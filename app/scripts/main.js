@@ -5,7 +5,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { useScroll } from 'react-router-scroll';
-import { Router, Route, IndexRoute, Redirect, hashHistory, applyRouterMiddleware } from 'react-router';
+import { Router, Route, IndexRoute, hashHistory, applyRouterMiddleware } from 'react-router';
 
 import config from './config';
 import reducers from './reducers';
