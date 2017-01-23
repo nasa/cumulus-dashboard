@@ -2,6 +2,8 @@
 
 Code to generate and deploy the dashboard for the Cumulus API.
 
+[Wireframes ticket](https://github.com/cumulus-nasa/cumulus_internal/issues/118)
+
 # Build
 
 This requires [nvm](https://github.com/creationix/nvm) and node v6.9.
