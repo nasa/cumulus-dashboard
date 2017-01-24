@@ -20,6 +20,7 @@ import App from './components/app';
 import Home from './components/home';
 import Collections from './components/collections';
 import Granules from './components/granules';
+import Pdr from './components/pdr';
 
 render((
   <Provider store={store}>
@@ -30,6 +31,7 @@ render((
 
         <Route path='collections' component={Collections} />
         <Route path='granules' component={Granules} />
+        <Route path='pdr' component={Pdr} />
       </Route>
     </Router>
   </Provider>

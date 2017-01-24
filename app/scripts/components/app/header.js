@@ -12,6 +12,7 @@ var Header = React.createClass({
         <Link to='/'>Home</Link>
         <Link to='/collections'>Collections</Link>
         <Link to='/granules'>Granules</Link>
+        <Link to='/pdr'>PDR's</Link>
       </div>
     );
   }
