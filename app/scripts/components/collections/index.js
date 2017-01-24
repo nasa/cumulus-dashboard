@@ -1,12 +1,9 @@
+'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
 
 var Collections = React.createClass({
   displayName: 'Collections',
-
-  propTypes: {
-    children: React.PropTypes.object
-  },
 
   render: function () {
     return (
