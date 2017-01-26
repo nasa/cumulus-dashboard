@@ -2,8 +2,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-var Pdrs = React.createClass({
-  displayName: 'Pdrs',
+
+var COMPONENT_NAME = React.createClass({
+  displayName: 'COMPONENT_NAME',
 
   render: function () {
     return (
@@ -14,4 +15,4 @@ var Pdrs = React.createClass({
   }
 });
 
-export default connect(state => state)(Pdrs);
+export default connect(state => state)(COMPONENT_NAME);

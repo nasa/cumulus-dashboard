@@ -8,11 +8,16 @@ var Header = React.createClass({
   render: function () {
     return (
       <div className='header'>
-        <h1>Header</h1>
-        <Link to='/'>Home</Link>
-        <Link to='/collections'>Collections</Link>
-        <Link to='/granules'>Granules</Link>
-        <Link to='/pdr'>PDR's</Link>
+        <h1>Cumulus</h1>
+        <ul>
+          <li><Link to='/'>Home</Link></li>
+          <li><Link to='/collections'>Collections</Link></li>
+          <li><Link to='/granules'>Granules</Link></li>
+          <li><Link to='/pdr'>PDR's</Link></li>
+          <li><Link to='/'>Errors</Link></li>
+          <li><Link to='/'>Logs</Link></li>
+          <li><Link to='/'>Contact</Link></li>
+        </ul>
       </div>
     );
   }
