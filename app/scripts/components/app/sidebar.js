@@ -10,7 +10,7 @@ var Sidebar = React.createClass({
       <div className='sidebar'>
         <h3>Collections Nav</h3>
         <ul>
-          <li><Link to='/collections/active'>Active</Link></li>
+          <li><Link to='/collections'>Active</Link></li>
           <li><Link to='/collections/inactive'>In-Active</Link></li>
         </ul>
 
@@ -25,7 +25,7 @@ var Sidebar = React.createClass({
 
         <h3>Granules Nav</h3>
         <ul>
-          <li><Link to='/granules/overview'>Overview</Link></li>
+          <li><Link to='/granules'>Overview</Link></li>
           <li><Link to='/granules/all-granules'>All Granules</Link></li>
           <li><Link to='/granules/errors'>Errors</Link></li>
           <li><Link to='/granules/marked-deletion'>Marked for Deletion</Link></li>
@@ -40,7 +40,7 @@ var Sidebar = React.createClass({
 
         <h3>PDRs Nav</h3>
         <ul>
-          <li><Link to='/pdr/pdrs-overview'>Overview</Link></li>
+          <li><Link to='/pdr'>Overview</Link></li>
           <li><Link to='/pdr/active'>Active</Link></li>
           <li><Link to='/pdr/errors'>Errors</Link></li>
           <li><Link to='/pdr/completed'>Completed</Link></li>
