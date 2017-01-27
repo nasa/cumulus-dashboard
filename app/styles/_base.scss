@@ -19,7 +19,7 @@
 
 // Scss starts here!
 .header {
-  padding-top: 1em;
+  padding: 1em;
 
   h1 {
     margin-bottom: 32px;
@@ -30,4 +30,12 @@
       vertical-align: top;
     }
   }
+  nav li {
+    display: inline-block;
+    margin-right: 1em;
+  }
+}
+
+.sidebar {
+  float: left;
 }

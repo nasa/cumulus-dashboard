@@ -2,8 +2,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-var CollectionErrors = React.createClass({
-  displayName: 'CollectionErrors',
+var ActiveCollections = React.createClass({
+  displayName: 'ActiveCollections',
 
   render: function () {
     return (
@@ -14,4 +14,4 @@ var CollectionErrors = React.createClass({
   }
 });
 
-export default connect(state => state)(CollectionErrors);
+export default connect(state => state)(ActiveCollections);

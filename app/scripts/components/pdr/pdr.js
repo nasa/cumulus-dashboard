@@ -8,7 +8,7 @@ var Pdr = React.createClass({
   render: function () {
     return (
       <div className='page__component'>
-        <h1>This is a component!</h1>
+        <h1>This is a PDR page!</h1>
       </div>
     );
   }

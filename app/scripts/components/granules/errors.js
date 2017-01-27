@@ -2,8 +2,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-var Errors = React.createClass({
-  displayName: 'Errors',
+var GranuleErrors = React.createClass({
+  displayName: 'GranuleErrors',
 
   render: function () {
     return (
@@ -14,4 +14,4 @@ var Errors = React.createClass({
   }
 });
 
-export default connect(state => state)(Errors);
+export default connect(state => state)(GranuleErrors);

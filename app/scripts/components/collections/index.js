@@ -15,12 +15,14 @@ var Collections = React.createClass({
   render: function () {
     return (
       <div className='page__collections'>
-      	<div>
+      	<div className='content__header'>
 	      	<h1>Collections</h1>
 	      	<Link to='/collections/add'>Add a Collection</Link>
 	      </div>
 	      <Sidebar />
-        {this.props.children}
+        <div className='page__content--shortened'>
+          {this.props.children}
+        </div>
       </div>
     );
   }
