@@ -2,10 +2,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-
 var ErrorsOverview = React.createClass({
   displayName: 'ErrorsOverview',
-
 
   render: function () {
     return (

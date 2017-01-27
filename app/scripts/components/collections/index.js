@@ -11,15 +11,14 @@ var Collections = React.createClass({
     children: React.PropTypes.object
   },
 
-
   render: function () {
     return (
       <div className='page__collections'>
-      	<div className='content__header'>
-	      	<h1>Collections</h1>
-	      	<Link to='/collections/add'>Add a Collection</Link>
-	      </div>
-	      <Sidebar />
+        <div className='content__header'>
+          <h1>Collections</h1>
+          <Link to='/collections/add'>Add a Collection</Link>
+        </div>
+        <Sidebar />
         <div className='page__content--shortened'>
           {this.props.children}
         </div>

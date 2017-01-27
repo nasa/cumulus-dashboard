@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-
 var Error = React.createClass({
   displayName: 'Error',
 

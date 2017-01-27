@@ -13,9 +13,9 @@ var Granules = React.createClass({
     return (
       <div className='page__granules'>
         <div className='content__header'>
-	      	<h1>Granules</h1>
-	      </div>
-	      <Sidebar />
+          <h1>Granules</h1>
+        </div>
+        <Sidebar />
         <div className='page__content--shortened'>
           {this.props.children}
         </div>
