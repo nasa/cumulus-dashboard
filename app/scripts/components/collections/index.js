@@ -15,8 +15,10 @@ var Collections = React.createClass({
     return (
       <div className='page__collections'>
         <div className='content__header'>
-          <h1>Collections</h1>
-          <Link to='/collections/add'>Add a Collection</Link>
+          <div className='row'>
+            <h1 className='heading--xlarge'>Collections</h1>
+            <Link className='button button--large button--white' to='/collections/add'>Add a Collection</Link>
+          </div>
         </div>
         <Sidebar />
         <div className='page__content--shortened'>

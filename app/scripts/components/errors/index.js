@@ -13,10 +13,14 @@ var Errors = React.createClass({
     return (
       <div className='page__errors'>
         <div className='content__header'>
-          <h1>Errors</h1>
+          <div className='row'>
+            <h1 className='heading--xlarge'>Errors</h1>
+          </div>
         </div>
-        <div className='page__content--shortened'>
-          {this.props.children}
+        <div className='page__content'>
+          <div className='row'>
+            {this.props.children}
+          </div>
         </div>
       </div>
     );

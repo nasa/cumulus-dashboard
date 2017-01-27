@@ -7,8 +7,17 @@ var Logs = React.createClass({
 
   render: function () {
     return (
-      <div className='page__component'>
-        <h1>This is a log page!</h1>
+      <div className='page__logs'>
+        <div className='content__header'>
+          <div className='row'>
+            <h1 className='heading--xlarge'>Logs</h1>
+          </div>
+        </div>
+        <div className='page__content'>
+          <div className='row'>
+
+          </div>
+        </div>
       </div>
     );
   }

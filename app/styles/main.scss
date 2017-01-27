@@ -40,9 +40,12 @@
 
 /* Settings
    ========================================================================== */
-
+@import "settings/variables";
 
 /* Main
    ========================================================================== */
 
 @import "base";
+@import "typography";
+@import "buttons";
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700');
