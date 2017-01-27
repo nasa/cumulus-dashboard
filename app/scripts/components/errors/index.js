@@ -1,11 +1,9 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
-import Sidebar from '../app/sidebar';
 
-var Collections = React.createClass({
-  displayName: 'Collections',
+var Errors = React.createClass({
+  displayName: 'Errors',
 
   propTypes: {
     children: React.PropTypes.object
@@ -13,12 +11,10 @@ var Collections = React.createClass({
 
   render: function () {
     return (
-      <div className='page__collections'>
+      <div className='page__errors'>
         <div className='content__header'>
-          <h1>Collections</h1>
-          <Link to='/collections/add'>Add a Collection</Link>
+          <h1>Errors</h1>
         </div>
-        <Sidebar />
         <div className='page__content--shortened'>
           {this.props.children}
         </div>
@@ -27,4 +23,4 @@ var Collections = React.createClass({
   }
 });
 
-export default connect(state => state)(Collections);
+export default connect(state => state)(Errors);
