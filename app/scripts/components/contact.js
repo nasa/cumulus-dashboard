@@ -7,8 +7,17 @@ var Contact = React.createClass({
 
   render: function () {
     return (
-      <div className='page__component'>
-        <h1>This is a contact page!</h1>
+      <div className='page__contact'>
+        <div className='content__header'>
+          <div className='row'>
+            <h1 className='heading--xlarge'>Contact</h1>
+          </div>
+        </div>
+        <div className='page__content'>
+          <div className='row'>
+
+          </div>
+        </div>
       </div>
     );
   }

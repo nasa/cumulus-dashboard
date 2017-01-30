@@ -18,11 +18,55 @@
 }
 
 // Scss starts here!
+html {
+  font-size: $root-font-size;
+}
+
+body {
+  color: $dark-grey;
+  font-size: $base-font-size;
+  line-height: $base-line-height;
+  font-family: $base-font-family;
+  font-weight: $base-font-weight;
+  background-color: $background-white;
+}
+
+.row {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 900px;
+  padding: 0 64px;
+  display: block;
+  width: auto;
+}
+
+a {
+  cursor: pointer;
+  transition: opacity 0.24s ease 0s;
+  text-decoration: none;
+}
+
+a:visited {
+}
+
+a:hover {
+  
+}
+
+a:active {
+  outline: 0;
+}
+
 .header {
-  padding: 1em;
+  padding: 1em 0;
+  background-color: $ocean-blue;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  a {
+    color: #fff;
+  }
 
   h1 {
-    margin-bottom: 32px;
+    float: left;
     > img {
       width: auto;
       height: 64px;
@@ -36,6 +80,40 @@
   }
 }
 
+.content__header {
+  background-color: $ocean-blue;
+  color: #fff;
+  padding-top: 7em;
+  padding-bottom: 2em;
+}
+
 .sidebar {
+  padding-top: 4em;
+  float: left;
+  background-color: $midnight-blue;
+  color: $lighter-grey;
+  a {
+    color: $lighter-grey;
+  }
+  li {
+    margin-bottom: 1em;
+  }
+}
+
+.sidebar__row {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 65px;
+  max-width: 210px;
+}
+
+.page__content {
+  padding-top: 4em;
+}
+
+.page__content--shortened {
+  padding: 4em 65px 0;
   float: left;
 }
+
