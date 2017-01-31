@@ -32,6 +32,7 @@ body {
 }
 
 .row {
+  @extend .clearfix;
   margin-left: auto;
   margin-right: auto;
   max-width: 900px;
@@ -39,6 +40,18 @@ body {
   display: block;
   width: auto;
 }
+
+.clearfix {
+  &:before,
+  &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
 
 a {
   cursor: pointer;
@@ -55,6 +68,18 @@ a:hover {
 
 a:active {
   outline: 0;
+}
+
+.link--secondary {
+
+}
+
+.link--tertiary {
+  color: $black;
+  border-bottom: 1px solid $lightest-grey;
+  &:hover {
+    color: lighten($black, 25%);
+  }
 }
 
 .header {
@@ -117,3 +142,6 @@ a:active {
   float: left;
 }
 
+.page__section {
+  margin-bottom: 5em;
+}

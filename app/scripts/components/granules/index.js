@@ -18,7 +18,7 @@ var Granules = React.createClass({
           </div>
         </div>
         <Sidebar />
-        <div className='page__content--shortened'>
+        <div className='page__content--shortened page__content'>
           {this.props.children}
         </div>
       </div>
