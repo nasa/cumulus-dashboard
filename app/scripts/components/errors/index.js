@@ -17,7 +17,7 @@ var Errors = React.createClass({
             <h1 className='heading--xlarge'>Errors</h1>
           </div>
         </div>
-        <div className='page__content'>
+        <div className='page__content page__content'>
           <div className='row'>
             {this.props.children}
           </div>
