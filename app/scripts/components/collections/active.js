@@ -10,7 +10,7 @@ var ActiveCollections = React.createClass({
       <div className='page__component'>
         <h1>These are active collections</h1>
         <div className='filters'>
-          <form className="search__wrapper form-group__element" onsubmit="">
+          <form className="search__wrapper form-group__element" onSubmit="">
             <input className='search' type="search" />
             <span className="search__icon"></span>
           </form>
