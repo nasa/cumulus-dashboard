@@ -1,6 +1,11 @@
+h1, h2, h3, h4, h5, h6 {
+  color: $black;
+}
+
 .heading--xlarge {
   font-size: 3.2em;
   font-weight: $base-font-bold;
+  color: #fff;
 }
 
 .heading--large {
@@ -9,6 +14,6 @@
 }
 
 .heading--medium {
-  font-size: 1.6em;
+  font-size: 1.72em;
   font-weight: $base-font-regular;
 }
