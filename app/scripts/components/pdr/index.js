@@ -18,9 +18,13 @@ var Pdrs = React.createClass({
             <h1 className='heading--xlarge'>PDR's</h1>
           </div>
         </div>
-        <Sidebar />
-        <div className='page__content--shortened'>
-          {this.props.children}
+        <div className='page__content'>
+          <div className='row'>
+            <Sidebar />
+            <div className='page__content--shortened'>
+              {this.props.children}
+            </div>
+          </div>
         </div>
       </div>
     );

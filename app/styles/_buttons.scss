@@ -1,16 +1,21 @@
 .button {
-  padding: .45em 2em;
+  padding: .65em 2em;
   border-radius: 4px;
   background-color: $light-green;
   color: #fff;
-  font-size: .9em;
   font-weight: $base-font-regular;
   border: none;
+  transition: all 0.3s ease 0s;
 }
 
 .button--white {
   color: $midnight-blue;
   background-color: #fff;
+}
+
+.button--small {
+  font-size: .86em;
+  padding: .3em 2em .35em;
 }
 
 .button--large {
@@ -21,4 +26,9 @@
 
 .button--secondary {
   background-color: $dolphin-grey;
+}
+
+.button__addcollections {
+  float: right;
+  margin-top: 1em;
 }

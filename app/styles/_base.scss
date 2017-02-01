@@ -44,6 +44,7 @@ a {
   cursor: pointer;
   transition: opacity 0.24s ease 0s;
   text-decoration: none;
+  transition: all 0.3s ease 0s;
 }
 
 a:visited {
@@ -58,25 +59,34 @@ a:active {
 }
 
 .header {
-  padding: 1em 0;
   background-color: $ocean-blue;
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
-  a {
-    color: #fff;
-  }
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
 
   h1 {
     float: left;
-    > img {
-      width: auto;
-      height: 64px;
-      max-width: 100%;
-      vertical-align: top;
+    margin-right: 2.5em;
+    padding-top: 1em;
+    img {
+      height: 26px;
+      width: 165px;
     }
   }
   nav li {
+    padding: 1.3em 0 1em;
     display: inline-block;
-    margin-right: 1em;
+    margin-right: 3em;
+    font-weight: $base-font-light;
+    border-bottom: 1px solid $ocean-blue;
+    transition: all 0.3s ease 0s;
+    a {
+      color: lighten($lightest-grey, 2%);
+    }
+    &:hover {
+      border-bottom: 1px solid #fff;
+      a {
+        color: #fff;
+      }
+    }
   }
 }
 
@@ -84,32 +94,71 @@ a:active {
   background-color: $ocean-blue;
   color: #fff;
   padding-top: 7em;
-  padding-bottom: 2em;
+  padding-bottom: 1em;
+  h1 {
+    display: inline-block;
+  }
+}
+
+.content__header--lg {
+  padding-top: 9em;
+}
+
+.sidebar__container {
+  background-color: $midnight-blue;
+  width: 30%;
+  height: 100%;
+  content: '.';
 }
 
 .sidebar {
   padding-top: 4em;
+  width: 20%;
+  max-width: 131px;
   float: left;
   background-color: $midnight-blue;
   color: $lighter-grey;
+  position: relative;
   a {
-    color: $lighter-grey;
+    color: lighten($lighter-grey, 8%);
+    .active {
+      color: #fff;
+    }
+    &:hover {
+      color: #fff;
+    }
   }
   li {
     margin-bottom: 1em;
   }
 }
 
+.sidebar:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* subtract h2 padding (1.5rem) */
+  left: -50em;
+  background: $midnight-blue;
+  height: 100%;
+  width: 50em;
+}
+
+.sidebar__nav--back {
+  padding-bottom: 1.8em;
+  margin-bottom: 1em;
+  border-bottom: 1px solid rgba(69, 83, 101, .8);
+  display: inline-block;
+}
+
 .sidebar__row {
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 65px;
-  max-width: 210px;
+  width: 90%;
 }
 
 .page__content {
-  padding-top: 4em;
+  width: 100%;
+  @include clearfix;
 }
 
 .page__content--shortened {

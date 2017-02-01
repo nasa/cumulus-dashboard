@@ -9,7 +9,7 @@ var Home = React.createClass({
   render: function () {
     return (
       <div className='page__home'>
-        <div className='content__header'>
+        <div className='content__header content__header--lg'>
           <div className='row'>
             <h1 className='heading--xlarge'>Dashboard</h1>
           </div>
@@ -63,11 +63,13 @@ var Home = React.createClass({
         </section>
         <section>
           <h2>Overview</h2>
-          <select>
-            <option value="week">Last Week</option>
-            <option value="month">Last Month</option>
-            <option value="year">Last Year</option>
-          </select>
+          <div className='dropdown__wrapper'>
+            <select>
+              <option value="week">Last Week</option>
+              <option value="month">Last Month</option>
+              <option value="year">Last Year</option>
+            </select>
+          </div>
         </section>
       </div>
     );
