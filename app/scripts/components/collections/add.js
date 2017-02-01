@@ -11,7 +11,7 @@ var AddCollection = React.createClass({
         <h1>Add a Collection</h1>
         <p>Instructions to add JSON in the below fields. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus tincidunt, orci vel tincidunt ultricies, augue libero egestas felis, vel blandit arcu elit et nisl. Pellentesque luctus sapien eu augue sodales auctor.</p>
         <form>
-          <ul>
+          <ul className='form__multistep'>
             <li>
               <label>Collection Name</label>
               <input type="text" name="collection_name" />

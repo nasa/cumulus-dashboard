@@ -11,6 +11,7 @@ var Sidebar = React.createClass({
         <div className='sidebar__row'>
           <h3>Collections Nav</h3>
           <ul>
+            <li><Link className='sidebar__nav--back' to='#'>Back to Collections</Link></li>
             <li><Link to='/collections'>Active</Link></li>
             <li><Link to='/collections/inactive'>In-Active</Link></li>
           </ul>

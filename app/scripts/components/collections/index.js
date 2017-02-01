@@ -17,12 +17,16 @@ var Collections = React.createClass({
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge'>Collections</h1>
-            <Link className='button button--large button--white' to='/collections/add'>Add a Collection</Link>
+            <Link className='button button--large button--white button__addcollections' to='/collections/add'>Add a Collection</Link>
           </div>
         </div>
-        <Sidebar />
-        <div className='page__content--shortened page__content'>
-          {this.props.children}
+        <div className='page__content'>
+          <div className='row'>
+            <Sidebar />
+            <div className='page__content--shortened'>
+              {this.props.children}
+            </div>
+          </div>
         </div>
       </div>
     );

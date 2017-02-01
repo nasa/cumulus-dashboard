@@ -9,7 +9,7 @@ var Header = React.createClass({
     return (
       <div className='header'>
         <div className='row'>
-          <h1 className='logo'><Link to='/'>Cumulus</Link></h1>
+          <h1 className='logo'><Link to='/'><img alt="Cumulus Logo" src='/graphics/layout/cumulus-logo.png' /></Link></h1>
           <nav>
             <ul>
               <li><Link to='/collections'>Collections</Link></li>
