@@ -14,7 +14,7 @@ var Home = React.createClass({
             <h1 className='heading--xlarge'>Dashboard</h1>
           </div>
         </div>
-        <div className='page__content'>
+        <div className='page__content page__content__nosidebar'>
           <section className='page__section'>
             <div className='row'>
               <ul>
@@ -30,7 +30,9 @@ var Home = React.createClass({
           </section>
           <section className='page__section'>
             <div className='row'>
-              <h2 className='heading--medium'>Recent Granules</h2>
+              <div className='heading__wrapper--border'>
+                <h2 className='heading--medium'>Recent Granules</h2>
+              </div>
               <ul className='timeline--processing--overall'>
                 <li><span className='num--medium'>40k</span> Granules Ingesting</li>
                 <li><span className='num--medium'>100k</span> Granules Processing</li>
@@ -67,18 +69,20 @@ var Home = React.createClass({
                   </tr>
                 </tbody>
               </table>
-              <Link to='/granules'>View All Granules</Link>
+              <Link className='link--secondary' to='/granules'>View All Granules</Link>
             </div>
           </section>
           <section className='page__section'>
             <div className='row'>
-              <h2 className='heading--medium'>Overview</h2>
-              <div className='dropdown__wrapper'>
-                <select>
-                  <option value="week">Last Week</option>
-                  <option value="month">Last Month</option>
-                  <option value="year">Last Year</option>
-                </select>
+              <div className='heading__wrapper--border'>
+                <h2 className='heading--medium heading--shared-content'>Overview</h2>
+                <div className='dropdown__wrapper form-group__element--right form-group__element--right--sm form-group__element--small'>
+                  <select>
+                    <option value="week">Last Week</option>
+                    <option value="month">Last Month</option>
+                    <option value="year">Last Year</option>
+                  </select>
+                </div>
               </div>
             </div>
           </section>

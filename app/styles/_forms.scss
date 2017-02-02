@@ -42,7 +42,7 @@ select {
 }
 
 .filters {
-  margin-bottom: 2em;
+  margin: 1.5em 0 2em;
   @include clearfix;
 }
 
@@ -80,4 +80,18 @@ select {
   input {
     margin-right: .8em;
   }
+}
+
+.form-group__element--right {
+  float: right;
+  margin-left: 1em;
+  margin-top: 1em;
+}
+
+.form-group__element--right--sm {
+  margin-top: 0;
+}
+
+.form-group__element--left {
+  margin-right: 1em;
 }

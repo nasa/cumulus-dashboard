@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 var ActiveCollections = React.createClass({
   displayName: 'ActiveCollections',
@@ -8,7 +9,13 @@ var ActiveCollections = React.createClass({
   render: function () {
     return (
       <div className='page__component'>
-        <h1>These are active collections</h1>
+        <h1 className='heading--large heading--shared-content'>Active Collections</h1>
+        <Link className='button button--small form-group__element--right' to=''>Edit</Link>
+        <dl className="metadata__updated">
+          <dt>Last Updated:</dt>
+          <dd>Sept. 23, 2016</dd>
+          <dd className='metadata__updated__time'>2:00pm EST</dd>
+        </dl>
         <div className='filters'>
           <form className="search__wrapper form-group__element" onSubmit="">
             <input className='search' type="search" />
