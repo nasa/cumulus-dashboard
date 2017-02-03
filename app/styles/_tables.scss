@@ -34,7 +34,7 @@ table {
   display: inline-block;
   border-radius: .5em;
   border: 1px solid lighten($lightest-grey, 4%);
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, .1);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, .08);
   text-align: center;
   font-size: .86em;
   width: 133px;
@@ -42,6 +42,15 @@ table {
   margin: .8em 1.5em .8em 0;
   float: left;
   color: $lighter-grey;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s ease 0s;
+  overflow: hidden;
+  clear: right;
+  &:hover {
+    margin: .1em 1.5em 1.5em 0;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, .1);
+  }
 }
 
 .timeline--processing--overall {
@@ -55,7 +64,7 @@ table {
     padding-right: 10%;
     &:after {
       content: '';
-      background-image: url(/graphics/layout/chevron-right.svg);
+      background-image: url(/graphics/layout/chevron-right-green.svg);
       background-size: 15px 25px;
       background-repeat: no-repeat;
       width: 15px;

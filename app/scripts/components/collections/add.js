@@ -31,8 +31,8 @@ var AddCollection = React.createClass({
               <textarea rows="4" cols="50"></textarea>
             </li>
           </ul>
-          <button className='button form-group__element--left' type="button">Submit</button>
-          <button className='button button--secondary form-group__element--left' type="button">Cancel</button>
+          <button className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' type="button">Submit</button>
+          <button className='button button--secondary form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__cancel' type="button">Cancel</button>
         </form>
       </div>
     );

@@ -18,13 +18,13 @@ var Home = React.createClass({
           <section className='page__section'>
             <div className='row'>
               <ul>
-                <li className='overview-num'><span className='num--large'>2</span> Errors (1 ingest, 1 processing)</li>
-                <li className='overview-num'><span className='num--large'>100</span> Collections</li>
-                <li className='overview-num'><span className='num--large'>400</span> Granules (recieved today)</li>
-                <li className='overview-num'><span className='num--large'>0:01:20</span> Average Processing Time</li>
-                <li className='overview-num'><span className='num--large'>300 GB</span> Data Used</li>
-                <li className='overview-num'><span className='num--large'>300</span> SQS Queues</li>
-                <li className='overview-num'><span className='num--large'>30</span> EC2 Instances</li>
+                <li><a className='overview-num' href='/'><span className='num--large'>2</span> Errors (1 ingest, 1 processing)</a></li>
+                <li><a className='overview-num' href='/'><span className='num--large'>100</span> Collections</a></li>
+                <li><a className='overview-num' href='/'><span className='num--large'>400</span> Granules (recieved today)</a></li>
+                <li><a className='overview-num' href='/'><span className='num--large'>0:01:20</span> Average Processing Time</a></li>
+                <li><a className='overview-num' href='/'><span className='num--large'>300 GB</span> Data Used</a></li>
+                <li><a className='overview-num' href='/'><span className='num--large'>300</span> SQS Queues</a></li>
+                <li><a className='overview-num' href='/'><span className='num--large'>30</span> EC2 Instances</a></li>
               </ul>
             </div>
           </section>

@@ -17,7 +17,7 @@ var Collections = React.createClass({
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge heading--shared-content'>Collections</h1>
-            <Link className='button button--large button--white button__addcollections button__arrow' to='/collections/add'>Add a Collection</Link>
+            <Link className='button button--large button--white button__addcollections button__arrow button__animation' to='/collections/add'>Add a Collection</Link>
           </div>
         </div>
         <div className='page__content'>
