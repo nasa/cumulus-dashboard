@@ -6,6 +6,9 @@
   font-weight: $base-font-regular;
   border: none;
   transition: all 0.3s ease 0s;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+
 }
 
 .button--white {
@@ -35,4 +38,28 @@
 
 .button--disabled {
   opacity: 0.6;
+}
+
+.btn-4:before {
+  position: absolute;
+  background-image: url('/graphics/layout/arrow-right.svg')
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+  content: '';
+  background-size: 10px 8px;
+}
+
+.button__arrow:hover {
+  left: 130%;
+  top: 0;
+}
+
+.button__arrow:before {
+  left: 130%;
+  top: 0;
+}
+
+.button__arrow:hover:before {
+  left: 80%;
 }
