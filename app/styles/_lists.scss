@@ -1,0 +1,20 @@
+.metadata__granule__details {
+  font-size: .86em;
+  @include clearfix;
+  dt {
+    font-weight: $base-font-semibold;
+    width: 22%;
+    padding-right: 8px;
+  }
+  dd {
+    width: 20%;
+    color: $lighter-grey;
+    &:nth-of-type(odd) {
+      margin-right: 10%;
+    }
+  }
+  dt, dd {
+    float: left;
+    margin: .5em 0;
+  }
+}
