@@ -11,9 +11,9 @@ var Granule = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large heading--shared-content'>Granule Name</h1>
-          <Link className='button button--small form-group__element--right button--disabled' to='/'>Delete</Link>
-          <Link className='button button--small form-group__element--right' to='/'>Remove from CMR</Link>
-          <Link className='button button--small form-group__element--right' to='/'>Reprocess</Link>
+          <Link className='button button--small form-group__element--right button--disabled button--green' to='/'>Delete</Link>
+          <Link className='button button--small form-group__element--right button--green' to='/'>Remove from CMR</Link>
+          <Link className='button button--small form-group__element--right button--green' to='/'>Reprocess</Link>
           <dl className="metadata__updated">
             <dt>Last Updated:</dt>
             <dd>Sept. 23, 2016</dd>

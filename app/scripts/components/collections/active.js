@@ -10,7 +10,7 @@ var ActiveCollections = React.createClass({
     return (
       <div className='page__component'>
         <h1 className='heading--large heading--shared-content'>Active Collections</h1>
-        <Link className='button button--small form-group__element--right' to=''>Edit</Link>
+        <Link className='button button--green button--small form-group__element--right' to=''>Edit</Link>
         <dl className="metadata__updated">
           <dt>Last Updated:</dt>
           <dd>Sept. 23, 2016</dd>
@@ -38,7 +38,7 @@ var ActiveCollections = React.createClass({
         </div>
         <div className='form--controls'>
           <label className='form__element__select form-group__element form-group__element--small'><input type="checkbox" name="Select" value="Select" />Select</label>
-          <button className='button button--small form-group__element'>Delete</button>
+          <button className='button button--small form-group__element button--green'>Delete</button>
           <div className='dropdown__wrapper form-group__element form-group__element--small'>
             <select>
               <option value="week">Change Ingest Status</option>

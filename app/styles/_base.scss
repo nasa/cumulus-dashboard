@@ -76,6 +76,13 @@ a:active {
   font-weight: $base-font-semibold;
   border-bottom: 2px solid $ocean-blue;
   padding-bottom: .3em;
+  transition: all 0.3s ease 0s;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  &:hover {
+    color: $light-green;
+    border-bottom: 2px solid $light-green;
+  }
 }
 
 .link--tertiary {
