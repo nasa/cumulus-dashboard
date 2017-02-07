@@ -2,9 +2,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { listCollections } from '../../actions';
 
 var ActiveCollections = React.createClass({
   displayName: 'ActiveCollections',
+
+  componentWillReceiveProps: function (props) {
+    // TODO this just keeps it from requesting endlessly,
+    // obviously we want to use some kind of other check.
+    if (!this.props.api.collections.length) {
+      this.listCollections();
+    }
+  },
+
+  componentWillMount: function () {
+    this.listCollections();
+  },
+
+  listCollections: function () {
+    this.props.dispatch(listCollections());
+  },
 
   render: function () {
     return (

@@ -23,11 +23,11 @@ export function setCollection (collection) {
 const root = config.apiRoot;
 export function listCollections () {
   return function (dispatch) {
-    request(url.resolve(root, 'collections'), (error, resp) => {
+    request(url.resolve(root, 'collections'), (error, resp, body) => {
       if (error) {
         return dispatch(setError({ error, meta: 'listCollections'}));
       }
-      return dispatch(setCollections(resp));
+      return dispatch(setCollections(JSON.parse(body)));
     });
   };
 }
