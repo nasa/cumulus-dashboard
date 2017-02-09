@@ -3,9 +3,35 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { listCollections } from '../../actions';
+import * as format from '../../utils/format';
+
+import SortableTable from '../table/sortable';
+
+const tableHeader = [
+  'Name',
+  'Errors',
+  'User Name',
+  'Granules',
+  'Duration',
+  'Last Update'
+];
+
+const tableRow = [
+  'collectionName',
+  () => 1,
+  'changedBy',
+  () => 1,
+  () => '0:03:00',
+  (d) => format.fullDate(d.updatedAt)
+];
 
 var ActiveCollections = React.createClass({
   displayName: 'ActiveCollections',
+
+  propTypes: {
+    api: React.PropTypes.object,
+    dispatch: React.PropTypes.func
+  },
 
   componentWillReceiveProps: function (props) {
     // TODO this just keeps it from requesting endlessly,
@@ -24,6 +50,8 @@ var ActiveCollections = React.createClass({
   },
 
   render: function () {
+    const data = this.props.api.collections;
+
     return (
       <div className='page__component'>
         <h1 className='heading--large heading--shared-content'>Active Collections</h1>
@@ -64,6 +92,7 @@ var ActiveCollections = React.createClass({
             </select>
           </div>
         </div>
+        <SortableTable data={data} header={tableHeader} row={tableRow}/>
       </div>
     );
   }
