@@ -2,10 +2,34 @@
 import React from 'react';
 import { Link } from 'react-router';
 
+// TODO figure out a better way to programmatically generate sections
+export const sections = [
+  { section: 'collections', display: 'Overview', path: 'collection' },
+  { section: 'collections', display: 'Granules', path: 'collection-granules' },
+  { section: 'collections', display: 'Errors', path: 'collection-errors' },
+  { section: 'collections', display: 'Ingest & Recipe', path: 'collection-ingest' },
+  { section: 'collections', display: 'Logs', path: 'collection-logs' },
+
+  { section: 'collections', display: 'Back to Collections', path: '../#', className: 'sidebar__nav--back', child: true },
+  { section: 'collections', display: 'Active', path: '', child: true },
+  { section: 'collections', display: 'Inactive', path: 'inactive', child: true },
+
+  { section: 'granules', display: 'Overview', path: '' },
+  { section: 'granules', display: 'All Granules', path: 'all-granules' },
+  { section: 'granules', display: 'Errors', path: 'errors' },
+  { section: 'granules', display: 'Marked for Deletion', path: 'marked-deletion' },
+  { section: 'granules', display: 'Restricted', path: 'restricted' }
+];
+
 var Sidebar = React.createClass({
   displayName: 'Sidebar',
 
+  propTypes: {
+    currentPath: React.PropTypes.string
+  },
+
   render: function () {
+    console.log(this.props.currentPath);
     return (
       <div className='sidebar'>
         <div className='sidebar__row'>

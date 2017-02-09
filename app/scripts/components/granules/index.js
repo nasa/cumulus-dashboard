@@ -6,7 +6,8 @@ var Granules = React.createClass({
   displayName: 'Granules',
 
   propTypes: {
-    children: React.PropTypes.object
+    children: React.PropTypes.object,
+    location: React.PropTypes.object
   },
 
   render: function () {
@@ -19,7 +20,7 @@ var Granules = React.createClass({
         </div>
         <div className='page__content'>
           <div className='row'>
-            <Sidebar />
+            <Sidebar currentPath={this.props.location.pathname}/>
             <div className='page__content--shortened'>
               {this.props.children}
             </div>
