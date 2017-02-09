@@ -1,5 +1,5 @@
 'use strict';
-import { get, set } from 'object-path';
+import { set } from 'object-path';
 import { ERROR } from '../actions';
 
 export const initialState = {
@@ -14,4 +14,4 @@ export default function reducer (state = initialState, action) {
       break;
   }
   return state;
-};
+}

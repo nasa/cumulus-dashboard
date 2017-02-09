@@ -27,7 +27,7 @@ export default function reducer (state = initialState, action) {
       break;
     case LIST_COLLECTIONS:
       action.data.forEach(validateCollection);
-      set(state, 'collections',  action.data);
+      set(state, 'collections', action.data);
       break;
     case GET_COLLECTION:
       validateCollection(action.data);
@@ -35,4 +35,4 @@ export default function reducer (state = initialState, action) {
       break;
   }
   return state;
-};
+}

@@ -25,7 +25,7 @@ export function listCollections () {
   return function (dispatch) {
     request(url.resolve(root, 'collections'), (error, resp, body) => {
       if (error) {
-        return dispatch(setError({ error, meta: 'listCollections'}));
+        return dispatch(setError({ error, meta: 'listCollections' }));
       }
       return dispatch(setCollections(JSON.parse(body)));
     });
