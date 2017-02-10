@@ -98,3 +98,41 @@ table {
   color: $midnight-blue;
 }
 
+.pagination {
+  margin: 2em auto 0;
+  text-align: center;
+  position: relative;
+  li {
+    display: inline-block;
+    margin: 0 .4em;
+    a, a:visited {
+      color: $lighter-grey;
+      transition: all 0.3s ease 0s;
+      -webkit-transition: all 0.3s;
+      -moz-transition: all 0.3s;
+      padding: 0 .3em;
+    }
+    a:hover {
+      color: $ocean-blue;
+    }
+    .active, .active:visited {
+      color: $ocean-blue;
+      font-weight: $base-font-semibold;
+      border-bottom: 2px solid $ocean-blue;
+      padding-bottom: .3em;
+      transition: all 0.3s ease 0s;
+      -webkit-transition: all 0.3s;
+      -moz-transition: all 0.3s;
+    }
+    .next, .previous {
+      position: absolute;
+      top: 0;
+    }
+    .next {
+      right: 0;
+    }
+    .previous {
+      left: 0;
+    }
+  }
+}
