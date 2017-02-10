@@ -9,7 +9,7 @@ var ActiveCollections = React.createClass({
   render: function () {
     return (
       <div className='page__component'>
-        <section className='page__section'> 
+        <section className='page__section'>
           <h1 className='heading--large heading--shared-content'>Active Collections</h1>
           <Link className='button button--green button--small form-group__element--right' to=''>Edit</Link>
           <dl className="metadata__updated">
@@ -49,7 +49,7 @@ var ActiveCollections = React.createClass({
             </div>
           </div>
         </section>
-        <section className='page__section'> 
+        <section className='page__section'>
           <div className='pagination'>
             <ol>
               <li><a className='previous' href="/">Previous</a></li>
