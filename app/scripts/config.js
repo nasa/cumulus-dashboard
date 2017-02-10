@@ -1,30 +1,15 @@
 'use strict';
-var defaultsDeep = require('lodash.defaultsdeep');
-/*
- * App configuration.
- *
- * Uses settings in config/production.js, with any properties set by
- * config/staging.js or config/local.js overriding them depending upon the
- * environment.
- *
- * This file should not be modified.  Instead, modify one of:
- *
- *  - config/production.js
- *      Production settings (base).
- *  - config/staging.js
- *      Overrides to production if ENV is staging.
- *  - config/local.js
- *      Overrides if local.js exists.
- *      This last file is gitignored, so you can safely change it without
- *      polluting the repo.
- */
+import assert from 'assert';
 
 var configurations = require('./config/*.js', {mode: 'hash'});
-var config = configurations.local || {};
+var config = configurations.base || {};
 
 if (process.env.DS_ENV === 'staging') {
-  defaultsDeep(config, configurations.staging);
+  config = Object.assign({}, config, configurations.staging);
+} else if (process.env.DS_ENV === 'production') {
+  config = Object.assign({}, config, configurations.production);
 }
-defaultsDeep(config, configurations.production);
+
+assert(typeof config.apiRoot, 'string');
 
 module.exports = config;

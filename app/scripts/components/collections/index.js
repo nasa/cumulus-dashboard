@@ -8,7 +8,8 @@ var Collections = React.createClass({
   displayName: 'Collections',
 
   propTypes: {
-    children: React.PropTypes.object
+    children: React.PropTypes.object,
+    location: React.PropTypes.object
   },
 
   render: function () {
@@ -22,7 +23,7 @@ var Collections = React.createClass({
         </div>
         <div className='page__content'>
           <div className='row'>
-            <Sidebar />
+            <Sidebar currentPath={this.props.location.pathname}/>
             <div className='page__content--shortened'>
               {this.props.children}
             </div>

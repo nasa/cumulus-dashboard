@@ -19,7 +19,8 @@
     "postinstall": "[ -f app/scripts/config/local.js ] || echo 'module.exports = {};' > app/scripts/config/local.js",
     "serve": "DS_ENV=development gulp serve",
     "build": "NODE_ENV=production gulp",
-    "lint": "eslint app/scripts/ --ext .js"
+    "lint": "eslint app/scripts/ --ext .js",
+    "start": "npm run serve"
   },
   "browserify": {
     "transform": [
@@ -75,13 +76,16 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "lodash.defaultsdeep": "^4.3.5",
+    "assert": "^1.4.1",
+    "moment": "^2.17.1",
+    "object-path": "^0.11.3",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.2",
     "react-router": "^3.0.2",
     "react-router-scroll": "^0.4.1",
     "redux": "^3.6.0",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "request": "^2.79.0"
   }
 }

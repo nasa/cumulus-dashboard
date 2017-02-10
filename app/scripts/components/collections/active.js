@@ -2,11 +2,56 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { listCollections } from '../../actions';
+import * as format from '../../utils/format';
+
+import SortableTable from '../table/sortable';
+
+const tableHeader = [
+  'Name',
+  'Errors',
+  'User Name',
+  'Granules',
+  'Duration',
+  'Last Update'
+];
+
+const tableRow = [
+  'collectionName',
+  () => 1,
+  'changedBy',
+  () => 1,
+  () => '0:03:00',
+  (d) => format.fullDate(d.updatedAt)
+];
 
 var ActiveCollections = React.createClass({
   displayName: 'ActiveCollections',
 
+  propTypes: {
+    api: React.PropTypes.object,
+    dispatch: React.PropTypes.func
+  },
+
+  componentWillReceiveProps: function (props) {
+    // TODO this just keeps it from requesting endlessly,
+    // obviously we want to use some kind of other check.
+    if (!this.props.api.collections.length) {
+      this.listCollections();
+    }
+  },
+
+  componentWillMount: function () {
+    this.listCollections();
+  },
+
+  listCollections: function () {
+    this.props.dispatch(listCollections());
+  },
+
   render: function () {
+    const data = this.props.api.collections;
+
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -62,6 +107,7 @@ var ActiveCollections = React.createClass({
             </ol>
           </div>
         </section>
+        <SortableTable data={data} header={tableHeader} row={tableRow}/>
       </div>
     );
   }
