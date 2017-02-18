@@ -23,30 +23,35 @@ export const build = function (forms, onSubmit) {
   forms = forms || [];
   const id = generate();
   return (
-    <div id={id} className='forms'>
-      {forms.map(form => {
-        let {
-          type,
-          label,
-          validate,
-          error
-        } = form;
-        type = type || formTypes.text;
-        let element;
-        switch (type) {
+    <form>
+      <ul id={id} className='form__multistep'>
+        {forms.map(form => {
+          let {
+            type,
+            label,
+            validate,
+            error
+          } = form;
+          type = type || formTypes.text;
+          let element;
+          switch (type) {
 
-          case formTypes.textArea:
-            element = textAreaForm;
-            break;
+            case formTypes.textArea:
+              element = textAreaForm;
+              break;
 
-          case formTypes.text:
-          default:
-            element = textForm;
-            break;
-        }
-        const elem = React.createElement(element, { type, label, validate, error });
-        return <div className='form__item'>{elem}</div>;
-      })}
-    </div>
+            case formTypes.text:
+            default:
+              element = textForm;
+              break;
+          }
+          const elem = React.createElement(element, { type, label, validate, error });
+          return <div className='form__item'>{elem}</div>;
+        })}
+        <button className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' type="button">Submit</button>
+        <button className='button button--secondary form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__cancel' type="button">Cancel</button>
+
+      </ul>
+    </form>
   );
 };
