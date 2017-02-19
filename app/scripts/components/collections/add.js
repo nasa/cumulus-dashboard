@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Form, formTypes, defaults } from '../form';
+import { createCollection } from '../../actions';
 import * as validate from '../../utils/validate';
 import t from '../../utils/strings';
 
@@ -42,8 +43,12 @@ const inputElements = [
 var AddCollection = React.createClass({
   displayName: 'AddCollection',
 
+  propTypes: {
+    dispatch: React.PropTypes.func
+  },
+
   post: function (payload) {
-    console.log(payload);
+    this.props.dispatch(createCollection(payload));
   },
 
   render: function () {
