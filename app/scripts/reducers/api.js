@@ -1,10 +1,6 @@
 'use strict';
 import { get, set } from 'object-path';
 
-import {
-  validateCollection
-} from '../utils/model';
-
 import * as ids from '../utils/ids';
 
 import {
@@ -26,11 +22,9 @@ export default function reducer (state = initialState, action) {
       set(state, 'authenticated', action.data);
       break;
     case LIST_COLLECTIONS:
-      action.data.forEach(validateCollection);
       set(state, 'collections', action.data);
       break;
     case GET_COLLECTION:
-      validateCollection(action.data);
       set(state, ['collectionDetail', get(action.data, ids.collection)], action.data);
       break;
   }
