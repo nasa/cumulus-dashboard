@@ -48,6 +48,9 @@ var AddCollection = React.createClass({
   },
 
   post: function (payload) {
+    payload.createdAt = new Date();
+    payload.updatedAt = new Date();
+    payload.changedBy = 'Cumulus Dashboard';
     this.props.dispatch(createCollection(payload));
   },
 
