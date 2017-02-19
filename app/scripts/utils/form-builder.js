@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import { generate } from 'shortid';
+import slugify from 'slugify';
 import textForm from '../components/forms/text';
 import textAreaForm from '../components/forms/text-area';
 
@@ -22,36 +23,47 @@ export const formTypes = {
 export const build = function (forms, onSubmit) {
   forms = forms || [];
   const id = generate();
-  return (
-    <form>
-      <ul id={id} className='form__multistep'>
-        {forms.map(form => {
-          let {
-            type,
-            label,
-            validate,
-            error
-          } = form;
-          type = type || formTypes.text;
-          let element;
-          switch (type) {
 
-            case formTypes.textArea:
-              element = textAreaForm;
-              break;
+  // Attach an id to each form
+  forms.forEach(d => {
+    d.id = slugify(d.label) + '-' + id;
+  });
 
-            case formTypes.text:
-            default:
-              element = textForm;
-              break;
-          }
-          const elem = React.createElement(element, { type, label, validate, error });
-          return <div className='form__item'>{elem}</div>;
-        })}
-        <button className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' type="button">Submit</button>
-        <button className='button button--secondary form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__cancel' type="button">Cancel</button>
+  return function () {
+    return (
+      <form>
+        <ul id={id} className='form__multistep'>
+          {forms.map((form) => {
+            let {
+              type,
+              label,
+              id,
+              validate,
+              error
+            } = form;
+            type = type || formTypes.text;
 
-      </ul>
-    </form>
-  );
+            let element;
+            switch (type) {
+              case formTypes.textArea:
+                element = textAreaForm;
+                break;
+              case formTypes.text:
+              default:
+                element = textForm;
+                break;
+            }
+
+            // textarea forms pass a mode value to ace
+            let mode = type === formTypes.textArea && form.mode || null;
+            const elem = React.createElement(element, { label, id, validate, error, mode });
+            return <div className='form__item' key={id}>{elem}</div>;
+          })}
+          <input className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' type='submit' value='Submit' />
+          <button className='button button--secondary form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__cancel' type='button'>Cancel</button>
+
+        </ul>
+      </form>
+    );
+  };
 };
