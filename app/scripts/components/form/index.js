@@ -36,7 +36,8 @@ export const Form = React.createClass({
   },
 
   propTypes: {
-    inputs: React.PropTypes.array
+    inputMeta: React.PropTypes.array,
+    submit: React.PropTypes.func
   },
 
   generateComponentId: function (label) {
@@ -49,7 +50,7 @@ export const Form = React.createClass({
 
     // initiate empty state for all inputs
     const inputState = {};
-    this.props.inputs.forEach(input => {
+    this.props.inputMeta.forEach(input => {
       let inputId = this.generateComponentId(input.label);
       let value = input.value || '';
       let error = null;
@@ -72,8 +73,10 @@ export const Form = React.createClass({
     const inputState = Object.assign({}, this.state.inputs);
 
     // validate input values in the store
+    // if values pass validation, write to payload object
     let hasError = false;
-    this.props.inputs.forEach(input => {
+    const payload = {};
+    this.props.inputMeta.forEach(input => {
       let inputId = this.generateComponentId(input.label);
       let { value } = inputState[inputId];
 
@@ -93,14 +96,16 @@ export const Form = React.createClass({
         return set(inputState, [inputId, 'error'], error);
       }
 
-      if (!hasError) {
-        // dispatch
-      }
+      payload[input.schemaProperty] = value;
     });
 
     this.setState(Object.assign({}, this.state, {
       inputs: inputState
     }));
+
+    if (!hasError) {
+      this.props.submit(payload);
+    }
   },
 
   render: function () {
@@ -108,7 +113,7 @@ export const Form = React.createClass({
     return (
       <form id={`form-${this.id}`}>
         <ul className='form__multistep'>
-          {this.props.inputs.map(form => {
+          {this.props.inputMeta.map(form => {
             let { type, label } = form;
             type = type || formTypes.text;
             let inputId = this.generateComponentId(label);

@@ -9,8 +9,8 @@ import 'brace/theme/github';
 import Ace from 'react-ace';
 
 const tabSize = 2;
-const minLines = 12;
-const maxLines = 24;
+const minLines = 8;
+const maxLines = 18;
 
 const TextAreaForm = React.createClass({
   displayName: 'TextAreaForm',
