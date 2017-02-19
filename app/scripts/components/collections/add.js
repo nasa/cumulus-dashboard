@@ -1,23 +1,30 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Form, formTypes } from '../form';
+import { Form, formTypes, defaults } from '../form';
+import * as validate from '../../utils/validate';
+import t from '../../utils/strings';
 
 const inputElements = [{
   label: 'Collection Name',
-  type: formTypes.text
+  type: formTypes.text,
+  validate: validate.isText,
+  error: t.errors.collectionName
 }, {
   label: 'Granule Definition',
   type: formTypes.textArea,
-  mode: 'json'
+  mode: 'json',
+  value: defaults.json
 }, {
   label: 'Ingest',
   type: formTypes.textArea,
-  mode: 'json'
+  mode: 'json',
+  value: defaults.json
 }, {
   label: 'Recipe',
   type: formTypes.textArea,
-  mode: 'json'
+  mode: 'json',
+  value: defaults.json
 }];
 
 var AddCollection = React.createClass({
