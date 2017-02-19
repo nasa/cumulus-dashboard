@@ -12,38 +12,39 @@ const tabSize = 2;
 const minLines = 12;
 const maxLines = 24;
 
-const defaultValues = {
-  json: '{}'
-};
-
 const TextAreaForm = React.createClass({
   displayName: 'TextAreaForm',
 
   propTypes: {
     label: React.PropTypes.string,
+    value: React.PropTypes.string,
     id: React.PropTypes.string,
-    validate: React.PropTypes.func,
     error: React.PropTypes.string,
-    mode: React.PropTypes.string
+    mode: React.PropTypes.string,
+    onChange: React.PropTypes.func
+  },
+
+  onChange: function (value) {
+    this.props.onChange(this.props.id, value);
   },
 
   render: function () {
     let {
       label,
+      value,
       id,
-      // validate,
-      // error,
+      error,
       mode
     } = this.props;
     return (
       <div className='form__textarea'>
-        <label>{label}</label>
+        <label>{label} {error}</label>
         <Ace
           mode={mode}
           theme='github'
           onChange={this.onChange}
           name={id}
-          value={defaultValues[mode]}
+          value={value}
 
           width='auto'
           tabSize={tabSize}

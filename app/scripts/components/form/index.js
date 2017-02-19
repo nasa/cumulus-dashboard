@@ -5,10 +5,15 @@ import { set } from 'object-path';
 import slugify from 'slugify';
 import textForm from './text';
 import textAreaForm from './text-area';
+import t from '../../utils/strings';
 
 export const formTypes = {
   text: 'TEXT',
   textArea: 'TEXT_AREA'
+};
+
+export const defaults = {
+  json: '{\n  \n}'
 };
 
 /**
@@ -34,49 +39,80 @@ export const Form = React.createClass({
     inputs: React.PropTypes.array
   },
 
+  generateComponentId: function (label) {
+    return slugify(label) + '-' + this.id;
+  },
+
   componentWillMount: function () {
     // generate id for this form
     this.id = generate();
 
     // initiate empty state for all inputs
-    const inputs = {};
+    const inputState = {};
     this.props.inputs.forEach(input => {
       let inputId = this.generateComponentId(input.label);
-      inputs[inputId] = '';
+      let value = input.value || '';
+      let error = null;
+      inputState[inputId] = { value, error };
     });
-    this.setState({ inputs });
+    this.setState({ inputs: inputState });
   },
 
-  generateComponentId: function (label) {
-    return slugify(label) + '-' + this.id;
+  onChange: function (inputId, value) {
+    const inputState = Object.assign({}, this.state.inputs);
+    set(inputState, [inputId, 'value'], value);
+    this.setState(Object.assign({}, this.state, {
+      inputs: inputState,
+      error: null
+    }));
   },
 
   onSubmit: function (e) {
     e.preventDefault();
-  },
+    const inputState = Object.assign({}, this.state.inputs);
 
-  onChange: function (value, id) {
-    const nextState = set(this.state, {
-      inputs: {
-        [id]: value
+    // validate input values in the store
+    let hasError = false;
+    this.props.inputs.forEach(input => {
+      let inputId = this.generateComponentId(input.label);
+      let { value } = inputState[inputId];
+
+      // if expected type is json, validate as json first
+      if (input.type === formTypes.textArea && input.mode === 'json') {
+        try {
+          value = JSON.parse(value);
+        } catch (e) {
+          hasError = true;
+          return set(inputState, [inputId, 'error'], t.errors.json);
+        }
+      }
+
+      if (input.validate && !input.validate(value)) {
+        hasError = true;
+        let error = input.error || t.errors.generic;
+        return set(inputState, [inputId, 'error'], error);
+      }
+
+      if (!hasError) {
+        // dispatch
       }
     });
-    this.setState(nextState);
+
+    this.setState(Object.assign({}, this.state, {
+      inputs: inputState
+    }));
   },
 
   render: function () {
+    const inputState = this.state.inputs;
     return (
       <form id={`form-${this.id}`}>
         <ul className='form__multistep'>
           {this.props.inputs.map(form => {
-            let {
-              type,
-              label,
-              validate,
-              error
-            } = form;
+            let { type, label } = form;
             type = type || formTypes.text;
-            let id = this.generateComponentId(label);
+            let inputId = this.generateComponentId(label);
+            let { value, error } = inputState[inputId];
 
             let element;
             switch (type) {
@@ -93,14 +129,14 @@ export const Form = React.createClass({
             let mode = type === formTypes.textArea && form.mode || null;
             const onChange = this.onChange;
             const elem = React.createElement(element, {
+              id: inputId,
               label,
-              id,
-              validate,
+              value,
               error,
               mode,
               onChange
             });
-            return <div className='form__item' key={id}>{elem}</div>;
+            return <div className='form__item' key={inputId}>{elem}</div>;
           })}
         </ul>
 
@@ -110,7 +146,10 @@ export const Form = React.createClass({
           onClick={this.onSubmit}
           className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
         />
-        <button className='button button--secondary form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__cancel' type='button'>Cancel</button>
+
+        <button
+          type='button'
+          className='button button--secondary form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__cancel'>Cancel</button>
 
       </form>
     );
