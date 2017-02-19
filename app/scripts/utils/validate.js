@@ -1,9 +1,14 @@
 'use strict';
 
-export const isText = function (name) {
-  return typeof name === 'string' && name.length;
+export const isText = function (string) {
+  return typeof string === 'string' && string.length;
 };
 
-export const collectionModel = function (c) {
-  return isText(c.collectionName);
+export const granuleModel = function (obj) {
+  return isText(obj.granuleId);
+};
+
+export const collectionModel = function (obj) {
+  return isText(obj.collectionName) &&
+    granuleModel(obj.granuleDefinition);
 };
