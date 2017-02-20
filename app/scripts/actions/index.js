@@ -7,6 +7,7 @@ export const ERROR = 'ERROR';
 export const AUTHENTICATED = 'AUTHENTICATED';
 export const LIST_COLLECTIONS = 'LIST_COLLECTIONS';
 export const GET_COLLECTION = 'GET_COLLECTION';
+export const POST_COLLECTION = 'POST_COLLECTION';
 
 export function setError (error) {
   return { type: ERROR, data: error };
@@ -20,14 +21,80 @@ export function setCollection (collection) {
   return { type: GET_COLLECTION, data: collection };
 }
 
+export function setPostSuccess (type, post) {
+  return {
+    type,
+    data: post.data,
+    key: post.id,
+    postType: post.type
+  };
+}
+
 const root = config.apiRoot;
+function get (path, callback) {
+  request(url.resolve(root, path), (error, resp, body) => {
+    if (error) {
+      return callback(error);
+    }
+    try {
+      var data = JSON.parse(body);
+    } catch (e) {
+      return callback('JSON parse error');
+    }
+    return callback(null, data);
+  });
+}
+
+function post (path, payload, callback) {
+  request.post({
+    url: url.resolve(root, path),
+    body: payload,
+    json: true
+  }, (error, resp, body) => {
+    error = error || body.errorMessage;
+    if (error) {
+      return callback(error);
+    } else {
+      return callback(null, body);
+    }
+  });
+}
+
 export function listCollections () {
   return function (dispatch) {
-    request(url.resolve(root, 'collections'), (error, resp, body) => {
+    get('collections', (error, data) => {
       if (error) {
-        return dispatch(setError({ error, meta: 'listCollections' }));
+        return dispatch(setError({
+          error,
+          meta: {
+            type: LIST_COLLECTIONS
+          }
+        }));
+      } else {
+        return dispatch(setCollections(data));
       }
-      return dispatch(setCollections(JSON.parse(body)));
+    });
+  };
+}
+
+export function createCollection (payload) {
+  return function (dispatch) {
+    post('collections', payload, (error, data) => {
+      if (error) {
+        return dispatch(setError({
+          error,
+          meta: {
+            type: POST_COLLECTION,
+            id: payload.collectionName
+          }
+        }));
+      } else {
+        return dispatch(setPostSuccess(POST_COLLECTION, {
+          type: 'collection',
+          id: data.collectionName,
+          data
+        }));
+      }
     });
   };
 }

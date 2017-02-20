@@ -37,15 +37,15 @@ var ActiveCollections = React.createClass({
     // TODO this just keeps it from requesting endlessly,
     // obviously we want to use some kind of other check.
     if (!this.props.api.collections.length) {
-      this.listCollections();
+      this.list();
     }
   },
 
   componentWillMount: function () {
-    this.listCollections();
+    this.list();
   },
 
-  listCollections: function () {
+  list: function () {
     this.props.dispatch(listCollections());
   },
 

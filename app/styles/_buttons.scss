@@ -48,6 +48,7 @@
 
 .button__animation {
   position: relative;
+  display: inline-block;
   &:before {
     position: absolute;
     background-image: url('/graphics/layout/arrow-right.svg');

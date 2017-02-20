@@ -1,22 +1,20 @@
 'use strict';
 import { get, set } from 'object-path';
 
-import {
-  validateCollection
-} from '../utils/model';
-
 import * as ids from '../utils/ids';
 
 import {
   AUTHENTICATED,
   LIST_COLLECTIONS,
-  GET_COLLECTION
+  GET_COLLECTION,
+  POST_COLLECTION
 } from '../actions';
 
 export const initialState = {
   authenticated: true,
   collections: [],
-  collectionDetail: {}
+  collectionDetail: {},
+  postedCollections: {}
 };
 
 export default function reducer (state = initialState, action) {
@@ -26,12 +24,13 @@ export default function reducer (state = initialState, action) {
       set(state, 'authenticated', action.data);
       break;
     case LIST_COLLECTIONS:
-      action.data.forEach(validateCollection);
       set(state, 'collections', action.data);
       break;
     case GET_COLLECTION:
-      validateCollection(action.data);
       set(state, ['collectionDetail', get(action.data, ids.collection)], action.data);
+      break;
+    case POST_COLLECTION:
+      set(state, ['postedCollections', action.postType, action.key], action.data);
       break;
   }
   return state;
