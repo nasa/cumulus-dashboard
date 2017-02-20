@@ -1,5 +1,5 @@
 'use strict';
-import { get, set } from 'object-path';
+import { set } from 'object-path';
 
 import {
   AUTHENTICATED,
