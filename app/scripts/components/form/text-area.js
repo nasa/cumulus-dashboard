@@ -7,8 +7,8 @@ import 'brace/mode/json';
 import 'brace/theme/github';
 
 import Ace from 'react-ace';
+import config from '../../config';
 
-const tabSize = 2;
 const minLines = 8;
 const maxLines = 18;
 
@@ -41,13 +41,13 @@ const TextAreaForm = React.createClass({
         <label>{label} {error}</label>
         <Ace
           mode={mode}
-          theme='github'
+          theme={config.editorTheme}
           onChange={this.onChange}
           name={id}
           value={value}
 
           width='auto'
-          tabSize={tabSize}
+          tabSize={config.tabSize}
           showPrintMargin={false}
           minLines={minLines}
           maxLines={maxLines}
