@@ -2,7 +2,10 @@
 
 Code to generate and deploy the dashboard for the Cumulus API.
 
-[Wireframes ticket](https://github.com/cumulus-nasa/cumulus_internal/issues/118)
+## Wireframes and mocks
+
+- [Designs](https://www.dropbox.com/sh/zotoy2nuozizufz/AAAiOpbAv2Gp0BU-HIu5aILra?dl=0)
+- [Wireframes](https://www.dropbox.com/s/dm7wct36ijg7sch/nasa-01-15.pdf?dl=0)
 
 # Build
 
@@ -63,4 +66,4 @@ import { Link } from 'react-router';
 
 ## Writing CSS
 
-I'm open to suggestions, but we have followed [Bem](http://getbem.com/naming/) in the past and I like it.
+We follow a [Bem](http://getbem.com/naming/) naming format.
