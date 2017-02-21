@@ -11,6 +11,7 @@ import config from './config';
 import reducers from './reducers';
 
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));
+window.store = store;
 
 console.log.apply(console, config.consoleMessage);
 console.log('Environment', config.environment);

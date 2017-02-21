@@ -7,14 +7,16 @@ import {
   AUTHENTICATED,
   LIST_COLLECTIONS,
   GET_COLLECTION,
-  POST_COLLECTION
+  POST_COLLECTION,
+  LIST_GRANULES
 } from '../actions';
 
 export const initialState = {
   authenticated: true,
   collections: [],
   collectionDetail: {},
-  postedCollections: {}
+  postedCollections: {},
+  granules: []
 };
 
 export default function reducer (state = initialState, action) {
@@ -31,6 +33,9 @@ export default function reducer (state = initialState, action) {
       break;
     case POST_COLLECTION:
       set(state, ['postedCollections', action.postType, action.key], action.data);
+      break;
+    case LIST_GRANULES:
+      set(state, 'granules', action.data);
       break;
   }
   return state;
