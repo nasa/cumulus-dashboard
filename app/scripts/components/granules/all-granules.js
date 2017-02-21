@@ -64,6 +64,12 @@ var AllGranules = React.createClass({
               <span className="search__icon"></span>
             </form>
           </div>
+
+          <div className='form--controls'>
+            <label className='form__element__select form-group__element form-group__element--small'><input type="checkbox" name="Select" value="Select" />Select</label>
+            <button className='button button--small form-group__element'>Remove From CMR</button>
+            <button className='button button--small form-group__element'>Reprocess</button>
+          </div>
         </section>
 
         <SortableTable data={granules} header={tableHeader} row={tableRow}/>
