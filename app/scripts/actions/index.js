@@ -23,7 +23,7 @@ export function setCollection (collection) {
 }
 
 function setGranules (granules) {
-  return { type: LIST_GRANULES, data: granules.results };
+  return { type: LIST_GRANULES, data: granules };
 }
 
 export function setPostSuccess (type, post) {

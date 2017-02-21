@@ -16,7 +16,10 @@ export const initialState = {
   collections: [],
   collectionDetail: {},
   postedCollections: {},
-  granules: []
+  granules: {
+    results: [],
+    meta: {}
+  }
 };
 
 export default function reducer (state = initialState, action) {
