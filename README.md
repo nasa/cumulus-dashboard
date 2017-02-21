@@ -64,6 +64,87 @@ Instead of using `<a href="path/to/component">` tags, we use `<Link to="path/to/
 import { Link } from 'react-router';
 ```
 
+## Writing an API query
+
+To write an API query, we need to write actions and reducers.
+
+Actions let the interface initiate requests. A good example: a submit button calls an action to initiate a GET. Once the API returns that data, we call another action to place it in the store, along with an accompanying identifier.
+
+Finally, we write a reducer to identify this action and optionally manipulate the data before assigning it a namespaced location.
+
+**A high-level example**:
+
+1. User navigates to the `collections` page, which starts a request to list all active collections.
+2. The API responds, and we assign the data to `store.api.collections` as an array with format `[{ id: 1 }, { id: 2 }, { id: 3 }, ...]`.
+3. We also assign each individual collection to `store.api.collectionDetail` as an object with format `{ 1: {}, 2: {}, 3: {} }` so it can be easily accessed by single collection pages.
+4. The active collections page displays a table by accessing `this.props.api.collections`. The user clicks on a single collection to go to `collections/1`.
+5. The single collection component decides whether the collection `{ id: 1 }` exists in `this.props.api.collectionDetail`; if it does, it renders using that data. Otherwise, it initiates a new GET request.
+
+### Writing actions
+
+We might want to write an action to query a single granule by id. To do this, we create a function with the format:
+
+```(javascript)
+export const getGranule = function (granuleId) {
+  return function (dispatch) {
+    // do ajax query
+    request.get(granuleId, function (err, resp) {
+      if (err) { console.log(err); }
+      dispatch(setGranule(granuleId, resp[0]));
+    })
+  };
+}
+```
+
+Note, `dispatch` allows us to write async actions.
+
+We'll need another action to set this data on the reducer. We probably don't need to export this action.
+
+```(javascript)
+function setGranule (id, granuleData) {
+  return { type: SET_GRANULE, id: id, data: granuleData };
+}
+```
+
+This sends the granule data to the store via reducers. We need to specify the primary key so we can identify this action.
+
+```(javascript)
+export const SET_GRANULE = 'SET_GRANULE';
+```
+
+Now in `reducers/api.js` our reducer function takes the form:
+
+```(javascript)
+import { SET_GRANULE } from '../actions';
+export function reducer (currentState, action) {
+  if (action.type === SET_GRANULE) {
+    currentState.granuleDetail[action.id] = action.data;
+  }
+};
+```
+
+Finally, this allows us to access the data from a component:
+
+```(javascript)
+import { getGranule } from '../actions';
+const Granule = React.createClass({
+  componentWillMount: function () {
+    // params are passed as props to each component,
+    // and id is the namespace for the route in `scripts/main.js`.
+    const granuleId = this.props.params.id;
+    getGranule(granuleId);
+  },
+  render: function () {
+    const granuleId = this.props.params.id;
+    const granule = this.props.api.granuleDetail[granuleId]; // should use object-path#get for this
+    if (!granule) {
+      return <div></div>; // return empty since we have no data yet
+    }
+    return <div className='granule'>{granule.granuleId}</div>;
+  }
+});
+```(javascript)
+
 ## Writing CSS
 
 We follow a [Bem](http://getbem.com/naming/) naming format.
