@@ -3,9 +3,22 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { listGranules } from '../../actions';
 import SortableTable from '../table/sortable';
+import { fullDate } from '../../utils/format';
 
-const header = ['Granule Id'];
-const keys = ['granuleId'];
+const header = [
+  'Name',
+  'Status',
+  'Collection',
+  'Duration',
+  'Updated'
+];
+const keys = [
+  'granuleId',
+  () => 'TODO',
+  'collectionName',
+  () => 'TODO',
+  (d) => fullDate(d.updatedAt)
+];
 
 var AllGranules = React.createClass({
   displayName: 'AllGranules',
