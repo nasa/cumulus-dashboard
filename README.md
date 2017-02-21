@@ -82,7 +82,7 @@ Finally, we write a reducer to identify this action and optionally manipulate th
 
 ### Writing actions
 
-We might want to write an action to query a single granule by id. To do this, we create a function with the format:
+We might want to write an action to query a single granule by id. To do this, we create a function in `scripts/actions/index.js`.
 
 ```(javascript)
 export const getGranule = function (granuleId) {
@@ -98,7 +98,7 @@ export const getGranule = function (granuleId) {
 
 Note, `dispatch` allows us to write async actions.
 
-We'll need another action to set this data on the reducer. We probably don't need to export this action.
+We'll need another action to send this data to the store. Note, we probably don't need to export this action. In the same file:
 
 ```(javascript)
 function setGranule (id, granuleData) {
@@ -106,34 +106,40 @@ function setGranule (id, granuleData) {
 }
 ```
 
-This sends the granule data to the store via reducers. We need to specify the primary key so we can identify this action.
+This sends the granule data to the store. We need to specify the primary key so we can identify this action in a reducer function, and place it appropriately. In `actions.js`:
 
 ```(javascript)
 export const SET_GRANULE = 'SET_GRANULE';
 ```
 
-Now in `reducers/api.js` our reducer function takes the form:
+Now in `reducers/api.js` we import the primary key and export a reducer function, which receives the current state, and the reducer in question. We use a primary key, because every action is sent to every reducer. The reducer doesn't manipulate the current state, but rather returns a new state object that includes the new data.
 
 ```(javascript)
 import { SET_GRANULE } from '../actions';
 export function reducer (currentState, action) {
+  const newState = Object.assign({}, currentState);
   if (action.type === SET_GRANULE) {
-    currentState.granuleDetail[action.id] = action.data;
+    newState.granuleDetail[action.id] = action.data;
   }
+  return newState;
 };
 ```
 
-Finally, this allows us to access the data from a component:
+Finally, this allows us to access the data from a component, where component state is passed as a `prop`:
 
 ```(javascript)
+// import the action so we can call it
 import { getGranule } from '../actions';
+
 const Granule = React.createClass({
+
   componentWillMount: function () {
     // params are passed as props to each component,
     // and id is the namespace for the route in `scripts/main.js`.
     const granuleId = this.props.params.id;
     getGranule(granuleId);
   },
+
   render: function () {
     const granuleId = this.props.params.id;
     const granule = this.props.api.granuleDetail[granuleId]; // should use object-path#get for this
@@ -143,7 +149,7 @@ const Granule = React.createClass({
     return <div className='granule'>{granule.granuleId}</div>;
   }
 });
-```(javascript)
+```
 
 ## Writing CSS
 
