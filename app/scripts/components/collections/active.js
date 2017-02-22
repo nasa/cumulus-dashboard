@@ -17,7 +17,7 @@ const tableHeader = [
 ];
 
 const tableRow = [
-  'collectionName',
+  (d) => <Link to={`/collections/collection/${d.collectionName}`}>{d.collectionName}</Link>,
   () => 1,
   'changedBy',
   () => 1,

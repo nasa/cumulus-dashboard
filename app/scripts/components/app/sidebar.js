@@ -42,11 +42,11 @@ var Sidebar = React.createClass({
 
           <h3>Collection Nav</h3>
           <ul>
-            <li><Link to='/collections/collection'>Overview</Link></li>
-            <li><Link to='/collections/collection-granules'>Granules</Link></li>
-            <li><Link to='/collections/collection-errors'>Errors</Link></li>
-            <li><Link to='/collections/collection-ingest'>Ingest & Recipe</Link></li>
-            <li><Link to='/collections/collection-logs'>Logs</Link></li>
+            <li><Link to='/collections'>Overview</Link></li>
+            <li><Link to='/collections/granules'>Granules</Link></li>
+            <li><Link to='/collections/errors'>Errors</Link></li>
+            <li><Link to='/collections/ingest'>Ingest & Recipe</Link></li>
+            <li><Link to='/collections/logs'>Logs</Link></li>
           </ul>
 
           <h3>Granules Nav</h3>

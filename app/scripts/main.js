@@ -63,11 +63,11 @@ render((
           <IndexRoute component={ActiveCollections} />
           <Route path='inactive' component={InactiveCollections} />
           <Route path='add' component={AddCollection} />
-          <Route path='collection-errors' component={CollectionErrors} />
-          <Route path='collection-granules' component={CollectionGranules} />
-          <Route path='collection-ingest' component={CollectionIngest} />
-          <Route path='collection-logs' component={CollectionLogs} />
-          <Route path='collection' component={Collection} />
+          <Route path='errors' component={CollectionErrors} />
+          <Route path='granules' component={CollectionGranules} />
+          <Route path='ingest' component={CollectionIngest} />
+          <Route path='logs' component={CollectionLogs} />
+          <Route path='collection/:collectionName' component={Collection} />
         </Route>
         <Route path='granules' component={Granules}>
           <IndexRoute component={Overview} />
