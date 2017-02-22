@@ -9,7 +9,24 @@ export const fullDate = function (datestring) {
   return moment(datestring).format('MMM. Do, YYYY hh:mm:ss');
 };
 
+export const bigTally = function (numberString) {
+  if ((!numberString && numberString !== 0) || numberString === nullValue || isNaN(numberString)) { return nullValue; }
+  numberString = +numberString;
+  if (numberString >= 1000) {
+    return numeral(numberString / 1000).format('0,0') + 'K';
+  } else {
+    return numeral(numberString / 1000000).format('0,0') + 'M';
+  }
+};
+
 export const tally = function (numberString) {
-  if (!numberString || numberString === nullValue || isNaN(numberString)) { return nullValue; }
-  return numeral(+numberString).format('0,0');
+  if ((!numberString && numberString !== 0) || numberString === nullValue || isNaN(numberString)) { return nullValue; }
+  numberString = +numberString;
+  if (numberString < 1000) {
+    return numberString;
+  } else if (numberString < 100000) {
+    return numeral(numberString).format('0,0');
+  } else {
+    return bigTally(numberString);
+  }
 };

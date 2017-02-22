@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { get } from 'object-path';
 import { getStats } from '../actions';
-import { nullValue } from '../utils/format';
+import { nullValue, tally } from '../utils/format';
 
 var Home = React.createClass({
   displayName: 'Home',
@@ -30,13 +30,13 @@ var Home = React.createClass({
     const processingTimeUnits = get(stats, 'processingTime.unit', ' ').slice(0, 1);
     const storage = get(stats, 'storage.value');
     const overview = [
-      [get(stats, 'errors.value', nullValue), 'Errors'],
-      [get(stats, 'collections.value', nullValue), 'Collections'],
-      [get(stats, 'granules.value', nullValue), 'Granules (received today)'],
+      [tally(get(stats, 'errors.value', nullValue)), 'Errors'],
+      [tally(get(stats, 'collections.value', nullValue)), 'Collections'],
+      [tally(get(stats, 'granules.value', nullValue)), 'Granules (received today)'],
       [get(stats, 'processingTime.value', nullValue) + processingTimeUnits, 'Average Processing Time'],
-      [(storage ? storage + get(stats, 'storage.unit') : nullValue), 'Data Used'],
-      [get(stats, 'queues.value', nullValue), 'SQS Queues'],
-      [get(stats, 'ec2.value', nullValue), 'EC2 Instances']
+      [(storage ? tally(storage) + get(stats, 'storage.unit') : nullValue), 'Data Used'],
+      [tally(get(stats, 'queues.value', nullValue)), 'SQS Queues'],
+      [tally(get(stats, 'ec2.value', nullValue)), 'EC2 Instances']
     ];
 
     return (
