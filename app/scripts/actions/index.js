@@ -76,7 +76,7 @@ export function listCollections () {
           }
         }));
       } else {
-        return dispatch(setCollections(data));
+        return dispatch(setCollections(data.results));
       }
     });
   };
