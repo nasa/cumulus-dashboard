@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
+import { get } from 'object-path';
 import { listGranules } from '../../actions';
 import SortableTable from '../table/sortable';
 import { fullDate } from '../../utils/format';
@@ -24,7 +25,7 @@ var AllGranules = React.createClass({
   displayName: 'AllGranules',
 
   propTypes: {
-    api: React.PropTypes.object,
+    granules: React.PropTypes.object,
     dispatch: React.PropTypes.func
   },
 
@@ -33,8 +34,8 @@ var AllGranules = React.createClass({
   },
 
   render: function () {
-    const granules = this.props.api.granules.results;
-    const count = this.props.api.granules.meta.count;
+    const granules = this.props.granules.list;
+    const count = get(this.props.granules, 'meta.count');
 
     return (
       <div className='page__component'>

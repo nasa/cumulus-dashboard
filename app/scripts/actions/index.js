@@ -5,31 +5,22 @@ import config from '../config';
 
 export const ERROR = 'ERROR';
 export const AUTHENTICATED = 'AUTHENTICATED';
-export const LIST_COLLECTIONS = 'LIST_COLLECTIONS';
+
 export const QUERY_COLLECTION = 'QUERY_COLLECTION';
 export const GET_COLLECTION = 'GET_COLLECTION';
+export const LIST_COLLECTIONS = 'LIST_COLLECTIONS';
 export const POST_COLLECTION = 'POST_COLLECTION';
+
 export const LIST_GRANULES = 'LIST_GRANULES';
 
-export function setError (error) {
-  return { type: ERROR, data: error };
-}
+export const GET_STATS = 'GET_STATS';
 
-export function setCollections (collections) {
-  return { type: LIST_COLLECTIONS, data: collections };
-}
-
-export function queryCollection (collectionName) {
-  return { type: QUERY_COLLECTION, data: { collectionName } };
-}
-
-export function setCollection (collection) {
-  return { type: GET_COLLECTION, data: collection };
-}
-
-function setGranules (granules) {
-  return { type: LIST_GRANULES, data: granules };
-}
+const setError = (error) => ({ type: ERROR, data: error });
+const queryCollection = (collectionName) => ({ type: QUERY_COLLECTION, data: { collectionName } });
+const setCollection = (collection) => ({ type: GET_COLLECTION, data: collection });
+const setCollections = (collections) => ({ type: LIST_COLLECTIONS, data: collections });
+const setGranules = (granules) => ({ type: LIST_GRANULES, data: granules });
+const setStats = (stats) => ({ type: GET_STATS, data: stats });
 
 export function setPostSuccess (type, post) {
   return {
@@ -136,11 +127,28 @@ export function listGranules () {
         return dispatch(setError({
           error,
           meta: {
-            type: LIST_COLLECTIONS
+            type: LIST_GRANULES
           }
         }));
       } else {
         return dispatch(setGranules(data));
+      }
+    });
+  };
+}
+
+export function getStats () {
+  return function (dispatch) {
+    get('stats/summary/grouped', (error, data) => {
+      if (error) {
+        return dispatch(setError({
+          error,
+          meta: {
+            type: GET_STATS
+          }
+        }));
+      } else {
+        return dispatch(setStats(data));
       }
     });
   };
