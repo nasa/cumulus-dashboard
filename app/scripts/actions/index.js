@@ -127,7 +127,7 @@ export function listGranules () {
         return dispatch(setError({
           error,
           meta: {
-            type: LIST_COLLECTIONS
+            type: LIST_GRANULES
           }
         }));
       } else {

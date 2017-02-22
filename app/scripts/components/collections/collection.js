@@ -18,13 +18,13 @@ var Collection = React.createClass({
 
   propTypes: {
     params: React.PropTypes.object,
-    api: React.PropTypes.object,
+    collections: React.PropTypes.object,
     dispatch: React.PropTypes.func
   },
 
   componentWillReceiveProps: function (props) {
     const collectionName = props.params.collectionName;
-    const record = get(this.props.api, ['map', collectionName]);
+    const record = get(this.props.collections, ['map', collectionName]);
     if (!record) {
       this.get(collectionName);
     }
@@ -39,7 +39,7 @@ var Collection = React.createClass({
   },
 
   render: function () {
-    const record = get(this.props.api, ['map', this.props.params.collectionName]);
+    const record = get(this.props.collections, ['map', this.props.params.collectionName]);
     if (!record) {
       return <div></div>;
     } else if (record.inflight) {

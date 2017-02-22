@@ -11,7 +11,7 @@ var EditCollection = React.createClass({
 
   propTypes: {
     params: React.PropTypes.object,
-    api: React.PropTypes.object,
+    collections: React.PropTypes.object,
     dispatch: React.PropTypes.func
   },
 
@@ -23,7 +23,7 @@ var EditCollection = React.createClass({
   },
 
   collection: function (collectionName) {
-    const record = get(this.props.api, ['map', collectionName]);
+    const record = get(this.props.collections, ['map', collectionName]);
     return record;
   },
 
@@ -70,7 +70,7 @@ var EditCollection = React.createClass({
 
   render: function () {
     const collectionName = this.props.params.collectionName;
-    const record = get(this.props.api, ['map', collectionName]);
+    const record = get(this.props.collections, ['map', collectionName]);
     if (!record) {
       return <div></div>;
     }
