@@ -145,3 +145,20 @@ export function listGranules () {
     });
   };
 }
+
+export function getStats () {
+  return function (dispatch) {
+    get('stats/summary/grouped', (error, data) => {
+      if (error) {
+        return dispatch(setError({
+          error,
+          meta: {
+            type: GET_STATS
+          }
+        }));
+      } else {
+        return dispatch(setStats(data));
+      }
+    });
+  };
+}
