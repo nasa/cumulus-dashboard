@@ -23,6 +23,7 @@ import Collections from './components/collections';
 import ActiveCollections from './components/collections/active';
 import InactiveCollections from './components/collections/inactive';
 import AddCollection from './components/collections/add';
+import EditCollection from './components/collections/edit';
 import CollectionErrors from './components/collections/collection-errors';
 import CollectionGranules from './components/collections/collection-granules';
 import CollectionIngest from './components/collections/collection-ingest';
@@ -63,6 +64,7 @@ render((
           <IndexRoute component={ActiveCollections} />
           <Route path='inactive' component={InactiveCollections} />
           <Route path='add' component={AddCollection} />
+          <Route path='edit/:collectionName' component={EditCollection} />
           <Route path='errors' component={CollectionErrors} />
           <Route path='granules' component={CollectionGranules} />
           <Route path='ingest' component={CollectionIngest} />
