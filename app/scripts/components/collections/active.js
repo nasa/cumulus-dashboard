@@ -29,7 +29,7 @@ var ActiveCollections = React.createClass({
   displayName: 'ActiveCollections',
 
   propTypes: {
-    api: React.PropTypes.object,
+    collections: React.PropTypes.object,
     dispatch: React.PropTypes.func
   },
 
