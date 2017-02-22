@@ -24,7 +24,7 @@ var Collection = React.createClass({
 
   componentWillReceiveProps: function (props) {
     const collectionName = props.params.collectionName;
-    const record = get(this.props.api, ['collectionDetail', collectionName]);
+    const record = get(this.props.api, ['map', collectionName]);
     if (!record) {
       this.get(collectionName);
     }
@@ -39,7 +39,7 @@ var Collection = React.createClass({
   },
 
   render: function () {
-    const record = get(this.props.api, ['collectionDetail', this.props.params.collectionName]);
+    const record = get(this.props.api, ['map', this.props.params.collectionName]);
     if (!record) {
       return <div></div>;
     } else if (record.inflight) {

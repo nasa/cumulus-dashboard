@@ -23,7 +23,7 @@ var EditCollection = React.createClass({
   },
 
   collection: function (collectionName) {
-    const record = get(this.props.api, ['collectionDetail', collectionName]);
+    const record = get(this.props.api, ['map', collectionName]);
     return record;
   },
 
@@ -70,7 +70,7 @@ var EditCollection = React.createClass({
 
   render: function () {
     const collectionName = this.props.params.collectionName;
-    const record = get(this.props.api, ['collectionDetail', collectionName]);
+    const record = get(this.props.api, ['map', collectionName]);
     if (!record) {
       return <div></div>;
     }

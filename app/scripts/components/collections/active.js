@@ -36,7 +36,7 @@ var ActiveCollections = React.createClass({
   componentWillReceiveProps: function (props) {
     // TODO this just keeps it from requesting endlessly,
     // obviously we want to use some kind of other check.
-    if (!this.props.api.collections.length) {
+    if (!this.props.collections.list.length) {
       this.list();
     }
   },
@@ -50,7 +50,7 @@ var ActiveCollections = React.createClass({
   },
 
   render: function () {
-    const data = this.props.api.collections;
+    const data = this.props.collections.list;
 
     return (
       <div className='page__component'>
