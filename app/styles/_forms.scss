@@ -21,7 +21,6 @@ label {
 .dropdown__wrapper {
   border: 1px solid $lightest-grey;
   border-radius: .5em;
-  width: 172px;
   position: relative;
   &:after {
     background-image: url('/graphics/layout/chevron-down.svg');
@@ -38,7 +37,6 @@ label {
 
 select {
   -webkit-appearance: caret;
-  width: 172px;
 }
 
 .filters {
@@ -48,7 +46,6 @@ select {
 
 .search__wrapper {
   position: relative;
-  width: 172px;
 }
 
 .search__icon {
@@ -85,7 +82,6 @@ select {
 .form-group__element--right {
   float: right;
   margin-left: 1em;
-  margin-top: 1em;
 }
 
 .form-group__element--right--sm {

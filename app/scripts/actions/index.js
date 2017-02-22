@@ -9,6 +9,7 @@ export const LIST_COLLECTIONS = 'LIST_COLLECTIONS';
 export const QUERY_COLLECTION = 'QUERY_COLLECTION';
 export const GET_COLLECTION = 'GET_COLLECTION';
 export const POST_COLLECTION = 'POST_COLLECTION';
+export const LIST_GRANULES = 'LIST_GRANULES';
 
 export function setError (error) {
   return { type: ERROR, data: error };
@@ -24,6 +25,10 @@ export function queryCollection (collectionName) {
 
 export function setCollection (collection) {
   return { type: GET_COLLECTION, data: collection };
+}
+
+function setGranules (granules) {
+  return { type: LIST_GRANULES, data: granules };
 }
 
 export function setPostSuccess (type, post) {
@@ -124,3 +129,19 @@ export function createCollection (payload) {
   };
 }
 
+export function listGranules () {
+  return function (dispatch) {
+    get('granules', (error, data) => {
+      if (error) {
+        return dispatch(setError({
+          error,
+          meta: {
+            type: LIST_COLLECTIONS
+          }
+        }));
+      } else {
+        return dispatch(setGranules(data));
+      }
+    });
+  };
+}
