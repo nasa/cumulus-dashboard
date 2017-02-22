@@ -6,6 +6,7 @@ import config from '../config';
 export const ERROR = 'ERROR';
 export const AUTHENTICATED = 'AUTHENTICATED';
 export const LIST_COLLECTIONS = 'LIST_COLLECTIONS';
+export const QUERY_COLLECTION = 'QUERY_COLLECTION';
 export const GET_COLLECTION = 'GET_COLLECTION';
 export const POST_COLLECTION = 'POST_COLLECTION';
 export const LIST_GRANULES = 'LIST_GRANULES';
@@ -16,6 +17,10 @@ export function setError (error) {
 
 export function setCollections (collections) {
   return { type: LIST_COLLECTIONS, data: collections };
+}
+
+export function queryCollection (collectionName) {
+  return { type: QUERY_COLLECTION, data: { collectionName } };
 }
 
 export function setCollection (collection) {
@@ -76,7 +81,27 @@ export function listCollections () {
           }
         }));
       } else {
-        return dispatch(setCollections(data));
+        return dispatch(setCollections(data.results));
+      }
+    });
+  };
+}
+
+export function getCollection (collectionName) {
+  return function (dispatch) {
+    dispatch(queryCollection(collectionName));
+    get(`collections?collectionName=${collectionName}`, (error, data) => {
+      if (error) {
+        return dispatch(setError({
+          error,
+          meta: {
+            type: GET_COLLECTION,
+            id: collectionName,
+            data
+          }
+        }));
+      } else {
+        return dispatch(setCollection(data.results[0]));
       }
     });
   };
@@ -102,9 +127,6 @@ export function createCollection (payload) {
       }
     });
   };
-}
-
-export function getCollection (collectionName) {
 }
 
 export function listGranules () {

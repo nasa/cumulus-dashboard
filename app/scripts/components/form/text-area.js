@@ -7,10 +7,10 @@ import 'brace/mode/json';
 import 'brace/theme/github';
 
 import Ace from 'react-ace';
+import config from '../../config';
 
-const tabSize = 2;
-const minLines = 8;
-const maxLines = 18;
+const _minLines = 8;
+const _maxLines = 18;
 
 const TextAreaForm = React.createClass({
   displayName: 'TextAreaForm',
@@ -21,7 +21,10 @@ const TextAreaForm = React.createClass({
     id: React.PropTypes.string,
     error: React.PropTypes.string,
     mode: React.PropTypes.string,
-    onChange: React.PropTypes.func
+    onChange: React.PropTypes.func,
+
+    minLines: React.PropTypes.number,
+    maxLines: React.PropTypes.number
   },
 
   onChange: function (value) {
@@ -36,18 +39,22 @@ const TextAreaForm = React.createClass({
       error,
       mode
     } = this.props;
+
+    let minLines = this.props.minLines || _minLines;
+    let maxLines = this.props.maxLines || _maxLines;
+
     return (
       <div className='form__textarea'>
         <label>{label} {error}</label>
         <Ace
           mode={mode}
-          theme='github'
+          theme={config.editorTheme}
           onChange={this.onChange}
           name={id}
           value={value}
 
           width='auto'
-          tabSize={tabSize}
+          tabSize={config.tabSize}
           showPrintMargin={false}
           minLines={minLines}
           maxLines={maxLines}
