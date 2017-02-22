@@ -58,11 +58,14 @@ var EditCollection = React.createClass({
   },
 
   onChange: function (id, value) {
-    // do something
+    this.setState({ collection: value });
   },
 
   onSubmit: function () {
-    // post
+    const json = JSON.parse(this.state.collection);
+    console.log('in onsubmit');
+    console.log(json);
+    // post using an action
   },
 
   render: function () {
@@ -86,9 +89,18 @@ var EditCollection = React.createClass({
               id={id}
               error={this.state.error}
               mode={'json'}
+              onChange={this.onChange}
               minLines={1}
               maxLines={200}
             />
+
+          <input
+            type='submit'
+            value='Submit'
+            onClick={this.onSubmit}
+            className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
+          />
+
           </form>
         </section>
       </div>
