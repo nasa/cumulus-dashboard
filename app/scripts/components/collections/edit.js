@@ -41,11 +41,13 @@ var EditCollection = React.createClass({
   componentWillReceiveProps: function (newProps) {
     const collectionName = this.props.params.collectionName;
     const newCollectionName = newProps.params.collectionName;
+
     if (collectionName !== newCollectionName) {
       // switch to a different collection, query it
       return this.get(newCollectionName);
     }
-    const record = get(newProps.api, ['collectionDetail', collectionName]);
+
+    const record = get(this.props.collections, ['map', collectionName]);
     if (!this.state.collection || (record.data && collectionName !== record.data.collectionName)) {
       // we've queried a new collection and just received it
       try {
