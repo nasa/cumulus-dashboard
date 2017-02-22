@@ -2,11 +2,43 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { get } from 'object-path';
+import { getStats } from '../actions';
+import { nullValue } from '../utils/format';
 
 var Home = React.createClass({
   displayName: 'Home',
 
+  propTypes: {
+    dispatch: React.PropTypes.func,
+    stats: React.PropTypes.object
+  },
+
+  componentWillMount: function () {
+    this.queryStats();
+  },
+
+  queryStats: function () {
+    // TODO set time span of granules
+    this.props.dispatch(getStats());
+  },
+
   render: function () {
+    const { stats } = this.props;
+    if (!Object.keys(stats).length) { return <div></div>; }
+
+    const processingTimeUnits = get(stats, 'processingTime.unit', ' ').slice(0, 1);
+    const storage = get(stats, 'storage.value');
+    const overview = [
+      [get(stats, 'errors.value', nullValue), 'Errors'],
+      [get(stats, 'collections.value', nullValue), 'Collections'],
+      [get(stats, 'granules.value', nullValue), 'Granules (received today)'],
+      [get(stats, 'processingTime.value', nullValue) + processingTimeUnits, 'Average Processing Time'],
+      [(storage ? storage + get(stats, 'storage.unit') : nullValue), 'Data Used'],
+      [get(stats, 'queues.value', nullValue), 'SQS Queues'],
+      [get(stats, 'ec2.value', nullValue), 'EC2 Instances']
+    ];
+
     return (
       <div className='page__home'>
         <div className='content__header content__header--lg'>
@@ -18,13 +50,11 @@ var Home = React.createClass({
           <section className='page__section'>
             <div className='row'>
               <ul>
-                <li><a className='overview-num' href='/'><span className='num--large'>2</span> Errors (1 ingest, 1 processing)</a></li>
-                <li><a className='overview-num' href='/'><span className='num--large'>100</span> Collections</a></li>
-                <li><a className='overview-num' href='/'><span className='num--large'>400</span> Granules (recieved today)</a></li>
-                <li><a className='overview-num' href='/'><span className='num--large'>0:01:20</span> Average Processing Time</a></li>
-                <li><a className='overview-num' href='/'><span className='num--large'>300 GB</span> Data Used</a></li>
-                <li><a className='overview-num' href='/'><span className='num--large'>300</span> SQS Queues</a></li>
-                <li><a className='overview-num' href='/'><span className='num--large'>30</span> EC2 Instances</a></li>
+                {overview.map(d => (
+                  <li key={d[1]}>
+                    <a className='overview-num' href='/'><span className='num--large'>{d[0]}</span> {d[1]}</a>
+                  </li>
+                ))}
               </ul>
             </div>
           </section>
