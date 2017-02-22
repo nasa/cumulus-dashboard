@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import api from './api';
 import collections from './collections';
 import granules from './granules';
+import stats from './stats';
 import errors from './errors';
 
 export const reducers = {
@@ -9,6 +10,7 @@ export const reducers = {
   api,
   collections,
   granules,
+  stats,
   errors
 };
 
