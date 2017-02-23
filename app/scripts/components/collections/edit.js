@@ -68,15 +68,20 @@ var EditCollection = React.createClass({
 
   onChange: function (id, value) {
     this.setState({ collection: value });
-    // reset error and run json validation
   },
 
   onSubmit: function () {
-    var json = JSON.parse(this.state.collection); // TODO check for error
-    json.updatedAt = moment().unix();
-    json.changedBy = 'Cumulus Dashboard';
+    try {
+      this.setState({'error': null});
 
-    this.props.dispatch(updateCollection(json));
+      var json = JSON.parse(this.state.collection);
+      json.updatedAt = moment().unix();
+      json.changedBy = 'Cumulus Dashboard';
+
+      this.props.dispatch(updateCollection(json));
+    } catch (e) {
+      this.setState({'error': 'Syntax error in JSON'});
+    }
   },
 
   render: function () {
@@ -106,6 +111,8 @@ var EditCollection = React.createClass({
               minLines={1}
               maxLines={200}
             />
+
+          <br />
 
           <input
             type='submit'

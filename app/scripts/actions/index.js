@@ -148,7 +148,11 @@ export function updateCollection (payload) {
           }
         }));
       } else {
-        return dispatch(getCollection(data.Attributes.collectionName));
+        return dispatch(setPostSuccess(PUT_COLLECTION, {
+          type: 'collection',
+          id: data.Attributes.collectionName,
+          data
+        }));
       }
     });
   };
