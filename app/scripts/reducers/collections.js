@@ -29,9 +29,7 @@ export default function reducer (state = initialState, action) {
       break;
 
     case QUERY_COLLECTION:
-      set(state, ['map', action.data.collectionName], {
-        inflight: true
-      });
+      set(state, ['map', action.data.collectionName], { inflight: true });
       break;
 
     case GET_COLLECTION:

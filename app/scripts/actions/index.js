@@ -6,12 +6,17 @@ const root = _config.apiRoot;
 
 export const ERROR = 'ERROR';
 export const AUTHENTICATED = 'AUTHENTICATED';
+
 export const QUERY_COLLECTION = 'QUERY_COLLECTION';
 export const GET_COLLECTION = 'GET_COLLECTION';
 export const LIST_COLLECTIONS = 'LIST_COLLECTIONS';
 export const POST_COLLECTION = 'POST_COLLECTION';
 export const PUT_COLLECTION = 'PUT_COLLECTION';
+
+export const QUERY_GRANULE = 'QUERY_GRANULE';
+export const GET_GRANULE = 'GET_GRANULE';
 export const LIST_GRANULES = 'LIST_GRANULES';
+
 export const GET_STATS = 'GET_STATS';
 export const LIST_PDRS = 'LIST_PDRS';
 
@@ -32,7 +37,10 @@ const setPutCollection = (collection) => ({
   id: collection.collectionName,
   data: collection
 });
+
+const queryGranule = (collectionName, granuleId) => ({ type: QUERY_GRANULE, data: { collectionName, granuleId } });
 const setGranules = (granules) => ({ type: LIST_GRANULES, data: granules });
+const setGranule = (granule) => ({ type: GET_GRANULE, data: granule });
 const setStats = (stats) => ({ type: GET_STATS, data: stats });
 const setPdrs = (pdrs) => ({ type: LIST_PDRS, data: pdrs });
 
@@ -53,12 +61,31 @@ export function getCollection (collectionName) {
           error,
           meta: {
             type: GET_COLLECTION,
-            id: collectionName,
-            data
+            url: path
           }
         }));
       } else {
         return dispatch(setCollection(data.results[0]));
+      }
+    });
+  };
+}
+
+export function getGranule (collectionName, granuleId) {
+  return function (dispatch) {
+    dispatch(queryGranule(collectionName, granuleId));
+    let path = url.resolve(root, `granules/${collectionName}/${granuleId}`);
+    get(path, (error, data) => {
+      if (error) {
+        return dispatch(setError({
+          error,
+          meta: {
+            type: GET_GRANULE,
+            url: path
+          }
+        }));
+      } else {
+        return dispatch(setGranule(data.results[0]));
       }
     });
   };
