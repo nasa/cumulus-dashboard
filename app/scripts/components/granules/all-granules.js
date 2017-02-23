@@ -34,7 +34,7 @@ var AllGranules = React.createClass({
   },
 
   render: function () {
-    const granules = this.props.granules.list;
+    const data = this.props.granules.list;
     const count = get(this.props.granules, 'meta.count');
 
     return (
@@ -73,7 +73,7 @@ var AllGranules = React.createClass({
           </div>
         </section>
 
-        <SortableTable data={granules} header={tableHeader} row={tableRow}/>
+        <SortableTable data={data} header={tableHeader} row={tableRow}/>
       </div>
     );
   }
