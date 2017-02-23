@@ -5,7 +5,8 @@ import {
   LIST_COLLECTIONS,
   QUERY_COLLECTION,
   GET_COLLECTION,
-  POST_COLLECTION
+  POST_COLLECTION,
+  PUT_COLLECTION
 } from '../actions';
 
 export const initialState = {
@@ -38,6 +39,10 @@ export default function reducer (state = initialState, action) {
 
     case POST_COLLECTION:
       set(state, ['created', action.postType, action.key], action.data);
+      break;
+
+    case PUT_COLLECTION:
+      set(state, ['map', action.key, 'data'], action.data.Attributes);
       break;
   }
   return state;

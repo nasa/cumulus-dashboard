@@ -19,6 +19,7 @@ var EditCollection = React.createClass({
   getInitialState: function () {
     return {
       collection: '',
+      updatedAt: null,
       error: null
     };
   },
@@ -59,6 +60,15 @@ var EditCollection = React.createClass({
       this.setState({ collection, error: null });
     }
 
+    // a collection edit was made and we've received the updated version
+    const updatedAt = this.state.updatedAt;
+    const newUpdatedAt = get(newProps.collections, ['map', collectionName, 'data', 'updatedAt']);
+    if (updatedAt && updatedAt !== newUpdatedAt) {
+      this.setState({
+        collection: JSON.stringify(get(newProps.collections, ['map', collectionName, 'data']), null, '\t')
+      });
+    }
+
     // save the latest error message if relevant
     var latestError = newProps.errors.errors[newProps.errors.errors.length - 1] || null;
     if (latestError && latestError.meta.type === PUT_COLLECTION) {
@@ -72,9 +82,13 @@ var EditCollection = React.createClass({
 
   onSubmit: function () {
     try {
-      this.setState({'error': null});
-
       var json = JSON.parse(this.state.collection);
+
+      this.setState({
+        'updatedAt': json.updatedAt,
+        'error': null
+      });
+
       json.updatedAt = moment().unix();
       json.changedBy = 'Cumulus Dashboard';
 
