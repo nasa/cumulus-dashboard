@@ -2,9 +2,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { getCollection } from '../../actions';
+import { getCollection, updateCollection, PUT_COLLECTION } from '../../actions';
 import TextArea from '../form/text-area';
 import slugify from 'slugify';
+import moment from 'moment';
 
 var EditCollection = React.createClass({
   displayName: 'EditCollection',
@@ -18,6 +19,7 @@ var EditCollection = React.createClass({
   getInitialState: function () {
     return {
       collection: '',
+      updatedAt: null,
       error: null
     };
   },
@@ -41,11 +43,13 @@ var EditCollection = React.createClass({
   componentWillReceiveProps: function (newProps) {
     const collectionName = this.props.params.collectionName;
     const newCollectionName = newProps.params.collectionName;
+
     if (collectionName !== newCollectionName) {
       // switch to a different collection, query it
       return this.get(newCollectionName);
     }
-    const record = get(newProps.api, ['collectionDetail', collectionName]);
+
+    const record = get(this.props.collections, ['map', collectionName]);
     if (!this.state.collection || (record.data && collectionName !== record.data.collectionName)) {
       // we've queried a new collection and just received it
       try {
@@ -55,6 +59,21 @@ var EditCollection = React.createClass({
       }
       this.setState({ collection, error: null });
     }
+
+    // a collection edit was made and we've received the updated version
+    const updatedAt = this.state.updatedAt;
+    const newUpdatedAt = get(newProps.collections, ['map', collectionName, 'data', 'updatedAt']);
+    if (updatedAt && updatedAt !== newUpdatedAt) {
+      this.setState({
+        collection: JSON.stringify(get(newProps.collections, ['map', collectionName, 'data']), null, '\t')
+      });
+    }
+
+    // save the latest error message if relevant
+    var latestError = newProps.errors.errors[newProps.errors.errors.length - 1] || null;
+    if (latestError && latestError.meta.type === PUT_COLLECTION) {
+      this.setState({'error': latestError.error});
+    }
   },
 
   onChange: function (id, value) {
@@ -62,14 +81,26 @@ var EditCollection = React.createClass({
   },
 
   onSubmit: function () {
-    const json = JSON.parse(this.state.collection);
-    console.log('in onsubmit');
-    console.log(json);
-    // post using an action
+    try {
+      var json = JSON.parse(this.state.collection);
+
+      this.setState({
+        'updatedAt': json.updatedAt,
+        'error': null
+      });
+
+      json.updatedAt = moment().unix();
+      json.changedBy = 'Cumulus Dashboard';
+
+      this.props.dispatch(updateCollection(json));
+    } catch (e) {
+      this.setState({'error': 'Syntax error in JSON'});
+    }
   },
 
   render: function () {
     const collectionName = this.props.params.collectionName;
+
     const record = get(this.props.collections, ['map', collectionName]);
     if (!record) {
       return <div></div>;
@@ -82,6 +113,7 @@ var EditCollection = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large'>Edit a Collection</h1>
+
           <form>
             <TextArea
               label={label}
@@ -93,6 +125,8 @@ var EditCollection = React.createClass({
               minLines={1}
               maxLines={200}
             />
+
+          <br />
 
           <input
             type='submit'

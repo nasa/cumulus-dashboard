@@ -10,6 +10,7 @@ export const QUERY_COLLECTION = 'QUERY_COLLECTION';
 export const GET_COLLECTION = 'GET_COLLECTION';
 export const LIST_COLLECTIONS = 'LIST_COLLECTIONS';
 export const POST_COLLECTION = 'POST_COLLECTION';
+export const PUT_COLLECTION = 'PUT_COLLECTION';
 
 export const LIST_GRANULES = 'LIST_GRANULES';
 
@@ -51,6 +52,21 @@ function get (path, callback) {
 
 function post (path, payload, callback) {
   request.post({
+    url: url.resolve(root, path),
+    body: payload,
+    json: true
+  }, (error, resp, body) => {
+    error = error || body.errorMessage;
+    if (error) {
+      return callback(error);
+    } else {
+      return callback(null, body);
+    }
+  });
+}
+
+function put (path, payload, callback) {
+  request.put({
     url: url.resolve(root, path),
     body: payload,
     json: true
@@ -116,6 +132,28 @@ export function createCollection (payload) {
         return dispatch(setPostSuccess(POST_COLLECTION, {
           type: 'collection',
           id: data.collectionName,
+          data
+        }));
+      }
+    });
+  };
+}
+
+export function updateCollection (payload) {
+  return function (dispatch) {
+    put('collections', payload, (error, data) => {
+      if (error) {
+        return dispatch(setError({
+          error,
+          meta: {
+            type: PUT_COLLECTION,
+            id: payload.collectionName
+          }
+        }));
+      } else {
+        return dispatch(setPostSuccess(PUT_COLLECTION, {
+          type: 'collection',
+          id: data.Attributes.collectionName,
           data
         }));
       }
