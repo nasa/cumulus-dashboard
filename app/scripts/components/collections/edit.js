@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { getCollection, updateCollection } from '../../actions';
+import { getCollection, updateCollection, PUT_COLLECTION } from '../../actions';
 import TextArea from '../form/text-area';
 import slugify from 'slugify';
 import moment from 'moment';
@@ -13,8 +13,7 @@ var EditCollection = React.createClass({
   propTypes: {
     params: React.PropTypes.object,
     collections: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    errors: React.PropTypes.object
+    dispatch: React.PropTypes.func
   },
 
   getInitialState: function () {
@@ -59,10 +58,17 @@ var EditCollection = React.createClass({
       }
       this.setState({ collection, error: null });
     }
+
+    // save the latest error message if relevant
+    var latestError = newProps.errors.errors[newProps.errors.errors.length - 1] || null;
+    if (latestError && latestError.meta.type === PUT_COLLECTION) {
+      this.setState({'error': latestError.error});
+    }
   },
 
   onChange: function (id, value) {
     this.setState({ collection: value });
+    // reset error and run json validation
   },
 
   onSubmit: function () {
@@ -84,16 +90,10 @@ var EditCollection = React.createClass({
     const label = `Edit ${collectionName}`;
     const id = `edit-${slugify(collectionName)}`;
 
-    if (this.props.errors.errors.length) {
-      var error = this.props.errors.errors[this.props.errors.errors.length - 1].error;
-    }
-
     return (
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large'>Edit a Collection</h1>
-
-          <p style={{color: 'red'}}>{error}</p>
 
           <form>
             <TextArea
