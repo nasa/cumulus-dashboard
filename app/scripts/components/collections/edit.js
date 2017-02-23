@@ -2,9 +2,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { getCollection } from '../../actions';
+import { getCollection, updateCollection } from '../../actions';
 import TextArea from '../form/text-area';
 import slugify from 'slugify';
+import moment from 'moment';
 
 var EditCollection = React.createClass({
   displayName: 'EditCollection',
@@ -12,7 +13,8 @@ var EditCollection = React.createClass({
   propTypes: {
     params: React.PropTypes.object,
     collections: React.PropTypes.object,
-    dispatch: React.PropTypes.func
+    dispatch: React.PropTypes.func,
+    errors: React.PropTypes.object
   },
 
   getInitialState: function () {
@@ -64,14 +66,16 @@ var EditCollection = React.createClass({
   },
 
   onSubmit: function () {
-    const json = JSON.parse(this.state.collection);
-    console.log('in onsubmit');
-    console.log(json);
-    // post using an action
+    var json = JSON.parse(this.state.collection); // TODO check for error
+    json.updatedAt = moment().unix();
+    json.changedBy = 'Cumulus Dashboard';
+
+    this.props.dispatch(updateCollection(json));
   },
 
   render: function () {
     const collectionName = this.props.params.collectionName;
+
     const record = get(this.props.collections, ['map', collectionName]);
     if (!record) {
       return <div></div>;
@@ -80,10 +84,17 @@ var EditCollection = React.createClass({
     const label = `Edit ${collectionName}`;
     const id = `edit-${slugify(collectionName)}`;
 
+    if (this.props.errors.errors.length) {
+      var error = this.props.errors.errors[this.props.errors.errors.length - 1].error;
+    }
+
     return (
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large'>Edit a Collection</h1>
+
+          <p style={{color: 'red'}}>{error}</p>
+
           <form>
             <TextArea
               label={label}
