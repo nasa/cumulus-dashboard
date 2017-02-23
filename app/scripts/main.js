@@ -74,7 +74,7 @@ render((
         <Route path='granules' component={Granules}>
           <IndexRoute component={Overview} />
           <Route path='granule-ingest' component={GranuleIngest} />
-          <Route path='granule' component={Granule} />
+          <Route path='granule/:collectionName/:granuleId' component={Granule} />
           <Route path='all-granules' component={AllGranules} />
           <Route path='errors' component={GranuleErrors} />
           <Route path='marked-deletion' component={MarkedDeletion} />
