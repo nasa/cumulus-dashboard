@@ -15,12 +15,15 @@ export const LIST_GRANULES = 'LIST_GRANULES';
 
 export const GET_STATS = 'GET_STATS';
 
+export const LIST_PDRS = 'LIST_PDRS';
+
 const setError = (error) => ({ type: ERROR, data: error });
 const queryCollection = (collectionName) => ({ type: QUERY_COLLECTION, data: { collectionName } });
 const setCollection = (collection) => ({ type: GET_COLLECTION, data: collection });
 const setCollections = (collections) => ({ type: LIST_COLLECTIONS, data: collections });
 const setGranules = (granules) => ({ type: LIST_GRANULES, data: granules });
 const setStats = (stats) => ({ type: GET_STATS, data: stats });
+const setPdrs = (pdrs) => ({ type: LIST_PDRS, data: pdrs });
 
 export function setPostSuccess (type, post) {
   return {
@@ -149,6 +152,22 @@ export function getStats () {
         }));
       } else {
         return dispatch(setStats(data));
+      }
+    });
+  };
+}
+
+export function listPdrs () {
+  return function (dispatch) {
+    get('pdrs', (error, data) => {
+      console.log(data);
+      if (error) {
+        return dispatch(setError({
+          error,
+          meta: { type: LIST_PDRS }
+        }));
+      } else {
+        return dispatch(setPdrs(data));
       }
     });
   };
