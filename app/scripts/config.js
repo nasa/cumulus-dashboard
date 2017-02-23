@@ -1,7 +1,11 @@
 'use strict';
 import assert from 'assert';
 
-var configurations = require('./config/*.js', {mode: 'hash'});
+var configurations = {
+  base: require('./config/base'),
+  staging: require('./config/staging'),
+  production: require('./config/production')
+};
 var config = configurations.base || {};
 
 if (process.env.DS_ENV === 'staging') {

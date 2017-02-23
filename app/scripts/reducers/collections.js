@@ -17,10 +17,14 @@ export const initialState = {
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
   switch (action.type) {
-
-    // TODO put each collection in collectionDetail as well.
     case LIST_COLLECTIONS:
       set(state, 'list', action.data);
+      // also sync each collection into the collection map
+      const map = {};
+      action.data.forEach(d => {
+        map[d.collectionName] = d;
+      });
+      Object.assign(state.map, map);
       break;
 
     case QUERY_COLLECTION:
