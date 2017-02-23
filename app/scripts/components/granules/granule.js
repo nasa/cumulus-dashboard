@@ -19,7 +19,12 @@ var Granule = React.createClass({
     const collectionName = this.props.params.collectionName;
     const granuleId = this.props.params.granuleId;
 
-    this.props.dispatch(getGranule(collectionName, granuleId));
+    // check for granule in map first, otherwise request it
+    const mapId = `${this.props.params.collectionName}-${granuleId}`;
+
+    if (!get(this.props.granules.map, mapId)) {
+      this.props.dispatch(getGranule(collectionName, granuleId));
+    }
   },
 
   render: function () {
