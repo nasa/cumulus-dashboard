@@ -7,5 +7,8 @@ module.exports = {
 
   // settings for Ace editor
   editorTheme: 'github',
-  tabSize: 2
+  tabSize: 2,
+
+  // settings for list queries
+  pageLimit: 100
 };
