@@ -5,6 +5,23 @@ import { Link } from 'react-router';
 import { getGranule } from '../../actions';
 import { get } from 'object-path';
 import { fullDate } from '../../utils/format';
+import SortableTable from '../table/sortable';
+
+const tableHeader = [
+  'Filename',
+  'Original',
+  'Staging',
+  'Archive',
+  'Access'
+];
+
+const tableRow = [
+  (d) => d.name,
+  (d) => (<a href={d.sipFile}>Link</a>),
+  (d) => (<a href={d.stagingFile}>Link</a>),
+  (d) => (<a href={d.archivedFile}>Link</a>),
+  (d) => d.access
+];
 
 var Granule = React.createClass({
   displayName: 'Granule',
@@ -42,6 +59,11 @@ var Granule = React.createClass({
 
     const granule = record.data;
 
+    const files = [];
+    Object.keys(granule.files).forEach(function (key) {
+      files.push(granule.files[key]);
+    });
+
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -66,6 +88,7 @@ var Granule = React.createClass({
             </ol>
           </div>
         </section>
+
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium'>Granule Overview</h2>
@@ -83,6 +106,14 @@ var Granule = React.createClass({
             <dd>{fullDate(granule.timeline.processStep.ended)}</dd>
           </dl>
         </section>
+
+        <section className='page__section'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium heading--shared-content'>Files</h2>
+          </div>
+          <SortableTable data={files} header={tableHeader} row={tableRow}/>
+        </section>
+
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content'>Logs</h2>
