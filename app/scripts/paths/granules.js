@@ -2,21 +2,24 @@
 
 const granuleRoutes = [
   ['Overview', null],
-  ['All Granules', 'all-granules'],
+  ['All Granules', 'all'],
   ['Errors', 'errors'],
-  ['Marked for Deletion', 'marked-deletion'],
+  ['Marked for Deletion', 'deletion'],
   ['Restricted', 'restricted']
 ];
 
 const singleGranuleRoutes = [
-  ['Granule', ':granuleId/overview'],
-  ['Granule Ingest', ':granuleId/ingest']
+  ['Granule', 'granule/:granuleId/overview'],
+  ['Granule Ingest', 'granule/:granuleId/ingest']
 ];
 
 const granules = {
   base: 'granules',
   heading: 'Granules',
-  routes: (params) => {
+  routes: (currentRoute, params) => {
+    if (currentRoute.indexOf('granules/granule') >= 0) {
+      return singleGranuleRoutes;
+    }
     return granuleRoutes;
   }
 };
