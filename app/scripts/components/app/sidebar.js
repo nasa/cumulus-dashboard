@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 import { resolve } from 'path';
 import sections from '../../paths';
 
+const currentPathClass = 'sidebar__nav--selected';
+
 var Sidebar = React.createClass({
   displayName: 'Sidebar',
 
@@ -12,19 +14,30 @@ var Sidebar = React.createClass({
   },
 
   resolvePath: function (base, path) {
-    if (!path) { return base; }
+    if (!path) { return resolve(base); }
     return resolve(base, path);
   },
 
   renderNavSection: function (section) {
     const { base, heading, routes } = section;
+    const { currentPath } = this.props;
     return (
       <div key={base}>
         <h3>{heading}</h3>
         <ul>
-          {routes(this.props.currentPath).map((d, i) => (
-            <li key={base + i}><Link to={this.resolvePath(base, d[1])}>{d[0]}</Link></li>
-          ))}
+          {routes(currentPath).map((d, i) => {
+            let path = this.resolvePath(base, d[1]);
+            let className = d[2] || '';
+            if (path === currentPath) {
+              className = className ? [className, currentPathClass].join(' ')
+                : currentPathClass;
+            }
+            return (
+              <li key={base + i}>
+                <Link className={className} to={path}>{d[0]}</Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
     );
