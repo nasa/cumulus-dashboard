@@ -23,7 +23,7 @@ const tableRow = [
   (d) => d.access
 ];
 
-var Granule = React.createClass({
+var GranuleOverview = React.createClass({
   displayName: 'Granule',
 
   propTypes: {
@@ -38,7 +38,6 @@ var Granule = React.createClass({
 
     // check for granule in map first, otherwise request it
     const mapId = `${this.props.params.collectionName}-${granuleId}`;
-
     if (!get(this.props.granules.map, mapId)) {
       this.props.dispatch(getGranule(collectionName, granuleId));
     }
@@ -131,4 +130,4 @@ var Granule = React.createClass({
   }
 });
 
-export default connect(state => state)(Granule);
+export default connect(state => state)(GranuleOverview);
