@@ -2,9 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { resolve } from 'path';
-import paths from '../../paths';
-
-const sections = ['collections', 'granules', 'pdrs', 'errors'];
+import sections from '../../paths';
 
 var Sidebar = React.createClass({
   displayName: 'Sidebar',
@@ -19,13 +17,13 @@ var Sidebar = React.createClass({
   },
 
   renderNavSection: function (section) {
-    const meta = paths[section];
+    const { base, heading, routes } = section;
     return (
-      <div key={meta.base}>
-        <h3>{meta.heading}</h3>
+      <div key={base}>
+        <h3>{heading}</h3>
         <ul>
-          {meta.routes(this.props.currentPath).map((d, i) => (
-            <li key={meta.base + i}><Link to={this.resolvePath(meta.base, d[1])}>{d[0]}</Link></li>
+          {routes(this.props.currentPath).map((d, i) => (
+            <li key={base + i}><Link to={this.resolvePath(base, d[1])}>{d[0]}</Link></li>
           ))}
         </ul>
       </div>
