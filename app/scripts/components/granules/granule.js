@@ -96,13 +96,13 @@ var GranuleOverview = React.createClass({
             <dt>Created</dt>
             <dd>{fullDate(granule.createdAt)}</dd>
             <dt>Metadata Pushed to CMR</dt>
-            <dd>{fullDate(granule.timeline.pushToCMR.ended)}</dd>
+            <dd>{fullDate(get(granule.timeline.pushToCMR, 'ended'))}</dd>
             <dt>Ingested</dt>
             <dd>{fullDate(granule.ingestEnded)}</dd>
             <dt>Archived</dt>
-            <dd>{fullDate(granule.timeline.archive.ended)}</dd>
+            <dd>{fullDate(get(granule.timeline.archive, 'ended'))}</dd>
             <dt>Processed</dt>
-            <dd>{fullDate(granule.timeline.processStep.ended)}</dd>
+            <dd>{fullDate(get(granule.timeline.prcoessStep, 'ended'))}</dd>
           </dl>
         </section>
 
