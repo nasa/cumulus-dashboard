@@ -10,10 +10,12 @@ test('reducers/collections', function (t) {
   };
   const action = {
     type: LIST_COLLECTIONS,
-    data: [
-      { collectionName: 'norm' },
-      { collectionName: 'barry' }
-    ]
+    data: {
+      results: [
+        { collectionName: 'norm' },
+        { collectionName: 'barry' }
+      ]
+    }
   };
   var newState = reducer(initialState, action);
   // list collections extends state.map
