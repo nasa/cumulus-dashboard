@@ -2,7 +2,7 @@
 
 const granuleRoutes = [
   ['Overview', null],
-  ['All Granules', 'all'],
+  ['All Granules', 'all-granules'],
   ['Errors', 'errors'],
   ['Marked for Deletion', 'deletion'],
   ['Restricted', 'restricted']

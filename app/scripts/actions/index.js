@@ -3,6 +3,7 @@ import url from 'url';
 import { get, post, put, wrapRequest } from './helpers';
 import _config from '../config';
 const root = _config.apiRoot;
+const pageLimit = _config.pageLimit;
 
 export const ERROR = 'ERROR';
 export const AUTHENTICATED = 'AUTHENTICATED';
@@ -26,7 +27,7 @@ export const setError = function (error) {
 
 const queryCollection = (collectionName) => ({ type: QUERY_COLLECTION, data: { collectionName } });
 const setCollection = (collection) => ({ type: GET_COLLECTION, data: collection });
-const setCollections = (collections) => ({ type: LIST_COLLECTIONS, data: collections.results });
+const setCollections = (collections) => ({ type: LIST_COLLECTIONS, data: collections });
 const setPostCollection = (collection) => ({
   type: POST_COLLECTION,
   id: collection.collectionName,
@@ -44,10 +45,22 @@ const setGranule = (granule) => ({ type: GET_GRANULE, data: granule });
 const setStats = (stats) => ({ type: GET_STATS, data: stats });
 const setPdrs = (pdrs) => ({ type: LIST_PDRS, data: pdrs });
 
-export const listCollections = () => wrapRequest(get, 'collections', LIST_COLLECTIONS, setCollections);
+export const listCollections = (options) => wrapRequest(get, {
+  url: url.resolve(root, 'collections'),
+  qs: {
+    page: options.page,
+    limit: pageLimit
+  }
+}, LIST_COLLECTIONS, setCollections);
 export const createCollection = (payload) => wrapRequest(post, 'collections', payload, POST_COLLECTION, setPostCollection);
 export const updateCollection = (payload) => wrapRequest(put, 'collections', payload, PUT_COLLECTION, setPutCollection);
-export const listGranules = () => wrapRequest(get, 'granules', LIST_GRANULES, setGranules);
+export const listGranules = (options) => wrapRequest(get, {
+  url: url.resolve(root, 'granules'),
+  qs: {
+    page: options.page,
+    limit: pageLimit
+  }
+}, LIST_GRANULES, setGranules);
 export const getStats = () => wrapRequest(get, 'stats/summary/grouped', GET_STATS, setStats);
 export const listPdrs = () => wrapRequest(get, 'pdrs', LIST_PDRS, setPdrs);
 

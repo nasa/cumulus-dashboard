@@ -12,6 +12,7 @@ import {
 export const initialState = {
   list: [],
   map: {},
+  meta: {},
   created: {}
 };
 
@@ -19,10 +20,11 @@ export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
   switch (action.type) {
     case LIST_COLLECTIONS:
-      set(state, 'list', action.data);
+      set(state, 'list', action.data.results);
+      set(state, 'meta', action.data.meta);
       // also sync each collection into the collection map
       const map = {};
-      action.data.forEach(d => {
+      action.data.results.forEach(d => {
         map[d.collectionName] = d;
       });
       Object.assign(state.map, map);

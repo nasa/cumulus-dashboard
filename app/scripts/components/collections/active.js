@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { listCollections } from '../../actions';
 import * as format from '../../utils/format';
+import Pagination from '../app/pagination';
 
 import SortableTable from '../table/sortable';
 
@@ -28,29 +29,39 @@ const tableRow = [
 var ActiveCollections = React.createClass({
   displayName: 'ActiveCollections',
 
+  getInitialState: function () {
+    return {
+      page: 1
+    };
+  },
+
   propTypes: {
     collections: React.PropTypes.object,
     dispatch: React.PropTypes.func
   },
 
-  componentWillReceiveProps: function (props) {
-    // TODO this just keeps it from requesting endlessly,
-    // obviously we want to use some kind of other check.
-    if (!this.props.collections.list.length) {
-      this.list();
+  componentWillReceiveProps: function (newProps) {
+    if (typeof newProps.collections.meta.page !== 'undefined') {
+      this.setState({ page: newProps.collections.meta.page });
     }
   },
 
   componentWillMount: function () {
-    this.list();
+    this.list(this.state.page);
   },
 
-  list: function () {
-    this.props.dispatch(listCollections());
+  list: function (page) {
+    this.props.dispatch(listCollections({ page }));
+  },
+
+  queryNewPage: function (page) {
+    this.list(page);
   },
 
   render: function () {
-    const data = this.props.collections.list;
+    const { list, meta } = this.props.collections;
+    const { count, limit } = meta;
+    const { page } = this.state;
 
     return (
       <div className='page__component'>
@@ -95,19 +106,9 @@ var ActiveCollections = React.createClass({
           </div>
         </section>
         <section className='page__section'>
-          <div className='pagination'>
-            <ol>
-              <li><a className='previous' href="/">Previous</a></li>
-              <li><a className='active' href="/">1</a></li>
-              <li><a href="/">2</a></li>
-              <li><a href="/">3</a></li>
-              <li><a href="/">4</a></li>
-              <li><a href="/">5</a></li>
-              <li><a className='next' href="/">Next</a></li>
-            </ol>
-          </div>
+          <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
-        <SortableTable data={data} header={tableHeader} row={tableRow}/>
+        <SortableTable data={list} header={tableHeader} row={tableRow}/>
       </div>
     );
   }
