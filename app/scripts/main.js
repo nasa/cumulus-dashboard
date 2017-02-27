@@ -74,6 +74,7 @@ render((
         </Route>
         <Route path='granules' component={Granules}>
           <IndexRoute component={ListGranules} />
+          <Route path='pdr/:pdrName' component={ListGranules} />
           <Route path='granule-ingest' component={GranuleIngest} />
           <Route path='granule/:collectionName/:granuleId/overview' component={GranuleOverview} />
           <Route path='granule/:collectionName/:granuleId/recipe' component={GranuleRecipe} />
