@@ -40,19 +40,22 @@ var ActiveCollections = React.createClass({
     dispatch: React.PropTypes.func
   },
 
+  componentWillReceiveProps: function (newProps) {
+    if (typeof newProps.collections.meta.page !== 'undefined') {
+      this.setState({ page: newProps.collections.meta.page });
+    }
+  },
+
   componentWillMount: function () {
-    this.list();
+    this.list(this.state.page);
   },
 
   list: function () {
-    this.props.dispatch(listCollections({
-      page: this.state.page
-    }));
+    this.props.dispatch(listCollections({ page }));
   },
 
   queryNewPage: function (page) {
-    this.setState({ page });
-    this.list();
+    this.list(page);
   },
 
   render: function () {
