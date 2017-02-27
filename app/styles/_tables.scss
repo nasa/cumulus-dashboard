@@ -10,7 +10,7 @@ table {
     }
   }
 
-  tbody { 
+  tbody {
     tr {
       border-bottom: 1px solid $lightest-grey;
       td {
@@ -135,4 +135,8 @@ table {
       left: 0;
     }
   }
+}
+
+.pagination__link--active {
+  text-decoration: underline;
 }
