@@ -85,7 +85,7 @@ export function getGranule (collectionName, granuleId) {
           }
         }));
       } else {
-        return dispatch(setGranule(data.results[0]));
+        return dispatch(setGranule(data));
       }
     });
   };

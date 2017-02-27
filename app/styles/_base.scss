@@ -296,3 +296,14 @@ a:active {
   background-color: darken($background-white, 3%);
   padding: 1em;
 }
+
+.granule-recipes {
+  ol {
+    list-style-type: decimal;
+    margin: 0 0 1em 1em;
+  }
+
+  .recipe {
+    margin-bottom: 1em;
+  }
+}

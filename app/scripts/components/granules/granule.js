@@ -2,15 +2,71 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { getGranule } from '../../actions';
+import { get } from 'object-path';
+import { fullDate } from '../../utils/format';
+import SortableTable from '../table/sortable';
 
-var Granule = React.createClass({
+const tableHeader = [
+  'Filename',
+  'Original',
+  'Staging',
+  'Archive',
+  'Access'
+];
+
+const tableRow = [
+  (d) => d.name,
+  (d) => (<a href={d.sipFile}>Link</a>),
+  (d) => (<a href={d.stagingFile}>Link</a>),
+  (d) => (<a href={d.archivedFile}>Link</a>),
+  (d) => d.access
+];
+
+var GranuleOverview = React.createClass({
   displayName: 'Granule',
 
+  propTypes: {
+    params: React.PropTypes.object,
+    dispatch: React.PropTypes.func,
+    granules: React.PropTypes.object
+  },
+
+  componentWillMount: function () {
+    const collectionName = this.props.params.collectionName;
+    const granuleId = this.props.params.granuleId;
+
+    // check for granule in map first, otherwise request it
+    const mapId = `${this.props.params.collectionName}-${granuleId}`;
+    if (!get(this.props.granules.map, mapId)) {
+      this.props.dispatch(getGranule(collectionName, granuleId));
+    }
+  },
+
   render: function () {
+    const granuleId = this.props.params.granuleId;
+
+    const mapId = `${this.props.params.collectionName}-${granuleId}`;
+    const record = get(this.props.granules, ['map', mapId]);
+
+    if (!record) {
+      return <div></div>;
+    } else if (record.inflight) {
+      // TODO loading indicator
+      return <div></div>;
+    }
+
+    const granule = record.data;
+
+    const files = [];
+    Object.keys(granule.files).forEach(function (key) {
+      files.push(granule.files[key]);
+    });
+
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>Granule Name</h1>
+          <h1 className='heading--large heading--shared-content'>{granuleId}</h1>
           <Link className='button button--small form-group__element--right button--disabled button--green' to='/'>Delete</Link>
           <Link className='button button--small form-group__element--right button--green' to='/'>Remove from CMR</Link>
           <Link className='button button--small form-group__element--right button--green' to='/'>Reprocess</Link>
@@ -31,27 +87,32 @@ var Granule = React.createClass({
             </ol>
           </div>
         </section>
+
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium'>Granule Overview</h2>
           </div>
           <dl className='metadata__granule__details'>
-            <dt>Collection</dt>
-            <dd>Collection Name</dd>
             <dt>Created</dt>
-            <dd>Date Created</dd>
-            <dt>Ingested</dt>
-            <dd>Date Ingested</dd>
-            <dt>Processed</dt>
-            <dd>Date Processed</dd>
-            <dt>Processed</dt>
-            <dd>Date Name</dd>
+            <dd>{fullDate(granule.createdAt)}</dd>
             <dt>Metadata Pushed to CMR</dt>
-            <dd>Date Created</dd>
+            <dd>{fullDate(get(granule.timeline.pushToCMR, 'ended'))}</dd>
+            <dt>Ingested</dt>
+            <dd>{fullDate(granule.ingestEnded)}</dd>
             <dt>Archived</dt>
-            <dd>Date Archived</dd>
+            <dd>{fullDate(get(granule.timeline.archive, 'ended'))}</dd>
+            <dt>Processed</dt>
+            <dd>{fullDate(get(granule.timeline.prcoessStep, 'ended'))}</dd>
           </dl>
         </section>
+
+        <section className='page__section'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium heading--shared-content'>Files</h2>
+          </div>
+          <SortableTable data={files} header={tableHeader} row={tableRow}/>
+        </section>
+
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content'>Logs</h2>
@@ -69,4 +130,4 @@ var Granule = React.createClass({
   }
 });
 
-export default connect(state => state)(Granule);
+export default connect(state => state)(GranuleOverview);

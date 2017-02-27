@@ -21,7 +21,10 @@ export default function reducer (state = initialState, action) {
       set(state, 'meta', action.data.meta);
       const newMap = {};
       action.data.results.forEach(d => {
-        newMap[id(d)] = d;
+        newMap[id(d)] = {
+          inflight: false,
+          'data': d
+        };
       });
       set(state, 'map', Object.assign({}, state.map, newMap));
       break;
