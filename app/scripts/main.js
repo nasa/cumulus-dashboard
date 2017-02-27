@@ -79,7 +79,7 @@ render((
           <Route path='granule/:collectionName/:granuleId/recipe' component={GranuleRecipe} />
           <Route path='all-granules' component={AllGranules} />
           <Route path='errors' component={GranuleErrors} />
-          <Route path='marked-deletion' component={MarkedDeletion} />
+          <Route path='deletion' component={MarkedDeletion} />
           <Route path='restricted' component={Restricted} />
         </Route>
         <Route path='pdr' component={Pdrs}>
