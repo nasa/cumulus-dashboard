@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { get } from 'object-path';
 import { listGranules } from '../../actions';
 import SortableTable from '../table/sortable';
 import { fullDate } from '../../utils/format';

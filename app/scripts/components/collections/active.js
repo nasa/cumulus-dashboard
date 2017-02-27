@@ -50,7 +50,7 @@ var ActiveCollections = React.createClass({
     this.list(this.state.page);
   },
 
-  list: function () {
+  list: function (page) {
     this.props.dispatch(listCollections({ page }));
   },
 
