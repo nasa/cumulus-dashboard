@@ -62,7 +62,13 @@ export const listGranules = (options) => wrapRequest(get, {
   }
 }, LIST_GRANULES, setGranules);
 export const getStats = () => wrapRequest(get, 'stats/summary/grouped', GET_STATS, setStats);
-export const listPdrs = () => wrapRequest(get, 'pdrs', LIST_PDRS, setPdrs);
+export const listPdrs = (options) => wrapRequest(get, {
+  url: url.resolve(root, 'pdrs'),
+  qs: {
+    page: options.page,
+    limit: pageLimit
+  }
+}, LIST_PDRS, setPdrs);
 
 export function getCollection (collectionName) {
   return function (dispatch) {
