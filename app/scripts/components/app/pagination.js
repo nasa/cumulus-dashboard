@@ -19,7 +19,7 @@ const Pagination = React.createClass({
 
   setPage: function (newPage) {
     const { page, limit, count } = this.props;
-    if (+page !== newPage && newPage > 1 && newPage < Math.ceil(count / limit)) {
+    if (+page !== newPage && newPage >= 1 && newPage <= Math.ceil(count / limit)) {
       this.props.onNewPage(newPage);
     }
   },
