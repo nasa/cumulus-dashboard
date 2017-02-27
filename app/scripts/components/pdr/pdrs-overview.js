@@ -5,6 +5,7 @@ import { get } from 'object-path';
 import { listPdrs } from '../../actions';
 import SortableTable from '../table/sortable';
 import { fullDate } from '../../utils/format';
+import Pagination from '../app/pagination';
 
 const tableHeader = [
   'PDR',
@@ -29,21 +30,39 @@ const tableRow = [
 var PdrsOverview = React.createClass({
   displayName: 'PdrsOverview',
 
+  getInitialState: function () {
+    return {
+      page: 1
+    };
+  },
+
   propTypes: {
     dispatch: React.PropTypes.func,
     pdrs: React.PropTypes.object
   },
 
   componentWillMount: function () {
-    this.list();
+    this.list(this.state.page);
   },
 
-  list: function () {
-    this.props.dispatch(listPdrs());
+  componentWillReceiveProps: function (newProps) {
+    if (typeof newProps.pdrs.meta.page !== 'undefined') {
+      this.setState({ page: newProps.pdrs.meta.page });
+    }
+  },
+
+  list: function (page) {
+    this.props.dispatch(listPdrs({ page }));
+  },
+
+  queryNewPage: function (page) {
+    this.list(page);
   },
 
   render: function () {
-    const data = this.props.pdrs.list;
+    const { list, meta } = this.props.pdrs;
+    const { count, limit } = meta;
+    const { page } = this.state;
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -55,7 +74,10 @@ var PdrsOverview = React.createClass({
           </dl>
           <hr />
         </section>
-        <SortableTable data={data} header={tableHeader} row={tableRow}/>
+        <section className='page__section'>
+          <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
+        </section>
+        <SortableTable data={list} header={tableHeader} row={tableRow}/>
       </div>
     );
   }
