@@ -54,7 +54,13 @@ export const listCollections = (options) => wrapRequest(get, {
 }, LIST_COLLECTIONS, setCollections);
 export const createCollection = (payload) => wrapRequest(post, 'collections', payload, POST_COLLECTION, setPostCollection);
 export const updateCollection = (payload) => wrapRequest(put, 'collections', payload, PUT_COLLECTION, setPutCollection);
-export const listGranules = () => wrapRequest(get, 'granules', LIST_GRANULES, setGranules);
+export const listGranules = (options) => wrapRequest(get, {
+  url: url.resolve(root, 'granules'),
+  qs: {
+    page: options.page,
+    limit: pageLimit
+  }
+}, LIST_GRANULES, setGranules);
 export const getStats = () => wrapRequest(get, 'stats/summary/grouped', GET_STATS, setStats);
 export const listPdrs = () => wrapRequest(get, 'pdrs', LIST_PDRS, setPdrs);
 
