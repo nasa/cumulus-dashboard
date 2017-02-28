@@ -2,15 +2,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
+import { Link } from 'react-router';
 import { listPdrs } from '../../actions';
 import SortableTable from '../table/sortable';
 import { fullDate } from '../../utils/format';
 import Pagination from '../app/pagination';
 
 const tableHeader = [
-  'PDR',
-  'Status',
   'Name',
+  'Status',
   'Provider',
   'Granules',
   'Duration',
@@ -18,9 +18,8 @@ const tableHeader = [
 ];
 
 const tableRow = [
-  () => 'TODO',
-  () => 'TODO',
-  'pdrName',
+  (d) => <Link to={`granules/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
+  'status',
   () => 'TODO',
   (d) => Object.keys(get(d, 'granules', {})).length,
   () => 'TODO',
