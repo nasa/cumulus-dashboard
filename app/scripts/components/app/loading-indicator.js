@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 const Loading = React.createClass({
+  displayName: 'Loading',
   render: function () {
     return (
       <div className='sk-cube-grid'>
