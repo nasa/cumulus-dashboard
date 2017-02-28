@@ -30,3 +30,8 @@ export const tally = function (numberString) {
     return bigTally(numberString);
   }
 };
+
+export const seconds = function (numberString) {
+  if (isNaN(numberString)) { return nullValue; }
+  return numberString + 's';
+};
