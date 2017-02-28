@@ -15,8 +15,8 @@ const tableHeader = [
   'Granules',
   'Ingesting',
   'Processing',
-  'Archiving',
   'Updating CMR',
+  'Archiving',
   'Completed'
 ];
 
@@ -26,8 +26,8 @@ const tableRow = [
   (d) => get(d, ['granulesStatus', 'total'], 0),
   (d) => get(d, ['granulesStatus', 'ingesting'], 0),
   (d) => get(d, ['granulesStatus', 'processing'], 0),
-  (d) => get(d, ['granulesStatus', 'archiving'], 0),
   (d) => get(d, ['granulesStatus', 'cmr'], 0),
+  (d) => get(d, ['granulesStatus', 'archiving'], 0),
   (d) => get(d, ['granulesStatus', 'completed'], 0)
 ];
 
