@@ -1,0 +1,14 @@
+machine:
+  node:
+    version: 6.9
+test:
+  override:
+    - npm run test
+
+deployment:
+  master:
+    branch: master
+    commands:
+      - npm rebuild node-sass
+      - npm run build
+      - cd dist && aws s3 sync . s3://cumulus-dashboard

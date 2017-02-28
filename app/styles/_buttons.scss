@@ -1,0 +1,96 @@
+.button {
+  padding: .65em 2em;
+  border-radius: 4px;
+  background-color: $light-green;
+  color: #fff;
+  font-weight: $base-font-regular;
+  border: none;
+  transition: all 0.3s ease 0s;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  overflow: hidden;
+}
+
+.button--green {
+  &:hover {
+    background-color: darken($light-green, 5%);
+  }
+}
+
+.button--white {
+  color: $midnight-blue;
+  background-color: #fff;
+}
+
+.button--small {
+  font-size: .86em;
+  padding: .3em 2em .35em;
+}
+
+.button--large {
+  padding: .7em 2em;
+  font-weight: $base-font-bold;
+  font-size: 1em;
+}
+
+.button--secondary {
+  background-color: $dolphin-grey;
+}
+
+.button__addcollections {
+  float: right;
+  margin-top: 1em;
+}
+
+.button--disabled {
+  opacity: 0.6;
+}
+
+.button__animation {
+  position: relative;
+  display: inline-block;
+  &:before {
+    position: absolute;
+    background-image: url('/graphics/layout/arrow-right.svg');
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+    content: '';
+    background-size: 15px 10px;
+    width: 15px;
+    height: 10px;
+  }
+}
+
+.button__animation:hover {
+  padding: .7em 3em .7em 1em;
+}
+
+.button__arrow:before {
+  left: 130%;
+  top: 1.1em;
+}
+
+.button__arrow:hover:before {
+  left: 85%;
+}
+
+.button__animation--md:hover {
+  padding: .65em 3em .65em 1em;
+}
+
+.button__arrow--md:hover:before {
+  left: 75%;
+}
+
+.button__arrow--white {
+  &:before {
+    background-image: url('/graphics/layout/arrow-right-white.svg');
+  }
+}
+
+.button__cancel {
+  &:before {
+    background-image: url('/graphics/layout/sm-xmark.svg');
+  }
+}

@@ -1,0 +1,93 @@
+input, textarea, select, .form__element__select {
+  border: 1px solid $lightest-grey;
+  background-color: #fff;
+  border-radius: .5em;
+  padding: .3em 2em .4em .7em;
+}
+
+label {
+  display: block;
+  font-weight: $base-font-semibold;
+  margin-bottom: .3em;
+}
+
+.form__multistep {
+  input[type='text'], textarea {
+    margin-bottom: 2em;
+    width: 100%;
+  }
+}
+
+.dropdown__wrapper {
+  border: 1px solid $lightest-grey;
+  border-radius: .5em;
+  position: relative;
+  &:after {
+    background-image: url('/graphics/layout/chevron-down.svg');
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-size: 10px 10px;
+    display: block;
+    position: absolute;
+    right: 1em;
+    top: .7em;
+  }
+}
+
+select {
+  -webkit-appearance: caret;
+}
+
+.filters {
+  margin: 1.5em 0 2em;
+  @include clearfix;
+}
+
+.search__wrapper {
+  position: relative;
+}
+
+.search__icon {
+  &:after {
+    position: absolute;
+    background-image: url('/graphics/layout/magnifier-left.svg');
+    content: '';
+    width: 14px;
+    height: 14px;
+    background-size: 14px 14px;
+    display: block;
+    right: 1em;
+    top: .7em;
+  }
+}
+
+.form-group__element {
+  float: left;
+  margin-right: 1em;
+}
+
+.form-group__element--small {
+  font-size: .86em;
+}
+
+.form__element__select {
+  font-weight: $base-font-regular;
+  padding: .3em .9em;
+  input {
+    margin-right: .8em;
+  }
+}
+
+.form-group__element--right {
+  float: right;
+  margin-left: 1em;
+}
+
+.form-group__element--right--sm {
+  margin-top: 0;
+}
+
+.form-group__element--left {
+  margin-right: 1em;
+}

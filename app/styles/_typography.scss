@@ -1,0 +1,40 @@
+h1, h2, h3, h4, h5, h6 {
+  color: $black;
+}
+
+.heading--xxlarge {
+  font-size: 3.2em;
+  font-weight: $base-font-bold;
+  color: #fff;
+}
+
+.heading--xlarge {
+  font-size: 3.2em;
+  font-weight: $base-font-bold;
+  color: #fff;
+}
+
+.heading--large {
+  font-size: 2.3em;
+  font-weight: $base-font-regular;
+}
+
+.heading--medium {
+  font-size: 1.58em;
+  font-weight: $base-font-regular;
+}
+
+.heading--small {
+  font-size: 1.28em;
+  font-weight: $base-font-bold;
+}
+
+.heading--shared-content {
+  display: inline-block;
+}
+
+.heading__wrapper--border {
+  border-bottom: 1px solid $lightest-grey;
+  padding-bottom: .3em;
+  margin-bottom: 1.2em;
+}

@@ -18,19 +18,314 @@
 }
 
 // Scss starts here!
+html {
+  font-size: $root-font-size;
+}
+
+body {
+  color: $dark-grey;
+  font-size: $base-font-size;
+  line-height: $base-line-height;
+  font-family: $base-font-family;
+  font-weight: $base-font-weight;
+  background-color: $background-white;
+}
+
+.row {
+  @extend .clearfix;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
+  padding: 0 64px;
+  display: block;
+  width: auto;
+}
+
+.clearfix {
+  &:before,
+  &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+
+a {
+  cursor: pointer;
+  transition: opacity 0.24s ease 0s;
+  text-decoration: none;
+  transition: all 0.3s ease 0s;
+}
+
+a:visited {
+}
+
+a:hover {
+
+}
+
+a:active {
+  outline: 0;
+}
+
+.link--secondary, .link--secondary:visited {
+  color: $ocean-blue;
+  font-weight: $base-font-semibold;
+  border-bottom: 2px solid $ocean-blue;
+  padding-bottom: .3em;
+  transition: all 0.3s ease 0s;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  &:hover {
+    color: $light-green;
+    border-bottom: 2px solid $light-green;
+  }
+}
+
+.link--tertiary {
+  color: $black;
+  border-bottom: 1px solid $lightest-grey;
+  &:hover {
+    color: lighten($black, 25%);
+  }
+}
+
+.description {
+  color: $lighter-grey;
+}
+
 .header {
-  padding: 256px 32px;
-  text-align: center;
-  font-size: 20px;
-  line-height: 1.5;
+  background-color: $ocean-blue;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
 
   h1 {
-    margin-bottom: 32px;
-    > img {
-      width: auto;
-      height: 64px;
-      max-width: 100%;
-      vertical-align: top;
+    float: left;
+    margin-right: 2.5em;
+    padding-top: 1em;
+    img {
+      height: 26px;
+      width: 165px;
     }
+  }
+  nav li {
+    padding: 1.3em 0 1em;
+    display: inline-block;
+    margin-right: 3em;
+    font-weight: $base-font-light;
+    border-bottom: 1px solid $ocean-blue;
+    transition: all 0.3s ease 0s;
+    a {
+      color: lighten($lightest-grey, 2%);
+    }
+    &:hover {
+      border-bottom: 1px solid #fff;
+      a {
+        color: #fff;
+      }
+    }
+  }
+}
+
+.content__header {
+  background-color: $ocean-blue;
+  color: #fff;
+  padding-top: 7em;
+  padding-bottom: 1em;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.content__header--lg {
+  padding-top: 15em;
+}
+
+.sidebar__container {
+  background-color: $midnight-blue;
+  width: 30%;
+  height: 100%;
+  content: '.';
+}
+
+.sidebar {
+  padding-top: 2em;
+  padding-bottom: 8em;
+  width: 20%;
+  max-width: 131px;
+  float: left;
+  background-color: $midnight-blue;
+  color: $lighter-grey;
+  position: relative;
+  a {
+    color: lighten($lighter-grey, 8%);
+    .active {
+      color: #fff;
+    }
+    &:hover {
+      color: #fff;
+    }
+  }
+  li {
+    margin-bottom: 0.75em;
+  }
+}
+
+.sidebar:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* subtract h2 padding (1.5rem) */
+  left: -50em;
+  background: $midnight-blue;
+  height: 100%;
+  width: 50em;
+}
+
+.sidebar__nav--back {
+  padding-bottom: 1.8em;
+  margin-bottom: 1em;
+  border-bottom: 1px solid rgba(69, 83, 101, .8);
+  display: inline-block;
+}
+
+.sidebar__row {
+  width: 90%;
+}
+
+.sidebar__nav--selected {
+  text-decoration: underline;
+}
+
+.sidebar__header {
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+.page__content__nosidebar {
+  margin-top: 4em;
+}
+
+.page__content {
+  width: 100%;
+  @include clearfix;
+}
+
+.page__content--shortened {
+  padding: 4em 0 0 65px;
+  float: left;
+  width: 80%;
+}
+
+.page__section {
+  margin-bottom: 6.5em;
+}
+
+.metadata__updated {
+  font-size: .79em;
+  font-style: italic;
+  color: lighten($lighter-grey, 10%);
+  dt, dd {
+    display: inline;
+    padding-right: .5em;
+  }
+  .metadata__updated__time {
+    margin-left: .5em;
+    padding-left: 1em;
+    border-left: 1px solid lighten($lighter-grey, 20%);
+  }
+}
+
+.progress-bar {
+  height: 5px;
+  position: relative;
+  background: $lightest-grey;
+  top: .3em;
+}
+
+.page__section__granule--progress {
+  position: relative;
+  margin: 2em 0 6em;
+  ol {
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+  li {
+    display: inline-block;
+    font-size: .86em;
+    color: lighten($lighter-grey, 8%);
+    text-align: center;
+    width: 24%;
+    position: relative;
+    top: 1.2em;
+    &:before {
+      content: '';
+      height: 14px;
+      width: 1px;
+      background-color: lighten($lighter-grey, 6%);
+      background-size: 14px 1px;
+      display: block;
+      margin-bottom: 2px;
+      position: absolute;
+      right: 50%;
+      top: -1.45em;
+    }
+    &:first-of-type {
+      text-align: left;
+      width: 14%;
+      &:before {
+        left: 0;
+        right: 0;
+      }
+    }
+    &:last-of-type {
+      text-align: right;
+      width: 14%;
+      &:before {
+        right: 0;
+      }
+    }
+  }
+
+  .progress-bar__active {
+    font-weight: $base-font-semibold;
+    color: $dark-grey;
+  }
+}
+
+.progress-bar__indicator {
+  position: absolute;
+  top: -8px;
+}
+
+.progress-bar__indicator--ingesting { left: -10px; }
+.progress-bar__indicator--processing { left: 25%;  }
+.progress-bar__indicator--cmr { left: 50%; }
+.progress-bar__indicator--archiving { left: 75%; }
+.progress-bar__indicator--completed { right: 12px; }
+
+.meter > span {
+  display: block;
+  height: 100%;
+  background-color: $light-green;
+  position: relative;
+  overflow: hidden;
+}
+
+.logs {
+  background-color: darken($background-white, 3%);
+  padding: 1em;
+}
+
+.granule-recipes {
+  ol {
+    list-style-type: decimal;
+    margin: 0 0 1em 1em;
+  }
+
+  .recipe {
+    margin-bottom: 1em;
   }
 }
