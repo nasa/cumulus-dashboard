@@ -9,9 +9,8 @@ const granuleRoutes = [
 ];
 
 const singleGranuleRoutes = [
-  ['Overview', null],
-  ['Granule', 'granule/:granuleId/overview'],
-  ['Granule Ingest', 'granule/:granuleId/ingest']
+  ['Overview', 'granule/:granuleId/overview'],
+  ['Ingest & Recipe', 'granule/:granuleId/recipe-ingest']
 ];
 
 const granules = {

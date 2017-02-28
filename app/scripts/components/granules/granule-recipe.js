@@ -6,9 +6,10 @@ import { get } from 'object-path';
 import { Link } from 'react-router';
 import Ace from 'react-ace';
 import config from '../../config';
+import Loading from '../app/loading-indicator';
 
 var GranuleRecipe = React.createClass({
-  displayName: 'Granule',
+  displayName: 'GranuleRecipe',
 
   propTypes: {
     params: React.PropTypes.object,
@@ -17,27 +18,20 @@ var GranuleRecipe = React.createClass({
   },
 
   componentWillMount: function () {
-    const collectionName = this.props.params.collectionName;
     const granuleId = this.props.params.granuleId;
-
-    // check for granule in map first, otherwise request it
-    const mapId = `${this.props.params.collectionName}-${granuleId}`;
-    if (!get(this.props.granules.map, mapId)) {
-      this.props.dispatch(getGranule(collectionName, granuleId));
+    if (!get(this.props.granules.map, granuleId)) {
+      this.props.dispatch(getGranule(granuleId));
     }
   },
 
   render: function () {
     const granuleId = this.props.params.granuleId;
-
-    const mapId = `${this.props.params.collectionName}-${granuleId}`;
-    const record = get(this.props.granules, ['map', mapId]);
+    const record = get(this.props.granules, ['map', granuleId]);
 
     if (!record) {
       return <div></div>;
     } else if (record.inflight) {
-      // TODO loading indicator
-      return <div></div>;
+      return <Loading />;
     }
 
     const granule = record.data;
