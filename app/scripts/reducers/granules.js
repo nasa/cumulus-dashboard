@@ -4,13 +4,14 @@ import { set } from 'object-path';
 import {
   LIST_GRANULES,
   QUERY_GRANULE,
-  GET_GRANULE
+  GET_GRANULE,
+  REPROCESS_GRANULE
 } from '../actions';
 
 export const initialState = {
   list: [],
   map: {},
-  meta: {}
+  meta: {},
 };
 
 export default function reducer (state = initialState, action) {
@@ -34,7 +35,11 @@ export default function reducer (state = initialState, action) {
       break;
 
     case GET_GRANULE:
-      set(state, ['map', action.data.granuleId], { inflight: false, data: action.data });
+      set(state, ['map', action.data.granuleId], { inflight: false, data: action.data, reprocessed: false });
+      break;
+
+    case REPROCESS_GRANULE:
+      set(state, ['map', action.data.granuleId, 'reprocessed'], true)
       break;
   }
   return state;

@@ -17,6 +17,7 @@ export const PUT_COLLECTION = 'PUT_COLLECTION';
 export const QUERY_GRANULE = 'QUERY_GRANULE';
 export const GET_GRANULE = 'GET_GRANULE';
 export const LIST_GRANULES = 'LIST_GRANULES';
+export const REPROCESS_GRANULE = 'REPROCESS_GRANULE';
 
 export const GET_STATS = 'GET_STATS';
 export const LIST_PDRS = 'LIST_PDRS';
@@ -44,6 +45,7 @@ const setGranules = (granules) => ({ type: LIST_GRANULES, data: granules });
 const setGranule = (granule) => ({ type: GET_GRANULE, data: granule });
 const setStats = (stats) => ({ type: GET_STATS, data: stats });
 const setPdrs = (pdrs) => ({ type: LIST_PDRS, data: pdrs });
+const setReprocessingGranule = (granuleId, response) => ({ type: REPROCESS_GRANULE, data: { granuleId }});
 
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
@@ -69,6 +71,10 @@ export const listPdrs = (options) => wrapRequest(get, {
   url: url.resolve(root, 'pdrs'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, LIST_PDRS, setPdrs);
+
+export const reprocessGranule = (granuleId) => wrapRequest(put, `granules/${granuleId}`, {
+  action: 'reprocess'
+}, REPROCESS_GRANULE, setReprocessingGranule.bind(null, granuleId));
 
 export function getCollection (collectionName) {
   return function (dispatch) {
