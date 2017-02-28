@@ -48,6 +48,7 @@ var GranuleOverview = React.createClass({
 
     const mapId = `${this.props.params.collectionName}-${granuleId}`;
     const record = get(this.props.granules, ['map', mapId]);
+    console.log(record);
 
     if (!record) {
       return <div></div>;
@@ -95,14 +96,8 @@ var GranuleOverview = React.createClass({
           <dl className='metadata__granule__details'>
             <dt>Created</dt>
             <dd>{fullDate(granule.createdAt)}</dd>
-            <dt>Metadata Pushed to CMR</dt>
-            <dd>{fullDate(get(granule.timeline.pushToCMR, 'ended'))}</dd>
             <dt>Ingested</dt>
             <dd>{fullDate(granule.ingestEnded)}</dd>
-            <dt>Archived</dt>
-            <dd>{fullDate(get(granule.timeline.archive, 'ended'))}</dd>
-            <dt>Processed</dt>
-            <dd>{fullDate(get(granule.timeline.prcoessStep, 'ended'))}</dd>
           </dl>
         </section>
 

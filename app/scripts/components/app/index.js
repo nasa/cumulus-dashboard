@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Header from './header';
-import Footer from './footer';
 
 var App = React.createClass({
   displayName: 'App',
@@ -18,7 +17,6 @@ var App = React.createClass({
         <main className='main' role='main'>
           {this.props.children}
         </main>
-        <Footer />
       </div>
     );
   }

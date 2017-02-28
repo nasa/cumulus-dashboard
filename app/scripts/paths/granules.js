@@ -2,13 +2,13 @@
 
 const granuleRoutes = [
   ['Overview', null],
-  ['All Granules', 'all-granules'],
   ['Errors', 'errors'],
   ['Marked for Deletion', 'deletion'],
   ['Restricted', 'restricted']
 ];
 
 const singleGranuleRoutes = [
+  ['Overview', null],
   ['Granule', 'granule/:granuleId/overview'],
   ['Granule Ingest', 'granule/:granuleId/ingest']
 ];

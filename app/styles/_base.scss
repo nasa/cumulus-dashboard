@@ -149,7 +149,8 @@ a:active {
 }
 
 .sidebar {
-  padding-top: 4em;
+  padding-top: 2em;
+  padding-bottom: 8em;
   width: 20%;
   max-width: 131px;
   float: left;
@@ -166,7 +167,7 @@ a:active {
     }
   }
   li {
-    margin-bottom: 1em;
+    margin-bottom: 0.75em;
   }
 }
 
@@ -195,6 +196,11 @@ a:active {
 
 .sidebar__nav--selected {
   text-decoration: underline;
+}
+
+.sidebar__header {
+  margin-top: 2em;
+  margin-bottom: 1em;
 }
 
 .page__content__nosidebar {

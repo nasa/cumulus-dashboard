@@ -45,6 +45,12 @@ const setGranule = (granule) => ({ type: GET_GRANULE, data: granule });
 const setStats = (stats) => ({ type: GET_STATS, data: stats });
 const setPdrs = (pdrs) => ({ type: LIST_PDRS, data: pdrs });
 
+export const interval = function (action, wait, immediate) {
+  if (immediate) { action(); }
+  const intervalId = setInterval(action, wait);
+  return () => clearInterval(intervalId);
+};
+
 export const listCollections = (options) => wrapRequest(get, {
   url: url.resolve(root, 'collections'),
   qs: {
@@ -56,13 +62,13 @@ export const createCollection = (payload) => wrapRequest(post, 'collections', pa
 export const updateCollection = (payload) => wrapRequest(put, 'collections', payload, PUT_COLLECTION, setPutCollection);
 export const listGranules = (options) => wrapRequest(get, {
   url: url.resolve(root, 'granules'),
-  qs: {
-    page: options.page,
-    limit: pageLimit
-  }
+  qs: Object.assign({ limit: pageLimit }, options)
 }, LIST_GRANULES, setGranules);
 export const getStats = () => wrapRequest(get, 'stats/summary/grouped', GET_STATS, setStats);
-export const listPdrs = () => wrapRequest(get, 'pdrs', LIST_PDRS, setPdrs);
+export const listPdrs = (options) => wrapRequest(get, {
+  url: url.resolve(root, 'pdrs'),
+  qs: Object.assign({ limit: pageLimit }, options)
+}, LIST_PDRS, setPdrs);
 
 export function getCollection (collectionName) {
   return function (dispatch) {

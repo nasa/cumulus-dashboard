@@ -9,7 +9,7 @@ const pdrRoutes = [
 ];
 
 const pdrs = {
-  base: 'pdr',
+  base: 'pdrs',
   heading: 'PDRs',
   routes: () => pdrRoutes
 };
