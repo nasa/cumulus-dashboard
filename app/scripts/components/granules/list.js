@@ -21,7 +21,7 @@ const tableHeader = [
   'Updated'
 ];
 const tableRow = [
-  (d) => <Link to={`/granules/granule/${d.collectionName}/${d.granuleId}/overview`}>{d.granuleId}</Link>,
+  (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
   'status',
   'pdrName',
   'collectionName',
