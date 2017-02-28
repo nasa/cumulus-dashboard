@@ -9,5 +9,6 @@ deployment:
   develop:
     branch: feature/deploy
     commands:
+      - npm rebuild node-sass
       - npm run build
       - cd dist && aws s3 sync . s3://cumulus-dashboard
