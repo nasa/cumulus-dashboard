@@ -5,25 +5,23 @@ import { get } from 'object-path';
 import { Link } from 'react-router';
 import { listPdrs } from '../../actions';
 import SortableTable from '../table/sortable';
-import { fullDate } from '../../utils/format';
+import { fullDate, nullValue } from '../../utils/format';
 import Pagination from '../app/pagination';
 
 const tableHeader = [
   'Name',
   'Status',
-  'Provider',
+  'Last update',
   'Granules',
-  'Duration',
-  'Added'
+  'Completed'
 ];
 
 const tableRow = [
   (d) => <Link to={`granules/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
   'status',
-  () => 'TODO',
-  (d) => Object.keys(get(d, 'granules', {})).length,
-  () => 'TODO',
-  (d) => fullDate(d.createdAt)
+  'updatedAt',
+  (d) => get(d, ['granulesStatus', 'total'], nullValue),
+  (d) => get(d, ['granulesStatus', 'completed'], nullValue)
 ];
 
 var PdrsOverview = React.createClass({
@@ -65,7 +63,7 @@ var PdrsOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>PDR's Overview</h1>
+          <h1 className='heading--large heading--shared-content'>PDR's Overview { count ? `(${count})` : null }</h1>
           <dl className="metadata__updated">
             <dt>Last Updated:</dt>
             <dd>Sept. 23, 2016</dd>
