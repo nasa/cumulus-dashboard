@@ -2,11 +2,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { listGranules } from '../../actions';
+import { interval, listGranules } from '../../actions';
 import SortableTable from '../table/sortable';
 import { fullDate, seconds } from '../../utils/format';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
+import { updateInterval } from '../../config';
+
+// distinguish between undefined and null parameters
+const NULL = null;
 
 const tableHeader = [
   'Name',
@@ -28,10 +32,10 @@ const tableRow = [
 var AllGranules = React.createClass({
   displayName: 'AllGranules',
 
-  getInitialState: function (props) {
+  getInitialState: function () {
     return {
       page: 1,
-      pdrName: this.props.params.pdrName
+      pdrName: this.props.params.pdrName || NULL
     };
   },
 
@@ -50,14 +54,26 @@ var AllGranules = React.createClass({
       this.setState({ page: newProps.granules.meta.page });
     }
 
-    // check for pdr name param here, if it's there set state
+    let { pdrName } = newProps.params;
+    pdrName = pdrName || NULL;
+    if (pdrName !== this.state.pdrName) {
+      this.setState({ pdrName });
+      this.list({ pdrName });
+    }
+  },
+
+  componentWillUnmount: function () {
+    if (this.cancelInterval) { this.cancelInterval(); }
   },
 
   list: function (options) {
     options = options || {};
     if (!options.page) { options.page = this.state.page; }
-    if (this.state.pdrName) { options.pdrName = this.state.pdrName; }
-    this.props.dispatch(listGranules(options));
+    if (options.pdrName !== NULL && this.state.pdrName) { options.pdrName = this.state.pdrName; }
+    for (let key in options) { !options[key] && delete options[key]; }
+    if (this.cancelInterval) { this.cancelInterval(); }
+    const { dispatch } = this.props;
+    this.cancelInterval = interval(() => dispatch(listGranules(options)), updateInterval, true);
   },
 
   queryNewPage: function (page) {

@@ -62,10 +62,7 @@ export const createCollection = (payload) => wrapRequest(post, 'collections', pa
 export const updateCollection = (payload) => wrapRequest(put, 'collections', payload, PUT_COLLECTION, setPutCollection);
 export const listGranules = (options) => wrapRequest(get, {
   url: url.resolve(root, 'granules'),
-  qs: {
-    page: options.page,
-    limit: pageLimit
-  }
+  qs: Object.assign({ limit: pageLimit }, options)
 }, LIST_GRANULES, setGranules);
 export const getStats = () => wrapRequest(get, 'stats/summary/grouped', GET_STATS, setStats);
 export const listPdrs = (options) => wrapRequest(get, {
