@@ -6,6 +6,9 @@ module.exports = {
   editorTheme: 'github',
   tabSize: 2,
 
-  // settings for list queries
-  pageLimit: 20
+  // list queries
+  pageLimit: 20,
+
+  // auto-update frequency
+  updateInterval: 5000
 };

@@ -31,11 +31,10 @@ import CollectionLogs from './components/collections/collection-logs';
 import Collection from './components/collections/collection';
 
 import Granules from './components/granules';
-import Overview from './components/granules/overview';
+import ListGranules from './components/granules/list';
 import GranuleIngest from './components/granules/granule-ingest';
 import GranuleOverview from './components/granules/granule';
 import GranuleRecipe from './components/granules/granule-recipe';
-import ListGranules from './components/granules/list';
 import GranuleErrors from './components/granules/errors';
 import MarkedDeletion from './components/granules/marked-deletion';
 import Restricted from './components/granules/restricted';

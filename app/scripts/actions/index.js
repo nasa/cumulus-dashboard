@@ -45,6 +45,12 @@ const setGranule = (granule) => ({ type: GET_GRANULE, data: granule });
 const setStats = (stats) => ({ type: GET_STATS, data: stats });
 const setPdrs = (pdrs) => ({ type: LIST_PDRS, data: pdrs });
 
+export const interval = function (action, wait, immediate) {
+  if (immediate) { action(); }
+  const intervalId = setInterval(action, wait);
+  return () => clearInterval(intervalId);
+};
+
 export const listCollections = (options) => wrapRequest(get, {
   url: url.resolve(root, 'collections'),
   qs: {

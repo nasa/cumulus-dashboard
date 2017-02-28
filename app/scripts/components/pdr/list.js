@@ -3,11 +3,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { Link } from 'react-router';
-import { listPdrs } from '../../actions';
+import { interval, listPdrs } from '../../actions';
 import SortableTable from '../table/sortable';
-import { fullDate } from '../../utils/format';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
+import { updateInterval } from '../../config';
 
 const tableHeader = [
   'Name',
@@ -55,8 +55,14 @@ var PdrsOverview = React.createClass({
     }
   },
 
+  componentWillUnmount: function () {
+    if (this.cancelInterval) { this.cancelInterval(); }
+  },
+
   list: function (page) {
-    this.props.dispatch(listPdrs({ page }));
+    if (this.cancelInterval) { this.cancelInterval(); }
+    const { dispatch } = this.props;
+    this.cancelInterval = interval(() => dispatch(listPdrs({ page })), updateInterval, true);
   },
 
   queryNewPage: function (page) {
