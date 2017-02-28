@@ -2,11 +2,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { getGranule } from '../../actions';
+import { interval, getGranule } from '../../actions';
 import { get } from 'object-path';
 import { fullDate } from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
+import { updateInterval } from '../../config';
 
 const tableHeader = [
   'Filename',
@@ -35,9 +36,13 @@ var GranuleOverview = React.createClass({
 
   componentWillMount: function () {
     const granuleId = this.props.params.granuleId;
-    if (!get(this.props.granules.map, granuleId)) {
-      this.props.dispatch(getGranule(granuleId));
-    }
+    const immediate = !get(this.props.granules.map, granuleId);
+    const { dispatch } = this.props;
+    this.cancelInterval = interval(() => dispatch(getGranule(granuleId)), updateInterval, immediate);
+  },
+
+  componentWillUnmount: function () {
+    if (this.cancelInterval) { this.cancelInterval(); }
   },
 
   renderStatus: function (status) {
@@ -79,7 +84,7 @@ var GranuleOverview = React.createClass({
 
     if (!record) {
       return <div></div>;
-    } else if (record.inflight) {
+    } else if (record.inflight && !record.data) {
       return <Loading />;
     }
 

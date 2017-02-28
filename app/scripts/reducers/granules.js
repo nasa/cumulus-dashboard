@@ -30,7 +30,7 @@ export default function reducer (state = initialState, action) {
       break;
 
     case QUERY_GRANULE:
-      set(state, ['map', action.data.granuleId], { inflight: true });
+      set(state, ['map', action.data.granuleId, 'inflight'], true);
       break;
 
     case GET_GRANULE:
