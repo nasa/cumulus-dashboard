@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import { listCollections } from '../../actions';
 import * as format from '../../utils/format';
 import Pagination from '../app/pagination';
-
+import Loading from '../app/loading-indicator';
 import SortableTable from '../table/sortable';
 
 const tableHeader = [
@@ -19,10 +19,10 @@ const tableHeader = [
 
 const tableRow = [
   (d) => <Link to={`/collections/collection/${d.collectionName}`}>{d.collectionName}</Link>,
-  () => 1,
+  () => 0,
   'changedBy',
-  () => 1,
-  () => '0:03:00',
+  (d) => format.tally(d.granules),
+  (d) => format.seconds(d.averageDuration),
   (d) => format.fullDate(d.updatedAt)
 ];
 
@@ -62,6 +62,7 @@ var ActiveCollections = React.createClass({
     const { list, meta } = this.props.collections;
     const { count, limit } = meta;
     const { page } = this.state;
+    console.log(list);
 
     return (
       <div className='page__component'>
@@ -105,6 +106,7 @@ var ActiveCollections = React.createClass({
             </div>
           </div>
         </section>
+        {list.length ? null : <Loading />}
         <section className='page__section'>
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
