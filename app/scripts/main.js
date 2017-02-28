@@ -82,7 +82,7 @@ render((
           <Route path='deletion' component={MarkedDeletion} />
           <Route path='restricted' component={Restricted} />
         </Route>
-        <Route path='pdr' component={Pdrs}>
+        <Route path='pdrs' component={Pdrs}>
           <IndexRoute component={listPdrs} />
           <Route path='active' component={PdrActive} />
           <Route path='completed' component={PdrCompleted} />
