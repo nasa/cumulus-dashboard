@@ -64,10 +64,7 @@ export const listGranules = (options) => wrapRequest(get, {
 export const getStats = () => wrapRequest(get, 'stats/summary/grouped', GET_STATS, setStats);
 export const listPdrs = (options) => wrapRequest(get, {
   url: url.resolve(root, 'pdrs'),
-  qs: {
-    page: options.page,
-    limit: pageLimit
-  }
+  qs: Object.assign({ limit: pageLimit }, options)
 }, LIST_PDRS, setPdrs);
 
 export function getCollection (collectionName) {
