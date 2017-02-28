@@ -4,3 +4,10 @@ machine:
 test:
   override:
     - npm run test
+
+deployment:
+  develop:
+    branch: feature/deploy
+    commands:
+      - npm run build
+      - cd dist && aws s3 sync . s3://cumulus-dashboard
