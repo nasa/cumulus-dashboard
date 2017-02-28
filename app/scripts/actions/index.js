@@ -39,7 +39,7 @@ const setPutCollection = (collection) => ({
   data: collection
 });
 
-const queryGranule = (collectionName, granuleId) => ({ type: QUERY_GRANULE, data: { collectionName, granuleId } });
+const queryGranule = (granuleId) => ({ type: QUERY_GRANULE, data: { granuleId } });
 const setGranules = (granules) => ({ type: LIST_GRANULES, data: granules });
 const setGranule = (granule) => ({ type: GET_GRANULE, data: granule });
 const setStats = (stats) => ({ type: GET_STATS, data: stats });
@@ -90,10 +90,10 @@ export function getCollection (collectionName) {
   };
 }
 
-export function getGranule (collectionName, granuleId) {
+export function getGranule (granuleId) {
   return function (dispatch) {
-    dispatch(queryGranule(collectionName, granuleId));
-    let path = url.resolve(root, `granules/${collectionName}/${granuleId}`);
+    dispatch(queryGranule(granuleId));
+    let path = url.resolve(root, `granules/${granuleId}`);
     get(path, (error, data) => {
       if (error) {
         return dispatch(setError({

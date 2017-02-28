@@ -21,7 +21,7 @@ export default function reducer (state = initialState, action) {
       set(state, 'meta', action.data.meta);
       const newMap = {};
       action.data.results.forEach(d => {
-        newMap[id(d)] = {
+        newMap[d.granuleId] = {
           inflight: false,
           'data': d
         };
@@ -30,19 +30,12 @@ export default function reducer (state = initialState, action) {
       break;
 
     case QUERY_GRANULE:
-      set(state, ['map', id(action.data)], { inflight: true });
+      set(state, ['map', action.data.granuleId], { inflight: true });
       break;
 
     case GET_GRANULE:
-      set(state, ['map', id(action.data)], {
-        inflight: false,
-        data: action.data
-      });
+      set(state, ['map', action.data.granuleId], { inflight: false, data: action.data });
       break;
   }
   return state;
-}
-
-function id (granule) {
-  return `${granule.collectionName}-${granule.granuleId}`;
 }
