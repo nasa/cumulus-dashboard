@@ -1,12 +1,12 @@
 'use strict';
 
 const routes = [
-  ['Errors', 'error']
+  ['', '']
 ];
 
 const meta = {
-  base: 'errors',
-  heading: 'Errors',
+  base: '',
+  heading: 'Logs',
   routes: () => routes
 };
 

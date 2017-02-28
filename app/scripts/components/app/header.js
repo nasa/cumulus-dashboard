@@ -14,8 +14,7 @@ var Header = React.createClass({
             <ul>
               <li><Link to='/collections'>Collections</Link></li>
               <li><Link to='/granules'>Granules</Link></li>
-              <li><Link to='/pdr'>PDR's</Link></li>
-              <li><Link to='/errors'>Errors</Link></li>
+              <li><Link to='/pdrs'>PDR's</Link></li>
               <li><Link to='/logs'>Logs</Link></li>
               <li><Link to='/contact'>Contact</Link></li>
             </ul>
