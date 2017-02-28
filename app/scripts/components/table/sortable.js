@@ -26,15 +26,15 @@ const Table = React.createClass({
           {this.props.data.map((d, i) => {
             return (
               <tr key={i}>
-                {row.map((accessor, i) => {
-                  let className = i === pIndex ? 'table__main-asset' : '';
+                {row.map((accessor, k) => {
+                  let className = k === pIndex ? 'table__main-asset' : '';
                   let text;
                   if (typeof accessor === 'function') {
-                    text = accessor(d, i, data);
+                    text = accessor(d, k, data);
                   } else {
                     text = d[accessor];
                   }
-                  return <td key={i + text} className={className}>{text}</td>;
+                  return <td key={String(i) + String(k) + text} className={className}>{text}</td>;
                 })}
               </tr>
             );
