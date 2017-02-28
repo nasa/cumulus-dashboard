@@ -6,8 +6,8 @@ test:
     - npm run test
 
 deployment:
-  develop:
-    branch: feature/deploy
+  master:
+    branch: master
     commands:
       - npm rebuild node-sass
       - npm run build
