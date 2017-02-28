@@ -257,7 +257,7 @@ a:active {
     font-size: .86em;
     color: lighten($lighter-grey, 8%);
     text-align: center;
-    width: 32%;
+    width: 24%;
     position: relative;
     top: 1.2em;
     &:before {
@@ -274,7 +274,7 @@ a:active {
     }
     &:first-of-type {
       text-align: left;
-      width: 18%;
+      width: 14%;
       &:before {
         left: 0;
         right: 0;
@@ -282,7 +282,7 @@ a:active {
     }
     &:last-of-type {
       text-align: right;
-      width: 18%;
+      width: 14%;
       &:before {
         right: 0;
       }
