@@ -1,4 +1,5 @@
 'use strict';
+import { encode } from '../utils/browser';
 
 const granuleRoutes = [
   ['Overview', null],
@@ -8,9 +9,8 @@ const granuleRoutes = [
 ];
 
 const singleGranuleRoutes = [
-  ['Overview', null],
-  ['Granule', 'granule/:granuleId/overview'],
-  ['Granule Ingest', 'granule/:granuleId/ingest']
+  ['Overview', 'granule/:granuleId/overview'],
+  ['Ingest & Recipe', 'granule/:granuleId/recipe-ingest']
 ];
 
 const granules = {
@@ -18,7 +18,12 @@ const granules = {
   heading: 'Granules',
   routes: (currentRoute, params) => {
     if (currentRoute.indexOf('granules/granule') >= 0) {
-      return singleGranuleRoutes;
+      return singleGranuleRoutes.map(d => {
+        if (!d[1] || d[1].indexOf(':granuleId') === -1) { return d; }
+        let copy = d.slice();
+        copy[1] = encode(copy[1].replace(':granuleId', params.granuleId));
+        return copy;
+      });
     }
     return granuleRoutes;
   }

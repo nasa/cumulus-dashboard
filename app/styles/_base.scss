@@ -257,7 +257,7 @@ a:active {
     font-size: .86em;
     color: lighten($lighter-grey, 8%);
     text-align: center;
-    width: 32%;
+    width: 24%;
     position: relative;
     top: 1.2em;
     &:before {
@@ -274,7 +274,7 @@ a:active {
     }
     &:first-of-type {
       text-align: left;
-      width: 18%;
+      width: 14%;
       &:before {
         left: 0;
         right: 0;
@@ -282,13 +282,29 @@ a:active {
     }
     &:last-of-type {
       text-align: right;
-      width: 18%;
+      width: 14%;
       &:before {
         right: 0;
       }
     }
   }
+
+  .progress-bar__active {
+    font-weight: $base-font-semibold;
+    color: $dark-grey;
+  }
 }
+
+.progress-bar__indicator {
+  position: absolute;
+  top: -8px;
+}
+
+.progress-bar__indicator--ingesting { left: -10px; }
+.progress-bar__indicator--processing { left: 25%;  }
+.progress-bar__indicator--cmr { left: 50%; }
+.progress-bar__indicator--archiving { left: 75%; }
+.progress-bar__indicator--completed { right: 12px; }
 
 .meter > span {
   display: block;
