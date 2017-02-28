@@ -288,7 +288,23 @@ a:active {
       }
     }
   }
+
+  .progress-bar__active {
+    font-weight: $base-font-semibold;
+    color: $dark-grey;
+  }
 }
+
+.progress-bar__indicator {
+  position: absolute;
+  top: -8px;
+}
+
+.progress-bar__indicator--ingesting { left: -10px; }
+.progress-bar__indicator--processing { left: 25%;  }
+.progress-bar__indicator--cmr { left: 50%; }
+.progress-bar__indicator--archiving { left: 75%; }
+.progress-bar__indicator--completed { right: 12px; }
 
 .meter > span {
   display: block;
