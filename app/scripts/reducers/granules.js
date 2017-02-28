@@ -11,7 +11,7 @@ import {
 export const initialState = {
   list: [],
   map: {},
-  meta: {},
+  meta: {}
 };
 
 export default function reducer (state = initialState, action) {
@@ -39,7 +39,7 @@ export default function reducer (state = initialState, action) {
       break;
 
     case REPROCESS_GRANULE:
-      set(state, ['map', action.data.granuleId, 'reprocessed'], true)
+      set(state, ['map', action.data.granuleId, 'reprocessed'], true);
       break;
   }
   return state;
