@@ -21,7 +21,7 @@ const tableHeader = [
   'Updated'
 ];
 const tableRow = [
-  (d) => (<Link to={`/granules/granule/${d.collectionName}/${d.granuleId}/overview`}>{d.granuleId}</Link>),
+  (d) => <Link to={`/granules/granule/${d.collectionName}/${d.granuleId}/overview`}>{d.granuleId}</Link>,
   'status',
   'pdrName',
   'collectionName',
@@ -81,6 +81,7 @@ var AllGranules = React.createClass({
   },
 
   render: function () {
+    const { pdrName } = this.props.params;
     const { list, meta } = this.props.granules;
     const { count, limit } = meta;
     const { page } = this.state;
@@ -88,7 +89,7 @@ var AllGranules = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large heading--shared-content'>
-            Granules <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
+            {pdrName || 'All'} Granules <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
           </h1>
           <dl className='metadata__updated'>
             <dt>Last Updated:</dt>
