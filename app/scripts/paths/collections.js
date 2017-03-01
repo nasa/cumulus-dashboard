@@ -2,17 +2,19 @@
 import { encode } from '../utils/browser';
 
 const singleCollectionRoutes = [
-  ['Back to Collections', null, 'sidebar__nav--back'],
   ['Active', 'collection/:collectionName/active'],
   ['In-active', 'collection/:collectionName/inactive']
 ];
 
 const collectionRoutes = [
+  ['Back to Collections', null, 'sidebar__nav--back'],
   ['Overview', null],
   ['Granules', 'granules'],
   ['Ingest & Recipe', 'ingest'],
   ['Logs', 'logs']
 ];
+
+const empty = [['', '']];
 
 const collections = {
   base: 'collections',
@@ -28,7 +30,12 @@ const collections = {
         return copy;
       });
     }
-    return collectionRoutes;
+    else if (currentRoute.slice(0, 12) === '/collections') {
+      return singleCollectionRoutes;
+    }
+    else {
+      return empty;
+    }
   }
 };
 
