@@ -37,7 +37,7 @@ export default function reducer (state = initialState, action) {
   switch (action.type) {
     case COLLECTION:
       set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'data'], data);
+      set(state, ['map', id, 'data'], data.results[0]);
       break;
     case COLLECTION_INFLIGHT:
       set(state, ['map', id, 'inflight'], true);
