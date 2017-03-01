@@ -64,6 +64,7 @@ export const wrapRequest = function (id, query, params, type, body) {
 
     dispatch({ id, type: inflightType });
 
+    const start = new Date();
     query(config, (error, data) => {
       if (error) {
         const errorType = type + '_ERROR';
@@ -77,8 +78,8 @@ export const wrapRequest = function (id, query, params, type, body) {
         });
 
       } else {
-        log((id ? type + ': ' + id : type));
-
+        const duration = new Date() - start;
+        log((id ? type + ': ' + id : type), duration + 'ms');
         return dispatch({ id, type, data });
       }
     });
