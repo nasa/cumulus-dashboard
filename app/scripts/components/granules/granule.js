@@ -9,6 +9,7 @@ import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
 import Ellipsis from '../app/loading-ellipsis';
 import { updateInterval } from '../../config';
+import LogViewer from '../logs/viewer';
 
 const tableHeader = [
   'Filename',
@@ -38,7 +39,8 @@ var GranuleOverview = React.createClass({
   propTypes: {
     params: React.PropTypes.object,
     dispatch: React.PropTypes.func,
-    granules: React.PropTypes.object
+    granules: React.PropTypes.object,
+    logs: React.PropTypes.object
   },
 
   componentWillMount: function () {
@@ -119,7 +121,7 @@ var GranuleOverview = React.createClass({
     const { reprocessing } = this.state;
     const files = [];
     for (let key in granule.files) { files.push(granule.files[key]); }
-
+    const logsQuery = { granuleId };
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -164,9 +166,7 @@ var GranuleOverview = React.createClass({
               <span className="search__icon"></span>
             </form>
           </div>
-          <div className="logs">
-            <p>This is where the logs would go</p>
-          </div>
+          <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
         </section>
       </div>
     );
