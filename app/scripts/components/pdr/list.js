@@ -76,6 +76,7 @@ var PdrsOverview = React.createClass({
     const { list } = this.props.pdrs;
     const { count, limit } = list.meta;
     const { page } = this.state;
+    const logsQuery = { q: 'pdrName' };
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -92,7 +93,7 @@ var PdrsOverview = React.createClass({
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
         <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
-        <LogViewer query={'pdrName'} dispatch={this.props.dispatch} logs={this.props.logs}/>
+        <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
       </div>
     );
   }

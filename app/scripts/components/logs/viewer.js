@@ -8,7 +8,7 @@ var LogViewer = React.createClass({
   displayName: 'LogViewer',
   propTypes: {
     dispatch: React.PropTypes.func,
-    query: React.PropTypes.string,
+    query: React.PropTypes.object,
     logs: React.PropTypes.object
   },
 
@@ -17,8 +17,8 @@ var LogViewer = React.createClass({
   },
 
   componentWillReceiveProps: function (newProps) {
-    if (newProps.query !== this.props.query) {
-      const query = newProps.query || 'none';
+    if (JSON.stringify(newProps.query) !== JSON.stringify(this.props.query)) {
+      const query = newProps.query || {};
       this.query(query);
     }
   },
@@ -29,8 +29,8 @@ var LogViewer = React.createClass({
 
   query: function (query) {
     // note, since the non-filtered endpoint is very slow,
-    // enforce a filter or none.
-    query = query || this.props.query || 'none';
+    // enforce a filter.
+    query = query || this.props.query || {level: 'info'};
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
 
@@ -40,10 +40,7 @@ var LogViewer = React.createClass({
       const duration = isFirstPull ? 1000 * 60 * 60 * 24 : logsUpdateInterval;
       const from = moment().subtract(duration, 'milliseconds').format();
       isFirstPull = false;
-      return dispatch(getLogs({
-        q: query,
-        date_from: from
-      }));
+      return dispatch(getLogs(Object.assign({ date_from: from }, query)));
     }
     this.cancelInterval = interval(querySinceLast, logsUpdateInterval, true);
   },
