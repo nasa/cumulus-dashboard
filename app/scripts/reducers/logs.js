@@ -1,22 +1,34 @@
 'use strict';
+import moment from 'moment';
 
 import {
-  LOGS,
-  LOGS_INFLIGHT,
-  LOGS_ERROR
+  LOGS
 } from '../actions';
 
 export const initialState = {
-  logs: []
+  items: []
 };
+
+// https://momentjs.com/docs/#/displaying/
+const format = 'MM/DD/YY hh:mma ss:SSS[s]';
 
 export default function reducer (state = initialState, action) {
   let nextState;
-  const { data, type, id } = action;
-  switch (type) {
+  const { data } = action;
+  switch (action.type) {
     case LOGS:
-      nextState = { logs: data };
+      if (Array.isArray(data.results) && data.results.length) {
+        data.results.forEach(processLog);
+        let items = data.results.concat(state.items);
+        nextState = { items };
+      }
       break;
   }
   return nextState || state;
+}
+
+function processLog (d) {
+  d.displayTime = moment(d.timestamp).format(format);
+  const replace = '[' + d.level.toUpperCase() + ']';
+  d.displayText = d.data.replace(replace, '').trim();
 }
