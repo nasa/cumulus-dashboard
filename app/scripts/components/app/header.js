@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import { Link } from 'react-router';
+import { graphicsPath } from '../../config';
 
 var Header = React.createClass({
   displayName: 'Header',
@@ -9,7 +10,7 @@ var Header = React.createClass({
     return (
       <div className='header'>
         <div className='row'>
-          <h1 className='logo'><Link to='/'><img alt="Cumulus Logo" src='/graphics/layout/cumulus-logo.png' /></Link></h1>
+          <h1 className='logo'><Link to='/'><img alt="Cumulus Logo" src={graphicsPath + 'layout/cumulus-logo.png'} /></Link></h1>
           <nav>
             <ul>
               <li><Link to='/collections'>Collections</Link></li>

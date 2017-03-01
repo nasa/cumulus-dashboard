@@ -2,6 +2,7 @@
 import url from 'url';
 import { get, post, put, wrapRequest } from './helpers';
 import _config from '../config';
+
 const root = _config.apiRoot;
 const pageLimit = _config.pageLimit;
 
@@ -41,6 +42,10 @@ export const PDRS = 'PDRS';
 export const PDRS_INFLIGHT = 'PDRS_INFLIGHT';
 export const PDRS_ERROR = 'PDRS_ERROR';
 
+export const LOGS = 'LOGS';
+export const LOGS_INFLIGHT = 'LOGS_INFLIGHT';
+export const LOGS_ERROR = 'LOGS_ERROR';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -70,9 +75,9 @@ export const listGranules = (options) => wrapRequest(null, get, {
 }, GRANULES);
 
 export const reprocessGranule = (granuleId) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, {
+  granuleId, put, `granules/${granuleId}`, GRANULE_REPROCESS, {
     action: 'reprocess'
-  }, GRANULE_REPROCESS);
+  });
 
 export const getStats = () => wrapRequest(null, get, 'stats/summary/grouped', STATS);
 
@@ -80,3 +85,8 @@ export const listPdrs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, PDRS);
+
+export const getLogs = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'logs'),
+  qs: Object.assign({ limit: 50 }, options)
+}, LOGS);

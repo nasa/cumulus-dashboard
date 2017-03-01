@@ -140,3 +140,14 @@ table {
 .pagination__link--active {
   text-decoration: underline;
 }
+
+.table__sort {
+  cursor: pointer;
+  position: relative;
+}
+
+//TODO
+.table__sort--desc {
+}
+.table__sort--asc {
+}

@@ -18,3 +18,20 @@
     margin: .5em 0;
   }
 }
+
+.logs__item--date {
+  font-weight: $base-font-semibold;
+  color: $grey;
+}
+
+.logs__item--level {
+  font-weight: $base-font-bold;
+}
+
+.logs__item--info {
+  color: $light-green;
+}
+
+.logs__item--error {
+  color: $error-red;
+}

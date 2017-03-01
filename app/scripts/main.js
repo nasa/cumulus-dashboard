@@ -16,8 +16,10 @@ import {
 
 import config from './config';
 import reducers from './reducers';
+import { global } from './utils/browser';
 
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));
+global.store = store;
 
 console.log.apply(console, config.consoleMessage);
 console.log('Environment', config.environment);
@@ -31,7 +33,6 @@ import ActiveCollections from './components/collections/active';
 import InactiveCollections from './components/collections/inactive';
 import AddCollection from './components/collections/add';
 import EditCollection from './components/collections/edit';
-import CollectionErrors from './components/collections/collection-errors';
 import CollectionGranules from './components/collections/collection-granules';
 import CollectionIngest from './components/collections/collection-ingest';
 import CollectionLogs from './components/collections/collection-logs';
@@ -41,7 +42,6 @@ import Granules from './components/granules';
 import ListGranules from './components/granules/list';
 import GranuleOverview from './components/granules/granule';
 import GranuleRecipe from './components/granules/granule-recipe';
-import GranuleErrors from './components/granules/errors';
 import MarkedDeletion from './components/granules/marked-deletion';
 import Restricted from './components/granules/restricted';
 
@@ -50,7 +50,6 @@ import listPdrs from './components/pdr/list';
 import Pdr from './components/pdr/pdr';
 import PdrActive from './components/pdr/active';
 import PdrCompleted from './components/pdr/completed';
-import PdrErrors from './components/pdr/errors';
 
 import Logs from './components/logs';
 import Contact from './components/contact';
@@ -67,7 +66,6 @@ render((
           <Route path='inactive' component={InactiveCollections} />
           <Route path='add' component={AddCollection} />
           <Route path='edit/:collectionName' component={EditCollection} />
-          <Route path='errors' component={CollectionErrors} />
           <Route path='granules' component={CollectionGranules} />
           <Route path='ingest' component={CollectionIngest} />
           <Route path='logs' component={CollectionLogs} />
@@ -78,7 +76,6 @@ render((
           <Route path='pdr/:pdrName' component={ListGranules} />
           <Route path='granule/:granuleId/overview' component={GranuleOverview} />
           <Route path='granule/:granuleId/recipe-ingest' component={GranuleRecipe} />
-          <Route path='errors' component={GranuleErrors} />
           <Route path='deletion' component={MarkedDeletion} />
           <Route path='restricted' component={Restricted} />
         </Route>
@@ -86,7 +83,6 @@ render((
           <IndexRoute component={listPdrs} />
           <Route path='active' component={PdrActive} />
           <Route path='completed' component={PdrCompleted} />
-          <Route path='errors' component={PdrErrors} />
           <Route path='pdr' component={Pdr} />
         </Route>
         <Route path='logs' component={Logs} />
