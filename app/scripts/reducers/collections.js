@@ -21,7 +21,8 @@ import {
 
 export const initialState = {
   list: {
-    data: []
+    data: [],
+    meta: {}
   },
   map: {},
   meta: {},

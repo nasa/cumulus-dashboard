@@ -9,9 +9,9 @@ import {
 
 export const initialState = {
   list: {
-    data: []
-  },
-  meta: {}
+    data: [],
+    meta: {}
+  }
 };
 
 export default function reducer (state = initialState, action) {
