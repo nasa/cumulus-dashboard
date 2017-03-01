@@ -3,13 +3,21 @@ import React from 'react';
 import { interval, getLogs } from '../../actions';
 import { logsUpdateInterval } from '../../config';
 import moment from 'moment';
+import LoadingEllipsis from '../app/loading-ellipsis';
 
+const noop = (d) => d;
 var LogViewer = React.createClass({
   displayName: 'LogViewer',
   propTypes: {
     dispatch: React.PropTypes.func,
     query: React.PropTypes.object,
     logs: React.PropTypes.object
+  },
+
+  getInitialState: function () {
+    return {
+      filter: noop
+    };
   },
 
   componentWillMount: function () {
@@ -25,6 +33,15 @@ var LogViewer = React.createClass({
 
   componentWillUnmount: function () {
     if (this.cancelInterval) { this.cancelInterval(); }
+  },
+
+  setFilter: function (e) {
+    const value = e.currentTarget.value;
+    if (!value || value.length < 2) {
+      this.setState({ filter: noop });
+    } else {
+      this.setState({ filter: (d) => d.searchkey.indexOf(value) >= 0 });
+    }
   },
 
   query: function (query) {
@@ -46,13 +63,24 @@ var LogViewer = React.createClass({
   },
 
   render: function () {
+    const { logs } = this.props;
+    const items = logs.items.filter(this.state.filter);
     return (
-      <div className='logs'>
-        {this.props.logs.items.map((d, i) => {
-          return <p
-            key={d.key}
-            className='logs__item'><span className='logs__item--date'>{d.displayTime}</span> <span className={'logs__item--level logs__item--' + d.level}>{d.level}</span> {d.displayText}</p>;
-        })}
+      <div>
+        <div className='heading__wrapper--border'>
+          <h2 className='heading--medium heading--shared-content'>Logs {logs.inflight ? <LoadingEllipsis /> : null}</h2>
+          <form className="search__wrapper form-group__element form-group__element--right form-group__element--right--sm form-group__element--small">
+            <input className='search' type="search" onChange={this.setFilter}/>
+            <span className="search__icon"></span>
+          </form>
+        </div>
+        <div className='logs'>
+          {items.map((d, i) => {
+            return <p
+              key={d.key}
+              className='logs__item'><span className='logs__item--date'>{d.displayTime}</span> <span className={'logs__item--level logs__item--' + d.level}>{d.level}</span> {d.displayText}</p>;
+          })}
+        </div>
       </div>
     );
   }

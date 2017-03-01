@@ -159,13 +159,6 @@ var GranuleOverview = React.createClass({
         </section>
 
         <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Logs</h2>
-            <form className="search__wrapper form-group__element form-group__element--right form-group__element--right--sm form-group__element--small" onSubmit="">
-              <input className='search' type="search" />
-              <span className="search__icon"></span>
-            </form>
-          </div>
           <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
         </section>
       </div>

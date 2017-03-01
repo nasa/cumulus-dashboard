@@ -72,12 +72,13 @@
 }
 
 .spinner {
+  display: inline-block;
   text-align: center;
 }
 
 .spinner > div {
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   background-color: $grey;
 
   border-radius: 100%;
