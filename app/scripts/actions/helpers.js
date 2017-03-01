@@ -76,7 +76,6 @@ export const wrapRequest = function (id, query, params, type, body) {
           type: errorType,
           error
         });
-
       } else {
         const duration = new Date() - start;
         log((id ? type + ': ' + id : type), duration + 'ms');

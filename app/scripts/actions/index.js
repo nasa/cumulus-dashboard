@@ -86,4 +86,7 @@ export const listPdrs = (options) => wrapRequest(null, get, {
   qs: Object.assign({ limit: pageLimit }, options)
 }, PDRS);
 
-export const getLogs = () => wrapRequest(null, get, 'logs', LOGS);
+export const getLogs = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'logs'),
+  qs: Object.assign({ limit: 50 }, options)
+}, LOGS);
