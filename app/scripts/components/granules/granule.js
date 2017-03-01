@@ -56,6 +56,7 @@ var GranuleOverview = React.createClass({
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
     this.cancelInterval = interval(() => dispatch(getGranule(granuleId)), updateInterval, immediate);
+    this.cancelInterval();
   },
 
   reprocess: function () {
@@ -76,7 +77,7 @@ var GranuleOverview = React.createClass({
       ['Ingest', 'ingesting'],
       ['Processing', 'processing'],
       ['Pushed to CMR', 'cmr'],
-      ['Archive', 'archiving'],
+      ['Archiving', 'archiving'],
       ['Complete', 'completed']
     ];
     const indicatorClass = 'progress-bar__indicator progress-bar__indicator--' + status;

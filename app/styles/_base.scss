@@ -252,6 +252,7 @@ a:active {
     top: 0;
     width: 100%;
   }
+
   li {
     display: inline-block;
     font-size: .86em;
@@ -260,19 +261,24 @@ a:active {
     width: 24%;
     position: relative;
     top: 1.2em;
-    &:before {
-      content: '';
-      height: 14px;
-      width: 1px;
-      background-color: lighten($lighter-grey, 6%);
-      background-size: 14px 1px;
-      display: block;
-      margin-bottom: 2px;
-      position: absolute;
-      right: 50%;
-      top: -1.45em;
+
+    &:last-child,
+    &:first-child {
+      &:before {
+        content: '';
+        height: 14px;
+        width: 1px;
+        background-color: lighten($lighter-grey, 6%);
+        background-size: 14px 1px;
+        display: block;
+        margin-bottom: 2px;
+        position: absolute;
+        right: 50%;
+        top: -1.45em;
+      }
     }
-    &:first-of-type {
+
+    &:first-child {
       text-align: left;
       width: 14%;
       &:before {
@@ -280,7 +286,7 @@ a:active {
         right: 0;
       }
     }
-    &:last-of-type {
+    &:last-child {
       text-align: right;
       width: 14%;
       &:before {
@@ -298,13 +304,14 @@ a:active {
 .progress-bar__indicator {
   position: absolute;
   top: -8px;
+  transition: left 0.2s ease-in-out, right 0.2s ease-in-out;
 }
 
-.progress-bar__indicator--ingesting { left: -10px; }
+.progress-bar__indicator--ingesting { left: 0; }
 .progress-bar__indicator--processing { left: 25%;  }
-.progress-bar__indicator--cmr { left: 50%; }
+.progress-bar__indicator--cmr { left: 49%; }
 .progress-bar__indicator--archiving { left: 73%; }
-.progress-bar__indicator--completed { right: 12px; }
+.progress-bar__indicator--completed { right: 20px; }
 
 .meter > span {
   display: block;
