@@ -41,6 +41,10 @@ export const PDRS = 'PDRS';
 export const PDRS_INFLIGHT = 'PDRS_INFLIGHT';
 export const PDRS_ERROR = 'PDRS_ERROR';
 
+export const LOGS = 'LOGS';
+export const LOGS_INFLIGHT = 'LOGS_INFLIGHT';
+export const LOGS_ERROR = 'LOGS_ERROR';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -80,3 +84,5 @@ export const listPdrs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, PDRS);
+
+export const getLots = () => wrapRequest(null, get, 'logs', LOGS);
