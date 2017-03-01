@@ -8,6 +8,7 @@ import { fullDate, seconds } from '../../utils/format';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
 import { updateInterval } from '../../config';
+import { isUndefined } from '../../utils/validate';
 
 // distinguish between undefined and null parameters
 const NULL = null;
@@ -28,6 +29,14 @@ const tableRow = [
   (d) => seconds(d.duration),
   (d) => fullDate(d.updatedAt)
 ];
+const tableSortProps = [
+  'granuleId',
+  'statusId',
+  'pdrName',
+  'collectionName',
+  'duration',
+  'updatedAt'
+];
 
 var AllGranules = React.createClass({
   displayName: 'AllGranules',
@@ -35,7 +44,9 @@ var AllGranules = React.createClass({
   getInitialState: function () {
     return {
       page: 1,
-      pdrName: this.props.params.pdrName || NULL
+      pdrName: this.props.params.pdrName || NULL,
+      sortIdx: 0,
+      order: 'desc'
     };
   },
 
@@ -71,6 +82,8 @@ var AllGranules = React.createClass({
     options = options || {};
     if (!options.page) { options.page = this.state.page; }
     if (options.pdrName !== NULL && this.state.pdrName) { options.pdrName = this.state.pdrName; }
+    if (isUndefined(options.order)) { options.order = this.state.order; }
+    if (isUndefined(options.sort_by)) { options.sort_by = tableSortProps[this.state.sortIdx]; }
     for (let key in options) { !options[key] && delete options[key]; }
     if (this.cancelInterval) { this.cancelInterval(); }
     const { dispatch } = this.props;
@@ -81,11 +94,19 @@ var AllGranules = React.createClass({
     this.list({ page });
   },
 
+  setSort: function (sortProps) {
+    this.setState(sortProps);
+    this.list({
+      order: sortProps.order,
+      sort_by: tableSortProps[sortProps.sortIdx]
+    });
+  },
+
   render: function () {
     const { pdrName } = this.props.params;
     const { list } = this.props.granules;
     const { count, limit } = list.meta;
-    const { page } = this.state;
+    const { page, sortIdx, order } = this.state;
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -123,7 +144,13 @@ var AllGranules = React.createClass({
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
 
-        <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
+        <SortableTable
+          data={list.data}
+          header={tableHeader}
+          row={tableRow}
+          sortIdx={sortIdx}
+          order={order}
+          changeSortProps={this.setSort} />
       </div>
     );
   }
