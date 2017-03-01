@@ -50,7 +50,7 @@ var PdrsOverview = React.createClass({
   },
 
   componentWillReceiveProps: function (newProps) {
-    const newPage = get(newProps, 'pdrs.list.meta.page');
+    const newPage = newProps.pdrs.list.meta.page;
     if (newPage) {
       this.setState({ page: newPage });
     }

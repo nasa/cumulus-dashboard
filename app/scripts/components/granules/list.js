@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { get } from 'object-path';
 import { interval, listGranules } from '../../actions';
 import SortableTable from '../table/sortable';
 import { fullDate, seconds } from '../../utils/format';
@@ -51,7 +50,7 @@ var AllGranules = React.createClass({
   },
 
   componentWillReceiveProps: function (newProps) {
-    const newPage = get(newProps, 'granules.list.meta.page');
+    const newPage = newProps.granules.list.meta.page;
     if (newPage) {
       this.setState({ page: newPage });
     }
