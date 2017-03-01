@@ -75,9 +75,9 @@ export const listGranules = (options) => wrapRequest(null, get, {
 }, GRANULES);
 
 export const reprocessGranule = (granuleId) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, {
+  granuleId, put, `granules/${granuleId}`, GRANULE_REPROCESS, {
     action: 'reprocess'
-  }, GRANULE_REPROCESS);
+  });
 
 export const getStats = () => wrapRequest(null, get, 'stats/summary/grouped', STATS);
 
