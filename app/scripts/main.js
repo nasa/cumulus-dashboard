@@ -16,8 +16,10 @@ import {
 
 import config from './config';
 import reducers from './reducers';
+import { global } from './utils/browser';
 
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));
+global.store = store;
 
 console.log.apply(console, config.consoleMessage);
 console.log('Environment', config.environment);
