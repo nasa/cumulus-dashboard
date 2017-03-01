@@ -2,6 +2,7 @@
 import url from 'url';
 import request from 'request';
 import _config from '../config';
+import log from '../utils/log';
 const root = _config.apiRoot;
 
 export const get = function (config, callback) {
@@ -59,16 +60,20 @@ export const wrapRequest = function (id, query, params, type, body) {
 
   return function (dispatch) {
     const inflightType = type + '_INFLIGHT';
+    log(inflightType, ':', id);
     dispatch({ id, type: inflightType });
     query(config, (error, data) => {
       if (error) {
         const errorType = type + '_ERROR';
+        log(errorType, ':', id);
+        log(error);
         return dispatch({
           id,
           type: errorType,
           error
         });
       } else {
+        log(type, ':', id);
         return dispatch({ id, type, data });
       }
     });
