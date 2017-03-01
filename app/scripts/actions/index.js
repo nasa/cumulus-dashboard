@@ -5,45 +5,41 @@ import _config from '../config';
 const root = _config.apiRoot;
 const pageLimit = _config.pageLimit;
 
-export const ERROR = 'ERROR';
 export const AUTHENTICATED = 'AUTHENTICATED';
 
-export const QUERY_COLLECTION = 'QUERY_COLLECTION';
-export const GET_COLLECTION = 'GET_COLLECTION';
-export const LIST_COLLECTIONS = 'LIST_COLLECTIONS';
-export const POST_COLLECTION = 'POST_COLLECTION';
-export const PUT_COLLECTION = 'PUT_COLLECTION';
+export const COLLECTION = 'COLLECTION';
+export const COLLECTION_INFLIGHT = 'COLLECTION_INFLIGHT';
+export const COLLECTION_ERROR = 'COLLECTION_ERROR';
 
-export const QUERY_GRANULE = 'QUERY_GRANULE';
-export const GET_GRANULE = 'GET_GRANULE';
-export const LIST_GRANULES = 'LIST_GRANULES';
+export const COLLECTIONS = 'COLLECTIONS';
+export const COLLECTIONS_INFLIGHT = 'COLLECTIONS_INFLIGHT';
+export const COLLECTIONS_ERROR = 'COLLECTIONS_ERROR';
 
-export const GET_STATS = 'GET_STATS';
-export const LIST_PDRS = 'LIST_PDRS';
+export const NEW_COLLECTION = 'NEW_COLLECTION';
+export const NEW_COLLECTION_INFLIGHT = 'NEW_COLLECTION_INFLIGHT';
+export const NEW_COLLECTION_ERROR = 'NEW_COLLECTION_ERROR';
 
-export const setError = function (error) {
-  return { type: ERROR, data: error };
-};
+export const UPDATE_COLLECTION = 'UPDATE_COLLECTION';
+export const UPDATE_COLLECTION_INFLIGHT = 'UPDATE_COLLECTION_INFLIGHT';
+export const UPDATE_COLLECTION_ERROR = 'UPDATE_COLLECTION_ERROR';
 
-const queryCollection = (collectionName) => ({ type: QUERY_COLLECTION, data: { collectionName } });
-const setCollection = (collection) => ({ type: GET_COLLECTION, data: collection });
-const setCollections = (collections) => ({ type: LIST_COLLECTIONS, data: collections });
-const setPostCollection = (collection) => ({
-  type: POST_COLLECTION,
-  id: collection.collectionName,
-  data: collection
-});
-const setPutCollection = (collection) => ({
-  type: PUT_COLLECTION,
-  id: collection.collectionName,
-  data: collection
-});
+export const GRANULE = 'GRANULE';
+export const GRANULE_INFLIGHT = 'GRANULE_INFLIGHT';
+export const GRANULE_ERROR = 'GRANULE_ERROR';
 
-const queryGranule = (collectionName, granuleId) => ({ type: QUERY_GRANULE, data: { collectionName, granuleId } });
-const setGranules = (granules) => ({ type: LIST_GRANULES, data: granules });
-const setGranule = (granule) => ({ type: GET_GRANULE, data: granule });
-const setStats = (stats) => ({ type: GET_STATS, data: stats });
-const setPdrs = (pdrs) => ({ type: LIST_PDRS, data: pdrs });
+export const GRANULES = 'GRANULES';
+export const GRANULES_INFLIGHT = 'GRANULES_INFLIGHT';
+export const GRANULES_ERROR = 'GRANULES_ERROR';
+
+export const GRANULE_REPROCESS = 'GRANULE_REPROCESS';
+export const GRANULE_REPROCESS_INFLIGHT = 'GRANULE_REPROCESS_INFLIGHT';
+export const GRANULE_REPROCESS_ERROR = 'GRANULE_REPROCESS_ERROR';
+
+export const STATS = 'STATS';
+
+export const PDRS = 'PDRS';
+export const PDRS_INFLIGHT = 'PDRS_INFLIGHT';
+export const PDRS_ERROR = 'PDRS_ERROR';
 
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
@@ -51,61 +47,36 @@ export const interval = function (action, wait, immediate) {
   return () => clearInterval(intervalId);
 };
 
-export const listCollections = (options) => wrapRequest(get, {
+export const getCollection = (collectionName) => wrapRequest(
+  collectionName, get, `collections?collectionName=${collectionName}`, COLLECTION);
+
+export const listCollections = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'collections'),
-  qs: {
-    page: options.page,
-    limit: pageLimit
-  }
-}, LIST_COLLECTIONS, setCollections);
-export const createCollection = (payload) => wrapRequest(post, 'collections', payload, POST_COLLECTION, setPostCollection);
-export const updateCollection = (payload) => wrapRequest(put, 'collections', payload, PUT_COLLECTION, setPutCollection);
-export const listGranules = (options) => wrapRequest(get, {
+  qs: Object.assign({ limit: pageLimit }, options)
+}, COLLECTIONS);
+
+export const createCollection = (payload) => wrapRequest(
+  payload.collectionName, post, 'collections', NEW_COLLECTION, payload);
+
+export const updateCollection = (payload) => wrapRequest(
+  payload.collectionName, put, 'collections', UPDATE_COLLECTION, payload);
+
+export const getGranule = (granuleId) => wrapRequest(
+  granuleId, get, `granules/${granuleId}`, GRANULE);
+
+export const listGranules = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'granules'),
   qs: Object.assign({ limit: pageLimit }, options)
-}, LIST_GRANULES, setGranules);
-export const getStats = () => wrapRequest(get, 'stats/summary/grouped', GET_STATS, setStats);
-export const listPdrs = (options) => wrapRequest(get, {
+}, GRANULES);
+
+export const reprocessGranule = (granuleId) => wrapRequest(
+  granuleId, put, `granules/${granuleId}`, {
+    action: 'reprocess'
+  }, GRANULE_REPROCESS);
+
+export const getStats = () => wrapRequest(null, get, 'stats/summary/grouped', STATS);
+
+export const listPdrs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),
   qs: Object.assign({ limit: pageLimit }, options)
-}, LIST_PDRS, setPdrs);
-
-export function getCollection (collectionName) {
-  return function (dispatch) {
-    dispatch(queryCollection(collectionName));
-    let path = url.resolve(root, `collections?collectionName=${collectionName}`);
-    get(path, (error, data) => {
-      if (error) {
-        return dispatch(setError({
-          error,
-          meta: {
-            type: GET_COLLECTION,
-            url: path
-          }
-        }));
-      } else {
-        return dispatch(setCollection(data.results[0]));
-      }
-    });
-  };
-}
-
-export function getGranule (collectionName, granuleId) {
-  return function (dispatch) {
-    dispatch(queryGranule(collectionName, granuleId));
-    let path = url.resolve(root, `granules/${collectionName}/${granuleId}`);
-    get(path, (error, data) => {
-      if (error) {
-        return dispatch(setError({
-          error,
-          meta: {
-            type: GET_GRANULE,
-            url: path
-          }
-        }));
-      } else {
-        return dispatch(setGranule(data));
-      }
-    });
-  };
-}
+}, PDRS);

@@ -1,7 +1,7 @@
 'use strict';
 
 import {
-  GET_STATS
+  STATS
 } from '../actions';
 
 export const initialState = {
@@ -17,7 +17,7 @@ export const initialState = {
 export default function reducer (state = initialState, action) {
   let nextState;
   switch (action.type) {
-    case GET_STATS:
+    case STATS:
       nextState = Object.assign(state, action.data);
       break;
   }

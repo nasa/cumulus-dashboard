@@ -2,10 +2,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { getGranule } from '../../actions';
+import { interval, getGranule, reprocessGranule } from '../../actions';
 import { get } from 'object-path';
 import { fullDate } from '../../utils/format';
 import SortableTable from '../table/sortable';
+import Loading from '../app/loading-indicator';
+import Ellipsis from '../app/loading-ellipsis';
+import { updateInterval } from '../../config';
 
 const tableHeader = [
   'Filename',
@@ -26,6 +29,12 @@ const tableRow = [
 var GranuleOverview = React.createClass({
   displayName: 'Granule',
 
+  getInitialState: function () {
+    return {
+      reprocessing: false
+    };
+  },
+
   propTypes: {
     params: React.PropTypes.object,
     dispatch: React.PropTypes.func,
@@ -33,36 +42,83 @@ var GranuleOverview = React.createClass({
   },
 
   componentWillMount: function () {
-    const collectionName = this.props.params.collectionName;
-    const granuleId = this.props.params.granuleId;
+    const { granuleId } = this.props.params;
+    const immediate = !get(this.props.granules.map, granuleId);
+    this.reload(immediate);
+  },
 
-    // check for granule in map first, otherwise request it
-    const mapId = `${this.props.params.collectionName}-${granuleId}`;
-    if (!get(this.props.granules.map, mapId)) {
-      this.props.dispatch(getGranule(collectionName, granuleId));
+  componentWillUnmount: function () {
+    if (this.cancelInterval) { this.cancelInterval(); }
+  },
+
+  reload: function (immediate) {
+    const granuleId = this.props.params.granuleId;
+    const { dispatch } = this.props;
+    if (this.cancelInterval) { this.cancelInterval(); }
+    this.cancelInterval = interval(() => dispatch(getGranule(granuleId)), updateInterval, immediate);
+    this.cancelInterval();
+  },
+
+  reprocess: function () {
+    const { granuleId } = this.props.params;
+    const { reprocessing } = this.state;
+    if (!reprocessing) {
+      this.props.dispatch(reprocessGranule(granuleId));
+      this.setState({ reprocessing: true });
+      setTimeout(function () {
+        this.reload(true);
+        this.setState({ reprocessing: false });
+      }.bind(this), 2000);
     }
+  },
+
+  renderStatus: function (status) {
+    const statusList = [
+      ['Ingest', 'ingesting'],
+      ['Processing', 'processing'],
+      ['Pushed to CMR', 'cmr'],
+      ['Archiving', 'archiving'],
+      ['Complete', 'completed']
+    ];
+    const indicatorClass = 'progress-bar__indicator progress-bar__indicator--' + status;
+    return (
+      <div className='page__section--subsection page__section__granule--progress'>
+        <div className='progress-bar'>
+
+          <div className={indicatorClass}>
+            <div className='pulse'>
+              <div className='pulse__dot'></div>
+              <div className='pulse__ring'></div>
+            </div>
+          </div>
+
+        </div>
+        <ol>
+          {statusList.map(d => (
+            <li
+              className={ d[1] === status ? 'progress-bar__active' : ''}
+              key={d[1]}>{d[0]}</li>
+          ))}
+        </ol>
+      </div>
+
+    );
   },
 
   render: function () {
     const granuleId = this.props.params.granuleId;
-
-    const mapId = `${this.props.params.collectionName}-${granuleId}`;
-    const record = get(this.props.granules, ['map', mapId]);
-    console.log(record);
+    const record = get(this.props.granules.map, granuleId);
 
     if (!record) {
       return <div></div>;
-    } else if (record.inflight) {
-      // TODO loading indicator
-      return <div></div>;
+    } else if (record.inflight && !record.data) {
+      return <Loading />;
     }
 
     const granule = record.data;
-
+    const { reprocessing } = this.state;
     const files = [];
-    Object.keys(granule.files).forEach(function (key) {
-      files.push(granule.files[key]);
-    });
+    for (let key in granule.files) { files.push(granule.files[key]); }
 
     return (
       <div className='page__component'>
@@ -70,23 +126,15 @@ var GranuleOverview = React.createClass({
           <h1 className='heading--large heading--shared-content'>{granuleId}</h1>
           <Link className='button button--small form-group__element--right button--disabled button--green' to='/'>Delete</Link>
           <Link className='button button--small form-group__element--right button--green' to='/'>Remove from CMR</Link>
-          <Link className='button button--small form-group__element--right button--green' to='/'>Reprocess</Link>
+          <button
+            className={'button button--small form-group__element--right button--green' + (reprocessing ? ' button--reprocessing' : '')}
+            onClick={this.reprocess}>Reprocess{ reprocessing ? <Ellipsis /> : '' }</button>
           <dl className="metadata__updated">
             <dt>Last Updated:</dt>
             <dd>Sept. 23, 2016</dd>
             <dd className='metadata__updated__time'>2:00pm EST</dd>
           </dl>
-          <div className='page__section--subsection page__section__granule--progress'>
-            <div className='progress-bar'>
-              <span></span>
-            </div>
-            <ol>
-              <li>Ingest</li>
-              <li>Processing</li>
-              <li>Pushed to CMR</li>
-              <li>Archive</li>
-            </ol>
-          </div>
+          {this.renderStatus(granule.status)}
         </section>
 
         <section className='page__section'>

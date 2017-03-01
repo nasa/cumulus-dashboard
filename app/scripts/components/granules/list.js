@@ -21,7 +21,7 @@ const tableHeader = [
   'Updated'
 ];
 const tableRow = [
-  (d) => <Link to={`/granules/granule/${d.collectionName}/${d.granuleId}/overview`}>{d.granuleId}</Link>,
+  (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
   'status',
   'pdrName',
   'collectionName',
@@ -50,8 +50,9 @@ var AllGranules = React.createClass({
   },
 
   componentWillReceiveProps: function (newProps) {
-    if (typeof newProps.granules.meta.page !== 'undefined') {
-      this.setState({ page: newProps.granules.meta.page });
+    const newPage = newProps.granules.list.meta.page;
+    if (newPage) {
+      this.setState({ page: newPage });
     }
 
     let { pdrName } = newProps.params;
@@ -82,8 +83,8 @@ var AllGranules = React.createClass({
 
   render: function () {
     const { pdrName } = this.props.params;
-    const { list, meta } = this.props.granules;
-    const { count, limit } = meta;
+    const { list } = this.props.granules;
+    const { count, limit } = list.meta;
     const { page } = this.state;
     return (
       <div className='page__component'>
@@ -117,12 +118,12 @@ var AllGranules = React.createClass({
           </div>
         </section>
 
-        {list.length ? null : <Loading />}
+        {list.inflight ? <Loading /> : null}
         <section className='page__section'>
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
 
-        <SortableTable data={list} header={tableHeader} row={tableRow}/>
+        <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
       </div>
     );
   }

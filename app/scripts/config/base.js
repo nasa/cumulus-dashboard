@@ -10,5 +10,5 @@ module.exports = {
   pageLimit: 20,
 
   // auto-update frequency
-  updateInterval: 7000
+  updateInterval: 10000
 };
