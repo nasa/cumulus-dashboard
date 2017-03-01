@@ -2,6 +2,7 @@
 import url from 'url';
 import { get, post, put, wrapRequest } from './helpers';
 import _config from '../config';
+
 const root = _config.apiRoot;
 const pageLimit = _config.pageLimit;
 
@@ -85,4 +86,4 @@ export const listPdrs = (options) => wrapRequest(null, get, {
   qs: Object.assign({ limit: pageLimit }, options)
 }, PDRS);
 
-export const getLots = () => wrapRequest(null, get, 'logs', LOGS);
+export const getLogs = () => wrapRequest(null, get, 'logs', LOGS);
