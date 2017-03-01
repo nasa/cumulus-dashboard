@@ -60,20 +60,25 @@ export const wrapRequest = function (id, query, params, type, body) {
 
   return function (dispatch) {
     const inflightType = type + '_INFLIGHT';
-    log(inflightType, ':', id);
+    log((id ? inflightType + ': ' + id : inflightType));
+
     dispatch({ id, type: inflightType });
+
+    const start = new Date();
     query(config, (error, data) => {
       if (error) {
         const errorType = type + '_ERROR';
-        log(errorType, ':', id);
+        log((id ? errorType + ': ' + id : errorType));
         log(error);
+
         return dispatch({
           id,
           type: errorType,
           error
         });
       } else {
-        log(type, ':', id);
+        const duration = new Date() - start;
+        log((id ? type + ': ' + id : type), duration + 'ms');
         return dispatch({ id, type, data });
       }
     });

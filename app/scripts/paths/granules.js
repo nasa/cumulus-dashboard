@@ -3,7 +3,6 @@ import { encode } from '../utils/browser';
 
 const granuleRoutes = [
   ['Overview', null],
-  ['Errors', 'errors'],
   ['Marked for Deletion', 'deletion'],
   ['Restricted', 'restricted']
 ];
