@@ -10,7 +10,6 @@ const singleCollectionRoutes = [
 const collectionRoutes = [
   ['Overview', null],
   ['Granules', 'granules'],
-  ['Errors', 'errors'],
   ['Ingest & Recipe', 'ingest'],
   ['Logs', 'logs']
 ];

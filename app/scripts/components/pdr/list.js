@@ -7,6 +7,7 @@ import { interval, listPdrs } from '../../actions';
 import SortableTable from '../table/sortable';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
+import LogViewer from '../logs/viewer';
 import { updateInterval } from '../../config';
 
 const tableHeader = [
@@ -42,7 +43,8 @@ var PdrsOverview = React.createClass({
 
   propTypes: {
     dispatch: React.PropTypes.func,
-    pdrs: React.PropTypes.object
+    pdrs: React.PropTypes.object,
+    logs: React.PropTypes.object
   },
 
   componentWillMount: function () {
@@ -50,8 +52,9 @@ var PdrsOverview = React.createClass({
   },
 
   componentWillReceiveProps: function (newProps) {
-    if (typeof newProps.pdrs.meta.page !== 'undefined') {
-      this.setState({ page: newProps.pdrs.meta.page });
+    const newPage = newProps.pdrs.list.meta.page;
+    if (newPage) {
+      this.setState({ page: newPage });
     }
   },
 
@@ -70,9 +73,10 @@ var PdrsOverview = React.createClass({
   },
 
   render: function () {
-    const { list, meta } = this.props.pdrs;
-    const { count, limit } = meta;
+    const { list } = this.props.pdrs;
+    const { count, limit } = list.meta;
     const { page } = this.state;
+    const logsQuery = { q: 'pdrName' };
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -84,11 +88,12 @@ var PdrsOverview = React.createClass({
           </dl>
           <hr />
         </section>
-        {list.length ? null : <Loading />}
+        {list.inflight ? <Loading /> : null}
         <section className='page__section'>
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
-        <SortableTable data={list} header={tableHeader} row={tableRow}/>
+        <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
+        <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
       </div>
     );
   }

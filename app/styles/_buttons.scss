@@ -46,6 +46,15 @@
   opacity: 0.6;
 }
 
+.button--reprocessing {
+  position: relative;
+  .spinner {
+    position: absolute;
+    top: 4px;
+  }
+  color: $light-green;
+}
+
 .button__animation {
   position: relative;
   display: inline-block;

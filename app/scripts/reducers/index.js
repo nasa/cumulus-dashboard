@@ -4,7 +4,7 @@ import collections from './collections';
 import granules from './granules';
 import stats from './stats';
 import pdrs from './pdrs';
-import errors from './errors';
+import logs from './logs';
 
 export const reducers = {
   def: (state = {}, action) => state,
@@ -13,7 +13,7 @@ export const reducers = {
   granules,
   stats,
   pdrs,
-  errors
+  logs
 };
 
 export default combineReducers(Object.assign({}, reducers));
