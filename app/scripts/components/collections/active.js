@@ -106,7 +106,7 @@ var ActiveCollections = React.createClass({
             </div>
           </div>
         </section>
-        {list.data.length ? null : <Loading />}
+        {list.inflight ? <Loading /> : null}
         <section className='page__section'>
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
