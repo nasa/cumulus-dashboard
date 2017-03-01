@@ -41,8 +41,9 @@ var ActiveCollections = React.createClass({
   },
 
   componentWillReceiveProps: function (newProps) {
-    if (typeof newProps.collections.meta.page !== 'undefined') {
-      this.setState({ page: newProps.collections.meta.page });
+    const newPage = newProps.collections.list.meta.page;
+    if (newPage) {
+      this.setState({ page: newPage });
     }
   },
 
@@ -59,10 +60,9 @@ var ActiveCollections = React.createClass({
   },
 
   render: function () {
-    const { list, meta } = this.props.collections;
-    const { count, limit } = meta;
+    const { list } = this.props.collections;
+    const { count, limit } = list.meta;
     const { page } = this.state;
-    console.log(list);
 
     return (
       <div className='page__component'>
@@ -106,11 +106,11 @@ var ActiveCollections = React.createClass({
             </div>
           </div>
         </section>
-        {list.length ? null : <Loading />}
+        {list.inflight ? <Loading /> : null}
         <section className='page__section'>
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
-        <SortableTable data={list} header={tableHeader} row={tableRow}/>
+        <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
       </div>
     );
   }

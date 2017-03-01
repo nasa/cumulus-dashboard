@@ -2,6 +2,9 @@
 import test from 'tape';
 import { wrapRequest } from '../../app/scripts/actions/helpers';
 
+const dispatch = () => true;
+const type = 'TEST';
+const id = 'id';
 test('wrap request', function (t) {
   t.plan(3);
 
@@ -9,21 +12,21 @@ test('wrap request', function (t) {
   const req1 = (config) => {
     t.ok(/blahblahblah/.test(config.url));
   };
-  wrapRequest(req1, url)();
+  wrapRequest(id, req1, url, type)(dispatch);
 
   const urlObj = { url };
   const req2 = (config) => {
     t.deepEquals(config, { url });
   };
-  wrapRequest(req2, urlObj)();
+  wrapRequest(id, req2, urlObj, type)(dispatch);
 
-  const payload = 1;
+  const body = { limit: 1 };
   const req3 = (config) => {
     t.deepEquals(config, {
       url: url,
       json: true,
-      body: 1
+      body: { limit: 1 }
     });
   };
-  wrapRequest(req3, urlObj, payload, true, true)();
+  wrapRequest(id, req3, urlObj, type, body)(dispatch);
 });

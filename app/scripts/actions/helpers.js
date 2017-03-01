@@ -2,9 +2,8 @@
 import url from 'url';
 import request from 'request';
 import _config from '../config';
+import log from '../utils/log';
 const root = _config.apiRoot;
-
-import { setError } from './';
 
 export const get = function (config, callback) {
   request(config, (error, resp, body) => {
@@ -42,37 +41,40 @@ export const put = function (config, callback) {
   });
 };
 
-export const wrapRequest = function (requestFunction, requestConfig, payload, type, dispatchFn) {
-  if (!dispatchFn) {
-    dispatchFn = type;
-    type = payload;
-    payload = null;
-  }
+export const wrapRequest = function (id, query, params, type, body) {
   let config;
-  if (typeof requestConfig === 'string') {
+  if (typeof params === 'string') {
     config = {
-      url: url.resolve(root, requestConfig)
+      url: url.resolve(root, params)
     };
-  } else if (requestConfig.url) {
-    config = requestConfig;
+  } else if (params.url) {
+    config = params;
   } else {
     throw new Error('Must include a url with request');
   }
 
-  if (payload) {
-    config.body = payload;
+  if (body && typeof body === 'object') {
+    config.body = body;
     config.json = true;
   }
 
   return function (dispatch) {
-    requestFunction(config, (error, data) => {
+    const inflightType = type + '_INFLIGHT';
+    log(inflightType, ':', id);
+    dispatch({ id, type: inflightType });
+    query(config, (error, data) => {
       if (error) {
-        return dispatch(setError({
-          error,
-          meta: Object.assign({ type }, config)
-        }));
+        const errorType = type + '_ERROR';
+        log(errorType, ':', id);
+        log(error);
+        return dispatch({
+          id,
+          type: errorType,
+          error
+        });
       } else {
-        return dispatch(dispatchFn(data));
+        log(type, ':', id);
+        return dispatch({ id, type, data });
       }
     });
   };
