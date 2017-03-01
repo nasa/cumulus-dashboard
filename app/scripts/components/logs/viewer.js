@@ -76,9 +76,13 @@ var LogViewer = React.createClass({
         </div>
         <div className='logs'>
           {items.map((d, i) => {
+            let text = d.displayText;
+            if (text.length > 200) {
+              text = text.slice(0, 200) + '...';
+            }
             return <p
               key={d.key}
-              className='logs__item'><span className='logs__item--date'>{d.displayTime}</span> <span className={'logs__item--level logs__item--' + d.level}>{d.level}</span> {d.displayText}</p>;
+              className='logs__item'><span className='logs__item--date'>{d.displayTime}</span> <span className={'logs__item--level logs__item--' + d.level}>{d.level}</span> {text}</p>;
           })}
         </div>
       </div>
