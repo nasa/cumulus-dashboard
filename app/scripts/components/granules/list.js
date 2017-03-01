@@ -34,7 +34,7 @@ const tableRow = [
 const tableSortProps = [
   'granuleId',
   'statusId',
-  'pdrName',
+  null,
   'collectionName',
   'duration',
   'updatedAt'
@@ -170,6 +170,7 @@ var AllGranules = React.createClass({
           data={list.data}
           header={tableHeader}
           row={tableRow}
+          props={tableSortProps}
           sortIdx={sortIdx}
           order={order}
           changeSortProps={this.setSort} />

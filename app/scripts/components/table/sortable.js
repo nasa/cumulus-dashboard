@@ -16,16 +16,22 @@ const Table = React.createClass({
     primaryIdx: React.PropTypes.number,
     data: React.PropTypes.array,
     header: React.PropTypes.array,
+    props: React.PropTypes.array,
     row: React.PropTypes.array,
     sortIdx: React.PropTypes.number,
     order: React.PropTypes.string,
     changeSortProps: React.PropTypes.func
   },
 
+  unSortable: function () {
+    return isUndefined(this.props.sortIdx) || !this.props.order || !Array.isArray(this.props.props);
+  },
+
   changeSort: function (e) {
-    if (isUndefined(this.props.sortIdx) || isUndefined(this.props.order)) { return; }
+    if (this.unSortable()) { return; }
     const value = e.currentTarget.getAttribute('data-value');
     const sortIdx = this.props.header.indexOf(value);
+    if (!this.props.props[sortIdx]) { return; }
     const order = this.props.sortIdx === sortIdx ? otherOrder[this.props.order] : defaultSortOrder;
     if (typeof this.props.changeSortProps === 'function') {
       this.props.changeSortProps({ sortIdx, order });
@@ -33,17 +39,25 @@ const Table = React.createClass({
   },
 
   render: function () {
-    let { primaryIdx, sortIdx, order, row, data } = this.props;
+    const canSort = !this.unSortable();
+    let { primaryIdx, sortIdx, order, props, row, data } = this.props;
     primaryIdx = primaryIdx || 0;
     return (
       <table>
         <thead>
           <tr>
-            {this.props.header.map((h, i) => <td
-              className={i === sortIdx ? 'table__sort table__sort--' + order : ''}
-              key={h}
-              data-value={h}
-              onClick={this.changeSort}>{h}</td>)}
+            {this.props.header.map((h, i) => {
+              let className = canSort && props[i] ? 'table__sort' : '';
+              if (i === sortIdx) { className += (' table__sort--' + order); }
+              return (
+                <td
+                className={className}
+                key={h}
+                data-value={h}
+                onClick={this.changeSort}>{h}</td>
+              );
+            })}
+
           </tr>
         </thead>
         <tbody>
