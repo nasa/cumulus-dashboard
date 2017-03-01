@@ -52,9 +52,8 @@ var LogViewer = React.createClass({
     return (
       <div className='logs'>
         {this.props.logs.items.map((d, i) => {
-          const key = d.timestamp + d.data;
           return <p
-            key={key}
+            key={d.key}
             className='logs__item'><span className='logs__item--date'>{d.displayTime}</span> <span className={'logs__item--level logs__item--' + d.level}>{d.level}</span> {d.displayText}</p>;
         })}
       </div>
