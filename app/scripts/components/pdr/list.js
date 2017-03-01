@@ -50,8 +50,9 @@ var PdrsOverview = React.createClass({
   },
 
   componentWillReceiveProps: function (newProps) {
-    if (typeof newProps.pdrs.meta.page !== 'undefined') {
-      this.setState({ page: newProps.pdrs.meta.page });
+    const newPage = get(newProps, 'pdrs.list.meta.page');
+    if (newPage) {
+      this.setState({ page: newPage });
     }
   },
 
@@ -70,8 +71,8 @@ var PdrsOverview = React.createClass({
   },
 
   render: function () {
-    const { list, meta } = this.props.pdrs;
-    const { count, limit } = meta;
+    const { list } = this.props.pdrs;
+    const { count, limit } = list.meta;
     const { page } = this.state;
     return (
       <div className='page__component'>
@@ -84,11 +85,11 @@ var PdrsOverview = React.createClass({
           </dl>
           <hr />
         </section>
-        {list.length ? null : <Loading />}
+        {list.data.length ? null : <Loading />}
         <section className='page__section'>
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
-        <SortableTable data={list} header={tableHeader} row={tableRow}/>
+        <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
       </div>
     );
   }
