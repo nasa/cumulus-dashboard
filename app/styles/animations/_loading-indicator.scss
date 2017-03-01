@@ -1,7 +1,18 @@
+.loading {
+  position: relative;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  pointer-events: none;
+  cursor: default;
+  margin: 0 auto;
+}
+
 .sk-cube-grid {
+  position: absolute;
   width: 40px;
   height: 40px;
-  margin: 100px auto;
+  top: 45px;
 }
 
 .sk-cube-grid .sk-cube {
