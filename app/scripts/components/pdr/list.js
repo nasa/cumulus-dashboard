@@ -6,9 +6,11 @@ import { Link } from 'react-router';
 import { interval, listPdrs } from '../../actions';
 import SortableTable from '../table/sortable';
 import Pagination from '../app/pagination';
+import ErrorReport from '../errors/report';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
 import { updateInterval } from '../../config';
+import { isUndefined } from '../../utils/validate';
 
 const tableHeader = [
   'Name',
@@ -32,12 +34,26 @@ const tableRow = [
   (d) => get(d, ['granulesStatus', 'completed'], 0)
 ];
 
+const tableSortProps = [
+  null,
+  'statusId',
+  null,
+  null,
+  null,
+  null,
+  null,
+  null
+];
+
 var PdrsOverview = React.createClass({
   displayName: 'PdrsOverview',
 
   getInitialState: function () {
     return {
-      page: 1
+      page: 1,
+      sortIdx: 1,
+      order: 'desc',
+      error: null
     };
   },
 
@@ -48,7 +64,7 @@ var PdrsOverview = React.createClass({
   },
 
   componentWillMount: function () {
-    this.list(this.state.page);
+    this.list();
   },
 
   componentWillReceiveProps: function (newProps) {
@@ -56,26 +72,49 @@ var PdrsOverview = React.createClass({
     if (newPage) {
       this.setState({ page: newPage });
     }
+
+    const error = newProps.pdrs.list.error;
+    if (error) {
+      this.setState({ error });
+      if (this.cancelInterval) { this.cancelInterval(); }
+    }
   },
 
   componentWillUnmount: function () {
     if (this.cancelInterval) { this.cancelInterval(); }
   },
 
-  list: function (page) {
+  list: function (options) {
+    options = options || {};
+    // attach page, pdrName, and sort properties using the current state
+    if (isUndefined(options.page)) { options.page = this.state.page; }
+    if (isUndefined(options.order)) { options.order = this.state.order; }
+    if (isUndefined(options.sort_by)) { options.sort_by = tableSortProps[this.state.sortIdx]; }
+
+    // remove empty keys so as not to mess up the query
+    for (let key in options) { !options[key] && delete options[key]; }
+
     if (this.cancelInterval) { this.cancelInterval(); }
     const { dispatch } = this.props;
-    this.cancelInterval = interval(() => dispatch(listPdrs({ page })), updateInterval, true);
+    this.cancelInterval = interval(() => dispatch(listPdrs(options)), updateInterval, true);
   },
 
   queryNewPage: function (page) {
-    this.list(page);
+    this.list({page});
+  },
+
+  setSort: function (sortProps) {
+    this.setState(sortProps);
+    this.list({
+      order: sortProps.order,
+      sort_by: tableSortProps[sortProps.sortIdx]
+    });
   },
 
   render: function () {
     const { list } = this.props.pdrs;
     const { count, limit } = list.meta;
-    const { page } = this.state;
+    const { error, page, sortIdx, order } = this.state;
     const logsQuery = { q: 'pdrName' };
     return (
       <div className='page__component'>
@@ -92,7 +131,17 @@ var PdrsOverview = React.createClass({
         <section className='page__section'>
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
-        <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
+
+        {error ? <ErrorReport report={error} /> : null}
+
+        <SortableTable
+          data={list.data}
+          header={tableHeader}
+          row={tableRow}
+          props={tableSortProps}
+          sortIdx={sortIdx}
+          order={order}
+          changeSortProps={this.setSort} />
         <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
       </div>
     );

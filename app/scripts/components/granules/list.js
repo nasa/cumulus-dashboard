@@ -7,7 +7,10 @@ import SortableTable from '../table/sortable';
 import { fullDate, seconds } from '../../utils/format';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
+import ErrorReport from '../errors/report';
+import LogViewer from '../logs/viewer';
 import { updateInterval } from '../../config';
+import { isUndefined } from '../../utils/validate';
 
 // distinguish between undefined and null parameters
 const NULL = null;
@@ -28,6 +31,14 @@ const tableRow = [
   (d) => seconds(d.duration),
   (d) => fullDate(d.updatedAt)
 ];
+const tableSortProps = [
+  'granuleId',
+  'statusId',
+  null,
+  'collectionName',
+  'duration',
+  'updatedAt'
+];
 
 var AllGranules = React.createClass({
   displayName: 'AllGranules',
@@ -35,14 +46,18 @@ var AllGranules = React.createClass({
   getInitialState: function () {
     return {
       page: 1,
-      pdrName: this.props.params.pdrName || NULL
+      pdrName: this.props.params.pdrName || NULL,
+      sortIdx: 0,
+      order: 'desc',
+      error: null
     };
   },
 
   propTypes: {
     granules: React.PropTypes.object,
     dispatch: React.PropTypes.func,
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    logs: React.PropTypes.object
   },
 
   componentWillMount: function () {
@@ -61,6 +76,12 @@ var AllGranules = React.createClass({
       this.setState({ pdrName });
       this.list({ pdrName });
     }
+
+    const error = newProps.granules.list.error;
+    if (error) {
+      this.setState({ error });
+      if (this.cancelInterval) { this.cancelInterval(); }
+    }
   },
 
   componentWillUnmount: function () {
@@ -69,23 +90,43 @@ var AllGranules = React.createClass({
 
   list: function (options) {
     options = options || {};
-    if (!options.page) { options.page = this.state.page; }
+
+    // attach page, pdrName, and sort properties using the current state
+    if (isUndefined(options.page)) { options.page = this.state.page; }
+    if (isUndefined(options.order)) { options.order = this.state.order; }
+    if (isUndefined(options.sort_by)) { options.sort_by = tableSortProps[this.state.sortIdx]; }
     if (options.pdrName !== NULL && this.state.pdrName) { options.pdrName = this.state.pdrName; }
+
+    // remove empty keys so as not to mess up the query
     for (let key in options) { !options[key] && delete options[key]; }
+
+    // stop the currently running auto-query
     if (this.cancelInterval) { this.cancelInterval(); }
     const { dispatch } = this.props;
     this.cancelInterval = interval(() => dispatch(listGranules(options)), updateInterval, true);
+
+    // optimistically set error to null in case we hit something good.
+    this.setState({ error: null });
   },
 
   queryNewPage: function (page) {
     this.list({ page });
   },
 
+  setSort: function (sortProps) {
+    this.setState(sortProps);
+    this.list({
+      order: sortProps.order,
+      sort_by: tableSortProps[sortProps.sortIdx]
+    });
+  },
+
   render: function () {
     const { pdrName } = this.props.params;
     const { list } = this.props.granules;
     const { count, limit } = list.meta;
-    const { page } = this.state;
+    const { error, page, sortIdx, order } = this.state;
+    const logsQuery = { q: 'granuleId' };
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -123,7 +164,17 @@ var AllGranules = React.createClass({
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
 
-        <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
+        {error ? <ErrorReport report={error} /> : null}
+
+        <SortableTable
+          data={list.data}
+          header={tableHeader}
+          row={tableRow}
+          props={tableSortProps}
+          sortIdx={sortIdx}
+          order={order}
+          changeSortProps={this.setSort} />
+        <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
       </div>
     );
   }
