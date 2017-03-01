@@ -107,7 +107,7 @@ var GranuleOverview = React.createClass({
 
   render: function () {
     const granuleId = this.props.params.granuleId;
-    const record = get(this.props.granules, ['map', granuleId]);
+    const record = get(this.props.granules.map, granuleId);
 
     if (!record) {
       return <div></div>;

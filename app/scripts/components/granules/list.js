@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { get } from 'object-path';
 import { interval, listGranules } from '../../actions';
 import SortableTable from '../table/sortable';
 import { fullDate, seconds } from '../../utils/format';
@@ -50,8 +51,9 @@ var AllGranules = React.createClass({
   },
 
   componentWillReceiveProps: function (newProps) {
-    if (typeof newProps.granules.meta.page !== 'undefined') {
-      this.setState({ page: newProps.granules.meta.page });
+    const newPage = get(newProps, 'granules.list.meta.page');
+    if (newPage) {
+      this.setState({ page: newPage });
     }
 
     let { pdrName } = newProps.params;
@@ -82,8 +84,8 @@ var AllGranules = React.createClass({
 
   render: function () {
     const { pdrName } = this.props.params;
-    const { list, meta } = this.props.granules;
-    const { count, limit } = meta;
+    const { list } = this.props.granules;
+    const { count, limit } = list.meta;
     const { page } = this.state;
     return (
       <div className='page__component'>
@@ -117,12 +119,12 @@ var AllGranules = React.createClass({
           </div>
         </section>
 
-        {list.length ? null : <Loading />}
+        {list.data.length ? null : <Loading />}
         <section className='page__section'>
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
 
-        <SortableTable data={list} header={tableHeader} row={tableRow}/>
+        <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
       </div>
     );
   }
