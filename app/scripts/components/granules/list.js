@@ -8,6 +8,7 @@ import { fullDate, seconds } from '../../utils/format';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
+import LogViewer from '../logs/viewer';
 import { updateInterval } from '../../config';
 import { isUndefined } from '../../utils/validate';
 
@@ -55,7 +56,8 @@ var AllGranules = React.createClass({
   propTypes: {
     granules: React.PropTypes.object,
     dispatch: React.PropTypes.func,
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    logs: React.PropTypes.object
   },
 
   componentWillMount: function () {
@@ -124,6 +126,7 @@ var AllGranules = React.createClass({
     const { list } = this.props.granules;
     const { count, limit } = list.meta;
     const { error, page, sortIdx, order } = this.state;
+    const logsQuery = { q: 'granuleId' };
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -170,6 +173,7 @@ var AllGranules = React.createClass({
           sortIdx={sortIdx}
           order={order}
           changeSortProps={this.setSort} />
+        <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
       </div>
     );
   }
