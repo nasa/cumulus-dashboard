@@ -32,10 +32,10 @@ const tableRow = [
   (d) => fullDate(d.updatedAt)
 ];
 const tableSortProps = [
-  'granuleId',
+  'granuleId.keyword',
   'statusId',
-  null,
-  'collectionName',
+  'pdrName.keyword',
+  'collectionName.keyword',
   'duration',
   'updatedAt'
 ];
@@ -130,24 +130,27 @@ var AllGranules = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>
-            {pdrName || 'All'} Granules <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
-          </h1>
-          <dl className='metadata__updated'>
-            <dt>Last Updated:</dt>
-            <dd>Sept. 23, 2016</dd>
-            <dd className='metadata__updated__time'>2:00pm EST</dd>
-          </dl>
-          <hr />
-          <div className='filters'>
-            <label htmlFor='collectionFilter'>Collection</label>
-            <div className='dropdown__wrapper form-group__element'>
-              <select id='collectionFilter'>
-                <option value='ASTER_1A_versionId_1'>ASTER_1A_versionId_1</option>
-                <option value='TODO'>TODO</option>
-              </select>
+          <div className='page__section__header'>
+            <h1 className='heading--large heading--shared-content'>
+              {pdrName || 'All'} Granules <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
+            </h1>
+            <dl className='metadata__updated'>
+              <dt>Last Updated:</dt>
+              <dd>Sept. 23, 2016</dd>
+              <dd className='metadata__updated__time'>2:00pm EST</dd>
+            </dl>
+          </div>
+          <div className='filters filters__wlabels'>
+            <div className='fitler__item'>
+              <label htmlFor='collectionFilter'>Collection</label>
+              <div className='dropdown__wrapper form-group__element'>
+                <select id='collectionFilter'>
+                  <option value='ASTER_1A_versionId_1'>ASTER_1A_versionId_1</option>
+                  <option value='TODO'>TODO</option>
+                </select>
+              </div>
             </div>
-            <form className='search__wrapper form-group__element--right' onSubmit=''>
+            <form className='search__wrapper form-group__element' onSubmit=''>
               <input className='search' type='search' />
               <span className='search__icon'></span>
             </form>
@@ -157,23 +160,21 @@ var AllGranules = React.createClass({
             <button className='button button--small form-group__element'>Remove From CMR</button>
             <button className='button button--small form-group__element'>Reprocess</button>
           </div>
-        </section>
 
-        {list.inflight ? <Loading /> : null}
-        <section className='page__section'>
+          {list.inflight ? <Loading /> : null}
+
+          {error ? <ErrorReport report={error} /> : null}
+
+          <SortableTable
+            data={list.data}
+            header={tableHeader}
+            row={tableRow}
+            props={tableSortProps}
+            sortIdx={sortIdx}
+            order={order}
+            changeSortProps={this.setSort} />
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
-
-        {error ? <ErrorReport report={error} /> : null}
-
-        <SortableTable
-          data={list.data}
-          header={tableHeader}
-          row={tableRow}
-          props={tableSortProps}
-          sortIdx={sortIdx}
-          order={order}
-          changeSortProps={this.setSort} />
         <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
       </div>
     );

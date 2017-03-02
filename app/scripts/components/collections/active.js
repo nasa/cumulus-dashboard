@@ -67,32 +67,34 @@ var ActiveCollections = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>Active Collections</h1>
-          <Link className='button button--green button--small form-group__element--right' to=''>Edit</Link>
-          <dl className="metadata__updated">
-            <dt>Last Updated:</dt>
-            <dd>Sept. 23, 2016</dd>
-            <dd className='metadata__updated__time'>2:00pm EST</dd>
-          </dl>
+          <div className='page__section__header'>
+            <h1 className='heading--large heading--shared-content'>Active Collections</h1>
+            <Link className='button button--green button--small form-group__element--right' to=''>Edit</Link>
+            <dl className="metadata__updated">
+              <dt>Last Updated:</dt>
+              <dd>Sept. 23, 2016</dd>
+              <dd className='metadata__updated__time'>2:00pm EST</dd>
+            </dl>
+          </div>
           <div className='filters'>
+            <div className='dropdown__wrapper form-group__element'>
+              <select>
+                <option value="week">Last Week</option>
+                <option value="month">Last Month</option>
+                <option value="year">Last Year</option>
+              </select>
+            </div>
+            <div className='dropdown__wrapper form-group__element'>
+              <select>
+                <option value="week">Last Week</option>
+                <option value="month">Last Month</option>
+                <option value="year">Last Year</option>
+              </select>
+            </div>
             <form className="search__wrapper form-group__element" onSubmit="">
               <input className='search' type="search" />
               <span className="search__icon"></span>
             </form>
-            <div className='dropdown__wrapper form-group__element'>
-              <select>
-                <option value="week">Last Week</option>
-                <option value="month">Last Month</option>
-                <option value="year">Last Year</option>
-              </select>
-            </div>
-            <div className='dropdown__wrapper form-group__element'>
-              <select>
-                <option value="week">Last Week</option>
-                <option value="month">Last Month</option>
-                <option value="year">Last Year</option>
-              </select>
-            </div>
           </div>
           <div className='form--controls'>
             <label className='form__element__select form-group__element form-group__element--small'><input type="checkbox" name="Select" value="Select" />Select</label>
@@ -105,12 +107,10 @@ var ActiveCollections = React.createClass({
               </select>
             </div>
           </div>
-        </section>
-        {list.inflight ? <Loading /> : null}
-        <section className='page__section'>
+          {list.inflight ? <Loading /> : null}
+          <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
-        <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
       </div>
     );
   }

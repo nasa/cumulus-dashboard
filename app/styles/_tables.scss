@@ -6,7 +6,8 @@ table {
     td {
       color: $black;
       font-weight: $base-font-semibold;
-      padding: 1em;
+      padding: 1em 1em 1.5em;
+      font-size: .86em;
     }
   }
 
@@ -148,6 +149,13 @@ table {
 
 .form--controls {
   @extend .clearfix;
+}
+
+.table__main-asset {
+  a, a:visited {
+    color: $black;
+    border-bottom: 1px solid $lightest-grey;
+  }
 }
 
 //TODO
