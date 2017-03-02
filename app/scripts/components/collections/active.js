@@ -2,11 +2,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { listCollections } from '../../actions';
+import { listCollections, searchCollections } from '../../actions';
 import * as format from '../../utils/format';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
 import SortableTable from '../table/sortable';
+import Search from '../form/search';
 
 const tableHeader = [
   'Name',
@@ -60,7 +61,7 @@ var ActiveCollections = React.createClass({
   },
 
   render: function () {
-    const { list } = this.props.collections;
+    const { list, search } = this.props.collections;
     const { count, limit } = list.meta;
     const { page } = this.state;
 
@@ -75,10 +76,11 @@ var ActiveCollections = React.createClass({
             <dd className='metadata__updated__time'>2:00pm EST</dd>
           </dl>
           <div className='filters'>
-            <form className="search__wrapper form-group__element" onSubmit="">
-              <input className='search' type="search" />
-              <span className="search__icon"></span>
-            </form>
+            <Search dispatch={this.props.dispatch}
+              action={searchCollections}
+              results={search}
+              format={format.collectionSearchResult}
+            />
             <div className='dropdown__wrapper form-group__element'>
               <select>
                 <option value="week">Last Week</option>
