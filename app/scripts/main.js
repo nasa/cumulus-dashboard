@@ -56,7 +56,6 @@ render((
   <Provider store={store}>
     <Router history={hashHistory} render={applyRouterMiddleware(useScroll())}>
       <Route path='/404' component={NotFound} />
-      <Redirect from='/' to='/pdrs' />
       <Redirect from='/collections' to='/collections/active' />
       <Route path='/' component={App}>
         <IndexRoute component={Home} />
