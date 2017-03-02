@@ -36,8 +36,12 @@ export default function reducer (state = initialState, action) {
 
 function processLog (d) {
   d.displayTime = moment(d.timestamp).format(format);
-  const replace = '[' + d.level.toUpperCase() + ']';
-  d.displayText = d.data.replace(replace, '').trim();
+  if (d.data && d.level) {
+    const replace = '[' + d.level.toUpperCase() + ']';
+    d.displayText = d.data.replace(replace, '').trim();
+  } else if (d.message) {
+    d.displayText = d.message;
+  }
   d.key = d.timestamp + '-' + d.data;
   d.searchkey = (d.displayTime + d.data).toLowerCase();
 }
@@ -46,7 +50,7 @@ function dedupe (items) {
   const deduped = [];
   const keymap = {};
   items.forEach(d => {
-    if (!keymap[d.key]) {
+    if (d.timestamp && d.displayText && !keymap[d.key]) {
       keymap[d.key] = 1;
       deduped.push(d);
     }
