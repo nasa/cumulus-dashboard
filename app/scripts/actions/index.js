@@ -24,6 +24,10 @@ export const UPDATE_COLLECTION = 'UPDATE_COLLECTION';
 export const UPDATE_COLLECTION_INFLIGHT = 'UPDATE_COLLECTION_INFLIGHT';
 export const UPDATE_COLLECTION_ERROR = 'UPDATE_COLLECTION_ERROR';
 
+export const SEARCH_COLLECTIONS = 'SEARCH_COLLECTIONS';
+export const SEARCH_COLLECTIONS_INFLIGHT = 'SEARCH_COLLECTIONS_INFLIGHT';
+export const SEARCH_COLLECTIONS_ERROR = 'SEARCH_COLLECTIONS_ERROR';
+
 export const GRANULE = 'GRANULE';
 export const GRANULE_INFLIGHT = 'GRANULE_INFLIGHT';
 export const GRANULE_ERROR = 'GRANULE_ERROR';
@@ -65,6 +69,11 @@ export const createCollection = (payload) => wrapRequest(
 
 export const updateCollection = (payload) => wrapRequest(
   payload.collectionName, put, 'collections', UPDATE_COLLECTION, payload);
+
+export const searchCollections = (query) => wrapRequest(null, get, {
+  url: url.resolve(root, 'collections'),
+  qs: Object.assign({ limit: 5 }, query)
+}, SEARCH_COLLECTIONS);
 
 export const getGranule = (granuleId) => wrapRequest(
   granuleId, get, `granules/${granuleId}`, GRANULE);
