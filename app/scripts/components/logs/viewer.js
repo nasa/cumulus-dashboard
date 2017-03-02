@@ -66,7 +66,7 @@ var LogViewer = React.createClass({
     const { logs } = this.props;
     const items = logs.items.filter(this.state.filter);
     return (
-      <div>
+      <section className='page__section'>
         <div className='heading__wrapper--border'>
           <h2 className='heading--medium heading--shared-content'>Logs {logs.inflight ? <LoadingEllipsis /> : null}</h2>
           <form className="search__wrapper form-group__element form-group__element--right form-group__element--right--sm form-group__element--small">
@@ -85,7 +85,7 @@ var LogViewer = React.createClass({
               className='logs__item'><span className='logs__item--date'>{d.displayTime}</span> <span className={'logs__item--level logs__item--' + d.level}>{d.level}</span> {text}</p>;
           })}
         </div>
-      </div>
+      </section>
     );
   }
 });

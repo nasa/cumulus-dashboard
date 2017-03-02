@@ -40,8 +40,19 @@ select {
 }
 
 .filters {
-  margin: 1.5em 0 2em;
+  margin: -.8em 0 3em;
   @include clearfix;
+  label {
+    font-size: .86em;
+  }
+}
+
+.filters__wlabels {
+  margin: -1em 0 3.2em;
+}
+
+.form--controls {
+  margin-bottom: 1em;
 }
 
 .search__wrapper {

@@ -124,13 +124,14 @@ var PdrsOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>PDR's Overview { count ? `(${count})` : null }</h1>
-          <dl className='metadata__updated'>
-            <dt>Last Updated:</dt>
-            <dd>Sept. 23, 2016</dd>
-            <dd className='metadata__updated__time'>2:00pm EST</dd>
-          </dl>
-          <hr />
+          <div className='page__section__header'>
+            <h1 className='heading--large heading--shared-content'>PDR's Overview { count ? `(${count})` : null }</h1>
+            <dl className='metadata__updated'>
+              <dt>Last Updated:</dt>
+              <dd>Sept. 23, 2016</dd>
+              <dd className='metadata__updated__time'>2:00pm EST</dd>
+            </dl>
+          </div>
           <div className='filters'>
             <Search dispatch={this.props.dispatch}
               action={searchPdrs}
@@ -139,20 +140,19 @@ var PdrsOverview = React.createClass({
               clear={clearPdrSearch}
             />
           </div>
-        </section>
-        {list.inflight ? <Loading /> : null}
+          {list.inflight ? <Loading /> : null}
 
-        {error ? <ErrorReport report={error} /> : null}
+          {error ? <ErrorReport report={error} /> : null}
 
-        <SortableTable
-          data={list.data}
-          header={tableHeader}
-          row={tableRow}
-          props={tableSortProps}
-          sortIdx={sortIdx}
-          order={order}
-          changeSortProps={this.setSort} />
-        <section className='page__section'>
+          <SortableTable
+            data={list.data}
+            header={tableHeader}
+            row={tableRow}
+            props={tableSortProps}
+            sortIdx={sortIdx}
+            order={order}
+            changeSortProps={this.setSort} />
+
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
         <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>

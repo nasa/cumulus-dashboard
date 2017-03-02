@@ -19,9 +19,12 @@
   }
 }
 
+.logs__item {
+  margin-bottom: .5em;
+}
+
 .logs__item--date {
   font-weight: $base-font-semibold;
-  color: $grey;
 }
 
 .logs__item--level {

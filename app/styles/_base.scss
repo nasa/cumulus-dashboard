@@ -148,8 +148,7 @@ a:active {
 }
 
 .sidebar {
-  padding-top: 2em;
-  padding-bottom: 8em;
+  padding-top: 4em;
   width: 20%;
   max-width: 131px;
   float: left;
@@ -220,7 +219,11 @@ a:active {
 }
 
 .page__section {
-  margin-bottom: 6.5em;
+  margin-bottom: 7em;
+}
+
+.page__section__header {
+  margin-bottom: 2em;
 }
 
 .metadata__updated {
@@ -324,7 +327,10 @@ a:active {
 
 .logs {
   background-color: darken($background-white, 3%);
-  padding: 1em;
+  padding: 2em 2.5em;
+  color: $dark-grey;
+  max-height: 25em;
+  overflow-y: scroll;
 }
 
 .granule-recipes {

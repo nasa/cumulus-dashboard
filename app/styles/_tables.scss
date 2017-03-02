@@ -6,7 +6,8 @@ table {
     td {
       color: $black;
       font-weight: $base-font-semibold;
-      padding: 1em;
+      padding: 1em 1em 1.5em;
+      font-size: .86em;
     }
   }
 
@@ -144,6 +145,10 @@ table {
 .table__sort {
   cursor: pointer;
   position: relative;
+}
+
+.form--controls {
+  @extend .clearfix;
 }
 
 .table__main-asset {
