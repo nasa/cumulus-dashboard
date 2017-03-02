@@ -11,6 +11,8 @@ module.exports = {
   // list queries
   pageLimit: 20,
 
+  searchPageLimit: 7,
+
   // auto-update frequency
   updateInterval: 10000,
   logsUpdateInterval: 5000
