@@ -15,5 +15,5 @@ module.exports = {
 
   // auto-update frequency
   updateInterval: 10000,
-  logsUpdateInterval: 5000
+  logsUpdateInterval: 8000
 };
