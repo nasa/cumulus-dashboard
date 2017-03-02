@@ -52,6 +52,11 @@ export const PDRS = 'PDRS';
 export const PDRS_INFLIGHT = 'PDRS_INFLIGHT';
 export const PDRS_ERROR = 'PDRS_ERROR';
 
+export const SEARCH_PDRS = 'SEARCH_PDRS';
+export const SEARCH_PDRS_INFLIGHT = 'SEARCH_PDRS_INFLIGHT';
+export const SEARCH_PDRS_ERROR = 'SEARCH_PDRS_ERROR';
+export const CLEAR_PDRS_SEARCH = 'CLEAR_PDRS_SEARCH';
+
 export const LOGS = 'LOGS';
 export const LOGS_INFLIGHT = 'LOGS_INFLIGHT';
 export const LOGS_ERROR = 'LOGS_ERROR';
@@ -109,6 +114,13 @@ export const listPdrs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, PDRS);
+
+export const searchPdrs = (query) => wrapRequest(null, get, {
+  url: url.resolve(root, 'pdrs'),
+  qs: Object.assign({ limit: 5, fields: 'pdrName' }, query)
+}, SEARCH_PDRS);
+
+export const clearPdrSearch = () => ({ type: CLEAR_PDRS_SEARCH });
 
 export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),
