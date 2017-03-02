@@ -25,11 +25,9 @@ const granules = {
         copy[1] = encode(copy[1].replace(':granuleId', params.granuleId));
         return copy;
       });
-    }
-    else if (currentRoute.slice(0, 9) === '/granules') {
+    } else if (currentRoute.slice(0, 9) === '/granules') {
       return granuleRoutes;
-    }
-    else {
+    } else {
       return empty;
     }
   }
