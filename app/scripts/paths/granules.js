@@ -2,9 +2,9 @@
 import { encode } from '../utils/browser';
 
 const granuleRoutes = [
-  ['Overview', null]/*,
+  ['Overview', null],
   ['Marked for Deletion', 'deletion'],
-  ['Restricted', 'restricted']*/
+  ['Restricted', 'restricted']
 ];
 
 const singleGranuleRoutes = [
