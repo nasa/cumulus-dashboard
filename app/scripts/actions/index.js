@@ -41,6 +41,11 @@ export const GRANULE_REPROCESS = 'GRANULE_REPROCESS';
 export const GRANULE_REPROCESS_INFLIGHT = 'GRANULE_REPROCESS_INFLIGHT';
 export const GRANULE_REPROCESS_ERROR = 'GRANULE_REPROCESS_ERROR';
 
+export const SEARCH_GRANULES = 'SEARCH_GRANULES';
+export const SEARCH_GRANULES_INFLIGHT = 'SEARCH_GRANULES_INFLIGHT';
+export const SEARCH_GRANULES_ERROR = 'SEARCH_GRANULES_ERROR';
+export const CLEAR_GRANULES_SEARCH = 'CLEAR_GRANULES_SEARCH';
+
 export const STATS = 'STATS';
 
 export const PDRS = 'PDRS';
@@ -90,6 +95,13 @@ export const reprocessGranule = (granuleId) => wrapRequest(
   granuleId, put, `granules/${granuleId}`, GRANULE_REPROCESS, {
     action: 'reprocess'
   });
+
+export const searchGranules = (query) => wrapRequest(null, get, {
+  url: url.resolve(root, 'granules'),
+  qs: Object.assign({ limit: 5, props: 'granuleId' }, query)
+}, SEARCH_GRANULES);
+
+export const clearGranuleSearch = () => ({ type: CLEAR_GRANULES_SEARCH });
 
 export const getStats = () => wrapRequest(null, get, 'stats/summary/grouped', STATS);
 
