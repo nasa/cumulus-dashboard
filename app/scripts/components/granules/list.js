@@ -34,7 +34,7 @@ const tableRow = [
 ];
 const tableSortProps = [
   'granuleId.keyword',
-  'statusId',
+  'status.keyword',
   'pdrName.keyword',
   'collectionName.keyword',
   'duration',
