@@ -1,17 +1,40 @@
 'use strict';
 import React from 'react';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { get } from 'object-path';
-import { getStats } from '../actions';
-import { nullValue, tally } from '../utils/format';
+import { getStats, listGranules } from '../actions';
+import { nullValue, tally, seconds, fullDate } from '../utils/format';
+import SortableTable from './table/sortable';
+
+const timespan = moment().subtract(1, 'day').format();
+
+const tableHeader = [
+  'Status',
+  'Name',
+  'Collection',
+  'PDR',
+  'Duration',
+  'Last Update'
+];
+
+const tableRow = [
+  'status',
+  (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
+  'collectionName',
+  'pdrName',
+  (d) => seconds(d.duration),
+  (d) => fullDate(d.updatedAt)
+];
 
 var Home = React.createClass({
   displayName: 'Home',
 
   propTypes: {
     dispatch: React.PropTypes.func,
-    stats: React.PropTypes.object
+    stats: React.PropTypes.object,
+    granules: React.PropTypes.object
   },
 
   componentWillMount: function () {
@@ -21,11 +44,15 @@ var Home = React.createClass({
   queryStats: function () {
     // TODO set time span of granules
     this.props.dispatch(getStats());
+    this.props.dispatch(listGranules({
+      updatedAt_from: timespan,
+      sort_by: 'updatedAt',
+      order: 'desc'
+    }));
   },
 
   render: function () {
-    const { stats } = this.props;
-    if (!Object.keys(stats).length) { return <div></div>; }
+    const { stats, granules } = this.props;
 
     const processingTimeUnits = get(stats, 'processingTime.unit', ' ').slice(0, 1);
     const storage = get(stats, 'storage.value');
@@ -69,36 +96,12 @@ var Home = React.createClass({
                 <li><span className='num--medium'>30k</span> Granules Pushed to CMR</li>
                 <li><span className='num--medium'>308k</span> Granules Archived</li>
               </ul>
-              <table>
-                <thead>
-                  <tr>
-                    <td>Status</td>
-                    <td>Name</td>
-                    <td>Collection</td>
-                    <td>PDR</td>
-                    <td>Duration</td>
-                    <td>Last Update</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Ingesting</td>
-                    <td className='table__main-asset'><a className='link--tertiary' href="#">Name of Granule</a></td>
-                    <td><a className='link--tertiary' href="#">Name of Collection</a></td>
-                    <td><a className='link--tertiary' href="#">307374</a></td>
-                    <td>0:03:00</td>
-                    <td>Sept. 14, 2016 14:50:49</td>
-                  </tr>
-                  <tr>
-                    <td>Ingesting</td>
-                    <td className='table__main-asset'><a className='link--tertiary' href="#">Name of Granule</a></td>
-                    <td><a className='link--tertiary' href="#">Name of Collection</a></td>
-                    <td><a className='link--tertiary' href="#">307374</a></td>
-                    <td>0:03:00</td>
-                    <td>Sept. 14, 2016 14:50:49</td>
-                  </tr>
-                </tbody>
-              </table>
+              <SortableTable
+                data={granules.list.data.slice(0, 10)}
+                header={tableHeader}
+                primaryIdx={1}
+                row={tableRow}
+                props={[]} />
               <Link className='link--secondary' to='/granules'>View All Granules</Link>
             </div>
           </section>
