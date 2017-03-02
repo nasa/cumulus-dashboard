@@ -118,7 +118,6 @@ var PdrsOverview = React.createClass({
 
   render: function () {
     const { list, search } = this.props.pdrs;
-    console.log(list);
     const { count, limit } = list.meta;
     const { error, page, sortIdx, order } = this.state;
     const logsQuery = { q: 'pdrName' };
