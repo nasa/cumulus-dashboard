@@ -20,7 +20,6 @@ const collections = {
   base: 'collections',
   heading: 'Collections',
   routes: (currentRoute, params) => {
-
     // determine which set of routes to show, based on the current route
     if (currentRoute.indexOf('collections/collection') >= 0) {
       return singleCollectionRoutes.map(d => {
@@ -33,8 +32,7 @@ const collections = {
     } else if (
       currentRoute.slice(0, 12) === '/collections') {
       return collectionRoutes;
-    }
-    else {
+    } else {
       return empty;
     }
   }
