@@ -62,6 +62,34 @@ select {
   }
 }
 
+.search__loading {
+  .spinner {
+    position: absolute;
+    right: 10px;
+    top: 6px;
+    > div {
+      width: 8px;
+      height: 8px;
+      background-color: $black;
+    }
+  }
+}
+
+.search__results {
+  background-color: #FFF;
+  border: 1px solid $lightest-grey;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+  border-radius: .5em;
+  padding: .3em 2em .4em .7em;
+  position: absolute;
+  top: 36px;
+
+  a, a:visited {
+    color: $black;
+    border-bottom: 1px solid $lightest-grey;
+  }
+}
+
 .form-group__element {
   float: left;
   margin-right: 1em;
