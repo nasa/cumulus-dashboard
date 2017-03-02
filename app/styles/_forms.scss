@@ -14,7 +14,7 @@ label {
 .form__multistep {
   input[type='text'], textarea {
     margin-bottom: 2em;
-    width: 100%;
+    width: 95.5%;
   }
 }
 
@@ -130,4 +130,19 @@ select {
 
 .form-group__element--left {
   margin-right: 1em;
+  margin-top: 2em;
+}
+
+.ace_editor {
+  margin-bottom: 2em;
+  border: 1px solid $lightest-grey;
+  border-radius: .5em;
+}
+
+.ace-github .ace_gutter {
+  padding-top: .5em;
+}
+
+.ace_content {
+  padding-top: .5em;
 }
