@@ -82,7 +82,7 @@ render((
           <IndexRoute component={listPdrs} />
           <Route path='active' component={PdrActive} />
           <Route path='completed' component={PdrCompleted} />
-          <Route path='pdr' component={Pdr} />
+          <Route path='pdr/:pdrName' component={Pdr} />
         </Route>
         <Route path='logs' component={Logs} />
         <Route path='contact' component={Contact} />
