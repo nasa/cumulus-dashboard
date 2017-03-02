@@ -2,16 +2,16 @@
 import { encode } from '../utils/browser';
 
 const collectionRoutes = [
-  ['Active', 'active']/*,
-                        ['In-active', 'inactive']*/
+  ['Active', 'active'],
+  ['In-active', 'inactive']
 ];
 
 const singleCollectionRoutes = [
   ['Back to Collections', null, 'sidebar__nav--back'],
   ['Overview', 'collection/:collectionName'],
-  /* ['Granules', 'collection/:collectionName/granules'],*/
-  ['Ingest & Recipe', 'collection/:collectionName/ingest']/*,
-                                                            ['Logs', 'collection/:collectionName/logs']*/
+  ['Granules', 'collection/:collectionName/granules'],
+  ['Ingest & Recipe', 'collection/:collectionName/ingest'],
+  ['Logs', 'collection/:collectionName/logs']
 ];
 
 const empty = [['', '']];
