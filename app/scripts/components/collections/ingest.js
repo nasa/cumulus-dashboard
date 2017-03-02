@@ -7,8 +7,8 @@ import { getCollection } from '../../actions';
 import { fullDate } from '../../utils/format';
 import config from '../../config';
 
-var Collection = React.createClass({
-  displayName: 'Collection',
+var CollectionIngest = React.createClass({
+  displayName: 'CollectionIngest',
 
   getInitialState: function () {
     return {
@@ -158,4 +158,4 @@ var Collection = React.createClass({
   }
 });
 
-export default connect(state => state)(Collection);
+export default connect(state => state)(CollectionIngest);
