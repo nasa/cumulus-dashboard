@@ -20,7 +20,7 @@ var Granules = React.createClass({
           </div>
         </div>
         <div className='page__content'>
-          <div className='row'>
+          <div className='row wrapper__sidebar'>
             <Sidebar currentPath={this.props.location.pathname} params={this.props.params} />
             <div className='page__content--shortened'>
               {this.props.children}

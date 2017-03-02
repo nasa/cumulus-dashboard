@@ -20,6 +20,7 @@
 // Scss starts here!
 html {
   font-size: $root-font-size;
+  height: 100%;
 }
 
 body {
@@ -29,6 +30,7 @@ body {
   font-family: $base-font-family;
   font-weight: $base-font-weight;
   background-color: $background-white;
+  height: 100%;
 }
 
 .row {
@@ -141,11 +143,8 @@ a:active {
   padding-top: 15em;
 }
 
-.sidebar__container {
-  background-color: $midnight-blue;
-  width: 30%;
-  height: 100%;
-  content: '.';
+.wrapper__sidebar{
+  position: relative;
 }
 
 .sidebar {
@@ -154,9 +153,10 @@ a:active {
   width: 20%;
   max-width: 131px;
   float: left;
+  height: 100%;
   background-color: $midnight-blue;
   color: $lighter-grey;
-  position: relative;
+  position: absolute;
   a {
     color: lighten($lighter-grey, 8%);
     .active {
@@ -166,6 +166,11 @@ a:active {
       color: #fff;
     }
   }
+  .sidebar__nav--selected {
+    color: #fff;
+    font-weight: $base-font-bold;
+    letter-spacing: .2px;
+  } 
   li {
     margin-bottom: 0.75em;
   }
@@ -194,10 +199,6 @@ a:active {
   width: 90%;
 }
 
-.sidebar__nav--selected {
-  text-decoration: underline;
-}
-
 .sidebar__header {
   margin-top: 2em;
   margin-bottom: 1em;
@@ -213,7 +214,7 @@ a:active {
 }
 
 .page__content--shortened {
-  padding: 4em 0 0 65px;
+  padding: 4em 0 0 13em;
   float: left;
   width: 80%;
 }

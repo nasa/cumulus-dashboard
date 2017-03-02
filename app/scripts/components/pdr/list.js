@@ -128,9 +128,6 @@ var PdrsOverview = React.createClass({
           <hr />
         </section>
         {list.inflight ? <Loading /> : null}
-        <section className='page__section'>
-          <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
-        </section>
 
         {error ? <ErrorReport report={error} /> : null}
 
@@ -142,6 +139,9 @@ var PdrsOverview = React.createClass({
           sortIdx={sortIdx}
           order={order}
           changeSortProps={this.setSort} />
+        <section className='page__section'>
+          <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
+        </section>
         <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
       </div>
     );

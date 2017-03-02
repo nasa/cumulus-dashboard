@@ -107,10 +107,10 @@ var ActiveCollections = React.createClass({
           </div>
         </section>
         {list.inflight ? <Loading /> : null}
+        <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
         <section className='page__section'>
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
-        <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
       </div>
     );
   }
