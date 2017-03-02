@@ -1,6 +1,8 @@
 'use strict';
+import React from 'react';
 import moment from 'moment';
 import numeral from 'numeral';
+import { Link } from 'react-router';
 
 export const nullValue = '--';
 
@@ -34,4 +36,13 @@ export const tally = function (numberString) {
 export const seconds = function (numberString) {
   if (isNaN(numberString)) { return nullValue; }
   return numberString.toFixed(2) + 's';
+};
+
+export const collectionSearchResult = function (collection) {
+  const { collectionName } = collection;
+  return (
+    <li key={collectionName}>
+      <Link to={`collections/collection/${collectionName}`}>{collectionName}</Link>
+    </li>
+  );
 };
