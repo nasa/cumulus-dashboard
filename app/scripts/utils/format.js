@@ -55,3 +55,13 @@ export const granuleSearchResult = function (granule) {
     </li>
   );
 };
+
+export const pdrSearchResult = function (pdr) {
+  const { pdrName } = pdr;
+  return (
+    <li key={pdrName}>
+      <Link to={`pdrs/pdr/${pdrName}`}>{pdrName}</Link>
+    </li>
+  );
+};
+
