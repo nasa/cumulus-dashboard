@@ -142,7 +142,7 @@ var AllGranules = React.createClass({
             </dl>
           </div>
           <div className='filters filters__wlabels'>
-            <div className='fitler__item'>
+            <div className='filter__item'>
               <label htmlFor='collectionFilter'>Collection</label>
               <div className='dropdown__wrapper form-group__element'>
                 <select id='collectionFilter'>
@@ -151,7 +151,7 @@ var AllGranules = React.createClass({
                 </select>
               </div>
             </div>
-            <div className='fitler__item'>
+            <div className='filter__item'>
               <Search dispatch={this.props.dispatch}
                 action={searchGranules}
                 results={search}
