@@ -1,4 +1,6 @@
 'use strict';
-const isNode = typeof window === 'undefined';
-export const encode = (str) => isNode ? str : window.encodeURI(str);
-export const global = {};
+import global from 'global';
+import window from 'global/window';
+import document from 'global/document';
+export const encode = (str) => window.encodeURI ? window.encodeURI(str) : str;
+export { global, window, document };

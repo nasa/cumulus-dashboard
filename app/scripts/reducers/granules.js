@@ -12,13 +12,21 @@ import {
 
   GRANULE_REPROCESS,
   GRANULE_REPROCESS_INFLIGHT,
-  GRANULE_REPROCESS_ERROR
+  GRANULE_REPROCESS_ERROR,
+
+  SEARCH_GRANULES,
+  SEARCH_GRANULES_INFLIGHT,
+  SEARCH_GRANULES_ERROR,
+  CLEAR_GRANULES_SEARCH
 } from '../actions';
 
 export const initialState = {
   list: {
     data: [],
     meta: {}
+  },
+  search: {
+    data: []
   },
   map: {},
   meta: {},
@@ -64,6 +72,23 @@ export default function reducer (state = initialState, action) {
     case GRANULE_REPROCESS_ERROR:
       set(state, ['reprocessed', id, 'status'], 'error');
       set(state, ['reprocessed', id, 'error'], action.error);
+      break;
+
+    case SEARCH_GRANULES:
+      set(state, ['search', 'data'], data.results);
+      set(state, ['search', 'inflight'], false);
+      break;
+    case SEARCH_GRANULES_INFLIGHT:
+      set(state, ['search', 'inflight'], true);
+      break;
+    case SEARCH_GRANULES_ERROR:
+      set(state, ['search', 'error'], action.error);
+      set(state, ['search', 'inflight'], false);
+      break;
+    case CLEAR_GRANULES_SEARCH:
+      set(state, ['search', 'data'], []);
+      set(state, ['search', 'error'], null);
+      set(state, ['search', 'inflight'], false);
       break;
   }
   return state;

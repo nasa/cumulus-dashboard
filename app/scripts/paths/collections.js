@@ -1,18 +1,20 @@
 'use strict';
 import { encode } from '../utils/browser';
 
-const singleCollectionRoutes = [
-  ['Back to Collections', null, 'sidebar__nav--back'],
-  ['Active', 'collection/:collectionName/active'],
-  ['In-active', 'collection/:collectionName/inactive']
+const collectionRoutes = [
+  ['Active', 'active']/*,
+                        ['In-active', 'inactive']*/
 ];
 
-const collectionRoutes = [
-  ['Overview', null],
-  ['Granules', 'granules'],
-  ['Ingest & Recipe', 'ingest'],
-  ['Logs', 'logs']
+const singleCollectionRoutes = [
+  ['Back to Collections', null, 'sidebar__nav--back'],
+  ['Overview', 'collection/:collectionName'],
+  /* ['Granules', 'collection/:collectionName/granules'],*/
+  ['Ingest & Recipe', 'collection/:collectionName/ingest']/*,
+                                                            ['Logs', 'collection/:collectionName/logs']*/
 ];
+
+const empty = [['', '']];
 
 const collections = {
   base: 'collections',
@@ -27,8 +29,12 @@ const collections = {
         copy[1] = encode(copy[1].replace(':collectionName', params.collectionName));
         return copy;
       });
+    } else if (
+      currentRoute.slice(0, 12) === '/collections') {
+      return collectionRoutes;
+    } else {
+      return empty;
     }
-    return collectionRoutes;
   }
 };
 

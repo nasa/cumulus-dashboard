@@ -2,14 +2,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { listCollections } from '../../actions';
+import { listCollections, searchCollections, clearCollectionsSearch } from '../../actions';
 import * as format from '../../utils/format';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
 import SortableTable from '../table/sortable';
+import Search from '../form/search';
 
 const tableHeader = [
   'Name',
+  'Status',
   'Errors',
   'User Name',
   'Granules',
@@ -19,6 +21,7 @@ const tableHeader = [
 
 const tableRow = [
   (d) => <Link to={`/collections/collection/${d.collectionName}`}>{d.collectionName}</Link>,
+  'status',
   () => 0,
   'changedBy',
   (d) => format.tally(d.granules),
@@ -60,7 +63,7 @@ var ActiveCollections = React.createClass({
   },
 
   render: function () {
-    const { list } = this.props.collections;
+    const { list, search } = this.props.collections;
     const { count, limit } = list.meta;
     const { page } = this.state;
 
@@ -75,10 +78,12 @@ var ActiveCollections = React.createClass({
             <dd className='metadata__updated__time'>2:00pm EST</dd>
           </dl>
           <div className='filters'>
-            <form className="search__wrapper form-group__element" onSubmit="">
-              <input className='search' type="search" />
-              <span className="search__icon"></span>
-            </form>
+            <Search dispatch={this.props.dispatch}
+              action={searchCollections}
+              results={search}
+              format={format.collectionSearchResult}
+              clear={clearCollectionsSearch}
+            />
             <div className='dropdown__wrapper form-group__element'>
               <select>
                 <option value="week">Last Week</option>
@@ -107,10 +112,10 @@ var ActiveCollections = React.createClass({
           </div>
         </section>
         {list.inflight ? <Loading /> : null}
+        <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
         <section className='page__section'>
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
-        <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
       </div>
     );
   }

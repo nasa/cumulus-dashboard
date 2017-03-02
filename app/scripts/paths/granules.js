@@ -2,15 +2,18 @@
 import { encode } from '../utils/browser';
 
 const granuleRoutes = [
-  ['Overview', null],
+  ['Overview', null]/*,
   ['Marked for Deletion', 'deletion'],
-  ['Restricted', 'restricted']
+  ['Restricted', 'restricted']*/
 ];
 
 const singleGranuleRoutes = [
+  ['Back to Granules', null, 'sidebar__nav--back'],
   ['Overview', 'granule/:granuleId/overview'],
   ['Ingest & Recipe', 'granule/:granuleId/recipe-ingest']
 ];
+
+const empty = [['', '']];
 
 const granules = {
   base: 'granules',
@@ -23,8 +26,11 @@ const granules = {
         copy[1] = encode(copy[1].replace(':granuleId', params.granuleId));
         return copy;
       });
+    } else if (currentRoute.slice(0, 9) === '/granules') {
+      return granuleRoutes;
+    } else {
+      return empty;
     }
-    return granuleRoutes;
   }
 };
 

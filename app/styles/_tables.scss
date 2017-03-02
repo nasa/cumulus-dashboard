@@ -140,3 +140,21 @@ table {
 .pagination__link--active {
   text-decoration: underline;
 }
+
+.table__sort {
+  cursor: pointer;
+  position: relative;
+}
+
+.table__main-asset {
+  a, a:visited {
+    color: $black;
+    border-bottom: 1px solid $lightest-grey;
+  }
+}
+
+//TODO
+.table__sort--desc {
+}
+.table__sort--asc {
+}

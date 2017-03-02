@@ -1,16 +1,24 @@
 'use strict';
 
 const pdrRoutes = [
-  ['Overview', null],
+  ['Overview', null]/*,
   ['Active', 'active'],
   ['Completed', 'completed'],
-  ['PDR', 'pdr']
+  ['PDR', 'pdr']*/
 ];
+
+const empty = [['', '']];
 
 const pdrs = {
   base: 'pdrs',
   heading: 'PDRs',
-  routes: () => pdrRoutes
+  routes: (currentRoute) => {
+    if (currentRoute.slice(0, 5) !== '/pdrs') {
+      return empty;
+    } else {
+      return pdrRoutes;
+    }
+  }
 };
 
 export default pdrs;

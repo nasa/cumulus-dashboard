@@ -20,11 +20,10 @@ var Sidebar = React.createClass({
   },
 
   renderNavSection: function (section) {
-    const { base, heading, routes } = section;
+    const { base, routes } = section;
     const { currentPath, params } = this.props;
     return (
       <div key={base}>
-        <h3 className='sidebar__header'><Link to={heading.toLowerCase()}>{heading}</Link></h3>
         <ul>
           {routes(currentPath, params).map((d, i) => {
             let path = this.resolvePath(base, d[1]);
