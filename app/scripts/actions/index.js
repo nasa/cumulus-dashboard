@@ -24,6 +24,11 @@ export const UPDATE_COLLECTION = 'UPDATE_COLLECTION';
 export const UPDATE_COLLECTION_INFLIGHT = 'UPDATE_COLLECTION_INFLIGHT';
 export const UPDATE_COLLECTION_ERROR = 'UPDATE_COLLECTION_ERROR';
 
+export const SEARCH_COLLECTIONS = 'SEARCH_COLLECTIONS';
+export const SEARCH_COLLECTIONS_INFLIGHT = 'SEARCH_COLLECTIONS_INFLIGHT';
+export const SEARCH_COLLECTIONS_ERROR = 'SEARCH_COLLECTIONS_ERROR';
+export const CLEAR_COLLECTIONS_SEARCH = 'CLEAR_COLLECTIONS_SEARCH';
+
 export const GRANULE = 'GRANULE';
 export const GRANULE_INFLIGHT = 'GRANULE_INFLIGHT';
 export const GRANULE_ERROR = 'GRANULE_ERROR';
@@ -36,11 +41,21 @@ export const GRANULE_REPROCESS = 'GRANULE_REPROCESS';
 export const GRANULE_REPROCESS_INFLIGHT = 'GRANULE_REPROCESS_INFLIGHT';
 export const GRANULE_REPROCESS_ERROR = 'GRANULE_REPROCESS_ERROR';
 
+export const SEARCH_GRANULES = 'SEARCH_GRANULES';
+export const SEARCH_GRANULES_INFLIGHT = 'SEARCH_GRANULES_INFLIGHT';
+export const SEARCH_GRANULES_ERROR = 'SEARCH_GRANULES_ERROR';
+export const CLEAR_GRANULES_SEARCH = 'CLEAR_GRANULES_SEARCH';
+
 export const STATS = 'STATS';
 
 export const PDRS = 'PDRS';
 export const PDRS_INFLIGHT = 'PDRS_INFLIGHT';
 export const PDRS_ERROR = 'PDRS_ERROR';
+
+export const SEARCH_PDRS = 'SEARCH_PDRS';
+export const SEARCH_PDRS_INFLIGHT = 'SEARCH_PDRS_INFLIGHT';
+export const SEARCH_PDRS_ERROR = 'SEARCH_PDRS_ERROR';
+export const CLEAR_PDRS_SEARCH = 'CLEAR_PDRS_SEARCH';
 
 export const LOGS = 'LOGS';
 export const LOGS_INFLIGHT = 'LOGS_INFLIGHT';
@@ -66,6 +81,13 @@ export const createCollection = (payload) => wrapRequest(
 export const updateCollection = (payload) => wrapRequest(
   payload.collectionName, put, 'collections', UPDATE_COLLECTION, payload);
 
+export const searchCollections = (query) => wrapRequest(null, get, {
+  url: url.resolve(root, 'collections'),
+  qs: Object.assign({ limit: 5, fields: 'collectionName' }, query)
+}, SEARCH_COLLECTIONS);
+
+export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH });
+
 export const getGranule = (granuleId) => wrapRequest(
   granuleId, get, `granules/${granuleId}`, GRANULE);
 
@@ -79,12 +101,26 @@ export const reprocessGranule = (granuleId) => wrapRequest(
     action: 'reprocess'
   });
 
+export const searchGranules = (query) => wrapRequest(null, get, {
+  url: url.resolve(root, 'granules'),
+  qs: Object.assign({ limit: 5, fields: 'granuleId' }, query)
+}, SEARCH_GRANULES);
+
+export const clearGranuleSearch = () => ({ type: CLEAR_GRANULES_SEARCH });
+
 export const getStats = () => wrapRequest(null, get, 'stats/summary/grouped', STATS);
 
 export const listPdrs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, PDRS);
+
+export const searchPdrs = (query) => wrapRequest(null, get, {
+  url: url.resolve(root, 'pdrs'),
+  qs: Object.assign({ limit: 5, fields: 'pdrName' }, query)
+}, SEARCH_PDRS);
+
+export const clearPdrSearch = () => ({ type: CLEAR_PDRS_SEARCH });
 
 export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),

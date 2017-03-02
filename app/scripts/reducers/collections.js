@@ -16,13 +16,21 @@ import {
 
   UPDATE_COLLECTION,
   UPDATE_COLLECTION_INFLIGHT,
-  UPDATE_COLLECTION_ERROR
+  UPDATE_COLLECTION_ERROR,
+
+  SEARCH_COLLECTIONS,
+  SEARCH_COLLECTIONS_INFLIGHT,
+  SEARCH_COLLECTIONS_ERROR,
+  CLEAR_COLLECTIONS_SEARCH
 } from '../actions';
 
 export const initialState = {
   list: {
     data: [],
     meta: {}
+  },
+  search: {
+    data: []
   },
   map: {},
   meta: {},
@@ -81,6 +89,23 @@ export default function reducer (state = initialState, action) {
     case UPDATE_COLLECTION_ERROR:
       set(state, ['updated', id, 'status'], 'error');
       set(state, ['updated', id, 'error'], action.error);
+      break;
+
+    case SEARCH_COLLECTIONS:
+      set(state, ['search', 'data'], data.results);
+      set(state, ['search', 'inflight'], false);
+      break;
+    case SEARCH_COLLECTIONS_INFLIGHT:
+      set(state, ['search', 'inflight'], true);
+      break;
+    case SEARCH_COLLECTIONS_ERROR:
+      set(state, ['search', 'error'], action.error);
+      set(state, ['search', 'inflight'], false);
+      break;
+    case CLEAR_COLLECTIONS_SEARCH:
+      set(state, ['search', 'data'], []);
+      set(state, ['search', 'error'], null);
+      set(state, ['search', 'inflight'], false);
       break;
   }
   return state;
