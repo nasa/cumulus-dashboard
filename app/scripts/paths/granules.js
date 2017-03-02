@@ -2,12 +2,13 @@
 import { encode } from '../utils/browser';
 
 const granuleRoutes = [
-  ['Overview', null],
+  ['Overview', null]/*,
   ['Marked for Deletion', 'deletion'],
-  ['Restricted', 'restricted']
+  ['Restricted', 'restricted']*/
 ];
 
 const singleGranuleRoutes = [
+  ['Back to Granules', null, 'sidebar__nav--back'],
   ['Overview', 'granule/:granuleId/overview'],
   ['Ingest & Recipe', 'granule/:granuleId/recipe-ingest']
 ];

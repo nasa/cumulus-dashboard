@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { Link } from 'react-router';
 import { interval, listPdrs, searchPdrs, clearPdrSearch } from '../../actions';
-import { pdrSearchResult } from '../../utils/format';
+import { tally, seconds, pdrSearchResult } from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Pagination from '../app/pagination';
 import ErrorReport from '../errors/report';
@@ -17,6 +17,7 @@ import { isUndefined } from '../../utils/validate';
 const tableHeader = [
   'Name',
   'Status',
+  'Duration',
   'Granules',
   'Ingesting',
   'Processing',
@@ -28,17 +29,19 @@ const tableHeader = [
 const tableRow = [
   (d) => <Link to={`granules/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
   'status',
-  (d) => get(d, ['granulesStatus', 'total'], 0),
-  (d) => get(d, ['granulesStatus', 'ingesting'], 0),
-  (d) => get(d, ['granulesStatus', 'processing'], 0),
-  (d) => get(d, ['granulesStatus', 'cmr'], 0),
-  (d) => get(d, ['granulesStatus', 'archiving'], 0),
-  (d) => get(d, ['granulesStatus', 'completed'], 0)
+  (d) => seconds(d.averageDuration),
+  (d) => tally(get(d, 'granules', 0)),
+  (d) => tally(get(d, ['granulesStatus', 'ingesting'], 0)),
+  (d) => tally(get(d, ['granulesStatus', 'processing'], 0)),
+  (d) => tally(get(d, ['granulesStatus', 'cmr'], 0)),
+  (d) => tally(get(d, ['granulesStatus', 'archiving'], 0)),
+  (d) => tally(get(d, ['granulesStatus', 'completed'], 0))
 ];
 
 const tableSortProps = [
+  'pdrName.keyword',
+  'status.keyword',
   null,
-  'statusId',
   null,
   null,
   null,

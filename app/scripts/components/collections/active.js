@@ -11,6 +11,7 @@ import Search from '../form/search';
 
 const tableHeader = [
   'Name',
+  'Status',
   'Errors',
   'User Name',
   'Granules',
@@ -20,6 +21,7 @@ const tableHeader = [
 
 const tableRow = [
   (d) => <Link to={`/collections/collection/${d.collectionName}`}>{d.collectionName}</Link>,
+  'status',
   () => 0,
   'changedBy',
   (d) => format.tally(d.granules),
