@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { Link } from 'react-router';
 import { interval, listPdrs, searchPdrs, clearPdrSearch } from '../../actions';
-import { tally, pdrSearchResult } from '../../utils/format';
+import { tally, seconds, pdrSearchResult } from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Pagination from '../app/pagination';
 import ErrorReport from '../errors/report';
@@ -17,6 +17,7 @@ import { isUndefined } from '../../utils/validate';
 const tableHeader = [
   'Name',
   'Status',
+  'Duration',
   'Granules',
   'Ingesting',
   'Processing',
@@ -28,6 +29,7 @@ const tableHeader = [
 const tableRow = [
   (d) => <Link to={`granules/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
   'status',
+  (d) => seconds(d.averageDuration),
   (d) => tally(get(d, 'granules', 0)),
   (d) => tally(get(d, ['granulesStatus', 'ingesting'], 0)),
   (d) => tally(get(d, ['granulesStatus', 'processing'], 0)),
@@ -39,6 +41,7 @@ const tableRow = [
 const tableSortProps = [
   'pdrName.keyword',
   'status.keyword',
+  null,
   null,
   null,
   null,
@@ -115,6 +118,7 @@ var PdrsOverview = React.createClass({
 
   render: function () {
     const { list, search } = this.props.pdrs;
+    console.log(list);
     const { count, limit } = list.meta;
     const { error, page, sortIdx, order } = this.state;
     const logsQuery = { q: 'pdrName' };

@@ -34,8 +34,8 @@ export const tally = function (numberString) {
 };
 
 export const seconds = function (numberString) {
-  if (isNaN(numberString)) { return nullValue; }
-  return numberString.toFixed(2) + 's';
+  if (numberString === null || isNaN(numberString)) { return nullValue; }
+  return +numberString.toFixed(2) + 's';
 };
 
 export const collectionSearchResult = function (collection) {
