@@ -2,11 +2,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { listCollections } from '../../actions';
+import { listCollections, searchCollections, clearCollectionsSearch } from '../../actions';
 import * as format from '../../utils/format';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
 import SortableTable from '../table/sortable';
+import Search from '../form/search';
 
 const tableHeader = [
   'Name',
@@ -60,7 +61,7 @@ var ActiveCollections = React.createClass({
   },
 
   render: function () {
-    const { list } = this.props.collections;
+    const { list, search } = this.props.collections;
     const { count, limit } = list.meta;
     const { page } = this.state;
 
@@ -91,10 +92,12 @@ var ActiveCollections = React.createClass({
                 <option value="year">Last Year</option>
               </select>
             </div>
-            <form className="search__wrapper form-group__element" onSubmit="">
-              <input className='search' type="search" />
-              <span className="search__icon"></span>
-            </form>
+            <Search dispatch={this.props.dispatch}
+              action={searchCollections}
+              results={search}
+              format={format.collectionSearchResult}
+              clear={clearCollectionsSearch}
+            />
           </div>
           <div className='form--controls'>
             <label className='form__element__select form-group__element form-group__element--small'><input type="checkbox" name="Select" value="Select" />Select</label>

@@ -1,6 +1,8 @@
 'use strict';
+import React from 'react';
 import moment from 'moment';
 import numeral from 'numeral';
+import { Link } from 'react-router';
 
 export const nullValue = '--';
 
@@ -35,3 +37,31 @@ export const seconds = function (numberString) {
   if (isNaN(numberString)) { return nullValue; }
   return numberString.toFixed(2) + 's';
 };
+
+export const collectionSearchResult = function (collection) {
+  const { collectionName } = collection;
+  return (
+    <li key={collectionName}>
+      <Link to={`collections/collection/${collectionName}`}>{collectionName}</Link>
+    </li>
+  );
+};
+
+export const granuleSearchResult = function (granule) {
+  const { granuleId } = granule;
+  return (
+    <li key={granuleId}>
+      <Link to={`granules/granule/${granuleId}/overview`}>{granuleId}</Link>
+    </li>
+  );
+};
+
+export const pdrSearchResult = function (pdr) {
+  const { pdrName } = pdr;
+  return (
+    <li key={pdrName}>
+      <Link to={`pdrs/pdr/${pdrName}`}>{pdrName}</Link>
+    </li>
+  );
+};
+

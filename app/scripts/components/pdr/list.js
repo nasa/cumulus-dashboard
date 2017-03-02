@@ -3,12 +3,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { Link } from 'react-router';
-import { interval, listPdrs } from '../../actions';
+import { interval, listPdrs, searchPdrs, clearPdrSearch } from '../../actions';
+import { pdrSearchResult } from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Pagination from '../app/pagination';
 import ErrorReport from '../errors/report';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
+import Search from '../form/search';
 import { updateInterval } from '../../config';
 import { isUndefined } from '../../utils/validate';
 
@@ -112,7 +114,7 @@ var PdrsOverview = React.createClass({
   },
 
   render: function () {
-    const { list } = this.props.pdrs;
+    const { list, search } = this.props.pdrs;
     const { count, limit } = list.meta;
     const { error, page, sortIdx, order } = this.state;
     const logsQuery = { q: 'pdrName' };
@@ -127,19 +129,26 @@ var PdrsOverview = React.createClass({
               <dd className='metadata__updated__time'>2:00pm EST</dd>
             </dl>
           </div>
-        
-        {list.inflight ? <Loading /> : null}
+          <div className='filters'>
+            <Search dispatch={this.props.dispatch}
+              action={searchPdrs}
+              results={search}
+              format={pdrSearchResult}
+              clear={clearPdrSearch}
+            />
+          </div>
+          {list.inflight ? <Loading /> : null}
 
-        {error ? <ErrorReport report={error} /> : null}
+          {error ? <ErrorReport report={error} /> : null}
 
-        <SortableTable
-          data={list.data}
-          header={tableHeader}
-          row={tableRow}
-          props={tableSortProps}
-          sortIdx={sortIdx}
-          order={order}
-          changeSortProps={this.setSort} />
+          <SortableTable
+            data={list.data}
+            header={tableHeader}
+            row={tableRow}
+            props={tableSortProps}
+            sortIdx={sortIdx}
+            order={order}
+            changeSortProps={this.setSort} />
 
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>

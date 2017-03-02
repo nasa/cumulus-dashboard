@@ -2,13 +2,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { interval, listGranules } from '../../actions';
+import { interval, listGranules, searchGranules, clearGranuleSearch } from '../../actions';
 import SortableTable from '../table/sortable';
-import { fullDate, seconds } from '../../utils/format';
+import { fullDate, seconds, granuleSearchResult } from '../../utils/format';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
 import LogViewer from '../logs/viewer';
+import Search from '../form/search';
 import { updateInterval } from '../../config';
 import { isUndefined } from '../../utils/validate';
 
@@ -123,7 +124,7 @@ var AllGranules = React.createClass({
 
   render: function () {
     const { pdrName } = this.props.params;
-    const { list } = this.props.granules;
+    const { list, search } = this.props.granules;
     const { count, limit } = list.meta;
     const { error, page, sortIdx, order } = this.state;
     const logsQuery = { q: 'granuleId' };
@@ -150,10 +151,14 @@ var AllGranules = React.createClass({
                 </select>
               </div>
             </div>
-            <form className='search__wrapper form-group__element' onSubmit=''>
-              <input className='search' type='search' />
-              <span className='search__icon'></span>
-            </form>
+            <div className='fitler__item'>
+              <Search dispatch={this.props.dispatch}
+                action={searchGranules}
+                results={search}
+                format={granuleSearchResult}
+                clear={clearGranuleSearch}
+              />
+            </div>
           </div>
           <div className='form--controls'>
             <label className='form__element__select form-group__element form-group__element--small'><input type='checkbox' name='Select' value='Select' />Select</label>
