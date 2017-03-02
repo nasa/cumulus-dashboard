@@ -46,3 +46,12 @@ export const collectionSearchResult = function (collection) {
     </li>
   );
 };
+
+export const granuleSearchResult = function (granule) {
+  const { granuleId } = granule;
+  return (
+    <li key={granuleId}>
+      <Link to={`granules/granule/${granuleId}/overview`}>{granuleId}</Link>
+    </li>
+  );
+};
