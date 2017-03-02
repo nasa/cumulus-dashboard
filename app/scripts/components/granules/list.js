@@ -32,10 +32,10 @@ const tableRow = [
   (d) => fullDate(d.updatedAt)
 ];
 const tableSortProps = [
-  'granuleId',
+  'granuleId.keyword',
   'statusId',
-  null,
-  'collectionName',
+  'pdrName.keyword',
+  'collectionName.keyword',
   'duration',
   'updatedAt'
 ];
