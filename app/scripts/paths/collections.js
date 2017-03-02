@@ -1,17 +1,17 @@
 'use strict';
 import { encode } from '../utils/browser';
 
-const singleCollectionRoutes = [
-  ['Active', 'collection/:collectionName/active'],
-  ['In-active', 'collection/:collectionName/inactive']
+const collectionRoutes = [
+  ['Active', 'active'],
+  ['In-active', 'inactive']
 ];
 
-const collectionRoutes = [
+const singleCollectionRoutes = [
   ['Back to Collections', null, 'sidebar__nav--back'],
-  ['Overview', null],
-  ['Granules', 'granules'],
-  ['Ingest & Recipe', 'ingest'],
-  ['Logs', 'logs']
+  ['Overview', 'collection/:collectionName'],
+  ['Granules', 'collection/:collectionName/granules'],
+  ['Ingest & Recipe', 'collection/:collectionName/ingest'],
+  ['Logs', 'collection/:collectionName/logs']
 ];
 
 const empty = [['', '']];
@@ -20,6 +20,7 @@ const collections = {
   base: 'collections',
   heading: 'Collections',
   routes: (currentRoute, params) => {
+
     // determine which set of routes to show, based on the current route
     if (currentRoute.indexOf('collections/collection') >= 0) {
       return singleCollectionRoutes.map(d => {
@@ -29,9 +30,9 @@ const collections = {
         copy[1] = encode(copy[1].replace(':collectionName', params.collectionName));
         return copy;
       });
-    }
-    else if (currentRoute.slice(0, 12) === '/collections') {
-      return singleCollectionRoutes;
+    } else if (
+      currentRoute.slice(0, 12) === '/collections') {
+      return collectionRoutes;
     }
     else {
       return empty;
