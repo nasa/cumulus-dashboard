@@ -9,7 +9,8 @@ const Search = React.createClass({
     dispatch: React.PropTypes.func,
     action: React.PropTypes.func,
     results: React.PropTypes.object,
-    format: React.PropTypes.func
+    format: React.PropTypes.func,
+    clear: React.PropTypes.func
   },
 
   getInitialState: function () {
@@ -20,6 +21,8 @@ const Search = React.createClass({
 
   componentWillUnmount: function () {
     if (this.cancelDelay) { this.cancelDelay(); }
+    const { dispatch, clear } = this.props;
+    dispatch(clear());
   },
 
   complete: function (e) {

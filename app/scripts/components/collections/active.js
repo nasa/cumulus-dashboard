@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { listCollections, searchCollections } from '../../actions';
+import { listCollections, searchCollections, clearCollectionsSearch } from '../../actions';
 import * as format from '../../utils/format';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
@@ -80,6 +80,7 @@ var ActiveCollections = React.createClass({
               action={searchCollections}
               results={search}
               format={format.collectionSearchResult}
+              clear={clearCollectionsSearch}
             />
             <div className='dropdown__wrapper form-group__element'>
               <select>

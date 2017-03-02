@@ -20,7 +20,8 @@ import {
 
   SEARCH_COLLECTIONS,
   SEARCH_COLLECTIONS_INFLIGHT,
-  SEARCH_COLLECTIONS_ERROR
+  SEARCH_COLLECTIONS_ERROR,
+  CLEAR_COLLECTIONS_SEARCH
 } from '../actions';
 
 export const initialState = {
@@ -99,6 +100,11 @@ export default function reducer (state = initialState, action) {
       break;
     case SEARCH_COLLECTIONS_ERROR:
       set(state, ['search', 'error'], action.error);
+      set(state, ['search', 'inflight'], false);
+      break;
+    case CLEAR_COLLECTIONS_SEARCH:
+      set(state, ['search', 'data'], []);
+      set(state, ['search', 'error'], null);
       set(state, ['search', 'inflight'], false);
       break;
   }
