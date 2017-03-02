@@ -83,6 +83,7 @@ select {
   padding: .3em 2em .4em .7em;
   position: absolute;
   top: 36px;
+  z-index: 100;
 
   a, a:visited {
     color: $black;
