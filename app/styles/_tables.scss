@@ -146,6 +146,10 @@ table {
   position: relative;
 }
 
+.form--controls {
+  @extend .clearfix;
+}
+
 //TODO
 .table__sort--desc {
 }
