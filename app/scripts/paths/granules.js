@@ -12,6 +12,8 @@ const singleGranuleRoutes = [
   ['Ingest & Recipe', 'granule/:granuleId/recipe-ingest']
 ];
 
+const empty = [['', '']];
+
 const granules = {
   base: 'granules',
   heading: 'Granules',
@@ -24,7 +26,12 @@ const granules = {
         return copy;
       });
     }
-    return granuleRoutes;
+    else if (currentRoute.slice(0, 9) === '/granules') {
+      return granuleRoutes;
+    }
+    else {
+      return empty;
+    }
   }
 };
 

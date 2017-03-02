@@ -33,10 +33,10 @@ import ActiveCollections from './components/collections/active';
 import InactiveCollections from './components/collections/inactive';
 import AddCollection from './components/collections/add';
 import EditCollection from './components/collections/edit';
+import CollectionOverview from './components/collections/collection-overview';
 import CollectionGranules from './components/collections/collection-granules';
-import CollectionIngest from './components/collections/collection-ingest';
+import CollectionIngest from './components/collections/ingest';
 import CollectionLogs from './components/collections/collection-logs';
-import Collection from './components/collections/collection';
 
 import Granules from './components/granules';
 import ListGranules from './components/granules/list';
@@ -59,17 +59,18 @@ render((
     <Router history={hashHistory} render={applyRouterMiddleware(useScroll())}>
       <Route path='/404' component={NotFound} />
       <Redirect from='/' to='/pdrs' />
+      <Redirect from='/collections' to='/collections/active' />
       <Route path='/' component={App}>
         <IndexRoute component={Home} />
         <Route path='collections' component={Collections}>
-          <IndexRoute component={ActiveCollections} />
+          <Route path='active' component={ActiveCollections} />
           <Route path='inactive' component={InactiveCollections} />
           <Route path='add' component={AddCollection} />
           <Route path='edit/:collectionName' component={EditCollection} />
-          <Route path='granules' component={CollectionGranules} />
-          <Route path='ingest' component={CollectionIngest} />
-          <Route path='logs' component={CollectionLogs} />
-          <Route path='collection/:collectionName' component={Collection} />
+          <Route path='collection/:collectionName' component={CollectionOverview} />
+          <Route path='collection/:collectionName/granules' component={CollectionGranules} />
+          <Route path='collection/:collectionName/ingest' component={CollectionIngest} />
+          <Route path='collection/:collectionName/logs' component={CollectionLogs} />
         </Route>
         <Route path='granules' component={Granules}>
           <IndexRoute component={ListGranules} />
