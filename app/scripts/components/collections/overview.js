@@ -50,7 +50,6 @@ var CollectionOverview = React.createClass({
 
   load: function () {
     const collectionName = this.props.params.collectionName;
-    const record = get(this.props.collections.map, collectionName);
     this.props.dispatch(getCollection(collectionName));
     this.props.dispatch(listGranules({
       collectionName,
