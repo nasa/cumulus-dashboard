@@ -61,7 +61,7 @@ var AddCollection = React.createClass({
           <div className='page__section__header'>
             <h1 className='heading--large'>Add a Collection</h1>
             <p className='description'>Instructions to add JSON in the below fields. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus tincidunt, orci vel tincidunt ultricies, augue libero egestas felis, vel blandit arcu elit et nisl. Pellentesque luctus sapien eu augue sodales auctor.</p>
-          </div>        
+          </div>
           <Form
             inputMeta={inputElements}
             submit={this.post}

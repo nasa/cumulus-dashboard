@@ -10,8 +10,7 @@ var Collections = React.createClass({
   propTypes: {
     children: React.PropTypes.object,
     location: React.PropTypes.object,
-    params: React.PropTypes.object,
-    location: React.PropTypes.object
+    params: React.PropTypes.object
   },
 
   render: function () {
@@ -27,7 +26,7 @@ var Collections = React.createClass({
         </div>
         <div className='page__content'>
           <div className='row wrapper__sidebar'>
-            {showSidebar ? <Sidebar currentPath={this.props.location.pathname} params={this.props.params} /> : null}
+            {showSidebar ? <Sidebar currentPath={pathname} params={this.props.params} /> : null}
             <div className={showSidebar ? 'page__content--shortened' : 'page__content'}>
               {this.props.children}
             </div>
