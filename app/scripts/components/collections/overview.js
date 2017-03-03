@@ -42,22 +42,22 @@ var CollectionOverview = React.createClass({
     this.load();
   },
 
-  componentWillReceiveProps: function () {
-    this.load();
+  componentWillReceiveProps: function (newProps) {
+    if (newProps.params.collectionName !== this.props.params.collectionName) {
+      this.load();
+    }
   },
 
   load: function () {
     const collectionName = this.props.params.collectionName;
     const record = get(this.props.collections.map, collectionName);
-    if (!record) {
-      this.props.dispatch(getCollection(collectionName));
-      this.props.dispatch(listGranules({
-        collectionName,
-        fields: granuleFields,
-        q: activeStatus,
-        limit: 10
-      }));
-    }
+    this.props.dispatch(getCollection(collectionName));
+    this.props.dispatch(listGranules({
+      collectionName,
+      fields: granuleFields,
+      q: activeStatus,
+      limit: 10
+    }));
   },
 
   renderOverview: function (record) {
