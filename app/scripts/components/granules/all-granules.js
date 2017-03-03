@@ -1,40 +1,13 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { searchGranules, clearGranuleSearch } from '../../actions';
-import { fullDate, seconds, granuleSearchResult } from '../../utils/format';
+import { granuleSearchResult } from '../../utils/format';
+import { isUndefined as undef } from '../../utils/validate';
+import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
 import GranulesList from './list';
 import LogViewer from '../logs/viewer';
 import Search from '../form/search';
-import { isUndefined as undef } from '../../utils/validate';
-
-const tableHeader = [
-  'Name',
-  'Status',
-  'PDR',
-  'Collection',
-  'Duration',
-  'Updated'
-];
-
-const tableRow = [
-  (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
-  'status',
-  'pdrName',
-  'collectionName',
-  (d) => seconds(d.duration),
-  (d) => fullDate(d.updatedAt)
-];
-
-const tableSortProps = [
-  'granuleId.keyword',
-  'statusId',
-  'pdrName.keyword',
-  'collectionName.keyword',
-  'duration',
-  'updatedAt'
-];
 
 var AllGranules = React.createClass({
   displayName: 'AllGranules',
