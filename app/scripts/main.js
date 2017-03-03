@@ -32,7 +32,7 @@ import InactiveCollections from './components/collections/inactive';
 import AddCollection from './components/collections/add';
 import EditCollection from './components/collections/edit';
 import CollectionOverview from './components/collections/overview';
-import CollectionGranules from './components/collections/collection-granules';
+import CollectionGranules from './components/collections/granules';
 import CollectionIngest from './components/collections/ingest';
 import CollectionLogs from './components/collections/collection-logs';
 
