@@ -28,6 +28,8 @@ const tableRow = [
   (d) => fullDate(d.updatedAt)
 ];
 
+const granuleFields = 'status,granuleId,collectionName,pdrName,duration,updatedAt';
+
 var Home = React.createClass({
   displayName: 'Home',
 
@@ -47,7 +49,9 @@ var Home = React.createClass({
     this.props.dispatch(listGranules({
       updatedAt_from: timespan,
       sort_by: 'updatedAt',
-      order: 'desc'
+      order: 'desc',
+      limit: 10,
+      fields: granuleFields
     }));
   },
 
@@ -97,7 +101,7 @@ var Home = React.createClass({
                 <li><span className='num--medium'>308k</span> Granules Archived</li>
               </ul>
               <SortableTable
-                data={granules.list.data.slice(0, 10)}
+                data={granules.list.data}
                 header={tableHeader}
                 primaryIdx={1}
                 row={tableRow}
