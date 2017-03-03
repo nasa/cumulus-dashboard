@@ -31,7 +31,7 @@ import ActiveCollections from './components/collections/active';
 import InactiveCollections from './components/collections/inactive';
 import AddCollection from './components/collections/add';
 import EditCollection from './components/collections/edit';
-import CollectionOverview from './components/collections/collection-overview';
+import CollectionOverview from './components/collections/overview';
 import CollectionGranules from './components/collections/collection-granules';
 import CollectionIngest from './components/collections/ingest';
 import CollectionLogs from './components/collections/collection-logs';
