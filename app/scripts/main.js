@@ -34,7 +34,7 @@ import EditCollection from './components/collections/edit';
 import CollectionOverview from './components/collections/overview';
 import CollectionGranules from './components/collections/granules';
 import CollectionIngest from './components/collections/ingest';
-import CollectionLogs from './components/collections/collection-logs';
+import CollectionLogs from './components/collections/logs';
 
 import Granules from './components/granules';
 import ListGranules from './components/granules/all-granules';

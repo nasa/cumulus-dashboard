@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { getCollection, listGranules } from '../../actions';
 import { get } from 'object-path';
 import { seconds, tally, fullDate } from '../../utils/format';
