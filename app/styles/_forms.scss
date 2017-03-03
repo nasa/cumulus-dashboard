@@ -90,15 +90,21 @@ select {
   background-color: #FFF;
   border: 1px solid $lightest-grey;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
-  border-radius: .5em;
-  padding: .3em 2em .4em .7em;
+  border-radius: .2em;
   position: absolute;
   top: 36px;
   z-index: 100;
+  max-height: 18em;
+  overflow-y: scroll;
 
   a, a:visited {
+    padding: .7em 1.8em .7em 1.2em;
     color: $black;
     border-bottom: 1px solid $lightest-grey;
+    display: block;
+    &:hover {
+      background-color: darken($background-white, 2%);
+    }
   }
 }
 
