@@ -31,13 +31,13 @@ import ActiveCollections from './components/collections/active';
 import InactiveCollections from './components/collections/inactive';
 import AddCollection from './components/collections/add';
 import EditCollection from './components/collections/edit';
-import CollectionOverview from './components/collections/collection-overview';
-import CollectionGranules from './components/collections/collection-granules';
+import CollectionOverview from './components/collections/overview';
+import CollectionGranules from './components/collections/granules';
 import CollectionIngest from './components/collections/ingest';
-import CollectionLogs from './components/collections/collection-logs';
+import CollectionLogs from './components/collections/logs';
 
 import Granules from './components/granules';
-import ListGranules from './components/granules/list';
+import ListGranules from './components/granules/all-granules';
 import GranuleOverview from './components/granules/granule';
 import GranuleRecipe from './components/granules/granule-recipe';
 import MarkedDeletion from './components/granules/marked-deletion';
@@ -56,7 +56,6 @@ render((
   <Provider store={store}>
     <Router history={hashHistory} render={applyRouterMiddleware(useScroll())}>
       <Route path='/404' component={NotFound} />
-      <Redirect from='/' to='/pdrs' />
       <Redirect from='/collections' to='/collections/active' />
       <Route path='/' component={App}>
         <IndexRoute component={Home} />

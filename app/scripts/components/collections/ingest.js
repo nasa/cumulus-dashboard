@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Link } from 'react-router';
 import Ace from 'react-ace';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
@@ -39,7 +40,8 @@ var CollectionIngest = React.createClass({
   },
 
   render: function () {
-    const record = get(this.props.collections, ['map', this.props.params.collectionName]);
+    const collectionName = this.props.params.collectionName;
+    const record = get(this.props.collections, ['map', collectionName]);
     if (!record) {
       return <div></div>;
     } else if (record.inflight) {
@@ -49,7 +51,15 @@ var CollectionIngest = React.createClass({
     const { data } = record;
     return (
       <div className='page__component'>
-        <h1>{data.collectionName}</h1>
+        <section className='page__section'>
+          <h1 className='heading--large heading--shared-content'>{collectionName}</h1>
+          <Link className='button button--small form-group__element--right button--disabled button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
+          <dl className="metadata__updated">
+            <dt>Last Updated:</dt>
+            <dd>Sept. 23, 2016</dd>
+            <dd className='metadata__updated__time'>2:00pm EST</dd>
+          </dl>
+        </section>
 
         <button onClick={() => this.state.view !== 'list' && this.setState({ view: 'list' })}>List View</button>
         <button onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}>JSON View</button>
