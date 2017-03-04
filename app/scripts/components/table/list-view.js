@@ -26,7 +26,8 @@ var List = React.createClass({
     tableHeader: React.PropTypes.array,
     tableRow: React.PropTypes.array,
     tableSortProps: React.PropTypes.array,
-    query: React.PropTypes.object
+    query: React.PropTypes.object,
+    isRemovable: React.PropTypes.bool
   },
 
   componentWillMount: function () {
@@ -82,17 +83,19 @@ var List = React.createClass({
   },
 
   render: function () {
-    const { tableHeader, tableRow, tableSortProps } = this.props;
+    const { tableHeader, tableRow, tableSortProps, isRemovable } = this.props;
     const { list } = this.props;
     const { count, limit } = list.meta;
     const { page, sortIdx, order } = this.state;
     return (
       <div>
-        <div className='form--controls'>
-          <label className='form__element__select form-group__element form-group__element--small'><input type='checkbox' name='Select' value='Select' />Select</label>
-          <button className='button button--small form-group__element'>Remove From CMR</button>
-          <button className='button button--small form-group__element'>Reprocess</button>
-        </div>
+        {isRemovable ? (
+          <div className='form--controls'>
+            <label className='form__element__select form-group__element form-group__element--small'><input type='checkbox' name='Select' value='Select' />Select</label>
+            <button className='button button--small form-group__element'>Remove From CMR</button>
+            <button className='button button--small form-group__element'>Reprocess</button>
+          </div>
+        ) : null}
 
         {list.inflight ? <Loading /> : null}
         {list.error ? <ErrorReport report={list.error} /> : null}
