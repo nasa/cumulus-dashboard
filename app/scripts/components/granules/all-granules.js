@@ -1,11 +1,11 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { searchGranules, clearGranuleSearch } from '../../actions';
+import { searchGranules, clearGranuleSearch, listGranules } from '../../actions';
 import { granuleSearchResult } from '../../utils/format';
 import { isUndefined as undef } from '../../utils/validate';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
-import GranulesList from './list';
+import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
 import Search from '../form/search';
 
@@ -64,9 +64,10 @@ var AllGranules = React.createClass({
             </div>
           </div>
 
-          <GranulesList
-            granules={this.props.granules}
+          <List
+            list={list}
             dispatch={this.props.dispatch}
+            action={listGranules}
             tableHeader={tableHeader}
             tableRow={tableRow}
             tableSortProps={tableSortProps}
