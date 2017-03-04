@@ -1,5 +1,6 @@
 'use strict';
 import { set } from 'object-path';
+import assignDate from './assign-date';
 
 import {
   PDRS,
@@ -28,7 +29,7 @@ export default function reducer (state = initialState, action) {
   switch (action.type) {
     case PDRS:
       set(state, ['list', 'data'], data.results);
-      set(state, ['list', 'meta'], data.meta);
+      set(state, ['list', 'meta'], assignDate(data.meta));
       set(state, ['list', 'inflight'], false);
       break;
     case PDRS_INFLIGHT:
@@ -40,7 +41,7 @@ export default function reducer (state = initialState, action) {
       break;
 
     case SEARCH_PDRS:
-      set(state, ['search', 'data'], data.results);
+      set(state, ['search', 'data'], assignDate(data.results));
       set(state, ['search', 'inflight'], false);
       break;
     case SEARCH_PDRS_INFLIGHT:
