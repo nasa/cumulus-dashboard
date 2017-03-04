@@ -44,7 +44,7 @@ import MarkedDeletion from './components/granules/marked-deletion';
 import Restricted from './components/granules/restricted';
 
 import Pdrs from './components/pdr';
-import listPdrs from './components/pdr/list';
+import PdrOverview from './components/pdr/overview';
 import Pdr from './components/pdr/pdr';
 import ActivePdrs from './components/pdr/active';
 import PdrCompleted from './components/pdr/completed';
@@ -78,7 +78,7 @@ render((
           <Route path='restricted' component={Restricted} />
         </Route>
         <Route path='pdrs' component={Pdrs}>
-          <IndexRoute component={listPdrs} />
+          <IndexRoute component={PdrOverview} />
           <Route path='active' component={ActivePdrs} />
           <Route path='completed' component={PdrCompleted} />
           <Route path='pdr/:pdrName' component={Pdr} />
