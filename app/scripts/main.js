@@ -46,7 +46,7 @@ import Restricted from './components/granules/restricted';
 import Pdrs from './components/pdr';
 import listPdrs from './components/pdr/list';
 import Pdr from './components/pdr/pdr';
-import PdrActive from './components/pdr/active';
+import ActivePdrs from './components/pdr/active';
 import PdrCompleted from './components/pdr/completed';
 
 import Logs from './components/logs';
@@ -79,7 +79,7 @@ render((
         </Route>
         <Route path='pdrs' component={Pdrs}>
           <IndexRoute component={listPdrs} />
-          <Route path='active' component={PdrActive} />
+          <Route path='active' component={ActivePdrs} />
           <Route path='completed' component={PdrCompleted} />
           <Route path='pdr/:pdrName' component={Pdr} />
         </Route>
