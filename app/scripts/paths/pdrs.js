@@ -3,8 +3,7 @@
 const pdrRoutes = [
   ['Overview', null],
   ['Active', 'active'],
-  ['Completed', 'completed'],
-  ['PDR', 'pdr']
+  ['Completed', 'completed']
 ];
 
 const empty = [['', '']];
