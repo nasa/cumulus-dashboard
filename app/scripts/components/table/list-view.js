@@ -1,15 +1,15 @@
 'use strict';
 import React from 'react';
-import { interval, listGranules } from '../../actions';
-import SortableTable from '../table/sortable';
+import { interval } from '../../actions';
+import SortableTable from './sortable';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
 import { updateInterval } from '../../config';
 import { isUndefined as undef } from '../../utils/validate';
 
-var GranulesList = React.createClass({
-  displayName: 'GranulesList',
+var List = React.createClass({
+  displayName: 'List',
 
   getInitialState: function () {
     return {
@@ -20,12 +20,14 @@ var GranulesList = React.createClass({
   },
 
   propTypes: {
-    granules: React.PropTypes.object,
+    list: React.PropTypes.object,
     dispatch: React.PropTypes.func,
+    action: React.PropTypes.func,
     tableHeader: React.PropTypes.array,
     tableRow: React.PropTypes.array,
     tableSortProps: React.PropTypes.array,
-    query: React.PropTypes.object
+    query: React.PropTypes.object,
+    isRemovable: React.PropTypes.bool
   },
 
   componentWillMount: function () {
@@ -76,22 +78,24 @@ var GranulesList = React.createClass({
 
     // stop the currently running auto-query
     if (this.cancelInterval) { this.cancelInterval(); }
-    const { dispatch } = this.props;
-    this.cancelInterval = interval(() => dispatch(listGranules(options)), updateInterval, true);
+    const { dispatch, action } = this.props;
+    this.cancelInterval = interval(() => dispatch(action(options)), updateInterval, true);
   },
 
   render: function () {
-    const { tableHeader, tableRow, tableSortProps } = this.props;
-    const { list } = this.props.granules;
+    const { tableHeader, tableRow, tableSortProps, isRemovable } = this.props;
+    const { list } = this.props;
     const { count, limit } = list.meta;
     const { page, sortIdx, order } = this.state;
     return (
       <div>
-        <div className='form--controls'>
-          <label className='form__element__select form-group__element form-group__element--small'><input type='checkbox' name='Select' value='Select' />Select</label>
-          <button className='button button--small form-group__element'>Remove From CMR</button>
-          <button className='button button--small form-group__element'>Reprocess</button>
-        </div>
+        {isRemovable ? (
+          <div className='form--controls'>
+            <label className='form__element__select form-group__element form-group__element--small'><input type='checkbox' name='Select' value='Select' />Select</label>
+            <button className='button button--small form-group__element'>Remove From CMR</button>
+            <button className='button button--small form-group__element'>Reprocess</button>
+          </div>
+        ) : null}
 
         {list.inflight ? <Loading /> : null}
         {list.error ? <ErrorReport report={list.error} /> : null}
@@ -111,4 +115,4 @@ var GranulesList = React.createClass({
   }
 });
 
-export default GranulesList;
+export default List;

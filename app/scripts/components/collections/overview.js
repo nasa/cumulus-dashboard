@@ -5,9 +5,9 @@ import { Link } from 'react-router';
 import { getCollection, listGranules } from '../../actions';
 import { get } from 'object-path';
 import { seconds, tally, fullDate } from '../../utils/format';
-import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
 import SortableTable from '../table/sortable';
+import Overview from '../app/overview';
 
 const tableHeader = [
   'Status',
@@ -72,20 +72,7 @@ var CollectionOverview = React.createClass({
       [tally(granules.cmr), 'Granules Pushed to CMR'],
       [tally(granules.archiving), 'Granules Archiving']
     ];
-    return (
-      <div className='row'>
-        {record.inflight ? <Loading /> : null}
-        <ul>
-          {overview.map(d => (
-            <li key={d[1]}>
-              <span className='overview-num' to='/'>
-                <span className='num--large'>{d[0]}</span> {d[1]}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
+    return <Overview items={overview} inflight={record.inflight} />;
   },
 
   render: function () {
