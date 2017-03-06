@@ -5,7 +5,7 @@ import Ace from 'react-ace';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { getCollection } from '../../actions';
-import { fullDate } from '../../utils/format';
+import { fullDate, lastUpdated } from '../../utils/format';
 import config from '../../config';
 
 var CollectionIngest = React.createClass({
@@ -54,11 +54,7 @@ var CollectionIngest = React.createClass({
         <section className='page__section'>
           <h1 className='heading--large heading--shared-content'>{collectionName}</h1>
           <Link className='button button--small form-group__element--right button--disabled button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
-          <dl className="metadata__updated">
-            <dt>Last Updated:</dt>
-            <dd>Sept. 23, 2016</dd>
-            <dd className='metadata__updated__time'>2:00pm EST</dd>
-          </dl>
+          {lastUpdated(data.queriedAt)}
         </section>
 
         <button onClick={() => this.state.view !== 'list' && this.setState({ view: 'list' })}>List View</button>

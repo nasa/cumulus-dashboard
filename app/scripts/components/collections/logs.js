@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { lastUpdated } from '../../utils/format';
 import LogViewer from '../logs/viewer';
 
 var CollectionLogs = React.createClass({
@@ -16,16 +17,13 @@ var CollectionLogs = React.createClass({
   render: function () {
     const collectionName = this.props.params.collectionName;
     const logsQuery = { q: collectionName };
+    const { queriedAt } = this.props.logs;
     return (
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large heading--shared-content'>{collectionName}</h1>
           <Link className='button button--small form-group__element--right button--disabled button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
-          <dl className="metadata__updated">
-            <dt>Last Updated:</dt>
-            <dd>Sept. 23, 2016</dd>
-            <dd className='metadata__updated__time'>2:00pm EST</dd>
-          </dl>
+          {lastUpdated(queriedAt)}
         </section>
         <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
       </div>

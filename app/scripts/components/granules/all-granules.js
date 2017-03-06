@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { searchGranules, clearGranuleSearch, listGranules } from '../../actions';
-import { granuleSearchResult } from '../../utils/format';
+import { granuleSearchResult, lastUpdated } from '../../utils/format';
 import { isUndefined as undef } from '../../utils/validate';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
 import List from '../table/list-view';
@@ -29,7 +29,7 @@ var AllGranules = React.createClass({
   render: function () {
     const { pdrName } = this.props.params;
     const { list, search } = this.props.granules;
-    const { count } = list.meta;
+    const { count, queriedAt } = list.meta;
     const logsQuery = { q: 'granuleId' };
     return (
       <div className='page__component'>
@@ -38,11 +38,7 @@ var AllGranules = React.createClass({
             <h1 className='heading--large heading--shared-content'>
               {pdrName || 'All'} Granules <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
             </h1>
-            <dl className='metadata__updated'>
-              <dt>Last Updated:</dt>
-              <dd>Sept. 23, 2016</dd>
-              <dd className='metadata__updated__time'>2:00pm EST</dd>
-            </dl>
+            {lastUpdated(queriedAt)}
           </div>
           <div className='filters filters__wlabels'>
             <div className='filter__item'>
