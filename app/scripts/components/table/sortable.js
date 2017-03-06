@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { isUndefined } from '../../utils/validate';
+import { selectSingleRow } from '../../utils/select';
 
 const defaultSortOrder = 'desc';
 const otherOrder = {
@@ -63,7 +64,7 @@ const Table = React.createClass({
         <tbody>
           {this.props.data.map((d, i) => {
             return (
-              <tr key={i}>
+              <tr key={i} onClick={selectSingleRow}>
                 {row.map((accessor, k) => {
                   let className = k === primaryIdx ? 'table__main-asset' : '';
                   let text;
