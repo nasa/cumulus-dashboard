@@ -69,6 +69,7 @@ var ActiveCollections = React.createClass({
     const { list, search } = this.props.collections;
     const { count, limit, queriedAt } = list.meta;
     const { page } = this.state;
+    const primaryIdx = 1;
 
     return (
       <div className='page__component'>
@@ -115,7 +116,7 @@ var ActiveCollections = React.createClass({
             </div>
           </div>
           {list.inflight ? <Loading /> : null}
-          <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
+          <SortableTable primaryIdx={primaryIdx} data={list.data} header={tableHeader} row={tableRow}/>
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
       </div>
