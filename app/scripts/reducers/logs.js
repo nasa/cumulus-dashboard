@@ -44,8 +44,8 @@ function processLog (d) {
   }
   d.key = d.timestamp + '-' + d.data;
   let metafields = '';
-  for (let key of Object.entries(d.meta)) {
-    metafields = metafields + ' ' + d.meta[key[0]];
+  for (let key in d.meta) {
+    metafields += ' ' + d.meta[key];
   }
   d.searchkey = (d.displayTime + d.data).toLowerCase() + metafields;
 }
