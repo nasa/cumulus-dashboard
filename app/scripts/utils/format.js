@@ -11,31 +11,47 @@ export const fullDate = function (datestring) {
   return moment(datestring).format('MMM. Do, YYYY hh:mm:ss');
 };
 
-export const bigTally = function (numberString) {
-  if ((!numberString && numberString !== 0) || numberString === nullValue || isNaN(numberString)) { return nullValue; }
-  numberString = +numberString;
-  if (numberString >= 1000) {
-    return numeral(numberString / 1000).format('0,0') + 'K';
+export const bigTally = function (numberstring) {
+  if ((!numberstring && numberstring !== 0) || numberstring === nullValue || isNaN(numberstring)) { return nullValue; }
+  numberstring = +numberstring;
+  if (numberstring >= 1000) {
+    return numeral(numberstring / 1000).format('0,0') + 'K';
   } else {
-    return numeral(numberString / 1000000).format('0,0') + 'M';
+    return numeral(numberstring / 1000000).format('0,0') + 'M';
   }
 };
 
-export const tally = function (numberString) {
-  if ((!numberString && numberString !== 0) || numberString === nullValue || isNaN(numberString)) { return nullValue; }
-  numberString = +numberString;
-  if (numberString < 1000) {
-    return numberString;
-  } else if (numberString < 100000) {
-    return numeral(numberString).format('0,0');
+export const tally = function (numberstring) {
+  if ((!numberstring && numberstring !== 0) || numberstring === nullValue || isNaN(numberstring)) { return nullValue; }
+  numberstring = +numberstring;
+  if (numberstring < 1000) {
+    return numberstring;
+  } else if (numberstring < 100000) {
+    return numeral(numberstring).format('0,0');
   } else {
-    return bigTally(numberString);
+    return bigTally(numberstring);
   }
 };
 
-export const seconds = function (numberString) {
-  if (numberString === null || isNaN(numberString)) { return nullValue; }
-  return +numberString.toFixed(2) + 's';
+export const seconds = function (numberstring) {
+  if (numberstring === null || isNaN(numberstring)) { return nullValue; }
+  return +numberstring.toFixed(2) + 's';
+};
+
+export const lastUpdated = function (datestring) {
+  let day, time;
+  if (datestring) {
+    const date = moment(datestring);
+    day = date.format('MMM. D, YYYY');
+    time = date.format('h:mm a');
+  }
+  return (
+    <dl className="metadata__updated">
+      <dt>Last Updated:</dt>
+      <dd>{day}</dd>
+      { time ? <dd className='metadata__updated__time'>{time}</dd> : null }
+    </dl>
+  );
 };
 
 export const collectionSearchResult = function (collection) {
