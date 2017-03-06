@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { fullDate, seconds } from '../format';
 
 export const tableHeader = [
+  '',
   'Name',
   'Status',
   'PDR',
@@ -13,6 +14,7 @@ export const tableHeader = [
 ];
 
 export const tableRow = [
+  (d) => <input type='checkbox' className='form-checkbox'/>,
   (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
   'status',
   'pdrName',

@@ -8,8 +8,10 @@ import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
 import SortableTable from '../table/sortable';
 import Search from '../form/search';
+import { selectAll } from '../../utils/select';
 
 const tableHeader = [
+  '',
   'Name',
   'Status',
   'Errors',
@@ -20,6 +22,7 @@ const tableHeader = [
 ];
 
 const tableRow = [
+  (d) => <input type='checkbox' className='form-checkbox'/>,
   (d) => <Link to={`/collections/collection/${d.collectionName}`}>{d.collectionName}</Link>,
   'status',
   () => 0,
@@ -98,7 +101,10 @@ var ActiveCollections = React.createClass({
             />
           </div>
           <div className='form--controls'>
-            <label className='form__element__select form-group__element form-group__element--small'><input type="checkbox" name="Select" value="Select" />Select</label>
+            <label className='form__element__select form-group__element form-group__element--small'>
+              <input type='checkbox' className='form-select__all' name='Select' value='Select' onClick={selectAll} />
+              Select
+            </label>
             <button className='button button--small form-group__element button--green'>Delete</button>
             <div className='dropdown__wrapper form-group__element form-group__element--small'>
               <select>
