@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { getCollection, listGranules } from '../../actions';
 import { get } from 'object-path';
-import { seconds, tally, fullDate } from '../../utils/format';
+import { seconds, tally, fullDate, lastUpdated } from '../../utils/format';
 import ErrorReport from '../errors/report';
 import SortableTable from '../table/sortable';
 import Overview from '../app/overview';
@@ -89,11 +89,7 @@ var CollectionOverview = React.createClass({
         <section className='page__section'>
           <h1 className='heading--large heading--shared-content'>{collectionName}</h1>
           <Link className='button button--small form-group__element--right button--disabled button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
-          <dl className="metadata__updated">
-            <dt>Last Updated:</dt>
-            <dd>Sept. 23, 2016</dd>
-            <dd className='metadata__updated__time'>2:00pm EST</dd>
-          </dl>
+          {lastUpdated(meta.queriedAt)}
           {overview}
         </section>
         <section className='page__section'>
