@@ -9,6 +9,11 @@
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
   overflow: hidden;
+  input {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+  }
 }
 
 .button--green {
@@ -99,6 +104,7 @@
 }
 
 .button__cancel {
+  max-width: 45px;
   &:before {
     background-image: url('/graphics/layout/sm-xmark.svg');
   }

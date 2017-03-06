@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { interval, getGranule, reprocessGranule } from '../../actions';
 import { get } from 'object-path';
-import { fullDate } from '../../utils/format';
+import { fullDate, lastUpdated } from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
 import Ellipsis from '../app/loading-ellipsis';
@@ -131,11 +131,7 @@ var GranuleOverview = React.createClass({
           <button
             className={'button button--small form-group__element--right button--green' + (reprocessing ? ' button--reprocessing' : '')}
             onClick={this.reprocess}>Reprocess{ reprocessing ? <Ellipsis /> : '' }</button>
-          <dl className="metadata__updated">
-            <dt>Last Updated:</dt>
-            <dd>Sept. 23, 2016</dd>
-            <dd className='metadata__updated__time'>2:00pm EST</dd>
-          </dl>
+          {lastUpdated(granule.queriedAt)}
           {this.renderStatus(granule.status)}
         </section>
 

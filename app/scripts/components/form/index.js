@@ -144,18 +144,21 @@ export const Form = React.createClass({
             return <div className='form__item' key={inputId}>{elem}</div>;
           })}
         </ul>
+        <span className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
+          <input
+            type='submit'
+            value='Submit'
+            onClick={this.onSubmit}
+          />
+        </span>
 
-        <input
-          type='submit'
-          value='Submit'
-          onClick={this.onSubmit}
-          className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
-        />
-
-        <button
-          type='button'
-          className='button button--secondary form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__cancel'>Cancel</button>
-
+        <span className='button button--secondary form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__cancel'>
+          <input
+            type='cancel'
+            value='Cancel'
+            onClick={this.onSubmit}
+          />
+        </span>
       </form>
     );
   }

@@ -1,10 +1,9 @@
 'use strict';
 
 const pdrRoutes = [
-  ['Overview', null]/*,
+  ['Overview', null],
   ['Active', 'active'],
-  ['Completed', 'completed'],
-  ['PDR', 'pdr']*/
+  ['Completed', 'completed']
 ];
 
 const empty = [['', '']];
