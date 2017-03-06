@@ -7,6 +7,7 @@ import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
 import { updateInterval } from '../../config';
 import { isUndefined as undef } from '../../utils/validate';
+import { selectAll } from '../../utils/select';
 
 var List = React.createClass({
   displayName: 'List',
@@ -92,11 +93,12 @@ var List = React.createClass({
     const { list } = this.props;
     const { count, limit } = list.meta;
     const { page, sortIdx, order } = this.state;
+    const primaryIdx = 1;
     return (
       <div>
         {isRemovable ? (
           <div className='form--controls'>
-            <label className='form__element__select form-group__element form-group__element--small'><input type='checkbox' name='Select' value='Select' />Select</label>
+            <label className='form__element__select form-group__element form-group__element--small'><input type='checkbox' className='form-select__all' name='Select' value='Select' onClick={selectAll} />Select</label>
             <button className='button button--small form-group__element'>Remove From CMR</button>
             <button className='button button--small form-group__element'>Reprocess</button>
           </div>
@@ -106,6 +108,7 @@ var List = React.createClass({
         {list.error ? <ErrorReport report={list.error} /> : null}
 
         <SortableTable
+          primaryIdx={primaryIdx}
           data={list.data}
           header={tableHeader}
           row={tableRow}
