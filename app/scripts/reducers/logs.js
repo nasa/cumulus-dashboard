@@ -26,6 +26,7 @@ export default function reducer (state = initialState, action) {
         set(nextState, 'items', items);
       }
       set(nextState, 'inflight', false);
+      set(nextState, 'queriedAt', new Date());
       break;
     case LOGS_INFLIGHT:
       set(nextState, 'inflight', true);
