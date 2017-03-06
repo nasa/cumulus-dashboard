@@ -2,9 +2,10 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { listGranules } from '../../actions';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
 
-import GranulesList from '../granules/list';
+import List from '../table/list-view';
 
 var CollectionGranules = React.createClass({
   displayName: 'CollectionGranules',
@@ -42,13 +43,15 @@ var CollectionGranules = React.createClass({
             <h2 className='heading--medium heading--shared-content'>Granules{meta.count ? ` (${meta.count})` : null}</h2>
           </div>
 
-          <GranulesList
-            granules={this.props.granules}
+          <List
+            list={list}
             dispatch={this.props.dispatch}
+            action={listGranules}
             tableHeader={tableHeader}
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
+            isRemovable={true}
           />
         </section>
 
