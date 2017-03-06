@@ -50,7 +50,11 @@ function processLog (d) {
     d.displayText = d.message;
   }
   d.key = d.timestamp + '-' + d.data;
-  d.searchkey = (d.displayTime + d.data).toLowerCase();
+  let metafields = '';
+  for (let key in d.meta) {
+    metafields += ' ' + d.meta[key];
+  }
+  d.searchkey = (d.displayTime + d.data).toLowerCase() + metafields;
 }
 
 function dedupe (items) {
