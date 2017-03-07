@@ -1,6 +1,7 @@
 'use strict';
 import url from 'url';
-import { get, post, put, wrapRequest, setAuth } from './helpers';
+import { get, post, put, wrapRequest } from './helpers';
+import { set as setToken } from '../utils/auth';
 import _config from '../config';
 
 const root = _config.apiRoot;
@@ -131,12 +132,12 @@ export const getLogs = (options) => wrapRequest(null, get, {
 }, LOGS);
 
 export const logout = () => {
-  setAuth(null);
+  setToken(null);
   return { type: LOGOUT };
 };
 
 export const login = (token) => {
-  setAuth(token);
+  setToken(token);
   // dummy request to test the auth token
   return wrapRequest('auth', get, {
     url: url.resolve(root, 'granules'),

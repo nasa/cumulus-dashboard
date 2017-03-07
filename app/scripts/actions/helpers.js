@@ -1,32 +1,16 @@
 'use strict';
 import url from 'url';
 import request from 'request';
-import { window } from '../utils/browser';
 import _config from '../config';
 import log from '../utils/log';
+import { get as getToken } from '../utils/auth';
 const root = _config.apiRoot;
 
-// NOTE using a very basic auth implementation for now.
-var auth = getAuth();
-export const setAuth = function (token) {
-  auth = token;
-  if (window.localStorage && typeof window.localStorage.setItem === 'function') {
-    window.localStorage.setItem('auth-token', token);
-  }
-};
-
-function getAuth () {
-  let auth = null;
-  if (window.localStorage && typeof window.localStorage.getItem === 'function') {
-    auth = window.localStorage.getItem('auth-token') || null;
-  }
-  return auth;
-}
-
 function setToken (config) {
-  if (auth) {
+  let token = getToken();
+  if (token) {
     config.headers = {
-      Authorization: 'Basic ' + auth,
+      Authorization: 'Basic ' + token,
       'Content-Type': 'application/json'
     };
   }
