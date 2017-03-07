@@ -23,7 +23,7 @@ label {
   border-radius: .5em;
   position: relative;
   &:after {
-    background-image: url('/graphics/layout/chevron-down.svg');
+    background-image: url(#{graphics}/layout/chevron-down.svg);
     content: '';
     width: 10px;
     height: 10px;
@@ -62,7 +62,7 @@ select {
 .search__icon {
   &:after {
     position: absolute;
-    background-image: url('/graphics/layout/magnifier-left.svg');
+    background-image: url(#{$graphics}/layout/magnifier-left.svg);
     content: '';
     width: 14px;
     height: 14px;
