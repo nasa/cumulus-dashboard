@@ -11,4 +11,4 @@ export const get = function () {
     auth = window.localStorage.getItem('auth-token') || null;
   }
   return auth;
-}
+};

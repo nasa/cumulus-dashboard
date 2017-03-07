@@ -24,7 +24,7 @@ export default function reducer (state = initialState, action) {
     case LOGIN_INFLIGHT:
       set(state, 'inflight', true);
       break;
-    case LOGIN_INFLIGHT:
+    case LOGIN_ERROR:
       set(state, 'error', action.error);
       set(state, 'inflight', false);
       break;
