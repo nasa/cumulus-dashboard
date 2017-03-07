@@ -1,5 +1,6 @@
 'use strict';
 import { set } from 'object-path';
+import { get as getToken } from '../utils/auth';
 
 import {
   LOGIN,
@@ -9,7 +10,7 @@ import {
 } from '../actions';
 
 export const initialState = {
-  authenticated: false,
+  authenticated: getToken(),
   inflight: false,
   error: null
 };
