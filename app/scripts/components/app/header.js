@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { login, logout } from '../../actions';
 import { graphicsPath } from '../../config';
 import { Form, formTypes } from '../form';
+import { window } from '../../utils/browser';
 import * as validate from '../../utils/validate';
 
 const inputElements = [
@@ -37,7 +38,9 @@ var Header = React.createClass({
   componentWillReceiveProps: function (newProps) {
     // delay-close the modal if it's open
     if (newProps.api.authenticated && this.state.showModal) {
-      setTimeout(this.hideLoginModal, 1000);
+      if (window.location && window.location.reload) {
+        setTimeout(() => window.location.reload(), 500);
+      }
     }
   },
 
@@ -57,6 +60,9 @@ var Header = React.createClass({
 
   logout: function () {
     this.props.dispatch(logout());
+    if (window.location && window.location.reload) {
+      setTimeout(() => window.location.reload(), 50);
+    }
   },
 
   render: function () {
