@@ -42,6 +42,11 @@ var List = React.createClass({
     if (JSON.stringify(newProps.query) !== JSON.stringify(this.props.query)) {
       this.list({}, newProps.query);
     }
+
+    if (newProps.list.error && this.cancelInterval) {
+      this.cancelInterval();
+      this.cancelInterval = null;
+    }
   },
 
   queryNewPage: function (page) {
