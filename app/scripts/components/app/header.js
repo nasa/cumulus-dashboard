@@ -78,7 +78,7 @@ var Header = React.createClass({
           </nav>
         </div>
 
-        { showModal ?  <div className='modal__cover'></div> : null }
+        { showModal ? <div className='modal__cover'></div> : null }
 
         <div className={ showModal ? 'login login__onscreen' : 'login' }>
           <div className='modal'>
