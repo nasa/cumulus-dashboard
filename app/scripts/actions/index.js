@@ -1,12 +1,16 @@
 'use strict';
 import url from 'url';
 import { get, post, put, wrapRequest } from './helpers';
+import { set as setToken } from '../utils/auth';
 import _config from '../config';
 
 const root = _config.apiRoot;
 const { pageLimit, searchPageLimit } = _config;
 
-export const AUTHENTICATED = 'AUTHENTICATED';
+export const LOGOUT = 'LOGOUT';
+export const LOGIN = 'LOGIN';
+export const LOGIN_INFLIGHT = 'LOGIN_INFLIGHT';
+export const LOGIN_ERROR = 'LOGIN_ERROR';
 
 export const COLLECTION = 'COLLECTION';
 export const COLLECTION_INFLIGHT = 'COLLECTION_INFLIGHT';
@@ -126,3 +130,17 @@ export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),
   qs: Object.assign({ limit: 50 }, options)
 }, LOGS);
+
+export const logout = () => {
+  setToken('');
+  return { type: LOGOUT };
+};
+
+export const login = (token) => {
+  setToken(token);
+  // dummy request to test the auth token
+  return wrapRequest('auth', get, {
+    url: url.resolve(root, 'granules'),
+    qs: { limit: 1, fields: 'granuleId' }
+  }, LOGIN);
+};

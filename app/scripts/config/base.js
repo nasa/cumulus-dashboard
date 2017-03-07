@@ -1,6 +1,6 @@
 module.exports = {
   environment: 'development',
-  apiRoot: 'https://0uqm56f3j2.execute-api.us-east-1.amazonaws.com/dev/',
+  apiRoot: 'https://cumulus.developmentseed.org/api/',
 
   graphicsPath: '/graphics/',
 

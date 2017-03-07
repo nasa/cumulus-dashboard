@@ -4,6 +4,7 @@ import { interval, getLogs } from '../../actions';
 import { logsUpdateInterval } from '../../config';
 import moment from 'moment';
 import LoadingEllipsis from '../app/loading-ellipsis';
+import ErrorReport from '../errors/report';
 
 const noop = (d) => d;
 var LogViewer = React.createClass({
@@ -28,6 +29,11 @@ var LogViewer = React.createClass({
     if (JSON.stringify(newProps.query) !== JSON.stringify(this.props.query)) {
       const query = newProps.query || {};
       this.query(query);
+    }
+
+    if (newProps.logs.error && this.cancelInterval) {
+      this.cancelInterval();
+      this.cancelInterval = null;
     }
   },
 
@@ -74,6 +80,7 @@ var LogViewer = React.createClass({
             <span className="search__icon"></span>
           </form>
         </div>
+        {logs.error ? <ErrorReport report={logs.error} /> : null}
         <div className='logs'>
           {items.map((d, i) => {
             let text = d.displayText;
