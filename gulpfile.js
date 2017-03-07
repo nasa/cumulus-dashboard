@@ -17,6 +17,7 @@ var rev = require('gulp-rev');
 var revReplace = require('gulp-rev-replace');
 var SassString = require('node-sass').types.String;
 var notifier = require('node-notifier');
+var preprocess = require('gulp-preprocess');
 
 // /////////////////////////////////////////////////////////////////////////////
 // --------------------------- Variables -------------------------------------//
@@ -167,6 +168,7 @@ gulp.task('build', ['vendorScripts', 'javascript'], function () {
 });
 
 gulp.task('styles', function () {
+  var assets = process.env.DS_ENV === 'production' ? '/dashboard/graphics' : '/graphics';
   return gulp.src('app/styles/main.scss')
     .pipe($.plumber(function (e) {
       notifier.notify({
@@ -193,6 +195,7 @@ gulp.task('styles', function () {
       },
       includePaths: ['.'].concat(require('node-bourbon').includePaths)
     }))
+    .pipe($.preprocess({context: {ASSETS_PATH: assets}}))
     .pipe($.sourcemaps.write())
     .pipe(gulp.dest('.tmp/styles'))
     .pipe(reload({stream: true}));

@@ -65,7 +65,7 @@
   display: inline-block;
   &:before {
     position: absolute;
-    background-image: url('/graphics/layout/arrow-right.svg');
+    background-image: url(#{$graphics}/layout/arrow-right.svg);
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s;
@@ -99,13 +99,13 @@
 
 .button__arrow--white {
   &:before {
-    background-image: url('/graphics/layout/arrow-right-white.svg');
+    background-image: url(#{$graphics}/layout/arrow-right-white.svg);
   }
 }
 
 .button__cancel {
   max-width: 45px;
   &:before {
-    background-image: url('/graphics/layout/sm-xmark.svg');
+    background-image: url(#{$graphics}/layout/sm-xmark.svg);
   }
 }
