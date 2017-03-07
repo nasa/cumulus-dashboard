@@ -1,12 +1,29 @@
 'use strict';
 import url from 'url';
 import request from 'request';
+import debug from 'request-debug';
+debug(request);
 import _config from '../config';
 import log from '../utils/log';
 const root = _config.apiRoot;
 
+let auth = null;
+export const setAuth = function (credentials) {
+  auth = credentials;
+};
+
+function setToken (config) {
+  if (auth) {
+    config.headers = {
+      Authorization: 'Basic ' + auth,
+      'Content-Type': 'application/json'
+    };
+  }
+  return config;
+}
+
 export const get = function (config, callback) {
-  request(config, (error, resp, body) => {
+  request.get(setToken(config), (error, resp, body) => {
     if (error) {
       return callback(error);
     }
@@ -20,7 +37,7 @@ export const get = function (config, callback) {
 };
 
 export const post = function (config, callback) {
-  request.post(config, (error, resp, body) => {
+  request.post(setToken(config), (error, resp, body) => {
     error = error || body.errorMessage;
     if (error) {
       return callback(error);
@@ -31,7 +48,7 @@ export const post = function (config, callback) {
 };
 
 export const put = function (config, callback) {
-  request.put(config, (error, resp, body) => {
+  request.put(setToken(config), (error, resp, body) => {
     error = error || body.errorMessage;
     if (error) {
       return callback(error);
