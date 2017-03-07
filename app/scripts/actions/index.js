@@ -132,7 +132,7 @@ export const getLogs = (options) => wrapRequest(null, get, {
 }, LOGS);
 
 export const logout = () => {
-  setToken(null);
+  setToken('');
   return { type: LOGOUT };
 };
 
