@@ -37,7 +37,9 @@ export const Form = React.createClass({
 
   propTypes: {
     inputMeta: React.PropTypes.array,
-    submit: React.PropTypes.func
+    submit: React.PropTypes.func,
+    cancel: React.PropTypes.func,
+    inflight: React.PropTypes.bool
   },
 
   generateComponentId: function (label) {
@@ -68,8 +70,14 @@ export const Form = React.createClass({
     }));
   },
 
+  onCancel: function (e) {
+    e.preventDefault();
+    if (this.props.cancel) { this.props.cancel(); }
+  },
+
   onSubmit: function (e) {
     e.preventDefault();
+    if (this.props.inflight) { return; }
     const inputState = Object.assign({}, this.state.inputs);
 
     // validate input values in the store
@@ -147,7 +155,7 @@ export const Form = React.createClass({
         <span className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
           <input
             type='submit'
-            value='Submit'
+            value={this.props.inflight ? 'Loading...' : 'Submit'}
             onClick={this.onSubmit}
           />
         </span>
@@ -156,7 +164,7 @@ export const Form = React.createClass({
           <input
             type='cancel'
             value='Cancel'
-            onClick={this.onSubmit}
+            onClick={this.onCancel}
           />
         </span>
       </form>
