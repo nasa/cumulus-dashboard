@@ -37,7 +37,8 @@ export const Form = React.createClass({
 
   propTypes: {
     inputMeta: React.PropTypes.array,
-    submit: React.PropTypes.func
+    submit: React.PropTypes.func,
+    cancel: React.PropTypes.func
   },
 
   generateComponentId: function (label) {
@@ -66,6 +67,11 @@ export const Form = React.createClass({
       inputs: inputState,
       error: null
     }));
+  },
+
+  onCancel: function (e) {
+    e.preventDefault();
+    if (this.props.cancel) { this.props.cancel(); }
   },
 
   onSubmit: function (e) {
@@ -156,7 +162,7 @@ export const Form = React.createClass({
           <input
             type='cancel'
             value='Cancel'
-            onClick={this.onSubmit}
+            onClick={this.onCancel}
           />
         </span>
       </form>
