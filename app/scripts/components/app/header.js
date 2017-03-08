@@ -6,6 +6,7 @@ import { graphicsPath } from '../../config';
 import { Form, formTypes } from '../form';
 import { window } from '../../utils/browser';
 import * as validate from '../../utils/validate';
+import { set as setToken } from '../../utils/auth';
 
 const inputElements = [
   {
@@ -31,13 +32,15 @@ var Header = React.createClass({
 
   getInitialState: function () {
     return {
-      showModal: false
+      showModal: false,
+      token: null
     };
   },
 
   componentWillReceiveProps: function (newProps) {
     // delay-close the modal if it's open
     if (newProps.api.authenticated && this.state.showModal) {
+      setToken(this.state.token);
       if (window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), 500);
       }
@@ -55,7 +58,8 @@ var Header = React.createClass({
   login: function (credentials) {
     const { user, pass } = credentials;
     const token = new Buffer(`${user}:${pass}`).toString('base64');
-    this.props.dispatch(login(token));
+    const { dispatch } = this.props;
+    this.setState({ token }, () => dispatch(login(token)));
   },
 
   logout: function () {
