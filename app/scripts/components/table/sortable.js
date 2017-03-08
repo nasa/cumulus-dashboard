@@ -43,14 +43,15 @@ const Table = React.createClass({
 
   selectThis: function (e) {
     if (typeof this.props.changeSelectionProp === 'function') {
-      const targetNum = [Number(e.currentTarget.getAttribute('data-value'))];
+      const targetId = (e.currentTarget.getAttribute('data-value'));
       const currentSelection = this.props.selectedRows;
       let updatedSelection = '';
 
-      if (currentSelection.indexOf(targetNum[0]) === -1) {
-        updatedSelection = targetNum.concat(currentSelection);
+      if (currentSelection.indexOf(targetId) === -1) {
+        const tempArray = [targetId];
+        updatedSelection = tempArray.concat(currentSelection);
       } else {
-        updatedSelection = currentSelection.filter(k => k !== targetNum[0]);
+        updatedSelection = currentSelection.filter(k => k !== targetId);
       }
 
       const newSelection = {selectedRows: updatedSelection};
@@ -91,16 +92,17 @@ const Table = React.createClass({
         </thead>
         <tbody>
           {this.props.data.map((d, i) => {
+            const dataId = d.granuleId;
             let checked = false;
 
             this.props.selectedRows.forEach((j) => {
-              if (i === Number(j)) {
+              if (dataId && dataId === j) {
                 checked = true;
               }
             });
 
             return (
-              <tr key={i} data-value={i} onClick={this.selectThis}>
+              <tr key={i} data-value={dataId} onClick={this.selectThis}>
                 {this.props.isRemovable &&
                   <td>
                     <input type='checkbox' checked={checked} />
