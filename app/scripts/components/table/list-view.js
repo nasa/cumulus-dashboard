@@ -71,11 +71,13 @@ var List = React.createClass({
       this.updateSelection({selectedRows: []});
     } else {
       this.setState({ selectAll: true });
-      const limit = this.props.list.meta.limit;
+      const allData = this.props.list.data;
       let selectAll = [];
-      for (let i = limit - 1; i >= 0; i--) {
-        selectAll.push(i);
-      }
+
+      allData.forEach((i) => {
+        selectAll.push(i.granuleId);
+      });
+
       this.updateSelection({selectedRows: selectAll});
     }
   },
