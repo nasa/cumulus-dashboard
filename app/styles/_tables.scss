@@ -155,15 +155,17 @@ table {
 
 .table__sort {
   cursor: pointer;
+  position: relative;
+  padding-right: 10px;
   &:after {
-    background-image: url("/graphics/layout/toggle.svg");
+    position: absolute;
+    background-image: url(#{$graphics}/layout/toggle.svg);
     content: ' ';
     width: 10px;
     height: 13px;
     background-size: 10px 13px;
     display: inline-block;
     margin-left: .5em;
-    vertical-align: middle;
   }
 }
 
@@ -180,17 +182,12 @@ table {
 
 .table__sort--desc {
   &:after {
-    background-image: url("/graphics/layout/chevron-down.svg");
-    vertical-align: bottom;
-    margin-bottom: 3px;
+    background-image: url(#{$graphics}/layout/chevron-down.svg);
+    top: 17px;
   }
 }
 .table__sort--asc {
   &:after {
-    background-image: url("/graphics/layout/chevron-up.svg");
-    vertical-align: top;
-    margin-top: 2px;
+    background-image: url(#{$graphics}/layout/chevron-up.svg);
   }
 }
-
-
