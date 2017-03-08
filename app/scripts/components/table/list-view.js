@@ -7,7 +7,6 @@ import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
 import { updateInterval } from '../../config';
 import { isUndefined as undef } from '../../utils/validate';
-import { selectAll } from '../../utils/select';
 
 var List = React.createClass({
   displayName: 'List',
@@ -16,7 +15,8 @@ var List = React.createClass({
     return {
       page: 1,
       sortIdx: 0,
-      order: 'desc'
+      order: 'desc',
+      selectedRows: []
     };
   },
 
@@ -64,6 +64,28 @@ var List = React.createClass({
     return this.props.tableSortProps[idx];
   },
 
+  selectAll: function (e) {
+    let currentlyChecked = e.currentTarget.getAttribute('defaultChecked');
+
+    if (!currentlyChecked) {
+      e.currentTarget.setAttribute('defaultChecked', true);
+      const limit = this.props.list.meta.limit;
+      let selectAll = [];
+
+      for (let i = limit - 1; i >= 0; i--) {
+        selectAll.push(i);
+      }
+      this.updateSelection({selectedRows: selectAll});
+    } else {
+      e.currentTarget.removeAttribute('defaultChecked');
+      this.updateSelection({selectedRows: []});
+    }
+  },
+
+  updateSelection: function (updateSelection) {
+    this.setState(updateSelection);
+  },
+
   list: function (options, query) {
     options = options || {};
     const { page, order, sort_by } = options;
@@ -92,13 +114,14 @@ var List = React.createClass({
     const { tableHeader, tableRow, tableSortProps, isRemovable } = this.props;
     const { list } = this.props;
     const { count, limit } = list.meta;
-    const { page, sortIdx, order } = this.state;
-    const primaryIdx = 1;
+    const { page, sortIdx, order, selectedRows } = this.state;
+    const primaryIdx = 0;
+
     return (
       <div>
         {isRemovable ? (
           <div className='form--controls'>
-            <label className='form__element__select form-group__element form-group__element--small'><input type='checkbox' className='form-select__all' name='Select' value='Select' onClick={selectAll} />Select</label>
+            <label className='form__element__select form-group__element form-group__element--small'><input type='checkbox' className='form-select__all' name='Select' defaultChecked={false} onChange={this.selectAll} />Select</label>
             <button className='button button--small form-group__element'>Remove From CMR</button>
             <button className='button button--small form-group__element'>Reprocess</button>
           </div>
@@ -115,7 +138,11 @@ var List = React.createClass({
           props={tableSortProps}
           sortIdx={sortIdx}
           order={order}
-          changeSortProps={this.queryNewSort} />
+          changeSortProps={this.queryNewSort}
+          changeSelectionProp={this.updateSelection}
+          isRemovable={isRemovable}
+          selectedRows={selectedRows}
+        />
 
         <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
       </div>
