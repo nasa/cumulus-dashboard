@@ -66,7 +66,6 @@ var ActiveCollections = React.createClass({
     const { list, search } = this.props.collections;
     const { count, limit, queriedAt } = list.meta;
     const { page } = this.state;
-    const primaryIdx = 1;
 
     return (
       <div className='page__component'>
@@ -100,7 +99,7 @@ var ActiveCollections = React.createClass({
           </div>
           <div className='form--controls'>
             <label className='form__element__select form-group__element form-group__element--small'>
-              <input type='checkbox' className='form-select__all' name='Select' value='Select' />
+              <input type="checkbox" name="Select" value="Select" />
               Select
             </label>
             <button className='button button--small form-group__element button--green'>Delete</button>
@@ -113,7 +112,7 @@ var ActiveCollections = React.createClass({
             </div>
           </div>
           {list.inflight ? <Loading /> : null}
-          <SortableTable primaryIdx={primaryIdx} data={list.data} header={tableHeader} row={tableRow}/>
+          <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
       </div>
