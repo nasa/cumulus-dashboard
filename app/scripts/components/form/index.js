@@ -157,6 +157,7 @@ export const Form = React.createClass({
             type='submit'
             value={this.props.inflight ? 'Loading...' : 'Submit'}
             onClick={this.onSubmit}
+            readOnly={true}
           />
         </span>
 
@@ -165,6 +166,7 @@ export const Form = React.createClass({
             type='cancel'
             value='Cancel'
             onClick={this.onCancel}
+            readOnly={true}
           />
         </span>
       </form>
