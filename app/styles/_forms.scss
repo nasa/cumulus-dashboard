@@ -14,7 +14,8 @@ label {
 .form__multistep {
   input[type='text'], textarea {
     margin-bottom: 2em;
-    width: 100%;
+    width: 95.5%;
+    padding: 0.3em;
   }
 }
 
@@ -23,7 +24,7 @@ label {
   border-radius: .5em;
   position: relative;
   &:after {
-    background-image: url('/graphics/layout/chevron-down.svg');
+    background-image: url(#{graphics}/layout/chevron-down.svg);
     content: '';
     width: 10px;
     height: 10px;
@@ -62,7 +63,7 @@ select {
 .search__icon {
   &:after {
     position: absolute;
-    background-image: url('/graphics/layout/magnifier-left.svg');
+    background-image: url(#{$graphics}/layout/magnifier-left.svg);
     content: '';
     width: 14px;
     height: 14px;
@@ -90,15 +91,21 @@ select {
   background-color: #FFF;
   border: 1px solid $lightest-grey;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
-  border-radius: .5em;
-  padding: .3em 2em .4em .7em;
+  border-radius: .2em;
   position: absolute;
   top: 36px;
   z-index: 100;
+  max-height: 18em;
+  overflow-y: scroll;
 
   a, a:visited {
+    padding: .7em 1.8em .7em 1.2em;
     color: $black;
     border-bottom: 1px solid $lightest-grey;
+    display: block;
+    &:hover {
+      background-color: darken($background-white, 2%);
+    }
   }
 }
 
@@ -130,4 +137,20 @@ select {
 
 .form-group__element--left {
   margin-right: 1em;
+  margin-top: 2em;
+  margin-left: 1em;
+}
+
+.ace_editor {
+  margin-bottom: 2em;
+  border: 1px solid $lightest-grey;
+  border-radius: .5em;
+}
+
+.ace-github .ace_gutter {
+  padding-top: .5em;
+}
+
+.ace_content {
+  padding-top: .5em;
 }

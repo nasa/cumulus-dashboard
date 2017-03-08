@@ -1,4 +1,5 @@
 'use strict';
+import assignDate from './assign-date';
 
 import {
   STATS
@@ -18,7 +19,7 @@ export default function reducer (state = initialState, action) {
   let nextState;
   switch (action.type) {
     case STATS:
-      nextState = Object.assign(state, action.data);
+      nextState = Object.assign(state, assignDate(action.data));
       break;
   }
   return nextState || state;

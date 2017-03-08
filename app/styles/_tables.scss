@@ -65,7 +65,7 @@ table {
     padding-right: 10%;
     &:after {
       content: '';
-      background-image: url(/graphics/layout/chevron-right-green.svg);
+      background-image: url(#{$graphics}/layout/chevron-right-green.svg);
       background-size: 15px 25px;
       background-repeat: no-repeat;
       width: 15px;

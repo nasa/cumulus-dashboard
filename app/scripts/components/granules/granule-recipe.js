@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { getGranule } from '../../actions';
 import { get } from 'object-path';
 import { Link } from 'react-router';
+import { lastUpdated } from '../../utils/format';
 import Ace from 'react-ace';
 import config from '../../config';
 import Loading from '../app/loading-indicator';
@@ -71,11 +72,7 @@ var GranuleRecipe = React.createClass({
           <Link className='button button--small form-group__element--right button--disabled button--green' to='/'>Delete</Link>
           <Link className='button button--small form-group__element--right button--green' to='/'>Remove from CMR</Link>
           <Link className='button button--small form-group__element--right button--green' to='/'>Reprocess</Link>
-          <dl className="metadata__updated">
-            <dt>Last Updated:</dt>
-            <dd>Sept. 23, 2016</dd>
-            <dd className='metadata__updated__time'>2:00pm EST</dd>
-          </dl>
+          {lastUpdated(granule.queriedAt)}
         </section>
 
         <section className='page__section'>

@@ -64,7 +64,7 @@ var ActiveCollections = React.createClass({
 
   render: function () {
     const { list, search } = this.props.collections;
-    const { count, limit } = list.meta;
+    const { count, limit, queriedAt } = list.meta;
     const { page } = this.state;
 
     return (
@@ -73,11 +73,7 @@ var ActiveCollections = React.createClass({
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content'>Active Collections</h1>
             <Link className='button button--green button--small form-group__element--right' to=''>Edit</Link>
-            <dl className="metadata__updated">
-              <dt>Last Updated:</dt>
-              <dd>Sept. 23, 2016</dd>
-              <dd className='metadata__updated__time'>2:00pm EST</dd>
-            </dl>
+            {format.lastUpdated(queriedAt)}
           </div>
           <div className='filters'>
             <div className='dropdown__wrapper form-group__element'>

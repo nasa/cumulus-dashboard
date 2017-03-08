@@ -7,9 +7,18 @@ var ErrorReport = React.createClass({
     report: React.PropTypes.string
   },
   render: function () {
+    const { report } = this.props;
+    let message;
+    if (typeof report === 'string') {
+      message = report;
+    } else if (report instanceof Error) {
+      message = report.message ? report.message : JSON.stringify(report);
+    } else if (typeof report === 'object') {
+      message = JSON.stringify(report);
+    }
     return (
       <div className='error'>
-        <p><strong>Error:</strong> {this.props.report}</p>
+        <p><strong>Error:</strong> {message}</p>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 'use strict';
 import { set } from 'object-path';
+import assignDate from './assign-date';
 
 import {
   GRANULE,
@@ -40,7 +41,7 @@ export default function reducer (state = initialState, action) {
   switch (action.type) {
     case GRANULE:
       set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'data'], data);
+      set(state, ['map', id, 'data'], assignDate(data));
       break;
     case GRANULE_INFLIGHT:
       set(state, ['map', id, 'inflight'], true);
@@ -52,7 +53,7 @@ export default function reducer (state = initialState, action) {
 
     case GRANULES:
       set(state, ['list', 'data'], data.results);
-      set(state, ['list', 'meta'], data.meta);
+      set(state, ['list', 'meta'], assignDate(data.meta));
       set(state, ['list', 'inflight'], false);
       break;
     case GRANULES_INFLIGHT:

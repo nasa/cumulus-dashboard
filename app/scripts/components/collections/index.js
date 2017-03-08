@@ -14,6 +14,8 @@ var Collections = React.createClass({
   },
 
   render: function () {
+    const { pathname } = this.props.location;
+    const showSidebar = pathname !== '/collections/add';
     return (
       <div className='page__collections'>
         <div className='content__header'>
@@ -24,8 +26,8 @@ var Collections = React.createClass({
         </div>
         <div className='page__content'>
           <div className='row wrapper__sidebar'>
-            <Sidebar currentPath={this.props.location.pathname} params={this.props.params} />
-            <div className='page__content--shortened'>
+            {showSidebar ? <Sidebar currentPath={pathname} params={this.props.params} /> : null}
+            <div className={showSidebar ? 'page__content--shortened' : 'page__content'}>
               {this.props.children}
             </div>
           </div>
