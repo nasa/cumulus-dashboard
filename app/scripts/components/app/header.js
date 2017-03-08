@@ -87,17 +87,19 @@ var Header = React.createClass({
         { showModal ? <div className='modal__cover'></div> : null }
 
         <div className={ showModal ? 'login login__onscreen' : 'login' }>
-          <div className='modal'>
-            <div className='modal__internal'>
-              <p>{ authenticated ? 'Success!' : 'Enter your username and password' }</p>
-              <Form
-                inputMeta={inputElements}
-                cancel={this.hideLoginModal}
-                submit={this.login}
-                inflight={inflight}
-              />
+          { showModal ? (
+            <div className='modal'>
+              <div className='modal__internal'>
+                <p>{ authenticated ? 'Success!' : 'Enter your username and password' }</p>
+                <Form
+                  inputMeta={inputElements}
+                  cancel={this.hideLoginModal}
+                  submit={this.login}
+                  inflight={inflight}
+                />
+              </div>
             </div>
-          </div>
+          ) : null }
         </div>
       </div>
     );
