@@ -58,21 +58,21 @@ var AddCollection = React.createClass({
   },
 
   post: function (payload) {
-    payload.createdAt = new Date();
-    payload.updatedAt = new Date();
+    payload.createdAt = new Date().getTime();
+    payload.updatedAt = new Date().getTime();
     payload.changedBy = 'Cumulus Dashboard';
     if (payload.collectionName) {
+      let { dispatch } = this.props;
       this.setState({
         collectionName: payload.collectionName
-      });
+      }, () => dispatch(createCollection(payload)));
     }
-    this.props.dispatch(createCollection(payload));
   },
 
   render: function () {
-    const collectionName = this.state;
-    const record = collectionName ?
-      get(this.props.collections.map, collectionName, {}) : {};
+    const { collectionName } = this.state;
+    const record = collectionName
+      ? get(this.props.collections.created, collectionName, {}) : {};
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -80,12 +80,12 @@ var AddCollection = React.createClass({
             <h1 className='heading--large'>Add a Collection</h1>
             <p className='description'>Instructions to add JSON in the below fields. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus tincidunt, orci vel tincidunt ultricies, augue libero egestas felis, vel blandit arcu elit et nisl. Pellentesque luctus sapien eu augue sodales auctor.</p>
           </div>
-          {record.inflight ? <Loading /> : null}
-          {record.error ? <ErrorReport record={record.error} /> : null}
+          {record.status === 'inflight' ? <Loading /> : null}
           <Form
             inputMeta={inputElements}
             submit={this.post}
           />
+          {record.status === 'error' ? <ErrorReport report={record.error} /> : null}
         </section>
       </div>
     );
