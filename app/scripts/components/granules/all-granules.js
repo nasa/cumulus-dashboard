@@ -31,6 +31,7 @@ var AllGranules = React.createClass({
     const { list, search } = this.props.granules;
     const { count, queriedAt } = list.meta;
     const logsQuery = { q: 'granuleId' };
+
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -68,7 +69,7 @@ var AllGranules = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
-            isRemovable={true}
+            isRemovable={true} 
           />
         </section>
         <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
