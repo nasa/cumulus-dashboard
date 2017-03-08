@@ -16,6 +16,7 @@ var List = React.createClass({
       page: 1,
       sortIdx: 0,
       order: 'desc',
+      selectAll: false,
       selectedRows: []
     };
   },
@@ -65,20 +66,17 @@ var List = React.createClass({
   },
 
   selectAll: function (e) {
-    let currentlyChecked = e.currentTarget.getAttribute('defaultChecked');
-
-    if (!currentlyChecked) {
-      e.currentTarget.setAttribute('defaultChecked', true);
+    if (this.state.selectAll) {
+      this.setState({ selectAll: false });
+      this.updateSelection({selectedRows: []});
+    } else {
+      this.setState({ selectAll: true });
       const limit = this.props.list.meta.limit;
       let selectAll = [];
-
       for (let i = limit - 1; i >= 0; i--) {
         selectAll.push(i);
       }
       this.updateSelection({selectedRows: selectAll});
-    } else {
-      e.currentTarget.removeAttribute('defaultChecked');
-      this.updateSelection({selectedRows: []});
     }
   },
 
@@ -114,14 +112,17 @@ var List = React.createClass({
     const { tableHeader, tableRow, tableSortProps, isRemovable } = this.props;
     const { list } = this.props;
     const { count, limit } = list.meta;
-    const { page, sortIdx, order, selectedRows } = this.state;
+    const { page, sortIdx, order, selectedRows, selectAllBox } = this.state;
     const primaryIdx = 0;
 
     return (
       <div>
         {isRemovable ? (
           <div className='form--controls'>
-            <label className='form__element__select form-group__element form-group__element--small'><input type='checkbox' className='form-select__all' name='Select' defaultChecked={false} onChange={this.selectAll} />Select</label>
+            <label className='form__element__select form-group__element form-group__element--small'>
+              <input type='checkbox' className='form-select__all' name='Select' checked={selectAllBox} onChange={this.selectAll} />
+              Select
+            </label>
             <button className='button button--small form-group__element'>Remove From CMR</button>
             <button className='button button--small form-group__element'>Reprocess</button>
           </div>
