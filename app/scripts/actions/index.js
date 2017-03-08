@@ -83,7 +83,7 @@ export const createCollection = (payload) => wrapRequest(
   payload.collectionName, post, 'collections', NEW_COLLECTION, payload);
 
 export const updateCollection = (payload) => wrapRequest(
-  payload.collectionName, put, 'collections', UPDATE_COLLECTION, payload);
+  payload.collectionName, put, `collections/${payload.collectionName}`, UPDATE_COLLECTION, payload);
 
 export const searchCollections = (query) => wrapRequest(null, get, {
   url: url.resolve(root, 'collections'),
