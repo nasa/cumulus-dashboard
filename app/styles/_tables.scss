@@ -142,11 +142,6 @@ table {
   text-decoration: underline;
 }
 
-.table__sort {
-  cursor: pointer;
-  position: relative;
-}
-
 .form--controls {
   @extend .clearfix;
 }
@@ -158,8 +153,41 @@ table {
   }
 }
 
-//TODO
+.table__sort {
+  cursor: pointer;
+  position: relative;
+  padding-right: 10px;
+  &:after {
+    position: absolute;
+    background-image: url(#{$graphics}/layout/toggle.svg);
+    content: ' ';
+    width: 10px;
+    height: 13px;
+    background-size: 10px 13px;
+    display: inline-block;
+    margin-left: .5em;
+  }
+}
+
+.table__sort--asc, .table__sort--desc {
+  &:after {
+    content: ' ';
+    width: 8px;
+    height: 8px;
+    background-size: 8px 8px;
+    display: inline-block;
+    margin-left: .5em
+  }
+}
+
 .table__sort--desc {
+  &:after {
+    background-image: url(#{$graphics}/layout/chevron-down.svg);
+    top: 17px;
+  }
 }
 .table__sort--asc {
+  &:after {
+    background-image: url(#{$graphics}/layout/chevron-up.svg);
+  }
 }

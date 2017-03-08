@@ -24,7 +24,7 @@ label {
   border-radius: .5em;
   position: relative;
   &:after {
-    background-image: url(#{graphics}/layout/chevron-down.svg);
+    background-image: url(#{$graphics}/layout/chevron-down.svg);
     content: '';
     width: 10px;
     height: 10px;
