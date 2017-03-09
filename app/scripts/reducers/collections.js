@@ -93,20 +93,26 @@ export default function reducer (state = initialState, action) {
       break;
 
     case SEARCH_COLLECTIONS:
-      set(state, ['search', 'data'], data.results);
+      // Since there are no auto-updates for the list, there's
+      // no need to save the search value (ie, collection-name prefix)
+      // within `list.meta`, as is done in the granules reducer
+      set(state, ['list', 'data'], data.results);
       set(state, ['search', 'inflight'], false);
+      set(state, ['list', 'inflight'], false);
       break;
     case SEARCH_COLLECTIONS_INFLIGHT:
       set(state, ['search', 'inflight'], true);
+      set(state, ['list', 'inflight'], true);
       break;
     case SEARCH_COLLECTIONS_ERROR:
       set(state, ['search', 'error'], action.error);
       set(state, ['search', 'inflight'], false);
+      set(state, ['list', 'inflight'], false);
       break;
     case CLEAR_COLLECTIONS_SEARCH:
-      set(state, ['search', 'data'], []);
       set(state, ['search', 'error'], null);
       set(state, ['search', 'inflight'], false);
+      set(state, ['list', 'inflight'], false);
       break;
   }
   return state;

@@ -87,7 +87,7 @@ export const updateCollection = (payload) => wrapRequest(
 
 export const searchCollections = (query) => wrapRequest(null, get, {
   url: url.resolve(root, 'collections'),
-  qs: Object.assign({ limit: searchPageLimit, fields: 'collectionName' }, query)
+  qs: Object.assign({ limit: searchPageLimit }, query)
 }, SEARCH_COLLECTIONS);
 
 export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH });
@@ -107,7 +107,7 @@ export const reprocessGranule = (granuleId) => wrapRequest(
 
 export const searchGranules = (query) => wrapRequest(null, get, {
   url: url.resolve(root, 'granules'),
-  qs: Object.assign({ limit: searchPageLimit, fields: 'granuleId' }, query)
+  qs: Object.assign({ limit: searchPageLimit }, query)
 }, SEARCH_GRANULES);
 
 export const clearGranuleSearch = () => ({ type: CLEAR_GRANULES_SEARCH });

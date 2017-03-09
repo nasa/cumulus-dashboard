@@ -53,15 +53,16 @@ const Search = React.createClass({
 
   submit: function (e) {
     e.preventDefault();
+    const value = e.currentTarget.value;
     const { dispatch, action } = this.props;
     if (this.cancelDelay) { this.cancelDelay(); }
-    dispatch(action({ prefix: e.currentTarget.value }));
+    dispatch(action({ prefix: value }));
   },
 
   delayedQuery: function (value) {
     const { dispatch, action, clear } = this.props;
     const timeoutId = setTimeout(function () {
-      if (value.length > 2) {
+      if (value && value.length) {
         dispatch(action({ prefix: value }));
       } else {
         dispatch(clear());
