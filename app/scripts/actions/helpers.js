@@ -9,10 +9,8 @@ const root = _config.apiRoot;
 function setToken (config) {
   let token = getToken();
   if (token) {
-    config.headers = {
-      Authorization: 'Basic ' + token,
-      'Content-Type': 'application/json'
-    };
+    config.headers = config.headers || {};
+    config.headers.Authorization = 'Basic ' + token;
   }
   return config;
 }
@@ -69,6 +67,9 @@ export const wrapRequest = function (id, query, params, type, body) {
     config.body = body;
     config.json = true;
   }
+
+  config.headers = config.headers || {};
+  config.headers['Content-Type'] = 'application/json';
 
   return function (dispatch) {
     const inflightType = type + '_INFLIGHT';

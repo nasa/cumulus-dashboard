@@ -5,6 +5,9 @@ import { wrapRequest } from '../../app/scripts/actions/helpers';
 const dispatch = () => true;
 const type = 'TEST';
 const id = 'id';
+const headers = {
+  'Content-Type': 'application/json'
+}
 test('wrap request', function (t) {
   t.plan(3);
 
@@ -16,7 +19,7 @@ test('wrap request', function (t) {
 
   const urlObj = { url };
   const req2 = (config) => {
-    t.deepEquals(config, { url });
+    t.deepEquals(config, { url, headers });
   };
   wrapRequest(id, req2, urlObj, type)(dispatch);
 
@@ -25,7 +28,8 @@ test('wrap request', function (t) {
     t.deepEquals(config, {
       url: url,
       json: true,
-      body: { limit: 1 }
+      body: { limit: 1 },
+      headers
     });
   };
   wrapRequest(id, req3, urlObj, type, body)(dispatch);

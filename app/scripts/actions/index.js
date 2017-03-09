@@ -137,10 +137,12 @@ export const logout = () => {
 };
 
 export const login = (token) => {
-  setToken(token);
   // dummy request to test the auth token
   return wrapRequest('auth', get, {
     url: url.resolve(root, 'granules'),
-    qs: { limit: 1, fields: 'granuleId' }
+    qs: { limit: 1, fields: 'granuleId' },
+    headers: {
+      Authorization: 'Basic ' + token
+    }
   }, LOGIN);
 };
