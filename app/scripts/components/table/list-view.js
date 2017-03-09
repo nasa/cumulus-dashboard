@@ -16,7 +16,6 @@ var List = React.createClass({
       page: 1,
       sortIdx: 0,
       order: 'desc',
-      selectAllBox: false,
       selectedRows: []
     };
   },
@@ -53,9 +52,9 @@ var List = React.createClass({
   },
 
   queryNewPage: function (page) {
-    this.setState({ selectAllBox: false });
     this.setState({ page });
     this.list({ page });
+    this.updateSelection({selectedRows: []});
   },
 
   queryNewSort: function (sortProps) {
@@ -68,11 +67,11 @@ var List = React.createClass({
   },
 
   selectAll: function (e) {
-    if (this.state.selectAllBox) {
-      this.setState({ selectAllBox: false });
+    const areAllSelected = this.state.selectedRows.length === this.props.list.data.length;
+
+    if (areAllSelected) {
       this.updateSelection({selectedRows: []});
     } else {
-      this.setState({ selectAllBox: true });
       const allData = this.props.list.data;
       let selectAll = allData.map(d => d[this.props.rowId]);
       this.updateSelection({selectedRows: selectAll});
@@ -111,15 +110,16 @@ var List = React.createClass({
     const { tableHeader, tableRow, tableSortProps, isRemovable, rowId } = this.props;
     const { list } = this.props;
     const { count, limit } = list.meta;
-    const { page, sortIdx, order, selectedRows, selectAllBox } = this.state;
+    const { page, sortIdx, order, selectedRows } = this.state;
     const primaryIdx = 0;
+    const checked = this.state.selectedRows.length === this.props.list.data.length;
 
     return (
       <div>
         {isRemovable ? (
           <div className='form--controls'>
             <label className='form__element__select form-group__element form-group__element--small'>
-              <input type='checkbox' className='form-select__all' name='Select' checked={selectAllBox} onChange={this.selectAll} />
+              <input type='checkbox' className='form-select__all' name='Select' checked={checked} onChange={this.selectAll} />
               Select
             </label>
             <button className='button button--small form-group__element'>Remove From CMR</button>
