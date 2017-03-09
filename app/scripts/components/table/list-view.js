@@ -30,7 +30,7 @@ var List = React.createClass({
     tableSortProps: React.PropTypes.array,
     query: React.PropTypes.object,
     isRemovable: React.PropTypes.bool,
-    pageRowId: React.PropTypes.string
+    rowId: React.PropTypes.string
   },
 
   componentWillMount: function () {
@@ -74,12 +74,7 @@ var List = React.createClass({
     } else {
       this.setState({ selectAllBox: true });
       const allData = this.props.list.data;
-      let selectAll = [];
-
-      allData.forEach((i) => {
-        selectAll.push(i.granuleId);
-      });
-
+      let selectAll = allData.map(d => d[this.props.rowId]);
       this.updateSelection({selectedRows: selectAll});
     }
   },
@@ -113,7 +108,7 @@ var List = React.createClass({
   },
 
   render: function () {
-    const { tableHeader, tableRow, tableSortProps, isRemovable, pageRowId } = this.props;
+    const { tableHeader, tableRow, tableSortProps, isRemovable, rowId } = this.props;
     const { list } = this.props;
     const { count, limit } = list.meta;
     const { page, sortIdx, order, selectedRows, selectAllBox } = this.state;
@@ -147,7 +142,7 @@ var List = React.createClass({
           changeSelectionProp={this.updateSelection}
           isRemovable={isRemovable}
           selectedRows={selectedRows}
-          pageRowId={pageRowId}
+          rowId={rowId}
         />
 
         <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />

@@ -24,7 +24,7 @@ const Table = React.createClass({
     changeSelectionProp: React.PropTypes.func,
     isRemovable: React.PropTypes.bool,
     selectedRows: React.PropTypes.array,
-    pageRowId: React.PropTypes.string
+    rowId: React.PropTypes.string
   },
 
   unSortable: function () {
@@ -46,11 +46,10 @@ const Table = React.createClass({
     if (typeof this.props.changeSelectionProp === 'function') {
       const targetId = (e.currentTarget.getAttribute('data-value'));
       const currentSelection = this.props.selectedRows;
-      let updatedSelection = '';
+      let updatedSelection;
 
       if (currentSelection.indexOf(targetId) === -1) {
-        const tempArray = [targetId];
-        updatedSelection = tempArray.concat(currentSelection);
+        updatedSelection = currentSelection.concat([targetId]);
       } else {
         updatedSelection = currentSelection.filter(k => k !== targetId);
       }
@@ -93,14 +92,12 @@ const Table = React.createClass({
         </thead>
         <tbody>
           {this.props.data.map((d, i) => {
-            const dataId = d[this.props.pageRowId];
-            let checked = false;
+            const dataId = d[this.props.rowId];
+            let checked;
 
-            this.props.selectedRows.forEach((j) => {
-              if (dataId && dataId === j) {
-                checked = true;
-              }
-            });
+            if (this.props.isRemovable) {
+              checked = this.props.selectedRows.indexOf(dataId) !== -1;
+            }
 
             return (
               <tr key={i} data-value={dataId} onClick={this.selectThis}>
