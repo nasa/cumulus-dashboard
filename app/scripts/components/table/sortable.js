@@ -23,7 +23,8 @@ const Table = React.createClass({
     changeSortProps: React.PropTypes.func,
     changeSelectionProp: React.PropTypes.func,
     isRemovable: React.PropTypes.bool,
-    selectedRows: React.PropTypes.array
+    selectedRows: React.PropTypes.array,
+    pageRowId: React.PropTypes.string
   },
 
   unSortable: function () {
@@ -92,7 +93,7 @@ const Table = React.createClass({
         </thead>
         <tbody>
           {this.props.data.map((d, i) => {
-            const dataId = d.granuleId;
+            const dataId = d[this.props.pageRowId];
             let checked = false;
 
             this.props.selectedRows.forEach((j) => {

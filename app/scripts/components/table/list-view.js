@@ -16,7 +16,7 @@ var List = React.createClass({
       page: 1,
       sortIdx: 0,
       order: 'desc',
-      selectAll: false,
+      selectAllBox: false,
       selectedRows: []
     };
   },
@@ -29,7 +29,8 @@ var List = React.createClass({
     tableRow: React.PropTypes.array,
     tableSortProps: React.PropTypes.array,
     query: React.PropTypes.object,
-    isRemovable: React.PropTypes.bool
+    isRemovable: React.PropTypes.bool,
+    pageRowId: React.PropTypes.string
   },
 
   componentWillMount: function () {
@@ -52,6 +53,7 @@ var List = React.createClass({
   },
 
   queryNewPage: function (page) {
+    this.setState({ selectAllBox: false });
     this.setState({ page });
     this.list({ page });
   },
@@ -66,11 +68,11 @@ var List = React.createClass({
   },
 
   selectAll: function (e) {
-    if (this.state.selectAll) {
-      this.setState({ selectAll: false });
+    if (this.state.selectAllBox) {
+      this.setState({ selectAllBox: false });
       this.updateSelection({selectedRows: []});
     } else {
-      this.setState({ selectAll: true });
+      this.setState({ selectAllBox: true });
       const allData = this.props.list.data;
       let selectAll = [];
 
@@ -111,7 +113,7 @@ var List = React.createClass({
   },
 
   render: function () {
-    const { tableHeader, tableRow, tableSortProps, isRemovable } = this.props;
+    const { tableHeader, tableRow, tableSortProps, isRemovable, pageRowId } = this.props;
     const { list } = this.props;
     const { count, limit } = list.meta;
     const { page, sortIdx, order, selectedRows, selectAllBox } = this.state;
@@ -145,6 +147,7 @@ var List = React.createClass({
           changeSelectionProp={this.updateSelection}
           isRemovable={isRemovable}
           selectedRows={selectedRows}
+          pageRowId={pageRowId}
         />
 
         <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
