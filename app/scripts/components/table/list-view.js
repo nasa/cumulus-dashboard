@@ -60,6 +60,7 @@ var List = React.createClass({
   queryNewSort: function (sortProps) {
     this.setState(sortProps);
     this.list({ order: sortProps.order, sort_by: this.getSortProp(sortProps.sortIdx) });
+    this.updateSelection({selectedRows: []});
   },
 
   getSortProp: function (idx) {
