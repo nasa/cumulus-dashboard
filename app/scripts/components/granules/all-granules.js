@@ -70,7 +70,7 @@ var AllGranules = React.createClass({
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
             isRemovable={true}
-            pageRowId={'granuleId'}
+            rowId={'granuleId'}
           />
         </section>
         <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
