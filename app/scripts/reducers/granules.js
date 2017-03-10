@@ -24,9 +24,8 @@ import {
 export const initialState = {
   list: {
     data: [],
-    meta: {
-      query: {}
-    }
+    meta: {},
+    prefix: null
   },
   search: {},
   map: {},
@@ -53,7 +52,7 @@ export default function reducer (state = initialState, action) {
 
     case GRANULES:
       set(state, ['list', 'data'], data.results);
-      set(state, ['list', 'meta'], Object.assign(state.list.meta, assignDate(data.meta)));
+      set(state, ['list', 'meta'], assignDate(data.meta));
       set(state, ['list', 'inflight'], false);
       break;
     case GRANULES_INFLIGHT:
@@ -76,26 +75,21 @@ export default function reducer (state = initialState, action) {
       break;
 
     case SEARCH_GRANULES:
-      // Apply the search field's query to the list view's auto-updates
-      set(state, ['list', 'meta', 'query', 'prefix'], config.qs.prefix);
       set(state, ['list', 'data'], data.results);
       set(state, ['search', 'inflight'], false);
-      set(state, ['list', 'inflight'], false);
       break;
     case SEARCH_GRANULES_INFLIGHT:
+      set(state, ['list', 'prefix'], config.qs.prefix);
       set(state, ['search', 'inflight'], true);
-      set(state, ['list', 'inflight'], true);
       break;
     case SEARCH_GRANULES_ERROR:
       set(state, ['search', 'error'], action.error);
       set(state, ['search', 'inflight'], false);
-      set(state, ['list', 'inflight'], false);
       break;
     case CLEAR_GRANULES_SEARCH:
-      set(state, ['list', 'meta', 'query', 'prefix'], null);
+      set(state, ['list', 'prefix'], null);
       set(state, ['search', 'error'], null);
       set(state, ['search', 'inflight'], false);
-      set(state, ['list', 'inflight'], false);
       break;
   }
   return state;
