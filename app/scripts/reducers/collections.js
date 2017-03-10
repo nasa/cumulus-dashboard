@@ -30,9 +30,7 @@ export const initialState = {
     data: [],
     meta: {}
   },
-  search: {
-    data: []
-  },
+  search: {},
   map: {},
   meta: {},
   created: {},
@@ -41,7 +39,7 @@ export const initialState = {
 
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
-  const { id, data } = action;
+  const { id, data, config } = action;
 
   switch (action.type) {
     case COLLECTION:
@@ -93,9 +91,7 @@ export default function reducer (state = initialState, action) {
       break;
 
     case SEARCH_COLLECTIONS:
-      // Since there are no auto-updates for the list, there's
-      // no need to save the search value (ie, collection-name prefix)
-      // within `list.meta`, as is done in the granules reducer
+      set(state, ['list', 'meta', 'query', 'prefix'], config.qs.prefix);
       set(state, ['list', 'data'], data.results);
       set(state, ['search', 'inflight'], false);
       set(state, ['list', 'inflight'], false);
@@ -110,6 +106,7 @@ export default function reducer (state = initialState, action) {
       set(state, ['list', 'inflight'], false);
       break;
     case CLEAR_COLLECTIONS_SEARCH:
+      set(state, ['list', 'meta', 'query', 'prefix'], null);
       set(state, ['search', 'error'], null);
       set(state, ['search', 'inflight'], false);
       set(state, ['list', 'inflight'], false);

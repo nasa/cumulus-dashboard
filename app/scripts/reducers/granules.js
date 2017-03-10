@@ -28,9 +28,7 @@ export const initialState = {
       query: {}
     }
   },
-  search: {
-    data: []
-  },
+  search: {},
   map: {},
   meta: {},
   reprocessed: {}
@@ -94,7 +92,7 @@ export default function reducer (state = initialState, action) {
       set(state, ['list', 'inflight'], false);
       break;
     case CLEAR_GRANULES_SEARCH:
-      set(state, ['list', 'meta', 'query', 'prefix'], undefined);
+      set(state, ['list', 'meta', 'query', 'prefix'], null);
       set(state, ['search', 'error'], null);
       set(state, ['search', 'inflight'], false);
       set(state, ['list', 'inflight'], false);

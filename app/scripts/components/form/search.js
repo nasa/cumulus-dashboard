@@ -79,11 +79,6 @@ const Search = React.createClass({
         <span className={results.inflight ? 'search__loading' : 'search__icon'}>
           {results.inflight ? <LoadingEllipsis /> : null}
         </span>
-        {results.data.length ? (
-          <ul className='search__results'>
-            {results.data.map(this.props.format)}
-          </ul>
-        ) : null}
       </form>
     );
   }
