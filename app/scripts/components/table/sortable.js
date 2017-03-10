@@ -20,7 +20,11 @@ const Table = React.createClass({
     row: React.PropTypes.array,
     sortIdx: React.PropTypes.number,
     order: React.PropTypes.string,
-    changeSortProps: React.PropTypes.func
+    changeSortProps: React.PropTypes.func,
+    onSelect: React.PropTypes.func,
+    isRemovable: React.PropTypes.bool,
+    selectedRows: React.PropTypes.array,
+    rowId: React.PropTypes.string
   },
 
   unSortable: function () {
@@ -38,14 +42,23 @@ const Table = React.createClass({
     }
   },
 
+  select: function (e) {
+    if (typeof this.props.onSelect === 'function') {
+      const targetId = (e.currentTarget.getAttribute('data-value'));
+      this.props.onSelect(targetId);
+    }
+  },
+
   render: function () {
     const canSort = !this.unSortable();
-    let { primaryIdx, sortIdx, order, props, row, data } = this.props;
+    let { primaryIdx, sortIdx, order, props, row, data, selectedRows, isRemovable } = this.props;
     primaryIdx = primaryIdx || 0;
+
     return (
       <table>
         <thead>
           <tr>
+            {isRemovable && <td></td> }
             {this.props.header.map((h, i) => {
               let className = canSort && props[i] ? 'table__sort' : '';
               if (i === sortIdx) { className += (' table__sort--' + order); }
@@ -62,11 +75,19 @@ const Table = React.createClass({
         </thead>
         <tbody>
           {this.props.data.map((d, i) => {
+            const dataId = d[this.props.rowId];
+            const checked = isRemovable && selectedRows.indexOf(dataId) !== -1;
             return (
-              <tr key={i}>
+              <tr key={i} data-value={dataId} onClick={this.select}>
+                {isRemovable &&
+                  <td>
+                    <input type='checkbox' checked={checked} />
+                  </td>
+                }
                 {row.map((accessor, k) => {
                   let className = k === primaryIdx ? 'table__main-asset' : '';
                   let text;
+
                   if (typeof accessor === 'function') {
                     text = accessor(d, k, data);
                   } else {

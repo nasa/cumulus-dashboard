@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { searchGranules, clearGranuleSearch, listGranules } from '../../actions';
 import { get } from 'object-path';
 import { granuleSearchResult, lastUpdated } from '../../utils/format';
-import { isUndefined as undef } from '../../utils/validate';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
 import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
@@ -22,12 +21,8 @@ var AllGranules = React.createClass({
 
   generateQuery: function () {
     const pdrName = get(this.props, ['params', 'pdrName']);
-    const prefix = get(this.props, ['granules', 'list', 'meta', 'query', 'prefix']);
-
     const options = {};
-    if (!undef(pdrName)) { options.pdrName = pdrName; }
-    if (!undef(prefix)) { options.prefix = prefix; }
-
+    if (pdrName) { options.pdrName = pdrName; }
     return options;
   },
 
@@ -36,6 +31,7 @@ var AllGranules = React.createClass({
     const { list, search } = this.props.granules;
     const { count, queriedAt } = list.meta;
     const logsQuery = { q: 'granuleId' };
+
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -74,6 +70,7 @@ var AllGranules = React.createClass({
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
             isRemovable={true}
+            rowId={'granuleId'}
           />
         </section>
         <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
