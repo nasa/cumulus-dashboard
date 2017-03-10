@@ -121,7 +121,7 @@ export const listPdrs = (options) => wrapRequest(null, get, {
 
 export const searchPdrs = (query) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),
-  qs: Object.assign({ limit: searchPageLimit, fields: 'pdrName' }, query)
+  qs: Object.assign({ limit: searchPageLimit }, query)
 }, SEARCH_PDRS);
 
 export const clearPdrSearch = () => ({ type: CLEAR_PDRS_SEARCH });
