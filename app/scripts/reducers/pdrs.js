@@ -23,7 +23,7 @@ export const initialState = {
 
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
-  const { data } = action;
+  const { data, config } = action;
   switch (action.type) {
     case PDRS:
       set(state, ['list', 'data'], data.results);
