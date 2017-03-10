@@ -15,7 +15,9 @@ var List = React.createClass({
     return {
       page: 1,
       sortIdx: 0,
-      order: 'desc'
+      order: 'desc',
+      selectAllBox: false,
+      selectedRows: []
     };
   },
 
@@ -27,7 +29,8 @@ var List = React.createClass({
     tableRow: React.PropTypes.array,
     tableSortProps: React.PropTypes.array,
     query: React.PropTypes.object,
-    isRemovable: React.PropTypes.bool
+    isRemovable: React.PropTypes.bool,
+    pageRowId: React.PropTypes.string
   },
 
   componentWillMount: function () {
@@ -50,6 +53,7 @@ var List = React.createClass({
   },
 
   queryNewPage: function (page) {
+    this.setState({ selectAllBox: false });
     this.setState({ page });
     this.list({ page });
   },
@@ -61,6 +65,27 @@ var List = React.createClass({
 
   getSortProp: function (idx) {
     return this.props.tableSortProps[idx];
+  },
+
+  selectAll: function (e) {
+    if (this.state.selectAllBox) {
+      this.setState({ selectAllBox: false });
+      this.updateSelection({selectedRows: []});
+    } else {
+      this.setState({ selectAllBox: true });
+      const allData = this.props.list.data;
+      let selectAll = [];
+
+      allData.forEach((i) => {
+        selectAll.push(i.granuleId);
+      });
+
+      this.updateSelection({selectedRows: selectAll});
+    }
+  },
+
+  updateSelection: function (updateSelection) {
+    this.setState(updateSelection);
   },
 
   list: function (options, query) {
@@ -88,15 +113,20 @@ var List = React.createClass({
   },
 
   render: function () {
-    const { tableHeader, tableRow, tableSortProps, isRemovable } = this.props;
+    const { tableHeader, tableRow, tableSortProps, isRemovable, pageRowId } = this.props;
     const { list } = this.props;
     const { count, limit } = list.meta;
-    const { page, sortIdx, order } = this.state;
+    const { page, sortIdx, order, selectedRows, selectAllBox } = this.state;
+    const primaryIdx = 0;
+
     return (
       <div>
         {isRemovable ? (
           <div className='form--controls'>
-            <label className='form__element__select form-group__element form-group__element--small'><input type='checkbox' name='Select' value='Select' />Select</label>
+            <label className='form__element__select form-group__element form-group__element--small'>
+              <input type='checkbox' className='form-select__all' name='Select' checked={selectAllBox} onChange={this.selectAll} />
+              Select
+            </label>
             <button className='button button--small form-group__element'>Remove From CMR</button>
             <button className='button button--small form-group__element'>Reprocess</button>
           </div>
@@ -106,13 +136,19 @@ var List = React.createClass({
         {list.error ? <ErrorReport report={list.error} /> : null}
 
         <SortableTable
+          primaryIdx={primaryIdx}
           data={list.data}
           header={tableHeader}
           row={tableRow}
           props={tableSortProps}
           sortIdx={sortIdx}
           order={order}
-          changeSortProps={this.queryNewSort} />
+          changeSortProps={this.queryNewSort}
+          changeSelectionProp={this.updateSelection}
+          isRemovable={isRemovable}
+          selectedRows={selectedRows}
+          pageRowId={pageRowId}
+        />
 
         <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
       </div>

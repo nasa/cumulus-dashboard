@@ -20,7 +20,11 @@ const Table = React.createClass({
     row: React.PropTypes.array,
     sortIdx: React.PropTypes.number,
     order: React.PropTypes.string,
-    changeSortProps: React.PropTypes.func
+    changeSortProps: React.PropTypes.func,
+    changeSelectionProp: React.PropTypes.func,
+    isRemovable: React.PropTypes.bool,
+    selectedRows: React.PropTypes.array,
+    pageRowId: React.PropTypes.string
   },
 
   unSortable: function () {
@@ -38,14 +42,41 @@ const Table = React.createClass({
     }
   },
 
+  selectThis: function (e) {
+    if (typeof this.props.changeSelectionProp === 'function') {
+      const targetId = (e.currentTarget.getAttribute('data-value'));
+      const currentSelection = this.props.selectedRows;
+      let updatedSelection = '';
+
+      if (currentSelection.indexOf(targetId) === -1) {
+        const tempArray = [targetId];
+        updatedSelection = tempArray.concat(currentSelection);
+      } else {
+        updatedSelection = currentSelection.filter(k => k !== targetId);
+      }
+
+      const newSelection = {selectedRows: updatedSelection};
+
+      this.changeAllSelections(newSelection);
+    }
+  },
+
+  changeAllSelections: function (newSelection) {
+    this.props.changeSelectionProp(newSelection);
+  },
+
   render: function () {
     const canSort = !this.unSortable();
     let { primaryIdx, sortIdx, order, props, row, data } = this.props;
     primaryIdx = primaryIdx || 0;
+
     return (
       <table>
         <thead>
           <tr>
+            {this.props.isRemovable &&
+              <td></td>
+            }
             {this.props.header.map((h, i) => {
               let className = canSort && props[i] ? 'table__sort' : '';
               if (i === sortIdx) { className += (' table__sort--' + order); }
@@ -62,11 +93,26 @@ const Table = React.createClass({
         </thead>
         <tbody>
           {this.props.data.map((d, i) => {
+            const dataId = d[this.props.pageRowId];
+            let checked = false;
+
+            this.props.selectedRows.forEach((j) => {
+              if (dataId && dataId === j) {
+                checked = true;
+              }
+            });
+
             return (
-              <tr key={i}>
+              <tr key={i} data-value={dataId} onClick={this.selectThis}>
+                {this.props.isRemovable &&
+                  <td>
+                    <input type='checkbox' checked={checked} />
+                  </td>
+                }
                 {row.map((accessor, k) => {
                   let className = k === primaryIdx ? 'table__main-asset' : '';
                   let text;
+
                   if (typeof accessor === 'function') {
                     text = accessor(d, k, data);
                   } else {

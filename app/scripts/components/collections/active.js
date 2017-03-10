@@ -34,7 +34,10 @@ var ActiveCollections = React.createClass({
 
   getInitialState: function () {
     return {
-      page: 1
+      page: 1,
+      selectedRows: [],
+      selectAllBox: false,
+      pageRowId: 'collectionName'
     };
   },
 
@@ -54,6 +57,28 @@ var ActiveCollections = React.createClass({
     this.list(this.state.page);
   },
 
+  selectAll: function (e) {
+    if (this.state.selectAllBox) {
+      this.setState({ selectAllBox: false });
+      this.updateSelection({selectedRows: []});
+    } else {
+      this.setState({ selectAllBox: true });
+      const allData = this.props.collections.list.data;
+      const dataId = this.state.pageRowId;
+      let selectAll = [];
+
+      allData.forEach((i) => {
+        selectAll.push(i[dataId]);
+      });
+
+      this.updateSelection({selectedRows: selectAll});
+    }
+  },
+
+  updateSelection: function (updateSelection) {
+    this.setState(updateSelection);
+  },
+
   list: function (page) {
     this.props.dispatch(listCollections({ page }));
   },
@@ -65,7 +90,7 @@ var ActiveCollections = React.createClass({
   render: function () {
     const { list, search } = this.props.collections;
     const { count, limit, queriedAt } = list.meta;
-    const { page } = this.state;
+    const { page, selectedRows, selectAllBox, pageRowId } = this.state;
 
     return (
       <div className='page__component'>
@@ -98,7 +123,10 @@ var ActiveCollections = React.createClass({
             />
           </div>
           <div className='form--controls'>
-            <label className='form__element__select form-group__element form-group__element--small'><input type="checkbox" name="Select" value="Select" />Select</label>
+            <label className='form__element__select form-group__element form-group__element--small'>
+              <input type='checkbox' className='form-select__all' name='Select' checked={selectAllBox} onChange={this.selectAll} />
+              Select
+            </label>
             <button className='button button--small form-group__element button--green'>Delete</button>
             <div className='dropdown__wrapper form-group__element form-group__element--small'>
               <select>
@@ -109,7 +137,15 @@ var ActiveCollections = React.createClass({
             </div>
           </div>
           {list.inflight ? <Loading /> : null}
-          <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
+          <SortableTable
+            data={list.data}
+            header={tableHeader}
+            row={tableRow}
+            pageRowId={pageRowId}
+            changeSelectionProp={this.updateSelection}
+            selectedRows={selectedRows}
+            isRemovable={true}
+          />
           <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
         </section>
       </div>
