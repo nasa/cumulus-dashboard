@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { searchGranules, clearGranuleSearch, listGranules } from '../../actions';
+import { get } from 'object-path';
 import { granuleSearchResult, lastUpdated } from '../../utils/format';
 import { isUndefined as undef } from '../../utils/validate';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
@@ -20,9 +21,13 @@ var AllGranules = React.createClass({
   },
 
   generateQuery: function () {
-    const pdrName = this.props.params.pdrName;
+    const pdrName = get(this.props, ['params', 'pdrName']);
+    const prefix = get(this.props, ['granules', 'list', 'meta', 'query', 'prefix']);
+
     const options = {};
     if (!undef(pdrName)) { options.pdrName = pdrName; }
+    if (!undef(prefix)) { options.prefix = prefix; }
+
     return options;
   },
 

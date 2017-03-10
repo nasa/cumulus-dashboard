@@ -19,6 +19,8 @@ export const get = function (config, callback) {
   request.get(setToken(config), (error, resp, body) => {
     if (error) {
       return callback(error);
+    } else if (+resp.statusCode >= 400) {
+      return callback(new Error(resp.statusMessage));
     }
     try {
       var data = JSON.parse(body);
@@ -34,6 +36,8 @@ export const post = function (config, callback) {
     error = error || body.errorMessage;
     if (error) {
       return callback(error);
+    } else if (+resp.statusCode >= 400) {
+      return callback(new Error(resp.statusMessage));
     } else {
       return callback(null, body);
     }
@@ -45,6 +49,8 @@ export const put = function (config, callback) {
     error = error || body.errorMessage;
     if (error) {
       return callback(error);
+    } else if (+resp.statusCode >= 400) {
+      return callback(new Error(resp.statusMessage));
     } else {
       return callback(null, body);
     }
