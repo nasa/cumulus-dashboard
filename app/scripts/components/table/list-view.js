@@ -16,7 +16,8 @@ var List = React.createClass({
       page: 1,
       sortIdx: 0,
       order: 'desc',
-      selectedRows: []
+      selected: [],
+      prefix: null
     };
   },
 
@@ -45,6 +46,10 @@ var List = React.createClass({
       this.list({}, newProps.query);
     }
 
+    if (newProps.list.prefix !== this.state.prefix) {
+      this.setState({ prefix: newProps.list.prefix }, () => this.list());
+    }
+
     if (newProps.list.error && this.cancelInterval) {
       this.cancelInterval();
       this.cancelInterval = null;
@@ -54,13 +59,13 @@ var List = React.createClass({
   queryNewPage: function (page) {
     this.setState({ page });
     this.list({ page });
-    this.updateSelection({selectedRows: []});
+    this.setState({selected: []});
   },
 
   queryNewSort: function (sortProps) {
     this.setState(sortProps);
     this.list({ order: sortProps.order, sort_by: this.getSortProp(sortProps.sortIdx) });
-    this.updateSelection({selectedRows: []});
+    this.setState({selected: []});
   },
 
   getSortProp: function (idx) {
@@ -68,29 +73,34 @@ var List = React.createClass({
   },
 
   selectAll: function (e) {
-    const areAllSelected = this.state.selectedRows.length === this.props.list.data.length;
-
-    if (areAllSelected) {
-      this.updateSelection({selectedRows: []});
+    const { data } = this.props.list;
+    if (!data.length) return;
+    const selected = this.state.selected.length === data.length;
+    if (selected) {
+      this.setState({ selected: [] });
     } else {
-      const allData = this.props.list.data;
-      let selectAll = allData.map(d => d[this.props.rowId]);
-      this.updateSelection({selectedRows: selectAll});
+      this.setState({ selected: data.map(d => d[this.props.rowId]) });
     }
   },
 
-  updateSelection: function (updateSelection) {
-    this.setState(updateSelection);
+  updateSelection: function (id) {
+    const { selected } = this.state;
+    if (selected.indexOf(id) === -1) {
+      this.setState({ selected: selected.concat([id]) });
+    } else {
+      this.setState({ selected: selected.filter(d => d === id) });
+    }
   },
 
   list: function (options, query) {
     options = options || {};
-    const { page, order, sort_by } = options;
+    const { page, order, sort_by, prefix } = options;
 
     // attach page, and sort properties using the current state
     if (undef(page)) { options.page = this.state.page; }
     if (undef(order)) { options.order = this.state.order; }
     if (undef(sort_by)) { options.sort_by = this.getSortProp(this.state.sortIdx); }
+    if (undef(prefix)) { options.prefix = this.state.prefix; }
 
     if (query) {
       options = Object.assign({}, options, query);
@@ -111,9 +121,9 @@ var List = React.createClass({
     const { tableHeader, tableRow, tableSortProps, isRemovable, rowId } = this.props;
     const { list } = this.props;
     const { count, limit } = list.meta;
-    const { page, sortIdx, order, selectedRows } = this.state;
+    const { page, sortIdx, order, selected } = this.state;
     const primaryIdx = 0;
-    const checked = this.state.selectedRows.length === this.props.list.data.length;
+    const checked = this.state.selected.length === this.props.list.data.length;
 
     return (
       <div>
@@ -140,9 +150,9 @@ var List = React.createClass({
           sortIdx={sortIdx}
           order={order}
           changeSortProps={this.queryNewSort}
-          changeSelectionProp={this.updateSelection}
+          onSelect={this.updateSelection}
           isRemovable={isRemovable}
-          selectedRows={selectedRows}
+          selectedRows={selected}
           rowId={rowId}
         />
 
