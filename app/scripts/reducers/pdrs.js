@@ -18,9 +18,7 @@ export const initialState = {
     data: [],
     meta: {}
   },
-  search: {
-    data: []
-  }
+  search: {}
 };
 
 export default function reducer (state = initialState, action) {
@@ -41,20 +39,25 @@ export default function reducer (state = initialState, action) {
       break;
 
     case SEARCH_PDRS:
-      set(state, ['search', 'data'], assignDate(data.results));
+      set(state, ['list', 'meta', 'query', 'prefix'], config.qs.prefix);
+      set(state, ['list', 'data'], assignDate(data.results));
       set(state, ['search', 'inflight'], false);
+      set(state, ['list', 'inflight'], false);
       break;
     case SEARCH_PDRS_INFLIGHT:
       set(state, ['search', 'inflight'], true);
+      set(state, ['list', 'inflight'], true);
       break;
     case SEARCH_PDRS_ERROR:
       set(state, ['search', 'error'], action.error);
       set(state, ['search', 'inflight'], false);
+      set(state, ['list', 'inflight'], false);
       break;
     case CLEAR_PDRS_SEARCH:
-      set(state, ['search', 'data'], []);
+      set(state, ['list', 'meta', 'query', 'prefix'], null);
       set(state, ['search', 'error'], null);
       set(state, ['search', 'inflight'], false);
+      set(state, ['list', 'inflight'], false);
       break;
   }
   return state;
