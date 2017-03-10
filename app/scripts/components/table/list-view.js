@@ -118,12 +118,11 @@ var List = React.createClass({
   },
 
   render: function () {
-    const { tableHeader, tableRow, tableSortProps, isRemovable, rowId } = this.props;
-    const { list } = this.props;
+    const { tableHeader, tableRow, tableSortProps, isRemovable, rowId, list } = this.props;
     const { count, limit } = list.meta;
     const { page, sortIdx, order, selected } = this.state;
     const primaryIdx = 0;
-    const checked = this.state.selected.length === this.props.list.data.length;
+    const checked = this.state.selected.length === list.data.length && list.data.length;
 
     return (
       <div>
