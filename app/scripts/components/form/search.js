@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import LoadingEllipsis from '../app/loading-ellipsis';
-import { document } from '../../utils/browser';
 
 const Search = React.createClass({
   displayName: 'Search',
@@ -20,25 +19,7 @@ const Search = React.createClass({
     };
   },
 
-  componentWillMount: function () {
-    const self = this;
-    function onWindowClick () {
-      setTimeout(() => {
-        self.cleanup();
-      }, 50);
-    }
-    if (document && typeof document.addEventListener === 'function') {
-      document.addEventListener('click', onWindowClick);
-      this.clearListener = () => document.removeEventListener('click', onWindowClick);
-    }
-  },
-
   componentWillUnmount: function () {
-    this.cleanup();
-    if (this.clearListener) { this.clearListener(); }
-  },
-
-  cleanup: function () {
     if (this.cancelDelay) { this.cancelDelay(); }
     const { dispatch, clear } = this.props;
     dispatch(clear());
