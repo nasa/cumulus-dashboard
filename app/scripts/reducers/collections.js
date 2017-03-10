@@ -81,7 +81,7 @@ export default function reducer (state = initialState, action) {
       break;
 
     case UPDATE_COLLECTION:
-      set(state, ['map', id, 'data'], data.Attributes);
+      set(state, ['map', id, 'data'], data);
       set(state, ['updated', id, 'status'], 'success');
       break;
     case UPDATE_COLLECTION_INFLIGHT:

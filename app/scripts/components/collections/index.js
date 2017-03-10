@@ -15,19 +15,19 @@ var Collections = React.createClass({
 
   render: function () {
     const { pathname } = this.props.location;
-    const showSidebar = pathname !== '/collections/add';
+    const existingCollection = pathname !== '/collections/add';
     return (
       <div className='page__collections'>
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge heading--shared-content'>Collections</h1>
-            <Link className='button button--large button--white button__addcollections button__arrow button__animation' to='/collections/add'>Add a Collection</Link>
+            {existingCollection ? <Link className='button button--large button--white button__addcollections button__arrow button__animation' to='/collections/add'>Add a Collection</Link> : null}
           </div>
         </div>
         <div className='page__content'>
           <div className='row wrapper__sidebar'>
-            {showSidebar ? <Sidebar currentPath={pathname} params={this.props.params} /> : null}
-            <div className={showSidebar ? 'page__content--shortened' : 'page__content'}>
+            {existingCollection ? <Sidebar currentPath={pathname} params={this.props.params} /> : null}
+            <div className={existingCollection ? 'page__content--shortened' : 'page__content'}>
               {this.props.children}
             </div>
           </div>

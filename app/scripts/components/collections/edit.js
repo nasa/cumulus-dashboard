@@ -2,10 +2,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { getCollection, updateCollection, PUT_COLLECTION } from '../../actions';
+import { getCollection, updateCollection } from '../../actions';
 import TextArea from '../form/text-area';
 import slugify from 'slugify';
-import moment from 'moment';
+import Loading from '../app/loading-indicator';
+import ErrorReport from '../errors/report';
 
 var EditCollection = React.createClass({
   displayName: 'EditCollection',
@@ -19,18 +20,14 @@ var EditCollection = React.createClass({
   getInitialState: function () {
     return {
       collection: '',
-      updatedAt: null,
+      collectionName: null,
       error: null
     };
   },
 
-  collection: function (collectionName) {
-    const record = get(this.props.collections, ['map', collectionName]);
-    return record;
-  },
-
   get: function (collectionName) {
-    if (!this.collection(collectionName)) {
+    const record = get(this.props.collections, ['map', collectionName]);
+    if (!record) {
       this.props.dispatch(getCollection(collectionName));
     }
   },
@@ -41,38 +38,33 @@ var EditCollection = React.createClass({
   },
 
   componentWillReceiveProps: function (newProps) {
-    const collectionName = this.props.params.collectionName;
-    const newCollectionName = newProps.params.collectionName;
+    const collectionName = newProps.params.collectionName;
+    if (this.state.collectionName === collectionName) { return; }
 
-    if (collectionName !== newCollectionName) {
-      // switch to a different collection, query it
-      return this.get(newCollectionName);
-    }
+    const record = get(this.props.collections.map, collectionName, {});
 
-    const record = get(this.props.collections, ['map', collectionName]);
-    if (!this.state.collection || (record.data && collectionName !== record.data.collectionName)) {
-      // we've queried a new collection and just received it
+    // record has hit an API error
+    if (record.error) {
+      this.setState({
+        collectionName,
+        collection: '',
+        error: record.error
+      });
+    } else if (record.data) {
+      // record has hit an API success; update the UI
       try {
         var collection = JSON.stringify(record.data, null, '\t');
-      } catch (e) {
-        this.setState({ error: JSON.stringify(e) });
+      } catch (error) {
+        return this.setState({ error, collectionName });
       }
-      this.setState({ collection, error: null });
-    }
-
-    // a collection edit was made and we've received the updated version
-    const updatedAt = this.state.updatedAt;
-    const newUpdatedAt = get(newProps.collections, ['map', collectionName, 'data', 'updatedAt']);
-    if (updatedAt && updatedAt !== newUpdatedAt) {
       this.setState({
-        collection: JSON.stringify(get(newProps.collections, ['map', collectionName, 'data']), null, '\t')
+        collectionName,
+        collection,
+        error: null
       });
-    }
-
-    // save the latest error message if relevant
-    var latestError = newProps.errors.errors[newProps.errors.errors.length - 1] || null;
-    if (latestError && latestError.meta.type === PUT_COLLECTION) {
-      this.setState({'error': latestError.error});
+    } else if (!record.inflight) {
+      // we've not yet fetched the record, request it
+      this.get(collectionName);
     }
   },
 
@@ -83,29 +75,20 @@ var EditCollection = React.createClass({
   onSubmit: function () {
     try {
       var json = JSON.parse(this.state.collection);
-
-      this.setState({
-        'updatedAt': json.updatedAt,
-        'error': null
-      });
-
-      json.updatedAt = moment().unix();
-      json.changedBy = 'Cumulus Dashboard';
-
-      this.props.dispatch(updateCollection(json));
     } catch (e) {
-      this.setState({'error': 'Syntax error in JSON'});
+      return this.setState({ error: 'Syntax error in JSON' });
     }
+    this.setState({ error: null });
+    json.updatedAt = new Date().getTime();
+    json.changedBy = 'Cumulus Dashboard';
+    this.props.dispatch(updateCollection(json));
   },
 
   render: function () {
     const collectionName = this.props.params.collectionName;
-
-    const record = get(this.props.collections, ['map', collectionName]);
-    if (!record) {
-      return <div></div>;
-    }
-
+    const record = get(this.props.collections.map, collectionName, {});
+    const meta = get(this.props.collections.updated, collectionName, {});
+    const error = this.state.error || record.error || meta.error;
     const label = `Edit ${collectionName}`;
     const id = `edit-${slugify(collectionName)}`;
 
@@ -123,19 +106,19 @@ var EditCollection = React.createClass({
               mode={'json'}
               onChange={this.onChange}
               minLines={1}
-              maxLines={200}
+              maxLines={30}
             />
-
-          <br />
-
-          <input
-            type='submit'
-            value='Submit'
-            onClick={this.onSubmit}
-            className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
-          />
-
+            <br />
+            <input
+              type='submit'
+              value='Submit'
+              onClick={this.onSubmit}
+              className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
+            />
           </form>
+          {record.inflight || meta.status === 'inflight' ? <Loading /> : null}
+          {error ? <ErrorReport report={error} /> : null}
+          {meta.status === 'success' ? <p>Success!</p> : null}
         </section>
       </div>
     );
