@@ -3,12 +3,24 @@ import url from 'url';
 import request from 'request';
 import _config from '../config';
 import log from '../utils/log';
+import { get as getToken } from '../utils/auth';
 const root = _config.apiRoot;
 
+function setToken (config) {
+  let token = getToken();
+  if (token) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = 'Basic ' + token;
+  }
+  return config;
+}
+
 export const get = function (config, callback) {
-  request(config, (error, resp, body) => {
+  request.get(setToken(config), (error, resp, body) => {
     if (error) {
       return callback(error);
+    } else if (+resp.statusCode >= 400) {
+      return callback(new Error(resp.statusMessage));
     }
     try {
       var data = JSON.parse(body);
@@ -20,10 +32,12 @@ export const get = function (config, callback) {
 };
 
 export const post = function (config, callback) {
-  request.post(config, (error, resp, body) => {
+  request.post(setToken(config), (error, resp, body) => {
     error = error || body.errorMessage;
     if (error) {
       return callback(error);
+    } else if (+resp.statusCode >= 400) {
+      return callback(new Error(resp.statusMessage));
     } else {
       return callback(null, body);
     }
@@ -31,10 +45,12 @@ export const post = function (config, callback) {
 };
 
 export const put = function (config, callback) {
-  request.put(config, (error, resp, body) => {
+  request.put(setToken(config), (error, resp, body) => {
     error = error || body.errorMessage;
     if (error) {
       return callback(error);
+    } else if (+resp.statusCode >= 400) {
+      return callback(new Error(resp.statusMessage));
     } else {
       return callback(null, body);
     }
@@ -57,6 +73,9 @@ export const wrapRequest = function (id, query, params, type, body) {
     config.body = body;
     config.json = true;
   }
+
+  config.headers = config.headers || {};
+  config.headers['Content-Type'] = 'application/json';
 
   return function (dispatch) {
     const inflightType = type + '_INFLIGHT';

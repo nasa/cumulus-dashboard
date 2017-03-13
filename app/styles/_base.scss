@@ -132,6 +132,9 @@ a:active {
         color: #fff;
       }
     }
+    &.rightalign {
+      float: right;
+    }
   }
 }
 
@@ -173,7 +176,7 @@ a:active {
     color: #fff;
     font-weight: $base-font-bold;
     letter-spacing: .2px;
-  } 
+  }
   li {
     margin-bottom: 0.75em;
   }
@@ -347,3 +350,58 @@ a:active {
     margin-bottom: 1em;
   }
 }
+
+/* modal */
+.modal__cover {
+  background-color: #999;
+  opacity: 0.85;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  opacity: 0.85;
+  z-index: 999;
+
+  &:after {
+    -moz-box-shadow: inset 0 0 10em #000;
+    -webkit-box-shadow: inset 0 0 10em #000;
+    box-shadow: inset 0 0 10em #000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    content: "";
+  }
+}
+
+.login {
+  margin-top: 20%;
+  position: fixed;
+  text-align: center;
+  top: 100%;
+  transition: top 0.2s ease-in-out;
+  width: 100%;
+  z-index: 1000;
+}
+
+.login__onscreen {
+  top: 0;
+}
+
+.modal {
+  border-radius: 5px;
+  display: inline-block;
+  background-color: $background-white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+  padding: 1em;
+  width: 300px;
+}
+
+.modal__internal {
+  text-align: center;
+  position: relative;
+}
+

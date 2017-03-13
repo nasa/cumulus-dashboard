@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import {
   LOGS,
+  LOGS_ERROR,
   LOGS_INFLIGHT
 } from '../actions';
 
@@ -37,8 +38,11 @@ export default function reducer (state = initialState, action) {
       set(nextState, 'inflight', true);
       set(nextState, 'query', query);
       break;
+    case LOGS_ERROR:
+      set(nextState, 'inflight', false);
+      set(nextState, 'error', action.error);
   }
-  return nextState || state;
+  return nextState;
 }
 
 function processLog (d) {

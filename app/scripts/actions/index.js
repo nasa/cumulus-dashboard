@@ -1,12 +1,16 @@
 'use strict';
 import url from 'url';
 import { get, post, put, wrapRequest } from './helpers';
+import { set as setToken } from '../utils/auth';
 import _config from '../config';
 
 const root = _config.apiRoot;
 const { pageLimit, searchPageLimit } = _config;
 
-export const AUTHENTICATED = 'AUTHENTICATED';
+export const LOGOUT = 'LOGOUT';
+export const LOGIN = 'LOGIN';
+export const LOGIN_INFLIGHT = 'LOGIN_INFLIGHT';
+export const LOGIN_ERROR = 'LOGIN_ERROR';
 
 export const COLLECTION = 'COLLECTION';
 export const COLLECTION_INFLIGHT = 'COLLECTION_INFLIGHT';
@@ -79,11 +83,11 @@ export const createCollection = (payload) => wrapRequest(
   payload.collectionName, post, 'collections', NEW_COLLECTION, payload);
 
 export const updateCollection = (payload) => wrapRequest(
-  payload.collectionName, put, 'collections', UPDATE_COLLECTION, payload);
+  payload.collectionName, put, `collections/${payload.collectionName}`, UPDATE_COLLECTION, payload);
 
 export const searchCollections = (query) => wrapRequest(null, get, {
   url: url.resolve(root, 'collections'),
-  qs: Object.assign({ limit: searchPageLimit, fields: 'collectionName' }, query)
+  qs: Object.assign({ limit: searchPageLimit }, query)
 }, SEARCH_COLLECTIONS);
 
 export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH });
@@ -103,7 +107,7 @@ export const reprocessGranule = (granuleId) => wrapRequest(
 
 export const searchGranules = (query) => wrapRequest(null, get, {
   url: url.resolve(root, 'granules'),
-  qs: Object.assign({ limit: searchPageLimit, fields: 'granuleId' }, query)
+  qs: Object.assign({ limit: searchPageLimit }, query)
 }, SEARCH_GRANULES);
 
 export const clearGranuleSearch = () => ({ type: CLEAR_GRANULES_SEARCH });
@@ -117,7 +121,7 @@ export const listPdrs = (options) => wrapRequest(null, get, {
 
 export const searchPdrs = (query) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),
-  qs: Object.assign({ limit: searchPageLimit, fields: 'pdrName' }, query)
+  qs: Object.assign({ limit: searchPageLimit }, query)
 }, SEARCH_PDRS);
 
 export const clearPdrSearch = () => ({ type: CLEAR_PDRS_SEARCH });
@@ -126,3 +130,19 @@ export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),
   qs: Object.assign({ limit: 50 }, options)
 }, LOGS);
+
+export const logout = () => {
+  setToken('');
+  return { type: LOGOUT };
+};
+
+export const login = (token) => {
+  // dummy request to test the auth token
+  return wrapRequest('auth', get, {
+    url: url.resolve(root, 'granules'),
+    qs: { limit: 1, fields: 'granuleId' },
+    headers: {
+      Authorization: 'Basic ' + token
+    }
+  }, LOGIN);
+};

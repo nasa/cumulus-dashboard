@@ -15,6 +15,7 @@ label {
   input[type='text'], textarea {
     margin-bottom: 2em;
     width: 95.5%;
+    padding: 0.3em;
   }
 }
 
@@ -23,7 +24,7 @@ label {
   border-radius: .5em;
   position: relative;
   &:after {
-    background-image: url('/graphics/layout/chevron-down.svg');
+    background-image: url(#{$graphics}/layout/chevron-down.svg);
     content: '';
     width: 10px;
     height: 10px;
@@ -62,7 +63,7 @@ select {
 .search__icon {
   &:after {
     position: absolute;
-    background-image: url('/graphics/layout/magnifier-left.svg');
+    background-image: url(#{$graphics}/layout/magnifier-left.svg);
     content: '';
     width: 14px;
     height: 14px;
@@ -137,6 +138,7 @@ select {
 .form-group__element--left {
   margin-right: 1em;
   margin-top: 2em;
+  margin-left: 1em;
 }
 
 .ace_editor {

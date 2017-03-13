@@ -24,11 +24,10 @@ import {
 export const initialState = {
   list: {
     data: [],
-    meta: {}
+    meta: {},
+    prefix: null
   },
-  search: {
-    data: []
-  },
+  search: {},
   map: {},
   meta: {},
   reprocessed: {}
@@ -36,7 +35,7 @@ export const initialState = {
 
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
-  const { id, data } = action;
+  const { id, data, config } = action;
 
   switch (action.type) {
     case GRANULE:
@@ -76,10 +75,11 @@ export default function reducer (state = initialState, action) {
       break;
 
     case SEARCH_GRANULES:
-      set(state, ['search', 'data'], data.results);
+      set(state, ['list', 'data'], data.results);
       set(state, ['search', 'inflight'], false);
       break;
     case SEARCH_GRANULES_INFLIGHT:
+      set(state, ['list', 'prefix'], config.qs.prefix);
       set(state, ['search', 'inflight'], true);
       break;
     case SEARCH_GRANULES_ERROR:
@@ -87,7 +87,7 @@ export default function reducer (state = initialState, action) {
       set(state, ['search', 'inflight'], false);
       break;
     case CLEAR_GRANULES_SEARCH:
-      set(state, ['search', 'data'], []);
+      set(state, ['list', 'prefix'], null);
       set(state, ['search', 'error'], null);
       set(state, ['search', 'inflight'], false);
       break;

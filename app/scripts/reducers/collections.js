@@ -28,11 +28,10 @@ import {
 export const initialState = {
   list: {
     data: [],
-    meta: {}
+    meta: {},
+    prefix: null
   },
-  search: {
-    data: []
-  },
+  search: {},
   map: {},
   meta: {},
   created: {},
@@ -41,7 +40,7 @@ export const initialState = {
 
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
-  const { id, data } = action;
+  const { id, data, config } = action;
 
   switch (action.type) {
     case COLLECTION:
@@ -81,7 +80,7 @@ export default function reducer (state = initialState, action) {
       break;
 
     case UPDATE_COLLECTION:
-      set(state, ['map', id, 'data'], data.Attributes);
+      set(state, ['map', id, 'data'], data);
       set(state, ['updated', id, 'status'], 'success');
       break;
     case UPDATE_COLLECTION_INFLIGHT:
@@ -93,10 +92,11 @@ export default function reducer (state = initialState, action) {
       break;
 
     case SEARCH_COLLECTIONS:
-      set(state, ['search', 'data'], data.results);
+      set(state, ['list', 'data'], data.results);
       set(state, ['search', 'inflight'], false);
       break;
     case SEARCH_COLLECTIONS_INFLIGHT:
+      set(state, ['list', 'prefix'], config.qs.prefix);
       set(state, ['search', 'inflight'], true);
       break;
     case SEARCH_COLLECTIONS_ERROR:
@@ -104,7 +104,7 @@ export default function reducer (state = initialState, action) {
       set(state, ['search', 'inflight'], false);
       break;
     case CLEAR_COLLECTIONS_SEARCH:
-      set(state, ['search', 'data'], []);
+      set(state, ['list', 'prefix'], null);
       set(state, ['search', 'error'], null);
       set(state, ['search', 'inflight'], false);
       break;

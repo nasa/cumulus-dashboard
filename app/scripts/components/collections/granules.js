@@ -51,7 +51,7 @@ var CollectionGranules = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
-            isRemovable={true}
+            rowId={'granuleId'}
           />
         </section>
 
