@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { interval, getGranule, reprocessGranule } from '../../actions';
 import { get } from 'object-path';
-import { fullDate, lastUpdated } from '../../utils/format';
+import { fullDate, lastUpdated, nullValue } from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
 import Ellipsis from '../app/loading-ellipsis';
@@ -19,11 +19,12 @@ const tableHeader = [
   'Access'
 ];
 
+const link = 'Link';
 const tableRow = [
-  (d) => d.name,
-  (d) => (<a href={d.sipFile}>Link</a>),
-  (d) => (<a href={d.stagingFile}>Link</a>),
-  (d) => (<a href={d.archivedFile}>Link</a>),
+  (d) => d.name || '(No name)',
+  (d) => (<a href={d.sipFile}>{d.sipFile ? link : nullValue}</a>),
+  (d) => (<a href={d.stagingFile}>{d.stagingFile ? link : nullValue}</a>),
+  (d) => (<a href={d.archivedFile}>{d.archivedFile ? link : nullValue}</a>),
   (d) => d.access
 ];
 
@@ -119,8 +120,11 @@ var GranuleOverview = React.createClass({
 
     const granule = record.data;
     const { reprocessing } = this.state;
+
     const files = [];
-    for (let key in granule.files) { files.push(granule.files[key]); }
+    if (granule.files) {
+      for (let key in granule.files) { files.push(granule.files[key]); }
+    }
     const logsQuery = { granuleId };
     return (
       <div className='page__component'>
