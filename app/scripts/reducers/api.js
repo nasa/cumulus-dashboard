@@ -10,7 +10,7 @@ import {
 } from '../actions';
 
 export const initialState = {
-  authenticated: getToken(),
+  authenticated: !!getToken(),
   inflight: false,
   error: null
 };
