@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import Ace from 'react-ace';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
+import omit from 'lodash.omit';
 import { getCollection } from '../../actions';
 import { fullDate, lastUpdated } from '../../utils/format';
 import config from '../../config';
@@ -13,7 +14,7 @@ var CollectionIngest = React.createClass({
 
   getInitialState: function () {
     return {
-      view: 'list'
+      view: 'json'
     };
   },
 
@@ -39,6 +40,25 @@ var CollectionIngest = React.createClass({
     this.props.dispatch(getCollection(collectionName));
   },
 
+  renderReadOnlyJson: function (name, data) {
+    return (
+      <Ace
+        mode='json'
+        theme={config.editorTheme}
+        name={`collection-read-only-${name}`}
+        readOnly={true}
+        value={JSON.stringify(data, null, '\t')}
+
+        width='auto'
+        tabSize={config.tabSize}
+        showPrintMargin={false}
+        minLines={1}
+        maxLines={12}
+        wrapEnabled={true}
+      />
+    );
+  },
+
   render: function () {
     const collectionName = this.props.params.collectionName;
     const record = get(this.props.collections, ['map', collectionName]);
@@ -57,8 +77,10 @@ var CollectionIngest = React.createClass({
           {lastUpdated(data.queriedAt)}
         </section>
 
-        <button onClick={() => this.state.view !== 'list' && this.setState({ view: 'list' })}>List View</button>
-        <button onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}>JSON View</button>
+        <button className={this.state.view === 'list' ? 'button--disabled' : ''}
+          onClick={() => this.state.view !== 'list' && this.setState({ view: 'list' })}>List View</button>
+        <button className={this.state.view === 'json' ? 'button--disabled' : ''}
+          onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}>JSON View</button>
 
         <div>
           {this.state.view === 'list' ? this.renderList(data) : this.renderJson(data)}
@@ -136,7 +158,6 @@ var CollectionIngest = React.createClass({
           {get(recipe, 'processStep.config.outputFiles', []).map((file, i) => <p key={i}>{file}</p>)}
 
         </div>
-
       </div>
     );
   },
@@ -144,21 +165,14 @@ var CollectionIngest = React.createClass({
   renderJson: function (data) {
     return (
       <div>
-        <Ace
-          mode='json'
-          theme={config.editorTheme}
-          name='collection-read-only'
-          readOnly={true}
-          value={JSON.stringify(data, null, '\t')}
-
-          width='auto'
-          tabSize={config.tabSize}
-          showPrintMargin={false}
-          minLines={1}
-          maxLines={200}
-          wrapEnabled={true}
-        />
-
+        <h1>{data.collectionName}</h1>
+        {this.renderReadOnlyJson('recipe', omit(data, ['recipe', 'granuleDefinition', 'granulesStatus']))}
+        <h1>Recipe</h1>
+        {this.renderReadOnlyJson('recipe', data.recipe)}
+        <h1>Granule Definition</h1>
+        {this.renderReadOnlyJson('granuleDefinition', data.granuleDefinition)}
+        <h1>Granule Status</h1>
+        {this.renderReadOnlyJson('granuleStatus', data.granulesStatus)}
       </div>
     );
   }
