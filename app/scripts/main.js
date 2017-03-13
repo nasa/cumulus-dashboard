@@ -39,7 +39,7 @@ import CollectionLogs from './components/collections/logs';
 import Granules from './components/granules';
 import ListGranules from './components/granules/all-granules';
 import GranuleOverview from './components/granules/granule';
-import GranuleRecipe from './components/granules/granule-recipe';
+import GranuleRecipeIngest from './components/granules/recipe-ingest';
 import MarkedDeletion from './components/granules/marked-deletion';
 import Restricted from './components/granules/restricted';
 
@@ -73,7 +73,7 @@ render((
           <IndexRoute component={ListGranules} />
           <Route path='pdr/:pdrName' component={ListGranules} />
           <Route path='granule/:granuleId/overview' component={GranuleOverview} />
-          <Route path='granule/:granuleId/recipe-ingest' component={GranuleRecipe} />
+          <Route path='granule/:granuleId/recipe-ingest' component={GranuleRecipeIngest} />
           <Route path='deletion' component={MarkedDeletion} />
           <Route path='restricted' component={Restricted} />
         </Route>
