@@ -71,20 +71,6 @@ export const interval = function (action, wait, immediate) {
   return () => clearInterval(intervalId);
 };
 
-export const timedInterval = function (action, interval, immediate, seconds, setSeconds) {
-  if (immediate) { action(); }
-  const intervalId = setInterval(() => {
-    setSeconds(seconds);
-    if (seconds === 0) {
-      seconds = interval / 1000;
-      action();
-    } else {
-      seconds = seconds - 1;
-    }
-  }, 1000);
-  return () => clearInterval(intervalId);
-};
-
 export const getCollection = (collectionName) => wrapRequest(
   collectionName, get, `collections?collectionName=${collectionName}`, COLLECTION);
 

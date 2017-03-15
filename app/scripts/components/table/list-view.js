@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import { timedInterval } from '../../actions';
 import SortableTable from './sortable';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
@@ -94,10 +93,6 @@ var List = React.createClass({
     }
   },
 
-  setSeconds: function (seconds) {
-    this.setState({ seconds: seconds });
-  },
-
   list: function (options, query) {
     options = options || {};
     const { page, order, sort_by, prefix } = options;
@@ -120,7 +115,23 @@ var List = React.createClass({
     // stop the currently running auto-query
     if (this.cancelInterval) { this.cancelInterval(); }
     const { dispatch, action } = this.props;
-    this.cancelInterval = timedInterval(() => dispatch(action(options)), updateInterval, true, updateInterval / 1000, this.setSeconds);
+    this.cancelInterval = this.timedInterval(() => dispatch(action(options)), true, updateInterval / 1000);
+  },
+
+  timedInterval: function (action, immediate, seconds) {
+    if (immediate) {
+      action();
+    }
+    const intervalId = setInterval(() => {
+      this.setState({ seconds: seconds });
+      if (seconds === 0) {
+        seconds = updateInterval / 1000;
+        action();
+      } else {
+        --seconds;
+      }
+    }, 1000);
+    return () => clearInterval(intervalId);
   },
 
   toggleAutoFetch: function () {
