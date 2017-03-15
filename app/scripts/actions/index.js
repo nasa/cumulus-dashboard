@@ -65,6 +65,10 @@ export const LOGS = 'LOGS';
 export const LOGS_INFLIGHT = 'LOGS_INFLIGHT';
 export const LOGS_ERROR = 'LOGS_ERROR';
 
+export const SCHEMA = 'SCHEMA';
+export const SCHEMA_INFLIGHT = 'SCHEMA_INFLIGHT';
+export const SCHEMA_ERROR = 'SCHEMA_ERROR';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -146,3 +150,5 @@ export const login = (token) => {
     }
   }, LOGIN);
 };
+
+export const getSchema = (type) => wrapRequest(null, get, `schemas/${type}`, SCHEMA);
