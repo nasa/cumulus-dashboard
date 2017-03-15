@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { pickBy } from 'lodash';
 import { interval } from '../../actions';
 import SortableTable from './sortable';
 import Pagination from '../app/pagination';
@@ -17,7 +18,7 @@ var List = React.createClass({
       sortIdx: 0,
       order: 'desc',
       selected: [],
-      prefix: null
+      params: {}
     };
   },
 
@@ -46,8 +47,9 @@ var List = React.createClass({
       this.list({}, newProps.query);
     }
 
-    if (newProps.list.prefix !== this.state.prefix) {
-      this.setState({ prefix: newProps.list.prefix }, () => this.list());
+    const nonNullParams = pickBy(newProps.list.params, v => (!undef(v) && v !== null));
+    if (JSON.stringify(nonNullParams) !== JSON.stringify(this.state.params)) {
+      this.setState({ params: nonNullParams }, () => this.list());
     }
 
     if (newProps.list.error && this.cancelInterval) {
@@ -94,13 +96,14 @@ var List = React.createClass({
 
   list: function (options, query) {
     options = options || {};
-    const { page, order, sort_by, prefix } = options;
+    const { page, order, sort_by, params } = options;
 
     // attach page, and sort properties using the current state
     if (undef(page)) { options.page = this.state.page; }
     if (undef(order)) { options.order = this.state.order; }
     if (undef(sort_by)) { options.sort_by = this.getSortProp(this.state.sortIdx); }
-    if (undef(prefix)) { options.prefix = this.state.prefix; }
+
+    if (undef(params)) { Object.assign(options, this.state.params); }
 
     if (query) {
       options = Object.assign({}, options, query);

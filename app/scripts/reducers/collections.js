@@ -20,18 +20,18 @@ import {
   UPDATE_COLLECTION_ERROR,
 
   SEARCH_COLLECTIONS,
-  SEARCH_COLLECTIONS_INFLIGHT,
-  SEARCH_COLLECTIONS_ERROR,
-  CLEAR_COLLECTIONS_SEARCH
+  CLEAR_COLLECTIONS_SEARCH,
+
+  FILTER_COLLECTIONS,
+  CLEAR_COLLECTIONS_FILTER
 } from '../actions';
 
 export const initialState = {
   list: {
     data: [],
     meta: {},
-    prefix: null
+    params: {}
   },
-  search: {},
   map: {},
   meta: {},
   created: {},
@@ -40,7 +40,7 @@ export const initialState = {
 
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
-  const { id, data, config } = action;
+  const { id, data } = action;
 
   switch (action.type) {
     case COLLECTION:
@@ -92,21 +92,17 @@ export default function reducer (state = initialState, action) {
       break;
 
     case SEARCH_COLLECTIONS:
-      set(state, ['list', 'data'], data.results);
-      set(state, ['search', 'inflight'], false);
-      break;
-    case SEARCH_COLLECTIONS_INFLIGHT:
-      set(state, ['list', 'prefix'], config.qs.prefix);
-      set(state, ['search', 'inflight'], true);
-      break;
-    case SEARCH_COLLECTIONS_ERROR:
-      set(state, ['search', 'error'], action.error);
-      set(state, ['search', 'inflight'], false);
+      set(state, ['list', 'params', 'prefix'], action.prefix);
       break;
     case CLEAR_COLLECTIONS_SEARCH:
-      set(state, ['list', 'prefix'], null);
-      set(state, ['search', 'error'], null);
-      set(state, ['search', 'inflight'], false);
+      set(state, ['list', 'params', 'prefix'], null);
+      break;
+
+    case FILTER_COLLECTIONS:
+      set(state, ['list', 'params', action.param.key], action.param.value);
+      break;
+    case CLEAR_COLLECTIONS_FILTER:
+      set(state, ['list', 'params', action.paramKey], null);
       break;
   }
   return state;

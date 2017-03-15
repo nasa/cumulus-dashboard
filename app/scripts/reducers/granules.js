@@ -16,18 +16,18 @@ import {
   GRANULE_REPROCESS_ERROR,
 
   SEARCH_GRANULES,
-  SEARCH_GRANULES_INFLIGHT,
-  SEARCH_GRANULES_ERROR,
-  CLEAR_GRANULES_SEARCH
+  CLEAR_GRANULES_SEARCH,
+
+  FILTER_GRANULES,
+  CLEAR_GRANULES_FILTER
 } from '../actions';
 
 export const initialState = {
   list: {
     data: [],
     meta: {},
-    prefix: null
+    params: {}
   },
-  search: {},
   map: {},
   meta: {},
   reprocessed: {}
@@ -35,7 +35,7 @@ export const initialState = {
 
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
-  const { id, data, config } = action;
+  const { id, data } = action;
 
   switch (action.type) {
     case GRANULE:
@@ -75,21 +75,17 @@ export default function reducer (state = initialState, action) {
       break;
 
     case SEARCH_GRANULES:
-      set(state, ['list', 'data'], data.results);
-      set(state, ['search', 'inflight'], false);
-      break;
-    case SEARCH_GRANULES_INFLIGHT:
-      set(state, ['list', 'prefix'], config.qs.prefix);
-      set(state, ['search', 'inflight'], true);
-      break;
-    case SEARCH_GRANULES_ERROR:
-      set(state, ['search', 'error'], action.error);
-      set(state, ['search', 'inflight'], false);
+      set(state, ['list', 'params', 'prefix'], action.prefix);
       break;
     case CLEAR_GRANULES_SEARCH:
-      set(state, ['list', 'prefix'], null);
-      set(state, ['search', 'error'], null);
-      set(state, ['search', 'inflight'], false);
+      set(state, ['list', 'params', 'prefix'], null);
+      break;
+
+    case FILTER_GRANULES:
+      set(state, ['list', 'params', action.param.key], action.param.value);
+      break;
+    case CLEAR_GRANULES_FILTER:
+      set(state, ['list', 'params', action.paramKey], null);
       break;
   }
   return state;
