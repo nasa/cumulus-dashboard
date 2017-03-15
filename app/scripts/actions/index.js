@@ -61,6 +61,9 @@ export const PDRS_ERROR = 'PDRS_ERROR';
 export const SEARCH_PDRS = 'SEARCH_PDRS';
 export const CLEAR_PDRS_SEARCH = 'CLEAR_PDRS_SEARCH';
 
+export const FILTER_PDRS = 'FILTER_PDRS';
+export const CLEAR_PDRS_FILTER = 'CLEAR_PDRS_FILTER';
+
 export const LOGS = 'LOGS';
 export const LOGS_INFLIGHT = 'LOGS_INFLIGHT';
 export const LOGS_ERROR = 'LOGS_ERROR';
@@ -124,6 +127,10 @@ export const listPdrs = (options) => wrapRequest(null, get, {
 export const searchPdrs = (prefix) => ({ type: SEARCH_PDRS, prefix: prefix });
 
 export const clearPdrsSearch = () => ({ type: CLEAR_PDRS_SEARCH });
+
+export const filterPdrs = (param) => ({ type: FILTER_PDRS, param: param });
+
+export const clearPdrsFilter = (paramKey) => ({ type: CLEAR_PDRS_FILTER, paramKey: paramKey });
 
 export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),

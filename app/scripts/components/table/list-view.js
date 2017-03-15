@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import { pickBy } from 'lodash';
+import pickBy from 'lodash.pickBy';
 import { interval } from '../../actions';
 import SortableTable from './sortable';
 import Pagination from '../app/pagination';

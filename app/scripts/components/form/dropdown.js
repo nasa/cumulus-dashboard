@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import { map } from 'lodash';
+import map from 'lodash.map';
 
 const Dropdown = React.createClass({
   displayName: 'Dropdown',
@@ -35,11 +35,13 @@ const Dropdown = React.createClass({
   },
 
   render: function () {
-    let { options, format, label, paramKey } = this.props;
+    // `options` are expected in the following format:
+    // {displayValue1: optionElementValue1, displayValue2, optionElementValue2, ...}
+    const { options, format, label, paramKey } = this.props;
 
     // Make sure this form ID is unique!
     // If needed in future, could add MD5 hash of stringified options,
-    // or a UUID such as `hat()`
+    // or a UUID library such as `hat()`
     const formID = `form-${label}-${paramKey}`;
 
     return (
