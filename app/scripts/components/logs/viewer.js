@@ -59,8 +59,8 @@ var LogViewer = React.createClass({
 
     let isFirstPull = true;
     function querySinceLast () {
-      // on first pull, get the last 24 hours
-      const duration = isFirstPull ? 1000 * 60 * 60 * 24 : logsUpdateInterval;
+      // on first pull, get the last 48 hours
+      const duration = isFirstPull ? 2 * 1000 * 60 * 60 * 24 : logsUpdateInterval;
       const from = moment().subtract(duration, 'milliseconds').format();
       isFirstPull = false;
       return dispatch(getLogs(Object.assign({ date_from: from }, query)));
