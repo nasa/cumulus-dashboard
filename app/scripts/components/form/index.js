@@ -72,7 +72,7 @@ export const Form = React.createClass({
 
   onCancel: function (e) {
     e.preventDefault();
-    if (this.props.cancel) { this.props.cancel(); }
+    this.props.cancel();
   },
 
   onSubmit: function (e) {
@@ -152,23 +152,28 @@ export const Form = React.createClass({
             return <div className='form__item' key={inputId}>{elem}</div>;
           })}
         </ul>
-        <span className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
-          <input
-            type='submit'
-            value={this.props.inflight ? 'Loading...' : 'Submit'}
-            onClick={this.onSubmit}
-            readOnly={true}
-          />
-        </span>
 
-        <span className='button button--secondary form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__cancel'>
-          <input
-            type='cancel'
-            value='Cancel'
-            onClick={this.onCancel}
-            readOnly={true}
-          />
-        </span>
+        {this.props.submit ? (
+          <span className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
+            <input
+              type='submit'
+              value={this.props.inflight ? 'Loading...' : 'Submit'}
+              onClick={this.onSubmit}
+              readOnly={true}
+            />
+          </span>
+        ) : null}
+
+        {this.props.cancel ? (
+          <span className='button button--secondary form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__cancel'>
+            <input
+              type='cancel'
+              value='Cancel'
+              onClick={this.onCancel}
+              readOnly={true}
+            />
+          </span>
+        ) : null}
       </form>
     );
   }
