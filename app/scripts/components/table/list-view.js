@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import { interval } from '../../actions';
+import { timedInterval } from '../../actions';
 import SortableTable from './sortable';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
@@ -17,7 +17,9 @@ var List = React.createClass({
       sortIdx: 0,
       order: 'desc',
       selected: [],
-      prefix: null
+      prefix: null,
+      seconds: updateInterval / 1000,
+      isAutoRunning: true
     };
   },
 
@@ -92,6 +94,10 @@ var List = React.createClass({
     }
   },
 
+  setSeconds: function (seconds) {
+    this.setState({ seconds: seconds });
+  },
+
   list: function (options, query) {
     options = options || {};
     const { page, order, sort_by, prefix } = options;
@@ -114,13 +120,23 @@ var List = React.createClass({
     // stop the currently running auto-query
     if (this.cancelInterval) { this.cancelInterval(); }
     const { dispatch, action } = this.props;
-    this.cancelInterval = interval(() => dispatch(action(options)), updateInterval, true);
+    this.cancelInterval = timedInterval(() => dispatch(action(options)), updateInterval, true, updateInterval / 1000, this.setSeconds);
+  },
+
+  toggleAutoFetch: function () {
+    if (this.state.isAutoRunning) {
+      if (this.cancelInterval) { this.cancelInterval(); }
+      this.setState({ seconds: -1, isAutoRunning: false });
+    } else {
+      this.setState({ seconds: updateInterval / 1000, isAutoRunning: true });
+      this.list();
+    }
   },
 
   render: function () {
     const { tableHeader, tableRow, tableSortProps, isRemovable, rowId, list } = this.props;
     const { count, limit } = list.meta;
-    const { page, sortIdx, order, selected } = this.state;
+    const { page, sortIdx, order, selected, seconds } = this.state;
     const primaryIdx = 0;
     const checked = this.state.selected.length === list.data.length && list.data.length;
 
@@ -134,6 +150,7 @@ var List = React.createClass({
             </label>
             <button className='button button--small form-group__element'>Remove From CMR</button>
             <button className='button button--small form-group__element'>Reprocess</button>
+            <button onClick={this.toggleAutoFetch}>{seconds === -1 ? '-' : seconds}</button>
           </div>
         ) : null}
 
