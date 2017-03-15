@@ -126,6 +126,12 @@ select {
   }
 }
 
+.form__element__updateToggle {
+  float: right;
+  cursor: pointer;
+  width: 150px;
+}
+
 .form-group__element--right {
   float: right;
   margin-left: 1em;

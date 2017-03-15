@@ -115,13 +115,11 @@ var List = React.createClass({
     // stop the currently running auto-query
     if (this.cancelInterval) { this.cancelInterval(); }
     const { dispatch, action } = this.props;
-    this.cancelInterval = this.timedInterval(() => dispatch(action(options)), true, updateInterval / 1000);
+    this.cancelInterval = this.timedInterval(() => dispatch(action(options)), updateInterval / 1000);
   },
 
-  timedInterval: function (action, immediate, seconds) {
-    if (immediate) {
-      action();
-    }
+  timedInterval: function (action, seconds) {
+    action();
     const intervalId = setInterval(() => {
       this.setState({ seconds: seconds });
       if (seconds === 0) {
@@ -161,7 +159,14 @@ var List = React.createClass({
             </label>
             <button className='button button--small form-group__element'>Remove From CMR</button>
             <button className='button button--small form-group__element'>Reprocess</button>
-            <button onClick={this.toggleAutoFetch}>{seconds === -1 ? '-' : seconds}</button>
+            <div className='form__element__updateToggle' onClick={this.toggleAutoFetch}>
+              <div className='form-group__updating'>
+                Next update in: {seconds === -1 ? '-' : seconds }
+              </div>
+              <i className='metadata__updated'>
+                {seconds === -1 ? 'Restart automatic update' : 'Stop automatic updates'}
+              </i>
+            </div>
           </div>
         ) : null}
 
