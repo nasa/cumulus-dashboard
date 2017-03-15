@@ -2,11 +2,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { getCollection, updateCollection } from '../../actions';
-import TextArea from '../form/text-area';
-import slugify from 'slugify';
+import { getCollection, updateCollection, getSchema } from '../../actions';
 import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
+import Schema from '../form/schema';
+
+const SCHEMA_KEY = 'collection';
 
 var EditCollection = React.createClass({
   displayName: 'EditCollection',
@@ -14,6 +15,7 @@ var EditCollection = React.createClass({
   propTypes: {
     params: React.PropTypes.object,
     collections: React.PropTypes.object,
+    schema: React.PropTypes.object,
     dispatch: React.PropTypes.func
   },
 
@@ -34,7 +36,10 @@ var EditCollection = React.createClass({
 
   componentWillMount: function () {
     const collectionName = this.props.params.collectionName;
-    this.get(collectionName);
+    if (collectionName) {
+      this.get(collectionName);
+    }
+    this.props.dispatch(getSchema(SCHEMA_KEY));
   },
 
   componentWillReceiveProps: function (newProps) {
@@ -89,33 +94,12 @@ var EditCollection = React.createClass({
     const record = get(this.props.collections.map, collectionName, {});
     const meta = get(this.props.collections.updated, collectionName, {});
     const error = this.state.error || record.error || meta.error;
-    const label = `Edit ${collectionName}`;
-    const id = `edit-${slugify(collectionName)}`;
-
+    const schema = get(this.props.schema, SCHEMA_KEY);
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large'>Edit a Collection</h1>
-
-          <form>
-            <TextArea
-              label={label}
-              value={this.state.collection}
-              id={id}
-              error={this.state.error}
-              mode={'json'}
-              onChange={this.onChange}
-              minLines={1}
-              maxLines={30}
-            />
-            <br />
-            <input
-              type='submit'
-              value='Submit'
-              onClick={this.onSubmit}
-              className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
-            />
-          </form>
+          <h1 className='heading--large'>Edit {collectionName}</h1>
+          <Schema schema={schema} />
           {record.inflight || meta.status === 'inflight' ? <Loading /> : null}
           {error ? <ErrorReport report={error} /> : null}
           {meta.status === 'success' ? <p>Success!</p> : null}
