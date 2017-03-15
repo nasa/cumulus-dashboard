@@ -24,11 +24,11 @@
 }
 
 .logs__item--date {
-  font-weight: $base-font-semibold;
+  color: $light-grey;
 }
 
 .logs__item--level {
-  font-weight: $base-font-bold;
+  color: $black;
 }
 
 .logs__item--info {
@@ -37,4 +37,8 @@
 
 .logs__item--error {
   color: $error-red;
+}
+
+.logs__item--meta {
+  color: $sky-blue;
 }
