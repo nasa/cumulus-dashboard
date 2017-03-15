@@ -128,7 +128,7 @@ var List = React.createClass({
       if (this.cancelInterval) { this.cancelInterval(); }
       this.setState({ seconds: -1, isAutoRunning: false });
     } else {
-      this.setState({ seconds: updateInterval / 1000, isAutoRunning: true });
+      this.setState({ seconds: 0, isAutoRunning: true });
       this.list();
     }
   },
