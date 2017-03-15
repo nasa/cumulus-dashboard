@@ -20,6 +20,7 @@ label {
 }
 
 .dropdown__wrapper {
+  display: inline-block;
   border: 1px solid $lightest-grey;
   border-radius: .5em;
   position: relative;

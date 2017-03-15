@@ -3,13 +3,15 @@ import React from 'react';
 import { generate } from 'shortid';
 import { set } from 'object-path';
 import slugify from 'slugify';
-import textForm from './text';
-import textAreaForm from './text-area';
+import TextForm from './text';
+import TextAreaForm from './text-area';
+import Dropdown from './dropdown';
 import t from '../../utils/strings';
 
 export const formTypes = {
   text: 'TEXT',
-  textArea: 'TEXT_AREA'
+  textArea: 'TEXT_AREA',
+  dropdown: 'DROPDOWN'
 };
 
 export const defaults = {
@@ -123,31 +125,37 @@ export const Form = React.createClass({
         <ul className='form__multistep'>
           {this.props.inputMeta.map(form => {
             let { type, label } = form;
-            type = type || formTypes.text;
-            let inputId = this.generateComponentId(label);
-            let { value, error } = inputState[inputId];
 
+            // decide which element to render
             let element;
             switch (type) {
               case formTypes.textArea:
-                element = textAreaForm;
+                element = TextAreaForm;
+                break;
+              case formTypes.dropdown:
+                element = Dropdown;
                 break;
               case formTypes.text:
               default:
-                element = textForm;
+                element = TextForm;
                 break;
             }
 
+            // retrieve value and errors stored in state
+            let inputId = this.generateComponentId(label);
+            let { value, error } = inputState[inputId];
+            // dropdowns have options
+            let options = type === formTypes.dropdown && form.options || null;
             // textarea forms pass a mode value to ace
-            let mode = type === formTypes.textArea && form.mode || null;
-            const onChange = this.onChange;
+            const mode = type === formTypes.textArea && form.mode || null;
             const elem = React.createElement(element, {
               id: inputId,
               label,
               value,
               error,
               mode,
-              onChange
+              options,
+              onChange: this.onChange
             });
             return <div className='form__item' key={inputId}>{elem}</div>;
           })}
