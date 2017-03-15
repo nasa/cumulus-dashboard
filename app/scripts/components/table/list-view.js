@@ -104,14 +104,13 @@ var List = React.createClass({
       if (this.cancelInterval) { this.cancelInterval(); }
     // if clock is off, turn on, reset countdown
     } else {
-      this.setState({ clockRunning: true, clockTick: updateInterval / 1000, immediateFetch: true });
+      this.setState({ clockRunning: true, clockTick: updateInterval / 1000 });
       this.countdownInterval = setInterval(this.fetchCountdown, 1000);
     }
   },
 
   fetchCountdown: function () {
     const { clockTick, clockRunning, immediateFetch } = this.state;
-
     if (immediateFetch) {
       this.runQuery(immediateFetch);
       this.setState({ clockTick: clockTick - 1, immediateFetch: false });
@@ -156,11 +155,11 @@ var List = React.createClass({
   },
 
   runQuery: function (immediate) {
-    // remove empty keys so as not to mess up the query
     let options = this.state.options;
+    // remove empty keys so as not to mess up the query
     for (let key in options) { !options[key] && delete options[key]; }
 
-    // if there's a fetch in progress, kill it
+    // stop the currently running auto-query
     if (this.cancelInterval) { this.cancelInterval(); }
     const { dispatch, action } = this.props;
     this.cancelInterval = interval(() => dispatch(action(options)), updateInterval, immediate);
