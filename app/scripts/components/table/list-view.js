@@ -17,7 +17,11 @@ var List = React.createClass({
       sortIdx: 0,
       order: 'desc',
       selected: [],
-      prefix: null
+      prefix: null,
+      clockTick: updateInterval / 1000,
+      clockRunning: false,
+      immediateFetch: true,
+      options: {}
     };
   },
 
@@ -35,6 +39,7 @@ var List = React.createClass({
 
   componentWillMount: function () {
     this.list();
+    this.toggleFetchClock();
   },
 
   componentWillUnmount: function () {
@@ -92,6 +97,42 @@ var List = React.createClass({
     }
   },
 
+  toggleFetchClock: function () {
+    // If clock is on, turn off, halt fetch
+    if (this.state.clockRunning) {
+      this.setState({ clockRunning: false, clockTick: -1 });
+      if (this.cancelInterval) { this.cancelInterval(); }
+    // if clock is off, turn on, reset countdown
+    } else {
+      this.setState({ clockRunning: true, clockTick: updateInterval / 1000 });
+      this.countdownInterval = setInterval(this.fetchCountdown, 1000);
+    }
+  },
+
+  fetchCountdown: function () {
+    const { clockTick, clockRunning, immediateFetch } = this.state;
+    if (immediateFetch) {
+      this.runQuery(immediateFetch);
+      this.setState({ clockTick: clockTick - 1, immediateFetch: false });
+    } else if (!clockRunning) {
+      this.turnOffCountdown();
+    } else if (clockTick === 0) {
+      this.resetClock(immediateFetch);
+    } else {
+      this.setState({ clockTick: clockTick - 1 });
+    }
+  },
+
+  turnOffCountdown: function () {
+    this.setState({ clockTick: -1 });
+    clearInterval(this.countdownInterval);
+  },
+
+  resetClock: function (immediate) {
+    this.setState({ clockTick: updateInterval / 1000 });
+    this.runQuery(immediate);
+  },
+
   list: function (options, query) {
     options = options || {};
     const { page, order, sort_by, prefix } = options;
@@ -108,19 +149,26 @@ var List = React.createClass({
       options = Object.assign({}, options, this.props.query);
     }
 
+    this.setState({options: options});
+
+    this.resetClock(true);
+  },
+
+  runQuery: function (immediate) {
+    let options = this.state.options;
     // remove empty keys so as not to mess up the query
     for (let key in options) { !options[key] && delete options[key]; }
 
     // stop the currently running auto-query
     if (this.cancelInterval) { this.cancelInterval(); }
     const { dispatch, action } = this.props;
-    this.cancelInterval = interval(() => dispatch(action(options)), updateInterval, true);
+    this.cancelInterval = interval(() => dispatch(action(options)), updateInterval, immediate);
   },
 
   render: function () {
     const { tableHeader, tableRow, tableSortProps, isRemovable, rowId, list } = this.props;
     const { count, limit } = list.meta;
-    const { page, sortIdx, order, selected } = this.state;
+    const { page, sortIdx, order, selected, clockTick } = this.state;
     const primaryIdx = 0;
     const checked = this.state.selected.length === list.data.length && list.data.length;
 
@@ -134,6 +182,7 @@ var List = React.createClass({
             </label>
             <button className='button button--small form-group__element'>Remove From CMR</button>
             <button className='button button--small form-group__element'>Reprocess</button>
+            <button onClick={this.toggleFetchClock}>{clockTick === -1 ? '-' : clockTick}</button>
           </div>
         ) : null}
 

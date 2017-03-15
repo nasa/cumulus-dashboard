@@ -14,6 +14,6 @@ module.exports = {
   searchPageLimit: 7,
 
   // auto-update frequency
-  updateInterval: 10000,
+  updateInterval: 3000,
   logsUpdateInterval: 8000
 };
