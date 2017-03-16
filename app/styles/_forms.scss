@@ -49,6 +49,11 @@ select {
   }
 }
 
+.filter__item {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
 .filters__wlabels {
   margin: -1em 0 3.2em;
 }
@@ -125,6 +130,12 @@ select {
   input {
     margin-right: .8em;
   }
+}
+
+.form__element__updateToggle {
+  float: right;
+  cursor: pointer;
+  width: 150px;
 }
 
 .form-group__element--right {

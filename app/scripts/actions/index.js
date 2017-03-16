@@ -5,7 +5,7 @@ import { set as setToken } from '../utils/auth';
 import _config from '../config';
 
 const root = _config.apiRoot;
-const { pageLimit, searchPageLimit } = _config;
+const { pageLimit } = _config;
 
 export const LOGOUT = 'LOGOUT';
 export const LOGIN = 'LOGIN';
@@ -29,9 +29,10 @@ export const UPDATE_COLLECTION_INFLIGHT = 'UPDATE_COLLECTION_INFLIGHT';
 export const UPDATE_COLLECTION_ERROR = 'UPDATE_COLLECTION_ERROR';
 
 export const SEARCH_COLLECTIONS = 'SEARCH_COLLECTIONS';
-export const SEARCH_COLLECTIONS_INFLIGHT = 'SEARCH_COLLECTIONS_INFLIGHT';
-export const SEARCH_COLLECTIONS_ERROR = 'SEARCH_COLLECTIONS_ERROR';
 export const CLEAR_COLLECTIONS_SEARCH = 'CLEAR_COLLECTIONS_SEARCH';
+
+export const FILTER_COLLECTIONS = 'FILTER_COLLECTIONS';
+export const CLEAR_COLLECTIONS_FILTER = 'CLEAR_COLLECTIONS_FILTER';
 
 export const GRANULE = 'GRANULE';
 export const GRANULE_INFLIGHT = 'GRANULE_INFLIGHT';
@@ -46,9 +47,10 @@ export const GRANULE_REPROCESS_INFLIGHT = 'GRANULE_REPROCESS_INFLIGHT';
 export const GRANULE_REPROCESS_ERROR = 'GRANULE_REPROCESS_ERROR';
 
 export const SEARCH_GRANULES = 'SEARCH_GRANULES';
-export const SEARCH_GRANULES_INFLIGHT = 'SEARCH_GRANULES_INFLIGHT';
-export const SEARCH_GRANULES_ERROR = 'SEARCH_GRANULES_ERROR';
 export const CLEAR_GRANULES_SEARCH = 'CLEAR_GRANULES_SEARCH';
+
+export const FILTER_GRANULES = 'FILTER_GRANULES';
+export const CLEAR_GRANULES_FILTER = 'CLEAR_GRANULES_FILTER';
 
 export const STATS = 'STATS';
 
@@ -57,9 +59,10 @@ export const PDRS_INFLIGHT = 'PDRS_INFLIGHT';
 export const PDRS_ERROR = 'PDRS_ERROR';
 
 export const SEARCH_PDRS = 'SEARCH_PDRS';
-export const SEARCH_PDRS_INFLIGHT = 'SEARCH_PDRS_INFLIGHT';
-export const SEARCH_PDRS_ERROR = 'SEARCH_PDRS_ERROR';
 export const CLEAR_PDRS_SEARCH = 'CLEAR_PDRS_SEARCH';
+
+export const FILTER_PDRS = 'FILTER_PDRS';
+export const CLEAR_PDRS_FILTER = 'CLEAR_PDRS_FILTER';
 
 export const LOGS = 'LOGS';
 export const LOGS_INFLIGHT = 'LOGS_INFLIGHT';
@@ -89,12 +92,13 @@ export const createCollection = (payload) => wrapRequest(
 export const updateCollection = (payload) => wrapRequest(
   payload.collectionName, put, `collections/${payload.collectionName}`, UPDATE_COLLECTION, payload);
 
-export const searchCollections = (query) => wrapRequest(null, get, {
-  url: url.resolve(root, 'collections'),
-  qs: Object.assign({ limit: searchPageLimit }, query)
-}, SEARCH_COLLECTIONS);
+export const searchCollections = (prefix) => ({ type: SEARCH_COLLECTIONS, prefix: prefix });
 
 export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH });
+
+export const filterCollections = (param) => ({ type: FILTER_COLLECTIONS, param: param });
+
+export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
 
 export const getGranule = (granuleId) => wrapRequest(
   granuleId, get, `granules/${granuleId}`, GRANULE);
@@ -109,12 +113,13 @@ export const reprocessGranule = (granuleId) => wrapRequest(
     action: 'reprocess'
   });
 
-export const searchGranules = (query) => wrapRequest(null, get, {
-  url: url.resolve(root, 'granules'),
-  qs: Object.assign({ limit: searchPageLimit }, query)
-}, SEARCH_GRANULES);
+export const searchGranules = (prefix) => ({ type: SEARCH_GRANULES, prefix: prefix });
 
-export const clearGranuleSearch = () => ({ type: CLEAR_GRANULES_SEARCH });
+export const clearGranulesSearch = () => ({ type: CLEAR_GRANULES_SEARCH });
+
+export const filterGranules = (param) => ({ type: FILTER_GRANULES, param: param });
+
+export const clearGranulesFilter = (paramKey) => ({ type: CLEAR_GRANULES_FILTER, paramKey: paramKey });
 
 export const getStats = () => wrapRequest(null, get, 'stats/summary/grouped', STATS);
 
@@ -123,12 +128,13 @@ export const listPdrs = (options) => wrapRequest(null, get, {
   qs: Object.assign({ limit: pageLimit }, options)
 }, PDRS);
 
-export const searchPdrs = (query) => wrapRequest(null, get, {
-  url: url.resolve(root, 'pdrs'),
-  qs: Object.assign({ limit: searchPageLimit }, query)
-}, SEARCH_PDRS);
+export const searchPdrs = (prefix) => ({ type: SEARCH_PDRS, prefix: prefix });
 
-export const clearPdrSearch = () => ({ type: CLEAR_PDRS_SEARCH });
+export const clearPdrsSearch = () => ({ type: CLEAR_PDRS_SEARCH });
+
+export const filterPdrs = (param) => ({ type: FILTER_PDRS, param: param });
+
+export const clearPdrsFilter = (paramKey) => ({ type: CLEAR_PDRS_FILTER, paramKey: paramKey });
 
 export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),

@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import { interval } from '../../actions';
+import pickBy from 'lodash.pickBy';
 import SortableTable from './sortable';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
@@ -17,7 +17,10 @@ var List = React.createClass({
       sortIdx: 0,
       order: 'desc',
       selected: [],
-      prefix: null
+      prefix: null,
+      seconds: updateInterval / 1000,
+      isAutoRunning: true,
+      params: {}
     };
   },
 
@@ -46,8 +49,9 @@ var List = React.createClass({
       this.list({}, newProps.query);
     }
 
-    if (newProps.list.prefix !== this.state.prefix) {
-      this.setState({ prefix: newProps.list.prefix }, () => this.list());
+    const nonNullParams = pickBy(newProps.list.params, v => (!undef(v) && v !== null));
+    if (JSON.stringify(nonNullParams) !== JSON.stringify(this.state.params)) {
+      this.setState({ params: nonNullParams }, () => this.list());
     }
 
     if (newProps.list.error && this.cancelInterval) {
@@ -94,13 +98,14 @@ var List = React.createClass({
 
   list: function (options, query) {
     options = options || {};
-    const { page, order, sort_by, prefix } = options;
+    const { page, order, sort_by, params } = options;
 
     // attach page, and sort properties using the current state
     if (undef(page)) { options.page = this.state.page; }
     if (undef(order)) { options.order = this.state.order; }
     if (undef(sort_by)) { options.sort_by = this.getSortProp(this.state.sortIdx); }
-    if (undef(prefix)) { options.prefix = this.state.prefix; }
+
+    if (undef(params)) { Object.assign(options, this.state.params); }
 
     if (query) {
       options = Object.assign({}, options, query);
@@ -114,13 +119,37 @@ var List = React.createClass({
     // stop the currently running auto-query
     if (this.cancelInterval) { this.cancelInterval(); }
     const { dispatch, action } = this.props;
-    this.cancelInterval = interval(() => dispatch(action(options)), updateInterval, true);
+    this.cancelInterval = this.timedInterval(() => dispatch(action(options)), updateInterval / 1000);
+  },
+
+  timedInterval: function (action, seconds) {
+    action();
+    const intervalId = setInterval(() => {
+      this.setState({ seconds: seconds });
+      if (seconds === 0) {
+        seconds = updateInterval / 1000;
+        action();
+      } else {
+        seconds -= 1;
+      }
+    }, 1000);
+    return () => clearInterval(intervalId);
+  },
+
+  toggleAutoFetch: function () {
+    if (this.state.isAutoRunning) {
+      if (this.cancelInterval) { this.cancelInterval(); }
+      this.setState({ seconds: -1, isAutoRunning: false });
+    } else {
+      this.setState({ seconds: 0, isAutoRunning: true });
+      this.list();
+    }
   },
 
   render: function () {
     const { tableHeader, tableRow, tableSortProps, isRemovable, rowId, list } = this.props;
     const { count, limit } = list.meta;
-    const { page, sortIdx, order, selected } = this.state;
+    const { page, sortIdx, order, selected, seconds } = this.state;
     const primaryIdx = 0;
     const checked = this.state.selected.length === list.data.length && list.data.length;
 
@@ -134,6 +163,14 @@ var List = React.createClass({
             </label>
             <button className='button button--small form-group__element'>Remove From CMR</button>
             <button className='button button--small form-group__element'>Reprocess</button>
+            <div className='form__element__updateToggle' onClick={this.toggleAutoFetch}>
+              <div className='form-group__updating'>
+                Next update in: {seconds === -1 ? '-' : seconds }
+              </div>
+              <i className='metadata__updated'>
+                {seconds === -1 ? 'Start automatic updates' : 'Stop automatic updates'}
+              </i>
+            </div>
           </div>
         ) : null}
 
