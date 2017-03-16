@@ -5,7 +5,7 @@ import { set } from 'object-path';
 import slugify from 'slugify';
 import TextForm from './text';
 import TextAreaForm from './text-area';
-import Dropdown from './dropdown';
+import SimpleDropdown from './simple-dropdown';
 import t from '../../utils/strings';
 
 export const formTypes = {
