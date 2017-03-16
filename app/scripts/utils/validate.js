@@ -8,6 +8,10 @@ export const isNumber = function (string) {
   return !isNaN(string);
 };
 
+export const isList = function (object) {
+  return Array.isArray(object);
+};
+
 export const granuleModel = function (obj) {
   return isText(obj.granuleId);
 };
