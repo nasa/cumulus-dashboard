@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import pickBy from 'lodash.pickBy';
-import { interval } from '../../actions';
 import SortableTable from './sortable';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
@@ -18,6 +17,9 @@ var List = React.createClass({
       sortIdx: 0,
       order: 'desc',
       selected: [],
+      prefix: null,
+      seconds: updateInterval / 1000,
+      isAutoRunning: true,
       params: {}
     };
   },
@@ -117,13 +119,37 @@ var List = React.createClass({
     // stop the currently running auto-query
     if (this.cancelInterval) { this.cancelInterval(); }
     const { dispatch, action } = this.props;
-    this.cancelInterval = interval(() => dispatch(action(options)), updateInterval, true);
+    this.cancelInterval = this.timedInterval(() => dispatch(action(options)), updateInterval / 1000);
+  },
+
+  timedInterval: function (action, seconds) {
+    action();
+    const intervalId = setInterval(() => {
+      this.setState({ seconds: seconds });
+      if (seconds === 0) {
+        seconds = updateInterval / 1000;
+        action();
+      } else {
+        seconds -= 1;
+      }
+    }, 1000);
+    return () => clearInterval(intervalId);
+  },
+
+  toggleAutoFetch: function () {
+    if (this.state.isAutoRunning) {
+      if (this.cancelInterval) { this.cancelInterval(); }
+      this.setState({ seconds: -1, isAutoRunning: false });
+    } else {
+      this.setState({ seconds: 0, isAutoRunning: true });
+      this.list();
+    }
   },
 
   render: function () {
     const { tableHeader, tableRow, tableSortProps, isRemovable, rowId, list } = this.props;
     const { count, limit } = list.meta;
-    const { page, sortIdx, order, selected } = this.state;
+    const { page, sortIdx, order, selected, seconds } = this.state;
     const primaryIdx = 0;
     const checked = this.state.selected.length === list.data.length && list.data.length;
 
@@ -137,6 +163,14 @@ var List = React.createClass({
             </label>
             <button className='button button--small form-group__element'>Remove From CMR</button>
             <button className='button button--small form-group__element'>Reprocess</button>
+            <div className='form__element__updateToggle' onClick={this.toggleAutoFetch}>
+              <div className='form-group__updating'>
+                Next update in: {seconds === -1 ? '-' : seconds }
+              </div>
+              <i className='metadata__updated'>
+                {seconds === -1 ? 'Start automatic updates' : 'Stop automatic updates'}
+              </i>
+            </div>
           </div>
         ) : null}
 
