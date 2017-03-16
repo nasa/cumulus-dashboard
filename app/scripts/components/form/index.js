@@ -5,13 +5,15 @@ import { set } from 'object-path';
 import slugify from 'slugify';
 import TextForm from './text';
 import TextAreaForm from './text-area';
-import SimpleDropdown from './simple-dropdown';
+import Dropdown from './simple-dropdown';
+import List from './arbitrary-list';
 import t from '../../utils/strings';
 
 export const formTypes = {
   text: 'TEXT',
   textArea: 'TEXT_AREA',
-  dropdown: 'DROPDOWN'
+  dropdown: 'DROPDOWN',
+  list: 'LIST'
 };
 
 export const defaults = {
@@ -56,7 +58,7 @@ export const Form = React.createClass({
     const inputState = {};
     this.props.inputMeta.forEach(input => {
       let inputId = this.generateComponentId(input.label);
-      let value = input.value || '';
+      let value = input.value || (input.type === formTypes.list ? [] : '');
       let error = null;
       inputState[inputId] = { value, error };
     });
@@ -134,6 +136,9 @@ export const Form = React.createClass({
                 break;
               case formTypes.dropdown:
                 element = Dropdown;
+                break;
+              case formTypes.list:
+                element = List;
                 break;
               case formTypes.text:
               default:

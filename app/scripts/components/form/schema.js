@@ -3,7 +3,7 @@ import React from 'react';
 import { get } from 'object-path';
 import { Form, formTypes } from './';
 import Loading from '../app/loading-indicator';
-import { isText, isNumber } from '../../utils/validate';
+import { isText, isNumber, isArray } from '../../utils/validate';
 import t from '../../utils/strings';
 const { errors } = t;
 export const Schema = React.createClass({
@@ -16,11 +16,9 @@ export const Schema = React.createClass({
     let label = schema.title || property;
     if (validate) label += ' (required)';
     return {
-      schemaProperty,
-      label,
+      schemaProperty, label, validate,
       type: formTypes.text,
-      error: validate && get(errors, property, 'Sorry, this field is required'),
-      validate
+      error: validate && get(errors, property, errors.required)
     };
   },
 
@@ -28,12 +26,20 @@ export const Schema = React.createClass({
     let label = schema.title || property;
     if (validate) label += ' (required)';
     return {
-      schemaProperty,
-      label,
+      schemaProperty, label, validate,
       options: schema['enum'],
       type: formTypes.dropdown,
-      error: validate && get(errors, property, 'Sorry, this field is required'),
-      validate
+      error: validate && get(errors, property, errors.required)
+    };
+  },
+
+  list: function (schema, property, schemaProperty, validate) {
+    let label = schema.title || property;
+    if (validate) label += ' (required)';
+    return {
+      schemaProperty, label, validate,
+      type: formTypes.list,
+      error: validate && get(errors, property, errors.required)
     };
   },
 
@@ -53,6 +59,9 @@ export const Schema = React.createClass({
           break;
         case 'enum':
           fields.push(this.dropdown(schema, property, accessor, (required && isText)));
+          break;
+        case 'array':
+          fields.push(this.list(schema, property, accessor, (required && isArray)));
           break;
         case 'string':
           fields.push(this.textfield(schema, property, accessor, (required && isText)));
