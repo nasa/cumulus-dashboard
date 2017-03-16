@@ -41,9 +41,9 @@ var List = React.createClass({
     const items = value.length ? value : [''];
 
     return (
-      <div className='form__list'>
+      <div className='form__addone'>
         <label>{label} {error}</label>
-        <ul className='form__list--items'>
+        <ul className='form__addone--items'>
           {items.map(this.renderItem)}
         </ul>
       </div>
@@ -55,19 +55,20 @@ var List = React.createClass({
     // only allow adds if you've entered something
     const disabled = add && !item.length;
     return (
-      <li key={i} className='form__list--item'>
+      <li key={i} className='form__addone--item'>
         <input
+          className='form__addone--input'
           value={item}
           onChange={(e) => this.onChange(i, e.target.value)}
         />
         { add ? <button
           onClick={this.add}
-          className={'button form__list--button' + (disabled ? ' button--disabled': '')}>+</button>
+          className={'button form__addone--button' + (disabled ? ' button--disabled': '')}>+</button>
         : null }
 
         { !add ? <button
           onClick={(e) => { e.preventDefault(); this.remove(i); }}
-          className='button form__list--button'>-</button>
+          className='button form__addone--button'>-</button>
         : null }
       </li>
     );
