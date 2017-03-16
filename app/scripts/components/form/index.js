@@ -124,7 +124,7 @@ export const Form = React.createClass({
     const inputState = this.state.inputs;
     return (
       <form id={`form-${this.id}`}>
-        <ul className='form__multistep'>
+        <ul>
           {this.props.inputMeta.map(form => {
             let { type, label } = form;
 
@@ -149,6 +149,8 @@ export const Form = React.createClass({
             // retrieve value and errors stored in state
             let inputId = this.generateComponentId(label);
             let { value, error } = inputState[inputId];
+            // coerce non-null values to string to simplify proptype warnings on numbers
+            if (type !== formTypes.list) { value = (value || value === 0) && String(value); }
             // dropdowns have options
             let options = type === formTypes.dropdown && form.options || null;
             // textarea forms pass a mode value to ace

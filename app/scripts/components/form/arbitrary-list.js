@@ -25,7 +25,7 @@ var List = React.createClass({
   },
 
   remove: function (index) {
-    let value = this.props.value.slice()
+    let value = this.props.value.slice();
     value.splice(index, 1);
     this.props.onChange(this.props.id, value);
   },
@@ -63,7 +63,7 @@ var List = React.createClass({
         />
         { add ? <button
           onClick={this.add}
-          className={'button form__addone--button' + (disabled ? ' button--disabled': '')}>+</button>
+          className={'button form__addone--button' + (disabled ? ' button--disabled' : '')}>+</button>
         : null }
 
         { !add ? <button

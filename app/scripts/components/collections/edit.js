@@ -99,7 +99,11 @@ var EditCollection = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large'>Edit {collectionName}</h1>
-          <Schema schema={schema} />
+          <Schema
+            schema={schema}
+            data={record.data}
+            pk={collectionName}
+          />
           {record.inflight || meta.status === 'inflight' ? <Loading /> : null}
           {error ? <ErrorReport report={error} /> : null}
           {meta.status === 'success' ? <p>Success!</p> : null}
