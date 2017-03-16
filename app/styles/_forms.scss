@@ -48,6 +48,11 @@ select {
   }
 }
 
+.filter__item {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
 .filters__wlabels {
   margin: -1em 0 3.2em;
 }
