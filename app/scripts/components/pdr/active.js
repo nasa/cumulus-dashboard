@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { searchPdrs, clearPdrSearch, listPdrs } from '../../actions';
+import { searchPdrs, clearPdrsSearch, listPdrs } from '../../actions';
 import { pdrSearchResult, lastUpdated } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdrs';
 import LogViewer from '../logs/viewer';
@@ -22,7 +22,7 @@ var ActivePdrs = React.createClass({
   },
 
   render: function () {
-    const { list, search } = this.props.pdrs;
+    const { list } = this.props.pdrs;
     const { count, queriedAt } = list.meta;
     const logsQuery = { q: 'pdrName' };
     return (
@@ -35,9 +35,8 @@ var ActivePdrs = React.createClass({
           <div className='filters'>
             <Search dispatch={this.props.dispatch}
               action={searchPdrs}
-              results={search}
               format={pdrSearchResult}
-              clear={clearPdrSearch}
+              clear={clearPdrsSearch}
             />
           </div>
 

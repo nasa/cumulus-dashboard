@@ -30,7 +30,7 @@ var Header = React.createClass({
             { !this.props.minimal ? <ul>
               <li><Link to='/collections'>Collections</Link></li>
               <li><Link to='/granules'>Granules</Link></li>
-              <li><Link to='/pdrs'>PDR's</Link></li>
+              <li><Link to='/pdrs'>PDRs</Link></li>
               <li><Link to='/logs'>Logs</Link></li>
               <li><Link to='/contact'>Contact</Link></li>
               <li className='rightalign'>{ authenticated ? <a onClick={this.logout}>Log out</a> : <Link to={'/login'}>Log in</Link> }</li>

@@ -37,13 +37,13 @@ var PdrOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>PDR's Overview</h1>
+          <h1 className='heading--large heading--shared-content'>PDRs Overview</h1>
           {lastUpdated(queriedAt)}
           {overview}
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Recently Active PDR's{count ? ` (${count})` : null}</h2>
+            <h2 className='heading--medium heading--shared-content'>Recently Active PDRs{count ? ` (${count})` : null}</h2>
           </div>
 
           <List
