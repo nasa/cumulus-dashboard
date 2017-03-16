@@ -167,6 +167,14 @@ select {
   padding-top: .5em;
 }
 
+.form__item {
+  margin-bottom: 1.5em;
+}
+
+.form__text input[type="text"] {
+  width: 50%;
+}
+
 .form__addone--item {
   margin: 0.5em 0;
 }
