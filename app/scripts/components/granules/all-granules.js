@@ -1,12 +1,13 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { searchGranules, clearGranuleSearch, listGranules } from '../../actions';
+import { searchGranules, clearGranulesSearch, filterGranules, clearGranulesFilter, listGranules } from '../../actions';
 import { get } from 'object-path';
-import { granuleSearchResult, lastUpdated } from '../../utils/format';
+import { granuleSearchResult, dropdownOption, lastUpdated } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
 import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
+import Dropdown from '../form/dropdown';
 import Search from '../form/search';
 
 var AllGranules = React.createClass({
@@ -28,7 +29,7 @@ var AllGranules = React.createClass({
 
   render: function () {
     const { pdrName } = this.props.params;
-    const { list, search } = this.props.granules;
+    const { list } = this.props.granules;
     const { count, queriedAt } = list.meta;
     const logsQuery = { q: 'granuleId' };
 
@@ -42,23 +43,21 @@ var AllGranules = React.createClass({
             {lastUpdated(queriedAt)}
           </div>
           <div className='filters filters__wlabels'>
-            <div className='filter__item'>
-              <label htmlFor='collectionFilter'>Collection</label>
-              <div className='dropdown__wrapper form-group__element'>
-                <select id='collectionFilter'>
-                  <option value='ASTER_1A_versionId_1'>ASTER_1A_versionId_1</option>
-                  <option value='TODO'>TODO</option>
-                </select>
-              </div>
-            </div>
-            <div className='filter__item'>
-              <Search dispatch={this.props.dispatch}
-                action={searchGranules}
-                results={search}
-                format={granuleSearchResult}
-                clear={clearGranuleSearch}
-              />
-            </div>
+            <Dropdown
+              dispatch={this.props.dispatch}
+              // TO-DO: Populate this list of available collections using the API
+              options={{'': '', 'AST_L1A__version__003': 'AST_L1A__version__003', 'Not a real collection': 'Not a real collection'}}
+              format={dropdownOption}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey={'collectionName'}
+              label={'Collection'}
+            />
+            <Search dispatch={this.props.dispatch}
+              action={searchGranules}
+              format={granuleSearchResult}
+              clear={clearGranulesSearch}
+            />
           </div>
 
           <List

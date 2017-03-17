@@ -1,10 +1,12 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { listCollections, searchCollections, clearCollectionsSearch } from '../../actions';
-import { collectionSearchResult, lastUpdated } from '../../utils/format';
+import moment from 'moment';
+import { listCollections, searchCollections, clearCollectionsSearch, filterCollections, clearCollectionsFilter } from '../../actions';
+import { collectionSearchResult, dropdownOption, lastUpdated } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/collections';
 import Search from '../form/search';
+import Dropdown from '../form/dropdown';
 import List from '../table/list-view';
 import { Link } from 'react-router';
 
@@ -17,12 +19,19 @@ var ActiveCollections = React.createClass({
     logs: React.PropTypes.object
   },
 
+  timeOptions: {
+    '': '',
+    '1 Week Ago': moment().subtract(1, 'weeks').format(),
+    '1 Month Ago': moment().subtract(1, 'months').format(),
+    '1 Year Ago': moment().subtract(1, 'years').format()
+  },
+
   generateQuery: function () {
     return {};
   },
 
   render: function () {
-    const { list, search } = this.props.collections;
+    const { list } = this.props.collections;
     const { count, queriedAt } = list.meta;
     return (
       <div className='page__component'>
@@ -35,23 +44,26 @@ var ActiveCollections = React.createClass({
             {lastUpdated(queriedAt)}
           </div>
           <div className='filters'>
-            <div className='dropdown__wrapper form-group__element'>
-              <select>
-                <option value="week">Last Week</option>
-                <option value="month">Last Month</option>
-                <option value="year">Last Year</option>
-              </select>
-            </div>
-            <div className='dropdown__wrapper form-group__element'>
-              <select>
-                <option value="week">Last Week</option>
-                <option value="month">Last Month</option>
-                <option value="year">Last Year</option>
-              </select>
-            </div>
+            <Dropdown
+              dispatch={this.props.dispatch}
+              options={this.timeOptions}
+              format={dropdownOption}
+              action={filterCollections}
+              clear={clearCollectionsFilter}
+              paramKey={'createdAt_from'}
+              label={'Starting'}
+            />
+            <Dropdown
+              dispatch={this.props.dispatch}
+              options={this.timeOptions}
+              format={dropdownOption}
+              action={filterCollections}
+              clear={clearCollectionsFilter}
+              paramKey={'createdAt_to'}
+              label={'Ending'}
+            />
             <Search dispatch={this.props.dispatch}
               action={searchCollections}
-              results={search}
               format={collectionSearchResult}
               clear={clearCollectionsSearch}
             />

@@ -6,6 +6,13 @@ import moment from 'moment';
 import LoadingEllipsis from '../app/loading-ellipsis';
 import ErrorReport from '../errors/report';
 
+const noLogs = {
+  displayText: 'There are no Cumulus logs from the past 48 hours.',
+  level: 'meta',
+  key: 'no-logs-message'
+};
+const twoDays = 2 * 1000 * 60 * 60 * 24;
+
 const noop = (d) => d;
 var LogViewer = React.createClass({
   displayName: 'LogViewer',
@@ -59,8 +66,8 @@ var LogViewer = React.createClass({
 
     let isFirstPull = true;
     function querySinceLast () {
-      // on first pull, get the last 24 hours
-      const duration = isFirstPull ? 1000 * 60 * 60 * 24 : logsUpdateInterval;
+      // on first pull, get the last 48 hours
+      const duration = isFirstPull ? twoDays : logsUpdateInterval;
       const from = moment().subtract(duration, 'milliseconds').format();
       isFirstPull = false;
       return dispatch(getLogs(Object.assign({ date_from: from }, query)));
@@ -70,7 +77,7 @@ var LogViewer = React.createClass({
 
   render: function () {
     const { logs } = this.props;
-    const items = logs.items.filter(this.state.filter);
+    const items = logs.items.length ? logs.items.filter(this.state.filter) : [noLogs];
     return (
       <section className='page__section'>
         <div className='heading__wrapper--border'>

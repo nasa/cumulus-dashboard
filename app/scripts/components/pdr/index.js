@@ -17,7 +17,7 @@ var Pdrs = React.createClass({
       <div className='page__pdrs'>
         <div className='content__header'>
           <div className='row'>
-            <h1 className='heading--xlarge'>PDR's</h1>
+            <h1 className='heading--xlarge'>PDRs</h1>
           </div>
         </div>
         <div className='page__content'>

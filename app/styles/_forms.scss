@@ -12,7 +12,7 @@ label {
 }
 
 .form__multistep {
-  input[type='text'], textarea {
+  input[type='password'], input[type='text'], textarea {
     margin-bottom: 2em;
     width: 95.5%;
     padding: 0.3em;
@@ -46,6 +46,11 @@ select {
   label {
     font-size: .86em;
   }
+}
+
+.filter__item {
+  display: inline-block;
+  vertical-align: bottom;
 }
 
 .filters__wlabels {
@@ -124,6 +129,12 @@ select {
   input {
     margin-right: .8em;
   }
+}
+
+.form__element__updateToggle {
+  float: right;
+  cursor: pointer;
+  width: 150px;
 }
 
 .form-group__element--right {

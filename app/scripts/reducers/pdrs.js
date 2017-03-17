@@ -8,23 +8,24 @@ import {
   PDRS_ERROR,
 
   SEARCH_PDRS,
-  SEARCH_PDRS_INFLIGHT,
-  SEARCH_PDRS_ERROR,
-  CLEAR_PDRS_SEARCH
+  CLEAR_PDRS_SEARCH,
+
+  FILTER_PDRS,
+  CLEAR_PDRS_FILTER
 } from '../actions';
 
 export const initialState = {
   list: {
     data: [],
     meta: {},
-    prefix: null
+    params: {}
   },
   search: {}
 };
 
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
-  const { data, config } = action;
+  const { data } = action;
   switch (action.type) {
     case PDRS:
       set(state, ['list', 'data'], data.results);
@@ -40,21 +41,17 @@ export default function reducer (state = initialState, action) {
       break;
 
     case SEARCH_PDRS:
-      set(state, ['list', 'data'], assignDate(data.results));
-      set(state, ['search', 'inflight'], false);
-      break;
-    case SEARCH_PDRS_INFLIGHT:
-      set(state, ['list', 'prefix'], config.qs.prefix);
-      set(state, ['search', 'inflight'], true);
-      break;
-    case SEARCH_PDRS_ERROR:
-      set(state, ['search', 'error'], action.error);
-      set(state, ['search', 'inflight'], false);
+      set(state, ['list', 'params', 'prefix'], action.prefix);
       break;
     case CLEAR_PDRS_SEARCH:
-      set(state, ['list', 'prefix'], null);
-      set(state, ['search', 'error'], null);
-      set(state, ['search', 'inflight'], false);
+      set(state, ['list', 'params', 'prefix'], null);
+      break;
+
+    case FILTER_PDRS:
+      set(state, ['list', 'params', action.param.key], action.param.value);
+      break;
+    case CLEAR_PDRS_FILTER:
+      set(state, ['list', 'params', action.paramKey], null);
       break;
   }
   return state;

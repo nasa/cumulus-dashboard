@@ -78,7 +78,7 @@ var CollectionOverview = React.createClass({
   render: function () {
     const collectionName = this.props.params.collectionName;
     const { granules, collections } = this.props;
-    const record = get(collections.map, collectionName);
+    const record = collections.map[collectionName];
     const { list } = granules;
     const { meta } = list;
 

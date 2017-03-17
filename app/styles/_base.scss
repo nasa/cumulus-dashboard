@@ -333,8 +333,11 @@ a:active {
 }
 
 .logs {
+  font-family: $code-font-family;
+  font-size: $code-font-size;
+  line-height: $code-line-height;
   background-color: darken($background-white, 3%);
-  padding: 2em 2.5em;
+  padding: 1.5em 1.5em 1em;
   color: $dark-grey;
   max-height: 25em;
   overflow-y: scroll;
