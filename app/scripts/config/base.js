@@ -9,7 +9,7 @@ module.exports = {
   tabSize: 2,
 
   // list queries
-  pageLimit: 20,
+  pageLimit: 50,
 
   searchPageLimit: 7,
 
