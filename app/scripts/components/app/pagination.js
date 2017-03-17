@@ -1,5 +1,9 @@
 'use strict';
 import React from 'react';
+import Paginator from 'paginator';
+
+const noop = (e) => e.preventDefault();
+const disabled = ' pagination__link--disabled';
 
 const Pagination = React.createClass({
   displayName: 'Pagination',
@@ -26,33 +30,38 @@ const Pagination = React.createClass({
 
   render: function () {
     const { page, limit, count } = this.props;
-    let paginatedPages = 0;
-    let currentPage = 1;
-
     if (!isNaN(count) && !isNaN(limit) && !isNaN(page)) {
-      paginatedPages = Math.ceil(count / limit);
-      currentPage = +page;
-    }
+      const currentPage = +page;
+      const paginator = new Paginator(limit, 7);
+      const meta = paginator.build(count, currentPage);
+      const pages = [];
+      for (let i = meta.first_page; i <= meta.last_page; ++i) { pages.push(i); }
+      const jumpToFirst = meta.first_page > 1 && <li><a href='#' data-value={1} onClick={this.onPageClick}>1</a> ... </li>;
+      const jumpToLast = meta.last_page < meta.total_pages &&
+        <li> ... <a href='#' data-value={meta.total_pages} onClick={this.onPageClick}>{meta.total_pages}</a> </li>;
 
-    const pages = [];
-    for (let i = 1; i <= paginatedPages; ++i) { pages.push(i); }
-
-    return (
-      <div className='pagination'>
-        {paginatedPages ? (
+      return (
+        <div className='pagination'>
           <ol>
-            <li><a className='previous' href="#" data-value={currentPage - 1} onClick={this.onPageClick}>Previous</a></li>
+            <li><a
+                className={'previous' + (meta.has_previous_page ? '' : disabled)}
+                data-value={meta.previous_page}
+                onClick={(meta.has_previous_page ? this.onPageClick : noop)}>Previous</a></li>
+            {jumpToFirst}
             {pages.map(d => (
               <li key={d} className={d === currentPage ? 'pagination__link--active' : ''}>
                 <a href='#' data-value={d} onClick={this.onPageClick}>{d}</a>
               </li>
             ))}
-            <li><a className='next' href="#" data-value={currentPage + 1} onClick={this.onPageClick}>Next</a></li>
+            {jumpToLast}
+            <li><a
+                className={'next' + (meta.has_next_page ? '' : disabled)}
+                data-value={meta.next_page}
+                onClick={(meta.has_next_page ? this.onPageClick : noop)}>Next</a></li>
           </ol>
-        ) : ''}
-      </div>
-    );
+        </div>
+      );
+    } else return <div></div>;
   }
 });
-
 export default Pagination;
