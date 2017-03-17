@@ -35,7 +35,7 @@ export const Form = React.createClass({
 
   getInitialState: function () {
     return {
-      inputs: []
+      inputs: {}
     };
   },
 
@@ -108,7 +108,7 @@ export const Form = React.createClass({
         return set(inputState, [inputId, 'error'], error);
       }
 
-      payload[input.schemaProperty] = value;
+      set(payload, input.schemaProperty, value);
     });
 
     this.setState(Object.assign({}, this.state, {
