@@ -8,6 +8,7 @@ import omit from 'lodash.omit';
 import { getCollection } from '../../actions';
 import { fullDate, lastUpdated } from '../../utils/format';
 import config from '../../config';
+import Loading from '../app/loading-indicator';
 
 var CollectionIngest = React.createClass({
   displayName: 'CollectionIngest',
@@ -26,7 +27,7 @@ var CollectionIngest = React.createClass({
 
   componentWillReceiveProps: function (props) {
     const collectionName = props.params.collectionName;
-    const record = get(this.props.collections, ['map', collectionName]);
+    const record = this.props.collections.map[collectionName];
     if (!record) {
       this.get(collectionName);
     }
@@ -61,12 +62,9 @@ var CollectionIngest = React.createClass({
 
   render: function () {
     const collectionName = this.props.params.collectionName;
-    const record = get(this.props.collections, ['map', collectionName]);
-    if (!record) {
-      return <div></div>;
-    } else if (record.inflight) {
-      // TODO loading indicator
-      return <div></div>;
+    const record = this.props.collections.map[collectionName];
+    if (!record || (record.inflight && !record.data)) {
+      return <Loading />;
     }
     const { data } = record;
     return (
