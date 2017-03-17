@@ -115,6 +115,7 @@ table {
     }
     a:hover {
       color: $ocean-blue;
+      text-decoration: underline;
     }
     .active, .active:visited {
       color: $ocean-blue;
@@ -134,6 +135,14 @@ table {
     }
     .previous {
       left: 0;
+    }
+    .pagination__link--disabled {
+      cursor: default;
+      color: $lightest-grey;
+    }
+    .pagination__link--disabled:hover {
+      color: $lightest-grey;
+      text-decoration: none;
     }
   }
 }
