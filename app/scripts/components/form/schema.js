@@ -11,7 +11,8 @@ export const Schema = React.createClass({
   propTypes: {
     schema: React.PropTypes.object,
     data: React.PropTypes.object,
-    pk: React.PropTypes.string
+    pk: React.PropTypes.string,
+    onSubmit: React.PropTypes.func
   },
 
   getInitialState: function () {
@@ -23,7 +24,7 @@ export const Schema = React.createClass({
     const { schema, data } = newProps;
     if ((props.pk !== newProps.pk) ||
         ((!props.schema || !props.data) && schema && data)) {
-      this.setState({ fields: this.traverseObject(data, schema) });
+      this.setState({ fields: this.createFormConfig(data, schema) });
     }
   },
 
@@ -47,6 +48,62 @@ export const Schema = React.createClass({
     config.error = validate && get(errors, property, errors.required);
     return config;
   },
+
+  onSubmit: function (payload) {
+    console.log(payload);
+  },
+
+  traverseSchema: function (schema, fn, path) {
+    for (let property in schema.properties) {
+      const meta = schema.properties[property];
+      if (meta.type === 'object') {
+        const nextPath = path ? path + '.' + property : property;
+        this.traverseSchema(meta, fn, nextPath);
+      } else {
+        fn(property, meta, schema, path);
+      }
+    }
+  },
+
+  createFormConfig: function (data, schema) {
+    const fields = [];
+    this.traverseSchema(schema, function (property, meta, schemaProperty, path) {
+      const required = Array.isArray(schemaProperty.required) &&
+        schemaProperty.required.indexOf(property) >= 0;
+      var label = meta.title || property;
+      if (meta.description) label += ` (${meta.description})`;
+      if (required) label += ' *required';
+
+      const accessor = path ? path + '.' + property : property;
+      const value = get(data, accessor);
+      const config = { value, label, schemaProperty: accessor };
+
+      const type = Array.isArray(meta['enum']) ? 'enum' : meta.type;
+      switch (type) {
+        case 'enum':
+          // pass the enum fields as options
+          config.options = meta.enum;
+          fields.push(this.dropdown(config, property, (required && isText)));
+          break;
+        case 'array':
+          // some array types have a minItems property
+          let validate = !required ? null
+            : (meta.minItems && isNaN(meta.minItems))
+              ? arrayWithLength(+meta.minItems) : isArray;
+          fields.push(this.list(config, property, validate));
+          break;
+        case 'string':
+          fields.push(this.textfield(config, property, (required && isText)));
+          break;
+        case 'number':
+          fields.push(this.textfield(config, property, (required && isNumber)));
+          break;
+        default: return;
+      }
+    }.bind(this));
+    return fields;
+  },
+
 
   // recursively scan a schema object and create a form config from it.
   // returns a flattened representation of the schema.
@@ -109,7 +166,7 @@ export const Schema = React.createClass({
     if (!fields) return <Loading />;
     return (
       <div>
-        <Form inputMeta={fields} />
+        <Form inputMeta={fields} submit={this.onSubmit}/>
       </div>
     );
   }
