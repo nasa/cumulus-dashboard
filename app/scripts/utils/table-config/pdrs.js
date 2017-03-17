@@ -13,6 +13,7 @@ export const tableHeader = [
   'Processing',
   'Updating CMR',
   'Archiving',
+  'Failed',
   'Completed'
 ];
 
@@ -25,6 +26,7 @@ export const tableRow = [
   (d) => tally(get(d, ['granulesStatus', 'processing'], 0)),
   (d) => tally(get(d, ['granulesStatus', 'cmr'], 0)),
   (d) => tally(get(d, ['granulesStatus', 'archiving'], 0)),
+  (d) => tally(get(d, ['granulesStatus', 'failed'], 0)),
   (d) => tally(get(d, ['granulesStatus', 'completed'], 0))
 ];
 
