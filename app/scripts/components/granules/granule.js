@@ -69,7 +69,7 @@ var GranuleOverview = React.createClass({
 
   componentWillMount: function () {
     const { granuleId } = this.props.params;
-    const immediate = !get(this.props.granules.map, granuleId);
+    const immediate = !this.props.granules.map[granuleId];
     this.reload(immediate);
   },
 
@@ -133,9 +133,9 @@ var GranuleOverview = React.createClass({
 
   render: function () {
     const granuleId = this.props.params.granuleId;
-    const record = get(this.props.granules.map, granuleId);
+    const record = this.props.granules.map[granuleId];
 
-    if (record.inflight && !record.data) {
+    if (!record || (record.inflight && !record.data)) {
       return <Loading />;
     }
 

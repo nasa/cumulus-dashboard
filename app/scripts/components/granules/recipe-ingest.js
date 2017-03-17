@@ -20,18 +20,16 @@ var GranuleRecipe = React.createClass({
 
   componentWillMount: function () {
     const granuleId = this.props.params.granuleId;
-    if (!get(this.props.granules.map, granuleId)) {
+    if (!this.props.granules.map[granuleId]) {
       this.props.dispatch(getGranule(granuleId));
     }
   },
 
   render: function () {
     const granuleId = this.props.params.granuleId;
-    const record = get(this.props.granules, ['map', granuleId]);
+    const record = this.props.granules.map[granuleId];
 
-    if (!record) {
-      return <div></div>;
-    } else if (record.inflight) {
+    if (!record || (record.inflight && !record.data)) {
       return <Loading />;
     }
 
