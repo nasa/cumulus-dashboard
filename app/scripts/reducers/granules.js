@@ -19,7 +19,11 @@ import {
   CLEAR_GRANULES_SEARCH,
 
   FILTER_GRANULES,
-  CLEAR_GRANULES_FILTER
+  CLEAR_GRANULES_FILTER,
+
+  OPTIONS_COLLECTIONNAME,
+  OPTIONS_COLLECTIONNAME_INFLIGHT,
+  OPTIONS_COLLECTIONNAME_ERROR
 } from '../actions';
 
 export const initialState = {
@@ -28,6 +32,7 @@ export const initialState = {
     meta: {},
     params: {}
   },
+  dropdown: {},
   map: {},
   meta: {},
   reprocessed: {}
@@ -86,6 +91,22 @@ export default function reducer (state = initialState, action) {
       break;
     case CLEAR_GRANULES_FILTER:
       set(state, ['list', 'params', action.paramKey], null);
+      break;
+
+    case OPTIONS_COLLECTIONNAME:
+      // Map the list response to an object with key-value pairs like:
+      // displayValue: optionElementValue
+      const options = data.results.reduce((obj, coll) => {
+        obj[coll.collectionName] = coll.collectionName;
+        return obj;
+      }, {'': ''});
+      set(state, ['dropdowns', 'collectionName', 'options'], options);
+      break;
+    case OPTIONS_COLLECTIONNAME_INFLIGHT:
+      break;
+    case OPTIONS_COLLECTIONNAME_ERROR:
+      set(state, ['dropdowns', 'collectionName', 'options'], []);
+      set(state, ['list', 'error'], action.error);
       break;
   }
   return state;
