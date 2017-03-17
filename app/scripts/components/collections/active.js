@@ -50,7 +50,7 @@ var ActiveCollections = React.createClass({
               format={dropdownOption}
               action={filterCollections}
               clear={clearCollectionsFilter}
-              paramKey={'createdAt_from'}
+              paramKey={'createdAt__from'}
               label={'Starting'}
             />
             <Dropdown
@@ -59,7 +59,7 @@ var ActiveCollections = React.createClass({
               format={dropdownOption}
               action={filterCollections}
               clear={clearCollectionsFilter}
-              paramKey={'createdAt_to'}
+              paramKey={'createdAt__to'}
               label={'Ending'}
             />
             <Search dispatch={this.props.dispatch}
