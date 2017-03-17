@@ -21,14 +21,13 @@ var EditCollection = React.createClass({
 
   getInitialState: function () {
     return {
-      collection: '',
       collectionName: null,
       error: null
     };
   },
 
   get: function (collectionName) {
-    const record = get(this.props.collections, ['map', collectionName]);
+    const record = this.props.collections.map[collectionName];
     if (!record) {
       this.props.dispatch(getCollection(collectionName));
     }
@@ -52,19 +51,12 @@ var EditCollection = React.createClass({
     if (record.error) {
       this.setState({
         collectionName,
-        collection: '',
         error: record.error
       });
     } else if (record.data) {
       // record has hit an API success; update the UI
-      try {
-        var collection = JSON.stringify(record.data, null, '\t');
-      } catch (error) {
-        return this.setState({ error, collectionName });
-      }
       this.setState({
         collectionName,
-        collection,
         error: null
       });
     } else if (!record.inflight) {
@@ -73,11 +65,9 @@ var EditCollection = React.createClass({
     }
   },
 
-  onChange: function (id, value) {
-    this.setState({ collection: value });
-  },
-
-  onSubmit: function () {
+  onSubmit: function (payload) {
+    console.log(payload);
+    /*
     try {
       var json = JSON.parse(this.state.collection);
     } catch (e) {
@@ -87,14 +77,15 @@ var EditCollection = React.createClass({
     json.updatedAt = new Date().getTime();
     json.changedBy = 'Cumulus Dashboard';
     this.props.dispatch(updateCollection(json));
+    */
   },
 
   render: function () {
     const collectionName = this.props.params.collectionName;
-    const record = get(this.props.collections.map, collectionName, {});
-    const meta = get(this.props.collections.updated, collectionName, {});
+    const record = get(this.props.collections.map, [collectionName], {});
+    const meta = get(this.props.collections.updated, [collectionName], {});
     const error = this.state.error || record.error || meta.error;
-    const schema = get(this.props.schema, SCHEMA_KEY);
+    const schema = this.props.schema[SCHEMA_KEY];
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -103,6 +94,7 @@ var EditCollection = React.createClass({
             schema={schema}
             data={record.data}
             pk={collectionName}
+            onSubmit={this.onSubmit}
           />
           {record.inflight || meta.status === 'inflight' ? <Loading /> : null}
           {error ? <ErrorReport report={error} /> : null}
