@@ -3,7 +3,7 @@ import React from 'react';
 import { get } from 'object-path';
 import { Form, formTypes } from './';
 import Loading from '../app/loading-indicator';
-import { isText, isNumber, isArray } from '../../utils/validate';
+import { isText, isNumber, isArray, arrayWithLength } from '../../utils/validate';
 import t from '../../utils/strings';
 const { errors } = t;
 export const Schema = React.createClass({
@@ -27,35 +27,25 @@ export const Schema = React.createClass({
     }
   },
 
-  textfield: function (value, schema, property, schemaProperty, validate) {
-    let label = schema.title || property;
-    if (validate) label += ' (required)';
-    return {
-      value, schemaProperty, label, validate,
-      type: formTypes.text,
-      error: validate && get(errors, property, errors.required)
-    };
+  textfield: function (config, property, validate) {
+    config.type = formTypes.text;
+    config.validate = validate;
+    config.error = validate && get(errors, property, errors.required);
+    return config;
   },
 
-  dropdown: function (value, schema, property, schemaProperty, validate) {
-    let label = schema.title || property;
-    if (validate) label += ' (required)';
-    return {
-      value, schemaProperty, label, validate,
-      options: schema['enum'],
-      type: formTypes.dropdown,
-      error: validate && get(errors, property, errors.required)
-    };
+  dropdown: function (config, property, validate) {
+    config.type = formTypes.dropdown;
+    config.validate = validate;
+    config.error = validate && get(errors, property, errors.required);
+    return config;
   },
 
-  list: function (value, schema, property, schemaProperty, validate) {
-    let label = schema.title || property;
-    if (validate) label += ' (required)';
-    return {
-      value, schemaProperty, label, validate,
-      type: formTypes.list,
-      error: validate && get(errors, property, errors.required)
-    };
+  list: function (config, property, validate) {
+    config.type = formTypes.list;
+    config.validate = validate;
+    config.error = validate && get(errors, property, errors.required);
+    return config;
   },
 
   // recursively scan a schema object and create a form config from it.
@@ -63,33 +53,52 @@ export const Schema = React.createClass({
   traverseObject: function (data, object, path) {
     let requiredProperties = object.required || [];
     let fields = [];
+
+    // traverse each property in this object
     for (let property in object.properties) {
-      const accessor = path ? path + '.' + property : property;
-      const value = get(data, accessor);
+      // the schema field
       const schema = object.properties[property];
-      const required = requiredProperties.indexOf(property) >= 0;
+
+      // dropdowns have type set to string, but have an enum prop.
+      // use enum as the type instead of string.
       const type = Array.isArray(schema['enum']) ? 'enum' : schema.type;
-      switch (type) {
-        case 'object':
-          fields = fields.concat(this.traverseObject(data, schema, accessor));
-          break;
-        case 'enum':
-          fields.push(this.dropdown(
-            value, schema, property, accessor, (required && isText)));
-          break;
-        case 'array':
-          fields.push(this.list(
-            value, schema, property, accessor, (required && isArray)));
-          break;
-        case 'string':
-          fields.push(this.textfield(
-            value, schema, property, accessor, (required && isText)));
-          break;
-        case 'number':
-          fields.push(this.textfield(
-            value, schema, property, accessor, (required && isNumber)));
-          break;
-        default: continue;
+
+      // create an object-path-ready accessor string
+      const accessor = path ? path + '.' + property : property;
+      if (type === 'object') {
+        // recursively traverse if it's another object
+        fields = fields.concat(this.traverseObject(data, schema, accessor));
+      } else {
+        // determine the label
+        var label = schema.title || property;
+        const required = requiredProperties.indexOf(property) >= 0;
+        if (schema.description) label += ` (${schema.description})`;
+        if (required) label += ' *required';
+
+        // create the form configuration
+        const value = get(data, accessor);
+        var config = { value, label, schemaProperty: accessor };
+        switch (type) {
+          case 'enum':
+            // pass the enum fields as options
+            config.options = schema.enum;
+            fields.push(this.dropdown(config, property, (required && isText)));
+            break;
+          case 'array':
+            // some array types have a minItems property
+            let validate = !required ? null
+              : (schema.minItems && isNaN(schema.minItems))
+                ? arrayWithLength(+schema.minItems) : isArray;
+            fields.push(this.list(config, property, validate));
+            break;
+          case 'string':
+            fields.push(this.textfield(config, property, (required && isText)));
+            break;
+          case 'number':
+            fields.push(this.textfield(config, property, (required && isNumber)));
+            break;
+          default: continue;
+        }
       }
     }
     return fields;
