@@ -114,6 +114,10 @@ select {
   }
 }
 
+.list-view {
+  position: relative;
+}
+
 .form-group__element {
   float: left;
   margin-right: 1em;
@@ -135,6 +139,12 @@ select {
   float: right;
   cursor: pointer;
   width: 150px;
+}
+
+.form__element__updateToggle-noHeader {
+  position: absolute;
+  right: 0;
+  top: -5.5rem;
 }
 
 .form-group__element--right {

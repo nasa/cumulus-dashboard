@@ -154,7 +154,16 @@ var List = React.createClass({
     const checked = this.state.selected.length === list.data.length && list.data.length;
 
     return (
-      <div>
+      <div className='list-view'>
+        <div className={isRemovable ? 'form__element__updateToggle' : 'form__element__updateToggle form__element__updateToggle-noHeader'} onClick={this.toggleAutoFetch}>
+          <div className='form-group__updating'>
+            Next update in: {seconds === -1 ? '-' : seconds }
+          </div>
+          <i className='metadata__updated'>
+            {seconds === -1 ? 'Start automatic updates' : 'Stop automatic updates'}
+          </i>
+        </div>
+
         {isRemovable ? (
           <div className='form--controls'>
             <label className='form__element__select form-group__element form-group__element--small'>
@@ -163,14 +172,6 @@ var List = React.createClass({
             </label>
             <button className='button button--small form-group__element'>Remove From CMR</button>
             <button className='button button--small form-group__element'>Reprocess</button>
-            <div className='form__element__updateToggle' onClick={this.toggleAutoFetch}>
-              <div className='form-group__updating'>
-                Next update in: {seconds === -1 ? '-' : seconds }
-              </div>
-              <i className='metadata__updated'>
-                {seconds === -1 ? 'Start automatic updates' : 'Stop automatic updates'}
-              </i>
-            </div>
           </div>
         ) : null}
 
