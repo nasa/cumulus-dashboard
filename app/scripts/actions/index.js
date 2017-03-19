@@ -52,6 +52,10 @@ export const CLEAR_GRANULES_SEARCH = 'CLEAR_GRANULES_SEARCH';
 export const FILTER_GRANULES = 'FILTER_GRANULES';
 export const CLEAR_GRANULES_FILTER = 'CLEAR_GRANULES_FILTER';
 
+export const OPTIONS_COLLECTIONNAME = 'OPTIONS_COLLECTIONNAME';
+export const OPTIONS_COLLECTIONNAME_INFLIGHT = 'OPTIONS_COLLECTIONNAME_INFLIGHT';
+export const OPTIONS_COLLECTIONNAME_ERROR = 'OPTIONS_COLLECTIONNAME_ERROR';
+
 export const STATS = 'STATS';
 
 export const PDRS = 'PDRS';
@@ -116,6 +120,11 @@ export const clearGranulesSearch = () => ({ type: CLEAR_GRANULES_SEARCH });
 export const filterGranules = (param) => ({ type: FILTER_GRANULES, param: param });
 
 export const clearGranulesFilter = (paramKey) => ({ type: CLEAR_GRANULES_FILTER, paramKey: paramKey });
+
+export const getOptionsCollectionName = () => wrapRequest(null, get, {
+  url: url.resolve(root, 'collections'),
+  qs: { limit: 100, fields: 'collectionName' }
+}, OPTIONS_COLLECTIONNAME);
 
 export const getStats = () => wrapRequest(null, get, 'stats/summary/grouped', STATS);
 
