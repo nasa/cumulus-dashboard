@@ -47,7 +47,7 @@ var Home = React.createClass({
     // TODO set time span of granules
     this.props.dispatch(getStats());
     this.props.dispatch(listGranules({
-      updatedAt_from: timespan,
+      updatedAt__from: timespan,
       sort_by: 'updatedAt',
       order: 'desc',
       limit: 10,

@@ -9,11 +9,11 @@ module.exports = {
   tabSize: 2,
 
   // list queries
-  pageLimit: 20,
+  pageLimit: 50,
 
   searchPageLimit: 7,
 
   // auto-update frequency
-  updateInterval: 10000,
-  logsUpdateInterval: 8000
+  updateInterval: 15000,
+  logsUpdateInterval: 10000
 };

@@ -25,7 +25,6 @@ const tableRow = [
   (d) => fullDate(d.updatedAt)
 ];
 
-const activeStatus = 'ingesting OR processing OR cmr OR archiving';
 const granuleFields = 'status,granuleId,pdrName,duration,updatedAt';
 
 var CollectionOverview = React.createClass({
@@ -54,7 +53,7 @@ var CollectionOverview = React.createClass({
     this.props.dispatch(listGranules({
       collectionName,
       fields: granuleFields,
-      q: activeStatus,
+      status__not: 'completed',
       limit: 10
     }));
   },
@@ -78,7 +77,7 @@ var CollectionOverview = React.createClass({
   render: function () {
     const collectionName = this.props.params.collectionName;
     const { granules, collections } = this.props;
-    const record = get(collections.map, collectionName);
+    const record = collections.map[collectionName];
     const { list } = granules;
     const { meta } = list;
 
