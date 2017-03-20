@@ -7,13 +7,15 @@ import TextForm from './text';
 import TextAreaForm from './text-area';
 import Dropdown from './simple-dropdown';
 import List from './arbitrary-list';
+import SubForm from './sub-form';
 import t from '../../utils/strings';
 
 export const formTypes = {
   text: 'TEXT',
   textArea: 'TEXT_AREA',
   dropdown: 'DROPDOWN',
-  list: 'LIST'
+  list: 'LIST',
+  subform: 'SUB_FORM'
 };
 
 export const defaults = {
@@ -140,6 +142,9 @@ export const Form = React.createClass({
               case formTypes.list:
                 element = List;
                 break;
+              case formTypes.subform:
+                element = SubForm;
+                break;
               case formTypes.text:
               default:
                 element = TextForm;
@@ -150,11 +155,15 @@ export const Form = React.createClass({
             let inputId = this.generateComponentId(label);
             let { value, error } = inputState[inputId];
             // coerce non-null values to string to simplify proptype warnings on numbers
-            if (type !== formTypes.list) { value = (value || value === 0) && String(value); }
+            if (type !== formTypes.list && type !== formTypes.subform) {
+              value = (value || value === 0) && String(value);
+            }
             // dropdowns have options
             let options = type === formTypes.dropdown && form.options || null;
             // textarea forms pass a mode value to ace
             const mode = type === formTypes.textArea && form.mode || null;
+            // subforms have a fields prop
+            const fields = type === formTypes.subform && form.fields || null;
             const elem = React.createElement(element, {
               id: inputId,
               label,
@@ -162,6 +171,7 @@ export const Form = React.createClass({
               error,
               mode,
               options,
+              fields,
               onChange: this.onChange
             });
             return <div className='form__item' key={inputId}>{elem}</div>;
