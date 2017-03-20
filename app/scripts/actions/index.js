@@ -68,6 +68,16 @@ export const CLEAR_PDRS_SEARCH = 'CLEAR_PDRS_SEARCH';
 export const FILTER_PDRS = 'FILTER_PDRS';
 export const CLEAR_PDRS_FILTER = 'CLEAR_PDRS_FILTER';
 
+export const PROVIDERS = 'PROVIDERS';
+export const PROVIDERS_INFLIGHT = 'PROVIDERS_INFLIGHT';
+export const PROVIDERS_ERROR = 'PROVIDERS_ERROR';
+
+export const SEARCH_PROVIDERS = 'SEARCH_PROVIDERS';
+export const CLEAR_PROVIDERS_SEARCH = 'CLEAR_PROVIDERS_SEARCH';
+
+export const FILTER_PROVIDERS = 'FILTER_PROVIDERS';
+export const CLEAR_PROVIDERS_FILTER = 'CLEAR_PROVIDERS_FILTER';
+
 export const LOGS = 'LOGS';
 export const LOGS_INFLIGHT = 'LOGS_INFLIGHT';
 export const LOGS_ERROR = 'LOGS_ERROR';
@@ -140,6 +150,19 @@ export const clearPdrsSearch = () => ({ type: CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: FILTER_PDRS, param: param });
 
 export const clearPdrsFilter = (paramKey) => ({ type: CLEAR_PDRS_FILTER, paramKey: paramKey });
+
+export const listProviders = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'providers'),
+  qs: Object.assign({ limit: pageLimit }, options)
+}, PROVIDERS);
+
+export const searchProviders = (prefix) => ({ type: SEARCH_PROVIDERS, prefix: prefix });
+
+export const clearProvidersSearch = () => ({ type: CLEAR_PROVIDERS_SEARCH });
+
+export const filterProviders = (param) => ({ type: FILTER_PROVIDERS, param: param });
+
+export const clearProvidersFilter = (paramKey) => ({ type: CLEAR_PROVIDERS_FILTER, paramKey: paramKey });
 
 export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),

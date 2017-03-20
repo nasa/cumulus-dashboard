@@ -4,6 +4,7 @@ import collections from './collections';
 import granules from './granules';
 import stats from './stats';
 import pdrs from './pdrs';
+import providers from './providers';
 import logs from './logs';
 
 export const reducers = {
@@ -13,6 +14,7 @@ export const reducers = {
   granules,
   stats,
   pdrs,
+  providers,
   logs
 };
 

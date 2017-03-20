@@ -2,7 +2,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
+import { Provider as ProviderElem } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { useScroll } from 'react-router-scroll';
 import {
@@ -50,6 +50,13 @@ import Pdr from './components/pdr/pdr';
 import ActivePdrs from './components/pdr/active';
 import PdrCompleted from './components/pdr/completed';
 
+import Providers from './components/providers';
+import ProvidersOverview from './components/providers/overview';
+// import Provider from './components/providers/provider';
+// import ActiveProviders from './components/providers/active';
+import InactiveProviders from './components/providers/inactive';
+// import ProviderErrors from './components/providers/errors';
+
 import Logs from './components/logs';
 import Contact from './components/contact';
 
@@ -61,7 +68,7 @@ function requireAuth (nextState, replace) {
 }
 
 render((
-  <Provider store={store}>
+  <ProviderElem store={store}>
     <Router history={hashHistory} render={applyRouterMiddleware(useScroll())}>
       <Route path='/404' component={NotFound} />
       <Redirect from='/collections' to='/collections/active' />
@@ -92,9 +99,13 @@ render((
           <Route path='completed' component={PdrCompleted} />
           <Route path='pdr/:pdrName' component={Pdr} />
         </Route>
+        <Route path='providers' component={Providers}>
+          <IndexRoute component={ProvidersOverview} />
+          <Route path='inactive' component={InactiveProviders} />
+        </Route>
         <Route path='logs' component={Logs} />
         <Route path='contact' component={Contact} />
       </Route>
     </Router>
-  </Provider>
+  </ProviderElem>
 ), document.getElementById('site-canvas'));

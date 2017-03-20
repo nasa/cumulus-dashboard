@@ -1,55 +1,48 @@
 'use strict';
+
 import React from 'react';
 import { connect } from 'react-redux';
-import { listPdrs } from '../../actions';
+import { listProviders } from '../../actions';
 import { lastUpdated } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdrs';
+import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/providers';
 import List from '../table/list-view';
 
 import Overview from '../app/overview';
 
-var PdrOverview = React.createClass({
-  displayName: 'PdrOverview',
+var ProvidersOverview = React.createClass({
+  displayName: 'ProvidersOverview',
 
   propTypes: {
     dispatch: React.PropTypes.func,
-    pdrs: React.PropTypes.object
-  },
-
-  renderOverview: function () {
-    const overview = [
-      [2, 'Errors'],
-      ['200k', 'Active PDRs'],
-      ['200k', 'Completed PDRs']
-    ];
-    return <Overview items={overview} inflight={false} />;
+    providers: React.PropTypes.object
   },
 
   generateQuery: function () {
-    return {limit: 10};
+    return {
+      limit: 10,
+      status: 'ingesting'
+    };
   },
 
   render: function () {
-    const { list } = this.props.pdrs;
+    const { list } = this.props.providers;
     const { count, queriedAt } = list.meta;
-    // create the overview boxes
-    const overview = this.renderOverview();
+
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>PDRs Overview</h1>
+          <h1 className='heading--large heading--shared-content'>Providers</h1>
           {lastUpdated(queriedAt)}
-          {overview}
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Recently Active PDRs{count ? ` (${count})` : null}</h2>
+            <h2 className='heading--medium heading--shared-content'>Ingesting Providers{count ? ` (${count})` : null}</h2>
           </div>
 
           <List
             list={list}
             dispatch={this.props.dispatch}
-            action={listPdrs}
+            action={listProviders}
             tableHeader={tableHeader}
             tableRow={tableRow}
             tableSortProps={tableSortProps}
@@ -61,4 +54,4 @@ var PdrOverview = React.createClass({
   }
 });
 
-export default connect(state => state)(PdrOverview);
+export default connect(state => state)(ProvidersOverview);
