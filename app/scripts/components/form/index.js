@@ -42,6 +42,7 @@ export const Form = React.createClass({
   },
 
   propTypes: {
+    id: React.PropTypes.string,
     inputMeta: React.PropTypes.array,
     submit: React.PropTypes.func,
     cancel: React.PropTypes.func,
@@ -119,7 +120,7 @@ export const Form = React.createClass({
     }));
 
     if (!hasError) {
-      this.props.submit(payload);
+      this.props.submit(this.props.id, payload);
     }
   },
 
@@ -163,8 +164,8 @@ export const Form = React.createClass({
             let options = type === formTypes.dropdown && form.options || null;
             // textarea forms pass a mode value to ace
             const mode = type === formTypes.textArea && form.mode || null;
-            // subforms have a fields prop
-            const fields = type === formTypes.subform && form.fields || null;
+            // subforms have fieldsets that define child form structure
+            const fieldSet = type === formTypes.subform && form.fieldSet || null;
             const elem = React.createElement(element, {
               id: inputId,
               label,
@@ -172,7 +173,7 @@ export const Form = React.createClass({
               error,
               mode,
               options,
-              fields,
+              fieldSet,
               onChange: this.onChange
             });
             return <li className='form__item' key={inputId}>{elem}</li>;

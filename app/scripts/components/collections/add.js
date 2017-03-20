@@ -57,7 +57,7 @@ var AddCollection = React.createClass({
     collections: React.PropTypes.object
   },
 
-  post: function (payload) {
+  post: function (id, payload) {
     payload.createdAt = new Date().getTime();
     payload.updatedAt = new Date().getTime();
     payload.changedBy = 'Cumulus Dashboard';
