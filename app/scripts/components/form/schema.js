@@ -94,6 +94,7 @@ export const Schema = React.createClass({
 
           // get any pre-existing objects, assigning the object key as _key.
           // this becomes the nested object's "name".
+          // if there are no values, include an empty fieldset as a template.
           var values = value ? Object.keys(value).map(key => Object.assign({_key: key}, value[key])) : [{}];
           if (!values.length) values = [{}];
 
@@ -105,7 +106,7 @@ export const Schema = React.createClass({
           // attach the fields
           config.fields = values.map(item => ({
             name: item._key,
-            forms: this.createFormConfig(item, patternProperties[pattern])
+            fields: this.createFormConfig(item, patternProperties[pattern])
           }));
           config.type = formTypes.subform;
           fields.push(config);

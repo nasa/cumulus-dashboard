@@ -175,7 +175,7 @@ export const Form = React.createClass({
               fields,
               onChange: this.onChange
             });
-            return <div className='form__item' key={inputId}>{elem}</div>;
+            return <li className='form__item' key={inputId}>{elem}</li>;
           })}
         </ul>
 
