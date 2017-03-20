@@ -185,6 +185,7 @@ select {
   width: 50%;
 }
 
+.subform__item,
 .form__addone--item {
   margin: 0.5em 0;
 }
@@ -197,4 +198,23 @@ select {
   margin-left: 0.5em;
   padding: 0.5em 1.8em;
   width: 5em;
+}
+
+.subform__name {
+  width: 50%;
+  display: inline-block;
+  border-bottom: 1px solid $grey;
+}
+
+.subform__button {
+  margin-left: 0.5em;
+  padding: 0.5em 1.8em;
+}
+
+.subform__fields {
+  margin-top: 1em;
+}
+
+.subform__item--expanded {
+  background-color: $lightest-grey;
 }
