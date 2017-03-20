@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 
-var List = React.createClass({
+const List = React.createClass({
   propTypes: {
     label: React.PropTypes.string,
     value: React.PropTypes.array,

@@ -45,7 +45,8 @@ export const Form = React.createClass({
     inputMeta: React.PropTypes.array,
     submit: React.PropTypes.func,
     cancel: React.PropTypes.func,
-    inflight: React.PropTypes.bool
+    inflight: React.PropTypes.bool,
+    nowrap: React.PropTypes.bool
   },
 
   generateComponentId: function (label) {
@@ -124,8 +125,8 @@ export const Form = React.createClass({
 
   render: function () {
     const inputState = this.state.inputs;
-    return (
-      <form id={`form-${this.id}`}>
+    const form = (
+      <div>
         <ul>
           {this.props.inputMeta.map(form => {
             let { type, label } = form;
@@ -199,7 +200,8 @@ export const Form = React.createClass({
             />
           </span>
         ) : null}
-      </form>
+      </div>
     );
+    return this.props.nowrap ? form : <form id={`form-${this.id}`}>{form}</form>;
   }
 });
