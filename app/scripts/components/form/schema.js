@@ -29,6 +29,7 @@ export const createFormConfig = function (data, schema) {
     const required = Array.isArray(schemaProperty.required) &&
       schemaProperty.required.indexOf(property) >= 0;
     var label = meta.title || property;
+    if (path) label = path + ' - ' + label;
     if (meta.description) label += ` (${meta.description})`;
     if (required) label += ' *required';
 
@@ -129,16 +130,12 @@ export const Schema = React.createClass({
     }
   },
 
-  onSubmit: function (payload) {
-    console.log(payload);
-  },
-
   render: function () {
     const { fields } = this.state;
     if (!fields) return <Loading />;
     return (
       <div>
-        <Form inputMeta={fields} submit={this.onSubmit}/>
+        <Form inputMeta={fields} submit={this.props.onSubmit}/>
       </div>
     );
   }
