@@ -7,9 +7,9 @@ import { get } from 'object-path';
 import { fullDate, lastUpdated, seconds, nullValue } from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
-import Ellipsis from '../app/loading-ellipsis';
-import { updateInterval } from '../../config';
 import LogViewer from '../logs/viewer';
+import AsyncCommand from '../form/async-command';
+import { updateInterval } from '../../config';
 
 const tableHeader = [
   'Filename',
@@ -54,12 +54,6 @@ const metaAccessors = [
 var GranuleOverview = React.createClass({
   displayName: 'Granule',
 
-  getInitialState: function () {
-    return {
-      reprocessing: false
-    };
-  },
-
   propTypes: {
     params: React.PropTypes.object,
     dispatch: React.PropTypes.func,
@@ -77,25 +71,23 @@ var GranuleOverview = React.createClass({
     if (this.cancelInterval) { this.cancelInterval(); }
   },
 
-  reload: function (immediate) {
+  reload: function (immediate, timeout) {
+    timeout = timeout || updateInterval;
     const granuleId = this.props.params.granuleId;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
-    this.cancelInterval = interval(() => dispatch(getGranule(granuleId)), updateInterval, immediate);
-    this.cancelInterval();
+    this.cancelInterval = interval(() => dispatch(getGranule(granuleId)), timeout, immediate);
+  },
+
+  fastReload: function () {
+    // delay a reload but shorten the duration
+    // this shows the granule as it reprocesses
+    this.reload(false, 2000);
   },
 
   reprocess: function () {
     const { granuleId } = this.props.params;
-    const { reprocessing } = this.state;
-    if (!reprocessing) {
-      this.props.dispatch(reprocessGranule(granuleId));
-      this.setState({ reprocessing: true });
-      setTimeout(function () {
-        this.reload(true);
-        this.setState({ reprocessing: false });
-      }.bind(this), 2000);
-    }
+    this.props.dispatch(reprocessGranule(granuleId));
   },
 
   renderStatus: function (status) {
@@ -138,25 +130,26 @@ var GranuleOverview = React.createClass({
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
     }
-
     const granule = record.data;
-    const { reprocessing } = this.state;
-
     const files = [];
     if (granule.files) {
-      for (let key in granule.files) { files.push(granule.files[key]); }
+      for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }
     }
     const logsQuery = { granuleId };
-    const cmrLink = get(granule, 'cmrLink');
+    const cmrLink = granule.cmrLink;
+    const reprocessStatus = get(this.props.granules.reprocessed, [granuleId, 'status']);
     return (
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large heading--shared-content'>{granuleId}</h1>
           <Link className='button button--small form-group__element--right button--disabled button--green' to='/'>Delete</Link>
           <Link className='button button--small form-group__element--right button--green' to='/'>Remove from CMR</Link>
-          <button
-            className={'button button--small form-group__element--right button--green' + (reprocessing ? ' button--reprocessing' : '')}
-            onClick={this.reprocess}>Reprocess{ reprocessing ? <Ellipsis /> : '' }</button>
+
+          <AsyncCommand action={this.reprocess}
+            success={this.fastReload}
+            status={reprocessStatus}
+            text={'Reprocess'} />
+
           {lastUpdated(granule.queriedAt)}
           {this.renderStatus(granule.status)}
         </section>
