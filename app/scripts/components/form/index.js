@@ -62,7 +62,7 @@ export const Form = React.createClass({
     const inputState = {};
     this.props.inputMeta.forEach(input => {
       let inputId = this.generateComponentId(input.label);
-      let value = input.value
+      let value = input.value;
       if (!value && value !== 0) {
         value = input.type === formTypes.list ? []
           : input.type === formTypes.subform ? {} : '';
