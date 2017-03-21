@@ -11,8 +11,6 @@ import merge from '../../utils/merge';
 const SCHEMA_KEY = 'collection';
 
 var EditCollection = React.createClass({
-  displayName: 'EditCollection',
-
   propTypes: {
     params: React.PropTypes.object,
     collections: React.PropTypes.object,
@@ -86,12 +84,14 @@ var EditCollection = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large'>Edit {collectionName}</h1>
-          <Schema
-            schema={schema}
-            data={record.data}
-            pk={collectionName}
-            onSubmit={this.onSubmit}
-          />
+          {schema && record.data ? (
+            <Schema
+              schema={schema}
+              data={record.data}
+              pk={collectionName}
+              onSubmit={this.onSubmit}
+            />
+          ) : null}
           {record.inflight || meta.status === 'inflight' ? <Loading /> : null}
           {error ? <ErrorReport report={error} /> : null}
           {meta.status === 'success' ? <p>Success!</p> : null}

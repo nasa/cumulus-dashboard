@@ -109,7 +109,6 @@ function list (config, property, validate) {
 }
 
 export const Schema = React.createClass({
-
   propTypes: {
     schema: React.PropTypes.object,
     data: React.PropTypes.object,
@@ -121,11 +120,15 @@ export const Schema = React.createClass({
     return { fields: null };
   },
 
+  componentWillMount: function () {
+    const { schema, data } = this.props;
+    this.setState({ fields: createFormConfig(data, schema) });
+  },
+
   componentWillReceiveProps: function (newProps) {
     const { props } = this;
     const { schema, data } = newProps;
-    if ((props.pk !== newProps.pk) ||
-        ((!props.schema || !props.data) && schema && data)) {
+    if (props.pk !== newProps.pk) {
       this.setState({ fields: createFormConfig(data, schema) });
     }
   },
