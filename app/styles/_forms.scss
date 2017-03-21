@@ -20,6 +20,7 @@ label {
 }
 
 .dropdown__wrapper {
+  display: inline-block;
   border: 1px solid $lightest-grey;
   border-radius: .5em;
   position: relative;
@@ -174,4 +175,46 @@ select {
 
 .ace_content {
   padding-top: .5em;
+}
+
+.form__item {
+  margin-bottom: 1.5em;
+}
+
+.form__text input[type="text"] {
+  width: 50%;
+}
+
+.subform__item,
+.form__addone--item {
+  margin: 0.5em 0;
+}
+
+.form__addone--input {
+  width: 50%;
+}
+
+.form__addone--button {
+  margin-left: 0.5em;
+  padding: 0.5em 1.8em;
+  width: 5em;
+}
+
+.subform__name {
+  width: 50%;
+  display: inline-block;
+  border-bottom: 1px solid $grey;
+}
+
+.subform__button {
+  margin-left: 0.5em;
+  padding: 0.5em 1.8em;
+}
+
+.subform__fields {
+  margin-top: 1em;
+}
+
+.subform__item--expanded {
+  background-color: $lightest-grey;
 }
