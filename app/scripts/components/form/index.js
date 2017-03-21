@@ -62,7 +62,11 @@ export const Form = React.createClass({
     const inputState = {};
     this.props.inputMeta.forEach(input => {
       let inputId = this.generateComponentId(input.label);
-      let value = input.value || (input.type === formTypes.list ? [] : '');
+      let value = input.value
+      if (!value && value !== 0) {
+        value = input.type === formTypes.list ? []
+          : input.type === formTypes.subform ? {} : '';
+      }
       let error = null;
       inputState[inputId] = { value, error };
     });
@@ -157,8 +161,8 @@ export const Form = React.createClass({
             let inputId = this.generateComponentId(label);
             let { value, error } = inputState[inputId];
             // coerce non-null values to string to simplify proptype warnings on numbers
-            if (type !== formTypes.list && type !== formTypes.subform) {
-              value = (value || value === 0) && String(value);
+            if (type !== formTypes.list && type !== formTypes.subform && !value && value !== 0) {
+              value = String(value);
             }
             // dropdowns have options
             let options = type === formTypes.dropdown && form.options || null;

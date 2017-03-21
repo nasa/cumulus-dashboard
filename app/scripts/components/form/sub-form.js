@@ -20,9 +20,6 @@ const SubForm = React.createClass({
     };
   },
 
-  componentWillReceiveProps: function (newProps) {
-  },
-
   render: function () {
     const {
       label,
@@ -38,6 +35,15 @@ const SubForm = React.createClass({
         fields: createFormConfig(value[key], fieldSet)
       });
     }
+
+    // create a default
+    if (!fields.length) {
+      fields.push({
+        name: 'New',
+        fields: createFormConfig({}, fieldSet)
+      });
+    }
+
     return (
       <div id={id} className='subform'>
         <label>{label} {error}</label>

@@ -47,12 +47,6 @@ export const createFormConfig = function (data, schema) {
         // pattern fields are an abstraction on arrays of objects.
         // each item in the array will be a grouped set of field inputs.
 
-        // get any pre-existing objects, assigning the object key as _key.
-        // this becomes the nested object's "name".
-        // if there are no values, include an empty fieldset as a template.
-        var values = value ? Object.keys(value).map(key => Object.assign({_key: key}, value[key])) : [{}];
-        if (!values.length) values = [{}];
-
         // get the first pattern property, which should be a regex that
         // validates _key.
         const { patternProperties } = meta;
