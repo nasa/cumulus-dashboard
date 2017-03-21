@@ -6,6 +6,7 @@ import { getCollection, updateCollection, getSchema } from '../../actions';
 import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
 import Schema from '../form/schema';
+import merge from '../../utils/merge';
 
 const SCHEMA_KEY = 'collection';
 
@@ -65,19 +66,14 @@ var EditCollection = React.createClass({
     }
   },
 
-  onSubmit: function (payload) {
-    console.log(payload);
-    /*
-    try {
-      var json = JSON.parse(this.state.collection);
-    } catch (e) {
-      return this.setState({ error: 'Syntax error in JSON' });
-    }
+  onSubmit: function (id, payload) {
+    const collectionName = this.props.params.collectionName;
+    const record = this.props.collections.map[collectionName];
+    const json = merge(record.data, payload);
     this.setState({ error: null });
     json.updatedAt = new Date().getTime();
     json.changedBy = 'Cumulus Dashboard';
     this.props.dispatch(updateCollection(json));
-    */
   },
 
   render: function () {
