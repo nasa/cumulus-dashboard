@@ -18,11 +18,12 @@ const AsyncCommand = React.createClass({
   },
 
   processingClass: function (processing) {
-    return 'button button--small form-group__element--right button--green' + (processing ? ' button--reprocessing' : '');
+    return 'button button--small form-group__element--right button--green' + (processing ? ' button--loading' : '');
   },
 
   handleClick: function (e) {
     e.preventDefault();
+    // prevent duplicate action if the action is already inflight.
     if (this.props.status !== 'inflight') {
       this.props.action();
     }
