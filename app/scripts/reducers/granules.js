@@ -15,6 +15,10 @@ import {
   GRANULE_REPROCESS_INFLIGHT,
   GRANULE_REPROCESS_ERROR,
 
+  GRANULE_REMOVE,
+  GRANULE_REMOVE_INFLIGHT,
+  GRANULE_REMOVE_ERROR,
+
   SEARCH_GRANULES,
   CLEAR_GRANULES_SEARCH,
 
@@ -35,7 +39,8 @@ export const initialState = {
   dropdown: {},
   map: {},
   meta: {},
-  reprocessed: {}
+  reprocessed: {},
+  removed: {}
 };
 
 export default function reducer (state = initialState, action) {
@@ -70,6 +75,7 @@ export default function reducer (state = initialState, action) {
 
     case GRANULE_REPROCESS:
       set(state, ['reprocessed', id, 'status'], 'success');
+      set(state, ['reprocessed', id, 'error'], null);
       break;
     case GRANULE_REPROCESS_INFLIGHT:
       set(state, ['reprocessed', id, 'status'], 'inflight');
@@ -77,6 +83,18 @@ export default function reducer (state = initialState, action) {
     case GRANULE_REPROCESS_ERROR:
       set(state, ['reprocessed', id, 'status'], 'error');
       set(state, ['reprocessed', id, 'error'], action.error);
+      break;
+
+    case GRANULE_REMOVE:
+      set(state, ['removed', id, 'status'], 'success');
+      set(state, ['removed', id, 'error'], null);
+      break;
+    case GRANULE_REMOVE_INFLIGHT:
+      set(state, ['removed', id, 'status'], 'inflight');
+      break;
+    case GRANULE_REMOVE_ERROR:
+      set(state, ['removed', id, 'status'], 'error');
+      set(state, ['removed', id, 'error'], action.error);
       break;
 
     case SEARCH_GRANULES:

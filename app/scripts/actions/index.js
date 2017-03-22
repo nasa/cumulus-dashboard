@@ -46,6 +46,10 @@ export const GRANULE_REPROCESS = 'GRANULE_REPROCESS';
 export const GRANULE_REPROCESS_INFLIGHT = 'GRANULE_REPROCESS_INFLIGHT';
 export const GRANULE_REPROCESS_ERROR = 'GRANULE_REPROCESS_ERROR';
 
+export const GRANULE_REMOVE = 'GRANULE_REMOVE';
+export const GRANULE_REMOVE_INFLIGHT = 'GRANULE_REMOVE_INFLIGHT';
+export const GRANULE_REMOVE_ERROR = 'GRANULE_REMOVE_ERROR';
+
 export const SEARCH_GRANULES = 'SEARCH_GRANULES';
 export const CLEAR_GRANULES_SEARCH = 'CLEAR_GRANULES_SEARCH';
 
@@ -115,6 +119,11 @@ export const listGranules = (options) => wrapRequest(null, get, {
 export const reprocessGranule = (granuleId) => wrapRequest(
   granuleId, put, `granules/${granuleId}`, GRANULE_REPROCESS, {
     action: 'reprocess'
+  });
+
+export const removeGranule = (granuleId) => wrapRequest(
+  granuleId, put, `granules/${granuleId}`, GRANULE_REMOVE, {
+    action: 'removeFromCmr'
   });
 
 export const searchGranules = (prefix) => ({ type: SEARCH_GRANULES, prefix: prefix });
