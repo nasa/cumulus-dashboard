@@ -35,7 +35,8 @@ var CollectionOverview = React.createClass({
     params: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     granules: React.PropTypes.object,
-    collections: React.PropTypes.object
+    collections: React.PropTypes.object,
+    router: React.PropTypes.object
   },
 
   componentWillMount: function () {
@@ -62,6 +63,12 @@ var CollectionOverview = React.createClass({
   delete: function () {
     const collectionName = this.props.params.collectionName;
     this.props.dispatch(deleteCollection(collectionName));
+  },
+
+  navigateBack: function () {
+    // delay the navigation so we can see the success indicator
+    const { router } = this.props;
+    settimeout(() => router.push('/collections/active'), 1000);
   },
 
   errors: function () {
@@ -94,7 +101,6 @@ var CollectionOverview = React.createClass({
     const { list } = granules;
     const { meta } = list;
     const deleteStatus = get(collections.deleted, [collectionName, 'status']);
-    console.log(collections);
     const hasGranules = get(record.data, 'granules', []).length;
     const errors = this.errors();
 
