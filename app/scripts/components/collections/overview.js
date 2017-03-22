@@ -68,7 +68,7 @@ var CollectionOverview = React.createClass({
   navigateBack: function () {
     // delay the navigation so we can see the success indicator
     const { router } = this.props;
-    settimeout(() => router.push('/collections/active'), 1000);
+    setTimeout(() => router.push('/collections/active'), 1000);
   },
 
   errors: function () {
