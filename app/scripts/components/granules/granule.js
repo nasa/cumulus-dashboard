@@ -1,8 +1,13 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
-import { interval, getGranule, reprocessGranule, removeGranule } from '../../actions';
+import {
+  interval,
+  getGranule,
+  reprocessGranule,
+  removeGranule,
+  deleteGranule
+} from '../../actions';
 import { get } from 'object-path';
 import { fullDate, lastUpdated, seconds, nullValue } from '../../utils/format';
 import SortableTable from '../table/sortable';
@@ -96,14 +101,20 @@ var GranuleOverview = React.createClass({
     this.props.dispatch(removeGranule(granuleId));
   },
 
+  delete: function () {
+    const { granuleId } = this.props.params;
+    this.props.dispatch(deleteGranule(granuleId));
+  },
+
   errors: function () {
     const granuleId = this.props.params.granuleId;
     const errors = [
       get(this.props.granules.map, [granuleId, 'error']),
       get(this.props.granules.reprocessed, [granuleId, 'error']),
-      get(this.props.granules.removed, [granuleId, 'error'])
+      get(this.props.granules.removed, [granuleId, 'error']),
+      get(this.props.granules.deleted, [granuleId, 'error'])
     ].filter(Boolean);
-    return errors.length ? errors.map(JSON.stringify).join('\n') : null;
+    return errors.length ? errors.map(JSON.stringify).join(', ') : null;
   },
 
   renderStatus: function (status) {
@@ -155,12 +166,16 @@ var GranuleOverview = React.createClass({
     const cmrLink = granule.cmrLink;
     const reprocessStatus = get(this.props.granules.reprocessed, [granuleId, 'status']);
     const removeStatus = get(this.props.granules.removed, [granuleId, 'status']);
+    const deleteStatus = get(this.props.granules.deleted, [granuleId, 'status']);
     const errors = this.errors();
     return (
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large heading--shared-content'>{granuleId}</h1>
-          <Link className='button button--small form-group__element--right button--disabled button--green' to='/'>Delete</Link>
+
+          <AsyncCommand action={this.delete}
+            status={deleteStatus}
+            text={'Delete'} />
 
           <AsyncCommand action={this.remove}
             status={removeStatus}

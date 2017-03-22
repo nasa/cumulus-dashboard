@@ -19,6 +19,10 @@ import {
   GRANULE_REMOVE_INFLIGHT,
   GRANULE_REMOVE_ERROR,
 
+  GRANULE_DELETE,
+  GRANULE_DELETE_INFLIGHT,
+  GRANULE_DELETE_ERROR,
+
   SEARCH_GRANULES,
   CLEAR_GRANULES_SEARCH,
 
@@ -95,6 +99,18 @@ export default function reducer (state = initialState, action) {
     case GRANULE_REMOVE_ERROR:
       set(state, ['removed', id, 'status'], 'error');
       set(state, ['removed', id, 'error'], action.error);
+      break;
+
+    case GRANULE_DELETE:
+      set(state, ['deleted', id, 'status'], 'success');
+      set(state, ['deleted', id, 'error'], null);
+      break;
+    case GRANULE_DELETE_INFLIGHT:
+      set(state, ['deleted', id, 'status'], 'inflight');
+      break;
+    case GRANULE_DELETE_ERROR:
+      set(state, ['deleted', id, 'status'], 'error');
+      set(state, ['deleted', id, 'error'], action.error);
       break;
 
     case SEARCH_GRANULES:
