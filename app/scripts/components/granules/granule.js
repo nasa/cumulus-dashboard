@@ -64,7 +64,8 @@ var GranuleOverview = React.createClass({
     params: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     granules: React.PropTypes.object,
-    logs: React.PropTypes.object
+    logs: React.PropTypes.object,
+    router: React.PropTypes.object
   },
 
   componentWillMount: function () {
@@ -89,6 +90,12 @@ var GranuleOverview = React.createClass({
     // delay a reload but shorten the duration
     // this shows the granule as it reprocesses
     this.reload(false, 2000);
+  },
+
+  navigateBack: function () {
+    // delay the navigation so we can see the success indicator
+    const { router } = this.props;
+    setTimeout(() => router.push('/granules'), 1000);
   },
 
   reprocess: function () {
@@ -177,11 +184,13 @@ var GranuleOverview = React.createClass({
           <h1 className='heading--large heading--shared-content'>{granuleId}</h1>
 
           <AsyncCommand action={this.delete}
+            success={this.navigateBack}
             status={deleteStatus}
             className={granule.published ? 'button--disabled' : null}
-            text={'Delete'} />
+            text={deleteStatus === 'success' ? 'Success!' : 'Delete'} />
 
           <AsyncCommand action={this.remove}
+            success={this.fastReload}
             status={removeStatus}
             text={'Remove from CMR'} />
 
