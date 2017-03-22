@@ -57,6 +57,19 @@ export const put = function (config, callback) {
   });
 };
 
+export const del = function (config, callback) {
+  request.del(setToken(config), (error, resp, body) => {
+    error = error || body.errorMessage || body.detail;
+    if (error) {
+      return callback(error);
+    } else if (+resp.statusCode >= 400) {
+      return callback(new Error(resp.statusMessage));
+    } else {
+      return callback(null, body);
+    }
+  });
+};
+
 export const wrapRequest = function (id, query, params, type, body) {
   let config;
   if (typeof params === 'string') {

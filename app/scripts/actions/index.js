@@ -1,6 +1,6 @@
 'use strict';
 import url from 'url';
-import { get, post, put, wrapRequest } from './helpers';
+import { get, post, put, del, wrapRequest } from './helpers';
 import { set as setToken } from '../utils/auth';
 import _config from '../config';
 
@@ -49,6 +49,10 @@ export const GRANULE_REPROCESS_ERROR = 'GRANULE_REPROCESS_ERROR';
 export const GRANULE_REMOVE = 'GRANULE_REMOVE';
 export const GRANULE_REMOVE_INFLIGHT = 'GRANULE_REMOVE_INFLIGHT';
 export const GRANULE_REMOVE_ERROR = 'GRANULE_REMOVE_ERROR';
+
+export const GRANULE_DELETE = 'GRANULE_DELETE';
+export const GRANULE_DELETE_INFLIGHT = 'GRANULE_DELETE_INFLIGHT';
+export const GRANULE_DELETE_ERROR = 'GRANULE_DELETE_ERROR';
 
 export const SEARCH_GRANULES = 'SEARCH_GRANULES';
 export const CLEAR_GRANULES_SEARCH = 'CLEAR_GRANULES_SEARCH';
@@ -125,6 +129,9 @@ export const removeGranule = (granuleId) => wrapRequest(
   granuleId, put, `granules/${granuleId}`, GRANULE_REMOVE, {
     action: 'removeFromCmr'
   });
+
+export const deleteGranule = (granuleId) => wrapRequest(
+  granuleId, del, `granules/${granuleId}`, GRANULE_DELETE);
 
 export const searchGranules = (prefix) => ({ type: SEARCH_GRANULES, prefix: prefix });
 
