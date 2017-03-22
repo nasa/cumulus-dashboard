@@ -2,13 +2,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { interval, getGranule, reprocessGranule } from '../../actions';
+import { interval, getGranule, reprocessGranule, removeGranule } from '../../actions';
 import { get } from 'object-path';
 import { fullDate, lastUpdated, seconds, nullValue } from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
 import AsyncCommand from '../form/async-command';
+import ErrorReport from '../errors/report';
 import { updateInterval } from '../../config';
 
 const tableHeader = [
@@ -90,6 +91,21 @@ var GranuleOverview = React.createClass({
     this.props.dispatch(reprocessGranule(granuleId));
   },
 
+  remove: function () {
+    const { granuleId } = this.props.params;
+    this.props.dispatch(removeGranule(granuleId));
+  },
+
+  errors: function () {
+    const granuleId = this.props.params.granuleId;
+    const errors = [
+      get(this.props.granules.map, [granuleId, 'error']),
+      get(this.props.granules.reprocessed, [granuleId, 'error']),
+      get(this.props.granules.removed, [granuleId, 'error'])
+    ].filter(Boolean);
+    return errors.length ? errors.map(JSON.stringify).join('\n') : null;
+  },
+
   renderStatus: function (status) {
     const statusList = [
       ['Ingest', 'ingesting'],
@@ -138,12 +154,17 @@ var GranuleOverview = React.createClass({
     const logsQuery = { granuleId };
     const cmrLink = granule.cmrLink;
     const reprocessStatus = get(this.props.granules.reprocessed, [granuleId, 'status']);
+    const removeStatus = get(this.props.granules.removed, [granuleId, 'status']);
+    const errors = this.errors();
     return (
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large heading--shared-content'>{granuleId}</h1>
           <Link className='button button--small form-group__element--right button--disabled button--green' to='/'>Delete</Link>
-          <Link className='button button--small form-group__element--right button--green' to='/'>Remove from CMR</Link>
+
+          <AsyncCommand action={this.remove}
+            status={removeStatus}
+            text={'Remove from CMR'} />
 
           <AsyncCommand action={this.reprocess}
             success={this.fastReload}
@@ -155,6 +176,7 @@ var GranuleOverview = React.createClass({
         </section>
 
         <section className='page__section'>
+          { errors ? <ErrorReport report={errors} /> : null }
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium'>Granule Overview {cmrLink ? <a href={cmrLink}>[CMR]</a> : null}</h2>
           </div>
