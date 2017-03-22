@@ -19,7 +19,7 @@ test('wrap request', function (t) {
 
   const urlObj = { url };
   const req2 = (config) => {
-    t.deepEquals(config, { url, headers });
+    t.deepEquals(config, { url, headers, json: true });
   };
   wrapRequest(id, req2, urlObj, type)(dispatch);
 

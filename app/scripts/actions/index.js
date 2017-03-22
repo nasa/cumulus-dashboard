@@ -1,6 +1,6 @@
 'use strict';
 import url from 'url';
-import { get, post, put, wrapRequest } from './helpers';
+import { get, post, put, del, wrapRequest } from './helpers';
 import { set as setToken } from '../utils/auth';
 import _config from '../config';
 
@@ -34,6 +34,10 @@ export const CLEAR_COLLECTIONS_SEARCH = 'CLEAR_COLLECTIONS_SEARCH';
 export const FILTER_COLLECTIONS = 'FILTER_COLLECTIONS';
 export const CLEAR_COLLECTIONS_FILTER = 'CLEAR_COLLECTIONS_FILTER';
 
+export const COLLECTION_DELETE = 'COLLECTION_DELETE';
+export const COLLECTION_DELETE_INFLIGHT = 'COLLECTION_DELETE_INFLIGHT';
+export const COLLECTION_DELETE_ERROR = 'COLLECTION_DELETE_ERROR';
+
 export const GRANULE = 'GRANULE';
 export const GRANULE_INFLIGHT = 'GRANULE_INFLIGHT';
 export const GRANULE_ERROR = 'GRANULE_ERROR';
@@ -45,6 +49,14 @@ export const GRANULES_ERROR = 'GRANULES_ERROR';
 export const GRANULE_REPROCESS = 'GRANULE_REPROCESS';
 export const GRANULE_REPROCESS_INFLIGHT = 'GRANULE_REPROCESS_INFLIGHT';
 export const GRANULE_REPROCESS_ERROR = 'GRANULE_REPROCESS_ERROR';
+
+export const GRANULE_REMOVE = 'GRANULE_REMOVE';
+export const GRANULE_REMOVE_INFLIGHT = 'GRANULE_REMOVE_INFLIGHT';
+export const GRANULE_REMOVE_ERROR = 'GRANULE_REMOVE_ERROR';
+
+export const GRANULE_DELETE = 'GRANULE_DELETE';
+export const GRANULE_DELETE_INFLIGHT = 'GRANULE_DELETE_INFLIGHT';
+export const GRANULE_DELETE_ERROR = 'GRANULE_DELETE_ERROR';
 
 export const SEARCH_GRANULES = 'SEARCH_GRANULES';
 export const CLEAR_GRANULES_SEARCH = 'CLEAR_GRANULES_SEARCH';
@@ -96,12 +108,12 @@ export const createCollection = (payload) => wrapRequest(
 export const updateCollection = (payload) => wrapRequest(
   payload.collectionName, put, `collections/${payload.collectionName}`, UPDATE_COLLECTION, payload);
 
+export const deleteCollection = (collectionName) => wrapRequest(
+  collectionName, del, `collections/${collectionName}`, COLLECTION_DELETE);
+
 export const searchCollections = (prefix) => ({ type: SEARCH_COLLECTIONS, prefix: prefix });
-
 export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH });
-
 export const filterCollections = (param) => ({ type: FILTER_COLLECTIONS, param: param });
-
 export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
 
 export const getGranule = (granuleId) => wrapRequest(
@@ -117,12 +129,17 @@ export const reprocessGranule = (granuleId) => wrapRequest(
     action: 'reprocess'
   });
 
+export const removeGranule = (granuleId) => wrapRequest(
+  granuleId, put, `granules/${granuleId}`, GRANULE_REMOVE, {
+    action: 'removeFromCmr'
+  });
+
+export const deleteGranule = (granuleId) => wrapRequest(
+  granuleId, del, `granules/${granuleId}`, GRANULE_DELETE);
+
 export const searchGranules = (prefix) => ({ type: SEARCH_GRANULES, prefix: prefix });
-
 export const clearGranulesSearch = () => ({ type: CLEAR_GRANULES_SEARCH });
-
 export const filterGranules = (param) => ({ type: FILTER_GRANULES, param: param });
-
 export const clearGranulesFilter = (paramKey) => ({ type: CLEAR_GRANULES_FILTER, paramKey: paramKey });
 
 export const getOptionsCollectionName = () => wrapRequest(null, get, {
@@ -138,11 +155,8 @@ export const listPdrs = (options) => wrapRequest(null, get, {
 }, PDRS);
 
 export const searchPdrs = (prefix) => ({ type: SEARCH_PDRS, prefix: prefix });
-
 export const clearPdrsSearch = () => ({ type: CLEAR_PDRS_SEARCH });
-
 export const filterPdrs = (param) => ({ type: FILTER_PDRS, param: param });
-
 export const clearPdrsFilter = (paramKey) => ({ type: CLEAR_PDRS_FILTER, paramKey: paramKey });
 
 export const getLogs = (options) => wrapRequest(null, get, {
