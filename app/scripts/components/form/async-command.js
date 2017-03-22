@@ -8,7 +8,8 @@ const AsyncCommand = React.createClass({
     action: React.PropTypes.func,
     success: React.PropTypes.func,
     status: React.PropTypes.string,
-    text: React.PropTypes.string
+    text: React.PropTypes.string,
+    className: React.PropTypes.string
   },
 
   componentWillReceiveProps: function (newProps) {
@@ -17,8 +18,11 @@ const AsyncCommand = React.createClass({
     }
   },
 
-  processingClass: function (processing) {
-    return 'button button--small form-group__element--right button--green' + (processing ? ' button--loading' : '');
+  buttonClass: function (processing) {
+    let className = 'button button--small form-group__element--right button--green';
+    if (processing) className += ' button--loading';
+    if (this.props.className) className += ' ' + this.props.className;
+    return className;
   },
 
   handleClick: function (e) {
@@ -34,7 +38,7 @@ const AsyncCommand = React.createClass({
     const inflight = status === 'inflight';
     return (
       <button
-        className={this.processingClass(inflight)}
+        className={this.buttonClass(inflight)}
         onClick={this.handleClick}
         >{text}{inflight ? <Ellipsis /> : ''}</button>
     );

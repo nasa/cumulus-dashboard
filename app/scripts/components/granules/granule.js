@@ -103,7 +103,10 @@ var GranuleOverview = React.createClass({
 
   delete: function () {
     const { granuleId } = this.props.params;
-    this.props.dispatch(deleteGranule(granuleId));
+    const granule = this.props.granules.map[granuleId].data;
+    if (!granule.published) {
+      this.props.dispatch(deleteGranule(granuleId));
+    }
   },
 
   errors: function () {
@@ -175,6 +178,7 @@ var GranuleOverview = React.createClass({
 
           <AsyncCommand action={this.delete}
             status={deleteStatus}
+            className={granule.published ? 'button--disabled' : null}
             text={'Delete'} />
 
           <AsyncCommand action={this.remove}
