@@ -15,6 +15,10 @@ import {
   NEW_COLLECTION_INFLIGHT,
   NEW_COLLECTION_ERROR,
 
+  COLLECTION_DELETE,
+  COLLECTION_DELETE_INFLIGHT,
+  COLLECTION_DELETE_ERROR,
+
   UPDATE_COLLECTION,
   UPDATE_COLLECTION_INFLIGHT,
   UPDATE_COLLECTION_ERROR,
@@ -35,7 +39,8 @@ export const initialState = {
   map: {},
   meta: {},
   created: {},
-  updated: {}
+  updated: {},
+  deleted: {}
 };
 
 export default function reducer (state = initialState, action) {
@@ -89,6 +94,18 @@ export default function reducer (state = initialState, action) {
     case UPDATE_COLLECTION_ERROR:
       set(state, ['updated', id, 'status'], 'error');
       set(state, ['updated', id, 'error'], action.error);
+      break;
+
+    case COLLECTION_DELETE:
+      set(state, ['deleted', id, 'status'], 'success');
+      set(state, ['deleted', id, 'error'], null);
+      break;
+    case COLLECTION_DELETE_INFLIGHT:
+      set(state, ['deleted', id, 'status'], 'inflight');
+      break;
+    case COLLECTION_DELETE_ERROR:
+      set(state, ['deleted', id, 'status'], 'error');
+      set(state, ['deleted', id, 'error'], action.error);
       break;
 
     case SEARCH_COLLECTIONS:
