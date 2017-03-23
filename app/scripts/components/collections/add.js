@@ -44,8 +44,8 @@ var AddCollection = React.createClass({
       ? get(this.props.collections.created, collectionName, {}) : {};
     const schema = this.props.schema[SCHEMA_KEY];
     return (
-      <div className='page__component'>
-        <section className='page__section'>
+      <div className='page__component page__content--shortened--centered'>
+        <section className='page__section page__section--fullpage-form'>
           <div className='page__section__header'>
             <h1 className='heading--large'>Add a Collection</h1>
             <p className='description'>Create a collection</p>

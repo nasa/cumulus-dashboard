@@ -9,6 +9,7 @@ label {
   display: block;
   font-weight: $base-font-semibold;
   margin-bottom: .3em;
+  font-size: .86em;
 }
 
 .form__multistep {
@@ -181,10 +182,6 @@ select {
   margin-bottom: 1.5em;
 }
 
-.form__text input[type="text"] {
-  width: 50%;
-}
-
 .subform__item,
 .form__addone--item {
   margin: 0.5em 0;
@@ -195,9 +192,8 @@ select {
 }
 
 .form__addone--button {
-  margin-left: 0.5em;
-  padding: 0.5em 1.8em;
-  width: 5em;
+  padding: 0.07em 1.8em;
+  font-size: 1.4em;
 }
 
 .subform__name {
@@ -217,4 +213,21 @@ select {
 
 .subform__item--expanded {
   background-color: $lightest-grey;
+}
+
+.page__section--fullpage-form {
+  input {
+    width: 90%;
+  }
+  .form__item {
+    margin-bottom: 2.5em;
+  }
+}
+
+.form__addone--item {
+  input {
+    width: 75%;
+    margin-right: 1.5em;
+    float: left;
+  }
 }

@@ -31,7 +31,7 @@ export const createFormConfig = function (data, schema) {
     var label = meta.title || property;
     if (path) label = path + ' - ' + label;
     if (meta.description) label += ` (${meta.description})`;
-    if (required) label += ' *required';
+    if (required) label += ' *';
 
     // create an object-path-ready accessor string
     const accessor = path ? path + '.' + property : property;
