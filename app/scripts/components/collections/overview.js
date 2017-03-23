@@ -2,12 +2,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { getCollection, listGranules } from '../../actions';
+import { getCollection, listGranules, deleteCollection } from '../../actions';
 import { get } from 'object-path';
 import { seconds, tally, fullDate, lastUpdated } from '../../utils/format';
 import ErrorReport from '../errors/report';
 import SortableTable from '../table/sortable';
 import Overview from '../app/overview';
+import AsyncCommand from '../form/async-command';
 
 const tableHeader = [
   'Status',
@@ -25,7 +26,6 @@ const tableRow = [
   (d) => fullDate(d.updatedAt)
 ];
 
-const activeStatus = 'ingesting OR processing OR cmr OR archiving';
 const granuleFields = 'status,granuleId,pdrName,duration,updatedAt';
 
 var CollectionOverview = React.createClass({
@@ -35,7 +35,8 @@ var CollectionOverview = React.createClass({
     params: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     granules: React.PropTypes.object,
-    collections: React.PropTypes.object
+    collections: React.PropTypes.object,
+    router: React.PropTypes.object
   },
 
   componentWillMount: function () {
@@ -54,19 +55,37 @@ var CollectionOverview = React.createClass({
     this.props.dispatch(listGranules({
       collectionName,
       fields: granuleFields,
-      q: activeStatus,
+      status__not: 'completed',
       limit: 10
     }));
   },
 
+  delete: function () {
+    const collectionName = this.props.params.collectionName;
+    this.props.dispatch(deleteCollection(collectionName));
+  },
+
+  navigateBack: function () {
+    // delay the navigation so we can see the success indicator
+    const { router } = this.props;
+    setTimeout(() => router.push('/collections/active'), 1000);
+  },
+
+  errors: function () {
+    const collectionName = this.props.params.collectionName;
+    const errors = [
+      get(this.props.collections.map, [collectionName, 'error']),
+      get(this.props.collections.deleted, [collectionName, 'error'])
+    ].filter(Boolean);
+    return errors.length ? errors.map(JSON.stringify).join(', ') : null;
+  },
+
   renderOverview: function (record) {
-    if (record.error) {
-      return <ErrorReport report={record.error} />;
-    }
     const data = get(record, 'data', {});
     const granules = get(data, 'granulesStatus', {});
     const overview = [
       [seconds(data.averageDuration), 'Average Processing Time'],
+      [tally(data.granules), 'Total Granules'],
       [tally(granules.ingesting), 'Granules Ingesting'],
       [tally(granules.processing), 'Granules Processing'],
       [tally(granules.cmr), 'Granules Pushed to CMR'],
@@ -81,6 +100,9 @@ var CollectionOverview = React.createClass({
     const record = collections.map[collectionName];
     const { list } = granules;
     const { meta } = list;
+    const deleteStatus = get(collections.deleted, [collectionName, 'status']);
+    const hasGranules = get(record.data, 'granules', []).length;
+    const errors = this.errors();
 
     // create the overview boxes
     const overview = record ? this.renderOverview(record) : <div></div>;
@@ -88,9 +110,17 @@ var CollectionOverview = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large heading--shared-content'>{collectionName}</h1>
-          <Link className='button button--small form-group__element--right button--disabled button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
+
+          <AsyncCommand action={this.delete}
+            success={this.navigateBack}
+            status={deleteStatus}
+            className={!hasGranules ? 'button--disabled' : null}
+            text={deleteStatus === 'success' ? 'Success!' : 'Delete' } />
+
+          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
           {lastUpdated(meta.queriedAt)}
           {overview}
+          { errors ? <ErrorReport report={errors} /> : null }
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>

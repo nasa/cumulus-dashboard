@@ -1,15 +1,21 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
-import { interval, getGranule, reprocessGranule } from '../../actions';
+import {
+  interval,
+  getGranule,
+  reprocessGranule,
+  removeGranule,
+  deleteGranule
+} from '../../actions';
 import { get } from 'object-path';
 import { fullDate, lastUpdated, seconds, nullValue } from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
-import Ellipsis from '../app/loading-ellipsis';
-import { updateInterval } from '../../config';
 import LogViewer from '../logs/viewer';
+import AsyncCommand from '../form/async-command';
+import ErrorReport from '../errors/report';
+import { updateInterval } from '../../config';
 
 const tableHeader = [
   'Filename',
@@ -54,17 +60,12 @@ const metaAccessors = [
 var GranuleOverview = React.createClass({
   displayName: 'Granule',
 
-  getInitialState: function () {
-    return {
-      reprocessing: false
-    };
-  },
-
   propTypes: {
     params: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     granules: React.PropTypes.object,
-    logs: React.PropTypes.object
+    logs: React.PropTypes.object,
+    router: React.PropTypes.object
   },
 
   componentWillMount: function () {
@@ -77,25 +78,53 @@ var GranuleOverview = React.createClass({
     if (this.cancelInterval) { this.cancelInterval(); }
   },
 
-  reload: function (immediate) {
+  reload: function (immediate, timeout) {
+    timeout = timeout || updateInterval;
     const granuleId = this.props.params.granuleId;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
-    this.cancelInterval = interval(() => dispatch(getGranule(granuleId)), updateInterval, immediate);
-    this.cancelInterval();
+    this.cancelInterval = interval(() => dispatch(getGranule(granuleId)), timeout, immediate);
+  },
+
+  fastReload: function () {
+    // delay a reload but shorten the duration
+    // this shows the granule as it reprocesses
+    this.reload(false, 2000);
+  },
+
+  navigateBack: function () {
+    // delay the navigation so we can see the success indicator
+    const { router } = this.props;
+    setTimeout(() => router.push('/granules'), 1000);
   },
 
   reprocess: function () {
     const { granuleId } = this.props.params;
-    const { reprocessing } = this.state;
-    if (!reprocessing) {
-      this.props.dispatch(reprocessGranule(granuleId));
-      this.setState({ reprocessing: true });
-      setTimeout(function () {
-        this.reload(true);
-        this.setState({ reprocessing: false });
-      }.bind(this), 2000);
+    this.props.dispatch(reprocessGranule(granuleId));
+  },
+
+  remove: function () {
+    const { granuleId } = this.props.params;
+    this.props.dispatch(removeGranule(granuleId));
+  },
+
+  delete: function () {
+    const { granuleId } = this.props.params;
+    const granule = this.props.granules.map[granuleId].data;
+    if (!granule.published) {
+      this.props.dispatch(deleteGranule(granuleId));
     }
+  },
+
+  errors: function () {
+    const granuleId = this.props.params.granuleId;
+    const errors = [
+      get(this.props.granules.map, [granuleId, 'error']),
+      get(this.props.granules.reprocessed, [granuleId, 'error']),
+      get(this.props.granules.removed, [granuleId, 'error']),
+      get(this.props.granules.deleted, [granuleId, 'error'])
+    ].filter(Boolean);
+    return errors.length ? errors.map(JSON.stringify).join(', ') : null;
   },
 
   renderStatus: function (status) {
@@ -138,30 +167,44 @@ var GranuleOverview = React.createClass({
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
     }
-
     const granule = record.data;
-    const { reprocessing } = this.state;
-
     const files = [];
     if (granule.files) {
-      for (let key in granule.files) { files.push(granule.files[key]); }
+      for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }
     }
-    const logsQuery = { granuleId };
-    const cmrLink = get(granule, 'cmrLink');
+    const logsQuery = { 'meta.granuleId': granuleId };
+    const cmrLink = granule.cmrLink;
+    const reprocessStatus = get(this.props.granules.reprocessed, [granuleId, 'status']);
+    const removeStatus = get(this.props.granules.removed, [granuleId, 'status']);
+    const deleteStatus = get(this.props.granules.deleted, [granuleId, 'status']);
+    const errors = this.errors();
     return (
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large heading--shared-content'>{granuleId}</h1>
-          <Link className='button button--small form-group__element--right button--disabled button--green' to='/'>Delete</Link>
-          <Link className='button button--small form-group__element--right button--green' to='/'>Remove from CMR</Link>
-          <button
-            className={'button button--small form-group__element--right button--green' + (reprocessing ? ' button--reprocessing' : '')}
-            onClick={this.reprocess}>Reprocess{ reprocessing ? <Ellipsis /> : '' }</button>
+
+          <AsyncCommand action={this.delete}
+            success={this.navigateBack}
+            status={deleteStatus}
+            className={granule.published ? 'button--disabled' : null}
+            text={deleteStatus === 'success' ? 'Success!' : 'Delete'} />
+
+          <AsyncCommand action={this.remove}
+            success={this.fastReload}
+            status={removeStatus}
+            text={'Remove from CMR'} />
+
+          <AsyncCommand action={this.reprocess}
+            success={this.fastReload}
+            status={reprocessStatus}
+            text={'Reprocess'} />
+
           {lastUpdated(granule.queriedAt)}
           {this.renderStatus(granule.status)}
         </section>
 
         <section className='page__section'>
+          { errors ? <ErrorReport report={errors} /> : null }
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium'>Granule Overview {cmrLink ? <a href={cmrLink}>[CMR]</a> : null}</h2>
           </div>

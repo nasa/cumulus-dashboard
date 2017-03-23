@@ -1,7 +1,14 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { searchGranules, clearGranulesSearch, filterGranules, clearGranulesFilter, listGranules } from '../../actions';
+import {
+  searchGranules,
+  clearGranulesSearch,
+  filterGranules,
+  clearGranulesFilter,
+  listGranules,
+  getOptionsCollectionName
+} from '../../actions';
 import { get } from 'object-path';
 import { granuleSearchResult, dropdownOption, lastUpdated } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
@@ -29,9 +36,9 @@ var AllGranules = React.createClass({
 
   render: function () {
     const { pdrName } = this.props.params;
-    const { list } = this.props.granules;
+    const { list, dropdowns } = this.props.granules;
     const { count, queriedAt } = list.meta;
-    const logsQuery = { q: 'granuleId' };
+    const logsQuery = { 'meta.granuleId__exists': 'true' };
 
     return (
       <div className='page__component'>
@@ -45,8 +52,8 @@ var AllGranules = React.createClass({
           <div className='filters filters__wlabels'>
             <Dropdown
               dispatch={this.props.dispatch}
-              // TO-DO: Populate this list of available collections using the API
-              options={{'': '', 'AST_L1A__version__003': 'AST_L1A__version__003', 'Not a real collection': 'Not a real collection'}}
+              getOptions={getOptionsCollectionName}
+              options={get(dropdowns, ['collectionName', 'options'])}
               format={dropdownOption}
               action={filterGranules}
               clear={clearGranulesFilter}

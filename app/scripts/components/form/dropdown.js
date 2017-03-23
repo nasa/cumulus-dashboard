@@ -8,6 +8,7 @@ const Dropdown = React.createClass({
   propTypes: {
     dispatch: React.PropTypes.func,
     options: React.PropTypes.object,
+    getOptions: React.PropTypes.func,
     format: React.PropTypes.func,
     action: React.PropTypes.func,
     clear: React.PropTypes.func,
@@ -15,8 +16,9 @@ const Dropdown = React.createClass({
     label: React.PropTypes.string
   },
 
-  getInitialState: function () {
-    return {};
+  componentWillMount: function () {
+    const { dispatch, getOptions } = this.props;
+    if (getOptions) { dispatch(getOptions()); }
   },
 
   componentWillUnmount: function () {
@@ -49,7 +51,7 @@ const Dropdown = React.createClass({
         {label ? <label htmlFor={formID}>{label}</label> : null}
         <form id={formID} className='dropdown__wrapper form-group__element'>
           <select onChange={this.onChange}>
-            {map(options, format)}
+            {map(options || {'': ''}, format)}
           </select>
         </form>
       </div>

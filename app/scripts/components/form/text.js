@@ -1,10 +1,7 @@
 'use strict';
 import React from 'react';
-import { connect } from 'react-redux';
 
 var TextForm = React.createClass({
-  displayName: 'TextForm',
-
   propTypes: {
     label: React.PropTypes.string,
     value: React.PropTypes.string,
@@ -43,4 +40,4 @@ var TextForm = React.createClass({
   }
 });
 
-export default connect(state => state)(TextForm);
+export default TextForm;

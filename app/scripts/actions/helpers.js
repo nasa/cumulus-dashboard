@@ -22,12 +22,7 @@ export const get = function (config, callback) {
     } else if (+resp.statusCode >= 400) {
       return callback(new Error(resp.statusMessage));
     }
-    try {
-      var data = JSON.parse(body);
-    } catch (e) {
-      return callback('JSON parse error');
-    }
-    return callback(null, data);
+    return callback(null, body);
   });
 };
 
@@ -46,7 +41,20 @@ export const post = function (config, callback) {
 
 export const put = function (config, callback) {
   request.put(setToken(config), (error, resp, body) => {
-    error = error || body.errorMessage;
+    error = error || body.errorMessage || body.detail;
+    if (error) {
+      return callback(error);
+    } else if (+resp.statusCode >= 400) {
+      return callback(new Error(resp.statusMessage));
+    } else {
+      return callback(null, body);
+    }
+  });
+};
+
+export const del = function (config, callback) {
+  request.del(setToken(config), (error, resp, body) => {
+    error = error || body.errorMessage || body.detail;
     if (error) {
       return callback(error);
     } else if (+resp.statusCode >= 400) {
@@ -68,10 +76,10 @@ export const wrapRequest = function (id, query, params, type, body) {
   } else {
     throw new Error('Must include a url with request');
   }
+  config.json = true;
 
   if (body && typeof body === 'object') {
     config.body = body;
-    config.json = true;
   }
 
   config.headers = config.headers || {};
