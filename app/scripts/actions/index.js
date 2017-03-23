@@ -149,7 +149,10 @@ export const getOptionsCollectionName = () => wrapRequest(null, get, {
   qs: { limit: 100, fields: 'collectionName' }
 }, OPTIONS_COLLECTIONNAME);
 
-export const getStats = () => wrapRequest(null, get, 'stats', STATS);
+export const getStats = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'stats'),
+  qs: options
+}, STATS);
 
 export const listPdrs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),

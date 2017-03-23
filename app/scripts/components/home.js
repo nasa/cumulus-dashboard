@@ -45,19 +45,21 @@ var Home = React.createClass({
   },
 
   queryStats: function () {
-    // TODO set time span of granules
-    this.props.dispatch(getStats());
+    this.props.dispatch(getStats({
+      timestamp__from: timespan
+    }));
     this.props.dispatch(listGranules({
       updatedAt__from: timespan,
       sort_by: 'updatedAt',
       order: 'desc',
-      limit: 10,
+      limit: 15,
       fields: granuleFields
     }));
   },
 
   render: function () {
     const { stats, granules } = this.props;
+    const { list } = granules;
     const data = stats.stats;
     const storage = get(data, 'storage.value');
     const overview = [
@@ -69,6 +71,8 @@ var Home = React.createClass({
       [tally(get(data, 'queues.value', nullValue)), 'SQS Queues'],
       [tally(get(data, 'ec2.value', nullValue)), 'EC2 Instances']
     ];
+    const numGranules = list.meta.count ? `(${list.meta.count})` : null;
+    console.log(numGranules);
 
     return (
       <div className='page__home'>
@@ -92,7 +96,7 @@ var Home = React.createClass({
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium'>Recent Granules</h2>
+                <h2 className='heading--medium'>Granules Updated Today {numGranules}</h2>
               </div>
               <ul className='timeline--processing--overall'>
                 <li><span className='num--medium'>40k</span> Granules Ingesting</li>
@@ -101,7 +105,7 @@ var Home = React.createClass({
                 <li><span className='num--medium'>308k</span> Granules Archived</li>
               </ul>
               <SortableTable
-                data={granules.list.data}
+                data={list.data}
                 header={tableHeader}
                 primaryIdx={1}
                 row={tableRow}
