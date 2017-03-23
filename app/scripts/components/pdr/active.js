@@ -24,7 +24,7 @@ var ActivePdrs = React.createClass({
   render: function () {
     const { list } = this.props.pdrs;
     const { count, queriedAt } = list.meta;
-    const logsQuery = { q: 'pdrName' };
+    const logsQuery = { 'meta.pdrName__exists': 'true' };
     return (
       <div className='page__component'>
         <section className='page__section'>

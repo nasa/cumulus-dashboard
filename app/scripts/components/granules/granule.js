@@ -172,7 +172,7 @@ var GranuleOverview = React.createClass({
     if (granule.files) {
       for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }
     }
-    const logsQuery = { granuleId };
+    const logsQuery = { 'meta.granuleId': granuleId };
     const cmrLink = granule.cmrLink;
     const reprocessStatus = get(this.props.granules.reprocessed, [granuleId, 'status']);
     const removeStatus = get(this.props.granules.removed, [granuleId, 'status']);
