@@ -83,7 +83,7 @@ var Home = React.createClass({
               <ul>
                 {overview.map(d => (
                   <li key={d[1]}>
-                    <a className='overview-num' href='/'><span className='num--large'>{ stats.inflight? <LoadingEllipsis /> : d[0] }</span> {d[1]}</a>
+                    <a className='overview-num' href='/'><span className='num--large'>{ stats.inflight ? <LoadingEllipsis /> : d[0] }</span> {d[1]}</a>
                   </li>
                 ))}
               </ul>

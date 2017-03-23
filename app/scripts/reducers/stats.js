@@ -25,7 +25,7 @@ export default function reducer (state = initialState, action) {
   let nextState;
   switch (action.type) {
     case STATS:
-      nextState = { stats: action.data, inflight: false, error: null };
+      nextState = { stats: assignDate(action.data), inflight: false, error: null };
       break;
     case STATS_INFLIGHT:
       nextState = { stats: state.data, inflight: true, error: state.error };
