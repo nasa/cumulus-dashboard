@@ -7,6 +7,7 @@ import { get } from 'object-path';
 import { getStats, listGranules } from '../actions';
 import { nullValue, tally, seconds, fullDate } from '../utils/format';
 import SortableTable from './table/sortable';
+import LoadingEllipsis from './app/loading-ellipsis';
 
 const timespan = moment().subtract(1, 'day').format();
 
@@ -57,17 +58,16 @@ var Home = React.createClass({
 
   render: function () {
     const { stats, granules } = this.props;
-
-    const processingTimeUnits = get(stats, 'processingTime.unit', ' ').slice(0, 1);
-    const storage = get(stats, 'storage.value');
+    const data = stats.stats;
+    const storage = get(data, 'storage.value');
     const overview = [
-      [tally(get(stats, 'errors.value', nullValue)), 'Errors'],
-      [tally(get(stats, 'collections.value', nullValue)), 'Collections'],
-      [tally(get(stats, 'granules.value', nullValue)), 'Granules (received today)'],
-      [get(stats, 'processingTime.value', nullValue) + processingTimeUnits, 'Average Processing Time'],
-      [(storage ? tally(storage) + get(stats, 'storage.unit') : nullValue), 'Data Used'],
-      [tally(get(stats, 'queues.value', nullValue)), 'SQS Queues'],
-      [tally(get(stats, 'ec2.value', nullValue)), 'EC2 Instances']
+      [tally(get(data, 'errors.value', nullValue)), 'Errors'],
+      [tally(get(data, 'collections.value', nullValue)), 'Collections'],
+      [tally(get(data, 'granules.value', nullValue)), 'Granules (received today)'],
+      [seconds(get(data, 'processingTime.value', nullValue)), 'Average Processing Time'],
+      [(storage ? tally(storage) + get(data, 'storage.unit') : nullValue), 'Data Used'],
+      [tally(get(data, 'queues.value', nullValue)), 'SQS Queues'],
+      [tally(get(data, 'ec2.value', nullValue)), 'EC2 Instances']
     ];
 
     return (
@@ -83,7 +83,7 @@ var Home = React.createClass({
               <ul>
                 {overview.map(d => (
                   <li key={d[1]}>
-                    <a className='overview-num' href='/'><span className='num--large'>{d[0]}</span> {d[1]}</a>
+                    <a className='overview-num' href='/'><span className='num--large'>{ stats.inflight? <LoadingEllipsis /> : d[0] }</span> {d[1]}</a>
                   </li>
                 ))}
               </ul>
