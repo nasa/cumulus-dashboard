@@ -55,9 +55,10 @@ var LoginModal = React.createClass({
           { show ? (
             <div className='modal'>
               <div className='modal__internal'>
-                <p>{ authenticated ? <strong>Success!</strong> : 'Enter your username and password' }</p>
+                <h2 className='heading--medium'>Log in to Cumulus</h2>
+                <p className='metadata__updated'>{ authenticated ? <strong>Success!</strong> : 'Enter your username and password' }</p>
                 <form>
-                  <div className='form__multistep form__login'>
+                  <div className='form__login'>
                     <Text label={'Username'}
                       value={this.state.user}
                       id={'login-user'}
@@ -67,7 +68,7 @@ var LoginModal = React.createClass({
                       id={'login-pass'}
                       type={'password'}
                       onChange={(id, value) => this.setState({pass: value})} />
-                    <span className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
+                    <span className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
                       <input
                         type='submit'
                         value={inflight ? 'Loading...' : 'Submit'}
