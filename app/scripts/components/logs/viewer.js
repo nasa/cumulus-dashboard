@@ -70,7 +70,7 @@ var LogViewer = React.createClass({
       const duration = isFirstPull ? twoDays : logsUpdateInterval;
       const from = moment().subtract(duration, 'milliseconds').format();
       isFirstPull = false;
-      return dispatch(getLogs(Object.assign({ date__from: from }, query)));
+      return dispatch(getLogs(Object.assign({ 'timestamp__from': from }, query)));
     }
     this.cancelInterval = interval(querySinceLast, logsUpdateInterval, true);
   },

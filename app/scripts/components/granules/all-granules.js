@@ -38,7 +38,7 @@ var AllGranules = React.createClass({
     const { pdrName } = this.props.params;
     const { list, dropdowns } = this.props.granules;
     const { count, queriedAt } = list.meta;
-    const logsQuery = { q: 'granuleId' };
+    const logsQuery = { 'meta.granuleId__exists': 'true' };
 
     return (
       <div className='page__component'>
