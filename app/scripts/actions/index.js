@@ -161,7 +161,7 @@ export const clearPdrsFilter = (paramKey) => ({ type: CLEAR_PDRS_FILTER, paramKe
 
 export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),
-  qs: Object.assign({ limit: 50 }, options)
+  qs: Object.assign({ limit: 200 }, options)
 }, LOGS);
 
 export const logout = () => {
