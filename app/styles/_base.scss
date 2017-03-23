@@ -380,31 +380,13 @@ a:active {
   }
 }
 
-.login {
-  margin-top: 20%;
-  position: fixed;
-  text-align: center;
-  top: 100%;
-  transition: top 0.2s ease-in-out;
-  width: 100%;
-  z-index: 1000;
-}
-
-.login__onscreen {
-  top: 0;
-}
-
 .modal {
   border-radius: 5px;
   display: inline-block;
   background-color: $background-white;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
-  padding: 1em;
+  padding: 2em 2.3em 3em;
   width: 300px;
-}
-
-.modal__internal {
-  text-align: center;
-  position: relative;
+  text-align: left;
 }
 

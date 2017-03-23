@@ -181,10 +181,6 @@ select {
   margin-bottom: 1.5em;
 }
 
-.form__text input[type="text"] {
-  width: 50%;
-}
-
 .subform__item,
 .form__addone--item {
   margin: 0.5em 0;
@@ -217,4 +213,34 @@ select {
 
 .subform__item--expanded {
   background-color: $lightest-grey;
+}
+
+
+/*log in*/
+.form__login {
+  margin-top: 1.5em;
+  .form__text {
+    margin-bottom: 1em;
+    &:last-of-type {
+      margin-bottom: 2.5em;
+    }
+    input {
+      width: 80%;
+    }
+  }
+}
+
+
+.login {
+  margin-top: 10%;
+  position: fixed;
+  text-align: center;
+  top: 100%;
+  transition: top 0.2s ease-in-out;
+  width: 100%;
+  z-index: 1000;
+}
+
+.login__onscreen {
+  top: 0;
 }
