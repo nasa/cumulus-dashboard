@@ -61,7 +61,7 @@ export const Form = React.createClass({
     // initiate empty state for all inputs
     const inputState = {};
     this.props.inputMeta.forEach(input => {
-      let inputId = this.generateComponentId(input.label);
+      let inputId = this.generateComponentId(input.schemaProperty);
       let value = input.value;
       if (!value && value !== 0) {
         value = input.type === formTypes.list ? []
@@ -97,7 +97,7 @@ export const Form = React.createClass({
     let hasError = false;
     const payload = {};
     this.props.inputMeta.forEach(input => {
-      let inputId = this.generateComponentId(input.label);
+      let inputId = this.generateComponentId(input.schemaProperty);
       let { value } = inputState[inputId];
 
       // if expected type is json, validate as json first
@@ -158,7 +158,7 @@ export const Form = React.createClass({
             }
 
             // retrieve value and errors stored in state
-            let inputId = this.generateComponentId(label);
+            let inputId = this.generateComponentId(form.schemaProperty);
             let { value, error } = inputState[inputId];
             // coerce non-null values to string to simplify proptype warnings on numbers
             if (type !== formTypes.list && type !== formTypes.subform && !value && value !== 0) {

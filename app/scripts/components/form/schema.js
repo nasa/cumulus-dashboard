@@ -28,10 +28,10 @@ export const createFormConfig = function (data, schema) {
     // determine the label
     const required = Array.isArray(schemaProperty.required) &&
       schemaProperty.required.indexOf(property) >= 0;
-    var label = meta.title || property;
-    if (path) label = path + ' - ' + label;
-    if (meta.description) label += ` (${meta.description})`;
-    if (required) label += ' *';
+    var label = [<span className='label__name'>{meta.title || property}</span>];
+    if (path) label.unshift(<span className='label__path'>{path + ' - '}</span>);
+    if (meta.description) label.push(<span className='label__description'> ({meta.description})</span>);
+    if (required) label.push(<span className='label__required'> */span>);
 
     // create an object-path-ready accessor string
     const accessor = path ? path + '.' + property : property;
