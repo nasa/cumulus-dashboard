@@ -239,7 +239,7 @@ a:active {
   margin-bottom: 2em;
 }
 
-.metadata__updated {
+.metadata__updated, .label__description {
   font-size: .79em;
   font-style: italic;
   color: lighten($lighter-grey, 10%);
