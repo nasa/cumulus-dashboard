@@ -4,7 +4,7 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { get } from 'object-path';
-import { getStats, listGranules } from '../actions';
+import { getStats, getCount, listGranules } from '../actions';
 import { nullValue, tally, seconds, fullDate } from '../utils/format';
 import SortableTable from './table/sortable';
 import LoadingEllipsis from './app/loading-ellipsis';
@@ -48,6 +48,10 @@ var Home = React.createClass({
     this.props.dispatch(getStats({
       timestamp__from: timespan
     }));
+    this.props.dispatch(getCount({
+      type: 'granules',
+      field: 'status'
+    }));
     this.props.dispatch(listGranules({
       updatedAt__from: timespan,
       sort_by: 'updatedAt',
@@ -57,23 +61,35 @@ var Home = React.createClass({
     }));
   },
 
+  renderGranuleProgress: function () {
+    const { count } = this.props.stats;
+    const granuleCount = get(count.data, 'granules.count', []);
+    return (
+      <ul className='timeline--processing--overall'>
+        {granuleCount.map(d => (
+          <li key={d.key} className={'timeline--processing--' + d.key}>
+            <span className='num--medium'>{tally(d.count)}</span>
+            Granules {d.key}
+          </li>
+        ))}
+      </ul>
+    );
+  },
+
   render: function () {
-    const { stats, granules } = this.props;
-    const { list } = granules;
-    const data = stats.stats;
-    const storage = get(data, 'storage.value');
+    const { list } = this.props.granules;
+    const { stats } = this.props.stats;
+    const storage = get(stats.data, 'storage.value');
     const overview = [
-      [tally(get(data, 'errors.value', nullValue)), 'Errors'],
-      [tally(get(data, 'collections.value', nullValue)), 'Collections'],
-      [tally(get(data, 'granules.value', nullValue)), 'Granules (received today)'],
-      [seconds(get(data, 'processingTime.value', nullValue)), 'Average Processing Time'],
-      [(storage ? tally(storage) + get(data, 'storage.unit') : nullValue), 'Data Used'],
-      [tally(get(data, 'queues.value', nullValue)), 'SQS Queues'],
-      [tally(get(data, 'ec2.value', nullValue)), 'EC2 Instances']
+      [tally(get(stats.data, 'errors.value', nullValue)), 'Errors'],
+      [tally(get(stats.data, 'collections.value', nullValue)), 'Collections'],
+      [tally(get(stats.data, 'granules.value', nullValue)), 'Granules (received today)'],
+      [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average Processing Time'],
+      [(storage ? tally(storage) + get(stats.data, 'storage.unit') : nullValue), 'Data Used'],
+      [tally(get(stats.data, 'queues.value', nullValue)), 'SQS Queues'],
+      [tally(get(stats.data, 'ec2.value', nullValue)), 'EC2 Instances']
     ];
     const numGranules = list.meta.count ? `(${list.meta.count})` : null;
-    console.log(numGranules);
-
     return (
       <div className='page__home'>
         <div className='content__header content__header--lg'>
@@ -98,12 +114,7 @@ var Home = React.createClass({
               <div className='heading__wrapper--border'>
                 <h2 className='heading--medium'>Granules Updated Today {numGranules}</h2>
               </div>
-              <ul className='timeline--processing--overall'>
-                <li><span className='num--medium'>40k</span> Granules Ingesting</li>
-                <li><span className='num--medium'>100k</span> Granules Processing</li>
-                <li><span className='num--medium'>30k</span> Granules Pushed to CMR</li>
-                <li><span className='num--medium'>308k</span> Granules Archived</li>
-              </ul>
+              {this.renderGranuleProgress()}
               <SortableTable
                 data={list.data}
                 header={tableHeader}
