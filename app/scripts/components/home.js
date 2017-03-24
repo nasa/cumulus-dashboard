@@ -81,9 +81,9 @@ var Home = React.createClass({
     const { stats } = this.props.stats;
     const storage = get(stats.data, 'storage.value');
     const overview = [
-      [tally(get(stats.data, 'errors.value', nullValue)), 'Errors'],
-      [tally(get(stats.data, 'collections.value', nullValue)), 'Collections'],
-      [tally(get(stats.data, 'granules.value', nullValue)), 'Granules (received today)'],
+      [tally(get(stats.data, 'errors.value', nullValue)), 'Errors', '/logs'],
+      [tally(get(stats.data, 'collections.value', nullValue)), 'Collections', '/collections'],
+      [tally(get(stats.data, 'granules.value', nullValue)), 'Granules (received today)', '/granules'],
       [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average Processing Time'],
       [(storage ? tally(storage) + get(stats.data, 'storage.unit') : nullValue), 'Data Used'],
       [tally(get(stats.data, 'queues.value', nullValue)), 'SQS Queues'],
@@ -103,7 +103,7 @@ var Home = React.createClass({
               <ul>
                 {overview.map(d => (
                   <li key={d[1]}>
-                    <a className='overview-num' href='/'><span className='num--large'>{ stats.inflight ? <LoadingEllipsis /> : d[0] }</span> {d[1]}</a>
+                    <Link className='overview-num' to={d[2] || '#'}><span className='num--large'>{ stats.inflight ? <LoadingEllipsis /> : d[0] }</span> {d[1]}</Link>
                   </li>
                 ))}
               </ul>
