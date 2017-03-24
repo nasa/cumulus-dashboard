@@ -28,7 +28,8 @@ var TextForm = React.createClass({
 
     return (
       <div className='form__text'>
-        <label>{label} {error}</label>
+        <label>{label}</label>
+        <span className='form__error'>{error}</span>
         <input
           id={id}
           type={type}

@@ -42,7 +42,8 @@ const List = React.createClass({
 
     return (
       <div className='form__addone'>
-        <label>{label} {error}</label>
+        <label>{label}</label>
+        <span className='form__error'>{error}</span>
         <ul className='form__addone--items'>
           {items.map(this.renderItem)}
         </ul>
