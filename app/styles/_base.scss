@@ -160,6 +160,7 @@ a:active {
   max-width: 131px;
   float: left;
   height: 100%;
+  min-height:100vh;
   background-color: $midnight-blue;
   color: $lighter-grey;
   position: absolute;
