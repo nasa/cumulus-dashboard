@@ -33,7 +33,6 @@ export const createFormConfig = function (data, schema) {
     if (path) label.unshift(<span className='label__path'>{path + ' - '}</span>);
     if (required) label.push(<span className='label__required'> *</span>);
     if (meta.description) label.push(<span className='label__description'> ({meta.description})</span>);
-    
 
     // create an object-path-ready accessor string
     const accessor = path ? path + '.' + property : property;
