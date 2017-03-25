@@ -244,3 +244,11 @@ select {
 .login__onscreen {
   top: 0;
 }
+
+
+.error__report,
+.form__error {
+  color: $error-red;
+  display: block;
+  margin-bottom: .8em;
+}

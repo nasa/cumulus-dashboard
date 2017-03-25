@@ -46,7 +46,8 @@ const SubForm = React.createClass({
 
     return (
       <div id={id} className='subform'>
-        <label>{label} {error}</label>
+        <label>{label}</label>
+        <span className='form__error'>{error}</span>
         {fields.map(this.renderFieldset)}
       </div>
     );

@@ -45,7 +45,8 @@ const TextAreaForm = React.createClass({
 
     return (
       <div className='form__textarea'>
-        <label>{label} {error}</label>
+        <label>{label}</label>
+        <span className='form__error'>{error}</span>
         <Ace
           mode={mode}
           theme={config.editorTheme}

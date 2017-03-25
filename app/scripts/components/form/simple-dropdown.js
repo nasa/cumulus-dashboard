@@ -26,7 +26,8 @@ var Dropdown = React.createClass({
 
     return (
       <div className='form__dropdown'>
-        <label htmlFor={id}>{label} {error}</label>
+        <label htmlFor={id}>{label}</label>
+        <span className='form__error'>{error}</span>
         <div className='dropdown__wrapper'>
           <select id={id} value={value} onChange={this.onChange}>
             {options.map((d, i) => <option value={d} key={i}>{d}</option>)}
