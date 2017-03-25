@@ -108,6 +108,7 @@ export const Schema = React.createClass({
     schema: React.PropTypes.object,
     data: React.PropTypes.object,
     pk: React.PropTypes.string,
+    router: React.PropTypes.object,
     onSubmit: React.PropTypes.func
   },
 
@@ -128,12 +129,16 @@ export const Schema = React.createClass({
     }
   },
 
+  back: function () {
+    this.props.router.goBack();
+  },
+
   render: function () {
     const { fields } = this.state;
     if (!fields) return <Loading />;
     return (
       <div>
-        <Form inputMeta={fields} submit={this.props.onSubmit}/>
+        <Form inputMeta={fields} submit={this.props.onSubmit} cancel={this.back}/>
       </div>
     );
   }
