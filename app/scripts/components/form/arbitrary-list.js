@@ -3,7 +3,7 @@ import React from 'react';
 
 const List = React.createClass({
   propTypes: {
-    label: React.PropTypes.string,
+    label: React.PropTypes.any,
     value: React.PropTypes.array,
     id: React.PropTypes.string,
     error: React.PropTypes.string,

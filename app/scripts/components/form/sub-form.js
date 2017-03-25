@@ -6,7 +6,7 @@ import { createFormConfig } from './schema';
 
 const SubForm = React.createClass({
   propTypes: {
-    label: React.PropTypes.string,
+    label: React.PropTypes.any,
     value: React.PropTypes.object,
     fieldSet: React.PropTypes.object,
     id: React.PropTypes.string,

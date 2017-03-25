@@ -29,10 +29,14 @@ export const createFormConfig = function (data, schema) {
     const required = Array.isArray(schemaProperty.required) &&
       schemaProperty.required.indexOf(property) >= 0;
 
-    var label = [<span className='label__name'>{meta.title || property}</span>];
-    if (path) label.unshift(<span className='label__path'>{path + ' - '}</span>);
-    if (required) label.push(<span className='label__required'> *</span>);
-    if (meta.description) label.push(<span className='label__description'> ({meta.description})</span>);
+    const label = (
+      <span>
+        { path ? <span className='label__path'>{path + ' - '}</span> : null }
+        <span className='label__name'>{meta.title || property}</span>
+        { required ? <span className='label__required'> *</span> : null }
+        { meta.description ? <span className='label__description'> ({meta.description})</span> : null }
+      </span>
+    );
 
     // create an object-path-ready accessor string
     const accessor = path ? path + '.' + property : property;
