@@ -4,7 +4,7 @@ import React from 'react';
 var ErrorReport = React.createClass({
   displayName: 'ErrorReport',
   propTypes: {
-    report: React.PropTypes.string
+    report: React.PropTypes.any
   },
   render: function () {
     const { report } = this.props;

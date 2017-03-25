@@ -192,7 +192,7 @@ export const Form = React.createClass({
         </ul>
 
         {this.props.submit ? (
-          <span className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
+          <span className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
             <input
               type='submit'
               value={this.props.inflight ? 'Loading...' : 'Submit'}

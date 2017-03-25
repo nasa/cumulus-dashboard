@@ -16,7 +16,7 @@ const TextAreaForm = React.createClass({
   displayName: 'TextAreaForm',
 
   propTypes: {
-    label: React.PropTypes.string,
+    label: React.PropTypes.any,
     value: React.PropTypes.string,
     id: React.PropTypes.string,
     error: React.PropTypes.string,

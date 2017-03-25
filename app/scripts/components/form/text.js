@@ -3,7 +3,7 @@ import React from 'react';
 
 var TextForm = React.createClass({
   propTypes: {
-    label: React.PropTypes.string,
+    label: React.PropTypes.any,
     value: React.PropTypes.string,
     id: React.PropTypes.string,
     error: React.PropTypes.string,

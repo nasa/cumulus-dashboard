@@ -28,10 +28,15 @@ export const createFormConfig = function (data, schema) {
     // determine the label
     const required = Array.isArray(schemaProperty.required) &&
       schemaProperty.required.indexOf(property) >= 0;
-    var label = [<span className='label__name'>{meta.title || property}</span>];
-    if (path) label.unshift(<span className='label__path'>{path + ' - '}</span>);
-    if (meta.description) label.push(<span className='label__description'> ({meta.description})</span>);
-    if (required) label.push(<span className='label__required'> *required</span>);
+
+    const label = (
+      <span>
+        { path ? <span className='label__path'>{path + ' - '}</span> : null }
+        <span className='label__name'>{meta.title || property}</span>
+        { required ? <span className='label__required'> *</span> : null }
+        { meta.description ? <span className='label__description'> ({meta.description})</span> : null }
+      </span>
+    );
 
     // create an object-path-ready accessor string
     const accessor = path ? path + '.' + property : property;
@@ -107,6 +112,7 @@ export const Schema = React.createClass({
     schema: React.PropTypes.object,
     data: React.PropTypes.object,
     pk: React.PropTypes.string,
+    router: React.PropTypes.object,
     onSubmit: React.PropTypes.func
   },
 
@@ -127,12 +133,16 @@ export const Schema = React.createClass({
     }
   },
 
+  back: function () {
+    this.props.router.goBack();
+  },
+
   render: function () {
     const { fields } = this.state;
     if (!fields) return <Loading />;
     return (
       <div>
-        <Form inputMeta={fields} submit={this.props.onSubmit}/>
+        <Form inputMeta={fields} submit={this.props.onSubmit} cancel={this.back}/>
       </div>
     );
   }

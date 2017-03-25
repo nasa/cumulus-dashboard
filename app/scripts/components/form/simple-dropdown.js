@@ -3,7 +3,7 @@ import React from 'react';
 
 var Dropdown = React.createClass({
   propTypes: {
-    label: React.PropTypes.string,
+    label: React.PropTypes.any,
     value: React.PropTypes.string,
     options: React.PropTypes.array,
     id: React.PropTypes.string,
