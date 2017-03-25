@@ -3,12 +3,15 @@ import React from 'react';
 import { generate } from 'shortid';
 import { set } from 'object-path';
 import slugify from 'slugify';
+import ErrorReport from '../errors/report';
 import TextForm from './text';
 import TextAreaForm from './text-area';
 import Dropdown from './simple-dropdown';
 import List from './arbitrary-list';
 import SubForm from './sub-form';
 import t from '../../utils/strings';
+import { window } from '../../utils/browser';
+const scrollTo = typeof window.scrollTo === 'function' ? window.scrollTo : () => true;
 
 export const formTypes = {
   text: 'TEXT',
@@ -21,6 +24,8 @@ export const formTypes = {
 export const defaults = {
   json: '{\n  \n}'
 };
+
+const errorMessage = (errors) => `Please review ${errors.join(', ')} and submit again.`;
 
 /**
  * Generates an HTML structure of form elements and
@@ -37,7 +42,8 @@ export const Form = React.createClass({
 
   getInitialState: function () {
     return {
-      inputs: {}
+      inputs: {},
+      errors: []
     };
   },
 
@@ -77,8 +83,7 @@ export const Form = React.createClass({
     const inputState = Object.assign({}, this.state.inputs);
     set(inputState, [inputId, 'value'], value);
     this.setState(Object.assign({}, this.state, {
-      inputs: inputState,
-      error: null
+      inputs: inputState
     }));
   },
 
@@ -94,7 +99,7 @@ export const Form = React.createClass({
 
     // validate input values in the store
     // if values pass validation, write to payload object
-    let hasError = false;
+    const errors = [];
     const payload = {};
     this.props.inputMeta.forEach(input => {
       let inputId = this.generateComponentId(input.schemaProperty);
@@ -105,13 +110,13 @@ export const Form = React.createClass({
         try {
           value = JSON.parse(value);
         } catch (e) {
-          hasError = true;
+          errors.push(input.schemaProperty);
           return set(inputState, [inputId, 'error'], t.errors.json);
         }
       }
 
       if (input.validate && !input.validate(value)) {
-        hasError = true;
+        errors.push(input.schemaProperty);
         let error = input.error || t.errors.generic;
         return set(inputState, [inputId, 'error'], error);
       }
@@ -123,15 +128,17 @@ export const Form = React.createClass({
       inputs: inputState
     }));
 
-    if (!hasError) {
-      this.props.submit(this.props.id, payload);
-    }
+    if (errors.length) scrollTo(0, 0);
+    else this.props.submit(this.props.id, payload);
+    this.setState({errors});
   },
 
   render: function () {
     const inputState = this.state.inputs;
+    const { errors } = this.state;
     const form = (
       <div>
+        {errors.length ? <ErrorReport report={errorMessage(errors)} /> : null}
         <ul>
           {this.props.inputMeta.map(form => {
             let { type, label } = form;
