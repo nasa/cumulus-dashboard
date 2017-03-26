@@ -330,6 +330,16 @@ a:active {
 .progress-bar__indicator--cmr { left: 49%; }
 .progress-bar__indicator--archiving { left: 73%; }
 .progress-bar__indicator--completed { right: 20px; }
+.progress-bar__indicator--failed {
+  right: 20px;
+  .pulse__dot {
+    border: 5px solid lighten($error-red, 10%);
+    background-color: $error-red;
+  }
+  .pulse__ring {
+    border: 11px solid $error-red;
+  }
+}
 
 .meter > span {
   display: block;
