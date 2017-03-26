@@ -86,3 +86,7 @@ export const dropdownOption = function (optionElementValue, displayValue) {
     <option value={optionElementValue} key={optionElementValue}>{displayValue}</option>
   );
 };
+
+export const bool = function (bool) {
+  return bool ? 'Yes' : 'No';
+};
