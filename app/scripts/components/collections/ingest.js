@@ -74,15 +74,17 @@ var CollectionIngest = React.createClass({
           <Link className='button button--small form-group__element--right button--disabled button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
           {lastUpdated(data.queriedAt)}
         </section>
-
-        <button className={this.state.view === 'list' ? 'button--disabled' : ''}
-          onClick={() => this.state.view !== 'list' && this.setState({ view: 'list' })}>List View</button>
-        <button className={this.state.view === 'json' ? 'button--disabled' : ''}
-          onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}>JSON View</button>
-
-        <div>
-          {this.state.view === 'list' ? this.renderList(data) : this.renderJson(data)}
-        </div>
+        <section className='page__section'>
+          <div className='tab--wrapper'>
+            <button className={'button--tab' + (this.state.view === 'list' ? 'button--disabled' : '')}
+              onClick={() => this.state.view !== 'list' && this.setState({ view: 'list' })}>List View</button>
+            <button className={'button--tab ' + (this.state.view === 'json' ? 'button--disabled' : '')}
+              onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}>JSON View</button>
+          </div>
+          <div>
+            {this.state.view === 'list' ? this.renderList(data) : this.renderJson(data)}
+          </div>
+        </section>
       </div>
     );
   },
@@ -98,7 +100,7 @@ var CollectionIngest = React.createClass({
       <div>
 
         <div>
-          <h1>Collection Name</h1>
+          <label>Collection Name</label>
           <p>{data.collectionName}</p>
         </div>
 

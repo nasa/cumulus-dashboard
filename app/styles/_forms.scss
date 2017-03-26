@@ -139,7 +139,15 @@ select {
 .form__element__updateToggle {
   float: right;
   cursor: pointer;
-  width: 150px;
+  margin-top: -6px;
+  text-align: right;
+  span {
+    display: block;
+  }
+  .form-group__updating {
+    font-weight: $base-font-semibold;
+    font-size: .86em;
+  }
 }
 
 .form__element__updateToggle-noHeader {

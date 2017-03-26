@@ -109,3 +109,20 @@
     background-image: url(#{$graphics}/layout/sm-xmark.svg);
   }
 }
+
+.tab--wrapper {
+  margin-bottom: 2em;
+  border-bottom: 1px solid $lightest-grey;
+  .active {
+    font-weight: $base-font-bold;
+    border-bottom: 2px solid $ocean-blue;
+    color: $ocean-blue;
+  }
+}
+
+.button--tab {
+  border: none;
+  background: none;
+  padding-bottom: .5em;
+  margin-right: 1em;
+}

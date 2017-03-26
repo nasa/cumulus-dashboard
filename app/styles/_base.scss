@@ -228,6 +228,10 @@ a:active {
 
 .page__section {
   margin-bottom: 7em;
+  @extend .clearfix;
+  &:first-of-type {
+    margin-bottom: 5em;
+  }
 }
 
 .page__section__header {

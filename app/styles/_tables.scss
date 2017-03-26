@@ -17,14 +17,29 @@ table {
       td {
         font-size: .86em;
         padding: 1em;
+        vertical-align: middle;
       }
       .table__main-asset {
-        font-size: 1em;
         font-weight: $base-font-semibold;
       }
       &:nth-child(odd) {
         background-color: darken($background-white, 2%);
       }
+    }
+  }
+}
+
+.overview-num__wrapper {
+  margin-top: 1.5em;
+  .num--large {
+    font-size: 1.85em;
+  }
+  .overview-num {
+    width: 122px;
+    height: 85px;
+    margin: .8em 1.2em .5em 0;
+    &:hover {
+      margin: .1em 1.5em 1.2em 0;
     }
   }
 }
