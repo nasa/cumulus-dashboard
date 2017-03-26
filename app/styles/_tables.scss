@@ -1,3 +1,7 @@
+.table--wrapper {
+  overflow-y: scroll;
+}
+
 table {
   width: 100%;
   margin-bottom: 2.5em;
@@ -39,7 +43,7 @@ table {
     height: 85px;
     margin: .8em 1.2em .5em 0;
     &:hover {
-      margin: .1em 1.5em 1.2em 0;
+      margin: .1em 1.2em 1.2em 0;
     }
   }
 }

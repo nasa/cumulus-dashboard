@@ -6,18 +6,20 @@ var Table = React.createClass({
 
   render: function () {
     return (
-      <table>
-        <thead>
-          <tr>
-            <td></td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
+      <div className='table--wrapper'>
+        <table>
+          <thead>
+            <tr>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     );
   }
 });

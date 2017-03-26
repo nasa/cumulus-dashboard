@@ -100,7 +100,7 @@ var CollectionIngest = React.createClass({
       <div>
 
         <div>
-          <label>Collection Name</label>
+          <h1>Collection Name</h1>
           <p>{data.collectionName}</p>
         </div>
 
@@ -164,16 +164,24 @@ var CollectionIngest = React.createClass({
 
   renderJson: function (data) {
     return (
-      <div>
-        <h1>{data.collectionName}</h1>
-        {this.renderReadOnlyJson('recipe', omit(data, ['recipe', 'granuleDefinition', 'granulesStatus']))}
-        <h1>Recipe</h1>
-        {this.renderReadOnlyJson('recipe', data.recipe)}
-        <h1>Granule Definition</h1>
-        {this.renderReadOnlyJson('granuleDefinition', data.granuleDefinition)}
-        <h1>Granule Status</h1>
-        {this.renderReadOnlyJson('granuleStatus', data.granulesStatus)}
-      </div>
+      <ul>
+        <li>
+          <label>{data.collectionName}</label>
+          {this.renderReadOnlyJson('recipe', omit(data, ['recipe', 'granuleDefinition', 'granulesStatus']))}
+        </li>
+        <li>
+          <label>Recipe</label>
+          {this.renderReadOnlyJson('recipe', data.recipe)}
+        </li>
+        <li>
+          <label>Granule Definition</label>
+          {this.renderReadOnlyJson('granuleDefinition', data.granuleDefinition)}
+        </li>
+        <li>
+          <label>Granule Status</label>
+          {this.renderReadOnlyJson('granuleStatus', data.granulesStatus)}
+        </li>
+      </ul>
     );
   }
 });
