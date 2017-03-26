@@ -226,6 +226,12 @@ a:active {
   width: 80%;
 }
 
+.page__content--shortened--centered {
+  width: 70%;
+  margin: 0 auto;
+  padding-top: 4em;
+}
+
 .page__section {
   margin-bottom: 7em;
   @extend .clearfix;
@@ -238,7 +244,7 @@ a:active {
   margin-bottom: 2em;
 }
 
-.metadata__updated {
+.metadata__updated, .label__description {
   font-size: .79em;
   font-style: italic;
   color: lighten($lighter-grey, 10%);

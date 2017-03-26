@@ -69,6 +69,12 @@ export const OPTIONS_COLLECTIONNAME_INFLIGHT = 'OPTIONS_COLLECTIONNAME_INFLIGHT'
 export const OPTIONS_COLLECTIONNAME_ERROR = 'OPTIONS_COLLECTIONNAME_ERROR';
 
 export const STATS = 'STATS';
+export const STATS_INFLIGHT = 'STATS_INFLIGHT';
+export const STATS_ERROR = 'STATS_ERROR';
+
+export const COUNT = 'COUNT';
+export const COUNT_INFLIGHT = 'COUNT_INFLIGHT';
+export const COUNT_ERROR = 'COUNT_ERROR';
 
 export const PDRS = 'PDRS';
 export const PDRS_INFLIGHT = 'PDRS_INFLIGHT';
@@ -147,7 +153,16 @@ export const getOptionsCollectionName = () => wrapRequest(null, get, {
   qs: { limit: 100, fields: 'collectionName' }
 }, OPTIONS_COLLECTIONNAME);
 
-export const getStats = () => wrapRequest(null, get, 'stats/summary/grouped', STATS);
+export const getStats = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'stats'),
+  qs: options
+}, STATS);
+
+// count queries *must* include type and field properties.
+export const getCount = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'stats/count'),
+  qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
+}, COUNT);
 
 export const listPdrs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),

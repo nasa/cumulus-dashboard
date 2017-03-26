@@ -4,31 +4,13 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { get } from 'object-path';
-import { getStats, listGranules } from '../actions';
-import { nullValue, tally, seconds, fullDate } from '../utils/format';
-import SortableTable from './table/sortable';
+import { getStats, getCount, listPdrs } from '../actions';
+import { nullValue, tally, seconds } from '../utils/format';
+import LoadingEllipsis from './app/loading-ellipsis';
+import List from './table/list-view';
+import { tableHeader, tableRow, tableSortProps } from '../utils/table-config/pdrs';
 
 const timespan = moment().subtract(1, 'day').format();
-
-const tableHeader = [
-  'Status',
-  'Name',
-  'Collection',
-  'PDR',
-  'Duration',
-  'Last Update'
-];
-
-const tableRow = [
-  'status',
-  (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
-  'collectionName',
-  'pdrName',
-  (d) => seconds(d.duration),
-  (d) => fullDate(d.updatedAt)
-];
-
-const granuleFields = 'status,granuleId,collectionName,pdrName,duration,updatedAt';
 
 var Home = React.createClass({
   displayName: 'Home',
@@ -36,7 +18,8 @@ var Home = React.createClass({
   propTypes: {
     dispatch: React.PropTypes.func,
     stats: React.PropTypes.object,
-    granules: React.PropTypes.object
+    granules: React.PropTypes.object,
+    pdrs: React.PropTypes.object
   },
 
   componentWillMount: function () {
@@ -44,32 +27,51 @@ var Home = React.createClass({
   },
 
   queryStats: function () {
-    // TODO set time span of granules
-    this.props.dispatch(getStats());
-    this.props.dispatch(listGranules({
-      updatedAt__from: timespan,
-      sort_by: 'updatedAt',
-      order: 'desc',
-      limit: 10,
-      fields: granuleFields
+    this.props.dispatch(getStats({
+      timestamp__from: timespan
+    }));
+    this.props.dispatch(getCount({
+      type: 'granules',
+      field: 'status'
     }));
   },
 
+  generateQuery: function () {
+    return {
+      limit: 15
+    };
+  },
+
+  renderGranuleProgress: function () {
+    const { count } = this.props.stats;
+    const granuleCount = get(count.data, 'granules.count', []);
+    return (
+      <ul className='timeline--processing--overall'>
+        {granuleCount.map(d => (
+          <li key={d.key} className={'timeline--processing--' + d.key}>
+            <span className='num--medium'>{tally(d.count)}</span>
+            Granules {d.key}
+          </li>
+        ))}
+      </ul>
+    );
+  },
+
   render: function () {
-    const { stats, granules } = this.props;
-
-    const processingTimeUnits = get(stats, 'processingTime.unit', ' ').slice(0, 1);
-    const storage = get(stats, 'storage.value');
+    const { list } = this.props.pdrs;
+    const { stats, count } = this.props.stats;
+    const storage = get(stats.data, 'storage.value');
     const overview = [
-      [tally(get(stats, 'errors.value', nullValue)), 'Errors'],
-      [tally(get(stats, 'collections.value', nullValue)), 'Collections'],
-      [tally(get(stats, 'granules.value', nullValue)), 'Granules (received today)'],
-      [get(stats, 'processingTime.value', nullValue) + processingTimeUnits, 'Average Processing Time'],
-      [(storage ? tally(storage) + get(stats, 'storage.unit') : nullValue), 'Data Used'],
-      [tally(get(stats, 'queues.value', nullValue)), 'SQS Queues'],
-      [tally(get(stats, 'ec2.value', nullValue)), 'EC2 Instances']
+      [tally(get(stats.data, 'errors.value', nullValue)), 'Errors', '/logs'],
+      [tally(get(stats.data, 'collections.value', nullValue)), 'Collections', '/collections'],
+      [tally(get(stats.data, 'granules.value', nullValue)), 'Granules (received today)', '/granules'],
+      [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average Processing Time'],
+      [(storage ? tally(storage) + get(stats.data, 'storage.unit') : nullValue), 'Data Used'],
+      [tally(get(stats.data, 'queues.value', nullValue)), 'SQS Queues'],
+      [tally(get(stats.data, 'ec2.value', nullValue)), 'EC2 Instances']
     ];
-
+    const granuleCount = get(count.data, 'granules.meta.count');
+    const numGranules = granuleCount ? `(${granuleCount})` : null;
     return (
       <div className='page__home'>
         <div className='content__header content__header--lg'>
@@ -83,7 +85,7 @@ var Home = React.createClass({
               <ul>
                 {overview.map(d => (
                   <li key={d[1]}>
-                    <a className='overview-num' href='/'><span className='num--large'>{d[0]}</span> {d[1]}</a>
+                    <Link className='overview-num' to={d[2] || '#'}><span className='num--large'>{ stats.inflight ? <LoadingEllipsis /> : d[0] }</span> {d[1]}</Link>
                   </li>
                 ))}
               </ul>
@@ -92,21 +94,26 @@ var Home = React.createClass({
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium'>Recent Granules</h2>
+                <h2 className='heading--medium'>Granules Updated Today {numGranules}</h2>
               </div>
-              <ul className='timeline--processing--overall'>
-                <li><span className='num--medium'>40k</span> Granules Ingesting</li>
-                <li><span className='num--medium'>100k</span> Granules Processing</li>
-                <li><span className='num--medium'>30k</span> Granules Pushed to CMR</li>
-                <li><span className='num--medium'>308k</span> Granules Archived</li>
-              </ul>
-              <SortableTable
-                data={granules.list.data}
-                header={tableHeader}
+              {this.renderGranuleProgress()}
+            </div>
+
+            <div className='row'>
+              <div className='heading__wrapper--border'>
+                <h2 className='heading--medium'>Recently Active PDR's</h2>
+              </div>
+              <List
+                list={list}
+                dispatch={this.props.dispatch}
+                action={listPdrs}
+                tableHeader={tableHeader}
                 primaryIdx={1}
-                row={tableRow}
-                props={[]} />
-              <Link className='link--secondary' to='/granules'>View All Granules</Link>
+                tableRow={tableRow}
+                tableSortProps={tableSortProps}
+                query={this.generateQuery()}
+              />
+              <Link className='link--secondary' to='/pdrs'>View All PDRs</Link>
             </div>
           </section>
           <section className='page__section'>
