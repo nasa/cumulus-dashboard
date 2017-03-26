@@ -75,9 +75,9 @@ var CollectionIngest = React.createClass({
           {lastUpdated(data.queriedAt)}
         </section>
 
-        <button className={this.state.view === 'list' ? 'button--disabled' : ''}
+        <button className={this.state.view === 'list' ? 'button--active' : ''}
           onClick={() => this.state.view !== 'list' && this.setState({ view: 'list' })}>List View</button>
-        <button className={this.state.view === 'json' ? 'button--disabled' : ''}
+        <button className={this.state.view === 'json' ? 'button--active' : ''}
           onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}>JSON View</button>
 
         <div>
