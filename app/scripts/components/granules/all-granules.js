@@ -16,6 +16,7 @@ import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
 import Search from '../form/search';
+import status from '../../utils/status';
 
 var AllGranules = React.createClass({
   displayName: 'AllGranules',
@@ -39,7 +40,6 @@ var AllGranules = React.createClass({
     const { list, dropdowns } = this.props.granules;
     const { count, queriedAt } = list.meta;
     const logsQuery = { 'meta.granuleId__exists': 'true' };
-
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -59,6 +59,15 @@ var AllGranules = React.createClass({
               clear={clearGranulesFilter}
               paramKey={'collectionName'}
               label={'Collection'}
+            />
+            <Dropdown
+              dispatch={this.props.dispatch}
+              options={status}
+              format={dropdownOption}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey={'status'}
+              label={'Status'}
             />
             <Search dispatch={this.props.dispatch}
               action={searchGranules}
