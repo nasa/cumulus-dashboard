@@ -12,27 +12,30 @@ var ActivePdrs = React.createClass({
   displayName: 'ActivePdrs',
 
   propTypes: {
-    params: React.PropTypes.object,
+    location: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     pdrs: React.PropTypes.object,
     logs: React.PropTypes.object
   },
 
   generateQuery: function () {
-    return {
-      status__not: 'completed'
-    };
+    const query = {};
+    const active = this.props.location.pathname.indexOf('active') >= 0;
+    if (active) query.status__not = 'completed';
+    else query.status = 'completed';
+    return query;
   },
 
   render: function () {
     const { list } = this.props.pdrs;
     const { count, queriedAt } = list.meta;
     const logsQuery = { 'meta.pdrName__exists': 'true' };
+    const active = this.props.location.pathname.indexOf('active') >= 0;
     return (
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content'>Active PDRs { count ? `(${count})` : null }</h1>
+            <h1 className='heading--large heading--shared-content'>{active ? 'Active' : ' Completed'} PDRs { count ? `(${count})` : null }</h1>
             {lastUpdated(queriedAt)}
           </div>
           <div className='filters'>
