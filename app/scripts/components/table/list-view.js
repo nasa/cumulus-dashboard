@@ -93,7 +93,7 @@ var List = React.createClass({
     if (selected.indexOf(id) === -1) {
       this.setState({ selected: selected.concat([id]) });
     } else {
-      this.setState({ selected: selected.filter(d => d === id) });
+      this.setState({ selected: selected.filter(d => d !== id) });
     }
   },
 
