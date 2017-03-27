@@ -113,10 +113,13 @@
 .tab--wrapper {
   margin-bottom: 2em;
   border-bottom: 1px solid $lightest-grey;
-  .active {
+  .button--active {
     font-weight: $base-font-bold;
     border-bottom: 2px solid $ocean-blue;
     color: $ocean-blue;
+    &:hover {
+      color: $ocean-blue;
+    }
   }
 }
 
@@ -125,4 +128,11 @@
   background: none;
   padding-bottom: .5em;
   margin-right: 1em;
+  color: $grey;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+  &:hover {
+    color: $dark-grey;
+  }
 }

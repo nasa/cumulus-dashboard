@@ -86,3 +86,12 @@ export const dropdownOption = function (optionElementValue, displayValue) {
     <option value={optionElementValue} key={optionElementValue}>{displayValue}</option>
   );
 };
+
+export const bool = function (bool) {
+  return bool ? 'Yes' : 'No';
+};
+
+export const displayCase = function (string) {
+  const split = string.split(' ');
+  return split.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+};

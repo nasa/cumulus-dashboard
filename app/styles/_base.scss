@@ -55,14 +55,13 @@ body {
 }
 
 
-a {
+a, a:visited {
   cursor: pointer;
   transition: opacity 0.24s ease 0s;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-}
-
-a:visited {
+  color: $ocean-blue;
+  border-bottom: 1px solid rgba(34, 118, 172, .2);
 }
 
 a:hover {
@@ -93,6 +92,11 @@ a:active {
   &:hover {
     color: lighten($black, 25%);
   }
+}
+
+.link--learn-more {
+  margin-top: 2em;
+  display: inline-block;
 }
 
 .description {
@@ -166,12 +170,19 @@ a:active {
   position: absolute;
   a {
     color: lighten($lighter-grey, 8%);
+    border-bottom: none;
     .active {
       color: #fff;
     }
     &:hover {
       color: #fff;
     }
+  }
+  .sidebar__nav--back {
+    padding-bottom: 1.8em;
+    margin-bottom: 1em;
+    border-bottom: 1px solid rgba(69, 83, 101, .8);
+    display: inline-block;
   }
   .sidebar__nav--selected {
     color: #fff;
@@ -193,13 +204,6 @@ a:active {
   background: $midnight-blue;
   height: 100%;
   width: 50em;
-}
-
-.sidebar__nav--back {
-  padding-bottom: 1.8em;
-  margin-bottom: 1em;
-  border-bottom: 1px solid rgba(69, 83, 101, .8);
-  display: inline-block;
 }
 
 .sidebar__row {
@@ -272,7 +276,7 @@ a:active {
   ol {
     position: absolute;
     top: 0;
-    width: 100%;
+    width: 99%;
   }
 
   li {
@@ -334,6 +338,16 @@ a:active {
 .progress-bar__indicator--cmr { left: 49%; }
 .progress-bar__indicator--archiving { left: 73%; }
 .progress-bar__indicator--completed { right: 20px; }
+.progress-bar__indicator--failed {
+  right: 20px;
+  .pulse__dot {
+    border: 5px solid lighten($error-red, 10%);
+    background-color: $error-red;
+  }
+  .pulse__ring {
+    border: 11px solid $error-red;
+  }
+}
 
 .meter > span {
   display: block;

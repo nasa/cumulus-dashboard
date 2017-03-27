@@ -76,9 +76,9 @@ var CollectionIngest = React.createClass({
         </section>
         <section className='page__section'>
           <div className='tab--wrapper'>
-            <button className={'button--tab' + (this.state.view === 'list' ? 'button--disabled' : '')}
+            <button className={'button--tab' + (this.state.view === 'list' ? 'button--active' : '')}
               onClick={() => this.state.view !== 'list' && this.setState({ view: 'list' })}>List View</button>
-            <button className={'button--tab ' + (this.state.view === 'json' ? 'button--disabled' : '')}
+            <button className={'button--tab ' + (this.state.view === 'json' ? 'button--active' : '')}
               onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}>JSON View</button>
           </div>
           <div>

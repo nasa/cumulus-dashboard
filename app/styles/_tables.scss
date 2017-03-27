@@ -1,5 +1,5 @@
 .table--wrapper {
-  overflow-y: scroll;
+  overflow-x: scroll;
 }
 
 table {
@@ -22,6 +22,9 @@ table {
         font-size: .86em;
         padding: 1em;
         vertical-align: middle;
+        &:first-of-type {
+          padding: 1em 0 1em 1em;
+        }
       }
       .table__main-asset {
         font-weight: $base-font-semibold;
@@ -38,17 +41,19 @@ table {
   .num--large {
     font-size: 1.85em;
   }
-  .overview-num {
+  .overview-num, .overview-num:visited {
     width: 122px;
     height: 85px;
     margin: .8em 1.2em .5em 0;
+    border-bottom: none;
     &:hover {
       margin: .1em 1.2em 1.2em 0;
     }
   }
 }
 
-.overview-num {
+.overview-num, .overview-num:visited {
+  border-bottom: none;
   background-color: #fff;
   padding: 1.5em 1em .5em;
   display: inline-block;
@@ -148,6 +153,7 @@ table {
     .next, .previous {
       position: absolute;
       top: 0;
+      border-bottom: none;
     }
     .next {
       right: 0;

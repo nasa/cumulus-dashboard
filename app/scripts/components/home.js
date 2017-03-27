@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import moment from 'moment';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { get } from 'object-path';
@@ -9,8 +8,7 @@ import { nullValue, tally, seconds } from '../utils/format';
 import LoadingEllipsis from './app/loading-ellipsis';
 import List from './table/list-view';
 import { tableHeader, tableRow, tableSortProps } from '../utils/table-config/pdrs';
-
-const timespan = moment().subtract(1, 'day').format();
+import { recent } from '../config';
 
 var Home = React.createClass({
   displayName: 'Home',
@@ -28,7 +26,7 @@ var Home = React.createClass({
 
   queryStats: function () {
     this.props.dispatch(getStats({
-      timestamp__from: timespan
+      timestamp__from: recent
     }));
     this.props.dispatch(getCount({
       type: 'granules',
@@ -38,7 +36,8 @@ var Home = React.createClass({
 
   generateQuery: function () {
     return {
-      limit: 15
+      updatedAt__from: recent,
+      limit: 10
     };
   },
 
@@ -113,7 +112,7 @@ var Home = React.createClass({
                 tableSortProps={tableSortProps}
                 query={this.generateQuery()}
               />
-              <Link className='link--secondary' to='/pdrs'>View All PDRs</Link>
+              <Link className='link--secondary link--learn-more' to='/pdrs'>View PDR Overview</Link>
             </div>
           </section>
           <section className='page__section'>

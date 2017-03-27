@@ -127,7 +127,7 @@ var CollectionOverview = React.createClass({
             <h2 className='heading--medium heading--shared-content'>Processing Granules{meta.count ? ` (${meta.count})` : null}</h2>
           </div>
           <SortableTable data={list.data} header={tableHeader} row={tableRow}/>
-          <Link className='link--secondary' to={`/collections/collection/${collectionName}/granules`}>View All Granules</Link>
+          <Link className='link--secondary link--learn-more' to={`/collections/collection/${collectionName}/granules`}>View All Granules</Link>
         </section>
       </div>
     );
