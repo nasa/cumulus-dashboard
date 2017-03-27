@@ -35,7 +35,7 @@ var ActivePdrs = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content'>{active ? 'Active' : ' Completed'} PDRs { count ? `(${count})` : null }</h1>
+            <h1 className='heading--large heading--shared-content with-description'>{active ? 'Active' : ' Completed'} PDRs { count ? `(${count})` : null }</h1>
             {lastUpdated(queriedAt)}
           </div>
           <div className='filters'>

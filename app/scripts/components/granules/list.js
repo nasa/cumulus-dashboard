@@ -64,7 +64,7 @@ var AllGranules = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content'>
+            <h1 className='heading--large heading--shared-content with-description '>
               {pdrName || 'All'} Granules <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}

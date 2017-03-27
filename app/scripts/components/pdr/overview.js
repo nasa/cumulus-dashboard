@@ -52,13 +52,13 @@ var PdrOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>PDRs Overview</h1>
+          <h1 className='heading--large heading--shared-content with-description'>PDRs Overview</h1>
           {lastUpdated(queriedAt)}
           {overview}
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Recently Active PDRs{count ? ` (${count})` : null}</h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Recently Active PDRs{count ? ` (${count})` : null}</h2>
           </div>
 
           <List
@@ -70,7 +70,7 @@ var PdrOverview = React.createClass({
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
           />
-          <Link className='link--secondary' to='/pdrs/active'>View All Active PDRs</Link>
+          <Link className='link--secondary link--learn-more' to='/pdrs/active'>View All Active PDRs</Link>
         </section>
       </div>
     );

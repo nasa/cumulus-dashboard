@@ -189,7 +189,7 @@ var GranuleOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>{granuleId}</h1>
+          <h1 className='heading--large heading--shared-content with-description'>{granuleId}</h1>
 
           <AsyncCommand action={this.delete}
             success={this.navigateBack}
@@ -218,7 +218,7 @@ var GranuleOverview = React.createClass({
         <section className='page__section'>
           {errors ? <ErrorReport report={errors} /> : null}
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium'>Granule Overview {cmrLink ? <a href={cmrLink}>[CMR]</a> : null}</h2>
+            <h2 className='heading--medium with-description'>Granule Overview {cmrLink ? <a href={cmrLink}>[CMR]</a> : null}</h2>
           </div>
           <dl className='metadata__granule__details'>
             {metaAccessors.reduce((acc, meta, i) => {
@@ -236,7 +236,7 @@ var GranuleOverview = React.createClass({
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Files</h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Files</h2>
           </div>
           <SortableTable data={files} header={tableHeader} row={tableRow}/>
         </section>

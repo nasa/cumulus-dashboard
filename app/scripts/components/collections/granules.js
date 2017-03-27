@@ -29,7 +29,7 @@ var CollectionGranules = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>{collectionName}</h1>
+          <h1 className='heading--large heading--shared-content with-description '>{collectionName}</h1>
           <Link className='button button--small form-group__element--right button--disabled button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
           <dl className="metadata__updated">
             <dt>Last Updated:</dt>
@@ -40,7 +40,7 @@ var CollectionGranules = React.createClass({
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Granules{meta.count ? ` (${meta.count})` : null}</h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Granules{meta.count ? ` (${meta.count})` : null}</h2>
           </div>
 
           <List

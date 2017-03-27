@@ -240,8 +240,12 @@ a:active {
   margin-bottom: 7em;
   @extend .clearfix;
   &:first-of-type {
-    margin-bottom: 5em;
+    margin-bottom: 4em;
   }
+}
+
+.page__section--small {
+  margin-bottom: 3em;
 }
 
 .page__section__header {
@@ -376,6 +380,17 @@ a:active {
 
   .recipe {
     margin-bottom: 1em;
+  }
+}
+
+.list-view {
+  dt {
+    font-weight: $base-font-bold;
+    margin-bottom: .2em;
+  }
+  dd, p {
+    margin-bottom: 1em;
+    color: $grey;
   }
 }
 
