@@ -1,3 +1,5 @@
+'use strict';
+import moment from 'moment';
 module.exports = {
   environment: 'development',
   apiRoot: 'https://cumulus.developmentseed.org/api/',
@@ -15,5 +17,7 @@ module.exports = {
 
   // auto-update frequency
   updateInterval: 15000,
-  logsUpdateInterval: 10000
+  logsUpdateInterval: 10000,
+
+  recent: moment().subtract(1, 'day').format()
 };

@@ -1,12 +1,13 @@
 'use strict';
 import React from 'react';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { listPdrs } from '../../actions';
 import { lastUpdated } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdrs';
 import List from '../table/list-view';
-
 import Overview from '../app/overview';
+import { recent } from '../../config';
 
 var PdrOverview = React.createClass({
   displayName: 'PdrOverview',
@@ -26,7 +27,10 @@ var PdrOverview = React.createClass({
   },
 
   generateQuery: function () {
-    return {limit: 10};
+    return {
+      limit: 10,
+      updatedAt__from: recent
+    };
   },
 
   render: function () {
@@ -55,6 +59,7 @@ var PdrOverview = React.createClass({
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
           />
+          <Link className='link--secondary' to='/pdrs/active'>View All Active PDRs</Link>
         </section>
       </div>
     );
