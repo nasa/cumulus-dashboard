@@ -12,13 +12,16 @@ var ActivePdrs = React.createClass({
   displayName: 'ActivePdrs',
 
   propTypes: {
+    params: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     pdrs: React.PropTypes.object,
     logs: React.PropTypes.object
   },
 
   generateQuery: function () {
-    return {};
+    return {
+      status__not: 'completed'
+    };
   },
 
   render: function () {
