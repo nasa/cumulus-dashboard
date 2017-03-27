@@ -46,7 +46,6 @@ import Restricted from './components/granules/restricted';
 
 import Pdrs from './components/pdr';
 import PdrOverview from './components/pdr/overview';
-import Pdr from './components/pdr/pdr';
 import PdrList from './components/pdr/list';
 
 import Logs from './components/logs';
