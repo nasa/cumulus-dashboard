@@ -2,9 +2,10 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { get } from 'object-path';
-import { tally, seconds } from '../format';
+import { tally, seconds, fullDate } from '../format';
 
 export const tableHeader = [
+  'Updated',
   'Name',
   'Status',
   'Duration',
@@ -18,6 +19,7 @@ export const tableHeader = [
 ];
 
 export const tableRow = [
+  (d) => fullDate(d.updatedAt),
   (d) => <Link to={`granules/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
   'status',
   (d) => seconds(d.averageDuration),
@@ -31,8 +33,10 @@ export const tableRow = [
 ];
 
 export const tableSortProps = [
+  'updatedAt',
   'pdrName.keyword',
   'status.keyword',
+  null,
   null,
   null,
   null,
