@@ -80,6 +80,10 @@ export const PDRS = 'PDRS';
 export const PDRS_INFLIGHT = 'PDRS_INFLIGHT';
 export const PDRS_ERROR = 'PDRS_ERROR';
 
+export const PDR_DELETE = 'PDR_DELETE';
+export const PDR_DELETE_INFLIGHT = 'PDR_DELETE_INFLIGHT';
+export const PDR_DELETE_ERROR = 'PDR_DELETE_ERROR';
+
 export const SEARCH_PDRS = 'SEARCH_PDRS';
 export const CLEAR_PDRS_SEARCH = 'CLEAR_PDRS_SEARCH';
 
@@ -173,6 +177,9 @@ export const searchPdrs = (prefix) => ({ type: SEARCH_PDRS, prefix: prefix });
 export const clearPdrsSearch = () => ({ type: CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: FILTER_PDRS, param: param });
 export const clearPdrsFilter = (paramKey) => ({ type: CLEAR_PDRS_FILTER, paramKey: paramKey });
+
+export const deletePdr = (pdrName) => wrapRequest(
+  pdrName, del, `pdrs/${pdrName}`, PDR_DELETE);
 
 export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),
