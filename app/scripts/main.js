@@ -38,7 +38,7 @@ import CollectionIngest from './components/collections/ingest';
 import CollectionLogs from './components/collections/logs';
 
 import Granules from './components/granules';
-import ListGranules from './components/granules/all-granules';
+import ListGranules from './components/granules/list';
 import GranuleOverview from './components/granules/granule';
 import GranuleRecipeIngest from './components/granules/recipe-ingest';
 import MarkedDeletion from './components/granules/marked-deletion';
