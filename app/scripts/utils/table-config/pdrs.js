@@ -20,7 +20,7 @@ export const tableHeader = [
 
 export const tableRow = [
   (d) => fullDate(d.updatedAt),
-  (d) => <Link to={`granules/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
+  (d) => <Link to={`pdrs/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
   'status',
   (d) => seconds(d.averageDuration),
   (d) => tally(get(d, 'granules', 0)),
