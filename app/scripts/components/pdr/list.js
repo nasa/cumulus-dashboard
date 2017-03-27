@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { searchPdrs, clearPdrsSearch, listPdrs } from '../../actions';
+import { searchPdrs, clearPdrsSearch, listPdrs, deletePdr } from '../../actions';
 import { pdrSearchResult, lastUpdated } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdrs';
 import LogViewer from '../logs/viewer';
@@ -24,6 +24,14 @@ var ActivePdrs = React.createClass({
     if (active) query.status__not = 'completed';
     else query.status = 'completed';
     return query;
+  },
+
+  generateBulkActions: function () {
+    return [{
+      text: 'Delete',
+      action: deletePdr,
+      state: this.props.pdrs.deleted
+    }];
   },
 
   render: function () {
@@ -54,6 +62,7 @@ var ActivePdrs = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
+            bulkActions={this.generateBulkActions()}
           />
         </section>
         <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
