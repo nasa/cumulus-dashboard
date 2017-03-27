@@ -114,7 +114,8 @@ var CollectionOverview = React.createClass({
           <AsyncCommand action={this.delete}
             success={this.navigateBack}
             status={deleteStatus}
-            className={!hasGranules ? 'button--disabled' : null}
+            disabled={!hasGranules}
+            className={'form-group__element--right'}
             text={deleteStatus === 'success' ? 'Success!' : 'Delete' } />
 
           <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>

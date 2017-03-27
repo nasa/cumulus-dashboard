@@ -5,6 +5,7 @@ import SortableTable from './sortable';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
+import BatchAsyncCommand from '../form/batch-async-command';
 import { updateInterval } from '../../config';
 import { isUndefined as undef } from '../../utils/validate';
 
@@ -32,7 +33,7 @@ var List = React.createClass({
     tableRow: React.PropTypes.array,
     tableSortProps: React.PropTypes.array,
     query: React.PropTypes.object,
-    isRemovable: React.PropTypes.bool,
+    bulkActions: React.PropTypes.array,
     rowId: React.PropTypes.string
   },
 
@@ -147,15 +148,16 @@ var List = React.createClass({
   },
 
   render: function () {
-    const { tableHeader, tableRow, tableSortProps, isRemovable, rowId, list } = this.props;
+    const { dispatch, tableHeader, tableRow, tableSortProps, bulkActions, rowId, list } = this.props;
     const { count, limit } = list.meta;
     const { page, sortIdx, order, selected, seconds } = this.state;
     const primaryIdx = 0;
-    const checked = this.state.selected.length === list.data.length && list.data.length;
+    const allChecked = this.state.selected.length === list.data.length && list.data.length;
+    const hasActions = !!(Array.isArray(bulkActions) && bulkActions.length);
 
     return (
       <div className='list-view'>
-        <div className={isRemovable ? 'form__element__updateToggle' : 'form__element__updateToggle form__element__updateToggle-noHeader'} onClick={this.toggleAutoFetch}>
+        <div className={hasActions ? 'form__element__updateToggle' : 'form__element__updateToggle form__element__updateToggle-noHeader'} onClick={this.toggleAutoFetch}>
           <span className='form-group__updating'>
             Next update in: {seconds === -1 ? '-' : seconds }
           </span>
@@ -164,14 +166,19 @@ var List = React.createClass({
           </span>
         </div>
 
-        {isRemovable ? (
+        {hasActions ? (
           <div className='form--controls'>
             <label className='form__element__select form-group__element form-group__element--small'>
-              <input type='checkbox' className='form-select__all' name='Select' checked={checked} onChange={this.selectAll} />
+              <input type='checkbox' className='form-select__all' name='Select' checked={allChecked} onChange={this.selectAll} />
               Select
             </label>
-            <button className='button button--small form-group__element'>Remove From CMR</button>
-            <button className='button button--small form-group__element'>Reprocess</button>
+            {bulkActions.map((item, i) => <BatchAsyncCommand key={item.text}
+              dispatch={dispatch}
+              action={item.action}
+              state={item.state}
+              text={item.text}
+              selection={selected}
+            />)}
           </div>
         ) : null}
 
@@ -188,7 +195,7 @@ var List = React.createClass({
           order={order}
           changeSortProps={this.queryNewSort}
           onSelect={this.updateSelection}
-          isRemovable={isRemovable}
+          canSelect={hasActions}
           selectedRows={selected}
           rowId={rowId}
         />
