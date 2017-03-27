@@ -188,7 +188,7 @@ var List = React.createClass({
           order={order}
           changeSortProps={this.queryNewSort}
           onSelect={this.updateSelection}
-          isRemovable={isRemovable}
+          canSelect={isRemovable}
           selectedRows={selected}
           rowId={rowId}
         />

@@ -22,7 +22,7 @@ const Table = React.createClass({
     order: React.PropTypes.string,
     changeSortProps: React.PropTypes.func,
     onSelect: React.PropTypes.func,
-    isRemovable: React.PropTypes.bool,
+    canSelect: React.PropTypes.bool,
     selectedRows: React.PropTypes.array,
     rowId: React.PropTypes.string
   },
@@ -51,14 +51,14 @@ const Table = React.createClass({
 
   render: function () {
     const canSort = !this.unSortable();
-    let { primaryIdx, sortIdx, order, props, row, data, selectedRows, isRemovable } = this.props;
+    let { primaryIdx, sortIdx, order, props, row, data, selectedRows, canSelect } = this.props;
     primaryIdx = primaryIdx || 0;
 
     return (
       <table>
         <thead>
           <tr>
-            {isRemovable && <td></td> }
+            {canSelect && <td></td> }
             {this.props.header.map((h, i) => {
               let className = canSort && props[i] ? 'table__sort' : '';
               if (i === sortIdx) { className += (' table__sort--' + order); }
@@ -76,10 +76,10 @@ const Table = React.createClass({
         <tbody>
           {this.props.data.map((d, i) => {
             const dataId = d[this.props.rowId];
-            const checked = isRemovable && selectedRows.indexOf(dataId) !== -1;
+            const checked = canSelect && selectedRows.indexOf(dataId) !== -1;
             return (
               <tr key={i} data-value={dataId} onClick={this.select}>
-                {isRemovable &&
+                {canSelect &&
                   <td>
                     <input type='checkbox' checked={checked} />
                   </td>
