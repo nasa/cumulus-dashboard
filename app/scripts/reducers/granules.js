@@ -44,7 +44,8 @@ export const initialState = {
   map: {},
   meta: {},
   reprocessed: {},
-  removed: {}
+  removed: {},
+  deleted: {}
 };
 
 export default function reducer (state = initialState, action) {

@@ -9,7 +9,8 @@ const AsyncCommand = React.createClass({
     success: React.PropTypes.func,
     status: React.PropTypes.string,
     text: React.PropTypes.string,
-    className: React.PropTypes.string
+    className: React.PropTypes.string,
+    disabled: React.PropTypes.bool
   },
 
   componentWillReceiveProps: function (newProps) {
@@ -19,8 +20,9 @@ const AsyncCommand = React.createClass({
   },
 
   buttonClass: function (processing) {
-    let className = 'button button--small form-group__element--right button--green';
+    let className = 'button button--small form-group__element button--green';
     if (processing) className += ' button--loading';
+    if (this.props.disabled) className += ' button--disabled';
     if (this.props.className) className += ' ' + this.props.className;
     return className;
   },
