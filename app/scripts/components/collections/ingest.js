@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { get } from 'object-path';
 import omit from 'lodash.omit';
 import { getCollection } from '../../actions';
-import { fullDate, lastUpdated } from '../../utils/format';
+import { fullDate, lastUpdated, nullValue } from '../../utils/format';
 import config from '../../config';
 import Loading from '../app/loading-indicator';
 
@@ -76,7 +76,7 @@ var CollectionIngest = React.createClass({
         </section>
         <section className='page__section'>
           <div className='tab--wrapper'>
-            <button className={'button--tab' + (this.state.view === 'list' ? 'button--active' : '')}
+            <button className={'button--tab ' + (this.state.view === 'list' ? 'button--active' : '')}
               onClick={() => this.state.view !== 'list' && this.setState({ view: 'list' })}>List View</button>
             <button className={'button--tab ' + (this.state.view === 'json' ? 'button--active' : '')}
               onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}>JSON View</button>
@@ -90,11 +90,9 @@ var CollectionIngest = React.createClass({
   },
 
   renderList: function (data) {
-    const {
-      granuleDefinition,
-      ingest,
-      recipe
-    } = data;
+    const granuleDefinition = get(data, 'granuleDefinition', {});
+    const ingest = get(data, 'ingest', {});
+    const recipe = get(data, 'recipe', {});
 
     return (
       <div>
@@ -119,7 +117,7 @@ var CollectionIngest = React.createClass({
           <h1>Granule Definition</h1>
           <p>{granuleDefinition.granuleId}</p>
           <h1>Files</h1>
-          {Object.keys(granuleDefinition.files).map(name => {
+          {Object.keys(get(granuleDefinition, 'files', [])).map(name => {
             let file = granuleDefinition.files[name];
             return (
               <div key={name}>
@@ -130,7 +128,7 @@ var CollectionIngest = React.createClass({
               </div>
               );
           })}
-          <h1>Needed for processing: {granuleDefinition.neededForProcessing.join(', ')}</h1>
+          <h1>Needed for processing: {get(granuleDefinition, 'neededForProcessing', []).join(', ')}</h1>
         </div>
 
         <div>
@@ -138,8 +136,8 @@ var CollectionIngest = React.createClass({
           <p>Type: {ingest.type}</p>
 
           <h1>Configuration</h1>
-          <p>Concurrency: {ingest.config.concurrency}</p>
-          <p>Endpoint: {ingest.config.endpoint}</p>
+          <p>Concurrency: {get(ingest, 'config.concurrency', nullValue)}</p>
+          <p>Endpoint: {get(ingest, 'config.endpoint', nullValue)}</p>
         </div>
 
         <div>
