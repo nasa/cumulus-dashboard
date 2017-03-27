@@ -11,7 +11,11 @@ import {
   CLEAR_PDRS_SEARCH,
 
   FILTER_PDRS,
-  CLEAR_PDRS_FILTER
+  CLEAR_PDRS_FILTER,
+
+  PDR_DELETE,
+  PDR_DELETE_INFLIGHT,
+  PDR_DELETE_ERROR
 } from '../actions';
 
 export const initialState = {
@@ -20,12 +24,13 @@ export const initialState = {
     meta: {},
     params: {}
   },
-  search: {}
+  search: {},
+  deleted: {}
 };
 
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
-  const { data } = action;
+  const { id, data } = action;
   switch (action.type) {
     case PDRS:
       set(state, ['list', 'data'], data.results);
@@ -52,6 +57,18 @@ export default function reducer (state = initialState, action) {
       break;
     case CLEAR_PDRS_FILTER:
       set(state, ['list', 'params', action.paramKey], null);
+      break;
+
+    case PDR_DELETE:
+      set(state, ['deleted', id, 'status'], 'success');
+      set(state, ['deleted', id, 'error'], null);
+      break;
+    case PDR_DELETE_INFLIGHT:
+      set(state, ['deleted', id, 'status'], 'inflight');
+      break;
+    case PDR_DELETE_ERROR:
+      set(state, ['deleted', id, 'status'], 'error');
+      set(state, ['deleted', id, 'error'], action.error);
       break;
   }
   return state;
