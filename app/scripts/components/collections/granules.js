@@ -2,7 +2,12 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { listGranules } from '../../actions';
+import {
+  listGranules,
+  reprocessGranule,
+  removeGranule,
+  deleteGranule
+} from '../../actions';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
 
 import List from '../table/list-view';
@@ -20,6 +25,23 @@ var CollectionGranules = React.createClass({
     return {
       collectionName: this.props.params.collectionName
     };
+  },
+
+  generateBulkActions: function () {
+    const { granules } = this.props;
+    return [{
+      text: 'Reprocess',
+      action: reprocessGranule,
+      state: granules.reprocessed
+    }, {
+      text: 'Remove from CMR',
+      action: removeGranule,
+      state: granules.removed
+    }, {
+      text: 'Delete',
+      action: deleteGranule,
+      state: granules.deleted
+    }];
   },
 
   render: function () {
@@ -51,6 +73,7 @@ var CollectionGranules = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
+            bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}
           />
         </section>
