@@ -63,6 +63,7 @@ var ActivePdrs = React.createClass({
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
+            rowId={'pdrName'}
           />
         </section>
         <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
