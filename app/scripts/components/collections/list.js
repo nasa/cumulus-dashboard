@@ -16,11 +16,13 @@ import Search from '../form/search';
 import Dropdown from '../form/dropdown';
 import List from '../table/list-view';
 import { Link } from 'react-router';
+import { recent } from '../../config';
 
 var CollectionList = React.createClass({
   displayName: 'CollectionList',
 
   propTypes: {
+    location: React.PropTypes.object,
     collections: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     logs: React.PropTypes.object
@@ -34,7 +36,10 @@ var CollectionList = React.createClass({
   },
 
   generateQuery: function () {
-    return {};
+    const query = {};
+    if (this.inactive()) query.updatedAt__to = recent;
+    else query.updatedAt__from = recent;
+    return query;
   },
 
   generateBulkActions: function () {
@@ -45,6 +50,10 @@ var CollectionList = React.createClass({
     }];
   },
 
+  inactive: function () {
+    return this.props.location.pathname.indexOf('collections/inactive') >= 0;
+  },
+
   render: function () {
     const { list } = this.props.collections;
     const { count, queriedAt } = list.meta;
@@ -53,7 +62,7 @@ var CollectionList = React.createClass({
         <section className='page__section'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description'>
-              Active Collections <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
+              {this.inactive() ? 'Inactive' : 'Active'} Collections <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
             </h1>
             <Link className='button button--green button--small form-group__element--right' to=''>Edit</Link>
             {lastUpdated(queriedAt)}

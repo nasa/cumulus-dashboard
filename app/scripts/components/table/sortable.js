@@ -78,7 +78,7 @@ const Table = React.createClass({
               const dataId = d[this.props.rowId];
               const checked = canSelect && selectedRows.indexOf(dataId) !== -1;
               return (
-                <tr key={i} data-value={dataId} onClick={this.select}>
+                <tr key={dataId + i} data-value={dataId} onClick={this.select}>
                   {canSelect &&
                     <td>
                       <input type='checkbox' checked={checked} />
