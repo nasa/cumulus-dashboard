@@ -194,17 +194,20 @@ var GranuleOverview = React.createClass({
           <AsyncCommand action={this.delete}
             success={this.navigateBack}
             status={deleteStatus}
-            className={granule.published ? 'button--disabled' : null}
+            disabled={granule.published}
+            className={'form-group__element--right'}
             text={deleteStatus === 'success' ? 'Success!' : 'Delete'} />
 
           <AsyncCommand action={this.remove}
             success={this.fastReload}
             status={removeStatus}
+            className={'form-group__element--right'}
             text={'Remove from CMR'} />
 
           <AsyncCommand action={this.reprocess}
             success={this.fastReload}
             status={reprocessStatus}
+            className={'form-group__element--right'}
             text={'Reprocess'} />
 
           {lastUpdated(granule.queriedAt)}
