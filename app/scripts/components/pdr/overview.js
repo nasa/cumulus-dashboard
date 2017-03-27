@@ -1,39 +1,54 @@
 'use strict';
 import React from 'react';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { listPdrs } from '../../actions';
-import { lastUpdated } from '../../utils/format';
+import { get } from 'object-path';
+import { listPdrs, getCount } from '../../actions';
+import { lastUpdated, tally, displayCase } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdrs';
 import List from '../table/list-view';
-
 import Overview from '../app/overview';
+import { recent } from '../../config';
 
 var PdrOverview = React.createClass({
   displayName: 'PdrOverview',
 
   propTypes: {
     dispatch: React.PropTypes.func,
-    pdrs: React.PropTypes.object
+    pdrs: React.PropTypes.object,
+    stats: React.PropTypes.object
   },
 
-  renderOverview: function () {
-    const overview = [
-      [2, 'Errors'],
-      ['200k', 'Active PDR\'s'],
-      ['200k', 'Completed PDR\'s']
-    ];
+  componentWillMount: function () {
+    this.queryStats();
+  },
+
+  queryStats: function () {
+    this.props.dispatch(getCount({
+      type: 'pdrs',
+      field: 'status'
+    }));
+  },
+
+  renderOverview: function (count) {
+    const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
     return <Overview items={overview} inflight={false} />;
   },
 
   generateQuery: function () {
-    return {limit: 10};
+    return {
+      limit: 10,
+      updatedAt__from: recent
+    };
   },
 
   render: function () {
+    const { stats } = this.props;
     const { list } = this.props.pdrs;
     const { count, queriedAt } = list.meta;
     // create the overview boxes
-    const overview = this.renderOverview();
+    const pdrCount = get(stats.count, 'data.pdrs.count', []);
+    const overview = this.renderOverview(pdrCount);
     return (
       <div className='page__component'>
         <section className='page__section'>
@@ -55,6 +70,7 @@ var PdrOverview = React.createClass({
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
           />
+          <Link className='link--secondary' to='/pdrs/active'>View All Active PDRs</Link>
         </section>
       </div>
     );

@@ -38,7 +38,7 @@ import CollectionIngest from './components/collections/ingest';
 import CollectionLogs from './components/collections/logs';
 
 import Granules from './components/granules';
-import ListGranules from './components/granules/all-granules';
+import ListGranules from './components/granules/list';
 import GranuleOverview from './components/granules/granule';
 import GranuleRecipeIngest from './components/granules/recipe-ingest';
 import MarkedDeletion from './components/granules/marked-deletion';
@@ -46,9 +46,7 @@ import Restricted from './components/granules/restricted';
 
 import Pdrs from './components/pdr';
 import PdrOverview from './components/pdr/overview';
-import Pdr from './components/pdr/pdr';
-import ActivePdrs from './components/pdr/active';
-import PdrCompleted from './components/pdr/completed';
+import PdrList from './components/pdr/list';
 
 import Logs from './components/logs';
 import Contact from './components/contact';
@@ -80,7 +78,6 @@ render((
         </Route>
         <Route path='granules' component={Granules}>
           <IndexRoute component={ListGranules} />
-          <Route path='pdr/:pdrName' component={ListGranules} />
           <Route path='granule/:granuleId/overview' component={GranuleOverview} />
           <Route path='granule/:granuleId/recipe-ingest' component={GranuleRecipeIngest} />
           <Route path='deletion' component={MarkedDeletion} />
@@ -88,9 +85,9 @@ render((
         </Route>
         <Route path='pdrs' component={Pdrs}>
           <IndexRoute component={PdrOverview} />
-          <Route path='active' component={ActivePdrs} />
-          <Route path='completed' component={PdrCompleted} />
-          <Route path='pdr/:pdrName' component={Pdr} />
+          <Route path='active' component={PdrList} />
+          <Route path='completed' component={PdrList} />
+          <Route path='pdr/:pdrName' component={ListGranules} />
         </Route>
         <Route path='logs' component={Logs} />
         <Route path='contact' component={Contact} />
