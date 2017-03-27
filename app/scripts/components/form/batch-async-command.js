@@ -12,7 +12,9 @@ const BatchCommand = React.createClass({
     state: React.PropTypes.object,
     text: React.PropTypes.string,
     selection: React.PropTypes.array,
-    className: React.PropTypes.string
+    className: React.PropTypes.string,
+    onSuccess: React.PropTypes.func,
+    onError: React.PropTypes.func
   },
 
   getInitialState: function () {
@@ -24,6 +26,7 @@ const BatchCommand = React.createClass({
   componentWillReceiveProps: function (newProps) {
     const { state } = newProps;
     const { callbacks } = this.state;
+    // on success or error, call and remove the saved callback
     Object.keys(callbacks).forEach(id => {
       if (!state[id] || !callbacks[id]) return;
       else if (state[id].status === 'success') callbacks[id](null, id);
@@ -35,6 +38,7 @@ const BatchCommand = React.createClass({
     });
   },
 
+  // save a reference to the callback in state, then init the action
   initAction: function (id, callback) {
     const { dispatch, action } = this.props;
     const { callbacks } = this.state;
@@ -43,7 +47,11 @@ const BatchCommand = React.createClass({
     return dispatch(action(id));
   },
 
+  // call onSuccess and onError functions as needed
   onComplete: function (error, results) {
+    const { onSuccess, onError } = this.props;
+    if (error && typeof onError === 'function') onError(error);
+    else if (!error && typeof onSuccess === 'function') onSuccess(results);
   },
 
   isInflight: function () {
