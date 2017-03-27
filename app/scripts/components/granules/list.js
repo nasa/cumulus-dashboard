@@ -7,7 +7,10 @@ import {
   filterGranules,
   clearGranulesFilter,
   listGranules,
-  getOptionsCollectionName
+  getOptionsCollectionName,
+  reprocessGranule,
+  removeGranule,
+  deleteGranule
 } from '../../actions';
 import { get } from 'object-path';
 import { granuleSearchResult, dropdownOption, lastUpdated } from '../../utils/format';
@@ -33,6 +36,23 @@ var AllGranules = React.createClass({
     const options = {};
     if (pdrName) { options.pdrName = pdrName; }
     return options;
+  },
+
+  generateBulkActions: function () {
+    const { granules } = this.props;
+    return [{
+      text: 'Reprocess',
+      action: reprocessGranule,
+      state: granules.reprocessed
+    }, {
+      text: 'Remove from CMR',
+      action: removeGranule,
+      state: granules.removed
+    }, {
+      text: 'Delete',
+      action: deleteGranule,
+      state: granules.deleted
+    }];
   },
 
   render: function () {
@@ -84,7 +104,7 @@ var AllGranules = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
-            isRemovable={true}
+            bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}
           />
         </section>
