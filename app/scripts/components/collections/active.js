@@ -10,8 +10,8 @@ import Dropdown from '../form/dropdown';
 import List from '../table/list-view';
 import { Link } from 'react-router';
 
-var ActiveCollections = React.createClass({
-  displayName: 'ActiveCollections',
+var CollectionList = React.createClass({
+  displayName: 'CollectionList',
 
   propTypes: {
     collections: React.PropTypes.object,
@@ -86,4 +86,4 @@ var ActiveCollections = React.createClass({
   }
 });
 
-export default connect(state => state)(ActiveCollections);
+export default connect(state => state)(CollectionList);
