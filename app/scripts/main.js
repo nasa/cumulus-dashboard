@@ -28,8 +28,7 @@ import Login from './components/app/login';
 import Home from './components/home';
 
 import Collections from './components/collections';
-import ActiveCollections from './components/collections/active';
-import InactiveCollections from './components/collections/inactive';
+import CollectionList from './components/collections/list';
 import AddCollection from './components/collections/add';
 import EditCollection from './components/collections/edit';
 import CollectionOverview from './components/collections/overview';
@@ -67,8 +66,8 @@ render((
       <Route path='/' component={App} onEnter={requireAuth} >
         <IndexRoute component={Home} />
         <Route path='collections' component={Collections}>
-          <Route path='active' component={ActiveCollections} />
-          <Route path='inactive' component={InactiveCollections} />
+          <Route path='active' component={CollectionList} />
+          <Route path='inactive' component={CollectionList} />
           <Route path='add' component={AddCollection} />
           <Route path='edit/:collectionName' component={EditCollection} />
           <Route path='collection/:collectionName' component={CollectionOverview} />

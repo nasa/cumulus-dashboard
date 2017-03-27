@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { get } from 'object-path';
 import omit from 'lodash.omit';
 import { getCollection } from '../../actions';
-import { fullDate, lastUpdated } from '../../utils/format';
+import { fullDate, lastUpdated, nullValue } from '../../utils/format';
 import config from '../../config';
 import Loading from '../app/loading-indicator';
 
@@ -90,11 +90,9 @@ var CollectionIngest = React.createClass({
   },
 
   renderList: function (data) {
-    const {
-      granuleDefinition,
-      ingest,
-      recipe
-    } = data;
+    const granuleDefinition = get(data, 'granuleDefinition', {});
+    const ingest = get(data, 'ingest', {});
+    const recipe = get(data, 'recipe', {});
 
     return (
       <div className='list-view'>
@@ -118,7 +116,8 @@ var CollectionIngest = React.createClass({
           <p>{granuleDefinition.granuleId}</p>
 
           <h3 className='heading--small'>Files</h3>
-          {Object.keys(granuleDefinition.files).map(name => {
+          {Object.keys(get(granuleDefinition, 'files', [])).map(name => {
+
             let file = granuleDefinition.files[name];
             return (
               <dl key={name}>
@@ -129,17 +128,32 @@ var CollectionIngest = React.createClass({
               </dl>
               );
           })}
+<<<<<<< HEAD
           <h1>Needed for processing: {granuleDefinition.neededForProcessing.join(', ')}</h1>
         </section>
+=======
+          <h1>Needed for processing: {get(granuleDefinition, 'neededForProcessing', []).join(', ')}</h1>
+        </div>
+>>>>>>> 1f306d038ebfb636aa90c395df0fd29828c02d73
 
         <section className='page__section--small'>
           <h2 className='heading--medium'>Ingest</h2>
           <p>Type: {ingest.type}</p>
 
+<<<<<<< HEAD
           <dt>Configuration</dt>
           <dd>Concurrency: {ingest.config.concurrency}</dd>
           <dd>Endpoint: {ingest.config.endpoint}</dd>
         </section>
+=======
+          <h1>Configuration</h1>
+          <p>Concurrency: {get(ingest, 'config.concurrency', nullValue)}</p>
+          <p>Endpoint: {get(ingest, 'config.endpoint', nullValue)}</p>
+        </div>
+
+        <div>
+          <h1>Recipe</h1>
+>>>>>>> 1f306d038ebfb636aa90c395df0fd29828c02d73
 
         <section className='page__section--small'>
           <h2 className='heading--medium'>Recipe</h2>

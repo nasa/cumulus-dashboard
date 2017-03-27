@@ -2,7 +2,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { listCollections, searchCollections, clearCollectionsSearch, filterCollections, clearCollectionsFilter } from '../../actions';
+import {
+  listCollections,
+  searchCollections,
+  clearCollectionsSearch,
+  filterCollections,
+  clearCollectionsFilter,
+  deleteCollection
+} from '../../actions';
 import { collectionSearchResult, dropdownOption, lastUpdated } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/collections';
 import Search from '../form/search';
@@ -10,8 +17,8 @@ import Dropdown from '../form/dropdown';
 import List from '../table/list-view';
 import { Link } from 'react-router';
 
-var ActiveCollections = React.createClass({
-  displayName: 'ActiveCollections',
+var CollectionList = React.createClass({
+  displayName: 'CollectionList',
 
   propTypes: {
     collections: React.PropTypes.object,
@@ -28,6 +35,14 @@ var ActiveCollections = React.createClass({
 
   generateQuery: function () {
     return {};
+  },
+
+  generateBulkActions: function () {
+    return [{
+      text: 'Delete',
+      action: deleteCollection,
+      state: this.props.collections.deleted
+    }];
   },
 
   render: function () {
@@ -77,6 +92,7 @@ var ActiveCollections = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
+            bulkActions={this.generateBulkActions()}
             isRemovable={true}
             rowId={'collectionName'}
           />
@@ -86,4 +102,4 @@ var ActiveCollections = React.createClass({
   }
 });
 
-export default connect(state => state)(ActiveCollections);
+export default connect(state => state)(CollectionList);
