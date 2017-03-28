@@ -1,14 +1,14 @@
 'use strict';
 import React from 'react';
 
-var TextForm = React.createClass({
+var Dropdown = React.createClass({
   propTypes: {
     label: React.PropTypes.any,
     value: React.PropTypes.string,
+    options: React.PropTypes.array,
     id: React.PropTypes.string,
     error: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    type: React.PropTypes.string
+    onChange: React.PropTypes.func
   },
 
   onChange: function (e) {
@@ -19,26 +19,22 @@ var TextForm = React.createClass({
     let {
       label,
       value,
+      options,
       id,
-      error,
-      type
+      error
     } = this.props;
 
-    type = type || 'text';
-
     return (
-      <div className='form__text'>
-        <label>{label}</label>
+      <div className='form__dropdown'>
+        <label htmlFor={id}>{label}</label>
         <span className='form__error'>{error}</span>
-        <input
-          id={id}
-          type={type}
-          value={value}
-          onChange={this.onChange}
-        />
+        <div className='dropdown__wrapper'>
+          <select id={id} value={value} onChange={this.onChange}>
+            {options.map((d, i) => <option value={d} key={i}>{d}</option>)}
+          </select>
+        </div>
       </div>
     );
   }
 });
-
-export default TextForm;
+export default Dropdown;

@@ -70,7 +70,7 @@ var LogViewer = React.createClass({
       const duration = isFirstPull ? twoDays : logsUpdateInterval;
       const from = moment().subtract(duration, 'milliseconds').format();
       isFirstPull = false;
-      return dispatch(getLogs(Object.assign({ date__from: from }, query)));
+      return dispatch(getLogs(Object.assign({ 'timestamp__from': from }, query)));
     }
     this.cancelInterval = interval(querySinceLast, logsUpdateInterval, true);
   },
@@ -81,7 +81,7 @@ var LogViewer = React.createClass({
     return (
       <section className='page__section'>
         <div className='heading__wrapper--border'>
-          <h2 className='heading--medium heading--shared-content'>Logs {logs.inflight ? <LoadingEllipsis /> : null}</h2>
+          <h2 className='heading--medium heading--shared-content with-description'>Logs {logs.inflight ? <LoadingEllipsis /> : null}</h2>
           <form className="search__wrapper form-group__element form-group__element--right form-group__element--right--sm form-group__element--small">
             <input className='search' type="search" onChange={this.setFilter}/>
             <span className="search__icon"></span>

@@ -13,7 +13,7 @@ const Dropdown = React.createClass({
     action: React.PropTypes.func,
     clear: React.PropTypes.func,
     paramKey: React.PropTypes.string,
-    label: React.PropTypes.string
+    label: React.PropTypes.any
   },
 
   componentWillMount: function () {

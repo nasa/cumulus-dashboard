@@ -1,6 +1,6 @@
 'use strict';
 import url from 'url';
-import { get, post, put, wrapRequest } from './helpers';
+import { get, post, put, del, wrapRequest } from './helpers';
 import { set as setToken } from '../utils/auth';
 import _config from '../config';
 
@@ -34,6 +34,10 @@ export const CLEAR_COLLECTIONS_SEARCH = 'CLEAR_COLLECTIONS_SEARCH';
 export const FILTER_COLLECTIONS = 'FILTER_COLLECTIONS';
 export const CLEAR_COLLECTIONS_FILTER = 'CLEAR_COLLECTIONS_FILTER';
 
+export const COLLECTION_DELETE = 'COLLECTION_DELETE';
+export const COLLECTION_DELETE_INFLIGHT = 'COLLECTION_DELETE_INFLIGHT';
+export const COLLECTION_DELETE_ERROR = 'COLLECTION_DELETE_ERROR';
+
 export const GRANULE = 'GRANULE';
 export const GRANULE_INFLIGHT = 'GRANULE_INFLIGHT';
 export const GRANULE_ERROR = 'GRANULE_ERROR';
@@ -46,6 +50,14 @@ export const GRANULE_REPROCESS = 'GRANULE_REPROCESS';
 export const GRANULE_REPROCESS_INFLIGHT = 'GRANULE_REPROCESS_INFLIGHT';
 export const GRANULE_REPROCESS_ERROR = 'GRANULE_REPROCESS_ERROR';
 
+export const GRANULE_REMOVE = 'GRANULE_REMOVE';
+export const GRANULE_REMOVE_INFLIGHT = 'GRANULE_REMOVE_INFLIGHT';
+export const GRANULE_REMOVE_ERROR = 'GRANULE_REMOVE_ERROR';
+
+export const GRANULE_DELETE = 'GRANULE_DELETE';
+export const GRANULE_DELETE_INFLIGHT = 'GRANULE_DELETE_INFLIGHT';
+export const GRANULE_DELETE_ERROR = 'GRANULE_DELETE_ERROR';
+
 export const SEARCH_GRANULES = 'SEARCH_GRANULES';
 export const CLEAR_GRANULES_SEARCH = 'CLEAR_GRANULES_SEARCH';
 
@@ -57,10 +69,24 @@ export const OPTIONS_COLLECTIONNAME_INFLIGHT = 'OPTIONS_COLLECTIONNAME_INFLIGHT'
 export const OPTIONS_COLLECTIONNAME_ERROR = 'OPTIONS_COLLECTIONNAME_ERROR';
 
 export const STATS = 'STATS';
+export const STATS_INFLIGHT = 'STATS_INFLIGHT';
+export const STATS_ERROR = 'STATS_ERROR';
+
+export const RESOURCES = 'RESOURCES';
+export const RESOURCES_INFLIGHT = 'RESOURCES_INFLIGHT';
+export const RESOURCES_ERROR = 'RESOURCES_ERROR';
+
+export const COUNT = 'COUNT';
+export const COUNT_INFLIGHT = 'COUNT_INFLIGHT';
+export const COUNT_ERROR = 'COUNT_ERROR';
 
 export const PDRS = 'PDRS';
 export const PDRS_INFLIGHT = 'PDRS_INFLIGHT';
 export const PDRS_ERROR = 'PDRS_ERROR';
+
+export const PDR_DELETE = 'PDR_DELETE';
+export const PDR_DELETE_INFLIGHT = 'PDR_DELETE_INFLIGHT';
+export const PDR_DELETE_ERROR = 'PDR_DELETE_ERROR';
 
 export const SEARCH_PDRS = 'SEARCH_PDRS';
 export const CLEAR_PDRS_SEARCH = 'CLEAR_PDRS_SEARCH';
@@ -82,6 +108,10 @@ export const LOGS = 'LOGS';
 export const LOGS_INFLIGHT = 'LOGS_INFLIGHT';
 export const LOGS_ERROR = 'LOGS_ERROR';
 
+export const SCHEMA = 'SCHEMA';
+export const SCHEMA_INFLIGHT = 'SCHEMA_INFLIGHT';
+export const SCHEMA_ERROR = 'SCHEMA_ERROR';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -102,12 +132,12 @@ export const createCollection = (payload) => wrapRequest(
 export const updateCollection = (payload) => wrapRequest(
   payload.collectionName, put, `collections/${payload.collectionName}`, UPDATE_COLLECTION, payload);
 
+export const deleteCollection = (collectionName) => wrapRequest(
+  collectionName, del, `collections/${collectionName}`, COLLECTION_DELETE);
+
 export const searchCollections = (prefix) => ({ type: SEARCH_COLLECTIONS, prefix: prefix });
-
 export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH });
-
 export const filterCollections = (param) => ({ type: FILTER_COLLECTIONS, param: param });
-
 export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
 
 export const getGranule = (granuleId) => wrapRequest(
@@ -123,12 +153,17 @@ export const reprocessGranule = (granuleId) => wrapRequest(
     action: 'reprocess'
   });
 
+export const removeGranule = (granuleId) => wrapRequest(
+  granuleId, put, `granules/${granuleId}`, GRANULE_REMOVE, {
+    action: 'removeFromCmr'
+  });
+
+export const deleteGranule = (granuleId) => wrapRequest(
+  granuleId, del, `granules/${granuleId}`, GRANULE_DELETE);
+
 export const searchGranules = (prefix) => ({ type: SEARCH_GRANULES, prefix: prefix });
-
 export const clearGranulesSearch = () => ({ type: CLEAR_GRANULES_SEARCH });
-
 export const filterGranules = (param) => ({ type: FILTER_GRANULES, param: param });
-
 export const clearGranulesFilter = (paramKey) => ({ type: CLEAR_GRANULES_FILTER, paramKey: paramKey });
 
 export const getOptionsCollectionName = () => wrapRequest(null, get, {
@@ -136,7 +171,20 @@ export const getOptionsCollectionName = () => wrapRequest(null, get, {
   qs: { limit: 100, fields: 'collectionName' }
 }, OPTIONS_COLLECTIONNAME);
 
-export const getStats = () => wrapRequest(null, get, 'stats/summary/grouped', STATS);
+export const getStats = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'stats'),
+  qs: options
+}, STATS);
+
+export const getResources = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'resources')
+}, RESOURCES);
+
+// count queries *must* include type and field properties.
+export const getCount = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'stats/count'),
+  qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
+}, COUNT);
 
 export const listPdrs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),
@@ -144,11 +192,8 @@ export const listPdrs = (options) => wrapRequest(null, get, {
 }, PDRS);
 
 export const searchPdrs = (prefix) => ({ type: SEARCH_PDRS, prefix: prefix });
-
 export const clearPdrsSearch = () => ({ type: CLEAR_PDRS_SEARCH });
-
 export const filterPdrs = (param) => ({ type: FILTER_PDRS, param: param });
-
 export const clearPdrsFilter = (paramKey) => ({ type: CLEAR_PDRS_FILTER, paramKey: paramKey });
 
 export const listProviders = (options) => wrapRequest(null, get, {
@@ -164,9 +209,12 @@ export const filterProviders = (param) => ({ type: FILTER_PROVIDERS, param: para
 
 export const clearProvidersFilter = (paramKey) => ({ type: CLEAR_PROVIDERS_FILTER, paramKey: paramKey });
 
+export const deletePdr = (pdrName) => wrapRequest(
+  pdrName, del, `pdrs/${pdrName}`, PDR_DELETE);
+
 export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),
-  qs: Object.assign({ limit: 50 }, options)
+  qs: Object.assign({ limit: 200 }, options)
 }, LOGS);
 
 export const logout = () => {
@@ -184,3 +232,5 @@ export const login = (token) => {
     }
   }, LOGIN);
 };
+
+export const getSchema = (type) => wrapRequest(null, get, `schemas/${type}`, SCHEMA);

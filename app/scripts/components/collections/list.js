@@ -2,18 +2,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { listCollections, searchCollections, clearCollectionsSearch, filterCollections, clearCollectionsFilter } from '../../actions';
+import {
+  listCollections,
+  searchCollections,
+  clearCollectionsSearch,
+  filterCollections,
+  clearCollectionsFilter,
+  deleteCollection
+} from '../../actions';
 import { collectionSearchResult, dropdownOption, lastUpdated } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/collections';
 import Search from '../form/search';
 import Dropdown from '../form/dropdown';
 import List from '../table/list-view';
 import { Link } from 'react-router';
+import { recent } from '../../config';
 
-var ActiveCollections = React.createClass({
-  displayName: 'ActiveCollections',
+var CollectionList = React.createClass({
+  displayName: 'CollectionList',
 
   propTypes: {
+    location: React.PropTypes.object,
     collections: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     logs: React.PropTypes.object
@@ -27,7 +36,22 @@ var ActiveCollections = React.createClass({
   },
 
   generateQuery: function () {
-    return {};
+    const query = {};
+    if (this.inactive()) query.updatedAt__to = recent;
+    else query.updatedAt__from = recent;
+    return query;
+  },
+
+  generateBulkActions: function () {
+    return [{
+      text: 'Delete',
+      action: deleteCollection,
+      state: this.props.collections.deleted
+    }];
+  },
+
+  inactive: function () {
+    return this.props.location.pathname.indexOf('collections/inactive') >= 0;
   },
 
   render: function () {
@@ -37,8 +61,8 @@ var ActiveCollections = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content'>
-              Active Collections <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
+            <h1 className='heading--large heading--shared-content with-description'>
+              {this.inactive() ? 'Inactive' : 'Active'} Collections <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
             </h1>
             <Link className='button button--green button--small form-group__element--right' to=''>Edit</Link>
             {lastUpdated(queriedAt)}
@@ -77,6 +101,7 @@ var ActiveCollections = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
+            bulkActions={this.generateBulkActions()}
             isRemovable={true}
             rowId={'collectionName'}
           />
@@ -86,4 +111,4 @@ var ActiveCollections = React.createClass({
   }
 });
 
-export default connect(state => state)(ActiveCollections);
+export default connect(state => state)(CollectionList);

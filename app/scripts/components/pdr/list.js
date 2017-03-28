@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { searchPdrs, clearPdrsSearch, listPdrs } from '../../actions';
+import { searchPdrs, clearPdrsSearch, listPdrs, deletePdr } from '../../actions';
 import { pdrSearchResult, lastUpdated } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdrs';
 import LogViewer from '../logs/viewer';
@@ -12,24 +12,38 @@ var ActivePdrs = React.createClass({
   displayName: 'ActivePdrs',
 
   propTypes: {
+    location: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     pdrs: React.PropTypes.object,
     logs: React.PropTypes.object
   },
 
   generateQuery: function () {
-    return {};
+    const query = {};
+    const active = this.props.location.pathname.indexOf('active') >= 0;
+    if (active) query.status__not = 'completed';
+    else query.status = 'completed';
+    return query;
+  },
+
+  generateBulkActions: function () {
+    return [{
+      text: 'Delete',
+      action: deletePdr,
+      state: this.props.pdrs.deleted
+    }];
   },
 
   render: function () {
     const { list } = this.props.pdrs;
     const { count, queriedAt } = list.meta;
-    const logsQuery = { q: 'pdrName' };
+    const logsQuery = { 'meta.pdrName__exists': 'true' };
+    const active = this.props.location.pathname.indexOf('active') >= 0;
     return (
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content'>Active PDRs { count ? `(${count})` : null }</h1>
+            <h1 className='heading--large heading--shared-content with-description'>{active ? 'Active' : ' Completed'} PDRs { count ? `(${count})` : null }</h1>
             {lastUpdated(queriedAt)}
           </div>
           <div className='filters'>
@@ -48,6 +62,8 @@ var ActivePdrs = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
+            bulkActions={this.generateBulkActions()}
+            rowId={'pdrName'}
           />
         </section>
         <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>

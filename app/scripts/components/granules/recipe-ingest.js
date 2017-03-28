@@ -81,7 +81,7 @@ var GranuleRecipe = React.createClass({
       <div className='page__component'>
 
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>{granuleId}</h1>
+          <h1 className='heading--large heading--shared-content with-description'>{granuleId}</h1>
           <Link className='button button--small form-group__element--right button--disabled button--green' to='/'>Delete</Link>
           <Link className='button button--small form-group__element--right button--green' to='/'>Remove from CMR</Link>
           <Link className='button button--small form-group__element--right button--green' to='/'>Reprocess</Link>
@@ -90,7 +90,7 @@ var GranuleRecipe = React.createClass({
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Recipe</h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Recipe</h2>
           </div>
           <div>
             <h3>Processing Order</h3>
@@ -101,7 +101,7 @@ var GranuleRecipe = React.createClass({
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Ingest</h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Ingest</h2>
           </div>
           <div>
             <h3>Duration: {seconds(granule.ingestDuration)}</h3>

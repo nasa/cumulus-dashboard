@@ -3,18 +3,29 @@ import React from 'react';
 import { generate } from 'shortid';
 import { set } from 'object-path';
 import slugify from 'slugify';
-import textForm from './text';
-import textAreaForm from './text-area';
+import ErrorReport from '../errors/report';
+import TextForm from './text';
+import TextAreaForm from './text-area';
+import Dropdown from './simple-dropdown';
+import List from './arbitrary-list';
+import SubForm from './sub-form';
 import t from '../../utils/strings';
+import { window } from '../../utils/browser';
+const scrollTo = typeof window.scrollTo === 'function' ? window.scrollTo : () => true;
 
 export const formTypes = {
   text: 'TEXT',
-  textArea: 'TEXT_AREA'
+  textArea: 'TEXT_AREA',
+  dropdown: 'DROPDOWN',
+  list: 'LIST',
+  subform: 'SUB_FORM'
 };
 
 export const defaults = {
   json: '{\n  \n}'
 };
+
+const errorMessage = (errors) => `Please review ${errors.join(', ')} and submit again.`;
 
 /**
  * Generates an HTML structure of form elements and
@@ -31,15 +42,18 @@ export const Form = React.createClass({
 
   getInitialState: function () {
     return {
-      inputs: []
+      inputs: {},
+      errors: []
     };
   },
 
   propTypes: {
+    id: React.PropTypes.string,
     inputMeta: React.PropTypes.array,
     submit: React.PropTypes.func,
     cancel: React.PropTypes.func,
-    inflight: React.PropTypes.bool
+    inflight: React.PropTypes.bool,
+    nowrap: React.PropTypes.bool
   },
 
   generateComponentId: function (label) {
@@ -53,8 +67,12 @@ export const Form = React.createClass({
     // initiate empty state for all inputs
     const inputState = {};
     this.props.inputMeta.forEach(input => {
-      let inputId = this.generateComponentId(input.label);
-      let value = input.value || '';
+      let inputId = this.generateComponentId(input.schemaProperty);
+      let value = input.value;
+      if (!value && value !== 0) {
+        value = input.type === formTypes.list ? []
+          : input.type === formTypes.subform ? {} : '';
+      }
       let error = null;
       inputState[inputId] = { value, error };
     });
@@ -65,14 +83,13 @@ export const Form = React.createClass({
     const inputState = Object.assign({}, this.state.inputs);
     set(inputState, [inputId, 'value'], value);
     this.setState(Object.assign({}, this.state, {
-      inputs: inputState,
-      error: null
+      inputs: inputState
     }));
   },
 
   onCancel: function (e) {
     e.preventDefault();
-    if (this.props.cancel) { this.props.cancel(); }
+    this.props.cancel();
   },
 
   onSubmit: function (e) {
@@ -82,10 +99,10 @@ export const Form = React.createClass({
 
     // validate input values in the store
     // if values pass validation, write to payload object
-    let hasError = false;
+    const errors = [];
     const payload = {};
     this.props.inputMeta.forEach(input => {
-      let inputId = this.generateComponentId(input.label);
+      let inputId = this.generateComponentId(input.schemaProperty);
       let { value } = inputState[inputId];
 
       // if expected type is json, validate as json first
@@ -93,83 +110,110 @@ export const Form = React.createClass({
         try {
           value = JSON.parse(value);
         } catch (e) {
-          hasError = true;
+          errors.push(input.schemaProperty);
           return set(inputState, [inputId, 'error'], t.errors.json);
         }
       }
 
       if (input.validate && !input.validate(value)) {
-        hasError = true;
+        errors.push(input.schemaProperty);
         let error = input.error || t.errors.generic;
         return set(inputState, [inputId, 'error'], error);
       }
 
-      payload[input.schemaProperty] = value;
+      set(payload, input.schemaProperty, value);
     });
 
     this.setState(Object.assign({}, this.state, {
       inputs: inputState
     }));
 
-    if (!hasError) {
-      this.props.submit(payload);
-    }
+    if (errors.length) scrollTo(0, 0);
+    else this.props.submit(this.props.id, payload);
+    this.setState({errors});
   },
 
   render: function () {
     const inputState = this.state.inputs;
-    return (
-      <form id={`form-${this.id}`}>
-        <ul className='form__multistep'>
+    const { errors } = this.state;
+    const form = (
+      <div>
+        {errors.length ? <ErrorReport report={errorMessage(errors)} /> : null}
+        <ul>
           {this.props.inputMeta.map(form => {
             let { type, label } = form;
-            type = type || formTypes.text;
-            let inputId = this.generateComponentId(label);
-            let { value, error } = inputState[inputId];
 
+            // decide which element to render
             let element;
             switch (type) {
               case formTypes.textArea:
-                element = textAreaForm;
+                element = TextAreaForm;
+                break;
+              case formTypes.dropdown:
+                element = Dropdown;
+                break;
+              case formTypes.list:
+                element = List;
+                break;
+              case formTypes.subform:
+                element = SubForm;
                 break;
               case formTypes.text:
               default:
-                element = textForm;
+                element = TextForm;
                 break;
             }
 
+            // retrieve value and errors stored in state
+            let inputId = this.generateComponentId(form.schemaProperty);
+            let { value, error } = inputState[inputId];
+            // coerce non-null values to string to simplify proptype warnings on numbers
+            if (type !== formTypes.list && type !== formTypes.subform && !value && value !== 0) {
+              value = String(value);
+            }
+            // dropdowns have options
+            let options = type === formTypes.dropdown && form.options || null;
             // textarea forms pass a mode value to ace
-            let mode = type === formTypes.textArea && form.mode || null;
-            const onChange = this.onChange;
+            const mode = type === formTypes.textArea && form.mode || null;
+            // subforms have fieldsets that define child form structure
+            const fieldSet = type === formTypes.subform && form.fieldSet || null;
             const elem = React.createElement(element, {
               id: inputId,
               label,
               value,
               error,
               mode,
-              onChange
+              options,
+              fieldSet,
+              onChange: this.onChange
             });
-            return <div className='form__item' key={inputId}>{elem}</div>;
+            return <li className='form__item' key={inputId}>{elem}</li>;
           })}
         </ul>
-        <span className='button form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
-          <input
-            type='submit'
-            value={this.props.inflight ? 'Loading...' : 'Submit'}
-            onClick={this.onSubmit}
-            readOnly={true}
-          />
-        </span>
 
-        <span className='button button--secondary form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__cancel'>
-          <input
-            type='cancel'
-            value='Cancel'
-            onClick={this.onCancel}
-            readOnly={true}
-          />
-        </span>
-      </form>
+        {this.props.submit ? (
+          <span className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
+            <input
+              type='submit'
+              value={this.props.inflight ? 'Loading...' : 'Submit'}
+              onClick={this.onSubmit}
+              readOnly={true}
+            />
+          </span>
+        ) : null}
+
+        {this.props.cancel ? (
+          <span className='button button--secondary form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__cancel'>
+            <input
+              type='cancel'
+              value='Cancel'
+              onClick={this.onCancel}
+              readOnly={true}
+            />
+          </span>
+        ) : null}
+      </div>
     );
+    return this.props.nowrap ? form : <form id={`form-${this.id}`}>{form}</form>;
   }
 });

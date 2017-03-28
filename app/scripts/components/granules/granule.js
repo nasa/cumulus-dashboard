@@ -1,15 +1,21 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
-import { interval, getGranule, reprocessGranule } from '../../actions';
+import {
+  interval,
+  getGranule,
+  reprocessGranule,
+  removeGranule,
+  deleteGranule
+} from '../../actions';
 import { get } from 'object-path';
-import { fullDate, lastUpdated, seconds, nullValue } from '../../utils/format';
+import { fullDate, lastUpdated, seconds, nullValue, bool } from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
-import Ellipsis from '../app/loading-ellipsis';
-import { updateInterval } from '../../config';
 import LogViewer from '../logs/viewer';
+import AsyncCommand from '../form/async-command';
+import ErrorReport from '../errors/report';
+import { updateInterval } from '../../config';
 
 const tableHeader = [
   'Filename',
@@ -27,8 +33,13 @@ const tableRow = [
   (d) => (<a href={d.archivedFile}>{d.archivedFile ? link : nullValue}</a>),
   (d) => d.access
 ];
+const noop = x => x;
 
 const metaAccessors = [
+  ['PDR Name', 'pdrName', noop],
+  ['Published', 'published', bool],
+  ['Duplicate', 'hasDuplicate', bool],
+
   ['Created', 'createdAt', fullDate],
   ['Last updated', 'updatedAt', fullDate],
 
@@ -54,17 +65,12 @@ const metaAccessors = [
 var GranuleOverview = React.createClass({
   displayName: 'Granule',
 
-  getInitialState: function () {
-    return {
-      reprocessing: false
-    };
-  },
-
   propTypes: {
     params: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     granules: React.PropTypes.object,
-    logs: React.PropTypes.object
+    logs: React.PropTypes.object,
+    router: React.PropTypes.object
   },
 
   componentWillMount: function () {
@@ -77,25 +83,53 @@ var GranuleOverview = React.createClass({
     if (this.cancelInterval) { this.cancelInterval(); }
   },
 
-  reload: function (immediate) {
+  reload: function (immediate, timeout) {
+    timeout = timeout || updateInterval;
     const granuleId = this.props.params.granuleId;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
-    this.cancelInterval = interval(() => dispatch(getGranule(granuleId)), updateInterval, immediate);
-    this.cancelInterval();
+    this.cancelInterval = interval(() => dispatch(getGranule(granuleId)), timeout, immediate);
+  },
+
+  fastReload: function () {
+    // delay a reload but shorten the duration
+    // this shows the granule as it reprocesses
+    this.reload(false, 2000);
+  },
+
+  navigateBack: function () {
+    // delay the navigation so we can see the success indicator
+    const { router } = this.props;
+    setTimeout(() => router.push('/granules'), 1000);
   },
 
   reprocess: function () {
     const { granuleId } = this.props.params;
-    const { reprocessing } = this.state;
-    if (!reprocessing) {
-      this.props.dispatch(reprocessGranule(granuleId));
-      this.setState({ reprocessing: true });
-      setTimeout(function () {
-        this.reload(true);
-        this.setState({ reprocessing: false });
-      }.bind(this), 2000);
+    this.props.dispatch(reprocessGranule(granuleId));
+  },
+
+  remove: function () {
+    const { granuleId } = this.props.params;
+    this.props.dispatch(removeGranule(granuleId));
+  },
+
+  delete: function () {
+    const { granuleId } = this.props.params;
+    const granule = this.props.granules.map[granuleId].data;
+    if (!granule.published) {
+      this.props.dispatch(deleteGranule(granuleId));
     }
+  },
+
+  errors: function () {
+    const granuleId = this.props.params.granuleId;
+    const errors = [
+      get(this.props.granules.map, [granuleId, 'error']),
+      get(this.props.granules.reprocessed, [granuleId, 'error']),
+      get(this.props.granules.removed, [granuleId, 'error']),
+      get(this.props.granules.deleted, [granuleId, 'error'])
+    ].filter(Boolean);
+    return errors.length ? errors.map(JSON.stringify).join(', ') : null;
   },
 
   renderStatus: function (status) {
@@ -103,9 +137,10 @@ var GranuleOverview = React.createClass({
       ['Ingest', 'ingesting'],
       ['Processing', 'processing'],
       ['Pushed to CMR', 'cmr'],
-      ['Archiving', 'archiving'],
-      ['Complete', 'completed']
+      ['Archiving', 'archiving']
     ];
+    if (status === 'failed') statusList.push(['Failed', 'failed']);
+    else statusList.push(['Complete', 'completed']);
     const indicatorClass = 'progress-bar__indicator progress-bar__indicator--' + status;
     return (
       <div className='page__section--subsection page__section__granule--progress'>
@@ -114,7 +149,7 @@ var GranuleOverview = React.createClass({
           <div className={indicatorClass}>
             <div className='pulse'>
               <div className='pulse__dot'></div>
-              <div className='pulse__ring'></div>
+              <div className=''></div>
             </div>
           </div>
 
@@ -138,32 +173,52 @@ var GranuleOverview = React.createClass({
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
     }
-
     const granule = record.data;
-    const { reprocessing } = this.state;
-
+    console.log(granule);
     const files = [];
     if (granule.files) {
-      for (let key in granule.files) { files.push(granule.files[key]); }
+      for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }
     }
-    const logsQuery = { granuleId };
-    const cmrLink = get(granule, 'cmrLink');
+    const logsQuery = { 'meta.granuleId': granuleId };
+    const cmrLink = granule.cmrLink;
+    const reprocessStatus = get(this.props.granules.reprocessed, [granuleId, 'status']);
+    const removeStatus = get(this.props.granules.removed, [granuleId, 'status']);
+    const deleteStatus = get(this.props.granules.deleted, [granuleId, 'status']);
+    const errors = this.errors();
+    const granuleError = granule.error;
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>{granuleId}</h1>
-          <Link className='button button--small form-group__element--right button--disabled button--green' to='/'>Delete</Link>
-          <Link className='button button--small form-group__element--right button--green' to='/'>Remove from CMR</Link>
-          <button
-            className={'button button--small form-group__element--right button--green' + (reprocessing ? ' button--reprocessing' : '')}
-            onClick={this.reprocess}>Reprocess{ reprocessing ? <Ellipsis /> : '' }</button>
+          <h1 className='heading--large heading--shared-content with-description'>{granuleId}</h1>
+
+          <AsyncCommand action={this.delete}
+            success={this.navigateBack}
+            status={deleteStatus}
+            disabled={granule.published}
+            className={'form-group__element--right'}
+            text={deleteStatus === 'success' ? 'Success!' : 'Delete'} />
+
+          <AsyncCommand action={this.remove}
+            success={this.fastReload}
+            status={removeStatus}
+            className={'form-group__element--right'}
+            text={'Remove from CMR'} />
+
+          <AsyncCommand action={this.reprocess}
+            success={this.fastReload}
+            status={reprocessStatus}
+            className={'form-group__element--right'}
+            text={'Reprocess'} />
+
           {lastUpdated(granule.queriedAt)}
           {this.renderStatus(granule.status)}
+          {granuleError ? <ErrorReport report={granuleError} /> : null}
         </section>
 
         <section className='page__section'>
+          {errors ? <ErrorReport report={errors} /> : null}
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium'>Granule Overview {cmrLink ? <a href={cmrLink}>[CMR]</a> : null}</h2>
+            <h2 className='heading--medium with-description'>Granule Overview {cmrLink ? <a href={cmrLink}>[CMR]</a> : null}</h2>
           </div>
           <dl className='metadata__granule__details'>
             {metaAccessors.reduce((acc, meta, i) => {
@@ -181,7 +236,7 @@ var GranuleOverview = React.createClass({
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Files</h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Files</h2>
           </div>
           <SortableTable data={files} header={tableHeader} row={tableRow}/>
         </section>

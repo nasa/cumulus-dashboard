@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { get } from 'object-path';
 import omit from 'lodash.omit';
 import { getCollection } from '../../actions';
-import { fullDate, lastUpdated } from '../../utils/format';
+import { fullDate, lastUpdated, nullValue } from '../../utils/format';
 import config from '../../config';
 import Loading from '../app/loading-indicator';
 
@@ -70,108 +70,113 @@ var CollectionIngest = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>{collectionName}</h1>
+          <h1 className='heading--large heading--shared-content with-description'>{collectionName}</h1>
           <Link className='button button--small form-group__element--right button--disabled button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
           {lastUpdated(data.queriedAt)}
         </section>
-
-        <button className={this.state.view === 'list' ? 'button--disabled' : ''}
-          onClick={() => this.state.view !== 'list' && this.setState({ view: 'list' })}>List View</button>
-        <button className={this.state.view === 'json' ? 'button--disabled' : ''}
-          onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}>JSON View</button>
-
-        <div>
-          {this.state.view === 'list' ? this.renderList(data) : this.renderJson(data)}
-        </div>
+        <section className='page__section'>
+          <div className='tab--wrapper'>
+            <button className={'button--tab ' + (this.state.view === 'list' ? 'button--active' : '')}
+              onClick={() => this.state.view !== 'list' && this.setState({ view: 'list' })}>List View</button>
+            <button className={'button--tab ' + (this.state.view === 'json' ? 'button--active' : '')}
+              onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}>JSON View</button>
+          </div>
+          <div>
+            {this.state.view === 'list' ? this.renderList(data) : this.renderJson(data)}
+          </div>
+        </section>
       </div>
     );
   },
 
   renderList: function (data) {
-    const {
-      granuleDefinition,
-      ingest,
-      recipe
-    } = data;
+    const granuleDefinition = get(data, 'granuleDefinition', {});
+    const ingest = get(data, 'ingest', {});
+    const recipe = get(data, 'recipe', {});
 
     return (
-      <div>
+      <div className='list-view'>
+        <section className='page__section--small'>
+          <dl>
+            <dt>Collection Name</dt>
+            <dd>{data.collectionName}</dd>
 
-        <div>
-          <h1>Collection Name</h1>
-          <p>{data.collectionName}</p>
-        </div>
+            <dt>Created at</dt>
+            <dd>{fullDate(data.createdAt)}</dd>
 
-        <div>
-          <h1>Created at</h1>
-          <p>{fullDate(data.createdAt)}</p>
+            <dt>Updated at</dt>
+            <dd>{fullDate(data.updatedAt)}</dd>
 
-          <h1>Updated at</h1>
-          <p>{fullDate(data.updatedAt)}</p>
+            <dt>Changed by</dt>
+            <dd>{fullDate(data.changedBy)}</dd>
+          </dl>
+        </section>
 
-          <h1>Changed by</h1>
-          <p>{fullDate(data.changedBy)}</p>
-        </div>
-
-        <div>
-          <h1>Granule Definition</h1>
+        <section className='page__section--small'>
+          <h2 className='heading--medium'>Granule Definition</h2>
           <p>{granuleDefinition.granuleId}</p>
-          <h1>Files</h1>
-          {Object.keys(granuleDefinition.files).map(name => {
+          <h3 className='heading--small'>Files</h3>
+          {Object.keys(get(granuleDefinition, 'files', [])).map(name => {
             let file = granuleDefinition.files[name];
             return (
-              <div key={name}>
-                <h3>{name}</h3>
-                <p>Regex: {file.regex}</p>
-                <p>Access: {file.access}</p>
-                <p>Source: {file.source}</p>
-              </div>
+              <dl key={name}>
+                <dt>{name}</dt>
+                <dd>Regex: {file.regex}</dd>
+                <dd>Access: {file.access}</dd>
+                <dd>Source: {file.source}</dd>
+              </dl>
               );
           })}
-          <h1>Needed for processing: {granuleDefinition.neededForProcessing.join(', ')}</h1>
-        </div>
+          <h1>Needed for processing: {get(granuleDefinition, 'neededForProcessing', []).join(', ')}</h1>
+        </section>
 
-        <div>
-          <h1>Ingest</h1>
+        <section className='page__section--small'>
+          <h2 className='heading--medium'>Ingest</h2>
           <p>Type: {ingest.type}</p>
+          <dt>Configuration</dt>
+          <dd>Concurrency: {get(ingest, 'config.concurrency', nullValue)}</dd>
+          <dd>Endpoint: {get(ingest, 'config.endpoint', nullValue)}</dd>
+        </section>
 
-          <h1>Configuration</h1>
-          <p>Concurrency: {ingest.config.concurrency}</p>
-          <p>Endpoint: {ingest.config.endpoint}</p>
-        </div>
+        <section className='page__section--small'>
+          <h2 className='heading--medium'>Recipe</h2>
 
-        <div>
-          <h1>Recipe</h1>
+          <dt>Order</dt>
+          {get(recipe, 'order', []).map((step, i) => <dd key={i}>{step}</dd>)}
 
-          <h1>Order</h1>
-          {get(recipe, 'order', []).map((step, i) => <p key={i}>{step}</p>)}
+          <dt>Process step</dt>
+          <dd>Description: {get(recipe, 'processStep.description', '--')}</dd>
 
-          <h1>Process step</h1>
-          <p>Description: {get(recipe, 'processStep.description', '--')}</p>
+          <dt>Input files</dt>
+          {get(recipe, 'processStep.config.inputFiles', []).map((file, i) => <dd key={i}>{file}</dd>)}
 
-          <h1>Input files</h1>
-          {get(recipe, 'processStep.config.inputFiles', []).map((file, i) => <p key={i}>{file}</p>)}
-
-          <h1>Output files</h1>
-          {get(recipe, 'processStep.config.outputFiles', []).map((file, i) => <p key={i}>{file}</p>)}
-
-        </div>
+          <dt>Output files</dt>
+          {get(recipe, 'processStep.config.outputFiles', []).map((file, i) => <dd key={i}>{file}</dd>)}
+        </section>
       </div>
     );
   },
 
   renderJson: function (data) {
     return (
-      <div>
-        <h1>{data.collectionName}</h1>
-        {this.renderReadOnlyJson('recipe', omit(data, ['recipe', 'granuleDefinition', 'granulesStatus']))}
-        <h1>Recipe</h1>
-        {this.renderReadOnlyJson('recipe', data.recipe)}
-        <h1>Granule Definition</h1>
-        {this.renderReadOnlyJson('granuleDefinition', data.granuleDefinition)}
-        <h1>Granule Status</h1>
-        {this.renderReadOnlyJson('granuleStatus', data.granulesStatus)}
-      </div>
+      <ul>
+        <li>
+          <label>{data.collectionName}</label>
+          {this.renderReadOnlyJson('recipe', omit(data, ['recipe', 'granuleDefinition', 'granulesStatus']))}
+        </li>
+        <li>
+          <label>Recipe</label>
+          {this.renderReadOnlyJson('recipe', data.recipe)}
+        </li>
+        <li>
+          <label>Granule Definition</label>
+          {this.renderReadOnlyJson('granuleDefinition', data.granuleDefinition)}
+        </li>
+        <li>
+          <label>Granule Status</label>
+          {this.renderReadOnlyJson('granuleStatus', data.granulesStatus)}
+        </li>
+      </ul>
     );
   }
 });

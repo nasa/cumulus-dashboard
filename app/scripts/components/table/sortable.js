@@ -22,7 +22,7 @@ const Table = React.createClass({
     order: React.PropTypes.string,
     changeSortProps: React.PropTypes.func,
     onSelect: React.PropTypes.func,
-    isRemovable: React.PropTypes.bool,
+    canSelect: React.PropTypes.bool,
     selectedRows: React.PropTypes.array,
     rowId: React.PropTypes.string
   },
@@ -51,55 +51,56 @@ const Table = React.createClass({
 
   render: function () {
     const canSort = !this.unSortable();
-    let { primaryIdx, sortIdx, order, props, row, data, selectedRows, isRemovable } = this.props;
+    let { primaryIdx, sortIdx, order, props, row, data, selectedRows, canSelect } = this.props;
     primaryIdx = primaryIdx || 0;
 
     return (
-      <table>
-        <thead>
-          <tr>
-            {isRemovable && <td></td> }
-            {this.props.header.map((h, i) => {
-              let className = canSort && props[i] ? 'table__sort' : '';
-              if (i === sortIdx) { className += (' table__sort--' + order); }
+      <div className='table--wrapper'>
+        <table>
+          <thead>
+            <tr>
+              {canSelect && <td></td> }
+              {this.props.header.map((h, i) => {
+                let className = canSort && props[i] ? 'table__sort' : '';
+                if (i === sortIdx) { className += (' table__sort--' + order); }
+                return (
+                  <td
+                  className={className}
+                  key={h}
+                  data-value={h}
+                  onClick={this.changeSort}>{h}</td>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {this.props.data.map((d, i) => {
+              const dataId = d[this.props.rowId];
+              const checked = canSelect && selectedRows.indexOf(dataId) !== -1;
               return (
-                <td
-                className={className}
-                key={h}
-                data-value={h}
-                onClick={this.changeSort}>{h}</td>
+                <tr key={i} data-value={dataId} onClick={this.select}>
+                  {canSelect &&
+                    <td>
+                      <input type='checkbox' checked={checked} />
+                    </td>
+                  }
+                  {row.map((accessor, k) => {
+                    let className = k === primaryIdx ? 'table__main-asset' : '';
+                    let text;
+
+                    if (typeof accessor === 'function') {
+                      text = accessor(d, k, data);
+                    } else {
+                      text = d[accessor];
+                    }
+                    return <td key={String(i) + String(k) + text} className={className}>{text}</td>;
+                  })}
+                </tr>
               );
             })}
-
-          </tr>
-        </thead>
-        <tbody>
-          {this.props.data.map((d, i) => {
-            const dataId = d[this.props.rowId];
-            const checked = isRemovable && selectedRows.indexOf(dataId) !== -1;
-            return (
-              <tr key={i} data-value={dataId} onClick={this.select}>
-                {isRemovable &&
-                  <td>
-                    <input type='checkbox' checked={checked} />
-                  </td>
-                }
-                {row.map((accessor, k) => {
-                  let className = k === primaryIdx ? 'table__main-asset' : '';
-                  let text;
-
-                  if (typeof accessor === 'function') {
-                    text = accessor(d, k, data);
-                  } else {
-                    text = d[accessor];
-                  }
-                  return <td key={String(i) + String(k) + text} className={className}>{text}</td>;
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     );
   }
 });

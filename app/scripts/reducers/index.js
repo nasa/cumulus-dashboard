@@ -6,6 +6,7 @@ import stats from './stats';
 import pdrs from './pdrs';
 import providers from './providers';
 import logs from './logs';
+import schema from './schema';
 
 export const reducers = {
   def: (state = {}, action) => state,
@@ -15,7 +16,8 @@ export const reducers = {
   stats,
   pdrs,
   providers,
-  logs
+  logs,
+  schema
 };
 
 export default combineReducers(Object.assign({}, reducers));
