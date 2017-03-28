@@ -64,11 +64,11 @@ var Home = React.createClass({
     const overview = [
       [tally(get(stats.data, 'errors.value', nullValue)), 'Errors', '/logs'],
       [tally(get(stats.data, 'collections.value', nullValue)), 'Collections', '/collections'],
-      [tally(get(stats.data, 'granules.value', nullValue)), 'Granules (received today)', '/granules'],
+      [tally(get(stats.data, 'granules.value', nullValue)), 'Granules (Received Today)', '/granules'],
       [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average Processing Time'],
-      [storage(get(resources.data, 's3', []).reduce((a, b) => a + b.Sum, 0)), 'data used', '/resources'],
-      [tally(get(resources.data, 'queues', []).length) || nullValue, 'sqs queues', '/resources'],
-      [tally(get(resources.data, 'instances', []).length) || nullValue, 'ec2 instances', '/resources']
+      [storage(get(resources.data, 's3', []).reduce((a, b) => a + b.Sum, 0)), 'Data Used', '/resources'],
+      [tally(get(resources.data, 'queues', []).length) || nullValue, 'SQS Queues', '/resources'],
+      [tally(get(resources.data, 'instances', []).length) || nullValue, 'EC2 Instances', '/resources']
     ];
     const granuleCount = get(count.data, 'granules.meta.count');
     const numGranules = granuleCount ? `(${granuleCount})` : null;
