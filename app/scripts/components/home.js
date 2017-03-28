@@ -112,7 +112,7 @@ var Home = React.createClass({
                 tableSortProps={tableSortProps}
                 query={this.generateQuery()}
               />
-              <Link className='link--secondary' to='/pdrs'>View PDR Overview</Link>
+              <Link className='link--secondary link--learn-more' to='/pdrs'>View PDR Overview</Link>
             </div>
           </section>
           <section className='page__section'>

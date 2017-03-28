@@ -158,12 +158,12 @@ var List = React.createClass({
     return (
       <div className='list-view'>
         <div className={hasActions ? 'form__element__updateToggle' : 'form__element__updateToggle form__element__updateToggle-noHeader'} onClick={this.toggleAutoFetch}>
-          <div className='form-group__updating'>
+          <span className='form-group__updating'>
             Next update in: {seconds === -1 ? '-' : seconds }
-          </div>
-          <i className='metadata__updated'>
+          </span>
+          <span className='metadata__updated'>
             {seconds === -1 ? 'Start automatic updates' : 'Stop automatic updates'}
-          </i>
+          </span>
         </div>
 
         {hasActions ? (

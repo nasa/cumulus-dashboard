@@ -61,7 +61,7 @@ var CollectionList = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content'>
+            <h1 className='heading--large heading--shared-content with-description'>
               {this.inactive() ? 'Inactive' : 'Active'} Collections <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
             </h1>
             <Link className='button button--green button--small form-group__element--right' to=''>Edit</Link>

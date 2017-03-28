@@ -119,7 +119,7 @@ var CollectionOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>{collectionName}</h1>
+          <h1 className='heading--large heading--shared-content with-description'>{collectionName}</h1>
 
           <AsyncCommand action={this.delete}
             success={this.navigateBack}
@@ -135,7 +135,7 @@ var CollectionOverview = React.createClass({
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Processing Granules{meta.count ? ` (${meta.count})` : null}</h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Processing Granules{meta.count ? ` (${meta.count})` : null}</h2>
           </div>
           <List
             list={list}
@@ -148,7 +148,7 @@ var CollectionOverview = React.createClass({
             bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}
           />
-          <Link className='link--secondary' to={`/collections/collection/${collectionName}/granules`}>View All Granules</Link>
+          <Link className='link--secondary link--learn-more' to={`/collections/collection/${collectionName}/granules`}>View All Granules</Link>
         </section>
       </div>
     );
