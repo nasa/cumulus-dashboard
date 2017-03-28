@@ -97,7 +97,11 @@ export const displayCase = function (string) {
 };
 
 export const storage = function (n) {
+  if (!n || isNaN(n)) return nullValue;
+
   n = +n;
+  if (n === 0) return n;
+
   if (n < 1e9) return (n / 1e6).toFixed(2) + 'mb';
   else if (n < 1e12) return (n / 1e9).toFixed(2) + 'gb';
   else if (n < 1e15) return (n / 1e12).toFixed(2) + 'tb';
