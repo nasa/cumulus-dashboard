@@ -111,13 +111,12 @@ var CollectionIngest = React.createClass({
             <dd>{fullDate(data.changedBy)}</dd>
           </dl>
         </section>
+
         <section className='page__section--small'>
           <h2 className='heading--medium'>Granule Definition</h2>
           <p>{granuleDefinition.granuleId}</p>
-
           <h3 className='heading--small'>Files</h3>
           {Object.keys(get(granuleDefinition, 'files', [])).map(name => {
-
             let file = granuleDefinition.files[name];
             return (
               <dl key={name}>
@@ -128,32 +127,16 @@ var CollectionIngest = React.createClass({
               </dl>
               );
           })}
-<<<<<<< HEAD
-          <h1>Needed for processing: {granuleDefinition.neededForProcessing.join(', ')}</h1>
-        </section>
-=======
           <h1>Needed for processing: {get(granuleDefinition, 'neededForProcessing', []).join(', ')}</h1>
-        </div>
->>>>>>> 1f306d038ebfb636aa90c395df0fd29828c02d73
+        </section>
 
         <section className='page__section--small'>
           <h2 className='heading--medium'>Ingest</h2>
           <p>Type: {ingest.type}</p>
-
-<<<<<<< HEAD
           <dt>Configuration</dt>
-          <dd>Concurrency: {ingest.config.concurrency}</dd>
-          <dd>Endpoint: {ingest.config.endpoint}</dd>
+          <dd>Concurrency: {get(ingest, 'config.concurrency', nullValue)}</dd>
+          <dd>Endpoint: {get(ingest, 'config.endpoint', nullValue)}</dd>
         </section>
-=======
-          <h1>Configuration</h1>
-          <p>Concurrency: {get(ingest, 'config.concurrency', nullValue)}</p>
-          <p>Endpoint: {get(ingest, 'config.endpoint', nullValue)}</p>
-        </div>
-
-        <div>
-          <h1>Recipe</h1>
->>>>>>> 1f306d038ebfb636aa90c395df0fd29828c02d73
 
         <section className='page__section--small'>
           <h2 className='heading--medium'>Recipe</h2>
