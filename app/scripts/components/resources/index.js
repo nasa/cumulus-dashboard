@@ -2,16 +2,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-
-import { getResources } from '../../actions';
-
+import { getResources, interval } from '../../actions';
 import { nullValue, tally, storage, lastUpdated } from '../../utils/format';
 import * as queueConfig from '../../utils/table-config/queues';
 import * as serviceConfig from '../../utils/table-config/services';
 import * as instanceConfig from '../../utils/table-config/instances';
-
 import SortableTable from '../table/sortable';
 import LoadingEllipsis from '../app/loading-ellipsis';
+
+// slower 20 second update interval here
+const UPDATE = 20000;
 
 var Resources = React.createClass({
   propTypes: {
@@ -23,13 +23,20 @@ var Resources = React.createClass({
     this.query();
   },
 
+  componentWillUnmount: function () {
+    if (this.cancelInterval) this.cancelInterval();
+  },
+
   query: function () {
-    this.props.dispatch(getResources());
+    const { dispatch } = this.props;
+    if (this.cancelInterval) this.cancelInterval();
+    this.cancelInterval = interval(() => dispatch(getResources()), UPDATE, true);
   },
 
   render: function () {
     const { resources } = this.props.stats;
-    const { data } = resources;
+    const { inflight, data } = resources;
+    console.log(data);
     const queues = get(data, 'queues', []);
     const services = get(data, 'services', []);
     const instances = get(data, 'instances', []);
@@ -57,7 +64,7 @@ var Resources = React.createClass({
               <ul>
                 {overview.map(d => (
                   <li key={d[1]}>
-                    <span className='overview-num'><span className='num--large'>{ resources.inflight ? <LoadingEllipsis /> : d[0] }</span> {d[1]}</span>
+                    <span className='overview-num'><span className='num--large'>{inflight && !data.timestamp ? <LoadingEllipsis /> : d[0]}</span> {d[1]}</span>
                   </li>
                 ))}
               </ul>
@@ -67,7 +74,7 @@ var Resources = React.createClass({
           <section className='page__section' id='queues'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium heading--shared-content with-description'>SQS Queues</h2>
+                <h2 className='heading--medium heading--shared-content with-description'>SQS Queues {inflight ? <LoadingEllipsis /> : null}</h2>
               </div>
             </div>
             <div className='row'>
@@ -78,7 +85,7 @@ var Resources = React.createClass({
           <section className='page__section' id='services'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium heading--shared-content with-description'>Services</h2>
+                <h2 className='heading--medium heading--shared-content with-description'>Services {inflight ? <LoadingEllipsis /> : null}</h2>
               </div>
             </div>
             <div className='row'>
@@ -89,7 +96,7 @@ var Resources = React.createClass({
           <section className='page__section' id='instances'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium heading--shared-content with-description'>EC2 Instances</h2>
+                <h2 className='heading--medium heading--shared-content with-description'>EC2 Instances {inflight ? <LoadingEllipsis /> : null}</h2>
               </div>
             </div>
             <div className='row'>
