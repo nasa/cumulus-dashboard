@@ -3,8 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { get } from 'object-path';
-import { getStats, getCount, listPdrs } from '../actions';
-import { nullValue, tally, seconds } from '../utils/format';
+import { getStats, getCount, listPdrs, getResources } from '../actions';
+import { nullValue, tally, seconds, storage } from '../utils/format';
 import LoadingEllipsis from './app/loading-ellipsis';
 import List from './table/list-view';
 import { tableHeader, tableRow, tableSortProps } from '../utils/table-config/pdrs';
@@ -21,10 +21,12 @@ var Home = React.createClass({
   },
 
   componentWillMount: function () {
-    this.queryStats();
+    this.query();
   },
 
-  queryStats: function () {
+  query: function () {
+    // TODO should probably time clamp this by most recent as well?
+    this.props.dispatch(getResources());
     this.props.dispatch(getStats({
       timestamp__from: recent
     }));
@@ -58,16 +60,15 @@ var Home = React.createClass({
 
   render: function () {
     const { list } = this.props.pdrs;
-    const { stats, count } = this.props.stats;
-    const storage = get(stats.data, 'storage.value');
+    const { stats, count, resources } = this.props.stats;
     const overview = [
       [tally(get(stats.data, 'errors.value', nullValue)), 'Errors', '/logs'],
       [tally(get(stats.data, 'collections.value', nullValue)), 'Collections', '/collections'],
-      [tally(get(stats.data, 'granules.value', nullValue)), 'Granules (received today)', '/granules'],
+      [tally(get(stats.data, 'granules.value', nullValue)), 'Granules (Received Today)', '/granules'],
       [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average Processing Time'],
-      [(storage ? tally(storage) + get(stats.data, 'storage.unit') : nullValue), 'Data Used'],
-      [tally(get(stats.data, 'queues.value', nullValue)), 'SQS Queues'],
-      [tally(get(stats.data, 'ec2.value', nullValue)), 'EC2 Instances']
+      [storage(get(resources.data, 's3', []).reduce((a, b) => a + b.Sum, 0)), 'Data Used', '/resources'],
+      [tally(get(resources.data, 'queues', []).length) || nullValue, 'SQS Queues', '/resources#queues'],
+      [tally(get(resources.data, 'instances', []).length) || nullValue, 'EC2 Instances', '/resources#instances']
     ];
     const granuleCount = get(count.data, 'granules.meta.count');
     const numGranules = granuleCount ? `(${granuleCount})` : null;

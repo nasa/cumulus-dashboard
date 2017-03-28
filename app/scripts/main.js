@@ -47,8 +47,8 @@ import Pdrs from './components/pdr';
 import PdrOverview from './components/pdr/overview';
 import PdrList from './components/pdr/list';
 
+import Resources from './components/resources';
 import Logs from './components/logs';
-import Contact from './components/contact';
 
 // redirect to login when not auth'd
 function requireAuth (nextState, replace) {
@@ -89,7 +89,7 @@ render((
           <Route path='pdr/:pdrName' component={ListGranules} />
         </Route>
         <Route path='logs' component={Logs} />
-        <Route path='contact' component={Contact} />
+        <Route path='resources' component={Resources} />
       </Route>
     </Router>
   </Provider>
