@@ -5,7 +5,7 @@ import { get } from 'object-path';
 
 import { getResources } from '../../actions';
 
-import { nullValue, tally, storage } from '../../utils/format';
+import { nullValue, tally, storage, lastUpdated } from '../../utils/format';
 import * as queueConfig from '../../utils/table-config/queues';
 import * as serviceConfig from '../../utils/table-config/services';
 import * as instanceConfig from '../../utils/table-config/instances';
@@ -54,6 +54,7 @@ var Resources = React.createClass({
         <div className='page__content page__content__nosidebar'>
           <section className='page__section'>
             <div className='row'>
+              {lastUpdated(data.updatedAt)}
               <ul>
                 {overview.map(d => (
                   <li key={d[1]}>
