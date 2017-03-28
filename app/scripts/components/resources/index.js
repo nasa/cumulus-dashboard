@@ -64,7 +64,7 @@ var Resources = React.createClass({
             </div>
           </section>
 
-          <section className='page__section'>
+          <section className='page__section' id='queues'>
             <div className='row'>
               <div className='heading__wrapper--border'>
                 <h2 className='heading--medium heading--shared-content with-description'>SQS Queues</h2>
@@ -75,7 +75,7 @@ var Resources = React.createClass({
             </div>
           </section>
 
-          <section className='page__section'>
+          <section className='page__section' id='services'>
             <div className='row'>
               <div className='heading__wrapper--border'>
                 <h2 className='heading--medium heading--shared-content with-description'>Services</h2>
@@ -86,7 +86,7 @@ var Resources = React.createClass({
             </div>
           </section>
 
-          <section className='page__section'>
+          <section className='page__section' id='instances'>
             <div className='row'>
               <div className='heading__wrapper--border'>
                 <h2 className='heading--medium heading--shared-content with-description'>EC2 Instances</h2>
