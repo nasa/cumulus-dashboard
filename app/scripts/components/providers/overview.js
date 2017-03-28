@@ -7,8 +7,6 @@ import { lastUpdated } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/providers';
 import List from '../table/list-view';
 
-import Overview from '../app/overview';
-
 var ProvidersOverview = React.createClass({
   displayName: 'ProvidersOverview',
 
@@ -47,6 +45,7 @@ var ProvidersOverview = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
+            rowId={'name'}
           />
         </section>
       </div>

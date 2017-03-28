@@ -30,5 +30,5 @@ export const tableSortProps = [
   null,
   null,
   'protocol.keyword',
-  null
+  'updatedAt'
 ];
