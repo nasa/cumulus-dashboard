@@ -50,7 +50,7 @@ import PdrList from './components/pdr/list';
 import Providers from './components/providers';
 import ProvidersOverview from './components/providers/overview';
 // import Provider from './components/providers/provider';
-// import ActiveProviders from './components/providers/active';
+import ActiveProviders from './components/providers/active';
 import InactiveProviders from './components/providers/inactive';
 // import ProviderErrors from './components/providers/errors';
 
@@ -98,6 +98,7 @@ render((
         </Route>
         <Route path='providers' component={Providers}>
           <IndexRoute component={ProvidersOverview} />
+          <Route path='active' component={ActiveProviders} />
           <Route path='inactive' component={InactiveProviders} />
         </Route>
         <Route path='logs' component={Logs} />

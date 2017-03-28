@@ -98,6 +98,14 @@ export const PROVIDERS = 'PROVIDERS';
 export const PROVIDERS_INFLIGHT = 'PROVIDERS_INFLIGHT';
 export const PROVIDERS_ERROR = 'PROVIDERS_ERROR';
 
+export const PROVIDER_DELETE = 'PROVIDER_DELETE';
+export const PROVIDER_DELETE_INFLIGHT = 'PROVIDER_DELETE_INFLIGHT';
+export const PROVIDER_DELETE_ERROR = 'PROVIDER_DELETE_ERROR';
+
+export const OPTIONS_PROVIDERGROUP = 'OPTIONS_PROVIDERGROUP';
+export const OPTIONS_PROVIDERGROUP_INFLIGHT = 'OPTIONS_PROVIDERGROUP_INFLIGHT';
+export const OPTIONS_PROVIDERGROUP_ERROR = 'OPTIONS_PROVIDERGROUP_ERROR';
+
 export const SEARCH_PROVIDERS = 'SEARCH_PROVIDERS';
 export const CLEAR_PROVIDERS_SEARCH = 'CLEAR_PROVIDERS_SEARCH';
 
@@ -200,6 +208,14 @@ export const listProviders = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'providers'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, PROVIDERS);
+
+export const getOptionsProviderGroup = () => wrapRequest(null, get, {
+  url: url.resolve(root, 'providers'),
+  qs: { limit: 100, fields: 'providerName' }
+}, OPTIONS_PROVIDERGROUP);
+
+export const deleteProvider = (providerId) => wrapRequest(
+  providerId, del, `providers/${providerId}`, PROVIDER_DELETE);
 
 export const searchProviders = (prefix) => ({ type: SEARCH_PROVIDERS, prefix: prefix });
 

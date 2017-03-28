@@ -30,7 +30,7 @@ var InactiveProviders = React.createClass({
 
   generateQuery: function () {
     return {
-      isActive: false
+      isActive: true
     };
   },
 
