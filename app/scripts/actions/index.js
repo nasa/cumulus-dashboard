@@ -72,6 +72,10 @@ export const STATS = 'STATS';
 export const STATS_INFLIGHT = 'STATS_INFLIGHT';
 export const STATS_ERROR = 'STATS_ERROR';
 
+export const RESOURCES = 'RESOURCES';
+export const RESOURCES_INFLIGHT = 'RESOURCES_INFLIGHT';
+export const RESOURCES_ERROR = 'RESOURCES_ERROR';
+
 export const COUNT = 'COUNT';
 export const COUNT_INFLIGHT = 'COUNT_INFLIGHT';
 export const COUNT_ERROR = 'COUNT_ERROR';
@@ -161,6 +165,10 @@ export const getStats = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'stats'),
   qs: options
 }, STATS);
+
+export const getResources = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'resources')
+}, RESOURCES);
 
 // count queries *must* include type and field properties.
 export const getCount = (options) => wrapRequest(null, get, {

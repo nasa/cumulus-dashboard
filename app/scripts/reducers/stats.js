@@ -7,6 +7,10 @@ import {
   STATS_INFLIGHT,
   STATS_ERROR,
 
+  RESOURCES,
+  RESOURCES_INFLIGHT,
+  RESOURCES_ERROR,
+
   COUNT,
   COUNT_INFLIGHT,
   COUNT_ERROR
@@ -30,12 +34,17 @@ export const initialState = {
     data: {},
     inflight: false,
     error: null
+  },
+  resources: {
+    data: {},
+    inflight: false,
+    error: null
   }
 };
 
 export default function reducer (state = initialState, action) {
   let nextState;
-  let stats, count;
+  let stats, count, resources;
   switch (action.type) {
     case STATS:
       stats = { data: assignDate(action.data), inflight: false, error: null };
@@ -62,6 +71,19 @@ export default function reducer (state = initialState, action) {
     case COUNT_ERROR:
       count = { data: state.count.data, inflight: false, error: action.error };
       nextState = Object.assign(state, { count });
+      break;
+
+    case RESOURCES:
+      resources = { data: action.data, inflight: false, error: null };
+      nextState = Object.assign(state, { resources });
+      break;
+    case RESOURCES_INFLIGHT:
+      resources = { data: state.resources.data, inflight: true, error: state.resources.error };
+      nextState = Object.assign(state, { resources });
+      break;
+    case RESOURCES_ERROR:
+      resources = { data: state.resources.data, inflight: false, error: action.error };
+      nextState = Object.assign(state, { resources });
       break;
   }
   return nextState || state;
