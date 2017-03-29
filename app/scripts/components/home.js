@@ -68,6 +68,9 @@ var Home = React.createClass({
   queryHistogram: function () {
     const { dispatch } = this.props;
     dispatch(queryHistogram(this.generateGranulesProcessed()));
+    dispatch(queryHistogram(this.generateErrors()));
+    dispatch(queryHistogram(this.generatePdrsProcessed()));
+    dispatch(queryHistogram(this.generateGranulesFailed()));
   },
 
   changeSpan: function (e) {
@@ -75,12 +78,38 @@ var Home = React.createClass({
   },
 
   generateGranulesProcessed: function () {
-    const { span } = this.state;
     return {
       type: 'granules',
-      interval: intervals[span],
-      updatedAt__from: spans[span],
-      status: 'completed'
+      status: 'completed',
+      interval: intervals[this.state.span],
+      updatedAt__from: spans[this.state.span]
+    };
+  },
+
+  generateErrors: function () {
+    return {
+      type: 'logs',
+      level: 'error',
+      interval: intervals[this.state.span],
+      timestamp__from: spans[this.state.span]
+    };
+  },
+
+  generatePdrsProcessed: function () {
+    return {
+      type: 'pdrs',
+      status: 'completed',
+      interval: intervals[this.state.span],
+      updatedAt__from: spans[this.state.span]
+    };
+  },
+
+  generateGranulesFailed: function () {
+    return {
+      type: 'granules',
+      status: 'failed',
+      interval: intervals[this.state.span],
+      updatedAt__from: spans[this.state.span]
     };
   },
 
@@ -122,6 +151,9 @@ var Home = React.createClass({
     const numGranules = granuleCount ? `(${granuleCount})` : null;
 
     const granulesProcessed = get(histogram, serialize(this.generateGranulesProcessed()), {});
+    const errorsRecorded = get(histogram, serialize(this.generateErrors()), {});
+    const pdrsProcessed = get(histogram, serialize(this.generatePdrsProcessed()), {});
+    const granulesFailed = get(histogram, serialize(this.generateGranulesFailed()), {});
 
     return (
       <div className='page__home'>
@@ -181,6 +213,9 @@ var Home = React.createClass({
                 </div>
               </div>
               <Histogram data={granulesProcessed} />
+              <Histogram data={errorsRecorded} />
+              <Histogram data={pdrsProcessed} />
+              <Histogram data={granulesFailed} />
             </div>
           </section>
         </div>
