@@ -3,6 +3,7 @@ import React from 'react';
 import { get } from 'object-path';
 import { scaleLinear, scaleBand } from 'd3-scale';
 import debounce from 'lodash.debounce';
+import { tally } from '../../utils/format';
 
 import LoadingIndicator from '../app/loading-indicator';
 
@@ -56,7 +57,7 @@ const Chart = React.createClass({
 
     const xScale = scaleLinear()
     .range([0, innerWidth])
-    .domain([0, Math.max.apply(Math, histogram.map(d => +d.count))]);
+    .domain([0, 1.25 * Math.max.apply(Math, histogram.map(d => +d.count))]);
 
     const scaleOrdinal = scaleBand()
     .paddingInner(0.6)
@@ -71,6 +72,48 @@ const Chart = React.createClass({
     return (
       <div className='chart__container' ref='chartContainer'>
         <svg className='chart' width={width} height={height} ref='svg'>
+
+          <g className='axis axis__top' transform={`translate(${margin.left}, ${margin.top})`}>
+            <line
+              className='axis__line'
+              x1='0'
+              x2={innerWidth}
+            />
+            {xScale.ticks(3).map((label, i) => {
+              // don't render the first tick
+              if (!i) return <g key={label}></g>;
+              return <g key={label} transform={`translate(${xScale(label)}, 0)`}>
+                <line className='axis__tick'
+                  y1='-4'
+                  y2='0'
+                />
+                <text className='axis__text'
+                  dy={-8}
+                  textAnchor={'middle'}>{tally(label)}</text>
+              </g>;
+            })}
+          </g>
+
+          <g className='axis axis__left' transform={`translate(${margin.left}, ${margin.top})`}>
+            <line
+              className='axis__line'
+              y1='0'
+              y2={innerHeight}
+            />
+            {histogram.map(d => {
+              return <g key={d.date} transform={`translate(0, ${yScale(d.date)})`}>
+                <line className='axis__tick'
+                  x1='-4'
+                  x2='0'
+                />
+                <text className='axis__text'
+                  dx='-8'
+                  dy='3'
+                  textAnchor={'end'}>{d.date}</text>
+              </g>;
+            })}
+          </g>
+
           <g transform={`translate(${margin.left}, ${margin.top})`}>
             {histogram.map(d => {
               return <rect
@@ -83,6 +126,7 @@ const Chart = React.createClass({
               />;
             })}
           </g>
+
         </svg>
       </div>
     );

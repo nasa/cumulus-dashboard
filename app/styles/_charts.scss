@@ -6,3 +6,13 @@
 .chart__bar {
   fill: $midnight-blue;
 }
+
+.axis__tick,
+.axis__line {
+  stroke: $light-grey;
+}
+
+.axis__text {
+  font-size: 10px;
+  fill: $light-grey;
+}
