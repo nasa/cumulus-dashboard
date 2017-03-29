@@ -102,6 +102,10 @@ export const SCHEMA = 'SCHEMA';
 export const SCHEMA_INFLIGHT = 'SCHEMA_INFLIGHT';
 export const SCHEMA_ERROR = 'SCHEMA_ERROR';
 
+export const HISTOGRAM = 'HISTOGRAM';
+export const HISTOGRAM_INFLIGHT = 'HISTOGRAM_INFLIGHT';
+export const HISTOGRAM_ERROR = 'HISTOGRAM_ERROR';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -211,3 +215,9 @@ export const login = (token) => {
 };
 
 export const getSchema = (type) => wrapRequest(null, get, `schemas/${type}`, SCHEMA);
+
+export const queryHistogram = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'stats/histogram'),
+  qs: options
+}, HISTOGRAM);
+
