@@ -212,10 +212,22 @@ var Home = React.createClass({
                   </select>
                 </div>
               </div>
-              <Histogram data={granulesProcessed} />
-              <Histogram data={errorsRecorded} />
-              <Histogram data={pdrsProcessed} />
-              <Histogram data={granulesFailed} />
+              <div className='chart__box'>
+                <h2 className='chart__title'>Granules Processed</h2>
+                <Histogram data={granulesProcessed} />
+              </div>
+              <div className='chart__box'>
+                <h2 className='chart__title'>Errors Over Time</h2>
+                <Histogram data={errorsRecorded} />
+              </div>
+              <div className='chart__box'>
+                <h2 className='chart__title'>PDRs Processed</h2>
+                <Histogram data={pdrsProcessed} />
+              </div>
+              <div className='chart__box'>
+                <h2 className='chart__title'>Granules Failed</h2>
+                <Histogram data={granulesFailed} />
+              </div>
             </div>
           </section>
         </div>

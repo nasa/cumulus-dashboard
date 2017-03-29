@@ -1,6 +1,11 @@
+.chart__box {
+  display: inline-block;
+  width: 50%;
+  text-align: center;
+}
+
 .chart__container {
   height: 400px;
-  width: 50%;
 }
 
 .chart__bar {
