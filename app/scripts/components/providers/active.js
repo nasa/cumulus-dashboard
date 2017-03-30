@@ -20,8 +20,8 @@ import Dropdown from '../form/dropdown';
 import { Link } from 'react-router';
 import protocol from '../../utils/protocol';
 
-var InactiveProviders = React.createClass({
-  displayName: 'InactiveProviders',
+var ActiveProviders = React.createClass({
+  displayName: 'ActiveProviders',
 
   propTypes: {
     dispatch: React.PropTypes.func,
@@ -54,7 +54,7 @@ var InactiveProviders = React.createClass({
         <section className='page__section'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content'>
-              Inactive Providers <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
+              Active Providers <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
             </h1>
             <Link className='button button--green button--small form-group__element--right' to=''>Edit</Link>
             {lastUpdated(queriedAt)}
@@ -103,4 +103,4 @@ var InactiveProviders = React.createClass({
   }
 });
 
-export default connect(state => state)(InactiveProviders);
+export default connect(state => state)(ActiveProviders);

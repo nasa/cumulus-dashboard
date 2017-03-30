@@ -3,6 +3,22 @@
 import { set } from 'object-path';
 import assignDate from './assign-date';
 import {
+  PROVIDER,
+  PROVIDER_INFLIGHT,
+  PROVIDER_ERROR,
+
+  NEW_PROVIDER,
+  NEW_PROVIDER_INFLIGHT,
+  NEW_PROVIDER_ERROR,
+
+  PROVIDER_COLLECTIONS,
+  PROVIDER_COLLECTIONS_INFLIGHT,
+  PROVIDER_COLLECTIONS_ERROR,
+
+  UPDATE_PROVIDER,
+  UPDATE_PROVIDER_INFLIGHT,
+  UPDATE_PROVIDER_ERROR,
+
   PROVIDERS,
   PROVIDERS_INFLIGHT,
   PROVIDERS_ERROR,
@@ -29,7 +45,11 @@ export const initialState = {
     params: {}
   },
   dropdowns: {},
+  map: {},
   search: {},
+  collections: {},
+  created: {},
+  updated: {},
   deleted: {}
 };
 
@@ -37,6 +57,53 @@ export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
   const { data, id } = action;
   switch (action.type) {
+    case PROVIDER:
+      set(state, ['map', id, 'inflight'], false);
+      set(state, ['map', id, 'data'], assignDate(data));
+      break;
+    case PROVIDER_INFLIGHT:
+      set(state, ['map', id, 'inflight'], true);
+      break;
+    case PROVIDER_ERROR:
+      set(state, ['map', id, 'inflight'], false);
+      set(state, ['map', id, 'error'], action.error);
+      break;
+
+    case NEW_PROVIDER:
+      set(state, ['created', id, 'status'], 'success');
+      break;
+    case NEW_PROVIDER_INFLIGHT:
+      set(state, ['created', id, 'status'], 'inflight');
+      break;
+    case NEW_PROVIDER_ERROR:
+      set(state, ['created', id, 'status'], 'error');
+      set(state, ['created', id, 'error'], action.error);
+      break;
+
+    case PROVIDER_COLLECTIONS:
+      set(state, ['collections', id, 'inflight'], false);
+      set(state, ['collections', id, 'data'], data.results.map(c => c.collectionName));
+      break;
+    case PROVIDER_COLLECTIONS_INFLIGHT:
+      set(state, ['collections', id, 'inflight'], true);
+      break;
+    case PROVIDER_COLLECTIONS_ERROR:
+      set(state, ['collections', id, 'inflight'], false);
+      set(state, ['collections', id, 'error'], action.error);
+      break;
+
+    case UPDATE_PROVIDER:
+      set(state, ['map', id, 'data'], data);
+      set(state, ['updated', id, 'status'], 'success');
+      break;
+    case UPDATE_PROVIDER_INFLIGHT:
+      set(state, ['updated', id, 'status'], 'inflight');
+      break;
+    case UPDATE_PROVIDER_ERROR:
+      set(state, ['updated', id, 'status'], 'error');
+      set(state, ['updated', id, 'error'], action.error);
+      break;
+
     case PROVIDERS:
       set(state, ['list', 'data'], data.results);
       set(state, ['list', 'meta'], assignDate(data.meta));

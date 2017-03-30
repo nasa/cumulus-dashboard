@@ -94,6 +94,22 @@ export const CLEAR_PDRS_SEARCH = 'CLEAR_PDRS_SEARCH';
 export const FILTER_PDRS = 'FILTER_PDRS';
 export const CLEAR_PDRS_FILTER = 'CLEAR_PDRS_FILTER';
 
+export const PROVIDER = 'PROVIDER';
+export const PROVIDER_INFLIGHT = 'PROVIDER_INFLIGHT';
+export const PROVIDER_ERROR = 'PROVIDER_ERROR';
+
+export const PROVIDER_COLLECTIONS = 'PROVIDER_COLLECTIONS';
+export const PROVIDER_COLLECTIONS_INFLIGHT = 'PROVIDER_COLLECTIONS_INFLIGHT';
+export const PROVIDER_COLLECTIONS_ERROR = 'PROVIDER_COLLECTIONS_ERROR';
+
+export const NEW_PROVIDER = 'NEW_PROVIDER';
+export const NEW_PROVIDER_INFLIGHT = 'NEW_PROVIDER_INFLIGHT';
+export const NEW_PROVIDER_ERROR = 'NEW_PROVIDER_ERROR';
+
+export const UPDATE_PROVIDER = 'UPDATE_PROVIDER';
+export const UPDATE_PROVIDER_INFLIGHT = 'UPDATE_PROVIDER_INFLIGHT';
+export const UPDATE_PROVIDER_ERROR = 'UPDATE_PROVIDER_ERROR';
+
 export const PROVIDERS = 'PROVIDERS';
 export const PROVIDERS_INFLIGHT = 'PROVIDERS_INFLIGHT';
 export const PROVIDERS_ERROR = 'PROVIDERS_ERROR';
@@ -213,6 +229,21 @@ export const getOptionsProviderGroup = () => wrapRequest(null, get, {
   url: url.resolve(root, 'providers'),
   qs: { limit: 100, fields: 'providerName' }
 }, OPTIONS_PROVIDERGROUP);
+
+export const getProvider = (providerId) => wrapRequest(
+  providerId, get, `providers/${providerId}`, PROVIDER);
+
+export const getCollectionsForProvider = (providerId) => wrapRequest(
+  providerId, get, {
+    url: url.resolve(root, 'collections'),
+    qs: { limit: 100, fields: 'collectionName', providers: providerId }
+  }, PROVIDER_COLLECTIONS);
+
+export const createProvider = (payload) => wrapRequest(
+  payload.name, post, 'providers', NEW_PROVIDER, payload);
+
+export const updateProvider = (payload) => wrapRequest(
+  payload.name, put, `providers/${payload.name}`, UPDATE_PROVIDER, payload);
 
 export const deleteProvider = (providerId) => wrapRequest(
   providerId, del, `providers/${providerId}`, PROVIDER_DELETE);

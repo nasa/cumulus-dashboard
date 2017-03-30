@@ -48,11 +48,12 @@ import PdrOverview from './components/pdr/overview';
 import PdrList from './components/pdr/list';
 
 import Providers from './components/providers';
+import AddProvider from './components/providers/add';
+import EditProvider from './components/providers/edit';
 import ProvidersOverview from './components/providers/overview';
-// import Provider from './components/providers/provider';
+import Provider from './components/providers/provider';
 import ActiveProviders from './components/providers/active';
 import InactiveProviders from './components/providers/inactive';
-// import ProviderErrors from './components/providers/errors';
 
 import Resources from './components/resources';
 
@@ -98,8 +99,11 @@ render((
         </Route>
         <Route path='providers' component={Providers}>
           <IndexRoute component={ProvidersOverview} />
+          <Route path='add' component={AddProvider} />
+          <Route path='edit/:providerId' component={EditProvider} />
           <Route path='active' component={ActiveProviders} />
           <Route path='inactive' component={InactiveProviders} />
+          <Route path='provider/:providerId' component={Provider} />
         </Route>
         <Route path='logs' component={Logs} />
         <Route path='resources' component={Resources} />
