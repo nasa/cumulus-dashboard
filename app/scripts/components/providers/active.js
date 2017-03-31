@@ -9,7 +9,8 @@ import {
   getOptionsProviderGroup,
   filterProviders,
   clearProvidersFilter,
-  deleteProvider
+  deleteProvider,
+  getCount
 } from '../../actions';
 import { get } from 'object-path';
 import { dropdownOption, lastUpdated } from '../../utils/format';
@@ -25,7 +26,15 @@ var ActiveProviders = React.createClass({
 
   propTypes: {
     dispatch: React.PropTypes.func,
-    providers: React.PropTypes.object
+    providers: React.PropTypes.object,
+    stats: React.PropTypes.object
+  },
+
+  componentWillMount: function () {
+    this.props.dispatch(getCount({
+      type: 'collections',
+      field: 'providers'
+    }));
   },
 
   generateQuery: function () {
@@ -48,6 +57,12 @@ var ActiveProviders = React.createClass({
   render: function () {
     const { list, dropdowns } = this.props.providers;
     const { count, queriedAt } = list.meta;
+
+    // Incorporate the collection counts into the `list`
+    const collectionCounts = get(this.props.stats, ['count', 'data', 'collections', 'count'], []);
+    list.data.forEach(d => {
+      d.collections = get(collectionCounts.find(c => c.key === d.name), 'count', 0);
+    });
 
     return (
       <div className='page__component'>

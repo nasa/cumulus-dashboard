@@ -17,7 +17,7 @@ export const tableRow = [
   (d) => <Link to={`providers/provider/${d.name}`}>{d.name}</Link>,
   'providerName',
   'status',
-  (d) => '?',
+  'collections',
   (d) => '?',
   'protocol',
   (d) => fullDate(d.createdAt)
