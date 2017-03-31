@@ -174,7 +174,6 @@ var GranuleOverview = React.createClass({
       return <Loading />;
     }
     const granule = record.data;
-    console.log(granule);
     const files = [];
     if (granule.files) {
       for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }

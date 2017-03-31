@@ -36,7 +36,6 @@ var Resources = React.createClass({
   render: function () {
     const { resources } = this.props.stats;
     const { inflight, data } = resources;
-    console.log(data);
     const queues = get(data, 'queues', []);
     const services = get(data, 'services', []);
     const instances = get(data, 'instances', []);
