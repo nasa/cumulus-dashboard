@@ -25,7 +25,7 @@ const metaAccessors = [
   ['PDR Name', 'name', noop],
   ['Protocol', 'protocol', noop],
   ['Created', 'createdAt', fullDate],
-  ['Regex', 'regex', r => <ul>{map(r, (v, k) => <li>{k}: {v}</li>)}</ul>],
+  ['Regex', 'regex', r => <ul>{map(r, (v, k) => <li key={k}>{k}: {v}</li>)}</ul>],
   ['Last Time Ingested', 'lastTimeIngestedAt', fullDate],
   ['Host', 'host', noop],
   ['Path', 'path', noop]

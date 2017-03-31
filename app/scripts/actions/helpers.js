@@ -54,7 +54,7 @@ export const put = function (config, callback) {
 
 export const del = function (config, callback) {
   request.del(setToken(config), (error, resp, body) => {
-    error = error || body.errorMessage || body.detail;
+    error = error || body.errorMessage;
     if (error) {
       return callback(error);
     } else if (+resp.statusCode >= 400) {

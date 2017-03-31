@@ -27,6 +27,13 @@ var AddCollection = React.createClass({
     this.props.dispatch(getSchema(SCHEMA_KEY));
   },
 
+  componentWillReceiveProps: function (newProps) {
+    const status = get(newProps, ['collections', 'created', this.state.collectionName, 'status']);
+    if (status === 'success') {
+      this.props.router.push(`/collections/collection/${this.state.collectionName}`);
+    }
+  },
+
   post: function (id, payload) {
     payload.createdAt = new Date().getTime();
     payload.updatedAt = new Date().getTime();

@@ -12,7 +12,7 @@ const SCHEMA_KEY = 'provider';
 var AddProvider = React.createClass({
   getInitialState: function () {
     return {
-      providerId: null
+      name: null
     };
   },
 
@@ -25,6 +25,13 @@ var AddProvider = React.createClass({
 
   componentWillMount: function () {
     this.props.dispatch(getSchema(SCHEMA_KEY));
+  },
+
+  componentWillReceiveProps: function (newProps) {
+    const status = get(newProps, ['providers', 'created', this.state.name, 'status']);
+    if (status === 'success') {
+      this.props.router.push(`/providers/provider/${this.state.name}`);
+    }
   },
 
   post: function (id, payload) {
@@ -40,9 +47,9 @@ var AddProvider = React.createClass({
   },
 
   render: function () {
-    const { providerId } = this.state;
-    const record = providerId
-      ? get(this.props.providers.created, providerId, {}) : {};
+    const { name } = this.state;
+    const record = name
+      ? get(this.props.providers.created, name, {}) : {};
     const schema = this.props.schema[SCHEMA_KEY];
     return (
       <div className='page__component page__content--shortened--centered'>
