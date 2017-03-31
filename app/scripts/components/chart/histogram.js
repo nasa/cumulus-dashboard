@@ -14,7 +14,7 @@ const margin = {
   left: 70
 };
 
-const Chart = React.createClass({
+const Histogram = React.createClass({
   propTypes: {
     data: React.PropTypes.object
   },
@@ -132,4 +132,4 @@ const Chart = React.createClass({
     );
   }
 });
-export default Chart;
+export default Histogram;

@@ -14,7 +14,7 @@ import {
 import { nullValue, tally, seconds, storage } from '../utils/format';
 import LoadingEllipsis from './app/loading-ellipsis';
 import List from './table/list-view';
-import Histogram from './chart';
+import Histogram from './chart/histogram';
 import { tableHeader, tableRow, tableSortProps } from '../utils/table-config/pdrs';
 import serialize from '../utils/serialize-config';
 import { recent } from '../config';
