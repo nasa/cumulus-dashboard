@@ -2,16 +2,43 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import moment from 'moment';
 import { get } from 'object-path';
-import { getStats, getCount, listPdrs, getResources } from '../actions';
+import {
+  getStats,
+  getCount,
+  listPdrs,
+  getResources,
+  queryHistogram
+} from '../actions';
 import { nullValue, tally, seconds, storage } from '../utils/format';
 import LoadingEllipsis from './app/loading-ellipsis';
 import List from './table/list-view';
+import Histogram from './chart/histogram';
 import { tableHeader, tableRow, tableSortProps } from '../utils/table-config/pdrs';
+import serialize from '../utils/serialize-config';
 import { recent } from '../config';
+
+const spans = {
+  week: moment().subtract(1, 'week').format(),
+  month: moment().subtract(1, 'month').format(),
+  year: moment().subtract(1, 'year').format()
+};
+
+const intervals = {
+  week: 'day',
+  month: 'week',
+  year: 'month'
+};
 
 var Home = React.createClass({
   displayName: 'Home',
+
+  getInitialState: function () {
+    return {
+      span: 'week'
+    };
+  },
 
   propTypes: {
     dispatch: React.PropTypes.func,
@@ -22,18 +49,68 @@ var Home = React.createClass({
 
   componentWillMount: function () {
     this.query();
+    this.queryHistogram();
   },
 
   query: function () {
+    const { dispatch } = this.props;
     // TODO should probably time clamp this by most recent as well?
-    this.props.dispatch(getResources());
-    this.props.dispatch(getStats({
+    dispatch(getResources());
+    dispatch(getStats({
       timestamp__from: recent
     }));
-    this.props.dispatch(getCount({
+    dispatch(getCount({
       type: 'granules',
       field: 'status'
     }));
+  },
+
+  queryHistogram: function () {
+    const { dispatch } = this.props;
+    dispatch(queryHistogram(this.generateGranulesProcessed()));
+    dispatch(queryHistogram(this.generateErrors()));
+    dispatch(queryHistogram(this.generatePdrsProcessed()));
+    dispatch(queryHistogram(this.generateGranulesFailed()));
+  },
+
+  changeSpan: function (e) {
+    this.setState({ span: e.currentTarget.value }, this.queryHistogram);
+  },
+
+  generateGranulesProcessed: function () {
+    return {
+      type: 'granules',
+      status: 'completed',
+      interval: intervals[this.state.span],
+      updatedAt__from: spans[this.state.span]
+    };
+  },
+
+  generateErrors: function () {
+    return {
+      type: 'logs',
+      level: 'error',
+      interval: intervals[this.state.span],
+      timestamp__from: spans[this.state.span]
+    };
+  },
+
+  generatePdrsProcessed: function () {
+    return {
+      type: 'pdrs',
+      status: 'completed',
+      interval: intervals[this.state.span],
+      updatedAt__from: spans[this.state.span]
+    };
+  },
+
+  generateGranulesFailed: function () {
+    return {
+      type: 'granules',
+      status: 'failed',
+      interval: intervals[this.state.span],
+      updatedAt__from: spans[this.state.span]
+    };
   },
 
   generateQuery: function () {
@@ -60,7 +137,7 @@ var Home = React.createClass({
 
   render: function () {
     const { list } = this.props.pdrs;
-    const { stats, count, resources } = this.props.stats;
+    const { stats, count, resources, histogram } = this.props.stats;
     const overview = [
       [tally(get(stats.data, 'errors.value', nullValue)), 'Errors', '/logs'],
       [tally(get(stats.data, 'collections.value', nullValue)), 'Collections', '/collections'],
@@ -72,6 +149,12 @@ var Home = React.createClass({
     ];
     const granuleCount = get(count.data, 'granules.meta.count');
     const numGranules = granuleCount ? `(${granuleCount})` : null;
+
+    const granulesProcessed = get(histogram, serialize(this.generateGranulesProcessed()), {});
+    const errorsRecorded = get(histogram, serialize(this.generateErrors()), {});
+    const pdrsProcessed = get(histogram, serialize(this.generatePdrsProcessed()), {});
+    const granulesFailed = get(histogram, serialize(this.generateGranulesFailed()), {});
+
     return (
       <div className='page__home'>
         <div className='content__header content__header--lg'>
@@ -116,17 +199,34 @@ var Home = React.createClass({
               <Link className='link--secondary link--learn-more' to='/pdrs'>View PDR Overview</Link>
             </div>
           </section>
+
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
                 <h2 className='heading--medium heading--shared-content'>Overview</h2>
                 <div className='dropdown__wrapper form-group__element--right form-group__element--right--sm form-group__element--small'>
-                  <select>
+                  <select onChange={this.changeSpan} value={this.state.span}>
                     <option value="week">Last Week</option>
                     <option value="month">Last Month</option>
                     <option value="year">Last Year</option>
                   </select>
                 </div>
+              </div>
+              <div className='chart__box'>
+                <h2 className='chart__title'>Granules Processed</h2>
+                <Histogram data={granulesProcessed} />
+              </div>
+              <div className='chart__box'>
+                <h2 className='chart__title'>Errors Over Time</h2>
+                <Histogram data={errorsRecorded} />
+              </div>
+              <div className='chart__box'>
+                <h2 className='chart__title'>PDRs Processed</h2>
+                <Histogram data={pdrsProcessed} />
+              </div>
+              <div className='chart__box'>
+                <h2 className='chart__title'>Granules Failed</h2>
+                <Histogram data={granulesFailed} />
               </div>
             </div>
           </section>
