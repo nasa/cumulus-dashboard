@@ -69,10 +69,24 @@ export const OPTIONS_COLLECTIONNAME_INFLIGHT = 'OPTIONS_COLLECTIONNAME_INFLIGHT'
 export const OPTIONS_COLLECTIONNAME_ERROR = 'OPTIONS_COLLECTIONNAME_ERROR';
 
 export const STATS = 'STATS';
+export const STATS_INFLIGHT = 'STATS_INFLIGHT';
+export const STATS_ERROR = 'STATS_ERROR';
+
+export const RESOURCES = 'RESOURCES';
+export const RESOURCES_INFLIGHT = 'RESOURCES_INFLIGHT';
+export const RESOURCES_ERROR = 'RESOURCES_ERROR';
+
+export const COUNT = 'COUNT';
+export const COUNT_INFLIGHT = 'COUNT_INFLIGHT';
+export const COUNT_ERROR = 'COUNT_ERROR';
 
 export const PDRS = 'PDRS';
 export const PDRS_INFLIGHT = 'PDRS_INFLIGHT';
 export const PDRS_ERROR = 'PDRS_ERROR';
+
+export const PDR_DELETE = 'PDR_DELETE';
+export const PDR_DELETE_INFLIGHT = 'PDR_DELETE_INFLIGHT';
+export const PDR_DELETE_ERROR = 'PDR_DELETE_ERROR';
 
 export const SEARCH_PDRS = 'SEARCH_PDRS';
 export const CLEAR_PDRS_SEARCH = 'CLEAR_PDRS_SEARCH';
@@ -87,6 +101,10 @@ export const LOGS_ERROR = 'LOGS_ERROR';
 export const SCHEMA = 'SCHEMA';
 export const SCHEMA_INFLIGHT = 'SCHEMA_INFLIGHT';
 export const SCHEMA_ERROR = 'SCHEMA_ERROR';
+
+export const HISTOGRAM = 'HISTOGRAM';
+export const HISTOGRAM_INFLIGHT = 'HISTOGRAM_INFLIGHT';
+export const HISTOGRAM_ERROR = 'HISTOGRAM_ERROR';
 
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
@@ -147,7 +165,20 @@ export const getOptionsCollectionName = () => wrapRequest(null, get, {
   qs: { limit: 100, fields: 'collectionName' }
 }, OPTIONS_COLLECTIONNAME);
 
-export const getStats = () => wrapRequest(null, get, 'stats/summary/grouped', STATS);
+export const getStats = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'stats'),
+  qs: options
+}, STATS);
+
+export const getResources = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'resources')
+}, RESOURCES);
+
+// count queries *must* include type and field properties.
+export const getCount = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'stats/count'),
+  qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
+}, COUNT);
 
 export const listPdrs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),
@@ -158,6 +189,9 @@ export const searchPdrs = (prefix) => ({ type: SEARCH_PDRS, prefix: prefix });
 export const clearPdrsSearch = () => ({ type: CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: FILTER_PDRS, param: param });
 export const clearPdrsFilter = (paramKey) => ({ type: CLEAR_PDRS_FILTER, paramKey: paramKey });
+
+export const deletePdr = (pdrName) => wrapRequest(
+  pdrName, del, `pdrs/${pdrName}`, PDR_DELETE);
 
 export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),
@@ -181,3 +215,9 @@ export const login = (token) => {
 };
 
 export const getSchema = (type) => wrapRequest(null, get, `schemas/${type}`, SCHEMA);
+
+export const queryHistogram = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'stats/histogram'),
+  qs: options
+}, HISTOGRAM);
+

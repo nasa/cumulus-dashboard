@@ -7,7 +7,10 @@ import {
   filterGranules,
   clearGranulesFilter,
   listGranules,
-  getOptionsCollectionName
+  getOptionsCollectionName,
+  reprocessGranule,
+  removeGranule,
+  deleteGranule
 } from '../../actions';
 import { get } from 'object-path';
 import { granuleSearchResult, dropdownOption, lastUpdated } from '../../utils/format';
@@ -16,6 +19,7 @@ import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
 import Search from '../form/search';
+import status from '../../utils/status';
 
 var AllGranules = React.createClass({
   displayName: 'AllGranules',
@@ -34,17 +38,33 @@ var AllGranules = React.createClass({
     return options;
   },
 
+  generateBulkActions: function () {
+    const { granules } = this.props;
+    return [{
+      text: 'Reprocess',
+      action: reprocessGranule,
+      state: granules.reprocessed
+    }, {
+      text: 'Remove from CMR',
+      action: removeGranule,
+      state: granules.removed
+    }, {
+      text: 'Delete',
+      action: deleteGranule,
+      state: granules.deleted
+    }];
+  },
+
   render: function () {
     const { pdrName } = this.props.params;
     const { list, dropdowns } = this.props.granules;
     const { count, queriedAt } = list.meta;
     const logsQuery = { 'meta.granuleId__exists': 'true' };
-
     return (
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content'>
+            <h1 className='heading--large heading--shared-content with-description '>
               {pdrName || 'All'} Granules <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
@@ -59,6 +79,15 @@ var AllGranules = React.createClass({
               clear={clearGranulesFilter}
               paramKey={'collectionName'}
               label={'Collection'}
+            />
+            <Dropdown
+              dispatch={this.props.dispatch}
+              options={status}
+              format={dropdownOption}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey={'status'}
+              label={'Status'}
             />
             <Search dispatch={this.props.dispatch}
               action={searchGranules}
@@ -75,7 +104,7 @@ var AllGranules = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
-            isRemovable={true}
+            bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}
           />
         </section>

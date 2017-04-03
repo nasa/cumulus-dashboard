@@ -9,7 +9,7 @@ import {
   deleteGranule
 } from '../../actions';
 import { get } from 'object-path';
-import { fullDate, lastUpdated, seconds, nullValue } from '../../utils/format';
+import { fullDate, lastUpdated, seconds, nullValue, bool } from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
@@ -33,8 +33,13 @@ const tableRow = [
   (d) => (<a href={d.archivedFile}>{d.archivedFile ? link : nullValue}</a>),
   (d) => d.access
 ];
+const noop = x => x;
 
 const metaAccessors = [
+  ['PDR Name', 'pdrName', noop],
+  ['Published', 'published', bool],
+  ['Duplicate', 'hasDuplicate', bool],
+
   ['Created', 'createdAt', fullDate],
   ['Last updated', 'updatedAt', fullDate],
 
@@ -132,9 +137,10 @@ var GranuleOverview = React.createClass({
       ['Ingest', 'ingesting'],
       ['Processing', 'processing'],
       ['Pushed to CMR', 'cmr'],
-      ['Archiving', 'archiving'],
-      ['Complete', 'completed']
+      ['Archiving', 'archiving']
     ];
+    if (status === 'failed') statusList.push(['Failed', 'failed']);
+    else statusList.push(['Complete', 'completed']);
     const indicatorClass = 'progress-bar__indicator progress-bar__indicator--' + status;
     return (
       <div className='page__section--subsection page__section__granule--progress'>
@@ -143,7 +149,7 @@ var GranuleOverview = React.createClass({
           <div className={indicatorClass}>
             <div className='pulse'>
               <div className='pulse__dot'></div>
-              <div className='pulse__ring'></div>
+              <div className=''></div>
             </div>
           </div>
 
@@ -178,35 +184,40 @@ var GranuleOverview = React.createClass({
     const removeStatus = get(this.props.granules.removed, [granuleId, 'status']);
     const deleteStatus = get(this.props.granules.deleted, [granuleId, 'status']);
     const errors = this.errors();
+    const granuleError = granule.error;
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>{granuleId}</h1>
+          <h1 className='heading--large heading--shared-content with-description'>{granuleId}</h1>
 
           <AsyncCommand action={this.delete}
             success={this.navigateBack}
             status={deleteStatus}
-            className={granule.published ? 'button--disabled' : null}
+            disabled={granule.published}
+            className={'form-group__element--right'}
             text={deleteStatus === 'success' ? 'Success!' : 'Delete'} />
 
           <AsyncCommand action={this.remove}
             success={this.fastReload}
             status={removeStatus}
+            className={'form-group__element--right'}
             text={'Remove from CMR'} />
 
           <AsyncCommand action={this.reprocess}
             success={this.fastReload}
             status={reprocessStatus}
+            className={'form-group__element--right'}
             text={'Reprocess'} />
 
           {lastUpdated(granule.queriedAt)}
           {this.renderStatus(granule.status)}
+          {granuleError ? <ErrorReport report={granuleError} /> : null}
         </section>
 
         <section className='page__section'>
-          { errors ? <ErrorReport report={errors} /> : null }
+          {errors ? <ErrorReport report={errors} /> : null}
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium'>Granule Overview {cmrLink ? <a href={cmrLink}>[CMR]</a> : null}</h2>
+            <h2 className='heading--medium with-description'>Granule Overview {cmrLink ? <a href={cmrLink}>[CMR]</a> : null}</h2>
           </div>
           <dl className='metadata__granule__details'>
             {metaAccessors.reduce((acc, meta, i) => {
@@ -224,7 +235,7 @@ var GranuleOverview = React.createClass({
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Files</h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Files</h2>
           </div>
           <SortableTable data={files} header={tableHeader} row={tableRow}/>
         </section>

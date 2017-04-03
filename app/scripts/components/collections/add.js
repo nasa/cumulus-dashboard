@@ -18,6 +18,7 @@ var AddCollection = React.createClass({
 
   propTypes: {
     dispatch: React.PropTypes.func,
+    router: React.PropTypes.object,
     collections: React.PropTypes.object,
     schema: React.PropTypes.object
   },
@@ -44,13 +45,18 @@ var AddCollection = React.createClass({
       ? get(this.props.collections.created, collectionName, {}) : {};
     const schema = this.props.schema[SCHEMA_KEY];
     return (
-      <div className='page__component'>
-        <section className='page__section'>
+      <div className='page__component page__content--shortened--centered'>
+        <section className='page__section page__section--fullpage-form'>
           <div className='page__section__header'>
             <h1 className='heading--large'>Add a Collection</h1>
             <p className='description'>Create a collection</p>
           </div>
-          {schema ? <Schema schema={schema} pk={'new-collection'} onSubmit={this.post} /> : null}
+          {schema ? <Schema
+            schema={schema}
+            pk={'new-collection'}
+            onSubmit={this.post}
+            router={this.props.router}
+          /> : null}
           {record.status === 'inflight' ? <Loading /> : null}
           {record.status === 'error' ? <ErrorReport report={record.error} /> : null}
         </section>

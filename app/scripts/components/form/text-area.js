@@ -16,7 +16,7 @@ const TextAreaForm = React.createClass({
   displayName: 'TextAreaForm',
 
   propTypes: {
-    label: React.PropTypes.string,
+    label: React.PropTypes.any,
     value: React.PropTypes.string,
     id: React.PropTypes.string,
     error: React.PropTypes.string,
@@ -45,7 +45,8 @@ const TextAreaForm = React.createClass({
 
     return (
       <div className='form__textarea'>
-        <label>{label} {error}</label>
+        <label>{label}</label>
+        <span className='form__error'>{error}</span>
         <Ace
           mode={mode}
           theme={config.editorTheme}

@@ -4,8 +4,8 @@
 
 .pulse__dot {
   position: absolute;
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border: 5px solid $light-green;
   border-radius: 30px;
   background-color: darken($light-green, 5%);
@@ -15,8 +15,8 @@
   border: 11px solid $light-green;
   background: transparent;
   border-radius: 60px;
-  height: 50px;
-  width: 50px;
+  height: 48px;
+  width: 48px;
   -webkit-animation: pulse 2s linear;
   -moz-animation: pulse 2s linear;
   animation: pulse 2s linear;

@@ -4,7 +4,7 @@ import React from 'react';
 var ErrorReport = React.createClass({
   displayName: 'ErrorReport',
   propTypes: {
-    report: React.PropTypes.string
+    report: React.PropTypes.any
   },
   render: function () {
     const { report } = this.props;
@@ -17,7 +17,7 @@ var ErrorReport = React.createClass({
       message = JSON.stringify(report);
     }
     return (
-      <div className='error'>
+      <div className='error__report'>
         <p><strong>Error:</strong> {message}</p>
       </div>
     );

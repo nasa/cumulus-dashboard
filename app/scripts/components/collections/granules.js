@@ -2,7 +2,12 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { listGranules } from '../../actions';
+import {
+  listGranules,
+  reprocessGranule,
+  removeGranule,
+  deleteGranule
+} from '../../actions';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
 
 import List from '../table/list-view';
@@ -22,6 +27,23 @@ var CollectionGranules = React.createClass({
     };
   },
 
+  generateBulkActions: function () {
+    const { granules } = this.props;
+    return [{
+      text: 'Reprocess',
+      action: reprocessGranule,
+      state: granules.reprocessed
+    }, {
+      text: 'Remove from CMR',
+      action: removeGranule,
+      state: granules.removed
+    }, {
+      text: 'Delete',
+      action: deleteGranule,
+      state: granules.deleted
+    }];
+  },
+
   render: function () {
     const collectionName = this.props.params.collectionName;
     const { list } = this.props.granules;
@@ -29,7 +51,7 @@ var CollectionGranules = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>{collectionName}</h1>
+          <h1 className='heading--large heading--shared-content with-description '>{collectionName}</h1>
           <Link className='button button--small form-group__element--right button--disabled button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
           <dl className="metadata__updated">
             <dt>Last Updated:</dt>
@@ -40,7 +62,7 @@ var CollectionGranules = React.createClass({
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Granules{meta.count ? ` (${meta.count})` : null}</h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Granules{meta.count ? ` (${meta.count})` : null}</h2>
           </div>
 
           <List
@@ -51,6 +73,7 @@ var CollectionGranules = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
+            bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}
           />
         </section>

@@ -1,5 +1,6 @@
 h1, h2, h3, h4, h5, h6 {
   color: $black;
+  margin-bottom: .5em;
 }
 
 .heading--xxlarge {
@@ -37,4 +38,8 @@ h1, h2, h3, h4, h5, h6 {
   border-bottom: 1px solid $lightest-grey;
   padding-bottom: .3em;
   margin-bottom: 1.8em;
+}
+
+.with-description {
+  margin-bottom: .1em;
 }

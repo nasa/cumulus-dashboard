@@ -6,7 +6,7 @@ import { createFormConfig } from './schema';
 
 const SubForm = React.createClass({
   propTypes: {
-    label: React.PropTypes.string,
+    label: React.PropTypes.any,
     value: React.PropTypes.object,
     fieldSet: React.PropTypes.object,
     id: React.PropTypes.string,
@@ -46,7 +46,8 @@ const SubForm = React.createClass({
 
     return (
       <div id={id} className='subform'>
-        <label>{label} {error}</label>
+        <label>{label}</label>
+        <span className='form__error'>{error}</span>
         {fields.map(this.renderFieldset)}
       </div>
     );
@@ -60,11 +61,11 @@ const SubForm = React.createClass({
       <div key={name} className={'subform__item' + expanded }>
         <div className='subform__ui'>
           <span className='subform__name'>{name}</span>
-          <button
-            className='button subform__button'
+          <a href='#'
+            className='subform__button link--secondary'
             onClick={this.toggleExpand}
             data-value={name}
-            >{isExpanded ? 'Cancel' : 'Edit'}</button>
+            >{isExpanded ? 'Cancel' : 'Edit'}</a>
         </div>
         { isExpanded ? this.renderExpandedField(fieldset) : null }
       </div>

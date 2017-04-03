@@ -1,3 +1,7 @@
+.table--wrapper {
+  overflow-x: scroll;
+}
+
 table {
   width: 100%;
   margin-bottom: 2.5em;
@@ -17,9 +21,12 @@ table {
       td {
         font-size: .86em;
         padding: 1em;
+        vertical-align: middle;
+        &:first-of-type {
+          padding: 1em 0 1em 1em;
+        }
       }
       .table__main-asset {
-        font-size: 1em;
         font-weight: $base-font-semibold;
       }
       &:nth-child(odd) {
@@ -29,7 +36,24 @@ table {
   }
 }
 
-.overview-num {
+.overview-num__wrapper {
+  margin-top: 1.5em;
+  .num--large {
+    font-size: 1.85em;
+  }
+  .overview-num, .overview-num:visited {
+    width: 122px;
+    height: 85px;
+    margin: .8em 1.2em .5em 0;
+    border-bottom: none;
+    &:hover {
+      margin: .1em 1.2em 1.2em 0;
+    }
+  }
+}
+
+.overview-num, .overview-num:visited {
+  border-bottom: none;
   background-color: #fff;
   padding: 1.5em 1em .5em;
   display: inline-block;
@@ -106,49 +130,46 @@ table {
   li {
     display: inline-block;
     margin: 0 .4em;
-    a, a:visited {
-      color: $lighter-grey;
-      transition: all 0.3s ease 0s;
-      -webkit-transition: all 0.3s;
-      -moz-transition: all 0.3s;
-      padding: 0 .3em;
-    }
-    a:hover {
-      color: $ocean-blue;
-      text-decoration: underline;
-    }
-    .active, .active:visited {
-      color: $ocean-blue;
-      font-weight: $base-font-semibold;
-      border-bottom: 2px solid $ocean-blue;
-      padding-bottom: .3em;
-      transition: all 0.3s ease 0s;
-      -webkit-transition: all 0.3s;
-      -moz-transition: all 0.3s;
-    }
-    .next, .previous {
-      position: absolute;
-      top: 0;
-    }
-    .next {
-      right: 0;
-    }
-    .previous {
-      left: 0;
-    }
-    .pagination__link--disabled {
-      cursor: default;
-      color: $lightest-grey;
-    }
-    .pagination__link--disabled:hover {
-      color: $lightest-grey;
-      text-decoration: none;
-    }
   }
-}
-
-.pagination__link--active {
-  text-decoration: underline;
+  a, a:visited {
+    color: $lighter-grey;
+    transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    padding: 0 .3em;
+    border-bottom: none;
+  }
+  a:hover {
+    color: $ocean-blue;
+  }
+  .next, .previous {
+    position: absolute;
+    top: 0;
+    border-bottom: none;
+  }
+  .next {
+    right: 0;
+  }
+  .previous {
+    left: 0;
+  }
+  .pagination__link--disabled {
+    cursor: default;
+    color: $lightest-grey;
+  }
+  .pagination__link--disabled:hover {
+    color: $lightest-grey;
+    text-decoration: none;
+  }
+  .pagination__link--active a, .pagination__link--active a:visited {
+    color: $ocean-blue;
+    font-weight: $base-font-semibold;
+    border-bottom: 2px solid $ocean-blue;
+    padding-bottom: .3em;
+    transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+  }
 }
 
 .form--controls {

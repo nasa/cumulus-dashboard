@@ -3,7 +3,7 @@ import React from 'react';
 
 var Dropdown = React.createClass({
   propTypes: {
-    label: React.PropTypes.string,
+    label: React.PropTypes.any,
     value: React.PropTypes.string,
     options: React.PropTypes.array,
     id: React.PropTypes.string,
@@ -26,7 +26,8 @@ var Dropdown = React.createClass({
 
     return (
       <div className='form__dropdown'>
-        <label htmlFor={id}>{label} {error}</label>
+        <label htmlFor={id}>{label}</label>
+        <span className='form__error'>{error}</span>
         <div className='dropdown__wrapper'>
           <select id={id} value={value} onChange={this.onChange}>
             {options.map((d, i) => <option value={d} key={i}>{d}</option>)}

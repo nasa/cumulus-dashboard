@@ -1,0 +1,23 @@
+.chart__box {
+  display: inline-block;
+  width: 50%;
+  text-align: center;
+}
+
+.chart__container {
+  height: 400px;
+}
+
+.chart__bar {
+  fill: $midnight-blue;
+}
+
+.axis__tick,
+.axis__line {
+  stroke: $light-grey;
+}
+
+.axis__text {
+  font-size: 10px;
+  fill: $light-grey;
+}
