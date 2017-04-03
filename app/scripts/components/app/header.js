@@ -31,6 +31,7 @@ var Header = React.createClass({
               <li><Link to='/collections'>Collections</Link></li>
               <li><Link to='/granules'>Granules</Link></li>
               <li><Link to='/pdrs'>PDRs</Link></li>
+              <li><Link to='/providers'>Providers</Link></li>
               <li><Link to='/logs'>Logs</Link></li>
               <li><Link to='/resources'>Resources</Link></li>
               <li className='rightalign'>{ authenticated ? <a onClick={this.logout}>Log out</a> : <Link to={'/login'}>Log in</Link> }</li>

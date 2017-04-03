@@ -94,6 +94,40 @@ export const CLEAR_PDRS_SEARCH = 'CLEAR_PDRS_SEARCH';
 export const FILTER_PDRS = 'FILTER_PDRS';
 export const CLEAR_PDRS_FILTER = 'CLEAR_PDRS_FILTER';
 
+export const PROVIDER = 'PROVIDER';
+export const PROVIDER_INFLIGHT = 'PROVIDER_INFLIGHT';
+export const PROVIDER_ERROR = 'PROVIDER_ERROR';
+
+export const PROVIDER_COLLECTIONS = 'PROVIDER_COLLECTIONS';
+export const PROVIDER_COLLECTIONS_INFLIGHT = 'PROVIDER_COLLECTIONS_INFLIGHT';
+export const PROVIDER_COLLECTIONS_ERROR = 'PROVIDER_COLLECTIONS_ERROR';
+
+export const NEW_PROVIDER = 'NEW_PROVIDER';
+export const NEW_PROVIDER_INFLIGHT = 'NEW_PROVIDER_INFLIGHT';
+export const NEW_PROVIDER_ERROR = 'NEW_PROVIDER_ERROR';
+
+export const UPDATE_PROVIDER = 'UPDATE_PROVIDER';
+export const UPDATE_PROVIDER_INFLIGHT = 'UPDATE_PROVIDER_INFLIGHT';
+export const UPDATE_PROVIDER_ERROR = 'UPDATE_PROVIDER_ERROR';
+
+export const PROVIDERS = 'PROVIDERS';
+export const PROVIDERS_INFLIGHT = 'PROVIDERS_INFLIGHT';
+export const PROVIDERS_ERROR = 'PROVIDERS_ERROR';
+
+export const PROVIDER_DELETE = 'PROVIDER_DELETE';
+export const PROVIDER_DELETE_INFLIGHT = 'PROVIDER_DELETE_INFLIGHT';
+export const PROVIDER_DELETE_ERROR = 'PROVIDER_DELETE_ERROR';
+
+export const OPTIONS_PROVIDERGROUP = 'OPTIONS_PROVIDERGROUP';
+export const OPTIONS_PROVIDERGROUP_INFLIGHT = 'OPTIONS_PROVIDERGROUP_INFLIGHT';
+export const OPTIONS_PROVIDERGROUP_ERROR = 'OPTIONS_PROVIDERGROUP_ERROR';
+
+export const SEARCH_PROVIDERS = 'SEARCH_PROVIDERS';
+export const CLEAR_PROVIDERS_SEARCH = 'CLEAR_PROVIDERS_SEARCH';
+
+export const FILTER_PROVIDERS = 'FILTER_PROVIDERS';
+export const CLEAR_PROVIDERS_FILTER = 'CLEAR_PROVIDERS_FILTER';
+
 export const LOGS = 'LOGS';
 export const LOGS_INFLIGHT = 'LOGS_INFLIGHT';
 export const LOGS_ERROR = 'LOGS_ERROR';
@@ -189,6 +223,36 @@ export const searchPdrs = (prefix) => ({ type: SEARCH_PDRS, prefix: prefix });
 export const clearPdrsSearch = () => ({ type: CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: FILTER_PDRS, param: param });
 export const clearPdrsFilter = (paramKey) => ({ type: CLEAR_PDRS_FILTER, paramKey: paramKey });
+
+export const listProviders = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'providers'),
+  qs: Object.assign({ limit: pageLimit }, options)
+}, PROVIDERS);
+
+export const getOptionsProviderGroup = () => wrapRequest(null, get, {
+  url: url.resolve(root, 'providers'),
+  qs: { limit: 100, fields: 'providerName' }
+}, OPTIONS_PROVIDERGROUP);
+
+export const getProvider = (providerId) => wrapRequest(
+  providerId, get, `providers/${providerId}`, PROVIDER);
+
+export const createProvider = (payload) => wrapRequest(
+  payload.name, post, 'providers', NEW_PROVIDER, payload);
+
+export const updateProvider = (payload) => wrapRequest(
+  payload.name, put, `providers/${payload.name}`, UPDATE_PROVIDER, payload);
+
+export const deleteProvider = (providerId) => wrapRequest(
+  providerId, del, `providers/${providerId}`, PROVIDER_DELETE);
+
+export const searchProviders = (prefix) => ({ type: SEARCH_PROVIDERS, prefix: prefix });
+
+export const clearProvidersSearch = () => ({ type: CLEAR_PROVIDERS_SEARCH });
+
+export const filterProviders = (param) => ({ type: FILTER_PROVIDERS, param: param });
+
+export const clearProvidersFilter = (paramKey) => ({ type: CLEAR_PROVIDERS_FILTER, paramKey: paramKey });
 
 export const deletePdr = (pdrName) => wrapRequest(
   pdrName, del, `pdrs/${pdrName}`, PDR_DELETE);

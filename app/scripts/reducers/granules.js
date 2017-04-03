@@ -40,7 +40,7 @@ export const initialState = {
     meta: {},
     params: {}
   },
-  dropdown: {},
+  dropdowns: {},
   map: {},
   meta: {},
   reprocessed: {},

@@ -33,10 +33,9 @@ const tableRow = [
   (d) => (<a href={d.archivedFile}>{d.archivedFile ? link : nullValue}</a>),
   (d) => d.access
 ];
-const noop = x => x;
 
 const metaAccessors = [
-  ['PDR Name', 'pdrName', noop],
+  ['PDR Name', 'pdrName'],
   ['Published', 'published', bool],
   ['Duplicate', 'hasDuplicate', bool],
 
