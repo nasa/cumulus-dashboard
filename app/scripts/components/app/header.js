@@ -5,9 +5,19 @@ import { logout } from '../../actions';
 import { graphicsPath } from '../../config';
 import { window } from '../../utils/browser';
 
+const paths = [
+  ['Collections', '/collections'],
+  ['Granules', '/granules'],
+  ['PDRs', '/pdrs'],
+  ['Providers', '/providers'],
+  ['Resources', '/resources'],
+  ['Logs', '/logs']
+];
+
 var Header = React.createClass({
   displayName: 'Header',
   propTypes: {
+    location: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     api: React.PropTypes.object,
     minimal: React.PropTypes.bool
@@ -20,6 +30,10 @@ var Header = React.createClass({
     }
   },
 
+  active: function (path) {
+    return this.props.location.pathname.slice(0, path.length) === path ? 'active' : '';
+  },
+
   render: function () {
     const { authenticated } = this.props.api;
     return (
@@ -28,12 +42,7 @@ var Header = React.createClass({
           <h1 className='logo'><Link to='/'><img alt="Cumulus Logo" src={graphicsPath + 'layout/cumulus-logo.png'} /></Link></h1>
           <nav>
             { !this.props.minimal ? <ul>
-              <li><Link to='/collections'>Collections</Link></li>
-              <li><Link to='/granules'>Granules</Link></li>
-              <li><Link to='/pdrs'>PDRs</Link></li>
-              <li><Link to='/providers'>Providers</Link></li>
-              <li><Link to='/logs'>Logs</Link></li>
-              <li><Link to='/resources'>Resources</Link></li>
+              {paths.map(path => <li key={path[0]} className={this.active(path[1])}><Link to={path[1]}>{path[0]}</Link></li>)}
               <li className='rightalign'>{ authenticated ? <a onClick={this.logout}>Log out</a> : <Link to={'/login'}>Log in</Link> }</li>
             </ul> : <li>&nbsp;</li> }
           </nav>
