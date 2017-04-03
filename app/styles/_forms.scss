@@ -220,6 +220,15 @@ select {
   margin-top: 1em;
 }
 
+.subform__item--expanded .subform__remove {
+  color: $error-red;
+  border-bottom: 2px solid $error-red;
+  &:hover {
+    color: $grey;
+    border-bottom: 2px solid $grey;
+  }
+}
+
 .page__section--fullpage-form {
   .subform__item {
     transition: all 0.2s ease 0s;

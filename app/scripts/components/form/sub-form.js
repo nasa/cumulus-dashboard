@@ -36,13 +36,11 @@ const SubForm = React.createClass({
       });
     }
 
-    // create a default
-    if (!fields.length) {
-      fields.push({
-        name: 'New',
-        fields: createFormConfig({}, fieldSet)
-      });
-    }
+    fields.push({
+      name: 'New',
+      fields: createFormConfig({}, fieldSet),
+      isEmpty: true
+    });
 
     return (
       <div id={id} className='subform'>
@@ -65,7 +63,14 @@ const SubForm = React.createClass({
             className='subform__button link--secondary'
             onClick={this.toggleExpand}
             data-value={name}
-            >{isExpanded ? 'Cancel' : 'Edit'}</a>
+            >{isExpanded ? 'Cancel' : fieldset.isEmpty ? 'Add' : 'Edit'}</a>
+          {isExpanded && !fieldset.isEmpty ? (
+            <a href='#'
+              className='subform__button link--secondary subform__remove'
+              onClick={this.remove}
+              data-value={name}
+              >✗ Remove</a>
+          ) : null}
         </div>
         { isExpanded ? this.renderExpandedField(fieldset) : null }
       </div>
@@ -83,24 +88,29 @@ const SubForm = React.createClass({
 
   toggleExpand: function (e) {
     e.preventDefault();
-    const name = e.currentTarget.getAttribute('data-value');
+    const id = e.currentTarget.getAttribute('data-value');
     const { expanded } = this.state;
-    expanded[name] = !expanded[name];
+    expanded[id] = !expanded[id];
     this.setState({ expanded });
   },
 
-  hide: function (name) {
+  hide: function (id) {
     const { expanded } = this.state;
-    expanded[name] = false;
+    expanded[id] = false;
     this.setState({ expanded });
+  },
+
+  remove: function (e) {
+    e.preventDefault();
+    const id = e.currentTarget.getAttribute('data-value');
+    this.update(id, null);
   },
 
   update: function (id, payload) {
-    const { expanded } = this.state;
-    expanded[id] = false;
-    setTimeout(() => this.setState({ expanded }), 200);
+    setTimeout(() => this.hide(id), 200);
     const { value } = this.props;
-    set(value, id, payload);
+    if (!payload) delete value[id];
+    else set(value, id, payload);
     this.props.onChange(this.props.id, value);
   }
 });
