@@ -118,6 +118,10 @@ export const PROVIDER_DELETE = 'PROVIDER_DELETE';
 export const PROVIDER_DELETE_INFLIGHT = 'PROVIDER_DELETE_INFLIGHT';
 export const PROVIDER_DELETE_ERROR = 'PROVIDER_DELETE_ERROR';
 
+export const PROVIDER_RESTART = 'PROVIDER_RESTART';
+export const PROVIDER_RESTART_INFLIGHT = 'PROVIDER_RESTART_INFLIGHT';
+export const PROVIDER_RESTART_ERROR = 'PROVIDER_RESTART_ERROR';
+
 export const OPTIONS_PROVIDERGROUP = 'OPTIONS_PROVIDERGROUP';
 export const OPTIONS_PROVIDERGROUP_INFLIGHT = 'OPTIONS_PROVIDERGROUP_INFLIGHT';
 export const OPTIONS_PROVIDERGROUP_ERROR = 'OPTIONS_PROVIDERGROUP_ERROR';
@@ -245,6 +249,11 @@ export const updateProvider = (payload) => wrapRequest(
 
 export const deleteProvider = (providerId) => wrapRequest(
   providerId, del, `providers/${providerId}`, PROVIDER_DELETE);
+
+export const restartProvider = (providerId) => wrapRequest(
+  providerId, put, `providers/${providerId}`, PROVIDER_RESTART, {
+    action: 'restart'
+  });
 
 export const searchProviders = (prefix) => ({ type: SEARCH_PROVIDERS, prefix: prefix });
 

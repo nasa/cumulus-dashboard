@@ -6,6 +6,7 @@ import {
   interval,
   getProvider,
   deleteProvider,
+  restartProvider,
   listCollections
 } from '../../actions';
 import { get } from 'object-path';
@@ -78,6 +79,11 @@ var ProviderOverview = React.createClass({
     }
   },
 
+  restart: function () {
+    const { providerId } = this.props.params;
+    this.props.dispatch(restartProvider(providerId));
+  },
+
   errors: function () {
     const providerId = this.props.params.providerId;
     const errors = [
@@ -99,6 +105,7 @@ var ProviderOverview = React.createClass({
       .map(c => c.collectionName);
     const logsQuery = { 'meta.provider': providerId };
     const deleteStatus = get(this.props.providers.deleted, [providerId, 'status']);
+    const restartStatus = get(this.props.providers.restarted, [providerId, 'status']);
     const errors = this.errors();
     const providerError = provider.error;
     return (
@@ -118,6 +125,10 @@ var ProviderOverview = React.createClass({
           >
             Edit
           </Link>
+          <AsyncCommand action={this.restart}
+            status={restartStatus}
+            className={'form-group__element--right'}
+            text={restartStatus === 'success' ? 'Success!' : 'Restart'} />
 
           {lastUpdated(provider.queriedAt)}
           Status: {findkey(status, v => v === provider.status)}
