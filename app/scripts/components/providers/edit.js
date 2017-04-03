@@ -15,7 +15,7 @@ var EditProvider = React.createClass({
     params: React.PropTypes.object,
     providers: React.PropTypes.object,
     schema: React.PropTypes.object,
-    router: React.PropTypes.func,
+    router: React.PropTypes.object,
     dispatch: React.PropTypes.func
   },
 

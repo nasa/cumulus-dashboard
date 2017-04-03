@@ -6,7 +6,7 @@ import {
   interval,
   getProvider,
   deleteProvider,
-  getCollectionsForProvider
+  listCollections
 } from '../../actions';
 import { get } from 'object-path';
 import { fullDate, lastUpdated, nullValue } from '../../utils/format';
@@ -19,16 +19,14 @@ import status from '../../utils/status';
 import findkey from 'lodash.findkey';
 import map from 'lodash.map';
 
-const noop = x => x;
-
 const metaAccessors = [
-  ['PDR Name', 'name', noop],
-  ['Protocol', 'protocol', noop],
+  ['PDR Name', 'name'],
+  ['Protocol', 'protocol'],
   ['Created', 'createdAt', fullDate],
   ['Regex', 'regex', r => <ul>{map(r, (v, k) => <li key={k}>{k}: {v}</li>)}</ul>],
   ['Last Time Ingested', 'lastTimeIngestedAt', fullDate],
-  ['Host', 'host', noop],
-  ['Path', 'path', noop]
+  ['Host', 'host'],
+  ['Path', 'path']
 ];
 
 var ProviderOverview = React.createClass({
@@ -38,6 +36,7 @@ var ProviderOverview = React.createClass({
     params: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     providers: React.PropTypes.object,
+    collections: React.PropTypes.object,
     logs: React.PropTypes.object,
     router: React.PropTypes.object
   },
@@ -46,7 +45,11 @@ var ProviderOverview = React.createClass({
     const { providerId } = this.props.params;
     const immediate = !this.props.providers.map[providerId];
     this.reload(immediate);
-    this.props.dispatch(getCollectionsForProvider(providerId));
+    this.props.dispatch(listCollections({
+      limit: 100,
+      fields: 'collectionName',
+      providers: providerId
+    }));
   },
 
   componentWillUnmount: function () {
@@ -92,8 +95,8 @@ var ProviderOverview = React.createClass({
       return <Loading />;
     }
     const provider = record.data;
-    const associatedCollections = get(this.props.providers, ['collections', providerId, 'data'], []);
-    console.log(provider);
+    const associatedCollections = get(this.props.collections, ['list', 'data'], [])
+      .map(c => c.collectionName);
     const logsQuery = { 'meta.provider': providerId };
     const deleteStatus = get(this.props.providers.deleted, [providerId, 'status']);
     const errors = this.errors();

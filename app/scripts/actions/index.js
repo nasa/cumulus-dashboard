@@ -237,12 +237,6 @@ export const getOptionsProviderGroup = () => wrapRequest(null, get, {
 export const getProvider = (providerId) => wrapRequest(
   providerId, get, `providers/${providerId}`, PROVIDER);
 
-export const getCollectionsForProvider = (providerId) => wrapRequest(
-  providerId, get, {
-    url: url.resolve(root, 'collections'),
-    qs: { limit: 100, fields: 'collectionName', providers: providerId }
-  }, PROVIDER_COLLECTIONS);
-
 export const createProvider = (payload) => wrapRequest(
   payload.name, post, 'providers', NEW_PROVIDER, payload);
 

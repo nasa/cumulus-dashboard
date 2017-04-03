@@ -21,13 +21,18 @@ import Dropdown from '../form/dropdown';
 import { Link } from 'react-router';
 import protocol from '../../utils/protocol';
 
-var ActiveProviders = React.createClass({
-  displayName: 'ActiveProviders',
+var ListProviders = React.createClass({
+  displayName: 'ListProviders',
 
   propTypes: {
     dispatch: React.PropTypes.func,
     providers: React.PropTypes.object,
-    stats: React.PropTypes.object
+    stats: React.PropTypes.object,
+    location: React.PropTypes.object
+  },
+
+  isActive: function () {
+    return this.props.location.pathname === '/providers/active';
   },
 
   componentWillMount: function () {
@@ -39,7 +44,7 @@ var ActiveProviders = React.createClass({
 
   generateQuery: function () {
     return {
-      isActive: true
+      isActive: this.isActive()
     };
   },
 
@@ -69,7 +74,7 @@ var ActiveProviders = React.createClass({
         <section className='page__section'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content'>
-              Active Providers <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
+              {this.isActive() ? 'Active' : 'Inactive'} Providers <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
             </h1>
             <Link className='button button--green button--small form-group__element--right' to=''>Edit</Link>
             {lastUpdated(queriedAt)}
@@ -118,4 +123,4 @@ var ActiveProviders = React.createClass({
   }
 });
 
-export default connect(state => state)(ActiveProviders);
+export default connect(state => state)(ListProviders);
