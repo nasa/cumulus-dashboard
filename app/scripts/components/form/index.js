@@ -89,7 +89,7 @@ export const Form = React.createClass({
 
   onCancel: function (e) {
     e.preventDefault();
-    this.props.cancel();
+    this.props.cancel(this.props.id);
   },
 
   onSubmit: function (e) {

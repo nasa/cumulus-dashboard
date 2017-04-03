@@ -15,7 +15,8 @@ var EditCollection = React.createClass({
     params: React.PropTypes.object,
     collections: React.PropTypes.object,
     schema: React.PropTypes.object,
-    dispatch: React.PropTypes.func
+    dispatch: React.PropTypes.func,
+    router: React.PropTypes.object
   },
 
   getInitialState: function () {
@@ -90,6 +91,7 @@ var EditCollection = React.createClass({
               data={record.data}
               pk={collectionName}
               onSubmit={this.onSubmit}
+              router={this.props.router}
             />
           ) : null}
           {record.inflight || meta.status === 'inflight' ? <Loading /> : null}
