@@ -130,6 +130,7 @@ a:active {
     a {
       color: lighten($lightest-grey, 2%);
     }
+    &.active,
     &:hover {
       border-bottom: 1px solid #fff;
       a {
