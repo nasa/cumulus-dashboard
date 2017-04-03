@@ -7,7 +7,6 @@ const Search = React.createClass({
   propTypes: {
     dispatch: React.PropTypes.func,
     action: React.PropTypes.func,
-    format: React.PropTypes.func,
     clear: React.PropTypes.func
   },
 
