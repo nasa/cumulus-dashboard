@@ -115,7 +115,9 @@ var List = React.createClass({
     }
 
     // remove empty keys so as not to mess up the query
-    for (let key in options) { !options[key] && delete options[key]; }
+    for (let key in options) {
+      if (options[key] === '') { delete options[key]; }
+    }
 
     // stop the currently running auto-query
     if (this.cancelInterval) { this.cancelInterval(); }
