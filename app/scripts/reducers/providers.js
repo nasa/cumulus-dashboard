@@ -1,6 +1,6 @@
 'use strict';
 
-import { set } from 'object-path';
+import { set, del } from 'object-path';
 import assignDate from './assign-date';
 import {
   PROVIDER,
@@ -36,6 +36,7 @@ import {
   PROVIDER_RESTART,
   PROVIDER_RESTART_INFLIGHT,
   PROVIDER_RESTART_ERROR,
+  CLEAR_RESTARTED_PROVIDER,
 
   OPTIONS_PROVIDERGROUP,
   OPTIONS_PROVIDERGROUP_INFLIGHT,
@@ -158,6 +159,9 @@ export default function reducer (state = initialState, action) {
     case PROVIDER_RESTART_ERROR:
       set(state, ['restarted', id, 'status'], 'error');
       set(state, ['restarted', id, 'error'], action.error);
+      break;
+    case CLEAR_RESTARTED_PROVIDER:
+      del(state, ['restarted', id]);
       break;
 
     case OPTIONS_PROVIDERGROUP:

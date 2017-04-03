@@ -7,7 +7,8 @@ import {
   getProvider,
   deleteProvider,
   restartProvider,
-  listCollections
+  listCollections,
+  clearRestartedProvider
 } from '../../actions';
 import { get } from 'object-path';
 import { fullDate, lastUpdated, nullValue } from '../../utils/format';
@@ -55,6 +56,7 @@ var ProviderOverview = React.createClass({
 
   componentWillUnmount: function () {
     if (this.cancelInterval) { this.cancelInterval(); }
+    clearRestartedProvider(this.props.params.providerId);
   },
 
   reload: function (immediate, timeout) {
@@ -69,6 +71,12 @@ var ProviderOverview = React.createClass({
     // delay the navigation so we can see the success indicator
     const { router } = this.props;
     setTimeout(() => router.push('/providers'), 1000);
+  },
+
+  clearRestartButton: function () {
+    setTimeout(() => {
+      this.props.dispatch(clearRestartedProvider(this.props.params.providerId));
+    }, 5000);
   },
 
   delete: function () {
@@ -125,7 +133,9 @@ var ProviderOverview = React.createClass({
           >
             Edit
           </Link>
-          <AsyncCommand action={this.restart}
+          <AsyncCommand
+            action={this.restart}
+            success={this.clearRestartButton}
             status={restartStatus}
             className={'form-group__element--right'}
             text={restartStatus === 'success' ? 'Success!' : 'Restart'} />
