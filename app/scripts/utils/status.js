@@ -6,6 +6,7 @@ const status = {
   'Updating CMR': 'cmr',
   Archiving: 'archiving',
   Completed: 'completed',
+  Stopped: 'stopped',
   Failed: 'failed'
 };
 export default status;

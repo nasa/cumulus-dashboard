@@ -2,24 +2,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { getSchema, createCollection } from '../../actions';
+import { getSchema, createProvider } from '../../actions';
 import ErrorReport from '../errors/report';
 import Schema from '../form/schema';
 import Loading from '../app/loading-indicator';
 
-const SCHEMA_KEY = 'collection';
+const SCHEMA_KEY = 'provider';
 
-var AddCollection = React.createClass({
+var AddProvider = React.createClass({
   getInitialState: function () {
     return {
-      collectionName: null
+      name: null
     };
   },
 
   propTypes: {
     dispatch: React.PropTypes.func,
     router: React.PropTypes.object,
-    collections: React.PropTypes.object,
+    providers: React.PropTypes.object,
     schema: React.PropTypes.object
   },
 
@@ -28,9 +28,9 @@ var AddCollection = React.createClass({
   },
 
   componentWillReceiveProps: function (newProps) {
-    const status = get(newProps, ['collections', 'created', this.state.collectionName, 'status']);
+    const status = get(newProps, ['providers', 'created', this.state.name, 'status']);
     if (status === 'success') {
-      this.props.router.push(`/collections/collection/${this.state.collectionName}`);
+      this.props.router.push(`/providers/provider/${this.state.name}`);
     }
   },
 
@@ -38,29 +38,29 @@ var AddCollection = React.createClass({
     payload.createdAt = new Date().getTime();
     payload.updatedAt = new Date().getTime();
     payload.changedBy = 'Cumulus Dashboard';
-    if (payload.collectionName) {
+    if (payload.name) {
       let { dispatch } = this.props;
       this.setState({
-        collectionName: payload.collectionName
-      }, () => dispatch(createCollection(payload)));
+        name: payload.name
+      }, () => dispatch(createProvider(payload)));
     }
   },
 
   render: function () {
-    const { collectionName } = this.state;
-    const record = collectionName
-      ? get(this.props.collections.created, collectionName, {}) : {};
+    const { name } = this.state;
+    const record = name
+      ? get(this.props.providers.created, name, {}) : {};
     const schema = this.props.schema[SCHEMA_KEY];
     return (
       <div className='page__component page__content--shortened--centered'>
         <section className='page__section page__section--fullpage-form'>
           <div className='page__section__header'>
-            <h1 className='heading--large'>Add a Collection</h1>
-            <p className='description'>Create a collection</p>
+            <h1 className='heading--large'>Add a Provider</h1>
+            <p className='description'>Create a provider</p>
           </div>
           {schema ? <Schema
             schema={schema}
-            pk={'new-collection'}
+            pk={'new-provider'}
             onSubmit={this.post}
             router={this.props.router}
           /> : null}
@@ -72,4 +72,4 @@ var AddCollection = React.createClass({
   }
 });
 
-export default connect(state => state)(AddCollection);
+export default connect(state => state)(AddProvider);

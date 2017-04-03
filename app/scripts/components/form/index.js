@@ -89,7 +89,7 @@ export const Form = React.createClass({
 
   onCancel: function (e) {
     e.preventDefault();
-    this.props.cancel();
+    this.props.cancel(this.props.id);
   },
 
   onSubmit: function (e) {
@@ -121,7 +121,12 @@ export const Form = React.createClass({
         return set(inputState, [inputId, 'error'], error);
       }
 
-      set(payload, input.schemaProperty, value);
+      // Ignore empty fields that aren't required
+      // These may have input elements in the form, but
+      // the API will fail if it's sent empty strings
+      if (value !== '' || input.required) {
+        set(payload, input.schemaProperty, value);
+      }
     });
 
     this.setState(Object.assign({}, this.state, {

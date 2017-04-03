@@ -16,7 +16,7 @@ var Dropdown = React.createClass({
   },
 
   render: function () {
-    let {
+    const {
       label,
       value,
       options,
@@ -24,13 +24,15 @@ var Dropdown = React.createClass({
       error
     } = this.props;
 
+    const renderedOptions = options[0] === '' ? options : [''].concat(options);
+
     return (
       <div className='form__dropdown'>
         <label htmlFor={id}>{label}</label>
         <span className='form__error'>{error}</span>
         <div className='dropdown__wrapper'>
           <select id={id} value={value} onChange={this.onChange}>
-            {options.map((d, i) => <option value={d} key={i}>{d}</option>)}
+            {renderedOptions.map((d, i) => <option value={d} key={i}>{d}</option>)}
           </select>
         </div>
       </div>

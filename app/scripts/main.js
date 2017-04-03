@@ -2,7 +2,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
+import { Provider as ProviderElem } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { useScroll } from 'react-router-scroll';
 import {
@@ -47,7 +47,15 @@ import Pdrs from './components/pdr';
 import PdrOverview from './components/pdr/overview';
 import PdrList from './components/pdr/list';
 
+import Providers from './components/providers';
+import AddProvider from './components/providers/add';
+import EditProvider from './components/providers/edit';
+import ProvidersOverview from './components/providers/overview';
+import Provider from './components/providers/provider';
+import ListProviders from './components/providers/list';
+
 import Resources from './components/resources';
+
 import Logs from './components/logs';
 
 // redirect to login when not auth'd
@@ -58,7 +66,7 @@ function requireAuth (nextState, replace) {
 }
 
 render((
-  <Provider store={store}>
+  <ProviderElem store={store}>
     <Router history={hashHistory} render={applyRouterMiddleware(useScroll())}>
       <Route path='/404' component={NotFound} />
       <Redirect from='/collections' to='/collections/active' />
@@ -88,9 +96,17 @@ render((
           <Route path='completed' component={PdrList} />
           <Route path='pdr/:pdrName' component={ListGranules} />
         </Route>
+        <Route path='providers' component={Providers}>
+          <IndexRoute component={ProvidersOverview} />
+          <Route path='add' component={AddProvider} />
+          <Route path='edit/:providerId' component={EditProvider} />
+          <Route path='active' component={ListProviders} />
+          <Route path='inactive' component={ListProviders} />
+          <Route path='provider/:providerId' component={Provider} />
+        </Route>
         <Route path='logs' component={Logs} />
         <Route path='resources' component={Resources} />
       </Route>
     </Router>
-  </Provider>
+  </ProviderElem>
 ), document.getElementById('site-canvas'));

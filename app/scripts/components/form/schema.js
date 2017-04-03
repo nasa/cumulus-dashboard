@@ -41,7 +41,11 @@ export const createFormConfig = function (data, schema) {
     // create an object-path-ready accessor string
     const accessor = path ? path + '.' + property : property;
     const value = get(data, accessor) || get(meta, 'default');
-    const config = { value, label, schemaProperty: accessor };
+    const config = {
+      value, label,
+      schemaProperty: accessor,
+      required: required
+    };
 
     // dropdowns have type set to string, but have an enum prop.
     // use enum as the type instead of string.
