@@ -87,8 +87,9 @@ render((
           <IndexRoute component={ListGranules} />
           <Route path='granule/:granuleId/overview' component={GranuleOverview} />
           <Route path='granule/:granuleId/recipe-ingest' component={GranuleRecipeIngest} />
-          <Route path='deletion' component={MarkedDeletion} />
-          <Route path='restricted' component={Restricted} />
+          <Route path='completed' component={ListGranules} />
+          <Route path='processing' component={ListGranules} />
+          <Route path='failed' component={ListGranules} />
         </Route>
         <Route path='pdrs' component={Pdrs}>
           <IndexRoute component={PdrOverview} />

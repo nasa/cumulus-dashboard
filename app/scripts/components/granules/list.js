@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
+import omit from 'lodash.omit';
 import {
   searchGranules,
   clearGranulesSearch,
@@ -19,7 +20,9 @@ import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
 import Search from '../form/search';
-import status from '../../utils/status';
+import statusOptions from '../../utils/status';
+const processingOptions = omit(statusOptions, ['Completed', 'Failed']);
+const processingStatus = Object.keys(processingOptions).map(d => processingOptions[d]).filter(Boolean).join(',');
 
 var AllGranules = React.createClass({
   displayName: 'AllGranules',
@@ -28,13 +31,17 @@ var AllGranules = React.createClass({
     granules: React.PropTypes.object,
     logs: React.PropTypes.object,
     dispatch: React.PropTypes.func,
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    location: React.PropTypes.object
   },
 
   generateQuery: function () {
-    const pdrName = get(this.props, ['params', 'pdrName']);
+    const { params, location } = this.props;
     const options = {};
-    if (pdrName) { options.pdrName = pdrName; }
+    if (params.pdrName) options.pdrName = params.pdrName;
+    else if (location.pathname === '/granules/completed') options.status = 'completed';
+    else if (location.pathname === '/granules/processing') options.status__in = processingStatus;
+    else if (location.pathname === '/granules/failed') options.status = 'failed';
     return options;
   },
 
@@ -55,17 +62,29 @@ var AllGranules = React.createClass({
     }];
   },
 
+  getView: function () {
+    const { params, location } = this.props;
+    if (params.pdrName) return this.props.params.pdrName;
+    else if (location.pathname === '/granules/completed') return 'Completed';
+    else if (location.pathname === '/granules/processing') return 'Processing';
+    else if (location.pathname === '/granules/failed') return 'Failed';
+    else return 'All';
+  },
+
   render: function () {
-    const { pdrName } = this.props.params;
     const { list, dropdowns } = this.props.granules;
     const { count, queriedAt } = list.meta;
     const logsQuery = { 'meta.granuleId__exists': 'true' };
+    const view = this.getView();
+    const StatOptions = view === 'Completed' || view === 'Failed'
+      ? null : view === 'Processing' ? processingOptions : statusOptions;
+
     return (
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>
-              {pdrName || 'All'} Granules <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
+              {view} Granules <span style={{color: 'gray'}}>{ typeof count !== 'undefined' ? `(${count})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>
@@ -80,15 +99,17 @@ var AllGranules = React.createClass({
               paramKey={'collectionName'}
               label={'Collection'}
             />
-            <Dropdown
-              dispatch={this.props.dispatch}
-              options={status}
-              format={dropdownOption}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              paramKey={'status'}
-              label={'Status'}
-            />
+            {StatOptions ? (
+              <Dropdown
+                dispatch={this.props.dispatch}
+                options={StatOptions}
+                format={dropdownOption}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey={'status'}
+                label={'Status'}
+              />
+            ) : null}
             <Search dispatch={this.props.dispatch}
               action={searchGranules}
               format={granuleSearchResult}
