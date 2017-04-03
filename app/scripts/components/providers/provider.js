@@ -17,13 +17,11 @@ import ErrorReport from '../errors/report';
 import { updateInterval } from '../../config';
 import status from '../../utils/status';
 import findkey from 'lodash.findkey';
-import map from 'lodash.map';
 
 const metaAccessors = [
   ['PDR Name', 'name'],
   ['Protocol', 'protocol'],
   ['Created', 'createdAt', fullDate],
-  ['Regex', 'regex', r => <ul>{map(r, (v, k) => <li key={k}>{k}: {v}</li>)}</ul>],
   ['Last Time Ingested', 'lastTimeIngestedAt', fullDate],
   ['Host', 'host'],
   ['Path', 'path']
