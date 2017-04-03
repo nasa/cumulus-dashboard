@@ -58,7 +58,7 @@ const SubForm = React.createClass({
     const isExpanded = this.state.expanded[name];
     const expanded = isExpanded ? ' subform__item--expanded' : '';
     return (
-      <div key={name} className={'subform__item' + expanded }>
+      <div key={name} className={'subform__item' + expanded}>
         <div className='subform__ui'>
           <span className='subform__name'>{name}</span>
           <a href='#'
@@ -76,7 +76,7 @@ const SubForm = React.createClass({
     const { name, fields } = fieldset;
     return (
       <div className='subform__fields'>
-        <Form id={name} nowrap={true} inputMeta={fields} submit={this.update}/>
+        <Form id={name} nowrap={true} inputMeta={fields} submit={this.update} cancel={this.hide}/>
       </div>
     );
   },
@@ -86,6 +86,12 @@ const SubForm = React.createClass({
     const name = e.currentTarget.getAttribute('data-value');
     const { expanded } = this.state;
     expanded[name] = !expanded[name];
+    this.setState({ expanded });
+  },
+
+  hide: function (name) {
+    const { expanded } = this.state;
+    expanded[name] = false;
     this.setState({ expanded });
   },
 
