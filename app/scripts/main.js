@@ -40,8 +40,6 @@ import Granules from './components/granules';
 import ListGranules from './components/granules/list';
 import GranuleOverview from './components/granules/granule';
 import GranuleRecipeIngest from './components/granules/recipe-ingest';
-import MarkedDeletion from './components/granules/marked-deletion';
-import Restricted from './components/granules/restricted';
 
 import Pdrs from './components/pdr';
 import PdrOverview from './components/pdr/overview';
