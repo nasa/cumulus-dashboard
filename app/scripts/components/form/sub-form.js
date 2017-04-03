@@ -1,8 +1,9 @@
 'use strict';
 import React from 'react';
-import { Form } from './';
+import { Form, formTypes } from './';
 import { set } from 'object-path';
 import { createFormConfig } from './schema';
+import { isText } from '../../utils/validate';
 
 const SubForm = React.createClass({
   propTypes: {
@@ -41,6 +42,15 @@ const SubForm = React.createClass({
       fields: createFormConfig({}, fieldSet),
       isEmpty: true
     });
+
+    // add a 'name' field for each item
+    fields.forEach(field => field.fields.unshift({
+      value: field.isEmpty ? '' : field.name,
+      label: 'Name *',
+      schemaProperty: '_id',
+      type: formTypes.text,
+      validate: isText
+    }));
 
     return (
       <div id={id} className='subform'>
@@ -109,8 +119,16 @@ const SubForm = React.createClass({
   update: function (id, payload) {
     setTimeout(() => this.hide(id), 200);
     const { value } = this.props;
-    if (!payload) delete value[id];
-    else set(value, id, payload);
+    if (!payload) {
+      delete value[id];
+    } else {
+      // use the `_id` property to set the payload,
+      // to account for someone changing the name of the file.
+      set(value, payload._id, payload);
+      // if the old name doesn't match the new name,
+      // delete the old name to avoid duplication.
+      if (id !== payload._id) delete value[id];
+    }
     this.props.onChange(this.props.id, value);
   }
 });
