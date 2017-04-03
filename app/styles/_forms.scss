@@ -208,6 +208,26 @@ select {
   min-width: 4.2em;
 }
 
+.subform__item {
+  transition: all 0.2s ease 0s;
+  width: 87.5%;
+}
+
+.subform__item--expanded {
+  background-color: lighten($lightest-grey, 7%);
+  border: 1px solid $lightest-grey;
+  padding: 1.5em 2em 2.5em;
+  border-radius: .4em;
+  -webkit-border-radius: .4em;
+  -moz-border-radius: .4em;
+  .form__item {
+    margin-bottom: 1.8em;
+  }
+  .subform__name {
+    margin-bottom: 2em;
+  }
+}
+
 .subform__name {
   display: inline-block;
 }
@@ -230,30 +250,6 @@ select {
 }
 
 .page__section--fullpage-form {
-  .subform__item {
-    transition: all 0.2s ease 0s;
-    width: 87.5%;
-  }
-  .subform__item--expanded {
-    background-color: lighten($lightest-grey, 7%);
-    border: 1px solid $lightest-grey;
-    padding: 1.5em 2em 2.5em;
-    border-radius: .4em;
-    -webkit-border-radius: .4em;
-    -moz-border-radius: .4em;
-    .form__item {
-      margin-bottom: 1.8em;
-    }
-    .subform__name {
-      margin-bottom: 2em;
-    }
-    .subform__button {
-
-      &:before {
-
-      }
-    }
-  }
   .form__item {
     margin-bottom: 3em;
     input[type=text] {
