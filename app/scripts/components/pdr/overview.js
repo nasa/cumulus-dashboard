@@ -60,7 +60,7 @@ export const tableSortProps = [
   null,
   null,
   null,
-  null
+  'discoveredAt'
 ];
 
 var PdrOverview = React.createClass({
