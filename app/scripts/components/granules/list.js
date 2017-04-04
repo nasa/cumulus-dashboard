@@ -81,7 +81,7 @@ var AllGranules = React.createClass({
         <section className='page__section'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>
-              {view} Granules <span style={{color: 'gray'}}>{ typeof count !== 'undefined' ? `(${count})` : null }</span>
+              {view} Granules <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>

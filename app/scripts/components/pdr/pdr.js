@@ -127,7 +127,7 @@ var PDR = React.createClass({
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Granules <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Granules <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span></h2>
           </div>
           <div className='filters filters__wlabels'>
             <Dropdown
