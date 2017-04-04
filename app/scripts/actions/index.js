@@ -80,6 +80,10 @@ export const COUNT = 'COUNT';
 export const COUNT_INFLIGHT = 'COUNT_INFLIGHT';
 export const COUNT_ERROR = 'COUNT_ERROR';
 
+export const PDR = 'PDR';
+export const PDR_INFLIGHT = 'PDR_INFLIGHT';
+export const PDR_ERROR = 'PDR_ERROR';
+
 export const PDRS = 'PDRS';
 export const PDRS_INFLIGHT = 'PDRS_INFLIGHT';
 export const PDRS_ERROR = 'PDRS_ERROR';
@@ -218,6 +222,9 @@ export const listPdrs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, PDRS);
+
+export const getPdr = (pdrName) => wrapRequest(
+  pdrName, get, `pdrs/${pdrName}`, PDR);
 
 export const searchPdrs = (prefix) => ({ type: SEARCH_PDRS, prefix: prefix });
 export const clearPdrsSearch = () => ({ type: CLEAR_PDRS_SEARCH });
