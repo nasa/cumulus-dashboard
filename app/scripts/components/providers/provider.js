@@ -56,7 +56,7 @@ var ProviderOverview = React.createClass({
 
   componentWillUnmount: function () {
     if (this.cancelInterval) { this.cancelInterval(); }
-    clearRestartedProvider(this.props.params.providerId);
+    this.props.dispatch(clearRestartedProvider(this.props.params.providerId));
   },
 
   reload: function (immediate, timeout) {
@@ -71,12 +71,6 @@ var ProviderOverview = React.createClass({
     // delay the navigation so we can see the success indicator
     const { router } = this.props;
     setTimeout(() => router.push('/providers'), 1000);
-  },
-
-  clearRestartButton: function () {
-    setTimeout(() => {
-      this.props.dispatch(clearRestartedProvider(this.props.params.providerId));
-    }, 5000);
   },
 
   delete: function () {
@@ -135,10 +129,12 @@ var ProviderOverview = React.createClass({
           </Link>
           <AsyncCommand
             action={this.restart}
-            success={this.clearRestartButton}
+            success={this.props.dispatch(clearRestartedProvider(this.props.params.providerId))}
             status={restartStatus}
+            disabled={restartStatus === 'success'}
             className={'form-group__element--right'}
-            text={restartStatus === 'success' ? 'Success!' : 'Restart'} />
+            text={restartStatus === 'success' ? 'Success!' : 'Restart'}
+            successTimeout={5000} />
 
           {lastUpdated(provider.queriedAt)}
           Status: {findkey(status, v => v === provider.status)}

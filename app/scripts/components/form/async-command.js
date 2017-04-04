@@ -10,12 +10,13 @@ const AsyncCommand = React.createClass({
     status: React.PropTypes.string,
     text: React.PropTypes.string,
     className: React.PropTypes.string,
-    disabled: React.PropTypes.bool
+    disabled: React.PropTypes.bool,
+    successTimeout: React.PropTypes.number
   },
 
   componentWillReceiveProps: function (newProps) {
     if (this.props.status === 'inflight' && newProps.status === 'success' && typeof this.props.success === 'function') {
-      this.props.success();
+      setTimeout(this.props.success, this.props.successTimeout);
     }
   },
 
