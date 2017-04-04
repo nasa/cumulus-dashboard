@@ -6,7 +6,9 @@ import {
   interval,
   getProvider,
   deleteProvider,
-  listCollections
+  restartProvider,
+  listCollections,
+  clearRestartedProvider
 } from '../../actions';
 import { get } from 'object-path';
 import { fullDate, lastUpdated, nullValue } from '../../utils/format';
@@ -63,9 +65,8 @@ var ProviderOverview = React.createClass({
   },
 
   navigateBack: function () {
-    // delay the navigation so we can see the success indicator
     const { router } = this.props;
-    setTimeout(() => router.push('/providers'), 1000);
+    router.push('/providers');
   },
 
   delete: function () {
@@ -74,6 +75,11 @@ var ProviderOverview = React.createClass({
     if (!provider.published) {
       this.props.dispatch(deleteProvider(providerId));
     }
+  },
+
+  restart: function () {
+    const { providerId } = this.props.params;
+    this.props.dispatch(restartProvider(providerId));
   },
 
   errors: function () {
@@ -97,6 +103,7 @@ var ProviderOverview = React.createClass({
       .map(c => c.collectionName);
     const logsQuery = { 'meta.provider': providerId };
     const deleteStatus = get(this.props.providers.deleted, [providerId, 'status']);
+    const restartStatus = get(this.props.providers.restarted, [providerId, 'status']);
     const errors = this.errors();
     const providerError = provider.error;
     return (
@@ -109,13 +116,22 @@ var ProviderOverview = React.createClass({
             status={deleteStatus}
             disabled={provider.published}
             className={'form-group__element--right'}
-            text={deleteStatus === 'success' ? 'Success!' : 'Delete'} />
+            text={deleteStatus === 'success' ? 'Success!' : 'Delete'}
+            successTimeout={1000} />
           <Link
             className='button button--small form-group__element button--green form-group__element--right'
             to={'/providers/edit/' + providerId}
           >
             Edit
           </Link>
+          <AsyncCommand
+            action={this.restart}
+            success={() => this.props.dispatch(clearRestartedProvider(this.props.params.providerId))}
+            status={restartStatus}
+            disabled={restartStatus === 'success'}
+            className={'form-group__element--right'}
+            text={restartStatus === 'success' ? 'Success!' : 'Restart'}
+            successTimeout={5000} />
 
           {lastUpdated(provider.queriedAt)}
           Status: {findkey(status, v => v === provider.status)}
