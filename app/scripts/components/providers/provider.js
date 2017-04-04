@@ -66,9 +66,8 @@ var ProviderOverview = React.createClass({
   },
 
   navigateBack: function () {
-    // delay the navigation so we can see the success indicator
     const { router } = this.props;
-    setTimeout(() => router.push('/providers'), 1000);
+    router.push('/providers');
   },
 
   delete: function () {
@@ -118,7 +117,8 @@ var ProviderOverview = React.createClass({
             status={deleteStatus}
             disabled={provider.published}
             className={'form-group__element--right'}
-            text={deleteStatus === 'success' ? 'Success!' : 'Delete'} />
+            text={deleteStatus === 'success' ? 'Success!' : 'Delete'}
+            successTimeout={1000} />
           <Link
             className='button button--small form-group__element button--green form-group__element--right'
             to={'/providers/edit/' + providerId}
