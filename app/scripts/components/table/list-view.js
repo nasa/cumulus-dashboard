@@ -124,8 +124,8 @@ var List = React.createClass({
     }
 
     // remove empty keys so as not to mess up the query
-    for (let key in options) {
-      if (options[key] === '') { delete options[key]; }
+    for (let key in config) {
+      if (config[key] === '') { delete config[key]; }
     }
     return config;
   },
