@@ -9,11 +9,12 @@ import {
   listCollections
 } from '../../actions';
 import { get } from 'object-path';
-import { fullDate, lastUpdated, nullValue } from '../../utils/format';
+import { fullDate, lastUpdated } from '../../utils/format';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
 import AsyncCommand from '../form/async-command';
 import ErrorReport from '../errors/report';
+import Metadata from '../table/metadata';
 import { updateInterval } from '../../config';
 import status from '../../utils/status';
 import findkey from 'lodash.findkey';
@@ -127,18 +128,7 @@ var ProviderOverview = React.createClass({
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Provider Overview</h2>
           </div>
-          <dl className='metadata__granule__details'>
-            {metaAccessors.reduce((acc, meta, i) => {
-              let value = get(provider, meta[1]);
-              if (value !== nullValue && typeof meta[2] === 'function') {
-                value = meta[2](value);
-              }
-              return acc.concat([
-                <dt key={`meta-${meta[1]}--dt`}>{meta[0]}</dt>,
-                <dd key={`meta-${meta[1]}--dd`}>{value}</dd>
-              ]);
-            }, [])}
-          </dl>
+          <Metadata data={provider} accessors={metaAccessors} />
         </section>
 
         <section className='page__section'>

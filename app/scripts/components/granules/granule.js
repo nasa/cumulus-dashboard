@@ -15,6 +15,7 @@ import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
 import AsyncCommand from '../form/async-command';
 import ErrorReport from '../errors/report';
+import Metadata from '../table/metadata';
 import { updateInterval } from '../../config';
 
 const tableHeader = [
@@ -218,18 +219,7 @@ var GranuleOverview = React.createClass({
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Granule Overview {cmrLink ? <a href={cmrLink}>[CMR]</a> : null}</h2>
           </div>
-          <dl className='metadata__granule__details'>
-            {metaAccessors.reduce((acc, meta, i) => {
-              let value = get(granule, meta[1]);
-              if (value !== nullValue && typeof meta[2] === 'function') {
-                value = meta[2](value);
-              }
-              return acc.concat([
-                <dt key={`meta-${meta[1]}--dt`}>{meta[0]}</dt>,
-                <dd key={`meta-${meta[1]}--dd`}>{value}</dd>
-              ]);
-            }, [])}
-          </dl>
+          <Metadata data={granule} accessors={metaAccessors} />
         </section>
 
         <section className='page__section'>
