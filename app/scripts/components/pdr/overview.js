@@ -70,7 +70,7 @@ var PdrOverview = React.createClass({
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
           />
-          <Link className='link--secondary link--learn-more' to='/pdrs/active'>View All Active PDRs</Link>
+          <Link className='link--secondary link--learn-more' to='/pdrs/active'>View Currently Active PDRs</Link>
         </section>
       </div>
     );
