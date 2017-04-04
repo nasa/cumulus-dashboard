@@ -168,7 +168,7 @@ gulp.task('build', ['vendorScripts', 'javascript'], function () {
 });
 
 gulp.task('styles', function () {
-  var assets = process.env.DS_ENV === 'production' ? '/dashboard/graphics' : '/graphics';
+  var assets = process.env.DS_ENV === 'development' ? '/graphics' : '/dashboard/graphics';
   return gulp.src('app/styles/main.scss')
     .pipe($.plumber(function (e) {
       notifier.notify({
