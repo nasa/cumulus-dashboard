@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { listPdrs, getCount } from '../../actions';
-import { lastUpdated, tally, displayCase } from '../../utils/format';
+import { lastUpdated, tally, displayCase, fromNow } from '../../utils/format';
 import List from '../table/list-view';
 import Overview from '../app/overview';
 import { recent } from '../../config';
@@ -41,7 +41,7 @@ const tableHeader = [
   'Status',
   'Progress',
   'Errors',
-  'Start of Current Process'
+  'Discovered'
 ];
 
 const tableRow = [
@@ -49,12 +49,13 @@ const tableRow = [
   'status',
   renderProgress,
   (d) => tally(get(d, 'granulesStatus.failed', 0)),
-  (d) => 'todo'
+  (d) => fromNow(d.discoveredAt)
 ];
 
 export const tableSortProps = [
   'pdrName.keyword',
   'status.keyword',
+  null,
   null,
   null
 ];

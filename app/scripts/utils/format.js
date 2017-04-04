@@ -40,6 +40,11 @@ export const seconds = function (numberstring) {
   return +numberstring.toFixed(2) + 's';
 };
 
+export const fromNow = function (numberstring) {
+  if (numberstring === null || isNaN(numberstring)) { return nullValue; }
+  return moment(numberstring).fromNow();
+};
+
 export const lastUpdated = function (datestring) {
   let day, time;
   if (datestring) {
