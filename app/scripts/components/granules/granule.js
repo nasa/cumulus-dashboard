@@ -97,9 +97,8 @@ var GranuleOverview = React.createClass({
   },
 
   navigateBack: function () {
-    // delay the navigation so we can see the success indicator
     const { router } = this.props;
-    setTimeout(() => router.push('/granules'), 1000);
+    router.push('/granules');
   },
 
   reprocess: function () {
@@ -191,6 +190,7 @@ var GranuleOverview = React.createClass({
 
           <AsyncCommand action={this.delete}
             success={this.navigateBack}
+            successTimeout={1000}
             status={deleteStatus}
             disabled={granule.published}
             className={'form-group__element--right'}
