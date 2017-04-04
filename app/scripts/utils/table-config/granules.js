@@ -1,11 +1,12 @@
 'use strict';
 import React from 'react';
 import { Link } from 'react-router';
-import { fullDate, seconds } from '../format';
+import { fullDate, seconds, bool } from '../format';
 
 export const tableHeader = [
   'Name',
   'Status',
+  'Published',
   'PDR',
   'Collection',
   'Duration',
@@ -15,6 +16,7 @@ export const tableHeader = [
 export const tableRow = [
   (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
   'status',
+  (d) => bool(d.published),
   'pdrName',
   'collectionName',
   (d) => seconds(d.duration),
@@ -24,6 +26,7 @@ export const tableRow = [
 export const tableSortProps = [
   'granuleId.keyword',
   'status.keyword',
+  'published.keyword',
   'pdrName.keyword',
   'collectionName.keyword',
   'duration',
