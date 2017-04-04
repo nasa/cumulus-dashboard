@@ -42,6 +42,7 @@ import GranuleOverview from './components/granules/granule';
 import GranuleRecipeIngest from './components/granules/recipe-ingest';
 
 import Pdrs from './components/pdr';
+import Pdr from './components/pdr/pdr';
 import PdrOverview from './components/pdr/overview';
 import PdrList from './components/pdr/list';
 
@@ -94,7 +95,7 @@ render((
           <Route path='active' component={PdrList} />
           <Route path='failed' component={PdrList} />
           <Route path='completed' component={PdrList} />
-          <Route path='pdr/:pdrName' component={ListGranules} />
+          <Route path='pdr/:pdrName' component={Pdr} />
         </Route>
         <Route path='providers' component={Providers}>
           <IndexRoute component={ProvidersOverview} />
