@@ -127,7 +127,7 @@ var ProviderOverview = React.createClass({
           </Link>
           <AsyncCommand
             action={this.restart}
-            success={this.props.dispatch(clearRestartedProvider(this.props.params.providerId))}
+            success={() => this.props.dispatch(clearRestartedProvider(this.props.params.providerId))}
             status={restartStatus}
             disabled={restartStatus === 'success'}
             className={'form-group__element--right'}
