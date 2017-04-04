@@ -11,10 +11,10 @@ deployment:
     commands:
       - npm rebuild node-sass
       - npm run production
-      - cd dist && aws s3 sync . s3://cumulus-dashboard-prod
+      - cd dist && aws s3 sync . s3://cumulus-dashboard-prod --acl=public-read
   develop:
     branch: develop
     commands:
       - npm rebuild node-sass
       - npm run staging
-      - cd dist && aws s3 sync . s3://cumulus-dashboard
+      - cd dist && aws s3 sync . s3://cumulus-dashboard --acl=public-read
