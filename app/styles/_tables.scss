@@ -221,3 +221,32 @@ table {
     background-image: url(#{$graphics}/layout/chevron-up.svg);
   }
 }
+
+.table__progress {
+  min-width: 240px;
+  padding-right: 60px;
+}
+
+.table__progress--name {
+  font-weight: $base-font-regular;
+}
+
+.table__progress--outer {
+  position: relative;
+  height: 6px;
+}
+
+.table__progress--bar {
+  display: inline-block;
+  background-color: $midnight-blue;
+  position: absolute;
+  left: 0;
+  height: 6px;
+}
+
+.table__progress--text {
+  font-size: 0.8em;
+  position: absolute;
+  margin-left: 6px;
+  top: -4px;
+}

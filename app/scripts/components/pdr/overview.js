@@ -8,6 +8,33 @@ import { lastUpdated, tally, displayCase } from '../../utils/format';
 import List from '../table/list-view';
 import Overview from '../app/overview';
 import { recent } from '../../config';
+import statusOptions from '../../utils/status';
+const stats = Object.keys(statusOptions).map(d => statusOptions[d]).filter(Boolean);
+
+function bar (pct, text) {
+  // show a sliver even if there's no progress
+  const width = pct || 0.5;
+  return (
+    <div className='table__progress--outer'>
+      <div className='table__progress--bar' style={{width: width + '%'}} />
+      <div className='table__progress--text' style={{left: width + '%'}}>{text}</div>
+    </div>
+  );
+}
+
+function renderProgress (d) {
+  const granules = d.granulesStatus;
+  const total = stats.reduce((a, b) => a + get(granules, b, 0), 0);
+  const completed = get(granules, 'completed', 0);
+  const percentCompleted = !total ? 0 : completed / total * 100;
+  const granulesCompleted = `${completed}/${total}`;
+  return (
+    <div className='table__progress'>
+      <h4 className='table__progress--name'>Completed</h4>
+      {bar(percentCompleted, granulesCompleted)}
+    </div>
+  );
+}
 
 const tableHeader = [
   'Name',
@@ -19,7 +46,7 @@ const tableHeader = [
 const tableRow = [
   (d) => <Link to={`pdrs/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
   'status',
-  (d) => 'todo',
+  renderProgress,
   (d) => 'todo'
 ];
 
