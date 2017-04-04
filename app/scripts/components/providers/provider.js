@@ -54,7 +54,6 @@ var ProviderOverview = React.createClass({
 
   componentWillUnmount: function () {
     if (this.cancelInterval) { this.cancelInterval(); }
-    this.props.dispatch(clearRestartedProvider(this.props.params.providerId));
   },
 
   reload: function (immediate, timeout) {
