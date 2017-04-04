@@ -10,5 +10,11 @@ deployment:
     branch: master
     commands:
       - npm rebuild node-sass
-      - npm run build
+      - npm run production
+      - cd dist && aws s3 sync . s3://cumulus-dashboard-prod
+  develop:
+    branch: develop
+    commands:
+      - npm rebuild node-sass
+      - npm run staging
       - cd dist && aws s3 sync . s3://cumulus-dashboard
