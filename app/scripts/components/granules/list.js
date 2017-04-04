@@ -31,17 +31,15 @@ var AllGranules = React.createClass({
     granules: React.PropTypes.object,
     logs: React.PropTypes.object,
     dispatch: React.PropTypes.func,
-    params: React.PropTypes.object,
     location: React.PropTypes.object
   },
 
   generateQuery: function () {
-    const { params, location } = this.props;
+    const { pathname } = this.props.location;
     const options = {};
-    if (params.pdrName) options.pdrName = params.pdrName;
-    else if (location.pathname === '/granules/completed') options.status = 'completed';
-    else if (location.pathname === '/granules/processing') options.status__in = processingStatus;
-    else if (location.pathname === '/granules/failed') options.status = 'failed';
+    if (pathname === '/granules/completed') options.status = 'completed';
+    else if (pathname === '/granules/processing') options.status__in = processingStatus;
+    else if (pathname === '/granules/failed') options.status = 'failed';
     return options;
   },
 
@@ -63,11 +61,10 @@ var AllGranules = React.createClass({
   },
 
   getView: function () {
-    const { params, location } = this.props;
-    if (params.pdrName) return this.props.params.pdrName;
-    else if (location.pathname === '/granules/completed') return 'Completed';
-    else if (location.pathname === '/granules/processing') return 'Processing';
-    else if (location.pathname === '/granules/failed') return 'Failed';
+    const { pathname } = this.props.location;
+    if (pathname === '/granules/completed') return 'Completed';
+    else if (pathname === '/granules/processing') return 'Processing';
+    else if (pathname === '/granules/failed') return 'Failed';
     else return 'All';
   },
 
@@ -84,7 +81,7 @@ var AllGranules = React.createClass({
         <section className='page__section'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>
-              {view} Granules <span style={{color: 'gray'}}>{ typeof count !== 'undefined' ? `(${count})` : null }</span>
+              {view} Granules <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>
