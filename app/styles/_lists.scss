@@ -1,5 +1,4 @@
-.metadata__granule__details,
-.metadata__provider__details {
+.metadata__details {
   font-size: .86em;
   @include clearfix;
   dt {
@@ -15,7 +14,8 @@
     }
   }
   dt, dd {
-    float: left;
+    display: inline-block;
+    vertical-align: middle;
     margin: .5em 0;
   }
 }

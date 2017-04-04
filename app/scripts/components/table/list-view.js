@@ -6,7 +6,7 @@ import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
 import BatchAsyncCommand from '../form/batch-async-command';
-import { updateInterval } from '../../config';
+import Timer from '../app/timer';
 import { isUndefined as undef } from '../../utils/validate';
 
 var List = React.createClass({
@@ -19,8 +19,7 @@ var List = React.createClass({
       order: 'desc',
       selected: [],
       prefix: null,
-      seconds: updateInterval / 1000,
-      isAutoRunning: true,
+      queryConfig: {},
       params: {}
     };
   },
@@ -38,7 +37,7 @@ var List = React.createClass({
   },
 
   componentWillMount: function () {
-    this.list();
+    this.setState({ queryConfig: this.config() });
   },
 
   componentWillUnmount: function () {
@@ -47,12 +46,15 @@ var List = React.createClass({
 
   componentWillReceiveProps: function (newProps) {
     if (JSON.stringify(newProps.query) !== JSON.stringify(this.props.query)) {
-      this.list({}, newProps.query);
+      this.setState({ queryConfig: this.config({}, newProps.query) });
     }
 
-    const nonNullParams = pickBy(newProps.list.params, v => (!undef(v) && v !== null));
-    if (JSON.stringify(nonNullParams) !== JSON.stringify(this.state.params)) {
-      this.setState({ params: nonNullParams }, () => this.list());
+    const params = pickBy(newProps.list.params, v => (!undef(v) && v !== null));
+    if (JSON.stringify(params) !== JSON.stringify(this.state.params)) {
+      this.setState({
+        params,
+        queryConfig: this.config({ params })
+      });
     }
 
     if (newProps.list.error && this.cancelInterval) {
@@ -63,14 +65,21 @@ var List = React.createClass({
 
   queryNewPage: function (page) {
     this.setState({ page });
-    this.list({ page });
-    this.setState({selected: []});
+    this.setState({
+      queryConfig: this.config({ page }),
+      selected: []
+    });
   },
 
   queryNewSort: function (sortProps) {
     this.setState(sortProps);
-    this.list({ order: sortProps.order, sort_by: this.getSortProp(sortProps.sortIdx) });
-    this.setState({selected: []});
+    this.setState({
+      queryConfig: this.config({
+        order: sortProps.order,
+        sort_by: this.getSortProp(sortProps.sortIdx)
+      }),
+      selected: []
+    });
   },
 
   getSortProp: function (idx) {
@@ -97,77 +106,50 @@ var List = React.createClass({
     }
   },
 
-  list: function (options, query) {
-    options = options || {};
-    const { page, order, sort_by, params } = options;
+  config: function (config, query) {
+    config = config || {};
+    const { page, order, sort_by, params } = config;
 
     // attach page, and sort properties using the current state
-    if (undef(page)) { options.page = this.state.page; }
-    if (undef(order)) { options.order = this.state.order; }
-    if (undef(sort_by)) { options.sort_by = this.getSortProp(this.state.sortIdx); }
+    if (undef(page)) { config.page = this.state.page; }
+    if (undef(order)) { config.order = this.state.order; }
+    if (undef(sort_by)) { config.sort_by = this.getSortProp(this.state.sortIdx); }
 
-    if (undef(params)) { Object.assign(options, this.state.params); }
+    if (undef(params)) { Object.assign(config, this.state.params); }
 
     if (query) {
-      options = Object.assign({}, options, query);
+      config = Object.assign({}, config, query);
     } else if (this.props.query) {
-      options = Object.assign({}, options, this.props.query);
+      config = Object.assign({}, config, this.props.query);
     }
 
     // remove empty keys so as not to mess up the query
-    for (let key in options) {
-      if (options[key] === '') { delete options[key]; }
+    for (let key in config) {
+      if (config[key] === '') { delete config[key]; }
     }
-
-    // stop the currently running auto-query
-    if (this.cancelInterval) { this.cancelInterval(); }
-    const { dispatch, action } = this.props;
-    this.cancelInterval = this.timedInterval(() => dispatch(action(options)), updateInterval / 1000);
-  },
-
-  timedInterval: function (action, seconds) {
-    action();
-    const intervalId = setInterval(() => {
-      this.setState({ seconds: seconds });
-      if (seconds === 0) {
-        seconds = updateInterval / 1000;
-        action();
-      } else {
-        seconds -= 1;
-      }
-    }, 1000);
-    return () => clearInterval(intervalId);
-  },
-
-  toggleAutoFetch: function () {
-    if (this.state.isAutoRunning) {
-      if (this.cancelInterval) { this.cancelInterval(); }
-      this.setState({ seconds: -1, isAutoRunning: false });
-    } else {
-      this.setState({ seconds: 0, isAutoRunning: true });
-      this.list();
-    }
+    return config;
   },
 
   render: function () {
-    const { dispatch, tableHeader, tableRow, tableSortProps, bulkActions, rowId, list } = this.props;
+    const {
+      dispatch,
+      action,
+      tableHeader,
+      tableRow,
+      tableSortProps,
+      bulkActions,
+      rowId,
+      list
+    } = this.props;
     const { count, limit } = list.meta;
-    const { page, sortIdx, order, selected, seconds } = this.state;
+    const { page, sortIdx, order, selected, queryConfig } = this.state;
     const primaryIdx = 0;
     const allChecked = this.state.selected.length === list.data.length && list.data.length;
     const hasActions = !!(Array.isArray(bulkActions) && bulkActions.length);
 
     return (
       <div className='list-view'>
-        <div className={hasActions ? 'form__element__updateToggle' : 'form__element__updateToggle form__element__updateToggle-noHeader'} onClick={this.toggleAutoFetch}>
-          <span className='form-group__updating'>
-            Next update in: {seconds === -1 ? '-' : seconds }
-          </span>
-          <span className='metadata__updated'>
-            {seconds === -1 ? 'Start automatic updates' : 'Stop automatic updates'}
-          </span>
-        </div>
-
+        <Timer noheader={!hasActions} dispatch={dispatch} action={action} config={queryConfig} />
         {hasActions ? (
           <div className='form--controls'>
             <label className='form__element__select form-group__element form-group__element--small'>

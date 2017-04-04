@@ -3,6 +3,10 @@ import { set } from 'object-path';
 import assignDate from './assign-date';
 
 import {
+  PDR,
+  PDR_INFLIGHT,
+  PDR_ERROR,
+
   PDRS,
   PDRS_INFLIGHT,
   PDRS_ERROR,
@@ -24,6 +28,7 @@ export const initialState = {
     meta: {},
     params: {}
   },
+  map: {},
   search: {},
   deleted: {}
 };
@@ -32,6 +37,18 @@ export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
   const { id, data } = action;
   switch (action.type) {
+    case PDR:
+      set(state, ['map', id, 'inflight'], false);
+      set(state, ['map', id, 'data'], assignDate(data));
+      break;
+    case PDR_INFLIGHT:
+      set(state, ['map', id, 'inflight'], true);
+      break;
+    case PDR_ERROR:
+      set(state, ['map', id, 'inflight'], false);
+      set(state, ['map', id, 'error'], action.error);
+      break;
+
     case PDRS:
       set(state, ['list', 'data'], data.results);
       set(state, ['list', 'meta'], assignDate(data.meta));

@@ -6,6 +6,8 @@ import { Link } from 'react-router';
 
 export const nullValue = '--';
 
+export const truthy = (value) => value || nullValue;
+
 export const fullDate = function (datestring) {
   if (!datestring) { return nullValue; }
   return moment(datestring).format('hh:mm:ss MM/DD/YY');
@@ -36,6 +38,11 @@ export const tally = function (numberstring) {
 export const seconds = function (numberstring) {
   if (numberstring === null || isNaN(numberstring)) { return nullValue; }
   return +numberstring.toFixed(2) + 's';
+};
+
+export const fromNow = function (numberstring) {
+  if (numberstring === null || isNaN(numberstring)) { return nullValue; }
+  return moment(numberstring).fromNow();
 };
 
 export const lastUpdated = function (datestring) {
@@ -107,3 +114,5 @@ export const storage = function (n) {
   else if (n < 1e15) return (n / 1e12).toFixed(2) + 'tb';
   else return (n / 1e15).toFixed(2) + 'pb';
 };
+
+export const link = (url) => <a href={url}>Link</a>;

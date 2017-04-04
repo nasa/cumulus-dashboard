@@ -74,7 +74,7 @@ var ListProviders = React.createClass({
         <section className='page__section'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content'>
-              {this.isActive() ? 'Active' : 'Inactive'} Providers <span style={{color: 'gray'}}>{ count ? `(${count})` : null }</span>
+              {this.isActive() ? 'Active' : 'Inactive'} Providers <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
             </h1>
             <Link className='button button--green button--small form-group__element--right' to=''>Edit</Link>
             {lastUpdated(queriedAt)}

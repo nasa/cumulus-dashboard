@@ -7,6 +7,10 @@ import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/
 import LogViewer from '../logs/viewer';
 import Search from '../form/search';
 import List from '../table/list-view';
+import statusOptions from '../../utils/status';
+const activeQuery = Object.keys(statusOptions).map(d => statusOptions[d]).filter(d => {
+  return d && d !== 'completed' && d !== 'failed';
+}).join(',');
 
 var ActivePdrs = React.createClass({
   displayName: 'ActivePdrs',
@@ -20,9 +24,10 @@ var ActivePdrs = React.createClass({
 
   generateQuery: function () {
     const query = {};
-    const active = this.props.location.pathname.indexOf('active') >= 0;
-    if (active) query.status__not = 'completed';
-    else query.status = 'completed';
+    const { pathname } = this.props.location;
+    if (pathname === '/pdrs/completed') query.status = 'completed';
+    else if (pathname === '/pdrs/failed') query.status = 'failed';
+    else query.status__in = activeQuery;
     return query;
   },
 
@@ -43,7 +48,7 @@ var ActivePdrs = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>{active ? 'Active' : ' Completed'} PDRs { count ? `(${count})` : null }</h1>
+            <h1 className='heading--large heading--shared-content with-description'>{active ? 'Active' : ' Completed'} PDRs {!isNaN(count) ? `(${count})` : null}</h1>
             {lastUpdated(queriedAt)}
           </div>
           <div className='filters'>
