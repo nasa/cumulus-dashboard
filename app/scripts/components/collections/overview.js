@@ -78,9 +78,8 @@ var CollectionOverview = React.createClass({
   },
 
   navigateBack: function () {
-    // delay the navigation so we can see the success indicator
     const { router } = this.props;
-    setTimeout(() => router.push('/collections/active'), 1000);
+    router.push('/collections/active');
   },
 
   errors: function () {
@@ -123,6 +122,7 @@ var CollectionOverview = React.createClass({
 
           <AsyncCommand action={this.delete}
             success={this.navigateBack}
+            successTimeout={1000}
             status={deleteStatus}
             disabled={hasGranules !== 0}
             className={'form-group__element--right'}
