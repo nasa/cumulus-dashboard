@@ -5,13 +5,45 @@ import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { listPdrs, getCount } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdrs';
 import List from '../table/list-view';
 import Overview from '../app/overview';
 import { recent } from '../../config';
 
+const tableHeader = [
+  'Name',
+  'Status',
+  'Progress',
+  'Start of Current Process'
+];
+
+const tableRow = [
+  (d) => <Link to={`pdrs/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
+  'status',
+  (d) => 'todo',
+  (d) => 'todo'
+];
+
+export const tableSortProps = [
+  'pdrName.keyword',
+  'status.keyword',
+  null,
+  null
+];
+
 var PdrOverview = React.createClass({
   displayName: 'PdrOverview',
+
+  getInitialState: function () {
+    return {
+      page: 1,
+      sortIdx: 0,
+      order: 'desc',
+      selected: [],
+      prefix: null,
+      queryConfig: {},
+      params: {}
+    };
+  },
 
   propTypes: {
     dispatch: React.PropTypes.func,
