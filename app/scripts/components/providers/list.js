@@ -18,7 +18,6 @@ import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/
 import List from '../table/list-view';
 import Search from '../form/search';
 import Dropdown from '../form/dropdown';
-import { Link } from 'react-router';
 import protocol from '../../utils/protocol';
 
 var ListProviders = React.createClass({
@@ -103,7 +102,6 @@ var ListProviders = React.createClass({
             <h1 className='heading--large heading--shared-content'>
               {this.state.listTitle} <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
             </h1>
-            <Link className='button button--green button--small form-group__element--right' to=''>Edit</Link>
             {lastUpdated(queriedAt)}
           </div>
 
