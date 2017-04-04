@@ -27,7 +27,7 @@ function renderProgress (d) {
   const total = stats.reduce((a, b) => a + get(granules, b, 0), 0);
   const completed = get(granules, 'completed', 0);
   const percentCompleted = !total ? 0 : completed / total * 100;
-  const granulesCompleted = `${completed}/${total}`;
+  const granulesCompleted = `${tally(completed)}/${tally(total)}`;
   return (
     <div className='table__progress'>
       <h4 className='table__progress--name'>Completed</h4>
@@ -40,6 +40,7 @@ const tableHeader = [
   'Name',
   'Status',
   'Progress',
+  'Errors',
   'Start of Current Process'
 ];
 
@@ -47,6 +48,7 @@ const tableRow = [
   (d) => <Link to={`pdrs/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
   'status',
   renderProgress,
+  (d) => tally(get(d, 'granulesStatus.failed', 0)),
   (d) => 'todo'
 ];
 
