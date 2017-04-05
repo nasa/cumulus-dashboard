@@ -16,7 +16,7 @@ import LogViewer from '../logs/viewer';
 import AsyncCommand from '../form/async-command';
 import ErrorReport from '../errors/report';
 import Metadata from '../table/metadata';
-import { updateInterval } from '../../config';
+import { updateInterval, updateDelay } from '../../config';
 
 const tableHeader = [
   'Filename',
@@ -191,7 +191,7 @@ var GranuleOverview = React.createClass({
 
           <AsyncCommand action={this.delete}
             success={this.navigateBack}
-            successTimeout={1000}
+            successTimeout={updateDelay}
             status={deleteStatus}
             disabled={granule.published}
             className={'form-group__element--right'}

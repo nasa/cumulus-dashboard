@@ -17,7 +17,7 @@ import LogViewer from '../logs/viewer';
 import AsyncCommand from '../form/async-command';
 import ErrorReport from '../errors/report';
 import Metadata from '../table/metadata';
-import { updateInterval } from '../../config';
+import { updateInterval, updateDelay } from '../../config';
 import status from '../../utils/status';
 import findkey from 'lodash.findkey';
 
@@ -118,7 +118,7 @@ var ProviderOverview = React.createClass({
             disabled={provider.published}
             className={'form-group__element--right'}
             text={deleteStatus === 'success' ? 'Success!' : 'Delete'}
-            successTimeout={1000} />
+            successTimeout={updateDelay} />
           <Link
             className='button button--small form-group__element button--green form-group__element--right'
             to={'/providers/edit/' + providerId}
@@ -132,7 +132,7 @@ var ProviderOverview = React.createClass({
             disabled={restartStatus === 'success'}
             className={'form-group__element--right'}
             text={restartStatus === 'success' ? 'Success!' : 'Restart'}
-            successTimeout={5000} />
+            successTimeout={updateDelay} />
 
           {lastUpdated(provider.queriedAt)}
           Status: {findkey(status, v => v === provider.status)}
