@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { listPdrs, getCount } from '../../actions';
+import { listPdrs, getCount, deletePdr } from '../../actions';
 import { bool, lastUpdated, tally, displayCase, fromNow } from '../../utils/format';
 import List from '../table/list-view';
 import Overview from '../app/overview';
@@ -107,6 +107,14 @@ var PdrOverview = React.createClass({
     };
   },
 
+  generateBulkActions: function () {
+    return [{
+      text: 'Delete',
+      action: deletePdr,
+      state: this.props.pdrs.deleted
+    }];
+  },
+
   render: function () {
     const { stats } = this.props;
     const { list } = this.props.pdrs;
@@ -134,6 +142,8 @@ var PdrOverview = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
+            bulkActions={this.generateBulkActions()}
+            rowId={'pdrName'}
           />
           <Link className='link--secondary link--learn-more' to='/pdrs/active'>View Currently Active PDRs</Link>
         </section>
