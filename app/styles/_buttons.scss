@@ -108,7 +108,6 @@
 }
 
 .button__cancel {
-  max-width: 45px;
   &:before {
     background-image: url(#{$graphics}/layout/sm-xmark.svg);
   }

@@ -296,22 +296,6 @@ select {
   }
 }
 
-
-.login {
-  margin-top: 10%;
-  position: fixed;
-  text-align: center;
-  top: 100%;
-  transition: top 0.2s ease-in-out;
-  width: 100%;
-  z-index: 1000;
-}
-
-.login__onscreen {
-  top: 0;
-}
-
-
 .error__report,
 .form__error {
   color: $error-red;
