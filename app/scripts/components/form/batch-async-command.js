@@ -103,14 +103,12 @@ const BatchCommand = React.createClass({
         <div className={ activeModal ? 'modal__container modal__container--onscreen' : 'modal__container' }>
           { activeModal ? (
             <div className='modal'>
-              <div className='modal__internal'>
+              <div className='modal__internal modal__formcenter'>
                 <h4>{confirm(selection.length)}</h4>
-                <div className='modal__formcenter'>
-                  <button className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
-                    onClick={this.confirm}>Confirm</button>
-                  <button className='button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
-                    onClick={this.cancel}>Cancel</button>
-                </div>
+                <button className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
+                  onClick={this.confirm}>Confirm</button>
+                <button className='button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
+                  onClick={this.cancel}>Cancel</button>
               </div>
             </div>
           ) : null}
