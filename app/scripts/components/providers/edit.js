@@ -105,7 +105,7 @@ var EditProvider = React.createClass({
               onSubmit={this.onSubmit}
               router={this.props.router}
             />
-          ) : null}
+          ) : <Loading />}
           {record.inflight || meta.status === 'inflight' ? <Loading /> : null}
           {error ? <ErrorReport report={error} /> : null}
           {meta.status === 'success' ? <p>Success!</p> : null}
