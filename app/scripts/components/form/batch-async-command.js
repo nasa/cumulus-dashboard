@@ -14,12 +14,14 @@ const BatchCommand = React.createClass({
     selection: React.PropTypes.array,
     className: React.PropTypes.string,
     onSuccess: React.PropTypes.func,
-    onError: React.PropTypes.func
+    onError: React.PropTypes.func,
+    confirm: React.PropTypes.func
   },
 
   getInitialState: function () {
     return {
-      callbacks: {}
+      callbacks: {},
+      activeModal: false
     };
   },
 
@@ -59,6 +61,20 @@ const BatchCommand = React.createClass({
   },
 
   handleClick: function () {
+    if (this.props.confirm) {
+      this.setState({ activeModal: true });
+    } else this.start();
+  },
+
+  confirm: function () {
+
+  },
+
+  cancel: function () {
+
+  },
+
+  start: function () {
     const { selection } = this.props;
     // if we have inflight callbacks, don't allow further clicks
     if (!Array.isArray(selection) || !selection.length ||
@@ -71,16 +87,35 @@ const BatchCommand = React.createClass({
   },
 
   render: function () {
-    const { text, selection, className } = this.props;
+    const { text, selection, className, confirm } = this.props;
     const inflight = this.isInflight();
+    const { activeModal } = this.state;
     return (
-      <AsyncCommand
-        action={this.handleClick}
-        text={text}
-        className={className}
-        disabled={!selection.length || inflight}
-        status={inflight ? 'inflight' : null}
-      />
+      <div>
+        <AsyncCommand
+          action={this.handleClick}
+          text={text}
+          className={className}
+          disabled={!selection.length || inflight}
+          status={inflight ? 'inflight' : null}
+        />
+        { activeModal ? <div className='modal__cover'></div> : null }
+        <div className={ activeModal ? 'modal__container modal__container--onscreen' : 'modal__container' }>
+          { activeModal ? (
+            <div className='modal'>
+              <div className='modal__internal'>
+                <h4>{confirm(selection.length)}</h4>
+                <div className='modal__formcenter'>
+                  <button className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
+                    onClick={this.confirm}>Confirm</button>
+                  <button className='button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
+                    onClick={this.cancel}>Cancel</button>
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
     );
   }
 });
