@@ -37,7 +37,8 @@ var LoginModal = React.createClass({
     }
   },
 
-  onSubmit: function () {
+  onSubmit: function (e) {
+    e.preventDefault();
     if (this.props.api.authenticated) return false;
     const { user, pass } = this.state;
     const token = new Buffer(`${user}:${pass}`).toString('base64');
