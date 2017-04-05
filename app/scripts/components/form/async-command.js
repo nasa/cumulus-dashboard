@@ -46,7 +46,7 @@ const AsyncCommand = React.createClass({
     return (
       <button
         className={this.buttonClass(inflight)}
-        onClick={this.handleClick}
+        onClick={this.props.disabled ? () => {} : this.handleClick}
         >{text}{inflight ? <Ellipsis /> : ''}</button>
     );
   }
