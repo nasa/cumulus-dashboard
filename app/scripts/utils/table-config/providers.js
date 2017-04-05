@@ -8,7 +8,6 @@ export const tableHeader = [
   'Group',
   'Status',
   'Collections',
-  'Errors',
   'Protocol',
   'Last Update'
 ];
@@ -18,7 +17,6 @@ export const tableRow = [
   'providerName',
   'status',
   'collections',
-  (d) => '?',
   'protocol',
   (d) => fullDate(d.createdAt)
 ];
@@ -27,7 +25,6 @@ export const tableSortProps = [
   'name.keyword',
   'providerName.keyword',
   'status.keyword',
-  null,
   null,
   'protocol.keyword',
   'updatedAt'

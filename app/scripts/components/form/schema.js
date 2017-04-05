@@ -25,6 +25,9 @@ export const createFormConfig = function (data, schema) {
   data = data || {};
   const fields = [];
   traverseSchema(schema, function (property, meta, schemaProperty, path) {
+    // If a field isn't user-editable, hide it from the form
+    if (meta.readonly) { return; }
+
     // determine the label
     const required = Array.isArray(schemaProperty.required) &&
       schemaProperty.required.indexOf(property) >= 0;
