@@ -195,7 +195,7 @@ var GranuleOverview = React.createClass({
             status={deleteStatus}
             disabled={granule.published}
             className={'form-group__element--right'}
-            text={deleteStatus === 'success' ? 'Success!' : 'Delete'} />
+            text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'} />
 
           <AsyncCommand action={this.remove}
             success={this.fastReload}

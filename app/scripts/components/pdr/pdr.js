@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import {
   interval,
   getPdr,
+  deletePdr,
   searchGranules,
   clearGranulesSearch,
   filterGranules,
@@ -36,6 +37,8 @@ import Search from '../form/search';
 import status from '../../utils/status';
 import Metadata from '../table/metadata';
 import Loading from '../app/loading-indicator';
+import AsyncCommand from '../form/async-command';
+import ErrorReport from '../errors/report';
 import { updateInterval } from '../../config';
 
 const metaAccessors = [
@@ -60,7 +63,8 @@ var PDR = React.createClass({
     logs: React.PropTypes.object,
     pdrs: React.PropTypes.object,
     dispatch: React.PropTypes.func,
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    router: React.PropTypes.object
   },
 
   componentWillMount: function () {
@@ -80,9 +84,18 @@ var PDR = React.createClass({
     this.cancelInterval = interval(() => dispatch(getPdr(pdrName)), updateInterval, immediate);
   },
 
+  deletePdr: function () {
+    const { pdrName } = this.props.params;
+    this.props.dispatch(deletePdr(pdrName));
+  },
+
   generateQuery: function () {
     const pdrName = get(this.props, ['params', 'pdrName']);
     return { pdrName };
+  },
+
+  navigateBack: function () {
+    this.props.router.push('/pdrs');
   },
 
   generateBulkActions: function () {
@@ -107,13 +120,22 @@ var PDR = React.createClass({
     const { list, dropdowns } = this.props.granules;
     const { count, queriedAt } = list.meta;
     const record = this.props.pdrs.map[pdrName];
-    console.log(record);
     const logsQuery = { 'meta.pdrName': pdrName };
+    const deleteStatus = get(this.props.pdrs.deleted, [pdrName, 'status']);
+    const error = record.error;
     return (
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>{pdrName}</h1>
+            <AsyncCommand action={this.deletePdr}
+              success={this.navigateBack}
+              successTimeout={1000}
+              status={deleteStatus}
+              className={'form-group__element--right'}
+              text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'} />
+
+            {error ? <ErrorReport report={error} /> : null}
             {lastUpdated(queriedAt)}
           </div>
         </section>
