@@ -64,12 +64,19 @@ function requireAuth (nextState, replace) {
   }
 }
 
+// redirect to homepage from login if authed
+function checkAuth (nextState, replace) {
+  if (store.getState().api.authenticated) {
+    replace('/');
+  }
+}
+
 render((
   <ProviderElem store={store}>
     <Router history={hashHistory} render={applyRouterMiddleware(useScroll())}>
       <Route path='/404' component={NotFound} />
       <Redirect from='/collections' to='/collections/active' />
-      <Route path='/login' component={Login} />
+      <Route path='/login' component={Login} onEnter={checkAuth} />
       <Route path='/' component={App} onEnter={requireAuth} >
         <IndexRoute component={Home} />
         <Route path='collections' component={Collections}>
