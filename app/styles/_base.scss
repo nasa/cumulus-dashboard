@@ -421,6 +421,22 @@ a:active {
   }
 }
 
+.modal__container {
+  left: 0;
+  margin-top: 10%;
+  overflow: visible;
+  position: fixed;
+  transition: top 0.2s ease-in-out;
+  text-align: center;
+  top: 100%;
+  width: 100%;
+  z-index: 1000;
+}
+
+.modal__container--onscreen {
+  top: 0;
+}
+
 .modal {
   border-radius: 5px;
   display: inline-block;
@@ -431,3 +447,7 @@ a:active {
   text-align: left;
 }
 
+
+.modal__formcenter {
+  text-align: center;
+}
