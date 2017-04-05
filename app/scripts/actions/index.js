@@ -114,6 +114,7 @@ export const NEW_PROVIDER_ERROR = 'NEW_PROVIDER_ERROR';
 export const UPDATE_PROVIDER = 'UPDATE_PROVIDER';
 export const UPDATE_PROVIDER_INFLIGHT = 'UPDATE_PROVIDER_INFLIGHT';
 export const UPDATE_PROVIDER_ERROR = 'UPDATE_PROVIDER_ERROR';
+export const UPDATE_PROVIDER_CLEAR = 'UPDATE_PROVIDER_CLEAR';
 
 export const PROVIDERS = 'PROVIDERS';
 export const PROVIDERS_INFLIGHT = 'PROVIDERS_INFLIGHT';
@@ -257,6 +258,8 @@ export const createProvider = (payload) => wrapRequest(
 
 export const updateProvider = (payload) => wrapRequest(
   payload.name, put, `providers/${payload.name}`, UPDATE_PROVIDER, payload);
+
+export const clearUpdateProvider = (providerId) => ({ type: UPDATE_PROVIDER_CLEAR, id: providerId });
 
 export const deleteProvider = (providerId) => wrapRequest(
   providerId, del, `providers/${providerId}`, PROVIDER_DELETE);
