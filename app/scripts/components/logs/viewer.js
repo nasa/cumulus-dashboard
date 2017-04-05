@@ -48,6 +48,12 @@ var LogViewer = React.createClass({
     if (this.cancelInterval) { this.cancelInterval(); }
   },
 
+  setSearch: function (e) {
+    const value = e.currentTarget.value;
+    if (!value) this.query();
+    else this.query({ q: value });
+  },
+
   setFilter: function (e) {
     const value = e.currentTarget.value;
     if (!value || value.length < 2) {
@@ -82,9 +88,22 @@ var LogViewer = React.createClass({
       <section className='page__section'>
         <div className='heading__wrapper--border'>
           <h2 className='heading--medium heading--shared-content with-description'>Logs {logs.inflight ? <LoadingEllipsis /> : null}</h2>
-          <form className="search__wrapper form-group__element form-group__element--right form-group__element--right--sm form-group__element--small">
-            <input className='search' type="search" onChange={this.setFilter}/>
-            <span className="search__icon"></span>
+          <form className='search__wrapper form-group__element form-group__element--right form-group__element--right--sm form-group__element--small'>
+            <input
+              className='search'
+              type='search'
+              placeholder='Search all logs'
+              onChange={this.setSearch}/>
+            <span className='search__icon'></span>
+          </form>
+
+          <form className='search__wrapper form-group__element form-group__element--right form-group__element--right--sm form-group__element--small'>
+            <input
+              className='search'
+              type='search'
+              placeholder='Filter logs'
+              onChange={this.setFilter}/>
+            <span className='filter__icon'></span>
           </form>
         </div>
         {logs.error ? <ErrorReport report={logs.error} /> : null}
