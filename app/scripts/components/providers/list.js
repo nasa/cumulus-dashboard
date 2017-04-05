@@ -68,10 +68,12 @@ var ListProviders = React.createClass({
     this.setViewState();
   },
 
-  componentWillReceiveProps: function () {
+  componentWillReceiveProps: function (newProps) {
     // Needed in case a user navigates directly from
     // `/providers/active` to `/providers/inactive`, for example
-    this.setViewState();
+    if (this.props.location.pathname !== newProps.location.pathname) {
+      this.setViewState();
+    }
   },
 
   generateBulkActions: function () {
