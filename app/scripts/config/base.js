@@ -21,5 +21,6 @@ module.exports = {
 
   recent: moment().subtract(1, 'day').format(),
 
-  updateDelay: 1500
+  // delay before UI/store updates after a successful command (ie PUT)
+  updateDelay: 1000
 };
