@@ -30,34 +30,29 @@ var ListProviders = React.createClass({
     location: React.PropTypes.object
   },
 
-  getInitialState: function () {
-    return {
-      listTitle: '',
-      query: {}
-    };
-  },
-
-  setViewState: function () {
+  getViewState: function () {
+    let state;
     switch (this.props.location.pathname) {
       case '/providers/active':
-        this.setState({
+        state = {
           listTitle: 'Active Providers',
           query: {isActive: true}
-        });
+        };
         break;
       case '/providers/inactive':
-        this.setState({
+        state = {
           listTitle: 'Inactive Providers',
           query: {isActive: false}
-        });
+        };
         break;
       case '/providers/failed':
-        this.setState({
+        state = {
           listTitle: 'Failed Providers',
           query: {status: 'failed'}
-        });
+        };
         break;
     }
+    return state;
   },
 
   componentWillMount: function () {
@@ -65,15 +60,6 @@ var ListProviders = React.createClass({
       type: 'collections',
       field: 'providers'
     }));
-    this.setViewState();
-  },
-
-  componentWillReceiveProps: function (newProps) {
-    // Needed in case a user navigates directly from
-    // `/providers/active` to `/providers/inactive`, for example
-    if (this.props.location.pathname !== newProps.location.pathname) {
-      this.setViewState();
-    }
   },
 
   generateBulkActions: function () {
@@ -90,6 +76,7 @@ var ListProviders = React.createClass({
   render: function () {
     const { list, dropdowns } = this.props.providers;
     const { count, queriedAt } = list.meta;
+    const { listTitle, query } = this.getViewState();
 
     // Incorporate the collection counts into the `list`
     const collectionCounts = get(this.props.stats, ['count', 'data', 'collections', 'count'], []);
@@ -102,7 +89,7 @@ var ListProviders = React.createClass({
         <section className='page__section'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content'>
-              {this.state.listTitle} <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
+              {listTitle} <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>
@@ -140,7 +127,7 @@ var ListProviders = React.createClass({
             tableHeader={tableHeader}
             tableRow={tableRow}
             tableSortProps={tableSortProps}
-            query={this.state.query}
+            query={query}
             bulkActions={this.generateBulkActions()}
             rowId={'name'}
           />
