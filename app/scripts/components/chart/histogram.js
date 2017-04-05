@@ -3,9 +3,12 @@ import React from 'react';
 import { get } from 'object-path';
 import { scaleLinear, scaleBand } from 'd3-scale';
 import debounce from 'lodash.debounce';
+import throttle from 'lodash.throttle';
 import { tally } from '../../utils/format';
-
 import LoadingIndicator from '../app/loading-indicator';
+
+const noop = (x) => x;
+const tooltipDelay = 100;
 
 const margin = {
   top: 50,
@@ -16,13 +19,17 @@ const margin = {
 
 const Histogram = React.createClass({
   propTypes: {
-    data: React.PropTypes.object
+    data: React.PropTypes.object,
+    tooltipFormat: React.PropTypes.func
   },
 
   getInitialState: function () {
     return {
       width: 0,
-      height: 0
+      height: 0,
+      tooltip: null,
+      tooltipX: 0,
+      tooltipY: 0
     };
   },
 
@@ -31,10 +38,33 @@ const Histogram = React.createClass({
     this.setState({ width: rect.width, height: rect.height });
   },
 
+  componentWillMount: function () {
+    this.setHoverState = throttle(this.setHoverState, tooltipDelay);
+    this.mouseOut = debounce(this.mouseOut, tooltipDelay);
+  },
+
   componentDidMount: function () {
     this.onWindowResize();
     this.onWindowResize = debounce(this.onWindowResize, 200);
     window.addEventListener('resize', this.onWindowResize);
+  },
+
+  setHoverState: function (tooltip, tooltipX, tooltipY) {
+    this.setState({ tooltip, tooltipX, tooltipY });
+  },
+
+  mouseMove: function (e) {
+    // http://stackoverflow.com/questions/38142880/react-js-throttle-mousemove-event-keep-throwing-event-persist-error
+    e.persist();
+    this.setHoverState(
+      e.currentTarget.getAttribute('data-tooltip'),
+      e.clientX,
+      e.clientY
+    );
+  },
+
+  mouseOut: function () {
+    this.setState({ tooltip: null });
   },
 
   render: function () {
@@ -68,11 +98,11 @@ const Histogram = React.createClass({
     .domain(histogram.map(d => d.date));
 
     const band = yScale.bandwidth();
+    const tooltipFormat = this.props.tooltipFormat || noop;
 
     return (
       <div className='chart__container' ref='chartContainer'>
         <svg className='chart' width={width} height={height} ref='svg'>
-
           <g className='axis axis__top' transform={`translate(${margin.left}, ${margin.top})`}>
             <line
               className='axis__line'
@@ -123,13 +153,26 @@ const Histogram = React.createClass({
                 y={yScale(d.date) - band / 2}
                 width={xScale(+d.count)}
                 height={band}
+                data-tooltip={d.count}
+                onMouseMove={this.mouseMove}
+                onMouseOut={this.mouseOut}
               />;
             })}
           </g>
-
         </svg>
+
+        <div className='tooltip' style={{
+          display: this.state.tooltip ? 'block' : 'none',
+          left: this.state.tooltipX,
+          top: this.state.tooltipY}}
+          >
+          <div className='tooltip__inner'>
+            {tooltipFormat(this.state.tooltip)}
+          </div>
+        </div>
       </div>
     );
   }
 });
+
 export default Histogram;
