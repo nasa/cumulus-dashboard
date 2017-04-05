@@ -18,6 +18,7 @@ import {
   UPDATE_PROVIDER,
   UPDATE_PROVIDER_INFLIGHT,
   UPDATE_PROVIDER_ERROR,
+  UPDATE_PROVIDER_CLEAR,
 
   PROVIDERS,
   PROVIDERS_INFLIGHT,
@@ -114,6 +115,9 @@ export default function reducer (state = initialState, action) {
     case UPDATE_PROVIDER_ERROR:
       set(state, ['updated', id, 'status'], 'error');
       set(state, ['updated', id, 'error'], action.error);
+      break;
+    case UPDATE_PROVIDER_CLEAR:
+      del(state, ['updated', id]);
       break;
 
     case PROVIDERS:

@@ -27,6 +27,7 @@ export const NEW_COLLECTION_ERROR = 'NEW_COLLECTION_ERROR';
 export const UPDATE_COLLECTION = 'UPDATE_COLLECTION';
 export const UPDATE_COLLECTION_INFLIGHT = 'UPDATE_COLLECTION_INFLIGHT';
 export const UPDATE_COLLECTION_ERROR = 'UPDATE_COLLECTION_ERROR';
+export const UPDATE_COLLECTION_CLEAR = 'UPDATE_COLLECTION_CLEAR';
 
 export const SEARCH_COLLECTIONS = 'SEARCH_COLLECTIONS';
 export const CLEAR_COLLECTIONS_SEARCH = 'CLEAR_COLLECTIONS_SEARCH';
@@ -113,6 +114,7 @@ export const NEW_PROVIDER_ERROR = 'NEW_PROVIDER_ERROR';
 export const UPDATE_PROVIDER = 'UPDATE_PROVIDER';
 export const UPDATE_PROVIDER_INFLIGHT = 'UPDATE_PROVIDER_INFLIGHT';
 export const UPDATE_PROVIDER_ERROR = 'UPDATE_PROVIDER_ERROR';
+export const UPDATE_PROVIDER_CLEAR = 'UPDATE_PROVIDER_CLEAR';
 
 export const PROVIDERS = 'PROVIDERS';
 export const PROVIDERS_INFLIGHT = 'PROVIDERS_INFLIGHT';
@@ -173,6 +175,8 @@ export const createCollection = (payload) => wrapRequest(
 
 export const updateCollection = (payload) => wrapRequest(
   payload.collectionName, put, `collections/${payload.collectionName}`, UPDATE_COLLECTION, payload);
+
+export const clearUpdateCollection = (collectionName) => ({ type: UPDATE_COLLECTION_CLEAR, id: collectionName });
 
 export const deleteCollection = (collectionName) => wrapRequest(
   collectionName, del, `collections/${collectionName}`, COLLECTION_DELETE);
@@ -260,6 +264,8 @@ export const createProvider = (payload) => wrapRequest(
 export const updateProvider = (payload) => wrapRequest(
   payload.name, put, `providers/${payload.name}`, UPDATE_PROVIDER, payload);
 
+export const clearUpdateProvider = (providerId) => ({ type: UPDATE_PROVIDER_CLEAR, id: providerId });
+
 export const deleteProvider = (providerId) => wrapRequest(
   providerId, del, `providers/${providerId}`, PROVIDER_DELETE);
 
@@ -276,13 +282,9 @@ export const stopProvider = (providerId) => wrapRequest(
   });
 
 export const clearStoppedProvider = (providerId) => ({ type: CLEAR_STOPPED_PROVIDER, id: providerId });
-
 export const searchProviders = (prefix) => ({ type: SEARCH_PROVIDERS, prefix: prefix });
-
 export const clearProvidersSearch = () => ({ type: CLEAR_PROVIDERS_SEARCH });
-
 export const filterProviders = (param) => ({ type: FILTER_PROVIDERS, param: param });
-
 export const clearProvidersFilter = (paramKey) => ({ type: CLEAR_PROVIDERS_FILTER, paramKey: paramKey });
 
 export const deletePdr = (pdrName) => wrapRequest(

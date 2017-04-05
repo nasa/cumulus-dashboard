@@ -19,5 +19,8 @@ module.exports = {
   updateInterval: 15000,
   logsUpdateInterval: 10000,
 
-  recent: moment().subtract(1, 'day').format()
+  recent: moment().subtract(1, 'day').format(),
+
+  // delay before UI/store updates after a successful command (ie PUT)
+  updateDelay: 1000
 };

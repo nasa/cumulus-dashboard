@@ -2,7 +2,6 @@
 import React from 'react';
 import { get } from 'object-path';
 import { Form, formTypes } from './';
-import Loading from '../app/loading-indicator';
 import { isText, isNumber, isArray, arrayWithLength } from '../../utils/validate';
 import t from '../../utils/strings';
 const { errors } = t;
@@ -146,7 +145,6 @@ export const Schema = React.createClass({
 
   render: function () {
     const { fields } = this.state;
-    if (!fields) return <Loading />;
     return (
       <div>
         <Form inputMeta={fields} submit={this.props.onSubmit} cancel={this.back}/>

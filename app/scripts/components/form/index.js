@@ -119,6 +119,8 @@ export const Form = React.createClass({
         errors.push(input.schemaProperty);
         let error = input.error || t.errors.generic;
         return set(inputState, [inputId, 'error'], error);
+      } else if (inputState[inputId].error) {
+        delete inputState[inputId].error;
       }
 
       // Ignore empty fields that aren't required
