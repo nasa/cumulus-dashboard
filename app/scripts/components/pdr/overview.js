@@ -30,7 +30,6 @@ function renderProgress (d) {
   const granulesCompleted = `${tally(completed)}/${tally(total)}`;
   return (
     <div className='table__progress'>
-      <h4 className='table__progress--name'>Completed</h4>
       {bar(percentCompleted, granulesCompleted)}
     </div>
   );
