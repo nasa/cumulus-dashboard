@@ -93,6 +93,7 @@
     "lodash.map": "^4.6.0",
     "lodash.omit": "^4.5.0",
     "lodash.pickby": "^4.6.0",
+    "lodash.throttle": "^4.1.1",
     "moment": "^2.17.1",
     "numeral": "^2.0.4",
     "object-path": "^0.11.3",
