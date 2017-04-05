@@ -17,6 +17,7 @@ import List from '../table/list-view';
 import Overview from '../app/overview';
 import AsyncCommand from '../form/async-command';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
+import { updateDelay } from '../../config';
 
 const granuleFields = 'status,granuleId,pdrName,duration,updatedAt';
 
@@ -122,7 +123,7 @@ var CollectionOverview = React.createClass({
 
           <AsyncCommand action={this.delete}
             success={this.navigateBack}
-            successTimeout={1000}
+            successTimeout={updateDelay}
             status={deleteStatus}
             disabled={hasGranules !== 0}
             className={'form-group__element--right'}

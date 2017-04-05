@@ -2,11 +2,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { getCollection, updateCollection, getSchema } from '../../actions';
+import {
+  getCollection,
+  updateCollection,
+  clearUpdateCollection,
+  getSchema
+} from '../../actions';
 import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
 import Schema from '../form/schema';
 import merge from '../../utils/merge';
+import { updateDelay } from '../../config';
 
 const SCHEMA_KEY = 'collection';
 
@@ -43,7 +49,14 @@ var EditCollection = React.createClass({
 
   componentWillReceiveProps: function (newProps) {
     const collectionName = newProps.params.collectionName;
-    if (this.state.collectionName === collectionName) { return; }
+    const updateStatus = get(this.props.collections.updated, [collectionName, 'status']);
+    if (updateStatus === 'success') {
+      // on success, clear the update and return to the collection detail
+      return setTimeout(() => {
+        this.props.dispatch(clearUpdateCollection(collectionName));
+        this.props.router.push(`/collections/collection/${collectionName}`);
+      }, updateDelay);
+    } else if (this.state.collectionName === collectionName) { return; }
 
     const record = get(this.props.collections.map, collectionName, {});
 
@@ -93,7 +106,7 @@ var EditCollection = React.createClass({
               onSubmit={this.onSubmit}
               router={this.props.router}
             />
-          ) : null}
+          ) : <Loading /> }
           {record.inflight || meta.status === 'inflight' ? <Loading /> : null}
           {error ? <ErrorReport report={error} /> : null}
           {meta.status === 'success' ? <p>Success!</p> : null}

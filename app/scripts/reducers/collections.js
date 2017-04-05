@@ -1,5 +1,5 @@
 'use strict';
-import { set } from 'object-path';
+import { set, del } from 'object-path';
 import assignDate from './assign-date';
 
 import {
@@ -22,6 +22,7 @@ import {
   UPDATE_COLLECTION,
   UPDATE_COLLECTION_INFLIGHT,
   UPDATE_COLLECTION_ERROR,
+  UPDATE_COLLECTION_CLEAR,
 
   SEARCH_COLLECTIONS,
   CLEAR_COLLECTIONS_SEARCH,
@@ -94,6 +95,9 @@ export default function reducer (state = initialState, action) {
     case UPDATE_COLLECTION_ERROR:
       set(state, ['updated', id, 'status'], 'error');
       set(state, ['updated', id, 'error'], action.error);
+      break;
+    case UPDATE_COLLECTION_CLEAR:
+      del(state, ['updated', id]);
       break;
 
     case COLLECTION_DELETE:

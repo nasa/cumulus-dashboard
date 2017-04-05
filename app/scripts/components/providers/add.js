@@ -63,7 +63,7 @@ var AddProvider = React.createClass({
             pk={'new-provider'}
             onSubmit={this.post}
             router={this.props.router}
-          /> : null}
+          /> : <Loading />}
           {record.status === 'inflight' ? <Loading /> : null}
           {record.status === 'error' ? <ErrorReport report={record.error} /> : null}
         </section>
