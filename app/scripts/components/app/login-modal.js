@@ -53,7 +53,7 @@ var LoginModal = React.createClass({
     return (
       <div>
         { show ? <div className='modal__cover'></div> : null }
-        <div className={ show ? 'login login__onscreen' : 'login' }>
+        <div className={ show ? 'modal__container modal__container--onscreen' : 'modal__container' }>
           { show ? (
             <div className='modal'>
               <div className='modal__internal'>
