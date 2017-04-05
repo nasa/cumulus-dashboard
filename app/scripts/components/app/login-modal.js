@@ -3,7 +3,8 @@ import React from 'react';
 import { login } from '../../actions';
 import { window } from '../../utils/browser';
 import { set as setToken } from '../../utils/auth';
-
+import { updateDelay } from '../../config';
+import ErrorReport from '../errors/report';
 import Text from '../form/text';
 
 var LoginModal = React.createClass({
@@ -29,9 +30,9 @@ var LoginModal = React.createClass({
       setToken(this.state.token);
       const { pathname } = this.props.location;
       if (pathname !== '/login' && window.location && window.location.reload) {
-        setTimeout(() => window.location.reload(), 1500);
+        setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/login') {
-        setTimeout(() => this.props.router.push('/'), 1500);
+        setTimeout(() => this.props.router.push('/'), updateDelay);
       }
     }
   },
@@ -45,7 +46,7 @@ var LoginModal = React.createClass({
   },
 
   render: function () {
-    const { authenticated, inflight } = this.props.api;
+    const { authenticated, inflight, error } = this.props.api;
     const { show } = this.props;
 
     return (
@@ -78,6 +79,7 @@ var LoginModal = React.createClass({
                     </span>
                   </div>
                 </form>
+                { error ? <ErrorReport report={error} /> : null }
               </div>
             </div>
           ) : null }
