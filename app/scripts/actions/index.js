@@ -27,6 +27,7 @@ export const NEW_COLLECTION_ERROR = 'NEW_COLLECTION_ERROR';
 export const UPDATE_COLLECTION = 'UPDATE_COLLECTION';
 export const UPDATE_COLLECTION_INFLIGHT = 'UPDATE_COLLECTION_INFLIGHT';
 export const UPDATE_COLLECTION_ERROR = 'UPDATE_COLLECTION_ERROR';
+export const UPDATE_COLLECTION_CLEAR = 'UPDATE_COLLECTION_CLEAR';
 
 export const SEARCH_COLLECTIONS = 'SEARCH_COLLECTIONS';
 export const CLEAR_COLLECTIONS_SEARCH = 'CLEAR_COLLECTIONS_SEARCH';
@@ -169,6 +170,8 @@ export const createCollection = (payload) => wrapRequest(
 export const updateCollection = (payload) => wrapRequest(
   payload.collectionName, put, `collections/${payload.collectionName}`, UPDATE_COLLECTION, payload);
 
+export const clearUpdateCollection = (collectionName) => ({ type: UPDATE_COLLECTION_CLEAR, id: collectionName });
+
 export const deleteCollection = (collectionName) => wrapRequest(
   collectionName, del, `collections/${collectionName}`, COLLECTION_DELETE);
 
@@ -264,13 +267,9 @@ export const restartProvider = (providerId) => wrapRequest(
   });
 
 export const clearRestartedProvider = (providerId) => ({ type: CLEAR_RESTARTED_PROVIDER, id: providerId });
-
 export const searchProviders = (prefix) => ({ type: SEARCH_PROVIDERS, prefix: prefix });
-
 export const clearProvidersSearch = () => ({ type: CLEAR_PROVIDERS_SEARCH });
-
 export const filterProviders = (param) => ({ type: FILTER_PROVIDERS, param: param });
-
 export const clearProvidersFilter = (paramKey) => ({ type: CLEAR_PROVIDERS_FILTER, paramKey: paramKey });
 
 export const deletePdr = (pdrName) => wrapRequest(
