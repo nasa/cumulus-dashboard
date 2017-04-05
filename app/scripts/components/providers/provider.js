@@ -7,8 +7,10 @@ import {
   getProvider,
   deleteProvider,
   restartProvider,
+  stopProvider,
   listCollections,
-  clearRestartedProvider
+  clearRestartedProvider,
+  clearStoppedProvider
 } from '../../actions';
 import { get } from 'object-path';
 import { fullDate, lastUpdated } from '../../utils/format';
@@ -83,6 +85,11 @@ var ProviderOverview = React.createClass({
     this.props.dispatch(restartProvider(providerId));
   },
 
+  stop: function () {
+    const { providerId } = this.props.params;
+    this.props.dispatch(stopProvider(providerId));
+  },
+
   errors: function () {
     const providerId = this.props.params.providerId;
     const errors = [
@@ -105,6 +112,7 @@ var ProviderOverview = React.createClass({
     const logsQuery = { 'meta.provider': providerId };
     const deleteStatus = get(this.props.providers.deleted, [providerId, 'status']);
     const restartStatus = get(this.props.providers.restarted, [providerId, 'status']);
+    const stopStatus = get(this.props.providers.stopped, [providerId, 'status']);
     const errors = this.errors();
     const providerError = provider.error;
     return (
@@ -117,7 +125,7 @@ var ProviderOverview = React.createClass({
             status={deleteStatus}
             disabled={provider.published}
             className={'form-group__element--right'}
-            text={deleteStatus === 'success' ? 'Success!' : 'Delete'}
+            text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'}
             successTimeout={updateDelay} />
           <Link
             className='button button--small form-group__element button--green form-group__element--right'
@@ -131,7 +139,15 @@ var ProviderOverview = React.createClass({
             status={restartStatus}
             disabled={restartStatus === 'success'}
             className={'form-group__element--right'}
-            text={restartStatus === 'success' ? 'Success!' : 'Restart'}
+            text={restartStatus === 'success' ? 'Restarted!' : 'Restart'}
+            successTimeout={updateDelay} />
+          <AsyncCommand
+            action={this.stop}
+            success={() => this.props.dispatch(clearStoppedProvider(this.props.params.providerId))}
+            status={stopStatus}
+            disabled={stopStatus === 'success' || provider.status === 'stopped'}
+            className={'form-group__element--right'}
+            text={stopStatus === 'success' ? 'Stopped!' : 'Stop'}
             successTimeout={updateDelay} />
 
           {lastUpdated(provider.queriedAt)}

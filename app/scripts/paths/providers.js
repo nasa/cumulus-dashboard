@@ -4,7 +4,7 @@ const providerRoutes = [
   ['Overview', null],
   ['Active', 'active'],
   ['Inactive', 'inactive'],
-  ['Errors', 'errors']
+  ['Failed', 'failed']
 ];
 
 const EMPTY = [['', '']];

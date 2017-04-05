@@ -18,7 +18,6 @@ import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/
 import List from '../table/list-view';
 import Search from '../form/search';
 import Dropdown from '../form/dropdown';
-import { Link } from 'react-router';
 import protocol from '../../utils/protocol';
 
 var ListProviders = React.createClass({
@@ -31,8 +30,34 @@ var ListProviders = React.createClass({
     location: React.PropTypes.object
   },
 
-  isActive: function () {
-    return this.props.location.pathname === '/providers/active';
+  getInitialState: function () {
+    return {
+      listTitle: '',
+      query: {}
+    };
+  },
+
+  setViewState: function () {
+    switch (this.props.location.pathname) {
+      case '/providers/active':
+        this.setState({
+          listTitle: 'Active Providers',
+          query: {isActive: true}
+        });
+        break;
+      case '/providers/inactive':
+        this.setState({
+          listTitle: 'Inactive Providers',
+          query: {isActive: false}
+        });
+        break;
+      case '/providers/failed':
+        this.setState({
+          listTitle: 'Failed Providers',
+          query: {status: 'failed'}
+        });
+        break;
+    }
   },
 
   componentWillMount: function () {
@@ -40,12 +65,15 @@ var ListProviders = React.createClass({
       type: 'collections',
       field: 'providers'
     }));
+    this.setViewState();
   },
 
-  generateQuery: function () {
-    return {
-      isActive: this.isActive()
-    };
+  componentWillReceiveProps: function (newProps) {
+    // Needed in case a user navigates directly from
+    // `/providers/active` to `/providers/inactive`, for example
+    if (this.props.location.pathname !== newProps.location.pathname) {
+      this.setViewState();
+    }
   },
 
   generateBulkActions: function () {
@@ -74,9 +102,8 @@ var ListProviders = React.createClass({
         <section className='page__section'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content'>
-              {this.isActive() ? 'Active' : 'Inactive'} Providers <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
+              {this.state.listTitle} <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
             </h1>
-            <Link className='button button--green button--small form-group__element--right' to=''>Edit</Link>
             {lastUpdated(queriedAt)}
           </div>
 
@@ -113,7 +140,7 @@ var ListProviders = React.createClass({
             tableHeader={tableHeader}
             tableRow={tableRow}
             tableSortProps={tableSortProps}
-            query={this.generateQuery()}
+            query={this.state.query}
             bulkActions={this.generateBulkActions()}
             rowId={'name'}
           />
