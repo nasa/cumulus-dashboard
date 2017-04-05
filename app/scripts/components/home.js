@@ -31,6 +31,11 @@ const intervals = {
   year: 'month'
 };
 
+const tGranulesProcessed = (d) => `${tally(d)} Granule(s) Processed`;
+const tErrors = (d) => `${tally(d)} Error(s) Recorded`;
+const tPdrsProcessed = (d) => `${tally(d)} PDR(s) Processed`;
+const tGranulesFailed = (d) => `${tally(d)} Granule(s) Failed`;
+
 var Home = React.createClass({
   displayName: 'Home',
 
@@ -214,19 +219,19 @@ var Home = React.createClass({
               </div>
               <div className='chart__box'>
                 <h2 className='chart__title'>Granules Processed</h2>
-                <Histogram data={granulesProcessed} />
+                <Histogram data={granulesProcessed} tooltipFormat={tGranulesProcessed}/>
               </div>
               <div className='chart__box'>
                 <h2 className='chart__title'>Errors Over Time</h2>
-                <Histogram data={errorsRecorded} />
+                <Histogram data={errorsRecorded} tooltipFormat={tErrors}/>
               </div>
               <div className='chart__box'>
                 <h2 className='chart__title'>PDRs Processed</h2>
-                <Histogram data={pdrsProcessed} />
+                <Histogram data={pdrsProcessed} tooltipFormat={tPdrsProcessed}/>
               </div>
               <div className='chart__box'>
                 <h2 className='chart__title'>Granules Failed</h2>
-                <Histogram data={granulesFailed} />
+                <Histogram data={granulesFailed} tooltipFormat={tGranulesFailed} />
               </div>
             </div>
           </section>
