@@ -24,6 +24,10 @@ import statusOptions from '../../utils/status';
 const processingOptions = omit(statusOptions, ['Completed', 'Failed']);
 const processingStatus = Object.keys(processingOptions).map(d => processingOptions[d]).filter(Boolean).join(',');
 
+const confirmReprocess = (d) => `Reprocess ${d} granules?`;
+const confirmRemove = (d) => `Remove ${d} granules from CMR?`;
+const confirmDelete = (d) => `Delete ${d} granules?`;
+
 var AllGranules = React.createClass({
   displayName: 'AllGranules',
 
@@ -48,15 +52,18 @@ var AllGranules = React.createClass({
     return [{
       text: 'Reprocess',
       action: reprocessGranule,
-      state: granules.reprocessed
+      state: granules.reprocessed,
+      confirm: confirmReprocess
     }, {
       text: 'Remove from CMR',
       action: removeGranule,
-      state: granules.removed
+      state: granules.removed,
+      confirm: confirmRemove
     }, {
       text: 'Delete',
       action: deleteGranule,
-      state: granules.deleted
+      state: granules.deleted,
+      confirm: confirmDelete
     }];
   },
 

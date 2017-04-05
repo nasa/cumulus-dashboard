@@ -161,6 +161,7 @@ var List = React.createClass({
               action={item.action}
               state={item.state}
               text={item.text}
+              confirm={item.confirm}
               selection={selected}
             />)}
           </div>
