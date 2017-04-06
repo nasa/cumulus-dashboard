@@ -21,7 +21,8 @@ var List = React.createClass({
       prefix: null,
       queryConfig: {},
       params: {},
-      completedBulkActions: 0
+      completedBulkActions: 0,
+      bulkActionError: null
     };
   },
 
@@ -109,7 +110,15 @@ var List = React.createClass({
 
   onBulkActionSuccess: function () {
     // not-elegant way to trigger a re-fresh in the timer
-    this.setState({completedBulkActions: this.state.completedBulkActions + 1});
+    this.setState({
+      completedBulkActions: this.state.completedBulkActions + 1,
+      bulkActionError: null
+    });
+  },
+
+  onBulkActionError: function (error) {
+    const message = `Could not process ${error.id}, ${error.error}`;
+    this.setState({ bulkActionError: message });
   },
 
   config: function (config, query) {
@@ -165,7 +174,8 @@ var List = React.createClass({
       order,
       selected,
       queryConfig,
-      completedBulkActions
+      completedBulkActions,
+      bulkActionError
     } = this.state;
     const primaryIdx = 0;
     const hasActions = !!(Array.isArray(bulkActions) && bulkActions.length);
@@ -189,6 +199,7 @@ var List = React.createClass({
               text={item.text}
               confirm={item.confirm}
               onSuccess={this.onBulkActionSuccess}
+              onError={this.onBulkActionError}
               selection={selected}
             />)}
           </div>
@@ -196,6 +207,7 @@ var List = React.createClass({
 
         {list.inflight ? <Loading /> : null}
         {list.error ? <ErrorReport report={list.error} /> : null}
+        {bulkActionError ? <ErrorReport report={bulkActionError} /> : null}
 
         <SortableTable
           primaryIdx={primaryIdx}

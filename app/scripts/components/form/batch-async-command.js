@@ -130,7 +130,7 @@ const BatchCommand = React.createClass({
                   onClick={this.cancel}>Cancel</button>
                 <div className='modal__loading'>
                   <div className='modal__loading--inner'>
-                    <div className='modal__loading--progress'
+                    <div className={'modal__loading--progress modal__loading--progress--' + status}
                       style={{width: (todo ? (completed * 100 / todo) + '%' : 0)}}>
                     </div>
                   </div>
