@@ -100,6 +100,7 @@ render((
         <Route path='pdrs' component={Pdrs}>
           <IndexRoute component={PdrOverview} />
           <Route path='active' component={PdrList} />
+          <Route path='all' component={PdrList} />
           <Route path='failed' component={PdrList} />
           <Route path='completed' component={PdrList} />
           <Route path='pdr/:pdrName' component={Pdr} />

@@ -7,8 +7,8 @@ import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/
 import LogViewer from '../logs/viewer';
 import Search from '../form/search';
 import List from '../table/list-view';
-import statusOptions from '../../utils/status';
-const activeQuery = Object.keys(statusOptions).map(d => statusOptions[d]).filter(d => {
+import { queryStatus } from '../../utils/status';
+const activeQuery = queryStatus.filter(d => {
   return d && d !== 'completed' && d !== 'failed';
 }).join(',');
 
@@ -27,8 +27,16 @@ var ActivePdrs = React.createClass({
     const { pathname } = this.props.location;
     if (pathname === '/pdrs/completed') query.status = 'completed';
     else if (pathname === '/pdrs/failed') query.status = 'failed';
-    else query.status__in = activeQuery;
+    else if (pathname === '/pdrs/active') query.status__in = activeQuery;
     return query;
+  },
+
+  getView: function () {
+    const { pathname } = this.props.location;
+    if (pathname === '/pdrs/completed') return 'Completed';
+    else if (pathname === '/pdrs/failed') return 'Failed';
+    else if (pathname === '/pdrs/active') return 'Active';
+    else return 'All';
   },
 
   generateBulkActions: function () {
@@ -39,12 +47,11 @@ var ActivePdrs = React.createClass({
     const { list } = this.props.pdrs;
     const { count, queriedAt } = list.meta;
     const logsQuery = { 'meta.pdrName__exists': 'true' };
-    const active = this.props.location.pathname.indexOf('active') >= 0;
     return (
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>{active ? 'Active' : ' Completed'} PDRs {!isNaN(count) ? `(${count})` : null}</h1>
+            <h1 className='heading--large heading--shared-content with-description'>{this.getView()} PDRs {!isNaN(count) ? `(${count})` : null}</h1>
             {lastUpdated(queriedAt)}
           </div>
           <div className='filters'>
