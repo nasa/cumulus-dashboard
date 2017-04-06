@@ -76,5 +76,8 @@
   background-color: $royal-purple;
 }
 
+.modal__loading--progress--success { background-color: $light-green; }
+.modal__loading--progress--error { background-color: $error-red; }
+
 .modal__title--success { color: $light-green; }
 .modal__title--error { color: $error-red; }
