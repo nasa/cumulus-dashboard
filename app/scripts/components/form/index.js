@@ -135,8 +135,11 @@ export const Form = React.createClass({
       inputs: inputState
     }));
 
-    if (errors.length) scrollTo(0, 0);
-    else this.props.submit(this.props.id, payload);
+    if (errors.length) {
+      if (this.DOMElement && typeof this.DOMElement.scrollIntoView === 'function') {
+        this.DOMElement.scrollIntoView(true);
+      } else scrollTo(0, 0);
+    } else this.props.submit(this.props.id, payload);
     this.setState({errors});
   },
 
@@ -144,7 +147,7 @@ export const Form = React.createClass({
     const inputState = this.state.inputs;
     const { errors } = this.state;
     const form = (
-      <div>
+      <div ref={(element) => { this.DOMElement = element; }}>
         {errors.length ? <ErrorReport report={errorMessage(errors)} /> : null}
         <ul>
           {this.props.inputMeta.map(form => {
