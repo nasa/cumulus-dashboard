@@ -34,6 +34,11 @@ import {
   OPTIONS_COLLECTIONNAME_ERROR
 } from '../actions';
 
+function removeDeleted (list, deleted) {
+  const filter = (item) => !(deleted[item.granuleId] && deleted[item.granuleId].status === 'success');
+  return list.filter(filter);
+}
+
 export const initialState = {
   list: {
     data: [],
@@ -66,7 +71,7 @@ export default function reducer (state = initialState, action) {
       break;
 
     case GRANULES:
-      set(state, ['list', 'data'], data.results);
+      set(state, ['list', 'data'], removeDeleted(data.results, state.deleted));
       set(state, ['list', 'meta'], assignDate(data.meta));
       set(state, ['list', 'inflight'], false);
       break;
