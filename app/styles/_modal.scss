@@ -75,3 +75,6 @@
   transition: width 0.2s linear;
   background-color: $royal-purple;
 }
+
+.modal__title--success { color: $light-green; }
+.modal__title--error { color: $error-red; }

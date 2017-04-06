@@ -24,7 +24,8 @@ const BatchCommand = React.createClass({
     return {
       callbacks: {},
       activeModal: false,
-      completed: 0
+      completed: 0,
+      status: null
     };
   },
 
@@ -35,7 +36,7 @@ const BatchCommand = React.createClass({
     Object.keys(callbacks).forEach(id => {
       if (!state[id] || !callbacks[id]) return;
       else if (state[id].status === 'success') callbacks[id](null, id);
-      else if (state[id].status === 'error') callbacks[id](state[id].error);
+      else if (state[id].status === 'error') callbacks[id]({error: state[id].error, id});
       if (state[id].status === 'success' || state[id].status === 'error') {
         delete callbacks[id];
         this.setState({ callbacks, completed: completed + 1 });
@@ -73,16 +74,18 @@ const BatchCommand = React.createClass({
     return dispatch(action(id));
   },
 
-  // call onSuccess and onError functions as needed
+  // immediately change the UI to show either success or error
   onComplete: function (error, results) {
+    this.setState({status: (error ? 'error' : 'success')});
+    setTimeout(() => this.cleanup(error, results), updateDelay);
+  },
+
+  // call onSuccess and onError functions as needed
+  cleanup: function (error, results) {
     const { onSuccess, onError } = this.props;
     if (error && typeof onError === 'function') onError(error);
     else if (!error && typeof onSuccess === 'function') onSuccess(results);
-    setTimeout(() => this.cleanup(), updateDelay);
-  },
-
-  cleanup: function () {
-    this.setState({ activeModal: false, completed: 0 });
+    this.setState({ activeModal: false, completed: 0, status: null });
   },
 
   isInflight: function () {
@@ -97,10 +100,15 @@ const BatchCommand = React.createClass({
 
   render: function () {
     const { text, selection, className, confirm } = this.props;
-    const { activeModal, completed } = this.state;
+    const { activeModal, completed, status } = this.state;
     const todo = selection.length;
-    const done = (todo && completed === todo);
     const inflight = this.isInflight();
+
+    // show button as disabled when loading, and in the delay before we clean up.
+    const buttonDisabled = inflight || status;
+    const modalText = inflight ? IN_PROGRESS
+      : !status ? confirm(todo)
+      : status === 'success' ? 'Success!' : 'Error';
     return (
       <div>
         <AsyncCommand
@@ -115,10 +123,10 @@ const BatchCommand = React.createClass({
           { activeModal ? (
             <div className='modal'>
               <div className='modal__internal modal__formcenter'>
-                <h4>{done ? 'Success!' : inflight ? IN_PROGRESS : confirm(todo)}</h4>
-                <button className={'button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (inflight || done ? ' button--disabled' : '')}
+                <h4 className={'modal__title--' + status}>{modalText}</h4>
+                <button className={'button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (buttonDisabled ? ' button--disabled' : '')}
                   onClick={this.confirm}>Confirm</button>
-                <button className={'button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel' + (inflight || done ? ' button--disabled' : '')}
+                <button className={'button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel' + (buttonDisabled ? ' button--disabled' : '')}
                   onClick={this.cancel}>Cancel</button>
                 <div className='modal__loading'>
                   <div className='modal__loading--inner'>
