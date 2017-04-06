@@ -5,10 +5,7 @@ import { Link } from 'react-router';
 import {
   getCollection,
   listGranules,
-  deleteCollection,
-  reprocessGranule,
-  removeGranule,
-  deleteGranule
+  deleteCollection
 } from '../../actions';
 import { get } from 'object-path';
 import { seconds, tally, lastUpdated } from '../../utils/format';
@@ -16,7 +13,7 @@ import ErrorReport from '../errors/report';
 import List from '../table/list-view';
 import Overview from '../app/overview';
 import AsyncCommand from '../form/async-command';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
+import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
 import { updateDelay } from '../../config';
 
 const granuleFields = 'status,granuleId,pdrName,duration,updatedAt';
@@ -58,19 +55,7 @@ var CollectionOverview = React.createClass({
 
   generateBulkActions: function () {
     const { granules } = this.props;
-    return [{
-      text: 'Reprocess',
-      action: reprocessGranule,
-      state: granules.reprocessed
-    }, {
-      text: 'Remove from CMR',
-      action: removeGranule,
-      state: granules.removed
-    }, {
-      text: 'Delete',
-      action: deleteGranule,
-      state: granules.deleted
-    }];
+    return bulkActions(granules);
   },
 
   delete: function () {

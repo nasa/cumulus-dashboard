@@ -9,12 +9,11 @@ import {
   getOptionsProviderGroup,
   filterProviders,
   clearProvidersFilter,
-  deleteProvider,
   getCount
 } from '../../actions';
 import { get } from 'object-path';
 import { dropdownOption, lastUpdated } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/providers';
+import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/providers';
 import List from '../table/list-view';
 import Search from '../form/search';
 import Dropdown from '../form/dropdown';
@@ -64,13 +63,7 @@ var ListProviders = React.createClass({
 
   generateBulkActions: function () {
     const { providers } = this.props;
-    return [
-      {
-        text: 'Delete',
-        action: deleteProvider,
-        state: providers.deleted
-      }
-    ];
+    return bulkActions(providers);
   },
 
   render: function () {

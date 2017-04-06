@@ -210,9 +210,9 @@ export const Form = React.createClass({
         ) : null}
 
         {this.props.cancel ? (
-          <span className='button button--secondary form-group__element--left button__animation--md button__arrow button__arrow--md button__animation button__cancel'>
+          <span className='button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'>
             <input
-              type='cancel'
+              type='submit'
               value='Cancel'
               onClick={this.onCancel}
               readOnly={true}

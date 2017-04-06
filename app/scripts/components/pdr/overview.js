@@ -3,8 +3,9 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { listPdrs, getCount, deletePdr } from '../../actions';
+import { listPdrs, getCount } from '../../actions';
 import { bool, lastUpdated, tally, displayCase, fromNow } from '../../utils/format';
+import { bulkActions } from '../../utils/table-config/pdrs';
 import List from '../table/list-view';
 import Overview from '../app/overview';
 import { recent } from '../../config';
@@ -107,11 +108,7 @@ var PdrOverview = React.createClass({
   },
 
   generateBulkActions: function () {
-    return [{
-      text: 'Delete',
-      action: deletePdr,
-      state: this.props.pdrs.deleted
-    }];
+    return bulkActions(this.props.pdrs);
   },
 
   render: function () {

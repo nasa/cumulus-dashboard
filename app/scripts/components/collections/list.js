@@ -7,11 +7,10 @@ import {
   searchCollections,
   clearCollectionsSearch,
   filterCollections,
-  clearCollectionsFilter,
-  deleteCollection
+  clearCollectionsFilter
 } from '../../actions';
 import { collectionSearchResult, dropdownOption, lastUpdated } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/collections';
+import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/collections';
 import Search from '../form/search';
 import Dropdown from '../form/dropdown';
 import List from '../table/list-view';
@@ -42,11 +41,7 @@ var CollectionList = React.createClass({
   },
 
   generateBulkActions: function () {
-    return [{
-      text: 'Delete',
-      action: deleteCollection,
-      state: this.props.collections.deleted
-    }];
+    return bulkActions(this.props.collections);
   },
 
   inactive: function () {
