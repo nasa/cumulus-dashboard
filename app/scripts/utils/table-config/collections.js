@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { fullDate, seconds, tally } from '../format';
+import { deleteCollection } from '../../actions';
 
 export const tableHeader = [
   'Name',
@@ -25,3 +26,13 @@ export const tableRow = [
 
 export const tableSortProps = [
 ];
+
+const confirmDelete = (d) => `Delete ${d} collections(s)?`;
+export const bulkActions = function (collections) {
+  return [{
+    text: 'Delete',
+    action: deleteCollection,
+    state: collections.deleted,
+    confirm: confirmDelete
+  }];
+};
