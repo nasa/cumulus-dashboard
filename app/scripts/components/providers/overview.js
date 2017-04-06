@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { listProviders, getCount } from '../../actions';
 import { lastUpdated } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/providers';
+import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/providers';
 import List from '../table/list-view';
 
 var ProvidersOverview = React.createClass({
@@ -23,6 +23,11 @@ var ProvidersOverview = React.createClass({
       type: 'collections',
       field: 'providers'
     }));
+  },
+
+  generateBulkActions: function () {
+    const { providers } = this.props;
+    return bulkActions(providers);
   },
 
   generateQuery: function () {
@@ -61,6 +66,7 @@ var ProvidersOverview = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
+            bulkActions={this.generateBulkActions()}
             rowId={'name'}
           />
         </section>

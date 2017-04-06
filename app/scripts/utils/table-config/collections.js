@@ -36,4 +36,3 @@ export const bulkActions = function (collections) {
     confirm: confirmDelete
   }];
 };
-

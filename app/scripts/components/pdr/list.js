@@ -1,9 +1,9 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { searchPdrs, clearPdrsSearch, listPdrs, deletePdr } from '../../actions';
+import { searchPdrs, clearPdrsSearch, listPdrs } from '../../actions';
 import { pdrSearchResult, lastUpdated } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdrs';
+import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/pdrs';
 import LogViewer from '../logs/viewer';
 import Search from '../form/search';
 import List from '../table/list-view';
@@ -32,11 +32,7 @@ var ActivePdrs = React.createClass({
   },
 
   generateBulkActions: function () {
-    return [{
-      text: 'Delete',
-      action: deletePdr,
-      state: this.props.pdrs.deleted
-    }];
+    return bulkActions(this.props.pdrs);
   },
 
   render: function () {
