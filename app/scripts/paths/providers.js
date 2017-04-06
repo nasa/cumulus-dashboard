@@ -2,6 +2,7 @@
 
 const providerRoutes = [
   ['Overview', null],
+  ['All Providers', 'all'],
   ['Active', 'active'],
   ['Inactive', 'inactive'],
   ['Failed', 'failed']

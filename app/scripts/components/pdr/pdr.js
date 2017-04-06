@@ -11,10 +11,7 @@ import {
   filterGranules,
   clearGranulesFilter,
   listGranules,
-  getOptionsCollectionName,
-  reprocessGranule,
-  removeGranule,
-  deleteGranule
+  getOptionsCollectionName
 } from '../../actions';
 import { get } from 'object-path';
 import {
@@ -29,7 +26,7 @@ import {
   displayCase,
   bool
 } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
+import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
 import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
@@ -100,19 +97,7 @@ var PDR = React.createClass({
 
   generateBulkActions: function () {
     const { granules } = this.props;
-    return [{
-      text: 'Reprocess',
-      action: reprocessGranule,
-      state: granules.reprocessed
-    }, {
-      text: 'Remove from CMR',
-      action: removeGranule,
-      state: granules.removed
-    }, {
-      text: 'Delete',
-      action: deleteGranule,
-      state: granules.deleted
-    }];
+    return bulkActions(granules);
   },
 
   render: function () {

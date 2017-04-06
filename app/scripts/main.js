@@ -100,6 +100,7 @@ render((
         <Route path='pdrs' component={Pdrs}>
           <IndexRoute component={PdrOverview} />
           <Route path='active' component={PdrList} />
+          <Route path='all' component={PdrList} />
           <Route path='failed' component={PdrList} />
           <Route path='completed' component={PdrList} />
           <Route path='pdr/:pdrName' component={Pdr} />
@@ -109,6 +110,7 @@ render((
           <Route path='add' component={AddProvider} />
           <Route path='edit/:providerId' component={EditProvider} />
           <Route path='active' component={ListProviders} />
+          <Route path='all' component={ListProviders} />
           <Route path='inactive' component={ListProviders} />
           <Route path='failed' component={ListProviders} />
           <Route path='provider/:providerId' component={Provider} />

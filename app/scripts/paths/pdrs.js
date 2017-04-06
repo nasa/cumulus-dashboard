@@ -2,6 +2,7 @@
 
 const pdrRoutes = [
   ['Overview', null],
+  ['All PDRs', 'all'],
   ['Completed', 'completed'],
   ['Active', 'active'],
   ['Failed', 'failed']
