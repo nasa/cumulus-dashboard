@@ -110,6 +110,7 @@ render((
           <Route path='add' component={AddProvider} />
           <Route path='edit/:providerId' component={EditProvider} />
           <Route path='active' component={ListProviders} />
+          <Route path='all' component={ListProviders} />
           <Route path='inactive' component={ListProviders} />
           <Route path='failed' component={ListProviders} />
           <Route path='provider/:providerId' component={Provider} />

@@ -50,7 +50,7 @@ var ProvidersOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>Providers</h1>
+          <h1 className='heading--large heading--shared-content'>Providers Overview</h1>
           {lastUpdated(queriedAt)}
         </section>
         <section className='page__section'>
