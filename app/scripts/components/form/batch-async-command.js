@@ -83,9 +83,9 @@ const BatchCommand = React.createClass({
   // call onSuccess and onError functions as needed
   cleanup: function (error, results) {
     const { onSuccess, onError } = this.props;
+    this.setState({ activeModal: false, completed: 0, status: null });
     if (error && typeof onError === 'function') onError(error);
     else if (!error && typeof onSuccess === 'function') onSuccess(results);
-    this.setState({ activeModal: false, completed: 0, status: null });
   },
 
   isInflight: function () {
@@ -94,7 +94,7 @@ const BatchCommand = React.createClass({
 
   handleClick: function () {
     if (this.props.confirm) {
-      this.setState({ activeModal: true });
+      this.setState({ activeModal: true, completed: 0 });
     } else this.start();
   },
 
