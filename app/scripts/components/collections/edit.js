@@ -9,7 +9,6 @@ import {
   getSchema
 } from '../../actions';
 import Loading from '../app/loading-indicator';
-import ErrorReport from '../errors/report';
 import Schema from '../form/schema';
 import merge from '../../utils/merge';
 import { updateDelay } from '../../config';
@@ -105,11 +104,10 @@ var EditCollection = React.createClass({
               pk={collectionName}
               onSubmit={this.onSubmit}
               router={this.props.router}
+              status={meta.status}
+              error={meta.status === 'inflight' ? null : error}
             />
           ) : <Loading /> }
-          {record.inflight || meta.status === 'inflight' ? <Loading /> : null}
-          {error ? <ErrorReport report={error} /> : null}
-          {meta.status === 'success' ? <p>Success!</p> : null}
         </section>
       </div>
     );

@@ -4,6 +4,7 @@ import { get } from 'object-path';
 import { Form, formTypes } from './';
 import { isText, isNumber, isArray, arrayWithLength } from '../../utils/validate';
 import t from '../../utils/strings';
+import ErrorReport from '../errors/report';
 const { errors } = t;
 
 export const traverseSchema = function (schema, fn, path) {
@@ -119,7 +120,9 @@ export const Schema = React.createClass({
     data: React.PropTypes.object,
     pk: React.PropTypes.string,
     router: React.PropTypes.object,
-    onSubmit: React.PropTypes.func
+    onSubmit: React.PropTypes.func,
+    status: React.PropTypes.string,
+    error: React.PropTypes.any
   },
 
   getInitialState: function () {
@@ -137,17 +140,33 @@ export const Schema = React.createClass({
     if (props.pk !== newProps.pk) {
       this.setState({ fields: createFormConfig(data, schema) });
     }
+    if (newProps.error && !props.error) {
+      this.scrollToTop();
+    }
   },
 
   back: function () {
     this.props.router.goBack();
   },
 
+  scrollToTop: function () {
+    if (this.DOMElement && typeof this.DOMElement.scrollIntoView === 'function') {
+      this.DOMElement.scrollIntoView(true);
+    } else scrollTo(0, 0);
+  },
+
   render: function () {
     const { fields } = this.state;
+    const { error } = this.props;
     return (
-      <div>
-        <Form inputMeta={fields} submit={this.props.onSubmit} cancel={this.back}/>
+      <div ref={(element) => { this.DOMElement = element; }}>
+        {error ? <ErrorReport report={error} /> : null}
+        <Form
+          inputMeta={fields}
+          submit={this.props.onSubmit}
+          cancel={this.back}
+          status={this.props.status}
+        />
       </div>
     );
   }

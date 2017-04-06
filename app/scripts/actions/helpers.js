@@ -15,12 +15,20 @@ function setToken (config) {
   return config;
 }
 
+function formatError (response, body) {
+  let error = response.statusMessage;
+  body = body || {};
+  if (body.name) error = body.name;
+  if (body.message) error += `: ${body.message}`;
+  return error;
+}
+
 export const get = function (config, callback) {
   request.get(setToken(config), (error, resp, body) => {
     if (error) {
       return callback(error);
     } else if (+resp.statusCode >= 400) {
-      return callback(new Error(resp.statusMessage));
+      return callback(new Error(formatError(resp, body)));
     }
     return callback(null, body);
   });
@@ -32,7 +40,7 @@ export const post = function (config, callback) {
     if (error) {
       return callback(error);
     } else if (+resp.statusCode >= 400) {
-      return callback(new Error(resp.statusMessage));
+      return callback(new Error(formatError(resp, body)));
     } else {
       return callback(null, body);
     }
@@ -45,7 +53,7 @@ export const put = function (config, callback) {
     if (error) {
       return callback(error);
     } else if (+resp.statusCode >= 400) {
-      return callback(new Error(resp.statusMessage));
+      return callback(new Error(formatError(resp, body)));
     } else {
       return callback(null, body);
     }
@@ -58,7 +66,7 @@ export const del = function (config, callback) {
     if (error) {
       return callback(error);
     } else if (+resp.statusCode >= 400) {
-      return callback(new Error(resp.statusMessage));
+      return callback(new Error(formatError(resp, body)));
     } else {
       return callback(null, body);
     }

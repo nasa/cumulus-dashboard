@@ -52,7 +52,7 @@ export const Form = React.createClass({
     inputMeta: React.PropTypes.array,
     submit: React.PropTypes.func,
     cancel: React.PropTypes.func,
-    inflight: React.PropTypes.bool,
+    status: React.PropTypes.string,
     nowrap: React.PropTypes.bool
   },
 
@@ -79,6 +79,10 @@ export const Form = React.createClass({
     this.setState({ inputs: inputState });
   },
 
+  isInflight: function () {
+    return this.props.status && this.props.status === 'inflight';
+  },
+
   onChange: function (inputId, value) {
     const inputState = Object.assign({}, this.state.inputs);
     set(inputState, [inputId, 'value'], value);
@@ -89,12 +93,13 @@ export const Form = React.createClass({
 
   onCancel: function (e) {
     e.preventDefault();
+    if (this.isInflight()) { return; }
     this.props.cancel(this.props.id);
   },
 
   onSubmit: function (e) {
     e.preventDefault();
-    if (this.props.inflight) { return; }
+    if (this.isInflight()) { return; }
     const inputState = Object.assign({}, this.state.inputs);
 
     // validate input values in the store
@@ -135,16 +140,23 @@ export const Form = React.createClass({
       inputs: inputState
     }));
 
-    if (errors.length) scrollTo(0, 0);
+    if (errors.length) this.scrollToTop();
     else this.props.submit(this.props.id, payload);
     this.setState({errors});
+  },
+
+  scrollToTop: function () {
+    if (this.DOMElement && typeof this.DOMElement.scrollIntoView === 'function') {
+      this.DOMElement.scrollIntoView(true);
+    } else scrollTo(0, 0);
   },
 
   render: function () {
     const inputState = this.state.inputs;
     const { errors } = this.state;
+    const { status } = this.props;
     const form = (
-      <div>
+      <div ref={(element) => { this.DOMElement = element; }}>
         {errors.length ? <ErrorReport report={errorMessage(errors)} /> : null}
         <ul>
           {this.props.inputMeta.map(form => {
@@ -199,10 +211,10 @@ export const Form = React.createClass({
         </ul>
 
         {this.props.submit ? (
-          <span className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
+          <span className={'button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (this.isInflight() ? ' button--disabled' : '')}>
             <input
               type='submit'
-              value={this.props.inflight ? 'Loading...' : 'Submit'}
+              value={this.isInflight() ? 'Loading...' : status === 'success' ? 'Success!' : 'Submit'}
               onClick={this.onSubmit}
               readOnly={true}
             />
@@ -210,7 +222,7 @@ export const Form = React.createClass({
         ) : null}
 
         {this.props.cancel ? (
-          <span className='button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'>
+          <span className={'button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel' + (this.isInflight() ? ' button--disabled' : '')}>
             <input
               type='submit'
               value='Cancel'
