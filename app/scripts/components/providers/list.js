@@ -34,20 +34,26 @@ var ListProviders = React.createClass({
     switch (this.props.location.pathname) {
       case '/providers/active':
         state = {
-          listTitle: 'Active Providers',
+          title: 'Active Providers',
           query: {isActive: true}
         };
         break;
       case '/providers/inactive':
         state = {
-          listTitle: 'Inactive Providers',
+          title: 'Inactive Providers',
           query: {isActive: false}
         };
         break;
       case '/providers/failed':
         state = {
-          listTitle: 'Failed Providers',
+          title: 'Failed Providers',
           query: {status: 'failed'}
+        };
+        break;
+      case '/providers/all':
+        state = {
+          title: 'All Providers',
+          query: {}
         };
         break;
     }
@@ -69,7 +75,7 @@ var ListProviders = React.createClass({
   render: function () {
     const { list, dropdowns } = this.props.providers;
     const { count, queriedAt } = list.meta;
-    const { listTitle, query } = this.getViewState();
+    const { title, query } = this.getViewState();
 
     // Incorporate the collection counts into the `list`
     const collectionCounts = get(this.props.stats, ['count', 'data', 'collections', 'count'], []);
@@ -82,7 +88,7 @@ var ListProviders = React.createClass({
         <section className='page__section'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content'>
-              {listTitle} <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
+              {title} <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>
