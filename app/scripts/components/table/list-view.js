@@ -20,7 +20,8 @@ var List = React.createClass({
       selected: [],
       prefix: null,
       queryConfig: {},
-      params: {}
+      params: {},
+      completedBulkActions: 0
     };
   },
 
@@ -106,6 +107,11 @@ var List = React.createClass({
     }
   },
 
+  onBulkActionSuccess: function () {
+    // not-elegant way to trigger a re-fresh in the timer
+    this.setState({completedBulkActions: this.state.completedBulkActions + 1});
+  },
+
   config: function (config, query) {
     config = config || {};
     const { page, order, sort_by, params } = config;
@@ -130,6 +136,17 @@ var List = React.createClass({
     return config;
   },
 
+  renderSelectAll: function () {
+    const { list } = this.props;
+    const allChecked = this.state.selected.length === list.data.length && list.data.length;
+    return (
+      <label className='form__element__select form-group__element form-group__element--small'>
+        <input type='checkbox' className='form-select__all' name='Select' checked={allChecked} onChange={this.selectAll} />
+        Select
+      </label>
+    );
+  },
+
   render: function () {
     const {
       dispatch,
@@ -142,26 +159,36 @@ var List = React.createClass({
       list
     } = this.props;
     const { count, limit } = list.meta;
-    const { page, sortIdx, order, selected, queryConfig } = this.state;
+    const {
+      page,
+      sortIdx,
+      order,
+      selected,
+      queryConfig,
+      completedBulkActions
+    } = this.state;
     const primaryIdx = 0;
-    const allChecked = this.state.selected.length === list.data.length && list.data.length;
     const hasActions = !!(Array.isArray(bulkActions) && bulkActions.length);
 
     return (
       <div className='list-view'>
-        <Timer noheader={!hasActions} dispatch={dispatch} action={action} config={queryConfig} />
+        <Timer
+          noheader={!hasActions}
+          dispatch={dispatch}
+          action={action}
+          config={queryConfig}
+          reload={completedBulkActions}
+        />
         {hasActions ? (
           <div className='form--controls'>
-            <label className='form__element__select form-group__element form-group__element--small'>
-              <input type='checkbox' className='form-select__all' name='Select' checked={allChecked} onChange={this.selectAll} />
-              Select
-            </label>
+            {this.renderSelectAll()}
             {bulkActions.map((item, i) => <BatchAsyncCommand key={item.text}
               dispatch={dispatch}
               action={item.action}
               state={item.state}
               text={item.text}
               confirm={item.confirm}
+              onSuccess={this.onBulkActionSuccess}
               selection={selected}
             />)}
           </div>
@@ -184,7 +211,6 @@ var List = React.createClass({
           selectedRows={selected}
           rowId={rowId}
         />
-
         <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
       </div>
     );

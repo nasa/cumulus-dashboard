@@ -8,7 +8,8 @@ const Timer = React.createClass({
     noheader: React.PropTypes.bool,
     dispatch: React.PropTypes.func,
     action: React.PropTypes.func,
-    config: React.PropTypes.object
+    config: React.PropTypes.object,
+    reload: React.PropTypes.any
   },
 
   componentWillMount: function () {
@@ -16,7 +17,8 @@ const Timer = React.createClass({
   },
 
   componentWillReceiveProps: function (nextProps) {
-    if (JSON.stringify(this.props.config) !== JSON.stringify(nextProps.config)) {
+    if (JSON.stringify(this.props.config) !== JSON.stringify(nextProps.config) ||
+      (nextProps.reload && this.props.reload !== nextProps.reload)) {
       this.createTimer(nextProps.config);
     }
   },
