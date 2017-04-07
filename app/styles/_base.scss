@@ -416,22 +416,22 @@ a:active {
       border-radius: 20px;
     }
   }
-  .Ingesting, .Processing, .Updating, .Archiving {
+  .ingesting, .processing, .updating, .archiving {
     &:before {
       background-color: $yellow;
     }
   }
-  .Completed {
+  .completed {
     &:before {
       background-color: $light-green;
     }
   }
-  .Stopped {
+  .stopped {
     &:before {
       background-color: $orange;
     }
   }
-  .Failed {
+  .failed {
     &:before {
       background-color: $error-red;
     }
