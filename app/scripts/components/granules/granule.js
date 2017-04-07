@@ -92,9 +92,8 @@ var GranuleOverview = React.createClass({
   },
 
   fastReload: function () {
-    // delay a reload but shorten the duration
-    // this shows the granule as it reprocesses
-    this.reload(false, 2000);
+    // decrease timeout to better see updates
+    this.reload(true, updateInterval / 2);
   },
 
   navigateBack: function () {
@@ -199,12 +198,15 @@ var GranuleOverview = React.createClass({
 
           <AsyncCommand action={this.remove}
             success={this.fastReload}
+            successTimeout={updateDelay}
             status={removeStatus}
+            disabled={!granule.published}
             className={'form-group__element--right'}
             text={'Remove from CMR'} />
 
           <AsyncCommand action={this.reprocess}
             success={this.fastReload}
+            successTimeout={updateDelay}
             status={reprocessStatus}
             className={'form-group__element--right'}
             text={'Reprocess'} />
