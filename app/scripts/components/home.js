@@ -12,7 +12,7 @@ import {
   getResources,
   queryHistogram
 } from '../actions';
-import { nullValue, tally, seconds, storage } from '../utils/format';
+import { nullValue, tally, seconds } from '../utils/format';
 import LoadingEllipsis from './app/loading-ellipsis';
 import List from './table/list-view';
 import Histogram from './chart/histogram';
@@ -151,16 +151,16 @@ var Home = React.createClass({
     const { list } = this.props.pdrs;
     const { stats, count, resources, histogram } = this.props.stats;
     const overview = [
-      [tally(get(stats.data, 'errors.value', nullValue)), 'Errors', '/logs'],
-      [tally(get(stats.data, 'collections.value', nullValue)), 'Collections', '/collections'],
-      [tally(get(stats.data, 'granules.value', nullValue)), 'Granules (Received Today)', '/granules'],
+      [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
+      [tally(get(stats.data, 'collections.value')), 'Collections', '/collections'],
+      [tally(get(stats.data, 'granules.value')), 'Granules (Received Today)', '/granules'],
       [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average Processing Time'],
-      [storage(get(resources.data, 's3', []).reduce((a, b) => a + b.Sum, 0)), 'Data Used', '/resources'],
-      [tally(get(resources.data, 'queues', []).length) || nullValue, 'SQS Queues', '/resources#queues'],
-      [tally(get(resources.data, 'instances', []).length) || nullValue, 'EC2 Instances', '/resources#instances']
+      [tally(get(resources.data, 'tasks.pendingTasks')), 'Pending Tasks', '/resources'],
+      [tally(get(resources.data, 'tasks.runningTasks')), 'Running Tasks', '/resources'],
+      [tally(get(resources.data, 'queues', []).length || nullValue), 'Queued Messages', '/resources']
     ];
     const granuleCount = get(count.data, 'granules.meta.count');
-    const numGranules = granuleCount ? `(${granuleCount})` : null;
+    const numGranules = !isNaN(granuleCount) ? `(${tally(granuleCount)})` : null;
 
     const granulesProcessed = get(histogram, serialize(this.generateGranulesProcessed()), {});
     const errorsRecorded = get(histogram, serialize(this.generateErrors()), {});
@@ -178,11 +178,17 @@ var Home = React.createClass({
           <section className='page__section'>
             <div className='row'>
               <ul>
-                {overview.map(d => (
-                  <li key={d[1]}>
-                    <Link className='overview-num' to={d[2] || '#'}><span className='num--large'>{ stats.inflight ? <LoadingEllipsis /> : d[0] }</span> {d[1]}</Link>
-                  </li>
-                ))}
+                {overview.map(d => {
+                  const value = d[0];
+                  let useLoading = value === nullValue;
+                  return (
+                    <li key={d[1]}>
+                      <Link className='overview-num' to={d[2] || '#'}>
+                        <span className='num--large'>{ useLoading ? <LoadingEllipsis /> : value }</span> {d[1]}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </section>
