@@ -152,6 +152,7 @@ export const CLEAR_PROVIDERS_FILTER = 'CLEAR_PROVIDERS_FILTER';
 export const LOGS = 'LOGS';
 export const LOGS_INFLIGHT = 'LOGS_INFLIGHT';
 export const LOGS_ERROR = 'LOGS_ERROR';
+export const CLEAR_LOGS = 'CLEAR_LOGS';
 
 export const SCHEMA = 'SCHEMA';
 export const SCHEMA_INFLIGHT = 'SCHEMA_INFLIGHT';
@@ -309,6 +310,7 @@ export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),
   qs: Object.assign({ limit: 200 }, options)
 }, LOGS);
+export const clearLogs = () => ({ type: CLEAR_LOGS });
 
 export const logout = () => {
   setToken('');
