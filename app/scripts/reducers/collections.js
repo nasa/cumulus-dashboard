@@ -52,6 +52,7 @@ export default function reducer (state = initialState, action) {
     case COLLECTION:
       set(state, ['map', id, 'inflight'], false);
       set(state, ['map', id, 'data'], assignDate(data.results[0]));
+      del(state, ['deleted', id]);
       break;
     case COLLECTION_INFLIGHT:
       set(state, ['map', id, 'inflight'], true);

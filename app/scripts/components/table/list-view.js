@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import pickBy from 'lodash.pickby';
 import SortableTable from './sortable';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
@@ -51,12 +50,19 @@ var List = React.createClass({
       this.setState({ queryConfig: this.config({}, newProps.query) });
     }
 
-    const params = pickBy(newProps.list.params, v => (!undef(v) && v !== null));
-    if (JSON.stringify(params) !== JSON.stringify(this.state.params)) {
-      this.setState({
-        params,
-        queryConfig: this.config({ params })
-      });
+    // remove null and undefined values
+    const { params } = newProps.list;
+    const validParams = {};
+    for (let key in params) {
+      let value = params[key];
+      if (!undef(value) && value !== null) {
+        validParams[key] = value;
+      }
+    }
+
+    if (JSON.stringify(validParams) !== JSON.stringify(this.state.params)) {
+      this.setState({ params: validParams }, () => this.setState({
+        queryConfig: this.config() }));
     }
 
     if (newProps.list.error && this.cancelInterval) {
@@ -125,11 +131,10 @@ var List = React.createClass({
     config = config || {};
     const { page, order, sort_by, params } = config;
 
-    // attach page, and sort properties using the current state
+    // attach page, params, and sort properties using the current state
     if (undef(page)) { config.page = this.state.page; }
     if (undef(order)) { config.order = this.state.order; }
     if (undef(sort_by)) { config.sort_by = this.getSortProp(this.state.sortIdx); }
-
     if (undef(params)) { Object.assign(config, this.state.params); }
 
     if (query) {

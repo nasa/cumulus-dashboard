@@ -1,5 +1,5 @@
 'use strict';
-import { set } from 'object-path';
+import { set, del } from 'object-path';
 import assignDate from './assign-date';
 
 import {
@@ -40,6 +40,8 @@ export default function reducer (state = initialState, action) {
     case PDR:
       set(state, ['map', id, 'inflight'], false);
       set(state, ['map', id, 'data'], assignDate(data));
+      // https://github.com/cumulus-nasa/cumulus-dashboard/issues/284
+      del(state, ['deleted', id]);
       break;
     case PDR_INFLIGHT:
       set(state, ['map', id, 'inflight'], true);
