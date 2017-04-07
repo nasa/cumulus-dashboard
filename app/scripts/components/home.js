@@ -10,7 +10,8 @@ import {
   getCount,
   listPdrs,
   getResources,
-  queryHistogram
+  queryHistogram,
+  getRecentGranules
 } from '../actions';
 import { nullValue, tally, seconds } from '../utils/format';
 import LoadingEllipsis from './app/loading-ellipsis';
@@ -75,6 +76,7 @@ var Home = React.createClass({
       type: 'granules',
       field: 'status'
     }));
+    dispatch(getRecentGranules());
   },
 
   queryHistogram: function () {
@@ -149,11 +151,12 @@ var Home = React.createClass({
 
   render: function () {
     const { list } = this.props.pdrs;
+    const { recent } = this.props.granules;
     const { stats, count, resources, histogram } = this.props.stats;
     const overview = [
       [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
       [tally(get(stats.data, 'collections.value')), 'Collections', '/collections'],
-      [tally(get(stats.data, 'granules.value')), 'Granules (Received Today)', '/granules'],
+      [tally(get(recent, 'data.count')), 'Granules Processed in the Past Hour', '/granules'],
       [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average Processing Time'],
       [tally(get(resources.data, 'tasks.pendingTasks')), 'Pending Tasks', '/resources'],
       [tally(get(resources.data, 'tasks.runningTasks')), 'Running Tasks', '/resources'],
