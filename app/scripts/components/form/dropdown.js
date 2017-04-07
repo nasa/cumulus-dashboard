@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import map from 'lodash.map';
+import { dropdownOption } from '../../utils/format';
 
 const Dropdown = React.createClass({
   displayName: 'Dropdown',
@@ -9,7 +10,6 @@ const Dropdown = React.createClass({
     dispatch: React.PropTypes.func,
     options: React.PropTypes.object,
     getOptions: React.PropTypes.func,
-    format: React.PropTypes.func,
     action: React.PropTypes.func,
     clear: React.PropTypes.func,
     paramKey: React.PropTypes.string,
@@ -39,7 +39,7 @@ const Dropdown = React.createClass({
   render: function () {
     // `options` are expected in the following format:
     // {displayValue1: optionElementValue1, displayValue2, optionElementValue2, ...}
-    const { options, format, label, paramKey } = this.props;
+    const { options, label, paramKey } = this.props;
 
     // Make sure this form ID is unique!
     // If needed in future, could add MD5 hash of stringified options,
@@ -51,7 +51,7 @@ const Dropdown = React.createClass({
         {label ? <label htmlFor={formID}>{label}</label> : null}
         <form id={formID} className='dropdown__wrapper form-group__element'>
           <select onChange={this.onChange}>
-            {map(options || {'': ''}, format)}
+            {map(options || {'': ''}, dropdownOption)}
           </select>
         </form>
       </div>

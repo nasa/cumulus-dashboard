@@ -21,3 +21,11 @@ export const queryStatus = [
   'stopped',
   'failed'
 ];
+
+export const pdrStatus = {
+  '': '',
+  Discovered: 'discovered',
+  Processing: 'processing',
+  Completed: 'completed',
+  Failed: 'failed'
+};

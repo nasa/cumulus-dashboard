@@ -12,7 +12,7 @@ import {
   getCount
 } from '../../actions';
 import { get } from 'object-path';
-import { dropdownOption, lastUpdated } from '../../utils/format';
+import { lastUpdated } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/providers';
 import List from '../table/list-view';
 import Search from '../form/search';
@@ -102,7 +102,6 @@ var ListProviders = React.createClass({
               dispatch={this.props.dispatch}
               getOptions={getOptionsProviderGroup}
               options={get(dropdowns, ['group', 'options'])}
-              format={dropdownOption}
               action={filterProviders}
               clear={clearProvidersFilter}
               paramKey={'providerName'}
@@ -111,7 +110,6 @@ var ListProviders = React.createClass({
             <Dropdown
               dispatch={this.props.dispatch}
               options={protocol}
-              format={dropdownOption}
               action={filterProviders}
               clear={clearProvidersFilter}
               paramKey={'protocol'}
