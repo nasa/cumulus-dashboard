@@ -3,13 +3,13 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { listPdrs, getCount } from '../../actions';
+import { interval, listPdrs, getCount } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import { bulkActions } from '../../utils/table-config/pdrs';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdr-progress';
 import List from '../table/list-view';
 import Overview from '../app/overview';
-import { recent } from '../../config';
+import { recent, updateInterval } from '../../config';
 
 var PdrOverview = React.createClass({
   displayName: 'PdrOverview',
@@ -33,7 +33,11 @@ var PdrOverview = React.createClass({
   },
 
   componentWillMount: function () {
-    this.queryStats();
+    this.cancelInterval = interval(this.queryStats, updateInterval, true);
+  },
+
+  componentWillUnmount: function () {
+    if (this.cancelInterval) { this.cancelInterval(); }
   },
 
   queryStats: function () {
@@ -41,11 +45,6 @@ var PdrOverview = React.createClass({
       type: 'pdrs',
       field: 'status'
     }));
-  },
-
-  renderOverview: function (count) {
-    const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
-    return <Overview items={overview} inflight={false} />;
   },
 
   generateQuery: function () {
@@ -57,6 +56,11 @@ var PdrOverview = React.createClass({
 
   generateBulkActions: function () {
     return bulkActions(this.props.pdrs);
+  },
+
+  renderOverview: function (count) {
+    const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
+    return <Overview items={overview} inflight={false} />;
   },
 
   render: function () {
