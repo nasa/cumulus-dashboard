@@ -72,14 +72,14 @@ var PdrOverview = React.createClass({
     const overview = this.renderOverview(pdrCount);
     return (
       <div className='page__component'>
-        <section className='page__section'>
+        <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>PDRs Overview</h1>
           {lastUpdated(queriedAt)}
           {overview}
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Recently Active PDRs{count ? ` (${tally(count)})` : null}</h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Recently Active PDRs <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
           </div>
 
           <List
