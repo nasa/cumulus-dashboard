@@ -1,4 +1,5 @@
 'use strict';
+import moment from 'moment';
 import url from 'url';
 import { get, post, put, del, wrapRequest } from './helpers';
 import { set as setToken } from '../utils/auth';
@@ -64,6 +65,10 @@ export const CLEAR_GRANULES_SEARCH = 'CLEAR_GRANULES_SEARCH';
 
 export const FILTER_GRANULES = 'FILTER_GRANULES';
 export const CLEAR_GRANULES_FILTER = 'CLEAR_GRANULES_FILTER';
+
+export const RECENT_GRANULES = 'RECENT_GRANULES';
+export const RECENT_GRANULES_INFLIGHT = 'RECENT_GRANULES_INFLIGHT';
+export const RECENT_GRANULES_ERROR = 'RECENT_GRANULES_ERROR';
 
 export const OPTIONS_COLLECTIONNAME = 'OPTIONS_COLLECTIONNAME';
 export const OPTIONS_COLLECTIONNAME_INFLIGHT = 'OPTIONS_COLLECTIONNAME_INFLIGHT';
@@ -147,6 +152,7 @@ export const CLEAR_PROVIDERS_FILTER = 'CLEAR_PROVIDERS_FILTER';
 export const LOGS = 'LOGS';
 export const LOGS_INFLIGHT = 'LOGS_INFLIGHT';
 export const LOGS_ERROR = 'LOGS_ERROR';
+export const CLEAR_LOGS = 'CLEAR_LOGS';
 
 export const SCHEMA = 'SCHEMA';
 export const SCHEMA_INFLIGHT = 'SCHEMA_INFLIGHT';
@@ -193,6 +199,16 @@ export const listGranules = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'granules'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, GRANULES);
+
+// only query the granules from the last hour
+export const getRecentGranules = () => wrapRequest(null, get, {
+  url: url.resolve(root, 'granules'),
+  qs: {
+    limit: 1,
+    fields: 'granuleId',
+    updatedAt__from: moment().subtract(1, 'hour').format()
+  }
+}, RECENT_GRANULES);
 
 export const reprocessGranule = (granuleId) => wrapRequest(
   granuleId, put, `granules/${granuleId}`, GRANULE_REPROCESS, {
@@ -294,6 +310,7 @@ export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),
   qs: Object.assign({ limit: 200 }, options)
 }, LOGS);
+export const clearLogs = () => ({ type: CLEAR_LOGS });
 
 export const logout = () => {
   setToken('');
