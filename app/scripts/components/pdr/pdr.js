@@ -35,7 +35,7 @@ import Metadata from '../table/metadata';
 import Loading from '../app/loading-indicator';
 import AsyncCommand from '../form/async-command';
 import ErrorReport from '../errors/report';
-import { updateInterval } from '../../config';
+import { updateInterval, updateDelay } from '../../config';
 
 const metaAccessors = [
   ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],
@@ -114,7 +114,7 @@ var PDR = React.createClass({
             <h1 className='heading--large heading--shared-content with-description '>{pdrName}</h1>
             <AsyncCommand action={this.deletePdr}
               success={this.navigateBack}
-              successTimeout={1000}
+              successTimeout={updateDelay}
               status={deleteStatus}
               className={'form-group__element--right'}
               text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'} />

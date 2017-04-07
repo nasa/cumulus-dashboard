@@ -9,7 +9,7 @@ import {
   filterPdrs,
   clearPdrsFilter
 } from '../../actions';
-import { pdrSearchResult, lastUpdated } from '../../utils/format';
+import { pdrSearchResult, lastUpdated, tally } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/pdrs';
 import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
@@ -59,7 +59,7 @@ var ActivePdrs = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>{view} PDRs {!isNaN(count) ? `(${count})` : null}</h1>
+            <h1 className='heading--large heading--shared-content with-description'>{view} PDRs {!isNaN(count) ? `(${tally(count)})` : null}</h1>
             {lastUpdated(queriedAt)}
           </div>
           <div className='filters'>

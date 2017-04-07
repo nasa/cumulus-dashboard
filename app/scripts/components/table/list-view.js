@@ -41,10 +41,6 @@ var List = React.createClass({
     this.setState({ queryConfig: this.config() });
   },
 
-  componentWillUnmount: function () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-  },
-
   componentWillReceiveProps: function (newProps) {
     if (JSON.stringify(newProps.query) !== JSON.stringify(this.props.query)) {
       this.setState({ queryConfig: this.config({}, newProps.query) });
@@ -63,11 +59,6 @@ var List = React.createClass({
     if (JSON.stringify(validParams) !== JSON.stringify(this.state.params)) {
       this.setState({ params: validParams }, () => this.setState({
         queryConfig: this.config() }));
-    }
-
-    if (newProps.list.error && this.cancelInterval) {
-      this.cancelInterval();
-      this.cancelInterval = null;
     }
   },
 

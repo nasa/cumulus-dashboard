@@ -5,7 +5,8 @@ import moment from 'moment';
 import {
   LOGS,
   LOGS_ERROR,
-  LOGS_INFLIGHT
+  LOGS_INFLIGHT,
+  CLEAR_LOGS
 } from '../actions';
 
 export const initialState = {
@@ -41,6 +42,12 @@ export default function reducer (state = initialState, action) {
     case LOGS_ERROR:
       set(nextState, 'inflight', false);
       set(nextState, 'error', action.error);
+      break;
+    case CLEAR_LOGS:
+      set(nextState, 'inflight', false);
+      set(nextState, 'error', action.error);
+      set(nextState, 'items', []);
+      break;
   }
   return nextState;
 }
