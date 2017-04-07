@@ -58,8 +58,9 @@ var AllGranules = React.createClass({
     const { count, queriedAt } = list.meta;
     const logsQuery = { 'meta.granuleId__exists': 'true' };
     const view = this.getView();
-    const StatOptions = view === 'Completed' || view === 'Failed'
-      ? null : view === 'Processing' ? processingOptions : statusOptions;
+    const statOptions = (view === 'Completed' || view === 'Failed') ? null
+      : view === 'Processing' ? processingOptions
+        : statusOptions;
 
     return (
       <div className='page__component'>
@@ -81,10 +82,10 @@ var AllGranules = React.createClass({
               paramKey={'collectionName'}
               label={'Collection'}
             />
-            {StatOptions ? (
+            {statOptions ? (
               <Dropdown
                 dispatch={this.props.dispatch}
-                options={StatOptions}
+                options={statOptions}
                 format={dropdownOption}
                 action={filterGranules}
                 clear={clearGranulesFilter}
