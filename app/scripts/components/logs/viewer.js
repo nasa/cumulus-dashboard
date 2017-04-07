@@ -5,6 +5,7 @@ import { logsUpdateInterval } from '../../config';
 import moment from 'moment';
 import LoadingEllipsis from '../app/loading-ellipsis';
 import ErrorReport from '../errors/report';
+import { tally } from '../../utils/format';
 
 const noLogs = {
   displayText: 'There are no Cumulus logs from the past 48 hours.',
@@ -80,7 +81,7 @@ var LogViewer = React.createClass({
     const { logs } = this.props;
     const items = logs.items.length ? logs.items.filter(this.state.filter)
       : logs.inflight ? [] : [noLogs];
-    const count = logs.items.length ? items.length : 0;
+    const count = logs.items.length ? tally(items.length) : 0;
     return (
       <section className='page__section'>
         <div className='heading__wrapper--border'>

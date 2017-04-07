@@ -79,7 +79,7 @@ var PdrOverview = React.createClass({
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Recently Active PDRs{count ? ` (${count})` : null}</h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Recently Active PDRs{count ? ` (${tally(count)})` : null}</h2>
           </div>
 
           <List
