@@ -244,6 +244,11 @@ table {
   height: 6px;
 }
 
+.table__progress--bar--failed {
+  background-color: $error-red;
+  border-left: 1px solid #fefefe;
+}
+
 .table__progress--text {
   font-size: 0.8em;
   position: absolute;
