@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import moment from 'moment';
 import { get } from 'object-path';
 import {
+  interval,
   getStats,
   getCount,
   listPdrs,
@@ -17,7 +18,7 @@ import List from './table/list-view';
 import Histogram from './chart/histogram';
 import { tableHeader, tableRow, tableSortProps } from '../utils/table-config/pdr-progress';
 import serialize from '../utils/serialize-config';
-import { recent } from '../config';
+import { recent, updateInterval } from '../config';
 
 const spans = {
   week: moment().subtract(1, 'week').format(),
@@ -53,8 +54,14 @@ var Home = React.createClass({
   },
 
   componentWillMount: function () {
-    this.query();
-    this.queryHistogram();
+    this.cancelInterval = interval(() => {
+      this.query();
+      this.queryHistogram();
+    }, updateInterval, true);
+  },
+
+  componentWillUnmount: function () {
+    if (this.cancelInterval) { this.cancelInterval(); }
   },
 
   query: function () {
