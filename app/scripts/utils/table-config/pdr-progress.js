@@ -30,7 +30,6 @@ function renderProgress (d) {
   const total = stats.reduce((a, b) => a + get(granules, b, 0), 0);
   const completed = get(granules, 'completed', 0);
   const failed = get(d, 'granulesStatus.failed', 0);
-  console.log(completed, failed);
   const percentCompleted = !total ? 0 : completed / total * 100;
   const percentFailed = !total ? 0 : failed / total * 100;
   const granulesCompleted = `${tally(completed + failed)}/${tally(total)}`;
