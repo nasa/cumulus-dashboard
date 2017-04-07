@@ -55,7 +55,7 @@ var List = React.createClass({
     if (JSON.stringify(params) !== JSON.stringify(this.state.params)) {
       this.setState({
         params,
-        queryConfig: this.config({ params })
+        queryConfig: this.config(params)
       });
     }
 
