@@ -11,7 +11,7 @@ import {
   getOptionsCollectionName
 } from '../../actions';
 import { get } from 'object-path';
-import { granuleSearchResult, dropdownOption, lastUpdated } from '../../utils/format';
+import { granuleSearchResult, lastUpdated } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
 import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
@@ -76,7 +76,6 @@ var AllGranules = React.createClass({
               dispatch={this.props.dispatch}
               getOptions={getOptionsCollectionName}
               options={get(dropdowns, ['collectionName', 'options'])}
-              format={dropdownOption}
               action={filterGranules}
               clear={clearGranulesFilter}
               paramKey={'collectionName'}
@@ -86,7 +85,6 @@ var AllGranules = React.createClass({
               <Dropdown
                 dispatch={this.props.dispatch}
                 options={statOptions}
-                format={dropdownOption}
                 action={filterGranules}
                 clear={clearGranulesFilter}
                 paramKey={'status'}

@@ -9,7 +9,7 @@ import {
   filterCollections,
   clearCollectionsFilter
 } from '../../actions';
-import { collectionSearchResult, dropdownOption, lastUpdated } from '../../utils/format';
+import { collectionSearchResult, lastUpdated } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/collections';
 import Search from '../form/search';
 import Dropdown from '../form/dropdown';
@@ -64,7 +64,6 @@ var CollectionList = React.createClass({
             <Dropdown
               dispatch={this.props.dispatch}
               options={this.timeOptions}
-              format={dropdownOption}
               action={filterCollections}
               clear={clearCollectionsFilter}
               paramKey={'createdAt__from'}
@@ -73,7 +72,6 @@ var CollectionList = React.createClass({
             <Dropdown
               dispatch={this.props.dispatch}
               options={this.timeOptions}
-              format={dropdownOption}
               action={filterCollections}
               clear={clearCollectionsFilter}
               paramKey={'createdAt__to'}

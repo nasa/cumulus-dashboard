@@ -16,7 +16,6 @@ import {
 import { get } from 'object-path';
 import {
   granuleSearchResult,
-  dropdownOption,
   lastUpdated,
   link,
   fullDate,
@@ -141,7 +140,6 @@ var PDR = React.createClass({
               dispatch={this.props.dispatch}
               getOptions={getOptionsCollectionName}
               options={get(dropdowns, ['collectionName', 'options'])}
-              format={dropdownOption}
               action={filterGranules}
               clear={clearGranulesFilter}
               paramKey={'collectionName'}
@@ -150,7 +148,6 @@ var PDR = React.createClass({
             <Dropdown
               dispatch={this.props.dispatch}
               options={status}
-              format={dropdownOption}
               action={filterGranules}
               clear={clearGranulesFilter}
               paramKey={'status'}
