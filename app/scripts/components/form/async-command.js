@@ -35,7 +35,7 @@ const AsyncCommand = React.createClass({
   handleClick: function (e) {
     e.preventDefault();
     // prevent duplicate action if the action is already inflight.
-    if (this.props.status !== 'inflight') {
+    if (this.props.status !== 'inflight' && !this.props.disabled) {
       this.props.action();
     }
   },
