@@ -394,3 +394,46 @@ a:active {
     color: $grey;
   }
 }
+
+.status--process {
+  margin-top: 1.5em;
+  dd, dt {
+    display: inline-block;
+  }
+  dt {
+    font-weight: $base-font-semibold;
+    margin-right: 1em;
+  }
+  dd {
+    color: $grey;
+    &:before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      margin-right: .5em;
+      background-size: 10px 10px;
+      border-radius: 20px;
+    }
+  }
+  .ingesting, .processing, .updating, .archiving {
+    &:before {
+      background-color: $yellow;
+    }
+  }
+  .completed {
+    &:before {
+      background-color: $light-green;
+    }
+  }
+  .stopped {
+    &:before {
+      background-color: $orange;
+    }
+  }
+  .failed {
+    &:before {
+      background-color: $error-red;
+    }
+  }
+}

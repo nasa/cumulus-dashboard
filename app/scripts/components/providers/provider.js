@@ -151,7 +151,10 @@ var ProviderOverview = React.createClass({
             successTimeout={updateDelay} />
 
           {lastUpdated(provider.queriedAt)}
-          Status: {findkey(status, v => v === provider.status)}
+          <dl className='status--process'>
+            <dt>Status:</dt>
+            <dd className={provider.status}>{findkey(status, v => v === provider.status)}</dd>
+          </dl>
           {providerError ? <ErrorReport report={providerError} /> : null}
         </section>
 
