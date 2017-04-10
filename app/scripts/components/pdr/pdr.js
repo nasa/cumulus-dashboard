@@ -109,7 +109,7 @@ var PDR = React.createClass({
     const error = record.error;
     return (
       <div className='page__component'>
-        <section className='page__section'>
+        <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>{pdrName}</h1>
             <AsyncCommand action={this.deletePdr}
@@ -133,7 +133,7 @@ var PDR = React.createClass({
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Granules <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Granules <span className='num--title'>{ !isNaN(count) ? `(${count})` : null }</span></h2>
           </div>
           <div className='filters filters__wlabels'>
             <Dropdown

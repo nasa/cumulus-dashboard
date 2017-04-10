@@ -11,7 +11,7 @@ import {
   getOptionsCollectionName
 } from '../../actions';
 import { get } from 'object-path';
-import { granuleSearchResult, lastUpdated } from '../../utils/format';
+import { granuleSearchResult, lastUpdated, tally } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
 import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
@@ -64,10 +64,10 @@ var AllGranules = React.createClass({
 
     return (
       <div className='page__component'>
-        <section className='page__section'>
+        <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>
-              {view} Granules <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
+              {view} Granules <span className='num--title'>{ !isNaN(count) ? `(${tally(count)})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>

@@ -69,7 +69,7 @@ var CollectionIngest = React.createClass({
     const { data } = record;
     return (
       <div className='page__component'>
-        <section className='page__section'>
+        <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>{collectionName}</h1>
           <Link className='button button--small form-group__element--right button--disabled button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
           {lastUpdated(data.queriedAt)}

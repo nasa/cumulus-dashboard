@@ -85,19 +85,15 @@ var ListProviders = React.createClass({
 
     return (
       <div className='page__component'>
-        <section className='page__section'>
+        <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content'>
-              {title} <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
+            <h1 className='heading--large heading--shared-content with-description'>
+              {title} <span className='num--title'>{ !isNaN(count) ? `(${count})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>
 
           <div className='filters filters__wlabels'>
-            <Search dispatch={this.props.dispatch}
-              action={searchProviders}
-              clear={clearProvidersSearch}
-            />
             <Dropdown
               dispatch={this.props.dispatch}
               getOptions={getOptionsProviderGroup}
@@ -114,6 +110,10 @@ var ListProviders = React.createClass({
               clear={clearProvidersFilter}
               paramKey={'protocol'}
               label={'Protocol'}
+            />
+            <Search dispatch={this.props.dispatch}
+              action={searchProviders}
+              clear={clearProvidersSearch}
             />
           </div>
 

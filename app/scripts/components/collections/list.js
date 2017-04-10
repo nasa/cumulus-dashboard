@@ -9,7 +9,7 @@ import {
   filterCollections,
   clearCollectionsFilter
 } from '../../actions';
-import { collectionSearchResult, lastUpdated } from '../../utils/format';
+import { collectionSearchResult, lastUpdated, tally } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/collections';
 import Search from '../form/search';
 import Dropdown from '../form/dropdown';
@@ -54,9 +54,9 @@ var CollectionList = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <div className='page__section__header'>
+          <div className='page__section__header page__section__header-wrapper'>
             <h1 className='heading--large heading--shared-content with-description'>
-              {this.inactive() ? 'Inactive' : 'Active'} Collections <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
+              {this.inactive() ? 'Inactive' : 'Active'} Collections <span className='num--title'>{ !isNaN(count) ? `(${tally(count)})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>

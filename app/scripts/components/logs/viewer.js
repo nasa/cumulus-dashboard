@@ -1,10 +1,11 @@
 'use strict';
 import React from 'react';
-import { interval, getLogs } from '../../actions';
+import { interval, getLogs, clearLogs } from '../../actions';
 import { logsUpdateInterval } from '../../config';
 import moment from 'moment';
 import LoadingEllipsis from '../app/loading-ellipsis';
 import ErrorReport from '../errors/report';
+import { tally } from '../../utils/format';
 
 const noLogs = {
   displayText: 'There are no Cumulus logs from the past 48 hours.',
@@ -46,6 +47,7 @@ var LogViewer = React.createClass({
 
   componentWillUnmount: function () {
     if (this.cancelInterval) { this.cancelInterval(); }
+    this.props.dispatch(clearLogs());
   },
 
   setFilter: function (e) {
@@ -77,11 +79,13 @@ var LogViewer = React.createClass({
 
   render: function () {
     const { logs } = this.props;
-    const items = logs.items.length ? logs.items.filter(this.state.filter) : [noLogs];
+    const items = logs.items.length ? logs.items.filter(this.state.filter)
+      : logs.inflight ? [] : [noLogs];
+    const count = logs.items.length ? tally(items.length) : 0;
     return (
       <section className='page__section'>
         <div className='heading__wrapper--border'>
-          <h2 className='heading--medium heading--shared-content with-description'>Logs {logs.inflight ? <LoadingEllipsis /> : null}</h2>
+          <h2 className='heading--medium heading--shared-content with-description'>Logs <span className='num--title'>{logs.inflight ? <LoadingEllipsis /> : '(' + count + ')'}</span></h2>
           <form className="search__wrapper form-group__element form-group__element--right form-group__element--right--sm form-group__element--small">
             <input className='search' type="search" onChange={this.setFilter}/>
             <span className="search__icon"></span>
