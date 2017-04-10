@@ -193,8 +193,6 @@ var GranuleOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>{granuleId}</h1>
-
           <AsyncCommand action={this.delete}
             success={this.navigateBack}
             successTimeout={updateDelay}
@@ -225,6 +223,16 @@ var GranuleOverview = React.createClass({
             className={'form-group__element--right'}
             text={'Reprocess'} />
 
+          <h1 className='heading--large heading--shared-content with-description'>{granuleId}</h1>
+          <div className='dropdown__options form-group__element--right'>
+            <a className='dropdown__options__btn button--green button' href='#'><span>Options</span></a>
+            <ul className='dropdown__menu'>
+              <li><a className='link--no-underline' href='#'>Reprocess</a></li>
+              <li><a className='link--no-underline' href='#'>Reingest</a></li>
+              <li><a className='link--no-underline' href='#'>Remove from CMR</a></li>
+              <li><a className='link--no-underline' href='#'>Delete</a></li>
+            </ul>
+          </div>
           {lastUpdated(granule.queriedAt)}
           {this.renderStatus(granule.status)}
           {granuleError ? <ErrorReport report={granuleError} /> : null}

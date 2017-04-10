@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43 (38999) - http://www.bohemiancoding.com/sketch -->
+    <title>cog</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="cog" fill-rule="nonzero" fill="#FFFFFF">
+            <path d="M512,288 L512,224 L439.7,199.9 C436.1,188 431.3,176.6 425.6,165.8 L459.7,97.6 L414.4,52.3 L346.2,86.4 C335.4,80.7 324,76 312.1,72.3 L288,0 L224,0 L199.9,72.3 C188,75.9 176.6,80.7 165.8,86.4 L97.6,52.4 L52.4,97.6 L86.5,165.8 C80.7,176.6 76,188 72.3,199.9 L0,224 L0,288 L72.3,312.1 C75.9,324 80.7,335.4 86.4,346.2 L52.3,414.4 L97.6,459.7 L165.8,425.6 C176.6,431.3 188,436.1 199.9,439.7 L224,512 L288,512 L312.1,439.7 C324,436.1 335.4,431.3 346.2,425.6 L414.4,459.7 L459.7,414.4 L425.6,346.2 C431.3,335.4 436.1,324 439.7,312.1 L512,288 Z M256,352 C203,352 160,309 160,256 C160,203 203,160 256,160 C309,160 352,203 352,256 C352,309 309,352 256,352 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>
