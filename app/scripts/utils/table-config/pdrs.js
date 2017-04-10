@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { get } from 'object-path';
-import { tally, seconds, fullDate } from '../format';
+import { tally, seconds, fullDate, bool, nullValue } from '../format';
 import { deletePdr } from '../../actions';
 
 export const tableHeader = [
@@ -44,6 +44,27 @@ export const tableSortProps = [
   null,
   null,
   null,
+  null
+];
+
+export const errorTableHeader = [
+  'Updated',
+  'Name',
+  'Error',
+  'PDRD Sent'
+];
+
+export const errorTableRow = [
+  (d) => fullDate(d.updatedAt),
+  (d) => <Link to={`pdrs/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
+  (d) => d.PDRD || nullValue,
+  (d) => bool(d.PDRDSent)
+];
+
+export const errorTableSortProps = [
+  'updatedAt',
+  'pdrName.keyword',
+  'PDRD.keyword',
   null
 ];
 
