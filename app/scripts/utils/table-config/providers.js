@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import { Link } from 'react-router';
-import { fullDate } from '../format';
+import { fullDate, nullValue } from '../format';
 import { deleteProvider, restartProvider, stopProvider } from '../../actions';
 
 export const tableHeader = [
@@ -42,7 +42,7 @@ export const errorTableHeader = [
 export const errorTableRow = [
   (d) => <Link to={`providers/provider/${d.name}`}>{d.name}</Link>,
   'providerName',
-  'error',
+  (d) => d.error || nullValue,
   'protocol',
   (d) => fullDate(d.createdAt)
 ];

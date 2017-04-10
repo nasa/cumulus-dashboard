@@ -57,7 +57,7 @@ export const errorTableHeader = [
 export const errorTableRow = [
   (d) => fullDate(d.updatedAt),
   (d) => <Link to={`pdrs/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
-  (d) => d.PDRD || nullValue,
+  (d) => d.PDRD || d.error || nullValue,
   (d) => bool(d.PDRDSent)
 ];
 
