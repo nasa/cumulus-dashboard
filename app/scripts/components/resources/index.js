@@ -77,7 +77,12 @@ var Resources = React.createClass({
               </div>
             </div>
             <div className='row'>
-              <SortableTable data={queues} header={queueConfig.tableHeader} row={queueConfig.tableRow}/>
+              <SortableTable
+                data={queues}
+                header={queueConfig.tableHeader}
+                row={queueConfig.tableRow}
+                props={['name', 'messagesAvailable', 'messagesInFlight']}
+                />
             </div>
           </section>
 
@@ -88,7 +93,12 @@ var Resources = React.createClass({
               </div>
             </div>
             <div className='row'>
-              <SortableTable data={services} header={serviceConfig.tableHeader} row={serviceConfig.tableRow}/>
+              <SortableTable
+                data={services}
+                header={serviceConfig.tableHeader}
+                row={serviceConfig.tableRow}
+                props={['name', 'status', 'desiredCount', 'pendingCount', 'runningCount']}
+                />
             </div>
           </section>
 
@@ -99,7 +109,12 @@ var Resources = React.createClass({
               </div>
             </div>
             <div className='row'>
-              <SortableTable data={instances} header={instanceConfig.tableHeader} row={instanceConfig.tableRow}/>
+              <SortableTable
+                data={instances}
+                header={instanceConfig.tableHeader}
+                row={instanceConfig.tableRow}
+                props={['id', 'status', 'pendingTasks', 'runningTasks', 'availableCpu', 'availableMemory']}
+                />
             </div>
           </section>
         </div>
