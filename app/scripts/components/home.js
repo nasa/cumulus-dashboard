@@ -198,11 +198,12 @@ var Home = React.createClass({
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium'>Granules Updated Today {numGranules}</h2>
+                <h2 className='heading--medium'>Granules Updated Today <span className='num--title'>{numGranules}</span></h2>
               </div>
               {this.renderGranuleProgress()}
             </div>
-
+          </section>
+          <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
                 <h2 className='heading--medium'>Recently Active PDR's</h2>
@@ -220,7 +221,6 @@ var Home = React.createClass({
               <Link className='link--secondary link--learn-more' to='/pdrs'>View PDR Overview</Link>
             </div>
           </section>
-
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>

@@ -92,11 +92,10 @@ var ProviderOverview = React.createClass({
 
   errors: function () {
     const providerId = this.props.params.providerId;
-    const errors = [
+    return [
       get(this.props.providers.map, [providerId, 'error']),
       get(this.props.providers.deleted, [providerId, 'error'])
     ].filter(Boolean);
-    return errors.length ? errors.map(JSON.stringify).join(', ') : null;
   },
 
   render: function () {
@@ -117,7 +116,7 @@ var ProviderOverview = React.createClass({
     const providerError = provider.error;
     return (
       <div className='page__component'>
-        <section className='page__section'>
+        <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>{providerId}</h1>
 
           <AsyncCommand action={this.delete}
@@ -128,7 +127,7 @@ var ProviderOverview = React.createClass({
             text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'}
             successTimeout={updateDelay} />
           <Link
-            className='button button--small form-group__element button--green form-group__element--right'
+            className='button button--small button--green form-group__element--right'
             to={'/providers/edit/' + providerId}
           >
             Edit
@@ -151,12 +150,15 @@ var ProviderOverview = React.createClass({
             successTimeout={updateDelay} />
 
           {lastUpdated(provider.queriedAt)}
-          Status: {findkey(status, v => v === provider.status)}
+          <dl className='status--process'>
+            <dt>Status:</dt>
+            <dd className={provider.status}>{findkey(status, v => v === provider.status)}</dd>
+          </dl>
           {providerError ? <ErrorReport report={providerError} /> : null}
         </section>
 
         <section className='page__section'>
-          {errors ? <ErrorReport report={errors} /> : null}
+          {errors.length ? errors.map(error => <ErrorReport report={error} />) : null}
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Provider Overview</h2>
           </div>

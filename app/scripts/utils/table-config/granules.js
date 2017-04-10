@@ -2,7 +2,12 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { fullDate, seconds, bool } from '../format';
-import { reprocessGranule, removeGranule, deleteGranule } from '../../actions';
+import {
+  reprocessGranule,
+  reingestGranule,
+  removeGranule,
+  deleteGranule
+} from '../../actions';
 
 export const tableHeader = [
   'Name',
@@ -35,6 +40,7 @@ export const tableSortProps = [
 ];
 
 const confirmReprocess = (d) => `Reprocess ${d} granule(s)?`;
+const confirmReingest = (d) => `Reingest ${d} granules(s)? Note, completed granules cannot be reingested.`;
 const confirmRemove = (d) => `Remove ${d} granule(s) from CMR?`;
 const confirmDelete = (d) => `Delete ${d} granule(s)?`;
 export const bulkActions = function (granules) {
@@ -43,6 +49,11 @@ export const bulkActions = function (granules) {
     action: reprocessGranule,
     state: granules.reprocessed,
     confirm: confirmReprocess
+  }, {
+    text: 'Reingest',
+    action: reingestGranule,
+    state: granules.reingested,
+    confirm: confirmReingest
   }, {
     text: 'Remove from CMR',
     action: removeGranule,

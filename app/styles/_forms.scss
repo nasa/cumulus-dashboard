@@ -43,7 +43,7 @@ select {
 }
 
 .filters {
-  margin: -.8em 0 3em;
+  margin: 1.2em 0 3em;
   @include clearfix;
   label {
     font-size: .86em;
@@ -53,10 +53,6 @@ select {
 .filter__item {
   display: inline-block;
   vertical-align: bottom;
-}
-
-.filters__wlabels {
-  margin: -1em 0 3.2em;
 }
 
 .form--controls {
@@ -162,6 +158,7 @@ select {
 .form-group__element--right {
   float: right;
   margin-left: 1em;
+  margin-right: 0;
 }
 
 .form-group__element--right--sm {
@@ -304,14 +301,23 @@ select {
 }
 
 .error__report {
-  color: #fff;
-  background-color: $error-red;
+  background-color: rgba(231, 76, 60, .25);
   border-radius: 0.5em;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, .08);
-  margin-bottom: 0.8em;
-  padding: 1.4em;
+  padding: 1.1em 1.4em;
+  text-align: center;
   position: relative;
+  margin-bottom: 2em;
   p {
-    color: #fff;
+    color: $error-text-red;
+    font-size: .86em;
+    margin-bottom: 0;
+  }
+}
+
+.page__section__header-wrapper {
+  .error__report {
+    margin-top: 3em;
+    margin-bottom: 0;
   }
 }

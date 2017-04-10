@@ -152,7 +152,7 @@ a:active {
 }
 
 .content__header--lg {
-  padding-top: 15em;
+  padding-top: 10em;
 }
 
 .wrapper__sidebar{
@@ -226,7 +226,7 @@ a:active {
 }
 
 .page__content--shortened {
-  padding: 4em 0 0 13em;
+  padding: 4em 0 0 12.5em;
   float: left;
   width: 80%;
 }
@@ -247,10 +247,6 @@ a:active {
 
 .page__section--small {
   margin-bottom: 3em;
-}
-
-.page__section__header {
-  margin-bottom: 2em;
 }
 
 .metadata__updated, .label__description {
@@ -392,5 +388,48 @@ a:active {
   dd, p {
     margin-bottom: 1em;
     color: $grey;
+  }
+}
+
+.status--process {
+  margin-top: 1.5em;
+  dd, dt {
+    display: inline-block;
+  }
+  dt {
+    font-weight: $base-font-semibold;
+    margin-right: 1em;
+  }
+  dd {
+    color: $grey;
+    &:before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      margin-right: .5em;
+      background-size: 10px 10px;
+      border-radius: 20px;
+    }
+  }
+  .ingesting, .processing, .updating, .archiving {
+    &:before {
+      background-color: $yellow;
+    }
+  }
+  .completed {
+    &:before {
+      background-color: $light-green;
+    }
+  }
+  .stopped {
+    &:before {
+      background-color: $orange;
+    }
+  }
+  .failed {
+    &:before {
+      background-color: $error-red;
+    }
   }
 }

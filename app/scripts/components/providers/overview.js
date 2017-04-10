@@ -70,14 +70,14 @@ var ProvidersOverview = React.createClass({
     const overview = this.renderOverview(providerStatus);
     return (
       <div className='page__component'>
-        <section className='page__section'>
-          <h1 className='heading--large heading--shared-content'>Providers Overview</h1>
+        <section className='page__section page__section__header-wrapper'>
+          <h1 className='heading--large heading--shared-content with-description'>Providers Overview</h1>
           {lastUpdated(queriedAt)}
           {overview}
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Ingesting Providers{count ? ` (${count})` : null}</h2>
+            <h2 className='heading--medium heading--shared-content'>Ingesting Providers <span className='num--title'>{count ? ` (${count})` : null}</span></h2>
           </div>
 
           <List
