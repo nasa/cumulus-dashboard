@@ -69,10 +69,11 @@ var CollectionOverview = React.createClass({
   },
 
   errors: function () {
-    const collectionName = this.props.params.collectionName; const errors = [ get(this.props.collections.map, [collectionName, 'error']),
+    const collectionName = this.props.params.collectionName;
+    return [
+      get(this.props.collections.map, [collectionName, 'error']),
       get(this.props.collections.deleted, [collectionName, 'error'])
     ].filter(Boolean);
-    return errors.length ? errors.map(JSON.stringify).join(', ') : null;
   },
 
   renderOverview: function (record) {
@@ -117,7 +118,7 @@ var CollectionOverview = React.createClass({
           <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
           {lastUpdated(meta.queriedAt)}
           {overview}
-          { errors ? <ErrorReport report={errors} /> : null }
+          {errors.length ? errors.map(error => <ErrorReport report={error} />) : null}
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
