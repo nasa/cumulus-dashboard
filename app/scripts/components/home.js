@@ -38,6 +38,16 @@ const tErrors = (d) => `${tally(d)} Error(s) Recorded`;
 const tPdrsProcessed = (d) => `${tally(d)} PDR(s) Processed`;
 const tGranulesFailed = (d) => `${tally(d)} Granule(s) Failed`;
 
+// defines the order in which the granules meta bar appears
+const granuleMeta = [
+  ['ingesting', 'Ingesting'],
+  ['processing', 'Processing'],
+  ['cmr', 'Updating CMR'],
+  ['archive', 'Archiving'],
+  ['completed', 'Completed'],
+  ['failed', 'Failed']
+];
+
 var Home = React.createClass({
   displayName: 'Home',
 
@@ -139,12 +149,16 @@ var Home = React.createClass({
     const granuleCount = get(count.data, 'granules.count', []);
     return (
       <ul className='timeline--processing--overall'>
-        {granuleCount.map(d => (
-          <li key={d.key} className={'timeline--processing--' + d.key}>
-            <span className='num--medium'>{tally(d.count)}</span>
-            Granules {d.key}
-          </li>
-        ))}
+        {granuleMeta.map(d => {
+          let item = granuleCount.find(count => count.key === d[0]);
+          let value = item ? get(item, 'count', 0) : 0;
+          return (
+            <li key={d[0]} className={'timeline--processing--' + d[0]}>
+              <span className='num--medium'>{tally(value)}</span>
+              Granules {d[1]}
+            </li>
+          );
+        })}
       </ul>
     );
   },
