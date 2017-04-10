@@ -63,6 +63,11 @@ const metaAccessors = [
   ['Total duration', 'totalDuration', seconds]
 ];
 
+const granuleErrors = {
+  ingest: 'This granule failed during the ingest phase',
+  processing: 'This granule failed during the processing phase'
+};
+
 var GranuleOverview = React.createClass({
   displayName: 'Granule',
 
@@ -190,6 +195,8 @@ var GranuleOverview = React.createClass({
     const deleteStatus = get(this.props.granules.deleted, [granuleId, 'status']);
     const errors = this.errors();
     const granuleError = granule.error;
+    const granuleErrorType = granuleError && granule.errorType && granuleErrors[granule.errorType]
+      ? granuleErrors[granule.errorType] : null;
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -228,6 +235,7 @@ var GranuleOverview = React.createClass({
           {lastUpdated(granule.queriedAt)}
           {this.renderStatus(granule.status)}
           {granuleError ? <ErrorReport report={granuleError} /> : null}
+          {granuleErrorType ? <ErrorReport report={granuleErrorType} /> : null}
         </section>
 
         <section className='page__section'>
