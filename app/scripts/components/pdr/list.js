@@ -63,7 +63,6 @@ var ActivePdrs = React.createClass({
     const { count, queriedAt } = list.meta;
     const logsQuery = { 'meta.pdrName__exists': 'true' };
     const view = this.getView();
-    console.log(list.data);
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
