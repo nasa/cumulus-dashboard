@@ -92,11 +92,10 @@ var ProviderOverview = React.createClass({
 
   errors: function () {
     const providerId = this.props.params.providerId;
-    const errors = [
+    return [
       get(this.props.providers.map, [providerId, 'error']),
       get(this.props.providers.deleted, [providerId, 'error'])
     ].filter(Boolean);
-    return errors.length ? errors.map(JSON.stringify).join(', ') : null;
   },
 
   render: function () {
@@ -159,7 +158,7 @@ var ProviderOverview = React.createClass({
         </section>
 
         <section className='page__section'>
-          {errors ? <ErrorReport report={errors} /> : null}
+          {errors.length ? errors.map(error => <ErrorReport report={error} />) : null}
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Provider Overview</h2>
           </div>

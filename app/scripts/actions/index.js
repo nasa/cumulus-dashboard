@@ -52,6 +52,10 @@ export const GRANULE_REPROCESS = 'GRANULE_REPROCESS';
 export const GRANULE_REPROCESS_INFLIGHT = 'GRANULE_REPROCESS_INFLIGHT';
 export const GRANULE_REPROCESS_ERROR = 'GRANULE_REPROCESS_ERROR';
 
+export const GRANULE_REINGEST = 'GRANULE_REINGEST';
+export const GRANULE_REINGEST_INFLIGHT = 'GRANULE_REINGEST_INFLIGHT';
+export const GRANULE_REINGEST_ERROR = 'GRANULE_REINGEST_ERROR';
+
 export const GRANULE_REMOVE = 'GRANULE_REMOVE';
 export const GRANULE_REMOVE_INFLIGHT = 'GRANULE_REMOVE_INFLIGHT';
 export const GRANULE_REMOVE_ERROR = 'GRANULE_REMOVE_ERROR';
@@ -213,6 +217,11 @@ export const getRecentGranules = () => wrapRequest(null, get, {
 export const reprocessGranule = (granuleId) => wrapRequest(
   granuleId, put, `granules/${granuleId}`, GRANULE_REPROCESS, {
     action: 'reprocess'
+  });
+
+export const reingestGranule = (granuleId) => wrapRequest(
+  granuleId, put, `granules/${granuleId}`, GRANULE_REINGEST, {
+    action: 'reingest'
   });
 
 export const removeGranule = (granuleId) => wrapRequest(

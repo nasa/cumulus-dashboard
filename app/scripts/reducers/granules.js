@@ -19,6 +19,10 @@ import {
   GRANULE_REPROCESS_INFLIGHT,
   GRANULE_REPROCESS_ERROR,
 
+  GRANULE_REINGEST,
+  GRANULE_REINGEST_INFLIGHT,
+  GRANULE_REINGEST_ERROR,
+
   GRANULE_REMOVE,
   GRANULE_REMOVE_INFLIGHT,
   GRANULE_REMOVE_ERROR,
@@ -54,6 +58,7 @@ export const initialState = {
   meta: {},
   reprocessed: {},
   removed: {},
+  reingested: {},
   deleted: {},
   recent: {}
 };
@@ -113,6 +118,18 @@ export default function reducer (state = initialState, action) {
     case GRANULE_REPROCESS_ERROR:
       set(state, ['reprocessed', id, 'status'], 'error');
       set(state, ['reprocessed', id, 'error'], action.error);
+      break;
+
+    case GRANULE_REINGEST:
+      set(state, ['reingested', id, 'status'], 'success');
+      set(state, ['reingested', id, 'error'], null);
+      break;
+    case GRANULE_REINGEST_INFLIGHT:
+      set(state, ['reingested', id, 'status'], 'inflight');
+      break;
+    case GRANULE_REINGEST_ERROR:
+      set(state, ['reingested', id, 'status'], 'error');
+      set(state, ['reingested', id, 'error'], action.error);
       break;
 
     case GRANULE_REMOVE:

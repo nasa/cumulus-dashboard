@@ -5,6 +5,7 @@ import {
   interval,
   getGranule,
   reprocessGranule,
+  reingestGranule,
   removeGranule,
   deleteGranule
 } from '../../actions';
@@ -106,6 +107,11 @@ var GranuleOverview = React.createClass({
     this.props.dispatch(reprocessGranule(granuleId));
   },
 
+  reingest: function () {
+    const { granuleId } = this.props.params;
+    this.props.dispatch(reingestGranule(granuleId));
+  },
+
   remove: function () {
     const { granuleId } = this.props.params;
     this.props.dispatch(removeGranule(granuleId));
@@ -121,13 +127,13 @@ var GranuleOverview = React.createClass({
 
   errors: function () {
     const granuleId = this.props.params.granuleId;
-    const errors = [
+    return [
       get(this.props.granules.map, [granuleId, 'error']),
       get(this.props.granules.reprocessed, [granuleId, 'error']),
+      get(this.props.granules.reingested, [granuleId, 'error']),
       get(this.props.granules.removed, [granuleId, 'error']),
       get(this.props.granules.deleted, [granuleId, 'error'])
     ].filter(Boolean);
-    return errors.length ? errors.map(JSON.stringify).join(', ') : null;
   },
 
   renderStatus: function (status) {
@@ -179,6 +185,7 @@ var GranuleOverview = React.createClass({
     const logsQuery = { 'meta.granuleId': granuleId };
     const cmrLink = granule.cmrLink;
     const reprocessStatus = get(this.props.granules.reprocessed, [granuleId, 'status']);
+    const reingestStatus = get(this.props.granules.reingested, [granuleId, 'status']);
     const removeStatus = get(this.props.granules.removed, [granuleId, 'status']);
     const deleteStatus = get(this.props.granules.deleted, [granuleId, 'status']);
     const errors = this.errors();
@@ -204,6 +211,13 @@ var GranuleOverview = React.createClass({
             className={'form-group__element--right'}
             text={'Remove from CMR'} />
 
+          <AsyncCommand action={this.reingest}
+            success={this.fastReload}
+            successTimeout={updateDelay}
+            status={reingestStatus}
+            className={'form-group__element--right'}
+            text={'Reingest'} />
+
           <AsyncCommand action={this.reprocess}
             success={this.fastReload}
             successTimeout={updateDelay}
@@ -217,7 +231,7 @@ var GranuleOverview = React.createClass({
         </section>
 
         <section className='page__section'>
-          {errors ? <ErrorReport report={errors} /> : null}
+          {errors.length ? errors.map(error => <ErrorReport report={error} />) : null}
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Granule Overview {cmrLink ? <a href={cmrLink}>[CMR]</a> : null}</h2>
           </div>
