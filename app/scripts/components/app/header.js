@@ -6,10 +6,10 @@ import { graphicsPath } from '../../config';
 import { window } from '../../utils/browser';
 
 const paths = [
-  ['Collections', '/collections'],
-  ['Granules', '/granules'],
   ['PDRs', '/pdrs'],
   ['Providers', '/providers'],
+  ['Collections', '/collections'],
+  ['Granules', '/granules'],
   ['Resources', '/resources'],
   ['Logs', '/logs']
 ];

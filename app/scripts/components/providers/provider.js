@@ -117,7 +117,7 @@ var ProviderOverview = React.createClass({
     const providerError = provider.error;
     return (
       <div className='page__component'>
-        <section className='page__section'>
+        <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>{providerId}</h1>
 
           <AsyncCommand action={this.delete}
@@ -128,7 +128,7 @@ var ProviderOverview = React.createClass({
             text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'}
             successTimeout={updateDelay} />
           <Link
-            className='button button--small form-group__element button--green form-group__element--right'
+            className='button button--small button--green form-group__element--right'
             to={'/providers/edit/' + providerId}
           >
             Edit
