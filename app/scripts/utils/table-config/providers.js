@@ -31,6 +31,30 @@ export const tableSortProps = [
   'updatedAt'
 ];
 
+export const errorTableHeader = [
+  'Name',
+  'Group',
+  'Error',
+  'Protocol',
+  'Last Update'
+];
+
+export const errorTableRow = [
+  (d) => <Link to={`providers/provider/${d.name}`}>{d.name}</Link>,
+  'providerName',
+  'error',
+  'protocol',
+  (d) => fullDate(d.createdAt)
+];
+
+export const errorTableSortProps = [
+  'name.keyword',
+  'providerName.keyword',
+  'error.keyword',
+  'protocol.keyword',
+  'updatedAt'
+];
+
 const confirmDelete = (d) => `Delete ${d} Provider(s)?`;
 const confirmRestart = (d) => `Restart ${d} Provider(s)?`;
 const confirmStop = (d) => `Stop ${d} Provider(s)?`;

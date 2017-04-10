@@ -12,8 +12,16 @@ import {
   getCount
 } from '../../actions';
 import { get } from 'object-path';
-import { lastUpdated } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/providers';
+import { lastUpdated, displayCase } from '../../utils/format';
+import {
+  tableHeader,
+  tableRow,
+  tableSortProps,
+  errorTableHeader,
+  errorTableRow,
+  errorTableSortProps,
+  bulkActions
+} from '../../utils/table-config/providers';
 import List from '../table/list-view';
 import Search from '../form/search';
 import Dropdown from '../form/dropdown';
@@ -34,25 +42,25 @@ var ListProviders = React.createClass({
     switch (this.props.location.pathname) {
       case '/providers/active':
         state = {
-          title: 'Active Providers',
+          title: 'active',
           query: {isActive: true}
         };
         break;
       case '/providers/inactive':
         state = {
-          title: 'Inactive Providers',
+          title: 'inactive',
           query: {isActive: false}
         };
         break;
       case '/providers/failed':
         state = {
-          title: 'Failed Providers',
+          title: 'failed',
           query: {status: 'failed'}
         };
         break;
       case '/providers/all':
         state = {
-          title: 'All Providers',
+          title: 'all',
           query: {}
         };
         break;
@@ -88,7 +96,7 @@ var ListProviders = React.createClass({
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description'>
-              {title} <span className='num--title'>{ !isNaN(count) ? `(${count})` : null }</span>
+              {displayCase(title)} Providers<span className='num--title'>{ !isNaN(count) ? `(${count})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>
@@ -121,9 +129,9 @@ var ListProviders = React.createClass({
             list={list}
             dispatch={this.props.dispatch}
             action={listProviders}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
+            tableHeader={title === 'failed' ? errorTableHeader : tableHeader}
+            tableRow={title === 'failed' ? errorTableRow : tableRow}
+            tableSortProps={title === 'failed' ? errorTableSortProps : tableSortProps}
             query={query}
             bulkActions={this.generateBulkActions()}
             rowId={'name'}
