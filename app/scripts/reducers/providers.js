@@ -125,6 +125,7 @@ export default function reducer (state = initialState, action) {
       set(state, ['list', 'data'], data.results);
       set(state, ['list', 'meta'], assignDate(data.meta));
       set(state, ['list', 'inflight'], false);
+      set(state, ['list', 'error'], false);
       break;
     case PROVIDERS_INFLIGHT:
       set(state, ['list', 'inflight'], true);
