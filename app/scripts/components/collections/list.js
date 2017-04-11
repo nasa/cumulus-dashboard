@@ -14,13 +14,11 @@ import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/
 import Search from '../form/search';
 import Dropdown from '../form/dropdown';
 import List from '../table/list-view';
-import { recent } from '../../config';
 
 var CollectionList = React.createClass({
   displayName: 'CollectionList',
 
   propTypes: {
-    location: React.PropTypes.object,
     collections: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     logs: React.PropTypes.object
@@ -34,18 +32,11 @@ var CollectionList = React.createClass({
   },
 
   generateQuery: function () {
-    const query = {};
-    if (this.inactive()) query.updatedAt__to = recent;
-    else query.updatedAt__from = recent;
-    return query;
+    return {};
   },
 
   generateBulkActions: function () {
     return bulkActions(this.props.collections);
-  },
-
-  inactive: function () {
-    return this.props.location.pathname.indexOf('collections/inactive') >= 0;
   },
 
   render: function () {
@@ -56,7 +47,7 @@ var CollectionList = React.createClass({
         <section className='page__section'>
           <div className='page__section__header page__section__header-wrapper'>
             <h1 className='heading--large heading--shared-content with-description'>
-              {this.inactive() ? 'Inactive' : 'Active'} Collections <span className='num--title'>{ !isNaN(count) ? `(${tally(count)})` : null }</span>
+              All Collections <span className='num--title'>{ !isNaN(count) ? `(${tally(count)})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>
