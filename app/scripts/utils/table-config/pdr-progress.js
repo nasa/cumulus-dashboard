@@ -61,7 +61,7 @@ export const tableRow = [
 export const tableSortProps = [
   'pdrName.keyword',
   'status.keyword',
-  null,
+  'progress',
   null,
   null,
   'discoveredAt'
