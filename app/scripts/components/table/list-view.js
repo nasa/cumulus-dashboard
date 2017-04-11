@@ -14,7 +14,7 @@ var List = React.createClass({
   getInitialState: function () {
     return {
       page: 1,
-      sortIdx: 0,
+      sortIdx: this.props.sortIdx || 0,
       order: 'desc',
       selected: [],
       prefix: null,
@@ -32,6 +32,7 @@ var List = React.createClass({
     tableHeader: React.PropTypes.array,
     tableRow: React.PropTypes.array,
     tableSortProps: React.PropTypes.array,
+    sortIdx: React.PropTypes.number,
     query: React.PropTypes.object,
     bulkActions: React.PropTypes.array,
     rowId: React.PropTypes.string

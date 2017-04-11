@@ -76,6 +76,7 @@ var PdrOverview = React.createClass({
             tableHeader={tableHeader}
             tableRow={tableRow}
             tableSortProps={tableSortProps}
+            sortIdx={1}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={'pdrName'}
