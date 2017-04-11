@@ -1,4 +1,4 @@
-.button {
+.button, .button:visited {
   padding: .65em 2em;
   border-radius: 4px;
   background-color: $light-green;
@@ -17,20 +17,22 @@
   }
 }
 
-.button--green {
+.button--green, .button--green:visited {
   &:hover {
     background-color: darken($light-green, 5%);
+    color: #fff;
+    border: 0;
   }
 }
 
-.button--white {
+.button--white, .button--white:visited {
   color: $midnight-blue;
   background-color: #fff;
 }
 
 .button--small {
   font-size: .86em;
-  padding: .3em 2em .35em;
+  padding: .4em 2em .3em;
 }
 
 .button--large {
@@ -39,7 +41,7 @@
   font-size: 1em;
 }
 
-.button--secondary {
+.button--secondary, .button--secondary:visited {
   background-color: $dolphin-grey;
 }
 
@@ -50,6 +52,7 @@
 
 .button--disabled {
   opacity: 0.6;
+  pointer-events: none;
 }
 
 .button--loading {
