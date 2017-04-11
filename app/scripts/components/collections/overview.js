@@ -49,7 +49,7 @@ var CollectionOverview = React.createClass({
     return {
       collectionName,
       fields: granuleFields,
-      status__not: 'completed'
+      status__not: 'completed,failed'
     };
   },
 

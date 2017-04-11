@@ -10,7 +10,7 @@ export const tableHeader = [
   'Granules',
   'Completed',
   'Failed',
-  'Duration',
+  'Average Duration',
   'Created at',
   'Updated at'
 ];
