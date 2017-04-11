@@ -9,8 +9,16 @@ import {
   filterPdrs,
   clearPdrsFilter
 } from '../../actions';
-import { pdrSearchResult, lastUpdated, tally } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/pdrs';
+import { pdrSearchResult, lastUpdated, tally, displayCase } from '../../utils/format';
+import {
+  tableHeader,
+  tableRow,
+  tableSortProps,
+  errorTableHeader,
+  errorTableRow,
+  errorTableSortProps,
+  bulkActions
+} from '../../utils/table-config/pdrs';
 import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
 import Search from '../form/search';
@@ -40,10 +48,10 @@ var ActivePdrs = React.createClass({
 
   getView: function () {
     const { pathname } = this.props.location;
-    if (pathname === '/pdrs/completed') return 'Completed';
-    else if (pathname === '/pdrs/failed') return 'Failed';
-    else if (pathname === '/pdrs/active') return 'Active';
-    else return 'All';
+    if (pathname === '/pdrs/completed') return 'completed';
+    else if (pathname === '/pdrs/failed') return 'failed';
+    else if (pathname === '/pdrs/active') return 'active';
+    else return 'all';
   },
 
   generateBulkActions: function () {
@@ -59,11 +67,12 @@ var ActivePdrs = React.createClass({
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>{view} PDRs <span className='num--title'>{!isNaN(count) ? `(${tally(count)})` : null}</span></h1>
+            <h1 className='heading--large heading--shared-content with-description'>{displayCase(view)} PDRs
+              <span className='num--title'>{!isNaN(count) ? `(${tally(count)})` : null}</span></h1>
             {lastUpdated(queriedAt)}
           </div>
           <div className='filters'>
-            {view === 'All' ? (
+            {view === 'all' ? (
               <Dropdown
                 dispatch={this.props.dispatch}
                 options={statusOptions}
@@ -84,9 +93,9 @@ var ActivePdrs = React.createClass({
             list={list}
             dispatch={this.props.dispatch}
             action={listPdrs}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
+            tableHeader={view === 'failed' ? errorTableHeader : tableHeader}
+            tableRow={view === 'failed' ? errorTableRow : tableRow}
+            tableSortProps={view === 'failed' ? errorTableSortProps : tableSortProps}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={'pdrName'}

@@ -27,18 +27,38 @@ const Table = React.createClass({
     rowId: React.PropTypes.string
   },
 
-  unSortable: function () {
+  getInitialState: function () {
+    return {
+      dumbOrder: null,
+      dumbSortIdx: null
+    };
+  },
+
+  isTableDumb: function () {
+    // identify whether the table is "dumb," as in it doesn't
+    // do its own data-updating, and cannot be sorted via its API call
     return isUndefined(this.props.sortIdx) || !this.props.order || !Array.isArray(this.props.props);
   },
 
   changeSort: function (e) {
-    if (this.unSortable()) { return; }
-    const value = e.currentTarget.getAttribute('data-value');
-    const sortIdx = this.props.header.indexOf(value);
-    if (!this.props.props[sortIdx]) { return; }
-    const order = this.props.sortIdx === sortIdx ? otherOrder[this.props.order] : defaultSortOrder;
+    let { sortIdx, order, props, header } = this.props;
+    const isTableDumb = this.isTableDumb();
+
+    if (isTableDumb) {
+      sortIdx = this.state.dumbSortIdx;
+      order = this.state.dumbOrder;
+    }
+
+    const headerName = e.currentTarget.getAttribute('data-value');
+    const newSortIdx = header.indexOf(headerName);
+    if (!props[newSortIdx]) { return; }
+    const newOrder = sortIdx === newSortIdx ? otherOrder[order] : defaultSortOrder;
+
     if (typeof this.props.changeSortProps === 'function') {
-      this.props.changeSortProps({ sortIdx, order });
+      this.props.changeSortProps({ sortIdx: newSortIdx, order: newOrder });
+    }
+    if (isTableDumb) {
+      this.setState({ dumbSortIdx: newSortIdx, dumbOrder: newOrder });
     }
   },
 
@@ -50,9 +70,21 @@ const Table = React.createClass({
   },
 
   render: function () {
-    const canSort = !this.unSortable();
-    let { primaryIdx, sortIdx, order, props, row, data, selectedRows, canSelect } = this.props;
+    let { primaryIdx, sortIdx, order, props, header, row, rowId, data, selectedRows, canSelect } = this.props;
+    const isTableDumb = this.isTableDumb();
     primaryIdx = primaryIdx || 0;
+
+    if (isTableDumb) {
+      sortIdx = this.state.dumbSortIdx;
+      order = this.state.dumbOrder;
+      const sortName = props[sortIdx];
+      const primaryName = props[primaryIdx];
+      data = data.sort((a, b) =>
+        // If the sort field is the same, tie-break using the primary ID field
+        a[sortName] === b[sortName] ? a[primaryName] > b[primaryName]
+        : (order === 'asc') ? a[sortName] < b[sortName] : a[sortName] > b[sortName]
+      );
+    }
 
     return (
       <div className='table--wrapper'>
@@ -60,8 +92,8 @@ const Table = React.createClass({
           <thead>
             <tr>
               {canSelect && <td></td> }
-              {this.props.header.map((h, i) => {
-                let className = canSort && props[i] ? 'table__sort' : '';
+              {header.map((h, i) => {
+                let className = (isTableDumb || props[i]) ? 'table__sort' : '';
                 if (i === sortIdx) { className += (' table__sort--' + order); }
                 return (
                   <td
@@ -74,8 +106,8 @@ const Table = React.createClass({
             </tr>
           </thead>
           <tbody>
-            {this.props.data.map((d, i) => {
-              const dataId = d[this.props.rowId];
+            {data.map((d, i) => {
+              const dataId = d[rowId];
               const checked = canSelect && selectedRows.indexOf(dataId) !== -1;
               return (
                 <tr key={i} data-value={dataId} onClick={this.select}>

@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import { Link } from 'react-router';
-import { fullDate } from '../format';
+import { fullDate, nullValue } from '../format';
 import { deleteProvider, restartProvider, stopProvider } from '../../actions';
 
 export const tableHeader = [
@@ -27,6 +27,30 @@ export const tableSortProps = [
   'providerName.keyword',
   'status.keyword',
   null,
+  'protocol.keyword',
+  'updatedAt'
+];
+
+export const errorTableHeader = [
+  'Name',
+  'Group',
+  'Error',
+  'Protocol',
+  'Last Update'
+];
+
+export const errorTableRow = [
+  (d) => <Link to={`providers/provider/${d.name}`}>{d.name}</Link>,
+  'providerName',
+  (d) => d.error || nullValue,
+  'protocol',
+  (d) => fullDate(d.createdAt)
+];
+
+export const errorTableSortProps = [
+  'name.keyword',
+  'providerName.keyword',
+  'error.keyword',
   'protocol.keyword',
   'updatedAt'
 ];

@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import { Link } from 'react-router';
-import { fullDate, seconds, bool } from '../format';
+import { fullDate, seconds, bool, nullValue } from '../format';
 import {
   reprocessGranule,
   reingestGranule,
@@ -32,10 +32,31 @@ export const tableRow = [
 export const tableSortProps = [
   'granuleId.keyword',
   'status.keyword',
-  'published.keyword',
+  'published',
   'pdrName.keyword',
   'collectionName.keyword',
   'duration',
+  'updatedAt'
+];
+
+export const errorTableHeader = [
+  'Name',
+  'Published',
+  'Error',
+  'Updated'
+];
+
+export const errorTableRow = [
+  (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
+  (d) => bool(d.published),
+  (d) => d.error || nullValue,
+  (d) => fullDate(d.updatedAt)
+];
+
+export const errorTableSortProps = [
+  'granuleId.keyword',
+  'published.keyword',
+  'error.keyword',
   'updatedAt'
 ];
 
