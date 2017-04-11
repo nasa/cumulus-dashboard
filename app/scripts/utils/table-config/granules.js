@@ -32,7 +32,7 @@ export const tableRow = [
 export const tableSortProps = [
   'granuleId.keyword',
   'status.keyword',
-  'published.keyword',
+  'published',
   'pdrName.keyword',
   'collectionName.keyword',
   'duration',

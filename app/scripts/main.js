@@ -75,13 +75,12 @@ render((
   <ProviderElem store={store}>
     <Router history={hashHistory} render={applyRouterMiddleware(useScroll())}>
       <Route path='/404' component={NotFound} />
-      <Redirect from='/collections' to='/collections/active' />
+      <Redirect from='/collections' to='/collections/all' />
       <Route path='/login' component={Login} onEnter={checkAuth} />
       <Route path='/' component={App} onEnter={requireAuth} >
         <IndexRoute component={Home} />
         <Route path='collections' component={Collections}>
-          <Route path='active' component={CollectionList} />
-          <Route path='inactive' component={CollectionList} />
+          <Route path='all' component={CollectionList} />
           <Route path='add' component={AddCollection} />
           <Route path='edit/:collectionName' component={EditCollection} />
           <Route path='collection/:collectionName' component={CollectionOverview} />
