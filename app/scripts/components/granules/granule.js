@@ -250,7 +250,12 @@ var GranuleOverview = React.createClass({
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>Files</h2>
           </div>
-          <SortableTable data={files} header={tableHeader} row={tableRow}/>
+          <SortableTable
+            data={files}
+            header={tableHeader}
+            row={tableRow}
+            props={['name', 'sipFile', 'stagingFile', 'archivedFile', 'access']}
+          />
         </section>
 
         <section className='page__section'>
