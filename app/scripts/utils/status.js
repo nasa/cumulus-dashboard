@@ -25,7 +25,7 @@ export const queryStatus = [
 export const pdrStatus = {
   '': '',
   Discovered: 'discovered',
-  Processing: 'processing',
+  Parsed: 'parsed',
   Completed: 'completed',
   Failed: 'failed'
 };
