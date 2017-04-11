@@ -5,5 +5,5 @@
 
 module.exports = {
   environment: 'staging',
-  graphicsPath: '/dashboard/graphics/dev/'
+  graphicsPath: '/dashboard/dev/graphics/'
 };

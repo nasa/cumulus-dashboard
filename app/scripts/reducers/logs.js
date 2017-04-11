@@ -29,6 +29,7 @@ export default function reducer (state = initialState, action) {
       }
       set(nextState, 'inflight', false);
       set(nextState, 'queriedAt', new Date());
+      set(nextState, 'error', false);
       break;
     case LOGS_INFLIGHT:
       const query = get(action.config, 'qs.q', '');

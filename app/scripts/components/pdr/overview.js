@@ -14,18 +14,6 @@ import { recent, updateInterval } from '../../config';
 var PdrOverview = React.createClass({
   displayName: 'PdrOverview',
 
-  getInitialState: function () {
-    return {
-      page: 1,
-      sortIdx: 0,
-      order: 'desc',
-      selected: [],
-      prefix: null,
-      queryConfig: {},
-      params: {}
-    };
-  },
-
   propTypes: {
     dispatch: React.PropTypes.func,
     pdrs: React.PropTypes.object,
@@ -49,7 +37,6 @@ var PdrOverview = React.createClass({
 
   generateQuery: function () {
     return {
-      limit: 10,
       updatedAt__from: recent
     };
   },
@@ -79,7 +66,7 @@ var PdrOverview = React.createClass({
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Recently Active PDRs <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Recently Updated PDRs <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
           </div>
 
           <List
@@ -89,6 +76,7 @@ var PdrOverview = React.createClass({
             tableHeader={tableHeader}
             tableRow={tableRow}
             tableSortProps={tableSortProps}
+            sortIdx={1}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={'pdrName'}
