@@ -2,8 +2,7 @@
 import { encode } from '../utils/browser';
 
 const collectionRoutes = [
-  ['Active', 'active'],
-  ['In-active', 'inactive']
+  ['All Collections', 'all']
 ];
 
 const singleCollectionRoutes = [
