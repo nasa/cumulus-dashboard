@@ -328,6 +328,19 @@ a:active {
   }
 }
 
+.progress-bar__progress {
+  height: 5px;
+  left: 0;
+  position: absolute;
+  transition: width 0.2s ease-in-out;
+  background-color: $light-green;
+}
+.progress-bar__progress--ingesting { width: 0; }
+.progress-bar__progress--processing { width: 25%;  }
+.progress-bar__progress--cmr { width: 49%; }
+.progress-bar__progress--archiving { width: 73%; }
+.progress-bar__progress--completed { width: 100%; }
+
 .progress-bar__indicator {
   position: absolute;
   top: -8px;
