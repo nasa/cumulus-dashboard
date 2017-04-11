@@ -10,7 +10,7 @@ export const truthy = (value) => value || nullValue;
 
 export const fullDate = function (datestring) {
   if (!datestring) { return nullValue; }
-  return moment(datestring).format('hh:mm:ss MM/DD/YY');
+  return moment(datestring).format('kk:mm:ss MM/DD/YY');
 };
 
 export const bigTally = function (numberstring) {
