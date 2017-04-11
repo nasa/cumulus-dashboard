@@ -270,7 +270,13 @@ select {
   }
 }
 
-
+.page__section--fullpage-form--internal {
+  .form__item {
+    input[type=text] {
+      width: 70%;
+    }
+  }
+}
 
 .label__description {
   display: block;

@@ -70,7 +70,7 @@ const SubForm = React.createClass({
         <div className='subform__ui'>
           <span className='subform__name'>{name}</span>
           <a href='#'
-            className='subform__button link--secondary'
+            className='subform__button'
             onClick={this.toggleExpand}
             data-value={name}
             >{isExpanded ? 'Cancel' : fieldset.isEmpty ? 'Add' : 'Edit'}</a>
