@@ -151,9 +151,11 @@ var GranuleOverview = React.createClass({
     if (status === 'failed') statusList.push(['Failed', 'failed']);
     else statusList.push(['Complete', 'completed']);
     const indicatorClass = 'progress-bar__indicator progress-bar__indicator--' + status;
+    const statusBarClass = 'progress-bar__progress progress-bar__progress--' + status;
     return (
       <div className='page__section--subsection page__section__granule--progress'>
         <div className='progress-bar'>
+          <div className={statusBarClass}></div>
 
           <div className={indicatorClass}>
             <div className='pulse'>
