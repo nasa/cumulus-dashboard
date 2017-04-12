@@ -38,7 +38,7 @@ const SubForm = React.createClass({
     }
 
     fields.push({
-      name: 'New',
+      name: 'Add',
       fields: createFormConfig({}, fieldSet),
       isEmpty: true
     });
@@ -61,12 +61,14 @@ const SubForm = React.createClass({
     );
   },
 
-  renderFieldset: function (fieldset) {
+  renderFieldset: function (fieldset, index, fields) {
     const { name } = fieldset;
     const isExpanded = this.state.expanded[name];
     const expanded = isExpanded ? ' subform__item--expanded' : '';
+    const isLast = index === fields.length - 1;
+    const last = isLast ? ' subform__item--last' : '';
     return (
-      <div key={name} className={'subform__item' + expanded}>
+      <div key={name} className={'subform__item' + expanded + last}>
         <div className='subform__ui'>
           <span className='subform__name'>{name}</span>
           <a href='#'
