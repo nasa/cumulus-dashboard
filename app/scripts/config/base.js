@@ -11,7 +11,7 @@ module.exports = {
   tabSize: 2,
 
   // list queries
-  pageLimit: 100,
+  pageLimit: 50,
 
   searchPageLimit: 7,
 
