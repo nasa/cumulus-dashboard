@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import {
   interval,
@@ -37,7 +38,7 @@ const tableRow = [
 ];
 
 const metaAccessors = [
-  ['PDR Name', 'pdrName'],
+  ['PDR Name', 'pdrName', (d) => <Link to={`pdrs/pdr/${d}`}>{d}</Link>],
   ['Published', 'published', bool],
   ['Duplicate', 'hasDuplicate', bool],
 
