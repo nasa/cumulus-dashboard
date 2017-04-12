@@ -38,7 +38,6 @@ const SubForm = React.createClass({
     }
 
     fields.push({
-      name: 'Add',
       fields: createFormConfig({}, fieldSet),
       isEmpty: true
     });
@@ -75,7 +74,7 @@ const SubForm = React.createClass({
             className='subform__button'
             onClick={this.toggleExpand}
             data-value={name}
-            >{isExpanded ? 'Cancel' : fieldset.isEmpty ? 'Add' : 'Edit'}</a>
+            >{isExpanded ? 'Cancel' : fieldset.isEmpty ? 'Add Another' : 'Edit'}</a>
           {isExpanded && !fieldset.isEmpty ? (
             <a href='#'
               className='subform__button link--secondary subform__remove'
