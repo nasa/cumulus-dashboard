@@ -206,6 +206,7 @@ var GranuleOverview = React.createClass({
     }, {
       text: 'Delete',
       action: this.delete,
+      disabled: granule.published,
       status: get(this.props.granules.deleted, [granuleId, 'status']),
       success: this.navigateBack
     }];
