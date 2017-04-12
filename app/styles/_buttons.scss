@@ -202,6 +202,10 @@
       &.async__element--loading {
         color: $lightest-grey;
       }
+      &.async__element--disabled {
+        color: $light-grey;
+        cursor: default;
+      }
     }
     &:last-of-type {
       border-bottom: 0;

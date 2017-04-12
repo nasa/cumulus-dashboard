@@ -38,7 +38,7 @@ const DropdownAsync = React.createClass({
 
   onSuccess: function (success) {
     this.setState({ showActions: false });
-    success();
+    if (typeof success === 'function') success();
   },
 
   render: function () {
@@ -55,6 +55,7 @@ const DropdownAsync = React.createClass({
                 successTimeout={updateDelay}
                 error={this.close}
                 status={d.status}
+                disabled={d.disabled}
                 className={'link--no-underline'}
                 element='a'
                 text={d.text} />
