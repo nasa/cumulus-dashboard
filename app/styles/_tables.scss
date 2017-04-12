@@ -179,6 +179,10 @@ table {
   a, a:visited {
     color: $black;
     border-bottom: 1px solid $lightest-grey;
+    &:hover { 
+      border-bottom: 1px solid $ocean-blue;
+      color: $ocean-blue;
+    }
   }
 }
 
