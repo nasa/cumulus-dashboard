@@ -155,21 +155,22 @@
 }
 
 .dropdown__options {
-  margin-top: 1em;
-  position: relative;
+  margin-top: .3em;
 }
 
 .dropdown__options__btn {
   position: relative;
+  padding: .6em 2em .2em;
   &:before {
     position: absolute;
     content: '';
-    background-size: 20px 20px;
-    width: 20px;
-    height: 20px;
+    background-size: 15px 15px;
+    width: 15px;
+    height: 15px;
     display: inline-block;
     background-image: url(#{$graphics}/layout/cog.svg);
     left: 1.4em;
+    top: .45em;
   }
   span {
     clip: rect(0,0,0,0);

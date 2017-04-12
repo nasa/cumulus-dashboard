@@ -46,7 +46,7 @@ const DropdownAsync = React.createClass({
     const { showActions } = this.state;
     return (
       <div className='dropdown__options form-group__element--right'>
-        <a className='dropdown__options__btn button--green button' href='#' onClick={this.toggleActions}><span>Options</span></a>
+        <a className='dropdown__options__btn button--green button button--small' href='#' onClick={this.toggleActions}><span>Options</span></a>
         {showActions ? (
           <ul className='dropdown__menu'>
             {config.map(d => <li key={d.text}>
