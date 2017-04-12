@@ -35,6 +35,7 @@ import Metadata from '../table/metadata';
 import Loading from '../app/loading-indicator';
 import AsyncCommand from '../form/async-command';
 import ErrorReport from '../errors/report';
+import GranulesProgress from '../granules/progress';
 import { updateInterval, updateDelay } from '../../config';
 
 const metaAccessors = [
@@ -107,6 +108,12 @@ var PDR = React.createClass({
     const logsQuery = { 'meta.pdrName': pdrName };
     const deleteStatus = get(this.props.pdrs.deleted, [pdrName, 'status']);
     const error = record.error;
+
+    const granulesCount = get(record, 'data.granulesStatus', []);
+    const granuleStatus = Object.keys(granulesCount).map(key => ({
+      count: granulesCount[key],
+      key
+    }));
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -134,6 +141,9 @@ var PDR = React.createClass({
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>Granules <span className='num--title'>{ !isNaN(count) ? `(${count})` : null }</span></h2>
+          </div>
+          <div>
+            <GranulesProgress granules={granuleStatus} />
           </div>
           <div className='filters filters__wlabels'>
             <Dropdown
