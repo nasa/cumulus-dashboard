@@ -223,6 +223,9 @@ select {
   .subform__name {
     margin-bottom: 2em;
   }
+  .subform__button {
+    display: none;
+  }
 }
 
 .subform__name {
@@ -246,11 +249,39 @@ select {
   }
 }
 
-.page__section--fullpage-form {
+.page__content--shortened--centered {
+  .page__section--fullpage-form {
+    .form__item {
+      input[type=text] {
+        width: 90%;
+      }
+      .subform__item--expanded {
+        width: 87%;
+      }
+      .form__addone--item {
+        input {
+          width: 75%;
+        }
+      }
+    }
+  }
+}
+
+.page__section--fullpage-form--internal {
   .form__item {
     margin-bottom: 3em;
     input[type=text] {
-      width: 90%;
+      width: 70%;
+    }
+    .subform__item--expanded {
+      width: 70%;
+      margin-top: 1.5em;
+      input[type=text] {
+        width: 92%;
+      }
+      .form-group__element--left {
+        margin-top: 0;
+      }
     }
     .dropdown__wrapper {
       width: 50%;
@@ -262,15 +293,13 @@ select {
     .form__addone--item {
       margin-bottom: 1em;
       input {
-        width: 75%;
+        width: 59%;
         margin-right: 1.5em;
         float: left;
       }
     }
   }
 }
-
-
 
 .label__description {
   display: block;
