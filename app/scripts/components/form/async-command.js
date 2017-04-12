@@ -55,14 +55,17 @@ const AsyncCommand = React.createClass({
     const { status, text } = this.props;
     const inflight = status === 'inflight';
     const element = this.props.element || 'button';
-    return React.createElement(element, {
+    const props = {
       className: this.props.element ? this.elementClass(inflight) : this.buttonClass(inflight),
       onClick: this.props.disabled ? preventDefault : this.handleClick
-    }, (
+    };
+    if (element === 'a') props.href = '#';
+    const children = (
       <span>
         {text}{inflight ? <Ellipsis /> : ''}
       </span>
-    ));
+    );
+    return React.createElement(element, props, children);
   }
 });
 export default AsyncCommand;
