@@ -32,6 +32,10 @@ const DropdownAsync = React.createClass({
     this.setState({ showActions: !this.state.showActions });
   },
 
+  close: function () {
+    this.setState({ showActions: false });
+  },
+
   onSuccess: function (success) {
     this.setState({ showActions: false });
     success();
@@ -49,6 +53,7 @@ const DropdownAsync = React.createClass({
               <AsyncCommand action={d.action}
                 success={() => this.onSuccess(d.success)}
                 successTimeout={updateDelay}
+                error={this.close}
                 status={d.status}
                 className={'link--no-underline'}
                 element='a'

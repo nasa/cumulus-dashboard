@@ -8,6 +8,7 @@ const AsyncCommand = React.createClass({
   propTypes: {
     action: React.PropTypes.func,
     success: React.PropTypes.func,
+    error: React.PropTypes.func,
     status: React.PropTypes.string,
     text: React.PropTypes.string,
     className: React.PropTypes.string,
@@ -23,6 +24,12 @@ const AsyncCommand = React.createClass({
       typeof this.props.success === 'function'
     ) {
       setTimeout(this.props.success, this.props.successTimeout || 0);
+    } else if (
+      this.props.status === 'inflight' &&
+        newProps.status === 'error' &&
+        typeof this.props.error === 'function'
+    ) {
+      this.props.error();
     }
   },
 
