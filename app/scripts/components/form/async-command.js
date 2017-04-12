@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import Ellipsis from '../app/loading-ellipsis';
+import { preventDefault } from '../../utils/noop';
 
 const AsyncCommand = React.createClass({
 
@@ -11,7 +12,8 @@ const AsyncCommand = React.createClass({
     text: React.PropTypes.string,
     className: React.PropTypes.string,
     disabled: React.PropTypes.bool,
-    successTimeout: React.PropTypes.number
+    successTimeout: React.PropTypes.number,
+    element: React.PropTypes.string
   },
 
   componentWillReceiveProps: function (newProps) {
@@ -32,6 +34,15 @@ const AsyncCommand = React.createClass({
     return className;
   },
 
+  // a generic className generator for non-button elements
+  elementClass: function (processing) {
+    let className = 'async__element';
+    if (processing) className += ' async__element--loading';
+    if (this.props.disabled) className += ' async__element--disabled';
+    if (this.props.className) className += ' ' + this.props.className;
+    return className;
+  },
+
   handleClick: function (e) {
     e.preventDefault();
     // prevent duplicate action if the action is already inflight.
@@ -43,12 +54,15 @@ const AsyncCommand = React.createClass({
   render: function () {
     const { status, text } = this.props;
     const inflight = status === 'inflight';
-    return (
-      <button
-        className={this.buttonClass(inflight)}
-        onClick={this.props.disabled ? () => {} : this.handleClick}
-        >{text}{inflight ? <Ellipsis /> : ''}</button>
-    );
+    const element = this.props.element || 'button';
+    return React.createElement(element, {
+      className: this.props.element ? this.elementClass(inflight) : this.buttonClass(inflight),
+      onClick: this.props.disabled ? preventDefault : this.handleClick
+    }, (
+      <span>
+        {text}{inflight ? <Ellipsis /> : ''}
+      </span>
+    ));
   }
 });
 export default AsyncCommand;
