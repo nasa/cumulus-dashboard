@@ -143,8 +143,13 @@
   }
 }
 
-.subform__item--last .subform__button {
-  display: inline-block;
-  margin-top: 1.5em;
-  margin-left: 0;
+.subform__item--last {
+  .subform__button {
+    display: inline-block;
+    margin-top: 1.5em;
+    margin-left: 0;
+  }
+  .subform__name {
+    display: none;
+  }
 }

@@ -38,6 +38,7 @@ const SubForm = React.createClass({
     }
 
     fields.push({
+      name: 'Add',
       fields: createFormConfig({}, fieldSet),
       isEmpty: true
     });
