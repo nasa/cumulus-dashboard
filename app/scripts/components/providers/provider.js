@@ -158,7 +158,7 @@ var ProviderOverview = React.createClass({
         </section>
 
         <section className='page__section'>
-          {errors.length ? errors.map(error => <ErrorReport report={error} />) : null}
+          {errors.length ? errors.map((error, i) => <ErrorReport key={i} report={error} />) : null}
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Provider Overview</h2>
           </div>

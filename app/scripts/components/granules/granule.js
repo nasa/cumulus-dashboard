@@ -124,10 +124,7 @@ var GranuleOverview = React.createClass({
 
   delete: function () {
     const { granuleId } = this.props.params;
-    const granule = this.props.granules.map[granuleId].data;
-    if (!granule.published) {
-      this.props.dispatch(deleteGranule(granuleId));
-    }
+    this.props.dispatch(deleteGranule(granuleId));
   },
 
   errors: function () {
@@ -227,7 +224,7 @@ var GranuleOverview = React.createClass({
         </section>
 
         <section className='page__section'>
-          {errors.length ? errors.map(error => <ErrorReport report={error} />) : null}
+          {errors.length ? errors.map((error, i) => <ErrorReport key={i} report={error} />) : null}
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Granule Overview {cmrLink ? <a href={cmrLink}>[CMR]</a> : null}</h2>
           </div>
