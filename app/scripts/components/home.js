@@ -17,6 +17,7 @@ import { nullValue, tally, seconds } from '../utils/format';
 import LoadingEllipsis from './app/loading-ellipsis';
 import List from './table/list-view';
 import Histogram from './chart/histogram';
+import GranulesProgress from './granules/progress';
 import { tableHeader, tableRow, tableSortProps } from '../utils/table-config/pdr-progress';
 import serialize from '../utils/serialize-config';
 import { recent, updateInterval } from '../config';
@@ -37,16 +38,6 @@ const tGranulesProcessed = (d) => `${tally(d)} Granule(s) Processed`;
 const tErrors = (d) => `${tally(d)} Error(s) Recorded`;
 const tPdrsProcessed = (d) => `${tally(d)} PDR(s) Processed`;
 const tGranulesFailed = (d) => `${tally(d)} Granule(s) Failed`;
-
-// defines the order in which the granules meta bar appears
-const granuleMeta = [
-  ['ingesting', 'Ingesting'],
-  ['processing', 'Processing'],
-  ['cmr', 'Updating CMR'],
-  ['archive', 'Archiving'],
-  ['completed', 'Completed'],
-  ['failed', 'Failed']
-];
 
 var Home = React.createClass({
   displayName: 'Home',
@@ -144,25 +135,6 @@ var Home = React.createClass({
     };
   },
 
-  renderGranuleProgress: function () {
-    const { count } = this.props.stats;
-    const granuleCount = get(count.data, 'granules.count', []);
-    return (
-      <ul className='timeline--processing--overall'>
-        {granuleMeta.map(d => {
-          let item = granuleCount.find(count => count.key === d[0]);
-          let value = item ? get(item, 'count', 0) : 0;
-          return (
-            <li key={d[0]} className={'timeline--processing--' + d[0]}>
-              <span className='num--medium'>{tally(value)}</span>
-              Granules {d[1]}
-            </li>
-          );
-        })}
-      </ul>
-    );
-  },
-
   render: function () {
     const { list } = this.props.pdrs;
     const { recent } = this.props.granules;
@@ -183,6 +155,7 @@ var Home = React.createClass({
     const errorsRecorded = get(histogram, serialize(this.generateErrors()), {});
     const pdrsProcessed = get(histogram, serialize(this.generatePdrsProcessed()), {});
     const granulesFailed = get(histogram, serialize(this.generateGranulesFailed()), {});
+    const granuleStatus = get(count.data, 'granules.count', []);
 
     return (
       <div className='page__home'>
@@ -214,7 +187,7 @@ var Home = React.createClass({
               <div className='heading__wrapper--border'>
                 <h2 className='heading--medium'>Granules Updated Today <span className='num--title'>{numGranules}</span></h2>
               </div>
-              {this.renderGranuleProgress()}
+              <GranulesProgress granules={granuleStatus} />
             </div>
           </section>
           <section className='page__section'>

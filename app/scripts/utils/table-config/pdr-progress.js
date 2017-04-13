@@ -25,7 +25,7 @@ function bar (completed, failed, text) {
   );
 }
 
-function renderProgress (d) {
+export const renderProgress = function (d) {
   const granules = d.granulesStatus;
   const total = stats.reduce((a, b) => a + get(granules, b, 0), 0);
   const completed = get(granules, 'completed', 0);
@@ -38,7 +38,7 @@ function renderProgress (d) {
       {bar(percentCompleted, percentFailed, granulesCompleted)}
     </div>
   );
-}
+};
 
 export const tableHeader = [
   'Name',
