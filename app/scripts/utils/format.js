@@ -116,3 +116,10 @@ export const storage = function (n) {
 };
 
 export const link = (url) => <a href={url}>Link</a>;
+
+export const truncate = function (string, to) {
+  if (!string) return nullValue;
+  to = to || 100;
+  if (string.length <= to) return string;
+  else return string.slice(0, to) + '...';
+};
