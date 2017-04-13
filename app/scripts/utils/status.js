@@ -29,3 +29,10 @@ export const pdrStatus = {
   Completed: 'completed',
   Failed: 'failed'
 };
+
+export const pdrQueryStatus = [
+  'discovered',
+  'parsed',
+  'completed',
+  'failed'
+];
