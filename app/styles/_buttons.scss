@@ -156,6 +156,7 @@
 
 .dropdown__options {
   margin-top: .3em;
+  position: relative;
 }
 
 .dropdown__options__btn {
@@ -185,14 +186,14 @@
   position: absolute;
   background-color: #fff;
   right: 0;
-  z-index: 5;
+  z-index: 15;
   margin-top: 1em;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
   box-shadow: 0px 1px 8px rgba(0, 0, 0, .1);
   padding: .5em 0;
-  min-width: 11em;
+  min-width: 12em;
   li {
     display: block;
     padding: .8em 1.5em;
