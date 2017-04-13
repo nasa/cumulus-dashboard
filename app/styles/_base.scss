@@ -73,6 +73,10 @@ a:active {
   outline: 0;
 }
 
+.link--no-underline {
+  border-bottom: 0;
+}
+
 .link--secondary, .link--secondary:visited {
   color: $ocean-blue;
   font-weight: $base-font-semibold;

@@ -15,10 +15,10 @@ import { fullDate, lastUpdated, seconds, nullValue, bool } from '../../utils/for
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
-import AsyncCommand from '../form/async-command';
 import ErrorReport from '../errors/report';
 import Metadata from '../table/metadata';
-import { updateInterval, updateDelay } from '../../config';
+import AsyncCommands from '../form/dropdown-async-command';
+import { updateInterval } from '../../config';
 
 const tableHeader = [
   'Filename',
@@ -128,10 +128,7 @@ var GranuleOverview = React.createClass({
 
   delete: function () {
     const { granuleId } = this.props.params;
-    const granule = this.props.granules.map[granuleId].data;
-    if (!granule.published) {
-      this.props.dispatch(deleteGranule(granuleId));
-    }
+    this.props.dispatch(deleteGranule(granuleId));
   },
 
   errors: function () {
@@ -194,49 +191,38 @@ var GranuleOverview = React.createClass({
       for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }
     }
     const logsQuery = { 'meta.granuleId': granuleId };
-    const reprocessStatus = get(this.props.granules.reprocessed, [granuleId, 'status']);
-    const reingestStatus = get(this.props.granules.reingested, [granuleId, 'status']);
-    const removeStatus = get(this.props.granules.removed, [granuleId, 'status']);
-    const deleteStatus = get(this.props.granules.deleted, [granuleId, 'status']);
     const errors = this.errors();
     const granuleError = granule.error;
+    const dropdownConfig = [{
+      text: 'Reprocess',
+      action: this.reprocess,
+      status: get(this.props.granules.reprocessed, [granuleId, 'status']),
+      success: this.fastReload
+    }, {
+      text: 'Reingest',
+      action: this.reingest,
+      status: get(this.props.granules.reingested, [granuleId, 'status']),
+      success: this.fastReload
+    }, {
+      text: 'Remove from CMR',
+      action: this.remove,
+      status: get(this.props.granules.removed, [granuleId, 'status']),
+      success: this.fastReload
+    }, {
+      text: 'Delete',
+      action: this.delete,
+      disabled: granule.published,
+      status: get(this.props.granules.deleted, [granuleId, 'status']),
+      success: this.navigateBack
+    }];
+
     const granuleErrorType = granuleError && granule.errorType && granuleErrors[granule.errorType]
       ? granuleErrors[granule.errorType] : null;
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>{granuleId}</h1>
-
-          <AsyncCommand action={this.delete}
-            success={this.navigateBack}
-            successTimeout={updateDelay}
-            status={deleteStatus}
-            disabled={granule.published}
-            className={'form-group__element--right'}
-            text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'} />
-
-          <AsyncCommand action={this.remove}
-            success={this.fastReload}
-            successTimeout={updateDelay}
-            status={removeStatus}
-            disabled={!granule.published}
-            className={'form-group__element--right'}
-            text={'Remove from CMR'} />
-
-          <AsyncCommand action={this.reingest}
-            success={this.fastReload}
-            successTimeout={updateDelay}
-            status={reingestStatus}
-            className={'form-group__element--right'}
-            text={'Reingest'} />
-
-          <AsyncCommand action={this.reprocess}
-            success={this.fastReload}
-            successTimeout={updateDelay}
-            status={reprocessStatus}
-            className={'form-group__element--right'}
-            text={'Reprocess'} />
-
+          <AsyncCommands config={dropdownConfig} />
           {lastUpdated(granule.queriedAt)}
           {this.renderStatus(granule.status)}
           {granuleError ? <ErrorReport report={granuleError} /> : null}
@@ -244,7 +230,7 @@ var GranuleOverview = React.createClass({
         </section>
 
         <section className='page__section'>
-          {errors.length ? errors.map(error => <ErrorReport report={error} />) : null}
+          {errors.length ? errors.map((error, i) => <ErrorReport key={i} report={error} />) : null}
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Granule Overview</h2>
           </div>
