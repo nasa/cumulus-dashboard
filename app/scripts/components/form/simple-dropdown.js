@@ -8,7 +8,8 @@ var Dropdown = React.createClass({
     options: React.PropTypes.array,
     id: React.PropTypes.string,
     error: React.PropTypes.string,
-    onChange: React.PropTypes.func
+    onChange: React.PropTypes.func,
+    noNull: React.PropTypes.bool
   },
 
   onChange: function (e) {
@@ -21,10 +22,11 @@ var Dropdown = React.createClass({
       value,
       options,
       id,
-      error
+      error,
+      noNull
     } = this.props;
 
-    const renderedOptions = options[0] === '' ? options : [''].concat(options);
+    const renderedOptions = options[0] === '' || noNull ? options : [''].concat(options);
 
     return (
       <div className='form__dropdown'>
