@@ -11,7 +11,8 @@ var Sidebar = React.createClass({
 
   propTypes: {
     currentPath: React.PropTypes.string,
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    count: React.PropTypes.array
   },
 
   resolvePath: function (base, path) {
@@ -21,11 +22,11 @@ var Sidebar = React.createClass({
 
   renderNavSection: function (section) {
     const { base, routes } = section;
-    const { currentPath, params } = this.props;
+    const { currentPath, params, count } = this.props;
     return (
       <div key={base}>
         <ul>
-          {routes(currentPath, params).map((d, i) => {
+          {routes(currentPath, params, count).map((d, i) => {
             let path = this.resolvePath(base, d[1]);
             let className = d[2] || '';
             if (path === currentPath) {
