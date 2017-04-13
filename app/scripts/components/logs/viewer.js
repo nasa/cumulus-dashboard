@@ -5,6 +5,7 @@ import { logsUpdateInterval } from '../../config';
 import moment from 'moment';
 import LoadingEllipsis from '../app/loading-ellipsis';
 import ErrorReport from '../errors/report';
+import Dropdown from '../form/simple-dropdown';
 import { tally } from '../../utils/format';
 
 const noLogs = {
@@ -14,18 +15,25 @@ const noLogs = {
 };
 const twoDays = 2 * 1000 * 60 * 60 * 24;
 
-const noop = (d) => d;
+const statusOptions = [
+  'All',
+  'Info',
+  'Error'
+];
+
 var LogViewer = React.createClass({
   displayName: 'LogViewer',
   propTypes: {
     dispatch: React.PropTypes.func,
     query: React.PropTypes.object,
-    logs: React.PropTypes.object
+    logs: React.PropTypes.object,
+    notFound: React.PropTypes.string
   },
 
   getInitialState: function () {
     return {
-      filter: noop
+      level: 'All',
+      search: ''
     };
   },
 
@@ -50,21 +58,26 @@ var LogViewer = React.createClass({
     this.props.dispatch(clearLogs());
   },
 
-  setFilter: function (e) {
+  setSearch: function (e) {
     const value = e.currentTarget.value;
-    if (!value || value.length < 2) {
-      this.setState({ filter: noop });
-    } else {
-      this.setState({ filter: (d) => d.searchkey.indexOf(value) >= 0 });
-    }
+    this.setState({ search: value, level: 'All' }, this.query);
   },
 
-  query: function (query) {
-    // note, since the non-filtered endpoint is very slow,
-    // enforce a filter.
-    query = query || this.props.query || {level: 'info'};
+  setSearchLevel: function (id, value) {
+    this.setState({ search: '', level: value }, this.query);
+  },
+
+  query: function () {
+    const query = this.props.query || {};
+    const { search, level } = this.state;
+    if (search) {
+      query.q = this.state.search;
+    } else if (level && level !== 'All') {
+      query.level = level.toLowerCase();
+    }
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
+    dispatch(clearLogs());
 
     let isFirstPull = true;
     function querySinceLast () {
@@ -78,17 +91,41 @@ var LogViewer = React.createClass({
   },
 
   render: function () {
-    const { logs } = this.props;
-    const items = logs.items.length ? logs.items.filter(this.state.filter)
-      : logs.inflight ? [] : [noLogs];
+    const { logs, notFound } = this.props;
+    let items = logs.items;
+    if (!items.length && !logs.inflight) {
+      let placeholder = notFound ? Object.assign({}, noLogs, {
+        displayText: notFound
+      }) : noLogs;
+      items = [placeholder];
+    }
     const count = logs.items.length ? tally(items.length) : 0;
+    const { level } = this.state;
     return (
       <section className='page__section'>
         <div className='heading__wrapper--border'>
-          <h2 className='heading--medium heading--shared-content with-description'>Logs <span className='num--title'>{logs.inflight ? <LoadingEllipsis /> : '(' + count + ')'}</span></h2>
-          <form className="search__wrapper form-group__element form-group__element--right form-group__element--right--sm form-group__element--small">
-            <input className='search' type="search" onChange={this.setFilter}/>
-            <span className="search__icon"></span>
+          <h2 className='heading--medium heading--shared-content with-description'>Logs
+            <span className='num--title'>{logs.inflight ? <LoadingEllipsis /> : '(' + count + ')'}</span>
+          </h2>
+          <form className='search__wrapper form-group__element form-group__element--right form-group__element--right--sm form-group__element--small'>
+            <input
+              className='search'
+              type='search'
+              placeholder='Search all logs'
+              value={this.state.search}
+              onChange={this.setSearch}/>
+            <span className='search__icon'></span>
+          </form>
+
+          <form className='search__wrapper form-group__element form-group__element--right form-group__element--right--sm form-group__element--small'>
+            <Dropdown
+              label={'Type'}
+              value={level}
+              options={statusOptions}
+              id={'logs-viewer-dropdown'}
+              onChange={this.setSearchLevel}
+              noNull={true}
+            />
           </form>
         </div>
         {logs.error ? <ErrorReport report={logs.error} /> : null}

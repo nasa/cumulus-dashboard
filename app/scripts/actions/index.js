@@ -317,7 +317,7 @@ export const deletePdr = (pdrName) => wrapRequest(
 
 export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),
-  qs: Object.assign({ limit: 200 }, options)
+  qs: Object.assign({limit: 100}, options)
 }, LOGS);
 export const clearLogs = () => ({ type: CLEAR_LOGS });
 

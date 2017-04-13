@@ -66,6 +66,16 @@ select {
 
 .search__wrapper {
   position: relative;
+  .form__dropdown label {
+    position: absolute;
+    top: -18px;
+  }
+  .form__error {
+    display: none;
+  }
+  .dropdown__wrapper select {
+    min-width: 6em;
+  }
 }
 
 .search__icon {

@@ -3,7 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import LogViewer from './viewer';
 
-const query = { limit: 200 };
 var Logs = React.createClass({
   propTypes: {
     dispatch: React.PropTypes.func,
@@ -20,7 +19,7 @@ var Logs = React.createClass({
         </div>
         <div className='page__content page__content__nosidebar'>
           <div className='row'>
-            <LogViewer query={query} dispatch={this.props.dispatch} logs={this.props.logs}/>
+            <LogViewer dispatch={this.props.dispatch} logs={this.props.logs}/>
           </div>
         </div>
       </div>

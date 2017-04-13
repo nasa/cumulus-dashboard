@@ -167,7 +167,12 @@ var ProviderOverview = React.createClass({
         </section>
 
         <section className='page__section'>
-          <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
+          <LogViewer
+            query={logsQuery}
+            dispatch={this.props.dispatch}
+            logs={this.props.logs}
+            notFound={`No recent logs for ${providerId}`}
+          />
         </section>
       </div>
     );

@@ -118,7 +118,12 @@ var AllGranules = React.createClass({
             rowId={'granuleId'}
           />
         </section>
-        <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
+        <LogViewer
+          query={logsQuery}
+          dispatch={this.props.dispatch}
+          logs={this.props.logs}
+          notFound={'No recent logs for granules'}
+        />
       </div>
     );
   }

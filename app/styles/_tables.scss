@@ -259,6 +259,10 @@ table {
   top: -4px;
 }
 
+.table__error {
+  color: $error-red;
+}
+
 .pdr__progress {
   margin-top: 1em;
   .table__progress--bar,
