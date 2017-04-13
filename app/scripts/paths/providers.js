@@ -1,11 +1,12 @@
 'use strict';
+import tally from './tally';
 
 const providerRoutes = [
   ['Overview', null],
   ['All Providers', 'all'],
-  ['Active', 'active'],
-  ['Inactive', 'inactive'],
-  ['Failed', 'failed']
+  ['Active', 'active', (d) => d.key === 'ingesting'],
+  ['Inactive', 'inactive', (d) => d.key === 'stopped'],
+  ['Failed', 'failed', (d) => d.key === 'failed']
 ];
 
 const EMPTY = [['', '']];
@@ -13,9 +14,10 @@ const EMPTY = [['', '']];
 const providers = {
   base: 'providers',
   heading: 'Providers',
-  routes: (currentRoute) => {
+  routes: (currentRoute, params, count) => {
     if (currentRoute.startsWith('/providers')) {
-      return providerRoutes;
+      count = count || [];
+      return providerRoutes.map(d => tally(d, count));
     } else {
       return EMPTY;
     }
