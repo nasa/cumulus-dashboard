@@ -26,6 +26,7 @@ import {
   bool
 } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
+import { renderProgress } from '../../utils/table-config/pdr-progress';
 import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
@@ -100,6 +101,14 @@ var PDR = React.createClass({
     return bulkActions(granules);
   },
 
+  renderProgress: function (record) {
+    return (
+      <div className='pdr__progress'>
+        {renderProgress(get(record, 'data', {}))}
+      </div>
+    );
+  },
+
   render: function () {
     const { pdrName } = this.props.params;
     const { list, dropdowns } = this.props.granules;
@@ -125,9 +134,9 @@ var PDR = React.createClass({
               status={deleteStatus}
               className={'form-group__element--right'}
               text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'} />
-
-            {error ? <ErrorReport report={error} /> : null}
             {lastUpdated(queriedAt)}
+            {this.renderProgress(record)}
+            {error ? <ErrorReport report={error} /> : null}
           </div>
         </section>
 
