@@ -5,19 +5,22 @@ import { Link } from 'react-router';
 import moment from 'moment';
 import { get } from 'object-path';
 import {
+  interval,
   getStats,
   getCount,
   listPdrs,
   getResources,
-  queryHistogram
+  queryHistogram,
+  getRecentGranules
 } from '../actions';
-import { nullValue, tally, seconds, storage } from '../utils/format';
+import { nullValue, tally, seconds } from '../utils/format';
 import LoadingEllipsis from './app/loading-ellipsis';
 import List from './table/list-view';
 import Histogram from './chart/histogram';
-import { tableHeader, tableRow, tableSortProps } from '../utils/table-config/pdrs';
+import GranulesProgress from './granules/progress';
+import { tableHeader, tableRow, tableSortProps } from '../utils/table-config/pdr-progress';
 import serialize from '../utils/serialize-config';
-import { recent } from '../config';
+import { recent, updateInterval } from '../config';
 
 const spans = {
   week: moment().subtract(1, 'week').format(),
@@ -53,8 +56,14 @@ var Home = React.createClass({
   },
 
   componentWillMount: function () {
-    this.query();
-    this.queryHistogram();
+    this.cancelInterval = interval(() => {
+      this.query();
+      this.queryHistogram();
+    }, updateInterval, true);
+  },
+
+  componentWillUnmount: function () {
+    if (this.cancelInterval) { this.cancelInterval(); }
   },
 
   query: function () {
@@ -68,6 +77,7 @@ var Home = React.createClass({
       type: 'granules',
       field: 'status'
     }));
+    dispatch(getRecentGranules());
   },
 
   queryHistogram: function () {
@@ -125,40 +135,27 @@ var Home = React.createClass({
     };
   },
 
-  renderGranuleProgress: function () {
-    const { count } = this.props.stats;
-    const granuleCount = get(count.data, 'granules.count', []);
-    return (
-      <ul className='timeline--processing--overall'>
-        {granuleCount.map(d => (
-          <li key={d.key} className={'timeline--processing--' + d.key}>
-            <span className='num--medium'>{tally(d.count)}</span>
-            Granules {d.key}
-          </li>
-        ))}
-      </ul>
-    );
-  },
-
   render: function () {
     const { list } = this.props.pdrs;
+    const { recent } = this.props.granules;
     const { stats, count, resources, histogram } = this.props.stats;
     const overview = [
-      [tally(get(stats.data, 'errors.value', nullValue)), 'Errors', '/logs'],
-      [tally(get(stats.data, 'collections.value', nullValue)), 'Collections', '/collections'],
-      [tally(get(stats.data, 'granules.value', nullValue)), 'Granules (Received Today)', '/granules'],
+      [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
+      [tally(get(stats.data, 'collections.value')), 'Collections', '/collections'],
+      [tally(get(recent, 'data.count')), 'Granules Processed in the Past Hour', '/granules'],
       [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average Processing Time'],
-      [storage(get(resources.data, 's3', []).reduce((a, b) => a + b.Sum, 0)), 'Data Used', '/resources'],
-      [tally(get(resources.data, 'queues', []).length) || nullValue, 'SQS Queues', '/resources#queues'],
-      [tally(get(resources.data, 'instances', []).length) || nullValue, 'EC2 Instances', '/resources#instances']
+      [tally(get(resources.data, 'tasks.pendingTasks')), 'Pending Tasks', '/resources'],
+      [tally(get(resources.data, 'tasks.runningTasks')), 'Running Tasks', '/resources'],
+      [tally(get(resources.data, 'queues', []).length || nullValue), 'Queued Messages', '/resources']
     ];
     const granuleCount = get(count.data, 'granules.meta.count');
-    const numGranules = granuleCount ? `(${granuleCount})` : null;
+    const numGranules = !isNaN(granuleCount) ? `(${tally(granuleCount)})` : null;
 
     const granulesProcessed = get(histogram, serialize(this.generateGranulesProcessed()), {});
     const errorsRecorded = get(histogram, serialize(this.generateErrors()), {});
     const pdrsProcessed = get(histogram, serialize(this.generatePdrsProcessed()), {});
     const granulesFailed = get(histogram, serialize(this.generateGranulesFailed()), {});
+    const granuleStatus = get(count.data, 'granules.count', []);
 
     return (
       <div className='page__home'>
@@ -171,22 +168,29 @@ var Home = React.createClass({
           <section className='page__section'>
             <div className='row'>
               <ul>
-                {overview.map(d => (
-                  <li key={d[1]}>
-                    <Link className='overview-num' to={d[2] || '#'}><span className='num--large'>{ stats.inflight ? <LoadingEllipsis /> : d[0] }</span> {d[1]}</Link>
-                  </li>
-                ))}
+                {overview.map(d => {
+                  const value = d[0];
+                  let useLoading = value === nullValue;
+                  return (
+                    <li key={d[1]}>
+                      <Link className='overview-num' to={d[2] || '#'}>
+                        <span className='num--large'>{ useLoading ? <LoadingEllipsis /> : value }</span> {d[1]}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </section>
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium'>Granules Updated Today {numGranules}</h2>
+                <h2 className='heading--medium'>Granules Updated Today <span className='num--title'>{numGranules}</span></h2>
               </div>
-              {this.renderGranuleProgress()}
+              <GranulesProgress granules={granuleStatus} />
             </div>
-
+          </section>
+          <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
                 <h2 className='heading--medium'>Recently Active PDR's</h2>
@@ -196,7 +200,7 @@ var Home = React.createClass({
                 dispatch={this.props.dispatch}
                 action={listPdrs}
                 tableHeader={tableHeader}
-                primaryIdx={1}
+                sortIdx={5}
                 tableRow={tableRow}
                 tableSortProps={tableSortProps}
                 query={this.generateQuery()}
@@ -204,7 +208,6 @@ var Home = React.createClass({
               <Link className='link--secondary link--learn-more' to='/pdrs'>View PDR Overview</Link>
             </div>
           </section>
-
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>

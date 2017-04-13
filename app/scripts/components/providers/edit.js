@@ -2,11 +2,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { getProvider, updateProvider, getSchema } from '../../actions';
+import {
+  getProvider,
+  updateProvider,
+  clearUpdateProvider,
+  getSchema
+} from '../../actions';
 import Loading from '../app/loading-indicator';
-import ErrorReport from '../errors/report';
 import Schema from '../form/schema';
 import merge from '../../utils/merge';
+import { updateDelay } from '../../config';
 
 const SCHEMA_KEY = 'provider';
 
@@ -43,7 +48,13 @@ var EditProvider = React.createClass({
 
   componentWillReceiveProps: function (newProps) {
     const providerId = newProps.params.providerId;
-    if (this.state.providerId === providerId) { return; }
+    const updateStatus = get(this.props.providers.updated, [providerId, 'status']);
+    if (updateStatus === 'success') {
+      return setTimeout(() => {
+        this.props.dispatch(clearUpdateProvider(providerId));
+        this.props.router.push(`/providers/provider/${providerId}`);
+      }, updateDelay);
+    } else if (this.state.providerId === providerId) { return; }
 
     const record = get(this.props.providers.map, providerId, {});
 
@@ -92,11 +103,10 @@ var EditProvider = React.createClass({
               pk={providerId}
               onSubmit={this.onSubmit}
               router={this.props.router}
+              status={meta.status}
+              error={meta.status === 'inflight' ? null : error}
             />
-          ) : null}
-          {record.inflight || meta.status === 'inflight' ? <Loading /> : null}
-          {error ? <ErrorReport report={error} /> : null}
-          {meta.status === 'success' ? <p>Success!</p> : null}
+          ) : <Loading />}
         </section>
       </div>
     );

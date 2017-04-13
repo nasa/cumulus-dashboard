@@ -3,6 +3,11 @@ input, textarea, select, .form__element__select {
   background-color: #fff;
   border-radius: .5em;
   padding: .3em 2em .4em .7em;
+  font-size: .86em;
+}
+
+input[type="checkbox"], input[type="radio"] {
+  font-size: 1em;
 }
 
 label {
@@ -34,7 +39,7 @@ label {
     display: block;
     position: absolute;
     right: 1em;
-    top: .7em;
+    top: .6em;
   }
 }
 
@@ -43,7 +48,7 @@ select {
 }
 
 .filters {
-  margin: -.8em 0 3em;
+  margin: 1.5em 0 2em;
   @include clearfix;
   label {
     font-size: .86em;
@@ -55,16 +60,22 @@ select {
   vertical-align: bottom;
 }
 
-.filters__wlabels {
-  margin: -1em 0 3.2em;
-}
-
 .form--controls {
-  margin-bottom: 1em;
+  margin-bottom: 2em;
 }
 
 .search__wrapper {
   position: relative;
+  .form__dropdown label {
+    position: absolute;
+    top: -18px;
+  }
+  .form__error {
+    display: none;
+  }
+  .dropdown__wrapper select {
+    min-width: 6em;
+  }
 }
 
 .search__icon {
@@ -77,7 +88,7 @@ select {
     background-size: 14px 14px;
     display: block;
     right: .8em;
-    top: .6em;
+    top: .5em;
   }
 }
 
@@ -162,6 +173,7 @@ select {
 .form-group__element--right {
   float: right;
   margin-left: 1em;
+  margin-right: 0;
 }
 
 .form-group__element--right--sm {
@@ -226,6 +238,9 @@ select {
   .subform__name {
     margin-bottom: 2em;
   }
+  .subform__button {
+    display: none;
+  }
 }
 
 .subform__name {
@@ -249,11 +264,39 @@ select {
   }
 }
 
-.page__section--fullpage-form {
+.page__content--shortened--centered {
+  .page__section--fullpage-form {
+    .form__item {
+      input[type=text] {
+        width: 90%;
+      }
+      .subform__item--expanded {
+        width: 87%;
+      }
+      .form__addone--item {
+        input {
+          width: 75%;
+        }
+      }
+    }
+  }
+}
+
+.page__section--fullpage-form--internal {
   .form__item {
     margin-bottom: 3em;
     input[type=text] {
-      width: 90%;
+      width: 70%;
+    }
+    .subform__item--expanded {
+      width: 70%;
+      margin-top: 1.5em;
+      input[type=text] {
+        width: 92%;
+      }
+      .form-group__element--left {
+        margin-top: 0;
+      }
     }
     .dropdown__wrapper {
       width: 50%;
@@ -265,15 +308,13 @@ select {
     .form__addone--item {
       margin-bottom: 1em;
       input {
-        width: 75%;
+        width: 59%;
         margin-right: 1.5em;
         float: left;
       }
     }
   }
 }
-
-
 
 .label__description {
   display: block;
@@ -296,25 +337,31 @@ select {
   }
 }
 
-
-.login {
-  margin-top: 10%;
-  position: fixed;
-  text-align: center;
-  top: 100%;
-  transition: top 0.2s ease-in-out;
-  width: 100%;
-  z-index: 1000;
-}
-
-.login__onscreen {
-  top: 0;
-}
-
-
-.error__report,
 .form__error {
-  color: $error-red;
+  font-size: 1em;
   display: block;
-  margin-bottom: .8em;
+  margin-bottom: 0.8em;
+  color: $error-red;
+}
+
+.error__report {
+  background-color: rgba(231, 76, 60, .25);
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, .08);
+  padding: 1.1em 1.4em;
+  text-align: center;
+  position: relative;
+  margin-bottom: 2em;
+  p {
+    color: $error-text-red;
+    font-size: .86em;
+    margin-bottom: 0;
+  }
+}
+
+.page__section__header-wrapper {
+  .error__report {
+    margin-top: 3em;
+    margin-bottom: 0;
+  }
 }

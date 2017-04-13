@@ -5,10 +5,7 @@ import { Link } from 'react-router';
 import {
   getCollection,
   listGranules,
-  deleteCollection,
-  reprocessGranule,
-  removeGranule,
-  deleteGranule
+  deleteCollection
 } from '../../actions';
 import { get } from 'object-path';
 import { seconds, tally, lastUpdated } from '../../utils/format';
@@ -16,7 +13,8 @@ import ErrorReport from '../errors/report';
 import List from '../table/list-view';
 import Overview from '../app/overview';
 import AsyncCommand from '../form/async-command';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
+import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
+import { updateDelay } from '../../config';
 
 const granuleFields = 'status,granuleId,pdrName,duration,updatedAt';
 
@@ -51,25 +49,13 @@ var CollectionOverview = React.createClass({
     return {
       collectionName,
       fields: granuleFields,
-      status__not: 'completed'
+      status__not: 'completed,failed'
     };
   },
 
   generateBulkActions: function () {
     const { granules } = this.props;
-    return [{
-      text: 'Reprocess',
-      action: reprocessGranule,
-      state: granules.reprocessed
-    }, {
-      text: 'Remove from CMR',
-      action: removeGranule,
-      state: granules.removed
-    }, {
-      text: 'Delete',
-      action: deleteGranule,
-      state: granules.deleted
-    }];
+    return bulkActions(granules);
   },
 
   delete: function () {
@@ -83,10 +69,11 @@ var CollectionOverview = React.createClass({
   },
 
   errors: function () {
-    const collectionName = this.props.params.collectionName; const errors = [ get(this.props.collections.map, [collectionName, 'error']),
+    const collectionName = this.props.params.collectionName;
+    return [
+      get(this.props.collections.map, [collectionName, 'error']),
       get(this.props.collections.deleted, [collectionName, 'error'])
     ].filter(Boolean);
-    return errors.length ? errors.map(JSON.stringify).join(', ') : null;
   },
 
   renderOverview: function (record) {
@@ -117,12 +104,12 @@ var CollectionOverview = React.createClass({
     const overview = record ? this.renderOverview(record) : <div></div>;
     return (
       <div className='page__component'>
-        <section className='page__section'>
+        <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>{collectionName}</h1>
 
           <AsyncCommand action={this.delete}
             success={this.navigateBack}
-            successTimeout={1000}
+            successTimeout={updateDelay}
             status={deleteStatus}
             disabled={hasGranules !== 0}
             className={'form-group__element--right'}
@@ -131,11 +118,11 @@ var CollectionOverview = React.createClass({
           <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
           {lastUpdated(meta.queriedAt)}
           {overview}
-          { errors ? <ErrorReport report={errors} /> : null }
+          {errors.length ? errors.map((error, i) => <ErrorReport key={i} report={error} />) : null}
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Processing Granules{meta.count ? ` (${meta.count})` : null}</h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Processing Granules <span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
           </div>
           <List
             list={list}

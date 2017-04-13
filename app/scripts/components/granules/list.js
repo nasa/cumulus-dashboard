@@ -8,14 +8,19 @@ import {
   filterGranules,
   clearGranulesFilter,
   listGranules,
-  getOptionsCollectionName,
-  reprocessGranule,
-  removeGranule,
-  deleteGranule
+  getOptionsCollectionName
 } from '../../actions';
 import { get } from 'object-path';
-import { granuleSearchResult, dropdownOption, lastUpdated } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
+import { granuleSearchResult, lastUpdated, tally, displayCase } from '../../utils/format';
+import {
+  tableHeader,
+  tableRow,
+  tableSortProps,
+  errorTableHeader,
+  errorTableRow,
+  errorTableSortProps,
+  bulkActions
+} from '../../utils/table-config/granules';
 import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
@@ -45,27 +50,15 @@ var AllGranules = React.createClass({
 
   generateBulkActions: function () {
     const { granules } = this.props;
-    return [{
-      text: 'Reprocess',
-      action: reprocessGranule,
-      state: granules.reprocessed
-    }, {
-      text: 'Remove from CMR',
-      action: removeGranule,
-      state: granules.removed
-    }, {
-      text: 'Delete',
-      action: deleteGranule,
-      state: granules.deleted
-    }];
+    return bulkActions(granules);
   },
 
   getView: function () {
     const { pathname } = this.props.location;
-    if (pathname === '/granules/completed') return 'Completed';
-    else if (pathname === '/granules/processing') return 'Processing';
-    else if (pathname === '/granules/failed') return 'Failed';
-    else return 'All';
+    if (pathname === '/granules/completed') return 'completed';
+    else if (pathname === '/granules/processing') return 'processing';
+    else if (pathname === '/granules/failed') return 'failed';
+    else return 'all';
   },
 
   render: function () {
@@ -73,15 +66,16 @@ var AllGranules = React.createClass({
     const { count, queriedAt } = list.meta;
     const logsQuery = { 'meta.granuleId__exists': 'true' };
     const view = this.getView();
-    const StatOptions = view === 'Completed' || view === 'Failed'
-      ? null : view === 'Processing' ? processingOptions : statusOptions;
+    const statOptions = (view === 'completed' || view === 'failed') ? null
+      : view === 'processing' ? processingOptions
+        : statusOptions;
 
     return (
       <div className='page__component'>
-        <section className='page__section'>
+        <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>
-              {view} Granules <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
+              {displayCase(view)} Granules <span className='num--title'>{ !isNaN(count) ? `(${tally(count)})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>
@@ -90,17 +84,15 @@ var AllGranules = React.createClass({
               dispatch={this.props.dispatch}
               getOptions={getOptionsCollectionName}
               options={get(dropdowns, ['collectionName', 'options'])}
-              format={dropdownOption}
               action={filterGranules}
               clear={clearGranulesFilter}
               paramKey={'collectionName'}
               label={'Collection'}
             />
-            {StatOptions ? (
+            {statOptions ? (
               <Dropdown
                 dispatch={this.props.dispatch}
-                options={StatOptions}
-                format={dropdownOption}
+                options={statOptions}
                 action={filterGranules}
                 clear={clearGranulesFilter}
                 paramKey={'status'}
@@ -118,9 +110,9 @@ var AllGranules = React.createClass({
             list={list}
             dispatch={this.props.dispatch}
             action={listGranules}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
+            tableHeader={view === 'failed' ? errorTableHeader : tableHeader}
+            tableRow={view === 'failed' ? errorTableRow : tableRow}
+            tableSortProps={view === 'failed' ? errorTableSortProps : tableSortProps}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}

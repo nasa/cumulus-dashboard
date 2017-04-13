@@ -3,7 +3,8 @@ import React from 'react';
 import { login } from '../../actions';
 import { window } from '../../utils/browser';
 import { set as setToken } from '../../utils/auth';
-
+import { updateDelay } from '../../config';
+import ErrorReport from '../errors/report';
 import Text from '../form/text';
 
 var LoginModal = React.createClass({
@@ -29,14 +30,15 @@ var LoginModal = React.createClass({
       setToken(this.state.token);
       const { pathname } = this.props.location;
       if (pathname !== '/login' && window.location && window.location.reload) {
-        setTimeout(() => window.location.reload(), 1500);
+        setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/login') {
-        setTimeout(() => this.props.router.push('/'), 1500);
+        setTimeout(() => this.props.router.push('/'), updateDelay);
       }
     }
   },
 
-  onSubmit: function () {
+  onSubmit: function (e) {
+    e.preventDefault();
     if (this.props.api.authenticated) return false;
     const { user, pass } = this.state;
     const token = new Buffer(`${user}:${pass}`).toString('base64');
@@ -45,13 +47,13 @@ var LoginModal = React.createClass({
   },
 
   render: function () {
-    const { authenticated, inflight } = this.props.api;
+    const { authenticated, inflight, error } = this.props.api;
     const { show } = this.props;
 
     return (
       <div>
         { show ? <div className='modal__cover'></div> : null }
-        <div className={ show ? 'login login__onscreen' : 'login' }>
+        <div className={ show ? 'modal__container modal__container--onscreen' : 'modal__container' }>
           { show ? (
             <div className='modal'>
               <div className='modal__internal'>
@@ -78,6 +80,7 @@ var LoginModal = React.createClass({
                     </span>
                   </div>
                 </form>
+                { error ? <ErrorReport report={error} /> : null }
               </div>
             </div>
           ) : null }

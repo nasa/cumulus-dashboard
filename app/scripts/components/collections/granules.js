@@ -2,14 +2,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import {
-  listGranules,
-  reprocessGranule,
-  removeGranule,
-  deleteGranule
-} from '../../actions';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
-
+import { listGranules } from '../../actions';
+import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
 import List from '../table/list-view';
 
 var CollectionGranules = React.createClass({
@@ -29,19 +23,7 @@ var CollectionGranules = React.createClass({
 
   generateBulkActions: function () {
     const { granules } = this.props;
-    return [{
-      text: 'Reprocess',
-      action: reprocessGranule,
-      state: granules.reprocessed
-    }, {
-      text: 'Remove from CMR',
-      action: removeGranule,
-      state: granules.removed
-    }, {
-      text: 'Delete',
-      action: deleteGranule,
-      state: granules.deleted
-    }];
+    return bulkActions(granules);
   },
 
   render: function () {
@@ -50,7 +32,7 @@ var CollectionGranules = React.createClass({
     const { meta } = list;
     return (
       <div className='page__component'>
-        <section className='page__section'>
+        <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description '>{collectionName}</h1>
           <Link className='button button--small form-group__element--right button--disabled button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
           <dl className="metadata__updated">
@@ -62,7 +44,7 @@ var CollectionGranules = React.createClass({
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Granules{meta.count ? ` (${meta.count})` : null}</h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Granules <span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
           </div>
 
           <List

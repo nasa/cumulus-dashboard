@@ -3,7 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { getSchema, createCollection } from '../../actions';
-import ErrorReport from '../errors/report';
 import Schema from '../form/schema';
 import Loading from '../app/loading-indicator';
 
@@ -63,9 +62,9 @@ var AddCollection = React.createClass({
             pk={'new-collection'}
             onSubmit={this.post}
             router={this.props.router}
-          /> : null}
-          {record.status === 'inflight' ? <Loading /> : null}
-          {record.status === 'error' ? <ErrorReport report={record.error} /> : null}
+            status={record.status}
+            error={record.status === 'inflight' ? null : record.error}
+          /> : <Loading />}
         </section>
       </div>
     );

@@ -1,17 +1,20 @@
 'use strict';
 import React from 'react';
 import Ellipsis from '../app/loading-ellipsis';
+import { preventDefault } from '../../utils/noop';
 
 const AsyncCommand = React.createClass({
 
   propTypes: {
     action: React.PropTypes.func,
     success: React.PropTypes.func,
+    error: React.PropTypes.func,
     status: React.PropTypes.string,
     text: React.PropTypes.string,
     className: React.PropTypes.string,
     disabled: React.PropTypes.bool,
-    successTimeout: React.PropTypes.number
+    successTimeout: React.PropTypes.number,
+    element: React.PropTypes.string
   },
 
   componentWillReceiveProps: function (newProps) {
@@ -21,6 +24,12 @@ const AsyncCommand = React.createClass({
       typeof this.props.success === 'function'
     ) {
       setTimeout(this.props.success, this.props.successTimeout || 0);
+    } else if (
+      this.props.status === 'inflight' &&
+        newProps.status === 'error' &&
+        typeof this.props.error === 'function'
+    ) {
+      this.props.error();
     }
   },
 
@@ -32,10 +41,19 @@ const AsyncCommand = React.createClass({
     return className;
   },
 
+  // a generic className generator for non-button elements
+  elementClass: function (processing) {
+    let className = 'async__element';
+    if (processing) className += ' async__element--loading';
+    if (this.props.disabled) className += ' async__element--disabled';
+    if (this.props.className) className += ' ' + this.props.className;
+    return className;
+  },
+
   handleClick: function (e) {
     e.preventDefault();
     // prevent duplicate action if the action is already inflight.
-    if (this.props.status !== 'inflight') {
+    if (this.props.status !== 'inflight' && !this.props.disabled) {
       this.props.action();
     }
   },
@@ -43,12 +61,18 @@ const AsyncCommand = React.createClass({
   render: function () {
     const { status, text } = this.props;
     const inflight = status === 'inflight';
-    return (
-      <button
-        className={this.buttonClass(inflight)}
-        onClick={this.props.disabled ? () => {} : this.handleClick}
-        >{text}{inflight ? <Ellipsis /> : ''}</button>
+    const element = this.props.element || 'button';
+    const props = {
+      className: this.props.element ? this.elementClass(inflight) : this.buttonClass(inflight),
+      onClick: this.props.disabled ? preventDefault : this.handleClick
+    };
+    if (element === 'a') props.href = '#';
+    const children = (
+      <span>
+        {text}{inflight ? <Ellipsis /> : ''}
+      </span>
     );
+    return React.createElement(element, props, children);
   }
 });
 export default AsyncCommand;

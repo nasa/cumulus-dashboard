@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import pickBy from 'lodash.pickby';
 import SortableTable from './sortable';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
@@ -15,12 +14,14 @@ var List = React.createClass({
   getInitialState: function () {
     return {
       page: 1,
-      sortIdx: 0,
+      sortIdx: this.props.sortIdx || 0,
       order: 'desc',
       selected: [],
       prefix: null,
       queryConfig: {},
-      params: {}
+      params: {},
+      completedBulkActions: 0,
+      bulkActionError: null
     };
   },
 
@@ -31,6 +32,7 @@ var List = React.createClass({
     tableHeader: React.PropTypes.array,
     tableRow: React.PropTypes.array,
     tableSortProps: React.PropTypes.array,
+    sortIdx: React.PropTypes.number,
     query: React.PropTypes.object,
     bulkActions: React.PropTypes.array,
     rowId: React.PropTypes.string
@@ -40,26 +42,24 @@ var List = React.createClass({
     this.setState({ queryConfig: this.config() });
   },
 
-  componentWillUnmount: function () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-  },
-
   componentWillReceiveProps: function (newProps) {
     if (JSON.stringify(newProps.query) !== JSON.stringify(this.props.query)) {
       this.setState({ queryConfig: this.config({}, newProps.query) });
     }
 
-    const params = pickBy(newProps.list.params, v => (!undef(v) && v !== null));
-    if (JSON.stringify(params) !== JSON.stringify(this.state.params)) {
-      this.setState({
-        params,
-        queryConfig: this.config({ params })
-      });
+    // remove null and undefined values
+    const { params } = newProps.list;
+    const validParams = {};
+    for (let key in params) {
+      let value = params[key];
+      if (!undef(value) && value !== null) {
+        validParams[key] = value;
+      }
     }
 
-    if (newProps.list.error && this.cancelInterval) {
-      this.cancelInterval();
-      this.cancelInterval = null;
+    if (JSON.stringify(validParams) !== JSON.stringify(this.state.params)) {
+      this.setState({ params: validParams }, () => this.setState({
+        queryConfig: this.config() }));
     }
   },
 
@@ -106,15 +106,27 @@ var List = React.createClass({
     }
   },
 
+  onBulkActionSuccess: function () {
+    // not-elegant way to trigger a re-fresh in the timer
+    this.setState({
+      completedBulkActions: this.state.completedBulkActions + 1,
+      bulkActionError: null
+    });
+  },
+
+  onBulkActionError: function (error) {
+    const message = `Could not process ${error.id}, ${error.error}`;
+    this.setState({ bulkActionError: message });
+  },
+
   config: function (config, query) {
     config = config || {};
     const { page, order, sort_by, params } = config;
 
-    // attach page, and sort properties using the current state
+    // attach page, params, and sort properties using the current state
     if (undef(page)) { config.page = this.state.page; }
     if (undef(order)) { config.order = this.state.order; }
     if (undef(sort_by)) { config.sort_by = this.getSortProp(this.state.sortIdx); }
-
     if (undef(params)) { Object.assign(config, this.state.params); }
 
     if (query) {
@@ -130,6 +142,17 @@ var List = React.createClass({
     return config;
   },
 
+  renderSelectAll: function () {
+    const { list } = this.props;
+    const allChecked = this.state.selected.length === list.data.length && list.data.length;
+    return (
+      <label className='form__element__select form-group__element form-group__element--small'>
+        <input type='checkbox' className='form-select__all' name='Select' checked={allChecked} onChange={this.selectAll} />
+        Select
+      </label>
+    );
+  },
+
   render: function () {
     const {
       dispatch,
@@ -142,25 +165,38 @@ var List = React.createClass({
       list
     } = this.props;
     const { count, limit } = list.meta;
-    const { page, sortIdx, order, selected, queryConfig } = this.state;
+    const {
+      page,
+      sortIdx,
+      order,
+      selected,
+      queryConfig,
+      completedBulkActions,
+      bulkActionError
+    } = this.state;
     const primaryIdx = 0;
-    const allChecked = this.state.selected.length === list.data.length && list.data.length;
     const hasActions = !!(Array.isArray(bulkActions) && bulkActions.length);
 
     return (
       <div className='list-view'>
-        <Timer noheader={!hasActions} dispatch={dispatch} action={action} config={queryConfig} />
+        <Timer
+          noheader={!hasActions}
+          dispatch={dispatch}
+          action={action}
+          config={queryConfig}
+          reload={completedBulkActions}
+        />
         {hasActions ? (
           <div className='form--controls'>
-            <label className='form__element__select form-group__element form-group__element--small'>
-              <input type='checkbox' className='form-select__all' name='Select' checked={allChecked} onChange={this.selectAll} />
-              Select
-            </label>
+            {this.renderSelectAll()}
             {bulkActions.map((item, i) => <BatchAsyncCommand key={item.text}
               dispatch={dispatch}
               action={item.action}
               state={item.state}
               text={item.text}
+              confirm={item.confirm}
+              onSuccess={this.onBulkActionSuccess}
+              onError={this.onBulkActionError}
               selection={selected}
             />)}
           </div>
@@ -168,6 +204,7 @@ var List = React.createClass({
 
         {list.inflight ? <Loading /> : null}
         {list.error ? <ErrorReport report={list.error} /> : null}
+        {bulkActionError ? <ErrorReport report={bulkActionError} /> : null}
 
         <SortableTable
           primaryIdx={primaryIdx}
@@ -183,7 +220,6 @@ var List = React.createClass({
           selectedRows={selected}
           rowId={rowId}
         />
-
         <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
       </div>
     );

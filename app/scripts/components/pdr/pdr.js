@@ -5,20 +5,17 @@ import { connect } from 'react-redux';
 import {
   interval,
   getPdr,
+  deletePdr,
   searchGranules,
   clearGranulesSearch,
   filterGranules,
   clearGranulesFilter,
   listGranules,
-  getOptionsCollectionName,
-  reprocessGranule,
-  removeGranule,
-  deleteGranule
+  getOptionsCollectionName
 } from '../../actions';
 import { get } from 'object-path';
 import {
   granuleSearchResult,
-  dropdownOption,
   lastUpdated,
   link,
   fullDate,
@@ -28,7 +25,8 @@ import {
   displayCase,
   bool
 } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
+import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
+import { renderProgress } from '../../utils/table-config/pdr-progress';
 import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
@@ -36,7 +34,10 @@ import Search from '../form/search';
 import status from '../../utils/status';
 import Metadata from '../table/metadata';
 import Loading from '../app/loading-indicator';
-import { updateInterval } from '../../config';
+import AsyncCommand from '../form/async-command';
+import ErrorReport from '../errors/report';
+import GranulesProgress from '../granules/progress';
+import { updateInterval, updateDelay } from '../../config';
 
 const metaAccessors = [
   ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],
@@ -60,7 +61,8 @@ var PDR = React.createClass({
     logs: React.PropTypes.object,
     pdrs: React.PropTypes.object,
     dispatch: React.PropTypes.func,
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    router: React.PropTypes.object
   },
 
   componentWillMount: function () {
@@ -80,26 +82,31 @@ var PDR = React.createClass({
     this.cancelInterval = interval(() => dispatch(getPdr(pdrName)), updateInterval, immediate);
   },
 
+  deletePdr: function () {
+    const { pdrName } = this.props.params;
+    this.props.dispatch(deletePdr(pdrName));
+  },
+
   generateQuery: function () {
     const pdrName = get(this.props, ['params', 'pdrName']);
     return { pdrName };
   },
 
+  navigateBack: function () {
+    this.props.router.push('/pdrs');
+  },
+
   generateBulkActions: function () {
     const { granules } = this.props;
-    return [{
-      text: 'Reprocess',
-      action: reprocessGranule,
-      state: granules.reprocessed
-    }, {
-      text: 'Remove from CMR',
-      action: removeGranule,
-      state: granules.removed
-    }, {
-      text: 'Delete',
-      action: deleteGranule,
-      state: granules.deleted
-    }];
+    return bulkActions(granules);
+  },
+
+  renderProgress: function (record) {
+    return (
+      <div className='pdr__progress'>
+        {renderProgress(get(record, 'data', {}))}
+      </div>
+    );
   },
 
   render: function () {
@@ -107,14 +114,29 @@ var PDR = React.createClass({
     const { list, dropdowns } = this.props.granules;
     const { count, queriedAt } = list.meta;
     const record = this.props.pdrs.map[pdrName];
-    console.log(record);
     const logsQuery = { 'meta.pdrName': pdrName };
+    const deleteStatus = get(this.props.pdrs.deleted, [pdrName, 'status']);
+    const error = record.error;
+
+    const granulesCount = get(record, 'data.granulesStatus', []);
+    const granuleStatus = Object.keys(granulesCount).map(key => ({
+      count: granulesCount[key],
+      key
+    }));
     return (
       <div className='page__component'>
-        <section className='page__section'>
+        <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>{pdrName}</h1>
+            <AsyncCommand action={this.deletePdr}
+              success={this.navigateBack}
+              successTimeout={updateDelay}
+              status={deleteStatus}
+              className={'form-group__element--right'}
+              text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'} />
             {lastUpdated(queriedAt)}
+            {this.renderProgress(record)}
+            {error ? <ErrorReport report={error} /> : null}
           </div>
         </section>
 
@@ -127,14 +149,16 @@ var PDR = React.createClass({
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Granules <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Granules <span className='num--title'>{ !isNaN(count) ? `(${count})` : null }</span></h2>
+          </div>
+          <div>
+            <GranulesProgress granules={granuleStatus} />
           </div>
           <div className='filters filters__wlabels'>
             <Dropdown
               dispatch={this.props.dispatch}
               getOptions={getOptionsCollectionName}
               options={get(dropdowns, ['collectionName', 'options'])}
-              format={dropdownOption}
               action={filterGranules}
               clear={clearGranulesFilter}
               paramKey={'collectionName'}
@@ -143,7 +167,6 @@ var PDR = React.createClass({
             <Dropdown
               dispatch={this.props.dispatch}
               options={status}
-              format={dropdownOption}
               action={filterGranules}
               clear={clearGranulesFilter}
               paramKey={'status'}

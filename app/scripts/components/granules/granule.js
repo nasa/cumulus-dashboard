@@ -1,10 +1,12 @@
 'use strict';
 import React from 'react';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import {
   interval,
   getGranule,
   reprocessGranule,
+  reingestGranule,
   removeGranule,
   deleteGranule
 } from '../../actions';
@@ -13,9 +15,9 @@ import { fullDate, lastUpdated, seconds, nullValue, bool } from '../../utils/for
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
-import AsyncCommand from '../form/async-command';
 import ErrorReport from '../errors/report';
 import Metadata from '../table/metadata';
+import AsyncCommands from '../form/dropdown-async-command';
 import { updateInterval } from '../../config';
 
 const tableHeader = [
@@ -36,7 +38,10 @@ const tableRow = [
 ];
 
 const metaAccessors = [
-  ['PDR Name', 'pdrName'],
+  ['PDR Name', 'pdrName', (d) => <Link to={`pdrs/pdr/${d}`}>{d}</Link>],
+  ['Collection', 'collectionName', (d) => <Link to={`collections/collection/${d}`}>{d}</Link>],
+  ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],
+  ['CMR Link', 'cmrLink', (d) => <a href={d}>{d ? 'Click Here' : nullValue}</a>],
   ['Published', 'published', bool],
   ['Duplicate', 'hasDuplicate', bool],
 
@@ -61,6 +66,11 @@ const metaAccessors = [
   ['Processing duration', 'processingDuration', seconds],
   ['Total duration', 'totalDuration', seconds]
 ];
+
+const granuleErrors = {
+  ingest: 'This granule failed during the ingest phase',
+  processing: 'This granule failed during the processing phase'
+};
 
 var GranuleOverview = React.createClass({
   displayName: 'Granule',
@@ -92,9 +102,8 @@ var GranuleOverview = React.createClass({
   },
 
   fastReload: function () {
-    // delay a reload but shorten the duration
-    // this shows the granule as it reprocesses
-    this.reload(false, 2000);
+    // decrease timeout to better see updates
+    this.reload(true, updateInterval / 2);
   },
 
   navigateBack: function () {
@@ -107,6 +116,11 @@ var GranuleOverview = React.createClass({
     this.props.dispatch(reprocessGranule(granuleId));
   },
 
+  reingest: function () {
+    const { granuleId } = this.props.params;
+    this.props.dispatch(reingestGranule(granuleId));
+  },
+
   remove: function () {
     const { granuleId } = this.props.params;
     this.props.dispatch(removeGranule(granuleId));
@@ -114,21 +128,18 @@ var GranuleOverview = React.createClass({
 
   delete: function () {
     const { granuleId } = this.props.params;
-    const granule = this.props.granules.map[granuleId].data;
-    if (!granule.published) {
-      this.props.dispatch(deleteGranule(granuleId));
-    }
+    this.props.dispatch(deleteGranule(granuleId));
   },
 
   errors: function () {
     const granuleId = this.props.params.granuleId;
-    const errors = [
+    return [
       get(this.props.granules.map, [granuleId, 'error']),
       get(this.props.granules.reprocessed, [granuleId, 'error']),
+      get(this.props.granules.reingested, [granuleId, 'error']),
       get(this.props.granules.removed, [granuleId, 'error']),
       get(this.props.granules.deleted, [granuleId, 'error'])
     ].filter(Boolean);
-    return errors.length ? errors.map(JSON.stringify).join(', ') : null;
   },
 
   renderStatus: function (status) {
@@ -141,9 +152,11 @@ var GranuleOverview = React.createClass({
     if (status === 'failed') statusList.push(['Failed', 'failed']);
     else statusList.push(['Complete', 'completed']);
     const indicatorClass = 'progress-bar__indicator progress-bar__indicator--' + status;
+    const statusBarClass = 'progress-bar__progress progress-bar__progress--' + status;
     return (
       <div className='page__section--subsection page__section__granule--progress'>
         <div className='progress-bar'>
+          <div className={statusBarClass}></div>
 
           <div className={indicatorClass}>
             <div className='pulse'>
@@ -178,46 +191,48 @@ var GranuleOverview = React.createClass({
       for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }
     }
     const logsQuery = { 'meta.granuleId': granuleId };
-    const cmrLink = granule.cmrLink;
-    const reprocessStatus = get(this.props.granules.reprocessed, [granuleId, 'status']);
-    const removeStatus = get(this.props.granules.removed, [granuleId, 'status']);
-    const deleteStatus = get(this.props.granules.deleted, [granuleId, 'status']);
     const errors = this.errors();
     const granuleError = granule.error;
+    const dropdownConfig = [{
+      text: 'Reprocess',
+      action: this.reprocess,
+      status: get(this.props.granules.reprocessed, [granuleId, 'status']),
+      success: this.fastReload
+    }, {
+      text: 'Reingest',
+      action: this.reingest,
+      status: get(this.props.granules.reingested, [granuleId, 'status']),
+      success: this.fastReload
+    }, {
+      text: 'Remove from CMR',
+      action: this.remove,
+      status: get(this.props.granules.removed, [granuleId, 'status']),
+      success: this.fastReload
+    }, {
+      text: 'Delete',
+      action: this.delete,
+      disabled: granule.published,
+      status: get(this.props.granules.deleted, [granuleId, 'status']),
+      success: this.navigateBack
+    }];
+
+    const granuleErrorType = granuleError && granule.errorType && granuleErrors[granule.errorType]
+      ? granuleErrors[granule.errorType] : null;
     return (
       <div className='page__component'>
-        <section className='page__section'>
+        <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>{granuleId}</h1>
-
-          <AsyncCommand action={this.delete}
-            success={this.navigateBack}
-            successTimeout={1000}
-            status={deleteStatus}
-            disabled={granule.published}
-            className={'form-group__element--right'}
-            text={deleteStatus === 'success' ? 'Success!' : 'Delete'} />
-
-          <AsyncCommand action={this.remove}
-            success={this.fastReload}
-            status={removeStatus}
-            className={'form-group__element--right'}
-            text={'Remove from CMR'} />
-
-          <AsyncCommand action={this.reprocess}
-            success={this.fastReload}
-            status={reprocessStatus}
-            className={'form-group__element--right'}
-            text={'Reprocess'} />
-
+          <AsyncCommands config={dropdownConfig} />
           {lastUpdated(granule.queriedAt)}
           {this.renderStatus(granule.status)}
           {granuleError ? <ErrorReport report={granuleError} /> : null}
+          {granuleErrorType ? <ErrorReport report={granuleErrorType} /> : null}
         </section>
 
         <section className='page__section'>
-          {errors ? <ErrorReport report={errors} /> : null}
+          {errors.length ? errors.map((error, i) => <ErrorReport key={i} report={error} />) : null}
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium with-description'>Granule Overview {cmrLink ? <a href={cmrLink}>[CMR]</a> : null}</h2>
+            <h2 className='heading--medium with-description'>Granule Overview</h2>
           </div>
           <Metadata data={granule} accessors={metaAccessors} />
         </section>
@@ -226,7 +241,12 @@ var GranuleOverview = React.createClass({
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>Files</h2>
           </div>
-          <SortableTable data={files} header={tableHeader} row={tableRow}/>
+          <SortableTable
+            data={files}
+            header={tableHeader}
+            row={tableRow}
+            props={['name', 'sipFile', 'stagingFile', 'archivedFile', 'access']}
+          />
         </section>
 
         <section className='page__section'>

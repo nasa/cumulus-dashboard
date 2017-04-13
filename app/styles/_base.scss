@@ -65,11 +65,16 @@ a, a:visited {
 }
 
 a:hover {
-
+  border-bottom: 1px solid rgba(34, 118, 172, 1);
+  color: darken($ocean-blue, 10%);
 }
 
 a:active {
   outline: 0;
+}
+
+.link--no-underline {
+  border-bottom: 0;
 }
 
 .link--secondary, .link--secondary:visited {
@@ -152,7 +157,7 @@ a:active {
 }
 
 .content__header--lg {
-  padding-top: 15em;
+  padding-top: 10em;
 }
 
 .wrapper__sidebar{
@@ -226,7 +231,7 @@ a:active {
 }
 
 .page__content--shortened {
-  padding: 4em 0 0 13em;
+  padding: 4em 0 0 12.5em;
   float: left;
   width: 80%;
 }
@@ -249,10 +254,6 @@ a:active {
   margin-bottom: 3em;
 }
 
-.page__section__header {
-  margin-bottom: 2em;
-}
-
 .metadata__updated, .label__description {
   font-size: .79em;
   font-style: italic;
@@ -273,6 +274,7 @@ a:active {
   position: relative;
   background: $lightest-grey;
   top: .3em;
+  width: 98.8%;
 }
 
 .page__section__granule--progress {
@@ -281,7 +283,7 @@ a:active {
   ol {
     position: absolute;
     top: 0;
-    width: 99%;
+    width: 98.8%;
   }
 
   li {
@@ -292,27 +294,24 @@ a:active {
     width: 24%;
     position: relative;
     top: 1.2em;
-
-    &:last-child,
-    &:first-child {
-      &:before {
-        content: '';
-        height: 14px;
-        width: 1px;
-        background-color: lighten($lighter-grey, 6%);
-        background-size: 14px 1px;
-        display: block;
-        margin-bottom: 2px;
-        position: absolute;
-        right: 50%;
-        top: -1.45em;
-      }
+    &:before {
+      content: '';
+      height: 14px;
+      width: 1px;
+      background-color: lighten($lighter-grey, 30%);
+      background-size: 14px 1px;
+      display: block;
+      margin-bottom: 2px;
+      position: absolute;
+      right: 50%;
+      top: -1.45em;
     }
 
     &:first-child {
       text-align: left;
       width: 14%;
       &:before {
+        background-color: lighten($lighter-grey, 6%);
         left: 0;
         right: 0;
       }
@@ -321,6 +320,7 @@ a:active {
       text-align: right;
       width: 14%;
       &:before {
+        background-color: lighten($lighter-grey, 6%);
         right: 0;
       }
     }
@@ -331,6 +331,20 @@ a:active {
     color: $dark-grey;
   }
 }
+
+.progress-bar__progress {
+  height: 5px;
+  left: 0;
+  position: absolute;
+  transition: width 0.2s ease-in-out;
+  background-color: $light-green;
+  z-index: 5;
+}
+.progress-bar__progress--ingesting { width: 0; }
+.progress-bar__progress--processing { width: 26%;  }
+.progress-bar__progress--cmr { width: 50%; }
+.progress-bar__progress--archiving { width: 74%; }
+.progress-bar__progress--completed { width: 100%; }
 
 .progress-bar__indicator {
   position: absolute;
@@ -395,39 +409,45 @@ a:active {
   }
 }
 
-/* modal */
-.modal__cover {
-  background-color: #999;
-  opacity: 0.85;
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  opacity: 0.85;
-  z-index: 999;
-
-  &:after {
-    -moz-box-shadow: inset 0 0 10em #000;
-    -webkit-box-shadow: inset 0 0 10em #000;
-    box-shadow: inset 0 0 10em #000;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    content: "";
+.status--process {
+  margin-top: 1.5em;
+  dd, dt {
+    display: inline-block;
+  }
+  dt {
+    font-weight: $base-font-semibold;
+    margin-right: 1em;
+  }
+  dd {
+    color: $grey;
+    &:before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      margin-right: .5em;
+      background-size: 10px 10px;
+      border-radius: 20px;
+    }
+  }
+  .ingesting, .processing, .updating, .archiving {
+    &:before {
+      background-color: $yellow;
+    }
+  }
+  .completed {
+    &:before {
+      background-color: $light-green;
+    }
+  }
+  .stopped {
+    &:before {
+      background-color: $orange;
+    }
+  }
+  .failed {
+    &:before {
+      background-color: $error-red;
+    }
   }
 }
-
-.modal {
-  border-radius: 5px;
-  display: inline-block;
-  background-color: $background-white;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
-  padding: 2em 2.3em 3em;
-  width: 300px;
-  text-align: left;
-}
-

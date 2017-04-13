@@ -1,4 +1,5 @@
 'use strict';
+import moment from 'moment';
 import url from 'url';
 import { get, post, put, del, wrapRequest } from './helpers';
 import { set as setToken } from '../utils/auth';
@@ -27,6 +28,7 @@ export const NEW_COLLECTION_ERROR = 'NEW_COLLECTION_ERROR';
 export const UPDATE_COLLECTION = 'UPDATE_COLLECTION';
 export const UPDATE_COLLECTION_INFLIGHT = 'UPDATE_COLLECTION_INFLIGHT';
 export const UPDATE_COLLECTION_ERROR = 'UPDATE_COLLECTION_ERROR';
+export const UPDATE_COLLECTION_CLEAR = 'UPDATE_COLLECTION_CLEAR';
 
 export const SEARCH_COLLECTIONS = 'SEARCH_COLLECTIONS';
 export const CLEAR_COLLECTIONS_SEARCH = 'CLEAR_COLLECTIONS_SEARCH';
@@ -50,6 +52,10 @@ export const GRANULE_REPROCESS = 'GRANULE_REPROCESS';
 export const GRANULE_REPROCESS_INFLIGHT = 'GRANULE_REPROCESS_INFLIGHT';
 export const GRANULE_REPROCESS_ERROR = 'GRANULE_REPROCESS_ERROR';
 
+export const GRANULE_REINGEST = 'GRANULE_REINGEST';
+export const GRANULE_REINGEST_INFLIGHT = 'GRANULE_REINGEST_INFLIGHT';
+export const GRANULE_REINGEST_ERROR = 'GRANULE_REINGEST_ERROR';
+
 export const GRANULE_REMOVE = 'GRANULE_REMOVE';
 export const GRANULE_REMOVE_INFLIGHT = 'GRANULE_REMOVE_INFLIGHT';
 export const GRANULE_REMOVE_ERROR = 'GRANULE_REMOVE_ERROR';
@@ -63,6 +69,10 @@ export const CLEAR_GRANULES_SEARCH = 'CLEAR_GRANULES_SEARCH';
 
 export const FILTER_GRANULES = 'FILTER_GRANULES';
 export const CLEAR_GRANULES_FILTER = 'CLEAR_GRANULES_FILTER';
+
+export const RECENT_GRANULES = 'RECENT_GRANULES';
+export const RECENT_GRANULES_INFLIGHT = 'RECENT_GRANULES_INFLIGHT';
+export const RECENT_GRANULES_ERROR = 'RECENT_GRANULES_ERROR';
 
 export const OPTIONS_COLLECTIONNAME = 'OPTIONS_COLLECTIONNAME';
 export const OPTIONS_COLLECTIONNAME_INFLIGHT = 'OPTIONS_COLLECTIONNAME_INFLIGHT';
@@ -113,6 +123,7 @@ export const NEW_PROVIDER_ERROR = 'NEW_PROVIDER_ERROR';
 export const UPDATE_PROVIDER = 'UPDATE_PROVIDER';
 export const UPDATE_PROVIDER_INFLIGHT = 'UPDATE_PROVIDER_INFLIGHT';
 export const UPDATE_PROVIDER_ERROR = 'UPDATE_PROVIDER_ERROR';
+export const UPDATE_PROVIDER_CLEAR = 'UPDATE_PROVIDER_CLEAR';
 
 export const PROVIDERS = 'PROVIDERS';
 export const PROVIDERS_INFLIGHT = 'PROVIDERS_INFLIGHT';
@@ -145,6 +156,7 @@ export const CLEAR_PROVIDERS_FILTER = 'CLEAR_PROVIDERS_FILTER';
 export const LOGS = 'LOGS';
 export const LOGS_INFLIGHT = 'LOGS_INFLIGHT';
 export const LOGS_ERROR = 'LOGS_ERROR';
+export const CLEAR_LOGS = 'CLEAR_LOGS';
 
 export const SCHEMA = 'SCHEMA';
 export const SCHEMA_INFLIGHT = 'SCHEMA_INFLIGHT';
@@ -174,6 +186,8 @@ export const createCollection = (payload) => wrapRequest(
 export const updateCollection = (payload) => wrapRequest(
   payload.collectionName, put, `collections/${payload.collectionName}`, UPDATE_COLLECTION, payload);
 
+export const clearUpdateCollection = (collectionName) => ({ type: UPDATE_COLLECTION_CLEAR, id: collectionName });
+
 export const deleteCollection = (collectionName) => wrapRequest(
   collectionName, del, `collections/${collectionName}`, COLLECTION_DELETE);
 
@@ -190,9 +204,24 @@ export const listGranules = (options) => wrapRequest(null, get, {
   qs: Object.assign({ limit: pageLimit }, options)
 }, GRANULES);
 
+// only query the granules from the last hour
+export const getRecentGranules = () => wrapRequest(null, get, {
+  url: url.resolve(root, 'granules'),
+  qs: {
+    limit: 1,
+    fields: 'granuleId',
+    updatedAt__from: moment().subtract(1, 'hour').format()
+  }
+}, RECENT_GRANULES);
+
 export const reprocessGranule = (granuleId) => wrapRequest(
   granuleId, put, `granules/${granuleId}`, GRANULE_REPROCESS, {
     action: 'reprocess'
+  });
+
+export const reingestGranule = (granuleId) => wrapRequest(
+  granuleId, put, `granules/${granuleId}`, GRANULE_REINGEST, {
+    action: 'reingest'
   });
 
 export const removeGranule = (granuleId) => wrapRequest(
@@ -260,6 +289,8 @@ export const createProvider = (payload) => wrapRequest(
 export const updateProvider = (payload) => wrapRequest(
   payload.name, put, `providers/${payload.name}`, UPDATE_PROVIDER, payload);
 
+export const clearUpdateProvider = (providerId) => ({ type: UPDATE_PROVIDER_CLEAR, id: providerId });
+
 export const deleteProvider = (providerId) => wrapRequest(
   providerId, del, `providers/${providerId}`, PROVIDER_DELETE);
 
@@ -276,13 +307,9 @@ export const stopProvider = (providerId) => wrapRequest(
   });
 
 export const clearStoppedProvider = (providerId) => ({ type: CLEAR_STOPPED_PROVIDER, id: providerId });
-
 export const searchProviders = (prefix) => ({ type: SEARCH_PROVIDERS, prefix: prefix });
-
 export const clearProvidersSearch = () => ({ type: CLEAR_PROVIDERS_SEARCH });
-
 export const filterProviders = (param) => ({ type: FILTER_PROVIDERS, param: param });
-
 export const clearProvidersFilter = (paramKey) => ({ type: CLEAR_PROVIDERS_FILTER, paramKey: paramKey });
 
 export const deletePdr = (pdrName) => wrapRequest(
@@ -290,8 +317,9 @@ export const deletePdr = (pdrName) => wrapRequest(
 
 export const getLogs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'logs'),
-  qs: Object.assign({ limit: 200 }, options)
+  qs: Object.assign({limit: 100}, options)
 }, LOGS);
+export const clearLogs = () => ({ type: CLEAR_LOGS });
 
 export const logout = () => {
   setToken('');

@@ -10,3 +10,22 @@ const status = {
   Failed: 'failed'
 };
 export default status;
+
+export const queryStatus = [
+  'discovered',
+  'ingesting',
+  'processing',
+  'cmr',
+  'archiving',
+  'completed',
+  'stopped',
+  'failed'
+];
+
+export const pdrStatus = {
+  '': '',
+  Discovered: 'discovered',
+  Parsed: 'parsed',
+  Completed: 'completed',
+  Failed: 'failed'
+};

@@ -8,15 +8,13 @@ import {
   deleteProvider,
   restartProvider,
   stopProvider,
-  listCollections,
-  clearRestartedProvider,
-  clearStoppedProvider
+  listCollections
 } from '../../actions';
 import { get } from 'object-path';
 import { fullDate, lastUpdated } from '../../utils/format';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
-import AsyncCommand from '../form/async-command';
+import AsyncCommands from '../form/dropdown-async-command';
 import ErrorReport from '../errors/report';
 import Metadata from '../table/metadata';
 import { updateInterval } from '../../config';
@@ -92,11 +90,10 @@ var ProviderOverview = React.createClass({
 
   errors: function () {
     const providerId = this.props.params.providerId;
-    const errors = [
+    return [
       get(this.props.providers.map, [providerId, 'error']),
       get(this.props.providers.deleted, [providerId, 'error'])
     ].filter(Boolean);
-    return errors.length ? errors.map(JSON.stringify).join(', ') : null;
   },
 
   render: function () {
@@ -110,53 +107,50 @@ var ProviderOverview = React.createClass({
     const associatedCollections = get(this.props.collections, ['list', 'data'], [])
       .map(c => c.collectionName);
     const logsQuery = { 'meta.provider': providerId };
+    const errors = this.errors();
+    const providerError = provider.error;
+
     const deleteStatus = get(this.props.providers.deleted, [providerId, 'status']);
     const restartStatus = get(this.props.providers.restarted, [providerId, 'status']);
     const stopStatus = get(this.props.providers.stopped, [providerId, 'status']);
-    const errors = this.errors();
-    const providerError = provider.error;
+    const dropdownConfig = [{
+      text: 'Stop',
+      action: this.stop,
+      disabled: provider.status === 'stopped',
+      status: stopStatus,
+      success: () => this.reload(true)
+    }, {
+      text: 'Restart',
+      action: this.restart,
+      status: restartStatus,
+      success: () => this.reload(true)
+    }, {
+      text: 'Delete',
+      action: this.delete,
+      disabled: provider.published,
+      status: deleteStatus,
+      success: this.navigateBack
+    }];
+
     return (
       <div className='page__component'>
-        <section className='page__section'>
+        <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>{providerId}</h1>
-
-          <AsyncCommand action={this.delete}
-            success={this.navigateBack}
-            status={deleteStatus}
-            disabled={provider.published}
-            className={'form-group__element--right'}
-            text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'}
-            successTimeout={1000} />
+          <AsyncCommands config={dropdownConfig} />
           <Link
-            className='button button--small form-group__element button--green form-group__element--right'
-            to={'/providers/edit/' + providerId}
-          >
-            Edit
-          </Link>
-          <AsyncCommand
-            action={this.restart}
-            success={() => this.props.dispatch(clearRestartedProvider(this.props.params.providerId))}
-            status={restartStatus}
-            disabled={restartStatus === 'success'}
-            className={'form-group__element--right'}
-            text={restartStatus === 'success' ? 'Restarted!' : 'Restart'}
-            successTimeout={5000} />
-          <AsyncCommand
-            action={this.stop}
-            success={() => this.props.dispatch(clearStoppedProvider(this.props.params.providerId))}
-            status={stopStatus}
-            disabled={stopStatus === 'success' || provider.status === 'stopped'}
-            className={'form-group__element--right'}
-            text={stopStatus === 'success' ? 'Stopped!' : 'Stop'}
-            successTimeout={5000} />
+            className='button button--small button--green form-group__element--right'
+            to={'/providers/edit/' + providerId}>Edit</Link>
 
           {lastUpdated(provider.queriedAt)}
-          Status: {findkey(status, v => v === provider.status)}
+          <dl className='status--process'>
+            <dt>Status:</dt>
+            <dd className={provider.status}>{findkey(status, v => v === provider.status)}</dd>
+          </dl>
           {providerError ? <ErrorReport report={providerError} /> : null}
         </section>
 
         <section className='page__section'>
-          {errors ? <ErrorReport report={errors} /> : null}
+          {errors.length ? errors.map((error, i) => <ErrorReport key={i} report={error} />) : null}
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Provider Overview</h2>
           </div>

@@ -7,21 +7,18 @@ import {
   searchCollections,
   clearCollectionsSearch,
   filterCollections,
-  clearCollectionsFilter,
-  deleteCollection
+  clearCollectionsFilter
 } from '../../actions';
-import { collectionSearchResult, dropdownOption, lastUpdated } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/collections';
+import { collectionSearchResult, lastUpdated, tally } from '../../utils/format';
+import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/collections';
 import Search from '../form/search';
 import Dropdown from '../form/dropdown';
 import List from '../table/list-view';
-import { recent } from '../../config';
 
 var CollectionList = React.createClass({
   displayName: 'CollectionList',
 
   propTypes: {
-    location: React.PropTypes.object,
     collections: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     logs: React.PropTypes.object
@@ -35,22 +32,11 @@ var CollectionList = React.createClass({
   },
 
   generateQuery: function () {
-    const query = {};
-    if (this.inactive()) query.updatedAt__to = recent;
-    else query.updatedAt__from = recent;
-    return query;
+    return {};
   },
 
   generateBulkActions: function () {
-    return [{
-      text: 'Delete',
-      action: deleteCollection,
-      state: this.props.collections.deleted
-    }];
-  },
-
-  inactive: function () {
-    return this.props.location.pathname.indexOf('collections/inactive') >= 0;
+    return bulkActions(this.props.collections);
   },
 
   render: function () {
@@ -59,9 +45,9 @@ var CollectionList = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <div className='page__section__header'>
+          <div className='page__section__header page__section__header-wrapper'>
             <h1 className='heading--large heading--shared-content with-description'>
-              {this.inactive() ? 'Inactive' : 'Active'} Collections <span style={{color: 'gray'}}>{ !isNaN(count) ? `(${count})` : null }</span>
+              All Collections <span className='num--title'>{ !isNaN(count) ? `(${tally(count)})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>
@@ -69,7 +55,6 @@ var CollectionList = React.createClass({
             <Dropdown
               dispatch={this.props.dispatch}
               options={this.timeOptions}
-              format={dropdownOption}
               action={filterCollections}
               clear={clearCollectionsFilter}
               paramKey={'createdAt__from'}
@@ -78,7 +63,6 @@ var CollectionList = React.createClass({
             <Dropdown
               dispatch={this.props.dispatch}
               options={this.timeOptions}
-              format={dropdownOption}
               action={filterCollections}
               clear={clearCollectionsFilter}
               paramKey={'createdAt__to'}

@@ -64,17 +64,23 @@ function requireAuth (nextState, replace) {
   }
 }
 
+// redirect to homepage from login if authed
+function checkAuth (nextState, replace) {
+  if (store.getState().api.authenticated) {
+    replace('/');
+  }
+}
+
 render((
   <ProviderElem store={store}>
     <Router history={hashHistory} render={applyRouterMiddleware(useScroll())}>
       <Route path='/404' component={NotFound} />
-      <Redirect from='/collections' to='/collections/active' />
-      <Route path='/login' component={Login} />
+      <Redirect from='/collections' to='/collections/all' />
+      <Route path='/login' component={Login} onEnter={checkAuth} />
       <Route path='/' component={App} onEnter={requireAuth} >
         <IndexRoute component={Home} />
         <Route path='collections' component={Collections}>
-          <Route path='active' component={CollectionList} />
-          <Route path='inactive' component={CollectionList} />
+          <Route path='all' component={CollectionList} />
           <Route path='add' component={AddCollection} />
           <Route path='edit/:collectionName' component={EditCollection} />
           <Route path='collection/:collectionName' component={CollectionOverview} />
@@ -93,6 +99,7 @@ render((
         <Route path='pdrs' component={Pdrs}>
           <IndexRoute component={PdrOverview} />
           <Route path='active' component={PdrList} />
+          <Route path='all' component={PdrList} />
           <Route path='failed' component={PdrList} />
           <Route path='completed' component={PdrList} />
           <Route path='pdr/:pdrName' component={Pdr} />
@@ -102,6 +109,7 @@ render((
           <Route path='add' component={AddProvider} />
           <Route path='edit/:providerId' component={EditProvider} />
           <Route path='active' component={ListProviders} />
+          <Route path='all' component={ListProviders} />
           <Route path='inactive' component={ListProviders} />
           <Route path='failed' component={ListProviders} />
           <Route path='provider/:providerId' component={Provider} />
