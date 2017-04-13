@@ -5,7 +5,7 @@ const processing = pdrQueryStatus.filter(d => d !== 'failed' && d !== 'completed
 
 const pdrRoutes = [
   ['Overview', null],
-  ['All PDRs', 'all', () => true],
+  ['All PDRs', 'all'],
   ['Completed', 'completed', (d) => d.key === 'completed'],
   ['Active', 'active', (d) => processing.indexOf(d.key) >= 0],
   ['Failed', 'failed', (d) => d.key === 'failed']
