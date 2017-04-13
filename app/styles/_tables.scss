@@ -179,7 +179,7 @@ table {
   a, a:visited {
     color: $black;
     border-bottom: 1px solid $lightest-grey;
-    &:hover { 
+    &:hover {
       border-bottom: 1px solid $ocean-blue;
       color: $ocean-blue;
     }
@@ -257,4 +257,18 @@ table {
   position: absolute;
   margin-left: 6px;
   top: -4px;
+}
+
+.pdr__progress {
+  margin-top: 1em;
+  .table__progress--bar,
+  .table__progress--outer {
+    height: 10px;
+  }
+  .table__progress--text {
+    top: -3px;
+  }
+  .table__progress--outer {
+    background-color: $lightest-grey;
+  }
 }

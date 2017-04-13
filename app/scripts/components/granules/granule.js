@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import {
   interval,
@@ -37,7 +38,10 @@ const tableRow = [
 ];
 
 const metaAccessors = [
-  ['PDR Name', 'pdrName'],
+  ['PDR Name', 'pdrName', (d) => <Link to={`pdrs/pdr/${d}`}>{d}</Link>],
+  ['Collection', 'collectionName', (d) => <Link to={`collections/collection/${d}`}>{d}</Link>],
+  ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],
+  ['CMR Link', 'cmrLink', (d) => <a href={d}>{d ? 'Click Here' : nullValue}</a>],
   ['Published', 'published', bool],
   ['Duplicate', 'hasDuplicate', bool],
 
@@ -187,7 +191,6 @@ var GranuleOverview = React.createClass({
       for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }
     }
     const logsQuery = { 'meta.granuleId': granuleId };
-    const cmrLink = granule.cmrLink;
     const errors = this.errors();
     const granuleError = granule.error;
     const dropdownConfig = [{
@@ -229,7 +232,7 @@ var GranuleOverview = React.createClass({
         <section className='page__section'>
           {errors.length ? errors.map((error, i) => <ErrorReport key={i} report={error} />) : null}
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium with-description'>Granule Overview {cmrLink ? <a href={cmrLink}>[CMR]</a> : null}</h2>
+            <h2 className='heading--medium with-description'>Granule Overview</h2>
           </div>
           <Metadata data={granule} accessors={metaAccessors} />
         </section>
