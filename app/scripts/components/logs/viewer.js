@@ -26,7 +26,8 @@ var LogViewer = React.createClass({
   propTypes: {
     dispatch: React.PropTypes.func,
     query: React.PropTypes.object,
-    logs: React.PropTypes.object
+    logs: React.PropTypes.object,
+    notFound: React.PropTypes.string
   },
 
   getInitialState: function () {
@@ -90,8 +91,14 @@ var LogViewer = React.createClass({
   },
 
   render: function () {
-    const { logs } = this.props;
-    const items = logs.items.length ? logs.items : logs.inflight ? [] : [noLogs];
+    const { logs, notFound } = this.props;
+    let items = logs.items;
+    if (!items.length && !logs.inflight) {
+      let placeholder = notFound ? Object.assign({}, noLogs, {
+        displayText: notFound
+      }) : noLogs;
+      items = [placeholder];
+    }
     const count = logs.items.length ? tally(items.length) : 0;
     const { level } = this.state;
     return (
