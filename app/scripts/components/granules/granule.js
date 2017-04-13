@@ -38,10 +38,10 @@ const tableRow = [
 ];
 
 const metaAccessors = [
-  ['PDR Name', 'pdrName', (d) => <Link to={`pdrs/pdr/${d}`}>{d}</Link>],
-  ['Collection', 'collectionName', (d) => <Link to={`collections/collection/${d}`}>{d}</Link>],
-  ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],
-  ['CMR Link', 'cmrLink', (d) => <a href={d}>{d ? 'Click Here' : nullValue}</a>],
+  ['PDR Name', 'pdrName', (d) => d ? <Link to={`pdrs/pdr/${d}`}>{d}</Link> : nullValue],
+  ['Collection', 'collectionName', (d) => d ? <Link to={`collections/collection/${d}`}>{d}</Link> : nullValue],
+  ['Provider', 'provider', (d) => d ? <Link to={`providers/provider/${d}`}>{d}</Link> : nullValue],
+  ['CMR Link', 'cmrLink', (d) => d ? <a href={d}>Link</a> : nullValue],
   ['Published', 'published', bool],
   ['Duplicate', 'hasDuplicate', bool],
 
