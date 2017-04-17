@@ -1,0 +1,43 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:6.9
+    working_directory: ~/cumulus-dashboard
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - cumulus-dashboard-{{ .Branch }}-{{ checksum "package.json" }}
+            - cumulus-dashboard-{{ .Branch }}
+            - cumulus-dashboard-develop
+            - cumulus-dashboard
+      - run:
+          name: Install dependencies
+          command: |
+            npm install
+            npm rebuild node-sass
+            apt-get update && apt-get install -y python-dev python-pip && pip install --upgrade --user awscli
+
+      - run:
+          name: Run tests
+          command: npm test
+      - deploy:
+          name: Deploy develop branch to the dev CloudFormation stack
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              npm run staging
+              ~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://cumulus-dashboard --acl=public-read
+            fi
+      - deploy:
+          name: Deploy master branch to the prod CloudFormation stack
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              npm run production
+              ~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://cumulus-dashboard-prod --acl=public-read
+            fi
+
+      - save_cache:
+          key: cumulus-dashboard-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - ~/cumulus-dashboard/node_modules

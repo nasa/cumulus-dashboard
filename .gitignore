@@ -5,3 +5,4 @@ node_modules
 *.swp
 dist
 app/scripts/config/local.js
+gulp-cache
