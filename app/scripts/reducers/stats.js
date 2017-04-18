@@ -12,9 +12,9 @@ import {
   RESOURCES_INFLIGHT,
   RESOURCES_ERROR,
 
-  AGGREGATE,
-  AGGREGATE_INFLIGHT,
-  AGGREGATE_ERROR,
+  COUNT,
+  COUNT_INFLIGHT,
+  COUNT_ERROR,
 
   HISTOGRAM,
   HISTOGRAM_INFLIGHT,
@@ -35,7 +35,7 @@ export const initialState = {
     inflight: false,
     error: null
   },
-  aggregate: {
+  count: {
     data: {},
     inflight: false,
     error: null
@@ -50,7 +50,7 @@ export const initialState = {
 
 export default function reducer (state = initialState, action) {
   let nextState;
-  let stats, aggregate, resources, histogram;
+  let stats, count, resources, histogram;
   switch (action.type) {
     case STATS:
       stats = { data: assignDate(action.data), inflight: false, error: null };
@@ -65,18 +65,18 @@ export default function reducer (state = initialState, action) {
       nextState = Object.assign(state, { stats });
       break;
 
-    case AGGREGATE:
-      aggregate = Object.assign({}, state.aggregate);
-      set(aggregate, ['data', action.config.qs.type], action.data);
-      nextState = Object.assign(state, { aggregate });
+    case COUNT:
+      count = Object.assign({}, state.count);
+      set(count, ['data', action.config.qs.type], action.data);
+      nextState = Object.assign(state, { count });
       break;
-    case AGGREGATE_INFLIGHT:
-      aggregate = { data: state.aggregate.data, inflight: true, error: state.aggregate.error };
-      nextState = Object.assign(state, { aggregate });
+    case COUNT_INFLIGHT:
+      count = { data: state.count.data, inflight: true, error: state.count.error };
+      nextState = Object.assign(state, { count });
       break;
-    case AGGREGATE_ERROR:
-      aggregate = { data: state.aggregate.data, inflight: false, error: action.error };
-      nextState = Object.assign(state, { aggregate });
+    case COUNT_ERROR:
+      count = { data: state.count.data, inflight: false, error: action.error };
+      nextState = Object.assign(state, { count });
       break;
 
     case RESOURCES:

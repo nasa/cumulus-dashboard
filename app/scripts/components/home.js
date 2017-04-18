@@ -7,7 +7,7 @@ import { get } from 'object-path';
 import {
   interval,
   getStats,
-  getAggregate,
+  getCount,
   listPdrs,
   getResources,
   queryHistogram,
@@ -73,7 +73,7 @@ var Home = React.createClass({
     dispatch(getStats({
       timestamp__from: recent
     }));
-    dispatch(getAggregate({
+    dispatch(getCount({
       type: 'granules',
       field: 'status'
     }));
@@ -138,7 +138,7 @@ var Home = React.createClass({
   render: function () {
     const { list } = this.props.pdrs;
     const { recent } = this.props.granules;
-    const { stats, aggregate, resources, histogram } = this.props.stats;
+    const { stats, count, resources, histogram } = this.props.stats;
     const overview = [
       [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
       [tally(get(stats.data, 'collections.value')), 'Collections', '/collections'],
@@ -148,14 +148,14 @@ var Home = React.createClass({
       [tally(get(resources.data, 'tasks.runningTasks')), 'Running Tasks', '/resources'],
       [tally(get(resources.data, 'queues', []).length || nullValue), 'Queued Messages', '/resources']
     ];
-    const granuleCount = get(aggregate.data, 'granules.meta.count');
+    const granuleCount = get(count.data, 'granules.meta.count');
     const numGranules = !isNaN(granuleCount) ? `(${tally(granuleCount)})` : null;
 
     const granulesProcessed = get(histogram, serialize(this.generateGranulesProcessed()), {});
     const errorsRecorded = get(histogram, serialize(this.generateErrors()), {});
     const pdrsProcessed = get(histogram, serialize(this.generatePdrsProcessed()), {});
     const granulesFailed = get(histogram, serialize(this.generateGranulesFailed()), {});
-    const granuleStatus = get(aggregate.data, 'granules.count', []);
+    const granuleStatus = get(count.data, 'granules.count', []);
 
     return (
       <div className='page__home'>

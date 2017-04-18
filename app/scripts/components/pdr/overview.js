@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { interval, listPdrs, getAggregate } from '../../actions';
+import { interval, listPdrs, getCount } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import { bulkActions } from '../../utils/table-config/pdrs';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdr-progress';
@@ -29,7 +29,7 @@ var PdrOverview = React.createClass({
   },
 
   queryStats: function () {
-    this.props.dispatch(getAggregate({
+    this.props.dispatch(getCount({
       type: 'pdrs',
       field: 'status'
     }));

@@ -9,7 +9,7 @@ import {
   getOptionsProviderGroup,
   filterProviders,
   clearProvidersFilter,
-  getAggregate
+  getCount
 } from '../../actions';
 import { get } from 'object-path';
 import { lastUpdated, displayCase } from '../../utils/format';
@@ -69,7 +69,7 @@ var ListProviders = React.createClass({
   },
 
   componentWillMount: function () {
-    this.props.dispatch(getAggregate({
+    this.props.dispatch(getCount({
       type: 'collections',
       field: 'providers'
     }));
