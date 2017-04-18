@@ -8,36 +8,40 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - cumulus-dashboard-{{ .Branch }}-{{ checksum "package.json" }}
+            - cumulus-dashboard-{{ .Branch }}-{{ checksum "yarn.lock" }}
             - cumulus-dashboard-{{ .Branch }}
             - cumulus-dashboard-develop
             - cumulus-dashboard
       - run:
           name: Install dependencies
           command: |
-            npm install
-            npm rebuild node-sass
-            apt-get update && apt-get install -y python-dev python-pip && pip install --upgrade --user awscli
+            apt-get update && apt-get install -y python-dev python-pip apt-transport-https
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+            apt-get update && apt-get install -y yarn
+            pip install --upgrade --user awscli
+            yarn install --cache-folder ~/cumulus-dashboard/yarn-cache
 
       - run:
           name: Run tests
-          command: npm test
+          command: yarn test
       - deploy:
           name: Deploy develop branch to the dev CloudFormation stack
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              npm run staging
+              yarn run staging
               ~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://cumulus-dashboard --acl=public-read
             fi
       - deploy:
           name: Deploy master branch to the prod CloudFormation stack
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              npm run production
+              yarn run production
               ~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://cumulus-dashboard-prod --acl=public-read
             fi
 
       - save_cache:
-          key: cumulus-dashboard-{{ .Branch }}-{{ checksum "package.json" }}
+          key: cumulus-dashboard-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - ~/cumulus-dashboard/node_modules
+            - ~/cumulus-dashboard/yarn-cache
