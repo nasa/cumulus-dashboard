@@ -253,7 +253,7 @@ export const getResources = (options) => wrapRequest(null, get, {
 
 // count queries *must* include type and field properties.
 export const getCount = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'stats/count'),
+  url: url.resolve(root, 'stats/aggregate'),
   qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
 }, COUNT);
 
