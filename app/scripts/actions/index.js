@@ -86,9 +86,9 @@ export const RESOURCES = 'RESOURCES';
 export const RESOURCES_INFLIGHT = 'RESOURCES_INFLIGHT';
 export const RESOURCES_ERROR = 'RESOURCES_ERROR';
 
-export const COUNT = 'COUNT';
-export const COUNT_INFLIGHT = 'COUNT_INFLIGHT';
-export const COUNT_ERROR = 'COUNT_ERROR';
+export const AGGREGATE = 'AGGREGATE';
+export const AGGREGATE_INFLIGHT = 'AGGREGATE_INFLIGHT';
+export const AGGREGATE_ERROR = 'AGGREGATE_ERROR';
 
 export const PDR = 'PDR';
 export const PDR_INFLIGHT = 'PDR_INFLIGHT';
@@ -251,11 +251,11 @@ export const getResources = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'resources')
 }, RESOURCES);
 
-// count queries *must* include type and field properties.
-export const getCount = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'stats/count'),
+// aggregate queries *must* include type and field properties.
+export const getAggregate = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'stats/aggregate'),
   qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
-}, COUNT);
+}, AGGREGATE);
 
 export const listPdrs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),

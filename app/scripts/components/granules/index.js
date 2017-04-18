@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import Sidebar from '../app/sidebar';
-import { interval, getCount } from '../../actions';
+import { interval, getAggregate } from '../../actions';
 import { updateInterval } from '../../config';
 
 var Granules = React.createClass({
@@ -25,7 +25,7 @@ var Granules = React.createClass({
   },
 
   query: function () {
-    this.props.dispatch(getCount({
+    this.props.dispatch(getAggregate({
       type: 'granules',
       field: 'status'
     }));

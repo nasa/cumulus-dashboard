@@ -3,7 +3,7 @@ import React from 'react';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
 import Sidebar from '../app/sidebar';
-import { interval, getCount } from '../../actions';
+import { interval, getAggregate } from '../../actions';
 import { updateInterval } from '../../config';
 
 var Pdrs = React.createClass({
@@ -26,7 +26,7 @@ var Pdrs = React.createClass({
   },
 
   query: function () {
-    this.props.dispatch(getCount({
+    this.props.dispatch(getAggregate({
       type: 'pdrs',
       field: 'status'
     }));

@@ -4,7 +4,7 @@ import { get } from 'object-path';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Sidebar from '../app/sidebar';
-import { interval, getCount } from '../../actions';
+import { interval, getAggregate } from '../../actions';
 import { updateInterval } from '../../config';
 
 var Providers = React.createClass({
@@ -27,7 +27,7 @@ var Providers = React.createClass({
   },
 
   query: function () {
-    this.props.dispatch(getCount({
+    this.props.dispatch(getAggregate({
       type: 'providers',
       field: 'status'
     }));

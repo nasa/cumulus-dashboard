@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { listProviders, getCount, interval } from '../../actions';
+import { listProviders, getAggregate, interval } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/providers';
 import List from '../table/list-view';
@@ -29,11 +29,11 @@ var ProvidersOverview = React.createClass({
   },
 
   queryStats: function () {
-    this.props.dispatch(getCount({
+    this.props.dispatch(getAggregate({
       type: 'collections',
       field: 'providers'
     }));
-    this.props.dispatch(getCount({
+    this.props.dispatch(getAggregate({
       type: 'providers',
       field: 'status'
     }));
