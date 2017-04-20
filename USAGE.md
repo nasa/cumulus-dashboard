@@ -1,8 +1,34 @@
+# Viewing data
+
+Cumulus Dashboard shows comprehensive data on the status and workings of the Cumulus system. In this Dashboard you will find both aggregate and individual data slices.
+
+Cumulus is a moving system. Almost all of the data views in Dashboard will update automatically to show the latest data every 15 seconds, so you don't have to refresh the page manually. Many pages provide a timer and adjacent clickable span to stop automatic updates, should you need to. Once stopped, you can click again to restart automatic updates.
+
+## Searching and filtering
+
+Many tables provide dropdowns to filter the data based on attributes like status or parent collection. Often, you will find search fields where you can enter arbitrary search strings. As you type, the Cumulus Dashboard and API will attempt to find records containing attributes with **prefixes** that match your search string.
+
+For example, say a granule belongs to a PDR with the name `MODAPSops8.15810456.PDR`. In the granules section under "All Granules," searching for "MODAPS" will return a selection containing this granule. However, searching for "1581" will not return this granule.
+
+## Sorting
+
+In the data tables, small up and down arrows next to the table header means you can click re-order the table based on that column. Clicking the same header again will change the order from ascending to descending, and vice versa.
+
+Some columns cannot be sorted, and these will not show small arrows.
+
+# Performing actions on data
+
+Depending on the type, some sections will allow you to modify the data using buttons. These actions range from reingesting to reprocessing and deleting.
+
+Some actions cannot be performed on all records. For example, you can't delete a granule without removing it from CMR first. In general, these actions will be grayed out. However, if they are not grayed out but not allowed, the Dashboard will show an error when you try to perform the action.
+
+Actions on individual records are performed as soon as you click the button. On bulk records, a notification will pop up asking you to confirm your action, then show a loading indicator that will close automatically when all actions are successfully sent to Cumulus API.
+
 # Adding and editing records
 
 In the Cumulus Dashboard you can create and edit existing collections and providers. Links to create new records are at the top of the collections and providers sections, and links to edit an existing records are in the detail pages for single collections and providers.
 
-Whether you're editing or creating a new record, the form will be the same. This form corresponds to a data schema that Cumulus API defines, and which the dashboard queries. This means the form you see in the dashboard should always correspond with the schema that the API uses internally.
+Whether you're editing or creating a new record, the form will be the same. This form corresponds to a data schema that Cumulus API defines, and which the Dashboard queries. This means the form you see in the Dashboard should always correspond with the schema that the API uses internally.
 
 ## Required items
 
