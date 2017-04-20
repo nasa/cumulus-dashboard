@@ -42,6 +42,8 @@ import {
   OPTIONS_COLLECTIONNAME_ERROR
 } from '../actions';
 
+// manually filter out list items that have been deleted.
+// https://github.com/cumulus-nasa/cumulus-dashboard/issues/276
 function removeDeleted (list, deleted) {
   const filter = (item) => !(deleted[item.granuleId] && deleted[item.granuleId].status === 'success');
   return list.filter(filter);
