@@ -2,18 +2,25 @@
 
 set -e
 
-npm run production
+apt-get update && apt-get install -y rsync
 
-rm -f release.tar
-rm -rf .release && mkdir .release
+mkdir /build
+rsync -a --exclude node_modules /source/ /build/
 
-mkdir .release/html
-cp -R dist .release/html/dashboard
-cp deployment/Dockerfile .release/Dockerfile
-cp deployment/nginx.conf .release/nginx.conf
-cp deployment/Procfile .release/Procfile
-cp deployment/run_web.sh .release/run_web.sh
+(
+  cd /build
 
-tar -cf release.tar -C .release .
+  npm install
+  npm run production
 
-rm -rf .release
+  mkdir .release
+  mkdir .release/html
+  cp -R dist .release/html/dashboard
+  cp deployment/Dockerfile .release/Dockerfile
+  cp deployment/nginx.conf .release/nginx.conf
+  cp deployment/Procfile .release/Procfile
+  cp deployment/run_web.sh .release/run_web.sh
+
+  tar -cf /source/release.tar -C .release .
+  chown "$RELEASE_UID" /source/release.tar
+)
