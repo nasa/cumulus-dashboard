@@ -20,6 +20,7 @@ curl \
   --header "Accept: application/json" \
   --header "Authorization: Token token=${bamboo_NGAP_API_PASSWORD}" \
   --form "source=@release.tar" \
+  --form "comment=${COMMENT}" \
   --output create_deployment_result.json \
   "${bamboo_NGAP_API}/api/v1/apps/${bamboo_APP_NAME}/deployments"
 
