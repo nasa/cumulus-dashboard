@@ -23,7 +23,7 @@ npm run serve
 
 ### Build modules package
 
-```
+```(bash)
 mkdir -p artifacts
 docker run \
   -e RELEASE_UID=$(id -u) \
@@ -32,12 +32,12 @@ docker run \
   -v "$(pwd):/source:ro" \
   -v "$(pwd)/artifacts:/artifacts" \
   node \
-  /source/bamboo/build_modules_package.sh
+  /source/ngap/bamboo/build_modules_package.sh
 ```
 
 ### Run tests
 
-```
+```(bash)
 tar -xf modules.tar
 mkdir -p artifacts
 docker run \
@@ -47,12 +47,12 @@ docker run \
   -v "$(pwd):/source:ro" \
   -v "$(pwd)/artifacts:/artifacts" \
   node \
-  /source/bamboo/run_tests.sh
+  /source/ngap/bamboo/run_tests.sh
 ```
 
 ### Build release package
 
-```
+```(bash)
 mkdir -p artifacts
 docker run \
   -e RELEASE_UID=$(id -u) \
@@ -61,9 +61,8 @@ docker run \
   -v "$(pwd):/source:ro" \
   -v "$(pwd)/artifacts:/artifacts" \
   node \
-  /source/bamboo/build_release_package.sh
+  /source/ngap/bamboo/build_release_package.sh
 ```
-
 
 ## Adding a new page
 

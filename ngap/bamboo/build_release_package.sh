@@ -13,10 +13,10 @@ cp -R /source /build
   mkdir release
   mkdir release/html
   cp -R dist release/html/dashboard
-  cp ngap_deployment/Dockerfile release/Dockerfile
-  cp ngap_deployment/nginx.conf release/nginx.conf
-  cp ngap_deployment/Procfile release/Procfile
-  cp ngap_deployment/run_web.sh release/run_web.sh
+  cp ngap/deployment/Dockerfile release/Dockerfile
+  cp ngap/deployment/nginx.conf release/nginx.conf
+  cp ngap/deployment/Procfile release/Procfile
+  cp ngap/deployment/run_web.sh release/run_web.sh
 
   tar -cf /artifacts/release.tar -C release .
 )
