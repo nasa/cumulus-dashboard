@@ -6,4 +6,4 @@ node_modules
 dist
 app/scripts/config/local.js
 gulp-cache
-/release.tar
+/artifacts
