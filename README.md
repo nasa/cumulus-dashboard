@@ -24,6 +24,51 @@ npm install
 npm run serve
 ```
 
+## Deploying in Bamboo
+
+### Build modules package
+
+```(bash)
+mkdir -p artifacts
+docker run \
+  -e RELEASE_UID=$(id -u) \
+  -e RELEASE_GID=$(id -g) \
+  --rm \
+  -v "$(pwd):/source:ro" \
+  -v "$(pwd)/artifacts:/artifacts" \
+  node \
+  /source/ngap/bamboo/build_modules_package.sh
+```
+
+### Run tests
+
+```(bash)
+tar -xf modules.tar
+mkdir -p artifacts
+docker run \
+  -e RELEASE_UID=$(id -u) \
+  -e RELEASE_GID=$(id -g) \
+  --rm \
+  -v "$(pwd):/source:ro" \
+  -v "$(pwd)/artifacts:/artifacts" \
+  node \
+  /source/ngap/bamboo/run_tests.sh
+```
+
+### Build release package
+
+```(bash)
+mkdir -p artifacts
+docker run \
+  -e RELEASE_UID=$(id -u) \
+  -e RELEASE_GID=$(id -g) \
+  --rm \
+  -v "$(pwd):/source:ro" \
+  -v "$(pwd)/artifacts:/artifacts" \
+  node \
+  /source/ngap/bamboo/build_release_package.sh
+```
+
 ## Adding a new page
 
 ### 1. Create the component
