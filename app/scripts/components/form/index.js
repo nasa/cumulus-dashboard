@@ -43,6 +43,7 @@ export const Form = React.createClass({
   getInitialState: function () {
     return {
       inputs: {},
+      dirty: {},
       errors: []
     };
   },
@@ -84,10 +85,16 @@ export const Form = React.createClass({
   },
 
   onChange: function (inputId, value) {
+    // update the internal key/value store, in addition to marking as dirty
     const inputState = Object.assign({}, this.state.inputs);
     set(inputState, [inputId, 'value'], value);
+
+    const markedDirty = Object.assign({}, this.state.dirty);
+    markedDirty[inputId] = true;
+
     this.setState(Object.assign({}, this.state, {
-      inputs: inputState
+      inputs: inputState,
+      dirty: markedDirty
     }));
   },
 
@@ -126,6 +133,13 @@ export const Form = React.createClass({
         return set(inputState, [inputId, 'error'], error);
       } else if (inputState[inputId].error) {
         delete inputState[inputId].error;
+      }
+
+      // don't set a value for passwords that haven't changed,
+      // since these are garbled and encrypted.
+      const markedDirty = this.state.dirty[inputId];
+      if (!markedDirty && input.isPassword) {
+        return;
       }
 
       // Ignore empty fields that aren't required
@@ -196,6 +210,8 @@ export const Form = React.createClass({
             const mode = type === formTypes.textArea && form.mode || null;
             // subforms have fieldsets that define child form structure
             const fieldSet = type === formTypes.subform && form.fieldSet || null;
+            // text forms can be type=password
+            const textType = (type === formTypes.text && form.isPassword) ? 'password' : null;
             const elem = React.createElement(element, {
               id: inputId,
               label,
@@ -204,6 +220,7 @@ export const Form = React.createClass({
               mode,
               options,
               fieldSet,
+              type: textType,
               onChange: this.onChange
             });
             return <li className='form__item' key={inputId}>{elem}</li>;
