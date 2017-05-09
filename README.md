@@ -2,6 +2,11 @@
 
 Code to generate and deploy the dashboard for the Cumulus API.
 
+## Documentation
+
+- [Usage](https://github.com/cumulus-nasa/cumulus-dashboard/blob/develop/USAGE.md)
+- [Technical documentation on tables](https://github.com/cumulus-nasa/cumulus-dashboard/blob/develop/TABLES.md)
+
 ## Wireframes and mocks
 
 - [Designs](https://www.dropbox.com/sh/zotoy2nuozizufz/AAAiOpbAv2Gp0BU-HIu5aILra?dl=0)
@@ -17,6 +22,51 @@ cd cumulus-dashboard
 nvm use
 npm install
 npm run serve
+```
+
+## Deploying in Bamboo
+
+### Build modules package
+
+```(bash)
+mkdir -p artifacts
+docker run \
+  -e RELEASE_UID=$(id -u) \
+  -e RELEASE_GID=$(id -g) \
+  --rm \
+  -v "$(pwd):/source:ro" \
+  -v "$(pwd)/artifacts:/artifacts" \
+  node \
+  /source/ngap/bamboo/build_modules_package.sh
+```
+
+### Run tests
+
+```(bash)
+tar -xf modules.tar
+mkdir -p artifacts
+docker run \
+  -e RELEASE_UID=$(id -u) \
+  -e RELEASE_GID=$(id -g) \
+  --rm \
+  -v "$(pwd):/source:ro" \
+  -v "$(pwd)/artifacts:/artifacts" \
+  node \
+  /source/ngap/bamboo/run_tests.sh
+```
+
+### Build release package
+
+```(bash)
+mkdir -p artifacts
+docker run \
+  -e RELEASE_UID=$(id -u) \
+  -e RELEASE_GID=$(id -g) \
+  --rm \
+  -v "$(pwd):/source:ro" \
+  -v "$(pwd)/artifacts:/artifacts" \
+  node \
+  /source/ngap/bamboo/build_release_package.sh
 ```
 
 ## Adding a new page

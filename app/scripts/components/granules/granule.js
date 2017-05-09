@@ -147,10 +147,9 @@ var GranuleOverview = React.createClass({
       ['Ingest', 'ingesting'],
       ['Processing', 'processing'],
       ['Pushed to CMR', 'cmr'],
-      ['Archiving', 'archiving']
+      ['Archiving', 'archiving'],
+      ['Complete', 'completed']
     ];
-    if (status === 'failed') statusList.push(['Failed', 'failed']);
-    else statusList.push(['Complete', 'completed']);
     const indicatorClass = 'progress-bar__indicator progress-bar__indicator--' + status;
     const statusBarClass = 'progress-bar__progress progress-bar__progress--' + status;
     return (

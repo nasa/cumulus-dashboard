@@ -97,6 +97,7 @@ function textfield (config, property, validate) {
   config.type = formTypes.text;
   config.validate = validate;
   config.error = validate && get(errors, property, errors.required);
+  if (property === 'password') config.isPassword = true;
   return config;
 }
 
