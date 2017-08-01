@@ -5,10 +5,7 @@ import { tally } from '../../utils/format';
 
 // defines the order in which the granules meta bar appears
 const granuleMeta = [
-  ['ingesting', 'Ingesting'],
   ['processing', 'Processing'],
-  ['cmr', 'Updating CMR'],
-  ['archive', 'Archiving'],
   ['completed', 'Completed'],
   ['failed', 'Failed']
 ];
