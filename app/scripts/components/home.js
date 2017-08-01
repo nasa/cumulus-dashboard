@@ -8,7 +8,7 @@ import {
   interval,
   getStats,
   getCount,
-  listPdrs,
+  listGranules,
   getResources,
   queryHistogram,
   getRecentGranules
@@ -18,7 +18,11 @@ import LoadingEllipsis from './app/loading-ellipsis';
 import List from './table/list-view';
 import Histogram from './chart/histogram';
 import GranulesProgress from './granules/progress';
-import { tableHeader, tableRow, tableSortProps } from '../utils/table-config/pdr-progress';
+import {
+  tableHeader,
+  tableRow,
+  tableSortProps
+} from '../utils/table-config/granules';
 import serialize from '../utils/serialize-config';
 import { recent, updateInterval } from '../config';
 
@@ -131,13 +135,12 @@ var Home = React.createClass({
   generateQuery: function () {
     return {
       updatedAt__from: recent,
-      limit: 10
+      limit: 30
     };
   },
 
   render: function () {
-    const { list } = this.props.pdrs;
-    const { recent } = this.props.granules;
+    const { list, recent } = this.props.granules;
     const { stats, count, resources, histogram } = this.props.stats;
     const overview = [
       [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
@@ -193,19 +196,19 @@ var Home = React.createClass({
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium'>Recently Active PDR's</h2>
+                <h2 className='heading--medium'>Recently Active Granules's</h2>
               </div>
               <List
                 list={list}
                 dispatch={this.props.dispatch}
-                action={listPdrs}
+                action={listGranules}
                 tableHeader={tableHeader}
-                sortIdx={5}
+                sortIdx={6}
                 tableRow={tableRow}
                 tableSortProps={tableSortProps}
                 query={this.generateQuery()}
               />
-              <Link className='link--secondary link--learn-more' to='/pdrs'>View PDR Overview</Link>
+              <Link className='link--secondary link--learn-more' to='/granules'>View Granules Overview</Link>
             </div>
           </section>
           <section className='page__section'>
