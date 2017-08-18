@@ -16,4 +16,15 @@ if (process.env.DS_ENV === 'staging') {
 
 assert(typeof config.apiRoot, 'string');
 
+// Set the deployment target.
+// Allows variable construction of dashboard depending on target.
+const target = (process.env.DS_TARGET || 'cumulus').toUpperCase();
+
+// Modules and UI pieces to exclude
+const EXCLUDE_NAV_PDRS = { nav: { '/pdrs': true } };
+const exclude = {
+  PODAAC: EXCLUDE_NAV_PDRS
+}[target] || {};
+
+config = Object.assign(config, { exclude });
 module.exports = config;

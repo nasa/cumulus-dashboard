@@ -1,11 +1,12 @@
 'use strict';
 import React from 'react';
 import { Link } from 'react-router';
+import { get } from 'object-path';
 import { logout } from '../../actions';
-import { graphicsPath } from '../../config';
+import { graphicsPath, exclude } from '../../config';
 import { window } from '../../utils/browser';
 
-const meta = require('../../mock/meta.json');
+const excludeNav = get(exclude, 'nav', {});
 
 const paths = [
   ['PDRs', '/pdrs'],
@@ -38,7 +39,7 @@ var Header = React.createClass({
 
   render: function () {
     const { authenticated } = this.props.api;
-    const activePaths = paths.filter(pathObj => !meta.nav.exclude[pathObj[1]]);
+    const activePaths = paths.filter(pathObj => !excludeNav[pathObj[1]]);
     return (
       <div className='header'>
         <div className='row'>
