@@ -125,6 +125,9 @@ a:active {
       width: 165px;
     }
   }
+  nav ul {
+    display: flex;
+  }
   nav li {
     padding: 1.3em 0 1em;
     display: inline-block;
@@ -143,10 +146,20 @@ a:active {
       }
     }
     &.rightalign {
-      float: right;
+      margin-left: auto;
     }
   }
 }
+
+.nav__order-0 { order: 0 };
+.nav__order-1 { order: 1 };
+.nav__order-2 { order: 2 };
+.nav__order-3 { order: 3 };
+.nav__order-4 { order: 4 };
+.nav__order-5 { order: 5 };
+.nav__order-6 { order: 6 };
+.nav__order-7 { order: 7 };
+.nav__order-8 { order: 8 };
 
 .content__header {
   background-color: $ocean-blue;
