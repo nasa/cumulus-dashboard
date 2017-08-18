@@ -1,7 +1,0 @@
-{
-  "nav": {
-    "exclude": {
-      "/pdrs": true
-    }
-  }
-}
