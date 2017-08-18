@@ -1,3 +1,7 @@
+.form__element__clickable {
+  cursor: pointer;
+}
+
 input, textarea, select, .form__element__select {
   border: 1px solid $lightest-grey;
   background-color: #fff;
@@ -152,15 +156,39 @@ select {
 
 .form__element__updateToggle {
   float: right;
-  cursor: pointer;
   margin-top: -6px;
-  text-align: right;
-  span {
+  position: relative;
+  .form-group__updating, .metadata__updated {
     display: block;
   }
+  .metadata__updated {
+    padding-top: 18px;
+    padding-right: 4px;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
   .form-group__updating {
+    position: absolute;
+    left: 14px;
     font-weight: $base-font-semibold;
     font-size: .86em;
+  }
+}
+
+.form__element__refresh {
+  position: absolute;
+  left: -2px;
+  top: 2px;
+  display: inline-block;
+  background-image: url(#{$graphics}/layout/refresh.svg);
+  width: 12px;
+  height: 12px;
+  background-size: 12px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  &:hover {
+    transform: rotate(0.1turn);
   }
 }
 

@@ -77,11 +77,12 @@ const Timer = React.createClass({
   render: function () {
     const { seconds } = this.state;
     return (
-      <div className={this.parentClass()} onClick={this.toggle}>
+      <div className={this.parentClass()}>
+        <span className='form__element__refresh' onClick={() => this.createTimer(this.props.config)}></span>
         <span className='form-group__updating'>
           Next update in: { seconds === -1 ? '-' : seconds }
         </span>
-        <span className='metadata__updated'>
+        <span className='metadata__updated form__element__clickable' onClick={this.toggle}>
           {seconds === -1 ? 'Start automatic updates' : 'Stop automatic updates'}
         </span>
       </div>
