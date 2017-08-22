@@ -11,7 +11,7 @@ import {
   deleteGranule
 } from '../../actions';
 import { get } from 'object-path';
-import { fullDate, lastUpdated, seconds, nullValue, bool } from '../../utils/format';
+import { fullDate, lastUpdated, seconds, nullValue, bool, collectionLink } from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
@@ -39,32 +39,12 @@ const tableRow = [
 
 const metaAccessors = [
   ['PDR Name', 'pdrName', (d) => d ? <Link to={`pdrs/pdr/${d}`}>{d}</Link> : nullValue],
-  ['Collection', 'collectionName', (d) => d ? <Link to={`collections/collection/${d}`}>{d}</Link> : nullValue],
+  ['Collection', 'collectionId', collectionLink],
   ['Provider', 'provider', (d) => d ? <Link to={`providers/provider/${d}`}>{d}</Link> : nullValue],
   ['CMR Link', 'cmrLink', (d) => d ? <a href={d}>Link</a> : nullValue],
   ['Published', 'published', bool],
   ['Duplicate', 'hasDuplicate', bool],
-
-  ['Created', 'createdAt', fullDate],
-  ['Last updated', 'updatedAt', fullDate],
-
-  ['Ingested started', 'ingestStartedAt', fullDate],
-  ['Ingest ended', 'ingestEndedAt', fullDate],
-
-  ['CMR push started', 'timeline.pushToCMR.startedAt', fullDate],
-  ['CMR push ended', 'timeline.pushToCMR.endedAt', fullDate],
-
-  ['Archive started', 'timeline.archive.startedAt', fullDate],
-  ['Archive ended', 'timeline.archive.endedAt', fullDate],
-
-  ['Processing started', 'timeline.processStep.startedAt', fullDate],
-  ['Processing ended', 'timeline.processStep.endedAt', fullDate],
-
-  ['Ingest duration', 'ingestDuration', seconds],
-  ['CMR Duration', 'pushToCMRDuration', seconds],
-  ['Archive duration', 'archiveDuration', seconds],
-  ['Processing duration', 'processingDuration', seconds],
-  ['Total duration', 'totalDuration', seconds]
+  ['Total duration', 'duration', seconds]
 ];
 
 const granuleErrors = {
@@ -109,11 +89,6 @@ var GranuleOverview = React.createClass({
   navigateBack: function () {
     const { router } = this.props;
     router.push('/granules');
-  },
-
-  reprocess: function () {
-    const { granuleId } = this.props.params;
-    this.props.dispatch(reprocessGranule(granuleId));
   },
 
   reingest: function () {
@@ -193,11 +168,6 @@ var GranuleOverview = React.createClass({
     const errors = this.errors();
     const granuleError = granule.error;
     const dropdownConfig = [{
-      text: 'Reprocess',
-      action: this.reprocess,
-      status: get(this.props.granules.reprocessed, [granuleId, 'status']),
-      success: this.fastReload
-    }, {
       text: 'Reingest',
       action: this.reingest,
       status: get(this.props.granules.reingested, [granuleId, 'status']),
