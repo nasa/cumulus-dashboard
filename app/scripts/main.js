@@ -82,8 +82,8 @@ render((
         <Route path='collections' component={Collections}>
           <Route path='all' component={CollectionList} />
           <Route path='add' component={AddCollection} />
-          <Route path='edit/:collectionName' component={EditCollection} />
-          <Route path='collection/:collectionName' component={CollectionOverview} />
+          <Route path='edit/:collectionName/:collectionVersion' component={EditCollection} />
+          <Route path='collection/:collectionName/:collectionVersion' component={CollectionOverview} />
           <Route path='collection/:collectionName/granules' component={CollectionGranules} />
           <Route path='collection/:collectionName/ingest' component={CollectionIngest} />
           <Route path='collection/:collectionName/logs' component={CollectionLogs} />
