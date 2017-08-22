@@ -64,7 +64,7 @@ var AllGranules = React.createClass({
   render: function () {
     const { list, dropdowns } = this.props.granules;
     const { count, queriedAt } = list.meta;
-    const logsQuery = { 'meta.granuleId__exists': 'true' };
+    const logsQuery = { 'granuleId__exists': 'true' };
     const view = this.getView();
     const statOptions = (view === 'completed' || view === 'failed') ? null
       : view === 'processing' ? processingOptions
