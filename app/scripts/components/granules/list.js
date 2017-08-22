@@ -86,7 +86,7 @@ var AllGranules = React.createClass({
               options={get(dropdowns, ['collectionName', 'options'])}
               action={filterGranules}
               clear={clearGranulesFilter}
-              paramKey={'collectionName'}
+              paramKey={'collectionId'}
               label={'Collection'}
             />
             {statOptions ? (

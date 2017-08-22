@@ -176,8 +176,9 @@ export default function reducer (state = initialState, action) {
     case OPTIONS_COLLECTIONNAME:
       // Map the list response to an object with key-value pairs like:
       // displayValue: optionElementValue
-      const options = data.results.reduce((obj, coll) => {
-        obj[coll.collectionName] = coll.collectionName;
+      const options = data.results.reduce((obj, d) => {
+        const { name, version } = d;
+        obj[`${name} ${version}`] = `${name}___${version}`;
         return obj;
       }, {'': ''});
       set(state, ['dropdowns', 'collectionName', 'options'], options);

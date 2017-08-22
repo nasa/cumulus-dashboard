@@ -239,7 +239,7 @@ export const clearGranulesFilter = (paramKey) => ({ type: CLEAR_GRANULES_FILTER,
 
 export const getOptionsCollectionName = () => wrapRequest(null, get, {
   url: url.resolve(root, 'collections'),
-  qs: { limit: 100, fields: 'collectionName' }
+  qs: { limit: 100, fields: 'name,version' }
 }, OPTIONS_COLLECTIONNAME);
 
 export const getStats = (options) => wrapRequest(null, get, {
