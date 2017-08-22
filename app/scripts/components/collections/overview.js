@@ -137,7 +137,7 @@ var CollectionOverview = React.createClass({
             bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}
           />
-          <Link className='link--secondary link--learn-more' to={`/collections/collection/${collectionName}/granules`}>View All Granules</Link>
+          <Link className='link--secondary link--learn-more' to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}>View All Granules</Link>
         </section>
       </div>
     );
