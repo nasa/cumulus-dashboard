@@ -123,3 +123,18 @@ export const truncate = function (string, to) {
   if (string.length <= to) return string;
   else return string.slice(0, to) + '...';
 };
+
+// "MYD13A1___006" => "MYD13A1 006"
+export const collectionName = function (string) {
+  if (!string) return nullValue;
+  return string.split('___').join(' ');
+};
+
+export const collectionLink = function (collectionId) {
+  if (!collectionId) return nullValue;
+  const split = collectionId.split('___');
+  if (split.length !== 2) return nullValue;
+  const name = split[0];
+  const version = split[1];
+  return <Link to={`/collections/collection/${name}/${version}`}>{collectionName(collectionId)}</Link>;
+};
