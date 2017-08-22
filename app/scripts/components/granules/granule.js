@@ -5,13 +5,19 @@ import { connect } from 'react-redux';
 import {
   interval,
   getGranule,
-  reprocessGranule,
   reingestGranule,
   removeGranule,
   deleteGranule
 } from '../../actions';
 import { get } from 'object-path';
-import { fullDate, lastUpdated, seconds, nullValue, bool, collectionLink } from '../../utils/format';
+import {
+  displayCase,
+  lastUpdated,
+  seconds,
+  nullValue,
+  bool,
+  collectionLink
+} from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
@@ -38,6 +44,7 @@ const tableRow = [
 ];
 
 const metaAccessors = [
+  ['Status', 'status', displayCase],
   ['PDR Name', 'pdrName', (d) => d ? <Link to={`pdrs/pdr/${d}`}>{d}</Link> : nullValue],
   ['Collection', 'collectionId', collectionLink],
   ['Provider', 'provider', (d) => d ? <Link to={`providers/provider/${d}`}>{d}</Link> : nullValue],
@@ -117,41 +124,6 @@ var GranuleOverview = React.createClass({
     ].filter(Boolean);
   },
 
-  renderStatus: function (status) {
-    const statusList = [
-      ['Ingest', 'ingesting'],
-      ['Processing', 'processing'],
-      ['Pushed to CMR', 'cmr'],
-      ['Archiving', 'archiving'],
-      ['Complete', 'completed']
-    ];
-    const indicatorClass = 'progress-bar__indicator progress-bar__indicator--' + status;
-    const statusBarClass = 'progress-bar__progress progress-bar__progress--' + status;
-    return (
-      <div className='page__section--subsection page__section__granule--progress'>
-        <div className='progress-bar'>
-          <div className={statusBarClass}></div>
-
-          <div className={indicatorClass}>
-            <div className='pulse'>
-              <div className='pulse__dot'></div>
-              <div className=''></div>
-            </div>
-          </div>
-
-        </div>
-        <ol>
-          {statusList.map(d => (
-            <li
-              className={ d[1] === status ? 'progress-bar__active' : ''}
-              key={d[1]}>{d[0]}</li>
-          ))}
-        </ol>
-      </div>
-
-    );
-  },
-
   render: function () {
     const granuleId = this.props.params.granuleId;
     const record = this.props.granules.map[granuleId];
@@ -192,8 +164,7 @@ var GranuleOverview = React.createClass({
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>{granuleId}</h1>
           <AsyncCommands config={dropdownConfig} />
-          {lastUpdated(granule.queriedAt)}
-          {this.renderStatus(granule.status)}
+          {lastUpdated(granule.timestamp)}
           {granuleError ? <ErrorReport report={granuleError} /> : null}
           {granuleErrorType ? <ErrorReport report={granuleErrorType} /> : null}
         </section>
