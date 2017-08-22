@@ -10,6 +10,7 @@ export const tableHeader = [
   'Version',
   'Granules',
   'Completed',
+  'Running',
   'Failed',
   'Duration',
   'Timestamp'
@@ -18,9 +19,10 @@ export const tableHeader = [
 export const tableRow = [
   (d) => <Link to={`/collections/collection/${d.name}/${d.version}`}>{d.name}</Link>,
   'version',
-  (d) => tally(get(d, 'stats.properties.total')),
-  (d) => tally(get(d, 'stats.properties.completed')),
-  (d) => tally(get(d, 'stats.properties.failed')),
+  (d) => tally(get(d, 'stats.total')),
+  (d) => tally(get(d, 'stats.completed')),
+  (d) => tally(get(d, 'stats.running')),
+  (d) => tally(get(d, 'stats.failed')),
   (d) => seconds(d.duration),
   (d) => fullDate(d.timestamp)
 ];
@@ -28,6 +30,7 @@ export const tableRow = [
 export const tableSortProps = [
   'name',
   'version',
+  null,
   null,
   null,
   null,

@@ -75,9 +75,9 @@ var CollectionOverview = React.createClass({
 
   renderOverview: function (record) {
     const data = get(record, 'data', {});
-    const stats = get(data, 'stats.properties', {});
+    const stats = get(data, 'stats', {});
     const overview = [
-      [tally(stats.processing), 'Granules Running'],
+      [tally(stats.running), 'Granules Running'],
       [tally(stats.completed), 'Granules Completed'],
       [tally(stats.failed), 'Granules Failed'],
       [seconds(data.duration), 'Average Processing Time']
