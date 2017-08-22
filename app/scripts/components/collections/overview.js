@@ -13,7 +13,7 @@ import ErrorReport from '../errors/report';
 import List from '../table/list-view';
 import Overview from '../app/overview';
 import AsyncCommand from '../form/async-command';
-import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
+import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
 import { updateDelay } from '../../config';
 
 const granuleFields = 'status,granuleId,pdrName,duration,updatedAt';
@@ -53,11 +53,6 @@ var CollectionOverview = React.createClass({
       fields: granuleFields,
       status__not: 'completed,failed'
     };
-  },
-
-  generateBulkActions: function () {
-    const { granules } = this.props;
-    return bulkActions(granules);
   },
 
   delete: function () {
@@ -132,7 +127,6 @@ var CollectionOverview = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
-            bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}
           />
           <Link className='link--secondary link--learn-more' to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}>View All Granules</Link>
