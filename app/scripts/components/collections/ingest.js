@@ -4,9 +4,8 @@ import { Link } from 'react-router';
 import Ace from 'react-ace';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import omit from 'lodash.omit';
 import { getCollection } from '../../actions';
-import { fullDate, lastUpdated, nullValue } from '../../utils/format';
+import { lastUpdated, nullValue } from '../../utils/format';
 import config from '../../config';
 import Loading from '../app/loading-indicator';
 
@@ -89,7 +88,6 @@ var CollectionIngest = React.createClass({
   },
 
   renderList: function (data) {
-    const granuleDefinition = get(data, 'granuleDefinition', {});
     const ingest = get(data, 'ingest', {});
     const recipe = get(data, 'recipe', {});
 
