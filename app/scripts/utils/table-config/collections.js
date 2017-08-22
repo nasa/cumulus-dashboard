@@ -16,22 +16,22 @@ export const tableHeader = [
 ];
 
 export const tableRow = [
-  (d) => <Link to={`/collections/collection/${d.collectionName}`}>{d.collectionName}</Link>,
+  (d) => <Link to={`/collections/collection/${d.name}/${d.version}`}>{d.name}</Link>,
+  (d) => tally(d.version),
   (d) => tally(d.granules),
   (d) => tally(get(d, 'granulesStatus.completed')),
   (d) => tally(get(d, 'granulesStatus.failed')),
   (d) => seconds(d.averageDuration),
-  (d) => fullDate(d.createdAt),
   (d) => fullDate(d.updatedAt)
 ];
 
 export const tableSortProps = [
-  'collectionName.keyword',
+  'name',
+  null,
   'granules',
   null,
   null,
   'averageDuration',
-  'createdAt',
   'updatedAt'
 ];
 
