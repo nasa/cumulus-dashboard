@@ -33,22 +33,23 @@ var CollectionOverview = React.createClass({
     this.load();
   },
 
-  componentWillReceiveProps: function (newProps) {
-    if (newProps.params.collectionName !== this.props.params.collectionName) {
+  componentWillReceiveProps: function ({ params }) {
+    const { collectionName, collectionVersion } = params;
+    if (collectionName !== this.props.params.collectionName ||
+       collectionVersion !== this.props.params.collectionVersion) {
       this.load();
     }
   },
 
   load: function () {
-    const name = this.props.params.collectionName;
-    const version = this.props.params.collectionVersion;
-    this.props.dispatch(getCollection(name, version));
+    const { collectionName, collectionVersion } = this.props.params;
+    this.props.dispatch(getCollection(collectionName, collectionVersion));
   },
 
   generateQuery: function () {
-    const collectionName = this.props.params.collectionName;
+    const { collectionName, collectionVersion } = this.props.params;
     return {
-      collectionName,
+      collectionId: `${collectionName}___${collectionVersion}`,
       fields: granuleFields,
       status__not: 'completed,failed'
     };
@@ -79,21 +80,18 @@ var CollectionOverview = React.createClass({
 
   renderOverview: function (record) {
     const data = get(record, 'data', {});
-    const granules = get(data, 'granulesStatus', {});
+    const stats = get(data, 'stats.properties', {});
     const overview = [
-      [seconds(data.averageDuration), 'Average Processing Time'],
-      [tally(data.granules), 'Total Granules'],
-      [tally(granules.ingesting), 'Granules Ingesting'],
-      [tally(granules.processing), 'Granules Processing'],
-      [tally(granules.cmr), 'Granules Pushed to CMR'],
-      [tally(granules.archiving), 'Granules Archiving']
+      [tally(stats.processing), 'Granules Running'],
+      [tally(stats.completed), 'Granules Completed'],
+      [tally(stats.failed), 'Granules Failed'],
+      [seconds(data.duration), 'Average Processing Time']
     ];
     return <Overview items={overview} inflight={record.inflight} />;
   },
 
   render: function () {
-    const collectionName = this.props.params.collectionName;
-    const collectionVersion = this.props.params.collectionVersion;
+    const { collectionName, collectionVersion } = this.props.params;
     const { granules, collections } = this.props;
     const record = collections.map[collectionName];
     const { list } = granules;
@@ -118,7 +116,7 @@ var CollectionOverview = React.createClass({
             text={deleteStatus === 'success' ? 'Success!' : 'Delete' } />
 
           <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
-          {lastUpdated(meta.queriedAt)}
+          {lastUpdated(get(record, 'data.timestamp'))}
           {overview}
           {errors.length ? errors.map((error, i) => <ErrorReport key={i} report={error} />) : null}
         </section>

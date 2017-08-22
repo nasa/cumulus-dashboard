@@ -9,7 +9,7 @@ const singleCollectionRoutes = [
   ['Back to Collections', null, 'sidebar__nav--back'],
   ['Overview', 'collection/:collectionName/:collectionVersion'],
   ['Granules', 'collection/:collectionName/:collectionVersion/granules'],
-  ['JSON', 'collection/:collectionName/:collectionVersion/ingest'],
+  ['Definition', 'collection/:collectionName/:collectionVersion/definition'],
   ['Logs', 'collection/:collectionName/:collectionVersion/logs']
 ];
 
