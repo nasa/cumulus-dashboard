@@ -172,8 +172,8 @@ export const interval = function (action, wait, immediate) {
   return () => clearInterval(intervalId);
 };
 
-export const getCollection = (collectionName) => wrapRequest(
-  collectionName, get, `collections?collectionName=${collectionName}`, COLLECTION);
+export const getCollection = (name, version) => wrapRequest(
+  name, get, `collections?name=${name}&version=${version}`, COLLECTION);
 
 export const listCollections = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'collections'),
