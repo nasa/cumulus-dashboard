@@ -5,14 +5,11 @@ import moment from 'moment';
 import {
   listCollections,
   searchCollections,
-  clearCollectionsSearch,
-  filterCollections,
-  clearCollectionsFilter
+  clearCollectionsSearch
 } from '../../actions';
 import { collectionSearchResult, lastUpdated, tally } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/collections';
 import Search from '../form/search';
-import Dropdown from '../form/dropdown';
 import List from '../table/list-view';
 
 var CollectionList = React.createClass({
@@ -52,22 +49,6 @@ var CollectionList = React.createClass({
             {lastUpdated(queriedAt)}
           </div>
           <div className='filters'>
-            <Dropdown
-              dispatch={this.props.dispatch}
-              options={this.timeOptions}
-              action={filterCollections}
-              clear={clearCollectionsFilter}
-              paramKey={'createdAt__from'}
-              label={'Starting'}
-            />
-            <Dropdown
-              dispatch={this.props.dispatch}
-              options={this.timeOptions}
-              action={filterCollections}
-              clear={clearCollectionsFilter}
-              paramKey={'createdAt__to'}
-              label={'Ending'}
-            />
             <Search dispatch={this.props.dispatch}
               action={searchCollections}
               format={collectionSearchResult}
