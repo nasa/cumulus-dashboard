@@ -40,8 +40,9 @@ var CollectionOverview = React.createClass({
   },
 
   load: function () {
-    const collectionName = this.props.params.collectionName;
-    this.props.dispatch(getCollection(collectionName));
+    const name = this.props.params.collectionName;
+    const version = this.props.params.collectionVersion;
+    this.props.dispatch(getCollection(name, version));
   },
 
   generateQuery: function () {
@@ -92,6 +93,7 @@ var CollectionOverview = React.createClass({
 
   render: function () {
     const collectionName = this.props.params.collectionName;
+    const collectionVersion = this.props.params.collectionVersion;
     const { granules, collections } = this.props;
     const record = collections.map[collectionName];
     const { list } = granules;
@@ -105,7 +107,7 @@ var CollectionOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>{collectionName}</h1>
+          <h1 className='heading--large heading--shared-content with-description'>{collectionName} / {collectionVersion}</h1>
 
           <AsyncCommand action={this.delete}
             success={this.navigateBack}
@@ -115,7 +117,7 @@ var CollectionOverview = React.createClass({
             className={'form-group__element--right'}
             text={deleteStatus === 'success' ? 'Success!' : 'Delete' } />
 
-          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
+          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
           {lastUpdated(meta.queriedAt)}
           {overview}
           {errors.length ? errors.map((error, i) => <ErrorReport key={i} report={error} />) : null}
