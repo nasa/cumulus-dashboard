@@ -30,11 +30,11 @@ export const tableRow = [
 ];
 
 export const tableSortProps = [
-  'granuleId.keyword',
-  'status.keyword',
+  'granuleId',
+  'status',
   'published',
-  'pdrName.keyword',
-  'collectionName.keyword',
+  'pdrName',
+  'collectionId',
   'duration',
   'updatedAt'
 ];

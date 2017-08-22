@@ -14,7 +14,7 @@ export const tableHeader = [
 ];
 
 export const tableRow = [
-  (d) => <Link to={`providers/provider/${d.name}`}>{d.name}</Link>,
+  (d) => <Link to={`providers/provider/${d.id}`}>{d.id}</Link>,
   'providerName',
   'status',
   'collections',
@@ -23,7 +23,7 @@ export const tableRow = [
 ];
 
 export const tableSortProps = [
-  'name.keyword',
+  'id',
   'providerName.keyword',
   'status.keyword',
   null,
