@@ -7,14 +7,13 @@ const processing = queryStatus.filter(d => d !== 'failed' && d !== 'completed');
 const granuleRoutes = [
   ['All Granules', null],
   ['Completed', 'completed', (d) => d.key === 'completed'],
-  ['Processing', 'processing', (d) => processing.indexOf(d.key) >= 0],
+  ['Running', 'processing', (d) => processing.indexOf(d.key) >= 0],
   ['Failed', 'failed', (d) => d.key === 'failed']
 ];
 
 const singleGranuleRoutes = [
   ['Back to Granules', null, 'sidebar__nav--back'],
-  ['Overview', 'granule/:granuleId/overview'],
-  ['Ingest & Recipe', 'granule/:granuleId/recipe-ingest']
+  ['Overview', 'granule/:granuleId/overview']
 ];
 
 const empty = [['', '']];

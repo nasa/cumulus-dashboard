@@ -1,9 +1,8 @@
 'use strict';
 import React from 'react';
 import { Link } from 'react-router';
-import { fullDate, seconds, bool, nullValue } from '../format';
+import { fullDate, seconds, bool, nullValue, collectionLink } from '../format';
 import {
-  reprocessGranule,
   reingestGranule,
   removeGranule,
   deleteGranule
@@ -13,8 +12,8 @@ export const tableHeader = [
   'Name',
   'Status',
   'Published',
-  'PDR',
   'Collection',
+  'Execution',
   'Duration',
   'Updated'
 ];
@@ -22,19 +21,19 @@ export const tableHeader = [
 export const tableRow = [
   (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
   'status',
-  (d) => bool(d.published),
-  'pdrName',
-  'collectionName',
+  (d) => d.cmrLink ? <a href={d.cmrLink}>{bool(d.published)}</a> : bool(d.published),
+  (d) => collectionLink(d.collectionId),
+  (d) => <a href={d.execution}>Link</a>,
   (d) => seconds(d.duration),
-  (d) => fullDate(d.updatedAt)
+  (d) => fullDate(d.timestamp)
 ];
 
 export const tableSortProps = [
-  'granuleId.keyword',
-  'status.keyword',
+  'granuleId',
+  'status',
   'published',
-  'pdrName.keyword',
-  'collectionName.keyword',
+  'collectionId',
+  null,
   'duration',
   'updatedAt'
 ];
@@ -60,17 +59,11 @@ export const errorTableSortProps = [
   'updatedAt'
 ];
 
-const confirmReprocess = (d) => `Reprocess ${d} granule(s)?`;
 const confirmReingest = (d) => `Reingest ${d} granules(s)? Note, completed granules cannot be reingested.`;
 const confirmRemove = (d) => `Remove ${d} granule(s) from CMR?`;
 const confirmDelete = (d) => `Delete ${d} granule(s)?`;
 export const bulkActions = function (granules) {
   return [{
-    text: 'Reprocess',
-    action: reprocessGranule,
-    state: granules.reprocessed,
-    confirm: confirmReprocess
-  }, {
     text: 'Reingest',
     action: reingestGranule,
     state: granules.reingested,

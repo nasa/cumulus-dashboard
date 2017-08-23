@@ -4,9 +4,8 @@ import { Link } from 'react-router';
 import Ace from 'react-ace';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import omit from 'lodash.omit';
 import { getCollection } from '../../actions';
-import { fullDate, lastUpdated, nullValue } from '../../utils/format';
+import { lastUpdated, nullValue } from '../../utils/format';
 import config from '../../config';
 import Loading from '../app/loading-indicator';
 
@@ -27,18 +26,19 @@ var CollectionIngest = React.createClass({
 
   componentWillReceiveProps: function (props) {
     const collectionName = props.params.collectionName;
+    const collectionVersion = props.params.collectionVersion;
     const record = this.props.collections.map[collectionName];
     if (!record) {
-      this.get(collectionName);
+      this.get(collectionName, collectionVersion);
     }
   },
 
   componentWillMount: function () {
-    this.get(this.props.params.collectionName);
+    this.get(this.props.params.collectionName, this.props.params.collectionVersion);
   },
 
-  get: function (collectionName) {
-    this.props.dispatch(getCollection(collectionName));
+  get: function (name, version) {
+    this.props.dispatch(getCollection(name, version));
   },
 
   renderReadOnlyJson: function (name, data) {
@@ -54,7 +54,7 @@ var CollectionIngest = React.createClass({
         tabSize={config.tabSize}
         showPrintMargin={false}
         minLines={1}
-        maxLines={12}
+        maxLines={35}
         wrapEnabled={true}
       />
     );
@@ -76,8 +76,6 @@ var CollectionIngest = React.createClass({
         </section>
         <section className='page__section'>
           <div className='tab--wrapper'>
-            <button className={'button--tab ' + (this.state.view === 'list' ? 'button--active' : '')}
-              onClick={() => this.state.view !== 'list' && this.setState({ view: 'list' })}>List View</button>
             <button className={'button--tab ' + (this.state.view === 'json' ? 'button--active' : '')}
               onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}>JSON View</button>
           </div>
@@ -90,46 +88,11 @@ var CollectionIngest = React.createClass({
   },
 
   renderList: function (data) {
-    const granuleDefinition = get(data, 'granuleDefinition', {});
     const ingest = get(data, 'ingest', {});
     const recipe = get(data, 'recipe', {});
 
     return (
       <div className='list-view'>
-        <section className='page__section--small'>
-          <dl>
-            <dt>Collection Name</dt>
-            <dd>{data.collectionName}</dd>
-
-            <dt>Created at</dt>
-            <dd>{fullDate(data.createdAt)}</dd>
-
-            <dt>Updated at</dt>
-            <dd>{fullDate(data.updatedAt)}</dd>
-
-            <dt>Changed by</dt>
-            <dd>{fullDate(data.changedBy)}</dd>
-          </dl>
-        </section>
-
-        <section className='page__section--small'>
-          <h2 className='heading--medium'>Granule Definition</h2>
-          <p>{granuleDefinition.granuleId}</p>
-          <h3 className='heading--small'>Files</h3>
-          {Object.keys(get(granuleDefinition, 'files', [])).map(name => {
-            let file = granuleDefinition.files[name];
-            return (
-              <dl key={name}>
-                <dt>{name}</dt>
-                <dd>Regex: {file.regex}</dd>
-                <dd>Access: {file.access}</dd>
-                <dd>Source: {file.source}</dd>
-              </dl>
-              );
-          })}
-          <h1>Needed for processing: {get(granuleDefinition, 'neededForProcessing', []).join(', ')}</h1>
-        </section>
-
         <section className='page__section--small'>
           <h2 className='heading--medium'>Ingest</h2>
           <p>Type: {ingest.type}</p>
@@ -161,20 +124,8 @@ var CollectionIngest = React.createClass({
     return (
       <ul>
         <li>
-          <label>{data.collectionName}</label>
-          {this.renderReadOnlyJson('recipe', omit(data, ['recipe', 'granuleDefinition', 'granulesStatus']))}
-        </li>
-        <li>
-          <label>Recipe</label>
-          {this.renderReadOnlyJson('recipe', data.recipe)}
-        </li>
-        <li>
-          <label>Granule Definition</label>
-          {this.renderReadOnlyJson('granuleDefinition', data.granuleDefinition)}
-        </li>
-        <li>
-          <label>Granule Status</label>
-          {this.renderReadOnlyJson('granuleStatus', data.granulesStatus)}
+          <label>{data.name}</label>
+          {this.renderReadOnlyJson('recipe', data)}
         </li>
       </ul>
     );

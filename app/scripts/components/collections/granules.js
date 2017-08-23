@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { lastUpdated } from '../../utils/format';
 import { listGranules } from '../../actions';
 import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
 import List from '../table/list-view';
@@ -17,7 +18,8 @@ var CollectionGranules = React.createClass({
 
   generateQuery: function () {
     return {
-      collectionName: this.props.params.collectionName
+      collectionName: this.props.params.collectionName,
+      collectionVersion: this.props.params.collectionVersion
     };
   },
 
@@ -28,17 +30,16 @@ var CollectionGranules = React.createClass({
 
   render: function () {
     const collectionName = this.props.params.collectionName;
+    const collectionVersion = this.props.params.collectionVersion;
     const { list } = this.props.granules;
     const { meta } = list;
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description '>{collectionName}</h1>
-          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
+          <h1 className='heading--large heading--shared-content with-description '>{collectionName} / {collectionVersion}</h1>
+          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
           <dl className="metadata__updated">
-            <dt>Last Updated:</dt>
-            <dd>Sept. 23, 2016</dd>
-            <dd className='metadata__updated__time'>2:00pm EST</dd>
+            <dd>{lastUpdated(meta.queriedAt)}</dd>
           </dl>
         </section>
 
