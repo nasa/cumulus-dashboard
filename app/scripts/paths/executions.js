@@ -4,18 +4,18 @@ const routes = [
 ];
 
 const singleRoutes = [
-  ['Back to Workflows', null, 'sidebar__nav--back']
+  ['Back to Executions', null, 'sidebar__nav--back']
 ];
 
 const empty = [['', '']];
 
 const handler = {
-  base: 'workflows',
-  heading: 'Workflows',
+  base: 'executions',
+  heading: 'Executions',
   routes: (currentRoute, params) => {
-    if (currentRoute.indexOf('workflows/workflow') >= 0) {
+    if (currentRoute.indexOf('executions/execution') >= 0) {
       return singleRoutes;
-    } else if (currentRoute.slice(0, 11) !== '/workflows') {
+    } else if (currentRoute.slice(0, 12) !== '/executions') {
       return empty;
     } else {
       return routes;
