@@ -60,32 +60,34 @@ var LogViewer = React.createClass({
 
   setSearch: function (e) {
     const value = e.currentTarget.value;
-    this.setState({ search: value, level: 'All' }, this.query);
+    this.setState({ search: value }, this.query);
   },
 
   setSearchLevel: function (id, value) {
-    this.setState({ search: '', level: value }, this.query);
+    this.setState({ search: '', type: value }, this.query);
   },
 
   query: function () {
     const query = this.props.query || {};
-    const { search, level } = this.state;
+    const { search, type } = this.state;
     if (search) {
       query.q = this.state.search;
-    } else if (level && level !== 'All') {
-      query.level = level.toLowerCase();
+    } else if (type && type !== 'All') {
+      query.type = type.toLowerCase();
     }
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
     dispatch(clearLogs());
 
-    let isFirstPull = true;
+    // let isFirstPull = true;
     function querySinceLast () {
       // on first pull, get the last 48 hours
-      const duration = isFirstPull ? twoDays : logsUpdateInterval;
-      const from = moment().subtract(duration, 'milliseconds').format();
-      isFirstPull = false;
-      return dispatch(getLogs(Object.assign({ 'timestamp__from': from }, query)));
+
+      // deactivating until timestamp filter works again on the API side
+      // const duration = isFirstPull ? twoDays : logsUpdateInterval;
+      // const from = moment().subtract(duration, 'milliseconds').format();
+      // isFirstPull = false;
+      return dispatch(getLogs(Object.assign({ }, query)));
     }
     this.cancelInterval = interval(querySinceLast, logsUpdateInterval, true);
   },
@@ -100,7 +102,7 @@ var LogViewer = React.createClass({
       items = [placeholder];
     }
     const count = logs.items.length ? tally(items.length) : 0;
-    const { level } = this.state;
+    const { type } = this.state;
     return (
       <section className='page__section'>
         <div className='heading__wrapper--border'>
@@ -120,7 +122,7 @@ var LogViewer = React.createClass({
           <form className='search__wrapper form-group__element form-group__element--right form-group__element--right--sm form-group__element--small'>
             <Dropdown
               label={'Type'}
-              value={level}
+              value={type}
               options={statusOptions}
               id={'logs-viewer-dropdown'}
               onChange={this.setSearchLevel}
@@ -135,10 +137,10 @@ var LogViewer = React.createClass({
             if (text.length > 200) {
               text = text.slice(0, 200) + '...';
             }
-            const level = d.level ? d.level.toLowerCase() : 'info';
+            const type = d.type ? d.type.toLowerCase() : 'info';
             return <p
               key={d.key}
-              className='logs__item'><span className='logs__item--date'>{d.displayTime}</span> <span className={'logs__item--level logs__item--' + level}>{level}</span> {text}</p>;
+              className='logs__item'><span className='logs__item--date'>{d.displayTime}</span> <span className={'logs__item--level logs__item--' + type}>{type}</span> {text}</p>;
           })}
         </div>
       </section>
