@@ -170,6 +170,10 @@ export const WORKFLOWS = 'WORKFLOWS';
 export const WORKFLOWS_INFLIGHT = 'WORKFLOWS_INFLIGHT';
 export const WORKFLOWS_ERROR = 'WORKFLOWS_ERROR';
 
+export const EXECUTIONS = 'EXECUTIONS';
+export const EXECUTIONS_INFLIGHT = 'EXECUTIONS_INFLIGHT';
+export const EXECUTIONS_ERROR = 'EXECUTIONS_ERROR';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -352,3 +356,8 @@ export const listWorkflows = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'workflows'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, WORKFLOWS);
+
+export const listExecutions = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'executions'),
+  qs: Object.assign({ limit: pageLimit }, options)
+}, EXECUTIONS);
