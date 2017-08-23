@@ -22,12 +22,10 @@ export default function reducer (state = initialState, action) {
   const { data } = action;
   switch (action.type) {
     case WORKFLOWS:
-      set(state, 'list', {
-        data: data,
-        meta: { timestamp: new Date() },
-        inflight: false,
-        error: false
-      });
+      set(state, ['list', 'data'], data);
+      set(state, ['list', 'meta'], { queriedAt: new Date() });
+      set(state, ['list', 'inflight'], false);
+      set(state, ['list', 'error'], false);
       break;
     case WORKFLOWS_INFLIGHT:
       set(state, ['list', 'inflight'], true);
