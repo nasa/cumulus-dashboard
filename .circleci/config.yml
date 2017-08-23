@@ -37,14 +37,6 @@ jobs:
               ~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://podaac-r-dashboard --acl=public-read
             fi
 
-      - deploy:
-          name: Deploy master branch to the prod CloudFormation stack
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              #yarn run production
-              #~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://cumulus-dashboard-prod --acl=public-read
-            fi
-
       - save_cache:
           key: cumulus-dashboard-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
