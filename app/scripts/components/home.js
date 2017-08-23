@@ -13,7 +13,7 @@ import {
   queryHistogram,
   getRecentGranules
 } from '../actions';
-import { nullValue, tally, seconds } from '../utils/format';
+import { nullValue, tally } from '../utils/format';
 import LoadingEllipsis from './app/loading-ellipsis';
 import List from './table/list-view';
 import Histogram from './chart/histogram';
@@ -134,22 +134,18 @@ var Home = React.createClass({
 
   generateQuery: function () {
     return {
-      updatedAt__from: recent,
+      timestamp__from: recent,
       limit: 30
     };
   },
 
   render: function () {
     const { list, recent } = this.props.granules;
-    const { stats, count, resources, histogram } = this.props.stats;
+    const { stats, count, histogram } = this.props.stats;
     const overview = [
       [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
       [tally(get(stats.data, 'collections.value')), 'Collections', '/collections'],
-      [tally(get(recent, 'data.count')), 'Granules Processed in the Past Hour', '/granules'],
-      [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average Processing Time'],
-      [tally(get(resources.data, 'tasks.pendingTasks')), 'Pending Tasks', '/resources'],
-      [tally(get(resources.data, 'tasks.runningTasks')), 'Running Tasks', '/resources'],
-      [tally(get(resources.data, 'queues', []).length || nullValue), 'Queued Messages', '/resources']
+      [tally(get(recent, 'data.count')), 'Granules Processed in the Past Hour', '/granules']
     ];
     const granuleCount = get(count.data, 'granules.meta.count');
     const numGranules = !isNaN(granuleCount) ? `(${tally(granuleCount)})` : null;

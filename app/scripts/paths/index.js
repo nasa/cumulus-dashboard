@@ -4,5 +4,7 @@ import granules from './granules';
 import pdrs from './pdrs';
 import providers from './providers';
 import errors from './errors';
-const paths = [ collections, granules, pdrs, providers, errors ];
+import workflows from './workflows';
+import executions from './executions';
+const paths = [ collections, granules, pdrs, providers, errors, workflows, executions ];
 export default paths;

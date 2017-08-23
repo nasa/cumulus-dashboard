@@ -166,6 +166,17 @@ export const HISTOGRAM = 'HISTOGRAM';
 export const HISTOGRAM_INFLIGHT = 'HISTOGRAM_INFLIGHT';
 export const HISTOGRAM_ERROR = 'HISTOGRAM_ERROR';
 
+export const WORKFLOWS = 'WORKFLOWS';
+export const WORKFLOWS_INFLIGHT = 'WORKFLOWS_INFLIGHT';
+export const WORKFLOWS_ERROR = 'WORKFLOWS_ERROR';
+
+export const EXECUTIONS = 'EXECUTIONS';
+export const EXECUTIONS_INFLIGHT = 'EXECUTIONS_INFLIGHT';
+export const EXECUTIONS_ERROR = 'EXECUTIONS_ERROR';
+
+export const FILTER_EXECUTIONS = 'FILTER_EXECUTIONS';
+export const CLEAR_EXECUTIONS_FILTER = 'CLEAR_EXECUTIONS_FILTER';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -344,3 +355,15 @@ export const queryHistogram = (options) => wrapRequest(null, get, {
   qs: options
 }, HISTOGRAM);
 
+export const listWorkflows = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'workflows'),
+  qs: Object.assign({ limit: pageLimit }, options)
+}, WORKFLOWS);
+
+export const listExecutions = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'executions'),
+  qs: Object.assign({ limit: pageLimit }, options)
+}, EXECUTIONS);
+
+export const filterExecutions = (param) => ({ type: FILTER_EXECUTIONS, param: param });
+export const clearExecutionsFilter = (paramKey) => ({ type: CLEAR_EXECUTIONS_FILTER, paramKey: paramKey });

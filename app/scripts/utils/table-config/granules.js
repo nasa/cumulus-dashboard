@@ -35,7 +35,7 @@ export const tableSortProps = [
   'collectionId',
   null,
   'duration',
-  'updatedAt'
+  'timestamp'
 ];
 
 export const errorTableHeader = [
@@ -49,14 +49,14 @@ export const errorTableRow = [
   (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
   (d) => bool(d.published),
   (d) => d.error || nullValue,
-  (d) => fullDate(d.updatedAt)
+  (d) => fullDate(d.timestamp)
 ];
 
 export const errorTableSortProps = [
   'granuleId.keyword',
   'published.keyword',
   'error.keyword',
-  'updatedAt'
+  'timestamp'
 ];
 
 const confirmReingest = (d) => `Reingest ${d} granules(s)? Note, completed granules cannot be reingested.`;
