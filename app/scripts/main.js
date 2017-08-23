@@ -56,6 +56,9 @@ import ListProviders from './components/providers/list';
 import Workflows from './components/workflows';
 import WorkflowsOverview from './components/workflows/overview';
 
+import Executions from './components/executions';
+import ExecutionsOverview from './components/executions/overview';
+
 import Logs from './components/logs';
 
 // redirect to login when not auth'd
@@ -117,7 +120,9 @@ render((
         </Route>
         <Route path='workflows' component={Workflows}>
           <IndexRoute component={WorkflowsOverview} />
-
+        </Route>
+        <Route path='executions' component={Executions}>
+          <IndexRoute component={ExecutionsOverview} />
         </Route>
         <Route path='logs' component={Logs} />
       </Route>
