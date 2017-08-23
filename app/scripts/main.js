@@ -53,7 +53,8 @@ import ProvidersOverview from './components/providers/overview';
 import Provider from './components/providers/provider';
 import ListProviders from './components/providers/list';
 
-import Resources from './components/resources';
+import Workflows from './components/workflows';
+import WorkflowsOverview from './components/workflows/overview';
 
 import Logs from './components/logs';
 
@@ -114,8 +115,11 @@ render((
           <Route path='failed' component={ListProviders} />
           <Route path='provider/:providerId' component={Provider} />
         </Route>
+        <Route path='workflows' component={Workflows}>
+          <IndexRoute component={WorkflowsOverview} />
+
+        </Route>
         <Route path='logs' component={Logs} />
-        <Route path='resources' component={Resources} />
       </Route>
     </Router>
   </ProviderElem>

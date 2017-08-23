@@ -15,6 +15,7 @@ const paths = [
   ['Providers', '/providers'],
   ['Collections', '/collections'],
   ['Granules', '/granules'],
+  ['Workflows', '/workflows'],
   ['Logs', '/logs']
 ];
 
