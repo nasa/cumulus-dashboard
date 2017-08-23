@@ -25,19 +25,16 @@ jobs:
       - run:
           name: Run tests
           command: yarn test
+
       - deploy:
-          name: Deploy develop branch to the dev CloudFormation stack
+          name: Dev Dashboard deployment
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              yarn run staging
-              ~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://cumulus-dashboard --acl=public-read
-            fi
-      - deploy:
-          name: Deploy master branch to the prod CloudFormation stack
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              yarn run production
-              ~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://cumulus-dashboard-prod --acl=public-read
+              DS_TARGET=lpdaac yarn run staging
+              ~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://lpdaac-r-dashboard --acl=public-read
+
+              DS_TARGET=podaac yarn run staging
+              ~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://podaac-r-dashboard --acl=public-read
             fi
 
       - save_cache:

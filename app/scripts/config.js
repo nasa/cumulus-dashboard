@@ -17,27 +17,33 @@ if (process.env.DS_ENV === 'staging') {
 // Set the deployment target.
 // Allows variable construction of dashboard depending on target,
 // including ordering, api root, etc.
-const target = (process.env.DS_TARGET || 'cumulus').toUpperCase();
+const target = (process.env.DS_TARGET || 'cumulus').toLowerCase();
+const env = (process.env.DS_ENV || 'development').toLowerCase();
 
 // Set an alternative url to access the Cumulus API from.
 const altApiRoot = {
-  // PODAAC: '//foo.net/bar'
+  podaac: 'https://cumulus.developmentseed.org/api/podaac/',
+  lpdaac: 'https://cumulus.developmentseed.org/api/lpdaac/'
 }[target];
 if (typeof altApiRoot === 'string') {
   Object.assign(config, { apiRoot: altApiRoot });
 }
 assert(typeof config.apiRoot, 'string');
 
+if (altApiRoot && env !== 'development') {
+  Object.assign(config, { graphicsPath: `/dashboard/${target}/graphics/` });
+}
+
 // Determine modules and UI pieces to exclude
 const EXCLUDE_NAV_PDRS = { nav: { '/pdrs': true } };
 const exclude = {
-  PODAAC: EXCLUDE_NAV_PDRS
+  podaac: EXCLUDE_NAV_PDRS
 }[target] || {};
 Object.assign(config, { exclude });
 
 // Determine nav order
 const order = {
-  PODAAC: { nav: {
+  podaac: { nav: {
     '/collections': 0
   } }
 }[target] || {};
