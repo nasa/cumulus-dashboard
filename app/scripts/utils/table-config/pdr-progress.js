@@ -66,7 +66,7 @@ export const tableRow = [
   renderProgress,
   (d) => tally(get(d, 'granulesStatus.failed', 0)),
   (d) => bool(d.PANSent || d.PDRDSent),
-  (d) => fromNow(d.discoveredAt)
+  (d) => fromNow(d.timestamp)
 ];
 
 export const tableSortProps = [
@@ -75,5 +75,5 @@ export const tableSortProps = [
   'progress',
   null,
   null,
-  'discoveredAt'
+  'timestamp'
 ];

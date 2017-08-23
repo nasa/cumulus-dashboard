@@ -20,7 +20,7 @@ export const tableHeader = [
 ];
 
 export const tableRow = [
-  (d) => fullDate(d.updatedAt),
+  (d) => fullDate(d.timestamp),
   (d) => <Link to={`pdrs/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
   'status',
   (d) => seconds(d.averageDuration),
@@ -34,7 +34,7 @@ export const tableRow = [
 ];
 
 export const tableSortProps = [
-  'updatedAt',
+  'timestamp',
   'pdrName.keyword',
   'status.keyword',
   null,
@@ -55,14 +55,14 @@ export const errorTableHeader = [
 ];
 
 export const errorTableRow = [
-  (d) => fullDate(d.updatedAt),
+  (d) => fullDate(d.timestamp),
   (d) => <Link to={`pdrs/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
   (d) => d.PDRD || d.error || nullValue,
   (d) => bool(d.PDRDSent)
 ];
 
 export const errorTableSortProps = [
-  'updatedAt',
+  'timestamp',
   'pdrName.keyword',
   'PDRD.keyword',
   null
