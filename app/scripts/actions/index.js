@@ -174,6 +174,9 @@ export const EXECUTIONS = 'EXECUTIONS';
 export const EXECUTIONS_INFLIGHT = 'EXECUTIONS_INFLIGHT';
 export const EXECUTIONS_ERROR = 'EXECUTIONS_ERROR';
 
+export const FILTER_EXECUTIONS = 'FILTER_EXECUTIONS';
+export const CLEAR_EXECUTIONS_FILTER = 'CLEAR_EXECUTIONS_FILTER';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -361,3 +364,6 @@ export const listExecutions = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'executions'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, EXECUTIONS);
+
+export const filterExecutions = (param) => ({ type: FILTER_EXECUTIONS, param: param });
+export const clearExecutionsFilter = (paramKey) => ({ type: CLEAR_EXECUTIONS_FILTER, paramKey: paramKey });
