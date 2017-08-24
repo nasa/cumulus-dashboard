@@ -12,37 +12,38 @@ import {
   seconds,
   tally,
   lastUpdated,
-  displayCase
+  displayCase,
+  truncate
 } from '../../utils/format';
 import statusOptions from '../../utils/status';
 import List from '../table/list-view';
 import Dropdown from '../form/dropdown';
 
 const tableHeader = [
+  'Name',
   'Status',
   'Type',
   'Created',
   'Duration',
-  'Collection',
-  'AWS Link'
+  'Collection'
 ];
 
 const tableRow = [
+  (d) => <a href={d.execution} title={d.name}>{truncate(d.name, 24)}</a>,
   (d) => displayCase(d.status),
   'type',
   (d) => fullDate(d.createdAt),
   (d) => seconds(d.duration),
-  'collectionId',
-  (d) => <a href={d.execution}>Link</a>
+  'collectionId'
 ];
 
 const tableSortProps = [
+  'name',
   'status',
   'type',
   'createdAt',
   'duration',
-  'collectionId',
-  null
+  'collectionId'
 ];
 
 var ExecutionOverview = React.createClass({
