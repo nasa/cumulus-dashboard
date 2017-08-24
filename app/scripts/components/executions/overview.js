@@ -35,7 +35,7 @@ const tableHeader = [
   'Type',
   'Created',
   'Duration',
-  'Collection'
+  'Collection Name'
 ];
 
 const tableRow = [
