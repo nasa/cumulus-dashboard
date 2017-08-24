@@ -3,11 +3,7 @@ import { set } from 'object-path';
 import {
   WORKFLOWS,
   WORKFLOWS_INFLIGHT,
-  WORKFLOWS_ERROR,
-
-  WORKFLOW,
-  WORKFLOW_INFLIGHT,
-  WORKFLOW_ERROR
+  WORKFLOWS_ERROR
 } from '../actions';
 
 export const initialState = {
@@ -21,23 +17,20 @@ export const initialState = {
   map: {}
 };
 
+function createMap (data) {
+  const map = {};
+  data.forEach(d => {
+    map[d.name] = d;
+  });
+  return map;
+}
+
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
-  const { data, id } = action;
+  const { data } = action;
   switch (action.type) {
-    case WORKFLOW:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'data'], data.find(d => d.name === id));
-      break;
-    case WORKFLOW_INFLIGHT:
-      set(state, ['map', id, 'inflight'], true);
-      break;
-    case WORKFLOW_ERROR:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'error'], action.error);
-      break;
-
     case WORKFLOWS:
+      set(state, 'map', createMap(data));
       set(state, ['list', 'data'], data);
       set(state, ['list', 'meta'], { queriedAt: new Date() });
       set(state, ['list', 'inflight'], false);

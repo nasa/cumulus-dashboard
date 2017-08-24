@@ -1,7 +1,9 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { tally } from '../../utils/format';
 import {
   listWorkflows
 } from '../../actions';
@@ -13,8 +15,8 @@ const tableHeader = [
 ];
 
 const tableRow = [
-  'name',
-  (d) => <a href={d.template}>{d.template}</a>
+  (d) => <Link to={`/workflows/workflow/${d.name}`}>{d.name}</Link>,
+  'definition.Comment'
 ];
 
 var WorkflowOverview = React.createClass({
@@ -24,15 +26,18 @@ var WorkflowOverview = React.createClass({
   },
 
   componentWillMount: function () {
-    this.props.dispatch(listWorkflows({}));
+    this.props.dispatch(listWorkflows());
   },
 
   render: function () {
     const { list } = this.props.workflows;
+    const count = list.data.length;
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>Workflows Overview</h1>
+          <h1 className='heading--large heading--shared-content with-description'>Workflows
+            <span className='num--title'>{count ? ` (${tally(count)})` : null}</span>
+          </h1>
 
           <List
             list={list}
