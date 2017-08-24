@@ -56,7 +56,6 @@ const Rule = React.createClass({
       return <Loading />;
     }
     const data = get(record, 'data', {});
-    console.log(record);
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>

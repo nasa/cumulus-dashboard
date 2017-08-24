@@ -129,7 +129,6 @@ var ProviderOverview = React.createClass({
       status: deleteStatus,
       success: this.navigateBack
     }];
-    console.log(record);
 
     return (
       <div className='page__component'>
