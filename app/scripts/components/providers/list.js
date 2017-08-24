@@ -103,7 +103,6 @@ var ListProviders = React.createClass({
 
           <div className='filters filters__wlabels'>
             <Dropdown
-              dispatch={this.props.dispatch}
               getOptions={getOptionsProviderGroup}
               options={get(dropdowns, ['group', 'options'])}
               action={filterProviders}
@@ -112,7 +111,6 @@ var ListProviders = React.createClass({
               label={'Group'}
             />
             <Dropdown
-              dispatch={this.props.dispatch}
               options={protocol}
               action={filterProviders}
               clear={clearProvidersFilter}

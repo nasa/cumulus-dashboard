@@ -74,7 +74,6 @@ var ActivePdrs = React.createClass({
           <div className='filters'>
             {view === 'all' ? (
               <Dropdown
-                dispatch={this.props.dispatch}
                 options={statusOptions}
                 action={filterPdrs}
                 clear={clearPdrsFilter}

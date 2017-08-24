@@ -156,7 +156,6 @@ var PDR = React.createClass({
           </div>
           <div className='filters filters__wlabels'>
             <Dropdown
-              dispatch={this.props.dispatch}
               getOptions={getOptionsCollectionName}
               options={get(dropdowns, ['collectionName', 'options'])}
               action={filterGranules}
@@ -165,7 +164,6 @@ var PDR = React.createClass({
               label={'Collection'}
             />
             <Dropdown
-              dispatch={this.props.dispatch}
               options={status}
               action={filterGranules}
               clear={clearGranulesFilter}

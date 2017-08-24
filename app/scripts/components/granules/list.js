@@ -81,7 +81,6 @@ var AllGranules = React.createClass({
           </div>
           <div className='filters filters__wlabels'>
             <Dropdown
-              dispatch={this.props.dispatch}
               getOptions={getOptionsCollectionName}
               options={get(dropdowns, ['collectionName', 'options'])}
               action={filterGranules}
@@ -91,7 +90,6 @@ var AllGranules = React.createClass({
             />
             {statOptions ? (
               <Dropdown
-                dispatch={this.props.dispatch}
                 options={statOptions}
                 action={filterGranules}
                 clear={clearGranulesFilter}
