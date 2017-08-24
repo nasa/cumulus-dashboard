@@ -23,6 +23,7 @@ const env = (process.env.DS_ENV || 'development').toLowerCase();
 // Set an alternative url to access the Cumulus API from.
 const altApiRoot = {
   podaac: 'https://cumulus.developmentseed.org/api/podaac/',
+  ghrc: 'https://cumulus.developmentseed.org/api/ghrc/',
   lpdaac: 'https://cumulus.developmentseed.org/api/lpdaac/'
 }[target];
 if (typeof altApiRoot === 'string') {
