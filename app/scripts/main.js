@@ -55,9 +55,13 @@ import ListProviders from './components/providers/list';
 
 import Workflows from './components/workflows';
 import WorkflowsOverview from './components/workflows/overview';
+import Workflow from './components/workflows/workflow';
 
 import Executions from './components/executions';
 import ExecutionsOverview from './components/executions/overview';
+
+import Rules from './components/rules';
+import RulesOverview from './components/rules/overview';
 
 import Logs from './components/logs';
 
@@ -120,9 +124,12 @@ render((
         </Route>
         <Route path='workflows' component={Workflows}>
           <IndexRoute component={WorkflowsOverview} />
+          <Route path='workflow/:workflowName' component={Workflow} />
         </Route>
         <Route path='executions' component={Executions}>
           <IndexRoute component={ExecutionsOverview} />
+        </Route>
+        <Route path='rules' component={Rules}>
         </Route>
         <Route path='logs' component={Logs} />
       </Route>
