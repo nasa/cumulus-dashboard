@@ -5,7 +5,12 @@ import { connect } from 'react-redux';
 import {
   listExecutions,
   filterExecutions,
-  clearExecutionsFilter
+  clearExecutionsFilter,
+
+  listCollections,
+  listWorkflows,
+
+  interval
 } from '../../actions';
 import {
   fullDate,
@@ -15,9 +20,14 @@ import {
   displayCase,
   truncate
 } from '../../utils/format';
+import {
+  workflowOptions,
+  collectionOptions
+} from '../../selectors';
 import statusOptions from '../../utils/status';
 import List from '../table/list-view';
 import Dropdown from '../form/dropdown';
+import { updateInterval } from '../../config';
 
 const tableHeader = [
   'Name',
@@ -49,16 +59,34 @@ const tableSortProps = [
 var ExecutionOverview = React.createClass({
   propTypes: {
     dispatch: PropTypes.func,
-    executions: PropTypes.object
+    executions: PropTypes.object,
+    collectionOptions: PropTypes.object,
+    workflowOptions: PropTypes.object
   },
 
   componentWillMount: function () {
-    this.props.dispatch(listExecutions({}));
+    // use a slightly slower update interval, since the dropdown fields
+    // will change less frequently.
+    this.cancelInterval = interval(this.queryDropdowns, updateInterval * 2, true);
+  },
+
+  componentWillUnmount: function () {
+    if (this.cancelInterval) { this.cancelInterval(); }
+  },
+
+  // query dropdown fields
+  queryDropdowns: function () {
+    this.props.dispatch(listCollections({
+      limit: 100,
+      fields: 'name,version'
+    }));
+    this.props.dispatch(listWorkflows());
   },
 
   render: function () {
     const { list } = this.props.executions;
     const { count, queriedAt } = list.meta;
+    console.log(list);
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -71,12 +99,27 @@ var ExecutionOverview = React.createClass({
 
           <div className='filters filters__wlabels'>
             <Dropdown
-              dispatch={this.props.dispatch}
               options={statusOptions}
               action={filterExecutions}
               clear={clearExecutionsFilter}
               paramKey={'status'}
               label={'Status'}
+            />
+
+            <Dropdown
+              options={this.props.collectionOptions}
+              action={filterExecutions}
+              clear={clearExecutionsFilter}
+              paramKey={'collectionId'}
+              label={'Collection'}
+            />
+
+            <Dropdown
+              options={this.props.workflowOptions}
+              action={filterExecutions}
+              clear={clearExecutionsFilter}
+              paramKey={'type'}
+              label={'Workflow'}
             />
           </div>
 
@@ -98,5 +141,7 @@ var ExecutionOverview = React.createClass({
 });
 
 export default connect(state => ({
-  executions: state.executions
+  executions: state.executions,
+  workflowOptions: workflowOptions(state),
+  collectionOptions: collectionOptions(state)
 }))(ExecutionOverview);
