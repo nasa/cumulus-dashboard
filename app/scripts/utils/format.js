@@ -124,10 +124,14 @@ export const truncate = function (string, to) {
   else return string.slice(0, to) + '...';
 };
 
+export const getCollectionId = function (name, version) {
+  return `${name}___${version}`;
+};
+
 // "MYD13A1___006" => "MYD13A1 006"
-export const collectionName = function (string) {
-  if (!string) return nullValue;
-  return string.split('___').join(' ');
+export const collectionName = function (collectionId) {
+  if (!collectionId) return nullValue;
+  return collectionId.split('___').join(' ');
 };
 
 export const collectionLink = function (collectionId) {
