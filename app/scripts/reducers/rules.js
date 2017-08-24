@@ -8,7 +8,13 @@ import {
 
   RULE,
   RULE_INFLIGHT,
-  RULE_ERROR
+  RULE_ERROR,
+
+  UPDATE_RULE,
+  UPDATE_RULE_INFLIGHT,
+  UPDATE_RULE_ERROR,
+  UPDATE_RULE_CLEAR
+
 } from '../actions';
 
 export const initialState = {
@@ -54,6 +60,21 @@ export default function reducer (state = initialState, action) {
     case RULES_ERROR:
       set(state, ['list', 'inflight'], false);
       set(state, ['list', 'error'], action.error);
+      break;
+
+    case UPDATE_RULE:
+      set(state, ['map', id, 'data'], data);
+      set(state, ['updated', id, 'status'], 'success');
+      break;
+    case UPDATE_RULE_INFLIGHT:
+      set(state, ['updated', id, 'status'], 'inflight');
+      break;
+    case UPDATE_RULE_ERROR:
+      set(state, ['updated', id, 'status'], 'error');
+      set(state, ['updated', id, 'error'], action.error);
+      break;
+    case UPDATE_RULE_CLEAR:
+      del(state, ['updated', id]);
       break;
   }
   return state;

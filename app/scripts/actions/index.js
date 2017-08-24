@@ -185,6 +185,11 @@ export const RULE = 'RULE';
 export const RULE_INFLIGHT = 'RULE_INFLIGHT';
 export const RULE_ERROR = 'RULE_ERROR';
 
+export const UPDATE_RULE = 'UPDATE_RULE';
+export const UPDATE_RULE_INFLIGHT = 'UPDATE_RULE_INFLIGHT';
+export const UPDATE_RULE_ERROR = 'UPDATE_RULE_ERROR';
+export const UPDATE_RULE_CLEAR = 'UPDATE_RULE_CLEAR';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -380,3 +385,8 @@ export const listRules = (options) => wrapRequest(null, get, {
 
 export const getRule = (ruleName) => wrapRequest(
   ruleName, get, `rules?name=${ruleName}`, RULE);
+
+export const updateRule = (name, payload) => wrapRequest(
+  name, put, `rules/${name}`, UPDATE_RULE, payload);
+
+export const clearUpdateRule = (ruleName) => ({ type: UPDATE_RULE_CLEAR, id: ruleName });
