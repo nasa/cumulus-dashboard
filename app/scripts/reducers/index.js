@@ -9,6 +9,7 @@ import logs from './logs';
 import schema from './schema';
 import workflows from './workflows';
 import executions from './executions';
+import rules from './rules';
 
 export const reducers = {
   def: (state = {}, action) => state,
@@ -21,7 +22,8 @@ export const reducers = {
   logs,
   schema,
   workflows,
-  executions
+  executions,
+  rules
 };
 
 export default combineReducers(Object.assign({}, reducers));
