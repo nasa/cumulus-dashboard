@@ -13,12 +13,12 @@ const handler = {
   base: 'rules',
   heading: 'Rules',
   routes: (currentRoute, params) => {
-    if (currentRoute.indexOf('rules/rule') >= 0) {
+    if (/^\/rules\/[rule|edit]/.test(currentRoute)) {
       return singleRoutes;
-    } else if (currentRoute.slice(0, 7) !== '/rules') {
-      return empty;
-    } else {
+    } else if (currentRoute.slice(0, 6) === '/rules') {
       return routes;
+    } else {
+      return empty;
     }
   }
 };
