@@ -17,6 +17,7 @@ const paths = [
   ['Granules', '/granules'],
   ['Workflows', '/workflows'],
   ['Executions', '/executions'],
+  ['Rules', '/rules'],
   ['Logs', '/logs']
 ];
 
