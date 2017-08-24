@@ -130,6 +130,7 @@ render((
           <IndexRoute component={ExecutionsOverview} />
         </Route>
         <Route path='rules' component={Rules}>
+          <IndexRoute component={RulesOverview} />
         </Route>
         <Route path='logs' component={Logs} />
       </Route>

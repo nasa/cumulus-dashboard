@@ -86,7 +86,6 @@ var ExecutionOverview = React.createClass({
   render: function () {
     const { list } = this.props.executions;
     const { count, queriedAt } = list.meta;
-    console.log(list);
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>

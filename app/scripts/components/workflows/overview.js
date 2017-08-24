@@ -25,10 +25,6 @@ var WorkflowOverview = React.createClass({
     workflows: PropTypes.object
   },
 
-  componentWillMount: function () {
-    this.props.dispatch(listWorkflows());
-  },
-
   render: function () {
     const { list } = this.props.workflows;
     const count = list.data.length;
