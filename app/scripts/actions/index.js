@@ -181,6 +181,10 @@ export const RULES = 'RULES';
 export const RULES_INFLIGHT = 'RULES_INFLIGHT';
 export const RULES_ERROR = 'RULES_ERROR';
 
+export const RULE = 'RULE';
+export const RULE_INFLIGHT = 'RULE_INFLIGHT';
+export const RULE_ERROR = 'RULE_ERROR';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -374,3 +378,5 @@ export const listRules = (options) => wrapRequest(null, get, {
   qs: Object.assign({ limit: pageLimit }, options)
 }, RULES);
 
+export const getRule = (ruleName) => wrapRequest(
+  ruleName, get, `rules?name=${ruleName}`, RULE);

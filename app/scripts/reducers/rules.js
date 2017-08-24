@@ -1,10 +1,14 @@
 'use strict';
-import { set } from 'object-path';
+import { set, del } from 'object-path';
 import assignDate from './assign-date';
 import {
   RULES,
   RULES_INFLIGHT,
-  RULES_ERROR
+  RULES_ERROR,
+
+  RULE,
+  RULE_INFLIGHT,
+  RULE_ERROR
 } from '../actions';
 
 export const initialState = {
@@ -15,13 +19,29 @@ export const initialState = {
     inflight: false,
     error: false
   },
-  map: {}
+  map: {},
+  created: {},
+  updated: {},
+  deleted: {}
 };
 
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
-  const { data } = action;
+  const { data, id } = action;
   switch (action.type) {
+    case RULE:
+      set(state, ['map', id, 'inflight'], false);
+      set(state, ['map', id, 'data'], assignDate(data.results[0]));
+      del(state, ['deleted', id]);
+      break;
+    case RULE_INFLIGHT:
+      set(state, ['map', id, 'inflight'], true);
+      break;
+    case RULE_ERROR:
+      set(state, ['map', id, 'inflight'], false);
+      set(state, ['map', id, 'error'], action.error);
+      break;
+
     case RULES:
       set(state, ['list', 'data'], data.results);
       set(state, ['list', 'meta'], assignDate(data.meta));

@@ -427,24 +427,25 @@ a:active {
   margin-top: 1.5em;
   dd, dt {
     display: inline-block;
-  }
-  dt {
-    font-weight: $base-font-semibold;
-    margin-right: 1em;
+    font-size: .9em;
   }
   dd {
-    color: $grey;
+    font-weight: $base-font-semibold;
     &:before {
       content: '';
       width: 10px;
       height: 10px;
       display: inline-block;
-      margin-right: .5em;
+      margin-right: .2em;
       background-size: 10px 10px;
       border-radius: 20px;
     }
   }
-  .ingesting, .processing, .updating, .archiving {
+  dt {
+    color: $grey;
+    margin-right: 0.5em;
+  }
+  .enabled {
     &:before {
       background-color: $yellow;
     }
@@ -459,7 +460,7 @@ a:active {
       background-color: $orange;
     }
   }
-  .failed {
+  .disabled {
     &:before {
       background-color: $error-red;
     }

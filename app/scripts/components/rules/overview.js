@@ -10,6 +10,8 @@ import {
   lastUpdated,
   tally,
   getCollectionId,
+  collectionLink,
+  providerLink,
   fullDate
 } from '../../utils/format';
 import List from '../table/list-view';
@@ -17,20 +19,16 @@ import List from '../table/list-view';
 const tableHeader = [
   'Name',
   'Provider',
-  'Collection',
+  'Collection ID',
   'Type',
   'State',
   'Timestamp'
 ];
 
 const tableRow = [
-  'name',
-  (d) => <Link to={`providers/provider/${d.provider}`}>{d.provider}</Link>,
-  (d) => {
-    const { name, version } = d.collection;
-    const collectionId = getCollectionId(name, version);
-    return <Link to={`collections/collection/${name}/${version}`}>{collectionId}</Link>;
-  },
+  (d) => <Link to={`rules/rule/${d.name}`}>{d.name}</Link>,
+  (d) => providerLink(d.provider),
+  (d) => collectionLink(getCollectionId(d.collection)),
   'rule.type',
   'state',
   (d) => fullDate(d.timestamp)
