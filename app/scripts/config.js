@@ -38,7 +38,8 @@ if (altApiRoot && env !== 'development') {
 // Determine modules and UI pieces to exclude
 const EXCLUDE_NAV_PDRS = { nav: { '/pdrs': true } };
 const exclude = {
-  podaac: EXCLUDE_NAV_PDRS
+  podaac: EXCLUDE_NAV_PDRS,
+  ghrc: EXCLUDE_NAV_PDRS
 }[target] || {};
 Object.assign(config, { exclude });
 
