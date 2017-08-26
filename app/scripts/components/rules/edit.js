@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   getRule,
@@ -13,10 +14,8 @@ const INCLUDED_FORMS = ['rule.value', 'state'];
 
 const EditRule = React.createClass({
   propTypes: {
-    params: React.PropTypes.object,
-    rules: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    router: React.PropTypes.object
+    params: PropTypes.object,
+    rules: PropTypes.object
   },
 
   render: function () {
