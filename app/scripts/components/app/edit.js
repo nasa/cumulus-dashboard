@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { withRouter } from 'react-router';
@@ -11,21 +12,21 @@ import { updateDelay } from '../../config';
 
 var EditRecord = React.createClass({
   propTypes: {
-    pk: React.PropTypes.string,
-    schema: React.PropTypes.object,
-    schemaKey: React.PropTypes.string,
-    dispatch: React.PropTypes.func,
-    state: React.PropTypes.object,
-    router: React.PropTypes.object,
-    backRoute: React.PropTypes.string,
+    pk: PropTypes.string,
+    schema: PropTypes.object,
+    schemaKey: PropTypes.string,
+    dispatch: PropTypes.func,
+    state: PropTypes.object,
+    router: PropTypes.object,
+    backRoute: PropTypes.string,
 
-    includedForms: React.PropTypes.array,
-    merge: React.PropTypes.bool,
-    attachMeta: React.PropTypes.bool,
+    includedForms: PropTypes.array,
+    merge: PropTypes.bool,
+    attachMeta: PropTypes.bool,
 
-    getRecord: React.PropTypes.func,
-    updateRecord: React.PropTypes.func,
-    clearRecordUpdate: React.PropTypes.func
+    getRecord: PropTypes.func,
+    updateRecord: PropTypes.func,
+    clearRecordUpdate: PropTypes.func
   },
 
   getInitialState: function () {
