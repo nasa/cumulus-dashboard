@@ -1,27 +1,20 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { get } from 'object-path';
 import {
   getCollection,
   updateCollection,
-  clearUpdateCollection,
-  getSchema
+  clearUpdateCollection
 } from '../../actions';
-import Loading from '../app/loading-indicator';
-import Schema from '../form/schema';
-import merge from '../../utils/merge';
-import { updateDelay } from '../../config';
-
-const SCHEMA_KEY = 'collection';
+import { getCollectionId } from '../../utils/format';
+import EditRaw from '../app/edit-raw';
 
 var EditCollection = React.createClass({
   propTypes: {
-    params: React.PropTypes.object,
-    collections: React.PropTypes.object,
-    schema: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    router: React.PropTypes.object
+    params: PropTypes.object,
+    collections: PropTypes.object,
+    router: PropTypes.object
   },
 
   getInitialState: function () {
@@ -31,87 +24,24 @@ var EditCollection = React.createClass({
     };
   },
 
-  get: function (collectionName) {
-    const record = this.props.collections.map[collectionName];
-    if (!record) {
-      this.props.dispatch(getCollection(collectionName));
-    }
-  },
-
-  componentWillMount: function () {
-    const collectionName = this.props.params.collectionName;
-    if (collectionName) {
-      this.get(collectionName);
-    }
-    this.props.dispatch(getSchema(SCHEMA_KEY));
-  },
-
-  componentWillReceiveProps: function (newProps) {
-    const collectionName = newProps.params.collectionName;
-    const updateStatus = get(this.props.collections.updated, [collectionName, 'status']);
-    if (updateStatus === 'success') {
-      // on success, clear the update and return to the collection detail
-      return setTimeout(() => {
-        this.props.dispatch(clearUpdateCollection(collectionName));
-        this.props.router.push(`/collections/collection/${collectionName}`);
-      }, updateDelay);
-    } else if (this.state.collectionName === collectionName) { return; }
-
-    const record = get(this.props.collections.map, collectionName, {});
-
-    // record has hit an API error
-    if (record.error) {
-      this.setState({
-        collectionName,
-        error: record.error
-      });
-    } else if (record.data) {
-      // record has hit an API success; update the UI
-      this.setState({
-        collectionName,
-        error: null
-      });
-    } else if (!record.inflight) {
-      // we've not yet fetched the record, request it
-      this.get(collectionName);
-    }
-  },
-
-  onSubmit: function (id, payload) {
-    const collectionName = this.props.params.collectionName;
-    const record = this.props.collections.map[collectionName];
-    const json = merge(record.data, payload);
-    this.setState({ error: null });
-    json.updatedAt = new Date().getTime();
-    json.changedBy = 'Cumulus Dashboard';
-    this.props.dispatch(updateCollection(json));
-  },
-
   render: function () {
-    const collectionName = this.props.params.collectionName;
-    const record = get(this.props.collections.map, collectionName, {});
-    const meta = get(this.props.collections.updated, collectionName, {});
-    const error = this.state.error || record.error || meta.error;
-    const schema = this.props.schema[SCHEMA_KEY];
+    const { params, collections } = this.props;
+    const { collectionName, collectionVersion } = params;
+    const collectionId = getCollectionId({name: collectionName, version: collectionVersion});
     return (
-      <div className='page__component'>
-        <section className='page__section'>
-          <h1 className='heading--large'>Edit {collectionName}</h1>
-          {schema && record.data ? (
-            <Schema
-              schema={schema}
-              data={record.data}
-              pk={collectionName}
-              onSubmit={this.onSubmit}
-              router={this.props.router}
-              status={meta.status}
-              error={meta.status === 'inflight' ? null : error}
-            />
-          ) : <Loading /> }
-        </section>
-      </div>
+      <EditRaw
+        pk={collectionId}
+        primaryProperty={'name'}
+        state={collections}
+        getRecord={() => getCollection(collectionName, collectionVersion)}
+        updateRecord={updateCollection}
+        backRoute={`/collections/collection/${collectionName}/${collectionVersion}`}
+        clearRecordUpdate={clearUpdateCollection}
+      />
     );
   }
 });
 
-export default connect(state => state)(EditCollection);
+export default connect(state => ({
+  collections: state.collections
+}))(EditCollection);
