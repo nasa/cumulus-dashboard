@@ -194,6 +194,10 @@ export const NEW_RULE = 'NEW_RULE';
 export const NEW_RULE_INFLIGHT = 'NEW_RULE_INFLIGHT';
 export const NEW_RULE_ERROR = 'NEW_RULE_ERROR';
 
+export const RULE_DELETE = 'RULE_DELETE';
+export const RULE_DELETE_INFLIGHT = 'RULE_DELETE_INFLIGHT';
+export const RULE_DELETE_ERROR = 'RULE_DELETE_ERROR';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -397,3 +401,6 @@ export const clearUpdateRule = (ruleName) => ({ type: UPDATE_RULE_CLEAR, id: rul
 
 export const createRule = (id, payload) => wrapRequest(
   id, post, 'rules', NEW_RULE, payload);
+
+export const deleteRule = (ruleName) => wrapRequest(
+  ruleName, del, `rules/${ruleName}`, RULE_DELETE);

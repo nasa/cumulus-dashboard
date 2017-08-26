@@ -17,7 +17,11 @@ import {
 
   NEW_RULE,
   NEW_RULE_INFLIGHT,
-  NEW_RULE_ERROR
+  NEW_RULE_ERROR,
+
+  RULE_DELETE,
+  RULE_DELETE_INFLIGHT,
+  RULE_DELETE_ERROR
 } from '../actions';
 
 export const initialState = {
@@ -89,6 +93,18 @@ export default function reducer (state = initialState, action) {
     case NEW_RULE_ERROR:
       set(state, ['created', id, 'status'], 'error');
       set(state, ['created', id, 'error'], action.error);
+      break;
+
+    case RULE_DELETE:
+      set(state, ['deleted', id, 'status'], 'success');
+      set(state, ['deleted', id, 'error'], null);
+      break;
+    case RULE_DELETE_INFLIGHT:
+      set(state, ['deleted', id, 'status'], 'inflight');
+      break;
+    case RULE_DELETE_ERROR:
+      set(state, ['deleted', id, 'status'], 'error');
+      set(state, ['deleted', id, 'error'], action.error);
       break;
   }
   return state;
