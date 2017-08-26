@@ -64,6 +64,7 @@ import Rules from './components/rules';
 import RulesOverview from './components/rules/overview';
 import Rule from './components/rules/rule';
 import EditRule from './components/rules/edit';
+import AddRule from './components/rules/add';
 
 import Logs from './components/logs';
 
@@ -135,6 +136,7 @@ render((
           <IndexRoute component={RulesOverview} />
           <Route path='rule/:ruleName' component={Rule} />
           <Route path='edit/:ruleName' component={EditRule} />
+          <Route path='add' component={AddRule} />
         </Route>
         <Route path='logs' component={Logs} />
       </Route>
