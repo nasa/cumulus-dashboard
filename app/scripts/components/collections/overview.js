@@ -109,6 +109,8 @@ const CollectionOverview = React.createClass({
             status={deleteStatus}
             disabled={hasGranules !== 0}
             className={'form-group__element--right'}
+            confirmAction={true}
+            confirmText={`Are you sure you want to delete ${collectionName} ${collectionVersion}?`}
             text={deleteStatus === 'success' ? 'Success!' : 'Delete' } />
 
           <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>

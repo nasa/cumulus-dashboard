@@ -133,6 +133,8 @@ var PDR = React.createClass({
               successTimeout={updateDelay}
               status={deleteStatus}
               className={'form-group__element--right'}
+              confirmAction={true}
+              confirmText={`Are you sure you want to delete ${pdrName}?`}
               text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'} />
             {lastUpdated(queriedAt)}
             {this.renderProgress(record)}
