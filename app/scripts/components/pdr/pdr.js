@@ -37,7 +37,7 @@ import Loading from '../app/loading-indicator';
 import AsyncCommand from '../form/async-command';
 import ErrorReport from '../errors/report';
 import GranulesProgress from '../granules/progress';
-import { updateInterval, updateDelay } from '../../config';
+import { updateInterval } from '../../config';
 
 const metaAccessors = [
   ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],
@@ -130,7 +130,6 @@ var PDR = React.createClass({
             <h1 className='heading--large heading--shared-content with-description '>{pdrName}</h1>
             <AsyncCommand action={this.deletePdr}
               success={this.navigateBack}
-              successTimeout={updateDelay}
               status={deleteStatus}
               className={'form-group__element--right'}
               confirmAction={true}

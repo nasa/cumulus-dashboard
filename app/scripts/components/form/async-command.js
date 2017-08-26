@@ -4,6 +4,7 @@ import c from 'classnames';
 import PropTypes from 'prop-types';
 import Ellipsis from '../app/loading-ellipsis';
 import { preventDefault } from '../../utils/noop';
+import { updateDelay } from '../../config';
 
 const AsyncCommand = React.createClass({
 
@@ -31,7 +32,8 @@ const AsyncCommand = React.createClass({
       newProps.status === 'success' &&
       typeof this.props.success === 'function'
     ) {
-      setTimeout(this.props.success, this.props.successTimeout || 0);
+      const timeout = isNaN(this.props.successTimeout) ? updateDelay : this.props.successTimeout;
+      setTimeout(this.props.success, timeout);
     } else if (
       this.props.status === 'inflight' &&
         newProps.status === 'error' &&

@@ -52,7 +52,6 @@ const DropdownAsync = React.createClass({
             {config.map(d => <li key={d.text}>
               <AsyncCommand action={d.action}
                 success={() => this.onSuccess(d.success)}
-                successTimeout={updateDelay}
                 error={this.close}
                 status={d.status}
                 disabled={d.disabled}
