@@ -2,7 +2,6 @@ import React from 'react';
 import { findDOMNode } from 'react-dom';
 import AsyncCommand from '../form/async-command';
 import { addGlobalListener } from '../../utils/browser';
-import { updateDelay } from '../../config';
 
 const DropdownAsync = React.createClass({
   propTypes: {
