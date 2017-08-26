@@ -20,7 +20,7 @@ const collections = {
   heading: 'Collections',
   routes: (currentRoute, params) => {
     // determine which set of routes to show, based on the current route
-    if (currentRoute.indexOf('collections/collection') >= 0) {
+    if (/^\/collections\/[collection|edit]/.test(currentRoute)) {
       return singleCollectionRoutes.map(d => {
         // replace wildecards with params
         if (!d[1] || d[1].indexOf(':collectionName') === -1) { return d; }

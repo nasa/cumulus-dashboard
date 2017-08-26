@@ -177,6 +177,27 @@ export const EXECUTIONS_ERROR = 'EXECUTIONS_ERROR';
 export const FILTER_EXECUTIONS = 'FILTER_EXECUTIONS';
 export const CLEAR_EXECUTIONS_FILTER = 'CLEAR_EXECUTIONS_FILTER';
 
+export const RULES = 'RULES';
+export const RULES_INFLIGHT = 'RULES_INFLIGHT';
+export const RULES_ERROR = 'RULES_ERROR';
+
+export const RULE = 'RULE';
+export const RULE_INFLIGHT = 'RULE_INFLIGHT';
+export const RULE_ERROR = 'RULE_ERROR';
+
+export const UPDATE_RULE = 'UPDATE_RULE';
+export const UPDATE_RULE_INFLIGHT = 'UPDATE_RULE_INFLIGHT';
+export const UPDATE_RULE_ERROR = 'UPDATE_RULE_ERROR';
+export const UPDATE_RULE_CLEAR = 'UPDATE_RULE_CLEAR';
+
+export const NEW_RULE = 'NEW_RULE';
+export const NEW_RULE_INFLIGHT = 'NEW_RULE_INFLIGHT';
+export const NEW_RULE_ERROR = 'NEW_RULE_ERROR';
+
+export const RULE_DELETE = 'RULE_DELETE';
+export const RULE_DELETE_INFLIGHT = 'RULE_DELETE_INFLIGHT';
+export const RULE_DELETE_ERROR = 'RULE_DELETE_ERROR';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -355,10 +376,7 @@ export const queryHistogram = (options) => wrapRequest(null, get, {
   qs: options
 }, HISTOGRAM);
 
-export const listWorkflows = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'workflows'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, WORKFLOWS);
+export const listWorkflows = (options) => wrapRequest(null, get, 'workflows', WORKFLOWS);
 
 export const listExecutions = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'executions'),
@@ -367,3 +385,22 @@ export const listExecutions = (options) => wrapRequest(null, get, {
 
 export const filterExecutions = (param) => ({ type: FILTER_EXECUTIONS, param: param });
 export const clearExecutionsFilter = (paramKey) => ({ type: CLEAR_EXECUTIONS_FILTER, paramKey: paramKey });
+
+export const listRules = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'rules'),
+  qs: Object.assign({ limit: pageLimit }, options)
+}, RULES);
+
+export const getRule = (ruleName) => wrapRequest(
+  ruleName, get, `rules?name=${ruleName}`, RULE);
+
+export const updateRule = (name, payload) => wrapRequest(
+  name, put, `rules/${name}`, UPDATE_RULE, payload);
+
+export const clearUpdateRule = (ruleName) => ({ type: UPDATE_RULE_CLEAR, id: ruleName });
+
+export const createRule = (id, payload) => wrapRequest(
+  id, post, 'rules', NEW_RULE, payload);
+
+export const deleteRule = (ruleName) => wrapRequest(
+  ruleName, del, `rules/${ruleName}`, RULE_DELETE);

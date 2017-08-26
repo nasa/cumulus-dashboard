@@ -100,7 +100,7 @@ export const bool = function (bool) {
 
 export const displayCase = function (string) {
   const split = string.split(' ');
-  return split.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  return split.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
 };
 
 export const storage = function (n) {
@@ -124,10 +124,14 @@ export const truncate = function (string, to) {
   else return string.slice(0, to) + '...';
 };
 
-// "MYD13A1___006" => "MYD13A1 006"
-export const collectionName = function (string) {
-  if (!string) return nullValue;
-  return string.split('___').join(' ');
+export const getCollectionId = function ({name, version}) {
+  return `${name}___${version}`;
+};
+
+// "MYD13A1___006" => "MYD13A1 / 006"
+export const collectionName = function (collectionId) {
+  if (!collectionId) return nullValue;
+  return collectionId.split('___').join(' / ');
 };
 
 export const collectionLink = function (collectionId) {
@@ -137,4 +141,9 @@ export const collectionLink = function (collectionId) {
   const name = split[0];
   const version = split[1];
   return <Link to={`/collections/collection/${name}/${version}`}>{collectionName(collectionId)}</Link>;
+};
+
+export const providerLink = function (provider) {
+  if (!provider) return nullValue;
+  return <Link to={`/providers/provider/${provider}`}>{provider}</Link>;
 };

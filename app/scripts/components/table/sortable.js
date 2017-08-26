@@ -1,7 +1,9 @@
 'use strict';
 import React from 'react';
+import { get } from 'object-path';
 import { connect } from 'react-redux';
 import { isUndefined } from '../../utils/validate';
+import { nullValue } from '../../utils/format';
 
 const defaultSortOrder = 'desc';
 const otherOrder = {
@@ -123,7 +125,7 @@ const Table = React.createClass({
                     if (typeof accessor === 'function') {
                       text = accessor(d, k, data);
                     } else {
-                      text = d[accessor];
+                      text = get(d, accessor, nullValue);
                     }
                     return <td key={String(i) + String(k) + text} className={className}>{text}</td>;
                   })}

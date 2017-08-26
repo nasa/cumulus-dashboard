@@ -21,12 +21,18 @@ export const traverseSchema = function (schema, fn, path) {
 
 // recursively scan a schema object and create a form config from it.
 // returns a flattened representation of the schema.
-export const createFormConfig = function (data, schema) {
+export const createFormConfig = function (data, schema, include) {
   data = data || {};
   const fields = [];
   traverseSchema(schema, function (property, meta, schemaProperty, path) {
     // If a field isn't user-editable, hide it from the form
     if (meta.readonly) { return; }
+
+    // create an object-path-ready accessor string
+    const accessor = path ? path + '.' + property : property;
+
+    // if there are included properties, only create forms for those
+    if (Array.isArray(include) && include.indexOf(accessor) === -1) { return; }
 
     // determine the label
     const required = Array.isArray(schemaProperty.required) &&
@@ -41,8 +47,6 @@ export const createFormConfig = function (data, schema) {
       </span>
     );
 
-    // create an object-path-ready accessor string
-    const accessor = path ? path + '.' + property : property;
     const value = get(data, accessor) || get(meta, 'default');
     const config = {
       value, label,
@@ -123,6 +127,9 @@ export const Schema = React.createClass({
     router: React.PropTypes.object,
     onSubmit: React.PropTypes.func,
     status: React.PropTypes.string,
+
+    // if present, only include these properties
+    include: React.PropTypes.array,
     error: React.PropTypes.any
   },
 
@@ -131,15 +138,15 @@ export const Schema = React.createClass({
   },
 
   componentWillMount: function () {
-    const { schema, data } = this.props;
-    this.setState({ fields: createFormConfig(data, schema) });
+    const { schema, data, include } = this.props;
+    this.setState({ fields: createFormConfig(data, schema, include) });
   },
 
   componentWillReceiveProps: function (newProps) {
     const { props } = this;
-    const { schema, data } = newProps;
+    const { schema, data, include } = newProps;
     if (props.pk !== newProps.pk) {
-      this.setState({ fields: createFormConfig(data, schema) });
+      this.setState({ fields: createFormConfig(data, schema, include) });
     }
     if (newProps.error && !props.error) {
       this.scrollToTop();

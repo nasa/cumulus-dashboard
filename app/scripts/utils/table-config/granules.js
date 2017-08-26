@@ -12,7 +12,7 @@ export const tableHeader = [
   'Name',
   'Status',
   'Published',
-  'Collection',
+  'Collection ID',
   'Execution',
   'Duration',
   'Updated'

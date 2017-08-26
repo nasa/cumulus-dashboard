@@ -1,5 +1,7 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import map from 'lodash.map';
 import { dropdownOption } from '../../utils/format';
 
@@ -7,13 +9,13 @@ const Dropdown = React.createClass({
   displayName: 'Dropdown',
 
   propTypes: {
-    dispatch: React.PropTypes.func,
-    options: React.PropTypes.object,
-    getOptions: React.PropTypes.func,
-    action: React.PropTypes.func,
-    clear: React.PropTypes.func,
-    paramKey: React.PropTypes.string,
-    label: React.PropTypes.any
+    dispatch: PropTypes.func,
+    options: PropTypes.object,
+    getOptions: PropTypes.func,
+    action: PropTypes.func,
+    clear: PropTypes.func,
+    paramKey: PropTypes.string,
+    label: PropTypes.any
   },
 
   componentWillMount: function () {
@@ -58,4 +60,4 @@ const Dropdown = React.createClass({
     );
   }
 });
-export default Dropdown;
+export default connect()(Dropdown);

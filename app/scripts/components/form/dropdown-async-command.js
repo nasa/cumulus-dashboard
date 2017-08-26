@@ -2,7 +2,6 @@ import React from 'react';
 import { findDOMNode } from 'react-dom';
 import AsyncCommand from '../form/async-command';
 import { addGlobalListener } from '../../utils/browser';
-import { updateDelay } from '../../config';
 
 const DropdownAsync = React.createClass({
   propTypes: {
@@ -52,7 +51,6 @@ const DropdownAsync = React.createClass({
             {config.map(d => <li key={d.text}>
               <AsyncCommand action={d.action}
                 success={() => this.onSuccess(d.success)}
-                successTimeout={updateDelay}
                 error={this.close}
                 status={d.status}
                 disabled={d.disabled}

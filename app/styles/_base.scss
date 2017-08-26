@@ -38,7 +38,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   max-width: 1280px;
-  padding: 0 64px;
+  padding: 0 48px;
   display: block;
   width: auto;
 }
@@ -131,7 +131,7 @@ a:active {
   nav li {
     padding: 1.3em 0 1em;
     display: inline-block;
-    margin-right: 3em;
+    margin-right: 2.5em;
     font-weight: $base-font-light;
     border-bottom: 1px solid $ocean-blue;
     transition: all 0.3s ease 0s;
@@ -147,6 +147,7 @@ a:active {
     }
     &.rightalign {
       margin-left: auto;
+      margin-right: 0;
     }
   }
 }
@@ -426,24 +427,25 @@ a:active {
   margin-top: 1.5em;
   dd, dt {
     display: inline-block;
-  }
-  dt {
-    font-weight: $base-font-semibold;
-    margin-right: 1em;
+    font-size: .9em;
   }
   dd {
-    color: $grey;
+    font-weight: $base-font-semibold;
     &:before {
       content: '';
       width: 10px;
       height: 10px;
       display: inline-block;
-      margin-right: .5em;
+      margin-right: .2em;
       background-size: 10px 10px;
       border-radius: 20px;
     }
   }
-  .ingesting, .processing, .updating, .archiving {
+  dt {
+    color: $grey;
+    margin-right: 0.5em;
+  }
+  .enabled {
     &:before {
       background-color: $yellow;
     }
@@ -458,7 +460,7 @@ a:active {
       background-color: $orange;
     }
   }
-  .failed {
+  .disabled {
     &:before {
       background-color: $error-red;
     }

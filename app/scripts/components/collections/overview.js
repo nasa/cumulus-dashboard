@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import PropTypes from 'prop-types';
 import {
   getCollection,
   listGranules,
@@ -18,15 +19,15 @@ import { updateDelay } from '../../config';
 
 const granuleFields = 'status,granuleId,pdrName,duration,updatedAt';
 
-var CollectionOverview = React.createClass({
+const CollectionOverview = React.createClass({
   displayName: 'CollectionOverview',
 
   propTypes: {
-    params: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    granules: React.PropTypes.object,
-    collections: React.PropTypes.object,
-    router: React.PropTypes.object
+    params: PropTypes.object,
+    dispatch: PropTypes.func,
+    granules: PropTypes.object,
+    collections: PropTypes.object,
+    router: PropTypes.object
   },
 
   componentWillMount: function () {
@@ -108,6 +109,8 @@ var CollectionOverview = React.createClass({
             status={deleteStatus}
             disabled={hasGranules !== 0}
             className={'form-group__element--right'}
+            confirmAction={true}
+            confirmText={`Are you sure you want to delete ${collectionName} ${collectionVersion}?`}
             text={deleteStatus === 'success' ? 'Success!' : 'Delete' } />
 
           <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>

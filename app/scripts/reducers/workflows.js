@@ -17,11 +17,20 @@ export const initialState = {
   map: {}
 };
 
+function createMap (data) {
+  const map = {};
+  data.forEach(d => {
+    map[d.name] = d;
+  });
+  return map;
+}
+
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
   const { data } = action;
   switch (action.type) {
     case WORKFLOWS:
+      set(state, 'map', createMap(data));
       set(state, ['list', 'data'], data);
       set(state, ['list', 'meta'], { queriedAt: new Date() });
       set(state, ['list', 'inflight'], false);

@@ -89,8 +89,8 @@ var EditCollection = React.createClass({
 
   render: function () {
     const collectionName = this.props.params.collectionName;
-    const record = get(this.props.collections.map, [collectionName], {});
-    const meta = get(this.props.collections.updated, [collectionName], {});
+    const record = get(this.props.collections.map, collectionName, {});
+    const meta = get(this.props.collections.updated, collectionName, {});
     const error = this.state.error || record.error || meta.error;
     const schema = this.props.schema[SCHEMA_KEY];
     return (

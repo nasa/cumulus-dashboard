@@ -18,8 +18,6 @@ import AsyncCommands from '../form/dropdown-async-command';
 import ErrorReport from '../errors/report';
 import Metadata from '../table/metadata';
 import { updateInterval } from '../../config';
-import status from '../../utils/status';
-import findkey from 'lodash.findkey';
 
 const metaAccessors = [
   ['PDR Name', 'name'],
@@ -142,10 +140,6 @@ var ProviderOverview = React.createClass({
             to={'/providers/edit/' + providerId}>Edit</Link>
 
           {lastUpdated(provider.queriedAt)}
-          <dl className='status--process'>
-            <dt>Status:</dt>
-            <dd className={provider.status}>{findkey(status, v => v === provider.status)}</dd>
-          </dl>
           {providerError ? <ErrorReport report={providerError} /> : null}
         </section>
 
