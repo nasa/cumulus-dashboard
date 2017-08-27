@@ -134,13 +134,24 @@ export const collectionName = function (collectionId) {
   return collectionId.split('___').join(' / ');
 };
 
-export const collectionLink = function (collectionId) {
+export const collectionNameVersion = function (collectionId) {
   if (!collectionId) return nullValue;
   const split = collectionId.split('___');
-  if (split.length !== 2) return nullValue;
   const name = split[0];
   const version = split[1];
+  return { name, version };
+};
+
+export const collectionLink = function (collectionId) {
+  if (!collectionId) return nullValue;
+  const { name, version } = collectionNameVersion(collectionId);
   return <Link to={`/collections/collection/${name}/${version}`}>{collectionName(collectionId)}</Link>;
+};
+
+export const collectionHref = function (collectionId) {
+  if (!collectionId) return nullValue;
+  const { name, version } = collectionNameVersion(collectionId);
+  return `/collections/collection/${name}/${version}`;
 };
 
 export const providerLink = function (provider) {
