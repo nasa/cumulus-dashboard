@@ -1,5 +1,6 @@
 'use strict';
 
+var path = require('path');
 var fs = require('fs');
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
@@ -34,6 +35,13 @@ if (!process.env.DS_ENV) {
   } else {
     process.env.DS_ENV = 'production';
   }
+}
+
+var assetsPath = process.env.DS_ENV === 'development' ? '/graphics' : '/dashboard/graphics';
+
+// Assign a graphics path
+if (process.env.DS_TARGET) {
+  assetsPath = path.join('/dashboard', process.env.DS_TARGET, 'graphics');
 }
 
 var prodBuild = false;
@@ -168,8 +176,6 @@ gulp.task('build', ['vendorScripts', 'javascript'], function () {
 });
 
 gulp.task('styles', function () {
-  var assets = process.env.DS_ENV === 'development' ? '/graphics'
-    : process.env.DS_ENV === 'staging' ? '/dashboard/dev/graphics' : '/dashboard/graphics';
   return gulp.src('app/styles/main.scss')
     .pipe($.plumber(function (e) {
       notifier.notify({
@@ -196,7 +202,7 @@ gulp.task('styles', function () {
       },
       includePaths: ['.'].concat(require('node-bourbon').includePaths)
     }))
-    .pipe($.preprocess({context: {ASSETS_PATH: assets}}))
+    .pipe($.preprocess({context: {ASSETS_PATH: assetsPath}}))
     .pipe($.sourcemaps.write())
     .pipe(gulp.dest('.tmp/styles'))
     .pipe(reload({stream: true}));
