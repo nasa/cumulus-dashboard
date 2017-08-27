@@ -17,13 +17,6 @@ var EditCollection = React.createClass({
     router: PropTypes.object
   },
 
-  getInitialState: function () {
-    return {
-      collectionName: null,
-      error: null
-    };
-  },
-
   render: function () {
     const { params, collections } = this.props;
     const { collectionName, collectionVersion } = params;
