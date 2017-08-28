@@ -51,22 +51,20 @@ var AddProvider = React.createClass({
       ? get(this.props.providers.created, name, {}) : {};
     const schema = this.props.schema[SCHEMA_KEY];
     return (
-      <div className='page__component page__content--shortened--centered'>
-        <section className='page__section page__section--fullpage-form'>
-          <div className='page__section__header'>
-            <h1 className='heading--large'>Add a Provider</h1>
-            <p className='description'>Create a provider</p>
-          </div>
-          {schema ? <Schema
-            schema={schema}
-            pk={'new-provider'}
-            onSubmit={this.post}
-            router={this.props.router}
-            status={record.status}
-            error={record.status === 'inflight' ? null : record.error}
-          /> : <Loading />}
-        </section>
-      </div>
+      <section className='page__section page__section--fullpage-form'>
+        <div className='page__section__header'>
+          <h1 className='heading--large'>Add a Provider</h1>
+          <p className='description'>Create a provider</p>
+        </div>
+        {schema ? <Schema
+          schema={schema}
+          pk={'new-provider'}
+          onSubmit={this.post}
+          router={this.props.router}
+          status={record.status}
+          error={record.status === 'inflight' ? null : record.error}
+        /> : <Loading />}
+      </section>
     );
   }
 });

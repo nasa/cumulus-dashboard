@@ -51,6 +51,6 @@ const order = {
 }[target] || {};
 Object.assign(config, { order });
 
-// Determine the ordering of the header elements
-
+// attach the target to the config
+Object.assign(config, { target });
 module.exports = config;

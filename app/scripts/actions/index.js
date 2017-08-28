@@ -4,6 +4,7 @@ import url from 'url';
 import { get, post, put, del, wrapRequest } from './helpers';
 import { set as setToken } from '../utils/auth';
 import _config from '../config';
+import { getCollectionId } from '../utils/format';
 
 const root = _config.apiRoot;
 const { pageLimit } = _config;
@@ -205,7 +206,7 @@ export const interval = function (action, wait, immediate) {
 };
 
 export const getCollection = (name, version) => wrapRequest(
-  name, get, `collections?name=${name}&version=${version}`, COLLECTION);
+  getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
 
 export const listCollections = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'collections'),
@@ -213,15 +214,15 @@ export const listCollections = (options) => wrapRequest(null, get, {
 }, COLLECTIONS);
 
 export const createCollection = (payload) => wrapRequest(
-  payload.collectionName, post, 'collections', NEW_COLLECTION, payload);
+  getCollectionId(payload), post, 'collections', NEW_COLLECTION, payload);
 
 export const updateCollection = (payload) => wrapRequest(
-  payload.collectionName, put, `collections/${payload.collectionName}`, UPDATE_COLLECTION, payload);
+  getCollectionId(payload), put, `collections/${payload.name}/${payload.version}`, UPDATE_COLLECTION, payload);
 
 export const clearUpdateCollection = (collectionName) => ({ type: UPDATE_COLLECTION_CLEAR, id: collectionName });
 
-export const deleteCollection = (collectionName) => wrapRequest(
-  collectionName, del, `collections/${collectionName}`, COLLECTION_DELETE);
+export const deleteCollection = (name, version) => wrapRequest(
+  getCollectionId({name, version}), del, `collections/${name}/${version}`, COLLECTION_DELETE);
 
 export const searchCollections = (prefix) => ({ type: SEARCH_COLLECTIONS, prefix: prefix });
 export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH });

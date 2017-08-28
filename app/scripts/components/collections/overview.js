@@ -9,7 +9,7 @@ import {
   deleteCollection
 } from '../../actions';
 import { get } from 'object-path';
-import { seconds, tally, lastUpdated } from '../../utils/format';
+import { seconds, tally, lastUpdated, getCollectionId } from '../../utils/format';
 import ErrorReport from '../errors/report';
 import List from '../table/list-view';
 import Overview from '../app/overview';
@@ -57,20 +57,21 @@ const CollectionOverview = React.createClass({
   },
 
   delete: function () {
-    const collectionName = this.props.params.collectionName;
-    this.props.dispatch(deleteCollection(collectionName));
+    const { collectionName, collectionVersion } = this.props.params;
+    this.props.dispatch(deleteCollection(collectionName, collectionVersion));
   },
 
   navigateBack: function () {
     const { router } = this.props;
-    router.push('/collections/active');
+    router.push('/collections/all');
   },
 
   errors: function () {
-    const collectionName = this.props.params.collectionName;
+    const { collectionName, collectionVersion } = this.props.params;
+    const collectionId = getCollectionId({name: collectionName, version: collectionVersion});
     return [
-      get(this.props.collections.map, [collectionName, 'error']),
-      get(this.props.collections.deleted, [collectionName, 'error'])
+      get(this.props.collections.map, [collectionId, 'error']),
+      get(this.props.collections.deleted, [collectionId, 'error'])
     ].filter(Boolean);
   },
 
@@ -89,11 +90,11 @@ const CollectionOverview = React.createClass({
   render: function () {
     const { collectionName, collectionVersion } = this.props.params;
     const { granules, collections } = this.props;
-    const record = collections.map[collectionName];
+    const collectionId = getCollectionId({name: collectionName, version: collectionVersion});
+    const record = collections.map[collectionId];
     const { list } = granules;
     const { meta } = list;
-    const deleteStatus = get(collections.deleted, [collectionName, 'status']);
-    const hasGranules = get(record.data, 'granules');
+    const deleteStatus = get(collections.deleted, [collectionId, 'status']);
     const errors = this.errors();
 
     // create the overview boxes
@@ -107,7 +108,6 @@ const CollectionOverview = React.createClass({
             success={this.navigateBack}
             successTimeout={updateDelay}
             status={deleteStatus}
-            disabled={hasGranules !== 0}
             className={'form-group__element--right'}
             confirmAction={true}
             confirmText={`Are you sure you want to delete ${collectionName} ${collectionVersion}?`}

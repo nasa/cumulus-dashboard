@@ -466,3 +466,15 @@ a:active {
     }
   }
 }
+
+.app__target--container {
+  background-color: $midnight-blue;
+  padding: 0.6em;
+  margin: 0;
+  text-align: center;
+}
+
+.app__target {
+  color: #FFF;
+  margin: 0;
+}
