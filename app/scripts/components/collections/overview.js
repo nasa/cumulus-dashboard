@@ -63,7 +63,7 @@ const CollectionOverview = React.createClass({
 
   navigateBack: function () {
     const { router } = this.props;
-    router.push('/collections/active');
+    router.push('/collections/all');
   },
 
   errors: function () {
@@ -94,8 +94,7 @@ const CollectionOverview = React.createClass({
     const record = collections.map[collectionId];
     const { list } = granules;
     const { meta } = list;
-    const deleteStatus = get(collections.deleted, [collectionName, 'status']);
-    const hasGranules = get(record.data, 'granules');
+    const deleteStatus = get(collections.deleted, [collectionId, 'status']);
     const errors = this.errors();
 
     // create the overview boxes
@@ -109,7 +108,6 @@ const CollectionOverview = React.createClass({
             success={this.navigateBack}
             successTimeout={updateDelay}
             status={deleteStatus}
-            disabled={hasGranules !== 0}
             className={'form-group__element--right'}
             confirmAction={true}
             confirmText={`Are you sure you want to delete ${collectionName} ${collectionVersion}?`}

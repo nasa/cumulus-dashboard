@@ -1,6 +1,8 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import ErrorReport from '../errors/report';
 
 import 'brace';
 import 'brace/mode/json';
@@ -16,15 +18,15 @@ const TextAreaForm = React.createClass({
   displayName: 'TextAreaForm',
 
   propTypes: {
-    label: React.PropTypes.any,
-    value: React.PropTypes.string,
-    id: React.PropTypes.string,
-    error: React.PropTypes.string,
-    mode: React.PropTypes.string,
-    onChange: React.PropTypes.func,
+    label: PropTypes.any,
+    value: PropTypes.string,
+    id: PropTypes.string,
+    error: PropTypes.any,
+    mode: PropTypes.string,
+    onChange: PropTypes.func,
 
-    minLines: React.PropTypes.number,
-    maxLines: React.PropTypes.number
+    minLines: PropTypes.number,
+    maxLines: PropTypes.number
   },
 
   onChange: function (value) {
@@ -46,7 +48,7 @@ const TextAreaForm = React.createClass({
     return (
       <div className='form__textarea'>
         <label>{label}</label>
-        <span className='form__error'>{error}</span>
+        <ErrorReport report={error} />
         <Ace
           mode={mode}
           theme={config.editorTheme}
