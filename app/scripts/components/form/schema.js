@@ -148,26 +148,17 @@ export const Schema = React.createClass({
     if (props.pk !== newProps.pk) {
       this.setState({ fields: createFormConfig(data, schema, include) });
     }
-    if (newProps.error && !props.error) {
-      this.scrollToTop();
-    }
   },
 
   back: function () {
     this.props.router.goBack();
   },
 
-  scrollToTop: function () {
-    if (this.DOMElement && typeof this.DOMElement.scrollIntoView === 'function') {
-      this.DOMElement.scrollIntoView(true);
-    } else scrollTo(0, 0);
-  },
-
   render: function () {
     const { fields } = this.state;
     const { error } = this.props;
     return (
-      <div ref={(element) => { this.DOMElement = element; }}>
+      <div>
         {error ? <ErrorReport report={error} /> : null}
         <Form
           inputMeta={fields}
