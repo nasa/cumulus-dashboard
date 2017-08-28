@@ -2,7 +2,7 @@
 import React from 'react';
 import { interval, getLogs, clearLogs } from '../../actions';
 import { logsUpdateInterval } from '../../config';
-import moment from 'moment';
+// import moment from 'moment';
 import LoadingEllipsis from '../app/loading-ellipsis';
 import ErrorReport from '../errors/report';
 import Dropdown from '../form/simple-dropdown';
@@ -13,7 +13,7 @@ const noLogs = {
   level: 'meta',
   key: 'no-logs-message'
 };
-const twoDays = 2 * 1000 * 60 * 60 * 24;
+// const twoDays = 2 * 1000 * 60 * 60 * 24;
 
 const statusOptions = [
   'All',
