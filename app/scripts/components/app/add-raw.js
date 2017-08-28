@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import path from 'path';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
@@ -54,7 +53,7 @@ const EditRaw = React.createClass({
     if (status === 'success') {
       const baseRoute = getBaseRoute(pk);
       return setTimeout(() => {
-        router.push(path.join(baseRoute, pk));
+        router.push(baseRoute);
       }, updateDelay);
     } else if (status === 'error' && !error) {
       this.setState({ error: get(state.created, [pk, 'error']) });
