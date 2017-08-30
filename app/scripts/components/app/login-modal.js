@@ -57,18 +57,20 @@ var LoginModal = React.createClass({
           { show ? (
             <div className='modal'>
               <div className='modal__internal'>
-                <h2 className='heading--medium'>Log in to Cumulus</h2>
+                <h2 className='heading--medium with-description'>Log in to Cumulus</h2>
                 <p className='metadata__updated'>{ authenticated ? <strong>Success!</strong> : 'Enter your username and password' }</p>
                 <form>
                   <div className='form__login'>
                     <Text label={'Username'}
                       value={this.state.user}
                       id={'login-user'}
+                      className='input--lg'
                       onChange={(id, value) => this.setState({user: value})} />
                     <Text label={'Password'}
                       value={this.state.pass}
                       id={'login-pass'}
                       type={'password'}
+                      className='input--lg'
                       onChange={(id, value) => this.setState({pass: value})} />
                     <span className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
                       <input

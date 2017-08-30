@@ -10,6 +10,10 @@ input, textarea, select, .form__element__select {
   font-size: .86em;
 }
 
+.input--lg {
+  padding: .6em 2em .7em .7em;
+}
+
 input[type="checkbox"], input[type="radio"] {
   font-size: 1em;
 }

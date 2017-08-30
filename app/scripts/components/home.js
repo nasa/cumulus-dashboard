@@ -84,6 +84,10 @@ var Home = React.createClass({
         <div className='page__content page__content__nosidebar'>
           <section className='page__section'>
             <div className='row'>
+              <div className='heading__wrapper--border'>
+                <h2 className='heading--medium'>Updates</h2>
+                <span>Jan. 20, 2017</span>
+              </div>
               <ul>
                 {overview.map(d => {
                   const value = d[0];
@@ -110,6 +114,9 @@ var Home = React.createClass({
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
+                <h2 className='heading--medium'></h2>
+              </div>
+              /*<div className='heading__wrapper--border'>
                 <h2 className='heading--medium'>Recently Active Granules's</h2>
               </div>
               <List
@@ -122,7 +129,7 @@ var Home = React.createClass({
                 tableSortProps={tableSortProps}
                 query={this.generateQuery()}
               />
-              <Link className='link--secondary link--learn-more' to='/granules'>View Granules Overview</Link>
+              <Link className='link--secondary link--learn-more' to='/granules'>View Granules Overview</Link>*/
             </div>
           </section>
         </div>

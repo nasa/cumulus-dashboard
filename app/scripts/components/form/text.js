@@ -8,7 +8,8 @@ var TextForm = React.createClass({
     id: React.PropTypes.string,
     error: React.PropTypes.string,
     onChange: React.PropTypes.func,
-    type: React.PropTypes.string
+    type: React.PropTypes.string,
+    className: React.PropTypes.string
   },
 
   onChange: function (e) {
@@ -21,7 +22,8 @@ var TextForm = React.createClass({
       value,
       id,
       error,
-      type
+      type,
+      className
     } = this.props;
 
     type = type || 'text';
@@ -34,6 +36,7 @@ var TextForm = React.createClass({
           id={id}
           type={type}
           value={value}
+          className={className}
           onChange={this.onChange}
         />
       </div>
