@@ -85,8 +85,8 @@ var Home = React.createClass({
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium'>Updates</h2>
-                <span>Jan. 20, 2017</span>
+                <h2 className='heading--medium heading--shared-content--right'>Updates</h2>
+                <span className='metadata__updated'>Jan. 20, 2017</span>
               </div>
               <ul>
                 {overview.map(d => {
@@ -106,7 +106,8 @@ var Home = React.createClass({
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium'>Granules Updated Today <span className='num--title'>{numGranules}</span></h2>
+                <h2 className='heading--medium heading--shared-content--right'>Granules Updated <span className='num--title'>{numGranules}</span></h2>
+                <span className='metadata__updated'>Jan. 20, 2017</span>
               </div>
               <GranulesProgress granules={granuleStatus} />
             </div>
@@ -114,9 +115,11 @@ var Home = React.createClass({
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium'></h2>
+                <h2 className='heading--medium heading--shared-content--right'>Errors <span className='num--title'>(8)</span></h2>
+                <span className='metadata__updated'>Jan. 20, 2017</span>
               </div>
-              /*<div className='heading__wrapper--border'>
+              
+              {/*<div className='heading__wrapper--border'>
                 <h2 className='heading--medium'>Recently Active Granules's</h2>
               </div>
               <List
@@ -129,7 +132,7 @@ var Home = React.createClass({
                 tableSortProps={tableSortProps}
                 query={this.generateQuery()}
               />
-              <Link className='link--secondary link--learn-more' to='/granules'>View Granules Overview</Link>*/
+              <Link className='link--secondary link--learn-more' to='/granules'>View Granules Overview</Link>*/}
             </div>
           </section>
         </div>
