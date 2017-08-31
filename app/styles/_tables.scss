@@ -4,6 +4,7 @@
 
 table {
   width: 100%;
+  line-height: 1.6em;
 
   thead {
     td {
@@ -32,6 +33,18 @@ table {
         background-color: darken($background-white, 2%);
       }
     }
+  }
+}
+
+.list--granules {
+  .table__main-asset {
+    max-width: 200px;
+  }
+}
+
+.list--errors {
+  tbody tr td:first-of-type {
+    max-width: 300px;
   }
 }
 
@@ -200,6 +213,7 @@ table {
     background-size: 10px 13px;
     display: inline-block;
     margin-left: .5em;
+    margin-top: .2em;
   }
 }
 
@@ -210,7 +224,7 @@ table {
     height: 8px;
     background-size: 8px 8px;
     display: inline-block;
-    margin-left: .5em
+    margin-left: .5em;
   }
 }
 

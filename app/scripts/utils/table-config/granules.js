@@ -9,8 +9,8 @@ import {
 } from '../../actions';
 
 export const tableHeader = [
-  'Name',
   'Status',
+  'Name',
   'Published',
   'Collection ID',
   'Execution',
@@ -19,8 +19,8 @@ export const tableHeader = [
 ];
 
 export const tableRow = [
-  (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
   'status',
+  (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
   (d) => d.cmrLink ? <a href={d.cmrLink}>{bool(d.published)}</a> : bool(d.published),
   (d) => collectionLink(d.collectionId),
   (d) => <a href={d.execution}>Link</a>,
@@ -29,8 +29,8 @@ export const tableRow = [
 ];
 
 export const tableSortProps = [
-  'granuleId',
   'status',
+  'granuleId',
   'published',
   'collectionId',
   null,

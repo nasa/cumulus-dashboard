@@ -103,15 +103,15 @@ const CollectionOverview = React.createClass({
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>{collectionName} / {collectionVersion}</h1>
-
+          <div className='form-group__element--right'>
           <AsyncCommand action={this.delete}
             success={this.navigateBack}
             successTimeout={updateDelay}
             status={deleteStatus}
-            className={'form-group__element--right'}
             confirmAction={true}
             confirmText={`Are you sure you want to delete ${collectionName} ${collectionVersion}?`}
             text={deleteStatus === 'success' ? 'Success!' : 'Delete' } />
+          </div>
 
           <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
           {lastUpdated(get(record, 'data.timestamp'))}
