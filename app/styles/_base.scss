@@ -119,7 +119,7 @@ a:active {
   h1 {
     float: left;
     margin-right: 2.5em;
-    padding-top: 1em;
+    padding-top: 1.3em;
     img {
       height: 26px;
       width: 165px;
@@ -129,7 +129,7 @@ a:active {
     display: flex;
   }
   nav li {
-    padding: 1.3em 0 1em;
+    padding: 1.5em 0 1.2em;
     display: inline-block;
     margin-right: 2.5em;
     font-weight: $base-font-light;
@@ -168,6 +168,10 @@ a:active {
   padding-top: 7em;
   padding-bottom: 1em;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+
+  h1 {
+    margin-bottom: .3em;
+  }
 }
 
 .content__header--lg {
@@ -468,13 +472,20 @@ a:active {
 }
 
 .app__target--container {
-  background-color: $midnight-blue;
-  padding: 0.6em;
+  background-color: darken($ocean-blue, 10%);
+  border-bottom: 1px solid darken($ocean-blue, 13%);
+  padding: 0.4em 0 .3em;
   margin: 0;
   text-align: center;
+  text-transform: uppercase;
+  font-size: .86em;
 }
 
 .app__target {
   color: #FFF;
   margin: 0;
+}
+
+.width--three-quarters {
+  width: 85%;
 }

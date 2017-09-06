@@ -84,6 +84,10 @@ var Home = React.createClass({
         <div className='page__content page__content__nosidebar'>
           <section className='page__section'>
             <div className='row'>
+              <div className='heading__wrapper--border'>
+                <h2 className='heading--medium heading--shared-content--right'>Updates</h2>
+                <span className='metadata__updated'>Jan. 20, 2017</span>
+              </div>
               <ul>
                 {overview.map(d => {
                   const value = d[0];
@@ -102,15 +106,53 @@ var Home = React.createClass({
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium'>Granules Updated Today <span className='num--title'>{numGranules}</span></h2>
+                <h2 className='heading--medium heading--shared-content--right'>Granules Updated <span className='num--title'>{numGranules}</span></h2>
+                <span className='metadata__updated'>Jan. 20, 2017</span>
               </div>
               <GranulesProgress granules={granuleStatus} />
             </div>
           </section>
-          <section className='page__section'>
+          <section className='page__section list--errors'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium'>Recently Active Granules's</h2>
+                <h2 className='heading--medium heading--shared-content--right'>Errors <span className='num--title'>(8)</span></h2>
+                <span className='metadata__updated'>Jan. 20, 2017</span>
+              </div>
+              <div className='table--wrapper'>
+                <table>
+                  <thead>
+                    <tr>
+                      <td className='table__sort'>Error</td>
+                      <td className='table__sort'>Type</td>
+                      <td className='table__sort'>Level</td>
+                      <td className='table__sort'>Log</td>
+                      <td className='table__sort'>Updated</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className='table__main-asset'><a href=''>Time has exceeded 4 hours by 15mins - Set of granules</a></td>
+                      <td><a>Latency</a></td>
+                      <td>High</td>
+                      <td><a>View Log</a></td>
+                      <td>15 secs ago</td>
+                    </tr>
+                    <tr>
+                      <td className='table__main-asset'><a href=''>T>"Ingesting MYD13A1.A2017185.h33v09.006.2017201231245 failed: Checksum verification failed for MYD13A1.A2017185.h33v09.006.2017201231245"</a></td>
+                      <td><a>Checksum</a></td>
+                      <td>High</td>
+                      <td><a>View Log</a></td>
+                      <td>15 secs ago</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+          <section className='page__section list--granules'>
+            <div className='row'>
+              <div className='heading__wrapper--border'>
+                <h2 className='heading--medium'>Recently Active Granules</h2>
               </div>
               <List
                 list={list}
