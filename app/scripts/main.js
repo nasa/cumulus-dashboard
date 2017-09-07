@@ -106,6 +106,7 @@ render((
           <Route path='completed' component={ListGranules} />
           <Route path='processing' component={ListGranules} />
           <Route path='failed' component={ListGranules} />
+          <Redirect from='running' to='processing' />
         </Route>
         <Route path='pdrs' component={Pdrs}>
           <IndexRoute component={PdrOverview} />

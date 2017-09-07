@@ -1,7 +1,14 @@
 'use strict';
 import React from 'react';
 import { Link } from 'react-router';
-import { fullDate, seconds, bool, nullValue, collectionLink } from '../format';
+import {
+  fullDate,
+  seconds,
+  bool,
+  nullValue,
+  displayCase,
+  collectionLink
+} from '../format';
 import {
   reingestGranule,
   removeGranule,
@@ -19,7 +26,7 @@ export const tableHeader = [
 ];
 
 export const tableRow = [
-  'status',
+  (d) => <Link to={`/granules/${d.status}`} className={`granule__status granule__status--${d.status}`}>{displayCase(d.status)}</Link>,
   (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
   (d) => d.cmrLink ? <a href={d.cmrLink}>{bool(d.published)}</a> : bool(d.published),
   (d) => collectionLink(d.collectionId),
