@@ -1,8 +1,9 @@
 'use strict';
 import React from 'react';
 import { Link } from 'react-router';
+import { get } from 'object-path';
 import {
-  fullDate,
+  fromNow,
   seconds,
   bool,
   nullValue,
@@ -32,7 +33,7 @@ export const tableRow = [
   (d) => collectionLink(d.collectionId),
   (d) => <a href={d.execution}>Link</a>,
   (d) => seconds(d.duration),
-  (d) => fullDate(d.timestamp)
+  (d) => fromNow(d.timestamp)
 ];
 
 export const tableSortProps = [
@@ -49,20 +50,23 @@ export const errorTableHeader = [
   'Name',
   'Published',
   'Error',
+  'Cause',
   'Updated'
 ];
 
 export const errorTableRow = [
   (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
   (d) => bool(d.published),
-  (d) => d.error || nullValue,
-  (d) => fullDate(d.timestamp)
+  (d) => get(d, 'error.Error', nullValue),
+  (d) => get(d, 'error.Cause', nullValue),
+  (d) => fromNow(d.timestamp)
 ];
 
 export const errorTableSortProps = [
-  'granuleId.keyword',
-  'published.keyword',
-  'error.keyword',
+  'granuleId',
+  'published',
+  null,
+  null,
   'timestamp'
 ];
 
