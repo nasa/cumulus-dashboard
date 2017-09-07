@@ -40,7 +40,7 @@ if (!process.env.DS_ENV) {
 var assetsPath = process.env.DS_ENV === 'development' ? '/graphics' : '/dashboard/graphics';
 
 // Assign a graphics path
-if (process.env.DS_TARGET) {
+if (process.env.DS_TARGET && process.env.DS_ENV !== 'development') {
   assetsPath = path.join('/dashboard', process.env.DS_TARGET, 'graphics');
 }
 
