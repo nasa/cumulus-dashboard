@@ -16,7 +16,8 @@ import {
   seconds,
   nullValue,
   bool,
-  collectionLink
+  collectionLink,
+  deleteText
 } from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
@@ -154,7 +155,9 @@ var GranuleOverview = React.createClass({
       action: this.delete,
       disabled: granule.published,
       status: get(this.props.granules.deleted, [granuleId, 'status']),
-      success: this.navigateBack
+      success: this.navigateBack,
+      confirmAction: true,
+      confirmText: deleteText(granuleId)
     }];
 
     const granuleErrorType = granuleError && granule.errorType && granuleErrors[granule.errorType]

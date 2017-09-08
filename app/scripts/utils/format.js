@@ -152,3 +152,7 @@ export const providerLink = function (provider) {
   if (!provider) return nullValue;
   return <Link to={`/providers/provider/${provider}`}>{provider}</Link>;
 };
+
+export const deleteText = function (name) {
+  return `Are you sure you want to permanently delete ${name}?`;
+};

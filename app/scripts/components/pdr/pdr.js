@@ -23,7 +23,8 @@ import {
   seconds,
   truthy,
   displayCase,
-  bool
+  bool,
+  deleteText
 } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
 import { renderProgress } from '../../utils/table-config/pdr-progress';
@@ -133,7 +134,7 @@ var PDR = React.createClass({
               status={deleteStatus}
               className={'form-group__element--right'}
               confirmAction={true}
-              confirmText={`Are you sure you want to delete ${pdrName}?`}
+              confirmText={deleteText(pdrName)}
               text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'} />
             {lastUpdated(queriedAt)}
             {this.renderProgress(record)}

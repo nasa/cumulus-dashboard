@@ -12,7 +12,7 @@ import {
   listCollections
 } from '../../actions';
 import { get } from 'object-path';
-import { fullDate, lastUpdated } from '../../utils/format';
+import { fullDate, lastUpdated, deleteText } from '../../utils/format';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
 import AsyncCommands from '../form/dropdown-async-command';
@@ -127,7 +127,9 @@ var ProviderOverview = React.createClass({
       action: this.delete,
       disabled: provider.published,
       status: deleteStatus,
-      success: this.navigateBack
+      success: this.navigateBack,
+      confirmAction: true,
+      confirmText: deleteText(providerId)
     }];
 
     return (

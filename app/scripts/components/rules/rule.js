@@ -10,7 +10,8 @@ import {
   collectionLink,
   providerLink,
   fullDate,
-  lastUpdated
+  lastUpdated,
+  deleteText
 } from '../../utils/format';
 import {
   getRule,
@@ -117,7 +118,9 @@ const Rule = React.createClass({
       text: 'Delete',
       action: this.delete,
       status: deleteStatus,
-      success: this.navigateBack
+      success: this.navigateBack,
+      confirmAction: true,
+      confirmText: deleteText(ruleName)
     }];
 
     const errors = this.errors();
