@@ -88,12 +88,6 @@ export const pdrSearchResult = function (pdr) {
   );
 };
 
-export const dropdownOption = function (optionElementValue, displayValue) {
-  return (
-    <option value={optionElementValue} key={optionElementValue}>{displayValue}</option>
-  );
-};
-
 export const bool = function (bool) {
   return bool ? 'Yes' : 'No';
 };

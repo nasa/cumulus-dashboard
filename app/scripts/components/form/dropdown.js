@@ -2,8 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import map from 'lodash.map';
-import { dropdownOption } from '../../utils/format';
 
 const Dropdown = React.createClass({
   displayName: 'Dropdown',
@@ -53,7 +51,9 @@ const Dropdown = React.createClass({
         {label ? <label htmlFor={formID}>{label}</label> : null}
         <form id={formID} className='dropdown__wrapper form-group__element'>
           <select onChange={this.onChange}>
-            {map(options || {'': ''}, dropdownOption)}
+            {Object.keys(options || {}).map((key, i) => (
+              <option key={`${options[key]}-${i}`} value={options[key]}>{key}</option>
+            ))}
           </select>
         </form>
       </div>
