@@ -175,7 +175,7 @@ var List = React.createClass({
       bulkActionError
     } = this.state;
     const primaryIdx = 0;
-    const hasActions = !!(Array.isArray(bulkActions) && bulkActions.length);
+    const hasActions = Array.isArray(bulkActions) && bulkActions.length;
 
     return (
       <div className='list-view'>
@@ -216,7 +216,7 @@ var List = React.createClass({
           order={order}
           changeSortProps={this.queryNewSort}
           onSelect={this.updateSelection}
-          canSelect={hasActions}
+          canSelect={!!hasActions}
           selectedRows={selected}
           rowId={rowId}
         />

@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import {
@@ -11,7 +12,7 @@ import {
   listCollections
 } from '../../actions';
 import { get } from 'object-path';
-import { fullDate, lastUpdated } from '../../utils/format';
+import { fullDate, lastUpdated, deleteText } from '../../utils/format';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
 import AsyncCommands from '../form/dropdown-async-command';
@@ -32,12 +33,12 @@ var ProviderOverview = React.createClass({
   displayName: 'Provider',
 
   propTypes: {
-    params: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    providers: React.PropTypes.object,
-    collections: React.PropTypes.object,
-    logs: React.PropTypes.object,
-    router: React.PropTypes.object
+    params: PropTypes.object,
+    dispatch: PropTypes.func,
+    providers: PropTypes.object,
+    collections: PropTypes.object,
+    logs: PropTypes.object,
+    router: PropTypes.object
   },
 
   componentWillMount: function () {
@@ -106,7 +107,6 @@ var ProviderOverview = React.createClass({
       .map(c => c.collectionName);
     const logsQuery = { 'meta.provider': providerId };
     const errors = this.errors();
-    const providerError = provider.error;
 
     const deleteStatus = get(this.props.providers.deleted, [providerId, 'status']);
     const restartStatus = get(this.props.providers.restarted, [providerId, 'status']);
@@ -127,7 +127,9 @@ var ProviderOverview = React.createClass({
       action: this.delete,
       disabled: provider.published,
       status: deleteStatus,
-      success: this.navigateBack
+      success: this.navigateBack,
+      confirmAction: true,
+      confirmText: deleteText(providerId)
     }];
 
     return (
@@ -140,7 +142,6 @@ var ProviderOverview = React.createClass({
             to={'/providers/edit/' + providerId}>Edit</Link>
 
           {lastUpdated(provider.queriedAt)}
-          {providerError ? <ErrorReport report={providerError} /> : null}
         </section>
 
         <section className='page__section'>
@@ -173,4 +174,8 @@ var ProviderOverview = React.createClass({
   }
 });
 
-export default connect(state => state)(ProviderOverview);
+export default connect(state => ({
+  providers: state.providers,
+  collections: state.collections,
+  logs: state.logs
+}))(ProviderOverview);

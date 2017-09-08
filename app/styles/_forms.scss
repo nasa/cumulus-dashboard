@@ -73,6 +73,7 @@ select {
 
 .form--controls {
   margin-bottom: 2em;
+  display: flex;
 }
 
 .search__wrapper {
@@ -145,7 +146,6 @@ select {
 }
 
 .form-group__element {
-  float: left;
   margin-right: 1em;
 }
 
