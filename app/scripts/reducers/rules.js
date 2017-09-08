@@ -21,7 +21,15 @@ import {
 
   RULE_DELETE,
   RULE_DELETE_INFLIGHT,
-  RULE_DELETE_ERROR
+  RULE_DELETE_ERROR,
+
+  RULE_ENABLE,
+  RULE_ENABLE_INFLIGHT,
+  RULE_ENABLE_ERROR,
+
+  RULE_DISABLE,
+  RULE_DISABLE_INFLIGHT,
+  RULE_DISABLE_ERROR
 } from '../actions';
 
 export const initialState = {
@@ -35,7 +43,9 @@ export const initialState = {
   map: {},
   created: {},
   updated: {},
-  deleted: {}
+  deleted: {},
+  enabled: {},
+  disabled: {}
 };
 
 export default function reducer (state = initialState, action) {
@@ -105,6 +115,32 @@ export default function reducer (state = initialState, action) {
     case RULE_DELETE_ERROR:
       set(state, ['deleted', id, 'status'], 'error');
       set(state, ['deleted', id, 'error'], action.error);
+      break;
+
+    case RULE_ENABLE:
+      set(state, ['enabled', id, 'status'], 'success');
+      set(state, ['enabled', id, 'error'], null);
+      del(state, ['disbled', id]);
+      break;
+    case RULE_ENABLE_INFLIGHT:
+      set(state, ['enabled', id, 'status'], 'inflight');
+      break;
+    case RULE_ENABLE_ERROR:
+      set(state, ['enabled', id, 'status'], 'error');
+      set(state, ['enabled', id, 'error'], action.error);
+      break;
+
+    case RULE_DISABLE:
+      set(state, ['disabled', id, 'status'], 'success');
+      set(state, ['disabled', id, 'error'], null);
+      del(state, ['enabled', id]);
+      break;
+    case RULE_DISABLE_INFLIGHT:
+      set(state, ['disabled', id, 'status'], 'inflight');
+      break;
+    case RULE_DISABLE_ERROR:
+      set(state, ['disabled', id, 'status'], 'error');
+      set(state, ['disabled', id, 'error'], action.error);
       break;
   }
   return state;
