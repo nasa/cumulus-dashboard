@@ -58,6 +58,7 @@ var CollectionGranules = React.createClass({
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}
+            sortIdx={6}
           />
         </section>
 

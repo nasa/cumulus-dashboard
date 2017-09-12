@@ -1,6 +1,5 @@
 'use strict';
 const status = {
-  '': '',
   Running: 'running',
   Completed: 'completed',
   Failed: 'failed'
@@ -14,7 +13,6 @@ export const queryStatus = [
 ];
 
 export const pdrStatus = {
-  '': '',
   Discovered: 'discovered',
   Parsed: 'parsed',
   Completed: 'completed',

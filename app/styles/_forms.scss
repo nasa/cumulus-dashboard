@@ -400,3 +400,25 @@ select {
     margin-bottom: 0;
   }
 }
+
+.autocomplete__menu {
+  position: fixed;
+  overflow: auto;
+  max-height: 50%;
+  z-index: 99;
+  background-color: #FFF;
+  border: 1px solid $lightest-grey;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+  border-radius: .2em;
+}
+
+.autocomplete__select {
+  cursor: pointer;
+  padding: .3em .9em;
+  font-size: .86em;
+}
+
+.autocomplete__select--highlighted {
+  background-color: $ocean-blue;
+  color: #FFF;
+}

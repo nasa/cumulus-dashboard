@@ -2,7 +2,7 @@
 import React from 'react';
 import { get } from 'object-path';
 import { Link } from 'react-router';
-import { fullDate, seconds, tally } from '../format';
+import { fromNow, seconds, tally } from '../format';
 import { deleteCollection } from '../../actions';
 
 export const tableHeader = [
@@ -24,7 +24,7 @@ export const tableRow = [
   (d) => tally(get(d, 'stats.running')),
   (d) => tally(get(d, 'stats.failed')),
   (d) => seconds(d.duration),
-  (d) => fullDate(d.timestamp)
+  (d) => fromNow(d.timestamp)
 ];
 
 export const tableSortProps = [

@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import omit from 'lodash.omit';
 import {
   searchPdrs,
   clearPdrsSearch,
@@ -24,8 +23,6 @@ import Dropdown from '../form/dropdown';
 import Search from '../form/search';
 import List from '../table/list-view';
 import { pdrStatus as statusOptions } from '../../utils/status';
-const processingOptions = omit(statusOptions, ['Completed', 'Failed']);
-const processingStatus = Object.keys(processingOptions).map(d => processingOptions[d]).filter(Boolean).join(',');
 
 var ActivePdrs = React.createClass({
   displayName: 'ActivePdrs',
@@ -42,7 +39,7 @@ var ActivePdrs = React.createClass({
     const { pathname } = this.props.location;
     if (pathname === '/pdrs/completed') query.status = 'completed';
     else if (pathname === '/pdrs/failed') query.status = 'failed';
-    else if (pathname === '/pdrs/active') query.status__in = processingStatus;
+    else if (pathname === '/pdrs/active') query.status = 'running';
     return query;
   },
 

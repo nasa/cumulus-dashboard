@@ -19,9 +19,8 @@ import {
   lastUpdated,
   link,
   fullDate,
-  tally,
   seconds,
-  truthy,
+  collectionLink,
   displayCase,
   bool,
   deleteText
@@ -42,18 +41,14 @@ import { updateInterval } from '../../config';
 
 const metaAccessors = [
   ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],
-  ['Original URL', 'originalUrl', link],
+  ['Collection', 'collectionId', collectionLink],
+  ['Execution', 'execution', link],
   ['Status', 'status', displayCase],
-  ['Active', 'isActive', bool],
-  ['Discovered at', 'discoveredAt', fullDate],
-  ['Average Duration', 'averageDuration', seconds],
-  ['Granules Count', 'granulesCount', tally],
-  ['Granules', 'granules', tally],
-  ['PAN', 'PAN', truthy],
+  ['Timestamp', 'timestamp', fullDate],
+  ['Created at', 'createdAt', fullDate],
+  ['Duration', 'duration', seconds],
   ['PAN Sent', 'PANSent', bool],
-  ['PDRD', 'PDRD', truthy],
-  ['PDRD Sent', 'PDRDSent', bool],
-  ['Address', 'address']
+  ['PAN Message', 'PANmessage']
 ];
 
 var PDR = React.createClass({
