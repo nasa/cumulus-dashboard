@@ -61,6 +61,10 @@ var List = React.createClass({
       this.setState({ params: validParams }, () => this.setState({
         queryConfig: this.config() }));
     }
+
+    if (newProps.sortIdx !== this.state.sortIdx) {
+      this.setState({ sortIdx: newProps.sortIdx });
+    }
   },
 
   queryNewPage: function (page) {

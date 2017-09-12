@@ -1,7 +1,8 @@
 'use strict';
 import React from 'react';
+import { get } from 'object-path';
 import { Link } from 'react-router';
-import { fromNow, seconds, bool, nullValue, collectionLink } from '../format';
+import { fromNow, seconds, bool, collectionLink } from '../format';
 import {
   reingestGranule,
   removeGranule,
@@ -48,14 +49,14 @@ export const errorTableHeader = [
 export const errorTableRow = [
   (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
   (d) => bool(d.published),
-  (d) => d.error || nullValue,
+  (d) => get(d, 'error.Error'),
   (d) => fromNow(d.timestamp)
 ];
 
 export const errorTableSortProps = [
-  'granuleId.keyword',
-  'published.keyword',
-  'error.keyword',
+  'granuleId',
+  'published',
+  null,
   'timestamp'
 ];
 

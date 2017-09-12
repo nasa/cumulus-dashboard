@@ -86,6 +86,7 @@ var ProvidersOverview = React.createClass({
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={'name'}
+            sortIdx={5}
           />
         </section>
       </div>

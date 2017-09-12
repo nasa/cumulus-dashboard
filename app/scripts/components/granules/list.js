@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import omit from 'lodash.omit';
 import {
   searchGranules,
   clearGranulesSearch,
@@ -26,8 +25,6 @@ import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
 import Search from '../form/search';
 import statusOptions from '../../utils/status';
-const processingOptions = omit(statusOptions, ['Completed', 'Failed']);
-const processingStatus = Object.keys(processingOptions).map(d => processingOptions[d]).filter(Boolean).join(',');
 
 var AllGranules = React.createClass({
   displayName: 'AllGranules',
@@ -40,11 +37,11 @@ var AllGranules = React.createClass({
   },
 
   generateQuery: function () {
-    const { pathname } = this.props.location;
     const options = {};
-    if (pathname === '/granules/completed') options.status = 'completed';
-    else if (pathname === '/granules/processing') options.status__in = processingStatus;
-    else if (pathname === '/granules/failed') options.status = 'failed';
+    const view = this.getView();
+    if (view === 'completed') options.status = 'completed';
+    else if (view === 'processing') options.status = 'running';
+    else if (view === 'failed') options.status = 'failed';
     return options;
   },
 
@@ -66,10 +63,8 @@ var AllGranules = React.createClass({
     const { count, queriedAt } = list.meta;
     const logsQuery = { 'granuleId__exists': 'true' };
     const view = this.getView();
-    const statOptions = (view === 'completed' || view === 'failed') ? null
-      : view === 'processing' ? processingOptions
-        : statusOptions;
-
+    const statOptions = (view === 'all') ? statusOptions : null;
+    const tableSortIdx = view === 'failed' ? 3 : 6;
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -114,6 +109,7 @@ var AllGranules = React.createClass({
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}
+            sortIdx={tableSortIdx}
           />
         </section>
         <LogViewer

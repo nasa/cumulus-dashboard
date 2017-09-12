@@ -99,6 +99,7 @@ var RulesOverview = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={{}}
+            sortIdx={5}
             bulkActions={this.generateBulkActions()}
             rowId={'name'}
           />

@@ -67,6 +67,7 @@ var CollectionList = React.createClass({
             bulkActions={this.generateBulkActions()}
             isRemovable={true}
             rowId={'collectionName'}
+            sortIdx={7}
           />
         </section>
       </div>

@@ -137,6 +137,7 @@ const CollectionOverview = React.createClass({
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
             rowId={'granuleId'}
+            sortIdx={6}
           />
           <Link className='link--secondary link--learn-more' to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}>View All Granules</Link>
         </section>

@@ -131,7 +131,7 @@ var ExecutionOverview = React.createClass({
             tableSortProps={tableSortProps}
             query={{}}
             rowId={'name'}
-            sortIdx={2}
+            sortIdx={3}
           />
         </section>
       </div>
