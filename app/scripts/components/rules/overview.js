@@ -15,7 +15,7 @@ import {
   getCollectionId,
   collectionLink,
   providerLink,
-  fullDate
+  fromNow
 } from '../../utils/format';
 import List from '../table/list-view';
 
@@ -34,7 +34,7 @@ const tableRow = [
   (d) => collectionLink(getCollectionId(d.collection)),
   'rule.type',
   'state',
-  (d) => fullDate(d.timestamp)
+  (d) => fromNow(d.timestamp)
 ];
 
 const tableSortProps = [

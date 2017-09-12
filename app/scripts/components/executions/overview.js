@@ -13,7 +13,7 @@ import {
   interval
 } from '../../actions';
 import {
-  fullDate,
+  fromNow,
   seconds,
   tally,
   lastUpdated,
@@ -42,7 +42,7 @@ const tableRow = [
   (d) => <a href={d.execution} title={d.name}>{truncate(d.name, 24)}</a>,
   (d) => displayCase(d.status),
   'type',
-  (d) => fullDate(d.createdAt),
+  (d) => fromNow(d.createdAt),
   (d) => seconds(d.duration),
   'collectionId'
 ];
