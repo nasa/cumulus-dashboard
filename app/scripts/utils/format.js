@@ -88,12 +88,6 @@ export const pdrSearchResult = function (pdr) {
   );
 };
 
-export const dropdownOption = function (optionElementValue, displayValue) {
-  return (
-    <option value={optionElementValue} key={optionElementValue}>{displayValue}</option>
-  );
-};
-
 export const bool = function (bool) {
   return bool ? 'Yes' : 'No';
 };
@@ -157,4 +151,8 @@ export const collectionHref = function (collectionId) {
 export const providerLink = function (provider) {
   if (!provider) return nullValue;
   return <Link to={`/providers/provider/${provider}`}>{provider}</Link>;
+};
+
+export const deleteText = function (name) {
+  return `Are you sure you want to permanently delete ${name}?`;
 };

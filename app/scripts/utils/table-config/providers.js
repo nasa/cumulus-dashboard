@@ -1,58 +1,34 @@
 'use strict';
 import React from 'react';
 import { Link } from 'react-router';
-import { fullDate, nullValue } from '../format';
+import { fromNow } from '../format';
 import { deleteProvider, restartProvider, stopProvider } from '../../actions';
 
 export const tableHeader = [
   'Name',
-  'Group',
-  'Status',
+  'Host',
   'Collections',
+  'Global Connection Limit',
   'Protocol',
-  'Last Update'
+  'Timestamp'
 ];
 
 export const tableRow = [
   (d) => <Link to={`providers/provider/${d.id}`}>{d.id}</Link>,
-  'providerName',
-  'status',
+  'host',
   'collections',
+  'globalConnectionLimit',
   'protocol',
-  (d) => fullDate(d.createdAt)
+  (d) => fromNow(d.timestamp)
 ];
 
 export const tableSortProps = [
   'id',
-  'providerName.keyword',
-  'status.keyword',
-  null,
-  'protocol.keyword',
-  'updatedAt'
-];
-
-export const errorTableHeader = [
-  'Name',
-  'Group',
-  'Error',
-  'Protocol',
-  'Last Update'
-];
-
-export const errorTableRow = [
-  (d) => <Link to={`providers/provider/${d.name}`}>{d.name}</Link>,
-  'providerName',
-  (d) => d.error || nullValue,
+  'host',
+  'collections',
+  'globalConnectionLimit',
   'protocol',
-  (d) => fullDate(d.createdAt)
-];
-
-export const errorTableSortProps = [
-  'name.keyword',
-  'providerName.keyword',
-  'error.keyword',
-  'protocol.keyword',
-  'updatedAt'
+  'timestamp'
 ];
 
 const confirmDelete = (d) => `Delete ${d} Provider(s)?`;

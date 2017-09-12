@@ -9,7 +9,13 @@ import {
   deleteCollection
 } from '../../actions';
 import { get } from 'object-path';
-import { seconds, tally, lastUpdated, getCollectionId } from '../../utils/format';
+import {
+  seconds,
+  tally,
+  lastUpdated,
+  getCollectionId,
+  deleteText
+} from '../../utils/format';
 import ErrorReport from '../errors/report';
 import List from '../table/list-view';
 import Overview from '../app/overview';
@@ -109,7 +115,7 @@ const CollectionOverview = React.createClass({
             successTimeout={updateDelay}
             status={deleteStatus}
             confirmAction={true}
-            confirmText={`Are you sure you want to delete ${collectionName} ${collectionVersion}?`}
+            confirmText={deleteText(`${collectionName} ${collectionVersion}`)}
             text={deleteStatus === 'success' ? 'Success!' : 'Delete' } />
           </div>
 
@@ -131,6 +137,7 @@ const CollectionOverview = React.createClass({
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
             rowId={'granuleId'}
+            sortIdx={6}
           />
           <Link className='link--secondary link--learn-more' to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}>View All Granules</Link>
         </section>

@@ -19,11 +19,11 @@ import {
   lastUpdated,
   link,
   fullDate,
-  tally,
   seconds,
-  truthy,
+  collectionLink,
   displayCase,
-  bool
+  bool,
+  deleteText
 } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
 import { renderProgress } from '../../utils/table-config/pdr-progress';
@@ -41,18 +41,14 @@ import { updateInterval } from '../../config';
 
 const metaAccessors = [
   ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],
-  ['Original URL', 'originalUrl', link],
+  ['Collection', 'collectionId', collectionLink],
+  ['Execution', 'execution', link],
   ['Status', 'status', displayCase],
-  ['Active', 'isActive', bool],
-  ['Discovered at', 'discoveredAt', fullDate],
-  ['Average Duration', 'averageDuration', seconds],
-  ['Granules Count', 'granulesCount', tally],
-  ['Granules', 'granules', tally],
-  ['PAN', 'PAN', truthy],
+  ['Timestamp', 'timestamp', fullDate],
+  ['Created at', 'createdAt', fullDate],
+  ['Duration', 'duration', seconds],
   ['PAN Sent', 'PANSent', bool],
-  ['PDRD', 'PDRD', truthy],
-  ['PDRD Sent', 'PDRDSent', bool],
-  ['Address', 'address']
+  ['PAN Message', 'PANmessage']
 ];
 
 var PDR = React.createClass({
@@ -133,7 +129,7 @@ var PDR = React.createClass({
               status={deleteStatus}
               className={'form-group__element--right'}
               confirmAction={true}
-              confirmText={`Are you sure you want to delete ${pdrName}?`}
+              confirmText={deleteText(pdrName)}
               text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'} />
             {lastUpdated(queriedAt)}
             {this.renderProgress(record)}

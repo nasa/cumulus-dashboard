@@ -51,7 +51,6 @@ import AddProvider from './components/providers/add';
 import EditProvider from './components/providers/edit';
 import ProvidersOverview from './components/providers/overview';
 import Provider from './components/providers/provider';
-import ListProviders from './components/providers/list';
 
 import Workflows from './components/workflows';
 import WorkflowsOverview from './components/workflows/overview';
@@ -111,7 +110,6 @@ render((
         <Route path='pdrs' component={Pdrs}>
           <IndexRoute component={PdrOverview} />
           <Route path='active' component={PdrList} />
-          <Route path='all' component={PdrList} />
           <Route path='failed' component={PdrList} />
           <Route path='completed' component={PdrList} />
           <Route path='pdr/:pdrName' component={Pdr} />
@@ -120,10 +118,6 @@ render((
           <IndexRoute component={ProvidersOverview} />
           <Route path='add' component={AddProvider} />
           <Route path='edit/:providerId' component={EditProvider} />
-          <Route path='active' component={ListProviders} />
-          <Route path='all' component={ListProviders} />
-          <Route path='inactive' component={ListProviders} />
-          <Route path='failed' component={ListProviders} />
           <Route path='provider/:providerId' component={Provider} />
         </Route>
         <Route path='workflows' component={Workflows}>

@@ -1,9 +1,25 @@
 'use strict';
+import c from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import map from 'lodash.map';
-import { dropdownOption } from '../../utils/format';
+import Autocomplete from 'react-autocomplete';
+
+function shouldItemRender ({ label }, value) {
+  return label.toLowerCase().indexOf(value) >= 0;
+}
+
+function renderItem (item, highlighted) {
+  return <div className={c('autocomplete__select', {
+    'autocomplete__select--highlighted': highlighted
+  })} key={item.value}>{item.label}</div>;
+}
+
+function renderMenu (items, value, style) {
+  return (
+    <div className='autocomplete__menu' style={style} children={items} />
+  );
+}
 
 const Dropdown = React.createClass({
   displayName: 'Dropdown',
@@ -18,6 +34,12 @@ const Dropdown = React.createClass({
     label: PropTypes.any
   },
 
+  getInitialState: function () {
+    return {
+      value: ''
+    };
+  },
+
   componentWillMount: function () {
     const { dispatch, getOptions } = this.props;
     if (getOptions) { dispatch(getOptions()); }
@@ -28,12 +50,17 @@ const Dropdown = React.createClass({
     dispatch(clear(this.props.paramKey));
   },
 
+  onSelect: function (selected, item) {
+    const { dispatch, action } = this.props;
+    dispatch(action({ key: this.props.paramKey, value: selected }));
+    this.setState({ value: item.label });
+  },
+
   onChange: function (e) {
-    const { dispatch, action, clear } = this.props;
-    const selected = e.currentTarget.value;
-    if (selected.length) {
-      dispatch(action({ key: this.props.paramKey, value: selected }));
-    } else {
+    const { dispatch, clear } = this.props;
+    const { value } = e.target;
+    this.setState({ value });
+    if (!value.length) {
       dispatch(clear(this.props.paramKey));
     }
   },
@@ -42,6 +69,7 @@ const Dropdown = React.createClass({
     // `options` are expected in the following format:
     // {displayValue1: optionElementValue1, displayValue2, optionElementValue2, ...}
     const { options, label, paramKey } = this.props;
+    const items = options ? Object.keys(options).map(label => ({label, value: options[label]})) : [];
 
     // Make sure this form ID is unique!
     // If needed in future, could add MD5 hash of stringified options,
@@ -51,10 +79,17 @@ const Dropdown = React.createClass({
     return (
       <div className='filter__item'>
         {label ? <label htmlFor={formID}>{label}</label> : null}
-        <form id={formID} className='dropdown__wrapper form-group__element'>
-          <select onChange={this.onChange}>
-            {map(options || {'': ''}, dropdownOption)}
-          </select>
+        <form className='form-group__element' id={formID}>
+          <Autocomplete
+            getItemValue={item => item.value}
+            items={items}
+            renderItem={renderItem}
+            shouldItemRender={shouldItemRender}
+            value={this.state.value}
+            onChange={this.onChange}
+            onSelect={this.onSelect}
+            renderMenu={renderMenu}
+          />
         </form>
       </div>
     );

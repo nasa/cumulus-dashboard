@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { listProviders, getCount, interval } from '../../actions';
@@ -45,10 +44,7 @@ var ProvidersOverview = React.createClass({
   },
 
   generateQuery: function () {
-    return {
-      limit: 10,
-      status: 'ingesting'
-    };
+    return {};
   },
 
   renderOverview: function (count) {
@@ -71,7 +67,7 @@ var ProvidersOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>Providers Overview</h1>
+          <h1 className='heading--large heading--shared-content with-description'>All Providers</h1>
           {lastUpdated(queriedAt)}
           {overview}
         </section>
@@ -90,10 +86,9 @@ var ProvidersOverview = React.createClass({
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={'name'}
+            sortIdx={5}
           />
         </section>
-
-        <Link to='/providers/active'>View All Active Providers</Link>
       </div>
     );
   }

@@ -16,7 +16,8 @@ import {
   seconds,
   nullValue,
   bool,
-  collectionLink
+  collectionLink,
+  deleteText
 } from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
@@ -53,11 +54,6 @@ const metaAccessors = [
   ['Duplicate', 'hasDuplicate', bool],
   ['Total duration', 'duration', seconds]
 ];
-
-const granuleErrors = {
-  ingest: 'This granule failed during the ingest phase',
-  processing: 'This granule failed during the processing phase'
-};
 
 var GranuleOverview = React.createClass({
   displayName: 'Granule',
@@ -138,7 +134,7 @@ var GranuleOverview = React.createClass({
     }
     const logsQuery = { 'meta.granuleId': granuleId };
     const errors = this.errors();
-    const granuleError = granule.error;
+    const granuleError = granule.error && typeof granule.error === 'object' ? `${granule.error.Error}: ${granule.error.Cause}` : null;
     const dropdownConfig = [{
       text: 'Reingest',
       action: this.reingest,
@@ -154,11 +150,11 @@ var GranuleOverview = React.createClass({
       action: this.delete,
       disabled: granule.published,
       status: get(this.props.granules.deleted, [granuleId, 'status']),
-      success: this.navigateBack
+      success: this.navigateBack,
+      confirmAction: true,
+      confirmText: deleteText(granuleId)
     }];
 
-    const granuleErrorType = granuleError && granule.errorType && granuleErrors[granule.errorType]
-      ? granuleErrors[granule.errorType] : null;
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -166,7 +162,6 @@ var GranuleOverview = React.createClass({
           <AsyncCommands config={dropdownConfig} />
           {lastUpdated(granule.timestamp)}
           {granuleError ? <ErrorReport report={granuleError} /> : null}
-          {granuleErrorType ? <ErrorReport report={granuleErrorType} /> : null}
         </section>
 
         <section className='page__section'>

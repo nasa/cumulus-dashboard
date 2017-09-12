@@ -61,6 +61,10 @@ var List = React.createClass({
       this.setState({ params: validParams }, () => this.setState({
         queryConfig: this.config() }));
     }
+
+    if (newProps.sortIdx !== this.state.sortIdx) {
+      this.setState({ sortIdx: newProps.sortIdx });
+    }
   },
 
   queryNewPage: function (page) {
@@ -175,7 +179,7 @@ var List = React.createClass({
       bulkActionError
     } = this.state;
     const primaryIdx = 0;
-    const hasActions = !!(Array.isArray(bulkActions) && bulkActions.length);
+    const hasActions = Array.isArray(bulkActions) && bulkActions.length;
 
     return (
       <div className='list-view'>
@@ -216,7 +220,7 @@ var List = React.createClass({
           order={order}
           changeSortProps={this.queryNewSort}
           onSelect={this.updateSelection}
-          canSelect={hasActions}
+          canSelect={!!hasActions}
           selectedRows={selected}
           rowId={rowId}
         />

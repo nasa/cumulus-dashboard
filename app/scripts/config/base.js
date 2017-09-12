@@ -2,7 +2,7 @@
 import moment from 'moment';
 module.exports = {
   environment: 'development',
-  apiRoot: 'https://ejxhiu80n0.execute-api.us-east-1.amazonaws.com/dev/',
+  apiRoot: 'https://cumulus.developmentseed.org/api/lpdaac/',
 
   graphicsPath: '/graphics/',
 
