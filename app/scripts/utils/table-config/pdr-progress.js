@@ -2,7 +2,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { get } from 'object-path';
-import { tally, bool, fromNow, truncate } from '../format';
+import { tally, bool, fromNow } from '../format';
+import ErrorReport from '../../components/errors/report';
 
 import statusOptions from '../status';
 const stats = Object.keys(statusOptions).map(d => statusOptions[d]).filter(Boolean);
@@ -28,15 +29,11 @@ function bar (completed, failed, text) {
 export const renderProgress = function (d) {
   // if the status is failed, return it as such
   if (d.status === 'failed') {
-    let parsed;
-    try {
-      parsed = JSON.parse(d.error);
-    } catch (e) {
-      parsed = null;
-    }
-    const error = parsed && parsed.message ? parsed.message : truncate(d.error);
-    return <span className='table__error'>{error}</span>;
-  }
+    const type = get(d, 'error.Error');
+    const cause = get(d, 'error.Cause');
+    const error = `${type}: ${cause}`;
+    return <ErrorReport report={error} />;
+  } else if (typeof d.status === 'undefined') return null;
   const granules = d.granulesStatus;
   const total = stats.reduce((a, b) => a + get(granules, b, 0), 0);
   const completed = get(granules, 'completed', 0);
