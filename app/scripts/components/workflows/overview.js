@@ -31,7 +31,7 @@ var WorkflowOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>Workflows
+          <h1 className='heading--large heading--shared-content with-description'>All Workflows
             <span className='num--title'>{count ? ` (${tally(count)})` : null}</span>
           </h1>
 

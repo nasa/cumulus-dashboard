@@ -1,6 +1,6 @@
 'use strict';
 const routes = [
-  ['Overview', null]
+  ['All Executions', null]
 ];
 
 const singleRoutes = [

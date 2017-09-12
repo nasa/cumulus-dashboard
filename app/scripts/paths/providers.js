@@ -2,11 +2,7 @@
 import tally from './tally';
 
 const providerRoutes = [
-  ['Overview', null],
-  ['All Providers', 'all'],
-  ['Active', 'active', (d) => d.key === 'ingesting'],
-  ['Inactive', 'inactive', (d) => d.key === 'stopped'],
-  ['Failed', 'failed', (d) => d.key === 'failed']
+  ['All Providers', null]
 ];
 
 const EMPTY = [['', '']];

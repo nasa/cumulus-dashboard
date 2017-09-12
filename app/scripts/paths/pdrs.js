@@ -1,13 +1,10 @@
 'use strict';
 import tally from './tally';
-import { pdrQueryStatus } from '../utils/status';
-const processing = pdrQueryStatus.filter(d => d !== 'failed' && d !== 'completed');
 
 const pdrRoutes = [
   ['Overview', null],
-  ['All PDRs', 'all'],
   ['Completed', 'completed', (d) => d.key === 'completed'],
-  ['Active', 'active', (d) => processing.indexOf(d.key) >= 0],
+  ['Active', 'active', (d) => d.key === 'running'],
   ['Failed', 'failed', (d) => d.key === 'failed']
 ];
 

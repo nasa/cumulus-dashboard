@@ -9,7 +9,7 @@ import { bulkActions } from '../../utils/table-config/pdrs';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdr-progress';
 import List from '../table/list-view';
 import Overview from '../app/overview';
-import { recent, updateInterval } from '../../config';
+import { updateInterval } from '../../config';
 
 var PdrOverview = React.createClass({
   displayName: 'PdrOverview',
@@ -36,9 +36,7 @@ var PdrOverview = React.createClass({
   },
 
   generateQuery: function () {
-    return {
-      updatedAt__from: recent
-    };
+    return {};
   },
 
   generateBulkActions: function () {
@@ -66,7 +64,7 @@ var PdrOverview = React.createClass({
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Recently Updated PDRs <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>All PDRs <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
           </div>
 
           <List

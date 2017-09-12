@@ -63,7 +63,7 @@ const bulkActions = (rules) => [{
   confirm: (d) => `Delete ${d} Rule(s)?`
 }];
 
-var IngestRules = React.createClass({
+var RulesOverview = React.createClass({
   propTypes: {
     dispatch: PropTypes.func,
     rules: PropTypes.object
@@ -85,7 +85,7 @@ var IngestRules = React.createClass({
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>Ingest Rules <span className='num--title'>{ !isNaN(count) ? `(${tally(count)})` : null }</span>
+            <h1 className='heading--large heading--shared-content with-description'>All Rules <span className='num--title'>{ !isNaN(count) ? `(${tally(count)})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>
@@ -110,4 +110,4 @@ var IngestRules = React.createClass({
 
 export default connect(state => ({
   rules: state.rules
-}))(IngestRules);
+}))(RulesOverview);
