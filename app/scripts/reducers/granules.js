@@ -180,7 +180,7 @@ export default function reducer (state = initialState, action) {
         const { name, version } = d;
         obj[`${name} ${version}`] = `${name}___${version}`;
         return obj;
-      }, {'': ''});
+      }, {});
       set(state, ['dropdowns', 'collectionName', 'options'], options);
       break;
     case OPTIONS_COLLECTIONNAME_INFLIGHT:
