@@ -15,7 +15,7 @@ var CollectionLogs = React.createClass({
   },
 
   render: function () {
-    const collectionName = this.props.params.collectionName;
+    const collectionName = this.props.params.name;
     const logsQuery = { 'meta.collectionName__exists': 'true' };
     const { queriedAt } = this.props.logs;
     return (

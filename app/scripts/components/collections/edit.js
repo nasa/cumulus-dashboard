@@ -19,16 +19,16 @@ var EditCollection = React.createClass({
 
   render: function () {
     const { params, collections } = this.props;
-    const { collectionName, collectionVersion } = params;
-    const collectionId = getCollectionId({name: collectionName, version: collectionVersion});
+    const { name, version } = params;
+    const collectionId = getCollectionId({ name, version });
     return (
       <EditRaw
         pk={collectionId}
         primaryProperty={'name'}
         state={collections}
-        getRecord={() => getCollection(collectionName, collectionVersion)}
+        getRecord={() => getCollection(name, version)}
         updateRecord={updateCollection}
-        backRoute={`/collections/collection/${collectionName}/${collectionVersion}`}
+        backRoute={`/collections/collection/${name}/${version}`}
         clearRecordUpdate={clearUpdateCollection}
       />
     );

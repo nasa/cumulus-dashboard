@@ -2,10 +2,21 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { lastUpdated } from '../../utils/format';
-import { listGranules } from '../../actions';
-import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
+import { getCollectionId, lastUpdated } from '../../utils/format';
+import {
+  listGranules,
+  filterGranules,
+  clearGranulesFilter
+} from '../../actions';
+import {
+  tableHeader,
+  tableRow,
+  tableSortProps,
+  bulkActions
+} from '../../utils/table-config/granules';
 import List from '../table/list-view';
+import Dropdown from '../form/dropdown';
+import statusOptions from '../../utils/status';
 
 var CollectionGranules = React.createClass({
   displayName: 'CollectionGranules',
@@ -17,10 +28,8 @@ var CollectionGranules = React.createClass({
   },
 
   generateQuery: function () {
-    return {
-      collectionName: this.props.params.collectionName,
-      collectionVersion: this.props.params.collectionVersion
-    };
+    const collectionId = getCollectionId(this.props.params);
+    return { collectionId };
   },
 
   generateBulkActions: function () {
@@ -29,8 +38,8 @@ var CollectionGranules = React.createClass({
   },
 
   render: function () {
-    const collectionName = this.props.params.collectionName;
-    const collectionVersion = this.props.params.collectionVersion;
+    const collectionName = this.props.params.name;
+    const collectionVersion = this.props.params.version;
     const { list } = this.props.granules;
     const { meta } = list;
     return (
@@ -46,6 +55,15 @@ var CollectionGranules = React.createClass({
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>Granules <span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
+          </div>
+          <div className='filters filters__wlabels'>
+          <Dropdown
+          options={statusOptions}
+          action={filterGranules}
+          clear={clearGranulesFilter}
+          paramKey={'status'}
+          label={'Status'}
+          />
           </div>
 
           <List
