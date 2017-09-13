@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import {
   interval,
@@ -135,7 +134,6 @@ var GranuleOverview = React.createClass({
     if (granule.files) {
       for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }
     }
-    const logsQuery = { 'granuleId': granuleId };
     const errors = this.errors();
     const granuleError = granule.error && typeof granule.error === 'object' ? `${granule.error.Error}: ${granule.error.Cause}` : null;
     const dropdownConfig = [{
@@ -189,7 +187,7 @@ var GranuleOverview = React.createClass({
 
         <section className='page__section'>
           <LogViewer
-            query={logsQuery}
+            query={{q: granuleId}}
             dispatch={this.props.dispatch}
             logs={this.props.logs}
             notFound={`No recent logs for ${granuleId}`}

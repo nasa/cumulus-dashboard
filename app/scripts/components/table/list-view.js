@@ -114,7 +114,8 @@ var List = React.createClass({
     // not-elegant way to trigger a re-fresh in the timer
     this.setState({
       completedBulkActions: this.state.completedBulkActions + 1,
-      bulkActionError: null
+      bulkActionError: null,
+      selected: []
     });
   },
 
