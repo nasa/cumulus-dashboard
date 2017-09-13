@@ -127,8 +127,8 @@ var GranuleOverview = React.createClass({
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
     } else if (record.error) {
-      return <ErrorReport report={record.error} />
-    };
+      return <ErrorReport report={record.error} />;
+    }
 
     const granule = record.data;
     const files = [];
