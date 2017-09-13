@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import {
@@ -17,6 +18,8 @@ import {
   nullValue,
   bool,
   collectionLink,
+  providerLink,
+  pdrLink,
   deleteText
 } from '../../utils/format';
 import SortableTable from '../table/sortable';
@@ -46,9 +49,9 @@ const tableRow = [
 
 const metaAccessors = [
   ['Status', 'status', displayCase],
-  ['PDR Name', 'pdrName', (d) => d ? <Link to={`pdrs/pdr/${d}`}>{d}</Link> : nullValue],
+  ['PDR Name', 'pdrName', pdrLink],
   ['Collection', 'collectionId', collectionLink],
-  ['Provider', 'provider', (d) => d ? <Link to={`providers/provider/${d}`}>{d}</Link> : nullValue],
+  ['Provider', 'provider', providerLink],
   ['CMR Link', 'cmrLink', (d) => d ? <a href={d}>Link</a> : nullValue],
   ['Published', 'published', bool],
   ['Duplicate', 'hasDuplicate', bool],
@@ -59,11 +62,11 @@ var GranuleOverview = React.createClass({
   displayName: 'Granule',
 
   propTypes: {
-    params: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    granules: React.PropTypes.object,
-    logs: React.PropTypes.object,
-    router: React.PropTypes.object
+    params: PropTypes.object,
+    dispatch: PropTypes.func,
+    granules: PropTypes.object,
+    logs: PropTypes.object,
+    router: PropTypes.object
   },
 
   componentWillMount: function () {
@@ -132,7 +135,7 @@ var GranuleOverview = React.createClass({
     if (granule.files) {
       for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }
     }
-    const logsQuery = { 'meta.granuleId': granuleId };
+    const logsQuery = { 'granuleId': granuleId };
     const errors = this.errors();
     const granuleError = granule.error && typeof granule.error === 'object' ? `${granule.error.Error}: ${granule.error.Cause}` : null;
     const dropdownConfig = [{
@@ -197,4 +200,7 @@ var GranuleOverview = React.createClass({
   }
 });
 
-export default connect(state => state)(GranuleOverview);
+export default connect(state => ({
+  granules: state.granules,
+  logs: state.logs
+}))(GranuleOverview);

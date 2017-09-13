@@ -71,7 +71,18 @@ export const collectionSearchResult = function (collection) {
 };
 
 export const granuleLink = function (granuleId) {
+  if (!granuleId) return nullValue;
   return <Link to={`granules/granule/${granuleId}`}>{granuleId}</Link>;
+};
+
+export const pdrLink = function (pdrName) {
+  if (!pdrName) return nullValue;
+  return <Link to={`pdrs/pdr/${pdrName}`}>{pdrName}</Link>;
+};
+
+export const providerLink = function (provider) {
+  if (!provider) return nullValue;
+  return <Link to={`providers/provider/${provider}`}>{provider}</Link>;
 };
 
 export const bool = function (bool) {
@@ -132,11 +143,6 @@ export const collectionHref = function (collectionId) {
   if (!collectionId) return nullValue;
   const { name, version } = collectionNameVersion(collectionId);
   return `/collections/collection/${name}/${version}`;
-};
-
-export const providerLink = function (provider) {
-  if (!provider) return nullValue;
-  return <Link to={`/providers/provider/${provider}`}>{provider}</Link>;
 };
 
 export const deleteText = function (name) {
