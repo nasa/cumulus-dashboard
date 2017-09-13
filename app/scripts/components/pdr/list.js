@@ -8,7 +8,7 @@ import {
   filterPdrs,
   clearPdrsFilter
 } from '../../actions';
-import { pdrSearchResult, lastUpdated, tally, displayCase } from '../../utils/format';
+import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
   tableHeader,
   tableRow,
@@ -80,7 +80,6 @@ var ActivePdrs = React.createClass({
             ) : null}
             <Search dispatch={this.props.dispatch}
               action={searchPdrs}
-              format={pdrSearchResult}
               clear={clearPdrsSearch}
             />
           </div>

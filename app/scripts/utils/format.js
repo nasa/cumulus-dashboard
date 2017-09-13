@@ -70,22 +70,8 @@ export const collectionSearchResult = function (collection) {
   );
 };
 
-export const granuleSearchResult = function (granule) {
-  const { granuleId } = granule;
-  return (
-    <li key={granuleId}>
-      <Link to={`granules/granule/${granuleId}/overview`}>{granuleId}</Link>
-    </li>
-  );
-};
-
-export const pdrSearchResult = function (pdr) {
-  const { pdrName } = pdr;
-  return (
-    <li key={pdrName}>
-      <Link to={`pdrs/pdr/${pdrName}`}>{pdrName}</Link>
-    </li>
-  );
+export const granuleLink = function (granuleId) {
+  return <Link to={`granules/granule/${granuleId}`}>{granuleId}</Link>;
 };
 
 export const bool = function (bool) {

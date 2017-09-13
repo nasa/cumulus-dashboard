@@ -8,7 +8,9 @@ import {
   bool,
   nullValue,
   displayCase,
-  collectionLink
+  collectionLink,
+  link,
+  granuleLink
 } from '../format';
 import {
   reingestGranule,
@@ -28,10 +30,10 @@ export const tableHeader = [
 
 export const tableRow = [
   (d) => <Link to={`/granules/${d.status}`} className={`granule__status granule__status--${d.status}`}>{displayCase(d.status)}</Link>,
-  (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
+  (d) => granuleLink(d.granuleId),
   (d) => d.cmrLink ? <a href={d.cmrLink}>{bool(d.published)}</a> : bool(d.published),
   (d) => collectionLink(d.collectionId),
-  (d) => <a href={d.execution}>Link</a>,
+  (d) => link(d.execution),
   (d) => seconds(d.duration),
   (d) => fromNow(d.timestamp)
 ];
@@ -54,7 +56,7 @@ export const errorTableHeader = [
 ];
 
 export const errorTableRow = [
-  (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
+  (d) => granuleLink(d.granuleId),
   (d) => bool(d.published),
   (d) => get(d, 'error.Error', nullValue),
   (d) => fromNow(d.timestamp)
