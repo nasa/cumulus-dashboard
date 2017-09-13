@@ -100,7 +100,6 @@ var AllGranules = React.createClass({
 
           <List
             list={list}
-            dispatch={this.props.dispatch}
             action={listGranules}
             tableHeader={view === 'failed' ? errorTableHeader : tableHeader}
             tableRow={view === 'failed' ? errorTableRow : tableRow}

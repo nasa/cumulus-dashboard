@@ -7,8 +7,18 @@ import {
   searchCollections,
   clearCollectionsSearch
 } from '../../actions';
-import { collectionSearchResult, lastUpdated, tally } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/collections';
+import {
+  collectionSearchResult,
+  lastUpdated,
+  tally,
+  getCollectionId
+} from '../../utils/format';
+import {
+  tableHeader,
+  tableRow,
+  tableSortProps,
+  bulkActions
+} from '../../utils/table-config/collections';
 import Search from '../form/search';
 import List from '../table/list-view';
 
@@ -65,10 +75,10 @@ var CollectionList = React.createClass({
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            isRemovable={true}
-            rowId={'collectionName'}
+            rowId={getCollectionId}
             sortIdx={7}
           />
+
         </section>
       </div>
     );
