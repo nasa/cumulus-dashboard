@@ -12,7 +12,13 @@ import {
   listCollections
 } from '../../actions';
 import { get } from 'object-path';
-import { fullDate, lastUpdated, deleteText } from '../../utils/format';
+import {
+  fromNow,
+  lastUpdated,
+  deleteText,
+  link,
+  tally
+} from '../../utils/format';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
 import AsyncCommands from '../form/dropdown-async-command';
@@ -21,12 +27,11 @@ import Metadata from '../table/metadata';
 import { updateInterval } from '../../config';
 
 const metaAccessors = [
-  ['PDR Name', 'name'],
+  ['Created', 'createdAt', fromNow],
+  ['Updated', 'updatedAt', fromNow],
   ['Protocol', 'protocol'],
-  ['Created', 'createdAt', fullDate],
-  ['Last Time Ingested', 'lastTimeIngestedAt', fullDate],
-  ['Host', 'host'],
-  ['Path', 'path']
+  ['Host', 'host', link],
+  ['Global Connection Limit', 'globalConnectionLimit', tally]
 ];
 
 var ProviderOverview = React.createClass({
@@ -101,6 +106,8 @@ var ProviderOverview = React.createClass({
 
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
+    } else if (record.error) {
+      return <ErrorReport report={record.error} />;
     }
     const provider = record.data;
     const associatedCollections = get(this.props.collections, ['list', 'data'], [])

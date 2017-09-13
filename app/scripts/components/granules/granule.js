@@ -126,6 +126,8 @@ var GranuleOverview = React.createClass({
     const record = this.props.granules.map[granuleId];
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
+    } else if (record.error) {
+      return <ErrorReport report={record.error} />;
     }
 
     const granule = record.data;
@@ -147,7 +149,7 @@ var GranuleOverview = React.createClass({
     }, {
       text: 'Delete',
       action: this.delete,
-      disabled: granule.published,
+      disabled: !!granule.published,
       status: get(this.props.granules.deleted, [granuleId, 'status']),
       success: this.navigateBack,
       confirmAction: true,
