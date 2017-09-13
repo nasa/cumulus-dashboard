@@ -25,7 +25,8 @@ var CollectionIngest = React.createClass({
   },
 
   componentWillReceiveProps: function (props) {
-    const collectionId = getCollectionId(this.props.params);
+    const { name, version } = this.props.params;
+    const collectionId = getCollectionId({ name, version });
     const record = this.props.collections.map[collectionId];
     if (!record) {
       this.get(name, version);
