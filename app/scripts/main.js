@@ -92,11 +92,11 @@ render((
         <Route path='collections' component={Collections}>
           <Route path='all' component={CollectionList} />
           <Route path='add' component={AddCollection} />
-          <Route path='edit/:collectionName/:collectionVersion' component={EditCollection} />
-          <Route path='collection/:collectionName/:collectionVersion' component={CollectionOverview} />
-          <Route path='collection/:collectionName/:collectionVersion/granules' component={CollectionGranules} />
-          <Route path='collection/:collectionName/:collectionVersion/definition' component={CollectionIngest} />
-          <Route path='collection/:collectionName/:collectionVersion/logs' component={CollectionLogs} />
+          <Route path='edit/:name/:version' component={EditCollection} />
+          <Route path='collection/:name/:version' component={CollectionOverview} />
+          <Route path='collection/:name/:version/granules' component={CollectionGranules} />
+          <Route path='collection/:name/:version/definition' component={CollectionIngest} />
+          <Route path='collection/:name/:version/logs' component={CollectionLogs} />
         </Route>
         <Route path='granules' component={Granules}>
           <IndexRoute component={ListGranules} />

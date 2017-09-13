@@ -7,10 +7,10 @@ const collectionRoutes = [
 
 const singleCollectionRoutes = [
   ['Back to Collections', null, 'sidebar__nav--back'],
-  ['Overview', 'collection/:collectionName/:collectionVersion'],
-  ['Granules', 'collection/:collectionName/:collectionVersion/granules'],
-  ['Definition', 'collection/:collectionName/:collectionVersion/definition'],
-  ['Logs', 'collection/:collectionName/:collectionVersion/logs']
+  ['Overview', 'collection/:name/:version'],
+  ['Granules', 'collection/:name/:version/granules'],
+  ['Definition', 'collection/:name/:version/definition'],
+  ['Logs', 'collection/:name/:version/logs']
 ];
 
 const empty = [['', '']];
@@ -23,10 +23,10 @@ const collections = {
     if (/^\/collections\/[collection|edit]/.test(currentRoute)) {
       return singleCollectionRoutes.map(d => {
         // replace wildecards with params
-        if (!d[1] || d[1].indexOf(':collectionName') === -1) { return d; }
+        if (!d[1] || d[1].indexOf(':name') === -1) { return d; }
         let copy = d.slice();
-        copy[1] = encode(copy[1].replace(':collectionName', params.collectionName)
-                                .replace(':collectionVersion', params.collectionVersion));
+        copy[1] = encode(copy[1].replace(':name', params.name)
+                                .replace(':version', params.version));
         return copy;
       });
     } else if (

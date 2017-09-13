@@ -62,10 +62,10 @@ export const lastUpdated = function (datestring) {
 };
 
 export const collectionSearchResult = function (collection) {
-  const { collectionName } = collection;
+  const { name, version } = collection;
   return (
-    <li key={collectionName}>
-      <Link to={`collections/collection/${collectionName}`}>{collectionName}</Link>
+    <li key={name}>
+      <Link to={`collections/collection/${name}/${version}`}>{name} / {version}</Link>
     </li>
   );
 };

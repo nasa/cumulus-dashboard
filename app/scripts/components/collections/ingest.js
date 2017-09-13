@@ -25,16 +25,16 @@ var CollectionIngest = React.createClass({
   },
 
   componentWillReceiveProps: function (props) {
-    const collectionName = props.params.collectionName;
-    const collectionVersion = props.params.collectionVersion;
-    const record = this.props.collections.map[collectionName];
+    const { name, version } = this.props.params;
+    const record = this.props.collections.map[name];
     if (!record) {
-      this.get(collectionName, collectionVersion);
+      this.get(name, version);
     }
   },
 
   componentWillMount: function () {
-    this.get(this.props.params.collectionName, this.props.params.collectionVersion);
+    const { name, version } = this.props.params;
+    this.get(name, version);
   },
 
   get: function (name, version) {
@@ -61,7 +61,7 @@ var CollectionIngest = React.createClass({
   },
 
   render: function () {
-    const collectionName = this.props.params.collectionName;
+    const collectionName = this.props.params.name;
     const record = this.props.collections.map[collectionName];
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
