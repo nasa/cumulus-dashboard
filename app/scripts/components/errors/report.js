@@ -20,22 +20,42 @@ var ErrorReport = React.createClass({
     } else scrollTo(0, 0);
   },
 
+  renderReport: function (report) {
+    if (typeof report === 'string') {
+      return <p key={report}><strong>Error:</strong> {report}</p>;
+    } else if (report instanceof Error) {
+      let name = report.name || 'Error';
+      let message = report.message || JSON.stringify(report);
+      return <p><strong key={message}>{name}: </strong> {message}</p>;
+    } else if (typeof report === 'object') {
+      return this.stringifyErrorObject(report);
+    } else if (Array.isArray(report)) {
+      return report.map(this.renderReport);
+    }
+  },
+
+  stringifyErrorObject: function (obj) {
+    let error, cause;
+    if (typeof obj.Error !== 'undefined') {
+      error = obj.Error;
+    }
+    if (typeof obj.Cause !== 'undefined') {
+      cause = obj.Cause;
+    }
+    if (error && cause) {
+      return <p key={cause}><strong>{error}: </strong> {cause}</p>;
+    } else {
+      let stringified = JSON.stringify(obj);
+      return <p key={stringified}>{stringified}</p>;
+    }
+  },
+
   render: function () {
     const { report } = this.props;
-    if (!report) {
-      return <div />;
-    }
-    let message;
-    if (typeof report === 'string') {
-      message = report;
-    } else if (report instanceof Error) {
-      message = report.message ? report.message : JSON.stringify(report);
-    } else if (typeof report === 'object') {
-      message = JSON.stringify(report);
-    }
+    if (!report) return <div />;
     return (
       <div ref={(e) => { this.DOMElement = e; }} className='error__report'>
-        <p><strong>Error:</strong> {message}</p>
+        {this.renderReport(report)}
       </div>
     );
   }
