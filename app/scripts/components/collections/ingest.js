@@ -5,7 +5,7 @@ import Ace from 'react-ace';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { getCollection } from '../../actions';
-import { lastUpdated, nullValue } from '../../utils/format';
+import { lastUpdated, nullValue, getCollectionId } from '../../utils/format';
 import config from '../../config';
 import Loading from '../app/loading-indicator';
 
@@ -25,8 +25,8 @@ var CollectionIngest = React.createClass({
   },
 
   componentWillReceiveProps: function (props) {
-    const { name, version } = this.props.params;
-    const record = this.props.collections.map[name];
+    const collectionId = getCollectionId(this.props.params);
+    const record = this.props.collections.map[collectionId];
     if (!record) {
       this.get(name, version);
     }
@@ -61,8 +61,9 @@ var CollectionIngest = React.createClass({
   },
 
   render: function () {
-    const collectionName = this.props.params.name;
-    const record = this.props.collections.map[collectionName];
+    const { name, version } = this.props.params;
+    const collectionId = getCollectionId(this.props.params);
+    const record = this.props.collections.map[collectionId];
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
     }
@@ -70,8 +71,8 @@ var CollectionIngest = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>{collectionName}</h1>
-          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
+          <h1 className='heading--large heading--shared-content with-description'>{name}</h1>
+          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${name}/${version}`}>Edit</Link>
           {lastUpdated(data.queriedAt)}
         </section>
         <section className='page__section'>
