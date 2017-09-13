@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { get } from 'object-path';
-import { connect } from 'react-redux';
 import { isUndefined } from '../../utils/validate';
 import { nullValue } from '../../utils/format';
 
@@ -15,18 +15,18 @@ const Table = React.createClass({
   displayName: 'SortableTable',
 
   propTypes: {
-    primaryIdx: React.PropTypes.number,
-    data: React.PropTypes.array,
-    header: React.PropTypes.array,
-    props: React.PropTypes.array,
-    row: React.PropTypes.array,
-    sortIdx: React.PropTypes.number,
-    order: React.PropTypes.string,
-    changeSortProps: React.PropTypes.func,
-    onSelect: React.PropTypes.func,
-    canSelect: React.PropTypes.bool,
-    selectedRows: React.PropTypes.array,
-    rowId: React.PropTypes.string
+    primaryIdx: PropTypes.number,
+    data: PropTypes.array,
+    header: PropTypes.array,
+    props: PropTypes.array,
+    row: PropTypes.array,
+    sortIdx: PropTypes.number,
+    order: PropTypes.string,
+    changeSortProps: PropTypes.func,
+    onSelect: PropTypes.func,
+    canSelect: PropTypes.bool,
+    selectedRows: PropTypes.array,
+    rowId: PropTypes.any
   },
 
   getInitialState: function () {
@@ -109,7 +109,7 @@ const Table = React.createClass({
           </thead>
           <tbody>
             {data.map((d, i) => {
-              const dataId = d[rowId];
+              const dataId = typeof rowId === 'function' ? rowId(d) : d[rowId];
               const checked = canSelect && selectedRows.indexOf(dataId) !== -1;
               return (
                 <tr key={i} data-value={dataId} onClick={this.select}>
@@ -139,4 +139,4 @@ const Table = React.createClass({
   }
 });
 
-export default connect(state => state)(Table);
+export default Table;

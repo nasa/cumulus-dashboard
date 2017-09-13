@@ -2,7 +2,7 @@
 import React from 'react';
 import { get } from 'object-path';
 import { Link } from 'react-router';
-import { fromNow, seconds, tally } from '../format';
+import { fromNow, seconds, tally, collectionNameVersion } from '../format';
 import { deleteCollection } from '../../actions';
 
 export const tableHeader = [
@@ -42,7 +42,10 @@ const confirmDelete = (d) => `Delete ${d} collections(s)?`;
 export const bulkActions = function (collections) {
   return [{
     text: 'Delete',
-    action: deleteCollection,
+    action: (collectionId) => {
+      const { name, version } = collectionNameVersion(collectionId);
+      return deleteCollection(name, version);
+    },
     state: collections.deleted,
     confirm: confirmDelete
   }];

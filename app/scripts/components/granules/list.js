@@ -10,7 +10,7 @@ import {
   getOptionsCollectionName
 } from '../../actions';
 import { get } from 'object-path';
-import { granuleSearchResult, lastUpdated, tally, displayCase } from '../../utils/format';
+import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
   tableHeader,
   tableRow,
@@ -94,14 +94,12 @@ var AllGranules = React.createClass({
             ) : null}
             <Search dispatch={this.props.dispatch}
               action={searchGranules}
-              format={granuleSearchResult}
               clear={clearGranulesSearch}
             />
           </div>
 
           <List
             list={list}
-            dispatch={this.props.dispatch}
             action={listGranules}
             tableHeader={view === 'failed' ? errorTableHeader : tableHeader}
             tableRow={view === 'failed' ? errorTableRow : tableRow}

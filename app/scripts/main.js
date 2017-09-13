@@ -39,7 +39,6 @@ import CollectionLogs from './components/collections/logs';
 import Granules from './components/granules';
 import ListGranules from './components/granules/list';
 import GranuleOverview from './components/granules/granule';
-import GranuleRecipeIngest from './components/granules/recipe-ingest';
 
 import Pdrs from './components/pdr';
 import Pdr from './components/pdr/pdr';
@@ -100,8 +99,7 @@ render((
         </Route>
         <Route path='granules' component={Granules}>
           <IndexRoute component={ListGranules} />
-          <Route path='granule/:granuleId/overview' component={GranuleOverview} />
-          <Route path='granule/:granuleId/recipe-ingest' component={GranuleRecipeIngest} />
+          <Route path='granule/:granuleId' component={GranuleOverview} />
           <Route path='completed' component={ListGranules} />
           <Route path='processing' component={ListGranules} />
           <Route path='failed' component={ListGranules} />

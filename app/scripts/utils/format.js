@@ -70,22 +70,19 @@ export const collectionSearchResult = function (collection) {
   );
 };
 
-export const granuleSearchResult = function (granule) {
-  const { granuleId } = granule;
-  return (
-    <li key={granuleId}>
-      <Link to={`granules/granule/${granuleId}/overview`}>{granuleId}</Link>
-    </li>
-  );
+export const granuleLink = function (granuleId) {
+  if (!granuleId) return nullValue;
+  return <Link to={`granules/granule/${granuleId}`}>{granuleId}</Link>;
 };
 
-export const pdrSearchResult = function (pdr) {
-  const { pdrName } = pdr;
-  return (
-    <li key={pdrName}>
-      <Link to={`pdrs/pdr/${pdrName}`}>{pdrName}</Link>
-    </li>
-  );
+export const pdrLink = function (pdrName) {
+  if (!pdrName) return nullValue;
+  return <Link to={`pdrs/pdr/${pdrName}`}>{pdrName}</Link>;
+};
+
+export const providerLink = function (provider) {
+  if (!provider) return nullValue;
+  return <Link to={`providers/provider/${provider}`}>{provider}</Link>;
 };
 
 export const bool = function (bool) {
@@ -146,11 +143,6 @@ export const collectionHref = function (collectionId) {
   if (!collectionId) return nullValue;
   const { name, version } = collectionNameVersion(collectionId);
   return `/collections/collection/${name}/${version}`;
-};
-
-export const providerLink = function (provider) {
-  if (!provider) return nullValue;
-  return <Link to={`/providers/provider/${provider}`}>{provider}</Link>;
 };
 
 export const deleteText = function (name) {

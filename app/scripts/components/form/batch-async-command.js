@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { queue } from 'd3-queue';
 import AsyncCommand from './async-command';
@@ -10,8 +11,8 @@ const IN_PROGRESS = 'Processing...';
 
 const BatchCommand = React.createClass({
   propTypes: {
-    dispatch: PropTypes.func,
     action: PropTypes.func,
+    dispatch: PropTypes.func,
     state: PropTypes.object,
     text: PropTypes.string,
     selection: PropTypes.array,
@@ -145,4 +146,4 @@ const BatchCommand = React.createClass({
     );
   }
 });
-export default BatchCommand;
+export default connect()(BatchCommand);

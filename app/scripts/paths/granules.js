@@ -13,7 +13,7 @@ const granuleRoutes = [
 
 const singleGranuleRoutes = [
   ['Back to Granules', null, 'sidebar__nav--back'],
-  ['Overview', 'granule/:granuleId/overview']
+  ['Overview', 'granule/:granuleId']
 ];
 
 const empty = [['', '']];
