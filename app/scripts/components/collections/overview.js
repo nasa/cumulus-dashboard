@@ -10,7 +10,6 @@ import {
 } from '../../actions';
 import { get } from 'object-path';
 import {
-  seconds,
   tally,
   lastUpdated,
   getCollectionId,
@@ -58,7 +57,7 @@ const CollectionOverview = React.createClass({
     return {
       collectionId: `${collectionName}___${collectionVersion}`,
       fields: granuleFields,
-      status__not: 'completed,failed'
+      status: 'running'
     };
   },
 
@@ -87,8 +86,7 @@ const CollectionOverview = React.createClass({
     const overview = [
       [tally(stats.running), 'Granules Running'],
       [tally(stats.completed), 'Granules Completed'],
-      [tally(stats.failed), 'Granules Failed'],
-      [seconds(data.duration), 'Average Processing Time']
+      [tally(stats.failed), 'Granules Failed']
     ];
     return <Overview items={overview} inflight={record.inflight} />;
   },
@@ -126,7 +124,7 @@ const CollectionOverview = React.createClass({
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Processing Granules <span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Running Granules <span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
           </div>
           <List
             list={list}
@@ -146,4 +144,7 @@ const CollectionOverview = React.createClass({
   }
 });
 
-export default connect(state => state)(CollectionOverview);
+export default connect(state => ({
+  collections: state.collections,
+  granules: state.granules
+}))(CollectionOverview);
