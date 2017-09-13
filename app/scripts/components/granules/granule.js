@@ -154,13 +154,14 @@ var GranuleOverview = React.createClass({
       confirmAction: true,
       confirmText: deleteText(granuleId)
     }];
+    console.log(granule);
 
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description width--three-quarters'>{granuleId}</h1>
           <AsyncCommands config={dropdownConfig} />
-          {lastUpdated(granule.timestamp)}
+          {lastUpdated(granule.createdAt, 'Created')}
 
           <dl className='status--process'>
             <dt>Status:</dt>
