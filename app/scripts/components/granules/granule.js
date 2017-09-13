@@ -47,7 +47,6 @@ const tableRow = [
 ];
 
 const metaAccessors = [
-  ['Status', 'status', displayCase],
   ['PDR Name', 'pdrName', pdrLink],
   ['Collection', 'collectionId', collectionLink],
   ['Provider', 'provider', providerLink],
@@ -162,6 +161,12 @@ var GranuleOverview = React.createClass({
           <h1 className='heading--large heading--shared-content with-description width--three-quarters'>{granuleId}</h1>
           <AsyncCommands config={dropdownConfig} />
           {lastUpdated(granule.timestamp)}
+
+          <dl className='status--process'>
+            <dt>Status:</dt>
+            <dd className={granule.status.toLowerCase()}>{displayCase(granule.status)}</dd>
+          </dl>
+
           {granuleError ? <ErrorReport report={granuleError} /> : null}
         </section>
 
