@@ -73,6 +73,7 @@ export default function reducer (state = initialState, action) {
     case PROVIDER:
       set(state, ['map', id, 'inflight'], false);
       set(state, ['map', id, 'data'], assignDate(data));
+      set(state, ['map', id, 'error'], null);
       del(state, ['deleted', id]);
       break;
     case PROVIDER_INFLIGHT:

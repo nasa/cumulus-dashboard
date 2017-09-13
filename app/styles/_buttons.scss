@@ -218,6 +218,11 @@
   }
 }
 
+.dropdown__menu--hidden {
+  display: none;
+  visibility: hidden;
+}
+
 .subform__item--last {
   .subform__button {
     display: inline-block;
