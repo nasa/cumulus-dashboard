@@ -25,8 +25,14 @@ var ErrorReport = React.createClass({
       return <p key={report}><strong>Error:</strong> {report}</p>;
     } else if (report instanceof Error) {
       let name = report.name || 'Error';
-      let message = report.message || JSON.stringify(report);
-      return <p><strong key={message}>{name}: </strong> {message}</p>;
+      let message, stack;
+      if (!report.message) {
+        message = JSON.stringify(report);
+      } else {
+        message = report.message;
+        stack = report.stack ? report.stack.split('\\n').map(s => <p key={s}>{s}</p>) : null;
+      }
+      return <div><p><strong key={message}>{name}: </strong> {message}</p>{stack}</div>;
     } else if (typeof report === 'object') {
       return this.stringifyErrorObject(report);
     } else if (Array.isArray(report)) {

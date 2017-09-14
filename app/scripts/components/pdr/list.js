@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   searchPdrs,
@@ -18,7 +19,6 @@ import {
   errorTableSortProps,
   bulkActions
 } from '../../utils/table-config/pdrs';
-import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
 import Search from '../form/search';
 import List from '../table/list-view';
@@ -28,10 +28,9 @@ var ActivePdrs = React.createClass({
   displayName: 'ActivePdrs',
 
   propTypes: {
-    location: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    pdrs: React.PropTypes.object,
-    logs: React.PropTypes.object
+    location: PropTypes.object,
+    dispatch: PropTypes.func,
+    pdrs: PropTypes.object
   },
 
   generateQuery: function () {
@@ -58,7 +57,6 @@ var ActivePdrs = React.createClass({
   render: function () {
     const { list } = this.props.pdrs;
     const { count, queriedAt } = list.meta;
-    const logsQuery = { 'meta.pdrName__exists': 'true' };
     const view = this.getView();
     return (
       <div className='page__component'>
@@ -96,15 +94,11 @@ var ActivePdrs = React.createClass({
             rowId={'pdrName'}
           />
         </section>
-        <LogViewer
-          query={logsQuery}
-          dispatch={this.props.dispatch}
-          logs={this.props.logs}
-          notFound={'No recent logs for PDRs'}
-        />
       </div>
     );
   }
 });
 
-export default connect(state => state)(ActivePdrs);
+export default connect(state => ({
+  pdrs: state.pdrs
+}))(ActivePdrs);

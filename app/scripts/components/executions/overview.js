@@ -1,16 +1,18 @@
 'use strict';
 import React from 'react';
+import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
+  interval,
+  getCount,
+
   listExecutions,
   filterExecutions,
   clearExecutionsFilter,
 
   listCollections,
-  listWorkflows,
-
-  interval
+  listWorkflows
 } from '../../actions';
 import {
   fromNow,
@@ -27,6 +29,7 @@ import {
 import statusOptions from '../../utils/status';
 import List from '../table/list-view';
 import Dropdown from '../form/dropdown';
+import Overview from '../app/overview';
 import { updateInterval } from '../../config';
 
 const tableHeader = [
@@ -59,6 +62,7 @@ const tableSortProps = [
 var ExecutionOverview = React.createClass({
   propTypes: {
     dispatch: PropTypes.func,
+    stats: PropTypes.object,
     executions: PropTypes.object,
     collectionOptions: PropTypes.object,
     workflowOptions: PropTypes.object
@@ -67,35 +71,47 @@ var ExecutionOverview = React.createClass({
   componentWillMount: function () {
     // use a slightly slower update interval, since the dropdown fields
     // will change less frequently.
-    this.cancelInterval = interval(this.queryDropdowns, updateInterval * 2, true);
+    this.cancelInterval = interval(this.queryMeta, updateInterval, true);
   },
 
   componentWillUnmount: function () {
     if (this.cancelInterval) { this.cancelInterval(); }
   },
 
-  // query dropdown fields
-  queryDropdowns: function () {
+  queryMeta: function () {
     this.props.dispatch(listCollections({
       limit: 100,
       fields: 'name,version'
     }));
     this.props.dispatch(listWorkflows());
+    this.props.dispatch(getCount({
+      type: 'executions',
+      field: 'status'
+    }));
+  },
+
+  renderOverview: function (count) {
+    const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
+    return <Overview items={overview} inflight={false} />;
   },
 
   render: function () {
-    const { list } = this.props.executions;
+    const { stats, executions } = this.props;
+    const { list } = executions;
     const { count, queriedAt } = list.meta;
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>
-              All Executions <span className='num--title'>{ !isNaN(count) ? `(${tally(count)})` : null }</span>
-            </h1>
+            <h1 className='heading--large heading--shared-content with-description'>Execution Overview</h1>
             {lastUpdated(queriedAt)}
+            {this.renderOverview(get(stats, 'count.data.executions.count', []))}
           </div>
-
+        </section>
+        <section className='page__section'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium heading--shared-content with-description'>All Executions <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
+          </div>
           <div className='filters filters__wlabels'>
             <Dropdown
               options={statusOptions}
@@ -140,6 +156,7 @@ var ExecutionOverview = React.createClass({
 });
 
 export default connect(state => ({
+  stats: state.stats,
   executions: state.executions,
   workflowOptions: workflowOptions(state),
   collectionOptions: collectionOptions(state)

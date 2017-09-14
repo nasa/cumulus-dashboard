@@ -1,6 +1,6 @@
 'use strict';
 const routes = [
-  ['All Workflows', null]
+  ['Overview', null]
 ];
 
 const singleRoutes = [

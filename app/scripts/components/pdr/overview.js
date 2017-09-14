@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
@@ -15,9 +16,9 @@ var PdrOverview = React.createClass({
   displayName: 'PdrOverview',
 
   propTypes: {
-    dispatch: React.PropTypes.func,
-    pdrs: React.PropTypes.object,
-    stats: React.PropTypes.object
+    dispatch: PropTypes.func,
+    pdrs: PropTypes.object,
+    stats: PropTypes.object
   },
 
   componentWillMount: function () {
@@ -58,7 +59,7 @@ var PdrOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>PDRs Overview</h1>
+          <h1 className='heading--large heading--shared-content with-description'>PDR Overview</h1>
           {lastUpdated(queriedAt)}
           {overview}
         </section>
@@ -86,4 +87,7 @@ var PdrOverview = React.createClass({
   }
 });
 
-export default connect(state => state)(PdrOverview);
+export default connect(state => ({
+  stats: state.stats,
+  pdrs: state.pdrs
+}))(PdrOverview);

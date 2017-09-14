@@ -8,7 +8,6 @@ import {
   getStats,
   getCount,
   listGranules,
-  getResources,
   getRecentGranules
 } from '../actions';
 import { nullValue, tally } from '../utils/format';
@@ -44,7 +43,6 @@ var Home = React.createClass({
   query: function () {
     const { dispatch } = this.props;
     // TODO should probably time clamp this by most recent as well?
-    dispatch(getResources());
     dispatch(getStats({
       timestamp__from: recent
     }));
