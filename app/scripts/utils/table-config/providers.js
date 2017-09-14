@@ -2,7 +2,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { fromNow } from '../format';
-import { deleteProvider, restartProvider, stopProvider } from '../../actions';
 
 export const tableHeader = [
   'Name',
@@ -10,7 +9,7 @@ export const tableHeader = [
   'Collections',
   'Global Connection Limit',
   'Protocol',
-  'Timestamp'
+  'Last Updated'
 ];
 
 export const tableRow = [
@@ -30,25 +29,3 @@ export const tableSortProps = [
   'protocol',
   'timestamp'
 ];
-
-const confirmDelete = (d) => `Delete ${d} Provider(s)?`;
-const confirmRestart = (d) => `Restart ${d} Provider(s)?`;
-const confirmStop = (d) => `Stop ${d} Provider(s)?`;
-export const bulkActions = function (providers) {
-  return [{
-    text: 'Stop',
-    action: stopProvider,
-    state: providers.stopped,
-    confirm: confirmStop
-  }, {
-    text: 'Restart',
-    action: restartProvider,
-    state: providers.restarted,
-    confirm: confirmRestart
-  }, {
-    text: 'Delete',
-    action: deleteProvider,
-    state: providers.deleted,
-    confirm: confirmDelete
-  }];
-};

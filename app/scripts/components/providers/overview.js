@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { listProviders, getCount, interval } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/providers';
+import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/providers';
 import List from '../table/list-view';
 import Overview from '../app/overview';
 import { updateInterval } from '../../config';
@@ -36,11 +36,6 @@ var ProvidersOverview = React.createClass({
       type: 'providers',
       field: 'status'
     }));
-  },
-
-  generateBulkActions: function () {
-    const { providers } = this.props;
-    return bulkActions(providers);
   },
 
   generateQuery: function () {
@@ -84,7 +79,7 @@ var ProvidersOverview = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
-            bulkActions={this.generateBulkActions()}
+            bulkActions={[]}
             rowId={'name'}
             sortIdx={5}
           />
