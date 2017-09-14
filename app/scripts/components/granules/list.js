@@ -1,7 +1,10 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
+  interval,
+  getCount,
   searchGranules,
   clearGranulesSearch,
   filterGranules,
@@ -24,7 +27,9 @@ import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
 import Search from '../form/search';
+import Overview from '../app/overview';
 import statusOptions from '../../utils/status';
+import { updateInterval } from '../../config';
 
 var AllGranules = React.createClass({
   displayName: 'AllGranules',
@@ -32,8 +37,26 @@ var AllGranules = React.createClass({
   propTypes: {
     granules: React.PropTypes.object,
     logs: React.PropTypes.object,
+    stats: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     location: React.PropTypes.object
+  },
+
+  componentWillMount: function () {
+    if (this.getView() === 'all') {
+      this.cancelInterval = interval(this.queryStats, updateInterval, true);
+    }
+  },
+
+  componentWillUnmount: function () {
+    if (this.cancelInterval) { this.cancelInterval(); }
+  },
+
+  queryStats: function () {
+    this.props.dispatch(getCount({
+      type: 'granules',
+      field: 'status'
+    }));
   },
 
   generateQuery: function () {
@@ -58,8 +81,14 @@ var AllGranules = React.createClass({
     else return 'all';
   },
 
+  renderOverview: function (count) {
+    const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
+    return <Overview items={overview} inflight={false} />;
+  },
+
   render: function () {
-    const { list, dropdowns } = this.props.granules;
+    const { stats, granules } = this.props;
+    const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
     const logsQuery = { 'granuleId__exists': 'true' };
     const view = this.getView();
@@ -73,7 +102,10 @@ var AllGranules = React.createClass({
               {displayCase(view)} Granules <span className='num--title'>{ !isNaN(count) ? `(${tally(count)})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
+            {this.renderOverview(get(stats, 'count.data.granules.count', []))}
           </div>
+        </section>
+        <section className='page__section'>
           <div className='filters filters__wlabels'>
             <Dropdown
               getOptions={getOptionsCollectionName}
@@ -121,4 +153,8 @@ var AllGranules = React.createClass({
   }
 });
 
-export default connect(state => state)(AllGranules);
+export default connect(state => ({
+  stats: state.stats,
+  logs: state.logs,
+  granules: state.granules
+}))(AllGranules);
