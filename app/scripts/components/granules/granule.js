@@ -133,7 +133,6 @@ var GranuleOverview = React.createClass({
     const granule = record.data;
     const files = [];
     if (granule.files) {
-      console.log(granule.files);
       for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }
     }
     const dropdownConfig = [{
