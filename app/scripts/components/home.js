@@ -18,7 +18,6 @@ import {
   tally,
   seconds
 } from '../utils/format';
-import LoadingEllipsis from './app/loading-ellipsis';
 import List from './table/list-view';
 import GranulesProgress from './granules/progress';
 import {
@@ -26,7 +25,7 @@ import {
   tableRow,
   tableSortProps
 } from '../utils/table-config/granules';
-import { recent, updateInterval } from '../config';
+import { updateInterval } from '../config';
 
 var Home = React.createClass({
   displayName: 'Home',
