@@ -130,7 +130,10 @@ var List = React.createClass({
 
   onBulkActionError: function (error) {
     const message = `Could not process ${error.id}, ${error.error}`;
-    this.setState({ bulkActionError: message });
+    this.setState({
+      bulkActionError: message,
+      selected: []
+    });
   },
 
   config: function (config, query) {
