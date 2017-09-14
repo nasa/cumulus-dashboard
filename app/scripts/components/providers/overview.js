@@ -67,7 +67,7 @@ var ProvidersOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>All Providers</h1>
+          <h1 className='heading--large heading--shared-content with-description'>Provider Overview</h1>
           {lastUpdated(queriedAt)}
           {overview}
         </section>

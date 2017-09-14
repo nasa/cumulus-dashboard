@@ -3,15 +3,14 @@ import { encode } from '../utils/browser';
 import tally from './tally';
 
 const granuleRoutes = [
-  ['All Granules', null],
+  ['Overview', null],
   ['Completed', 'completed', (d) => d.key === 'completed'],
   ['Running', 'processing', (d) => d.key === 'running'],
   ['Failed', 'failed', (d) => d.key === 'failed']
 ];
 
 const singleGranuleRoutes = [
-  ['Back to Granules', null, 'sidebar__nav--back'],
-  ['Overview', 'granule/:granuleId']
+  ['Back to Granules', null, 'sidebar__nav--back']
 ];
 
 const empty = [['', '']];
