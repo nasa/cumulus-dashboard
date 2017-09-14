@@ -122,6 +122,9 @@ table {
   }
 }
 
+.timeline--processing--failed {
+  color: $error-text-red;
+}
 .num--large {
   display: block;
   font-size: 2.4em;
