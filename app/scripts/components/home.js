@@ -10,8 +10,7 @@ import {
   getCount,
   listGranules,
   listExecutions,
-  listRules,
-  getRecentGranules
+  listRules
 } from '../actions';
 import {
   nullValue,
@@ -25,7 +24,7 @@ import {
   tableRow,
   tableSortProps
 } from '../utils/table-config/granules';
-import { updateInterval } from '../config';
+import { recent, updateInterval } from '../config';
 
 var Home = React.createClass({
   displayName: 'Home',
@@ -58,7 +57,6 @@ var Home = React.createClass({
       type: 'granules',
       field: 'status'
     }));
-    dispatch(getRecentGranules());
     dispatch(listExecutions({}));
     dispatch(listRules({}));
   },
@@ -71,7 +69,7 @@ var Home = React.createClass({
   },
 
   render: function () {
-    const { list, recent } = this.props.granules;
+    const { list } = this.props.granules;
     const { stats, count } = this.props.stats;
     const overview = [
       [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
