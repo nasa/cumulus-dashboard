@@ -24,12 +24,12 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
               DS_TARGET=lpdaac yarn run staging
-              ~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://lpdaac-r-dashboard --acl=public-read
+              aws s3 sync ~/cumulus-dashboard/dist/. s3://lpdaac-r-dashboard --acl=public-read
 
               DS_TARGET=podaac yarn run staging
-              ~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://podaac-r-dashboard --acl=public-read
+              aws s3 sync ~/cumulus-dashboard/dist/. s3://podaac-r-dashboard --acl=public-read
 
               DS_TARGET=ghrc yarn run staging
-              ~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://ghrc-r-dashboard --acl=public-read
+              aws s3 sync ~/cumulus-dashboard/dist/. s3://ghrc-r-dashboard --acl=public-read
             fi
 
