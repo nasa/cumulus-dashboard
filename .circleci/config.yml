@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:8.4
+      - image: developmentseed/circleci:node8.4-python2.7
 
     working_directory: ~/cumulus-dashboard
     steps:
@@ -11,8 +11,6 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get update && sudo apt-get install -y python-dev python-pip
-            sudo pip install awscli
             yarn install
 
       - run:
