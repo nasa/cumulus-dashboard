@@ -2,10 +2,12 @@ version: 2
 jobs:
   build:
     docker:
-      - image: node:6.9
+      - image: circleci/node:8.4
+
     working_directory: ~/cumulus-dashboard
     steps:
       - checkout
+
       - restore_cache:
           keys:
             - cumulus-dashboard-{{ .Branch }}-{{ checksum "yarn.lock" }}
@@ -15,12 +17,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt-get update && apt-get install -y python-dev python-pip apt-transport-https
-            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-            echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-            apt-get update && apt-get install -y yarn
+            apt-get update && apt-get install -y python-dev
             pip install --upgrade --user awscli
-            yarn install --cache-folder ~/cumulus-dashboard/yarn-cache
 
       - run:
           name: Run tests
