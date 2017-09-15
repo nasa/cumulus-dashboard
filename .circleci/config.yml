@@ -12,7 +12,7 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt-get update && sudo apt-get install -y python-dev python-pip
-            sudo pip install --upgrade --user awscli
+            sudo pip install awscli
             yarn install
 
       - run:
