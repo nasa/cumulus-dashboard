@@ -11,8 +11,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt-get update && apt-get install -y python-dev
-            pip install --upgrade --user awscli
+            sudo apt-get update && sudo apt-get install -y python-dev
+            sudo pip install --upgrade --user awscli
 
       - run:
           name: Run tests
