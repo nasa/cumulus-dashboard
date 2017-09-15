@@ -137,7 +137,7 @@ export const Schema = React.createClass({
     schema: PropTypes.object,
     data: PropTypes.object,
     pk: PropTypes.string,
-    router: PropTypes.object,
+    onCancel: PropTypes.func,
     onSubmit: PropTypes.func,
     status: PropTypes.string,
 
@@ -163,10 +163,6 @@ export const Schema = React.createClass({
     }
   },
 
-  back: function () {
-    this.props.router.goBack();
-  },
-
   render: function () {
     const { fields } = this.state;
     const { error } = this.props;
@@ -176,7 +172,7 @@ export const Schema = React.createClass({
         <Form
           inputMeta={fields}
           submit={this.props.onSubmit}
-          cancel={this.back}
+          cancel={this.props.onCancel}
           status={this.props.status}
         />
       </div>
