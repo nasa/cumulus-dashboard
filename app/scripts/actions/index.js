@@ -319,8 +319,8 @@ export const getProvider = (providerId) => wrapRequest(
 export const createProvider = (providerId, payload) => wrapRequest(
   providerId, post, 'providers', NEW_PROVIDER, payload);
 
-export const updateProvider = (payload) => wrapRequest(
-  payload.id, put, `providers/${payload.id}`, UPDATE_PROVIDER, payload);
+export const updateProvider = (providerId, payload) => wrapRequest(
+  providerId, put, `providers/${providerId}`, UPDATE_PROVIDER, payload);
 
 export const clearUpdateProvider = (providerId) => ({ type: UPDATE_PROVIDER_CLEAR, id: providerId });
 
