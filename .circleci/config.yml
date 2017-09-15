@@ -20,7 +20,7 @@ jobs:
       - deploy:
           name: Dev Dashboard deployment
           command: |
-            #if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
               DS_TARGET=lpdaac yarn run staging
               aws s3 sync ~/cumulus-dashboard/dist/. s3://lpdaac-r-dashboard --acl=public-read
 
@@ -29,5 +29,5 @@ jobs:
 
               DS_TARGET=ghrc yarn run staging
               aws s3 sync ~/cumulus-dashboard/dist/. s3://ghrc-r-dashboard --acl=public-read
-            #fi
+            fi
 
