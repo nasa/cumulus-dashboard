@@ -1,6 +1,8 @@
 'use strict';
 import { set, del } from 'object-path';
 import assignDate from './assign-date';
+import removeDeleted from './remove-deleted';
+
 import {
   RULES,
   RULES_INFLIGHT,
@@ -66,7 +68,7 @@ export default function reducer (state = initialState, action) {
       break;
 
     case RULES:
-      set(state, ['list', 'data'], data.results);
+      set(state, ['list', 'data'], removeDeleted('name', data.results, state.deleted));
       set(state, ['list', 'meta'], assignDate(data.meta));
       set(state, ['list', 'inflight'], false);
       set(state, ['list', 'error'], false);
