@@ -2,25 +2,18 @@ version: 2
 jobs:
   build:
     docker:
-      - image: node:6.9
+      - image: circleci/node:8.4
+
     working_directory: ~/cumulus-dashboard
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - cumulus-dashboard-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - cumulus-dashboard-{{ .Branch }}
-            - cumulus-dashboard-develop
-            - cumulus-dashboard
+
       - run:
           name: Install dependencies
           command: |
-            apt-get update && apt-get install -y python-dev python-pip apt-transport-https
-            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-            echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-            apt-get update && apt-get install -y yarn
-            pip install --upgrade --user awscli
-            yarn install --cache-folder ~/cumulus-dashboard/yarn-cache
+            sudo apt-get update && sudo apt-get install -y python-dev python-pip
+            sudo pip install --upgrade --user awscli
+            yarn install
 
       - run:
           name: Run tests
@@ -40,8 +33,3 @@ jobs:
               ~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://ghrc-r-dashboard --acl=public-read
             fi
 
-      - save_cache:
-          key: cumulus-dashboard-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/cumulus-dashboard/node_modules
-            - ~/cumulus-dashboard/yarn-cache
