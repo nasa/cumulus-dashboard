@@ -79,6 +79,10 @@ var EditRecord = React.createClass({
     }
   },
 
+  navigateBack: function () {
+    this.props.router.push(this.props.backRoute);
+  },
+
   onSubmit: function (id, payload) {
     const { pk, state, dispatch, updateRecord, attachMeta } = this.props;
     const record = state.map[pk];
@@ -92,7 +96,7 @@ var EditRecord = React.createClass({
   },
 
   render: function () {
-    const { pk, state, schemaKey, router, includedForms } = this.props;
+    const { pk, state, schemaKey, includedForms } = this.props;
     const record = get(state.map, pk, {});
     const meta = get(state.updated, pk, {});
     const error = this.state.error || record.error || meta.error;
@@ -107,10 +111,9 @@ var EditRecord = React.createClass({
               data={record.data}
               pk={pk}
               onSubmit={this.onSubmit}
-              router={router}
+              onCancel={this.navigateBack}
               status={meta.status}
               include={includedForms}
-
               error={meta.status === 'inflight' ? null : error}
             />
           ) : <Loading />}
