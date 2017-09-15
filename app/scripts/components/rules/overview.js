@@ -85,12 +85,14 @@ var RulesOverview = React.createClass({
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>All Rules <span className='num--title'>{ !isNaN(count) ? `(${tally(count)})` : null }</span>
-            </h1>
+            <h1 className='heading--large heading--shared-content with-description'>Rule Overview</h1>
             {lastUpdated(queriedAt)}
           </div>
         </section>
         <section className='page__section'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium heading--shared-content with-description'>All Rules <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
+          </div>
           <List
             list={list}
             dispatch={this.props.dispatch}

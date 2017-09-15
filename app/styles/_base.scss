@@ -449,6 +449,7 @@ a:active {
     color: $grey;
     margin-right: 0.5em;
   }
+  .running,
   .enabled {
     &:before {
       background-color: $yellow;
@@ -464,6 +465,7 @@ a:active {
       background-color: $orange;
     }
   }
+  .failed,
   .disabled {
     &:before {
       background-color: $error-red;

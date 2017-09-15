@@ -1,6 +1,7 @@
 'use strict';
 import { set, del } from 'object-path';
 import assignDate from './assign-date';
+import removeDeleted from './remove-deleted';
 
 import {
   GRANULE,
@@ -42,13 +43,6 @@ import {
   OPTIONS_COLLECTIONNAME_ERROR
 } from '../actions';
 
-// manually filter out list items that have been deleted.
-// https://github.com/cumulus-nasa/cumulus-dashboard/issues/276
-function removeDeleted (list, deleted) {
-  const filter = (item) => !(deleted[item.granuleId] && deleted[item.granuleId].status === 'success');
-  return list.filter(filter);
-}
-
 export const initialState = {
   list: {
     data: [],
@@ -84,7 +78,7 @@ export default function reducer (state = initialState, action) {
       break;
 
     case GRANULES:
-      set(state, ['list', 'data'], removeDeleted(data.results, state.deleted));
+      set(state, ['list', 'data'], removeDeleted('granuleId', data.results, state.deleted));
       set(state, ['list', 'meta'], assignDate(data.meta));
       set(state, ['list', 'inflight'], false);
       set(state, ['list', 'error'], false);

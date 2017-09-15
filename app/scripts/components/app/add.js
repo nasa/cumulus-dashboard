@@ -49,6 +49,10 @@ var AddCollection = React.createClass({
     }
   },
 
+  navigateBack: function () {
+    this.props.router.push(this.props.baseRoute.split('/')[1]);
+  },
+
   post: function (id, payload) {
     const {
       primaryProperty,
@@ -69,7 +73,7 @@ var AddCollection = React.createClass({
   },
 
   render: function () {
-    const { title, state, schemaKey, router } = this.props;
+    const { title, state, schemaKey } = this.props;
     const { pk } = this.state;
     const record = pk ? get(state.created, pk, {}) : {};
     const schema = this.props.schema[schemaKey];
@@ -83,7 +87,7 @@ var AddCollection = React.createClass({
             schema={schema}
             pk={'new-collection'}
             onSubmit={this.post}
-            router={router}
+            onCancel={this.navigateBack}
             status={record.status}
             error={record.status === 'inflight' ? null : record.error}
           /> : <Loading />}

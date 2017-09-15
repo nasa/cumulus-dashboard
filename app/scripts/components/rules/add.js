@@ -9,8 +9,7 @@ const SCHEMA_KEY = 'rule';
 
 const AddRule = React.createClass({
   propTypes: {
-    rules: PropTypes.object,
-    dispatch: PropTypes.func
+    rules: PropTypes.object
   },
 
   render: function () {

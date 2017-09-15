@@ -1,4 +1,5 @@
 import React from 'react';
+import c from 'classnames';
 import { findDOMNode } from 'react-dom';
 import AsyncCommand from '../form/async-command';
 import { addGlobalListener } from '../../utils/browser';
@@ -46,22 +47,22 @@ const DropdownAsync = React.createClass({
     return (
       <div className='dropdown__options form-group__element--right'>
         <a className='dropdown__options__btn button--green button button--small' href='#' onClick={this.toggleActions}><span>Options</span></a>
-        {showActions ? (
-          <ul className='dropdown__menu'>
-            {config.map(d => <li key={d.text}>
-              <AsyncCommand action={d.action}
-                success={() => this.onSuccess(d.success)}
-                error={this.close}
-                status={d.status}
-                disabled={d.disabled}
-                confirmAction={d.confirmAction}
-                confirmText={d.confirmText}
-                className={'link--no-underline'}
-                element='a'
-                text={d.text} />
-            </li>)}
-          </ul>
-        ) : null}
+        <ul className={c('dropdown__menu', {
+          'dropdown__menu--hidden': !showActions
+        })}>
+          {config.map(d => <li key={d.text}>
+            <AsyncCommand action={d.action}
+              success={() => this.onSuccess(d.success)}
+              error={this.close}
+              status={d.status}
+              disabled={d.disabled}
+              confirmAction={d.confirmAction}
+              confirmText={d.confirmText}
+              className={'link--no-underline'}
+              element='a'
+              text={d.text} />
+          </li>)}
+        </ul>
       </div>
     );
   }

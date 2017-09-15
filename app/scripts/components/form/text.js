@@ -1,15 +1,19 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 var TextForm = React.createClass({
   propTypes: {
-    label: React.PropTypes.any,
-    value: React.PropTypes.string,
-    id: React.PropTypes.string,
-    error: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    type: React.PropTypes.string,
-    className: React.PropTypes.string
+    label: PropTypes.any,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
+    id: PropTypes.string,
+    error: PropTypes.string,
+    onChange: PropTypes.func,
+    type: PropTypes.string,
+    className: PropTypes.string
   },
 
   onChange: function (e) {

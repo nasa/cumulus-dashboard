@@ -45,7 +45,8 @@ export const fromNow = function (numberstring) {
   return moment(numberstring).fromNow();
 };
 
-export const lastUpdated = function (datestring) {
+export const lastUpdated = function (datestring, text) {
+  const meta = text || 'Last Updated';
   let day, time;
   if (datestring) {
     const date = moment(datestring);
@@ -54,7 +55,7 @@ export const lastUpdated = function (datestring) {
   }
   return (
     <dl className="metadata__updated">
-      <dt>Last Updated:</dt>
+      <dt>{meta}:</dt>
       <dd>{day}</dd>
       { time ? <dd className='metadata__updated__time'>{time}</dd> : null }
     </dl>

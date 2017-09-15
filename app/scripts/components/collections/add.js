@@ -6,6 +6,14 @@ import { createCollection } from '../../actions';
 import { getCollectionId, collectionHref } from '../../utils/format';
 import AddRaw from '../app/add-raw';
 
+const getBaseRoute = function (collectionId) {
+  if (collectionId) {
+    return collectionHref(collectionId);
+  } else {
+    return '/collections/collection';
+  }
+};
+
 var AddCollection = React.createClass({
   propTypes: {
     collections: PropTypes.object
@@ -19,7 +27,7 @@ var AddCollection = React.createClass({
         primaryProperty={'name'}
         state={this.props.collections}
         createRecord={createCollection}
-        getBaseRoute={collectionHref}
+        getBaseRoute={getBaseRoute}
         getPk={getCollectionId}
       />
     );

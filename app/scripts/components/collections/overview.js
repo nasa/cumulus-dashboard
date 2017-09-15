@@ -118,7 +118,7 @@ const CollectionOverview = React.createClass({
           <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
           {lastUpdated(get(record, 'data.timestamp'))}
           {overview}
-          {errors.length ? errors.map((error, i) => <ErrorReport key={i} report={error} />) : null}
+          {errors.length ? <ErrorReport report={errors} /> : null}
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>

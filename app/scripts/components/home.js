@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { get } from 'object-path';
@@ -8,11 +9,14 @@ import {
   getStats,
   getCount,
   listGranules,
-  getResources,
-  getRecentGranules
+  listExecutions,
+  listRules
 } from '../actions';
-import { nullValue, tally } from '../utils/format';
-import LoadingEllipsis from './app/loading-ellipsis';
+import {
+  nullValue,
+  tally,
+  seconds
+} from '../utils/format';
 import List from './table/list-view';
 import GranulesProgress from './granules/progress';
 import {
@@ -25,10 +29,12 @@ import { recent, updateInterval } from '../config';
 var Home = React.createClass({
   displayName: 'Home',
   propTypes: {
-    dispatch: React.PropTypes.func,
-    stats: React.PropTypes.object,
-    granules: React.PropTypes.object,
-    pdrs: React.PropTypes.object
+    dispatch: PropTypes.func,
+    stats: PropTypes.object,
+    rules: PropTypes.object,
+    granules: PropTypes.object,
+    pdrs: PropTypes.object,
+    executions: PropTypes.object
   },
 
   componentWillMount: function () {
@@ -44,7 +50,6 @@ var Home = React.createClass({
   query: function () {
     const { dispatch } = this.props;
     // TODO should probably time clamp this by most recent as well?
-    dispatch(getResources());
     dispatch(getStats({
       timestamp__from: recent
     }));
@@ -52,7 +57,8 @@ var Home = React.createClass({
       type: 'granules',
       field: 'status'
     }));
-    dispatch(getRecentGranules());
+    dispatch(listExecutions({}));
+    dispatch(listRules({}));
   },
 
   generateQuery: function () {
@@ -63,12 +69,15 @@ var Home = React.createClass({
   },
 
   render: function () {
-    const { list, recent } = this.props.granules;
+    const { list } = this.props.granules;
     const { stats, count } = this.props.stats;
     const overview = [
       [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
       [tally(get(stats.data, 'collections.value')), 'Collections', '/collections'],
-      [tally(get(recent, 'data.count')), 'Granules Processed in the Past Hour', '/granules']
+      [tally(get(stats.data, 'granules.value')), 'Granules', '/granules'],
+      [tally(get(this.props.executions, 'list.meta.count')), 'Executions', '/executions'],
+      [tally(get(this.props.rules, 'list.meta.count')), 'Ingest Rules', '/rules'],
+      [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time']
     ];
     const granuleCount = get(count.data, 'granules.meta.count');
     const numGranules = !isNaN(granuleCount) ? `(${tally(granuleCount)})` : null;
@@ -91,11 +100,11 @@ var Home = React.createClass({
               <ul>
                 {overview.map(d => {
                   const value = d[0];
-                  let useLoading = value === nullValue;
+                  if (value === nullValue) return null;
                   return (
                     <li key={d[1]}>
                       <Link className='overview-num' to={d[2] || '#'}>
-                        <span className='num--large'>{ useLoading ? <LoadingEllipsis /> : value }</span> {d[1]}
+                        <span className='num--large'>{value}</span> {d[1]}
                       </Link>
                     </li>
                   );
@@ -173,4 +182,10 @@ var Home = React.createClass({
   }
 });
 
-export default connect(state => state)(Home);
+export default connect(state => ({
+  rules: state.rules,
+  stats: state.stats,
+  granules: state.granules,
+  pdrs: state.pdrs,
+  executions: state.executions
+}))(Home);

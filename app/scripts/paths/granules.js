@@ -1,19 +1,16 @@
 'use strict';
 import { encode } from '../utils/browser';
 import tally from './tally';
-import { queryStatus } from '../utils/status';
-const processing = queryStatus.filter(d => d !== 'failed' && d !== 'completed');
 
 const granuleRoutes = [
-  ['All Granules', null],
+  ['Overview', null],
   ['Completed', 'completed', (d) => d.key === 'completed'],
-  ['Running', 'processing', (d) => processing.indexOf(d.key) >= 0],
+  ['Running', 'processing', (d) => d.key === 'running'],
   ['Failed', 'failed', (d) => d.key === 'failed']
 ];
 
 const singleGranuleRoutes = [
-  ['Back to Granules', null, 'sidebar__nav--back'],
-  ['Overview', 'granule/:granuleId']
+  ['Back to Granules', null, 'sidebar__nav--back']
 ];
 
 const empty = [['', '']];

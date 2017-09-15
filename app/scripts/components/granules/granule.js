@@ -47,7 +47,6 @@ const tableRow = [
 ];
 
 const metaAccessors = [
-  ['Status', 'status', displayCase],
   ['PDR Name', 'pdrName', pdrLink],
   ['Collection', 'collectionId', collectionLink],
   ['Provider', 'provider', providerLink],
@@ -125,17 +124,17 @@ var GranuleOverview = React.createClass({
   render: function () {
     const granuleId = this.props.params.granuleId;
     const record = this.props.granules.map[granuleId];
-
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
+    } else if (record.error) {
+      return <ErrorReport report={record.error} />;
     }
+
     const granule = record.data;
     const files = [];
     if (granule.files) {
       for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }
     }
-    const errors = this.errors();
-    const granuleError = granule.error && typeof granule.error === 'object' ? `${granule.error.Error}: ${granule.error.Cause}` : null;
     const dropdownConfig = [{
       text: 'Reingest',
       action: this.reingest,
@@ -149,24 +148,29 @@ var GranuleOverview = React.createClass({
     }, {
       text: 'Delete',
       action: this.delete,
-      disabled: granule.published,
+      disabled: !!granule.published,
       status: get(this.props.granules.deleted, [granuleId, 'status']),
       success: this.navigateBack,
       confirmAction: true,
       confirmText: deleteText(granuleId)
     }];
+    const errors = this.errors();
 
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description width--three-quarters'>{granuleId}</h1>
           <AsyncCommands config={dropdownConfig} />
-          {lastUpdated(granule.timestamp)}
-          {granuleError ? <ErrorReport report={granuleError} /> : null}
+          {lastUpdated(granule.createdAt, 'Created')}
+
+          <dl className='status--process'>
+            <dt>Status:</dt>
+            <dd className={granule.status.toLowerCase()}>{displayCase(granule.status)}</dd>
+          </dl>
         </section>
 
         <section className='page__section'>
-          {errors.length ? errors.map((error, i) => <ErrorReport key={i} report={error} />) : null}
+          {errors.length ? <ErrorReport report={errors} /> : null}
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Granule Overview</h2>
           </div>

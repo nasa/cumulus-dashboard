@@ -5,13 +5,17 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import TextArea from '../form/text-area';
 import { get } from 'object-path';
+import { getSchema } from '../../actions';
 import Loading from '../app/loading-indicator';
+import { removeReadOnly } from '../form/schema';
 import { updateDelay } from '../../config';
 
 const EditRaw = React.createClass({
   propTypes: {
     dispatch: PropTypes.func,
     pk: PropTypes.string,
+    schema: PropTypes.object,
+    schemaKey: PropTypes.string,
     state: PropTypes.object,
     backRoute: PropTypes.string,
     router: PropTypes.object,
@@ -49,19 +53,26 @@ const EditRaw = React.createClass({
     this.props.dispatch(this.props.updateRecord(json));
   },
 
-  componentWillMount: function () {
-    this.queryRecord(this.props.pk);
+  cancel: function () {
+    this.props.router.push(this.props.backRoute);
   },
 
-  componentWillReceiveProps: function ({ pk, state }) {
+  componentWillMount: function () {
+    this.queryRecord(this.props.pk);
+    this.props.dispatch(getSchema(this.props.schemaKey));
+  },
+
+  componentWillReceiveProps: function ({ pk, state, schema, schemaKey }) {
     const { dispatch, router, clearRecordUpdate, backRoute } = this.props;
+    const recordSchema = schema[schemaKey];
+    // successfully updated, navigate away
     if (get(state.updated, [pk, 'status']) === 'success') {
       return setTimeout(() => {
         dispatch(clearRecordUpdate(pk));
         router.push(backRoute);
       }, updateDelay);
     }
-    if (this.state.pk === pk) { return; }
+    if (this.state.pk === pk || !schema[schemaKey]) { return; }
     const newRecord = state.map[pk] || {};
     if (newRecord.error) {
       this.setState({
@@ -70,8 +81,9 @@ const EditRaw = React.createClass({
         error: newRecord.error
       });
     } else if (newRecord.data) {
+      let data = removeReadOnly(newRecord.data, recordSchema);
       try {
-        var text = JSON.stringify(newRecord.data, null, '\t');
+        var text = JSON.stringify(data, null, '\t');
       } catch (error) {
         return this.setState({ error, pk });
       }
@@ -119,6 +131,15 @@ const EditRaw = React.createClass({
                 />
               </span>
 
+              <span className='button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'>
+                <input
+                  type='submit'
+                  value='Cancel'
+                  onClick={this.cancel}
+                  readOnly={true}
+                />
+              </span>
+
             </form>
           ) : <Loading /> }
         </section>
@@ -127,4 +148,6 @@ const EditRaw = React.createClass({
   }
 });
 
-export default withRouter(connect()(EditRaw));
+export default withRouter(connect(state => ({
+  schema: state.schema
+}))(EditRaw));

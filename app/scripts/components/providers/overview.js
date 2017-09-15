@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { listProviders, getCount, interval } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/providers';
+import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/providers';
 import List from '../table/list-view';
 import Overview from '../app/overview';
 import { updateInterval } from '../../config';
@@ -38,11 +38,6 @@ var ProvidersOverview = React.createClass({
     }));
   },
 
-  generateBulkActions: function () {
-    const { providers } = this.props;
-    return bulkActions(providers);
-  },
-
   generateQuery: function () {
     return {};
   },
@@ -67,7 +62,7 @@ var ProvidersOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>All Providers</h1>
+          <h1 className='heading--large heading--shared-content with-description'>Provider Overview</h1>
           {lastUpdated(queriedAt)}
           {overview}
         </section>
@@ -84,7 +79,7 @@ var ProvidersOverview = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
-            bulkActions={this.generateBulkActions()}
+            bulkActions={[]}
             rowId={'name'}
             sortIdx={5}
           />

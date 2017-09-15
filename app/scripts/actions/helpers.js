@@ -100,7 +100,7 @@ export const wrapRequest = function (id, query, params, type, body) {
 
     const start = new Date();
     query(config, (error, data) => {
-      if (error || data.msg) {
+      if (error || (data && data.msg)) {
         const errorType = type + '_ERROR';
         error = error || data.msg;
         log((id ? errorType + ': ' + id : errorType));

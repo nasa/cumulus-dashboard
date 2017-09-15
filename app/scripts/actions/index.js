@@ -83,10 +83,6 @@ export const STATS = 'STATS';
 export const STATS_INFLIGHT = 'STATS_INFLIGHT';
 export const STATS_ERROR = 'STATS_ERROR';
 
-export const RESOURCES = 'RESOURCES';
-export const RESOURCES_INFLIGHT = 'RESOURCES_INFLIGHT';
-export const RESOURCES_ERROR = 'RESOURCES_ERROR';
-
 export const COUNT = 'COUNT';
 export const COUNT_INFLIGHT = 'COUNT_INFLIGHT';
 export const COUNT_ERROR = 'COUNT_ERROR';
@@ -288,10 +284,6 @@ export const getStats = (options) => wrapRequest(null, get, {
   qs: options
 }, STATS);
 
-export const getResources = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'resources')
-}, RESOURCES);
-
 // count queries *must* include type and field properties.
 export const getCount = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'stats/aggregate'),
@@ -324,11 +316,11 @@ export const getOptionsProviderGroup = () => wrapRequest(null, get, {
 export const getProvider = (providerId) => wrapRequest(
   providerId, get, `providers/${providerId}`, PROVIDER);
 
-export const createProvider = (payload) => wrapRequest(
-  payload.name, post, 'providers', NEW_PROVIDER, payload);
+export const createProvider = (providerId, payload) => wrapRequest(
+  providerId, post, 'providers', NEW_PROVIDER, payload);
 
-export const updateProvider = (payload) => wrapRequest(
-  payload.name, put, `providers/${payload.name}`, UPDATE_PROVIDER, payload);
+export const updateProvider = (providerId, payload) => wrapRequest(
+  providerId, put, `providers/${providerId}`, UPDATE_PROVIDER, payload);
 
 export const clearUpdateProvider = (providerId) => ({ type: UPDATE_PROVIDER_CLEAR, id: providerId });
 

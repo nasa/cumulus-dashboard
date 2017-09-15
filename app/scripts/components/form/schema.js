@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
-import { get } from 'object-path';
+import PropTypes from 'prop-types';
+import { get, set } from 'object-path';
 import { Form, formTypes } from './';
 import { isText, isNumber, isArray, arrayWithLength } from '../../utils/validate';
 import t from '../../utils/strings';
@@ -17,6 +18,18 @@ export const traverseSchema = function (schema, fn, path) {
       fn(property, meta, schema, path);
     }
   }
+};
+
+// create a copy of an object, where the copy adheres strictly to the schema.
+export const removeReadOnly = function (data, schema) {
+  const readOnlyRemoved = {};
+  traverseSchema(schema, function (property, meta, schemaProperty, path) {
+    if (!meta.readonly) {
+      const accessor = path ? path + '.' + property : property;
+      set(readOnlyRemoved, accessor, get(data, accessor));
+    }
+  });
+  return readOnlyRemoved;
 };
 
 // recursively scan a schema object and create a form config from it.
@@ -121,16 +134,16 @@ function list (config, property, validate) {
 
 export const Schema = React.createClass({
   propTypes: {
-    schema: React.PropTypes.object,
-    data: React.PropTypes.object,
-    pk: React.PropTypes.string,
-    router: React.PropTypes.object,
-    onSubmit: React.PropTypes.func,
-    status: React.PropTypes.string,
+    schema: PropTypes.object,
+    data: PropTypes.object,
+    pk: PropTypes.string,
+    onCancel: PropTypes.func,
+    onSubmit: PropTypes.func,
+    status: PropTypes.string,
 
     // if present, only include these properties
-    include: React.PropTypes.array,
-    error: React.PropTypes.any
+    include: PropTypes.array,
+    error: PropTypes.any
   },
 
   getInitialState: function () {
@@ -150,10 +163,6 @@ export const Schema = React.createClass({
     }
   },
 
-  back: function () {
-    this.props.router.goBack();
-  },
-
   render: function () {
     const { fields } = this.state;
     const { error } = this.props;
@@ -163,7 +172,7 @@ export const Schema = React.createClass({
         <Form
           inputMeta={fields}
           submit={this.props.onSubmit}
-          cancel={this.back}
+          cancel={this.props.onCancel}
           status={this.props.status}
         />
       </div>

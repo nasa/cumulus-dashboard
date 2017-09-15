@@ -10,6 +10,8 @@ import {
 import { getCollectionId } from '../../utils/format';
 import EditRaw from '../app/edit-raw';
 
+const SCHEMA_KEY = 'collection';
+
 var EditCollection = React.createClass({
   propTypes: {
     params: PropTypes.object,
@@ -24,6 +26,7 @@ var EditCollection = React.createClass({
     return (
       <EditRaw
         pk={collectionId}
+        schemaKey={SCHEMA_KEY}
         primaryProperty={'name'}
         state={collections}
         getRecord={() => getCollection(name, version)}

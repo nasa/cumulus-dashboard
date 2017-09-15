@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { queue } from 'd3-queue';
 import AsyncCommand from './async-command';
@@ -146,4 +145,4 @@ const BatchCommand = React.createClass({
     );
   }
 });
-export default connect()(BatchCommand);
+export default BatchCommand;
