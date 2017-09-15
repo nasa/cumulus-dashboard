@@ -8,12 +8,6 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-            - cumulus-dashboard-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - cumulus-dashboard-{{ .Branch }}
-            - cumulus-dashboard-develop
-            - cumulus-dashboard
       - run:
           name: Install dependencies
           command: |
@@ -38,8 +32,3 @@ jobs:
               ~/.local/bin/aws s3 sync ~/cumulus-dashboard/dist/. s3://ghrc-r-dashboard --acl=public-read
             fi
 
-      - save_cache:
-          key: cumulus-dashboard-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/cumulus-dashboard/node_modules
-            - ~/cumulus-dashboard/yarn-cache
