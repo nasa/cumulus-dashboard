@@ -4,12 +4,17 @@ import assert from 'assert';
 var configurations = {
   base: require('./config/base'),
   staging: require('./config/staging'),
-  production: require('./config/production')
+  production: require('./config/production'),
+  'lpdaac-uat': require('./config/lpdaac-uat')
 };
 var config = configurations.base || {};
 
 if (process.env.DS_ENV === 'staging') {
   config = Object.assign({}, config, configurations.staging);
+} else if (process.env.DS_ENV === 'production') {
+  config = Object.assign({}, config, configurations.production);
+} else if (process.env.DS_ENV === 'lpdaac-uat') {
+  config = Object.assign({}, config, configurations['lpdaac-uat']);
 } else if (process.env.DS_ENV === 'production') {
   config = Object.assign({}, config, configurations.production);
 }
