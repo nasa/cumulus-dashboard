@@ -27,6 +27,10 @@ const EditRaw = React.createClass({
     };
   },
 
+  cancel: function (e) {
+    this.props.router.push(this.props.getBaseRoute().split('/')[1]);
+  },
+
   submit: function (e) {
     e.preventDefault();
     const { state, dispatch, createRecord, getPk } = this.props;
@@ -93,6 +97,15 @@ const EditRaw = React.createClass({
                   readOnly={true}
                 />
               </span>
+              <span className='button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'>
+                <input
+                  type='submit'
+                  value='Cancel'
+                  onClick={this.cancel}
+                  readOnly={true}
+                />
+              </span>
+
             </form>
           </div>
         </section>

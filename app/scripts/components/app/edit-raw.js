@@ -53,6 +53,10 @@ const EditRaw = React.createClass({
     this.props.dispatch(this.props.updateRecord(json));
   },
 
+  cancel: function () {
+    this.props.router.push(this.props.backRoute);
+  },
+
   componentWillMount: function () {
     this.queryRecord(this.props.pk);
     this.props.dispatch(getSchema(this.props.schemaKey));
@@ -123,6 +127,15 @@ const EditRaw = React.createClass({
                   type='submit'
                   value={buttonText}
                   onClick={this.submit}
+                  readOnly={true}
+                />
+              </span>
+
+              <span className='button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'>
+                <input
+                  type='submit'
+                  value='Cancel'
+                  onClick={this.cancel}
                   readOnly={true}
                 />
               </span>
