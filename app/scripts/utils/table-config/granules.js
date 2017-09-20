@@ -17,6 +17,7 @@ import {
   removeGranule,
   deleteGranule
 } from '../../actions';
+import ErrorReport from '../../components/errors/report';
 
 export const tableHeader = [
   'Status',
@@ -49,23 +50,26 @@ export const tableSortProps = [
 ];
 
 export const errorTableHeader = [
-  'Name',
-  'Published',
   'Error',
+  'Type',
+  'Granule',
+  'Duration',
   'Updated'
 ];
 
 export const errorTableRow = [
-  (d) => granuleLink(d.granuleId),
-  (d) => bool(d.published),
+  (d) => <ErrorReport report={get(d, 'error.Cause', nullValue)} />,
   (d) => get(d, 'error.Error', nullValue),
+  (d) => granuleLink(d.granuleId),
+  (d) => seconds(d.duration),
   (d) => fromNow(d.timestamp)
 ];
 
 export const errorTableSortProps = [
-  'granuleId',
-  'published',
   null,
+  null,
+  'granuleId',
+  'duration',
   'timestamp'
 ];
 
