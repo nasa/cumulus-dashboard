@@ -58,7 +58,7 @@ export const errorTableHeader = [
 ];
 
 export const errorTableRow = [
-  (d) => <ErrorReport report={get(d, 'error.Cause', nullValue)} />,
+  (d) => <ErrorReport report={get(d, 'error.Cause', nullValue)} truncate={true} />,
   (d) => get(d, 'error.Error', nullValue),
   (d) => granuleLink(d.granuleId),
   (d) => seconds(d.duration),
