@@ -64,7 +64,7 @@ var Home = React.createClass({
   generateQuery: function () {
     return {
       q: '_exists_:error AND status:failed',
-      limit: 100
+      limit: 20
     };
   },
 
@@ -115,7 +115,6 @@ var Home = React.createClass({
             <div className='row'>
               <div className='heading__wrapper--border'>
                 <h2 className='heading--medium heading--shared-content--right'>Granules Updated <span className='num--title'>{numGranules}</span></h2>
-                <span className='metadata__updated'>Jan. 20, 2017</span>
               </div>
               <GranulesProgress granules={granuleStatus} />
             </div>
