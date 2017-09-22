@@ -95,7 +95,6 @@ var Home = React.createClass({
             <div className='row'>
               <div className='heading__wrapper--border'>
                 <h2 className='heading--medium heading--shared-content--right'>Updates</h2>
-                <span className='metadata__updated'>Jan. 20, 2017</span>
               </div>
               <ul>
                 {overview.map(d => {
