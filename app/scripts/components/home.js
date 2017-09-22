@@ -20,9 +20,9 @@ import {
 import List from './table/list-view';
 import GranulesProgress from './granules/progress';
 import {
-  tableHeader,
-  tableRow,
-  tableSortProps
+  errorTableHeader,
+  errorTableRow,
+  errorTableSortProps
 } from '../utils/table-config/granules';
 import { recent, updateInterval } from '../config';
 
@@ -63,8 +63,8 @@ var Home = React.createClass({
 
   generateQuery: function () {
     return {
-      timestamp__from: recent,
-      limit: 30
+      q: '_exists_:error AND status:failed',
+      limit: 100
     };
   },
 
@@ -121,56 +121,20 @@ var Home = React.createClass({
               <GranulesProgress granules={granuleStatus} />
             </div>
           </section>
-          <section className='page__section list--errors'>
-            <div className='row'>
-              <div className='heading__wrapper--border'>
-                <h2 className='heading--medium heading--shared-content--right'>Errors <span className='num--title'>(8)</span></h2>
-                <span className='metadata__updated'>Jan. 20, 2017</span>
-              </div>
-              <div className='table--wrapper'>
-                <table>
-                  <thead>
-                    <tr>
-                      <td className='table__sort'>Error</td>
-                      <td className='table__sort'>Type</td>
-                      <td className='table__sort'>Level</td>
-                      <td className='table__sort'>Log</td>
-                      <td className='table__sort'>Updated</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className='table__main-asset'><a href=''>Time has exceeded 4 hours by 15mins - Set of granules</a></td>
-                      <td><a>Latency</a></td>
-                      <td>High</td>
-                      <td><a>View Log</a></td>
-                      <td>15 secs ago</td>
-                    </tr>
-                    <tr>
-                      <td className='table__main-asset'><a href=''>T>"Ingesting MYD13A1.A2017185.h33v09.006.2017201231245 failed: Checksum verification failed for MYD13A1.A2017185.h33v09.006.2017201231245"</a></td>
-                      <td><a>Checksum</a></td>
-                      <td>High</td>
-                      <td><a>View Log</a></td>
-                      <td>15 secs ago</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section>
+
           <section className='page__section list--granules'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium'>Recently Active Granules</h2>
+                <h2 className='heading--medium'>Granule Errors</h2>
               </div>
               <List
                 list={list}
                 dispatch={this.props.dispatch}
                 action={listGranules}
-                tableHeader={tableHeader}
-                sortIdx={6}
-                tableRow={tableRow}
-                tableSortProps={tableSortProps}
+                tableHeader={errorTableHeader}
+                sortIdx={4}
+                tableRow={errorTableRow}
+                tableSortProps={errorTableSortProps}
                 query={this.generateQuery()}
               />
               <Link className='link--secondary link--learn-more' to='/granules'>View Granules Overview</Link>

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { get } from 'object-path';
-import { tally, bool, fromNow } from '../format';
+import { tally, bool, fromNow, nullValue } from '../format';
 import ErrorReport from '../../components/errors/report';
 
 import statusOptions from '../status';
@@ -29,10 +29,8 @@ function bar (completed, failed, text) {
 export const renderProgress = function (d) {
   // if the status is failed, return it as such
   if (d.status === 'failed') {
-    const type = get(d, 'error.Error');
-    const cause = get(d, 'error.Cause');
-    const error = `${type}: ${cause}`;
-    return <ErrorReport report={error} />;
+    const error = get(d, 'error', nullValue);
+    return <ErrorReport report={error} truncate={true} />;
   } else if (typeof d.status === 'undefined') return null;
   const granules = d.granulesStatus;
   const total = stats.reduce((a, b) => a + get(granules, b, 0), 0);
