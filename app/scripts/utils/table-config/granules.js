@@ -32,7 +32,7 @@ export const tableHeader = [
 export const tableRow = [
   (d) => <Link to={`/granules/${d.status}`} className={`granule__status granule__status--${d.status}`}>{displayCase(d.status)}</Link>,
   (d) => granuleLink(d.granuleId),
-  (d) => d.cmrLink ? <a href={d.cmrLink}>{bool(d.published)}</a> : bool(d.published),
+  (d) => d.cmrLink ? <a href={d.cmrLink} target='_blank'>{bool(d.published)}</a> : bool(d.published),
   (d) => collectionLink(d.collectionId),
   (d) => link(d.execution),
   (d) => seconds(d.duration),

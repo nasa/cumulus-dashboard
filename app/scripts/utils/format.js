@@ -107,7 +107,7 @@ export const storage = function (n) {
   else return (n / 1e15).toFixed(2) + 'pb';
 };
 
-export const link = (url) => <a href={url}>Link</a>;
+export const link = (url) => <a href={url} target='_blank'>Link</a>;
 
 export const truncate = function (string, to) {
   if (!string) return nullValue;
