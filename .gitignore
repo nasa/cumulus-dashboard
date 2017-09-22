@@ -7,3 +7,5 @@ dist
 app/scripts/config/local.js
 gulp-cache
 /artifacts
+/tmp/
+/docker/html/
