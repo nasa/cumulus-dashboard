@@ -92,6 +92,7 @@ var EditRecord = React.createClass({
       json.changedBy = 'Cumulus Dashboard';
     }
     this.setState({ error: null });
+    console.log('About to update', json);
     dispatch(updateRecord(pk, json));
   },
 

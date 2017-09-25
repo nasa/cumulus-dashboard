@@ -50,6 +50,7 @@ const EditRaw = React.createClass({
       return this.setState({ error: 'Syntax error in JSON' });
     }
     this.setState({ error: null });
+    console.log('About to update', json);
     this.props.dispatch(this.props.updateRecord(json));
   },
 
