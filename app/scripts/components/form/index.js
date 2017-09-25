@@ -117,6 +117,12 @@ export const Form = React.createClass({
       let inputId = this.generateComponentId(input.schemaProperty);
       let { value } = inputState[inputId];
 
+      // don't set a value for values that haven't changed
+      const markedDirty = this.state.dirty[inputId];
+      if (!markedDirty) {
+        return;
+      }
+
       // if expected type is json, validate as json first
       if (input.type === formTypes.textArea && input.mode === 'json') {
         try {
@@ -133,13 +139,6 @@ export const Form = React.createClass({
         return set(inputState, [inputId, 'error'], error);
       } else if (inputState[inputId].error) {
         delete inputState[inputId].error;
-      }
-
-      // don't set a value for passwords that haven't changed,
-      // since these are garbled and encrypted.
-      const markedDirty = this.state.dirty[inputId];
-      if (!markedDirty && input.isPassword) {
-        return;
       }
 
       // Ignore empty fields that aren't required
