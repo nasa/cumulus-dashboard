@@ -31,19 +31,18 @@ import { updateInterval } from '../../config';
 
 const tableHeader = [
   'Filename',
-  'Original',
-  'Staging',
-  'Archive',
-  'Access'
+  'Link',
+  'Bucket'
 ];
 
 const link = 'Link';
+
+const makeLink = (s3Uri) => s3Uri.replace('s3://', 'https://s3.amazonaws.com/');
+
 const tableRow = [
   (d) => d.name || '(No name)',
-  (d) => (<a href={d.sipFile}>{d.sipFile ? link : nullValue}</a>),
-  (d) => (<a href={d.stagingFile}>{d.stagingFile ? link : nullValue}</a>),
-  (d) => (<a href={d.archivedFile}>{d.archivedFile ? link : nullValue}</a>),
-  (d) => d.access
+  (d) => (<a href={makeLink(d.filename)}>{d.filename ? link : nullValue}</a>),
+  (d) => d.bucket
 ];
 
 const metaAccessors = [
@@ -186,7 +185,7 @@ var GranuleOverview = React.createClass({
             data={files}
             header={tableHeader}
             row={tableRow}
-            props={['name', 'sipFile', 'stagingFile', 'archivedFile', 'access']}
+            props={['name', 'filename', 'bucket']}
           />
         </section>
 
