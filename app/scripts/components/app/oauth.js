@@ -17,7 +17,8 @@ var OAuth = React.createClass({
     api: React.PropTypes.object,
     location: React.PropTypes.object,
     router: React.PropTypes.object,
-    show: React.PropTypes.bool
+    show: React.PropTypes.bool,
+    error: React.PropTypes.string
   },
 
   getInitialState: function () {
