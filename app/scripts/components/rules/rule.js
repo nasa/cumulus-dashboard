@@ -26,6 +26,7 @@ import ErrorReport from '../errors/report';
 
 const metaAccessors = [
   ['Rule Name', 'name'],
+  ['Workflow', 'workflow'],
   ['Provider', 'provider', providerLink],
   ['Rule Type', 'rule.type'],
   ['Collection', 'collection', d => collectionLink(getCollectionId(d))],

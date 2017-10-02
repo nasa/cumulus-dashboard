@@ -31,26 +31,26 @@ import { updateInterval } from '../../config';
 
 const tableHeader = [
   'Filename',
-  'Original',
-  'Staging',
-  'Archive',
-  'Access'
+  'Link',
+  'Bucket'
 ];
 
 const link = 'Link';
+
+const makeLink = (s3Uri) => s3Uri.replace('s3://', 'https://s3.amazonaws.com/');
+
 const tableRow = [
   (d) => d.name || '(No name)',
-  (d) => (<a href={d.sipFile}>{d.sipFile ? link : nullValue}</a>),
-  (d) => (<a href={d.stagingFile}>{d.stagingFile ? link : nullValue}</a>),
-  (d) => (<a href={d.archivedFile}>{d.archivedFile ? link : nullValue}</a>),
-  (d) => d.access
+  (d) => (<a href={makeLink(d.filename)}>{d.filename ? link : nullValue}</a>),
+  (d) => d.bucket
 ];
 
 const metaAccessors = [
   ['PDR Name', 'pdrName', pdrLink],
   ['Collection', 'collectionId', collectionLink],
   ['Provider', 'provider', providerLink],
-  ['CMR Link', 'cmrLink', (d) => d ? <a href={d}>Link</a> : nullValue],
+  ['CMR Link', 'cmrLink', (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue],
+  ['Execution', 'execution', (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue],
   ['Published', 'published', bool],
   ['Duplicate', 'hasDuplicate', bool],
   ['Total duration', 'duration', seconds]
@@ -185,7 +185,7 @@ var GranuleOverview = React.createClass({
             data={files}
             header={tableHeader}
             row={tableRow}
-            props={['name', 'sipFile', 'stagingFile', 'archivedFile', 'access']}
+            props={['name', 'filename', 'bucket']}
           />
         </section>
 
