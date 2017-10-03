@@ -1,7 +1,7 @@
 'use strict';
 var logo = require('./logo');
 module.exports = {
-  apiRoot: 'https://8ns3a35lha.execute-api.us-east-1.amazonaws.com/UAT/',
+  apiRoot: 'https://api.cumulus.lpdaac.uat.earthdata.nasa.gov/',
   graphicsPath: '/graphics/',
   environment: 'lpdaac-uat',
   consoleMessage: logo
