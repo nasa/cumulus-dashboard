@@ -13,7 +13,6 @@ import {
   hashHistory,
   applyRouterMiddleware
 } from 'react-router';
-import url from 'url';
 
 import config from './config';
 import reducers from './reducers';
