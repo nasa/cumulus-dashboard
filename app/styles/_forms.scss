@@ -1,9 +1,20 @@
+.form__element__clickable {
+  cursor: pointer;
+}
+
 input, textarea, select, .form__element__select {
   border: 1px solid $lightest-grey;
   background-color: #fff;
   border-radius: .5em;
   padding: .3em 2em .4em .7em;
   font-size: .86em;
+}
+input[type=submit] {
+  font-size: 1em;
+}
+
+.input--lg {
+  padding: .6em 2em .7em .7em;
 }
 
 input[type="checkbox"], input[type="radio"] {
@@ -62,6 +73,7 @@ select {
 
 .form--controls {
   margin-bottom: 2em;
+  display: flex;
 }
 
 .search__wrapper {
@@ -134,7 +146,6 @@ select {
 }
 
 .form-group__element {
-  float: left;
   margin-right: 1em;
 }
 
@@ -152,15 +163,40 @@ select {
 
 .form__element__updateToggle {
   float: right;
-  cursor: pointer;
   margin-top: -6px;
-  text-align: right;
-  span {
+  position: relative;
+  .form-group__updating, .metadata__updated {
     display: block;
   }
+  .metadata__updated {
+    padding-top: 18px;
+    padding-right: 4px;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
   .form-group__updating {
+    position: absolute;
+    left: 14px;
     font-weight: $base-font-semibold;
     font-size: .86em;
+    min-width: 120px;
+  }
+}
+
+.form__element__refresh {
+  position: absolute;
+  left: -2px;
+  top: 2px;
+  display: inline-block;
+  background-image: url(#{$graphics}/layout/refresh.svg);
+  width: 12px;
+  height: 12px;
+  background-size: 12px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  &:hover {
+    transform: rotate(0.1turn);
   }
 }
 
@@ -364,4 +400,26 @@ select {
     margin-top: 3em;
     margin-bottom: 0;
   }
+}
+
+.autocomplete__menu {
+  position: fixed;
+  overflow: auto;
+  max-height: 50%;
+  z-index: 99;
+  background-color: #FFF;
+  border: 1px solid $lightest-grey;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+  border-radius: .2em;
+}
+
+.autocomplete__select {
+  cursor: pointer;
+  padding: .3em .9em;
+  font-size: .86em;
+}
+
+.autocomplete__select--highlighted {
+  background-color: $ocean-blue;
+  color: #FFF;
 }

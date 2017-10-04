@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { lastUpdated } from '../../utils/format';
@@ -9,14 +10,13 @@ var CollectionLogs = React.createClass({
   displayName: 'CollectionLogs',
 
   propTypes: {
-    dispatch: React.PropTypes.func,
-    params: React.PropTypes.object,
-    logs: React.PropTypes.object
+    dispatch: PropTypes.func,
+    params: PropTypes.object,
+    logs: PropTypes.object
   },
 
   render: function () {
-    const collectionName = this.props.params.collectionName;
-    const logsQuery = { 'meta.collectionName__exists': 'true' };
+    const collectionName = this.props.params.name;
     const { queriedAt } = this.props.logs;
     return (
       <div className='page__component'>
@@ -25,10 +25,12 @@ var CollectionLogs = React.createClass({
           <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
           {lastUpdated(queriedAt)}
         </section>
-        <LogViewer query={logsQuery} dispatch={this.props.dispatch} logs={this.props.logs}/>
+        <LogViewer query={{ q: collectionName }} dispatch={this.props.dispatch} logs={this.props.logs}/>
       </div>
     );
   }
 });
 
-export default connect(state => state)(CollectionLogs);
+export default connect(state => ({
+  logs: state.logs
+}))(CollectionLogs);

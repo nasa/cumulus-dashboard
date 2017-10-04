@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
-import { get } from 'object-path';
+import PropTypes from 'prop-types';
+import { get, set } from 'object-path';
 import { Form, formTypes } from './';
 import { isText, isNumber, isArray, arrayWithLength } from '../../utils/validate';
 import t from '../../utils/strings';
@@ -19,14 +20,32 @@ export const traverseSchema = function (schema, fn, path) {
   }
 };
 
+// create a copy of an object, where the copy adheres strictly to the schema.
+export const removeReadOnly = function (data, schema) {
+  const readOnlyRemoved = {};
+  traverseSchema(schema, function (property, meta, schemaProperty, path) {
+    if (!meta.readonly) {
+      const accessor = path ? path + '.' + property : property;
+      set(readOnlyRemoved, accessor, get(data, accessor));
+    }
+  });
+  return readOnlyRemoved;
+};
+
 // recursively scan a schema object and create a form config from it.
 // returns a flattened representation of the schema.
-export const createFormConfig = function (data, schema) {
+export const createFormConfig = function (data, schema, include) {
   data = data || {};
   const fields = [];
   traverseSchema(schema, function (property, meta, schemaProperty, path) {
     // If a field isn't user-editable, hide it from the form
     if (meta.readonly) { return; }
+
+    // create an object-path-ready accessor string
+    const accessor = path ? path + '.' + property : property;
+
+    // if there are included properties, only create forms for those
+    if (Array.isArray(include) && include.indexOf(accessor) === -1) { return; }
 
     // determine the label
     const required = Array.isArray(schemaProperty.required) &&
@@ -41,8 +60,6 @@ export const createFormConfig = function (data, schema) {
       </span>
     );
 
-    // create an object-path-ready accessor string
-    const accessor = path ? path + '.' + property : property;
     const value = get(data, accessor) || get(meta, 'default');
     const config = {
       value, label,
@@ -117,13 +134,16 @@ function list (config, property, validate) {
 
 export const Schema = React.createClass({
   propTypes: {
-    schema: React.PropTypes.object,
-    data: React.PropTypes.object,
-    pk: React.PropTypes.string,
-    router: React.PropTypes.object,
-    onSubmit: React.PropTypes.func,
-    status: React.PropTypes.string,
-    error: React.PropTypes.any
+    schema: PropTypes.object,
+    data: PropTypes.object,
+    pk: PropTypes.string,
+    onCancel: PropTypes.func,
+    onSubmit: PropTypes.func,
+    status: PropTypes.string,
+
+    // if present, only include these properties
+    include: PropTypes.array,
+    error: PropTypes.any
   },
 
   getInitialState: function () {
@@ -131,41 +151,28 @@ export const Schema = React.createClass({
   },
 
   componentWillMount: function () {
-    const { schema, data } = this.props;
-    this.setState({ fields: createFormConfig(data, schema) });
+    const { schema, data, include } = this.props;
+    this.setState({ fields: createFormConfig(data, schema, include) });
   },
 
   componentWillReceiveProps: function (newProps) {
     const { props } = this;
-    const { schema, data } = newProps;
+    const { schema, data, include } = newProps;
     if (props.pk !== newProps.pk) {
-      this.setState({ fields: createFormConfig(data, schema) });
+      this.setState({ fields: createFormConfig(data, schema, include) });
     }
-    if (newProps.error && !props.error) {
-      this.scrollToTop();
-    }
-  },
-
-  back: function () {
-    this.props.router.goBack();
-  },
-
-  scrollToTop: function () {
-    if (this.DOMElement && typeof this.DOMElement.scrollIntoView === 'function') {
-      this.DOMElement.scrollIntoView(true);
-    } else scrollTo(0, 0);
   },
 
   render: function () {
     const { fields } = this.state;
     const { error } = this.props;
     return (
-      <div ref={(element) => { this.DOMElement = element; }}>
+      <div>
         {error ? <ErrorReport report={error} /> : null}
         <Form
           inputMeta={fields}
           submit={this.props.onSubmit}
-          cancel={this.back}
+          cancel={this.props.onCancel}
           status={this.props.status}
         />
       </div>

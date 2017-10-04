@@ -1,116 +1,38 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { get } from 'object-path';
 import {
   getProvider,
   updateProvider,
-  clearUpdateProvider,
-  getSchema
+  clearUpdateProvider
 } from '../../actions';
-import Loading from '../app/loading-indicator';
-import Schema from '../form/schema';
-import merge from '../../utils/merge';
-import { updateDelay } from '../../config';
+import EditRecord from '../app/edit';
 
 const SCHEMA_KEY = 'provider';
 
 var EditProvider = React.createClass({
   propTypes: {
-    params: React.PropTypes.object,
-    providers: React.PropTypes.object,
-    schema: React.PropTypes.object,
-    router: React.PropTypes.object,
-    dispatch: React.PropTypes.func
-  },
-
-  getInitialState: function () {
-    return {
-      providerId: null,
-      error: null
-    };
-  },
-
-  get: function (providerId) {
-    const record = this.props.providers.map[providerId];
-    if (!record) {
-      this.props.dispatch(getProvider(providerId));
-    }
-  },
-
-  componentWillMount: function () {
-    const providerId = this.props.params.providerId;
-    if (providerId) {
-      this.get(providerId);
-    }
-    this.props.dispatch(getSchema(SCHEMA_KEY));
-  },
-
-  componentWillReceiveProps: function (newProps) {
-    const providerId = newProps.params.providerId;
-    const updateStatus = get(this.props.providers.updated, [providerId, 'status']);
-    if (updateStatus === 'success') {
-      return setTimeout(() => {
-        this.props.dispatch(clearUpdateProvider(providerId));
-        this.props.router.push(`/providers/provider/${providerId}`);
-      }, updateDelay);
-    } else if (this.state.providerId === providerId) { return; }
-
-    const record = get(this.props.providers.map, providerId, {});
-
-    // record has hit an API error
-    if (record.error) {
-      this.setState({
-        providerId,
-        error: record.error
-      });
-    } else if (record.data) {
-      // record has hit an API success; update the UI
-      this.setState({
-        providerId,
-        error: null
-      });
-    } else if (!record.inflight) {
-      // we've not yet fetched the record, request it
-      this.get(providerId);
-    }
-  },
-
-  onSubmit: function (id, payload) {
-    const providerId = this.props.params.providerId;
-    const record = this.props.providers.map[providerId];
-    const json = merge(record.data, payload);
-    this.setState({ error: null });
-    json.updatedAt = new Date().getTime();
-    json.changedBy = 'Cumulus Dashboard';
-    this.props.dispatch(updateProvider(json));
+    params: PropTypes.object,
+    providers: PropTypes.object
   },
 
   render: function () {
-    const providerId = this.props.params.providerId;
-    const record = get(this.props.providers.map, [providerId], {});
-    const meta = get(this.props.providers.updated, [providerId], {});
-    const error = this.state.error || record.error || meta.error;
-    const schema = this.props.schema[SCHEMA_KEY];
+    const { providerId } = this.props.params;
     return (
-      <div className='page__component'>
-        <section className='page__section'>
-          <h1 className='heading--large'>Edit {providerId}</h1>
-          {schema && record.data ? (
-            <Schema
-              schema={schema}
-              data={record.data}
-              pk={providerId}
-              onSubmit={this.onSubmit}
-              router={this.props.router}
-              status={meta.status}
-              error={meta.status === 'inflight' ? null : error}
-            />
-          ) : <Loading />}
-        </section>
-      </div>
+      <EditRecord
+        pk={providerId}
+        schemaKey={SCHEMA_KEY}
+        state={this.props.providers}
+        getRecord={getProvider}
+        updateRecord={updateProvider}
+        clearRecordUpdate={clearUpdateProvider}
+        backRoute={`providers/provider/${providerId}`}
+      />
     );
   }
 });
 
-export default connect(state => state)(EditProvider);
+export default connect(state => ({
+  providers: state.providers
+}))(EditProvider);

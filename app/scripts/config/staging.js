@@ -5,5 +5,6 @@
 
 module.exports = {
   environment: 'staging',
+  requireEarthdataLogin: true,
   graphicsPath: '/dashboard/dev/graphics/'
 };

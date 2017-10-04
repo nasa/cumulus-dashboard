@@ -38,7 +38,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   max-width: 1280px;
-  padding: 0 64px;
+  padding: 0 48px;
   display: block;
   width: auto;
 }
@@ -119,16 +119,19 @@ a:active {
   h1 {
     float: left;
     margin-right: 2.5em;
-    padding-top: 1em;
+    padding-top: 1.3em;
     img {
       height: 26px;
       width: 165px;
     }
   }
+  nav ul {
+    display: flex;
+  }
   nav li {
-    padding: 1.3em 0 1em;
+    padding: 1.5em 0 1.2em;
     display: inline-block;
-    margin-right: 3em;
+    margin-right: 2.5em;
     font-weight: $base-font-light;
     border-bottom: 1px solid $ocean-blue;
     transition: all 0.3s ease 0s;
@@ -143,10 +146,21 @@ a:active {
       }
     }
     &.rightalign {
-      float: right;
+      margin-left: auto;
+      margin-right: 0;
     }
   }
 }
+
+.nav__order-0 { order: 0 };
+.nav__order-1 { order: 1 };
+.nav__order-2 { order: 2 };
+.nav__order-3 { order: 3 };
+.nav__order-4 { order: 4 };
+.nav__order-5 { order: 5 };
+.nav__order-6 { order: 6 };
+.nav__order-7 { order: 7 };
+.nav__order-8 { order: 8 };
 
 .content__header {
   background-color: $ocean-blue;
@@ -154,6 +168,10 @@ a:active {
   padding-top: 7em;
   padding-bottom: 1em;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+
+  h1 {
+    margin-bottom: .3em;
+  }
 }
 
 .content__header--lg {
@@ -413,24 +431,26 @@ a:active {
   margin-top: 1.5em;
   dd, dt {
     display: inline-block;
-  }
-  dt {
-    font-weight: $base-font-semibold;
-    margin-right: 1em;
+    font-size: .9em;
   }
   dd {
-    color: $grey;
+    font-weight: $base-font-semibold;
     &:before {
       content: '';
       width: 10px;
       height: 10px;
       display: inline-block;
-      margin-right: .5em;
+      margin-right: .2em;
       background-size: 10px 10px;
       border-radius: 20px;
     }
   }
-  .ingesting, .processing, .updating, .archiving {
+  dt {
+    color: $grey;
+    margin-right: 0.5em;
+  }
+  .running,
+  .enabled {
     &:before {
       background-color: $yellow;
     }
@@ -445,9 +465,29 @@ a:active {
       background-color: $orange;
     }
   }
-  .failed {
+  .failed,
+  .disabled {
     &:before {
       background-color: $error-red;
     }
   }
+}
+
+.app__target--container {
+  background-color: darken($ocean-blue, 10%);
+  border-bottom: 1px solid darken($ocean-blue, 13%);
+  padding: 0.4em 0 .3em;
+  margin: 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: .86em;
+}
+
+.app__target {
+  color: #FFF;
+  margin: 0;
+}
+
+.width--three-quarters {
+  width: 85%;
 }

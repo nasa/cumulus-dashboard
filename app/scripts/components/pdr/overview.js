@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
@@ -9,15 +10,15 @@ import { bulkActions } from '../../utils/table-config/pdrs';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdr-progress';
 import List from '../table/list-view';
 import Overview from '../app/overview';
-import { recent, updateInterval } from '../../config';
+import { updateInterval } from '../../config';
 
 var PdrOverview = React.createClass({
   displayName: 'PdrOverview',
 
   propTypes: {
-    dispatch: React.PropTypes.func,
-    pdrs: React.PropTypes.object,
-    stats: React.PropTypes.object
+    dispatch: PropTypes.func,
+    pdrs: PropTypes.object,
+    stats: PropTypes.object
   },
 
   componentWillMount: function () {
@@ -36,9 +37,7 @@ var PdrOverview = React.createClass({
   },
 
   generateQuery: function () {
-    return {
-      updatedAt__from: recent
-    };
+    return {};
   },
 
   generateBulkActions: function () {
@@ -60,13 +59,13 @@ var PdrOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>PDRs Overview</h1>
+          <h1 className='heading--large heading--shared-content with-description'>PDR Overview</h1>
           {lastUpdated(queriedAt)}
           {overview}
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Recently Updated PDRs <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>All PDRs <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
           </div>
 
           <List
@@ -88,4 +87,7 @@ var PdrOverview = React.createClass({
   }
 });
 
-export default connect(state => state)(PdrOverview);
+export default connect(state => ({
+  stats: state.stats,
+  pdrs: state.pdrs
+}))(PdrOverview);

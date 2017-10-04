@@ -2,24 +2,26 @@
 import tally from './tally';
 
 const providerRoutes = [
-  ['Overview', null],
-  ['All Providers', 'all'],
-  ['Active', 'active', (d) => d.key === 'ingesting'],
-  ['Inactive', 'inactive', (d) => d.key === 'stopped'],
-  ['Failed', 'failed', (d) => d.key === 'failed']
+  ['Overview', null]
 ];
 
-const EMPTY = [['', '']];
+const singleProviderRoutes = [
+  ['Back to Providers', null, 'sidebar__nav--back']
+];
+
+const empty = [['', '']];
 
 const providers = {
   base: 'providers',
   heading: 'Providers',
   routes: (currentRoute, params, count) => {
-    if (currentRoute.startsWith('/providers')) {
+    if (currentRoute.indexOf('/providers/provider') >= 0) {
+      return singleProviderRoutes;
+    } else if (currentRoute.slice(0, 10) !== '/providers') {
+      return empty;
+    } else {
       count = count || [];
       return providerRoutes.map(d => tally(d, count));
-    } else {
-      return EMPTY;
     }
   }
 };

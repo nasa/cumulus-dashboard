@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import omit from 'lodash.omit';
 import {
   searchGranules,
   clearGranulesSearch,
@@ -11,7 +11,7 @@ import {
   getOptionsCollectionName
 } from '../../actions';
 import { get } from 'object-path';
-import { granuleSearchResult, lastUpdated, tally, displayCase } from '../../utils/format';
+import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
   tableHeader,
   tableRow,
@@ -26,25 +26,23 @@ import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
 import Search from '../form/search';
 import statusOptions from '../../utils/status';
-const processingOptions = omit(statusOptions, ['Completed', 'Failed']);
-const processingStatus = Object.keys(processingOptions).map(d => processingOptions[d]).filter(Boolean).join(',');
 
 var AllGranules = React.createClass({
   displayName: 'AllGranules',
 
   propTypes: {
-    granules: React.PropTypes.object,
-    logs: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    location: React.PropTypes.object
+    granules: PropTypes.object,
+    logs: PropTypes.object,
+    dispatch: PropTypes.func,
+    location: PropTypes.object
   },
 
   generateQuery: function () {
-    const { pathname } = this.props.location;
     const options = {};
-    if (pathname === '/granules/completed') options.status = 'completed';
-    else if (pathname === '/granules/processing') options.status__in = processingStatus;
-    else if (pathname === '/granules/failed') options.status = 'failed';
+    const view = this.getView();
+    if (view === 'completed') options.status = 'completed';
+    else if (view === 'processing') options.status = 'running';
+    else if (view === 'failed') options.status = 'failed';
     return options;
   },
 
@@ -62,14 +60,13 @@ var AllGranules = React.createClass({
   },
 
   render: function () {
-    const { list, dropdowns } = this.props.granules;
+    const { granules } = this.props;
+    const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
-    const logsQuery = { 'meta.granuleId__exists': 'true' };
+    const logsQuery = { 'granuleId__exists': 'true' };
     const view = this.getView();
-    const statOptions = (view === 'completed' || view === 'failed') ? null
-      : view === 'processing' ? processingOptions
-        : statusOptions;
-
+    const statOptions = (view === 'all') ? statusOptions : null;
+    const tableSortIdx = view === 'failed' ? 3 : 6;
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -81,17 +78,15 @@ var AllGranules = React.createClass({
           </div>
           <div className='filters filters__wlabels'>
             <Dropdown
-              dispatch={this.props.dispatch}
               getOptions={getOptionsCollectionName}
               options={get(dropdowns, ['collectionName', 'options'])}
               action={filterGranules}
               clear={clearGranulesFilter}
-              paramKey={'collectionName'}
+              paramKey={'collectionId'}
               label={'Collection'}
             />
             {statOptions ? (
               <Dropdown
-                dispatch={this.props.dispatch}
                 options={statOptions}
                 action={filterGranules}
                 clear={clearGranulesFilter}
@@ -101,14 +96,12 @@ var AllGranules = React.createClass({
             ) : null}
             <Search dispatch={this.props.dispatch}
               action={searchGranules}
-              format={granuleSearchResult}
               clear={clearGranulesSearch}
             />
           </div>
 
           <List
             list={list}
-            dispatch={this.props.dispatch}
             action={listGranules}
             tableHeader={view === 'failed' ? errorTableHeader : tableHeader}
             tableRow={view === 'failed' ? errorTableRow : tableRow}
@@ -116,6 +109,7 @@ var AllGranules = React.createClass({
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}
+            sortIdx={tableSortIdx}
           />
         </section>
         <LogViewer
@@ -129,4 +123,7 @@ var AllGranules = React.createClass({
   }
 });
 
-export default connect(state => state)(AllGranules);
+export default connect(state => ({
+  logs: state.logs,
+  granules: state.granules
+}))(AllGranules);

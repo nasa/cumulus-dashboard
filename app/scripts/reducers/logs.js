@@ -55,18 +55,13 @@ export default function reducer (state = initialState, action) {
 
 function processLog (d) {
   d.displayTime = moment(d.timestamp).format(format);
-  if (d.data && d.level) {
-    const replace = '[' + d.level.toUpperCase() + ']';
-    d.displayText = d.data.replace(replace, '').trim();
-  } else if (d.message) {
-    d.displayText = d.message;
-  }
-  d.key = d.timestamp + '-' + d.data;
+  d.displayText = d.message || d.msg;
+  d.key = d.timestamp + '-' + d.displayText;
   let metafields = '';
-  for (let key in d.meta) {
-    metafields += ' ' + d.meta[key];
+  for (let key in d) {
+    metafields += ' ' + d[key];
   }
-  d.searchkey = (d.displayTime + d.data).toLowerCase() + metafields;
+  d.searchkey = metafields;
 }
 
 function dedupe (items) {

@@ -4,6 +4,7 @@ import url from 'url';
 import { get, post, put, del, wrapRequest } from './helpers';
 import { set as setToken } from '../utils/auth';
 import _config from '../config';
+import { getCollectionId } from '../utils/format';
 
 const root = _config.apiRoot;
 const { pageLimit } = _config;
@@ -81,10 +82,6 @@ export const OPTIONS_COLLECTIONNAME_ERROR = 'OPTIONS_COLLECTIONNAME_ERROR';
 export const STATS = 'STATS';
 export const STATS_INFLIGHT = 'STATS_INFLIGHT';
 export const STATS_ERROR = 'STATS_ERROR';
-
-export const RESOURCES = 'RESOURCES';
-export const RESOURCES_INFLIGHT = 'RESOURCES_INFLIGHT';
-export const RESOURCES_ERROR = 'RESOURCES_ERROR';
 
 export const COUNT = 'COUNT';
 export const COUNT_INFLIGHT = 'COUNT_INFLIGHT';
@@ -166,14 +163,54 @@ export const HISTOGRAM = 'HISTOGRAM';
 export const HISTOGRAM_INFLIGHT = 'HISTOGRAM_INFLIGHT';
 export const HISTOGRAM_ERROR = 'HISTOGRAM_ERROR';
 
+export const WORKFLOWS = 'WORKFLOWS';
+export const WORKFLOWS_INFLIGHT = 'WORKFLOWS_INFLIGHT';
+export const WORKFLOWS_ERROR = 'WORKFLOWS_ERROR';
+
+export const EXECUTIONS = 'EXECUTIONS';
+export const EXECUTIONS_INFLIGHT = 'EXECUTIONS_INFLIGHT';
+export const EXECUTIONS_ERROR = 'EXECUTIONS_ERROR';
+
+export const FILTER_EXECUTIONS = 'FILTER_EXECUTIONS';
+export const CLEAR_EXECUTIONS_FILTER = 'CLEAR_EXECUTIONS_FILTER';
+
+export const RULES = 'RULES';
+export const RULES_INFLIGHT = 'RULES_INFLIGHT';
+export const RULES_ERROR = 'RULES_ERROR';
+
+export const RULE = 'RULE';
+export const RULE_INFLIGHT = 'RULE_INFLIGHT';
+export const RULE_ERROR = 'RULE_ERROR';
+
+export const UPDATE_RULE = 'UPDATE_RULE';
+export const UPDATE_RULE_INFLIGHT = 'UPDATE_RULE_INFLIGHT';
+export const UPDATE_RULE_ERROR = 'UPDATE_RULE_ERROR';
+export const UPDATE_RULE_CLEAR = 'UPDATE_RULE_CLEAR';
+
+export const NEW_RULE = 'NEW_RULE';
+export const NEW_RULE_INFLIGHT = 'NEW_RULE_INFLIGHT';
+export const NEW_RULE_ERROR = 'NEW_RULE_ERROR';
+
+export const RULE_DELETE = 'RULE_DELETE';
+export const RULE_DELETE_INFLIGHT = 'RULE_DELETE_INFLIGHT';
+export const RULE_DELETE_ERROR = 'RULE_DELETE_ERROR';
+
+export const RULE_ENABLE = 'RULE_ENABLE';
+export const RULE_ENABLE_INFLIGHT = 'RULE_ENABLE_INFLIGHT';
+export const RULE_ENABLE_ERROR = 'RULE_ENABLE_ERROR';
+
+export const RULE_DISABLE = 'RULE_DISABLE';
+export const RULE_DISABLE_INFLIGHT = 'RULE_DISABLE_INFLIGHT';
+export const RULE_DISABLE_ERROR = 'RULE_DISABLE_ERROR';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
   return () => clearInterval(intervalId);
 };
 
-export const getCollection = (collectionName) => wrapRequest(
-  collectionName, get, `collections?collectionName=${collectionName}`, COLLECTION);
+export const getCollection = (name, version) => wrapRequest(
+  getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
 
 export const listCollections = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'collections'),
@@ -181,15 +218,15 @@ export const listCollections = (options) => wrapRequest(null, get, {
 }, COLLECTIONS);
 
 export const createCollection = (payload) => wrapRequest(
-  payload.collectionName, post, 'collections', NEW_COLLECTION, payload);
+  getCollectionId(payload), post, 'collections', NEW_COLLECTION, payload);
 
 export const updateCollection = (payload) => wrapRequest(
-  payload.collectionName, put, `collections/${payload.collectionName}`, UPDATE_COLLECTION, payload);
+  getCollectionId(payload), put, `collections/${payload.name}/${payload.version}`, UPDATE_COLLECTION, payload);
 
 export const clearUpdateCollection = (collectionName) => ({ type: UPDATE_COLLECTION_CLEAR, id: collectionName });
 
-export const deleteCollection = (collectionName) => wrapRequest(
-  collectionName, del, `collections/${collectionName}`, COLLECTION_DELETE);
+export const deleteCollection = (name, version) => wrapRequest(
+  getCollectionId({name, version}), del, `collections/${name}/${version}`, COLLECTION_DELETE);
 
 export const searchCollections = (prefix) => ({ type: SEARCH_COLLECTIONS, prefix: prefix });
 export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH });
@@ -239,17 +276,13 @@ export const clearGranulesFilter = (paramKey) => ({ type: CLEAR_GRANULES_FILTER,
 
 export const getOptionsCollectionName = () => wrapRequest(null, get, {
   url: url.resolve(root, 'collections'),
-  qs: { limit: 100, fields: 'collectionName' }
+  qs: { limit: 100, fields: 'name,version' }
 }, OPTIONS_COLLECTIONNAME);
 
 export const getStats = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'stats'),
   qs: options
 }, STATS);
-
-export const getResources = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'resources')
-}, RESOURCES);
 
 // count queries *must* include type and field properties.
 export const getCount = (options) => wrapRequest(null, get, {
@@ -283,11 +316,11 @@ export const getOptionsProviderGroup = () => wrapRequest(null, get, {
 export const getProvider = (providerId) => wrapRequest(
   providerId, get, `providers/${providerId}`, PROVIDER);
 
-export const createProvider = (payload) => wrapRequest(
-  payload.name, post, 'providers', NEW_PROVIDER, payload);
+export const createProvider = (providerId, payload) => wrapRequest(
+  providerId, post, 'providers', NEW_PROVIDER, payload);
 
-export const updateProvider = (payload) => wrapRequest(
-  payload.name, put, `providers/${payload.name}`, UPDATE_PROVIDER, payload);
+export const updateProvider = (providerId, payload) => wrapRequest(
+  providerId, put, `providers/${providerId}`, UPDATE_PROVIDER, payload);
 
 export const clearUpdateProvider = (providerId) => ({ type: UPDATE_PROVIDER_CLEAR, id: providerId });
 
@@ -344,3 +377,41 @@ export const queryHistogram = (options) => wrapRequest(null, get, {
   qs: options
 }, HISTOGRAM);
 
+export const listWorkflows = (options) => wrapRequest(null, get, 'workflows', WORKFLOWS);
+
+export const listExecutions = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'executions'),
+  qs: Object.assign({ limit: pageLimit }, options)
+}, EXECUTIONS);
+
+export const filterExecutions = (param) => ({ type: FILTER_EXECUTIONS, param: param });
+export const clearExecutionsFilter = (paramKey) => ({ type: CLEAR_EXECUTIONS_FILTER, paramKey: paramKey });
+
+export const listRules = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'rules'),
+  qs: Object.assign({ limit: pageLimit }, options)
+}, RULES);
+
+export const getRule = (ruleName) => wrapRequest(
+  ruleName, get, `rules?name=${ruleName}`, RULE);
+
+export const updateRule = (name, payload) => wrapRequest(
+  name, put, `rules/${name}`, UPDATE_RULE, payload);
+
+export const clearUpdateRule = (ruleName) => ({ type: UPDATE_RULE_CLEAR, id: ruleName });
+
+export const createRule = (id, payload) => wrapRequest(
+  id, post, 'rules', NEW_RULE, payload);
+
+export const deleteRule = (ruleName) => wrapRequest(
+  ruleName, del, `rules/${ruleName}`, RULE_DELETE);
+
+export const enableRule = (ruleName) => wrapRequest(
+  ruleName, put, `rules/${ruleName}`, RULE_ENABLE, {
+    state: 'ENABLED'
+  });
+
+export const disableRule = (ruleName) => wrapRequest(
+  ruleName, put, `rules/${ruleName}`, RULE_DISABLE, {
+    state: 'DISABLED'
+  });
