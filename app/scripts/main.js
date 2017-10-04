@@ -25,6 +25,7 @@ console.log('Environment', config.environment);
 import NotFound from './components/404';
 import App from './components/app';
 import Login from './components/app/login';
+import OAuth from './components/app/oauth';
 import Home from './components/home';
 
 import Collections from './components/collections';
@@ -70,7 +71,11 @@ import Logs from './components/logs';
 // redirect to login when not auth'd
 function requireAuth (nextState, replace) {
   if (!store.getState().api.authenticated) {
-    replace('/login');
+    if (config.requireEarthdataLogin) {
+      replace('/auth');
+    } else {
+      replace('/login');
+    }
   }
 }
 
@@ -87,6 +92,7 @@ render((
       <Route path='/404' component={NotFound} />
       <Redirect from='/collections' to='/collections/all' />
       <Route path='/login' component={Login} onEnter={checkAuth} />
+      <Route path='/auth' component={OAuth} onEnter={checkAuth} />
       <Route path='/' component={App} onEnter={requireAuth} >
         <IndexRoute component={Home} />
         <Route path='collections' component={Collections}>
