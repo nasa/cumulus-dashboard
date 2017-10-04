@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
 import Sidebar from '../app/sidebar';
@@ -10,11 +11,11 @@ var Pdrs = React.createClass({
   displayName: 'Pdrs',
 
   propTypes: {
-    children: React.PropTypes.object,
-    location: React.PropTypes.object,
-    params: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    stats: React.PropTypes.object
+    children: PropTypes.object,
+    location: PropTypes.object,
+    params: PropTypes.object,
+    dispatch: PropTypes.func,
+    stats: PropTypes.object
   },
 
   componentWillMount: function () {
@@ -58,4 +59,6 @@ var Pdrs = React.createClass({
   }
 });
 
-export default connect(state => state)(Pdrs);
+export default connect(state => ({
+  stats: state.stats
+}))(Pdrs);

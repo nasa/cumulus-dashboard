@@ -2,44 +2,50 @@
 import React from 'react';
 import { get } from 'object-path';
 import { Link } from 'react-router';
-import { fullDate, seconds, tally } from '../format';
+import { fromNow, seconds, tally, collectionNameVersion } from '../format';
 import { deleteCollection } from '../../actions';
 
 export const tableHeader = [
   'Name',
+  'Version',
   'Granules',
   'Completed',
+  'Running',
   'Failed',
-  'Average Duration',
-  'Created at',
-  'Updated at'
+  'Duration',
+  'Timestamp'
 ];
 
 export const tableRow = [
-  (d) => <Link to={`/collections/collection/${d.collectionName}`}>{d.collectionName}</Link>,
-  (d) => tally(d.granules),
-  (d) => tally(get(d, 'granulesStatus.completed')),
-  (d) => tally(get(d, 'granulesStatus.failed')),
-  (d) => seconds(d.averageDuration),
-  (d) => fullDate(d.createdAt),
-  (d) => fullDate(d.updatedAt)
+  (d) => <Link to={`/collections/collection/${d.name}/${d.version}`}>{d.name}</Link>,
+  'version',
+  (d) => tally(get(d, 'stats.total')),
+  (d) => tally(get(d, 'stats.completed')),
+  (d) => tally(get(d, 'stats.running')),
+  (d) => tally(get(d, 'stats.failed')),
+  (d) => seconds(d.duration),
+  (d) => fromNow(d.timestamp)
 ];
 
 export const tableSortProps = [
-  'collectionName.keyword',
-  'granules',
+  'name',
+  'version',
   null,
   null,
-  'averageDuration',
-  'createdAt',
-  'updatedAt'
+  null,
+  null,
+  'duration',
+  'timestamp'
 ];
 
 const confirmDelete = (d) => `Delete ${d} collections(s)?`;
 export const bulkActions = function (collections) {
   return [{
     text: 'Delete',
-    action: deleteCollection,
+    action: (collectionId) => {
+      const { name, version } = collectionNameVersion(collectionId);
+      return deleteCollection(name, version);
+    },
     state: collections.deleted,
     confirm: confirmDelete
   }];

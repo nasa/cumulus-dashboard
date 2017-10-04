@@ -5,14 +5,21 @@ import moment from 'moment';
 import {
   listCollections,
   searchCollections,
-  clearCollectionsSearch,
-  filterCollections,
-  clearCollectionsFilter
+  clearCollectionsSearch
 } from '../../actions';
-import { collectionSearchResult, lastUpdated, tally } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/collections';
+import {
+  collectionSearchResult,
+  lastUpdated,
+  tally,
+  getCollectionId
+} from '../../utils/format';
+import {
+  tableHeader,
+  tableRow,
+  tableSortProps,
+  bulkActions
+} from '../../utils/table-config/collections';
 import Search from '../form/search';
-import Dropdown from '../form/dropdown';
 import List from '../table/list-view';
 
 var CollectionList = React.createClass({
@@ -46,28 +53,15 @@ var CollectionList = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header page__section__header-wrapper'>
-            <h1 className='heading--large heading--shared-content with-description'>
-              All Collections <span className='num--title'>{ !isNaN(count) ? `(${tally(count)})` : null }</span>
-            </h1>
+            <h1 className='heading--large heading--shared-content with-description'>Collection Overview</h1>
             {lastUpdated(queriedAt)}
           </div>
+        </section>
+        <section className='page__section'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium heading--shared-content with-description'>All Collections <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
+          </div>
           <div className='filters'>
-            <Dropdown
-              dispatch={this.props.dispatch}
-              options={this.timeOptions}
-              action={filterCollections}
-              clear={clearCollectionsFilter}
-              paramKey={'createdAt__from'}
-              label={'Starting'}
-            />
-            <Dropdown
-              dispatch={this.props.dispatch}
-              options={this.timeOptions}
-              action={filterCollections}
-              clear={clearCollectionsFilter}
-              paramKey={'createdAt__to'}
-              label={'Ending'}
-            />
             <Search dispatch={this.props.dispatch}
               action={searchCollections}
               format={collectionSearchResult}
@@ -84,9 +78,10 @@ var CollectionList = React.createClass({
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            isRemovable={true}
-            rowId={'collectionName'}
+            rowId={getCollectionId}
+            sortIdx={7}
           />
+
         </section>
       </div>
     );

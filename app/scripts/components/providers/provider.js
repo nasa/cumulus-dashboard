@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import {
@@ -11,35 +12,38 @@ import {
   listCollections
 } from '../../actions';
 import { get } from 'object-path';
-import { fullDate, lastUpdated } from '../../utils/format';
+import {
+  fromNow,
+  lastUpdated,
+  deleteText,
+  link,
+  tally
+} from '../../utils/format';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
 import AsyncCommands from '../form/dropdown-async-command';
 import ErrorReport from '../errors/report';
 import Metadata from '../table/metadata';
 import { updateInterval } from '../../config';
-import status from '../../utils/status';
-import findkey from 'lodash.findkey';
 
 const metaAccessors = [
-  ['PDR Name', 'name'],
+  ['Created', 'createdAt', fromNow],
+  ['Updated', 'updatedAt', fromNow],
   ['Protocol', 'protocol'],
-  ['Created', 'createdAt', fullDate],
-  ['Last Time Ingested', 'lastTimeIngestedAt', fullDate],
-  ['Host', 'host'],
-  ['Path', 'path']
+  ['Host', 'host', link],
+  ['Global Connection Limit', 'globalConnectionLimit', tally]
 ];
 
 var ProviderOverview = React.createClass({
   displayName: 'Provider',
 
   propTypes: {
-    params: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    providers: React.PropTypes.object,
-    collections: React.PropTypes.object,
-    logs: React.PropTypes.object,
-    router: React.PropTypes.object
+    params: PropTypes.object,
+    dispatch: PropTypes.func,
+    providers: PropTypes.object,
+    collections: PropTypes.object,
+    logs: PropTypes.object,
+    router: PropTypes.object
   },
 
   componentWillMount: function () {
@@ -102,13 +106,14 @@ var ProviderOverview = React.createClass({
 
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
+    } else if (record.error) {
+      return <ErrorReport report={record.error} />;
     }
     const provider = record.data;
     const associatedCollections = get(this.props.collections, ['list', 'data'], [])
       .map(c => c.collectionName);
     const logsQuery = { 'meta.provider': providerId };
     const errors = this.errors();
-    const providerError = provider.error;
 
     const deleteStatus = get(this.props.providers.deleted, [providerId, 'status']);
     const restartStatus = get(this.props.providers.restarted, [providerId, 'status']);
@@ -129,7 +134,9 @@ var ProviderOverview = React.createClass({
       action: this.delete,
       disabled: provider.published,
       status: deleteStatus,
-      success: this.navigateBack
+      success: this.navigateBack,
+      confirmAction: true,
+      confirmText: deleteText(providerId)
     }];
 
     return (
@@ -142,15 +149,10 @@ var ProviderOverview = React.createClass({
             to={'/providers/edit/' + providerId}>Edit</Link>
 
           {lastUpdated(provider.queriedAt)}
-          <dl className='status--process'>
-            <dt>Status:</dt>
-            <dd className={provider.status}>{findkey(status, v => v === provider.status)}</dd>
-          </dl>
-          {providerError ? <ErrorReport report={providerError} /> : null}
         </section>
 
         <section className='page__section'>
-          {errors.length ? errors.map((error, i) => <ErrorReport key={i} report={error} />) : null}
+          {errors.length ? <ErrorReport report={errors} /> : null}
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Provider Overview</h2>
           </div>
@@ -179,4 +181,8 @@ var ProviderOverview = React.createClass({
   }
 });
 
-export default connect(state => state)(ProviderOverview);
+export default connect(state => ({
+  providers: state.providers,
+  collections: state.collections,
+  logs: state.logs
+}))(ProviderOverview);

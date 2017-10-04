@@ -1,5 +1,7 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import SortableTable from './sortable';
 import Pagination from '../app/pagination';
 import Loading from '../app/loading-indicator';
@@ -26,16 +28,16 @@ var List = React.createClass({
   },
 
   propTypes: {
-    list: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    action: React.PropTypes.func,
-    tableHeader: React.PropTypes.array,
-    tableRow: React.PropTypes.array,
-    tableSortProps: React.PropTypes.array,
-    sortIdx: React.PropTypes.number,
-    query: React.PropTypes.object,
-    bulkActions: React.PropTypes.array,
-    rowId: React.PropTypes.string
+    list: PropTypes.object,
+    dispatch: PropTypes.func,
+    action: PropTypes.func,
+    tableHeader: PropTypes.array,
+    tableRow: PropTypes.array,
+    tableSortProps: PropTypes.array,
+    sortIdx: PropTypes.number,
+    query: PropTypes.object,
+    bulkActions: PropTypes.array,
+    rowId: PropTypes.any
   },
 
   componentWillMount: function () {
@@ -60,6 +62,10 @@ var List = React.createClass({
     if (JSON.stringify(validParams) !== JSON.stringify(this.state.params)) {
       this.setState({ params: validParams }, () => this.setState({
         queryConfig: this.config() }));
+    }
+
+    if (newProps.sortIdx !== this.state.sortIdx) {
+      this.setState({ sortIdx: newProps.sortIdx });
     }
   },
 
@@ -87,13 +93,20 @@ var List = React.createClass({
   },
 
   selectAll: function (e) {
-    const { data } = this.props.list;
+    const { rowId, list } = this.props;
+    const { data } = list;
+    const allSelected = this.state.selected.length === data.length;
     if (!data.length) return;
-    const selected = this.state.selected.length === data.length;
-    if (selected) {
+    else if (allSelected) {
       this.setState({ selected: [] });
     } else {
-      this.setState({ selected: data.map(d => d[this.props.rowId]) });
+      let selected;
+      if (typeof rowId === 'function') {
+        selected = data.map(rowId);
+      } else {
+        selected = data.map(d => d[this.props.rowId]);
+      }
+      this.setState({ selected });
     }
   },
 
@@ -110,13 +123,17 @@ var List = React.createClass({
     // not-elegant way to trigger a re-fresh in the timer
     this.setState({
       completedBulkActions: this.state.completedBulkActions + 1,
-      bulkActionError: null
+      bulkActionError: null,
+      selected: []
     });
   },
 
   onBulkActionError: function (error) {
     const message = `Could not process ${error.id}, ${error.error}`;
-    this.setState({ bulkActionError: message });
+    this.setState({
+      bulkActionError: message,
+      selected: []
+    });
   },
 
   config: function (config, query) {
@@ -175,7 +192,7 @@ var List = React.createClass({
       bulkActionError
     } = this.state;
     const primaryIdx = 0;
-    const hasActions = !!(Array.isArray(bulkActions) && bulkActions.length);
+    const hasActions = Array.isArray(bulkActions) && bulkActions.length;
 
     return (
       <div className='list-view'>
@@ -216,7 +233,7 @@ var List = React.createClass({
           order={order}
           changeSortProps={this.queryNewSort}
           onSelect={this.updateSelection}
-          canSelect={hasActions}
+          canSelect={!!hasActions}
           selectedRows={selected}
           rowId={rowId}
         />
@@ -226,4 +243,4 @@ var List = React.createClass({
   }
 });
 
-export default List;
+export default connect()(List);

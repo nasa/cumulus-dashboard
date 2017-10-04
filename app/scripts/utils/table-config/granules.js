@@ -1,76 +1,83 @@
 'use strict';
 import React from 'react';
+import { get } from 'object-path';
 import { Link } from 'react-router';
-import { fullDate, seconds, bool, nullValue } from '../format';
 import {
-  reprocessGranule,
+  fromNow,
+  seconds,
+  bool,
+  nullValue,
+  displayCase,
+  collectionLink,
+  link,
+  granuleLink
+} from '../format';
+import {
   reingestGranule,
   removeGranule,
   deleteGranule
 } from '../../actions';
+import ErrorReport from '../../components/errors/report';
 
 export const tableHeader = [
-  'Name',
   'Status',
+  'Name',
   'Published',
-  'PDR',
-  'Collection',
+  'Collection ID',
+  'Execution',
   'Duration',
   'Updated'
 ];
 
 export const tableRow = [
-  (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
-  'status',
-  (d) => bool(d.published),
-  'pdrName',
-  'collectionName',
+  (d) => <Link to={`/granules/${d.status}`} className={`granule__status granule__status--${d.status}`}>{displayCase(d.status)}</Link>,
+  (d) => granuleLink(d.granuleId),
+  (d) => d.cmrLink ? <a href={d.cmrLink} target='_blank'>{bool(d.published)}</a> : bool(d.published),
+  (d) => collectionLink(d.collectionId),
+  (d) => link(d.execution),
   (d) => seconds(d.duration),
-  (d) => fullDate(d.updatedAt)
+  (d) => fromNow(d.timestamp)
 ];
 
 export const tableSortProps = [
-  'granuleId.keyword',
-  'status.keyword',
+  'status',
+  'granuleId',
   'published',
-  'pdrName.keyword',
-  'collectionName.keyword',
+  'collectionId',
+  null,
   'duration',
-  'updatedAt'
+  'timestamp'
 ];
 
 export const errorTableHeader = [
-  'Name',
-  'Published',
   'Error',
+  'Type',
+  'Granule',
+  'Duration',
   'Updated'
 ];
 
 export const errorTableRow = [
-  (d) => <Link to={`/granules/granule/${d.granuleId}/overview`}>{d.granuleId}</Link>,
-  (d) => bool(d.published),
-  (d) => d.error || nullValue,
-  (d) => fullDate(d.updatedAt)
+  (d) => <ErrorReport report={get(d, 'error.Cause', nullValue)} truncate={true} />,
+  (d) => get(d, 'error.Error', nullValue),
+  (d) => granuleLink(d.granuleId),
+  (d) => seconds(d.duration),
+  (d) => fromNow(d.timestamp)
 ];
 
 export const errorTableSortProps = [
-  'granuleId.keyword',
-  'published.keyword',
-  'error.keyword',
-  'updatedAt'
+  null,
+  null,
+  'granuleId',
+  'duration',
+  'timestamp'
 ];
 
-const confirmReprocess = (d) => `Reprocess ${d} granule(s)?`;
 const confirmReingest = (d) => `Reingest ${d} granules(s)? Note, completed granules cannot be reingested.`;
 const confirmRemove = (d) => `Remove ${d} granule(s) from CMR?`;
 const confirmDelete = (d) => `Delete ${d} granule(s)?`;
 export const bulkActions = function (granules) {
   return [{
-    text: 'Reprocess',
-    action: reprocessGranule,
-    state: granules.reprocessed,
-    confirm: confirmReprocess
-  }, {
     text: 'Reingest',
     action: reingestGranule,
     state: granules.reingested,

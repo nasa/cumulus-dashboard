@@ -1,6 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { get } from 'object-path';
+import { connect } from 'react-redux';
 import Sidebar from '../app/sidebar';
 import { interval, getCount } from '../../actions';
 import { updateInterval } from '../../config';
@@ -9,11 +10,11 @@ var Granules = React.createClass({
   displayName: 'Granules',
 
   propTypes: {
-    children: React.PropTypes.object,
-    location: React.PropTypes.object,
-    params: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    stats: React.PropTypes.object
+    children: PropTypes.object,
+    location: PropTypes.object,
+    params: PropTypes.object,
+    dispatch: PropTypes.func,
+    stats: PropTypes.object
   },
 
   componentWillMount: function () {
@@ -57,4 +58,6 @@ var Granules = React.createClass({
   }
 });
 
-export default connect(state => state)(Granules);
+export default connect(state => ({
+  stats: state.stats
+}))(Granules);

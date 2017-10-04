@@ -19,11 +19,11 @@ import {
   lastUpdated,
   link,
   fullDate,
-  tally,
   seconds,
-  truthy,
+  collectionLink,
   displayCase,
-  bool
+  bool,
+  deleteText
 } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
 import { renderProgress } from '../../utils/table-config/pdr-progress';
@@ -37,22 +37,18 @@ import Loading from '../app/loading-indicator';
 import AsyncCommand from '../form/async-command';
 import ErrorReport from '../errors/report';
 import GranulesProgress from '../granules/progress';
-import { updateInterval, updateDelay } from '../../config';
+import { updateInterval } from '../../config';
 
 const metaAccessors = [
   ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],
-  ['Original URL', 'originalUrl', link],
+  ['Collection', 'collectionId', collectionLink],
+  ['Execution', 'execution', link],
   ['Status', 'status', displayCase],
-  ['Active', 'isActive', bool],
-  ['Discovered at', 'discoveredAt', fullDate],
-  ['Average Duration', 'averageDuration', seconds],
-  ['Granules Count', 'granulesCount', tally],
-  ['Granules', 'granules', tally],
-  ['PAN', 'PAN', truthy],
+  ['Timestamp', 'timestamp', fullDate],
+  ['Created at', 'createdAt', fullDate],
+  ['Duration', 'duration', seconds],
   ['PAN Sent', 'PANSent', bool],
-  ['PDRD', 'PDRD', truthy],
-  ['PDRD Sent', 'PDRDSent', bool],
-  ['Address', 'address']
+  ['PAN Message', 'PANmessage']
 ];
 
 var PDR = React.createClass({
@@ -130,9 +126,10 @@ var PDR = React.createClass({
             <h1 className='heading--large heading--shared-content with-description '>{pdrName}</h1>
             <AsyncCommand action={this.deletePdr}
               success={this.navigateBack}
-              successTimeout={updateDelay}
               status={deleteStatus}
               className={'form-group__element--right'}
+              confirmAction={true}
+              confirmText={deleteText(pdrName)}
               text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'} />
             {lastUpdated(queriedAt)}
             {this.renderProgress(record)}
@@ -156,7 +153,6 @@ var PDR = React.createClass({
           </div>
           <div className='filters filters__wlabels'>
             <Dropdown
-              dispatch={this.props.dispatch}
               getOptions={getOptionsCollectionName}
               options={get(dropdowns, ['collectionName', 'options'])}
               action={filterGranules}
@@ -165,7 +161,6 @@ var PDR = React.createClass({
               label={'Collection'}
             />
             <Dropdown
-              dispatch={this.props.dispatch}
               options={status}
               action={filterGranules}
               clear={clearGranulesFilter}

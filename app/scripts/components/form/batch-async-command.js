@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { queue } from 'd3-queue';
 import AsyncCommand from './async-command';
 import { updateDelay } from '../../config';
@@ -9,15 +10,15 @@ const IN_PROGRESS = 'Processing...';
 
 const BatchCommand = React.createClass({
   propTypes: {
-    dispatch: React.PropTypes.func,
-    action: React.PropTypes.func,
-    state: React.PropTypes.object,
-    text: React.PropTypes.string,
-    selection: React.PropTypes.array,
-    className: React.PropTypes.string,
-    onSuccess: React.PropTypes.func,
-    onError: React.PropTypes.func,
-    confirm: React.PropTypes.func
+    action: PropTypes.func,
+    dispatch: PropTypes.func,
+    state: PropTypes.object,
+    text: PropTypes.string,
+    selection: PropTypes.array,
+    className: PropTypes.string,
+    onSuccess: PropTypes.func,
+    onError: PropTypes.func,
+    confirm: PropTypes.func
   },
 
   getInitialState: function () {
@@ -116,6 +117,7 @@ const BatchCommand = React.createClass({
           text={text}
           className={className}
           disabled={!activeModal && (!todo || !!inflight)}
+          successTimeout={0}
           status={!activeModal && inflight ? 'inflight' : null}
         />
         { activeModal ? <div className='modal__cover'></div> : null }

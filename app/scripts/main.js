@@ -25,6 +25,7 @@ console.log('Environment', config.environment);
 import NotFound from './components/404';
 import App from './components/app';
 import Login from './components/app/login';
+import OAuth from './components/app/oauth';
 import Home from './components/home';
 
 import Collections from './components/collections';
@@ -38,8 +39,8 @@ import CollectionLogs from './components/collections/logs';
 
 import Granules from './components/granules';
 import ListGranules from './components/granules/list';
-import GranuleOverview from './components/granules/granule';
-import GranuleRecipeIngest from './components/granules/recipe-ingest';
+import Granule from './components/granules/granule';
+import GranuleOverview from './components/granules/overview';
 
 import Pdrs from './components/pdr';
 import Pdr from './components/pdr/pdr';
@@ -51,16 +52,30 @@ import AddProvider from './components/providers/add';
 import EditProvider from './components/providers/edit';
 import ProvidersOverview from './components/providers/overview';
 import Provider from './components/providers/provider';
-import ListProviders from './components/providers/list';
 
-import Resources from './components/resources';
+import Workflows from './components/workflows';
+import WorkflowsOverview from './components/workflows/overview';
+import Workflow from './components/workflows/workflow';
+
+import Executions from './components/executions';
+import ExecutionsOverview from './components/executions/overview';
+
+import Rules from './components/rules';
+import RulesOverview from './components/rules/overview';
+import Rule from './components/rules/rule';
+import EditRule from './components/rules/edit';
+import AddRule from './components/rules/add';
 
 import Logs from './components/logs';
 
 // redirect to login when not auth'd
 function requireAuth (nextState, replace) {
   if (!store.getState().api.authenticated) {
-    replace('/login');
+    if (config.requireEarthdataLogin) {
+      replace('/auth');
+    } else {
+      replace('/login');
+    }
   }
 }
 
@@ -77,29 +92,29 @@ render((
       <Route path='/404' component={NotFound} />
       <Redirect from='/collections' to='/collections/all' />
       <Route path='/login' component={Login} onEnter={checkAuth} />
+      <Route path='/auth' component={OAuth} onEnter={checkAuth} />
       <Route path='/' component={App} onEnter={requireAuth} >
         <IndexRoute component={Home} />
         <Route path='collections' component={Collections}>
           <Route path='all' component={CollectionList} />
           <Route path='add' component={AddCollection} />
-          <Route path='edit/:collectionName' component={EditCollection} />
-          <Route path='collection/:collectionName' component={CollectionOverview} />
-          <Route path='collection/:collectionName/granules' component={CollectionGranules} />
-          <Route path='collection/:collectionName/ingest' component={CollectionIngest} />
-          <Route path='collection/:collectionName/logs' component={CollectionLogs} />
+          <Route path='edit/:name/:version' component={EditCollection} />
+          <Route path='collection/:name/:version' component={CollectionOverview} />
+          <Route path='collection/:name/:version/granules' component={CollectionGranules} />
+          <Route path='collection/:name/:version/definition' component={CollectionIngest} />
+          <Route path='collection/:name/:version/logs' component={CollectionLogs} />
         </Route>
         <Route path='granules' component={Granules}>
-          <IndexRoute component={ListGranules} />
-          <Route path='granule/:granuleId/overview' component={GranuleOverview} />
-          <Route path='granule/:granuleId/recipe-ingest' component={GranuleRecipeIngest} />
+          <IndexRoute component={GranuleOverview} />
+          <Route path='granule/:granuleId' component={Granule} />
           <Route path='completed' component={ListGranules} />
           <Route path='processing' component={ListGranules} />
           <Route path='failed' component={ListGranules} />
+          <Redirect from='running' to='processing' />
         </Route>
         <Route path='pdrs' component={Pdrs}>
           <IndexRoute component={PdrOverview} />
           <Route path='active' component={PdrList} />
-          <Route path='all' component={PdrList} />
           <Route path='failed' component={PdrList} />
           <Route path='completed' component={PdrList} />
           <Route path='pdr/:pdrName' component={Pdr} />
@@ -108,14 +123,22 @@ render((
           <IndexRoute component={ProvidersOverview} />
           <Route path='add' component={AddProvider} />
           <Route path='edit/:providerId' component={EditProvider} />
-          <Route path='active' component={ListProviders} />
-          <Route path='all' component={ListProviders} />
-          <Route path='inactive' component={ListProviders} />
-          <Route path='failed' component={ListProviders} />
           <Route path='provider/:providerId' component={Provider} />
         </Route>
+        <Route path='workflows' component={Workflows}>
+          <IndexRoute component={WorkflowsOverview} />
+          <Route path='workflow/:workflowName' component={Workflow} />
+        </Route>
+        <Route path='executions' component={Executions}>
+          <IndexRoute component={ExecutionsOverview} />
+        </Route>
+        <Route path='rules' component={Rules}>
+          <IndexRoute component={RulesOverview} />
+          <Route path='rule/:ruleName' component={Rule} />
+          <Route path='edit/:ruleName' component={EditRule} />
+          <Route path='add' component={AddRule} />
+        </Route>
         <Route path='logs' component={Logs} />
-        <Route path='resources' component={Resources} />
       </Route>
     </Router>
   </ProviderElem>

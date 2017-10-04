@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import omit from 'lodash.omit';
 import {
   searchPdrs,
   clearPdrsSearch,
@@ -9,7 +9,7 @@ import {
   filterPdrs,
   clearPdrsFilter
 } from '../../actions';
-import { pdrSearchResult, lastUpdated, tally, displayCase } from '../../utils/format';
+import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
   tableHeader,
   tableRow,
@@ -19,22 +19,18 @@ import {
   errorTableSortProps,
   bulkActions
 } from '../../utils/table-config/pdrs';
-import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
 import Search from '../form/search';
 import List from '../table/list-view';
 import { pdrStatus as statusOptions } from '../../utils/status';
-const processingOptions = omit(statusOptions, ['Completed', 'Failed']);
-const processingStatus = Object.keys(processingOptions).map(d => processingOptions[d]).filter(Boolean).join(',');
 
 var ActivePdrs = React.createClass({
   displayName: 'ActivePdrs',
 
   propTypes: {
-    location: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    pdrs: React.PropTypes.object,
-    logs: React.PropTypes.object
+    location: PropTypes.object,
+    dispatch: PropTypes.func,
+    pdrs: PropTypes.object
   },
 
   generateQuery: function () {
@@ -42,7 +38,7 @@ var ActivePdrs = React.createClass({
     const { pathname } = this.props.location;
     if (pathname === '/pdrs/completed') query.status = 'completed';
     else if (pathname === '/pdrs/failed') query.status = 'failed';
-    else if (pathname === '/pdrs/active') query.status__in = processingStatus;
+    else if (pathname === '/pdrs/active') query.status = 'running';
     return query;
   },
 
@@ -61,7 +57,6 @@ var ActivePdrs = React.createClass({
   render: function () {
     const { list } = this.props.pdrs;
     const { count, queriedAt } = list.meta;
-    const logsQuery = { 'meta.pdrName__exists': 'true' };
     const view = this.getView();
     return (
       <div className='page__component'>
@@ -74,7 +69,6 @@ var ActivePdrs = React.createClass({
           <div className='filters'>
             {view === 'all' ? (
               <Dropdown
-                dispatch={this.props.dispatch}
                 options={statusOptions}
                 action={filterPdrs}
                 clear={clearPdrsFilter}
@@ -84,7 +78,6 @@ var ActivePdrs = React.createClass({
             ) : null}
             <Search dispatch={this.props.dispatch}
               action={searchPdrs}
-              format={pdrSearchResult}
               clear={clearPdrsSearch}
             />
           </div>
@@ -101,15 +94,11 @@ var ActivePdrs = React.createClass({
             rowId={'pdrName'}
           />
         </section>
-        <LogViewer
-          query={logsQuery}
-          dispatch={this.props.dispatch}
-          logs={this.props.logs}
-          notFound={'No recent logs for PDRs'}
-        />
       </div>
     );
   }
 });
 
-export default connect(state => state)(ActivePdrs);
+export default connect(state => ({
+  pdrs: state.pdrs
+}))(ActivePdrs);

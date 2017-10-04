@@ -2,102 +2,101 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import PropTypes from 'prop-types';
 import {
   getCollection,
   listGranules,
   deleteCollection
 } from '../../actions';
 import { get } from 'object-path';
-import { seconds, tally, lastUpdated } from '../../utils/format';
+import {
+  tally,
+  lastUpdated,
+  getCollectionId,
+  deleteText
+} from '../../utils/format';
 import ErrorReport from '../errors/report';
 import List from '../table/list-view';
 import Overview from '../app/overview';
 import AsyncCommand from '../form/async-command';
-import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
+import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
 import { updateDelay } from '../../config';
 
-const granuleFields = 'status,granuleId,pdrName,duration,updatedAt';
-
-var CollectionOverview = React.createClass({
+const CollectionOverview = React.createClass({
   displayName: 'CollectionOverview',
 
   propTypes: {
-    params: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    granules: React.PropTypes.object,
-    collections: React.PropTypes.object,
-    router: React.PropTypes.object
+    params: PropTypes.object,
+    dispatch: PropTypes.func,
+    granules: PropTypes.object,
+    collections: PropTypes.object,
+    router: PropTypes.object
   },
 
   componentWillMount: function () {
     this.load();
   },
 
-  componentWillReceiveProps: function (newProps) {
-    if (newProps.params.collectionName !== this.props.params.collectionName) {
+  componentWillReceiveProps: function ({ params }) {
+    const { name, version } = params;
+    if (name !== this.props.params.name ||
+       version !== this.props.params.version) {
       this.load();
     }
   },
 
   load: function () {
-    const collectionName = this.props.params.collectionName;
-    this.props.dispatch(getCollection(collectionName));
+    const { name, version } = this.props.params;
+    this.props.dispatch(getCollection(name, version));
   },
 
   generateQuery: function () {
-    const collectionName = this.props.params.collectionName;
+    const collectionId = getCollectionId(this.props.params);
     return {
-      collectionName,
-      fields: granuleFields,
-      status__not: 'completed,failed'
+      collectionId,
+      status: 'running'
     };
   },
 
-  generateBulkActions: function () {
-    const { granules } = this.props;
-    return bulkActions(granules);
-  },
-
   delete: function () {
-    const collectionName = this.props.params.collectionName;
-    this.props.dispatch(deleteCollection(collectionName));
+    const { name, version } = this.props.params;
+    this.props.dispatch(deleteCollection(name, version));
   },
 
   navigateBack: function () {
     const { router } = this.props;
-    router.push('/collections/active');
+    router.push('/collections/all');
   },
 
   errors: function () {
-    const collectionName = this.props.params.collectionName;
+    const { name, version } = this.props.params;
+    const collectionId = getCollectionId({name, version});
     return [
-      get(this.props.collections.map, [collectionName, 'error']),
-      get(this.props.collections.deleted, [collectionName, 'error'])
+      get(this.props.collections.map, [collectionId, 'error']),
+      get(this.props.collections.deleted, [collectionId, 'error'])
     ].filter(Boolean);
   },
 
   renderOverview: function (record) {
     const data = get(record, 'data', {});
-    const granules = get(data, 'granulesStatus', {});
+    const stats = get(data, 'stats', {});
     const overview = [
-      [seconds(data.averageDuration), 'Average Processing Time'],
-      [tally(data.granules), 'Total Granules'],
-      [tally(granules.ingesting), 'Granules Ingesting'],
-      [tally(granules.processing), 'Granules Processing'],
-      [tally(granules.cmr), 'Granules Pushed to CMR'],
-      [tally(granules.archiving), 'Granules Archiving']
+      [tally(stats.running), 'Granules Running'],
+      [tally(stats.completed), 'Granules Completed'],
+      [tally(stats.failed), 'Granules Failed']
     ];
     return <Overview items={overview} inflight={record.inflight} />;
   },
 
   render: function () {
-    const collectionName = this.props.params.collectionName;
-    const { granules, collections } = this.props;
-    const record = collections.map[collectionName];
+    const { params, granules, collections } = this.props;
+    const collectionName = params.name;
+    const collectionVersion = params.version;
+    const collectionId = getCollectionId(params);
+    const record = collections.map[collectionId];
     const { list } = granules;
     const { meta } = list;
-    const deleteStatus = get(collections.deleted, [collectionName, 'status']);
-    const hasGranules = get(record.data, 'granules');
+    const deleteStatus = get(collections.deleted, [collectionId, 'status']);
     const errors = this.errors();
 
     // create the overview boxes
@@ -105,24 +104,25 @@ var CollectionOverview = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>{collectionName}</h1>
-
+          <h1 className='heading--large heading--shared-content with-description'>{collectionName} / {collectionVersion}</h1>
+          <div className='form-group__element--right'>
           <AsyncCommand action={this.delete}
             success={this.navigateBack}
             successTimeout={updateDelay}
             status={deleteStatus}
-            disabled={hasGranules !== 0}
-            className={'form-group__element--right'}
+            confirmAction={true}
+            confirmText={deleteText(`${collectionName} ${collectionVersion}`)}
             text={deleteStatus === 'success' ? 'Success!' : 'Delete' } />
+          </div>
 
-          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
-          {lastUpdated(meta.queriedAt)}
+          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
+          {lastUpdated(get(record, 'data.timestamp'))}
           {overview}
-          {errors.length ? errors.map((error, i) => <ErrorReport key={i} report={error} />) : null}
+          {errors.length ? <ErrorReport report={errors} /> : null}
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Processing Granules <span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>Running Granules <span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
           </div>
           <List
             list={list}
@@ -132,14 +132,17 @@ var CollectionOverview = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
-            bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}
+            sortIdx={6}
           />
-          <Link className='link--secondary link--learn-more' to={`/collections/collection/${collectionName}/granules`}>View All Granules</Link>
+          <Link className='link--secondary link--learn-more' to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}>View All Granules</Link>
         </section>
       </div>
     );
   }
 });
 
-export default connect(state => state)(CollectionOverview);
+export default connect(state => ({
+  collections: state.collections,
+  granules: state.granules
+}))(CollectionOverview);

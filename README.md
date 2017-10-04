@@ -1,5 +1,7 @@
 # Cumulus Dashboard
 
+[![CircleCI](https://circleci.com/gh/cumulus-nasa/cumulus-dashboard.svg?style=svg&circle-token=2e209f473a8424f48ce376e23df834cca9869b37)](https://circleci.com/gh/cumulus-nasa/cumulus-dashboard)
+
 Code to generate and deploy the dashboard for the Cumulus API.
 
 ## Documentation
@@ -12,7 +14,18 @@ Code to generate and deploy the dashboard for the Cumulus API.
 - [Designs](https://www.dropbox.com/sh/zotoy2nuozizufz/AAAiOpbAv2Gp0BU-HIu5aILra?dl=0)
 - [Wireframes](https://www.dropbox.com/s/dm7wct36ijg7sch/nasa-01-15.pdf?dl=0)
 
-# Build
+## Building in Docker
+
+The Cumulus Dashboard can be built inside of a Docker container, without needing to install any local dependencies.
+
+Example of building for the "production" environment:
+```
+$ ./bin/build_in_docker production
+```
+
+The compiled files will be placed in the `dist` directory.
+
+## Building locally
 
 This requires [nvm](https://github.com/creationix/nvm) and node v6.9. To set v6.9 as the default, use `nvm alias default v6.9`.
 
@@ -24,50 +37,23 @@ npm install
 npm run serve
 ```
 
-## Deploying in Bamboo
+## Running locally in docker
 
-### Build modules package
+There is a script called `bin/build_docker_image.sh` which will build a Docker image
+that runs the Cumulus Dashboard.  It expects that the dashboard has already been
+built and can be found in the `dist` directory.
 
-```(bash)
-mkdir -p artifacts
-docker run \
-  -e RELEASE_UID=$(id -u) \
-  -e RELEASE_GID=$(id -g) \
-  --rm \
-  -v "$(pwd):/source:ro" \
-  -v "$(pwd)/artifacts:/artifacts" \
-  node \
-  /source/ngap/bamboo/build_modules_package.sh
+The script takes one optional parameter, the tag that you would like to apply to
+the generated image.
+
+Example of building and running the project in Docker
+```
+$ ./bin/build_docker_image.sh cumulus-dashboard:production-1
+...
+$ docker run -e PORT=8181 -p 8181:8181 cumulus-dashboard:production-1
 ```
 
-### Run tests
-
-```(bash)
-tar -xf modules.tar
-mkdir -p artifacts
-docker run \
-  -e RELEASE_UID=$(id -u) \
-  -e RELEASE_GID=$(id -g) \
-  --rm \
-  -v "$(pwd):/source:ro" \
-  -v "$(pwd)/artifacts:/artifacts" \
-  node \
-  /source/ngap/bamboo/run_tests.sh
-```
-
-### Build release package
-
-```(bash)
-mkdir -p artifacts
-docker run \
-  -e RELEASE_UID=$(id -u) \
-  -e RELEASE_GID=$(id -g) \
-  --rm \
-  -v "$(pwd):/source:ro" \
-  -v "$(pwd)/artifacts:/artifacts" \
-  node \
-  /source/ngap/bamboo/build_release_package.sh
-```
+In this example, the dashboard would be available at http://localhost:8181/
 
 ## Adding a new page
 

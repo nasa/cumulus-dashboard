@@ -38,7 +38,6 @@ export const initialState = {
     params: {}
   },
   map: {},
-  meta: {},
   created: {},
   updated: {},
   deleted: {}

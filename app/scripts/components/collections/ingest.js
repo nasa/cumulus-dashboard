@@ -4,9 +4,8 @@ import { Link } from 'react-router';
 import Ace from 'react-ace';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import omit from 'lodash.omit';
 import { getCollection } from '../../actions';
-import { fullDate, lastUpdated, nullValue } from '../../utils/format';
+import { lastUpdated, nullValue, getCollectionId } from '../../utils/format';
 import config from '../../config';
 import Loading from '../app/loading-indicator';
 
@@ -26,19 +25,21 @@ var CollectionIngest = React.createClass({
   },
 
   componentWillReceiveProps: function (props) {
-    const collectionName = props.params.collectionName;
-    const record = this.props.collections.map[collectionName];
+    const { name, version } = this.props.params;
+    const collectionId = getCollectionId({ name, version });
+    const record = this.props.collections.map[collectionId];
     if (!record) {
-      this.get(collectionName);
+      this.get(name, version);
     }
   },
 
   componentWillMount: function () {
-    this.get(this.props.params.collectionName);
+    const { name, version } = this.props.params;
+    this.get(name, version);
   },
 
-  get: function (collectionName) {
-    this.props.dispatch(getCollection(collectionName));
+  get: function (name, version) {
+    this.props.dispatch(getCollection(name, version));
   },
 
   renderReadOnlyJson: function (name, data) {
@@ -54,15 +55,16 @@ var CollectionIngest = React.createClass({
         tabSize={config.tabSize}
         showPrintMargin={false}
         minLines={1}
-        maxLines={12}
+        maxLines={35}
         wrapEnabled={true}
       />
     );
   },
 
   render: function () {
-    const collectionName = this.props.params.collectionName;
-    const record = this.props.collections.map[collectionName];
+    const { name, version } = this.props.params;
+    const collectionId = getCollectionId(this.props.params);
+    const record = this.props.collections.map[collectionId];
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
     }
@@ -70,14 +72,12 @@ var CollectionIngest = React.createClass({
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>{collectionName}</h1>
-          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
+          <h1 className='heading--large heading--shared-content with-description'>{name}</h1>
+          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${name}/${version}`}>Edit</Link>
           {lastUpdated(data.queriedAt)}
         </section>
         <section className='page__section'>
           <div className='tab--wrapper'>
-            <button className={'button--tab ' + (this.state.view === 'list' ? 'button--active' : '')}
-              onClick={() => this.state.view !== 'list' && this.setState({ view: 'list' })}>List View</button>
             <button className={'button--tab ' + (this.state.view === 'json' ? 'button--active' : '')}
               onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}>JSON View</button>
           </div>
@@ -90,46 +90,11 @@ var CollectionIngest = React.createClass({
   },
 
   renderList: function (data) {
-    const granuleDefinition = get(data, 'granuleDefinition', {});
     const ingest = get(data, 'ingest', {});
     const recipe = get(data, 'recipe', {});
 
     return (
       <div className='list-view'>
-        <section className='page__section--small'>
-          <dl>
-            <dt>Collection Name</dt>
-            <dd>{data.collectionName}</dd>
-
-            <dt>Created at</dt>
-            <dd>{fullDate(data.createdAt)}</dd>
-
-            <dt>Updated at</dt>
-            <dd>{fullDate(data.updatedAt)}</dd>
-
-            <dt>Changed by</dt>
-            <dd>{fullDate(data.changedBy)}</dd>
-          </dl>
-        </section>
-
-        <section className='page__section--small'>
-          <h2 className='heading--medium'>Granule Definition</h2>
-          <p>{granuleDefinition.granuleId}</p>
-          <h3 className='heading--small'>Files</h3>
-          {Object.keys(get(granuleDefinition, 'files', [])).map(name => {
-            let file = granuleDefinition.files[name];
-            return (
-              <dl key={name}>
-                <dt>{name}</dt>
-                <dd>Regex: {file.regex}</dd>
-                <dd>Access: {file.access}</dd>
-                <dd>Source: {file.source}</dd>
-              </dl>
-              );
-          })}
-          <h1>Needed for processing: {get(granuleDefinition, 'neededForProcessing', []).join(', ')}</h1>
-        </section>
-
         <section className='page__section--small'>
           <h2 className='heading--medium'>Ingest</h2>
           <p>Type: {ingest.type}</p>
@@ -161,20 +126,8 @@ var CollectionIngest = React.createClass({
     return (
       <ul>
         <li>
-          <label>{data.collectionName}</label>
-          {this.renderReadOnlyJson('recipe', omit(data, ['recipe', 'granuleDefinition', 'granulesStatus']))}
-        </li>
-        <li>
-          <label>Recipe</label>
-          {this.renderReadOnlyJson('recipe', data.recipe)}
-        </li>
-        <li>
-          <label>Granule Definition</label>
-          {this.renderReadOnlyJson('granuleDefinition', data.granuleDefinition)}
-        </li>
-        <li>
-          <label>Granule Status</label>
-          {this.renderReadOnlyJson('granuleStatus', data.granulesStatus)}
+          <label>{data.name}</label>
+          {this.renderReadOnlyJson('recipe', data)}
         </li>
       </ul>
     );

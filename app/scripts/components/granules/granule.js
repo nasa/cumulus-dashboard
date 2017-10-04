@@ -1,17 +1,26 @@
 'use strict';
 import React from 'react';
-import { Link } from 'react-router';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   interval,
   getGranule,
-  reprocessGranule,
   reingestGranule,
   removeGranule,
   deleteGranule
 } from '../../actions';
 import { get } from 'object-path';
-import { fullDate, lastUpdated, seconds, nullValue, bool } from '../../utils/format';
+import {
+  displayCase,
+  lastUpdated,
+  seconds,
+  nullValue,
+  bool,
+  collectionLink,
+  providerLink,
+  pdrLink,
+  deleteText
+} from '../../utils/format';
 import SortableTable from '../table/sortable';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
@@ -22,65 +31,40 @@ import { updateInterval } from '../../config';
 
 const tableHeader = [
   'Filename',
-  'Original',
-  'Staging',
-  'Archive',
-  'Access'
+  'Link',
+  'Bucket'
 ];
 
 const link = 'Link';
+
+const makeLink = (s3Uri) => s3Uri.replace('s3://', 'https://s3.amazonaws.com/');
+
 const tableRow = [
   (d) => d.name || '(No name)',
-  (d) => (<a href={d.sipFile}>{d.sipFile ? link : nullValue}</a>),
-  (d) => (<a href={d.stagingFile}>{d.stagingFile ? link : nullValue}</a>),
-  (d) => (<a href={d.archivedFile}>{d.archivedFile ? link : nullValue}</a>),
-  (d) => d.access
+  (d) => (<a href={makeLink(d.filename)}>{d.filename ? link : nullValue}</a>),
+  (d) => d.bucket
 ];
 
 const metaAccessors = [
-  ['PDR Name', 'pdrName', (d) => d ? <Link to={`pdrs/pdr/${d}`}>{d}</Link> : nullValue],
-  ['Collection', 'collectionName', (d) => d ? <Link to={`collections/collection/${d}`}>{d}</Link> : nullValue],
-  ['Provider', 'provider', (d) => d ? <Link to={`providers/provider/${d}`}>{d}</Link> : nullValue],
-  ['CMR Link', 'cmrLink', (d) => d ? <a href={d}>Link</a> : nullValue],
+  ['PDR Name', 'pdrName', pdrLink],
+  ['Collection', 'collectionId', collectionLink],
+  ['Provider', 'provider', providerLink],
+  ['CMR Link', 'cmrLink', (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue],
+  ['Execution', 'execution', (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue],
   ['Published', 'published', bool],
   ['Duplicate', 'hasDuplicate', bool],
-
-  ['Created', 'createdAt', fullDate],
-  ['Last updated', 'updatedAt', fullDate],
-
-  ['Ingested started', 'ingestStartedAt', fullDate],
-  ['Ingest ended', 'ingestEndedAt', fullDate],
-
-  ['CMR push started', 'timeline.pushToCMR.startedAt', fullDate],
-  ['CMR push ended', 'timeline.pushToCMR.endedAt', fullDate],
-
-  ['Archive started', 'timeline.archive.startedAt', fullDate],
-  ['Archive ended', 'timeline.archive.endedAt', fullDate],
-
-  ['Processing started', 'timeline.processStep.startedAt', fullDate],
-  ['Processing ended', 'timeline.processStep.endedAt', fullDate],
-
-  ['Ingest duration', 'ingestDuration', seconds],
-  ['CMR Duration', 'pushToCMRDuration', seconds],
-  ['Archive duration', 'archiveDuration', seconds],
-  ['Processing duration', 'processingDuration', seconds],
-  ['Total duration', 'totalDuration', seconds]
+  ['Total duration', 'duration', seconds]
 ];
-
-const granuleErrors = {
-  ingest: 'This granule failed during the ingest phase',
-  processing: 'This granule failed during the processing phase'
-};
 
 var GranuleOverview = React.createClass({
   displayName: 'Granule',
 
   propTypes: {
-    params: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    granules: React.PropTypes.object,
-    logs: React.PropTypes.object,
-    router: React.PropTypes.object
+    params: PropTypes.object,
+    dispatch: PropTypes.func,
+    granules: PropTypes.object,
+    logs: PropTypes.object,
+    router: PropTypes.object
   },
 
   componentWillMount: function () {
@@ -111,11 +95,6 @@ var GranuleOverview = React.createClass({
     router.push('/granules');
   },
 
-  reprocess: function () {
-    const { granuleId } = this.props.params;
-    this.props.dispatch(reprocessGranule(granuleId));
-  },
-
   reingest: function () {
     const { granuleId } = this.props.params;
     this.props.dispatch(reingestGranule(granuleId));
@@ -142,62 +121,21 @@ var GranuleOverview = React.createClass({
     ].filter(Boolean);
   },
 
-  renderStatus: function (status) {
-    const statusList = [
-      ['Ingest', 'ingesting'],
-      ['Processing', 'processing'],
-      ['Pushed to CMR', 'cmr'],
-      ['Archiving', 'archiving'],
-      ['Complete', 'completed']
-    ];
-    const indicatorClass = 'progress-bar__indicator progress-bar__indicator--' + status;
-    const statusBarClass = 'progress-bar__progress progress-bar__progress--' + status;
-    return (
-      <div className='page__section--subsection page__section__granule--progress'>
-        <div className='progress-bar'>
-          <div className={statusBarClass}></div>
-
-          <div className={indicatorClass}>
-            <div className='pulse'>
-              <div className='pulse__dot'></div>
-              <div className=''></div>
-            </div>
-          </div>
-
-        </div>
-        <ol>
-          {statusList.map(d => (
-            <li
-              className={ d[1] === status ? 'progress-bar__active' : ''}
-              key={d[1]}>{d[0]}</li>
-          ))}
-        </ol>
-      </div>
-
-    );
-  },
-
   render: function () {
     const granuleId = this.props.params.granuleId;
     const record = this.props.granules.map[granuleId];
-
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
+    } else if (record.error) {
+      return <ErrorReport report={record.error} />;
     }
+
     const granule = record.data;
     const files = [];
     if (granule.files) {
       for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }
     }
-    const logsQuery = { 'meta.granuleId': granuleId };
-    const errors = this.errors();
-    const granuleError = granule.error;
     const dropdownConfig = [{
-      text: 'Reprocess',
-      action: this.reprocess,
-      status: get(this.props.granules.reprocessed, [granuleId, 'status']),
-      success: this.fastReload
-    }, {
       text: 'Reingest',
       action: this.reingest,
       status: get(this.props.granules.reingested, [granuleId, 'status']),
@@ -210,26 +148,29 @@ var GranuleOverview = React.createClass({
     }, {
       text: 'Delete',
       action: this.delete,
-      disabled: granule.published,
+      disabled: !!granule.published,
       status: get(this.props.granules.deleted, [granuleId, 'status']),
-      success: this.navigateBack
+      success: this.navigateBack,
+      confirmAction: true,
+      confirmText: deleteText(granuleId)
     }];
+    const errors = this.errors();
 
-    const granuleErrorType = granuleError && granule.errorType && granuleErrors[granule.errorType]
-      ? granuleErrors[granule.errorType] : null;
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>{granuleId}</h1>
+          <h1 className='heading--large heading--shared-content with-description width--three-quarters'>{granuleId}</h1>
           <AsyncCommands config={dropdownConfig} />
-          {lastUpdated(granule.queriedAt)}
-          {this.renderStatus(granule.status)}
-          {granuleError ? <ErrorReport report={granuleError} /> : null}
-          {granuleErrorType ? <ErrorReport report={granuleErrorType} /> : null}
+          {lastUpdated(granule.createdAt, 'Created')}
+
+          <dl className='status--process'>
+            <dt>Status:</dt>
+            <dd className={granule.status.toLowerCase()}>{displayCase(granule.status)}</dd>
+          </dl>
         </section>
 
         <section className='page__section'>
-          {errors.length ? errors.map((error, i) => <ErrorReport key={i} report={error} />) : null}
+          {errors.length ? <ErrorReport report={errors} /> : null}
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Granule Overview</h2>
           </div>
@@ -244,13 +185,13 @@ var GranuleOverview = React.createClass({
             data={files}
             header={tableHeader}
             row={tableRow}
-            props={['name', 'sipFile', 'stagingFile', 'archivedFile', 'access']}
+            props={['name', 'filename', 'bucket']}
           />
         </section>
 
         <section className='page__section'>
           <LogViewer
-            query={logsQuery}
+            query={{q: granuleId}}
             dispatch={this.props.dispatch}
             logs={this.props.logs}
             notFound={`No recent logs for ${granuleId}`}
@@ -261,4 +202,7 @@ var GranuleOverview = React.createClass({
   }
 });
 
-export default connect(state => state)(GranuleOverview);
+export default connect(state => ({
+  granules: state.granules,
+  logs: state.logs
+}))(GranuleOverview);

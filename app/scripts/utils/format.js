@@ -45,7 +45,8 @@ export const fromNow = function (numberstring) {
   return moment(numberstring).fromNow();
 };
 
-export const lastUpdated = function (datestring) {
+export const lastUpdated = function (datestring, text) {
+  const meta = text || 'Last Updated';
   let day, time;
   if (datestring) {
     const date = moment(datestring);
@@ -54,7 +55,7 @@ export const lastUpdated = function (datestring) {
   }
   return (
     <dl className="metadata__updated">
-      <dt>Last Updated:</dt>
+      <dt>{meta}:</dt>
       <dd>{day}</dd>
       { time ? <dd className='metadata__updated__time'>{time}</dd> : null }
     </dl>
@@ -62,36 +63,27 @@ export const lastUpdated = function (datestring) {
 };
 
 export const collectionSearchResult = function (collection) {
-  const { collectionName } = collection;
+  const { name, version } = collection;
   return (
-    <li key={collectionName}>
-      <Link to={`collections/collection/${collectionName}`}>{collectionName}</Link>
+    <li key={name}>
+      <Link to={`collections/collection/${name}/${version}`}>{name} / {version}</Link>
     </li>
   );
 };
 
-export const granuleSearchResult = function (granule) {
-  const { granuleId } = granule;
-  return (
-    <li key={granuleId}>
-      <Link to={`granules/granule/${granuleId}/overview`}>{granuleId}</Link>
-    </li>
-  );
+export const granuleLink = function (granuleId) {
+  if (!granuleId) return nullValue;
+  return <Link to={`granules/granule/${granuleId}`}>{granuleId}</Link>;
 };
 
-export const pdrSearchResult = function (pdr) {
-  const { pdrName } = pdr;
-  return (
-    <li key={pdrName}>
-      <Link to={`pdrs/pdr/${pdrName}`}>{pdrName}</Link>
-    </li>
-  );
+export const pdrLink = function (pdrName) {
+  if (!pdrName) return nullValue;
+  return <Link to={`pdrs/pdr/${pdrName}`}>{pdrName}</Link>;
 };
 
-export const dropdownOption = function (optionElementValue, displayValue) {
-  return (
-    <option value={optionElementValue} key={optionElementValue}>{displayValue}</option>
-  );
+export const providerLink = function (provider) {
+  if (!provider) return nullValue;
+  return <Link to={`providers/provider/${provider}`}>{provider}</Link>;
 };
 
 export const bool = function (bool) {
@@ -100,7 +92,7 @@ export const bool = function (bool) {
 
 export const displayCase = function (string) {
   const split = string.split(' ');
-  return split.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  return split.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
 };
 
 export const storage = function (n) {
@@ -115,11 +107,45 @@ export const storage = function (n) {
   else return (n / 1e15).toFixed(2) + 'pb';
 };
 
-export const link = (url) => <a href={url}>Link</a>;
+export const link = (url) => <a href={url} target='_blank'>Link</a>;
 
 export const truncate = function (string, to) {
   if (!string) return nullValue;
   to = to || 100;
   if (string.length <= to) return string;
   else return string.slice(0, to) + '...';
+};
+
+export const getCollectionId = function ({name, version}) {
+  return `${name}___${version}`;
+};
+
+// "MYD13A1___006" => "MYD13A1 / 006"
+export const collectionName = function (collectionId) {
+  if (!collectionId) return nullValue;
+  return collectionId.split('___').join(' / ');
+};
+
+export const collectionNameVersion = function (collectionId) {
+  if (!collectionId) return nullValue;
+  const split = collectionId.split('___');
+  const name = split[0];
+  const version = split[1];
+  return { name, version };
+};
+
+export const collectionLink = function (collectionId) {
+  if (!collectionId) return nullValue;
+  const { name, version } = collectionNameVersion(collectionId);
+  return <Link to={`/collections/collection/${name}/${version}`}>{collectionName(collectionId)}</Link>;
+};
+
+export const collectionHref = function (collectionId) {
+  if (!collectionId) return nullValue;
+  const { name, version } = collectionNameVersion(collectionId);
+  return `/collections/collection/${name}/${version}`;
+};
+
+export const deleteText = function (name) {
+  return `Are you sure you want to permanently delete ${name}?`;
 };

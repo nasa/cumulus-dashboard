@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { get } from 'object-path';
-import { tally, seconds, fullDate, bool, nullValue } from '../format';
+import { tally, seconds, fromNow, bool, nullValue } from '../format';
 import { deletePdr } from '../../actions';
 
 export const tableHeader = [
@@ -20,7 +20,7 @@ export const tableHeader = [
 ];
 
 export const tableRow = [
-  (d) => fullDate(d.updatedAt),
+  (d) => fromNow(d.timestamp),
   (d) => <Link to={`pdrs/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
   'status',
   (d) => seconds(d.averageDuration),
@@ -34,7 +34,7 @@ export const tableRow = [
 ];
 
 export const tableSortProps = [
-  'updatedAt',
+  'timestamp',
   'pdrName.keyword',
   'status.keyword',
   null,
@@ -51,21 +51,24 @@ export const errorTableHeader = [
   'Updated',
   'Name',
   'Error',
-  'PDRD Sent'
+  'PAN Sent',
+  'PAN Message'
 ];
 
 export const errorTableRow = [
-  (d) => fullDate(d.updatedAt),
+  (d) => fromNow(d.timestamp),
   (d) => <Link to={`pdrs/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
-  (d) => d.PDRD || d.error || nullValue,
-  (d) => bool(d.PDRDSent)
+  (d) => get(d, 'error.Cause', nullValue),
+  (d) => bool(d.PANSent),
+  'PANmessage'
 ];
 
 export const errorTableSortProps = [
-  'updatedAt',
-  'pdrName.keyword',
-  'PDRD.keyword',
-  null
+  'timestamp',
+  'pdrName',
+  null,
+  'PANSent',
+  'PANmessage'
 ];
 
 const confirmDelete = (d) => `Delete ${d} PDR(s)?`;
