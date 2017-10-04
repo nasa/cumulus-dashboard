@@ -73,7 +73,7 @@ import Logs from './components/logs';
 function requireAuth (nextState, replace) {
   if (!store.getState().api.authenticated) {
     if (config.requireEarthdataLogin) {
-      window.location.href = url.resolve(config.apiRoot, 'auth/redirect');
+      replace('/auth');
     } else {
       replace('/login');
     }

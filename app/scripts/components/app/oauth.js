@@ -16,9 +16,7 @@ var OAuth = React.createClass({
     dispatch: React.PropTypes.func,
     api: React.PropTypes.object,
     location: React.PropTypes.object,
-    router: React.PropTypes.object,
-    show: React.PropTypes.bool,
-    error: React.PropTypes.string
+    router: React.PropTypes.object
   },
 
   getInitialState: function () {
@@ -45,7 +43,7 @@ var OAuth = React.createClass({
     const params = window.location.hash.split('?')[1];
     const args = { url: url.resolve(apiRoot, `auth/token?${params}`) };
     request.get(args, (error, resp, body) => {
-      if (error || +resp.statusCode >= 400) {
+      if (error || resp.statusCode >= 400) {
         const message = error || JSON.parse(resp.body).message;
         this.setState({ error: message });
       } else {
@@ -58,7 +56,13 @@ var OAuth = React.createClass({
   },
 
   render: function () {
-    const { dispatch, api, error } = this.props;
+    const { dispatch, api } = this.props;
+    const { error, token } = this.state;
+
+    let button;
+    if (!token) {
+      button = <a href={url.resolve(apiRoot, 'auth/redirect')} >Login with the EarthData</a>;
+    }
     return (
       <div className='app'>
         <Header dispatch={dispatch} api={api} minimal={true}/>
@@ -68,8 +72,9 @@ var OAuth = React.createClass({
             <div className='modal__container modal__container--onscreen'>
               <div className='modal'>
                 <div className='modal__internal'>
-                  <h2 className='heading--medium'>Checking login { error ? null : '...' }</h2>
+                  { token ? <h2 className='heading--medium'>Checking login { error ? null : '...' }</h2> : null }
                   { error ? <ErrorReport report={error} /> : null }
+                  { button }
                 </div>
               </div>
             </div>
