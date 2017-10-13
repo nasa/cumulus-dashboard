@@ -61,7 +61,7 @@ var OAuth = React.createClass({
 
     let button;
     if (!token) {
-      button = <a href={url.resolve(apiRoot, 'auth/redirect')} >Login with the EarthData</a>;
+      button = <a href={url.resolve(apiRoot, 'auth/redirect')} >Use Earthdata Login</a>;
     }
     return (
       <div className='app'>
