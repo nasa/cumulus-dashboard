@@ -5,6 +5,7 @@ var configurations = {
   base: require('./config/base'),
   staging: require('./config/staging'),
   production: require('./config/production'),
+  'lpdaac-sit': require('./config/lpdaac-sit'),
   'lpdaac-uat': require('./config/lpdaac-uat')
 };
 var config = configurations.base || {};
@@ -13,6 +14,8 @@ if (process.env.DS_ENV === 'staging') {
   config = Object.assign({}, config, configurations.staging);
 } else if (process.env.DS_ENV === 'production') {
   config = Object.assign({}, config, configurations.production);
+} else if (process.env.DS_ENV === 'lpdaac-sit') {
+  config = Object.assign({}, config, configurations['lpdaac-sit']);
 } else if (process.env.DS_ENV === 'lpdaac-uat') {
   config = Object.assign({}, config, configurations['lpdaac-uat']);
 } else if (process.env.DS_ENV === 'production') {
