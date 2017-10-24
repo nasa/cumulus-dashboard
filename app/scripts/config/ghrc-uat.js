@@ -1,7 +1,7 @@
 'use strict';
 var logo = require('./logo');
 module.exports = {
-  apiRoot: 'https://b2fxt3cf7b.execute-api.us-east-1.amazonaws.com/UAT/',
+  apiRoot: 'https://api.cumulus.ghrc.uat.earthdata.nasa.gov/',
   graphicsPath: '/graphics/',
   environment: 'ghrc-uat',
   requireEarthdataLogin: true,
