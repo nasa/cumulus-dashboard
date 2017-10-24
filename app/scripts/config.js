@@ -1,60 +1,27 @@
 'use strict';
+
+var path = require('path');
+var fs = require('fs');
+
 import assert from 'assert';
 import yaml from 'js-yaml';
-
-
-
-// TODO: remove
-// var configurations = {
-//   base: require('./config/base'),
-//   staging: require('./config/staging'),
-//   production: require('./config/production'),
-//   'ghrc-uat': require('./config/ghrc-uat'),
-//   'lpdaac-sit': require('./config/lpdaac-sit'),
-//   'lpdaac-uat': require('./config/lpdaac-uat'),
-//   'nsidc-uat': require('./config/nsidc-uat'),
-//   'podaac-uat': require('./config/podaac-uat')
-// };
-
-
-
-
-var configPath = path.join(__dirname, 'config.yaml')
-var configurations = yaml.safeLoad(fs.readFileSync(configPath))
-
-var config = configurations.base || {};
-
-if (configurations[process.env.DS_ENV]) {
-  config = Object.assign({}, config, configurations[process.env.DS_ENV]);
-}
-
-// TODO: remove
-// if (process.env.DS_ENV === 'staging') {
-//   config = Object.assign({}, config, configurations.staging);
-// } else if (process.env.DS_ENV === 'production') {
-//   config = Object.assign({}, config, configurations.production);
-// } else if (process.env.DS_ENV === 'ghrc-uat') {
-//   config = Object.assign({}, config, configurations['ghrc-uat']);
-// } else if (process.env.DS_ENV === 'lpdaac-sit') {
-//   config = Object.assign({}, config, configurations['lpdaac-sit']);
-// } else if (process.env.DS_ENV === 'lpdaac-uat') {
-//   config = Object.assign({}, config, configurations['lpdaac-uat']);
-// } else if (process.env.DS_ENV === 'nsidc-uat') {
-//   config = Object.assign({}, config, configurations['nsidc-uat']);
-// } else if (process.env.DS_ENV === 'podaac-uat') {
-//   config = Object.assign({}, config, configurations['podaac-uat']);
-// } else if (process.env.DS_ENV === 'production') {
-//   config = Object.assign({}, config, configurations.production);
-// }
-
-
-
 
 // Set the deployment target.
 // Allows variable construction of dashboard depending on target,
 // including ordering, api root, etc.
 const target = (process.env.DS_TARGET || 'cumulus').toLowerCase();
 const env = (process.env.DS_ENV || 'development').toLowerCase();
+
+var config = require('./config/base');
+
+var yamlFile = fs.readFileSync(path.join(__dirname, 'config.yml'));
+var environments = yaml.safeLoad(yamlFile);
+console.log('yamlFile', yamlFile)
+console.log('environments', environments)
+console.log('env', env)
+if (environments[env]) {
+  config = Object.assign({}, config, environments[env]);
+}
 
 // Set an alternative url to access the Cumulus API from.
 const altApiRoot = {
@@ -68,29 +35,10 @@ if (typeof altApiRoot === 'string') {
 
 assert(typeof config.apiRoot, 'string', 'apiRoot string is required');
 
-if (altApiRoot && env !== 'development') {
+if (target !== 'cumulus' && env !== 'development') {
   Object.assign(config, { graphicsPath: `/dashboard/${target}/graphics/` });
 }
 
-// Determine modules and UI pieces to exclude
-const EXCLUDE_NAV_PDRS = { nav: { '/pdrs': true } };
-
-const exclude = {
-  podaac: EXCLUDE_NAV_PDRS,
-  ghrc: EXCLUDE_NAV_PDRS
-}[target] || {};
-
-Object.assign(config, { exclude });
-
-// Determine nav order
-const order = {
-  podaac: { nav: {
-    '/collections': 0
-  } }
-}[target] || {};
-
-Object.assign(config, { order });
-
-// attach the target to the config
+config.wut = true
 Object.assign(config, { target });
 module.exports = config;

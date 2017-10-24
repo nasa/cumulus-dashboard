@@ -26,7 +26,7 @@ var preprocess = require('gulp-preprocess');
 
 // The package.json
 var pkg;
-
+console.log('process.env.DS_ENV', process.env.DS_ENV)
 // Environment
 // Set the correct environment, which controls what happens in config.js
 if (!process.env.DS_ENV) {
