@@ -1,35 +1,54 @@
 'use strict';
 import assert from 'assert';
+import yaml from 'js-yaml';
 
-var configurations = {
-  base: require('./config/base'),
-  staging: require('./config/staging'),
-  production: require('./config/production'),
-  'ghrc-uat': require('./config/ghrc-uat'),
-  'lpdaac-sit': require('./config/lpdaac-sit'),
-  'lpdaac-uat': require('./config/lpdaac-uat'),
-  'nsidc-uat': require('./config/nsidc-uat'),
-  'podaac-uat': require('./config/podaac-uat')
-};
+
+
+// TODO: remove
+// var configurations = {
+//   base: require('./config/base'),
+//   staging: require('./config/staging'),
+//   production: require('./config/production'),
+//   'ghrc-uat': require('./config/ghrc-uat'),
+//   'lpdaac-sit': require('./config/lpdaac-sit'),
+//   'lpdaac-uat': require('./config/lpdaac-uat'),
+//   'nsidc-uat': require('./config/nsidc-uat'),
+//   'podaac-uat': require('./config/podaac-uat')
+// };
+
+
+
+
+var configPath = path.join(__dirname, 'config.yaml')
+var configurations = yaml.safeLoad(fs.readFileSync(configPath))
+
 var config = configurations.base || {};
 
-if (process.env.DS_ENV === 'staging') {
-  config = Object.assign({}, config, configurations.staging);
-} else if (process.env.DS_ENV === 'production') {
-  config = Object.assign({}, config, configurations.production);
-} else if (process.env.DS_ENV === 'ghrc-uat') {
-  config = Object.assign({}, config, configurations['ghrc-uat']);
-} else if (process.env.DS_ENV === 'lpdaac-sit') {
-  config = Object.assign({}, config, configurations['lpdaac-sit']);
-} else if (process.env.DS_ENV === 'lpdaac-uat') {
-  config = Object.assign({}, config, configurations['lpdaac-uat']);
-} else if (process.env.DS_ENV === 'nsidc-uat') {
-  config = Object.assign({}, config, configurations['nsidc-uat']);
-} else if (process.env.DS_ENV === 'podaac-uat') {
-  config = Object.assign({}, config, configurations['podaac-uat']);
-} else if (process.env.DS_ENV === 'production') {
-  config = Object.assign({}, config, configurations.production);
+if (configurations[process.env.DS_ENV]) {
+  config = Object.assign({}, config, configurations[process.env.DS_ENV]);
 }
+
+// TODO: remove
+// if (process.env.DS_ENV === 'staging') {
+//   config = Object.assign({}, config, configurations.staging);
+// } else if (process.env.DS_ENV === 'production') {
+//   config = Object.assign({}, config, configurations.production);
+// } else if (process.env.DS_ENV === 'ghrc-uat') {
+//   config = Object.assign({}, config, configurations['ghrc-uat']);
+// } else if (process.env.DS_ENV === 'lpdaac-sit') {
+//   config = Object.assign({}, config, configurations['lpdaac-sit']);
+// } else if (process.env.DS_ENV === 'lpdaac-uat') {
+//   config = Object.assign({}, config, configurations['lpdaac-uat']);
+// } else if (process.env.DS_ENV === 'nsidc-uat') {
+//   config = Object.assign({}, config, configurations['nsidc-uat']);
+// } else if (process.env.DS_ENV === 'podaac-uat') {
+//   config = Object.assign({}, config, configurations['podaac-uat']);
+// } else if (process.env.DS_ENV === 'production') {
+//   config = Object.assign({}, config, configurations.production);
+// }
+
+
+
 
 // Set the deployment target.
 // Allows variable construction of dashboard depending on target,
@@ -46,7 +65,8 @@ const altApiRoot = {
 if (typeof altApiRoot === 'string') {
   Object.assign(config, { apiRoot: altApiRoot });
 }
-assert(typeof config.apiRoot, 'string');
+
+assert(typeof config.apiRoot, 'string', 'apiRoot string is required');
 
 if (altApiRoot && env !== 'development') {
   Object.assign(config, { graphicsPath: `/dashboard/${target}/graphics/` });
@@ -54,10 +74,12 @@ if (altApiRoot && env !== 'development') {
 
 // Determine modules and UI pieces to exclude
 const EXCLUDE_NAV_PDRS = { nav: { '/pdrs': true } };
+
 const exclude = {
   podaac: EXCLUDE_NAV_PDRS,
   ghrc: EXCLUDE_NAV_PDRS
 }[target] || {};
+
 Object.assign(config, { exclude });
 
 // Determine nav order
@@ -66,6 +88,7 @@ const order = {
     '/collections': 0
   } }
 }[target] || {};
+
 Object.assign(config, { order });
 
 // attach the target to the config
