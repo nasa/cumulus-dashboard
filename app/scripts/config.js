@@ -8,7 +8,8 @@ var configurations = {
   'ghrc-uat': require('./config/ghrc-uat'),
   'lpdaac-sit': require('./config/lpdaac-sit'),
   'lpdaac-uat': require('./config/lpdaac-uat'),
-  'nsidc-uat': require('./config/nsidc-uat')
+  'nsidc-uat': require('./config/nsidc-uat'),
+  'podaac-uat': require('./config/podaac-uat')
 };
 var config = configurations.base || {};
 
@@ -24,6 +25,8 @@ if (process.env.DS_ENV === 'staging') {
   config = Object.assign({}, config, configurations['lpdaac-uat']);
 } else if (process.env.DS_ENV === 'nsidc-uat') {
   config = Object.assign({}, config, configurations['nsidc-uat']);
+} else if (process.env.DS_ENV === 'podaac-uat') {
+  config = Object.assign({}, config, configurations['podaac-uat']);
 } else if (process.env.DS_ENV === 'production') {
   config = Object.assign({}, config, configurations.production);
 }
