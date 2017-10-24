@@ -1,9 +1,9 @@
 'use strict';
 var logo = require('./logo');
 module.exports = {
-  apiRoot: 'https://api.cumulus.lpdaac.uat.earthdata.nasa.gov/',
+  apiRoot: 'https://api.cumulus.sit.earthdata.nasa.gov/',
   graphicsPath: '/graphics/',
-  environment: 'lpdaac-uat',
+  environment: 'lpdaac-sit',
   requireEarthdataLogin: true,
   consoleMessage: logo
 };

@@ -2,8 +2,8 @@
 import moment from 'moment';
 module.exports = {
   environment: 'development',
-  requireEarthdataLogin: false,
-  apiRoot: 'https://cumulus.ds.io/api/lpdaac/',
+  requireEarthdataLogin: true,
+  apiRoot: 'https://wjdkfyb6t6.execute-api.us-east-1.amazonaws.com/dev/',
 
   graphicsPath: '/graphics/',
 

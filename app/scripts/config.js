@@ -5,7 +5,11 @@ var configurations = {
   base: require('./config/base'),
   staging: require('./config/staging'),
   production: require('./config/production'),
-  'lpdaac-uat': require('./config/lpdaac-uat')
+  'ghrc-uat': require('./config/ghrc-uat'),
+  'lpdaac-sit': require('./config/lpdaac-sit'),
+  'lpdaac-uat': require('./config/lpdaac-uat'),
+  'nsidc-uat': require('./config/nsidc-uat'),
+  'podaac-uat': require('./config/podaac-uat')
 };
 var config = configurations.base || {};
 
@@ -13,8 +17,16 @@ if (process.env.DS_ENV === 'staging') {
   config = Object.assign({}, config, configurations.staging);
 } else if (process.env.DS_ENV === 'production') {
   config = Object.assign({}, config, configurations.production);
+} else if (process.env.DS_ENV === 'ghrc-uat') {
+  config = Object.assign({}, config, configurations['ghrc-uat']);
+} else if (process.env.DS_ENV === 'lpdaac-sit') {
+  config = Object.assign({}, config, configurations['lpdaac-sit']);
 } else if (process.env.DS_ENV === 'lpdaac-uat') {
   config = Object.assign({}, config, configurations['lpdaac-uat']);
+} else if (process.env.DS_ENV === 'nsidc-uat') {
+  config = Object.assign({}, config, configurations['nsidc-uat']);
+} else if (process.env.DS_ENV === 'podaac-uat') {
+  config = Object.assign({}, config, configurations['podaac-uat']);
 } else if (process.env.DS_ENV === 'production') {
   config = Object.assign({}, config, configurations.production);
 }
