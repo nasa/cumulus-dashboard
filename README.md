@@ -43,11 +43,20 @@ npm run serve
 
 The environment that the app is running in. Can only be `development`, `staging`, or `production`.
 
-## `DS_TARGET`
+### `DS_APIROOT`
+
+The API endpoint of the cumulus deployment that the dashboard will use.
+
+Example:
+
+```
+DS_APIROOT=https://api.cumulus.lpdaac.uat.earthdata.nasa.gov/ npm run staging
+```
+### `DS_TARGET`
 
 The name of the deployment target.
 
-Should follow the pattern `{organisation}-{deployment}`, where `organization` is the organization name, such as `podaac`, and `deployment` is the name of the deployment, such as `uat` or `sit`.
+Should follow the pattern `{organization}-{deployment}`, where `organization` is the organization name, such as `podaac`, and `deployment` is the name of the deployment, such as `uat` or `sit`.
 
 The `DS_TARGET` environment variable corresponds with the config in `app/scripts/config.yml`.
 
@@ -56,6 +65,9 @@ The `DS_TARGET` environment variable corresponds with the config in `app/scripts
 - Open the `app/scripts/config.yml` file.
 - Add a target with properties like `apiRoot` or `graphicsPath`
 - To control navigation UI, you can disable or change the ordering of navigation items. See the podaac-uat target as an example.
+
+## `.env` file
+You can create a `.env` file at `app/scripts/.env` with the environment variables needed for building and serving the dashboard locally.
 
 ## Running locally in docker
 

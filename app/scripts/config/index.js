@@ -11,6 +11,7 @@ import yaml from 'js-yaml';
 // including ordering, api root, etc.
 const target = (process.env.DS_TARGET || 'cumulus').toLowerCase();
 const env = (process.env.DS_ENV || 'development').toLowerCase();
+const apiRoot = process.env.DS_APIROOT;
 
 let config = require('./base');
 
@@ -21,7 +22,9 @@ if (targets[target]) {
   config = Object.assign({}, config, targets[target]);
 }
 
-// TODO: are more asserts needed here?
+if (!config) config = {};
+config.apiRoot = apiRoot;
+
 assert(typeof config.apiRoot, 'string', 'apiRoot string is required');
 
 if (target !== 'cumulus' && env !== 'development') {

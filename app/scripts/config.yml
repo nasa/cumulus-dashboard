@@ -1,28 +1,14 @@
-local:
-  apiRoot: https://wjdkfyb6t6.execute-api.us-east-1.amazonaws.com/dev/
-
-lpdaac-sit:
-  apiRoot: https://api.cumulus.sit.earthdata.nasa.gov/
-
-lpdaac-uat:
-  apiRoot: https://api.cumulus.lpdaac.uat.earthdata.nasa.gov/
-
 ghrc-uat:
-  apiRoot: https://api.cumulus.ghrc.uat.earthdata.nasa.gov/
   nav:
     /pdrs: true
 
-nsidc-uat:
-  apiRoot: https://api.cumulus.nsidc.uat.earthdata.nasa.gov/
-
 podaac-uat:
-  apiRoot: https://api.cumulus.podaac.uat.earthdata.nasa.gov/
   nav:
     /pdrs: true
     /collections: 0
 
+# TODO: move these back to config/index.js
 production:
-  apiRoot: https://cumulus.ds.io/api/
   graphicsPath: /dashboard/graphics/
 
 staging:
