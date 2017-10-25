@@ -37,6 +37,18 @@ npm install
 npm run serve
 ```
 
+## Environment variables
+
+### `DS_ENV`
+
+The environment that the app is running in. Can only be `development`, `staging`, or `production`.
+
+## `DS_TARGET`
+
+The name of the deployment target.
+
+Should follow the pattern `{organisation}-{deployment}`, where `organization` is the organization name, such as `podaac`, and `deployment` is the name of the deployment, such as `uat` or `sit`.
+
 ## Running locally in docker
 
 There is a script called `bin/build_docker_image.sh` which will build a Docker image

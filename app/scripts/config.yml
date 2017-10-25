@@ -1,8 +1,8 @@
-development:
+local:
   apiRoot: https://wjdkfyb6t6.execute-api.us-east-1.amazonaws.com/dev/
 
 lpdaac-sit:
-  apiRoot: https://wjdkfyb6t6.execute-api.us-east-1.amazonaws.com/dev/
+  apiRoot: https://api.cumulus.sit.earthdata.nasa.gov/
 
 lpdaac-uat:
   apiRoot: https://api.cumulus.lpdaac.uat.earthdata.nasa.gov/
