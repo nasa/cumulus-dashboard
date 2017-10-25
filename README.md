@@ -49,6 +49,14 @@ The name of the deployment target.
 
 Should follow the pattern `{organisation}-{deployment}`, where `organization` is the organization name, such as `podaac`, and `deployment` is the name of the deployment, such as `uat` or `sit`.
 
+The `DS_TARGET` environment variable corresponds with the config in `app/scripts/config.yml`.
+
+### Adding a target
+
+- Open the `app/scripts/config.yml` file.
+- Add a target with properties like `apiRoot` or `graphicsPath`
+- To control navigation UI, you can disable or change the ordering of navigation items. See the podaac-uat target as an example.
+
 ## Running locally in docker
 
 There is a script called `bin/build_docker_image.sh` which will build a Docker image
