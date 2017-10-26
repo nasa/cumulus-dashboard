@@ -1,0 +1,8 @@
+ghrc-uat:
+  nav:
+    /pdrs: true
+
+podaac-uat:
+  nav:
+    /pdrs: true
+    /collections: 0

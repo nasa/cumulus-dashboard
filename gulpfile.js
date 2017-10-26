@@ -19,6 +19,10 @@ var revReplace = require('gulp-rev-replace');
 var SassString = require('node-sass').types.String;
 var notifier = require('node-notifier');
 var preprocess = require('gulp-preprocess');
+var dotenv = require('dotenv');
+
+// Load the .env file to expose environment variables
+dotenv.load({ path: path.join(__dirname, 'app', 'scripts', '.env') })
 
 // /////////////////////////////////////////////////////////////////////////////
 // --------------------------- Variables -------------------------------------//
