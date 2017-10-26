@@ -106,7 +106,8 @@ export const wrapRequest = function (id, query, params, type, body) {
         // Weirdly error.message shows up as " : Session expired"
         // So it's using indexOf instead of a direct comparison
         if (error && error.message.indexOf('Session expired') >= 0) {
-          hashHistory.push('/auth');
+          dispatch({ type: 'LOGOUT' });
+          return hashHistory.push('/auth');
         }
 
         const errorType = type + '_ERROR';
