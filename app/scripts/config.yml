@@ -6,10 +6,3 @@ podaac-uat:
   nav:
     /pdrs: true
     /collections: 0
-
-# TODO: move these back to config/index.js
-production:
-  graphicsPath: /dashboard/graphics/
-
-staging:
-  graphicsPath: /dashboard/dev/graphics/
