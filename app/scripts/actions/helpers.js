@@ -1,6 +1,7 @@
 'use strict';
 import url from 'url';
 import request from 'request';
+import { hashHistory } from 'react-router';
 import _config from '../config';
 import log from '../utils/log';
 import { get as getToken } from '../utils/auth';
@@ -101,6 +102,13 @@ export const wrapRequest = function (id, query, params, type, body) {
     const start = new Date();
     query(config, (error, data) => {
       if (error || (data && data.msg)) {
+        // Catch the session expired error
+        // Weirdly error.message shows up as " : Session expired"
+        // So it's using indexOf instead of a direct comparison
+        if (error && error.message.indexOf('Session expired') >= 0) {
+          hashHistory.push('/auth');
+        }
+
         const errorType = type + '_ERROR';
         error = error || data.msg;
         log((id ? errorType + ': ' + id : errorType));
