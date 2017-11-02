@@ -3,17 +3,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import {
-  interval,
-  getExecutionStatus
-} from '../../actions';
+import { getExecutionStatus } from '../../actions';
+import { displayCase, fullDate } from '../../utils/format';
 
-import { displayCase } from '../../utils/format';
-import { updateInterval } from '../../config';
+import {
+  tableHeader,
+  tableRow
+} from '../../utils/table-config/execution-status';
 
 import ErrorReport from '../errors/report';
 
 import ExecutionStatusGraph from './execution-status-graph';
+import SortableTable from '../table/sortable';
 
 var ExecutionStatus = React.createClass({
   displayName: 'Execution',
@@ -29,26 +30,6 @@ var ExecutionStatus = React.createClass({
     const { dispatch } = this.props;
     const { executionArn } = this.props.params;
     dispatch(getExecutionStatus(executionArn));
-    this.reload();
-  },
-
-  componentWillUnmount: function () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-  },
-
-  reload: function (immediate, timeout) {
-    timeout = timeout || updateInterval;
-    const { dispatch } = this.props;
-    const { executionArn } = this.props.params;
-    console.log('executionArn', executionArn);
-
-    if (this.cancelInterval) { this.cancelInterval(); }
-    this.cancelInterval = interval(() => dispatch(getExecutionStatus(executionArn)), timeout, immediate);
-  },
-
-  fastReload: function () {
-    // decrease timeout to better see updates
-    this.reload(true, updateInterval / 2);
   },
 
   navigateBack: function () {
@@ -58,6 +39,24 @@ var ExecutionStatus = React.createClass({
 
   errors: function () {
     return [].filter(Boolean);
+  },
+
+  renderEvents: function () {
+    const { executionStatus } = this.props;
+    let { executionHistory: { events } } = executionStatus;
+
+    return (
+      <SortableTable
+        data={events.sort((a, b) => a.id > b.id ? 1 : -1)}
+        dispatch={this.props.dispatch}
+        header={tableHeader}
+        row={tableRow}
+        rowId='id'
+        sortIdx={0}
+        props={[]}
+        order='asc'
+      />
+    );
   },
 
   render: function () {
@@ -73,19 +72,46 @@ var ExecutionStatus = React.createClass({
           Execution {executionStatus.arn}
         </h1>
 
+        {errors.length ? <ErrorReport report={errors} /> : null}
+      </section>
+
+      <section className='page__section width--half' style={{ display: 'inline-block', marginRight: '5%' }}>
+        <div className='heading__wrapper--border'>
+          <h2 className='heading--medium with-description'>Visual workflow</h2>
+        </div>
+
+        <ExecutionStatusGraph executionStatus={executionStatus} />
+      </section>
+
+      <section className='page__section width--half' style={{ display: 'inline-block', verticalAlign: 'top' }}>
+        <div className='heading__wrapper--border'>
+          <h2 className='heading--medium with-description'>Execution Details</h2>
+        </div>
+
         <dl className='status--process'>
-          <dt>Status:</dt>
-          <dd className="">{displayCase(executionStatus.execution.status)}</dd>
+          <dt>Execution Status:</dt>
+          <dd>{displayCase(executionStatus.execution.status)}</dd><br />
+
+          <dt>Execution An:</dt>
+          <dd>{executionStatus.execution.executionArn}</dd><br />
+
+          <dt>State Machine An:</dt>
+          <dd>{executionStatus.stateMachine.stateMachineArn}</dd><br />
+
+          <dt>Started:</dt>
+          <dd>{fullDate(executionStatus.execution.startDate)}</dd><br />
+
+          <dt>Ended:</dt>
+          <dd>{fullDate(executionStatus.execution.stopDate)}</dd><br />
         </dl>
       </section>
 
       <section className='page__section'>
-        {errors.length ? <ErrorReport report={errors} /> : null}
-
         <div className='heading__wrapper--border'>
-          <h2 className='heading--medium with-description'>Visual workflow</h2>
+          <h2 className='heading--medium with-description'>Events</h2>
         </div>
-        <ExecutionStatusGraph executionStatus={executionStatus} />
+
+        {this.renderEvents()}
       </section>
       </div>
     );

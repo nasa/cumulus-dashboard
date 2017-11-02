@@ -33,6 +33,9 @@ var ExecutionStatusGraph = React.createClass({
     var render = new dagre.render();
     var svg = d3.select('svg');
     render(svg, this.g);
+    var height = d3.select('svg g').node().getBBox().height;
+    svg.style('height', height + 10);
+    svg.style('padding', 5);
   },
 
   componentWillUnmount: function () {
@@ -41,7 +44,7 @@ var ExecutionStatusGraph = React.createClass({
 
   render: function () {
     return (
-      <svg style={{ height: '1000px' }}></svg>
+      <svg></svg>
     );
   }
 });

@@ -77,6 +77,7 @@ const Table = React.createClass({
     primaryIdx = primaryIdx || 0;
 
     if (isTableDumb) {
+      props = [];
       sortIdx = this.state.dumbSortIdx;
       order = this.state.dumbOrder;
       const sortName = props[sortIdx];
