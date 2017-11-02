@@ -58,7 +58,7 @@ import Workflow from './components/workflows/workflow';
 
 import Executions from './components/executions';
 import ExecutionsOverview from './components/executions/overview';
-import Execution from './components/executions/execution';
+import ExecutionStatus from './components/executions/execution-status';
 
 import Rules from './components/rules';
 import RulesOverview from './components/rules/overview';
@@ -127,7 +127,7 @@ render((
         </Route>
         <Route path='executions' component={Executions}>
           <IndexRoute component={ExecutionsOverview} />
-          <Route path='execution/:executionArn' component={Execution} />
+          <Route path='execution/:executionArn' component={ExecutionStatus} />
         </Route>
         <Route path='rules' component={Rules}>
           <IndexRoute component={RulesOverview} />

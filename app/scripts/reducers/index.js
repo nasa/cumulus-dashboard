@@ -9,6 +9,7 @@ import logs from './logs';
 import schema from './schema';
 import workflows from './workflows';
 import executions from './executions';
+import executionStatus from './execution-status';
 import rules from './rules';
 
 export const reducers = {
@@ -23,6 +24,7 @@ export const reducers = {
   schema,
   workflows,
   executions,
+  executionStatus,
   rules
 };
 

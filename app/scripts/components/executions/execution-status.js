@@ -3,24 +3,33 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import {
+  interval,
+  getExecutionStatus
+} from '../../actions';
+
 import { displayCase } from '../../utils/format';
 import { updateInterval } from '../../config';
 
 import ErrorReport from '../errors/report';
 
-var Execution = React.createClass({
+import ExecutionStatusGraph from './execution-status-graph';
+
+var ExecutionStatus = React.createClass({
   displayName: 'Execution',
 
   propTypes: {
-    execution: PropTypes.object,
+    executionStatus: PropTypes.object,
     params: PropTypes.object,
     dispatch: PropTypes.func,
     router: PropTypes.object
   },
 
   componentWillMount: function () {
-    const { execution } = this.props;
-    console.log('execution', execution);
+    const { dispatch } = this.props;
+    const { executionArn } = this.props.params;
+    dispatch(getExecutionStatus(executionArn));
+    this.reload();
   },
 
   componentWillUnmount: function () {
@@ -29,12 +38,12 @@ var Execution = React.createClass({
 
   reload: function (immediate, timeout) {
     timeout = timeout || updateInterval;
-    const { execution } = this.props;
-    // const { dispatch } = this.props;
-    console.log('execution', execution);
+    const { dispatch } = this.props;
+    const { executionArn } = this.props.params;
+    console.log('executionArn', executionArn);
+
     if (this.cancelInterval) { this.cancelInterval(); }
-    // TODO: restore this when we have access to execution info
-    // this.cancelInterval = interval(() => dispatch(getExecution(executionArn)), timeout, immediate);
+    this.cancelInterval = interval(() => dispatch(getExecutionStatus(executionArn)), timeout, immediate);
   },
 
   fastReload: function () {
@@ -52,7 +61,8 @@ var Execution = React.createClass({
   },
 
   render: function () {
-    const { execution } = this.props;
+    const { executionStatus } = this.props;
+    if (!executionStatus.execution) return null;
 
     const errors = this.errors();
 
@@ -60,28 +70,28 @@ var Execution = React.createClass({
       <div className='page__component'>
       <section className='page__section page__section__header-wrapper'>
         <h1 className='heading--large heading--shared-content with-description width--three-quarters'>
-          Execution {execution.arn}
+          Execution {executionStatus.arn}
         </h1>
 
         <dl className='status--process'>
           <dt>Status:</dt>
-          <dd className={execution.status.toLowerCase()}>{displayCase(execution.status)}</dd>
+          <dd className="">{displayCase(executionStatus.execution.status)}</dd>
         </dl>
       </section>
 
       <section className='page__section'>
         {errors.length ? <ErrorReport report={errors} /> : null}
-        <div className='heading__wrapper--border'>
-          <h2 className='heading--medium with-description'>Granule Overview</h2>
-        </div>
-      </section>
 
-      <section className='page__section'>
-        tbd
+        <div className='heading__wrapper--border'>
+          <h2 className='heading--medium with-description'>Visual workflow</h2>
+        </div>
+        <ExecutionStatusGraph executionStatus={executionStatus} />
       </section>
       </div>
     );
   }
 });
 
-export default connect(state => ({}))(Execution);
+export default connect(state => ({
+  executionStatus: state.executionStatus
+}))(ExecutionStatus);

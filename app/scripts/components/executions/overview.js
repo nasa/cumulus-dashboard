@@ -3,6 +3,7 @@ import React from 'react';
 import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import {
   interval,
   getCount,
@@ -42,7 +43,7 @@ const tableHeader = [
 ];
 
 const tableRow = [
-  (d) => <a href={d.execution} title={d.name}>{truncate(d.name, 24)}</a>,
+  (d) => <Link to={'/executions/execution/' + d.arn} title={d.name}>{truncate(d.name, 24)}</Link>,
   (d) => displayCase(d.status),
   'type',
   (d) => fromNow(d.createdAt),
