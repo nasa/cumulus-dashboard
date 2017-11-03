@@ -5,6 +5,7 @@ node_modules
 *.swp
 dist
 app/scripts/config/local.js
+app/scripts/config/config.js
 gulp-cache
 /artifacts
 /tmp/

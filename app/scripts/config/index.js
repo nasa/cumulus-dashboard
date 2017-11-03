@@ -1,6 +1,12 @@
 'use strict';
 import moment from 'moment';
-module.exports = {
+
+import deploymentConfig from './config';
+
+/**
+* These are base config values that you can override in your config.js file
+**/
+const baseConfig = {
   environment: 'development',
   requireEarthdataLogin: true,
   apiRoot: 'https://wjdkfyb6t6.execute-api.us-east-1.amazonaws.com/dev/',
@@ -25,3 +31,5 @@ module.exports = {
   // delay before UI/store updates after a successful command (ie PUT)
   updateDelay: 1000
 };
+
+module.exports = Object.assign({}, baseConfig, deploymentConfig);

@@ -50,9 +50,19 @@ var prodBuild = false;
 // ------------------------- Helper functions --------------------------------//
 // ---------------------------------------------------------------------------//
 
+function ensureConfigExists () {
+  try {
+    fs.statSync(path.join(__dirname, 'app', 'scripts', 'config', 'config.js'));
+  } catch (e) {
+    throw new Error('create a config file at app/scripts/config/config.js by copying app/scripts/config/example.config.js');
+  }
+}
+
 function readPackage () {
   pkg = JSON.parse(fs.readFileSync('package.json'));
 }
+
+ensureConfigExists();
 readPackage();
 
 // /////////////////////////////////////////////////////////////////////////////
