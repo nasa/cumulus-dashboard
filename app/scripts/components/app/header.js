@@ -45,7 +45,7 @@ var Header = React.createClass({
 
   render: function () {
     const { authenticated } = this.props.api;
-    const activePaths = paths.filter(pathObj => nav.exclude.indexOf(pathObj[1].replace('/', '')) === -1);
+    const activePaths = paths.filter(pathObj => nav.exclude[pathObj[1].replace('/', '')] !== true);
     return (
       <div className='header'>
         <div className='row'>

@@ -3,7 +3,9 @@ module.exports = {
   environment: process.env.STAGE || 'development',
   nav: {
     order: ['collections'],
-    exclude: ['pdrs']
+    exclude: {
+      'pdrs': process.env.PDR || true 
+    }
   },
   apiRoot: process.env.APIROOT || 'https://wjdkfyb6t6.execute-api.us-east-1.amazonaws.com/dev/'
 };
