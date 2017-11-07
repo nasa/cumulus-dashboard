@@ -54,6 +54,16 @@ npm install
 npm run serve
 ```
 
+## Deployment Using S3
+
+First build the site
+
+     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false APIROOT=https://myapi.com npm run production 
+
+Then deploy the `dist` folder
+
+     $ aws s3 async dist s3://my-bucket-to-be-used --acl public 
+
 ## Running locally in docker
 
 There is a script called `bin/build_docker_image.sh` which will build a Docker image
