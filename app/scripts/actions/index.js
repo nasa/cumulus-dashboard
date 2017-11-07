@@ -167,6 +167,10 @@ export const WORKFLOWS = 'WORKFLOWS';
 export const WORKFLOWS_INFLIGHT = 'WORKFLOWS_INFLIGHT';
 export const WORKFLOWS_ERROR = 'WORKFLOWS_ERROR';
 
+export const EXECUTION_STATUS = 'EXECUTION_STATUS';
+export const EXECUTION_STATUS_INFLIGHT = 'EXECUTION_STATUS_INFLIGHT';
+export const EXECUTION_STATUS_ERROR = 'EXECUTION_STATUS_ERROR';
+
 export const EXECUTIONS = 'EXECUTIONS';
 export const EXECUTIONS_INFLIGHT = 'EXECUTIONS_INFLIGHT';
 export const EXECUTIONS_ERROR = 'EXECUTIONS_ERROR';
@@ -378,6 +382,10 @@ export const queryHistogram = (options) => wrapRequest(null, get, {
 }, HISTOGRAM);
 
 export const listWorkflows = (options) => wrapRequest(null, get, 'workflows', WORKFLOWS);
+
+export const getExecutionStatus = (arn) => wrapRequest(null, get, {
+  url: url.resolve(root, 'executionstatus/' + arn)
+}, EXECUTION_STATUS);
 
 export const listExecutions = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'executions'),

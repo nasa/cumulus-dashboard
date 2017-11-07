@@ -38,3 +38,58 @@
   background: #FFF;
   max-width: 240px;
 }
+
+.clusters rect {
+  fill: transparent;
+  stroke: #555;
+  stroke-dasharray: 5 2;
+  stroke-width: 1px;
+}
+
+text {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+  font-size: 14px;
+  fill: #444444;
+}
+
+rect {
+  ry: 5;
+  rx: 5;
+}
+
+.node rect {
+  stroke: #555;
+  fill: #fff;
+  stroke-width: 1px;
+}
+
+.edgePath path {
+  stroke: #555;
+  stroke-width: 1.5px;
+}
+
+.cluster .label {
+  display: none;
+}
+
+.terminus rect {
+  ry: 25px;
+  rx: 25px;
+  fill: #ffda75;
+}
+
+.Succeeded rect {
+  fill: #2bd62e;
+}
+
+.InProgress rect {
+  fill: #53c9ed;
+}
+
+.Cancelled rect {
+  fill: #ddd;
+}
+
+.Failed rect {
+  fill: #de322f;
+}
