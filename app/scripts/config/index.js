@@ -1,7 +1,7 @@
 'use strict';
-import moment from 'moment';
+const moment = require('moment');
 
-import deploymentConfig from './config';
+const deploymentConfig = require('./config');
 
 /**
 * These are base config values that you can override in your config.js file
