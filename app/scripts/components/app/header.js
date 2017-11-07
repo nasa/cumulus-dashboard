@@ -2,13 +2,9 @@
 import React from 'react';
 import c from 'classnames';
 import { Link } from 'react-router';
-import { get } from 'object-path';
 import { logout } from '../../actions';
-import { graphicsPath, exclude, order } from '../../config';
+import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
-
-const excludeNav = get(exclude, 'nav', {});
-const navOrder = get(order, 'nav', {});
 
 const paths = [
   ['PDRs', '/pdrs'],
@@ -39,7 +35,8 @@ var Header = React.createClass({
 
   className: function (path) {
     const active = this.props.location.pathname.slice(0, path.length) === path;
-    const order = 'nav__order-' + (typeof navOrder[path] === 'undefined' ? 1 : navOrder[path]);
+    const menuItem = path.replace('/', '');
+    const order = 'nav__order-' + (nav.order.indexOf(menuItem) === -1 ? 2 : nav.order.indexOf(menuItem));
     return c({
       'active': active,
       [order]: true
@@ -48,7 +45,7 @@ var Header = React.createClass({
 
   render: function () {
     const { authenticated } = this.props.api;
-    const activePaths = paths.filter(pathObj => !excludeNav[pathObj[1]]);
+    const activePaths = paths.filter(pathObj => nav.exclude[pathObj[1].replace('/', '')] !== true);
     return (
       <div className='header'>
         <div className='row'>

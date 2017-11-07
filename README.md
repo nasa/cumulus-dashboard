@@ -24,11 +24,12 @@ The following Environment Variables override the default values in `config.js`:
 
 | Env Name | Description
 | -------- | -----------
+| HIDE_PDR | whether to hide the PDR menu, default to true 
 | DAAC_NAME | e.g. LPDAAC, default to Local
 | STAGE | e.g. UAT, default to development
 | APIROOT | the API URL, default to a test URL deployed by Devseed
 
-     $ APIROOT=https://myapi.com npm run serve
+     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false APIROOT=https://myapi.com npm run serve
 
 ## Building in Docker
 
@@ -52,6 +53,16 @@ nvm use
 npm install
 npm run serve
 ```
+
+## Deployment Using S3
+
+First build the site
+
+     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false APIROOT=https://myapi.com npm run production 
+
+Then deploy the `dist` folder
+
+     $ aws s3 async dist s3://my-bucket-to-be-used --acl public-read
 
 ## Running locally in docker
 
