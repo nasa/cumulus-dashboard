@@ -10,7 +10,7 @@
     "name": "Development Seed",
     "url": "https://developmentseed.org"
   },
-  "license": "TBD",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/cumulus-nasa/cumulus-dashboard/issues"
   },
