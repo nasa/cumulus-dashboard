@@ -18,7 +18,7 @@ var rev = require('gulp-rev');
 var revReplace = require('gulp-rev-replace');
 var SassString = require('node-sass').types.String;
 var notifier = require('node-notifier');
-var preprocess = require('gulp-preprocess');
+var config = require('./app/scripts/config');
 
 // /////////////////////////////////////////////////////////////////////////////
 // --------------------------- Variables -------------------------------------//
@@ -26,23 +26,6 @@ var preprocess = require('gulp-preprocess');
 
 // The package.json
 var pkg;
-
-// Environment
-// Set the correct environment, which controls what happens in config.js
-if (!process.env.DS_ENV) {
-  if (!process.env.TRAVIS_BRANCH || process.env.TRAVIS_BRANCH !== process.env.DEPLOY_BRANCH) {
-    process.env.DS_ENV = 'staging';
-  } else {
-    process.env.DS_ENV = 'production';
-  }
-}
-
-var assetsPath = process.env.DS_ENV === 'development' ? '/graphics' : '/dashboard/graphics';
-
-// Assign a graphics path
-if (process.env.DS_TARGET && process.env.DS_ENV !== 'development') {
-  assetsPath = path.join('/dashboard', process.env.DS_TARGET, 'graphics');
-}
 
 var prodBuild = false;
 
@@ -212,7 +195,7 @@ gulp.task('styles', function () {
       },
       includePaths: ['.'].concat(require('node-bourbon').includePaths)
     }))
-    .pipe($.preprocess({context: {ASSETS_PATH: assetsPath}}))
+    .pipe($.preprocess({context: { ASSETS_PATH: config.graphicsPath }}))
     .pipe($.sourcemaps.write())
     .pipe(gulp.dest('.tmp/styles'))
     .pipe(reload({stream: true}));
