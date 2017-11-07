@@ -24,7 +24,7 @@ The following Environment Variables override the default values in `config.js`:
 
 | Env Name | Description
 | -------- | -----------
-| PDR | whether to hide the PDR menu, default to true 
+| HIDE_PDR | whether to hide the PDR menu, default to true 
 | DAAC_NAME | e.g. LPDAAC, default to Local
 | STAGE | e.g. UAT, default to development
 | APIROOT | the API URL, default to a test URL deployed by Devseed

@@ -4,7 +4,7 @@ module.exports = {
   nav: {
     order: ['collections'],
     exclude: {
-      'pdrs': process.env.PDR || true 
+      'pdrs': process.env.HIDE_PDR || true
     }
   },
   apiRoot: process.env.APIROOT || 'https://wjdkfyb6t6.execute-api.us-east-1.amazonaws.com/dev/'

@@ -36,7 +36,7 @@ var Header = React.createClass({
   className: function (path) {
     const active = this.props.location.pathname.slice(0, path.length) === path;
     const menuItem = path.replace('/', '');
-    const order = 'nav__order-' + (nav.order.indexOf(menuItem) === -1 ? 20 : nav.order.indexOf(menuItem));
+    const order = 'nav__order-' + (nav.order.indexOf(menuItem) === -1 ? 2 : nav.order.indexOf(menuItem));
     return c({
       'active': active,
       [order]: true
