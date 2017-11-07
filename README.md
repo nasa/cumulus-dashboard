@@ -29,7 +29,7 @@ The following Environment Variables override the default values in `config.js`:
 | STAGE | e.g. UAT, default to development
 | APIROOT | the API URL, default to a test URL deployed by Devseed
 
-     $ APIROOT=https://myapi.com npm run serve
+     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false APIROOT=https://myapi.com npm run serve
 
 ## Building in Docker
 
