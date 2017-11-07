@@ -14,6 +14,22 @@ Code to generate and deploy the dashboard for the Cumulus API.
 - [Designs](https://www.dropbox.com/sh/zotoy2nuozizufz/AAAiOpbAv2Gp0BU-HIu5aILra?dl=0)
 - [Wireframes](https://www.dropbox.com/s/dm7wct36ijg7sch/nasa-01-15.pdf?dl=0)
 
+## Configuration
+
+The dashboard is populated from the Cumulus API. The dashboard has to point to a working version of the Cumulus API before it is installed and built.
+
+The information needed to configure the dashboard are stored at `app/scripts/config/config.js`.
+
+The following Environment Variables override the default values in `config.js`:
+
+| Env Name | Description
+| -------- | -----------
+| DAAC_NAME | e.g. LPDAAC, default to Local
+| STAGE | e.g. UAT, default to development
+| APIROOT | the API URL, default to a test URL deployed by Devseed
+
+     $ APIROOT=https://myapi.com npm run serve
+
 ## Building in Docker
 
 The Cumulus Dashboard can be built inside of a Docker container, without needing to install any local dependencies.
