@@ -62,7 +62,7 @@ First build the site
 
 Then deploy the `dist` folder
 
-     $ aws s3 async dist s3://my-bucket-to-be-used --acl public 
+     $ aws s3 async dist s3://my-bucket-to-be-used --acl public-read
 
 ## Running locally in docker
 
