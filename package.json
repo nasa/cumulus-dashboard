@@ -16,10 +16,9 @@
   },
   "homepage": "https://github.com/cumulus-nasa/cumulus-dashboard",
   "scripts": {
-    "postinstall": "[ -f app/scripts/config/local.js ] || echo 'module.exports = {};' > app/scripts/config/local.js",
-    "serve": "DS_ENV=development gulp serve",
-    "staging": "DS_ENV=staging gulp",
-    "production": "DS_ENV=production gulp",
+    "serve": "gulp serve",
+    "staging": "gulp",
+    "production": "gulp",
     "lint": "eslint app/scripts/ --ext .js",
     "start": "npm run serve",
     "test": "npm run lint && ./node_modules/.bin/tape -r babel-register -r babel-polyfill test/**/*.js"
