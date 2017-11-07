@@ -32,7 +32,7 @@ const baseConfig = {
   updateDelay: 1000
 };
 
-const config = Object.assign({}, baseConfig, deploymentConfig)
+const config = Object.assign({}, baseConfig, deploymentConfig);
 config.apiRoot = config.apiRoot.replace(/\/?$/, '/');
 
 module.exports = config;
