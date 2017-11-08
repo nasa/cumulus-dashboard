@@ -2,12 +2,6 @@
 
 set -evx
 
-DS_ENV="$1"
-if [ "$DS_ENV" == "" ]; then
-  echo "Usage: $0 DS_ENV" >&2
-  exit 1
-fi
-
 DIST="$(pwd)/dist"
 
 echo "Cleaning $DIST directory"
@@ -52,7 +46,6 @@ chmod +x tmp/script.sh
 echo "Building to $DIST"
 docker run \
   --rm \
-  --env "DS_ENV=${DS_ENV}" \
   --volume "${DIST}:/dist" \
   --volume "$(pwd):/cumulus-dashboard:ro" \
   node:slim /cumulus-dashboard/tmp/script.sh
