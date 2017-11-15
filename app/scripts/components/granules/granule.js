@@ -1,6 +1,8 @@
 'use strict';
+import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import {
   interval,
@@ -41,7 +43,7 @@ const makeLink = (s3Uri) => s3Uri.replace('s3://', 'https://s3.amazonaws.com/');
 
 const tableRow = [
   (d) => d.name || '(No name)',
-  (d) => (<a href={makeLink(d.filename)}>{d.filename ? link : nullValue}</a>),
+  (d) => d.filname ? (<a href={makeLink(d.filename)}>{d.filename ? link : nullValue}</a>) : null,
   (d) => d.bucket
 ];
 
@@ -50,7 +52,7 @@ const metaAccessors = [
   ['Collection', 'collectionId', collectionLink],
   ['Provider', 'provider', providerLink],
   ['CMR Link', 'cmrLink', (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue],
-  ['Execution', 'execution', (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue],
+  ['Execution', 'execution', (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue],
   ['Published', 'published', bool],
   ['Duplicate', 'hasDuplicate', bool],
   ['Total duration', 'duration', seconds]

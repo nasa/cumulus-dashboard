@@ -1,4 +1,5 @@
 'use strict';
+import path from 'path';
 import React from 'react';
 import { get } from 'object-path';
 import { Link } from 'react-router';
@@ -9,7 +10,6 @@ import {
   nullValue,
   displayCase,
   collectionLink,
-  link,
   granuleLink
 } from '../format';
 import {
@@ -34,7 +34,7 @@ export const tableRow = [
   (d) => granuleLink(d.granuleId),
   (d) => d.cmrLink ? <a href={d.cmrLink} target='_blank'>{bool(d.published)}</a> : bool(d.published),
   (d) => collectionLink(d.collectionId),
-  (d) => link(d.execution),
+  (d) => <Link to={`/executions/execution/${path.basename(d.execution)}`}>link</Link>,
   (d) => seconds(d.duration),
   (d) => fromNow(d.timestamp)
 ];
