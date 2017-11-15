@@ -18,7 +18,6 @@ import { get } from 'object-path';
 import {
   granuleSearchResult,
   lastUpdated,
-  link,
   nullValue,
   fullDate,
   seconds,
