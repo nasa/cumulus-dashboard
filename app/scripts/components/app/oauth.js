@@ -50,11 +50,14 @@ var OAuth = React.createClass({
   render: function () {
     const { dispatch, api } = this.props;
 
-    const origin = window.location.origin;
-    const pathname = window.location.pathname;
-    const hash = window.location.hash;
-    const redirect = encodeURIComponent(url.resolve(origin, pathname) + hash);
-    const button = <a href={url.resolve(apiRoot, `token?state=${redirect}`)} >Use Earthdata Login</a>;
+    let button;
+    if (!api.authenticated && !api.inflight) {
+      const origin = window.location.origin;
+      const pathname = window.location.pathname;
+      const hash = window.location.hash;
+      const redirect = encodeURIComponent(url.resolve(origin, pathname) + hash);
+      button = <div style={{textAlign: 'center'}}><a href={url.resolve(apiRoot, `token?state=${redirect}`)} >Login with Earthdata Login</a></div>;
+    }
     return (
       <div className='app'>
         <Header dispatch={dispatch} api={api} minimal={true}/>
@@ -64,6 +67,8 @@ var OAuth = React.createClass({
             <div className='modal__container modal__container--onscreen'>
               <div className='modal'>
                 <div className='modal__internal'>
+                  { api.inflight ? <h2 className='heading--medium'>Authenticating ... </h2> : null }
+                  { api.error ? <ErrorReport report={api.error} /> : null }
                   { button }
                 </div>
               </div>

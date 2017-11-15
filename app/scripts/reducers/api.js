@@ -1,6 +1,6 @@
 'use strict';
 import { set } from 'object-path';
-import { get as getToken } from '../utils/auth';
+import { get as getToken, set as setToken } from '../utils/auth';
 
 import {
   LOGIN,
@@ -28,9 +28,12 @@ export default function reducer (state = initialState, action) {
     case LOGIN_ERROR:
       set(state, 'error', action.error);
       set(state, 'inflight', false);
+      set(state, 'authenticated', false);
+      setToken('');
       break;
     case LOGOUT:
       set(state, 'authenticated', false);
+      setToken('');
       break;
 
   }
