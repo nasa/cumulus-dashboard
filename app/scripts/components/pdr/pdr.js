@@ -1,4 +1,5 @@
 'use strict';
+import path from 'path';
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -17,7 +18,7 @@ import { get } from 'object-path';
 import {
   granuleSearchResult,
   lastUpdated,
-  link,
+  nullValue,
   fullDate,
   seconds,
   collectionLink,
@@ -42,7 +43,7 @@ import { updateInterval } from '../../config';
 const metaAccessors = [
   ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],
   ['Collection', 'collectionId', collectionLink],
-  ['Execution', 'execution', link],
+  ['Execution', 'execution', (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue],
   ['Status', 'status', displayCase],
   ['Timestamp', 'timestamp', fullDate],
   ['Created at', 'createdAt', fullDate],
