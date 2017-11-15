@@ -101,17 +101,16 @@ export const wrapRequest = function (id, query, params, type, body) {
 
     const start = new Date();
     query(config, (error, data) => {
-      if (error || (data && data.msg)) {
+      if (error) {
         // Catch the session expired error
         // Weirdly error.message shows up as " : Session expired"
         // So it's using indexOf instead of a direct comparison
-        if (error && error.message.indexOf('Session expired') >= 0) {
-          dispatch({ type: 'LOGOUT' });
+        if (error.message.includes('Session expired') || error.message.includes('Invalid Authorization token')) {
+          dispatch({ type: 'LOGIN_ERROR', error: error.message.replace('Bad Request: ', '') });
           return hashHistory.push('/auth');
         }
 
         const errorType = type + '_ERROR';
-        error = error || data.msg;
         log((id ? errorType + ': ' + id : errorType));
         log(error);
 
