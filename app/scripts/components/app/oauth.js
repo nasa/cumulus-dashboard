@@ -3,7 +3,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import url from 'url';
-import request from 'request';
 import { login } from '../../actions';
 import { window } from '../../utils/browser';
 import { set as setToken } from '../../utils/auth';
@@ -39,30 +38,23 @@ var OAuth = React.createClass({
     }
   },
 
-  componentDidMount: function () {
-    const params = window.location.hash.split('?')[1];
-    const args = { url: url.resolve(apiRoot, `auth/token?${params}`) };
-    request.get(args, (error, resp, body) => {
-      if (error || resp.statusCode >= 400) {
-        const message = error || JSON.parse(resp.body).message;
-        this.setState({ error: message });
-      } else {
-        const { user, password } = JSON.parse(resp.body);
-        const token = new Buffer(`${user}:${password}`).toString('base64');
-        const { dispatch } = this.props;
-        this.setState({ token }, () => dispatch(login(token)));
-      }
-    });
+  componentWillMount: function () {
+    const query = this.props.location.query;
+    if (query.token) {
+      const token = query.token;
+      const { dispatch } = this.props;
+      this.setState({ token }, () => dispatch(login(token)));
+    }
   },
 
   render: function () {
     const { dispatch, api } = this.props;
-    const { error, token } = this.state;
 
-    let button;
-    if (!token) {
-      button = <a href={url.resolve(apiRoot, 'auth/redirect')} >Use Earthdata Login</a>;
-    }
+    const origin = window.location.origin;
+    const pathname = window.location.pathname;
+    const hash = window.location.hash;
+    const redirect = encodeURIComponent(url.resolve(origin, pathname) + hash);
+    const button = <a href={url.resolve(apiRoot, `token?state=${redirect}`)} >Use Earthdata Login</a>;
     return (
       <div className='app'>
         <Header dispatch={dispatch} api={api} minimal={true}/>
@@ -72,8 +64,6 @@ var OAuth = React.createClass({
             <div className='modal__container modal__container--onscreen'>
               <div className='modal'>
                 <div className='modal__internal'>
-                  { token ? <h2 className='heading--medium'>Checking login { error ? null : '...' }</h2> : null }
-                  { error ? <ErrorReport report={error} /> : null }
                   { button }
                 </div>
               </div>

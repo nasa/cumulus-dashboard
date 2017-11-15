@@ -11,7 +11,7 @@ function setToken (config) {
   let token = getToken();
   if (token) {
     config.headers = config.headers || {};
-    config.headers.Authorization = 'Basic ' + token;
+    config.headers.Authorization = 'Bearer ' + token;
   }
   return config;
 }

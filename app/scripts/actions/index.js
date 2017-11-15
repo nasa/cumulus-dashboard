@@ -369,7 +369,7 @@ export const login = (token) => {
     url: url.resolve(root, 'granules'),
     qs: { limit: 1, fields: 'granuleId' },
     headers: {
-      Authorization: 'Basic ' + token
+      Authorization: 'Bearer ' + token
     }
   }, LOGIN);
 };
