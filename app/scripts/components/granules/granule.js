@@ -43,7 +43,7 @@ const makeLink = (s3Uri) => s3Uri.replace('s3://', 'https://s3.amazonaws.com/');
 
 const tableRow = [
   (d) => d.name || '(No name)',
-  (d) => d.filname ? (<a href={makeLink(d.filename)}>{d.filename ? link : nullValue}</a>) : null,
+  (d) => d.filename ? (<a href={makeLink(d.filename)}>{d.filename ? link : nullValue}</a>) : null,
   (d) => d.bucket
 ];
 
