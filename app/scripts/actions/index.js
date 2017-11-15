@@ -384,7 +384,7 @@ export const queryHistogram = (options) => wrapRequest(null, get, {
 export const listWorkflows = (options) => wrapRequest(null, get, 'workflows', WORKFLOWS);
 
 export const getExecutionStatus = (arn) => wrapRequest(null, get, {
-  url: url.resolve(root, 'executions/' + arn)
+  url: url.resolve(root, 'executions/status/' + arn)
 }, EXECUTION_STATUS);
 
 export const listExecutions = (options) => wrapRequest(null, get, {
