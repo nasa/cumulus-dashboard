@@ -149,3 +149,7 @@ export const collectionHref = function (collectionId) {
 export const deleteText = function (name) {
   return `Are you sure you want to permanently delete ${name}?`;
 };
+
+export const rerunText = function (name) {
+  return `Are you sure you want to rerun ${name}?`;
+};

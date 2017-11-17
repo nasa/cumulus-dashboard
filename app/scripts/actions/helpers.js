@@ -50,7 +50,7 @@ export const post = function (config, callback) {
 
 export const put = function (config, callback) {
   request.put(setToken(config), (error, resp, body) => {
-    error = error || body.errorMessage || body.detail;
+    error = error || body && body.errorMessage || body && body.detail || null;
     if (error) {
       return callback(error);
     } else if (+resp.statusCode >= 400) {
