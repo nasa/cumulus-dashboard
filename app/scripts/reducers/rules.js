@@ -25,6 +25,10 @@ import {
   RULE_DELETE_INFLIGHT,
   RULE_DELETE_ERROR,
 
+  RULE_RERUN,
+  RULE_RERUN_INFLIGHT,
+  RULE_RERUN_ERROR,
+
   RULE_ENABLE,
   RULE_ENABLE_INFLIGHT,
   RULE_ENABLE_ERROR,
@@ -117,6 +121,18 @@ export default function reducer (state = initialState, action) {
     case RULE_DELETE_ERROR:
       set(state, ['deleted', id, 'status'], 'error');
       set(state, ['deleted', id, 'error'], action.error);
+      break;
+
+    case RULE_RERUN:
+      set(state, ['rerun', id, 'status'], 'success');
+      set(state, ['rerun', id, 'error'], null);
+      break;
+    case RULE_RERUN_INFLIGHT:
+      set(state, ['rerun', id, 'status'], 'inflight');
+      break;
+    case RULE_RERUN_ERROR:
+      set(state, ['rerun', id, 'status'], 'error');
+      set(state, ['rerun', id, 'error'], action.error);
       break;
 
     case RULE_ENABLE:

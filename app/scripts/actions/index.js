@@ -199,6 +199,10 @@ export const RULE_DELETE = 'RULE_DELETE';
 export const RULE_DELETE_INFLIGHT = 'RULE_DELETE_INFLIGHT';
 export const RULE_DELETE_ERROR = 'RULE_DELETE_ERROR';
 
+export const RULE_RERUN = 'RULE_RERUN';
+export const RULE_RERUN_INFLIGHT = 'RULE_RERUN_INFLIGHT';
+export const RULE_RERUN_ERROR = 'RULE_RERUN_ERROR';
+
 export const RULE_ENABLE = 'RULE_ENABLE';
 export const RULE_ENABLE_INFLIGHT = 'RULE_ENABLE_INFLIGHT';
 export const RULE_ENABLE_ERROR = 'RULE_ENABLE_ERROR';
@@ -422,4 +426,9 @@ export const enableRule = (ruleName) => wrapRequest(
 export const disableRule = (ruleName) => wrapRequest(
   ruleName, put, `rules/${ruleName}`, RULE_DISABLE, {
     state: 'DISABLED'
+  });
+
+export const rerunRule = (ruleName) => wrapRequest(
+  ruleName, put, `rules/${ruleName}`, RULE_RERUN, {
+    action: 'rerun'
   });

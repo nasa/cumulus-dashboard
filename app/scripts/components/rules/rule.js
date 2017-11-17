@@ -11,11 +11,13 @@ import {
   providerLink,
   fullDate,
   lastUpdated,
+  rerunText,
   deleteText
 } from '../../utils/format';
 import {
   getRule,
   deleteRule,
+  rerunRule,
   enableRule,
   disableRule
 } from '../../actions';
@@ -70,6 +72,11 @@ const Rule = React.createClass({
     this.props.dispatch(disableRule(ruleName));
   },
 
+  rerun: function () {
+    const { ruleName } = this.props.params;
+    this.props.dispatch(rerunRule(ruleName));
+  },
+
   navigateBack: function () {
     this.props.router.push('/rules');
   },
@@ -103,6 +110,7 @@ const Rule = React.createClass({
     const deleteStatus = get(rules, `deleted.${ruleName}.status`);
     const enabledStatus = get(rules, `enabled.${ruleName}.status`);
     const disabledStatus = get(rules, `disabled.${ruleName}.status`);
+    const rerunStatus = get(rules, `rerun.${ruleName}.status`);
     const dropdownConfig = [{
       text: 'Enable',
       action: this.enable,
@@ -122,6 +130,13 @@ const Rule = React.createClass({
       success: this.navigateBack,
       confirmAction: true,
       confirmText: deleteText(ruleName)
+    }, {
+      text: 'Rerun',
+      action: this.rerun,
+      status: rerunStatus,
+      success: this.reload,
+      confirmAction: true,
+      confirmText: rerunText(ruleName)
     }];
 
     const errors = this.errors();
