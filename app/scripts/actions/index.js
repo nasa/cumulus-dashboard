@@ -423,6 +423,11 @@ export const enableRule = (ruleName) => wrapRequest(
     state: 'ENABLED'
   });
 
+export const disableRule = (ruleName) => wrapRequest(
+  ruleName, put, `rules/${ruleName}`, RULE_DISABLE, {
+    state: 'DISABLED'
+  });
+
 export const rerunRule = (ruleName) => wrapRequest(
   ruleName, put, `rules/${ruleName}`, RULE_RERUN, {
     action: 'rerun'
