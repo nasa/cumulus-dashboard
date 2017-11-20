@@ -102,7 +102,7 @@ table {
     padding-right: 10%;
     &:after {
       content: '';
-      background-image: url(#{$graphics}/layout/chevron-right-green.svg);
+      background-image: url(#{$graphics}layout/chevron-right-green.svg);
       background-size: 15px 25px;
       background-repeat: no-repeat;
       width: 15px;
@@ -209,7 +209,7 @@ table {
   padding-right: 10px;
   &:after {
     position: absolute;
-    background-image: url(#{$graphics}/layout/toggle.svg);
+    background-image: url(#{$graphics}layout/toggle.svg);
     content: ' ';
     width: 10px;
     height: 13px;
@@ -233,13 +233,13 @@ table {
 
 .table__sort--desc {
   &:after {
-    background-image: url(#{$graphics}/layout/chevron-down.svg);
+    background-image: url(#{$graphics}layout/chevron-down.svg);
     top: 17px;
   }
 }
 .table__sort--asc {
   &:after {
-    background-image: url(#{$graphics}/layout/chevron-up.svg);
+    background-image: url(#{$graphics}layout/chevron-up.svg);
   }
 }
 
