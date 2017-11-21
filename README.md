@@ -58,7 +58,7 @@ npm run serve
 
 First build the site
 
-     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false APIROOT=https://myapi.com npm run production
+     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false APIROOT=https://myapi.com npm run build
 
 Then deploy the `dist` folder
 
