@@ -8,7 +8,7 @@ cp -R /source /build
   cd /build
   tar -xf modules.tar
 
-  npm run production
+  npm run build
 
   mkdir release
   mkdir release/html
