@@ -141,7 +141,7 @@ export const Form = React.createClass({
           errors.push(input.schemaProperty);
           return set(inputState, [inputId, 'error'], t.errors.json);
         }
-      } 
+      }
 
       if (input.validate && !input.validate(value)) {
         errors.push(input.schemaProperty);
