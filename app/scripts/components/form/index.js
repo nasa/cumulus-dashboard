@@ -139,7 +139,7 @@ export const Form = React.createClass({
           value = parseInt(value);
         } catch (e) {
           errors.push(input.schemaProperty);
-          return set(inputState, [inputId, 'error'], t.errors.json);
+          return set(inputState, [inputId, 'error'], t.errors.integerRequired);
         }
       }
 
