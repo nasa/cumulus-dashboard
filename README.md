@@ -6,8 +6,8 @@ Code to generate and deploy the dashboard for the Cumulus API.
 
 ## Documentation
 
-- [Usage](https://github.com/cumulus-nasa/cumulus-dashboard/blob/develop/USAGE.md)
-- [Technical documentation on tables](https://github.com/cumulus-nasa/cumulus-dashboard/blob/develop/TABLES.md)
+- [Usage](https://github.com/cumulus-nasa/cumulus-dashboard/blob/master/USAGE.md)
+- [Technical documentation on tables](https://github.com/cumulus-nasa/cumulus-dashboard/blob/master/TABLES.md)
 
 ## Wireframes and mocks
 
