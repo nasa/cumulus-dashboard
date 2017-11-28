@@ -18,6 +18,7 @@ export const formTypes = {
   textArea: 'TEXT_AREA',
   dropdown: 'DROPDOWN',
   list: 'LIST',
+  number: 'NUMBER',
   subform: 'SUB_FORM'
 };
 
@@ -133,6 +134,15 @@ export const Form = React.createClass({
         }
       }
 
+      if (input.type === formTypes.number) {
+        try {
+          value = parseInt(value);
+        } catch (e) {
+          errors.push(input.schemaProperty);
+          return set(inputState, [inputId, 'error'], t.errors.integerRequired);
+        }
+      }
+
       if (input.validate && !input.validate(value)) {
         errors.push(input.schemaProperty);
         let error = input.error || t.errors.generic;
@@ -209,8 +219,13 @@ export const Form = React.createClass({
             const mode = type === formTypes.textArea && form.mode || null;
             // subforms have fieldsets that define child form structure
             const fieldSet = type === formTypes.subform && form.fieldSet || null;
-            // text forms can be type=password
-            const textType = (type === formTypes.text && form.isPassword) ? 'password' : null;
+
+            // text forms can be type=password or number
+            let textType = (type === formTypes.text && form.isPassword) ? 'password' : null;
+            if (type === formTypes.number) {
+              textType = 'number';
+            }
+
             const elem = React.createElement(element, {
               id: inputId,
               label,

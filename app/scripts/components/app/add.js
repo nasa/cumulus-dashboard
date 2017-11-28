@@ -66,7 +66,6 @@ var AddCollection = React.createClass({
       payload.updatedAt = new Date().getTime();
       payload.changedBy = 'Cumulus Dashboard';
     }
-    console.log('About to post', payload);
     if (!validate || validate(payload)) {
       const pk = get(payload, primaryProperty);
       this.setState({ pk }, () => dispatch(createRecord(pk, payload)));

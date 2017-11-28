@@ -102,7 +102,7 @@ export const createFormConfig = function (data, schema, include) {
         fields.push(textfield(config, property, (required && isText)));
         break;
       case 'number':
-        fields.push(textfield(config, property, (required && isNumber)));
+        fields.push(numberfield(config, property, (required && isNumber)));
         break;
       default: return;
     }
@@ -115,6 +115,15 @@ function textfield (config, property, validate) {
   config.validate = validate;
   config.error = validate && get(errors, property, errors.required);
   if (property === 'password') config.isPassword = true;
+
+  return config;
+}
+
+function numberfield (config, property, validate) {
+  config.type = formTypes.number;
+  config.validate = validate;
+  config.error = validate && get(errors, property, errors.required);
+
   return config;
 }
 
