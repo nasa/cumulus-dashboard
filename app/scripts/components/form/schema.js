@@ -24,10 +24,10 @@ export const traverseSchema = function (schema, fn, path) {
  * Remove read-only and administrative fields from
  * the list of fields that are returned for addition and editing
  * in the forms.
- * 
- * Any fields that are included in the record but are not in 
+ *
+ * Any fields that are included in the record but are not in
  * the schema will remain
- * 
+ *
  * @function removeReadOnly
  * @param  {object} data   the fields data
  * @param  {object} schema the form schema
