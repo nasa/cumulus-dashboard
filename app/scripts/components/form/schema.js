@@ -20,15 +20,39 @@ export const traverseSchema = function (schema, fn, path) {
   }
 };
 
-// create a copy of an object, where the copy adheres strictly to the schema.
+/**
+ * Remove read-only and administrative fields from
+ * the list of fields that are returned for addition and editing
+ * in the forms.
+ *
+ * Any fields that are included in the record but are not in
+ * the schema will remain
+ *
+ * @function removeReadOnly
+ * @param  {object} data   the fields data
+ * @param  {object} schema the form schema
+ * @return {object} updated list of fields
+ */
 export const removeReadOnly = function (data, schema) {
   const readOnlyRemoved = {};
+  const schemaFields = [];
   traverseSchema(schema, function (property, meta, schemaProperty, path) {
+    schemaFields.push(property);
     if (!meta.readonly) {
       const accessor = path ? path + '.' + property : property;
       set(readOnlyRemoved, accessor, get(data, accessor));
     }
   });
+
+  // filter fields that are not in the schema
+  const esFields = ['queriedAt', 'timestamp', 'stats'];
+  const nonSchemaFields = Object.keys(data).filter(f => (
+    schemaFields.indexOf(f) === -1 && esFields.indexOf(f) === -1)
+  );
+
+  // add them to the list of fields
+  nonSchemaFields.forEach(f => set(readOnlyRemoved, f, get(data, f)));
+
   return readOnlyRemoved;
 };
 
