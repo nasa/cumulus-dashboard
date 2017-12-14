@@ -116,8 +116,11 @@ export const truncate = function (string, to) {
   else return string.slice(0, to) + '...';
 };
 
-export const getCollectionId = function ({name, version}) {
-  return `${name}___${version}`;
+export const getCollectionId = function (collection) {
+  if (collection && collection.name && collection.version) {
+    return `${collection.name}___${collection.version}`;
+  }
+  return 'unknown';
 };
 
 // "MYD13A1___006" => "MYD13A1 / 006"
