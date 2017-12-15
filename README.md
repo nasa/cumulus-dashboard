@@ -58,11 +58,11 @@ npm run serve
 
 First build the site
 
-     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false APIROOT=https://myapi.com npm run build
+     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false APIROOT=https://myBackendInvokeURL npm run build
 
 Then deploy the `dist` folder
 
-     $ aws s3 async dist s3://my-bucket-to-be-used --acl public-read
+     $ aws s3 sync dist s3://my-bucket-to-be-used --acl public-read
 
 ## Running locally in docker
 
