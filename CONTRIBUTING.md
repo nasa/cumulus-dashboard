@@ -15,7 +15,7 @@ If you want to submit your own contributions, follow these steps:
 * Fork the Cumulus Dashboard repo
 * Create a new branch from the branch you'd like to contribute to
 * If an issue does't already exist, submit one (see above)
-* [Create a pull request](https://help.github.com/articles/creating-a-pull-request/) from your fork into the target branch of the cumulus-nasa/cumulus repo
+* [Create a pull request](https://help.github.com/articles/creating-a-pull-request/) from your fork into the target branch of the cumulus-nasa/cumulus-dashboard repo
 * Be sure to [mention the corresponding issue number](https://help.github.com/articles/closing-issues-using-keywords/) in the PR description, i.e. "Fixes Issue #10"
 * Upon submission of a pull request, the Cumulus development team will review the code
 * The request will then either be merged, declined, or an adjustment to the code will be requested
@@ -33,7 +33,7 @@ All of the automated tests for this project need to pass before your submission 
 * Make small commits that show the individual changes you are making
 * Write descriptive commit messages that explain your changes
 
-Example of a good commit message;
+Example of a good commit message:
 
 ```
 Improve contributing guidelines. Fixes #10
