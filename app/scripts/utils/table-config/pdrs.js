@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { get } from 'object-path';
-import { tally, seconds, fromNow, bool, nullValue } from '../format';
+import { seconds, fromNow, bool, nullValue } from '../format';
 import { deletePdr } from '../../actions';
 
 export const tableHeader = [
