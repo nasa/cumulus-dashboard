@@ -2,7 +2,7 @@
 import test from 'tape';
 import {tableRow} from '../../app/scripts/utils/table-config/pdrs.js';
 import {getProgress} from '../../app/scripts/utils/table-config/pdr-progress.js';
-const d =
+const pdr =
   {
     'pdrName': 'test-4.PDR',
     'collectionId': 'MOD09GQ___006',
@@ -24,7 +24,7 @@ const d =
   };
 
 test('test pdr-progress.js getProgress', function (t) {
-  const result = getProgress(d);
+  const result = getProgress(pdr);
   t.equal(result.percentCompleted, 25);
   t.equal(result.percentFailed, 75);
   t.equal(result.granulesCompleted, '4/4');
@@ -32,17 +32,9 @@ test('test pdr-progress.js getProgress', function (t) {
 });
 
 test('test pdrs.js tableRow', function (t) {
-  const result = [];
-  tableRow.forEach(function (col) {
-    if (col instanceof Function) {
-      result.push(col(d));
-    } else {
-      result.push(col);
-    }
-  });
-  t.equal(result[4], 4);
-  t.equal(result[5], d.stats.processing);
-  t.equal(result[6], d.stats.failed);
-  t.equal(result[7], d.stats.completed);
+  t.equal(tableRow[4](pdr), 4);
+  t.equal(tableRow[5](pdr), pdr.stats.processing);
+  t.equal(tableRow[6](pdr), pdr.stats.failed);
+  t.equal(tableRow[7](pdr), pdr.stats.completed);
   t.end();
 });
