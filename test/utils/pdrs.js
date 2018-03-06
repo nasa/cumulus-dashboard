@@ -1,7 +1,7 @@
 'use strict';
 import test from 'tape';
 import {tableRow} from '../../app/scripts/utils/table-config/pdrs.js';
-import {renderProgress} from '../../app/scripts/utils/table-config/pdr-progress.js';
+import {getProgress} from '../../app/scripts/utils/table-config/pdr-progress.js';
 const d =
   {
     'pdrName': 'test-4.PDR',
@@ -23,10 +23,11 @@ const d =
     'duration': 0.526
   };
 
-test('test pdr-progress.js renderProgress', function (t) {
-  const rendered = renderProgress(d);
-  console.log(rendered);
-  // TODO
+test('test pdr-progress.js getProgress', function (t) {
+  const result = getProgress(d);
+  t.equal(result.percentCompleted, 25);
+  t.equal(result.percentFailed, 75);
+  t.equal(result.granulesCompleted, '4/4');
   t.end();
 });
 

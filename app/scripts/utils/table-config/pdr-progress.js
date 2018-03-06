@@ -23,7 +23,7 @@ function bar (completed, failed, text) {
   );
 }
 
-export const renderProgress = function (d) {
+export const getProgress = function (d) {
   // if the status is failed, return it as such
   if (d.status === 'failed') {
     const error = get(d, 'error', nullValue);
@@ -38,9 +38,18 @@ export const renderProgress = function (d) {
   const percentCompleted = !total ? 0 : completed / total * 100;
   const percentFailed = !total ? 0 : failed / total * 100;
   const granulesCompleted = `${tally(completed + failed)}/${tally(total)}`;
+  return {
+    percentCompleted: percentCompleted,
+    percentFailed: percentFailed,
+    granulesCompleted: granulesCompleted
+  };
+};
+
+export const renderProgress = function (d) {
+  const progress = getProgress(d);
   return (
     <div className='table__progress'>
-      {bar(percentCompleted, percentFailed, granulesCompleted)}
+      {bar(progress.percentCompleted, progress.percentFailed, progress.granulesCompleted)}
     </div>
   );
 };
