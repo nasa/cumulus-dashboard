@@ -5,9 +5,6 @@ import { get } from 'object-path';
 import { tally, bool, fromNow, nullValue } from '../format';
 import ErrorReport from '../../components/errors/report';
 
-import statusOptions from '../status';
-const stats = Object.keys(statusOptions).map(d => statusOptions[d]).filter(Boolean);
-
 function bar (completed, failed, text) {
   // show a sliver even if there's no progress
   return (
@@ -26,22 +23,33 @@ function bar (completed, failed, text) {
   );
 }
 
+export const getProgress = function (d) {
+  const granules = d.stats;
+  // granule count in all states, total is 'null' in some pdrs
+  const total = Object.keys(granules).filter(k => k !== 'total')
+    .reduce((a, b) => a + get(granules, b, 0), 0);
+  const completed = get(granules, 'completed', 0);
+  const failed = get(granules, 'failed', 0);
+  const percentCompleted = !total ? 0 : completed / total * 100;
+  const percentFailed = !total ? 0 : failed / total * 100;
+  const granulesCompleted = `${tally(completed + failed)}/${tally(total)}`;
+  return {
+    percentCompleted: percentCompleted,
+    percentFailed: percentFailed,
+    granulesCompleted: granulesCompleted
+  };
+};
+
 export const renderProgress = function (d) {
   // if the status is failed, return it as such
   if (d.status === 'failed') {
     const error = get(d, 'error', nullValue);
     return <ErrorReport report={error} truncate={true} />;
   } else if (typeof d.status === 'undefined') return null;
-  const granules = d.granulesStatus;
-  const total = stats.reduce((a, b) => a + get(granules, b, 0), 0);
-  const completed = get(granules, 'completed', 0);
-  const failed = get(d, 'granulesStatus.failed', 0);
-  const percentCompleted = !total ? 0 : completed / total * 100;
-  const percentFailed = !total ? 0 : failed / total * 100;
-  const granulesCompleted = `${tally(completed + failed)}/${tally(total)}`;
+  const progress = getProgress(d);
   return (
     <div className='table__progress'>
-      {bar(percentCompleted, percentFailed, granulesCompleted)}
+      {bar(progress.percentCompleted, progress.percentFailed, progress.granulesCompleted)}
     </div>
   );
 };
