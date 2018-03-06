@@ -32,8 +32,17 @@ test('test pdr-progress.js getProgress', function (t) {
 });
 
 test('test pdrs.js tableRow', function (t) {
-  const row = tableRow(d);
-  console.log(row);
-  // TODO
+  const result = [];
+  tableRow.forEach(function (col) {
+    if (col instanceof Function) {
+      result.push(col(d));
+    } else {
+      result.push(col);
+    }
+  });
+  t.equal(result[4], 4);
+  t.equal(result[5], d.stats.processing);
+  t.equal(result[6], d.stats.failed);
+  t.equal(result[7], d.stats.completed);
   t.end();
 });
