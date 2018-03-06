@@ -1,7 +1,7 @@
 'use strict';
 import test from 'tape';
-import tableRow from '../../app/scripts/utils/table-config/pdrs.js';
-import renderProgress from '../../app/scripts/utils/table-config/pdr-progress.js';
+import {tableRow} from '../../app/scripts/utils/table-config/pdrs.js';
+import {renderProgress} from '../../app/scripts/utils/table-config/pdr-progress.js';
 const d =
   {
     'pdrName': 'test-4.PDR',
