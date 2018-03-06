@@ -24,11 +24,6 @@ function bar (completed, failed, text) {
 }
 
 export const getProgress = function (d) {
-  // if the status is failed, return it as such
-  if (d.status === 'failed') {
-    const error = get(d, 'error', nullValue);
-    return <ErrorReport report={error} truncate={true} />;
-  } else if (typeof d.status === 'undefined') return null;
   const granules = d.stats;
   // granule count in all states, total is 'null' in some pdrs
   const total = Object.keys(granules).filter(k => k !== 'total')
@@ -46,6 +41,11 @@ export const getProgress = function (d) {
 };
 
 export const renderProgress = function (d) {
+  // if the status is failed, return it as such
+  if (d.status === 'failed') {
+    const error = get(d, 'error', nullValue);
+    return <ErrorReport report={error} truncate={true} />;
+  } else if (typeof d.status === 'undefined') return null;
   const progress = getProgress(d);
   return (
     <div className='table__progress'>
