@@ -218,23 +218,23 @@ export const interval = function (action, wait, immediate) {
 };
 
 export const getCollection = (name, version) => wrapRequest(
-  getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
+  getCollectionId({name, version}), get, `v1/collections?name=${name}&version=${version}`, COLLECTION);
 
 export const listCollections = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'collections'),
+  url: url.resolve(root, 'v1/collections'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, COLLECTIONS);
 
 export const createCollection = (payload) => wrapRequest(
-  getCollectionId(payload), post, 'collections', NEW_COLLECTION, payload);
+  getCollectionId(payload), post, 'v1/collections', NEW_COLLECTION, payload);
 
 export const updateCollection = (payload) => wrapRequest(
-  getCollectionId(payload), put, `collections/${payload.name}/${payload.version}`, UPDATE_COLLECTION, payload);
+  getCollectionId(payload), put, `v1/collections/${payload.name}/${payload.version}`, UPDATE_COLLECTION, payload);
 
 export const clearUpdateCollection = (collectionName) => ({ type: UPDATE_COLLECTION_CLEAR, id: collectionName });
 
 export const deleteCollection = (name, version) => wrapRequest(
-  getCollectionId({name, version}), del, `collections/${name}/${version}`, COLLECTION_DELETE);
+  getCollectionId({name, version}), del, `v1/collections/${name}/${version}`, COLLECTION_DELETE);
 
 export const searchCollections = (prefix) => ({ type: SEARCH_COLLECTIONS, prefix: prefix });
 export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH });
@@ -242,16 +242,16 @@ export const filterCollections = (param) => ({ type: FILTER_COLLECTIONS, param: 
 export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
 
 export const getGranule = (granuleId) => wrapRequest(
-  granuleId, get, `granules/${granuleId}`, GRANULE);
+  granuleId, get, `v1/granules/${granuleId}`, GRANULE);
 
 export const listGranules = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'granules'),
+  url: url.resolve(root, 'v1/granules'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, GRANULES);
 
 // only query the granules from the last hour
 export const getRecentGranules = () => wrapRequest(null, get, {
-  url: url.resolve(root, 'granules'),
+  url: url.resolve(root, 'v1/granules'),
   qs: {
     limit: 1,
     fields: 'granuleId',
@@ -260,22 +260,22 @@ export const getRecentGranules = () => wrapRequest(null, get, {
 }, RECENT_GRANULES);
 
 export const reprocessGranule = (granuleId) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, GRANULE_REPROCESS, {
+  granuleId, put, `v1/granules/${granuleId}`, GRANULE_REPROCESS, {
     action: 'reprocess'
   });
 
 export const reingestGranule = (granuleId) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, GRANULE_REINGEST, {
+  granuleId, put, `v1/granules/${granuleId}`, GRANULE_REINGEST, {
     action: 'reingest'
   });
 
 export const removeGranule = (granuleId) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, GRANULE_REMOVE, {
+  granuleId, put, `v1/granules/${granuleId}`, GRANULE_REMOVE, {
     action: 'removeFromCmr'
   });
 
 export const deleteGranule = (granuleId) => wrapRequest(
-  granuleId, del, `granules/${granuleId}`, GRANULE_DELETE);
+  granuleId, del, `v1/granules/${granuleId}`, GRANULE_DELETE);
 
 export const searchGranules = (prefix) => ({ type: SEARCH_GRANULES, prefix: prefix });
 export const clearGranulesSearch = () => ({ type: CLEAR_GRANULES_SEARCH });
@@ -283,28 +283,28 @@ export const filterGranules = (param) => ({ type: FILTER_GRANULES, param: param 
 export const clearGranulesFilter = (paramKey) => ({ type: CLEAR_GRANULES_FILTER, paramKey: paramKey });
 
 export const getOptionsCollectionName = () => wrapRequest(null, get, {
-  url: url.resolve(root, 'collections'),
+  url: url.resolve(root, 'v1/collections'),
   qs: { limit: 100, fields: 'name,version' }
 }, OPTIONS_COLLECTIONNAME);
 
 export const getStats = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'stats'),
+  url: url.resolve(root, 'v1/stats'),
   qs: options
 }, STATS);
 
 // count queries *must* include type and field properties.
 export const getCount = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'stats/aggregate'),
+  url: url.resolve(root, 'v1/stats/aggregate'),
   qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
 }, COUNT);
 
 export const listPdrs = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'pdrs'),
+  url: url.resolve(root, 'v1/pdrs'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, PDRS);
 
 export const getPdr = (pdrName) => wrapRequest(
-  pdrName, get, `pdrs/${pdrName}`, PDR);
+  pdrName, get, `v1/pdrs/${pdrName}`, PDR);
 
 export const searchPdrs = (prefix) => ({ type: SEARCH_PDRS, prefix: prefix });
 export const clearPdrsSearch = () => ({ type: CLEAR_PDRS_SEARCH });
@@ -312,38 +312,38 @@ export const filterPdrs = (param) => ({ type: FILTER_PDRS, param: param });
 export const clearPdrsFilter = (paramKey) => ({ type: CLEAR_PDRS_FILTER, paramKey: paramKey });
 
 export const listProviders = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'providers'),
+  url: url.resolve(root, 'v1/providers'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, PROVIDERS);
 
 export const getOptionsProviderGroup = () => wrapRequest(null, get, {
-  url: url.resolve(root, 'providers'),
+  url: url.resolve(root, 'v1/providers'),
   qs: { limit: 100, fields: 'providerName' }
 }, OPTIONS_PROVIDERGROUP);
 
 export const getProvider = (providerId) => wrapRequest(
-  providerId, get, `providers/${providerId}`, PROVIDER);
+  providerId, get, `v1/providers/${providerId}`, PROVIDER);
 
 export const createProvider = (providerId, payload) => wrapRequest(
-  providerId, post, 'providers', NEW_PROVIDER, payload);
+  providerId, post, 'v1/providers', NEW_PROVIDER, payload);
 
 export const updateProvider = (providerId, payload) => wrapRequest(
-  providerId, put, `providers/${providerId}`, UPDATE_PROVIDER, payload);
+  providerId, put, `v1/providers/${providerId}`, UPDATE_PROVIDER, payload);
 
 export const clearUpdateProvider = (providerId) => ({ type: UPDATE_PROVIDER_CLEAR, id: providerId });
 
 export const deleteProvider = (providerId) => wrapRequest(
-  providerId, del, `providers/${providerId}`, PROVIDER_DELETE);
+  providerId, del, `v1/providers/${providerId}`, PROVIDER_DELETE);
 
 export const restartProvider = (providerId) => wrapRequest(
-  providerId, put, `providers/${providerId}`, PROVIDER_RESTART, {
+  providerId, put, `v1/providers/${providerId}`, PROVIDER_RESTART, {
     action: 'restart'
   });
 
 export const clearRestartedProvider = (providerId) => ({ type: CLEAR_RESTARTED_PROVIDER, id: providerId });
 
 export const stopProvider = (providerId) => wrapRequest(
-  providerId, put, `providers/${providerId}`, PROVIDER_STOP, {
+  providerId, put, `v1/providers/${providerId}`, PROVIDER_STOP, {
     action: 'stop'
   });
 
@@ -354,10 +354,10 @@ export const filterProviders = (param) => ({ type: FILTER_PROVIDERS, param: para
 export const clearProvidersFilter = (paramKey) => ({ type: CLEAR_PROVIDERS_FILTER, paramKey: paramKey });
 
 export const deletePdr = (pdrName) => wrapRequest(
-  pdrName, del, `pdrs/${pdrName}`, PDR_DELETE);
+  pdrName, del, `v1/pdrs/${pdrName}`, PDR_DELETE);
 
 export const getLogs = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'logs'),
+  url: url.resolve(root, 'v1/logs'),
   qs: Object.assign({limit: 100}, options)
 }, LOGS);
 export const clearLogs = () => ({ type: CLEAR_LOGS });
@@ -370,7 +370,7 @@ export const logout = () => {
 export const login = (token) => {
   // dummy request to test the auth token
   return wrapRequest('auth', get, {
-    url: url.resolve(root, 'granules'),
+    url: url.resolve(root, 'v1/granules'),
     qs: { limit: 1, fields: 'granuleId' },
     headers: {
       Authorization: 'Bearer ' + token
@@ -378,21 +378,21 @@ export const login = (token) => {
   }, LOGIN);
 };
 
-export const getSchema = (type) => wrapRequest(null, get, `schemas/${type}`, SCHEMA);
+export const getSchema = (type) => wrapRequest(null, get, `v1/schemas/${type}`, SCHEMA);
 
 export const queryHistogram = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'stats/histogram'),
+  url: url.resolve(root, 'v1/stats/histogram'),
   qs: options
 }, HISTOGRAM);
 
-export const listWorkflows = (options) => wrapRequest(null, get, 'workflows', WORKFLOWS);
+export const listWorkflows = (options) => wrapRequest(null, get, 'v1/workflows', WORKFLOWS);
 
 export const getExecutionStatus = (arn) => wrapRequest(null, get, {
-  url: url.resolve(root, 'executions/status/' + arn)
+  url: url.resolve(root, 'v1/executions/status/' + arn)
 }, EXECUTION_STATUS);
 
 export const listExecutions = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'executions'),
+  url: url.resolve(root, 'v1/executions'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, EXECUTIONS);
 
@@ -400,35 +400,35 @@ export const filterExecutions = (param) => ({ type: FILTER_EXECUTIONS, param: pa
 export const clearExecutionsFilter = (paramKey) => ({ type: CLEAR_EXECUTIONS_FILTER, paramKey: paramKey });
 
 export const listRules = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'rules'),
+  url: url.resolve(root, 'v1/rules'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, RULES);
 
 export const getRule = (ruleName) => wrapRequest(
-  ruleName, get, `rules?name=${ruleName}`, RULE);
+  ruleName, get, `v1/rules?name=${ruleName}`, RULE);
 
 export const updateRule = (name, payload) => wrapRequest(
-  name, put, `rules/${name}`, UPDATE_RULE, payload);
+  name, put, `v1/rules/${name}`, UPDATE_RULE, payload);
 
 export const clearUpdateRule = (ruleName) => ({ type: UPDATE_RULE_CLEAR, id: ruleName });
 
 export const createRule = (id, payload) => wrapRequest(
-  id, post, 'rules', NEW_RULE, payload);
+  id, post, 'v1/rules', NEW_RULE, payload);
 
 export const deleteRule = (ruleName) => wrapRequest(
-  ruleName, del, `rules/${ruleName}`, RULE_DELETE);
+  ruleName, del, `v1/rules/${ruleName}`, RULE_DELETE);
 
 export const enableRule = (ruleName) => wrapRequest(
-  ruleName, put, `rules/${ruleName}`, RULE_ENABLE, {
+  ruleName, put, `v1/rules/${ruleName}`, RULE_ENABLE, {
     state: 'ENABLED'
   });
 
 export const disableRule = (ruleName) => wrapRequest(
-  ruleName, put, `rules/${ruleName}`, RULE_DISABLE, {
+  ruleName, put, `v1/rules/${ruleName}`, RULE_DISABLE, {
     state: 'DISABLED'
   });
 
 export const rerunRule = (ruleName) => wrapRequest(
-  ruleName, put, `rules/${ruleName}`, RULE_RERUN, {
+  ruleName, put, `v1/rules/${ruleName}`, RULE_RERUN, {
     action: 'rerun'
   });
