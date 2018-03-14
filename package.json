@@ -20,7 +20,7 @@
     "build": "gulp",
     "lint": "eslint app/scripts/ --ext .js",
     "start": "npm run serve",
-    "test": "npm run lint && ./node_modules/.bin/tape -r babel-register -r babel-polyfill test/**/*.js"
+    "test": "npm run lint && ./node_modules/.bin/tape -r babel-register -r babel-polyfill 'test/**/*.js'"
   },
   "browserify": {
     "transform": [
