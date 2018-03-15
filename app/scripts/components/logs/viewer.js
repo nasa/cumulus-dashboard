@@ -17,8 +17,12 @@ const noLogs = {
 
 const statusOptions = [
   'All',
+  'Debug',
   'Info',
-  'Error'
+  'Warn',
+  'Error',
+  'Fatal',
+  'Trace'
 ];
 
 var LogViewer = React.createClass({
@@ -64,16 +68,16 @@ var LogViewer = React.createClass({
   },
 
   setSearchLevel: function (id, value) {
-    this.setState({ search: '', type: value }, this.query);
+    this.setState({ search: '', level: value }, this.query);
   },
 
   query: function () {
     const query = this.props.query || {};
-    const { search, type } = this.state;
+    const { search, level } = this.state;
     if (search) {
       query.q = this.state.search;
-    } else if (type && type !== 'All') {
-      query.type = type.toLowerCase();
+    } else if (level && level !== 'All') {
+      query.level = level.toLowerCase();
     }
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
@@ -102,7 +106,7 @@ var LogViewer = React.createClass({
       items = [placeholder];
     }
     const count = logs.items.length ? tally(items.length) : 0;
-    const { type } = this.state;
+    const { level } = this.state;
     return (
       <section className='page__section'>
         <div className='heading__wrapper--border'>
@@ -121,8 +125,8 @@ var LogViewer = React.createClass({
 
           <form className='search__wrapper form-group__element form-group__element--right form-group__element--right--sm form-group__element--small'>
             <Dropdown
-              label={'Type'}
-              value={type}
+              label={'Level'}
+              value={level}
               options={statusOptions}
               id={'logs-viewer-dropdown'}
               onChange={this.setSearchLevel}
@@ -137,10 +141,10 @@ var LogViewer = React.createClass({
             if (text.length > 200) {
               text = text.slice(0, 200) + '...';
             }
-            const type = d.type ? d.type.toLowerCase() : 'info';
+            const level = d.level ? d.level.toLowerCase() : 'info';
             return <p
               key={d.key}
-              className='logs__item'><span className='logs__item--date'>{d.displayTime}</span> <span className={'logs__item--level logs__item--' + type}>{type}</span> {text}</p>;
+              className='logs__item'><span className='logs__item--date'>{d.displayTime}</span> <span className={'logs__item--level logs__item--' + level}>{level}</span> {text}</p>;
           })}
         </div>
       </section>
