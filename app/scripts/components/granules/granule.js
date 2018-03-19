@@ -39,7 +39,12 @@ const tableHeader = [
 
 const link = 'Link';
 
-const makeLink = (s3Uri) => s3Uri.replace('s3://', 'https://s3.amazonaws.com/');
+const makeLink = (s3Uri) => {
+  const chunks = s3Uri.split('/');
+  const bucket = chunks[2];
+  const key = chunks.slice(3).join('/');
+  return `https://${bucket}.s3.amazonaws.com/${key}`;
+};
 
 const tableRow = [
   (d) => d.name || '(No name)',
@@ -66,11 +71,21 @@ var GranuleOverview = React.createClass({
     dispatch: PropTypes.func,
     granules: PropTypes.object,
     logs: PropTypes.object,
-    router: PropTypes.object
+    router: PropTypes.object,
+    skipReloadOnMount: PropTypes.bool
+  },
+
+  getDefaultProps: function () {
+    return {
+      skipReloadOnMount: false
+    };
   },
 
   componentWillMount: function () {
     const { granuleId } = this.props.params;
+
+    if (this.props.skipReloadOnMount) return;
+
     const immediate = !this.props.granules.map[granuleId];
     this.reload(immediate);
   },
@@ -203,6 +218,7 @@ var GranuleOverview = React.createClass({
     );
   }
 });
+export { GranuleOverview };
 
 export default connect(state => ({
   granules: state.granules,
