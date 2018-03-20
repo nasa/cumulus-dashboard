@@ -1,5 +1,5 @@
 'use strict';
-import test from 'tape';
+import test from 'ava';
 import {tableRow} from '../../app/scripts/utils/table-config/pdrs.js';
 import {getProgress} from '../../app/scripts/utils/table-config/pdr-progress.js';
 const pdr =
@@ -25,16 +25,14 @@ const pdr =
 
 test('test pdr-progress.js getProgress', function (t) {
   const result = getProgress(pdr);
-  t.equal(result.percentCompleted, 25);
-  t.equal(result.percentFailed, 75);
-  t.equal(result.granulesCompleted, '4/4');
-  t.end();
+  t.is(result.percentCompleted, 25);
+  t.is(result.percentFailed, 75);
+  t.is(result.granulesCompleted, '4/4');
 });
 
 test('test pdrs.js tableRow', function (t) {
-  t.equal(tableRow[4](pdr), 4);
-  t.equal(tableRow[5](pdr), pdr.stats.processing);
-  t.equal(tableRow[6](pdr), pdr.stats.failed);
-  t.equal(tableRow[7](pdr), pdr.stats.completed);
-  t.end();
+  t.is(tableRow[4](pdr), 4);
+  t.is(tableRow[5](pdr), pdr.stats.processing);
+  t.is(tableRow[6](pdr), pdr.stats.failed);
+  t.is(tableRow[7](pdr), pdr.stats.completed);
 });
