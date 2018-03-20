@@ -1,5 +1,5 @@
 'use strict';
-import test from 'tape';
+import test from 'ava';
 import reducer from '../../app/scripts/reducers/collections.js';
 import { COLLECTIONS } from '../../app/scripts/actions';
 
@@ -20,5 +20,4 @@ test('reducers/collections', function (t) {
   var newState = reducer(initialState, action);
   // list collections overwrites state.list
   t.deepEqual(newState.list.data.map(d => d.collectionName).sort(), ['norm', 'barry'].sort());
-  t.end();
 });
