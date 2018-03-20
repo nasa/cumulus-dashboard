@@ -42,12 +42,25 @@
   color: $black;
 }
 
+.logs__item--debug,
+.logs__item--trace {
+  color: $grey;
+}
+
 .logs__item--info {
   color: $light-green;
 }
 
+.logs__item--warn {
+  color: $orange;
+}
+
 .logs__item--error {
   color: $error-red;
+}
+
+.logs__item--fatal {
+  color: $error-text-red;
 }
 
 .logs__item--meta {
