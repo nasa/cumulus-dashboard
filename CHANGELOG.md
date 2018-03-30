@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+### Added
+- Expandable errors. [CUMULUS-394]
+
 ### Changed
 - In `components/logs/viewer.js`, changed references to `type` to `level` to match cumulus v1 logging [CUMULUS-306].
 - Tests use ava instead of tape. [CUMULUS-418]

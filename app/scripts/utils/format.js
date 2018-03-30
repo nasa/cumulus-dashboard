@@ -113,7 +113,7 @@ export const truncate = function (string, to) {
   if (!string) return nullValue;
   to = to || 100;
   if (string.length <= to) return string;
-  else return string.slice(0, to) + '...';
+  else return string.slice(0, to) + '... Show More';
 };
 
 export const getCollectionId = function (collection) {
