@@ -226,7 +226,7 @@ export const listCollections = (options) => wrapRequest(null, get, {
 }, COLLECTIONS);
 
 export const createCollection = (payload) => wrapRequest(
-  getCollectionId(payload), post, `collections`, NEW_COLLECTION, payload);
+  getCollectionId(payload), post, 'collections', NEW_COLLECTION, payload);
 
 export const updateCollection = (payload) => wrapRequest(
   getCollectionId(payload), put, `collections/${payload.name}/${payload.version}`, UPDATE_COLLECTION, payload);
@@ -325,7 +325,7 @@ export const getProvider = (providerId) => wrapRequest(
   providerId, get, `providers/${providerId}`, PROVIDER);
 
 export const createProvider = (providerId, payload) => wrapRequest(
-  providerId, post, `providers`, NEW_PROVIDER, payload);
+  providerId, post, 'providers', NEW_PROVIDER, payload);
 
 export const updateProvider = (providerId, payload) => wrapRequest(
   providerId, put, `providers/${providerId}`, UPDATE_PROVIDER, payload);
@@ -385,7 +385,7 @@ export const queryHistogram = (options) => wrapRequest(null, get, {
   qs: options
 }, HISTOGRAM);
 
-export const listWorkflows = (options) => wrapRequest(null, get, `workflows`, WORKFLOWS);
+export const listWorkflows = (options) => wrapRequest(null, get, 'workflows', WORKFLOWS);
 
 export const getExecutionStatus = (arn) => wrapRequest(null, get, {
   url: url.resolve(root, 'executions/status/' + arn)
@@ -413,7 +413,7 @@ export const updateRule = (name, payload) => wrapRequest(
 export const clearUpdateRule = (ruleName) => ({ type: UPDATE_RULE_CLEAR, id: ruleName });
 
 export const createRule = (id, payload) => wrapRequest(
-  id, post, `rules`, NEW_RULE, payload);
+  id, post, 'rules', NEW_RULE, payload);
 
 export const deleteRule = (ruleName) => wrapRequest(
   ruleName, del, `rules/${ruleName}`, RULE_DELETE);
