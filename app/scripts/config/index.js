@@ -11,8 +11,6 @@ const baseConfig = {
   requireEarthdataLogin: true,
   apiRoot: 'https://wjdkfyb6t6.execute-api.us-east-1.amazonaws.com/dev/',
 
-  defaultVersion: 'v1',
-
   graphicsPath: '/graphics/',
 
   // settings for Ace editor
