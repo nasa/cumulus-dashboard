@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+### Fixed
+- batch-async-command now collects all errors in a queue, rather than emptying the queue after the first error
+
 ## [v1.1.0] - 2018-04-20
 ### Added
 - Expandable errors. [CUMULUS-394]
