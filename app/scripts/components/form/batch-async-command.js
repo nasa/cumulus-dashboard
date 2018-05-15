@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { queue } from 'd3-queue';
+import queue from 'stubborn-queue';
 import AsyncCommand from './async-command';
 import { updateDelay } from '../../config';
 
@@ -61,9 +61,9 @@ const BatchCommand = React.createClass({
       this.isInflight()) return false;
     const q = queue(CONCURRENCY);
     for (let i = 0; i < selection.length; ++i) {
-      q.defer(this.initAction, selection[i]);
+      q.add(this.initAction, selection[i]);
     }
-    q.awaitAll(this.onComplete);
+    q.done(this.onComplete);
   },
 
   // save a reference to the callback in state, then init the action
@@ -76,9 +76,18 @@ const BatchCommand = React.createClass({
   },
 
   // immediately change the UI to show either success or error
-  onComplete: function (error, results) {
+  onComplete: function (errors, results) {
+    console.log(errors, results)
+    // turn array of errors from queue into single error for ui
+    const error = this.createErrorMessage(errors);
     this.setState({status: (error ? 'error' : 'success')});
     setTimeout(() => this.cleanup(error, results), updateDelay);
+  },
+
+  // combine multiple errors into one
+  createErrorMessage: function (errors) {
+    if (!errors || !errors.length) return;
+    return `${errors.map((err) => err.toString()).join('\n')}`;
   },
 
   // call onSuccess and onError functions as needed
@@ -86,7 +95,7 @@ const BatchCommand = React.createClass({
     const { onSuccess, onError } = this.props;
     this.setState({ activeModal: false, completed: 0, status: null });
     if (error && typeof onError === 'function') onError(error);
-    else if (!error && typeof onSuccess === 'function') onSuccess(results);
+    if (results && results.length && typeof onSuccess === 'function') onSuccess(results);
   },
 
   isInflight: function () {
