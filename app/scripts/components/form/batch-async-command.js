@@ -18,7 +18,8 @@ const BatchCommand = React.createClass({
     className: PropTypes.string,
     onSuccess: PropTypes.func,
     onError: PropTypes.func,
-    confirm: PropTypes.func
+    confirm: PropTypes.func,
+    updateDelay: PropTypes.number
   },
 
   getInitialState: function () {
@@ -77,17 +78,19 @@ const BatchCommand = React.createClass({
 
   // immediately change the UI to show either success or error
   onComplete: function (errors, results) {
-    console.log(errors, results)
+    const delay = this.props.updateDelay ? this.props.updateDelay : updateDelay;
     // turn array of errors from queue into single error for ui
     const error = this.createErrorMessage(errors);
     this.setState({status: (error ? 'error' : 'success')});
-    setTimeout(() => this.cleanup(error, results), updateDelay);
+    setTimeout(() => {
+      this.cleanup(error, results);
+    }, delay);
   },
 
   // combine multiple errors into one
   createErrorMessage: function (errors) {
     if (!errors || !errors.length) return;
-    return `${errors.map((err) => err.toString()).join('\n')}`;
+    return `${errors.length} errors occurred: \n${errors.map((err) => err.error.toString()).join('\n')}`;
   },
 
   // call onSuccess and onError functions as needed

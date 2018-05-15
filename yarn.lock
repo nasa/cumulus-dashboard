@@ -3055,10 +3055,6 @@ enzyme-adapter-utils@^1.1.0:
     object.assign "^4.0.4"
     prop-types "^15.6.0"
 
-enzyme-redux@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/enzyme-redux/-/enzyme-redux-0.2.1.tgz#7c2ebebc8a4dd62749d632c5a12d5a23bcabc1ff"
-
 enzyme@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/enzyme/-/enzyme-3.3.0.tgz#0971abd167f2d4bf3f5bd508229e1c4b6dc50479"
