@@ -56,7 +56,7 @@ const metaAccessors = [
   ['PDR Name', 'pdrName', pdrLink],
   ['Collection', 'collectionId', collectionLink],
   ['Provider', 'provider', providerLink],
-  ['CMR Link', 'cmrLink', (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue],
+  ['OnEarth Link', 'cmrLink', (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue],
   ['Execution', 'execution', (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue],
   ['Published', 'published', bool],
   ['Duplicate', 'hasDuplicate', bool],
@@ -158,7 +158,7 @@ var GranuleOverview = React.createClass({
       status: get(this.props.granules.reingested, [granuleId, 'status']),
       success: this.fastReload
     }, {
-      text: 'Remove from CMR',
+      text: 'Remove from OnEarth',
       action: this.remove,
       status: get(this.props.granules.removed, [granuleId, 'status']),
       success: this.fastReload

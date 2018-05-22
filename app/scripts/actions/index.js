@@ -242,16 +242,16 @@ export const filterCollections = (param) => ({ type: FILTER_COLLECTIONS, param: 
 export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
 
 export const getGranule = (granuleId) => wrapRequest(
-  granuleId, get, `granules/${granuleId}`, GRANULE);
+  granuleId, get, `ggranules/${granuleId}`, GRANULE);
 
 export const listGranules = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'granules'),
+  url: url.resolve(root, 'ggranules'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, GRANULES);
 
 // only query the granules from the last hour
 export const getRecentGranules = () => wrapRequest(null, get, {
-  url: url.resolve(root, 'granules'),
+  url: url.resolve(root, 'ggranules'),
   qs: {
     limit: 1,
     fields: 'granuleId',
@@ -260,22 +260,22 @@ export const getRecentGranules = () => wrapRequest(null, get, {
 }, RECENT_GRANULES);
 
 export const reprocessGranule = (granuleId) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, GRANULE_REPROCESS, {
+  granuleId, put, `ggranules/${granuleId}`, GRANULE_REPROCESS, {
     action: 'reprocess'
   });
 
 export const reingestGranule = (granuleId) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, GRANULE_REINGEST, {
+  granuleId, put, `ggranules/${granuleId}`, GRANULE_REINGEST, {
     action: 'reingest'
   });
 
 export const removeGranule = (granuleId) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, GRANULE_REMOVE, {
-    action: 'removeFromCmr'
+  granuleId, put, `ggranules/${granuleId}`, GRANULE_REMOVE, {
+    action: 'removeFromOnEarth'
   });
 
 export const deleteGranule = (granuleId) => wrapRequest(
-  granuleId, del, `granules/${granuleId}`, GRANULE_DELETE);
+  granuleId, del, `ggranules/${granuleId}`, GRANULE_DELETE);
 
 export const searchGranules = (prefix) => ({ type: SEARCH_GRANULES, prefix: prefix });
 export const clearGranulesSearch = () => ({ type: CLEAR_GRANULES_SEARCH });

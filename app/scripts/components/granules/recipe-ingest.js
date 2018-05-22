@@ -121,7 +121,7 @@ var GranuleRecipe = React.createClass({
       status: get(this.props.granules.reingested, [granuleId, 'status']),
       success: noop
     }, {
-      text: 'Remove from CMR',
+      text: 'Remove from OnEarth',
       action: this.remove,
       status: get(this.props.granules.removed, [granuleId, 'status']),
       success: noop
