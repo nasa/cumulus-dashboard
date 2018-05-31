@@ -136,7 +136,7 @@ const CollectionOverview = React.createClass({
             rowId={'granuleId'}
             sortIdx={6}
           />
-          <Link className='link--secondary link--learn-more' to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}>View All Granules</Link>
+          <Link className='link--secondary link--learn-more' to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}>{strings.view_all_granules}</Link>
         </section>
       </div>
     );

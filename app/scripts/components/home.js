@@ -89,7 +89,7 @@ var Home = React.createClass({
       <div className='page__home'>
         <div className='content__header content__header--lg'>
           <div className='row'>
-            <h1 className='heading--xlarge'>Dashboard</h1>
+            <h1 className='heading--xlarge'>{strings.dashboard}</h1>
           </div>
         </div>
         <div className='page__content page__content__nosidebar'>

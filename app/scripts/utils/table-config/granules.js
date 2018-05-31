@@ -84,7 +84,7 @@ export const bulkActions = function (granules) {
     state: granules.reingested,
     confirm: confirmReingest
   }, {
-    text: 'Remove from OnEarth',
+    text: strings.remove_from_cmr,
     action: removeGranule,
     state: granules.removed,
     confirm: confirmRemove

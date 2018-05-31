@@ -159,7 +159,7 @@ var GranuleOverview = React.createClass({
       status: get(this.props.granules.reingested, [granuleId, 'status']),
       success: this.fastReload
     }, {
-      text: 'Remove from OnEarth',
+      text: strings.remove_from_cmr,
       action: this.remove,
       status: get(this.props.granules.removed, [granuleId, 'status']),
       success: this.fastReload

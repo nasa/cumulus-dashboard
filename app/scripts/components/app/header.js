@@ -50,7 +50,7 @@ var Header = React.createClass({
     return (
       <div className='header'>
         <div className='row'>
-          <h1 className='logo'><Link to='/'><img alt="Cumulus Logo" src={graphicsPath + 'layout/cumulus-logo.png'} /></Link></h1>
+          <h1 className='logo'><Link to='/'><img alt="Logo" src={graphicsPath + strings.logo} /></Link></h1>
           <nav>
             { !this.props.minimal ? <ul>
               {activePaths.map(path => <li

@@ -27,9 +27,10 @@ The following Environment Variables override the default values in `config.js`:
 | HIDE_PDR | whether to hide the PDR menu, default to true
 | DAAC\_NAME | e.g. LPDAAC, default to Local
 | STAGE | e.g. UAT, default to development
+| LANG | gitc or cmr localization
 | APIROOT | the API URL, default to a test URL deployed by Devseed
 
-     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false APIROOT=https://myapi.com npm run serve
+     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false LANG=cmr APIROOT=https://myapi.com npm run serve
 
 ## Building in Docker
 
@@ -44,7 +45,7 @@ The compiled files will be placed in the `dist` directory.
 
 ## Building locally
 
-This requires [nvm](https://github.com/creationix/nvm) and node v6.9. To set v6.9 as the default, use `nvm alias default v6.9`.
+This requires [nvm](https://github.com/creationix/nvm) and node v8.11. To set v8.11 as the default, use `nvm use`.
 
 ```(bash)
 git clone https://github.com/cumulus-nasa/cumulus-dashboard
@@ -58,11 +59,11 @@ npm run serve
 
 First build the site
 
-     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false APIROOT=https://myapi.com npm run build
+     $ DAAC_NAME=GITC STAGE=production HIDE_PDR=false LANG=gitc APIROOT=https://myapi.com npm run build
 
 Then deploy the `dist` folder
 
-     $ aws s3 async dist s3://my-bucket-to-be-used --acl public-read
+     $ aws s3 sync dist s3://my-bucket-to-be-used --acl public-read
 
 ## Running locally in docker
 
