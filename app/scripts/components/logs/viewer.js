@@ -141,7 +141,14 @@ var LogViewer = React.createClass({
             if (text.length > 200) {
               text = text.slice(0, 200) + '...';
             }
-            const level = d.level ? d.level.toLowerCase() : 'info';
+            let level;
+            if (d.level) {
+              if (d.level === 30) level = 'info';
+              else level = d.level.toString().toLowerCase();
+            } else {
+              level = 'info';
+            }
+
             return <p
               key={d.key}
               className='logs__item'><span className='logs__item--date'>{d.displayTime}</span> <span className={'logs__item--level logs__item--' + level}>{level}</span> {text}</p>;
