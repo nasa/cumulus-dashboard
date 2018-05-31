@@ -26,6 +26,7 @@ import Search from '../form/search';
 import Overview from '../app/overview';
 import statusOptions from '../../utils/status';
 import { updateInterval } from '../../config';
+import { strings } from '../locale';
 
 var GranulesOverview = React.createClass({
   propTypes: {
@@ -72,14 +73,14 @@ var GranulesOverview = React.createClass({
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description '>Granule Overview</h1>
+            <h1 className='heading--large heading--shared-content with-description '>{strings.granule_overview}</h1>
             {lastUpdated(queriedAt)}
             {this.renderOverview(get(stats, 'count.data.granules.count', []))}
           </div>
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Granules <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
           </div>
           <div className='filters filters__wlabels'>
             <Dropdown
@@ -88,7 +89,7 @@ var GranulesOverview = React.createClass({
               action={filterGranules}
               clear={clearGranulesFilter}
               paramKey={'collectionId'}
-              label={'Collection'}
+              label={strings.collection}
             />
             <Dropdown
               options={statusOptions}

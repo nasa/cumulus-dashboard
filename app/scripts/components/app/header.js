@@ -5,12 +5,13 @@ import { Link } from 'react-router';
 import { logout } from '../../actions';
 import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
+import { strings } from '../locale';
 
 const paths = [
   ['PDRs', '/pdrs'],
   ['Providers', '/providers'],
-  ['Collections', '/collections'],
-  ['Granules', '/granules'],
+  [strings.collections, '/collections'],
+  [strings.granules, '/granules'],
   ['Workflows', '/workflows'],
   ['Executions', '/executions'],
   ['Rules', '/rules'],

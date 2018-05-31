@@ -2,11 +2,12 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { fromNow } from '../format';
+import { strings } from '../../Components/locale';
 
 export const tableHeader = [
   'Name',
   'Host',
-  'Collections',
+  strings.collections,
   'Global Connection Limit',
   'Protocol',
   'Last Updated'
@@ -15,7 +16,7 @@ export const tableHeader = [
 export const tableRow = [
   (d) => <Link to={`providers/provider/${d.id}`}>{d.id}</Link>,
   'host',
-  'collections',
+  strings.collections,
   'globalConnectionLimit',
   'protocol',
   (d) => fromNow(d.timestamp)

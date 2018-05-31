@@ -18,12 +18,13 @@ import {
   deleteGranule
 } from '../../actions';
 import ErrorReport from '../../components/errors/report';
+import {strings} from '../../components/locale';
 
 export const tableHeader = [
   'Status',
   'Name',
   'Published',
-  'Collection ID',
+  strings.collection_id,
   'Execution',
   'Duration',
   'Updated'

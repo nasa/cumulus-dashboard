@@ -1,14 +1,15 @@
 'use strict';
 import { encode } from '../utils/browser';
+import { strings } from '../components/locale';
 
 const collectionRoutes = [
   ['Overview', 'all']
 ];
 
 const singleCollectionRoutes = [
-  ['Back to Collections', null, 'sidebar__nav--back'],
+  [strings.back_to_collections, null, 'sidebar__nav--back'],
   ['Overview', 'collection/:name/:version'],
-  ['Granules', 'collection/:name/:version/granules'],
+  [strings.granules, 'collection/:name/:version/granules'],
   ['Definition', 'collection/:name/:version/definition'],
   ['Logs', 'collection/:name/:version/logs']
 ];
@@ -17,7 +18,7 @@ const empty = [['', '']];
 
 const collections = {
   base: 'collections',
-  heading: 'Collections',
+  heading: strings.Collections,
   routes: (currentRoute, params) => {
     // determine which set of routes to show, based on the current route
     if (/^\/collections\/[collection|edit]/.test(currentRoute)) {

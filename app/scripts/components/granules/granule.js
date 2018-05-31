@@ -30,6 +30,7 @@ import ErrorReport from '../errors/report';
 import Metadata from '../table/metadata';
 import AsyncCommands from '../form/dropdown-async-command';
 import { updateInterval } from '../../config';
+import { strings } from '../locale';
 
 const tableHeader = [
   'Filename',
@@ -64,7 +65,7 @@ const metaAccessors = [
 ];
 
 var GranuleOverview = React.createClass({
-  displayName: 'Granule',
+  displayName: strings.granule,
 
   propTypes: {
     params: PropTypes.object,
@@ -189,7 +190,7 @@ var GranuleOverview = React.createClass({
         <section className='page__section'>
           {errors.length ? <ErrorReport report={errors} /> : null}
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium with-description'>Granule Overview</h2>
+            <h2 className='heading--medium with-description'>{strings.granule_overview}</h2>
           </div>
           <Metadata data={granule} accessors={metaAccessors} />
         </section>

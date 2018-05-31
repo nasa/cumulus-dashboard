@@ -9,6 +9,8 @@ import {
 } from '../../actions';
 import EditRecord from '../app/edit';
 
+import EditRaw from '../app/edit-raw';  // PGC
+
 const SCHEMA_KEY = 'rule';
 const INCLUDED_FORMS = ['rule.value', 'state'];
 
@@ -20,16 +22,28 @@ const EditRule = React.createClass({
 
   render: function () {
     const { ruleName } = this.props.params;
+    // return (
+    //   <EditRecord
+    //     pk={ruleName}
+    //     schemaKey={SCHEMA_KEY}
+    //     state={this.props.rules}
+    //     getRecord={getRule}
+    //     updateRecord={updateRule}
+    //     clearRecordUpdate={clearUpdateRule}
+    //     includedForms={INCLUDED_FORMS}
+    //     backRoute={`rules/rule/${ruleName}`}
+    //   />
+    // );
     return (
-      <EditRecord
+      <EditRaw
         pk={ruleName}
         schemaKey={SCHEMA_KEY}
+        primaryProperty={'name'}
         state={this.props.rules}
         getRecord={getRule}
         updateRecord={updateRule}
-        clearRecordUpdate={clearUpdateRule}
-        includedForms={INCLUDED_FORMS}
         backRoute={`rules/rule/${ruleName}`}
+        clearRecordUpdate={clearUpdateRule}
       />
     );
   }

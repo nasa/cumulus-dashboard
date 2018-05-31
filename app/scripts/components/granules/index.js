@@ -5,9 +5,10 @@ import { connect } from 'react-redux';
 import Sidebar from '../app/sidebar';
 import { interval, getCount } from '../../actions';
 import { updateInterval } from '../../config';
+import { strings } from '../locale'
 
 var Granules = React.createClass({
-  displayName: 'Granules',
+  displayName: strings.granules,
 
   propTypes: {
     children: PropTypes.object,
@@ -38,7 +39,7 @@ var Granules = React.createClass({
       <div className='page__granules'>
         <div className='content__header'>
           <div className='row'>
-            <h1 className='heading--xlarge'>Granules</h1>
+            <h1 className='heading--xlarge'>{strings.granules}</h1>
           </div>
         </div>
         <div className='page__content'>

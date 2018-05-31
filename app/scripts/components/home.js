@@ -26,6 +26,8 @@ import {
 } from '../utils/table-config/granules';
 import { recent, updateInterval } from '../config';
 
+import { strings } from './locale';
+
 var Home = React.createClass({
   displayName: 'Home',
   propTypes: {
@@ -73,8 +75,8 @@ var Home = React.createClass({
     const { stats, count } = this.props.stats;
     const overview = [
       [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
-      [tally(get(stats.data, 'collections.value')), 'Collections', '/collections'],
-      [tally(get(stats.data, 'granules.value')), 'Granules', '/granules'],
+      [tally(get(stats.data, 'collections.value')), strings.collections, '/collections'],
+      [tally(get(stats.data, 'granules.value')), strings.granules, '/granules'],
       [tally(get(this.props.executions, 'list.meta.count')), 'Executions', '/executions'],
       [tally(get(this.props.rules, 'list.meta.count')), 'Ingest Rules', '/rules'],
       [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time']
@@ -114,7 +116,7 @@ var Home = React.createClass({
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium heading--shared-content--right'>Granules Updated <span className='num--title'>{numGranules}</span></h2>
+                <h2 className='heading--medium heading--shared-content--right'>{strings.granules_updated}<span className='num--title'>{numGranules}</span></h2>
               </div>
               <GranulesProgress granules={granuleStatus} />
             </div>
@@ -123,7 +125,7 @@ var Home = React.createClass({
           <section className='page__section list--granules'>
             <div className='row'>
               <div className='heading__wrapper--border'>
-                <h2 className='heading--medium'>Granule Errors</h2>
+                <h2 className='heading--medium'>{strings.granules_errors}</h2>
               </div>
               <List
                 list={list}
@@ -135,7 +137,7 @@ var Home = React.createClass({
                 tableSortProps={errorTableSortProps}
                 query={this.generateQuery()}
               />
-              <Link className='link--secondary link--learn-more' to='/granules'>View Granules Overview</Link>
+              <Link className='link--secondary link--learn-more' to='/granules'>{strings.view_granules_overview}</Link>
             </div>
           </section>
         </div>

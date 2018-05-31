@@ -412,8 +412,10 @@ export const updateRule = (name, payload) => wrapRequest(
 
 export const clearUpdateRule = (ruleName) => ({ type: UPDATE_RULE_CLEAR, id: ruleName });
 
-export const createRule = (id, payload) => wrapRequest(
-  id, post, 'rules', NEW_RULE, payload);
+//PGC export const createRule = (id, payload) => wrapRequest(
+//   id, post, 'rules', NEW_RULE, payload);
+export const createRule = (payload) => wrapRequest(
+  payload.name, post, 'rules', NEW_RULE, payload);
 
 export const deleteRule = (ruleName) => wrapRequest(
   ruleName, del, `rules/${ruleName}`, RULE_DELETE);

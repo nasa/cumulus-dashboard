@@ -4,13 +4,14 @@ import { Link } from 'react-router';
 import { get } from 'object-path';
 import { seconds, fromNow, bool, nullValue } from '../format';
 import { deletePdr } from '../../actions';
+import { strings } from '../../Components/locale';
 
 export const tableHeader = [
   'Updated',
   'Name',
   'Status',
   'Duration',
-  'Granules',
+  strings.granules,
   'Processing',
   'Failed',
   'Completed'
