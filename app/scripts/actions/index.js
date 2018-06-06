@@ -211,6 +211,14 @@ export const RULE_DISABLE = 'RULE_DISABLE';
 export const RULE_DISABLE_INFLIGHT = 'RULE_DISABLE_INFLIGHT';
 export const RULE_DISABLE_ERROR = 'RULE_DISABLE_ERROR';
 
+export const RECONCILIATION = 'RECONCILIATION';
+export const RECONCILIATION_INFLIGHT = 'RECONCILIATION_INFLIGHT';
+export const RECONCILIATION_ERROR = 'RECONCILIATION_ERROR';
+
+export const RECONCILIATIONS = 'RECONCILIATIONS';
+export const RECONCILIATIONS_INFLIGHT = 'RECONCILIATIONS_INFLIGHT';
+export const RECONCILIATIONS_ERROR = 'RECONCILIATIONS_ERROR';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -432,3 +440,11 @@ export const rerunRule = (ruleName) => wrapRequest(
   ruleName, put, `rules/${ruleName}`, RULE_RERUN, {
     action: 'rerun'
   });
+
+export const listReconciliations = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'reconciliations'),
+  qs: Object.assign({ limit: pageLimit }, options)
+}, RECONCILIATIONS);
+
+export const getReconciliation = (pdrName) => wrapRequest(
+  pdrName, get, `reconciliations/${reconciliationName}`, RECONCILIATION);
