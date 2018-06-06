@@ -446,5 +446,5 @@ export const listReconciliations = (options) => wrapRequest(null, get, {
   qs: Object.assign({ limit: pageLimit }, options)
 }, RECONCILIATIONS);
 
-export const getReconciliation = (pdrName) => wrapRequest(
+export const getReconciliation = (reconciliationName) => wrapRequest(
   pdrName, get, `reconciliations/${reconciliationName}`, RECONCILIATION);

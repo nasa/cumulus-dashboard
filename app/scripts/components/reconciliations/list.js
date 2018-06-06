@@ -101,4 +101,4 @@ const ReconciliationList = React.createClass({
 
 export default connect(state => ({
   pdrs: state.pdrs
-}))(ActivePdrs);
+}))(ReconciliationList);
