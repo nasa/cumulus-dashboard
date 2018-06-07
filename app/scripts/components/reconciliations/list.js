@@ -3,11 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  searchPdrs,
-  clearPdrsSearch,
-  listPdrs,
-  filterPdrs,
-  clearPdrsFilter
+  searchReconciliations,
+  clearReconciliationSearch,
+  listReconciliations
 } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
@@ -19,43 +17,24 @@ import {
   errorTableSortProps,
   bulkActions
 } from '../../utils/table-config/pdrs';
-import Dropdown from '../form/dropdown';
 import Search from '../form/search';
 import List from '../table/list-view';
-import { pdrStatus as statusOptions } from '../../utils/status';
 
 const ReconciliationList = React.createClass({
-  displayName: 'ActivePdrs',
+  displayName: 'ReconciliationList',
 
   propTypes: {
     location: PropTypes.object,
     dispatch: PropTypes.func,
-    pdrs: PropTypes.object
-  },
-
-  generateQuery: function () {
-    const query = {};
-    const { pathname } = this.props.location;
-    if (pathname === '/pdrs/completed') query.status = 'completed';
-    else if (pathname === '/pdrs/failed') query.status = 'failed';
-    else if (pathname === '/pdrs/active') query.status = 'running';
-    return query;
-  },
-
-  getView: function () {
-    const { pathname } = this.props.location;
-    if (pathname === '/pdrs/completed') return 'completed';
-    else if (pathname === '/pdrs/failed') return 'failed';
-    else if (pathname === '/pdrs/active') return 'active';
-    else return 'all';
+    reconciliations: PropTypes.object
   },
 
   generateBulkActions: function () {
-    return bulkActions(this.props.pdrs);
+    return bulkActions(this.props.reconciliations);
   },
 
   render: function () {
-    const { list } = this.props.pdrs;
+    const { list } = this.props.reconciliations;
     const { count, queriedAt } = list.meta;
     const view = this.getView();
     return (
@@ -67,25 +46,16 @@ const ReconciliationList = React.createClass({
             {lastUpdated(queriedAt)}
           </div>
           <div className='filters'>
-            {view === 'all' ? (
-              <Dropdown
-                options={statusOptions}
-                action={filterPdrs}
-                clear={clearPdrsFilter}
-                paramKey={'status'}
-                label={'Status'}
-              />
-            ) : null}
             <Search dispatch={this.props.dispatch}
-              action={searchPdrs}
-              clear={clearPdrsSearch}
+              action={searchReconciliations}
+              clear={clearReconciliationSearch}
             />
           </div>
 
           <List
             list={list}
             dispatch={this.props.dispatch}
-            action={listPdrs}
+            action={listReconciliations}
             tableHeader={view === 'failed' ? errorTableHeader : tableHeader}
             tableRow={view === 'failed' ? errorTableRow : tableRow}
             tableSortProps={view === 'failed' ? errorTableSortProps : tableSortProps}
@@ -100,5 +70,5 @@ const ReconciliationList = React.createClass({
 });
 
 export default connect(state => ({
-  pdrs: state.pdrs
+  reconciliations: state.reconciliations
 }))(ReconciliationList);

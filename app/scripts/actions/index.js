@@ -219,6 +219,9 @@ export const RECONCILIATIONS = 'RECONCILIATIONS';
 export const RECONCILIATIONS_INFLIGHT = 'RECONCILIATIONS_INFLIGHT';
 export const RECONCILIATIONS_ERROR = 'RECONCILIATIONS_ERROR';
 
+export const SEARCH_RECONCILIATIONS = 'SEARCH_RECONCILIATIONS';
+export const CLEAR_RECONCILIATIONS_SEARCH = 'CLEAR_RECONCILIATIONS_SEARCH';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -447,4 +450,7 @@ export const listReconciliations = (options) => wrapRequest(null, get, {
 }, RECONCILIATIONS);
 
 export const getReconciliation = (reconciliationName) => wrapRequest(
-  pdrName, get, `reconciliations/${reconciliationName}`, RECONCILIATION);
+  reconciliationName, get, `reconciliations/${reconciliationName}`, RECONCILIATION);
+
+export const searchReconciliations = (prefix) => ({ type: SEARCH_RECONCILIATIONS, prefix: prefix });
+export const clearReconciliationSearch = () => ({ type: CLEAR_RECONCILIATIONS_SEARCH });
