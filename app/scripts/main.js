@@ -70,6 +70,7 @@ import Logs from './components/logs';
 
 import Reconciliations from './components/reconciliations';
 import ReconciliationList from './components/reconciliations/list';
+import Reconciliation from './components/reconciliations/reconciliation';
 
 // redirect to login when not auth'd
 function requireAuth (nextState, replace) {
@@ -141,6 +142,7 @@ render((
         <Route path='logs' component={Logs} />
         <Route path='reconciliations' component={Reconciliations}>
           <IndexRoute component={ReconciliationList} />
+          <Route path='reconciliation/:reconciliationName' component={Reconciliation} />
         </Route>
       </Route>
     </Router>
