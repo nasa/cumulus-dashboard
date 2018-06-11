@@ -11,6 +11,7 @@ import workflows from './workflows';
 import executions from './executions';
 import executionStatus from './execution-status';
 import rules from './rules';
+import reconciliationReports from './reconciliation-reports';
 
 export const reducers = {
   def: (state = {}, action) => state,
@@ -25,7 +26,8 @@ export const reducers = {
   workflows,
   executions,
   executionStatus,
-  rules
+  rules,
+  reconciliationReports
 };
 
 export default combineReducers(Object.assign({}, reducers));
