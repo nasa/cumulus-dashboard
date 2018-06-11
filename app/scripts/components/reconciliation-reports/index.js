@@ -7,8 +7,8 @@ import Sidebar from '../app/sidebar';
 import { interval, getCount } from '../../actions';
 import { updateInterval } from '../../config';
 
-var Reconciliations = React.createClass({
-  displayName: 'Reconciliations',
+var ReconciliationReports = React.createClass({
+  displayName: 'Reconciliation Reports',
 
   propTypes: {
     children: PropTypes.object,
@@ -61,4 +61,4 @@ var Reconciliations = React.createClass({
 
 export default connect(state => ({
   stats: state.stats
-}))(Reconciliations);
+}))(ReconciliationReports);

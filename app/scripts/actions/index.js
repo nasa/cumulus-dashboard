@@ -444,13 +444,13 @@ export const rerunRule = (ruleName) => wrapRequest(
     action: 'rerun'
   });
 
-export const listReconciliations = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'reconciliations'),
+export const listReconciliationReports = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'reconciliationReports'),
   qs: Object.assign({ limit: pageLimit }, options)
 }, RECONCILIATIONS);
 
-export const getReconciliation = (reconciliationName) => wrapRequest(
-  reconciliationName, get, `reconciliations/${reconciliationName}`, RECONCILIATION);
+export const getReconciliationReport = (reconciliationName) => wrapRequest(
+  reconciliationName, get, `reconciliationReports/${reconciliationName}`, RECONCILIATION);
 
-export const searchReconciliations = (prefix) => ({ type: SEARCH_RECONCILIATIONS, prefix: prefix });
-export const clearReconciliationSearch = () => ({ type: CLEAR_RECONCILIATIONS_SEARCH });
+export const searchReconciliationReports = (prefix) => ({ type: SEARCH_RECONCILIATIONS, prefix: prefix });
+export const clearReconciliationReportSearch = () => ({ type: CLEAR_RECONCILIATIONS_SEARCH });

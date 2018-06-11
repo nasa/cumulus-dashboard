@@ -3,9 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  searchReconciliations,
-  clearReconciliationSearch,
-  listReconciliations
+  searchReconciliationReports,
+  clearReconciliationReportSearch,
+  listReconciliationReports
 } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
@@ -20,21 +20,21 @@ import {
 import Search from '../form/search';
 import List from '../table/list-view';
 
-const ReconciliationList = React.createClass({
-  displayName: 'ReconciliationList',
+const ReconciliationReportList = React.createClass({
+  displayName: 'Reconciliation Reports',
 
   propTypes: {
     location: PropTypes.object,
     dispatch: PropTypes.func,
-    reconciliations: PropTypes.object
+    reconciliationReports: PropTypes.object
   },
 
   generateBulkActions: function () {
-    return bulkActions(this.props.reconciliations);
+    return bulkActions(this.props.reconciliationReports);
   },
 
   render: function () {
-    const { list } = this.props.reconciliations;
+    const { list } = this.props.reconciliationReports;
     const { count, queriedAt } = list.meta;
     const view = this.getView();
     return (
@@ -47,15 +47,15 @@ const ReconciliationList = React.createClass({
           </div>
           <div className='filters'>
             <Search dispatch={this.props.dispatch}
-              action={searchReconciliations}
-              clear={clearReconciliationSearch}
+              action={searchReconciliationReports}
+              clear={clearReconciliationReportSearch}
             />
           </div>
 
           <List
             list={list}
             dispatch={this.props.dispatch}
-            action={listReconciliations}
+            action={listReconciliationReports}
             tableHeader={view === 'failed' ? errorTableHeader : tableHeader}
             tableRow={view === 'failed' ? errorTableRow : tableRow}
             tableSortProps={view === 'failed' ? errorTableSortProps : tableSortProps}
@@ -70,5 +70,5 @@ const ReconciliationList = React.createClass({
 });
 
 export default connect(state => ({
-  reconciliations: state.reconciliations
-}))(ReconciliationList);
+  reconciliationReports: state.reconciliationReports
+}))(ReconciliationReportList);

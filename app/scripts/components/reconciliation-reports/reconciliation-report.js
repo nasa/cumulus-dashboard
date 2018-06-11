@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   interval,
-  getReconciliation
+  getReconciliationReport
 } from '../../actions';
 import { get } from 'object-path';
 import { renderProgress } from '../../utils/table-config/pdr-progress';
@@ -14,9 +14,9 @@ import { updateInterval } from '../../config';
 
 const metaAccessors = [];
 
-var Reconciliation = React.createClass({
+var ReconciliationReport = React.createClass({
   propTypes: {
-    reconciliations: React.PropTypes.object,
+    reconciliationReports: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     params: React.PropTypes.object,
     router: React.PropTypes.object
@@ -24,7 +24,7 @@ var Reconciliation = React.createClass({
 
   componentWillMount: function () {
     const { reconciliationName } = this.props.params;
-    const immediate = !this.props.reconciliations.map[reconciliationName];
+    const immediate = !this.props.reconciliationReports.map[reconciliationName];
     this.reload(immediate);
   },
 
@@ -36,7 +36,7 @@ var Reconciliation = React.createClass({
     const { reconciliationName } = this.props.params;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
-    this.cancelInterval = interval(() => dispatch(getReconciliation(reconciliationName)), updateInterval, immediate);
+    this.cancelInterval = interval(() => dispatch(getReconciliationReport(reconciliationName)), updateInterval, immediate);
   },
 
   generateQuery: function () {
@@ -57,15 +57,15 @@ var Reconciliation = React.createClass({
   },
 
   render: function () {
-    const { reconciliationName } = this.props.params;
-    const record = this.props.reconciliations.map[reconciliationName];
+    const { reconciliationReportName } = this.props.params;
+    const record = this.props.reconciliationReports.map[reconciliationReportName];
     const error = record.error;
 
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description '>{reconciliationName}</h1>
+            <h1 className='heading--large heading--shared-content with-description '>{reconciliationReportName}</h1>
             {this.renderProgress(record)}
             {error ? <ErrorReport report={error} /> : null}
           </div>
@@ -88,4 +88,4 @@ var Reconciliation = React.createClass({
   }
 });
 
-export default connect(state => state)(Reconciliation);
+export default connect(state => state)(ReconciliationReport);
