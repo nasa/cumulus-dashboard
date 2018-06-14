@@ -13,7 +13,7 @@ import {
   tableRow,
   tableSortProps,
   bulkActions
-} from '../../utils/table-config/pdrs';
+} from '../../utils/table-config/reconciliation-reports';
 import Search from '../form/search';
 import List from '../table/list-view';
 

@@ -47,6 +47,7 @@ export default function reducer (state = initialState, action) {
       // response is a array of string filenames
       console.log(data)
       const results = data.map((filename) => ({ reconciliationReportName: filename }));
+      console.log(results)
       set(state, ['list', 'data'], results);
       set(state, ['list', 'meta'], assignDate(data.meta));
       set(state, ['list', 'inflight'], false);
