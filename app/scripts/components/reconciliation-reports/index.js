@@ -41,7 +41,7 @@ var ReconciliationReports = React.createClass({
       <div className='page__reconciliations'>
         <div className='content__header'>
           <div className='row'>
-            <h1 className='heading--xlarge'>Reconciliations</h1>
+            <h1 className='heading--xlarge'>Reconciliation Reports</h1>
             <button className='button button--large button--white button__addcollections button__arrow button__animation' onClick={this.createReport}>
               Create a Report
             </button>

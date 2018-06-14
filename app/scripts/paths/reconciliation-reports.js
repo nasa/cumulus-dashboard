@@ -4,10 +4,8 @@ const routes = [
 ];
 
 const singleRoutes = [
-  ['Back to Reports', null, 'sidebar__nav--back']
+  ['Back to Reports List', null, 'sidebar__nav--back']
 ];
-
-const empty = [['', '']];
 
 const handler = {
   base: 'reconciliation-reports',
@@ -15,8 +13,6 @@ const handler = {
   routes: (currentRoute, params) => {
     if (currentRoute.indexOf('reconciliation-reports/report') >= 0) {
       return singleRoutes;
-    } else if (currentRoute.slice(0, 11) !== '/reconciliation-reports') {
-      return empty;
     } else {
       return routes;
     }
