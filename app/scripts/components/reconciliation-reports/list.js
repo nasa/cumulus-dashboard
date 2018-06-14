@@ -11,7 +11,8 @@ import { lastUpdated } from '../../utils/format';
 import {
   tableHeader,
   tableRow,
-  tableSortProps
+  tableSortProps,
+  bulkActions
 } from '../../utils/table-config/pdrs';
 import Search from '../form/search';
 import List from '../table/list-view';
@@ -27,6 +28,11 @@ const ReconciliationReportList = React.createClass({
 
   generateQuery: function () {
     return {};
+  },
+
+  generateBulkActions: function () {
+    const { reconciliationReports } = this.props;
+    return bulkActions(reconciliationReports);
   },
 
   render: function () {

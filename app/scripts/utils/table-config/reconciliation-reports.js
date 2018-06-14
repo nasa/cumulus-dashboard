@@ -13,3 +13,7 @@ export const tableRow = [
 export const tableSortProps = [
   'reconciliationReportName'
 ];
+
+export const bulkActions = function (reports) {
+  return [];
+};
