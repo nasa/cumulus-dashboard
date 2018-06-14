@@ -64,7 +64,11 @@ var ReconciliationReport = React.createClass({
     const { reconciliationReportName } = this.props.params;
 
     const record = reconciliationReports.map[reconciliationReportName];
-    const error = record.error;
+
+    let error;
+    if (record && record.data) {
+      error = record.data.error;
+    }
 
     return (
       <div className='page__component'>
