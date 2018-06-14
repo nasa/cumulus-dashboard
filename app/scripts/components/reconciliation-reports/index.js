@@ -38,7 +38,6 @@ var ReconciliationReports = React.createClass({
   },
 
   render: function () {
-    const count = get(this.props.stats, 'count.data.reconciliations.count');
     return (
       <div className='page__reconciliations'>
         <div className='content__header'>
@@ -54,7 +53,6 @@ var ReconciliationReports = React.createClass({
             <Sidebar
               currentPath={this.props.location.pathname}
               params={this.props.params}
-              count={count}
             />
             <div className='page__content--shortened'>
               {this.props.children}

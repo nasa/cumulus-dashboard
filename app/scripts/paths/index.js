@@ -7,5 +7,7 @@ import errors from './errors';
 import workflows from './workflows';
 import executions from './executions';
 import rules from './rules';
-const paths = [ collections, granules, pdrs, providers, errors, workflows, executions, rules ];
+import reconciliationReports from './reconciliation-reports';
+
+const paths = [ collections, granules, pdrs, providers, errors, workflows, executions, rules, reconciliationReports ];
 export default paths;

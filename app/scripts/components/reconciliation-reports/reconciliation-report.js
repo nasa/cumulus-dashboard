@@ -60,7 +60,9 @@ var ReconciliationReport = React.createClass({
   },
 
   render: function () {
+    const { reconciliationReports } = this.props;
     const { reconciliationReportName } = this.props.params;
+
     console.log(this.props)
     console.log('reconciliationReportName', reconciliationReportName)
     const record = this.props.reconciliationReports.map[reconciliationReportName];
@@ -85,6 +87,10 @@ var ReconciliationReport = React.createClass({
     );
   }
 });
+
+ReconciliationReport.defaultProps = {
+  reconciliationReports: []
+};
 
 export { ReconciliationReport };
 export default connect(state => state)(ReconciliationReport);

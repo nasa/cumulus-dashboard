@@ -5,7 +5,7 @@ import { resolve } from 'path';
 import sections from '../../paths';
 
 const currentPathClass = 'sidebar__nav--selected';
-
+console.log('sections', sections)
 var Sidebar = React.createClass({
   displayName: 'Sidebar',
 
