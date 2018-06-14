@@ -28,7 +28,7 @@ var ReconciliationReports = React.createClass({
 
   query: function () {
     this.props.dispatch(getCount({
-      type: 'reconciliations',
+      type: 'reconciliationReports',
       field: 'status'
     }));
   },

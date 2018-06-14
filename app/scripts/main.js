@@ -142,7 +142,7 @@ render((
         <Route path='logs' component={Logs} />
         <Route path='reconciliation-reports' component={ReconciliationReports}>
           <IndexRoute component={ReconciliationReportList} />
-          <Route path='reconciliation-reports/:reconciliationReportName' component={ReconciliationReport} />
+          <Route path='report/:reconciliationReportName' component={ReconciliationReport} />
         </Route>
       </Route>
     </Router>

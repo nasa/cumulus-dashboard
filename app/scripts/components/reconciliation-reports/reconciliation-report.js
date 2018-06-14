@@ -5,14 +5,30 @@ import {
   interval,
   getReconciliationReport
 } from '../../actions';
-import { get } from 'object-path';
-import { renderProgress } from '../../utils/table-config/pdr-progress';
 import Metadata from '../table/metadata';
 import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
 import { updateInterval } from '../../config';
 
-const metaAccessors = [];
+function joinArray (arr) {
+  if (!arr || !arr.length) return '';
+  return arr.join(', ');
+}
+
+function joinArrayObjectProperty (property) {
+  return function (arr) {
+    if (!arr || !arr.length) return '';
+    return arr.map((obj) => obj[property]).join(', ');
+  };
+}
+
+const metaAccessors = [
+  ['Created', 'reportStartTime'],
+  ['Status', 'status'],
+  ['OK file count', 'okFileCount'],
+  ['Only in S3', 'onlyInS3', joinArray],
+  ['Only in DynamoDB', 'onlyInDynamoDb', joinArrayObjectProperty('granuleId')]
+];
 
 var ReconciliationReport = React.createClass({
   propTypes: {
@@ -23,8 +39,8 @@ var ReconciliationReport = React.createClass({
   },
 
   componentWillMount: function () {
-    const { reconciliationName } = this.props.params;
-    const immediate = !this.props.reconciliationReports.map[reconciliationName];
+    const { reconciliationReportName } = this.props.params;
+    const immediate = !this.props.reconciliationReports.map[reconciliationReportName];
     this.reload(immediate);
   },
 
@@ -33,40 +49,26 @@ var ReconciliationReport = React.createClass({
   },
 
   reload: function (immediate) {
-    const { reconciliationName } = this.props.params;
+    const { reconciliationReportName } = this.props.params;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
-    this.cancelInterval = interval(() => dispatch(getReconciliationReport(reconciliationName)), updateInterval, immediate);
-  },
-
-  generateQuery: function () {
-    const reconciliationName = get(this.props, ['params', 'reconciliationName']);
-    return { reconciliationName };
+    this.cancelInterval = interval(() => dispatch(getReconciliationReport(reconciliationReportName)), updateInterval, immediate);
   },
 
   navigateBack: function () {
     this.props.router.push('/reconciliations');
   },
 
-  renderProgress: function (record) {
-    return (
-      <div className='reconciliation__progress'>
-        {renderProgress(get(record, 'data', {}))}
-      </div>
-    );
-  },
-
   render: function () {
     const { reconciliationReportName } = this.props.params;
     const record = this.props.reconciliationReports.map[reconciliationReportName];
-    const error = record.error;
+    const error = record.data.error;
 
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>{reconciliationReportName}</h1>
-            {this.renderProgress(record)}
             {error ? <ErrorReport report={error} /> : null}
           </div>
         </section>
@@ -77,15 +79,10 @@ var ReconciliationReport = React.createClass({
           </div>
           {!record || (record.inflight && !record.data) ? <Loading /> : <Metadata data={record.data} accessors={metaAccessors} />}
         </section>
-
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-
-          </div>
-        </section>
       </div>
     );
   }
 });
 
+export { ReconciliationReport };
 export default connect(state => state)(ReconciliationReport);

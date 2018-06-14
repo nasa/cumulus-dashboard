@@ -11,22 +11,22 @@ import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
   tableHeader,
   tableRow,
-  tableSortProps,
-  errorTableHeader,
-  errorTableRow,
-  errorTableSortProps,
-  bulkActions
+  tableSortProps
 } from '../../utils/table-config/pdrs';
 import Search from '../form/search';
 import List from '../table/list-view';
 
 const ReconciliationReportList = React.createClass({
-  displayName: 'Reconciliation Reports',
+  displayName: 'ReconciliationReportList',
 
   propTypes: {
     location: PropTypes.object,
     dispatch: PropTypes.func,
     reconciliationReports: PropTypes.object
+  },
+
+  generateQuery: function () {
+    return {};
   },
 
   generateBulkActions: function () {
@@ -41,8 +41,9 @@ const ReconciliationReportList = React.createClass({
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>{displayCase(view)} PDRs
-              <span className='num--title'>{!isNaN(count) ? `(${tally(count)})` : null}</span></h1>
+            <h1 className='heading--large heading--shared-content with-description'>
+              Reconciliation Reports Overview
+            </h1>
             {lastUpdated(queriedAt)}
           </div>
           <div className='filters'>
@@ -56,12 +57,12 @@ const ReconciliationReportList = React.createClass({
             list={list}
             dispatch={this.props.dispatch}
             action={listReconciliationReports}
-            tableHeader={view === 'failed' ? errorTableHeader : tableHeader}
-            tableRow={view === 'failed' ? errorTableRow : tableRow}
-            tableSortProps={view === 'failed' ? errorTableSortProps : tableSortProps}
+            tableHeader={tableHeader}
+            tableRow={tableRow}
+            tableSortProps={tableSortProps}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            rowId={'pdrName'}
+            rowId={'reconciliationReportName'}
           />
         </section>
       </div>
