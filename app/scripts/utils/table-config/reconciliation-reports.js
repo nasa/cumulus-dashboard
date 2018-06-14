@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import { Link } from 'react-router';
-import { createReconciliationReport } from '../../actions';
 
 export const tableHeader = [
   'Report filename'

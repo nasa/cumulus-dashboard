@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
 import Sidebar from '../app/sidebar';
-import { interval, getCount } from '../../actions';
+import { interval, getCount, createReconciliationReport } from '../../actions';
 import { updateInterval } from '../../config';
 
 var ReconciliationReports = React.createClass({
@@ -33,6 +33,10 @@ var ReconciliationReports = React.createClass({
     }));
   },
 
+  createReport: function () {
+    this.props.dispatch(createReconciliationReport());
+  },
+
   render: function () {
     const count = get(this.props.stats, 'count.data.reconciliations.count');
     return (
@@ -40,6 +44,9 @@ var ReconciliationReports = React.createClass({
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge'>Reconciliations</h1>
+            <button className='button button--large button--white button__addcollections button__arrow button__animation' onClick={this.createReport.bind(this)}>
+              Create a Report
+            </button>
           </div>
         </div>
         <div className='page__content'>
