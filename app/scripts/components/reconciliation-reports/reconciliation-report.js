@@ -63,9 +63,7 @@ var ReconciliationReport = React.createClass({
     const { reconciliationReports } = this.props;
     const { reconciliationReportName } = this.props.params;
 
-    console.log(this.props)
-    console.log('reconciliationReportName', reconciliationReportName)
-    const record = this.props.reconciliationReports.map[reconciliationReportName];
+    const record = reconciliationReports.map[reconciliationReportName];
     const error = record.error;
 
     return (

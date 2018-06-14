@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'object-path';
 import { connect } from 'react-redux';
 import Sidebar from '../app/sidebar';
 import { interval, getCount, createReconciliationReport } from '../../actions';
