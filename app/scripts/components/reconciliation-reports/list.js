@@ -7,7 +7,7 @@ import {
   clearReconciliationReportSearch,
   listReconciliationReports
 } from '../../actions';
-import { lastUpdated, tally, displayCase } from '../../utils/format';
+import { lastUpdated } from '../../utils/format';
 import {
   tableHeader,
   tableRow,
@@ -29,14 +29,10 @@ const ReconciliationReportList = React.createClass({
     return {};
   },
 
-  generateBulkActions: function () {
-    return bulkActions(this.props.reconciliationReports);
-  },
-
   render: function () {
     const { list } = this.props.reconciliationReports;
-    const { count, queriedAt } = list.meta;
-    const view = this.getView();
+    const { queriedAt } = list.meta;
+
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
