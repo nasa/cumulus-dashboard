@@ -96,7 +96,6 @@ const ReconciliationReport = React.createClass({
     let filesInS3 = [];
     let filesInDynamoDb = [];
     if (record && record.data) {
-      console.log(record.data)
       filesInS3 = record.data.onlyInS3.map(d => { 
         const parsed = url.parse(d); 
         return {
