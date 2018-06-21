@@ -84,24 +84,26 @@ const ReconciliationReport = React.createClass({
     let filesInS3 = [];
     let filesInDynamoDb = [];
     if (record && record.data) {
-      filesInS3 = record.data.onlyInS3.map(d => {
-        const parsed = url.parse(d);
-        return {
-          filename: path.basename(parsed.pathname),
-          bucket: parsed.hostname,
-          path: parsed.href
-        };
-      });
+      if (record.data.onlyInDynamoDb && record.data.onlyInS3) {
+        filesInS3 = record.data.onlyInS3.map(d => {
+          const parsed = url.parse(d);
+          return {
+            filename: path.basename(parsed.pathname),
+            bucket: parsed.hostname,
+            path: parsed.href
+          };
+        });
 
-      filesInDynamoDb = record.data.onlyInDynamoDb.map(d => {
-        const parsed = url.parse(d.uri);
-        return {
-          granuleId: d.granuleId,
-          filename: path.basename(parsed.pathname),
-          bucket: parsed.hostname,
-          path: parsed.href
-        };
-      });
+        filesInDynamoDb = record.data.onlyInDynamoDb.map(d => {
+          const parsed = url.parse(d.uri);
+          return {
+            granuleId: d.granuleId,
+            filename: path.basename(parsed.pathname),
+            bucket: parsed.hostname,
+            path: parsed.href
+          };
+        });
+      }
     }
 
     let error;
@@ -128,7 +130,7 @@ const ReconciliationReport = React.createClass({
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>
-              Files only in DynamoDB {!record || (record.inflight && !record.data) ? '' : `(${record.data.onlyInDynamoDb.length})`}
+              Files only in DynamoDB ({filesInDynamoDb.length})
             </h2>
           </div>
           <SortableTable
@@ -142,7 +144,7 @@ const ReconciliationReport = React.createClass({
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>
-              Files only in S3 {!record || (record.inflight && !record.data) ? '' : `(${record.data.onlyInS3.length})`}
+              Files only in S3 ({filesInS3.length})
             </h2>
           </div>
           <SortableTable
