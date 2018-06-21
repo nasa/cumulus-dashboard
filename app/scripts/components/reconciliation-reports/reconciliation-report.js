@@ -85,7 +85,7 @@ const ReconciliationReport = React.createClass({
     let filesInDynamoDb = [];
     if (record && record.data) {
       filesInS3 = record.data.onlyInS3.map(d => {
-        const parsed = url.parse(d); 
+        const parsed = url.parse(d);
         return {
           filename: path.basename(parsed.pathname),
           bucket: parsed.hostname,
@@ -93,8 +93,8 @@ const ReconciliationReport = React.createClass({
         };
       });
 
-      filesInDynamoDb = record.data.onlyInDynamoDb.map(d => { 
-        const parsed = url.parse(d.uri); 
+      filesInDynamoDb = record.data.onlyInDynamoDb.map(d => {
+        const parsed = url.parse(d.uri);
         return {
           granuleId: d.granuleId,
           filename: path.basename(parsed.pathname),
