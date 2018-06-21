@@ -14,18 +14,6 @@ import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
 import { updateInterval } from '../../config';
 
-function joinArray (arr) {
-  if (!arr || !arr.length) return '';
-  return arr.join(', ');
-}
-
-function joinArrayObjectProperty (property) {
-  return function (arr) {
-    if (!arr || !arr.length) return '';
-    return arr.map((obj) => obj[property]).join(', ');
-  };
-}
-
 const metaAccessors = [
   ['Created', 'reportStartTime'],
   ['Status', 'status'],
@@ -96,7 +84,7 @@ const ReconciliationReport = React.createClass({
     let filesInS3 = [];
     let filesInDynamoDb = [];
     if (record && record.data) {
-      filesInS3 = record.data.onlyInS3.map(d => { 
+      filesInS3 = record.data.onlyInS3.map(d => {
         const parsed = url.parse(d); 
         return {
           filename: path.basename(parsed.pathname),
