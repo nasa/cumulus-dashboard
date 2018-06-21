@@ -68,6 +68,10 @@ import AddRule from './components/rules/add';
 
 import Logs from './components/logs';
 
+import ReconciliationReports from './components/reconciliation-reports';
+import ReconciliationReportList from './components/reconciliation-reports/list';
+import ReconciliationReport from './components/reconciliation-reports/reconciliation-report';
+
 // redirect to login when not auth'd
 function requireAuth (nextState, replace) {
   if (!store.getState().api.authenticated) {
@@ -136,6 +140,10 @@ render((
           <Route path='add' component={AddRule} />
         </Route>
         <Route path='logs' component={Logs} />
+        <Route path='reconciliation-reports' component={ReconciliationReports}>
+          <IndexRoute component={ReconciliationReportList} />
+          <Route path='report/:reconciliationReportName' component={ReconciliationReport} />
+        </Route>
       </Route>
     </Router>
   </ProviderElem>
