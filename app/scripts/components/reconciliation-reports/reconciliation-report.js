@@ -106,7 +106,7 @@ const ReconciliationReport = React.createClass({
         };
       });
 
-      filesInDynamoDb = record.data.onlyInDyanmoDb.map(d => { 
+      filesInDynamoDb = record.data.onlyInDynamoDb.map(d => { 
         const parsed = url.parse(d.uri); 
         return {
           granuleId: d.granuleId,
