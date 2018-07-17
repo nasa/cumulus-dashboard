@@ -32,6 +32,8 @@ import ErrorReport from '../errors/report';
 import Metadata from '../table/metadata';
 import AsyncCommands from '../form/dropdown-async-command';
 import { updateInterval } from '../../config';
+import { workflowOptionNames } from '../../selectors';
+import { simpleDropdownConfig } from '../../utils/table-config/granules';
 
 const tableHeader = [
   'Filename',
@@ -87,13 +89,12 @@ var GranuleOverview = React.createClass({
   componentWillMount: function () {
     this.setState({});
     const { granuleId } = this.props.params;
-    this.props.dispatch(listWorkflows());
+    this.cancelInterval = interval(this.queryWorkflows, updateInterval, true);
 
     if (this.props.skipReloadOnMount) return;
 
     const immediate = !this.props.granules.map[granuleId];
     this.reload(immediate);
-    console.log(this.props.workflowOptions);
   },
 
   componentWillUnmount: function () {
@@ -118,6 +119,10 @@ var GranuleOverview = React.createClass({
     router.push('/granules');
   },
 
+  queryWorkflows: function () {
+    this.props.dispatch(listWorkflows());
+  },
+
   reingest: function () {
     const { granuleId } = this.props.params;
     this.props.dispatch(reingestGranule(granuleId));
@@ -126,7 +131,6 @@ var GranuleOverview = React.createClass({
   applyWorkflow: function () {
     const { granuleId } = this.props.params;
     const { workflow } = this.state;
-    console.log(`Req: ${JSON.stringify({ granuleId, workflow })}`);
     this.props.dispatch(applyWorkflowToGranule(granuleId, workflow));
   },
 
@@ -153,21 +157,15 @@ var GranuleOverview = React.createClass({
 
   selectWorkflow: function (selector, workflow) {
     this.setState({ workflow });
-    console.log(`state: ${JSON.stringify(this.state)}`);
-    return workflow;
   },
 
-  getConfirmDropdownConfigs: function () {
-    const dropdownOptions = this.props.workflowOptions;
-    const { workflow } = this.state;
-    return [
-      {
-        handler: this.selectWorkflow,
-        label: 'workflow',
-        value: workflow,
-        options: dropdownOptions
-      }
-    ];
+  getExecuteConfigs: function () {
+    return simpleDropdownConfig(
+      this.selectWorkflow,
+      'workflow',
+      this.state.workflow,
+      this.props.workflowOptions
+    );
   },
 
   render: function () {
@@ -197,7 +195,7 @@ var GranuleOverview = React.createClass({
       confirmAction: true,
       confirmText: `Execute on ${granuleId}?`,
       confirmHasDropdown: true,
-      confirmDropdownConfigs: this.getConfirmDropdownConfigs()
+      confirmDropdownConfigs: this.getExecuteConfigs()
     }, {
       text: 'Remove from CMR',
       action: this.remove,
@@ -263,6 +261,6 @@ export { GranuleOverview };
 
 export default connect(state => ({
   granules: state.granules,
-  workflowOptions: state.workflows.list.data.map((wf) => wf.name),
+  workflowOptions: workflowOptionNames(state),
   logs: state.logs
 }))(GranuleOverview);

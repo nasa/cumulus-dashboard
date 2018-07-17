@@ -15,7 +15,8 @@ import {
 import {
   reingestGranule,
   removeGranule,
-  deleteGranule
+  deleteGranule,
+  applyWorkflowToGranule
 } from '../../actions';
 import ErrorReport from '../../components/errors/report';
 
@@ -74,14 +75,20 @@ export const errorTableSortProps = [
 ];
 
 const confirmReingest = (d) => `Reingest ${d} granules(s)? Note, completed granules cannot be reingested.`;
+const confirmApply = (d) => `Run workflow on ${d} granules?`;
 const confirmRemove = (d) => `Remove ${d} granule(s) from CMR?`;
 const confirmDelete = (d) => `Delete ${d} granule(s)?`;
-export const bulkActions = function (granules) {
+export const bulkActions = function (granules, executionConfig) {
   return [{
     text: 'Reingest',
     action: reingestGranule,
     state: granules.reingested,
     confirm: confirmReingest
+  }, {
+    text: 'Execute',
+    action: applyWorkflowToGranule,
+    state: granules,
+    confirm: confirmApply
   }, {
     text: 'Remove from CMR',
     action: removeGranule,
@@ -93,4 +100,15 @@ export const bulkActions = function (granules) {
     state: granules.deleted,
     confirm: confirmDelete
   }];
+};
+
+export const simpleDropdownConfig = function (handler, label, value, options) {
+  return [
+    {
+      handler,
+      label,
+      value,
+      options
+    }
+  ];
 };
