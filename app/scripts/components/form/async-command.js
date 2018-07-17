@@ -2,6 +2,7 @@
 import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
+import Dropdown from './simple-dropdown';
 import Ellipsis from '../app/loading-ellipsis';
 import { preventDefault } from '../../utils/noop';
 import { updateDelay } from '../../config';
@@ -19,7 +20,9 @@ const AsyncCommand = React.createClass({
     successTimeout: PropTypes.number,
     element: PropTypes.string,
     confirmAction: PropTypes.bool,
-    confirmText: PropTypes.string
+    confirmText: PropTypes.string,
+    confirmHasDropdown: PropTypes.bool,
+    confirmDropdownConfigs: PropTypes.array
   },
 
   getInitialState: function () {
@@ -80,7 +83,7 @@ const AsyncCommand = React.createClass({
   },
 
   render: function () {
-    const { status, text, confirmText } = this.props;
+    const { status, text, confirmText, confirmHasDropdown, confirmDropdownConfigs } = this.props;
     const { modal } = this.state;
     const inflight = status === 'inflight';
     const element = this.props.element || 'button';
@@ -106,7 +109,22 @@ const AsyncCommand = React.createClass({
           { modal ? (
             <div className='modal'>
               <div className='modal__internal modal__formcenter'>
-                <h4>{confirmText}</h4>
+                <div className='filters filters__wlabels'>
+                  { confirmHasDropdown ? (confirmDropdownConfigs).map(item =>
+                  <div key={`dropdown-${item.label}`}>
+                    <Dropdown
+                      label={item.label.toUpperCase()}
+                      value={item.value}
+                      options={item.options}
+                      id={item.label}
+                      onChange={item.handler}
+                      noNull={true}
+                    />
+                    <br />
+                  </div>
+                  ) : null }
+                  <h4>{confirmText}</h4>
+                </div>
                 <button
                   className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
                   onClick={this.confirm}>Confirm</button>

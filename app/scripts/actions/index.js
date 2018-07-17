@@ -49,6 +49,10 @@ export const GRANULES = 'GRANULES';
 export const GRANULES_INFLIGHT = 'GRANULES_INFLIGHT';
 export const GRANULES_ERROR = 'GRANULES_ERROR';
 
+export const GRANULE_APPLYWORKFLOW = 'GRANULE_APPLYWORKFLOW';
+export const GRANULE_APPLYWORKFLOW_INFLIGHT = 'GRANULE_APPLYWORKFLOW_INFLIGHT';
+export const GRANULE_APPLYWORKFLOW_ERROR = 'GRANULE_APPLYWORKFLOW_ERROR';
+
 export const GRANULE_REPROCESS = 'GRANULE_REPROCESS';
 export const GRANULE_REPROCESS_INFLIGHT = 'GRANULE_REPROCESS_INFLIGHT';
 export const GRANULE_REPROCESS_ERROR = 'GRANULE_REPROCESS_ERROR';
@@ -64,6 +68,9 @@ export const GRANULE_REMOVE_ERROR = 'GRANULE_REMOVE_ERROR';
 export const GRANULE_DELETE = 'GRANULE_DELETE';
 export const GRANULE_DELETE_INFLIGHT = 'GRANULE_DELETE_INFLIGHT';
 export const GRANULE_DELETE_ERROR = 'GRANULE_DELETE_ERROR';
+
+export const SELECT_GRANULE_WORKFLOW = 'SELECT_GRANULE_WORKFLOW';
+export const CLEAR_GRANULE_WORKFLOW = 'CLEAR_GRANULE_WORKFLOW';
 
 export const SEARCH_GRANULES = 'SEARCH_GRANULES';
 export const CLEAR_GRANULES_SEARCH = 'CLEAR_GRANULES_SEARCH';
@@ -279,6 +286,12 @@ export const reprocessGranule = (granuleId) => wrapRequest(
     action: 'reprocess'
   });
 
+export const applyWorkflowToGranule = (granuleId, workflow) => wrapRequest(
+  granuleId, put, `granules/${granuleId}`, GRANULE_APPLYWORKFLOW, {
+    action: 'applyWorkflow',
+    workflow
+  });
+
 export const reingestGranule = (granuleId) => wrapRequest(
   granuleId, put, `granules/${granuleId}`, GRANULE_REINGEST, {
     action: 'reingest'
@@ -296,6 +309,8 @@ export const searchGranules = (prefix) => ({ type: SEARCH_GRANULES, prefix: pref
 export const clearGranulesSearch = () => ({ type: CLEAR_GRANULES_SEARCH });
 export const filterGranules = (param) => ({ type: FILTER_GRANULES, param: param });
 export const clearGranulesFilter = (paramKey) => ({ type: CLEAR_GRANULES_FILTER, paramKey: paramKey });
+export const selectGranuleWorkflow = (param) => ({ type: SELECT_GRANULE_WORKFLOW, param: param });
+export const clearGranuleWorkflow = (paramKey) => ({ type: CLEAR_GRANULE_WORKFLOW, paramKey: paramKey });
 
 export const getOptionsCollectionName = () => wrapRequest(null, get, {
   url: url.resolve(root, 'collections'),
