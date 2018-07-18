@@ -101,7 +101,7 @@ export const bulkActions = function (granules, config) {
   }, {
     text: 'Execute',
     action: config.execute.action,
-    state: granules,
+    state: granules.executed,
     confirm: confirmApply,
     confirmOptions: config.execute.options
   }, {
