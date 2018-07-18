@@ -9,3 +9,4 @@ gulp-cache
 /artifacts
 /tmp/
 /docker/html/
+package-lock.json
