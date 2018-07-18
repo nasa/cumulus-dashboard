@@ -33,7 +33,7 @@ import Metadata from '../table/metadata';
 import AsyncCommands from '../form/dropdown-async-command';
 import { updateInterval } from '../../config';
 import { workflowOptionNames } from '../../selectors';
-import { simpleDropdownConfig } from '../../utils/table-config/granules';
+import { simpleDropdownOption } from '../../utils/table-config/granules';
 
 const tableHeader = [
   'Filename',
@@ -159,13 +159,13 @@ var GranuleOverview = React.createClass({
     this.setState({ workflow });
   },
 
-  getExecuteConfigs: function () {
-    return simpleDropdownConfig(
-      this.selectWorkflow,
-      'workflow',
-      this.state.workflow,
-      this.props.workflowOptions
-    );
+  getExecuteOptions: function () {
+    return simpleDropdownOption({
+      handler: this.selectWorkflow,
+      label: 'workflow',
+      value: this.state.workflow,
+      options: this.props.workflowOptions
+    });
   },
 
   render: function () {
@@ -194,8 +194,7 @@ var GranuleOverview = React.createClass({
       success: this.fastReload,
       confirmAction: true,
       confirmText: `Execute on ${granuleId}?`,
-      confirmHasDropdown: true,
-      confirmDropdownConfigs: this.getExecuteConfigs()
+      confirmOptions: [this.getExecuteOptions]
     }, {
       text: 'Remove from CMR',
       action: this.remove,

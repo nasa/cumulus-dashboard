@@ -2,7 +2,6 @@
 import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
-import Dropdown from './simple-dropdown';
 import Ellipsis from '../app/loading-ellipsis';
 import { preventDefault } from '../../utils/noop';
 import { updateDelay } from '../../config';
@@ -21,8 +20,7 @@ const AsyncCommand = React.createClass({
     element: PropTypes.string,
     confirmAction: PropTypes.bool,
     confirmText: PropTypes.string,
-    confirmHasDropdown: PropTypes.bool,
-    confirmDropdownConfigs: PropTypes.array
+    confirmOptions: PropTypes.array
   },
 
   getInitialState: function () {
@@ -83,7 +81,7 @@ const AsyncCommand = React.createClass({
   },
 
   render: function () {
-    const { status, text, confirmText, confirmHasDropdown, confirmDropdownConfigs } = this.props;
+    const { status, text, confirmText, confirmOptions } = this.props;
     const { modal } = this.state;
     const inflight = status === 'inflight';
     const element = this.props.element || 'button';
@@ -109,22 +107,13 @@ const AsyncCommand = React.createClass({
           { modal ? (
             <div className='modal'>
               <div className='modal__internal modal__formcenter'>
-                <div className='filters filters__wlabels'>
-                  { confirmHasDropdown ? (confirmDropdownConfigs).map(item =>
-                  <div key={`dropdown-${item.label}`}>
-                    <Dropdown
-                      label={item.label.toUpperCase()}
-                      value={item.value}
-                      options={item.options}
-                      id={item.label}
-                      onChange={item.handler}
-                      noNull={true}
-                    />
+                { confirmOptions ? (confirmOptions).map(option =>
+                  <div key={`option-${confirmOptions.indexOf(option)}`}>
+                    {option()}
                     <br />
                   </div>
-                  ) : null }
-                  <h4>{confirmText}</h4>
-                </div>
+                ) : null }
+                <h4>{confirmText}</h4>
                 <button
                   className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
                   onClick={this.confirm}>Confirm</button>
