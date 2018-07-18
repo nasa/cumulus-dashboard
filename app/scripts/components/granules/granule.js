@@ -160,12 +160,14 @@ var GranuleOverview = React.createClass({
   },
 
   getExecuteOptions: function () {
-    return simpleDropdownOption({
-      handler: this.selectWorkflow,
-      label: 'workflow',
-      value: this.state.workflow,
-      options: this.props.workflowOptions
-    });
+    return [
+      simpleDropdownOption({
+        handler: this.selectWorkflow,
+        label: 'workflow',
+        value: this.state.workflow,
+        options: this.props.workflowOptions
+      })
+    ];
   },
 
   render: function () {
@@ -194,7 +196,7 @@ var GranuleOverview = React.createClass({
       success: this.fastReload,
       confirmAction: true,
       confirmText: `Execute on ${granuleId}?`,
-      confirmOptions: [this.getExecuteOptions]
+      confirmOptions: this.getExecuteOptions()
     }, {
       text: 'Remove from CMR',
       action: this.remove,

@@ -64,7 +64,7 @@ var GranulesOverview = React.createClass({
   generateBulkActions: function () {
     const config = {
       execute: {
-        options: [this.getExecuteOptions],
+        options: this.getExecuteOptions(),
         action: this.applyWorkflow
       }
     };
@@ -81,12 +81,14 @@ var GranulesOverview = React.createClass({
   },
 
   getExecuteOptions: function () {
-    return simpleDropdownOption({
-      handler: this.selectWorkflow,
-      label: 'workflow',
-      value: this.state.workflow,
-      options: this.props.workflowOptions
-    });
+    return [
+      simpleDropdownOption({
+        handler: this.selectWorkflow,
+        label: 'workflow',
+        value: this.state.workflow,
+        options: this.props.workflowOptions
+      })
+    ];
   },
 
   renderOverview: function (count) {

@@ -109,7 +109,7 @@ const AsyncCommand = React.createClass({
               <div className='modal__internal modal__formcenter'>
                 { confirmOptions ? (confirmOptions).map(option =>
                   <div key={`option-${confirmOptions.indexOf(option)}`}>
-                    {option()}
+                    {option}
                     <br />
                   </div>
                 ) : null }

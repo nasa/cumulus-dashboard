@@ -40,7 +40,7 @@ const BatchCommand = React.createClass({
       if (!state[id] || !callbacks[id]) return;
       else if (state[id].status === 'success') callbacks[id](null, id);
       else if (state[id].status === 'error') callbacks[id]({error: state[id].error, id});
-      if (state[id].status === 'success' || state[id].status === 'error') {
+      if (state[id].status === 'success' || state[id].status === 'error' || state[id].status === 'failed') {
         delete callbacks[id];
         this.setState({ callbacks, completed: completed + 1 });
       }
@@ -140,7 +140,7 @@ const BatchCommand = React.createClass({
               <div className='modal__internal modal__formcenter'>
                 { confirmOptions ? (confirmOptions).map(option =>
                   <div key={`option-${confirmOptions.indexOf(option)}`}>
-                    {option()}
+                    {option}
                     <br />
                   </div>
                 ) : null }
