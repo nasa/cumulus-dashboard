@@ -150,6 +150,7 @@ var GranuleOverview = React.createClass({
       get(this.props.granules.map, [granuleId, 'error']),
       get(this.props.granules.reprocessed, [granuleId, 'error']),
       get(this.props.granules.reingested, [granuleId, 'error']),
+      get(this.props.granules.executed, [granuleId, 'error']),
       get(this.props.granules.removed, [granuleId, 'error']),
       get(this.props.granules.deleted, [granuleId, 'error'])
     ].filter(Boolean);
@@ -192,7 +193,7 @@ var GranuleOverview = React.createClass({
     }, {
       text: 'Execute',
       action: this.applyWorkflow,
-      status: get(this.props.granules.reingested, [granuleId, 'status']),
+      status: get(this.props.granules.executed, [granuleId, 'status']),
       success: this.fastReload,
       confirmAction: true,
       confirmText: `Execute on ${granuleId}?`,
