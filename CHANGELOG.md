@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+### Added
+- `Execute` option on granules to start a workflow with the granule as payload.
+
 ### Fixed
 - batch-async-command now collects all errors in a queue, rather than emptying the queue after the first error
 

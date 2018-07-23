@@ -34,7 +34,10 @@ test('CUMULUS-336 Granule file links use the correct URL', function (t) {
 
   const params = { granuleId: 'my-granule-id' };
 
+  const dispatch = () => {};
+
   const granuleOverview = shallow(<GranuleOverview
+      dispatch={dispatch}
       params={params}
       granules={granules}
       logs={logs}

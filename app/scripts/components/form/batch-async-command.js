@@ -19,6 +19,7 @@ const BatchCommand = React.createClass({
     onSuccess: PropTypes.func,
     onError: PropTypes.func,
     confirm: PropTypes.func,
+    confirmOptions: PropTypes.array,
     updateDelay: PropTypes.number
   },
 
@@ -112,7 +113,7 @@ const BatchCommand = React.createClass({
   },
 
   render: function () {
-    const { text, selection, className, confirm } = this.props;
+    const { text, selection, className, confirm, confirmOptions } = this.props;
     const { activeModal, completed, status } = this.state;
     const todo = selection.length;
     const inflight = this.isInflight();
@@ -137,6 +138,12 @@ const BatchCommand = React.createClass({
           { activeModal ? (
             <div className='modal'>
               <div className='modal__internal modal__formcenter'>
+                { confirmOptions ? (confirmOptions).map(option =>
+                  <div key={`option-${confirmOptions.indexOf(option)}`}>
+                    {option}
+                    <br />
+                  </div>
+                ) : null }
                 <h4 className={'modal__title--' + status}>{modalText}</h4>
                 <button className={'button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (buttonDisabled ? ' button--disabled' : '')}
                   onClick={this.confirm}>Confirm</button>

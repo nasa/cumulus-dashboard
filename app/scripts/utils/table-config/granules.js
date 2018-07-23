@@ -18,6 +18,7 @@ import {
   deleteGranule
 } from '../../actions';
 import ErrorReport from '../../components/errors/report';
+import Dropdown from '../../components/form/simple-dropdown';
 
 export const tableHeader = [
   'Status',
@@ -73,15 +74,36 @@ export const errorTableSortProps = [
   'timestamp'
 ];
 
+export const simpleDropdownOption = function (config) {
+  return (
+    <Dropdown
+      key={config.label}
+      label={config.label.toUpperCase()}
+      value={config.value}
+      options={config.options}
+      id={config.label}
+      onChange={config.handler}
+      noNull={true}
+    />
+  );
+};
+
 const confirmReingest = (d) => `Reingest ${d} granules(s)? Note, completed granules cannot be reingested.`;
+const confirmApply = (d) => `Run workflow on ${d} granules?`;
 const confirmRemove = (d) => `Remove ${d} granule(s) from CMR?`;
 const confirmDelete = (d) => `Delete ${d} granule(s)?`;
-export const bulkActions = function (granules) {
+export const bulkActions = function (granules, config) {
   return [{
     text: 'Reingest',
     action: reingestGranule,
     state: granules.reingested,
     confirm: confirmReingest
+  }, {
+    text: 'Execute',
+    action: config.execute.action,
+    state: granules.executed,
+    confirm: confirmApply,
+    confirmOptions: config.execute.options
   }, {
     text: 'Remove from CMR',
     action: removeGranule,

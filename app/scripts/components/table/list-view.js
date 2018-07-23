@@ -212,6 +212,7 @@ var List = React.createClass({
               state={item.state}
               text={item.text}
               confirm={item.confirm}
+              confirmOptions={item.confirmOptions}
               onSuccess={this.onBulkActionSuccess}
               onError={this.onBulkActionError}
               selection={selected}

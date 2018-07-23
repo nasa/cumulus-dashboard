@@ -11,6 +11,10 @@ export const workflowOptions = ({ workflows }) => {
   return options;
 };
 
+export const workflowOptionNames = ({ workflows }) => {
+  return get(workflows, 'list.data', []).map(workflow => workflow.name);
+};
+
 export const collectionOptions = ({ collections }) => {
   const options = {'': ''};
   get(collections, 'list.data', []).forEach(d => {

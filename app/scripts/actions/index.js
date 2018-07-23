@@ -49,6 +49,10 @@ export const GRANULES = 'GRANULES';
 export const GRANULES_INFLIGHT = 'GRANULES_INFLIGHT';
 export const GRANULES_ERROR = 'GRANULES_ERROR';
 
+export const GRANULE_APPLYWORKFLOW = 'GRANULE_APPLYWORKFLOW';
+export const GRANULE_APPLYWORKFLOW_INFLIGHT = 'GRANULE_APPLYWORKFLOW_INFLIGHT';
+export const GRANULE_APPLYWORKFLOW_ERROR = 'GRANULE_APPLYWORKFLOW_ERROR';
+
 export const GRANULE_REPROCESS = 'GRANULE_REPROCESS';
 export const GRANULE_REPROCESS_INFLIGHT = 'GRANULE_REPROCESS_INFLIGHT';
 export const GRANULE_REPROCESS_ERROR = 'GRANULE_REPROCESS_ERROR';
@@ -277,6 +281,12 @@ export const getRecentGranules = () => wrapRequest(null, get, {
 export const reprocessGranule = (granuleId) => wrapRequest(
   granuleId, put, `granules/${granuleId}`, GRANULE_REPROCESS, {
     action: 'reprocess'
+  });
+
+export const applyWorkflowToGranule = (granuleId, workflow) => wrapRequest(
+  granuleId, put, `granules/${granuleId}`, GRANULE_APPLYWORKFLOW, {
+    action: 'applyWorkflow',
+    workflow
   });
 
 export const reingestGranule = (granuleId) => wrapRequest(
