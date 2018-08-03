@@ -27,10 +27,10 @@ The following Environment Variables override the default values in `config.js`:
 | HIDE_PDR | whether to hide the PDR menu, default to true
 | DAAC\_NAME | e.g. LPDAAC, default to Local
 | STAGE | e.g. UAT, default to development
-| LANG | gitc or cmr localization
-| APIROOT | the API URL, default to a test URL deployed by Devseed
+| LABELS | gitc or daac localization (defaults to daac)
+| APIROOT | the API URL. This must be set as it defaults to example.com 
 
-     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false LANG=cmr APIROOT=https://myapi.com npm run serve
+     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com npm run serve
 
 ## Building in Docker
 
@@ -59,7 +59,7 @@ npm run serve
 
 First build the site
 
-     $ DAAC_NAME=GITC STAGE=production HIDE_PDR=false LANG=gitc APIROOT=https://myapi.com npm run build
+     $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com npm run build
 
 Then deploy the `dist` folder
 
