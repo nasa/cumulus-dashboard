@@ -236,6 +236,10 @@ select {
   padding-top: .5em;
 }
 
+.ace_text-layer {
+  font-feature-settings: "liga" 0;
+}
+
 .form__item {
   margin-bottom: 1.5em;
 }
