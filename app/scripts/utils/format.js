@@ -139,7 +139,7 @@ export const collectionNameVersion = function (collectionId) {
 
 export const constructCollectionNameVersion = function (name, version) {
   return `${name}___${version}`;
-}
+};
 
 export const collectionLink = function (collectionId) {
   if (!collectionId) return nullValue;

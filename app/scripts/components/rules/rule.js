@@ -6,8 +6,6 @@ import { Link } from 'react-router';
 import { get } from 'object-path';
 import {
   displayCase,
-  getCollectionId,
-  collectionLink,
   providerLink,
   fullDate,
   lastUpdated,
@@ -32,7 +30,7 @@ const metaAccessors = [
   ['Provider', 'provider', providerLink],
   ['ProviderPath', 'provider_path'],
   ['RuleType', 'rule.type'],
-  //PGC ['Collection', 'collection', d => collectionLink(getCollectionId(d))],
+  // PGC ['Collection', 'collection', d => collectionLink(getCollectionId(d))],
   ['Timestamp', 'timestamp', fullDate]
 ];
 

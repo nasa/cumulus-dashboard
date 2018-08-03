@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Sidebar from '../app/sidebar';
 import { interval, getCount } from '../../actions';
 import { updateInterval } from '../../config';
-import { strings } from '../locale'
+import { strings } from '../locale';
 
 var Granules = React.createClass({
   displayName: strings.granules,

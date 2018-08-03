@@ -55,12 +55,12 @@ const EditRaw = React.createClass({
   },
 
   componentWillReceiveProps: function ({ state }) {
-    const { router, getBaseRoute, defaultValue } = this.props;
+    const { router, getBaseRoute } = this.props;
     const { pk, error } = this.state;
     if (!pk) {
       return;
     }
-    
+
     const status = get(state.created, [pk, 'status']);
     if (status === 'success') {
       const baseRoute = getBaseRoute(pk);
