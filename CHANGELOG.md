@@ -6,8 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [v1.2.0] - 2018-08-03
+
 ### Added
 - `Execute` option on granules to start a workflow with the granule as payload.
+- Dashboard menus now support `GITC` and `DAAC` labels. The dashboard also supports addition of new labels.
+
+### Changed
+- The Rules add and edit forms are changed to a JSON editor box
+- All Rule fields are not editable on the dashboard
 
 ### Fixed
 - batch-async-command now collects all errors in a queue, rather than emptying the queue after the first error
