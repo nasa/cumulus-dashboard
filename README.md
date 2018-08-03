@@ -110,7 +110,7 @@ When one route is nested within another route, the urls stack. In the following 
 
 The routes are all defined in `app/scripts/main.js`. Make sure to `import` the necessary component at the top of the file.
 
-```(javascript)
+```javascript
 import Collections from './components/collections'
 import List from './components/collections/list'
 ```
@@ -123,7 +123,7 @@ For more on Router, including how to pass variables in the url, see the [docs on
 
 Instead of using `<a href="path/to/component">` tags, we use `<Link to="path/to/component" />`. This gives us a few convenience features.  Just remember to import the Link module:
 
-```(javascript)
+```javascript
 import { Link } from 'react-router';
 ```
 
@@ -147,7 +147,7 @@ Finally, we write a reducer to identify this action and optionally manipulate th
 
 We might want to write an action to query a single granule by id. To do this, we create a function in `scripts/actions/index.js`.
 
-```(javascript)
+```javascript
 export const getGranule = function (granuleId) {
   return function (dispatch) {
     // do ajax query
@@ -163,7 +163,7 @@ Note, `dispatch` allows us to write async actions.
 
 We'll need another action to send this data to the store. Note, we probably don't need to export this action. In the same file:
 
-```(javascript)
+```javascript
 function setGranule (id, granuleData) {
   return { type: SET_GRANULE, id: id, data: granuleData };
 }
@@ -171,13 +171,13 @@ function setGranule (id, granuleData) {
 
 This sends the granule data to the store. We need to specify the primary key so we can identify this action in a reducer function, and place it appropriately. In `actions.js`:
 
-```(javascript)
+```javascript
 export const SET_GRANULE = 'SET_GRANULE';
 ```
 
 Now in `reducers/api.js` we import the primary key and export a reducer function, which receives the current state, and the reducer in question. We use a primary key, because every action is sent to every reducer. The reducer doesn't manipulate the current state, but rather returns a new state object that includes the new data.
 
-```(javascript)
+```javascript
 import { SET_GRANULE } from '../actions';
 export function reducer (currentState, action) {
   const newState = Object.assign({}, currentState);
@@ -190,7 +190,7 @@ export function reducer (currentState, action) {
 
 Finally, this allows us to access the data from a component, where component state is passed as a `prop`:
 
-```(javascript)
+```javascript
 // import the action so we can call it
 import { getGranule } from '../actions';
 
