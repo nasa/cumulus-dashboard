@@ -49,6 +49,10 @@ export const GRANULES = 'GRANULES';
 export const GRANULES_INFLIGHT = 'GRANULES_INFLIGHT';
 export const GRANULES_ERROR = 'GRANULES_ERROR';
 
+export const GRANULE_APPLYWORKFLOW = 'GRANULE_APPLYWORKFLOW';
+export const GRANULE_APPLYWORKFLOW_INFLIGHT = 'GRANULE_APPLYWORKFLOW_INFLIGHT';
+export const GRANULE_APPLYWORKFLOW_ERROR = 'GRANULE_APPLYWORKFLOW_ERROR';
+
 export const GRANULE_REPROCESS = 'GRANULE_REPROCESS';
 export const GRANULE_REPROCESS_INFLIGHT = 'GRANULE_REPROCESS_INFLIGHT';
 export const GRANULE_REPROCESS_ERROR = 'GRANULE_REPROCESS_ERROR';
@@ -211,6 +215,21 @@ export const RULE_DISABLE = 'RULE_DISABLE';
 export const RULE_DISABLE_INFLIGHT = 'RULE_DISABLE_INFLIGHT';
 export const RULE_DISABLE_ERROR = 'RULE_DISABLE_ERROR';
 
+export const RECONCILIATION = 'RECONCILIATION';
+export const RECONCILIATION_INFLIGHT = 'RECONCILIATION_INFLIGHT';
+export const RECONCILIATION_ERROR = 'RECONCILIATION_ERROR';
+
+export const RECONCILIATIONS = 'RECONCILIATIONS';
+export const RECONCILIATIONS_INFLIGHT = 'RECONCILIATIONS_INFLIGHT';
+export const RECONCILIATIONS_ERROR = 'RECONCILIATIONS_ERROR';
+
+export const SEARCH_RECONCILIATIONS = 'SEARCH_RECONCILIATIONS';
+export const CLEAR_RECONCILIATIONS_SEARCH = 'CLEAR_RECONCILIATIONS_SEARCH';
+
+export const NEW_RECONCILIATION = 'NEW_RECONCILIATION';
+export const NEW_RECONCILIATION_INFLIGHT = 'NEW_RECONCILIATION_INFLIGHT';
+export const NEW_RECONCILIATION_ERROR = 'NEW_RECONCILIATION_ERROR';
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -262,6 +281,12 @@ export const getRecentGranules = () => wrapRequest(null, get, {
 export const reprocessGranule = (granuleId) => wrapRequest(
   granuleId, put, `granules/${granuleId}`, GRANULE_REPROCESS, {
     action: 'reprocess'
+  });
+
+export const applyWorkflowToGranule = (granuleId, workflow) => wrapRequest(
+  granuleId, put, `granules/${granuleId}`, GRANULE_APPLYWORKFLOW, {
+    action: 'applyWorkflow',
+    workflow
   });
 
 export const reingestGranule = (granuleId) => wrapRequest(
@@ -432,3 +457,17 @@ export const rerunRule = (ruleName) => wrapRequest(
   ruleName, put, `rules/${ruleName}`, RULE_RERUN, {
     action: 'rerun'
   });
+
+export const listReconciliationReports = (options) => wrapRequest(null, get, {
+  url: url.resolve(root, 'reconciliationReports'),
+  qs: Object.assign({ limit: pageLimit }, options)
+}, RECONCILIATIONS);
+
+export const getReconciliationReport = (reconciliationName) => wrapRequest(
+  reconciliationName, get, `reconciliationReports/${reconciliationName}`, RECONCILIATION);
+
+export const createReconciliationReport = () => wrapRequest(
+  `reconciliation-report-${new Date().toISOString()}`, post, 'reconciliationReports', NEW_RECONCILIATION);
+
+export const searchReconciliationReports = (prefix) => ({ type: SEARCH_RECONCILIATIONS, prefix: prefix });
+export const clearReconciliationReportSearch = () => ({ type: CLEAR_RECONCILIATIONS_SEARCH });

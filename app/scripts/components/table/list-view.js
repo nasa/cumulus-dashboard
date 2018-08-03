@@ -129,7 +129,7 @@ var List = React.createClass({
   },
 
   onBulkActionError: function (error) {
-    const message = `Could not process ${error.id}, ${error.error}`;
+    const message = (error.id && error.error) ? `Could not process ${error.id}, ${error.error}` : error;
     this.setState({
       bulkActionError: message,
       selected: []
@@ -212,6 +212,7 @@ var List = React.createClass({
               state={item.state}
               text={item.text}
               confirm={item.confirm}
+              confirmOptions={item.confirmOptions}
               onSuccess={this.onBulkActionSuccess}
               onError={this.onBulkActionError}
               selection={selected}

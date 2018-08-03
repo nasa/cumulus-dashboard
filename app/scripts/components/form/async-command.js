@@ -19,7 +19,8 @@ const AsyncCommand = React.createClass({
     successTimeout: PropTypes.number,
     element: PropTypes.string,
     confirmAction: PropTypes.bool,
-    confirmText: PropTypes.string
+    confirmText: PropTypes.string,
+    confirmOptions: PropTypes.array
   },
 
   getInitialState: function () {
@@ -80,7 +81,7 @@ const AsyncCommand = React.createClass({
   },
 
   render: function () {
-    const { status, text, confirmText } = this.props;
+    const { status, text, confirmText, confirmOptions } = this.props;
     const { modal } = this.state;
     const inflight = status === 'inflight';
     const element = this.props.element || 'button';
@@ -106,6 +107,12 @@ const AsyncCommand = React.createClass({
           { modal ? (
             <div className='modal'>
               <div className='modal__internal modal__formcenter'>
+                { confirmOptions ? (confirmOptions).map(option =>
+                  <div key={`option-${confirmOptions.indexOf(option)}`}>
+                    {option}
+                    <br />
+                  </div>
+                ) : null }
                 <h4>{confirmText}</h4>
                 <button
                   className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'

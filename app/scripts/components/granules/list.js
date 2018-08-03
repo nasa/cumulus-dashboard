@@ -8,7 +8,10 @@ import {
   filterGranules,
   clearGranulesFilter,
   listGranules,
-  getOptionsCollectionName
+  getOptionsCollectionName,
+  listWorkflows,
+  applyWorkflowToGranule,
+  interval
 } from '../../actions';
 import { get } from 'object-path';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
@@ -19,7 +22,8 @@ import {
   errorTableHeader,
   errorTableRow,
   errorTableSortProps,
-  bulkActions
+  bulkActions,
+  simpleDropdownOption
 } from '../../utils/table-config/granules';
 import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
@@ -27,6 +31,8 @@ import Dropdown from '../form/dropdown';
 import Search from '../form/search';
 import statusOptions from '../../utils/status';
 import { strings } from '../locale';
+import { updateInterval } from '../../config';
+import { workflowOptionNames } from '../../selectors';
 
 var AllGranules = React.createClass({
   displayName: strings.all_granules,
@@ -35,7 +41,21 @@ var AllGranules = React.createClass({
     granules: PropTypes.object,
     logs: PropTypes.object,
     dispatch: PropTypes.func,
-    location: PropTypes.object
+    location: PropTypes.object,
+    workflowOptions: PropTypes.array
+  },
+
+  componentWillMount: function () {
+    this.setState({});
+    this.cancelInterval = interval(this.queryWorkflows, updateInterval, true);
+  },
+
+  componentWillUnmount: function () {
+    if (this.cancelInterval) { this.cancelInterval(); }
+  },
+
+  queryWorkflows: function () {
+    this.props.dispatch(listWorkflows());
   },
 
   generateQuery: function () {
@@ -48,8 +68,33 @@ var AllGranules = React.createClass({
   },
 
   generateBulkActions: function () {
+    const config = {
+      execute: {
+        options: this.getExecuteOptions(),
+        action: this.applyWorkflow
+      }
+    };
     const { granules } = this.props;
-    return bulkActions(granules);
+    return bulkActions(granules, config);
+  },
+
+  selectWorkflow: function (selector, workflow) {
+    this.setState({ workflow });
+  },
+
+  applyWorkflow: function (granuleId) {
+    return applyWorkflowToGranule(granuleId, this.state.workflow);
+  },
+
+  getExecuteOptions: function () {
+    return [
+      simpleDropdownOption({
+        handler: this.selectWorkflow,
+        label: 'workflow',
+        value: this.state.workflow,
+        options: this.props.workflowOptions
+      })
+    ];
   },
 
   getView: function () {
@@ -126,5 +171,6 @@ var AllGranules = React.createClass({
 
 export default connect(state => ({
   logs: state.logs,
-  granules: state.granules
+  granules: state.granules,
+  workflowOptions: workflowOptionNames(state)
 }))(AllGranules);

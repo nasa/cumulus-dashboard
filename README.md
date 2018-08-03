@@ -1,6 +1,6 @@
 # Cumulus Dashboard
 
-[![CircleCI](https://circleci.com/gh/cumulus-nasa/cumulus-dashboard.svg?style=svg&circle-token=2e209f473a8424f48ce376e23df834cca9869b37)](https://circleci.com/gh/cumulus-nasa/cumulus-dashboard)
+[![CircleCI](https://circleci.com/gh/nasa/cumulus-dashboard.svg?style=svg)](https://circleci.com/gh/nasa/cumulus-dashboard)
 
 Code to generate and deploy the dashboard for the Cumulus API.
 

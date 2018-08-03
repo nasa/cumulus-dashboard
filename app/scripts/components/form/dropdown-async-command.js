@@ -58,6 +58,7 @@ const DropdownAsync = React.createClass({
               disabled={d.disabled}
               confirmAction={d.confirmAction}
               confirmText={d.confirmText}
+              confirmOptions={d.confirmOptions}
               className={'link--no-underline'}
               element='a'
               text={d.text} />

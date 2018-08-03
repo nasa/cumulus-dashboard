@@ -10,6 +10,8 @@ import {
   filterGranules,
   clearGranulesFilter,
   listGranules,
+  listWorkflows,
+  applyWorkflowToGranule,
   getOptionsCollectionName
 } from '../../actions';
 import { get } from 'object-path';
@@ -18,6 +20,7 @@ import {
   tableHeader,
   tableRow,
   tableSortProps,
+  simpleDropdownOption,
   bulkActions
 } from '../../utils/table-config/granules';
 import List from '../table/list-view';
@@ -27,24 +30,28 @@ import Overview from '../app/overview';
 import statusOptions from '../../utils/status';
 import { updateInterval } from '../../config';
 import { strings } from '../locale';
+import { workflowOptionNames } from '../../selectors';
 
 var GranulesOverview = React.createClass({
   propTypes: {
     granules: PropTypes.object,
     stats: PropTypes.object,
     dispatch: PropTypes.func,
+    workflowOptions: PropTypes.array,
     location: PropTypes.object
   },
 
   componentWillMount: function () {
-    this.cancelInterval = interval(this.queryStats, updateInterval, true);
+    this.setState({});
+    this.cancelInterval = interval(this.queryMeta, updateInterval, true);
   },
 
   componentWillUnmount: function () {
     if (this.cancelInterval) { this.cancelInterval(); }
   },
 
-  queryStats: function () {
+  queryMeta: function () {
+    this.props.dispatch(listWorkflows());
     this.props.dispatch(getCount({
       type: 'granules',
       field: 'status'
@@ -56,8 +63,33 @@ var GranulesOverview = React.createClass({
   },
 
   generateBulkActions: function () {
+    const config = {
+      execute: {
+        options: this.getExecuteOptions(),
+        action: this.applyWorkflow
+      }
+    };
     const { granules } = this.props;
-    return bulkActions(granules);
+    return bulkActions(granules, config);
+  },
+
+  selectWorkflow: function (selector, workflow) {
+    this.setState({ workflow });
+  },
+
+  applyWorkflow: function (granuleId) {
+    return applyWorkflowToGranule(granuleId, this.state.workflow);
+  },
+
+  getExecuteOptions: function () {
+    return [
+      simpleDropdownOption({
+        handler: this.selectWorkflow,
+        label: 'workflow',
+        value: this.state.workflow,
+        options: this.props.workflowOptions
+      })
+    ];
   },
 
   renderOverview: function (count) {
@@ -123,5 +155,6 @@ var GranulesOverview = React.createClass({
 
 export default connect(state => ({
   stats: state.stats,
+  workflowOptions: workflowOptionNames(state),
   granules: state.granules
 }))(GranulesOverview);
