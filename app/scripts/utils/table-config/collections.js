@@ -4,7 +4,7 @@ import { get } from 'object-path';
 import { Link } from 'react-router';
 import { fromNow, seconds, tally, collectionNameVersion } from '../format';
 import { deleteCollection } from '../../actions';
-import { strings } from '../../Components/locale';
+import { strings } from '../../components/locale';
 
 export const tableHeader = [
   'Name',

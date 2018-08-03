@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { get } from 'object-path';
 import { seconds, fromNow, bool, nullValue } from '../format';
 import { deletePdr } from '../../actions';
-import { strings } from '../../Components/locale';
+import { strings } from '../../components/locale';
 
 export const tableHeader = [
   'Updated',

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { fromNow } from '../format';
-import { strings } from '../../Components/locale';
+import { strings } from '../../components/locale';
 
 export const tableHeader = [
   'Name',
