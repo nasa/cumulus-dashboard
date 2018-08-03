@@ -7,12 +7,10 @@ import {
   updateRule,
   clearUpdateRule
 } from '../../actions';
-import EditRecord from '../app/edit';
 
-import EditRaw from '../app/edit-raw';  // PGC
+import EditRaw from '../app/edit-raw';
 
 const SCHEMA_KEY = 'rule';
-const INCLUDED_FORMS = ['rule.value', 'state'];
 
 const EditRule = React.createClass({
   propTypes: {
@@ -22,18 +20,6 @@ const EditRule = React.createClass({
 
   render: function () {
     const { ruleName } = this.props.params;
-    // return (
-    //   <EditRecord
-    //     pk={ruleName}
-    //     schemaKey={SCHEMA_KEY}
-    //     state={this.props.rules}
-    //     getRecord={getRule}
-    //     updateRecord={updateRule}
-    //     clearRecordUpdate={clearUpdateRule}
-    //     includedForms={INCLUDED_FORMS}
-    //     backRoute={`rules/rule/${ruleName}`}
-    //   />
-    // );
     return (
       <EditRaw
         pk={ruleName}

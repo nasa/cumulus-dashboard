@@ -57,7 +57,7 @@ const metaAccessors = [
   ['PDR Name', 'pdrName', pdrLink],
   ['Collection', 'collectionId', collectionLink],
   ['Provider', 'provider', providerLink],
-  ['OnEarth Link', 'cmrLink', (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue],
+  ['CMR/OnEarth Link', 'cmrLink', (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue],
   ['Execution', 'execution', (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue],
   ['Published', 'published', bool],
   ['Duplicate', 'hasDuplicate', bool],

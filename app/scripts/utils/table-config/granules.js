@@ -75,7 +75,7 @@ export const errorTableSortProps = [
 ];
 
 const confirmReingest = (d) => `Reingest ${d} granules(s)? Note, completed granules cannot be reingested.`;
-const confirmRemove = (d) => `Remove ${d} granule(s) from OnEarth?`;
+const confirmRemove = (d) => `Remove ${d} granule(s) from CMR/OnEarth?`;
 const confirmDelete = (d) => `Delete ${d} granule(s)?`;
 export const bulkActions = function (granules) {
   return [{
