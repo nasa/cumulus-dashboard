@@ -11,6 +11,7 @@ const EditRaw = React.createClass({
   propTypes: {
     dispatch: PropTypes.func,
     state: PropTypes.object,
+    defaultValue: PropTypes.object,
     title: PropTypes.string,
     getPk: PropTypes.func,
     getBaseRoute: PropTypes.func,
@@ -47,12 +48,19 @@ const EditRaw = React.createClass({
     }
   },
 
+  componentWillMount: function () {
+    if (this.props.defaultValue) {
+      this.setState({ data: JSON.stringify(this.props.defaultValue, null, 2) });
+    }
+  },
+
   componentWillReceiveProps: function ({ state }) {
-    const { router, getBaseRoute } = this.props;
+    const { router, getBaseRoute, defaultValue } = this.props;
     const { pk, error } = this.state;
     if (!pk) {
       return;
     }
+    
     const status = get(state.created, [pk, 'status']);
     if (status === 'success') {
       const baseRoute = getBaseRoute(pk);
@@ -69,7 +77,7 @@ const EditRaw = React.createClass({
   },
 
   render: function () {
-    const { data, pk, error } = this.state;
+    const { pk, error, data } = this.state;
     const status = get(this.props.state.created, [pk, 'status']);
     const buttonText = status === 'inflight' ? 'loading...'
       : status === 'success' ? 'Success!' : 'Submit';
