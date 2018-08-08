@@ -9,7 +9,7 @@ export const strings = new LocalizedStrings({
     add_a_collection: 'Add a Collection',
     all_collections: 'All Granules',
     all_granules: 'All Granules',
-    associated_collections: 'Associated collections',
+    associated_collections: 'Associated Collections',
     back_to_collections: 'Back to Collections',
     back_to_granules: 'Back to Granules',
     cmr: 'CMR',
