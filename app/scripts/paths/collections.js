@@ -18,7 +18,7 @@ const empty = [['', '']];
 
 const collections = {
   base: 'collections',
-  heading: strings.Collections,
+  heading: strings.collections,
   routes: (currentRoute, params) => {
     // determine which set of routes to show, based on the current route
     if (/^\/collections\/[collection|edit]/.test(currentRoute)) {

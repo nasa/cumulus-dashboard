@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - The Rules add and edit forms are changed to a JSON editor box
-- All Rule fields are not editable on the dashboard
+- All Rule fields are now editable on the dashboard
 
 ### Fixed
 - batch-async-command now collects all errors in a queue, rather than emptying the queue after the first error

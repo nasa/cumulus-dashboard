@@ -16,7 +16,7 @@ export const tableHeader = [
 export const tableRow = [
   (d) => <Link to={`providers/provider/${d.id}`}>{d.id}</Link>,
   'host',
-  strings.collections,
+  'collections',
   'globalConnectionLimit',
   'protocol',
   (d) => fromNow(d.timestamp)
