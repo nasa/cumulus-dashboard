@@ -2,11 +2,12 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { fromNow } from '../format';
+import { strings } from '../../components/locale';
 
 export const tableHeader = [
   'Name',
   'Host',
-  'Collections',
+  strings.collections,
   'Global Connection Limit',
   'Protocol',
   'Last Updated'

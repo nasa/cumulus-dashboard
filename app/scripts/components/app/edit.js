@@ -9,6 +9,7 @@ import Loading from '../app/loading-indicator';
 import Schema from '../form/schema';
 import merge from '../../utils/merge';
 import { updateDelay } from '../../config';
+import {strings} from '../locale';
 
 var EditRecord = React.createClass({
   propTypes: {
@@ -89,7 +90,7 @@ var EditRecord = React.createClass({
     const json = this.props.merge ? merge(record.data, payload) : payload;
     if (attachMeta) {
       json.updatedAt = new Date().getTime();
-      json.changedBy = 'Cumulus Dashboard';
+      json.changedBy = strings.dashboard;
     }
     this.setState({ error: null });
     console.log('About to update', json);

@@ -25,6 +25,7 @@ import AsyncCommands from '../form/dropdown-async-command';
 import ErrorReport from '../errors/report';
 import Metadata from '../table/metadata';
 import { updateInterval } from '../../config';
+import { strings } from '../locale';
 
 const metaAccessors = [
   ['Created', 'createdAt', fromNow],
@@ -161,7 +162,7 @@ var ProviderOverview = React.createClass({
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Associated Collections</h2>
+            <h2 className='heading--medium heading--shared-content with-description'>{strings.associated_collections}</h2>
           </div>
           <ul>
             {associatedCollections.map(c => (<li key={c} className='metadata__provider__collections'><a href={'#/collections/collection/' + c}>{c}</a></li>))}

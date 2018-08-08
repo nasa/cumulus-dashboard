@@ -5,12 +5,13 @@ import { Link } from 'react-router';
 import { logout } from '../../actions';
 import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
+import { strings } from '../locale';
 
 const paths = [
   ['PDRs', '/pdrs'],
   ['Providers', '/providers'],
-  ['Collections', '/collections'],
-  ['Granules', '/granules'],
+  [strings.collections, '/collections'],
+  [strings.granules, '/granules'],
   ['Workflows', '/workflows'],
   ['Executions', '/executions'],
   ['Rules', '/rules'],
@@ -50,7 +51,7 @@ var Header = React.createClass({
     return (
       <div className='header'>
         <div className='row'>
-          <h1 className='logo'><Link to='/'><img alt="Cumulus Logo" src={graphicsPath + 'layout/cumulus-logo.png'} /></Link></h1>
+          <h1 className='logo'><Link to='/'><img alt="Logo" src={graphicsPath + strings.logo} /></Link></h1>
           <nav>
             { !this.props.minimal ? <ul>
               {activePaths.map(path => <li

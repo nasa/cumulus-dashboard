@@ -21,6 +21,7 @@ import Overview from '../app/overview';
 import AsyncCommand from '../form/async-command';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
 import { updateDelay } from '../../config';
+import { strings } from '../locale';
 
 const CollectionOverview = React.createClass({
   displayName: 'CollectionOverview',
@@ -81,9 +82,9 @@ const CollectionOverview = React.createClass({
     const data = get(record, 'data', {});
     const stats = get(data, 'stats', {});
     const overview = [
-      [tally(stats.running), 'Granules Running'],
-      [tally(stats.completed), 'Granules Completed'],
-      [tally(stats.failed), 'Granules Failed']
+      [tally(stats.running), strings.granules_running],
+      [tally(stats.completed), strings.granules_completed],
+      [tally(stats.failed), strings.granules_failed]
     ];
     return <Overview items={overview} inflight={record.inflight} />;
   },
@@ -122,7 +123,7 @@ const CollectionOverview = React.createClass({
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Running Granules <span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>{strings.running_granules}<span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
           </div>
           <List
             list={list}
@@ -135,7 +136,7 @@ const CollectionOverview = React.createClass({
             rowId={'granuleId'}
             sortIdx={6}
           />
-          <Link className='link--secondary link--learn-more' to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}>View All Granules</Link>
+          <Link className='link--secondary link--learn-more' to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}>{strings.view_all_granules}</Link>
         </section>
       </div>
     );

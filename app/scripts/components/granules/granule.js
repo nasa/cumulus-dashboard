@@ -32,6 +32,7 @@ import ErrorReport from '../errors/report';
 import Metadata from '../table/metadata';
 import AsyncCommands from '../form/dropdown-async-command';
 import { updateInterval } from '../../config';
+import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import { simpleDropdownOption } from '../../utils/table-config/granules';
 
@@ -60,7 +61,7 @@ const metaAccessors = [
   ['PDR Name', 'pdrName', pdrLink],
   ['Collection', 'collectionId', collectionLink],
   ['Provider', 'provider', providerLink],
-  ['CMR Link', 'cmrLink', (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue],
+  [`${strings.cmr} Link`, 'cmrLink', (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue],
   ['Execution', 'execution', (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue],
   ['Published', 'published', bool],
   ['Duplicate', 'hasDuplicate', bool],
@@ -68,7 +69,7 @@ const metaAccessors = [
 ];
 
 var GranuleOverview = React.createClass({
-  displayName: 'Granule',
+  displayName: strings.granule,
 
   propTypes: {
     params: PropTypes.object,
@@ -199,7 +200,7 @@ var GranuleOverview = React.createClass({
       confirmText: `Execute on ${granuleId}?`,
       confirmOptions: this.getExecuteOptions()
     }, {
-      text: 'Remove from CMR',
+      text: strings.remove_from_cmr,
       action: this.remove,
       status: get(this.props.granules.removed, [granuleId, 'status']),
       success: this.fastReload
@@ -230,7 +231,7 @@ var GranuleOverview = React.createClass({
         <section className='page__section'>
           {errors.length ? <ErrorReport report={errors} /> : null}
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium with-description'>Granule Overview</h2>
+            <h2 className='heading--medium with-description'>{strings.granule_overview}</h2>
           </div>
           <Metadata data={granule} accessors={metaAccessors} />
         </section>

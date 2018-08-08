@@ -3,9 +3,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Sidebar from '../app/sidebar';
+import { strings } from '../locale';
 
 var Collections = React.createClass({
-  displayName: 'Collections',
+  displayName: strings.collections,
 
   propTypes: {
     children: React.PropTypes.object,
@@ -20,8 +21,8 @@ var Collections = React.createClass({
       <div className='page__collections'>
         <div className='content__header'>
           <div className='row'>
-            <h1 className='heading--xlarge heading--shared-content'>Collections</h1>
-            {existingCollection ? <Link className='button button--large button--white button__addcollections button__arrow button__animation' to='/collections/add'>Add a Collection</Link> : null}
+            <h1 className='heading--xlarge heading--shared-content'>{strings.collections}</h1>
+            {existingCollection ? <Link className='button button--large button--white button__addcollections button__arrow button__animation' to='/collections/add'>{strings.add_a_collection}</Link> : null}
           </div>
         </div>
         <div className='page__content'>

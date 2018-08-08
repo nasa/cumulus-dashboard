@@ -2,6 +2,7 @@
 import React from 'react';
 import { get } from 'object-path';
 import { tally } from '../../utils/format';
+import { strings } from '../locale';
 
 // defines the order in which the granules meta bar appears
 const granuleMeta = [
@@ -28,7 +29,7 @@ const Progress = React.createClass({
           return (
             <li key={d[0]} className={'timeline--processing--' + d[0]}>
               <span className='num--medium'>{tally(item)}</span>
-              Granules {d[1]}
+              {strings.granules} {d[1]}
             </li>
           );
         })}
