@@ -1,10 +1,10 @@
 'use strict';
 import React from 'react';
+import Collapse from 'react-collapsible';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
 import { getExecutionStatus } from '../../actions';
-import { displayCase, fullDate } from '../../utils/format';
+import { displayCase, fullDate, parseJson } from '../../utils/format';
 
 import {
   tableHeader,
@@ -13,7 +13,7 @@ import {
 
 import ErrorReport from '../errors/report';
 
-import ExecutionStatusGraph from './execution-status-graph';
+import { ExecutionStatusGraph, getEventDetails } from './execution-status-graph';
 import SortableTable from '../table/sortable';
 
 var ExecutionStatus = React.createClass({
@@ -44,6 +44,9 @@ var ExecutionStatus = React.createClass({
   renderEvents: function () {
     const { executionStatus } = this.props;
     let { executionHistory: { events } } = executionStatus;
+    events.forEach((event) => {
+      event.eventDetails = getEventDetails(event);
+    });
 
     return (
       <SortableTable
@@ -55,6 +58,7 @@ var ExecutionStatus = React.createClass({
         sortIdx={0}
         props={[]}
         order='asc'
+        collapsible={true}
       />
     );
   },
@@ -103,6 +107,23 @@ var ExecutionStatus = React.createClass({
 
           <dt>Ended:</dt>
           <dd>{fullDate(executionStatus.execution.stopDate)}</dd><br />
+
+          <dt>Input:</dt>
+          <dd>
+            <Collapse trigger={'Show Input'} triggerWhenOpen={'Hide Input'}>
+              <pre>{parseJson(executionStatus.execution.input)}</pre>
+            </Collapse>
+          </dd><br />
+
+          <dt>Output:</dt>
+          {executionStatus.execution.output &&
+          <dd>
+            <Collapse trigger={'Show Output'} triggerWhenOpen={'Hide Output'}>
+              <pre>{parseJson(executionStatus.execution.output)}</pre>
+            </Collapse>
+            </dd>
+          }
+          <br />
         </dl>
       </section>
 
