@@ -17,9 +17,10 @@ import {
 import List from '../table/list-view';
 import Dropdown from '../form/dropdown';
 import statusOptions from '../../utils/status';
+import {strings} from '../locale';
 
 var CollectionGranules = React.createClass({
-  displayName: 'CollectionGranules',
+  displayName: strings.collection_granules,
 
   propTypes: {
     granules: React.PropTypes.object,
@@ -54,7 +55,7 @@ var CollectionGranules = React.createClass({
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Granules <span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
           </div>
           <div className='filters filters__wlabels'>
           <Dropdown

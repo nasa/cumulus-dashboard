@@ -32,6 +32,7 @@ import List from '../table/list-view';
 import Dropdown from '../form/dropdown';
 import Overview from '../app/overview';
 import { updateInterval } from '../../config';
+import {strings} from '../locale';
 
 const tableHeader = [
   'Name',
@@ -39,7 +40,7 @@ const tableHeader = [
   'Type',
   'Created',
   'Duration',
-  'Collection Name'
+  strings.collection_name
 ];
 
 const tableRow = [
@@ -57,7 +58,7 @@ const tableSortProps = [
   'type',
   'createdAt',
   'duration',
-  'collectionId'
+  strings.collection_id
 ];
 
 var ExecutionOverview = React.createClass({
@@ -127,7 +128,7 @@ var ExecutionOverview = React.createClass({
               action={filterExecutions}
               clear={clearExecutionsFilter}
               paramKey={'collectionId'}
-              label={'Collection'}
+              label={strings.collection}
             />
 
             <Dropdown

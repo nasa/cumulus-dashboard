@@ -6,8 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [v1.2.0] - 2018-08-08
+
 ### Added
 - `Execute` option on granules to start a workflow with the granule as payload.
+- Dashboard menus now support `GITC` and `DAAC` labels. The dashboard also supports addition of new labels.
+
+### Changed
+- The Rules add and edit forms are changed to a JSON editor box
+- All Rule fields are now editable on the dashboard
 
 ### Fixed
 - batch-async-command now collects all errors in a queue, rather than emptying the queue after the first error
@@ -26,5 +33,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/cumulus-nasa/cumulus/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/cumulus-nasa/cumulus/compare/v1.2.0...HEAD
+[v1.2.0]: https://github.com/cumulus-nasa/cumulus/compare/v1.1.0...v1.2.0
 [v1.1.0]: https://github.com/cumulus-nasa/cumulus/compare/v1.0.1...v1.1.0

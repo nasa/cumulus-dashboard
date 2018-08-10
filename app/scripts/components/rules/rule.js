@@ -6,8 +6,6 @@ import { Link } from 'react-router';
 import { get } from 'object-path';
 import {
   displayCase,
-  getCollectionId,
-  collectionLink,
   providerLink,
   fullDate,
   lastUpdated,
@@ -27,11 +25,12 @@ import AsyncCommands from '../form/dropdown-async-command';
 import ErrorReport from '../errors/report';
 
 const metaAccessors = [
-  ['Rule Name', 'name'],
+  ['RuleName', 'name'],
   ['Workflow', 'workflow'],
   ['Provider', 'provider', providerLink],
-  ['Rule Type', 'rule.type'],
-  ['Collection', 'collection', d => collectionLink(getCollectionId(d))],
+  ['ProviderPath', 'provider_path'],
+  ['RuleType', 'rule.type'],
+  // PGC ['Collection', 'collection', d => collectionLink(getCollectionId(d))],
   ['Timestamp', 'timestamp', fullDate]
 ];
 

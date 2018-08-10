@@ -9,6 +9,7 @@ import { getSchema } from '../../actions';
 import Schema from '../form/schema';
 import Loading from '../app/loading-indicator';
 import { updateDelay } from '../../config';
+import { strings } from '../locale';
 
 var AddCollection = React.createClass({
   getInitialState: function () {
@@ -64,7 +65,7 @@ var AddCollection = React.createClass({
     if (attachMeta) {
       payload.createdAt = new Date().getTime();
       payload.updatedAt = new Date().getTime();
-      payload.changedBy = 'Cumulus Dashboard';
+      payload.changedBy = strings.dashboard;
     }
     if (!validate || validate(payload)) {
       const pk = get(payload, primaryProperty);

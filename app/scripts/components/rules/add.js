@@ -3,24 +3,47 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createRule } from '../../actions';
-import AddRecord from '../app/add';
+import AddRaw from '../app/add-raw';
 
-const SCHEMA_KEY = 'rule';
-
+const getBaseRoute = function () {
+  return '/rules';
+};
+const getRuleName = function (item) {
+  if (item && item.name) {
+    return item.name;
+  } else {
+    return 'unknown';
+  }
+};
 const AddRule = React.createClass({
   propTypes: {
     rules: PropTypes.object
   },
-
   render: function () {
+    const defaultValue = {
+      name: '',
+      workflow: '',
+      provider: '',
+      collection: {
+        name: '',
+        version: ''
+      },
+      meta: {},
+      rule: {
+        type: '',
+        value: ''
+      }
+    };
     return (
-      <AddRecord
-        schemaKey={SCHEMA_KEY}
+      <AddRaw
+        pk={'new-rule'}
+        title={'Add a rule'}
         primaryProperty={'name'}
-        title={'Create a rule'}
         state={this.props.rules}
-        baseRoute={'/rules/rule'}
+        defaultValue={defaultValue}
         createRecord={createRule}
+        getBaseRoute={getBaseRoute}
+        getPk={getRuleName}
       />
     );
   }

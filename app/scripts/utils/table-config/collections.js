@@ -4,11 +4,12 @@ import { get } from 'object-path';
 import { Link } from 'react-router';
 import { fromNow, seconds, tally, collectionNameVersion } from '../format';
 import { deleteCollection } from '../../actions';
+import { strings } from '../../components/locale';
 
 export const tableHeader = [
   'Name',
   'Version',
-  'Granules',
+  strings.granules,
   'Completed',
   'Running',
   'Failed',
@@ -38,7 +39,7 @@ export const tableSortProps = [
   'timestamp'
 ];
 
-const confirmDelete = (d) => `Delete ${d} collections(s)?`;
+const confirmDelete = (d) => `Delete ${d} {strings.collection}(s)?`;
 export const bulkActions = function (collections) {
   return [{
     text: 'Delete',
