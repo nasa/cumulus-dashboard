@@ -49,8 +49,7 @@ var ExecutionStatusGraph = React.createClass({
   }
 });
 
-exports.ExecutionStatusGraph = ExecutionStatusGraph;
-//export default connect(state => ({}))(ExecutionStatusGraph);
+exports.ExecutionStatusGraph = connect(state => ({}))(ExecutionStatusGraph);
 
 function select (arr, predOrProp) {
   var predicate = predOrProp;
