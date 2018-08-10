@@ -39,10 +39,11 @@ import AsyncCommand from '../form/async-command';
 import ErrorReport from '../errors/report';
 import GranulesProgress from '../granules/progress';
 import { updateInterval } from '../../config';
+import {strings} from '../locale';
 
 const metaAccessors = [
   ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],
-  ['Collection', 'collectionId', collectionLink],
+  [strings.collection, 'collectionId', collectionLink],
   ['Execution', 'execution', (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue],
   ['Status', 'status', displayCase],
   ['Timestamp', 'timestamp', fullDate],
@@ -147,7 +148,7 @@ var PDR = React.createClass({
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Granules <span className='num--title'>{ !isNaN(count) ? `(${count})` : null }</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num--title'>{ !isNaN(count) ? `(${count})` : null }</span></h2>
           </div>
           <div>
             <GranulesProgress granules={granuleStatus} />
@@ -159,7 +160,7 @@ var PDR = React.createClass({
               action={filterGranules}
               clear={clearGranulesFilter}
               paramKey={'collectionName'}
-              label={'Collection'}
+              label={strings.collection}
             />
             <Dropdown
               options={status}

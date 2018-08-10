@@ -30,11 +30,12 @@ import LogViewer from '../logs/viewer';
 import Dropdown from '../form/dropdown';
 import Search from '../form/search';
 import statusOptions from '../../utils/status';
+import { strings } from '../locale';
 import { updateInterval } from '../../config';
 import { workflowOptionNames } from '../../selectors';
 
 var AllGranules = React.createClass({
-  displayName: 'AllGranules',
+  displayName: strings.all_granules,
 
   propTypes: {
     granules: PropTypes.object,
@@ -117,7 +118,7 @@ var AllGranules = React.createClass({
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>
-              {displayCase(view)} Granules <span className='num--title'>{ !isNaN(count) ? `(${tally(count)})` : null }</span>
+              {displayCase(view)} {strings.granules} <span className='num--title'>{ !isNaN(count) ? `(${tally(count)})` : null }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>
@@ -128,7 +129,7 @@ var AllGranules = React.createClass({
               action={filterGranules}
               clear={clearGranulesFilter}
               paramKey={'collectionId'}
-              label={'Collection'}
+              label={strings.collection}
             />
             {statOptions ? (
               <Dropdown

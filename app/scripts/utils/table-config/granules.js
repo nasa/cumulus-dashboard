@@ -18,13 +18,14 @@ import {
   deleteGranule
 } from '../../actions';
 import ErrorReport from '../../components/errors/report';
+import {strings} from '../../components/locale';
 import Dropdown from '../../components/form/simple-dropdown';
 
 export const tableHeader = [
   'Status',
   'Name',
   'Published',
-  'Collection ID',
+  strings.collection_id,
   'Execution',
   'Duration',
   'Updated'
@@ -90,7 +91,7 @@ export const simpleDropdownOption = function (config) {
 
 const confirmReingest = (d) => `Reingest ${d} granules(s)? Note, completed granules cannot be reingested.`;
 const confirmApply = (d) => `Run workflow on ${d} granules?`;
-const confirmRemove = (d) => `Remove ${d} granule(s) from CMR?`;
+const confirmRemove = (d) => `Remove ${d} granule(s) from ${strings.cmr}?`;
 const confirmDelete = (d) => `Delete ${d} granule(s)?`;
 export const bulkActions = function (granules, config) {
   return [{
@@ -105,7 +106,7 @@ export const bulkActions = function (granules, config) {
     confirm: confirmApply,
     confirmOptions: config.execute.options
   }, {
-    text: 'Remove from CMR',
+    text: strings.remove_from_cmr,
     action: removeGranule,
     state: granules.removed,
     confirm: confirmRemove

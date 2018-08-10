@@ -432,13 +432,13 @@ export const listRules = (options) => wrapRequest(null, get, {
 export const getRule = (ruleName) => wrapRequest(
   ruleName, get, `rules?name=${ruleName}`, RULE);
 
-export const updateRule = (name, payload) => wrapRequest(
-  name, put, `rules/${name}`, UPDATE_RULE, payload);
+export const updateRule = (payload) => wrapRequest(
+  payload.name, put, `rules/${payload.name}`, UPDATE_RULE, payload);
 
 export const clearUpdateRule = (ruleName) => ({ type: UPDATE_RULE_CLEAR, id: ruleName });
 
-export const createRule = (id, payload) => wrapRequest(
-  id, post, 'rules', NEW_RULE, payload);
+export const createRule = (payload) => wrapRequest(
+  payload.name, post, 'rules', NEW_RULE, payload);
 
 export const deleteRule = (ruleName) => wrapRequest(
   ruleName, del, `rules/${ruleName}`, RULE_DELETE);

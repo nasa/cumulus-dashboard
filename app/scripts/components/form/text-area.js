@@ -55,7 +55,6 @@ const TextAreaForm = React.createClass({
           onChange={this.onChange}
           name={id}
           value={value}
-
           width='auto'
           tabSize={config.tabSize}
           showPrintMargin={false}

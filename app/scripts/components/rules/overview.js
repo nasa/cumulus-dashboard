@@ -18,11 +18,12 @@ import {
   fromNow
 } from '../../utils/format';
 import List from '../table/list-view';
+import { strings } from '../locale';
 
 const tableHeader = [
   'Name',
   'Provider',
-  'Collection ID',
+  strings.collection_id,
   'Type',
   'State',
   'Timestamp'

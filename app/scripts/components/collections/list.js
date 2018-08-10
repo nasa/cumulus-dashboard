@@ -21,6 +21,7 @@ import {
 } from '../../utils/table-config/collections';
 import Search from '../form/search';
 import List from '../table/list-view';
+import { strings } from '../locale';
 
 var CollectionList = React.createClass({
   displayName: 'CollectionList',
@@ -53,13 +54,13 @@ var CollectionList = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header page__section__header-wrapper'>
-            <h1 className='heading--large heading--shared-content with-description'>Collection Overview</h1>
+            <h1 className='heading--large heading--shared-content with-description'>{strings.collection_overview}</h1>
             {lastUpdated(queriedAt)}
           </div>
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>All Collections <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>{strings.all_collections} <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
           </div>
           <div className='filters'>
             <Search dispatch={this.props.dispatch}

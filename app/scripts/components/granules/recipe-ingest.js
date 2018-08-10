@@ -14,6 +14,7 @@ import Ace from 'react-ace';
 import config from '../../config';
 import Loading from '../app/loading-indicator';
 import AsyncCommands from '../form/dropdown-async-command';
+import { strings } from '.../../locale';
 
 const noop = () => true;
 var GranuleRecipe = React.createClass({
@@ -121,7 +122,7 @@ var GranuleRecipe = React.createClass({
       status: get(this.props.granules.reingested, [granuleId, 'status']),
       success: noop
     }, {
-      text: 'Remove from CMR',
+      text: strings.remove_from_cmr,
       action: this.remove,
       status: get(this.props.granules.removed, [granuleId, 'status']),
       success: noop

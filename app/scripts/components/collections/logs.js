@@ -5,9 +5,10 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { lastUpdated } from '../../utils/format';
 import LogViewer from '../logs/viewer';
+import {strings} from '../locale';
 
 var CollectionLogs = React.createClass({
-  displayName: 'CollectionLogs',
+  displayName: strings.collection_logs,
 
   propTypes: {
     dispatch: PropTypes.func,
