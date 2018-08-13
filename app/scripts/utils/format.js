@@ -13,6 +13,11 @@ export const fullDate = function (datestring) {
   return moment(datestring).format('kk:mm:ss MM/DD/YY');
 };
 
+export const parseJson = function (jsonString) {
+  const parsed = JSON.parse(jsonString);
+  return JSON.stringify(parsed, null, 2);
+};
+
 export const bigTally = function (numberstring) {
   if ((!numberstring && numberstring !== 0) || numberstring === nullValue || isNaN(numberstring)) { return nullValue; }
   numberstring = +numberstring;

@@ -1,4 +1,5 @@
 'use strict';
+import Collapse from 'react-collapsible';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
@@ -25,6 +26,7 @@ const Table = React.createClass({
     changeSortProps: PropTypes.func,
     onSelect: PropTypes.func,
     canSelect: PropTypes.bool,
+    collapsible: PropTypes.bool,
     selectedRows: PropTypes.array,
     rowId: PropTypes.any
   },
@@ -72,7 +74,7 @@ const Table = React.createClass({
   },
 
   render: function () {
-    let { primaryIdx, sortIdx, order, props, header, row, rowId, data, selectedRows, canSelect } = this.props;
+    let { primaryIdx, sortIdx, order, props, header, row, rowId, data, selectedRows, canSelect, collapsible } = this.props;
     const isTableDumb = this.isTableDumb();
     primaryIdx = primaryIdx || 0;
 
@@ -130,6 +132,13 @@ const Table = React.createClass({
                     }
                     return <td key={String(i) + String(k) + text} className={className}>{text}</td>;
                   })}
+                  {collapsible &&
+                    <td>
+                      <Collapse trigger={'More Details'} triggerWhenOpen={'Less Details'}>
+                        <pre className={'pre-style'}>{JSON.stringify(d.eventDetails, null, 2)}</pre>
+                      </Collapse>
+                    </td>
+                  }
                 </tr>
               );
             })}

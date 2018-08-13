@@ -35,7 +35,7 @@ var ExecutionStatusGraph = React.createClass({
     render(svg, this.g);
     var height = d3.select('svg g').node().getBBox().height;
     svg.style('height', height + 10);
-    svg.style('padding', 5);
+    svg.style('padding-right', 150);
   },
 
   componentWillUnmount: function () {
@@ -49,7 +49,7 @@ var ExecutionStatusGraph = React.createClass({
   }
 });
 
-export default connect(state => ({}))(ExecutionStatusGraph);
+exports.ExecutionStatusGraph = connect(state => ({}))(ExecutionStatusGraph);
 
 function select (arr, predOrProp) {
   var predicate = predOrProp;
@@ -306,3 +306,5 @@ function addEventsToGraph (events, graph) {
   }
   return result;
 }
+
+exports.getEventDetails = getEventDetails;

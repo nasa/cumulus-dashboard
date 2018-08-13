@@ -7,7 +7,8 @@ import {
 export const tableHeader = [
   'Id',
   'Type',
-  'Timestamp'
+  'Timestamp',
+  'Input Details'
 ];
 
 export const tableRow = [
