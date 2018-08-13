@@ -74,8 +74,7 @@ var ExecutionStatus = React.createClass({
           <pre>{parseJson(executionStatus.execution.output)}</pre>
         </Collapse>
       </dd>;
-    }
-    else {
+    } else {
       output = <dd>N/A</dd>;
     }
 
