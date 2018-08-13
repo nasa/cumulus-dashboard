@@ -2,6 +2,18 @@
   overflow-x: scroll;
 }
 
+.pre-style {
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+.Collapsible {
+  max-width: 500px;
+}
+
 table {
   width: 100%;
   line-height: 1.6em;
@@ -21,7 +33,7 @@ table {
       td {
         font-size: .86em;
         padding: 1em;
-        vertical-align: middle;
+        vertical-align: top;
         &:first-of-type {
           padding: 1em 0 1em 1em;
         }
