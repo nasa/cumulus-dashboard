@@ -75,7 +75,6 @@ var CollectionGranules = React.createClass({
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
-            bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}
             sortIdx={6}
           />

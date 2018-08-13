@@ -67,6 +67,17 @@ var ExecutionStatus = React.createClass({
     const { executionStatus } = this.props;
     if (!executionStatus.execution) return null;
 
+    let output;
+    if (executionStatus.execution.output) {
+      output = <dd>
+        <Collapse trigger={'Show Output'} triggerWhenOpen={'Hide Output'}>
+          <pre>{parseJson(executionStatus.execution.output)}</pre>
+        </Collapse>
+      </dd>;
+    } else {
+      output = <dd>N/A</dd>;
+    }
+
     const errors = this.errors();
 
     return (
@@ -116,13 +127,7 @@ var ExecutionStatus = React.createClass({
           </dd><br />
 
           <dt>Output:</dt>
-          {executionStatus.execution.output &&
-          <dd>
-            <Collapse trigger={'Show Output'} triggerWhenOpen={'Hide Output'}>
-              <pre>{parseJson(executionStatus.execution.output)}</pre>
-            </Collapse>
-            </dd>
-          }
+          {output}
           <br />
         </dl>
       </section>
