@@ -133,9 +133,11 @@ const Table = React.createClass({
                     return <td key={String(i) + String(k) + text} className={className}>{text}</td>;
                   })}
                   {collapsible &&
-                    <Collapse trigger={'More Details'} triggerWhenOpen={'Less Details'}>
-                      <pre>{JSON.stringify(d.eventDetails, null, 2)}</pre>
-                    </Collapse>
+                    <td>
+                      <Collapse trigger={'More Details'} triggerWhenOpen={'Less Details'}>
+                        <pre className={'pre-style'}>{JSON.stringify(d.eventDetails, null, 2)}</pre>
+                      </Collapse>
+                    </td>
                   }
                 </tr>
               );
