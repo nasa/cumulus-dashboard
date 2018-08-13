@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+### Added
+- Execution details (inputs and outputs) are shown for executions and execution steps. [CUMULUS-692]
+
 ## [v1.2.0] - 2018-08-08
 
 ### Added
