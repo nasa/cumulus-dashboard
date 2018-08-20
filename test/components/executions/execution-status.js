@@ -10,7 +10,7 @@ import executionHistory from '../../../test/fixtures/execution-history-all';
 
 configure({ adapter: new Adapter() });
 
-test.only('Cumulus-690 Execution Status shows workflow task and version information', function (t) {
+test('Cumulus-690 Execution Status shows workflow task and version information', function (t) {
   const executionStatus = {
     execution: executionHistory.execution,
     executionHistory: executionHistory.executionHistory,
