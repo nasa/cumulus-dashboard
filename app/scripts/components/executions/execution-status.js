@@ -107,10 +107,10 @@ var ExecutionStatus = React.createClass({
           <dt>Execution Status:</dt>
           <dd>{displayCase(executionStatus.execution.status)}</dd><br />
 
-          <dt>Execution An:</dt>
+          <dt>Execution Arn:</dt>
           <dd>{executionStatus.execution.executionArn}</dd><br />
 
-          <dt>State Machine An:</dt>
+          <dt>State Machine Arn:</dt>
           <dd>{executionStatus.stateMachine.stateMachineArn}</dd><br />
 
           <dt>Started:</dt>
@@ -144,6 +144,8 @@ var ExecutionStatus = React.createClass({
     );
   }
 });
+
+export { ExecutionStatus };
 
 export default connect(state => ({
   executionStatus: state.executionStatus
