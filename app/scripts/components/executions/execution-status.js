@@ -135,6 +135,7 @@ var ExecutionStatus = React.createClass({
       <section className='page__section'>
         <div className='heading__wrapper--border'>
           <h2 className='heading--medium with-description'>Events</h2>
+          <p><b>More details</b> includes details of the step function event execution, including the tasks' name and version. To find all task name and versions, select <b>More details</b> for the last Lambda- or Activity-type event. There you should find a key / value pair "workflow_tasks" which lists all tasks' version, name and arn.</p>
         </div>
 
         {this.renderEvents()}
