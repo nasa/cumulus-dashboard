@@ -34,6 +34,7 @@ test('Cumulus-690 Execution Status shows workflow task and version information',
   t.is(sortableTable.length, 1);
 
   const sortableTableWrapper = sortableTable.dive();
+  const moreDetails = sortableTableWrapper.find('pre');
   const selectedTasks = moreDetails.findWhere((jsonDetails) => {
     const parsedDetailsOutput = JSON.parse(jsonDetails.text()).output;
     if (parsedDetailsOutput && parsedDetailsOutput.meta && parsedDetailsOutput.meta.workflow_tasks) {
