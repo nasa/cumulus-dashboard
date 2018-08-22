@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import get from 'lodash.get';
 import { getExecutionStatus } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
+import { Link } from 'react-router';
 
 import {
   tableHeader,
@@ -84,7 +85,7 @@ var ExecutionStatus = React.createClass({
       const input = JSON.parse(executionStatus.execution.input);
       const parent = get(input.cumulus_meta, 'parentExecutionArn');
       if (parent) {
-        parentARN = <dd>{parent}</dd>;
+        parentARN = <dd><Link to={'/executions/execution/' + parent} title={parent}>{parent}</Link></dd>;
       } else {
         parentARN = <dd>N/A</dd>;
       }
@@ -133,7 +134,7 @@ var ExecutionStatus = React.createClass({
           <dt>Ended:</dt>
           <dd>{fullDate(executionStatus.execution.stopDate)}</dd><br />
 
-          <dt>Parent Workflow ARN</dt>
+          <dt>Parent Workflow Execution</dt>
           {parentARN}
           <br />
 
