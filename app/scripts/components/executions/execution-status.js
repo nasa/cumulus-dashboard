@@ -155,6 +155,7 @@ var ExecutionStatus = React.createClass({
         <div className='heading__wrapper--border'>
           <h2 className='heading--medium with-description'>Events</h2>
           <p><b>More details</b> includes details of the step function event execution, including the tasks' name and version. To find all task name and versions, select <b>More details</b> for the last Lambda- or Activity-type event. There you should find a key / value pair "workflow_tasks" which lists all tasks' version, name and arn.</p>
+          <p><b>NOTE:</b>Task / version tracking is enabled as of Cumulus version 1.9.1.</p>
         </div>
 
         {this.renderEvents()}
