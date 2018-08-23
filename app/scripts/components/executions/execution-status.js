@@ -3,8 +3,10 @@ import React from 'react';
 import Collapse from 'react-collapsible';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import get from 'lodash.get';
 import { getExecutionStatus } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
+import { Link } from 'react-router';
 
 import {
   tableHeader,
@@ -78,6 +80,19 @@ var ExecutionStatus = React.createClass({
       output = <dd>N/A</dd>;
     }
 
+    let parentARN;
+    if (executionStatus.execution.input) {
+      const input = JSON.parse(executionStatus.execution.input);
+      const parent = get(input.cumulus_meta, 'parentExecutionArn');
+      if (parent) {
+        parentARN = <dd><Link to={'/executions/execution/' + parent} title={parent}>{parent}</Link></dd>;
+      } else {
+        parentARN = <dd>N/A</dd>;
+      }
+    } else {
+      parentARN = <dd>N/A</dd>;
+    }
+
     const errors = this.errors();
 
     return (
@@ -118,6 +133,10 @@ var ExecutionStatus = React.createClass({
 
           <dt>Ended:</dt>
           <dd>{fullDate(executionStatus.execution.stopDate)}</dd><br />
+
+          <dt>Parent Workflow Execution</dt>
+          {parentARN}
+          <br />
 
           <dt>Input:</dt>
           <dd>
