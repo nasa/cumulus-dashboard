@@ -10,6 +10,7 @@ import schema from './schema';
 import workflows from './workflows';
 import executions from './executions';
 import executionStatus from './execution-status';
+import executionLogs from './execution-logs';
 import rules from './rules';
 import reconciliationReports from './reconciliation-reports';
 
@@ -26,6 +27,7 @@ export const reducers = {
   workflows,
   executions,
   executionStatus,
+  executionLogs,
   rules,
   reconciliationReports
 };

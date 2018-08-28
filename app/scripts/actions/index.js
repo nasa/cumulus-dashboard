@@ -175,6 +175,10 @@ export const EXECUTION_STATUS = 'EXECUTION_STATUS';
 export const EXECUTION_STATUS_INFLIGHT = 'EXECUTION_STATUS_INFLIGHT';
 export const EXECUTION_STATUS_ERROR = 'EXECUTION_STATUS_ERROR';
 
+export const EXECUTION_LOGS = 'EXECUTION_LOGS';
+export const EXECUTION_LOGS_INFLIGHT = 'EXECUTION_LOGS_INFLIGHT';
+export const EXECUTION_LOGS_ERROR = 'EXECUTION_LOGS_ERROR';
+
 export const EXECUTIONS = 'EXECUTIONS';
 export const EXECUTIONS_INFLIGHT = 'EXECUTIONS_INFLIGHT';
 export const EXECUTIONS_ERROR = 'EXECUTIONS_ERROR';
@@ -415,6 +419,10 @@ export const listWorkflows = (options) => wrapRequest(null, get, 'workflows', WO
 export const getExecutionStatus = (arn) => wrapRequest(null, get, {
   url: url.resolve(root, 'executions/status/' + arn)
 }, EXECUTION_STATUS);
+
+export const getExecutionLogs = (executionName) => wrapRequest(null, get, {
+  url: url.resolve(root, 'logs/' + executionName)
+}, EXECUTION_LOGS);
 
 export const listExecutions = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'executions'),
