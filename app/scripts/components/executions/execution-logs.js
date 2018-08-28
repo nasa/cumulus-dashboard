@@ -40,8 +40,8 @@ var ExecutionLogs = React.createClass({
     return (
       <div className='page__component'>
       <section className='page__section page__section__header-wrapper'>
-        <h1 className='heading--large heading--shared-content with-description width--three-quarters'>
-          Execution Logs
+        <h1 className='heading--large heading--shared-content with-description'>
+          Logs for Execution {executionLogs.results[0].executions}
         </h1>
 
         {errors.length ? <ErrorReport report={errors} /> : null}
