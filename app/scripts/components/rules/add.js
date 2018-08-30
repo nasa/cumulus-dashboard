@@ -32,7 +32,8 @@ const AddRule = React.createClass({
       rule: {
         type: '',
         value: ''
-      }
+      },
+      state: 'ENABLED'
     };
     return (
       <AddRaw
