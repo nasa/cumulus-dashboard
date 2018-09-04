@@ -102,6 +102,11 @@ export const wrapRequest = function (id, query, params, type, body) {
     const start = new Date();
     query(config, (error, data) => {
       if (error) {
+        // Temporary fix until the 'logs' endpoint is fixed
+        if (error.message.includes('Invalid Authorization token') && config.url.includes('logs')) {
+          const data = { results: [] };
+          return dispatch({ id, type, data, config });
+        }
         // Catch the session expired error
         // Weirdly error.message shows up as " : Session expired"
         // So it's using indexOf instead of a direct comparison

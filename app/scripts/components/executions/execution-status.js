@@ -148,6 +148,10 @@ var ExecutionStatus = React.createClass({
           <dt>Output:</dt>
           {output}
           <br />
+
+          <dt>Logs:</dt>
+          <dd><Link to={'/executions/execution/' + executionStatus.execution.name + '/logs'} title={executionStatus.execution.name + '/logs'}>View Execution Logs</Link></dd>
+          <br />
         </dl>
       </section>
 

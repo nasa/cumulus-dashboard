@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Execution details (inputs and outputs) are shown for executions and execution steps. [CUMULUS-692]
 - Link to parent workflow execution if any exists. [Cumulus-689]
+- Logs for specific workflow executions. [Cumulus-691]
 - Documentation was added to the `execution-status.js` component about how to find task / version information for step function events. [Cumulus-690]
 
 ## [v1.2.0] - 2018-08-08
