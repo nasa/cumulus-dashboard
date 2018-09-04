@@ -122,10 +122,10 @@ var ExecutionStatus = React.createClass({
           <dt>Execution Status:</dt>
           <dd>{displayCase(executionStatus.execution.status)}</dd><br />
 
-          <dt>Execution An:</dt>
+          <dt>Execution Arn:</dt>
           <dd>{executionStatus.execution.executionArn}</dd><br />
 
-          <dt>State Machine An:</dt>
+          <dt>State Machine Arn:</dt>
           <dd>{executionStatus.stateMachine.stateMachineArn}</dd><br />
 
           <dt>Started:</dt>
@@ -158,6 +158,9 @@ var ExecutionStatus = React.createClass({
       <section className='page__section'>
         <div className='heading__wrapper--border'>
           <h2 className='heading--medium with-description'>Events</h2>
+          <p>To find all task name and versions, select <b>More details</b> for the last Lambda- or Activity-type event. There you should find a key / value pair "workflow_tasks" which lists all tasks' version, name and arn.</p>
+          <p><b>NOTE:</b>Task / version tracking is enabled as of Cumulus version 1.9.1.</p>
+          <p><b>NOTE:</b>If the task output is greater than 10KB, the full message will be stored in an S3 Bucket. In these scenarios, task and version numbers are not part of the Lambda or Activity event output.</p>
         </div>
 
         {this.renderEvents()}
@@ -166,6 +169,8 @@ var ExecutionStatus = React.createClass({
     );
   }
 });
+
+export { ExecutionStatus };
 
 export default connect(state => ({
   executionStatus: state.executionStatus

@@ -6,7 +6,7 @@ import dagre from 'dagre-d3v4';
 import * as d3 from 'd3';
 
 // dagre-d3v4 expects d3 to be attached to the window
-window.d3 = d3;
+if (process.env.NODE_ENV !== 'test') window.d3 = d3;
 
 var ExecutionStatusGraph = React.createClass({
   propTypes: {
