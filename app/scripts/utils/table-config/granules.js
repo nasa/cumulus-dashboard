@@ -84,7 +84,7 @@ export const simpleDropdownOption = function (config) {
       options={config.options}
       id={config.label}
       onChange={config.handler}
-      noNull={true}
+      noNull={false}
     />
   );
 };
