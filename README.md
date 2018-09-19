@@ -55,6 +55,25 @@ npm install
 npm run serve
 ```
 
+## Tests
+
+### Unit Tests
+
+     $ npm run test
+  
+## Integration Tests
+
+Run the Dashboard in a terminal:
+
+     $ npm run serve
+
+Run the test suite in another terminal:
+
+     $ npm run cypress
+
+When the cypress editor opens, click on `run all specs`.
+
+
 ## Deployment Using S3
 
 First build the site
