@@ -21,6 +21,7 @@
     "lint": "eslint app/scripts/ --ext .js",
     "start": "npm run serve",
     "cypress": "cypress open",
+    "cypress-tests": "cypress run --spec 'cypress/integration/*'",
     "test": "npm run lint && ./node_modules/.bin/ava"
   },
   "ava": {
@@ -96,6 +97,7 @@
   },
   "dependencies": {
     "assert": "^1.4.1",
+    "ava-http": "^1.0.0",
     "brace": "^0.9.1",
     "classnames": "^2.2.5",
     "d3-queue": "^3.0.5",
