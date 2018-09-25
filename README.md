@@ -56,6 +56,12 @@ npm install
 npm run serve
 ```
 
+## Fake API server
+
+For development and testing purposes, you can use a fake API server provided with the dashboard. To use the fake API server, run `node fake-api.js` in a separate terminal session, then launch the dashboard with:
+
+     $ APIROOT=http://localhost:5001 npm run serve
+
 ## Tests
 
 ### Unit Tests
@@ -64,16 +70,16 @@ npm run serve
   
 ## Integration Tests
 
-Run the Dashboard in a terminal:
+For the integration tests to work, you have to launch the fake API and the dashboard first. Run the following commands in separate terminal sessions:
 
-     $ npm run serve
+     $ node fake-api.js
+     $ APIROOT=http://localhost:5001 npm run serve
 
 Run the test suite in another terminal:
 
      $ npm run cypress
 
 When the cypress editor opens, click on `run all specs`.
-
 
 ## Deployment Using S3
 
