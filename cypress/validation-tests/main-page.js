@@ -3,7 +3,7 @@
 import test from 'ava';
 import http from 'ava-http';
 
-test('Hit the main page with no authenticated', async (t) => {
+test('POST, PUT, or DELETE operations with no session information are rejected', async (t) => {
   const host = process.env.DASHBOARD_HOST || 'http://localhost:3000/';
   const res = await http.getResponse(host);
   t.is(res.statusCode, 200);
