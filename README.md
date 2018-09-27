@@ -68,7 +68,7 @@ For development and testing purposes, you can use a fake API server provided wit
 
      $ npm run test
   
-## Integration Tests
+## Integration & Validation Tests
 
 For the integration tests to work, you have to launch the fake API and the dashboard first. Run the following commands in separate terminal sessions:
 
@@ -77,6 +77,7 @@ For the integration tests to work, you have to launch the fake API and the dashb
 
 Run the test suite in another terminal:
 
+     $ npm run validation
      $ npm run cypress
 
 When the cypress editor opens, click on `run all specs`.
