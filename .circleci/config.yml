@@ -14,10 +14,7 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: |
-            nvm install
-            nvm use
-            yarn install --frozen-lockfile
+          command: docker run --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home node:8.11.4 yarn install --frozen-lockfile --cache-folder /root/.cache
 
       # save node_module folders
       - save_cache:
@@ -27,7 +24,7 @@ jobs:
  
       - run:
           name: Run tests
-          command: yarn test
+          command: docker run --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home node:8.11.4 yarn test --cache-folder /root/.cache
 
       - run:
           name: Prepare servers 
@@ -36,12 +33,12 @@ jobs:
             docker run -d --name api -v $(pwd):/home --workdir /home -p 5001:5001 node:8.11.4 node fake-api.js
 
             # run dashboard
-            docker run -d --name dashboard -v $(pwd):/home --workdir -e APIROOT=http://localhost:5001 /home -p 3000:3000 node:8.11.4 yarn serve
+            docker run -d --name dashboard -v $(pwd):/home --workdir -e APIROOT=http://api:5001 /home -p 3000:3000 node:8.11.4 yarn serve
       
       - run:
           name: Run Validation Tests
-          command: yarn validation 
+          command: docker run --link api:api --link dashboard:dashboard -e DASHBOARD_HOST=http://dashboard:3000 --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home node:8.11.4 yarn validation
       
       - run:
           name: Run Integration Tests
-          command: yarn cypress-ci 
+          command: docker run --link api:api --link dashboard:dashboard -e DASHBOARD_HOST=http://dashboard:3000 --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home node:8.11.4 yarn cypress-ci 
