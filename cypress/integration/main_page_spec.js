@@ -8,4 +8,17 @@ describe('Dashboard Tests', () => {
       cy.get('a').should('have.text', 'Login with Earthdata Login');
     });
   });
+
+  it('Logging in successfully redirects to the Dashboard main page', () => {
+    cy.get('div[class=modal__internal]').within(() => {
+      cy.get('a').click();
+    });
+
+    cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
+    cy.get('li[class=nav__order-0]').within(() => {
+      cy.get('a').should('have.attr', 'href').and('include', '/collections');
+    });
+
+    
+  });
 });
