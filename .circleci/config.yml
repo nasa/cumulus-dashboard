@@ -31,7 +31,7 @@ jobs:
 
       - run:
           name: Prepare servers 
-          commmand: |
+          command: |
             # run fake api
             docker run -d --name api -v $(pwd):/home --workdir /home -p 5001:5001 node:8.11.4 node fake-api.js
 
@@ -40,8 +40,8 @@ jobs:
       
       - run:
           name: Run Validation Tests
-          commmand: yarn validation 
+          command: yarn validation 
       
       - run:
           name: Run Integration Tests
-          commmand: yarn cypress-ci 
+          command: yarn cypress-ci 
