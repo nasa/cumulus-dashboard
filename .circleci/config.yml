@@ -34,6 +34,20 @@ jobs:
 
             # run dashboard
             docker run -d --name dashboard -v $(pwd):/home --workdir /home -e APIROOT=http://api:5001 -p 3000:3000 node:8.11.4 yarn serve
+
+            attempt_counter=0
+            max_attempts=20
+
+            until $(curl --output /dev/null --silent --head --fail http://localhost:3000); do
+                if [ ${attempt_counter} -eq ${max_attempts} ];then
+                  echo "Max attempts reached"
+                  exit 1
+                fi
+
+                printf '.'
+                attempt_counter=$(($attempt_counter+1))
+                sleep 5
+            done
       
       - run:
           name: Run Validation Tests
@@ -41,4 +55,4 @@ jobs:
       
       - run:
           name: Run Integration Tests
-          command: docker run --link api:api --link dashboard:dashboard -e DASHBOARD_HOST=http://dashboard:3000 --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home node:8.11.4 yarn cypress-ci 
+          command: docker run --link api:api --link dashboard:dashboard -e DASHBOARD_HOST=http://dashboard:3000 --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home cypress/base:8 yarn cypress-ci 
