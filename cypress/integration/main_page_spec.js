@@ -19,7 +19,5 @@ describe('Dashboard Tests', () => {
     cy.get('li[class=nav__order-0]').within(() => {
       cy.get('a').should('have.attr', 'href').and('include', '/collections');
     });
-
-    
   });
 });
