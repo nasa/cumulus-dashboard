@@ -24,7 +24,7 @@ function fakeApiMiddleWare (req, res, next) {
       res.status(401);
       res.json({
         message: 'Invalid Authorization token'
-      }).end('bye');
+      }).end();
       return;
     }
   }
