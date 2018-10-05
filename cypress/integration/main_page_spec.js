@@ -1,4 +1,3 @@
-
 describe('Dashboard Tests', () => {
   const host = process.env.DASHBOARD_HOST || 'http://localhost:3000/';
   it('When not logged in it should redirect to login page', () => {
@@ -28,6 +27,8 @@ describe('Dashboard Tests', () => {
     });
 
     cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
+
+    cy.request('/#/collections');
 
     cy.get('nav li').last().within(() => {
       cy.get('a').should('have.text', 'Log out');
