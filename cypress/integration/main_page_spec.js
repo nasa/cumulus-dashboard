@@ -28,17 +28,15 @@ describe('Dashboard Tests', () => {
 
     cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
 
-    cy.request('/#/collections');
-
     cy.get('nav li').last().within(() => {
       cy.get('a').should('have.text', 'Log out');
     });
     cy.get('nav li').last().click();
-
     cy.url().should('include', '/#/auth');
-    cy.get('div[class=modal__internal]').within(() => {
-      cy.get('a').should('have.attr', 'href').and('include', 'token?');
-      cy.get('a').should('have.text', 'Login with Earthdata Login');
-    });
+
+    cy.visit(`${host}#/collections`);
+
+    cy.url().should('not.include', '/#/collections');
+    cy.url().should('include', '/#/auth');
   });
 });
