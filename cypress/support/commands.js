@@ -25,7 +25,5 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('login', () => {
-  cy.get('div[class=modal__internal]').within(() => {
-    cy.get('a').click();
-  });
+  return cy.visit('http://localhost:5001/token?state=http%3A%2F%2Flocalhost%3A3000%2F%23%2Fauth');
 });
