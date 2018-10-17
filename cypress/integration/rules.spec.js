@@ -1,6 +1,6 @@
 describe('Rules page', () => {
   const host = process.env.DASHBOARD_HOST || 'http://localhost:3000/';
-  it('When not logged in it should redirect to login page', () => {
+  it('when not logged in it should redirect to login page', () => {
     cy.visit(`${host}#/rules`);
     cy.url().should('include', '/#/auth');
     cy.get('div[class=modal__internal]').within(() => {
@@ -9,13 +9,17 @@ describe('Rules page', () => {
     });
   });
 
-  it('visiting the Rules page', () => {
-    cy.login();
+  describe('when logged in', () => {
+    before(() => {
+      cy.login();
 
-    // cy.contains('Rules')
-    //   .click();
-    cy.visit('#/rules');
+      cy.contains('Rules')
+        .click();
+      // cy.visit('#/rules');
+    });
 
-    cy.get('table tbody tr').should('have.length', 1);
+    it('should display a list of rules', () => {
+      cy.get('table tbody tr').should('have.length', 1);
+    });
   });
 });
