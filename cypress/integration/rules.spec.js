@@ -9,8 +9,13 @@ describe('Rules page', () => {
     });
   });
 
-  it('Logging in successfully redirects to the Dashboard main page', () => {
+  it('visiting the Rules page', () => {
     cy.login();
-    cy.contains('Rules').should('have.attr', 'href').and('include', '/rules');
+
+    // cy.contains('Rules')
+    //   .click();
+    cy.visit('#/rules');
+
+    cy.get('table tbody tr').should('have.length', 1);
   });
 });
