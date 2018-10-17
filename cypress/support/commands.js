@@ -23,3 +23,9 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', () => {
+  cy.get('div[class=modal__internal]').within(() => {
+    cy.get('a').click();
+  });
+});
