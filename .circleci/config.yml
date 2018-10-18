@@ -52,7 +52,7 @@ jobs:
 
       - run:
           name: Run Validation Tests
-          command: docker run --link api:api --link dashboard:dashboard -e CYPRESS_BASE_URL=http://dashboard:3000 -e CYPRESS_APIROOT=http://api:5001 --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home node:8.11.4 yarn validation
+          command: docker run --link api:api --link dashboard:dashboard -e CYPRESS_BASE_URL=http://dashboard:3000 --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home node:8.11.4 yarn validation
 
       - run:
           name: Run Integration Tests
