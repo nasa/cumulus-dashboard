@@ -14,8 +14,14 @@ describe('Dashboard Tests', () => {
     });
 
     cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
-    cy.contains('Collections').should('have.attr', 'href').and('include', '/collections');
-    cy.contains('Rules').should('have.attr', 'href').and('include', '/rules');
+    cy.get('nav')
+      .contains('Collections')
+      .should('have.attr', 'href')
+      .and('include', '/collections');
+    cy.get('nav')
+      .contains('Rules')
+      .should('have.attr', 'href')
+      .and('include', '/rules');
   });
 
   it('Logging out successfully redirects to the login screen', () => {

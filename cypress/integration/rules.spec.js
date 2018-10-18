@@ -11,7 +11,8 @@ describe('Rules page', () => {
   describe('when logged in', () => {
     before(() => {
       cy.login();
-      cy.visit('#/rules');
+      cy.visit('/');
+      cy.get('nav').contains('Rules').click();
     });
 
     it('should display a list of rules', () => {
