@@ -25,5 +25,12 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('login', () => {
-  return cy.visit('http://localhost:5001/token?state=http%3A%2F%2Flocalhost%3A3000%2F%23%2Fauth');
+  return cy.request({
+    url: 'http://localhost:5001/token?state=http%3A%2F%2Flocalhost%3A3000%2F%23%2Fauth',
+    followRedirect: false
+  }).then((response) => {
+    const query = response.redirectedToUrl.substr(response.redirectedToUrl.indexOf('?') + 1);
+    const token = query.split('=')[1];
+    window.localStorage.setItem('auth-token', token);
+  });
 });
