@@ -14,9 +14,7 @@ describe('Dashboard Tests', () => {
     });
 
     cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
-    cy.get('li[class=nav__order-0]').within(() => {
-      cy.get('a').should('have.attr', 'href').and('include', '/collections');
-    });
+    cy.contains('Collections').should('have.attr', 'href').and('include', '/collections');
     cy.contains('Rules').should('have.attr', 'href').and('include', '/rules');
   });
 
