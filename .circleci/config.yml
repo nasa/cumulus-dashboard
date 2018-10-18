@@ -22,13 +22,13 @@ jobs:
           paths:
             - ~/cumulus-dashboard/node_modules
             - ~/.cache
- 
+
       - run:
           name: Run tests
           command: docker run --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home node:8.11.4 yarn test --cache-folder /root/.cache
 
       - run:
-          name: Prepare servers 
+          name: Prepare servers
           command: |
             # run fake api
             docker run -d --name api -v $(pwd):/home --workdir /home -p 5001:5001 node:8.11.4 node fake-api.js
@@ -49,11 +49,11 @@ jobs:
                 attempt_counter=$(($attempt_counter+1))
                 sleep 5
             done
-      
+
       - run:
           name: Run Validation Tests
-          command: docker run --link api:api --link dashboard:dashboard -e DASHBOARD_HOST=http://dashboard:3000 --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home node:8.11.4 yarn validation
-      
+          command: docker run --link api:api --link dashboard:dashboard -e CYPRESS_BASE_URL=http://dashboard:3000 -e CYPRESS_APIROOT=http://api:5001 --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home node:8.11.4 yarn validation
+
       - run:
           name: Run Integration Tests
-          command: docker run --link api:api --link dashboard:dashboard -e DASHBOARD_HOST=http://dashboard:3000 --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home cypress/base:8 yarn cypress-ci 
+          command: docker run --link api:api --link dashboard:dashboard -e CYPRESS_BASE_URL=http://dashboard:3000 -e CYPRESS_APIROOT=http://api:5001 --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home cypress/base:8 yarn cypress-ci
