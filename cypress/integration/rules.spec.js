@@ -21,7 +21,28 @@ describe('Rules page', () => {
       cy.get('nav').contains('Rules').click();
       cy.url().should('include', '/#/rules');
       cy.get('table tbody tr').should('have.length', 1);
-      cy.get('table tr[data-value="MOD09GQ_TEST_kinesisRule"]').should('exist');
+      cy.get('table tr a')
+        .contains('MOD09GQ_TEST_kinesisRule')
+        .should('exist');
+    });
+
+    it.only('deleting a rule should remove it from the list', () => {
+      cy.server();
+      cy.route('DELETE', `${Cypress.env('APIROOT')}/rules/*`, {});
+
+      cy.visit('/#/rules');
+      cy.get('table tr[data-value="MOD09GQ_TEST_kinesisRule"] input[type="checkbox"')
+        .should('exist')
+        .click();
+      cy.get('.form--controls button')
+        .contains('Delete')
+        .click();
+      cy.get('.modal')
+        .should('exist')
+        .get('button')
+        .contains('Confirm')
+        .click();
+      cy.get('table tbody tr').should('not.exist');
     });
   });
 });
