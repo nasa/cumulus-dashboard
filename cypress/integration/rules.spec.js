@@ -22,6 +22,7 @@ describe('Rules page', () => {
       cy.get('nav').contains('Rules').click();
       cy.url().should('include', '/#/rules');
       cy.get('table tbody tr').should('have.length', 1);
+      cy.get('table tr[data-value="MOD09GQ_TEST_kinesisRule"]').should('exist');
     });
   });
 });
