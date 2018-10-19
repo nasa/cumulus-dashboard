@@ -9,13 +9,18 @@ describe('Rules page', () => {
   });
 
   describe('when logged in', () => {
-    before(() => {
+    beforeEach(() => {
       cy.login();
+    });
+
+    it('should display a link to view rules', () => {
       cy.visit('/');
-      cy.get('nav').contains('Rules').click();
+      cy.get('nav').contains('Rules').should('exist');
     });
 
     it('should display a list of rules', () => {
+      cy.get('nav').contains('Rules').click();
+      cy.url().should('include', '/#/rules');
       cy.get('table tbody tr').should('have.length', 1);
     });
   });

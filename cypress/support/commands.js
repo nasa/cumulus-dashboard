@@ -26,12 +26,20 @@
 
 Cypress.Commands.add('login', () => {
   const authUrl = `${Cypress.config('baseUrl')}/#/auth`;
-  return cy.request({
-    url: `${Cypress.env('APIROOT')}/token?state=${encodeURIComponent(authUrl)}`,
+  cy.request({
+    url: `${Cypress.env('APIROOT')}/token`,
+    qs: {
+      state: encodeURIComponent(authUrl)
+    },
     followRedirect: false
   }).then((response) => {
     const query = response.redirectedToUrl.substr(response.redirectedToUrl.indexOf('?') + 1);
     const token = query.split('=')[1];
-    window.localStorage.setItem('auth-token', token);
+    cy.window().its('appStore').then(store => {
+      store.dispatch({ type: 'LOGIN' });
+    });
+    cy.window()
+      .its('localStorage')
+      .invoke('setItem', 'auth-token', token);
   });
 });
