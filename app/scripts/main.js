@@ -18,10 +18,6 @@ import config from './config';
 import reducers from './reducers';
 
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));
-if (window.Cypress) {
-  // only available during E2E tests
-  window.appStore = store;
-}
 
 console.log.apply(console, config.consoleMessage);
 console.log('Environment', config.environment);

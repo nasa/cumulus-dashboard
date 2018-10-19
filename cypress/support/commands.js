@@ -35,9 +35,6 @@ Cypress.Commands.add('login', () => {
   }).then((response) => {
     const query = response.redirectedToUrl.substr(response.redirectedToUrl.indexOf('?') + 1);
     const token = query.split('=')[1];
-    cy.window().its('appStore').then(store => {
-      store.dispatch({ type: 'LOGIN' });
-    });
     cy.window()
       .its('localStorage')
       .invoke('setItem', 'auth-token', token);

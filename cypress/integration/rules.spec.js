@@ -19,6 +19,7 @@ describe('Rules page', () => {
     });
 
     it('should display a list of rules', () => {
+      cy.visit('/');
       cy.get('nav').contains('Rules').click();
       cy.url().should('include', '/#/rules');
       cy.get('table tbody tr').should('have.length', 1);
