@@ -7,6 +7,8 @@ describe('Rules page', () => {
   });
 
   describe('when logged in', () => {
+    const testRuleName = 'MOD09GQ_TEST_kinesisRule';
+
     beforeEach(() => {
       cy.login();
     });
@@ -22,20 +24,23 @@ describe('Rules page', () => {
       cy.url().should('include', '/#/rules');
       cy.get('table tbody tr').should('have.length', 1);
       cy.get('table tr a')
-        .contains('MOD09GQ_TEST_kinesisRule')
+        .contains(testRuleName)
         .should('exist');
     });
 
-    it.only('deleting a rule should remove it from the list', () => {
+    it('deleting a rule should remove it from the list', () => {
+      // Stub the DELETE route for rules otherwise the request will fail and
+      // UI state won't update properly.
       cy.server();
       cy.route('DELETE', `${Cypress.env('APIROOT')}/rules/*`, {});
 
       cy.visit('/#/rules');
-      cy.get('table tr[data-value="MOD09GQ_TEST_kinesisRule"] input[type="checkbox"')
+      cy.get(`table tr[data-value="${testRuleName}"] input[type="checkbox"`)
         .should('exist')
         .click();
       cy.get('.form--controls button')
         .contains('Delete')
+        .should('exist')
         .click();
       cy.get('.modal')
         .should('exist')
