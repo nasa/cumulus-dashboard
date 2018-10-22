@@ -7,8 +7,9 @@ describe('Rules page', () => {
   });
 
   describe('when logged in', () => {
-    const testProvider = 'PODAAC_SWOT';
-    const testCollection = 'MOD09GQ / 006';
+    const testRuleName = 'MOD09GQ_TEST_kinesisRule';
+    const testProviderId = 'PODAAC_SWOT';
+    const testCollectionId = 'MOD09GQ / 006';
 
     beforeEach(() => {
       cy.login();
@@ -24,11 +25,37 @@ describe('Rules page', () => {
       cy.get('nav').contains('Rules').click();
       cy.url().should('include', '/#/rules');
       cy.get('table tbody tr').should('have.length', 1);
-      cy.get('table tr[data-value="MOD09GQ_TEST_kinesisRule"]')
+      cy.get(`table tr[data-value="${testRuleName}"]`)
         .should('exist')
         .within(() => {
-          cy.contains(testProvider).should('exist');
-          cy.contains(testCollection).should('exist');
+          cy.contains(testProviderId).should('exist');
+          cy.contains(testCollectionId).should('exist');
+          // Has to be the last assertion so that this element
+          // is yielded to the click() command.
+          cy.contains(testRuleName).should('exist');
+        })
+        .click();
+      cy.url().should('include', `/#/rules/rule/${testRuleName}`);
+    });
+
+    it('display a rule with the correct data', () => {
+      cy.visit(`/#/rules/rule/${testRuleName}`);
+      cy.get('.metadata__details')
+        .should('exist')
+        .within(() => {
+          cy.get('dt')
+            .contains('RuleName')
+            .next('dd')
+            .should('contain', testRuleName);
+          cy.get('dt')
+            .contains('Workflow')
+            .next('dd')
+            .should('contain', 'KinesisTriggerTest');
+          cy.get('dt')
+            .contains('Provider')
+            .next('dd')
+            .contains('PODAAC_SWOT')
+            .should('exist');
         });
     });
   });
