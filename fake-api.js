@@ -15,7 +15,8 @@ function fakeApiMiddleWare (req, res, next) {
   // intercepts OPTIONS method
   if (req.method === 'OPTIONS') {
     // respond with 200
-    res.sendStatus(200);
+    res.sendStatus(200).end();
+    return;
   } else {
     const auth = req.header('Authorization');
     const re = /^\/token/;
@@ -31,15 +32,14 @@ function fakeApiMiddleWare (req, res, next) {
   next();
 }
 
-app.use('/', fakeApiMiddleWare );
+app.use('/', fakeApiMiddleWare);
 app.use('/', express.static('test/fake-api-fixtures', { index: 'index.json' }));
 
 app.get('/token', (req, res) => {
   const url = req.query.state;
   if (url) {
     res.redirect(`${url}?token=fake-token`);
-  }
-  else {
+  } else {
     res.write('state parameter is missing');
     res.status(400).end();
   }
@@ -47,6 +47,18 @@ app.get('/token', (req, res) => {
 
 app.get('/auth', (req, res) => {
   res.status(200).end();
+});
+
+app.post('/*', (req, res) => {
+  res.status(200).send('{"message": "Record saved"}').end();
+});
+
+app.put('/*', (req, res) => {
+  res.sendStatus(200).end();
+});
+
+app.delete('/*', (req, res) => {
+  res.sendStatus(200).end();
 });
 
 const port = process.env.PORT || 5001;
