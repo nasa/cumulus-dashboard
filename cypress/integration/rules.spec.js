@@ -57,7 +57,7 @@ describe('Rules page', () => {
           cy.get('dt')
             .contains('Provider')
             .next('dd')
-            .contains('PODAAC_SWOT')
+            .contains(testProviderId)
             .should('exist');
         });
     });
