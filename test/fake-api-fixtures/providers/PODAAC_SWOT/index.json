@@ -1,0 +1,6 @@
+{
+  "globalConnectionLimit": 10,
+  "host": "test-bucket",
+  "id": "PODAAC_SWOT",
+  "protocol": "s3"
+}
