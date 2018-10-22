@@ -30,16 +30,19 @@ describe('Rules page', () => {
         .within(() => {
           cy.contains(testProviderId).should('exist');
           cy.contains(testCollectionId).should('exist');
-          // Has to be the last assertion so that this element
-          // is yielded to the click() command.
-          cy.contains(testRuleName).should('exist');
-        })
-        .click();
-      cy.url().should('include', `/#/rules/rule/${testRuleName}`);
+          cy.contains(testRuleName)
+            .should('exist')
+            .and('have.attr', 'href')
+            .and('equal', `#/rules/rule/${testRuleName}`);
+        });
     });
 
     it('display a rule with the correct data', () => {
-      cy.visit(`/#/rules/rule/${testRuleName}`);
+      cy.visit('/#/rules');
+      cy.get(`table tr[data-value="${testRuleName}"]`)
+        .contains(testRuleName)
+        .click();
+      cy.url().should('include', `/#/rules/rule/${testRuleName}`);
       cy.get('.metadata__details')
         .should('exist')
         .within(() => {
