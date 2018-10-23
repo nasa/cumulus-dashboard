@@ -32,8 +32,7 @@ describe('Rules page', () => {
           cy.contains(testCollectionId).should('exist');
           cy.contains(testRuleName)
             .should('exist')
-            .and('have.attr', 'href')
-            .and('equal', `#/rules/rule/${testRuleName}`);
+            .and('have.attr', 'href', `#/rules/rule/${testRuleName}`);
         });
     });
 
@@ -58,7 +57,8 @@ describe('Rules page', () => {
             .contains('Provider')
             .next('dd')
             .contains(testProviderId)
-            .should('exist');
+            .should('exist')
+            .and('have.attr', 'href', `#/providers/provider/${testProviderId}`);
         });
     });
   });
