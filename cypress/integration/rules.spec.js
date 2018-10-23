@@ -63,11 +63,6 @@ describe('Rules page', () => {
     });
 
     it('deleting a rule should remove it from the list', () => {
-      // Stub the DELETE route for rules otherwise the request will fail and
-      // UI state won't update properly.
-      cy.server();
-      cy.route('DELETE', `${Cypress.env('APIROOT')}/rules/*`, {});
-
       cy.visit('/#/rules');
       cy.get(`table tr[data-value="${testRuleName}"] input[type="checkbox"`)
         .should('exist')
