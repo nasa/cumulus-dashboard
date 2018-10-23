@@ -23,3 +23,20 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', () => {
+  const authUrl = `${Cypress.config('baseUrl')}/#/auth`;
+  cy.request({
+    url: `${Cypress.env('APIROOT')}/token`,
+    qs: {
+      state: encodeURIComponent(authUrl)
+    },
+    followRedirect: false
+  }).then((response) => {
+    const query = response.redirectedToUrl.substr(response.redirectedToUrl.indexOf('?') + 1);
+    const token = query.split('=')[1];
+    cy.window()
+      .its('localStorage')
+      .invoke('setItem', 'auth-token', token);
+  });
+});
