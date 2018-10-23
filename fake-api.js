@@ -3,6 +3,8 @@
 const express = require('express');
 const app = express();
 
+const rulesJson = require('./test/fake-api-fixtures/rules/index.json');
+
 /**
  * Config
  */
@@ -33,7 +35,19 @@ function fakeApiMiddleWare (req, res, next) {
 }
 
 app.use('/', fakeApiMiddleWare);
-app.use('/', express.static('test/fake-api-fixtures', { index: 'index.json' }));
+
+app.get('/rules', (req, res) => {
+  // if (req.query.name) {
+  //   const rule = rulesJson.results.find(rule => rule.name === req.query.name);
+  //   return res.send(rule);
+  // }
+  res.send(rulesJson);
+});
+
+app.delete('/rules/:name', (req, res) => {
+  rulesJson.results = rulesJson.results.filter(rule => rule.name !== req.params.name);
+  res.sendStatus(200).end();
+});
 
 app.get('/token', (req, res) => {
   const url = req.query.state;
@@ -48,6 +62,8 @@ app.get('/token', (req, res) => {
 app.get('/auth', (req, res) => {
   res.status(200).end();
 });
+
+app.use('/', express.static('test/fake-api-fixtures', { index: 'index.json' }));
 
 app.post('/*', (req, res) => {
   res.status(200).send('{"message": "Record saved"}').end();
