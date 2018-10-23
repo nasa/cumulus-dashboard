@@ -11,8 +11,13 @@ describe('Rules page', () => {
     const testProviderId = 'PODAAC_SWOT';
     const testCollectionId = 'MOD09GQ / 006';
 
+    // before(() => {
+    //   cy.task('resetState');
+    // });
+
     beforeEach(() => {
       cy.login();
+      cy.task('resetState');
     });
 
     it('should display a link to view rules', () => {

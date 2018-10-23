@@ -18,12 +18,3 @@ import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
-
-// Cypress does not support requesting stubbed routes using fetch. Destroying
-// the fetch object will force requests to fallback to XHR, which will interact
-// with stubbed routes.
-//
-// See https://github.com/cypress-io/cypress/issues/920#issuecomment-344983566.
-Cypress.on('window:before:load', win => {
-  win.fetch = null;
-});

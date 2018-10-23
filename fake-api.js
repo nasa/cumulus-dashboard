@@ -4,7 +4,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
-const rulesJson = require('./test/fake-api-fixtures/rules/index.json');
+const { FakeDataStore } = require('./test/fake-db-model');
+FakeDataStore.reset();
 
 /**
  * Config
@@ -39,21 +40,17 @@ app.use(bodyParser.json());
 app.use('/', fakeApiMiddleWare);
 
 app.get('/rules', (req, res) => {
-  // if (req.query.name) {
-  //   const rule = rulesJson.results.find(rule => rule.name === req.query.name);
-  //   return res.send(rule);
-  // }
-  res.send(rulesJson);
+  console.log(`from API: ${FakeDataStore.getTest()}`);
+  res.send(FakeDataStore.getRules());
 });
 
 app.post('/rules', (req, res) => {
-  rulesJson.meta.count += 1;
-  rulesJson.results.push(req.body);
+  FakeDataStore.addRule(req.body);
   res.sendStatus(200).end();
 });
 
 app.delete('/rules/:name', (req, res) => {
-  rulesJson.results = rulesJson.results.filter(rule => rule.name !== req.params.name);
+  FakeDataStore.deleteRule(req.params.name);
   res.sendStatus(200).end();
 });
 
