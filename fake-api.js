@@ -2,6 +2,7 @@
 
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 
 const rulesJson = require('./test/fake-api-fixtures/rules/index.json');
 
@@ -34,6 +35,7 @@ function fakeApiMiddleWare (req, res, next) {
   next();
 }
 
+app.use(bodyParser.json());
 app.use('/', fakeApiMiddleWare);
 
 app.get('/rules', (req, res) => {
@@ -42,6 +44,12 @@ app.get('/rules', (req, res) => {
   //   return res.send(rule);
   // }
   res.send(rulesJson);
+});
+
+app.post('/rules', (req, res) => {
+  rulesJson.meta.count += 1;
+  rulesJson.results.push(req.body);
+  res.sendStatus(200).end();
 });
 
 app.delete('/rules/:name', (req, res) => {
@@ -64,18 +72,6 @@ app.get('/auth', (req, res) => {
 });
 
 app.use('/', express.static('test/fake-api-fixtures', { index: 'index.json' }));
-
-app.post('/*', (req, res) => {
-  res.status(200).send('{"message": "Record saved"}').end();
-});
-
-app.put('/*', (req, res) => {
-  res.sendStatus(200).end();
-});
-
-app.delete('/*', (req, res) => {
-  res.sendStatus(200).end();
-});
 
 const port = process.env.PORT || 5001;
 
