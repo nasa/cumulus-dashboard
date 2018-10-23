@@ -33,6 +33,7 @@ describe('Dashboard Collections Page', () => {
     it('collections page displays a button to add a new collection', () => {
       cy.visit(`${host}/#collections`);
 
+      cy.get('.heading--large').should('have.text', 'Collection Overview');
       cy.get('a').contains('Add a Collection').should('exist').as('addCollection');
       cy.get('@addCollection').should('have.attr', 'href', '#/collections/add');
       cy.get('@addCollection').click();

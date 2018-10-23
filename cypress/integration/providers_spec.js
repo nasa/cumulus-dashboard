@@ -33,6 +33,7 @@ describe('Dashboard Providers Page', () => {
     it('providers page displays a button to add a new provider', () => {
       cy.visit(`${host}/#providers`);
 
+      cy.get('.heading--large').should('have.text', 'Provider Overview');
       cy.get('a').contains('Add a Provider').should('exist').as('addProvider');
       cy.get('@addProvider').should('have.attr', 'href', '#/providers/add');
       cy.get('@addProvider').click();
