@@ -2,27 +2,23 @@ const ace = require('brace');
 require('brace/mode/javascript');
 require('brace/theme/monokai');
 
-describe('Dashboard Collections Page', () => {
-  const host = process.env.DASHBOARD_HOST || 'http://localhost:3000/';
+import { shouldBeRedirectedToLogin } from '../support/assertions';
 
+describe('Dashboard Collections Page', () => {
   describe('When not logged in', () => {
     it('should redirect to login page', () => {
-      cy.visit(`${host}#/collections`);
-      cy.url().should('include', '/#/auth');
-      cy.get('div[class=modal__internal]').within(() => {
-        cy.get('a').should('have.attr', 'href').and('include', 'token?');
-        cy.get('a').should('have.text', 'Login with Earthdata Login');
-      });
+      cy.visit('/#/collections');
+      shouldBeRedirectedToLogin();
     });
   });
 
   describe('When logged in', () => {
     beforeEach(() => {
-      cy.login(host);
+      cy.login();
     });
 
     it('displays a link to view collections', () => {
-      cy.visit(host);
+      cy.visit('/');
 
       cy.get('nav li a').contains('Collections').should('exist').as('collections');
       cy.get('@collections').should('have.attr', 'href', '#/collections');
@@ -35,7 +31,7 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('collections page displays a button to add a new collection', () => {
-      cy.visit(`${host}/#collections`);
+      cy.visit('/#/collections');
 
       cy.get('.heading--large').should('have.text', 'Collection Overview');
       cy.get('a').contains('Add a Collection').should('exist').as('addCollection');
@@ -56,7 +52,7 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('collection page has buttons to edit or delete the collection', () => {
-      cy.visit(`${host}/#/collections/collection/MOD09GQ/006`);
+      cy.visit('/#/collections/collection/MOD09GQ/006');
       cy.get('a').contains('Edit').should('exist').as('editCollection');
       cy.get('@editCollection').should('have.attr', 'href').and('include', '#/collections/edit/MOD09GQ/006');
       cy.get('@editCollection').click();
