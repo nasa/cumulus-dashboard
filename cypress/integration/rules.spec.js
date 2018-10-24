@@ -16,6 +16,10 @@ describe('Rules page', () => {
       cy.task('resetState');
     });
 
+    after(() => {
+      cy.task('resetState');
+    });
+
     it('should display a link to view rules', () => {
       cy.visit('/');
       cy.get('nav').contains('Rules').should('exist');
