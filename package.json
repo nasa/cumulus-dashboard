@@ -26,7 +26,10 @@
     "test": "npm run lint && ava"
   },
   "ava": {
-    "files": "test",
+    "files": [
+			"test/**/*.js",
+			"!test/fake-api-db/*.js"
+		],
     "babel": "inherit",
     "require": [
       "babel-polyfill",
