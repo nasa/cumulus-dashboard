@@ -77,7 +77,8 @@ describe('Rules page', () => {
         .get('button')
         .contains('Confirm')
         .click();
-      cy.get('table tbody tr').should('not.exist');
+      cy.get(`table tr[data-value="${testRuleName}"]`)
+        .should('not.exist');
     });
   });
 });
