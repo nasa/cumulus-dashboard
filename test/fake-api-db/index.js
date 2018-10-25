@@ -30,7 +30,9 @@ class FakeDb {
   getItems () {
     return fs.readJson(this.filePath);
   }
+}
 
+class FakeRulesDb extends FakeDb {
   deleteItem (name) {
     return fs.readJson(this.filePath)
       .then((data) => {
@@ -41,8 +43,6 @@ class FakeDb {
       .then((data) => seed(this.filePath, data));
   }
 }
-
-class FakeRulesDb extends FakeDb {}
 const fakeRulesDb = new FakeRulesDb(rulesFilePath);
 
 module.exports.resetState = resetState;
