@@ -2,6 +2,12 @@
 
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
+
+const { fakeRulesDb, resetState } = require('./test/fake-api-db');
+
+// Reset the fake API state
+resetState();
 
 /**
  * Config
@@ -15,7 +21,8 @@ function fakeApiMiddleWare (req, res, next) {
   // intercepts OPTIONS method
   if (req.method === 'OPTIONS') {
     // respond with 200
-    res.sendStatus(200);
+    res.sendStatus(200).end();
+    return;
   } else {
     const auth = req.header('Authorization');
     const re = /^\/token/;
@@ -31,15 +38,29 @@ function fakeApiMiddleWare (req, res, next) {
   next();
 }
 
-app.use('/', fakeApiMiddleWare );
-app.use('/', express.static('test/fake-api-fixtures', { index: 'index.json' }));
+app.use(bodyParser.json());
+app.use('/', fakeApiMiddleWare);
+
+app.get('/rules', async (req, res) => {
+  const rules = await fakeRulesDb.getItems();
+  res.send(rules);
+});
+
+app.post('/rules', async (req, res) => {
+  await fakeRulesDb.addItem(req.body);
+  res.sendStatus(200).end();
+});
+
+app.delete('/rules/:name', async (req, res) => {
+  await fakeRulesDb.deleteItem(req.params.name);
+  res.sendStatus(200).end();
+});
 
 app.get('/token', (req, res) => {
   const url = req.query.state;
   if (url) {
     res.redirect(`${url}?token=fake-token`);
-  }
-  else {
+  } else {
     res.write('state parameter is missing');
     res.status(400).end();
   }
@@ -48,6 +69,8 @@ app.get('/token', (req, res) => {
 app.get('/auth', (req, res) => {
   res.status(200).end();
 });
+
+app.use('/', express.static('test/fake-api-fixtures', { index: 'index.json' }));
 
 const port = process.env.PORT || 5001;
 
