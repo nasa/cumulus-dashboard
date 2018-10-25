@@ -56,17 +56,14 @@ describe('Dashboard Providers Page', () => {
       cy.url().should('include', `#/providers/provider/${name}`);
 
       // verify the new provider is added to the providers list
-      cy.get('a').contains('Back to Providers').click();
+      cy.get('a').contains('Back to Provider').click();
       cy.get('.heading--large').should('have.text', 'Provider Overview');
       cy.get('table tbody tr').its('length').should('be.gt', 1);
 
       // providers table doesn't have tr[data-value="${name}"] like collections page
-      cy.get('table tbody tr')
-        .within(() => {
-          cy.contains('a', name)
-            .should('exist')
-            .and('have.attr', 'href', `#/providers/provider/${name}`);
-        });
+      cy.contains('table tbody tr a', name)
+        .should('exist')
+        .and('have.attr', 'href', `#/providers/provider/${name}`);
     });
 
     it('provider page has button to edit the provider', () => {
