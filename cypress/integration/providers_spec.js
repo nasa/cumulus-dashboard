@@ -9,10 +9,9 @@ describe('Dashboard Providers Page', () => {
   });
 
   describe('When logged in', () => {
-    // test provider name
-    const name = 'TESTPROVIDER';
     beforeEach(() => {
       cy.login();
+      cy.task('resetState');
     });
 
     after(() => {
@@ -33,6 +32,7 @@ describe('Dashboard Providers Page', () => {
     });
 
     it('providers page displays a button to add a new provider', () => {
+      const name = 'TESTPROVIDER';
       cy.visit('/#/providers');
 
       cy.get('.heading--large').should('have.text', 'Provider Overview');
@@ -67,6 +67,7 @@ describe('Dashboard Providers Page', () => {
     });
 
     it('provider page has button to edit the provider', () => {
+      const name = 's3_provider';
       cy.visit(`/#/providers/provider/${name}`);
       cy.get('.heading--large').should('have.text', name);
       cy.contains('a', 'Edit').should('exist').as('editprovider');
@@ -93,6 +94,7 @@ describe('Dashboard Providers Page', () => {
     });
 
     it('provider page has button to delete the provider', () => {
+      const name = 's3_provider';
       cy.visit(`/#/providers/provider/${name}`);
       cy.get('.heading--large').should('have.text', name);
 

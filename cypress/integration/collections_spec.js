@@ -14,10 +14,9 @@ describe('Dashboard Collections Page', () => {
   });
 
   describe('When logged in', () => {
-    const name = 'TESTCOLLECTION';
-    const version = '006';
     beforeEach(() => {
       cy.login();
+      cy.task('resetState');
     });
 
     after(() => {
@@ -38,6 +37,8 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('collections page displays a button to add a new collection', () => {
+      const name = 'TESTCOLLECTION';
+      const version = '006';
       cy.visit('/#/collections');
 
       cy.get('.heading--large').should('have.text', 'Collection Overview');
@@ -63,6 +64,8 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('collection page has button to edit the collection', () => {
+      const name = 'MOD09GQ';
+      const version = '006';
       cy.visit(`/#/collections/collection/${name}/${version}`);
       cy.contains('a', 'Edit').should('exist').as('editCollection');
       cy.get('@editCollection')
@@ -74,26 +77,9 @@ describe('Dashboard Collections Page', () => {
 
       // There are issues updating the react form which uses ace editor.
       // Neither cy .clear nor ace editor works.
-      //
-      // cy .clear or .type('{selectall}{backspace}' has the following error:
-      // CypressError: cy.type() failed because this element is detached from the DOM.
-      //
-      // ace editor: editor.setValue(collection) does update the value in the ace_content,
-      // but doesn't cause the textarea value to be updated, and the updated conent is not submitted
-      // with the form.
-      // const collection = '{"name":"TESTCOLLECTION","version":"006","dataType":"TESTCOLLECTION", "duplicateHandling":"replace"}';
-      // const escapedCollection = collection.replace('{', '{{}');
-      // cy.get('textarea')
-      //   .type('{selectall}{backspace}', { force: true })
-      //   .type(escapedCollection, { force: true });
-      // cy.get('.ace_editor').then((ele) => {
-      //   const editor = ace.edit(ele[0]);
-      //   editor.setValue(collection);
-      // });
-
-      // as a workaround, we add additional parameter at the end of collection metadata
+      // As a workaround, we add additional parameter at the end of collection metadata
       const meta = '"meta": "testmetadata"}';
-      cy.get('textarea').type(`{backspace}{backspace},${meta}`, { force: true });
+      cy.get('textarea').type(`{backspace},${meta}`, { force: true });
 
       cy.contains('form input', 'Submit').click();
 
@@ -104,10 +90,12 @@ describe('Dashboard Collections Page', () => {
       // verify the collection is updated by looking at the Edit page
       cy.contains('a', 'Edit').should('exist').click();
       cy.contains('form .ace_content', meta).should('exist');
-      cy.get('.heading--large').should('have.text', 'Edit TESTCOLLECTION___006');
+      cy.get('.heading--large').should('have.text', `Edit ${name}___${version}`);
     });
 
     it('collection page has button to delete the collection', () => {
+      const name = 'MOD09GQ';
+      const version = '006';
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
