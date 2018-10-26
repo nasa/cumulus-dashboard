@@ -61,8 +61,9 @@ describe('Dashboard Providers Page', () => {
       cy.url().should('include', `#/providers/provider/${name}`);
       cy.get('.metadata__details')
         .within(() => {
-          cy.contains('Host').should('exist');
-          cy.contains('a', 'Link').should('have.attr', 'href', 'test-host');
+          cy.contains('Global Connection Limit').should('exist').next().should('have.text', '5');
+          cy.contains('Protocol').should('exist').next().should('have.text', 's3');
+          cy.contains('Host').should('exist').next().contains('a', 'Link').should('have.attr', 'href', 'test-host');
         });
 
       // verify the new provider is added to the providers list
@@ -94,8 +95,9 @@ describe('Dashboard Providers Page', () => {
       cy.get('.heading--medium').first().should('have.text', 'Provider Overview');
       cy.get('.metadata__details')
         .within(() => {
-          cy.contains('Host').should('exist');
-          cy.contains('a', 'Link').should('have.attr', 'href', 'test-host-new');
+          cy.contains('Global Connection Limit').should('exist').next().should('have.text', '12');
+          cy.contains('Protocol').should('exist').next().should('have.text', 's3');
+          cy.contains('Host').should('exist').next().contains('a', 'Link').should('have.attr', 'href', 'test-host-new');
         });
     });
 
