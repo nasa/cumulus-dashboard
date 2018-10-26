@@ -57,7 +57,13 @@ describe('Dashboard Providers Page', () => {
       // displays the new provider
       cy.get('.heading--xlarge').should('have.text', 'Providers');
       cy.get('.heading--large').should('have.text', name);
+      cy.get('.heading--medium').first().should('have.text', 'Provider Overview');
       cy.url().should('include', `#/providers/provider/${name}`);
+      cy.get('.metadata__details')
+        .within(() => {
+          cy.contains('Host').should('exist');
+          cy.contains('a', 'Link').should('have.attr', 'href', 'test-host');
+        });
 
       // verify the new provider is added to the providers list
       cy.contains('a', 'Back to Provider').click();

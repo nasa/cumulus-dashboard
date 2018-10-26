@@ -100,7 +100,7 @@ describe('Dashboard Collections Page', () => {
       // verify the collection is now gone
       cy.url().should('include', 'collections');
       cy.get('.heading--xlarge').should('have.text', 'Collections');
-      cy.get(`table tr[data-value="${name}___${version}"]`).should('not.exist');
+      cy.contains('table tbody tr a', name).should('not.exist');
     });
   });
 });
