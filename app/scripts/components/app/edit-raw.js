@@ -111,7 +111,7 @@ const EditRaw = React.createClass({
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large'>Edit {pk}</h1>
-          { data ? (
+          { data || data === '' ? (
             <form>
               <TextArea
                 value={data}
