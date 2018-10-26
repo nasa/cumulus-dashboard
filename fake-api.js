@@ -3,8 +3,11 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const collectionsJson = require('./test/fake-api-fixtures/collections/index.json');
-const providersJson = require('./test/fake-api-fixtures/providers/index.json');
+
+const { fakeCollectionsDb, fakeProvidersDb, fakeRulesDb, resetState } = require('./test/fake-api-db');
+
+// Reset the fake API state
+resetState();
 
 /**
  * Config
@@ -35,84 +38,79 @@ function fakeApiMiddleWare (req, res, next) {
   next();
 }
 
-const jsonParser = bodyParser.json();
-
+app.use(bodyParser.json());
 app.use('/', fakeApiMiddleWare);
 
-app.get('/collections', (req, res) => {
-  res.send(collectionsJson);
+app.get('/collections', async (req, res) => {
+  const collections = await fakeCollectionsDb.getItems();
+  res.send(collections);
 });
 
-app.get('/collections/:name/:version', (req, res) => {
-  const collection = collectionsJson.results.filter(
-    collection => `${collection.name}${collection.version}` === `${req.params.name}${req.params.version}`
-  );
-  res.send(collection[0]);
+app.get('/collections/:name/:version', async (req, res) => {
+  const collection = await fakeCollectionsDb.getItem(req.params.name, req.params.version);
+  res.send(collection);
 });
 
-app.post('/collections', jsonParser, (req, res) => {
-  if (req.body.name) {
-    console.log('post collections', req.body);
-    collectionsJson.results.push(req.body);
+app.post('/collections', async (req, res) => {
+  if (req.body.name && req.body.version) {
+    // console.log('post collections', req.body);
+    await fakeCollectionsDb.addItem(req.body);
   }
   res.status(200).send({record: req.body, message: 'Record saved'}).end();
 });
 
-app.put('/collections/:name/:version', jsonParser, (req, res) => {
-  console.log('put collections', req.params, req.body);
-  let updated;
-  collectionsJson.results.forEach((collection, index) => {
-    if (`${collection.name}${collection.version}` === `${req.params.name}${req.params.version}`) {
-      collectionsJson.results[index] = req.body;
-      updated = collectionsJson.results[index];
-    }
-  });
-  res.status(200).send(updated);
+app.put('/collections/:name/:version', async (req, res) => {
+  // console.log('put collections', req.params, req.body);
+  const updatedItem = await fakeCollectionsDb.updateItem(req.params.name, req.params.version, req.body);
+  res.status(200).send(updatedItem);
 });
 
-app.delete('/collections/:name/:version', (req, res) => {
-  collectionsJson.results = collectionsJson.results.filter(
-    collection => `${collection.name}${collection.version}` !== `${req.params.name}${req.params.version}`
-  );
+app.delete('/collections/:name/:version', async (req, res) => {
+  await fakeCollectionsDb.deleteItem(req.params.name, req.params.version);
   res.sendStatus(200).end();
 });
 
-app.get('/providers', (req, res) => {
-  // console.log(providersJson);
-  res.send(providersJson);
+app.get('/providers', async (req, res) => {
+  const providers = await fakeProvidersDb.getItems();
+  res.send(providers);
 });
 
-app.get('/providers/:id', (req, res) => {
-  const provider = providersJson.results.filter(
-    provider => provider.id === req.params.id
-  );
-  res.send(provider[0]);
+app.get('/providers/:id', async (req, res) => {
+  const provider = await fakeProvidersDb.getItem(req.params.id);
+  res.send(provider);
 });
 
-app.post('/providers', jsonParser, (req, res) => {
+app.post('/providers', async (req, res) => {
   if (req.body.id) {
-    console.log('post providers', req.body);
-    providersJson.results.push(req.body);
+    // console.log('post collections', req.body);
+    await fakeProvidersDb.addItem(req.body);
   }
   res.status(200).send({record: req.body, message: 'Record saved'}).end();
 });
 
-app.put('/providers/:id', jsonParser, (req, res) => {
-  console.log('put providers', req.params, req.body);
-  let updated;
-  providersJson.results.forEach((provider, index) => {
-    if (provider.id === req.params.id) {
-      providersJson.results[index] = Object.assign({}, providersJson.results[index], req.body);
-      updated = providersJson.results[index];
-    }
-  });
-  res.status(200).send(updated);
+app.put('/providers/:id', async (req, res) => {
+  // console.log('put providers', req.params, req.body);
+  const updatedItem = await fakeProvidersDb.updateItem(req.params.id, req.body);
+  res.status(200).send(updatedItem);
 });
 
-app.delete('/providers/:id', (req, res) => {
-  providersJson.results = providersJson.results.filter(
-    provider => provider.id !== req.params.id
-  );
+app.delete('/providers/:id', async (req, res) => {
+  await fakeProvidersDb.deleteItem(req.params.id);
+  res.sendStatus(200).end();
+});
+
+app.get('/rules', async (req, res) => {
+  const rules = await fakeRulesDb.getItems();
+  res.send(rules);
+});
+
+app.post('/rules', async (req, res) => {
+  await fakeRulesDb.addItem(req.body);
+  res.sendStatus(200).end();
+});
+
+app.delete('/rules/:name', async (req, res) => {
+  await fakeRulesDb.deleteItem(req.params.name);
   res.sendStatus(200).end();
 });
 
@@ -132,15 +130,7 @@ app.get('/auth', (req, res) => {
 
 app.use('/', express.static('test/fake-api-fixtures', { index: 'index.json' }));
 
-app.post('/*', (req, res) => {
-  res.status(200).send('{"message": "Record saved"}').end();
-});
-
 app.put('/*', (req, res) => {
-  res.sendStatus(200).end();
-});
-
-app.delete('/*', (req, res) => {
   res.sendStatus(200).end();
 });
 

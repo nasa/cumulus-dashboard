@@ -13,6 +13,11 @@ describe('Rules page', () => {
 
     beforeEach(() => {
       cy.login();
+      cy.task('resetState');
+    });
+
+    after(() => {
+      cy.task('resetState');
     });
 
     it('should display a link to view rules', () => {
@@ -60,6 +65,24 @@ describe('Rules page', () => {
             .should('exist')
             .and('have.attr', 'href', `#/providers/provider/${testProviderId}`);
         });
+    });
+
+    it('deleting a rule should remove it from the list', () => {
+      cy.visit('/#/rules');
+      cy.get(`table tr[data-value="${testRuleName}"] input[type="checkbox"`)
+        .should('exist')
+        .click();
+      cy.get('.form--controls button')
+        .contains('Delete')
+        .should('exist')
+        .click();
+      cy.get('.modal')
+        .should('exist')
+        .get('button')
+        .contains('Confirm')
+        .click();
+      cy.get(`table tr[data-value="${testRuleName}"]`)
+        .should('not.exist');
     });
   });
 });
