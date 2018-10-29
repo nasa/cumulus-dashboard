@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
-const { fakeRulesDb, resetState } = require('./test/fake-api-db');
+const { fakeCollectionsDb, fakeProvidersDb, fakeRulesDb, resetState } = require('./test/fake-api-db');
 
 // Reset the fake API state
 resetState();
@@ -41,6 +41,64 @@ function fakeApiMiddleWare (req, res, next) {
 app.use(bodyParser.json());
 app.use('/', fakeApiMiddleWare);
 
+app.get('/collections', async (req, res) => {
+  const collections = await fakeCollectionsDb.getItems();
+  res.send(collections);
+});
+
+app.get('/collections/:name/:version', async (req, res) => {
+  const collection = await fakeCollectionsDb.getItem(req.params.name, req.params.version);
+  res.send(collection);
+});
+
+app.post('/collections', async (req, res) => {
+  if (req.body.name && req.body.version) {
+    // console.log('post collections', req.body);
+    await fakeCollectionsDb.addItem(req.body);
+  }
+  res.status(200).send({record: req.body, message: 'Record saved'}).end();
+});
+
+app.put('/collections/:name/:version', async (req, res) => {
+  // console.log('put collections', req.params, req.body);
+  const updatedItem = await fakeCollectionsDb.updateItem(req.params.name, req.params.version, req.body);
+  res.status(200).send(updatedItem);
+});
+
+app.delete('/collections/:name/:version', async (req, res) => {
+  await fakeCollectionsDb.deleteItem(req.params.name, req.params.version);
+  res.sendStatus(200).end();
+});
+
+app.get('/providers', async (req, res) => {
+  const providers = await fakeProvidersDb.getItems();
+  res.send(providers);
+});
+
+app.get('/providers/:id', async (req, res) => {
+  const provider = await fakeProvidersDb.getItem(req.params.id);
+  res.send(provider);
+});
+
+app.post('/providers', async (req, res) => {
+  if (req.body.id) {
+    // console.log('post collections', req.body);
+    await fakeProvidersDb.addItem(req.body);
+  }
+  res.status(200).send({record: req.body, message: 'Record saved'}).end();
+});
+
+app.put('/providers/:id', async (req, res) => {
+  // console.log('put providers', req.params, req.body);
+  const updatedItem = await fakeProvidersDb.updateItem(req.params.id, req.body);
+  res.status(200).send(updatedItem);
+});
+
+app.delete('/providers/:id', async (req, res) => {
+  await fakeProvidersDb.deleteItem(req.params.id);
+  res.sendStatus(200).end();
+});
+
 app.get('/rules', async (req, res) => {
   const rules = await fakeRulesDb.getItems();
   res.send(rules);
@@ -71,6 +129,10 @@ app.get('/auth', (req, res) => {
 });
 
 app.use('/', express.static('test/fake-api-fixtures', { index: 'index.json' }));
+
+app.put('/*', (req, res) => {
+  res.sendStatus(200).end();
+});
 
 const port = process.env.PORT || 5001;
 

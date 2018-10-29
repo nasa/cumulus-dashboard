@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Documentation was added to the `execution-status.js` component about how to find task / version information for step function events. [Cumulus-690]
 - Added Cypress for front-end testing. [Cumulus-918]
 - Added tests for the login page and dashboard home page. [Cumulus-638]
+- Added tests for the Collections page and Providers page. [Cumulus-643]
 
 ## [v1.2.0] - 2018-08-08
 
