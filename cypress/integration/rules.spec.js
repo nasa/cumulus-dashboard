@@ -67,6 +67,26 @@ describe('Rules page', () => {
         });
     });
 
+    it('creating a rule should add it to the list', () => {
+      cy.visit('/#/rules');
+      cy.get('a').contains('Add a rule').should('exist').as('addRule');
+      cy.get('@addRule').should('have.attr', 'href', '#/rules/add');
+      cy.get('@addRule').click();
+
+      cy.get('textarea').clear({force: true});
+      const newRule = '{{}"name":"newRule","workflow":"HelloWorldWorkflow","provider":"PODAAC_SWOT","collection":{{}"name":"MOD09GQ","version":"006"},"meta":{{}},"rule":{{}"type":"onetime","value":""},"state":"ENABLED"}';
+      cy.get('textarea').type(newRule, {force: true});
+      cy.get('form').get('input').contains('Submit').click();
+
+      cy.get('.heading--xlarge').should('have.text', 'Rules');
+      cy.contains('table tbody tr a', 'newRule')
+        .should('exist')
+        .and('have.attr', 'href', '#/rules/rule/newRule');
+      cy.contains('table tbody tr a', 'PODAAC_SWOT')
+        .should('exist')
+        .and('have.attr', 'href', '#/providers/provider/PODAAC_SWOT');
+    });
+
     it('deleting a rule should remove it from the list', () => {
       cy.visit('/#/rules');
       cy.get(`table tr[data-value="${testRuleName}"] input[type="checkbox"`)
