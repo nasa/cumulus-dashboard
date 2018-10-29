@@ -44,12 +44,11 @@ Cypress.Commands.add('login', () => {
 Cypress.Commands.add('editTextarea', (overrides) => {
   cy.window().its('aceEditorRef').its('editor').then((editor) => {
     const value = editor.getValue();
-    cy.log(value);
+    // this should not be necessary
+    // const { JSON } = window;
     let data = JSON.parse(value);
     data = Cypress._.assign(data, overrides);
-    cy.log(data);
-    // cy.log(JSON.stringify(collection));
-    // collection = JSON.stringify(collection);
-    editor.setValue('TEST');
+    data = JSON.stringify(data);
+    editor.setValue(data);
   });
 });

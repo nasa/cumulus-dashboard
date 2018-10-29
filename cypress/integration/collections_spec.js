@@ -87,22 +87,16 @@ describe('Dashboard Collections Page', () => {
       const meta = 'metadata';
       cy.editTextarea({ meta });
 
-      // There are issues updating the react form which uses ace editor.
-      // Neither cy .clear nor ace editor works.
-      // As a workaround, we add additional parameter at the end of collection metadata
-      // const meta = '"meta": "testmetadata"}';
-      // cy.get('textarea').type(`{backspace},${meta}`, { force: true });
-
-      // cy.contains('form input', 'Submit').click();
+      cy.contains('form input', 'Submit').click();
 
       // displays the updated collection and its granules
-      // cy.get('.heading--xlarge').should('have.text', 'Collections');
-      // cy.get('.heading--large').should('have.text', `${name} / ${version}`);
+      cy.get('.heading--xlarge').should('have.text', 'Collections');
+      cy.get('.heading--large').should('have.text', `${name} / ${version}`);
 
       // verify the collection is updated by looking at the Edit page
-      // cy.contains('a', 'Edit').should('exist').click();
-      // cy.contains('form .ace_content', meta).should('exist');
-      // cy.get('.heading--large').should('have.text', `Edit ${name}___${version}`);
+      cy.contains('a', 'Edit').should('exist').click();
+      cy.contains('form .ace_content', meta).should('exist');
+      cy.get('.heading--large').should('have.text', `Edit ${name}___${version}`);
     });
 
     it('collection page has button to delete the collection', () => {
