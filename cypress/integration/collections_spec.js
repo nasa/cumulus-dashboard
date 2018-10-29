@@ -43,13 +43,23 @@ describe('Dashboard Collections Page', () => {
 
       // fill the form and submit
       const collection = '{{}"name":"TESTCOLLECTION","version":"006","dataType":"TESTCOLLECTION", "duplicateHandling":"error"}';
-      cy.get('textarea').type(collection, {force: true});
+      cy.get('textarea').type(collection, { force: true });
       cy.get('form').get('input').contains('Submit').click();
 
       // displays the new collection
       cy.get('.heading--xlarge').should('have.text', 'Collections');
       cy.get('.heading--large').should('have.text', `${name} / ${version}`);
       cy.url().should('include', `#/collections/collection/${name}/${version}`);
+
+      // verify the collection's properties by looking at the Edit page
+      cy.contains('a', 'Edit').should('exist').click();
+      cy.get('form .ace_content')
+        .within(() => {
+          cy.contains(`"name": "${name}"`).should('exist');
+          cy.contains(`"version": "${version}"`).should('exist');
+          cy.contains(`"dataType": "${name}"`).should('exist');
+          cy.contains('"duplicateHandling": "error"').should('exist');
+        });
 
       // verify the new collection is added to the collections list
       cy.contains('a', 'Back to Collections').click();
