@@ -104,6 +104,12 @@ app.get('/rules', async (req, res) => {
   res.send(rules);
 });
 
+app.get('/rules/:name', async (req, res) => {
+  console.log('got the the correct get!!!!1');
+  const rule = await fakeRulesDb.getItem(req.params.name);
+  res.send(rule);
+});
+
 app.post('/rules', async (req, res) => {
   await fakeRulesDb.addItem(req.body);
   res.sendStatus(200).end();

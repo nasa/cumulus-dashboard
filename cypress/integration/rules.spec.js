@@ -74,17 +74,26 @@ describe('Rules page', () => {
       cy.get('@addRule').click();
 
       cy.get('textarea').clear({force: true});
+      cy.get('textarea').clear({force: true});
       const newRule = '{{}"name":"newRule","workflow":"HelloWorldWorkflow","provider":"PODAAC_SWOT","collection":{{}"name":"MOD09GQ","version":"006"},"meta":{{}},"rule":{{}"type":"onetime","value":""},"state":"ENABLED"}';
       cy.get('textarea').type(newRule, {force: true});
       cy.get('form').get('input').contains('Submit').click();
 
-      cy.get('.heading--xlarge').should('have.text', 'Rules');
+      cy.contains('.heading--xlarge', 'Rules');
       cy.contains('table tbody tr a', 'newRule')
         .should('exist')
-        .and('have.attr', 'href', '#/rules/rule/newRule');
-      cy.contains('table tbody tr a', 'PODAAC_SWOT')
-        .should('exist')
-        .and('have.attr', 'href', '#/providers/provider/PODAAC_SWOT');
+        .and('have.attr', 'href', '#/rules/rule/newRule').click();
+
+      cy.contains('.heading--xlarge', 'Rules');
+      cy.contains('.heading--large', 'newRule');
+      cy.contains('.heading--medium', 'Rule Overview');
+      cy.url().should('include', '#/rules/rule/newRule');
+      cy.get('.metadata__details')
+        .within(() => {
+          cy.contains('RuleName').should('exist').next().should('have.text', 'newRule');
+          cy.contains('Workflow').should('exist').next().should('have.text', 'HelloWorldWorkflow');
+          cy.contains('Provider').should('exist').next().contains('a', 'PODAAC_SWOT').should('have.attr', 'href', '#/providers/provider/PODAAC_SWOT');
+        });
     });
 
     it('deleting a rule should remove it from the list', () => {
