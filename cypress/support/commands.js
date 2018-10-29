@@ -40,3 +40,4 @@ Cypress.Commands.add('login', () => {
       .invoke('setItem', 'auth-token', token);
   });
 });
+
