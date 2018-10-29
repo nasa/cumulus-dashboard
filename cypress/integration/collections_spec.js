@@ -30,7 +30,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('@collections').click();
 
       cy.url().should('include', 'collections');
-      cy.get('.heading--xlarge').should('have.text', 'Collections');
+      cy.contains('.heading--xlarge', 'Collections');
 
       cy.get('table tbody tr').its('length').should('be.eq', 5);
     });
@@ -40,20 +40,30 @@ describe('Dashboard Collections Page', () => {
       const version = '006';
       cy.visit('/#/collections');
 
-      cy.get('.heading--large').should('have.text', 'Collection Overview');
+      cy.contains('.heading--large', 'Collection Overview');
       cy.contains('a', 'Add a Collection').should('exist').as('addCollection');
       cy.get('@addCollection').should('have.attr', 'href', '#/collections/add');
       cy.get('@addCollection').click();
 
       // fill the form and submit
       const collection = '{{}"name":"TESTCOLLECTION","version":"006","dataType":"TESTCOLLECTION", "duplicateHandling":"error"}';
-      cy.get('textarea').type(collection, {force: true});
+      cy.get('textarea').type(collection, { force: true });
       cy.get('form').get('input').contains('Submit').click();
 
       // displays the new collection
-      cy.get('.heading--xlarge').should('have.text', 'Collections');
-      cy.get('.heading--large').should('have.text', `${name} / ${version}`);
+      cy.contains('.heading--xlarge', 'Collections');
+      cy.contains('.heading--large', `${name} / ${version}`);
       cy.url().should('include', `#/collections/collection/${name}/${version}`);
+
+      // verify the collection's properties by looking at the Edit page
+      cy.contains('a', 'Edit').should('exist').click();
+      cy.get('form .ace_content')
+        .within(() => {
+          cy.contains(`"name": "${name}"`).should('exist');
+          cy.contains(`"version": "${version}"`).should('exist');
+          cy.contains(`"dataType": "${name}"`).should('exist');
+          cy.contains('"duplicateHandling": "error"').should('exist');
+        });
 
       // verify the new collection is added to the collections list
       cy.contains('a', 'Back to Collections').click();
@@ -72,7 +82,7 @@ describe('Dashboard Collections Page', () => {
         .and('include', `#/collections/edit/${name}/${version}`);
       cy.get('@editCollection').click();
 
-      cy.get('.heading--large').should('have.text', `Edit ${name}___${version}`);
+      cy.contains('.heading--large', `Edit ${name}___${version}`);
 
       cy.get('form').within(() => {
         const editor = ace.edit(document.querySelector('.ace_editor'));
@@ -110,7 +120,7 @@ describe('Dashboard Collections Page', () => {
 
       // verify the collection is now gone
       cy.url().should('include', 'collections');
-      cy.get('.heading--xlarge').should('have.text', 'Collections');
+      cy.contains('.heading--xlarge', 'Collections');
       cy.contains('table tbody tr a', name).should('not.exist');
     });
   });
