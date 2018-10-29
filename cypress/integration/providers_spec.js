@@ -26,7 +26,7 @@ describe('Dashboard Providers Page', () => {
       cy.get('@providers').click();
 
       cy.url().should('include', 'providers');
-      cy.get('.heading--xlarge').should('have.text', 'Providers');
+      cy.contains('.heading--xlarge', 'Providers');
 
       cy.get('table tbody tr').its('length').should('be.eq', 2);
     });
@@ -35,13 +35,13 @@ describe('Dashboard Providers Page', () => {
       const name = 'TESTPROVIDER';
       cy.visit('/#/providers');
 
-      cy.get('.heading--large').should('have.text', 'Provider Overview');
+      cy.contains('.heading--large', 'Provider Overview');
       cy.contains('a', 'Add a Provider').should('exist').as('addProvider');
       cy.get('@addProvider').should('have.attr', 'href', '#/providers/add');
       cy.get('@addProvider').click();
 
-      cy.get('.heading--xlarge').should('have.text', 'Providers');
-      cy.get('.heading--large').should('have.text', 'Create a provider');
+      cy.contains('.heading--xlarge', 'Providers');
+      cy.contains('.heading--large', 'Create a provider');
 
       // fill the form and submit
       cy.get('form div ul').as('providerinput');
@@ -55,9 +55,9 @@ describe('Dashboard Providers Page', () => {
       cy.get('form div input[value=Submit]').click();
 
       // displays the new provider
-      cy.get('.heading--xlarge').should('have.text', 'Providers');
-      cy.get('.heading--large').should('have.text', name);
-      cy.get('.heading--medium').first().should('have.text', 'Provider Overview');
+      cy.contains('.heading--xlarge', 'Providers');
+      cy.contains('.heading--large', name);
+      cy.contains('.heading--medium', 'Provider Overview');
       cy.url().should('include', `#/providers/provider/${name}`);
       cy.get('.metadata__details')
         .within(() => {
@@ -76,12 +76,12 @@ describe('Dashboard Providers Page', () => {
     it('provider page has button to edit the provider', () => {
       const name = 's3_provider';
       cy.visit(`/#/providers/provider/${name}`);
-      cy.get('.heading--large').should('have.text', name);
+      cy.contains('.heading--large', name);
       cy.contains('a', 'Edit').should('exist').as('editprovider');
       cy.get('@editprovider').should('have.attr', 'href').and('include', `#/providers/edit/${name}`);
       cy.get('@editprovider').click();
 
-      cy.get('.heading--large').should('have.text', `Edit ${name}`);
+      cy.contains('.heading--large', `Edit ${name}`);
 
       cy.get('form div ul').as('providerinput');
       cy.get('@providerinput').contains('Concurrent Connnection Limit').siblings('input').clear().type(12);
@@ -90,9 +90,9 @@ describe('Dashboard Providers Page', () => {
       cy.get('form div input[value=Submit]').click();
 
       // displays the updated provider
-      cy.get('.heading--xlarge').should('have.text', 'Providers');
-      cy.get('.heading--large').should('have.text', name);
-      cy.get('.heading--medium').first().should('have.text', 'Provider Overview');
+      cy.contains('.heading--xlarge', 'Providers');
+      cy.contains('.heading--large', name);
+      cy.contains('.heading--medium', 'Provider Overview');
       cy.get('.metadata__details')
         .within(() => {
           cy.contains('Global Connection Limit').should('exist').next().should('have.text', '12');
@@ -104,7 +104,7 @@ describe('Dashboard Providers Page', () => {
     it('provider page has button to delete the provider', () => {
       const name = 's3_provider';
       cy.visit(`/#/providers/provider/${name}`);
-      cy.get('.heading--large').should('have.text', name);
+      cy.contains('.heading--large', name);
 
       // delete provider
       cy.get('.dropdown__options__btn').click();
@@ -113,7 +113,7 @@ describe('Dashboard Providers Page', () => {
 
       // verify the provider is now gone
       cy.url().should('include', 'providers');
-      cy.get('.heading--xlarge').should('have.text', 'Providers');
+      cy.contains('.heading--xlarge', 'Providers');
       cy.contains('table tbody tr', name).should('not.exist');
     });
   });

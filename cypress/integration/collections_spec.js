@@ -26,7 +26,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('@collections').click();
 
       cy.url().should('include', 'collections');
-      cy.get('.heading--xlarge').should('have.text', 'Collections');
+      cy.contains('.heading--xlarge', 'Collections');
 
       cy.get('table tbody tr').its('length').should('be.eq', 5);
     });
@@ -36,7 +36,7 @@ describe('Dashboard Collections Page', () => {
       const version = '006';
       cy.visit('/#/collections');
 
-      cy.get('.heading--large').should('have.text', 'Collection Overview');
+      cy.contains('.heading--large', 'Collection Overview');
       cy.contains('a', 'Add a Collection').should('exist').as('addCollection');
       cy.get('@addCollection').should('have.attr', 'href', '#/collections/add');
       cy.get('@addCollection').click();
@@ -47,8 +47,8 @@ describe('Dashboard Collections Page', () => {
       cy.get('form').get('input').contains('Submit').click();
 
       // displays the new collection
-      cy.get('.heading--xlarge').should('have.text', 'Collections');
-      cy.get('.heading--large').should('have.text', `${name} / ${version}`);
+      cy.contains('.heading--xlarge', 'Collections');
+      cy.contains('.heading--large', `${name} / ${version}`);
       cy.url().should('include', `#/collections/collection/${name}/${version}`);
 
       // verify the collection's properties by looking at the Edit page
@@ -78,7 +78,7 @@ describe('Dashboard Collections Page', () => {
         .and('include', `#/collections/edit/${name}/${version}`);
       cy.get('@editCollection').click();
 
-      cy.get('.heading--large').should('have.text', `Edit ${name}___${version}`);
+      cy.contains('.heading--large', `Edit ${name}___${version}`);
 
       // There are issues updating the react form which uses ace editor.
       // Neither cy .clear nor ace editor works.
@@ -89,13 +89,13 @@ describe('Dashboard Collections Page', () => {
       cy.contains('form input', 'Submit').click();
 
       // displays the updated collection and its granules
-      cy.get('.heading--xlarge').should('have.text', 'Collections');
-      cy.get('.heading--large').should('have.text', `${name} / ${version}`);
+      cy.contains('.heading--xlarge', 'Collections');
+      cy.contains('.heading--large', `${name} / ${version}`);
 
       // verify the collection is updated by looking at the Edit page
       cy.contains('a', 'Edit').should('exist').click();
       cy.contains('form .ace_content', meta).should('exist');
-      cy.get('.heading--large').should('have.text', `Edit ${name}___${version}`);
+      cy.contains('.heading--large', `Edit ${name}___${version}`);
     });
 
     it('collection page has button to delete the collection', () => {
@@ -109,7 +109,7 @@ describe('Dashboard Collections Page', () => {
 
       // verify the collection is now gone
       cy.url().should('include', 'collections');
-      cy.get('.heading--xlarge').should('have.text', 'Collections');
+      cy.contains('.heading--xlarge', 'Collections');
       cy.contains('table tbody tr a', name).should('not.exist');
     });
   });
