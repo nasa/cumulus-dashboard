@@ -33,6 +33,12 @@ const TextAreaForm = React.createClass({
     this.props.onChange(this.props.id, value);
   },
 
+  setEditorRef: function (editorRef) {
+    if (window.Cypress) {
+      window.aceEditorRef = editorRef;
+    }
+  },
+
   render: function () {
     let {
       label,
@@ -61,6 +67,7 @@ const TextAreaForm = React.createClass({
           minLines={minLines}
           maxLines={maxLines}
           wrapEnabled={true}
+          ref={this.setEditorRef}
         />
       </div>
     );
