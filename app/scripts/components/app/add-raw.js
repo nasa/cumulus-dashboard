@@ -7,7 +7,7 @@ import TextArea from '../form/text-area';
 import { get } from 'object-path';
 import { updateDelay } from '../../config';
 
-const EditRaw = React.createClass({
+const AddRaw = React.createClass({
   propTypes: {
     dispatch: PropTypes.func,
     state: PropTypes.object,
@@ -122,4 +122,4 @@ const EditRaw = React.createClass({
   }
 });
 
-export default withRouter(connect()(EditRaw));
+export default withRouter(connect()(AddRaw));
