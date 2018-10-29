@@ -41,3 +41,15 @@ Cypress.Commands.add('login', () => {
   });
 });
 
+Cypress.Commands.add('editTextarea', (overrides) => {
+  cy.window().its('aceEditorRef').its('editor').then((editor) => {
+    const value = editor.getValue();
+    cy.log(value);
+    let data = JSON.parse(value);
+    data = Cypress._.assign(data, overrides);
+    cy.log(data);
+    // cy.log(JSON.stringify(collection));
+    // collection = JSON.stringify(collection);
+    editor.setValue('TEST');
+  });
+});
