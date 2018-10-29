@@ -104,9 +104,17 @@ app.get('/rules', async (req, res) => {
   res.send(rules);
 });
 
+app.get('/rules/:ruleName', async (req, res) => {
+  console.log('in the spotkajhf kajhf');
+  const rule = await fakeRulesDb.getItem(req.params.ruleName);
+  res.send(rule);
+});
+
 app.post('/rules', async (req, res) => {
-  await fakeRulesDb.addItem(req.body);
-  res.sendStatus(200).end();
+  if (req.body.name) {
+    await fakeRulesDb.addItem(req.body);
+  }
+  res.status(200).send({record: req.body, message: 'Record saved'}).end();
 });
 
 app.delete('/rules/:name', async (req, res) => {

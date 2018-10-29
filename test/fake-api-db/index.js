@@ -49,6 +49,16 @@ class FakeRulesDb extends FakeDb {
       })
       .then((data) => seed(this.filePath, data));
   }
+
+  getItem (name) {
+    return fs.readJson(this.filePath)
+    .then((data) => {
+      const rule = data.results.filter(
+        rule => `${rule.name}` === `${name}`
+      );
+      return rule.length > 0 ? rule[0] : null;
+    });
+  }
 }
 const fakeRulesDb = new FakeRulesDb(rulesFilePath);
 
