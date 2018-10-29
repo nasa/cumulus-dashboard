@@ -1,8 +1,8 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
 
-const ace = require('brace');
-require('brace/mode/javascript');
-require('brace/theme/monokai');
+// const ace = require('brace');
+// require('brace/mode/javascript');
+// require('brace/theme/monokai');
 
 describe('Dashboard Collections Page', () => {
   describe('When not logged in', () => {
@@ -84,12 +84,8 @@ describe('Dashboard Collections Page', () => {
 
       cy.contains('.heading--large', `Edit ${name}___${version}`);
 
-      cy.get('form').within(() => {
-        const editor = ace.edit(document.querySelector('.ace_editor'));
-        cy.log(editor);
-        const value = editor.getSession().getValue();
-        cy.log(value);
-      });
+      const meta = 'metadata';
+      cy.editTextarea({ meta });
 
       // There are issues updating the react form which uses ace editor.
       // Neither cy .clear nor ace editor works.
@@ -99,11 +95,11 @@ describe('Dashboard Collections Page', () => {
 
       // cy.contains('form input', 'Submit').click();
 
-      // // displays the updated collection and its granules
+      // displays the updated collection and its granules
       // cy.get('.heading--xlarge').should('have.text', 'Collections');
       // cy.get('.heading--large').should('have.text', `${name} / ${version}`);
 
-      // // verify the collection is updated by looking at the Edit page
+      // verify the collection is updated by looking at the Edit page
       // cy.contains('a', 'Edit').should('exist').click();
       // cy.contains('form .ace_content', meta).should('exist');
       // cy.get('.heading--large').should('have.text', `Edit ${name}___${version}`);
