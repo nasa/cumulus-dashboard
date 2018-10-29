@@ -105,7 +105,6 @@ app.get('/rules', async (req, res) => {
 });
 
 app.get('/rules/:name', async (req, res) => {
-  console.log('got the the correct get!!!!1');
   const rule = await fakeRulesDb.getItem(req.params.name);
   res.send(rule);
 });
