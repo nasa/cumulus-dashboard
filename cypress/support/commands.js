@@ -44,8 +44,6 @@ Cypress.Commands.add('login', () => {
 Cypress.Commands.add('editTextarea', (overrides) => {
   cy.window().its('aceEditorRef').its('editor').then((editor) => {
     const value = editor.getValue();
-    // this should not be necessary
-    // const { JSON } = window;
     let data = JSON.parse(value);
     data = Cypress._.assign(data, overrides);
     data = JSON.stringify(data);
