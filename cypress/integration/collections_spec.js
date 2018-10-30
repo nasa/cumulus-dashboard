@@ -49,7 +49,7 @@ describe('Dashboard Collections Page', () => {
         dataType: 'TESTCOLLECTION',
         duplicateHandling
       };
-      cy.editTextarea({ data: collection });
+      cy.editJsonTextarea({ data: collection });
       cy.get('form').get('input').contains('Submit').click();
 
       // displays the new collection
@@ -88,7 +88,7 @@ describe('Dashboard Collections Page', () => {
 
       // update collection and submit
       const meta = 'metadata';
-      cy.editTextarea({ data: { meta }, update: true });
+      cy.editJsonTextarea({ data: { meta }, update: true });
       cy.contains('form input', 'Submit').click();
 
       // displays the updated collection and its granules

@@ -41,7 +41,7 @@ Cypress.Commands.add('login', () => {
   });
 });
 
-Cypress.Commands.add('editTextarea', ({ data, update = false }) => {
+Cypress.Commands.add('editJsonTextarea', ({ data, update = false }) => {
   cy.window().its('aceEditorRef').its('editor').then((editor) => {
     if (update) {
       const value = editor.getValue();
