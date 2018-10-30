@@ -34,6 +34,7 @@ describe('Dashboard Collections Page', () => {
     it('collections page displays a button to add a new collection', () => {
       const name = 'TESTCOLLECTION';
       const version = '006';
+
       cy.visit('/#/collections');
 
       cy.contains('.heading--large', 'Collection Overview');
@@ -77,6 +78,7 @@ describe('Dashboard Collections Page', () => {
     it('collection page has button to edit the collection', () => {
       const name = 'MOD09GQ';
       const version = '006';
+
       cy.visit(`/#/collections/collection/${name}/${version}`);
       cy.contains('a', 'Edit').should('exist').as('editCollection');
       cy.get('@editCollection')
@@ -104,6 +106,7 @@ describe('Dashboard Collections Page', () => {
     it('collection page has button to delete the collection', () => {
       const name = 'MOD09GQ';
       const version = '006';
+
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
