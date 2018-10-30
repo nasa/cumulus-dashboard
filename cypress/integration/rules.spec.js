@@ -91,31 +91,36 @@ describe('Rules page', () => {
       cy.editJsonTextarea({ data: newRule });
       cy.get('form').get('input').contains('Submit').click();
 
-      cy.contains('.heading--xlarge', 'Rules');
+      cy.contains('.heading--xlarge', 'Rules').should('exist');
       cy.contains('table tbody tr a', ruleName)
         .should('exist')
         .and('have.attr', 'href', `#/rules/rule/${ruleName}`).click();
 
-      cy.contains('.heading--xlarge', 'Rules');
-      cy.contains('.heading--large', ruleName);
-      cy.contains('.heading--medium', 'Rule Overview');
+      cy.contains('.heading--xlarge', 'Rules').should('exist');
+      cy.contains('.heading--large', ruleName).should('exist');
+      cy.contains('.heading--medium', 'Rule Overview').should('exist');
       cy.url().should('include', `#/rules/rule/${ruleName}`);
       cy.get('.metadata__details')
         .within(() => {
           cy.contains('RuleName').should('exist').next().should('have.text', ruleName);
           cy.contains('Workflow').should('exist').next().should('have.text', workflow);
-          cy.contains('Provider').should('exist')
+          cy.contains('Provider')
+            .should('exist')
             .next()
             .contains('a', provider)
             .should('have.attr', 'href', `#/providers/provider/${provider}`);
         });
     });
 
-    it('deleting a rule should remove it from the list', () => {
+    it.only('deleting a rule should remove it from the list', () => {
       cy.visit('/#/rules');
-      cy.get(`table tr[data-value="${testRuleName}"] input[type="checkbox"`)
+      cy.contains('table tr', testRuleName)
         .should('exist')
-        .click();
+        .within(() => {
+          cy.get('input[type="checkbox"]')
+            .should('exist')
+            .click();
+        });
       cy.get('.form--controls button')
         .contains('Delete')
         .should('exist')
