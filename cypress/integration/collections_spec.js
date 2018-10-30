@@ -86,7 +86,7 @@ describe('Dashboard Collections Page', () => {
         .and('include', `#/collections/edit/${name}/${version}`);
       cy.get('@editCollection').click();
 
-      cy.contains('.heading--large', `Edit ${name}___${version}`);
+      cy.contains('.heading--large', `Edit ${name}___${version}`).should('exist');
 
       // update collection and submit
       const meta = 'metadata';
