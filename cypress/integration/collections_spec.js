@@ -1,9 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
 
-// const ace = require('brace');
-// require('brace/mode/javascript');
-// require('brace/theme/monokai');
-
 describe('Dashboard Collections Page', () => {
   describe('When not logged in', () => {
     it('should redirect to login page', () => {
@@ -46,8 +42,14 @@ describe('Dashboard Collections Page', () => {
       cy.get('@addCollection').click();
 
       // fill the form and submit
-      const collection = '{{}"name":"TESTCOLLECTION","version":"006","dataType":"TESTCOLLECTION", "duplicateHandling":"error"}';
-      cy.get('textarea').type(collection, { force: true });
+      const duplicateHandling = 'error';
+      const collection = {
+        name: 'TESTCOLLECTION',
+        version: '006',
+        dataType: 'TESTCOLLECTION',
+        duplicateHandling
+      };
+      cy.editTextarea({ data: collection });
       cy.get('form').get('input').contains('Submit').click();
 
       // displays the new collection
@@ -62,7 +64,7 @@ describe('Dashboard Collections Page', () => {
           cy.contains(`"name": "${name}"`).should('exist');
           cy.contains(`"version": "${version}"`).should('exist');
           cy.contains(`"dataType": "${name}"`).should('exist');
-          cy.contains('"duplicateHandling": "error"').should('exist');
+          cy.contains(`"duplicateHandling": "${duplicateHandling}"`).should('exist');
         });
 
       // verify the new collection is added to the collections list
@@ -72,7 +74,7 @@ describe('Dashboard Collections Page', () => {
         .and('have.attr', 'href', `#/collections/collection/${name}/${version}`);
     });
 
-    it.only('collection page has button to edit the collection', () => {
+    it('collection page has button to edit the collection', () => {
       const name = 'MOD09GQ';
       const version = '006';
       cy.visit(`/#/collections/collection/${name}/${version}`);
@@ -84,9 +86,9 @@ describe('Dashboard Collections Page', () => {
 
       cy.contains('.heading--large', `Edit ${name}___${version}`);
 
+      // update collection and submit
       const meta = 'metadata';
-      cy.editTextarea({ meta });
-
+      cy.editTextarea({ data: { meta }, update: true });
       cy.contains('form input', 'Submit').click();
 
       // displays the updated collection and its granules
