@@ -30,10 +30,9 @@
       "test/**/*.js",
       "!test/fake-api-db/*.js"
     ],
-    "babel": "inherit",
     "require": [
-      "babel-polyfill",
-      "babel-register"
+      "@babel/polyfill",
+      "@babel/register"
     ]
   },
   "browserify": {
@@ -53,13 +52,13 @@
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
+    "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
-    "ava": "^0.25.0",
+    "@babel/register": "^7.0.0",
+    "ava": "^1.0.0-rc.1",
     "ava-http": "^1.0.0",
     "babel-core": "^7.0.0-bridge",
-    "babel-polyfill": "^6.23.0",
-    "babel-register": "^6.23.0",
     "babelify": "^9.0.0",
     "body-parser": "^1.18.3",
     "browser-sync": "^2.12.5",
