@@ -112,7 +112,7 @@ describe('Rules page', () => {
         });
     });
 
-    it.only('deleting a rule should remove it from the list', () => {
+    it('deleting a rule should remove it from the list', () => {
       cy.visit('/#/rules');
       cy.contains('table tr', testRuleName)
         .should('exist')
