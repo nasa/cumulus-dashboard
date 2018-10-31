@@ -34,7 +34,7 @@ const TextAreaForm = React.createClass({
   },
 
   setEditorRef: function (editorRef) {
-    if (window.Cypress) {
+    if (window.Cypress && window.Cypress.env('TESTING') === true) {
       window.aceEditorRef = editorRef;
     }
   },
