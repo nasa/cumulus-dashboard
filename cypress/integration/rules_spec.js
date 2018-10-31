@@ -22,7 +22,7 @@ describe('Rules page', () => {
 
     it('should display a link to view rules', () => {
       cy.visit('/');
-      cy.get('nav').contains('Rules').should('exist');
+      cy.get('nav').contains('Rules');
     });
 
     it('should display a list of rules', () => {
@@ -31,13 +31,11 @@ describe('Rules page', () => {
       cy.url().should('include', '/#/rules');
       cy.get('table tbody tr').should('have.length', 1);
       cy.contains('table tr', testRuleName)
-        .should('exist')
         .within(() => {
-          cy.contains(testProviderId).should('exist');
-          cy.contains(testCollectionId).should('exist');
+          cy.contains(testProviderId);
+          cy.contains(testCollectionId);
           cy.contains(testRuleName)
-            .should('exist')
-            .and('have.attr', 'href', `#/rules/rule/${testRuleName}`);
+            .should('have.attr', 'href', `#/rules/rule/${testRuleName}`);
         });
     });
 
@@ -47,7 +45,6 @@ describe('Rules page', () => {
         .click();
       cy.url().should('include', `/#/rules/rule/${testRuleName}`);
       cy.get('.metadata__details')
-        .should('exist')
         .within(() => {
           cy.get('dt')
             .contains('RuleName')
@@ -61,14 +58,13 @@ describe('Rules page', () => {
             .contains('Provider')
             .next('dd')
             .contains(testProviderId)
-            .should('exist')
-            .and('have.attr', 'href', `#/providers/provider/${testProviderId}`);
+            .should('have.attr', 'href', `#/providers/provider/${testProviderId}`);
         });
     });
 
     it('creating a rule should add it to the list', () => {
       cy.visit('/#/rules');
-      cy.get('a').contains('Add a rule').should('exist').as('addRule');
+      cy.get('a').contains('Add a rule').as('addRule');
       cy.get('@addRule').should('have.attr', 'href', '#/rules/add');
       cy.get('@addRule').click();
 
@@ -91,21 +87,19 @@ describe('Rules page', () => {
       cy.editJsonTextarea({ data: newRule });
       cy.get('form').get('input').contains('Submit').click();
 
-      cy.contains('.heading--xlarge', 'Rules').should('exist');
+      cy.contains('.heading--xlarge', 'Rules');
       cy.contains('table tbody tr a', ruleName)
-        .should('exist')
         .and('have.attr', 'href', `#/rules/rule/${ruleName}`).click();
 
-      cy.contains('.heading--xlarge', 'Rules').should('exist');
-      cy.contains('.heading--large', ruleName).should('exist');
-      cy.contains('.heading--medium', 'Rule Overview').should('exist');
+      cy.contains('.heading--xlarge', 'Rules');
+      cy.contains('.heading--large', ruleName);
+      cy.contains('.heading--medium', 'Rule Overview');
       cy.url().should('include', `#/rules/rule/${ruleName}`);
       cy.get('.metadata__details')
         .within(() => {
-          cy.contains('RuleName').should('exist').next().should('have.text', ruleName);
-          cy.contains('Workflow').should('exist').next().should('have.text', workflow);
+          cy.contains('RuleName').next().should('have.text', ruleName);
+          cy.contains('Workflow').next().should('have.text', workflow);
           cy.contains('Provider')
-            .should('exist')
             .next()
             .contains('a', provider)
             .should('have.attr', 'href', `#/providers/provider/${provider}`);
@@ -115,18 +109,13 @@ describe('Rules page', () => {
     it('deleting a rule should remove it from the list', () => {
       cy.visit('/#/rules');
       cy.contains('table tr', testRuleName)
-        .should('exist')
         .within(() => {
-          cy.get('input[type="checkbox"]')
-            .should('exist')
-            .click();
+          cy.get('input[type="checkbox"]').click();
         });
       cy.get('.form--controls button')
         .contains('Delete')
-        .should('exist')
         .click();
       cy.get('.modal')
-        .should('exist')
         .get('button')
         .contains('Confirm')
         .click();
