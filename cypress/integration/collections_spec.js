@@ -38,7 +38,7 @@ describe('Dashboard Collections Page', () => {
       cy.visit('/#/collections');
 
       cy.contains('.heading--large', 'Collection Overview');
-      cy.contains('a', 'Add a Collection').should('exist').as('addCollection');
+      cy.contains('a', 'Add a Collection').as('addCollection');
       cy.get('@addCollection').should('have.attr', 'href', '#/collections/add');
       cy.get('@addCollection').click();
 
@@ -59,20 +59,19 @@ describe('Dashboard Collections Page', () => {
       cy.url().should('include', `#/collections/collection/${name}/${version}`);
 
       // verify the collection's properties by looking at the Edit page
-      cy.contains('a', 'Edit').should('exist').click();
+      cy.contains('a', 'Edit').click();
       cy.get('form .ace_content')
         .within(() => {
-          cy.contains(`"name": "${name}"`).should('exist');
-          cy.contains(`"version": "${version}"`).should('exist');
-          cy.contains(`"dataType": "${name}"`).should('exist');
-          cy.contains(`"duplicateHandling": "${duplicateHandling}"`).should('exist');
+          cy.contains(`"name": "${name}"`);
+          cy.contains(`"version": "${version}"`);
+          cy.contains(`"dataType": "${name}"`);
+          cy.contains(`"duplicateHandling": "${duplicateHandling}"`);
         });
 
       // verify the new collection is added to the collections list
       cy.contains('a', 'Back to Collections').click();
       cy.contains('table tbody tr a', name)
-        .should('exist')
-        .and('have.attr', 'href', `#/collections/collection/${name}/${version}`);
+        .should('have.attr', 'href', `#/collections/collection/${name}/${version}`);
     });
 
     it('collection page has button to edit the collection', () => {
@@ -80,13 +79,13 @@ describe('Dashboard Collections Page', () => {
       const version = '006';
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
-      cy.contains('a', 'Edit').should('exist').as('editCollection');
+      cy.contains('a', 'Edit').as('editCollection');
       cy.get('@editCollection')
         .should('have.attr', 'href')
         .and('include', `#/collections/edit/${name}/${version}`);
       cy.get('@editCollection').click();
 
-      cy.contains('.heading--large', `Edit ${name}___${version}`).should('exist');
+      cy.contains('.heading--large', `Edit ${name}___${version}`);
 
       // update collection and submit
       const meta = 'metadata';
@@ -94,13 +93,13 @@ describe('Dashboard Collections Page', () => {
       cy.contains('form input', 'Submit').click();
 
       // displays the updated collection and its granules
-      cy.get('.heading--xlarge').should('have.text', 'Collections');
-      cy.get('.heading--large').should('have.text', `${name} / ${version}`);
+      cy.contains('.heading--xlarge', 'Collections');
+      cy.contains('.heading--large', `${name} / ${version}`);
 
       // verify the collection is updated by looking at the Edit page
-      cy.contains('a', 'Edit').should('exist').click();
-      cy.contains('form .ace_content', meta).should('exist');
-      cy.get('.heading--large').should('have.text', `Edit ${name}___${version}`);
+      cy.contains('a', 'Edit').click();
+      cy.contains('form .ace_content', meta);
+      cy.contains('.heading--large', `Edit ${name}___${version}`);
     });
 
     it('collection page has button to delete the collection', () => {
@@ -110,7 +109,7 @@ describe('Dashboard Collections Page', () => {
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
-      cy.contains('button', 'Delete').should('exist').click();
+      cy.contains('button', 'Delete').click();
       cy.contains('button', 'Confirm').click();
 
       // verify the collection is now gone
