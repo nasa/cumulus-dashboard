@@ -51,9 +51,7 @@ var ErrorReport = React.createClass({
             <strong key={message}>{name}: </strong>
             {/* <Collapsible trigger={this.truncate(message)} triggerWhenOpen={message}/> */}
           </p>
-          <Collapsible trigger={this.truncate(report.stack)}>
-            {stack}
-          </Collapsible>
+          <Collapsible trigger={this.truncate(report.stack)} triggerWhenOpen={stack}/>
         </div>
       );
     } else if (Array.isArray(report)) {
