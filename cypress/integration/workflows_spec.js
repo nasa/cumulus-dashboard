@@ -29,6 +29,12 @@ describe('Dashboard Workflows Page', () => {
       cy.contains('.heading--xlarge', 'Workflows');
 
       cy.get('table tbody tr').its('length').should('be.eq', 3);
+      cy.contains('table tbody tr a', 'HelloWorldWorkflow')
+        .should('have.attr', 'href', '#/workflows/workflow/HelloWorldWorkflow');
+      cy.contains('table tbody tr a', 'EcsHelloWorldWorkflow')
+        .should('have.attr', 'href', '#/workflows/workflow/EcsHelloWorldWorkflow');
+      cy.contains('table tbody tr a', 'KinesisTriggerTest')
+        .should('have.attr', 'href', '#/workflows/workflow/KinesisTriggerTest');
     });
   });
 });
