@@ -10,13 +10,13 @@
   word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
-.Collapsible {
-  max-width: 500px;
-}
-
 table {
   width: 100%;
   line-height: 1.6em;
+
+  .Collapsible {
+    max-width: 500px;
+  }
 
   thead {
     td {

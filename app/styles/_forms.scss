@@ -392,9 +392,6 @@ select {
   text-align: center;
   position: relative;
   margin-bottom: 2em;
-  .Collapsible {
-    max-width: none;
-  }
   p {
     color: $error-text-red;
     font-size: .86em;
