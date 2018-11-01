@@ -87,7 +87,7 @@ class FakeCollectionsDb extends FakeDb {
       });
   }
 
-  async deleteItem (name, version) {
+  async getAssociatedRules (name, version) {
     let associatedRules;
     try {
       const { results } = await fakeRulesDb.getItems();
@@ -102,7 +102,11 @@ class FakeCollectionsDb extends FakeDb {
         message: err.message
       });
     }
+    return associatedRules;
+  }
 
+  async deleteItem (name, version) {
+    const associatedRules = await this.getAssociatedRules(name, version);
     if (associatedRules.length) {
       throw new FakeApiError({
         code: 400,
