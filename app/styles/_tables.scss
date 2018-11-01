@@ -61,6 +61,7 @@ table {
 }
 
 .overview-num__wrapper {
+  @include clearfix;
   margin-top: 1.5em;
   .num--large {
     font-size: 1.85em;
