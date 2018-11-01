@@ -91,11 +91,14 @@ class FakeCollectionsDb extends FakeDb {
     let associatedRules;
     try {
       const { results } = await fakeRulesDb.getItems();
-      associatedRules = results.filter((rule) => {
-        return rule.collection &&
+      associatedRules = results.reduce((ruleNames, rule) => {
+        if (rule.collection &&
           rule.collection.name === name &&
-          rule.collection.version === version;
-      });
+          rule.collection.version === version) {
+          ruleNames.push(rule.name);
+        }
+        return ruleNames;
+      }, []);
     } catch (err) {
       throw new FakeApiError({
         code: 500,
@@ -109,8 +112,8 @@ class FakeCollectionsDb extends FakeDb {
     const associatedRules = await this.getAssociatedRules(name, version);
     if (associatedRules.length) {
       throw new FakeApiError({
-        code: 400,
-        message: 'Cannot delete collection with associated rule'
+        code: 409,
+        message: `Cannot delete collection ${name} with associated rule(s): ${associatedRules.join(', ')}`
       });
     }
 
