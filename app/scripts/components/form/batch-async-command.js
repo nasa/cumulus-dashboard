@@ -98,8 +98,8 @@ const BatchCommand = React.createClass({
   cleanup: function (error, results) {
     const { onSuccess, onError } = this.props;
     this.setState({ activeModal: false, completed: 0, status: null });
-    if (error && typeof onError === 'function') onError(error);
-    if (results && results.length && typeof onSuccess === 'function') onSuccess(results);
+    if (error && typeof onError === 'function') return onError(error);
+    if (results && results.length && typeof onSuccess === 'function') return onSuccess(results);
   },
 
   isInflight: function () {
