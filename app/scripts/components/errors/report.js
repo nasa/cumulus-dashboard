@@ -31,10 +31,10 @@ var ErrorReport = React.createClass({
   renderReport: function (report) {
     if (typeof report === 'string') {
       return (
-        <p key={report}>
+        <div key={report}>
           <strong>Error:</strong>
           <Collapsible trigger={this.truncate(report)} triggerWhenOpen={report} />
-        </p>
+        </div>
       );
     } else if (report instanceof Error) {
       let name = report.name || 'Error';
@@ -49,9 +49,11 @@ var ErrorReport = React.createClass({
         <div>
           <p>
             <strong key={message}>{name}: </strong>
-            <Collapsible trigger={this.truncate(message)} triggerWhenOpen={message}/>
+            {/* <Collapsible trigger={this.truncate(message)} triggerWhenOpen={message}/> */}
           </p>
-          <Collapsible trigger={this.truncate(stack)} triggerWhenOpen={stack}/>
+          <Collapsible trigger={this.truncate(report.stack)}>
+            {stack}
+          </Collapsible>
         </div>
       );
     } else if (Array.isArray(report)) {
