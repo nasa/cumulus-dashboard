@@ -19,6 +19,20 @@ const resetState = () => {
   ]);
 };
 
+class FakeApiError extends Error {
+  constructor (err) {
+    super(err.message);
+    this.code = err.code;
+  }
+
+  toJSON () {
+    return {
+      code: this.code,
+      message: this.message
+    };
+  }
+}
+
 class FakeDb {
   constructor (filePath) {
     this.filePath = filePath;
@@ -52,12 +66,12 @@ class FakeRulesDb extends FakeDb {
 
   getItem (name) {
     return fs.readJson(this.filePath)
-    .then((data) => {
-      const rule = data.results.filter(
-        rule => `${rule.name}` === `${name}`
-      );
-      return rule.length > 0 ? rule[0] : null;
-    });
+      .then((data) => {
+        const rule = data.results.filter(
+          rule => `${rule.name}` === `${name}`
+        );
+        return rule.length > 0 ? rule[0] : null;
+      });
   }
 }
 const fakeRulesDb = new FakeRulesDb(rulesFilePath);
@@ -73,7 +87,29 @@ class FakeCollectionsDb extends FakeDb {
       });
   }
 
-  deleteItem (name, version) {
+  async deleteItem (name, version) {
+    let associatedRules;
+    try {
+      const { results } = await fakeRulesDb.getItems();
+      associatedRules = results.filter((rule) => {
+        return rule.collection &&
+          rule.collection.name === name &&
+          rule.collection.version === version;
+      });
+    } catch (err) {
+      throw new FakeApiError({
+        code: 500,
+        message: err.message
+      });
+    }
+
+    if (associatedRules.length) {
+      throw new FakeApiError({
+        code: 400,
+        message: 'Cannot delete collection with associated rule'
+      });
+    }
+
     return fs.readJson(this.filePath)
       .then((data) => {
         data.meta.count -= 1;
