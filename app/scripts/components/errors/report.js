@@ -54,10 +54,10 @@ var ErrorReport = React.createClass({
           <Collapsible trigger={this.truncate(stack)} triggerWhenOpen={stack}/>
         </div>
       );
-    } else if (typeof report === 'object') {
-      return this.stringifyErrorObject(report);
     } else if (Array.isArray(report)) {
       return report.map(this.renderReport);
+    } else if (typeof report === 'object') {
+      return this.stringifyErrorObject(report);
     }
   },
 
