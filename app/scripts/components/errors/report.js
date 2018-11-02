@@ -32,6 +32,8 @@ var ErrorReport = React.createClass({
     if (!trigger) {
       trigger = this.truncate(report);
     }
+    // No need to make error collapsible if the truncated
+    // output is the same length as the original ouptut
     if (typeof report === 'string' &&
         report === trigger &&
         report.length === trigger.length) {
