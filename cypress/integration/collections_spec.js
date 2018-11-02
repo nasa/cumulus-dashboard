@@ -18,7 +18,7 @@ describe('Dashboard Collections Page', () => {
       cy.task('resetState');
     });
 
-    it('displays a link to view collections', () => {
+    it('should display a link to view collections', () => {
       cy.visit('/');
 
       cy.contains('nav li a', 'Collections').as('collections');
@@ -31,7 +31,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('table tbody tr').its('length').should('be.eq', 5);
     });
 
-    it('collections page displays a button to add a new collection', () => {
+    it('should add a new collection', () => {
       const name = 'TESTCOLLECTION';
       const version = '006';
 
@@ -74,7 +74,7 @@ describe('Dashboard Collections Page', () => {
         .should('have.attr', 'href', `#/collections/collection/${name}/${version}`);
     });
 
-    it('collection page has button to edit the collection', () => {
+    it('should edit a collection', () => {
       const name = 'MOD09GQ';
       const version = '006';
 
@@ -102,8 +102,8 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.heading--large', `Edit ${name}___${version}`);
     });
 
-    it('collection page has button to delete the collection', () => {
-      const name = 'MOD09GQ';
+    it('should delete a collection', () => {
+      const name = 'MOD09GK';
       const version = '006';
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
@@ -116,6 +116,25 @@ describe('Dashboard Collections Page', () => {
       cy.url().should('include', 'collections');
       cy.contains('.heading--xlarge', 'Collections');
       cy.contains('table tbody tr a', name).should('not.exist');
+    });
+
+    it('should fail deleting a collection with an associated rule', () => {
+      const name = 'MOD09GQ';
+      const version = '006';
+
+      cy.visit(`/#/collections/collection/${name}/${version}`);
+
+      // delete collection
+      cy.contains('button', 'Delete').click();
+      cy.contains('button', 'Confirm').click();
+
+      // error should be displayed indicating that deletion failed
+      cy.get('.error__report');
+
+      // collection should still be shown in listing
+      cy.contains('Back to Collections').click();
+      cy.contains('.heading--xlarge', 'Collections');
+      cy.contains('table tbody tr a', name);
     });
   });
 });
