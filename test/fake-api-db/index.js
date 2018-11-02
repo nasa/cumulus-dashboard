@@ -152,7 +152,35 @@ class FakeProvidersDb extends FakeDb {
       });
   }
 
-  deleteItem (id) {
+  async getAssociatedRules (id) {
+    let associatedRules;
+    try {
+      const { results } = await fakeRulesDb.getItems();
+      associatedRules = results.reduce((ruleNames, rule) => {
+        if (rule.provider &&
+          rule.provider === id) {
+          ruleNames.push(rule.name);
+        }
+        return ruleNames;
+      }, []);
+    } catch (err) {
+      throw new FakeApiError({
+        code: 500,
+        message: err.message
+      });
+    }
+    return associatedRules;
+  }
+
+  async deleteItem (id) {
+    const associatedRules = await this.getAssociatedRules(id);
+    if (associatedRules.length) {
+      throw new FakeApiError({
+        code: 409,
+        message: `Cannot delete provider ${id} with associated rule(s): ${associatedRules.join(', ')}`
+      });
+    }
+
     return fs.readJson(this.filePath)
       .then((data) => {
         data.meta.count -= 1;

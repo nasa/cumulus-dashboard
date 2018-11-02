@@ -103,8 +103,13 @@ app.put('/providers/:id', async (req, res) => {
 });
 
 app.delete('/providers/:id', async (req, res) => {
-  await fakeProvidersDb.deleteItem(req.params.id);
-  res.sendStatus(200).end();
+  try {
+    await fakeProvidersDb.deleteItem(req.params.id);
+    res.sendStatus(200).end();
+  } catch (err) {
+    res.status(err.code);
+    res.json(err).end();
+  }
 });
 
 app.get('/rules', async (req, res) => {
