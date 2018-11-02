@@ -35,6 +35,7 @@
     },
     "globals": {
       "cy": true,
-      "Cypress": true
+      "Cypress": true,
+      "expect": true
     }
 }

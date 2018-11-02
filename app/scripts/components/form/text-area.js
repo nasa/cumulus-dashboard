@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import ErrorReport from '../errors/report';
 
 import 'brace';
 import 'brace/mode/json';
@@ -10,6 +9,8 @@ import 'brace/theme/github';
 
 import Ace from 'react-ace';
 import config from '../../config';
+import { setWindowEditorRef } from '../../utils/browser';
+import ErrorReport from '../errors/report';
 
 const _minLines = 8;
 const _maxLines = 18;
@@ -31,12 +32,6 @@ const TextAreaForm = React.createClass({
 
   onChange: function (value) {
     this.props.onChange(this.props.id, value);
-  },
-
-  setEditorRef: function (editorRef) {
-    if (window.Cypress && window.Cypress.env('TESTING') === true) {
-      window.aceEditorRef = editorRef;
-    }
   },
 
   render: function () {
@@ -67,7 +62,7 @@ const TextAreaForm = React.createClass({
           minLines={minLines}
           maxLines={maxLines}
           wrapEnabled={true}
-          ref={this.setEditorRef}
+          ref={setWindowEditorRef}
         />
       </div>
     );

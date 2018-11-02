@@ -33,6 +33,20 @@ declare global {
       editJsonTextarea(options: EditJsonOptions): Chainable<null>
 
       /**
+       * Get the contents of a JSON textarea
+       *
+       * @returns {Promise<object>}
+       *   A promise to the JSON value of the textarea
+       *
+       * @memberof Chainable
+       * @example
+       *   cy.getJsonTextareaValue().then((jsonValue) => {
+       *     // run assertions against JSON object
+       *   })
+       */
+      getJsonTextareaValue(): Chainable<object>
+
+      /**
        * Login to dashboard via network requests
        *
        * To ensure the user is logged in across all tests in the spec,
