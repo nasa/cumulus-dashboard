@@ -131,8 +131,8 @@ describe('Dashboard Collections Page', () => {
       // error should be displayed indicating that deletion failed
       cy.get('.error__report');
 
-      // collection should still be shown in listing
-      cy.contains('Back to Collections').click();
+      // collection should still exist in list
+      cy.contains('a', 'Back to Collections').click();
       cy.contains('.heading--xlarge', 'Collections');
       cy.contains('table tbody tr a', name);
     });

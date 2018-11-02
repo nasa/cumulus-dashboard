@@ -18,7 +18,7 @@ describe('Dashboard Providers Page', () => {
       cy.task('resetState');
     });
 
-    it('displays a link to view providers', () => {
+    it('should display a link to view providers', () => {
       cy.visit('/');
 
       cy.contains('nav li a', 'Providers').as('providers');
@@ -31,7 +31,7 @@ describe('Dashboard Providers Page', () => {
       cy.get('table tbody tr').its('length').should('be.eq', 2);
     });
 
-    it('providers page displays a button to add a new provider', () => {
+    it('should add a new provider', () => {
       const name = 'TESTPROVIDER';
       const connectionLimit = 5;
       const protocol = 's3';
@@ -96,7 +96,7 @@ describe('Dashboard Providers Page', () => {
         .should('have.attr', 'href', `#/providers/provider/${name}`);
     });
 
-    it('provider page has button to edit the provider', () => {
+    it('should edit a provider', () => {
       const name = 's3_provider';
       const connectionLimit = 12;
       const host = 'test-host-new';
@@ -141,7 +141,7 @@ describe('Dashboard Providers Page', () => {
         });
     });
 
-    it('provider page has button to delete the provider', () => {
+    it('should delete a provider', () => {
       const name = 's3_provider';
       cy.visit(`/#/providers/provider/${name}`);
       cy.contains('.heading--large', name);
@@ -155,6 +155,27 @@ describe('Dashboard Providers Page', () => {
       cy.url().should('include', 'providers');
       cy.contains('.heading--xlarge', 'Providers');
       cy.contains('table tbody tr', name).should('not.exist');
+    });
+
+    it('should fail to delete a provider with an associated rule', () => {
+      const name = 'PODAAC_SWOT';
+      cy.visit(`/#/providers/provider/${name}`);
+      cy.contains('.heading--large', name);
+
+      // delete provider
+      cy.get('.dropdown__options__btn').click();
+      cy.contains('span', 'Delete').click();
+      cy.contains('button', 'Confirm').click();
+
+      // error should be displayed indicating that deletion failed
+      cy.contains('Provider Overview')
+        .parents('section')
+        .get('.error__report');
+
+      // provider should still exist in list
+      cy.contains('a', 'Back to Providers').click();
+      cy.contains('.heading--xlarge', 'Providers');
+      cy.contains('table tbody tr a', name);
     });
   });
 });
