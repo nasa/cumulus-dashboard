@@ -43,14 +43,14 @@ var ErrorReport = React.createClass({
         message = JSON.stringify(report);
       } else {
         message = report.message;
-        stack = report.stack ? report.stack.split('\\n').map(s => <p key={s}>{s}</p>) : null;
+        stack = report.stack
+          ? report.stack.split(`\n`).map((s, index) => <p key={index}>{s}</p>)
+          : null;
       }
       return (
         <div>
-          <p>
-            <strong key={message}>{name}: </strong>
-            {/* <Collapsible trigger={this.truncate(message)} triggerWhenOpen={message}/> */}
-          </p>
+          <strong key={message}>{name}: </strong>
+          <Collapsible trigger={this.truncate(message)} triggerWhenOpen={message}/>
           <Collapsible trigger={this.truncate(report.stack)} triggerWhenOpen={stack}/>
         </div>
       );
