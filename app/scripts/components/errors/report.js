@@ -28,12 +28,28 @@ var ErrorReport = React.createClass({
     else return truncate(string);
   },
 
+  renderSingleError: function (report, trigger) {
+    if (!trigger) {
+      trigger = this.truncate(report);
+    }
+    if (typeof report === 'string' &&
+        report === trigger &&
+        report.length === trigger.length) {
+      return <p>{report}</p>;
+    }
+    return (
+      <Collapsible trigger={trigger} triggerWhenOpen={'Show less'}>
+        {report}
+      </Collapsible>
+    );
+  },
+
   renderReport: function (report) {
     if (typeof report === 'string') {
       return (
         <div key={report}>
           <strong>Error:</strong>
-          <Collapsible trigger={this.truncate(report)} triggerWhenOpen={report} />
+          { this.renderSingleError(report) }
         </div>
       );
     } else if (report instanceof Error) {
@@ -48,10 +64,10 @@ var ErrorReport = React.createClass({
           : null;
       }
       return (
-        <div>
-          <strong key={message}>{name}: </strong>
-          <Collapsible trigger={this.truncate(message)} triggerWhenOpen={message}/>
-          <Collapsible trigger={this.truncate(report.stack)} triggerWhenOpen={stack}/>
+        <div key={message}>
+          <strong>{name}: </strong>
+          { this.renderSingleError(message) }
+          { this.renderSingleError(stack, this.truncate(report.stack)) }
         </div>
       );
     } else if (Array.isArray(report)) {
@@ -70,7 +86,12 @@ var ErrorReport = React.createClass({
       cause = obj.Cause;
     }
     if (error && cause) {
-      return <p key={cause}><strong>{error}: </strong> <Collapsible trigger={this.truncate(cause)} triggerWhenOpen={cause}/></p>;
+      return (
+        <div key={cause}>
+          <strong>{error}: </strong>
+          { this.renderSingleError(cause) }
+        </div>
+      );
     } else {
       let stringified = this.truncate(JSON.stringify(obj));
       return <p key={stringified}>{stringified}</p>;
