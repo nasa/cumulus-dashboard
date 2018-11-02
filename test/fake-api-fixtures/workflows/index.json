@@ -1,7 +1,7 @@
 [
   {
     "name": "HelloWorldWorkflow",
-    "template": "s3://cumulus-test-sandbox-internal/mboyd-test/workflows/HelloWorldWorkflow.json",
+    "template": "s3://cumulus-test-sandbox-internal/test-deploy/workflows/HelloWorldWorkflow.json",
     "definition": {
       "Comment": "Returns Hello World",
       "StartAt": "StartStatus",
@@ -38,7 +38,7 @@
   },
   {
     "name": "EcsHelloWorldWorkflow",
-    "template": "s3://cumulus-test-sandbox-internal/mboyd-test/workflows/EcsHelloWorldWorkflow.json",
+    "template": "s3://cumulus-test-sandbox-internal/test-deploy/workflows/EcsHelloWorldWorkflow.json",
     "definition": {
       "Comment": "Returns Hello World",
       "StartAt": "StartStatus",
@@ -84,7 +84,7 @@
   },
   {
     "name": "KinesisTriggerTest",
-    "template": "s3://cumulus-test-sandbox-internal/mboyd-test/workflows/KinesisTriggerTest.json",
+    "template": "s3://cumulus-test-sandbox-internal/test-deploy/workflows/KinesisTriggerTest.json",
     "definition": {
       "Comment": "Tests Workflow from Kinesis Stream",
       "StartAt": "StartStatus",
