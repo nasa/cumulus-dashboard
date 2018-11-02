@@ -52,3 +52,10 @@ Cypress.Commands.add('editJsonTextarea', ({ data, update = false }) => {
     editor.setValue(data);
   });
 });
+
+Cypress.Commands.add('getJsonTextareaValue', () => {
+  return cy.window().its('aceEditorRef').its('editor').then((editor) => {
+    const value = editor.getValue();
+    return JSON.parse(value);
+  });
+});
