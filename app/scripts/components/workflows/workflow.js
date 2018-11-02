@@ -4,6 +4,7 @@ import Ace from 'react-ace';
 import { connect } from 'react-redux';
 import { listWorkflows } from '../../actions';
 import config from '../../config';
+import { setWindowEditorRef } from '../../utils/browser';
 import Loading from '../app/loading-indicator';
 
 var Workflow = React.createClass({
@@ -42,13 +43,13 @@ var Workflow = React.createClass({
         name={`collection-read-only-${name}`}
         readOnly={true}
         value={JSON.stringify(data, null, '\t')}
-
         width='auto'
         tabSize={config.tabSize}
         showPrintMargin={false}
         minLines={1}
         maxLines={35}
         wrapEnabled={true}
+        ref={setWindowEditorRef}
       />
     );
   },

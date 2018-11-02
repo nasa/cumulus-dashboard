@@ -21,7 +21,7 @@ describe('Dashboard Collections Page', () => {
     it('displays a link to view collections', () => {
       cy.visit('/');
 
-      cy.contains('nav li a', 'Collections').should('exist').as('collections');
+      cy.contains('nav li a', 'Collections').as('collections');
       cy.get('@collections').should('have.attr', 'href', '#/collections');
       cy.get('@collections').click();
 
