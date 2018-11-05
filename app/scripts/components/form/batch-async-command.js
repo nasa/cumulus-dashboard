@@ -84,6 +84,11 @@ const BatchCommand = React.createClass({
     const error = this.createErrorMessage(errors);
     this.setState({status: (error ? 'error' : 'success')});
     setTimeout(() => {
+      // Due to internals of the `queue` function being used, results
+      // passed to this method from `start` will include an empty value
+      // in the array even if there was no actual result. Filtering the
+      // results to avoid incorrectly firing the `onSuccess` callback.
+      results = results.filter(r => r);
       this.cleanup(error, results);
     }, delay);
   },
@@ -98,8 +103,8 @@ const BatchCommand = React.createClass({
   cleanup: function (error, results) {
     const { onSuccess, onError } = this.props;
     this.setState({ activeModal: false, completed: 0, status: null });
-    if (error && typeof onError === 'function') return onError(error);
-    if (results && results.length && typeof onSuccess === 'function') return onSuccess(results);
+    if (error && typeof onError === 'function') onError(error);
+    if (results && results.length && typeof onSuccess === 'function') onSuccess(results);
   },
 
   isInflight: function () {

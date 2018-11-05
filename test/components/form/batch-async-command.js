@@ -10,7 +10,7 @@ import BatchCommand from '../../../app/scripts/components/form/batch-async-comma
 configure({ adapter: new Adapter() });
 
 test('collect multiple errors', function (t) {
-  const noop = () => {}
+  const noop = () => {};
 
   return new Promise((resolve, reject) => {
     const selection = [
@@ -20,22 +20,22 @@ test('collect multiple errors', function (t) {
       '3-pass'
     ];
 
-    let count = 0
+    let count = 0;
     const done = () => {
-      count++
-      if (count == 2) {
-        resolve()
+      count++;
+      if (count === 2) {
+        resolve();
       }
-    }
+    };
 
     const onSuccess = (result) => {
-      t.is(result.filter((item) => !!item).length, 2)
-      done()
+      t.is(result.filter((item) => !!item).length, 2);
+      done();
     };
 
     const onError = (err) => {
-      t.is(err.indexOf('2 errors occurred'), 0)
-      done()
+      t.is(err.indexOf('2 errors occurred'), 0);
+      done();
     };
 
     const action = (id) => {
@@ -43,24 +43,24 @@ test('collect multiple errors', function (t) {
         item.state[id] = {
           status: 'error',
           error: `there was a problem with ${id}`
-        }
+        };
       } else {
         item.state[id] = {
           status: 'success'
-        }
+        };
       }
 
       process.nextTick(() => {
-        command.setProps(item)
-      })
-    }
+        command.setProps(item);
+      });
+    };
 
     const item = {
       text: 'Example',
       action: action,
       state: {},
       confirm: noop
-    }
+    };
 
     const command = shallow(
       <BatchCommand
@@ -77,6 +77,6 @@ test('collect multiple errors', function (t) {
       />
     );
 
-    command.instance().start()
-  })
+    command.instance().start();
+  });
 });
