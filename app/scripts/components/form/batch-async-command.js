@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import queue from 'stubborn-queue';
-import compact from 'lodash.compact';
 import AsyncCommand from './async-command';
 import { updateDelay } from '../../config';
 
@@ -85,11 +84,6 @@ const BatchCommand = React.createClass({
     const error = this.createErrorMessage(errors);
     this.setState({status: (error ? 'error' : 'success')});
     setTimeout(() => {
-      // Due to internals of the `queue` function being used, results
-      // passed to this method from `start` will include an empty value
-      // in the array even if there was no actual result. Filtering the
-      // results to avoid incorrectly firing the `onSuccess` callback.
-      results = compact(results);
       this.cleanup(error, results);
     }, delay);
   },
