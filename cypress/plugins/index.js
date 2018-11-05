@@ -11,4 +11,12 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-module.exports = require('./api');
+const fakeApiDb = require('../../test/fake-api-db');
+
+module.exports = (on) => {
+  on('task', {
+    resetState: function () {
+      return fakeApiDb.resetState();
+    }
+  });
+};

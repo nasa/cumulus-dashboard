@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import ErrorReport from '../errors/report';
 
 import 'brace';
 import 'brace/mode/json';
@@ -10,6 +9,8 @@ import 'brace/theme/github';
 
 import Ace from 'react-ace';
 import config from '../../config';
+import { setWindowEditorRef } from '../../utils/browser';
+import ErrorReport from '../errors/report';
 
 const _minLines = 8;
 const _maxLines = 18;
@@ -61,6 +62,7 @@ const TextAreaForm = React.createClass({
           minLines={minLines}
           maxLines={maxLines}
           wrapEnabled={true}
+          ref={setWindowEditorRef}
         />
       </div>
     );
