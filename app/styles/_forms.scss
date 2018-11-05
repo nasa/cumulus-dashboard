@@ -398,6 +398,14 @@ select {
     margin-bottom: 0;
     color: $error-text-red;
   }
+  .Collapsible {
+    display: flex;
+    flex-direction: column;
+
+    .Collapsible__trigger {
+      order: 1;
+    }
+  }
 }
 
 .page__section__header-wrapper {
