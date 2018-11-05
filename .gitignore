@@ -9,5 +9,5 @@ gulp-cache
 /artifacts
 /tmp/
 /docker/html/
-yarn.lock
 package-lock.json
+test/fake-api-db/*.json
