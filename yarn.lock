@@ -10567,10 +10567,10 @@ strip-outer@^1.0.0:
   dependencies:
     escape-string-regexp "^1.0.2"
 
-stubborn-queue@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/stubborn-queue/-/stubborn-queue-1.0.0.tgz#1e300562e794033cea87fc9ce16294b630e5a44f"
-  integrity sha512-YsaBWcFbAFbMkOF3zlEsmAEcg3l4yc/B6lMgabbHohwHyfcFAYIy9TajxDlum7TBSrPAA3OZKj0zq+tz12iRPA==
+stubborn-queue@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/stubborn-queue/-/stubborn-queue-2.0.0.tgz#204178e23b965e63417e1ae7b8a73f0e3edd4673"
+  integrity sha512-O5p628UempL1sM7RQ1aZbHIpUDT6L+j5efE8+uGwENFvlNHfx0YOxtD0TJmz7l2c50gWTWz3QGgXH8lm1Y7LJw==
   dependencies:
     assert-argument "^1.0.2"
 
