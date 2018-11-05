@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import queue from 'stubborn-queue';
+import compact from 'lodash.compact';
 import AsyncCommand from './async-command';
 import { updateDelay } from '../../config';
 
@@ -88,7 +89,7 @@ const BatchCommand = React.createClass({
       // passed to this method from `start` will include an empty value
       // in the array even if there was no actual result. Filtering the
       // results to avoid incorrectly firing the `onSuccess` callback.
-      results = results.filter(r => r);
+      results = compact(results);
       this.cleanup(error, results);
     }, delay);
   },
