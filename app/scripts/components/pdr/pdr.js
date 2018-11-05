@@ -26,7 +26,7 @@ import {
   bool,
   deleteText
 } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/granules';
+import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/pdrs';
 import { renderProgress } from '../../utils/table-config/pdr-progress';
 import List from '../table/list-view';
 import LogViewer from '../logs/viewer';
