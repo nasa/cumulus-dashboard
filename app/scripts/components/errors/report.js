@@ -68,7 +68,6 @@ var ErrorReport = React.createClass({
       return (
         <div key={message}>
           <strong>{name}: </strong>
-          {/* { this.renderSingleError(message) } */}
           { this.renderSingleError(stack, this.truncate(report.stack)) }
         </div>
       );
