@@ -89,7 +89,7 @@ export const simpleDropdownOption = function (config) {
   );
 };
 
-const confirmReingest = (d) => `Reingest ${d} granules(s)? Note, completed granules cannot be reingested.`;
+const confirmReingest = (d) => `Reingest ${d} granules(s)? Note: the granule files will be overwritten.`;
 const confirmApply = (d) => `Run workflow on ${d} granules?`;
 const confirmRemove = (d) => `Remove ${d} granule(s) from ${strings.cmr}?`;
 const confirmDelete = (d) => `Delete ${d} granule(s)?`;

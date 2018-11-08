@@ -39,7 +39,7 @@ export const tableSortProps = [
   'timestamp'
 ];
 
-const confirmDelete = (d) => `Delete ${d} {strings.collection}(s)?`;
+const confirmDelete = (d) => `Delete ${d} ${strings.collection}(s)?`;
 export const bulkActions = function (collections) {
   return [{
     text: 'Delete',
