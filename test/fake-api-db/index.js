@@ -73,6 +73,19 @@ class FakeRulesDb extends FakeDb {
         return rule.length > 0 ? rule[0] : null;
       });
   }
+
+  async updateItem (name, updates) {
+    const data = await fs.readJson(this.filePath);
+    let updatedItem;
+    data.results.forEach((rule, index) => {
+      if (rule.name === name) {
+        data.results[index] = Object.assign({}, data.results[index], updates);
+        updatedItem = data.results[index];
+      }
+    });
+    await seed(this.filePath, data);
+    return updatedItem;
+  }
 }
 const fakeRulesDb = new FakeRulesDb(rulesFilePath);
 

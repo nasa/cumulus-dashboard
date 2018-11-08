@@ -19,14 +19,15 @@ const EditRule = React.createClass({
   },
 
   render: function () {
-    const { ruleName } = this.props.params;
+    const { params, rules } = this.props;
+    const { ruleName } = params;
     return (
       <EditRaw
         pk={ruleName}
         schemaKey={SCHEMA_KEY}
         primaryProperty={'name'}
-        state={this.props.rules}
-        getRecord={getRule}
+        state={rules}
+        getRecord={() => getRule(ruleName)}
         updateRecord={updateRule}
         backRoute={`rules/rule/${ruleName}`}
         clearRecordUpdate={clearUpdateRule}
