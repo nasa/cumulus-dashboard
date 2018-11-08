@@ -116,7 +116,7 @@ describe('Rules page', () => {
       cy.contains('.button--small', 'Edit').click();
       cy.contains('.heading--large', `Edit ${testRuleName}`);
 
-      // update collection and submit
+      // update rule and submit
       const provider = 'newProvider';
       cy.editJsonTextarea({ data: { provider }, update: true });
       cy.contains('form input', 'Submit').click();
