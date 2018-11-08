@@ -134,7 +134,7 @@ var LogViewer = React.createClass({
             />
           </form>
         </div>
-        {logs.error ? <ErrorReport report={logs.error} /> : null}
+        {logs.error ? <ErrorReport report={logs.error} truncate={true} /> : null}
         <div className='logs'>
           {items.map((d, i) => {
             let text = d.displayText;
