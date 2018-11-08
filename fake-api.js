@@ -4,7 +4,12 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
-const { fakeCollectionsDb, fakeProvidersDb, fakeRulesDb, resetState } = require('./test/fake-api-db');
+const {
+  fakeCollectionsDb,
+  fakeProvidersDb,
+  fakeRulesDb,
+  resetState
+} = require('./test/fake-api-db');
 
 // Reset the fake API state
 resetState();
@@ -53,21 +58,24 @@ app.get('/collections/:name/:version', async (req, res) => {
 
 app.post('/collections', async (req, res) => {
   if (req.body.name && req.body.version) {
-    // console.log('post collections', req.body);
     await fakeCollectionsDb.addItem(req.body);
   }
   res.status(200).send({record: req.body, message: 'Record saved'}).end();
 });
 
 app.put('/collections/:name/:version', async (req, res) => {
-  // console.log('put collections', req.params, req.body);
   const updatedItem = await fakeCollectionsDb.updateItem(req.params.name, req.params.version, req.body);
   res.status(200).send(updatedItem);
 });
 
 app.delete('/collections/:name/:version', async (req, res) => {
-  await fakeCollectionsDb.deleteItem(req.params.name, req.params.version);
-  res.sendStatus(200).end();
+  try {
+    await fakeCollectionsDb.deleteItem(req.params.name, req.params.version);
+    res.sendStatus(200).end();
+  } catch (err) {
+    res.status(err.code);
+    res.json(err).end();
+  }
 });
 
 app.get('/providers', async (req, res) => {
@@ -95,8 +103,13 @@ app.put('/providers/:id', async (req, res) => {
 });
 
 app.delete('/providers/:id', async (req, res) => {
-  await fakeProvidersDb.deleteItem(req.params.id);
-  res.sendStatus(200).end();
+  try {
+    await fakeProvidersDb.deleteItem(req.params.id);
+    res.sendStatus(200).end();
+  } catch (err) {
+    res.status(err.code);
+    res.json(err).end();
+  }
 });
 
 app.get('/rules', async (req, res) => {

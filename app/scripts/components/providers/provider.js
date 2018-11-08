@@ -108,7 +108,7 @@ var ProviderOverview = React.createClass({
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
     } else if (record.error) {
-      return <ErrorReport report={record.error} />;
+      return <ErrorReport report={record.error} truncate={true} />;
     }
     const provider = record.data;
     const associatedCollections = get(this.props.collections, ['list', 'data'], [])
@@ -153,7 +153,7 @@ var ProviderOverview = React.createClass({
         </section>
 
         <section className='page__section'>
-          {errors.length ? <ErrorReport report={errors} /> : null}
+          {errors.length ? <ErrorReport report={errors} truncate={true} /> : null}
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Provider Overview</h2>
           </div>

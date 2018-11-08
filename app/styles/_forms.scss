@@ -392,10 +392,19 @@ select {
   text-align: center;
   position: relative;
   margin-bottom: 2em;
+  color: $error-text-red;
+  font-size: .86em;
   p {
-    color: $error-text-red;
-    font-size: .86em;
     margin-bottom: 0;
+    color: $error-text-red;
+  }
+  .Collapsible {
+    display: flex;
+    flex-direction: column;
+
+    .Collapsible__trigger {
+      order: 1;
+    }
   }
 }
 

@@ -19,6 +19,20 @@ const resetState = () => {
   ]);
 };
 
+class FakeApiError extends Error {
+  constructor (err) {
+    super(err.message);
+    this.code = err.code;
+  }
+
+  toJSON () {
+    return {
+      code: this.code,
+      message: this.message
+    };
+  }
+}
+
 class FakeDb {
   constructor (filePath) {
     this.filePath = filePath;
@@ -52,12 +66,12 @@ class FakeRulesDb extends FakeDb {
 
   getItem (name) {
     return fs.readJson(this.filePath)
-    .then((data) => {
-      const rule = data.results.filter(
-        rule => `${rule.name}` === `${name}`
-      );
-      return rule.length > 0 ? rule[0] : null;
-    });
+      .then((data) => {
+        const rule = data.results.filter(
+          rule => `${rule.name}` === `${name}`
+        );
+        return rule.length > 0 ? rule[0] : null;
+      });
   }
 }
 const fakeRulesDb = new FakeRulesDb(rulesFilePath);
@@ -73,7 +87,36 @@ class FakeCollectionsDb extends FakeDb {
       });
   }
 
-  deleteItem (name, version) {
+  async getAssociatedRules (name, version) {
+    let associatedRules;
+    try {
+      const { results } = await fakeRulesDb.getItems();
+      associatedRules = results.reduce((ruleNames, rule) => {
+        if (rule.collection &&
+          rule.collection.name === name &&
+          rule.collection.version === version) {
+          ruleNames.push(rule.name);
+        }
+        return ruleNames;
+      }, []);
+    } catch (err) {
+      throw new FakeApiError({
+        code: 500,
+        message: err.message
+      });
+    }
+    return associatedRules;
+  }
+
+  async deleteItem (name, version) {
+    const associatedRules = await this.getAssociatedRules(name, version);
+    if (associatedRules.length) {
+      throw new FakeApiError({
+        code: 409,
+        message: `Cannot delete collection ${name} with associated rule(s): ${associatedRules.join(', ')}`
+      });
+    }
+
     return fs.readJson(this.filePath)
       .then((data) => {
         data.meta.count -= 1;
@@ -109,7 +152,35 @@ class FakeProvidersDb extends FakeDb {
       });
   }
 
-  deleteItem (id) {
+  async getAssociatedRules (id) {
+    let associatedRules;
+    try {
+      const { results } = await fakeRulesDb.getItems();
+      associatedRules = results.reduce((ruleNames, rule) => {
+        if (rule.provider &&
+          rule.provider === id) {
+          ruleNames.push(rule.name);
+        }
+        return ruleNames;
+      }, []);
+    } catch (err) {
+      throw new FakeApiError({
+        code: 500,
+        message: err.message
+      });
+    }
+    return associatedRules;
+  }
+
+  async deleteItem (id) {
+    const associatedRules = await this.getAssociatedRules(id);
+    if (associatedRules.length) {
+      throw new FakeApiError({
+        code: 409,
+        message: `Cannot delete provider ${id} with associated rule(s): ${associatedRules.join(', ')}`
+      });
+    }
+
     return fs.readJson(this.filePath)
       .then((data) => {
         data.meta.count -= 1;
