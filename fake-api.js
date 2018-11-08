@@ -117,6 +117,11 @@ app.post('/rules', async (req, res) => {
   res.status(200).send({record: req.body, message: 'Record saved'}).end();
 });
 
+app.put('/rules/:name', async (req, res) => {
+  const updatedItem = await fakeRulesDb.updateItem(req.params.name, req.body);
+  res.status(200).send(updatedItem);
+});
+
 app.delete('/rules/:name', async (req, res) => {
   await fakeRulesDb.deleteItem(req.params.name);
   res.sendStatus(200).end();

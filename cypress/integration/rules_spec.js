@@ -106,6 +106,35 @@ describe('Rules page', () => {
         });
     });
 
+    it('editing a rule and returning to the rules page should show the new changes', () => {
+      cy.visit('/#/rules');
+      cy.contains('table tbody tr a', testRuleName)
+      .and('have.attr', 'href', `#/rules/rule/${testRuleName}`).click();
+
+      cy.contains('.heading--large', testRuleName);
+      cy.contains('.button--small', 'Edit').click();
+      cy.contains('.heading--large', `Edit ${testRuleName}`);
+
+      // update collection and submit
+      const provider = 'newProvider';
+      cy.editJsonTextarea({ data: { provider }, update: true });
+      cy.contains('form input', 'Submit').click();
+
+      cy.contains('.heading--large', testRuleName);
+      cy.get('.metadata__details')
+      .within(() => {
+        cy.contains('Provider').next().should('have.text', 'newProvider');
+      });
+
+      cy.contains('a', 'Back to Rules').click();
+      cy.contains('.heading--large', 'Rule Overview');
+      cy.contains('table tr', testRuleName)
+      .within(() => {
+        cy.contains('newProvider')
+          .should('have.attr', 'href', '#/providers/provider/newProvider');
+      });
+    });
+
     it('deleting a rule should remove it from the list', () => {
       cy.visit('/#/rules');
       cy.contains('table tr', testRuleName)
