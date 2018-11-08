@@ -74,7 +74,7 @@ export const del = function (config, callback) {
   });
 };
 
-export const wrapRequest = function (id, query, params, type, body) {
+export const wrapRequest = function (id, query, params, type, body, successCallback) {
   let config;
   if (typeof params === 'string') {
     config = {
@@ -128,6 +128,9 @@ export const wrapRequest = function (id, query, params, type, body) {
       } else {
         const duration = new Date() - start;
         log((id ? type + ': ' + id : type), duration + 'ms');
+        if (successCallback) {
+          successCallback(dispatch, data);
+        }
         return dispatch({ id, type, data, config });
       }
     });

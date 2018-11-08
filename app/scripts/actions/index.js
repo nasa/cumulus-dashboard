@@ -248,7 +248,7 @@ export const getCollection = (name, version) => wrapRequest(
 export const listCollections = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'collections'),
   qs: Object.assign({ limit: pageLimit }, options)
-}, COLLECTIONS);
+}, COLLECTIONS, getMMTLinks);
 
 export const createCollection = (payload) => wrapRequest(
   getCollectionId(payload), post, 'collections', NEW_COLLECTION, payload);
@@ -265,6 +265,27 @@ export const searchCollections = (prefix) => ({ type: SEARCH_COLLECTIONS, prefix
 export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH });
 export const filterCollections = (param) => ({ type: FILTER_COLLECTIONS, param: param });
 export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
+
+export const getMMTLinks = (dispatch, data) => {
+  data.forEach((collectionObject) => {
+    getMMTLinkFromCmr(collectionObject)
+      .then((url) => {
+        const action = {
+          type: ADD_MMTURL,
+          data: {
+            name: data.name,
+            version: data.version,
+            url: url
+          }
+        };
+        dispatch(action);
+      });
+  });
+};
+
+export const getMMTLinkFromCmr = (collection) => {
+  return Promise.resolve('fake MMT LINK');
+};
 
 export const getGranule = (granuleId) => wrapRequest(
   granuleId, get, `granules/${granuleId}`, GRANULE);
