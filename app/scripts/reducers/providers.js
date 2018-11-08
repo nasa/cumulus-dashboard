@@ -1,6 +1,6 @@
 'use strict';
 
-import { set, del } from 'object-path';
+import { get, set, del } from 'object-path';
 import assignDate from './assign-date';
 import {
   PROVIDER,
@@ -74,7 +74,9 @@ export default function reducer (state = initialState, action) {
       set(state, ['map', id, 'inflight'], false);
       set(state, ['map', id, 'data'], assignDate(data));
       set(state, ['map', id, 'error'], null);
-      del(state, ['deleted', id]);
+      if (get(state, ['deleted', id, 'status']) !== 'error') {
+        del(state, ['deleted', id]);
+      }
       break;
     case PROVIDER_INFLIGHT:
       set(state, ['map', id, 'inflight'], true);

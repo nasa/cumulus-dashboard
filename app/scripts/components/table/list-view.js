@@ -221,7 +221,7 @@ var List = React.createClass({
         ) : null}
 
         {list.inflight ? <Loading /> : null}
-        {list.error ? <ErrorReport report={list.error} /> : null}
+        {list.error ? <ErrorReport report={list.error} truncate={true} /> : null}
         {bulkActionError ? <ErrorReport report={bulkActionError} /> : null}
 
         <SortableTable
