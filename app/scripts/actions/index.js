@@ -41,7 +41,7 @@ export const COLLECTION_DELETE = 'COLLECTION_DELETE';
 export const COLLECTION_DELETE_INFLIGHT = 'COLLECTION_DELETE_INFLIGHT';
 export const COLLECTION_DELETE_ERROR = 'COLLECTION_DELETE_ERROR';
 
-export const ADD_MMTURL = 'ADD_MMTURL';
+export const ADD_MMTLINK = 'ADD_MMTLINK';
 
 export const GRANULE = 'GRANULE';
 export const GRANULE_INFLIGHT = 'GRANULE_INFLIGHT';
@@ -248,7 +248,7 @@ export const getCollection = (name, version) => wrapRequest(
 export const listCollections = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'collections'),
   qs: Object.assign({ limit: pageLimit }, options)
-}, COLLECTIONS, getMMTLinks);
+}, COLLECTIONS, null, getMMTLinks);
 
 export const createCollection = (payload) => wrapRequest(
   getCollectionId(payload), post, 'collections', NEW_COLLECTION, payload);
@@ -267,16 +267,12 @@ export const filterCollections = (param) => ({ type: FILTER_COLLECTIONS, param: 
 export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
 
 export const getMMTLinks = (dispatch, data) => {
-  data.forEach((collectionObject) => {
-    getMMTLinkFromCmr(collectionObject)
+  data.results.forEach((collection) => {
+    getMMTLinkFromCmr(collection)
       .then((url) => {
         const action = {
-          type: ADD_MMTURL,
-          data: {
-            name: data.name,
-            version: data.version,
-            url: url
-          }
+          type: ADD_MMTLINK,
+          data: { name: collection.name, version: collection.version, url: url }
         };
         dispatch(action);
       });
@@ -284,7 +280,7 @@ export const getMMTLinks = (dispatch, data) => {
 };
 
 export const getMMTLinkFromCmr = (collection) => {
-  return Promise.resolve('fake MMT LINK');
+  return Promise.resolve('https://mmt.uat.earthdata.nasa.gov/collections/fake-CUMULUS');
 };
 
 export const getGranule = (granuleId) => wrapRequest(

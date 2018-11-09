@@ -28,6 +28,7 @@ var CollectionList = React.createClass({
 
   propTypes: {
     collections: React.PropTypes.object,
+    mmtLinks: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     logs: React.PropTypes.object
   },
@@ -49,6 +50,9 @@ var CollectionList = React.createClass({
 
   render: function () {
     const { list } = this.props.collections;
+    // merge mmtLinks with the collection data;
+    const mmtLinks = this.props.mmtLinks;
+    list.data.forEach((collection) => { collection.mmtLink = mmtLinks[getCollectionId(collection)]; });
     const { count, queriedAt } = list.meta;
     return (
       <div className='page__component'>

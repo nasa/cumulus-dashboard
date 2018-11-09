@@ -13,6 +13,7 @@ export const tableHeader = [
   'Completed',
   'Running',
   'Failed',
+  'MMT',
   'Duration',
   'Timestamp'
 ];
@@ -24,6 +25,7 @@ export const tableRow = [
   (d) => tally(get(d, 'stats.completed')),
   (d) => tally(get(d, 'stats.running')),
   (d) => tally(get(d, 'stats.failed')),
+  (d) => d.mmtLink ? <a href={d.mmtLink}>MMT</a> : null,
   (d) => seconds(d.duration),
   (d) => fromNow(d.timestamp)
 ];
@@ -31,6 +33,7 @@ export const tableRow = [
 export const tableSortProps = [
   'name',
   'version',
+  null,
   null,
   null,
   null,

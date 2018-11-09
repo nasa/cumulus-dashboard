@@ -13,13 +13,13 @@ import executionStatus from './execution-status';
 import executionLogs from './execution-logs';
 import rules from './rules';
 import reconciliationReports from './reconciliation-reports';
-import mmtURLs from './mmtURLs';
+import mmtLinks from './mmtLinks';
 
 export const reducers = {
   def: (state = {}, action) => state,
   api,
   collections,
-  mmtURLs,
+  mmtLinks,
   granules,
   stats,
   pdrs,
