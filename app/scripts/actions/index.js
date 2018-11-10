@@ -1,6 +1,7 @@
 'use strict';
 import moment from 'moment';
 import url from 'url';
+import { CMR } from '@cumulus/cmrjs';
 import { get, post, put, del, wrapRequest } from './helpers';
 import { set as setToken } from '../utils/auth';
 import _config from '../config';
@@ -275,12 +276,26 @@ export const getMMTLinks = (dispatch, data) => {
           data: { name: collection.name, version: collection.version, url: url }
         };
         dispatch(action);
-      });
+      })
+      .catch((error) => console.error(error));
   });
 };
 
 export const getMMTLinkFromCmr = (collection) => {
-  return Promise.resolve('https://mmt.uat.earthdata.nasa.gov/collections/fake-CUMULUS');
+  const search = new CMR('CUMULUS');
+  return search.searchCollections({short_name: collection.name, version: collection.version})
+    .then((results) => {
+      if (results.length === 1) {
+        const conceptId = results[0].id;
+        if (conceptId) {
+          return `https://mmt.uat.earthdata.nasa.gov/collections/${conceptId}`;
+        }
+      }
+      return null;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 export const getGranule = (granuleId) => wrapRequest(

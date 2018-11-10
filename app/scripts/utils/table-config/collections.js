@@ -25,7 +25,7 @@ export const tableRow = [
   (d) => tally(get(d, 'stats.completed')),
   (d) => tally(get(d, 'stats.running')),
   (d) => tally(get(d, 'stats.failed')),
-  (d) => d.mmtLink ? <a href={d.mmtLink}>MMT</a> : null,
+  (d) => d.mmtLink ? <a href={d.mmtLink} target="_blank">MMT</a> : null,
   (d) => seconds(d.duration),
   (d) => fromNow(d.timestamp)
 ];
