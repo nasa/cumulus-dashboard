@@ -3,6 +3,8 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+// let expiration;
 
 const {
   fakeCollectionsDb,
@@ -32,13 +34,21 @@ function fakeApiMiddleWare (req, res, next) {
     const auth = req.header('Authorization');
     const re = /^\/token/;
 
-    if (auth !== 'Bearer fake-token' && req.url.match(re) === null) {
-      res.status(401);
-      res.json({
-        message: 'Invalid Authorization token'
-      }).end();
-      return;
-    }
+    // if (auth !== 'Bearer fake-token' && req.url.match(re) === null) {
+    //   res.status(401);
+    //   res.json({
+    //     message: 'Invalid Authorization token'
+    //   }).end();
+    //   return;
+    // }
+    // else if (Date.now() > expiration) {
+    //   console.log('expired');
+    //   res.status(403);
+    //   res.json({
+    //     message: 'Access token has expired'
+    //   }).end();
+    //   return;
+    // }
   }
   next();
 }
@@ -143,11 +153,28 @@ app.delete('/rules/:name', async (req, res) => {
 app.get('/token', (req, res) => {
   const url = req.query.state;
   if (url) {
-    res.redirect(`${url}?token=fake-token`);
+    // expiration = Date.now() + (10 * 1000);
+    const token = jwt.sign({
+      data: 'fake-token'
+    }, 'secret', { expiresIn: 10 });
+    res.redirect(`${url}?token=${token}`);
+    // res.redirect(`${url}?token=fake-token`);
+    // res.cookie('token', 'fake-token');
+    // res.redirect(`${url}`);
   } else {
     res.write('state parameter is missing');
     res.status(400).end();
   }
+});
+
+app.post('/token/refresh', (req, res) => {
+  const token = jwt.sign({
+    data: 'fake-token'
+  }, 'secret', { expiresIn: 10 });
+  res.status(200);
+  res.json({
+    token
+  });
 });
 
 app.get('/auth', (req, res) => {
