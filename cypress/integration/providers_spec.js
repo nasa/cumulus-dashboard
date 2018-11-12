@@ -5,6 +5,10 @@ describe('Dashboard Providers Page', () => {
     it('should redirect to login page', () => {
       cy.visit('/#/providers');
       shouldBeRedirectedToLogin();
+
+      const name = 's3_provider';
+      cy.visit(`/#/providers/provider/${name}`);
+      shouldBeRedirectedToLogin();
     });
   });
 

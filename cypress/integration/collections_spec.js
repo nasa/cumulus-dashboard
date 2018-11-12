@@ -5,6 +5,11 @@ describe('Dashboard Collections Page', () => {
     it('should redirect to login page', () => {
       cy.visit('/#/collections');
       shouldBeRedirectedToLogin();
+
+      const name = 'MOD09GQ';
+      const version = '006';
+      cy.visit(`/#/collections/collection/${name}/${version}`);
+      shouldBeRedirectedToLogin();
     });
   });
 
@@ -34,6 +39,7 @@ describe('Dashboard Collections Page', () => {
     it('should add a new collection', () => {
       const name = 'TESTCOLLECTION';
       const version = '006';
+      const duplicateHandling = 'replace';
 
       cy.visit('/#/collections');
 
@@ -43,14 +49,9 @@ describe('Dashboard Collections Page', () => {
       cy.get('@addCollection').click();
 
       // fill the form and submit
-      const duplicateHandling = 'error';
-      const collection = {
-        name: 'TESTCOLLECTION',
-        version: '006',
-        dataType: 'TESTCOLLECTION',
-        duplicateHandling
-      };
-      cy.editJsonTextarea({ data: collection });
+      cy.fixture('TESTCOLLECTION___006.json').then((collection) => {
+        cy.editJsonTextarea({ data: collection });
+      });
       cy.get('form').get('input').contains('Submit').click();
 
       // displays the new collection
@@ -88,8 +89,9 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.heading--large', `Edit ${name}___${version}`);
 
       // update collection and submit
+      const duplicateHandling = 'version';
       const meta = 'metadata';
-      cy.editJsonTextarea({ data: { meta }, update: true });
+      cy.editJsonTextarea({ data: { duplicateHandling, meta }, update: true });
       cy.contains('form input', 'Submit').click();
 
       // displays the updated collection and its granules
@@ -98,7 +100,11 @@ describe('Dashboard Collections Page', () => {
 
       // verify the collection is updated by looking at the Edit page
       cy.contains('a', 'Edit').click();
-      cy.contains('form .ace_content', meta);
+
+      cy.getJsonTextareaValue().then((collectionJson) => {
+        expect(collectionJson.duplicateHandling).to.equal(duplicateHandling);
+        expect(collectionJson.meta).to.equal(meta);
+      });
       cy.contains('.heading--large', `Edit ${name}___${version}`);
     });
 
