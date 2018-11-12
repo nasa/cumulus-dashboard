@@ -9,6 +9,7 @@ describe('Dashboard Collections Page', () => {
       const name = 'MOD09GQ';
       const version = '006';
       cy.visit(`/#/collections/collection/${name}/${version}`);
+      shouldBeRedirectedToLogin();
     });
   });
 
