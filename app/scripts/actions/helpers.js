@@ -2,7 +2,9 @@
 import url from 'url';
 import request from 'request';
 import { hashHistory } from 'react-router';
-import { decode as jwtDecode } from 'jsonwebtoken';
+import {
+  decode as jwtDecode
+} from 'jsonwebtoken';
 import _config from '../config';
 import log from '../utils/log';
 import { get as getToken } from '../utils/auth';
@@ -109,6 +111,11 @@ export const wrapRequest = function (id, query, params, type, body) {
     const start = new Date();
     query(config, (error, data) => {
       if (error) {
+        if (error.message.includes('Access token has expired')) {
+          dispatch({ type: 'LOGIN_ERROR', error: error.message.replace('Bad Request: ', '') });
+          return hashHistory.push('/auth');
+        }
+
         // Temporary fix until the 'logs' endpoint is fixed
         if (error.message.includes('Invalid Authorization token') && config.url.includes('logs')) {
           const data = { results: [] };
