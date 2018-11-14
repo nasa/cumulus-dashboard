@@ -4,11 +4,11 @@ import request from 'request';
 import { hashHistory } from 'react-router';
 import _config from '../config';
 import log from '../utils/log';
-import { get as getToken } from '../utils/auth';
+// import { get as getToken } from '../utils/auth';
 const root = _config.apiRoot;
 
-function setToken (config) {
-  let token = getToken();
+function setToken (config, getState) {
+  let token = getState().tokens.token;
   if (token) {
     config.headers = config.headers || {};
     config.headers.Authorization = 'Bearer ' + token;
@@ -25,7 +25,7 @@ function formatError (response, body) {
 }
 
 export const get = function (config, callback) {
-  request.get(setToken(config), (error, resp, body) => {
+  request.get(config, (error, resp, body) => {
     if (error) {
       return callback(error);
     } else if (+resp.statusCode >= 400) {
@@ -36,7 +36,7 @@ export const get = function (config, callback) {
 };
 
 export const post = function (config, callback) {
-  request.post(setToken(config), (error, resp, body) => {
+  request.post(config, (error, resp, body) => {
     error = error || body.errorMessage;
     if (error) {
       return callback(error);
@@ -49,7 +49,7 @@ export const post = function (config, callback) {
 };
 
 export const put = function (config, callback) {
-  request.put(setToken(config), (error, resp, body) => {
+  request.put(config, (error, resp, body) => {
     error = error || body && body.errorMessage || body && body.detail || null;
     if (error) {
       return callback(error);
@@ -62,7 +62,7 @@ export const put = function (config, callback) {
 };
 
 export const del = function (config, callback) {
-  request.del(setToken(config), (error, resp, body) => {
+  request.del(config, (error, resp, body) => {
     error = error || body.errorMessage;
     if (error) {
       return callback(error);
@@ -97,12 +97,14 @@ export const configureRequest = function (params, body) {
 };
 
 export const wrapRequest = function (id, query, params, type, body) {
-  const config = configureRequest(params, body);
+  let config = configureRequest(params, body);
 
-  return function (dispatch) {
+  return function (dispatch, getState) {
     const inflightType = type + '_INFLIGHT';
     log((id ? inflightType + ': ' + id : inflightType));
     dispatch({ id, config, type: inflightType, needsAuth: true });
+
+    setToken(config, getState);
 
     const start = new Date();
     query(config, (error, data) => {

@@ -238,6 +238,8 @@ export const REFRESH_TOKEN = 'REFRESH_TOKEN';
 export const REFRESH_TOKEN_ERROR = 'REFRESH_TOKEN_ERROR';
 export const REFRESH_TOKEN_INFLIGHT = 'REFRESH_TOKEN_INFLIGHT';
 
+export const SET_TOKEN = 'SET_TOKEN';
+
 export const refreshAccessToken = (token, action) => {
   return (dispatch) => {
     dispatch({ type: REFRESH_TOKEN_INFLIGHT });
@@ -264,6 +266,8 @@ export const refreshAccessToken = (token, action) => {
     });
   };
 };
+
+export const setTokenState = (token) => ({ type: SET_TOKEN, token });
 
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
