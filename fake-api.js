@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const {
   fakeCollectionsDb,
   fakeProvidersDb,
+  fakeExecutionsDb,
   fakeRulesDb,
   resetState
 } = require('./test/fake-api-db');
@@ -118,7 +119,6 @@ app.get('/rules', async (req, res) => {
 });
 
 app.get('/rules/:ruleName', async (req, res) => {
-  console.log('in the spotkajhf kajhf');
   const rule = await fakeRulesDb.getItem(req.params.ruleName);
   res.send(rule);
 });
@@ -138,6 +138,11 @@ app.put('/rules/:name', async (req, res) => {
 app.delete('/rules/:name', async (req, res) => {
   await fakeRulesDb.deleteItem(req.params.name);
   res.sendStatus(200).end();
+});
+
+app.get('/executions/status/:arn', async (req, res) => {
+  const execution = await fakeExecutionsDb.getStatus(req.params.arn);
+  res.send(execution);
 });
 
 app.get('/token', (req, res) => {

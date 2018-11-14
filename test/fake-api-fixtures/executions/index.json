@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "name": "cumulus-api",
+    "stack": "test-src-integration",
+    "table": "execution",
+    "limit": 1,
+    "page": 1,
+    "count": 1
+  },
+  "results": [
+    {
+      "arn": "arn:aws:states:us-east-1:596205514284:execution:TestSrcIntegrationIngestGranuleStateMachine-UhCSmszl2sgv:08aa40f8-7d91-41b4-986e-d12ce495aec5",
+      "duration": 1.693,
+      "createdAt": 1534443719571,
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514284:execution:TestSrcIntegrationIngestGranuleStateMachine-UhCSmszl2sgv:08aa40f8-7d91-41b4-986e-d12ce495aec5",
+      "name": "08aa40f8-7d91-41b4-986e-d12ce495aec5",
+      "error": {},
+      "type": "IngestGranule",
+      "collectionId": "MOD09GQ___006",
+      "tasks": {},
+      "status": "completed",
+      "timestamp": 1534443721559,
+      "updatedAt": 1534443721265
+    }
+  ]
+}

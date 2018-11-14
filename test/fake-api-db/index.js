@@ -10,12 +10,16 @@ const providersFilePath = path.join(__dirname, 'db-providers.json');
 const rulesJson = require('../fake-api-fixtures/rules/index.json');
 const rulesFilePath = path.join(__dirname, 'db-rules.json');
 
+const executionsJson = require('../fake-api-fixtures/executions/index.json');
+const executionsFilePath = path.join(__dirname, 'db-executions.json');
+
 const seed = (filePath, data) => fs.outputJson(filePath, data);
 const resetState = () => {
   return Promise.all([
     seed(collectionsFilePath, collectionsJson),
     seed(providersFilePath, providersJson),
-    seed(rulesFilePath, rulesJson)
+    seed(rulesFilePath, rulesJson),
+    seed(executionsFilePath, executionsJson)
   ]);
 };
 
@@ -88,6 +92,19 @@ class FakeRulesDb extends FakeDb {
   }
 }
 const fakeRulesDb = new FakeRulesDb(rulesFilePath);
+
+class FakeExecutionsDb extends FakeDb {
+  getStatus (arn) {
+    return fs.readJson(this.filePath)
+      .then((data) => {
+        const rule = data.results.filter(
+          rule => `${rule.name}` === `${name}`
+        );
+        return rule.length > 0 ? rule[0] : null;
+      });
+  }
+}
+const fakeExecutionsDb = new FakeExecutionsDb(executionsFilePath);
 
 class FakeCollectionsDb extends FakeDb {
   getItem (name, version) {
@@ -222,3 +239,4 @@ module.exports.resetState = resetState;
 module.exports.fakeCollectionsDb = fakeCollectionsDb;
 module.exports.fakeProvidersDb = fakeProvidersDb;
 module.exports.fakeRulesDb = fakeRulesDb;
+module.exports.fakeExecutionsDb = fakeExecutionsDb;
