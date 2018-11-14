@@ -15,6 +15,9 @@ export const LOGIN = 'LOGIN';
 export const LOGIN_INFLIGHT = 'LOGIN_INFLIGHT';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 
+export const ADD_CMR_ENVIRONMENT = 'ADD_CMR_ENVIRONMENT';
+export const ADD_CMR_PROVIDER = 'ADD_CMR_PROVIDER';
+
 export const COLLECTION = 'COLLECTION';
 export const COLLECTION_INFLIGHT = 'COLLECTION_INFLIGHT';
 export const COLLECTION_ERROR = 'COLLECTION_ERROR';
@@ -267,6 +270,11 @@ export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH })
 export const filterCollections = (param) => ({ type: FILTER_COLLECTIONS, param: param });
 export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
 
+export const cumulusInstanceMetadata = (config) => {
+  return get(config, (error, success) => {
+  })
+};
+
 export const getMMTLinks = (dispatch, data) => {
   data.results.forEach((collection) => {
     getMMTLinkFromCmr(collection)
@@ -282,13 +290,13 @@ export const getMMTLinks = (dispatch, data) => {
 };
 
 export const getMMTLinkFromCmr = (collection) => {
-  const search = new CMR('CUMULUS');
+  const search = new CMR('CUMULUS'); // TODO: get this from state.getState()
   return search.searchCollections({short_name: collection.name, version: collection.version})
     .then((results) => {
       if (results.length === 1) {
         const conceptId = results[0].id;
         if (conceptId) {
-          return `https://mmt.uat.earthdata.nasa.gov/collections/${conceptId}`;
+          return buildMMTLink(conceptId);
         }
       }
       return null;
@@ -296,6 +304,11 @@ export const getMMTLinkFromCmr = (collection) => {
     .catch((error) => {
       console.log(error);
     });
+};
+
+export const buildMMTLink = (conceptId) => {
+  const environment = 'uat';
+  return `https://mmt.${environment}.earthdata.nasa.gov/collections/${conceptId}`;
 };
 
 export const getGranule = (granuleId) => wrapRequest(

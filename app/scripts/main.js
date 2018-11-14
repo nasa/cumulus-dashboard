@@ -19,6 +19,10 @@ import reducers from './reducers';
 
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
+console.log('One Time only code'); // TODO: mhs update with correct calls.
+store.dispatch({type: 'ADD_CMR_PROVIDER', data: {cmr: {provider: 'CUMULUS'}}});
+store.dispatch({type: 'ADD_CMR_ENVIRONMENT', data: {cmr: {provider: 'OPS'}}});
+
 console.log.apply(console, config.consoleMessage);
 console.log('Environment', config.environment);
 
