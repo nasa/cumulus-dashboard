@@ -17,17 +17,42 @@ import {
   decode as jwtDecode
 } from 'jsonwebtoken';
 
+import { refreshAccessToken } from './actions';
 import config from './config';
 import reducers from './reducers';
 import { get as getToken } from './utils/auth';
 
-const checkTokenExpirationMiddleware = store => next => action => {
-  const token = getToken();
-  if (token && jwtDecode(token).exp < Date.now() / 1000) {
-    console.log('token expired');
+let deferred;
+const checkTokenExpirationMiddleware = ({ dispatch, getState }) => next => action => {
+  if (action.needsAuth) {
+    const token = getToken();
+    if (token && jwtDecode(token).exp < Date.now() / 1000) {
+      console.log('token expired');
+      const inflight = getState().tokens.inflight;
+      if (!inflight) {
+        return dispatch(refreshAccessToken(token))
+          .then(() => {
+            deferred.promise.resolve();
+            return next(action);
+          });
+      } else {
+        return deferred.promise.then(() => {
+          return next(action);
+        });
+      }
+    }
   }
-  next(action);
+  return next(action);
 };
+
+function createDeferred () {
+  const deferred = {};
+  deferred.promise = new Promise((resolve, reject) => {
+    deferred.resolve = resolve;
+    deferred.reject = reject;
+  });
+  return deferred;
+}
 
 const store = createStore(reducers, applyMiddleware(
   checkTokenExpirationMiddleware,

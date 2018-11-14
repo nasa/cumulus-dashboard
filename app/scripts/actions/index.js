@@ -1,7 +1,7 @@
 'use strict';
 import moment from 'moment';
 import url from 'url';
-import { get, post, put, del, wrapRequest } from './helpers';
+import { get, post, put, del, configureRequest, wrapRequest } from './helpers';
 import { set as setToken } from '../utils/auth';
 import _config from '../config';
 import { getCollectionId } from '../utils/format';
@@ -233,6 +233,37 @@ export const CLEAR_RECONCILIATIONS_SEARCH = 'CLEAR_RECONCILIATIONS_SEARCH';
 export const NEW_RECONCILIATION = 'NEW_RECONCILIATION';
 export const NEW_RECONCILIATION_INFLIGHT = 'NEW_RECONCILIATION_INFLIGHT';
 export const NEW_RECONCILIATION_ERROR = 'NEW_RECONCILIATION_ERROR';
+
+export const REFRESH_TOKEN = 'REFRESH_TOKEN';
+export const REFRESH_TOKEN_ERROR = 'REFRESH_TOKEN_ERROR';
+export const REFRESH_TOKEN_INFLIGHT = 'REFRESH_TOKEN_INFLIGHT';
+
+export const refreshAccessToken = (token, action) => {
+  return (dispatch) => {
+    dispatch({ type: REFRESH_TOKEN_INFLIGHT });
+    return new Promise((resolve, reject) => {
+      post(configureRequest(
+        {
+          url: url.resolve(root, 'token/refresh')
+        },
+        { token }
+      ), (error, data) => {
+        if (error) {
+          dispatch({
+            type: REFRESH_TOKEN_ERROR,
+            error
+          });
+          return reject(error);
+        }
+        dispatch({
+          type: REFRESH_TOKEN,
+          token: data.token
+        });
+        return resolve(data);
+      });
+    });
+  };
+};
 
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
