@@ -179,6 +179,25 @@ app.get('/token', (req, res) => {
 });
 
 app.post('/token/refresh', (req, res) => {
+  if (!req.body.token) {
+    res.status(400);
+    res.json({
+      message: 'Missing Authorization token'
+    }).end();
+    return;
+  }
+  let token = req.body.token;
+  try {
+    jwt.verify(token, tokenSecret, { ignoreExpiration: true });
+  } catch (err) {
+    if (err instanceof jwt.JsonWebTokenError) {
+      res.status(403);
+      res.json({
+        message: 'Invalid access token'
+      }).end();
+      return;
+    }
+  }
   token = generateJWT();
   res.status(200);
   res.json({
