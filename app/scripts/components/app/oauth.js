@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import url from 'url';
 import { login } from '../../actions';
-import { window, document } from '../../utils/browser';
+import { window } from '../../utils/browser';
 import { set as setToken } from '../../utils/auth';
 import { updateDelay, apiRoot } from '../../config';
 import ErrorReport from '../errors/report';
@@ -40,9 +40,8 @@ var OAuth = React.createClass({
 
   componentWillMount: function () {
     const query = this.props.location.query;
-    const test = document.cookie;
-    if (query.token || test) {
-      const token = query.token || test.split('=')[1];
+    if (query.token) {
+      const token = query.token;
       const { dispatch } = this.props;
       this.setState({ token }, () => dispatch(login(token)));
     }

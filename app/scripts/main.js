@@ -13,11 +13,26 @@ import {
   hashHistory,
   applyRouterMiddleware
 } from 'react-router';
+import {
+  decode as jwtDecode
+} from 'jsonwebtoken';
 
 import config from './config';
 import reducers from './reducers';
+import { get as getToken } from './utils/auth';
 
-const store = createStore(reducers, applyMiddleware(thunkMiddleware));
+const checkTokenExpirationMiddleware = store => next => action => {
+  const token = getToken();
+  if (token && jwtDecode(token).exp < Date.now() / 1000) {
+    console.log('token expired');
+  }
+  next(action);
+};
+
+const store = createStore(reducers, applyMiddleware(
+  checkTokenExpirationMiddleware,
+  thunkMiddleware
+));
 
 console.log.apply(console, config.consoleMessage);
 console.log('Environment', config.environment);

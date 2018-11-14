@@ -2,9 +2,6 @@
 import url from 'url';
 import request from 'request';
 import { hashHistory } from 'react-router';
-import {
-  decode as jwtDecode
-} from 'jsonwebtoken';
 import _config from '../config';
 import log from '../utils/log';
 import { get as getToken } from '../utils/auth';
@@ -96,12 +93,6 @@ export const wrapRequest = function (id, query, params, type, body) {
 
   config.headers = config.headers || {};
   config.headers['Content-Type'] = 'application/json';
-
-  // console.log(decode(getToken()));
-  if (getToken() && jwtDecode(getToken()).exp < Date.now() / 1000) {
-    console.log('expired');
-    // make async call to set token?
-  }
 
   return function (dispatch) {
     const inflightType = type + '_INFLIGHT';

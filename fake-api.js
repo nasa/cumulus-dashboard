@@ -172,7 +172,6 @@ app.get('/token', (req, res) => {
   if (url) {
     token = generateJWT();
     res.redirect(`${url}?token=${token}`);
-    // res.cookie('token', 'fake-token');
   } else {
     res.write('state parameter is missing');
     res.status(400).end();
