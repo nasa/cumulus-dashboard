@@ -6,7 +6,7 @@ import _config from '../config';
 import log from '../utils/log';
 const root = _config.apiRoot;
 
-function setToken (config, getState) {
+function addRequestAuthorization (config, getState) {
   let token = getState().tokens.token;
   if (token) {
     config.headers = config.headers || {};
@@ -103,7 +103,7 @@ export const wrapRequest = function (id, query, params, type, body) {
     log((id ? inflightType + ': ' + id : inflightType));
     dispatch({ id, config, type: inflightType, needsAuth: true });
 
-    setToken(config, getState);
+    addRequestAuthorization(config, getState);
 
     const start = new Date();
     query(config, (error, data) => {

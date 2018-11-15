@@ -1,8 +1,7 @@
 'use strict';
 import React from 'react';
-import { login } from '../../actions';
+import { login, setTokenState } from '../../actions';
 import { window } from '../../utils/browser';
-import { set as setToken } from '../../utils/auth';
 import { updateDelay } from '../../config';
 import ErrorReport from '../errors/report';
 import Text from '../form/text';
@@ -27,7 +26,8 @@ var LoginModal = React.createClass({
   componentWillReceiveProps: function (newProps) {
     // delay-close the modal if it's open
     if (newProps.api.authenticated && this.props.show) {
-      setToken(this.state.token);
+      const { dispatch } = this.props;
+      dispatch(setTokenState(this.state.token));
       const { pathname } = this.props.location;
       if (pathname !== '/login' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);

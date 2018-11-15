@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import url from 'url';
 import { login, setTokenState } from '../../actions';
 import { window } from '../../utils/browser';
-import { set as setToken } from '../../utils/auth';
 import { updateDelay, apiRoot } from '../../config';
 import ErrorReport from '../errors/report';
 import Header from './header';
@@ -30,7 +29,6 @@ var OAuth = React.createClass({
     if (newProps.api.authenticated) {
       const { dispatch } = this.props;
       dispatch(setTokenState(this.state.token));
-      // setToken(this.state.token);
       const { pathname } = this.props.location;
       if (pathname !== '/auth' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);

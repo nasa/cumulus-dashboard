@@ -2,7 +2,6 @@
 import moment from 'moment';
 import url from 'url';
 import { get, post, put, del, configureRequest, wrapRequest } from './helpers';
-import { set as setToken } from '../utils/auth';
 import _config from '../config';
 import { getCollectionId } from '../utils/format';
 
@@ -425,7 +424,6 @@ export const getLogs = (options) => wrapRequest(null, get, {
 export const clearLogs = () => ({ type: CLEAR_LOGS });
 
 export const logout = () => {
-  setToken('');
   return { type: LOGOUT };
 };
 
