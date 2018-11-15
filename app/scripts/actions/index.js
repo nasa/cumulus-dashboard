@@ -250,6 +250,7 @@ export const interval = function (action, wait, immediate) {
 export const getCollection = (name, version) => wrapRequest(
   getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
 
+
 export const listCollections = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'collections'),
   qs: Object.assign({ limit: pageLimit }, options)
@@ -273,9 +274,9 @@ export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_F
 
 export const cumulusInstanceMetadata = () => wrapRequest(null, get, 'instanceMeta', ADD_CMR);
 
-export const getMMTLinks = (dispatch, data) => {
+export const getMMTLinks = (dispatch, getState, data) => {
   data.results.forEach((collection) => {
-    getMMTLinkFromCmr(collection)
+    getMMTLinkFromCmr(collection, getState)
       .then((url) => {
         const action = {
           type: ADD_MMTLINK,
@@ -287,16 +288,15 @@ export const getMMTLinks = (dispatch, data) => {
   });
 };
 
-export const getMMTLinkFromCmr = (collection) => {
-  const cmrProvider = 'CUMULUS';     //  TODO: Get this from state somehow?
-  const cmrEnvironment = 'UAT';     //  TODO: Get this from state somehow?
-  const search = new CMR(cmrProvider);
+export const getMMTLinkFromCmr = (collection, getState) => {
+  const {cmr_provider, cmr_environment} = getState().cumulusInstance;
+  const search = new CMR(cmr_provider);
   return search.searchCollections({short_name: collection.name, version: collection.version})
     .then((results) => {
       if (results.length === 1) {
         const conceptId = results[0].id;
         if (conceptId) {
-          return buildMMTLink(conceptId, cmrEnvironment);
+          return buildMMTLink(conceptId, cmr_environment);
         }
       }
       return null;

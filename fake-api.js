@@ -46,6 +46,10 @@ function fakeApiMiddleWare (req, res, next) {
 app.use(bodyParser.json());
 app.use('/', fakeApiMiddleWare);
 
+app.get('/instanceMeta', (req, res) => {
+  res.json({cmr: {provider: 'CUMULUS', environment: 'UAT'}}).end();
+});
+
 app.get('/collections', async (req, res) => {
   const collections = await fakeCollectionsDb.getItems();
   res.send(collections);

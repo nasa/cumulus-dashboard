@@ -95,7 +95,7 @@ export const wrapRequest = function (id, query, params, type, body, successCallb
   config.headers = config.headers || {};
   config.headers['Content-Type'] = 'application/json';
 
-  return function (dispatch) {
+  return function (dispatch, getState) {
     const inflightType = type + '_INFLIGHT';
     log((id ? inflightType + ': ' + id : inflightType));
     dispatch({ id, config, type: inflightType });
@@ -130,7 +130,7 @@ export const wrapRequest = function (id, query, params, type, body, successCallb
         const duration = new Date() - start;
         log((id ? type + ': ' + id : type), duration + 'ms');
         if (successCallback) {
-          successCallback(dispatch, data);
+          successCallback(dispatch, getState, data);
         }
         return dispatch({ id, type, data, config });
       }

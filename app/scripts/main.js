@@ -153,10 +153,3 @@ render((
     </Router>
   </ProviderElem>
 ), document.getElementById('site-canvas'));
-
-// Makes single call out to API to set cumulusInstanceMetadata.
-// TODO: I'm looking for help on how to make this better/correct
-console.log('One Time only code');
-import { cumulusInstanceMetadata } from './actions';
-const callback = cumulusInstanceMetadata();
-callback(store.dispatch);

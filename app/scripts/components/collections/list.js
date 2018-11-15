@@ -3,9 +3,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import {
+  clearCollectionsSearch,
+  cumulusInstanceMetadata,
   listCollections,
-  searchCollections,
-  clearCollectionsSearch
+  searchCollections
 } from '../../actions';
 import {
   collectionSearchResult,
@@ -38,6 +39,11 @@ var CollectionList = React.createClass({
     '1 Week Ago': moment().subtract(1, 'weeks').format(),
     '1 Month Ago': moment().subtract(1, 'months').format(),
     '1 Year Ago': moment().subtract(1, 'years').format()
+  },
+
+  componentWillMount: function () {
+    const { dispatch } = this.props;
+    dispatch(cumulusInstanceMetadata());
   },
 
   generateQuery: function () {
