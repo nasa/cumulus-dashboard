@@ -4,7 +4,6 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-let token;
 
 const {
   fakeCollectionsDb,
@@ -21,6 +20,7 @@ resetState();
  */
 
 const tokenSecret = 'secret';
+let token;
 function generateJWT () {
   return jwt.sign({
     data: 'fake-token'
@@ -186,9 +186,9 @@ app.post('/token/refresh', (req, res) => {
     }).end();
     return;
   }
-  let token = req.body.token;
+  let requestToken = req.body.token;
   try {
-    jwt.verify(token, tokenSecret, { ignoreExpiration: true });
+    jwt.verify(requestToken, tokenSecret, { ignoreExpiration: true });
   } catch (err) {
     if (err instanceof jwt.JsonWebTokenError) {
       res.status(403);

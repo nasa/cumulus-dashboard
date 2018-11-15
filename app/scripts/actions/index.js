@@ -240,31 +240,29 @@ export const REFRESH_TOKEN_INFLIGHT = 'REFRESH_TOKEN_INFLIGHT';
 
 export const SET_TOKEN = 'SET_TOKEN';
 
-export const refreshAccessToken = (token, action) => {
-  return (dispatch) => {
-    dispatch({ type: REFRESH_TOKEN_INFLIGHT });
-    return new Promise((resolve, reject) => {
-      post(configureRequest(
-        {
-          url: url.resolve(root, 'token/refresh')
-        },
-        { token }
-      ), (error, data) => {
-        if (error) {
-          dispatch({
-            type: REFRESH_TOKEN_ERROR,
-            error
-          });
-          return reject(error);
-        }
+export const refreshAccessToken = (token, dispatch) => {
+  dispatch({ type: REFRESH_TOKEN_INFLIGHT });
+  return new Promise((resolve, reject) => {
+    post(configureRequest(
+      {
+        url: url.resolve(root, 'token/refresh')
+      },
+      { token }
+    ), (error, data) => {
+      if (error) {
         dispatch({
-          type: REFRESH_TOKEN,
-          token: data.token
+          type: REFRESH_TOKEN_ERROR,
+          error
         });
-        return resolve(data);
+        return reject(error);
+      }
+      dispatch({
+        type: REFRESH_TOKEN,
+        token: data.token
       });
+      return resolve(data);
     });
-  };
+  });
 };
 
 export const setTokenState = (token) => ({ type: SET_TOKEN, token });

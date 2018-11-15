@@ -4,52 +4,10 @@ import request from 'request';
 import { hashHistory } from 'react-router';
 import _config from '../config';
 import log from '../utils/log';
-// import { get as getToken } from '../utils/auth';
-import {
-  decode as jwtDecode
-} from 'jsonwebtoken';
 const root = _config.apiRoot;
 
-// let deferred;
-// function createDeferred () {
-//   const deferred = {};
-//   deferred.promise = new Promise((resolve, reject) => {
-//     deferred.resolve = resolve;
-//     deferred.reject = reject;
-//   });
-//   return deferred;
-// }
-
-async function refreshToken (token, getState) {
-  // const inflight = getState().tokens.inflight;
-  return new Promise((resolve, reject) => {
-    post(configureRequest(
-      {
-        url: url.resolve(root, 'token/refresh')
-      },
-      { token }
-    ), (error, data) => {
-      if (error) return reject(error);
-      resolve(data.token);
-    });
-  });
-}
-
-async function setToken (config, dispatch, getState) {
+function setToken (config, getState) {
   let token = getState().tokens.token;
-  if (jwtDecode(token).exp < Date.now() / 1000) {
-    token = await refreshToken(token, getState);
-    dispatch({ type: 'SET_TOKEN', token });
-    // const inflight = getState().tokens.inflight;
-    // if (!inflight) {
-    //   deferred = createDeferred();
-    //   token = await refreshToken(token, getState);
-    // } else {
-    //   return deferred.promise.then(() => {
-    //     return token;
-    //   });
-    // }
-  }
   if (token) {
     config.headers = config.headers || {};
     config.headers.Authorization = 'Bearer ' + token;
@@ -140,12 +98,12 @@ export const configureRequest = function (params, body) {
 export const wrapRequest = function (id, query, params, type, body) {
   let config = configureRequest(params, body);
 
-  return async function (dispatch, getState) {
+  return function (dispatch, getState) {
     const inflightType = type + '_INFLIGHT';
     log((id ? inflightType + ': ' + id : inflightType));
     dispatch({ id, config, type: inflightType, needsAuth: true });
 
-    await setToken(config, dispatch, getState);
+    setToken(config, getState);
 
     const start = new Date();
     query(config, (error, data) => {

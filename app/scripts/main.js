@@ -24,13 +24,13 @@ import { get as getToken } from './utils/auth';
 
 let deferred;
 const checkTokenExpirationMiddleware = ({ dispatch, getState }) => next => action => {
-  if (action.needsAuth) {
+  if (typeof action === 'function') {
     const token = getToken();
     if (token && jwtDecode(token).exp < Date.now() / 1000) {
       const inflight = getState().tokens.inflight;
       if (!inflight) {
         deferred = createDeferred();
-        return dispatch(refreshAccessToken(token))
+        return refreshAccessToken(token, dispatch)
           .then(() => {
             deferred.resolve();
             return next(action);
