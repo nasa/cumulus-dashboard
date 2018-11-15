@@ -259,7 +259,7 @@ export const refreshAccessToken = (token, dispatch) => {
         type: REFRESH_TOKEN,
         token: data.token
       });
-      return resolve(data);
+      return resolve();
     });
   });
 };

@@ -101,7 +101,7 @@ export const wrapRequest = function (id, query, params, type, body) {
   return function (dispatch, getState) {
     const inflightType = type + '_INFLIGHT';
     log((id ? inflightType + ': ' + id : inflightType));
-    dispatch({ id, config, type: inflightType, needsAuth: true });
+    dispatch({ id, config, type: inflightType });
 
     addRequestAuthorization(config, getState);
 
