@@ -16,7 +16,7 @@ test('reducers/cumulus-instance/add_cmr_environment', (t) => {
   };
 
   const expectedState = {
-    cmr_environment: 'cmr environment value'
+    cmrEnvironment: 'cmr environment value'
   };
   const newState = reducer(initialState, action);
   t.deepEqual(expectedState, newState);
@@ -30,7 +30,7 @@ test('reducers/cumulus-instance/add_cmr_provider', (t) => {
   };
 
   const expectedState = {
-    cmr_provider: 'cmr provider value'
+    cmrProvider: 'cmr provider value'
   };
   const newState = reducer(initialState, action);
   t.deepEqual(expectedState, newState);
@@ -44,14 +44,14 @@ test('reducers/cumulus-instance/add_cmr', (t) => {
   };
 
   const expectedState = {
-    cmr_provider: 'cmr provider value'
+    cmrProvider: 'cmr provider value'
   };
   const newState = reducer(initialState, action);
   t.deepEqual(expectedState, newState);
 });
 
 test('reducer with initial state', (t) => {
-  const initialState = {'cmr_provider': 'had provider'};
+  const initialState = {'cmrProvider': 'had provider'};
 
   const action = {
     type: ADD_CMR_ENVIRONMENT,
@@ -59,15 +59,15 @@ test('reducer with initial state', (t) => {
   };
 
   const expectedState = {
-    cmr_provider: 'had provider',
-    cmr_environment: 'cmr environment value'
+    cmrProvider: 'had provider',
+    cmrEnvironment: 'cmr environment value'
   };
   const newState = reducer(initialState, action);
   t.deepEqual(expectedState, newState);
 });
 
 test('Updated values in reducer with initial state', (t) => {
-  const initialState = {'cmr_provider': 'had provider'};
+  const initialState = {'cmrProvider': 'had provider'};
 
   const action = {
     type: ADD_CMR,
@@ -75,8 +75,8 @@ test('Updated values in reducer with initial state', (t) => {
   };
 
   const expectedState = {
-    cmr_provider: 'had provider',
-    cmr_environment: 'new cmr environment value'
+    cmrProvider: 'had provider',
+    cmrEnvironment: 'new cmr environment value'
   };
   const newState = reducer(initialState, action);
   t.deepEqual(expectedState, newState);

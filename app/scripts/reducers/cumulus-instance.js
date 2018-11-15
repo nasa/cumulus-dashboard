@@ -15,14 +15,14 @@ export default function reducer (state = initialState, action) {
   const { data } = action;
   switch (action.type) {
     case ADD_CMR_ENVIRONMENT:
-      set(state, 'cmr_environment', data.cmr.environment);
+      set(state, 'cmrEnvironment', data.cmr.environment);
       break;
     case ADD_CMR_PROVIDER:
-      set(state, 'cmr_provider', data.cmr.provider);
+      set(state, 'cmrProvider', data.cmr.provider);
       break;
     case ADD_CMR:
-      if (data.cmr.environment) set(state, 'cmr_environment', data.cmr.environment);
-      if (data.cmr.provider) set(state, 'cmr_provider', data.cmr.provider);
+      if (data.cmr.environment) set(state, 'cmrEnvironment', data.cmr.environment);
+      if (data.cmr.provider) set(state, 'cmrProvider', data.cmr.provider);
       break;
 
   }

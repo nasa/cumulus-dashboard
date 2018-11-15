@@ -317,14 +317,14 @@ export const getMMTLinks = () => {
 };
 
 export const getMMTLinkFromCmr = (collection, getState) => {
-  const {cmr_provider, cmr_environment} = getState().cumulusInstance;
-  const search = new CMR(cmr_provider);
+  const {cmrProvider, cmrEnvironment} = getState().cumulusInstance;
+  const search = new CMR(cmrProvider);
   return search.searchCollections({short_name: collection.name, version: collection.version})
     .then((results) => {
       if (results.length === 1) {
         const conceptId = results[0].id;
         if (conceptId) {
-          return buildMMTLink(conceptId, cmr_environment);
+          return buildMMTLink(conceptId, cmrEnvironment);
         }
       }
       return null;
