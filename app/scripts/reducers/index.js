@@ -14,12 +14,14 @@ import executionLogs from './execution-logs';
 import rules from './rules';
 import reconciliationReports from './reconciliation-reports';
 import mmtLinks from './mmtLinks';
+import cumulusInstance from './cumulus-instance';
 
 export const reducers = {
   def: (state = {}, action) => state,
   api,
   collections,
   mmtLinks,
+  cumulusInstance,
   granules,
   stats,
   pdrs,

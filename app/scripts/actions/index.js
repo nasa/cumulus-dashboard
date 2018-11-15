@@ -1,7 +1,7 @@
 'use strict';
 import moment from 'moment';
 import url from 'url';
-import { CMR } from '@cumulus/cmrjs';
+import { CMR, hostId } from '@cumulus/cmrjs';
 import { get, post, put, del, wrapRequest } from './helpers';
 import { set as setToken } from '../utils/auth';
 import _config from '../config';
@@ -15,6 +15,7 @@ export const LOGIN = 'LOGIN';
 export const LOGIN_INFLIGHT = 'LOGIN_INFLIGHT';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 
+export const ADD_CMR = 'ADD_CMR';
 export const ADD_CMR_ENVIRONMENT = 'ADD_CMR_ENVIRONMENT';
 export const ADD_CMR_PROVIDER = 'ADD_CMR_PROVIDER';
 
@@ -270,10 +271,7 @@ export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH })
 export const filterCollections = (param) => ({ type: FILTER_COLLECTIONS, param: param });
 export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
 
-export const cumulusInstanceMetadata = (config) => {
-  return get(config, (error, success) => {
-  })
-};
+export const cumulusInstanceMetadata = () => wrapRequest(null, get, 'instanceMeta', ADD_CMR);
 
 export const getMMTLinks = (dispatch, data) => {
   data.results.forEach((collection) => {
@@ -290,13 +288,15 @@ export const getMMTLinks = (dispatch, data) => {
 };
 
 export const getMMTLinkFromCmr = (collection) => {
-  const search = new CMR('CUMULUS'); // TODO: get this from state.getState()
+  const cmrProvider = 'CUMULUS';     //  TODO: Get this from state somehow?
+  const cmrEnvironment = 'UAT';     //  TODO: Get this from state somehow?
+  const search = new CMR(cmrProvider);
   return search.searchCollections({short_name: collection.name, version: collection.version})
     .then((results) => {
       if (results.length === 1) {
         const conceptId = results[0].id;
         if (conceptId) {
-          return buildMMTLink(conceptId);
+          return buildMMTLink(conceptId, cmrEnvironment);
         }
       }
       return null;
@@ -306,9 +306,9 @@ export const getMMTLinkFromCmr = (collection) => {
     });
 };
 
-export const buildMMTLink = (conceptId) => {
-  const environment = 'uat';
-  return `https://mmt.${environment}.earthdata.nasa.gov/collections/${conceptId}`;
+export const buildMMTLink = (conceptId, cmrEnv) => {
+  const url = ['mmt', hostId(cmrEnv), 'earthdata.nasa.gov'].filter((d) => d).join('.');
+  return `https://${url}/collections/${conceptId}`;
 };
 
 export const getGranule = (granuleId) => wrapRequest(

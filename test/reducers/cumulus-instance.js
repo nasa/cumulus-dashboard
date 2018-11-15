@@ -1,6 +1,6 @@
 'use strict';
 import test from 'ava';
-import reducer from '../../app/scripts/reducers/cumulusInstance';
+import reducer from '../../app/scripts/reducers/cumulus-instance';
 import { ADD_CMR, ADD_CMR_ENVIRONMENT, ADD_CMR_PROVIDER } from '../../app/scripts/actions/index';
 
 test('verify initial state', (t) => {
@@ -8,7 +8,7 @@ test('verify initial state', (t) => {
   t.deepEqual(newState, {});
 });
 
-test('reducers/cumulusInstance/add_cmr_environment', (t) => {
+test('reducers/cumulus-instance/add_cmr_environment', (t) => {
   const initialState = {};
   const action = {
     type: ADD_CMR_ENVIRONMENT,
@@ -22,7 +22,7 @@ test('reducers/cumulusInstance/add_cmr_environment', (t) => {
   t.deepEqual(expectedState, newState);
 });
 
-test('reducers/cumulusInstance/add_cmr_provider', (t) => {
+test('reducers/cumulus-instance/add_cmr_provider', (t) => {
   const initialState = {};
   const action = {
     type: ADD_CMR_PROVIDER,
@@ -36,7 +36,7 @@ test('reducers/cumulusInstance/add_cmr_provider', (t) => {
   t.deepEqual(expectedState, newState);
 });
 
-test('reducers/cumulusInstance/add_cmr', (t) => {
+test('reducers/cumulus-instance/add_cmr', (t) => {
   const initialState = {};
   const action = {
     type: ADD_CMR,
