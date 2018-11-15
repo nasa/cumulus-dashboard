@@ -11,7 +11,6 @@ export const initialState = {};
 
 export default function reducer (state = initialState, action) {
   state = { ...state };
-  console.log(action);
   const { data } = action;
   switch (action.type) {
     case ADD_CMR_ENVIRONMENT:
