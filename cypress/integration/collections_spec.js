@@ -31,6 +31,13 @@ describe('Dashboard Collections Page', () => {
       cy.get('table tbody tr').its('length').should('be.eq', 5);
     });
 
+    it.only('should display a list of collections', () => {
+      cy.visit('/#/collections');
+
+      cy.get('table tbody tr').its('length').should('be.eq', 5);
+      cy.contains('table tbody tr', 'MOD09GQ');
+    });
+
     it('should add a new collection', () => {
       const name = 'TESTCOLLECTION';
       const version = '006';
