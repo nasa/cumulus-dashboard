@@ -3,11 +3,12 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const fs = require('fs-extra');
 
 const {
   fakeCollectionsDb,
   fakeProvidersDb,
-  fakeExecutionsDb,
+  fakeExecutionStatusDb,
   fakeRulesDb,
   resetState
 } = require('./test/fake-api-db');
@@ -141,8 +142,23 @@ app.delete('/rules/:name', async (req, res) => {
 });
 
 app.get('/executions/status/:arn', async (req, res) => {
-  const execution = await fakeExecutionsDb.getStatus(req.params.arn);
-  res.send(execution);
+  console.log('got to the correct request');
+  const executionStatus = await fakeExecutionStatusDb.getStatus(req.params.arn);
+  console.log('response:');
+  console.log(executionStatus);
+  res.send(executionStatus);
+});
+
+app.get('/stats/aggregate', async (req, res, next) => {
+  const field = req.query.field;
+  const type = req.query.type;
+  const statsFile = `test/fake-api-fixtures/stats/aggregate/${type}/index.json`;
+  if (field === 'status' && await fs.pathExists(statsFile)) {
+    const stats = await fs.readJson(`test/fake-api-fixtures/stats/aggregate/${type}/index.json`);
+    res.status(200).send(stats);
+    return;
+  }
+  next();
 });
 
 app.get('/token', (req, res) => {

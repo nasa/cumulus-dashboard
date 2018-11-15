@@ -1,0 +1,48 @@
+{
+    "published": false,
+    "pdrName": "MOD09GQ_1granule_v3.PDR",
+    "status": "completed",
+    "timestamp": 1542053130920,
+    "createdAt": 1542053110348,
+    "productVolume": 17911979,
+    "timeToPreprocess": 0,
+    "timeToArchive": 0,
+    "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:50eaad71-bba8-4376-83d7-bb9cc1309b92",
+    "files": [
+        {
+            "bucket": "cumulus-test-sandbox-protected",
+            "path": "cumulus-test-data/pdrs",
+            "filename": "s3://cumulus-test-sandbox-protected/MOD09GQ___006/2017/MOD/MOD09GQ.A2016358.h13v04.006.2016360104606.hdf",
+            "filepath": "MOD09GQ___006/2017/MOD/MOD09GQ.A2016358.h13v04.006.2016360104606.hdf",
+            "fileSize": 17865615,
+            "name": "MOD09GQ.A2016358.h13v04.006.2016360104606.hdf",
+            "url_path": "{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}"
+        },
+        {
+            "bucket": "cumulus-test-sandbox-private",
+            "path": "cumulus-test-data/pdrs",
+            "filename": "s3://cumulus-test-sandbox-private/MOD09GQ___006/MOD/MOD09GQ.A2016358.h13v04.006.2016360104606.hdf.met",
+            "filepath": "MOD09GQ___006/MOD/MOD09GQ.A2016358.h13v04.006.2016360104606.hdf.met",
+            "fileSize": 44118,
+            "name": "MOD09GQ.A2016358.h13v04.006.2016360104606.hdf.met",
+            "url_path": "{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}"
+        },
+        {
+            "bucket": "cumulus-test-sandbox-protected-2",
+            "name": "MOD09GQ.A2016358.h13v04.006.2016360104606.cmr.xml",
+            "filename": "s3://cumulus-test-sandbox-protected-2/MOD09GQ___006/MOD/MOD09GQ.A2016358.h13v04.006.2016360104606.cmr.xml",
+            "filepath": "MOD09GQ___006/MOD/MOD09GQ.A2016358.h13v04.006.2016360104606.cmr.xml",
+            "fileSize": 2246,
+            "url_path": "{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}"
+        }
+    ],
+    "updatedAt": 1542053130920,
+    "provider": "s3_provider",
+    "granuleId": "MOD09GQ.A2016358.h13v04.006.2016360104606",
+    "duration": 20.572,
+    "collectionId": "MOD09GQ___006",
+    "error": {
+        "Error": "Unknown Error",
+        "Cause": "\"None\""
+    }
+}

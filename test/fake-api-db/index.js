@@ -11,7 +11,9 @@ const rulesJson = require('../fake-api-fixtures/rules/index.json');
 const rulesFilePath = path.join(__dirname, 'db-rules.json');
 
 const executionsJson = require('../fake-api-fixtures/executions/index.json');
+const executionStatusJson = require('../fake-api-fixtures/executions/status/arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8/index.json');
 const executionsFilePath = path.join(__dirname, 'db-executions.json');
+const executionStatusesFilePath = path.join(__dirname, 'db-executionstatus.json');
 
 const seed = (filePath, data) => fs.outputJson(filePath, data);
 const resetState = () => {
@@ -19,7 +21,8 @@ const resetState = () => {
     seed(collectionsFilePath, collectionsJson),
     seed(providersFilePath, providersJson),
     seed(rulesFilePath, rulesJson),
-    seed(executionsFilePath, executionsJson)
+    seed(executionsFilePath, executionsJson),
+    seed(executionStatusesFilePath, executionStatusJson)
   ]);
 };
 
@@ -93,18 +96,19 @@ class FakeRulesDb extends FakeDb {
 }
 const fakeRulesDb = new FakeRulesDb(rulesFilePath);
 
-class FakeExecutionsDb extends FakeDb {
+class FakeExecutionStatusDb extends FakeDb {
   getStatus (arn) {
     return fs.readJson(this.filePath)
       .then((data) => {
-        const rule = data.results.filter(
-          rule => `${rule.name}` === `${name}`
-        );
-        return rule.length > 0 ? rule[0] : null;
+        let status;
+        if (data.execution.executionArn === arn) {
+          status = data;
+        }
+        return status;
       });
   }
 }
-const fakeExecutionsDb = new FakeExecutionsDb(executionsFilePath);
+const fakeExecutionStatusDb = new FakeExecutionStatusDb(executionStatusesFilePath);
 
 class FakeCollectionsDb extends FakeDb {
   getItem (name, version) {
@@ -239,4 +243,4 @@ module.exports.resetState = resetState;
 module.exports.fakeCollectionsDb = fakeCollectionsDb;
 module.exports.fakeProvidersDb = fakeProvidersDb;
 module.exports.fakeRulesDb = fakeRulesDb;
-module.exports.fakeExecutionsDb = fakeExecutionsDb;
+module.exports.fakeExecutionStatusDb = fakeExecutionStatusDb;

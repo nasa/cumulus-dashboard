@@ -1,26 +1,179 @@
 {
-  "meta": {
-    "name": "cumulus-api",
-    "stack": "test-src-integration",
-    "table": "execution",
-    "limit": 1,
-    "page": 1,
-    "count": 1
-  },
-  "results": [
-    {
-      "arn": "arn:aws:states:us-east-1:596205514284:execution:TestSrcIntegrationIngestGranuleStateMachine-UhCSmszl2sgv:08aa40f8-7d91-41b4-986e-d12ce495aec5",
-      "duration": 1.693,
-      "createdAt": 1534443719571,
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514284:execution:TestSrcIntegrationIngestGranuleStateMachine-UhCSmszl2sgv:08aa40f8-7d91-41b4-986e-d12ce495aec5",
-      "name": "08aa40f8-7d91-41b4-986e-d12ce495aec5",
-      "error": {},
-      "type": "IngestGranule",
-      "collectionId": "MOD09GQ___006",
-      "tasks": {},
-      "status": "completed",
-      "timestamp": 1534443721559,
-      "updatedAt": 1534443721265
-    }
-  ]
+    "meta": {
+        "name": "cumulus-api",
+        "stack": "test-source-integration",
+        "table": "execution",
+        "limit": 10,
+        "page": 1,
+        "count": 5
+    },
+    "results": [
+        {
+            "arn": "arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
+            "duration": 26.635,
+            "createdAt": 1542129071756,
+            "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
+            "name": "7a71f849-57a0-40e7-8fca-5cf796602a07",
+            "error": {
+                "Cause": "{\"errorMessage\":\"Source file not found s3://cumulus-test-sandbox-internal/non-existent-path/non-existent-file\",\"errorType\":\"FileNotFound\",\"stackTrace\":[\"S3Granule.sync (/var/task/index.js:142314:13)\",\"<anonymous>\",\"process._tickDomainCallback (internal/process/next_tick.js:228:7)\"]}",
+                "Error": "FileNotFound"
+            },
+            "type": "IngestGranule",
+            "collectionId": "MOD09GQ_test-test-source-integration-IngestGranuleFailure-1542129068831___006",
+            "tasks": {
+                "Report": {
+                    "name": "test-source-integration-SfSnsReport",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
+                    "version": "18"
+                }
+            },
+            "status": "running",
+            "timestamp": 1542129099323,
+            "updatedAt": 1542129098391
+        },
+        {
+            "arn": "arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "duration": 28.694,
+            "createdAt": 1542123794842,
+            "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "name": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "error": {
+                "Cause": "{\"errorMessage\":\"Source file not found s3://cumulus-test-sandbox-internal/non-existent-path/non-existent-file\",\"errorType\":\"FileNotFound\",\"stackTrace\":[\"S3Granule.sync (/var/task/index.js:142314:13)\",\"<anonymous>\",\"process._tickDomainCallback (internal/process/next_tick.js:228:7)\"]}",
+                "Error": "FileNotFound"
+            },
+            "type": "IngestGranule",
+            "collectionId": "MOD09GQ_test-test-source-integration-IngestGranuleFailure-1542123793369___006",
+            "tasks": {
+                "StopStatus": {
+                    "name": "test-source-integration-SfSnsReport",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
+                    "version": "18"
+                }
+            },
+            "status": "failed",
+            "timestamp": 1542123824136,
+            "updatedAt": 1542123823536
+        },
+        {
+            "arn": "arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationParsePdrStateMachine-JVlCKfoXElDQ:9888b858-d70c-42ec-a887-c9367dcfd7cf",
+            "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationParsePdrStateMachine-JVlCKfoXElDQ:9888b858-d70c-42ec-a887-c9367dcfd7cf",
+            "error": {
+                "Cause": "\"None\"",
+                "Error": "Unknown Error"
+            },
+            "type": "ParsePdr",
+            "duration": 77.104,
+            "createdAt": 1542053062238,
+            "parentArn": "arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8",
+            "name": "9888b858-d70c-42ec-a887-c9367dcfd7cf",
+            "collectionId": "MOD09GQ___006",
+            "tasks": {
+                "StatusReport": {
+                    "name": "test-source-integration-SfSnsReport",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
+                    "version": "18"
+                },
+                "StopStatus": {
+                    "name": "test-source-integration-SfSnsReport",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
+                    "version": "18"
+                },
+                "CheckStatus": {
+                    "name": "test-source-integration-PdrStatusCheck",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-PdrStatusCheck:PdrStatusCheck-870b3ba8ae46bd75407798ef59cc1e459d363312",
+                    "version": "19"
+                },
+                "QueueGranules": {
+                    "name": "test-source-integration-QueueGranules",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-QueueGranules:QueueGranules-5f5de321741f77e2d7f89f41f16498f02ce111cd",
+                    "version": "19"
+                },
+                "ParsePdr": {
+                    "name": "test-source-integration-ParsePdr",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-ParsePdr:ParsePdr-2979f1f71736621607b0d6ccc9875dce4fdcccab",
+                    "version": "19"
+                }
+            },
+            "status": "completed",
+            "timestamp": 1542053139921,
+            "updatedAt": 1542053139343
+        },
+        {
+            "arn": "arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:50eaad71-bba8-4376-83d7-bb9cc1309b92",
+            "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:50eaad71-bba8-4376-83d7-bb9cc1309b92",
+            "error": {
+                "Cause": "\"None\"",
+                "Error": "Unknown Error"
+            },
+            "type": "IngestGranule",
+            "duration": 20.365,
+            "createdAt": 1542053110348,
+            "parentArn": "arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationParsePdrStateMachine-JVlCKfoXElDQ:9888b858-d70c-42ec-a887-c9367dcfd7cf",
+            "name": "50eaad71-bba8-4376-83d7-bb9cc1309b92",
+            "collectionId": "MOD09GQ___006",
+            "tasks": {
+                "MoveGranuleStep": {
+                    "name": "test-source-integration-MoveGranules",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-MoveGranules:MoveGranules-065967facfd624617685271a921be71a8c436f27",
+                    "version": "32"
+                },
+                "StopStatus": {
+                    "name": "test-source-integration-SfSnsReport",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
+                    "version": "18"
+                },
+                "ProcessingStep": {
+                    "name": "test-source-integration-FakeProcessing",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-FakeProcessing:FakeProcessing-ca2504cf11020f7a7a2b01304752adf11fa43a56",
+                    "version": "35"
+                },
+                "SyncGranuleNoVpc": {
+                    "name": "test-source-integration-SyncGranuleNoVpc",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-SyncGranuleNoVpc:SyncGranuleNoVpc-71bf2cfeda020e9409a3f67293d1f7b8f42e0546",
+                    "version": "35"
+                }
+            },
+            "status": "completed",
+            "timestamp": 1542053131165,
+            "updatedAt": 1542053130713
+        },
+        {
+            "arn": "arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8",
+            "duration": 13.127,
+            "createdAt": 1542053050795,
+            "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8",
+            "name": "c3ce6b76-a5f5-47d2-80a5-8b5c56300da8",
+            "error": {
+                "Cause": "\"None\"",
+                "Error": "Unknown Error"
+            },
+            "type": "DiscoverAndQueuePdrs",
+            "collectionId": "MOD09GQ___006",
+            "tasks": {
+                "StartStatus": {
+                    "name": "test-source-integration-SfSnsReport",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
+                    "version": "18"
+                },
+                "QueuePdrs": {
+                    "name": "test-source-integration-QueuePdrs",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-QueuePdrs:QueuePdrs-8e81d722bac219528d2be0ba8d8104a8cbb1bb04",
+                    "version": "18"
+                },
+                "StopStatus": {
+                    "name": "test-source-integration-SfSnsReport",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
+                    "version": "18"
+                },
+                "DiscoverPdrs": {
+                    "name": "test-source-integration-DiscoverPdrs",
+                    "arn": "arn:aws:lambda:us-east-1:596205514787:function:test-source-integration-DiscoverPdrs:DiscoverPdrs-c155ebecc4d03a9a0a3737b844122643e93d3887",
+                    "version": "19"
+                }
+            },
+            "status": "completed",
+            "timestamp": 1542053064551,
+            "updatedAt": 1542053063922
+        }
+    ]
 }
