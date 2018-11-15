@@ -31,11 +31,16 @@ describe('Dashboard Collections Page', () => {
       cy.get('table tbody tr').its('length').should('be.eq', 5);
     });
 
-    it.only('should display a list of collections', () => {
+    it('should display correct MMT Links for collections list', () => {
       cy.visit('/#/collections');
 
       cy.get('table tbody tr').its('length').should('be.eq', 5);
-      cy.contains('table tbody tr', 'MOD09GQ');
+      cy.contains('table tbody tr', 'MOD09GQ').contains('td a', 'MMT')
+        .should('have.attr', 'href')
+        .and('eq', 'https://mmt.uat.earthdata.nasa.gov/collections/C1218668453-CUMULUS');
+      cy.contains('table tbody tr', 'L2_HR_PIXC').contains('td a', 'MMT')
+        .should('have.attr', 'href')
+        .and('eq', 'https://mmt.uat.earthdata.nasa.gov/collections/C1224299630-CUMULUS');
     });
 
     it('should add a new collection', () => {
