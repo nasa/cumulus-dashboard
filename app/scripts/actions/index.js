@@ -2,7 +2,7 @@
 import moment from 'moment';
 import url from 'url';
 import { CMR, hostId } from '@cumulus/cmrjs';
-import { get, post, put, del, wrapRequest } from './helpers';
+import { get, post, put, del, configureRequest, wrapRequest } from './helpers';
 import { set as setToken } from '../utils/auth';
 import _config from '../config';
 import { getCollectionId } from '../utils/format';
@@ -250,11 +250,36 @@ export const interval = function (action, wait, immediate) {
 export const getCollection = (name, version) => wrapRequest(
   getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
 
-
-export const listCollections = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'collections'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, COLLECTIONS, null, getMMTLinks);
+export const listCollections = (options) => {
+  return (dispatch) => {
+    // wrap the request for collections data in a promise to make
+    // it thenable and make it easier to create chained actions
+    const wrapListCollections = () => {
+      return new Promise((resolve, reject) => {
+        get(configureRequest({
+          url: url.resolve(root, 'collections'),
+          qs: Object.assign({ limit: pageLimit }, options)
+        }), (error, data) => {
+          if (error) {
+            dispatch({
+              type: COLLECTIONS_ERROR,
+              error
+            });
+            return reject(error);
+          }
+          dispatch({
+            type: COLLECTIONS,
+            data
+          });
+          return resolve();
+        });
+      });
+    };
+    return wrapListCollections().then(() => {
+      return dispatch(getMMTLinks());
+    });
+  };
+};
 
 export const createCollection = (payload) => wrapRequest(
   getCollectionId(payload), post, 'collections', NEW_COLLECTION, payload);
@@ -274,18 +299,21 @@ export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_F
 
 export const cumulusInstanceMetadata = () => wrapRequest(null, get, 'instanceMeta', ADD_CMR);
 
-export const getMMTLinks = (dispatch, getState, data) => {
-  data.results.forEach((collection) => {
-    getMMTLinkFromCmr(collection, getState)
-      .then((url) => {
-        const action = {
-          type: ADD_MMTLINK,
-          data: { name: collection.name, version: collection.version, url: url }
-        };
-        dispatch(action);
-      })
-      .catch((error) => console.error(error));
-  });
+export const getMMTLinks = () => {
+  return (dispatch, getState) => {
+    const { data } = getState().collections.list;
+    data.forEach((collection) => {
+      getMMTLinkFromCmr(collection, getState)
+        .then((url) => {
+          const action = {
+            type: ADD_MMTLINK,
+            data: { name: collection.name, version: collection.version, url: url }
+          };
+          dispatch(action);
+        })
+        .catch((error) => console.error(error));
+    });
+  };
 };
 
 export const getMMTLinkFromCmr = (collection, getState) => {

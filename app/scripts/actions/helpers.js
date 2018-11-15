@@ -75,7 +75,7 @@ export const del = function (config, callback) {
   });
 };
 
-export const wrapRequest = function (id, query, params, type, body, successCallback) {
+export const configureRequest = function (params, body) {
   let config;
   if (typeof params === 'string') {
     config = {
@@ -94,6 +94,11 @@ export const wrapRequest = function (id, query, params, type, body, successCallb
 
   config.headers = config.headers || {};
   config.headers['Content-Type'] = 'application/json';
+  return config;
+};
+
+export const wrapRequest = function (id, query, params, type, body, successCallback) {
+  const config = configureRequest(params, body);
 
   return function (dispatch, getState) {
     const inflightType = type + '_INFLIGHT';
