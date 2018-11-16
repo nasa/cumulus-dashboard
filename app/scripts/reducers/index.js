@@ -13,7 +13,6 @@ import executionStatus from './execution-status';
 import executionLogs from './execution-logs';
 import rules from './rules';
 import reconciliationReports from './reconciliation-reports';
-import tokens from './tokens';
 
 export const reducers = {
   def: (state = {}, action) => state,
@@ -30,8 +29,7 @@ export const reducers = {
   executionStatus,
   executionLogs,
   rules,
-  reconciliationReports,
-  tokens
+  reconciliationReports
 };
 
 export default combineReducers(Object.assign({}, reducers));

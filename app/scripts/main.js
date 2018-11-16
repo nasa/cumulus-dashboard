@@ -27,7 +27,7 @@ const checkTokenExpirationMiddleware = ({ dispatch, getState }) => next => actio
   if (typeof action === 'function') {
     const token = getToken();
     if (token && jwtDecode(token).exp < Date.now() / 1000) {
-      const inflight = getState().tokens.inflight;
+      const inflight = getState().api.tokens.inflight;
       if (!inflight) {
         deferred = createDeferred();
         return refreshAccessToken(token, dispatch)

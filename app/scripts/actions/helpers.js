@@ -7,7 +7,7 @@ import log from '../utils/log';
 const root = _config.apiRoot;
 
 function addRequestAuthorization (config, getState) {
-  let token = getState().tokens.token;
+  let token = getState().api.tokens.token;
   if (token) {
     config.headers = config.headers || {};
     config.headers.Authorization = 'Bearer ' + token;

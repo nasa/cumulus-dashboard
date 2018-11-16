@@ -6,13 +6,22 @@ import {
   LOGIN,
   LOGIN_INFLIGHT,
   LOGIN_ERROR,
-  LOGOUT
+  LOGOUT,
+  REFRESH_TOKEN,
+  REFRESH_TOKEN_ERROR,
+  REFRESH_TOKEN_INFLIGHT,
+  SET_TOKEN
 } from '../actions';
 
 export const initialState = {
   authenticated: !!getToken(),
   inflight: false,
-  error: null
+  error: null,
+  tokens: {
+    error: null,
+    inflight: false,
+    token: getToken()
+  }
 };
 
 export default function reducer (state = initialState, action) {
@@ -33,7 +42,25 @@ export default function reducer (state = initialState, action) {
       break;
     case LOGOUT:
       set(state, 'authenticated', false);
+      set(state, 'tokens.token', null);
       setToken('');
+      break;
+    case REFRESH_TOKEN:
+      set(state, 'tokens.error', null);
+      set(state, 'tokens.inflight', false);
+      set(state, 'tokens.token', action.token);
+      setToken(action.token);
+      break;
+    case REFRESH_TOKEN_ERROR:
+      set(state, 'tokens.error', action.error);
+      set(state, 'tokens.inflight', false);
+      break;
+    case REFRESH_TOKEN_INFLIGHT:
+      set(state, 'tokens.inflight', true);
+      break;
+    case SET_TOKEN:
+      set(state, 'tokens.token', action.token);
+      setToken(action.token);
       break;
   }
   return state;
