@@ -1,7 +1,7 @@
 'use strict';
 import moment from 'moment';
 import url from 'url';
-import { CMR, hostId } from '@cumulus/cmrjs';
+import { CMR, hostId } from '@flamingbear/cmrjs';
 import { get, post, put, del, configureRequest, wrapRequest } from './helpers';
 import { set as setToken } from '../utils/auth';
 import _config from '../config';
