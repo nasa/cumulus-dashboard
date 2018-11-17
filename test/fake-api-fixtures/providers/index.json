@@ -1,7 +1,7 @@
 {
     "meta": {
         "name": "cumulus-api",
-        "stack": "jl-test-integration",
+        "stack": "test-src-integration",
         "table": "provider",
         "limit": 10,
         "page": 1,
