@@ -57,3 +57,6 @@ jobs:
       - run:
           name: Run Integration Tests
           command: docker run --link api:api --link dashboard:dashboard -e CYPRESS_BASE_URL=http://dashboard:3000 -e CYPRESS_APIROOT=http://api:5001 --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home cypress/base:8 yarn cypress-ci
+
+      - store_artifacts:
+          path: cypress/screenshots
