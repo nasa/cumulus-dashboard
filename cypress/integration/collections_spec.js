@@ -36,7 +36,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('table tbody tr').its('length').should('be.eq', 5);
     });
 
-    it.only('should display correct MMT Links for collections list', () => {
+    it('should display correct MMT Links for collections list', () => {
       cy.server();
       cy.fixture('cmr').then((fixture) => {
         fixture.forEach((call) => {
