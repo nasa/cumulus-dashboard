@@ -23,4 +23,21 @@ test('reducers/mmtLinks', (t) => {
   t.deepEqual(expectedState, newState);
 });
 
-test.todo('reducers/mmtLinks with initial state');
+test('reducers/mmtLinks with initial state', (t) => {
+  const initialState = {
+    'collectionname___versionString': 'initial MMT URL',
+    'differentcollection___versionString': 'some other MMT URL'
+  };
+
+  const action = {
+    type: ADD_MMTLINK,
+    data: {name: 'collectionname', version: 'versionString', url: 'updated MMT url'}
+  };
+  const key = getCollectionId({name: 'collectionname', version: 'versionString'});
+  const expectedState = {
+    [key]: 'updated MMT url',
+    'differentcollection___versionString': 'some other MMT URL'
+  };
+  const newState = reducer(initialState, action);
+  t.deepEqual(expectedState, newState);
+});
