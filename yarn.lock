@@ -689,9 +689,9 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@flamingbear/cmrjs@1.10.4-rc":
-  version "1.10.4-rc"
-  resolved "https://registry.yarnpkg.com/@flamingbear/cmrjs/-/cmrjs-1.10.4-rc.tgz#7dce83d8d9a77f47023d20321aa5b52a79af80ed"
+"@flamingbear/cmrjs@1.10.4-rc.8":
+  version "1.10.4-rc.8"
+  resolved "https://registry.yarnpkg.com/@flamingbear/cmrjs/-/cmrjs-1.10.4-rc.8.tgz#4b4de1e8e3b6e3b778132f82c320ccbd3e975b96"
   dependencies:
     "@cumulus/common" "^1.10.3"
     got "^8.3.0"
@@ -780,8 +780,8 @@
     "@types/sinon" "*"
 
 "@types/sinon@*":
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-5.0.5.tgz#de600fa07eb1ec9d5f55669d5bac46a75fc88115"
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-5.0.6.tgz#2d362a14209fb6a85dd5d54a595a13c3e355f4d7"
 
 "@types/sinon@4.0.0":
   version "4.0.0"
@@ -2016,8 +2016,8 @@ camelcase@^4.0.0, camelcase@^4.1.0:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
 
 caniuse-lite@^1.0.30000899:
-  version "1.0.30000907"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000907.tgz#0b9899bde53fb1c30e214fb12402361e02ff5c42"
+  version "1.0.30000909"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000909.tgz#697e8f447ca5f758e7c6cef39ec429ce18b908d3"
 
 capture-stack-trace@^1.0.0:
   version "1.0.1"
@@ -7343,8 +7343,8 @@ node-pre-gyp@^0.10.0:
     tar "^4"
 
 node-releases@^1.0.1:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.0.3.tgz#3414ed84595096459c251699bfcb47d88324a9e4"
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.0.4.tgz#2d585de8c6c81d00017e063e7810a63889aa6756"
   dependencies:
     semver "^5.3.0"
 
