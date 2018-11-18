@@ -34,14 +34,3 @@ test('wrap request', function (t) {
   };
   wrapRequest(id, req3, urlObj, type, body)(dispatchStub);
 });
-
-test('wrapRequest invokes callback on success.', (t) => {
-  t.plan(1);
-  const params = { url: 'fakeURL' };
-  const type = 'ANY';
-
-  const callback = (dispatch, data) => t.true(true);
-  const successfulQuery = (config, cb) => cb(null, []);
-
-  wrapRequest(null, successfulQuery, params, type, null, callback)(dispatchStub);
-});

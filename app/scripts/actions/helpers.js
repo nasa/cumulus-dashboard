@@ -97,7 +97,7 @@ export const configureRequest = function (params, body) {
   return config;
 };
 
-export const wrapRequest = function (id, query, params, type, body, successCallback) {
+export const wrapRequest = function (id, query, params, type, body) {
   const config = configureRequest(params, body);
 
   return function (dispatch, getState) {
@@ -134,9 +134,6 @@ export const wrapRequest = function (id, query, params, type, body, successCallb
       } else {
         const duration = new Date() - start;
         log((id ? type + ': ' + id : type), duration + 'ms');
-        if (successCallback) {
-          successCallback(dispatch, getState, data);
-        }
         return dispatch({ id, type, data, config });
       }
     });
