@@ -299,6 +299,11 @@ export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_F
 
 export const cumulusInstanceMetadata = () => wrapRequest(null, get, 'instanceMeta', ADD_CMR);
 
+/**
+ * Iterates over each collection in the application collections state dispatching the
+ * action to add the MMT link to the its state.
+ * @returns {function} anonymous redux-thunk function.
+ */
 export const getMMTLinks = () => {
   return (dispatch, getState) => {
     const { data } = getState().collections.list;
@@ -316,11 +321,18 @@ export const getMMTLinks = () => {
   };
 };
 
+/**
+ *
+ * @param {Object} collection - application collections item.
+ * @param {function} getState - redux-thunk callback.
+ * @returns {Promise<string>} - Promise for a Metadata Management Toolkit (MMT) Link
+ *                              to the input collection or null if it doesn't exist.
+ */
 export const getMMTLinkFromCmr = (collection, getState) => {
   const {cmrProvider, cmrEnvironment} = getState().cumulusInstance;
   const mmtLinks = getState().mmtLinks;
   if (getCollectionId(collection) in mmtLinks) {
-    return mmtLinks[getCollectionId(collection)];
+    return Promise.resolve(mmtLinks[getCollectionId(collection)]);
   }
   const search = new CMR(cmrProvider);
   return search.searchCollections({short_name: collection.name, version: collection.version})
@@ -338,6 +350,13 @@ export const getMMTLinkFromCmr = (collection, getState) => {
     });
 };
 
+/**
+ * Build correct link to collection based on conceptId and cumulus environment.
+ *
+ * @param {string} conceptId - CMR's concept id
+ * @param {string} cmrEnv - cumulus instance operating environ UAT/SIT/PROD.
+ * @returns {string} MMT link to edit the collection at conceptId.
+ */
 export const buildMMTLink = (conceptId, cmrEnv) => {
   const url = ['mmt', hostId(cmrEnv), 'earthdata.nasa.gov'].filter((d) => d).join('.');
   return `https://${url}/collections/${conceptId}`;
