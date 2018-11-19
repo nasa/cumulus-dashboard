@@ -108,6 +108,18 @@ class FakeExecutionStatusDb extends FakeDb {
         return null;
       });
   }
+
+  getLogs (executionName) {
+    const filePath = path.join(__dirname, `../fake-api-fixtures/executions/logs/${executionName}/index.json`);
+    return fs.readFile(filePath)
+    .then((data) => {
+      const logs = JSON.parse(data);
+      if (logs) {
+        return logs;
+      }
+      return null;
+    });
+  }
 }
 const fakeExecutionStatusDb = new FakeExecutionStatusDb(executionStatusesFilePath);
 

@@ -146,6 +146,11 @@ app.get('/executions/status/:arn', async (req, res) => {
   res.send(executionStatus);
 });
 
+app.get('/logs/:executionName', async (req, res) => {
+  const executionLogs = await fakeExecutionStatusDb.getLogs(req.params.executionName);
+  res.send(executionLogs);
+});
+
 app.get('/stats/aggregate', async (req, res, next) => {
   const field = req.query.field;
   const type = req.query.type;

@@ -1,0 +1,57 @@
+{
+    "meta": {
+        "name": "cumulus-api",
+        "stack": "test-source-integration",
+        "table": "logs",
+        "limit": 50,
+        "page": 1,
+        "count": 5
+    },
+    "results": [
+        {
+            "executions": "9888b858-d70c-42ec-a887-c9367dcfd7cf",
+            "level": 30,
+            "message": "uploaded s3://test-source-integration-internal/test-source-integration/pdrs/test-test-source-integration-IngestFromPdr-1541699204532_MOD09GQ_1granule_v3.PDR",
+            "sender": "test-source-integration-ParsePdr",
+            "timestamp": "2018-11-08T17:47:48.438Z",
+            "version": "24",
+            "RequestId": "6ab04dae-87fd-46c2-835c-daa5aea0ad52"
+        },
+        {
+            "executions": "9888b858-d70c-42ec-a887-c9367dcfd7cf",
+            "level": 30,
+            "message": "{ pdrName: 'test-test-source-integration-IngestFromPdr-1541699204532_MOD09GQ_1granule_v3.PDR' } 'There are 1 granules in test-test-source-integration-IngestFromPdr-1541699204532_MOD09GQ_1granule_v3.PDR'",
+            "sender": "test-source-integration-ParsePdr",
+            "timestamp": "2018-11-08T17:47:48.400Z",
+            "version": "24",
+            "RequestId": "6ab04dae-87fd-46c2-835c-daa5aea0ad52"
+        },
+        {
+            "executions": "9888b858-d70c-42ec-a887-c9367dcfd7cf",
+            "level": 30,
+            "message": "{ pdrName: 'test-test-source-integration-IngestFromPdr-1541699204532_MOD09GQ_1granule_v3.PDR' } 'There are 2 files in test-test-source-integration-IngestFromPdr-1541699204532_MOD09GQ_1granule_v3.PDR'",
+            "sender": "test-source-integration-ParsePdr",
+            "timestamp": "2018-11-08T17:47:48.400Z",
+            "version": "24",
+            "RequestId": "6ab04dae-87fd-46c2-835c-daa5aea0ad52"
+        },
+        {
+            "executions": "9888b858-d70c-42ec-a887-c9367dcfd7cf",
+            "level": 30,
+            "message": "Finishing downloading s3://test-source-integration-internal/test-source-integration-IngestFromPdr-1541699204532-test-data/files/test-test-source-integration-IngestFromPdr-1541699204532_MOD09GQ_1granule_v3.PDR",
+            "sender": "test-source-integration-ParsePdr",
+            "timestamp": "2018-11-08T17:47:48.352Z",
+            "version": "24",
+            "RequestId": "6ab04dae-87fd-46c2-835c-daa5aea0ad52"
+        },
+        {
+            "executions": "9888b858-d70c-42ec-a887-c9367dcfd7cf",
+            "level": 30,
+            "message": "Downloading s3://test-source-integration-internal/test-source-integration-IngestFromPdr-1541699204532-test-data/files/test-test-source-integration-IngestFromPdr-1541699204532_MOD09GQ_1granule_v3.PDR to /tmp/I7s8bp/test-test-source-integration-IngestFromPdr-1541699204532_MOD09GQ_1granule_v3.PDR",
+            "sender": "test-source-integration-ParsePdr",
+            "timestamp": "2018-11-08T17:47:48.235Z",
+            "version": "24",
+            "RequestId": "6ab04dae-87fd-46c2-835c-daa5aea0ad52"
+        }
+    ]
+}

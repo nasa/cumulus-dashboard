@@ -78,8 +78,8 @@ describe('Dashboard Executions Page', () => {
       cy.contains('.heading--xlarge', 'Executions');
       const executionName = '50eaad71-bba8-4376-83d7-bb9cc1309b92';
 
-      cy.get('table tbody tr').within(() => {
-        cy.get(`a[title=${executionName}]`).click();
+      cy.get('table tbody tr td[class=table__main-asset]').within(() => {
+        cy.get(`a[title=${executionName}]`).click({force: true});
       });
 
       cy.contains('.heading--large', 'Execution');
