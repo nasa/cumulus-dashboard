@@ -19,7 +19,7 @@ function formatError (response, body) {
   let error = response.statusMessage;
   body = body || {};
   if (body.name) error = body.name;
-  if (body.message) error += `: ${body.message}`;
+  if (body.message) error += `${(body.name ? ': ' : '')}${body.message}`;
   return error;
 }
 
@@ -108,11 +108,6 @@ export const wrapRequest = function (id, query, params, type, body) {
     const start = new Date();
     query(config, (error, data) => {
       if (error) {
-        if (error.message.includes('Access token has expired')) {
-          dispatch({ type: 'LOGIN_ERROR', error: error.message.replace('Bad Request: ', '') });
-          return hashHistory.push('/auth');
-        }
-
         // Temporary fix until the 'logs' endpoint is fixed
         if (error.message.includes('Invalid Authorization token') && config.url.includes('logs')) {
           const data = { results: [] };
@@ -122,7 +117,9 @@ export const wrapRequest = function (id, query, params, type, body) {
         // Catch the session expired error
         // Weirdly error.message shows up as " : Session expired"
         // So it's using indexOf instead of a direct comparison
-        if (error.message.includes('Session expired') || error.message.includes('Invalid Authorization token')) {
+        if (error.message.includes('Session expired') ||
+            error.message.includes('Invalid Authorization token') ||
+            error.message.includes('Access token has expired')) {
           dispatch({ type: 'LOGIN_ERROR', error: error.message.replace('Bad Request: ', '') });
           return hashHistory.push('/auth');
         }

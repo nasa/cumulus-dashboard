@@ -244,7 +244,7 @@ export const refreshAccessToken = (token, dispatch) => {
   return new Promise((resolve, reject) => {
     post(configureRequest(
       {
-        url: url.resolve(root, 'token/refresh')
+        url: url.resolve(root, 'refresh')
       },
       { token }
     ), (error, data) => {
