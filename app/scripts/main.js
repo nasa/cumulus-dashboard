@@ -26,8 +26,8 @@ let deferred;
 const checkTokenExpirationMiddleware = ({ dispatch, getState }) => next => action => {
   if (typeof action === 'function') {
     const token = getToken();
-    const refreshThreshold = Math.floor((Date.now() - 1000) / 1000);
-    if (token && jwtDecode(token).exp <= refreshThreshold) {
+    const refreshThreshold = Math.floor((Date.now() + 1000) / 1000);
+    if (token && refreshThreshold >= jwtDecode(token).exp) {
       const inflight = getState().api.tokens.inflight;
       if (!inflight) {
         deferred = createDeferred();
