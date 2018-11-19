@@ -178,7 +178,7 @@ app.get('/token', (req, res) => {
   }
 });
 
-app.post('/token/refresh', (req, res) => {
+app.post('/refresh', (req, res) => {
   if (!req.body.token) {
     res.status(400);
     res.json({
