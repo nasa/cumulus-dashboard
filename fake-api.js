@@ -151,7 +151,7 @@ app.get('/stats/aggregate', async (req, res, next) => {
   const type = req.query.type;
   const statsFile = `test/fake-api-fixtures/stats/aggregate/${type}/index.json`;
   if (field === 'status' && await fs.pathExists(statsFile)) {
-    const stats = await fs.readJson(`test/fake-api-fixtures/stats/aggregate/${type}/index.json`);
+    const stats = await fs.readJson(statsFile);
     res.status(200).send(stats);
     return;
   }
