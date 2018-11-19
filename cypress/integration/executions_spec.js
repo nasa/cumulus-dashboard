@@ -48,5 +48,22 @@ describe('Dashboard Executions Page', () => {
         cy.get('@children').eq(4).invoke('text').should('match', /.+s$/);
       });
     });
+
+    it('should show a single execution', () => {
+      cy.contains('nav li a', 'Executions').as('executions');
+      cy.get('@executions').should('have.attr', 'href', '#/executions');
+      cy.get('@executions').click();
+
+      cy.url().should('include', 'executions');
+      cy.contains('.heading--xlarge', 'Executions');
+      const executionName = '50eaad71-bba8-4376-83d7-bb9cc1309b92';
+
+      cy.get('table tbody tr').within(() => {
+        cy.get(`a[title=${executionName}]`).click();
+      });
+
+      cy.contains('.heading--large', 'Execution');
+      cy.contains('.heading--medium', 'Visual workflow');
+    });
   });
 });

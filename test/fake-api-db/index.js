@@ -98,13 +98,14 @@ const fakeRulesDb = new FakeRulesDb(rulesFilePath);
 
 class FakeExecutionStatusDb extends FakeDb {
   getStatus (arn) {
-    return fs.readJson(this.filePath)
+    const filePath = path.join(__dirname, `../fake-api-fixtures/executions/status/${arn}/index.json`);
+    return fs.readFile(filePath)
       .then((data) => {
-        let status;
-        if (data.execution.executionArn === arn) {
-          status = data;
+        const status = JSON.parse(data);
+        if (status.execution.executionArn === arn) {
+          return status;
         }
-        return status;
+        return null;
       });
   }
 }

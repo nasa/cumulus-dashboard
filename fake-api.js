@@ -142,10 +142,7 @@ app.delete('/rules/:name', async (req, res) => {
 });
 
 app.get('/executions/status/:arn', async (req, res) => {
-  console.log('got to the correct request');
   const executionStatus = await fakeExecutionStatusDb.getStatus(req.params.arn);
-  console.log('response:');
-  console.log(executionStatus);
   res.send(executionStatus);
 });
 
