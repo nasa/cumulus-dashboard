@@ -26,7 +26,8 @@ let deferred;
 const checkTokenExpirationMiddleware = ({ dispatch, getState }) => next => action => {
   if (typeof action === 'function') {
     const token = getToken();
-    if (token && jwtDecode(token).exp < Date.now() / 1000) {
+    const refreshThreshold = Math.floor((Date.now() - 1000) / 1000);
+    if (token && jwtDecode(token).exp <= refreshThreshold) {
       const inflight = getState().api.tokens.inflight;
       if (!inflight) {
         deferred = createDeferred();
@@ -34,6 +35,10 @@ const checkTokenExpirationMiddleware = ({ dispatch, getState }) => next => actio
           .then(() => {
             deferred.resolve();
             return next(action);
+          })
+          .catch(() => {
+            dispatch({ type: 'LOGIN_ERROR', error: 'Session expired' });
+            return hashHistory.push('/auth');
           });
       } else {
         return deferred.promise.then(() => {
