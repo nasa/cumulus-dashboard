@@ -297,7 +297,7 @@ export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH })
 export const filterCollections = (param) => ({ type: FILTER_COLLECTIONS, param: param });
 export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
 
-export const cumulusInstanceMetadata = () => wrapRequest(null, get, 'instanceMeta', ADD_CMR);
+export const getCumulusInstanceMetadata = () => wrapRequest(null, get, 'instanceMeta', ADD_CMR);
 
 /**
  * Iterates over each collection in the application collections state dispatching the

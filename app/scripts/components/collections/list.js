@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import {
   clearCollectionsSearch,
-  cumulusInstanceMetadata,
+  getCumulusInstanceMetadata,
   listCollections,
   searchCollections
 } from '../../actions';
@@ -43,7 +43,7 @@ var CollectionList = React.createClass({
 
   componentWillMount: function () {
     const { dispatch } = this.props;
-    dispatch(cumulusInstanceMetadata());
+    dispatch(getCumulusInstanceMetadata());
   },
 
   generateQuery: function () {
