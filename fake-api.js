@@ -40,7 +40,7 @@ function fakeApiMiddleWare (req, res, next) {
     return;
   } else {
     const auth = req.header('Authorization');
-    const re = /^\/token/;
+    const re = /^\/token|refresh/;
 
     if (req.url.match(re) === null) {
       if (auth !== `Bearer ${token}`) {
