@@ -12,11 +12,15 @@
 // the project's config changing)
 
 const fakeApiDb = require('../../test/fake-api-db');
+const fakeApiToken = require('../../test/fake-api-token');
 
 module.exports = (on) => {
   on('task', {
     resetState: function () {
       return fakeApiDb.resetState();
+    },
+    generateJWT: function (options) {
+      return fakeApiToken.generateJWT(options);
     }
   });
 };

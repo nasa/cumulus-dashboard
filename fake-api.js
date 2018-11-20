@@ -21,10 +21,14 @@ resetState();
 
 const tokenSecret = 'secret';
 let token;
-function generateJWT () {
+function generateJWT (params) {
+  params = params || {};
+  const options = Object.assign({
+    expiresIn: 10
+  }, params);
   return jwt.sign({
     data: 'fake-token'
-  }, tokenSecret, { expiresIn: 10 });
+  }, tokenSecret, options);
 }
 
 function fakeApiMiddleWare (req, res, next) {
@@ -39,7 +43,7 @@ function fakeApiMiddleWare (req, res, next) {
     return;
   } else {
     const auth = req.header('Authorization');
-    const re = /^\/token/;
+    const re = /^\/token|refresh/;
 
     if (req.url.match(re) === null) {
       if (auth !== `Bearer ${token}`) {
