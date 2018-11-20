@@ -100,7 +100,7 @@ export const configureRequest = function (params, body) {
 export const wrapRequest = function (id, query, params, type, body) {
   const config = configureRequest(params, body);
 
-  return function (dispatch, getState) {
+  return function (dispatch) {
     const inflightType = type + '_INFLIGHT';
     log((id ? inflightType + ': ' + id : inflightType));
     dispatch({ id, config, type: inflightType });
