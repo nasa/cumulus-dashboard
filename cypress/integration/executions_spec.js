@@ -91,7 +91,7 @@ describe('Dashboard Executions Page', () => {
           cy.get('tr[data-value=31]').children('td').as('items');
           cy.get('@items').eq(0).should('have.text', '31');
           cy.get('@items').eq(1).should('have.text', 'ExecutionSucceeded');
-          cy.get('@items').eq(2).should('have.text', '15:05:31 11/12/18');
+          cy.get('@items').eq(2).invoke('text').should('match', /\d{2}:\d{2}:\d{2} \d{2}\/\d{2}\/\d{2}$/);
           cy.get('@items').eq(3).contains('More Details').click();
           cy.get('@items').eq(3).contains('Less Details');
         });
@@ -101,8 +101,8 @@ describe('Dashboard Executions Page', () => {
           cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
           cy.contains('Execution Arn:').next().should('have.text', executionArn);
           cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
-          cy.contains('Started:').next().should('have.text', '15:05:10 11/12/18');
-          cy.contains('Ended:').next().should('have.text', '15:05:31 11/12/18');
+          cy.contains('Started:').next().invoke('text').should('match', /\d{2}:\d{2}:\d{2} \d{2}\/\d{2}\/\d{2}$/);
+          cy.contains('Ended:').next().invoke('text').should('match', /\d{2}:\d{2}:\d{2} \d{2}\/\d{2}\/\d{2}$/);
         });
     });
   });
