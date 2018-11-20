@@ -47,60 +47,61 @@ describe('Dashboard Granules Page', () => {
 
       // compare data in each row with the data from fixture
       cy.get('@list').each(($el, index, $list) => {
-        cy.wrap($el).children().as('rows');
-        cy.get('@rows').its('length').should('be.eq', 8);
+        // columns in the row
+        cy.wrap($el).children().as('columns');
+        cy.get('@columns').its('length').should('be.eq', 8);
 
         cy.get('@granulesList').its('results').then((granules) => {
           const granule = granules[index];
 
           // granule Status column
-          cy.get('@rows').eq(1).invoke('text')
+          cy.get('@columns').eq(1).invoke('text')
             .should('be.eq', granule.status.replace(/^\w/, c => c.toUpperCase()));
           // has link to the granule list with the same status
-          cy.get('@rows').eq(1).children('a')
+          cy.get('@columns').eq(1).children('a')
             .should('have.attr', 'href')
             .and('be.eq', `#/granules/${granule.status}`);
 
           // granule Name (id) column
-          cy.get('@rows').eq(2).invoke('text')
+          cy.get('@columns').eq(2).invoke('text')
             .should('be.eq', granule.granuleId);
           // has link to the detailed granule page
-          cy.get('@rows').eq(2).children('a')
+          cy.get('@columns').eq(2).children('a')
             .should('have.attr', 'href')
             .and('be.eq', `#/granules/granule/${granule.granuleId}`);
 
           // Published column, only public granules have CMR link
           if (granule.published) {
-            cy.get('@rows').eq(3).invoke('text')
+            cy.get('@columns').eq(3).invoke('text')
               .should('be.eq', 'Yes');
-            cy.get('@rows').eq(3).children('a')
+            cy.get('@columns').eq(3).children('a')
               .should('have.attr', 'href')
               .and('include', 'https://cmr');
           } else {
-            cy.get('@rows').eq(3).invoke('text')
+            cy.get('@columns').eq(3).invoke('text')
               .should('be.eq', 'No');
-            cy.get('@rows').eq(3).children('a')
+            cy.get('@columns').eq(3).children('a')
               .should('not.exist');
           }
 
           // Collection ID column
-          cy.get('@rows').eq(4).invoke('text')
+          cy.get('@columns').eq(4).invoke('text')
             .should('be.eq', granule.collectionId.replace('___', ' / '));
           // has link to the detailed collection page
-          cy.get('@rows').eq(4).children('a')
+          cy.get('@columns').eq(4).children('a')
             .should('have.attr', 'href')
             .and('be.eq', `#/collections/collection/${granule.collectionId.replace('___', '/')}`);
 
           // Execution column has link to the detailed execution page
-          cy.get('@rows').eq(5).children('a')
+          cy.get('@columns').eq(5).children('a')
             .should('have.attr', 'href')
             .and('be.eq', `#/executions/execution/${granule.execution.split('/').pop()}`);
 
           // Duration column
-          cy.get('@rows').eq(6).invoke('text')
+          cy.get('@columns').eq(6).invoke('text')
             .should('be.eq', `${Number(granule.duration.toFixed(2))}s`);
           // Updated column
-          cy.get('@rows').eq(7).invoke('text')
+          cy.get('@columns').eq(7).invoke('text')
             .should('match', /.+ago$/);
         });
       });
