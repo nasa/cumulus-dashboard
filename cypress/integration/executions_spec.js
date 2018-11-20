@@ -77,13 +77,33 @@ describe('Dashboard Executions Page', () => {
       cy.url().should('include', 'executions');
       cy.contains('.heading--xlarge', 'Executions');
       const executionName = '50eaad71-bba8-4376-83d7-bb9cc1309b92';
-
+      const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:50eaad71-bba8-4376-83d7-bb9cc1309b92';
+      const stateMachine = 'arn:aws:states:us-east-1:596205514787:stateMachine:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf';
       cy.get('table tbody tr td[class=table__main-asset]').within(() => {
         cy.get(`a[title=${executionName}]`).click({force: true});
       });
 
       cy.contains('.heading--large', 'Execution');
       cy.contains('.heading--medium', 'Visual workflow');
+
+      cy.get('.table--wrapper')
+        .within(() => {
+          cy.get('tr[data-value=31]').children('td').as('items');
+          cy.get('@items').eq(0).should('have.text', '31');
+          cy.get('@items').eq(1).should('have.text', 'ExecutionSucceeded');
+          cy.get('@items').eq(2).should('have.text', '15:05:31 11/12/18');
+          cy.get('@items').eq(3).contains('More Details').click();
+          cy.get('@items').eq(3).contains('Less Details');
+        });
+
+      cy.get('.status--process')
+        .within(() => {
+          cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
+          cy.contains('Execution Arn:').next().should('have.text', executionArn);
+          cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
+          cy.contains('Started:').next().should('have.text', '15:05:10 11/12/18');
+          cy.contains('Ended:').next().should('have.text', '15:05:31 11/12/18');
+        });
     });
   });
 });
