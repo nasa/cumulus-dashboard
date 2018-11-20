@@ -328,6 +328,8 @@ export const getMMTLinks = () => {
  */
 export const getMMTLinkFromCmr = (collection, getState) => {
   const {cmrProvider, cmrEnvironment} = getState().cumulusInstance;
+  if (!cmrProvider || !cmrEnvironment) return null;
+
   const mmtLinks = getState().mmtLinks;
   if (getCollectionId(collection) in mmtLinks) {
     return Promise.resolve(mmtLinks[getCollectionId(collection)]);
