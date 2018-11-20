@@ -36,7 +36,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('table tbody tr').its('length').should('be.eq', 5);
     });
 
-    it('should display correct MMT Links for collections list', () => {
+    it('should display expected MMT Links for collections list', () => {
       cy.server();
       cy.fixture('cmr').then((fixture) => {
         fixture.forEach((call) => {
@@ -48,11 +48,13 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('table tbody tr').its('length').should('be.eq', 5);
 
-      cy.contains('table tbody tr', 'MOD09GQ').contains('td a', 'MMT')
+      cy.contains('table tbody tr', 'MOD09GQ')
+        .contains('td a', 'MMT')
         .should('have.attr', 'href')
         .and('eq', 'https://mmt.uat.earthdata.nasa.gov/collections/CMOD09GQ-CUMULUS');
 
-      cy.contains('table tbody tr', 'L2_HR_PIXC').contains('td a', 'MMT')
+      cy.contains('table tbody tr', 'L2_HR_PIXC')
+        .contains('td a', 'MMT')
         .should('have.attr', 'href')
         .and('eq', 'https://mmt.uat.earthdata.nasa.gov/collections/CL2_HR_PIXC-CUMULUS');
     });
