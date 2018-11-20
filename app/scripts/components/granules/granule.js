@@ -190,7 +190,9 @@ var GranuleOverview = React.createClass({
       text: 'Reingest',
       action: this.reingest,
       status: get(this.props.granules.reingested, [granuleId, 'status']),
-      success: this.fastReload
+      success: this.fastReload,
+      confirmAction: true,
+      confirmText: `Reingest ${granuleId}? Note: the granule files will be overwritten.`
     }, {
       text: 'Execute',
       action: this.applyWorkflow,
