@@ -62,7 +62,7 @@ describe('Dashboard Executions Page', () => {
           cy.get('@rows').eq(3).invoke('text')
             .should('match', /.+ago$/);
           cy.get('@rows').eq(4).invoke('text')
-            .should('be.eq', `${(Math.round(execution.duration * 100) / 100).toString()}s`);
+            .should('be.eq', `${Number(execution.duration.toFixed(2))}s`);
           cy.get('@rows').eq(5).invoke('text')
             .should('be.eq', execution.collectionId);
         });
