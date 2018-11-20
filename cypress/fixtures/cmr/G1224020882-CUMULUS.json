@@ -1,0 +1,61 @@
+{
+    "feed": {
+        "updated": "2018-11-16T18:53:28.939Z",
+        "id": "https://cmr.uat.earthdata.nasa.gov:443/search/granules.json?concept_id=G1224020882-CUMULUS",
+        "title": "ECHO granule metadata",
+        "entry": [
+            {
+                "time_start": "2017-10-24T00:00:00.000Z",
+                "cloud_cover": "13.0",
+                "updated": "2018-04-25T21:45:45.524Z",
+                "dataset_id": "MODIS/Terra Surface Reflectance Daily L2G Global 250m SIN Grid V006",
+                "data_center": "CUMULUS",
+                "title": "MOD09GQ.A1530852.CljGDp.006.2163412421938",
+                "coordinate_system": "GEODETIC",
+                "time_end": "2017-11-08T23:59:59.000Z",
+                "id": "G1224020882-CUMULUS",
+                "original_format": "ECHO10",
+                "browse_flag": false,
+                "polygons": [
+                    [
+                        "-19.999773 21.2909979 -9.958851 20.3182234 -9.9634645 10.1164882 -20.004534 10.5987669 -19.999773 21.2909979"
+                    ]
+                ],
+                "collection_concept_id": "C1218668453-CUMULUS",
+                "online_access_flag": true,
+                "links": [
+                    {
+                        "rel": "http://esipfed.org/ns/fedsearch/1.1/data#",
+                        "title": "File to download",
+                        "hreflang": "en-US",
+                        "href": "https://example.com/cumulus-test-sandbox-protected/MOD09GQ___006/2017/MOD/MOD09GQ.A1530852.CljGDp.006.2163412421938.hdf"
+                    },
+                    {
+                        "rel": "http://esipfed.org/ns/fedsearch/1.1/data#",
+                        "title": "File to download",
+                        "hreflang": "en-US",
+                        "href": "https://cumulus-test-sandbox-public.s3.amazonaws.com/MOD09GQ___006/MOD/MOD09GQ.A1530852.CljGDp.006.2163412421938_ndvi.jpg"
+                    },
+                    {
+                        "rel": "http://esipfed.org/ns/fedsearch/1.1/data#",
+                        "title": "File to download",
+                        "hreflang": "en-US",
+                        "href": "https://example.com/cumulus-test-sandbox-protected-2/MOD09GQ___006/MOD/MOD09GQ.A1530852.CljGDp.006.2163412421938.cmr.xml"
+                    },
+                    {
+                        "inherited": true,
+                        "rel": "http://esipfed.org/ns/fedsearch/1.1/documentation#",
+                        "hreflang": "en-US",
+                        "href": "http://landweb.nascom.nasa.gov/cgi-bin/QA_WWW/qaFlagPage.cgi?sat=terra&ver=C6"
+                    },
+                    {
+                        "inherited": true,
+                        "rel": "http://esipfed.org/ns/fedsearch/1.1/documentation#",
+                        "hreflang": "en-US",
+                        "href": "http://dx.doi.org/10.5067/MODIS/MOD09GQ.006"
+                    }
+                ]
+            }
+        ]
+    }
+}

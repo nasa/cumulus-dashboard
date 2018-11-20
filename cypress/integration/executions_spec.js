@@ -44,26 +44,27 @@ describe('Dashboard Executions Page', () => {
 
       // compare data in each row with the data from fixture
       cy.get('@list').each(($el, index, $list) => {
-        cy.wrap($el).children().as('rows');
-        cy.get('@rows').its('length').should('be.eq', 6);
+         // columns in the row
+        cy.wrap($el).children().as('columns');
+        cy.get('@columns').its('length').should('be.eq', 6);
 
         cy.get('@executionStatus').its('results').then((executions) => {
           const execution = executions[index];
-          cy.get('@rows').eq(0).children('a')
+          cy.get('@columns').eq(0).children('a')
             .should('have.attr', 'href')
             .and('include', execution.arn);
-          cy.get('@rows').eq(0).children('a')
+          cy.get('@columns').eq(0).children('a')
             .should('have.attr', 'title')
             .and('be.eq', execution.name);
-          cy.get('@rows').eq(1).invoke('text')
+          cy.get('@columns').eq(1).invoke('text')
             .should('be.eq', execution.status.replace(/^\w/, c => c.toUpperCase()));
-          cy.get('@rows').eq(2).invoke('text')
+          cy.get('@columns').eq(2).invoke('text')
             .should('be.eq', execution.type);
-          cy.get('@rows').eq(3).invoke('text')
+          cy.get('@columns').eq(3).invoke('text')
             .should('match', /.+ago$/);
-          cy.get('@rows').eq(4).invoke('text')
-            .should('be.eq', `${(Math.round(execution.duration * 100) / 100).toString()}s`);
-          cy.get('@rows').eq(5).invoke('text')
+          cy.get('@columns').eq(4).invoke('text')
+            .should('be.eq', `${Number(execution.duration.toFixed(2))}s`);
+          cy.get('@columns').eq(5).invoke('text')
             .should('be.eq', execution.collectionId);
         });
       });
