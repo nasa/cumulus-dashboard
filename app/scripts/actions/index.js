@@ -322,7 +322,7 @@ export const getMMTLinks = () => {
 /**
  *
  * @param {Object} collection - application collections item.
- * @param {function} getState - redux-thunk callback.
+ * @param {function} getState - redux function to access app state.
  * @returns {Promise<string>} - Promise for a Metadata Management Toolkit (MMT) Link
  *                              to the input collection or null if it doesn't exist.
  */
