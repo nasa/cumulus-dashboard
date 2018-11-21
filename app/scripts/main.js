@@ -23,6 +23,10 @@ const store = createStore(reducers, applyMiddleware(
   thunkMiddleware
 ));
 
+if (window.Cypress && window.Cypress.env('TESTING') === true) {
+  window.appStore = store;
+}
+
 console.log.apply(console, config.consoleMessage);
 console.log('Environment', config.environment);
 
