@@ -13,54 +13,13 @@ import {
   hashHistory,
   applyRouterMiddleware
 } from 'react-router';
-import {
-  decode as jwtDecode
-} from 'jsonwebtoken';
 
-import { refreshAccessToken } from './actions';
 import config from './config';
 import reducers from './reducers';
-import { get as getToken } from './utils/auth';
-
-let deferred;
-const checkTokenExpirationMiddleware = ({ dispatch, getState }) => next => action => {
-  if (typeof action === 'function') {
-    const token = getToken();
-    const refreshThreshold = Math.floor((Date.now() + 1000) / 1000);
-    if (token && refreshThreshold >= jwtDecode(token).exp) {
-      const inflight = getState().api.tokens.inflight;
-      if (!inflight) {
-        deferred = createDeferred();
-        return refreshAccessToken(token, dispatch)
-          .then(() => {
-            deferred.resolve();
-            return next(action);
-          })
-          .catch(() => {
-            dispatch({ type: 'LOGIN_ERROR', error: 'Session expired' });
-            return hashHistory.push('/auth');
-          });
-      } else {
-        return deferred.promise.then(() => {
-          return next(action);
-        });
-      }
-    }
-  }
-  return next(action);
-};
-
-function createDeferred () {
-  const deferred = {};
-  deferred.promise = new Promise((resolve, reject) => {
-    deferred.resolve = resolve;
-    deferred.reject = reject;
-  });
-  return deferred;
-}
+import { refreshTokenMiddleware } from './middleware/token';
 
 const store = createStore(reducers, applyMiddleware(
-  checkTokenExpirationMiddleware,
+  refreshTokenMiddleware,
   thunkMiddleware
 ));
 

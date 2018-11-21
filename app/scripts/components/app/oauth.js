@@ -26,7 +26,8 @@ var OAuth = React.createClass({
 
   componentWillReceiveProps: function (newProps) {
     // delay-close the modal if it's open
-    if (newProps.api.authenticated) {
+    if (newProps.api.authenticated &&
+        newProps.api.authenticated !== this.props.api.authenticated) {
       const { dispatch } = this.props;
       dispatch(setTokenState(this.state.token));
       const { pathname } = this.props.location;

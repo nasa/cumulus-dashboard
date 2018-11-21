@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const fs = require('fs-extra');
 
 const {
   fakeCollectionsDb,
@@ -169,6 +170,18 @@ app.put('/rules/:name', async (req, res) => {
 app.delete('/rules/:name', async (req, res) => {
   await fakeRulesDb.deleteItem(req.params.name);
   res.sendStatus(200).end();
+});
+
+app.get('/stats/aggregate', async (req, res, next) => {
+  const field = req.query.field;
+  const type = req.query.type;
+  const statsFile = `test/fake-api-fixtures/stats/aggregate/${type}/index.json`;
+  if (field === 'status' && await fs.pathExists(statsFile)) {
+    const stats = await fs.readJson(statsFile);
+    res.status(200).send(stats);
+    return;
+  }
+  next();
 });
 
 app.get('/token', (req, res) => {
