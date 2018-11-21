@@ -88,12 +88,18 @@ describe('Dashboard Executions Page', () => {
 
       cy.get('.table--wrapper')
         .within(() => {
-          cy.get('tr[data-value=31]').children('td').as('items');
-          cy.get('@items').eq(0).should('have.text', '31');
-          cy.get('@items').eq(1).should('have.text', 'ExecutionSucceeded');
-          cy.get('@items').eq(2).invoke('text').should('match', /\d{2}:\d{2}:\d{2} \d{2}\/\d{2}\/\d{2}$/);
-          cy.get('@items').eq(3).contains('More Details').click();
-          cy.get('@items').eq(3).contains('Less Details');
+          let i;
+          for (i = 26; i < 32; i++) {
+            let idMatch = `"id": ${i},`;
+            let previousIdMatch = `"previousEventId": ${i - 1}`;
+
+            cy.get(`tr[data-value=${i}]`).children('td').as('items');
+            cy.get('@items').eq(0).should('have.text', i.toString());
+            cy.get('@items').eq(2).invoke('text').should('match', /\d{2}:\d{2}:\d{2} \d{2}\/\d{2}\/\d{2}$/);
+            cy.get('@items').eq(3).contains('More Details').click();
+            cy.get('@items').eq(3).contains(idMatch).contains(previousIdMatch);
+            cy.get('@items').eq(3).contains('Less Details').click();
+          }
         });
 
       cy.get('.status--process')
@@ -101,9 +107,20 @@ describe('Dashboard Executions Page', () => {
           cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
           cy.contains('Execution Arn:').next().should('have.text', executionArn);
           cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
-          cy.contains('Started:').next().invoke('text').should('match', /\d{2}:\d{2}:\d{2} \d{2}\/\d{2}\/\d{2}$/);
-          cy.contains('Ended:').next().invoke('text').should('match', /\d{2}:\d{2}:\d{2} \d{2}\/\d{2}\/\d{2}$/);
+          cy.contains('Started:').next().invoke('text').should('match', '20:05:10 11/12/18');
+          cy.contains('Ended:').next().invoke('text').should('match', '20:05:31 11/12/18');
+          cy.contains('Logs:').next()
+            .within(() => {
+              cy.get('a').should('have.attr', 'href', `#/executions/execution/${executionName}/logs`).click();
+            });
         });
+
+      cy.contains('.heading--large', `Logs for Execution ${executionName}`);
+      cy.get('div[class=status--process] h2').first()
+        .should('have.text', 'Execution Details:').next().as('headingSection');
+      cy.get('@headingSection')
+        .contains('"stack": "test-source-integration",')
+        .contains('"count": 28');
     });
   });
 });
