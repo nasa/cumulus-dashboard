@@ -12,6 +12,13 @@ function generateJWT (params) {
   }, tokenSecret, options);
 }
 
+function verifyJWT (token, params) {
+  params = params || {};
+  const options = Object.assign({}, params);
+  jwt.verify(token, tokenSecret, options);
+}
+
 module.exports = {
-  generateJWT
+  generateJWT,
+  verifyJWT
 };

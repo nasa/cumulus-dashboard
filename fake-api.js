@@ -13,6 +13,8 @@ const {
   resetState
 } = require('./test/fake-api-db');
 
+const { generateJWT, verifyJWT } = require('./test/fake-api-token');
+
 // Reset the fake API state
 resetState();
 
@@ -20,17 +22,7 @@ resetState();
  * Config
  */
 
-const tokenSecret = 'secret';
 let token;
-function generateJWT (params) {
-  params = params || {};
-  const options = Object.assign({
-    expiresIn: 10
-  }, params);
-  return jwt.sign({
-    data: 'fake-token'
-  }, tokenSecret, options);
-}
 
 function fakeApiMiddleWare (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -56,7 +48,7 @@ function fakeApiMiddleWare (req, res, next) {
       }
 
       try {
-        jwt.verify(token, tokenSecret);
+        verifyJWT(token);
       } catch (err) {
         if (err instanceof jwt.TokenExpiredError) {
           res.status(403);
@@ -205,7 +197,7 @@ app.post('/refresh', (req, res) => {
   }
   let requestToken = req.body.token;
   try {
-    jwt.verify(requestToken, tokenSecret, { ignoreExpiration: true });
+    verifyJWT(requestToken, { ignoreExpiration: true });
   } catch (err) {
     if (err instanceof jwt.JsonWebTokenError) {
       res.status(403);
