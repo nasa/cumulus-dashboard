@@ -41,24 +41,6 @@ Cypress.Commands.add('login', () => {
   });
 });
 
-Cypress.Commands.add('refreshToken', (requestToken) => {
-  if (!requestToken) {
-    requestToken = window.localStorage.getItem('auth-token');
-  }
-  cy.request({
-    method: 'POST',
-    url: `${Cypress.env('APIROOT')}/refresh`,
-    body: {
-      token: requestToken
-    }
-  }).then((response) => {
-    const token = response.body.token;
-    cy.window()
-      .its('localStorage')
-      .invoke('setItem', 'auth-token', token);
-  });
-});
-
 Cypress.Commands.add('editJsonTextarea', ({ data, update = false }) => {
   cy.window().its('aceEditorRef').its('editor').then((editor) => {
     if (update) {
