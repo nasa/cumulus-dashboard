@@ -19,7 +19,7 @@ function formatError (response, body) {
   let error = response.statusMessage;
   body = body || {};
   if (body.name) error = body.name;
-  if (body.message) error += `${(body.name ? ': ' : '')}${body.message}`;
+  if (body.message) error += `${(error ? ': ' : '')}${body.message}`;
   return error;
 }
 
