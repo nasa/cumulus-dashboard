@@ -108,8 +108,8 @@ describe('Dashboard Executions Page', () => {
           cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
           cy.contains('Execution Arn:').next().should('have.text', executionArn);
           cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
-          cy.contains('Started:').next().invoke('text').should('match', '20:05:10 11/12/18');
-          cy.contains('Ended:').next().invoke('text').should('match', '20:05:31 11/12/18');
+          cy.contains('Started:').next().should('have.text', '20:05:10 11/12/18');
+          cy.contains('Ended:').next().should('have.text', '20:05:31 11/12/18');
           cy.contains('Logs:').next()
             .within(() => {
               cy.get('a').should('have.attr', 'href', `#/executions/execution/${executionName}/logs`).click();
