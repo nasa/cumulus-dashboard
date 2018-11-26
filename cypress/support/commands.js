@@ -59,3 +59,8 @@ Cypress.Commands.add('getJsonTextareaValue', () => {
     return JSON.parse(value);
   });
 });
+
+Cypress.Commands.add('getFakeApiFixture', (fixturePath) => {
+  const executionStatusFile = `./test/fake-api/fixtures/${fixturePath}/index.json`;
+  return cy.readFile(executionStatusFile);
+});

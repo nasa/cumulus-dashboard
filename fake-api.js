@@ -142,7 +142,6 @@ app.get('/rules', async (req, res) => {
 });
 
 app.get('/rules/:ruleName', async (req, res) => {
-  console.log('in the spotkajhf kajhf');
   const rule = await fakeRulesDb.getItem(req.params.ruleName);
   res.send(rule);
 });
@@ -167,7 +166,7 @@ app.delete('/rules/:name', async (req, res) => {
 app.get('/stats/aggregate', async (req, res, next) => {
   const field = req.query.field;
   const type = req.query.type;
-  const statsFile = `test/fake-api-fixtures/stats/aggregate/${type}/index.json`;
+  const statsFile = `test/fake-api/fixtures/stats/aggregate/${type}/index.json`;
   if (field === 'status' && await fs.pathExists(statsFile)) {
     const stats = await fs.readJson(statsFile);
     res.status(200).send(stats);

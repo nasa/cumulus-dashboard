@@ -36,8 +36,7 @@ describe('Dashboard Executions Page', () => {
         .next().contains('li', '1 Running');
 
       // shows a list of executions with IDs and status
-      const executionStatusFile = './test/fake-api-fixtures/executions/index.json';
-      cy.readFile(executionStatusFile).as('executionStatus');
+      cy.getFakeApiFixture('executions').as('executionStatus');
 
       cy.get('table tbody tr').as('list');
       cy.get('@list').its('length').should('be.eq', 5);
