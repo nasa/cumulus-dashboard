@@ -8,12 +8,15 @@ let deferred;
 const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
   if (typeof action === 'function') {
     const token = get(getState(), 'api.tokens.token');
+    if (!token) {
+      return next(action);
+    }
     const tokenExpiration = get(jwtDecode(token), 'exp');
     if (!tokenExpiration) {
       dispatch({ type: 'LOGIN_ERROR', error: 'Invalid token' });
       return hashHistory.push('/auth');
     }
-    if (token && (tokenExpiration - Math.floor(Date.now() / 1000)) <= 3) {
+    if ((tokenExpiration - Math.floor(Date.now() / 1000)) <= 3) {
       const inflight = get(getState(), 'api.tokens.inflight');
       if (!inflight) {
         deferred = createDeferred();

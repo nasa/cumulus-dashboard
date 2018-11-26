@@ -218,7 +218,7 @@ app.get('/auth', (req, res) => {
   res.status(200).end();
 });
 
-app.use('/', express.static('test/fake-api-fixtures', { index: 'index.json' }));
+app.use('/', express.static('test/fake-api/fixtures', { index: 'index.json' }));
 
 app.put('/*', (req, res) => {
   res.sendStatus(200).end();
