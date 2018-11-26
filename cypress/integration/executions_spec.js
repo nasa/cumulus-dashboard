@@ -87,41 +87,74 @@ describe('Dashboard Executions Page', () => {
       cy.contains('.heading--large', 'Execution');
       cy.contains('.heading--medium', 'Visual workflow');
 
-      cy.get('.table--wrapper')
-        .within(() => {
-          let i;
-          for (i = 26; i < 32; i++) {
-            let idMatch = `"id": ${i},`;
-            let previousIdMatch = `"previousEventId": ${i - 1}`;
+      cy.get('.status--process')
+      .within(() => {
+        cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
+        cy.contains('Execution Arn:').next().should('have.text', executionArn);
+        cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
+        cy.contains('Started:').next().invoke('text').should('match', /\d{2}:05:10 11\/12\/18/);
+        cy.contains('Ended:').next().invoke('text').should('match', /\d{2}:05:31 11\/12\/18/);
+      });
+      cy.get('table tbody tr').as('events');
+      cy.get('@events').its('length').should('be.eq', 7);
 
-            cy.get(`tr[data-value=${i}]`).children('td').as('items');
-            cy.get('@items').eq(0).should('have.text', i.toString());
-            cy.get('@items').eq(2).invoke('text').should('match', /\d{2}:\d{2}:\d{2} \d{2}\/\d{2}\/\d{2}$/);
-            cy.get('@items').eq(3).contains('More Details').click();
-            cy.get('@items').eq(3).contains(idMatch).contains(previousIdMatch);
-            cy.get('@items').eq(3).contains('Less Details').click();
-          }
-        });
+      cy.get('@events').each(($el, index, $list) => {
+        // columns in the row
+        cy.wrap($el).children('td').as('columns');
+        cy.get('@columns').its('length').should('be.eq', 4);
+        let idMatch = `"id": ${index + 1},`;
+        let previousIdMatch = `"previousEventId": ${index}`;
+
+        cy.get('@columns').eq(0).should('have.text', (index + 1).toString());
+        cy.get('@columns').eq(2).invoke('text')
+          .should('match', /\d{2}:\d{2}:\d{2} 11\/12\/18/);
+        cy.get('@columns').eq(3).contains('More Details').click();
+        cy.get('@columns').eq(3).contains(idMatch);
+        if (index !== 0) {
+          cy.get('@columns').eq(3).contains(previousIdMatch);
+        }
+        cy.get('@columns').eq(3).contains('Less Details').click();
+      });
+    });
+
+    it('should show logs for a single execution', () => {
+      cy.contains('nav li a', 'Executions').click();
+      cy.contains('.heading--xlarge', 'Executions');
+      const executionName = '50eaad71-bba8-4376-83d7-bb9cc1309b92';
+      // shows a list of executions with IDs and status
+      const executionLogsFile = `./test/fake-api-fixtures/executions/logs/${executionName}/index.json`;
+      cy.readFile(executionLogsFile).as('executionLogs');
+
+      cy.get('table tbody tr td[class=table__main-asset]').within(() => {
+        cy.get(`a[title=${executionName}]`).click({force: true});
+      });
+      cy.contains('.heading--large', 'Execution');
 
       cy.get('.status--process')
-        .within(() => {
-          cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
-          cy.contains('Execution Arn:').next().should('have.text', executionArn);
-          cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
-          cy.contains('Started:').next().should('have.text', '20:05:10 11/12/18');
-          cy.contains('Ended:').next().should('have.text', '20:05:31 11/12/18');
-          cy.contains('Logs:').next()
-            .within(() => {
-              cy.get('a').should('have.attr', 'href', `#/executions/execution/${executionName}/logs`).click();
-            });
-        });
+      .within(() => {
+        cy.contains('Logs:').next()
+          .within(() => {
+            cy.get('a').should('have.attr', 'href', `#/executions/execution/${executionName}/logs`).click();
+          });
+      });
 
       cy.contains('.heading--large', `Logs for Execution ${executionName}`);
-      cy.get('div[class=status--process] h2').first()
-        .should('have.text', 'Execution Details:').next().as('headingSection');
-      cy.get('@headingSection')
-        .contains('"stack": "test-source-integration",')
-        .contains('"count": 28');
+      cy.get('div[class=status--process]').as('sections');
+      cy.get('@executionLogs').its('meta').then((meta) => {
+        cy.get('@sections').eq(0).within(() => {
+          cy.get('h2').should('have.text', 'Execution Details:');
+          cy.get('pre')
+            .contains(meta.name)
+            .contains(meta.stack)
+            .contains(meta.table)
+            .contains(meta.count);
+        });
+      });
+      cy.get('@executionLogs').its('results').then((logs) => {
+        cy.get('@sections').eq(1).within(() => {
+          cy.get('pre').contains(JSON.stringify(logs[0].message));
+        });
+      });
     });
   });
 });
