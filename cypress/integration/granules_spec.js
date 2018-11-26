@@ -39,8 +39,7 @@ describe('Dashboard Granules Page', () => {
         .contains('li', '14 Running');
 
       // shows a list of granules
-      const granulesFile = './test/fake-api-fixtures/granules/index.json';
-      cy.readFile(granulesFile).as('granulesList');
+      cy.getFakeApiFixture('granules').as('granulesList');
 
       cy.get('table tbody tr').as('list');
       cy.get('@list').its('length').should('be.eq', 10);
