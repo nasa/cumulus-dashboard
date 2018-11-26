@@ -1,5 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
-import { login, SET_TOKEN } from '../../app/scripts/actions';
+import { listGranules, SET_TOKEN } from '../../app/scripts/actions';
 
 describe('Dashboard authentication', () => {
   describe('Token refresh', () => {
@@ -7,22 +7,25 @@ describe('Dashboard authentication', () => {
       cy.login();
     });
 
-    it('should fail and redirect to login page for invalid token', () => {
+    it('should logout user on invalid token', () => {
       cy.visit('/');
 
       cy.window().its('appStore').then((store) => {
+        // Dispatch an action to set the token
         store.dispatch({
           type: SET_TOKEN,
           token: 'invalid-token'
         });
-        store.dispatch(login);
+        // Dispatch an action to request granules. It should fail
+        // and log the user out when it recognizes the invalid token.
+        store.dispatch(listGranules);
       });
 
       shouldBeRedirectedToLogin();
       cy.contains('.error__report', 'Invalid token');
     });
 
-    it.only('should redirect to login page for failed request', () => {
+    it('should logout user on failed token refresh', () => {
       cy.server();
       cy.route({
         method: 'POST',
@@ -34,7 +37,14 @@ describe('Dashboard authentication', () => {
       cy.visit('/');
 
       cy.window().its('appStore').then((store) => {
-        store.dispatch(login);
+        cy.task('generateJWT', { expiresIn: -10 }).then((expiredJwt) => {
+          store.dispatch({
+            type: SET_TOKEN,
+            token: expiredJwt
+          });
+
+          store.dispatch(listGranules);
+        });
       });
 
       shouldBeRedirectedToLogin();
