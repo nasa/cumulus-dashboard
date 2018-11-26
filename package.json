@@ -28,7 +28,7 @@
   "ava": {
     "files": [
       "test/**/*.js",
-      "!test/fake-api-db/*.js"
+      "!test/fake-api"
     ],
     "require": [
       "@babel/polyfill",

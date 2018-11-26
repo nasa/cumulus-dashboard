@@ -11,9 +11,9 @@ const {
   fakeProvidersDb,
   fakeRulesDb,
   resetState
-} = require('./test/fake-api-db');
+} = require('./test/fake-api/db');
 
-const { generateJWT, verifyJWT } = require('./test/fake-api-token');
+const { generateJWT, verifyJWT } = require('./test/fake-api/token');
 
 // Reset the fake API state
 resetState();

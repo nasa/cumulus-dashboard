@@ -1,13 +1,13 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-const collectionsJson = require('../fake-api-fixtures/collections/index.json');
+const collectionsJson = require('../fixtures/collections/index.json');
 const collectionsFilePath = path.join(__dirname, 'db-collections.json');
 
-const providersJson = require('../fake-api-fixtures/providers/index.json');
+const providersJson = require('../fixtures/providers/index.json');
 const providersFilePath = path.join(__dirname, 'db-providers.json');
 
-const rulesJson = require('../fake-api-fixtures/rules/index.json');
+const rulesJson = require('../fixtures/rules/index.json');
 const rulesFilePath = path.join(__dirname, 'db-rules.json');
 
 const seed = (filePath, data) => fs.outputJson(filePath, data);
