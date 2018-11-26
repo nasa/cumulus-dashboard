@@ -13,8 +13,8 @@ const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
       dispatch({ type: 'LOGIN_ERROR', error: 'Invalid token' });
       return hashHistory.push('/auth');
     }
-    if (token && (jwtDecode(token).exp - Math.floor(Date.now() / 1000)) <= 3) {
-      const inflight = getState().api.tokens.inflight;
+    if (token && (tokenExpiration - Math.floor(Date.now() / 1000)) <= 3) {
+      const inflight = get(getState(), 'api.tokens.inflight');
       if (!inflight) {
         deferred = createDeferred();
         return refreshAccessToken(token, dispatch)
