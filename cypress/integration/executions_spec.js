@@ -1,4 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
+const moment = require('moment');
 
 describe('Dashboard Executions Page', () => {
   describe('When not logged in', () => {
@@ -87,33 +88,40 @@ describe('Dashboard Executions Page', () => {
       cy.contains('.heading--large', 'Execution');
       cy.contains('.heading--medium', 'Visual workflow');
 
+      const startMatch = moment('2018-11-12T20:05:10.401Z').format('kk:mm:ss MM/DD/YY');
+      const endMatch = moment('2018-11-12T20:05:31.536Z').format('kk:mm:ss MM/DD/YY');
+
       cy.get('.status--process')
       .within(() => {
         cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
         cy.contains('Execution Arn:').next().should('have.text', executionArn);
         cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
-        cy.contains('Started:').next().invoke('text').should('match', /\d{2}:05:10 11\/12\/18/);
-        cy.contains('Ended:').next().invoke('text').should('match', /\d{2}:05:31 11\/12\/18/);
+        cy.contains('Started:').next().should('have.text', startMatch);
+        cy.contains('Ended:').next().should('have.text', endMatch);
       });
       cy.get('table tbody tr').as('events');
       cy.get('@events').its('length').should('be.eq', 7);
 
-      cy.get('@events').each(($el, index, $list) => {
-        // columns in the row
-        cy.wrap($el).children('td').as('columns');
-        cy.get('@columns').its('length').should('be.eq', 4);
-        let idMatch = `"id": ${index + 1},`;
-        let previousIdMatch = `"previousEventId": ${index}`;
+      const executionStatusFile = `./test/fake-api-fixtures/executions/status/${executionArn}/index.json`;
+      cy.readFile(executionStatusFile).as('executionStatus');
 
-        cy.get('@columns').eq(0).should('have.text', (index + 1).toString());
-        cy.get('@columns').eq(2).invoke('text')
-          .should('match', /\d{2}:\d{2}:\d{2} 11\/12\/18/);
-        cy.get('@columns').eq(3).contains('More Details').click();
-        cy.get('@columns').eq(3).contains(idMatch);
-        if (index !== 0) {
-          cy.get('@columns').eq(3).contains(previousIdMatch);
-        }
-        cy.get('@columns').eq(3).contains('Less Details').click();
+      cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
+        cy.get('@events').each(($el, index, $list) => {
+          let timestamp = moment(events[index].timestamp).format('kk:mm:ss MM/DD/YY');
+          cy.wrap($el).children('td').as('columns');
+          cy.get('@columns').its('length').should('be.eq', 4);
+          let idMatch = `"id": ${index + 1},`;
+          let previousIdMatch = `"previousEventId": ${index}`;
+
+          cy.get('@columns').eq(0).should('have.text', (index + 1).toString());
+          cy.get('@columns').eq(2).should('have.text', timestamp);
+          cy.get('@columns').eq(3).contains('More Details').click();
+          cy.get('@columns').eq(3).contains(idMatch);
+          if (index !== 0) {
+            cy.get('@columns').eq(3).contains(previousIdMatch);
+          }
+          cy.get('@columns').eq(3).contains('Less Details').click();
+        });
       });
     });
 
