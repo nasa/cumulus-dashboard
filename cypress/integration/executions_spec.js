@@ -129,7 +129,6 @@ describe('Dashboard Executions Page', () => {
       cy.contains('nav li a', 'Executions').click();
       cy.contains('.heading--xlarge', 'Executions');
       const executionName = '50eaad71-bba8-4376-83d7-bb9cc1309b92';
-      // shows a list of executions with IDs and status
       const executionLogsFile = `./test/fake-api-fixtures/executions/logs/${executionName}/index.json`;
       cy.readFile(executionLogsFile).as('executionLogs');
 
