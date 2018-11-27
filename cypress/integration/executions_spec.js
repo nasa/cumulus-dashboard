@@ -1,5 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
-const moment = require('moment');
+import { fullDate } from '../../app/scripts/utils/format';
 
 describe('Dashboard Executions Page', () => {
   describe('When not logged in', () => {
@@ -88,8 +88,8 @@ describe('Dashboard Executions Page', () => {
       cy.contains('.heading--large', 'Execution');
       cy.contains('.heading--medium', 'Visual workflow');
 
-      const startMatch = moment('2018-11-12T20:05:10.401Z').format('kk:mm:ss MM/DD/YY');
-      const endMatch = moment('2018-11-12T20:05:31.536Z').format('kk:mm:ss MM/DD/YY');
+      const startMatch = fullDate('2018-11-12T20:05:10.401Z');
+      const endMatch = fullDate('2018-11-12T20:05:31.536Z');
 
       cy.get('.status--process')
       .within(() => {
@@ -107,7 +107,7 @@ describe('Dashboard Executions Page', () => {
 
       cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
         cy.get('@events').each(($el, index, $list) => {
-          let timestamp = moment(events[index].timestamp).format('kk:mm:ss MM/DD/YY');
+          let timestamp = fullDate(events[index].timestamp);
           cy.wrap($el).children('td').as('columns');
           cy.get('@columns').its('length').should('be.eq', 4);
           let idMatch = `"id": ${index + 1},`;
