@@ -4,6 +4,7 @@ import url from 'url';
 import { get, post, put, del, configureRequest, wrapRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId } from '../utils/format';
+import log from '../utils/log';
 
 const root = _config.apiRoot;
 const { pageLimit } = _config;
@@ -240,7 +241,10 @@ export const REFRESH_TOKEN_INFLIGHT = 'REFRESH_TOKEN_INFLIGHT';
 export const SET_TOKEN = 'SET_TOKEN';
 
 export const refreshAccessToken = (token, dispatch) => {
+  const start = new Date();
+  log('REFRESH_TOKEN_INFLIGHT', start);
   dispatch({ type: REFRESH_TOKEN_INFLIGHT });
+
   return new Promise((resolve, reject) => {
     post(configureRequest(
       {
@@ -255,6 +259,8 @@ export const refreshAccessToken = (token, dispatch) => {
         });
         return reject(error);
       }
+      const duration = new Date() - start;
+      log('REFRESH_TOKEN', duration + 'ms');
       dispatch({
         type: REFRESH_TOKEN,
         token: data.token
