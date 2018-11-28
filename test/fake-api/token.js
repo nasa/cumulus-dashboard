@@ -4,7 +4,7 @@ const tokenSecret = 'secret';
 function generateJWT (params) {
   params = params || {};
   const options = Object.assign({
-    expiresIn: 15
+    expiresIn: 30
   }, params);
   return jwt.sign({
     data: 'fake-token'

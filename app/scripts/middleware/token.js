@@ -3,6 +3,9 @@ import { get } from 'object-path';
 import { decode as jwtDecode } from 'jsonwebtoken';
 
 import { refreshAccessToken } from '../actions';
+import config from '../config';
+
+const refreshInterval = Math.ceil((config.updateInterval + 1000) / 1000);
 
 let deferred;
 const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
@@ -16,9 +19,11 @@ const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
       dispatch({ type: 'LOGIN_ERROR', error: 'Invalid token' });
       return hashHistory.push('/auth');
     }
-    if ((tokenExpiration - Math.floor(Date.now() / 1000)) <= 3) {
+    // const diff = (tokenExpiration - Math.floor(Date.now() / 1000));
+    if ((tokenExpiration - Math.floor(Date.now() / 1000)) <= refreshInterval) {
       const inflight = get(getState(), 'api.tokens.inflight');
       if (!inflight) {
+        // console.log(diff);
         deferred = createDeferred();
         return refreshAccessToken(token, dispatch)
           .then(() => {

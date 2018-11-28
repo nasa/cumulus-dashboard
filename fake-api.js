@@ -25,9 +25,13 @@ resetState();
 let token;
 
 function fakeApiMiddleWare (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
+  const origin = req.get('origin');
+
+  res.header('Access-Control-Allow-Origin', origin);
+  res.header('Access-Control-Allow-Credentials', true);
+  // res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, Origin');
 
   // intercepts OPTIONS method
   if (req.method === 'OPTIONS') {
@@ -196,8 +200,15 @@ app.post('/refresh', (req, res) => {
   }
   let requestToken = req.body.token;
   try {
-    verifyJWT(requestToken, { ignoreExpiration: true });
+    verifyJWT(requestToken);
   } catch (err) {
+    if (err instanceof jwt.TokenExpiredError) {
+      res.status(403);
+      res.json({
+        message: 'Access token expired'
+      }).end();
+      return;
+    }
     if (err instanceof jwt.JsonWebTokenError) {
       res.status(403);
       res.json({
