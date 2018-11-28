@@ -126,15 +126,12 @@ describe('Dashboard Executions Page', () => {
     });
 
     it('should show logs for a single execution', () => {
-      cy.contains('nav li a', 'Executions').click();
-      cy.contains('.heading--xlarge', 'Executions');
       const executionName = '50eaad71-bba8-4376-83d7-bb9cc1309b92';
+      const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:50eaad71-bba8-4376-83d7-bb9cc1309b92';
       const executionLogsFile = `./test/fake-api-fixtures/executions/logs/${executionName}/index.json`;
       cy.readFile(executionLogsFile).as('executionLogs');
 
-      cy.get('table tbody tr td[class=table__main-asset]').within(() => {
-        cy.get(`a[title=${executionName}]`).click({force: true});
-      });
+      cy.visit(`/#/executions/execution/${executionArn}`);
       cy.contains('.heading--large', 'Execution');
 
       cy.get('.status--process')
