@@ -45,7 +45,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('@list').its('length').should('be.eq', 10);
 
       // compare data in each row with the data from fixture
-      cy.get('@list').each(($el, index, $list) => {
+      cy.get('@list').each(($el, index) => {
         // columns in the row
         cy.wrap($el).children().as('columns');
         cy.get('@columns').its('length').should('be.eq', 8);

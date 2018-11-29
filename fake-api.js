@@ -15,6 +15,7 @@ const {
 } = require('./test/fake-api/db');
 
 const { generateJWT, verifyJWT } = require('./test/fake-api/token');
+let token;
 
 // Reset the fake API state
 resetState();
@@ -22,8 +23,6 @@ resetState();
 /**
  * Config
  */
-
-let token;
 
 function fakeApiMiddleWare (req, res, next) {
   const origin = req.get('origin');
@@ -45,6 +44,8 @@ function fakeApiMiddleWare (req, res, next) {
 
     if (req.url.match(re) === null) {
       if (auth !== `Bearer ${token}`) {
+        console.log(`auth: ${auth}`);
+        console.log(`expected token: ${token}`);
         res.status(401);
         res.json({
           message: 'Invalid Authorization token'
@@ -194,6 +195,7 @@ app.get('/token', (req, res) => {
   const url = req.query.state;
   if (url) {
     token = generateJWT();
+    console.log(`set token: ${token}`);
     res.redirect(`${url}?token=${token}`);
   } else {
     res.write('state parameter is missing');
@@ -229,6 +231,7 @@ app.post('/refresh', (req, res) => {
     }
   }
   token = generateJWT();
+  console.log(`refreshed token: ${token}`);
   res.status(200);
   res.json({
     token
