@@ -4,12 +4,13 @@ import { listGranules, SET_TOKEN } from '../../app/scripts/actions';
 describe('Dashboard authentication', () => {
   describe('Token refresh', () => {
     beforeEach(() => {
+      // make sure to visit app before cy.login() so that reference to
+      // data store exists on window.appStore
+      cy.visit('/');
       cy.login();
     });
 
     it('should logout user on invalid token', () => {
-      cy.visit('/');
-
       cy.window().its('appStore').then((store) => {
         // Dispatch an action to set the token
         store.dispatch({
@@ -33,8 +34,6 @@ describe('Dashboard authentication', () => {
         status: 500,
         response: {}
       });
-
-      cy.visit('/');
 
       cy.window().its('appStore').then((store) => {
         cy.task('generateJWT', { expiresIn: -10 }).then((expiredJwt) => {
