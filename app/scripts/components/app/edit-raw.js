@@ -123,20 +123,18 @@ const EditRaw = React.createClass({
                 maxLines={200}
               />
               <br />
-              <span className={'button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (updateStatus === 'inflight' ? ' button--disabled' : '')}>
+              <span onClick={this.submit} className={'button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (updateStatus === 'inflight' ? ' button--disabled' : '')}>
                 <input
                   type='submit'
                   value={buttonText}
-                  onClick={this.submit}
                   readOnly={true}
                 />
               </span>
 
-              <span className='button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'>
+              <span onClick={this.cancel} className='button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'>
                 <input
                   type='submit'
                   value='Cancel'
-                  onClick={this.cancel}
                   readOnly={true}
                 />
               </span>
