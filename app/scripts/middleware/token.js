@@ -2,14 +2,14 @@ import { hashHistory } from 'react-router';
 import { get } from 'object-path';
 import { decode as jwtDecode } from 'jsonwebtoken';
 
-import { refreshAccessToken } from '../actions';
+import { CALL_API, refreshAccessToken } from '../actions';
 import config from '../config';
 
 const refreshInterval = Math.ceil((config.updateInterval + 1000) / 1000);
 
 let deferred;
 const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
-  if (typeof action === 'function') {
+  if (typeof action === 'function' || action[CALL_API]) {
     const token = get(getState(), 'api.tokens.token');
     if (!token) {
       return next(action);

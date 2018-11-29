@@ -52,15 +52,15 @@ var Home = React.createClass({
   query: function () {
     const { dispatch } = this.props;
     // TODO should probably time clamp this by most recent as well?
-    dispatch(getStats({
-      timestamp__from: recent
-    }));
+    // dispatch(getStats({
+    //   timestamp__from: recent
+    // }));
     dispatch(getCount({
       type: 'granules',
       field: 'status'
     }));
-    dispatch(listExecutions({}));
-    dispatch(listRules({}));
+    // dispatch(listExecutions({}));
+    // dispatch(listRules({}));
   },
 
   generateQuery: function () {
@@ -72,18 +72,18 @@ var Home = React.createClass({
 
   render: function () {
     const { list } = this.props.granules;
-    const { stats, count } = this.props.stats;
-    const overview = [
-      [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
-      [tally(get(stats.data, 'collections.value')), strings.collections, '/collections'],
-      [tally(get(stats.data, 'granules.value')), strings.granules, '/granules'],
-      [tally(get(this.props.executions, 'list.meta.count')), 'Executions', '/executions'],
-      [tally(get(this.props.rules, 'list.meta.count')), 'Ingest Rules', '/rules'],
-      [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time']
-    ];
-    const granuleCount = get(count.data, 'granules.meta.count');
-    const numGranules = !isNaN(granuleCount) ? `(${tally(granuleCount)})` : null;
-    const granuleStatus = get(count.data, 'granules.count', []);
+    // const { stats, count } = this.props.stats;
+    // const overview = [
+    //   [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
+    //   [tally(get(stats.data, 'collections.value')), strings.collections, '/collections'],
+    //   [tally(get(stats.data, 'granules.value')), strings.granules, '/granules'],
+    //   [tally(get(this.props.executions, 'list.meta.count')), 'Executions', '/executions'],
+    //   [tally(get(this.props.rules, 'list.meta.count')), 'Ingest Rules', '/rules'],
+    //   [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time']
+    // ];
+    // const granuleCount = get(count.data, 'granules.meta.count');
+    // const numGranules = !isNaN(granuleCount) ? `(${tally(granuleCount)})` : null;
+    // const granuleStatus = get(count.data, 'granules.count', []);
 
     return (
       <div className='page__home'>
@@ -93,7 +93,7 @@ var Home = React.createClass({
           </div>
         </div>
         <div className='page__content page__content__nosidebar'>
-          <section className='page__section'>
+          {/* <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
                 <h2 className='heading--medium heading--shared-content--right'>Updates</h2>
@@ -120,7 +120,7 @@ var Home = React.createClass({
               </div>
               <GranulesProgress granules={granuleStatus} />
             </div>
-          </section>
+          </section> */}
 
           <section className='page__section list--granules'>
             <div className='row'>

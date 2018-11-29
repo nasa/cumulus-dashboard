@@ -240,6 +240,8 @@ export const REFRESH_TOKEN_INFLIGHT = 'REFRESH_TOKEN_INFLIGHT';
 
 export const SET_TOKEN = 'SET_TOKEN';
 
+export const CALL_API = 'CALL_API';
+
 export const refreshAccessToken = (token, dispatch) => {
   const start = new Date();
   log('REFRESH_TOKEN_INFLIGHT');
@@ -305,10 +307,20 @@ export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_F
 export const getGranule = (granuleId) => wrapRequest(
   granuleId, get, `granules/${granuleId}`, GRANULE);
 
-export const listGranules = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'granules'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, GRANULES);
+// export const listGranules = (options) => wrapRequest(null, get, {
+//   url: url.resolve(root, 'granules'),
+//   qs: Object.assign({ limit: pageLimit }, options)
+// }, GRANULES);
+
+export const listGranules = (options) => ({
+  [CALL_API]: {
+    type: GRANULES,
+    method: 'GET',
+    id: null,
+    url: url.resolve(root, 'granules'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
 
 // only query the granules from the last hour
 export const getRecentGranules = () => wrapRequest(null, get, {
@@ -360,10 +372,20 @@ export const getStats = (options) => wrapRequest(null, get, {
 }, STATS);
 
 // count queries *must* include type and field properties.
-export const getCount = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'stats/aggregate'),
-  qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
-}, COUNT);
+// export const getCount = (options) => wrapRequest(null, get, {
+//   url: url.resolve(root, 'stats/aggregate'),
+//   qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
+// }, COUNT);
+
+export const getCount = (options) => ({
+  [CALL_API]: {
+    type: COUNT,
+    method: 'GET',
+    id: null,
+    url: url.resolve(root, 'stats/aggregate'),
+    qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
+  }
+});
 
 export const listPdrs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),
