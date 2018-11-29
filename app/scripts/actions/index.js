@@ -242,7 +242,7 @@ export const SET_TOKEN = 'SET_TOKEN';
 
 export const refreshAccessToken = (token, dispatch) => {
   const start = new Date();
-  log('REFRESH_TOKEN_INFLIGHT', start);
+  log('REFRESH_TOKEN_INFLIGHT');
   dispatch({ type: REFRESH_TOKEN_INFLIGHT });
 
   return new Promise((resolve, reject) => {

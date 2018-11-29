@@ -19,11 +19,9 @@ const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
       dispatch({ type: 'LOGIN_ERROR', error: 'Invalid token' });
       return hashHistory.push('/auth');
     }
-    // const diff = (tokenExpiration - Math.floor(Date.now() / 1000));
     if ((tokenExpiration - Math.floor(Date.now() / 1000)) <= refreshInterval) {
       const inflight = get(getState(), 'api.tokens.inflight');
       if (!inflight) {
-        // console.log(diff);
         deferred = createDeferred();
         return refreshAccessToken(token, dispatch)
           .then(() => {
