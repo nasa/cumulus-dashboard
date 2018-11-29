@@ -10,8 +10,8 @@ const providersFilePath = path.join(__dirname, 'db-providers.json');
 const rulesJson = require('../fixtures/rules/index.json');
 const rulesFilePath = path.join(__dirname, 'db-rules.json');
 
-const executionsJson = require('../fake-api-fixtures/executions/index.json');
-const executionStatusJson = require('../fake-api-fixtures/executions/status/arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8/index.json');
+const executionsJson = require('../fixtures/executions/index.json');
+const executionStatusJson = require('../fixtures/executions/status/arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8/index.json');
 const executionsFilePath = path.join(__dirname, 'db-executions.json');
 const executionStatusesFilePath = path.join(__dirname, 'db-executionstatus.json');
 
@@ -98,7 +98,7 @@ const fakeRulesDb = new FakeRulesDb(rulesFilePath);
 
 class FakeExecutionStatusDb extends FakeDb {
   getStatus (arn) {
-    const filePath = path.join(__dirname, `../fake-api-fixtures/executions/status/${arn}/index.json`);
+    const filePath = path.join(__dirname, `../fixtures/executions/status/${arn}/index.json`);
     return fs.readFile(filePath)
       .then((data) => {
         const status = JSON.parse(data);
@@ -110,7 +110,7 @@ class FakeExecutionStatusDb extends FakeDb {
   }
 
   getLogs (executionName) {
-    const filePath = path.join(__dirname, `../fake-api-fixtures/executions/logs/${executionName}/index.json`);
+    const filePath = path.join(__dirname, `../fixtures/executions/logs/${executionName}/index.json`);
     return fs.readFile(filePath)
     .then((data) => {
       const logs = JSON.parse(data);
