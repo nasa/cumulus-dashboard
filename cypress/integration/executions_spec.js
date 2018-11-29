@@ -1,4 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
+import { fullDate } from '../../app/scripts/utils/format';
 
 describe('Dashboard Executions Page', () => {
   describe('When not logged in', () => {
@@ -65,6 +66,96 @@ describe('Dashboard Executions Page', () => {
             .should('be.eq', `${Number(execution.duration.toFixed(2))}s`);
           cy.get('@columns').eq(5).invoke('text')
             .should('be.eq', execution.collectionId);
+        });
+      });
+    });
+
+    it('should show a single execution', () => {
+      cy.contains('nav li a', 'Executions').as('executions');
+      cy.get('@executions').should('have.attr', 'href', '#/executions');
+      cy.get('@executions').click();
+
+      cy.url().should('include', 'executions');
+      cy.contains('.heading--xlarge', 'Executions');
+      const executionName = '50eaad71-bba8-4376-83d7-bb9cc1309b92';
+      const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:50eaad71-bba8-4376-83d7-bb9cc1309b92';
+      const stateMachine = 'arn:aws:states:us-east-1:596205514787:stateMachine:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf';
+      cy.get('table tbody tr td[class=table__main-asset]').within(() => {
+        cy.get(`a[title=${executionName}]`).click({force: true});
+      });
+
+      cy.contains('.heading--large', 'Execution');
+      cy.contains('.heading--medium', 'Visual workflow');
+
+      const startMatch = fullDate('2018-11-12T20:05:10.401Z');
+      const endMatch = fullDate('2018-11-12T20:05:31.536Z');
+
+      cy.get('.status--process')
+      .within(() => {
+        cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
+        cy.contains('Execution Arn:').next().should('have.text', executionArn);
+        cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
+        cy.contains('Started:').next().should('have.text', startMatch);
+        cy.contains('Ended:').next().should('have.text', endMatch);
+      });
+      cy.get('table tbody tr').as('events');
+      cy.get('@events').its('length').should('be.eq', 7);
+
+      const executionStatusFile = `./test/fake-api-fixtures/executions/status/${executionArn}/index.json`;
+      cy.readFile(executionStatusFile).as('executionStatus');
+
+      cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
+        cy.get('@events').each(($el, index, $list) => {
+          let timestamp = fullDate(events[index].timestamp);
+          cy.wrap($el).children('td').as('columns');
+          cy.get('@columns').its('length').should('be.eq', 4);
+          let idMatch = `"id": ${index + 1},`;
+          let previousIdMatch = `"previousEventId": ${index}`;
+
+          cy.get('@columns').eq(0).should('have.text', (index + 1).toString());
+          cy.get('@columns').eq(2).should('have.text', timestamp);
+          cy.get('@columns').eq(3).contains('More Details').click();
+          cy.get('@columns').eq(3).contains(idMatch);
+          if (index !== 0) {
+            cy.get('@columns').eq(3).contains(previousIdMatch);
+          }
+          cy.get('@columns').eq(3).contains('Less Details').click();
+        });
+      });
+    });
+
+    it('should show logs for a single execution', () => {
+      const executionName = '50eaad71-bba8-4376-83d7-bb9cc1309b92';
+      const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:50eaad71-bba8-4376-83d7-bb9cc1309b92';
+      const executionLogsFile = `./test/fake-api-fixtures/executions/logs/${executionName}/index.json`;
+      cy.readFile(executionLogsFile).as('executionLogs');
+
+      cy.visit(`/#/executions/execution/${executionArn}`);
+      cy.contains('.heading--large', 'Execution');
+
+      cy.get('.status--process')
+      .within(() => {
+        cy.contains('Logs:').next()
+          .within(() => {
+            cy.get('a').should('have.attr', 'href', `#/executions/execution/${executionName}/logs`).click();
+          });
+      });
+
+      cy.contains('.heading--large', `Logs for Execution ${executionName}`);
+      cy.get('div[class=status--process]').as('sections');
+      cy.get('@executionLogs').its('meta').then((meta) => {
+        cy.get('@sections').eq(0).within(() => {
+          cy.get('h2').should('have.text', 'Execution Details:');
+          cy.get('pre')
+            .contains(meta.name)
+            .contains(meta.stack)
+            .contains(meta.table)
+            .contains(meta.count);
+        });
+      });
+      cy.get('@executionLogs').its('results').then((logs) => {
+        cy.get('@sections').eq(1).within(() => {
+          cy.get('pre').contains(JSON.stringify(logs[0].message));
         });
       });
     });

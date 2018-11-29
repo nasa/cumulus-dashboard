@@ -10,12 +10,19 @@ const providersFilePath = path.join(__dirname, 'db-providers.json');
 const rulesJson = require('../fixtures/rules/index.json');
 const rulesFilePath = path.join(__dirname, 'db-rules.json');
 
+const executionsJson = require('../fake-api-fixtures/executions/index.json');
+const executionStatusJson = require('../fake-api-fixtures/executions/status/arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8/index.json');
+const executionsFilePath = path.join(__dirname, 'db-executions.json');
+const executionStatusesFilePath = path.join(__dirname, 'db-executionstatus.json');
+
 const seed = (filePath, data) => fs.outputJson(filePath, data);
 const resetState = () => {
   return Promise.all([
     seed(collectionsFilePath, collectionsJson),
     seed(providersFilePath, providersJson),
-    seed(rulesFilePath, rulesJson)
+    seed(rulesFilePath, rulesJson),
+    seed(executionsFilePath, executionsJson),
+    seed(executionStatusesFilePath, executionStatusJson)
   ]);
 };
 
@@ -88,6 +95,33 @@ class FakeRulesDb extends FakeDb {
   }
 }
 const fakeRulesDb = new FakeRulesDb(rulesFilePath);
+
+class FakeExecutionStatusDb extends FakeDb {
+  getStatus (arn) {
+    const filePath = path.join(__dirname, `../fake-api-fixtures/executions/status/${arn}/index.json`);
+    return fs.readFile(filePath)
+      .then((data) => {
+        const status = JSON.parse(data);
+        if (status.execution.executionArn === arn) {
+          return status;
+        }
+        return null;
+      });
+  }
+
+  getLogs (executionName) {
+    const filePath = path.join(__dirname, `../fake-api-fixtures/executions/logs/${executionName}/index.json`);
+    return fs.readFile(filePath)
+    .then((data) => {
+      const logs = JSON.parse(data);
+      if (logs) {
+        return logs;
+      }
+      return null;
+    });
+  }
+}
+const fakeExecutionStatusDb = new FakeExecutionStatusDb(executionStatusesFilePath);
 
 class FakeCollectionsDb extends FakeDb {
   getItem (name, version) {
@@ -222,3 +256,4 @@ module.exports.resetState = resetState;
 module.exports.fakeCollectionsDb = fakeCollectionsDb;
 module.exports.fakeProvidersDb = fakeProvidersDb;
 module.exports.fakeRulesDb = fakeRulesDb;
+module.exports.fakeExecutionStatusDb = fakeExecutionStatusDb;
