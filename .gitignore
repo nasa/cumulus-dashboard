@@ -11,3 +11,5 @@ gulp-cache
 /docker/html/
 package-lock.json
 test/fake-api/db/*.json
+cypress/screenshots
+cypress/videos
