@@ -19,7 +19,7 @@ const doRequestMiddleware = ({ dispatch, getState }) => next => action => {
 
   const inflightType = type + '_INFLIGHT';
   log((id ? inflightType + ': ' + id : inflightType));
-  dispatch({ id, requestAction, type: inflightType });
+  dispatch({ id, config: requestAction, type: inflightType });
 
   const start = new Date();
   query(requestAction, (error, data) => {
@@ -27,7 +27,7 @@ const doRequestMiddleware = ({ dispatch, getState }) => next => action => {
       // Temporary fix until the 'logs' endpoint is fixed
       if (error.message.includes('Invalid Authorization token') && requestAction.url.includes('logs')) {
         const data = { results: [] };
-        return next({ id, type, data, requestAction });
+        return next({ id, type, data, config: requestAction });
       }
 
       // Catch the session expired error
@@ -46,14 +46,14 @@ const doRequestMiddleware = ({ dispatch, getState }) => next => action => {
 
       return next({
         id,
-        requestAction,
+        config: requestAction,
         type: errorType,
         error
       });
     } else {
       const duration = new Date() - start;
       log((id ? type + ': ' + id : type), duration + 'ms');
-      return next({ id, type, data, requestAction });
+      return next({ id, type, data, config: requestAction });
     }
   });
 };

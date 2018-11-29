@@ -283,10 +283,20 @@ export const interval = function (action, wait, immediate) {
 export const getCollection = (name, version) => wrapRequest(
   getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
 
-export const listCollections = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'collections'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, COLLECTIONS);
+// export const listCollections = (options) => wrapRequest(null, get, {
+//   url: url.resolve(root, 'collections'),
+//   qs: Object.assign({ limit: pageLimit }, options)
+// }, COLLECTIONS);
+
+export const listCollections = (options) => ({
+  [CALL_API]: {
+    type: COLLECTIONS,
+    method: 'GET',
+    id: null,
+    url: url.resolve(root, 'collections'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
 
 export const createCollection = (payload) => wrapRequest(
   getCollectionId(payload), post, 'collections', NEW_COLLECTION, payload);
@@ -473,7 +483,16 @@ export const queryHistogram = (options) => wrapRequest(null, get, {
   qs: options
 }, HISTOGRAM);
 
-export const listWorkflows = (options) => wrapRequest(null, get, 'workflows', WORKFLOWS);
+// export const listWorkflows = (options) => wrapRequest(null, get, 'workflows', WORKFLOWS);
+
+export const listWorkflows = (options) => ({
+  [CALL_API]: {
+    type: WORKFLOWS,
+    method: 'GET',
+    id: null,
+    url: url.resolve(root, 'workflows')
+  }
+});
 
 export const getExecutionStatus = (arn) => wrapRequest(null, get, {
   url: url.resolve(root, 'executions/status/' + arn)
