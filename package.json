@@ -140,5 +140,8 @@
     "slugify": "^1.1.0",
     "stubborn-queue": "^2.0.0",
     "url": "^0.11.0"
+  },
+  "resolutions": {
+    "event-stream": "3.3.4"
   }
 }
