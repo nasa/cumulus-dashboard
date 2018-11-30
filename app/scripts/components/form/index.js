@@ -242,25 +242,17 @@ export const Form = React.createClass({
         </ul>
 
         {this.props.submit ? (
-          <span className={'button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (this.isInflight() ? ' button--disabled' : '')}>
-            <input
-              type='submit'
-              value={this.isInflight() ? 'Loading...' : status === 'success' ? 'Success!' : 'Submit'}
-              onClick={this.onSubmit}
-              readOnly={true}
-            />
-          </span>
+          <button
+            className={'button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (this.isInflight() ? ' button--disabled' : '')}
+            onClick={this.onSubmit}
+            >{this.isInflight() ? 'Loading...' : status === 'success' ? 'Success!' : 'Submit'}</button>
         ) : null}
 
         {this.props.cancel ? (
-          <span className={'button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel' + (this.isInflight() ? ' button--disabled' : '')}>
-            <input
-              type='submit'
-              value='Cancel'
+            <button
+              className={'button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel' + (this.isInflight() ? ' button--disabled' : '')}
               onClick={this.onCancel}
-              readOnly={true}
-            />
-          </span>
+            >Cancel</button>
         ) : null}
       </div>
     );
