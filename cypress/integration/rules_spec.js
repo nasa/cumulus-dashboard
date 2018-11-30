@@ -85,7 +85,7 @@ describe('Rules page', () => {
         state: 'ENABLED'
       };
       cy.editJsonTextarea({ data: newRule });
-      cy.get('form').get('input').contains('Submit').click();
+      cy.get('form').get('button').contains('Submit').click();
 
       cy.contains('.heading--xlarge', 'Rules');
       cy.contains('table tbody tr a', ruleName)
@@ -119,8 +119,7 @@ describe('Rules page', () => {
       // update rule and submit
       const provider = 'newProvider';
       cy.editJsonTextarea({ data: { provider }, update: true });
-      cy.contains('form input', 'Submit').click();
-
+      cy.contains('form button', 'Submit').click();
       cy.contains('.heading--large', testRuleName);
       cy.get('.metadata__details')
         .within(() => {
