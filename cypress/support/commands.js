@@ -26,7 +26,7 @@
 
 import { SET_TOKEN } from '../../app/scripts/actions';
 
-function login () {
+Cypress.Commands.add('login', () => {
   const authUrl = `${Cypress.config('baseUrl')}/#/auth`;
   cy.request({
     url: `${Cypress.env('APIROOT')}/token`,
@@ -44,39 +44,6 @@ function login () {
       });
     });
   });
-}
-
-function loginWaitOnInflightTokens () {
-  cy.window().its('appStore').then((store) => {
-    const inflight = store.getState().api.tokens.inflight;
-    cy.log(inflight);
-    if (!inflight) {
-      return login();
-    }
-    loginWaitOnInflightTokens();
-  });
-}
-
-Cypress.Commands.add('login', () => {
-  loginWaitOnInflightTokens();
-
-  // const authUrl = `${Cypress.config('baseUrl')}/#/auth`;
-  // cy.request({
-  //   url: `${Cypress.env('APIROOT')}/token`,
-  //   qs: {
-  //     state: encodeURIComponent(authUrl)
-  //   },
-  //   followRedirect: false
-  // }).then((response) => {
-  //   const query = response.redirectedToUrl.substr(response.redirectedToUrl.indexOf('?') + 1);
-  //   const token = query.split('=')[1];
-  //   cy.window().its('appStore').then((store) => {
-  //     store.dispatch({
-  //       type: SET_TOKEN,
-  //       token
-  //     });
-  //   });
-  // });
 });
 
 Cypress.Commands.add('editJsonTextarea', ({ data, update = false }) => {
