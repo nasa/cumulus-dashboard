@@ -12,7 +12,10 @@ import {
   RECONCILIATIONS_ERROR,
 
   SEARCH_RECONCILIATIONS,
-  CLEAR_RECONCILIATIONS_SEARCH
+  CLEAR_RECONCILIATIONS_SEARCH,
+
+  NEW_RECONCILIATION_INFLIGHT,
+  NEW_RECONCILIATION
 } from '../actions';
 
 export const initialState = {
@@ -22,6 +25,7 @@ export const initialState = {
     params: {}
   },
   map: {},
+  createReportInflight: false,
   search: {},
   deleted: {}
 };
@@ -64,6 +68,14 @@ export default function reducer (state = initialState, action) {
       break;
     case CLEAR_RECONCILIATIONS_SEARCH:
       set(state, ['list', 'params', 'prefix'], null);
+      break;
+
+    case NEW_RECONCILIATION_INFLIGHT:
+      set(state, 'createReportInflight', true);
+      break;
+
+    case NEW_RECONCILIATION:
+      set(state, 'createReportInflight', false);
       break;
   }
   return state;
