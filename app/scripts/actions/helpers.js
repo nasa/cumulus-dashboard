@@ -2,12 +2,13 @@
 import url from 'url';
 import request from 'request';
 import { hashHistory } from 'react-router';
+import { get as getProperty } from 'object-path';
 import _config from '../config';
 import log from '../utils/log';
 const root = _config.apiRoot;
 
 function addRequestAuthorization (config, getState) {
-  let token = getState().api.tokens.token;
+  let token = getProperty(getState(), 'api.tokens.token');
   if (token) {
     config.headers = config.headers || {};
     config.headers.Authorization = 'Bearer ' + token;
