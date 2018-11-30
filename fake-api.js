@@ -8,6 +8,7 @@ const fs = require('fs-extra');
 const {
   fakeCollectionsDb,
   fakeProvidersDb,
+  fakeExecutionStatusDb,
   fakeRulesDb,
   resetState
 } = require('./test/fake-api-db');
@@ -123,7 +124,6 @@ app.get('/rules', async (req, res) => {
 });
 
 app.get('/rules/:ruleName', async (req, res) => {
-  console.log('in the spotkajhf kajhf');
   const rule = await fakeRulesDb.getItem(req.params.ruleName);
   res.send(rule);
 });
@@ -143,6 +143,16 @@ app.put('/rules/:name', async (req, res) => {
 app.delete('/rules/:name', async (req, res) => {
   await fakeRulesDb.deleteItem(req.params.name);
   res.sendStatus(200).end();
+});
+
+app.get('/executions/status/:arn', async (req, res) => {
+  const executionStatus = await fakeExecutionStatusDb.getStatus(req.params.arn);
+  res.send(executionStatus);
+});
+
+app.get('/logs/:executionName', async (req, res) => {
+  const executionLogs = await fakeExecutionStatusDb.getLogs(req.params.executionName);
+  res.send(executionLogs);
 });
 
 app.get('/stats/aggregate', async (req, res, next) => {

@@ -107,7 +107,7 @@ describe('Dashboard Granules Page', () => {
       });
     });
 
-    it('returns CMR metadata for corresponding granule when a CMR link is clicked', () => {
+    xit('returns CMR metadata for corresponding granule when a CMR link is clicked', () => {
       cy.server();
 
       cy.visit('/#/granules');

@@ -73,7 +73,7 @@ describe('Dashboard Providers Page', () => {
         .siblings('input')
         .type(host);
 
-      cy.get('form div input[value=Submit]').click();
+      cy.get('form div button').contains('Submit').click();
 
       // displays the new provider
       cy.contains('.heading--xlarge', 'Providers');
@@ -127,7 +127,7 @@ describe('Dashboard Providers Page', () => {
         .clear()
         .type(host);
 
-      cy.get('form div input[value=Submit]').click();
+      cy.get('form div button').contains('Submit').click();
 
       // displays the updated provider
       cy.contains('.heading--xlarge', 'Providers');

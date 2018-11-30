@@ -1,0 +1,502 @@
+{
+    "meta": {
+        "name": "cumulus-api",
+        "stack": "test-source-integration",
+        "table": "logs",
+        "limit": 50,
+        "page": 1,
+        "count": 128
+    },
+    "results": [
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "synced 1098034 bytes",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:20.107Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "await validateChecksum {\"path\":\"test-source-integration-IngestGranuleFailure-1541699453762-test-data/files\",\"fileSize\":17865615,\"name\":\"MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\",\"duplicate_found\":true}, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:20.107Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "synced 21708 bytes",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:20.075Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "await validateChecksum {\"path\":\"test-source-integration-IngestGranuleFailure-1541699453762-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\",\"duplicate_found\":true}, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:20.075Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "s3 Upload completed in 0.128 secs s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:20.074Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "s3 Upload completed in 0.079 secs s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:20.040Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "await validateChecksum {\"path\":\"test-source-integration-IngestGranuleFailure-1541699453762-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\",\"duplicate_found\":true}, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:20.032Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "synced 9728 bytes",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:20.032Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "s3 Upload completed in 0.058 secs s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:20.014Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "SyncGranule errored.",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.996Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "error": {
+                "name": "FileNotFound",
+                "message": "Source file not found s3://test-source-integration-internal/non-existent-path/non-existent-file",
+                "stack": [
+                    "FileNotFound: Source file not found s3://test-source-integration-internal/non-existent-path/non-existent-file",
+                    "    at S3Granule.sync (/var/task/index.js:142342:13)",
+                    "    at <anonymous>",
+                    "    at process._tickDomainCallback (internal/process/next_tick.js:228:7)"
+                ]
+            },
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 50,
+            "message": "Source file not found s3://test-source-integration-internal/non-existent-path/non-existent-file",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.996Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "error": {
+                "name": "FileNotFound",
+                "message": "Source file not found s3://test-source-integration-internal/non-existent-path/non-existent-file",
+                "stack": [
+                    "FileNotFound: Source file not found s3://test-source-integration-internal/non-existent-path/non-existent-file",
+                    "    at S3Granule.sync (/var/task/index.js:142342:13)",
+                    "    at <anonymous>",
+                    "    at process._tickDomainCallback (internal/process/next_tick.js:228:7)"
+                ]
+            },
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 50,
+            "message": "Source file not found s3://test-source-integration-internal/non-existent-path/non-existent-file",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.996Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "sync params: { Bucket: 'test-source-integration-internal',\n  CopySource: '/test-source-integration-internal/test-source-integration-IngestGranuleFailure-1541699453762-test-data/files/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met',\n  Key: 'file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met',\n  ACL: 'private' }",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.961Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "Error caught, await lock.removeLock(test-source-integration-internal, s3_provider_test-test-source-integration-IngestGranuleFailure-1541699453762, MOD09GQ.A8170639.IXXk8h.006.9553803320385)",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.959Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "sync params: { Bucket: 'test-source-integration-internal',\n  CopySource: '/test-source-integration-internal/test-source-integration-IngestGranuleFailure-1541699453762-test-data/files/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg',\n  Key: 'file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg',\n  ACL: 'private' }",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.956Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "sync params: { Bucket: 'test-source-integration-internal',\n  CopySource: '/test-source-integration-internal/test-source-integration-IngestGranuleFailure-1541699453762-test-data/files/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf',\n  Key: 'file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf',\n  ACL: 'private' }",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.945Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "file file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met exists in test-source-integration-internal: true",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.925Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "await sync file to s3 test-source-integration-IngestGranuleFailure-1541699453762-test-data/files/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.925Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "Sync s3://test-source-integration-internal/test-source-integration-IngestGranuleFailure-1541699453762-test-data/files/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met to s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.925Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "Sync s3://test-source-integration-internal/test-source-integration-IngestGranuleFailure-1541699453762-test-data/files/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg to s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.923Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "await sync file to s3 test-source-integration-IngestGranuleFailure-1541699453762-test-data/files/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.923Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "file file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg exists in test-source-integration-internal: true",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.923Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "file file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/non-existent-file exists in test-source-integration-internal: false",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.922Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "Sync s3://test-source-integration-internal/non-existent-path/non-existent-file to s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/non-existent-file",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.922Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "await sync file to s3 non-existent-path/non-existent-file, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/non-existent-file",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.922Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "Sync s3://test-source-integration-internal/test-source-integration-IngestGranuleFailure-1541699453762-test-data/files/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf to s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.920Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "await sync file to s3 test-source-integration-IngestGranuleFailure-1541699453762-test-data/files/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.920Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "file file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf exists in test-source-integration-internal: true",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.920Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "awaiting all download.Files",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.886Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "await ingest.ingest({\"granuleId\":\"MOD09GQ.A8170639.IXXk8h.006.9553803320385\",\"dataType\":\"MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762\",\"version\":\"006\",\"files\":[{\"path\":\"test-source-integration-IngestGranuleFailure-1541699453762-test-data/files\",\"fileSize\":17865615,\"name\":\"MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf\"},{\"path\":\"test-source-integration-IngestGranuleFailure-1541699453762-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met\"},{\"path\":\"test-source-integration-IngestGranuleFailure-1541699453762-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg\"},{\"path\":\"non-existent-path\",\"name\":\"non-existent-file\"}]}, test-source-integration-internal)",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.881Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "Configured duplicateHandling value: replace",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.832Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "awaiting lock.proceed in download() bucket: test-source-integration-internal, provider: {\"protocol\":\"s3\",\"globalConnectionLimit\":10,\"host\":\"test-source-integration-internal\",\"updatedAt\":1541699454006,\"id\":\"s3_provider_test-test-source-integration-IngestGranuleFailure-1541699453762\",\"createdAt\":1541699454006}, granuleID: MOD09GQ.A8170639.IXXk8h.006.9553803320385",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:19.832Z",
+            "version": "25",
+            "RequestId": "1dc0a8a5-118f-43f1-98d7-3456a0c414d8"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "synced 1098034 bytes",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:10.126Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "await validateChecksum {\"path\":\"test-source-integration-IngestGranuleFailure-1541699453762-test-data/files\",\"fileSize\":17865615,\"name\":\"MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\",\"duplicate_found\":true}, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:10.126Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "s3 Upload completed in 0.129 secs s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:10.083Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "await validateChecksum {\"path\":\"test-source-integration-IngestGranuleFailure-1541699453762-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\",\"duplicate_found\":true}, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:10.077Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "synced 21708 bytes",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:10.077Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "synced 9728 bytes",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:10.076Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "await validateChecksum {\"path\":\"test-source-integration-IngestGranuleFailure-1541699453762-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\",\"duplicate_found\":true}, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:10.076Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "s3 Upload completed in 0.088 secs s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:10.043Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "s3 Upload completed in 0.085 secs s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:10.020Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "error": {
+                "name": "FileNotFound",
+                "message": "Source file not found s3://test-source-integration-internal/non-existent-path/non-existent-file",
+                "stack": [
+                    "FileNotFound: Source file not found s3://test-source-integration-internal/non-existent-path/non-existent-file",
+                    "    at S3Granule.sync (/var/task/index.js:142342:13)",
+                    "    at <anonymous>",
+                    "    at process._tickDomainCallback (internal/process/next_tick.js:228:7)"
+                ]
+            },
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 50,
+            "message": "Source file not found s3://test-source-integration-internal/non-existent-path/non-existent-file",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:09.957Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "error": {
+                "name": "FileNotFound",
+                "message": "Source file not found s3://test-source-integration-internal/non-existent-path/non-existent-file",
+                "stack": [
+                    "FileNotFound: Source file not found s3://test-source-integration-internal/non-existent-path/non-existent-file",
+                    "    at S3Granule.sync (/var/task/index.js:142342:13)",
+                    "    at <anonymous>",
+                    "    at process._tickDomainCallback (internal/process/next_tick.js:228:7)"
+                ]
+            },
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 50,
+            "message": "Source file not found s3://test-source-integration-internal/non-existent-path/non-existent-file",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:09.957Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "SyncGranule errored.",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:09.957Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "sync params: { Bucket: 'test-source-integration-internal',\n  CopySource: '/test-source-integration-internal/test-source-integration-IngestGranuleFailure-1541699453762-test-data/files/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met',\n  Key: 'file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf.met',\n  ACL: 'private' }",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:09.955Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "sync params: { Bucket: 'test-source-integration-internal',\n  CopySource: '/test-source-integration-internal/test-source-integration-IngestGranuleFailure-1541699453762-test-data/files/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf',\n  Key: 'file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385.hdf',\n  ACL: 'private' }",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:09.954Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 30,
+            "message": "sync params: { Bucket: 'test-source-integration-internal',\n  CopySource: '/test-source-integration-internal/test-source-integration-IngestGranuleFailure-1541699453762-test-data/files/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg',\n  Key: 'file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg',\n  ACL: 'private' }",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:09.935Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "Error caught, await lock.removeLock(test-source-integration-internal, s3_provider_test-test-source-integration-IngestGranuleFailure-1541699453762, MOD09GQ.A8170639.IXXk8h.006.9553803320385)",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:09.933Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "file file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg exists in test-source-integration-internal: true",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:09.915Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        },
+        {
+            "executions": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+            "level": 20,
+            "message": "await sync file to s3 test-source-integration-IngestGranuleFailure-1541699453762-test-data/files/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleFailure-1541699453762___006/MOD09GQ.A8170639.IXXk8h.006.9553803320385_ndvi.jpg",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T17:51:09.915Z",
+            "version": "25",
+            "RequestId": "f7b411f7-5b18-4b9f-a91e-541ab984113e"
+        }
+    ]
+}
