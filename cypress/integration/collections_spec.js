@@ -52,7 +52,7 @@ describe('Dashboard Collections Page', () => {
       cy.fixture('TESTCOLLECTION___006.json').then((collection) => {
         cy.editJsonTextarea({ data: collection });
       });
-      cy.get('form').get('input').contains('Submit').click();
+      cy.contains('form button', 'Submit').click();
 
       // displays the new collection
       cy.contains('.heading--xlarge', 'Collections');
@@ -92,7 +92,7 @@ describe('Dashboard Collections Page', () => {
       const duplicateHandling = 'version';
       const meta = 'metadata';
       cy.editJsonTextarea({ data: { duplicateHandling, meta }, update: true });
-      cy.contains('form input', 'Submit').click();
+      cy.contains('form button', 'Submit').click();
 
       // displays the updated collection and its granules
       cy.contains('.heading--xlarge', 'Collections');
