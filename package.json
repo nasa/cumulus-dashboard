@@ -21,7 +21,7 @@
     "lint": "eslint app/scripts/ --ext .js",
     "start": "npm run serve",
     "cypress": "CYPRESS_TESTING=true cypress open",
-    "cypress-ci": "CYPRESS_TESTING=true cypress run --spec 'cypress/integration/*' --config video=true",
+    "cypress-ci": "CYPRESS_TESTING=true cypress run --spec 'cypress/integration/*' --config video=false",
     "validation": "ava cypress/validation-tests/*.js",
     "test": "npm run lint && ava"
   },
