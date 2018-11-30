@@ -52,7 +52,7 @@ describe('Dashboard Collections Page', () => {
       cy.fixture('TESTCOLLECTION___006.json').then((collection) => {
         cy.editJsonTextarea({ data: collection });
       });
-      cy.get('form').get('button').contains('Submit').click();
+      cy.contains('form button', 'Submit').click();
 
       // displays the new collection
       cy.contains('.heading--xlarge', 'Collections');

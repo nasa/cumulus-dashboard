@@ -85,7 +85,7 @@ describe('Rules page', () => {
         state: 'ENABLED'
       };
       cy.editJsonTextarea({ data: newRule });
-      cy.get('form').get('button').contains('Submit').click();
+      cy.contains('form button', 'Submit').click();
 
       cy.contains('.heading--xlarge', 'Rules');
       cy.contains('table tbody tr a', ruleName)
