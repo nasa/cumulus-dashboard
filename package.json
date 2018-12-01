@@ -105,7 +105,7 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "@flamingbear/cmrjs": "1.10.4-rc.8",
+    "@cumulus/cmrjs": "^1.11.0",
     "assert": "^1.4.1",
     "body-parser": "^1.18.3",
     "brace": "^0.9.1",
