@@ -2,6 +2,7 @@
 import url from 'url';
 import request from 'request';
 import { hashHistory } from 'react-router';
+
 import _config from '../config';
 import log from '../utils/log';
 import { get as getToken } from '../utils/auth';
@@ -74,7 +75,7 @@ export const del = function (config, callback) {
   });
 };
 
-export const wrapRequest = function (id, query, params, type, body) {
+export const configureRequest = function (params, body) {
   let config;
   if (typeof params === 'string') {
     config = {
@@ -93,6 +94,11 @@ export const wrapRequest = function (id, query, params, type, body) {
 
   config.headers = config.headers || {};
   config.headers['Content-Type'] = 'application/json';
+  return config;
+};
+
+export const wrapRequest = function (id, query, params, type, body) {
+  const config = configureRequest(params, body);
 
   return function (dispatch) {
     const inflightType = type + '_INFLIGHT';

@@ -1,7 +1,8 @@
 'use strict';
 import moment from 'moment';
 import url from 'url';
-import { get, post, put, del, wrapRequest } from './helpers';
+import { CMR, hostId } from '@cumulus/cmrjs';
+import { get, post, put, del, configureRequest, wrapRequest } from './helpers';
 import { set as setToken } from '../utils/auth';
 import _config from '../config';
 import { getCollectionId } from '../utils/format';
@@ -13,6 +14,8 @@ export const LOGOUT = 'LOGOUT';
 export const LOGIN = 'LOGIN';
 export const LOGIN_INFLIGHT = 'LOGIN_INFLIGHT';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
+
+export const ADD_INSTANCE_META_CMR = 'ADD_INSTANCE_META_CMR';
 
 export const COLLECTION = 'COLLECTION';
 export const COLLECTION_INFLIGHT = 'COLLECTION_INFLIGHT';
@@ -40,6 +43,8 @@ export const CLEAR_COLLECTIONS_FILTER = 'CLEAR_COLLECTIONS_FILTER';
 export const COLLECTION_DELETE = 'COLLECTION_DELETE';
 export const COLLECTION_DELETE_INFLIGHT = 'COLLECTION_DELETE_INFLIGHT';
 export const COLLECTION_DELETE_ERROR = 'COLLECTION_DELETE_ERROR';
+
+export const ADD_MMTLINK = 'ADD_MMTLINK';
 
 export const GRANULE = 'GRANULE';
 export const GRANULE_INFLIGHT = 'GRANULE_INFLIGHT';
@@ -243,10 +248,36 @@ export const interval = function (action, wait, immediate) {
 export const getCollection = (name, version) => wrapRequest(
   getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
 
-export const listCollections = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'collections'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, COLLECTIONS);
+export const listCollections = (options) => {
+  return (dispatch) => {
+    // wrap the request for collections data in a promise to make
+    // it thenable and make it easier to create chained actions
+    const wrapListCollections = () => {
+      return new Promise((resolve, reject) => {
+        get(configureRequest({
+          url: url.resolve(root, 'collections'),
+          qs: Object.assign({ limit: pageLimit }, options)
+        }), (error, data) => {
+          if (error) {
+            dispatch({
+              type: COLLECTIONS_ERROR,
+              error
+            });
+            return reject(error);
+          }
+          dispatch({
+            type: COLLECTIONS,
+            data
+          });
+          return resolve();
+        });
+      });
+    };
+    return wrapListCollections().then(() => {
+      return dispatch(getMMTLinks());
+    });
+  };
+};
 
 export const createCollection = (payload) => wrapRequest(
   getCollectionId(payload), post, 'collections', NEW_COLLECTION, payload);
@@ -263,6 +294,73 @@ export const searchCollections = (prefix) => ({ type: SEARCH_COLLECTIONS, prefix
 export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH });
 export const filterCollections = (param) => ({ type: FILTER_COLLECTIONS, param: param });
 export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
+
+export const getCumulusInstanceMetadata = () => wrapRequest(null, get, 'instanceMeta', ADD_INSTANCE_META_CMR);
+
+/**
+ * Iterates over each collection in the application collections state dispatching the
+ * action to add the MMT link to the its state.
+ * @returns {function} anonymous redux-thunk function.
+ */
+export const getMMTLinks = () => {
+  return (dispatch, getState) => {
+    const { data } = getState().collections.list;
+    data.forEach((collection) => {
+      getMMTLinkFromCmr(collection, getState)
+        .then((url) => {
+          const action = {
+            type: ADD_MMTLINK,
+            data: { name: collection.name, version: collection.version, url: url }
+          };
+          dispatch(action);
+        })
+        .catch((error) => console.error(error));
+    });
+  };
+};
+
+/**
+ *
+ * @param {Object} collection - application collections item.
+ * @param {function} getState - redux function to access app state.
+ * @returns {Promise<string>} - Promise for a Metadata Management Toolkit (MMT) Link
+ *                              to the input collection or null if it doesn't exist.
+ */
+export const getMMTLinkFromCmr = (collection, getState) => {
+  const {cmrProvider, cmrEnvironment} = getState().cumulusInstance;
+  if (!cmrProvider || !cmrEnvironment) return null;
+
+  const mmtLinks = getState().mmtLinks;
+  if (getCollectionId(collection) in mmtLinks) {
+    return Promise.resolve(mmtLinks[getCollectionId(collection)]);
+  }
+  const search = new CMR(cmrProvider);
+  return search.searchCollections({short_name: collection.name, version: collection.version})
+    .then((results) => {
+      if (results.length === 1) {
+        const conceptId = results[0].id;
+        if (conceptId) {
+          return buildMMTLink(conceptId, cmrEnvironment);
+        }
+      }
+      return null;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+/**
+ * Build correct link to collection based on conceptId and cumulus environment.
+ *
+ * @param {string} conceptId - CMR's concept id
+ * @param {string} cmrEnv - cumulus instance operating environ UAT/SIT/PROD.
+ * @returns {string} MMT link to edit the collection at conceptId.
+ */
+export const buildMMTLink = (conceptId, cmrEnv) => {
+  const url = ['mmt', hostId(cmrEnv), 'earthdata.nasa.gov'].filter((d) => d).join('.');
+  return `https://${url}/collections/${conceptId}`;
+};
 
 export const getGranule = (granuleId) => wrapRequest(
   granuleId, get, `granules/${granuleId}`, GRANULE);

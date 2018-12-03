@@ -23,7 +23,7 @@ const collections = {
     // determine which set of routes to show, based on the current route
     if (/^\/collections\/[collection|edit]/.test(currentRoute)) {
       return singleCollectionRoutes.map(d => {
-        // replace wildecards with params
+        // replace wildcards with params
         if (!d[1] || d[1].indexOf(':name') === -1) { return d; }
         let copy = d.slice();
         copy[1] = encode(copy[1].replace(':name', params.name)
