@@ -3,9 +3,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import {
+  clearCollectionsSearch,
+  getCumulusInstanceMetadata,
   listCollections,
-  searchCollections,
-  clearCollectionsSearch
+  searchCollections
 } from '../../actions';
 import {
   collectionSearchResult,
@@ -28,6 +29,7 @@ var CollectionList = React.createClass({
 
   propTypes: {
     collections: React.PropTypes.object,
+    mmtLinks: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     logs: React.PropTypes.object
   },
@@ -37,6 +39,11 @@ var CollectionList = React.createClass({
     '1 Week Ago': moment().subtract(1, 'weeks').format(),
     '1 Month Ago': moment().subtract(1, 'months').format(),
     '1 Year Ago': moment().subtract(1, 'years').format()
+  },
+
+  componentWillMount: function () {
+    const { dispatch } = this.props;
+    dispatch(getCumulusInstanceMetadata());
   },
 
   generateQuery: function () {
@@ -49,6 +56,9 @@ var CollectionList = React.createClass({
 
   render: function () {
     const { list } = this.props.collections;
+    // merge mmtLinks with the collection data;
+    const mmtLinks = this.props.mmtLinks;
+    list.data.forEach((collection) => { collection.mmtLink = mmtLinks[getCollectionId(collection)]; });
     const { count, queriedAt } = list.meta;
     return (
       <div className='page__component'>

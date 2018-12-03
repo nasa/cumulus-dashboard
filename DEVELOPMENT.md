@@ -12,15 +12,13 @@ Components can be an entire page, or a portion of a page. Component files go in 
 
 If a component is very simple, it may not need a unique directory, and can be simply `app/scripts/components/404.js`, for example.
 
-A bare bones component file at `app/scripts/__sample-component__.js` can be copy and pasted into the proper directory.
-
 ### 2. Add the component to the router
 
 The router tells the app what the component's URL should be. In our app, a route looks like a line of HTML, so we'll call them elements. A route element requires at minimum `path` and `component` properties. Path defines the url path, and component is the name of the component.
 
 When one route is nested within another route, the urls stack. In the following example, the list component's path is `/collections/list`.
 
-```(html)
+```html
 <Route path='/collections' component={Collections}>
    <Route path='/list' component={List} />
 </Route>

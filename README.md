@@ -29,7 +29,7 @@ The following Environment Variables override the default values in `config.js`:
 | DAAC\_NAME | e.g. LPDAAC, default to Local
 | STAGE | e.g. UAT, default to development
 | LABELS | gitc or daac localization (defaults to daac)
-| APIROOT | the API URL. This must be set as it defaults to example.com 
+| APIROOT | the API URL. This must be set as it defaults to example.com
 
      $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com npm run serve
 
@@ -48,7 +48,7 @@ The compiled files will be placed in the `dist` directory.
 
 This requires [nvm](https://github.com/creationix/nvm) and node v8.11. To set v8.11 as the default, use `nvm use`.
 
-```(bash)
+```bash
 git clone https://github.com/cumulus-nasa/cumulus-dashboard
 cd cumulus-dashboard
 nvm use
@@ -67,7 +67,7 @@ For development and testing purposes, you can use a fake API server provided wit
 ### Unit Tests
 
      $ npm run test
-  
+
 ## Integration & Validation Tests
 
 For the integration tests to work, you have to launch the fake API and the dashboard first. Run the following commands in separate terminal sessions:
