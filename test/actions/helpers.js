@@ -2,7 +2,7 @@
 import test from 'ava';
 import { wrapRequest } from '../../app/scripts/actions/helpers';
 
-const dispatch = () => true;
+const dispatchStub = () => true;
 const type = 'TEST';
 const id = 'id';
 const headers = {
@@ -15,13 +15,13 @@ test('wrap request', function (t) {
   const req1 = (config) => {
     t.true(/blahblahblah/.test(config.url));
   };
-  wrapRequest(id, req1, url, type)(dispatch);
+  wrapRequest(id, req1, url, type)(dispatchStub);
 
   const urlObj = { url };
   const req2 = (config) => {
     t.deepEqual(config, { url, headers, json: true });
   };
-  wrapRequest(id, req2, urlObj, type)(dispatch);
+  wrapRequest(id, req2, urlObj, type)(dispatchStub);
 
   const body = { limit: 1 };
   const req3 = (config) => {
@@ -32,5 +32,5 @@ test('wrap request', function (t) {
       headers
     });
   };
-  wrapRequest(id, req3, urlObj, type, body)(dispatch);
+  wrapRequest(id, req3, urlObj, type, body)(dispatchStub);
 });
