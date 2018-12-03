@@ -95,15 +95,9 @@ export const configureRequest = function (params, body) {
   config.headers['Content-Type'] = 'application/json';
   return config;
 };
-<<<<<<< HEAD
-=======
 
 export const wrapRequest = function (id, query, params, type, body) {
   const config = configureRequest(params, body);
->>>>>>> master
-
-export const wrapRequest = function (id, query, params, type, body) {
-  let config = configureRequest(params, body);
 
   return function (dispatch, getState) {
     const inflightType = type + '_INFLIGHT';
