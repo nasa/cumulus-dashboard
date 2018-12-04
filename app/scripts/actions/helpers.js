@@ -2,31 +2,21 @@
 import url from 'url';
 import request from 'request';
 import { hashHistory } from 'react-router';
-
+import { get as getProperty } from 'object-path';
 import _config from '../config';
 import log from '../utils/log';
-import { get as getToken } from '../utils/auth';
 const root = _config.apiRoot;
-
-function setToken (config) {
-  let token = getToken();
-  if (token) {
-    config.headers = config.headers || {};
-    config.headers.Authorization = 'Bearer ' + token;
-  }
-  return config;
-}
 
 function formatError (response, body) {
   let error = response.statusMessage;
   body = body || {};
   if (body.name) error = body.name;
-  if (body.message) error += `: ${body.message}`;
+  if (body.message) error += `${(error ? ': ' : '')}${body.message}`;
   return error;
 }
 
 export const get = function (config, callback) {
-  request.get(setToken(config), (error, resp, body) => {
+  request.get(config, (error, resp, body) => {
     if (error) {
       return callback(error);
     } else if (+resp.statusCode >= 400) {
@@ -37,7 +27,7 @@ export const get = function (config, callback) {
 };
 
 export const post = function (config, callback) {
-  request.post(setToken(config), (error, resp, body) => {
+  request.post(config, (error, resp, body) => {
     error = error || body.errorMessage;
     if (error) {
       return callback(error);
@@ -50,7 +40,7 @@ export const post = function (config, callback) {
 };
 
 export const put = function (config, callback) {
-  request.put(setToken(config), (error, resp, body) => {
+  request.put(config, (error, resp, body) => {
     error = error || body && body.errorMessage || body && body.detail || null;
     if (error) {
       return callback(error);
@@ -63,7 +53,7 @@ export const put = function (config, callback) {
 };
 
 export const del = function (config, callback) {
-  request.del(setToken(config), (error, resp, body) => {
+  request.del(config, (error, resp, body) => {
     error = error || body.errorMessage;
     if (error) {
       return callback(error);
@@ -73,6 +63,15 @@ export const del = function (config, callback) {
       return callback(null, body);
     }
   });
+};
+
+export const addRequestAuthorization = (config, getState) => {
+  let token = getProperty(getState(), 'api.tokens.token');
+  if (token) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = 'Bearer ' + token;
+  }
+  return config;
 };
 
 export const configureRequest = function (params, body) {
@@ -100,10 +99,12 @@ export const configureRequest = function (params, body) {
 export const wrapRequest = function (id, query, params, type, body) {
   const config = configureRequest(params, body);
 
-  return function (dispatch) {
+  return function (dispatch, getState) {
     const inflightType = type + '_INFLIGHT';
     log((id ? inflightType + ': ' + id : inflightType));
     dispatch({ id, config, type: inflightType });
+
+    addRequestAuthorization(config, getState);
 
     const start = new Date();
     query(config, (error, data) => {
@@ -113,10 +114,13 @@ export const wrapRequest = function (id, query, params, type, body) {
           const data = { results: [] };
           return dispatch({ id, type, data, config });
         }
+
         // Catch the session expired error
         // Weirdly error.message shows up as " : Session expired"
         // So it's using indexOf instead of a direct comparison
-        if (error.message.includes('Session expired') || error.message.includes('Invalid Authorization token')) {
+        if (error.message.includes('Session expired') ||
+            error.message.includes('Invalid Authorization token') ||
+            error.message.includes('Access token has expired')) {
           dispatch({ type: 'LOGIN_ERROR', error: error.message.replace('Bad Request: ', '') });
           return hashHistory.push('/auth');
         }

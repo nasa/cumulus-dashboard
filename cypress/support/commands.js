@@ -24,6 +24,8 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+import { SET_TOKEN } from '../../app/scripts/actions';
+
 Cypress.Commands.add('login', () => {
   const authUrl = `${Cypress.config('baseUrl')}/#/auth`;
   cy.request({
@@ -35,9 +37,12 @@ Cypress.Commands.add('login', () => {
   }).then((response) => {
     const query = response.redirectedToUrl.substr(response.redirectedToUrl.indexOf('?') + 1);
     const token = query.split('=')[1];
-    cy.window()
-      .its('localStorage')
-      .invoke('setItem', 'auth-token', token);
+    cy.window().its('appStore').then((store) => {
+      store.dispatch({
+        type: SET_TOKEN,
+        token
+      });
+    });
   });
 });
 
@@ -58,4 +63,9 @@ Cypress.Commands.add('getJsonTextareaValue', () => {
     const value = editor.getValue();
     return JSON.parse(value);
   });
+});
+
+Cypress.Commands.add('getFakeApiFixture', (fixturePath) => {
+  const fixtureFile = `./test/fake-api/fixtures/${fixturePath}/index.json`;
+  return cy.readFile(fixtureFile);
 });

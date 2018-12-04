@@ -10,4 +10,6 @@ gulp-cache
 /tmp/
 /docker/html/
 package-lock.json
-test/fake-api-db/*.json
+test/fake-api/db/*.json
+cypress/screenshots
+cypress/videos

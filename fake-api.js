@@ -3,6 +3,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
 const fs = require('fs-extra');
 
 const {
@@ -11,7 +12,10 @@ const {
   fakeExecutionStatusDb,
   fakeRulesDb,
   resetState
-} = require('./test/fake-api-db');
+} = require('./test/fake-api/db');
+
+const { generateJWT, verifyJWT } = require('./test/fake-api/token');
+let token;
 
 // Reset the fake API state
 resetState();
@@ -21,9 +25,12 @@ resetState();
  */
 
 function fakeApiMiddleWare (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
+  const origin = req.get('origin');
+
+  res.header('Access-Control-Allow-Origin', origin);
+  res.header('Access-Control-Allow-Credentials', true);
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, Origin');
 
   // intercepts OPTIONS method
   if (req.method === 'OPTIONS') {
@@ -32,14 +39,34 @@ function fakeApiMiddleWare (req, res, next) {
     return;
   } else {
     const auth = req.header('Authorization');
-    const re = /^\/token/;
+    const re = /^\/token|refresh/;
 
-    if (auth !== 'Bearer fake-token' && req.url.match(re) === null) {
-      res.status(401);
-      res.json({
-        message: 'Invalid Authorization token'
-      }).end();
-      return;
+    if (req.url.match(re) === null) {
+      if (auth !== `Bearer ${token}`) {
+        res.status(401);
+        res.json({
+          message: 'Invalid Authorization token'
+        }).end();
+        return;
+      }
+
+      try {
+        verifyJWT(token);
+      } catch (err) {
+        if (err instanceof jwt.TokenExpiredError) {
+          res.status(403);
+          res.json({
+            message: 'Access token has expired'
+          }).end();
+          return;
+        } else if (err instanceof jwt.JsonWebTokenError) {
+          res.status(400);
+          res.json({
+            message: 'Invalid Authorization token'
+          }).end();
+          return;
+        }
+      }
     }
   }
   next();
@@ -96,14 +123,12 @@ app.get('/providers/:id', async (req, res) => {
 
 app.post('/providers', async (req, res) => {
   if (req.body.id) {
-    // console.log('post collections', req.body);
     await fakeProvidersDb.addItem(req.body);
   }
   res.status(200).send({record: req.body, message: 'Record saved'}).end();
 });
 
 app.put('/providers/:id', async (req, res) => {
-  // console.log('put providers', req.params, req.body);
   const updatedItem = await fakeProvidersDb.updateItem(req.params.id, req.body);
   res.status(200).send(updatedItem);
 });
@@ -158,7 +183,7 @@ app.get('/logs/:executionName', async (req, res) => {
 app.get('/stats/aggregate', async (req, res, next) => {
   const field = req.query.field;
   const type = req.query.type;
-  const statsFile = `test/fake-api-fixtures/stats/aggregate/${type}/index.json`;
+  const statsFile = `test/fake-api/fixtures/stats/aggregate/${type}/index.json`;
   if (field === 'status' && await fs.pathExists(statsFile)) {
     const stats = await fs.readJson(statsFile);
     res.status(200).send(stats);
@@ -170,18 +195,53 @@ app.get('/stats/aggregate', async (req, res, next) => {
 app.get('/token', (req, res) => {
   const url = req.query.state;
   if (url) {
-    res.redirect(`${url}?token=fake-token`);
+    token = generateJWT();
+    res.redirect(`${url}?token=${token}`);
   } else {
     res.write('state parameter is missing');
     res.status(400).end();
   }
 });
 
+app.post('/refresh', (req, res) => {
+  if (!req.body.token) {
+    res.status(400);
+    res.json({
+      message: 'Missing Authorization token'
+    }).end();
+    return;
+  }
+  let requestToken = req.body.token;
+  try {
+    verifyJWT(requestToken);
+  } catch (err) {
+    if (err instanceof jwt.TokenExpiredError) {
+      res.status(403);
+      res.json({
+        message: 'Access token expired'
+      }).end();
+      return;
+    }
+    if (err instanceof jwt.JsonWebTokenError) {
+      res.status(403);
+      res.json({
+        message: 'Invalid access token'
+      }).end();
+      return;
+    }
+  }
+  token = generateJWT();
+  res.status(200);
+  res.json({
+    token
+  });
+});
+
 app.get('/auth', (req, res) => {
   res.status(200).end();
 });
 
-app.use('/', express.static('test/fake-api-fixtures', { index: 'index.json' }));
+app.use('/', express.static('test/fake-api/fixtures', { index: 'index.json' }));
 
 app.put('/*', (req, res) => {
   res.sendStatus(200).end();

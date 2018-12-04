@@ -2,10 +2,18 @@
 import moment from 'moment';
 import url from 'url';
 import { CMR, hostId } from '@cumulus/cmrjs';
-import { get, post, put, del, configureRequest, wrapRequest } from './helpers';
-import { set as setToken } from '../utils/auth';
+import {
+  get,
+  post,
+  put,
+  del,
+  configureRequest,
+  wrapRequest,
+  addRequestAuthorization
+} from './helpers';
 import _config from '../config';
 import { getCollectionId } from '../utils/format';
+import log from '../utils/log';
 
 const root = _config.apiRoot;
 const { pageLimit } = _config;
@@ -239,6 +247,44 @@ export const NEW_RECONCILIATION = 'NEW_RECONCILIATION';
 export const NEW_RECONCILIATION_INFLIGHT = 'NEW_RECONCILIATION_INFLIGHT';
 export const NEW_RECONCILIATION_ERROR = 'NEW_RECONCILIATION_ERROR';
 
+export const REFRESH_TOKEN = 'REFRESH_TOKEN';
+export const REFRESH_TOKEN_ERROR = 'REFRESH_TOKEN_ERROR';
+export const REFRESH_TOKEN_INFLIGHT = 'REFRESH_TOKEN_INFLIGHT';
+
+export const SET_TOKEN = 'SET_TOKEN';
+
+export const refreshAccessToken = (token, dispatch) => {
+  const start = new Date();
+  log('REFRESH_TOKEN_INFLIGHT');
+  dispatch({ type: REFRESH_TOKEN_INFLIGHT });
+
+  return new Promise((resolve, reject) => {
+    post(configureRequest(
+      {
+        url: url.resolve(root, 'refresh')
+      },
+      { token }
+    ), (error, data) => {
+      if (error) {
+        dispatch({
+          type: REFRESH_TOKEN_ERROR,
+          error
+        });
+        return reject(error);
+      }
+      const duration = new Date() - start;
+      log('REFRESH_TOKEN', duration + 'ms');
+      dispatch({
+        type: REFRESH_TOKEN,
+        token: data.token
+      });
+      return resolve();
+    });
+  });
+};
+
+export const setTokenState = (token) => ({ type: SET_TOKEN, token });
+
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
@@ -249,15 +295,17 @@ export const getCollection = (name, version) => wrapRequest(
   getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
 
 export const listCollections = (options) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     // wrap the request for collections data in a promise to make
     // it thenable and make it easier to create chained actions
     const wrapListCollections = () => {
       return new Promise((resolve, reject) => {
-        get(configureRequest({
+        const config = configureRequest({
           url: url.resolve(root, 'collections'),
           qs: Object.assign({ limit: pageLimit }, options)
-        }), (error, data) => {
+        });
+        addRequestAuthorization(config, getState);
+        get(config, (error, data) => {
           if (error) {
             dispatch({
               type: COLLECTIONS_ERROR,
@@ -490,7 +538,6 @@ export const getLogs = (options) => wrapRequest(null, get, {
 export const clearLogs = () => ({ type: CLEAR_LOGS });
 
 export const logout = () => {
-  setToken('');
   return { type: LOGOUT };
 };
 

@@ -57,6 +57,18 @@ declare global {
        *    cy.login()
        */
       login(): Chainable<null>
+
+      /**
+       * Get value of fixture for fake API
+       *
+       * @param {String} fixturePath - Path to fixture inside fake API `fixtures` directory
+       *
+       * @memberof Chainable
+       * @example
+       *   cy.getFixtureValue('executions').as('executionStatus');
+       *   cy.getFixtureValue('stats/aggregate/executions').as('statsAggregateExecutions');
+       */
+      getFakeApiFixture(fixturePath: String): Chainable<null>
     }
   }
 }
