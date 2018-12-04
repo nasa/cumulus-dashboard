@@ -109,3 +109,43 @@ $ docker run -e PORT=8181 -p 8181:8181 cumulus-dashboard:production-1
 ```
 
 In this example, the dashboard would be available at http://localhost:8181/
+
+## develop vs. master branches
+
+The `master` branch is the branch where the source code of HEAD always reflects the latest product release. The `develop` branch is the branch where the source code of HEAD always reflects the latest merged development changes for the next release.  The `develop` branch is the branch where we should branch off.
+
+When the source code in the develop branch reaches a stable point and is ready to be released, all of the changes should be merged back into master and then tagged with a release number.
+
+## How to release
+
+### 1. Checkout `develop` branch
+
+We will make changes in the `develop` branch.
+
+### 2. Update the version number
+
+When changes are ready to be released, the version number must be updated in `package.json`.
+
+### 3. Update the minimum version of Cumulus API if necessary
+
+### 4. Update CHANGELOG.md
+
+Update the CHANGELOG.md. Put a header under the 'Unreleased' section with the new version number and the date.
+
+Add a link reference for the github "compare" view at the bottom of the CHANGELOG.md, following the existing pattern. This link reference should create a link in the CHANGELOG's release header to changes in the corresponding release.
+
+### 5. Create a pull request against the master branch
+
+Create a PR against the `master` branch. Verify that the Circle CI build for the PR succeeds and then merge to master.
+
+### 6. Create a git tag for the release
+
+Push a new release tag to Github. The tag should be in the format `v1.2.3`, where `1.2.3` is the new version.
+
+Create and push a new git tag:
+
+```
+$ git checkout master
+$ git tag -a v1.x.x -m "Release 1.x.x"
+$ git push origin v1.x.x
+```
