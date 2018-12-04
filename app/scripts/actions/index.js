@@ -2,7 +2,15 @@
 import moment from 'moment';
 import url from 'url';
 import { CMR, hostId } from '@cumulus/cmrjs';
-import { get, post, put, del, configureRequest, wrapRequest } from './helpers';
+import {
+  get,
+  post,
+  put,
+  del,
+  configureRequest,
+  wrapRequest,
+  addRequestAuthorization
+} from './helpers';
 import _config from '../config';
 import { getCollectionId } from '../utils/format';
 import log from '../utils/log';
@@ -287,15 +295,17 @@ export const getCollection = (name, version) => wrapRequest(
   getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
 
 export const listCollections = (options) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     // wrap the request for collections data in a promise to make
     // it thenable and make it easier to create chained actions
     const wrapListCollections = () => {
       return new Promise((resolve, reject) => {
-        get(configureRequest({
+        const config = configureRequest({
           url: url.resolve(root, 'collections'),
           qs: Object.assign({ limit: pageLimit }, options)
-        }), (error, data) => {
+        });
+        addRequestAuthorization(config, getState);
+        get(config, (error, data) => {
           if (error) {
             dispatch({
               type: COLLECTIONS_ERROR,

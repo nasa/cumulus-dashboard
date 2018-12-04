@@ -7,15 +7,6 @@ import _config from '../config';
 import log from '../utils/log';
 const root = _config.apiRoot;
 
-function addRequestAuthorization (config, getState) {
-  let token = getProperty(getState(), 'api.tokens.token');
-  if (token) {
-    config.headers = config.headers || {};
-    config.headers.Authorization = 'Bearer ' + token;
-  }
-  return config;
-}
-
 function formatError (response, body) {
   let error = response.statusMessage;
   body = body || {};
@@ -72,6 +63,15 @@ export const del = function (config, callback) {
       return callback(null, body);
     }
   });
+};
+
+export const addRequestAuthorization = (config, getState) => {
+  let token = getProperty(getState(), 'api.tokens.token');
+  if (token) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = 'Bearer ' + token;
+  }
+  return config;
 };
 
 export const configureRequest = function (params, body) {
