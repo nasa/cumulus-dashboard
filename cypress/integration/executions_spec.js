@@ -37,8 +37,7 @@ describe('Dashboard Executions Page', () => {
         .next().contains('li', '1 Running');
 
       // shows a list of executions with IDs and status
-      const executionStatusFile = './test/fake-api-fixtures/executions/index.json';
-      cy.readFile(executionStatusFile).as('executionStatus');
+      cy.getFakeApiFixture('executions').as('executionStatus');
 
       cy.get('table tbody tr').as('list');
       cy.get('@list').its('length').should('be.eq', 5);
@@ -102,8 +101,7 @@ describe('Dashboard Executions Page', () => {
       cy.get('table tbody tr').as('events');
       cy.get('@events').its('length').should('be.eq', 7);
 
-      const executionStatusFile = `./test/fake-api-fixtures/executions/status/${executionArn}/index.json`;
-      cy.readFile(executionStatusFile).as('executionStatus');
+      cy.getFakeApiFixture(`executions/status/${executionArn}`).as('executionStatus');
 
       cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
         cy.get('@events').each(($el, index, $list) => {
@@ -128,8 +126,8 @@ describe('Dashboard Executions Page', () => {
     it('should show logs for a single execution', () => {
       const executionName = '50eaad71-bba8-4376-83d7-bb9cc1309b92';
       const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:50eaad71-bba8-4376-83d7-bb9cc1309b92';
-      const executionLogsFile = `./test/fake-api-fixtures/executions/logs/${executionName}/index.json`;
-      cy.readFile(executionLogsFile).as('executionLogs');
+
+      cy.getFakeApiFixture(`executions/logs/${executionName}`).as('executionLogs');
 
       cy.visit(`/#/executions/execution/${executionArn}`);
       cy.contains('.heading--large', 'Execution');

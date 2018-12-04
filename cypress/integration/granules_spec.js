@@ -39,14 +39,13 @@ describe('Dashboard Granules Page', () => {
         .contains('li', '14 Running');
 
       // shows a list of granules
-      const granulesFile = './test/fake-api-fixtures/granules/index.json';
-      cy.readFile(granulesFile).as('granulesList');
+      cy.getFakeApiFixture('granules').as('granulesList');
 
       cy.get('table tbody tr').as('list');
       cy.get('@list').its('length').should('be.eq', 10);
 
       // compare data in each row with the data from fixture
-      cy.get('@list').each(($el, index, $list) => {
+      cy.get('@list').each(($el, index) => {
         // columns in the row
         cy.wrap($el).children().as('columns');
         cy.get('@columns').its('length').should('be.eq', 8);

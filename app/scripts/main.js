@@ -16,8 +16,16 @@ import {
 
 import config from './config';
 import reducers from './reducers';
+import { refreshTokenMiddleware } from './middleware/token';
 
-const store = createStore(reducers, applyMiddleware(thunkMiddleware));
+const store = createStore(reducers, applyMiddleware(
+  refreshTokenMiddleware,
+  thunkMiddleware
+));
+
+if (window.Cypress && window.Cypress.env('TESTING') === true) {
+  window.appStore = store;
+}
 
 console.log.apply(console, config.consoleMessage);
 console.log('Environment', config.environment);
