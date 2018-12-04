@@ -29,7 +29,6 @@ function fakeApiMiddleWare (req, res, next) {
 
   res.header('Access-Control-Allow-Origin', origin);
   res.header('Access-Control-Allow-Credentials', true);
-  // res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, Origin');
 
@@ -75,6 +74,10 @@ function fakeApiMiddleWare (req, res, next) {
 
 app.use(bodyParser.json());
 app.use('/', fakeApiMiddleWare);
+
+app.get('/instanceMeta', (req, res) => {
+  res.json({cmr: {provider: 'CUMULUS', environment: 'UAT'}}).end();
+});
 
 app.get('/collections', async (req, res) => {
   const collections = await fakeCollectionsDb.getItems();

@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Sidebar from '../app/sidebar';
+import LoadingEllipsis from '../app/loading-ellipsis';
 import { interval, getCount, createReconciliationReport } from '../../actions';
 import { updateInterval } from '../../config';
 
@@ -14,7 +15,8 @@ var ReconciliationReports = React.createClass({
     location: PropTypes.object,
     params: PropTypes.object,
     dispatch: PropTypes.func,
-    stats: PropTypes.object
+    stats: PropTypes.object,
+    reconciliationReports: PropTypes.object
   },
 
   componentWillMount: function () {
@@ -37,13 +39,14 @@ var ReconciliationReports = React.createClass({
   },
 
   render: function () {
+    const { reconciliationReports } = this.props;
     return (
       <div className='page__reconciliations'>
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge'>Reconciliation Reports</h1>
             <button className='button button--large button--white button__addcollections button__arrow button__animation' onClick={this.createReport}>
-              Create a Report
+             { reconciliationReports.createReportInflight ? <LoadingEllipsis /> : 'Create a Report'}
             </button>
           </div>
         </div>
@@ -64,5 +67,6 @@ var ReconciliationReports = React.createClass({
 });
 
 export default connect(state => ({
-  stats: state.stats
+  stats: state.stats,
+  reconciliationReports: state.reconciliationReports
 }))(ReconciliationReports);

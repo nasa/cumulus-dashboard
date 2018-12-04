@@ -7,15 +7,6 @@ import _config from '../config';
 import log from '../utils/log';
 const root = _config.apiRoot;
 
-function addRequestAuthorization (config, getState) {
-  let token = getProperty(getState(), 'api.tokens.token');
-  if (token) {
-    config.headers = config.headers || {};
-    config.headers.Authorization = 'Bearer ' + token;
-  }
-  return config;
-}
-
 function formatError (response, body) {
   let error = response.statusMessage;
   body = body || {};
@@ -74,6 +65,15 @@ export const del = function (config, callback) {
   });
 };
 
+export const addRequestAuthorization = (config, getState) => {
+  let token = getProperty(getState(), 'api.tokens.token');
+  if (token) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = 'Bearer ' + token;
+  }
+  return config;
+};
+
 export const configureRequest = function (params, body) {
   let config;
   if (typeof params === 'string') {
@@ -97,7 +97,7 @@ export const configureRequest = function (params, body) {
 };
 
 export const wrapRequest = function (id, query, params, type, body) {
-  let config = configureRequest(params, body);
+  const config = configureRequest(params, body);
 
   return function (dispatch, getState) {
     const inflightType = type + '_INFLIGHT';

@@ -2,8 +2,8 @@
 import test from 'ava';
 import { wrapRequest } from '../../app/scripts/actions/helpers';
 
-const dispatch = () => true;
-const getState = () => ({
+const dispatchStub = () => true;
+const getStateStub = () => ({
   api: {
     tokens: {
       token: 'token'
@@ -23,13 +23,13 @@ test('wrap request', function (t) {
   const req1 = (config) => {
     t.true(/blahblahblah/.test(config.url));
   };
-  wrapRequest(id, req1, url, type)(dispatch, getState);
+  wrapRequest(id, req1, url, type)(dispatchStub, getStateStub);
 
   const urlObj = { url };
   const req2 = (config) => {
     t.deepEqual(config, { url, headers, json: true });
   };
-  wrapRequest(id, req2, urlObj, type)(dispatch, getState);
+  wrapRequest(id, req2, urlObj, type)(dispatchStub, getStateStub);
 
   const body = { limit: 1 };
   const req3 = (config) => {
@@ -40,5 +40,5 @@ test('wrap request', function (t) {
       headers
     });
   };
-  wrapRequest(id, req3, urlObj, type, body)(dispatch, getState);
+  wrapRequest(id, req3, urlObj, type, body)(dispatchStub, getStateStub);
 });
