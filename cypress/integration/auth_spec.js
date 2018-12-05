@@ -24,6 +24,7 @@ describe('Dashboard authentication', () => {
       store.dispatch(listGranules);
 
       // token should not have been updated
+      expect(store.getState().api.tokens.inflight).to.eq(false);
       expect(store.getState().api.tokens.token).to.eq('fake-token');
     });
 
