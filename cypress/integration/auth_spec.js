@@ -12,16 +12,37 @@ describe('Dashboard authentication', () => {
     cy.login();
   });
 
-  it('should logout user on invalid token', () => {
+  it('should not attempt refresh for non-JWT token', () => {
+    cy.visit('/');
+
     cy.window().its('appStore').then((store) => {
-      // Dispatch an action to set the token
       store.dispatch({
         type: SET_TOKEN,
-        token: 'invalid-token'
+        token: 'fake-token'
       });
-      // Dispatch an action to request granules. It should fail
-      // and log the user out when it recognizes the invalid token.
+
       store.dispatch(listGranules);
+
+      // token should not have been updated
+      expect(store.getState().api.tokens.token).to.eq('fake-token');
+    });
+
+    cy.url().should('not.include', '/#/auth');
+  });
+
+  it('should logout user on invalid JWT token', () => {
+    cy.window().its('appStore').then((store) => {
+      cy.task('generateJWT', {}).then((invalidJwt) => {
+        // Dispatch an action to set the token
+        store.dispatch({
+          type: SET_TOKEN,
+          token: invalidJwt
+        });
+
+        // Dispatch an action to request granules. It should fail
+        // and log the user out when it recognizes the invalid token.
+        store.dispatch(listGranules);
+      });
     });
 
     shouldBeRedirectedToLogin();
