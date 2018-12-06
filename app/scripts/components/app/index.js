@@ -17,11 +17,12 @@ var App = React.createClass({
     apiVersion: React.PropTypes.object
   },
 
+  /*
   componentDidMount: () => {
     const { dispatch } = this.props;
     dispatch(getApiVersion);
     dispatch(validateApiVersion);
-  },
+  },*/
 
   render: function () {
     const { isCompatible, versionNumber } = this.props.apiVersion;
@@ -30,13 +31,13 @@ var App = React.createClass({
         { target !== 'cumulus' ? (
           <div className='app__target--container'>
             <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
-            <h5 className='app__api_version'>
+	    <!--<h5 className='app__api_version'>
               {`API Version: ${versionNumber}`}
               { isCompatible ? 'INCOMPATIBLE CUMULUS API - PLEASE CHECK' : '' }
-            </h5>
+	    </h5>-->
           </div>
         ) : null }
-        <Header dispatch={this.props.dispatch} api={this.props.api} location={this.props.location}/>
+        <Header dispatch={this.props.dispatch} api={this.props.api} apiVersion={this.props.apiVersion} location={this.props.location}/>
         <main className='main' role='main'>
           {this.props.children}
         </main>
