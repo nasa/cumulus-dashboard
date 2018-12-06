@@ -14,7 +14,13 @@ const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
     if (!token) {
       return next(action);
     }
-    const tokenExpiration = get(jwtDecode(token), 'exp');
+    const jwtData = jwtDecode(token);
+    // Bail out early if this is not a JWT value to preserve backwards
+    // compatibility with API returning regular tokens
+    if (!jwtData) {
+      return next(action);
+    }
+    const tokenExpiration = get(jwtData, 'exp');
     if (!tokenExpiration) {
       dispatch({ type: 'LOGIN_ERROR', error: 'Invalid token' });
       return hashHistory.push('/auth');
