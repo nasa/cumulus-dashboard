@@ -17,7 +17,7 @@ var App = React.createClass({
     apiVersion: React.PropTypes.object
   },
 
-  componentWillMount: () => {
+  componentDidMount: () => {
     const { dispatch } = this.props;
     dispatch(getApiVersion);
     dispatch(validateApiVersion);
