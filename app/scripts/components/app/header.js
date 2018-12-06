@@ -30,10 +30,10 @@ var Header = React.createClass({
     apiVersion: React.PropTypes.object
   },
 
-  componentWillMount: () => {
+  componentDidMount: function () {
     const { dispatch } = this.props;
-    dispatch(getApiVersion);
-    dispatch(validateApiVersion);
+    dispatch(getApiVersion());
+    // dispatch(validateApiVersion);
   },
 
   logout: function () {

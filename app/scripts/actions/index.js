@@ -259,10 +259,11 @@ export const API_VERSION_ERROR = 'API_VERSION_ERROR';
 
 export const SET_API_VERSION_COMPAT_ERROR = 'SET_API_VERSION_COMPAT_ERROR';
 
-export const getApiVersion = () => wrapRequest(
-  null, get, 'version', API_VERSION);
+export const getApiVersion = () => {
+  return wrapRequest( null, get, 'version', API_VERSION);
+};
 
-export const validateApiVersion = (apiVersion, compatibleList, dispatch) => {
+/*export const validateApiVersion = (apiVersion, compatibleList, dispatch) => {
   const isCompatible = compatibleList.indexOf(apiVersion) > -1;
   if (!isCompatible) {
     dispatch({
@@ -274,7 +275,7 @@ export const validateApiVersion = (apiVersion, compatibleList, dispatch) => {
       }
     });
   }
-};
+};*/
 
 export const refreshAccessToken = (token, dispatch) => {
   const start = new Date();
