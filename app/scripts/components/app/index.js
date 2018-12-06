@@ -16,7 +16,7 @@ var App = React.createClass({
     api: React.PropTypes.object
   },
 
-  componentWillMount: () => {
+  componentDidMount: () => {
     const { dispatch } = this.props;
     dispatch(getApiVersion);
     dispatch(validateApiVersion);
@@ -28,8 +28,9 @@ var App = React.createClass({
         { target !== 'cumulus' ? (
           <div className='app__target--container'>
             <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
-            <h5 className='app__api_version'>{`API Version: ${this.state.api_version}`}
-            { this.state.version_compat_error ? 'INCOMPATIBLE CUMULUS API _ PLEASE CHECK' : '' }
+            <h5 className='app__api_version'>
+              {`API Version: ${this.state.api_version}`}
+              { this.state.version_compat_error ? 'INCOMPATIBLE CUMULUS API _ PLEASE CHECK' : '' }
             </h5>
           </div>
         ) : null }
