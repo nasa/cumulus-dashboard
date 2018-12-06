@@ -257,8 +257,24 @@ export const API_VERSION = 'API_VERSION';
 export const API_VERSION_INFLIGHT = 'API_VERSION_INFLIGHT';
 export const API_VERSION_ERROR = 'API_VERSION_ERROR';
 
+export const SET_API_VERSION_COMPAT_ERROR = 'SET_API_VERSION_COMPAT_ERROR';
+
 export const getApiVersion = () => wrapRequest(
   null, get, 'version', API_VERSION);
+
+export const validateApiVersion = (apiVersion, compatibleList, dispatch) => {
+  const isCompatible = compatibleList.indexOf(apiVersion) > -1;
+  if (!isCompatible) {
+    dispatch({
+      type: SET_API_VERSION_COMPAT_ERROR,
+      payload: {
+        isCompatible,
+        apiVersion,
+        compatibleList
+      }
+    });
+  }
+};
 
 export const refreshAccessToken = (token, dispatch) => {
   const start = new Date();

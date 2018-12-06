@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { target, environment } from '../../config';
 import { displayCase } from '../../utils/format';
-import { getApiVersion } from '../../actions';
+import { getApiVersion, validateApiVersion } from '../../actions';
 
 import Header from './header';
 
@@ -17,7 +17,9 @@ var App = React.createClass({
   },
 
   componentWillMount: () => {
-    this.props.dispatch(getApiVersion);
+    const { dispatch } = this.props;
+    dispatch(getApiVersion);
+    dispatch(validateApiVersion);
   },
 
   render: function () {
@@ -26,7 +28,9 @@ var App = React.createClass({
         { target !== 'cumulus' ? (
           <div className='app__target--container'>
             <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
-            <h5 className='app__api_version'>{`API Version: ${this.state.api_version}`}</h5>
+            <h5 className='app__api_version'>{`API Version: ${this.state.api_version}`}
+            { this.state.version_compat_error ? 'INCOMPATIBLE CUMULUS API _ PLEASE CHECK' : '' }
+            </h5>
           </div>
         ) : null }
         <Header dispatch={this.props.dispatch} api={this.props.api} location={this.props.location}/>
