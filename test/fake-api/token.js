@@ -1,11 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const tokenSecret = 'secret';
-function generateJWT (params) {
-  params = params || {};
-  const options = Object.assign({
-    expiresIn: 30
-  }, params);
+function generateJWT (options = { expiresIn: 30 }) {
   return jwt.sign({
     data: 'fake-token'
   }, tokenSecret, options);
