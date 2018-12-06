@@ -3,8 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import c from 'classnames';
 import { Link } from 'react-router';
-import { logout, getApiVersion, validateApiVersion } from '../../actions';
-import { graphicsPath, nav } from '../../config';
+import { logout, checkApiVersion } from '../../actions';
+import { graphicsPath, nav, compatibleApiVersions } from '../../config';
 import { window } from '../../utils/browser';
 import { strings } from '../locale';
 
@@ -23,17 +23,16 @@ const paths = [
 var Header = React.createClass({
   displayName: 'Header',
   propTypes: {
-    location: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
     api: React.PropTypes.object,
-    minimal: React.PropTypes.bool,
-    apiVersion: React.PropTypes.object
+    apiVersion: React.PropTypes.object,
+    dispatch: React.PropTypes.func,
+    location: React.PropTypes.object,
+    minimal: React.PropTypes.bool
   },
 
-  componentDidMount: function () {
-    const { dispatch } = this.props;
-    dispatch(getApiVersion());
-    // dispatch(validateApiVersion);
+  componentWillMount: function () {
+    const { dispatch, api } = this.props;
+    if (api.authenticated) dispatch(checkApiVersion(compatibleApiVersions));
   },
 
   logout: function () {
