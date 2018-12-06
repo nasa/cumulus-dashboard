@@ -9,34 +9,30 @@ import Header from './header';
 var App = React.createClass({
   displayName: 'App',
 
-  getInitialState: function () {
-    return {
-      api_version: ''
-    };
-  },
-
   propTypes: {
     children: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     location: React.PropTypes.object,
-    api: React.PropTypes.object
+    api: React.PropTypes.object,
+    apiVersion: React.PropTypes.object
   },
 
-  componentDidMount: () => {
+  componentWillMount: () => {
     const { dispatch } = this.props;
     dispatch(getApiVersion);
     dispatch(validateApiVersion);
   },
 
   render: function () {
+    const { isCompatible, versionNumber } = this.props.apiVersion;
     return (
       <div className='app'>
         { target !== 'cumulus' ? (
           <div className='app__target--container'>
             <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
             <h5 className='app__api_version'>
-              {`API Version: ${this.state.api_version}`}
-              { this.state.version_compat_error ? 'INCOMPATIBLE CUMULUS API _ PLEASE CHECK' : '' }
+              {`API Version: ${versionNumber}`}
+              { isCompatible ? 'INCOMPATIBLE CUMULUS API - PLEASE CHECK' : '' }
             </h5>
           </div>
         ) : null }
