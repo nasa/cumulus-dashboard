@@ -31,10 +31,10 @@ var App = React.createClass({
         { target !== 'cumulus' ? (
           <div className='app__target--container'>
             <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
-	    <!--<h5 className='app__api_version'>
+	    { /* <h5 className='app__api_version'>
               {`API Version: ${versionNumber}`}
               { isCompatible ? 'INCOMPATIBLE CUMULUS API - PLEASE CHECK' : '' }
-	    </h5>-->
+	    </h5> */ }
           </div>
         ) : null }
         <Header dispatch={this.props.dispatch} api={this.props.api} apiVersion={this.props.apiVersion} location={this.props.location}/>
