@@ -1,8 +1,9 @@
 'use strict';
 import React from 'react';
+import { connect } from 'react-redux';
 import c from 'classnames';
 import { Link } from 'react-router';
-import { logout } from '../../actions';
+import { logout, getApiVersion, validateApiVersion } from '../../actions';
 import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
 import { strings } from '../locale';
@@ -25,7 +26,14 @@ var Header = React.createClass({
     location: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     api: React.PropTypes.object,
-    minimal: React.PropTypes.bool
+    minimal: React.PropTypes.bool,
+    apiVersion: React.PropTypes.object
+  },
+
+  componentWillMount: () => {
+    const { dispatch } = this.props;
+    dispatch(getApiVersion);
+    dispatch(validateApiVersion);
   },
 
   logout: function () {
@@ -52,6 +60,7 @@ var Header = React.createClass({
       <div className='header'>
         <div className='row'>
           <h1 className='logo'><Link to='/'><img alt="Logo" src={graphicsPath + strings.logo} /></Link></h1>
+          <h5 className='apiVersion'>{ this.props.apiVersion.versionNumber }</h5>
           <nav>
             { !this.props.minimal ? <ul>
               {activePaths.map(path => <li
