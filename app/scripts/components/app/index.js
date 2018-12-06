@@ -9,6 +9,12 @@ import Header from './header';
 var App = React.createClass({
   displayName: 'App',
 
+  getInitialState: function () {
+    return {
+      api_version: ''
+    };
+  },
+
   propTypes: {
     children: React.PropTypes.object,
     dispatch: React.PropTypes.func,
