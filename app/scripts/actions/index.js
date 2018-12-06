@@ -253,6 +253,13 @@ export const REFRESH_TOKEN_INFLIGHT = 'REFRESH_TOKEN_INFLIGHT';
 
 export const SET_TOKEN = 'SET_TOKEN';
 
+export const API_VERSION = 'API_VERSION';
+export const API_VERSION_INFLIGHT = 'API_VERSION_INFLIGHT';
+export const API_VERSION_ERROR = 'API_VERSION_ERROR';
+
+export const getApiVersion = () => wrapRequest(
+  null, get, 'version', API_VERSION);
+
 export const refreshAccessToken = (token, dispatch) => {
   const start = new Date();
   log('REFRESH_TOKEN_INFLIGHT');
