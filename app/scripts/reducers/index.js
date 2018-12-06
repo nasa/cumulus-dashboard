@@ -20,7 +20,7 @@ import cumulusInstance from './cumulus-instance';
 export const reducers = {
   def: (state = {}, action) => state,
   api,
-  api-version,
+  apiVersion,
   collections,
   mmtLinks,
   cumulusInstance,
