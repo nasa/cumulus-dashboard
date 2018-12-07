@@ -2,7 +2,7 @@ import { hashHistory } from 'react-router';
 import { get } from 'object-path';
 import { decode as jwtDecode } from 'jsonwebtoken';
 
-import { refreshAccessToken } from '../actions';
+import { forceLogout, refreshAccessToken } from '../actions';
 import config from '../config';
 
 const refreshInterval = Math.ceil((config.updateInterval + 1000) / 1000);
@@ -22,8 +22,10 @@ const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
     }
     const tokenExpiration = get(jwtData, 'exp');
     if (!tokenExpiration) {
-      dispatch({ type: 'LOGIN_ERROR', error: 'Invalid token' });
-      return hashHistory.push('/auth');
+      return forceLogout(dispatch, token, 'Invalid token')
+        .then(() => {
+          return hashHistory.push('/auth');
+        });
     }
     // tokenExpiration = date seconds since epoch
     // Math.ceil(Date.now() / 1000) = now in seconds since epoch
@@ -37,8 +39,10 @@ const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
             return next(action);
           })
           .catch(() => {
-            dispatch({ type: 'LOGIN_ERROR', error: 'Session expired' });
-            return hashHistory.push('/auth');
+            return forceLogout(dispatch, token, 'Session expired')
+              .then(() => {
+                return hashHistory.push('/auth');
+              });
           });
       } else {
         return deferred.promise.then(() => {
