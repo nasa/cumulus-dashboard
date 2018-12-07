@@ -1,7 +1,7 @@
 import {
   API_VERSION,
   API_VERSION_ERROR,
-  API_VERSION_COMPAT_ERROR
+  API_VERSION_COMPAT
 } from '../actions';
 
 export const initialState = {
@@ -16,7 +16,7 @@ export default function reducer (state = initialState, action) {
     case API_VERSION:
       state.apiVersion = action.apiVersion;
       break;
-    case SET_API_VERSION_COMPAT:
+    case API_VERSION_COMPAT:
       state.apiIsCompatible = action.payload.isCompatible;
       break;
     case API_VERSION_ERROR:

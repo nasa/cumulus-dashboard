@@ -257,7 +257,7 @@ export const API_VERSION = 'API_VERSION';
 export const API_VERSION_INFLIGHT = 'API_VERSION_INFLIGHT';
 export const API_VERSION_ERROR = 'API_VERSION_ERROR';
 
-export const SET_API_VERSION_COMPAT_ERROR = 'SET_API_VERSION_COMPAT_ERROR';
+export const API_VERSION_COMPAT = 'API_VERSION_COMPAT';
 
 export const refreshAccessToken = (token, dispatch) => {
   const start = new Date();
@@ -318,7 +318,7 @@ export const checkApiVersion = (apiCompatList) => {
   	  }
 	  if (apiCompatList.indexOf(data.api_version) < 0) {
 	    dispatch({
-	      type: SET_API_VERSION_COMPAT,
+	      type: API_VERSION_COMPAT,
 	      payload: {
 		message: `Dashboard version incompatible with api version (${data.api_version})`,
 	        isCompatible: false
