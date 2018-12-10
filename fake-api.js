@@ -203,6 +203,18 @@ app.get('/token', (req, res) => {
   }
 });
 
+app.post('/token-revoke', (req, res) => {
+  if (req.body.token) {
+    token = '';
+    res.status(200).json({
+      message: 'Deleted token'
+    }).end();
+  } else {
+    res.write('token is required');
+    res.status(400).end();
+  }
+});
+
 app.post('/refresh', (req, res) => {
   if (!req.body.token) {
     res.status(400);
