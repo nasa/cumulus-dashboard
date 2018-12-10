@@ -565,7 +565,7 @@ export const logout = () => {
 export const forceLogout = (dispatch, token, error) => {
   return deleteToken(dispatch, token)
     .then(() => {
-      dispatch({ type: 'LOGIN_ERROR', error });
+      return dispatch({ type: 'LOGIN_ERROR', error });
     });
 };
 
