@@ -8,7 +8,8 @@ import {
   put,
   del,
   configureRequest,
-  wrapRequest
+  wrapRequest,
+  addRequestAuthorization
 } from './helpers';
 import _config from '../config';
 import { getCollectionId } from '../utils/format';
@@ -292,41 +293,119 @@ export const interval = function (action, wait, immediate) {
   return () => clearInterval(intervalId);
 };
 
-export const getCollection = (name, version) => wrapRequest(
-  getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
+// export const getCollection = (name, version) => wrapRequest(
+//   getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
+
+export const getCollection = (name, version) => ({
+  [CALL_API]: {
+    type: COLLECTION,
+    method: 'GET',
+    id: getCollectionId({name, version}),
+    path: `collections?name=${name}&version=${version}`
+  }
+});
 
 // export const listCollections = (options) => wrapRequest(null, get, {
 //   url: url.resolve(root, 'collections'),
 //   qs: Object.assign({ limit: pageLimit }, options)
 // }, COLLECTIONS);
 
-export const listCollections = (options) => ({
+// export const listCollections = (options) => ({
+//   [CALL_API]: {
+//     type: COLLECTIONS,
+//     method: 'GET',
+//     id: null,
+//     url: url.resolve(root, 'collections'),
+//     qs: Object.assign({ limit: pageLimit }, options)
+//   }
+// });
+
+export const listCollections = (options) => {
+  return (dispatch, getState) => {
+    // it thenable and make it easier to create chained actions
+    const wrapListCollections = () => {
+      return new Promise((resolve, reject) => {
+        const config = configureRequest({
+          url: url.resolve(root, 'collections'),
+          qs: Object.assign({ limit: pageLimit }, options)
+        });
+        addRequestAuthorization(config, getState);
+        get(config, (error, data) => {
+          if (error) {
+            dispatch({
+              type: COLLECTIONS_ERROR,
+              error
+            });
+            return reject(error);
+          }
+          dispatch({
+            type: COLLECTIONS,
+            data
+          });
+          return resolve();
+        });
+      });
+    };
+    return wrapListCollections().then(() => {
+      return dispatch(getMMTLinks());
+    });
+  };
+};
+
+// export const createCollection = (payload) => wrapRequest(
+//   getCollectionId(payload), post, 'collections', NEW_COLLECTION, payload);
+
+export const createCollection = (payload) => ({
   [CALL_API]: {
-    type: COLLECTIONS,
-    method: 'GET',
-    id: null,
-    url: url.resolve(root, 'collections'),
-    qs: Object.assign({ limit: pageLimit }, options)
+    type: NEW_COLLECTION,
+    method: 'POST',
+    id: getCollectionId(payload),
+    path: 'collections',
+    body: payload
   }
 });
 
-export const createCollection = (payload) => wrapRequest(
-  getCollectionId(payload), post, 'collections', NEW_COLLECTION, payload);
+// export const updateCollection = (payload) => wrapRequest(
+//   getCollectionId(payload), put, `collections/${payload.name}/${payload.version}`, UPDATE_COLLECTION, payload);
 
-export const updateCollection = (payload) => wrapRequest(
-  getCollectionId(payload), put, `collections/${payload.name}/${payload.version}`, UPDATE_COLLECTION, payload);
+export const updateCollection = (payload) => ({
+  [CALL_API]: {
+    type: UPDATE_COLLECTION,
+    method: 'PUT',
+    id: getCollectionId(payload),
+    path: `collections/${payload.name}/${payload.version}`,
+    body: payload
+  }
+});
 
 export const clearUpdateCollection = (collectionName) => ({ type: UPDATE_COLLECTION_CLEAR, id: collectionName });
 
-export const deleteCollection = (name, version) => wrapRequest(
-  getCollectionId({name, version}), del, `collections/${name}/${version}`, COLLECTION_DELETE);
+// export const deleteCollection = (name, version) => wrapRequest(
+//   getCollectionId({name, version}), del, `collections/${name}/${version}`, COLLECTION_DELETE);
+
+export const deleteCollection = (name, version) => ({
+  [CALL_API]: {
+    type: COLLECTION_DELETE,
+    method: 'DELETE',
+    id: getCollectionId({name, version}),
+    path: `collections/${name}/${version}`
+  }
+});
 
 export const searchCollections = (prefix) => ({ type: SEARCH_COLLECTIONS, prefix: prefix });
 export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH });
 export const filterCollections = (param) => ({ type: FILTER_COLLECTIONS, param: param });
 export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
 
-export const getCumulusInstanceMetadata = () => wrapRequest(null, get, 'instanceMeta', ADD_INSTANCE_META_CMR);
+// export const getCumulusInstanceMetadata = () => wrapRequest(null, get, 'instanceMeta', ADD_INSTANCE_META_CMR);
+
+export const getCumulusInstanceMetadata = () => ({
+  [CALL_API]: {
+    type: ADD_INSTANCE_META_CMR,
+    method: 'GET',
+    path: 'instanceMeta'
+  }
+});
 
 /**
  * Iterates over each collection in the application collections state dispatching the
@@ -396,11 +475,6 @@ export const buildMMTLink = (conceptId, cmrEnv) => {
 export const getGranule = (granuleId) => wrapRequest(
   granuleId, get, `granules/${granuleId}`, GRANULE);
 
-// export const listGranules = (options) => wrapRequest(null, get, {
-//   url: url.resolve(root, 'granules'),
-//   qs: Object.assign({ limit: pageLimit }, options)
-// }, GRANULES);
-
 export const listGranules = (options) => ({
   [CALL_API]: {
     type: GRANULES,
@@ -461,11 +535,6 @@ export const getStats = (options) => wrapRequest(null, get, {
 }, STATS);
 
 // count queries *must* include type and field properties.
-// export const getCount = (options) => wrapRequest(null, get, {
-//   url: url.resolve(root, 'stats/aggregate'),
-//   qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
-// }, COUNT);
-
 export const getCount = (options) => ({
   [CALL_API]: {
     type: COUNT,

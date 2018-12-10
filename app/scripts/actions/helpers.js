@@ -83,6 +83,10 @@ export const configureRequest = function (params, body) {
     };
   } else if (params.url) {
     config = params;
+  } else if (params.path && typeof params.path === 'string') {
+    config = {
+      url: url.resolve(root, params.path)
+    };
   } else {
     throw new Error('Must include a url with request');
   }
@@ -90,6 +94,8 @@ export const configureRequest = function (params, body) {
 
   if (body && typeof body === 'object') {
     config.body = body;
+  } else if (params.body && typeof params.body === 'object') {
+    config.body = params.body;
   }
 
   config.headers = config.headers || {};
