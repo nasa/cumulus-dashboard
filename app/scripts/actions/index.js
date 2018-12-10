@@ -558,15 +558,14 @@ export const deleteToken = (dispatch, token) => {
   });
 };
 
-export const logout = () => {
-  return { type: LOGOUT };
+export const logout = (dispatch, token) => {
+  return deleteToken(dispatch, token)
+    .then(() => dispatch({ type: LOGOUT }));
 };
 
 export const forceLogout = (dispatch, token, error) => {
   return deleteToken(dispatch, token)
-    .then(() => {
-      return dispatch({ type: 'LOGIN_ERROR', error });
-    });
+    .then(() => dispatch({ type: 'LOGIN_ERROR', error }));
 };
 
 export const login = (token) => {
