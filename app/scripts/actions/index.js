@@ -8,8 +8,7 @@ import {
   put,
   del,
   configureRequest,
-  wrapRequest,
-  addRequestAuthorization
+  wrapRequest
 } from './helpers';
 import _config from '../config';
 import { getCollectionId } from '../utils/format';
@@ -253,6 +252,8 @@ export const REFRESH_TOKEN_INFLIGHT = 'REFRESH_TOKEN_INFLIGHT';
 
 export const SET_TOKEN = 'SET_TOKEN';
 
+export const CALL_API = 'CALL_API';
+
 export const refreshAccessToken = (token, dispatch) => {
   const start = new Date();
   log('REFRESH_TOKEN_INFLIGHT');
@@ -294,38 +295,20 @@ export const interval = function (action, wait, immediate) {
 export const getCollection = (name, version) => wrapRequest(
   getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
 
-export const listCollections = (options) => {
-  return (dispatch, getState) => {
-    // wrap the request for collections data in a promise to make
-    // it thenable and make it easier to create chained actions
-    const wrapListCollections = () => {
-      return new Promise((resolve, reject) => {
-        const config = configureRequest({
-          url: url.resolve(root, 'collections'),
-          qs: Object.assign({ limit: pageLimit }, options)
-        });
-        addRequestAuthorization(config, getState);
-        get(config, (error, data) => {
-          if (error) {
-            dispatch({
-              type: COLLECTIONS_ERROR,
-              error
-            });
-            return reject(error);
-          }
-          dispatch({
-            type: COLLECTIONS,
-            data
-          });
-          return resolve();
-        });
-      });
-    };
-    return wrapListCollections().then(() => {
-      return dispatch(getMMTLinks());
-    });
-  };
-};
+// export const listCollections = (options) => wrapRequest(null, get, {
+//   url: url.resolve(root, 'collections'),
+//   qs: Object.assign({ limit: pageLimit }, options)
+// }, COLLECTIONS);
+
+export const listCollections = (options) => ({
+  [CALL_API]: {
+    type: COLLECTIONS,
+    method: 'GET',
+    id: null,
+    url: url.resolve(root, 'collections'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
 
 export const createCollection = (payload) => wrapRequest(
   getCollectionId(payload), post, 'collections', NEW_COLLECTION, payload);
@@ -413,10 +396,20 @@ export const buildMMTLink = (conceptId, cmrEnv) => {
 export const getGranule = (granuleId) => wrapRequest(
   granuleId, get, `granules/${granuleId}`, GRANULE);
 
-export const listGranules = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'granules'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, GRANULES);
+// export const listGranules = (options) => wrapRequest(null, get, {
+//   url: url.resolve(root, 'granules'),
+//   qs: Object.assign({ limit: pageLimit }, options)
+// }, GRANULES);
+
+export const listGranules = (options) => ({
+  [CALL_API]: {
+    type: GRANULES,
+    method: 'GET',
+    id: null,
+    url: url.resolve(root, 'granules'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
 
 // only query the granules from the last hour
 export const getRecentGranules = () => wrapRequest(null, get, {
@@ -468,10 +461,20 @@ export const getStats = (options) => wrapRequest(null, get, {
 }, STATS);
 
 // count queries *must* include type and field properties.
-export const getCount = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'stats/aggregate'),
-  qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
-}, COUNT);
+// export const getCount = (options) => wrapRequest(null, get, {
+//   url: url.resolve(root, 'stats/aggregate'),
+//   qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
+// }, COUNT);
+
+export const getCount = (options) => ({
+  [CALL_API]: {
+    type: COUNT,
+    method: 'GET',
+    id: null,
+    url: url.resolve(root, 'stats/aggregate'),
+    qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
+  }
+});
 
 export const listPdrs = (options) => wrapRequest(null, get, {
   url: url.resolve(root, 'pdrs'),
@@ -586,7 +589,16 @@ export const queryHistogram = (options) => wrapRequest(null, get, {
   qs: options
 }, HISTOGRAM);
 
-export const listWorkflows = (options) => wrapRequest(null, get, 'workflows', WORKFLOWS);
+// export const listWorkflows = (options) => wrapRequest(null, get, 'workflows', WORKFLOWS);
+
+export const listWorkflows = (options) => ({
+  [CALL_API]: {
+    type: WORKFLOWS,
+    method: 'GET',
+    id: null,
+    url: url.resolve(root, 'workflows')
+  }
+});
 
 export const getExecutionStatus = (arn) => wrapRequest(null, get, {
   url: url.resolve(root, 'executions/status/' + arn)
