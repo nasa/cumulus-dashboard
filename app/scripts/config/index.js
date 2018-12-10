@@ -10,7 +10,7 @@ const baseConfig = {
   environment: 'development',
   requireEarthdataLogin: false,
   apiRoot: 'https://wjdkfyb6t6.execute-api.us-east-1.amazonaws.com/dev/',
-  compatibleApiVersions: ['1.11.0', '1.10.1-1'],
+  compatibleApiVersions: ['1.11.0'],
 
   graphicsPath: '/graphics/',
 

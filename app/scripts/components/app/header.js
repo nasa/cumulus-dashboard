@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import { connect } from 'react-redux';
 import c from 'classnames';
 import { Link } from 'react-router';
 import { logout, checkApiVersion } from '../../actions';
