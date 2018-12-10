@@ -35,9 +35,6 @@ var Header = React.createClass({
         window.location.reload();
       }
     });
-    // if (window.location && window.location.reload) {
-    //   setTimeout(() => window.location.reload(), 50);
-    // }
   },
 
   className: function (path) {
