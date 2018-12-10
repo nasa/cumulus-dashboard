@@ -541,7 +541,7 @@ export const DELETE_TOKEN = 'DELETE_TOKEN';
 export const deleteToken = (dispatch, token) => {
   return new Promise((resolve) => {
     const config = configureRequest({
-      url: url.resolve(root, 'token-revoke'),
+      url: url.resolve(root, 'tokenRevoke'),
       body: {
         token
       }

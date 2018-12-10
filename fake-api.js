@@ -203,7 +203,7 @@ app.get('/token', (req, res) => {
   }
 });
 
-app.post('/token-revoke', (req, res) => {
+app.post('/tokenRevoke', (req, res) => {
   if (req.body.token) {
     token = '';
     res.status(200).json({
