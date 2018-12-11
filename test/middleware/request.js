@@ -38,7 +38,7 @@ test.cb.only('should make GET request for API request action', (t) => {
     id: undefined,
     config: requestAction,
     type: 'TEST',
-    data: JSON.stringify(stubbedResponse)
+    data: stubbedResponse
   };
 
   const actionHandler = t.context.nextHandler(action => {

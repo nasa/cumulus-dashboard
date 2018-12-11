@@ -1,14 +1,16 @@
 import { hashHistory } from 'react-router';
 
 import { CALL_API } from '../actions';
-import { get, post, put, del } from '../actions/helpers';
+import { configureRequest, get, post, put, del } from '../actions/helpers';
 import log from '../utils/log';
 
 const doRequestMiddleware = ({ dispatch }) => next => action => {
-  const requestAction = action[CALL_API];
+  let requestAction = action[CALL_API];
   if (!requestAction) {
     return next(action);
   }
+
+  requestAction = Object.assign(requestAction, configureRequest(requestAction));
 
   let query;
   if (requestAction.method === 'GET') {
@@ -24,14 +26,15 @@ const doRequestMiddleware = ({ dispatch }) => next => action => {
     query = del;
   }
 
-  const { id, type, config } = requestAction;
+  const { id, type } = requestAction;
 
   const inflightType = type + '_INFLIGHT';
   log((id ? inflightType + ': ' + id : inflightType));
-  dispatch({ id, config, type: inflightType });
+  dispatch({ id, config: requestAction, type: inflightType });
 
   const start = new Date();
-  query(config, (error, data) => {
+  // requestAction.json = true;
+  query(requestAction, (error, data) => {
     if (error) {
       // Temporary fix until the 'logs' endpoint is fixed
       if (error.message.includes('Invalid Authorization token') && requestAction.url.includes('logs')) {

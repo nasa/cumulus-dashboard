@@ -51,9 +51,15 @@ test.cb('should make GET request', (t) => {
     .reply(200, stubbedResponse);
 
   get({
-    url: 'http://localhost:5001/test-path'
+    url: 'http://localhost:5001/test-path',
+    json: true
   }, (_, data) => {
-    t.deepEqual(data, JSON.stringify(stubbedResponse));
+    t.deepEqual(data, stubbedResponse);
     t.end();
   });
 });
+
+test.todo('GET returning 4xx response');
+test.todo('POST request');
+test.todo('PUT request');
+test.todo('DELETE request');
