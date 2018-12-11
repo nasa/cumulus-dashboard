@@ -1,6 +1,7 @@
 'use strict';
 import test from 'ava';
-import { wrapRequest } from '../../app/scripts/actions/helpers';
+import nock from 'nock';
+import { get, wrapRequest } from '../../app/scripts/actions/helpers';
 
 const dispatchStub = () => true;
 const getStateStub = () => ({
@@ -41,4 +42,18 @@ test('wrap request', function (t) {
     });
   };
   wrapRequest(id, req3, urlObj, type, body)(dispatchStub, getStateStub);
+});
+
+test.cb('should make GET request', (t) => {
+  const stubbedResponse = { message: 'success' };
+  nock('http://localhost:5001')
+    .get('/test-path')
+    .reply(200, stubbedResponse);
+
+  get({
+    url: 'http://localhost:5001/test-path'
+  }, (_, data) => {
+    t.deepEqual(data, JSON.stringify(stubbedResponse));
+    t.end();
+  });
 });
