@@ -19,7 +19,7 @@ test('should pass action to next if not an API request action', (t) => {
   actionHandler(actionObj);
 });
 
-test.cb.only('should make GET request for API request action', (t) => {
+test.cb('should return action with GET response for API request action', (t) => {
   const stubbedResponse = { message: 'success' };
   nock('http://localhost:5001')
     .get('/test-path')
@@ -28,6 +28,102 @@ test.cb.only('should make GET request for API request action', (t) => {
   const requestAction = {
     type: 'TEST',
     method: 'GET',
+    url: 'http://localhost:5001/test-path'
+  };
+  const actionObj = {
+    [CALL_API]: requestAction
+  };
+
+  const expectedAction = {
+    id: undefined,
+    config: requestAction,
+    type: 'TEST',
+    data: stubbedResponse
+  };
+
+  const actionHandler = t.context.nextHandler(action => {
+    t.deepEqual(action, expectedAction);
+    t.end();
+  });
+
+  actionHandler(actionObj);
+});
+
+test.cb('should return action with POST response for API request action', (t) => {
+  nock('http://localhost:5001')
+    .post('/test-path')
+    .reply(200, (_, requestBody) => {
+      return requestBody;
+    });
+
+  const requestBody = { test: 'test' };
+  const requestAction = {
+    type: 'TEST',
+    method: 'POST',
+    url: 'http://localhost:5001/test-path',
+    body: requestBody
+  };
+  const actionObj = {
+    [CALL_API]: requestAction
+  };
+
+  const expectedAction = {
+    id: undefined,
+    config: requestAction,
+    type: 'TEST',
+    data: requestBody
+  };
+
+  const actionHandler = t.context.nextHandler(action => {
+    t.deepEqual(action, expectedAction);
+    t.end();
+  });
+
+  actionHandler(actionObj);
+});
+
+test.cb('should return action with PUT response for API request action', (t) => {
+  nock('http://localhost:5001')
+    .put('/test-path')
+    .reply(200, (_, requestBody) => {
+      return requestBody;
+    });
+
+  const requestBody = { test: 'test' };
+  const requestAction = {
+    type: 'TEST',
+    method: 'PUT',
+    url: 'http://localhost:5001/test-path',
+    body: requestBody
+  };
+  const actionObj = {
+    [CALL_API]: requestAction
+  };
+
+  const expectedAction = {
+    id: undefined,
+    config: requestAction,
+    type: 'TEST',
+    data: requestBody
+  };
+
+  const actionHandler = t.context.nextHandler(action => {
+    t.deepEqual(action, expectedAction);
+    t.end();
+  });
+
+  actionHandler(actionObj);
+});
+
+test.cb('should return action with DELETE response for API request action', (t) => {
+  const stubbedResponse = { message: 'success' };
+  nock('http://localhost:5001')
+    .delete('/test-path')
+    .reply(200, stubbedResponse);
+
+  const requestAction = {
+    type: 'TEST',
+    method: 'DELETE',
     url: 'http://localhost:5001/test-path'
   };
   const actionObj = {

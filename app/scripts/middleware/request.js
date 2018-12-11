@@ -33,7 +33,6 @@ const doRequestMiddleware = ({ dispatch }) => next => action => {
   dispatch({ id, config: requestAction, type: inflightType });
 
   const start = new Date();
-  // requestAction.json = true;
   query(requestAction, (error, data) => {
     if (error) {
       // Temporary fix until the 'logs' endpoint is fixed
