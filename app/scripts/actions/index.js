@@ -472,8 +472,14 @@ export const buildMMTLink = (conceptId, cmrEnv) => {
   return `https://${url}/collections/${conceptId}`;
 };
 
-export const getGranule = (granuleId) => wrapRequest(
-  granuleId, get, `granules/${granuleId}`, GRANULE);
+export const getGranule = (granuleId) => ({
+  [CALL_API]: {
+    type: GRANULE,
+    method: 'GET',
+    id: granuleId,
+    path: `granules/${granuleId}`
+  }
+});
 
 export const listGranules = (options) => ({
   [CALL_API]: {
@@ -486,38 +492,76 @@ export const listGranules = (options) => ({
 });
 
 // only query the granules from the last hour
-export const getRecentGranules = () => wrapRequest(null, get, {
-  url: url.resolve(root, 'granules'),
-  qs: {
-    limit: 1,
-    fields: 'granuleId',
-    updatedAt__from: moment().subtract(1, 'hour').format()
+export const getRecentGranules = () => ({
+  [CALL_API]: {
+    type: RECENT_GRANULES,
+    method: 'GET',
+    path: 'granules',
+    qs: {
+      limit: 1,
+      fields: 'granuleId',
+      updatedAt__from: moment().subtract(1, 'hour').format()
+    }
   }
-}, RECENT_GRANULES);
+});
 
-export const reprocessGranule = (granuleId) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, GRANULE_REPROCESS, {
-    action: 'reprocess'
-  });
+export const reprocessGranule = (granuleId) => ({
+  [CALL_API]: {
+    type: GRANULE_REPROCESS,
+    method: 'PUT',
+    id: granuleId,
+    path: `granules/${granuleId}`,
+    body: {
+      action: 'reprocess'
+    }
+  }
+});
 
-export const applyWorkflowToGranule = (granuleId, workflow) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, GRANULE_APPLYWORKFLOW, {
-    action: 'applyWorkflow',
-    workflow
-  });
+export const applyWorkflowToGranule = (granuleId, workflow) => ({
+  [CALL_API]: {
+    type: GRANULE_APPLYWORKFLOW,
+    method: 'PUT',
+    id: granuleId,
+    path: `granules/${granuleId}`,
+    body: {
+      action: 'applyWorkflow',
+      workflow
+    }
+  }
+});
 
-export const reingestGranule = (granuleId) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, GRANULE_REINGEST, {
-    action: 'reingest'
-  });
+export const reingestGranule = (granuleId) => ({
+  [CALL_API]: {
+    type: GRANULE_REINGEST,
+    method: 'PUT',
+    id: granuleId,
+    path: `granules/${granuleId}`,
+    body: {
+      action: 'reingest'
+    }
+  }
+});
 
-export const removeGranule = (granuleId) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, GRANULE_REMOVE, {
-    action: 'removeFromCmr'
-  });
+export const removeGranule = (granuleId) => ({
+  [CALL_API]: {
+    type: GRANULE_REMOVE,
+    method: 'PUT',
+    id: granuleId,
+    path: `granules/${granuleId}`,
+    body: {
+      action: 'removeFromCmr'
+    }
+  }
+});
 
-export const deleteGranule = (granuleId) => wrapRequest(
-  granuleId, del, `granules/${granuleId}`, GRANULE_DELETE);
+export const deleteGranule = (granuleId) => ({
+  [CALL_API]: {
+    type: GRANULE_DELETE,
+    method: 'DELETE',
+    id: granuleId,
+    path: `granules/${granuleId}`
+  }
+});
 
 export const searchGranules = (prefix) => ({ type: SEARCH_GRANULES, prefix: prefix });
 export const clearGranulesSearch = () => ({ type: CLEAR_GRANULES_SEARCH });
