@@ -75,24 +75,26 @@ export const addRequestAuthorization = (config, getState) => {
 };
 
 export const configureRequest = function (params, body) {
-  const defaultConfig = {
-    json: true,
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
+  // todo: enforce that params is an object and set config = params
   let config = {};
+  if (typeof params === 'object') {
+    config = params;
+  }
+
+  let headers = {
+    'Content-Type': 'application/json'
+  };
+  if (params.headers && typeof params.headers === 'object') {
+    headers = Object.assign({}, headers, params.headers);
+  }
+  config.headers = headers;
 
   if (typeof params === 'string') {
-    config = {
-      url: url.resolve(_config.apiRoot, params)
-    };
+    config.url = url.resolve(_config.apiRoot, params);
   } else if (params.url) {
     config = params;
   } else if (params.path && typeof params.path === 'string') {
-    config = {
-      url: url.resolve(_config.apiRoot, params.path)
-    };
+    config.url = url.resolve(_config.apiRoot, params.path);
   } else {
     throw new Error('Must include a url with request');
   }
@@ -103,6 +105,9 @@ export const configureRequest = function (params, body) {
     config.body = params.body;
   }
 
+  const defaultConfig = {
+    json: true
+  };
   config = Object.assign({}, defaultConfig, config);
 
   return config;

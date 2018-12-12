@@ -3,6 +3,7 @@ import test from 'ava';
 import nock from 'nock';
 
 import _config from '../../app/scripts/config';
+import { CALL_API } from '../../app/scripts/actions';
 import { get, configureRequest, wrapRequest } from '../../app/scripts/actions/helpers';
 
 const dispatchStub = () => true;
@@ -82,6 +83,7 @@ test('configureRequest() should convert path to URL', (t) => {
   };
   const expectedConfig = {
     ...t.context.defaultConfig,
+    path: 'test',
     url: 'http://localhost/test'
   };
   const requestConfig = configureRequest(requestParams);
@@ -102,6 +104,46 @@ test('configureRequest() should add the request body', (t) => {
     body: requestBody
   };
   const requestConfig = configureRequest(requestParams);
+  t.deepEqual(requestConfig, expectedConfig);
+});
+
+test('configureRequest() should maintain query state parameters', (t) => {
+  const queryParameters = {
+    test: 'test'
+  };
+  const requestParams = {
+    url: 'http://localhost/test',
+    qs: queryParameters
+  };
+  const expectedConfig = {
+    ...t.context.defaultConfig,
+    url: 'http://localhost/test',
+    qs: queryParameters
+  };
+  const requestConfig = configureRequest(requestParams);
+  t.deepEqual(requestConfig, expectedConfig);
+});
+
+test('configureRequest() should not overwrite auth headers', (t) => {
+  let requestParams = {
+    path: 'test',
+    headers: {
+      Authorization: 'Bearer fake-token'
+    }
+  };
+
+  const expectedConfig = {
+    ...t.context.defaultConfig,
+    path: 'test',
+    url: 'http://localhost/test',
+    headers: {
+      ...t.context.defaultConfig.headers,
+      Authorization: 'Bearer fake-token'
+    }
+  };
+
+  const requestConfig = configureRequest(requestParams);
+
   t.deepEqual(requestConfig, expectedConfig);
 });
 
