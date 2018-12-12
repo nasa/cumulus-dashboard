@@ -1,7 +1,9 @@
 'use strict';
 import test from 'ava';
 import nock from 'nock';
-import { get, wrapRequest } from '../../app/scripts/actions/helpers';
+
+import _config from '../../app/scripts/config';
+import { get, configureRequest, wrapRequest } from '../../app/scripts/actions/helpers';
 
 const dispatchStub = () => true;
 const getStateStub = () => ({
@@ -17,6 +19,18 @@ const headers = {
   Authorization: 'Bearer token',
   'Content-Type': 'application/json'
 };
+
+test.beforeEach((t) => {
+  t.context.defaultConfig = {
+    json: true,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  _config.apiRoot = 'http://localhost';
+});
+
 test('wrap request', function (t) {
   t.plan(3);
 
@@ -44,7 +58,33 @@ test('wrap request', function (t) {
   wrapRequest(id, req3, urlObj, type, body)(dispatchStub, getStateStub);
 });
 
-test.cb('should make GET request', (t) => {
+test('configureRequest() should add default parameters', (t) => {
+  const requestParams = {
+    url: 'http://localhost/test'
+  };
+  const expectedConfig = {
+    ...t.context.defaultConfig,
+    url: 'http://localhost/test'
+  };
+  const requestConfig = configureRequest(requestParams);
+  t.deepEqual(requestConfig, expectedConfig);
+});
+
+test.only('configureRequest() should convert path to URL', (t) => {
+  const requestParams = {
+    path: 'test'
+  };
+  const expectedConfig = {
+    ...t.context.defaultConfig,
+    url: 'http://localhost/test'
+  };
+  // console.log(requestParams);
+  const requestConfig = configureRequest(requestParams);
+  // console.log(requestParams);
+  t.deepEqual(requestConfig, expectedConfig);
+});
+
+test.cb('get() should make GET request', (t) => {
   const stubbedResponse = { message: 'success' };
   nock('http://localhost:5001')
     .get('/test-path')

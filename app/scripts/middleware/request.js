@@ -10,7 +10,9 @@ const doRequestMiddleware = ({ dispatch }) => next => action => {
     return next(action);
   }
 
-  requestAction = Object.assign(requestAction, configureRequest(requestAction));
+  if (!requestAction.method) {
+    throw new Error('Request action must include a method');
+  }
 
   let query;
   if (requestAction.method === 'GET') {
@@ -25,6 +27,8 @@ const doRequestMiddleware = ({ dispatch }) => next => action => {
   if (requestAction.method === 'DELETE') {
     query = del;
   }
+
+  requestAction = Object.assign({}, requestAction, configureRequest(requestAction));
 
   const { id, type } = requestAction;
 

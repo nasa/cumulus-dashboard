@@ -6,7 +6,6 @@ import { get as getProperty } from 'object-path';
 import _config from '../config';
 import log from '../utils/log';
 import { forceLogout } from './index';
-const root = _config.apiRoot;
 
 function formatError (response, body) {
   let error = response.statusMessage;
@@ -79,13 +78,13 @@ export const configureRequest = function (params, body) {
   let config;
   if (typeof params === 'string') {
     config = {
-      url: url.resolve(root, params)
+      url: url.resolve(_config.apiRoot, params)
     };
   } else if (params.url) {
     config = params;
   } else if (params.path && typeof params.path === 'string') {
     config = {
-      url: url.resolve(root, params.path)
+      url: url.resolve(_config.apiRoot, params.path)
     };
   } else {
     throw new Error('Must include a url with request');
