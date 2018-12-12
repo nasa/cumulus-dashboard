@@ -1,6 +1,7 @@
 import test from 'ava';
 import nock from 'nock';
 import { CALL_API } from '../../app/scripts/actions';
+import { configureRequest } from '../../app/scripts/actions/helpers';
 import { doRequestMiddleware } from '../../app/scripts/middleware/request';
 
 test.beforeEach((t) => {
@@ -17,6 +18,21 @@ test('should pass action to next if not an API request action', (t) => {
   });
 
   actionHandler(actionObj);
+});
+
+test('should throw error if no method is set on API request action', (t) => {
+  const actionObj = {
+    [CALL_API]: {}
+  };
+
+  const actionHandler = t.context.nextHandler(() => {});
+
+  try {
+    actionHandler(actionObj);
+    t.fail('Expected error to be thrown');
+  } catch (err) {
+    t.is(err.message, 'Request action must include a method');
+  }
 });
 
 test.cb('should return action with GET response for API request action', (t) => {
@@ -36,7 +52,7 @@ test.cb('should return action with GET response for API request action', (t) => 
 
   const expectedAction = {
     id: undefined,
-    config: requestAction,
+    config: configureRequest(requestAction),
     type: 'TEST',
     data: stubbedResponse
   };
@@ -69,7 +85,7 @@ test.cb('should return action with POST response for API request action', (t) =>
 
   const expectedAction = {
     id: undefined,
-    config: requestAction,
+    config: configureRequest(requestAction),
     type: 'TEST',
     data: requestBody
   };
@@ -102,7 +118,7 @@ test.cb('should return action with PUT response for API request action', (t) => 
 
   const expectedAction = {
     id: undefined,
-    config: requestAction,
+    config: configureRequest(requestAction),
     type: 'TEST',
     data: requestBody
   };
@@ -132,7 +148,7 @@ test.cb('should return action with DELETE response for API request action', (t) 
 
   const expectedAction = {
     id: undefined,
-    config: requestAction,
+    config: configureRequest(requestAction),
     type: 'TEST',
     data: stubbedResponse
   };
