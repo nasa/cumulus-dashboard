@@ -34,21 +34,16 @@ test('should properly add authorization headers to API request action', (t) => {
     [CALL_API]: requestAction
   };
 
-  const updatedRequestAction = Object.assign(requestAction, {
+  const authRequestAction = Object.assign({}, requestAction, {
     headers: {
       Authorization: 'Bearer fake-token'
     }
   });
   const expectedAction = {
-    [CALL_API]: updatedRequestAction
+    [CALL_API]: authRequestAction
   };
 
-  // is this a valid test? we're mutating the action so all of the
-  // logged objects are equivalent
   const actionHandler = t.context.nextHandler(action => {
-    console.log(actionObj);
-    console.log(action);
-    console.log(expectedAction);
     t.deepEqual(action, expectedAction);
   });
 

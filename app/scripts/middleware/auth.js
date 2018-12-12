@@ -7,10 +7,18 @@ const addRequestAuthMiddleware = ({ getState }) => next => action => {
   }
 
   let token = getState().api.tokens.token;
+
   if (token) {
-    requestAction.headers = requestAction.headers || {};
-    requestAction.headers.Authorization = 'Bearer ' + token;
+    requestAction = Object.assign({}, requestAction, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   }
+
+  action = Object.assign({}, {
+    [CALL_API]: requestAction
+  });
 
   return next(action);
 };
