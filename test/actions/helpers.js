@@ -58,6 +58,12 @@ test('wrap request', function (t) {
   wrapRequest(id, req3, urlObj, type, body)(dispatchStub, getStateStub);
 });
 
+test('configureRequest() should throw error if no URL is provided', (t) => {
+  const requestParams = {};
+
+  t.throws(() => configureRequest(requestParams), 'Must include a url with request');
+});
+
 test('configureRequest() should add default parameters', (t) => {
   const requestParams = {
     url: 'http://localhost/test'
@@ -70,7 +76,7 @@ test('configureRequest() should add default parameters', (t) => {
   t.deepEqual(requestConfig, expectedConfig);
 });
 
-test.only('configureRequest() should convert path to URL', (t) => {
+test('configureRequest() should convert path to URL', (t) => {
   const requestParams = {
     path: 'test'
   };
@@ -78,9 +84,24 @@ test.only('configureRequest() should convert path to URL', (t) => {
     ...t.context.defaultConfig,
     url: 'http://localhost/test'
   };
-  // console.log(requestParams);
   const requestConfig = configureRequest(requestParams);
-  // console.log(requestParams);
+  t.deepEqual(requestConfig, expectedConfig);
+});
+
+test('configureRequest() should add the request body', (t) => {
+  const requestBody = {
+    test: 'test'
+  };
+  const requestParams = {
+    url: 'http://localhost/test',
+    body: requestBody
+  };
+  const expectedConfig = {
+    ...t.context.defaultConfig,
+    url: 'http://localhost/test',
+    body: requestBody
+  };
+  const requestConfig = configureRequest(requestParams);
   t.deepEqual(requestConfig, expectedConfig);
 });
 

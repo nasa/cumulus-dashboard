@@ -75,7 +75,14 @@ export const addRequestAuthorization = (config, getState) => {
 };
 
 export const configureRequest = function (params, body) {
-  let config;
+  const defaultConfig = {
+    json: true,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  let config = {};
+
   if (typeof params === 'string') {
     config = {
       url: url.resolve(_config.apiRoot, params)
@@ -89,7 +96,6 @@ export const configureRequest = function (params, body) {
   } else {
     throw new Error('Must include a url with request');
   }
-  config.json = true;
 
   if (body && typeof body === 'object') {
     config.body = body;
@@ -97,8 +103,8 @@ export const configureRequest = function (params, body) {
     config.body = params.body;
   }
 
-  config.headers = config.headers || {};
-  config.headers['Content-Type'] = 'application/json';
+  config = Object.assign({}, defaultConfig, config);
+
   return config;
 };
 
