@@ -35,8 +35,38 @@ test('should throw error if no method is set on API request action', (t) => {
   }
 });
 
-test.cb('should return action with GET response for API request action', (t) => {
+test.cb('should dispatch error action for failed request', (t) => {
+  nock('http://localhost:5001')
+    .get('/test-path')
+    .reply(500, { message: 'Internal server error' });
+
+  const requestAction = {
+    type: 'TEST',
+    method: 'GET',
+    url: 'http://localhost:5001/test-path'
+  };
+  const actionObj = {
+    [CALL_API]: requestAction
+  };
+
+  const expectedAction = {
+    id: undefined,
+    error: new Error('Internal server error'),
+    config: configureRequest(requestAction),
+    type: 'TEST_ERROR'
+  };
+
+  const actionHandler = t.context.nextHandler(action => {
+    t.deepEqual(action, expectedAction);
+    t.end();
+  });
+
+  actionHandler(actionObj);
+});
+
+test.cb('should return expected action for GET request action', (t) => {
   const stubbedResponse = { message: 'success' };
+
   nock('http://localhost:5001')
     .get('/test-path')
     .reply(200, stubbedResponse);
@@ -65,7 +95,44 @@ test.cb('should return action with GET response for API request action', (t) => 
   actionHandler(actionObj);
 });
 
-test.cb('should return action with POST response for API request action', (t) => {
+test.cb('should return expected action for GET request action with query state', (t) => {
+  const queryParams = {
+    limit: 1,
+    otherParam: 'value'
+  };
+  const stubbedResponse = { message: 'success' };
+
+  nock('http://localhost:5001')
+    .get('/test-path')
+    .query(queryParams)
+    .reply(200, stubbedResponse);
+
+  const requestAction = {
+    type: 'TEST',
+    method: 'GET',
+    url: 'http://localhost:5001/test-path',
+    qs: queryParams
+  };
+  const actionObj = {
+    [CALL_API]: requestAction
+  };
+
+  const expectedAction = {
+    id: undefined,
+    config: configureRequest(requestAction),
+    type: 'TEST',
+    data: stubbedResponse
+  };
+
+  const actionHandler = t.context.nextHandler(action => {
+    t.deepEqual(action, expectedAction);
+    t.end();
+  });
+
+  actionHandler(actionObj);
+});
+
+test.cb('should return expected action for POST request action', (t) => {
   nock('http://localhost:5001')
     .post('/test-path')
     .reply(200, (_, requestBody) => {
@@ -98,7 +165,7 @@ test.cb('should return action with POST response for API request action', (t) =>
   actionHandler(actionObj);
 });
 
-test.cb('should return action with PUT response for API request action', (t) => {
+test.cb('should return expected action for PUT request action', (t) => {
   nock('http://localhost:5001')
     .put('/test-path')
     .reply(200, (_, requestBody) => {
@@ -131,7 +198,7 @@ test.cb('should return action with PUT response for API request action', (t) => 
   actionHandler(actionObj);
 });
 
-test.cb('should return action with DELETE response for API request action', (t) => {
+test.cb('should return expected action for DELETE request action', (t) => {
   const stubbedResponse = { message: 'success' };
   nock('http://localhost:5001')
     .delete('/test-path')
