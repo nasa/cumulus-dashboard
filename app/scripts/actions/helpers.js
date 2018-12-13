@@ -7,13 +7,15 @@ import _config from '../config';
 import log from '../utils/log';
 import { forceLogout } from './index';
 
-function formatError (response, body) {
-  let error = response.statusMessage;
+export const formatError = (response = {}, body) => {
+  let error = response
+    ? response.statusMessage || ''
+    : '';
   body = body || {};
   if (body.name) error = body.name;
   if (body.message) error += `${(error ? ': ' : '')}${body.message}`;
   return error;
-}
+};
 
 export const get = function (config, callback) {
   request.get(config, (error, resp, body) => {

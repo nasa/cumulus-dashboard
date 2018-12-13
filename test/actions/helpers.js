@@ -3,8 +3,12 @@ import test from 'ava';
 import nock from 'nock';
 
 import _config from '../../app/scripts/config';
-import { CALL_API } from '../../app/scripts/actions';
-import { get, configureRequest, wrapRequest } from '../../app/scripts/actions/helpers';
+import {
+  formatError,
+  get,
+  configureRequest,
+  wrapRequest
+} from '../../app/scripts/actions/helpers';
 
 const dispatchStub = () => true;
 const getStateStub = () => ({
@@ -57,6 +61,51 @@ test('wrap request', function (t) {
     });
   };
   wrapRequest(id, req3, urlObj, type, body)(dispatchStub, getStateStub);
+});
+
+test.only('formatError() should handle error responses properly', (t) => {
+  const requestErrorMessage = 'Request failed';
+  const response = {
+    statusMessage: requestErrorMessage
+  };
+
+  let formattedError = formatError();
+  t.is(formattedError, '');
+
+  formattedError = formatError(null);
+  t.is(formattedError, '');
+
+  formattedError = formatError(response);
+  t.is(formattedError, requestErrorMessage);
+
+  const bodyErrorName = 'InternalServerError';
+  const bodyErrorMessage = 'Internal server error';
+
+  formattedError = formatError(null, {
+    name: bodyErrorName
+  });
+  t.is(formattedError, bodyErrorName);
+
+  formattedError = formatError(null, {
+    message: bodyErrorMessage
+  });
+  t.is(formattedError, bodyErrorMessage);
+
+  formattedError = formatError(response, {
+    name: bodyErrorName
+  });
+  t.is(formattedError, bodyErrorName);
+
+  formattedError = formatError(response, {
+    message: bodyErrorMessage
+  });
+  t.is(formattedError, `${requestErrorMessage}: ${bodyErrorMessage}`);
+
+  formattedError = formatError(response, {
+    name: bodyErrorName,
+    message: bodyErrorMessage
+  });
+  t.is(formattedError, `${bodyErrorName}: ${bodyErrorMessage}`);
 });
 
 test('configureRequest() should throw error if no URL is provided', (t) => {
