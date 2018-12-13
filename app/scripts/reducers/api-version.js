@@ -1,13 +1,14 @@
 import {
   API_VERSION,
   API_VERSION_ERROR,
-  API_VERSION_COMPAT
+  API_VERSION_COMPATIBLE,
+  API_VERSION_INCOMPATIBLE
 } from '../actions';
 
 export const initialState = {
   versionNumber: '',
   isCompatible: false,
-  error: null
+  warning: null
 };
 
 export default function reducer (state = initialState, action) {
@@ -16,11 +17,15 @@ export default function reducer (state = initialState, action) {
     case API_VERSION:
       state.apiVersion = action.apiVersion;
       break;
-    case API_VERSION_COMPAT:
-      state.apiIsCompatible = action.payload.isCompatible;
-      break;
     case API_VERSION_ERROR:
       state.apiVersion = action.error;
+      break;
+    case API_VERSION_COMPATIBLE:
+      state.isCompatible = true;
+      break;
+    case API_VERSION_INCOMPATIBLE:
+      state.isCompatible = false;
+      state.warning = action.payload.warning;
       break;
   }
   return state;

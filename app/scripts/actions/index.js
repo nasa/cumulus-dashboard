@@ -254,10 +254,10 @@ export const REFRESH_TOKEN_INFLIGHT = 'REFRESH_TOKEN_INFLIGHT';
 export const SET_TOKEN = 'SET_TOKEN';
 
 export const API_VERSION = 'API_VERSION';
-export const API_VERSION_INFLIGHT = 'API_VERSION_INFLIGHT';
 export const API_VERSION_ERROR = 'API_VERSION_ERROR';
 
-export const API_VERSION_COMPAT = 'API_VERSION_COMPAT';
+export const API_VERSION_COMPATIBLE = 'API_VERSION_COMPATIBLE';
+export const API_VERSION_INCOMPATIBLE = 'API_VERSION_INCOMPATIBLE';
 
 export const refreshAccessToken = (token, dispatch) => {
   const start = new Date();
@@ -300,42 +300,51 @@ export const interval = function (action, wait, immediate) {
 export const getCollection = (name, version) => wrapRequest(
   getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
 
-export const checkApiVersion = (apiCompatList) => {
+export const getApiVersion = (apiCompatList) => {
   return (dispatch, getState) => {
-    const getApiVersion = () => {
+    const wrapApiVersion = () => {
       return new Promise((resolve, reject) => {
         const config = configureRequest({
-  	  url: url.resolve(root, 'version')
+          url: url.resolve(root, 'version')
         });
-        addRequestAuthorization(config, getState);
         get(config, (error, data) => {
-  	  if (error) {
-  	    dispatch({
-  	      type: API_VERSION_ERROR,
-  	      error
-  	    });
-  	    return reject(error);
-  	  }
-	  if (apiCompatList.indexOf(data.api_version) < 0) {
-	    dispatch({
-	      type: API_VERSION_COMPAT,
-	      payload: {
-		message: `Dashboard version incompatible with api version (${data.api_version})`,
-	        isCompatible: false
-	      }
-	    });
-	  }
-  	  dispatch({
-  	    type: API_VERSION,
-  	    data
-  	  });
-	  return resolve();
-	});
+          if (error) {
+            dispatch({
+              type: API_VERSION_ERROR,
+              error
+            });
+            return reject(error);
+          }
+          dispatch({
+            type: API_VERSION,
+            data
+          });
+          return resolve();
+        });
       });
     };
-    return getApiVersion().then(() => {
-      return dispatch(changeme);
+    return wrapApiVersion().then(() => {
+      return dispatch(checkApiVersion(apiCompatList));
     });
+  };
+};
+
+export const checkApiVersion = (apiCompatList) => {
+  return (dispatch, getState) => {
+    const { versionNumber } = getState().apiVersion;
+    if (apiCompatList.indexOf(versionNumber) < 0) {
+      dispatch({
+        type: API_VERSION_INCOMPATIBLE,
+        payload: {
+          warning: `Dashboard version incompatible with api version (${versionNumber})`
+        }
+      });
+    } else {
+      dispatch({
+        type: API_VERSION_COMPATIBLE,
+        payload: {}
+      });
+    }
   };
 };
 

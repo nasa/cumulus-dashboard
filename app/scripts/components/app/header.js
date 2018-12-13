@@ -59,6 +59,7 @@ var Header = React.createClass({
         <div className='row'>
           <h1 className='logo'><Link to='/'><img alt="Logo" src={graphicsPath + strings.logo} /></Link></h1>
           <h5 className='apiVersion'>{ this.props.apiVersion.versionNumber }</h5>
+          { this.props.apiVersion.warning ? <h5 className='apiWarning'>{ this.props.apiVersion.warning }</h5> : <li>&nbsp;</li> }
           <nav>
             { !this.props.minimal ? <ul>
               {activePaths.map(path => <li
