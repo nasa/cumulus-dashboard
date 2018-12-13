@@ -53,13 +53,14 @@ var Header = React.createClass({
 
   render: function () {
     const { authenticated } = this.props.api;
+    const { warning, versionNumber } = this.props.apiVersion;
     const activePaths = paths.filter(pathObj => nav.exclude[pathObj[1].replace('/', '')] !== true);
     return (
       <div className='header'>
         <div className='row'>
           <h1 className='logo'><Link to='/'><img alt="Logo" src={graphicsPath + strings.logo} /></Link></h1>
-          <h5 className='apiVersion'>{ this.props.apiVersion.versionNumber }</h5>
-          { this.props.apiVersion.warning ? <h5 className='apiWarning'>{ this.props.apiVersion.warning }</h5> : <li>&nbsp;</li> }
+          <h5 className='apiVersion'>{ versionNumber }</h5>
+          { warning ? <h5 className='apiWarning'>{ warning }</h5> : <li>&nbsp;</li> }
           <nav>
             { !this.props.minimal ? <ul>
               {activePaths.map(path => <li

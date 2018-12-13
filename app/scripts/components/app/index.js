@@ -17,7 +17,6 @@ var App = React.createClass({
   },
 
   render: function () {
-    const { isCompatible, versionNumber } = this.props.apiVersion;
     return (
       <div className='app'>
         { target !== 'cumulus' ? (
