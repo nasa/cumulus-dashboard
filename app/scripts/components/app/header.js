@@ -55,12 +55,15 @@ var Header = React.createClass({
     const { authenticated } = this.props.api;
     const { warning, versionNumber } = this.props.apiVersion;
     const activePaths = paths.filter(pathObj => nav.exclude[pathObj[1].replace('/', '')] !== true);
+
+    let versionWarning;
+    if (warning) { versionWarning = <h5 className='apiVersionWarning'>Warning: { warning }</h5>; }
     return (
       <div className='header'>
         <div className='row'>
           <h1 className='logo'><Link to='/'><img alt="Logo" src={graphicsPath + strings.logo} /></Link></h1>
-          <h5 className='apiVersion'>{ versionNumber }</h5>
-          { warning ? <h5 className='apiWarning'>{ warning }</h5> : <li>&nbsp;</li> }
+          <h5 className='apiVersion'>Cumulus API Version: { versionNumber }</h5>
+          { versionWarning }
           <nav>
             { !this.props.minimal ? <ul>
               {activePaths.map(path => <li
