@@ -15,7 +15,7 @@ export default function reducer (state = initialState, action) {
   state = {...state};
   switch (action.type) {
     case API_VERSION:
-      state.apiVersion = action.payload.apiVersion;
+      state.versionNumber = action.payload.versionNumber;
       state.warning = '';
       break;
     case API_VERSION_ERROR:

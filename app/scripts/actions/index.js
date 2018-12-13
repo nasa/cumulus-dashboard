@@ -317,7 +317,7 @@ export const getApiVersion = (apiCompatList) => {
           }
           dispatch({
             type: API_VERSION,
-            payload: { apiVersion: data.api_version }
+            payload: { versionNumber: data.api_version }
           });
           return resolve();
         });
