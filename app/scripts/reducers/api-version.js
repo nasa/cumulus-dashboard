@@ -15,11 +15,11 @@ export default function reducer (state = initialState, action) {
   state = {...state};
   switch (action.type) {
     case API_VERSION:
-      state.apiVersion = action.data.apiVersion;
+      state.apiVersion = action.payload.apiVersion;
       state.warning = '';
       break;
     case API_VERSION_ERROR:
-      state.apiVersion = action.error.message;
+      state.apiVersion = action.payload.error.message;
       state.warning = 'Failed to acquire Cumulus API Version';
       break;
     case API_VERSION_COMPATIBLE:

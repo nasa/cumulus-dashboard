@@ -311,13 +311,13 @@ export const getApiVersion = (apiCompatList) => {
           if (error) {
             dispatch({
               type: API_VERSION_ERROR,
-              error
+              payload: { error }
             });
             return reject(error);
           }
           dispatch({
             type: API_VERSION,
-            data
+            payload: { apiVersion: data.api_version }
           });
           return resolve();
         });
