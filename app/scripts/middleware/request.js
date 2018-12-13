@@ -37,6 +37,7 @@ const doRequestMiddleware = ({ dispatch }) => next => action => {
   dispatch({ id, config: requestAction, type: inflightType });
 
   const start = new Date();
+  // Todo: can we return a promise here?
   query(requestAction, (error, data) => {
     if (error) {
       // Temporary fix until the 'logs' endpoint is fixed
@@ -52,6 +53,7 @@ const doRequestMiddleware = ({ dispatch }) => next => action => {
           error.message.includes('Invalid Authorization token') ||
           error.message.includes('Access token has expired')) {
         next({ type: 'LOGIN_ERROR', error: error.message.replace('Bad Request: ', '') });
+        // Todo: this is a side effect. move out of middleware
         return hashHistory.push('/auth');
       }
 
