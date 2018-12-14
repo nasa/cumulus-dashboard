@@ -56,6 +56,20 @@ npm install
 npm run serve
 ```
 
+## Building a Specific Version
+
+Cumulus-dashboard versions are distributed using tags in github. You can pull a specific version in the following manner:
+
+```bash
+git clone https://github.com/cumulus-nasa/cumulus-dashboard
+cd cumulus-dashboard
+git fetch origin ${tagNumber}:refs/tags/${tagNumber}
+git checkout ${tagNumber}
+nvm use
+npm install
+npm run serve
+```
+
 ## Fake API server
 
 For development and testing purposes, you can use a fake API server provided with the dashboard. To use the fake API server, run `node fake-api.js` in a separate terminal session, then launch the dashboard with:
