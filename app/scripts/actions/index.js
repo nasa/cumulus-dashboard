@@ -739,18 +739,14 @@ export const forceLogout = (dispatch, token, error) => {
 
 export const login = (token) => {
   return (dispatch) => {
-    // dispatch(setTokenState(token));
+    dispatch(setTokenState(token));
     dispatch({
       [CALL_API]: {
         type: LOGIN,
         id: 'auth',
         method: 'GET',
         url: url.resolve(root, 'granules'),
-        qs: { limit: 1, fields: 'granuleId' },
-        skipAuth: true,
-        headers: {
-          Authorization: 'Bearer ' + token
-        }
+        qs: { limit: 1, fields: 'granuleId' }
       }
     });
   };
@@ -762,6 +758,7 @@ export const deleteToken = () => {
     if (!token) return Promise.resolve();
 
     const requestConfig = configureRequest({
+      method: 'POST',
       url: url.resolve(root, 'tokenRevoke'),
       body: {
         token

@@ -28,8 +28,6 @@ var OAuth = React.createClass({
     // delay-close the modal if it's open
     if (newProps.api.authenticated &&
         newProps.api.authenticated !== this.props.api.authenticated) {
-      const { dispatch } = this.props;
-      dispatch(setTokenState(this.state.token));
       const { pathname } = this.props.location;
       if (pathname !== '/auth' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);
@@ -44,7 +42,7 @@ var OAuth = React.createClass({
     if (query.token) {
       const token = query.token;
       const { dispatch } = this.props;
-      this.setState({ token }, () => dispatch(login(token)));
+      dispatch(login(token));
     }
   },
 
