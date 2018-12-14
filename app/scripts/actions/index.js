@@ -6,11 +6,7 @@ import requestPromise from 'request-promise';
 import { hashHistory } from 'react-router';
 import { CMR, hostId } from '@cumulus/cmrjs';
 
-import {
-  get,
-  configureRequest,
-  wrapRequest
-} from './helpers';
+import { configureRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId } from '../utils/format';
 import log from '../utils/log';
@@ -520,15 +516,23 @@ export const clearGranulesSearch = () => ({ type: CLEAR_GRANULES_SEARCH });
 export const filterGranules = (param) => ({ type: FILTER_GRANULES, param: param });
 export const clearGranulesFilter = (paramKey) => ({ type: CLEAR_GRANULES_FILTER, paramKey: paramKey });
 
-export const getOptionsCollectionName = () => wrapRequest(null, get, {
-  url: url.resolve(root, 'collections'),
-  qs: { limit: 100, fields: 'name,version' }
-}, OPTIONS_COLLECTIONNAME);
+export const getOptionsCollectionName = (options) => ({
+  [CALL_API]: {
+    type: OPTIONS_COLLECTIONNAME,
+    method: 'GET',
+    url: url.resolve(root, 'collections'),
+    qs: { limit: 100, fields: 'name,version' }
+  }
+});
 
-export const getStats = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'stats'),
-  qs: options
-}, STATS);
+export const getStats = (options) => ({
+  [CALL_API]: {
+    type: STATS,
+    method: 'GET',
+    url: url.resolve(root, 'stats'),
+    qs: options
+  }
+});
 
 // count queries *must* include type and field properties.
 export const getCount = (options) => ({
@@ -683,20 +687,19 @@ export const logout = () => {
   };
 };
 
-export const login = (token) => {
-  return (dispatch) => {
-    dispatch(setTokenState(token));
-    dispatch({
-      [CALL_API]: {
-        type: LOGIN,
-        id: 'auth',
-        method: 'GET',
-        url: url.resolve(root, 'granules'),
-        qs: { limit: 1, fields: 'granuleId' }
-      }
-    });
-  };
-};
+export const login = (token) => ({
+  [CALL_API]: {
+    type: LOGIN,
+    id: 'auth',
+    method: 'GET',
+    url: url.resolve(root, 'granules'),
+    qs: { limit: 1, fields: 'granuleId' },
+    skipAuth: true,
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+});
 
 export const deleteToken = () => {
   return (dispatch, getState) => {

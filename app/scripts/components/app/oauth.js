@@ -3,7 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import url from 'url';
-import { login } from '../../actions';
+import { login, setTokenState } from '../../actions';
 import { window } from '../../utils/browser';
 import { updateDelay, apiRoot } from '../../config';
 import ErrorReport from '../errors/report';
@@ -19,6 +19,7 @@ var OAuth = React.createClass({
 
   getInitialState: function () {
     return {
+      token: null,
       error: null
     };
   },
@@ -27,6 +28,7 @@ var OAuth = React.createClass({
     // delay-close the modal if it's open
     if (newProps.api.authenticated &&
         newProps.api.authenticated !== this.props.api.authenticated) {
+      this.props.dispatch(setTokenState(this.state.token));
       const { pathname } = this.props.location;
       if (pathname !== '/auth' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);
@@ -41,7 +43,7 @@ var OAuth = React.createClass({
     if (query.token) {
       const token = query.token;
       const { dispatch } = this.props;
-      dispatch(login(token));
+      this.setState({ token }, () => dispatch(login(token)));
     }
   },
 

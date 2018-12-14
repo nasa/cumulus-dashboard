@@ -51,7 +51,9 @@ const requestMiddleware = ({ dispatch, getState }) => next => action => {
   }
 
   requestAction = configureRequest(requestAction);
-  addRequestAuthorization(requestAction, getState());
+  if (!requestAction.skipAuth) {
+    addRequestAuthorization(requestAction, getState());
+  }
 
   const { id, type } = requestAction;
 
