@@ -8,7 +8,7 @@ import {
 export const initialState = {
   versionNumber: '',
   isCompatible: false,
-  warning: null
+  warning: ''
 };
 
 export default function reducer (state = initialState, action) {
