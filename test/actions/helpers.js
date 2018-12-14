@@ -1,11 +1,11 @@
 'use strict';
 import test from 'ava';
-import nock from 'nock';
 
 import _config from '../../app/scripts/config';
 import {
+  addRequestHeaders,
   formatError,
-  get,
+  getError,
   configureRequest,
   wrapRequest
 } from '../../app/scripts/actions/helpers';
@@ -14,23 +14,23 @@ const dispatchStub = () => true;
 const getStateStub = () => ({
   api: {
     tokens: {
-      token: 'token'
+      token: 'fake-token'
     }
   }
 });
 const type = 'TEST';
 const id = 'id';
-const headers = {
-  Authorization: 'Bearer token',
-  'Content-Type': 'application/json'
-};
 
 test.beforeEach((t) => {
   t.context.defaultConfig = {
     json: true,
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    resolveWithFullResponse: true,
+    simple: false
+  };
+
+  t.context.expectedHeaders = {
+    Authorization: 'Bearer fake-token',
+    'Content-Type': 'application/json'
   };
 
   _config.apiRoot = 'http://localhost';
@@ -47,17 +47,21 @@ test('wrap request', function (t) {
 
   const urlObj = { url };
   const req2 = (config) => {
-    t.deepEqual(config, { url, headers, json: true });
+    t.deepEqual(config, {
+      ...t.context.defaultConfig,
+      url,
+      headers: t.context.expectedHeaders
+    });
   };
   wrapRequest(id, req2, urlObj, type)(dispatchStub, getStateStub);
 
   const body = { limit: 1 };
   const req3 = (config) => {
     t.deepEqual(config, {
+      ...t.context.defaultConfig,
       url: url,
-      json: true,
       body: { limit: 1 },
-      headers
+      headers: t.context.expectedHeaders
     });
   };
   wrapRequest(id, req3, urlObj, type, body)(dispatchStub, getStateStub);
@@ -106,6 +110,11 @@ test('formatError() should handle error responses properly', (t) => {
     message: bodyErrorMessage
   });
   t.is(formattedError, `${bodyErrorName}: ${bodyErrorMessage}`);
+});
+
+test('addRequestHeaders() should return correct headers', (t) => {
+  const headers = addRequestHeaders(getStateStub());
+  t.deepEqual(headers, t.context.expectedHeaders);
 });
 
 test('configureRequest() should throw error if no URL is provided', (t) => {
@@ -196,22 +205,34 @@ test('configureRequest() should not overwrite auth headers', (t) => {
   t.deepEqual(requestConfig, expectedConfig);
 });
 
-test.cb('get() should make GET request', (t) => {
-  const stubbedResponse = { message: 'success' };
-  nock('http://localhost:5001')
-    .get('/test-path')
-    .reply(200, stubbedResponse);
-
-  get({
-    url: 'http://localhost:5001/test-path',
-    json: true
-  }, (_, data) => {
-    t.deepEqual(data, stubbedResponse);
-    t.end();
+test('getError() returns correct errors', (t) => {
+  let error = getError({
+    request: { method: 'PUT' },
+    body: { detail: 'Detail error' }
   });
-});
+  t.is(error, 'Detail error');
 
-test.todo('GET returning 4xx response');
-test.todo('POST request');
-test.todo('PUT request');
-test.todo('DELETE request');
+  error = getError({
+    request: { method: 'PUT' },
+    body: { errorMessage: 'PUT error' }
+  });
+  t.is(error, 'PUT error');
+
+  error = getError({
+    request: { method: 'DELETE' },
+    body: { errorMessage: 'DELETE error' }
+  });
+  t.is(error, 'DELETE error');
+
+  error = getError({
+    request: { method: 'POST' },
+    body: { errorMessage: 'POST error' }
+  });
+  t.is(error, 'POST error');
+
+  error = getError({
+    request: { method: 'GET' },
+    body: { message: 'Test error' }
+  });
+  t.deepEqual(error, new Error('Test error'));
+});

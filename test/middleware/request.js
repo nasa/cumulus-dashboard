@@ -5,13 +5,10 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import { CALL_API } from '../../app/scripts/actions';
-import { configureRequest } from '../../app/scripts/actions/helpers';
-import { addRequestAuthMiddleware } from '../../app/scripts/middleware/auth';
-import { doRequestMiddleware, getError } from '../../app/scripts/middleware/request';
+import { requestMiddleware } from '../../app/scripts/middleware/request';
 
 const middlewares = [
-  addRequestAuthMiddleware,
-  doRequestMiddleware,
+  requestMiddleware,
   thunk
 ];
 const mockStore = configureMockStore(middlewares);
@@ -25,59 +22,25 @@ const store = mockStore({
 
 test.beforeEach((t) => {
   const doDispatch = () => {};
-  const doGetState = () => {};
-  t.context.nextHandler = doRequestMiddleware({dispatch: doDispatch, getState: doGetState});
-});
+  const doGetState = () => ({
+    api: {
+      tokens: {
+        token: 'fake-token'
+      }
+    }
+  });
+  t.context.nextHandler = requestMiddleware({dispatch: doDispatch, getState: doGetState});
 
-test.skip('promise', async (t) => {
-  nock('http://localhost:5001')
-    .get('/test-path')
-    .reply(200);
-
-  const requestAction = {
-    type: 'TEST',
-    method: 'GET',
-    url: 'http://localhost:5001/test-path'
-  };
-  const actionObj = {
-    [CALL_API]: requestAction
+  t.context.defaultConfig = {
+    json: true,
+    resolveWithFullResponse: true,
+    simple: false
   };
 
-  const test = await store.dispatch(actionObj);
-  console.log(test);
-  t.is(test, 'testing');
-});
-
-test('getError() returns correct errors', (t) => {
-  let error = getError({
-    request: { method: 'PUT' },
-    body: { detail: 'Detail error' }
-  });
-  t.is(error, 'Detail error');
-
-  error = getError({
-    request: { method: 'PUT' },
-    body: { errorMessage: 'PUT error' }
-  });
-  t.is(error, 'PUT error');
-
-  error = getError({
-    request: { method: 'DELETE' },
-    body: { errorMessage: 'DELETE error' }
-  });
-  t.is(error, 'DELETE error');
-
-  error = getError({
-    request: { method: 'POST' },
-    body: { errorMessage: 'POST error' }
-  });
-  t.is(error, 'POST error');
-
-  error = getError({
-    request: { method: 'GET' },
-    body: { message: 'Test error' }
-  });
-  t.deepEqual(error, new Error('Test error'));
+  t.context.expectedHeaders = {
+    Authorization: 'Bearer fake-token',
+    'Content-Type': 'application/json'
+  };
 });
 
 test('should send inflight action', (t) => {
@@ -96,16 +59,13 @@ test('should send inflight action', (t) => {
 
   store.dispatch(actionObj);
 
-  const requestConfig = configureRequest(requestAction);
   const expectedInflightAction = {
     id: undefined,
     type: 'TEST_INFLIGHT',
     config: {
-      ...requestConfig,
-      headers: {
-        ...requestConfig.headers,
-        Authorization: 'Bearer fake-token'
-      }
+      ...t.context.defaultConfig,
+      ...requestAction,
+      headers: t.context.expectedHeaders
     }
   };
 
@@ -137,6 +97,32 @@ test('should throw error if no method is set on API request action', (t) => {
   }
 });
 
+test.cb('should add correct authorization headers to API request action', (t) => {
+  nock('http://localhost:5001', {
+    reqheaders: {
+      'Authorization': 'Bearer fake-token'
+    }
+  })
+    .get('/test-path')
+    .reply(200);
+
+  const requestAction = {
+    type: 'TEST',
+    method: 'GET',
+    url: 'http://localhost:5001/test-path'
+  };
+  const actionObj = {
+    [CALL_API]: requestAction
+  };
+
+  const actionHandler = t.context.nextHandler(action => {
+    t.deepEqual(action.config.headers.Authorization, 'Bearer fake-token');
+    t.end();
+  });
+
+  actionHandler(actionObj);
+});
+
 test.cb('should dispatch error action for failed request', (t) => {
   nock('http://localhost:5001')
     .get('/test-path')
@@ -154,7 +140,11 @@ test.cb('should dispatch error action for failed request', (t) => {
   const expectedAction = {
     id: undefined,
     error: new Error('Internal server error'),
-    config: configureRequest(requestAction),
+    config: {
+      ...t.context.defaultConfig,
+      ...requestAction,
+      headers: t.context.expectedHeaders
+    },
     type: 'TEST_ERROR'
   };
 
@@ -184,7 +174,11 @@ test.cb('should return expected action for GET request action', (t) => {
 
   const expectedAction = {
     id: undefined,
-    config: configureRequest(requestAction),
+    config: {
+      ...t.context.defaultConfig,
+      ...requestAction,
+      headers: t.context.expectedHeaders
+    },
     type: 'TEST',
     data: stubbedResponse
   };
@@ -221,7 +215,11 @@ test.cb('should return expected action for GET request action with query state',
 
   const expectedAction = {
     id: undefined,
-    config: configureRequest(requestAction),
+    config: {
+      ...t.context.defaultConfig,
+      ...requestAction,
+      headers: t.context.expectedHeaders
+    },
     type: 'TEST',
     data: stubbedResponse
   };
@@ -254,7 +252,11 @@ test.cb('should return expected action for POST request action', (t) => {
 
   const expectedAction = {
     id: undefined,
-    config: configureRequest(requestAction),
+    config: {
+      ...t.context.defaultConfig,
+      ...requestAction,
+      headers: t.context.expectedHeaders
+    },
     type: 'TEST',
     data: requestBody
   };
@@ -287,7 +289,11 @@ test.cb('should return expected action for PUT request action', (t) => {
 
   const expectedAction = {
     id: undefined,
-    config: configureRequest(requestAction),
+    config: {
+      ...t.context.defaultConfig,
+      ...requestAction,
+      headers: t.context.expectedHeaders
+    },
     type: 'TEST',
     data: requestBody
   };
@@ -317,7 +323,11 @@ test.cb('should return expected action for DELETE request action', (t) => {
 
   const expectedAction = {
     id: undefined,
-    config: configureRequest(requestAction),
+    config: {
+      ...t.context.defaultConfig,
+      ...requestAction,
+      headers: t.context.expectedHeaders
+    },
     type: 'TEST',
     data: stubbedResponse
   };

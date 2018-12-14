@@ -67,13 +67,32 @@ export const del = function (config, callback) {
   });
 };
 
-export const addRequestAuthorization = (config, getState) => {
-  let token = getProperty(getState(), 'api.tokens.token');
-  if (token) {
-    config.headers = config.headers || {};
-    config.headers.Authorization = 'Bearer ' + token;
+export const getError = (response) => {
+  const { request, body } = response;
+  let error;
+
+  // TODO: is this still relevant?
+  if (request.method === 'DELETE' || request.method === 'POST') {
+    error = body.errorMessage;
+  } else if (request.method === 'PUT') {
+    error = body && body.errorMessage || body && body.detail;
   }
-  return config;
+
+  if (error) return error;
+
+  error = new Error(formatError(response, body));
+  return error;
+};
+
+export const addRequestHeaders = (state) => {
+  let token = getProperty(state, 'api.tokens.token');
+  const headers = {
+    'Content-Type': 'application/json'
+  };
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+  return headers;
 };
 
 export const configureRequest = function (params, body) {
@@ -82,14 +101,6 @@ export const configureRequest = function (params, body) {
   if (typeof params === 'object') {
     config = params;
   }
-
-  let headers = {
-    'Content-Type': 'application/json'
-  };
-  if (params.headers && typeof params.headers === 'object') {
-    headers = Object.assign({}, headers, params.headers);
-  }
-  config.headers = headers;
 
   if (typeof params === 'string') {
     config.url = url.resolve(_config.apiRoot, params);
@@ -107,25 +118,24 @@ export const configureRequest = function (params, body) {
     config.body = params.body;
   }
 
-  const defaultConfig = {
+  const defaultRequestConfig = {
     json: true,
     resolveWithFullResponse: true,
     simple: false
   };
-  config = Object.assign({}, defaultConfig, config);
+  config = Object.assign({}, defaultRequestConfig, config);
 
   return config;
 };
 
 export const wrapRequest = function (id, query, params, type, body) {
-  const config = configureRequest(params, body);
-
   return function (dispatch, getState) {
+    const config = configureRequest(params, body);
+    config.headers = addRequestHeaders(getState());
+
     const inflightType = type + '_INFLIGHT';
     log((id ? inflightType + ': ' + id : inflightType));
     dispatch({ id, config, type: inflightType });
-
-    addRequestAuthorization(config, getState);
 
     const start = new Date();
     query(config, (error, data) => {

@@ -17,13 +17,11 @@ import {
 import config from './config';
 import reducers from './reducers';
 import { refreshTokenMiddleware } from './middleware/token';
-import { addRequestAuthMiddleware } from './middleware/auth';
-import { doRequestMiddleware } from './middleware/request';
+import { requestMiddleware } from './middleware/request';
 
 const store = createStore(reducers, applyMiddleware(
   refreshTokenMiddleware,
-  addRequestAuthMiddleware,
-  doRequestMiddleware,
+  requestMiddleware,
   thunkMiddleware
 ));
 

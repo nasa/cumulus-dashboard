@@ -4,7 +4,8 @@ import { hashHistory } from 'react-router';
 import { CALL_API } from '../actions';
 import {
   configureRequest,
-  formatError
+  addRequestHeaders,
+  getError
 } from '../actions/helpers';
 import log from '../utils/log';
 
@@ -42,24 +43,7 @@ const handleError = ({ id, type, error, requestAction }, next) => {
   });
 };
 
-const getError = (response) => {
-  const { request, body } = response;
-  let error;
-
-  // TODO: is this still relevant?
-  if (request.method === 'DELETE' || request.method === 'POST') {
-    error = body.errorMessage;
-  } else if (request.method === 'PUT') {
-    error = body && body.errorMessage || body && body.detail;
-  }
-
-  if (error) return error;
-
-  error = new Error(formatError(response, body));
-  return error;
-};
-
-const doRequestMiddleware = ({ dispatch }) => next => action => {
+const requestMiddleware = ({ dispatch, getState }) => next => action => {
   let requestAction = action[CALL_API];
   if (!requestAction) {
     return next(action);
@@ -69,8 +53,8 @@ const doRequestMiddleware = ({ dispatch }) => next => action => {
     throw new Error('Request action must include a method');
   }
 
-  // this Object.assign seems redundant
-  requestAction = Object.assign({}, requestAction, configureRequest(requestAction));
+  requestAction = configureRequest(requestAction);
+  requestAction.headers = addRequestHeaders(getState());
 
   const { id, type } = requestAction;
 
@@ -96,6 +80,6 @@ const doRequestMiddleware = ({ dispatch }) => next => action => {
 };
 
 module.exports = {
-  doRequestMiddleware,
+  requestMiddleware,
   getError
 };
