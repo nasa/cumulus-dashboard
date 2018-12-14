@@ -247,6 +247,7 @@ export const REFRESH_TOKEN = 'REFRESH_TOKEN';
 export const REFRESH_TOKEN_ERROR = 'REFRESH_TOKEN_ERROR';
 export const REFRESH_TOKEN_INFLIGHT = 'REFRESH_TOKEN_INFLIGHT';
 
+export const DELETE_TOKEN = 'DELETE_TOKEN';
 export const SET_TOKEN = 'SET_TOKEN';
 
 export const CALL_API = 'CALL_API';
@@ -677,8 +678,6 @@ export const getLogs = (options) => ({
 });
 
 export const clearLogs = () => ({ type: CLEAR_LOGS });
-
-export const DELETE_TOKEN = 'DELETE_TOKEN';
 
 export const logout = () => {
   return (dispatch) => {
