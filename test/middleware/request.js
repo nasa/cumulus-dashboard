@@ -5,9 +5,9 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import { CALL_API } from '../../app/scripts/actions';
-import { configureRequest } from '../../app/scripts/actions/helpers';
+import { configureRequest, put } from '../../app/scripts/actions/helpers';
 import { addRequestAuthMiddleware } from '../../app/scripts/middleware/auth';
-import { doRequestMiddleware } from '../../app/scripts/middleware/request';
+import { doRequestMiddleware, getError } from '../../app/scripts/middleware/request';
 
 const middlewares = [
   addRequestAuthMiddleware,
@@ -46,6 +46,38 @@ test.skip('promise', async (t) => {
   const test = await store.dispatch(actionObj);
   console.log(test);
   t.is(test, 'testing');
+});
+
+test('getError() returns correct errors', (t) => {
+  let error = getError({
+    request: { method: 'PUT' },
+    body: { detail: 'Detail error' }
+  });
+  t.is(error, 'Detail error');
+
+  error = getError({
+    request: { method: 'PUT' },
+    body: { errorMessage: 'PUT error' }
+  });
+  t.is(error, 'PUT error');
+
+  error = getError({
+    request: { method: 'DELETE' },
+    body: { errorMessage: 'DELETE error' }
+  });
+  t.is(error, 'DELETE error');
+
+  error = getError({
+    request: { method: 'POST' },
+    body: { errorMessage: 'POST error' }
+  });
+  t.is(error, 'POST error');
+
+  error = getError({
+    request: { method: 'GET' },
+    body: { message: 'Test error' }
+  });
+  t.deepEqual(error, new Error('Test error'));
 });
 
 test('should send inflight action', (t) => {
@@ -105,7 +137,7 @@ test('should throw error if no method is set on API request action', (t) => {
   }
 });
 
-test.cb.only('should dispatch error action for failed request', (t) => {
+test.cb('should dispatch error action for failed request', (t) => {
   nock('http://localhost:5001')
     .get('/test-path')
     .reply(500, { message: 'Internal server error' });

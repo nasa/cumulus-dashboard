@@ -63,7 +63,7 @@ test('wrap request', function (t) {
   wrapRequest(id, req3, urlObj, type, body)(dispatchStub, getStateStub);
 });
 
-test.only('formatError() should handle error responses properly', (t) => {
+test('formatError() should handle error responses properly', (t) => {
   const requestErrorMessage = 'Request failed';
   const response = {
     statusMessage: requestErrorMessage

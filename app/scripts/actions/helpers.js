@@ -108,7 +108,9 @@ export const configureRequest = function (params, body) {
   }
 
   const defaultConfig = {
-    json: true
+    json: true,
+    resolveWithFullResponse: true,
+    simple: false
   };
   config = Object.assign({}, defaultConfig, config);
 
