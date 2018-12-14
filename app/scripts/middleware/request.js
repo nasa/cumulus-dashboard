@@ -69,6 +69,7 @@ const doRequestMiddleware = ({ dispatch }) => next => action => {
     throw new Error('Request action must include a method');
   }
 
+  // this Object.assign seems redundant
   requestAction = Object.assign({}, requestAction, configureRequest(requestAction));
 
   const { id, type } = requestAction;

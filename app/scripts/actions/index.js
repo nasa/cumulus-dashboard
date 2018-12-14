@@ -293,9 +293,6 @@ export const interval = function (action, wait, immediate) {
   return () => clearInterval(intervalId);
 };
 
-// export const getCollection = (name, version) => wrapRequest(
-//   getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
-
 export const getCollection = (name, version) => ({
   [CALL_API]: {
     type: COLLECTION,
@@ -305,55 +302,21 @@ export const getCollection = (name, version) => ({
   }
 });
 
-// export const listCollections = (options) => wrapRequest(null, get, {
-//   url: url.resolve(root, 'collections'),
-//   qs: Object.assign({ limit: pageLimit }, options)
-// }, COLLECTIONS);
-
-// export const listCollections = (options) => ({
-//   [CALL_API]: {
-//     type: COLLECTIONS,
-//     method: 'GET',
-//     id: null,
-//     url: url.resolve(root, 'collections'),
-//     qs: Object.assign({ limit: pageLimit }, options)
-//   }
-// });
-
 export const listCollections = (options) => {
-  return (dispatch, getState) => {
-    // it thenable and make it easier to create chained actions
-    const wrapListCollections = () => {
-      return new Promise((resolve, reject) => {
-        const config = configureRequest({
-          url: url.resolve(root, 'collections'),
-          qs: Object.assign({ limit: pageLimit }, options)
-        });
-        addRequestAuthorization(config, getState);
-        get(config, (error, data) => {
-          if (error) {
-            dispatch({
-              type: COLLECTIONS_ERROR,
-              error
-            });
-            return reject(error);
-          }
-          dispatch({
-            type: COLLECTIONS,
-            data
-          });
-          return resolve();
-        });
-      });
-    };
-    return wrapListCollections().then(() => {
+  return (dispatch) => {
+    return dispatch({
+      [CALL_API]: {
+        type: COLLECTIONS,
+        method: 'GET',
+        id: null,
+        url: url.resolve(root, 'collections'),
+        qs: Object.assign({ limit: pageLimit }, options)
+      }
+    }).then(() => {
       return dispatch(getMMTLinks());
     });
   };
 };
-
-// export const createCollection = (payload) => wrapRequest(
-//   getCollectionId(payload), post, 'collections', NEW_COLLECTION, payload);
 
 export const createCollection = (payload) => ({
   [CALL_API]: {
@@ -364,9 +327,6 @@ export const createCollection = (payload) => ({
     body: payload
   }
 });
-
-// export const updateCollection = (payload) => wrapRequest(
-//   getCollectionId(payload), put, `collections/${payload.name}/${payload.version}`, UPDATE_COLLECTION, payload);
 
 export const updateCollection = (payload) => ({
   [CALL_API]: {
@@ -379,9 +339,6 @@ export const updateCollection = (payload) => ({
 });
 
 export const clearUpdateCollection = (collectionName) => ({ type: UPDATE_COLLECTION_CLEAR, id: collectionName });
-
-// export const deleteCollection = (name, version) => wrapRequest(
-//   getCollectionId({name, version}), del, `collections/${name}/${version}`, COLLECTION_DELETE);
 
 export const deleteCollection = (name, version) => ({
   [CALL_API]: {
@@ -396,8 +353,6 @@ export const searchCollections = (prefix) => ({ type: SEARCH_COLLECTIONS, prefix
 export const clearCollectionsSearch = () => ({ type: CLEAR_COLLECTIONS_SEARCH });
 export const filterCollections = (param) => ({ type: FILTER_COLLECTIONS, param: param });
 export const clearCollectionsFilter = (paramKey) => ({ type: CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
-
-// export const getCumulusInstanceMetadata = () => wrapRequest(null, get, 'instanceMeta', ADD_INSTANCE_META_CMR);
 
 export const getCumulusInstanceMetadata = () => ({
   [CALL_API]: {

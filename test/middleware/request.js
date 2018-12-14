@@ -5,7 +5,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import { CALL_API } from '../../app/scripts/actions';
-import { configureRequest, put } from '../../app/scripts/actions/helpers';
+import { configureRequest } from '../../app/scripts/actions/helpers';
 import { addRequestAuthMiddleware } from '../../app/scripts/middleware/auth';
 import { doRequestMiddleware, getError } from '../../app/scripts/middleware/request';
 

@@ -77,7 +77,7 @@ export const addRequestAuthorization = (config, getState) => {
 };
 
 export const configureRequest = function (params, body) {
-  // todo: enforce that params is an object and set config = params
+  // TODO: enforce that params is an object and set config = params
   let config = {};
   if (typeof params === 'object') {
     config = params;
