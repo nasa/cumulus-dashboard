@@ -8,47 +8,46 @@ const refreshInterval = Math.ceil((config.updateInterval + 1000) / 1000);
 
 let deferred;
 const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
-  if (!action[CALL_API]) {
-    return next(action);
-  }
+  if (typeof action === 'object' && action.hasOwnProperty(CALL_API)) {
+    const token = get(getState(), 'api.tokens.token');
+    if (!token) {
+      return next(action);
+    }
 
-  const token = get(getState(), 'api.tokens.token');
-  if (!token) {
-    return next(action);
-  }
+    const jwtData = jwtDecode(token);
+    // Bail out early if this is not a JWT value to preserve backwards
+    // compatibility with API returning regular tokens
+    if (!jwtData) {
+      return next(action);
+    }
 
-  const jwtData = jwtDecode(token);
-  // Bail out early if this is not a JWT value to preserve backwards
-  // compatibility with API returning regular tokens
-  if (!jwtData) {
-    return next(action);
-  }
+    const tokenExpiration = get(jwtData, 'exp');
+    if (!tokenExpiration) {
+      return dispatch(loginError('Invalid token'));
+    }
 
-  const tokenExpiration = get(jwtData, 'exp');
-  if (!tokenExpiration) {
-    return dispatch(loginError('Invalid token'));
-  }
-
-  // tokenExpiration = date seconds since epoch
-  // Math.ceil(Date.now() / 1000) = now in seconds since epoch
-  if ((tokenExpiration - Math.ceil(Date.now() / 1000)) <= refreshInterval) {
-    const inflight = get(getState(), 'api.tokens.inflight');
-    if (!inflight) {
-      deferred = createDeferred();
-      return refreshAccessToken(token, dispatch)
-        .then(() => {
-          deferred.resolve();
+    // tokenExpiration = date seconds since epoch
+    // Math.ceil(Date.now() / 1000) = now in seconds since epoch
+    if ((tokenExpiration - Math.ceil(Date.now() / 1000)) <= refreshInterval) {
+      const inflight = get(getState(), 'api.tokens.inflight');
+      if (!inflight) {
+        deferred = createDeferred();
+        return refreshAccessToken(token, dispatch)
+          .then(() => {
+            deferred.resolve();
+            return next(action);
+          })
+          .catch(() => {
+            return dispatch(loginError('Session expired'));
+          });
+      } else {
+        return deferred.promise.then(() => {
           return next(action);
-        })
-        .catch(() => {
-          return dispatch(loginError('Session expired'));
         });
-    } else {
-      return deferred.promise.then(() => {
-        return next(action);
-      });
+      }
     }
   }
+  return next(action);
 };
 
 function createDeferred () {
