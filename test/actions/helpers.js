@@ -6,11 +6,9 @@ import {
   addRequestAuthorization,
   formatError,
   getError,
-  configureRequest,
-  wrapRequest
+  configureRequest
 } from '../../app/scripts/actions/helpers';
 
-const dispatchStub = () => true;
 const getStateStub = () => ({
   api: {
     tokens: {
@@ -18,8 +16,6 @@ const getStateStub = () => ({
     }
   }
 });
-const type = 'TEST';
-const id = 'id';
 
 test.beforeEach((t) => {
   t.context.defaultConfig = {
@@ -33,42 +29,6 @@ test.beforeEach((t) => {
   };
 
   _config.apiRoot = 'http://localhost';
-});
-
-test('wrap request', function (t) {
-  t.plan(3);
-
-  const url = 'blahblahblah';
-  const req1 = (config) => {
-    t.true(/blahblahblah/.test(config.url));
-  };
-  wrapRequest(id, req1, url, type)(dispatchStub, getStateStub);
-
-  const headers = {
-    ...t.context.defaultHeaders,
-    Authorization: 'Bearer fake-token'
-  };
-
-  const urlObj = { url };
-  const req2 = (config) => {
-    t.deepEqual(config, {
-      ...t.context.defaultConfig,
-      url,
-      headers
-    });
-  };
-  wrapRequest(id, req2, urlObj, type)(dispatchStub, getStateStub);
-
-  const body = { limit: 1 };
-  const req3 = (config) => {
-    t.deepEqual(config, {
-      ...t.context.defaultConfig,
-      url: url,
-      body: { limit: 1 },
-      headers
-    });
-  };
-  wrapRequest(id, req3, urlObj, type, body)(dispatchStub, getStateStub);
 });
 
 test('formatError() should handle error responses properly', (t) => {
