@@ -1,15 +1,16 @@
 'use strict';
 import moment from 'moment';
 import url from 'url';
+import requestPromise from 'request-promise';
 import { CMR, hostId } from '@cumulus/cmrjs';
+
 import {
   get,
   post,
   put,
   del,
   configureRequest,
-  wrapRequest,
-  addRequestAuthorization
+  wrapRequest
 } from './helpers';
 import _config from '../config';
 import { getCollectionId } from '../utils/format';
@@ -260,29 +261,26 @@ export const refreshAccessToken = (token, dispatch) => {
   log('REFRESH_TOKEN_INFLIGHT');
   dispatch({ type: REFRESH_TOKEN_INFLIGHT });
 
-  return new Promise((resolve, reject) => {
-    post(configureRequest(
-      {
-        url: url.resolve(root, 'refresh')
-      },
-      { token }
-    ), (error, data) => {
-      if (error) {
-        dispatch({
-          type: REFRESH_TOKEN_ERROR,
-          error
-        });
-        return reject(error);
-      }
+  const requestConfig = configureRequest({
+    method: 'POST',
+    url: url.resolve(root, 'refresh'),
+    body: { token }
+  });
+  return requestPromise(requestConfig)
+    .then(({ body }) => {
       const duration = new Date() - start;
       log('REFRESH_TOKEN', duration + 'ms');
-      dispatch({
+      return dispatch({
         type: REFRESH_TOKEN,
-        token: data.token
+        token: body.token
       });
-      return resolve();
+    })
+    .catch(({ error }) => {
+      return dispatch({
+        type: REFRESH_TOKEN_ERROR,
+        error
+      });
     });
-  });
 };
 
 export const setTokenState = (token) => ({ type: SET_TOKEN, token });
