@@ -41,41 +41,42 @@ const handleError = ({ id, type, error, requestAction }, next) => {
 };
 
 const requestMiddleware = ({ dispatch, getState }) => next => action => {
-  let requestAction = action[CALL_API];
-  if (!requestAction) {
-    return next(action);
+  if (typeof action === 'object' && action.hasOwnProperty(CALL_API)) {
+    let requestAction = action[CALL_API];
+
+    if (!requestAction.method) {
+      throw new Error('Request action must include a method');
+    }
+
+    requestAction = configureRequest(requestAction);
+    if (!requestAction.skipAuth) {
+      addRequestAuthorization(requestAction, getState());
+    }
+
+    const { id, type } = requestAction;
+
+    const inflightType = type + '_INFLIGHT';
+    log((id ? inflightType + ': ' + id : inflightType));
+    dispatch({ id, config: requestAction, type: inflightType });
+
+    const start = new Date();
+    return requestPromise(requestAction)
+      .then((response) => {
+        const { body } = response;
+
+        if (+response.statusCode >= 400) {
+          const error = getError(response);
+          return handleError({ id, type, error, requestAction }, next);
+        }
+
+        const duration = new Date() - start;
+        log((id ? type + ': ' + id : type), duration + 'ms');
+        return next({ id, type, data: body, config: requestAction });
+      })
+      .catch(({ error }) => handleError({ id, type, error, requestAction }, next));
   }
 
-  if (!requestAction.method) {
-    throw new Error('Request action must include a method');
-  }
-
-  requestAction = configureRequest(requestAction);
-  if (!requestAction.skipAuth) {
-    addRequestAuthorization(requestAction, getState());
-  }
-
-  const { id, type } = requestAction;
-
-  const inflightType = type + '_INFLIGHT';
-  log((id ? inflightType + ': ' + id : inflightType));
-  dispatch({ id, config: requestAction, type: inflightType });
-
-  const start = new Date();
-  return requestPromise(requestAction)
-    .then((response) => {
-      const { body } = response;
-
-      if (+response.statusCode >= 400) {
-        const error = getError(response);
-        return handleError({ id, type, error, requestAction }, next);
-      }
-
-      const duration = new Date() - start;
-      log((id ? type + ': ' + id : type), duration + 'ms');
-      return next({ id, type, data: body, config: requestAction });
-    })
-    .catch(({ error }) => handleError({ id, type, error, requestAction }, next));
+  return next(action);
 };
 
 module.exports = {
