@@ -727,14 +727,11 @@ export const clearLogs = () => ({ type: CLEAR_LOGS });
 
 export const DELETE_TOKEN = 'DELETE_TOKEN';
 
-export const logout = (dispatch, token) => {
-  return deleteToken(dispatch, token)
-    .then(() => dispatch({ type: LOGOUT }));
-};
-
-export const forceLogout = (dispatch, token, error) => {
-  return deleteToken(dispatch, token)
-    .then(() => dispatch({ type: 'LOGIN_ERROR', error }));
+export const logout = () => {
+  return (dispatch) => {
+    return dispatch(deleteToken())
+      .then(() => dispatch({ type: LOGOUT }));
+  };
 };
 
 export const login = (token) => {

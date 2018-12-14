@@ -3,7 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import url from 'url';
-import { login, setTokenState } from '../../actions';
+import { login } from '../../actions';
 import { window } from '../../utils/browser';
 import { updateDelay, apiRoot } from '../../config';
 import ErrorReport from '../errors/report';
@@ -19,7 +19,6 @@ var OAuth = React.createClass({
 
   getInitialState: function () {
     return {
-      token: null,
       error: null
     };
   },
