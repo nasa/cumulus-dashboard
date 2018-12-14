@@ -8,9 +8,6 @@ import { CMR, hostId } from '@cumulus/cmrjs';
 
 import {
   get,
-  post,
-  put,
-  del,
   configureRequest,
   wrapRequest
 } from './helpers';
@@ -544,11 +541,6 @@ export const getCount = (options) => ({
   }
 });
 
-// export const listPdrs = (options) => wrapRequest(null, get, {
-//   url: url.resolve(root, 'pdrs'),
-//   qs: Object.assign({ limit: pageLimit }, options)
-// }, PDRS);
-
 export const listPdrs = (options) => ({
   [CALL_API]: {
     type: PDRS,
@@ -558,14 +550,11 @@ export const listPdrs = (options) => ({
   }
 });
 
-// export const getPdr = (pdrName) => wrapRequest(
-//   pdrName, get, `pdrs/${pdrName}`, PDR);
-
 export const getPdr = (pdrName) => ({
   [CALL_API]: {
+    id: pdrName,
     type: PDR,
     method: 'GET',
-    id: pdrName,
     path: `pdrs/${pdrName}`
   }
 });
@@ -574,11 +563,6 @@ export const searchPdrs = (prefix) => ({ type: SEARCH_PDRS, prefix: prefix });
 export const clearPdrsSearch = () => ({ type: CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: FILTER_PDRS, param: param });
 export const clearPdrsFilter = (paramKey) => ({ type: CLEAR_PDRS_FILTER, paramKey: paramKey });
-
-// export const listProviders = (options) => wrapRequest(null, get, {
-//   url: url.resolve(root, 'providers'),
-//   qs: Object.assign({ limit: pageLimit }, options)
-// }, PROVIDERS);
 
 export const listProviders = (options) => ({
   [CALL_API]: {
@@ -589,11 +573,6 @@ export const listProviders = (options) => ({
   }
 });
 
-// export const getOptionsProviderGroup = () => wrapRequest(null, get, {
-//   url: url.resolve(root, 'providers'),
-//   qs: { limit: 100, fields: 'providerName' }
-// }, OPTIONS_PROVIDERGROUP);
-
 export const getOptionsProviderGroup = () => ({
   [CALL_API]: {
     type: OPTIONS_PROVIDERGROUP,
@@ -603,9 +582,6 @@ export const getOptionsProviderGroup = () => ({
   }
 });
 
-// export const getProvider = (providerId) => wrapRequest(
-//   providerId, get, `providers/${providerId}`, PROVIDER);
-
 export const getProvider = (providerId) => ({
   [CALL_API]: {
     type: PROVIDER,
@@ -614,9 +590,6 @@ export const getProvider = (providerId) => ({
     path: `providers/${providerId}`
   }
 });
-
-// export const createProvider = (providerId, payload) => wrapRequest(
-//   providerId, post, 'providers', NEW_PROVIDER, payload);
 
 export const createProvider = (providerId, payload) => ({
   [CALL_API]: {
@@ -628,23 +601,17 @@ export const createProvider = (providerId, payload) => ({
   }
 });
 
-// export const updateProvider = (providerId, payload) => wrapRequest(
-//   providerId, put, `providers/${providerId}`, UPDATE_PROVIDER, payload);
-
 export const updateProvider = (providerId, payload) => ({
   [CALL_API]: {
     type: UPDATE_PROVIDER,
     id: providerId,
     method: 'PUT',
-    path: 'providers',
+    path: `providers/${providerId}`,
     body: payload
   }
 });
 
 export const clearUpdateProvider = (providerId) => ({ type: UPDATE_PROVIDER_CLEAR, id: providerId });
-
-// export const deleteProvider = (providerId) => wrapRequest(
-//   providerId, del, `providers/${providerId}`, PROVIDER_DELETE);
 
 export const deleteProvider = (providerId) => ({
   [CALL_API]: {
@@ -654,11 +621,6 @@ export const deleteProvider = (providerId) => ({
     path: `providers/${providerId}`
   }
 });
-
-// export const restartProvider = (providerId) => wrapRequest(
-//   providerId, put, `providers/${providerId}`, PROVIDER_RESTART, {
-//     action: 'restart'
-//   });
 
 export const restartProvider = (providerId) => ({
   [CALL_API]: {
@@ -673,11 +635,6 @@ export const restartProvider = (providerId) => ({
 });
 
 export const clearRestartedProvider = (providerId) => ({ type: CLEAR_RESTARTED_PROVIDER, id: providerId });
-
-// export const stopProvider = (providerId) => wrapRequest(
-//   providerId, put, `providers/${providerId}`, PROVIDER_STOP, {
-//     action: 'stop'
-//   });
 
 export const stopProvider = (providerId) => ({
   [CALL_API]: {
@@ -697,9 +654,6 @@ export const clearProvidersSearch = () => ({ type: CLEAR_PROVIDERS_SEARCH });
 export const filterProviders = (param) => ({ type: FILTER_PROVIDERS, param: param });
 export const clearProvidersFilter = (paramKey) => ({ type: CLEAR_PROVIDERS_FILTER, paramKey: paramKey });
 
-// export const deletePdr = (pdrName) => wrapRequest(
-//   pdrName, del, `pdrs/${pdrName}`, PDR_DELETE);
-
 export const deletePdr = (pdrName) => ({
   [CALL_API]: {
     type: PDR_DELETE,
@@ -708,11 +662,6 @@ export const deletePdr = (pdrName) => ({
     path: `pdrs/${pdrName}`
   }
 });
-
-// export const getLogs = (options) => wrapRequest(null, get, {
-//   url: url.resolve(root, 'logs'),
-//   qs: Object.assign({limit: 100}, options)
-// }, LOGS);
 
 export const getLogs = (options) => ({
   [CALL_API]: {
@@ -774,84 +723,170 @@ export const loginError = (error) => {
   };
 };
 
-export const getSchema = (type) => wrapRequest(null, get, `schemas/${type}`, SCHEMA);
+export const getSchema = (type) => ({
+  [CALL_API]: {
+    type: SCHEMA,
+    method: 'GET',
+    path: `schemas/${type}`
+  }
+});
 
-export const queryHistogram = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'stats/histogram'),
-  qs: options
-}, HISTOGRAM);
+export const queryHistogram = (options) => ({
+  [CALL_API]: {
+    type: HISTOGRAM,
+    method: 'GET',
+    url: url.resolve(root, 'stats/histogram'),
+    qs: options
+  }
+});
 
-// export const listWorkflows = (options) => wrapRequest(null, get, 'workflows', WORKFLOWS);
-
-export const listWorkflows = (options) => ({
+export const listWorkflows = () => ({
   [CALL_API]: {
     type: WORKFLOWS,
     method: 'GET',
-    id: null,
     url: url.resolve(root, 'workflows')
   }
 });
 
-export const getExecutionStatus = (arn) => wrapRequest(null, get, {
-  url: url.resolve(root, 'executions/status/' + arn)
-}, EXECUTION_STATUS);
+export const getExecutionStatus = (arn) => ({
+  [CALL_API]: {
+    type: EXECUTION_STATUS,
+    method: 'GET',
+    url: url.resolve(root, 'executions/status/' + arn)
+  }
+});
 
-export const getExecutionLogs = (executionName) => wrapRequest(null, get, {
-  url: url.resolve(root, 'logs/' + executionName)
-}, EXECUTION_LOGS);
+export const getExecutionLogs = (executionName) => ({
+  [CALL_API]: {
+    type: EXECUTION_LOGS,
+    method: 'GET',
+    url: url.resolve(root, 'logs/' + executionName)
+  }
+});
 
-export const listExecutions = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'executions'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, EXECUTIONS);
+export const listExecutions = (options) => ({
+  [CALL_API]: {
+    type: EXECUTIONS,
+    method: 'GET',
+    url: url.resolve(root, 'executions'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
 
 export const filterExecutions = (param) => ({ type: FILTER_EXECUTIONS, param: param });
 export const clearExecutionsFilter = (paramKey) => ({ type: CLEAR_EXECUTIONS_FILTER, paramKey: paramKey });
 
-export const listRules = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'rules'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, RULES);
+export const listRules = (options) => ({
+  [CALL_API]: {
+    type: RULES,
+    method: 'GET',
+    url: url.resolve(root, 'rules'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
 
-export const getRule = (ruleName) => wrapRequest(
-  ruleName, get, `rules?name=${ruleName}`, RULE);
+export const getRule = (ruleName) => ({
+  [CALL_API]: {
+    id: ruleName,
+    type: RULE,
+    method: 'GET',
+    path: `rules?name=${ruleName}`
+  }
+});
 
-export const updateRule = (payload) => wrapRequest(
-  payload.name, put, `rules/${payload.name}`, UPDATE_RULE, payload);
+export const updateRule = (payload) => ({
+  [CALL_API]: {
+    id: payload.name,
+    type: UPDATE_RULE,
+    method: 'PUT',
+    path: `rules/${payload.name}`,
+    body: payload
+  }
+});
 
 export const clearUpdateRule = (ruleName) => ({ type: UPDATE_RULE_CLEAR, id: ruleName });
 
-export const createRule = (payload) => wrapRequest(
-  payload.name, post, 'rules', NEW_RULE, payload);
+export const createRule = (payload) => ({
+  [CALL_API]: {
+    id: payload.name,
+    type: NEW_RULE,
+    method: 'POST',
+    path: 'rules',
+    body: payload
+  }
+});
 
-export const deleteRule = (ruleName) => wrapRequest(
-  ruleName, del, `rules/${ruleName}`, RULE_DELETE);
+export const deleteRule = (ruleName) => ({
+  [CALL_API]: {
+    id: ruleName,
+    type: RULE_DELETE,
+    method: 'DELETE',
+    path: `rules/${ruleName}`
+  }
+});
 
-export const enableRule = (ruleName) => wrapRequest(
-  ruleName, put, `rules/${ruleName}`, RULE_ENABLE, {
-    state: 'ENABLED'
-  });
+export const enableRule = (ruleName) => ({
+  [CALL_API]: {
+    id: ruleName,
+    type: RULE_ENABLE,
+    method: 'PUT',
+    path: `rules/${ruleName}`,
+    body: {
+      state: 'ENABLED'
+    }
+  }
+});
 
-export const disableRule = (ruleName) => wrapRequest(
-  ruleName, put, `rules/${ruleName}`, RULE_DISABLE, {
-    state: 'DISABLED'
-  });
+export const disableRule = (ruleName) => ({
+  [CALL_API]: {
+    id: ruleName,
+    type: RULE_DISABLE,
+    method: 'PUT',
+    path: `rules/${ruleName}`,
+    body: {
+      state: 'DISABLED'
+    }
+  }
+});
 
-export const rerunRule = (ruleName) => wrapRequest(
-  ruleName, put, `rules/${ruleName}`, RULE_RERUN, {
-    action: 'rerun'
-  });
+export const rerunRule = (ruleName) => ({
+  [CALL_API]: {
+    id: ruleName,
+    type: RULE_RERUN,
+    method: 'PUT',
+    path: `rules/${ruleName}`,
+    body: {
+      action: 'rerun'
+    }
+  }
+});
 
-export const listReconciliationReports = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'reconciliationReports'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, RECONCILIATIONS);
+export const listReconciliationReports = (options) => ({
+  [CALL_API]: {
+    type: RECONCILIATIONS,
+    method: 'GET',
+    url: url.resolve(root, 'reconciliationReports'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
 
-export const getReconciliationReport = (reconciliationName) => wrapRequest(
-  reconciliationName, get, `reconciliationReports/${reconciliationName}`, RECONCILIATION);
+export const getReconciliationReport = (reconciliationName) => ({
+  [CALL_API]: {
+    id: reconciliationName,
+    type: RECONCILIATION,
+    method: 'GET',
+    path: `reconciliationReports/${reconciliationName}`
+  }
+});
 
-export const createReconciliationReport = () => wrapRequest(
-  `reconciliation-report-${new Date().toISOString()}`, post, 'reconciliationReports', NEW_RECONCILIATION);
+export const createReconciliationReport = () => ({
+  [CALL_API]: {
+    id: `reconciliation-report-${new Date().toISOString()}`,
+    type: NEW_RECONCILIATION,
+    method: 'POST',
+    path: 'reconciliationReports'
+  }
+});
 
 export const searchReconciliationReports = (prefix) => ({ type: SEARCH_RECONCILIATIONS, prefix: prefix });
 export const clearReconciliationReportSearch = () => ({ type: CLEAR_RECONCILIATIONS_SEARCH });

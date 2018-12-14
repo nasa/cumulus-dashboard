@@ -1,5 +1,4 @@
 import requestPromise from 'request-promise';
-import { hashHistory } from 'react-router';
 
 import { CALL_API, loginError } from '../actions';
 import {
