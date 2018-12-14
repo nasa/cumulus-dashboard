@@ -2,7 +2,7 @@ import test from 'ava';
 import nock from 'nock';
 
 import configureMockStore from 'redux-mock-store';
-// import thunk from 'redux-thunk';
+import thunk from 'redux-thunk';
 
 import { CALL_API } from '../../app/scripts/actions';
 import { configureRequest } from '../../app/scripts/actions/helpers';
@@ -11,8 +11,8 @@ import { doRequestMiddleware } from '../../app/scripts/middleware/request';
 
 const middlewares = [
   addRequestAuthMiddleware,
-  doRequestMiddleware
-  // thunk
+  doRequestMiddleware,
+  thunk
 ];
 const mockStore = configureMockStore(middlewares);
 const store = mockStore({
@@ -27,6 +27,25 @@ test.beforeEach((t) => {
   const doDispatch = () => {};
   const doGetState = () => {};
   t.context.nextHandler = doRequestMiddleware({dispatch: doDispatch, getState: doGetState});
+});
+
+test.skip('promise', async (t) => {
+  nock('http://localhost:5001')
+    .get('/test-path')
+    .reply(200);
+
+  const requestAction = {
+    type: 'TEST',
+    method: 'GET',
+    url: 'http://localhost:5001/test-path'
+  };
+  const actionObj = {
+    [CALL_API]: requestAction
+  };
+
+  const test = await store.dispatch(actionObj);
+  console.log(test);
+  t.is(test, 'testing');
 });
 
 test('should send inflight action', (t) => {
@@ -86,7 +105,7 @@ test('should throw error if no method is set on API request action', (t) => {
   }
 });
 
-test.cb('should dispatch error action for failed request', (t) => {
+test.cb.only('should dispatch error action for failed request', (t) => {
   nock('http://localhost:5001')
     .get('/test-path')
     .reply(500, { message: 'Internal server error' });

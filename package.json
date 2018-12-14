@@ -140,6 +140,7 @@
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "request": "^2.79.0",
+    "request-promise-native": "^1.0.5",
     "shortid": "^2.2.6",
     "slugify": "^1.1.0",
     "stubborn-queue": "^2.0.0",
