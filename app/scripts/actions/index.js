@@ -1,7 +1,9 @@
 'use strict';
 import moment from 'moment';
 import url from 'url';
+import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
+import { hashHistory } from 'react-router';
 import { CMR, hostId } from '@cumulus/cmrjs';
 
 import {
@@ -542,54 +544,152 @@ export const getCount = (options) => ({
   }
 });
 
-export const listPdrs = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'pdrs'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, PDRS);
+// export const listPdrs = (options) => wrapRequest(null, get, {
+//   url: url.resolve(root, 'pdrs'),
+//   qs: Object.assign({ limit: pageLimit }, options)
+// }, PDRS);
 
-export const getPdr = (pdrName) => wrapRequest(
-  pdrName, get, `pdrs/${pdrName}`, PDR);
+export const listPdrs = (options) => ({
+  [CALL_API]: {
+    type: PDRS,
+    method: 'GET',
+    url: url.resolve(root, 'pdrs'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
+
+// export const getPdr = (pdrName) => wrapRequest(
+//   pdrName, get, `pdrs/${pdrName}`, PDR);
+
+export const getPdr = (pdrName) => ({
+  [CALL_API]: {
+    type: PDR,
+    method: 'GET',
+    id: pdrName,
+    path: `pdrs/${pdrName}`
+  }
+});
 
 export const searchPdrs = (prefix) => ({ type: SEARCH_PDRS, prefix: prefix });
 export const clearPdrsSearch = () => ({ type: CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: FILTER_PDRS, param: param });
 export const clearPdrsFilter = (paramKey) => ({ type: CLEAR_PDRS_FILTER, paramKey: paramKey });
 
-export const listProviders = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'providers'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, PROVIDERS);
+// export const listProviders = (options) => wrapRequest(null, get, {
+//   url: url.resolve(root, 'providers'),
+//   qs: Object.assign({ limit: pageLimit }, options)
+// }, PROVIDERS);
 
-export const getOptionsProviderGroup = () => wrapRequest(null, get, {
-  url: url.resolve(root, 'providers'),
-  qs: { limit: 100, fields: 'providerName' }
-}, OPTIONS_PROVIDERGROUP);
+export const listProviders = (options) => ({
+  [CALL_API]: {
+    type: PROVIDERS,
+    method: 'GET',
+    url: url.resolve(root, 'providers'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
 
-export const getProvider = (providerId) => wrapRequest(
-  providerId, get, `providers/${providerId}`, PROVIDER);
+// export const getOptionsProviderGroup = () => wrapRequest(null, get, {
+//   url: url.resolve(root, 'providers'),
+//   qs: { limit: 100, fields: 'providerName' }
+// }, OPTIONS_PROVIDERGROUP);
 
-export const createProvider = (providerId, payload) => wrapRequest(
-  providerId, post, 'providers', NEW_PROVIDER, payload);
+export const getOptionsProviderGroup = () => ({
+  [CALL_API]: {
+    type: OPTIONS_PROVIDERGROUP,
+    method: 'GET',
+    url: url.resolve(root, 'providers'),
+    qs: { limit: 100, fields: 'providerName' }
+  }
+});
 
-export const updateProvider = (providerId, payload) => wrapRequest(
-  providerId, put, `providers/${providerId}`, UPDATE_PROVIDER, payload);
+// export const getProvider = (providerId) => wrapRequest(
+//   providerId, get, `providers/${providerId}`, PROVIDER);
+
+export const getProvider = (providerId) => ({
+  [CALL_API]: {
+    type: PROVIDER,
+    id: providerId,
+    method: 'GET',
+    path: `providers/${providerId}`
+  }
+});
+
+// export const createProvider = (providerId, payload) => wrapRequest(
+//   providerId, post, 'providers', NEW_PROVIDER, payload);
+
+export const createProvider = (providerId, payload) => ({
+  [CALL_API]: {
+    type: NEW_PROVIDER,
+    id: providerId,
+    method: 'POST',
+    path: 'providers',
+    body: payload
+  }
+});
+
+// export const updateProvider = (providerId, payload) => wrapRequest(
+//   providerId, put, `providers/${providerId}`, UPDATE_PROVIDER, payload);
+
+export const updateProvider = (providerId, payload) => ({
+  [CALL_API]: {
+    type: UPDATE_PROVIDER,
+    id: providerId,
+    method: 'PUT',
+    path: 'providers',
+    body: payload
+  }
+});
 
 export const clearUpdateProvider = (providerId) => ({ type: UPDATE_PROVIDER_CLEAR, id: providerId });
 
-export const deleteProvider = (providerId) => wrapRequest(
-  providerId, del, `providers/${providerId}`, PROVIDER_DELETE);
+// export const deleteProvider = (providerId) => wrapRequest(
+//   providerId, del, `providers/${providerId}`, PROVIDER_DELETE);
 
-export const restartProvider = (providerId) => wrapRequest(
-  providerId, put, `providers/${providerId}`, PROVIDER_RESTART, {
-    action: 'restart'
-  });
+export const deleteProvider = (providerId) => ({
+  [CALL_API]: {
+    type: PROVIDER_DELETE,
+    id: providerId,
+    method: 'DELETE',
+    path: `providers/${providerId}`
+  }
+});
+
+// export const restartProvider = (providerId) => wrapRequest(
+//   providerId, put, `providers/${providerId}`, PROVIDER_RESTART, {
+//     action: 'restart'
+//   });
+
+export const restartProvider = (providerId) => ({
+  [CALL_API]: {
+    type: PROVIDER_RESTART,
+    id: providerId,
+    method: 'PUT',
+    path: `providers/${providerId}`,
+    body: {
+      action: 'restart'
+    }
+  }
+});
 
 export const clearRestartedProvider = (providerId) => ({ type: CLEAR_RESTARTED_PROVIDER, id: providerId });
 
-export const stopProvider = (providerId) => wrapRequest(
-  providerId, put, `providers/${providerId}`, PROVIDER_STOP, {
-    action: 'stop'
-  });
+// export const stopProvider = (providerId) => wrapRequest(
+//   providerId, put, `providers/${providerId}`, PROVIDER_STOP, {
+//     action: 'stop'
+//   });
+
+export const stopProvider = (providerId) => ({
+  [CALL_API]: {
+    type: PROVIDER_STOP,
+    id: providerId,
+    method: 'PUT',
+    path: `providers/${providerId}`,
+    body: {
+      action: 'stop'
+    }
+  }
+});
 
 export const clearStoppedProvider = (providerId) => ({ type: CLEAR_STOPPED_PROVIDER, id: providerId });
 export const searchProviders = (prefix) => ({ type: SEARCH_PROVIDERS, prefix: prefix });
@@ -597,35 +697,35 @@ export const clearProvidersSearch = () => ({ type: CLEAR_PROVIDERS_SEARCH });
 export const filterProviders = (param) => ({ type: FILTER_PROVIDERS, param: param });
 export const clearProvidersFilter = (paramKey) => ({ type: CLEAR_PROVIDERS_FILTER, paramKey: paramKey });
 
-export const deletePdr = (pdrName) => wrapRequest(
-  pdrName, del, `pdrs/${pdrName}`, PDR_DELETE);
+// export const deletePdr = (pdrName) => wrapRequest(
+//   pdrName, del, `pdrs/${pdrName}`, PDR_DELETE);
 
-export const getLogs = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'logs'),
-  qs: Object.assign({limit: 100}, options)
-}, LOGS);
+export const deletePdr = (pdrName) => ({
+  [CALL_API]: {
+    type: PDR_DELETE,
+    id: pdrName,
+    method: 'DELETE',
+    path: `pdrs/${pdrName}`
+  }
+});
+
+// export const getLogs = (options) => wrapRequest(null, get, {
+//   url: url.resolve(root, 'logs'),
+//   qs: Object.assign({limit: 100}, options)
+// }, LOGS);
+
+export const getLogs = (options) => ({
+  [CALL_API]: {
+    type: LOGS,
+    method: 'GET',
+    url: url.resolve(root, 'logs'),
+    qs: Object.assign({limit: 100}, options)
+  }
+});
+
 export const clearLogs = () => ({ type: CLEAR_LOGS });
 
 export const DELETE_TOKEN = 'DELETE_TOKEN';
-export const deleteToken = (dispatch, token) => {
-  return new Promise((resolve) => {
-    const config = configureRequest({
-      url: url.resolve(root, 'tokenRevoke'),
-      body: {
-        token
-      }
-    });
-
-    post(config, () => {
-      // Whether or not request to delete the token on the server
-      // was successful, delete the local token
-      dispatch({
-        type: DELETE_TOKEN
-      });
-      return resolve();
-    });
-  });
-};
 
 export const logout = (dispatch, token) => {
   return deleteToken(dispatch, token)
@@ -638,14 +738,46 @@ export const forceLogout = (dispatch, token, error) => {
 };
 
 export const login = (token) => {
-  // dummy request to test the auth token
-  return wrapRequest('auth', get, {
-    url: url.resolve(root, 'granules'),
-    qs: { limit: 1, fields: 'granuleId' },
-    headers: {
-      Authorization: 'Bearer ' + token
-    }
-  }, LOGIN);
+  return (dispatch) => {
+    // dispatch(setTokenState(token));
+    dispatch({
+      [CALL_API]: {
+        type: LOGIN,
+        id: 'auth',
+        method: 'GET',
+        url: url.resolve(root, 'granules'),
+        qs: { limit: 1, fields: 'granuleId' },
+        skipAuth: true,
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      }
+    });
+  };
+};
+
+export const deleteToken = () => {
+  return (dispatch, getState) => {
+    const token = getProperty(getState(), 'api.tokens.token');
+    if (!token) return Promise.resolve();
+
+    const requestConfig = configureRequest({
+      url: url.resolve(root, 'tokenRevoke'),
+      body: {
+        token
+      }
+    });
+    return requestPromise(requestConfig)
+      .finally(() => dispatch({ type: DELETE_TOKEN }));
+  };
+};
+
+export const loginError = (error) => {
+  return (dispatch) => {
+    return dispatch(deleteToken())
+      .then(() => dispatch({ type: 'LOGIN_ERROR', error }))
+      .then(() => hashHistory.push('/auth'));
+  };
 };
 
 export const getSchema = (type) => wrapRequest(null, get, `schemas/${type}`, SCHEMA);

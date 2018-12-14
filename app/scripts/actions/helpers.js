@@ -84,15 +84,13 @@ export const getError = (response) => {
   return error;
 };
 
-export const addRequestHeaders = (state) => {
+export const addRequestAuthorization = (config, state) => {
   let token = getProperty(state, 'api.tokens.token');
-  const headers = {
-    'Content-Type': 'application/json'
-  };
   if (token) {
-    headers.Authorization = `Bearer ${token}`;
+    config.headers = Object.assign({}, config.headers, {
+      Authorization: `Bearer ${token}`
+    });
   }
-  return headers;
 };
 
 export const configureRequest = function (params, body) {
@@ -101,6 +99,9 @@ export const configureRequest = function (params, body) {
   if (typeof params === 'object') {
     config = params;
   }
+
+  config.headers = config.headers || {};
+  config.headers['Content-Type'] = 'application/json';
 
   if (typeof params === 'string') {
     config.url = url.resolve(_config.apiRoot, params);
@@ -131,7 +132,7 @@ export const configureRequest = function (params, body) {
 export const wrapRequest = function (id, query, params, type, body) {
   return function (dispatch, getState) {
     const config = configureRequest(params, body);
-    config.headers = addRequestHeaders(getState());
+    addRequestAuthorization(config, getState());
 
     const inflightType = type + '_INFLIGHT';
     log((id ? inflightType + ': ' + id : inflightType));

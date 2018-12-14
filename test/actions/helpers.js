@@ -3,7 +3,7 @@ import test from 'ava';
 
 import _config from '../../app/scripts/config';
 import {
-  addRequestHeaders,
+  addRequestAuthorization,
   formatError,
   getError,
   configureRequest,
@@ -28,8 +28,7 @@ test.beforeEach((t) => {
     simple: false
   };
 
-  t.context.expectedHeaders = {
-    Authorization: 'Bearer fake-token',
+  t.context.defaultHeaders = {
     'Content-Type': 'application/json'
   };
 
@@ -45,12 +44,17 @@ test('wrap request', function (t) {
   };
   wrapRequest(id, req1, url, type)(dispatchStub, getStateStub);
 
+  const headers = {
+    ...t.context.defaultHeaders,
+    Authorization: 'Bearer fake-token'
+  };
+
   const urlObj = { url };
   const req2 = (config) => {
     t.deepEqual(config, {
       ...t.context.defaultConfig,
       url,
-      headers: t.context.expectedHeaders
+      headers
     });
   };
   wrapRequest(id, req2, urlObj, type)(dispatchStub, getStateStub);
@@ -61,7 +65,7 @@ test('wrap request', function (t) {
       ...t.context.defaultConfig,
       url: url,
       body: { limit: 1 },
-      headers: t.context.expectedHeaders
+      headers
     });
   };
   wrapRequest(id, req3, urlObj, type, body)(dispatchStub, getStateStub);
@@ -112,9 +116,12 @@ test('formatError() should handle error responses properly', (t) => {
   t.is(formattedError, `${bodyErrorName}: ${bodyErrorMessage}`);
 });
 
-test('addRequestHeaders() should return correct headers', (t) => {
-  const headers = addRequestHeaders(getStateStub());
-  t.deepEqual(headers, t.context.expectedHeaders);
+test('addRequestAuthorization() should return correct headers', (t) => {
+  const config = {};
+  addRequestAuthorization(config, getStateStub());
+  t.deepEqual(config.headers, {
+    Authorization: 'Bearer fake-token'
+  });
 });
 
 test('configureRequest() should throw error if no URL is provided', (t) => {
@@ -129,7 +136,8 @@ test('configureRequest() should add default parameters', (t) => {
   };
   const expectedConfig = {
     ...t.context.defaultConfig,
-    url: 'http://localhost/test'
+    url: 'http://localhost/test',
+    headers: t.context.defaultHeaders
   };
   const requestConfig = configureRequest(requestParams);
   t.deepEqual(requestConfig, expectedConfig);
@@ -142,7 +150,8 @@ test('configureRequest() should convert path to URL', (t) => {
   const expectedConfig = {
     ...t.context.defaultConfig,
     path: 'test',
-    url: 'http://localhost/test'
+    url: 'http://localhost/test',
+    headers: t.context.defaultHeaders
   };
   const requestConfig = configureRequest(requestParams);
   t.deepEqual(requestConfig, expectedConfig);
@@ -159,7 +168,8 @@ test('configureRequest() should add the request body', (t) => {
   const expectedConfig = {
     ...t.context.defaultConfig,
     url: 'http://localhost/test',
-    body: requestBody
+    body: requestBody,
+    headers: t.context.defaultHeaders
   };
   const requestConfig = configureRequest(requestParams);
   t.deepEqual(requestConfig, expectedConfig);
@@ -176,7 +186,8 @@ test('configureRequest() should maintain query state parameters', (t) => {
   const expectedConfig = {
     ...t.context.defaultConfig,
     url: 'http://localhost/test',
-    qs: queryParameters
+    qs: queryParameters,
+    headers: t.context.defaultHeaders
   };
   const requestConfig = configureRequest(requestParams);
   t.deepEqual(requestConfig, expectedConfig);
@@ -195,7 +206,7 @@ test('configureRequest() should not overwrite auth headers', (t) => {
     path: 'test',
     url: 'http://localhost/test',
     headers: {
-      ...t.context.defaultConfig.headers,
+      ...t.context.defaultHeaders,
       Authorization: 'Bearer fake-token'
     }
   };

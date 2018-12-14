@@ -1,10 +1,10 @@
 import requestPromise from 'request-promise';
 import { hashHistory } from 'react-router';
 
-import { CALL_API } from '../actions';
+import { CALL_API, loginError } from '../actions';
 import {
   configureRequest,
-  addRequestHeaders,
+  addRequestAuthorization,
   getError
 } from '../actions/helpers';
 import log from '../utils/log';
@@ -25,9 +25,7 @@ const handleError = ({ id, type, error, requestAction }, next) => {
     if (error.message.includes('Session expired') ||
         error.message.includes('Invalid Authorization token') ||
         error.message.includes('Access token has expired')) {
-      next({ type: 'LOGIN_ERROR', error: error.message.replace('Bad Request: ', '') });
-      // TODO: this is a side effect. move out of middleware
-      return hashHistory.push('/auth');
+      return next(loginError(error.message.replace('Bad Request: ', '')));
     }
   }
 
@@ -54,7 +52,9 @@ const requestMiddleware = ({ dispatch, getState }) => next => action => {
   }
 
   requestAction = configureRequest(requestAction);
-  requestAction.headers = addRequestHeaders(getState());
+  if (!requestAction.skipAuth) {
+    addRequestAuthorization(requestAction, getState());
+  }
 
   const { id, type } = requestAction;
 

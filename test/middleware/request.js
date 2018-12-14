@@ -123,6 +123,36 @@ test.cb('should add correct authorization headers to API request action', (t) =>
   actionHandler(actionObj);
 });
 
+test.cb('should be able to use provided authorization headers', (t) => {
+  nock('http://localhost:5001', {
+    reqheaders: {
+      'Authorization': 'Bearer another-token'
+    }
+  })
+    .get('/test-path')
+    .reply(200);
+
+  const requestAction = {
+    type: 'TEST',
+    method: 'GET',
+    url: 'http://localhost:5001/test-path',
+    skipAuth: true,
+    headers: {
+      Authorization: 'Bearer another-token'
+    }
+  };
+  const actionObj = {
+    [CALL_API]: requestAction
+  };
+
+  const actionHandler = t.context.nextHandler(action => {
+    t.deepEqual(action.config.headers.Authorization, 'Bearer another-token');
+    t.end();
+  });
+
+  actionHandler(actionObj);
+});
+
 test.cb('should dispatch error action for failed request', (t) => {
   nock('http://localhost:5001')
     .get('/test-path')
