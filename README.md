@@ -56,7 +56,7 @@ npm install
 npm run serve
 ```
 
-## Building a Specific Version
+## Building a Specific Dashboard Version
 
 Cumulus-dashboard versions are distributed using tags in github. You can pull a specific version in the following manner:
 

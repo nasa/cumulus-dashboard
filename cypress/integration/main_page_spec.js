@@ -1,25 +1,37 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
 
-describe('Dashboard Tests', () => {
+describe('Dashboard Home Page', () => {
   it('When not logged in it should redirect to login page', () => {
     cy.visit('/');
     shouldBeRedirectedToLogin();
   });
 
-  it('Logging in successfully redirects to the Dashboard main page', () => {
-    cy.get('div[class=modal__internal]').within(() => {
-      cy.get('a').click();
+  describe('When logged in', () => {
+    beforeEach(() => {
+      cy.login();
+      cy.task('resetState');
     });
 
-    cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
-    cy.get('nav')
-      .contains('Collections')
-      .should('have.attr', 'href')
-      .and('include', '/collections');
-    cy.get('nav')
-      .contains('Rules')
-      .should('have.attr', 'href')
-      .and('include', '/rules');
+    after(() => {
+      cy.task('resetState');
+    });
+
+    it('successfully redirects to the Dashboard main page', () => {
+      cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
+      cy.get('nav')
+        .contains('Collections')
+        .should('have.attr', 'href')
+        .and('include', '/collections');
+      cy.get('nav')
+        .contains('Rules')
+        .should('have.attr', 'href')
+        .and('include', '/rules');
+    });
+
+    it('displays a compatible Cumulus API Version number', () => {
+      const apiVersion = '1.11.0';
+      cy.get('h5[class=apiVersion]').should('have.text', apiVersion);
+    });
   });
 
   it('Logging out successfully redirects to the login screen', () => {

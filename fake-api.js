@@ -237,6 +237,13 @@ app.post('/refresh', (req, res) => {
   });
 });
 
+app.get('/version', (req, res) => {
+  res.status(200);
+  res.json({
+    api_version: '1.11.0'
+  });
+});
+
 app.get('/auth', (req, res) => {
   res.status(200).end();
 });
