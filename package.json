@@ -43,6 +43,9 @@
           "presets": [
             "@babel/preset-env",
             "@babel/preset-react"
+          ],
+          "plugins": [
+            "@babel/plugin-transform-spread"
           ]
         }
       ],
@@ -105,6 +108,7 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
+    "@babel/plugin-transform-spread": "^7.2.2",
     "@cumulus/cmrjs": "^1.11.0",
     "assert": "^1.4.1",
     "body-parser": "^1.18.3",
