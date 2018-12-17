@@ -541,13 +541,10 @@ export const DELETE_TOKEN = 'DELETE_TOKEN';
 export const deleteToken = (dispatch, token) => {
   return new Promise((resolve) => {
     const config = configureRequest({
-      url: url.resolve(root, 'tokenRevoke'),
-      body: {
-        token
-      }
+      url: url.resolve(root, `tokenDelete/${token}`)
     });
 
-    post(config, () => {
+    del(config, () => {
       // Whether or not request to delete the token on the server
       // was successful, delete the local token
       dispatch({
