@@ -8,8 +8,10 @@ describe('Dashboard Home Page', () => {
 
   describe('When logged in', () => {
     beforeEach(() => {
-      cy.login();
-      cy.task('resetState');
+      cy.visit('/');
+      cy.get('div[class=modal__internal]').within(() => {
+          cy.get('a').click();
+      });
     });
 
     after(() => {
@@ -30,7 +32,9 @@ describe('Dashboard Home Page', () => {
 
     it('displays a compatible Cumulus API Version number', () => {
       const apiVersion = '1.11.0';
-      cy.get('h5[class=apiVersion]').should('have.text', apiVersion);
+      cy.get('h5[class=apiVersion]').should((apiVersionWrapper) => {
+        expect(apiVersionWrapper.first()).to.contain(apiVersion)
+      });
     });
   });
 
