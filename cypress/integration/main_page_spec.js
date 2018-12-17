@@ -1,4 +1,7 @@
-import { shouldBeRedirectedToLogin } from '../support/assertions';
+import {
+  shouldBeRedirectedToLogin,
+  shouldHaveApiVersionNumber
+} from '../support/assertions';
 
 describe('Dashboard Home Page', () => {
   it('When not logged in it should redirect to login page', () => {
@@ -10,7 +13,7 @@ describe('Dashboard Home Page', () => {
     beforeEach(() => {
       cy.visit('/');
       cy.get('div[class=modal__internal]').within(() => {
-          cy.get('a').click();
+        cy.get('a').click();
       });
     });
 
@@ -31,9 +34,10 @@ describe('Dashboard Home Page', () => {
     });
 
     it('displays a compatible Cumulus API Version number', () => {
-      const apiVersion = '1.11.0';
+      const apiVersionNumber = '1.11.0';
+      shouldHaveApiVersionNumber(apiVersionNumber);
       cy.get('h5[class=apiVersion]').should((apiVersionWrapper) => {
-        expect(apiVersionWrapper.first()).to.contain(apiVersion)
+        expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
       });
     });
   });

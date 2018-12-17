@@ -5,3 +5,9 @@ exports.shouldBeRedirectedToLogin = () => {
     cy.get('a').should('have.text', 'Login with Earthdata Login');
   });
 };
+
+exports.shouldHaveApiVersionNumber = (apiVersionNumber) => {
+  cy.window().its('appStore').then((store) => {
+    expect(store.getState().apiVersion.versionNumber).to.equal(apiVersionNumber);
+  });
+};
