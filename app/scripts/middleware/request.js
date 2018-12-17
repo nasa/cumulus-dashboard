@@ -7,6 +7,7 @@ import {
   getError
 } from '../actions/helpers';
 import log from '../utils/log';
+import { isValidApiRequestAction } from './validate';
 
 const handleError = ({ id, type, error, requestAction }, next) => {
   if (error.message) {
@@ -41,7 +42,7 @@ const handleError = ({ id, type, error, requestAction }, next) => {
 };
 
 const requestMiddleware = ({ dispatch, getState }) => next => action => {
-  if (typeof action === 'object' && action.hasOwnProperty(CALL_API)) {
+  if (isValidApiRequestAction(action)) {
     let requestAction = action[CALL_API];
 
     if (!requestAction.method) {

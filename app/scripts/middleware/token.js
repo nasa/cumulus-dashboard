@@ -1,14 +1,15 @@
 import { get } from 'object-path';
 import { decode as jwtDecode } from 'jsonwebtoken';
 
-import { CALL_API, loginError, refreshAccessToken } from '../actions';
+import { loginError, refreshAccessToken } from '../actions';
 import config from '../config';
+import { isValidApiRequestAction } from './validate';
 
 const refreshInterval = Math.ceil((config.updateInterval + 1000) / 1000);
 
 let deferred;
 const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
-  if (typeof action === 'object' && action.hasOwnProperty(CALL_API)) {
+  if (isValidApiRequestAction(action)) {
     const token = get(getState(), 'api.tokens.token');
     if (!token) {
       return next(action);
