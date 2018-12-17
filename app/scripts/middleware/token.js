@@ -33,7 +33,7 @@ const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
       const inflight = get(getState(), 'api.tokens.inflight');
       if (!inflight) {
         deferred = createDeferred();
-        return refreshAccessToken(token, dispatch)
+        return dispatch(refreshAccessToken(token))
           .then(() => {
             deferred.resolve();
             return next(action);

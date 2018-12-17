@@ -252,31 +252,36 @@ export const SET_TOKEN = 'SET_TOKEN';
 
 export const CALL_API = 'CALL_API';
 
-export const refreshAccessToken = (token, dispatch) => {
-  const start = new Date();
-  log('REFRESH_TOKEN_INFLIGHT');
-  dispatch({ type: REFRESH_TOKEN_INFLIGHT });
+export const refreshAccessToken = (token) => {
+  return (dispatch) => {
+    const start = new Date();
+    log('REFRESH_TOKEN_INFLIGHT');
+    dispatch({ type: REFRESH_TOKEN_INFLIGHT });
 
-  const requestConfig = configureRequest({
-    method: 'POST',
-    url: url.resolve(root, 'refresh'),
-    body: { token }
-  });
-  return requestPromise(requestConfig)
-    .then(({ body }) => {
-      const duration = new Date() - start;
-      log('REFRESH_TOKEN', duration + 'ms');
-      return dispatch({
-        type: REFRESH_TOKEN,
-        token: body.token
-      });
-    })
-    .catch(({ error }) => {
-      return dispatch({
-        type: REFRESH_TOKEN_ERROR,
-        error
-      });
+    const requestConfig = configureRequest({
+      method: 'POST',
+      url: url.resolve(root, 'refresh'),
+      body: { token },
+      // make sure request failures are sent to .catch()
+      simple: true
     });
+    return requestPromise(requestConfig)
+      .then(({ body }) => {
+        const duration = new Date() - start;
+        log('REFRESH_TOKEN', duration + 'ms');
+        return dispatch({
+          type: REFRESH_TOKEN,
+          token: body.token
+        });
+      })
+      .catch(({ error }) => {
+        dispatch({
+          type: REFRESH_TOKEN_ERROR,
+          error
+        });
+        throw error;
+      });
+  };
 };
 
 export const setTokenState = (token) => ({ type: SET_TOKEN, token });
