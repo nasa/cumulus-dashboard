@@ -1,24 +1,8 @@
 import test from 'ava';
 import nock from 'nock';
 
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-
 import { CALL_API } from '../../app/scripts/actions';
 import { requestMiddleware } from '../../app/scripts/middleware/request';
-
-const middlewares = [
-  requestMiddleware,
-  thunk
-];
-const mockStore = configureMockStore(middlewares);
-const store = mockStore({
-  api: {
-    tokens: {
-      token: 'fake-token'
-    }
-  }
-});
 
 test.beforeEach((t) => {
   const doDispatch = () => {};
@@ -41,35 +25,6 @@ test.beforeEach((t) => {
     Authorization: 'Bearer fake-token',
     'Content-Type': 'application/json'
   };
-});
-
-test('should send inflight action', (t) => {
-  nock('http://localhost:5001')
-    .get('/test-path')
-    .reply(200);
-
-  const requestAction = {
-    type: 'TEST',
-    method: 'GET',
-    url: 'http://localhost:5001/test-path'
-  };
-  const actionObj = {
-    [CALL_API]: requestAction
-  };
-
-  store.dispatch(actionObj);
-
-  const expectedInflightAction = {
-    id: undefined,
-    type: 'TEST_INFLIGHT',
-    config: {
-      ...t.context.defaultConfig,
-      ...requestAction,
-      headers: t.context.expectedHeaders
-    }
-  };
-
-  t.deepEqual(store.getActions(), [expectedInflightAction]);
 });
 
 test('should pass action to next if not an API request action', (t) => {
