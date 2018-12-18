@@ -300,7 +300,7 @@ export const interval = function (action, wait, immediate) {
 export const getCollection = (name, version) => wrapRequest(
   getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
 
-export const getAPIVersion = () => {
+export const getApiVersion = () => {
   return (dispatch, getState) => {
     const wrapApiVersion = () => {
       return new Promise((resolve, reject) => {
@@ -324,19 +324,19 @@ export const getAPIVersion = () => {
       });
     };
     return wrapApiVersion().then(() => {
-      return dispatch(checkAPIVersion());
+      return dispatch(checkApiVersion());
     });
   };
 };
 
-export const checkAPIVersion = () => {
+export const checkApiVersion = () => {
   return (dispatch, getState) => {
     const { versionNumber } = getState().apiVersion;
     if (compatibleApiVersion.indexOf(versionNumber) < 0) {
       dispatch({
         type: API_VERSION_INCOMPATIBLE,
         payload: {
-          warning: `Dashboard version incompatible with api version (${versionNumber})`
+          warning: `Dashboard version incompatible with Cumulus API version (${versionNumber})`
         }
       });
     } else {
