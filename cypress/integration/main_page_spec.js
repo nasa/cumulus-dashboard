@@ -4,10 +4,7 @@ import {
   shouldHaveDeletedToken
 } from '../support/assertions';
 
-import {
-  get,
-  configureRequest
-} from '../../app/scripts/actions/helpers';
+import { API_VERSION } from '../../app/scripts/actions';
 
 describe('Dashboard Home Page', () => {
   it('When not logged in it should redirect to login page', () => {
@@ -17,6 +14,10 @@ describe('Dashboard Home Page', () => {
   });
 
   describe('When logged in', () => {
+    before(() => {
+      cy.visit('/');
+    });
+
     beforeEach(() => {
       cy.login();
     });
@@ -25,18 +26,22 @@ describe('Dashboard Home Page', () => {
       cy.task('resetState');
     });
 
-    it('displays a compatible Cumulus API Version number', () => {
-      let apiVersionNumber;
-      const config = configureRequest('/version');
-      get(config, (error, data) => {
-        if (error) {
-          // fail the test
-          throw new Error('Failed to get Cumulus API Version number');
-        }
-        apiVersionNumber = data.api_version;
-      });
-      cy.get('h5[class=apiVersion]').should((apiVersionWrapper) => {
-        expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
+    it('displays a Cumulus API Version number and warning', () => {
+      const apiVersionNumber = 'a.b.c';
+      cy.window().its('appStore').then((store) => {
+        store.dispatch({
+          type: API_VERSION,
+          message: 'a.b.c'
+        });
+        expect(store.getState().apiVersion.versionNumber).to.eq(apiVersionNumber);
+        expect(store.getState().apiVersion.warning).to.contain(apiVersionNumber);
+
+        cy.get('h5[class=apiVersion]').should((apiVersionWrapper) => {
+          expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
+        });
+        cy.get('h5[class=apiVersionWarning]').should((apiVersionWarningWrapper) => {
+          expect(apiVersionWarningWrapper.first()).to.contain(apiVersionNumber);
+        });
       });
     });
   });
