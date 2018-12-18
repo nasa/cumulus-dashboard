@@ -35,7 +35,6 @@ describe('Dashboard Home Page', () => {
 
     it('displays a compatible Cumulus API Version number', () => {
       const apiVersionNumber = '1.11.0';
-      shouldHaveApiVersionNumber(apiVersionNumber);
       cy.get('h5[class=apiVersion]').should((apiVersionWrapper) => {
         expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
       });

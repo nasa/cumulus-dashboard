@@ -300,7 +300,7 @@ export const interval = function (action, wait, immediate) {
 export const getCollection = (name, version) => wrapRequest(
   getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
 
-export const getApiVersion = () => {
+export const getAPIVersion = () => {
   return (dispatch, getState) => {
     const wrapApiVersion = () => {
       return new Promise((resolve, reject) => {
@@ -324,12 +324,12 @@ export const getApiVersion = () => {
       });
     };
     return wrapApiVersion().then(() => {
-      return dispatch(checkApiVersion());
+      return dispatch(checkAPIVersion());
     });
   };
 };
 
-export const checkApiVersion = () => {
+export const checkAPIVersion = () => {
   return (dispatch, getState) => {
     const { versionNumber } = getState().apiVersion;
     if (compatibleApiVersion.indexOf(versionNumber) < 0) {
