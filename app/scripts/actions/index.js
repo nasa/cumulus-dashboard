@@ -12,7 +12,7 @@ import { getCollectionId } from '../utils/format';
 import log from '../utils/log';
 
 const root = _config.apiRoot;
-const { pageLimit, compatibleApiVersion } = _config;
+const { pageLimit, compatibleApiVersions } = _config;
 
 export const LOGOUT = 'LOGOUT';
 export const LOGIN = 'LOGIN';
@@ -331,7 +331,7 @@ export const getApiVersion = () => {
 export const checkApiVersion = () => {
   return (dispatch, getState) => {
     const { versionNumber } = getState().apiVersion;
-    if (compatibleApiVersion.indexOf(versionNumber) < 0) {
+    if (compatibleApiVersions.indexOf(versionNumber) < 0) {
       dispatch({
         type: API_VERSION_INCOMPATIBLE,
         payload: {
