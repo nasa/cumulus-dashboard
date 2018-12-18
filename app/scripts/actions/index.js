@@ -325,13 +325,6 @@ export const getApiVersion = () => {
         type: API_VERSION_ERROR,
         payload: { error }
       }));
-    // const wrapApiVersion = () => {
-
-
-    // };
-    // return wrapApiVersion().then(() => {
-    //   return dispatch(checkApiVersion());
-    // });
   };
 };
 
