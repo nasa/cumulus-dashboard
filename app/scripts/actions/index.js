@@ -711,11 +711,8 @@ export const deleteToken = () => {
     if (!token) return Promise.resolve();
 
     const requestConfig = configureRequest({
-      method: 'POST',
-      url: url.resolve(root, 'tokenRevoke'),
-      body: {
-        token
-      }
+      method: 'DELETE',
+      url: url.resolve(root, `tokenDelete/${token}`)
     });
     return requestPromise(requestConfig)
       .finally(() => dispatch({ type: DELETE_TOKEN }));

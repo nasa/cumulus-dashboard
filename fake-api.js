@@ -203,8 +203,8 @@ app.get('/token', (req, res) => {
   }
 });
 
-app.post('/tokenRevoke', (req, res) => {
-  if (req.body.token) {
+app.delete('/tokenDelete/:jwtToken', (req, res) => {
+  if (req.params.jwtToken) {
     token = '';
     res.status(200).json({
       message: 'Deleted token'
