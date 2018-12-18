@@ -16,7 +16,7 @@ import { getCollectionId } from '../utils/format';
 import log from '../utils/log';
 
 const root = _config.apiRoot;
-const { pageLimit } = _config;
+const { pageLimit, compatibleApiVersion } = _config;
 
 export const LOGOUT = 'LOGOUT';
 export const LOGIN = 'LOGIN';
@@ -300,7 +300,7 @@ export const interval = function (action, wait, immediate) {
 export const getCollection = (name, version) => wrapRequest(
   getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, COLLECTION);
 
-export const getApiVersion = (apiCompatList) => {
+export const getApiVersion = () => {
   return (dispatch, getState) => {
     const wrapApiVersion = () => {
       return new Promise((resolve, reject) => {
@@ -324,15 +324,15 @@ export const getApiVersion = (apiCompatList) => {
       });
     };
     return wrapApiVersion().then(() => {
-      return dispatch(checkApiVersion(apiCompatList));
+      return dispatch(checkApiVersion());
     });
   };
 };
 
-export const checkApiVersion = (apiCompatList) => {
+export const checkApiVersion = () => {
   return (dispatch, getState) => {
     const { versionNumber } = getState().apiVersion;
-    if (apiCompatList.indexOf(versionNumber) < 0) {
+    if (compatibleApiVersion.indexOf(versionNumber) < 0) {
       dispatch({
         type: API_VERSION_INCOMPATIBLE,
         payload: {

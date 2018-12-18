@@ -3,7 +3,7 @@ import React from 'react';
 import c from 'classnames';
 import { Link } from 'react-router';
 import { logout, getApiVersion } from '../../actions';
-import { graphicsPath, nav, compatibleApiVersions } from '../../config';
+import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
 import { strings } from '../locale';
 
@@ -31,7 +31,7 @@ var Header = React.createClass({
 
   componentWillMount: function () {
     const { dispatch, api } = this.props;
-    if (api.authenticated) dispatch(getApiVersion(compatibleApiVersions));
+    if (api.authenticated) dispatch(getApiVersion());
   },
 
   logout: function () {
