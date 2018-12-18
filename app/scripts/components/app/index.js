@@ -12,7 +12,8 @@ var App = React.createClass({
     children: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     location: React.PropTypes.object,
-    api: React.PropTypes.object
+    api: React.PropTypes.object,
+    apiVersion: React.PropTypes.object
   },
 
   render: function () {
@@ -23,7 +24,7 @@ var App = React.createClass({
             <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
           </div>
         ) : null }
-        <Header dispatch={this.props.dispatch} api={this.props.api} location={this.props.location}/>
+        <Header dispatch={this.props.dispatch} api={this.props.api} apiVersion={this.props.apiVersion} location={this.props.location}/>
         <main className='main' role='main'>
           {this.props.children}
         </main>

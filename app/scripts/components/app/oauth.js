@@ -14,7 +14,8 @@ var OAuth = React.createClass({
     dispatch: React.PropTypes.func,
     api: React.PropTypes.object,
     location: React.PropTypes.object,
-    router: React.PropTypes.object
+    router: React.PropTypes.object,
+    apiVersion: React.PropTypes.object
   },
 
   getInitialState: function () {
@@ -48,7 +49,7 @@ var OAuth = React.createClass({
   },
 
   render: function () {
-    const { dispatch, api } = this.props;
+    const { dispatch, api, apiVersion } = this.props;
 
     let button;
     if (!api.authenticated && !api.inflight) {
@@ -60,7 +61,7 @@ var OAuth = React.createClass({
     }
     return (
       <div className='app'>
-        <Header dispatch={dispatch} api={api} minimal={true}/>
+        <Header dispatch={dispatch} api={api} apiVersion={apiVersion} minimal={true}/>
         <main className='main' role='main'>
           <div>
             <div className='modal__cover'></div>

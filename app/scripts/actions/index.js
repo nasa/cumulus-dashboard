@@ -12,7 +12,7 @@ import { getCollectionId } from '../utils/format';
 import log from '../utils/log';
 
 const root = _config.apiRoot;
-const { pageLimit } = _config;
+const { pageLimit, compatibleApiVersion } = _config;
 
 export const LOGOUT = 'LOGOUT';
 export const LOGIN = 'LOGIN';
@@ -250,6 +250,12 @@ export const REFRESH_TOKEN_INFLIGHT = 'REFRESH_TOKEN_INFLIGHT';
 export const DELETE_TOKEN = 'DELETE_TOKEN';
 export const SET_TOKEN = 'SET_TOKEN';
 
+export const API_VERSION = 'API_VERSION';
+export const API_VERSION_ERROR = 'API_VERSION_ERROR';
+
+export const API_VERSION_COMPATIBLE = 'API_VERSION_COMPATIBLE';
+export const API_VERSION_INCOMPATIBLE = 'API_VERSION_INCOMPATIBLE';
+
 export const CALL_API = 'CALL_API';
 
 export const refreshAccessToken = (token) => {
@@ -300,6 +306,53 @@ export const getCollection = (name, version) => ({
     path: `collections?name=${name}&version=${version}`
   }
 });
+
+export const getApiVersion = () => {
+  return (dispatch) => {
+    const config = configureRequest({
+      method: 'GET',
+      url: url.resolve(root, 'version'),
+      // make sure request failures are sent to .catch()
+      simple: true
+    });
+    return requestPromise(config)
+      .then(({ body }) => dispatch({
+        type: API_VERSION,
+        payload: { versionNumber: body.api_version }
+      }))
+      .then(() => dispatch(checkApiVersion()))
+      .catch(({ error }) => dispatch({
+        type: API_VERSION_ERROR,
+        payload: { error }
+      }));
+    // const wrapApiVersion = () => {
+
+
+    // };
+    // return wrapApiVersion().then(() => {
+    //   return dispatch(checkApiVersion());
+    // });
+  };
+};
+
+export const checkApiVersion = () => {
+  return (dispatch, getState) => {
+    const { versionNumber } = getState().apiVersion;
+    if (compatibleApiVersion.indexOf(versionNumber) < 0) {
+      dispatch({
+        type: API_VERSION_INCOMPATIBLE,
+        payload: {
+          warning: `Dashboard version incompatible with Cumulus API version (${versionNumber})`
+        }
+      });
+    } else {
+      dispatch({
+        type: API_VERSION_COMPATIBLE,
+        payload: {}
+      });
+    }
+  };
+};
 
 export const listCollections = (options) => {
   return (dispatch) => {
