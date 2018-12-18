@@ -1,5 +1,7 @@
 import {
-  shouldBeRedirectedToLogin
+  shouldBeRedirectedToLogin,
+  shouldHaveNoToken,
+  shouldHaveDeletedToken
 } from '../support/assertions';
 
 import {
@@ -11,6 +13,7 @@ describe('Dashboard Home Page', () => {
   it('When not logged in it should redirect to login page', () => {
     cy.visit('/');
     shouldBeRedirectedToLogin();
+    shouldHaveNoToken();
   });
 
   describe('When logged in', () => {
@@ -71,5 +74,7 @@ describe('Dashboard Home Page', () => {
 
     cy.url().should('not.include', '/#/collections');
     cy.url().should('include', '/#/auth');
+
+    shouldHaveDeletedToken();
   });
 });

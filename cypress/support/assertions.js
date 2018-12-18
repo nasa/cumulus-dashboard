@@ -5,3 +5,21 @@ exports.shouldBeRedirectedToLogin = () => {
     cy.get('a').should('have.text', 'Login with Earthdata Login');
   });
 };
+
+exports.shouldHaveNoToken = () => {
+  cy.window().its('appStore').then((store) => {
+    expect(store.getState().api.tokens.token).to.be.null;
+    cy.window().its('localStorage').invoke('getItem', 'auth-token').then(token => {
+      expect(token).to.be.null;
+    });
+  });
+};
+
+exports.shouldHaveDeletedToken = () => {
+  cy.window().its('appStore').then((store) => {
+    expect(store.getState().api.tokens.token).to.be.null;
+    cy.window().its('localStorage').invoke('getItem', 'auth-token').then(token => {
+      expect(token).to.eq('');
+    });
+  });
+};
