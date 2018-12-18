@@ -1,4 +1,4 @@
-import { shouldBeRedirectedToLogin } from '../support/assertions';
+import { shouldBeRedirectedToLogin, shouldHaveDeletedToken } from '../support/assertions';
 import { listGranules, SET_TOKEN } from '../../app/scripts/actions';
 
 describe('Dashboard authentication', () => {
@@ -32,6 +32,8 @@ describe('Dashboard authentication', () => {
   });
 
   it('should logout user on invalid JWT token', () => {
+    cy.visit('/');
+
     cy.window().its('appStore').then((store) => {
       cy.task('generateJWT', {}).then((invalidJwt) => {
         // Dispatch an action to set the token
@@ -48,9 +50,13 @@ describe('Dashboard authentication', () => {
 
     shouldBeRedirectedToLogin();
     cy.contains('.error__report', 'Invalid token');
+
+    shouldHaveDeletedToken();
   });
 
   it('should logout user on failed token refresh', () => {
+    cy.visit('/');
+
     cy.server();
     cy.route({
       method: 'POST',
@@ -72,5 +78,7 @@ describe('Dashboard authentication', () => {
 
     shouldBeRedirectedToLogin();
     cy.contains('.error__report', 'Session expired');
+
+    shouldHaveDeletedToken();
   });
 });

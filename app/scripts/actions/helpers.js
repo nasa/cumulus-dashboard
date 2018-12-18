@@ -5,6 +5,7 @@ import { hashHistory } from 'react-router';
 import { get as getProperty } from 'object-path';
 import _config from '../config';
 import log from '../utils/log';
+import { forceLogout } from './index';
 const root = _config.apiRoot;
 
 function formatError (response, body) {
@@ -121,8 +122,13 @@ export const wrapRequest = function (id, query, params, type, body) {
         if (error.message.includes('Session expired') ||
             error.message.includes('Invalid Authorization token') ||
             error.message.includes('Access token has expired')) {
-          dispatch({ type: 'LOGIN_ERROR', error: error.message.replace('Bad Request: ', '') });
-          return hashHistory.push('/auth');
+          return forceLogout(
+            dispatch,
+            getProperty(getState(), 'api.tokens.token'),
+            error.message.replace('Bad Request: ', '')
+          ).then(() => {
+            return hashHistory.push('/auth');
+          });
         }
 
         const errorType = type + '_ERROR';

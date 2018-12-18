@@ -2,6 +2,7 @@
 import React from 'react';
 import c from 'classnames';
 import { Link } from 'react-router';
+import { get } from 'object-path';
 import { logout } from '../../actions';
 import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
@@ -29,10 +30,11 @@ var Header = React.createClass({
   },
 
   logout: function () {
-    this.props.dispatch(logout());
-    if (window.location && window.location.reload) {
-      setTimeout(() => window.location.reload(), 50);
-    }
+    logout(this.props.dispatch, get(this.props, 'api.tokens.token')).then(() => {
+      if (window.location && window.location.reload) {
+        window.location.reload();
+      }
+    });
   },
 
   className: function (path) {
