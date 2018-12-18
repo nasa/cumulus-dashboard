@@ -18,26 +18,11 @@ describe('Dashboard Home Page', () => {
 
   describe('When logged in', () => {
     beforeEach(() => {
-      cy.visit('/');
-      cy.get('div[class=modal__internal]').within(() => {
-        cy.get('a').click();
-      });
+      cy.login();
     });
 
     after(() => {
       cy.task('resetState');
-    });
-
-    it('successfully redirects to the Dashboard main page', () => {
-      cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
-      cy.get('nav')
-        .contains('Collections')
-        .should('have.attr', 'href')
-        .and('include', '/collections');
-      cy.get('nav')
-        .contains('Rules')
-        .should('have.attr', 'href')
-        .and('include', '/rules');
     });
 
     it('displays a compatible Cumulus API Version number', () => {
@@ -54,6 +39,23 @@ describe('Dashboard Home Page', () => {
         expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
       });
     });
+  });
+
+  it('Logging in successfully redirects to the Dashboard main page', () => {
+    cy.visit('/');
+    cy.get('div[class=modal__internal]').within(() => {
+      cy.get('a').click();
+    });
+
+    cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
+    cy.get('nav')
+      .contains('Collections')
+      .should('have.attr', 'href')
+      .and('include', '/collections');
+    cy.get('nav')
+      .contains('Rules')
+      .should('have.attr', 'href')
+      .and('include', '/rules');
   });
 
   it('Logging out successfully redirects to the login screen', () => {
