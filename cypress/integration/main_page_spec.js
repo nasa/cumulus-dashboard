@@ -1,7 +1,11 @@
 import {
-  shouldBeRedirectedToLogin,
-  shouldHaveApiVersionNumber
+  shouldBeRedirectedToLogin
 } from '../support/assertions';
+
+import {
+  get,
+  configureRequest
+} from '../../app/scripts/actions/helpers';
 
 describe('Dashboard Home Page', () => {
   it('When not logged in it should redirect to login page', () => {
@@ -34,7 +38,15 @@ describe('Dashboard Home Page', () => {
     });
 
     it('displays a compatible Cumulus API Version number', () => {
-      const apiVersionNumber = '1.11.0';
+      let apiVersionNumber;
+      const config = configureRequest('/version');
+      get(config, (error, data) => {
+        if (error) {
+          // fail the test
+          throw new Error('Failed to get Cumulus API Version number');
+        }
+        apiVersionNumber = data.api_version;
+      });
       cy.get('h5[class=apiVersion]').should((apiVersionWrapper) => {
         expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
       });
