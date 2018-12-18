@@ -3,7 +3,7 @@ import React from 'react';
 import c from 'classnames';
 import { Link } from 'react-router';
 import { get } from 'object-path';
-import { logout } from '../../actions';
+import { logout, getApiVersion } from '../../actions';
 import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
 import { strings } from '../locale';
@@ -23,10 +23,16 @@ const paths = [
 var Header = React.createClass({
   displayName: 'Header',
   propTypes: {
-    location: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
     api: React.PropTypes.object,
+    apiVersion: React.PropTypes.object,
+    dispatch: React.PropTypes.func,
+    location: React.PropTypes.object,
     minimal: React.PropTypes.bool
+  },
+
+  componentWillMount: function () {
+    const { dispatch, api } = this.props;
+    if (api.authenticated) dispatch(getApiVersion());
   },
 
   logout: function () {
@@ -49,11 +55,17 @@ var Header = React.createClass({
 
   render: function () {
     const { authenticated } = this.props.api;
+    const { warning, versionNumber } = this.props.apiVersion;
     const activePaths = paths.filter(pathObj => nav.exclude[pathObj[1].replace('/', '')] !== true);
+
+    let versionWarning;
+    if (warning) { versionWarning = <h5 className='apiVersionWarning'>Warning: { warning }</h5>; }
     return (
       <div className='header'>
         <div className='row'>
           <h1 className='logo'><Link to='/'><img alt="Logo" src={graphicsPath + strings.logo} /></Link></h1>
+          <h5 className='apiVersion'>Cumulus API Version: { versionNumber }</h5>
+          { versionWarning }
           <nav>
             { !this.props.minimal ? <ul>
               {activePaths.map(path => <li

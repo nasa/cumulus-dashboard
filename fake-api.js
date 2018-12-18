@@ -14,6 +14,8 @@ const {
   resetState
 } = require('./test/fake-api/db');
 
+const publicEndpoints = ['/version'];
+
 const { generateJWT, verifyJWT } = require('./test/fake-api/token');
 let token;
 
@@ -37,7 +39,7 @@ function fakeApiMiddleWare (req, res, next) {
     // respond with 200
     res.sendStatus(200).end();
     return;
-  } else {
+  } else if (publicEndpoints.indexOf(req.path) < 0){
     const auth = req.header('Authorization');
     const re = /^\/token|refresh/;
 
@@ -246,6 +248,13 @@ app.post('/refresh', (req, res) => {
   res.status(200);
   res.json({
     token
+  });
+});
+
+app.get('/version', (req, res) => {
+  res.status(200);
+  res.json({
+    api_version: '1.11.0'
   });
 });
 

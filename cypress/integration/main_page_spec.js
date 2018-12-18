@@ -4,14 +4,45 @@ import {
   shouldHaveDeletedToken
 } from '../support/assertions';
 
-describe('Dashboard Tests', () => {
+import { API_VERSION } from '../../app/scripts/actions';
+
+describe('Dashboard Home Page', () => {
   it('When not logged in it should redirect to login page', () => {
     cy.visit('/');
     shouldBeRedirectedToLogin();
     shouldHaveNoToken();
   });
 
+  describe('When logged in', () => {
+    before(() => {
+      cy.visit('/');
+    });
+
+    beforeEach(() => {
+      cy.login();
+    });
+
+    after(() => {
+      cy.task('resetState');
+    });
+
+    it('displays a compatible Cumulus API Version number', () => {
+      const apiVersionNumber = 'a.b.c';
+      cy.window().its('appStore').then((store) => {
+        store.dispatch({
+          type: API_VERSION,
+          payload: { versionNumber: apiVersionNumber }
+        });
+
+        cy.get('h5[class=apiVersion]').should((apiVersionWrapper) => {
+          expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
+        });
+      });
+    });
+  });
+
   it('Logging in successfully redirects to the Dashboard main page', () => {
+    cy.visit('/');
     cy.get('div[class=modal__internal]').within(() => {
       cy.get('a').click();
     });
