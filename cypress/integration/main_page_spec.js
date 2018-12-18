@@ -26,21 +26,16 @@ describe('Dashboard Home Page', () => {
       cy.task('resetState');
     });
 
-    it('displays a Cumulus API Version number and warning', () => {
+    it('displays a compatible Cumulus API Version number', () => {
       const apiVersionNumber = 'a.b.c';
       cy.window().its('appStore').then((store) => {
         store.dispatch({
           type: API_VERSION,
-          payload: { versionNumber: 'a.b.c' }
+          payload: { versionNumber: apiVersionNumber }
         });
-	// expect(store.getState().apiVersion.versionNumber).to.eq(apiVersionNumber);
-	// expect(store.getState().apiVersion.warning).to.contain(apiVersionNumber);
 
         cy.get('h5[class=apiVersion]').should((apiVersionWrapper) => {
           expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
-        });
-        cy.get('h5[class=apiVersionWarning]').should((apiVersionWarningWrapper) => {
-          expect(apiVersionWarningWrapper.first()).to.contain(apiVersionNumber);
         });
       });
     });
