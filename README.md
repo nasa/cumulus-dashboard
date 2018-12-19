@@ -30,6 +30,7 @@ The following Environment Variables override the default values in `config.js`:
 | STAGE | e.g. UAT, default to development
 | LABELS | gitc or daac localization (defaults to daac)
 | APIROOT | the API URL. This must be set as it defaults to example.com
+| minCompatibleApiVersions | list of minimum compatible Cumulus API versions. Warning will be shown if a cumulus api version is not compatible
 
      $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com npm run serve
 
