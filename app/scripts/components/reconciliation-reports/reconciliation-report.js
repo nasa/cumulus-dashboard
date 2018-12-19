@@ -2,6 +2,8 @@
 import url from 'url';
 import path from 'path';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   interval,
@@ -46,12 +48,12 @@ const tableRowDyanmoDb = [
   (d) => d ? <a href={d.path} target='_blank'>Link</a> : nullValue
 ];
 
-const ReconciliationReport = React.createClass({
+const ReconciliationReport = createReactClass({
   propTypes: {
-    reconciliationReports: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    params: React.PropTypes.object,
-    router: React.PropTypes.object
+    reconciliationReports: PropTypes.object,
+    dispatch: PropTypes.func,
+    params: PropTypes.object,
+    router: PropTypes.object
   },
 
   componentWillMount: function () {

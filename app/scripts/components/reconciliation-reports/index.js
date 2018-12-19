@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Sidebar from '../app/sidebar';
@@ -7,7 +8,7 @@ import LoadingEllipsis from '../app/loading-ellipsis';
 import { interval, getCount, createReconciliationReport } from '../../actions';
 import { updateInterval } from '../../config';
 
-var ReconciliationReports = React.createClass({
+var ReconciliationReports = createReactClass({
   displayName: 'Reconciliation Reports',
 
   propTypes: {

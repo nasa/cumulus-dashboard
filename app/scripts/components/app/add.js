@@ -1,6 +1,7 @@
 'use strict';
 import path from 'path';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -11,7 +12,7 @@ import Loading from '../app/loading-indicator';
 import { updateDelay } from '../../config';
 import { strings } from '../locale';
 
-var AddCollection = React.createClass({
+var AddCollection = createReactClass({
   getInitialState: function () {
     return {
       pk: null

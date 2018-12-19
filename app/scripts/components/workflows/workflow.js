@@ -2,6 +2,7 @@
 import React from 'react';
 import Ace from 'react-ace';
 import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { listWorkflows } from '../../actions';
 import config from '../../config';
@@ -16,9 +17,9 @@ var Workflow = createReactClass({
   },
 
   propTypes: {
-    params: React.PropTypes.object,
-    workflows: React.PropTypes.object,
-    dispatch: React.PropTypes.func
+    params: PropTypes.object,
+    workflows: PropTypes.object,
+    dispatch: PropTypes.func
   },
 
   componentWillReceiveProps: function ({ params }) {

@@ -1,6 +1,7 @@
 'use strict';
 import path from 'path';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -68,7 +69,7 @@ const metaAccessors = [
   ['Total duration', 'duration', seconds]
 ];
 
-var GranuleOverview = React.createClass({
+var GranuleOverview = createReactClass({
   displayName: strings.granule,
 
   propTypes: {

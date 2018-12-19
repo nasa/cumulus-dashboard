@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -32,7 +33,7 @@ import { updateInterval } from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 
-var GranulesOverview = React.createClass({
+var GranulesOverview = createReactClass({
   propTypes: {
     granules: PropTypes.object,
     stats: PropTypes.object,

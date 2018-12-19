@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import dagre from 'dagre-d3v4';
@@ -8,7 +9,7 @@ import * as d3 from 'd3';
 // dagre-d3v4 expects d3 to be attached to the window
 if (process.env.NODE_ENV !== 'test') window.d3 = d3;
 
-var ExecutionStatusGraph = React.createClass({
+var ExecutionStatusGraph = createReactClass({
   propTypes: {
     executionStatus: PropTypes.object
   },

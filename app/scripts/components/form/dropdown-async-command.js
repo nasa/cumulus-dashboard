@@ -2,11 +2,13 @@ import React from 'react';
 import c from 'classnames';
 import { findDOMNode } from 'react-dom';
 import AsyncCommand from '../form/async-command';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { addGlobalListener } from '../../utils/browser';
 
-const DropdownAsync = React.createClass({
+const DropdownAsync = createReactClass({
   propTypes: {
-    config: React.PropTypes.array
+    config: PropTypes.array
   },
 
   getInitialState: function () {

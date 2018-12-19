@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import {
   searchGranules,
@@ -34,7 +35,7 @@ import { strings } from '../locale';
 import { updateInterval } from '../../config';
 import { workflowOptionNames } from '../../selectors';
 
-var AllGranules = React.createClass({
+var AllGranules = createReactClass({
   displayName: strings.all_granules,
 
   propTypes: {

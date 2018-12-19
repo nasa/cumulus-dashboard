@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
@@ -11,7 +12,7 @@ import merge from '../../utils/merge';
 import { updateDelay } from '../../config';
 import {strings} from '../locale';
 
-var EditRecord = React.createClass({
+var EditRecord = createReactClass({
   propTypes: {
     pk: PropTypes.string,
     schema: PropTypes.object,

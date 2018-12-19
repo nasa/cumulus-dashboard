@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -35,7 +36,7 @@ const metaAccessors = [
   ['Global Connection Limit', 'globalConnectionLimit', tally]
 ];
 
-var ProviderOverview = React.createClass({
+var ProviderOverview = createReactClass({
   displayName: 'Provider',
 
   propTypes: {
