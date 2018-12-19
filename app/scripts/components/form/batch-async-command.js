@@ -2,13 +2,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import queue from 'stubborn-queue';
+import createReactClass from 'create-react-class';
 import AsyncCommand from './async-command';
 import { updateDelay } from '../../config';
 
 const CONCURRENCY = 3;
 const IN_PROGRESS = 'Processing...';
 
-const BatchCommand = React.createClass({
+const BatchCommand = createReactClass({
   propTypes: {
     action: PropTypes.func,
     dispatch: PropTypes.func,

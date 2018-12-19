@@ -1,10 +1,11 @@
 'use strict';
 import React from 'react';
 import Collapsible from 'react-collapsible';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { truncate } from '../../utils/format';
 
-var ErrorReport = React.createClass({
+var ErrorReport = createReactClass({
   displayName: 'ErrorReport',
   propTypes: {
     report: PropTypes.any,

@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import SortableTable from './sortable';
@@ -10,7 +11,7 @@ import BatchAsyncCommand from '../form/batch-async-command';
 import Timer from '../app/timer';
 import { isUndefined as undef } from '../../utils/validate';
 
-var List = React.createClass({
+var List = createReactClass({
   displayName: 'List',
 
   getInitialState: function () {

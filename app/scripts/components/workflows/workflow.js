@@ -1,13 +1,14 @@
 'use strict';
 import React from 'react';
 import Ace from 'react-ace';
+import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import { listWorkflows } from '../../actions';
 import config from '../../config';
 import { setWindowEditorRef } from '../../utils/browser';
 import Loading from '../app/loading-indicator';
 
-var Workflow = React.createClass({
+var Workflow = createReactClass({
   getInitialState: function () {
     return {
       view: 'json'

@@ -1,12 +1,13 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { getExecutionLogs } from '../../actions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import ErrorReport from '../errors/report';
 
-var ExecutionLogs = React.createClass({
+var ExecutionLogs = createReactClass({
   displayName: 'Execution',
 
   propTypes: {

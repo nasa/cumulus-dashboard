@@ -2,11 +2,12 @@
 import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import Ellipsis from '../app/loading-ellipsis';
 import { preventDefault } from '../../utils/noop';
 import { updateDelay } from '../../config';
 
-const AsyncCommand = React.createClass({
+const AsyncCommand = createReactClass({
 
   propTypes: {
     action: PropTypes.func,
