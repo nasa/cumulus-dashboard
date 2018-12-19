@@ -24,7 +24,7 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-import { SET_TOKEN } from '../../app/scripts/actions';
+import { DELETE_TOKEN, SET_TOKEN } from '../../app/scripts/actions';
 
 Cypress.Commands.add('login', () => {
   const authUrl = `${Cypress.config('baseUrl')}/#/auth`;
@@ -44,6 +44,16 @@ Cypress.Commands.add('login', () => {
       });
     });
   });
+});
+
+Cypress.Commands.add('logout', () => {
+  cy.window().its('appStore')
+    .then((store) => {
+      store.dispatch({
+        type: DELETE_TOKEN
+      });
+    });
+  cy.reload();
 });
 
 Cypress.Commands.add('editJsonTextarea', ({ data, update = false }) => {
