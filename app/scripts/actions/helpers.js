@@ -149,3 +149,12 @@ export const wrapRequest = function (id, query, params, type, body) {
     });
   };
 };
+
+export const parseVersionString = function (versionString) {
+  const splitVersionString = versionString.split('.');
+  return {
+    major: splitVersionString[0],
+    minor: splitVersionString[1],
+    patch: splitVersionString[2]
+  };
+};

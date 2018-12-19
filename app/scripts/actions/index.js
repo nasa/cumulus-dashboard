@@ -9,14 +9,15 @@ import {
   del,
   configureRequest,
   wrapRequest,
-  addRequestAuthorization
+  addRequestAuthorization,
+  parseVersionString
 } from './helpers';
 import _config from '../config';
 import { getCollectionId } from '../utils/format';
 import log from '../utils/log';
 
 const root = _config.apiRoot;
-const { pageLimit, compatibleApiVersion } = _config;
+const { pageLimit, minCompatibleApiVersion } = _config;
 
 export const LOGOUT = 'LOGOUT';
 export const LOGIN = 'LOGIN';
@@ -332,17 +333,21 @@ export const getApiVersion = () => {
 export const checkApiVersion = () => {
   return (dispatch, getState) => {
     const { versionNumber } = getState().apiVersion;
-    if (compatibleApiVersion.indexOf(versionNumber) < 0) {
+    const minCompatibleVersionParsed = parseVersionString(minCompatibleApiVersion);
+    const apiVersionParsed = parseVersionString(versionNumber);
+    if (apiVersionParsed.major === minCompatibleVersionParsed.major &&
+        apiVersionParsed.minor === minCompatibleVersionParsed.minor &&
+        apiVersionParsed.patch >= minCompatibleVersionParsed.patch) {
+      dispatch({
+        type: API_VERSION_COMPATIBLE,
+        payload: {}
+      });
+    } else {
       dispatch({
         type: API_VERSION_INCOMPATIBLE,
         payload: {
           warning: `Dashboard version incompatible with Cumulus API version (${versionNumber})`
         }
-      });
-    } else {
-      dispatch({
-        type: API_VERSION_COMPATIBLE,
-        payload: {}
       });
     }
   };
