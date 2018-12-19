@@ -84,10 +84,16 @@ test('addRequestAuthorization() should return correct headers', (t) => {
   });
 });
 
-test('configureRequest() should throw error if no URL is provided', (t) => {
+test('configureRequest() should throw error if no URL or path is provided', (t) => {
   const requestParams = {};
 
-  t.throws(() => configureRequest(requestParams), 'Must include a url with request');
+  t.throws(() => configureRequest(requestParams), 'Must include a URL or path with request');
+});
+
+test('configureRequest() should throw error if path is not a string', (t) => {
+  const requestParams = { path: {} };
+
+  t.throws(() => configureRequest(requestParams), 'Path must be a string');
 });
 
 test('configureRequest() should add default parameters', (t) => {
@@ -117,7 +123,7 @@ test('configureRequest() should convert path to URL', (t) => {
   t.deepEqual(requestConfig, expectedConfig);
 });
 
-test('configureRequest() should add the request body', (t) => {
+test('configureRequest() should maintain the request body', (t) => {
   const requestBody = {
     test: 'test'
   };

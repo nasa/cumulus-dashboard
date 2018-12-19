@@ -39,30 +39,21 @@ export const addRequestAuthorization = (config, state) => {
   }
 };
 
-export const configureRequest = function (params, body) {
-  // TODO: enforce that params is an object and set config = params
-  let config = {};
-  if (typeof params === 'object') {
-    config = params;
+export const configureRequest = (params = {}) => {
+  let config = params;
+
+  if (!config.url && !config.path) {
+    throw new Error('Must include a URL or path with request');
   }
 
   config.headers = config.headers || {};
   config.headers['Content-Type'] = 'application/json';
 
-  if (typeof params === 'string') {
-    config.url = url.resolve(_config.apiRoot, params);
-  } else if (params.url) {
-    config = params;
-  } else if (params.path && typeof params.path === 'string') {
-    config.url = url.resolve(_config.apiRoot, params.path);
-  } else {
-    throw new Error('Must include a url with request');
-  }
-
-  if (body && typeof body === 'object') {
-    config.body = body;
-  } else if (params.body && typeof params.body === 'object') {
-    config.body = params.body;
+  if (config.path) {
+    if (typeof config.path !== 'string') {
+      throw new Error('Path must be a string');
+    }
+    config.url = url.resolve(_config.apiRoot, config.path);
   }
 
   const defaultRequestConfig = {
