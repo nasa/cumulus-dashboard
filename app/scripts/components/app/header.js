@@ -64,7 +64,9 @@ var Header = React.createClass({
       <div className='header'>
         <div className='row'>
           <h1 className='logo'><Link to='/'><img alt="Logo" src={graphicsPath + strings.logo} /></Link></h1>
-          <h5 className='apiVersion'>Cumulus API Version: { versionNumber }</h5>
+          { authenticated &&
+            <h5 className='apiVersion'>Cumulus API Version: { versionNumber }</h5>
+          }
           { versionWarning }
           <nav>
             { !this.props.minimal ? <ul>

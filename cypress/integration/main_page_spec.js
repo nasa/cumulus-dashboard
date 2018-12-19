@@ -55,8 +55,6 @@ describe('Dashboard Home Page', () => {
     });
 
     it('displays a compatible Cumulus API Version number', () => {
-      cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
-
       const apiVersionNumber = 'a.b.c';
       cy.window().its('appStore').then((store) => {
         store.dispatch({
