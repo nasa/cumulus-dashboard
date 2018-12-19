@@ -65,7 +65,7 @@ var PDR = createReactClass({
     router: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { pdrName } = this.props.params;
     const immediate = !this.props.pdrs.map[pdrName];
     this.reload(immediate);

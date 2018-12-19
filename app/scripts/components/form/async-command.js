@@ -21,14 +21,15 @@ const AsyncCommand = createReactClass({
     element: PropTypes.string,
     confirmAction: PropTypes.bool,
     confirmText: PropTypes.string,
-    confirmOptions: PropTypes.array
+    confirmOptions: PropTypes.array,
+    href: PropTypes.string
   },
 
   getInitialState: function () {
     return { modal: false };
   },
 
-  componentWillReceiveProps: function (newProps) {
+  UNSAFE_componentWillReceiveProps: function (newProps) {
     if (
       this.props.status === 'inflight' &&
       newProps.status === 'success' &&

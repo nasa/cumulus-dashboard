@@ -43,7 +43,7 @@ var CollectionList = createReactClass({
     '1 Year Ago': moment().subtract(1, 'years').format()
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { dispatch } = this.props;
     dispatch(getCumulusInstanceMetadata());
   },

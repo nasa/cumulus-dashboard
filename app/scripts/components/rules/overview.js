@@ -71,7 +71,7 @@ var RulesOverview = createReactClass({
     rules: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.props.dispatch(listRules);
   },
 

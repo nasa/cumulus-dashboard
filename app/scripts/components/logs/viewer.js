@@ -43,11 +43,11 @@ var LogViewer = createReactClass({
     };
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.query();
   },
 
-  componentWillReceiveProps: function (newProps) {
+  UNSAFE_componentWillReceiveProps: function (newProps) {
     if (JSON.stringify(newProps.query) !== JSON.stringify(this.props.query)) {
       const query = newProps.query || {};
       this.query(query);

@@ -12,7 +12,7 @@ var ErrorReport = createReactClass({
     truncate: PropTypes.bool
   },
 
-  componentWillReceiveProps: function ({ report }) {
+  UNSAFE_componentWillReceiveProps: function ({ report }) {
     if (report !== this.props.report) {
       this.scrollToTop();
     }
@@ -63,7 +63,7 @@ var ErrorReport = createReactClass({
       } else {
         message = report.message;
         stack = report.stack
-          ? report.stack.split(`\n`).map((s, index) => <p key={index}>{s}</p>)
+          ? report.stack.split('\n').map((s, index) => <p key={index}>{s}</p>)
           : null;
       }
       return (

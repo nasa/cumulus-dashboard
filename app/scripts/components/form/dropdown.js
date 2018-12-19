@@ -41,7 +41,7 @@ const Dropdown = createReactClass({
     };
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { dispatch, getOptions } = this.props;
     if (getOptions) { dispatch(getOptions()); }
   },

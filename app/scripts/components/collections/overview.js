@@ -35,11 +35,11 @@ const CollectionOverview = createReactClass({
     router: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.load();
   },
 
-  componentWillReceiveProps: function ({ params }) {
+  UNSAFE_componentWillReceiveProps: function ({ params }) {
     const { name, version } = params;
     if (name !== this.props.params.name ||
        version !== this.props.params.version) {

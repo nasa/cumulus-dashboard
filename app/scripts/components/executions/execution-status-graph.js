@@ -14,7 +14,7 @@ var ExecutionStatusGraph = createReactClass({
     executionStatus: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const {
       executionStatus: {
         executionHistory,

@@ -22,14 +22,14 @@ var Workflow = createReactClass({
     dispatch: PropTypes.func
   },
 
-  componentWillReceiveProps: function ({ params }) {
+  UNSAFE_componentWillReceiveProps: function ({ params }) {
     const { workflowName } = params;
     if (workflowName !== this.props.params.workflowName) {
       this.get();
     }
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.get();
   },
 

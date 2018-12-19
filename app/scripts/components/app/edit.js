@@ -45,13 +45,13 @@ var EditRecord = createReactClass({
     }
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { pk } = this.props;
     this.get(pk);
     this.props.dispatch(getSchema(this.props.schemaKey));
   },
 
-  componentWillReceiveProps: function ({ pk }) {
+  UNSAFE_componentWillReceiveProps: function ({ pk }) {
     const { dispatch, router, clearRecordUpdate, backRoute, state } = this.props;
     const updateStatus = get(state.updated, [pk, 'status']);
     if (updateStatus === 'success') {

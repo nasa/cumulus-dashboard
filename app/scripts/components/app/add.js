@@ -36,11 +36,11 @@ var AddCollection = createReactClass({
     validate: PropTypes.func
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.props.dispatch(getSchema(this.props.schemaKey));
   },
 
-  componentWillReceiveProps: function ({ state }) {
+  UNSAFE_componentWillReceiveProps: function ({ state }) {
     const { pk } = this.state;
     const { router, baseRoute } = this.props;
     const status = get(state, ['created', pk, 'status']);

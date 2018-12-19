@@ -22,7 +22,7 @@ var PdrOverview = createReactClass({
     stats: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.cancelInterval = interval(this.queryStats, updateInterval, true);
   },
 

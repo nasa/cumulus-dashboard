@@ -184,12 +184,12 @@ export const Schema = createReactClass({
     return { fields: null };
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { schema, data, include } = this.props;
     this.setState({ fields: createFormConfig(data, schema, include) });
   },
 
-  componentWillReceiveProps: function (newProps) {
+  UNSAFE_componentWillReceiveProps: function (newProps) {
     const { props } = this;
     const { schema, data, include } = newProps;
     if (props.pk !== newProps.pk) {

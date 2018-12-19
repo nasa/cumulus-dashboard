@@ -48,7 +48,7 @@ var ProviderOverview = createReactClass({
     router: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { providerId } = this.props.params;
     const immediate = !this.props.providers.map[providerId];
     this.reload(immediate);

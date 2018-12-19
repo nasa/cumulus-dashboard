@@ -41,11 +41,11 @@ var List = createReactClass({
     rowId: PropTypes.any
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.setState({ queryConfig: this.config() });
   },
 
-  componentWillReceiveProps: function (newProps) {
+  UNSAFE_componentWillReceiveProps: function (newProps) {
     if (JSON.stringify(newProps.query) !== JSON.stringify(this.props.query)) {
       this.setState({ queryConfig: this.config({}, newProps.query) });
     }

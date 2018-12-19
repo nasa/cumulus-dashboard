@@ -42,7 +42,7 @@ var GranulesOverview = createReactClass({
     location: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.setState({});
     this.cancelInterval = interval(this.queryMeta, updateInterval, true);
   },

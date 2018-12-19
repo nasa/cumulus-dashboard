@@ -14,11 +14,11 @@ const Timer = createReactClass({
     reload: PropTypes.any
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.createTimer(this.props.config);
   },
 
-  componentWillReceiveProps: function (nextProps) {
+  UNSAFE_componentWillReceiveProps: function (nextProps) {
     if (JSON.stringify(this.props.config) !== JSON.stringify(nextProps.config) ||
       (nextProps.reload && this.props.reload !== nextProps.reload)) {
       this.createTimer(nextProps.config);

@@ -29,7 +29,7 @@ var ExecutionStatus = createReactClass({
     router: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { dispatch } = this.props;
     const { executionArn } = this.props.params;
     dispatch(getExecutionStatus(executionArn));

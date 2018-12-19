@@ -40,7 +40,7 @@ var Home = createReactClass({
     executions: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.cancelInterval = interval(() => {
       this.query();
     }, updateInterval, true);

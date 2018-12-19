@@ -33,7 +33,7 @@ const BatchCommand = createReactClass({
     };
   },
 
-  componentWillReceiveProps: function (newProps) {
+  UNSAFE_componentWillReceiveProps: function (newProps) {
     const { state } = newProps;
     const { callbacks, completed } = this.state;
     // on success or error, call and remove the saved callback

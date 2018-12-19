@@ -27,7 +27,7 @@ var OAuth = createReactClass({
     };
   },
 
-  componentWillReceiveProps: function (newProps) {
+  UNSAFE_componentWillReceiveProps: function (newProps) {
     // delay-close the modal if it's open
     if (newProps.api.authenticated &&
         newProps.api.authenticated !== this.props.api.authenticated) {
@@ -42,7 +42,7 @@ var OAuth = createReactClass({
     }
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const query = this.props.location.query;
     if (query.token) {
       const token = query.token;

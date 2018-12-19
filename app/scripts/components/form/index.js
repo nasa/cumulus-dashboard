@@ -64,7 +64,7 @@ export const Form = createReactClass({
     return slugify(label) + '-' + this.id;
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     // generate id for this form
     this.id = generate();
 

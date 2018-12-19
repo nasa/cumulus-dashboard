@@ -88,7 +88,7 @@ var GranuleOverview = createReactClass({
     };
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.setState({});
     const { granuleId } = this.props.params;
     this.cancelInterval = interval(this.queryWorkflows, updateInterval, true);

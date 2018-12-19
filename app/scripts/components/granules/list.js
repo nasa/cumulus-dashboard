@@ -46,7 +46,7 @@ var AllGranules = createReactClass({
     workflowOptions: PropTypes.array
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.setState({});
     this.cancelInterval = interval(this.queryWorkflows, updateInterval, true);
   },

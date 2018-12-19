@@ -71,7 +71,7 @@ var ExecutionOverview = createReactClass({
     workflowOptions: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     // use a slightly slower update interval, since the dropdown fields
     // will change less frequently.
     this.cancelInterval = interval(this.queryMeta, updateInterval, true);

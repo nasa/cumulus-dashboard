@@ -43,11 +43,11 @@ const Rule = createReactClass({
     rules: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.load(this.props.params.ruleName);
   },
 
-  componentWillReceiveProps: function ({ params }) {
+  UNSAFE_componentWillReceiveProps: function ({ params }) {
     if (params.ruleName !== this.props.params.ruleName) {
       this.load(params.ruleName);
     }

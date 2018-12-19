@@ -56,7 +56,7 @@ const ReconciliationReport = createReactClass({
     router: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { reconciliationReportName } = this.props.params;
     const immediate = !this.props.reconciliationReports.map[reconciliationReportName];
     this.reload(immediate);

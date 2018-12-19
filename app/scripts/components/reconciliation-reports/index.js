@@ -20,7 +20,7 @@ var ReconciliationReports = createReactClass({
     reconciliationReports: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.cancelInterval = interval(() => this.query(), updateInterval, true);
   },
 

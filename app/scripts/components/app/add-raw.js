@@ -49,13 +49,13 @@ const AddRaw = createReactClass({
     }
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     if (this.props.defaultValue) {
       this.setState({ data: JSON.stringify(this.props.defaultValue, null, 2) });
     }
   },
 
-  componentWillReceiveProps: function ({ state }) {
+  UNSAFE_componentWillReceiveProps: function ({ state }) {
     const { router, getBaseRoute } = this.props;
     const { pk, error } = this.state;
     if (!pk) {

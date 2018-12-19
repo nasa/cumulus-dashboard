@@ -59,12 +59,12 @@ const EditRaw = createReactClass({
     this.props.router.push(this.props.backRoute);
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.queryRecord(this.props.pk);
     this.props.dispatch(getSchema(this.props.schemaKey));
   },
 
-  componentWillReceiveProps: function ({ pk, state, schema, schemaKey }) {
+  UNSAFE_componentWillReceiveProps: function ({ pk, state, schema, schemaKey }) {
     const { dispatch, router, clearRecordUpdate, backRoute } = this.props;
     const recordSchema = schema[schemaKey];
     // successfully updated, navigate away

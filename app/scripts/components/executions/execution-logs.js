@@ -17,7 +17,7 @@ var ExecutionLogs = createReactClass({
     router: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { dispatch } = this.props;
     const { executionName } = this.props.params;
     dispatch(getExecutionLogs(executionName));

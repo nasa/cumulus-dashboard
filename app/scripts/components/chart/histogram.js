@@ -40,7 +40,7 @@ const Histogram = createReactClass({
     this.setState({ width: rect.width, height: rect.height });
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.setHoverState = throttle(this.setHoverState, tooltipDelay);
     this.mouseOut = debounce(this.mouseOut, tooltipDelay);
   },

@@ -26,7 +26,7 @@ var CollectionIngest = createReactClass({
     dispatch: PropTypes.func
   },
 
-  componentWillReceiveProps: function (props) {
+  UNSAFE_componentWillReceiveProps: function (props) {
     const { name, version } = this.props.params;
     const collectionId = getCollectionId({ name, version });
     const record = this.props.collections.map[collectionId];
@@ -35,7 +35,7 @@ var CollectionIngest = createReactClass({
     }
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { name, version } = this.props.params;
     this.get(name, version);
   },

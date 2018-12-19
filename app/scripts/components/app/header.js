@@ -32,7 +32,7 @@ var Header = createReactClass({
     minimal: PropTypes.bool
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { dispatch, api } = this.props;
     if (api.authenticated) dispatch(getApiVersion());
   },

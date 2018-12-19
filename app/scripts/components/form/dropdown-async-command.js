@@ -15,7 +15,7 @@ const DropdownAsync = createReactClass({
     return { showActions: false };
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.cleanup = addGlobalListener('click', this.onOutsideClick);
   },
 
