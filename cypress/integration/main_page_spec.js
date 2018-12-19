@@ -13,6 +13,45 @@ describe('Dashboard Home Page', () => {
     shouldHaveNoToken();
   });
 
+  it('Logging in successfully redirects to the Dashboard main page', () => {
+    cy.visit('/');
+    cy.get('div[class=modal__internal]').within(() => {
+      cy.get('a').click();
+    });
+
+    cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
+    cy.get('nav')
+      .contains('Collections')
+      .should('have.attr', 'href')
+      .and('include', '/collections');
+    cy.get('nav')
+      .contains('Rules')
+      .should('have.attr', 'href')
+      .and('include', '/rules');
+  });
+
+  it('Logging out successfully redirects to the login screen', () => {
+    // cy.visit('/');
+    cy.get('div[class=modal__internal]').within(() => {
+      cy.get('a').click();
+    });
+
+    cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
+
+    cy.get('nav li').last().within(() => {
+      cy.get('a').should('have.text', 'Log out');
+    });
+    cy.get('nav li').last().click();
+    cy.url().should('include', '/#/auth');
+
+    cy.visit('#/collections');
+
+    cy.url().should('not.include', '/#/collections');
+    cy.url().should('include', '/#/auth');
+
+    shouldHaveDeletedToken();
+  });
+
   describe('When logged in', () => {
     before(() => {
       cy.visit('/');
@@ -39,44 +78,5 @@ describe('Dashboard Home Page', () => {
         });
       });
     });
-  });
-
-  it('Logging in successfully redirects to the Dashboard main page', () => {
-    cy.visit('/');
-    cy.get('div[class=modal__internal]').within(() => {
-      cy.get('a').click();
-    });
-
-    cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
-    cy.get('nav')
-      .contains('Collections')
-      .should('have.attr', 'href')
-      .and('include', '/collections');
-    cy.get('nav')
-      .contains('Rules')
-      .should('have.attr', 'href')
-      .and('include', '/rules');
-  });
-
-  it('Logging out successfully redirects to the login screen', () => {
-    cy.visit('/');
-    cy.get('div[class=modal__internal]').within(() => {
-      cy.get('a').click();
-    });
-
-    cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
-
-    cy.get('nav li').last().within(() => {
-      cy.get('a').should('have.text', 'Log out');
-    });
-    cy.get('nav li').last().click();
-    cy.url().should('include', '/#/auth');
-
-    cy.visit('#/collections');
-
-    cy.url().should('not.include', '/#/collections');
-    cy.url().should('include', '/#/auth');
-
-    shouldHaveDeletedToken();
   });
 });
