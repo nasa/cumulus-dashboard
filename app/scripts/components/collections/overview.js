@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import {
   getCollection,
   listGranules,
@@ -23,7 +24,7 @@ import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/
 import { updateDelay } from '../../config';
 import { strings } from '../locale';
 
-const CollectionOverview = React.createClass({
+const CollectionOverview = createReactClass({
   displayName: 'CollectionOverview',
 
   propTypes: {

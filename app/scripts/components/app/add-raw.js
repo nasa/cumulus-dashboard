@@ -3,11 +3,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import TextArea from '../form/text-area';
 import { get } from 'object-path';
 import { updateDelay } from '../../config';
 
-const AddRaw = React.createClass({
+const AddRaw = createReactClass({
   propTypes: {
     dispatch: PropTypes.func,
     state: PropTypes.object,

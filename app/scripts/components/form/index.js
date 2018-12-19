@@ -10,6 +10,8 @@ import Dropdown from './simple-dropdown';
 import List from './arbitrary-list';
 import SubForm from './sub-form';
 import t from '../../utils/strings';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { window } from '../../utils/browser';
 const scrollTo = typeof window.scrollTo === 'function' ? window.scrollTo : () => true;
 
@@ -38,7 +40,7 @@ const errorMessage = (errors) => `Please review ${errors.join(', ')} and submit 
  * @param {String} form.error text to display when a form doesn't pass validation.
  * @return {JSX}
  */
-export const Form = React.createClass({
+export const Form = createReactClass({
   displayName: 'Form',
 
   getInitialState: function () {
@@ -50,12 +52,12 @@ export const Form = React.createClass({
   },
 
   propTypes: {
-    id: React.PropTypes.string,
-    inputMeta: React.PropTypes.array,
-    submit: React.PropTypes.func,
-    cancel: React.PropTypes.func,
-    status: React.PropTypes.string,
-    nowrap: React.PropTypes.bool
+    id: PropTypes.string,
+    inputMeta: PropTypes.array,
+    submit: PropTypes.func,
+    cancel: PropTypes.func,
+    status: PropTypes.string,
+    nowrap: PropTypes.bool
   },
 
   generateComponentId: function (label) {

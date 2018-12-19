@@ -1,8 +1,8 @@
 'use strict';
 import React from 'react';
 import createReactClass from 'create-react-class';
-import { getExecutionLogs } from '../../actions';
 import PropTypes from 'prop-types';
+import { getExecutionLogs } from '../../actions';
 import { connect } from 'react-redux';
 
 import ErrorReport from '../errors/report';

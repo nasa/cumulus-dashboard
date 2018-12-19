@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { interval, getLogs, clearLogs } from '../../actions';
 import { logsUpdateInterval } from '../../config';
 // import moment from 'moment';
@@ -29,10 +30,10 @@ const statusOptions = [
 var LogViewer = createReactClass({
   displayName: 'LogViewer',
   propTypes: {
-    dispatch: React.PropTypes.func,
-    query: React.PropTypes.object,
-    logs: React.PropTypes.object,
-    notFound: React.PropTypes.string
+    dispatch: PropTypes.func,
+    query: PropTypes.object,
+    logs: PropTypes.object,
+    notFound: PropTypes.string
   },
 
   getInitialState: function () {

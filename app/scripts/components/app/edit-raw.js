@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import TextArea from '../form/text-area';
 import { get } from 'object-path';
 import { getSchema } from '../../actions';
@@ -10,7 +11,7 @@ import Loading from '../app/loading-indicator';
 import { removeReadOnly } from '../form/schema';
 import { updateDelay } from '../../config';
 
-const EditRaw = React.createClass({
+const EditRaw = createReactClass({
   propTypes: {
     dispatch: PropTypes.func,
     pk: PropTypes.string,

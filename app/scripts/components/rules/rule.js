@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
@@ -34,7 +35,7 @@ const metaAccessors = [
   ['Timestamp', 'timestamp', fullDate]
 ];
 
-const Rule = React.createClass({
+const Rule = createReactClass({
   propTypes: {
     params: PropTypes.object,
     router: PropTypes.object,

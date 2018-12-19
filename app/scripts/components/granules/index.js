@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
 import Sidebar from '../app/sidebar';
@@ -7,7 +8,7 @@ import { interval, getCount } from '../../actions';
 import { updateInterval } from '../../config';
 import { strings } from '../locale';
 
-var Granules = React.createClass({
+var Granules = createReactClass({
   displayName: strings.granules,
 
   propTypes: {
