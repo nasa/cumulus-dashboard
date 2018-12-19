@@ -17,7 +17,7 @@ import { getCollectionId } from '../utils/format';
 import log from '../utils/log';
 
 const root = _config.apiRoot;
-const { pageLimit, minCompatibleApiVersion } = _config;
+const { pageLimit, minCompatibleApiVersions } = _config;
 
 export const LOGOUT = 'LOGOUT';
 export const LOGIN = 'LOGIN';
@@ -333,11 +333,17 @@ export const getApiVersion = () => {
 export const checkApiVersion = () => {
   return (dispatch, getState) => {
     const { versionNumber } = getState().apiVersion;
-    const minCompatibleVersionParsed = parseVersionString(minCompatibleApiVersion);
     const apiVersionParsed = parseVersionString(versionNumber);
-    if (apiVersionParsed.major === minCompatibleVersionParsed.major &&
-        apiVersionParsed.minor === minCompatibleVersionParsed.minor &&
-        apiVersionParsed.patch >= minCompatibleVersionParsed.patch) {
+    let isCompatible = false;
+    for (let version of minCompatibleApiVersions) {
+      const parsedVersion = parseVersionString(version);
+      if (apiVersionParsed.major === parsedVersion.major &&
+          apiVersionParsed.minor === parsedVersion.minor &&
+          apiVersionParsed.patch >= parsedVersion.patch) {
+        isCompatible = true;
+      }
+    }
+    if (isCompatible) {
       dispatch({
         type: API_VERSION_COMPATIBLE,
         payload: {}
