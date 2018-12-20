@@ -10,8 +10,7 @@ import {
   del,
   configureRequest,
   wrapRequest,
-  addRequestAuthorization,
-  parseVersionString
+  addRequestAuthorization
 } from './helpers';
 import _config from '../config';
 import { getCollectionId } from '../utils/format';
