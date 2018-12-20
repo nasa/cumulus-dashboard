@@ -143,16 +143,6 @@ export const PROVIDER_DELETE = 'PROVIDER_DELETE';
 export const PROVIDER_DELETE_INFLIGHT = 'PROVIDER_DELETE_INFLIGHT';
 export const PROVIDER_DELETE_ERROR = 'PROVIDER_DELETE_ERROR';
 
-export const PROVIDER_RESTART = 'PROVIDER_RESTART';
-export const PROVIDER_RESTART_INFLIGHT = 'PROVIDER_RESTART_INFLIGHT';
-export const PROVIDER_RESTART_ERROR = 'PROVIDER_RESTART_ERROR';
-export const CLEAR_RESTARTED_PROVIDER = 'CLEAR_RESTARTED_PROVIDER';
-
-export const PROVIDER_STOP = 'PROVIDER_STOP';
-export const PROVIDER_STOP_INFLIGHT = 'PROVIDER_STOP_INFLIGHT';
-export const PROVIDER_STOP_ERROR = 'PROVIDER_STOP_ERROR';
-export const CLEAR_STOPPED_PROVIDER = 'CLEAR_STOPPED_PROVIDER';
-
 export const OPTIONS_PROVIDERGROUP = 'OPTIONS_PROVIDERGROUP';
 export const OPTIONS_PROVIDERGROUP_INFLIGHT = 'OPTIONS_PROVIDERGROUP_INFLIGHT';
 export const OPTIONS_PROVIDERGROUP_ERROR = 'OPTIONS_PROVIDERGROUP_ERROR';
@@ -678,33 +668,6 @@ export const deleteProvider = (providerId) => ({
   }
 });
 
-export const restartProvider = (providerId) => ({
-  [CALL_API]: {
-    type: PROVIDER_RESTART,
-    id: providerId,
-    method: 'PUT',
-    path: `providers/${providerId}`,
-    body: {
-      action: 'restart'
-    }
-  }
-});
-
-export const clearRestartedProvider = (providerId) => ({ type: CLEAR_RESTARTED_PROVIDER, id: providerId });
-
-export const stopProvider = (providerId) => ({
-  [CALL_API]: {
-    type: PROVIDER_STOP,
-    id: providerId,
-    method: 'PUT',
-    path: `providers/${providerId}`,
-    body: {
-      action: 'stop'
-    }
-  }
-});
-
-export const clearStoppedProvider = (providerId) => ({ type: CLEAR_STOPPED_PROVIDER, id: providerId });
 export const searchProviders = (prefix) => ({ type: SEARCH_PROVIDERS, prefix: prefix });
 export const clearProvidersSearch = () => ({ type: CLEAR_PROVIDERS_SEARCH });
 export const filterProviders = (param) => ({ type: FILTER_PROVIDERS, param: param });

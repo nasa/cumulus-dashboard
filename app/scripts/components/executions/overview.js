@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import { get } from 'object-path';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -61,7 +62,7 @@ const tableSortProps = [
   strings.collection_id
 ];
 
-var ExecutionOverview = React.createClass({
+var ExecutionOverview = createReactClass({
   propTypes: {
     dispatch: PropTypes.func,
     stats: PropTypes.object,
@@ -70,7 +71,7 @@ var ExecutionOverview = React.createClass({
     workflowOptions: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     // use a slightly slower update interval, since the dropdown fields
     // will change less frequently.
     this.cancelInterval = interval(this.queryMeta, updateInterval, true);

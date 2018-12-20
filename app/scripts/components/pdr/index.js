@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
@@ -7,7 +8,7 @@ import Sidebar from '../app/sidebar';
 import { interval, getCount } from '../../actions';
 import { updateInterval } from '../../config';
 
-var Pdrs = React.createClass({
+var Pdrs = createReactClass({
   displayName: 'Pdrs',
 
   propTypes: {
@@ -18,7 +19,7 @@ var Pdrs = React.createClass({
     stats: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.cancelInterval = interval(() => this.query(), updateInterval, true);
   },
 

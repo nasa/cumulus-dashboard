@@ -1,13 +1,15 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
-const List = React.createClass({
+const List = createReactClass({
   propTypes: {
-    label: React.PropTypes.any,
-    value: React.PropTypes.array,
-    id: React.PropTypes.string,
-    error: React.PropTypes.string,
-    onChange: React.PropTypes.func
+    label: PropTypes.any,
+    value: PropTypes.array,
+    id: PropTypes.string,
+    error: PropTypes.string,
+    onChange: PropTypes.func
   },
 
   onChange: function (index, newValue) {

@@ -1,6 +1,8 @@
 'use strict';
 import React from 'react';
 import c from 'classnames';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { logout, getApiVersion } from '../../actions';
 import { graphicsPath, nav } from '../../config';
@@ -19,17 +21,17 @@ const paths = [
   ['Reconciliation Reports', 'reconciliation-reports']
 ];
 
-var Header = React.createClass({
+var Header = createReactClass({
   displayName: 'Header',
   propTypes: {
-    api: React.PropTypes.object,
-    apiVersion: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    location: React.PropTypes.object,
-    minimal: React.PropTypes.bool
+    api: PropTypes.object,
+    apiVersion: PropTypes.object,
+    dispatch: PropTypes.func,
+    location: PropTypes.object,
+    minimal: PropTypes.bool
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { dispatch, api } = this.props;
     if (api.authenticated) dispatch(getApiVersion());
   },

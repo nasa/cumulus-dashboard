@@ -2,6 +2,7 @@
 import c from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import Autocomplete from 'react-autocomplete';
 
@@ -21,7 +22,7 @@ function renderMenu (items, value, style) {
   );
 }
 
-const Dropdown = React.createClass({
+const Dropdown = createReactClass({
   displayName: 'Dropdown',
 
   propTypes: {
@@ -40,7 +41,7 @@ const Dropdown = React.createClass({
     };
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { dispatch, getOptions } = this.props;
     if (getOptions) { dispatch(getOptions()); }
   },

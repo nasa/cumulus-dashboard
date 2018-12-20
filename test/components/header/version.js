@@ -1,7 +1,7 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from 'enzyme-adapter-react-15';
+import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 
