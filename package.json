@@ -21,7 +21,7 @@
     "lint": "eslint app/scripts/ --ext .js",
     "start": "npm run serve",
     "cypress": "CYPRESS_TESTING=true cypress open",
-    "cypress-ci": "CYPRESS_TESTING=true cypress run --spec 'cypress/integration/*' --config video=false",
+    "cypress-ci": "DEBUG=cypress:* CYPRESS_TESTING=true cypress run --spec 'cypress/integration/collections_spec.js' --config video=false",
     "validation": "ava cypress/validation-tests/*.js",
     "test": "npm run lint && ava"
   },
@@ -56,6 +56,7 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "@cypress/browserify-preprocessor": "^1.1.2",
     "ava": "^1.0.0-rc.1",
     "ava-http": "^1.0.0",
     "babel-core": "^7.0.0-bridge",
