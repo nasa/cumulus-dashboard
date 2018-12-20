@@ -13,7 +13,7 @@ describe('Dashboard authentication', () => {
     cy.login();
   });
 
-  xit('should not attempt refresh for non-JWT token', () => {
+  it('should not attempt refresh for non-JWT token', () => {
     cy.visit('/');
 
     cy.window().its('appStore').then((store) => {
@@ -55,7 +55,7 @@ describe('Dashboard authentication', () => {
     shouldHaveDeletedToken();
   });
 
-  xit('should logout user on failed token refresh', () => {
+  it('should logout user on failed token refresh', () => {
     cy.visit('/');
 
     cy.server();
