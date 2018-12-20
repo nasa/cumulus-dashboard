@@ -1,4 +1,5 @@
 'use strict';
+import compareVersions from 'compare-versions';
 import moment from 'moment';
 import url from 'url';
 import { CMR, hostId } from '@cumulus/cmrjs';
@@ -17,7 +18,7 @@ import { getCollectionId } from '../utils/format';
 import log from '../utils/log';
 
 const root = _config.apiRoot;
-const { pageLimit, minCompatibleApiVersions } = _config;
+const { pageLimit, minCompatibleApiVersion } = _config;
 
 export const LOGOUT = 'LOGOUT';
 export const LOGIN = 'LOGIN';
@@ -333,28 +334,9 @@ export const getApiVersion = () => {
 export const checkApiVersion = () => {
   return (dispatch, getState) => {
     const { versionNumber } = getState().apiVersion;
-    const apiVersionParsed = parseVersionString(versionNumber);
-    let isCompatible = false;
-    for (let version of minCompatibleApiVersions) {
-      const parsedVersion = parseVersionString(version);
-      if (apiVersionParsed.major === parsedVersion.major &&
-          apiVersionParsed.minor === parsedVersion.minor &&
-          apiVersionParsed.patch >= parsedVersion.patch) {
-        isCompatible = true;
-      }
-    }
-    /* minCompatibleApiVersions.map((compatVersionString) => {
-      const parsedCompatVersionString = parseVersionString(compatVersionString);
-      if (apiVersionParsed.major === parsedCompatVersionString.major &&
-          apiVersionParsed.minor === parsedCompatVersionString.minor &&
-          apiVersionParsed.patch >= parsedCompatVersionString.patch) {
-        isCompatible = true;
-      }
-    }); */
-    if (isCompatible) {
+    if (compareVersions(versionNumber, minCompatibleApiVersion) >= 0) {
       dispatch({
-        type: API_VERSION_COMPATIBLE,
-        payload: {}
+        type: API_VERSION_COMPATIBLE
       });
     } else {
       dispatch({
