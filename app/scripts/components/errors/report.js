@@ -1,17 +1,18 @@
 'use strict';
 import React from 'react';
 import Collapsible from 'react-collapsible';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { truncate } from '../../utils/format';
 
-var ErrorReport = React.createClass({
+var ErrorReport = createReactClass({
   displayName: 'ErrorReport',
   propTypes: {
     report: PropTypes.any,
     truncate: PropTypes.bool
   },
 
-  componentWillReceiveProps: function ({ report }) {
+  UNSAFE_componentWillReceiveProps: function ({ report }) {
     if (report !== this.props.report) {
       this.scrollToTop();
     }
@@ -62,7 +63,7 @@ var ErrorReport = React.createClass({
       } else {
         message = report.message;
         stack = report.stack
-          ? report.stack.split(`\n`).map((s, index) => <p key={index}>{s}</p>)
+          ? report.stack.split('\n').map((s, index) => <p key={index}>{s}</p>)
           : null;
       }
       return (

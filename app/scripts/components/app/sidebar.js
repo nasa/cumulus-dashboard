@@ -1,18 +1,20 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { resolve } from 'path';
 import sections from '../../paths';
 
 const currentPathClass = 'sidebar__nav--selected';
 
-var Sidebar = React.createClass({
+var Sidebar = createReactClass({
   displayName: 'Sidebar',
 
   propTypes: {
-    currentPath: React.PropTypes.string,
-    params: React.PropTypes.object,
-    count: React.PropTypes.array
+    currentPath: PropTypes.string,
+    params: PropTypes.object,
+    count: PropTypes.array
   },
 
   resolvePath: function (base, path) {

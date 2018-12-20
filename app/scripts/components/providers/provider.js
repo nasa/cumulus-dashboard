@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -35,7 +36,7 @@ const metaAccessors = [
   ['Global Connection Limit', 'globalConnectionLimit', tally]
 ];
 
-var ProviderOverview = React.createClass({
+var ProviderOverview = createReactClass({
   displayName: 'Provider',
 
   propTypes: {
@@ -47,7 +48,7 @@ var ProviderOverview = React.createClass({
     router: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { providerId } = this.props.params;
     const immediate = !this.props.providers.map[providerId];
     this.reload(immediate);

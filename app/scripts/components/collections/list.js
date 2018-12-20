@@ -1,5 +1,7 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import {
@@ -24,14 +26,14 @@ import Search from '../form/search';
 import List from '../table/list-view';
 import { strings } from '../locale';
 
-var CollectionList = React.createClass({
+var CollectionList = createReactClass({
   displayName: 'CollectionList',
 
   propTypes: {
-    collections: React.PropTypes.object,
-    mmtLinks: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    logs: React.PropTypes.object
+    collections: PropTypes.object,
+    mmtLinks: PropTypes.object,
+    dispatch: PropTypes.func,
+    logs: PropTypes.object
   },
 
   timeOptions: {
@@ -41,7 +43,7 @@ var CollectionList = React.createClass({
     '1 Year Ago': moment().subtract(1, 'years').format()
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { dispatch } = this.props;
     dispatch(getCumulusInstanceMetadata());
   },

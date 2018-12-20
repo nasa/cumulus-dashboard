@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import {
   searchReconciliationReports,
@@ -17,7 +18,7 @@ import {
 import Search from '../form/search';
 import List from '../table/list-view';
 
-const ReconciliationReportList = React.createClass({
+const ReconciliationReportList = createReactClass({
   displayName: 'ReconciliationReportList',
 
   propTypes: {

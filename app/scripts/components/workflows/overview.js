@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -19,7 +20,7 @@ const tableRow = [
   'definition.Comment'
 ];
 
-var WorkflowOverview = React.createClass({
+var WorkflowOverview = createReactClass({
   propTypes: {
     dispatch: PropTypes.func,
     workflows: PropTypes.object
