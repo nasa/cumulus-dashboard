@@ -335,22 +335,22 @@ export const checkApiVersion = () => {
     const { versionNumber } = getState().apiVersion;
     const apiVersionParsed = parseVersionString(versionNumber);
     let isCompatible = false;
-    /* for (let version of minCompatibleApiVersions) {
+    for (let version of minCompatibleApiVersions) {
       const parsedVersion = parseVersionString(version);
       if (apiVersionParsed.major === parsedVersion.major &&
           apiVersionParsed.minor === parsedVersion.minor &&
           apiVersionParsed.patch >= parsedVersion.patch) {
         isCompatible = true;
       }
-    } */
-    minCompatibleApiVersions.map((compatVersionString) => {
+    }
+    /* minCompatibleApiVersions.map((compatVersionString) => {
       const parsedCompatVersionString = parseVersionString(compatVersionString);
       if (apiVersionParsed.major === parsedCompatVersionString.major &&
           apiVersionParsed.minor === parsedCompatVersionString.minor &&
           apiVersionParsed.patch >= parsedCompatVersionString.patch) {
         isCompatible = true;
       }
-    });
+    }); */
     if (isCompatible) {
       dispatch({
         type: API_VERSION_COMPATIBLE,
