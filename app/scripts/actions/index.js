@@ -324,19 +324,6 @@ export const clearUpdateProvider = (providerId) => ({ type: types.UPDATE_PROVIDE
 export const deleteProvider = (providerId) => wrapRequest(
   providerId, del, `providers/${providerId}`, types.PROVIDER_DELETE);
 
-export const restartProvider = (providerId) => wrapRequest(
-  providerId, put, `providers/${providerId}`, types.PROVIDER_RESTART, {
-    action: 'restart'
-  });
-
-export const clearRestartedProvider = (providerId) => ({ type: types.CLEAR_RESTARTED_PROVIDER, id: providerId });
-
-export const stopProvider = (providerId) => wrapRequest(
-  providerId, put, `providers/${providerId}`, types.PROVIDER_STOP, {
-    action: 'stop'
-  });
-
-export const clearStoppedProvider = (providerId) => ({ type: types.CLEAR_STOPPED_PROVIDER, id: providerId });
 export const searchProviders = (prefix) => ({ type: types.SEARCH_PROVIDERS, prefix: prefix });
 export const clearProvidersSearch = () => ({ type: types.CLEAR_PROVIDERS_SEARCH });
 export const filterProviders = (param) => ({ type: types.FILTER_PROVIDERS, param: param });
