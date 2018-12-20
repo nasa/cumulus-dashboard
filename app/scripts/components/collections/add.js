@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import { createCollection } from '../../actions';
 import { getCollectionId, collectionHref } from '../../utils/format';
@@ -14,7 +15,7 @@ const getBaseRoute = function (collectionId) {
   }
 };
 
-var AddCollection = React.createClass({
+var AddCollection = createReactClass({
   propTypes: {
     collections: PropTypes.object
   },

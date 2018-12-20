@@ -7,19 +7,21 @@ import { listProviders, getCount, interval } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/providers';
 import List from '../table/list-view';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import Overview from '../app/overview';
 import { updateInterval } from '../../config';
 
-var ProvidersOverview = React.createClass({
+var ProvidersOverview = createReactClass({
   displayName: 'ProvidersOverview',
 
   propTypes: {
-    dispatch: React.PropTypes.func,
-    providers: React.PropTypes.object,
-    stats: React.PropTypes.object
+    dispatch: PropTypes.func,
+    providers: PropTypes.object,
+    stats: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.cancelInterval = interval(this.queryStats, updateInterval, true);
   },
 

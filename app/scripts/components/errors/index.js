@@ -1,12 +1,14 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
-var Errors = React.createClass({
+var Errors = createReactClass({
   displayName: 'Errors',
 
   propTypes: {
-    children: React.PropTypes.object
+    children: PropTypes.object
   },
 
   render: function () {

@@ -1,8 +1,9 @@
 'use strict';
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 
-var Footer = React.createClass({
+var Footer = createReactClass({
   displayName: 'Footer',
 
   render: function () {

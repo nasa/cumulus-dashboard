@@ -1,8 +1,9 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 
-var PdrCompleted = React.createClass({
+var PdrCompleted = createReactClass({
   displayName: 'PdrCompleted',
 
   render: function () {

@@ -3,19 +3,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import url from 'url';
+import createReactClass from 'create-react-class';
 import { login, setTokenState } from '../../actions';
 import { window } from '../../utils/browser';
 import { updateDelay, apiRoot } from '../../config';
+import PropTypes from 'prop-types';
 import ErrorReport from '../errors/report';
 import Header from './header';
 
-var OAuth = React.createClass({
+var OAuth = createReactClass({
   propTypes: {
-    dispatch: React.PropTypes.func,
-    api: React.PropTypes.object,
-    location: React.PropTypes.object,
-    router: React.PropTypes.object,
-    apiVersion: React.PropTypes.object
+    dispatch: PropTypes.func,
+    api: PropTypes.object,
+    location: PropTypes.object,
+    router: PropTypes.object,
+    apiVersion: PropTypes.object
   },
 
   getInitialState: function () {
@@ -25,7 +27,7 @@ var OAuth = React.createClass({
     };
   },
 
-  componentWillReceiveProps: function (newProps) {
+  UNSAFE_componentWillReceiveProps: function (newProps) {
     // delay-close the modal if it's open
     if (newProps.api.authenticated &&
         newProps.api.authenticated !== this.props.api.authenticated) {
@@ -40,7 +42,7 @@ var OAuth = React.createClass({
     }
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const query = this.props.location.query;
     if (query.token) {
       const token = query.token;
