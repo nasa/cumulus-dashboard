@@ -24,7 +24,7 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-import { SET_TOKEN } from '../../app/scripts/actions';
+import { SET_TOKEN } from '../../app/scripts/actions/types';
 
 Cypress.Commands.add('login', () => {
   const authUrl = `${Cypress.config('baseUrl')}/#/auth`;
