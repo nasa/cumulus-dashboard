@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import TextArea from '../form/text-area';
 import { get } from 'object-path';
 import { getSchema } from '../../actions';
@@ -10,7 +11,7 @@ import Loading from '../app/loading-indicator';
 import { removeReadOnly } from '../form/schema';
 import { updateDelay } from '../../config';
 
-const EditRaw = React.createClass({
+const EditRaw = createReactClass({
   propTypes: {
     dispatch: PropTypes.func,
     pk: PropTypes.string,
@@ -58,12 +59,12 @@ const EditRaw = React.createClass({
     this.props.router.push(this.props.backRoute);
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.queryRecord(this.props.pk);
     this.props.dispatch(getSchema(this.props.schemaKey));
   },
 
-  componentWillReceiveProps: function ({ pk, state, schema, schemaKey }) {
+  UNSAFE_componentWillReceiveProps: function ({ pk, state, schema, schemaKey }) {
     const { dispatch, router, clearRecordUpdate, backRoute } = this.props;
     const recordSchema = schema[schemaKey];
     // successfully updated, navigate away

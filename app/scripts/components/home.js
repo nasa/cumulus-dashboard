@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { get } from 'object-path';
@@ -28,7 +29,7 @@ import { recent, updateInterval } from '../config';
 
 import { strings } from './locale';
 
-var Home = React.createClass({
+var Home = createReactClass({
   displayName: 'Home',
   propTypes: {
     dispatch: PropTypes.func,
@@ -39,7 +40,7 @@ var Home = React.createClass({
     executions: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.cancelInterval = interval(() => {
       this.query();
     }, updateInterval, true);

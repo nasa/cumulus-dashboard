@@ -1,13 +1,15 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
-const Search = React.createClass({
+const Search = createReactClass({
   displayName: 'Search',
 
   propTypes: {
-    dispatch: React.PropTypes.func,
-    action: React.PropTypes.func,
-    clear: React.PropTypes.func
+    dispatch: PropTypes.func,
+    action: PropTypes.func,
+    clear: PropTypes.func
   },
 
   getInitialState: function () {

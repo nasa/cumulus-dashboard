@@ -1,6 +1,7 @@
 'use strict';
 import path from 'path';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -68,7 +69,7 @@ const metaAccessors = [
   ['Total duration', 'duration', seconds]
 ];
 
-var GranuleOverview = React.createClass({
+var GranuleOverview = createReactClass({
   displayName: strings.granule,
 
   propTypes: {
@@ -87,7 +88,7 @@ var GranuleOverview = React.createClass({
     };
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.setState({});
     const { granuleId } = this.props.params;
     this.cancelInterval = interval(this.queryWorkflows, updateInterval, true);

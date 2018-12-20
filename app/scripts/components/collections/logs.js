@@ -1,13 +1,14 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { lastUpdated } from '../../utils/format';
 import LogViewer from '../logs/viewer';
 import {strings} from '../locale';
 
-var CollectionLogs = React.createClass({
+var CollectionLogs = createReactClass({
   displayName: strings.collection_logs,
 
   propTypes: {

@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -12,7 +13,7 @@ import EditRaw from '../app/edit-raw';
 
 const SCHEMA_KEY = 'rule';
 
-const EditRule = React.createClass({
+const EditRule = createReactClass({
   propTypes: {
     params: PropTypes.object,
     rules: PropTypes.object

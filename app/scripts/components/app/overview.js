@@ -1,12 +1,14 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import Loading from './loading-indicator';
 
-const Overview = React.createClass({
+const Overview = createReactClass({
   displayName: 'Overview',
   propTypes: {
-    items: React.PropTypes.array,
-    inflight: React.PropTypes.bool
+    items: PropTypes.array,
+    inflight: PropTypes.bool
   },
   render: function () {
     const { inflight, items } = this.props;
