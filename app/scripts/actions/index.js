@@ -1,4 +1,5 @@
 'use strict';
+import compareVersions from 'compare-versions';
 import moment from 'moment';
 import url from 'url';
 import { CMR, hostId } from '@cumulus/cmrjs';
@@ -16,7 +17,7 @@ import { getCollectionId } from '../utils/format';
 import log from '../utils/log';
 
 const root = _config.apiRoot;
-const { pageLimit, compatibleApiVersion } = _config;
+const { pageLimit, minCompatibleApiVersion } = _config;
 
 export const LOGOUT = 'LOGOUT';
 export const LOGIN = 'LOGIN';
@@ -322,17 +323,16 @@ export const getApiVersion = () => {
 export const checkApiVersion = () => {
   return (dispatch, getState) => {
     const { versionNumber } = getState().apiVersion;
-    if (compatibleApiVersion.indexOf(versionNumber) < 0) {
+    if (compareVersions(versionNumber, minCompatibleApiVersion) >= 0) {
+      dispatch({
+        type: API_VERSION_COMPATIBLE
+      });
+    } else {
       dispatch({
         type: API_VERSION_INCOMPATIBLE,
         payload: {
           warning: `Dashboard version incompatible with Cumulus API version (${versionNumber})`
         }
-      });
-    } else {
-      dispatch({
-        type: API_VERSION_COMPATIBLE,
-        payload: {}
       });
     }
   };
