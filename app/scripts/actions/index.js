@@ -13,7 +13,7 @@ import { getCollectionId } from '../utils/format';
 import log from '../utils/log';
 import * as types from './types';
 
-const CALL_API = CALL_API;
+const CALL_API = types.CALL_API;
 const root = _config.apiRoot;
 const { pageLimit, minCompatibleApiVersion } = _config;
 
