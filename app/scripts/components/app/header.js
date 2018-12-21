@@ -4,7 +4,6 @@ import c from 'classnames';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import { get } from 'object-path';
 import { logout, getApiVersion } from '../../actions';
 import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
@@ -38,7 +37,8 @@ var Header = createReactClass({
   },
 
   logout: function () {
-    logout(this.props.dispatch, get(this.props, 'api.tokens.token')).then(() => {
+    const { dispatch } = this.props;
+    dispatch(logout()).then(() => {
       if (window.location && window.location.reload) {
         window.location.reload();
       }
@@ -66,7 +66,9 @@ var Header = createReactClass({
       <div className='header'>
         <div className='row'>
           <h1 className='logo'><Link to='/'><img alt="Logo" src={graphicsPath + strings.logo} /></Link></h1>
-          <h5 className='apiVersion'>Cumulus API Version: { versionNumber }</h5>
+          { authenticated &&
+            <h5 className='apiVersion'>Cumulus API Version: { versionNumber }</h5>
+          }
           { versionWarning }
           <nav>
             { !this.props.minimal ? <ul>

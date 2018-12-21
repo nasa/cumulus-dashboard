@@ -2,52 +2,51 @@
 import compareVersions from 'compare-versions';
 import moment from 'moment';
 import url from 'url';
+import { get as getProperty } from 'object-path';
+import requestPromise from 'request-promise';
+import { hashHistory } from 'react-router';
 import { CMR, hostId } from '@cumulus/cmrjs';
-import {
-  get,
-  post,
-  put,
-  del,
-  configureRequest,
-  wrapRequest,
-  addRequestAuthorization
-} from './helpers';
+
+import { configureRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId } from '../utils/format';
 import log from '../utils/log';
 import * as types from './types';
 
+const CALL_API = types.CALL_API;
 const root = _config.apiRoot;
 const { pageLimit, minCompatibleApiVersion } = _config;
 
-export const refreshAccessToken = (token, dispatch) => {
-  const start = new Date();
-  log('REFRESH_TOKEN_INFLIGHT');
-  dispatch({ type: types.REFRESH_TOKEN_INFLIGHT });
+export const refreshAccessToken = (token) => {
+  return (dispatch) => {
+    const start = new Date();
+    log('REFRESH_TOKEN_INFLIGHT');
+    dispatch({ type: types.REFRESH_TOKEN_INFLIGHT });
 
-  return new Promise((resolve, reject) => {
-    post(configureRequest(
-      {
-        url: url.resolve(root, 'refresh')
-      },
-      { token }
-    ), (error, data) => {
-      if (error) {
+    const requestConfig = configureRequest({
+      method: 'POST',
+      url: url.resolve(root, 'refresh'),
+      body: { token },
+      // make sure request failures are sent to .catch()
+      simple: true
+    });
+    return requestPromise(requestConfig)
+      .then(({ body }) => {
+        const duration = new Date() - start;
+        log('REFRESH_TOKEN', duration + 'ms');
+        return dispatch({
+          type: types.REFRESH_TOKEN,
+          token: body.token
+        });
+      })
+      .catch(({ error }) => {
         dispatch({
           type: types.REFRESH_TOKEN_ERROR,
           error
         });
-        return reject(error);
-      }
-      const duration = new Date() - start;
-      log('REFRESH_TOKEN', duration + 'ms');
-      dispatch({
-        type: types.REFRESH_TOKEN,
-        token: data.token
+        throw error;
       });
-      return resolve();
-    });
-  });
+  };
 };
 
 export const setTokenState = (token) => ({ type: types.SET_TOKEN, token });
@@ -58,35 +57,33 @@ export const interval = function (action, wait, immediate) {
   return () => clearInterval(intervalId);
 };
 
-export const getCollection = (name, version) => wrapRequest(
-  getCollectionId({name, version}), get, `collections?name=${name}&version=${version}`, types.COLLECTION);
+export const getCollection = (name, version) => ({
+  [CALL_API]: {
+    type: types.COLLECTION,
+    method: 'GET',
+    id: getCollectionId({name, version}),
+    path: `collections?name=${name}&version=${version}`
+  }
+});
 
 export const getApiVersion = () => {
-  return (dispatch, getState) => {
-    const wrapApiVersion = () => {
-      return new Promise((resolve, reject) => {
-        const config = configureRequest({
-          url: url.resolve(root, 'version')
-        });
-        get(config, (error, data) => {
-          if (error) {
-            dispatch({
-              type: types.API_VERSION_ERROR,
-              payload: { error }
-            });
-            return reject(error);
-          }
-          dispatch({
-            type: types.API_VERSION,
-            payload: { versionNumber: data.api_version }
-          });
-          return resolve();
-        });
-      });
-    };
-    return wrapApiVersion().then(() => {
-      return dispatch(checkApiVersion());
+  return (dispatch) => {
+    const config = configureRequest({
+      method: 'GET',
+      url: url.resolve(root, 'version'),
+      // make sure request failures are sent to .catch()
+      simple: true
     });
+    return requestPromise(config)
+      .then(({ body }) => dispatch({
+        type: types.API_VERSION,
+        payload: { versionNumber: body.api_version }
+      }))
+      .then(() => dispatch(checkApiVersion()))
+      .catch(({ error }) => dispatch({
+        type: types.API_VERSION_ERROR,
+        payload: { error }
+      }));
   };
 };
 
@@ -109,55 +106,64 @@ export const checkApiVersion = () => {
 };
 
 export const listCollections = (options) => {
-  return (dispatch, getState) => {
-    // wrap the request for collections data in a promise to make
-    // it thenable and make it easier to create chained actions
-    const wrapListCollections = () => {
-      return new Promise((resolve, reject) => {
-        const config = configureRequest({
-          url: url.resolve(root, 'collections'),
-          qs: Object.assign({ limit: pageLimit }, options)
-        });
-        addRequestAuthorization(config, getState);
-        get(config, (error, data) => {
-          if (error) {
-            dispatch({
-              type: types.COLLECTIONS_ERROR,
-              error
-            });
-            return reject(error);
-          }
-          dispatch({
-            type: types.COLLECTIONS,
-            data
-          });
-          return resolve();
-        });
-      });
-    };
-    return wrapListCollections().then(() => {
+  return (dispatch) => {
+    return dispatch({
+      [CALL_API]: {
+        type: types.COLLECTIONS,
+        method: 'GET',
+        id: null,
+        url: url.resolve(root, 'collections'),
+        qs: Object.assign({ limit: pageLimit }, options)
+      }
+    }).then(() => {
       return dispatch(getMMTLinks());
     });
   };
 };
 
-export const createCollection = (payload) => wrapRequest(
-  getCollectionId(payload), post, 'collections', types.NEW_COLLECTION, payload);
+export const createCollection = (payload) => ({
+  [CALL_API]: {
+    type: types.NEW_COLLECTION,
+    method: 'POST',
+    id: getCollectionId(payload),
+    path: 'collections',
+    body: payload
+  }
+});
 
-export const updateCollection = (payload) => wrapRequest(
-  getCollectionId(payload), put, `collections/${payload.name}/${payload.version}`, types.UPDATE_COLLECTION, payload);
+export const updateCollection = (payload) => ({
+  [CALL_API]: {
+    type: types.UPDATE_COLLECTION,
+    method: 'PUT',
+    id: getCollectionId(payload),
+    path: `collections/${payload.name}/${payload.version}`,
+    body: payload
+  }
+});
 
 export const clearUpdateCollection = (collectionName) => ({ type: types.UPDATE_COLLECTION_CLEAR, id: collectionName });
 
-export const deleteCollection = (name, version) => wrapRequest(
-  getCollectionId({name, version}), del, `collections/${name}/${version}`, types.COLLECTION_DELETE);
+export const deleteCollection = (name, version) => ({
+  [CALL_API]: {
+    type: types.COLLECTION_DELETE,
+    method: 'DELETE',
+    id: getCollectionId({name, version}),
+    path: `collections/${name}/${version}`
+  }
+});
 
 export const searchCollections = (prefix) => ({ type: types.SEARCH_COLLECTIONS, prefix: prefix });
 export const clearCollectionsSearch = () => ({ type: types.CLEAR_COLLECTIONS_SEARCH });
 export const filterCollections = (param) => ({ type: types.FILTER_COLLECTIONS, param: param });
 export const clearCollectionsFilter = (paramKey) => ({ type: types.CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
 
-export const getCumulusInstanceMetadata = () => wrapRequest(null, get, 'instanceMeta', types.ADD_INSTANCE_META_CMR);
+export const getCumulusInstanceMetadata = () => ({
+  [CALL_API]: {
+    type: types.ADD_INSTANCE_META_CMR,
+    method: 'GET',
+    path: 'instanceMeta'
+  }
+});
 
 /**
  * Iterates over each collection in the application collections state dispatching the
@@ -224,227 +230,444 @@ export const buildMMTLink = (conceptId, cmrEnv) => {
   return `https://${url}/collections/${conceptId}`;
 };
 
-export const getGranule = (granuleId) => wrapRequest(
-  granuleId, get, `granules/${granuleId}`, types.GRANULE);
+export const getGranule = (granuleId) => ({
+  [CALL_API]: {
+    type: types.GRANULE,
+    method: 'GET',
+    id: granuleId,
+    path: `granules/${granuleId}`
+  }
+});
 
-export const listGranules = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'granules'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, types.GRANULES);
+export const listGranules = (options) => ({
+  [CALL_API]: {
+    type: types.GRANULES,
+    method: 'GET',
+    id: null,
+    url: url.resolve(root, 'granules'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
 
 // only query the granules from the last hour
-export const getRecentGranules = () => wrapRequest(null, get, {
-  url: url.resolve(root, 'granules'),
-  qs: {
-    limit: 1,
-    fields: 'granuleId',
-    updatedAt__from: moment().subtract(1, 'hour').format()
+export const getRecentGranules = () => ({
+  [CALL_API]: {
+    type: types.RECENT_GRANULES,
+    method: 'GET',
+    path: 'granules',
+    qs: {
+      limit: 1,
+      fields: 'granuleId',
+      updatedAt__from: moment().subtract(1, 'hour').format()
+    }
   }
-}, types.RECENT_GRANULES);
+});
 
-export const reprocessGranule = (granuleId) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, types.GRANULE_REPROCESS, {
-    action: 'reprocess'
-  });
+export const reprocessGranule = (granuleId) => ({
+  [CALL_API]: {
+    type: types.GRANULE_REPROCESS,
+    method: 'PUT',
+    id: granuleId,
+    path: `granules/${granuleId}`,
+    body: {
+      action: 'reprocess'
+    }
+  }
+});
 
-export const applyWorkflowToGranule = (granuleId, workflow) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, types.GRANULE_APPLYWORKFLOW, {
-    action: 'applyWorkflow',
-    workflow
-  });
+export const applyWorkflowToGranule = (granuleId, workflow) => ({
+  [CALL_API]: {
+    type: types.GRANULE_APPLYWORKFLOW,
+    method: 'PUT',
+    id: granuleId,
+    path: `granules/${granuleId}`,
+    body: {
+      action: 'applyWorkflow',
+      workflow
+    }
+  }
+});
 
-export const reingestGranule = (granuleId) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, types.GRANULE_REINGEST, {
-    action: 'reingest'
-  });
+export const reingestGranule = (granuleId) => ({
+  [CALL_API]: {
+    type: types.GRANULE_REINGEST,
+    method: 'PUT',
+    id: granuleId,
+    path: `granules/${granuleId}`,
+    body: {
+      action: 'reingest'
+    }
+  }
+});
 
-export const removeGranule = (granuleId) => wrapRequest(
-  granuleId, put, `granules/${granuleId}`, types.GRANULE_REMOVE, {
-    action: 'removeFromCmr'
-  });
+export const removeGranule = (granuleId) => ({
+  [CALL_API]: {
+    type: types.GRANULE_REMOVE,
+    method: 'PUT',
+    id: granuleId,
+    path: `granules/${granuleId}`,
+    body: {
+      action: 'removeFromCmr'
+    }
+  }
+});
 
-export const deleteGranule = (granuleId) => wrapRequest(
-  granuleId, del, `granules/${granuleId}`, types.GRANULE_DELETE);
+export const deleteGranule = (granuleId) => ({
+  [CALL_API]: {
+    type: types.GRANULE_DELETE,
+    method: 'DELETE',
+    id: granuleId,
+    path: `granules/${granuleId}`
+  }
+});
 
 export const searchGranules = (prefix) => ({ type: types.SEARCH_GRANULES, prefix: prefix });
 export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH });
 export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param: param });
 export const clearGranulesFilter = (paramKey) => ({ type: types.CLEAR_GRANULES_FILTER, paramKey: paramKey });
 
-export const getOptionsCollectionName = () => wrapRequest(null, get, {
-  url: url.resolve(root, 'collections'),
-  qs: { limit: 100, fields: 'name,version' }
-}, types.OPTIONS_COLLECTIONNAME);
+export const getOptionsCollectionName = (options) => ({
+  [CALL_API]: {
+    type: types.OPTIONS_COLLECTIONNAME,
+    method: 'GET',
+    url: url.resolve(root, 'collections'),
+    qs: { limit: 100, fields: 'name,version' }
+  }
+});
 
-export const getStats = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'stats'),
-  qs: options
-}, types.STATS);
+export const getStats = (options) => ({
+  [CALL_API]: {
+    type: types.STATS,
+    method: 'GET',
+    url: url.resolve(root, 'stats'),
+    qs: options
+  }
+});
 
 // count queries *must* include type and field properties.
-export const getCount = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'stats/aggregate'),
-  qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
-}, types.COUNT);
+export const getCount = (options) => ({
+  [CALL_API]: {
+    type: types.COUNT,
+    method: 'GET',
+    id: null,
+    url: url.resolve(root, 'stats/aggregate'),
+    qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
+  }
+});
 
-export const listPdrs = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'pdrs'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, types.PDRS);
+export const listPdrs = (options) => ({
+  [CALL_API]: {
+    type: types.PDRS,
+    method: 'GET',
+    url: url.resolve(root, 'pdrs'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
 
-export const getPdr = (pdrName) => wrapRequest(
-  pdrName, get, `pdrs/${pdrName}`, types.PDR);
+export const getPdr = (pdrName) => ({
+  [CALL_API]: {
+    id: pdrName,
+    type: types.PDR,
+    method: 'GET',
+    path: `pdrs/${pdrName}`
+  }
+});
 
 export const searchPdrs = (prefix) => ({ type: types.SEARCH_PDRS, prefix: prefix });
 export const clearPdrsSearch = () => ({ type: types.CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: types.FILTER_PDRS, param: param });
 export const clearPdrsFilter = (paramKey) => ({ type: types.CLEAR_PDRS_FILTER, paramKey: paramKey });
 
-export const listProviders = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'providers'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, types.PROVIDERS);
+export const listProviders = (options) => ({
+  [CALL_API]: {
+    type: types.PROVIDERS,
+    method: 'GET',
+    url: url.resolve(root, 'providers'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
 
-export const getOptionsProviderGroup = () => wrapRequest(null, get, {
-  url: url.resolve(root, 'providers'),
-  qs: { limit: 100, fields: 'providerName' }
-}, types.OPTIONS_PROVIDERGROUP);
+export const getOptionsProviderGroup = () => ({
+  [CALL_API]: {
+    type: types.OPTIONS_PROVIDERGROUP,
+    method: 'GET',
+    url: url.resolve(root, 'providers'),
+    qs: { limit: 100, fields: 'providerName' }
+  }
+});
 
-export const getProvider = (providerId) => wrapRequest(
-  providerId, get, `providers/${providerId}`, types.PROVIDER);
+export const getProvider = (providerId) => ({
+  [CALL_API]: {
+    type: types.PROVIDER,
+    id: providerId,
+    method: 'GET',
+    path: `providers/${providerId}`
+  }
+});
 
-export const createProvider = (providerId, payload) => wrapRequest(
-  providerId, post, 'providers', types.NEW_PROVIDER, payload);
+export const createProvider = (providerId, payload) => ({
+  [CALL_API]: {
+    type: types.NEW_PROVIDER,
+    id: providerId,
+    method: 'POST',
+    path: 'providers',
+    body: payload
+  }
+});
 
-export const updateProvider = (providerId, payload) => wrapRequest(
-  providerId, put, `providers/${providerId}`, types.UPDATE_PROVIDER, payload);
+export const updateProvider = (providerId, payload) => ({
+  [CALL_API]: {
+    type: types.UPDATE_PROVIDER,
+    id: providerId,
+    method: 'PUT',
+    path: `providers/${providerId}`,
+    body: payload
+  }
+});
 
 export const clearUpdateProvider = (providerId) => ({ type: types.UPDATE_PROVIDER_CLEAR, id: providerId });
 
-export const deleteProvider = (providerId) => wrapRequest(
-  providerId, del, `providers/${providerId}`, types.PROVIDER_DELETE);
+export const deleteProvider = (providerId) => ({
+  [CALL_API]: {
+    type: types.PROVIDER_DELETE,
+    id: providerId,
+    method: 'DELETE',
+    path: `providers/${providerId}`
+  }
+});
 
 export const searchProviders = (prefix) => ({ type: types.SEARCH_PROVIDERS, prefix: prefix });
 export const clearProvidersSearch = () => ({ type: types.CLEAR_PROVIDERS_SEARCH });
 export const filterProviders = (param) => ({ type: types.FILTER_PROVIDERS, param: param });
 export const clearProvidersFilter = (paramKey) => ({ type: types.CLEAR_PROVIDERS_FILTER, paramKey: paramKey });
 
-export const deletePdr = (pdrName) => wrapRequest(
-  pdrName, del, `pdrs/${pdrName}`, types.PDR_DELETE);
+export const deletePdr = (pdrName) => ({
+  [CALL_API]: {
+    type: types.PDR_DELETE,
+    id: pdrName,
+    method: 'DELETE',
+    path: `pdrs/${pdrName}`
+  }
+});
 
-export const getLogs = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'logs'),
-  qs: Object.assign({limit: 100}, options)
-}, types.LOGS);
+export const getLogs = (options) => ({
+  [CALL_API]: {
+    type: types.LOGS,
+    method: 'GET',
+    url: url.resolve(root, 'logs'),
+    qs: Object.assign({limit: 100}, options)
+  }
+});
+
 export const clearLogs = () => ({ type: types.CLEAR_LOGS });
 
-export const deleteToken = (dispatch, token) => {
-  return new Promise((resolve) => {
-    const config = configureRequest({
-      url: url.resolve(root, `tokenDelete/${token}`)
-    });
-
-    del(config, () => {
-      // Whether or not request to delete the token on the server
-      // was successful, delete the local token
-      dispatch({
-        type: types.DELETE_TOKEN
-      });
-      return resolve();
-    });
-  });
+export const logout = () => {
+  return (dispatch) => {
+    return dispatch(deleteToken())
+      .then(() => dispatch({ type: types.LOGOUT }));
+  };
 };
 
-export const logout = (dispatch, token) => {
-  return deleteToken(dispatch, token)
-    .then(() => dispatch({ type: types.LOGOUT }));
-};
-
-export const forceLogout = (dispatch, token, error) => {
-  return deleteToken(dispatch, token)
-    .then(() => dispatch({ type: types.LOGIN_ERROR, error }));
-};
-
-export const login = (token) => {
-  // dummy request to test the auth token
-  return wrapRequest('auth', get, {
+export const login = (token) => ({
+  [CALL_API]: {
+    type: types.LOGIN,
+    id: 'auth',
+    method: 'GET',
     url: url.resolve(root, 'granules'),
     qs: { limit: 1, fields: 'granuleId' },
+    skipAuth: true,
     headers: {
-      Authorization: 'Bearer ' + token
+      Authorization: `Bearer ${token}`
     }
-  }, types.LOGIN);
+  }
+});
+
+export const deleteToken = () => {
+  return (dispatch, getState) => {
+    const token = getProperty(getState(), 'api.tokens.token');
+    if (!token) return Promise.resolve();
+
+    const requestConfig = configureRequest({
+      method: 'DELETE',
+      url: url.resolve(root, `tokenDelete/${token}`)
+    });
+    return requestPromise(requestConfig)
+      .finally(() => dispatch({ type: types.DELETE_TOKEN }));
+  };
 };
 
-export const getSchema = (type) => wrapRequest(null, get, `schemas/${type}`, types.SCHEMA);
+export const loginError = (error) => {
+  return (dispatch) => {
+    return dispatch(deleteToken())
+      .then(() => dispatch({ type: 'LOGIN_ERROR', error }))
+      .then(() => hashHistory.push('/auth'));
+  };
+};
 
-export const queryHistogram = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'stats/histogram'),
-  qs: options
-}, types.HISTOGRAM);
+export const getSchema = (type) => ({
+  [CALL_API]: {
+    type: types.SCHEMA,
+    method: 'GET',
+    path: `schemas/${type}`
+  }
+});
 
-export const listWorkflows = (options) => wrapRequest(null, get, 'workflows', types.WORKFLOWS);
+export const queryHistogram = (options) => ({
+  [CALL_API]: {
+    type: types.HISTOGRAM,
+    method: 'GET',
+    url: url.resolve(root, 'stats/histogram'),
+    qs: options
+  }
+});
 
-export const getExecutionStatus = (arn) => wrapRequest(null, get, {
-  url: url.resolve(root, 'executions/status/' + arn)
-}, types.EXECUTION_STATUS);
+export const listWorkflows = () => ({
+  [CALL_API]: {
+    type: types.WORKFLOWS,
+    method: 'GET',
+    url: url.resolve(root, 'workflows')
+  }
+});
 
-export const getExecutionLogs = (executionName) => wrapRequest(null, get, {
-  url: url.resolve(root, 'logs/' + executionName)
-}, types.EXECUTION_LOGS);
+export const getExecutionStatus = (arn) => ({
+  [CALL_API]: {
+    type: types.EXECUTION_STATUS,
+    method: 'GET',
+    url: url.resolve(root, 'executions/status/' + arn)
+  }
+});
 
-export const listExecutions = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'executions'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, types.EXECUTIONS);
+export const getExecutionLogs = (executionName) => ({
+  [CALL_API]: {
+    type: types.EXECUTION_LOGS,
+    method: 'GET',
+    url: url.resolve(root, 'logs/' + executionName)
+  }
+});
+
+export const listExecutions = (options) => ({
+  [CALL_API]: {
+    type: types.EXECUTIONS,
+    method: 'GET',
+    url: url.resolve(root, 'executions'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
 
 export const filterExecutions = (param) => ({ type: types.FILTER_EXECUTIONS, param: param });
 export const clearExecutionsFilter = (paramKey) => ({ type: types.CLEAR_EXECUTIONS_FILTER, paramKey: paramKey });
 
-export const listRules = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'rules'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, types.RULES);
+export const listRules = (options) => ({
+  [CALL_API]: {
+    type: types.RULES,
+    method: 'GET',
+    url: url.resolve(root, 'rules'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
 
-export const getRule = (ruleName) => wrapRequest(
-  ruleName, get, `rules?name=${ruleName}`, types.RULE);
+export const getRule = (ruleName) => ({
+  [CALL_API]: {
+    id: ruleName,
+    type: types.RULE,
+    method: 'GET',
+    path: `rules?name=${ruleName}`
+  }
+});
 
-export const updateRule = (payload) => wrapRequest(
-  payload.name, put, `rules/${payload.name}`, types.UPDATE_RULE, payload);
+export const updateRule = (payload) => ({
+  [CALL_API]: {
+    id: payload.name,
+    type: types.UPDATE_RULE,
+    method: 'PUT',
+    path: `rules/${payload.name}`,
+    body: payload
+  }
+});
 
 export const clearUpdateRule = (ruleName) => ({ type: types.UPDATE_RULE_CLEAR, id: ruleName });
 
-export const createRule = (payload) => wrapRequest(
-  payload.name, post, 'rules', types.NEW_RULE, payload);
+export const createRule = (payload) => ({
+  [CALL_API]: {
+    id: payload.name,
+    type: types.NEW_RULE,
+    method: 'POST',
+    path: 'rules',
+    body: payload
+  }
+});
 
-export const deleteRule = (ruleName) => wrapRequest(
-  ruleName, del, `rules/${ruleName}`, types.RULE_DELETE);
+export const deleteRule = (ruleName) => ({
+  [CALL_API]: {
+    id: ruleName,
+    type: types.RULE_DELETE,
+    method: 'DELETE',
+    path: `rules/${ruleName}`
+  }
+});
 
-export const enableRule = (ruleName) => wrapRequest(
-  ruleName, put, `rules/${ruleName}`, types.RULE_ENABLE, {
-    state: 'ENABLED'
-  });
+export const enableRule = (ruleName) => ({
+  [CALL_API]: {
+    id: ruleName,
+    type: types.RULE_ENABLE,
+    method: 'PUT',
+    path: `rules/${ruleName}`,
+    body: {
+      state: 'ENABLED'
+    }
+  }
+});
 
-export const disableRule = (ruleName) => wrapRequest(
-  ruleName, put, `rules/${ruleName}`, types.RULE_DISABLE, {
-    state: 'DISABLED'
-  });
+export const disableRule = (ruleName) => ({
+  [CALL_API]: {
+    id: ruleName,
+    type: types.RULE_DISABLE,
+    method: 'PUT',
+    path: `rules/${ruleName}`,
+    body: {
+      state: 'DISABLED'
+    }
+  }
+});
 
-export const rerunRule = (ruleName) => wrapRequest(
-  ruleName, put, `rules/${ruleName}`, types.RULE_RERUN, {
-    action: 'rerun'
-  });
+export const rerunRule = (ruleName) => ({
+  [CALL_API]: {
+    id: ruleName,
+    type: types.RULE_RERUN,
+    method: 'PUT',
+    path: `rules/${ruleName}`,
+    body: {
+      action: 'rerun'
+    }
+  }
+});
 
-export const listReconciliationReports = (options) => wrapRequest(null, get, {
-  url: url.resolve(root, 'reconciliationReports'),
-  qs: Object.assign({ limit: pageLimit }, options)
-}, types.RECONCILIATIONS);
+export const listReconciliationReports = (options) => ({
+  [CALL_API]: {
+    type: types.RECONCILIATIONS,
+    method: 'GET',
+    url: url.resolve(root, 'reconciliationReports'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
 
-export const getReconciliationReport = (reconciliationName) => wrapRequest(
-  reconciliationName, get, `reconciliationReports/${reconciliationName}`, types.RECONCILIATION);
+export const getReconciliationReport = (reconciliationName) => ({
+  [CALL_API]: {
+    id: reconciliationName,
+    type: types.RECONCILIATION,
+    method: 'GET',
+    path: `reconciliationReports/${reconciliationName}`
+  }
+});
 
-export const createReconciliationReport = () => wrapRequest(
-  `reconciliation-report-${new Date().toISOString()}`, post, 'reconciliationReports', types.NEW_RECONCILIATION);
+export const createReconciliationReport = () => ({
+  [CALL_API]: {
+    id: `reconciliation-report-${new Date().toISOString()}`,
+    type: types.NEW_RECONCILIATION,
+    method: 'POST',
+    path: 'reconciliationReports'
+  }
+});
 
 export const searchReconciliationReports = (prefix) => ({ type: types.SEARCH_RECONCILIATIONS, prefix: prefix });
 export const clearReconciliationReportSearch = () => ({ type: types.CLEAR_RECONCILIATIONS_SEARCH });
