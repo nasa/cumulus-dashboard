@@ -12,7 +12,7 @@ import {
   REFRESH_TOKEN_ERROR,
   REFRESH_TOKEN_INFLIGHT,
   SET_TOKEN
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {
   authenticated: !!getToken(),

@@ -45,7 +45,7 @@ import {
   OPTIONS_COLLECTIONNAME,
   OPTIONS_COLLECTIONNAME_INFLIGHT,
   OPTIONS_COLLECTIONNAME_ERROR
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {
   list: {

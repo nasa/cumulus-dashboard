@@ -1,5 +1,6 @@
 import { shouldBeRedirectedToLogin, shouldHaveDeletedToken } from '../support/assertions';
-import { listGranules, SET_TOKEN } from '../../app/scripts/actions';
+import { listGranules } from '../../app/scripts/actions';
+import { SET_TOKEN } from '../../app/scripts/actions/types';
 
 describe('Dashboard authentication', () => {
   before(() => {
@@ -21,7 +22,7 @@ describe('Dashboard authentication', () => {
         token: 'fake-token'
       });
 
-      store.dispatch(listGranules);
+      store.dispatch(listGranules());
 
       // token should not have been updated
       expect(store.getState().api.tokens.inflight).to.eq(false);
@@ -44,7 +45,7 @@ describe('Dashboard authentication', () => {
 
         // Dispatch an action to request granules. It should fail
         // and log the user out when it recognizes the invalid token.
-        store.dispatch(listGranules);
+        store.dispatch(listGranules());
       });
     });
 
@@ -72,7 +73,7 @@ describe('Dashboard authentication', () => {
           token: expiredJwt
         });
 
-        store.dispatch(listGranules);
+        store.dispatch(listGranules());
       });
     });
 

@@ -8,7 +8,7 @@ import {
 
   FILTER_EXECUTIONS,
   CLEAR_EXECUTIONS_FILTER
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {
   list: {

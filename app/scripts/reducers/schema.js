@@ -2,7 +2,7 @@
 
 import {
   SCHEMA
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {};
 
