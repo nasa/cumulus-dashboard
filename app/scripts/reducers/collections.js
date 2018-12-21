@@ -29,7 +29,7 @@ import {
 
   FILTER_COLLECTIONS,
   CLEAR_COLLECTIONS_FILTER
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {
   list: {

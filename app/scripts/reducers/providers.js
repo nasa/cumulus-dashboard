@@ -37,7 +37,7 @@ import {
   OPTIONS_PROVIDERGROUP,
   OPTIONS_PROVIDERGROUP_INFLIGHT,
   OPTIONS_PROVIDERGROUP_ERROR
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {
   list: {

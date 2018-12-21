@@ -3,7 +3,7 @@ import {
   API_VERSION_ERROR,
   API_VERSION_COMPATIBLE,
   API_VERSION_INCOMPATIBLE
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {
   versionNumber: '',
