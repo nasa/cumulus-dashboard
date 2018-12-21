@@ -1,6 +1,8 @@
 'use strict';
 import path from 'path';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import {
@@ -53,17 +55,17 @@ const metaAccessors = [
   ['PAN Message', 'PANmessage']
 ];
 
-var PDR = React.createClass({
+var PDR = createReactClass({
   propTypes: {
-    granules: React.PropTypes.object,
-    logs: React.PropTypes.object,
-    pdrs: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    params: React.PropTypes.object,
-    router: React.PropTypes.object
+    granules: PropTypes.object,
+    logs: PropTypes.object,
+    pdrs: PropTypes.object,
+    dispatch: PropTypes.func,
+    params: PropTypes.object,
+    router: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { pdrName } = this.props.params;
     const immediate = !this.props.pdrs.map[pdrName];
     this.reload(immediate);

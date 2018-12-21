@@ -3,10 +3,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createProvider } from '../../actions';
 import AddRecord from '../app/add';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
 const SCHEMA_KEY = 'provider';
 
-var AddProvider = React.createClass({
+var AddProvider = createReactClass({
   getInitialState: function () {
     return {
       name: null
@@ -14,7 +16,7 @@ var AddProvider = React.createClass({
   },
 
   propTypes: {
-    providers: React.PropTypes.object
+    providers: PropTypes.object
   },
 
   render: function () {

@@ -2,13 +2,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import queue from 'stubborn-queue';
+import createReactClass from 'create-react-class';
 import AsyncCommand from './async-command';
 import { updateDelay } from '../../config';
 
 const CONCURRENCY = 3;
 const IN_PROGRESS = 'Processing...';
 
-const BatchCommand = React.createClass({
+const BatchCommand = createReactClass({
   propTypes: {
     action: PropTypes.func,
     dispatch: PropTypes.func,
@@ -32,7 +33,7 @@ const BatchCommand = React.createClass({
     };
   },
 
-  componentWillReceiveProps: function (newProps) {
+  UNSAFE_componentWillReceiveProps: function (newProps) {
     const { state } = newProps;
     const { callbacks, completed } = this.state;
     // on success or error, call and remove the saved callback

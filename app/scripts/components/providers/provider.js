@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -7,8 +8,6 @@ import {
   interval,
   getProvider,
   deleteProvider,
-  restartProvider,
-  stopProvider,
   listCollections
 } from '../../actions';
 import { get } from 'object-path';
@@ -35,7 +34,7 @@ const metaAccessors = [
   ['Global Connection Limit', 'globalConnectionLimit', tally]
 ];
 
-var ProviderOverview = React.createClass({
+var ProviderOverview = createReactClass({
   displayName: 'Provider',
 
   propTypes: {
@@ -47,7 +46,7 @@ var ProviderOverview = React.createClass({
     router: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { providerId } = this.props.params;
     const immediate = !this.props.providers.map[providerId];
     this.reload(immediate);
@@ -83,16 +82,6 @@ var ProviderOverview = React.createClass({
     }
   },
 
-  restart: function () {
-    const { providerId } = this.props.params;
-    this.props.dispatch(restartProvider(providerId));
-  },
-
-  stop: function () {
-    const { providerId } = this.props.params;
-    this.props.dispatch(stopProvider(providerId));
-  },
-
   errors: function () {
     const providerId = this.props.params.providerId;
     return [
@@ -117,20 +106,7 @@ var ProviderOverview = React.createClass({
     const errors = this.errors();
 
     const deleteStatus = get(this.props.providers.deleted, [providerId, 'status']);
-    const restartStatus = get(this.props.providers.restarted, [providerId, 'status']);
-    const stopStatus = get(this.props.providers.stopped, [providerId, 'status']);
     const dropdownConfig = [{
-      text: 'Stop',
-      action: this.stop,
-      disabled: provider.status === 'stopped',
-      status: stopStatus,
-      success: () => this.reload(true)
-    }, {
-      text: 'Restart',
-      action: this.restart,
-      status: restartStatus,
-      success: () => this.reload(true)
-    }, {
       text: 'Delete',
       action: this.delete,
       disabled: provider.published,

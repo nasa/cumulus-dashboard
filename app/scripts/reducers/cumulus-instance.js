@@ -3,7 +3,7 @@ import { set } from 'object-path';
 
 import {
   ADD_INSTANCE_META_CMR
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {};
 

@@ -1,18 +1,20 @@
 'use strict';
 import React from 'react';
 import Paginator from 'paginator';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
 const noop = (e) => e.preventDefault();
 const disabled = ' pagination__link--disabled';
 
-const Pagination = React.createClass({
+const Pagination = createReactClass({
   displayName: 'Pagination',
 
   propTypes: {
-    page: React.PropTypes.number,
-    limit: React.PropTypes.number,
-    count: React.PropTypes.number,
-    onNewPage: React.PropTypes.func
+    page: PropTypes.number,
+    limit: PropTypes.number,
+    count: PropTypes.number,
+    onNewPage: PropTypes.func
   },
 
   onPageClick: function (e) {

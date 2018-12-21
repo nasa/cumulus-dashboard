@@ -47,7 +47,7 @@ declare global {
       getJsonTextareaValue(): Chainable<object>
 
       /**
-       * Login to dashboard via network requests
+       * Login to dashboard programatically
        *
        * To ensure the user is logged in across all tests in the spec,
        * use `cy.login()` in `beforeEach()`
@@ -57,6 +57,15 @@ declare global {
        *    cy.login()
        */
       login(): Chainable<null>
+
+      /**
+       * Logout of the dashboard programatically and reload the app
+       *
+       * @memberof Chainable
+       * @example
+       *    cy.logout()
+       */
+      logout(): Chainable<null>
 
       /**
        * Get value of fixture for fake API

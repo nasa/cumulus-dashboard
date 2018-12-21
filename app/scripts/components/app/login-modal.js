@@ -1,18 +1,20 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { login, setTokenState } from '../../actions';
 import { window } from '../../utils/browser';
 import { updateDelay } from '../../config';
 import ErrorReport from '../errors/report';
 import Text from '../form/text';
 
-var LoginModal = React.createClass({
+var LoginModal = createReactClass({
   propTypes: {
-    dispatch: React.PropTypes.func,
-    api: React.PropTypes.object,
-    location: React.PropTypes.object,
-    router: React.PropTypes.object,
-    show: React.PropTypes.bool
+    dispatch: PropTypes.func,
+    api: PropTypes.object,
+    location: PropTypes.object,
+    router: PropTypes.object,
+    show: PropTypes.bool
   },
 
   getInitialState: function () {
@@ -23,7 +25,7 @@ var LoginModal = React.createClass({
     };
   },
 
-  componentWillReceiveProps: function (newProps) {
+  UNSAFE_componentWillReceiveProps: function (newProps) {
     // delay-close the modal if it's open
     if (newProps.api.authenticated && this.props.show) {
       const { dispatch } = this.props;
