@@ -1,7 +1,7 @@
 import test from 'ava';
 import nock from 'nock';
 
-import { CALL_API } from '../../app/scripts/actions';
+import { CALL_API } from '../../app/scripts/actions/types';
 import { requestMiddleware } from '../../app/scripts/middleware/request';
 
 test.beforeEach((t) => {

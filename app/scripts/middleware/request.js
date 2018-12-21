@@ -1,6 +1,7 @@
 import requestPromise from 'request-promise';
 
-import { CALL_API, loginError } from '../actions';
+import { loginError } from '../actions';
+import { CALL_API } from '../actions/types';
 import {
   configureRequest,
   addRequestAuthorization,
