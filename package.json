@@ -111,6 +111,7 @@
     "body-parser": "^1.18.3",
     "brace": "^0.9.1",
     "classnames": "^2.2.5",
+    "compare-versions": "^3.4.0",
     "create-react-class": "^15.6.3",
     "d3-queue": "^3.0.5",
     "d3-scale": "^1.0.5",
