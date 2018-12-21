@@ -21,7 +21,7 @@ If you want to submit your own contributions, follow these steps:
   * If you don't know the Cumulus API version (because it hasn't been released), create a one-line PR with the following attributes:
     * Title: Version bump for next Cumulus API release
     * In the body, write a quick explanation and link to the unreleased Cumulus Core PR
-    * `'change-me-next-api-release'` in the `minCompatibleApiVersion` array.
+    * Set `'change-me-next-api-release'` as the value for the `minCompatibleApiVersion` config value.
 * Upon submission of a pull request, the Cumulus development team will review the code
 * The request will then either be merged, declined, or an adjustment to the code will be requested
 
