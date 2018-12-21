@@ -1,5 +1,7 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { tally } from '../../utils/format';
 import { strings } from '../locale';
@@ -10,9 +12,9 @@ const granuleMeta = [
   ['completed', 'Completed'],
   ['failed', 'Failed']
 ];
-const Progress = React.createClass({
+const Progress = createReactClass({
   propTypes: {
-    granules: React.PropTypes.array
+    granules: PropTypes.array
   },
 
   getItem: function (key) {

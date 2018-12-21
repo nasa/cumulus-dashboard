@@ -2,11 +2,12 @@
 import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import Ellipsis from '../app/loading-ellipsis';
 import { preventDefault } from '../../utils/noop';
 import { updateDelay } from '../../config';
 
-const AsyncCommand = React.createClass({
+const AsyncCommand = createReactClass({
 
   propTypes: {
     action: PropTypes.func,
@@ -20,14 +21,15 @@ const AsyncCommand = React.createClass({
     element: PropTypes.string,
     confirmAction: PropTypes.bool,
     confirmText: PropTypes.string,
-    confirmOptions: PropTypes.array
+    confirmOptions: PropTypes.array,
+    href: PropTypes.string
   },
 
   getInitialState: function () {
     return { modal: false };
   },
 
-  componentWillReceiveProps: function (newProps) {
+  UNSAFE_componentWillReceiveProps: function (newProps) {
     if (
       this.props.status === 'inflight' &&
       newProps.status === 'success' &&

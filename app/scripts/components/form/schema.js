@@ -5,6 +5,7 @@ import { get, set } from 'object-path';
 import { Form, formTypes } from './';
 import { isText, isNumber, isArray, arrayWithLength } from '../../utils/validate';
 import t from '../../utils/strings';
+import createReactClass from 'create-react-class';
 import ErrorReport from '../errors/report';
 const { errors } = t;
 
@@ -165,7 +166,7 @@ function list (config, property, validate) {
   return config;
 }
 
-export const Schema = React.createClass({
+export const Schema = createReactClass({
   propTypes: {
     schema: PropTypes.object,
     data: PropTypes.object,
@@ -183,12 +184,12 @@ export const Schema = React.createClass({
     return { fields: null };
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { schema, data, include } = this.props;
     this.setState({ fields: createFormConfig(data, schema, include) });
   },
 
-  componentWillReceiveProps: function (newProps) {
+  UNSAFE_componentWillReceiveProps: function (newProps) {
     const { props } = this;
     const { schema, data, include } = newProps;
     if (props.pk !== newProps.pk) {

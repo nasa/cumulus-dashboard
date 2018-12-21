@@ -1,13 +1,15 @@
 'use strict';
 import React from 'react';
 import Ace from 'react-ace';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { listWorkflows } from '../../actions';
 import config from '../../config';
 import { setWindowEditorRef } from '../../utils/browser';
 import Loading from '../app/loading-indicator';
 
-var Workflow = React.createClass({
+var Workflow = createReactClass({
   getInitialState: function () {
     return {
       view: 'json'
@@ -15,19 +17,19 @@ var Workflow = React.createClass({
   },
 
   propTypes: {
-    params: React.PropTypes.object,
-    workflows: React.PropTypes.object,
-    dispatch: React.PropTypes.func
+    params: PropTypes.object,
+    workflows: PropTypes.object,
+    dispatch: PropTypes.func
   },
 
-  componentWillReceiveProps: function ({ params }) {
+  UNSAFE_componentWillReceiveProps: function ({ params }) {
     const { workflowName } = params;
     if (workflowName !== this.props.params.workflowName) {
       this.get();
     }
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.get();
   },
 

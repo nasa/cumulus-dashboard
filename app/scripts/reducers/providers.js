@@ -34,16 +34,6 @@ import {
   PROVIDER_DELETE_INFLIGHT,
   PROVIDER_DELETE_ERROR,
 
-  PROVIDER_RESTART,
-  PROVIDER_RESTART_INFLIGHT,
-  PROVIDER_RESTART_ERROR,
-  CLEAR_RESTARTED_PROVIDER,
-
-  PROVIDER_STOP,
-  PROVIDER_STOP_INFLIGHT,
-  PROVIDER_STOP_ERROR,
-  CLEAR_STOPPED_PROVIDER,
-
   OPTIONS_PROVIDERGROUP,
   OPTIONS_PROVIDERGROUP_INFLIGHT,
   OPTIONS_PROVIDERGROUP_ERROR
@@ -162,36 +152,6 @@ export default function reducer (state = initialState, action) {
     case PROVIDER_DELETE_ERROR:
       set(state, ['deleted', id, 'status'], 'error');
       set(state, ['deleted', id, 'error'], action.error);
-      break;
-
-    case PROVIDER_RESTART:
-      set(state, ['restarted', id, 'status'], 'success');
-      set(state, ['restarted', id, 'error'], null);
-      break;
-    case PROVIDER_RESTART_INFLIGHT:
-      set(state, ['restarted', id, 'status'], 'inflight');
-      break;
-    case PROVIDER_RESTART_ERROR:
-      set(state, ['restarted', id, 'status'], 'error');
-      set(state, ['restarted', id, 'error'], action.error);
-      break;
-    case CLEAR_RESTARTED_PROVIDER:
-      del(state, ['restarted', id]);
-      break;
-
-    case PROVIDER_STOP:
-      set(state, ['stopped', id, 'status'], 'success');
-      set(state, ['stopped', id, 'error'], null);
-      break;
-    case PROVIDER_STOP_INFLIGHT:
-      set(state, ['stopped', id, 'status'], 'inflight');
-      break;
-    case PROVIDER_STOP_ERROR:
-      set(state, ['stopped', id, 'status'], 'error');
-      set(state, ['stopped', id, 'error'], action.error);
-      break;
-    case CLEAR_STOPPED_PROVIDER:
-      del(state, ['stopped', id]);
       break;
 
     case OPTIONS_PROVIDERGROUP:

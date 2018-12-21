@@ -1,17 +1,19 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Sidebar from '../app/sidebar';
 import { strings } from '../locale';
 
-var Collections = React.createClass({
+var Collections = createReactClass({
   displayName: strings.collections,
 
   propTypes: {
-    children: React.PropTypes.object,
-    location: React.PropTypes.object,
-    params: React.PropTypes.object
+    children: PropTypes.object,
+    location: PropTypes.object,
+    params: PropTypes.object
   },
 
   render: function () {

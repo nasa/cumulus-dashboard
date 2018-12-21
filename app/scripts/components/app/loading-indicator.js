@@ -1,6 +1,8 @@
 'use strict';
 import React from 'react';
-const Loading = React.createClass({
+import createReactClass from 'create-react-class';
+
+const Loading = createReactClass({
   displayName: 'Loading',
   render: function () {
     return (

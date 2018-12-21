@@ -4,6 +4,8 @@ import { get } from 'object-path';
 import { scaleLinear, scaleBand } from 'd3-scale';
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { tally } from '../../utils/format';
 import LoadingIndicator from '../app/loading-indicator';
 
@@ -17,10 +19,10 @@ const margin = {
   left: 70
 };
 
-const Histogram = React.createClass({
+const Histogram = createReactClass({
   propTypes: {
-    data: React.PropTypes.object,
-    tooltipFormat: React.PropTypes.func
+    data: PropTypes.object,
+    tooltipFormat: PropTypes.func
   },
 
   getInitialState: function () {
@@ -38,7 +40,7 @@ const Histogram = React.createClass({
     this.setState({ width: rect.width, height: rect.height });
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.setHoverState = throttle(this.setHoverState, tooltipDelay);
     this.mouseOut = debounce(this.mouseOut, tooltipDelay);
   },
