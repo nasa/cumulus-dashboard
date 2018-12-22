@@ -69,16 +69,21 @@ var ExecutionStatus = React.createClass({
     const { executionStatus } = this.props;
     if (!executionStatus.execution) return null;
 
-    let output;
-    if (executionStatus.execution.output) {
-      output = <dd>
+    const input = (executionStatus.execution.input)
+      ? <dd>
+        <Collapse trigger={'Show Input'} triggerWhenOpen={'Hide Input'}>
+          <pre>{parseJson(executionStatus.execution.input)}</pre>
+        </Collapse>
+      </dd>
+      : <dd>N/A</dd>;
+
+    const output = (executionStatus.execution.output)
+      ? <dd>
         <Collapse trigger={'Show Output'} triggerWhenOpen={'Hide Output'}>
           <pre>{parseJson(executionStatus.execution.output)}</pre>
         </Collapse>
-      </dd>;
-    } else {
-      output = <dd>N/A</dd>;
-    }
+      </dd>
+      : <dd>N/A</dd>;
 
     let parentARN;
     if (executionStatus.execution.input) {
@@ -142,13 +147,7 @@ var ExecutionStatus = React.createClass({
           <br />
 
           <dt>Input:</dt>
-          {(executionStatus.execution.input)
-          ? <dd>
-              <Collapse trigger={'Show Input'} triggerWhenOpen={'Hide Input'}>
-                <pre>{parseJson(executionStatus.execution.input)}</pre>
-              </Collapse>
-            </dd>
-          : <dd>N/A</dd>}
+          {input}
           <br />
 
           <dt>Output:</dt>

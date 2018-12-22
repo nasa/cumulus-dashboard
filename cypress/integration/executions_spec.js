@@ -40,7 +40,7 @@ describe('Dashboard Executions Page', () => {
       cy.getFakeApiFixture('executions').as('executionStatus');
 
       cy.get('table tbody tr').as('list');
-      cy.get('@list').its('length').should('be.eq', 5);
+      cy.get('@list').its('length').should('be.eq', 6);
 
       // compare data in each row with the data from fixture
       cy.get('@list').each(($el, index, $list) => {
@@ -157,6 +157,60 @@ describe('Dashboard Executions Page', () => {
           cy.get('pre').contains(JSON.stringify(logs[0].message));
         });
       });
+    });
+
+    it('should show an execution with limited information', () => {
+      cy.contains('nav li a', 'Executions').as('executions');
+      cy.get('@executions').should('have.attr', 'href', '#/executions');
+      cy.get('@executions').click();
+
+      cy.url().should('include', 'executions');
+      cy.contains('.heading--xlarge', 'Executions');
+      const executionName = 'b313e777-d28a-435b-a0dd-f1fad08116t1';
+      const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
+      const stateMachine = 'arn:aws:states:us-east-1:596205514787:stateMachine:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo';
+      cy.get('table tbody tr td[class=table__main-asset]').within(() => {
+        cy.get(`a[title=${executionName}]`).click({force: true});
+      });
+
+      cy.contains('.heading--large', 'Execution');
+      cy.contains('.heading--medium', 'Visual workflow');
+
+      const startMatch = fullDate('2018-12-06T19:18:11.174Z');
+      const endMatch = fullDate('2018-12-06T19:18:41.145Z');
+
+      cy.get('.status--process')
+      .within(() => {
+        cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
+        cy.contains('Execution Arn:').next().should('have.text', executionArn);
+        cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
+        cy.contains('Started:').next().should('have.text', startMatch);
+        cy.contains('Ended:').next().should('have.text', endMatch);
+      });
+      /*
+      cy.get('table tbody tr').as('events');
+      cy.get('@events').its('length').should('be.eq', 7);
+
+      cy.getFakeApiFixture(`executions/status/${executionArn}`).as('executionStatus');
+
+      cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
+        cy.get('@events').each(($el, index, $list) => {
+          let timestamp = fullDate(events[index].timestamp);
+          cy.wrap($el).children('td').as('columns');
+          cy.get('@columns').its('length').should('be.eq', 4);
+          let idMatch = `"id": ${index + 1},`;
+          let previousIdMatch = `"previousEventId": ${index}`;
+
+          cy.get('@columns').eq(0).should('have.text', (index + 1).toString());
+          cy.get('@columns').eq(2).should('have.text', timestamp);
+          cy.get('@columns').eq(3).contains('More Details').click();
+          cy.get('@columns').eq(3).contains(idMatch);
+          if (index !== 0) {
+            cy.get('@columns').eq(3).contains(previousIdMatch);
+          }
+          cy.get('@columns').eq(3).contains('Less Details').click();
+        });
+      });*/
     });
   });
 });
