@@ -2,6 +2,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Ace from 'react-ace';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { getCollection } from '../../actions';
@@ -9,7 +11,7 @@ import { lastUpdated, nullValue, getCollectionId } from '../../utils/format';
 import config from '../../config';
 import Loading from '../app/loading-indicator';
 
-var CollectionIngest = React.createClass({
+var CollectionIngest = createReactClass({
   displayName: 'CollectionIngest',
 
   getInitialState: function () {
@@ -19,12 +21,12 @@ var CollectionIngest = React.createClass({
   },
 
   propTypes: {
-    params: React.PropTypes.object,
-    collections: React.PropTypes.object,
-    dispatch: React.PropTypes.func
+    params: PropTypes.object,
+    collections: PropTypes.object,
+    dispatch: PropTypes.func
   },
 
-  componentWillReceiveProps: function (props) {
+  UNSAFE_componentWillReceiveProps: function (props) {
     const { name, version } = this.props.params;
     const collectionId = getCollectionId({ name, version });
     const record = this.props.collections.map[collectionId];
@@ -33,7 +35,7 @@ var CollectionIngest = React.createClass({
     }
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { name, version } = this.props.params;
     this.get(name, version);
   },

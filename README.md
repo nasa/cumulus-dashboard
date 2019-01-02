@@ -30,6 +30,7 @@ The following Environment Variables override the default values in `config.js`:
 | STAGE | e.g. UAT, default to development
 | LABELS | gitc or daac localization (defaults to daac)
 | APIROOT | the API URL. This must be set as it defaults to example.com
+| minCompatibleApiVersion | A minimum compatible Cumulus Api version string `'a.b.c'`
 
      $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com npm run serve
 
@@ -51,6 +52,20 @@ This requires [nvm](https://github.com/creationix/nvm) and node v8.11. To set v8
 ```bash
 git clone https://github.com/cumulus-nasa/cumulus-dashboard
 cd cumulus-dashboard
+nvm use
+npm install
+npm run serve
+```
+
+## Building a Specific Dashboard Version
+
+Cumulus-dashboard versions are distributed using tags in github. You can pull a specific version in the following manner:
+
+```bash
+git clone https://github.com/cumulus-nasa/cumulus-dashboard
+cd cumulus-dashboard
+git fetch origin ${tagNumber}:refs/tags/${tagNumber}
+git checkout ${tagNumber}
 nvm use
 npm install
 npm run serve

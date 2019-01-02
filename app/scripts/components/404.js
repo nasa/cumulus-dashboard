@@ -1,8 +1,9 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
+import createReactClass from 'create-react-class';
 
-var NotFound = React.createClass({
+var NotFound = createReactClass({
   displayName: '404',
 
   render: function () {

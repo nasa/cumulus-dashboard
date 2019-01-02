@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 
 import 'brace';
 import 'brace/mode/json';
@@ -15,7 +16,7 @@ import ErrorReport from '../errors/report';
 const _minLines = 8;
 const _maxLines = 18;
 
-const TextAreaForm = React.createClass({
+const TextAreaForm = createReactClass({
   displayName: 'TextAreaForm',
 
   propTypes: {

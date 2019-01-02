@@ -1,14 +1,16 @@
 'use strict';
 import React from 'react';
 import Sidebar from '../app/sidebar';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
-var Workflows = React.createClass({
+var Workflows = createReactClass({
   displayName: 'Workflows',
 
   propTypes: {
-    children: React.PropTypes.object,
-    location: React.PropTypes.object,
-    params: React.PropTypes.object
+    children: PropTypes.object,
+    location: PropTypes.object,
+    params: PropTypes.object
   },
 
   render: function () {

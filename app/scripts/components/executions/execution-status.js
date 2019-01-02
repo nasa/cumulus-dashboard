@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import Collapse from 'react-collapsible';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
@@ -18,7 +19,7 @@ import ErrorReport from '../errors/report';
 import { ExecutionStatusGraph, getEventDetails } from './execution-status-graph';
 import SortableTable from '../table/sortable';
 
-var ExecutionStatus = React.createClass({
+var ExecutionStatus = createReactClass({
   displayName: 'Execution',
 
   propTypes: {
@@ -28,7 +29,7 @@ var ExecutionStatus = React.createClass({
     router: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { dispatch } = this.props;
     const { executionArn } = this.props.params;
     dispatch(getExecutionStatus(executionArn));

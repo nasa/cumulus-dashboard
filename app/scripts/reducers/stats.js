@@ -15,7 +15,7 @@ import {
   HISTOGRAM,
   HISTOGRAM_INFLIGHT,
   HISTOGRAM_ERROR
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {
   stats: {

@@ -1,15 +1,17 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 
-var Dropdown = React.createClass({
+var Dropdown = createReactClass({
   propTypes: {
-    label: React.PropTypes.any,
-    value: React.PropTypes.string,
-    options: React.PropTypes.array,
-    id: React.PropTypes.string,
-    error: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    noNull: React.PropTypes.bool
+    label: PropTypes.any,
+    value: PropTypes.string,
+    options: PropTypes.array,
+    id: PropTypes.string,
+    error: PropTypes.string,
+    onChange: PropTypes.func,
+    noNull: PropTypes.bool
   },
 
   onChange: function (e) {

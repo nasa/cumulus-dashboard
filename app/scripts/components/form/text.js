@@ -1,8 +1,9 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 
-var TextForm = React.createClass({
+var TextForm = createReactClass({
   propTypes: {
     label: PropTypes.any,
     value: PropTypes.oneOfType([

@@ -1,22 +1,24 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { updateInterval } from '../../config';
 const delay = updateInterval / 1000;
 
-const Timer = React.createClass({
+const Timer = createReactClass({
   propTypes: {
-    noheader: React.PropTypes.bool,
-    dispatch: React.PropTypes.func,
-    action: React.PropTypes.func,
-    config: React.PropTypes.object,
-    reload: React.PropTypes.any
+    noheader: PropTypes.bool,
+    dispatch: PropTypes.func,
+    action: PropTypes.func,
+    config: PropTypes.object,
+    reload: PropTypes.any
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.createTimer(this.props.config);
   },
 
-  componentWillReceiveProps: function (nextProps) {
+  UNSAFE_componentWillReceiveProps: function (nextProps) {
     if (JSON.stringify(this.props.config) !== JSON.stringify(nextProps.config) ||
       (nextProps.reload && this.props.reload !== nextProps.reload)) {
       this.createTimer(nextProps.config);

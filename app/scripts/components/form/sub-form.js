@@ -1,18 +1,20 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { Form, formTypes } from './';
 import { set } from 'object-path';
 import { createFormConfig } from './schema';
 import { isText } from '../../utils/validate';
 
-const SubForm = React.createClass({
+const SubForm = createReactClass({
   propTypes: {
-    label: React.PropTypes.any,
-    value: React.PropTypes.object,
-    fieldSet: React.PropTypes.object,
-    id: React.PropTypes.string,
-    error: React.PropTypes.string,
-    onChange: React.PropTypes.func
+    label: PropTypes.any,
+    value: PropTypes.object,
+    fieldSet: PropTypes.object,
+    id: PropTypes.string,
+    error: PropTypes.string,
+    onChange: PropTypes.func
   },
 
   getInitialState: function () {

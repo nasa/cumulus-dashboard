@@ -1,8 +1,9 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 
-var Error = React.createClass({
+var Error = createReactClass({
   displayName: 'Error',
 
   render: function () {
