@@ -57,7 +57,19 @@ var OAuth = createReactClass({
     if (!api.authenticated && !api.inflight) {
       const origin = window.location.origin;
       const pathname = window.location.pathname;
-      const hash = window.location.hash;
+      let hash = window.location.hash;
+      const hasQuery = hash.indexOf('?');
+      if (hasQuery !== -1) {
+        hash = hash.substr(hash.indexOf('#') + 1);
+        const parsedUrl = url.parse(hash, true);
+        // Remove any ?token query parameter to avoid polluting
+        // the login link
+        delete parsedUrl.query.token;
+        hash = `#${url.format({
+          pathname: parsedUrl.pathname,
+          query: parsedUrl.query
+        })}`;
+      }
       const redirect = encodeURIComponent(url.resolve(origin, pathname) + hash);
       button = <div style={{textAlign: 'center'}}><a href={url.resolve(apiRoot, `token?state=${redirect}`)} >Login with Earthdata Login</a></div>;
     }
