@@ -4,7 +4,7 @@ import { getCollectionId } from '../utils/format';
 
 import {
   ADD_MMTLINK
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {};
 

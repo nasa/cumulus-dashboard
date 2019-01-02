@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import SortableTable from './sortable';
@@ -10,7 +11,7 @@ import BatchAsyncCommand from '../form/batch-async-command';
 import Timer from '../app/timer';
 import { isUndefined as undef } from '../../utils/validate';
 
-var List = React.createClass({
+var List = createReactClass({
   displayName: 'List',
 
   getInitialState: function () {
@@ -40,11 +41,11 @@ var List = React.createClass({
     rowId: PropTypes.any
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     this.setState({ queryConfig: this.config() });
   },
 
-  componentWillReceiveProps: function (newProps) {
+  UNSAFE_componentWillReceiveProps: function (newProps) {
     if (JSON.stringify(newProps.query) !== JSON.stringify(this.props.query)) {
       this.setState({ queryConfig: this.config({}, newProps.query) });
     }

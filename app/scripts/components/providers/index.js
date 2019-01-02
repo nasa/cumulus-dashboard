@@ -2,14 +2,16 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Sidebar from '../app/sidebar';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
-var Providers = React.createClass({
+var Providers = createReactClass({
   displayName: 'Providers',
 
   propTypes: {
-    children: React.PropTypes.object,
-    location: React.PropTypes.object,
-    params: React.PropTypes.object
+    children: PropTypes.object,
+    location: PropTypes.object,
+    params: PropTypes.object
   },
 
   render: function () {

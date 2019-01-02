@@ -16,7 +16,7 @@ import {
 
   NEW_RECONCILIATION_INFLIGHT,
   NEW_RECONCILIATION
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {
   list: {

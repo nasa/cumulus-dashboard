@@ -1,12 +1,13 @@
 'use strict';
 import React from 'react';
-import { getExecutionLogs } from '../../actions';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
+import { getExecutionLogs } from '../../actions';
 import { connect } from 'react-redux';
 
 import ErrorReport from '../errors/report';
 
-var ExecutionLogs = React.createClass({
+var ExecutionLogs = createReactClass({
   displayName: 'Execution',
 
   propTypes: {
@@ -16,7 +17,7 @@ var ExecutionLogs = React.createClass({
     router: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { dispatch } = this.props;
     const { executionName } = this.props.params;
     dispatch(getExecutionLogs(executionName));

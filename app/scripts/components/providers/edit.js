@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -11,7 +12,7 @@ import EditRecord from '../app/edit';
 
 const SCHEMA_KEY = 'provider';
 
-var EditProvider = React.createClass({
+var EditProvider = createReactClass({
   propTypes: {
     params: PropTypes.object,
     providers: PropTypes.object

@@ -1,6 +1,7 @@
 'use strict';
 import Collapse from 'react-collapsible';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { isUndefined } from '../../utils/validate';
@@ -12,7 +13,7 @@ const otherOrder = {
   asc: 'desc'
 };
 
-const Table = React.createClass({
+const Table = createReactClass({
   displayName: 'SortableTable',
 
   propTypes: {
