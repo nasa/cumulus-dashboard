@@ -174,33 +174,33 @@ describe('Dashboard Executions Page', () => {
       cy.getFakeApiFixture(`executions/status/${executionArn}`).as('executionStatus');
 
       cy.get('.status--process')
-      .within(() => {
-        cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
-        cy.contains('Execution Arn:').next().should('have.text', executionArn);
-        cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
-        cy.contains('Started:').next().should('have.text', startMatch);
-        cy.contains('Ended:').next().should('have.text', endMatch);
+        .within(() => {
+          cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
+          cy.contains('Execution Arn:').next().should('have.text', executionArn);
+          cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
+          cy.contains('Started:').next().should('have.text', startMatch);
+          cy.contains('Ended:').next().should('have.text', endMatch);
 
-        cy.get('@executionStatus').its('execution').then((execution) => {
-          cy.contains('Input:').next().find('pre').then(($content) =>
-            // parse and stringify JSON string to get the same format as in the fixture
-            expect(JSON.stringify(JSON.parse($content.text()))).to.eq(execution.input));
+          cy.get('@executionStatus').its('execution').then((execution) => {
+            cy.contains('Input:').next().find('pre').then(($content) =>
+              // parse and stringify JSON string to get the same format as in the fixture
+              expect(JSON.stringify(JSON.parse($content.text()))).to.eq(execution.input));
 
-          cy.contains('Input:').next().contains('Show Input').click();
-          cy.contains('Input:').next().contains('Hide Input').click();
+            cy.contains('Input:').next().contains('Show Input').click();
+            cy.contains('Input:').next().contains('Hide Input').click();
 
-          cy.contains('Output:').next().find('pre').then(($content) =>
-            expect(JSON.stringify(JSON.parse($content.text()))).to.eq(execution.output));
+            cy.contains('Output:').next().find('pre').then(($content) =>
+              expect(JSON.stringify(JSON.parse($content.text()))).to.eq(execution.output));
 
-          cy.contains('Output:').next().contains('Show Output').click();
-          cy.contains('Output:').next().contains('Hide Output').click();
-        });
-
-        cy.contains('Logs:').next()
-          .within(() => {
-            cy.get('a').should('have.attr', 'href', `#/executions/execution/${executionName}/logs`).click();
+            cy.contains('Output:').next().contains('Show Output').click();
+            cy.contains('Output:').next().contains('Hide Output').click();
           });
-      });
+
+          cy.contains('Logs:').next()
+            .within(() => {
+              cy.get('a').should('have.attr', 'href', `#/executions/execution/${executionName}/logs`);
+            });
+        });
 
       cy.contains('.heading--medium', 'Events').should('not.exist');
     });
