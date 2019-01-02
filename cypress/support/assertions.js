@@ -1,3 +1,7 @@
+exports.shouldBeLoggedIn = () => {
+  cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
+};
+
 exports.shouldBeRedirectedToLogin = () => {
   cy.url().should('include', '/#/auth');
   cy.get('div[class=modal__internal]').within(() => {
