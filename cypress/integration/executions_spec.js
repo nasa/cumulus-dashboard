@@ -18,7 +18,7 @@ describe('Dashboard Executions Page', () => {
     after(() => {
       cy.task('resetState');
     });
-
+/*
     it('should display a link to view executions', () => {
       cy.visit('/');
 
@@ -158,7 +158,7 @@ describe('Dashboard Executions Page', () => {
         });
       });
     });
-
+*/
     it('should show an execution with limited information', () => {
       const executionName = 'b313e777-d28a-435b-a0dd-f1fad08116t1';
       const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
@@ -186,14 +186,14 @@ describe('Dashboard Executions Page', () => {
               // parse and stringify JSON string to get the same format as in the fixture
               expect(JSON.stringify(JSON.parse($content.text()))).to.eq(execution.input));
 
-            cy.contains('Input:').next().contains('Show Input').click();
-            cy.contains('Input:').next().contains('Hide Input').click();
+            cy.contains('Input:').next().contains('.Collapsible', 'Show Input').click('topLeft');
+            cy.contains('Input:').next().contains('.Collapsible', 'Hide Input');
 
             cy.contains('Output:').next().find('pre').then(($content) =>
               expect(JSON.stringify(JSON.parse($content.text()))).to.eq(execution.output));
 
-            cy.contains('Output:').next().contains('Show Output').click();
-            cy.contains('Output:').next().contains('Hide Output').click();
+            cy.contains('Output:').next().contains('.Collapsible', 'Show Output').click('topLeft');
+            cy.contains('Output:').next().contains('.Collapsible', 'Hide Output');
           });
 
           cy.contains('Logs:').next()
