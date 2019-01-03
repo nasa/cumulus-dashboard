@@ -31,7 +31,14 @@ jobs:
           name: Prepare servers
           command: |
             # run fake api
-            docker run -d --name api -v $(pwd):/home --workdir /home -p 5001:5001 node:8.11.4 node fake-api.js
+            docker run \
+                -d \
+                --name api \
+                -v $(pwd):/home \
+                --workdir /home \
+                -p 5001:5001 \
+                node:8.11.4 \
+                node fake-api.js
 
             # build dashboard
             docker run --rm \
@@ -47,9 +54,10 @@ jobs:
 
             # run dashboard
             docker run \
+                # run in detached mode or else subsequent commands will not be reached
+                -d \
                 --rm \
                 --name dashboard \
-                -d \ # run in detached mode or else subsequent commands won't be reached
                 -e PORT=3000 \
                 -p 3000:3000 \
                 cumulus-dashboard:ci
