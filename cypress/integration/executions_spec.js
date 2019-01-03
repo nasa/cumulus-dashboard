@@ -18,7 +18,7 @@ describe('Dashboard Executions Page', () => {
     after(() => {
       cy.task('resetState');
     });
-/*
+
     it('should display a link to view executions', () => {
       cy.visit('/');
 
@@ -158,7 +158,7 @@ describe('Dashboard Executions Page', () => {
         });
       });
     });
-*/
+
     it('should show an execution with limited information', () => {
       const executionName = 'b313e777-d28a-435b-a0dd-f1fad08116t1';
       const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
