@@ -33,7 +33,7 @@ jobs:
             # run fake api
             docker run -d --name api -v $(pwd):/home --workdir /home -p 5001:5001 node:8.11.4 node fake-api.js
 
-            # run dashboard
+            # build dashboard
             docker run --rm \
                 -v /home/circleci/.cache:/root/.cache \
                 -v $(pwd):/home \
@@ -41,21 +41,18 @@ jobs:
                 -e APIROOT=http://api:5001 \
                 node:8.11.4 \
                 yarn run build
+
+            # build dashboard image
             ./bin/build_docker_image.sh cumulus-dashboard:ci
+
+            # run dashboard
             docker run \
                 --rm \
                 --name dashboard \
+                -d \ # run in detached mode or else subsequent commands won't be reached
                 -e PORT=3000 \
                 -p 3000:3000 \
                 cumulus-dashboard:ci
-            # docker run -d \
-            #     --name dashboard \
-            #     -v $(pwd):/home \
-            #     --workdir /home \
-            #     -e APIROOT=http://api:5001 \
-            #     -p 3000:3000 \
-            #     node:8.11.4 \
-            #     yarn serve
 
             attempt_counter=0
             max_attempts=20
