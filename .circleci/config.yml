@@ -34,7 +34,13 @@ jobs:
             docker run -d --name api -v $(pwd):/home --workdir /home -p 5001:5001 node:8.11.4 node fake-api.js
 
             # run dashboard
-            APIROOT=http://api:5001 yarn run build
+            docker run --rm \
+                -v /home/circleci/.cache:/root/.cache \
+                -v $(pwd):/home \
+                --workdir /home \
+                -e APIROOT=http://api:5001 \
+                node:8.11.4 \
+                yarn run build
             ./bin/build_docker_image.sh cumulus-dashboard:ci
             docker run \
                 --rm \
