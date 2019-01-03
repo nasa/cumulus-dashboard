@@ -164,3 +164,7 @@ $ git checkout master
 $ git tag -a v1.x.x -m "Release 1.x.x"
 $ git push origin v1.x.x
 ```
+
+### 7. Add the release to Github
+
+Follow the [Github documentation to create a new release](https://help.github.com/articles/creating-releases/) for the dashboard using the tag that you just pushed. Make sure to use the content from the CHANGELOG for this release as the description of the release on Github.
