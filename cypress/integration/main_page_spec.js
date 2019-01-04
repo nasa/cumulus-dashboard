@@ -1,4 +1,5 @@
 import {
+  shouldBeLoggedIn,
   shouldBeRedirectedToLogin,
   shouldHaveNoToken,
   shouldHaveDeletedToken
@@ -19,7 +20,7 @@ describe('Dashboard Home Page', () => {
       cy.get('a').click();
     });
 
-    cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
+    shouldBeLoggedIn();
     cy.get('nav')
       .contains('Collections')
       .should('have.attr', 'href')
@@ -28,6 +29,20 @@ describe('Dashboard Home Page', () => {
       .contains('Rules')
       .should('have.attr', 'href')
       .and('include', '/rules');
+  });
+
+  it('Logs in successfully after failed login', () => {
+    // simulate failed login
+    cy.visit('/#/auth')
+      .window().then(function (window) {
+        window.location.hash = '#/auth?token=failed-token';
+      });
+
+    cy.get('div[class=modal__internal]').within(() => {
+      cy.get('a').click();
+    });
+
+    shouldBeLoggedIn();
   });
 
   describe('When logged in', () => {

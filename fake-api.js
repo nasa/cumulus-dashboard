@@ -198,7 +198,7 @@ app.get('/token', (req, res) => {
   const url = req.query.state;
   if (url) {
     token = generateJWT();
-    res.redirect(`${url}?token=${token}`);
+    res.redirect(`${decodeURIComponent(url)}?token=${token}`);
   } else {
     res.write('state parameter is missing');
     res.status(400).end();
