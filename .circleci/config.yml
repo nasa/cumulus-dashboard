@@ -116,12 +116,12 @@ jobs:
               --workdir /home \
               node:8.11.4 \
               yarn run build
-  workflows:
-    version: 2
-    build_and_test:
-      jobs:
-        - build
-        - build2:
-          filters:
-            branches:
-              only: CUMULUS-1075
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - build2:
+        filters:
+          branches:
+            only: CUMULUS-1075
