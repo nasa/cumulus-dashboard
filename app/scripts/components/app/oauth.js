@@ -6,6 +6,7 @@ import url from 'url';
 import createReactClass from 'create-react-class';
 import { login, setTokenState } from '../../actions';
 import { window } from '../../utils/browser';
+import { buildRedirectUrl } from '../../utils/format';
 import { updateDelay, apiRoot } from '../../config';
 import PropTypes from 'prop-types';
 import ErrorReport from '../errors/report';
@@ -55,10 +56,7 @@ var OAuth = createReactClass({
 
     let button;
     if (!api.authenticated && !api.inflight) {
-      const origin = window.location.origin;
-      const pathname = window.location.pathname;
-      const hash = window.location.hash;
-      const redirect = encodeURIComponent(url.resolve(origin, pathname) + hash);
+      const redirect = buildRedirectUrl(window.location);
       button = <div style={{textAlign: 'center'}}><a href={url.resolve(apiRoot, `token?state=${redirect}`)} >Login with Earthdata Login</a></div>;
     }
     return (
