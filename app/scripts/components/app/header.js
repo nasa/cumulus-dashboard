@@ -1,8 +1,10 @@
 'use strict';
 import React from 'react';
 import c from 'classnames';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import { logout } from '../../actions';
+import { logout, getApiVersion } from '../../actions';
 import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
 import { strings } from '../locale';
@@ -19,20 +21,28 @@ const paths = [
   ['Reconciliation Reports', 'reconciliation-reports']
 ];
 
-var Header = React.createClass({
+var Header = createReactClass({
   displayName: 'Header',
   propTypes: {
-    location: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    api: React.PropTypes.object,
-    minimal: React.PropTypes.bool
+    api: PropTypes.object,
+    apiVersion: PropTypes.object,
+    dispatch: PropTypes.func,
+    location: PropTypes.object,
+    minimal: PropTypes.bool
+  },
+
+  UNSAFE_componentWillMount: function () {
+    const { dispatch, api } = this.props;
+    if (api.authenticated) dispatch(getApiVersion());
   },
 
   logout: function () {
-    this.props.dispatch(logout());
-    if (window.location && window.location.reload) {
-      setTimeout(() => window.location.reload(), 50);
-    }
+    const { dispatch } = this.props;
+    dispatch(logout()).then(() => {
+      if (window.location && window.location.reload) {
+        window.location.reload();
+      }
+    });
   },
 
   className: function (path) {
@@ -47,11 +57,19 @@ var Header = React.createClass({
 
   render: function () {
     const { authenticated } = this.props.api;
+    const { warning, versionNumber } = this.props.apiVersion;
     const activePaths = paths.filter(pathObj => nav.exclude[pathObj[1].replace('/', '')] !== true);
+
+    let versionWarning;
+    if (warning) { versionWarning = <h5 className='apiVersionWarning'>Warning: { warning }</h5>; }
     return (
       <div className='header'>
         <div className='row'>
           <h1 className='logo'><Link to='/'><img alt="Logo" src={graphicsPath + strings.logo} /></Link></h1>
+          { authenticated &&
+            <h5 className='apiVersion'>Cumulus API Version: { versionNumber }</h5>
+          }
+          { versionWarning }
           <nav>
             { !this.props.minimal ? <ul>
               {activePaths.map(path => <li

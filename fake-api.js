@@ -14,6 +14,8 @@ const {
   resetState
 } = require('./test/fake-api/db');
 
+const publicEndpoints = ['/version'];
+
 const { generateJWT, verifyJWT } = require('./test/fake-api/token');
 let token;
 
@@ -37,7 +39,7 @@ function fakeApiMiddleWare (req, res, next) {
     // respond with 200
     res.sendStatus(200).end();
     return;
-  } else {
+  } else if (publicEndpoints.indexOf(req.path) < 0){
     const auth = req.header('Authorization');
     const re = /^\/token|refresh/;
 
@@ -196,9 +198,21 @@ app.get('/token', (req, res) => {
   const url = req.query.state;
   if (url) {
     token = generateJWT();
-    res.redirect(`${url}?token=${token}`);
+    res.redirect(`${decodeURIComponent(url)}?token=${token}`);
   } else {
     res.write('state parameter is missing');
+    res.status(400).end();
+  }
+});
+
+app.delete('/tokenDelete/:jwtToken', (req, res) => {
+  if (req.params.jwtToken) {
+    token = '';
+    res.status(200).json({
+      message: 'Deleted token'
+    }).end();
+  } else {
+    res.write('token is required');
     res.status(400).end();
   }
 });
@@ -234,6 +248,13 @@ app.post('/refresh', (req, res) => {
   res.status(200);
   res.json({
     token
+  });
+});
+
+app.get('/version', (req, res) => {
+  res.status(200);
+  res.json({
+    api_version: '1.11.0'
   });
 });
 

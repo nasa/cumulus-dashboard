@@ -5,7 +5,7 @@ import {
   EXECUTION_STATUS,
   EXECUTION_STATUS_INFLIGHT,
   EXECUTION_STATUS_ERROR
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {
   execution: null,

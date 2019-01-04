@@ -13,3 +13,4 @@ package-lock.json
 test/fake-api/db/*.json
 cypress/screenshots
 cypress/videos
+.vscode

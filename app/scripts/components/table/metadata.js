@@ -1,11 +1,13 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { nullValue } from '../../utils/format';
-const Metadata = React.createClass({
+const Metadata = createReactClass({
   propTypes: {
-    data: React.PropTypes.object,
-    accessors: React.PropTypes.array
+    data: PropTypes.object,
+    accessors: PropTypes.array
   },
   render: function () {
     const { data, accessors } = this.props;

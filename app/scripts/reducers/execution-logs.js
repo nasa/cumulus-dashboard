@@ -5,7 +5,7 @@ import {
   EXECUTION_LOGS,
   EXECUTION_LOGS_INFLIGHT,
   EXECUTION_LOGS_ERROR
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {
   results: null,
