@@ -102,10 +102,13 @@ jobs:
               --workdir /home \
               cypress/base:8 \
               yarn cypress-ci
+
   build2:
     machine: true
     working_directory: ~/cumulus-dashboard
     steps:
+      - checkout
+
       - run:
           name: Build dashboard
           command: |
@@ -116,6 +119,7 @@ jobs:
               --workdir /home \
               node:8.11.4 \
               yarn run build
+
 workflows:
   version: 2
   build_and_test:
