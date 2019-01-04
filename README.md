@@ -31,7 +31,7 @@ The following Environment Variables override the default values in `config.js`:
 | LABELS | gitc or daac localization (defaults to daac)
 | APIROOT | the API URL. This must be set as it defaults to example.com
 
-     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com npm run serve
+     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com yarn run serve
 
 ## Building in Docker
 
@@ -46,39 +46,48 @@ The compiled files will be placed in the `dist` directory.
 
 ## Building locally
 
-This requires [nvm](https://github.com/creationix/nvm) and node v8.11. To set v8.11 as the default, use `nvm use`.
+The dashboard uses node v8.11. To run the dashboard using node v8.11, install [nvm](https://github.com/creationix/nvm) and run `nvm use`.
+
+`yarn` is required to install the correct dependencies for the dashboard. To install `yarn`:
+
+```
+nvm use
+npm install -g yarn
+```
+
+To run the dashboard locally:
 
 ```bash
 git clone https://github.com/cumulus-nasa/cumulus-dashboard
 cd cumulus-dashboard
 nvm use
-npm install
-npm run serve
+yarn install
+yarn run serve
 ```
 
 ## Fake API server
 
 For development and testing purposes, you can use a fake API server provided with the dashboard. To use the fake API server, run `node fake-api.js` in a separate terminal session, then launch the dashboard with:
 
-     $ APIROOT=http://localhost:5001 npm run serve
+     $ APIROOT=http://localhost:5001 yarn run serve
 
 ## Tests
 
 ### Unit Tests
 
-     $ npm run test
+     $ yarn run test
 
 ## Integration & Validation Tests
 
 For the integration tests to work, you have to launch the fake API and the dashboard first. Run the following commands in separate terminal sessions:
 
      $ node fake-api.js
-     $ APIROOT=http://localhost:5001 npm run serve
+     $ APIROOT=http://localhost:5001 yarn run serve
 
 Run the test suite in another terminal:
 
-     $ npm run validation
-     $ npm run cypress
+     $ yarn run validation
+     $ yarn run cypress
 
 When the cypress editor opens, click on `run all specs`.
 
@@ -86,7 +95,7 @@ When the cypress editor opens, click on `run all specs`.
 
 First build the site
 
-     $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com npm run build
+     $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com yarn run build
 
 Then deploy the `dist` folder
 
@@ -149,3 +158,7 @@ $ git checkout master
 $ git tag -a v1.x.x -m "Release 1.x.x"
 $ git push origin v1.x.x
 ```
+
+### 7. Add the release to Github
+
+Follow the [Github documentation to create a new release](https://help.github.com/articles/creating-releases/) for the dashboard using the tag that you just pushed. Make sure to use the content from the CHANGELOG for this release as the description of the release on Github.
