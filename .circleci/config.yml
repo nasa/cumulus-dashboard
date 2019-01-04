@@ -50,15 +50,26 @@ jobs:
               node:8.11.4 \
               node fake-api.js
 
+            # build dashboard
+            docker run --rm \
+                -v /home/circleci/.cache:/root/.cache \
+                -v $(pwd):/home \
+                --workdir /home \
+                -e APIROOT=http://api:5001 \
+                node:8.11.4 \
+                yarn run build
+
+            # build dashboard image
+            ./bin/build_docker_image.sh cumulus-dashboard:ci
+
             # run dashboard
-            docker run -d \
-              --name dashboard \
-              -v $(pwd):/home \
-              --workdir /home \
-              -e APIROOT=http://api:5001 \
-              -p 3000:3000 \
-              node:8.11.4 \
-              yarn serve
+            docker run \
+                -d \
+                --rm \
+                --name dashboard \
+                -e PORT=3000 \
+                -p 3000:3000 \
+                cumulus-dashboard:ci
 
             attempt_counter=0
             max_attempts=20
@@ -74,19 +85,19 @@ jobs:
               sleep 5
             done
 
-      - run:
-          name: Run Validation Tests
-          command: |
-            docker run \
-              --link api:api \
-              --link dashboard:dashboard \
-              -e CYPRESS_BASE_URL=http://dashboard:3000 \
-              --rm \
-              -v /home/circleci/.cache:/root/.cache \
-              -v $(pwd):/home \
-              --workdir /home \
-              node:8.11.4 \
-              yarn validation
+      # - run:
+      #     name: Run Validation Tests
+      #     command: |
+      #       docker run \
+      #         --link api:api \
+      #         --link dashboard:dashboard \
+      #         -e CYPRESS_BASE_URL=http://dashboard:3000 \
+      #         --rm \
+      #         -v /home/circleci/.cache:/root/.cache \
+      #         -v $(pwd):/home \
+      #         --workdir /home \
+      #         node:8.11.4 \
+      #         yarn validation
 
       - run:
           name: Run Integration Tests
@@ -102,27 +113,3 @@ jobs:
               --workdir /home \
               cypress/base:8 \
               yarn cypress-ci
-
-  build2:
-    machine: true
-    working_directory: ~/cumulus-dashboard
-    steps:
-      - checkout
-
-      - run:
-          name: Build dashboard
-          command: |
-            # build dashboard
-            docker run --rm \
-              -v /home/circleci/.cache:/root/.cache \
-              -v $(pwd):/home \
-              --workdir /home \
-              node:8.11.4 \
-              yarn run build
-
-workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - build
-      - build2
