@@ -121,7 +121,4 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - build2:
-        filters:
-          branches:
-            only: CUMULUS-1075
+      - build2
