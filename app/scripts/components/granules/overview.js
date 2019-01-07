@@ -44,7 +44,7 @@ class GranulesOverview extends React.Component {
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
   }
 
-  UNSAFE_componentWillMount () {
+  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
     this.setState({});
     this.cancelInterval = interval(this.queryMeta, updateInterval, true);
   }

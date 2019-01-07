@@ -1,7 +1,6 @@
 'use strict';
 import path from 'path';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -69,26 +68,24 @@ const metaAccessors = [
   ['Total duration', 'duration', seconds]
 ];
 
-var GranuleOverview = createReactClass({
-  displayName: strings.granule,
+class GranuleOverview extends React.Component {
+  constructor () {
+    super();
+    this.reload = this.reload.bind(this);
+    this.fastReload = this.fastReload.bind(this);
+    this.navigateBack = this.navigateBack.bind(this);
+    this.queryWorkflows = this.queryWorkflows.bind(this);
+    this.reingest = this.reingest.bind(this);
+    this.applyWorkflow = this.applyWorkflow.bind(this);
+    this.remove = this.remove.bind(this);
+    this.delete = this.delete.bind(this);
+    this.errors = this.errors.bind(this);
+    this.selectWorkflow = this.selectWorkflow.bind(this);
+    this.getExecuteOptions = this.getExecuteOptions.bind(this);
+    this.displayName = strings.granule;
+  }
 
-  propTypes: {
-    params: PropTypes.object,
-    dispatch: PropTypes.func,
-    granules: PropTypes.object,
-    logs: PropTypes.object,
-    router: PropTypes.object,
-    skipReloadOnMount: PropTypes.bool,
-    workflowOptions: PropTypes.array
-  },
-
-  getDefaultProps: function () {
-    return {
-      skipReloadOnMount: false
-    };
-  },
-
-  UNSAFE_componentWillMount: function () {
+  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
     this.setState({});
     const { granuleId } = this.props.params;
     this.cancelInterval = interval(this.queryWorkflows, updateInterval, true);
@@ -97,56 +94,56 @@ var GranuleOverview = createReactClass({
 
     const immediate = !this.props.granules.map[granuleId];
     this.reload(immediate);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
-  },
+  }
 
-  reload: function (immediate, timeout) {
+  reload (immediate, timeout) {
     timeout = timeout || updateInterval;
     const granuleId = this.props.params.granuleId;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
     this.cancelInterval = interval(() => dispatch(getGranule(granuleId)), timeout, immediate);
-  },
+  }
 
-  fastReload: function () {
+  fastReload () {
     // decrease timeout to better see updates
     this.reload(true, updateInterval / 2);
-  },
+  }
 
-  navigateBack: function () {
+  navigateBack () {
     const { router } = this.props;
     router.push('/granules');
-  },
+  }
 
-  queryWorkflows: function () {
+  queryWorkflows () {
     this.props.dispatch(listWorkflows());
-  },
+  }
 
-  reingest: function () {
+  reingest () {
     const { granuleId } = this.props.params;
     this.props.dispatch(reingestGranule(granuleId));
-  },
+  }
 
-  applyWorkflow: function () {
+  applyWorkflow () {
     const { granuleId } = this.props.params;
     const { workflow } = this.state;
     this.props.dispatch(applyWorkflowToGranule(granuleId, workflow));
-  },
+  }
 
-  remove: function () {
+  remove () {
     const { granuleId } = this.props.params;
     this.props.dispatch(removeGranule(granuleId));
-  },
+  }
 
-  delete: function () {
+  delete () {
     const { granuleId } = this.props.params;
     this.props.dispatch(deleteGranule(granuleId));
-  },
+  }
 
-  errors: function () {
+  errors () {
     const granuleId = this.props.params.granuleId;
     return [
       get(this.props.granules.map, [granuleId, 'error']),
@@ -156,13 +153,13 @@ var GranuleOverview = createReactClass({
       get(this.props.granules.removed, [granuleId, 'error']),
       get(this.props.granules.deleted, [granuleId, 'error'])
     ].filter(Boolean);
-  },
+  }
 
-  selectWorkflow: function (selector, workflow) {
+  selectWorkflow (selector, workflow) {
     this.setState({ workflow });
-  },
+  }
 
-  getExecuteOptions: function () {
+  getExecuteOptions () {
     return [
       simpleDropdownOption({
         handler: this.selectWorkflow,
@@ -171,9 +168,9 @@ var GranuleOverview = createReactClass({
         options: this.props.workflowOptions
       })
     ];
-  },
+  }
 
-  render: function () {
+  render () {
     const granuleId = this.props.params.granuleId;
     const record = this.props.granules.map[granuleId];
     if (!record || (record.inflight && !record.data)) {
@@ -262,7 +259,22 @@ var GranuleOverview = createReactClass({
       </div>
     );
   }
-});
+}
+
+GranuleOverview.propTypes = {
+  params: PropTypes.object,
+  dispatch: PropTypes.func,
+  granules: PropTypes.object,
+  logs: PropTypes.object,
+  router: PropTypes.object,
+  skipReloadOnMount: PropTypes.bool,
+  workflowOptions: PropTypes.array
+};
+
+GranuleOverview.defaultProps = {
+  skipReloadOnMount: false
+};
+
 export { GranuleOverview };
 
 export default connect(state => ({
