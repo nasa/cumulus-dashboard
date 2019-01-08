@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { get } from 'object-path';
