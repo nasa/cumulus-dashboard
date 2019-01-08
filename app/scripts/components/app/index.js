@@ -6,6 +6,7 @@ import { target, environment } from '../../config';
 import { displayCase } from '../../utils/format';
 
 import Header from './header';
+import Footer from './footer';
 
 var App = createReactClass({
   displayName: 'App',
@@ -26,10 +27,11 @@ var App = createReactClass({
             <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
           </div>
         ) : null }
-        <Header dispatch={this.props.dispatch} api={this.props.api} apiVersion={this.props.apiVersion} location={this.props.location}/>
+        <Header dispatch={this.props.dispatch} api={this.props.api} location={this.props.location}/>
         <main className='main' role='main'>
           {this.props.children}
         </main>
+        <Footer api={this.props.api} apiVersion={this.props.apiVersion} />
       </div>
     );
   }
