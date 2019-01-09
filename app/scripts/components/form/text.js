@@ -1,27 +1,18 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 
-var TextForm = createReactClass({
-  propTypes: {
-    label: PropTypes.any,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]),
-    id: PropTypes.string,
-    error: PropTypes.string,
-    onChange: PropTypes.func,
-    type: PropTypes.string,
-    className: PropTypes.string
-  },
+class TextForm extends React.Component {
+  constructor () {
+    super();
+    this.onChange = this.onChange.bind(this);
+  }
 
-  onChange: function (e) {
+  onChange (e) {
     this.props.onChange(this.props.id, e.target.value);
-  },
+  }
 
-  render: function () {
+  render () {
     let {
       label,
       value,
@@ -47,6 +38,19 @@ var TextForm = createReactClass({
       </div>
     );
   }
-});
+}
+
+TextForm.propTypes = {
+  label: PropTypes.any,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  id: PropTypes.string,
+  error: PropTypes.string,
+  onChange: PropTypes.func,
+  type: PropTypes.string,
+  className: PropTypes.string
+};
 
 export default TextForm;
