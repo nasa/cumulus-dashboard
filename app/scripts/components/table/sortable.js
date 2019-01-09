@@ -1,7 +1,6 @@
 'use strict';
 import Collapse from 'react-collapsible';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { isUndefined } from '../../utils/validate';
@@ -13,39 +12,26 @@ const otherOrder = {
   asc: 'desc'
 };
 
-const Table = createReactClass({
-  displayName: 'SortableTable',
-
-  propTypes: {
-    primaryIdx: PropTypes.number,
-    data: PropTypes.array,
-    header: PropTypes.array,
-    props: PropTypes.array,
-    row: PropTypes.array,
-    sortIdx: PropTypes.number,
-    order: PropTypes.string,
-    changeSortProps: PropTypes.func,
-    onSelect: PropTypes.func,
-    canSelect: PropTypes.bool,
-    collapsible: PropTypes.bool,
-    selectedRows: PropTypes.array,
-    rowId: PropTypes.any
-  },
-
-  getInitialState: function () {
-    return {
+class Table extends React.Component {
+  constructor () {
+    super();
+    this.state = {
       dumbOrder: null,
       dumbSortIdx: null
     };
-  },
+    this.displayName = 'SortableTable';
+    this.isTableDumb = this.isTableDumb.bind(this);
+    this.changeSort = this.changeSort.bind(this);
+    this.select = this.select.bind(this);
+  }
 
-  isTableDumb: function () {
+  isTableDumb () {
     // identify whether the table is "dumb," as in it doesn't
     // do its own data-updating, and cannot be sorted via its API call
     return isUndefined(this.props.sortIdx) || !this.props.order || !Array.isArray(this.props.props);
-  },
+  }
 
-  changeSort: function (e) {
+  changeSort (e) {
     let { sortIdx, order, props, header } = this.props;
     const isTableDumb = this.isTableDumb();
 
@@ -65,16 +51,16 @@ const Table = createReactClass({
     if (isTableDumb) {
       this.setState({ dumbSortIdx: newSortIdx, dumbOrder: newOrder });
     }
-  },
+  }
 
-  select: function (e) {
+  select (e) {
     if (typeof this.props.onSelect === 'function') {
       const targetId = (e.currentTarget.getAttribute('data-value'));
       this.props.onSelect(targetId);
     }
-  },
+  }
 
-  render: function () {
+  render () {
     let { primaryIdx, sortIdx, order, props, header, row, rowId, data, selectedRows, canSelect, collapsible } = this.props;
     const isTableDumb = this.isTableDumb();
     primaryIdx = primaryIdx || 0;
@@ -148,6 +134,22 @@ const Table = createReactClass({
       </div>
     );
   }
-});
+}
+
+Table.propTypes = {
+  primaryIdx: PropTypes.number,
+  data: PropTypes.array,
+  header: PropTypes.array,
+  props: PropTypes.array,
+  row: PropTypes.array,
+  sortIdx: PropTypes.number,
+  order: PropTypes.string,
+  changeSortProps: PropTypes.func,
+  onSelect: PropTypes.func,
+  canSelect: PropTypes.bool,
+  collapsible: PropTypes.bool,
+  selectedRows: PropTypes.array,
+  rowId: PropTypes.any
+};
 
 export default Table;
