@@ -18,7 +18,7 @@ const paths = [
   ['Executions', '/executions'],
   ['Rules', '/rules'],
   ['Logs', '/logs'],
-  ['Reconciliation Reports', 'reconciliation-reports']
+  ['Reconciliation Reports', '/reconciliation-reports']
 ];
 
 var Header = createReactClass({
