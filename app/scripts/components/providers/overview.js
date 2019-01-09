@@ -7,29 +7,28 @@ import { listProviders, getCount, interval } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/providers';
 import List from '../table/list-view';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import Overview from '../app/overview';
 import { updateInterval } from '../../config';
 
-var ProvidersOverview = createReactClass({
-  displayName: 'ProvidersOverview',
+class ProvidersOverview extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'ProvidersOverview';
+    this.queryStats = this.queryStats.bind(this);
+    this.generateQuery = this.generateQuery.bind(this);
+    this.renderOverview = this.renderOverview.bind(this);
+  }
 
-  propTypes: {
-    dispatch: PropTypes.func,
-    providers: PropTypes.object,
-    stats: PropTypes.object
-  },
-
-  UNSAFE_componentWillMount: function () {
+  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
     this.cancelInterval = interval(this.queryStats, updateInterval, true);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
-  },
+  }
 
-  queryStats: function () {
+  queryStats () {
     this.props.dispatch(getCount({
       type: 'collections',
       field: 'providers'
@@ -38,18 +37,18 @@ var ProvidersOverview = createReactClass({
       type: 'providers',
       field: 'status'
     }));
-  },
+  }
 
-  generateQuery: function () {
+  generateQuery () {
     return {};
-  },
+  }
 
-  renderOverview: function (count) {
+  renderOverview (count) {
     const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
     return <Overview items={overview} inflight={false} />;
-  },
+  }
 
-  render: function () {
+  render () {
     const { list } = this.props.providers;
     const { stats } = this.props;
     const { count, queriedAt } = list.meta;
@@ -89,6 +88,12 @@ var ProvidersOverview = createReactClass({
       </div>
     );
   }
-});
+}
+
+ProvidersOverview.propTypes = {
+  dispatch: PropTypes.func,
+  providers: PropTypes.object,
+  stats: PropTypes.object
+};
 
 export default connect(state => state)(ProvidersOverview);
