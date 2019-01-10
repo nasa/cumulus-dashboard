@@ -11,8 +11,8 @@ import Timer from '../app/timer';
 import { isUndefined as undef } from '../../utils/validate';
 
 class List extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.displayName = 'List';
     this.queryNewPage = this.queryNewPage.bind(this);
     this.queryNewSort = this.queryNewSort.bind(this);
@@ -25,7 +25,7 @@ class List extends React.Component {
     this.renderSelectAll = this.renderSelectAll.bind(this);
     this.state = {
       page: 1,
-      sortIdx: this.props.sortIdx || 0,
+      sortIdx: props.sortIdx || 0,
       order: 'desc',
       selected: [],
       prefix: null,
