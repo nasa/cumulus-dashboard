@@ -25,7 +25,7 @@ import {
   pdrLink,
   deleteText
 } from '../../utils/format';
-import SortableTable from '../table/sortable';
+import Table from '../table/sortable';
 import Loading from '../app/loading-indicator';
 import LogViewer from '../logs/viewer';
 import ErrorReport from '../errors/report';
@@ -240,7 +240,7 @@ class GranuleOverview extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>Files</h2>
           </div>
-          <SortableTable
+          <Table
             data={files}
             header={tableHeader}
             row={tableRow}
