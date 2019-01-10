@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import Collapse from 'react-collapsible';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
@@ -19,32 +18,31 @@ import ErrorReport from '../errors/report';
 import { ExecutionStatusGraph, getEventDetails } from './execution-status-graph';
 import SortableTable from '../table/sortable';
 
-var ExecutionStatus = createReactClass({
-  displayName: 'Execution',
+class ExecutionStatus extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'Execution';
+    this.navigateBack = this.navigateBack.bind(this);
+    this.errors = this.errors.bind(this);
+    this.renderEvents = this.renderEvents.bind(this);
+  }
 
-  propTypes: {
-    executionStatus: PropTypes.object,
-    params: PropTypes.object,
-    dispatch: PropTypes.func,
-    router: PropTypes.object
-  },
-
-  UNSAFE_componentWillMount: function () {
+  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
     const { dispatch } = this.props;
     const { executionArn } = this.props.params;
     dispatch(getExecutionStatus(executionArn));
-  },
+  }
 
-  navigateBack: function () {
+  navigateBack () {
     const { router } = this.props;
     router.push('/executions');
-  },
+  }
 
-  errors: function () {
+  errors () {
     return [].filter(Boolean);
-  },
+  }
 
-  renderEvents: function () {
+  renderEvents () {
     const { executionStatus } = this.props;
     let { executionHistory: { events } } = executionStatus;
     events.forEach((event) => {
@@ -64,9 +62,9 @@ var ExecutionStatus = createReactClass({
         collapsible={true}
       />
     );
-  },
+  }
 
-  render: function () {
+  render () {
     const { executionStatus } = this.props;
     if (!executionStatus.execution) return null;
 
@@ -177,7 +175,14 @@ var ExecutionStatus = createReactClass({
       </div>
     );
   }
-});
+}
+
+ExecutionStatus.propTypes = {
+  executionStatus: PropTypes.object,
+  params: PropTypes.object,
+  dispatch: PropTypes.func,
+  router: PropTypes.object
+};
 
 export { ExecutionStatus };
 
