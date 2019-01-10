@@ -2818,11 +2818,6 @@ clone-stats@^1.0.0:
   resolved "https://registry.yarnpkg.com/clone-stats/-/clone-stats-1.0.0.tgz#b3782dff8bb5474e18b9b6bf0fdfe782f8777680"
   integrity sha1-s3gt/4u1R04Yuba/D9/ngvh3doA=
 
-clone@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/clone/-/clone-0.2.0.tgz#c6126a90ad4f72dbf5acdb243cc37724fe93fc1f"
-  integrity sha1-xhJqkK1Pctv1rNskPMN3JP6T/B8=
-
 clone@^1.0.0, clone@^1.0.2:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
@@ -12390,13 +12385,13 @@ vinyl-fs@^3.0.0, vinyl-fs@^3.0.2:
     vinyl "^2.0.0"
     vinyl-sourcemap "^1.1.0"
 
-vinyl-source-stream@^1.1.0:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/vinyl-source-stream/-/vinyl-source-stream-1.1.2.tgz#62b53a135610a896e98ca96bee3a87f008a8e780"
-  integrity sha1-YrU6E1YQqJbpjKlr7jqH8Aio54A=
+vinyl-source-stream@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/vinyl-source-stream/-/vinyl-source-stream-2.0.0.tgz#f38a5afb9dd1e93b65d550469ac6182ac4f54b8e"
+  integrity sha1-84pa+53R6Ttl1VBGmsYYKsT1S44=
   dependencies:
     through2 "^2.0.3"
-    vinyl "^0.4.3"
+    vinyl "^2.1.0"
 
 vinyl-sourcemap@^1.1.0:
   version "1.1.0"
@@ -12426,14 +12421,6 @@ vinyl@1.X, vinyl@^1.1.0:
     clone "^1.0.0"
     clone-stats "^0.0.1"
     replace-ext "0.0.1"
-
-vinyl@^0.4.3:
-  version "0.4.6"
-  resolved "https://registry.yarnpkg.com/vinyl/-/vinyl-0.4.6.tgz#2f356c87a550a255461f36bbeb2a5ba8bf784847"
-  integrity sha1-LzVsh6VQolVGHza76ypbqL94SEc=
-  dependencies:
-    clone "^0.2.0"
-    clone-stats "^0.0.1"
 
 vinyl@^0.5.0:
   version "0.5.3"
