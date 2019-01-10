@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import {
   searchPdrs,
@@ -24,7 +25,7 @@ import Search from '../form/search';
 import List from '../table/list-view';
 import { pdrStatus as statusOptions } from '../../utils/status';
 
-var ActivePdrs = React.createClass({
+var ActivePdrs = createReactClass({
   displayName: 'ActivePdrs',
 
   propTypes: {

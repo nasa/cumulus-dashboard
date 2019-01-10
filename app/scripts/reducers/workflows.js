@@ -4,7 +4,7 @@ import {
   WORKFLOWS,
   WORKFLOWS_INFLIGHT,
   WORKFLOWS_ERROR
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {
   list: {

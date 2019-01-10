@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
@@ -11,7 +12,7 @@ import merge from '../../utils/merge';
 import { updateDelay } from '../../config';
 import {strings} from '../locale';
 
-var EditRecord = React.createClass({
+var EditRecord = createReactClass({
   propTypes: {
     pk: PropTypes.string,
     schema: PropTypes.object,
@@ -44,13 +45,13 @@ var EditRecord = React.createClass({
     }
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { pk } = this.props;
     this.get(pk);
     this.props.dispatch(getSchema(this.props.schemaKey));
   },
 
-  componentWillReceiveProps: function ({ pk }) {
+  UNSAFE_componentWillReceiveProps: function ({ pk }) {
     const { dispatch, router, clearRecordUpdate, backRoute, state } = this.props;
     const updateStatus = get(state.updated, [pk, 'status']);
     if (updateStatus === 'success') {

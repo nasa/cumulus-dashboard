@@ -1,5 +1,7 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   getGranule,
@@ -17,17 +19,17 @@ import AsyncCommands from '../form/dropdown-async-command';
 import { strings } from '.../../locale';
 
 const noop = () => true;
-var GranuleRecipe = React.createClass({
+var GranuleRecipe = createReactClass({
   displayName: 'GranuleRecipe',
 
   propTypes: {
-    params: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    granules: React.PropTypes.object,
-    router: React.PropTypes.object
+    params: PropTypes.object,
+    dispatch: PropTypes.func,
+    granules: PropTypes.object,
+    router: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const granuleId = this.props.params.granuleId;
     if (!this.props.granules.map[granuleId]) {
       this.props.dispatch(getGranule(granuleId));

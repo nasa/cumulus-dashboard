@@ -1,5 +1,7 @@
 'use strict';
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { getCollectionId, lastUpdated } from '../../utils/format';
@@ -19,13 +21,13 @@ import Dropdown from '../form/dropdown';
 import statusOptions from '../../utils/status';
 import {strings} from '../locale';
 
-var CollectionGranules = React.createClass({
+var CollectionGranules = createReactClass({
   displayName: strings.collection_granules,
 
   propTypes: {
-    granules: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    params: React.PropTypes.object
+    granules: PropTypes.object,
+    dispatch: PropTypes.func,
+    params: PropTypes.object
   },
 
   generateQuery: function () {

@@ -1,13 +1,15 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { Link } from 'react-router';
 import Sidebar from '../app/sidebar';
 
-var Rules = React.createClass({
+var Rules = createReactClass({
   propTypes: {
-    children: React.PropTypes.object,
-    location: React.PropTypes.object,
-    params: React.PropTypes.object
+    children: PropTypes.object,
+    location: PropTypes.object,
+    params: PropTypes.object
   },
 
   render: function () {

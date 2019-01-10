@@ -1,18 +1,21 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { target, environment } from '../../config';
 import { displayCase } from '../../utils/format';
 
 import Header from './header';
 
-var App = React.createClass({
+var App = createReactClass({
   displayName: 'App',
 
   propTypes: {
-    children: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    location: React.PropTypes.object,
-    api: React.PropTypes.object
+    children: PropTypes.object,
+    dispatch: PropTypes.func,
+    location: PropTypes.object,
+    api: PropTypes.object,
+    apiVersion: PropTypes.object
   },
 
   render: function () {
@@ -23,7 +26,7 @@ var App = React.createClass({
             <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
           </div>
         ) : null }
-        <Header dispatch={this.props.dispatch} api={this.props.api} location={this.props.location}/>
+        <Header dispatch={this.props.dispatch} api={this.props.api} apiVersion={this.props.apiVersion} location={this.props.location}/>
         <main className='main' role='main'>
           {this.props.children}
         </main>

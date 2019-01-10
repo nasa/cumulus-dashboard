@@ -1,12 +1,13 @@
 'use strict';
 import React from 'react';
-import { getExecutionLogs } from '../../actions';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
+import { getExecutionLogs } from '../../actions';
 import { connect } from 'react-redux';
 
 import ErrorReport from '../errors/report';
 
-var ExecutionLogs = React.createClass({
+var ExecutionLogs = createReactClass({
   displayName: 'Execution',
 
   propTypes: {
@@ -16,7 +17,7 @@ var ExecutionLogs = React.createClass({
     router: PropTypes.object
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const { dispatch } = this.props;
     const { executionName } = this.props.params;
     dispatch(getExecutionLogs(executionName));
@@ -33,6 +34,7 @@ var ExecutionLogs = React.createClass({
 
   render: function () {
     const { executionLogs } = this.props;
+    const { executionName } = this.props.params;
     if (!executionLogs.results) return null;
 
     const errors = this.errors();
@@ -41,7 +43,7 @@ var ExecutionLogs = React.createClass({
       <div className='page__component'>
       <section className='page__section page__section__header-wrapper'>
         <h1 className='heading--large heading--shared-content with-description'>
-          Logs for Execution {executionLogs.results[0].executions}
+          Logs for Execution {executionName}
         </h1>
 
         {errors.length ? <ErrorReport report={errors} /> : null}

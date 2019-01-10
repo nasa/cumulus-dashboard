@@ -3,18 +3,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import url from 'url';
+import createReactClass from 'create-react-class';
 import { login, setTokenState } from '../../actions';
 import { window } from '../../utils/browser';
+import { buildRedirectUrl } from '../../utils/format';
 import { updateDelay, apiRoot } from '../../config';
+import PropTypes from 'prop-types';
 import ErrorReport from '../errors/report';
 import Header from './header';
 
-var OAuth = React.createClass({
+var OAuth = createReactClass({
   propTypes: {
-    dispatch: React.PropTypes.func,
-    api: React.PropTypes.object,
-    location: React.PropTypes.object,
-    router: React.PropTypes.object
+    dispatch: PropTypes.func,
+    api: PropTypes.object,
+    location: PropTypes.object,
+    router: PropTypes.object,
+    apiVersion: PropTypes.object
   },
 
   getInitialState: function () {
@@ -24,12 +28,11 @@ var OAuth = React.createClass({
     };
   },
 
-  componentWillReceiveProps: function (newProps) {
+  UNSAFE_componentWillReceiveProps: function (newProps) {
     // delay-close the modal if it's open
     if (newProps.api.authenticated &&
         newProps.api.authenticated !== this.props.api.authenticated) {
-      const { dispatch } = this.props;
-      dispatch(setTokenState(this.state.token));
+      this.props.dispatch(setTokenState(this.state.token));
       const { pathname } = this.props.location;
       if (pathname !== '/auth' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);
@@ -39,7 +42,7 @@ var OAuth = React.createClass({
     }
   },
 
-  componentWillMount: function () {
+  UNSAFE_componentWillMount: function () {
     const query = this.props.location.query;
     if (query.token) {
       const token = query.token;
@@ -49,19 +52,16 @@ var OAuth = React.createClass({
   },
 
   render: function () {
-    const { dispatch, api } = this.props;
+    const { dispatch, api, apiVersion } = this.props;
 
     let button;
     if (!api.authenticated && !api.inflight) {
-      const origin = window.location.origin;
-      const pathname = window.location.pathname;
-      const hash = window.location.hash;
-      const redirect = encodeURIComponent(url.resolve(origin, pathname) + hash);
+      const redirect = buildRedirectUrl(window.location);
       button = <div style={{textAlign: 'center'}}><a href={url.resolve(apiRoot, `token?state=${redirect}`)} >Login with Earthdata Login</a></div>;
     }
     return (
       <div className='app'>
-        <Header dispatch={dispatch} api={api} minimal={true}/>
+        <Header dispatch={dispatch} api={api} apiVersion={apiVersion} minimal={true}/>
         <main className='main' role='main'>
           <div>
             <div className='modal__cover'></div>

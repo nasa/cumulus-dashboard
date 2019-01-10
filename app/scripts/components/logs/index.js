@@ -2,11 +2,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import LogViewer from './viewer';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
-var Logs = React.createClass({
+var Logs = createReactClass({
   propTypes: {
-    dispatch: React.PropTypes.func,
-    logs: React.PropTypes.object
+    dispatch: PropTypes.func,
+    logs: PropTypes.object
   },
 
   render: function () {
