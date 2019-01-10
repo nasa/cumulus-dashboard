@@ -1,16 +1,15 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import Loading from './loading-indicator';
 
-const Overview = createReactClass({
-  displayName: 'Overview',
-  propTypes: {
-    items: PropTypes.array,
-    inflight: PropTypes.bool
-  },
-  render: function () {
+class Overview extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'Overview';
+  }
+
+  render () {
     const { inflight, items } = this.props;
     return (
       <div className='overview-num__wrapper'>
@@ -27,6 +26,11 @@ const Overview = createReactClass({
       </div>
     );
   }
-});
+}
+
+Overview.propTypes = {
+  items: PropTypes.array,
+  inflight: PropTypes.bool
+};
 
 export default Overview;
