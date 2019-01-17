@@ -1,34 +1,34 @@
 'use strict';
 
-var path = require('path');
-var fs = require('fs');
-var gulp = require('gulp');
-var $ = require('gulp-load-plugins')();
-var uglify = require('gulp-uglify-es').default;
-var gutil = require('gulp-util');
-var del = require('del');
-var browserSync = require('browser-sync');
-var reload = browserSync.reload;
-var watchify = require('watchify');
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var sourcemaps = require('gulp-sourcemaps');
-var exit = require('gulp-exit');
-var rev = require('gulp-rev');
-var revReplace = require('gulp-rev-replace');
-var SassString = require('node-sass').types.String;
-var notifier = require('node-notifier');
-var config = require('./app/scripts/config');
+const path = require('path');
+const fs = require('fs');
+const gulp = require('gulp');
+const $ = require('gulp-load-plugins')();
+const uglify = require('gulp-uglify-es').default;
+const gutil = require('gulp-util');
+const del = require('del');
+const browserSync = require('browser-sync');
+const reload = browserSync.reload;
+const watchify = require('watchify');
+const browserify = require('browserify');
+const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
+const sourcemaps = require('gulp-sourcemaps');
+const exit = require('gulp-exit');
+const rev = require('gulp-rev');
+const revReplace = require('gulp-rev-replace');
+const SassString = require('node-sass').types.String;
+const notifier = require('node-notifier');
+const config = require('./app/scripts/config');
 
 // /////////////////////////////////////////////////////////////////////////////
 // --------------------------- Variables -------------------------------------//
 // ---------------------------------------------------------------------------//
 
 // The package.json
-var pkg;
+let pkg;
 
-var prodBuild = false;
+let prodBuild = false;
 
 // /////////////////////////////////////////////////////////////////////////////
 // ------------------------- Helper functions --------------------------------//
@@ -58,7 +58,7 @@ readPackage();
 // When including the file in the index.html we need to refer to bundle.js not
 // main.js
 gulp.task('javascript', function () {
-  var watcher = watchify(browserify({
+  const watcher = watchify(browserify({
     entries: ['./app/scripts/main.js'],
     debug: true,
     cache: {},
@@ -93,13 +93,13 @@ gulp.task('javascript', function () {
   }
 
   watcher
-  .on('log', gutil.log)
-  .on('update', bundler);
+    .on('log', gutil.log)
+    .on('update', bundler);
 
   return bundler();
 });
 
-// Vendor scripts. Basically all the dependencies in the package.js.
+// Vendor scripts. Basically all the dependencies in the package.json.
 // Therefore be careful and keep the dependencies clean.
 gulp.task('vendorScripts', function () {
   // Ensure package is updated.
@@ -122,13 +122,23 @@ gulp.task('vendorScripts', function () {
 // --------------------------- Helper tasks -----------------------------------//
 // ----------------------------------------------------------------------------//
 
-gulp.task('build', gulp.series('vendorScripts', 'javascript', function () {
-  gulp.start(['html', 'images', 'fonts', 'extras'], function () {
-    return gulp.src('dist/**/*')
-      .pipe($.size({title: 'build', gzip: true}))
-      .pipe(exit());
-  });
-}));
+const logBuildSize = () => {
+  return gulp.src('dist/**/*')
+    .pipe($.size({title: 'build', gzip: true}));
+};
+
+const compileBuild = (done) => {
+  return gulp.series(
+    gulp.parallel('html', 'images', 'fonts', 'extras'),
+    logBuildSize,
+  )(done);
+};
+
+const doBuild = (done) => {
+  return gulp.series('vendorScripts', 'javascript', compileBuild)(done);
+};
+
+gulp.task('build', doBuild);
 
 gulp.task('styles', function () {
   return gulp.src('app/styles/main.scss')
@@ -239,7 +249,14 @@ gulp.task('serve', gulp.series('vendorScripts', 'javascript', 'styles', 'fonts',
   gulp.watch('package.json', gulp.series('vendorScripts'));
 }));
 
-gulp.task('default', gulp.series('clean', function () {
+const doProdBuild = (done) => {
   prodBuild = true;
-  gulp.start('build');
+  return doBuild(done);
+  // return gulp.parallel('build')(done);
+};
+
+gulp.task('default', gulp.series('clean', function (done) {
+  prodBuild = true;
+  return doBuild(done);
+  // return gulp.parallel('build')(done);
 }));
