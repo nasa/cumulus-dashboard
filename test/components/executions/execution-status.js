@@ -30,7 +30,7 @@ test('Cumulus-690 Execution Status shows workflow task and version information',
       executionStatus={executionStatus}
       skipReloadOnMount={true} />);
 
-  const sortableTable = executionStatusRendered.find('SortableTable');
+  const sortableTable = executionStatusRendered.find('Table');
   t.is(sortableTable.length, 1);
 
   const sortableTableWrapper = sortableTable.dive();

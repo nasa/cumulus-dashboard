@@ -2,48 +2,48 @@ import React from 'react';
 import c from 'classnames';
 import { findDOMNode } from 'react-dom';
 import AsyncCommand from '../form/async-command';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { addGlobalListener } from '../../utils/browser';
 
-const DropdownAsync = createReactClass({
-  propTypes: {
-    config: PropTypes.array
-  },
+class DropdownAsync extends React.Component {
+  constructor () {
+    super();
+    this.state = { showActions: false };
+    this.onOutsideClick = this.onOutsideClick.bind(this);
+    this.toggleActions = this.toggleActions.bind(this);
+    this.close = this.close.bind(this);
+    this.onSuccess = this.onSuccess.bind(this);
+  }
 
-  getInitialState: function () {
-    return { showActions: false };
-  },
-
-  UNSAFE_componentWillMount: function () {
+  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
     this.cleanup = addGlobalListener('click', this.onOutsideClick);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cleanup && typeof this.cleanup === 'function') this.cleanup();
-  },
+  }
 
-  onOutsideClick: function (e) {
+  onOutsideClick (e) {
     if (findDOMNode(this).contains(e.target)) return;
     else this.setState({ showActions: false });
-  },
+  }
 
-  toggleActions: function (e) {
+  toggleActions (e) {
     e.preventDefault();
     e.stopPropagation();
     this.setState({ showActions: !this.state.showActions });
-  },
+  }
 
-  close: function () {
+  close () {
     this.setState({ showActions: false });
-  },
+  }
 
-  onSuccess: function (success) {
+  onSuccess (success) {
     this.setState({ showActions: false });
     if (typeof success === 'function') success();
-  },
+  }
 
-  render: function () {
+  render () {
     const { config } = this.props;
     const { showActions } = this.state;
     return (
@@ -69,5 +69,10 @@ const DropdownAsync = createReactClass({
       </div>
     );
   }
-});
+}
+
+DropdownAsync.propTypes = {
+  config: PropTypes.array
+};
+
 export default DropdownAsync;

@@ -1,10 +1,8 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 
-const Loading = createReactClass({
-  displayName: 'Loading',
-  render: function () {
+class Loading extends React.Component {
+  render () {
     return (
       <div className='loading'>
         <div className='sk-cube-grid'>
@@ -21,5 +19,5 @@ const Loading = createReactClass({
       </div>
     );
   }
-});
+}
 export default Loading;

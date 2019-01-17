@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added tests for the Collections page and Providers page. [Cumulus-643]
 - Added warning message to granules `reingest` button to indicates that existing data will be overwritten. [Cumulus-792]
 
+### Changed
+- Updated React to version 16.6.3
+- Updated all component classes using ES6 style [Cumulus-1096]
+
 ## [v1.2.0] - 2018-08-08
 
 ### Added

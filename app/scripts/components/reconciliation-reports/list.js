@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import {
   searchReconciliationReports,
@@ -18,25 +17,24 @@ import {
 import Search from '../form/search';
 import List from '../table/list-view';
 
-const ReconciliationReportList = createReactClass({
-  displayName: 'ReconciliationReportList',
+class ReconciliationReportList extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'ReconciliationReportList';
+    this.generateQuery = this.generateQuery.bind(this);
+    this.generateBulkActions = this.generateBulkActions.bind(this);
+  }
 
-  propTypes: {
-    location: PropTypes.object,
-    dispatch: PropTypes.func,
-    reconciliationReports: PropTypes.object
-  },
-
-  generateQuery: function () {
+  generateQuery () {
     return {};
-  },
+  }
 
-  generateBulkActions: function () {
+  generateBulkActions () {
     const { reconciliationReports } = this.props;
     return bulkActions(reconciliationReports);
-  },
+  }
 
-  render: function () {
+  render () {
     const { list } = this.props.reconciliationReports;
     const { queriedAt } = list.meta;
 
@@ -71,7 +69,13 @@ const ReconciliationReportList = createReactClass({
       </div>
     );
   }
-});
+}
+
+ReconciliationReportList.propTypes = {
+  location: PropTypes.object,
+  dispatch: PropTypes.func,
+  reconciliationReports: PropTypes.object
+};
 
 export default connect(state => ({
   reconciliationReports: state.reconciliationReports

@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import {
   searchPdrs,
@@ -25,37 +24,37 @@ import Search from '../form/search';
 import List from '../table/list-view';
 import { pdrStatus as statusOptions } from '../../utils/status';
 
-var ActivePdrs = createReactClass({
-  displayName: 'ActivePdrs',
+class ActivePdrs extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'ActivePdrs';
+    this.generateQuery = this.generateQuery.bind(this);
+    this.getView = this.getView.bind(this);
+    this.generateBulkActions = this.generateBulkActions.bind(this);
+  }
 
-  propTypes: {
-    location: PropTypes.object,
-    dispatch: PropTypes.func,
-    pdrs: PropTypes.object
-  },
-
-  generateQuery: function () {
+  generateQuery () {
     const query = {};
     const { pathname } = this.props.location;
     if (pathname === '/pdrs/completed') query.status = 'completed';
     else if (pathname === '/pdrs/failed') query.status = 'failed';
     else if (pathname === '/pdrs/active') query.status = 'running';
     return query;
-  },
+  }
 
-  getView: function () {
+  getView () {
     const { pathname } = this.props.location;
     if (pathname === '/pdrs/completed') return 'completed';
     else if (pathname === '/pdrs/failed') return 'failed';
     else if (pathname === '/pdrs/active') return 'active';
     else return 'all';
-  },
+  }
 
-  generateBulkActions: function () {
+  generateBulkActions () {
     return bulkActions(this.props.pdrs);
-  },
+  }
 
-  render: function () {
+  render () {
     const { list } = this.props.pdrs;
     const { count, queriedAt } = list.meta;
     const view = this.getView();
@@ -98,7 +97,13 @@ var ActivePdrs = createReactClass({
       </div>
     );
   }
-});
+}
+
+ActivePdrs.propTypes = {
+  location: PropTypes.object,
+  dispatch: PropTypes.func,
+  pdrs: PropTypes.object
+};
 
 export default connect(state => ({
   pdrs: state.pdrs

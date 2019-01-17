@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -20,13 +19,8 @@ const tableRow = [
   'definition.Comment'
 ];
 
-var WorkflowOverview = createReactClass({
-  propTypes: {
-    dispatch: PropTypes.func,
-    workflows: PropTypes.object
-  },
-
-  render: function () {
+class WorkflowOverview extends React.Component {
+  render () {
     const { list } = this.props.workflows;
     const count = list.data.length;
     return (
@@ -53,7 +47,12 @@ var WorkflowOverview = createReactClass({
       </div>
     );
   }
-});
+}
+
+WorkflowOverview.propTypes = {
+  dispatch: PropTypes.func,
+  workflows: PropTypes.object
+};
 
 export default connect(state => ({
   workflows: state.workflows
