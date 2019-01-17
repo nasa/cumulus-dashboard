@@ -200,6 +200,15 @@ app.get('/reconciliationReports', async (req, res) => {
   res.send(reports);
 });
 
+app.post('/reconciliationReports', async(req, res) => {
+  await fakeReconciliationReports.createReport();
+  res.status(202).send({message: 'Report is being generated'}).end();
+});
+
+app.get('/reconciliationReports/:report', async(req, res) => {
+
+});
+
 app.get('/token', (req, res) => {
   const url = req.query.state;
   if (url) {
