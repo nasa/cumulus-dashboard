@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import {
   getCollection,
@@ -13,14 +12,8 @@ import EditRaw from '../app/edit-raw';
 
 const SCHEMA_KEY = 'collection';
 
-var EditCollection = createReactClass({
-  propTypes: {
-    params: PropTypes.object,
-    collections: PropTypes.object,
-    router: PropTypes.object
-  },
-
-  render: function () {
+class EditCollection extends React.Component {
+  render () {
     const { params, collections } = this.props;
     const { name, version } = params;
     const collectionId = getCollectionId({ name, version });
@@ -37,7 +30,13 @@ var EditCollection = createReactClass({
       />
     );
   }
-});
+}
+
+EditCollection.propTypes = {
+  params: PropTypes.object,
+  collections: PropTypes.object,
+  router: PropTypes.object
+};
 
 export default connect(state => ({
   collections: state.collections

@@ -1,29 +1,24 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { Form, formTypes } from './';
 import { set } from 'object-path';
 import { createFormConfig } from './schema';
 import { isText } from '../../utils/validate';
 
-const SubForm = createReactClass({
-  propTypes: {
-    label: PropTypes.any,
-    value: PropTypes.object,
-    fieldSet: PropTypes.object,
-    id: PropTypes.string,
-    error: PropTypes.string,
-    onChange: PropTypes.func
-  },
+class SubForm extends React.Component {
+  constructor () {
+    super();
+    this.state = { expanded: {} };
+    this.renderFieldset = this.renderFieldset.bind(this);
+    this.renderExpandedField = this.renderExpandedField.bind(this);
+    this.toggleExpand = this.toggleExpand.bind(this);
+    this.hide = this.hide.bind(this);
+    this.remove = this.remove.bind(this);
+    this.update = this.update.bind(this);
+  }
 
-  getInitialState: function () {
-    return {
-      expanded: {}
-    };
-  },
-
-  render: function () {
+  render () {
     const {
       label,
       error,
@@ -61,9 +56,9 @@ const SubForm = createReactClass({
         {fields.map(this.renderFieldset)}
       </div>
     );
-  },
+  }
 
-  renderFieldset: function (fieldset, index, fields) {
+  renderFieldset (fieldset, index, fields) {
     const { name } = fieldset;
     const isExpanded = this.state.expanded[name];
     const expanded = isExpanded ? ' subform__item--expanded' : '';
@@ -89,38 +84,38 @@ const SubForm = createReactClass({
         { isExpanded ? this.renderExpandedField(fieldset) : null }
       </div>
     );
-  },
+  }
 
-  renderExpandedField: function (fieldset) {
+  renderExpandedField (fieldset) {
     const { name, fields } = fieldset;
     return (
       <div className='subform__fields'>
         <Form id={name} nowrap={true} inputMeta={fields} submit={this.update} cancel={this.hide}/>
       </div>
     );
-  },
+  }
 
-  toggleExpand: function (e) {
+  toggleExpand (e) {
     e.preventDefault();
     const id = e.currentTarget.getAttribute('data-value');
     const { expanded } = this.state;
     expanded[id] = !expanded[id];
     this.setState({ expanded });
-  },
+  }
 
-  hide: function (id) {
+  hide (id) {
     const { expanded } = this.state;
     expanded[id] = false;
     this.setState({ expanded });
-  },
+  }
 
-  remove: function (e) {
+  remove (e) {
     e.preventDefault();
     const id = e.currentTarget.getAttribute('data-value');
     this.update(id, null);
-  },
+  }
 
-  update: function (id, payload) {
+  update (id, payload) {
     setTimeout(() => this.hide(id), 200);
     const { value } = this.props;
     if (!payload) {
@@ -135,6 +130,15 @@ const SubForm = createReactClass({
     }
     this.props.onChange(this.props.id, value);
   }
-});
+}
+
+SubForm.propTypes = {
+  label: PropTypes.any,
+  value: PropTypes.object,
+  fieldSet: PropTypes.object,
+  id: PropTypes.string,
+  error: PropTypes.string,
+  onChange: PropTypes.func
+};
 
 export default SubForm;

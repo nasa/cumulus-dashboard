@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -21,26 +20,25 @@ import Dropdown from '../form/dropdown';
 import statusOptions from '../../utils/status';
 import {strings} from '../locale';
 
-var CollectionGranules = createReactClass({
-  displayName: strings.collection_granules,
+class CollectionGranules extends React.Component {
+  constructor () {
+    super();
+    this.displayName = strings.collection_granules;
+    this.generateBulkActions = this.generateBulkActions.bind(this);
+    this.generateQuery = this.generateQuery.bind(this);
+  }
 
-  propTypes: {
-    granules: PropTypes.object,
-    dispatch: PropTypes.func,
-    params: PropTypes.object
-  },
-
-  generateQuery: function () {
+  generateQuery () {
     const collectionId = getCollectionId(this.props.params);
     return { collectionId };
-  },
+  }
 
-  generateBulkActions: function () {
+  generateBulkActions () {
     const { granules } = this.props;
     return bulkActions(granules);
-  },
+  }
 
-  render: function () {
+  render () {
     const collectionName = this.props.params.name;
     const collectionVersion = this.props.params.version;
     const { list } = this.props.granules;
@@ -85,6 +83,12 @@ var CollectionGranules = createReactClass({
       </div>
     );
   }
-});
+}
+
+CollectionGranules.propTypes = {
+  granules: PropTypes.object,
+  dispatch: PropTypes.func,
+  params: PropTypes.object
+};
 
 export default connect(state => state)(CollectionGranules);

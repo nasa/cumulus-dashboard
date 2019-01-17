@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createRule } from '../../actions';
@@ -16,11 +15,8 @@ const getRuleName = function (item) {
     return 'unknown';
   }
 };
-const AddRule = createReactClass({
-  propTypes: {
-    rules: PropTypes.object
-  },
-  render: function () {
+class AddRule extends React.Component {
+  render () {
     const defaultValue = {
       name: '',
       workflow: '',
@@ -49,7 +45,11 @@ const AddRule = createReactClass({
       />
     );
   }
-});
+}
+
+AddRule.propTypes = {
+  rules: PropTypes.object
+};
 
 export default connect(state => ({
   rules: state.rules

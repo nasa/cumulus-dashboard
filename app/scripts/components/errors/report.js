@@ -1,35 +1,38 @@
 'use strict';
 import React from 'react';
 import Collapsible from 'react-collapsible';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { truncate } from '../../utils/format';
 
-var ErrorReport = createReactClass({
-  displayName: 'ErrorReport',
-  propTypes: {
-    report: PropTypes.any,
-    truncate: PropTypes.bool
-  },
+class ErrorReport extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'ErrorReport';
+    this.scrollToTop = this.scrollToTop.bind(this);
+    this.truncate = this.truncate.bind(this);
+    this.renderSingleError = this.renderSingleError.bind(this);
+    this.renderReport = this.renderReport.bind(this);
+    this.stringifyErrorObject = this.stringifyErrorObject.bind(this);
+  }
 
-  UNSAFE_componentWillReceiveProps: function ({ report }) {
+  UNSAFE_componentWillReceiveProps ({ report }) { // eslint-disable-line camelcase
     if (report !== this.props.report) {
       this.scrollToTop();
     }
-  },
+  }
 
-  scrollToTop: function () {
+  scrollToTop () {
     if (this.DOMElement && typeof this.DOMElement.scrollIntoView === 'function') {
       this.DOMElement.scrollIntoView(true);
     } else scrollTo(0, 0);
-  },
+  }
 
-  truncate: function (string) {
+  truncate (string) {
     if (!this.props.truncate) return string;
     else return truncate(string);
-  },
+  }
 
-  renderSingleError: function (report, trigger) {
+  renderSingleError (report, trigger) {
     if (!trigger) {
       trigger = this.truncate(report);
     }
@@ -45,9 +48,9 @@ var ErrorReport = createReactClass({
         {report}
       </Collapsible>
     );
-  },
+  }
 
-  renderReport: function (report) {
+  renderReport (report) {
     if (typeof report === 'string') {
       return (
         <div key={report}>
@@ -77,9 +80,9 @@ var ErrorReport = createReactClass({
     } else if (typeof report === 'object') {
       return this.stringifyErrorObject(report);
     }
-  },
+  }
 
-  stringifyErrorObject: function (obj) {
+  stringifyErrorObject (obj) {
     let error, cause;
     if (typeof obj.Error !== 'undefined') {
       error = obj.Error;
@@ -98,9 +101,9 @@ var ErrorReport = createReactClass({
       let stringified = this.truncate(JSON.stringify(obj));
       return <p key={stringified}>{stringified}</p>;
     }
-  },
+  }
 
-  render: function () {
+  render () {
     const { report } = this.props;
     if (!report) return <div />;
     return (
@@ -109,6 +112,11 @@ var ErrorReport = createReactClass({
       </div>
     );
   }
-});
+}
+
+ErrorReport.propTypes = {
+  report: PropTypes.any,
+  truncate: PropTypes.bool
+};
 
 export default ErrorReport;
