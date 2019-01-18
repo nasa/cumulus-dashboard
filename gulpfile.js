@@ -58,19 +58,26 @@ readPackage();
 // When including the file in the index.html we need to refer to bundle.js not
 // main.js
 gulp.task('javascript', function () {
-  const watcher = watchify(browserify({
+  let bundler = browserify({
     entries: ['./app/scripts/main.js'],
     debug: true,
     cache: {},
     packageCache: {},
     fullPaths: true
-  }), {poll: true});
+  });
 
-  function bundler () {
+  if (!prodBuild) {
+    bundler = watchify(bundler, { poll: true });
+    bundler
+      .on('log', gutil.log)
+      .on('update', bundleScripts);
+  }
+
+  function bundleScripts () {
     if (pkg.dependencies) {
-      watcher.external(Object.keys(pkg.dependencies));
+      bundler.external(Object.keys(pkg.dependencies));
     }
-    return watcher.bundle()
+    return bundler.bundle()
       .on('error', function (e) {
         notifier.notify({
           title: 'Oops! Browserify errored:',
@@ -92,11 +99,7 @@ gulp.task('javascript', function () {
       .pipe(reload({stream: true}));
   }
 
-  watcher
-    .on('log', gutil.log)
-    .on('update', bundler);
-
-  return bundler();
+  return bundleScripts();
 });
 
 // Vendor scripts. Basically all the dependencies in the package.json.
@@ -138,7 +141,7 @@ const doBuild = (done) => {
   return gulp.series('vendorScripts', 'javascript', compileBuild)(done);
 };
 
-gulp.task('build', doBuild);
+gulp.task('build', gulp.parallel(doBuild));
 
 gulp.task('styles', function () {
   return gulp.src('app/styles/main.scss')
@@ -251,12 +254,7 @@ gulp.task('serve', gulp.series('vendorScripts', 'javascript', 'styles', 'fonts',
 
 const doProdBuild = (done) => {
   prodBuild = true;
-  return doBuild(done);
-  // return gulp.parallel('build')(done);
+  return gulp.series(doBuild)(done);
 };
 
-gulp.task('default', gulp.series('clean', function (done) {
-  prodBuild = true;
-  return doBuild(done);
-  // return gulp.parallel('build')(done);
-}));
+gulp.task('default', gulp.series('clean', doProdBuild));
