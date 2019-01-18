@@ -28,6 +28,108 @@ jobs:
             - ~/cumulus-dashboard/node_modules
             - ~/.cache
 
+      # - run:
+      #     name: Run tests
+      #     command: |
+      #       docker run --rm \
+      #         -v /home/circleci/.cache:/root/.cache \
+      #         -v $(pwd):/home \
+      #         --workdir /home \
+      #         node:8.11.4 \
+      #         yarn test --cache-folder /root/.cache
+
+      # - run:
+      #     name: Prepare servers
+      #     command: |
+      #       # run fake api
+      #       docker run -d \
+      #         --name api \
+      #         -v $(pwd):/home \
+      #         --workdir /home \
+      #         -p 5001:5001 \
+      #         node:8.11.4 \
+      #         node fake-api.js
+
+      #       # build dashboard
+      #       docker run --rm \
+      #           -v /home/circleci/.cache:/root/.cache \
+      #           -v $(pwd):/home \
+      #           --workdir /home \
+      #           -e APIROOT=http://api:5001 \
+      #           node:8.11.4 \
+      #           yarn run build
+
+      #       # build dashboard image
+      #       ./bin/build_docker_image.sh cumulus-dashboard:ci
+
+      #       # run dashboard
+      #       docker run \
+      #           -d \
+      #           --rm \
+      #           --name dashboard \
+      #           -e PORT=3000 \
+      #           -p 3000:3000 \
+      #           cumulus-dashboard:ci
+
+      #       attempt_counter=0
+      #       max_attempts=20
+
+      #       until $(curl --output /dev/null --silent --head --fail http://localhost:3000); do
+      #         if [ ${attempt_counter} -eq ${max_attempts} ];then
+      #           echo "Max attempts reached"
+      #           exit 1
+      #         fi
+
+      #         printf '.'
+      #         attempt_counter=$(($attempt_counter+1))
+      #         sleep 5
+      #       done
+
+      # - run:
+      #     name: Run Validation Tests
+      #     command: |
+      #       docker run \
+      #         --link api:api \
+      #         --link dashboard:dashboard \
+      #         -e CYPRESS_BASE_URL=http://dashboard:3000 \
+      #         --rm \
+      #         -v /home/circleci/.cache:/root/.cache \
+      #         -v $(pwd):/home \
+      #         --workdir /home \
+      #         node:8.11.4 \
+      #         yarn validation
+
+      # - run:
+      #     name: Run Integration Tests
+      #     command: |
+      #       docker run \
+      #         --link api:api \
+      #         --link dashboard:dashboard \
+      #         -e CYPRESS_BASE_URL=http://dashboard:3000 \
+      #         -e CYPRESS_APIROOT=http://api:5001 \
+      #         --rm \
+      #         -v /home/circleci/.cache:/root/.cache \
+      #         -v $(pwd):/home \
+      #         --workdir /home \
+      #         cypress/base:8 \
+      #         yarn cypress-ci
+
+      # - store_artifacts:
+      #     path: cypress/videos
+
+      # - store_artifacts:
+      #     path: cypress/screenshots
+  run_tests:
+    machine: true
+    working_directory: ~/cumulus-dashboard
+    steps:
+      - checkout
+
+      # restore cache
+      - restore_cache:
+          keys:
+            - dashboard-{{ .Branch }}-{{ checksum "package.json" }}
+
       - run:
           name: Run tests
           command: |
@@ -119,3 +221,11 @@ jobs:
 
       - store_artifacts:
           path: cypress/screenshots
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - run_tests:
+          requires:
+            - build
