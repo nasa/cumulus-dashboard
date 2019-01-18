@@ -54,6 +54,7 @@ jobs:
           command: |
             # run fake api
             docker run -d \
+              --rm \
               --name api \
               -v $(pwd):/home \
               --workdir /home \
@@ -62,7 +63,8 @@ jobs:
               node fake-api.js
 
             # run dashboard
-            docker run --rm \
+            docker run -d \
+              --rm \
               --name dashboard \
               -v $(pwd):/home \
               --workdir /home \
