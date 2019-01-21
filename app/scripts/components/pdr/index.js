@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
@@ -8,33 +7,29 @@ import Sidebar from '../app/sidebar';
 import { interval, getCount } from '../../actions';
 import { updateInterval } from '../../config';
 
-var Pdrs = createReactClass({
-  displayName: 'Pdrs',
+class Pdrs extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'Pdrs';
+    this.query = this.query.bind(this);
+  }
 
-  propTypes: {
-    children: PropTypes.object,
-    location: PropTypes.object,
-    params: PropTypes.object,
-    dispatch: PropTypes.func,
-    stats: PropTypes.object
-  },
-
-  UNSAFE_componentWillMount: function () {
+  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
     this.cancelInterval = interval(() => this.query(), updateInterval, true);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
-  },
+  }
 
-  query: function () {
+  query () {
     this.props.dispatch(getCount({
       type: 'pdrs',
       field: 'status'
     }));
-  },
+  }
 
-  render: function () {
+  render () {
     const count = get(this.props.stats, 'count.data.pdrs.count');
     return (
       <div className='page__pdrs'>
@@ -58,7 +53,15 @@ var Pdrs = createReactClass({
       </div>
     );
   }
-});
+}
+
+Pdrs.propTypes = {
+  children: PropTypes.object,
+  location: PropTypes.object,
+  params: PropTypes.object,
+  dispatch: PropTypes.func,
+  stats: PropTypes.object
+};
 
 export default connect(state => ({
   stats: state.stats

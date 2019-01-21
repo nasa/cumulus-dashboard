@@ -1,38 +1,35 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { getExecutionLogs } from '../../actions';
 import { connect } from 'react-redux';
 
 import ErrorReport from '../errors/report';
 
-var ExecutionLogs = createReactClass({
-  displayName: 'Execution',
+class ExecutionLogs extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'Execution';
+    this.navigateBack = this.navigateBack.bind(this);
+    this.errors = this.errors.bind(this);
+  }
 
-  propTypes: {
-    executionLogs: PropTypes.object,
-    params: PropTypes.object,
-    dispatch: PropTypes.func,
-    router: PropTypes.object
-  },
-
-  UNSAFE_componentWillMount: function () {
+  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
     const { dispatch } = this.props;
     const { executionName } = this.props.params;
     dispatch(getExecutionLogs(executionName));
-  },
+  }
 
-  navigateBack: function () {
+  navigateBack () {
     const { router } = this.props;
     router.push('/executions');
-  },
+  }
 
-  errors: function () {
+  errors () {
     return [].filter(Boolean);
-  },
+  }
 
-  render: function () {
+  render () {
     const { executionLogs } = this.props;
     const { executionName } = this.props.params;
     if (!executionLogs.results) return null;
@@ -65,7 +62,14 @@ var ExecutionLogs = createReactClass({
       </div>
     );
   }
-});
+}
+
+ExecutionLogs.propTypes = {
+  executionLogs: PropTypes.object,
+  params: PropTypes.object,
+  dispatch: PropTypes.func,
+  router: PropTypes.object
+};
 
 export default connect(state => ({
   executionLogs: state.executionLogs

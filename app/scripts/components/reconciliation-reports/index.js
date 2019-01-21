@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Sidebar from '../app/sidebar';
@@ -8,38 +7,34 @@ import LoadingEllipsis from '../app/loading-ellipsis';
 import { interval, getCount, createReconciliationReport } from '../../actions';
 import { updateInterval } from '../../config';
 
-var ReconciliationReports = createReactClass({
-  displayName: 'Reconciliation Reports',
+class ReconciliationReports extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'Reconciliation Reports';
+    this.query = this.query.bind(this);
+    this.createReport = this.createReport.bind(this);
+  }
 
-  propTypes: {
-    children: PropTypes.object,
-    location: PropTypes.object,
-    params: PropTypes.object,
-    dispatch: PropTypes.func,
-    stats: PropTypes.object,
-    reconciliationReports: PropTypes.object
-  },
-
-  UNSAFE_componentWillMount: function () {
+  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
     this.cancelInterval = interval(() => this.query(), updateInterval, true);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
-  },
+  }
 
-  query: function () {
+  query () {
     this.props.dispatch(getCount({
       type: 'reconciliationReports',
       field: 'status'
     }));
-  },
+  }
 
-  createReport: function () {
+  createReport () {
     this.props.dispatch(createReconciliationReport());
-  },
+  }
 
-  render: function () {
+  render () {
     const { reconciliationReports } = this.props;
     return (
       <div className='page__reconciliations'>
@@ -65,7 +60,16 @@ var ReconciliationReports = createReactClass({
       </div>
     );
   }
-});
+}
+
+ReconciliationReports.propTypes = {
+  children: PropTypes.object,
+  location: PropTypes.object,
+  params: PropTypes.object,
+  dispatch: PropTypes.func,
+  stats: PropTypes.object,
+  reconciliationReports: PropTypes.object
+};
 
 export default connect(state => ({
   stats: state.stats,

@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
@@ -35,58 +34,62 @@ const metaAccessors = [
   ['Timestamp', 'timestamp', fullDate]
 ];
 
-const Rule = createReactClass({
-  propTypes: {
-    params: PropTypes.object,
-    router: PropTypes.object,
-    dispatch: PropTypes.func,
-    rules: PropTypes.object
-  },
-
-  UNSAFE_componentWillMount: function () {
+class Rule extends React.Component {
+  constructor () {
+    super();
+    this.load = this.load.bind(this);
+    this.delete = this.delete.bind(this);
+    this.enable = this.enable.bind(this);
+    this.disable = this.disable.bind(this);
+    this.rerun = this.rerun.bind(this);
+    this.navigateBack = this.navigateBack.bind(this);
+    this.reload = this.reload.bind(this);
+    this.errors = this.errors.bind(this);
+  }
+  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
     this.load(this.props.params.ruleName);
-  },
+  }
 
-  UNSAFE_componentWillReceiveProps: function ({ params }) {
+  UNSAFE_componentWillReceiveProps ({ params }) { // eslint-disable-line camelcase
     if (params.ruleName !== this.props.params.ruleName) {
       this.load(params.ruleName);
     }
-  },
+  }
 
-  load: function (ruleName) {
+  load (ruleName) {
     this.props.dispatch(getRule(ruleName));
-  },
+  }
 
-  delete: function () {
+  delete () {
     const { ruleName } = this.props.params;
     this.props.dispatch(deleteRule(ruleName));
-  },
+  }
 
-  enable: function () {
+  enable () {
     const { ruleName } = this.props.params;
     this.props.dispatch(enableRule(ruleName));
-  },
+  }
 
-  disable: function () {
+  disable () {
     const { ruleName } = this.props.params;
     this.props.dispatch(disableRule(ruleName));
-  },
+  }
 
-  rerun: function () {
+  rerun () {
     const { ruleName } = this.props.params;
     this.props.dispatch(rerunRule(ruleName));
-  },
+  }
 
-  navigateBack: function () {
+  navigateBack () {
     this.props.router.push('/rules');
-  },
+  }
 
-  reload: function () {
+  reload () {
     const { ruleName } = this.props.params;
     this.load(ruleName);
-  },
+  }
 
-  errors: function () {
+  errors () {
     const { ruleName } = this.props.params;
     const { rules } = this.props;
     return [
@@ -95,9 +98,9 @@ const Rule = createReactClass({
       get(rules.enabled, [ruleName, 'error']),
       get(rules.disabled, [ruleName, 'error'])
     ].filter(Boolean);
-  },
+  }
 
-  render: function () {
+  render () {
     const { params, rules } = this.props;
     const { ruleName } = params;
     const record = rules.map[ruleName];
@@ -170,7 +173,15 @@ const Rule = createReactClass({
       </div>
     );
   }
-});
+}
+
+Rule.propTypes = {
+  params: PropTypes.object,
+  router: PropTypes.object,
+  dispatch: PropTypes.func,
+  rules: PropTypes.object
+};
+
 export default connect(state => ({
   rules: state.rules
 }))(Rule);

@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -13,13 +12,8 @@ import EditRaw from '../app/edit-raw';
 
 const SCHEMA_KEY = 'rule';
 
-const EditRule = createReactClass({
-  propTypes: {
-    params: PropTypes.object,
-    rules: PropTypes.object
-  },
-
-  render: function () {
+class EditRule extends React.Component {
+  render () {
     const { params, rules } = this.props;
     const { ruleName } = params;
     return (
@@ -35,7 +29,12 @@ const EditRule = createReactClass({
       />
     );
   }
-});
+}
+
+EditRule.propTypes = {
+  params: PropTypes.object,
+  rules: PropTypes.object
+};
 
 export default connect(state => ({
   rules: state.rules

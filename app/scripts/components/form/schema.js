@@ -5,7 +5,6 @@ import { get, set } from 'object-path';
 import { Form, formTypes } from './';
 import { isText, isNumber, isArray, arrayWithLength } from '../../utils/validate';
 import t from '../../utils/strings';
-import createReactClass from 'create-react-class';
 import ErrorReport from '../errors/report';
 const { errors } = t;
 
@@ -166,38 +165,26 @@ function list (config, property, validate) {
   return config;
 }
 
-export const Schema = createReactClass({
-  propTypes: {
-    schema: PropTypes.object,
-    data: PropTypes.object,
-    pk: PropTypes.string,
-    onCancel: PropTypes.func,
-    onSubmit: PropTypes.func,
-    status: PropTypes.string,
+export class Schema extends React.Component {
+  constructor () {
+    super();
+    this.state = { fields: null };
+  }
 
-    // if present, only include these properties
-    include: PropTypes.array,
-    error: PropTypes.any
-  },
-
-  getInitialState: function () {
-    return { fields: null };
-  },
-
-  UNSAFE_componentWillMount: function () {
+  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
     const { schema, data, include } = this.props;
     this.setState({ fields: createFormConfig(data, schema, include) });
-  },
+  }
 
-  UNSAFE_componentWillReceiveProps: function (newProps) {
+  UNSAFE_componentWillReceiveProps (newProps) { // eslint-disable-line camelcase
     const { props } = this;
     const { schema, data, include } = newProps;
     if (props.pk !== newProps.pk) {
       this.setState({ fields: createFormConfig(data, schema, include) });
     }
-  },
+  }
 
-  render: function () {
+  render () {
     const { fields } = this.state;
     const { error } = this.props;
     return (
@@ -212,5 +199,19 @@ export const Schema = createReactClass({
       </div>
     );
   }
-});
+}
+
+Schema.propTypes = {
+  schema: PropTypes.object,
+  data: PropTypes.object,
+  pk: PropTypes.string,
+  onCancel: PropTypes.func,
+  onSubmit: PropTypes.func,
+  status: PropTypes.string,
+
+  // if present, only include these properties
+  include: PropTypes.array,
+  error: PropTypes.any
+};
+
 export default Schema;
