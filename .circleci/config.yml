@@ -7,6 +7,17 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: Run audit-ci
+          command: |
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install v8.11.4
+            nvm alias default v8.11.4
+            npm install -g npm
+            npm install --no-audit
+            ./node_modules/.bin/audit-ci --moderate
+
       # restore cache
       - restore_cache:
           keys:
@@ -49,13 +60,6 @@ jobs:
                 attempt_counter=$(($attempt_counter+1))
                 sleep 5
             done
-
-      - run:
-          name: run-audit-ci
-          command: |
-            nvm install-latest-npm
-            npm install --no-audit
-            ./node_modules/.bin/audit-ci --moderate
 
       - run:
           name: Run Validation Tests
