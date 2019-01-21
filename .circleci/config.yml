@@ -51,6 +51,13 @@ jobs:
             done
 
       - run:
+          name: run-audit-ci
+          command: |
+            nvm install-latest-npm
+            npm install --no-audit
+            ./node_modules/.bin/audit-ci --moderate
+
+      - run:
           name: Run Validation Tests
           command: docker run --link api:api --link dashboard:dashboard -e CYPRESS_BASE_URL=http://dashboard:3000 --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home node:8.11.4 yarn validation
 
