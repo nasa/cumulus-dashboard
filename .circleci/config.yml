@@ -7,17 +7,6 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          name: Run audit-ci
-          command: |
-            export NVM_DIR="/opt/circleci/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm install v8.11.4
-            nvm alias default v8.11.4
-            npm install -g npm
-            npm install --no-audit
-            ./node_modules/.bin/audit-ci --moderate
-
       # restore cache
       - restore_cache:
           keys:
@@ -25,7 +14,13 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: docker run --rm -v /home/circleci/.cache:/root/.cache -v $(pwd):/home --workdir /home node:8.11.4 yarn install --frozen-lockfile --cache-folder /root/.cache
+          command: |
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install v8.11.4
+            nvm alias default v8.11.4
+            npm install -g yarn
+            yarn install --frozen-lockfile --cache-folder /home/circleci/.cache
 
       # save node_module folders
       - save_cache:
@@ -33,6 +28,13 @@ jobs:
           paths:
             - ~/cumulus-dashboard/node_modules
             - ~/.cache
+
+      - run:
+          name: Run audit-ci
+          command: |
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            ./node_modules/.bin/audit-ci --moderate -p yarn
 
       - run:
           name: Run tests
