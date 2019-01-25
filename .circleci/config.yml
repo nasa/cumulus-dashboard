@@ -39,16 +39,17 @@ jobs:
             npm install -g yarn
             yarn run audit-ci
 
-  run_tests:
-    machine: true
-    working_directory: ~/cumulus-dashboard
-    steps:
-      - checkout
-
-      # restore cache
-      - restore_cache:
-          keys:
-            - dashboard-{{ .Branch }}-{{ checksum "package.json" }}
+      - run:
+          name: Test dashboard build
+          command: |
+            # build dashboard
+            docker run --rm \
+              -v /home/circleci/.cache:/root/.cache \
+              -v $(pwd):/home \
+              --workdir /home \
+              -e APIROOT=http://api:5001 \
+              node:8.11.4 \
+              yarn run build
 
       - run:
           name: Run tests
@@ -126,41 +127,3 @@ jobs:
               --workdir /home \
               cypress/base:8 \
               yarn cypress-ci
-
-  test_dashboard_build:
-    machine: true
-    working_directory: ~/cumulus-dashboard
-    steps:
-      - checkout
-
-      # restore cache
-      - restore_cache:
-          keys:
-            - dashboard-{{ .Branch }}-{{ checksum "package.json" }}
-
-      - run:
-          name: Prepare servers
-          command: |
-            # build dashboard
-            docker run --rm \
-              -v /home/circleci/.cache:/root/.cache \
-              -v $(pwd):/home \
-              --workdir /home \
-              -e APIROOT=http://api:5001 \
-              node:8.11.4 \
-              yarn run build
-
-workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - build
-      - run_tests:
-          requires:
-            - build
-      - test_dashboard_build:
-          requires:
-            - build
-          filters:
-            branches:
-              only: CUMULUS-1075
