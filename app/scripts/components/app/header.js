@@ -3,7 +3,7 @@ import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import { logout } from '../../actions';
+import { logout, getApiVersion } from '../../actions';
 import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
 import { strings } from '../locale';
@@ -26,6 +26,11 @@ class Header extends React.Component {
     this.displayName = 'Header';
     this.logout = this.logout.bind(this);
     this.className = this.className.bind(this);
+  }
+
+  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+    const { dispatch, api } = this.props;
+    if (api.authenticated) dispatch(getApiVersion());
   }
 
   logout () {
