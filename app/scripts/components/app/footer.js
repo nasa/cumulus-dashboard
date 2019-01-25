@@ -1,17 +1,22 @@
 'use strict';
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
-var Footer = createReactClass({
-  displayName: 'Footer',
-  propTypes: {
-    api: PropTypes.object,
-    apiVersion: PropTypes.object
-  },
-
-  render: function () {
+class Footer extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'Footer';
+    this.logout = this.logout.bind(this);
+    this.className = this.className.bind(this);
+  }
+  
+  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+    const { dispatch, api } = this.props;
+    if (api.authenticated) dispatch(getApiVersion());
+  }
+  
+  render () {
     const { authenticated } = this.props.api;
     const { warning, versionNumber } = this.props.apiVersion;
 
@@ -26,6 +31,11 @@ var Footer = createReactClass({
       </div>
     );
   }
-});
+}
+
+Footer.propTypes = {
+  api: PropTypes.object,
+  apiVersion: PropTypes.object
+};
 
 export default Footer;

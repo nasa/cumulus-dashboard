@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 
 import 'brace';
 import 'brace/mode/json';
@@ -16,26 +15,18 @@ import ErrorReport from '../errors/report';
 const _minLines = 8;
 const _maxLines = 18;
 
-const TextAreaForm = createReactClass({
-  displayName: 'TextAreaForm',
+class TextAreaForm extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'TextAreaForm';
+    this.onChange = this.onChange.bind(this);
+  }
 
-  propTypes: {
-    label: PropTypes.any,
-    value: PropTypes.string,
-    id: PropTypes.string,
-    error: PropTypes.any,
-    mode: PropTypes.string,
-    onChange: PropTypes.func,
-
-    minLines: PropTypes.number,
-    maxLines: PropTypes.number
-  },
-
-  onChange: function (value) {
+  onChange (value) {
     this.props.onChange(this.props.id, value);
-  },
+  }
 
-  render: function () {
+  render () {
     let {
       label,
       value,
@@ -68,6 +59,18 @@ const TextAreaForm = createReactClass({
       </div>
     );
   }
-});
+}
+
+TextAreaForm.propTypes = {
+  label: PropTypes.any,
+  value: PropTypes.string,
+  id: PropTypes.string,
+  error: PropTypes.any,
+  mode: PropTypes.string,
+  onChange: PropTypes.func,
+
+  minLines: PropTypes.number,
+  maxLines: PropTypes.number
+};
 
 export default connect(state => state)(TextAreaForm);

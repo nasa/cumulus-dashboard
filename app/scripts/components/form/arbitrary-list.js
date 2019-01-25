@@ -1,38 +1,37 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
-const List = createReactClass({
-  propTypes: {
-    label: PropTypes.any,
-    value: PropTypes.array,
-    id: PropTypes.string,
-    error: PropTypes.string,
-    onChange: PropTypes.func
-  },
+class List extends React.Component {
+  constructor () {
+    super();
+    this.onChange = this.onChange.bind(this);
+    this.add = this.add.bind(this);
+    this.remove = this.remove.bind(this);
+    this.renderItem = this.renderItem.bind(this);
+  }
 
-  onChange: function (index, newValue) {
+  onChange (index, newValue) {
     const value = this.props.value.slice();
     value[index] = newValue;
     this.props.onChange(this.props.id, value);
-  },
+  }
 
-  add: function (e) {
+  add (e) {
     e.preventDefault();
     const value = this.props.value.slice();
     if (!value[value.length - 1]) return false;
     value.push('');
     this.props.onChange(this.props.id, value);
-  },
+  }
 
-  remove: function (index) {
+  remove (index) {
     let value = this.props.value.slice();
     value.splice(index, 1);
     this.props.onChange(this.props.id, value);
-  },
+  }
 
-  render: function () {
+  render () {
     let {
       label,
       value,
@@ -51,9 +50,9 @@ const List = createReactClass({
         </ul>
       </div>
     );
-  },
+  }
 
-  renderItem: function (item, i, items) {
+  renderItem (item, i, items) {
     const add = i === items.length - 1;
     // only allow adds if you've entered something
     const disabled = add && !item.length;
@@ -76,5 +75,14 @@ const List = createReactClass({
       </li>
     );
   }
-});
+}
+
+List.propTypes = {
+  label: PropTypes.any,
+  value: PropTypes.array,
+  id: PropTypes.string,
+  error: PropTypes.string,
+  onChange: PropTypes.func
+};
+
 export default List;

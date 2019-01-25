@@ -1,18 +1,11 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { Link } from 'react-router';
 import Sidebar from '../app/sidebar';
 
-var Rules = createReactClass({
-  propTypes: {
-    children: PropTypes.object,
-    location: PropTypes.object,
-    params: PropTypes.object
-  },
-
-  render: function () {
+class Rules extends React.Component {
+  render () {
     const { pathname } = this.props.location;
     const showSidebar = pathname !== '/rules/add';
     return (
@@ -39,6 +32,12 @@ var Rules = createReactClass({
       </div>
     );
   }
-});
+}
+
+Rules.propTypes = {
+  children: PropTypes.object,
+  location: PropTypes.object,
+  params: PropTypes.object
+};
 
 export default Rules;

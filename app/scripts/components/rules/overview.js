@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -65,22 +64,22 @@ const bulkActions = (rules) => [{
   confirm: (d) => `Delete ${d} Rule(s)?`
 }];
 
-var RulesOverview = createReactClass({
-  propTypes: {
-    dispatch: PropTypes.func,
-    rules: PropTypes.object
-  },
+class RulesOverview extends React.Component {
+  constructor () {
+    super();
+    this.generateBulkActions = this.generateBulkActions.bind(this);
+  }
 
-  UNSAFE_componentWillMount: function () {
+  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
     this.props.dispatch(listRules);
-  },
+  }
 
-  generateBulkActions: function () {
+  generateBulkActions () {
     const { rules } = this.props;
     return bulkActions(rules);
-  },
+  }
 
-  render: function () {
+  render () {
     const { list } = this.props.rules;
     const { count, queriedAt } = list.meta;
     return (
@@ -111,7 +110,12 @@ var RulesOverview = createReactClass({
       </div>
     );
   }
-});
+}
+
+RulesOverview.propTypes = {
+  dispatch: PropTypes.func,
+  rules: PropTypes.object
+};
 
 export default connect(state => ({
   rules: state.rules
