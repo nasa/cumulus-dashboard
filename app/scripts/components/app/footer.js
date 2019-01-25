@@ -2,6 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getApiVersion } from '../../actions';
 
 class Footer extends React.Component {
   constructor () {
@@ -10,12 +11,12 @@ class Footer extends React.Component {
     this.logout = this.logout.bind(this);
     this.className = this.className.bind(this);
   }
-  
+
   UNSAFE_componentWillMount () { // eslint-disable-line camelcase
     const { dispatch, api } = this.props;
     if (api.authenticated) dispatch(getApiVersion());
   }
-  
+
   render () {
     const { authenticated } = this.props.api;
     const { warning, versionNumber } = this.props.apiVersion;
@@ -35,7 +36,8 @@ class Footer extends React.Component {
 
 Footer.propTypes = {
   api: PropTypes.object,
-  apiVersion: PropTypes.object
+  apiVersion: PropTypes.object,
+  dispatch: PropTypes.func
 };
 
 export default Footer;
