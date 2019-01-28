@@ -2,16 +2,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import LogViewer from './viewer';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
-var Logs = createReactClass({
-  propTypes: {
-    dispatch: PropTypes.func,
-    logs: PropTypes.object
-  },
-
-  render: function () {
+class Logs extends React.Component {
+  render () {
     return (
       <div className='page__logs'>
         <div className='content__header'>
@@ -27,6 +21,11 @@ var Logs = createReactClass({
       </div>
     );
   }
-});
+}
+
+Logs.propTypes = {
+  dispatch: PropTypes.func,
+  logs: PropTypes.object
+};
 
 export default connect(state => state)(Logs);
