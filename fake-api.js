@@ -206,7 +206,7 @@ app.post('/reconciliationReports', async(req, res) => {
 });
 
 app.get('/reconciliationReports/:report', async(req, res) => {
-
+  res.send(fakeReconciliationReports.getReport());
 });
 
 app.get('/token', (req, res) => {

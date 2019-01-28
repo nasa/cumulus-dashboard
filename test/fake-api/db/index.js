@@ -261,7 +261,7 @@ class FakeReconciliationReports extends FakeDb {
     this.addItem('created_report.json');
   }
 
-  async getReport () {
+  getReport () {
     return {
       reportStartTime: '2018-06-11T18:52:37.710Z',
       'reportEndTime': '2018-06-11T18:52:39.893Z',
