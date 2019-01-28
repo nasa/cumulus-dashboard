@@ -1,6 +1,6 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
 
-describe('Dashboard Collections Page', () => {
+describe('Dashboard Reconciliation Reports Page', () => {
   describe('When not logged in', () => {
     it('should redirect to login page', () => {
       cy.visit('/#/reconciliation-reports');
@@ -23,7 +23,10 @@ describe('Dashboard Collections Page', () => {
 
       cy.contains('nav li a', 'Reconciliation Reports').as('reconciliationReports');
       cy.get('@reconciliationReports').should('have.attr', 'href', '#/reconciliation-reports');
-      // cy.get('@reconciliationReports').click();
+      cy.get('@reconciliationReports').click({ force: true });
+
+      cy.url().should('include', 'reconciliation-reports');
+      cy.contains('.heading--large', 'Reconciliation Reports Overview');
     });
 
     it('displays a list of reconciliation reports', () => {
