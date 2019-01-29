@@ -166,14 +166,11 @@ function list (config, property, validate) {
 }
 
 export class Schema extends React.Component {
-  constructor () {
-    super();
-    this.state = { fields: null };
-  }
-
-  componentDidMount () {
+  constructor (props) {
+    super(props);
+    this.props = props;
     const { schema, data, include } = this.props;
-    this.setState({ fields: createFormConfig(data, schema, include) }); // eslint-disable-line react/no-did-mount-set-state
+    this.state = { fields: createFormConfig(data, schema, include) };
   }
 
   UNSAFE_componentWillReceiveProps (newProps) { // eslint-disable-line camelcase

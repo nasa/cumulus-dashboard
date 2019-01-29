@@ -40,13 +40,9 @@ const errorMessage = (errors) => `Please review ${errors.join(', ')} and submit 
  * @return {JSX}
  */
 export class Form extends React.Component {
-  constructor () {
-    super();
-    this.state = {
-      inputs: {},
-      dirty: {},
-      errors: []
-    };
+  constructor (props) {
+    super(props);
+    this.props = props;
     this.displayName = 'Form';
     this.generateComponentId = this.generateComponentId.bind(this);
     this.isInflight = this.isInflight.bind(this);
@@ -54,13 +50,7 @@ export class Form extends React.Component {
     this.onCancel = this.onCancel.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.scrollToTop = this.scrollToTop.bind(this);
-  }
 
-  generateComponentId (label) {
-    return slugify(label) + '-' + this.id;
-  }
-
-  componentDidMount () {
     // generate id for this form
     this.id = generate();
 
@@ -76,7 +66,15 @@ export class Form extends React.Component {
       let error = null;
       inputState[inputId] = { value, error };
     });
-    this.setState({ inputs: inputState }); // eslint-disable-line react/no-did-mount-set-state
+    this.state = {
+      inputs: inputState,
+      dirty: {},
+      errors: []
+    };
+  }
+
+  generateComponentId (label) {
+    return slugify(label) + '-' + this.id;
   }
 
   isInflight () {
