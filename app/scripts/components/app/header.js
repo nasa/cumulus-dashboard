@@ -17,7 +17,7 @@ const paths = [
   ['Executions', '/executions'],
   ['Rules', '/rules'],
   ['Logs', '/logs'],
-  ['Reconciliation Reports', 'reconciliation-reports']
+  ['Reconciliation Reports', '/reconciliation-reports']
 ];
 
 class Header extends React.Component {

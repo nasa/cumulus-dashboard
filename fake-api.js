@@ -11,6 +11,7 @@ const {
   fakeProvidersDb,
   fakeExecutionStatusDb,
   fakeRulesDb,
+  fakeReconciliationReports,
   resetState
 } = require('./test/fake-api/db');
 
@@ -192,6 +193,20 @@ app.get('/stats/aggregate', async (req, res, next) => {
     return;
   }
   next();
+});
+
+app.get('/reconciliationReports', async (req, res) => {
+  const reports = await fakeReconciliationReports.getItems();
+  res.send(reports);
+});
+
+app.post('/reconciliationReports', async(req, res) => {
+  await fakeReconciliationReports.createReport();
+  res.status(202).send({message: 'Report is being generated'}).end();
+});
+
+app.get('/reconciliationReports/:report', async(req, res) => {
+  res.send(fakeReconciliationReports.getReport());
 });
 
 app.get('/token', (req, res) => {
