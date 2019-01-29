@@ -60,7 +60,7 @@ export class Form extends React.Component {
     return slugify(label) + '-' + this.id;
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     // generate id for this form
     this.id = generate();
 
@@ -76,7 +76,7 @@ export class Form extends React.Component {
       let error = null;
       inputState[inputId] = { value, error };
     });
-    this.setState({ inputs: inputState });
+    this.setState({ inputs: inputState }); // eslint-disable-line react/no-did-mount-set-state
   }
 
   isInflight () {

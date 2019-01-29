@@ -20,7 +20,7 @@ class ProvidersOverview extends React.Component {
     this.renderOverview = this.renderOverview.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     this.cancelInterval = interval(this.queryStats, updateInterval, true);
   }
 

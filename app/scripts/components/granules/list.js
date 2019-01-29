@@ -45,10 +45,10 @@ class AllGranules extends React.Component {
     this.applyWorkflow = this.applyWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
     this.getView = this.getView.bind(this);
+    this.state = {};
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
-    this.setState({});
+  componentDidMount () {
     this.cancelInterval = interval(this.queryWorkflows, updateInterval, true);
   }
 

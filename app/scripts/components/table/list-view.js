@@ -29,16 +29,16 @@ class List extends React.Component {
       order: 'desc',
       selected: [],
       prefix: null,
-      queryConfig: {},
+      queryConfig: this.config(),
       params: {},
       completedBulkActions: 0,
       bulkActionError: null
     };
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
-    this.setState({ queryConfig: this.config() });
-  }
+  // componentDidMount () {
+  //   this.setState({ queryConfig: this.config() }); // eslint-disable-line react/no-did-mount-set-state
+  // }
 
   UNSAFE_componentWillReceiveProps (newProps) { // eslint-disable-line camelcase
     if (JSON.stringify(newProps.query) !== JSON.stringify(this.props.query)) {

@@ -49,7 +49,7 @@ class EditRaw extends React.Component {
     this.props.router.push(this.props.backRoute);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     this.queryRecord(this.props.pk);
     this.props.dispatch(getSchema(this.props.schemaKey));
   }

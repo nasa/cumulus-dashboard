@@ -14,7 +14,7 @@ class ExecutionLogs extends React.Component {
     this.errors = this.errors.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     const { dispatch } = this.props;
     const { executionName } = this.props.params;
     dispatch(getExecutionLogs(executionName));

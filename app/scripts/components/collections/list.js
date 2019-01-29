@@ -39,7 +39,7 @@ class CollectionList extends React.Component {
     this.generateBulkActions = this.generateBulkActions.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     const { dispatch } = this.props;
     dispatch(getCumulusInstanceMetadata());
   }

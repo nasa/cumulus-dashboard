@@ -19,7 +19,7 @@ class Timer extends React.Component {
     this.parentClass = this.parentClass.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     this.createTimer(this.props.config);
   }
 

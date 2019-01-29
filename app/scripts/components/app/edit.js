@@ -30,7 +30,7 @@ class EditRecord extends React.Component {
     }
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     const { pk } = this.props;
     this.get(pk);
     this.props.dispatch(getSchema(this.props.schemaKey));

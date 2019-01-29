@@ -34,12 +34,12 @@ class OAuth extends React.Component {
     }
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     const query = this.props.location.query;
     if (query.token) {
       const token = query.token;
       const { dispatch } = this.props;
-      this.setState({ token }, () => dispatch(login(token)));
+      this.setState({ token }, () => dispatch(login(token))); // eslint-disable-line react/no-did-mount-set-state
     }
   }
 

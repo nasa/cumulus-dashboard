@@ -21,7 +21,7 @@ class AddCollection extends React.Component {
     this.post = this.post.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     this.props.dispatch(getSchema(this.props.schemaKey));
   }
 

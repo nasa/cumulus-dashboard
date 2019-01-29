@@ -28,7 +28,7 @@ class Header extends React.Component {
     this.className = this.className.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     const { dispatch, api } = this.props;
     if (api.authenticated) dispatch(getApiVersion());
   }

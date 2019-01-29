@@ -36,7 +36,7 @@ class Home extends React.Component {
     this.generateQuery = this.generateQuery.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     this.cancelInterval = interval(() => {
       this.query();
     }, updateInterval, true);

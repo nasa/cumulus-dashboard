@@ -15,7 +15,7 @@ class DropdownAsync extends React.Component {
     this.onSuccess = this.onSuccess.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     this.cleanup = addGlobalListener('click', this.onOutsideClick);
   }
 

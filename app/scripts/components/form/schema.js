@@ -171,9 +171,9 @@ export class Schema extends React.Component {
     this.state = { fields: null };
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     const { schema, data, include } = this.props;
-    this.setState({ fields: createFormConfig(data, schema, include) });
+    this.setState({ fields: createFormConfig(data, schema, include) }); // eslint-disable-line react/no-did-mount-set-state
   }
 
   UNSAFE_componentWillReceiveProps (newProps) { // eslint-disable-line camelcase

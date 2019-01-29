@@ -42,10 +42,10 @@ class GranulesOverview extends React.Component {
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.applyWorkflow = this.applyWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
+    this.state = {};
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
-    this.setState({});
+  componentDidMount () {
     this.cancelInterval = interval(this.queryMeta, updateInterval, true);
   }
 
