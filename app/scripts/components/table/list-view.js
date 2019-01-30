@@ -34,10 +34,7 @@ class List extends React.Component {
       completedBulkActions: 0,
       bulkActionError: null
     };
-  }
-
-  componentDidMount () {
-    this.setState({ queryConfig: this.config() }); // eslint-disable-line react/no-did-mount-set-state
+    this.setState({ queryConfig: this.config() });
   }
 
   UNSAFE_componentWillReceiveProps (newProps) { // eslint-disable-line camelcase
