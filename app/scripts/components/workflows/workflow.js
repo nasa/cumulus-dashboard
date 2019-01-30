@@ -24,7 +24,7 @@ class Workflow extends React.Component {
     }
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     this.get();
   }
 

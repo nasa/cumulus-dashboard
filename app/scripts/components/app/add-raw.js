@@ -40,9 +40,9 @@ class AddRaw extends React.Component {
     }
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     if (this.props.defaultValue) {
-      this.setState({ data: JSON.stringify(this.props.defaultValue, null, 2) });
+      this.setState({ data: JSON.stringify(this.props.defaultValue, null, 2) }); // eslint-disable-line react/no-did-mount-set-state
     }
   }
 

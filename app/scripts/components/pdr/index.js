@@ -14,7 +14,7 @@ class Pdrs extends React.Component {
     this.query = this.query.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     this.cancelInterval = interval(() => this.query(), updateInterval, true);
   }
 

@@ -65,7 +65,7 @@ class PDR extends React.Component {
     this.renderProgress = this.renderProgress.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     const { pdrName } = this.props.params;
     const immediate = !this.props.pdrs.map[pdrName];
     this.reload(immediate);

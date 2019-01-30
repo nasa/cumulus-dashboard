@@ -46,7 +46,8 @@ class Rule extends React.Component {
     this.reload = this.reload.bind(this);
     this.errors = this.errors.bind(this);
   }
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+
+  componentDidMount () {
     this.load(this.props.params.ruleName);
   }
 

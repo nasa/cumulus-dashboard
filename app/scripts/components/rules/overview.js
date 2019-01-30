@@ -70,7 +70,7 @@ class RulesOverview extends React.Component {
     this.generateBulkActions = this.generateBulkActions.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     this.props.dispatch(listRules);
   }
 

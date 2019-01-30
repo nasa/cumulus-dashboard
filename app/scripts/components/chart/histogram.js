@@ -39,12 +39,9 @@ class Histogram extends React.Component {
     this.setState({ width: rect.width, height: rect.height });
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     this.setHoverState = throttle(this.setHoverState, tooltipDelay);
     this.mouseOut = debounce(this.mouseOut, tooltipDelay);
-  }
-
-  componentDidMount () {
     this.onWindowResize();
     this.onWindowResize = debounce(this.onWindowResize, 200);
     window.addEventListener('resize', this.onWindowResize);

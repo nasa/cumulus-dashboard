@@ -14,7 +14,7 @@ class Granules extends React.Component {
     this.displayName = strings.granules;
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     this.cancelInterval = interval(() => this.query(), updateInterval, true);
   }
 

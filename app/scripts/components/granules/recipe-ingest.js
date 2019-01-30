@@ -29,7 +29,7 @@ class GranuleRecipe extends React.Component {
     this.delete = this.delete.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     const granuleId = this.props.params.granuleId;
     if (!this.props.granules.map[granuleId]) {
       this.props.dispatch(getGranule(granuleId));

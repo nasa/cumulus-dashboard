@@ -53,7 +53,8 @@ class ReconciliationReport extends React.Component {
     this.reload = this.reload.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
   }
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+
+  componentDidMount () {
     const { reconciliationReportName } = this.props.params;
     const immediate = !this.props.reconciliationReports.map[reconciliationReportName];
     this.reload(immediate);

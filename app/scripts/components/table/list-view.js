@@ -36,8 +36,8 @@ class List extends React.Component {
     };
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
-    this.setState({ queryConfig: this.config() });
+  componentDidMount () {
+    this.setState({ queryConfig: this.config() }); // eslint-disable-line react/no-did-mount-set-state
   }
 
   UNSAFE_componentWillReceiveProps (newProps) { // eslint-disable-line camelcase

@@ -15,7 +15,7 @@ class ReconciliationReports extends React.Component {
     this.createReport = this.createReport.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     this.cancelInterval = interval(() => this.query(), updateInterval, true);
   }
 

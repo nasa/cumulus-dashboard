@@ -9,7 +9,7 @@ import * as d3 from 'd3';
 if (process.env.NODE_ENV !== 'test') window.d3 = d3;
 
 class ExecutionStatusGraph extends React.Component {
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     const {
       executionStatus: {
         executionHistory,
@@ -23,9 +23,6 @@ class ExecutionStatusGraph extends React.Component {
     var graph = workflowToGraph(workflow);
     addEventsToGraph(events, graph);
     this.g = draw(graph);
-  }
-
-  componentDidMount () {
     var render = new dagre.render();
     var svg = d3.select('svg');
     render(svg, this.g);

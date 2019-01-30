@@ -27,7 +27,7 @@ class ExecutionStatus extends React.Component {
     this.renderEvents = this.renderEvents.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     const { dispatch } = this.props;
     const { executionArn } = this.props.params;
     dispatch(getExecutionStatus(executionArn));

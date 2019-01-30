@@ -32,7 +32,7 @@ class CollectionIngest extends React.Component {
     }
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     const { name, version } = this.props.params;
     this.get(name, version);
   }

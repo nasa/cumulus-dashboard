@@ -68,7 +68,7 @@ class ExecutionOverview extends React.Component {
     this.renderOverview = this.renderOverview.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     // use a slightly slower update interval, since the dropdown fields
     // will change less frequently.
     this.cancelInterval = interval(this.queryMeta, updateInterval, true);

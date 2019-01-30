@@ -83,10 +83,10 @@ class GranuleOverview extends React.Component {
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
     this.displayName = strings.granule;
+    this.state = {};
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
-    this.setState({});
+  componentDidMount () {
     const { granuleId } = this.props.params;
     this.cancelInterval = interval(this.queryWorkflows, updateInterval, true);
 

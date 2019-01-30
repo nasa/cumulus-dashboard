@@ -32,7 +32,7 @@ class Dropdown extends React.Component {
     this.onChange = this.onChange.bind(this);
   }
 
-  UNSAFE_componentWillMount () { // eslint-disable-line camelcase
+  componentDidMount () {
     const { dispatch, getOptions } = this.props;
     if (getOptions) { dispatch(getOptions()); }
   }
