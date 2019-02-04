@@ -28,8 +28,8 @@ class BatchCommand extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  UNSAFE_componentWillReceiveProps (newProps) { // eslint-disable-line camelcase
-    const { state } = newProps;
+  componentDidUpdate () {
+    const { state } = this.props;
     const { callbacks, completed } = this.state;
     // on success or error, call and remove the saved callback
     Object.keys(callbacks).forEach(id => {

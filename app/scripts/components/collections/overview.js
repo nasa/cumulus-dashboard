@@ -39,10 +39,10 @@ class CollectionOverview extends React.Component {
     this.load();
   }
 
-  UNSAFE_componentWillReceiveProps ({ params }) { // eslint-disable-line camelcase
-    const { name, version } = params;
-    if (name !== this.props.params.name ||
-       version !== this.props.params.version) {
+  componentDidUpdate (prevProps) {
+    const { name, version } = this.props.params;
+    if (name !== prevProps.params.name ||
+       version !== prevProps.params.version) {
       this.load();
     }
   }

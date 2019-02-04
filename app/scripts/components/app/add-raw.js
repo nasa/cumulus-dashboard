@@ -46,21 +46,21 @@ class AddRaw extends React.Component {
     }
   }
 
-  UNSAFE_componentWillReceiveProps ({ state }) { // eslint-disable-line camelcase
-    const { router, getBaseRoute } = this.props;
+  componentDidUpdate (prevProps) {
+    const { router, getBaseRoute } = prevProps;
     const { pk, error } = this.state;
     if (!pk) {
       return;
     }
 
-    const status = get(state.created, [pk, 'status']);
+    const status = get(this.props.state.created, [pk, 'status']);
     if (status === 'success') {
       const baseRoute = getBaseRoute(pk);
       return setTimeout(() => {
         router.push(baseRoute);
       }, updateDelay);
     } else if (status === 'error' && !error) {
-      this.setState({ error: get(state.created, [pk, 'error']) });
+      this.setState({ error: get(this.props.state.created, [pk, 'error']) }); // eslint-disable-line react/no-did-update-set-state
     }
   }
 

@@ -25,10 +25,10 @@ class AddCollection extends React.Component {
     this.props.dispatch(getSchema(this.props.schemaKey));
   }
 
-  UNSAFE_componentWillReceiveProps ({ state }) { // eslint-disable-line camelcase
+  componentDidUpdate (prevProps) {
     const { pk } = this.state;
-    const { router, baseRoute } = this.props;
-    const status = get(state, ['created', pk, 'status']);
+    const { router, baseRoute } = prevProps;
+    const status = get(this.props.state, ['created', pk, 'status']);
     if (status === 'success') {
       return setTimeout(() => {
         router.push(path.join(baseRoute, pk));

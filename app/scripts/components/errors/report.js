@@ -15,8 +15,8 @@ class ErrorReport extends React.Component {
     this.stringifyErrorObject = this.stringifyErrorObject.bind(this);
   }
 
-  UNSAFE_componentWillReceiveProps ({ report }) { // eslint-disable-line camelcase
-    if (report !== this.props.report) {
+  componentDidUpdate (prevProps) {
+    if (this.props.report !== prevProps.report) {
       this.scrollToTop();
     }
   }
