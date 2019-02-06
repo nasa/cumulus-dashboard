@@ -173,11 +173,10 @@ export class Schema extends React.Component {
     this.state = { fields: createFormConfig(data, schema, include) };
   }
 
-  UNSAFE_componentWillReceiveProps (newProps) { // eslint-disable-line camelcase
-    const { props } = this;
-    const { schema, data, include } = newProps;
-    if (props.pk !== newProps.pk) {
-      this.setState({ fields: createFormConfig(data, schema, include) });
+  componentDidUpdate (prevProps) {
+    const { schema, data, include, pk } = this.props;
+    if (prevProps.pk !== pk) {
+      this.setState({ fields: createFormConfig(data, schema, include) }); // eslint-disable-line react/no-did-update-set-state
     }
   }
 

@@ -17,20 +17,20 @@ class AsyncCommand extends React.Component {
     this.cancel = this.cancel.bind(this);
   }
 
-  UNSAFE_componentWillReceiveProps (newProps) { // eslint-disable-line camelcase
+  componentDidUpdate (prevProps) {
     if (
-      this.props.status === 'inflight' &&
-      newProps.status === 'success' &&
-      typeof this.props.success === 'function'
+      prevProps.status === 'inflight' &&
+      this.props.status === 'success' &&
+      typeof prevProps.success === 'function'
     ) {
-      const timeout = isNaN(this.props.successTimeout) ? updateDelay : this.props.successTimeout;
-      setTimeout(this.props.success, timeout);
+      const timeout = isNaN(prevProps.successTimeout) ? updateDelay : prevProps.successTimeout;
+      setTimeout(prevProps.success, timeout);
     } else if (
-      this.props.status === 'inflight' &&
-        newProps.status === 'error' &&
-        typeof this.props.error === 'function'
+      prevProps.status === 'inflight' &&
+        this.props.status === 'error' &&
+        typeof prevProps.error === 'function'
     ) {
-      this.props.error();
+      prevProps.error();
     }
   }
 

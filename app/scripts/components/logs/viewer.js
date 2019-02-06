@@ -43,13 +43,13 @@ class LogViewer extends React.Component {
     this.query();
   }
 
-  UNSAFE_componentWillReceiveProps (newProps) { // eslint-disable-line camelcase
-    if (JSON.stringify(newProps.query) !== JSON.stringify(this.props.query)) {
-      const query = newProps.query || {};
+  componentDidUpdate (prevProps) {
+    if (JSON.stringify(this.props.query) !== JSON.stringify(prevProps.query)) {
+      const query = this.props.query || {};
       this.query(query);
     }
 
-    if (newProps.logs.error && this.cancelInterval) {
+    if (this.props.logs.error && this.cancelInterval) {
       this.cancelInterval();
       this.cancelInterval = null;
     }

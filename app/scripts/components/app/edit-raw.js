@@ -54,9 +54,9 @@ class EditRaw extends React.Component {
     this.props.dispatch(getSchema(this.props.schemaKey));
   }
 
-  UNSAFE_componentWillReceiveProps ({ pk, state, schema, schemaKey }) { // eslint-disable-line camelcase
-    const { dispatch, router, clearRecordUpdate, backRoute } = this.props;
-    const recordSchema = schema[schemaKey];
+  componentDidUpdate (prevProps) {
+    const { pk, state, schema, schemaKey } = this.props;
+    const { dispatch, router, clearRecordUpdate, backRoute } = prevProps;
     // successfully updated, navigate away
     if (get(state.updated, [pk, 'status']) === 'success') {
       return setTimeout(() => {
@@ -65,9 +65,11 @@ class EditRaw extends React.Component {
       }, updateDelay);
     }
     if (this.state.pk === pk || !schema[schemaKey]) { return; }
+    const recordSchema = schema[schemaKey];
+
     const newRecord = state.map[pk] || {};
     if (newRecord.error) {
-      this.setState({
+      this.setState({ // eslint-disable-line react/no-did-update-set-state
         pk,
         data: '',
         error: newRecord.error
@@ -77,9 +79,9 @@ class EditRaw extends React.Component {
       try {
         var text = JSON.stringify(data, null, '\t');
       } catch (error) {
-        return this.setState({ error, pk });
+        this.setState({ error, pk }); // eslint-disable-line react/no-did-update-set-state
       }
-      this.setState({
+      this.setState({ // eslint-disable-line react/no-did-update-set-state
         pk,
         data: text,
         error: null

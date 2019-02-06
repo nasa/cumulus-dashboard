@@ -18,16 +18,16 @@ class LoginModal extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  UNSAFE_componentWillReceiveProps (newProps) { // eslint-disable-line camelcase
+  componentDidUpdate (prevProps) {
     // delay-close the modal if it's open
-    if (newProps.api.authenticated && this.props.show) {
-      const { dispatch } = this.props;
+    if (this.props.api.authenticated && prevProps.show) {
+      const { dispatch } = prevProps;
       dispatch(setTokenState(this.state.token));
-      const { pathname } = this.props.location;
+      const { pathname } = prevProps.location;
       if (pathname !== '/login' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/login') {
-        setTimeout(() => this.props.router.push('/'), updateDelay);
+        setTimeout(() => prevProps.router.push('/'), updateDelay);
       }
     }
   }
