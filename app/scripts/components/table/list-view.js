@@ -40,13 +40,14 @@ class List extends React.Component {
     this.setState({ queryConfig: this.config() }); // eslint-disable-line react/no-did-mount-set-state
   }
 
-  UNSAFE_componentWillReceiveProps (newProps) { // eslint-disable-line camelcase
-    if (JSON.stringify(newProps.query) !== JSON.stringify(this.props.query)) {
-      this.setState({ queryConfig: this.config({}, newProps.query) });
+  componentDidUpdate (prevProps) {
+    const { query, list, sortIdx } = this.props;
+    if (JSON.stringify(query) !== JSON.stringify(prevProps.query)) {
+      this.setState({ queryConfig: this.config({}, query) }); // eslint-disable-line react/no-did-update-set-state
     }
 
     // remove null and undefined values
-    const { params } = newProps.list;
+    const { params } = list;
     const validParams = {};
     for (let key in params) {
       let value = params[key];
@@ -56,12 +57,12 @@ class List extends React.Component {
     }
 
     if (JSON.stringify(validParams) !== JSON.stringify(this.state.params)) {
-      this.setState({ params: validParams }, () => this.setState({
+      this.setState({ params: validParams }, () => this.setState({ // eslint-disable-line react/no-did-update-set-state
         queryConfig: this.config() }));
     }
 
-    if (newProps.sortIdx !== this.state.sortIdx) {
-      this.setState({ sortIdx: newProps.sortIdx });
+    if (sortIdx !== this.state.sortIdx) {
+      this.setState({ sortIdx: sortIdx }); // eslint-disable-line react/no-did-update-set-state
     }
   }
 

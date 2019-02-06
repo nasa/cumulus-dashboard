@@ -17,9 +17,9 @@ class Workflow extends React.Component {
     this.renderJson = this.renderJson.bind(this);
   }
 
-  UNSAFE_componentWillReceiveProps ({ params }) { // eslint-disable-line camelcase
-    const { workflowName } = params;
-    if (workflowName !== this.props.params.workflowName) {
+  componentDidUpdate (prevProps) {
+    const { workflowName } = this.props.params;
+    if (workflowName !== prevProps.params.workflowName) {
       this.get();
     }
   }

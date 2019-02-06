@@ -23,10 +23,10 @@ class CollectionIngest extends React.Component {
     this.renderJson = this.renderJson.bind(this);
   }
 
-  UNSAFE_componentWillReceiveProps (props) { // eslint-disable-line camelcase
-    const { name, version } = this.props.params;
+  componentDidUpdate (prevProps) {
+    const { name, version } = prevProps.params;
     const collectionId = getCollectionId({ name, version });
-    const record = this.props.collections.map[collectionId];
+    const record = prevProps.collections.map[collectionId];
     if (!record) {
       this.get(name, version);
     }

@@ -20,12 +20,12 @@ class OAuth extends React.Component {
     };
   }
 
-  UNSAFE_componentWillReceiveProps (newProps) { // eslint-disable-line camelcase
+  componentDidUpdate (prevProps) {
     // delay-close the modal if it's open
-    if (newProps.api.authenticated &&
-        newProps.api.authenticated !== this.props.api.authenticated) {
-      this.props.dispatch(setTokenState(this.state.token));
-      const { pathname } = this.props.location;
+    if (this.props.api.authenticated &&
+        this.props.api.authenticated !== prevProps.api.authenticated) {
+      prevProps.dispatch(setTokenState(this.state.token));
+      const { pathname } = prevProps.location;
       if (pathname !== '/auth' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/auth') {

@@ -23,10 +23,10 @@ class Timer extends React.Component {
     this.createTimer(this.props.config);
   }
 
-  UNSAFE_componentWillReceiveProps (nextProps) { // eslint-disable-line camelcase
-    if (JSON.stringify(this.props.config) !== JSON.stringify(nextProps.config) ||
-      (nextProps.reload && this.props.reload !== nextProps.reload)) {
-      this.createTimer(nextProps.config);
+  componentDidUpdate (prevProps) {
+    if (JSON.stringify(prevProps.config) !== JSON.stringify(this.props.config) ||
+      (this.props.reload && prevProps.reload !== this.props.reload)) {
+      this.createTimer(this.props.config);
     }
   }
 

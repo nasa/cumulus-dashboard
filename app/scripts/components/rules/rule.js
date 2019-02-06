@@ -51,9 +51,9 @@ class Rule extends React.Component {
     this.load(this.props.params.ruleName);
   }
 
-  UNSAFE_componentWillReceiveProps ({ params }) { // eslint-disable-line camelcase
-    if (params.ruleName !== this.props.params.ruleName) {
-      this.load(params.ruleName);
+  componentDidUpdate (prevProps) {
+    if (this.props.params.ruleName !== prevProps.params.ruleName) {
+      this.load(this.props.params.ruleName);
     }
   }
 

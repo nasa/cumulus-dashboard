@@ -36,8 +36,9 @@ class EditRecord extends React.Component {
     this.props.dispatch(getSchema(this.props.schemaKey));
   }
 
-  UNSAFE_componentWillReceiveProps ({ pk }) { // eslint-disable-line camelcase
-    const { dispatch, router, clearRecordUpdate, backRoute, state } = this.props;
+  componentDidUpdate (prevProps) {
+    const { pk } = this.props;
+    const { dispatch, router, clearRecordUpdate, backRoute, state } = prevProps;
     const updateStatus = get(state.updated, [pk, 'status']);
     if (updateStatus === 'success') {
       return setTimeout(() => {
@@ -46,17 +47,17 @@ class EditRecord extends React.Component {
       }, updateDelay);
     } else if (this.state.pk === pk) { return; }
 
-    const record = get(this.props.state.map, pk, {});
+    const record = get(state.map, pk, {});
 
     // record has hit an API error
     if (record.error) {
-      this.setState({
+      this.setState({ // eslint-disable-line react/no-did-update-set-state
         pk,
         error: record.error
       });
     } else if (record.data) {
       // record has hit an API success; update the UI
-      this.setState({
+      this.setState({ // eslint-disable-line react/no-did-update-set-state
         pk,
         error: null
       });
