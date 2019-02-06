@@ -17,6 +17,7 @@ class BatchCommand extends React.Component {
       completed: 0,
       status: null
     };
+    this.isRunning = false;
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
     this.start = this.start.bind(this);
@@ -29,18 +30,23 @@ class BatchCommand extends React.Component {
   }
 
   componentDidUpdate () {
+    if (this.isRunning) return;
+    this.isRunning = true;
     const { state } = this.props;
     const { callbacks, completed } = this.state;
+
     // on success or error, call and remove the saved callback
     Object.keys(callbacks).forEach(id => {
       if (!state[id] || !callbacks[id]) return;
       else if (state[id].status === 'success') callbacks[id](null, id);
       else if (state[id].status === 'error') callbacks[id]({error: state[id].error, id});
+
       if (state[id].status === 'success' || state[id].status === 'error') {
         delete callbacks[id];
         this.setState({ callbacks, completed: completed + 1 });
       }
     });
+    this.isRunning = false;
   }
 
   confirm () {

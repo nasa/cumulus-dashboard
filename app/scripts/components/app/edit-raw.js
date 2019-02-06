@@ -91,35 +91,6 @@ class EditRaw extends React.Component {
     }
   }
 
-  // static getDerivedStateFromProps (nextProps) {
-  //   const { pk, state, schema, schemaKey } = nextProps;
-  //   const recordSchema = schema[schemaKey];
-
-  //   const newRecord = state.map[pk] || {};
-  //   if (newRecord.error) {
-  //     return {
-  //       pk,
-  //       data: '',
-  //       error: newRecord.error
-  //     };
-  //   } else if (newRecord.data) {
-  //     let data = removeReadOnly(newRecord.data, recordSchema);
-  //     try {
-  //       var text = JSON.stringify(data, null, '\t');
-  //     } catch (error) {
-  //       return { error, pk };
-  //     }
-  //     return {
-  //       pk,
-  //       data: text,
-  //       error: null
-  //     };
-  //   } else if (!newRecord.inflight) {
-  //     this.queryRecord(pk);
-  //   }
-  //   return null;
-  // }
-
   onChange (id, value) {
     this.setState({ data: value });
   }

@@ -67,35 +67,6 @@ class EditRecord extends React.Component {
     }
   }
 
-  // static getDerivedStateFromProps (nextProps, prevState) {
-  //   const { pk } = nextProps;
-
-  //   if (prevState.prevPropsState !== nextProps.state) {
-  //     return {
-  //       prevPropsState: nextProps.state,
-  //       pk,
-  //       error: null };
-  //   }
-  //   const record = get(prevState.prevPropsState.map, pk, {});
-
-  //   // record has hit an API error
-  //   if (record.error) {
-  //     return {
-  //       pk,
-  //       error: record.error
-  //     };
-  //   } else if (record.data) {
-  //     // record has hit an API success; update the UI
-  //     return {
-  //       pk,
-  //       error: null
-  //     };
-  //   } else if (!record.inflight) {
-  //     // we've not yet fetched the record, request it
-  //     this.get(pk);
-  //   }
-  // }
-
   navigateBack () {
     this.props.router.push(this.props.backRoute);
   }
