@@ -111,8 +111,8 @@ gulp.task('vendorScripts', function () {
     require: pkg.dependencies ? Object.keys(pkg.dependencies) : []
   });
 
+  // Ignore unnecessary web-incompatible package
   vb.ignore('fs-extra');
-  // vb.ignore(require.resolve('@cumulus/common'));
 
   return vb.bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
