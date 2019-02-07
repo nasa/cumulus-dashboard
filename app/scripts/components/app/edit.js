@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
@@ -12,47 +11,34 @@ import merge from '../../utils/merge';
 import { updateDelay } from '../../config';
 import {strings} from '../locale';
 
-var EditRecord = createReactClass({
-  propTypes: {
-    pk: PropTypes.string,
-    schema: PropTypes.object,
-    schemaKey: PropTypes.string,
-    dispatch: PropTypes.func,
-    state: PropTypes.object,
-    router: PropTypes.object,
-    backRoute: PropTypes.string,
-
-    includedForms: PropTypes.array,
-    merge: PropTypes.bool,
-    attachMeta: PropTypes.bool,
-
-    getRecord: PropTypes.func,
-    updateRecord: PropTypes.func,
-    clearRecordUpdate: PropTypes.func
-  },
-
-  getInitialState: function () {
-    return {
+class EditRecord extends React.Component {
+  constructor () {
+    super();
+    this.state = {
       pk: null,
       error: null
     };
-  },
+    this.get = this.get.bind(this);
+    this.navigateBack = this.navigateBack.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
 
-  get: function (pk) {
+  get (pk) {
     const record = this.props.state.map[pk];
     if (!record) {
       this.props.dispatch(this.props.getRecord(pk));
     }
-  },
+  }
 
-  UNSAFE_componentWillMount: function () {
+  componentDidMount () {
     const { pk } = this.props;
     this.get(pk);
     this.props.dispatch(getSchema(this.props.schemaKey));
-  },
+  }
 
-  UNSAFE_componentWillReceiveProps: function ({ pk }) {
-    const { dispatch, router, clearRecordUpdate, backRoute, state } = this.props;
+  componentDidUpdate (prevProps) {
+    const { pk } = this.props;
+    const { dispatch, router, clearRecordUpdate, backRoute, state } = prevProps;
     const updateStatus = get(state.updated, [pk, 'status']);
     if (updateStatus === 'success') {
       return setTimeout(() => {
@@ -61,17 +47,17 @@ var EditRecord = createReactClass({
       }, updateDelay);
     } else if (this.state.pk === pk) { return; }
 
-    const record = get(this.props.state.map, pk, {});
+    const record = get(state.map, pk, {});
 
     // record has hit an API error
     if (record.error) {
-      this.setState({
+      this.setState({ // eslint-disable-line react/no-did-update-set-state
         pk,
         error: record.error
       });
     } else if (record.data) {
       // record has hit an API success; update the UI
-      this.setState({
+      this.setState({ // eslint-disable-line react/no-did-update-set-state
         pk,
         error: null
       });
@@ -79,13 +65,13 @@ var EditRecord = createReactClass({
       // we've not yet fetched the record, request it
       this.get(pk);
     }
-  },
+  }
 
-  navigateBack: function () {
+  navigateBack () {
     this.props.router.push(this.props.backRoute);
-  },
+  }
 
-  onSubmit: function (id, payload) {
+  onSubmit (id, payload) {
     const { pk, state, dispatch, updateRecord, attachMeta } = this.props;
     const record = state.map[pk];
     const json = this.props.merge ? merge(record.data, payload) : payload;
@@ -96,9 +82,9 @@ var EditRecord = createReactClass({
     this.setState({ error: null });
     console.log('About to update', json);
     dispatch(updateRecord(pk, json));
-  },
+  }
 
-  render: function () {
+  render () {
     const { pk, state, schemaKey, includedForms } = this.props;
     const record = get(state.map, pk, {});
     const meta = get(state.updated, pk, {});
@@ -124,7 +110,25 @@ var EditRecord = createReactClass({
       </div>
     );
   }
-});
+}
+
+EditRecord.propTypes = {
+  pk: PropTypes.string,
+  schema: PropTypes.object,
+  schemaKey: PropTypes.string,
+  dispatch: PropTypes.func,
+  state: PropTypes.object,
+  router: PropTypes.object,
+  backRoute: PropTypes.string,
+
+  includedForms: PropTypes.array,
+  merge: PropTypes.bool,
+  attachMeta: PropTypes.bool,
+
+  getRecord: PropTypes.func,
+  updateRecord: PropTypes.func,
+  clearRecordUpdate: PropTypes.func
+};
 
 export default withRouter(connect(state => ({
   schema: state.schema

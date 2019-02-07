@@ -1,22 +1,18 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Sidebar from '../app/sidebar';
 import { strings } from '../locale';
 
-var Collections = createReactClass({
-  displayName: strings.collections,
+class Collections extends React.Component {
+  constructor () {
+    super();
+    this.displayName = strings.collection;
+  }
 
-  propTypes: {
-    children: PropTypes.object,
-    location: PropTypes.object,
-    params: PropTypes.object
-  },
-
-  render: function () {
+  render () {
     const { pathname } = this.props.location;
     const existingCollection = pathname !== '/collections/add';
     return (
@@ -38,6 +34,12 @@ var Collections = createReactClass({
       </div>
     );
   }
-});
+}
+
+Collections.propTypes = {
+  children: PropTypes.object,
+  location: PropTypes.object,
+  params: PropTypes.object
+};
 
 export default connect(state => state)(Collections);

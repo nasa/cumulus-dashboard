@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import Collapse from 'react-collapsible';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
@@ -19,32 +18,31 @@ import ErrorReport from '../errors/report';
 import { ExecutionStatusGraph, getEventDetails } from './execution-status-graph';
 import SortableTable from '../table/sortable';
 
-var ExecutionStatus = createReactClass({
-  displayName: 'Execution',
+class ExecutionStatus extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'Execution';
+    this.navigateBack = this.navigateBack.bind(this);
+    this.errors = this.errors.bind(this);
+    this.renderEvents = this.renderEvents.bind(this);
+  }
 
-  propTypes: {
-    executionStatus: PropTypes.object,
-    params: PropTypes.object,
-    dispatch: PropTypes.func,
-    router: PropTypes.object
-  },
-
-  UNSAFE_componentWillMount: function () {
+  componentDidMount () {
     const { dispatch } = this.props;
     const { executionArn } = this.props.params;
     dispatch(getExecutionStatus(executionArn));
-  },
+  }
 
-  navigateBack: function () {
+  navigateBack () {
     const { router } = this.props;
     router.push('/executions');
-  },
+  }
 
-  errors: function () {
+  errors () {
     return [].filter(Boolean);
-  },
+  }
 
-  renderEvents: function () {
+  renderEvents () {
     const { executionStatus } = this.props;
     let { executionHistory: { events } } = executionStatus;
     events.forEach((event) => {
@@ -64,22 +62,27 @@ var ExecutionStatus = createReactClass({
         collapsible={true}
       />
     );
-  },
+  }
 
-  render: function () {
+  render () {
     const { executionStatus } = this.props;
     if (!executionStatus.execution) return null;
 
-    let output;
-    if (executionStatus.execution.output) {
-      output = <dd>
+    const input = (executionStatus.execution.input)
+      ? <dd>
+        <Collapse trigger={'Show Input'} triggerWhenOpen={'Hide Input'}>
+          <pre>{parseJson(executionStatus.execution.input)}</pre>
+        </Collapse>
+      </dd>
+      : <dd>N/A</dd>;
+
+    const output = (executionStatus.execution.output)
+      ? <dd>
         <Collapse trigger={'Show Output'} triggerWhenOpen={'Hide Output'}>
           <pre>{parseJson(executionStatus.execution.output)}</pre>
         </Collapse>
-      </dd>;
-    } else {
-      output = <dd>N/A</dd>;
-    }
+      </dd>
+      : <dd>N/A</dd>;
 
     let parentARN;
     if (executionStatus.execution.input) {
@@ -106,13 +109,16 @@ var ExecutionStatus = createReactClass({
         {errors.length ? <ErrorReport report={errors} /> : null}
       </section>
 
-      <section className='page__section width--half' style={{ display: 'inline-block', marginRight: '5%' }}>
-        <div className='heading__wrapper--border'>
-          <h2 className='heading--medium with-description'>Visual workflow</h2>
-        </div>
+      {/* stateMachine's definition and executionHistory's event statuses are needed to draw the graph */}
+      {(executionStatus.stateMachine && executionStatus.executionHistory)
+      ? <section className='page__section width--half' style={{ display: 'inline-block', marginRight: '5%' }}>
+            <div className='heading__wrapper--border'>
+              <h2 className='heading--medium with-description'>Visual workflow</h2>
+            </div>
 
-        <ExecutionStatusGraph executionStatus={executionStatus} />
-      </section>
+            <ExecutionStatusGraph executionStatus={executionStatus} />
+        </section>
+      : null}
 
       <section className='page__section width--half' style={{ display: 'inline-block', verticalAlign: 'top' }}>
         <div className='heading__wrapper--border'>
@@ -127,7 +133,7 @@ var ExecutionStatus = createReactClass({
           <dd>{executionStatus.execution.executionArn}</dd><br />
 
           <dt>State Machine Arn:</dt>
-          <dd>{executionStatus.stateMachine.stateMachineArn}</dd><br />
+          <dd>{executionStatus.execution.stateMachineArn}</dd><br />
 
           <dt>Started:</dt>
           <dd>{fullDate(executionStatus.execution.startDate)}</dd><br />
@@ -140,11 +146,8 @@ var ExecutionStatus = createReactClass({
           <br />
 
           <dt>Input:</dt>
-          <dd>
-            <Collapse trigger={'Show Input'} triggerWhenOpen={'Hide Input'}>
-              <pre>{parseJson(executionStatus.execution.input)}</pre>
-            </Collapse>
-          </dd><br />
+          {input}
+          <br />
 
           <dt>Output:</dt>
           {output}
@@ -156,20 +159,30 @@ var ExecutionStatus = createReactClass({
         </dl>
       </section>
 
-      <section className='page__section'>
-        <div className='heading__wrapper--border'>
-          <h2 className='heading--medium with-description'>Events</h2>
-          <p>To find all task name and versions, select <b>More details</b> for the last Lambda- or Activity-type event. There you should find a key / value pair "workflow_tasks" which lists all tasks' version, name and arn.</p>
-          <p><b>NOTE:</b>Task / version tracking is enabled as of Cumulus version 1.9.1.</p>
-          <p><b>NOTE:</b>If the task output is greater than 10KB, the full message will be stored in an S3 Bucket. In these scenarios, task and version numbers are not part of the Lambda or Activity event output.</p>
-        </div>
+      {(executionStatus.executionHistory)
+      ? <section className='page__section'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium with-description'>Events</h2>
+            <p>To find all task name and versions, select <b>More details</b> for the last Lambda- or Activity-type event. There you should find a key / value pair "workflow_tasks" which lists all tasks' version, name and arn.</p>
+            <p><b>NOTE:</b>Task / version tracking is enabled as of Cumulus version 1.9.1.</p>
+            <p><b>NOTE:</b>If the task output is greater than 10KB, the full message will be stored in an S3 Bucket. In these scenarios, task and version numbers are not part of the Lambda or Activity event output.</p>
+          </div>
 
-        {this.renderEvents()}
-      </section>
+          {this.renderEvents()}
+        </section>
+      : null}
+
       </div>
     );
   }
-});
+}
+
+ExecutionStatus.propTypes = {
+  executionStatus: PropTypes.object,
+  params: PropTypes.object,
+  dispatch: PropTypes.func,
+  router: PropTypes.object
+};
 
 export { ExecutionStatus };
 

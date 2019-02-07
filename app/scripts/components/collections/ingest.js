@@ -2,7 +2,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Ace from 'react-ace';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
@@ -11,40 +10,38 @@ import { lastUpdated, nullValue, getCollectionId } from '../../utils/format';
 import config from '../../config';
 import Loading from '../app/loading-indicator';
 
-var CollectionIngest = createReactClass({
-  displayName: 'CollectionIngest',
-
-  getInitialState: function () {
-    return {
+class CollectionIngest extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'CollectionIngest';
+    this.state = {
       view: 'json'
     };
-  },
+    this.get = this.get.bind(this);
+    this.renderReadOnlyJson = this.renderReadOnlyJson.bind(this);
+    this.renderList = this.renderList.bind(this);
+    this.renderJson = this.renderJson.bind(this);
+  }
 
-  propTypes: {
-    params: PropTypes.object,
-    collections: PropTypes.object,
-    dispatch: PropTypes.func
-  },
-
-  UNSAFE_componentWillReceiveProps: function (props) {
-    const { name, version } = this.props.params;
+  componentDidUpdate (prevProps) {
+    const { name, version } = prevProps.params;
     const collectionId = getCollectionId({ name, version });
-    const record = this.props.collections.map[collectionId];
+    const record = prevProps.collections.map[collectionId];
     if (!record) {
       this.get(name, version);
     }
-  },
+  }
 
-  UNSAFE_componentWillMount: function () {
+  componentDidMount () {
     const { name, version } = this.props.params;
     this.get(name, version);
-  },
+  }
 
-  get: function (name, version) {
+  get (name, version) {
     this.props.dispatch(getCollection(name, version));
-  },
+  }
 
-  renderReadOnlyJson: function (name, data) {
+  renderReadOnlyJson (name, data) {
     return (
       <Ace
         mode='json'
@@ -61,9 +58,9 @@ var CollectionIngest = createReactClass({
         wrapEnabled={true}
       />
     );
-  },
+  }
 
-  render: function () {
+  render () {
     const { name, version } = this.props.params;
     const collectionId = getCollectionId(this.props.params);
     const record = this.props.collections.map[collectionId];
@@ -89,9 +86,9 @@ var CollectionIngest = createReactClass({
         </section>
       </div>
     );
-  },
+  }
 
-  renderList: function (data) {
+  renderList (data) {
     const ingest = get(data, 'ingest', {});
     const recipe = get(data, 'recipe', {});
 
@@ -122,9 +119,9 @@ var CollectionIngest = createReactClass({
         </section>
       </div>
     );
-  },
+  }
 
-  renderJson: function (data) {
+  renderJson (data) {
     return (
       <ul>
         <li>
@@ -134,6 +131,12 @@ var CollectionIngest = createReactClass({
       </ul>
     );
   }
-});
+}
+
+CollectionIngest.propTypes = {
+  params: PropTypes.object,
+  collections: PropTypes.object,
+  dispatch: PropTypes.func
+};
 
 export default connect(state => state)(CollectionIngest);

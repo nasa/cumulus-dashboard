@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { tally } from '../../utils/format';
@@ -12,16 +11,17 @@ const granuleMeta = [
   ['completed', 'Completed'],
   ['failed', 'Failed']
 ];
-const Progress = createReactClass({
-  propTypes: {
-    granules: PropTypes.array
-  },
+class Progress extends React.Component {
+  constructor () {
+    super();
+    this.getItem = this.getItem.bind(this);
+  }
 
-  getItem: function (key) {
+  getItem (key) {
     return this.props.granules.find(count => count.key === key);
-  },
+  }
 
-  render: function () {
+  render () {
     return (
       <ul className='timeline--processing--overall'>
         {granuleMeta.map(d => {
@@ -38,5 +38,8 @@ const Progress = createReactClass({
       </ul>
     );
   }
-});
+}
+
+Progress.propTypes = { granules: PropTypes.array };
+
 export default Progress;

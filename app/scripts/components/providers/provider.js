@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -34,19 +33,17 @@ const metaAccessors = [
   ['Global Connection Limit', 'globalConnectionLimit', tally]
 ];
 
-var ProviderOverview = createReactClass({
-  displayName: 'Provider',
+class ProviderOverview extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'Provider';
+    this.reload = this.reload.bind(this);
+    this.navigateBack = this.navigateBack.bind(this);
+    this.delete = this.delete.bind(this);
+    this.errors = this.errors.bind(this);
+  }
 
-  propTypes: {
-    params: PropTypes.object,
-    dispatch: PropTypes.func,
-    providers: PropTypes.object,
-    collections: PropTypes.object,
-    logs: PropTypes.object,
-    router: PropTypes.object
-  },
-
-  UNSAFE_componentWillMount: function () {
+  componentDidMount () {
     const { providerId } = this.props.params;
     const immediate = !this.props.providers.map[providerId];
     this.reload(immediate);
@@ -55,42 +52,42 @@ var ProviderOverview = createReactClass({
       fields: 'collectionName',
       providers: providerId
     }));
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
-  },
+  }
 
-  reload: function (immediate, timeout) {
+  reload (immediate, timeout) {
     timeout = timeout || updateInterval;
     const providerId = this.props.params.providerId;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
     this.cancelInterval = interval(() => dispatch(getProvider(providerId)), timeout, immediate);
-  },
+  }
 
-  navigateBack: function () {
+  navigateBack () {
     const { router } = this.props;
     router.push('/providers');
-  },
+  }
 
-  delete: function () {
+  delete () {
     const { providerId } = this.props.params;
     const provider = this.props.providers.map[providerId].data;
     if (!provider.published) {
       this.props.dispatch(deleteProvider(providerId));
     }
-  },
+  }
 
-  errors: function () {
+  errors () {
     const providerId = this.props.params.providerId;
     return [
       get(this.props.providers.map, [providerId, 'error']),
       get(this.props.providers.deleted, [providerId, 'error'])
     ].filter(Boolean);
-  },
+  }
 
-  render: function () {
+  render () {
     const providerId = this.props.params.providerId;
     const record = this.props.providers.map[providerId];
 
@@ -156,7 +153,16 @@ var ProviderOverview = createReactClass({
       </div>
     );
   }
-});
+}
+
+ProviderOverview.propTypes = {
+  params: PropTypes.object,
+  dispatch: PropTypes.func,
+  providers: PropTypes.object,
+  collections: PropTypes.object,
+  logs: PropTypes.object,
+  router: PropTypes.object
+};
 
 export default connect(state => ({
   providers: state.providers,

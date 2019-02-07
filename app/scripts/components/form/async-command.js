@@ -2,68 +2,56 @@
 import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import Ellipsis from '../app/loading-ellipsis';
 import { preventDefault } from '../../utils/noop';
 import { updateDelay } from '../../config';
 
-const AsyncCommand = createReactClass({
+class AsyncCommand extends React.Component {
+  constructor () {
+    super();
+    this.state = { modal: false };
+    this.buttonClass = this.buttonClass.bind(this);
+    this.elementClass = this.elementClass.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.confirm = this.confirm.bind(this);
+    this.cancel = this.cancel.bind(this);
+  }
 
-  propTypes: {
-    action: PropTypes.func,
-    success: PropTypes.func,
-    error: PropTypes.func,
-    status: PropTypes.string,
-    text: PropTypes.string,
-    className: PropTypes.string,
-    disabled: PropTypes.bool,
-    successTimeout: PropTypes.number,
-    element: PropTypes.string,
-    confirmAction: PropTypes.bool,
-    confirmText: PropTypes.string,
-    confirmOptions: PropTypes.array,
-    href: PropTypes.string
-  },
-
-  getInitialState: function () {
-    return { modal: false };
-  },
-
-  UNSAFE_componentWillReceiveProps: function (newProps) {
+  componentDidUpdate (prevProps) {
     if (
-      this.props.status === 'inflight' &&
-      newProps.status === 'success' &&
-      typeof this.props.success === 'function'
+      prevProps.status === 'inflight' &&
+      this.props.status === 'success' &&
+      typeof prevProps.success === 'function'
     ) {
-      const timeout = isNaN(this.props.successTimeout) ? updateDelay : this.props.successTimeout;
-      setTimeout(this.props.success, timeout);
+      const timeout = isNaN(prevProps.successTimeout) ? updateDelay : prevProps.successTimeout;
+      setTimeout(prevProps.success, timeout);
     } else if (
-      this.props.status === 'inflight' &&
-        newProps.status === 'error' &&
-        typeof this.props.error === 'function'
+      prevProps.status === 'inflight' &&
+        this.props.status === 'error' &&
+        typeof prevProps.error === 'function'
     ) {
-      this.props.error();
+      prevProps.error();
     }
-  },
+  }
 
-  buttonClass: function (processing) {
+  buttonClass (processing) {
     let className = 'button button--small form-group__element button--green';
     if (processing) className += ' button--loading';
     if (this.props.disabled) className += ' button--disabled';
     if (this.props.className) className += ' ' + this.props.className;
     return className;
-  },
+  }
 
   // a generic className generator for non-button elements
-  elementClass: function (processing) {
+  elementClass (processing) {
     let className = 'async__element';
     if (processing) className += ' async__element--loading';
     if (this.props.disabled) className += ' async__element--disabled';
     if (this.props.className) className += ' ' + this.props.className;
     return className;
-  },
+  }
 
-  handleClick: function (e) {
+  handleClick (e) {
     e.preventDefault();
     if (this.props.confirmAction) {
       this.setState({ modal: true });
@@ -71,18 +59,18 @@ const AsyncCommand = createReactClass({
       // prevent duplicate action if the action is already inflight.
       this.props.action();
     }
-  },
+  }
 
-  confirm: function () {
+  confirm () {
     this.props.action();
     this.setState({ modal: false });
-  },
+  }
 
-  cancel: function () {
+  cancel () {
     this.setState({ modal: false });
-  },
+  }
 
-  render: function () {
+  render () {
     const { status, text, confirmText, confirmOptions } = this.props;
     const { modal } = this.state;
     const inflight = status === 'inflight';
@@ -129,5 +117,22 @@ const AsyncCommand = createReactClass({
       </div>
     );
   }
-});
+}
+
+AsyncCommand.propTypes = {
+  action: PropTypes.func,
+  success: PropTypes.func,
+  error: PropTypes.func,
+  status: PropTypes.string,
+  text: PropTypes.string,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+  successTimeout: PropTypes.number,
+  element: PropTypes.string,
+  confirmAction: PropTypes.bool,
+  confirmText: PropTypes.string,
+  confirmOptions: PropTypes.array,
+  href: PropTypes.string
+};
+
 export default AsyncCommand;

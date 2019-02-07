@@ -3,37 +3,28 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import TextArea from '../form/text-area';
 import { get } from 'object-path';
 import { updateDelay } from '../../config';
 
-const AddRaw = createReactClass({
-  propTypes: {
-    dispatch: PropTypes.func,
-    state: PropTypes.object,
-    defaultValue: PropTypes.object,
-    title: PropTypes.string,
-    getPk: PropTypes.func,
-    getBaseRoute: PropTypes.func,
-    router: PropTypes.object,
-
-    createRecord: PropTypes.func
-  },
-
-  getInitialState: function () {
-    return {
+class AddRaw extends React.Component {
+  constructor () {
+    super();
+    this.state = {
       data: '',
       pk: null,
       error: null
     };
-  },
+    this.cancel = this.cancel.bind(this);
+    this.submit = this.submit.bind(this);
+    this.onChange = this.onChange.bind(this);
+  }
 
-  cancel: function (e) {
+  cancel (e) {
     this.props.router.push(this.props.getBaseRoute().split('/')[1]);
-  },
+  }
 
-  submit: function (e) {
+  submit (e) {
     e.preventDefault();
     const { state, dispatch, createRecord, getPk } = this.props;
     let { pk, data } = this.state;
@@ -47,37 +38,37 @@ const AddRaw = createReactClass({
       this.setState({ error: null, pk: getPk(json) });
       dispatch(createRecord(json));
     }
-  },
+  }
 
-  UNSAFE_componentWillMount: function () {
+  componentDidMount () {
     if (this.props.defaultValue) {
-      this.setState({ data: JSON.stringify(this.props.defaultValue, null, 2) });
+      this.setState({ data: JSON.stringify(this.props.defaultValue, null, 2) }); // eslint-disable-line react/no-did-mount-set-state
     }
-  },
+  }
 
-  UNSAFE_componentWillReceiveProps: function ({ state }) {
-    const { router, getBaseRoute } = this.props;
+  componentDidUpdate (prevProps) {
+    const { router, getBaseRoute } = prevProps;
     const { pk, error } = this.state;
     if (!pk) {
       return;
     }
 
-    const status = get(state.created, [pk, 'status']);
+    const status = get(this.props.state.created, [pk, 'status']);
     if (status === 'success') {
       const baseRoute = getBaseRoute(pk);
       return setTimeout(() => {
         router.push(baseRoute);
       }, updateDelay);
     } else if (status === 'error' && !error) {
-      this.setState({ error: get(state.created, [pk, 'error']) });
+      this.setState({ error: get(this.props.state.created, [pk, 'error']) }); // eslint-disable-line react/no-did-update-set-state
     }
-  },
+  }
 
-  onChange: function (id, value) {
+  onChange (id, value) {
     this.setState({ data: value });
-  },
+  }
 
-  render: function () {
+  render () {
     const { pk, error, data } = this.state;
     const status = get(this.props.state.created, [pk, 'status']);
     const buttonText = status === 'inflight' ? 'loading...'
@@ -114,6 +105,18 @@ const AddRaw = createReactClass({
       </div>
     );
   }
-});
+}
+
+AddRaw.propTypes = {
+  dispatch: PropTypes.func,
+  state: PropTypes.object,
+  defaultValue: PropTypes.object,
+  title: PropTypes.string,
+  getPk: PropTypes.func,
+  getBaseRoute: PropTypes.func,
+  router: PropTypes.object,
+
+  createRecord: PropTypes.func
+};
 
 export default withRouter(connect()(AddRaw));

@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import { get } from 'object-path';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -62,26 +61,24 @@ const tableSortProps = [
   strings.collection_id
 ];
 
-var ExecutionOverview = createReactClass({
-  propTypes: {
-    dispatch: PropTypes.func,
-    stats: PropTypes.object,
-    executions: PropTypes.object,
-    collectionOptions: PropTypes.object,
-    workflowOptions: PropTypes.object
-  },
+class ExecutionOverview extends React.Component {
+  constructor () {
+    super();
+    this.queryMeta = this.queryMeta.bind(this);
+    this.renderOverview = this.renderOverview.bind(this);
+  }
 
-  UNSAFE_componentWillMount: function () {
+  componentDidMount () {
     // use a slightly slower update interval, since the dropdown fields
     // will change less frequently.
     this.cancelInterval = interval(this.queryMeta, updateInterval, true);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
-  },
+  }
 
-  queryMeta: function () {
+  queryMeta () {
     this.props.dispatch(listCollections({
       limit: 100,
       fields: 'name,version'
@@ -91,14 +88,14 @@ var ExecutionOverview = createReactClass({
       type: 'executions',
       field: 'status'
     }));
-  },
+  }
 
-  renderOverview: function (count) {
+  renderOverview (count) {
     const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
     return <Overview items={overview} inflight={false} />;
-  },
+  }
 
-  render: function () {
+  render () {
     const { stats, executions } = this.props;
     const { list } = executions;
     const { count, queriedAt } = list.meta;
@@ -156,7 +153,15 @@ var ExecutionOverview = createReactClass({
       </div>
     );
   }
-});
+}
+
+ExecutionOverview.propTypes = {
+  dispatch: PropTypes.func,
+  stats: PropTypes.object,
+  executions: PropTypes.object,
+  collectionOptions: PropTypes.object,
+  workflowOptions: PropTypes.object
+};
 
 export default connect(state => ({
   stats: state.stats,

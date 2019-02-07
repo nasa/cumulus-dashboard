@@ -2,7 +2,6 @@
 import c from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import Autocomplete from 'react-autocomplete';
 
@@ -22,51 +21,43 @@ function renderMenu (items, value, style) {
   );
 }
 
-const Dropdown = createReactClass({
-  displayName: 'Dropdown',
-
-  propTypes: {
-    dispatch: PropTypes.func,
-    options: PropTypes.object,
-    getOptions: PropTypes.func,
-    action: PropTypes.func,
-    clear: PropTypes.func,
-    paramKey: PropTypes.string,
-    label: PropTypes.any
-  },
-
-  getInitialState: function () {
-    return {
+class Dropdown extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'Dropdown';
+    this.state = {
       value: ''
     };
-  },
+    this.onSelect = this.onSelect.bind(this);
+    this.onChange = this.onChange.bind(this);
+  }
 
-  UNSAFE_componentWillMount: function () {
+  componentDidMount () {
     const { dispatch, getOptions } = this.props;
     if (getOptions) { dispatch(getOptions()); }
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     const { dispatch, clear } = this.props;
     dispatch(clear(this.props.paramKey));
-  },
+  }
 
-  onSelect: function (selected, item) {
+  onSelect (selected, item) {
     const { dispatch, action } = this.props;
     dispatch(action({ key: this.props.paramKey, value: selected }));
     this.setState({ value: item.label });
-  },
+  }
 
-  onChange: function (e) {
+  onChange (e) {
     const { dispatch, clear } = this.props;
     const { value } = e.target;
     this.setState({ value });
     if (!value.length) {
       dispatch(clear(this.props.paramKey));
     }
-  },
+  }
 
-  render: function () {
+  render () {
     // `options` are expected in the following format:
     // {displayValue1: optionElementValue1, displayValue2, optionElementValue2, ...}
     const { options, label, paramKey } = this.props;
@@ -95,5 +86,16 @@ const Dropdown = createReactClass({
       </div>
     );
   }
-});
+}
+
+Dropdown.propTypes = {
+  dispatch: PropTypes.func,
+  options: PropTypes.object,
+  getOptions: PropTypes.func,
+  action: PropTypes.func,
+  clear: PropTypes.func,
+  paramKey: PropTypes.string,
+  label: PropTypes.any
+};
+
 export default connect()(Dropdown);

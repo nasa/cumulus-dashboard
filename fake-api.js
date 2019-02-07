@@ -11,6 +11,7 @@ const {
   fakeProvidersDb,
   fakeExecutionStatusDb,
   fakeRulesDb,
+  fakeReconciliationReports,
   resetState
 } = require('./test/fake-api/db');
 
@@ -194,11 +195,25 @@ app.get('/stats/aggregate', async (req, res, next) => {
   next();
 });
 
+app.get('/reconciliationReports', async (req, res) => {
+  const reports = await fakeReconciliationReports.getItems();
+  res.send(reports);
+});
+
+app.post('/reconciliationReports', async(req, res) => {
+  await fakeReconciliationReports.createReport();
+  res.status(202).send({message: 'Report is being generated'}).end();
+});
+
+app.get('/reconciliationReports/:report', async(req, res) => {
+  res.send(fakeReconciliationReports.getReport());
+});
+
 app.get('/token', (req, res) => {
   const url = req.query.state;
   if (url) {
     token = generateJWT();
-    res.redirect(`${url}?token=${token}`);
+    res.redirect(`${decodeURIComponent(url)}?token=${token}`);
   } else {
     res.write('state parameter is missing');
     res.status(400).end();

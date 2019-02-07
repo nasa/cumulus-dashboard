@@ -1,39 +1,37 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { getExecutionLogs } from '../../actions';
 import { connect } from 'react-redux';
 
 import ErrorReport from '../errors/report';
 
-var ExecutionLogs = createReactClass({
-  displayName: 'Execution',
+class ExecutionLogs extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'Execution';
+    this.navigateBack = this.navigateBack.bind(this);
+    this.errors = this.errors.bind(this);
+  }
 
-  propTypes: {
-    executionLogs: PropTypes.object,
-    params: PropTypes.object,
-    dispatch: PropTypes.func,
-    router: PropTypes.object
-  },
-
-  UNSAFE_componentWillMount: function () {
+  componentDidMount () {
     const { dispatch } = this.props;
     const { executionName } = this.props.params;
     dispatch(getExecutionLogs(executionName));
-  },
+  }
 
-  navigateBack: function () {
+  navigateBack () {
     const { router } = this.props;
     router.push('/executions');
-  },
+  }
 
-  errors: function () {
+  errors () {
     return [].filter(Boolean);
-  },
+  }
 
-  render: function () {
+  render () {
     const { executionLogs } = this.props;
+    const { executionName } = this.props.params;
     if (!executionLogs.results) return null;
 
     const errors = this.errors();
@@ -42,7 +40,7 @@ var ExecutionLogs = createReactClass({
       <div className='page__component'>
       <section className='page__section page__section__header-wrapper'>
         <h1 className='heading--large heading--shared-content with-description'>
-          Logs for Execution {executionLogs.results[0].executions}
+          Logs for Execution {executionName}
         </h1>
 
         {errors.length ? <ErrorReport report={errors} /> : null}
@@ -64,7 +62,14 @@ var ExecutionLogs = createReactClass({
       </div>
     );
   }
-});
+}
+
+ExecutionLogs.propTypes = {
+  executionLogs: PropTypes.object,
+  params: PropTypes.object,
+  dispatch: PropTypes.func,
+  router: PropTypes.object
+};
 
 export default connect(state => ({
   executionLogs: state.executionLogs

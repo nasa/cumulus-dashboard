@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import {
   searchGranules,
@@ -35,40 +34,42 @@ import { strings } from '../locale';
 import { updateInterval } from '../../config';
 import { workflowOptionNames } from '../../selectors';
 
-var AllGranules = createReactClass({
-  displayName: strings.all_granules,
+class AllGranules extends React.Component {
+  constructor () {
+    super();
+    this.displayName = strings.all_granules;
+    this.queryWorkflows = this.queryWorkflows.bind(this);
+    this.generateQuery = this.generateQuery.bind(this);
+    this.generateBulkActions = this.generateBulkActions.bind(this);
+    this.selectWorkflow = this.selectWorkflow.bind(this);
+    this.applyWorkflow = this.applyWorkflow.bind(this);
+    this.getExecuteOptions = this.getExecuteOptions.bind(this);
+    this.getView = this.getView.bind(this);
+    this.state = {};
+  }
 
-  propTypes: {
-    granules: PropTypes.object,
-    logs: PropTypes.object,
-    dispatch: PropTypes.func,
-    location: PropTypes.object,
-    workflowOptions: PropTypes.array
-  },
-
-  UNSAFE_componentWillMount: function () {
-    this.setState({});
+  componentDidMount () {
     this.cancelInterval = interval(this.queryWorkflows, updateInterval, true);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
-  },
+  }
 
-  queryWorkflows: function () {
+  queryWorkflows () {
     this.props.dispatch(listWorkflows());
-  },
+  }
 
-  generateQuery: function () {
+  generateQuery () {
     const options = {};
     const view = this.getView();
     if (view === 'completed') options.status = 'completed';
     else if (view === 'processing') options.status = 'running';
     else if (view === 'failed') options.status = 'failed';
     return options;
-  },
+  }
 
-  generateBulkActions: function () {
+  generateBulkActions () {
     const config = {
       execute: {
         options: this.getExecuteOptions(),
@@ -77,17 +78,17 @@ var AllGranules = createReactClass({
     };
     const { granules } = this.props;
     return bulkActions(granules, config);
-  },
+  }
 
-  selectWorkflow: function (selector, workflow) {
+  selectWorkflow (selector, workflow) {
     this.setState({ workflow });
-  },
+  }
 
-  applyWorkflow: function (granuleId) {
+  applyWorkflow (granuleId) {
     return applyWorkflowToGranule(granuleId, this.state.workflow);
-  },
+  }
 
-  getExecuteOptions: function () {
+  getExecuteOptions () {
     return [
       simpleDropdownOption({
         handler: this.selectWorkflow,
@@ -96,17 +97,17 @@ var AllGranules = createReactClass({
         options: this.props.workflowOptions
       })
     ];
-  },
+  }
 
-  getView: function () {
+  getView () {
     const { pathname } = this.props.location;
     if (pathname === '/granules/completed') return 'completed';
     else if (pathname === '/granules/processing') return 'processing';
     else if (pathname === '/granules/failed') return 'failed';
     else return 'all';
-  },
+  }
 
-  render: function () {
+  render () {
     const { granules } = this.props;
     const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
@@ -168,7 +169,15 @@ var AllGranules = createReactClass({
       </div>
     );
   }
-});
+}
+
+AllGranules.propTypes = {
+  granules: PropTypes.object,
+  logs: PropTypes.object,
+  dispatch: PropTypes.func,
+  location: PropTypes.object,
+  workflowOptions: PropTypes.array
+};
 
 export default connect(state => ({
   logs: state.logs,

@@ -15,6 +15,9 @@ const executionStatusJson = require('../fixtures/executions/status/arn:aws:state
 const executionsFilePath = path.join(__dirname, 'db-executions.json');
 const executionStatusesFilePath = path.join(__dirname, 'db-executionstatus.json');
 
+const reconciliationReportsJson = require('../fixtures/reconciliation-reports/index.json');
+const reconciliationReportFilePath = path.join(__dirname, 'db-reconciliationReports.json');
+
 const seed = (filePath, data) => fs.outputJson(filePath, data);
 const resetState = () => {
   return Promise.all([
@@ -22,7 +25,8 @@ const resetState = () => {
     seed(providersFilePath, providersJson),
     seed(rulesFilePath, rulesJson),
     seed(executionsFilePath, executionsJson),
-    seed(executionStatusesFilePath, executionStatusJson)
+    seed(executionStatusesFilePath, executionStatusJson),
+    seed(reconciliationReportFilePath, reconciliationReportsJson)
   ]);
 };
 
@@ -252,8 +256,40 @@ class FakeProvidersDb extends FakeDb {
 }
 const fakeProvidersDb = new FakeProvidersDb(providersFilePath);
 
+class FakeReconciliationReports extends FakeDb {
+  async createReport () {
+    this.addItem('created_report.json');
+  }
+
+  getReport () {
+    return {
+      reportStartTime: '2018-06-11T18:52:37.710Z',
+      'reportEndTime': '2018-06-11T18:52:39.893Z',
+      status: 'SUCCESS',
+      error: null,
+      okFileCount: 21,
+      onlyInS3: [
+        's3://some-bucket/path/to/key-1.hdf',
+        's3://some-bucket/path/to/key-2.hdf'
+      ],
+      onlyInDynamoDb: [
+        {
+          uri: 's3://some-bucket/path/to/key-123.hdf',
+          granuleId: 'g-123'
+        },
+        {
+          uri: 's3://some-bucket/path/to/key-456.hdf',
+          granuleId: 'g-456'
+        }
+      ]
+    };
+  }
+}
+const fakeReconciliationReports = new FakeReconciliationReports(reconciliationReportFilePath);
+
 module.exports.resetState = resetState;
 module.exports.fakeCollectionsDb = fakeCollectionsDb;
 module.exports.fakeProvidersDb = fakeProvidersDb;
 module.exports.fakeRulesDb = fakeRulesDb;
 module.exports.fakeExecutionStatusDb = fakeExecutionStatusDb;
+module.exports.fakeReconciliationReports = fakeReconciliationReports;

@@ -10,7 +10,6 @@ import Dropdown from './simple-dropdown';
 import List from './arbitrary-list';
 import SubForm from './sub-form';
 import t from '../../utils/strings';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { window } from '../../utils/browser';
 const scrollTo = typeof window.scrollTo === 'function' ? window.scrollTo : () => true;
@@ -40,31 +39,18 @@ const errorMessage = (errors) => `Please review ${errors.join(', ')} and submit 
  * @param {String} form.error text to display when a form doesn't pass validation.
  * @return {JSX}
  */
-export const Form = createReactClass({
-  displayName: 'Form',
+export class Form extends React.Component {
+  constructor (props) {
+    super(props);
+    this.props = props;
+    this.displayName = 'Form';
+    this.generateComponentId = this.generateComponentId.bind(this);
+    this.isInflight = this.isInflight.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onCancel = this.onCancel.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.scrollToTop = this.scrollToTop.bind(this);
 
-  getInitialState: function () {
-    return {
-      inputs: {},
-      dirty: {},
-      errors: []
-    };
-  },
-
-  propTypes: {
-    id: PropTypes.string,
-    inputMeta: PropTypes.array,
-    submit: PropTypes.func,
-    cancel: PropTypes.func,
-    status: PropTypes.string,
-    nowrap: PropTypes.bool
-  },
-
-  generateComponentId: function (label) {
-    return slugify(label) + '-' + this.id;
-  },
-
-  UNSAFE_componentWillMount: function () {
     // generate id for this form
     this.id = generate();
 
@@ -80,14 +66,22 @@ export const Form = createReactClass({
       let error = null;
       inputState[inputId] = { value, error };
     });
-    this.setState({ inputs: inputState });
-  },
+    this.state = {
+      inputs: inputState,
+      dirty: {},
+      errors: []
+    };
+  }
 
-  isInflight: function () {
+  generateComponentId (label) {
+    return slugify(label) + '-' + this.id;
+  }
+
+  isInflight () {
     return this.props.status && this.props.status === 'inflight';
-  },
+  }
 
-  onChange: function (inputId, value) {
+  onChange (inputId, value) {
     // update the internal key/value store, in addition to marking as dirty
     const inputState = Object.assign({}, this.state.inputs);
     set(inputState, [inputId, 'value'], value);
@@ -99,15 +93,15 @@ export const Form = createReactClass({
       inputs: inputState,
       dirty: markedDirty
     }));
-  },
+  }
 
-  onCancel: function (e) {
+  onCancel (e) {
     e.preventDefault();
     if (this.isInflight()) { return; }
     this.props.cancel(this.props.id);
-  },
+  }
 
-  onSubmit: function (e) {
+  onSubmit (e) {
     e.preventDefault();
     if (this.isInflight()) { return; }
     const inputState = Object.assign({}, this.state.inputs);
@@ -168,15 +162,15 @@ export const Form = createReactClass({
     if (errors.length) this.scrollToTop();
     else this.props.submit(this.props.id, payload);
     this.setState({errors});
-  },
+  }
 
-  scrollToTop: function () {
+  scrollToTop () {
     if (this.DOMElement && typeof this.DOMElement.scrollIntoView === 'function') {
       this.DOMElement.scrollIntoView(true);
     } else scrollTo(0, 0);
-  },
+  }
 
-  render: function () {
+  render () {
     const inputState = this.state.inputs;
     const { errors } = this.state;
     const { status } = this.props;
@@ -260,4 +254,13 @@ export const Form = createReactClass({
     );
     return this.props.nowrap ? form : <form className='page__section--fullpage-form page__section--fullpage-form--internal' id={`form-${this.id}`}>{form}</form>;
   }
-});
+}
+
+Form.propTypes = {
+  id: PropTypes.string,
+  inputMeta: PropTypes.array,
+  submit: PropTypes.func,
+  cancel: PropTypes.func,
+  status: PropTypes.string,
+  nowrap: PropTypes.bool
+};

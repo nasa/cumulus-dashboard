@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -19,49 +18,50 @@ import AsyncCommands from '../form/dropdown-async-command';
 import { strings } from '.../../locale';
 
 const noop = () => true;
-var GranuleRecipe = createReactClass({
-  displayName: 'GranuleRecipe',
+class GranuleRecipe extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'GranuleRecipe';
+    this.navigateBack = this.navigateBack.bind(this);
+    this.reprocess = this.reprocess.bind(this);
+    this.reingest = this.reingest.bind(this);
+    this.remove = this.remove.bind(this);
+    this.delete = this.delete.bind(this);
+  }
 
-  propTypes: {
-    params: PropTypes.object,
-    dispatch: PropTypes.func,
-    granules: PropTypes.object,
-    router: PropTypes.object
-  },
-
-  UNSAFE_componentWillMount: function () {
+  componentDidMount () {
     const granuleId = this.props.params.granuleId;
     if (!this.props.granules.map[granuleId]) {
       this.props.dispatch(getGranule(granuleId));
     }
-  },
+  }
 
-  navigateBack: function () {
+  navigateBack () {
     const { router } = this.props;
     router.push('/granules');
-  },
+  }
 
-  reprocess: function () {
+  reprocess () {
     const { granuleId } = this.props.params;
     this.props.dispatch(reprocessGranule(granuleId));
-  },
+  }
 
-  reingest: function () {
+  reingest () {
     const { granuleId } = this.props.params;
     this.props.dispatch(reingestGranule(granuleId));
-  },
+  }
 
-  remove: function () {
+  remove () {
     const { granuleId } = this.props.params;
     this.props.dispatch(removeGranule(granuleId));
-  },
+  }
 
-  delete: function () {
+  delete () {
     const { granuleId } = this.props.params;
     this.props.dispatch(deleteGranule(granuleId));
-  },
+  }
 
-  render: function () {
+  render () {
     const granuleId = this.props.params.granuleId;
     const record = this.props.granules.map[granuleId];
 
@@ -159,6 +159,13 @@ var GranuleRecipe = createReactClass({
       </div>
     );
   }
-});
+}
+
+GranuleRecipe.propTypes = {
+  params: PropTypes.object,
+  dispatch: PropTypes.func,
+  granules: PropTypes.object,
+  router: PropTypes.object
+};
 
 export default connect(state => state)(GranuleRecipe);
