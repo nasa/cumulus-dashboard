@@ -14,7 +14,6 @@ const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const sourcemaps = require('gulp-sourcemaps');
-const exit = require('gulp-exit');
 const rev = require('gulp-rev');
 const revReplace = require('gulp-rev-replace');
 const SassString = require('node-sass').types.String;
@@ -111,6 +110,10 @@ gulp.task('vendorScripts', function () {
     debug: true,
     require: pkg.dependencies ? Object.keys(pkg.dependencies) : []
   });
+
+  // Ignore unnecessary web-incompatible package
+  vb.ignore('fs-extra');
+
   return vb.bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source('vendor.js'))
