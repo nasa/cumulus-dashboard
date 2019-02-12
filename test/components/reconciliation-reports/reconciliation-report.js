@@ -17,21 +17,23 @@ const reconciliationReports = {
         'reportEndTime': '2018-06-11T18:52:39.893Z',
         status: 'SUCCESS',
         error: null,
-        okFileCount: 21,
-        onlyInS3: [
-          's3://some-bucket/path/to/key-1.hdf',
-          's3://some-bucket/path/to/key-2.hdf'
-        ],
-        onlyInDynamoDb: [
-          {
-            uri: 's3://some-bucket/path/to/key-123.hdf',
-            granuleId: 'g-123'
-          },
-          {
-            uri: 's3://some-bucket/path/to/key-456.hdf',
-            granuleId: 'g-456'
-          }
-        ]
+        filesInCumulus: {
+          okFileCount: 21,
+          onlyInS3: [
+            's3://some-bucket/path/to/key-1.hdf',
+            's3://some-bucket/path/to/key-2.hdf'
+          ],
+          onlyInDynamoDb: [
+            {
+              uri: 's3://some-bucket/path/to/key-123.hdf',
+              granuleId: 'g-123'
+            },
+            {
+              uri: 's3://some-bucket/path/to/key-456.hdf',
+              granuleId: 'g-456'
+            }
+          ]
+        }
       }
     },
     exampleReportWithError: {
