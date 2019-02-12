@@ -40,7 +40,7 @@ The Cumulus Dashboard can be built inside of a Docker container, without needing
 
 Example of building for the "production" environment:
 ```
-$ ./bin/build_in_docker production
+$ ./bin/build_in_docker.sh production
 ```
 
 The compiled files will be placed in the `dist` directory.

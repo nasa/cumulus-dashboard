@@ -264,32 +264,36 @@ class FakeReconciliationReports extends FakeDb {
   getReport () {
     return {
       reportStartTime: '2018-06-11T18:52:37.710Z',
-      'reportEndTime': '2018-06-11T18:52:39.893Z',
+      reportEndTime: '2018-06-11T18:52:39.893Z',
       status: 'SUCCESS',
       error: null,
-      okFileCount: 21,
-      onlyInS3: [
-        's3://some-bucket/path/to/key-1.hdf',
-        's3://some-bucket/path/to/key-2.hdf'
-      ],
-      onlyInDynamoDb: [
-        {
-          uri: 's3://some-bucket/path/to/key-123.hdf',
-          granuleId: 'g-123'
-        },
-        {
-          uri: 's3://some-bucket/path/to/key-456.hdf',
-          granuleId: 'g-456'
-        }
-      ]
+      filesInCumulus: {
+        okFileCount: 21,
+        onlyInS3: [
+          's3://some-bucket/path/to/key-1.hdf',
+          's3://some-bucket/path/to/key-2.hdf'
+        ],
+        onlyInDynamoDb: [
+          {
+            uri: 's3://some-bucket/path/to/key-123.hdf',
+            granuleId: 'g-123'
+          },
+          {
+            uri: 's3://some-bucket/path/to/key-456.hdf',
+            granuleId: 'g-456'
+          }
+        ]
+      }
     };
   }
 }
 const fakeReconciliationReports = new FakeReconciliationReports(reconciliationReportFilePath);
 
-module.exports.resetState = resetState;
-module.exports.fakeCollectionsDb = fakeCollectionsDb;
-module.exports.fakeProvidersDb = fakeProvidersDb;
-module.exports.fakeRulesDb = fakeRulesDb;
-module.exports.fakeExecutionStatusDb = fakeExecutionStatusDb;
-module.exports.fakeReconciliationReports = fakeReconciliationReports;
+module.exports = {
+  resetState,
+  fakeCollectionsDb,
+  fakeProvidersDb,
+  fakeRulesDb,
+  fakeExecutionStatusDb,
+  fakeReconciliationReports
+};
