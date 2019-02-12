@@ -59,7 +59,7 @@ test('show individual report', function (t) {
   const MetadataWrapper = Metadata.dive();
   const MetadataWrapperChildren = MetadataWrapper.children();
   // ReconciliationReport is configured to use 3 metaAccessors,
-  // so there will be 3 groups of dt, dd elements for a total of 6 
+  // so there will be 3 groups of dt, dd elements for a total of 6
   t.is(MetadataWrapperChildren.length, 6);
 });
 

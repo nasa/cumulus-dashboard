@@ -84,7 +84,9 @@ class ReconciliationReport extends React.Component {
     let filesInS3 = [];
     let filesInDynamoDb = [];
     if (record && record.data) {
-      if (record.data.filesInCumulus.onlyInDynamoDb && record.data.filesInCumulus.onlyInS3) {
+      if (record.data.filesInCumulus &&
+          record.data.filesInCumulus.onlyInDynamoDb &&
+          record.data.filesInCumulus.onlyInS3) {
         filesInS3 = record.data.filesInCumulus.onlyInS3.map(d => {
           const parsed = url.parse(d);
           return {
