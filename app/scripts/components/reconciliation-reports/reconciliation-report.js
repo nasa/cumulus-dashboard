@@ -105,6 +105,8 @@ class ReconciliationReport extends React.Component {
             path: parsed.href
           };
         });
+
+        record.data.okFileCount = record.data.filesInCumulus.okFileCount;
       }
     }
 
