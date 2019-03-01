@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/cumulus-nasa/cumulus-dashboard",
   "scripts": {
-    "audit-ci": "audit-ci --moderate -p yarn",
+    "audit-ci": "audit-ci --high -p yarn",
     "serve": "gulp serve",
     "build": "gulp",
     "lint": "eslint app/scripts/ --ext .js",
