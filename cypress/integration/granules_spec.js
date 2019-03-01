@@ -106,7 +106,7 @@ describe('Dashboard Granules Page', () => {
       });
     });
 
-    it('returns CMR metadata for corresponding granule when a CMR link is clicked', () => {
+    it('contains the correct link to retrieve CMR metadata', () => {
       cy.server();
 
       cy.visit('/#/granules');
@@ -114,16 +114,24 @@ describe('Dashboard Granules Page', () => {
       cy.get('table tbody tr').its('length').should('be.eq', 10);
 
       // verify CMR links for two of the public granules
-      const granuleIds = ['MOD09GQ.A5456658.rso6Y4.006.4979096122140', 'MOD09GQ.A1530852.CljGDp.006.2163412421938'];
-      granuleIds.forEach((granuleId) => {
-        cy.contains('table tbody tr', granuleId)
+      const granules = [
+        {
+          granuleId: 'MOD09GQ.A5456658.rso6Y4.006.4979096122140',
+          conceptId: 'G1224020880-CUMULUS'
+        },
+        {
+          granuleId: 'MOD09GQ.A1530852.CljGDp.006.2163412421938',
+          conceptId: 'G1224020882-CUMULUS'
+        }
+      ];
+
+      granules.forEach((granule) => {
+        cy.contains('table tbody tr', granule.granuleId)
           .contains('td a', 'Yes')
           .should('have.attr', 'href')
           .then((link) => {
-            const conceptId = link.split('=').pop();
-            cy.route(link, `fixture:cmr/${conceptId}`);
-            cy.request(link)
-              .then((response) => expect(response.body.feed.entry[0].title).to.equal(granuleId));
+            const expectedLink = `https://cmr.uat.earthdata.nasa.gov/search/granules.json?concept_id=${granule.conceptId}`;
+            expect(link).to.equal(expectedLink);
           });
       });
     });
