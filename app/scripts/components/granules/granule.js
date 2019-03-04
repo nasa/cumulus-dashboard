@@ -44,16 +44,13 @@ const tableHeader = [
 
 const link = 'Link';
 
-const makeLink = (s3Uri) => {
-  const chunks = s3Uri.split('/');
-  const bucket = chunks[2];
-  const key = chunks.slice(3).join('/');
+const makeLink = (bucket, key) => {
   return `https://${bucket}.s3.amazonaws.com/${key}`;
 };
 
 const tableRow = [
-  (d) => d.name || '(No name)',
-  (d) => d.filename ? (<a href={makeLink(d.filename)}>{d.filename ? link : nullValue}</a>) : null,
+  (d) => d.fileName || '(No name)',
+  (d) => (d.bucket && d.key) ? (<a href={makeLink(d.bucket, d.key)}>{d.fileName ? link : nullValue}</a>) : null,
   (d) => d.bucket
 ];
 
