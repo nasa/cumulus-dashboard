@@ -127,3 +127,113 @@ jobs:
               --workdir /home \
               cypress/base:8 \
               yarn cypress-ci
+
+  deploy:
+    machine: true
+    working_directory: ~/cumulus-dashboard
+    steps:
+      - checkout
+
+      # restore cache
+      - restore_cache:
+          keys:
+            - dashboard-{{ .Branch }}-{{ checksum "package.json" }}
+
+      - run:
+          name: Install awscli
+          command: sudo pip install awscli
+
+
+      - run:
+          name: Install dependencies
+          command: |
+            docker run --rm \
+              -v /home/circleci/.cache:/root/.cache \
+              -v $(pwd):/home \
+              --workdir /home \
+              node:8.11.4 \
+              yarn install --frozen-lockfile --cache-folder /root/.cache
+
+      - run:
+          # This has to be done in a separate step, like this, because Circle CI
+          # will not interpolate values when setting environment variables
+          name: Setup Sandbox Environment Variables
+          command: |
+            echo 'export AWS_ACCESS_KEY_ID="$SANDBOX_ACCESS_KEY_ID"' >> $BASH_ENV
+            echo 'export AWS_SECRET_ACCESS_KEY="$SANDBOX_SECRET_ACCESS_KEY"' >> $BASH_ENV
+
+      - run:
+          name: Build Sandbox Dist
+          command: |
+            docker run --rm \
+              -v /home/circleci/.cache:/root/.cache \
+              -v $(pwd):/home \
+              --workdir /home \
+              -e APIROOT=${SANDBOX_API} \
+              node:8.11.4 \
+              yarn run build
+
+      - run:
+          name: Deploy to S3
+          command: |
+            aws s3 sync $(pwd)/dist s3://${SANDBOX_DASHBOARD_BUCKET}
+
+      - run:
+          # This has to be done in a separate step, like this, because Circle CI
+          # will not interpolate values when setting environment variables
+          name: Setup Sandbox Environment Variables
+          command: |
+            echo 'export AWS_ACCESS_KEY_ID="$SANDBOX_ACCESS_KEY_ID"' >> $BASH_ENV
+            echo 'export AWS_SECRET_ACCESS_KEY="$SANDBOX_SECRET_ACCESS_KEY"' >> $BASH_ENV
+
+      - run:
+          name: Build Sandbox Dist
+          command: |
+            docker run --rm \
+              -v /home/circleci/.cache:/root/.cache \
+              -v $(pwd):/home \
+              --workdir /home \
+              -e APIROOT=${SANDBOX_API_ROOT} \
+              node:8.11.4 \
+              yarn run build
+
+      - run:
+          name: Deploy to Cumulus Sandbox
+          command: |
+            aws s3 sync $(pwd)/dist s3://${SANDBOX_DASHBOARD_BUCKET}
+
+      - run:
+          # This has to be done in a separate step, like this, because Circle CI
+          # will not interpolate values when setting environment variables
+          name: Setup SIT Environment Variables
+          command: |
+            echo 'export AWS_ACCESS_KEY_ID="$SIT_ACCESS_KEY_ID"' >> $BASH_ENV
+            echo 'export AWS_SECRET_ACCESS_KEY="$SIT_SECRET_ACCESS_KEY"' >> $BASH_ENV
+
+      - run:
+          name: Build SIT Dist
+          command: |
+            docker run --rm \
+              -v /home/circleci/.cache:/root/.cache \
+              -v $(pwd):/home \
+              --workdir /home \
+              -e APIROOT=${SIT_API_ROOT} \
+              node:8.11.4 \
+              yarn run build
+
+      - run:
+          name: Deploy to Cumulus SIT
+          command: |
+            aws s3 sync $(pwd)/dist s3://${SIT_DASHBOARD_BUCKET}
+
+workflows:
+  version: 2
+  build_test_deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: deploy
