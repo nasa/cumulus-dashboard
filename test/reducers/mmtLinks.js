@@ -1,7 +1,7 @@
 'use strict';
 import test from 'ava';
 import reducer from '../../app/scripts/reducers/mmtLinks';
-import { ADD_MMTLINK } from '../../app/scripts/actions/index';
+import { ADD_MMTLINK } from '../../app/scripts/actions/types';
 import { getCollectionId } from '../../app/scripts/utils/format';
 
 test('verify initial state', (t) => {

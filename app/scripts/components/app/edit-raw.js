@@ -10,36 +10,27 @@ import Loading from '../app/loading-indicator';
 import { removeReadOnly } from '../form/schema';
 import { updateDelay } from '../../config';
 
-const EditRaw = React.createClass({
-  propTypes: {
-    dispatch: PropTypes.func,
-    pk: PropTypes.string,
-    schema: PropTypes.object,
-    schemaKey: PropTypes.string,
-    state: PropTypes.object,
-    backRoute: PropTypes.string,
-    router: PropTypes.object,
-
-    getRecord: PropTypes.func,
-    updateRecord: PropTypes.func,
-    clearRecordUpdate: PropTypes.func
-  },
-
-  getInitialState: function () {
-    return {
+class EditRaw extends React.Component {
+  constructor () {
+    super();
+    this.state = {
       pk: null,
       data: '',
       error: null
     };
-  },
+    this.queryRecord = this.queryRecord.bind(this);
+    this.submit = this.submit.bind(this);
+    this.cancel = this.cancel.bind(this);
+    this.onChange = this.onChange.bind(this);
+  }
 
-  queryRecord: function (pk) {
+  queryRecord (pk) {
     if (!this.props.state.map[pk]) {
       this.props.dispatch(this.props.getRecord(pk));
     }
-  },
+  }
 
-  submit: function (e) {
+  submit (e) {
     e.preventDefault();
     const { state, pk } = this.props;
     const updateStatus = get(state.updated, [pk, 'status']);
@@ -52,20 +43,20 @@ const EditRaw = React.createClass({
     this.setState({ error: null });
     console.log('About to update', json);
     this.props.dispatch(this.props.updateRecord(json));
-  },
+  }
 
-  cancel: function () {
+  cancel () {
     this.props.router.push(this.props.backRoute);
-  },
+  }
 
-  componentWillMount: function () {
+  componentDidMount () {
     this.queryRecord(this.props.pk);
     this.props.dispatch(getSchema(this.props.schemaKey));
-  },
+  }
 
-  componentWillReceiveProps: function ({ pk, state, schema, schemaKey }) {
-    const { dispatch, router, clearRecordUpdate, backRoute } = this.props;
-    const recordSchema = schema[schemaKey];
+  componentDidUpdate (prevProps) {
+    const { pk, state, schema, schemaKey } = this.props;
+    const { dispatch, router, clearRecordUpdate, backRoute } = prevProps;
     // successfully updated, navigate away
     if (get(state.updated, [pk, 'status']) === 'success') {
       return setTimeout(() => {
@@ -74,9 +65,11 @@ const EditRaw = React.createClass({
       }, updateDelay);
     }
     if (this.state.pk === pk || !schema[schemaKey]) { return; }
+    const recordSchema = schema[schemaKey];
+
     const newRecord = state.map[pk] || {};
     if (newRecord.error) {
-      this.setState({
+      this.setState({ // eslint-disable-line react/no-did-update-set-state
         pk,
         data: '',
         error: newRecord.error
@@ -86,9 +79,9 @@ const EditRaw = React.createClass({
       try {
         var text = JSON.stringify(data, null, '\t');
       } catch (error) {
-        return this.setState({ error, pk });
+        this.setState({ error, pk }); // eslint-disable-line react/no-did-update-set-state
       }
-      this.setState({
+      this.setState({ // eslint-disable-line react/no-did-update-set-state
         pk,
         data: text,
         error: null
@@ -96,13 +89,13 @@ const EditRaw = React.createClass({
     } else if (!newRecord.inflight) {
       this.queryRecord(pk);
     }
-  },
+  }
 
-  onChange: function (id, value) {
+  onChange (id, value) {
     this.setState({ data: value });
-  },
+  }
 
-  render: function () {
+  render () {
     const { data, pk } = this.state;
     const updateStatus = get(this.props.state.updated, [pk, 'status']);
     const buttonText = updateStatus === 'inflight' ? 'loading...'
@@ -138,7 +131,21 @@ const EditRaw = React.createClass({
       </div>
     );
   }
-});
+}
+
+EditRaw.propTypes = {
+  dispatch: PropTypes.func,
+  pk: PropTypes.string,
+  schema: PropTypes.object,
+  schemaKey: PropTypes.string,
+  state: PropTypes.object,
+  backRoute: PropTypes.string,
+  router: PropTypes.object,
+
+  getRecord: PropTypes.func,
+  updateRecord: PropTypes.func,
+  clearRecordUpdate: PropTypes.func
+};
 
 export default withRouter(connect(state => ({
   schema: state.schema

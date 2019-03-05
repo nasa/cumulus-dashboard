@@ -1,13 +1,11 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { nullValue } from '../../utils/format';
-const Metadata = React.createClass({
-  propTypes: {
-    data: React.PropTypes.object,
-    accessors: React.PropTypes.array
-  },
-  render: function () {
+
+class Metadata extends React.Component {
+  render () {
     const { data, accessors } = this.props;
     return (
       <dl className='metadata__details'>
@@ -24,5 +22,11 @@ const Metadata = React.createClass({
       </dl>
     );
   }
-});
+}
+
+Metadata.propTypes = {
+  data: PropTypes.object,
+  accessors: PropTypes.array
+};
+
 export default Metadata;

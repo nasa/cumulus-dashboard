@@ -11,50 +11,36 @@ import Loading from '../app/loading-indicator';
 import { updateDelay } from '../../config';
 import { strings } from '../locale';
 
-var AddCollection = React.createClass({
-  getInitialState: function () {
-    return {
+class AddCollection extends React.Component {
+  constructor () {
+    super();
+    this.state = {
       pk: null
     };
-  },
+    this.navigateBack = this.navigateBack.bind(this);
+    this.post = this.post.bind(this);
+  }
 
-  propTypes: {
-    schema: PropTypes.object,
-    schemaKey: PropTypes.string,
-    primaryProperty: PropTypes.string,
-    title: PropTypes.string,
-
-    dispatch: PropTypes.func,
-    state: PropTypes.object,
-
-    router: PropTypes.object,
-    baseRoute: PropTypes.string,
-    attachMeta: PropTypes.bool,
-
-    createRecord: PropTypes.func,
-    validate: PropTypes.func
-  },
-
-  componentWillMount: function () {
+  componentDidMount () {
     this.props.dispatch(getSchema(this.props.schemaKey));
-  },
+  }
 
-  componentWillReceiveProps: function ({ state }) {
+  componentDidUpdate (prevProps) {
     const { pk } = this.state;
-    const { router, baseRoute } = this.props;
-    const status = get(state, ['created', pk, 'status']);
+    const { router, baseRoute } = prevProps;
+    const status = get(this.props.state, ['created', pk, 'status']);
     if (status === 'success') {
       return setTimeout(() => {
         router.push(path.join(baseRoute, pk));
       }, updateDelay);
     }
-  },
+  }
 
-  navigateBack: function () {
+  navigateBack () {
     this.props.router.push(this.props.baseRoute.split('/')[1]);
-  },
+  }
 
-  post: function (id, payload) {
+  post (id, payload) {
     const {
       primaryProperty,
       dispatch,
@@ -73,9 +59,9 @@ var AddCollection = React.createClass({
     } else {
       console.log('Payload failed validation');
     }
-  },
+  }
 
-  render: function () {
+  render () {
     const { title, state, schemaKey } = this.props;
     const { pk } = this.state;
     const record = pk ? get(state.created, pk, {}) : {};
@@ -98,7 +84,24 @@ var AddCollection = React.createClass({
       </div>
     );
   }
-});
+}
+
+AddCollection.propTypes = {
+  schema: PropTypes.object,
+  schemaKey: PropTypes.string,
+  primaryProperty: PropTypes.string,
+  title: PropTypes.string,
+
+  dispatch: PropTypes.func,
+  state: PropTypes.object,
+
+  router: PropTypes.object,
+  baseRoute: PropTypes.string,
+  attachMeta: PropTypes.bool,
+
+  createRecord: PropTypes.func,
+  validate: PropTypes.func
+};
 
 export default withRouter(connect(state => ({
   schema: state.schema

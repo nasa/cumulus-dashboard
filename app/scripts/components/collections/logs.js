@@ -7,16 +7,13 @@ import { lastUpdated } from '../../utils/format';
 import LogViewer from '../logs/viewer';
 import {strings} from '../locale';
 
-var CollectionLogs = React.createClass({
-  displayName: strings.collection_logs,
+class CollectionLogs extends React.Component {
+  constructor () {
+    super();
+    this.displayName = strings.collection_logs;
+  }
 
-  propTypes: {
-    dispatch: PropTypes.func,
-    params: PropTypes.object,
-    logs: PropTypes.object
-  },
-
-  render: function () {
+  render () {
     const collectionName = this.props.params.name;
     const { queriedAt } = this.props.logs;
     return (
@@ -30,7 +27,13 @@ var CollectionLogs = React.createClass({
       </div>
     );
   }
-});
+}
+
+CollectionLogs.propTypes = {
+  dispatch: PropTypes.func,
+  params: PropTypes.object,
+  logs: PropTypes.object
+};
 
 export default connect(state => ({
   logs: state.logs

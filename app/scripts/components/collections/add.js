@@ -14,12 +14,8 @@ const getBaseRoute = function (collectionId) {
   }
 };
 
-var AddCollection = React.createClass({
-  propTypes: {
-    collections: PropTypes.object
-  },
-
-  render: function () {
+class AddCollection extends React.Component {
+  render () {
     return (
       <AddRaw
         pk={'new-collection'}
@@ -32,7 +28,11 @@ var AddCollection = React.createClass({
       />
     );
   }
-});
+}
+
+AddCollection.propTypes = {
+  collections: PropTypes.object
+};
 
 export default connect(state => ({
   collections: state.collections

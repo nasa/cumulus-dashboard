@@ -28,28 +28,25 @@ import { recent, updateInterval } from '../config';
 
 import { strings } from './locale';
 
-var Home = React.createClass({
-  displayName: 'Home',
-  propTypes: {
-    dispatch: PropTypes.func,
-    stats: PropTypes.object,
-    rules: PropTypes.object,
-    granules: PropTypes.object,
-    pdrs: PropTypes.object,
-    executions: PropTypes.object
-  },
+class Home extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'Home';
+    this.query = this.query.bind(this);
+    this.generateQuery = this.generateQuery.bind(this);
+  }
 
-  componentWillMount: function () {
+  componentDidMount () {
     this.cancelInterval = interval(() => {
       this.query();
     }, updateInterval, true);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
-  },
+  }
 
-  query: function () {
+  query () {
     const { dispatch } = this.props;
     // TODO should probably time clamp this by most recent as well?
     dispatch(getStats({
@@ -61,16 +58,16 @@ var Home = React.createClass({
     }));
     dispatch(listExecutions({}));
     dispatch(listRules({}));
-  },
+  }
 
-  generateQuery: function () {
+  generateQuery () {
     return {
       q: '_exists_:error AND status:failed',
       limit: 20
     };
-  },
+  }
 
-  render: function () {
+  render () {
     const { list } = this.props.granules;
     const { stats, count } = this.props.stats;
     const overview = [
@@ -144,7 +141,16 @@ var Home = React.createClass({
       </div>
     );
   }
-});
+}
+
+Home.propTypes = {
+  dispatch: PropTypes.func,
+  stats: PropTypes.object,
+  rules: PropTypes.object,
+  granules: PropTypes.object,
+  pdrs: PropTypes.object,
+  executions: PropTypes.object
+};
 
 export default connect(state => ({
   rules: state.rules,

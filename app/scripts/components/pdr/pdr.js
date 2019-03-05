@@ -1,6 +1,7 @@
 'use strict';
 import path from 'path';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import {
@@ -53,61 +54,62 @@ const metaAccessors = [
   ['PAN Message', 'PANmessage']
 ];
 
-var PDR = React.createClass({
-  propTypes: {
-    granules: React.PropTypes.object,
-    logs: React.PropTypes.object,
-    pdrs: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    params: React.PropTypes.object,
-    router: React.PropTypes.object
-  },
+class PDR extends React.Component {
+  constructor () {
+    super();
+    this.reload = this.reload.bind(this);
+    this.deletePdr = this.deletePdr.bind(this);
+    this.generateQuery = this.generateQuery.bind(this);
+    this.navigateBack = this.navigateBack.bind(this);
+    this.generateBulkActions = this.generateBulkActions.bind(this);
+    this.renderProgress = this.renderProgress.bind(this);
+  }
 
-  componentWillMount: function () {
+  componentDidMount () {
     const { pdrName } = this.props.params;
     const immediate = !this.props.pdrs.map[pdrName];
     this.reload(immediate);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
-  },
+  }
 
-  reload: function (immediate) {
+  reload (immediate) {
     const { pdrName } = this.props.params;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
     this.cancelInterval = interval(() => dispatch(getPdr(pdrName)), updateInterval, immediate);
-  },
+  }
 
-  deletePdr: function () {
+  deletePdr () {
     const { pdrName } = this.props.params;
     this.props.dispatch(deletePdr(pdrName));
-  },
+  }
 
-  generateQuery: function () {
+  generateQuery () {
     const pdrName = get(this.props, ['params', 'pdrName']);
     return { pdrName };
-  },
+  }
 
-  navigateBack: function () {
+  navigateBack () {
     this.props.router.push('/pdrs');
-  },
+  }
 
-  generateBulkActions: function () {
+  generateBulkActions () {
     const { granules } = this.props;
     return bulkActions(granules);
-  },
+  }
 
-  renderProgress: function (record) {
+  renderProgress (record) {
     return (
       <div className='pdr__progress'>
         {renderProgress(get(record, 'data', {}))}
       </div>
     );
-  },
+  }
 
-  render: function () {
+  render () {
     const { pdrName } = this.props.params;
     const { list, dropdowns } = this.props.granules;
     const { count, queriedAt } = list.meta;
@@ -197,6 +199,15 @@ var PDR = React.createClass({
       </div>
     );
   }
-});
+}
+
+PDR.propTypes = {
+  granules: PropTypes.object,
+  logs: PropTypes.object,
+  pdrs: PropTypes.object,
+  dispatch: PropTypes.func,
+  params: PropTypes.object,
+  router: PropTypes.object
+};
 
 export default connect(state => state)(PDR);

@@ -7,7 +7,7 @@ import {
   LOGS_ERROR,
   LOGS_INFLIGHT,
   CLEAR_LOGS
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {
   items: []

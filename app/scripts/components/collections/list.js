@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import {
@@ -24,37 +25,34 @@ import Search from '../form/search';
 import List from '../table/list-view';
 import { strings } from '../locale';
 
-var CollectionList = React.createClass({
-  displayName: 'CollectionList',
+class CollectionList extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'CollectionList';
+    this.timeOptions = {
+      '': '',
+      '1 Week Ago': moment().subtract(1, 'weeks').format(),
+      '1 Month Ago': moment().subtract(1, 'months').format(),
+      '1 Year Ago': moment().subtract(1, 'years').format()
+    };
+    this.generateQuery = this.generateQuery.bind(this);
+    this.generateBulkActions = this.generateBulkActions.bind(this);
+  }
 
-  propTypes: {
-    collections: React.PropTypes.object,
-    mmtLinks: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    logs: React.PropTypes.object
-  },
-
-  timeOptions: {
-    '': '',
-    '1 Week Ago': moment().subtract(1, 'weeks').format(),
-    '1 Month Ago': moment().subtract(1, 'months').format(),
-    '1 Year Ago': moment().subtract(1, 'years').format()
-  },
-
-  componentWillMount: function () {
+  componentDidMount () {
     const { dispatch } = this.props;
     dispatch(getCumulusInstanceMetadata());
-  },
+  }
 
-  generateQuery: function () {
+  generateQuery () {
     return {};
-  },
+  }
 
-  generateBulkActions: function () {
+  generateBulkActions () {
     return bulkActions(this.props.collections);
-  },
+  }
 
-  render: function () {
+  render () {
     const { list } = this.props.collections;
     // merge mmtLinks with the collection data;
     const mmtLinks = this.props.mmtLinks;
@@ -97,6 +95,13 @@ var CollectionList = React.createClass({
       </div>
     );
   }
-});
+}
+
+CollectionList.propTypes = {
+  collections: PropTypes.object,
+  mmtLinks: PropTypes.object,
+  dispatch: PropTypes.func,
+  logs: PropTypes.object
+};
 
 export default connect(state => state)(CollectionList);

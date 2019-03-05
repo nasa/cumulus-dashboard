@@ -1,52 +1,47 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { login, setTokenState } from '../../actions';
 import { window } from '../../utils/browser';
 import { updateDelay } from '../../config';
 import ErrorReport from '../errors/report';
 import Text from '../form/text';
 
-var LoginModal = React.createClass({
-  propTypes: {
-    dispatch: React.PropTypes.func,
-    api: React.PropTypes.object,
-    location: React.PropTypes.object,
-    router: React.PropTypes.object,
-    show: React.PropTypes.bool
-  },
-
-  getInitialState: function () {
-    return {
+class LoginModal extends React.Component {
+  constructor () {
+    super();
+    this.state = {
       user: '',
       pass: '',
       token: null
     };
-  },
+    this.onSubmit = this.onSubmit.bind(this);
+  }
 
-  componentWillReceiveProps: function (newProps) {
+  componentDidUpdate (prevProps) {
     // delay-close the modal if it's open
-    if (newProps.api.authenticated && this.props.show) {
-      const { dispatch } = this.props;
+    if (this.props.api.authenticated && prevProps.show) {
+      const { dispatch } = prevProps;
       dispatch(setTokenState(this.state.token));
-      const { pathname } = this.props.location;
+      const { pathname } = prevProps.location;
       if (pathname !== '/login' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/login') {
-        setTimeout(() => this.props.router.push('/'), updateDelay);
+        setTimeout(() => prevProps.router.push('/'), updateDelay);
       }
     }
-  },
+  }
 
-  onSubmit: function (e) {
+  onSubmit (e) {
     e.preventDefault();
     if (this.props.api.authenticated) return false;
     const { user, pass } = this.state;
     const token = new Buffer(`${user}:${pass}`).toString('base64');
     const { dispatch } = this.props;
     this.setState({ token }, () => dispatch(login(token)));
-  },
+  }
 
-  render: function () {
+  render () {
     const { authenticated, inflight, error } = this.props.api;
     const { show } = this.props;
 
@@ -90,6 +85,14 @@ var LoginModal = React.createClass({
       </div>
     );
   }
-});
+}
+
+LoginModal.propTypes = {
+  dispatch: PropTypes.func,
+  api: PropTypes.object,
+  location: PropTypes.object,
+  router: PropTypes.object,
+  show: PropTypes.bool
+};
 
 export default LoginModal;

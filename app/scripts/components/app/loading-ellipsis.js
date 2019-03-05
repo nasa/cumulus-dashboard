@@ -1,8 +1,8 @@
 'use strict';
 import React from 'react';
-const Loading = React.createClass({
-  displayName: 'Ellipsis',
-  render: function () {
+
+class Loading extends React.Component {
+  render () {
     return (
       <div className="spinner">
         <div className="bounce1"></div>
@@ -11,5 +11,5 @@ const Loading = React.createClass({
       </div>
     );
   }
-});
+}
 export default Loading;

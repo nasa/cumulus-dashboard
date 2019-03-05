@@ -12,44 +12,45 @@ import List from '../table/list-view';
 import Overview from '../app/overview';
 import { updateInterval } from '../../config';
 
-var PdrOverview = React.createClass({
-  displayName: 'PdrOverview',
+class PdrOverview extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'PdrOverview';
+    this.queryStats = this.queryStats.bind(this);
+    this.generateQuery = this.generateQuery.bind(this);
+    this.generateBulkActions = this.generateBulkActions.bind(this);
+    this.renderOverview = this.renderOverview.bind(this);
+  }
 
-  propTypes: {
-    dispatch: PropTypes.func,
-    pdrs: PropTypes.object,
-    stats: PropTypes.object
-  },
-
-  componentWillMount: function () {
+  componentDidMount () {
     this.cancelInterval = interval(this.queryStats, updateInterval, true);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
-  },
+  }
 
-  queryStats: function () {
+  queryStats () {
     this.props.dispatch(getCount({
       type: 'pdrs',
       field: 'status'
     }));
-  },
+  }
 
-  generateQuery: function () {
+  generateQuery () {
     return {};
-  },
+  }
 
-  generateBulkActions: function () {
+  generateBulkActions () {
     return bulkActions(this.props.pdrs);
-  },
+  }
 
-  renderOverview: function (count) {
+  renderOverview (count) {
     const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
     return <Overview items={overview} inflight={false} />;
-  },
+  }
 
-  render: function () {
+  render () {
     const { stats } = this.props;
     const { list } = this.props.pdrs;
     const { count, queriedAt } = list.meta;
@@ -85,7 +86,13 @@ var PdrOverview = React.createClass({
       </div>
     );
   }
-});
+}
+
+PdrOverview.propTypes = {
+  dispatch: PropTypes.func,
+  pdrs: PropTypes.object,
+  stats: PropTypes.object
+};
 
 export default connect(state => ({
   stats: state.stats,

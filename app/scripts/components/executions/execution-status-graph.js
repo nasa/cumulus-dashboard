@@ -8,12 +8,8 @@ import * as d3 from 'd3';
 // dagre-d3v4 expects d3 to be attached to the window
 if (process.env.NODE_ENV !== 'test') window.d3 = d3;
 
-var ExecutionStatusGraph = React.createClass({
-  propTypes: {
-    executionStatus: PropTypes.object
-  },
-
-  componentWillMount: function () {
+class ExecutionStatusGraph extends React.Component {
+  componentDidMount () {
     const {
       executionStatus: {
         executionHistory,
@@ -27,27 +23,28 @@ var ExecutionStatusGraph = React.createClass({
     var graph = workflowToGraph(workflow);
     addEventsToGraph(events, graph);
     this.g = draw(graph);
-  },
-
-  componentDidMount: function () {
     var render = new dagre.render();
     var svg = d3.select('svg');
     render(svg, this.g);
     var height = d3.select('svg g').node().getBBox().height;
     svg.style('height', height + 10);
     svg.style('padding-right', 150);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     this.g = null;
-  },
+  }
 
-  render: function () {
+  render () {
     return (
       <svg></svg>
     );
   }
-});
+}
+
+ExecutionStatusGraph.propTypes = {
+  executionStatus: PropTypes.object
+};
 
 exports.ExecutionStatusGraph = connect(state => ({}))(ExecutionStatusGraph);
 

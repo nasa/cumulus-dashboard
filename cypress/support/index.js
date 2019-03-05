@@ -15,9 +15,6 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands';
-// cmrjs uses got and we can't intercept fetch calls.
-// https://github.com/cypress-io/cypress/issues/1619#issuecomment-383587597
-Cypress.on('window:before:load', (win) => { win.fetch = null; });
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

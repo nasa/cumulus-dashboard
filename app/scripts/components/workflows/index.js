@@ -1,17 +1,10 @@
 'use strict';
 import React from 'react';
 import Sidebar from '../app/sidebar';
+import PropTypes from 'prop-types';
 
-var Workflows = React.createClass({
-  displayName: 'Workflows',
-
-  propTypes: {
-    children: React.PropTypes.object,
-    location: React.PropTypes.object,
-    params: React.PropTypes.object
-  },
-
-  render: function () {
+class Workflows extends React.Component {
+  render () {
     return (
       <div className='page__workflows'>
         <div className='content__header'>
@@ -33,6 +26,12 @@ var Workflows = React.createClass({
       </div>
     );
   }
-});
+}
+
+Workflows.propTypes = {
+  children: PropTypes.object,
+  location: PropTypes.object,
+  params: PropTypes.object
+};
 
 export default Workflows;

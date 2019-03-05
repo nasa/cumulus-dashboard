@@ -15,11 +15,8 @@ const getRuleName = function (item) {
     return 'unknown';
   }
 };
-const AddRule = React.createClass({
-  propTypes: {
-    rules: PropTypes.object
-  },
-  render: function () {
+class AddRule extends React.Component {
+  render () {
     const defaultValue = {
       name: '',
       workflow: '',
@@ -48,7 +45,11 @@ const AddRule = React.createClass({
       />
     );
   }
-});
+}
+
+AddRule.propTypes = {
+  rules: PropTypes.object
+};
 
 export default connect(state => ({
   rules: state.rules

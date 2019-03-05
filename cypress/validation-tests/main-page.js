@@ -8,23 +8,26 @@ test('POST, PUT, or DELETE operations with no session information are rejected',
   const res = await http.getResponse(host);
   t.is(res.statusCode, 200);
 
-  try{
+  try {
     await http.putResponse(host);
+    t.fail('Expected error to be thrown');
   } catch (err) {
-    t.true(err.error.includes('Cannot PUT /'));
+    // Error code is 405 from when running in Docker/nginx and
+    // 404 from gulp serve
+    t.true([405, 404].includes(err.statusCode));
   }
 
-  try{
+  try {
     await http.postResponse(host);
+    t.fail('Expected error to be thrown');
   } catch (err) {
-    t.true(err.error.includes('Cannot POST /'));
+    t.true([405, 404].includes(err.statusCode));
   }
 
-  try{
+  try {
     await http.delResponse(host);
+    t.fail('Expected error to be thrown');
   } catch (err) {
-    t.true(err.error.includes('Cannot DELETE /'));
+    t.true([405, 404].includes(err.statusCode));
   }
 });
-
-

@@ -1,7 +1,7 @@
 'use strict';
 
 import test from 'ava';
-import Adapter from 'enzyme-adapter-react-15';
+import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 
@@ -43,7 +43,7 @@ test('CUMULUS-336 Granule file links use the correct URL', function (t) {
       logs={logs}
       skipReloadOnMount={true} />);
 
-  const sortableTable = granuleOverview.find('SortableTable');
+  const sortableTable = granuleOverview.find('Table');
   t.is(sortableTable.length, 1);
   const sortableTableWrapper = sortableTable.dive();
   t.is(sortableTableWrapper.find('tbody tr td a[href="https://my-bucket.s3.amazonaws.com/my-key-path/my-name"]').length, 1);

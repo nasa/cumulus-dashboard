@@ -12,13 +12,8 @@ import EditRaw from '../app/edit-raw';
 
 const SCHEMA_KEY = 'rule';
 
-const EditRule = React.createClass({
-  propTypes: {
-    params: PropTypes.object,
-    rules: PropTypes.object
-  },
-
-  render: function () {
+class EditRule extends React.Component {
+  render () {
     const { params, rules } = this.props;
     const { ruleName } = params;
     return (
@@ -34,7 +29,12 @@ const EditRule = React.createClass({
       />
     );
   }
-});
+}
+
+EditRule.propTypes = {
+  params: PropTypes.object,
+  rules: PropTypes.object
+};
 
 export default connect(state => ({
   rules: state.rules

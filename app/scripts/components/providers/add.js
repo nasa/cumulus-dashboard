@@ -3,21 +3,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createProvider } from '../../actions';
 import AddRecord from '../app/add';
+import PropTypes from 'prop-types';
 
 const SCHEMA_KEY = 'provider';
 
-var AddProvider = React.createClass({
-  getInitialState: function () {
-    return {
-      name: null
-    };
-  },
+class AddProvider extends React.Component {
+  constructor () {
+    super();
+    this.state = { name: null };
+  }
 
-  propTypes: {
-    providers: React.PropTypes.object
-  },
-
-  render: function () {
+  render () {
     return (
       <AddRecord
         schemaKey={SCHEMA_KEY}
@@ -29,7 +25,11 @@ var AddProvider = React.createClass({
       />
     );
   }
-});
+}
+
+AddProvider.propTypes = {
+  providers: PropTypes.object
+};
 
 export default connect(state => ({
   providers: state.providers

@@ -1,61 +1,61 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { updateInterval } from '../../config';
 const delay = updateInterval / 1000;
 
-const Timer = React.createClass({
-  propTypes: {
-    noheader: React.PropTypes.bool,
-    dispatch: React.PropTypes.func,
-    action: React.PropTypes.func,
-    config: React.PropTypes.object,
-    reload: React.PropTypes.any
-  },
-
-  componentWillMount: function () {
-    this.createTimer(this.props.config);
-  },
-
-  componentWillReceiveProps: function (nextProps) {
-    if (JSON.stringify(this.props.config) !== JSON.stringify(nextProps.config) ||
-      (nextProps.reload && this.props.reload !== nextProps.reload)) {
-      this.createTimer(nextProps.config);
-    }
-  },
-
-  componentWillUnmount: function () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-  },
-
-  getInitialState: function () {
-    return {
+class Timer extends React.Component {
+  constructor () {
+    super();
+    this.state = {
       running: true,
       seconds: delay
     };
-  },
+    this.stop = this.stop.bind(this);
+    this.start = this.start.bind(this);
+    this.toggle = this.toggle.bind(this);
+    this.createTimer = this.createTimer.bind(this);
+    this.interval = this.interval.bind(this);
+    this.parentClass = this.parentClass.bind(this);
+  }
 
-  stop: function () {
+  componentDidMount () {
+    this.createTimer(this.props.config);
+  }
+
+  componentDidUpdate (prevProps) {
+    if (JSON.stringify(prevProps.config) !== JSON.stringify(this.props.config) ||
+      (this.props.reload && prevProps.reload !== this.props.reload)) {
+      this.createTimer(this.props.config);
+    }
+  }
+
+  componentWillUnmount () {
+    if (this.cancelInterval) { this.cancelInterval(); }
+  }
+
+  stop () {
     if (this.cancelInterval) { this.cancelInterval(); }
     this.setState({ seconds: -1, running: false });
-  },
+  }
 
-  start: function () {
+  start () {
     this.setState({ seconds: 0, running: true });
     this.createTimer(this.props.config);
-  },
+  }
 
-  toggle: function () {
+  toggle () {
     if (this.state.running) this.stop();
     else this.start();
-  },
+  }
 
-  createTimer: function (config) {
+  createTimer (config) {
     if (this.cancelInterval) { this.cancelInterval(); }
     const { dispatch, action } = this.props;
     this.cancelInterval = this.interval(() => dispatch(action(config)), delay);
-  },
+  }
 
-  interval: function (action, seconds) {
+  interval (action, seconds) {
     action();
     const intervalId = setInterval(() => {
       this.setState({ seconds: seconds });
@@ -67,14 +67,14 @@ const Timer = React.createClass({
       }
     }, 1000);
     return () => clearInterval(intervalId);
-  },
+  }
 
-  parentClass: function () {
+  parentClass () {
     const className = 'form__element__updateToggle';
     return this.props.noheader ? className + ' form__element__updateToggle-noHeader' : className;
-  },
+  }
 
-  render: function () {
+  render () {
     const { seconds } = this.state;
     return (
       <div className={this.parentClass()}>
@@ -88,5 +88,14 @@ const Timer = React.createClass({
       </div>
     );
   }
-});
+}
+
+Timer.propTypes = {
+  noheader: PropTypes.bool,
+  dispatch: PropTypes.func,
+  action: PropTypes.func,
+  config: PropTypes.object,
+  reload: PropTypes.any
+};
+
 export default Timer;

@@ -23,62 +23,63 @@ import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/
 import { updateDelay } from '../../config';
 import { strings } from '../locale';
 
-const CollectionOverview = React.createClass({
-  displayName: 'CollectionOverview',
+class CollectionOverview extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'CollectionOverview';
+    this.load = this.load.bind(this);
+    this.generateQuery = this.generateQuery.bind(this);
+    this.delete = this.delete.bind(this);
+    this.navigateBack = this.navigateBack.bind(this);
+    this.errors = this.errors.bind(this);
+    this.renderOverview = this.renderOverview.bind(this);
+  }
 
-  propTypes: {
-    params: PropTypes.object,
-    dispatch: PropTypes.func,
-    granules: PropTypes.object,
-    collections: PropTypes.object,
-    router: PropTypes.object
-  },
-
-  componentWillMount: function () {
+  componentDidMount () {
     this.load();
-  },
+  }
 
-  componentWillReceiveProps: function ({ params }) {
-    const { name, version } = params;
-    if (name !== this.props.params.name ||
-       version !== this.props.params.version) {
+  componentDidUpdate (prevProps) {
+    const { name, version } = this.props.params;
+    if (name !== prevProps.params.name ||
+       version !== prevProps.params.version) {
       this.load();
     }
-  },
+  }
 
-  load: function () {
+  load () {
     const { name, version } = this.props.params;
     this.props.dispatch(getCollection(name, version));
-  },
+  }
 
-  generateQuery: function () {
+  generateQuery () {
     const collectionId = getCollectionId(this.props.params);
     return {
       collectionId,
       status: 'running'
     };
-  },
+  }
 
-  delete: function () {
+  delete () {
     const { name, version } = this.props.params;
     this.props.dispatch(deleteCollection(name, version));
-  },
+  }
 
-  navigateBack: function () {
+  navigateBack () {
     const { router } = this.props;
     router.push('/collections/all');
-  },
+  }
 
-  errors: function () {
+  errors () {
     const { name, version } = this.props.params;
     const collectionId = getCollectionId({name, version});
     return [
       get(this.props.collections.map, [collectionId, 'error']),
       get(this.props.collections.deleted, [collectionId, 'error'])
     ].filter(Boolean);
-  },
+  }
 
-  renderOverview: function (record) {
+  renderOverview (record) {
     const data = get(record, 'data', {});
     const stats = get(data, 'stats', {});
     const overview = [
@@ -87,9 +88,9 @@ const CollectionOverview = React.createClass({
       [tally(stats.failed), strings.granules_failed]
     ];
     return <Overview items={overview} inflight={record.inflight} />;
-  },
+  }
 
-  render: function () {
+  render () {
     const { params, granules, collections } = this.props;
     const collectionName = params.name;
     const collectionVersion = params.version;
@@ -141,7 +142,15 @@ const CollectionOverview = React.createClass({
       </div>
     );
   }
-});
+}
+
+CollectionOverview.propTypes = {
+  params: PropTypes.object,
+  dispatch: PropTypes.func,
+  granules: PropTypes.object,
+  collections: PropTypes.object,
+  router: PropTypes.object
+};
 
 export default connect(state => ({
   collections: state.collections,

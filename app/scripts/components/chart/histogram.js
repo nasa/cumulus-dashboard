@@ -4,6 +4,7 @@ import { get } from 'object-path';
 import { scaleLinear, scaleBand } from 'd3-scale';
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
+import PropTypes from 'prop-types';
 import { tally } from '../../utils/format';
 import LoadingIndicator from '../app/loading-indicator';
 
@@ -17,43 +18,40 @@ const margin = {
   left: 70
 };
 
-const Histogram = React.createClass({
-  propTypes: {
-    data: React.PropTypes.object,
-    tooltipFormat: React.PropTypes.func
-  },
-
-  getInitialState: function () {
-    return {
+class Histogram extends React.Component {
+  constructor () {
+    super();
+    this.state = {
       width: 0,
       height: 0,
       tooltip: null,
       tooltipX: 0,
       tooltipY: 0
     };
-  },
+    this.onWindowResize = this.onWindowResize.bind(this);
+    this.setHoverState = this.setHoverState.bind(this);
+    this.mouseMove = this.mouseMove.bind(this);
+    this.mouseOut = this.mouseOut.bind(this);
+  }
 
-  onWindowResize: function () {
+  onWindowResize () {
     let rect = this.refs.chartContainer.getBoundingClientRect();
     this.setState({ width: rect.width, height: rect.height });
-  },
+  }
 
-  componentWillMount: function () {
+  componentDidMount () {
     this.setHoverState = throttle(this.setHoverState, tooltipDelay);
     this.mouseOut = debounce(this.mouseOut, tooltipDelay);
-  },
-
-  componentDidMount: function () {
     this.onWindowResize();
     this.onWindowResize = debounce(this.onWindowResize, 200);
     window.addEventListener('resize', this.onWindowResize);
-  },
+  }
 
-  setHoverState: function (tooltip, tooltipX, tooltipY) {
+  setHoverState (tooltip, tooltipX, tooltipY) {
     this.setState({ tooltip, tooltipX, tooltipY });
-  },
+  }
 
-  mouseMove: function (e) {
+  mouseMove (e) {
     // http://stackoverflow.com/questions/38142880/react-js-throttle-mousemove-event-keep-throwing-event-persist-error
     e.persist();
     this.setHoverState(
@@ -61,13 +59,13 @@ const Histogram = React.createClass({
       e.clientX,
       e.clientY
     );
-  },
+  }
 
-  mouseOut: function () {
+  mouseOut () {
     this.setState({ tooltip: null });
-  },
+  }
 
-  render: function () {
+  render () {
     const { width, height } = this.state;
     const { inflight, data } = this.props.data;
     const innerWidth = width - margin.left - margin.right;
@@ -173,6 +171,11 @@ const Histogram = React.createClass({
       </div>
     );
   }
-});
+}
+
+Histogram.propTypes = {
+  data: PropTypes.object,
+  tooltipFormat: PropTypes.func
+};
 
 export default Histogram;

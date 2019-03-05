@@ -64,22 +64,22 @@ const bulkActions = (rules) => [{
   confirm: (d) => `Delete ${d} Rule(s)?`
 }];
 
-var RulesOverview = React.createClass({
-  propTypes: {
-    dispatch: PropTypes.func,
-    rules: PropTypes.object
-  },
+class RulesOverview extends React.Component {
+  constructor () {
+    super();
+    this.generateBulkActions = this.generateBulkActions.bind(this);
+  }
 
-  componentWillMount: function () {
+  componentDidMount () {
     this.props.dispatch(listRules);
-  },
+  }
 
-  generateBulkActions: function () {
+  generateBulkActions () {
     const { rules } = this.props;
     return bulkActions(rules);
-  },
+  }
 
-  render: function () {
+  render () {
     const { list } = this.props.rules;
     const { count, queriedAt } = list.meta;
     return (
@@ -110,7 +110,12 @@ var RulesOverview = React.createClass({
       </div>
     );
   }
-});
+}
+
+RulesOverview.propTypes = {
+  dispatch: PropTypes.func,
+  rules: PropTypes.object
+};
 
 export default connect(state => ({
   rules: state.rules

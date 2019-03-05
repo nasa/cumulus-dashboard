@@ -1,22 +1,18 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 
-var Dropdown = React.createClass({
-  propTypes: {
-    label: React.PropTypes.any,
-    value: React.PropTypes.string,
-    options: React.PropTypes.array,
-    id: React.PropTypes.string,
-    error: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    noNull: React.PropTypes.bool
-  },
+class Dropdown extends React.Component {
+  constructor () {
+    super();
+    this.onChange = this.onChange.bind(this);
+  }
 
-  onChange: function (e) {
+  onChange (e) {
     this.props.onChange(this.props.id, e.target.value);
-  },
+  }
 
-  render: function () {
+  render () {
     const {
       label,
       value,
@@ -40,5 +36,16 @@ var Dropdown = React.createClass({
       </div>
     );
   }
-});
+}
+
+Dropdown.propTypes = {
+  label: PropTypes.any,
+  value: PropTypes.string,
+  options: PropTypes.array,
+  id: PropTypes.string,
+  error: PropTypes.string,
+  onChange: PropTypes.func,
+  noNull: PropTypes.bool
+};
+
 export default Dropdown;

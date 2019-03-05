@@ -1,15 +1,10 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import Sidebar from '../app/sidebar';
 
-var Executions = React.createClass({
-  propTypes: {
-    children: React.PropTypes.object,
-    location: React.PropTypes.object,
-    params: React.PropTypes.object
-  },
-
-  render: function () {
+class Executions extends React.Component {
+  render () {
     return (
       <div className='page__workflows'>
         <div className='content__header'>
@@ -31,6 +26,12 @@ var Executions = React.createClass({
       </div>
     );
   }
-});
+}
+
+Executions.propTypes = {
+  children: PropTypes.object,
+  location: PropTypes.object,
+  params: PropTypes.object
+};
 
 export default Executions;

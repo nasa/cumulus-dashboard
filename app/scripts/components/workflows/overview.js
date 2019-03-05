@@ -19,13 +19,8 @@ const tableRow = [
   'definition.Comment'
 ];
 
-var WorkflowOverview = React.createClass({
-  propTypes: {
-    dispatch: PropTypes.func,
-    workflows: PropTypes.object
-  },
-
-  render: function () {
+class WorkflowOverview extends React.Component {
+  render () {
     const { list } = this.props.workflows;
     const count = list.data.length;
     return (
@@ -52,7 +47,12 @@ var WorkflowOverview = React.createClass({
       </div>
     );
   }
-});
+}
+
+WorkflowOverview.propTypes = {
+  dispatch: PropTypes.func,
+  workflows: PropTypes.object
+};
 
 export default connect(state => ({
   workflows: state.workflows

@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.3.0] - 2019-03-04
+
 ### Added
 - Execution details (inputs and outputs) are shown for executions and execution steps. [CUMULUS-692]
 - Link to parent workflow execution if any exists. [Cumulus-689]
@@ -15,6 +17,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added tests for the login page and dashboard home page. [Cumulus-638]
 - Added tests for the Collections page and Providers page. [Cumulus-643]
 - Added warning message to granules `reingest` button to indicates that existing data will be overwritten. [Cumulus-792]
+
+### Changed
+- Updated React to version 16.6.3
+- Updated all component classes using ES6 style [Cumulus-1096]
 
 ## [v1.2.0] - 2018-08-08
 
@@ -43,6 +49,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.3.0...HEAD
+[v1.3.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.2.0...v1.3.0
 [v1.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.1.0...v1.2.0
 [v1.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.0.1...v1.1.0

@@ -2,6 +2,7 @@
 import url from 'url';
 import path from 'path';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   interval,
@@ -46,36 +47,35 @@ const tableRowDyanmoDb = [
   (d) => d ? <a href={d.path} target='_blank'>Link</a> : nullValue
 ];
 
-const ReconciliationReport = React.createClass({
-  propTypes: {
-    reconciliationReports: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    params: React.PropTypes.object,
-    router: React.PropTypes.object
-  },
+class ReconciliationReport extends React.Component {
+  constructor () {
+    super();
+    this.reload = this.reload.bind(this);
+    this.navigateBack = this.navigateBack.bind(this);
+  }
 
-  componentWillMount: function () {
+  componentDidMount () {
     const { reconciliationReportName } = this.props.params;
     const immediate = !this.props.reconciliationReports.map[reconciliationReportName];
     this.reload(immediate);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
-  },
+  }
 
-  reload: function (immediate) {
+  reload (immediate) {
     const { reconciliationReportName } = this.props.params;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
     this.cancelInterval = interval(() => dispatch(getReconciliationReport(reconciliationReportName)), updateInterval, immediate);
-  },
+  }
 
-  navigateBack: function () {
+  navigateBack () {
     this.props.router.push('/reconciliations');
-  },
+  }
 
-  render: function () {
+  render () {
     const { reconciliationReports } = this.props;
     const { reconciliationReportName } = this.props.params;
 
@@ -157,7 +157,14 @@ const ReconciliationReport = React.createClass({
       </div>
     );
   }
-});
+}
+
+ReconciliationReport.propTypes = {
+  reconciliationReports: PropTypes.object,
+  dispatch: PropTypes.func,
+  params: PropTypes.object,
+  router: PropTypes.object
+};
 
 ReconciliationReport.defaultProps = {
   reconciliationReports: []

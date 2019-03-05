@@ -20,7 +20,7 @@ import {
   PDR_DELETE,
   PDR_DELETE_INFLIGHT,
   PDR_DELETE_ERROR
-} from '../actions';
+} from '../actions/types';
 
 export const initialState = {
   list: {

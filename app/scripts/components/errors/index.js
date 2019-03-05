@@ -1,15 +1,15 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-var Errors = React.createClass({
-  displayName: 'Errors',
+class Errors extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'Errors';
+  }
 
-  propTypes: {
-    children: React.PropTypes.object
-  },
-
-  render: function () {
+  render () {
     return (
       <div className='page__errors'>
         <div className='content__header'>
@@ -25,6 +25,10 @@ var Errors = React.createClass({
       </div>
     );
   }
-});
+}
+
+Errors.propTypes = {
+  children: PropTypes.object
+};
 
 export default connect(state => state)(Errors);

@@ -2,17 +2,15 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Sidebar from '../app/sidebar';
+import PropTypes from 'prop-types';
 
-var Providers = React.createClass({
-  displayName: 'Providers',
+class Providers extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'Providers';
+  }
 
-  propTypes: {
-    children: React.PropTypes.object,
-    location: React.PropTypes.object,
-    params: React.PropTypes.object
-  },
-
-  render: function () {
+  render () {
     const { pathname } = this.props.location;
     const showSidebar = pathname !== '/providers/add';
     return (
@@ -37,6 +35,12 @@ var Providers = React.createClass({
       </div>
     );
   }
-});
+}
+
+Providers.propTypes = {
+  children: PropTypes.object,
+  location: PropTypes.object,
+  params: PropTypes.object
+};
 
 export default Providers;

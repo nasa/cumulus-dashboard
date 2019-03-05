@@ -1,34 +1,33 @@
 'use strict';
 import React from 'react';
 import Paginator from 'paginator';
+import PropTypes from 'prop-types';
 
 const noop = (e) => e.preventDefault();
 const disabled = ' pagination__link--disabled';
 
-const Pagination = React.createClass({
-  displayName: 'Pagination',
+class Pagination extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'Pagination';
+    this.onPageClick = this.onPageClick.bind(this);
+    this.setPage = this.setPage.bind(this);
+  }
 
-  propTypes: {
-    page: React.PropTypes.number,
-    limit: React.PropTypes.number,
-    count: React.PropTypes.number,
-    onNewPage: React.PropTypes.func
-  },
-
-  onPageClick: function (e) {
+  onPageClick (e) {
     e.preventDefault();
     const newPage = +e.currentTarget.getAttribute('data-value');
     this.setPage(newPage);
-  },
+  }
 
-  setPage: function (newPage) {
+  setPage (newPage) {
     const { page, limit, count } = this.props;
     if (+page !== newPage && newPage >= 1 && newPage <= Math.ceil(count / limit)) {
       this.props.onNewPage(newPage);
     }
-  },
+  }
 
-  render: function () {
+  render () {
     const { page, limit, count } = this.props;
     if (!isNaN(count) && !isNaN(limit) && !isNaN(page)) {
       const currentPage = +page;
@@ -63,5 +62,13 @@ const Pagination = React.createClass({
       );
     } else return <div></div>;
   }
-});
+}
+
+Pagination.propTypes = {
+  page: PropTypes.number,
+  limit: PropTypes.number,
+  count: PropTypes.number,
+  onNewPage: PropTypes.func
+};
+
 export default Pagination;

@@ -10,13 +10,22 @@ import BatchAsyncCommand from '../form/batch-async-command';
 import Timer from '../app/timer';
 import { isUndefined as undef } from '../../utils/validate';
 
-var List = React.createClass({
-  displayName: 'List',
-
-  getInitialState: function () {
-    return {
+class List extends React.Component {
+  constructor (props) {
+    super(props);
+    this.displayName = 'List';
+    this.queryNewPage = this.queryNewPage.bind(this);
+    this.queryNewSort = this.queryNewSort.bind(this);
+    this.getSortProp = this.getSortProp.bind(this);
+    this.selectAll = this.selectAll.bind(this);
+    this.updateSelection = this.updateSelection.bind(this);
+    this.onBulkActionSuccess = this.onBulkActionSuccess.bind(this);
+    this.onBulkActionError = this.onBulkActionError.bind(this);
+    this.config = this.config.bind(this);
+    this.renderSelectAll = this.renderSelectAll.bind(this);
+    this.state = {
       page: 1,
-      sortIdx: this.props.sortIdx || 0,
+      sortIdx: props.sortIdx || 0,
       order: 'desc',
       selected: [],
       prefix: null,
@@ -25,32 +34,20 @@ var List = React.createClass({
       completedBulkActions: 0,
       bulkActionError: null
     };
-  },
+  }
 
-  propTypes: {
-    list: PropTypes.object,
-    dispatch: PropTypes.func,
-    action: PropTypes.func,
-    tableHeader: PropTypes.array,
-    tableRow: PropTypes.array,
-    tableSortProps: PropTypes.array,
-    sortIdx: PropTypes.number,
-    query: PropTypes.object,
-    bulkActions: PropTypes.array,
-    rowId: PropTypes.any
-  },
+  componentDidMount () {
+    this.setState({ queryConfig: this.config() }); // eslint-disable-line react/no-did-mount-set-state
+  }
 
-  componentWillMount: function () {
-    this.setState({ queryConfig: this.config() });
-  },
-
-  componentWillReceiveProps: function (newProps) {
-    if (JSON.stringify(newProps.query) !== JSON.stringify(this.props.query)) {
-      this.setState({ queryConfig: this.config({}, newProps.query) });
+  componentDidUpdate (prevProps) {
+    const { query, list, sortIdx } = this.props;
+    if (JSON.stringify(query) !== JSON.stringify(prevProps.query)) {
+      this.setState({ queryConfig: this.config({}, query) }); // eslint-disable-line react/no-did-update-set-state
     }
 
     // remove null and undefined values
-    const { params } = newProps.list;
+    const { params } = list;
     const validParams = {};
     for (let key in params) {
       let value = params[key];
@@ -60,24 +57,24 @@ var List = React.createClass({
     }
 
     if (JSON.stringify(validParams) !== JSON.stringify(this.state.params)) {
-      this.setState({ params: validParams }, () => this.setState({
+      this.setState({ params: validParams }, () => this.setState({ // eslint-disable-line react/no-did-update-set-state
         queryConfig: this.config() }));
     }
 
-    if (newProps.sortIdx !== this.state.sortIdx) {
-      this.setState({ sortIdx: newProps.sortIdx });
+    if (sortIdx !== this.state.sortIdx) {
+      this.setState({ sortIdx: sortIdx }); // eslint-disable-line react/no-did-update-set-state
     }
-  },
+  }
 
-  queryNewPage: function (page) {
+  queryNewPage (page) {
     this.setState({ page });
     this.setState({
       queryConfig: this.config({ page }),
       selected: []
     });
-  },
+  }
 
-  queryNewSort: function (sortProps) {
+  queryNewSort (sortProps) {
     this.setState(sortProps);
     this.setState({
       queryConfig: this.config({
@@ -86,13 +83,13 @@ var List = React.createClass({
       }),
       selected: []
     });
-  },
+  }
 
-  getSortProp: function (idx) {
+  getSortProp (idx) {
     return this.props.tableSortProps[idx];
-  },
+  }
 
-  selectAll: function (e) {
+  selectAll (e) {
     const { rowId, list } = this.props;
     const { data } = list;
     const allSelected = this.state.selected.length === data.length;
@@ -108,35 +105,35 @@ var List = React.createClass({
       }
       this.setState({ selected });
     }
-  },
+  }
 
-  updateSelection: function (id) {
+  updateSelection (id) {
     const { selected } = this.state;
     if (selected.indexOf(id) === -1) {
       this.setState({ selected: selected.concat([id]) });
     } else {
       this.setState({ selected: selected.filter(d => d !== id) });
     }
-  },
+  }
 
-  onBulkActionSuccess: function () {
+  onBulkActionSuccess () {
     // not-elegant way to trigger a re-fresh in the timer
     this.setState({
       completedBulkActions: this.state.completedBulkActions + 1,
       bulkActionError: null,
       selected: []
     });
-  },
+  }
 
-  onBulkActionError: function (error) {
+  onBulkActionError (error) {
     const message = (error.id && error.error) ? `Could not process ${error.id}, ${error.error}` : error;
     this.setState({
       bulkActionError: message,
       selected: []
     });
-  },
+  }
 
-  config: function (config, query) {
+  config (config, query) {
     config = config || {};
     const { page, order, sort_by, params } = config;
 
@@ -157,9 +154,9 @@ var List = React.createClass({
       if (config[key] === '') { delete config[key]; }
     }
     return config;
-  },
+  }
 
-  renderSelectAll: function () {
+  renderSelectAll () {
     const { list } = this.props;
     const allChecked = this.state.selected.length === list.data.length && list.data.length;
     return (
@@ -168,9 +165,9 @@ var List = React.createClass({
         Select
       </label>
     );
-  },
+  }
 
-  render: function () {
+  render () {
     const {
       dispatch,
       action,
@@ -242,6 +239,19 @@ var List = React.createClass({
       </div>
     );
   }
-});
+}
+
+List.propTypes = {
+  list: PropTypes.object,
+  dispatch: PropTypes.func,
+  action: PropTypes.func,
+  tableHeader: PropTypes.array,
+  tableRow: PropTypes.array,
+  tableSortProps: PropTypes.array,
+  sortIdx: PropTypes.number,
+  query: PropTypes.object,
+  bulkActions: PropTypes.array,
+  rowId: PropTypes.any
+};
 
 export default connect()(List);

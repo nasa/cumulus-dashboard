@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { interval, getLogs, clearLogs } from '../../actions';
 import { logsUpdateInterval } from '../../config';
 // import moment from 'moment';
@@ -25,53 +26,50 @@ const statusOptions = [
   'Trace'
 ];
 
-var LogViewer = React.createClass({
-  displayName: 'LogViewer',
-  propTypes: {
-    dispatch: React.PropTypes.func,
-    query: React.PropTypes.object,
-    logs: React.PropTypes.object,
-    notFound: React.PropTypes.string
-  },
-
-  getInitialState: function () {
-    return {
+class LogViewer extends React.Component {
+  constructor () {
+    super();
+    this.displayName = 'LogViewer';
+    this.setSearch = this.setSearch.bind(this);
+    this.setSearchLevel = this.setSearchLevel.bind(this);
+    this.query = this.query.bind(this);
+    this.state = {
       level: 'All',
       search: ''
     };
-  },
+  }
 
-  componentWillMount: function () {
+  componentDidMount () {
     this.query();
-  },
+  }
 
-  componentWillReceiveProps: function (newProps) {
-    if (JSON.stringify(newProps.query) !== JSON.stringify(this.props.query)) {
-      const query = newProps.query || {};
+  componentDidUpdate (prevProps) {
+    if (JSON.stringify(this.props.query) !== JSON.stringify(prevProps.query)) {
+      const query = this.props.query || {};
       this.query(query);
     }
 
-    if (newProps.logs.error && this.cancelInterval) {
+    if (this.props.logs.error && this.cancelInterval) {
       this.cancelInterval();
       this.cancelInterval = null;
     }
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
     this.props.dispatch(clearLogs());
-  },
+  }
 
-  setSearch: function (e) {
+  setSearch (e) {
     const value = e.currentTarget.value;
     this.setState({ search: value }, this.query);
-  },
+  }
 
-  setSearchLevel: function (id, value) {
+  setSearchLevel (id, value) {
     this.setState({ search: '', level: value }, this.query);
-  },
+  }
 
-  query: function () {
+  query () {
     const query = this.props.query || {};
     const { search, level } = this.state;
     if (search) {
@@ -94,9 +92,9 @@ var LogViewer = React.createClass({
       return dispatch(getLogs(Object.assign({ }, query)));
     }
     this.cancelInterval = interval(querySinceLast, logsUpdateInterval, true);
-  },
+  }
 
-  render: function () {
+  render () {
     const { logs, notFound } = this.props;
     let items = logs.items;
     if (!items.length && !logs.inflight) {
@@ -157,6 +155,13 @@ var LogViewer = React.createClass({
       </section>
     );
   }
-});
+}
+
+LogViewer.propTypes = {
+  dispatch: PropTypes.func,
+  query: PropTypes.object,
+  logs: PropTypes.object,
+  notFound: PropTypes.string
+};
 
 export default LogViewer;

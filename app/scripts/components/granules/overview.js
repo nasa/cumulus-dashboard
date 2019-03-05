@@ -32,37 +32,40 @@ import { updateInterval } from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 
-var GranulesOverview = React.createClass({
-  propTypes: {
-    granules: PropTypes.object,
-    stats: PropTypes.object,
-    dispatch: PropTypes.func,
-    workflowOptions: PropTypes.array,
-    location: PropTypes.object
-  },
+class GranulesOverview extends React.Component {
+  constructor () {
+    super();
+    this.renderOverview = this.renderOverview.bind(this);
+    this.generateQuery = this.generateQuery.bind(this);
+    this.generateBulkActions = this.generateBulkActions.bind(this);
+    this.queryMeta = this.queryMeta.bind(this);
+    this.selectWorkflow = this.selectWorkflow.bind(this);
+    this.applyWorkflow = this.applyWorkflow.bind(this);
+    this.getExecuteOptions = this.getExecuteOptions.bind(this);
+    this.state = {};
+  }
 
-  componentWillMount: function () {
-    this.setState({});
+  componentDidMount () {
     this.cancelInterval = interval(this.queryMeta, updateInterval, true);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
-  },
+  }
 
-  queryMeta: function () {
+  queryMeta () {
     this.props.dispatch(listWorkflows());
     this.props.dispatch(getCount({
       type: 'granules',
       field: 'status'
     }));
-  },
+  }
 
-  generateQuery: function () {
+  generateQuery () {
     return {};
-  },
+  }
 
-  generateBulkActions: function () {
+  generateBulkActions () {
     const config = {
       execute: {
         options: this.getExecuteOptions(),
@@ -71,17 +74,17 @@ var GranulesOverview = React.createClass({
     };
     const { granules } = this.props;
     return bulkActions(granules, config);
-  },
+  }
 
-  selectWorkflow: function (selector, workflow) {
+  selectWorkflow (selector, workflow) {
     this.setState({ workflow });
-  },
+  }
 
-  applyWorkflow: function (granuleId) {
+  applyWorkflow (granuleId) {
     return applyWorkflowToGranule(granuleId, this.state.workflow);
-  },
+  }
 
-  getExecuteOptions: function () {
+  getExecuteOptions () {
     return [
       simpleDropdownOption({
         handler: this.selectWorkflow,
@@ -90,14 +93,14 @@ var GranulesOverview = React.createClass({
         options: this.props.workflowOptions
       })
     ];
-  },
+  }
 
-  renderOverview: function (count) {
+  renderOverview (count) {
     const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
     return <Overview items={overview} inflight={false} />;
-  },
+  }
 
-  render: function () {
+  render () {
     const { stats, granules } = this.props;
     const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
@@ -151,7 +154,15 @@ var GranulesOverview = React.createClass({
       </div>
     );
   }
-});
+}
+
+GranulesOverview.propTypes = {
+  granules: PropTypes.object,
+  stats: PropTypes.object,
+  dispatch: PropTypes.func,
+  workflowOptions: PropTypes.array,
+  location: PropTypes.object
+};
 
 export default connect(state => ({
   stats: state.stats,

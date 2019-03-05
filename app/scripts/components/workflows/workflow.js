@@ -1,41 +1,38 @@
 'use strict';
 import React from 'react';
 import Ace from 'react-ace';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { listWorkflows } from '../../actions';
 import config from '../../config';
 import { setWindowEditorRef } from '../../utils/browser';
 import Loading from '../app/loading-indicator';
 
-var Workflow = React.createClass({
-  getInitialState: function () {
-    return {
-      view: 'json'
-    };
-  },
+class Workflow extends React.Component {
+  constructor () {
+    super();
+    this.state = { view: 'json' };
+    this.get = this.get.bind(this);
+    this.renderReadOnlyJson = this.renderReadOnlyJson.bind(this);
+    this.renderJson = this.renderJson.bind(this);
+  }
 
-  propTypes: {
-    params: React.PropTypes.object,
-    workflows: React.PropTypes.object,
-    dispatch: React.PropTypes.func
-  },
-
-  componentWillReceiveProps: function ({ params }) {
-    const { workflowName } = params;
-    if (workflowName !== this.props.params.workflowName) {
+  componentDidUpdate (prevProps) {
+    const { workflowName } = this.props.params;
+    if (workflowName !== prevProps.params.workflowName) {
       this.get();
     }
-  },
+  }
 
-  componentWillMount: function () {
+  componentDidMount () {
     this.get();
-  },
+  }
 
-  get: function (workflowName) {
+  get (workflowName) {
     this.props.dispatch(listWorkflows());
-  },
+  }
 
-  renderReadOnlyJson: function (name, data) {
+  renderReadOnlyJson (name, data) {
     return (
       <Ace
         mode='json'
@@ -52,9 +49,9 @@ var Workflow = React.createClass({
         ref={setWindowEditorRef}
       />
     );
-  },
+  }
 
-  render: function () {
+  render () {
     const { workflows, params } = this.props;
     const { workflowName } = params;
     const data = workflows.map[workflowName];
@@ -77,9 +74,9 @@ var Workflow = React.createClass({
         </section>
       </div>
     );
-  },
+  }
 
-  renderJson: function (data) {
+  renderJson (data) {
     return (
       <ul>
         <li>
@@ -89,7 +86,13 @@ var Workflow = React.createClass({
       </ul>
     );
   }
-});
+}
+
+Workflow.propTypes = {
+  params: PropTypes.object,
+  workflows: PropTypes.object,
+  dispatch: PropTypes.func
+};
 
 export default connect(state => ({
   workflows: state.workflows

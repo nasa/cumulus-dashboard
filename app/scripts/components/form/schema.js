@@ -165,38 +165,22 @@ function list (config, property, validate) {
   return config;
 }
 
-export const Schema = React.createClass({
-  propTypes: {
-    schema: PropTypes.object,
-    data: PropTypes.object,
-    pk: PropTypes.string,
-    onCancel: PropTypes.func,
-    onSubmit: PropTypes.func,
-    status: PropTypes.string,
-
-    // if present, only include these properties
-    include: PropTypes.array,
-    error: PropTypes.any
-  },
-
-  getInitialState: function () {
-    return { fields: null };
-  },
-
-  componentWillMount: function () {
+export class Schema extends React.Component {
+  constructor (props) {
+    super(props);
+    this.props = props;
     const { schema, data, include } = this.props;
-    this.setState({ fields: createFormConfig(data, schema, include) });
-  },
+    this.state = { fields: createFormConfig(data, schema, include) };
+  }
 
-  componentWillReceiveProps: function (newProps) {
-    const { props } = this;
-    const { schema, data, include } = newProps;
-    if (props.pk !== newProps.pk) {
-      this.setState({ fields: createFormConfig(data, schema, include) });
+  componentDidUpdate (prevProps) {
+    const { schema, data, include, pk } = this.props;
+    if (prevProps.pk !== pk) {
+      this.setState({ fields: createFormConfig(data, schema, include) }); // eslint-disable-line react/no-did-update-set-state
     }
-  },
+  }
 
-  render: function () {
+  render () {
     const { fields } = this.state;
     const { error } = this.props;
     return (
@@ -211,5 +195,19 @@ export const Schema = React.createClass({
       </div>
     );
   }
-});
+}
+
+Schema.propTypes = {
+  schema: PropTypes.object,
+  data: PropTypes.object,
+  pk: PropTypes.string,
+  onCancel: PropTypes.func,
+  onSubmit: PropTypes.func,
+  status: PropTypes.string,
+
+  // if present, only include these properties
+  include: PropTypes.array,
+  error: PropTypes.any
+};
+
 export default Schema;

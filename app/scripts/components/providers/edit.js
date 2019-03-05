@@ -11,13 +11,8 @@ import EditRecord from '../app/edit';
 
 const SCHEMA_KEY = 'provider';
 
-var EditProvider = React.createClass({
-  propTypes: {
-    params: PropTypes.object,
-    providers: PropTypes.object
-  },
-
-  render: function () {
+class EditProvider extends React.Component {
+  render () {
     const { providerId } = this.props.params;
     return (
       <EditRecord
@@ -31,7 +26,12 @@ var EditProvider = React.createClass({
       />
     );
   }
-});
+}
+
+EditProvider.propTypes = {
+  params: PropTypes.object,
+  providers: PropTypes.object
+};
 
 export default connect(state => ({
   providers: state.providers

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import api from './api';
+import apiVersion from './api-version';
 import collections from './collections';
 import granules from './granules';
 import stats from './stats';
@@ -19,6 +20,7 @@ import cumulusInstance from './cumulus-instance';
 export const reducers = {
   def: (state = {}, action) => state,
   api,
+  apiVersion,
   collections,
   mmtLinks,
   cumulusInstance,

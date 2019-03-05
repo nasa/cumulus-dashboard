@@ -7,33 +7,29 @@ import { interval, getCount } from '../../actions';
 import { updateInterval } from '../../config';
 import { strings } from '../locale';
 
-var Granules = React.createClass({
-  displayName: strings.granules,
+class Granules extends React.Component {
+  constructor () {
+    super();
+    this.query = this.query.bind(this);
+    this.displayName = strings.granules;
+  }
 
-  propTypes: {
-    children: PropTypes.object,
-    location: PropTypes.object,
-    params: PropTypes.object,
-    dispatch: PropTypes.func,
-    stats: PropTypes.object
-  },
-
-  componentWillMount: function () {
+  componentDidMount () {
     this.cancelInterval = interval(() => this.query(), updateInterval, true);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
-  },
+  }
 
-  query: function () {
+  query () {
     this.props.dispatch(getCount({
       type: 'granules',
       field: 'status'
     }));
-  },
+  }
 
-  render: function () {
+  render () {
     const count = get(this.props.stats, 'count.data.granules.count');
     return (
       <div className='page__granules'>
@@ -57,7 +53,15 @@ var Granules = React.createClass({
       </div>
     );
   }
-});
+}
+
+Granules.propTypes = {
+  children: PropTypes.object,
+  location: PropTypes.object,
+  params: PropTypes.object,
+  dispatch: PropTypes.func,
+  stats: PropTypes.object
+};
 
 export default connect(state => ({
   stats: state.stats
