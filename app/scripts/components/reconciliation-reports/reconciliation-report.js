@@ -84,8 +84,11 @@ class ReconciliationReport extends React.Component {
     let filesInS3 = [];
     let filesInDynamoDb = [];
     if (record && record.data) {
-      if (record.data.onlyInDynamoDb && record.data.onlyInS3) {
-        filesInS3 = record.data.onlyInS3.map(d => {
+      const report = record.data;
+      const { filesInCumulus } = report;
+
+      if (filesInCumulus.onlyInDynamoDb && filesInCumulus.onlyInS3) {
+        filesInS3 = filesInCumulus.onlyInS3.map(d => {
           const parsed = url.parse(d);
           return {
             filename: path.basename(parsed.pathname),
@@ -94,7 +97,7 @@ class ReconciliationReport extends React.Component {
           };
         });
 
-        filesInDynamoDb = record.data.onlyInDynamoDb.map(d => {
+        filesInDynamoDb = filesInCumulus.onlyInDynamoDb.map(d => {
           const parsed = url.parse(d.uri);
           return {
             granuleId: d.granuleId,
