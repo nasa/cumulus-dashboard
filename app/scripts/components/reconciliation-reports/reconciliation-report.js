@@ -18,7 +18,7 @@ import { updateInterval } from '../../config';
 const metaAccessors = [
   ['Created', 'reportStartTime'],
   ['Status', 'status'],
-  ['OK file count', 'okFileCount']
+  ['OK file count', 'filesInCumulus.okCount']
 ];
 
 const tableHeaderS3 = [
