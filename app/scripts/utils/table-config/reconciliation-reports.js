@@ -32,21 +32,23 @@ export const tableRowS3File = [
   (d) => d ? <a href={d.path} target='_blank'>Link</a> : nullValue
 ];
 
-export const tableHeaderGranuleFiles = [
+export const tablePropsS3File = ['filename', 'bucket', 'link'];
+
+export const tableHeaderFiles = [
   'GranuleId',
   'Filename',
   'Bucket',
   'S3 Link'
 ];
 
-export const tableRowGranuleFile = [
+export const tableRowFile = [
   (d) => d.granuleId,
   (d) => d.filename,
   (d) => d.bucket,
   (d) => d ? <a href={d.path} target='_blank'>Link</a> : nullValue
 ];
 
-export const tablePropsGranuleFile = ['granuleId', 'filename', 'bucket', 'link'];
+export const tablePropsFile = ['granuleId', 'filename', 'bucket', 'link'];
 
 export const tableHeaderCollections = [
   'Collection name'
