@@ -16,7 +16,10 @@ import {
   tablePropsGranuleFile,
   tableHeaderCollections,
   tableRowCollection,
-  tablePropsCollection
+  tablePropsCollection,
+  tableHeaderGranules,
+  tableRowGranule,
+  tablePropsGranule
 } from '../../utils/table-config/reconciliation-reports';
 import SortableTable from '../table/sortable';
 import Metadata from '../table/metadata';
@@ -35,6 +38,10 @@ const fileMetaAccessors = [
 
 const collectionMetaAccessors = [
   ['OK collections count', 'okCount']
+];
+
+const granuleMetaAccessors = [
+  ['OK granules count', 'okCount']
 ];
 
 const parseFileObject = (d) => {
@@ -94,16 +101,21 @@ class ReconciliationReport extends React.Component {
     let collectionsInCumulus = [];
     let collectionsInCmr = [];
 
+    let granulesInCumulus = [];
+    let granulesInCmr = [];
+
     let filesInCumulus;
     let filesInCumulusCmr;
     let collectionsInCumulusCmr;
+    let granulesInCumulusCmr;
 
     if (record && record.data) {
       const report = record.data;
       ({
         filesInCumulus,
         filesInCumulusCmr,
-        collectionsInCumulusCmr
+        collectionsInCumulusCmr,
+        granulesInCumulusCmr
       } = report);
 
       if (filesInCumulus.onlyInDynamoDb && filesInCumulus.onlyInS3) {
@@ -138,6 +150,12 @@ class ReconciliationReport extends React.Component {
         const getCollectionName = (collectionName) => ({ name: collectionName });
         collectionsInCumulus = collectionsInCumulusCmr.onlyInCumulus.map(getCollectionName);
         collectionsInCmr = collectionsInCumulusCmr.onlyInCmr.map(getCollectionName);
+      }
+
+      if (granulesInCumulusCmr.onlyInCumulus && granulesInCumulusCmr.onlyInCmr) {
+        granulesInCumulus = granulesInCumulusCmr.onlyInCumulus;
+        granulesInCmr = granulesInCumulusCmr.onlyInCmr
+          .map((granule) => ({ granuleId: granule.GranuleUR }));
       }
     }
 
@@ -266,6 +284,42 @@ class ReconciliationReport extends React.Component {
               header={tableHeaderCollections}
               row={tableRowCollection}
               props={tablePropsCollection}
+            />
+          </div>
+        </section>
+
+        <section className='page__section'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium heading--shared-content with-description'>
+              Granules
+            </h2>
+          </div>
+
+          <div className='page__section--small'>
+            <Metadata data={granulesInCumulusCmr} accessors={granuleMetaAccessors} />
+          </div>
+
+          <div className='page__section--small'>
+            <h3 className='heading--small heading--shared-content with-description'>
+              Granules only in Cumulus ({granulesInCumulus.length})
+            </h3>
+            <SortableTable
+              data={granulesInCumulus}
+              header={tableHeaderGranules}
+              row={tableRowGranule}
+              props={tablePropsGranule}
+            />
+          </div>
+
+          <div className='page__section--small'>
+            <h3 className='heading--small heading--shared-content with-description'>
+              Granules only in CMR ({granulesInCmr.length})
+            </h3>
+            <SortableTable
+              data={granulesInCmr}
+              header={tableHeaderGranules}
+              row={tableRowGranule}
+              props={tablePropsGranule}
             />
           </div>
         </section>
