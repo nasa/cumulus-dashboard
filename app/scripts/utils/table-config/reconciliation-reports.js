@@ -47,3 +47,13 @@ export const tableRowGranuleFile = [
 ];
 
 export const tablePropsGranuleFile = ['granuleId', 'filename', 'bucket', 'link'];
+
+export const tableHeaderCollections = [
+  'Collection name'
+];
+
+export const tableRowCollection = [
+  (d) => d.name
+];
+
+export const tablePropsCollection = ['name'];
