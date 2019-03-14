@@ -119,6 +119,25 @@ class ReconciliationReport extends React.Component {
     return { filesInS3, filesInDynamoDb, filesOnlyInCumulus, filesOnlyInCmr };
   }
 
+  getCollectionsSummary ({
+    onlyInCumulus,
+    onlyInCmr
+  }) {
+    const getCollectionName = (collectionName) => ({ name: collectionName });
+    const collectionsInCumulus = onlyInCumulus.map(getCollectionName);
+    const collectionsInCmr = onlyInCmr.map(getCollectionName);
+    return { collectionsInCumulus, collectionsInCmr };
+  }
+
+  getGranulesSummary ({
+    onlyInCumulus,
+    onlyInCmr
+  }) {
+    const granulesInCumulus = onlyInCumulus;
+    const granulesInCmr = onlyInCmr.map((granule) => ({ granuleId: granule.GranuleUR }));
+    return { granulesInCumulus, granulesInCmr };
+  }
+
   render () {
     const { reconciliationReports } = this.props;
     const { reconciliationReportName } = this.props.params;
@@ -160,17 +179,15 @@ class ReconciliationReport extends React.Component {
         filesOnlyInCmr
       } = this.getFilesSummary(filesInCumulus, filesInCumulusCmr));
 
-      if (collectionsInCumulusCmr.onlyInCumulus && collectionsInCumulusCmr.onlyInCmr) {
-        const getCollectionName = (collectionName) => ({ name: collectionName });
-        collectionsInCumulus = collectionsInCumulusCmr.onlyInCumulus.map(getCollectionName);
-        collectionsInCmr = collectionsInCumulusCmr.onlyInCmr.map(getCollectionName);
-      }
+      ({
+        collectionsInCumulus,
+        collectionsInCmr
+      } = this.getCollectionsSummary(collectionsInCumulusCmr));
 
-      if (granulesInCumulusCmr.onlyInCumulus && granulesInCumulusCmr.onlyInCmr) {
-        granulesInCumulus = granulesInCumulusCmr.onlyInCumulus;
-        granulesInCmr = granulesInCumulusCmr.onlyInCmr
-          .map((granule) => ({ granuleId: granule.GranuleUR }));
-      }
+      ({
+        granulesInCumulus,
+        granulesInCmr
+      } = this.getGranulesSummary(granulesInCumulusCmr));
     }
 
     let error;
