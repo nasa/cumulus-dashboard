@@ -86,9 +86,13 @@ class ReconciliationReport extends React.Component {
 
     let filesInS3 = [];
     let filesInDynamoDb = [];
+
+    let filesOnlyInCumulus = [];
+    let filesOnlyInCmr = [];
+
     if (record && record.data) {
       const report = record.data;
-      const { filesInCumulus } = report;
+      const { filesInCumulus, filesInCumulusCmr } = report;
 
       if (filesInCumulus.onlyInDynamoDb && filesInCumulus.onlyInS3) {
         filesInS3 = filesInCumulus.onlyInS3.map(d => {
@@ -110,6 +114,27 @@ class ReconciliationReport extends React.Component {
           };
         });
       }
+
+      if (filesInCumulusCmr.onlyInCumulus && filesInCumulusCmr.onlyInCmr) {
+        filesOnlyInCumulus = filesInCumulusCmr.onlyInCumulus.map(d => {
+          const parsed = url.parse(d.uri);
+          return {
+            granuleId: d.granuleId,
+            filename: path.basename(parsed.pathname),
+            bucket: parsed.hostname,
+            path: parsed.href
+          };
+        });
+
+        filesOnlyInCmr = filesInCumulusCmr.onlyInCmr.map(d => {
+          const parsed = url.parse(d.URL);
+          return {
+            filename: path.basename(parsed.pathname),
+            bucket: parsed.hostname.split('.')[0],
+            path: parsed.href
+          };
+        });
+      }
     }
 
     let error;
@@ -117,8 +142,12 @@ class ReconciliationReport extends React.Component {
       error = record.data.error;
     }
 
-    const dynamoS3metaAccessors = [
+    const dynamoS3MetaAccessors = [
       ['OK file count', 'filesInCumulus.okCount']
+    ];
+
+    const cumulusCmrMetaAccessors = [
+      ['OK file count', 'filesInCumulusCmr.okCount']
     ];
 
     return (
@@ -145,7 +174,7 @@ class ReconciliationReport extends React.Component {
           </div>
 
           <div className='page__section--small'>
-            <Metadata data={record.data} accessors={dynamoS3metaAccessors} />
+            <Metadata data={record.data} accessors={dynamoS3MetaAccessors} />
           </div>
 
           <div className='page__section--small'>
@@ -166,6 +195,42 @@ class ReconciliationReport extends React.Component {
             </h3>
             <SortableTable
               data={filesInS3}
+              header={tableHeaderS3}
+              row={tableRowS3}
+              props={['filename', 'bucket', 'link']}
+            />
+          </div>
+        </section>
+
+        <section className='page__section'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium heading--shared-content with-description'>
+              Cumulus vs CMR
+            </h2>
+          </div>
+
+          <div className='page__section--small'>
+            <Metadata data={record.data} accessors={cumulusCmrMetaAccessors} />
+          </div>
+
+          <div className='page__section--small'>
+            <h3 className='heading--small heading--shared-content with-description'>
+              Files only in Cumulus ({filesOnlyInCumulus.length})
+            </h3>
+            <SortableTable
+              data={filesOnlyInCumulus}
+              header={tableHeaderDynamoDb}
+              row={tableRowDyanmoDb}
+              props={['granuleId', 'filename', 'bucket', 'link']}
+            />
+          </div>
+
+          <div className='page__section--small'>
+            <h3 className='heading--small heading--shared-content with-description'>
+              Files only in CMR ({filesOnlyInCmr.length})
+            </h3>
+            <SortableTable
+              data={filesOnlyInCmr}
               header={tableHeaderS3}
               row={tableRowS3}
               props={['filename', 'bucket', 'link']}
