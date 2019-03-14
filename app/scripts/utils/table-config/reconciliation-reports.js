@@ -57,3 +57,13 @@ export const tableRowCollection = [
 ];
 
 export const tablePropsCollection = ['name'];
+
+export const tableHeaderGranules = [
+  'Granule ID'
+];
+
+export const tableRowGranule = [
+  (d) => d.granuleId
+];
+
+export const tablePropsGranule = ['granuleId'];
