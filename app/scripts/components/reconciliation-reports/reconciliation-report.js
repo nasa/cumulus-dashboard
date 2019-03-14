@@ -33,19 +33,11 @@ import ReportTable from './report-table';
 
 const reportMetaAccessors = [
   ['Created', 'reportStartTime'],
-  ['Status', 'status']
-];
-
-const fileMetaAccessors = [
-  ['OK file count', 'okCount']
-];
-
-const collectionMetaAccessors = [
-  ['OK collection count', 'okCount']
-];
-
-const granuleMetaAccessors = [
-  ['OK granule count', 'okCount']
+  ['Status', 'status'],
+  ['Files in DynamoDB and S3', 'filesInCumulus.okCount'],
+  ['Files in Cumulus and CMR', 'filesInCumulusCmr.okCount'],
+  ['Collections in Cumulus and CMR', 'collectionsInCumulusCmr.okCount'],
+  ['Granules in Cumulus and CMR', 'granulesInCumulusCmr.okCount']
 ];
 
 class ReconciliationReport extends React.Component {
@@ -206,21 +198,11 @@ class ReconciliationReport extends React.Component {
         </section>
 
         <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium with-description'>Reconciliation report</h2>
-          </div>
-          <Metadata data={report} accessors={reportMetaAccessors} />
-        </section>
-
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>
-              DynamoDB vs S3
-            </h2>
-          </div>
-
           <div className='page__section--small'>
-            <Metadata data={report.filesInCumulus} accessors={fileMetaAccessors} />
+            <div className='heading__wrapper--border'>
+              <h2 className='heading--medium with-description'>Reconciliation report</h2>
+            </div>
+            <Metadata data={report} accessors={reportMetaAccessors} />
           </div>
 
           <ReportTable
@@ -238,18 +220,6 @@ class ReconciliationReport extends React.Component {
             tableRow={tableRowS3File}
             tableProps={tablePropsS3File}
           />
-        </section>
-
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>
-              Cumulus vs CMR
-            </h2>
-          </div>
-
-          <div className='page__section--small'>
-            <Metadata data={report.filesInCumulusCmr} accessors={fileMetaAccessors} />
-          </div>
 
           <ReportTable
             data={filesOnlyInCumulus}
@@ -266,18 +236,6 @@ class ReconciliationReport extends React.Component {
             tableRow={tableRowFile}
             tableProps={tablePropsFile}
           />
-        </section>
-
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>
-              Collections
-            </h2>
-          </div>
-
-          <div className='page__section--small'>
-            <Metadata data={report.collectionsInCumulusCmr} accessors={collectionMetaAccessors} />
-          </div>
 
           <ReportTable
             data={collectionsInCumulus}
@@ -294,18 +252,6 @@ class ReconciliationReport extends React.Component {
             tableRow={tableRowCollection}
             tableProps={tablePropsCollection}
           />
-        </section>
-
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>
-              Granules
-            </h2>
-          </div>
-
-          <div className='page__section--small'>
-            <Metadata data={report.granulesInCumulusCmr} accessors={granuleMetaAccessors} />
-          </div>
 
           <ReportTable
             data={granulesInCumulus}
