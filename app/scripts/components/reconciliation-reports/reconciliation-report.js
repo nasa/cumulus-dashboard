@@ -8,43 +8,41 @@ import {
   interval,
   getReconciliationReport
 } from '../../actions';
-import { nullValue } from '../../utils/format';
+import {
+  tableHeaderS3Files,
+  tableRowS3File,
+  tableHeaderGranuleFiles,
+  tableRowGranuleFile,
+  tablePropsGranuleFile
+} from '../../utils/table-config/reconciliation-reports';
 import SortableTable from '../table/sortable';
 import Metadata from '../table/metadata';
 import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
 import { updateInterval } from '../../config';
 
-const metaAccessors = [
+const reportMetaAccessors = [
   ['Created', 'reportStartTime'],
   ['Status', 'status']
 ];
 
-const tableHeaderS3 = [
-  'Filename',
-  'Bucket',
-  'S3 Link'
+const dynamoS3MetaAccessors = [
+  ['OK file count', 'filesInCumulus.okCount']
 ];
 
-const tableRowS3 = [
-  (d) => d.filename,
-  (d) => d.bucket,
-  (d) => d ? <a href={d.path} target='_blank'>Link</a> : nullValue
+const cumulusCmrMetaAccessors = [
+  ['OK file count', 'filesInCumulusCmr.okCount']
 ];
 
-const tableHeaderDynamoDb = [
-  'GranuleId',
-  'Filename',
-  'Bucket',
-  'S3 Link'
-];
-
-const tableRowDyanmoDb = [
-  (d) => d.granuleId,
-  (d) => d.filename,
-  (d) => d.bucket,
-  (d) => d ? <a href={d.path} target='_blank'>Link</a> : nullValue
-];
+const parseFileObject = (d) => {
+  const parsed = url.parse(d.uri);
+  return {
+    granuleId: d.granuleId,
+    filename: path.basename(parsed.pathname),
+    bucket: parsed.hostname,
+    path: parsed.href
+  };
+};
 
 class ReconciliationReport extends React.Component {
   constructor () {
@@ -104,34 +102,20 @@ class ReconciliationReport extends React.Component {
           };
         });
 
-        filesInDynamoDb = filesInCumulus.onlyInDynamoDb.map(d => {
-          const parsed = url.parse(d.uri);
-          return {
-            granuleId: d.granuleId,
-            filename: path.basename(parsed.pathname),
-            bucket: parsed.hostname,
-            path: parsed.href
-          };
-        });
+        filesInDynamoDb = filesInCumulus.onlyInDynamoDb.map(parseFileObject);
       }
 
       if (filesInCumulusCmr.onlyInCumulus && filesInCumulusCmr.onlyInCmr) {
-        filesOnlyInCumulus = filesInCumulusCmr.onlyInCumulus.map(d => {
-          const parsed = url.parse(d.uri);
-          return {
-            granuleId: d.granuleId,
-            filename: path.basename(parsed.pathname),
-            bucket: parsed.hostname,
-            path: parsed.href
-          };
-        });
+        filesOnlyInCumulus = filesInCumulusCmr.onlyInCumulus.map(parseFileObject);
 
         filesOnlyInCmr = filesInCumulusCmr.onlyInCmr.map(d => {
           const parsed = url.parse(d.URL);
+          const bucket = parsed.hostname.split('.')[0];
           return {
+            granuleId: d.GranuleUR,
             filename: path.basename(parsed.pathname),
-            bucket: parsed.hostname.split('.')[0],
-            path: parsed.href
+            bucket,
+            path: `s3://${bucket}${parsed.pathname}`
           };
         });
       }
@@ -141,14 +125,6 @@ class ReconciliationReport extends React.Component {
     if (record && record.data) {
       error = record.data.error;
     }
-
-    const dynamoS3MetaAccessors = [
-      ['OK file count', 'filesInCumulus.okCount']
-    ];
-
-    const cumulusCmrMetaAccessors = [
-      ['OK file count', 'filesInCumulusCmr.okCount']
-    ];
 
     return (
       <div className='page__component'>
@@ -163,7 +139,7 @@ class ReconciliationReport extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Reconciliation report</h2>
           </div>
-          <Metadata data={record.data} accessors={metaAccessors} />
+          <Metadata data={record.data} accessors={reportMetaAccessors} />
         </section>
 
         <section className='page__section'>
@@ -183,9 +159,9 @@ class ReconciliationReport extends React.Component {
             </h3>
             <SortableTable
               data={filesInDynamoDb}
-              header={tableHeaderDynamoDb}
-              row={tableRowDyanmoDb}
-              props={['granuleId', 'filename', 'bucket', 'link']}
+              header={tableHeaderGranuleFiles}
+              row={tableRowGranuleFile}
+              props={tablePropsGranuleFile}
             />
           </div>
 
@@ -195,8 +171,8 @@ class ReconciliationReport extends React.Component {
             </h3>
             <SortableTable
               data={filesInS3}
-              header={tableHeaderS3}
-              row={tableRowS3}
+              header={tableHeaderS3Files}
+              row={tableRowS3File}
               props={['filename', 'bucket', 'link']}
             />
           </div>
@@ -219,9 +195,9 @@ class ReconciliationReport extends React.Component {
             </h3>
             <SortableTable
               data={filesOnlyInCumulus}
-              header={tableHeaderDynamoDb}
-              row={tableRowDyanmoDb}
-              props={['granuleId', 'filename', 'bucket', 'link']}
+              header={tableHeaderGranuleFiles}
+              row={tableRowGranuleFile}
+              props={tablePropsGranuleFile}
             />
           </div>
 
@@ -231,9 +207,9 @@ class ReconciliationReport extends React.Component {
             </h3>
             <SortableTable
               data={filesOnlyInCmr}
-              header={tableHeaderS3}
-              row={tableRowS3}
-              props={['filename', 'bucket', 'link']}
+              header={tableHeaderGranuleFiles}
+              row={tableRowGranuleFile}
+              props={tablePropsGranuleFile}
             />
           </div>
         </section>
