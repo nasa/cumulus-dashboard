@@ -85,6 +85,40 @@ class ReconciliationReport extends React.Component {
     this.props.router.push('/reconciliations');
   }
 
+  getFilesSummary ({
+    onlyInDynamoDb = [],
+    onlyInS3 = []
+  }, {
+    onlyInCumulus = [],
+    onlyInCmr = []
+  }) {
+    const filesInS3 = onlyInS3.map(d => {
+      const parsed = url.parse(d);
+      return {
+        filename: path.basename(parsed.pathname),
+        bucket: parsed.hostname,
+        path: parsed.href
+      };
+    });
+
+    const filesInDynamoDb = onlyInDynamoDb.map(parseFileObject);
+
+    const filesOnlyInCumulus = onlyInCumulus.map(parseFileObject);
+
+    const filesOnlyInCmr = onlyInCmr.map(d => {
+      const parsed = url.parse(d.URL);
+      const bucket = parsed.hostname.split('.')[0];
+      return {
+        granuleId: d.GranuleUR,
+        filename: path.basename(parsed.pathname),
+        bucket,
+        path: `s3://${bucket}${parsed.pathname}`
+      };
+    });
+
+    return { filesInS3, filesInDynamoDb, filesOnlyInCumulus, filesOnlyInCmr };
+  }
+
   render () {
     const { reconciliationReports } = this.props;
     const { reconciliationReportName } = this.props.params;
@@ -107,47 +141,24 @@ class ReconciliationReport extends React.Component {
     let granulesInCumulus = [];
     let granulesInCmr = [];
 
-    let filesInCumulus;
-    let filesInCumulusCmr;
-    let collectionsInCumulusCmr;
-    let granulesInCumulusCmr;
+    let report;
 
     if (record && record.data) {
-      const report = record.data;
+      report = record.data;
+
+      const {
+        filesInCumulus = {},
+        filesInCumulusCmr = {},
+        collectionsInCumulusCmr = {},
+        granulesInCumulusCmr = {}
+      } = report;
+
       ({
-        filesInCumulus,
-        filesInCumulusCmr,
-        collectionsInCumulusCmr,
-        granulesInCumulusCmr
-      } = report);
-
-      if (filesInCumulus.onlyInDynamoDb && filesInCumulus.onlyInS3) {
-        filesInS3 = filesInCumulus.onlyInS3.map(d => {
-          const parsed = url.parse(d);
-          return {
-            filename: path.basename(parsed.pathname),
-            bucket: parsed.hostname,
-            path: parsed.href
-          };
-        });
-
-        filesInDynamoDb = filesInCumulus.onlyInDynamoDb.map(parseFileObject);
-      }
-
-      if (filesInCumulusCmr.onlyInCumulus && filesInCumulusCmr.onlyInCmr) {
-        filesOnlyInCumulus = filesInCumulusCmr.onlyInCumulus.map(parseFileObject);
-
-        filesOnlyInCmr = filesInCumulusCmr.onlyInCmr.map(d => {
-          const parsed = url.parse(d.URL);
-          const bucket = parsed.hostname.split('.')[0];
-          return {
-            granuleId: d.GranuleUR,
-            filename: path.basename(parsed.pathname),
-            bucket,
-            path: `s3://${bucket}${parsed.pathname}`
-          };
-        });
-      }
+        filesInS3,
+        filesInDynamoDb,
+        filesOnlyInCumulus,
+        filesOnlyInCmr
+      } = this.getFilesSummary(filesInCumulus, filesInCumulusCmr));
 
       if (collectionsInCumulusCmr.onlyInCumulus && collectionsInCumulusCmr.onlyInCmr) {
         const getCollectionName = (collectionName) => ({ name: collectionName });
@@ -180,7 +191,7 @@ class ReconciliationReport extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Reconciliation report</h2>
           </div>
-          <Metadata data={record.data} accessors={reportMetaAccessors} />
+          <Metadata data={report} accessors={reportMetaAccessors} />
         </section>
 
         <section className='page__section'>
@@ -191,7 +202,7 @@ class ReconciliationReport extends React.Component {
           </div>
 
           <div className='page__section--small'>
-            <Metadata data={filesInCumulus} accessors={fileMetaAccessors} />
+            <Metadata data={report.filesInCumulus} accessors={fileMetaAccessors} />
           </div>
 
           <ReportTable
@@ -219,7 +230,7 @@ class ReconciliationReport extends React.Component {
           </div>
 
           <div className='page__section--small'>
-            <Metadata data={filesInCumulusCmr} accessors={fileMetaAccessors} />
+            <Metadata data={report.filesInCumulusCmr} accessors={fileMetaAccessors} />
           </div>
 
           <ReportTable
@@ -247,7 +258,7 @@ class ReconciliationReport extends React.Component {
           </div>
 
           <div className='page__section--small'>
-            <Metadata data={collectionsInCumulusCmr} accessors={collectionMetaAccessors} />
+            <Metadata data={report.collectionsInCumulusCmr} accessors={collectionMetaAccessors} />
           </div>
 
           <ReportTable
@@ -275,7 +286,7 @@ class ReconciliationReport extends React.Component {
           </div>
 
           <div className='page__section--small'>
-            <Metadata data={granulesInCumulusCmr} accessors={granuleMetaAccessors} />
+            <Metadata data={report.granulesInCumulusCmr} accessors={granuleMetaAccessors} />
           </div>
 
           <ReportTable
