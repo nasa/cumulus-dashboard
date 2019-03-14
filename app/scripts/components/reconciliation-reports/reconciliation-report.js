@@ -4,6 +4,7 @@ import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
 import {
   interval,
   getReconciliationReport
@@ -27,6 +28,8 @@ import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
 import { updateInterval } from '../../config';
 
+import ReportTable from './report-table';
+
 const reportMetaAccessors = [
   ['Created', 'reportStartTime'],
   ['Status', 'status']
@@ -37,11 +40,11 @@ const fileMetaAccessors = [
 ];
 
 const collectionMetaAccessors = [
-  ['OK collections count', 'okCount']
+  ['OK collection count', 'okCount']
 ];
 
 const granuleMetaAccessors = [
-  ['OK granules count', 'okCount']
+  ['OK granule count', 'okCount']
 ];
 
 const parseFileObject = (d) => {
@@ -191,29 +194,21 @@ class ReconciliationReport extends React.Component {
             <Metadata data={filesInCumulus} accessors={fileMetaAccessors} />
           </div>
 
-          <div className='page__section--small'>
-            <h3 className='heading--small heading--shared-content with-description'>
-              Files only in DynamoDB ({filesInDynamoDb.length})
-            </h3>
-            <SortableTable
-              data={filesInDynamoDb}
-              header={tableHeaderGranuleFiles}
-              row={tableRowGranuleFile}
-              props={tablePropsGranuleFile}
-            />
-          </div>
+          <ReportTable
+            data={filesInDynamoDb}
+            title={'Files only in DynamoDB'}
+            tableHeader={tableHeaderGranuleFiles}
+            tableRow={tableRowGranuleFile}
+            tableProps={tablePropsGranuleFile}
+          />
 
-          <div className='page__section--small'>
-            <h3 className='heading--small heading--shared-content with-description'>
-              Files only in S3 ({filesInS3.length})
-            </h3>
-            <SortableTable
-              data={filesInS3}
-              header={tableHeaderS3Files}
-              row={tableRowS3File}
-              props={['filename', 'bucket', 'link']}
-            />
-          </div>
+          <ReportTable
+            data={filesInS3}
+            title={'Files only in S3'}
+            tableHeader={tableHeaderS3Files}
+            tableRow={tableRowS3File}
+            tableProps={['filename', 'bucket', 'link']}
+          />
         </section>
 
         <section className='page__section'>
@@ -227,29 +222,21 @@ class ReconciliationReport extends React.Component {
             <Metadata data={filesInCumulusCmr} accessors={fileMetaAccessors} />
           </div>
 
-          <div className='page__section--small'>
-            <h3 className='heading--small heading--shared-content with-description'>
-              Files only in Cumulus ({filesOnlyInCumulus.length})
-            </h3>
-            <SortableTable
-              data={filesOnlyInCumulus}
-              header={tableHeaderGranuleFiles}
-              row={tableRowGranuleFile}
-              props={tablePropsGranuleFile}
-            />
-          </div>
+          <ReportTable
+            data={filesOnlyInCumulus}
+            title={'Files only in Cumulus'}
+            tableHeader={tableHeaderGranuleFiles}
+            tableRow={tableRowGranuleFile}
+            tableProps={tablePropsGranuleFile}
+          />
 
-          <div className='page__section--small'>
-            <h3 className='heading--small heading--shared-content with-description'>
-              Files only in CMR ({filesOnlyInCmr.length})
-            </h3>
-            <SortableTable
-              data={filesOnlyInCmr}
-              header={tableHeaderGranuleFiles}
-              row={tableRowGranuleFile}
-              props={tablePropsGranuleFile}
-            />
-          </div>
+          <ReportTable
+            data={filesOnlyInCmr}
+            title={'Files only in CMR'}
+            tableHeader={tableHeaderGranuleFiles}
+            tableRow={tableRowGranuleFile}
+            tableProps={tablePropsGranuleFile}
+          />
         </section>
 
         <section className='page__section'>
@@ -263,29 +250,21 @@ class ReconciliationReport extends React.Component {
             <Metadata data={collectionsInCumulusCmr} accessors={collectionMetaAccessors} />
           </div>
 
-          <div className='page__section--small'>
-            <h3 className='heading--small heading--shared-content with-description'>
-              Collections only in Cumulus ({collectionsInCumulus.length})
-            </h3>
-            <SortableTable
-              data={collectionsInCumulus}
-              header={tableHeaderCollections}
-              row={tableRowCollection}
-              props={tablePropsCollection}
-            />
-          </div>
+          <ReportTable
+            data={collectionsInCumulus}
+            title={'Collections only in Cumulus'}
+            tableHeader={tableHeaderCollections}
+            tableRow={tableRowCollection}
+            tableProps={tablePropsCollection}
+          />
 
-          <div className='page__section--small'>
-            <h3 className='heading--small heading--shared-content with-description'>
-              Collections only in CMR ({collectionsInCmr.length})
-            </h3>
-            <SortableTable
-              data={collectionsInCmr}
-              header={tableHeaderCollections}
-              row={tableRowCollection}
-              props={tablePropsCollection}
-            />
-          </div>
+          <ReportTable
+            data={collectionsInCmr}
+            title={'Collections only in CMR'}
+            tableHeader={tableHeaderCollections}
+            tableRow={tableRowCollection}
+            tableProps={tablePropsCollection}
+          />
         </section>
 
         <section className='page__section'>
@@ -299,29 +278,21 @@ class ReconciliationReport extends React.Component {
             <Metadata data={granulesInCumulusCmr} accessors={granuleMetaAccessors} />
           </div>
 
-          <div className='page__section--small'>
-            <h3 className='heading--small heading--shared-content with-description'>
-              Granules only in Cumulus ({granulesInCumulus.length})
-            </h3>
-            <SortableTable
-              data={granulesInCumulus}
-              header={tableHeaderGranules}
-              row={tableRowGranule}
-              props={tablePropsGranule}
-            />
-          </div>
+          <ReportTable
+            data={granulesInCumulus}
+            title={'Granules only in Cumulus'}
+            tableHeader={tableHeaderGranules}
+            tableRow={tableRowGranule}
+            tableProps={tablePropsGranule}
+          />
 
-          <div className='page__section--small'>
-            <h3 className='heading--small heading--shared-content with-description'>
-              Granules only in CMR ({granulesInCmr.length})
-            </h3>
-            <SortableTable
-              data={granulesInCmr}
-              header={tableHeaderGranules}
-              row={tableRowGranule}
-              props={tablePropsGranule}
-            />
-          </div>
+          <ReportTable
+            data={granulesInCmr}
+            title={'Granules only in CMR'}
+            tableHeader={tableHeaderGranules}
+            tableRow={tableRowGranule}
+            tableProps={tablePropsGranule}
+          />
         </section>
       </div>
     );
