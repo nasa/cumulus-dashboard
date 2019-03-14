@@ -9,12 +9,14 @@ import {
   interval,
   getReconciliationReport
 } from '../../actions';
+import { updateInterval } from '../../config';
 import {
   tableHeaderS3Files,
   tableRowS3File,
-  tableHeaderGranuleFiles,
-  tableRowGranuleFile,
-  tablePropsGranuleFile,
+  tablePropsS3File,
+  tableHeaderFiles,
+  tableRowFile,
+  tablePropsFile,
   tableHeaderCollections,
   tableRowCollection,
   tablePropsCollection,
@@ -22,11 +24,10 @@ import {
   tableRowGranule,
   tablePropsGranule
 } from '../../utils/table-config/reconciliation-reports';
-import SortableTable from '../table/sortable';
+
 import Metadata from '../table/metadata';
 import Loading from '../app/loading-indicator';
 import ErrorReport from '../errors/report';
-import { updateInterval } from '../../config';
 
 import ReportTable from './report-table';
 
@@ -46,16 +47,6 @@ const collectionMetaAccessors = [
 const granuleMetaAccessors = [
   ['OK granule count', 'okCount']
 ];
-
-const parseFileObject = (d) => {
-  const parsed = url.parse(d.uri);
-  return {
-    granuleId: d.granuleId,
-    filename: path.basename(parsed.pathname),
-    bucket: parsed.hostname,
-    path: parsed.href
-  };
-};
 
 class ReconciliationReport extends React.Component {
   constructor () {
@@ -92,6 +83,16 @@ class ReconciliationReport extends React.Component {
     onlyInCumulus = [],
     onlyInCmr = []
   }) {
+    const parseFileObject = (d) => {
+      const parsed = url.parse(d.uri);
+      return {
+        granuleId: d.granuleId,
+        filename: path.basename(parsed.pathname),
+        bucket: parsed.hostname,
+        path: parsed.href
+      };
+    };
+
     const filesInS3 = onlyInS3.map(d => {
       const parsed = url.parse(d);
       return {
@@ -225,9 +226,9 @@ class ReconciliationReport extends React.Component {
           <ReportTable
             data={filesInDynamoDb}
             title={'Files only in DynamoDB'}
-            tableHeader={tableHeaderGranuleFiles}
-            tableRow={tableRowGranuleFile}
-            tableProps={tablePropsGranuleFile}
+            tableHeader={tableHeaderFiles}
+            tableRow={tableRowFile}
+            tableProps={tablePropsFile}
           />
 
           <ReportTable
@@ -235,7 +236,7 @@ class ReconciliationReport extends React.Component {
             title={'Files only in S3'}
             tableHeader={tableHeaderS3Files}
             tableRow={tableRowS3File}
-            tableProps={['filename', 'bucket', 'link']}
+            tableProps={tablePropsS3File}
           />
         </section>
 
@@ -253,17 +254,17 @@ class ReconciliationReport extends React.Component {
           <ReportTable
             data={filesOnlyInCumulus}
             title={'Files only in Cumulus'}
-            tableHeader={tableHeaderGranuleFiles}
-            tableRow={tableRowGranuleFile}
-            tableProps={tablePropsGranuleFile}
+            tableHeader={tableHeaderFiles}
+            tableRow={tableRowFile}
+            tableProps={tablePropsFile}
           />
 
           <ReportTable
             data={filesOnlyInCmr}
             title={'Files only in CMR'}
-            tableHeader={tableHeaderGranuleFiles}
-            tableRow={tableRowGranuleFile}
-            tableProps={tablePropsGranuleFile}
+            tableHeader={tableHeaderFiles}
+            tableRow={tableRowFile}
+            tableProps={tablePropsFile}
           />
         </section>
 
