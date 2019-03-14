@@ -13,7 +13,10 @@ import {
   tableRowS3File,
   tableHeaderGranuleFiles,
   tableRowGranuleFile,
-  tablePropsGranuleFile
+  tablePropsGranuleFile,
+  tableHeaderCollections,
+  tableRowCollection,
+  tablePropsCollection
 } from '../../utils/table-config/reconciliation-reports';
 import SortableTable from '../table/sortable';
 import Metadata from '../table/metadata';
@@ -26,12 +29,12 @@ const reportMetaAccessors = [
   ['Status', 'status']
 ];
 
-const dynamoS3MetaAccessors = [
-  ['OK file count', 'filesInCumulus.okCount']
+const fileMetaAccessors = [
+  ['OK file count', 'okCount']
 ];
 
-const cumulusCmrMetaAccessors = [
-  ['OK file count', 'filesInCumulusCmr.okCount']
+const collectionMetaAccessors = [
+  ['OK collections count', 'okCount']
 ];
 
 const parseFileObject = (d) => {
@@ -88,9 +91,20 @@ class ReconciliationReport extends React.Component {
     let filesOnlyInCumulus = [];
     let filesOnlyInCmr = [];
 
+    let collectionsInCumulus = [];
+    let collectionsInCmr = [];
+
+    let filesInCumulus;
+    let filesInCumulusCmr;
+    let collectionsInCumulusCmr;
+
     if (record && record.data) {
       const report = record.data;
-      const { filesInCumulus, filesInCumulusCmr } = report;
+      ({
+        filesInCumulus,
+        filesInCumulusCmr,
+        collectionsInCumulusCmr
+      } = report);
 
       if (filesInCumulus.onlyInDynamoDb && filesInCumulus.onlyInS3) {
         filesInS3 = filesInCumulus.onlyInS3.map(d => {
@@ -118,6 +132,12 @@ class ReconciliationReport extends React.Component {
             path: `s3://${bucket}${parsed.pathname}`
           };
         });
+      }
+
+      if (collectionsInCumulusCmr.onlyInCumulus && collectionsInCumulusCmr.onlyInCmr) {
+        const getCollectionName = (collectionName) => ({ name: collectionName });
+        collectionsInCumulus = collectionsInCumulusCmr.onlyInCumulus.map(getCollectionName);
+        collectionsInCmr = collectionsInCumulusCmr.onlyInCmr.map(getCollectionName);
       }
     }
 
@@ -150,7 +170,7 @@ class ReconciliationReport extends React.Component {
           </div>
 
           <div className='page__section--small'>
-            <Metadata data={record.data} accessors={dynamoS3MetaAccessors} />
+            <Metadata data={filesInCumulus} accessors={fileMetaAccessors} />
           </div>
 
           <div className='page__section--small'>
@@ -186,7 +206,7 @@ class ReconciliationReport extends React.Component {
           </div>
 
           <div className='page__section--small'>
-            <Metadata data={record.data} accessors={cumulusCmrMetaAccessors} />
+            <Metadata data={filesInCumulusCmr} accessors={fileMetaAccessors} />
           </div>
 
           <div className='page__section--small'>
@@ -210,6 +230,42 @@ class ReconciliationReport extends React.Component {
               header={tableHeaderGranuleFiles}
               row={tableRowGranuleFile}
               props={tablePropsGranuleFile}
+            />
+          </div>
+        </section>
+
+        <section className='page__section'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium heading--shared-content with-description'>
+              Collections
+            </h2>
+          </div>
+
+          <div className='page__section--small'>
+            <Metadata data={collectionsInCumulusCmr} accessors={collectionMetaAccessors} />
+          </div>
+
+          <div className='page__section--small'>
+            <h3 className='heading--small heading--shared-content with-description'>
+              Collections only in Cumulus ({collectionsInCumulus.length})
+            </h3>
+            <SortableTable
+              data={collectionsInCumulus}
+              header={tableHeaderCollections}
+              row={tableRowCollection}
+              props={tablePropsCollection}
+            />
+          </div>
+
+          <div className='page__section--small'>
+            <h3 className='heading--small heading--shared-content with-description'>
+              Collections only in CMR ({collectionsInCmr.length})
+            </h3>
+            <SortableTable
+              data={collectionsInCmr}
+              header={tableHeaderCollections}
+              row={tableRowCollection}
+              props={tablePropsCollection}
             />
           </div>
         </section>
