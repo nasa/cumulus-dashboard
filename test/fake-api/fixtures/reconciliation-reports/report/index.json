@@ -67,11 +67,6 @@
         "URL": "https://cumulus-test-sandbox-public.s3.amazonaws.com/MYD13Q1___006/BRO/BROWSE.MYD13Q1.A7311886.RaRakR.006.2426147011695.1.jpg",
         "Type": "GET DATA",
         "GranuleUR": "MYD13Q1.A7311886.RaRakR.006.2426147011695"
-      },
-      {
-        "URL": "https://example.com/s3credentials",
-        "Type": "GET DATA",
-        "GranuleUR": "MYD13Q1.A7311886.RaRakR.006.2426147011695"
       }
     ]
   }
