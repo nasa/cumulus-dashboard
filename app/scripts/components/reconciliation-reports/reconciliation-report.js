@@ -17,8 +17,7 @@ import { updateInterval } from '../../config';
 
 const metaAccessors = [
   ['Created', 'reportStartTime'],
-  ['Status', 'status'],
-  ['OK file count', 'filesInCumulus.okCount']
+  ['Status', 'status']
 ];
 
 const tableHeaderS3 = [
@@ -81,6 +80,10 @@ class ReconciliationReport extends React.Component {
 
     const record = reconciliationReports.map[reconciliationReportName];
 
+    if (!record || (record.inflight && !record.data)) {
+      return <Loading />;
+    }
+
     let filesInS3 = [];
     let filesInDynamoDb = [];
     if (record && record.data) {
@@ -114,6 +117,10 @@ class ReconciliationReport extends React.Component {
       error = record.data.error;
     }
 
+    const dynamoS3metaAccessors = [
+      ['OK file count', 'filesInCumulus.okCount']
+    ];
+
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -127,35 +134,43 @@ class ReconciliationReport extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Reconciliation report</h2>
           </div>
-          {!record || (record.inflight && !record.data) ? <Loading /> : <Metadata data={record.data} accessors={metaAccessors} />}
+          <Metadata data={record.data} accessors={metaAccessors} />
         </section>
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>
+              DynamoDB vs S3
+            </h2>
+          </div>
+
+          <div className='page__section--small'>
+            <Metadata data={record.data} accessors={dynamoS3metaAccessors} />
+          </div>
+
+          <div className='page__section--small'>
+            <h3 className='heading--small heading--shared-content with-description'>
               Files only in DynamoDB ({filesInDynamoDb.length})
-            </h2>
+            </h3>
+            <SortableTable
+              data={filesInDynamoDb}
+              header={tableHeaderDynamoDb}
+              row={tableRowDyanmoDb}
+              props={['granuleId', 'filename', 'bucket', 'link']}
+            />
           </div>
-          <SortableTable
-            data={filesInDynamoDb}
-            header={tableHeaderDynamoDb}
-            row={tableRowDyanmoDb}
-            props={['granuleId', 'filename', 'bucket', 'link']}
-          />
-        </section>
 
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>
+          <div className='page__section--small'>
+            <h3 className='heading--small heading--shared-content with-description'>
               Files only in S3 ({filesInS3.length})
-            </h2>
+            </h3>
+            <SortableTable
+              data={filesInS3}
+              header={tableHeaderS3}
+              row={tableRowS3}
+              props={['filename', 'bucket', 'link']}
+            />
           </div>
-          <SortableTable
-            data={filesInS3}
-            header={tableHeaderS3}
-            row={tableRowS3}
-            props={['filename', 'bucket', 'link']}
-          />
         </section>
       </div>
     );
