@@ -13,6 +13,10 @@ class ReportTable extends React.Component {
       tableProps
     } = this.props;
 
+    if (!data || !data.length) {
+      return null;
+    }
+
     return (
       <div className='page__section--small'>
         <h3 className='heading--small heading--shared-content with-description'>
