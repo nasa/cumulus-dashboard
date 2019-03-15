@@ -491,3 +491,7 @@ a:active {
 .apiVersionWarning {
   color: $error-red;
 }
+
+.apiVersion, .apiVersionWarning {
+  text-align: center;
+}
