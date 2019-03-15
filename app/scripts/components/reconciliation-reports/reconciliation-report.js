@@ -113,8 +113,8 @@ class ReconciliationReport extends React.Component {
   }
 
   getCollectionsSummary ({
-    onlyInCumulus,
-    onlyInCmr
+    onlyInCumulus = [],
+    onlyInCmr = []
   }) {
     const getCollectionName = (collectionName) => ({ name: collectionName });
     const collectionsInCumulus = onlyInCumulus.map(getCollectionName);
@@ -123,8 +123,8 @@ class ReconciliationReport extends React.Component {
   }
 
   getGranulesSummary ({
-    onlyInCumulus,
-    onlyInCmr
+    onlyInCumulus = [],
+    onlyInCmr = []
   }) {
     const granulesInCumulus = onlyInCumulus;
     const granulesInCmr = onlyInCmr.map((granule) => ({ granuleId: granule.GranuleUR }));
