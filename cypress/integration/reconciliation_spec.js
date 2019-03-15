@@ -50,6 +50,8 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
       cy.contains('.heading--large', 'report-2018-05-20T20:58:38.883Z.json');
 
+      /** Summary **/
+
       cy.contains('dl dd', '2018-06-11T18:52:37.710Z');
       cy.contains('dl dd', 'SUCCESS');
       cy.contains('dl dt', 'Files in DynamoDB and S3')
@@ -65,31 +67,117 @@ describe('Dashboard Reconciliation Reports Page', () => {
         .next('dd')
         .contains('1');
 
-      // Files only in Dynamo section
-      cy.contains('h3', 'Files only in DynamoDB (2)');
-      cy.get('table tbody').first().children().its('length').should('be.eq', 2);
-      cy.get('table tbody').first()
-        .contains('tr td', 'g-123');
-      cy.get('table tbody').first()
-        .contains('tr td', 'key-123.hdf');
-      cy.get('table tbody').first()
-        .contains('tr td', 'some-bucket');
-      cy.get('table tbody').first()
-        .contains('tr td a', 'Link')
-        .should('have.attr', 'href', 's3://some-bucket/path/to/key-123.hdf');
+      /** Files **/
 
-      // Files only in S3 section
-      cy.contains('h3', 'Files only in S3 (2)');
-      cy.get('table tbody').last().children().its('length').should('be.eq', 2);
-      cy.get('table tbody').first()
-        .contains('tr td', 'g-123');
-      cy.get('table tbody').first()
-        .contains('tr td', 'key-123.hdf');
-      cy.get('table tbody').first()
-        .contains('tr td', 'some-bucket');
-      cy.get('table tbody').first()
-        .contains('tr td a', 'Link')
-        .should('have.attr', 'href', 's3://some-bucket/path/to/key-123.hdf');
+      cy.contains('h3', 'Files only in DynamoDB (2)')
+        .next()
+        .find('table tbody')
+        .as('dynamoTable');
+      cy.get('@dynamoTable').find('tr').its('length').should('be.eq', 2);
+      cy.get('@dynamoTable')
+        .children('tr')
+        .first()
+        .within(() => {
+          cy.contains('g-123');
+          cy.contains('key-123.hdf');
+          cy.contains('some-bucket');
+          cy.contains('a', 'Link')
+            .should('have.attr', 'href', 's3://some-bucket/path/to/key-123.hdf');
+        });
+
+      cy.contains('h3', 'Files only in S3 (2)')
+        .next()
+        .find('table tbody')
+        .as('s3Table');
+      cy.get('@s3Table').find('tr').its('length').should('be.eq', 2);
+      cy.get('@s3Table')
+        .children('tr')
+        .first()
+        .within(() => {
+          cy.contains('key-1.hdf');
+          cy.contains('some-bucket');
+          cy.contains('a', 'Link')
+            .should('have.attr', 'href', 's3://some-bucket/path/to/key-1.hdf');
+        });
+
+      cy.contains('h3', 'Files only in Cumulus (1)')
+        .next()
+        .find('table tbody')
+        .as('cumulusFilesTable');
+      cy.get('@cumulusFilesTable').find('tr').its('length').should('be.eq', 1);
+      cy.get('@cumulusFilesTable')
+        .children('tr')
+        .first()
+        .within(() => {
+          cy.contains('granule.001.1234');
+          cy.contains('granule.001.1234.jpg');
+          cy.contains('some-bucket');
+          cy.contains('a', 'Link')
+            .should('have.attr', 'href', 's3://some-bucket/granule__001/granule.001.1234.jpg');
+        });
+
+      cy.contains('h3', 'Files only in CMR (1)')
+        .next()
+        .find('table tbody')
+        .as('cmrFilesTable');
+      cy.get('@cmrFilesTable').find('tr').its('length').should('be.eq', 1);
+      cy.get('@cmrFilesTable')
+        .children('tr')
+        .first()
+        .within(() => {
+          cy.contains('granule.002.5678');
+          cy.contains('granule.002.5678.jpg');
+          cy.contains('some-bucket');
+          cy.contains('a', 'Link')
+            .should('have.attr', 'href', 's3://some-bucket/granule__002/granule.002.5678.jpg');
+        });
+
+      /** Collections **/
+
+      cy.contains('h3', 'Collections only in Cumulus (2)')
+        .next()
+        .find('table tbody')
+        .as('cumulusCollectionsTable');
+      cy.get('@cumulusCollectionsTable').find('tr').its('length').should('be.eq', 2);
+      cy.get('@cumulusCollectionsTable')
+        .within(() => {
+          cy.contains('collection_1');
+          cy.contains('collection_2');
+        });
+
+      cy.contains('h3', 'Collections only in CMR (2)')
+        .next()
+        .find('table tbody')
+        .as('cmrCollectionsTable');
+      cy.get('@cmrCollectionsTable').find('tr').its('length').should('be.eq', 2);
+      cy.get('@cmrCollectionsTable')
+        .within(() => {
+          cy.contains('collection_3');
+          cy.contains('collection_4');
+        });
+
+      /** Granules **/
+
+      cy.contains('h3', 'Granules only in Cumulus (1)')
+        .next()
+        .find('table tbody')
+        .as('cumulusGranulesTable');
+      cy.get('@cumulusGranulesTable').find('tr').its('length').should('be.eq', 1);
+      cy.get('@cumulusGranulesTable')
+        .within(() => {
+          cy.contains('granule.123');
+        });
+
+      cy.contains('h3', 'Granules only in CMR (2)')
+        .next()
+        .find('table tbody')
+        .as('cmrGranulesTable');
+      cy.get('@cmrGranulesTable').find('tr').its('length').should('be.eq', 2);
+      cy.get('@cmrGranulesTable')
+        .within(() => {
+          cy.contains('granule456.001');
+          cy.contains('granule789.001');
+        });
     });
 
     xit('displays the create a report button', () => {
