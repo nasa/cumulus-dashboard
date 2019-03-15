@@ -18,7 +18,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.task('resetState');
     });
 
-    xit('displays a link to view reconciliation reports', () => {
+    it('displays a link to view reconciliation reports', () => {
       cy.visit('/');
 
       cy.contains('nav li a', 'Reconciliation Reports').as('reconciliationReports');
@@ -29,7 +29,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.contains('.heading--large', 'Reconciliation Reports Overview');
     });
 
-    xit('displays a list of reconciliation reports', () => {
+    it('displays a list of reconciliation reports', () => {
       cy.visit('#/reconciliation-reports');
 
       cy.get('table tbody tr').its('length').should('be.eq', 3);
@@ -180,7 +180,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
         });
     });
 
-    xit('displays the create a report button', () => {
+    it('displays the create a report button', () => {
       cy.visit('/#/reconciliation-reports');
 
       cy.contains('button', 'Create a Report')
