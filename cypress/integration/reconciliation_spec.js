@@ -18,7 +18,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.task('resetState');
     });
 
-    it('displays a link to view reconciliation reports', () => {
+    xit('displays a link to view reconciliation reports', () => {
       cy.visit('/');
 
       cy.contains('nav li a', 'Reconciliation Reports').as('reconciliationReports');
@@ -29,7 +29,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.contains('.heading--large', 'Reconciliation Reports Overview');
     });
 
-    it('displays a list of reconciliation reports', () => {
+    xit('displays a list of reconciliation reports', () => {
       cy.visit('#/reconciliation-reports');
 
       cy.get('table tbody tr').its('length').should('be.eq', 3);
@@ -52,10 +52,21 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
       cy.contains('dl dd', '2018-06-11T18:52:37.710Z');
       cy.contains('dl dd', 'SUCCESS');
-      cy.contains('dl dd', '21');
+      cy.contains('dl dt', 'Files in DynamoDB and S3')
+        .next('dd')
+        .contains('21');
+      cy.contains('dl dt', 'Files in Cumulus and CMR')
+        .next('dd')
+        .contains('4');
+      cy.contains('dl dt', 'Collections in Cumulus and CMR')
+        .next('dd')
+        .contains('1');
+      cy.contains('dl dt', 'Granules in Cumulus and CMR')
+        .next('dd')
+        .contains('1');
 
       // Files only in Dynamo section
-      cy.contains('h2', 'Files only in DynamoDB (2)');
+      cy.contains('h3', 'Files only in DynamoDB (2)');
       cy.get('table tbody').first().children().its('length').should('be.eq', 2);
       cy.get('table tbody').first()
         .contains('tr td', 'g-123');
@@ -68,11 +79,20 @@ describe('Dashboard Reconciliation Reports Page', () => {
         .should('have.attr', 'href', 's3://some-bucket/path/to/key-123.hdf');
 
       // Files only in S3 section
-      cy.contains('h2', 'Files only in S3 (2)');
+      cy.contains('h3', 'Files only in S3 (2)');
       cy.get('table tbody').last().children().its('length').should('be.eq', 2);
+      cy.get('table tbody').first()
+        .contains('tr td', 'g-123');
+      cy.get('table tbody').first()
+        .contains('tr td', 'key-123.hdf');
+      cy.get('table tbody').first()
+        .contains('tr td', 'some-bucket');
+      cy.get('table tbody').first()
+        .contains('tr td a', 'Link')
+        .should('have.attr', 'href', 's3://some-bucket/path/to/key-123.hdf');
     });
 
-    it('displays the create a report button', () => {
+    xit('displays the create a report button', () => {
       cy.visit('/#/reconciliation-reports');
 
       cy.contains('button', 'Create a Report')
