@@ -488,10 +488,29 @@ a:active {
   width: 40%;
 }
 
-.apiVersionWarning {
-  color: $error-red;
+.error__report, .report__table {
+  .Collapsible {
+    display: flex;
+    flex-direction: column;
+
+    .Collapsible__trigger {
+      order: 1;
+    }
+  }
 }
 
-.apiVersion, .apiVersionWarning {
+.report__table {
+  .Collapsible__trigger {
+    align-self: flex-start;
+    cursor: pointer;
+    margin: 1em 0;
+  }
+}
+
+.api__summary {
   text-align: center;
+}
+
+.api__warning {
+  color: $error-red;
 }
