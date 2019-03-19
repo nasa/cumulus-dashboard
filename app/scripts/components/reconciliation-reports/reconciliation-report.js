@@ -222,8 +222,24 @@ class ReconciliationReport extends React.Component {
           />
 
           <ReportTable
+            data={granulesInCumulus}
+            title={'Granules only in Cumulus'}
+            tableHeader={tableHeaderGranules}
+            tableRow={tableRowGranule}
+            tableProps={tablePropsGranule}
+          />
+
+          <ReportTable
+            data={granulesInCmr}
+            title={'Granules only in CMR'}
+            tableHeader={tableHeaderGranules}
+            tableRow={tableRowGranule}
+            tableProps={tablePropsGranule}
+          />
+
+          <ReportTable
             data={filesOnlyInCumulus}
-            title={'Files only in Cumulus'}
+            title={'Granule files only in Cumulus'}
             tableHeader={tableHeaderFiles}
             tableRow={tableRowFile}
             tableProps={tablePropsFile}
@@ -231,7 +247,7 @@ class ReconciliationReport extends React.Component {
 
           <ReportTable
             data={filesOnlyInCmr}
-            title={'Files only in CMR'}
+            title={'Granule files only in CMR'}
             tableHeader={tableHeaderFiles}
             tableRow={tableRowFile}
             tableProps={tablePropsFile}
@@ -251,22 +267,6 @@ class ReconciliationReport extends React.Component {
             tableHeader={tableHeaderCollections}
             tableRow={tableRowCollection}
             tableProps={tablePropsCollection}
-          />
-
-          <ReportTable
-            data={granulesInCumulus}
-            title={'Granules only in Cumulus'}
-            tableHeader={tableHeaderGranules}
-            tableRow={tableRowGranule}
-            tableProps={tablePropsGranule}
-          />
-
-          <ReportTable
-            data={granulesInCmr}
-            title={'Granules only in CMR'}
-            tableHeader={tableHeaderGranules}
-            tableRow={tableRowGranule}
-            tableProps={tablePropsGranule}
           />
         </section>
       </div>
