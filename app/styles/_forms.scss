@@ -398,6 +398,9 @@ select {
     margin-bottom: 0;
     color: $error-text-red;
   }
+}
+
+.error__report, .report__table {
   .Collapsible {
     display: flex;
     flex-direction: column;
@@ -405,6 +408,14 @@ select {
     .Collapsible__trigger {
       order: 1;
     }
+  }
+}
+
+.report__table {
+  .Collapsible__trigger {
+    align-self: flex-start;
+    cursor: pointer;
+    margin: 1em 0;
   }
 }
 
