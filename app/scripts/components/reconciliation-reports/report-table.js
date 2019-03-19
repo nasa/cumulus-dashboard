@@ -33,7 +33,7 @@ class ReportTable extends React.Component {
       reportTable = (
         <Collapsible
           trigger={`Show table (${data.length} rows)`}
-          triggerWhenOpen="Hide table"
+          triggerWhenOpen='Hide table'
           triggerClassName={'button button--green button--small'}
           triggerOpenedClassName={'button button--green button--small'}
         >
