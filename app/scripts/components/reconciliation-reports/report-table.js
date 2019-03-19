@@ -65,7 +65,7 @@ ReportTable.propTypes = {
 
 ReportTable.defaultProps = {
   collapsible: true,
-  collapseThreshold: 1
+  collapseThreshold: 10
 };
 
 export default ReportTable;
