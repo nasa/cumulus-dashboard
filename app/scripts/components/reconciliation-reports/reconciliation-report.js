@@ -35,9 +35,9 @@ const reportMetaAccessors = [
   ['Created', 'reportStartTime'],
   ['Status', 'status'],
   ['Files in DynamoDB and S3', 'filesInCumulus.okCount'],
-  ['Files in Cumulus and CMR', 'filesInCumulusCmr.okCount'],
-  ['Collections in Cumulus and CMR', 'collectionsInCumulusCmr.okCount'],
-  ['Granules in Cumulus and CMR', 'granulesInCumulusCmr.okCount']
+  ['Granules in Cumulus and CMR', 'granulesInCumulusCmr.okCount'],
+  ['Granule files in Cumulus and CMR', 'filesInCumulusCmr.okCount'],
+  ['Collections in Cumulus and CMR', 'collectionsInCumulusCmr.okCount']
 ];
 
 const parseFileObject = (d) => {
