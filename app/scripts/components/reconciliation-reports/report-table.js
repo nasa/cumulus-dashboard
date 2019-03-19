@@ -54,6 +54,8 @@ class ReportTable extends React.Component {
 }
 
 ReportTable.propTypes = {
+  collapsible: PropTypes.bool,
+  collapseThreshold: PropTypes.number,
   data: PropTypes.array,
   title: PropTypes.string,
   tableHeader: PropTypes.array,
