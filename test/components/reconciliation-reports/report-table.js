@@ -3,6 +3,7 @@
 import test from 'ava';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
+import Collapsible from 'react-collapsible';
 import { shallow, configure } from 'enzyme';
 
 import ReportTable from '../../../app/scripts/components/reconciliation-reports/report-table';
@@ -82,4 +83,79 @@ test('render basic table', function (t) {
   t.true(dataRow.children('td').at(3).contains(
     <a href="s3://some-bucket/filename.txt" target="_blank">Link</a>
   ));
+});
+
+test('render buttons to show/hide table when configured', function (t) {
+  const data = [
+    ...tableData,
+    ...tableData,
+    ...tableData
+  ];
+
+  const report = shallow(
+    <ReportTable
+      data={data}
+      title={'Test table'}
+      tableHeader={tableHeader}
+      tableRow={tableRow}
+      tableProps={tableProps}
+      collapseThreshold={2}
+    />
+  );
+
+  const collapsibleTable = report.find(Collapsible);
+  t.true(collapsibleTable.exists());
+
+  const collapsibleTrigger = collapsibleTable.dive().find('.Collapsible__trigger');
+  t.true(collapsibleTrigger.exists());
+  t.is(collapsibleTrigger.text(), 'Show table (3 rows)');
+});
+
+test('do not render buttons to show/hide table when data length is less than threshold', function (t) {
+  const data = [
+    ...tableData,
+    ...tableData,
+    ...tableData
+  ];
+
+  const report = shallow(
+    <ReportTable
+      data={data}
+      title={'Test table'}
+      tableHeader={tableHeader}
+      tableRow={tableRow}
+      tableProps={tableProps}
+      collapseThreshold={10}
+    />
+  );
+
+  const collapsibleTable = report.find(Collapsible);
+  t.false(collapsibleTable.exists());
+  const table = report.find(SortableTable);
+  t.true(table.exists());
+});
+
+test('do not render buttons to show/hide table when disabled', function (t) {
+  const data = [
+    ...tableData,
+    ...tableData,
+    ...tableData
+  ];
+
+  const report = shallow(
+    <ReportTable
+      data={data}
+      title={'Test table'}
+      tableHeader={tableHeader}
+      tableRow={tableRow}
+      tableProps={tableProps}
+      collapsible={false}
+      collapseThreshold={2}
+    />
+  );
+
+  const collapsibleTable = report.find(Collapsible);
+  t.false(collapsibleTable.exists());
+  const table = report.find(SortableTable);
+  t.true(table.exists());
 });
