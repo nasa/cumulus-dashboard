@@ -172,7 +172,7 @@ class ReconciliationReport extends React.Component {
       ({
         filesInS3,
         filesInDynamoDb
-      } = this.getFilesSummary(filesInCumulus, filesInCumulusCmr));
+      } = this.getFilesSummary(filesInCumulus));
 
       ({
         granulesInCumulus,
@@ -182,7 +182,7 @@ class ReconciliationReport extends React.Component {
       ({
         granuleFilesOnlyInCumulus,
         granuleFilesOnlyInCmr
-      } = this.getGranuleFilesSummary(filesInCumulus, filesInCumulusCmr));
+      } = this.getGranuleFilesSummary(filesInCumulusCmr));
 
       ({
         collectionsInCumulus,
