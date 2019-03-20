@@ -40,7 +40,7 @@ export default function reducer (state = initialState, action) {
     case PDR:
       set(state, ['map', id, 'inflight'], false);
       set(state, ['map', id, 'data'], assignDate(data));
-      // https://github.com/cumulus-nasa/cumulus-dashboard/issues/284
+      // https://github.com/nasa/cumulus-dashboard/issues/284
       del(state, ['deleted', id]);
       break;
     case PDR_INFLIGHT:
