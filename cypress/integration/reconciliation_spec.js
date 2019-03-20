@@ -57,13 +57,13 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.contains('dl dt', 'Files in DynamoDB and S3')
         .next('dd')
         .contains('21');
-      cy.contains('dl dt', 'Files in Cumulus and CMR')
+      cy.contains('dl dt', 'Granules in Cumulus and CMR')
+        .next('dd')
+        .contains('1');
+      cy.contains('dl dt', 'Granule files in Cumulus and CMR')
         .next('dd')
         .contains('4');
       cy.contains('dl dt', 'Collections in Cumulus and CMR')
-        .next('dd')
-        .contains('1');
-      cy.contains('dl dt', 'Granules in Cumulus and CMR')
         .next('dd')
         .contains('1');
 
@@ -100,12 +100,37 @@ describe('Dashboard Reconciliation Reports Page', () => {
             .should('have.attr', 'href', 's3://some-bucket/path/to/key-1.hdf');
         });
 
-      cy.contains('h3', 'Files only in Cumulus (1)')
+     /** Granules **/
+
+      cy.contains('h3', 'Granules only in Cumulus (1)')
         .next()
         .find('table tbody')
-        .as('cumulusFilesTable');
-      cy.get('@cumulusFilesTable').find('tr').its('length').should('be.eq', 1);
-      cy.get('@cumulusFilesTable')
+        .as('cumulusGranulesTable');
+      cy.get('@cumulusGranulesTable').find('tr').its('length').should('be.eq', 1);
+      cy.get('@cumulusGranulesTable')
+        .within(() => {
+          cy.contains('granule.123');
+        });
+
+      cy.contains('h3', 'Granules only in CMR (2)')
+        .next()
+        .find('table tbody')
+        .as('cmrGranulesTable');
+      cy.get('@cmrGranulesTable').find('tr').its('length').should('be.eq', 2);
+      cy.get('@cmrGranulesTable')
+        .within(() => {
+          cy.contains('granule456.001');
+          cy.contains('granule789.001');
+        });
+
+      /** Granule files **/
+
+      cy.contains('h3', 'Granule files only in Cumulus (1)')
+        .next()
+        .find('table tbody')
+        .as('cumulusGranulesFilesTable');
+      cy.get('@cumulusGranulesFilesTable').find('tr').its('length').should('be.eq', 1);
+      cy.get('@cumulusGranulesFilesTable')
         .children('tr')
         .first()
         .within(() => {
@@ -116,12 +141,12 @@ describe('Dashboard Reconciliation Reports Page', () => {
             .should('have.attr', 'href', 's3://some-bucket/granule__001/granule.001.1234.jpg');
         });
 
-      cy.contains('h3', 'Files only in CMR (1)')
+      cy.contains('h3', 'Granule files only in CMR (1)')
         .next()
         .find('table tbody')
-        .as('cmrFilesTable');
-      cy.get('@cmrFilesTable').find('tr').its('length').should('be.eq', 1);
-      cy.get('@cmrFilesTable')
+        .as('cmrGranulesFilesTable');
+      cy.get('@cmrGranulesFilesTable').find('tr').its('length').should('be.eq', 1);
+      cy.get('@cmrGranulesFilesTable')
         .children('tr')
         .first()
         .within(() => {
@@ -154,29 +179,6 @@ describe('Dashboard Reconciliation Reports Page', () => {
         .within(() => {
           cy.contains('collection_3');
           cy.contains('collection_4');
-        });
-
-      /** Granules **/
-
-      cy.contains('h3', 'Granules only in Cumulus (1)')
-        .next()
-        .find('table tbody')
-        .as('cumulusGranulesTable');
-      cy.get('@cumulusGranulesTable').find('tr').its('length').should('be.eq', 1);
-      cy.get('@cumulusGranulesTable')
-        .within(() => {
-          cy.contains('granule.123');
-        });
-
-      cy.contains('h3', 'Granules only in CMR (2)')
-        .next()
-        .find('table tbody')
-        .as('cmrGranulesTable');
-      cy.get('@cmrGranulesTable').find('tr').its('length').should('be.eq', 2);
-      cy.get('@cmrGranulesTable')
-        .within(() => {
-          cy.contains('granule456.001');
-          cy.contains('granule789.001');
         });
     });
 
