@@ -1,0 +1,72 @@
+{
+  "reportStartTime": "2018-06-11T18:52:37.710Z",
+  "reportEndTime": "2018-06-11T18:52:39.893Z",
+  "status": "SUCCESS",
+  "error": null,
+  "filesInCumulus": {
+    "okCount": 21,
+    "onlyInS3": [
+      "s3://some-bucket/path/to/key-1.hdf",
+      "s3://some-bucket/path/to/key-2.hdf"
+    ],
+    "onlyInDynamoDb": [
+      {
+        "uri": "s3://some-bucket/path/to/key-123.hdf",
+        "granuleId": "g-123"
+      },
+      {
+        "uri": "s3://some-bucket/path/to/key-456.hdf",
+        "granuleId": "g-456"
+      }
+    ]
+  },
+  "collectionsInCumulusCmr": {
+    "okCount": 1,
+    "onlyInCumulus": [
+      "collection_1",
+      "collection_2"
+    ],
+    "onlyInCmr": [
+      "collection_3",
+      "collection_4"
+    ]
+  },
+  "granulesInCumulusCmr": {
+    "okCount": 1,
+    "onlyInCumulus": [
+      {
+        "granuleId": "granule.123",
+        "collectionId": "granule___001"
+      }
+    ],
+    "onlyInCmr": [
+      {
+        "GranuleUR": "granule456.001",
+        "ShortName": "granule456",
+        "Version": "001"
+      },
+      {
+        "GranuleUR": "granule789.001",
+        "ShortName": "granule789",
+        "Version": "001"
+      }
+    ]
+  },
+  "filesInCumulusCmr": {
+    "okCount": 4,
+    "onlyInCumulus": [
+      {
+        "fileName": "granule.001.1234.jpg",
+        "uri": "s3://some-bucket/granule__001/granule.001.1234.jpg",
+        "granuleId": "granule.001.1234"
+      }
+    ],
+    "onlyInCmr": [
+      {
+        "URL": "https://some-bucket.s3.amazonaws.com/granule__002/granule.002.5678.jpg",
+        "Type": "GET DATA",
+        "GranuleUR": "granule.002.5678"
+      }
+    ]
+  }
+}

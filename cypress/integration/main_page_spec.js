@@ -77,7 +77,7 @@ describe('Dashboard Home Page', () => {
           payload: { versionNumber: apiVersionNumber }
         });
 
-        cy.get('h5[class=apiVersion]').should((apiVersionWrapper) => {
+        cy.get('h5[class=api__version]').should((apiVersionWrapper) => {
           expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
         });
       });
