@@ -6,9 +6,9 @@ Code to generate and deploy the dashboard for the Cumulus API.
 
 ## Documentation
 
-- [Usage](https://github.com/cumulus-nasa/cumulus-dashboard/blob/master/USAGE.md)
-- [Development Guide](https://github.com/cumulus-nasa/cumulus-dashboard/blob/master/DEVELOPMENT.md)
-- [Technical documentation on tables](https://github.com/cumulus-nasa/cumulus-dashboard/blob/master/TABLES.md)
+- [Usage](https://github.com/nasa/cumulus-dashboard/blob/master/USAGE.md)
+- [Development Guide](https://github.com/nasa/cumulus-dashboard/blob/master/DEVELOPMENT.md)
+- [Technical documentation on tables](https://github.com/nasa/cumulus-dashboard/blob/master/TABLES.md)
 
 ## Wireframes and mocks
 
@@ -59,7 +59,7 @@ npm install -g yarn
 To run the dashboard locally:
 
 ```bash
-git clone https://github.com/cumulus-nasa/cumulus-dashboard
+git clone https://github.com/nasa/cumulus-dashboard
 cd cumulus-dashboard
 nvm use
 yarn install
