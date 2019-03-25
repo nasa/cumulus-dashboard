@@ -100,6 +100,30 @@ describe('Dashboard Reconciliation Reports Page', () => {
             .should('have.attr', 'href', 's3://some-bucket/path/to/key-1.hdf');
         });
 
+      /** Collections **/
+
+      cy.contains('h3', 'Collections only in Cumulus (2)')
+        .next()
+        .find('table tbody')
+        .as('cumulusCollectionsTable');
+      cy.get('@cumulusCollectionsTable').find('tr').its('length').should('be.eq', 2);
+      cy.get('@cumulusCollectionsTable')
+        .within(() => {
+          cy.contains('collection_1');
+          cy.contains('collection_2');
+        });
+
+      cy.contains('h3', 'Collections only in CMR (2)')
+        .next()
+        .find('table tbody')
+        .as('cmrCollectionsTable');
+      cy.get('@cmrCollectionsTable').find('tr').its('length').should('be.eq', 2);
+      cy.get('@cmrCollectionsTable')
+        .within(() => {
+          cy.contains('collection_3');
+          cy.contains('collection_4');
+        });
+
      /** Granules **/
 
       cy.contains('h3', 'Granules only in Cumulus (1)')
@@ -155,30 +179,6 @@ describe('Dashboard Reconciliation Reports Page', () => {
           cy.contains('some-bucket');
           cy.contains('a', 'Link')
             .should('have.attr', 'href', 's3://some-bucket/granule__002/granule.002.5678.jpg');
-        });
-
-      /** Collections **/
-
-      cy.contains('h3', 'Collections only in Cumulus (2)')
-        .next()
-        .find('table tbody')
-        .as('cumulusCollectionsTable');
-      cy.get('@cumulusCollectionsTable').find('tr').its('length').should('be.eq', 2);
-      cy.get('@cumulusCollectionsTable')
-        .within(() => {
-          cy.contains('collection_1');
-          cy.contains('collection_2');
-        });
-
-      cy.contains('h3', 'Collections only in CMR (2)')
-        .next()
-        .find('table tbody')
-        .as('cmrCollectionsTable');
-      cy.get('@cmrCollectionsTable').find('tr').its('length').should('be.eq', 2);
-      cy.get('@cmrCollectionsTable')
-        .within(() => {
-          cy.contains('collection_3');
-          cy.contains('collection_4');
         });
     });
 
