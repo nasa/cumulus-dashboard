@@ -35,9 +35,9 @@ const reportMetaAccessors = [
   ['Created', 'reportStartTime'],
   ['Status', 'status'],
   ['Files in DynamoDB and S3', 'filesInCumulus.okCount'],
+  ['Collections in Cumulus and CMR', 'collectionsInCumulusCmr.okCount'],
   ['Granules in Cumulus and CMR', 'granulesInCumulusCmr.okCount'],
-  ['Granule files in Cumulus and CMR', 'filesInCumulusCmr.okCount'],
-  ['Collections in Cumulus and CMR', 'collectionsInCumulusCmr.okCount']
+  ['Granule files in Cumulus and CMR', 'filesInCumulusCmr.okCount']
 ];
 
 const parseFileObject = (d) => {
@@ -96,6 +96,16 @@ class ReconciliationReport extends React.Component {
     return { filesInS3, filesInDynamoDb };
   }
 
+  getCollectionsSummary ({
+    onlyInCumulus = [],
+    onlyInCmr = []
+  }) {
+    const getCollectionName = (collectionName) => ({ name: collectionName });
+    const collectionsInCumulus = onlyInCumulus.map(getCollectionName);
+    const collectionsInCmr = onlyInCmr.map(getCollectionName);
+    return { collectionsInCumulus, collectionsInCmr };
+  }
+
   getGranulesSummary ({
     onlyInCumulus = [],
     onlyInCmr = []
@@ -123,16 +133,6 @@ class ReconciliationReport extends React.Component {
     });
 
     return { granuleFilesOnlyInCumulus, granuleFilesOnlyInCmr };
-  }
-
-  getCollectionsSummary ({
-    onlyInCumulus = [],
-    onlyInCmr = []
-  }) {
-    const getCollectionName = (collectionName) => ({ name: collectionName });
-    const collectionsInCumulus = onlyInCumulus.map(getCollectionName);
-    const collectionsInCmr = onlyInCmr.map(getCollectionName);
-    return { collectionsInCumulus, collectionsInCmr };
   }
 
   render () {
@@ -175,6 +175,11 @@ class ReconciliationReport extends React.Component {
       } = this.getFilesSummary(filesInCumulus));
 
       ({
+        collectionsInCumulus,
+        collectionsInCmr
+      } = this.getCollectionsSummary(collectionsInCumulusCmr));
+
+      ({
         granulesInCumulus,
         granulesInCmr
       } = this.getGranulesSummary(granulesInCumulusCmr));
@@ -183,11 +188,6 @@ class ReconciliationReport extends React.Component {
         granuleFilesOnlyInCumulus,
         granuleFilesOnlyInCmr
       } = this.getGranuleFilesSummary(filesInCumulusCmr));
-
-      ({
-        collectionsInCumulus,
-        collectionsInCmr
-      } = this.getCollectionsSummary(collectionsInCumulusCmr));
     }
 
     let error;
@@ -229,6 +229,22 @@ class ReconciliationReport extends React.Component {
           />
 
           <ReportTable
+            data={collectionsInCumulus}
+            title={'Collections only in Cumulus'}
+            tableHeader={tableHeaderCollections}
+            tableRow={tableRowCollection}
+            tableProps={tablePropsCollection}
+          />
+
+          <ReportTable
+            data={collectionsInCmr}
+            title={'Collections only in CMR'}
+            tableHeader={tableHeaderCollections}
+            tableRow={tableRowCollection}
+            tableProps={tablePropsCollection}
+          />
+
+          <ReportTable
             data={granulesInCumulus}
             title={'Granules only in Cumulus'}
             tableHeader={tableHeaderGranules}
@@ -258,22 +274,6 @@ class ReconciliationReport extends React.Component {
             tableHeader={tableHeaderFiles}
             tableRow={tableRowFile}
             tableProps={tablePropsFile}
-          />
-
-          <ReportTable
-            data={collectionsInCumulus}
-            title={'Collections only in Cumulus'}
-            tableHeader={tableHeaderCollections}
-            tableRow={tableRowCollection}
-            tableProps={tablePropsCollection}
-          />
-
-          <ReportTable
-            data={collectionsInCmr}
-            title={'Collections only in CMR'}
-            tableHeader={tableHeaderCollections}
-            tableRow={tableRowCollection}
-            tableProps={tablePropsCollection}
           />
         </section>
       </div>
