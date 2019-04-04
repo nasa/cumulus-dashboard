@@ -17,11 +17,14 @@ test('Cumulus API Version is not shown on the dashboard when not logged in', fun
     isCompatible: true
   };
 
-  const footerWrapper = shallow(<Footer
-    api={api}
-    apiVersion={apiVersion}/>);
+  const footerWrapper = shallow(
+    <Footer
+      api={api}
+      apiVersion={apiVersion}
+    />
+  );
 
-  t.false(footerWrapper.exists('apiVersion'));
+  t.false(footerWrapper.exists('.api__version'));
 });
 
 test('Cumulus API Version is shown on the dashboard', function (t) {
@@ -32,13 +35,16 @@ test('Cumulus API Version is shown on the dashboard', function (t) {
     isCompatible: true
   };
 
-  const footerWrapper = shallow(<Footer
-    api={api}
-    apiVersion={apiVersion}/>);
+  const footerWrapper = shallow(
+    <Footer
+      api={api}
+      apiVersion={apiVersion}
+    />
+  );
 
-  const apiVersionNumber = footerWrapper.find('[className="apiVersion"]');
+  const apiVersionNumber = footerWrapper.find('[className="api__version"]');
   t.is(`Cumulus API Version: ${apiVersion.versionNumber}`, apiVersionNumber.text());
-  const hasApiWarning = footerWrapper.hasClass('apiVersionWarning');
+  const hasApiWarning = footerWrapper.hasClass('api__warning');
   t.false(hasApiWarning);
 });
 
@@ -50,12 +56,15 @@ test('Warning is shown when Cumulus API Version is not compatible with dashboard
     isCompatible: false
   };
 
-  const footerWrapper = shallow(<Footer
-    api={api}
-    apiVersion={apiVersion}/>);
+  const footerWrapper = shallow(
+    <Footer
+      api={api}
+      apiVersion={apiVersion}
+    />
+  );
 
-  const apiWarning = footerWrapper.find('[className="apiVersionWarning"]');
-  const hasApiWarning = apiWarning.hasClass('apiVersionWarning');
+  const apiWarning = footerWrapper.find('[className="api__warning"]');
+  const hasApiWarning = apiWarning.hasClass('api__warning');
   t.true(hasApiWarning);
   t.is(`Warning: ${apiVersion.warning}`, apiWarning.text());
 });
