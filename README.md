@@ -19,7 +19,7 @@ Code to generate and deploy the dashboard for the Cumulus API.
 
 The dashboard is populated from the Cumulus API. The dashboard has to point to a working version of the Cumulus API before it is installed and built.
 
-The information needed to configure the dashboard are stored at `app/scripts/config/config.js`.
+The information needed to configure the dashboard is stored at `app/scripts/config/config.js`.
 
 The following Environment Variables override the default values in `config.js`:
 
@@ -68,7 +68,7 @@ yarn run serve
 
 ## Building a Specific Dashboard Version
 
-Cumulus-dashboard versions are distributed using tags in github. You can pull a specific version in the following manner:
+Cumulus-dashboard versions are distributed using tags in GitHub. You can pull a specific version in the following manner:
 
 ```bash
 git clone https://github.com/cumulus-nasa/cumulus-dashboard
@@ -156,7 +156,7 @@ When changes are ready to be released, the version number must be updated in `pa
 
 Update the CHANGELOG.md. Put a header under the 'Unreleased' section with the new version number and the date.
 
-Add a link reference for the github "compare" view at the bottom of the CHANGELOG.md, following the existing pattern. This link reference should create a link in the CHANGELOG's release header to changes in the corresponding release.
+Add a link reference for the GitHub "compare" view at the bottom of the CHANGELOG.md, following the existing pattern. This link reference should create a link in the CHANGELOG's release header to changes in the corresponding release.
 
 ### 5. Create a pull request against the master branch
 
@@ -174,6 +174,6 @@ $ git tag -a v1.x.x -m "Release 1.x.x"
 $ git push origin v1.x.x
 ```
 
-### 7. Add the release to Github
+### 7. Add the release to GitHub
 
-Follow the [Github documentation to create a new release](https://help.github.com/articles/creating-releases/) for the dashboard using the tag that you just pushed. Make sure to use the content from the CHANGELOG for this release as the description of the release on Github.
+Follow the [Github documentation to create a new release](https://help.github.com/articles/creating-releases/) for the dashboard using the tag that you just pushed. Make sure to use the content from the CHANGELOG for this release as the description of the release on GitHub.
