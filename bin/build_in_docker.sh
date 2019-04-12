@@ -33,7 +33,11 @@ rsync -av \
   cd /build
   npm install -g yarn
   yarn install
-  APIROOT=$APIROOT yarn run build
+  APIROOT=$APIROOT \
+    DAAC_NAME=$DAAC_NAME \
+    STAGE=$STAGE \
+    HIDE_PDR=$HIDE_PDR \
+    LABELS=$LABELS yarn run build
 
   rsync -av ./dist/ /dist/
   chown -R "${DOCKER_UID}:${DOCKER_GID}" /dist/
@@ -47,5 +51,9 @@ docker run \
   --volume "${DIST}:/dist" \
   --volume "$(pwd):/cumulus-dashboard:ro" \
   --env APIROOT=$APIROOT \
+  --env DAAC_NAME=$DAAC_NAME \
+  --env STAGE=$STAGE \
+  --env HIDE_PDR=$HIDE_PDR \
+  --env LABELS=$LABELS \
   node:8-slim \
   /cumulus-dashboard/tmp/script.sh
