@@ -1,9 +1,5 @@
 #!/bin/sh
 
-
-# echo $APIROOT;
-# exit;
-
 set -evx
 
 DIST="$(pwd)/dist"
@@ -48,8 +44,8 @@ chmod +x tmp/script.sh
 echo "Building to $DIST"
 docker run \
   --rm \
-  -e APIROOT=$APIROOT
   --volume "${DIST}:/dist" \
   --volume "$(pwd):/cumulus-dashboard:ro" \
+  --env APIROOT=$APIROOT \
   node:8-slim \
   /cumulus-dashboard/tmp/script.sh
