@@ -31,12 +31,6 @@ The following environment variables override the default values in `config.js`:
 | LABELS | gitc or daac localization (defaults to daac)
 | APIROOT | the API URL. This must be set as it defaults to example.com
 
-**NOTE**: Only the `APIROOT` environment variable is required when building or running the dashboard, but any of the above environment variables can be specified. For example:
-
-```bash
-  DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com yarn run serve
-```
-
 ## Building or running locally
 
 The dashboard uses node v8.11. To build/run the dashboard on your local machine using node v8.11, install [nvm](https://github.com/creationix/nvm) and run `nvm use`.
@@ -55,8 +49,10 @@ The dashboard uses node v8.11. To build/run the dashboard on your local machine 
 The Cumulus Dashboard can be built inside of a Docker container, without needing to install any local dependencies.
 
 ```bash
-  $ APIROOT=http://myapi.com ./bin/build_in_docker.sh
+  $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com ./bin/build_in_docker.sh
 ```
+
+**NOTE**: Only the `APIROOT` environment variable is required.
 
 The compiled files will be placed in the `dist` directory.
 
@@ -68,6 +64,8 @@ To build the dashboard:
   $ nvm use
   $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com yarn run build
 ```
+
+**NOTE**: Only the `APIROOT` environment variable is required.
 
 The compiled files will be placed in the `dist` directory.
 
