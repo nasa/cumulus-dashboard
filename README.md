@@ -32,15 +32,18 @@ The following Environment Variables override the default values in `config.js`:
 | APIROOT | the API URL. This must be set as it defaults to example.com
 | minCompatibleApiVersion | A minimum compatible Cumulus Api version string `'a.b.c'`
 
-     $ DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com yarn run serve
+```bash
+  DAAC_NAME=LPDAAC STAGE=dev HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com yarn run serve
+```
 
 ## Building in Docker
 
 The Cumulus Dashboard can be built inside of a Docker container, without needing to install any local dependencies.
 
 Example of building for the "production" environment:
-```
-$ ./bin/build_in_docker production
+
+```bash
+  $ APIROOT=http://localhost:5001 ./bin/build_in_docker.sh production
 ```
 
 The compiled files will be placed in the `dist` directory.
@@ -51,19 +54,19 @@ The dashboard uses node v8.11. To run the dashboard using node v8.11, install [n
 
 `yarn` is required to install the correct dependencies for the dashboard. To install `yarn`:
 
-```
-nvm use
-npm install -g yarn
+```bash
+  nvm use
+  npm install -g yarn
 ```
 
 To run the dashboard locally:
 
 ```bash
-git clone https://github.com/nasa/cumulus-dashboard
-cd cumulus-dashboard
-nvm use
-yarn install
-yarn run serve
+  git clone https://github.com/nasa/cumulus-dashboard
+  cd cumulus-dashboard
+  nvm use
+  yarn install
+  yarn run serve
 ```
 
 ## Building a Specific Dashboard Version
@@ -71,38 +74,46 @@ yarn run serve
 Cumulus-dashboard versions are distributed using tags in GitHub. You can pull a specific version in the following manner:
 
 ```bash
-git clone https://github.com/cumulus-nasa/cumulus-dashboard
-cd cumulus-dashboard
-git fetch origin ${tagNumber}:refs/tags/${tagNumber}
-git checkout ${tagNumber}
-nvm use
-npm install
-npm run serve
+  git clone https://github.com/cumulus-nasa/cumulus-dashboard
+  cd cumulus-dashboard
+  git fetch origin ${tagNumber}:refs/tags/${tagNumber}
+  git checkout ${tagNumber}
+  nvm use
+  yarn install
+  yarn run serve
 ```
 
 ## Fake API server
 
 For development and testing purposes, you can use a fake API server provided with the dashboard. To use the fake API server, run `node fake-api.js` in a separate terminal session, then launch the dashboard with:
 
-     $ APIROOT=http://localhost:5001 yarn run serve
+```bash
+  $ APIROOT=http://localhost:5001 yarn run serve
+```
 
 ## Tests
 
 ### Unit Tests
 
-     $ yarn run test
+```bash
+  $ yarn run test
+```
 
 ## Integration & Validation Tests
 
 For the integration tests to work, you have to launch the fake API and the dashboard first. Run the following commands in separate terminal sessions:
 
-     $ node fake-api.js
-     $ APIROOT=http://localhost:5001 yarn run serve
+```bash
+  $ node fake-api.js
+  $ APIROOT=http://localhost:5001 yarn run serve
+```
 
 Run the test suite in another terminal:
 
-     $ yarn run validation
-     $ yarn run cypress
+```bash
+  $ yarn run validation
+  $ yarn run cypress
+```
 
 When the cypress editor opens, click on `run all specs`.
 
@@ -110,11 +121,15 @@ When the cypress editor opens, click on `run all specs`.
 
 First build the site
 
-     $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com yarn run build
+```bash
+  $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com yarn run build
+```
 
 Then deploy the `dist` folder
 
-     $ aws s3 sync dist s3://my-bucket-to-be-used --acl public-read
+```bash
+  $ aws s3 sync dist s3://my-bucket-to-be-used --acl public-read
+```
 
 ## Running locally in docker
 
@@ -126,10 +141,11 @@ The script takes one optional parameter, the tag that you would like to apply to
 the generated image.
 
 Example of building and running the project in Docker
-```
-$ ./bin/build_docker_image.sh cumulus-dashboard:production-1
-...
-$ docker run -e PORT=8181 -p 8181:8181 cumulus-dashboard:production-1
+
+```bash
+  $ ./bin/build_docker_image.sh cumulus-dashboard:production-1
+  ...
+  $ docker run -e PORT=8181 -p 8181:8181 cumulus-dashboard:production-1
 ```
 
 In this example, the dashboard would be available at http://localhost:8181/
@@ -168,10 +184,10 @@ Push a new release tag to Github. The tag should be in the format `v1.2.3`, wher
 
 Create and push a new git tag:
 
-```
-$ git checkout master
-$ git tag -a v1.x.x -m "Release 1.x.x"
-$ git push origin v1.x.x
+```bash
+  $ git checkout master
+  $ git tag -a v1.x.x -m "Release 1.x.x"
+  $ git push origin v1.x.x
 ```
 
 ### 7. Add the release to GitHub
