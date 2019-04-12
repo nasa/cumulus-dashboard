@@ -129,6 +129,7 @@ In this example, the dashboard would be available at http://localhost:8181/.
 First build the site
 
 ```bash
+  $ nvm use
   $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com yarn run build
 ```
 
