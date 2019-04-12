@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Updated to `gulp-sass@^3` so Python build of `node-sass` library is not required. Removed unnecessary direct dependency on `node-sass` package.
 - Updates to `./bin/build_in_docker.sh` (Fixes #562):
   - Use `yarn` instead of `npm`.
+  - Updated script to run in `node:8-slim` Docker image instead of `node:slim`.
   - Added ability to specify all environment variables for configuring dashboard when building via `./bin/build_in_docker.sh`.
   - Removed install of unnecessary system packages.
 
