@@ -18,9 +18,6 @@ set -evx
 apt-get update
 
 apt-get install -y \
-  g++ \
-  make \
-  python \
   rsync
 
 mkdir /build
@@ -34,8 +31,13 @@ rsync -av \
   set -evx
 
   cd /build
-  npm install
-  ./node_modules/.bin/gulp
+  npm install -g yarn
+  yarn install
+  APIROOT=$APIROOT \
+    DAAC_NAME=$DAAC_NAME \
+    STAGE=$STAGE \
+    HIDE_PDR=$HIDE_PDR \
+    LABELS=$LABELS yarn run build
 
   rsync -av ./dist/ /dist/
   chown -R "${DOCKER_UID}:${DOCKER_GID}" /dist/
@@ -48,4 +50,10 @@ docker run \
   --rm \
   --volume "${DIST}:/dist" \
   --volume "$(pwd):/cumulus-dashboard:ro" \
-  node:slim /cumulus-dashboard/tmp/script.sh
+  --env APIROOT=$APIROOT \
+  --env DAAC_NAME=$DAAC_NAME \
+  --env STAGE=$STAGE \
+  --env HIDE_PDR=$HIDE_PDR \
+  --env LABELS=$LABELS \
+  node:8-slim \
+  /cumulus-dashboard/tmp/script.sh
