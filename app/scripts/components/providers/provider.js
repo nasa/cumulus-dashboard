@@ -23,7 +23,6 @@ import AsyncCommands from '../form/dropdown-async-command';
 import ErrorReport from '../errors/report';
 import Metadata from '../table/metadata';
 import { updateInterval } from '../../config';
-import { strings } from '../locale';
 
 const metaAccessors = [
   ['Created', 'createdAt', fromNow],
