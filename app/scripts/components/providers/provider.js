@@ -97,8 +97,6 @@ class ProviderOverview extends React.Component {
       return <ErrorReport report={record.error} truncate={true} />;
     }
     const provider = record.data;
-    const associatedCollections = get(this.props.collections, ['list', 'data'], [])
-      .map(c => c.collectionName);
     const logsQuery = { 'meta.provider': providerId };
     const errors = this.errors();
 
@@ -131,15 +129,6 @@ class ProviderOverview extends React.Component {
             <h2 className='heading--medium with-description'>Provider Overview</h2>
           </div>
           <Metadata data={provider} accessors={metaAccessors} />
-        </section>
-
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>{strings.associated_collections}</h2>
-          </div>
-          <ul>
-            {associatedCollections.map(c => (<li key={c} className='metadata__provider__collections'><a href={'#/collections/collection/' + c}>{c}</a></li>))}
-          </ul>
         </section>
 
         <section className='page__section'>
