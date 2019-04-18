@@ -147,13 +147,11 @@ ProviderOverview.propTypes = {
   params: PropTypes.object,
   dispatch: PropTypes.func,
   providers: PropTypes.object,
-  collections: PropTypes.object,
   logs: PropTypes.object,
   router: PropTypes.object
 };
 
 export default connect(state => ({
   providers: state.providers,
-  collections: state.collections,
   logs: state.logs
 }))(ProviderOverview);
