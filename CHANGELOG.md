@@ -7,14 +7,33 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.4.0] - 2019-04-19
+
+### BREAKING CHANGES
+
+- You must be using Cumulus API version 1.12.1 or above with this version of the dashboard.
+
+### Added
+
+- **CUMULUS-820**
+  - Added information from Cumulus vs CMR reconciliation report to page (files, collections, granules)
+  - Added ability to expand/collapse tables in reconciliation report output. Tables larger than 10 rows are collapsed by default.
+
 ### Changed
 
 - Updated to `gulp-sass@^3` so Python build of `node-sass` library is not required. Removed unnecessary direct dependency on `node-sass` package.
+
+### Fixed
+
 - Updates to `./bin/build_in_docker.sh` (Fixes #562):
   - Use `yarn` instead of `npm`.
   - Updated script to run in `node:8-slim` Docker image instead of `node:slim`.
   - Added ability to specify all environment variables for configuring dashboard when building via `./bin/build_in_docker.sh`.
   - Removed install of unnecessary system packages.
+
+### Removed
+
+- **CUMULUS-997** - Removed the deprecated "associated collections" section from the individual provider pages
 
 ## [v1.3.0] - 2019-03-04
 
@@ -68,7 +87,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.4.0...HEAD
+[v1.4.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.3.0...v1.4.0
 [v1.3.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.2.0...v1.3.0
 [v1.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.1.0...v1.2.0
 [v1.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.0.1...v1.1.0

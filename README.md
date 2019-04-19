@@ -183,6 +183,8 @@ When changes are ready to be released, the version number must be updated in `pa
 
 ### 3. Update the minimum version of Cumulus API if necessary
 
+See the `minCompatibleApiVersion` value in `app/scrips/config/index.js`.
+
 ### 4. Update CHANGELOG.md
 
 Update the CHANGELOG.md. Put a header under the 'Unreleased' section with the new version number and the date.
