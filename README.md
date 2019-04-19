@@ -177,23 +177,29 @@ When the source code in the develop branch reaches a stable point and is ready t
 
 We will make changes in the `develop` branch.
 
-### 2. Update the version number
+### 2. Create a new branch for the release
+
+Create a new branch off of the `develop` branch for the release named `release-vX.X.X` (e.g. `release-v1.3.0`).
+
+### 3. Update the version number
 
 When changes are ready to be released, the version number must be updated in `package.json`.
 
-### 3. Update the minimum version of Cumulus API if necessary
+### 4. Update the minimum version of Cumulus API if necessary
 
-### 4. Update CHANGELOG.md
+See the `minCompatibleApiVersion` value in `app/scrips/config/index.js`.
+
+### 5. Update CHANGELOG.md
 
 Update the CHANGELOG.md. Put a header under the 'Unreleased' section with the new version number and the date.
 
 Add a link reference for the GitHub "compare" view at the bottom of the CHANGELOG.md, following the existing pattern. This link reference should create a link in the CHANGELOG's release header to changes in the corresponding release.
 
-### 5. Create a pull request against the master branch
+### 6. Create a pull request against the master branch
 
-Create a PR against the `master` branch. Verify that the Circle CI build for the PR succeeds and then merge to master.
+Create a PR for the `release-vX.X.X` branch against the `master` branch. Verify that the Circle CI build for the PR succeeds and then merge to `master`.
 
-### 6. Create a git tag for the release
+### 7. Create a git tag for the release
 
 Push a new release tag to Github. The tag should be in the format `v1.2.3`, where `1.2.3` is the new version.
 
@@ -205,6 +211,12 @@ Create and push a new git tag:
   $ git push origin v1.x.x
 ```
 
-### 7. Add the release to GitHub
+### 8. Add the release to GitHub
 
 Follow the [Github documentation to create a new release](https://help.github.com/articles/creating-releases/) for the dashboard using the tag that you just pushed. Make sure to use the content from the CHANGELOG for this release as the description of the release on GitHub.
+
+### 9. Create a pull request against the develop branch
+
+The updates to the CHANGELOG and the version number still need to be merged back to the `develop` branch.
+
+Create a PR for the `release-vX.X.X` branch against the `develop` branch. Verify that the Circle CI build for the PR succeeds and then merge to `develop`.
