@@ -23,7 +23,6 @@ import AsyncCommands from '../form/dropdown-async-command';
 import ErrorReport from '../errors/report';
 import Metadata from '../table/metadata';
 import { updateInterval } from '../../config';
-import { strings } from '../locale';
 
 const metaAccessors = [
   ['Created', 'createdAt', fromNow],
@@ -97,8 +96,6 @@ class ProviderOverview extends React.Component {
       return <ErrorReport report={record.error} truncate={true} />;
     }
     const provider = record.data;
-    const associatedCollections = get(this.props.collections, ['list', 'data'], [])
-      .map(c => c.collectionName);
     const logsQuery = { 'meta.provider': providerId };
     const errors = this.errors();
 
@@ -134,15 +131,6 @@ class ProviderOverview extends React.Component {
         </section>
 
         <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>{strings.associated_collections}</h2>
-          </div>
-          <ul>
-            {associatedCollections.map(c => (<li key={c} className='metadata__provider__collections'><a href={'#/collections/collection/' + c}>{c}</a></li>))}
-          </ul>
-        </section>
-
-        <section className='page__section'>
           <LogViewer
             query={logsQuery}
             dispatch={this.props.dispatch}
@@ -159,13 +147,11 @@ ProviderOverview.propTypes = {
   params: PropTypes.object,
   dispatch: PropTypes.func,
   providers: PropTypes.object,
-  collections: PropTypes.object,
   logs: PropTypes.object,
   router: PropTypes.object
 };
 
 export default connect(state => ({
   providers: state.providers,
-  collections: state.collections,
   logs: state.logs
 }))(ProviderOverview);

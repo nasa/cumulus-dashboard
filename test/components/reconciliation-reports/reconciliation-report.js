@@ -56,9 +56,9 @@ test('show individual report', function (t) {
   const Metadata = report.find('Metadata');
   const MetadataWrapper = Metadata.dive();
   const MetadataWrapperChildren = MetadataWrapper.children();
-  // ReconciliationReport is configured to use 3 metaAccessors,
-  // so there will be 3 groups of dt, dd elements for a total of 6 
-  t.is(MetadataWrapperChildren.length, 6);
+  // ReconciliationReport is configured to use 6 metaAccessors,
+  // so there will be 6 groups of dt, dd elements for a total of 12
+  t.is(MetadataWrapperChildren.length, 12);
 });
 
 test('report with error triggers error message', function (t) {
@@ -75,7 +75,5 @@ test('report with error triggers error message', function (t) {
   const ErrorReport = report.find('ErrorReport');
   const props = ErrorReport.props();
   t.is(props.report, reconciliationReports.map.exampleReportWithError.data.error);
-
-  // The following assertion should work, but it seems like enzyme has trouble with div tags inside p tags
-  // t.is(ErrorReport.dive().find('div p div span').text(), reconciliationReports.map.exampleReportWithError.data.error)
+  t.is(ErrorReport.dive().find('div p').text(), reconciliationReports.map.exampleReportWithError.data.error);
 });

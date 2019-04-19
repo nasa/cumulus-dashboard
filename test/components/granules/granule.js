@@ -20,8 +20,8 @@ test('CUMULUS-336 Granule file links use the correct URL', function (t) {
           status: 'success',
           files: [
             {
-              name: 'my-name',
-              filename: 's3://my-bucket/my-key-path/my-name',
+              fileName: 'my-name',
+              key: 'my-key-path/my-name',
               bucket: 'my-bucket'
             }
           ]

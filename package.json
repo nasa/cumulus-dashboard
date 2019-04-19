@@ -1,10 +1,10 @@
 {
   "name": "cumulus-dashboard",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A dashboard for Cumulus API",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cumulus-nasa/cumulus-dashboard"
+    "url": "https://github.com/nasa/cumulus-dashboard"
   },
   "author": {
     "name": "Development Seed",
@@ -12,9 +12,9 @@
   },
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/cumulus-nasa/cumulus-dashboard/issues"
+    "url": "https://github.com/nasa/cumulus-dashboard/issues"
   },
-  "homepage": "https://github.com/cumulus-nasa/cumulus-dashboard",
+  "homepage": "https://github.com/nasa/cumulus-dashboard",
   "scripts": {
     "audit-ci": "audit-ci --high -p yarn",
     "serve": "gulp serve",
@@ -59,7 +59,7 @@
     "@babel/register": "^7.0.0",
     "@cypress/browserify-preprocessor": "^1.1.2",
     "audit-ci": "1.3.0",
-    "ava": "^1.0.0-rc.1",
+    "ava": "^1.0.0",
     "ava-http": "^1.0.0",
     "babel-core": "^7.0.0-bridge",
     "babelify": "^9.0.0",
@@ -67,7 +67,7 @@
     "browser-sync": "^2.26.3",
     "browserify": "^16.2.3",
     "cls-bluebird": "^2.1.0",
-    "cypress": "^3.1.5",
+    "cypress": "3.1.5",
     "del": "^2.2.0",
     "envify": "^3.4.0",
     "enzyme": "^3.8.0",
@@ -83,13 +83,13 @@
     "gulp-cache": "^0.4.4",
     "gulp-csso": "^2.0.0",
     "gulp-if": "^2.0.1",
-    "gulp-imagemin": "^5.0.3",
+    "gulp-imagemin": "^5.0.0",
     "gulp-load-plugins": "^1.2.2",
     "gulp-plumber": "^1.1.0",
     "gulp-preprocess": "^3.0.1",
     "gulp-rev": "^7.0.0",
     "gulp-rev-replace": "^0.4.3",
-    "gulp-sass": "^2.3.1",
+    "gulp-sass": "^3",
     "gulp-size": "^2.1.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify-es": "^1.0.4",
@@ -98,12 +98,10 @@
     "nock": "^10.0.4",
     "node-bourbon": "^4.2.8",
     "node-notifier": "^4.5.0",
-    "node-sass": "^4.11.0",
     "react-test-renderer": "^16.6.3",
     "redux-mock-store": "^1.5.3",
     "redux-test-utils": "^0.2.2",
     "require-globify": "^1.3.0",
-    "tap-xunit": "^2.3.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^2.0.0",
     "watchify": "^3.7.0"
