@@ -14,8 +14,11 @@ import log from '../utils/log';
 import * as types from './types';
 
 const CALL_API = types.CALL_API;
-const root = _config.apiRoot;
-const { pageLimit, minCompatibleApiVersion } = _config;
+const {
+  apiRoot: root,
+  pageLimit,
+  minCompatibleApiVersion
+} = _config;
 
 export const refreshAccessToken = (token) => {
   return (dispatch) => {
@@ -308,6 +311,18 @@ export const removeGranule = (granuleId) => ({
     path: `granules/${granuleId}`,
     body: {
       action: 'removeFromCmr'
+    }
+  }
+});
+
+export const recoverGranule = (granuleId) => ({
+  [CALL_API]: {
+    type: types.GRANULE_RECOVER,
+    method: 'PUT',
+    id: granuleId,
+    path: `${_config.customPath}/${granuleId}`,
+    body: {
+      action: 'recoverGranule'
     }
   }
 });
