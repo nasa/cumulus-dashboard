@@ -320,7 +320,7 @@ export const recoverGranule = (granuleId) => ({
     type: types.GRANULE_RECOVER,
     method: 'PUT',
     id: granuleId,
-    path: `${_config.customPath}/${granuleId}`,
+    path: `${_config.recoveryPath}/${granuleId}`,
     body: {
       action: 'recoverGranule'
     }

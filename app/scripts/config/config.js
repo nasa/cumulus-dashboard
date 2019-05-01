@@ -8,6 +8,6 @@ module.exports = {
     }
   },
   apiRoot: 'https://vas1ow86gg.execute-api.us-east-1.amazonaws.com/dev/',
-  customPath: 'recover',
+  recoveryPath: 'recover',
   graphicsPath: (process.env.BUCKET || '') + '/graphics/'
 };
