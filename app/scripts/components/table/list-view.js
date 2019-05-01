@@ -38,7 +38,6 @@ class List extends React.Component {
 
   componentDidMount () {
     this.setState({ queryConfig: this.config() }); // eslint-disable-line react/no-did-mount-set-state
-    console.log(this.props);
   }
 
   componentDidUpdate (prevProps) {

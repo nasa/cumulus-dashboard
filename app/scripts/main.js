@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import { render } from 'react-dom';
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider as ProviderElem } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { useScroll } from 'react-router-scroll';
@@ -19,18 +19,17 @@ import reducers from './reducers';
 import { refreshTokenMiddleware } from './middleware/token';
 import { requestMiddleware } from './middleware/request';
 
-const store = createStore(reducers, compose(
-  applyMiddleware(
+const store = createStore(reducers, applyMiddleware(
   refreshTokenMiddleware,
   requestMiddleware,
-  thunkMiddleware)
+  thunkMiddleware
 ));
 
 if (window.Cypress && window.Cypress.env('TESTING') === true) {
   window.appStore = store;
 }
 
-console.log.apply(console, config.consoleMessage)
+console.log.apply(console, config.consoleMessage);
 console.log('Environment', config.environment);
 
 import NotFound from './components/404';
