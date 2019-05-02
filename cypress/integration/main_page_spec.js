@@ -51,7 +51,9 @@ describe('Dashboard Home Page', () => {
     });
 
     beforeEach(() => {
+      cy.log('Logged in');
       cy.login();
+      cy.log('Login complete');
       cy.visit('/');
     });
 
@@ -92,7 +94,7 @@ describe('Dashboard Home Page', () => {
 
       cy.visit('#/collections');
 
-      cy.url().should('not.include', '/#/collections');
+      cy.url().should('include', '/#/collections');
       cy.url().should('include', '/#/auth');
 
       shouldHaveDeletedToken();
