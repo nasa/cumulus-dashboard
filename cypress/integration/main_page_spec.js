@@ -51,10 +51,11 @@ describe('Dashboard Home Page', () => {
     });
 
     beforeEach(() => {
-      cy.task('log', 'Login')
+      cy.task('log', 'Login');
       cy.login();
-      cy.task('log', 'Login complete')
+      cy.task('log', 'Login complete');
       cy.visit('/');
+      cy.task('log', 'Visit complete');
     });
 
     afterEach(() => {
@@ -64,7 +65,9 @@ describe('Dashboard Home Page', () => {
       // cy.visit('/') should always work.
       //
       // https://github.com/cypress-io/cypress/issues/1311#issuecomment-393896371
+      cy.task('log', 'Logout');
       cy.logout();
+      cy.task('log', 'Logout complete');
     });
 
     after(() => {
@@ -86,17 +89,22 @@ describe('Dashboard Home Page', () => {
     });
 
     it('Logging out successfully redirects to the login screen', () => {
-      cy.task('log', 'Test logging');
+      cy.task('log', 'Start test');
 
       cy.get('nav li').last().within(() => {
         cy.get('a').should('have.text', 'Log out');
       });
+
+      cy.task('log', 'Click');
+
       cy.get('nav li').last().click();
       cy.url().should('include', '/#/auth');
 
+      cy.task('log', 'Visit collections');
+
       cy.visit('#/collections');
 
-      cy.url().should('include', '/#/collections');
+      cy.url().should('not.include', '/#/collections');
       cy.url().should('include', '/#/auth');
 
       shouldHaveDeletedToken();
