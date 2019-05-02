@@ -7,7 +7,7 @@ module.exports = {
       'pdrs': process.env.HIDE_PDR || true
     }
   },
-  apiRoot: 'https://vas1ow86gg.execute-api.us-east-1.amazonaws.com/dev/',
+  apiRoot: process.env.APIROOT || 'https://example.com',
   recoveryPath: 'recover',
   graphicsPath: (process.env.BUCKET || '') + '/graphics/'
 };
