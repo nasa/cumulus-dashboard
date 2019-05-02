@@ -63,6 +63,7 @@ export const initialState = {
   reprocessed: {},
   removed: {},
   reingested: {},
+  recovered: {},
   executed: {},
   deleted: {},
   recent: {}
