@@ -84,6 +84,8 @@ describe('Dashboard Home Page', () => {
     });
 
     it('Logging out successfully redirects to the login screen', () => {
+      console.log('Running main page spec');
+
       cy.get('nav li').last().within(() => {
         cy.get('a').should('have.text', 'Log out');
       });
