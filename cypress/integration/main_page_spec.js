@@ -51,9 +51,9 @@ describe('Dashboard Home Page', () => {
     });
 
     beforeEach(() => {
-      cy.log('Logged in');
+      cy.task('log', 'Login')
       cy.login();
-      cy.log('Login complete');
+      cy.task('log', 'Login complete')
       cy.visit('/');
     });
 
@@ -86,6 +86,8 @@ describe('Dashboard Home Page', () => {
     });
 
     it('Logging out successfully redirects to the login screen', () => {
+      cy.task('log', 'Test logging');
+
       cy.get('nav li').last().within(() => {
         cy.get('a').should('have.text', 'Log out');
       });
