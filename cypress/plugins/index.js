@@ -34,6 +34,7 @@ module.exports = (on) => {
     },
     generateJWT: function (options) {
       return fakeApiToken.generateJWT(options);
-    }
+    },
+    failed: require('cypress-failed-log/src/failed')()
   });
 };
