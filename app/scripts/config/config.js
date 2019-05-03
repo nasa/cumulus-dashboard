@@ -8,6 +8,6 @@ module.exports = {
     }
   },
   apiRoot: process.env.APIROOT || 'https://example.com',
-  recoveryPath: 'recover',
+  // recoveryPath: 'recover',
   graphicsPath: (process.env.BUCKET || '') + '/graphics/'
 };
