@@ -9,7 +9,7 @@ const granules = {
 
 test('recoverAction returns an empty list when disabled', function (t) {
   const response = recoverAction(granules, true);
-  t.is(response, []);
+  t.deepEqual(response, []);
 });
 
 test('recoverAction returns a javascript object when disabled is false', function (t) {
