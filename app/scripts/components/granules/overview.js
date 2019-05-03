@@ -74,8 +74,9 @@ class GranulesOverview extends React.Component {
       }
     };
     const { granules } = this.props;
-    console.log(this.props);
-    return bulkActions(granules, config).concat(recoverAction(granules, !!(get(this.props, ['config', 'recoveryPath']))));
+    return bulkActions(granules, config).concat(
+      recoverAction(granules, !(get(this.props, ['config', 'recoveryPath']))
+    ));
   }
 
   selectWorkflow (selector, workflow) {

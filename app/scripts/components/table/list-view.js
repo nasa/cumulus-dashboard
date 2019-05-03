@@ -188,7 +188,6 @@ class List extends React.Component {
       completedBulkActions,
       bulkActionError
     } = this.state;
-    console.log(bulkActions);
     const primaryIdx = 0;
     const hasActions = Array.isArray(bulkActions) && bulkActions.length;
 
@@ -205,7 +204,6 @@ class List extends React.Component {
           <div className='form--controls'>
             {this.renderSelectAll()}
             {bulkActions.map((item) => <BatchAsyncCommand key={item.text}
-              disabledOverride={item.disabled}
               dispatch={dispatch}
               action={item.action}
               state={item.state}

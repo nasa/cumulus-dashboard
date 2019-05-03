@@ -115,13 +115,12 @@ class BatchCommand extends React.Component {
   }
 
   render () {
-    const { 
+    const {
       text,
       selection,
       className,
       confirm,
-      confirmOptions,
-      disabledOverride
+      confirmOptions
     } = this.props;
     const { activeModal, completed, status } = this.state;
     const todo = selection.length;
@@ -138,7 +137,7 @@ class BatchCommand extends React.Component {
           action={this.handleClick}
           text={text}
           className={className}
-          disabled={(!activeModal && (!todo || !!inflight)) || disabledOverride }
+          disabled={!activeModal && (!todo || !!inflight)}
           successTimeout={0}
           status={!activeModal && inflight ? 'inflight' : null}
         />

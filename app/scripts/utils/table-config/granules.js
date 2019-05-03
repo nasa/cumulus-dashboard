@@ -92,12 +92,11 @@ export const simpleDropdownOption = function (config) {
 
 const confirmRecover = (d) => `Recover ${d} granule(s)?`;
 export const recoverAction = function (granules, disabled) {
-  return {
+  return disabled ? [] : {
     text: 'Recover Granule',
     action: recoverGranule,
     state: granules.recovered,
-    confirm: confirmRecover,
-    disabled
+    confirm: confirmRecover
   };
 };
 
