@@ -91,14 +91,12 @@ export const simpleDropdownOption = function (config) {
 };
 
 const confirmRecover = (d) => `Recover ${d} granule(s)?`;
-export const recoverAction = function (granules, disabled) {
-  return disabled ? [] : {
-    text: 'Recover Granule',
-    action: recoverGranule,
-    state: granules.recovered,
-    confirm: confirmRecover
-  };
-};
+export const recoverAction = (granules) => ({
+  text: 'Recover Granule',
+  action: recoverGranule,
+  state: granules.recovered,
+  confirm: confirmRecover
+});
 
 const confirmReingest = (d) => `Reingest ${d} granules(s)? Note: the granule files will be overwritten.`;
 const confirmApply = (d) => `Run workflow on ${d} granules?`;

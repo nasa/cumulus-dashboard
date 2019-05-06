@@ -67,16 +67,18 @@ class GranulesOverview extends React.Component {
   }
 
   generateBulkActions () {
-    const config = {
+    const actionConfig = {
       execute: {
         options: this.getExecuteOptions(),
         action: this.applyWorkflow
       }
     };
-    const { granules } = this.props;
-    return bulkActions(granules, config).concat(
-      recoverAction(granules, !(get(this.props, ['config', 'recoveryPath']))
-    ));
+    const { granules, config } = this.props;
+    let actions = bulkActions(granules, actionConfig);
+    if (config.recoveryPath) {
+      actions = actions.concat(recoverAction(granules));
+    }
+    return actions;
   }
 
   selectWorkflow (selector, workflow) {
@@ -107,6 +109,7 @@ class GranulesOverview extends React.Component {
     const { stats, granules } = this.props;
     const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
+    console.log(this.props);
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -168,6 +171,7 @@ GranulesOverview.propTypes = {
   config: PropTypes.object
 };
 
+export { GranulesOverview };
 export default connect(state => ({
   stats: state.stats,
   workflowOptions: workflowOptionNames(state),
