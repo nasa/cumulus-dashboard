@@ -254,5 +254,4 @@ List.propTypes = {
   rowId: PropTypes.any
 };
 
-export { List };
 export default connect()(List);

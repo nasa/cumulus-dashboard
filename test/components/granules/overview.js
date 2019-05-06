@@ -6,41 +6,36 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { shallow, configure } from 'enzyme';
 import { GranulesOverview } from '../../../app/scripts/components/granules/overview';
-import { List } from '../../../app/scripts/components/table/list-view';
 
 configure({ adapter: new Adapter() });
 
-test('Overview renders bulkAction buttons without recovery button', function (t) {
-  const granules = {
-    /* reingested: false,
-    executed: false,
-    removed: false,
-    deleted: false,
-    recovered: false, */
-    list: {
-      meta: {
-        count: 12,
-        queriedAt: 0
-      }
-    },
-    map: {
-      'my-granule-id': {
-        data: {
-          name: 'my-name',
-          filename: 'my-filename',
-          bucket: 'my-bucket',
-          status: 'success',
-          files: [
-            {
-              fileName: 'my-name',
-              key: 'my-key-path/my-name',
-              bucket: 'my-bucket'
-            }
-          ]
-        }
+const granules = {
+  list: {
+    meta: {
+      count: 12,
+      queriedAt: 0
+    }
+  },
+  map: {
+    'my-granule-id': {
+      data: {
+        name: 'my-name',
+        filename: 'my-filename',
+        bucket: 'my-bucket',
+        status: 'success',
+        files: [
+          {
+            fileName: 'my-name',
+            key: 'my-key-path/my-name',
+            bucket: 'my-bucket'
+          }
+        ]
       }
     }
-  };
+  }
+};
+
+test('Overview renders bulkAction buttons with recovery button', function (t) {
   const dispatch = () => {};
   const workflowOptions = [];
   const stats = { count: 0, histogram: {}, stats: {} };
@@ -52,18 +47,58 @@ test('Overview renders bulkAction buttons without recovery button', function (t)
     getState: () => {}
   };
 
-  const overviewWrapper = shallow(
-    //<Provider store={store}>
+  const providerWrapper = shallow(
+    <Provider store={store}>
       <GranulesOverview
         granules = {granules}
         stats = {stats}
         dispatch = {dispatch}
         workflowOptions = {workflowOptions}
         location = {location}
-        config={config}/>);
-    //</Provider>);
+        config={config}/>
+    </Provider>);
 
-  // granulesOverview.setState({ config: { recoveryPath: 'recover' } });
-  console.log(overviewWrapper.props());
-  console.log(overviewWrapper.find('.filters').length);
+  const overviewWrapper = providerWrapper.find('GranulesOverview').dive();
+  const listWrapper = overviewWrapper.find('Connect(List)');
+  const listBulkActions = listWrapper.prop('bulkActions');
+
+  const recoverFilter = (object) => object.text === 'Recover Granule';
+  const recoverActionList = listBulkActions.filter(recoverFilter);
+  t.is(recoverActionList.length, 1);
+
+  const recoverAction = recoverActionList[0];
+  t.truthy(recoverAction);
+  t.is(recoverAction.text, 'Recover Granule');
+});
+
+test('Overview renders bulkAction buttons without recovery button', function (t) {
+  const dispatch = () => {};
+  const workflowOptions = [];
+  const stats = { count: 0, histogram: {}, stats: {} };
+  const location = { pathname: 'granules' };
+  const config = {};
+  const store = {
+    subscribe: () => {},
+    dispatch: dispatch,
+    getState: () => {}
+  };
+
+  const providerWrapper = shallow(
+    <Provider store={store}>
+      <GranulesOverview
+        granules = {granules}
+        stats = {stats}
+        dispatch = {dispatch}
+        workflowOptions = {workflowOptions}
+        location = {location}
+        config={config}/>
+    </Provider>);
+
+  const overviewWrapper = providerWrapper.find('GranulesOverview').dive();
+  const listWrapper = overviewWrapper.find('Connect(List)');
+  const listBulkActions = listWrapper.prop('bulkActions');
+
+  const recoverFilter = (object) => object.text === 'Recover Granule';
+  const recoverActionList = listBulkActions.filter(recoverFilter);
+  t.is(recoverActionList.length, 0);
 });
