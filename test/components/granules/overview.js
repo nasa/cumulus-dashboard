@@ -35,7 +35,7 @@ const granules = {
   }
 };
 
-test('Overview renders bulkAction buttons with recovery button', function (t) {
+test('GranulesOverview generates bulkAction for recovery button', function (t) {
   const dispatch = () => {};
   const workflowOptions = [];
   const stats = { count: 0, histogram: {}, stats: {} };
@@ -71,7 +71,7 @@ test('Overview renders bulkAction buttons with recovery button', function (t) {
   t.is(recoverAction.text, 'Recover Granule');
 });
 
-test('Overview renders bulkAction buttons without recovery button', function (t) {
+test('GranulesOverview does not generate bulkAction for recovery button', function (t) {
   const dispatch = () => {};
   const workflowOptions = [];
   const stats = { count: 0, histogram: {}, stats: {} };
