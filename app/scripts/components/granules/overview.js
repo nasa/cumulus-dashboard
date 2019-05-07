@@ -21,7 +21,8 @@ import {
   tableRow,
   tableSortProps,
   simpleDropdownOption,
-  bulkActions
+  bulkActions,
+  recoverAction
 } from '../../utils/table-config/granules';
 import List from '../table/list-view';
 import Dropdown from '../form/dropdown';
@@ -66,14 +67,18 @@ class GranulesOverview extends React.Component {
   }
 
   generateBulkActions () {
-    const config = {
+    const actionConfig = {
       execute: {
         options: this.getExecuteOptions(),
         action: this.applyWorkflow
       }
     };
-    const { granules } = this.props;
-    return bulkActions(granules, config);
+    const { granules, config } = this.props;
+    let actions = bulkActions(granules, actionConfig);
+    if (config.recoveryPath) {
+      actions = actions.concat(recoverAction(granules));
+    }
+    return actions;
   }
 
   selectWorkflow (selector, workflow) {
@@ -161,11 +166,14 @@ GranulesOverview.propTypes = {
   stats: PropTypes.object,
   dispatch: PropTypes.func,
   workflowOptions: PropTypes.array,
-  location: PropTypes.object
+  location: PropTypes.object,
+  config: PropTypes.object
 };
 
+export { GranulesOverview };
 export default connect(state => ({
   stats: state.stats,
   workflowOptions: workflowOptionNames(state),
-  granules: state.granules
+  granules: state.granules,
+  config: state.config
 }))(GranulesOverview);
