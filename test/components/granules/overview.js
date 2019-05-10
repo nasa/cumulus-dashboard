@@ -65,10 +65,6 @@ test('GranulesOverview generates bulkAction for recovery button', function (t) {
   const recoverFilter = (object) => object.text === 'Recover Granule';
   const recoverActionList = listBulkActions.filter(recoverFilter);
   t.is(recoverActionList.length, 1);
-
-  const recoverAction = recoverActionList[0];
-  t.truthy(recoverAction);
-  t.is(recoverAction.text, 'Recover Granule');
 });
 
 test('GranulesOverview does not generate bulkAction for recovery button', function (t) {
@@ -76,7 +72,7 @@ test('GranulesOverview does not generate bulkAction for recovery button', functi
   const workflowOptions = [];
   const stats = { count: 0, histogram: {}, stats: {} };
   const location = { pathname: 'granules' };
-  const config = {};
+  const config = { recoveryPath: null };
   const store = {
     subscribe: () => {},
     dispatch: dispatch,

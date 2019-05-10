@@ -109,4 +109,5 @@ CollectionList.propTypes = {
   config: PropTypes.object
 };
 
+export { CollectionList };
 export default connect(state => state)(CollectionList);
