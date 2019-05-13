@@ -155,6 +155,18 @@ export const deleteCollection = (name, version) => ({
   }
 });
 
+export const recoverCollection = (name, version) => ({
+  [CALL_API]: {
+    type: types.COLLECTION_RECOVER,
+    method: 'PUT',
+    id: getCollectionId({name, version}),
+    path: `${_config.recoveryPath}/collections/${getCollectionId({name, version})}`,
+    body: {
+      action: 'recoverCollection'
+    }
+  }
+});
+
 export const searchCollections = (prefix) => ({ type: types.SEARCH_COLLECTIONS, prefix: prefix });
 export const clearCollectionsSearch = () => ({ type: types.CLEAR_COLLECTIONS_SEARCH });
 export const filterCollections = (param) => ({ type: types.FILTER_COLLECTIONS, param: param });
@@ -320,7 +332,7 @@ export const recoverGranule = (granuleId) => ({
     type: types.GRANULE_RECOVER,
     method: 'PUT',
     id: granuleId,
-    path: `${_config.recoveryPath}/${granuleId}`,
+    path: `${_config.recoveryPath}/granules/${granuleId}`,
     body: {
       action: 'recoverGranule'
     }
