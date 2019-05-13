@@ -36,7 +36,13 @@ The following environment variables override the default values in `config.js`:
 
 *In Development - subject to change:*
 
-The `RECOVERY_PATH` environment variable allows the specification of a recovery endpoint for the recovery of granules and collections. The implementation of this recovery is currently up to the user. Setting the `RECOVERY_PATH` configuration variable will activate a button on the Collection Overview and Granule Overview pages. When pressed, this button will send one of the two following requests per selected item in the Overview Table: `{{cumulus_backend_url}}/{{RECOVERY_PATH}}/granules/{{granuleId}}` for granule recovery or `{{cumulus_backend_url}}/{{RECOVERY_PATH}}/collections/{{collectionId}}` for collection recovery. Each of these requests will have a body of:
+The `RECOVERY_PATH` environment variable allows the specification of a recovery endpoint for the recovery of granules and collections. The implementation of this recovery is currently up to the user.
+
+Setting the `RECOVERY_PATH` configuration variable will activate a button on the Collection Overview and Granule Overview pages. When pressed, this button will send one of the two following requests per selected item in the Overview Table:
+- `{{cumulus_backend_url}}/{{RECOVERY_PATH}}/granules/{{granuleId}}` for granule recovery
+- `{{cumulus_backend_url}}/{{RECOVERY_PATH}}/collections/{{collectionId}}` for collection recovery.
+
+Each of these requests will have a body of:
 
 ```json
 {
