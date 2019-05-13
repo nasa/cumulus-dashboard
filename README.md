@@ -34,7 +34,7 @@ The following environment variables override the default values in `config.js`:
 
 ### Configuring Recovery
 
-*In Development - subject to change:*
+*In Development - subject to change*
 
 The `RECOVERY_PATH` environment variable allows the specification of a recovery endpoint for the recovery of granules and collections. The implementation of this recovery is currently up to the user.
 
