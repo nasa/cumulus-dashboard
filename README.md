@@ -32,6 +32,20 @@ The following environment variables override the default values in `config.js`:
 | APIROOT | the API URL. This must be set as it defaults to example.com
 | RECOVERY_PATH | setting this to a backend api endpoint will enable 'recover buttons' for granules and collections. e.g. - 'recover' 
 
+### Configuring Recovery
+
+*In Development - subject to change:*
+
+The `RECOVERY_PATH` environment variable allows the specification of a recovery endpoint for the recovery of granules and collections. The implementation of this recovery is currently up to the user. Setting the `RECOVERY_PATH` configuration variable will activate a button on the Collection Overview and Granule Overview pages. When pressed, this button will send one of the two following requests per selected item in the Overview Table: `{{cumulus_backend_url}}/{{RECOVERY_PATH}}/granules/{{granuleId}}` for granule recovery or `{{cumulus_backend_url}}/{{RECOVERY_PATH}}/collections/{{collectionId}}` for collection recovery. Each of these requests will have a body of:
+
+```json
+{
+  "action": "recover{{Granule||Collection}}"
+}
+```
+
+The dashboard will loyally report a success (200) or failure (400) based on the response from the recovery API.
+
 ## Building or running locally
 
 The dashboard uses node v8.11. To build/run the dashboard on your local machine using node v8.11, install [nvm](https://github.com/creationix/nvm) and run `nvm use`.

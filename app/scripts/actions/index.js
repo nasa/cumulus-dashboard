@@ -160,7 +160,10 @@ export const recoverCollection = (name, version) => ({
     type: types.COLLECTION_RECOVER,
     method: 'PUT',
     id: getCollectionId({name, version}),
-    path: `${_config.recoveryPath}/collection/${getCollectionId({name, version})}`
+    path: `${_config.recoveryPath}/collections/${getCollectionId({name, version})}`,
+    body: {
+      action: 'recoverCollection'
+    }
   }
 });
 
@@ -329,7 +332,7 @@ export const recoverGranule = (granuleId) => ({
     type: types.GRANULE_RECOVER,
     method: 'PUT',
     id: granuleId,
-    path: `${_config.recoveryPath}/granule/${granuleId}`,
+    path: `${_config.recoveryPath}/granules/${granuleId}`,
     body: {
       action: 'recoverGranule'
     }

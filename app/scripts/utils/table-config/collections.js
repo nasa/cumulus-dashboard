@@ -42,7 +42,7 @@ export const tableSortProps = [
   'timestamp'
 ];
 
-const confirmRecover = (d) => `Recover all granules from ${d} ${strings.collection}(s)?`;
+const confirmRecover = (d) => `Recover ${d} ${strings.collection}(s)?`;
 export const recoverAction = function (collections) {
   return [{
     text: 'Recover',
