@@ -30,6 +30,7 @@ The following environment variables override the default values in `config.js`:
 | STAGE | e.g. UAT, default to development
 | LABELS | gitc or daac localization (defaults to daac)
 | APIROOT | the API URL. This must be set as it defaults to example.com
+| RECOVERY_PATH | setting this to a backend api endpoint will enable 'recover buttons' for granules and collections. e.g. - 'recover' 
 
 ## Building or running locally
 

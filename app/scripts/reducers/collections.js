@@ -19,6 +19,10 @@ import {
   COLLECTION_DELETE_INFLIGHT,
   COLLECTION_DELETE_ERROR,
 
+  COLLECTION_RECOVER,
+  COLLECTION_RECOVER_INFLIGHT,
+  COLLECTION_RECOVER_ERROR,
+
   UPDATE_COLLECTION,
   UPDATE_COLLECTION_INFLIGHT,
   UPDATE_COLLECTION_ERROR,
@@ -115,6 +119,18 @@ export default function reducer (state = initialState, action) {
     case COLLECTION_DELETE_ERROR:
       set(state, ['deleted', id, 'status'], 'error');
       set(state, ['deleted', id, 'error'], action.error);
+      break;
+
+    case COLLECTION_RECOVER:
+      set(state, ['recovered', id, 'status'], 'success');
+      set(state, ['recovered', id, 'error', null]);
+      break;
+    case COLLECTION_RECOVER_INFLIGHT:
+      set(state, ['recovered', id, 'status'], 'inflight');
+      break;
+    case COLLECTION_RECOVER_ERROR:
+      set(state, ['recovered', id, 'status'], 'error');
+      set(state, ['recovered', id, 'status'], action.error);
       break;
 
     case SEARCH_COLLECTIONS:

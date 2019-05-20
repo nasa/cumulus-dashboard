@@ -115,7 +115,13 @@ class BatchCommand extends React.Component {
   }
 
   render () {
-    const { text, selection, className, confirm, confirmOptions } = this.props;
+    const {
+      text,
+      selection,
+      className,
+      confirm,
+      confirmOptions
+    } = this.props;
     const { activeModal, completed, status } = this.state;
     const todo = selection.length;
     const inflight = this.isInflight();

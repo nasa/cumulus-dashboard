@@ -14,8 +14,11 @@ import log from '../utils/log';
 import * as types from './types';
 
 const CALL_API = types.CALL_API;
-const root = _config.apiRoot;
-const { pageLimit, minCompatibleApiVersion } = _config;
+const {
+  apiRoot: root,
+  pageLimit,
+  minCompatibleApiVersion
+} = _config;
 
 export const refreshAccessToken = (token) => {
   return (dispatch) => {
@@ -149,6 +152,18 @@ export const deleteCollection = (name, version) => ({
     method: 'DELETE',
     id: getCollectionId({name, version}),
     path: `collections/${name}/${version}`
+  }
+});
+
+export const recoverCollection = (name, version) => ({
+  [CALL_API]: {
+    type: types.COLLECTION_RECOVER,
+    method: 'PUT',
+    id: getCollectionId({name, version}),
+    path: `${_config.recoveryPath}/collections/${getCollectionId({name, version})}`,
+    body: {
+      action: 'recoverCollection'
+    }
   }
 });
 
@@ -308,6 +323,18 @@ export const removeGranule = (granuleId) => ({
     path: `granules/${granuleId}`,
     body: {
       action: 'removeFromCmr'
+    }
+  }
+});
+
+export const recoverGranule = (granuleId) => ({
+  [CALL_API]: {
+    type: types.GRANULE_RECOVER,
+    method: 'PUT',
+    id: granuleId,
+    path: `${_config.recoveryPath}/granules/${granuleId}`,
+    body: {
+      action: 'recoverGranule'
     }
   }
 });
