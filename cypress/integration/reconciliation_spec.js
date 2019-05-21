@@ -190,6 +190,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
       cy.reload();
 
+      // Logging for info for intermittent test fail
       cy.get('table tbody tr a')
         .then((items) => cy.task('log', `Report item count: ${items.length}`));
 
