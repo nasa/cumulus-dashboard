@@ -188,13 +188,10 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.contains('button', 'Create a Report')
         .click();
 
-      // cy.get('table tbody tr a')
-      //   .then((items) => cy.task('log', `Report item count: ${items.length}`));
+      cy.reload();
 
-      cy.reload(true);
-
-      // cy.get('table tbody tr a')
-      //   .then((items) => cy.task('log', `Report item count: ${items.length}`));
+      cy.get('table tbody tr a')
+        .then((items) => cy.task('log', `Report item count: ${items.length}`));
 
       cy.contains('table tbody tr a', 'created_report.json')
         .should('have.attr', 'href', '#/reconciliation-reports/report/created_report.json');
