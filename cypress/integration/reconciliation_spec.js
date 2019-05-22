@@ -191,20 +191,18 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.reload();
 
       // Logging for info for intermittent test fail
-      let itemLength = 0;
       cy.get('table tbody tr a')
-        .then((items) => { itemLength = items.length; });
+        .then((items) => {
+          cy.task('log', `Report item count: ${items.length}`);
+          if (items.length < 4) {
+            cy.reload();
+          }
 
-      cy.task('log', `Report item count: ${itemLength}`);
+          cy.contains('table tbody tr a', 'created_report.json')
+            .should('have.attr', 'href', '#/reconciliation-reports/report/created_report.json');
 
-      if (itemLength < 4) {
-        cy.reload();
-      }
-
-      cy.contains('table tbody tr a', 'created_report.json')
-        .should('have.attr', 'href', '#/reconciliation-reports/report/created_report.json');
-
-      expect(itemLength, 4);
+          expect(items.length).to.eq(4);
+        });
     });
   });
 });
