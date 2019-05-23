@@ -11,7 +11,9 @@ const rulesJson = require('../fixtures/rules/index.json');
 const rulesFilePath = path.join(__dirname, 'db-rules.json');
 
 const executionsJson = require('../fixtures/executions/index.json');
-const executionStatusJson = require('../fixtures/executions/status/arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8/index.json');
+// const executionStatusJson = require('../fixtures/executions/status/arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8/index.json');
+const executionStatusJson = require('../fixtures/executions/status/c3ce6b76-a5f5-47d2-80a5-8b5c56300da8/index.json');
+
 const executionsFilePath = path.join(__dirname, 'db-executions.json');
 const executionStatusesFilePath = path.join(__dirname, 'db-executionstatus.json');
 
@@ -103,7 +105,13 @@ const fakeRulesDb = new FakeRulesDb(rulesFilePath);
 
 class FakeExecutionStatusDb extends FakeDb {
   getStatus (arn) {
-    const filePath = path.join(__dirname, `../fixtures/executions/status/${arn}/index.json`);
+    const executionIdResult = RegExp('[a-zA-Z0-9-]{36}$').exec(arn);
+    if (!executionIdResult) {
+      return null;
+    }
+
+    const executionId = executionIdResult[0];
+    const filePath = path.join(__dirname, `../fixtures/executions/status/${executionId}/index.json`);
     return fs.readFile(filePath)
       .then((data) => {
         const status = JSON.parse(data);
