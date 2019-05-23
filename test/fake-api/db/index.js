@@ -11,7 +11,6 @@ const rulesJson = require('../fixtures/rules/index.json');
 const rulesFilePath = path.join(__dirname, 'db-rules.json');
 
 const executionsJson = require('../fixtures/executions/index.json');
-// const executionStatusJson = require('../fixtures/executions/status/arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8/index.json');
 const executionStatusJson = require('../fixtures/executions/status/c3ce6b76-a5f5-47d2-80a5-8b5c56300da8/index.json');
 
 const executionsFilePath = path.join(__dirname, 'db-executions.json');
