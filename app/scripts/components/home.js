@@ -127,7 +127,7 @@ class Home extends React.Component {
                   const value = d[0];
                   if (value === nullValue) return null;
                   return (
-                    <li key={d[1]}>
+                    <li id='distMetric' key={d[1]}>
                       <Link className='overview-num' to={d[2] || '#'}>
                         <span className='num--large'>{value}</span> {d[1]}
                       </Link>
