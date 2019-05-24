@@ -11,11 +11,9 @@ configure({ adapter: new Adapter() });
 
 test('CUMULUS-799 Home page contains distribution error report', async (t) => {
   const dist = {
-    dist: {
-      data: {
-        errors: 52,
-        successes: 43
-      }
+    data: {
+      errors: 52,
+      successes: 43
     }
   };
   const granules = { list: [] };
@@ -36,5 +34,10 @@ test('CUMULUS-799 Home page contains distribution error report', async (t) => {
     stats={stats}
     />);
 
-  t.is(home.find('#distMetric').length, 2);
+  const metrics = home.find('#distMetrics li');
+  t.is(metrics.length, 2);
+  t.is(metrics.at(0).key(), 'Errors');
+  t.is(metrics.at(1).key(), 'Successes');
+  t.is(metrics.at(0).find('Link').dive().text(), '52 Errors');
+  t.is(metrics.at(1).find('Link').dive().text(), '43 Successes');
 });

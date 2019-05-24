@@ -69,28 +69,36 @@ class Home extends React.Component {
     };
   }
 
-  renderButtonList(items) {
+  renderButtonListSection(items, header, listId) {
+    const data = items.filter(d => d[0] !== nullValue);
+    if (!data.length) return null;
     return (
-      <ul>
-        {items.map(d => {
-          const value = d[0];
-          if (value === nullValue) return null;
-          return (
-            <li key={d[1]}>
-              <Link className='overview-num' to={d[2] || '#'}>
-                <span className='num--large'>{value}</span> {d[1]}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      <section className='page_section'>
+        <div className='row'>
+          <div className='heading__wrapper--border'>
+              <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
+          </div>
+          <ul id={listId}>
+            {data.map(d => {
+              const value = d[0];
+              return (
+                <li key={d[1]}>
+                  <Link id={d[1]} className='overview-num' to={d[2] || '#'}>
+                    <span className='num--large'>{value}</span> {d[1]}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
     );
   }
 
   render () {
     const { list } = this.props.granules;
     const { stats, count } = this.props.stats;
-    const { dist } = this.props.dist;
+    const { dist } = this.props;
     const overview = [
       [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
       [tally(get(stats.data, 'collections.value')), strings.collections, '/collections'],
@@ -115,22 +123,8 @@ class Home extends React.Component {
           </div>
         </div>
         <div className='page__content page__content__nosidebar'>
-          <section className='page__section'>
-            <div className='row'>
-              <div className='heading__wrapper--border'>
-                <h2 className='heading--medium heading--shared-content--right'>Updates</h2>
-              </div>
-              {this.renderButtonList(overview)}
-            </div>
-          </section>
-          <section className='page_section'>
-            <div className='row'>
-              <div className='heading__wrapper--border'>
-                  <h2 className='heading--medium heading--shared-content--right'>Distribution Metrics</h2>
-              </div>
-              {this.renderButtonList(distStats)}
-            </div>
-          </section>
+          {this.renderButtonListSection(overview, 'Updates')}
+          {this.renderButtonListSection(distStats, 'Distribution Metrics', 'distMetrics')}
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>
