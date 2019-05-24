@@ -69,6 +69,24 @@ class Home extends React.Component {
     };
   }
 
+  renderButtonList(items) {
+    return (
+      <ul>
+        {items.map(d => {
+          const value = d[0];
+          if (value === nullValue) return null;
+          return (
+            <li key={d[1]}>
+              <Link className='overview-num' to={d[2] || '#'}>
+                <span className='num--large'>{value}</span> {d[1]}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
+
   render () {
     const { list } = this.props.granules;
     const { stats, count } = this.props.stats;
@@ -102,19 +120,7 @@ class Home extends React.Component {
               <div className='heading__wrapper--border'>
                 <h2 className='heading--medium heading--shared-content--right'>Updates</h2>
               </div>
-              <ul>
-                {overview.map(d => {
-                  const value = d[0];
-                  if (value === nullValue) return null;
-                  return (
-                    <li key={d[1]}>
-                      <Link className='overview-num' to={d[2] || '#'}>
-                        <span className='num--large'>{value}</span> {d[1]}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
+              {this.renderButtonList(overview)}
             </div>
           </section>
           <section className='page_section'>
@@ -122,19 +128,7 @@ class Home extends React.Component {
               <div className='heading__wrapper--border'>
                   <h2 className='heading--medium heading--shared-content--right'>Distribution Metrics</h2>
               </div>
-              <ul>
-                {distStats.map(d => {
-                  const value = d[0];
-                  if (value === nullValue) return null;
-                  return (
-                    <li id='distMetric' key={d[1]}>
-                      <Link className='overview-num' to={d[2] || '#'}>
-                        <span className='num--large'>{value}</span> {d[1]}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
+              {this.renderButtonList(distStats)}
             </div>
           </section>
           <section className='page__section'>

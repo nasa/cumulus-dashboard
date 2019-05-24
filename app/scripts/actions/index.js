@@ -375,8 +375,7 @@ export const getDistMetrics = () => ({
   [CALL_API]: {
     type: types.DIST,
     method: 'GET',
-    url: url.resolve(root, 'distributionMetrics'),
-    qs: {}
+    url: url.resolve(root, 'distributionMetrics')
   }
 });
 
