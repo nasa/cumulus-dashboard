@@ -38,6 +38,6 @@ test('CUMULUS-799 Home page contains distribution error report', async (t) => {
   t.is(metrics.length, 2);
   t.is(metrics.at(0).key(), 'Errors');
   t.is(metrics.at(1).key(), 'Successes');
-  t.is(metrics.at(0).find('Link').dive().text(), '52 Errors');
-  t.is(metrics.at(1).find('Link').dive().text(), '43 Successes');
+  t.is(metrics.at(0).find('Link').dive().text(), `${dist.data.errors} Errors`);
+  t.is(metrics.at(1).find('Link').dive().text(), `${dist.data.successes} Successes`);
 });
