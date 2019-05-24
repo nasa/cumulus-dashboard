@@ -195,6 +195,12 @@ app.get('/stats/aggregate', async (req, res, next) => {
   next();
 });
 
+app.get('/distributionMetrics', async (req, res) => {
+  const metricsFile = `test/fake-api/fixtures/distributionMetrics/index.json`;
+  const metricsObj = await fs.readJson(metricsFile);
+  res.status(200).send(metricsObj);
+});
+
 app.get('/reconciliationReports', async (req, res) => {
   const reports = await fakeReconciliationReports.getItems();
   res.send(reports);

@@ -371,6 +371,15 @@ export const getStats = (options) => ({
   }
 });
 
+export const getDistMetrics = () => ({
+  [CALL_API]: {
+    type: types.DIST,
+    method: 'GET',
+    url: url.resolve(root, 'distributionMetrics'),
+    qs: {}
+  }
+});
+
 // count queries *must* include type and field properties.
 export const getCount = (options) => ({
   [CALL_API]: {
