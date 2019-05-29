@@ -40,7 +40,7 @@ function fakeApiMiddleWare (req, res, next) {
     // respond with 200
     res.sendStatus(200).end();
     return;
-  } else if (publicEndpoints.indexOf(req.path) < 0){
+  } else if (publicEndpoints.indexOf(req.path) < 0) {
     const auth = req.header('Authorization');
     const re = /^\/token|refresh/;
 
@@ -202,6 +202,7 @@ app.get('/reconciliationReports', async (req, res) => {
 
 app.post('/reconciliationReports', async(req, res) => {
   await fakeReconciliationReports.createReport();
+  console.log('GENERATE REPORT');
   res.status(202).send({message: 'Report is being generated'}).end();
 });
 

@@ -259,6 +259,7 @@ const fakeProvidersDb = new FakeProvidersDb(providersFilePath);
 
 class FakeReconciliationReports extends FakeDb {
   async createReport () {
+    console.log('added report');
     this.addItem('created_report.json');
   }
 
