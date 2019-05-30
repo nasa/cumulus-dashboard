@@ -9,7 +9,7 @@ import { CMR, hostId } from '@cumulus/cmrjs';
 
 import { configureRequest } from './helpers';
 import _config from '../config';
-import { getCollectionId } from '../utils/format';
+import { getCollectionId, collectionNameVersion } from '../utils/format';
 import log from '../utils/log';
 import * as types from './types';
 
@@ -65,6 +65,7 @@ export const getCollection = (name, version) => ({
     type: types.COLLECTION,
     method: 'GET',
     id: getCollectionId({name, version}),
+    // path: `collections/${name}/${version}`
     path: `collections?name=${name}&version=${version}`
   }
 });
@@ -303,6 +304,29 @@ export const applyWorkflowToGranule = (granuleId, workflow) => ({
   }
 });
 
+export const applyRecoveryWorkflow = (granuleId) => {
+  return (dispatch) => {
+    return dispatch(getGranule(granuleId)).then((granuleResponse) => {
+      const collection = collectionNameVersion(granuleResponse.data.collectionId);
+      return dispatch(
+        getCollection(collection.name, collection.version)
+      ).then((collectionResponse) => {
+        console.log(collectionResponse);
+        const { recoveryWorkflow } = collectionResponse.data.results[0].meta;
+        if (recoveryWorkflow) {
+          return dispatch(applyWorkflowToGranule(granuleId, recoveryWorkflow));
+        } else {
+          return dispatch({
+            id: granuleId,
+            type: types.GRANULE_APPLYWORKFLOW_ERROR,
+            error: `Unable to apply recovery workflow to ${granuleId} because the attribute recoveryWorkflow is not set in collection.meta`
+          });
+        }
+      });
+    });
+  };
+};
+
 export const reingestGranule = (granuleId) => ({
   [CALL_API]: {
     type: types.GRANULE_REINGEST,
@@ -323,18 +347,6 @@ export const removeGranule = (granuleId) => ({
     path: `granules/${granuleId}`,
     body: {
       action: 'removeFromCmr'
-    }
-  }
-});
-
-export const recoverGranule = (granuleId) => ({
-  [CALL_API]: {
-    type: types.GRANULE_RECOVER,
-    method: 'PUT',
-    id: granuleId,
-    path: `${_config.recoveryPath}/granules/${granuleId}`,
-    body: {
-      action: 'recoverGranule'
     }
   }
 });
