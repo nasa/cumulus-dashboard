@@ -64,7 +64,6 @@ const requestMiddleware = ({ dispatch, getState }) => next => action => {
     const start = new Date();
     return requestPromise(requestAction)
       .then((response) => {
-        console.log(response);
         const { body } = response;
 
         if (+response.statusCode >= 400) {
