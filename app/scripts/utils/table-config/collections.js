@@ -3,7 +3,7 @@ import React from 'react';
 import { get } from 'object-path';
 import { Link } from 'react-router';
 import { fromNow, seconds, tally, collectionNameVersion } from '../format';
-import { deleteCollection, recoverCollection } from '../../actions';
+import { deleteCollection } from '../../actions';
 import { strings } from '../../components/locale';
 
 export const tableHeader = [

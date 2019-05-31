@@ -29,10 +29,10 @@ test('Collections Overview generates bulkAction for recovery button', function (
   const dispatch = () => {};
   const mmtLinks = {};
   const logs = {};
-  const config = { recoveryPath: 'recover' };
+  const config = { enableRecovery: true };
   const store = {
     setState: () => {},
-    dispatch: dispatch,
+    dispatch,
     subscribe: () => {}
   };
 
@@ -59,10 +59,10 @@ test('Collections Overview does not generate bulkAction for recovery button', fu
   const dispatch = () => {};
   const mmtLinks = {};
   const logs = {};
-  const config = { recoveryPath: null };
+  const config = { enableRecovery: false };
   const store = {
     getState: () => {},
-    dispatch: dispatch,
+    dispatch,
     subscribe: () => {}
   };
 
