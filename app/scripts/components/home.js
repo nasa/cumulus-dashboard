@@ -69,7 +69,7 @@ class Home extends React.Component {
     };
   }
 
-  renderButtonListSection(items, header, listId) {
+  renderButtonListSection (items, header, listId) {
     const data = items.filter(d => d[0] !== nullValue);
     if (!data.length) return null;
     return (
@@ -110,7 +110,7 @@ class Home extends React.Component {
     const distStats = [
       [tally(get(dist.data, 'errors')), 'Errors', '/distribution'],
       [tally(get(dist.data, 'successes')), 'Successes', '/distribution']
-    ]
+    ];
     const granuleCount = get(count.data, 'granules.meta.count');
     const numGranules = !isNaN(granuleCount) ? `(${tally(granuleCount)})` : null;
     const granuleStatus = get(count.data, 'granules.count', []);
