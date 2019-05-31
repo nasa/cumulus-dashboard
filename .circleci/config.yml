@@ -51,15 +51,15 @@ jobs:
               node:8.11.4 \
               yarn run build
 
-      # - run:
-      #     name: Run tests
-      #     command: |
-      #       docker run --rm \
-      #         -v /home/circleci/.cache:/root/.cache \
-      #         -v $(pwd):/home \
-      #         --workdir /home \
-      #         node:8.11.4 \
-      #         yarn test --cache-folder /root/.cache
+      - run:
+          name: Run tests
+          command: |
+            docker run --rm \
+              -v /home/circleci/.cache:/root/.cache \
+              -v $(pwd):/home \
+              --workdir /home \
+              node:8.11.4 \
+              yarn test --cache-folder /root/.cache
 
       - run:
           name: Prepare servers
