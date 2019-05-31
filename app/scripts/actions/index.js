@@ -295,7 +295,7 @@ export const applyWorkflowToCollection = (name, version, workflow) => ({
   [CALL_API]: {
     type: types.COLLECTION_APPLYWORKFLOW,
     method: 'PUT',
-    id: getCollectionId(name, version),
+    id: getCollectionId({name, version}),
     path: `collections/${name}/${version}`,
     body: {
       action: 'applyWorkflow',
@@ -315,7 +315,7 @@ export const applyRecoveryWorkflowToCollection = (collectionId) => {
         return dispatch({
           id: collectionId,
           type: types.COLLECTION_APPLYWORKFLOW_ERROR,
-          error: `Unable to apply recovery workflow to ${collectionId} because the attribute recoveryWorkflow is not set in collection.meta`
+          error: `Unable to apply recovery workflow to ${collectionId} because the attribute collectionRecoveryWorkflow is not set in collection.meta`
         });
       }
     });
@@ -350,7 +350,7 @@ export const applyRecoveryWorkflowToGranule = (granuleId) => {
           return dispatch({
             id: granuleId,
             type: types.GRANULE_APPLYWORKFLOW_ERROR,
-            error: `Unable to apply recovery workflow to ${granuleId} because the attribute recoveryWorkflow is not set in collection.meta`
+            error: `Unable to apply recovery workflow to ${granuleId} because the attribute granuleRecoveryWorkflow is not set in collection.meta`
           });
         }
       });
