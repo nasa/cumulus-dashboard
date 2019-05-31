@@ -9,5 +9,5 @@ module.exports = {
   },
   apiRoot: process.env.APIROOT || 'https://example.com',
   graphicsPath: (process.env.BUCKET || '') + '/graphics/',
-  enableRecovery: process.env.ENABLE_RECOVERY || false
+  enableRecovery: process.env.ENABLE_RECOVERY || true
 };

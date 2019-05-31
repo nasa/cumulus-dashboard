@@ -13,7 +13,6 @@ import {
   granuleLink
 } from '../format';
 import {
-  recoverGranule,
   reingestGranule,
   removeGranule,
   deleteGranule

@@ -291,6 +291,37 @@ export const reprocessGranule = (granuleId) => ({
   }
 });
 
+export const applyWorkflowToCollection = (name, version, workflow) => ({
+  [CALL_API]: {
+    type: types.COLLECTION_APPLYWORKFLOW,
+    method: 'PUT',
+    id: getCollectionId(name, version),
+    path: `collections/${name}/${version}`,
+    body: {
+      action: 'applyWorkflow',
+      workflow
+    }
+  }
+});
+
+export const applyRecoveryWorkflowToCollection = (collectionId) => {
+  return (dispatch) => {
+    const { name, version } = collectionNameVersion(collectionId);
+    return dispatch(getCollection(name, version)).then((collectionResponse) => {
+      const { collectionRecoveryWorkflow } = collectionResponse.data.results[0].meta;
+      if (collectionRecoveryWorkflow) {
+        return dispatch(applyWorkflowToCollection(name, version, collectionRecoveryWorkflow));
+      } else {
+        return dispatch({
+          id: collectionId,
+          type: types.COLLECTION_APPLYWORKFLOW_ERROR,
+          error: `Unable to apply recovery workflow to ${collectionId} because the attribute recoveryWorkflow is not set in collection.meta`
+        });
+      }
+    });
+  };
+};
+
 export const applyWorkflowToGranule = (granuleId, workflow) => ({
   [CALL_API]: {
     type: types.GRANULE_APPLYWORKFLOW,
@@ -304,17 +335,17 @@ export const applyWorkflowToGranule = (granuleId, workflow) => ({
   }
 });
 
-export const applyRecoveryWorkflow = (granuleId) => {
+export const applyRecoveryWorkflowToGranule = (granuleId) => {
   return (dispatch) => {
     return dispatch(getGranule(granuleId)).then((granuleResponse) => {
-      const collection = collectionNameVersion(granuleResponse.data.collectionId);
+      const { name, version } = collectionNameVersion(granuleResponse.data.collectionId);
       return dispatch(
-        getCollection(collection.name, collection.version)
+        getCollection(name, version)
       ).then((collectionResponse) => {
         console.log(collectionResponse);
-        const { recoveryWorkflow } = collectionResponse.data.results[0].meta;
-        if (recoveryWorkflow) {
-          return dispatch(applyWorkflowToGranule(granuleId, recoveryWorkflow));
+        const { granuleRecoveryWorkflow } = collectionResponse.data.results[0].meta;
+        if (granuleRecoveryWorkflow) {
+          return dispatch(applyWorkflowToGranule(granuleId, granuleRecoveryWorkflow));
         } else {
           return dispatch({
             id: granuleId,

@@ -12,7 +12,7 @@ import {
   listGranules,
   listWorkflows,
   applyWorkflowToGranule,
-  applyRecoveryWorkflow,
+  applyRecoveryWorkflowToGranule,
   getOptionsCollectionName
 } from '../../actions';
 import { get } from 'object-path';
@@ -96,7 +96,7 @@ class GranulesOverview extends React.Component {
   }
 
   applyRecoveryWorkflow (granuleId) {
-    return applyRecoveryWorkflow(granuleId);
+    return applyRecoveryWorkflowToGranule(granuleId);
   }
 
   getExecuteOptions () {

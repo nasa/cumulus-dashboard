@@ -7,6 +7,10 @@ import {
   COLLECTION_INFLIGHT,
   COLLECTION_ERROR,
 
+  COLLECTION_APPLYWORKFLOW,
+  COLLECTION_APPLYWORKFLOW_INFLIGHT,
+  COLLECTION_APPLYWORKFLOW_ERROR,
+
   COLLECTIONS,
   COLLECTIONS_INFLIGHT,
   COLLECTIONS_ERROR,
@@ -41,10 +45,11 @@ export const initialState = {
     meta: {},
     params: {}
   },
-  map: {},
   created: {},
-  updated: {},
-  deleted: {}
+  deleted: {},
+  executed: {},
+  map: {},
+  updated: {}
 };
 
 export default function reducer (state = initialState, action) {
@@ -67,6 +72,18 @@ export default function reducer (state = initialState, action) {
     case COLLECTION_ERROR:
       set(state, ['map', id, 'inflight'], false);
       set(state, ['map', id, 'error'], action.error);
+      break;
+
+    case COLLECTION_APPLYWORKFLOW:
+      set(state, ['executed', id, 'status'], 'success');
+      set(state, ['executed', id, 'error'], null);
+      break;
+    case COLLECTION_APPLYWORKFLOW_INFLIGHT:
+      set(state, ['executed', id, 'status'], 'inflight');
+      break;
+    case COLLECTION_APPLYWORKFLOW_ERROR:
+      set(state, ['executed', id, 'status'], 'error');
+      set(state, ['executed', id, 'error'], action.error);
       break;
 
     case COLLECTIONS:

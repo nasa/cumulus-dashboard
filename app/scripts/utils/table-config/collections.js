@@ -43,14 +43,11 @@ export const tableSortProps = [
 ];
 
 const confirmRecover = (d) => `Recover ${d} ${strings.collection}(s)?`;
-export const recoverAction = function (collections) {
+export const recoverAction = function (collections, config) {
   return [{
     text: 'Recover',
-    action: (collectionId) => {
-      const { name, version } = collectionNameVersion(collectionId);
-      return recoverCollection(name, version);
-    },
-    state: collections.recovered,
+    action: config.recover.action,
+    state: collections.executed, // this will probably need to be changed
     confirm: confirmRecover
   }];
 };
