@@ -3,6 +3,7 @@ import api from './api';
 import apiVersion from './api-version';
 import collections from './collections';
 import config from './config';
+import dist from './dist';
 import granules from './granules';
 import stats from './stats';
 import pdrs from './pdrs';
@@ -24,6 +25,7 @@ export const reducers = {
   apiVersion,
   collections,
   config,
+  dist,
   mmtLinks,
   cumulusInstance,
   granules,
