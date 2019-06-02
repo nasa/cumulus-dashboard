@@ -156,18 +156,6 @@ export const deleteCollection = (name, version) => ({
   }
 });
 
-export const recoverCollection = (name, version) => ({
-  [CALL_API]: {
-    type: types.COLLECTION_RECOVER,
-    method: 'PUT',
-    id: getCollectionId({name, version}),
-    path: `${_config.recoveryPath}/collections/${getCollectionId({name, version})}`,
-    body: {
-      action: 'recoverCollection'
-    }
-  }
-});
-
 export const searchCollections = (prefix) => ({ type: types.SEARCH_COLLECTIONS, prefix: prefix });
 export const clearCollectionsSearch = () => ({ type: types.CLEAR_COLLECTIONS_SEARCH });
 export const filterCollections = (param) => ({ type: types.FILTER_COLLECTIONS, param: param });
@@ -308,7 +296,7 @@ export const applyRecoveryWorkflowToCollection = (collectionId) => {
   return (dispatch) => {
     const { name, version } = collectionNameVersion(collectionId);
     return dispatch(getCollection(name, version)).then((collectionResponse) => {
-      const { collectionRecoveryWorkflow } = collectionResponse.data.results[0].meta;
+      const collectionRecoveryWorkflow = getProperty(collectionResponse.data.results[0], 'meta', undefined);
       if (collectionRecoveryWorkflow) {
         return dispatch(applyWorkflowToCollection(name, version, collectionRecoveryWorkflow));
       } else {
@@ -342,8 +330,7 @@ export const applyRecoveryWorkflowToGranule = (granuleId) => {
       return dispatch(
         getCollection(name, version)
       ).then((collectionResponse) => {
-        console.log(collectionResponse);
-        const { granuleRecoveryWorkflow } = collectionResponse.data.results[0].meta;
+        const granuleRecoveryWorkflow = getProperty(collectionResponse.data.results[0], 'meta', undefined);
         if (granuleRecoveryWorkflow) {
           return dispatch(applyWorkflowToGranule(granuleId, granuleRecoveryWorkflow));
         } else {
