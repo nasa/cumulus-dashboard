@@ -296,17 +296,23 @@ export const applyRecoveryWorkflowToCollection = (collectionId) => {
   return (dispatch) => {
     const { name, version } = collectionNameVersion(collectionId);
     return dispatch(getCollection(name, version)).then((collectionResponse) => {
-      const collectionRecoveryWorkflow = getProperty(collectionResponse.data.results[0], 'meta', undefined);
+      const collectionRecoveryWorkflow = getProperty(
+        collectionResponse.data.results[0],
+        'meta.collectionRecoveryWorkflow',
+        undefined
+      );
       if (collectionRecoveryWorkflow) {
         return dispatch(applyWorkflowToCollection(name, version, collectionRecoveryWorkflow));
       } else {
-        return dispatch({
-          id: collectionId,
-          type: types.COLLECTION_APPLYWORKFLOW_ERROR,
-          error: `Unable to apply recovery workflow to ${collectionId} because the attribute collectionRecoveryWorkflow is not set in collection.meta`
-        });
+        throw new ReferenceError(
+          `Unable to apply recovery workflow to ${collectionId} because the attribute collectionRecoveryWorkflow is not set in collection.meta`
+        );
       }
-    });
+    }).catch((error) => dispatch({
+      id: collectionId,
+      type: types.COLLECTION_APPLYWORKFLOW_ERROR,
+      error: error
+    }));
   };
 };
 
@@ -330,18 +336,24 @@ export const applyRecoveryWorkflowToGranule = (granuleId) => {
       return dispatch(
         getCollection(name, version)
       ).then((collectionResponse) => {
-        const granuleRecoveryWorkflow = getProperty(collectionResponse.data.results[0], 'meta', undefined);
+        const granuleRecoveryWorkflow = getProperty(
+          collectionResponse.data.results[0],
+          'meta.granuleRecoveryWorkflow',
+          undefined
+        );
         if (granuleRecoveryWorkflow) {
           return dispatch(applyWorkflowToGranule(granuleId, granuleRecoveryWorkflow));
         } else {
-          return dispatch({
-            id: granuleId,
-            type: types.GRANULE_APPLYWORKFLOW_ERROR,
-            error: `Unable to apply recovery workflow to ${granuleId} because the attribute granuleRecoveryWorkflow is not set in collection.meta`
-          });
+          throw new ReferenceError(
+            `Unable to apply recovery workflow to ${granuleId} because the attribute granuleRecoveryWorkflow is not set in collection.meta`
+          );
         }
       });
-    });
+    }).catch((error) => dispatch({
+      id: granuleId,
+      type: types.GRANULE_APPLYWORKFLOW_ERROR,
+      error: error
+    }));
   };
 };
 
