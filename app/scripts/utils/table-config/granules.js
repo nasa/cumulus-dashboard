@@ -13,6 +13,7 @@ import {
   granuleLink
 } from '../format';
 import {
+  recoverGranule,
   reingestGranule,
   removeGranule,
   deleteGranule
@@ -88,6 +89,14 @@ export const simpleDropdownOption = function (config) {
     />
   );
 };
+
+const confirmRecover = (d) => `Recover ${d} granule(s)?`;
+export const recoverAction = (granules) => ({
+  text: 'Recover Granule',
+  action: recoverGranule,
+  state: granules.recovered,
+  confirm: confirmRecover
+});
 
 const confirmReingest = (d) => `Reingest ${d} granules(s)? Note: the granule files will be overwritten.`;
 const confirmApply = (d) => `Run workflow on ${d} granules?`;

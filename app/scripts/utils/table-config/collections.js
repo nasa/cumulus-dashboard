@@ -3,7 +3,7 @@ import React from 'react';
 import { get } from 'object-path';
 import { Link } from 'react-router';
 import { fromNow, seconds, tally, collectionNameVersion } from '../format';
-import { deleteCollection } from '../../actions';
+import { deleteCollection, recoverCollection } from '../../actions';
 import { strings } from '../../components/locale';
 
 export const tableHeader = [
@@ -41,6 +41,19 @@ export const tableSortProps = [
   'duration',
   'timestamp'
 ];
+
+const confirmRecover = (d) => `Recover ${d} ${strings.collection}(s)?`;
+export const recoverAction = function (collections) {
+  return [{
+    text: 'Recover',
+    action: (collectionId) => {
+      const { name, version } = collectionNameVersion(collectionId);
+      return recoverCollection(name, version);
+    },
+    state: collections.recovered,
+    confirm: confirmRecover
+  }];
+};
 
 const confirmDelete = (d) => `Delete ${d} ${strings.collection}(s)?`;
 export const bulkActions = function (collections) {

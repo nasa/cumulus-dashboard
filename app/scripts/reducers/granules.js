@@ -32,6 +32,10 @@ import {
   GRANULE_REMOVE_INFLIGHT,
   GRANULE_REMOVE_ERROR,
 
+  GRANULE_RECOVER,
+  GRANULE_RECOVER_INFLIGHT,
+  GRANULE_RECOVER_ERROR,
+
   GRANULE_DELETE,
   GRANULE_DELETE_INFLIGHT,
   GRANULE_DELETE_ERROR,
@@ -59,6 +63,7 @@ export const initialState = {
   reprocessed: {},
   removed: {},
   reingested: {},
+  recovered: {},
   executed: {},
   deleted: {},
   recent: {}
@@ -156,6 +161,18 @@ export default function reducer (state = initialState, action) {
     case GRANULE_REMOVE_ERROR:
       set(state, ['removed', id, 'status'], 'error');
       set(state, ['removed', id, 'error'], action.error);
+      break;
+
+    case GRANULE_RECOVER:
+      set(state, ['recovered', id, 'status'], 'success');
+      set(state, ['recovered', id, 'error'], null);
+      break;
+    case GRANULE_RECOVER_INFLIGHT:
+      set(state, ['recovered', id, 'status'], 'inflight');
+      break;
+    case GRANULE_RECOVER_ERROR:
+      set(state, ['recovered', id, 'status'], 'error');
+      set(state, ['recovered', id, 'error'], action.error);
       break;
 
     case GRANULE_DELETE:
