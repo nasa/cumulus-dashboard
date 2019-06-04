@@ -101,7 +101,7 @@ describe('Dashboard Executions Page', () => {
       cy.get('table tbody tr').as('events');
       cy.get('@events').its('length').should('be.eq', 7);
 
-      cy.getFakeApiFixture(`executions/status/${executionArn}`).as('executionStatus');
+      cy.getFakeApiFixture(`executions/status/${executionName}`).as('executionStatus');
 
       cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
         cy.get('@events').each(($el, index, $list) => {
@@ -171,7 +171,7 @@ describe('Dashboard Executions Page', () => {
       const startMatch = fullDate('2018-12-06T19:18:11.174Z');
       const endMatch = fullDate('2018-12-06T19:18:41.145Z');
 
-      cy.getFakeApiFixture(`executions/status/${executionArn}`).as('executionStatus');
+      cy.getFakeApiFixture(`executions/status/${executionName}`).as('executionStatus');
 
       cy.get('.status--process')
         .within(() => {
