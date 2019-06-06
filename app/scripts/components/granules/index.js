@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
 import Sidebar from '../app/sidebar';
-import { interval, getCount } from '../../actions';
+import { interval, getCount, getGranuleCSV } from '../../actions';
 import { updateInterval } from '../../config';
 import { strings } from '../locale';
 
@@ -29,8 +29,15 @@ class Granules extends React.Component {
     }));
   }
 
+  newFunction () {
+    this.props.dispatch(getGranuleCSV());
+    console.log(this.props);
+  }
+
   render () {
     const count = get(this.props.stats, 'count.data.granules.count');
+    const dataCSV = get(this.props, 'csvData');
+    console.log('data csv', dataCSV);
     return (
       <div className='page__granules'>
         <div className='content__header'>
@@ -46,6 +53,7 @@ class Granules extends React.Component {
               count={count}
             />
             <div className='page__content--shortened'>
+              <button onClick={this.newFunction()}>Click me</button>
               {this.props.children}
             </div>
           </div>
