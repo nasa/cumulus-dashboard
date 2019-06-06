@@ -27,17 +27,18 @@ class Granules extends React.Component {
       type: 'granules',
       field: 'status'
     }));
+    this.props.dispatch(getGranuleCSV());
   }
 
-  newFunction () {
-    this.props.dispatch(getGranuleCSV());
-    console.log(this.props);
+  newFunction (fileData) {
+    console.log(fileData);
   }
 
   render () {
     const count = get(this.props.stats, 'count.data.granules.count');
-    const dataCSV = get(this.props, 'csvData');
-    console.log('data csv', dataCSV);
+    const { granuleCSV } = this.props;
+    const { csvData } = granuleCSV;
+    // console.log('data csv', dataCSV);
     return (
       <div className='page__granules'>
         <div className='content__header'>
@@ -53,7 +54,7 @@ class Granules extends React.Component {
               count={count}
             />
             <div className='page__content--shortened'>
-              <button onClick={this.newFunction()}>Click me</button>
+              <button onClick={this.newFunction(csvData)}>Click me</button>
               {this.props.children}
             </div>
           </div>
@@ -68,9 +69,11 @@ Granules.propTypes = {
   location: PropTypes.object,
   params: PropTypes.object,
   dispatch: PropTypes.func,
-  stats: PropTypes.object
+  stats: PropTypes.object,
+  granuleCSV: PropTypes.object
 };
 
 export default connect(state => ({
-  stats: state.stats
+  stats: state.stats,
+  granuleCSV: state.granuleCSV
 }))(Granules);

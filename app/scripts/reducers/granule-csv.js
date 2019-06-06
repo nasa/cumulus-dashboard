@@ -1,5 +1,4 @@
 'use strict';
-import { set, del } from 'object-path';
 
 import {
   GRANULE_CSV,
@@ -28,24 +27,22 @@ export const initialState = {
 
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
-  const { id, data } = action;
   let csvData, nextState;
 
   switch (action.type) {
     case GRANULE_CSV:
       console.log('in reducer for csv file');
-      console.log(data);
-      csvData = data;
-      set(state, ['map', id, 'inflight'], false);
-      nextState = Object.assign(state, { csvData });
-      del(state, ['deleted', id]);
+      console.log(action.data);
+      csvData = { data: action.data, inflight: false, error: null };
+      nextState = Object.assign(state, csvData);
       break;
     case GRANULE_CSV_INFLIGHT:
-      set(state, ['map', id, 'inflight'], true);
+      csvData = { data: state.data, inflight: true, error: state.error };
+      nextState = Object.assign(state, csvData);
       break;
     case GRANULE_CSV_ERROR:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'error'], action.error);
+      csvData = { data: state.data, inflight: false, error: action.error };
+      nextState = Object.assign(state, csvData);
       break;
   }
   return nextState || state;
