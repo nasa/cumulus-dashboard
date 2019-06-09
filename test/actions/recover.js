@@ -162,7 +162,7 @@ test.serial('applyRecoveryWorkflowToGranule dispatches GRANULE_APPLYWORKFLOW_ERR
   });
 });
 
-test.serial('applyRecoveryWorkflowToGranule fails to acquire collection, fails, and dispatches failure', async (t) => {
+test.serial('applyRecoveryWorkflowToGranule fails to acquire collection and dispatches GRANULE_APPLYWORKFLOW_ERROR', async (t) => {
   const getGranuleResponse = {
     collectionId
   };
