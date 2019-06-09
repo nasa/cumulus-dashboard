@@ -62,7 +62,7 @@ test.serial('appylyRecoveryWorkflowToCollection fails to acquire collection, dis
   });
 });
 
-test.serial('applyRecoveryWorkflowToCollection collection collectionRecoveryWorkflow now configured, dispatches error', async (t) => {
+test.serial('applyRecoveryWorkflowToCollection dispatches error with collection collectionRecoveryWorkflow configured because applyWorkflow request fails', async (t) => {
   const getCollectionResponse = {
     results: [{
       meta: {}
