@@ -131,7 +131,7 @@ test.serial('applyRecoveryWorkflowToGranule fails to acquire granule, dispatches
   });
 });
 
-test.serial('applyRecoveryWorkflowToGranule related collection does not have recoveryWorkflow configured', async (t) => {
+test.serial('applyRecoveryWorkflowToGranule dispatches GRANULE_APPLYWORKFLOW_ERROR when related collection does not have recoveryWorkflow configured', async (t) => {
   const getGranuleResponse = {
     collectionId
   };
