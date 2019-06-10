@@ -295,22 +295,24 @@ export const applyWorkflowToCollection = (name, version, workflow) => ({
 export const applyRecoveryWorkflowToCollection = (collectionId) => {
   return (dispatch) => {
     const { name, version } = collectionNameVersion(collectionId);
-    return dispatch(getCollection(name, version)).then((collectionResponse) => {
-      const collectionRecoveryWorkflow = getProperty(
-        collectionResponse, 'data.results.0.meta.collectionRecoveryWorkflow'
-      );
-      if (collectionRecoveryWorkflow) {
-        return dispatch(applyWorkflowToCollection(name, version, collectionRecoveryWorkflow));
-      } else {
-        throw new ReferenceError(
-          `Unable to apply recovery workflow to ${collectionId} because the attribute collectionRecoveryWorkflow is not set in collection.meta`
+    return dispatch(getCollection(name, version))
+      .then((collectionResponse) => {
+        const collectionRecoveryWorkflow = getProperty(
+          collectionResponse, 'data.results.0.meta.collectionRecoveryWorkflow'
         );
-      }
-    }).catch((error) => dispatch({
-      id: collectionId,
-      type: types.COLLECTION_APPLYWORKFLOW_ERROR,
-      error: error
-    }));
+        if (collectionRecoveryWorkflow) {
+          return dispatch(applyWorkflowToCollection(name, version, collectionRecoveryWorkflow));
+        } else {
+          throw new ReferenceError(
+            `Unable to apply recovery workflow to ${collectionId} because the attribute collectionRecoveryWorkflow is not set in collection.meta`
+          );
+        }
+      })
+      .catch((error) => dispatch({
+        id: collectionId,
+        type: types.COLLECTION_APPLYWORKFLOW_ERROR,
+        error: error
+      }));
   };
 };
 
@@ -327,16 +329,18 @@ export const applyWorkflowToGranule = (granuleId, workflow) => ({
   }
 });
 
+export const getCollectionByGranuleId = (dispatch, granuleId) => {
+  return dispatch(getGranule(granuleId)).then((granuleResponse) => {
+    const { name, version } = collectionNameVersion(granuleResponse.data.collectionId);
+    return dispatch(getCollection(name, version));
+  });
+};
+
 export const applyRecoveryWorkflowToGranule = (granuleId) => {
   return (dispatch) => {
-    return dispatch(getGranule(granuleId)).then((granuleResponse) => {
-      const { name, version } = collectionNameVersion(granuleResponse.data.collectionId);
-      return dispatch(
-        getCollection(name, version)
-      ).then((collectionResponse) => {
-        const granuleRecoveryWorkflow = getProperty(
-          collectionResponse, 'data.results.0.meta.granuleRecoveryWorkflow'
-        );
+    return getCollectionByGranuleId(dispatch, granuleId)
+      .then((collectionResponse) => {
+        const granuleRecoveryWorkflow = getProperty(collectionResponse, 'data.results.0.meta.granuleRecoveryWorkflow');
         if (granuleRecoveryWorkflow) {
           return dispatch(applyWorkflowToGranule(granuleId, granuleRecoveryWorkflow));
         } else {
@@ -344,12 +348,12 @@ export const applyRecoveryWorkflowToGranule = (granuleId) => {
             `Unable to apply recovery workflow to ${granuleId} because the attribute granuleRecoveryWorkflow is not set in collection.meta`
           );
         }
-      });
-    }).catch((error) => dispatch({
-      id: granuleId,
-      type: types.GRANULE_APPLYWORKFLOW_ERROR,
-      error: error
-    }));
+      })
+      .catch((error) => dispatch({
+        id: granuleId,
+        type: types.GRANULE_APPLYWORKFLOW_ERROR,
+        error: error
+      }));
   };
 };
 
