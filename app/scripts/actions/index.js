@@ -65,8 +65,7 @@ export const getCollection = (name, version) => ({
     type: types.COLLECTION,
     method: 'GET',
     id: getCollectionId({name, version}),
-    // path: `collections/${name}/${version}`
-    path: `collections?name=${name}&version=${version}`
+    path: `collections/${name}/${version}`
   }
 });
 
@@ -298,7 +297,7 @@ export const applyRecoveryWorkflowToCollection = (collectionId) => {
     return dispatch(getCollection(name, version))
       .then((collectionResponse) => {
         const collectionRecoveryWorkflow = getProperty(
-          collectionResponse, 'data.results.0.meta.collectionRecoveryWorkflow'
+          collectionResponse, 'data.meta.collectionRecoveryWorkflow'
         );
         if (collectionRecoveryWorkflow) {
           return dispatch(applyWorkflowToCollection(name, version, collectionRecoveryWorkflow));
@@ -340,7 +339,9 @@ export const applyRecoveryWorkflowToGranule = (granuleId) => {
   return (dispatch) => {
     return getCollectionByGranuleId(dispatch, granuleId)
       .then((collectionResponse) => {
-        const granuleRecoveryWorkflow = getProperty(collectionResponse, 'data.results.0.meta.granuleRecoveryWorkflow');
+        const granuleRecoveryWorkflow = getProperty(
+          collectionResponse, 'data.meta.granuleRecoveryWorkflow'
+        );
         if (granuleRecoveryWorkflow) {
           return dispatch(applyWorkflowToGranule(granuleId, granuleRecoveryWorkflow));
         } else {
