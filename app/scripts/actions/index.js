@@ -65,7 +65,7 @@ export const getCollection = (name, version) => ({
     type: types.COLLECTION,
     method: 'GET',
     id: getCollectionId({name, version}),
-    path: `collections/${name}/${version}`
+    path: `collections?name=${name}&version=${version}`
   }
 });
 
@@ -297,7 +297,7 @@ export const applyRecoveryWorkflowToCollection = (collectionId) => {
     return dispatch(getCollection(name, version))
       .then((collectionResponse) => {
         const collectionRecoveryWorkflow = getProperty(
-          collectionResponse, 'data.meta.collectionRecoveryWorkflow'
+          collectionResponse, 'data.results.0.meta.collectionRecoveryWorkflow'
         );
         if (collectionRecoveryWorkflow) {
           return dispatch(applyWorkflowToCollection(name, version, collectionRecoveryWorkflow));
@@ -328,19 +328,21 @@ export const applyWorkflowToGranule = (granuleId, workflow) => ({
   }
 });
 
-export const getCollectionByGranuleId = (dispatch, granuleId) => {
-  return dispatch(getGranule(granuleId)).then((granuleResponse) => {
-    const { name, version } = collectionNameVersion(granuleResponse.data.collectionId);
-    return dispatch(getCollection(name, version));
-  });
+export const getCollectionByGranuleId = (granuleId) => {
+  return (dispatch) => {
+    return dispatch(getGranule(granuleId)).then((granuleResponse) => {
+      const { name, version } = collectionNameVersion(granuleResponse.data.collectionId);
+      return dispatch(getCollection(name, version));
+    });
+  };
 };
 
 export const applyRecoveryWorkflowToGranule = (granuleId) => {
   return (dispatch) => {
-    return getCollectionByGranuleId(dispatch, granuleId)
+    return dispatch(getCollectionByGranuleId(granuleId))
       .then((collectionResponse) => {
         const granuleRecoveryWorkflow = getProperty(
-          collectionResponse, 'data.meta.granuleRecoveryWorkflow'
+          collectionResponse, 'data.results.0.meta.granuleRecoveryWorkflow'
         );
         if (granuleRecoveryWorkflow) {
           return dispatch(applyWorkflowToGranule(granuleId, granuleRecoveryWorkflow));
