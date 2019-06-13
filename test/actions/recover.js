@@ -47,7 +47,6 @@ test.beforeEach((t) => {
 
 test.serial('appylyRecoveryWorkflowToCollection fails to acquire collection, dispatches COLLECTION_APPLYWORKFLOW_ERROR', async (t) => {
   nock('https://example.com')
-    // .get(`/collections/${name}/${version}`)
     .get(`/collections?name=${name}&version=${version}`)
     .reply(404);
 
@@ -73,7 +72,6 @@ test.serial('applyRecoveryWorkflowToCollection dispatches error with collection 
   };
 
   nock('https://example.com')
-    // .get(`/collections/${name}/${version}`)
     .get(`/collections?name=${name}&version=${version}`)
     .reply(200, getCollectionResponse);
 
@@ -101,7 +99,6 @@ test.serial('applyRecoveryWorkflowToCollection successfully sends applyWorkflow 
   };
 
   nock('https://example.com')
-    // .get(`/collections/${name}/${version}`)
     .get(`/collections?name=${name}&version=${version}`)
     .reply(200, getCollectionResponse)
     .put(`/collections/${name}/${version}`)
@@ -153,7 +150,6 @@ test.serial('applyRecoveryWorkflowToGranule dispatches GRANULE_APPLYWORKFLOW_ERR
     .get(`/granules/${granuleId}`)
     .reply(200, getGranuleResponse);
   nock('https://example.com')
-    // .get(`/collections/${name}/${version}`)
     .get(`/collections?name=${name}&version=${version}`)
     .reply(200, getCollectionResponse);
 
@@ -180,7 +176,6 @@ test.serial('applyRecoveryWorkflowToGranule fails to acquire collection and disp
     .get(`/granules/${granuleId}`)
     .reply(200, getGranuleResponse);
   nock('https://example.com')
-    // .get(`/collections/${name}/${version}`)
     .get(`/collections?name=${name}&version=${version}`)
     .reply(404);
 
@@ -213,7 +208,6 @@ test.serial('applyRecoveryWorkflowToGranule dispatches applyWorkflow', async (t)
   };
 
   nock('https://example.com')
-    // .get(`/collections/${name}/${version}`)
     .get(`/collections?name=${name}&version=${version}`)
     .reply(200, getCollectionResponse);
   nock('https://example.com')
