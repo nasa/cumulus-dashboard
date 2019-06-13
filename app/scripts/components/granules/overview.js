@@ -12,6 +12,7 @@ import {
   listGranules,
   listWorkflows,
   applyWorkflowToGranule,
+  applyRecoveryWorkflowToGranule,
   getOptionsCollectionName
 } from '../../actions';
 import { get } from 'object-path';
@@ -43,6 +44,7 @@ class GranulesOverview extends React.Component {
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.applyWorkflow = this.applyWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
+    this.applyRecoveryWorkflow = this.applyRecoveryWorkflow.bind(this);
     this.state = {};
   }
 
@@ -71,12 +73,16 @@ class GranulesOverview extends React.Component {
       execute: {
         options: this.getExecuteOptions(),
         action: this.applyWorkflow
+      },
+      recover: {
+        options: this.getExecuteOptions(),
+        action: this.applyRecoveryWorkflow
       }
     };
     const { granules, config } = this.props;
     let actions = bulkActions(granules, actionConfig);
-    if (config.recoveryPath) {
-      actions = actions.concat(recoverAction(granules));
+    if (config.enableRecovery) {
+      actions = actions.concat(recoverAction(granules, actionConfig));
     }
     return actions;
   }
@@ -87,6 +93,10 @@ class GranulesOverview extends React.Component {
 
   applyWorkflow (granuleId) {
     return applyWorkflowToGranule(granuleId, this.state.workflow);
+  }
+
+  applyRecoveryWorkflow (granuleId) {
+    return applyRecoveryWorkflowToGranule(granuleId);
   }
 
   getExecuteOptions () {
