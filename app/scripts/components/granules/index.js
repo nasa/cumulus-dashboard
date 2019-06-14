@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
 import Sidebar from '../app/sidebar';
-import { interval, getCount, getGranuleCSV } from '../../actions';
+import { interval, getCount } from '../../actions';
 import { updateInterval } from '../../config';
 import { strings } from '../locale';
 
@@ -27,18 +27,18 @@ class Granules extends React.Component {
       type: 'granules',
       field: 'status'
     }));
-    this.props.dispatch(getGranuleCSV());
   }
 
-  newFunction (fileData) {
-    console.log(fileData);
+  csvDownloadSection (fileData) {
+    const data = new Blob([fileData], {type: 'text/csv'});
+    const url = window.URL.createObjectURL(data);
+
+    return (<a id='download_link' download='granules.csv' href={url}>Download Granule List</a>);
   }
 
   render () {
     const count = get(this.props.stats, 'count.data.granules.count');
-    const { granuleCSV } = this.props;
-    const { csvData } = granuleCSV;
-    // console.log('data csv', dataCSV);
+
     return (
       <div className='page__granules'>
         <div className='content__header'>
@@ -54,7 +54,6 @@ class Granules extends React.Component {
               count={count}
             />
             <div className='page__content--shortened'>
-              <button onClick={this.newFunction(csvData)}>Click me</button>
               {this.props.children}
             </div>
           </div>
@@ -69,11 +68,9 @@ Granules.propTypes = {
   location: PropTypes.object,
   params: PropTypes.object,
   dispatch: PropTypes.func,
-  stats: PropTypes.object,
-  granuleCSV: PropTypes.object
+  stats: PropTypes.object
 };
 
 export default connect(state => ({
-  stats: state.stats,
-  granuleCSV: state.granuleCSV
+  stats: state.stats
 }))(Granules);
