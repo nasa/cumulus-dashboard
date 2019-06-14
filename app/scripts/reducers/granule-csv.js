@@ -7,22 +7,9 @@ import {
 } from '../actions/types';
 
 export const initialState = {
-  list: {
-    data: [],
-    meta: {},
-    params: {}
-  },
-  csvData: {},
-  dropdowns: {},
-  map: {},
-  meta: {},
-  reprocessed: {},
-  removed: {},
-  reingested: {},
-  recovered: {},
-  executed: {},
-  deleted: {},
-  recent: {}
+  data: {},
+  inflight: false,
+  error: null
 };
 
 export default function reducer (state = initialState, action) {

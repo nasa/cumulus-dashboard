@@ -403,7 +403,7 @@ export const getGranuleCSV = (options) => ({
     type: types.GRANULE_CSV,
     method: 'GET',
     url: url.resolve(root, 'granule-csv'),
-    qs: Object.assign({ limit: pageLimit }, options)
+    qs: Object.assign({}, options)
   }
 });
 
