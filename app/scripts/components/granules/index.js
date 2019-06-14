@@ -29,16 +29,8 @@ class Granules extends React.Component {
     }));
   }
 
-  csvDownloadSection (fileData) {
-    const data = new Blob([fileData], {type: 'text/csv'});
-    const url = window.URL.createObjectURL(data);
-
-    return (<a id='download_link' download='granules.csv' href={url}>Download Granule List</a>);
-  }
-
   render () {
     const count = get(this.props.stats, 'count.data.granules.count');
-
     return (
       <div className='page__granules'>
         <div className='content__header'>
