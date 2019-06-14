@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import {
+  applyRecoveryWorkflowToCollection,
   clearCollectionsSearch,
   getCumulusInstanceMetadata,
   listCollections,
@@ -50,9 +51,14 @@ class CollectionList extends React.Component {
   }
 
   generateBulkActions () {
+    const actionConfig = {
+      recover: {
+        action: applyRecoveryWorkflowToCollection
+      }
+    };
     const { collections, config } = this.props;
     let actions = bulkActions(collections);
-    if (config.recoveryPath) actions = actions.concat(recoverAction(collections));
+    if (config.enableRecovery) actions = actions.concat(recoverAction(collections, actionConfig));
     return actions;
   }
 

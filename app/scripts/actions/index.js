@@ -9,7 +9,7 @@ import { CMR, hostId } from '@cumulus/cmrjs';
 
 import { configureRequest } from './helpers';
 import _config from '../config';
-import { getCollectionId } from '../utils/format';
+import { getCollectionId, collectionNameVersion } from '../utils/format';
 import log from '../utils/log';
 import * as types from './types';
 
@@ -155,18 +155,6 @@ export const deleteCollection = (name, version) => ({
   }
 });
 
-export const recoverCollection = (name, version) => ({
-  [CALL_API]: {
-    type: types.COLLECTION_RECOVER,
-    method: 'PUT',
-    id: getCollectionId({name, version}),
-    path: `${_config.recoveryPath}/collections/${getCollectionId({name, version})}`,
-    body: {
-      action: 'recoverCollection'
-    }
-  }
-});
-
 export const searchCollections = (prefix) => ({ type: types.SEARCH_COLLECTIONS, prefix: prefix });
 export const clearCollectionsSearch = () => ({ type: types.CLEAR_COLLECTIONS_SEARCH });
 export const filterCollections = (param) => ({ type: types.FILTER_COLLECTIONS, param: param });
@@ -290,6 +278,43 @@ export const reprocessGranule = (granuleId) => ({
   }
 });
 
+export const applyWorkflowToCollection = (name, version, workflow) => ({
+  [CALL_API]: {
+    type: types.COLLECTION_APPLYWORKFLOW,
+    method: 'PUT',
+    id: getCollectionId({name, version}),
+    path: `collections/${name}/${version}`,
+    body: {
+      action: 'applyWorkflow',
+      workflow
+    }
+  }
+});
+
+export const applyRecoveryWorkflowToCollection = (collectionId) => {
+  return (dispatch) => {
+    const { name, version } = collectionNameVersion(collectionId);
+    return dispatch(getCollection(name, version))
+      .then((collectionResponse) => {
+        const collectionRecoveryWorkflow = getProperty(
+          collectionResponse, 'data.results.0.meta.collectionRecoveryWorkflow'
+        );
+        if (collectionRecoveryWorkflow) {
+          return dispatch(applyWorkflowToCollection(name, version, collectionRecoveryWorkflow));
+        } else {
+          throw new ReferenceError(
+            `Unable to apply recovery workflow to ${collectionId} because the attribute collectionRecoveryWorkflow is not set in collection.meta`
+          );
+        }
+      })
+      .catch((error) => dispatch({
+        id: collectionId,
+        type: types.COLLECTION_APPLYWORKFLOW_ERROR,
+        error: error
+      }));
+  };
+};
+
 export const applyWorkflowToGranule = (granuleId, workflow) => ({
   [CALL_API]: {
     type: types.GRANULE_APPLYWORKFLOW,
@@ -302,6 +327,38 @@ export const applyWorkflowToGranule = (granuleId, workflow) => ({
     }
   }
 });
+
+export const getCollectionByGranuleId = (granuleId) => {
+  return (dispatch) => {
+    return dispatch(getGranule(granuleId)).then((granuleResponse) => {
+      const { name, version } = collectionNameVersion(granuleResponse.data.collectionId);
+      return dispatch(getCollection(name, version));
+    });
+  };
+};
+
+export const applyRecoveryWorkflowToGranule = (granuleId) => {
+  return (dispatch) => {
+    return dispatch(getCollectionByGranuleId(granuleId))
+      .then((collectionResponse) => {
+        const granuleRecoveryWorkflow = getProperty(
+          collectionResponse, 'data.results.0.meta.granuleRecoveryWorkflow'
+        );
+        if (granuleRecoveryWorkflow) {
+          return dispatch(applyWorkflowToGranule(granuleId, granuleRecoveryWorkflow));
+        } else {
+          throw new ReferenceError(
+            `Unable to apply recovery workflow to ${granuleId} because the attribute granuleRecoveryWorkflow is not set in collection.meta`
+          );
+        }
+      })
+      .catch((error) => dispatch({
+        id: granuleId,
+        type: types.GRANULE_APPLYWORKFLOW_ERROR,
+        error: error
+      }));
+  };
+};
 
 export const reingestGranule = (granuleId) => ({
   [CALL_API]: {
@@ -323,18 +380,6 @@ export const removeGranule = (granuleId) => ({
     path: `granules/${granuleId}`,
     body: {
       action: 'removeFromCmr'
-    }
-  }
-});
-
-export const recoverGranule = (granuleId) => ({
-  [CALL_API]: {
-    type: types.GRANULE_RECOVER,
-    method: 'PUT',
-    id: granuleId,
-    path: `${_config.recoveryPath}/granules/${granuleId}`,
-    body: {
-      action: 'recoverGranule'
     }
   }
 });

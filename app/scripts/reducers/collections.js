@@ -7,6 +7,10 @@ import {
   COLLECTION_INFLIGHT,
   COLLECTION_ERROR,
 
+  COLLECTION_APPLYWORKFLOW,
+  COLLECTION_APPLYWORKFLOW_INFLIGHT,
+  COLLECTION_APPLYWORKFLOW_ERROR,
+
   COLLECTIONS,
   COLLECTIONS_INFLIGHT,
   COLLECTIONS_ERROR,
@@ -18,10 +22,6 @@ import {
   COLLECTION_DELETE,
   COLLECTION_DELETE_INFLIGHT,
   COLLECTION_DELETE_ERROR,
-
-  COLLECTION_RECOVER,
-  COLLECTION_RECOVER_INFLIGHT,
-  COLLECTION_RECOVER_ERROR,
 
   UPDATE_COLLECTION,
   UPDATE_COLLECTION_INFLIGHT,
@@ -41,10 +41,11 @@ export const initialState = {
     meta: {},
     params: {}
   },
-  map: {},
   created: {},
-  updated: {},
-  deleted: {}
+  deleted: {},
+  executed: {},
+  map: {},
+  updated: {}
 };
 
 export default function reducer (state = initialState, action) {
@@ -67,6 +68,18 @@ export default function reducer (state = initialState, action) {
     case COLLECTION_ERROR:
       set(state, ['map', id, 'inflight'], false);
       set(state, ['map', id, 'error'], action.error);
+      break;
+
+    case COLLECTION_APPLYWORKFLOW:
+      set(state, ['executed', id, 'status'], 'success');
+      set(state, ['executed', id, 'error'], null);
+      break;
+    case COLLECTION_APPLYWORKFLOW_INFLIGHT:
+      set(state, ['executed', id, 'status'], 'inflight');
+      break;
+    case COLLECTION_APPLYWORKFLOW_ERROR:
+      set(state, ['executed', id, 'status'], 'error');
+      set(state, ['executed', id, 'error'], action.error);
       break;
 
     case COLLECTIONS:
@@ -119,18 +132,6 @@ export default function reducer (state = initialState, action) {
     case COLLECTION_DELETE_ERROR:
       set(state, ['deleted', id, 'status'], 'error');
       set(state, ['deleted', id, 'error'], action.error);
-      break;
-
-    case COLLECTION_RECOVER:
-      set(state, ['recovered', id, 'status'], 'success');
-      set(state, ['recovered', id, 'error', null]);
-      break;
-    case COLLECTION_RECOVER_INFLIGHT:
-      set(state, ['recovered', id, 'status'], 'inflight');
-      break;
-    case COLLECTION_RECOVER_ERROR:
-      set(state, ['recovered', id, 'status'], 'error');
-      set(state, ['recovered', id, 'status'], action.error);
       break;
 
     case SEARCH_COLLECTIONS:
