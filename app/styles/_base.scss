@@ -64,6 +64,10 @@ a, a:visited {
   border-bottom: 1px solid rgba(34, 118, 172, .2);
 }
 
+.csv__download {
+  float: right;
+}
+
 a:hover {
   border-bottom: 1px solid rgba(34, 118, 172, 1);
   color: darken($ocean-blue, 10%);

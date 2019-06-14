@@ -31,8 +31,6 @@ export default function reducer (state = initialState, action) {
 
   switch (action.type) {
     case GRANULE_CSV:
-      console.log('in reducer for csv file');
-      console.log(action.data);
       csvData = { data: action.data, inflight: false, error: null };
       nextState = Object.assign(state, csvData);
       break;
