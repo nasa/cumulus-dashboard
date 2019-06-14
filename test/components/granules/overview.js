@@ -34,6 +34,7 @@ const granules = {
     }
   }
 };
+const data = '';
 
 test('GranulesOverview generates bulkAction for recovery button', function (t) {
   const dispatch = () => {};
@@ -51,6 +52,7 @@ test('GranulesOverview generates bulkAction for recovery button', function (t) {
     <Provider store={store}>
       <GranulesOverview
         granules = {granules}
+        granuleCSV = {data}
         stats = {stats}
         dispatch = {dispatch}
         workflowOptions = {workflowOptions}
@@ -84,6 +86,7 @@ test('GranulesOverview does not generate bulkAction for recovery button', functi
       <GranulesOverview
         granules = {granules}
         stats = {stats}
+        granuleCSV = {data}
         dispatch = {dispatch}
         workflowOptions = {workflowOptions}
         location = {location}

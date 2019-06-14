@@ -119,10 +119,12 @@ class GranulesOverview extends React.Component {
   }
 
   csvDownloadSection (fileData) {
-    const data = new Blob([fileData], {type: 'text/csv'});
-    const url = window.URL.createObjectURL(data);
+    if (fileData) {
+      const data = new Blob([fileData], {type: 'text/csv'});
+      const url = window.URL.createObjectURL(data);
 
-    return (<a className='csv__download' id='download_link' download='granules.csv' href={url}>Download Granule List</a>);
+      return (<a className='csv__download' id='download_link' download='granules.csv' href={url}>Download Granule List</a>);
+    } else return;
   }
 
   render () {
