@@ -116,7 +116,7 @@ describe('Dashboard Granules Page', () => {
       cy.contains('.heading--xlarge', 'Granules');
 
       cy.contains('a', 'Download Granule List')
-      .should('have.attr', 'href').should('include', 'blob:http://localhost:3000/');
+      .should('have.attr', 'href').should('include', 'blob:http://');
     });
   });
 });
