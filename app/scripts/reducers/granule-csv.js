@@ -7,7 +7,7 @@ import {
 } from '../actions/types';
 
 export const initialState = {
-  data: {},
+  data: null,
   inflight: false,
   error: null
 };
