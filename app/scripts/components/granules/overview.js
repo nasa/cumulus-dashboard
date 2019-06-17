@@ -13,7 +13,8 @@ import {
   listWorkflows,
   applyWorkflowToGranule,
   applyRecoveryWorkflowToGranule,
-  getOptionsCollectionName
+  getOptionsCollectionName,
+  getGranuleCSV
 } from '../../actions';
 import { get } from 'object-path';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
@@ -44,6 +45,7 @@ class GranulesOverview extends React.Component {
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.applyWorkflow = this.applyWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
+    this.csvDownloadSection = this.csvDownloadSection.bind(this);
     this.applyRecoveryWorkflow = this.applyRecoveryWorkflow.bind(this);
     this.state = {};
   }
@@ -62,6 +64,7 @@ class GranulesOverview extends React.Component {
       type: 'granules',
       field: 'status'
     }));
+    this.props.dispatch(getGranuleCSV());
   }
 
   generateQuery () {
@@ -115,10 +118,20 @@ class GranulesOverview extends React.Component {
     return <Overview items={overview} inflight={false} />;
   }
 
+  csvDownloadSection (fileData) {
+    if (!fileData) return;
+
+    const data = new Blob([fileData], {type: 'text/csv'});
+    const url = window.URL.createObjectURL(data);
+
+    return (<a className='csv__download' id='download_link' download='granules.csv' href={url}>Download Granule List</a>);
+  }
+
   render () {
-    const { stats, granules } = this.props;
+    const { stats, granules, granuleCSV } = this.props;
     const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
+    const { data } = granuleCSV;
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -131,6 +144,7 @@ class GranulesOverview extends React.Component {
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
+            {this.csvDownloadSection(data)}
           </div>
           <div className='filters filters__wlabels'>
             <Dropdown
@@ -177,7 +191,8 @@ GranulesOverview.propTypes = {
   dispatch: PropTypes.func,
   workflowOptions: PropTypes.array,
   location: PropTypes.object,
-  config: PropTypes.object
+  config: PropTypes.object,
+  granuleCSV: PropTypes.object
 };
 
 export { GranulesOverview };
@@ -185,5 +200,6 @@ export default connect(state => ({
   stats: state.stats,
   workflowOptions: workflowOptionNames(state),
   granules: state.granules,
-  config: state.config
+  config: state.config,
+  granuleCSV: state.granuleCSV
 }))(GranulesOverview);

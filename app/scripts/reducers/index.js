@@ -5,6 +5,7 @@ import collections from './collections';
 import config from './config';
 import dist from './dist';
 import granules from './granules';
+import granuleCSV from './granule-csv';
 import stats from './stats';
 import pdrs from './pdrs';
 import providers from './providers';
@@ -29,6 +30,7 @@ export const reducers = {
   mmtLinks,
   cumulusInstance,
   granules,
+  granuleCSV,
   stats,
   pdrs,
   providers,

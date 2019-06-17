@@ -398,6 +398,14 @@ export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH })
 export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param: param });
 export const clearGranulesFilter = (paramKey) => ({ type: types.CLEAR_GRANULES_FILTER, paramKey: paramKey });
 
+export const getGranuleCSV = (options) => ({
+  [CALL_API]: {
+    type: types.GRANULE_CSV,
+    method: 'GET',
+    url: url.resolve(root, 'granule-csv')
+  }
+});
+
 export const getOptionsCollectionName = (options) => ({
   [CALL_API]: {
     type: types.OPTIONS_COLLECTIONNAME,
