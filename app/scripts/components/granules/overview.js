@@ -119,7 +119,8 @@ class GranulesOverview extends React.Component {
   }
 
   csvDownloadSection (fileData) {
-    if (!fileData) return;
+    if (!fileData || Object.entries(fileData).length === 0) return;
+
     const data = new Blob([fileData], {type: 'text/csv'});
     const url = window.URL.createObjectURL(data);
 
@@ -131,6 +132,7 @@ class GranulesOverview extends React.Component {
     const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
     const { data } = granuleCSV;
+    console.log(data);
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>

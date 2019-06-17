@@ -114,6 +114,10 @@ app.delete('/collections/:name/:version', async (req, res) => {
   }
 });
 
+app.get('/granule-csv', (req, res) => {
+  res.status(200).send('"granuleUr","collectionId","createdAt","startDateTime","endDateTime"\n"localrun-granule","fakeCollection___v1","2019-06-14T13:14:14.160Z","149817246194","18724619651535"');
+});
+
 app.get('/providers', async (req, res) => {
   const providers = await fakeProvidersDb.getItems();
   res.send(providers);
