@@ -402,8 +402,7 @@ export const getGranuleCSV = (options) => ({
   [CALL_API]: {
     type: types.GRANULE_CSV,
     method: 'GET',
-    url: url.resolve(root, 'granule-csv'),
-    qs: Object.assign({}, options)
+    url: url.resolve(root, 'granule-csv')
   }
 });
 

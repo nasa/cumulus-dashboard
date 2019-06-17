@@ -132,7 +132,6 @@ class GranulesOverview extends React.Component {
     const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
     const { data } = granuleCSV;
-    console.log(data);
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
