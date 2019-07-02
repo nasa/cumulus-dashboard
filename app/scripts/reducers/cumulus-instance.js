@@ -12,8 +12,13 @@ export default function reducer (state = initialState, action) {
   const { data } = action;
   switch (action.type) {
     case ADD_INSTANCE_META:
-      if (data.cmr.environment) set(state, 'cmrEnvironment', data.cmr.environment);
-      if (data.cmr.provider) set(state, 'cmrProvider', data.cmr.provider);
+      if (data.cmr) {
+        if (data.cmr.environment) set(state, 'cmrEnvironment', data.cmr.environment);
+        if (data.cmr.provider) set(state, 'cmrProvider', data.cmr.provider);
+      }
+      if (data.cumulus) {
+        if (data.cumulus.stackName) set(state, 'stackName', data.cumulus.stackName);
+      }
       break;
   }
   return state;
