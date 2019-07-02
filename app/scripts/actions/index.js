@@ -162,7 +162,7 @@ export const clearCollectionsFilter = (paramKey) => ({ type: types.CLEAR_COLLECT
 
 export const getCumulusInstanceMetadata = () => ({
   [CALL_API]: {
-    type: types.ADD_INSTANCE_META_CMR,
+    type: types.ADD_INSTANCE_META,
     method: 'GET',
     path: 'instanceMeta'
   }
