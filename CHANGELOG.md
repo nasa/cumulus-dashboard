@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- **CUMULUS-1337**
+  - Distribution metrics are no longer served from the cumulus core, but are computed from the logs in the ELK stack.
+  - If you want to use a Kibana instance (ELK stack) to display distribution metrics, you need to set the environment variable KIBANAROOT to point to the base url of an accessable Kibana instance.
+
 ## [v1.4.0] - 2019-04-19
 
 ### BREAKING CHANGES

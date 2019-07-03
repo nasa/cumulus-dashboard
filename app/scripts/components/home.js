@@ -8,6 +8,7 @@ import {
   interval,
   getStats,
   getCount,
+  getCumulusInstanceMetadata,
   getDistMetrics,
   listGranules,
   listExecutions,
@@ -26,6 +27,7 @@ import {
   errorTableSortProps
 } from '../utils/table-config/granules';
 import { recent, updateInterval } from '../config';
+import { kibanaErrorsLink, kibanaSuccessesLink } from '../utils/kibana';
 
 import { strings } from './locale';
 
@@ -41,6 +43,8 @@ class Home extends React.Component {
     this.cancelInterval = interval(() => {
       this.query();
     }, updateInterval, true);
+    const {dispatch} = this.props;
+    dispatch(getCumulusInstanceMetadata());
   }
 
   componentWillUnmount () {
@@ -69,6 +73,10 @@ class Home extends React.Component {
     };
   }
 
+  isExternalLink (link) {
+    return link.match('https?://');
+  }
+
   renderButtonListSection (items, header, listId) {
     const data = items.filter(d => d[0] !== nullValue);
     if (!data.length) return null;
@@ -82,10 +90,16 @@ class Home extends React.Component {
             {data.map(d => {
               const value = d[0];
               return (
-                <li key={d[1]}>
-                  <Link id={d[1]} className='overview-num' to={d[2] || '#'}>
-                    <span className='num--large'>{value}</span> {d[1]}
-                  </Link>
+                  <li key={d[1]}>
+                  {this.isExternalLink(d[2]) ? (
+                    <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
+                      <span className='num--large'>{value}</span> {d[1]}
+                    </a>
+                  ) : (
+                    <Link id={d[1]} className='overview-num' to={d[2] || '#'}>
+                      <span className='num--large'>{value}</span> {d[1]}
+                    </Link>
+                  )}
                 </li>
               );
             })}
@@ -108,8 +122,8 @@ class Home extends React.Component {
       [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time']
     ];
     const distStats = [
-      [tally(get(dist.data, 'errors')), 'Errors', '/distribution'],
-      [tally(get(dist.data, 'successes')), 'Successes', '/distribution']
+      [tally(get(dist.data, 'errors')), 'Errors', kibanaErrorsLink(this.props.cumulusInstance)],
+      [tally(get(dist.data, 'successes')), 'Successes', kibanaSuccessesLink(this.props.cumulusInstance)]
     ];
     const granuleCount = get(count.data, 'granules.meta.count');
     const numGranules = !isNaN(granuleCount) ? `(${tally(granuleCount)})` : null;
@@ -164,7 +178,8 @@ Home.propTypes = {
   rules: PropTypes.object,
   granules: PropTypes.object,
   pdrs: PropTypes.object,
-  executions: PropTypes.object
+  executions: PropTypes.object,
+  cumulusInstance: PropTypes.object
 };
 
 export { Home };
@@ -174,5 +189,6 @@ export default connect(state => ({
   dist: state.dist,
   granules: state.granules,
   pdrs: state.pdrs,
-  executions: state.executions
+  executions: state.executions,
+  cumulusInstance: state.cumulusInstance
 }))(Home);

@@ -15,6 +15,7 @@ import * as types from './types';
 
 const CALL_API = types.CALL_API;
 const {
+  kibanaRoot,
   apiRoot: root,
   pageLimit,
   minCompatibleApiVersion
