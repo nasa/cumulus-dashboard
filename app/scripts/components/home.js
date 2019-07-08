@@ -27,7 +27,16 @@ import {
   errorTableSortProps
 } from '../utils/table-config/granules';
 import { recent, updateInterval } from '../config';
-import { kibanaErrorsLink, kibanaSuccessesLink } from '../utils/kibana';
+import {
+  kibanaS3AccessErrorsLink,
+  kibanaS3AccessSuccessesLink,
+  kibanaApiLambdaErrorsLink,
+  kibanaApiLambdaSuccessesLink,
+  kibanaGatewayAccessErrorsLink,
+  kibanaGatewayAccessSuccessesLink,
+  kibanaGatewayExecutionErrorsLink,
+  kibanaGatewayExecutionSuccessesLink
+} from '../utils/kibana';
 
 import { strings } from './locale';
 
@@ -122,8 +131,17 @@ class Home extends React.Component {
       [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time']
     ];
     const distStats = [
-      [tally(get(dist.data, 'errors')), 'Errors', kibanaErrorsLink(this.props.cumulusInstance)],
-      [tally(get(dist.data, 'successes')), 'Successes', kibanaSuccessesLink(this.props.cumulusInstance)]
+      [tally(get(dist.data, 'errors')), 'S3 Access Errors', kibanaS3AccessErrorsLink(this.props.cumulusInstance)],
+      [tally(get(dist.data, 'successes')), 'S3 Access Successes', kibanaS3AccessSuccessesLink(this.props.cumulusInstance)],
+
+      [tally(get(dist.data, 'errors')), 'Distribution API Lambda Errors', kibanaApiLambdaErrorsLink(this.props.cumulusInstance)],
+      [tally(get(dist.data, 'successes')), 'Distribution API Lambda Successes', kibanaApiLambdaSuccessesLink(this.props.cumulusInstance)],
+
+      [tally(get(dist.data, 'errors')), 'Gateway Execution Errors', kibanaGatewayExecutionErrorsLink(this.props.cumulusInstance)],
+      [tally(get(dist.data, 'successes')), 'Gateway Execution Successes', kibanaGatewayExecutionSuccessesLink(this.props.cumulusInstance)],
+
+      [tally(get(dist.data, 'errors')), 'Gateway Access Errors', kibanaGatewayAccessErrorsLink(this.props.cumulusInstance)],
+      [tally(get(dist.data, 'successes')), 'Gateway Access Successes', kibanaGatewayAccessSuccessesLink(this.props.cumulusInstance)]
     ];
     const granuleCount = get(count.data, 'granules.meta.count');
     const numGranules = !isNaN(granuleCount) ? `(${tally(granuleCount)})` : null;
