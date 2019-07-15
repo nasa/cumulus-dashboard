@@ -12,7 +12,8 @@ import {
   getDistMetrics,
   listGranules,
   listExecutions,
-  listRules
+  listRules,
+  getDistApiGatewayMetrics
 } from '../actions';
 import {
   nullValue,
@@ -70,6 +71,7 @@ class Home extends React.Component {
       type: 'granules',
       field: 'status'
     }));
+    dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
     dispatch(getDistMetrics({}));
     dispatch(listExecutions({}));
     dispatch(listRules({}));
@@ -130,6 +132,7 @@ class Home extends React.Component {
       [tally(get(this.props.rules, 'list.meta.count')), 'Ingest Rules', '/rules'],
       [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time']
     ];
+
     const distStats = [
       [tally(get(dist.data, 'errors')), 'S3 Access Errors', kibanaS3AccessErrorsLink(this.props.cumulusInstance)],
       [tally(get(dist.data, 'successes')), 'S3 Access Successes', kibanaS3AccessSuccessesLink(this.props.cumulusInstance)],

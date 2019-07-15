@@ -1,4 +1,5 @@
 'use strict';
+
 import compareVersions from 'compare-versions';
 import moment from 'moment';
 import url from 'url';
@@ -11,11 +12,12 @@ import { configureRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId, collectionNameVersion } from '../utils/format';
 import log from '../utils/log';
+import { apiGatewaySearchString } from './action-config/apiGatewaySearch';
 import * as types from './types';
 
 const CALL_API = types.CALL_API;
 const {
-  kibanaRoot,
+  esRoot,
   apiRoot: root,
   pageLimit,
   minCompatibleApiVersion
@@ -424,6 +426,20 @@ export const getStats = (options) => ({
     qs: options
   }
 });
+
+export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
+  // TODO [MHS, 2019-07-15]  - use cumulusInstanceMeta to populate searchString with correct information.
+  // TODO [MHS, 2019-07-15]  - Put correct time boundaries in to the string.
+  return {
+    [CALL_API]: {
+      type: types.DIST_APIGATEWAY,
+      skipAuth: true,
+      method: 'POST',
+      url: `${esRoot}/_search/`,
+      body: JSON.parse(apiGatewaySearchString)
+    }
+  };
+};
 
 export const getDistMetrics = () => ({
   [CALL_API]: {
