@@ -7,14 +7,14 @@ export const apiLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpoc
         "filters": {
           "LambdaAPIErrors": {
             "query_string": {
-              "query": "message:(+GET +HTTP -(200 307))",
+              "query": "message:(+GET +HTTP +(4?? 5??) -(200 307))",
               "analyze_wildcard": true,
               "default_field": "*"
             }
           },
           "LambdaAPISuccesses": {
             "query_string": {
-              "query": "message:(+GET +HTTP (200 307))",
+              "query": "message:(+GET +HTTP +(2?? 3??))",
               "analyze_wildcard": true,
               "default_field": "*"
             }
