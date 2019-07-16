@@ -135,19 +135,20 @@ class Home extends React.Component {
       [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time']
     ];
 
-    const distStats = [
-      [tally(get(dist, 's3Access.errors')), 'S3 Access Errors', kibanaS3AccessErrorsLink(this.props.cumulusInstance)],
+    const distSuccessStats = [
       [tally(get(dist, 's3Access.successes')), 'S3 Access Successes', kibanaS3AccessSuccessesLink(this.props.cumulusInstance)],
-
-      [tally(get(dist, 'apiLambda.errors')), 'Distribution API Lambda Errors', kibanaApiLambdaErrorsLink(this.props.cumulusInstance)],
       [tally(get(dist, 'apiLambda.successes')), 'Distribution API Lambda Successes', kibanaApiLambdaSuccessesLink(this.props.cumulusInstance)],
-
-      [tally(get(dist, 'apiGateway.execution.errors')), 'Gateway Execution Errors', kibanaGatewayExecutionErrorsLink(this.props.cumulusInstance)],
       [tally(get(dist, 'apiGateway.execution.successes')), 'Gateway Execution Successes', kibanaGatewayExecutionSuccessesLink(this.props.cumulusInstance)],
-
-      [tally(get(dist, 'apiGateway.access.errors')), 'Gateway Access Errors', kibanaGatewayAccessErrorsLink(this.props.cumulusInstance)],
       [tally(get(dist, 'apiGateway.access.successes')), 'Gateway Access Successes', kibanaGatewayAccessSuccessesLink(this.props.cumulusInstance)]
     ];
+
+    const distErrorStats = [
+      [tally(get(dist, 's3Access.errors')), 'S3 Access Errors', kibanaS3AccessErrorsLink(this.props.cumulusInstance)],
+      [tally(get(dist, 'apiLambda.errors')), 'Distribution API Lambda Errors', kibanaApiLambdaErrorsLink(this.props.cumulusInstance)],
+      [tally(get(dist, 'apiGateway.execution.errors')), 'Gateway Execution Errors', kibanaGatewayExecutionErrorsLink(this.props.cumulusInstance)],
+      [tally(get(dist, 'apiGateway.access.errors')), 'Gateway Access Errors', kibanaGatewayAccessErrorsLink(this.props.cumulusInstance)],
+    ];
+
     const granuleCount = get(count.data, 'granules.meta.count');
     const numGranules = !isNaN(granuleCount) ? `(${tally(granuleCount)})` : null;
     const granuleStatus = get(count.data, 'granules.count', []);
@@ -161,7 +162,9 @@ class Home extends React.Component {
         </div>
         <div className='page__content page__content__nosidebar'>
           {this.renderButtonListSection(overview, 'Updates')}
-          {this.renderButtonListSection(distStats, 'Distribution Metrics', 'distMetrics')}
+          {this.renderButtonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
+          {this.renderButtonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
+
           <section className='page__section'>
             <div className='row'>
               <div className='heading__wrapper--border'>

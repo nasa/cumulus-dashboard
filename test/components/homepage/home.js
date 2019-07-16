@@ -33,7 +33,7 @@ test('CUMULUS-799 Home page contains distribution error report', async (t) => {
     granules={granules}
     stats={stats}
     />);
-
+  // TODO [MHS, 2019-07-16] This needs correcting, updating the fake api and the correct tag..
   const metrics = home.find('#distMetrics li');
   t.is(metrics.length, 2);
   t.is(metrics.at(0).key(), 'Errors');
