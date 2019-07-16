@@ -432,7 +432,7 @@ export const getStats = (options) => ({
 });
 
 export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
-  // TODO [MHS, 2019-07-15]  - use cumulusInstanceMeta to populate searchString with correct information.
+  const stackName = cumulusInstanceMeta.stackName;
   const now = Date.now();
   const twentyFourHoursAgo = now - millisecondsPerDay;
   return {
@@ -441,13 +441,13 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
-      body: JSON.parse(apiGatewaySearchTemplate('mhs4', twentyFourHoursAgo, now))
+      body: JSON.parse(apiGatewaySearchTemplate(stackName, twentyFourHoursAgo, now))
     }
   };
 };
 
 export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
-  // TODO [MHS, 2019-07-16] - populate the search string correctly.
+  const stackName = cumulusInstanceMeta.stackName;
   const now = Date.now();
   const twentyFourHoursAgo = now - millisecondsPerDay;
   return {
@@ -456,13 +456,13 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
-      body: JSON.parse(apiLambdaSearchTemplate('mhs4', twentyFourHoursAgo, now))
+      body: JSON.parse(apiLambdaSearchTemplate(stackName, twentyFourHoursAgo, now))
     }
   };
 };
 
 export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
-  // TODO [MHS, 2019-07-16] - populate the search string correctly.
+  const stackName = cumulusInstanceMeta.stackName;
   const now = Date.now();
   const twentyFourHoursAgo = now - millisecondsPerDay;
   return {
@@ -471,7 +471,7 @@ export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
-      body: JSON.parse(s3AccessSearchTemplate('mhs4', twentyFourHoursAgo, now))
+      body: JSON.parse(s3AccessSearchTemplate(stackName, twentyFourHoursAgo, now))
     }
   };
 };
