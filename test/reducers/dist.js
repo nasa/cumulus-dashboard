@@ -7,6 +7,7 @@ import test from 'ava';
 
 import { apiGatewayFixture } from '../fixtures/apiGatewayMetrics';
 import { apiLambdaFixture } from '../fixtures/apiLambdaMetrics';
+import { s3AccessFixture } from '../fixtures/s3AccessMetrics';
 import reducer from '../../app/scripts/reducers/dist';
 import {
   DIST,
@@ -17,7 +18,10 @@ import {
   DIST_APIGATEWAY_ERROR,
   DIST_APILAMBDA,
   DIST_APILAMBDA_INFLIGHT,
-  DIST_APILAMBDA_ERROR
+  DIST_APILAMBDA_ERROR,
+  DIST_S3ACCESS,
+  DIST_S3ACCESS_INFLIGHT,
+  DIST_S3ACCESS_ERROR
 } from '../../app/scripts/actions/types';
 
 const testDate = Date.now();
@@ -216,6 +220,73 @@ test('reducers/dist/dist_lambda_error', (t) => {
       error: 'api lambda error',
       successes: 9,
       errors: 7
+    }
+  };
+  const newState = reducer(initialState, action);
+  t.deepEqual(expectedState, newState);
+});
+
+test('reducers/dist/dist_s3access', (t) => {
+  const initialState = {};
+  const action = {
+    type: DIST_S3ACCESS,
+    data: JSON.parse(s3AccessFixture)
+  };
+
+  const expectedState = {
+    s3Access: {
+      inflight: false,
+      error: null,
+      queriedAt: new Date(Date.now()),
+      errors: 1,
+      successes: 200
+    }
+  };
+  const newState = reducer(initialState, action);
+  t.deepEqual(expectedState, newState);
+});
+
+test('reducers/dist/dist_s3access_inflight', (t) => {
+  const initialState = {
+    apiLambda: {
+      inflight: false
+    }
+  };
+  const action = {
+    type: DIST_S3ACCESS_INFLIGHT
+  };
+
+  const expectedState = {
+    apiLambda: {
+      inflight: false
+    },
+    s3Access: {
+      inflight: true
+    }
+  };
+  const newState = reducer(initialState, action);
+  t.deepEqual(expectedState, newState);
+});
+
+test('reducers/dist/dist_s3access_error', (t) => {
+  const initialState = {
+    s3Access: {
+      successes: 34,
+      errors: 90,
+      inflight: true
+    }
+  };
+  const action = {
+    type: DIST_S3ACCESS_ERROR,
+    error: 's3 Access error'
+  };
+
+  const expectedState = {
+    s3Access: {
+      inflight: false,
+      error: 's3 Access error',
+      successes: 34,
+      errors: 90
     }
   };
   const newState = reducer(initialState, action);

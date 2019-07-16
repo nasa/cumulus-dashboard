@@ -13,7 +13,10 @@ import {
   DIST_APIGATEWAY_ERROR,
   DIST_APILAMBDA,
   DIST_APILAMBDA_INFLIGHT,
-  DIST_APILAMBDA_ERROR
+  DIST_APILAMBDA_ERROR,
+  DIST_S3ACCESS,
+  DIST_S3ACCESS_INFLIGHT,
+  DIST_S3ACCESS_ERROR
 } from '../actions/types';
 
 const initialState = {
@@ -114,7 +117,28 @@ export default function reducer(state = initialState, action) {
       set(state, 'apiLambda.inflight', false);
       set(state, 'apiLambda.error', action.error);
       break;
+    case DIST_S3ACCESS:
+      set(state, 's3Access.error', null);
+      set(state, 's3Access.inflight', false);
+      set(state, 's3Access.queriedAt', new Date(Date.now()));
+      set(
+        state,
+        's3Access.errors',
+        countsFromApiGatewayData(action.data, 's3AccessFailures')
+      );
+      set(
+        state,
+        's3Access.successes',
+        countsFromApiGatewayData(action.data, 's3AccessSuccesses')
+      );
+      break;
+    case DIST_S3ACCESS_INFLIGHT:
+      set(state, 's3Access.inflight', true);
+      break;
+    case DIST_S3ACCESS_ERROR:
+      set(state, 's3Access.inflight', false);
+      set(state, 's3Access.error', action.error);
+      break;
   }
-
   return state;
 }

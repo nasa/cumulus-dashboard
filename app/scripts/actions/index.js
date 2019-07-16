@@ -14,6 +14,7 @@ import { getCollectionId, collectionNameVersion } from '../utils/format';
 import log from '../utils/log';
 import { apiGatewaySearchString } from './action-config/apiGatewaySearch';
 import { apiLambdaSearchString } from './action-config/apiLambdaSearch';
+import { s3AccessSearchString } from './action-config/s3AccessSearch';
 import * as types from './types';
 
 const CALL_API = types.CALL_API;
@@ -454,6 +455,20 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
     }
   };
 };
+
+export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
+  // TODO [MHS, 2019-07-16] - populate the search string correctly.
+  return {
+    [CALL_API]: {
+      type: types.DIST_S3ACCESS,
+      skipAuth: true,
+      method: 'POST',
+      url: `${esRoot}/_search/`,
+      body: JSON.parse(s3AccessSearchString)
+    }
+  };
+};
+
 
 export const getDistMetrics = () => ({
   [CALL_API]: {
