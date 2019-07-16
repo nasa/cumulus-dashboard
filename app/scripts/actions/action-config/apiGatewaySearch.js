@@ -7,28 +7,28 @@ export const apiGatewaySearchTemplate = (prefix, startTimeEpochMilli, endTimeEpo
         "filters": {
           "ApiExecutionErrors": {
             "query_string": {
-              "query": "+\\"Method completed with status:\\" -\\"Method completed with status: 307\\"",
+              "query": "+\\"Method completed with status:\\" +(4?? 5??)",
               "analyze_wildcard": true,
               "default_field": "*"
             }
           },
           "ApiExecutionSuccesses": {
             "query_string": {
-              "query": "+\\"Method completed with status: 307\\"",
+              "query": "+\\"Method completed with status:\\" +(2?? 3??)",
               "analyze_wildcard": true,
               "default_field": "*"
             }
           },
           "ApiAccessErrors": {
             "query_string": {
-              "query": "-(\\"status \\\\: 307\\" \\"status \\\\: 200\\") +protocol",
+              "query": "+requestId +status +(4?? 5??)",
               "analyze_wildcard": true,
               "default_field": "*"
             }
           },
           "ApiAccessSuccesses": {
             "query_string": {
-              "query": "+(\\"status \\\\: 307\\" \\"status \\\\: 200\\") +protocol",
+              "query": "+requestId +status +(2?? 3??)",
               "analyze_wildcard": true,
               "default_field": "*"
             }
