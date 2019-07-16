@@ -55,7 +55,13 @@ class Home extends React.Component {
       this.query();
     }, updateInterval, true);
     const {dispatch} = this.props;
-    dispatch(getCumulusInstanceMetadata());
+    dispatch(getCumulusInstanceMetadata())
+      .then(() => {
+        dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
+        dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
+        dispatch(getDistS3AccessMetrics(this.props.cumulusInstance));
+      }
+    );
   }
 
   componentWillUnmount () {
