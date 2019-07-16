@@ -1,6 +1,6 @@
 'use strict';
 
-export const apiGatewaySearchString = `{
+export const apiGatewaySearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
   "aggs": {
     "2": {
       "filters": {
@@ -60,8 +60,8 @@ export const apiGatewaySearchString = `{
         {
           "range": {
             "@timestamp": {
-              "gte": 1547224803266,
-              "lte": 1562859603266,
+              "gte": ${startTimeEpochMilli},
+              "lte": ${endTimeEpochMilli},
               "format": "epoch_millis"
             }
           }
@@ -69,7 +69,7 @@ export const apiGatewaySearchString = `{
         {
           "match_phrase": {
             "_index": {
-              "query": "mhs4-cloudwatch*"
+              "query": "${prefix}-cloudwatch*"
             }
           }
         },

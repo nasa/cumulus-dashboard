@@ -1,6 +1,6 @@
 'use strict';
 
-export const apiLambdaSearchString = `{
+export const apiLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
   "aggs": {
     "2": {
       "filters": {
@@ -46,8 +46,8 @@ export const apiLambdaSearchString = `{
         {
           "range": {
             "@timestamp": {
-              "gte": 1563205145243,
-              "lte": 1563291545243,
+              "gte": ${startTimeEpochMilli},
+              "lte": ${endTimeEpochMilli},
               "format": "epoch_millis"
             }
           }
@@ -55,14 +55,14 @@ export const apiLambdaSearchString = `{
         {
           "match_phrase": {
             "_index": {
-              "query": "mhs4-cloudwatch*"
+              "query": "${prefix}-cloudwatch*"
             }
           }
         },
         {
           "match_phrase": {
             "logGroup": {
-              "query": "/aws/lambda/mhs4-ApiDistribution"
+              "query": "/aws/lambda/${prefix}-ApiDistribution"
             }
           }
         }

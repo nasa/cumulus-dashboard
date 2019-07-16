@@ -12,9 +12,9 @@ import { configureRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId, collectionNameVersion } from '../utils/format';
 import log from '../utils/log';
-import { apiGatewaySearchString } from './action-config/apiGatewaySearch';
-import { apiLambdaSearchString } from './action-config/apiLambdaSearch';
-import { s3AccessSearchString } from './action-config/s3AccessSearch';
+import { apiGatewaySearchTemplate } from './action-config/apiGatewaySearch';
+import { apiLambdaSearchTemplate } from './action-config/apiLambdaSearch';
+import { s3AccessSearchTemplate } from './action-config/s3AccessSearch';
 import * as types from './types';
 
 const CALL_API = types.CALL_API;
@@ -24,6 +24,8 @@ const {
   pageLimit,
   minCompatibleApiVersion
 } = _config;
+
+const millisecondsPerDay = 24 * 60 * 60 * 1000;
 
 export const refreshAccessToken = (token) => {
   return (dispatch) => {
@@ -431,40 +433,45 @@ export const getStats = (options) => ({
 
 export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
   // TODO [MHS, 2019-07-15]  - use cumulusInstanceMeta to populate searchString with correct information.
-  // TODO [MHS, 2019-07-15]  - Put correct time boundaries in to the string.
+  const now = Date.now();
+  const twentyFourHoursAgo = now - millisecondsPerDay;
   return {
     [CALL_API]: {
       type: types.DIST_APIGATEWAY,
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
-      body: JSON.parse(apiGatewaySearchString)
+      body: JSON.parse(apiGatewaySearchTemplate('mhs4', twentyFourHoursAgo, now))
     }
   };
 };
 
 export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
   // TODO [MHS, 2019-07-16] - populate the search string correctly.
+  const now = Date.now();
+  const twentyFourHoursAgo = now - millisecondsPerDay;
   return {
     [CALL_API]: {
       type: types.DIST_APILAMBDA,
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
-      body: JSON.parse(apiLambdaSearchString)
+      body: JSON.parse(apiLambdaSearchTemplate('mhs4', twentyFourHoursAgo, now))
     }
   };
 };
 
 export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
   // TODO [MHS, 2019-07-16] - populate the search string correctly.
+  const now = Date.now();
+  const twentyFourHoursAgo = now - millisecondsPerDay;
   return {
     [CALL_API]: {
       type: types.DIST_S3ACCESS,
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
-      body: JSON.parse(s3AccessSearchString)
+      body: JSON.parse(s3AccessSearchTemplate('mhs4', twentyFourHoursAgo, now))
     }
   };
 };

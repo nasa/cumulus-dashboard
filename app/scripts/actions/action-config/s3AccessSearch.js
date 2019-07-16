@@ -1,6 +1,6 @@
 'use strict';
 
-export const s3AccessSearchString = `{
+export const s3AccessSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
   "aggs": {
     "2": {
       "filters": {
@@ -46,8 +46,8 @@ export const s3AccessSearchString = `{
         {
           "range": {
             "@timestamp": {
-              "gte": 1563208630561,
-              "lte": 1563295030561,
+              "gte": ${startTimeEpochMilli},
+              "lte": ${endTimeEpochMilli},
               "format": "epoch_millis"
             }
           }
@@ -55,7 +55,7 @@ export const s3AccessSearchString = `{
         {
           "match_phrase": {
             "_index": {
-              "query": "mhs4-s3*"
+              "query": "${prefix}-s3*"
             }
           }
         },
