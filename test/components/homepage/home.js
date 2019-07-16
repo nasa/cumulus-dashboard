@@ -28,7 +28,7 @@ test('CUMULUS-799 Home page contains distribution error report', async (t) => {
   const dispatch = () => {};
 
   const home = shallow(<Home
-    dispatch={dispatch} 
+    dispatch={dispatch}
     dist={dist}
     granules={granules}
     stats={stats}

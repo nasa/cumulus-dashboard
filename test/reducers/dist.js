@@ -10,9 +10,6 @@ import { apiLambdaFixture } from '../fixtures/apiLambdaMetrics';
 import { s3AccessFixture } from '../fixtures/s3AccessMetrics';
 import reducer from '../../app/scripts/reducers/dist';
 import {
-  DIST,
-  DIST_INFLIGHT,
-  DIST_ERROR,
   DIST_APIGATEWAY,
   DIST_APIGATEWAY_INFLIGHT,
   DIST_APIGATEWAY_ERROR,
@@ -38,75 +35,6 @@ test('verify initial state', (t) => {
   const initialState = { some: 'initialState' };
   const newState = reducer(initialState, { data: {}, type: 'ANY' });
   t.deepEqual(newState, initialState);
-});
-
-test('reducers/dist/dist', (t) => {
-  const initialState = {};
-  const action = {
-    type: DIST,
-    data: { errors: 5, successes: 7 }
-  };
-
-  const expectedState = {
-    data: { errors: 5, successes: 7, queriedAt: new Date(testDate) },
-    inflight: false,
-    error: null
-  };
-
-  const actualState = reducer(initialState, action);
-
-  t.deepEqual(expectedState, actualState);
-});
-
-test('reducers/dist/dist_inflight', (t) => {
-  const initialState = {
-    data: {
-      errors: 4,
-      successes: 9
-    },
-    inflight: false,
-    error: null
-  };
-
-  const action = {
-    type: DIST_INFLIGHT
-  };
-
-  const expectedState = {
-    data: { errors: 4, successes: 9 },
-    inflight: true,
-    error: null
-  };
-
-  const actualState = reducer(initialState, action);
-
-  t.deepEqual(expectedState, actualState);
-});
-
-test('reducers/dist/dist_error', (t) => {
-  const initialState = {
-    data: {
-      errors: 4,
-      successes: 9
-    },
-    inflight: true,
-    error: null
-  };
-
-  const action = {
-    type: DIST_ERROR,
-    error: 'an Error'
-  };
-
-  const expectedState = {
-    data: { errors: 4, successes: 9 },
-    inflight: false,
-    error: 'an Error'
-  };
-
-  const actualState = reducer(initialState, action);
-
-  t.deepEqual(expectedState, actualState);
 });
 
 test('reducers/dist/dist_apigateway', (t) => {

@@ -5,17 +5,16 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { get } from 'object-path';
 import {
-  interval,
-  getStats,
   getCount,
   getCumulusInstanceMetadata,
-  getDistMetrics,
-  listGranules,
-  listExecutions,
-  listRules,
   getDistApiGatewayMetrics,
   getDistApiLambdaMetrics,
-  getDistS3AccessMetrics
+  getDistS3AccessMetrics,
+  getStats,
+  interval,
+  listExecutions,
+  listGranules,
+  listRules
 } from '../actions';
 import {
   nullValue,
@@ -76,7 +75,6 @@ class Home extends React.Component {
     dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
     dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
     dispatch(getDistS3AccessMetrics(this.props.cumulusInstance));
-    dispatch(getDistMetrics({}));
     dispatch(listExecutions({}));
     dispatch(listRules({}));
   }
