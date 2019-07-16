@@ -6,6 +6,7 @@ import test from 'ava';
 // assignDateModule.default = (object) => Object.assign({}, object, {queriedAt: 'fakeTime'});
 
 import { apiGatewayFixture } from '../fixtures/apiGatewayMetrics';
+import { apiLambdaFixture } from '../fixtures/apiLambdaMetrics';
 import reducer from '../../app/scripts/reducers/dist';
 import {
   DIST,
@@ -13,7 +14,10 @@ import {
   DIST_ERROR,
   DIST_APIGATEWAY,
   DIST_APIGATEWAY_INFLIGHT,
-  DIST_APIGATEWAY_ERROR
+  DIST_APIGATEWAY_ERROR,
+  DIST_APILAMBDA,
+  DIST_APILAMBDA_INFLIGHT,
+  DIST_APILAMBDA_ERROR
 } from '../../app/scripts/actions/types';
 
 const testDate = Date.now();
@@ -152,6 +156,66 @@ test('reducers/dist/dist_apigateway_Error', (t) => {
     apiGateway: {
       inflight: false,
       error: 'api error'
+    }
+  };
+  const newState = reducer(initialState, action);
+  t.deepEqual(expectedState, newState);
+});
+
+test('reducers/dist/dist_lambda', (t) => {
+  const initialState = {};
+  const action = {
+    type: DIST_APILAMBDA,
+    data: JSON.parse(apiLambdaFixture)
+  };
+
+  const expectedState = {
+    apiLambda: {
+      inflight: false,
+      error: null,
+      queriedAt: new Date(Date.now()),
+      errors: 10,
+      successes: 4001
+    }
+  };
+  const newState = reducer(initialState, action);
+  t.deepEqual(expectedState, newState);
+});
+
+test('reducers/dist/dist_lambda_inflight', (t) => {
+  const initialState = {};
+  const action = {
+    type: DIST_APILAMBDA_INFLIGHT
+  };
+
+  const expectedState = {
+    apiLambda: {
+      inflight: true
+    }
+  };
+  const newState = reducer(initialState, action);
+  t.deepEqual(expectedState, newState);
+});
+
+test('reducers/dist/dist_lambda_error', (t) => {
+  const initialState = {
+    apiLambda: {
+      successes: 9,
+      errors: 7,
+      inflight: true
+    }
+  };
+  const action = {
+    type: DIST_APILAMBDA_ERROR,
+    error: 'api lambda error'
+  };
+
+  const expectedState = {
+    apiLambda: {
+      inflight: false,
+      error: 'api lambda error',
+      successes: 9,
+      errors: 7
     }
   };
   const newState = reducer(initialState, action);

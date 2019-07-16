@@ -1,13 +1,15 @@
-// Listen on a specific host via the HOST environment variable
-var host = process.env.XSHOST || '127.0.0.1';
-// Listen on a specific port via the PORT environment variable
-var port = process.env.XSPORT || 49876;
+// Listen on a specific host via the CPHOST environment variable
+var host = process.env.CPHOST || '127.0.0.1';
+// Listen on a specific port via the CPPORT environment variable
+var port = process.env.CPPORT || 49876;
 
-var cors_proxy = require('cors-anywhere');
-cors_proxy.createServer({
-  originWhitelist: [], // Allow all origins
-  requireHeader: ['origin', 'x-requested-with'],
-  removeHeaders: ['cookie', 'cookie2']
-}).listen(port, host, function () {
-  console.log('Running CORS Anywhere on ' + host + ':' + port);
-});
+var corsProxy = require('cors-anywhere');
+corsProxy
+  .createServer({
+    originWhitelist: [], // Allow all origins
+    requireHeader: ['origin', 'x-requested-with'],
+    removeHeaders: ['cookie', 'cookie2']
+  })
+  .listen(port, host, function () {
+    console.log('Running CORS Anywhere on ' + host + ':' + port);
+  });

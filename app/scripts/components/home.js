@@ -13,7 +13,8 @@ import {
   listGranules,
   listExecutions,
   listRules,
-  getDistApiGatewayMetrics
+  getDistApiGatewayMetrics,
+  getDistApiLambdaMetrics
 } from '../actions';
 import {
   nullValue,
@@ -72,6 +73,7 @@ class Home extends React.Component {
       field: 'status'
     }));
     dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
+    dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
     dispatch(getDistMetrics({}));
     dispatch(listExecutions({}));
     dispatch(listRules({}));

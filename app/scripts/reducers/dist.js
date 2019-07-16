@@ -10,7 +10,10 @@ import {
   DIST_ERROR,
   DIST_APIGATEWAY,
   DIST_APIGATEWAY_INFLIGHT,
-  DIST_APIGATEWAY_ERROR
+  DIST_APIGATEWAY_ERROR,
+  DIST_APILAMBDA,
+  DIST_APILAMBDA_INFLIGHT,
+  DIST_APILAMBDA_ERROR
 } from '../actions/types';
 
 const initialState = {
@@ -42,7 +45,7 @@ const countsFromApiGatewayData = (data, name) => {
   return get(data, `aggregations.2.buckets.${name}.doc_count`, null);
 };
 
-export default function reducer (state = initialState, action) {
+export default function reducer(state = initialState, action) {
   state = Object.assign({}, state);
   switch (action.type) {
     case DIST:
@@ -88,6 +91,28 @@ export default function reducer (state = initialState, action) {
     case DIST_APIGATEWAY_ERROR:
       set(state, 'apiGateway.inflight', false);
       set(state, 'apiGateway.error', action.error);
+      break;
+    case DIST_APILAMBDA:
+      set(state, 'apiLambda.error', null);
+      set(state, 'apiLambda.inflight', false);
+      set(state, 'apiLambda.queriedAt', new Date(Date.now()));
+      set(
+        state,
+        'apiLambda.errors',
+        countsFromApiGatewayData(action.data, 'LambdaAPIErrors')
+      );
+      set(
+        state,
+        'apiLambda.successes',
+        countsFromApiGatewayData(action.data, 'LambdaAPISuccesses')
+      );
+      break;
+    case DIST_APILAMBDA_INFLIGHT:
+      set(state, 'apiLambda.inflight', true);
+      break;
+    case DIST_APILAMBDA_ERROR:
+      set(state, 'apiLambda.inflight', false);
+      set(state, 'apiLambda.error', action.error);
       break;
   }
 

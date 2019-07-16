@@ -13,6 +13,7 @@ import _config from '../config';
 import { getCollectionId, collectionNameVersion } from '../utils/format';
 import log from '../utils/log';
 import { apiGatewaySearchString } from './action-config/apiGatewaySearch';
+import { apiLambdaSearchString } from './action-config/apiLambdaSearch';
 import * as types from './types';
 
 const CALL_API = types.CALL_API;
@@ -437,6 +438,19 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
       method: 'POST',
       url: `${esRoot}/_search/`,
       body: JSON.parse(apiGatewaySearchString)
+    }
+  };
+};
+
+export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
+  // TODO [MHS, 2019-07-16] - populate the search string correctly.
+  return {
+    [CALL_API]: {
+      type: types.DIST_APILAMBDA,
+      skipAuth: true,
+      method: 'POST',
+      url: `${esRoot}/_search/`,
+      body: JSON.parse(apiLambdaSearchString)
     }
   };
 };
