@@ -2,7 +2,6 @@
 
 import { kibanaRoot } from '../config';
 
-
 export const kibanaS3AccessErrorsLink = (cumulusInstanceMeta) => {
   if (!cumulusInstanceMeta.stackName) return '';
   if (!kibanaRoot) return '';
@@ -30,7 +29,6 @@ export const kibanaApiLambdaSuccessesLink = (cumulusInstanceMeta) => {
   const stackName = cumulusInstanceMeta.stackName;
   return `${kibanaRoot}/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(from:now-24h,mode:quick,to:now))&_a=(columns:!(_source),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:${stackName},key:_index,negate:!f,params:(query:'${stackName}-cloudwatch*',type:phrase),type:phrase,value:'${stackName}-cloudwatch*'),query:(match:(_index:(query:'${stackName}-cloudwatch*',type:phrase)))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:${stackName},key:logGroup,negate:!f,params:(query:%2Faws%2Flambda%2F${stackName}-ApiDistribution,type:phrase),type:phrase,value:%2Faws%2Flambda%2F${stackName}-ApiDistribution),query:(match:(logGroup:(query:%2Faws%2Flambda%2F${stackName}-ApiDistribution,type:phrase))))),index:${stackName},interval:auto,query:(language:lucene,query:'message:(%2BGET%20%2BHTTP%20%2B(200%20307))'),sort:!('@timestamp',desc))`;
 };
-
 
 export const kibanaGatewayExecutionErrorsLink = (cumulusInstanceMeta) => {
   if (!cumulusInstanceMeta.stackName) return '';

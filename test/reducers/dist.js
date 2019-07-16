@@ -11,7 +11,9 @@ import {
   DIST,
   DIST_INFLIGHT,
   DIST_ERROR,
-  DIST_APIGATEWAY
+  DIST_APIGATEWAY,
+  DIST_APIGATEWAY_INFLIGHT,
+  DIST_APIGATEWAY_ERROR
 } from '../../app/scripts/actions/types';
 
 const testDate = Date.now();
@@ -25,8 +27,8 @@ test.after((t) => {
 });
 
 test('verify initial state', (t) => {
-  const initialState = {some: 'initialState'};
-  const newState = reducer(initialState, {data: {}, type: 'ANY'});
+  const initialState = { some: 'initialState' };
+  const newState = reducer(initialState, { data: {}, type: 'ANY' });
   t.deepEqual(newState, initialState);
 });
 
@@ -34,11 +36,11 @@ test('reducers/dist/dist', (t) => {
   const initialState = {};
   const action = {
     type: DIST,
-    data: {errors: 5, successes: 7}
+    data: { errors: 5, successes: 7 }
   };
 
   const expectedState = {
-    data: {errors: 5, successes: 7, queriedAt: new Date(testDate)},
+    data: { errors: 5, successes: 7, queriedAt: new Date(testDate) },
     inflight: false,
     error: null
   };
@@ -63,7 +65,7 @@ test('reducers/dist/dist_inflight', (t) => {
   };
 
   const expectedState = {
-    data: {errors: 4, successes: 9},
+    data: { errors: 4, successes: 9 },
     inflight: true,
     error: null
   };
@@ -72,6 +74,7 @@ test('reducers/dist/dist_inflight', (t) => {
 
   t.deepEqual(expectedState, actualState);
 });
+
 test('reducers/dist/dist_error', (t) => {
   const initialState = {
     data: {
@@ -88,7 +91,7 @@ test('reducers/dist/dist_error', (t) => {
   };
 
   const expectedState = {
-    data: {errors: 4, successes: 9},
+    data: { errors: 4, successes: 9 },
     inflight: false,
     error: 'an Error'
   };
@@ -118,6 +121,37 @@ test('reducers/dist/dist_apigateway', (t) => {
         errors: 1,
         successes: 20
       }
+    }
+  };
+  const newState = reducer(initialState, action);
+  t.deepEqual(expectedState, newState);
+});
+
+test('reducers/dist/dist_apigateway_inflight', (t) => {
+  const initialState = {};
+  const action = { type: DIST_APIGATEWAY_INFLIGHT };
+
+  const expectedState = {
+    apiGateway: {
+      inflight: true
+    }
+  };
+  const newState = reducer(initialState, action);
+  t.deepEqual(expectedState, newState);
+});
+
+test('reducers/dist/dist_apigateway_Error', (t) => {
+  const initialState = {
+    apiGateway: {
+      inflight: true
+    }
+  };
+  const action = { type: DIST_APIGATEWAY_ERROR, error: 'api error' };
+
+  const expectedState = {
+    apiGateway: {
+      inflight: false,
+      error: 'api error'
     }
   };
   const newState = reducer(initialState, action);

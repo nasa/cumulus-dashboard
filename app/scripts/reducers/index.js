@@ -27,7 +27,6 @@ export const reducers = {
   collections,
   config,
   dist,
-  distApiGateway,
   mmtLinks,
   cumulusInstance,
   granules,

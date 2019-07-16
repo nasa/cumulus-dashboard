@@ -24,6 +24,10 @@ const initialState = {
       successes: {}
     }
   },
+  apiLambda: {
+    errors: {},
+    successes: {}
+  },
   s3Access: {
     errors: {},
     successes: {}
@@ -34,13 +38,11 @@ const initialState = {
   }
 };
 
-
-const pluckValuesFromData = (data, name) => {
+const countsFromApiGatewayData = (data, name) => {
   return get(data, `aggregations.2.buckets.${name}.doc_count`, null);
-}
+};
 
 export default function reducer (state = initialState, action) {
-
   state = Object.assign({}, state);
   switch (action.type) {
     case DIST:
@@ -59,10 +61,33 @@ export default function reducer (state = initialState, action) {
       set(state, 'apiGateway.error', null);
       set(state, 'apiGateway.inflight', false);
       set(state, 'apiGateway.queriedAt', new Date(Date.now()));
-      set(state, 'apiGateway.access.errors', pluckValuesFromData(action.data, 'ApiAccessErrors'));
-      set(state, 'apiGateway.access.successes', pluckValuesFromData(action.data, 'ApiAccessSuccesses'));
-      set(state, 'apiGateway.execution.errors', pluckValuesFromData(action.data, 'ApiExecutionErrors'));
-      set(state, 'apiGateway.execution.successes', pluckValuesFromData(action.data, 'ApiExecutionSuccesses'));
+      set(
+        state,
+        'apiGateway.access.errors',
+        countsFromApiGatewayData(action.data, 'ApiAccessErrors')
+      );
+      set(
+        state,
+        'apiGateway.access.successes',
+        countsFromApiGatewayData(action.data, 'ApiAccessSuccesses')
+      );
+      set(
+        state,
+        'apiGateway.execution.errors',
+        countsFromApiGatewayData(action.data, 'ApiExecutionErrors')
+      );
+      set(
+        state,
+        'apiGateway.execution.successes',
+        countsFromApiGatewayData(action.data, 'ApiExecutionSuccesses')
+      );
+      break;
+    case DIST_APIGATEWAY_INFLIGHT:
+      set(state, 'apiGateway.inflight', true);
+      break;
+    case DIST_APIGATEWAY_ERROR:
+      set(state, 'apiGateway.inflight', false);
+      set(state, 'apiGateway.error', action.error);
       break;
   }
 
