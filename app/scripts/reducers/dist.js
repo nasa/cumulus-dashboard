@@ -2,7 +2,6 @@
 
 import get from 'lodash.get';
 import { set } from 'object-path';
-import assignDate from './assign-date';
 
 import {
   DIST_APIGATEWAY,
@@ -18,30 +17,18 @@ import {
 
 const initialState = {
   apiGateway: {
-    execution: {
-      errors: {},
-      successes: {}
-    },
-    access: {
-      errors: {},
-      successes: {}
-    }
+    execution: { errors: {}, successes: {} },
+    access: { errors: {}, successes: {} }
   },
-  apiLambda: {
-    errors: {},
-    successes: {}
-  },
-  s3Access: {
-    errors: {},
-    successes: {}
-  }
+  apiLambda: { errors: {}, successes: {} },
+  s3Access: { errors: {}, successes: {} }
 };
 
 const countsFromApiGatewayData = (data, name) => {
   return get(data, `aggregations.2.buckets.${name}.doc_count`, null);
 };
 
-export default function reducer(state = initialState, action) {
+export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
   switch (action.type) {
     case DIST_APIGATEWAY:
