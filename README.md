@@ -30,7 +30,9 @@ The following environment variables override the default values in `config.js`:
 | STAGE | e.g. UAT, default to development
 | LABELS | gitc or daac localization (defaults to daac)
 | APIROOT | the API URL. This must be set as it defaults to example.com
-| RECOVERY_PATH | setting this to a backend api endpoint will enable 'recover buttons' for granules and collections. e.g. - 'recover' 
+| KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set for distribution metrics to be displayed.
+| ESROOT | \<optional\> Should point to an Elasticsearch endpoint. Must be set for distribution metrics to be displayed.
+| RECOVERY_PATH | setting this to a backend api endpoint will enable 'recover buttons' for granules and collections. e.g. - 'recover'
 
 ## Building or running locally
 
@@ -105,6 +107,50 @@ For development and testing purposes, you can use a fake API server provided wit
   $ nvm use
   $ APIROOT=http://localhost:5001 yarn run serve
 ```
+
+#### NGAP Sandbox Metrics Development
+
+##### Kibana and Elasticsearch access
+
+In order to develop features that interact with Kibana or Elasticsearch in the NGAP sandbox, you need to set up tunnels through the metric's teams bastion-host.  First you must get access to the metric's host. This will require a [NASD ticket](https://bugs.earthdata.nasa.gov/servicedesk/customer/portal/7/create/79) and permission from the metrics team.  Once you have access to the metrics-bastion-host you can get the IP addresses for the Bastion, Kibana and Elasticsearch from the metrics team and configure your `.ssh/config` file to create you local tunnels.  This configuration will open traffic to the Kibana endpoint on localhost:5601 and Elasticsearch on localhost:9201 tunneling traffic through the Bastion and Kibana machines.
+
+```
+Host metrics-bastion-host
+  Hostname "Bastion.Host.Ip.Address"
+  User ec2-user
+  IdentitiesOnly yes
+  IdentityFile ~/.ssh/your_private_bastion_key
+Host metrics-elk-tunnels
+  Hostname "Kibana.Host.IP.Address"
+  IdentitiesOnly yes
+  ProxyCommand ssh metrics-bastion-host -W %h:%p
+  User ec2-user
+  IdentityFile ~/.ssh/your_private_bastion_key
+  # kibana
+  LocalForward 5601 "Kibana.Host.IP.Address":5601
+  # elastic search
+  LocalForward 9201 "Elasticsearch.Host.IP.Address":9201
+```
+
+##### CORS proxy server
+
+In addition to setting up tunnels to Kibana and Elasticsearch you must run a CORS proxy server in order to access the endpoints from the dashboard application.
+Run this command in a separate terminal window to launch a small, local CORS Anywhere server.
+```sh
+node cors-proxy.js
+```
+You can then configure your ESROOT to use this.
+
+```sh
+export ESROOT=http://localhost:49876/127.0.0.1:9201
+```
+This config will send requests to and from Elasticsearch through the proxy server to prevent CORS errors.
+The KIBANAROOT doesn't need to go through the proxy and can just be set to your fowarded port.
+
+```sh
+export KIBANAROOT=http://localhost:5601
+```
+
 
 ### Running locally in Docker
 
