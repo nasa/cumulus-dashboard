@@ -24,7 +24,7 @@ const initialState = {
   s3Access: { errors: {}, successes: {} }
 };
 
-const countsFromApiGatewayData = (data, name) => {
+const countsFromElasticSearchQuery = (data, name) => {
   return get(data, `aggregations.2.buckets.${name}.doc_count`, null);
 };
 
@@ -38,22 +38,22 @@ export default function reducer (state = initialState, action) {
       set(
         state,
         'apiGateway.access.errors',
-        countsFromApiGatewayData(action.data, 'ApiAccessErrors')
+        countsFromElasticSearchQuery(action.data, 'ApiAccessErrors')
       );
       set(
         state,
         'apiGateway.access.successes',
-        countsFromApiGatewayData(action.data, 'ApiAccessSuccesses')
+        countsFromElasticSearchQuery(action.data, 'ApiAccessSuccesses')
       );
       set(
         state,
         'apiGateway.execution.errors',
-        countsFromApiGatewayData(action.data, 'ApiExecutionErrors')
+        countsFromElasticSearchQuery(action.data, 'ApiExecutionErrors')
       );
       set(
         state,
         'apiGateway.execution.successes',
-        countsFromApiGatewayData(action.data, 'ApiExecutionSuccesses')
+        countsFromElasticSearchQuery(action.data, 'ApiExecutionSuccesses')
       );
       break;
     case DIST_APIGATEWAY_INFLIGHT:
@@ -70,12 +70,12 @@ export default function reducer (state = initialState, action) {
       set(
         state,
         'apiLambda.errors',
-        countsFromApiGatewayData(action.data, 'LambdaAPIErrors')
+        countsFromElasticSearchQuery(action.data, 'LambdaAPIErrors')
       );
       set(
         state,
         'apiLambda.successes',
-        countsFromApiGatewayData(action.data, 'LambdaAPISuccesses')
+        countsFromElasticSearchQuery(action.data, 'LambdaAPISuccesses')
       );
       break;
     case DIST_APILAMBDA_INFLIGHT:
@@ -92,12 +92,12 @@ export default function reducer (state = initialState, action) {
       set(
         state,
         's3Access.errors',
-        countsFromApiGatewayData(action.data, 's3AccessFailures')
+        countsFromElasticSearchQuery(action.data, 's3AccessFailures')
       );
       set(
         state,
         's3Access.successes',
-        countsFromApiGatewayData(action.data, 's3AccessSuccesses')
+        countsFromElasticSearchQuery(action.data, 's3AccessSuccesses')
       );
       break;
     case DIST_S3ACCESS_INFLIGHT:

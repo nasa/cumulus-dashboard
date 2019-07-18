@@ -1,3 +1,6 @@
+// server to proxy CORS requests for tunneled resources
+// via localhost port forwarding during development.
+
 // Listen on a specific host via the CPHOST environment variable
 var host = process.env.CPHOST || '127.0.0.1';
 // Listen on a specific port via the CPPORT environment variable
