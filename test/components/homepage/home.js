@@ -41,7 +41,6 @@ test('CUMULUS-799 Home page contains distribution error report', async (t) => {
     />
   );
 
-  // TODO [MHS, 2019-07-16] This needs correcting, updating the fake api and the correct tag..
   const errorMetrics = home.find('#distributionErrors li');
   t.is(errorMetrics.length, 2);
   t.is(errorMetrics.at(0).key(), 'Gateway Execution Errors');
