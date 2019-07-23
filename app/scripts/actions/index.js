@@ -435,6 +435,7 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
   const stackName = cumulusInstanceMeta.stackName;
   const now = Date.now();
   const twentyFourHoursAgo = now - millisecondsPerDay;
+  if (!esRoot) return { type: types.NOOP };
   return {
     [CALL_API]: {
       type: types.DIST_APIGATEWAY,
@@ -450,6 +451,7 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
   const stackName = cumulusInstanceMeta.stackName;
   const now = Date.now();
   const twentyFourHoursAgo = now - millisecondsPerDay;
+  if (!esRoot) return { type: types.NOOP };
   return {
     [CALL_API]: {
       type: types.DIST_APILAMBDA,
@@ -465,6 +467,7 @@ export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
   const stackName = cumulusInstanceMeta.stackName;
   const now = Date.now();
   const twentyFourHoursAgo = now - millisecondsPerDay;
+  if (!esRoot) return { type: types.NOOP };
   return {
     [CALL_API]: {
       type: types.DIST_S3ACCESS,
