@@ -12,7 +12,7 @@ A basic table component that supports row selection and dumb sorting (see below)
 - **data**: Array of data items. Items can be objects or arrays, depending on the accessor functions defined in `row`.
 - **header**: Array of strings representing the header row.
 - **row**: Array of items representing columns in each row. Items can be accessor functions with the arguments `data[k], k, data` (where `k` is the index of the current loop), or string values, ie `"collectionName"`.
-- **props**: Array of property names to send to elasticsearch for a re-ordering query.
+- **props**: Array of property names to send to Elasticsearch for a re-ordering query.
 - **sortIdx**: The current index of the `props` array to sort by.
 - **order**: Either 'desc' or 'asc', corresponding to sort order.
 - **changeSortProps**: Callback when a new sort order is defined, passed an object with the properties `{ sortIdx, order }`.

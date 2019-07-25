@@ -8,6 +8,8 @@ module.exports = {
     }
   },
   apiRoot: process.env.APIROOT || 'https://example.com',
+  kibanaRoot: process.env.KIBANAROOT || false,
+  esRoot: process.env.ESROOT || false,
   graphicsPath: (process.env.BUCKET || '') + '/graphics/',
   enableRecovery: process.env.ENABLE_RECOVERY || false
 };

@@ -79,7 +79,10 @@ app.use(bodyParser.json());
 app.use('/', fakeApiMiddleWare);
 
 app.get('/instanceMeta', (req, res) => {
-  res.json({cmr: {provider: 'CUMULUS', environment: 'UAT'}}).end();
+  res.json({
+    cmr: {provider: 'CUMULUS', environment: 'UAT'},
+    cumulus: { stackName: 'stackName' }
+  }).end();
 });
 
 app.get('/collections', async (req, res) => {

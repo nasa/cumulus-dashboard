@@ -5,7 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+### BREAKING CHANGES
+
+- You must be using Cumulus API version vX.XX.X or above in order to use the new distribution metrics functionality.
+
 ## [Unreleased]
+
+- **CUMULUS-1337**
+  - Must use Cumulus API version vX.XX.X or above in order to use the new distribution metrics functionality.
+  - Distribution metrics are no longer served from the Cumulus API , but are computed from the logs in an ELK stack.
+  - If you want to display distribution metrics using a Kibana instance (ELK stack), you need to set the environment variables `KIBANAROOT` to point to the base url of an accessible Kibana instance as well as `ESROOT` to the Elastic Search endpoint holding your metrics.
+  - The `KIBANAROOT` will be used to generate links to the kibana discovery page to interrogate errors/successes further.
+  - The `ESROOT` is used to query Elasticsearch directly to retrieve the displayed counts.
+  - For information on setting up the Cumulus Distribution API Logs and S3 Server Access see the [Cumulus distribution metrics documentation](https://nasa.github.io/cumulus/docs/features/distribution-metrics).
+  - See this project's `README.md` for instructions on setting up development access for Kibana and Elasticsearch.
+
 
 ## [v1.4.0] - 2019-04-19
 

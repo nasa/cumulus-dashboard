@@ -1,4 +1,5 @@
 'use strict';
+
 import compareVersions from 'compare-versions';
 import moment from 'moment';
 import url from 'url';
@@ -11,14 +12,20 @@ import { configureRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId, collectionNameVersion } from '../utils/format';
 import log from '../utils/log';
+import { apiGatewaySearchTemplate } from './action-config/apiGatewaySearch';
+import { apiLambdaSearchTemplate } from './action-config/apiLambdaSearch';
+import { s3AccessSearchTemplate } from './action-config/s3AccessSearch';
 import * as types from './types';
 
 const CALL_API = types.CALL_API;
 const {
+  esRoot,
   apiRoot: root,
   pageLimit,
   minCompatibleApiVersion
 } = _config;
+
+const millisecondsPerDay = 24 * 60 * 60 * 1000;
 
 export const refreshAccessToken = (token) => {
   return (dispatch) => {
@@ -162,7 +169,7 @@ export const clearCollectionsFilter = (paramKey) => ({ type: types.CLEAR_COLLECT
 
 export const getCumulusInstanceMetadata = () => ({
   [CALL_API]: {
-    type: types.ADD_INSTANCE_META_CMR,
+    type: types.ADD_INSTANCE_META,
     method: 'GET',
     path: 'instanceMeta'
   }
@@ -424,13 +431,53 @@ export const getStats = (options) => ({
   }
 });
 
-export const getDistMetrics = () => ({
-  [CALL_API]: {
-    type: types.DIST,
-    method: 'GET',
-    url: url.resolve(root, 'distributionMetrics')
-  }
-});
+export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
+  const stackName = cumulusInstanceMeta.stackName;
+  const now = Date.now();
+  const twentyFourHoursAgo = now - millisecondsPerDay;
+  if (!esRoot) return { type: types.NOOP };
+  return {
+    [CALL_API]: {
+      type: types.DIST_APIGATEWAY,
+      skipAuth: true,
+      method: 'POST',
+      url: `${esRoot}/_search/`,
+      body: JSON.parse(apiGatewaySearchTemplate(stackName, twentyFourHoursAgo, now))
+    }
+  };
+};
+
+export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
+  const stackName = cumulusInstanceMeta.stackName;
+  const now = Date.now();
+  const twentyFourHoursAgo = now - millisecondsPerDay;
+  if (!esRoot) return { type: types.NOOP };
+  return {
+    [CALL_API]: {
+      type: types.DIST_APILAMBDA,
+      skipAuth: true,
+      method: 'POST',
+      url: `${esRoot}/_search/`,
+      body: JSON.parse(apiLambdaSearchTemplate(stackName, twentyFourHoursAgo, now))
+    }
+  };
+};
+
+export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
+  const stackName = cumulusInstanceMeta.stackName;
+  const now = Date.now();
+  const twentyFourHoursAgo = now - millisecondsPerDay;
+  if (!esRoot) return { type: types.NOOP };
+  return {
+    [CALL_API]: {
+      type: types.DIST_S3ACCESS,
+      skipAuth: true,
+      method: 'POST',
+      url: `${esRoot}/_search/`,
+      body: JSON.parse(s3AccessSearchTemplate(stackName, twentyFourHoursAgo, now))
+    }
+  };
+};
 
 // count queries *must* include type and field properties.
 export const getCount = (options) => ({
