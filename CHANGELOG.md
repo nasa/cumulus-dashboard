@@ -7,12 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### BREAKING CHANGES
 
-- You must be using Cumulus API version vX.XX.X or above in order to use the new distribution metrics functionality.
+- You must be using Cumulus API version v1.14.0 or above in order to use the new distribution metrics functionality.
 
 ## [Unreleased]
 
 - **CUMULUS-1337**
-  - Must use Cumulus API version vX.XX.X or above in order to use the new distribution metrics functionality.
+  - Must use Cumulus API version v1.14.0 or above in order to use the new distribution metrics functionality.
   - Distribution metrics are no longer served from the Cumulus API , but are computed from the logs in an ELK stack.
   - If you want to display distribution metrics using a Kibana instance (ELK stack), you need to set the environment variables `KIBANAROOT` to point to the base url of an accessible Kibana instance as well as `ESROOT` to the Elastic Search endpoint holding your metrics.
   - The `KIBANAROOT` will be used to generate links to the kibana discovery page to interrogate errors/successes further.
