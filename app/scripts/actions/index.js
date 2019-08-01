@@ -12,6 +12,7 @@ import { configureRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId, collectionNameVersion } from '../utils/format';
 import log from '../utils/log';
+import { authHeader } from '../utils/basic-auth';
 import { apiGatewaySearchTemplate } from './action-config/apiGatewaySearch';
 import { apiLambdaSearchTemplate } from './action-config/apiLambdaSearch';
 import { s3AccessSearchTemplate } from './action-config/s3AccessSearch';
@@ -442,6 +443,7 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
+      headers: authHeader(),
       body: JSON.parse(apiGatewaySearchTemplate(stackName, twentyFourHoursAgo, now))
     }
   };
@@ -458,6 +460,7 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
+      headers: authHeader(),
       body: JSON.parse(apiLambdaSearchTemplate(stackName, twentyFourHoursAgo, now))
     }
   };
@@ -474,6 +477,7 @@ export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
+      headers: authHeader(),
       body: JSON.parse(s3AccessSearchTemplate(stackName, twentyFourHoursAgo, now))
     }
   };
