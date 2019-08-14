@@ -22,6 +22,8 @@ import * as types from './types';
 const CALL_API = types.CALL_API;
 const {
   esRoot,
+  showDistributionAPIMetrics,
+  showTeaMetrics,
   apiRoot: root,
   pageLimit,
   minCompatibleApiVersion
@@ -455,6 +457,7 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
   const now = Date.now();
   const twentyFourHoursAgo = now - millisecondsPerDay;
   if (!esRoot) return { type: types.NOOP };
+  if (!showDistributionAPIMetrics) return {type: types.NOOP};
   return {
     [CALL_API]: {
       type: types.DIST_API_LAMBDA,
@@ -472,6 +475,7 @@ export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
   const now = Date.now();
   const twentyFourHoursAgo = now - millisecondsPerDay;
   if (!esRoot) return { type: types.NOOP };
+  if (!showTeaMetrics) return { type: types.NOOP };
   return {
     [CALL_API]: {
       type: types.DIST_TEA_LAMBDA,
