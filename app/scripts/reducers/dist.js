@@ -7,9 +7,12 @@ import {
   DIST_APIGATEWAY,
   DIST_APIGATEWAY_INFLIGHT,
   DIST_APIGATEWAY_ERROR,
-  DIST_APILAMBDA,
-  DIST_APILAMBDA_INFLIGHT,
-  DIST_APILAMBDA_ERROR,
+  DIST_API_LAMBDA,
+  DIST_API_LAMBDA_INFLIGHT,
+  DIST_API_LAMBDA_ERROR,
+  DIST_TEA_LAMBDA,
+  DIST_TEA_LAMBDA_INFLIGHT,
+  DIST_TEA_LAMBDA_ERROR,
   DIST_S3ACCESS,
   DIST_S3ACCESS_INFLIGHT,
   DIST_S3ACCESS_ERROR
@@ -21,6 +24,7 @@ const initialState = {
     access: { errors: {}, successes: {} }
   },
   apiLambda: { errors: {}, successes: {} },
+  teaLambda: { errors: {}, successes: {} },
   s3Access: { errors: {}, successes: {} }
 };
 
@@ -63,7 +67,7 @@ export default function reducer (state = initialState, action) {
       set(state, 'apiGateway.inflight', false);
       set(state, 'apiGateway.error', action.error);
       break;
-    case DIST_APILAMBDA:
+    case DIST_API_LAMBDA:
       set(state, 'apiLambda.error', null);
       set(state, 'apiLambda.inflight', false);
       set(state, 'apiLambda.queriedAt', new Date(Date.now()));
@@ -78,12 +82,34 @@ export default function reducer (state = initialState, action) {
         countsFromElasticSearchQuery(action.data, 'LambdaAPISuccesses')
       );
       break;
-    case DIST_APILAMBDA_INFLIGHT:
+    case DIST_API_LAMBDA_INFLIGHT:
       set(state, 'apiLambda.inflight', true);
       break;
-    case DIST_APILAMBDA_ERROR:
+    case DIST_API_LAMBDA_ERROR:
       set(state, 'apiLambda.inflight', false);
       set(state, 'apiLambda.error', action.error);
+      break;
+    case DIST_TEA_LAMBDA:
+      set(state, 'teaLambda.error', null);
+      set(state, 'teaLambda.inflight', false);
+      set(state, 'teaLambda.queriedAt', new Date(Date.now()));
+      set(
+        state,
+        'teaLambda.errors',
+        countsFromElasticSearchQuery(action.data, 'TEALambdaErrors')
+      );
+      set(
+        state,
+        'teaLambda.successes',
+        countsFromElasticSearchQuery(action.data, 'TEALambdaSuccesses')
+      );
+      break;
+    case DIST_TEA_LAMBDA_INFLIGHT:
+      set(state, 'teaLambda.inflight', true);
+      break;
+    case DIST_TEA_LAMBDA_ERROR:
+      set(state, 'teaLambda.inflight', false);
+      set(state, 'teaLambda.error', action.error);
       break;
     case DIST_S3ACCESS:
       set(state, 's3Access.error', null);
