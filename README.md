@@ -33,7 +33,7 @@ The following environment variables override the default values in `config.js`:
 | ENABLE\_RECOVERY | If true, adds recovery options to the granule and collection pages. default: false |
 | KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set to examine distribution metrics details. |
 | SHOW\_TEA\_METRICS | \<optional\> display metrics from Thin Egress Application (TEA). default: true |
-| SHOW\_DISTRIBUTION\_API_METRICS | \<optional\> Display metrics from Cumulus Distribution API. default: false |
+| SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from Cumulus Distribution API. default: false |
 | ESROOT | \<optional\> Should point to an Elasticsearch endpoint. Must be set for distribution metrics to be displayed. |
 | ES\_USER | \<optional\> Elasticsearch username, needed when protected by basic authorization |
 | ES\_PASSWORD | \<optional\> Elasticsearch password,needed when protected by basic authorization |
