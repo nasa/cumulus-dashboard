@@ -9,6 +9,7 @@ import {
   getCumulusInstanceMetadata,
   getDistApiGatewayMetrics,
   getDistApiLambdaMetrics,
+  getTEALambdaMetrics,
   getDistS3AccessMetrics,
   getStats,
   interval,
@@ -34,6 +35,8 @@ import {
   kibanaS3AccessSuccessesLink,
   kibanaApiLambdaErrorsLink,
   kibanaApiLambdaSuccessesLink,
+  kibanaTEALambdaErrorsLink,
+  kibanaTEALambdaSuccessesLink,
   kibanaGatewayAccessErrorsLink,
   kibanaGatewayAccessSuccessesLink,
   kibanaGatewayExecutionErrorsLink,
@@ -58,6 +61,7 @@ class Home extends React.Component {
     dispatch(getCumulusInstanceMetadata())
       .then(() => {
         dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
+        dispatch(getTEALambdaMetrics(this.props.cumulusInstance));
         dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
         dispatch(getDistS3AccessMetrics(this.props.cumulusInstance));
       }
@@ -79,6 +83,7 @@ class Home extends React.Component {
       field: 'status'
     }));
     dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
+    dispatch(getTEALambdaMetrics(this.props.cumulusInstance));
     dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
     dispatch(getDistS3AccessMetrics(this.props.cumulusInstance));
     dispatch(listExecutions({}));
@@ -143,6 +148,7 @@ class Home extends React.Component {
 
     const distSuccessStats = [
       [tally(get(dist, 's3Access.successes')), 'S3 Access Successes', kibanaS3AccessSuccessesLink(this.props.cumulusInstance)],
+      [tally(get(dist, 'teaLambda.successes')), 'TEA Lambda Successes', kibanaTEALambdaSuccessesLink(this.props.cumulusInstance)],
       [tally(get(dist, 'apiLambda.successes')), 'Distribution API Lambda Successes', kibanaApiLambdaSuccessesLink(this.props.cumulusInstance)],
       [tally(get(dist, 'apiGateway.execution.successes')), 'Gateway Execution Successes', kibanaGatewayExecutionSuccessesLink(this.props.cumulusInstance)],
       [tally(get(dist, 'apiGateway.access.successes')), 'Gateway Access Successes', kibanaGatewayAccessSuccessesLink(this.props.cumulusInstance)]
@@ -150,6 +156,7 @@ class Home extends React.Component {
 
     const distErrorStats = [
       [tally(get(dist, 's3Access.errors')), 'S3 Access Errors', kibanaS3AccessErrorsLink(this.props.cumulusInstance)],
+      [tally(get(dist, 'teaLambda.errors')), 'TEA Lambda Errors', kibanaTEALambdaErrorsLink(this.props.cumulusInstance)],
       [tally(get(dist, 'apiLambda.errors')), 'Distribution API Lambda Errors', kibanaApiLambdaErrorsLink(this.props.cumulusInstance)],
       [tally(get(dist, 'apiGateway.execution.errors')), 'Gateway Execution Errors', kibanaGatewayExecutionErrorsLink(this.props.cumulusInstance)],
       [tally(get(dist, 'apiGateway.access.errors')), 'Gateway Access Errors', kibanaGatewayAccessErrorsLink(this.props.cumulusInstance)]

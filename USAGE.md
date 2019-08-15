@@ -53,3 +53,7 @@ The forms do not yet support undo or redo actions, so if you accidentally make a
 ## On successful save
 
 When you successfully save a record, you will be redirected to the overview for that section. If you do not see your changes immediately represented in the tables, check back in 15 or 30 seconds, as it sometimes takes a bit for the changes to propagate through the Cumulus system.
+
+## Recovery options
+
+If the dashboard is started with a truthful value for the environment variable ENABLE_RECOVERY.  "Recover Granule" and "Recover Collection" buttons are added to the the granule and collection dashboard pages, respectively. Which workflow is run by these buttons is configured in a collection under meta.granuleRecoveryWorkflow. If a user attempts to recover a granule from a collection that doesn't have this value configured, an error will show up on the dashboard and no workflow will be started.

@@ -23,16 +23,21 @@ The information needed to configure the dashboard is stored at `app/scripts/conf
 
 The following environment variables override the default values in `config.js`:
 
-| Env Name | Description
-| -------- | -----------
-| HIDE_PDR | whether to hide the PDR menu, default to true
-| DAAC\_NAME | e.g. LPDAAC, default to Local
-| STAGE | e.g. UAT, default to development
-| LABELS | gitc or daac localization (defaults to daac)
-| APIROOT | the API URL. This must be set as it defaults to example.com
-| KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set for distribution metrics to be displayed.
-| ESROOT | \<optional\> Should point to an Elasticsearch endpoint. Must be set for distribution metrics to be displayed.
-| RECOVERY_PATH | setting this to a backend api endpoint will enable 'recover buttons' for granules and collections. e.g. - 'recover'
+| Env Name | Description |
+| -------- | ----------- |
+| HIDE_PDR | whether to hide the PDR menu, default to true |
+| DAAC\_NAME    | e.g. LPDAAC, default to Local |
+| STAGE | e.g. UAT, default to development |
+| LABELS | gitc or daac localization (defaults to daac) |
+| APIROOT | the API URL. This must be set by the user as it defaults to example.com |
+| ENABLE\_RECOVERY | If true, adds recovery options to the granule and collection pages. default: false |
+| KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set to examine distribution metrics details. |
+| SHOW\_TEA\_METRICS | \<optional\> display metrics from Thin Egress Application (TEA). default: true |
+| SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from Cumulus Distribution API. default: false |
+| ESROOT | \<optional\> Should point to an Elasticsearch endpoint. Must be set for distribution metrics to be displayed. |
+| ES\_USER | \<optional\> Elasticsearch username, needed when protected by basic authorization |
+| ES\_PASSWORD | \<optional\> Elasticsearch password,needed when protected by basic authorization |
+
 
 ## Building or running locally
 
@@ -132,24 +137,20 @@ Host metrics-elk-tunnels
   LocalForward 9201 "Elasticsearch.Host.IP.Address":9201
 ```
 
-##### CORS proxy server
-
-In addition to setting up tunnels to Kibana and Elasticsearch you must run a CORS proxy server in order to access the endpoints from the dashboard application.
-Run this command in a separate terminal window to launch a small, local CORS Anywhere server.
-```sh
-node cors-proxy.js
-```
-You can then configure your ESROOT to use this.
+Now you can configure you sandbox environment with these variables.
 
 ```sh
-export ESROOT=http://localhost:49876/127.0.0.1:9201
-```
-This config will send requests to and from Elasticsearch through the proxy server to prevent CORS errors.
-The KIBANAROOT doesn't need to go through the proxy and can just be set to your fowarded port.
-
-```sh
+export ESROOT=http://localhost:9201
 export KIBANAROOT=http://localhost:5601
 ```
+
+If the Elasticsearch machine is protected by basic authorization, the following two variables should also be set.
+
+```sh
+export ES_USER=<username>
+export ES_PASSWORD=<password>
+```
+
 
 
 ### Running locally in Docker

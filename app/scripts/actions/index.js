@@ -12,14 +12,18 @@ import { configureRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId, collectionNameVersion } from '../utils/format';
 import log from '../utils/log';
+import { authHeader } from '../utils/basic-auth';
 import { apiGatewaySearchTemplate } from './action-config/apiGatewaySearch';
 import { apiLambdaSearchTemplate } from './action-config/apiLambdaSearch';
+import { teaLambdaSearchTemplate } from './action-config/teaLambdaSearch';
 import { s3AccessSearchTemplate } from './action-config/s3AccessSearch';
 import * as types from './types';
 
 const CALL_API = types.CALL_API;
 const {
   esRoot,
+  showDistributionAPIMetrics,
+  showTeaMetrics,
   apiRoot: root,
   pageLimit,
   minCompatibleApiVersion
@@ -442,6 +446,7 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
+      headers: authHeader(),
       body: JSON.parse(apiGatewaySearchTemplate(stackName, twentyFourHoursAgo, now))
     }
   };
@@ -452,13 +457,33 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
   const now = Date.now();
   const twentyFourHoursAgo = now - millisecondsPerDay;
   if (!esRoot) return { type: types.NOOP };
+  if (!showDistributionAPIMetrics) return {type: types.NOOP};
   return {
     [CALL_API]: {
-      type: types.DIST_APILAMBDA,
+      type: types.DIST_API_LAMBDA,
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
+      headers: authHeader(),
       body: JSON.parse(apiLambdaSearchTemplate(stackName, twentyFourHoursAgo, now))
+    }
+  };
+};
+
+export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
+  const stackName = cumulusInstanceMeta.stackName;
+  const now = Date.now();
+  const twentyFourHoursAgo = now - millisecondsPerDay;
+  if (!esRoot) return { type: types.NOOP };
+  if (!showTeaMetrics) return { type: types.NOOP };
+  return {
+    [CALL_API]: {
+      type: types.DIST_TEA_LAMBDA,
+      skipAuth: true,
+      method: 'POST',
+      url: `${esRoot}/_search/`,
+      headers: authHeader(),
+      body: JSON.parse(teaLambdaSearchTemplate(stackName, twentyFourHoursAgo, now))
     }
   };
 };
@@ -474,6 +499,7 @@ export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
+      headers: authHeader(),
       body: JSON.parse(s3AccessSearchTemplate(stackName, twentyFourHoursAgo, now))
     }
   };

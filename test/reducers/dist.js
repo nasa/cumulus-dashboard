@@ -7,15 +7,19 @@ import test from 'ava';
 
 import { apiGatewayFixture } from '../fixtures/apiGatewayMetrics';
 import { apiLambdaFixture } from '../fixtures/apiLambdaMetrics';
+import { teaLambdaFixture } from '../fixtures/teaLambdaMetrics';
 import { s3AccessFixture } from '../fixtures/s3AccessMetrics';
 import reducer from '../../app/scripts/reducers/dist';
 import {
   DIST_APIGATEWAY,
   DIST_APIGATEWAY_INFLIGHT,
   DIST_APIGATEWAY_ERROR,
-  DIST_APILAMBDA,
-  DIST_APILAMBDA_INFLIGHT,
-  DIST_APILAMBDA_ERROR,
+  DIST_API_LAMBDA,
+  DIST_API_LAMBDA_INFLIGHT,
+  DIST_API_LAMBDA_ERROR,
+  DIST_TEA_LAMBDA,
+  DIST_TEA_LAMBDA_INFLIGHT,
+  DIST_TEA_LAMBDA_ERROR,
   DIST_S3ACCESS,
   DIST_S3ACCESS_INFLIGHT,
   DIST_S3ACCESS_ERROR
@@ -94,10 +98,10 @@ test('reducers/dist/dist_apigateway_Error', (t) => {
   t.deepEqual(expectedState, newState);
 });
 
-test('reducers/dist/dist_lambda', (t) => {
+test('reducers/dist/dist_apilambda', (t) => {
   const initialState = {};
   const action = {
-    type: DIST_APILAMBDA,
+    type: DIST_API_LAMBDA,
     data: JSON.parse(apiLambdaFixture)
   };
 
@@ -114,10 +118,10 @@ test('reducers/dist/dist_lambda', (t) => {
   t.deepEqual(expectedState, newState);
 });
 
-test('reducers/dist/dist_lambda_inflight', (t) => {
+test('reducers/dist/dist_apilambda_inflight', (t) => {
   const initialState = {};
   const action = {
-    type: DIST_APILAMBDA_INFLIGHT
+    type: DIST_API_LAMBDA_INFLIGHT
   };
 
   const expectedState = {
@@ -129,7 +133,7 @@ test('reducers/dist/dist_lambda_inflight', (t) => {
   t.deepEqual(expectedState, newState);
 });
 
-test('reducers/dist/dist_lambda_error', (t) => {
+test('reducers/dist/dist_apilambda_error', (t) => {
   const initialState = {
     apiLambda: {
       successes: 9,
@@ -138,7 +142,7 @@ test('reducers/dist/dist_lambda_error', (t) => {
     }
   };
   const action = {
-    type: DIST_APILAMBDA_ERROR,
+    type: DIST_API_LAMBDA_ERROR,
     error: 'api lambda error'
   };
 
@@ -153,6 +157,67 @@ test('reducers/dist/dist_lambda_error', (t) => {
   const newState = reducer(initialState, action);
   t.deepEqual(expectedState, newState);
 });
+
+test('reducers/dist/dist_tea_lambda', (t) => {
+  const initialState = {};
+  const action = {
+    type: DIST_TEA_LAMBDA,
+    data: JSON.parse(teaLambdaFixture)
+  };
+
+  const expectedState = {
+    teaLambda: {
+      inflight: false,
+      error: null,
+      queriedAt: new Date(Date.now()),
+      errors: 18,
+      successes: 34301
+    }
+  };
+  const newState = reducer(initialState, action);
+  t.deepEqual(expectedState, newState);
+});
+
+test('reducers/dist/dist_tea_lambda_inflight', (t) => {
+  const initialState = {};
+  const action = {
+    type: DIST_TEA_LAMBDA_INFLIGHT
+  };
+
+  const expectedState = {
+    teaLambda: {
+      inflight: true
+    }
+  };
+  const newState = reducer(initialState, action);
+  t.deepEqual(expectedState, newState);
+});
+
+test('reducers/dist/dist_tea_lambda_error', (t) => {
+  const initialState = {
+    teaLambda: {
+      successes: 9,
+      errors: 7,
+      inflight: true
+    }
+  };
+  const action = {
+    type: DIST_TEA_LAMBDA_ERROR,
+    error: 'api lambda error'
+  };
+
+  const expectedState = {
+    teaLambda: {
+      inflight: false,
+      error: 'api lambda error',
+      successes: 9,
+      errors: 7
+    }
+  };
+  const newState = reducer(initialState, action);
+  t.deepEqual(expectedState, newState);
+});
+
 
 test('reducers/dist/dist_s3access', (t) => {
   const initialState = {};
