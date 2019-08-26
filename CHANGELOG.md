@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.5.0] - 2019-08-26
+
 - **CUMULUS-1337**
   - Must use Cumulus API version v1.14.0 or above in order to use the new distribution metrics functionality.
   - Distribution metrics are no longer served from the Cumulus API , but are computed from the logs in an ELK stack.
@@ -101,7 +103,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.5.0...HEAD
+[v1.5.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.4.0...v1.5.0
 [v1.4.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.3.0...v1.4.0
 [v1.3.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.2.0...v1.3.0
 [v1.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.1.0...v1.2.0
