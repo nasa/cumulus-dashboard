@@ -5,13 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [v1.5.0] - 2019-08-26
+
 ### BREAKING CHANGES
 
 - You must be using Cumulus API version v1.14.0 or above in order to use the new distribution metrics functionality.
 
-## [Unreleased]
-
-## [v1.5.0] - 2019-08-26
+### Added
 
 - **CUMULUS-1337**
   - Must use Cumulus API version v1.14.0 or above in order to use the new distribution metrics functionality.
