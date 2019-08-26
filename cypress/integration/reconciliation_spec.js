@@ -181,17 +181,5 @@ describe('Dashboard Reconciliation Reports Page', () => {
             .should('have.attr', 'href', 's3://some-bucket/granule__002/granule.002.5678.jpg');
         });
     });
-
-    it('displays the create a report button', () => {
-      cy.visit('/#/reconciliation-reports');
-
-      cy.contains('button', 'Create a Report')
-        .click();
-
-      cy.reload();
-
-      cy.contains('table tbody tr a', 'created_report.json')
-        .should('have.attr', 'href', '#/reconciliation-reports/report/created_report.json');
-    });
   });
 });

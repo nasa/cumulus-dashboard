@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.5.0] - 2019-08-26
+
+### BREAKING CHANGES
+
+- You must be using Cumulus API version v1.14.0 or above in order to use the new distribution metrics functionality.
+
+### Added
+
+- **CUMULUS-1337**
+  - Must use Cumulus API version v1.14.0 or above in order to use the new distribution metrics functionality.
+  - Distribution metrics are no longer served from the Cumulus API , but are computed from the logs in an ELK stack.
+  - If you want to display distribution metrics using a Kibana instance (ELK stack), you need to set the environment variables `KIBANAROOT` to point to the base url of an accessible Kibana instance as well as `ESROOT` to the Elastic Search endpoint holding your metrics.
+  - The `KIBANAROOT` will be used to generate links to the kibana discovery page to interrogate errors/successes further.
+  - The `ESROOT` is used to query Elasticsearch directly to retrieve the displayed counts.
+  - For information on setting up the Cumulus Distribution API Logs and S3 Server Access see the [Cumulus distribution metrics documentation](https://nasa.github.io/cumulus/docs/features/distribution-metrics).
+  - See this project's `README.md` for instructions on setting up development access for Kibana and Elasticsearch.
+
+
 ## [v1.4.0] - 2019-04-19
 
 ### BREAKING CHANGES
@@ -87,7 +105,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.5.0...HEAD
+[v1.5.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.4.0...v1.5.0
 [v1.4.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.3.0...v1.4.0
 [v1.3.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.2.0...v1.3.0
 [v1.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.1.0...v1.2.0

@@ -79,7 +79,10 @@ app.use(bodyParser.json());
 app.use('/', fakeApiMiddleWare);
 
 app.get('/instanceMeta', (req, res) => {
-  res.json({cmr: {provider: 'CUMULUS', environment: 'UAT'}}).end();
+  res.json({
+    cmr: {provider: 'CUMULUS', environment: 'UAT'},
+    cumulus: { stackName: 'stackName' }
+  }).end();
 });
 
 app.get('/collections', async (req, res) => {
@@ -112,6 +115,10 @@ app.delete('/collections/:name/:version', async (req, res) => {
     res.status(err.code);
     res.json(err).end();
   }
+});
+
+app.get('/granule-csv', (req, res) => {
+  res.status(200).send('"granuleUr","collectionId","createdAt","startDateTime","endDateTime"\n"localrun-granule","fakeCollection___v1","2019-06-14T13:14:14.160Z","149817246194","18724619651535"');
 });
 
 app.get('/providers', async (req, res) => {

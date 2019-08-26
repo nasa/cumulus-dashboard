@@ -1,6 +1,6 @@
 module.exports = {
   target: process.env.DAAC_NAME || 'local',
-  environment: process.env.STAGE || 'production',
+  environment: process.env.STAGE || 'development',
   nav: {
     order: ['collections'],
     exclude: {
@@ -8,6 +8,10 @@ module.exports = {
     }
   },
   apiRoot: process.env.APIROOT || 'https://example.com',
-  graphicsPath: (process.env.BUCKET || '') + '/graphics/'
-
+  kibanaRoot: process.env.KIBANAROOT || false,
+  esRoot: process.env.ESROOT || false,
+  showTeaMetrics: process.env.SHOW_TEA_METRICS || true,
+  showDistributionAPIMetrics: process.env.SHOW_DISTRIBUTION_API_METRICS || false,
+  graphicsPath: (process.env.BUCKET || '') + '/graphics/',
+  enableRecovery: process.env.ENABLE_RECOVERY || false
 };

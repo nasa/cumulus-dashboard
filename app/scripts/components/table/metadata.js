@@ -9,7 +9,7 @@ class Metadata extends React.Component {
     const { data, accessors } = this.props;
     return (
       <dl className='metadata__details'>
-        {accessors.reduce((acc, meta, i) => {
+        {accessors.reduce((acc, meta) => {
           let value = get(data, meta[1]);
           if (value !== nullValue && typeof meta[2] === 'function') {
             value = meta[2](value);

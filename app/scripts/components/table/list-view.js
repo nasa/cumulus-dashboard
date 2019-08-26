@@ -203,7 +203,7 @@ class List extends React.Component {
         {hasActions ? (
           <div className='form--controls'>
             {this.renderSelectAll()}
-            {bulkActions.map((item, i) => <BatchAsyncCommand key={item.text}
+            {bulkActions.map((item) => <BatchAsyncCommand key={item.text}
               dispatch={dispatch}
               action={item.action}
               state={item.state}

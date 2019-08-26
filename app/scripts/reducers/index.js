@@ -2,7 +2,10 @@ import { combineReducers } from 'redux';
 import api from './api';
 import apiVersion from './api-version';
 import collections from './collections';
+import config from './config';
+import dist from './dist';
 import granules from './granules';
+import granuleCSV from './granule-csv';
 import stats from './stats';
 import pdrs from './pdrs';
 import providers from './providers';
@@ -22,9 +25,12 @@ export const reducers = {
   api,
   apiVersion,
   collections,
+  config,
+  dist,
   mmtLinks,
   cumulusInstance,
   granules,
+  granuleCSV,
   stats,
   pdrs,
   providers,

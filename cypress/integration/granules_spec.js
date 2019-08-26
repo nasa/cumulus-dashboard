@@ -105,5 +105,18 @@ describe('Dashboard Granules Page', () => {
         });
       });
     });
+
+    it('should display a link to download the granule list', () => {
+      cy.visit('/');
+
+      cy.contains('nav li a', 'Granules').as('granules');
+      cy.get('@granules').should('have.attr', 'href', '#/granules');
+      cy.get('@granules').click();
+
+      cy.contains('.heading--xlarge', 'Granules');
+
+      cy.contains('a', 'Download Granule List')
+      .should('have.attr', 'href').should('include', 'blob:http://');
+    });
   });
 });

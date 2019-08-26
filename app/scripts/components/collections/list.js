@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import {
+  applyRecoveryWorkflowToCollection,
   clearCollectionsSearch,
   getCumulusInstanceMetadata,
   listCollections,
@@ -19,7 +20,8 @@ import {
   tableHeader,
   tableRow,
   tableSortProps,
-  bulkActions
+  bulkActions,
+  recoverAction
 } from '../../utils/table-config/collections';
 import Search from '../form/search';
 import List from '../table/list-view';
@@ -49,7 +51,15 @@ class CollectionList extends React.Component {
   }
 
   generateBulkActions () {
-    return bulkActions(this.props.collections);
+    const actionConfig = {
+      recover: {
+        action: applyRecoveryWorkflowToCollection
+      }
+    };
+    const { collections, config } = this.props;
+    let actions = bulkActions(collections);
+    if (config.enableRecovery) actions = actions.concat(recoverAction(collections, actionConfig));
+    return actions;
   }
 
   render () {
@@ -101,7 +111,9 @@ CollectionList.propTypes = {
   collections: PropTypes.object,
   mmtLinks: PropTypes.object,
   dispatch: PropTypes.func,
-  logs: PropTypes.object
+  logs: PropTypes.object,
+  config: PropTypes.object
 };
 
+export { CollectionList };
 export default connect(state => state)(CollectionList);

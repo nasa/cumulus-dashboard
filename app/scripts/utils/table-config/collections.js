@@ -42,6 +42,16 @@ export const tableSortProps = [
   'timestamp'
 ];
 
+const confirmRecover = (d) => `Recover ${d} ${strings.collection}(s)?`;
+export const recoverAction = function (collections, config) {
+  return [{
+    text: 'Recover',
+    action: config.recover.action,
+    state: collections.executed, // this will probably need to be changed
+    confirm: confirmRecover
+  }];
+};
+
 const confirmDelete = (d) => `Delete ${d} ${strings.collection}(s)?`;
 export const bulkActions = function (collections) {
   return [{

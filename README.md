@@ -23,13 +23,21 @@ The information needed to configure the dashboard is stored at `app/scripts/conf
 
 The following environment variables override the default values in `config.js`:
 
-| Env Name | Description
-| -------- | -----------
-| HIDE_PDR | whether to hide the PDR menu, default to true
-| DAAC\_NAME | e.g. LPDAAC, default to Local
-| STAGE | e.g. UAT, default to development
-| LABELS | gitc or daac localization (defaults to daac)
-| APIROOT | the API URL. This must be set as it defaults to example.com
+| Env Name | Description |
+| -------- | ----------- |
+| HIDE_PDR | whether to hide the PDR menu, default to true |
+| DAAC\_NAME    | e.g. LPDAAC, default to Local |
+| STAGE | e.g. UAT, default to development |
+| LABELS | gitc or daac localization (defaults to daac) |
+| APIROOT | the API URL. This must be set by the user as it defaults to example.com |
+| ENABLE\_RECOVERY | If true, adds recovery options to the granule and collection pages. default: false |
+| KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set to examine distribution metrics details. |
+| SHOW\_TEA\_METRICS | \<optional\> display metrics from Thin Egress Application (TEA). default: true |
+| SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from Cumulus Distribution API. default: false |
+| ESROOT | \<optional\> Should point to an Elasticsearch endpoint. Must be set for distribution metrics to be displayed. |
+| ES\_USER | \<optional\> Elasticsearch username, needed when protected by basic authorization |
+| ES\_PASSWORD | \<optional\> Elasticsearch password,needed when protected by basic authorization |
+
 
 ## Building or running locally
 
@@ -104,6 +112,46 @@ For development and testing purposes, you can use a fake API server provided wit
   $ nvm use
   $ APIROOT=http://localhost:5001 yarn run serve
 ```
+
+#### NGAP Sandbox Metrics Development
+
+##### Kibana and Elasticsearch access
+
+In order to develop features that interact with Kibana or Elasticsearch in the NGAP sandbox, you need to set up tunnels through the metric's teams bastion-host.  First you must get access to the metric's host. This will require a [NASD ticket](https://bugs.earthdata.nasa.gov/servicedesk/customer/portal/7/create/79) and permission from the metrics team.  Once you have access to the metrics-bastion-host you can get the IP addresses for the Bastion, Kibana and Elasticsearch from the metrics team and configure your `.ssh/config` file to create you local tunnels.  This configuration will open traffic to the Kibana endpoint on localhost:5601 and Elasticsearch on localhost:9201 tunneling traffic through the Bastion and Kibana machines.
+
+```
+Host metrics-bastion-host
+  Hostname "Bastion.Host.Ip.Address"
+  User ec2-user
+  IdentitiesOnly yes
+  IdentityFile ~/.ssh/your_private_bastion_key
+Host metrics-elk-tunnels
+  Hostname "Kibana.Host.IP.Address"
+  IdentitiesOnly yes
+  ProxyCommand ssh metrics-bastion-host -W %h:%p
+  User ec2-user
+  IdentityFile ~/.ssh/your_private_bastion_key
+  # kibana
+  LocalForward 5601 "Kibana.Host.IP.Address":5601
+  # elastic search
+  LocalForward 9201 "Elasticsearch.Host.IP.Address":9201
+```
+
+Now you can configure you sandbox environment with these variables.
+
+```sh
+export ESROOT=http://localhost:9201
+export KIBANAROOT=http://localhost:5601
+```
+
+If the Elasticsearch machine is protected by basic authorization, the following two variables should also be set.
+
+```sh
+export ES_USER=<username>
+export ES_PASSWORD=<password>
+```
+
+
 
 ### Running locally in Docker
 

@@ -89,6 +89,14 @@ export const simpleDropdownOption = function (config) {
   );
 };
 
+const confirmRecover = (d) => `Recover ${d} granule(s)?`;
+export const recoverAction = (granules, config) => ({
+  text: 'Recover Granule',
+  action: config.recover.action,
+  state: granules.executed,
+  confirm: confirmRecover
+});
+
 const confirmReingest = (d) => `Reingest ${d} granules(s)? Note: the granule files will be overwritten.`;
 const confirmApply = (d) => `Run workflow on ${d} granules?`;
 const confirmRemove = (d) => `Remove ${d} granule(s) from ${strings.cmr}?`;

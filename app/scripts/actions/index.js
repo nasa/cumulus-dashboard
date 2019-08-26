@@ -1,4 +1,5 @@
 'use strict';
+
 import compareVersions from 'compare-versions';
 import moment from 'moment';
 import url from 'url';
@@ -9,13 +10,26 @@ import { CMR, hostId } from '@cumulus/cmrjs';
 
 import { configureRequest } from './helpers';
 import _config from '../config';
-import { getCollectionId } from '../utils/format';
+import { getCollectionId, collectionNameVersion } from '../utils/format';
 import log from '../utils/log';
+import { authHeader } from '../utils/basic-auth';
+import { apiGatewaySearchTemplate } from './action-config/apiGatewaySearch';
+import { apiLambdaSearchTemplate } from './action-config/apiLambdaSearch';
+import { teaLambdaSearchTemplate } from './action-config/teaLambdaSearch';
+import { s3AccessSearchTemplate } from './action-config/s3AccessSearch';
 import * as types from './types';
 
 const CALL_API = types.CALL_API;
-const root = _config.apiRoot;
-const { pageLimit, minCompatibleApiVersion } = _config;
+const {
+  esRoot,
+  showDistributionAPIMetrics,
+  showTeaMetrics,
+  apiRoot: root,
+  pageLimit,
+  minCompatibleApiVersion
+} = _config;
+
+const millisecondsPerDay = 24 * 60 * 60 * 1000;
 
 export const refreshAccessToken = (token) => {
   return (dispatch) => {
@@ -159,7 +173,7 @@ export const clearCollectionsFilter = (paramKey) => ({ type: types.CLEAR_COLLECT
 
 export const getCumulusInstanceMetadata = () => ({
   [CALL_API]: {
-    type: types.ADD_INSTANCE_META_CMR,
+    type: types.ADD_INSTANCE_META,
     method: 'GET',
     path: 'instanceMeta'
   }
@@ -275,6 +289,43 @@ export const reprocessGranule = (granuleId) => ({
   }
 });
 
+export const applyWorkflowToCollection = (name, version, workflow) => ({
+  [CALL_API]: {
+    type: types.COLLECTION_APPLYWORKFLOW,
+    method: 'PUT',
+    id: getCollectionId({name, version}),
+    path: `collections/${name}/${version}`,
+    body: {
+      action: 'applyWorkflow',
+      workflow
+    }
+  }
+});
+
+export const applyRecoveryWorkflowToCollection = (collectionId) => {
+  return (dispatch) => {
+    const { name, version } = collectionNameVersion(collectionId);
+    return dispatch(getCollection(name, version))
+      .then((collectionResponse) => {
+        const collectionRecoveryWorkflow = getProperty(
+          collectionResponse, 'data.results.0.meta.collectionRecoveryWorkflow'
+        );
+        if (collectionRecoveryWorkflow) {
+          return dispatch(applyWorkflowToCollection(name, version, collectionRecoveryWorkflow));
+        } else {
+          throw new ReferenceError(
+            `Unable to apply recovery workflow to ${collectionId} because the attribute collectionRecoveryWorkflow is not set in collection.meta`
+          );
+        }
+      })
+      .catch((error) => dispatch({
+        id: collectionId,
+        type: types.COLLECTION_APPLYWORKFLOW_ERROR,
+        error: error
+      }));
+  };
+};
+
 export const applyWorkflowToGranule = (granuleId, workflow) => ({
   [CALL_API]: {
     type: types.GRANULE_APPLYWORKFLOW,
@@ -287,6 +338,38 @@ export const applyWorkflowToGranule = (granuleId, workflow) => ({
     }
   }
 });
+
+export const getCollectionByGranuleId = (granuleId) => {
+  return (dispatch) => {
+    return dispatch(getGranule(granuleId)).then((granuleResponse) => {
+      const { name, version } = collectionNameVersion(granuleResponse.data.collectionId);
+      return dispatch(getCollection(name, version));
+    });
+  };
+};
+
+export const applyRecoveryWorkflowToGranule = (granuleId) => {
+  return (dispatch) => {
+    return dispatch(getCollectionByGranuleId(granuleId))
+      .then((collectionResponse) => {
+        const granuleRecoveryWorkflow = getProperty(
+          collectionResponse, 'data.results.0.meta.granuleRecoveryWorkflow'
+        );
+        if (granuleRecoveryWorkflow) {
+          return dispatch(applyWorkflowToGranule(granuleId, granuleRecoveryWorkflow));
+        } else {
+          throw new ReferenceError(
+            `Unable to apply recovery workflow to ${granuleId} because the attribute granuleRecoveryWorkflow is not set in collection.meta`
+          );
+        }
+      })
+      .catch((error) => dispatch({
+        id: granuleId,
+        type: types.GRANULE_APPLYWORKFLOW_ERROR,
+        error: error
+      }));
+  };
+};
 
 export const reingestGranule = (granuleId) => ({
   [CALL_API]: {
@@ -326,6 +409,14 @@ export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH })
 export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param: param });
 export const clearGranulesFilter = (paramKey) => ({ type: types.CLEAR_GRANULES_FILTER, paramKey: paramKey });
 
+export const getGranuleCSV = (options) => ({
+  [CALL_API]: {
+    type: types.GRANULE_CSV,
+    method: 'GET',
+    url: url.resolve(root, 'granule-csv')
+  }
+});
+
 export const getOptionsCollectionName = (options) => ({
   [CALL_API]: {
     type: types.OPTIONS_COLLECTIONNAME,
@@ -343,6 +434,76 @@ export const getStats = (options) => ({
     qs: options
   }
 });
+
+export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
+  const stackName = cumulusInstanceMeta.stackName;
+  const now = Date.now();
+  const twentyFourHoursAgo = now - millisecondsPerDay;
+  if (!esRoot) return { type: types.NOOP };
+  return {
+    [CALL_API]: {
+      type: types.DIST_APIGATEWAY,
+      skipAuth: true,
+      method: 'POST',
+      url: `${esRoot}/_search/`,
+      headers: authHeader(),
+      body: JSON.parse(apiGatewaySearchTemplate(stackName, twentyFourHoursAgo, now))
+    }
+  };
+};
+
+export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
+  const stackName = cumulusInstanceMeta.stackName;
+  const now = Date.now();
+  const twentyFourHoursAgo = now - millisecondsPerDay;
+  if (!esRoot) return { type: types.NOOP };
+  if (!showDistributionAPIMetrics) return {type: types.NOOP};
+  return {
+    [CALL_API]: {
+      type: types.DIST_API_LAMBDA,
+      skipAuth: true,
+      method: 'POST',
+      url: `${esRoot}/_search/`,
+      headers: authHeader(),
+      body: JSON.parse(apiLambdaSearchTemplate(stackName, twentyFourHoursAgo, now))
+    }
+  };
+};
+
+export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
+  const stackName = cumulusInstanceMeta.stackName;
+  const now = Date.now();
+  const twentyFourHoursAgo = now - millisecondsPerDay;
+  if (!esRoot) return { type: types.NOOP };
+  if (!showTeaMetrics) return { type: types.NOOP };
+  return {
+    [CALL_API]: {
+      type: types.DIST_TEA_LAMBDA,
+      skipAuth: true,
+      method: 'POST',
+      url: `${esRoot}/_search/`,
+      headers: authHeader(),
+      body: JSON.parse(teaLambdaSearchTemplate(stackName, twentyFourHoursAgo, now))
+    }
+  };
+};
+
+export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
+  const stackName = cumulusInstanceMeta.stackName;
+  const now = Date.now();
+  const twentyFourHoursAgo = now - millisecondsPerDay;
+  if (!esRoot) return { type: types.NOOP };
+  return {
+    [CALL_API]: {
+      type: types.DIST_S3ACCESS,
+      skipAuth: true,
+      method: 'POST',
+      url: `${esRoot}/_search/`,
+      headers: authHeader(),
+      body: JSON.parse(s3AccessSearchTemplate(stackName, twentyFourHoursAgo, now))
+    }
+  };
+};
 
 // count queries *must* include type and field properties.
 export const getCount = (options) => ({
