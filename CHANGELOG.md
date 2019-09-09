@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - The `ESROOT` is used to query Elasticsearch directly to retrieve the displayed counts.
   - For information on setting up the Cumulus Distribution API Logs and S3 Server Access see the [Cumulus distribution metrics documentation](https://nasa.github.io/cumulus/docs/features/distribution-metrics).
   - See this project's `README.md` for instructions on setting up development access for Kibana and Elasticsearch.
+  
+- **CUMULUS-1427**
+  - Dashboard home page no longer displays non-error granules in the Granules
+    Errors list
 
 
 ## [v1.4.0] - 2019-04-19

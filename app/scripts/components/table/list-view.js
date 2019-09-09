@@ -1,14 +1,19 @@
 'use strict';
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import SortableTable from './sortable';
-import Pagination from '../app/pagination';
-import Loading from '../app/loading-indicator';
-import ErrorReport from '../errors/report';
+
 import BatchAsyncCommand from '../form/batch-async-command';
+import {connect} from 'react-redux';
+import ErrorReport from '../errors/report';
+import isEmpty from 'lodash.isempty';
+import isEqual from 'lodash.isequal';
+import isFunction from 'lodash.isfunction';
+import isNil from 'lodash.isnil';
+import Loading from '../app/loading-indicator';
+import omitBy from 'lodash.omitby';
+import Pagination from '../app/pagination';
+import PropTypes from 'prop-types';
+import React from 'react';
+import SortableTable from './sortable';
 import Timer from '../app/timer';
-import { isUndefined as undef } from '../../utils/validate';
 
 class List extends React.Component {
   constructor (props) {
@@ -21,63 +26,68 @@ class List extends React.Component {
     this.updateSelection = this.updateSelection.bind(this);
     this.onBulkActionSuccess = this.onBulkActionSuccess.bind(this);
     this.onBulkActionError = this.onBulkActionError.bind(this);
-    this.config = this.config.bind(this);
+    this.getQueryConfig = this.getQueryConfig.bind(this);
     this.renderSelectAll = this.renderSelectAll.bind(this);
+
+    const initialPage = 1;
+    const initialSortIdx = props.sortIdx || 0;
+    const initialOrder = 'desc';
+
     this.state = {
-      page: 1,
-      sortIdx: props.sortIdx || 0,
-      order: 'desc',
+      page: initialPage,
+      sortIdx: initialSortIdx,
+      order: initialOrder,
       selected: [],
       prefix: null,
-      queryConfig: {},
+      queryConfig: {
+        page: initialPage,
+        order: initialOrder,
+        sort_by: this.getSortProp(initialSortIdx),
+        params: {},
+        ...(props.query || {})
+      },
       params: {},
       completedBulkActions: 0,
       bulkActionError: null
     };
   }
 
-  componentDidMount () {
-    this.setState({ queryConfig: this.config() }); // eslint-disable-line react/no-did-mount-set-state
-  }
-
   componentDidUpdate (prevProps) {
     const { query, list, sortIdx } = this.props;
-    if (JSON.stringify(query) !== JSON.stringify(prevProps.query)) {
-      this.setState({ queryConfig: this.config({}, query) }); // eslint-disable-line react/no-did-update-set-state
+
+    if (!isEqual(query, prevProps.query)) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ queryConfig: this.getQueryConfig({}, query) });
     }
 
-    // remove null and undefined values
-    const { params } = list;
-    const validParams = {};
-    for (let key in params) {
-      let value = params[key];
-      if (!undef(value) && value !== null) {
-        validParams[key] = value;
-      }
-    }
+    // Remove parameters with null or undefined values
+    const params = omitBy(list.params, isNil);
 
-    if (JSON.stringify(validParams) !== JSON.stringify(this.state.params)) {
-      this.setState({ params: validParams }, () => this.setState({ // eslint-disable-line react/no-did-update-set-state
-        queryConfig: this.config() }));
+    if (!isEqual(params, this.state.params)) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ params }, () => this.setState({
+        queryConfig: this.getQueryConfig()
+      }));
     }
 
     if (sortIdx !== this.state.sortIdx) {
-      this.setState({ sortIdx: sortIdx }); // eslint-disable-line react/no-did-update-set-state
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ sortIdx });
     }
   }
 
   queryNewPage (page) {
-    this.setState({ page });
     this.setState({
-      queryConfig: this.config({ page }),
+      page,
+      queryConfig: this.getQueryConfig({ page }),
       selected: []
     });
   }
 
   queryNewSort (sortProps) {
-    this.setState(sortProps);
     this.setState({
-      queryConfig: this.config({
+      ...sortProps,
+      queryConfig: this.getQueryConfig({
         order: sortProps.order,
         sort_by: this.getSortProp(sortProps.sortIdx)
       }),
@@ -90,30 +100,25 @@ class List extends React.Component {
   }
 
   selectAll (e) {
-    const { rowId, list } = this.props;
-    const { data } = list;
-    const allSelected = this.state.selected.length === data.length;
-    if (!data.length) return;
-    else if (allSelected) {
-      this.setState({ selected: [] });
-    } else {
-      let selected;
-      if (typeof rowId === 'function') {
-        selected = data.map(rowId);
-      } else {
-        selected = data.map(d => d[this.props.rowId]);
-      }
+    const { rowId, list: { data } } = this.props;
+
+    if (!isEmpty(data)) {
+      const rowIdFn = isFunction(rowId) ? rowId : row => row[rowId];
+      const allSelected = this.state.selected.length === data.length;
+      const selected = allSelected ? [] : data.map(rowIdFn);
+
       this.setState({ selected });
     }
   }
 
   updateSelection (id) {
     const { selected } = this.state;
-    if (selected.indexOf(id) === -1) {
-      this.setState({ selected: selected.concat([id]) });
-    } else {
-      this.setState({ selected: selected.filter(d => d !== id) });
-    }
+
+    this.setState({
+      selected: selected.includes(id)
+        ? selected.filter(anId => anId !== id)
+        : [...selected, id]
+    });
   }
 
   onBulkActionSuccess () {
@@ -126,42 +131,39 @@ class List extends React.Component {
   }
 
   onBulkActionError (error) {
-    const message = (error.id && error.error) ? `Could not process ${error.id}, ${error.error}` : error;
-    this.setState({
-      bulkActionError: message,
-      selected: []
-    });
+    const bulkActionError = (error.id && error.error)
+      ? `Could not process ${error.id}, ${error.error}`
+      : error;
+
+    this.setState({ bulkActionError, selected: [] });
   }
 
-  config (config, query) {
-    config = config || {};
-    const { page, order, sort_by, params } = config;
-
-    // attach page, params, and sort properties using the current state
-    if (undef(page)) { config.page = this.state.page; }
-    if (undef(order)) { config.order = this.state.order; }
-    if (undef(sort_by)) { config.sort_by = this.getSortProp(this.state.sortIdx); }
-    if (undef(params)) { Object.assign(config, this.state.params); }
-
-    if (query) {
-      config = Object.assign({}, config, query);
-    } else if (this.props.query) {
-      config = Object.assign({}, config, this.props.query);
-    }
-
-    // remove empty keys so as not to mess up the query
-    for (let key in config) {
-      if (config[key] === '') { delete config[key]; }
-    }
-    return config;
+  getQueryConfig (config = {}, query = (this.props.query || {})) {
+    // Remove empty keys so as not to mess up the query
+    return omitBy({
+      page: this.state.page,
+      order: this.state.order,
+      sort_by: this.getSortProp(this.state.sortIdx),
+      params: this.state.params,
+      ...config,
+      ...query
+    }, isEmpty);
   }
 
   renderSelectAll () {
-    const { list } = this.props;
-    const allChecked = this.state.selected.length === list.data.length && list.data.length;
+    const { list: { data } } = this.props;
+    const allChecked = !isEmpty(data) && this.state.selected.length === data.length;
+
     return (
-      <label className='form__element__select form-group__element form-group__element--small'>
-        <input type='checkbox' className='form-select__all' name='Select' checked={allChecked} onChange={this.selectAll} />
+      <label
+        className='form__element__select form-group__element form-group__element--small'>
+        <input
+          type='checkbox'
+          className='form-select__all'
+          name='Select'
+          checked={allChecked}
+          onChange={this.selectAll}
+        />
         Select
       </label>
     );
@@ -176,9 +178,14 @@ class List extends React.Component {
       tableSortProps,
       bulkActions,
       rowId,
-      list
+      list,
+      list: {
+        meta: {
+          count,
+          limit
+        }
+      }
     } = this.props;
-    const { count, limit } = list.meta;
     const {
       page,
       sortIdx,
@@ -189,7 +196,7 @@ class List extends React.Component {
       bulkActionError
     } = this.state;
     const primaryIdx = 0;
-    const hasActions = Array.isArray(bulkActions) && bulkActions.length;
+    const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
     return (
       <div className='list-view'>
@@ -200,26 +207,28 @@ class List extends React.Component {
           config={queryConfig}
           reload={completedBulkActions}
         />
-        {hasActions ? (
+        {hasActions && (
           <div className='form--controls'>
             {this.renderSelectAll()}
-            {bulkActions.map((item) => <BatchAsyncCommand key={item.text}
-              dispatch={dispatch}
-              action={item.action}
-              state={item.state}
-              text={item.text}
-              confirm={item.confirm}
-              confirmOptions={item.confirmOptions}
-              onSuccess={this.onBulkActionSuccess}
-              onError={this.onBulkActionError}
-              selection={selected}
-            />)}
+            {bulkActions.map((item) =>
+              <BatchAsyncCommand
+                key={item.text}
+                dispatch={dispatch}
+                action={item.action}
+                state={item.state}
+                text={item.text}
+                confirm={item.confirm}
+                confirmOptions={item.confirmOptions}
+                onSuccess={this.onBulkActionSuccess}
+                onError={this.onBulkActionError}
+                selection={selected}
+              />)}
           </div>
-        ) : null}
+        )}
 
-        {list.inflight ? <Loading /> : null}
-        {list.error ? <ErrorReport report={list.error} truncate={true} /> : null}
-        {bulkActionError ? <ErrorReport report={bulkActionError} /> : null}
+        {list.inflight && <Loading/>}
+        {list.error && <ErrorReport report={list.error} truncate={true}/>}
+        {bulkActionError && <ErrorReport report={bulkActionError}/>}
 
         <SortableTable
           primaryIdx={primaryIdx}
@@ -231,11 +240,16 @@ class List extends React.Component {
           order={order}
           changeSortProps={this.queryNewSort}
           onSelect={this.updateSelection}
-          canSelect={!!hasActions}
+          canSelect={hasActions}
           selectedRows={selected}
           rowId={rowId}
         />
-        <Pagination count={count} limit={limit} page={page} onNewPage={this.queryNewPage} />
+        <Pagination
+          count={count}
+          limit={limit}
+          page={page}
+          onNewPage={this.queryNewPage}
+        />
       </div>
     );
   }
