@@ -6,7 +6,7 @@ import url from 'url';
 import { login, setTokenState } from '../../actions';
 import { window } from '../../utils/browser';
 import { buildRedirectUrl } from '../../utils/format';
-import { updateDelay, apiRoot } from '../../config';
+import { updateDelay, apiRoot, oauthMethod } from '../../config';
 import PropTypes from 'prop-types';
 import ErrorReport from '../errors/report';
 import Header from './header';
@@ -45,11 +45,14 @@ class OAuth extends React.Component {
 
   render () {
     const { dispatch, api, apiVersion } = this.props;
-
     let button;
     if (!api.authenticated && !api.inflight) {
       const redirect = buildRedirectUrl(window.location);
-      button = <div style={{textAlign: 'center'}}><a href={url.resolve(apiRoot, `token?state=${redirect}`)} >Login with Earthdata Login</a></div>;
+      if (oauthMethod === 'launchpad') {
+        button = <div style={{textAlign: 'center'}}><a href={url.resolve(apiRoot, `samlLogin?state=${redirect}`)}>Login with Launchpad</a></div>;
+      } else {
+        button = <div style={{textAlign: 'center'}}><a href={url.resolve(apiRoot, `token?state=${redirect}`)} >Login with Earthdata Login</a></div>;
+      }
     }
     return (
       <div className='app'>
