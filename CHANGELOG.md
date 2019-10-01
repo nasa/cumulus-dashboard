@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- **CUMULUS-1308**
+  - Pass full provider object to API on edit to ensure compatibility with API
+    changes where HTTP PUTs for Collections, Providers, and Rules expect full
+    objects to be supplied (rather than partial objects)
+  - Upgrade Cypress to latest version (3.4.1)
+  - Eliminate "caniuse-lite is outdated" message during testing
+  - Fix flaky Cypress integration test
+  - Fix invalid value for prop `className` on `<a>` tag
+  - Fix failed prop type error for checkboxes in tables
+  - Fix unhandled rejection in `getMMTLinks` function
+
 - **CUMULUS-1337**
   - Must use Cumulus API version v1.14.0 or above in order to use the new distribution metrics functionality.
   - Distribution metrics are no longer served from the Cumulus API , but are computed from the logs in an ELK stack.
