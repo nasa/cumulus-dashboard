@@ -16,6 +16,7 @@ class EditProvider extends React.Component {
     const { providerId } = this.props.params;
     return (
       <EditRecord
+        merge={true}
         pk={providerId}
         schemaKey={SCHEMA_KEY}
         state={this.props.providers}
