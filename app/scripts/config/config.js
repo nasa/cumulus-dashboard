@@ -8,7 +8,7 @@ module.exports = {
     }
   },
   apiRoot: process.env.APIROOT || 'https://example.com',
-  oauthMethod: process.env.oauth || 'launchpad',
+  oauthMethod: process.env.oauth || 'earthdata',
   kibanaRoot: process.env.KIBANAROOT || false,
   esRoot: process.env.ESROOT || false,
   showTeaMetrics: process.env.SHOW_TEA_METRICS || true,
