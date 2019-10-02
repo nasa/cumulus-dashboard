@@ -26,19 +26,24 @@ class Sidebar extends React.Component {
     return (
       <div key={base}>
         <ul>
-          {routes(currentPath, params, count).map((d, i) => {
-            let path = this.resolvePath(base, d[1]);
-            let className = d[2] || '';
-            if (path === currentPath) {
-              className = className ? [className, currentPathClass].join(' ')
-                : currentPathClass;
-            }
-            return (
-              <li key={base + i}>
-                <Link className={className} to={path}>{d[0]}</Link>
-              </li>
-            );
-          })}
+          {
+            routes(currentPath, params, count).map((d, i) => {
+              const path = this.resolvePath(base, d[1]);
+              const classes = [
+                // d[2] might be a function; use it only when it's a string
+                typeof d[2] === 'string' ? d[2] : '',
+                path === currentPath ? currentPathClass : ''
+              ].join(' ');
+
+              return (
+                <li key={base + i}>
+                  <Link className={classes} to={path} onlyActiveOnIndex>
+                    {d[0]}
+                  </Link>
+                </li>
+              );
+            })
+          }
         </ul>
       </div>
     );
