@@ -17,6 +17,15 @@ describe('Dashboard Collections Page', () => {
     beforeEach(() => {
       cy.login();
       cy.task('resetState');
+      cy.server();
+      cy.route('POST', '/collections').as('postCollection');
+      cy.route('GET', '/collections?limit=*').as('getCollections');
+      cy.route('GET', '/collections?name=*').as('getCollection');
+      cy.route('GET', '/granules?limit=*').as('getGranules');
+
+      // Stub CMR response to avoid hitting UAT
+      cy.fixture('cmr')
+        .then((fixture) => fixture.forEach((options) => cy.route(options)));
     });
 
     after(() => {
@@ -37,13 +46,6 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should display expected MMT Links for collections list', () => {
-      cy.server();
-      cy.fixture('cmr').then((fixture) => {
-        fixture.forEach((call) => {
-          cy.route(call.method, call.url, call.body);
-        });
-      });
-
       cy.visit('/#/collections');
 
       cy.get('table tbody tr').its('length').should('be.eq', 5);
@@ -64,9 +66,6 @@ describe('Dashboard Collections Page', () => {
       const version = '006';
       // Test collection loaded by cy.fixture
       let collection;
-
-      cy.server();
-      cy.route('POST', '/collections').as('postCollection');
 
       // On the Collections page, click the Add Collection button
       cy.visit('/#/collections');
@@ -95,9 +94,20 @@ describe('Dashboard Collections Page', () => {
         .then((response) => expect(response.body).to.deep.equal(collection));
 
       // Display the new collection
+      cy.wait('@getCollection');
+      cy.wait('@getGranules');
       cy.hash().should('eq', `#/collections/collection/${name}/${version}`);
       cy.contains('.heading--xlarge', 'Collections');
       cy.contains('.heading--large', `${name} / ${version}`);
+      cy.get('table tbody tr[data-value]');
+
+      // Verify the new collection appears in the collections list
+      cy.contains('Back to Collections').click();
+      cy.wait('@getCollections');
+      cy.hash().should('eq', '#/collections/all');
+      cy.contains('table tbody tr a', name)
+        .should('have.attr', 'href',
+          `#/collections/collection/${name}/${version}`);
     });
 
     it('should edit a collection', () => {

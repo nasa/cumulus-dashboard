@@ -1,27 +1,72 @@
 [
   {
+    "method": "GET",
     "url": "https://cmr.uat.earthdata.nasa.gov/search/collections.json?page_size=50&provider_short_name=CUMULUS&short_name=https_testcollection&version=001&page_num=1",
-    "method": "GET",
-    "body": {"feed": { "entry": [] }}
+    "response": {
+      "feed": {
+        "entry": []
+      }
+    }
   },
   {
+    "method": "GET",
     "url": "https://cmr.uat.earthdata.nasa.gov/search/collections.json?page_size=50&provider_short_name=CUMULUS&short_name=MOD09GQ&version=006&page_num=1",
-    "method": "GET",
-    "body": {"feed": { "entry": [{"id": "CMOD09GQ-CUMULUS"}] }}
+    "response": {
+      "feed": {
+        "entry": [
+          {
+            "id": "CMOD09GQ-CUMULUS"
+          }
+        ]
+      }
+    }
   },
   {
+    "method": "GET",
     "url": "https://cmr.uat.earthdata.nasa.gov/search/collections.json?page_size=50&provider_short_name=CUMULUS&short_name=MOD09GK&version=006&page_num=1",
-    "method": "GET",
-    "body": {"feed": { "entry": [{"id": "MOD09GK"}] }}
+    "response": {
+      "feed": {
+        "entry": [
+          {
+            "id": "MOD09GK"
+          }
+        ]
+      }
+    }
   },
   {
+    "method": "GET",
     "url": "https://cmr.uat.earthdata.nasa.gov/search/collections.json?page_size=50&provider_short_name=CUMULUS&short_name=http_testcollection&version=001&page_num=1",
-    "method": "GET",
-    "body": {"feed": { "entry": [{"id": "http_testcollection"}] }}
+    "response": {
+      "feed": {
+        "entry": [
+          {
+            "id": "http_testcollection"
+          }
+        ]
+      }
+    }
   },
   {
-    "url": "https://cmr.uat.earthdata.nasa.gov/search/collections.json?page_size=50&provider_short_name=CUMULUS&short_name=L2_HR_PIXC&version=000&page_num=1",
     "method": "GET",
-    "body": {"feed": { "entry": [{"id": "CL2_HR_PIXC-CUMULUS"}] }}
+    "url": "https://cmr.uat.earthdata.nasa.gov/search/collections.json?page_size=50&provider_short_name=CUMULUS&short_name=L2_HR_PIXC&version=000&page_num=1",
+    "response": {
+      "feed": {
+        "entry": [
+          {
+            "id": "CL2_HR_PIXC-CUMULUS"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "method": "GET",
+    "url": "https://cmr.uat.earthdata.nasa.gov/search/collections.json?page_size=50&provider_short_name=CUMULUS&short_name=TESTCOLLECTION&version=006&page_num=1",
+    "response": {
+      "feed": {
+        "entry": []
+      }
+    }
   }
 ]
