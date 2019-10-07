@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### BREAKING CHANGES
 
-- You must be using Cumulus API version v1.14.0 or above in order to use the new distribution metrics functionality.
+- You must be using Cumulus API version >= v1.14.2 in order to use Launchpad authentication.
+- You must be using Cumulus API version >= v1.14.0 in order to use the new distribution metrics functionality.
 
 ## [Unreleased]
+
+- **CUMULUS-639**
+  - Adds optional Launchpad authorization integration via AUTH_METHOD environment variable.
 
 - **CUMULUS-1308**
   - Pass full provider object to API on edit to ensure compatibility with API
@@ -30,7 +34,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - The `ESROOT` is used to query Elasticsearch directly to retrieve the displayed counts.
   - For information on setting up the Cumulus Distribution API Logs and S3 Server Access see the [Cumulus distribution metrics documentation](https://nasa.github.io/cumulus/docs/features/distribution-metrics).
   - See this project's `README.md` for instructions on setting up development access for Kibana and Elasticsearch.
-  
+
 - **CUMULUS-1427**
   - Dashboard home page no longer displays non-error granules in the Granules
     Errors list
