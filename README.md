@@ -30,6 +30,7 @@ The following environment variables override the default values in `config.js`:
 | STAGE | e.g. UAT, default to development |
 | LABELS | gitc or daac localization (defaults to daac) |
 | APIROOT | the API URL. This must be set by the user as it defaults to example.com |
+| AUTH_METHOD | The type of authorization method protecting the Cumulus API.  [launchpad or earthdata] Default: earthdata  |
 | ENABLE\_RECOVERY | If true, adds recovery options to the granule and collection pages. default: false |
 | KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set to examine distribution metrics details. |
 | SHOW\_TEA\_METRICS | \<optional\> display metrics from Thin Egress Application (TEA). default: true |
