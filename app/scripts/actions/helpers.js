@@ -19,9 +19,9 @@ export const getError = (response) => {
 
   // TODO: is this still relevant?
   if (request.method === 'DELETE' || request.method === 'POST') {
-    error = body.errorMessage;
+    error = body.errorMessage || body.message;
   } else if (request.method === 'PUT') {
-    error = body && body.errorMessage || body && body.detail;
+    error = body && body.errorMessage || body && body.message || body && body.detail;
   }
 
   if (error) return error;
