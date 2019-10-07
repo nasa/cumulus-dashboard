@@ -212,4 +212,16 @@ test('getError() returns correct errors', (t) => {
     body: { message: 'Test error' }
   });
   t.deepEqual(error, new Error('Test error'));
+
+  error = getError({
+    request: { method: 'PUT' },
+    body: { message: 'Test error' }
+  });
+  t.deepEqual(error, 'Test error');
+
+  error = getError({
+    request: { method: 'POST' },
+    body: { message: 'Test error' }
+  });
+  t.deepEqual(error, 'Test error');
 });
