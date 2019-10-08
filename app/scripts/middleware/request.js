@@ -11,12 +11,6 @@ import log from '../utils/log';
 import { isValidApiRequestAction } from './validate';
 
 const handleError = ({ id, type, error, requestAction }, next) => {
-  console.group(['handleError']);
-  console.log(`id: ${id}`);
-  console.log(`type: ${type}`);
-  console.log(`error: ${error}`);
-  console.log(`requestAction: ${JSON.stringify(requestAction, null, 2)}`);
-  console.groupEnd();
   if (error.message) {
     // Temporary fix until the 'logs' endpoint is fixed
     // TODO: is this still relevant?
@@ -81,7 +75,7 @@ const requestMiddleware = ({ dispatch, getState }) => next => action => {
         log((id ? type + ': ' + id : type), duration + 'ms');
         return next({ id, type, data: body, config: requestAction });
       })
-      .catch(({ error }) => handleError({ id, type, error, requestAction }, next));
+      .catch((error) => handleError({ id, type, error, requestAction }, next));
   }
 
   return next(action);
