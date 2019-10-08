@@ -5,12 +5,18 @@ import { CALL_API } from '../actions/types';
 import {
   configureRequest,
   addRequestAuthorization,
-  getError
+  getErrorMessage
 } from '../actions/helpers';
 import log from '../utils/log';
 import { isValidApiRequestAction } from './validate';
 
 const handleError = ({ id, type, error, requestAction }, next) => {
+  console.group(['handleError']);
+  console.log(`id: ${id}`);
+  console.log(`type: ${type}`);
+  console.log(`error: ${error}`);
+  console.log(`requestAction: ${JSON.stringify(requestAction, null, 2)}`);
+  console.groupEnd();
   if (error.message) {
     // Temporary fix until the 'logs' endpoint is fixed
     // TODO: is this still relevant?
@@ -67,7 +73,7 @@ const requestMiddleware = ({ dispatch, getState }) => next => action => {
         const { body } = response;
 
         if (+response.statusCode >= 400) {
-          const error = getError(response);
+          const error = new Error(getErrorMessage(response));
           return handleError({ id, type, error, requestAction }, next);
         }
 
@@ -82,6 +88,5 @@ const requestMiddleware = ({ dispatch, getState }) => next => action => {
 };
 
 module.exports = {
-  requestMiddleware,
-  getError
+  requestMiddleware
 };

@@ -13,21 +13,12 @@ export const formatError = (response = {}, body) => {
   return error;
 };
 
-export const getError = (response) => {
-  const { request, body } = response;
-  let error;
+export const getErrorMessage = (response) => {
+  const { body } = response;
+  const errorMessage = body && body.errorMessage || body && body.message || body && body.detail;
 
-  // TODO: is this still relevant?
-  if (request.method === 'DELETE' || request.method === 'POST') {
-    error = body.errorMessage || body.message;
-  } else if (request.method === 'PUT') {
-    error = body && body.errorMessage || body && body.message || body && body.detail;
-  }
-
-  if (error) return error;
-
-  error = new Error(formatError(response, body));
-  return error;
+  if (errorMessage) return errorMessage;
+  return formatError(response, body);
 };
 
 export const addRequestAuthorization = (config, state) => {
