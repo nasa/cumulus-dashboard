@@ -44,7 +44,7 @@ const handleError = ({ id, type, error, requestAction }, next) => {
     id,
     config: requestAction,
     type: errorType,
-    error
+    error: error.message
   });
 };
 
