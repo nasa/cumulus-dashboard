@@ -5,7 +5,7 @@ import _config from '../../app/scripts/config';
 import {
   addRequestAuthorization,
   formatError,
-  getError,
+  getErrorMessage,
   configureRequest
 } from '../../app/scripts/actions/helpers';
 
@@ -182,44 +182,44 @@ test('configureRequest() should not overwrite auth headers', (t) => {
   t.deepEqual(requestConfig, expectedConfig);
 });
 
-test('getError() returns correct errors', (t) => {
-  let error = getError({
+test('getErrorMessage() returns correct errors', (t) => {
+  let error = getErrorMessage({
     request: { method: 'PUT' },
     body: { detail: 'Detail error' }
   });
   t.is(error, 'Detail error');
 
-  error = getError({
+  error = getErrorMessage({
     request: { method: 'PUT' },
     body: { errorMessage: 'PUT error' }
   });
   t.is(error, 'PUT error');
 
-  error = getError({
+  error = getErrorMessage({
     request: { method: 'DELETE' },
     body: { errorMessage: 'DELETE error' }
   });
   t.is(error, 'DELETE error');
 
-  error = getError({
+  error = getErrorMessage({
     request: { method: 'POST' },
     body: { errorMessage: 'POST error' }
   });
   t.is(error, 'POST error');
 
-  error = getError({
+  error = getErrorMessage({
     request: { method: 'GET' },
     body: { message: 'Test error' }
   });
-  t.deepEqual(error, new Error('Test error'));
+  t.deepEqual(error, 'Test error');
 
-  error = getError({
+  error = getErrorMessage({
     request: { method: 'PUT' },
     body: { message: 'Test error' }
   });
   t.deepEqual(error, 'Test error');
 
-  error = getError({
+  error = getErrorMessage({
     request: { method: 'POST' },
     body: { message: 'Test error' }
   });
