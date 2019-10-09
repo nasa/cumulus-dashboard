@@ -11,6 +11,12 @@ import log from '../utils/log';
 import { isValidApiRequestAction } from './validate';
 
 const handleError = ({ id, type, error, requestAction }, next) => {
+  console.groupCollapsed('handleError');
+  console.log(`id: ${id}`);
+  console.log(`type: ${type}`);
+  console.dir(error);
+  console.dir(requestAction);
+  console.groupEnd();
   if (error.message) {
     // Temporary fix until the 'logs' endpoint is fixed
     // TODO: is this still relevant?
