@@ -17,6 +17,15 @@ describe('Dashboard Collections Page', () => {
     beforeEach(() => {
       cy.login();
       cy.task('resetState');
+      cy.server();
+      cy.route('POST', '/collections').as('postCollection');
+      cy.route('GET', '/collections?limit=*').as('getCollections');
+      cy.route('GET', '/collections?name=*').as('getCollection');
+      cy.route('GET', '/granules?limit=*').as('getGranules');
+
+      // Stub CMR response to avoid hitting UAT
+      cy.fixture('cmr')
+        .then((fixture) => fixture.forEach((options) => cy.route(options)));
     });
 
     after(() => {
@@ -37,13 +46,6 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should display expected MMT Links for collections list', () => {
-      cy.server();
-      cy.fixture('cmr').then((fixture) => {
-        fixture.forEach((call) => {
-          cy.route(call.method, call.url, call.body);
-        });
-      });
-
       cy.visit('/#/collections');
 
       cy.get('table tbody tr').its('length').should('be.eq', 5);
@@ -62,40 +64,50 @@ describe('Dashboard Collections Page', () => {
     it('should add a new collection', () => {
       const name = 'TESTCOLLECTION';
       const version = '006';
-      const duplicateHandling = 'replace';
+      // Test collection loaded by cy.fixture
+      let collection;
 
+      // On the Collections page, click the Add Collection button
       cy.visit('/#/collections');
-
       cy.contains('.heading--large', 'Collection Overview');
-      cy.contains('a', 'Add a Collection').as('addCollection');
-      cy.get('@addCollection').should('have.attr', 'href', '#/collections/add');
-      cy.get('@addCollection').click();
+      cy.contains('a', 'Add a Collection').click();
 
-      // fill the form and submit
-      cy.fixture('TESTCOLLECTION___006.json').then((collection) => {
-        cy.editJsonTextarea({ data: collection });
-      });
+      // Fill the form with the test collection JSON and submit it
+      cy.hash().should('eq', '#/collections/add');
+      cy.fixture('TESTCOLLECTION___006.json')
+        .then((json) => {
+          cy.editJsonTextarea({ data: json });
+          // Capture the test collection so we can confirm below that it was
+          // properly persisted after form submission.
+          collection = json;
+        });
       cy.contains('form button', 'Submit').click();
 
-      // displays the new collection
+      // After POSTing the new collection, make sure we GET it back
+      cy.wait('@postCollection')
+        .then((xhr) =>
+          cy.request({
+            method: 'GET',
+            url: `${new URL(xhr.url).origin}/collections/${name}/${version}`,
+            headers: xhr.request.headers
+          }))
+        .then((response) => expect(response.body).to.deep.equal(collection));
+
+      // Display the new collection
+      cy.wait('@getCollection');
+      cy.wait('@getGranules');
+      cy.hash().should('eq', `#/collections/collection/${name}/${version}`);
       cy.contains('.heading--xlarge', 'Collections');
       cy.contains('.heading--large', `${name} / ${version}`);
-      cy.url().should('include', `#/collections/collection/${name}/${version}`);
+      cy.get('table tbody tr[data-value]');
 
-      // verify the collection's properties by looking at the Edit page
-      cy.contains('a', 'Edit').click();
-      cy.get('form .ace_content')
-        .within(() => {
-          cy.contains(`"name": "${name}"`);
-          cy.contains(`"version": "${version}"`);
-          cy.contains(`"dataType": "${name}"`);
-          cy.contains(`"duplicateHandling": "${duplicateHandling}"`);
-        });
-
-      // verify the new collection is added to the collections list
-      cy.contains('a', 'Back to Collections').click();
+      // Verify the new collection appears in the collections list
+      cy.contains('Back to Collections').click();
+      cy.wait('@getCollections');
+      cy.hash().should('eq', '#/collections/all');
       cy.contains('table tbody tr a', name)
-        .should('have.attr', 'href', `#/collections/collection/${name}/${version}`);
+        .should('have.attr', 'href',
+          `#/collections/collection/${name}/${version}`);
     });
 
     it('should edit a collection', () => {

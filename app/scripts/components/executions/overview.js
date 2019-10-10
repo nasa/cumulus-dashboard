@@ -5,14 +5,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import {
-  interval,
-  getCount,
-
-  listExecutions,
-  filterExecutions,
   clearExecutionsFilter,
-
+  filterExecutions,
+  getCount,
+  getCumulusInstanceMetadata,
+  interval,
   listCollections,
+  listExecutions,
   listWorkflows
 } from '../../actions';
 import {
@@ -62,8 +61,8 @@ const tableSortProps = [
 ];
 
 class ExecutionOverview extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.queryMeta = this.queryMeta.bind(this);
     this.renderOverview = this.renderOverview.bind(this);
   }
@@ -72,6 +71,7 @@ class ExecutionOverview extends React.Component {
     // use a slightly slower update interval, since the dropdown fields
     // will change less frequently.
     this.cancelInterval = interval(this.queryMeta, updateInterval, true);
+    this.props.dispatch(getCumulusInstanceMetadata());
   }
 
   componentWillUnmount () {

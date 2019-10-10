@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import { render } from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider as ProviderElem } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { useScroll } from 'react-router-scroll';
@@ -19,11 +19,15 @@ import reducers from './reducers';
 import { refreshTokenMiddleware } from './middleware/token';
 import { requestMiddleware } from './middleware/request';
 
-const store = createStore(reducers, applyMiddleware(
-  refreshTokenMiddleware,
-  requestMiddleware,
-  thunkMiddleware
-));
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(reducers,
+                          composeEnhancers(
+                            applyMiddleware(
+                              refreshTokenMiddleware,
+                              requestMiddleware,
+                              thunkMiddleware
+                            )));
 
 if (window.Cypress && window.Cypress.env('TESTING') === true) {
   window.appStore = store;

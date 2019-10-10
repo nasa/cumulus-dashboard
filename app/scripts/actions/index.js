@@ -112,16 +112,16 @@ export const checkApiVersion = () => {
       dispatch({
         type: types.API_VERSION_INCOMPATIBLE,
         payload: {
-          warning: `Dashboard version incompatible with Cumulus API version (${versionNumber})`
+          warning: `Dashboard incompatible with Cumulus API version (${versionNumber}), dashboard requires (>= ${minCompatibleApiVersion})`
         }
       });
     }
   };
 };
 
-export const listCollections = (options) => {
-  return (dispatch) => {
-    return dispatch({
+export const listCollections = (options) =>
+  (dispatch) =>
+    dispatch({
       [CALL_API]: {
         type: types.COLLECTIONS,
         method: 'GET',
@@ -129,11 +129,7 @@ export const listCollections = (options) => {
         url: url.resolve(root, 'collections'),
         qs: Object.assign({ limit: pageLimit }, options)
       }
-    }).then(() => {
-      return dispatch(getMMTLinks());
-    });
-  };
-};
+    }).then(() => dispatch(getMMTLinks()));
 
 export const createCollection = (payload) => ({
   [CALL_API]: {
@@ -180,67 +176,72 @@ export const getCumulusInstanceMetadata = () => ({
 });
 
 /**
- * Iterates over each collection in the application collections state dispatching the
- * action to add the MMT link to the its state.
- * @returns {function} anonymous redux-thunk function.
+ * Iterates over each collection in the application collections state
+ * dispatching the action to add the MMT link to the state.
+ *
+ * @returns {function} anonymous redux-thunk function
  */
-export const getMMTLinks = () => {
-  return (dispatch, getState) => {
+export const getMMTLinks = () =>
+  (dispatch, getState) => {
     const { data } = getState().collections.list;
-    data.forEach((collection) => {
+    const doDispatch = ({ name, version }) =>
+      (url) =>
+        dispatch({
+          type: types.ADD_MMTLINK,
+          data: { name, version, url }
+        });
+
+    data.forEach((collection) =>
       getMMTLinkFromCmr(collection, getState)
-        .then((url) => {
-          const action = {
-            type: types.ADD_MMTLINK,
-            data: { name: collection.name, version: collection.version, url: url }
-          };
-          dispatch(action);
-        })
-        .catch((error) => console.error(error));
-    });
+        .then(doDispatch(collection))
+        .catch((error) => console.error(error)));
   };
-};
 
 /**
+ * Returns a Promise for the Metadata Management Toolkit (MMT) URL string for
+ * the specified collection, or an empty promise if the collection is not found
+ * in the CMR.
  *
- * @param {Object} collection - application collections item.
- * @param {function} getState - redux function to access app state.
- * @returns {Promise<string>} - Promise for a Metadata Management Toolkit (MMT) Link
- *                              to the input collection or null if it doesn't exist.
+ * @param {Object} collection - application collections item
+ * @param {function} getState - redux function to access app state
+ * @returns {Promise<string>} - Promise for a Metadata Management Toolkit (MMT)
+ *    Link (URL string) to the input collection, or undefined if it isn't found
  */
 export const getMMTLinkFromCmr = (collection, getState) => {
-  const {cmrProvider, cmrEnvironment} = getState().cumulusInstance;
-  if (!cmrProvider || !cmrEnvironment) return null;
+  const {
+    cumulusInstance: { cmrProvider, cmrEnvironment }, mmtLinks
+  } = getState();
 
-  const mmtLinks = getState().mmtLinks;
+  if (!cmrProvider || !cmrEnvironment) {
+    return Promise.reject('Missing Cumulus Instance Metadata in state.' +
+      ' Make sure a call to getCumulusInstanceMetadata is dispatched.');
+  }
+
   if (getCollectionId(collection) in mmtLinks) {
     return Promise.resolve(mmtLinks[getCollectionId(collection)]);
   }
-  const search = new CMR(cmrProvider);
-  return search.searchCollections({short_name: collection.name, version: collection.version})
-    .then((results) => {
-      if (results.length === 1) {
-        const conceptId = results[0].id;
-        if (conceptId) {
-          return buildMMTLink(conceptId, cmrEnvironment);
-        }
-      }
-      return null;
+
+  return new CMR(cmrProvider).searchCollections(
+    {
+      short_name: collection.name,
+      version: collection.version
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .then(([result]) =>
+      result && result.id && buildMMTLink(result.id, cmrEnvironment));
 };
 
 /**
- * Build correct link to collection based on conceptId and cumulus environment.
+ * Returns the MMT URL string for collection based on conceptId and Cumulus
+ * environment.
  *
  * @param {string} conceptId - CMR's concept id
- * @param {string} cmrEnv - cumulus instance operating environ UAT/SIT/PROD.
- * @returns {string} MMT link to edit the collection at conceptId.
+ * @param {string} cmrEnv - Cumulus instance operating environ UAT/SIT/PROD
+ * @returns {string} MMT URL string to edit the collection at conceptId
  */
 export const buildMMTLink = (conceptId, cmrEnv) => {
-  const url = ['mmt', hostId(cmrEnv), 'earthdata.nasa.gov'].filter((d) => d).join('.');
+  const url = ['mmt', hostId(cmrEnv), 'earthdata.nasa.gov']
+    .filter((value) => value)
+    .join('.');
   return `https://${url}/collections/${conceptId}`;
 };
 

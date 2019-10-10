@@ -30,6 +30,7 @@ The following environment variables override the default values in `config.js`:
 | STAGE | e.g. UAT, default to development |
 | LABELS | gitc or daac localization (defaults to daac) |
 | APIROOT | the API URL. This must be set by the user as it defaults to example.com |
+| AUTH_METHOD | The type of authorization method protecting the Cumulus API.  [launchpad or earthdata] Default: earthdata  |
 | ENABLE\_RECOVERY | If true, adds recovery options to the granule and collection pages. default: false |
 | KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set to examine distribution metrics details. |
 | SHOW\_TEA\_METRICS | \<optional\> display metrics from Thin Egress Application (TEA). default: true |
@@ -243,11 +244,15 @@ Update the CHANGELOG.md. Put a header under the 'Unreleased' section with the ne
 
 Add a link reference for the GitHub "compare" view at the bottom of the CHANGELOG.md, following the existing pattern. This link reference should create a link in the CHANGELOG's release header to changes in the corresponding release.
 
-### 6. Create a pull request against the master branch
+### 6. Create a pull request against the develop branch
 
-Create a PR for the `release-vX.X.X` branch against the `master` branch. Verify that the Circle CI build for the PR succeeds and then merge to `master`.
+Create a PR for the `release-vX.X.X` branch against the `develop` branch. Verify that the Circle CI build for the PR succeeds and then merge to `develop`.
 
-### 7. Create a git tag for the release
+### 7. Create a pull request against the master branch
+
+Create a PR for the `develop` branch against the `master` branch. Verify that the Circle CI build for the PR succeeds and then merge to `master`.
+
+### 8. Create a git tag for the release
 
 Push a new release tag to Github. The tag should be in the format `v1.2.3`, where `1.2.3` is the new version.
 
@@ -259,12 +264,6 @@ Create and push a new git tag:
   $ git push origin v1.x.x
 ```
 
-### 8. Add the release to GitHub
+### 9. Add the release to GitHub
 
 Follow the [Github documentation to create a new release](https://help.github.com/articles/creating-releases/) for the dashboard using the tag that you just pushed. Make sure to use the content from the CHANGELOG for this release as the description of the release on GitHub.
-
-### 9. Create a pull request against the develop branch
-
-The updates to the CHANGELOG and the version number still need to be merged back to the `develop` branch.
-
-Create a PR for the `release-vX.X.X` branch against the `develop` branch. Verify that the Circle CI build for the PR succeeds and then merge to `develop`.

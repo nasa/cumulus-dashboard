@@ -37,7 +37,8 @@ rsync -av \
     DAAC_NAME=$DAAC_NAME \
     STAGE=$STAGE \
     HIDE_PDR=$HIDE_PDR \
-    LABELS=$LABELS yarn run build
+    LABELS=$LABELS \
+    AUTH_METHOD=$AUTH_METHOD yarn run build
 
   rsync -av ./dist/ /dist/
   chown -R "${DOCKER_UID}:${DOCKER_GID}" /dist/
@@ -55,5 +56,6 @@ docker run \
   --env STAGE=$STAGE \
   --env HIDE_PDR=$HIDE_PDR \
   --env LABELS=$LABELS \
+  --env AUTH_METHOD=$AUTH_METHOD \
   node:8-slim \
   /cumulus-dashboard/tmp/script.sh

@@ -5,12 +5,18 @@ import { CALL_API } from '../actions/types';
 import {
   configureRequest,
   addRequestAuthorization,
-  getError
+  getErrorMessage
 } from '../actions/helpers';
 import log from '../utils/log';
 import { isValidApiRequestAction } from './validate';
 
 const handleError = ({ id, type, error, requestAction }, next) => {
+  console.groupCollapsed('handleError');
+  console.log(`id: ${id}`);
+  console.log(`type: ${type}`);
+  console.dir(error);
+  console.dir(requestAction);
+  console.groupEnd();
   if (error.message) {
     // Temporary fix until the 'logs' endpoint is fixed
     // TODO: is this still relevant?
@@ -38,7 +44,7 @@ const handleError = ({ id, type, error, requestAction }, next) => {
     id,
     config: requestAction,
     type: errorType,
-    error
+    error: error.message
   });
 };
 
@@ -67,7 +73,7 @@ const requestMiddleware = ({ dispatch, getState }) => next => action => {
         const { body } = response;
 
         if (+response.statusCode >= 400) {
-          const error = getError(response);
+          const error = new Error(getErrorMessage(response));
           return handleError({ id, type, error, requestAction }, next);
         }
 
@@ -75,13 +81,12 @@ const requestMiddleware = ({ dispatch, getState }) => next => action => {
         log((id ? type + ': ' + id : type), duration + 'ms');
         return next({ id, type, data: body, config: requestAction });
       })
-      .catch(({ error }) => handleError({ id, type, error, requestAction }, next));
+      .catch((error) => handleError({ id, type, error, requestAction }, next));
   }
 
   return next(action);
 };
 
 module.exports = {
-  requestMiddleware,
-  getError
+  requestMiddleware
 };

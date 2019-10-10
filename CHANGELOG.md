@@ -7,11 +7,42 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.6.0] - 2019-10-10
+
+### BREAKING CHANGES
+
+- You must be using Cumulus API version >= v1.14.2 in order to use Launchpad authentication. There is also an error display fix that requires 1.14.2+.
+
+### Added
+
+- **CUMULUS-639**
+  - Adds optional Launchpad authorization integration via AUTH_METHOD environment variable.
+
+- **CUMULUS-1308**
+  - Pass full provider object to API on edit to ensure compatibility with API
+    changes where HTTP PUTs for Collections, Providers, and Rules expect full
+    objects to be supplied (rather than partial objects)
+  - Upgrade Cypress to latest version (3.4.1)
+  - Eliminate "caniuse-lite is outdated" message during testing
+  - Fix flaky Cypress integration test
+  - Fix invalid value for prop `className` on `<a>` tag
+  - Fix failed prop type error for checkboxes in tables
+  - Fix unhandled rejection in `getMMTLinks` function
+
+### Fixed
+
+- **CUMULUS-1427**
+  - Dashboard home page no longer displays non-error granules in the Granules
+    Errors list
+
+- **CUMULUS-1456**
+  - Error messages are displayed correctly from the API. Note: you must be on API version 1.14.2 or later.
+
 ## [v1.5.0] - 2019-08-26
 
 ### BREAKING CHANGES
 
-- You must be using Cumulus API version v1.14.0 or above in order to use the new distribution metrics functionality.
+- You must be using Cumulus API version >= v1.14.0 in order to use the new distribution metrics functionality.
 
 ### Added
 
@@ -105,7 +136,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.6.0...HEAD
+[v1.6.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.5.0...v1.6.0
 [v1.5.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.4.0...v1.5.0
 [v1.4.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.3.0...v1.4.0
 [v1.3.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.2.0...v1.3.0

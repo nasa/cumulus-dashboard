@@ -239,7 +239,7 @@ export class Form extends React.Component {
 
         {this.props.submit ? (
           <button
-            className={'button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (this.isInflight() ? ' button--disabled' : '')}
+            className={'button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white button__submit' + (this.isInflight() ? ' button--disabled' : '')}
             onClick={this.onSubmit}
             >{this.isInflight() ? 'Loading...' : status === 'success' ? 'Success!' : 'Submit'}</button>
         ) : null}

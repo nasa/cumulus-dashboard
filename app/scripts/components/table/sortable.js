@@ -13,8 +13,8 @@ const otherOrder = {
 };
 
 class Table extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.state = {
       dumbOrder: null,
       dumbSortIdx: null
@@ -83,16 +83,17 @@ class Table extends React.Component {
         <table>
           <thead>
             <tr>
-              {canSelect && <td></td> }
+              {canSelect && <td/> }
               {header.map((h, i) => {
                 let className = (isTableDumb || props[i]) ? 'table__sort' : '';
                 if (i === sortIdx) { className += (' table__sort--' + order); }
                 return (
                   <td
-                  className={className}
-                  key={h}
-                  data-value={h}
-                  onClick={this.changeSort}>{h}</td>
+                    className={className}
+                    key={h}
+                    data-value={h}
+                    onClick={this.changeSort}>{h}
+                  </td>
                 );
               })}
             </tr>
@@ -105,7 +106,7 @@ class Table extends React.Component {
                 <tr key={i} data-value={dataId} onClick={this.select}>
                   {canSelect &&
                     <td>
-                      <input type='checkbox' checked={checked} />
+                      <input type={'checkbox'} checked={checked} readOnly/>
                     </td>
                   }
                   {row.map((accessor, k) => {
