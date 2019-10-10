@@ -5,12 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [v1.5.0] - 2019-08-26
+
 ### BREAKING CHANGES
 
 - You must be using Cumulus API version >= v1.14.2 in order to use Launchpad authentication.
 - You must be using Cumulus API version >= v1.14.0 in order to use the new distribution metrics functionality.
 
-## [Unreleased]
+### Added
 
 - **CUMULUS-639**
   - Adds optional Launchpad authorization integration via AUTH_METHOD environment variable.
@@ -120,7 +124,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.5.0...HEAD
+[v1.5.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.4.0...v1.5.0
 [v1.4.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.3.0...v1.4.0
 [v1.3.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.2.0...v1.3.0
 [v1.2.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.1.0...v1.2.0
