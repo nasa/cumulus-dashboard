@@ -124,7 +124,7 @@ test.cb('should dispatch error action for failed request', (t) => {
 
   const expectedAction = {
     id: undefined,
-    error: new Error('Internal server error'),
+    error: 'Internal server error',
     config: {
       ...t.context.defaultConfig,
       ...requestAction,
