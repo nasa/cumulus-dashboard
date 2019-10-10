@@ -244,7 +244,7 @@ Update the CHANGELOG.md. Put a header under the 'Unreleased' section with the ne
 
 Add a link reference for the GitHub "compare" view at the bottom of the CHANGELOG.md, following the existing pattern. This link reference should create a link in the CHANGELOG's release header to changes in the corresponding release.
 
-### 6. Create a pull request against the master branch
+### 6. Create a pull request against the develop branch
 
 Create a PR for the `release-vX.X.X` branch against the `develop` branch. Verify that the Circle CI build for the PR succeeds and then merge to `develop`.
 
