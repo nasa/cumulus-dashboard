@@ -7,12 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [v1.5.0] - 2019-08-26
+## [v1.6.0] - 2019-10-10
 
 ### BREAKING CHANGES
 
-- You must be using Cumulus API version >= v1.14.2 in order to use Launchpad authentication.
-- You must be using Cumulus API version >= v1.14.0 in order to use the new distribution metrics functionality.
+- You must be using Cumulus API version >= v1.14.2 in order to use Launchpad authentication. There is also an error display fix that requires 1.14.2+.
 
 ### Added
 
@@ -30,6 +29,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Fix failed prop type error for checkboxes in tables
   - Fix unhandled rejection in `getMMTLinks` function
 
+### Fixed
+
+- **CUMULUS-1427**
+  - Dashboard home page no longer displays non-error granules in the Granules
+    Errors list
+
+- **CUMULUS-1456**
+  - Error messages are displayed correctly from the API. Note: you must be on API version 1.14.2 or later.
+
+## [v1.5.0] - 2019-08-26
+
+### BREAKING CHANGES
+
+- You must be using Cumulus API version >= v1.14.0 in order to use the new distribution metrics functionality.
+
+### Added
+
 - **CUMULUS-1337**
   - Must use Cumulus API version v1.14.0 or above in order to use the new distribution metrics functionality.
   - Distribution metrics are no longer served from the Cumulus API , but are computed from the logs in an ELK stack.
@@ -38,10 +54,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - The `ESROOT` is used to query Elasticsearch directly to retrieve the displayed counts.
   - For information on setting up the Cumulus Distribution API Logs and S3 Server Access see the [Cumulus distribution metrics documentation](https://nasa.github.io/cumulus/docs/features/distribution-metrics).
   - See this project's `README.md` for instructions on setting up development access for Kibana and Elasticsearch.
-
-- **CUMULUS-1427**
-  - Dashboard home page no longer displays non-error granules in the Granules
-    Errors list
 
 
 ## [v1.4.0] - 2019-04-19
@@ -124,7 +136,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.6.0...HEAD
+[v1.6.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.5.0...v1.6.0
 [v1.5.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.4.0...v1.5.0
 [v1.4.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.3.0...v1.4.0
 [v1.3.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.2.0...v1.3.0

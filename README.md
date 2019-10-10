@@ -246,9 +246,13 @@ Add a link reference for the GitHub "compare" view at the bottom of the CHANGELO
 
 ### 6. Create a pull request against the master branch
 
-Create a PR for the `release-vX.X.X` branch against the `master` branch. Verify that the Circle CI build for the PR succeeds and then merge to `master`.
+Create a PR for the `release-vX.X.X` branch against the `develop` branch. Verify that the Circle CI build for the PR succeeds and then merge to `develop`.
 
-### 7. Create a git tag for the release
+### 7. Create a pull request against the master branch
+
+Create a PR for the `develop` branch against the `master` branch. Verify that the Circle CI build for the PR succeeds and then merge to `master`.
+
+### 8. Create a git tag for the release
 
 Push a new release tag to Github. The tag should be in the format `v1.2.3`, where `1.2.3` is the new version.
 
@@ -260,12 +264,6 @@ Create and push a new git tag:
   $ git push origin v1.x.x
 ```
 
-### 8. Add the release to GitHub
+### 9. Add the release to GitHub
 
 Follow the [Github documentation to create a new release](https://help.github.com/articles/creating-releases/) for the dashboard using the tag that you just pushed. Make sure to use the content from the CHANGELOG for this release as the description of the release on GitHub.
-
-### 9. Create a pull request against the develop branch
-
-The updates to the CHANGELOG and the version number still need to be merged back to the `develop` branch.
-
-Create a PR for the `release-vX.X.X` branch against the `develop` branch. Verify that the Circle CI build for the PR succeeds and then merge to `develop`.
