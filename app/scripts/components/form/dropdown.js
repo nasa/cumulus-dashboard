@@ -33,8 +33,13 @@ class Dropdown extends React.Component {
   }
 
   componentDidMount () {
-    const { dispatch, getOptions } = this.props;
+    const { dispatch, getOptions, action, initialValue, options} = this.props;
     if (getOptions) { dispatch(getOptions()); }
+
+    if (initialValue && this.state.value == '' && options) {
+      dispatch(action({key: this.props.paramKey, value: options[initialValue]}))
+    }
+    this.setState({value: initialValue});
   }
 
   componentWillUnmount () {
@@ -60,7 +65,7 @@ class Dropdown extends React.Component {
   render () {
     // `options` are expected in the following format:
     // {displayValue1: optionElementValue1, displayValue2, optionElementValue2, ...}
-    const { options, label, paramKey } = this.props;
+    const { options, label, paramKey, dispatch, action, initialValue } = this.props;
     const items = options ? Object.keys(options).map(label => ({label, value: options[label]})) : [];
 
     // Make sure this form ID is unique!
@@ -95,7 +100,8 @@ Dropdown.propTypes = {
   action: PropTypes.func,
   clear: PropTypes.func,
   paramKey: PropTypes.string,
-  label: PropTypes.any
+  label: PropTypes.any,
+  initialValue: PropTypes.string
 };
 
 export default connect()(Dropdown);

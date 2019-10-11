@@ -68,7 +68,14 @@ class GranulesOverview extends React.Component {
   }
 
   generateQuery () {
-    return {};
+    const queryString = this.props.location.search;
+
+    let queryParams = {};
+    for(let entry of new URLSearchParams(queryString)) {
+      const [key, value] = entry;
+      queryParams[key] = value;
+    }
+    return queryParams;
   }
 
   generateBulkActions () {
@@ -132,6 +139,7 @@ class GranulesOverview extends React.Component {
     const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
     const { data } = granuleCSV;
+    const initialValues = this.generateQuery();
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -154,13 +162,16 @@ class GranulesOverview extends React.Component {
               clear={clearGranulesFilter}
               paramKey={'collectionId'}
               label={strings.collection}
+              initialValue={initialValues['collectionId']}
             />
+
             <Dropdown
               options={statusOptions}
               action={filterGranules}
               clear={clearGranulesFilter}
               paramKey={'status'}
               label={'Status'}
+              initialValue={initialValues['status']}
             />
             <Search dispatch={this.props.dispatch}
               action={searchGranules}
@@ -174,7 +185,7 @@ class GranulesOverview extends React.Component {
             tableHeader={tableHeader}
             tableRow={tableRow}
             tableSortProps={tableSortProps}
-            query={this.generateQuery()}
+            query={{}}
             bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}
             sortIdx={6}
@@ -190,6 +201,7 @@ GranulesOverview.propTypes = {
   stats: PropTypes.object,
   dispatch: PropTypes.func,
   workflowOptions: PropTypes.array,
+  history: PropTypes.object,
   location: PropTypes.object,
   config: PropTypes.object,
   granuleCSV: PropTypes.object
