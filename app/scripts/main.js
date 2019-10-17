@@ -11,8 +11,10 @@ import {
   IndexRoute,
   Redirect,
   hashHistory,
-  applyRouterMiddleware
+  applyRouterMiddleware,
+  useRouterHistory
 } from 'react-router';
+import { createHashHistory } from 'history';
 
 import config from './config';
 import reducers from './reducers';
@@ -103,7 +105,7 @@ function checkAuth (nextState, replace) {
 
 render((
   <ProviderElem store={store}>
-    <Router history={hashHistory} render={applyRouterMiddleware(useScroll())}>
+    <Router history={useRouterHistory(createHashHistory)()} render={applyRouterMiddleware(useScroll())}>
       <Route path='/404' component={NotFound} />
       <Redirect from='/collections' to='/collections/all' />
       <Redirect from='/login' to='/auth' />
