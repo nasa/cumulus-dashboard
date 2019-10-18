@@ -54,7 +54,7 @@ function initialValueFromProps (props) {
     initialValue = location.query[paramKey];
   }
   return initialValue;
-};
+}
 
 class Dropdown extends React.Component {
   constructor (props) {
@@ -69,23 +69,25 @@ class Dropdown extends React.Component {
   }
 
   updateHistory (router, location, value) {
+    const { paramKey } = this.props;
     let nextQuery = { ...location.query };
     if (value.length) {
-      nextQuery = { ...nextQuery, [this.props.paramKey]: value };
+      nextQuery = { ...nextQuery, [paramKey]: value };
     } else {
-      delete nextQuery[this.props.paramKey];
+      delete nextQuery[paramKey];
     }
-    if (location.query[this.props.paramKey] !== nextQuery[this.props.paramKey]) {
+    if (location.query[paramKey] !== nextQuery[paramKey]) {
       location.query = nextQuery;
       router.push(location);
     }
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
-    if (this.props.location.query[this.props.paramKey] !== prevProps.location.query[this.props.paramKey]) {
-      let value = this.props.location.query[this.props.paramKey];
-      this.props.dispatch(this.props.action({ key: this.props.paramKey, value }));
-      if (value) value = statusToLabel(this.props.options, value);
+    const {location, paramKey, dispatch, action, options} = this.props;
+    if (location.query[paramKey] !== prevProps.location.query[paramKey]) {
+      let value = location.query[paramKey];
+      dispatch(action({ key: paramKey, value }));
+      if (value) value = statusToLabel(options, value);
       this.setState({value}); // eslint-disable-line react/no-did-update-set-state
     }
   }
@@ -96,23 +98,23 @@ class Dropdown extends React.Component {
   }
 
   componentWillUnmount () {
-    const { dispatch, clear } = this.props;
-    dispatch(clear(this.props.paramKey));
+    const { dispatch, clear, paramKey } = this.props;
+    dispatch(clear(paramKey));
   }
 
   onSelect (selected, item) {
-    const { dispatch, action, router, location } = this.props;
-    dispatch(action({ key: this.props.paramKey, value: selected }));
+    const { dispatch, action, router, location, paramKey } = this.props;
+    dispatch(action({ key: paramKey, value: selected }));
     this.setState({ value: item.label });
     this.updateHistory(router, location, item.value);
   }
 
   onChange (e) {
-    const { dispatch, clear, router, location } = this.props;
+    const { dispatch, clear, router, location, paramKey } = this.props;
     const { value } = e.target;
     this.setState({ value });
     if (!value.length) {
-      dispatch(clear(this.props.paramKey));
+      dispatch(clear(paramKey));
       this.updateHistory(router, location, '');
     }
   }
