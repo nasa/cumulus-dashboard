@@ -1,5 +1,12 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
 
+function visitGranulePage () {
+  cy.visit('/');
+  cy.contains('nav li a', 'Granules').as('granules');
+  cy.get('@granules').should('have.attr', 'href', '#/granules');
+  cy.get('@granules').click();
+}
+
 describe('Dashboard Granules Page', () => {
   describe('When not logged in', () => {
     it('should redirect to login page', () => {
@@ -19,12 +26,7 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('should display a link to view granules', () => {
-      cy.visit('/');
-
-      cy.contains('nav li a', 'Granules').as('granules');
-      cy.get('@granules').should('have.attr', 'href', '#/granules');
-      cy.get('@granules').click();
-
+      visitGranulePage();
       cy.url().should('include', 'granules');
       cy.contains('.heading--xlarge', 'Granules');
       cy.contains('.heading--large', 'Granule Overview');
@@ -107,16 +109,35 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('should display a link to download the granule list', () => {
-      cy.visit('/');
-
-      cy.contains('nav li a', 'Granules').as('granules');
-      cy.get('@granules').should('have.attr', 'href', '#/granules');
-      cy.get('@granules').click();
+      visitGranulePage();
 
       cy.contains('.heading--xlarge', 'Granules');
 
       cy.contains('a', 'Download Granule List')
       .should('have.attr', 'href').should('include', 'blob:http://');
+    });
+
+    it('Should update dropdown with label when visiting bookmarkable URL', () => {
+      cy.visit('/#/granules?status=running');
+      cy.get('#form-Status-status > div > input').as('status-input');
+      cy.get('@status-input').should('have.value', 'Running');
+
+      cy.visit('/#/granules?status=completed');
+      cy.get('#form-Status-status > div > input').as('status-input');
+      cy.get('@status-input').should('have.value', 'Completed');
+    });
+
+    it('Should update dropdown with status value if query params are not a valid status.', () => {
+      cy.visit('/#/granules?status=notanoption');
+      cy.get('#form-Status-status > div > input').as('status-input');
+      cy.get('@status-input').should('have.value', 'notanoption');
+    });
+
+    it('Should update URL when dropdown filters are activated.', () => {
+      visitGranulePage();
+      cy.get('#form-Status-status > div > input').as('status-input');
+      cy.get('@status-input').click().type('{downarrow}').type('{enter}');
+      cy.url().should('include', '?status=running');
     });
   });
 });
