@@ -23,43 +23,82 @@ function renderMenu (items, value, style) {
   );
 }
 
+/**
+ * Translator for status objects.
+ *
+ * Returns a function that will return the correct display label for a status
+ *   or if the status doesn't match any keys, it will just return itself.
+ *
+ * example :
+ *     labelIs = statusToLabelFactory(status)
+ *     [Function]
+ *     > labelIs('running')
+ *     'Running'
+ *     > labelIs('run')
+ *     'run'
+ *
+ * @param {Object} statusObject
+ * @returns {function} translator function
+ */
+const statusToLabelFactory = (statusObject = {}) => (status) => {
+  let result = Object.keys(statusObject).filter(
+    (label) => statusObject[label] === status
+  );
+  if (result.length) return result[0];
+  return status;
+};
+
+function propsToInitialStatus (props) {
+  const { location, dispatch, action } = props;
+
+  let initialValue = '';
+  if (
+    !isEmpty(location.query) &&
+      Object.hasOwnProperty.call(location.query, props.paramKey)
+  ) {
+    dispatch(action({key: props.paramKey, value: location.query[props.paramKey]}));
+    initialValue = location.query[props.paramKey];
+  }
+  return initialValue;
+}
+
 class Dropdown extends React.Component {
   constructor (props) {
     super(props);
     this.displayName = 'Dropdown';
+    this.statusToLabel = statusToLabelFactory(props.options);
+    const initialValue = this.statusToLabel(propsToInitialStatus(props));
     this.state = {
-      value: ''
+      value: initialValue
     };
     this.onSelect = this.onSelect.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
-  updateHistory(router, location, value) {
-    let newQuery = { ...location.query };
+  updateHistory (router, location, value) {
+    let nextQuery = { ...location.query };
     if (value.length) {
-      newQuery = { ...newQuery, [this.props.paramKey]: value };
+      nextQuery = { ...nextQuery, [this.props.paramKey]: value };
     } else {
-      delete newQuery[this.props.paramKey];
+      delete nextQuery[this.props.paramKey];
     }
-    if (location.query[this.props.paramKey] !== newQuery[this.props.paramKey]) {
-      location.query = newQuery;
+    if (location.query[this.props.paramKey] !== nextQuery[this.props.paramKey]) {
+      location.query = nextQuery;
       router.push(location);
     }
   }
 
-  componentDidMount () {
-    const { dispatch, getOptions, action, location } = this.props;
-    if (
-      !isEmpty(location.query) &&
-        Object.hasOwnProperty.call(location.query, this.props.paramKey)
-       ) {
-      dispatch(action({key: this.props.paramKey, value: location.query[this.props.paramKey]}));
-      // This shouldn't do this.setState here
-      // TODO [MHS, 2019-10-16] And really
-      // any stuff we're doing in this dropdown.js should be passed in by the
-      // parent as props.  Figure that out
-      this.setState({value: location.query[this.props.paramKey]});
+  componentDidUpdate (prevProps, prevState, snapshot) {
+    if (this.props.location.query[this.props.paramKey] !== prevProps.location.query[this.props.paramKey]) {
+      let value = this.props.location.query[this.props.paramKey];
+      this.props.dispatch(this.props.action({ key: this.props.paramKey, value }));
+      if (value) value = this.statusToLabel(value);
+      this.setState({value}); // eslint-disable-line react/no-did-update-set-state
     }
+  }
+
+  componentDidMount () {
+    const { dispatch, getOptions } = this.props;
     if (getOptions) { dispatch(getOptions()); }
   }
 
@@ -81,7 +120,7 @@ class Dropdown extends React.Component {
     this.setState({ value });
     if (!value.length) {
       dispatch(clear(this.props.paramKey));
-      this.updateHistory(router, location, "");
+      this.updateHistory(router, location, '');
     }
   }
 
@@ -123,7 +162,9 @@ Dropdown.propTypes = {
   action: PropTypes.func,
   clear: PropTypes.func,
   paramKey: PropTypes.string,
-  label: PropTypes.any
+  label: PropTypes.any,
+  location: PropTypes.object,
+  router: PropTypes.object
 };
 
 export default withRouter(connect()(Dropdown));

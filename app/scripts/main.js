@@ -10,7 +10,6 @@ import {
   Route,
   IndexRoute,
   Redirect,
-  hashHistory,
   applyRouterMiddleware,
   useRouterHistory
 } from 'react-router';
