@@ -26,21 +26,11 @@ function renderMenu (items, value, style) {
 /**
  * Translator for status objects.
  *
- * Returns a function that will return the correct display label for a status
- *   or if the status doesn't match any keys, it will just return itself.
- *
- * example :
- *     labelIs = statusToLabelFactory(status)
- *     [Function]
- *     > labelIs('running')
- *     'Running'
- *     > labelIs('run')
- *     'run'
- *
  * @param {Object} statusObject
- * @returns {function} translator function
+ * @param {string} status - url query parameter to match. e.g. "running", "completed", "failed"
+ * @returns {string} - either the correct label from the status Object, or the input status.
  */
-const statusToLabelFactory = (statusObject = {}) => (status) => {
+const statusToLabel = (statusObject = {}, status) => {
   let result = Object.keys(statusObject).filter(
     (label) => statusObject[label] === status
   );
@@ -48,26 +38,29 @@ const statusToLabelFactory = (statusObject = {}) => (status) => {
   return status;
 };
 
-function propsToInitialStatus (props) {
-  const { location, dispatch, action } = props;
+/**
+ * Retrieve initial value for component based on react-router's location.
+ *
+ * @param {Object} props - react component props
+ * @returns {string} - value of this component's query string from the url .
+ */
+function initialValueFromProps (props) {
+  const { location, dispatch, action, paramKey } = props;
 
   let initialValue = '';
-  if (
-    !isEmpty(location.query) &&
-      Object.hasOwnProperty.call(location.query, props.paramKey)
-  ) {
-    dispatch(action({key: props.paramKey, value: location.query[props.paramKey]}));
-    initialValue = location.query[props.paramKey];
+  if (!isEmpty(location.query) &&
+       Object.hasOwnProperty.call(location.query, paramKey)) {
+    dispatch(action({key: paramKey, value: location.query[paramKey]}));
+    initialValue = location.query[paramKey];
   }
   return initialValue;
-}
+};
 
 class Dropdown extends React.Component {
   constructor (props) {
     super(props);
     this.displayName = 'Dropdown';
-    this.statusToLabel = statusToLabelFactory(props.options);
-    const initialValue = this.statusToLabel(propsToInitialStatus(props));
+    const initialValue = statusToLabel(props.options, initialValueFromProps(props));
     this.state = {
       value: initialValue
     };
@@ -92,7 +85,7 @@ class Dropdown extends React.Component {
     if (this.props.location.query[this.props.paramKey] !== prevProps.location.query[this.props.paramKey]) {
       let value = this.props.location.query[this.props.paramKey];
       this.props.dispatch(this.props.action({ key: this.props.paramKey, value }));
-      if (value) value = this.statusToLabel(value);
+      if (value) value = statusToLabel(this.props.options, value);
       this.setState({value}); // eslint-disable-line react/no-did-update-set-state
     }
   }
