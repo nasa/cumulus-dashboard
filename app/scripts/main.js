@@ -4,14 +4,14 @@ import { render } from 'react-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider as ProviderElem } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
-import { useScroll } from 'react-router-scroll';
+import { useScroll as notHookUseScroll } from 'react-router-scroll';
 import {
   Router,
   Route,
   IndexRoute,
   Redirect,
   applyRouterMiddleware,
-  useRouterHistory
+  useRouterHistory as notHookUseRouterHistory
 } from 'react-router';
 import { createHashHistory } from 'history';
 
@@ -104,7 +104,7 @@ function checkAuth (nextState, replace) {
 
 render((
   <ProviderElem store={store}>
-    <Router history={useRouterHistory(createHashHistory)()} render={applyRouterMiddleware(useScroll())}>
+    <Router history={notHookUseRouterHistory(createHashHistory)()} render={applyRouterMiddleware(notHookUseScroll())}>
       <Route path='/404' component={NotFound} />
       <Redirect from='/collections' to='/collections/all' />
       <Redirect from='/login' to='/auth' />
