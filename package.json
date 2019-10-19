@@ -29,7 +29,8 @@
   "ava": {
     "files": [
       "test/**/*.js",
-      "!test/fake-api/**/*"
+      "!test/fake-api/**/*",
+      "!test/fixtures/**/*"
     ],
     "require": [
       "@babel/polyfill",
@@ -59,7 +60,7 @@
     "@babel/register": "^7.0.0",
     "@cypress/browserify-preprocessor": "^1.1.2",
     "audit-ci": "1.3.0",
-    "ava": "^1.0.0",
+    "ava": "^2.4.0",
     "ava-http": "^1.0.0",
     "babel-core": "^7.0.0-bridge",
     "babelify": "^9.0.0",
@@ -111,7 +112,7 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "@cumulus/cmrjs": "^1.11.0",
+    "@cumulus/cmrjs": "1.11.0",
     "assert": "^1.4.1",
     "body-parser": "^1.18.3",
     "brace": "^0.9.1",
