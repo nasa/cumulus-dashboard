@@ -6,7 +6,7 @@ import url from 'url';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
 import { hashHistory } from 'react-router';
-import { CMR } from '@cumulus/cmr-client';
+import { CMR } from '@cumulus/cmrjs';
 
 import { configureRequest } from './helpers';
 import _config from '../config';
