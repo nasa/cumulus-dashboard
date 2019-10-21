@@ -11,8 +11,8 @@ function initialValueFromProps (props) {
   let initialValue = '';
   if (!isEmpty(location.query) &&
        Object.hasOwnProperty.call(location.query, paramKey)) {
-    dispatch(action({value: location.query[paramKey]}));
     initialValue = location.query[paramKey];
+    dispatch(action({value: location.query[paramKey]}));
   }
   return initialValue;
 }
@@ -42,6 +42,16 @@ class Search extends React.Component {
     }
   }
 
+  componentDidMount () {
+    const { dispatch, action, location, paramKey } = this.props;
+    dispatch(action({value: location.query[paramKey]}));
+  }
+
+  componentDidUpdate () {
+    const { dispatch, action, location, paramKey } = this.props;
+    dispatch(action({value: location.query[paramKey]}));
+  }
+
   componentWillUnmount () {
     if (this.cancelDelay) { this.cancelDelay(); }
     const { dispatch, clear } = this.props;
@@ -65,13 +75,13 @@ class Search extends React.Component {
   }
 
   delayedQuery (value) {
-    const { dispatch, action, clear, location, paramKey, router } = this.props;
+    const { dispatch, action, clear, location, router } = this.props;
     const timeoutId = setTimeout(function () {
       if (value && value.length) {
         this.updateHistory(router, location, value);
         dispatch(action(value));
       } else {
-        this.updateHistory(router, location, "");
+        this.updateHistory(router, location, '');
         dispatch(clear());
       }
     }.bind(this), 650);
@@ -97,7 +107,10 @@ Search.defaultProps = {
 Search.propTypes = {
   dispatch: PropTypes.func,
   action: PropTypes.func,
-  clear: PropTypes.func
+  clear: PropTypes.func,
+  paramKey: PropTypes.string,
+  location: PropTypes.object,
+  router: PropTypes.object
 };
 
 export default withRouter(connect()(Search));

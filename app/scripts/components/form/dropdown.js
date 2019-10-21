@@ -45,12 +45,10 @@ const statusToLabel = (statusObject = {}, status) => {
  * @returns {string} - value of this component's query string from the url .
  */
 function initialValueFromProps (props) {
-  const { location, dispatch, action, paramKey } = props;
-
+  const { location, paramKey } = props;
   let initialValue = '';
   if (!isEmpty(location.query) &&
        Object.hasOwnProperty.call(location.query, paramKey)) {
-    dispatch(action({key: paramKey, value: location.query[paramKey]}));
     initialValue = location.query[paramKey];
   }
   return initialValue;
@@ -93,8 +91,9 @@ class Dropdown extends React.Component {
   }
 
   componentDidMount () {
-    const { dispatch, getOptions } = this.props;
+    const { dispatch, getOptions, action, location, paramKey } = this.props;
     if (getOptions) { dispatch(getOptions()); }
+    dispatch(action({key: paramKey, value: location.query[paramKey]}));
   }
 
   componentWillUnmount () {
