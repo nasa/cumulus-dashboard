@@ -30,20 +30,12 @@ test('removeDeleted, returns input list if deleted is empty', (t) => {
   t.deepEqual(result, initialList);
 });
 
-test.only('removeDeleted, returns filtered list if successful deleted found', (t) => {
+test('removeDeleted, returns filtered list if successful deleted found', (t) => {
   const initialAccessor = 'accessorName';
   const deletedId = initialList[1].accessorName;
+  const expectedList = [initialList[0], initialList[2]];
   const deleted = {[deletedId]: {status: 'success'}};
   console.log(deleted);
   const result = removeDeleted(initialAccessor, initialList, deleted);
-  t.deepEqual(result, initialList);
-});
-
-test.only('removeDeleted returns empty list returns filtered list if successful deleted found', (t) => {
-  const initialAccessor = 'accessorName';
-  const deletedId = initialList[1].accessorName;
-  const deleted = {[deletedId]: {status: 'success'}};
-  console.log(deleted);
-  const result = removeDeleted(initialAccessor, initialList, deleted);
-  t.deepEqual(result, initialList);
+  t.deepEqual(result, expectedList);
 });
