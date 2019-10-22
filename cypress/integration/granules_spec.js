@@ -127,12 +127,6 @@ describe('Dashboard Granules Page', () => {
       cy.get('@status-input').should('have.value', 'Completed');
     });
 
-    it('Should update dropdown with status value if query params are not a valid status.', () => {
-      cy.visit('/#/granules?status=notanoption');
-      cy.get('#form-Status-status > div > input').as('status-input');
-      cy.get('@status-input').should('have.value', 'notanoption');
-    });
-
     it('Should update URL when dropdown filters are activated.', () => {
       visitGranulePage();
       cy.get('#form-Status-status > div > input').as('status-input');
