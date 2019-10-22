@@ -136,8 +136,8 @@ describe('Dashboard Granules Page', () => {
     it('Should update URL when dropdown filters are activated.', () => {
       visitGranulePage();
       cy.get('#form-Status-status > div > input').as('status-input');
-      cy.get('@status-input').click().type('{downarrow}').type('{enter}');
-      cy.url().should('include', '?status=running');
+      cy.get('@status-input').click().type('fai').type('{enter}');
+      cy.url().should('include', '?status=failed');
     });
 
     it('Should update URL when search filter is changed.', () => {
@@ -152,7 +152,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.search').as('search');
       cy.get('@search').click().type('L2');
       cy.get('#form-Status-status > div > input').as('status-input');
-      cy.get('@status-input').click().type('{downarrow}{downarrow}{enter}');
+      cy.get('@status-input').click().type('comp{enter}');
       cy.url().should('include', 'search=L2');
       cy.url().should('include', 'status=completed');
     });
