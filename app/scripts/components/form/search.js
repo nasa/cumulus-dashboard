@@ -64,12 +64,12 @@ class Search extends React.Component {
 
   render () {
     return (
-        <div className='filter__item'>
-        <form className='search__wrapper form-group__element' onSubmit={this.submit} >
+     <div className='filter__item'>
+       <form className='search__wrapper form-group__element' onSubmit={this.submit} >
         <input className='search' type='search' onChange={this.complete} value={this.state.value}/>
         <span className='search__icon'/>
-        </form>
-        </div>
+       </form>
+     </div>
     );
   }
 }
