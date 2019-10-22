@@ -42,10 +42,8 @@ class Dropdown extends React.Component {
   constructor (props) {
     super(props);
     this.displayName = 'Dropdown';
-    const initialValue = statusToLabel(props.options, initialValueFromLocation(props));
-    this.state = {
-      value: initialValue
-    };
+    const value = statusToLabel(props.options, initialValueFromLocation(props));
+    this.state = { value };
     this.onSelect = this.onSelect.bind(this);
     this.onChange = this.onChange.bind(this);
   }
