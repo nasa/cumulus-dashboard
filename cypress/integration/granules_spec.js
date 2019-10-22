@@ -153,8 +153,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('@search').click().type('L2');
       cy.get('#form-Status-status > div > input').as('status-input');
       cy.get('@status-input').click().type('comp{enter}');
-      cy.url().should('include', 'search=L2');
-      cy.url().should('include', 'status=completed');
+      cy.url().should('include', 'search=L2').and('include', 'status=completed');
     });
   });
 });
