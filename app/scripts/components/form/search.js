@@ -3,43 +3,17 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import isEmpty from 'lodash.isempty';
-
-function initialValueFromProps (props) {
-  const { location, dispatch, action, paramKey } = props;
-
-  let initialValue = '';
-  if (!isEmpty(location.query) &&
-       Object.hasOwnProperty.call(location.query, paramKey)) {
-    initialValue = location.query[paramKey];
-    dispatch(action({value: location.query[paramKey]}));
-  }
-  return initialValue;
-}
+import { initialValueFromLocation, updateRouterLocation } from '../../utils/url-helper';
 
 class Search extends React.Component {
   constructor (props) {
     super(props);
     this.displayName = 'Search';
-    const value = initialValueFromProps(props);
+    const value = initialValueFromLocation(props);
     this.state = { value };
     this.complete = this.complete.bind(this);
     this.submit = this.submit.bind(this);
     this.delayedQuery = this.delayedQuery.bind(this);
-  }
-
-  updateHistory (router, location, value) {
-    const { paramKey } = this.props;
-    let nextQuery = { ...location.query };
-    if (value.length) {
-      nextQuery = { ...nextQuery, [paramKey]: value };
-    } else {
-      delete nextQuery[paramKey];
-    }
-    if (location.query[paramKey] !== nextQuery[paramKey]) {
-      location.query = nextQuery;
-      router.push(location);
-    }
   }
 
   componentDidMount () {
@@ -75,16 +49,16 @@ class Search extends React.Component {
   }
 
   delayedQuery (value) {
-    const { dispatch, action, clear, location, router } = this.props;
+    const { dispatch, action, clear, location, router, paramKey } = this.props;
     const timeoutId = setTimeout(function () {
       if (value && value.length) {
-        this.updateHistory(router, location, value);
+        updateRouterLocation(router, location, paramKey, value);
         dispatch(action(value));
       } else {
-        this.updateHistory(router, location, '');
+        updateRouterLocation(router, location, paramKey, '');
         dispatch(clear());
       }
-    }.bind(this), 650);
+    }, 650);
     return () => clearTimeout(timeoutId);
   }
 

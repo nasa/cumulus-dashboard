@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Autocomplete from 'react-autocomplete';
-import isEmpty from 'lodash.isempty';
+import { initialValueFromLocation, updateRouterLocation } from '../../utils/url-helper';
 
 function shouldItemRender ({ label }, value) {
   return label.toLowerCase().indexOf(value) >= 0;
@@ -38,46 +38,16 @@ const statusToLabel = (statusObject = {}, status) => {
   return status;
 };
 
-/**
- * Retrieve initial value for component based on react-router's location.
- *
- * @param {Object} props - react component props
- * @returns {string} - value of this component's query string from the url .
- */
-function initialValueFromProps (props) {
-  const { location, paramKey } = props;
-  let initialValue = '';
-  if (!isEmpty(location.query) &&
-       Object.hasOwnProperty.call(location.query, paramKey)) {
-    initialValue = location.query[paramKey];
-  }
-  return initialValue;
-}
-
 class Dropdown extends React.Component {
   constructor (props) {
     super(props);
     this.displayName = 'Dropdown';
-    const initialValue = statusToLabel(props.options, initialValueFromProps(props));
+    const initialValue = statusToLabel(props.options, initialValueFromLocation(props));
     this.state = {
       value: initialValue
     };
     this.onSelect = this.onSelect.bind(this);
     this.onChange = this.onChange.bind(this);
-  }
-
-  updateHistory (router, location, value) {
-    const { paramKey } = this.props;
-    let nextQuery = { ...location.query };
-    if (value.length) {
-      nextQuery = { ...nextQuery, [paramKey]: value };
-    } else {
-      delete nextQuery[paramKey];
-    }
-    if (location.query[paramKey] !== nextQuery[paramKey]) {
-      location.query = nextQuery;
-      router.push(location);
-    }
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
@@ -105,7 +75,7 @@ class Dropdown extends React.Component {
     const { dispatch, action, router, location, paramKey } = this.props;
     dispatch(action({ key: paramKey, value: selected }));
     this.setState({ value: item.label });
-    this.updateHistory(router, location, item.value);
+    updateRouterLocation(router, location, paramKey, item.value);
   }
 
   onChange (e) {
@@ -114,7 +84,7 @@ class Dropdown extends React.Component {
     this.setState({ value });
     if (!value.length) {
       dispatch(clear(paramKey));
-      this.updateHistory(router, location, '');
+      updateRouterLocation(router, location, paramKey, '');
     }
   }
 
