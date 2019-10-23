@@ -6,7 +6,7 @@ import url from 'url';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
 import { hashHistory } from 'react-router';
-import { CMR, hostId } from '@cumulus/cmrjs';
+import { CMR } from '@cumulus/cmrjs';
 
 import { configureRequest } from './helpers';
 import _config from '../config';
@@ -30,6 +30,15 @@ const {
 } = _config;
 
 const millisecondsPerDay = 24 * 60 * 60 * 1000;
+
+/**
+ * match MMT to CMR environment.
+ * @param {string} env - cmr environment defaults to 'SIT'
+ * @returns {string} correct hostname for mmt environment
+ */
+const hostId = (env = 'SIT') => {
+  return getProperty({ OPS: '', SIT: 'sit', UAT: 'uat' }, env, 'sit');
+};
 
 export const refreshAccessToken = (token) => {
   return (dispatch) => {

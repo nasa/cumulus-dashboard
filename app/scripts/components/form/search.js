@@ -1,15 +1,29 @@
 'use strict';
 import React from 'react';
+import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { initialValueFromLocation, updateRouterLocation } from '../../utils/url-helper';
 
 class Search extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.displayName = 'Search';
-    this.state = { value: null };
+    const value = initialValueFromLocation(props);
+    this.state = { value };
     this.complete = this.complete.bind(this);
     this.submit = this.submit.bind(this);
     this.delayedQuery = this.delayedQuery.bind(this);
+  }
+
+  componentDidMount () {
+    const { dispatch, action, location, paramKey } = this.props;
+    dispatch(action({value: location.query[paramKey]}));
+  }
+
+  componentDidUpdate () {
+    const { dispatch, action, location, paramKey } = this.props;
+    dispatch(action({value: location.query[paramKey]}));
   }
 
   componentWillUnmount () {
@@ -35,11 +49,13 @@ class Search extends React.Component {
   }
 
   delayedQuery (value) {
-    const { dispatch, action, clear } = this.props;
+    const { dispatch, action, clear, location, router, paramKey } = this.props;
     const timeoutId = setTimeout(function () {
       if (value && value.length) {
+        updateRouterLocation(router, location, paramKey, value);
         dispatch(action(value));
       } else {
+        updateRouterLocation(router, location, paramKey, '');
         dispatch(clear());
       }
     }, 650);
@@ -48,20 +64,27 @@ class Search extends React.Component {
 
   render () {
     return (
-      <div className='filter__item'>
-        <form className='search__wrapper form-group__element' onSubmit={this.submit} value={this.state.value}>
-          <input className='search' type='search' onChange={this.complete}/>
-          <span className='search__icon'/>
-        </form>
-      </div>
+     <div className='filter__item'>
+       <form className='search__wrapper form-group__element' onSubmit={this.submit} >
+        <input className='search' type='search' onChange={this.complete} value={this.state.value}/>
+        <span className='search__icon'/>
+       </form>
+     </div>
     );
   }
 }
 
+Search.defaultProps = {
+  paramKey: 'search'
+};
+
 Search.propTypes = {
   dispatch: PropTypes.func,
   action: PropTypes.func,
-  clear: PropTypes.func
+  clear: PropTypes.func,
+  paramKey: PropTypes.string,
+  location: PropTypes.object,
+  router: PropTypes.object
 };
 
-export default Search;
+export default withRouter(connect()(Search));

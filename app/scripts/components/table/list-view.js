@@ -43,7 +43,6 @@ class List extends React.Component {
         page: initialPage,
         order: initialOrder,
         sort_by: this.getSortProp(initialSortIdx),
-        params: {},
         ...(props.query || {})
       },
       params: {},
@@ -144,7 +143,7 @@ class List extends React.Component {
       page: this.state.page,
       order: this.state.order,
       sort_by: this.getSortProp(this.state.sortIdx),
-      params: this.state.params,
+      ...this.state.params,
       ...config,
       ...query
     }, isEmpty);

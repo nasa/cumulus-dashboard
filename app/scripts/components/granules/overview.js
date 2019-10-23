@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import {
   interval,
@@ -196,10 +197,11 @@ GranulesOverview.propTypes = {
 };
 
 export { GranulesOverview };
-export default connect(state => ({
+
+export default withRouter(connect((state) => ({
   stats: state.stats,
   workflowOptions: workflowOptionNames(state),
   granules: state.granules,
   config: state.config,
   granuleCSV: state.granuleCSV
-}))(GranulesOverview);
+}))(GranulesOverview));

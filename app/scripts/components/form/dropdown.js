@@ -3,7 +3,9 @@ import c from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import Autocomplete from 'react-autocomplete';
+import { initialValueFromLocation, updateRouterLocation } from '../../utils/url-helper';
 
 function shouldItemRender ({ label }, value) {
   return label.toLowerCase().indexOf(value) >= 0;
@@ -21,39 +23,66 @@ function renderMenu (items, value, style) {
   );
 }
 
+/**
+ * Translator for status objects.
+ *
+ * @param {Object} statusObject
+ * @param {string} status - url query parameter to match. e.g. "running", "completed", "failed"
+ * @returns {string} - either the correct label from the status Object, or the input status.
+ */
+const statusToLabel = (statusObject = {}, status) => {
+  let result = Object.keys(statusObject).filter(
+    (label) => statusObject[label] === status
+  );
+  if (result.length) return result[0];
+  return status;
+};
+
 class Dropdown extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.displayName = 'Dropdown';
-    this.state = {
-      value: ''
-    };
+    const value = statusToLabel(props.options, initialValueFromLocation(props));
+    this.state = { value };
     this.onSelect = this.onSelect.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
+  componentDidUpdate (prevProps, prevState, snapshot) {
+    const {location, paramKey, dispatch, action, options} = this.props;
+    if (location.query[paramKey] !== prevProps.location.query[paramKey]) {
+      let value = location.query[paramKey];
+      dispatch(action({ key: paramKey, value }));
+      if (value) value = statusToLabel(options, value);
+      this.setState({value}); // eslint-disable-line react/no-did-update-set-state
+    }
+  }
+
   componentDidMount () {
-    const { dispatch, getOptions } = this.props;
+    const { dispatch, getOptions, action, location, paramKey } = this.props;
     if (getOptions) { dispatch(getOptions()); }
+    dispatch(action({key: paramKey, value: location.query[paramKey]}));
   }
 
   componentWillUnmount () {
-    const { dispatch, clear } = this.props;
-    dispatch(clear(this.props.paramKey));
+    const { dispatch, clear, paramKey } = this.props;
+    dispatch(clear(paramKey));
   }
 
   onSelect (selected, item) {
-    const { dispatch, action } = this.props;
-    dispatch(action({ key: this.props.paramKey, value: selected }));
+    const { dispatch, action, router, location, paramKey } = this.props;
+    dispatch(action({ key: paramKey, value: selected }));
     this.setState({ value: item.label });
+    updateRouterLocation(router, location, paramKey, item.value);
   }
 
   onChange (e) {
-    const { dispatch, clear } = this.props;
+    const { dispatch, clear, router, location, paramKey } = this.props;
     const { value } = e.target;
     this.setState({ value });
     if (!value.length) {
-      dispatch(clear(this.props.paramKey));
+      dispatch(clear(paramKey));
+      updateRouterLocation(router, location, paramKey, '');
     }
   }
 
@@ -95,7 +124,9 @@ Dropdown.propTypes = {
   action: PropTypes.func,
   clear: PropTypes.func,
   paramKey: PropTypes.string,
-  label: PropTypes.any
+  label: PropTypes.any,
+  location: PropTypes.object,
+  router: PropTypes.object
 };
 
-export default connect()(Dropdown);
+export default withRouter(connect()(Dropdown));
