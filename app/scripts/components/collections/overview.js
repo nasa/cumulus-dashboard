@@ -6,7 +6,9 @@ import PropTypes from 'prop-types';
 import {
   getCollection,
   listGranules,
-  deleteCollection
+  deleteCollection,
+  searchGranules,
+  clearGranulesSearch
 } from '../../actions';
 import { get } from 'object-path';
 import {
@@ -16,6 +18,8 @@ import {
   deleteText
 } from '../../utils/format';
 import ErrorReport from '../errors/report';
+import Dropdown from '../form/simple-dropdown';
+import Search from '../form/search';
 import List from '../table/list-view';
 import Overview from '../app/overview';
 import AsyncCommand from '../form/async-command';
@@ -23,16 +27,29 @@ import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/
 import { updateDelay } from '../../config';
 import { strings } from '../locale';
 
+const statusOptions = [
+  'All',
+  'Complete',
+  'Running',
+  'Failed'
+];
+
 class CollectionOverview extends React.Component {
   constructor () {
     super();
     this.displayName = 'CollectionOverview';
     this.load = this.load.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
+    this.setSearch = this.setSearch.bind(this);
     this.delete = this.delete.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
     this.errors = this.errors.bind(this);
     this.renderOverview = this.renderOverview.bind(this);
+    this.query = this.query.bind(this);
+    this.state = {
+      status: 'All',
+      search: ''
+    };
   }
 
   componentDidMount () {
@@ -55,9 +72,30 @@ class CollectionOverview extends React.Component {
   generateQuery () {
     const collectionId = getCollectionId(this.props.params);
     return {
-      collectionId,
-      status: 'running'
+      collectionId
     };
+  }
+
+  setSearch (e) {
+    const value = e.currentTarget.value;
+    this.setState({ search: value }, this.query);
+  }
+
+  setSearchStatus (id, value) {
+    this.setState({ search: '', status: value }, this.query);
+  }
+
+  query () {
+    const query = this.props.query || {};
+    const { search, status } = this.state;
+    if (search) {
+      query.q = this.state.search;
+    } else if (status && status !== 'All') {
+      query.status = status.toLowerCase();
+    }
+    const { dispatch } = this.props;
+
+    dispatch(listGranules(Object.assign({ }, query)));
   }
 
   delete () {
@@ -124,7 +162,32 @@ class CollectionOverview extends React.Component {
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>{strings.running_granules}<span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>{strings.total_granules}<span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
+          </div>
+          <div>
+            <form className='search__wrapper form-group__element'>
+              <input
+                className='search'
+                type='search'
+                placeholder='Search (Name, etc.)'
+                value={this.state.search}
+                onChange={this.setSearch}/>
+              <span className='search__icon'></span>
+            </form>
+            <Search dispatch={this.props.dispatch}
+              action={searchGranules}
+              clear={clearGranulesSearch}
+            />
+            <form className='search__wrapper form-group__element form-group__element--right'>
+              <Dropdown
+                label={'Status'}
+                value={status}
+                options={statusOptions}
+                id={'logs-viewer-dropdown'}
+                onChange={this.setSearchStatus}
+                noNull={true}
+              />
+            </form>
           </div>
           <List
             list={list}
@@ -149,7 +212,8 @@ CollectionOverview.propTypes = {
   dispatch: PropTypes.func,
   granules: PropTypes.object,
   collections: PropTypes.object,
-  router: PropTypes.object
+  router: PropTypes.object,
+  query: PropTypes.object
 };
 
 export default connect(state => ({
