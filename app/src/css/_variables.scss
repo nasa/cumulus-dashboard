@@ -1,11 +1,12 @@
 /* Colors
    ========================================================================== */
 
-$graphics: '/* @echo ASSETS_PATH */';
+$graphics: '/* @echo ASSETS_PATH */'; //bourbon
 
-$light-green: #20ce6f;                                   //
-$ocean-blue: #2276ac;                                //
-$midnight-blue: #2c3e50;                              //
+//EUI Colors
+$light-green: #20ce6f;                                   
+$ocean-blue: #2276ac;                                
+$midnight-blue: #2c3e50;                              
 $royal-purple: #673285;
 $dolphin-grey: #95a5a6;
 $sky-blue: #7ab5da;
@@ -23,9 +24,11 @@ $lighter-grey: #8C8C8C;
 $lightest-grey: #E2DFDF;
 $background-white: #F8F8F8;
 
-/* typography */
+/* Typography
+   ========================================================================== */
 $root-font-size: 14px;
 
+/* Main Font */
 $base-font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
 $base-font-light: 300;
 $base-font-italic: 400i;
@@ -36,6 +39,7 @@ $base-font-weight: $base-font-regular;
 $base-font-size: 1rem;
 $base-line-height: 1.5;
 
+/* Data Font */
 $code-font-family: 'Inconsolata', monospace;
 $code-font-size: 1rem;
 $code-line-height: 1;

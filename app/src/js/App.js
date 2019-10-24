@@ -24,8 +24,6 @@ import reducers from './reducers';
 import { refreshTokenMiddleware } from './middleware/token';
 import { requestMiddleware } from './middleware/request';
 
-import '../css/main.scss';
-
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(reducers,

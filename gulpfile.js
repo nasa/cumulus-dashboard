@@ -94,7 +94,7 @@ gulp.task('javascript', function () {
       // Source maps.
       .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest('.tmp/js'))
+      .pipe(gulp.dest('.tmp/scripts'))
       .pipe(reload({stream: true}));
   }
 
@@ -120,7 +120,7 @@ gulp.task('vendorScripts', function () {
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('.tmp/js/'))
+    .pipe(gulp.dest('.tmp/scripts/'))
     .pipe(reload({stream: true}));
 });
 
@@ -175,7 +175,7 @@ gulp.task('styles', function () {
     }))
     .pipe($.preprocess({context: { ASSETS_PATH: config.graphicsPath }}))
     .pipe($.sourcemaps.write())
-    .pipe(gulp.dest('.tmp/css'))
+    .pipe(gulp.dest('.tmp/styles'))
     .pipe(reload({stream: true}));
 });
 
@@ -199,6 +199,7 @@ gulp.task('images', function () {
       // as hooks for embedding and styling
       $.imagemin.svgo({plugins: [{cleanupIDs: false}]})
     ])))
+    .pipe(gulp.dest('.tmp/images'))
     .pipe(gulp.dest('dist/images'));
 });
 
