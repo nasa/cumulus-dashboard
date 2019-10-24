@@ -66,7 +66,7 @@ class CollectionOverview extends React.Component {
 
   generateQuery () {
     const collectionId = getCollectionId(this.props.params);
-    return { 
+    return {
       collectionId
     };
   }
