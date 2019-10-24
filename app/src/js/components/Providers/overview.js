@@ -1,13 +1,13 @@
 'use strict';
 
-import React from './node_modules/react';
-import { connect } from './node_modules/react-redux';
-import { get } from './node_modules/object-path';
+import React from 'react';
+import { connect } from 'react-redux';
+import { get } from 'object-path';
 import { listProviders, getCount, interval } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/providers';
 import List from '../Table/Table';
-import PropTypes from './node_modules/prop-types';
+import PropTypes from 'prop-types';
 import Overview from '../Overview/overview';
 import { updateInterval } from '../../config';
 

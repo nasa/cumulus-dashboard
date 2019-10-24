@@ -1,10 +1,10 @@
 'use strict';
-import React from './node_modules/react';
-import { connect } from './node_modules/react-redux';
-import { withRouter } from './node_modules/react-router';
-import PropTypes from './node_modules/prop-types';
+import React from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import PropTypes from 'prop-types';
 import TextArea from '../TextAreaForm/text-area';
-import { get } from './node_modules/object-path';
+import { get } from 'object-path';
 import { getSchema } from '../../actions';
 import Loading from '../LoadingIndicator/loading-indicator';
 import { removeReadOnly } from '../FormSchema/schema';

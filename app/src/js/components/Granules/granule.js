@@ -26,11 +26,11 @@ import {
   deleteText
 } from '../../utils/format';
 import Table from '../SortableTable/SortableTable';
-import Loading from '../Loading/loading-indicator';
+import Loading from '../LoadingIndicator/loading-indicator';
 import LogViewer from '../Logs/viewer';
 import ErrorReport from '../Errors/report';
-import Metadata from '../Table/metadata';
-import AsyncCommands from '../Form/dropdown-async-command';
+import Metadata from '../Table/Metadata';
+import AsyncCommands from '../DropDown/dropdown-async-command';
 import { updateInterval } from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';

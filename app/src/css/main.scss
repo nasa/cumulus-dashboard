@@ -12,7 +12,8 @@
 @charset "UTF-8";
 
 
-/* Libraries
+
+/* Libraries/Vendors
    ========================================================================== */
 
 /**
@@ -38,21 +39,25 @@
 @import "normalize-opentype";
 
 
-/* Settings
+/* Settings for Mixins
    ========================================================================== */
-@import "/app/src/css/variables";
+@import "variables";
 
-/* Main
+/* Application Styles
    ========================================================================== */
 
 @import "base";
-@import "modal";
+@import "../css/modules/modal";
 @import "typography";
-@import "buttons";
-@import "forms";
+@import "../js/components/Button/button";
+@import "../js/components/Form/form";
 @import "lists";
+@import "../js/components/Table/table";
+@import "../js/components/Chart/chart";
+@import "../js/components/LoadingIndicator/loading-indicator";
+@import "pulse";
+
+/* Fonts
+   ========================================================================== */
 @import url('https://fonts.googleapis.com/css?family=Inconsolata|Open+Sans:300,400,400i,600,700');
-@import "tables";
-@import "charts";
-@import "animations/loading-indicator";
-@import "animations/pulse";
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap');

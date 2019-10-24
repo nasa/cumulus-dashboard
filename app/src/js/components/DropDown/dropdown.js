@@ -1,10 +1,10 @@
 'use strict';
-import c from './node_modules/classnames';
-import React from './node_modules/react';
-import PropTypes from './node_modules/prop-types';
-import { connect } from './node_modules/react-redux';
-import { withRouter } from './node_modules/react-router';
-import Autocomplete from './node_modules/react-autocomplete';
+import c from 'classnames';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import Autocomplete from 'react-autocomplete';
 import { initialValueFromLocation, updateRouterLocation } from '../../utils/url-helper';
 
 function shouldItemRender ({ label }, value) {

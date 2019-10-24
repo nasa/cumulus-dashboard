@@ -1,7 +1,7 @@
 'use strict';
-import React from './node_modules/react';
-import { connect } from './node_modules/react-redux';
-import PropTypes from './node_modules/prop-types';
+import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 class Errors extends React.Component {
   constructor () {

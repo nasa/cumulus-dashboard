@@ -1,8 +1,8 @@
 'use strict';
-import React from './node_modules/react';
-import PropTypes from './node_modules/prop-types';
-import { connect } from './node_modules/react-redux';
-import moment from './node_modules/moment';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import moment from 'moment';
 import {
   applyRecoveryWorkflowToCollection,
   clearCollectionsSearch,

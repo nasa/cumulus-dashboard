@@ -22,7 +22,7 @@ import {
   tally,
   seconds
 } from '../utils/format';
-import List from './Table/list-view';
+import List from './Table/Table';
 import GranulesProgress from './Granules/progress';
 import {
   errorTableHeader,

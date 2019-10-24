@@ -1,7 +1,7 @@
 'use strict';
-import React from './node_modules/react';
-import PropTypes from './node_modules/prop-types';
-import queue from './node_modules/stubborn-queue';
+import React from 'react';
+import PropTypes from 'prop-types';
+import queue from 'stubborn-queue';
 import AsyncCommand from '../AsyncCommands/async-command';
 import { updateDelay } from '../../config';
 

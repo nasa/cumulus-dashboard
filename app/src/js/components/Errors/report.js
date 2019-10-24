@@ -1,7 +1,7 @@
 'use strict';
-import React from './node_modules/react';
+import React from 'react';
 import Collapsible from 'react-collapsible';
-import PropTypes from './node_modules/prop-types';
+import PropTypes from 'prop-types';
 import { truncate } from '../../utils/format';
 
 class ErrorReport extends React.Component {

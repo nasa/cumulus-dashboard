@@ -1,8 +1,8 @@
 'use strict';
-import React from './node_modules/react';
-import { Link } from './node_modules/react-router';
+import React from 'react';
+import { Link } from 'react-router';
 import Sidebar from '../Sidebar/sidebar';
-import PropTypes from './node_modules/prop-types';
+import PropTypes from 'prop-types';
 
 class Providers extends React.Component {
   constructor () {

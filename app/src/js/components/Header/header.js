@@ -1,8 +1,8 @@
 'use strict';
-import React from './node_modules/react';
-import c from './node_modules/classnames';
-import PropTypes from './node_modules/prop-types';
-import { Link } from './node_modules/react-router';
+import React from 'react';
+import c from 'classnames';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router';
 import { logout, getApiVersion } from '../../actions';
 import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';

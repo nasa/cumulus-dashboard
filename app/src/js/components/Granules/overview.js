@@ -17,7 +17,7 @@ import {
   getOptionsCollectionName,
   getGranuleCSV
 } from '../../actions';
-import { get } from './node_modules/object-path';
+import { get } from 'object-path';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
   tableHeader,

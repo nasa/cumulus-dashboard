@@ -6,7 +6,7 @@ import slugify from 'slugify';
 import ErrorReport from '../Errors/report';
 import TextForm from '../TextAreaForm/text';
 import TextAreaForm from '../TextAreaForm/text-area';
-import Dropdown from './simple-dropdown';
+import Dropdown from '../DropDown/simple-dropdown';
 import List from '../ArbitraryList/arbitrary-list';
 import SubForm from '../SubForm/sub-form';
 import t from '../../utils/strings';

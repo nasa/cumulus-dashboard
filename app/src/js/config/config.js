@@ -13,6 +13,6 @@ module.exports = {
   esRoot: process.env.ESROOT || false,
   showTeaMetrics: process.env.SHOW_TEA_METRICS || true,
   showDistributionAPIMetrics: process.env.SHOW_DISTRIBUTION_API_METRICS || false,
-  graphicsPath: (process.env.BUCKET || '') + '/graphics/',
+  graphicsPath: (process.env.BUCKET || '') + '/images/',
   enableRecovery: process.env.ENABLE_RECOVERY || false
 };

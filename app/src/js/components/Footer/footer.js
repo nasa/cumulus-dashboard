@@ -1,7 +1,7 @@
 'use strict';
 
-import React from './node_modules/react';
-import PropTypes from './node_modules/prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 class Footer extends React.Component {
   constructor () {

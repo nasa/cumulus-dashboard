@@ -8,7 +8,7 @@ import {
   clearUpdateCollection
 } from '../../actions';
 import { getCollectionId } from '../../utils/format';
-import EditRaw from '../edit/edit-raw';
+import EditRaw from '../EditRaw/edit-raw';
 
 const SCHEMA_KEY = 'collection';
 

@@ -1,9 +1,9 @@
 'use strict';
 import path from 'path';
-import React from './node_modules/react';
-import PropTypes from './node_modules/prop-types';
-import { Link } from './node_modules/react-router';
-import { connect } from './node_modules/react-redux';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router';
+import { connect } from 'react-redux';
 import {
   interval,
   getPdr,
@@ -15,7 +15,7 @@ import {
   listGranules,
   getOptionsCollectionName
 } from '../../actions';
-import { get } from './node_modules/object-path';
+import { get } from 'object-path';
 import {
   granuleSearchResult,
   lastUpdated,

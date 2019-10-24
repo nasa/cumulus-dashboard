@@ -1,8 +1,8 @@
 'use strict';
-import React from './node_modules/react';
-import { withRouter } from './node_modules/react-router';
-import { connect } from './node_modules/react-redux';
-import PropTypes from './node_modules/prop-types';
+import React from 'react';
+import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { initialValueFromLocation, updateRouterLocation } from '../../utils/url-helper';
 
 class Search extends React.Component {

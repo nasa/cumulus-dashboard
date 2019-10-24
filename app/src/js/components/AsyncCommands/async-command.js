@@ -1,8 +1,9 @@
+// Will need to review: Modal needs to be put into its own component and link the actions to that component as well as ButtonGroup aka bulkactions
 'use strict';
 import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
-import Ellipsis from '../loading/loading-ellipsis';
+import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
 import { preventDefault } from '../../utils/noop';
 import { updateDelay } from '../../config';
 

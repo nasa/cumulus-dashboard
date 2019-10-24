@@ -1,9 +1,9 @@
 'use strict';
-import React from './node_modules/react';
-import PropTypes from './node_modules/prop-types';
-import { connect } from './node_modules/react-redux';
-import dagre from './node_modules/dagre-d3v4';
-import * as d3 from './node_modules/d3';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import dagre from 'dagre-d3v4';
+import * as d3 from 'd3';
 
 // dagre-d3v4 expects d3 to be attached to the window
 if (process.env.NODE_ENV !== 'test') window.d3 = d3;

@@ -1,9 +1,9 @@
 'use strict';
-import React from './node_modules/react';
-import { connect } from './node_modules/react-redux';
+import React from 'react';
+import { connect } from 'react-redux';
 import { createProvider } from '../../actions';
 import AddRecord from '../Add/add';
-import PropTypes from './node_modules/prop-types';
+import PropTypes from 'prop-types';
 
 const SCHEMA_KEY = 'provider';
 

@@ -1,7 +1,7 @@
 'use strict';
-import React from './node_modules/react';
-import PropTypes from './node_modules/prop-types';
-import { get, set } from './node_modules/object-path';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { get, set } from 'object-path';
 import { Form, formTypes } from '../Form/Form';
 import { isText, isNumber, isArray, arrayWithLength } from '../../utils/validate';
 import t from '../../utils/strings';

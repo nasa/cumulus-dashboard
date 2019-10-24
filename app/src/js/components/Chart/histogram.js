@@ -1,10 +1,10 @@
 'use strict';
-import React from './node_modules/react';
-import { get } from './node_modules/object-path';
-import { scaleLinear, scaleBand } from './node_modules/d3-scale';
-import debounce from './node_modules/lodash.debounce';
-import throttle from './node_modules/lodash.throttle';
-import PropTypes from './node_modules/prop-types';
+import React from 'react';
+import { get } from 'object-path';
+import { scaleLinear, scaleBand } from 'd3-scale';
+import debounce from 'lodash.debounce';
+import throttle from 'lodash.throttle';
+import PropTypes from 'prop-types';
 import { tally } from '../../utils/format';
 import LoadingIndicator from '../app/loading-indicator';
 

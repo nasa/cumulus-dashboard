@@ -1,12 +1,12 @@
 'use strict';
-import React from './node_modules/react';
+import React from 'react';
 import Collapse from 'react-collapsible';
-import PropTypes from './node_modules/prop-types';
-import { connect } from './node_modules/react-redux';
-import get from './node_modules/lodash.get';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import get from 'lodash.get';
 import { getExecutionStatus } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
-import { Link } from './node_modules/react-router';
+import { Link } from 'react-router';
 
 import {
   tableHeader,

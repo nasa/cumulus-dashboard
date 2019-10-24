@@ -1,19 +1,20 @@
 'use strict';
 
-import BatchAsyncCommand from '../BatchAsyncCommands/batch-async-command';
+import React from 'react';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import BatchAsyncCommand from '../BatchAsyncCommands/batch-async-command';
 import ErrorReport from '../Errors/report';
+import Loading from '../LoadingIndicator/loading-indicator';
+import Pagination from '../Pagination/pagination';
+import SortableTable from '../SortableTable/SortableTable';
+import Timer from '../Timer/timer';
+//Lodash
 import isEmpty from 'lodash.isempty';
 import isEqual from 'lodash.isequal';
 import isFunction from 'lodash.isfunction';
 import isNil from 'lodash.isnil';
-import Loading from '../LoadingIndicator/loading-indicator';
 import omitBy from 'lodash.omitby';
-import Pagination from '../pagination';
-import PropTypes from 'prop-types';
-import React from 'react';
-import SortableTable from '../SortableTable/SortableTable';
-import Timer from '../timer';
 
 class List extends React.Component {
   constructor (props) {

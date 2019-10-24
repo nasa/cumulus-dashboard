@@ -5,6 +5,10 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider as ProviderElem } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { useScroll as notHookUseScroll } from 'react-router-scroll';
+//  Fontawesome Icons Library
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSignOutAlt, faSearch, faPlus, faInfoCircle, faTimesCircle, faSave, faCalendar, faExpand, faCompress, faClock, faCaretDown, faSort, faSortDown, faSortUp, faArrowAltCircleLeft, faArrowAltCircleRight, faArrowAltCircleDown, faArrowAltCircleUp, faCopy, faEdit, faArchive, faLaptopCode, faServer, faHdd, faExternalLinkSquareAlt, faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
+library.add(faSignOutAlt, faSearch, faPlus, faInfoCircle, faTimesCircle, faSave, faCalendar, faExpand, faCompress, faClock, faCaretDown, faSort, faSortDown, faSortUp, faArrowAltCircleLeft, faArrowAltCircleRight, faArrowAltCircleDown, faArrowAltCircleUp, faCopy, faEdit, faArchive, faLaptopCode, faServer, faHdd, faExternalLinkSquareAlt, faToggleOn, faToggleOff);
 import {
   Router,
   Route,
@@ -19,6 +23,8 @@ import config from './config';
 import reducers from './reducers';
 import { refreshTokenMiddleware } from './middleware/token';
 import { requestMiddleware } from './middleware/request';
+
+import '../css/main.scss';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

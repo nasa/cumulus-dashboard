@@ -1,9 +1,9 @@
 'use strict';
-import React from './node_modules/react';
-import { connect } from './node_modules/react-redux';
-import PropTypes from './node_modules/prop-types';
-import { Link } from './node_modules/react-router';
-import { get } from './node_modules/object-path';
+import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router';
+import { get } from 'object-path';
 import {
   displayCase,
   providerLink,

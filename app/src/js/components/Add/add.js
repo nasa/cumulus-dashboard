@@ -1,13 +1,13 @@
 'use strict';
 import path from 'path';
-import React from './node_modules/react';
-import PropTypes from './node_modules/prop-types';
-import { connect } from './node_modules/react-redux';
-import { withRouter } from './node_modules/react-router';
-import { get } from './node_modules/object-path';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import { get } from 'object-path';
 import { getSchema } from '../../actions';
 import Schema from '../FormSchema/schema';
-import Loading from '../loading/loading-indicator';
+import Loading from '../LoadingIndicator/loading-indicator';
 import { updateDelay } from '../../config';
 import { strings } from '../locale';
 

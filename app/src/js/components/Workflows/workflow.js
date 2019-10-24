@@ -1,8 +1,8 @@
 'use strict';
-import React from './node_modules/react';
-import Ace from './node_modules/react-ace';
-import PropTypes from './node_modules/prop-types';
-import { connect } from './node_modules/react-redux';
+import React from 'react';
+import Ace from 'react-ace';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { listWorkflows } from '../../actions';
 import config from '../../config';
 import { setWindowEditorRef } from '../../utils/browser';
