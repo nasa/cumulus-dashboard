@@ -65,9 +65,10 @@ class CollectionOverview extends React.Component {
   }
 
   generateQuery () {
-    const options = {};
-    options.collectionId = getCollectionId(this.props.params);
-    return options;
+    const collectionId = getCollectionId(this.props.params);
+    return { 
+      collectionId
+    };
   }
 
   delete () {
@@ -138,7 +139,6 @@ class CollectionOverview extends React.Component {
           </div>
           <div className='filters filters__wlabels'>
             <Search dispatch={this.props.dispatch}
-              placeholder='Search (Name, etc.)'
               action={searchGranules}
               clear={clearGranulesSearch}
             />
@@ -173,8 +173,7 @@ CollectionOverview.propTypes = {
   dispatch: PropTypes.func,
   granules: PropTypes.object,
   collections: PropTypes.object,
-  router: PropTypes.object,
-  query: PropTypes.object
+  router: PropTypes.object
 };
 
 export default connect(state => ({
