@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import {
   getCollection,
   listGranules,
+  filterGranules,
+  clearGranulesFilter,
   deleteCollection,
   searchGranules,
   clearGranulesSearch
@@ -18,7 +20,7 @@ import {
   deleteText
 } from '../../utils/format';
 import ErrorReport from '../errors/report';
-import Dropdown from '../form/simple-dropdown';
+import Dropdown from '../form/dropdown';
 import Search from '../form/search';
 import List from '../table/list-view';
 import Overview from '../app/overview';
@@ -27,12 +29,11 @@ import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/
 import { updateDelay } from '../../config';
 import { strings } from '../locale';
 
-const statusOptions = [
-  'All',
-  'Complete',
-  'Running',
-  'Failed'
-];
+const statusOptions = {
+  Running: 'running',
+  Completed: 'completed',
+  Failed: 'failed'
+};
 
 class CollectionOverview extends React.Component {
   constructor () {
@@ -40,16 +41,10 @@ class CollectionOverview extends React.Component {
     this.displayName = 'CollectionOverview';
     this.load = this.load.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
-    this.setSearch = this.setSearch.bind(this);
     this.delete = this.delete.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
     this.errors = this.errors.bind(this);
     this.renderOverview = this.renderOverview.bind(this);
-    this.query = this.query.bind(this);
-    this.state = {
-      status: 'All',
-      search: ''
-    };
   }
 
   componentDidMount () {
@@ -70,32 +65,9 @@ class CollectionOverview extends React.Component {
   }
 
   generateQuery () {
-    const collectionId = getCollectionId(this.props.params);
-    return {
-      collectionId
-    };
-  }
-
-  setSearch (e) {
-    const value = e.currentTarget.value;
-    this.setState({ search: value }, this.query);
-  }
-
-  setSearchStatus (id, value) {
-    this.setState({ search: '', status: value }, this.query);
-  }
-
-  query () {
-    const query = this.props.query || {};
-    const { search, status } = this.state;
-    if (search) {
-      query.q = this.state.search;
-    } else if (status && status !== 'All') {
-      query.status = status.toLowerCase();
-    }
-    const { dispatch } = this.props;
-
-    dispatch(listGranules(Object.assign({ }, query)));
+    const options = {};
+    options.collectionId = getCollectionId(this.props.params);
+    return options;
   }
 
   delete () {
@@ -164,30 +136,19 @@ class CollectionOverview extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>{strings.total_granules}<span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
           </div>
-          <div>
-            <form className='search__wrapper form-group__element'>
-              <input
-                className='search'
-                type='search'
-                placeholder='Search (Name, etc.)'
-                value={this.state.search}
-                onChange={this.setSearch}/>
-              <span className='search__icon'></span>
-            </form>
+          <div className='filters filters__wlabels'>
             <Search dispatch={this.props.dispatch}
+              placeholder='Search (Name, etc.)'
               action={searchGranules}
               clear={clearGranulesSearch}
             />
-            <form className='search__wrapper form-group__element form-group__element--right'>
-              <Dropdown
-                label={'Status'}
-                value={status}
+            <Dropdown
                 options={statusOptions}
-                id={'logs-viewer-dropdown'}
-                onChange={this.setSearchStatus}
-                noNull={true}
-              />
-            </form>
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey={'status'}
+                label={'Status'}
+            />
           </div>
           <List
             list={list}
