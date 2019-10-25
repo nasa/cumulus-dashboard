@@ -6,7 +6,11 @@ import PropTypes from 'prop-types';
 import {
   getCollection,
   listGranules,
-  deleteCollection
+  filterGranules,
+  clearGranulesFilter,
+  deleteCollection,
+  searchGranules,
+  clearGranulesSearch
 } from '../../actions';
 import { get } from 'object-path';
 import {
@@ -16,6 +20,9 @@ import {
   deleteText
 } from '../../utils/format';
 import ErrorReport from '../errors/report';
+import Dropdown from '../form/dropdown';
+import Search from '../form/search';
+import statusOptions from '../../utils/status';
 import List from '../table/list-view';
 import Overview from '../app/overview';
 import AsyncCommand from '../form/async-command';
@@ -55,8 +62,7 @@ class CollectionOverview extends React.Component {
   generateQuery () {
     const collectionId = getCollectionId(this.props.params);
     return {
-      collectionId,
-      status: 'running'
+      collectionId
     };
   }
 
@@ -124,7 +130,20 @@ class CollectionOverview extends React.Component {
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>{strings.running_granules}<span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>{strings.total_granules}<span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
+          </div>
+          <div className='filters filters__wlabels'>
+            <Search dispatch={this.props.dispatch}
+              action={searchGranules}
+              clear={clearGranulesSearch}
+            />
+            <Dropdown
+                options={statusOptions}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey={'status'}
+                label={'Status'}
+            />
           </div>
           <List
             list={list}
