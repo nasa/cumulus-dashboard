@@ -45,6 +45,8 @@ import {
 
 import { strings } from './locale';
 
+import TopButton from './TopButton/TopButton';
+
 class Home extends React.Component {
   constructor () {
     super();
@@ -163,7 +165,7 @@ class Home extends React.Component {
     ];
 
     const granuleCount = get(count.data, 'granules.meta.count');
-    const numGranules = !isNaN(granuleCount) ? `(${tally(granuleCount)})` : null;
+    const numGranules = !isNaN(granuleCount) ? `${tally(granuleCount)}` : null;
     const granuleStatus = get(count.data, 'granules.count', []);
 
     return (
@@ -173,23 +175,38 @@ class Home extends React.Component {
             <h1 className='heading--xlarge'>{strings.dashboard}</h1>
           </div>
         </div>
+
         <div className='page__content page__content__nosidebar'>
+        <section className='page__section metrics--overview'>
+            <div className='row'>
+              <div className='heading__wrapper--border'>
+                <h2 className='heading--large heading--shared-content--right'>Metrics Overview</h2>
+              </div>
+              </div>
+          </section>
+
           {this.renderButtonListSection(overview, 'Updates')}
           {this.renderButtonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
           {this.renderButtonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
 
-          <section className='page__section'>
+          <section className='page__section update--granules'>
             <div className='row'>
               <div className='heading__wrapper--border'>
+                <h2 className='heading--large heading--shared-content--right'>Granules Updates</h2>
+                <Link className='link--secondary link--learn-more' to='/granules'>{strings.view_granules_overview}</Link>
+              </div>
+              <div className="heading__wrapper">
                 <h2 className='heading--medium heading--shared-content--right'>{strings.granules_updated}<span className='num--title'>{numGranules}</span></h2>
               </div>
+
               <GranulesProgress granules={granuleStatus} />
             </div>
           </section>
           <section className='page__section list--granules'>
             <div className='row'>
-              <div className='heading__wrapper--border'>
-                <h2 className='heading--medium'>{strings.granules_errors}</h2>
+              <div className='heading__wrapper'>
+                <h2 className='heading--medium heading--shared-content--right'>{strings.granules_errors}</h2>
+                <Link className='link--secondary link--learn-more' to='/logs'>{strings.view_logs}</Link>
               </div>
               <List
                 list={list}
@@ -201,8 +218,11 @@ class Home extends React.Component {
                 tableSortProps={errorTableSortProps}
                 query={this.generateQuery()}
               />
-              <Link className='link--secondary link--learn-more' to='/granules'>{strings.view_granules_overview}</Link>
             </div>
+          </section>
+
+          <section className='page__section--top'>
+            <TopButton/>
           </section>
         </div>
       </div>

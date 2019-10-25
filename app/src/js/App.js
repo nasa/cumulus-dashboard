@@ -5,6 +5,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider as ProviderElem } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { useScroll as notHookUseScroll } from 'react-router-scroll';
+
 //  Fontawesome Icons Library
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSignOutAlt, faSearch, faPlus, faInfoCircle, faTimesCircle, faSave, faCalendar, faExpand, faCompress, faClock, faCaretDown, faSort, faSortDown, faSortUp, faArrowAltCircleLeft, faArrowAltCircleRight, faArrowAltCircleDown, faArrowAltCircleUp, faCopy, faEdit, faArchive, faLaptopCode, faServer, faHdd, faExternalLinkSquareAlt, faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
@@ -46,6 +47,7 @@ import App from '..';
 import OAuth from './components/oauth';
 import Home from './components/home';
 
+//Components
 import Collections from './components/Collections';
 import CollectionList from './components/Collections/list';
 import AddCollection from './components/Collections/add';

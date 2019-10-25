@@ -1,7 +1,7 @@
 /* Colors
    ========================================================================== */
 
-$graphics: '/* @echo ASSETS_PATH */'; //bourbon
+$graphics: '/* @echo ASSETS_PATH */'; //images vendor (bourbon)
 
 //EUI Colors
 $light-green: #20ce6f;                                   
@@ -10,9 +10,12 @@ $midnight-blue: #2c3e50;
 $royal-purple: #673285;
 $dolphin-grey: #95a5a6;
 $sky-blue: #7ab5da;
+
+//Errors
 $error-red: #E74C3C;
 $error-text-red: #EC1600;
 
+//Warnings
 $yellow: #EED919;
 $orange: #F9A213;
 
@@ -23,6 +26,7 @@ $light-grey: #C4C4C4;
 $lighter-grey: #8C8C8C;
 $lightest-grey: #E2DFDF;
 $background-white: #F8F8F8;
+$white: #FFFFFF;
 
 /* Typography
    ========================================================================== */

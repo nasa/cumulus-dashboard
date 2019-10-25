@@ -1,5 +1,7 @@
 .table--wrapper {
   overflow-x: scroll;
+  border: 1px solid #ECEAEA;
+  border-radius: 8px 8px 0px 0px;
 }
 
 .pre-style {
@@ -19,8 +21,9 @@ table {
   }
 
   thead {
+    background-color: $ocean-blue;
     td {
-      color: $black;
+      color: $white;
       font-weight: $base-font-semibold;
       padding: 1em 1em 1.5em;
       font-size: .86em;
@@ -33,7 +36,7 @@ table {
       td {
         font-size: .86em;
         padding: 1em;
-        vertical-align: top;
+        vertical-align: middle;
         &:first-of-type {
           padding: 1em 0 1em 1em;
         }
@@ -59,6 +62,8 @@ table {
     max-width: 300px;
   }
 }
+
+// Overview Number Card Group //
 
 .overview-num__wrapper {
   @include clearfix;
@@ -105,15 +110,36 @@ table {
 }
 
 .timeline--processing--overall {
+  background-color: #fff;
+  padding: 1.5em 1em .5em;
+  display: inline-block;
+  border-radius: .5em;
+  border: 1px solid #eceaea;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.08);
+  text-align: center;
   font-size: .86em;
+  width: 615px;
+  height: 70px;
+  margin: .8em 1.5em .8em 0;
+  float: left;
+  color: #8C8C8C;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s ease 0s;
+  overflow: hidden;
+  clear: right;
+  display: flex;
+  flex-direction: row;
+  /*font-size: .86em;
   color: $lighter-grey;
-  margin: 3em 0;
+  margin: 3em 0;*/
   li {
     display: inline-block;
     position: relative;
-    margin-right: 2em;
-    padding-right: 10%;
-    &:after {
+    /*margin-right: 2em;
+    padding-right: 10%;*/
+    flex: 1;
+    /*&:after {
       content: '';
       background-image: url(#{$graphics}layout/chevron-right-green.svg);
       background-size: 15px 25px;
@@ -125,7 +151,7 @@ table {
       top: 1em;
       right: 15%;
       position: absolute;
-    }
+    }*/
     &:last-child {
       margin-right: 0;
       &:after {
@@ -135,9 +161,10 @@ table {
   }
 }
 
-.timeline--processing--failed {
+/*.timeline--processing--failed {
   color: $error-text-red;
-}
+}*/
+
 .num--large {
   display: block;
   font-size: 2.4em;
@@ -151,6 +178,10 @@ table {
   font-weight: $base-font-semibold;
   color: $midnight-blue;
 }
+
+// Pagination - Top //
+
+// Pagination - Bottom //
 
 .pagination {
   margin: 2em auto 0;
@@ -171,18 +202,42 @@ table {
   a:hover {
     color: $ocean-blue;
   }
-  .next, .previous {
-    position: absolute;
+
+  .next, .previous{
+    position: relative;
     top: 0;
     border-bottom: none;
   }
-  .next {
-    right: 0;
+
+  .next{
+    &:before{
+      color: $ocean-blue;
+      position: absolute;
+      font-family: 'Font Awesome 5 Free';
+      content: '\f0a9';
+      font-weight: 900;
+      top: 1px;
+      left: 40px;
+    }
   }
+
   .previous {
-    left: 0;
+    &:before{
+      color: $ocean-blue;
+      position: absolute;
+      font-family: 'Font Awesome 5 Free';
+      content: '\f0a8';
+      font-weight: 900;
+      top: 1px;
+      left: -14px;
+    }
   }
+
   .pagination__link--disabled {
+    cursor: default;
+    color: $lightest-grey;
+  }
+  .pagination__link--disabled:before {
     cursor: default;
     color: $lightest-grey;
   }
@@ -198,6 +253,18 @@ table {
     transition: all 0.3s ease 0s;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
+  }
+
+  .pagination__link--position{
+    position: absolute;
+  }
+
+  .pagination__link--position.next {
+    right: 20px;
+  }
+
+  .pagination__link--position.previous {
+    left: 20px;
   }
 }
 
@@ -216,14 +283,18 @@ table {
   }
 }
 
+// Table Sorting Feature //
+
 .table__sort {
   cursor: pointer;
   position: relative;
   padding-right: 10px;
   &:after {
+    color: $white;
     position: absolute;
-    background-image: url(#{$graphics}layout/toggle.svg);
-    content: ' ';
+    font-family: 'Font Awesome 5 Free';
+    content: '\f0dc';
+    font-weight: 900;
     width: 10px;
     height: 13px;
     background-size: 10px 13px;
@@ -246,15 +317,26 @@ table {
 
 .table__sort--desc {
   &:after {
-    background-image: url(#{$graphics}layout/chevron-down.svg);
-    top: 17px;
+    color: $white;
+    position: absolute;
+    font-family: 'Font Awesome 5 Free';
+    content: '\f0dd';
+    font-weight: 900;
+    top: 5px;
   }
 }
 .table__sort--asc {
   &:after {
-    background-image: url(#{$graphics}layout/chevron-up.svg);
+    color: $white;
+    position: absolute;
+    font-family: 'Font Awesome 5 Free';
+    content: '\f0de';
+    font-weight: 900;
+    top: 5px;
   }
 }
+
+// Table Progress Feature //
 
 .table__progress {
   min-width: 160px;
@@ -308,14 +390,39 @@ table {
   }
 }
 
+// Table - Granule Status //
+
 .table__main-asset {
-  .granule__status--running, .granule__status--running:visited {
-    color: $orange;
-  }
-  .granule__status--completed, .granule__status--completed:visited {
-    color: $light-green;
-  }
+  .granule__status--running, .granule__status--running:visited, 
+  .granule__status--completed, .granule__status--completed:visited,
   .granule__status--failed, .granule__status--failed:visited {
-    color: $error-red;
+    color: $ocean-blue;
   }
+}
+
+/**********************************
+  Table Form Options
+***********************************/
+.options--top{
+  background-color: $white;
+  height: 45px;
+  padding: 21px 35px 0px 35px;
+  display: flex;
+  flex-direction: row;
+  
+}
+
+.options li{
+  display: inline-block;
+  font-weight: 500;
+  font-size: $base-font-size;
+  flex: 1;
+  margin-right: 50px;
+}
+
+.options input[type=text] {
+  width: 25px;
+  box-sizing: border-box;
+  margin-left: 5px;
+  margin-right: 5px;
 }

@@ -1,5 +1,9 @@
-// IE < 10
-// Don't delete.
+/**********************************************************************
+  This stylesheet is the core and general styles for the application. 
+**********************************************************************/
+
+/******** If Browser IE < 10 - Don't delete. *****/
+
 .lt-ie10 {
   #site-canvas {
     display: none;
@@ -17,7 +21,12 @@
   }
 }
 
-// Scss starts here!
+/**************************************************/
+
+/**************************************************
+  General
+**************************************************/
+
 html {
   font-size: $root-font-size;
   height: 100%;
@@ -83,15 +92,16 @@ a:active {
 
 .link--secondary, .link--secondary:visited {
   color: $ocean-blue;
-  font-weight: $base-font-semibold;
-  border-bottom: 2px solid $ocean-blue;
-  padding-bottom: .3em;
+  font-size: .88em;
+  font-weight: $base-font-regular;
+  border-bottom: 1px solid $ocean-blue;
+  /*padding-bottom: .3em;*/
   transition: all 0.3s ease 0s;
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
   &:hover {
     color: $light-green;
-    border-bottom: 2px solid $light-green;
+    border-bottom: 1px solid $light-green;
   }
 }
 
@@ -104,8 +114,9 @@ a:active {
 }
 
 .link--learn-more {
-  margin-top: 2em;
+  margin-top: 1em;
   display: inline-block;
+  float: right;
 }
 
 .description {
@@ -115,6 +126,10 @@ a:active {
   font-size: .86em;
   line-height: 1.6em;
 }
+
+/**************************************************
+  Header & Navigation (Includes Sidebar)
+**************************************************/
 
 .header {
   background-color: $ocean-blue;
@@ -129,8 +144,12 @@ a:active {
       width: 165px;
     }
   }
+  nav{
+    height: 4.688em;
+  }
   nav ul {
     display: flex;
+    height: 47px;
   }
   nav li {
     padding: 1.5em 0 1.2em;
@@ -144,9 +163,9 @@ a:active {
     }
     &.active,
     &:hover {
-      border-bottom: 1px solid #fff;
+      border-bottom: 1px solid $white;
       a {
-        color: #fff;
+        color: $white;
       }
     }
     &.rightalign {
@@ -166,11 +185,15 @@ a:active {
 .nav__order-7 { order: 7 };
 .nav__order-8 { order: 8 };
 
+.svg-inline--fa.fa-w-16{
+  padding-right: 5px;
+}
+
 .content__header {
   background-color: $ocean-blue;
-  color: #fff;
-  padding-top: 7em;
-  padding-bottom: 1em;
+  color: $white;
+  padding-top: 2em;
+  padding-bottom: 2em;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
 
   h1 {
@@ -179,8 +202,10 @@ a:active {
 }
 
 .content__header--lg {
-  padding-top: 10em;
+  padding-top: 3em;
 }
+
+//Sidebar//
 
 .wrapper__sidebar{
   position: relative;
@@ -244,7 +269,7 @@ a:active {
 }
 
 .page__content__nosidebar {
-  margin-top: 4em;
+  margin-top: 2em;
 }
 
 .page__content {
@@ -265,15 +290,19 @@ a:active {
 }
 
 .page__section {
-  margin-bottom: 7em;
+  margin-bottom: 3em;
   @extend .clearfix;
   &:first-of-type {
-    margin-bottom: 4em;
+    margin-bottom: 2em;
   }
 }
 
 .page__section--small {
-  margin-bottom: 3em;
+  margin-bottom: 2em;
+}
+
+.page__section.update--granules{
+  margin-bottom: 2em;
 }
 
 .metadata__updated, .label__description {
@@ -290,6 +319,10 @@ a:active {
     border-left: 1px solid lighten($lighter-grey, 20%);
   }
 }
+
+/**************************************************
+  Progress Bar
+**************************************************/
 
 .progress-bar {
   height: 5px;
@@ -420,6 +453,9 @@ a:active {
   }
 }
 
+/**************************************************
+  Table
+**************************************************/
 .list-view {
   dt {
     font-weight: $base-font-bold;
@@ -517,4 +553,13 @@ a:active {
 
 .api__warning {
   color: $error-red;
+}
+
+.top{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin-top: 30px;
+  margin-bottom: 45px;
+
 }

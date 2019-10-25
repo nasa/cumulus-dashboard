@@ -1,9 +1,11 @@
-.button, .button:visited, .subform__item--last .subform__button {
-  padding: .65em 2em;
+.button, .subform__item--last .subform__button {
+  position: relative;
+  padding: .65em 1.2em .65em 2.5em;
   border-radius: 4px;
-  background-color: $light-green;
-  color: #fff;
+  color: $white;
+  background-color: $ocean-blue;
   font-weight: $base-font-regular;
+  text-align: center;
   border: none;
   transition: all 0.3s ease 0s;
   -webkit-transition: all 0.3s;
@@ -15,6 +17,220 @@
     background-color: transparent;
     padding: 0;
   }
+
+  &:visited {
+    color: $white;
+  }
+
+  &:disabled{
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  &--white{
+    color: $midnight-blue;
+    background-color: $white;
+  }
+
+  &--primary, &--primary{
+    &:hover, &:visited {
+      background-color: darken($light-green, 5%);
+      color: $white;
+      border: 0;
+    }
+  }
+  
+  &--secondary, &--secondary{
+    &:hover, &:visited {
+      background-color: $dolphin-grey;
+    }
+  }
+  
+  &--small{
+    font-size: .86em;
+    padding: .4em 1.5em .3em 2.5em;
+  }
+  
+  &--large{
+    padding: .7em 2em;
+    font-weight: $base-font-bold;
+    font-size: 1em;
+  }
+  
+  &--loading {
+    position: relative;
+    display: inline-block;
+    .spinner {
+      position: absolute;
+      top: 6px;
+      left: 0;
+      width: 100%;
+    }
+    color: $light-green;
+  }
+
+  &--top{
+    background-color: $light-green;
+    color: $white;
+    border: none;
+    border-radius: 4px;
+    padding: .65em 1.2em .65em 2.5em;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+  
+    &:before{
+      color: $white;
+      position: absolute;
+      font-family: 'Font Awesome 5 Free';
+      content: '\f0aa';
+      font-weight: 900;
+      left: 10px;
+      
+    } 
+  }
+  
+  /*******ButtonGroup & Group CTA******/
+  
+    &--add {
+      background-color: $light-green;
+      
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f067';
+        font-weight: 900;
+        top: 4px;
+        left: 10px;
+      } 
+    }
+  
+    &--cancel {
+      background-color: $dolphin-grey;
+      
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f057';
+        font-weight: 900;
+        left: 10px;
+        
+      } 
+    }
+  
+    &--edit {
+      background-color: $light-green;
+    
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f044';
+        font-weight: 900;
+        left: 10px;
+        
+      } 
+    }
+  
+    &--delete {
+      background-color: $error-red;
+    
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f187';
+        font-weight: 900;
+        left: 10px;
+        
+      } 
+    }
+  
+    &--remove {
+      background-color: $light-green;
+      
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f0a0';
+        font-weight: 900;
+        left: 10px;
+        
+      } 
+    }
+  
+    &--execute{
+      background-color: $light-green;
+      
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f5fc';
+        font-weight: 900;
+        left: 10px;
+        
+      } 
+    }
+  
+    &--reingest{
+      background-color: $light-green;
+      
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f233';
+        font-weight: 900;
+        left: 10px;
+        
+      } 
+    }
+  
+    &--download{
+      background-color: $light-green;
+    
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f0ab';
+        font-weight: 900;
+        left: 10px;
+        
+      } 
+    }
+  
+    &--copy{
+      background-color: $light-green;
+    
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f0c5';
+        font-weight: 900;
+        left: 10px;
+        
+      } 
+    }
+  
+    &--confirm, &--submit{
+      background-color: $light-green;
+    
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f0c7';
+        font-weight: 900;
+        left: 10px;
+        
+      } 
+    }
 }
 
 .button--green, .button--green:visited, .subform__item--last .subform__button {
@@ -39,10 +255,6 @@
   padding: .7em 2em;
   font-weight: $base-font-bold;
   font-size: 1em;
-}
-
-.button--secondary, .button--secondary:visited {
-  background-color: $dolphin-grey;
 }
 
 .button__addcollections {

@@ -13,16 +13,17 @@ const baseConfig = {
   minCompatibleApiVersion: '1.14.2',
   oauthMethod: 'earthdata',
 
-  graphicsPath: '/graphics/',
+  graphicsPath: 'app/src/assets/images/',
 
   // settings for Ace editor
   editorTheme: 'github',
   tabSize: 2,
 
-  // list queries
+  // list queries // This is static we need to change this for dynamic table page results
   pageLimit: 50,
 
   searchPageLimit: 7,
+  //
 
   // auto-update frequency
   updateInterval: 15000,
