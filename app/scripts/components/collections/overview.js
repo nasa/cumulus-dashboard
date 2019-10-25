@@ -22,18 +22,13 @@ import {
 import ErrorReport from '../errors/report';
 import Dropdown from '../form/dropdown';
 import Search from '../form/search';
+import statusOptions from '../../utils/status';
 import List from '../table/list-view';
 import Overview from '../app/overview';
 import AsyncCommand from '../form/async-command';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
 import { updateDelay } from '../../config';
 import { strings } from '../locale';
-
-const statusOptions = {
-  Running: 'running',
-  Completed: 'completed',
-  Failed: 'failed'
-};
 
 class CollectionOverview extends React.Component {
   constructor () {
