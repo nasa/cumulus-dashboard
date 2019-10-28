@@ -10,8 +10,7 @@ class TableOptions extends React.Component {
   render() {
     return (
       <div className="options">
-        <div className="row">
-          <ul>
+          <ul className="form__options">
             <li className="records">Show <span className="data-record">all 100</span> Records</li>
             <li className="pager">
               <Pagination
@@ -22,9 +21,8 @@ class TableOptions extends React.Component {
                 showPages={this.props.showPages}
               />
             </li>
-            <li className="amount">Show Options</li>
+            <li className="amount">Show<input type="text" value={this.props.page}></input>per table</li>
           </ul>
-        </div>
       </div>
 
     );

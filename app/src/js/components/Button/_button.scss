@@ -78,6 +78,7 @@
     display: flex;
     justify-content: center;
     align-content: center;
+    position: relative;
   
     &:before{
       color: $white;
@@ -85,7 +86,7 @@
       font-family: 'Font Awesome 5 Free';
       content: '\f0aa';
       font-weight: 900;
-      left: 10px;
+      left: 13px;
       
     } 
   }
@@ -94,6 +95,7 @@
   
     &--add {
       background-color: $light-green;
+      position: relative;
       
       &:before{
         color: $white;
@@ -108,6 +110,7 @@
   
     &--cancel {
       background-color: $dolphin-grey;
+      position: relative;
       
       &:before{
         color: $white;
@@ -122,6 +125,7 @@
   
     &--edit {
       background-color: $light-green;
+      position: relative;
     
       &:before{
         color: $white;
@@ -136,6 +140,7 @@
   
     &--delete {
       background-color: $error-red;
+      position: relative;
     
       &:before{
         color: $white;
@@ -150,6 +155,7 @@
   
     &--remove {
       background-color: $light-green;
+      position: relative;
       
       &:before{
         color: $white;
@@ -164,6 +170,7 @@
   
     &--execute{
       background-color: $light-green;
+      position: relative;
       
       &:before{
         color: $white;
@@ -178,6 +185,7 @@
   
     &--reingest{
       background-color: $light-green;
+      position: relative;
       
       &:before{
         color: $white;
@@ -192,6 +200,7 @@
   
     &--download{
       background-color: $light-green;
+      position: relative;
     
       &:before{
         color: $white;
@@ -206,6 +215,7 @@
   
     &--copy{
       background-color: $light-green;
+      position: relative;
     
       &:before{
         color: $white;
@@ -220,6 +230,7 @@
   
     &--confirm, &--submit{
       background-color: $light-green;
+      position: relative;
     
       &:before{
         color: $white;

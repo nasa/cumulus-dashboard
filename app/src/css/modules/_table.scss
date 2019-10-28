@@ -1,7 +1,8 @@
 .table--wrapper {
   overflow-x: scroll;
-  border: 1px solid #ECEAEA;
+  /*border: 1px solid #ECEAEA;
   border-radius: 8px 8px 0px 0px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.08);*/
 }
 
 .pre-style {
@@ -49,6 +50,17 @@ table {
       }
     }
   }
+}
+
+.list-view {
+  position: relative;
+  margin-top: 10px;
+}
+
+.list__wrapper{
+  border: 1px solid #eceaea;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
 }
 
 .list--granules {
@@ -187,6 +199,7 @@ table {
   margin: 2em auto 0;
   text-align: center;
   position: relative;
+  padding-bottom: 25px;
   li {
     display: inline-block;
     margin: 0 .4em;
@@ -260,11 +273,11 @@ table {
   }
 
   .pagination__link--position.next {
-    right: 20px;
+    right: 40px;
   }
 
   .pagination__link--position.previous {
-    left: 20px;
+    left: 40px;
   }
 }
 
@@ -403,21 +416,21 @@ table {
 /**********************************
   Table Form Options
 ***********************************/
-.options--top{
+.form__options{
   background-color: $white;
   height: 45px;
   padding: 21px 35px 0px 35px;
   display: flex;
   flex-direction: row;
+  border-radius: 10px 10px 0 0;
   
 }
 
-.options li{
+.form__options li{
   display: inline-block;
   font-weight: 500;
   font-size: $base-font-size;
   flex: 1;
-  margin-right: 50px;
 }
 
 .options input[type=text] {
@@ -425,4 +438,15 @@ table {
   box-sizing: border-box;
   margin-left: 5px;
   margin-right: 5px;
+}
+
+.amount {
+  text-align: right;
+}
+
+.pager .pagination {
+  margin: 0;
+}
+.data-record{
+  font-weight: 700;
 }

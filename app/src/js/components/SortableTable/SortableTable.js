@@ -80,58 +80,60 @@ class Table extends React.Component {
 
     return (
       <div className='table--wrapper'>
-        <table>
-          <thead>
-            <tr>
-              {canSelect && <td/> }
-              {header.map((h, i) => {
-                let className = (isTableDumb || props[i]) ? 'table__sort' : '';
-                if (i === sortIdx) { className += (' table__sort--' + order); }
+        <form>
+          <table>
+            <thead>
+              <tr>
+                {canSelect && <td/> }
+                {header.map((h, i) => {
+                  let className = (isTableDumb || props[i]) ? 'table__sort' : '';
+                  if (i === sortIdx) { className += (' table__sort--' + order); }
+                  return (
+                    <td
+                      className={className}
+                      key={h}
+                      data-value={h}
+                      onClick={this.changeSort}>{h}
+                    </td>
+                  );
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((d, i) => {
+                const dataId = typeof rowId === 'function' ? rowId(d) : d[rowId];
+                const checked = canSelect && selectedRows.indexOf(dataId) !== -1;
                 return (
-                  <td
-                    className={className}
-                    key={h}
-                    data-value={h}
-                    onClick={this.changeSort}>{h}
-                  </td>
+                  <tr key={i} data-value={dataId} onClick={this.select}>
+                    {canSelect &&
+                      <td>
+                        <input type={'checkbox'} checked={checked} readOnly/>
+                      </td>
+                    }
+                    {row.map((accessor, k) => {
+                      let className = k === primaryIdx ? 'table__main-asset' : '';
+                      let text;
+
+                      if (typeof accessor === 'function') {
+                        text = accessor(d, k, data);
+                      } else {
+                        text = get(d, accessor, nullValue);
+                      }
+                      return <td key={String(i) + String(k) + text} className={className}>{text}</td>;
+                    })}
+                    {collapsible &&
+                      <td>
+                        <Collapse trigger={'More Details'} triggerWhenOpen={'Less Details'}>
+                          <pre className={'pre-style'}>{JSON.stringify(d.eventDetails, null, 2)}</pre>
+                        </Collapse>
+                      </td>
+                    }
+                  </tr>
                 );
               })}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((d, i) => {
-              const dataId = typeof rowId === 'function' ? rowId(d) : d[rowId];
-              const checked = canSelect && selectedRows.indexOf(dataId) !== -1;
-              return (
-                <tr key={i} data-value={dataId} onClick={this.select}>
-                  {canSelect &&
-                    <td>
-                      <input type={'checkbox'} checked={checked} readOnly/>
-                    </td>
-                  }
-                  {row.map((accessor, k) => {
-                    let className = k === primaryIdx ? 'table__main-asset' : '';
-                    let text;
-
-                    if (typeof accessor === 'function') {
-                      text = accessor(d, k, data);
-                    } else {
-                      text = get(d, accessor, nullValue);
-                    }
-                    return <td key={String(i) + String(k) + text} className={className}>{text}</td>;
-                  })}
-                  {collapsible &&
-                    <td>
-                      <Collapse trigger={'More Details'} triggerWhenOpen={'Less Details'}>
-                        <pre className={'pre-style'}>{JSON.stringify(d.eventDetails, null, 2)}</pre>
-                      </Collapse>
-                    </td>
-                  }
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </form>
       </div>
     );
   }

@@ -230,36 +230,37 @@ class List extends React.Component {
         {list.inflight && <Loading/>}
         {list.error && <ErrorReport report={list.error} truncate={true}/>}
         {bulkActionError && <ErrorReport report={bulkActionError}/>}
-
-        <TableOptions
-          count={count}
-          limit={limit}
-          page={page}
-          onNewPage={this.queryNewPage}
-          showPages={false}
-        />
-        
-        <SortableTable
-          primaryIdx={primaryIdx}
-          data={list.data}
-          header={tableHeader}
-          row={tableRow}
-          props={tableSortProps}
-          sortIdx={sortIdx}
-          order={order}
-          changeSortProps={this.queryNewSort}
-          onSelect={this.updateSelection}
-          canSelect={hasActions}
-          selectedRows={selected}
-          rowId={rowId}
-        />
-        <Pagination
-          count={count}
-          limit={limit}
-          page={page}
-          onNewPage={this.queryNewPage}
-          showPages={true}
-        />
+        <div className = "list__wrapper">
+          <TableOptions
+            count={count}
+            limit={limit}
+            page={page}
+            onNewPage={this.queryNewPage}
+            showPages={false}
+          />
+          
+          <SortableTable
+            primaryIdx={primaryIdx}
+            data={list.data}
+            header={tableHeader}
+            row={tableRow}
+            props={tableSortProps}
+            sortIdx={sortIdx}
+            order={order}
+            changeSortProps={this.queryNewSort}
+            onSelect={this.updateSelection}
+            canSelect={hasActions}
+            selectedRows={selected}
+            rowId={rowId}
+          />
+          <Pagination
+            count={count}
+            limit={limit}
+            page={page}
+            onNewPage={this.queryNewPage}
+            showPages={true}
+          />
+        </div>
       </div>
     );
   }

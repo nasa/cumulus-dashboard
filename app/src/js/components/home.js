@@ -107,9 +107,9 @@ class Home extends React.Component {
     const data = items.filter(d => d[0] !== nullValue);
     if (!data.length) return null;
     return (
-      <section className='page_section'>
+      <section className='page__section'>
         <div className='row'>
-          <div className='heading__wrapper--border'>
+          <div className='heading__wrapper'>
               <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
           </div>
           <ul id={listId}>

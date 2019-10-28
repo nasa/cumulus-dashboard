@@ -69,6 +69,23 @@ select {
 .filter__item {
   display: inline-block;
   vertical-align: bottom;
+  position: relative;
+}
+
+.filter__icon{
+  &:after {
+    color: $ocean-blue;
+    position: absolute;
+    font-family: 'Font Awesome 5 Free';
+    content: '\f0d7';
+    font-weight: 900;
+    width: 14px;
+    height: 14px;
+    background-size: 14px 14px;
+    display: block;
+    right: .8em;
+    top: .5em;
+  }
 }
 
 .form--controls {
@@ -141,10 +158,6 @@ select {
   }
 }
 
-.list-view {
-  position: relative;
-}
-
 .form-group__element {
   margin-right: 1em;
 }
@@ -203,7 +216,7 @@ select {
 .form__element__updateToggle-noHeader {
   position: absolute;
   right: 0;
-  top: -5.5rem;
+  top: -3.2rem;
 }
 
 .form-group__element--right {
