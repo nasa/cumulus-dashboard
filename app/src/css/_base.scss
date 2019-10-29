@@ -293,7 +293,7 @@ a:active {
   margin-bottom: 3em;
   @extend .clearfix;
   &:first-of-type {
-    margin-bottom: 2em;
+    margin-bottom: 0em; /* This is temporary until we had the datepicker component */
   }
 }
 

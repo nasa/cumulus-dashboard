@@ -1,5 +1,6 @@
 import React from 'react';
 import Pagination from '../Pagination/Pagination';
+import ShowRecords from '../ShowRecords/ShowRecords';
 import PropTypes from 'prop-types';
 
 class TableOptions extends React.Component {
@@ -11,7 +12,9 @@ class TableOptions extends React.Component {
     return (
       <div className="options">
           <ul className="form__options">
-            <li className="records">Show <span className="data-record">all 100</span> Records</li>
+            <li className="records">
+              {/*<ShowRecords/>*/}
+            </li>
             <li className="pager">
               <Pagination
                 count={this.props.count}
@@ -21,7 +24,7 @@ class TableOptions extends React.Component {
                 showPages={this.props.showPages}
               />
             </li>
-            <li className="amount">Show<input type="text" value={this.props.page}></input>per table</li>
+            <li className="amount">{/*Show <input type="text" value={this.props.page}></input>per table*/}</li>
           </ul>
       </div>
 

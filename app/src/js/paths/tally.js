@@ -15,7 +15,7 @@ function tallyFn (route, count) {
 
   // clone and set the tally
   const copy = route.slice();
-  copy[0] += ` (${tally(value)})`;
+  copy[0] += ` ${tally(value)}`;
   return copy;
 }
 export default tallyFn;

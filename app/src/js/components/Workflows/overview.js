@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { tally } from '../../utils/format';
+import Search from '../Search/search';
 import {
   listWorkflows
 } from '../../actions';
@@ -19,6 +20,11 @@ const tableRow = [
   'definition.Comment'
 ];
 
+const tableSortProps = [
+  'name',
+  'aws link',
+];
+
 class WorkflowOverview extends React.Component {
   render () {
     const { list } = this.props.workflows;
@@ -30,8 +36,16 @@ class WorkflowOverview extends React.Component {
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>All Workflows <span className='num--title'>{count ? ` (${tally(count)})` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>All Workflows <span className='num--title'>{count ? ` ${tally(count)}` : null}</span></h2>
           </div>
+          {/* Someone needs to define the search parameters for workflows, e.g. steps, collections, granules, etc. }*/}
+          {/*<div className='filters'>
+            <Search dispatch={this.props.dispatch}
+              action={searchWorkflows}
+              format={collectionWorkflows}
+              clear={clearWorklflowsSearch}
+            />
+            </div>*/}
 
           <List
             list={list}
@@ -39,8 +53,9 @@ class WorkflowOverview extends React.Component {
             action={listWorkflows}
             tableHeader={tableHeader}
             tableRow={tableRow}
-            tableSortProps={[]}
+            tableSortProps={tableSortProps}
             query={{}}
+            sortIdx={1}
             rowId={'name'}
           />
         </section>

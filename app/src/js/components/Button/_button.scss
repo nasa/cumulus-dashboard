@@ -245,6 +245,8 @@
 }
 
 .button--green, .button--green:visited, .subform__item--last .subform__button {
+  background-color: $light-green;
+
   &:hover {
     background-color: darken($light-green, 5%);
     color: #fff;

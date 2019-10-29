@@ -692,11 +692,12 @@ export const queryHistogram = (options) => ({
   }
 });
 
-export const listWorkflows = () => ({
+export const listWorkflows = (options) => ({
   [CALL_API]: {
     type: types.WORKFLOWS,
     method: 'GET',
-    url: url.resolve(root, 'workflows')
+    url: url.resolve(root, 'workflows'),
+    qs: Object.assign({ limit: pageLimit }, options)
   }
 });
 

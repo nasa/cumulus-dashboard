@@ -96,7 +96,7 @@ Pagination.propTypes = {
   limit: PropTypes.number,
   count: PropTypes.number,
   onNewPage: PropTypes.func,
-  //showPages: PropTypes.boolean,
+  showPages: PropTypes.boolean,
 };
 
 export default Pagination;
