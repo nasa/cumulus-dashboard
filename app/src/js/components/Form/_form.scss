@@ -42,13 +42,10 @@ label {
   border-radius: .5em;
   position: relative;
   &:after {
-    background-image: url(#{$graphics}layout/chevron-down.svg);
-    content: '';
-    width: 10px;
-    height: 10px;
-    background-size: 10px 10px;
-    display: block;
     position: absolute;
+    font-family: 'Font Awesome 5 Free';
+    content: '\f078';
+    font-weight: 900;
     right: 1em;
     top: .6em;
   }
@@ -110,14 +107,11 @@ select {
 .search__icon {
   &:after {
     position: absolute;
-    background-image: url(#{$graphics}layout/magnifier-left.svg);
-    content: '';
-    width: 14px;
-    height: 14px;
-    background-size: 14px 14px;
-    display: block;
+    font-family: 'Font Awesome 5 Free';
+    content: '\f002';
+    font-weight: 900;
     right: .8em;
-    top: .5em;
+    top: .34em;
   }
 }
 
@@ -199,15 +193,17 @@ select {
 
 .form__element__refresh {
   position: absolute;
-  left: -2px;
-  top: 2px;
+  left: -.3em;
+  top: -.2em;
   display: inline-block;
-  background-image: url(#{$graphics}layout/refresh.svg);
-  width: 12px;
-  height: 12px;
-  background-size: 12px;
-  cursor: pointer;
-  transition: transform 0.2s;
+  &:before {
+    font-family: 'Font Awesome 5 Free';
+    content: '\f021';
+    color: $ocean-blue;
+    font-weight: 900;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
   &:hover {
     transform: rotate(0.1turn);
   }

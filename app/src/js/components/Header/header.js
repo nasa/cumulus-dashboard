@@ -9,6 +9,7 @@ import { window } from '../../utils/browser';
 import { strings } from '../locale';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+
 const paths = [
   ['PDRs', '/pdrs'],
   ['Providers', '/providers'],

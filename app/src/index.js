@@ -6,6 +6,7 @@ import { displayCase } from './js/utils/format';
 
 import Header from './js/components/Header/header';
 import Footer from './js/components/Footer/footer';
+import TopButton from './js/components/TopButton/TopButton';
 
 class App extends React.Component {
   constructor () {
@@ -25,6 +26,9 @@ class App extends React.Component {
         <main className='main' role='main'>
           {this.props.children}
         </main>
+        <section className='page__section--top'>
+            <TopButton/>
+          </section>
         <Footer api={this.props.api} apiVersion={this.props.apiVersion} />
       </div>
     );

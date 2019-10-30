@@ -309,14 +309,13 @@
   cursor: pointer;
   &:before {
     position: absolute;
-    background-image: url(#{$graphics}layout/arrow-right.svg);
+    /*color: $white;*/
+    font-family: 'Font Awesome 5 Free';
+    content: '\f061';
+    font-weight: 900;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s;
-    content: '';
-    background-size: 15px 10px;
-    width: 15px;
-    height: 10px;
   }
 }
 
@@ -326,7 +325,7 @@
 
 .button__arrow:before {
   left: 130%;
-  top: 1.1em;
+  top: .75em;
 }
 
 .button__arrow:hover:before {
@@ -343,13 +342,21 @@
 
 .button__arrow--white {
   &:before {
-    background-image: url(#{$graphics}layout/arrow-right-white.svg);
+    position: absolute;
+    color: $white;
+    font-family: 'Font Awesome 5 Free';
+    content: '\f061';
+    font-weight: 900;
   }
 }
 
 .button__cancel {
   &:before {
-    background-image: url(#{$graphics}layout/sm-xmark.svg);
+    color: $white;
+    position: absolute;
+    font-family: 'Font Awesome 5 Free';
+    content: '\f057';
+    font-weight: 900;
   }
 }
 
@@ -390,12 +397,11 @@
   padding: .6em 2em .2em;
   &:before {
     position: absolute;
-    content: '';
-    background-size: 15px 15px;
-    width: 15px;
-    height: 15px;
-    display: inline-block;
-    background-image: url(#{$graphics}layout/cog.svg);
+    color: $white;
+    position: absolute;
+    font-family: 'Font Awesome 5 Free';
+    content: '\f013';
+    font-weight: 900;
     left: 1.4em;
     top: .45em;
   }

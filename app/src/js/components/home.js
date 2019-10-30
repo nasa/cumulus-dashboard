@@ -220,10 +220,6 @@ class Home extends React.Component {
               />
             </div>
           </section>
-
-          <section className='page__section--top'>
-            <TopButton/>
-          </section>
         </div>
       </div>
     );

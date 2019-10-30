@@ -26,7 +26,7 @@ table {
     td {
       color: $white;
       font-weight: $base-font-semibold;
-      padding: 1em 1em 1.5em;
+      padding: 1em 2em 1.5em;
       font-size: .86em;
     }
   }
@@ -36,10 +36,10 @@ table {
       border-bottom: 1px solid $lightest-grey;
       td {
         font-size: .86em;
-        padding: 1em;
+        padding: 1em 2em;
         vertical-align: middle;
         &:first-of-type {
-          padding: 1em 0 1em 1em;
+          padding: 1em 0 1em 2em;
         }
       }
       .table__main-asset {
