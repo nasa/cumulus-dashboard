@@ -13,7 +13,7 @@ const baseConfig = {
   minCompatibleApiVersion: '1.14.2',
   oauthMethod: 'earthdata',
 
-  graphicsPath: 'app/src/assets/images/',
+  graphicsPath: '/src/assets/images/',
 
   // settings for Ace editor
   editorTheme: 'github',

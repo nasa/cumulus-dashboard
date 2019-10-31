@@ -27,6 +27,14 @@
     pointer-events: none;
   }
 
+  &:hover{
+    background-color: $midnight-blue;
+  }
+
+  &--oauth{
+    padding: 1em;
+  }
+
   &--white{
     color: $midnight-blue;
     background-color: $white;
@@ -89,7 +97,15 @@
       left: 13px;
       
     } 
+
+    &:hover{
+      &:hover {
+        background-color: darken($light-green, 5%);
+      }
+    }
   }
+
+ 
   
   /*******ButtonGroup & Group CTA******/
   
@@ -242,6 +258,7 @@
         
       } 
     }
+
 }
 
 .button--green, .button--green:visited, .subform__item--last .subform__button {

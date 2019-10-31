@@ -301,6 +301,19 @@ a:active {
   margin-bottom: 2em;
 }
 
+.page__section--top{
+  margin-bottom: 45px;
+}
+
+.top{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.top span{
+  font-weight: 700;
+}
 .page__section.update--granules{
   margin-bottom: 2em;
 }
@@ -555,11 +568,7 @@ a:active {
   color: $error-red;
 }
 
-.top{
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  margin-top: 30px;
-  margin-bottom: 45px;
-
+.footer{
+  border-top: 1px solid #E2DFDF;
+  padding-top: 25px;
 }

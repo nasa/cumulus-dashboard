@@ -146,6 +146,7 @@ const doBuild = (done) => {
 
 gulp.task('build', gulp.parallel(doBuild));
 
+
 gulp.task('styles', function () {
   return gulp.src('app/src/css/main.scss')
     .pipe($.plumber(function (e) {

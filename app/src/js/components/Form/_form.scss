@@ -47,13 +47,13 @@ label {
     content: '\f078';
     font-weight: 900;
     right: 1em;
-    top: .6em;
+    top: .1em;
   }
 }
 
-select {
+/*select {
   -webkit-appearance: caret;
-}
+}*/
 
 .filters {
   margin: 1.5em 0 2em;
@@ -394,15 +394,16 @@ select {
 }
 
 .error__report {
-  background-color: rgba(231, 76, 60, .25);
+  background-color: $white;
   border-radius: 0.5em;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, .08);
   padding: 1.1em 1.4em;
   text-align: center;
   position: relative;
-  margin-bottom: 2em;
+  margin: 2em 2em 2em 0em;
   color: $error-text-red;
   font-size: .86em;
+  border: 1px solid $error-red;
   p {
     margin-bottom: 0;
     color: $error-text-red;

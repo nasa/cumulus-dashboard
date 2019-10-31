@@ -29,7 +29,7 @@ const handleError = ({ id, type, error, requestAction }, next) => {
     // Catch the session expired error
     // Weirdly error.message shows up as " : Session expired"
     // So it's using indexOf instead of a direct comparison
-    if (error.message.includes('Session expired') ||
+    if (error.message.includes('Your session has expired. Please login again.') ||
         error.message.includes('Invalid Authorization token') ||
         error.message.includes('Access token has expired')) {
       return next(loginError(error.message.replace('Bad Request: ', '')));

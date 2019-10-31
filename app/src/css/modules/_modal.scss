@@ -45,7 +45,7 @@
   display: inline-block;
   background-color: $background-white;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
-  padding: 2em 2.3em 3em;
+  padding: 2em;
   position: relative;
   width: 300px;
   text-align: left;
@@ -74,6 +74,10 @@
   position: absolute;
   transition: width 0.2s linear;
   background-color: $royal-purple;
+}
+
+.modal .modal__internal .error__report{
+  margin: 0em 0em 5em 0em;
 }
 
 .modal__loading--progress--success { background-color: $light-green; }

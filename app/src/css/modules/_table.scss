@@ -55,6 +55,8 @@ table {
 .list-view {
   position: relative;
   margin-top: 10px;
+  /*border-bottom: 1px solid #E2DFDF;*/
+  padding-bottom: 10px;
 }
 
 .list__wrapper{
@@ -133,7 +135,7 @@ table {
   width: 615px;
   height: 70px;
   margin: .8em 1.5em .8em 0;
-  float: left;
+  /*float: left;*/
   color: #8C8C8C;
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
