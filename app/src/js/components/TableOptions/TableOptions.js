@@ -32,12 +32,12 @@ class TableOptions extends React.Component {
   }
 }
 
-// TableOptions.propTypes = {
-//   page: PropTypes.number,
-//   limit: PropTypes.number,
-//   count: PropTypes.number,
-//   onNewPage: PropTypes.func,
-//   showPages: PropTypes.boolean,
-// };
+TableOptions.propTypes = {
+  page: PropTypes.number,
+  limit: PropTypes.number,
+  count: PropTypes.number,
+  onNewPage: PropTypes.func,
+  showPages: PropTypes.boolean,
+};
 
 export default TableOptions

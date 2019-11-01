@@ -274,6 +274,11 @@
 .button--white, .button--white:visited {
   color: $midnight-blue;
   background-color: #fff;
+
+  &:hover{
+    color: $white;
+    background-color: $midnight-blue;
+  }
 }
 
 .button--small, .subform__item--last .subform__button {
