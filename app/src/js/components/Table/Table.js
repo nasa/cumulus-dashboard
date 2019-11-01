@@ -9,7 +9,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/Pagination';
 import SortableTable from '../SortableTable/SortableTable';
 import Timer from '../Timer/timer';
-import TableOptions from '../TableOptions/TableOptions'
+//import TableOptions from '../TableOptions/TableOptions'
 //Lodash
 import isEmpty from 'lodash.isempty';
 import isEqual from 'lodash.isequal';
@@ -231,13 +231,13 @@ class List extends React.Component {
         {list.error && <ErrorReport report={list.error} truncate={true}/>}
         {bulkActionError && <ErrorReport report={bulkActionError}/>}
         <div className = "list__wrapper">
-          <TableOptions
+          {/* Will add back when working on ticket 1462<TableOptions
             count={count}
             limit={limit}
             page={page}
             onNewPage={this.queryNewPage}
             showPages={false}
-          />
+          />*/}
           
           <SortableTable
             primaryIdx={primaryIdx}
