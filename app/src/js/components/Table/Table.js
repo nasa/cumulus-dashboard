@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import BatchAsyncCommand from '../BatchAsyncCommands/batch-async-command';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
-import Pagination from '../Pagination/Pagination';
+import Pagination from '../Pagination/pagination';
 import SortableTable from '../SortableTable/SortableTable';
 import Timer from '../Timer/timer';
 // import TableOptions from '../TableOptions/TableOptions'
