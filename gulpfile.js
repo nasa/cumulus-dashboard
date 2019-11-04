@@ -18,7 +18,7 @@ const rev = require('gulp-rev');
 const revReplace = require('gulp-rev-replace');
 const SassString = require('node-sass').types.String;
 const notifier = require('node-notifier');
-const config = require('./app/scripts/config');
+const config = require('./app/src/js/config');
 
 // /////////////////////////////////////////////////////////////////////////////
 // --------------------------- Variables -------------------------------------//
@@ -35,9 +35,9 @@ let prodBuild = false;
 
 function ensureConfigExists () {
   try {
-    fs.statSync(path.join(__dirname, 'app', 'scripts', 'config', 'config.js'));
+    fs.statSync(path.join(__dirname, 'app', 'src', 'js', 'config', 'config.js'));
   } catch (e) {
-    throw new Error('create a config file at app/scripts/config/config.js by copying app/scripts/config/example.config.js');
+    throw new Error('create a config file at app/src/js/config/config.js by copying app/src/js/config/example.config.js');
   }
 }
 
@@ -55,10 +55,10 @@ readPackage();
 
 // Compiles the user's script files to bundle.js.
 // When including the file in the index.html we need to refer to bundle.js not
-// main.js
+// App.js
 gulp.task('javascript', function () {
   let bundler = browserify({
-    entries: ['./app/scripts/main.js'],
+    entries: ['./app/src/js/App.js'],
     debug: true,
     cache: {},
     packageCache: {},
@@ -146,8 +146,9 @@ const doBuild = (done) => {
 
 gulp.task('build', gulp.parallel(doBuild));
 
+
 gulp.task('styles', function () {
-  return gulp.src('app/styles/main.scss')
+  return gulp.src('app/src/css/main.scss')
     .pipe($.plumber(function (e) {
       notifier.notify({
         title: 'Oops! Sass errored:',
@@ -190,7 +191,7 @@ gulp.task('html', gulp.series('styles', function () {
 }));
 
 gulp.task('images', function () {
-  return gulp.src('app/graphics/**/*')
+  return gulp.src('app/src/assets/images/**/*')
     .pipe($.cache($.imagemin([
       $.imagemin.gifsicle({interlaced: true}),
       $.imagemin.jpegtran({progressive: true}),
@@ -199,11 +200,12 @@ gulp.task('images', function () {
       // as hooks for embedding and styling
       $.imagemin.svgo({plugins: [{cleanupIDs: false}]})
     ])))
-    .pipe(gulp.dest('dist/graphics'));
+    .pipe(gulp.dest('.tmp/images'))
+    .pipe(gulp.dest('dist/images'));
 });
 
 gulp.task('fonts', function () {
-  return gulp.src('app/fonts/**/*')
+  return gulp.src('app/src/assets/fonts/**/*')
     .pipe(gulp.dest('.tmp/fonts'))
     .pipe(gulp.dest('dist/fonts'));
 });
@@ -212,10 +214,10 @@ gulp.task('extras', function () {
   return gulp.src([
     'app/**/*',
     '!app/*.html',
-    '!app/graphics/**',
-    '!app/vendor/**',
-    '!app/styles/**',
-    '!app/scripts/**'
+    '!app/src/assets/**',
+    '!app/src/vendor/**',
+    '!app/src/css/**',
+    '!app/src/js/**'
   ], {
     dot: true
   }).pipe(gulp.dest('dist'));
@@ -246,12 +248,12 @@ gulp.task('serve', gulp.series('vendorScripts', 'javascript', 'styles', 'fonts',
   // watch for changes
   gulp.watch([
     'app/*.html',
-    'app/graphics/**/*',
+    'app/src/assets/images/**/*',
     '.tmp/fonts/**/*'
   ]).on('change', reload);
 
-  gulp.watch('app/styles/**/*.scss', gulp.series('styles'));
-  gulp.watch('app/fonts/**/*', gulp.series('fonts'));
+  gulp.watch('app/src/css/**/*.scss', gulp.series('styles'));
+  gulp.watch('app/src/assets/fonts/**/*', gulp.series('fonts'));
   gulp.watch('package.json', gulp.series('vendorScripts'));
 }));
 
