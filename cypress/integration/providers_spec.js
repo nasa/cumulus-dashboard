@@ -79,7 +79,7 @@ describe('Dashboard Providers Page', () => {
       cy.contains('.heading--xlarge', 'Providers');
       cy.contains('.heading--large', name);
       cy.contains('.heading--medium', 'Provider Overview');
-      cy.url().should('include', `#/providers/provider/${name}`);
+      cy.url().should('include', `#providers/provider/${name}`);
       cy.get('.metadata__details')
         .within(() => {
           cy.contains('Global Connection Limit')

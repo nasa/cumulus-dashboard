@@ -34,18 +34,18 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
       cy.get('table tbody tr').its('length').should('be.eq', 3);
       cy.contains('table tbody tr a', 'report-2018-04-20T20:58:38.883Z.json')
-        .should('have.attr', 'href', '#/reconciliation-reports/report/report-2018-04-20T20:58:38.883Z.json');
+        .should('have.attr', 'href', '#reconciliation-reports/report/report-2018-04-20T20:58:38.883Z.json');
       cy.contains('table tbody tr a', 'report-2018-05-20T20:58:38.883Z.json')
-        .should('have.attr', 'href', '#/reconciliation-reports/report/report-2018-05-20T20:58:38.883Z.json');
+        .should('have.attr', 'href', '#reconciliation-reports/report/report-2018-05-20T20:58:38.883Z.json');
       cy.contains('table tbody tr a', 'report-2018-06-20T20:58:38.883Z.json')
-        .should('have.attr', 'href', '#/reconciliation-reports/report/report-2018-06-20T20:58:38.883Z.json');
+        .should('have.attr', 'href', '#reconciliation-reports/report/report-2018-06-20T20:58:38.883Z.json');
     });
 
     it('displays a link to an individual report', () => {
       cy.visit('/#/reconciliation-reports');
 
       cy.contains('table tbody tr a', 'report-2018-05-20T20:58:38.883Z.json')
-        .should('have.attr', 'href', '#/reconciliation-reports/report/report-2018-05-20T20:58:38.883Z.json')
+        .should('have.attr', 'href', '#reconciliation-reports/report/report-2018-05-20T20:58:38.883Z.json')
         .click();
 
       cy.contains('.heading--large', 'report-2018-05-20T20:58:38.883Z.json');

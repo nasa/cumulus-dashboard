@@ -35,7 +35,7 @@ describe('Rules page', () => {
           cy.contains(testProviderId);
           cy.contains(testCollectionId);
           cy.contains(testRuleName)
-            .should('have.attr', 'href', `#/rules/rule/${testRuleName}`);
+            .should('have.attr', 'href', `#rules/rule/${testRuleName}`);
         });
     });
 
@@ -58,7 +58,7 @@ describe('Rules page', () => {
             .contains('Provider')
             .next('dd')
             .contains(testProviderId)
-            .should('have.attr', 'href', `#/providers/provider/${testProviderId}`);
+            .should('have.attr', 'href', `#providers/provider/${testProviderId}`);
         });
     });
 
@@ -89,7 +89,7 @@ describe('Rules page', () => {
 
       cy.contains('.heading--xlarge', 'Rules');
       cy.contains('table tbody tr a', ruleName)
-        .and('have.attr', 'href', `#/rules/rule/${ruleName}`).click();
+        .and('have.attr', 'href', `#rules/rule/${ruleName}`).click();
 
       cy.contains('.heading--xlarge', 'Rules');
       cy.contains('.heading--large', ruleName);
@@ -102,14 +102,14 @@ describe('Rules page', () => {
           cy.contains('Provider')
             .next()
             .contains('a', provider)
-            .should('have.attr', 'href', `#/providers/provider/${provider}`);
+            .should('have.attr', 'href', `#providers/provider/${provider}`);
         });
     });
 
     it('editing a rule and returning to the rules page should show the new changes', () => {
       cy.visit('/#/rules');
       cy.contains('table tbody tr a', testRuleName)
-        .and('have.attr', 'href', `#/rules/rule/${testRuleName}`)
+        .and('have.attr', 'href', `#rules/rule/${testRuleName}`)
         .click();
 
       cy.contains('.heading--large', testRuleName);
@@ -131,7 +131,7 @@ describe('Rules page', () => {
       cy.contains('table tr', testRuleName)
         .within(() => {
           cy.contains(provider)
-            .should('have.attr', 'href', `#/providers/provider/${provider}`);
+            .should('have.attr', 'href', `#providers/provider/${provider}`);
         });
     });
 
