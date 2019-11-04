@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import {shallow, configure} from 'enzyme';
 import {listGranules} from '../../../app/src/js/actions';
-import List from '../../../app/src/js/components/Table/table';
+import List from '../../../app/src/js/components/Table/Table';
 import Timer from '../../../app/src/js/components/Timer/timer.js';
 import {
   errorTableHeader,
