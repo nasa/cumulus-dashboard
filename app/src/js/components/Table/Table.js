@@ -9,8 +9,8 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/Pagination';
 import SortableTable from '../SortableTable/SortableTable';
 import Timer from '../Timer/timer';
-//import TableOptions from '../TableOptions/TableOptions'
-//Lodash
+// import TableOptions from '../TableOptions/TableOptions'
+// Lodash
 import isEmpty from 'lodash.isempty';
 import isEqual from 'lodash.isequal';
 import isFunction from 'lodash.isfunction';
@@ -238,7 +238,6 @@ class List extends React.Component {
             onNewPage={this.queryNewPage}
             showPages={false}
           />*/}
-          
           <SortableTable
             primaryIdx={primaryIdx}
             data={list.data}

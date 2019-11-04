@@ -32,6 +32,7 @@ export const strings = new LocalizedStrings({
     logo: 'logo/cumulus-logo.png',
     remove_from_cmr: 'Remove from CMR',
     running_granules: 'Running Granules',
+    total_granules: 'Total Granules',
     view_all_granules: 'View All Granules',
     view_granules_overview: 'View Granule Overview'
   },
