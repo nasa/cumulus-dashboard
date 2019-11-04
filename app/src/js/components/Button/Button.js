@@ -1,14 +1,14 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import React from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import {
   Button as Btn,
   Badge,
   OverlayTrigger,
   Tooltip
-} from 'react-bootstrap'
+} from 'react-bootstrap';
 
-import './Button.scss'
+import './Button.scss';
 
 export const Button = ({
   badge,
@@ -23,6 +23,7 @@ export const Button = ({
   label,
   onClick,
   overlayClass,
+  spinner,
   style,
   target,
   title,
@@ -41,36 +42,36 @@ export const Button = ({
       'button--badge': !!badge
     },
     className
-  )
+  );
 
-  let iconClasses
+  let iconClasses;
 
   const buildIconClass = (icon) => {
     if (icon.indexOf('edsc') > -1) {
-      return icon
+      return icon;
     }
-    return `fa fa-${icon}`
-  }
+    return `fa fa-${icon}`;
+  };
 
   if (icon) {
     iconClasses = classNames(
       'button__icon',
       children ? 'button__icon--push' : null,
       icon ? buildIconClass(icon) : null
-    )
+    );
   }
 
-  let badgeClasses
+  let badgeClasses;
 
   if (badge) {
     badgeClasses = classNames(
       'button__badge'
-    )
+    );
   }
 
-  let rel
+  let rel;
   if (target && target === '_blank') {
-    rel = 'noopener nofollow'
+    rel = 'noopener nofollow';
   }
 
   const button = (
@@ -101,17 +102,17 @@ export const Button = ({
         }
       </span>
       {badge && (
-        <>
+        <span>
           <Badge
             className={badgeClasses}
             variant={badgeVariant === null ? 'secondary' : badgeVariant}
           >
             {badge}
           </Badge>
-        </>
+        </span>
       )}
     </Btn>
-  )
+  );
 
   if (tooltip && tooltipId) {
     return (
@@ -123,11 +124,11 @@ export const Button = ({
       >
         {button}
       </OverlayTrigger>
-    )
+    );
   }
 
-  return button
-}
+  return button;
+};
 
 Button.defaultProps = {
   badge: null,
@@ -151,7 +152,7 @@ Button.defaultProps = {
   tooltipPlacement: null,
   type: 'button',
   variant: null
-}
+};
 
 Button.propTypes = {
   badge: PropTypes.string,
@@ -177,6 +178,6 @@ Button.propTypes = {
   tooltipId: PropTypes.string,
   type: PropTypes.string,
   variant: PropTypes.string
-}
+};
 
-export default Button
+export default Button;

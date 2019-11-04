@@ -2,7 +2,7 @@
 
 import test from 'ava';
 
-import { initialValueFromLocation } from '../../app/scripts/utils/url-helper';
+import { initialValueFromLocation } from '../../app/src/js/utils/url-helper';
 
 const location = {
   pathname: '/granules',

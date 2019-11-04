@@ -45,8 +45,6 @@ import {
 
 import { strings } from './locale';
 
-import TopButton from './TopButton/TopButton';
-
 class Home extends React.Component {
   constructor () {
     super();
