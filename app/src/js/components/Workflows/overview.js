@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { tally } from '../../utils/format';
-import Search from '../Search/search';
 import {
   listWorkflows
 } from '../../actions';
@@ -22,7 +21,7 @@ const tableRow = [
 
 const tableSortProps = [
   'name',
-  'aws link',
+  'aws link'
 ];
 
 class WorkflowOverview extends React.Component {
@@ -39,7 +38,7 @@ class WorkflowOverview extends React.Component {
             <h2 className='heading--medium heading--shared-content with-description'>All Workflows <span className='num--title'>{count ? ` ${tally(count)}` : null}</span></h2>
           </div>
           {/* Someone needs to define the search parameters for workflows, e.g. steps, collections, granules, etc. }*/}
-          {/*<div className='filters'>
+          {/* <div className='filters'>
             <Search dispatch={this.props.dispatch}
               action={searchWorkflows}
               format={collectionWorkflows}

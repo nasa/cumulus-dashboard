@@ -1,5 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
-import { fullDate } from '../../app/src/utils/format';
+import { fullDate } from '../../app/src/js/utils/format';
 
 describe('Dashboard Executions Page', () => {
   describe('When not logged in', () => {

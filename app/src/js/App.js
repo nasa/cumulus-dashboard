@@ -6,7 +6,7 @@ import { Provider as ProviderElem } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { useScroll as notHookUseScroll } from 'react-router-scroll';
 
-//Bootstrap Framework
+// Bootstrap Framework
 
 //  Fontawesome Icons Library
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -49,7 +49,7 @@ import App from '..';
 import OAuth from './components/oauth';
 import Home from './components/home';
 
-//Components
+// Components
 import Collections from './components/Collections';
 import CollectionList from './components/Collections/list';
 import AddCollection from './components/Collections/add';

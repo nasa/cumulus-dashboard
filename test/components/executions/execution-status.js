@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 
-import { ExecutionStatus } from '../../../app/scripts/components/executions/execution-status.js';
+import { ExecutionStatus } from '../../../app/src/js/components/Executions/execution-status.js';
 import executionHistory from '../../../test/fixtures/execution-history-all';
 
 configure({ adapter: new Adapter() });

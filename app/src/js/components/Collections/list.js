@@ -1,4 +1,4 @@
-//This is the main Collections Overview page
+// This is the main Collections Overview page
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';

@@ -7,11 +7,11 @@ import thunk from 'redux-thunk';
 import {
   applyRecoveryWorkflowToCollection,
   applyRecoveryWorkflowToGranule
-} from '../../app/scripts/actions';
+} from '../../app/src/js/actions';
 import {
   constructCollectionNameVersion
-} from '../../app/scripts/utils/format';
-import { requestMiddleware } from '../../app/scripts/middleware/request';
+} from '../../app/src/js/utils/format';
+import { requestMiddleware } from '../../app/src/js/middleware/request';
 
 const middlewares = [
   requestMiddleware,

@@ -97,7 +97,7 @@ describe('Dashboard Providers Page', () => {
       // verify the new provider is added to the providers list
       cy.contains('a', 'Back to Provider').click();
       cy.contains('table tbody tr a', name)
-        .should('have.attr', 'href', `#/providers/provider/${name}`);
+        .should('have.attr', 'href', `#providers/provider/${name}`);
     });
 
     it('should edit a provider', () => {

@@ -69,7 +69,7 @@ describe('Dashboard Granules Page', () => {
           // has link to the detailed granule page
           cy.get('@columns').eq(2).children('a')
             .should('have.attr', 'href')
-            .and('be.eq', `#/granules/granule/${granule.granuleId}`);
+            .and('be.eq', `#granules/granule/${granule.granuleId}`);
 
           // Published column, only public granules have CMR link
           if (granule.published) {

@@ -10,8 +10,8 @@ import {
   getProvider,
   updateProvider,
   clearUpdateProvider
-} from '../../../app/scripts/actions';
-import EditRecord from '../../../app/scripts/components/app/edit.js';
+} from '../../../app/src/js/actions';
+import EditRecord from '../../../app/src/js/components/Edit/edit.js';
 
 configure({ adapter: new Adapter() });
 
