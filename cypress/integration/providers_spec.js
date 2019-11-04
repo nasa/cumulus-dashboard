@@ -79,7 +79,7 @@ describe('Dashboard Providers Page', () => {
       cy.contains('.heading--xlarge', 'Providers');
       cy.contains('.heading--large', name);
       cy.contains('.heading--medium', 'Provider Overview');
-      cy.url().should('include', `#providers/provider/${name}`);
+      cy.url().should('include', `#/providers/provider/${name}`);
       cy.get('.metadata__details')
         .within(() => {
           cy.contains('Global Connection Limit')
@@ -97,7 +97,7 @@ describe('Dashboard Providers Page', () => {
       // verify the new provider is added to the providers list
       cy.contains('a', 'Back to Provider').click();
       cy.contains('table tbody tr a', name)
-        .should('have.attr', 'href', `#/providers/provider/${name}`);
+        .should('have.attr', 'href', `#providers/provider/${name}`);
     });
 
     it('should edit a provider', () => {
