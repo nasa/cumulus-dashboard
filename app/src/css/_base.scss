@@ -185,8 +185,25 @@ a:active {
 .nav__order-7 { order: 7 };
 .nav__order-8 { order: 8 };
 
-.svg-inline--fa.fa-w-16{
-  padding-right: 5px;
+.svg{
+  width: 100%;
+  height: 100%;
+  padding-right: 0px;
+  padding-left: 0px;
+}
+.rightalign.nav__order-8{
+  position: relative;
+}
+.rightalign.nav__order-8 .log-icon{
+  &:before {
+    position: absolute;
+    color: $white;
+    font-family: 'Font Awesome 5 Free';
+    content: '\f2f5';
+    font-weight: 900;
+    right: 3.9em;
+    top: 1.54em;
+  }
 }
 
 .content__header {
