@@ -66,7 +66,7 @@ class Header extends React.Component {
               {activePaths.map(path => <li
                 key={path[0]}
                 className={this.className(path[1])}><Link to={path[1]}>{path[0]}</Link></li>)}
-              <li className='rightalign nav__order-8'>{ authenticated ? <a onClick={this.logout}><FontAwesomeIcon icon="sign-out-alt" />Log out</a> : <Link to={'/login'}>Log in</Link> }</li>
+              <li className='rightalign nav__order-8'>{ authenticated ? <a onClick={this.logout}><span className="log-icon"></span>Log out</a> : <Link to={'/login'}>Log in</Link> }</li>
             </ul> : <li>&nbsp;</li> }
           </nav>
         </div>
