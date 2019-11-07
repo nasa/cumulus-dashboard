@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 
-import BatchCommand from '../../../app/scripts/components/form/batch-async-command.js';
+import BatchCommand from '../../../app/src/js/components/BatchAsyncCommands/batch-async-command.js';
 
 configure({ adapter: new Adapter() });
 

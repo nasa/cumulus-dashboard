@@ -3,7 +3,7 @@
 import test from 'ava';
 import sinon from 'sinon';
 
-import { updateRouterLocation } from '../../app/scripts/utils/url-helper';
+import { updateRouterLocation } from '../../app/src/js/utils/url-helper';
 
 const sandbox = sinon.createSandbox();
 test.beforeEach((t) => {

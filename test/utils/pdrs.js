@@ -1,7 +1,7 @@
 'use strict';
 import test from 'ava';
-import {tableRow} from '../../app/scripts/utils/table-config/pdrs.js';
-import {getProgress} from '../../app/scripts/utils/table-config/pdr-progress.js';
+import {tableRow} from '../../app/src/js/utils/table-config/pdrs.js';
+import {getProgress} from '../../app/src/js/utils/table-config/pdr-progress.js';
 const pdr =
   {
     'pdrName': 'test-4.PDR',

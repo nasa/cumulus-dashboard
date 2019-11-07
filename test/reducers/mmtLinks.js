@@ -1,8 +1,8 @@
 'use strict';
 import test from 'ava';
-import reducer from '../../app/scripts/reducers/mmtLinks';
-import { ADD_MMTLINK } from '../../app/scripts/actions/types';
-import { getCollectionId } from '../../app/scripts/utils/format';
+import reducer from '../../app/src/js/reducers/mmtLinks';
+import { ADD_MMTLINK } from '../../app/src/js/actions/types';
+import { getCollectionId } from '../../app/src/js/utils/format';
 
 test('verify initial state', (t) => {
   const newState = reducer({}, {data: {}, type: 'ANY'});

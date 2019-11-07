@@ -36,7 +36,7 @@ Wraps `sortable-table` and implements auto-update and smart sort. When a new sor
 - **tableRow**: Corresponds to `sortableTable#row`.
 - **tableSortProps**: Corresponds to `sortableTable#props`.
 - **sortIdx**: Corresponds to `sortableTable#sortIdx`.
-- **query**: Array of configuration objects passed to `forms/batch-async-command`.
+- **query**: Array of configuration objects passed to `batch-async-command`.
 - **rowId** Corresponds to `sortableTable#rowId`.
 
 ## Dumb vs smart sort

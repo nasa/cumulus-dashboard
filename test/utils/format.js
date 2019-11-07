@@ -1,6 +1,6 @@
 'use strict';
 import test from 'ava';
-import { buildRedirectUrl } from '../../app/scripts/utils/format.js';
+import { buildRedirectUrl } from '../../app/src/js/utils/format.js';
 
 test('buildRedirectUrl() properly strips ?token query parameter', function (t) {
   const redirect = buildRedirectUrl({

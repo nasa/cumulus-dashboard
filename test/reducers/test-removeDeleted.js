@@ -3,7 +3,7 @@
 import test from 'ava';
 import { randomBytes } from 'crypto';
 
-import removeDeleted from '../../app/scripts/reducers/remove-deleted';
+import removeDeleted from '../../app/src/js/reducers/remove-deleted';
 
 const randomId = (id) => `${id}${randomBytes(5).toString('hex')}`;
 
