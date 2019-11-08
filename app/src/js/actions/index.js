@@ -778,37 +778,40 @@ export const deleteRule = (ruleName) => ({
   }
 });
 
-export const enableRule = (ruleName) => ({
+export const enableRule = (payload) => ({
   [CALL_API]: {
-    id: ruleName,
+    id: payload.name,
     type: types.RULE_ENABLE,
     method: 'PUT',
-    path: `rules/${ruleName}`,
+    path: `rules/${payload.name}`,
     body: {
+      ...payload,
       state: 'ENABLED'
     }
   }
 });
 
-export const disableRule = (ruleName) => ({
+export const disableRule = (payload) => ({
   [CALL_API]: {
-    id: ruleName,
+    id: payload.name,
     type: types.RULE_DISABLE,
     method: 'PUT',
-    path: `rules/${ruleName}`,
+    path: `rules/${payload.name}`,
     body: {
+      ...payload,
       state: 'DISABLED'
     }
   }
 });
 
-export const rerunRule = (ruleName) => ({
+export const rerunRule = (payload) => ({
   [CALL_API]: {
-    id: ruleName,
+    id: payload.name,
     type: types.RULE_RERUN,
     method: 'PUT',
-    path: `rules/${ruleName}`,
+    path: `rules/${payload.name}`,
     body: {
+      ...payload,
       action: 'rerun'
     }
   }

@@ -49,12 +49,14 @@ const tableSortProps = [
 
 const bulkActions = (rules) => [{
   text: 'Enable',
-  action: enableRule,
+  action: (ruleName) =>
+    enableRule(rules.list.data.find((rule) => rule.name === ruleName)),
   state: rules.enabled,
   confirm: (d) => `Enable ${d} Rule(s)?`
 }, {
   text: 'Disable',
-  action: disableRule,
+  action: (ruleName) =>
+    disableRule(rules.list.data.find((rule) => rule.name === ruleName)),
   state: rules.disabled,
   confirm: (d) => `Disable ${d} Rule(s)?`
 }, {
