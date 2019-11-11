@@ -779,18 +779,28 @@ export const deleteRule = (ruleName) => ({
   }
 });
 
-export const enableRule = (payload) => ({
-  [CALL_API]: {
-    id: payload.name,
-    type: types.RULE_ENABLE,
-    method: 'PUT',
-    path: `rules/${payload.name}`,
-    body: {
-      ...payload,
-      state: 'ENABLED'
-    }
+export const enableRule = (payload) => {
+  const rule = clonedeep(payload);
+  delete rule['queriedAt'];
+  delete rule['timestamp'];
+
+  if (!rule.rule.value) {
+    rule.rule.value = '';
   }
-});
+
+  return {
+    [CALL_API]: {
+      id: rule.name,
+      type: types.RULE_ENABLE,
+      method: 'PUT',
+      path: `rules/${rule.name}`,
+      body: {
+        ...rule,
+        state: 'ENABLED'
+      }
+    }
+  };
+};
 
 export const disableRule = (payload) => {
   const rule = clonedeep(payload);
