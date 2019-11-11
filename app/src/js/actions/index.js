@@ -7,6 +7,7 @@ import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
 import { hashHistory } from 'react-router';
 import { CMR } from '@cumulus/cmrjs';
+import clonedeep from 'lodash.clonedeep';
 
 import { configureRequest } from './helpers';
 import _config from '../config';
@@ -791,18 +792,28 @@ export const enableRule = (payload) => ({
   }
 });
 
-export const disableRule = (payload) => ({
-  [CALL_API]: {
-    id: payload.name,
-    type: types.RULE_DISABLE,
-    method: 'PUT',
-    path: `rules/${payload.name}`,
-    body: {
-      ...payload,
-      state: 'DISABLED'
-    }
+export const disableRule = (payload) => {
+  const rule = clonedeep(payload);
+  delete rule['queriedAt'];
+  delete rule['timestamp'];
+
+  if (!rule.rule.value) {
+    rule.rule.value = '';
   }
-});
+
+  return {
+    [CALL_API]: {
+      id: rule.name,
+      type: types.RULE_DISABLE,
+      method: 'PUT',
+      path: `rules/${rule.name}`,
+      body: {
+        ...rule,
+        state: 'DISABLED'
+      }
+    }
+  };
+};
 
 export const rerunRule = (payload) => ({
   [CALL_API]: {
