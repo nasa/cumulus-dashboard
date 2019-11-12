@@ -1,8 +1,8 @@
 import test from 'ava';
 import nock from 'nock';
 
-import { CALL_API } from '../../app/scripts/actions/types';
-import { requestMiddleware } from '../../app/scripts/middleware/request';
+import { CALL_API } from '../../app/src/js/actions/types';
+import { requestMiddleware } from '../../app/src/js/middleware/request';
 
 test.beforeEach((t) => {
   const doDispatch = () => {};

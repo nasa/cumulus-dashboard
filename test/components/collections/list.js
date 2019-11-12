@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 import { Provider } from 'react-redux';
-import { CollectionList } from '../../../app/scripts/components/collections/list';
+import { CollectionList } from '../../../app/src/js/components/Collections/list';
 
 configure({ adapter: new Adapter() });
 

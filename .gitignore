@@ -4,7 +4,7 @@ node_modules
 .DS_Store
 *.swp
 dist
-app/scripts/config/local.js
+app/src/js/config/local.js
 gulp-cache
 /artifacts
 /tmp/

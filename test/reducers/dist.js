@@ -9,7 +9,7 @@ import { apiGatewayFixture } from '../fixtures/apiGatewayMetrics';
 import { apiLambdaFixture } from '../fixtures/apiLambdaMetrics';
 import { teaLambdaFixture } from '../fixtures/teaLambdaMetrics';
 import { s3AccessFixture } from '../fixtures/s3AccessMetrics';
-import reducer from '../../app/scripts/reducers/dist';
+import reducer from '../../app/src/js/reducers/dist';
 import {
   DIST_APIGATEWAY,
   DIST_APIGATEWAY_INFLIGHT,
@@ -23,7 +23,7 @@ import {
   DIST_S3ACCESS,
   DIST_S3ACCESS_INFLIGHT,
   DIST_S3ACCESS_ERROR
-} from '../../app/scripts/actions/types';
+} from '../../app/src/js/actions/types';
 
 const testDate = Date.now();
 test.before((t) => {

@@ -1,0 +1,62 @@
+/* ==========================================================================
+   Main
+   ========================================================================== */
+
+/**
+ * Following Necolas' Principles of writing consistent, idiomatic CSS:
+ * https://github.com/necolas/idiomatic-css
+ */
+
+/* Charset */
+
+@charset "UTF-8";
+
+
+/* Libraries/Vendors
+   ========================================================================== */
+
+/**
+ * Using Bourbon for extended SASS functionality:
+ * http://bourbon.io/
+ */
+
+@import "bourbon";
+
+
+/* Reboot
+   ========================================================================== */
+
+@import "normalize";
+@import "reset";
+
+/**
+ * Using Kenneth Ormandy's OpenType features—ligatures, kerning, and
+ * more—to Normalize.css:
+ * https://github.com/kennethormandy/normalize-opentype.css
+ */
+
+@import "normalize-opentype";
+
+
+/* Settings for Mixins
+   ========================================================================== */
+@import "variables";
+
+/* Application Styles
+   ========================================================================== */
+
+@import "base";
+@import "../css/modules/modal";
+@import "typography";
+@import "../js/components/Button/button";
+@import "../js/components/Form/form";
+@import "lists";
+@import "../css/modules/table";
+@import "../js/components/Chart/chart";
+@import "../js/components/LoadingIndicator/loading-indicator";
+@import "pulse";
+
+/* Fonts
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css?family=Inconsolata|Open+Sans:300,400,400i,600,700');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap');

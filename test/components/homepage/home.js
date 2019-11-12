@@ -5,9 +5,9 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 
-import { Home } from '../../../app/scripts/components/home';
-import { tally } from '../../../app/scripts/utils/format';
-import config from '../../../app/scripts/config';
+import { Home } from '../../../app/src/js/components/home';
+import { tally } from '../../../app/src/js/utils/format';
+import config from '../../../app/src/js/config';
 
 configure({ adapter: new Adapter() });
 

@@ -5,7 +5,7 @@ import {
   shouldHaveDeletedToken
 } from '../support/assertions';
 
-import { API_VERSION } from '../../app/scripts/actions/types';
+import { API_VERSION } from '../../app/src/js/actions/types';
 
 describe('Dashboard Home Page', () => {
   it('When not logged in it should redirect to login page', () => {

@@ -6,9 +6,9 @@ import React from 'react';
 import Collapsible from 'react-collapsible';
 import { shallow, configure } from 'enzyme';
 
-import ReportTable from '../../../app/scripts/components/reconciliation-reports/report-table';
-import SortableTable from '../../../app/scripts/components/table/sortable';
-import { nullValue } from '../../../app/scripts/utils/format';
+import ReportTable from '../../../app/src/js/components/ReconciliationReports/report-table';
+import SortableTable from '../../../app/src/js/components/SortableTable/SortableTable';
+import { nullValue } from '../../../app/src/js/utils/format';
 
 configure({ adapter: new Adapter() });
 

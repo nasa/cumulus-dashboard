@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 
-import { GranuleOverview } from '../../../app/scripts/components/granules/granule.js';
+import { GranuleOverview } from '../../../app/src/js/components/Granules/granule.js';
 
 configure({ adapter: new Adapter() });
 

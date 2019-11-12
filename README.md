@@ -19,7 +19,7 @@ Code to generate and deploy the dashboard for the Cumulus API.
 
 The dashboard is populated from the Cumulus API. The dashboard has to point to a working version of the Cumulus API before it is installed and built.
 
-The information needed to configure the dashboard is stored at `app/scripts/config/config.js`.
+The information needed to configure the dashboard is stored at `app/src/js/config/config.js`.
 
 The following environment variables override the default values in `config.js`:
 

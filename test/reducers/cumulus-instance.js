@@ -1,7 +1,7 @@
 'use strict';
 import test from 'ava';
-import reducer from '../../app/scripts/reducers/cumulus-instance';
-import { ADD_INSTANCE_META } from '../../app/scripts/actions/types';
+import reducer from '../../app/src/js/reducers/cumulus-instance';
+import { ADD_INSTANCE_META } from '../../app/src/js/actions/types';
 
 test('verify initial state', (t) => {
   const newState = reducer({}, {data: {}, type: 'ANY'});
