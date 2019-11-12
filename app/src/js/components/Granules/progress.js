@@ -15,10 +15,31 @@ class Progress extends React.Component {
   constructor () {
     super();
     this.getItem = this.getItem.bind(this);
+    this.tallyDisplay = this.tallyDisplay.bind(this);
   }
 
   getItem (key) {
-    return this.props.granules.find(count => count.key === key);
+    const thing = this.props.granules.find(count => count.key === key);
+    if (key === 'failed') console.log(thing);
+    return thing;
+  }
+
+  tallyDisplay (type, item) {
+    if (type[1] === 'Failed') {
+      if (item > 99) {
+        return (
+          <span className='num-medium-red'>{item}</span>
+        );
+      } else if (item > 0) {
+        return (
+          <span className='num-medium-yellow'>{item}</span>
+        );
+      }
+    } else {
+      return (
+        <span className='num--medium'>{item}</span>
+      );
+    }
   }
 
   render () {
@@ -30,7 +51,7 @@ class Progress extends React.Component {
           }, 0) : get(this.getItem(d[0]), 'count', 0);
           return (
             <li key={d[0]} className={'timeline--processing--' + d[0]}>
-              <span className='num--medium'>{tally(item)}</span>
+              {this.tallyDisplay(d, tally(item))}
               {strings.granules} {d[1]}
             </li>
           );
