@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- **CUMULUS-1308**
+  - Fixed bug preventing rerun, enabling, and disabling of rules
+
 ## [v1.6.0] - 2019-10-10
 
 ### BREAKING CHANGES

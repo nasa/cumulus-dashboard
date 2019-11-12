@@ -68,17 +68,17 @@ class Rule extends React.Component {
 
   enable () {
     const { ruleName } = this.props.params;
-    this.props.dispatch(enableRule(ruleName));
+    this.props.dispatch(enableRule(this.props.rules.map[ruleName].data));
   }
 
   disable () {
     const { ruleName } = this.props.params;
-    this.props.dispatch(disableRule(ruleName));
+    this.props.dispatch(disableRule(this.props.rules.map[ruleName].data));
   }
 
   rerun () {
     const { ruleName } = this.props.params;
-    this.props.dispatch(rerunRule(ruleName));
+    this.props.dispatch(rerunRule(this.props.rules.map[ruleName].data));
   }
 
   navigateBack () {

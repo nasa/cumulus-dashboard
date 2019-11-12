@@ -7,6 +7,7 @@ import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
 import { hashHistory } from 'react-router';
 import { CMR } from '@cumulus/cmrjs';
+import clonedeep from 'lodash.clonedeep';
 
 import { configureRequest } from './helpers';
 import _config from '../config';
@@ -778,37 +779,60 @@ export const deleteRule = (ruleName) => ({
   }
 });
 
-export const enableRule = (ruleName) => ({
-  [CALL_API]: {
-    id: ruleName,
-    type: types.RULE_ENABLE,
-    method: 'PUT',
-    path: `rules/${ruleName}`,
-    body: {
-      state: 'ENABLED'
-    }
-  }
-});
+export const enableRule = (payload) => {
+  const rule = clonedeep(payload);
+  delete rule['queriedAt'];
+  delete rule['timestamp'];
 
-export const disableRule = (ruleName) => ({
-  [CALL_API]: {
-    id: ruleName,
-    type: types.RULE_DISABLE,
-    method: 'PUT',
-    path: `rules/${ruleName}`,
-    body: {
-      state: 'DISABLED'
-    }
+  if (!rule.rule.value) {
+    rule.rule.value = '';
   }
-});
 
-export const rerunRule = (ruleName) => ({
+  return {
+    [CALL_API]: {
+      id: rule.name,
+      type: types.RULE_ENABLE,
+      method: 'PUT',
+      path: `rules/${rule.name}`,
+      body: {
+        ...rule,
+        state: 'ENABLED'
+      }
+    }
+  };
+};
+
+export const disableRule = (payload) => {
+  const rule = clonedeep(payload);
+  delete rule['queriedAt'];
+  delete rule['timestamp'];
+
+  if (!rule.rule.value) {
+    rule.rule.value = '';
+  }
+
+  return {
+    [CALL_API]: {
+      id: rule.name,
+      type: types.RULE_DISABLE,
+      method: 'PUT',
+      path: `rules/${rule.name}`,
+      body: {
+        ...rule,
+        state: 'DISABLED'
+      }
+    }
+  };
+};
+
+export const rerunRule = (payload) => ({
   [CALL_API]: {
-    id: ruleName,
+    id: payload.name,
     type: types.RULE_RERUN,
     method: 'PUT',
-    path: `rules/${ruleName}`,
+    path: `rules/${payload.name}`,
     body: {
+      ...payload,
       action: 'rerun'
     }
   }
