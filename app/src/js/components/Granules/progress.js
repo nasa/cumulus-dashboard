@@ -19,9 +19,7 @@ class Progress extends React.Component {
   }
 
   getItem (key) {
-    const thing = this.props.granules.find(count => count.key === key);
-    if (key === 'failed') console.log(thing);
-    return thing;
+    return this.props.granules.find(count => count.key === key);
   }
 
   tallyDisplay (type, item) {
