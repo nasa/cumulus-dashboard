@@ -10,21 +10,29 @@
 
     <link rel="author" type="text/plain" href="humans.txt" />
 
-    <!-- build:css styles/vendor.css -->
+    <!-- build:css css/vendor.css -->
+      <!-- Bootstrap -->
+      <link rel="stylesheet" href="/css/bootstrap.css">
     <!-- endbuild -->
 
-    <!-- build:css styles/main.css -->
+    <!-- build:css css/main.css -->
     <link rel="stylesheet" type="text/css" href="styles/main.css">
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <!-- endbuild -->
 
+    <!-- Modernizr -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    <!--/Modernizr -->
+
+    <!-- FontAwesome -->
     <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/v5.11.2/js/all.js" integrity="sha384-L469/ELG4Bg9sDQbl0hvjMq8pOcqFgkSpwhwnslzvVVGpDjYJ6wJJyYjvG3u8XW7" crossorigin="anonymous"></script>
     <style>
       .icon::before {
         display: none;
       }
     </style>
+     <!--/FontAwesome -->
 
   </head>
   <body>
@@ -44,5 +52,9 @@
     <!-- build:js scripts/bundle.js -->
     <script src="scripts/bundle.js"></script>
     <!-- endbuild -->
+    <!-- For Bootstrap-->
+      <script src="/js/jquery.min.js"></script>
+      <script src="/js/bootstrap.min.js"></script>
+    <!--/For Bootstrap-->
 </body>
 </html>

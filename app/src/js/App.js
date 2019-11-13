@@ -6,8 +6,6 @@ import { Provider as ProviderElem } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { useScroll as notHookUseScroll } from 'react-router-scroll';
 
-// Bootstrap Framework
-
 //  Fontawesome Icons Library
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSignOutAlt, faSearch, faSync, faPlus, faInfoCircle, faTimesCircle, faSave, faCalendar, faExpand, faCompress, faClock, faCaretDown, faChevronDown, faSort, faSortDown, faSortUp, faArrowAltCircleLeft, faArrowAltCircleRight, faArrowAltCircleDown, faArrowAltCircleUp, faArrowRight, faCopy, faEdit, faArchive, faLaptopCode, faServer, faHdd, faExternalLinkSquareAlt, faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';

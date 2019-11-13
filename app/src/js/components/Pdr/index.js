@@ -39,7 +39,7 @@ class Pdrs extends React.Component {
           </div>
         </div>
         <div className='page__content'>
-          <div className='row wrapper__sidebar'>
+          <div className='wrapper__sidebar'>
             <Sidebar
               currentPath={this.props.location.pathname}
               params={this.props.params}

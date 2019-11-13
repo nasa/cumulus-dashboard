@@ -26,11 +26,11 @@ class Progress extends React.Component {
     if (type[1] === 'Failed') {
       if (item > 99) {
         return (
-          <span className='num-medium-red'>{item}</span>
+          <span className='num--medium num--medium--red'>{item}</span>
         );
       } else if (item > 0) {
         return (
-          <span className='num-medium-yellow'>{item}</span>
+          <span className='num--medium num--medium--yellow'>{item}</span>
         );
       }
     } else {

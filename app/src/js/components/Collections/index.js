@@ -24,7 +24,7 @@ class Collections extends React.Component {
           </div>
         </div>
         <div className='page__content'>
-          <div className='row wrapper__sidebar'>
+          <div className='wrapper__sidebar'>
             {existingCollection ? <Sidebar currentPath={pathname} params={this.props.params} /> : null}
             <div className={existingCollection ? 'page__content--shortened' : 'page__content'}>
               {this.props.children}
