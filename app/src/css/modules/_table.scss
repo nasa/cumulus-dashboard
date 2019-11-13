@@ -193,6 +193,20 @@ table {
   color: $midnight-blue;
 }
 
+.num-medium-yellow {
+  display: block;
+  font-size: 1.7em;
+  font-weight: $base-font-semibold;
+  color: $orange;
+}
+
+.num-medium-red {
+  display: block;
+  font-size: 1.7em;
+  font-weight: $base-font-semibold;
+  color: $error-red;
+}
+
 // Pagination - Top //
 
 // Pagination - Bottom //
