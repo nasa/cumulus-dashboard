@@ -234,10 +234,10 @@ a:active {
 
 .sidebar {
   flex: 2;
-  padding: 3em 1em 0em 5em;
+  padding: 0;
   /* width: 20%; */
-  max-width: 175px;
-  min-width: 150px;
+  max-width: 225px;
+  min-width: 175px;
   /* float: left; */
   min-height: 100vh;
   background-color: $sub-blue;
@@ -262,12 +262,22 @@ a:active {
     display: inline-block;
   }
   .sidebar__nav--selected {
-    color: #fff;
-    font-weight: $base-font-bold;
+    color: #E7E4E4;
+    font-weight: $base-font-semibold;
     letter-spacing: .2px;
+    border-bottom: 2px solid #E7E4E4;
   }
   li {
     margin-bottom: 0.75em;
+  }
+  li:first-child{
+    line-height: 3em;
+    font-size: 1.25em;
+    font-weight: 400;
+  }
+  li:nth-child(n+2){
+    line-height: 2em;
+    font-weight: 400;
   }
 }
 
@@ -284,7 +294,12 @@ a:active {
 }
 
 .sidebar__row {
-  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: $dark-blue;
+  padding: 1em 0 1.5em 0;
 }
 
 .sidebar__header {
@@ -328,7 +343,11 @@ a:active {
 }
 
 .page__section--top{
-  margin-bottom: 45px;
+  /*margin-bottom: 25px;*/
+  padding: 25px 0 25px 0;
+  /*border-top: 1px solid #E2DFDF;*/
+  background-color: #1E6B9D;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
 }
 
 .top{
@@ -586,15 +605,48 @@ a:active {
   }
 }
 
+/**************************************************
+  Footer
+**************************************************/
+
+.footer{
+  border-top: 1px solid #E2DFDF;
+  background-color: $ocean-blue;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
 .api__summary {
   text-align: center;
 }
 
-.api__warning {
-  color: $error-red;
+.api__version{
+  font-weight: 400;
+  color: $white;
+  padding: 10px 0 2px 0;
 }
 
-.footer{
-  border-top: 1px solid #E2DFDF;
-  padding-top: 25px;
+.api__warning {
+  /*color: $error-red;*/
+  color: $white;
+  font-weight: 500;
+  position: relative;
+  border-bottom: 1px solid #175075;
+  padding: 0.4em 0 1em;
+  margin: 0;
 }
+
+.api__warning .warning-icon{
+    position: relative;
+  &:before {
+    position: absolute;
+    /*color: $error-red;*/
+    color: $white;
+    font-family: 'Font Awesome 5 Free';
+    content: '\f071';
+    font-weight: 900;
+    left: -1.5em;
+    top: 0em;
+  }
+}
+
