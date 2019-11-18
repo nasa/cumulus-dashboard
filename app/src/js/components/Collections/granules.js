@@ -7,7 +7,9 @@ import { getCollectionId, lastUpdated } from '../../utils/format';
 import {
   listGranules,
   filterGranules,
-  clearGranulesFilter
+  clearGranulesFilter,
+  searchGranules,
+  clearGranulesSearch
 } from '../../actions';
 import {
   tableHeader,
@@ -17,6 +19,7 @@ import {
 } from '../../utils/table-config/granules';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
+import Search from '../Search/search';
 import statusOptions from '../../utils/status';
 import {strings} from '../locale';
 
@@ -26,11 +29,25 @@ class CollectionGranules extends React.Component {
     this.displayName = strings.collection_granules;
     this.generateBulkActions = this.generateBulkActions.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
+    this.getView = this.getView.bind(this);
   }
 
   generateQuery () {
     const collectionId = getCollectionId(this.props.params);
-    return { collectionId };
+    const options = { collectionId };
+    const view = this.getView();
+    if (view === 'completed') options.status = 'completed';
+    else if (view === 'processing') options.status = 'running';
+    else if (view === 'failed') options.status = 'failed';
+    return options;
+  }
+
+  getView () {
+    const { pathname } = this.props.location;
+    if (pathname.includes('/granules/completed')) return 'completed';
+    else if (pathname.includes('/granules/processing')) return 'processing';
+    else if (pathname.includes('/granules/failed')) return 'failed';
+    else return 'all';
   }
 
   generateBulkActions () {
@@ -43,6 +60,7 @@ class CollectionGranules extends React.Component {
     const collectionVersion = this.props.params.version;
     const { list } = this.props.granules;
     const { meta } = list;
+    const view = this.getView();
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -58,13 +76,19 @@ class CollectionGranules extends React.Component {
             <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num--title'>{meta.count ? ` (${meta.count})` : null}</span></h2>
           </div>
           <div className='filters filters__wlabels'>
-          <Dropdown
-          options={statusOptions}
-          action={filterGranules}
-          clear={clearGranulesFilter}
-          paramKey={'status'}
-          label={'Status'}
-          />
+          {(view === 'all') ? <Dropdown
+            options={statusOptions}
+            action={filterGranules}
+            clear={clearGranulesFilter}
+            paramKey={'status'}
+            label={'Status'}
+            />
+            : <Search
+              dispatch={this.props.dispatch}
+              action={searchGranules}
+              clear={clearGranulesSearch}
+            />
+          }
           </div>
 
           <List
@@ -88,6 +112,7 @@ class CollectionGranules extends React.Component {
 CollectionGranules.propTypes = {
   granules: PropTypes.object,
   dispatch: PropTypes.func,
+  location: PropTypes.object,
   params: PropTypes.object
 };
 
