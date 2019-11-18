@@ -44,7 +44,7 @@
   border-radius: 5px;
   display: inline-block;
   background-color: $background-white;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+  box-shadow: $shadow__modal;
   padding: 2em;
   position: relative;
   width: 300px;
