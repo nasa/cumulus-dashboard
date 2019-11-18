@@ -122,7 +122,12 @@ render((
           <Route path='add' component={AddCollection} />
           <Route path='edit/:name/:version' component={EditCollection} />
           <Route path='collection/:name/:version' component={CollectionOverview} />
-          <Route path='collection/:name/:version/granules' component={CollectionGranules} />
+          <Route path='collection/:name/:version/granules' component={CollectionGranules}>
+            <Route path='completed' component={CollectionGranules}/>
+            <Route path='processing' component={CollectionGranules}/>
+            <Route path='failed' component={CollectionGranules}/>
+            <Redirect from='running' to='processing' />
+          </Route>
           <Route path='collection/:name/:version/definition' component={CollectionIngest} />
           <Route path='collection/:name/:version/logs' component={CollectionLogs} />
         </Route>
