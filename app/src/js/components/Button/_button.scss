@@ -372,6 +372,24 @@
   }
 }
 
+.button--submit:hover:before, .button--confirm:hover:before{
+  color: $white;
+  position: absolute;
+  font-family: 'Font Awesome 5 Free';
+  content: '\f0c7';
+  font-weight: 900;
+  visibility: hidden;
+}
+
+.button--cancel:hover:before{
+    color: $white;
+    position: absolute;
+    font-family: 'Font Awesome 5 Free';
+    content: '\f057';
+    font-weight: 900;
+    visibility: hidden;
+}
+
 /*.button__cancel {
   &:before {
     color: $white;

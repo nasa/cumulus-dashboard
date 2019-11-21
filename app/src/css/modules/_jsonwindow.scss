@@ -1,6 +1,18 @@
+.ace_editor {
+  margin-bottom: 2em;
+  border: 1px solid $lightest-grey;
+  border-radius: .5em;
+}
+
+.ace_editor.ace-github {
+   min-height: 400px;
+   max-height: 600px;
+}
+
 .ace-github .ace_gutter {
   background: $dark-blue !important;
   color: $white !important;
+  padding-top: 25px;
 }
 
 .ace_fold-widget {
@@ -16,4 +28,14 @@
     top: 0;
     right: 1px;
   }
+}
+
+.ace-github .ace_content {
+  padding-top: .5em;
+  margin-top: 20px !important;
+  min-height: 380px;
+}
+
+.ace_text-layer {
+  font-feature-settings: "liga" 0;
 }
