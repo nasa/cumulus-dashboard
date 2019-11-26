@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { Link, withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { getCollectionId, lastUpdated } from '../../utils/format';
 import {
@@ -15,6 +15,7 @@ import {
   tableHeader,
   tableRow,
   tableSortProps,
+  simpleDropdownOption,
   bulkActions
 } from '../../utils/table-config/granules';
 import List from '../Table/Table';
@@ -22,14 +23,18 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import statusOptions from '../../utils/status';
 import {strings} from '../locale';
+import { workflowOptionNames } from '../../selectors';
 
 class CollectionGranules extends React.Component {
   constructor () {
     super();
     this.displayName = strings.collection_granules;
     this.generateBulkActions = this.generateBulkActions.bind(this);
+    this.selectWorkflow = this.selectWorkflow.bind(this);
+    this.getExecuteOptions = this.getExecuteOptions.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.getView = this.getView.bind(this);
+    this.state = {};
   }
 
   generateQuery () {
@@ -51,8 +56,30 @@ class CollectionGranules extends React.Component {
   }
 
   generateBulkActions () {
+    const actionConfig = {
+      execute: {
+        options: this.getExecuteOptions(),
+        action: this.applyWorkflow
+      }
+    };
     const { granules } = this.props;
-    return bulkActions(granules);
+    let actions = bulkActions(granules, actionConfig);
+    return actions;
+  }
+
+  selectWorkflow (selector, workflow) {
+    this.setState({ workflow });
+  }
+
+  getExecuteOptions () {
+    return [
+      simpleDropdownOption({
+        handler: this.selectWorkflow,
+        label: 'workflow',
+        value: this.state.workflow,
+        options: this.props.workflowOptions
+      })
+    ];
   }
 
   render () {
@@ -93,12 +120,12 @@ class CollectionGranules extends React.Component {
 
           <List
             list={list}
-            dispatch={this.props.dispatch}
             action={listGranules}
             tableHeader={tableHeader}
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
+            bulkActions={this.generateBulkActions()}
             rowId={'granuleId'}
             sortIdx={6}
           />
@@ -113,7 +140,13 @@ CollectionGranules.propTypes = {
   granules: PropTypes.object,
   dispatch: PropTypes.func,
   location: PropTypes.object,
+  config: PropTypes.object,
+  workflowOptions: PropTypes.array,
   params: PropTypes.object
 };
 
-export default connect(state => state)(CollectionGranules);
+export default withRouter(connect(state => ({
+  workflowOptions: workflowOptionNames(state),
+  granules: state.granules,
+  config: state.config
+}))(CollectionGranules));
