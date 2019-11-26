@@ -72,7 +72,7 @@ class CollectionIngest extends React.Component {
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>{name}</h1>
-          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${name}/${version}`}>Edit</Link>
+          <Link className='button button--edit button--small form-group__element--right button--green' to={`/collections/edit/${name}/${version}`}>Edit</Link>
           {lastUpdated(data.queriedAt)}
         </section>
         <section className='page__section'>

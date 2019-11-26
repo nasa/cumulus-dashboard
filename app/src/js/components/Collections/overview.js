@@ -123,7 +123,7 @@ class CollectionOverview extends React.Component {
             text={deleteStatus === 'success' ? 'Success!' : 'Delete' } />
           </div>
 
-          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
+          <Link className='button button--edit button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
           {lastUpdated(get(record, 'data.timestamp'))}
           {overview}
           {errors.length ? <ErrorReport report={errors} truncate={true} /> : null}

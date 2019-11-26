@@ -19,8 +19,10 @@ class CollectionLogs extends React.Component {
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large heading--shared-content with-description'>{collectionName}</h1>
-          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
+          <div className="heading__wrapper--border">
+            <h1 className='heading--large heading--shared-content with-description'>{collectionName}</h1>
+          </div>
+          <Link className='button button--edit button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}`}>Edit</Link>
           {lastUpdated(queriedAt)}
         </section>
         <LogViewer query={{ q: collectionName }} dispatch={this.props.dispatch} logs={this.props.logs}/>

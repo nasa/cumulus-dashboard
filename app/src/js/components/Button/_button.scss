@@ -283,7 +283,7 @@
 
 .button--small, .subform__item--last .subform__button {
   font-size: .86em;
-  padding: .4em 2em .3em;
+  /*padding: .4em 2em .3em;*/
 }
 
 .button--large {
@@ -329,7 +329,7 @@
   position: relative;
   display: inline-block;
   cursor: pointer;
-  &:before {
+  &:after {
     position: absolute;
     /*color: $white;*/
     font-family: 'Font Awesome 5 Free';
@@ -345,12 +345,12 @@
   padding: .7em 3em .7em 1em;
 }
 
-.button__arrow:before {
+.button__arrow:after {
   left: 130%;
   top: .75em;
 }
 
-.button__arrow:hover:before {
+.button__arrow:hover:after {
   left: 85%;
 }
 
@@ -358,12 +358,12 @@
   padding: .65em 3em .65em 1em;
 }
 
-.button__arrow--md:hover:before {
+.button__arrow--md:hover:after {
   left: 75%;
 }
 
 .button__arrow--white {
-  &:before {
+  &:after {
     position: absolute;
     color: $white;
     font-family: 'Font Awesome 5 Free';
@@ -372,7 +372,25 @@
   }
 }
 
-.button__cancel {
+.button--submit:hover:before, .button--confirm:hover:before{
+  color: $white;
+  position: absolute;
+  font-family: 'Font Awesome 5 Free';
+  content: '\f0c7';
+  font-weight: 900;
+  visibility: hidden;
+}
+
+.button--cancel:hover:before{
+    color: $white;
+    position: absolute;
+    font-family: 'Font Awesome 5 Free';
+    content: '\f057';
+    font-weight: 900;
+    visibility: hidden;
+}
+
+/*.button__cancel {
   &:before {
     color: $white;
     position: absolute;
@@ -380,7 +398,7 @@
     content: '\f057';
     font-weight: 900;
   }
-}
+}*/
 
 .tab--wrapper {
   margin-bottom: 2em;
