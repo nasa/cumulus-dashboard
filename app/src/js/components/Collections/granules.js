@@ -8,6 +8,7 @@ import {
   listGranules,
   filterGranules,
   clearGranulesFilter,
+  applyWorkflowToGranule,
   searchGranules,
   clearGranulesSearch
 } from '../../actions';
@@ -29,6 +30,7 @@ class CollectionGranules extends React.Component {
   constructor () {
     super();
     this.displayName = strings.collection_granules;
+    this.applyWorkflow = this.applyWorkflow.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
@@ -69,6 +71,10 @@ class CollectionGranules extends React.Component {
 
   selectWorkflow (selector, workflow) {
     this.setState({ workflow });
+  }
+
+  applyWorkflow (granuleId) {
+    return applyWorkflowToGranule(granuleId, this.state.workflow);
   }
 
   getExecuteOptions () {
