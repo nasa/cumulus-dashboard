@@ -362,6 +362,24 @@
       visibility: hidden;
     }
 
+    &__bulkgranules.button__arrow--md:hover:after {
+      left: 85%;
+    }
+
+    &__kibana_open{
+      background-color: $light-green;
+      position: relative;
+      margin-top: 1em;
+          
+      &:before{
+      color: $white;
+      position: absolute;
+      font-family: 'Font Awesome 5 Free';
+      content: '\f360';
+      font-weight: 900;
+      left: 10px;  
+      } 
+    }
 
      &__addcollections {
       float: right;

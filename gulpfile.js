@@ -146,6 +146,13 @@ const doBuild = (done) => {
 
 gulp.task('build', gulp.parallel(doBuild));
 
+// Bootstrap
+gulp.task('js', function () {
+  return gulp.src(['node_modules/bootstrap/dist/js/bootstrap.min.js', 'node_modules/popper.js/dist/popper.min.js', 'node_modules/jquery/dist/jquery.min.js'])
+    .pipe(gulp.dest('src/js'))
+    .pipe(browserSync.stream());
+});
+
 gulp.task('styles', function () {
   return gulp.src('app/src/css/main.scss')
     .pipe($.plumber(function (e) {

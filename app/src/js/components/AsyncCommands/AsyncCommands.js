@@ -92,6 +92,7 @@ class AsyncCommand extends React.Component {
 
     return (
       <div>
+        
         { button }
         { modal ? <div className='modal__cover'></div> : null }
         <div className={c({
