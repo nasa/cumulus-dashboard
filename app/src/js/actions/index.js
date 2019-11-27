@@ -744,7 +744,7 @@ export const getRule = (ruleName) => ({
     id: ruleName,
     type: types.RULE,
     method: 'GET',
-    path: `rules?name=${ruleName}`
+    path: `rules/${ruleName}`
   }
 });
 
@@ -781,8 +781,6 @@ export const deleteRule = (ruleName) => ({
 
 export const enableRule = (payload) => {
   const rule = clonedeep(payload);
-  delete rule['queriedAt'];
-  delete rule['timestamp'];
 
   if (!rule.rule.value) {
     rule.rule.value = '';
@@ -804,8 +802,6 @@ export const enableRule = (payload) => {
 
 export const disableRule = (payload) => {
   const rule = clonedeep(payload);
-  delete rule['queriedAt'];
-  delete rule['timestamp'];
 
   if (!rule.rule.value) {
     rule.rule.value = '';
