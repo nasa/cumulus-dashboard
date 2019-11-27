@@ -114,6 +114,9 @@ gulp.task('vendorScripts', function () {
   // Ignore unnecessary web-incompatible package
   vb.ignore('fs-extra');
 
+  // Needed to load react-datetime-picker DateTimePicker.css
+  vb.transform('browserify-css', {global: true});
+
   return vb.bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source('vendor.js'))

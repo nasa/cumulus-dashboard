@@ -91,6 +91,31 @@ describe('Dashboard Home Page', () => {
       });
     });
 
+    it('displays a date picker in metrics section', () => {
+      cy.get('main[class=main] section').eq(1).within(() => {
+        cy.get('h3').should('have.text', 'Date and Time Range');
+
+        cy.get('div[class=datetime] ul li select[name=dateRange]').as('dateRange');
+        cy.get('@dateRange').select('1 week', { force: true });
+        cy.url().should('include', 'dateRange=1+week');
+
+        cy.get('div[class=datetime] ul li').eq(1).within(() => {
+          cy.get('div input').as('datetimeinputs');
+          cy.get('@datetimeinputs').eq(1).click({ force: true }).type('2');
+          cy.get('@datetimeinputs').eq(2).click({ force: true }).type('19');
+          cy.get('@datetimeinputs').eq(3).click({ force: true }).type('2019');
+          cy.get('@datetimeinputs').eq(4).click({ force: true }).type('6');
+          cy.get('@datetimeinputs').eq(5).click({ force: true }).type('59');
+          cy.get('div select[name=amPm]').select('PM', { force: true });
+          cy.url().should('include', 'startDateTime=2019-02-19T18%3A59%3A00Z');
+        });
+
+        cy.get('div[class=datetime__clear] button').click({ force: true });
+        cy.url().should('not.include', 'dateRange=1+week');
+        cy.url().should('not.include', 'startDateTime=2019-02-19T18%3A59%3A00Z');
+      });
+    });
+
     it('Logging out successfully redirects to the login screen', () => {
       // Logging to debug intermittent timeouts
       cy.task('log', 'Start test');
