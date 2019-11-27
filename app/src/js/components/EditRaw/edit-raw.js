@@ -103,7 +103,9 @@ class EditRaw extends React.Component {
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large'>Edit {pk}</h1>
+        <div className="heading__wrapper--border">
+          <h1 className='heading--large'>{pk}</h1>
+        </div>
           { data || data === '' ? (
             <form>
               <TextArea
@@ -115,14 +117,13 @@ class EditRaw extends React.Component {
                 minLines={1}
                 maxLines={200}
               />
-              <br />
               <button
-                className={'button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (updateStatus === 'inflight' ? ' button--disabled' : '')}
+                className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (updateStatus === 'inflight' ? ' button--disabled' : '')}
                 onClick={this.submit}
                 value={buttonText}
                 >{buttonText}</button>
               <button
-                className='button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
+                className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
                 onClick={this.cancel}
                 >Cancel</button>
             </form>
