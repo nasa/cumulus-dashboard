@@ -744,7 +744,7 @@ export const getRule = (ruleName) => ({
     id: ruleName,
     type: types.RULE,
     method: 'GET',
-    path: `rules?name=${ruleName}`
+    path: `rules/${ruleName}`
   }
 });
 
