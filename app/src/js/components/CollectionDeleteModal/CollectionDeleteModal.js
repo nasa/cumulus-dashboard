@@ -39,12 +39,12 @@ class CollectionDeleteModal extends React.Component {
           <Button
             className='button button--confirm button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
             onClick={this.confirm}>
-              Confirm
+              Delete Collection
           </Button>
           <Button
             className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
             onClick={this.cancel}>
-              Cancel
+              Cancel Request
           </Button>
         </Modal.Footer>
       </Modal>
