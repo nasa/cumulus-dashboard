@@ -6,12 +6,10 @@ import { Provider as ProviderElem } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { useScroll as notHookUseScroll } from 'react-router-scroll';
 
-// Bootstrap Framework
-
 //  Fontawesome Icons Library
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSignOutAlt, faSearch, faSync, faPlus, faInfoCircle, faTimesCircle, faSave, faCalendar, faExpand, faCompress, faClock, faCaretDown, faChevronDown, faSort, faSortDown, faSortUp, faArrowAltCircleLeft, faArrowAltCircleRight, faArrowAltCircleDown, faArrowAltCircleUp, faArrowRight, faCopy, faEdit, faArchive, faLaptopCode, faServer, faHdd, faExternalLinkSquareAlt, faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
-library.add(faSignOutAlt, faSearch, faSync, faPlus, faInfoCircle, faTimesCircle, faSave, faCalendar, faExpand, faCompress, faClock, faCaretDown, faSort, faChevronDown, faSortDown, faSortUp, faArrowAltCircleLeft, faArrowAltCircleRight, faArrowAltCircleDown, faArrowAltCircleUp, faArrowRight, faCopy, faEdit, faArchive, faLaptopCode, faServer, faHdd, faExternalLinkSquareAlt, faToggleOn, faToggleOff);
+import {faSignOutAlt, faSearch, faSync, faPlus, faInfoCircle, faTimesCircle, faSave, faCalendar, faExpand, faCompress, faClock, faCaretDown, faChevronDown, faSort, faSortDown, faSortUp, faArrowAltCircleLeft, faArrowAltCircleRight, faArrowAltCircleDown, faArrowAltCircleUp, faArrowRight, faCopy, faEdit, faArchive, faLaptopCode, faServer, faHdd, faExternalLinkSquareAlt, faToggleOn, faToggleOff, faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
+library.add(faSignOutAlt, faSearch, faSync, faPlus, faInfoCircle, faTimesCircle, faSave, faCalendar, faExpand, faCompress, faClock, faCaretDown, faSort, faChevronDown, faSortDown, faSortUp, faArrowAltCircleLeft, faArrowAltCircleRight, faArrowAltCircleDown, faArrowAltCircleUp, faArrowRight, faCopy, faEdit, faArchive, faLaptopCode, faServer, faHdd, faExternalLinkSquareAlt, faToggleOn, faToggleOff, faExclamationTriangle);
 import {
   Router,
   Route,
@@ -124,7 +122,12 @@ render((
           <Route path='add' component={AddCollection} />
           <Route path='edit/:name/:version' component={EditCollection} />
           <Route path='collection/:name/:version' component={CollectionOverview} />
-          <Route path='collection/:name/:version/granules' component={CollectionGranules} />
+          <Route path='collection/:name/:version/granules' component={CollectionGranules}>
+            <Route path='completed' component={CollectionGranules}/>
+            <Route path='processing' component={CollectionGranules}/>
+            <Route path='failed' component={CollectionGranules}/>
+            <Redirect from='running' to='processing' />
+          </Route>
           <Route path='collection/:name/:version/definition' component={CollectionIngest} />
           <Route path='collection/:name/:version/logs' component={CollectionLogs} />
         </Route>

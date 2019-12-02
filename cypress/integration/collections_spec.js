@@ -121,7 +121,7 @@ describe('Dashboard Collections Page', () => {
         .and('include', `#/collections/edit/${name}/${version}`);
       cy.get('@editCollection').click();
 
-      cy.contains('.heading--large', `Edit ${name}___${version}`);
+      cy.contains('.heading--large', `${name}___${version}`);
 
       // update collection and submit
       const duplicateHandling = 'version';
@@ -140,7 +140,7 @@ describe('Dashboard Collections Page', () => {
         expect(collectionJson.duplicateHandling).to.equal(duplicateHandling);
         expect(collectionJson.meta).to.equal(meta);
       });
-      cy.contains('.heading--large', `Edit ${name}___${version}`);
+      cy.contains('.heading--large', `${name}___${version}`);
     });
 
     it('should delete a collection', () => {

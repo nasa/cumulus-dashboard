@@ -4,13 +4,13 @@
 
 ### 1. Create the component
 
-Components can be an entire page, or a portion of a page. Component files go in `app/scripts/components`. If the component has many child components (a page with charts, tables, etc) then consider making a separate directory. In the case of the collections component:
+Components can be an entire page, or a portion of a page. Component files go in `app/src/js/components`. If the component has many child components (a page with charts, tables, etc) then consider making a separate directory. In the case of the collections component:
 
- - `app/scripts/components/collections/index.js` is the parent or main page.
- - A search component could live in `app/scripts/components/collections/search.js`.
- - A bar chart component that is shared with other pages could live in `app/scripts/components/charts/bar.js`.
+ - `app/src/js/components/collections/index.js` is the parent or main page.
+ - A search component could live in `app/src/js/components/collections/search.js`.
+ - A bar chart component that is shared with other pages could live in `app/src/js/components/charts/bar.js`.
 
-If a component is very simple, it may not need a unique directory, and can be simply `app/scripts/components/404.js`, for example.
+If a component is very simple, it may not need a unique directory, and can be simply `app/src/js/components/404.js`, for example.
 
 ### 2. Add the component to the router
 
@@ -24,7 +24,7 @@ When one route is nested within another route, the urls stack. In the following 
 </Route>
 ```
 
-The routes are all defined in `app/scripts/main.js`. Make sure to `import` the necessary component at the top of the file.
+The routes are all defined in `app/src/js/main.js`. Make sure to `import` the necessary component at the top of the file.
 
 ```javascript
 import Collections from './components/collections'
@@ -61,7 +61,7 @@ Finally, we write a reducer to identify this action and optionally manipulate th
 
 ### Writing actions
 
-We might want to write an action to query a single granule by id. To do this, we create a function in `scripts/actions/index.js`.
+We might want to write an action to query a single granule by id. To do this, we create a function in `src/js/actions/index.js`.
 
 ```javascript
 export const getGranule = function (granuleId) {
@@ -114,7 +114,7 @@ const Granule = React.createClass({
 
   componentWillMount: function () {
     // params are passed as props to each component,
-    // and id is the namespace for the route in `scripts/main.js`.
+    // and id is the namespace for the route in `src/js/main.js`.
     const granuleId = this.props.params.id;
     getGranule(granuleId);
   },

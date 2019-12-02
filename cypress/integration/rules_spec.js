@@ -114,7 +114,7 @@ describe('Rules page', () => {
 
       cy.contains('.heading--large', testRuleName);
       cy.contains('.button--small', 'Edit').click();
-      cy.contains('.heading--large', `Edit ${testRuleName}`);
+      cy.contains('.heading--large', `${testRuleName}`);
 
       // update rule and submit
       const provider = 'newProvider';

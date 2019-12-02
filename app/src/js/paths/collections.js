@@ -10,6 +10,9 @@ const singleCollectionRoutes = [
   [strings.back_to_collections, null, 'sidebar__nav--back'],
   ['Overview', 'collection/:name/:version'],
   [strings.granules, 'collection/:name/:version/granules'],
+  ['Completed', 'collection/:name/:version/granules/completed'],
+  ['Running', 'collection/:name/:version/granules/processing'],
+  ['Failed', 'collection/:name/:version/granules/failed'],
   ['Definition', 'collection/:name/:version/definition'],
   ['Logs', 'collection/:name/:version/logs']
 ];
