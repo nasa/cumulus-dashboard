@@ -1,19 +1,21 @@
 import React from 'react';
-import {Modal} from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import Modal from 'react-bootstrap/Modal';
 import Button from '../Button/Button';
 import '../Button/Button.scss';
 
 class CollectionDeleteModal extends React.Component {
   constructor (props) {
-    super(props);
+    super(props)
 
     this.onModalClose = this.onModalClose.bind(this);
   }
 
   onModalClose () {
-    const {onTogggleCollectionDeleteModal} = this.props;
-    onTogggleCollectionDeleteModal(false);
+    const {onToggleCollectionDeleteModal} = this.props
+    onToggleCollectionDeleteModal(false)
   }
+  
   render () {
     const {
       isOpen
@@ -50,6 +52,11 @@ class CollectionDeleteModal extends React.Component {
       </Modal>
     );
   }
+}
+
+CollectionDeleteModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onToggleCollectionDeleteModal: PropTypes.func.isRequired
 }
 
 export default CollectionDeleteModal;
