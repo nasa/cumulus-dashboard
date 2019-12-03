@@ -4,23 +4,23 @@ import Button from '../Button/Button';
 import '../Button/Button.scss';
 
 class CollectionDeleteModal extends React.Component {
-  constructor(props) {
-    super(props)
+  constructor (props) {
+    super(props);
 
-    this.onModalClose = this.onModalClose.bind(this)
+    this.onModalClose = this.onModalClose.bind(this);
   }
 
-  onModalClose(){
-    const {onTogggleCollectionDeleteModal} = this.props
-    onTogggleCollectionDeleteModal(false)
+  onModalClose () {
+    const {onTogggleCollectionDeleteModal} = this.props;
+    onTogggleCollectionDeleteModal(false);
   }
   render () {
     const {
       isOpen
-    } = this.props
+    } = this.props;
 
     return (
-      <Modal 
+      <Modal
         dialogClassName="collection-delete-modal"
         show={isOpen}
         onHide={this.onModalClose}
@@ -32,7 +32,7 @@ class CollectionDeleteModal extends React.Component {
         <Modal.Title id="modal__collection-delete-modal" className="collection-delete-modal__title">Delete Collection</Modal.Title>
         <Modal.Body>
           <p>
-            You have submitted a request to delete collection. Are you sure that you want to delete this collection? 
+            You have submitted a request to delete collection. Are you sure that you want to delete this collection?
           </p>
         </Modal.Body>
         <Modal.Footer>

@@ -19,6 +19,9 @@ class App extends React.Component {
       <div className='app'>
         { target !== 'cumulus' ? (
           <div className='app__target--container'>
+            <div className="alert alert-primary" role="alert">
+              This is a primary alert—check it out!
+            </div>
             <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
           </div>
         ) : null }
