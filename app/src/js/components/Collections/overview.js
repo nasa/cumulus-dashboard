@@ -17,29 +17,37 @@ import {
   tally,
   lastUpdated,
   getCollectionId,
-  deleteText
+  deleteText,
+  collectionNameVersion
 } from '../../utils/format';
 import Dropdown from '../DropDown/dropdown';
+import SimpleDropdown from '../DropDown/simple-dropdown';
 import Search from '../Search/search';
 import statusOptions from '../../utils/status';
 import ErrorReport from '../Errors/report';
 import List from '../Table/Table';
 import Overview from '../Overview/overview';
 import AsyncCommand from '../AsyncCommands/async-command';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
+import {
+  tableHeader,
+  tableRow,
+  tableSortProps
+} from '../../utils/table-config/granules';
 import { updateDelay } from '../../config';
 import { strings } from '../locale';
 
 class CollectionOverview extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
+
     this.displayName = 'CollectionOverview';
-    this.load = this.load.bind(this);
-    this.generateQuery = this.generateQuery.bind(this);
+
+    this.changeCollection = this.changeCollection.bind(this);
     this.delete = this.delete.bind(this);
-    this.navigateBack = this.navigateBack.bind(this);
     this.errors = this.errors.bind(this);
-    this.renderOverview = this.renderOverview.bind(this);
+    this.generateQuery = this.generateQuery.bind(this);
+    this.load = this.load.bind(this);
+    this.navigateBack = this.navigateBack.bind(this);
   }
 
   componentDidMount () {
@@ -59,10 +67,15 @@ class CollectionOverview extends React.Component {
     this.props.dispatch(getCollection(name, version));
   }
 
+  changeCollection (_, collectionId) {
+    const { name, version } = collectionNameVersion(collectionId);
+    Object.assign(this.props.params, { name, version });
+    this.props.dispatch(getCollection(name, version));
+  }
+
   generateQuery () {
-    const collectionId = getCollectionId(this.props.params);
     return {
-      collectionId
+      collectionId: getCollectionId(this.props.params)
     };
   }
 
@@ -101,6 +114,9 @@ class CollectionOverview extends React.Component {
     const collectionName = params.name;
     const collectionVersion = params.version;
     const collectionId = getCollectionId(params);
+    const sortedCollectionIds = collections.list.data.map(getCollectionId).sort(
+      // Compare collection IDs ignoring case
+      (id1, id2) => id1.localeCompare(id2, 'en', { sensitivity: 'base' }));
     const record = collections.map[collectionId];
     const { list } = granules;
     const { meta } = list;
@@ -109,18 +125,29 @@ class CollectionOverview extends React.Component {
 
     // create the overview boxes
     const overview = record ? this.renderOverview(record) : <div></div>;
+
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>{collectionName} / {collectionVersion}</h1>
           <div className='form-group__element--right'>
-          <AsyncCommand action={this.delete}
-            success={this.navigateBack}
-            successTimeout={updateDelay}
-            status={deleteStatus}
-            confirmAction={true}
-            confirmText={deleteText(`${collectionName} ${collectionVersion}`)}
-            text={deleteStatus === 'success' ? 'Success!' : 'Delete' } />
+            <SimpleDropdown
+              label={'Collection'}
+              value={getCollectionId(params)}
+              options={sortedCollectionIds}
+              id={'collection-chooser'}
+              onChange={this.changeCollection}
+              noNull={true}
+            />
+            <AsyncCommand
+              action={this.delete}
+              success={this.navigateBack}
+              successTimeout={updateDelay}
+              status={deleteStatus}
+              confirmAction={true}
+              confirmText={deleteText(`${collectionName} ${collectionVersion}`)}
+              text={deleteStatus === 'success' ? 'Success!' : 'Delete'}
+            />
           </div>
 
           <Link className='button button--edit button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
@@ -138,11 +165,11 @@ class CollectionOverview extends React.Component {
               clear={clearGranulesSearch}
             />
             <Dropdown
-                options={statusOptions}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey={'status'}
-                label={'Status'}
+              options={statusOptions}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey={'status'}
+              label={'Status'}
             />
           </div>
           <List

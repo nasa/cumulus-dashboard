@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class Dropdown extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.onChange = this.onChange.bind(this);
   }
 
