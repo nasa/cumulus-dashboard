@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from '../Button/Button';
 import '../Button/Button.scss';
 
-class CollectionDeleteModal extends React.Component {
+class GranulesRedirectModal extends React.Component {
   constructor (props) {
     super(props);
 
@@ -12,8 +12,8 @@ class CollectionDeleteModal extends React.Component {
   }
 
   onModalClose () {
-    const {onToggleCollectionDeleteModal} = this.props;
-    onToggleCollectionDeleteModal(false);
+    const {onToggleGranulesRedirectModal} = this.props;
+    onToggleGranulesRedirectModal(false);
   }
 
   render () {
@@ -23,18 +23,18 @@ class CollectionDeleteModal extends React.Component {
 
     return (
       <Modal
-        dialogClassName="collection-delete-modal"
+        dialogClassName="granules-redirect-modal"
         show={isOpen}
         onHide={this.onModalClose}
         centered
         size="md"
-        aria-labelledby="modal__collection-delete-modal"
+        aria-labelledby="modal__granules-redirect-modal"
         >
-        <Modal.Header className="collection-delete-modal__header" closeButton></Modal.Header>
-        <Modal.Title id="modal__collection-delete-modal" className="collection-delete-modal__title">Delete Collection</Modal.Title>
+        <Modal.Header className="granules-redirect-modal__header" closeButton></Modal.Header>
+        <Modal.Title id="modal__granules-redirect-modal" className="granules-redirect-modal__title">Delete Collection</Modal.Title>
         <Modal.Body>
           <p>
-           You have submitted a request to delete collection {(`${collectionName} ${collectionVersion}`)}. Are you sure that you want to delete this collection?
+          You have submitted a request to delete collection {(`${collectionName} ${collectionVersion}`)}. In order to complete your request, the granules associated with this collection needs to be deleted first. Would you like to be redirected to the Granules page?
           </p>
         </Modal.Body>
         <Modal.Footer>
@@ -44,9 +44,9 @@ class CollectionDeleteModal extends React.Component {
               Cancel Request
           </Button>
           <Button
-            className='button button__deletecollections button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
+            className='button button__gotogranules button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
             onClick={this.confirm}>
-              Delete Collection
+              Go To Granules
           </Button>
         </Modal.Footer>
       </Modal>
@@ -54,9 +54,9 @@ class CollectionDeleteModal extends React.Component {
   }
 }
 
-CollectionDeleteModal.propTypes = {
+GranulesRedirectModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onToggleCollectionDeleteModal: PropTypes.func.isRequired
 };
 
-export default CollectionDeleteModal;
+export default GranulesRedirectModal;

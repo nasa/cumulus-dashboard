@@ -18,7 +18,7 @@ class AsyncCommand extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
-    this.onModalClose = this.onModalClose.bind(this);
+    /* this.onModalClose = this.onModalClose.bind(this); */
   }
 
   componentDidUpdate (prevProps) {
@@ -43,7 +43,6 @@ class AsyncCommand extends React.Component {
     if (processing) className += ' button--loading';
     if (this.props.disabled) className += ' button--disabled';
     if (this.props.className) className += ' ' + this.props.className;
-    // if (this.props.delete) className += ' button--delete';
     return className;
   }
 
@@ -75,10 +74,10 @@ class AsyncCommand extends React.Component {
     this.setState({ modal: false });
   }
 
-  onModalClose () {
+  /* onModalClose () {
     const { onToggleAsyncCommand } = this.props
-    onToggleAsyncCommand(false)
-  }
+    onToggleAsyncCommand(false);
+  } */
 
   render () {
     const { status, text, confirmText, confirmOptions } = this.props;
@@ -97,6 +96,10 @@ class AsyncCommand extends React.Component {
     );
     const button = React.createElement(element, props, children);
 
+    /* const {
+      isOpen
+    } = this.props; */
+
     return (
       <div>
         { button }
@@ -108,24 +111,36 @@ class AsyncCommand extends React.Component {
           { modal ? (
             <Modal
               dialogClassName="async-modal"
-                { confirmOptions ? (confirmOptions).map(option =>
-                  <div key={`option-${confirmOptions.indexOf(option)}`}>
-                    {option}
-                    <br />
-                  </div>
-                ) : null }
-                <h4>{confirmText}</h4>
-                <button
-                  className='button button--confirm button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
-                  onClick={this.confirm}>Confirm</button>
-                <button
-                  className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
-                  onClick={this.cancel}>Cancel</button>
-              </div>
-            </div>
-              show
               show={true}
-              onHide={this.onModalClose}
+              /* onHide={this.onModalClose} */
+              centered
+              size="md"
+              aria-labelledby="modal__async-modal"
+            >
+              <Modal.Header className="async-modal__header" closeButton></Modal.Header>
+                <Modal.Title id="modal__async-modal" className="modal__async-title"></Modal.Title>
+                  <Modal.Body>
+                    <div className='modal__internal modal__formcenter'>
+                      { confirmOptions ? (confirmOptions).map(option =>
+                        <div key={`option-${confirmOptions.indexOf(option)}`}>
+                          {option}
+                          <br />
+                        </div>
+                      ) : null }
+                      <h4>{confirmText}</h4>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                  <button
+                      className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
+                      onClick={this.cancel}>Cancel
+                  </button>
+                  <button
+                      className='button button--confirm button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
+                      onClick={this.confirm}>Confirm
+                  </button>
+                </Modal.Footer>
+            </Modal>
           ) : null }
         </div>
       </div>

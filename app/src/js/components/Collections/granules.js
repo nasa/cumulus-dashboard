@@ -98,7 +98,7 @@ class CollectionGranules extends React.Component {
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description '>{collectionName} / {collectionVersion}</h1>
-          <Link className='button button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
+          <Link className='button button--edit button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
           <dl className="metadata__updated">
             <dd>{lastUpdated(meta.queriedAt)}</dd>
           </dl>
