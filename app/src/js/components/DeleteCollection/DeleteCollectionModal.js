@@ -4,34 +4,18 @@ import Modal from 'react-bootstrap/Modal';
 import Button from '../Button/Button';
 import '../Button/Button.scss';
 
-class CollectionDeleteModal extends React.Component {
-  constructor (props) {
-    super(props);
-
-    this.onModalClose = this.onModalClose.bind(this);
-  }
-
-  onModalClose () {
-    const {onToggleCollectionDeleteModal} = this.props;
-    onToggleCollectionDeleteModal(false);
-  }
-
+class DeleteCollectionModal extends React.Component {
   render () {
-    const {
-      isOpen
-    } = this.props;
-
     return (
       <Modal
-        dialogClassName="collection-delete-modal"
-        show={isOpen}
-        onHide={this.onModalClose}
+        dialogClassName="delete-collection-modal"
+        show
         centered
         size="md"
-        aria-labelledby="modal__collection-delete-modal"
+        aria-labelledby="modal__delete-collection-modal"
         >
-        <Modal.Header className="collection-delete-modal__header" closeButton></Modal.Header>
-        <Modal.Title id="modal__collection-delete-modal" className="collection-delete-modal__title">Delete Collection</Modal.Title>
+        <Modal.Header className="delete-collection-modal__header" closeButton></Modal.Header>
+        <Modal.Title id="modal__delete-collection-modal" className="delete-collection-modal__title">Delete Collection</Modal.Title>
         <Modal.Body>
           <p>
            You have submitted a request to delete collection {(`${collectionName} ${collectionVersion}`)}. Are you sure that you want to delete this collection?
@@ -54,9 +38,7 @@ class CollectionDeleteModal extends React.Component {
   }
 }
 
-CollectionDeleteModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onToggleCollectionDeleteModal: PropTypes.func.isRequired
+DeleteCollectionModal.propTypes = {
 };
 
-export default CollectionDeleteModal;
+export default DeleteCollectionModal;

@@ -18,7 +18,6 @@ class AsyncCommand extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
-    /* this.onModalClose = this.onModalClose.bind(this); */
   }
 
   componentDidUpdate (prevProps) {
@@ -74,11 +73,6 @@ class AsyncCommand extends React.Component {
     this.setState({ modal: false });
   }
 
-  /* onModalClose () {
-    const { onToggleAsyncCommand } = this.props
-    onToggleAsyncCommand(false);
-  } */
-
   render () {
     const { status, text, confirmText, confirmOptions } = this.props;
     const { modal } = this.state;
@@ -96,10 +90,6 @@ class AsyncCommand extends React.Component {
     );
     const button = React.createElement(element, props, children);
 
-    /* const {
-      isOpen
-    } = this.props; */
-
     return (
       <div>
         { button }
@@ -111,8 +101,7 @@ class AsyncCommand extends React.Component {
           { modal ? (
             <Modal
               dialogClassName="async-modal"
-              show={true}
-              /* onHide={this.onModalClose} */
+              show
               centered
               size="md"
               aria-labelledby="modal__async-modal"
@@ -161,8 +150,7 @@ AsyncCommand.propTypes = {
   confirmAction: PropTypes.bool,
   confirmText: PropTypes.string,
   confirmOptions: PropTypes.array,
-  href: PropTypes.string,
-  onToggleAsyncCommand: PropTypes.func.isRequired
+  href: PropTypes.string
 };
 
 export default AsyncCommand;

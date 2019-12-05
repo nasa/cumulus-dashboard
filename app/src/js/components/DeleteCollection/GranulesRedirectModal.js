@@ -5,27 +5,11 @@ import Button from '../Button/Button';
 import '../Button/Button.scss';
 
 class GranulesRedirectModal extends React.Component {
-  constructor (props) {
-    super(props);
-
-    this.onModalClose = this.onModalClose.bind(this);
-  }
-
-  onModalClose () {
-    const {onToggleGranulesRedirectModal} = this.props;
-    onToggleGranulesRedirectModal(false);
-  }
-
   render () {
-    const {
-      isOpen
-    } = this.props;
-
     return (
       <Modal
         dialogClassName="granules-redirect-modal"
-        show={isOpen}
-        onHide={this.onModalClose}
+        show
         centered
         size="md"
         aria-labelledby="modal__granules-redirect-modal"
@@ -55,8 +39,6 @@ class GranulesRedirectModal extends React.Component {
 }
 
 GranulesRedirectModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onToggleCollectionDeleteModal: PropTypes.func.isRequired
 };
 
 export default GranulesRedirectModal;

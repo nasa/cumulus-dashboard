@@ -30,7 +30,6 @@ class BatchCommand extends React.Component {
     this.cleanup = this.cleanup.bind(this);
     this.isInflight = this.isInflight.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    /* this.onModalClose = this.onModalClose.bind(this); */
   }
 
   componentDidUpdate () {
@@ -118,11 +117,6 @@ class BatchCommand extends React.Component {
     } else this.start();
   }
 
-  /* onModalClose () {
-    const { onToggleBatchAsyncCommand } = this.props
-    onToggleBatchAsyncCommand(false);
-  } */
-
   render () {
     const {
       text,
@@ -130,7 +124,6 @@ class BatchCommand extends React.Component {
       className,
       confirm,
       confirmOptions
-      /* isOpen */
     } = this.props;
     const { activeModal, completed, status } = this.state;
     const todo = selection.length;
@@ -158,7 +151,6 @@ class BatchCommand extends React.Component {
             <Modal
               dialogClassName="batch-async-modal"
               show={true}
-              /* onHide={this.onModalClose} */
               centered
               size="md"
               aria-labelledby="modal__batch-async-modal"
@@ -186,7 +178,7 @@ class BatchCommand extends React.Component {
                     <button className={'button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel' + (buttonDisabled ? ' button--disabled' : '')}
                       onClick={this.cancel}>Cancel
                     </button>
-                    <button className={'button button__deletecollection button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (buttonDisabled ? ' button--disabled' : '')}
+                    <button className={'button button__deletecollections button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (buttonDisabled ? ' button--disabled' : '')}
                       onClick={this.confirm}>Confirm
                     </button>
                   </Modal.Footer>
@@ -210,8 +202,6 @@ BatchCommand.propTypes = {
   confirm: PropTypes.func,
   confirmOptions: PropTypes.array,
   updateDelay: PropTypes.number
-  /* onToggleBatchAsyncCommand: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired */
 };
 
 export default BatchCommand;
