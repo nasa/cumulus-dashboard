@@ -71,16 +71,20 @@
 
 &__wrapper {
   display: inline-block;
-  border: 1px solid $lightest-grey;
+  /*border: 1px solid $lightest-grey;*/
   border-radius: .5em;
   position: relative;
   &:after {
     position: absolute;
     font-family: 'Font Awesome 5 Free';
     content: '\f078';
+    color: $white;
     font-weight: 900;
-    right: 1em;
-    top: .1em;
-  }
-}
+    right: .1em;
+    /* top: .3em; */
+    background-color: $ocean-blue;
+    padding: 3px;
+    border-radius: 0em .5em .5em 0em;
+    }
+  } 
 }
