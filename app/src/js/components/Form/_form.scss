@@ -36,21 +36,6 @@ label {
   }
 }
 
-.dropdown__wrapper {
-  display: inline-block;
-  border: 1px solid $lightest-grey;
-  border-radius: .5em;
-  position: relative;
-  &:after {
-    position: absolute;
-    font-family: 'Font Awesome 5 Free';
-    content: '\f078';
-    font-weight: 900;
-    right: 1em;
-    top: .1em;
-  }
-}
-
 /*select {
   -webkit-appearance: caret;
 }*/

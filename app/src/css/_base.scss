@@ -222,6 +222,19 @@ a:active {
   padding-top: 3em;
 }
 
+.heading-form-group--left {
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.heading-form-group--left li h1{
+  margin-right: 5em;
+}
+
+.heading-form-group--left li:not(:first-child){
+  margin-right: 2em;
+}
+
 //Sidebar//
 
 .wrapper__sidebar{
@@ -650,4 +663,3 @@ a:active {
     top: 0em;
   }
 }
-

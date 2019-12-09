@@ -128,9 +128,9 @@ class CollectionOverview extends React.Component {
 
     return (
       <div className='page__component'>
-        <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>{collectionName} / {collectionVersion}</h1>
-          <div className='form-group__element--right'>
+        <section className='page__section page__section__controls'>
+          <div className='breadcrumbs'></div>
+          <div className='dropdown__collection form-group__element--right'>
             <SimpleDropdown
               label={'Collection'}
               value={getCollectionId(params)}
@@ -139,19 +139,33 @@ class CollectionOverview extends React.Component {
               onChange={this.changeCollection}
               noNull={true}
             />
-            <AsyncCommand
-              action={this.delete}
-              success={this.navigateBack}
-              successTimeout={updateDelay}
-              status={deleteStatus}
-              confirmAction={true}
-              confirmText={deleteText(`${collectionName} ${collectionVersion}`)}
-              text={deleteStatus === 'success' ? 'Success!' : 'Delete'}
-            />
           </div>
-
-          <Link className='button button--edit button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
-          {lastUpdated(get(record, 'data.timestamp'))}
+        </section>
+        <section className='page__section page__section__header-wrapper'>
+          <div className='heading-group'>
+            <ul className='heading-form-group--left'>
+              <li>
+                <h1 className='heading--large heading--shared-content with-description'>{collectionName} / {collectionVersion}</h1>
+              </li>
+              <li>
+                <button className='button button--edit button--small button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</button>
+              </li>
+              <li>
+                <AsyncCommand
+                action={this.delete}
+                success={this.navigateBack}
+                successTimeout={updateDelay}
+                status={deleteStatus}
+                confirmAction={true}
+                 confirmText={deleteText(`${collectionName} ${collectionVersion}`)}
+                text={deleteStatus === 'success' ? 'Success!' : 'Delete'}
+                />
+              </li>
+            </ul>
+           <span className="last-update">{lastUpdated(get(record, 'data.timestamp'))}</span>
+          </div>
+        </section>
+        <section className='page__section page__section__overview'>
           {overview}
           {errors.length ? <ErrorReport report={errors} truncate={true} /> : null}
         </section>
