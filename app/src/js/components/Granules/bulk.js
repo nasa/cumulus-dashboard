@@ -17,7 +17,12 @@ const getBaseRoute = function (collectionId) {
 
 class BulkGranule extends React.Component {
   render () {
-    const prefill = '{/nqueueName: expectedQueueName,/n workflowName: expectedWorkflowName,/n index: expectedIndex,/n query: expectedQuery/n}';
+    const defaultValue = {
+      queueName: '',
+      workflowName: '',
+      index: '',
+      query: ''
+    };
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -35,10 +40,10 @@ class BulkGranule extends React.Component {
         <section>
           <AddRaw
             pk={'new-operation'}
-            primaryProperty={'name'}
+            primaryProperty={'workflowName'}
             title={'Operation Input'}
             state={this.props.collections}
-            prefill={prefill}
+            defaultValue={defaultValue}
             createRecord={bulkGranule}
             getBaseRoute={getBaseRoute}
             getPk={getCollectionId}

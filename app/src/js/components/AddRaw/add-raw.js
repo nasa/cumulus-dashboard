@@ -71,8 +71,6 @@ class AddRaw extends React.Component {
   render () {
     const { pk, error, data } = this.state;
     const status = get(this.props.state.created, [pk, 'status']);
-    const prefill = this.props.prefill || '';
-    console.log('idk ', prefill, 'yes?');
     const buttonText = status === 'inflight' ? 'loading...'
       : status === 'success' ? 'Success!' : 'Submit';
     return (
@@ -83,14 +81,12 @@ class AddRaw extends React.Component {
             <form>
               <TextArea
                 value={data}
-                placeholder={prefill}
                 id={'create-new-record'}
                 error={error}
                 onChange={this.onChange}
                 mode={'json'}
                 minLines={30}
                 maxLines={200}
-
               />
                 <button
                   className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (status === 'inflight' ? ' button--disabled' : '')}
@@ -118,7 +114,6 @@ AddRaw.propTypes = {
   getPk: PropTypes.func,
   getBaseRoute: PropTypes.func,
   router: PropTypes.object,
-  prefill: PropTypes.string,
   createRecord: PropTypes.func
 };
 
