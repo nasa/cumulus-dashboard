@@ -32,8 +32,10 @@ class TextAreaForm extends React.Component {
       value,
       id,
       error,
-      mode
+      mode,
+      placeholder
     } = this.props;
+    console.log('this placeholder', placeholder, 'yes.....');
 
     let minLines = this.props.minLines || _minLines;
     let maxLines = this.props.maxLines || _maxLines;
@@ -47,6 +49,7 @@ class TextAreaForm extends React.Component {
           theme={config.editorTheme}
           onChange={this.onChange}
           name={id}
+          placeholder={placeholder}
           value={value}
           width='auto'
           tabSize={config.tabSize}
@@ -68,6 +71,7 @@ TextAreaForm.propTypes = {
   error: PropTypes.any,
   mode: PropTypes.string,
   onChange: PropTypes.func,
+  placeholder: PropTypes.string,
 
   minLines: PropTypes.number,
   maxLines: PropTypes.number

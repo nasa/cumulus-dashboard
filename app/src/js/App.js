@@ -60,6 +60,7 @@ import CollectionLogs from './components/Collections/logs';
 import Granules from './components/Granules';
 import ListGranules from './components/Granules/list';
 import Granule from './components/Granules/granule';
+import BulkGranule from './components/Granules/bulk';
 import GranuleOverview from './components/Granules/overview';
 
 import Pdrs from './components/Pdr';
@@ -137,6 +138,7 @@ render((
           <Route path='completed' component={ListGranules} />
           <Route path='processing' component={ListGranules} />
           <Route path='failed' component={ListGranules} />
+          <Route path='bulk' component={BulkGranule} />
           <Redirect from='running' to='processing' />
         </Route>
         <Route path='pdrs' component={Pdrs}>
