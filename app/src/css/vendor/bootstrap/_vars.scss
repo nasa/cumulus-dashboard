@@ -9,3 +9,6 @@ We are using default bootstrap variables for styling and functionality
 @import "overrides";
 
 //Import Bootstrap default mixins, variables, and functions
+@import "../../../../../node_modules/bootstrap/scss/_functions";
+@import "../../../../../node_modules/bootstrap/scss/_variables";
+@import "../../../../../node_modules/bootstrap/scss/_mixins";

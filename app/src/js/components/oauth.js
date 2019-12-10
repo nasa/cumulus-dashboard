@@ -10,6 +10,7 @@ import { updateDelay, apiRoot, oauthMethod } from '../config';
 import PropTypes from 'prop-types';
 import ErrorReport from './Errors/report';
 import Header from './Header/header';
+import Modal from 'react-bootstrap/Modal';
 
 class OAuth extends React.Component {
   constructor () {
@@ -54,23 +55,31 @@ class OAuth extends React.Component {
         button = <div style={{textAlign: 'center'}}><a className="button button--oauth" href={url.resolve(apiRoot, `token?state=${redirect}`)} >Login with Earthdata Login</a></div>;
       }
     }
+
     return (
       <div className='app'>
         <Header dispatch={dispatch} api={api} apiVersion={apiVersion} minimal={true}/>
-        <main className='main' role='main'>
-          <div>
-            <div className='modal__cover'></div>
-            <div className='modal__container modal__container--onscreen'>
-              <div className='modal'>
-                <div className='modal__internal'>
-                  { api.inflight ? <h2 className='heading--medium'>Authenticating ... </h2> : null }
-                  { api.error ? <ErrorReport report={api.error} /> : null }
-                  { button }
-                </div>
-              </div>
+          <main className='main' role='main'>
+            <div className="modal-content">
+              <Modal
+              dialogClassName="oauth-modal"
+              show= {true}
+              centered
+              size="sm"
+              aria-labelledby="modal__oauth-modal"
+              >
+                <Modal.Header className="oauth-modal__header"></Modal.Header>
+                  <Modal.Title id="modal__oauth-modal" className="oauth-modal__title">Welcome To Cumulus Dashboard</Modal.Title>
+                    <Modal.Body>
+                      { api.inflight ? <h2 className='heading--medium'>Authenticating ... </h2> : null }
+                      { api.error ? <ErrorReport report={api.error} /> : null }
+                    </Modal.Body>
+                      <Modal.Footer>
+                        { button }
+                      </Modal.Footer>
+              </Modal>
             </div>
-          </div>
-        </main>
+          </main>
       </div>
     );
   }

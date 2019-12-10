@@ -1,4 +1,5 @@
 // Will need to review: Modal needs to be put into its own component and link the actions to that component as well as ButtonGroup aka bulkactions
+/* For Delete Collection Modal (later other modals): Need to copy logic from here and implement in AsyncDeleteCollectionModal.js */
 'use strict';
 import React from 'react';
 import c from 'classnames';
@@ -6,6 +7,7 @@ import PropTypes from 'prop-types';
 import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
 import { preventDefault } from '../../utils/noop';
 import { updateDelay } from '../../config';
+import Modal from 'react-bootstrap/Modal';
 
 class AsyncCommand extends React.Component {
   constructor () {
@@ -36,7 +38,7 @@ class AsyncCommand extends React.Component {
   }
 
   buttonClass (processing) {
-    let className = 'button button--small form-group__element button--green';
+    let className = 'button button--small form-group__element';// this button affects all Collections buttongroups -- the buttons need to be independent
     if (processing) className += ' button--loading';
     if (this.props.disabled) className += ' button--disabled';
     if (this.props.className) className += ' ' + this.props.className;
@@ -87,6 +89,7 @@ class AsyncCommand extends React.Component {
       </span>
     );
     const button = React.createElement(element, props, children);
+
     return (
       <div>
         { button }
@@ -96,23 +99,37 @@ class AsyncCommand extends React.Component {
           'modal__container--onscreen': modal
         })}>
           { modal ? (
-            <div className='modal'>
-              <div className='modal__internal modal__formcenter'>
-                { confirmOptions ? (confirmOptions).map(option =>
-                  <div key={`option-${confirmOptions.indexOf(option)}`}>
-                    {option}
-                    <br />
-                  </div>
-                ) : null }
-                <h4>{confirmText}</h4>
-                <button
-                  className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
-                  onClick={this.confirm}>Confirm</button>
-                <button
-                  className='button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
-                  onClick={this.cancel}>Cancel</button>
-              </div>
-            </div>
+            <Modal
+              dialogClassName="async-modal"
+              show
+              centered
+              size="md"
+              aria-labelledby="modal__async-modal"
+            >
+              <Modal.Header className="async-modal__header" closeButton></Modal.Header>
+                <Modal.Title id="modal__async-modal" className="modal__async-title"></Modal.Title>
+                  <Modal.Body>
+                    <div className='modal__internal modal__formcenter'>
+                      { confirmOptions ? (confirmOptions).map(option =>
+                        <div key={`option-${confirmOptions.indexOf(option)}`}>
+                          {option}
+                          <br />
+                        </div>
+                      ) : null }
+                      <h4>{confirmText}</h4>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                  <button
+                      className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
+                      onClick={this.cancel}>Cancel
+                  </button>
+                  <button
+                      className='button button--confirm button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
+                      onClick={this.confirm}>Confirm
+                  </button>
+                </Modal.Footer>
+            </Modal>
           ) : null }
         </div>
       </div>

@@ -25,7 +25,7 @@ import statusOptions from '../../utils/status';
 import ErrorReport from '../Errors/report';
 import List from '../Table/Table';
 import Overview from '../Overview/overview';
-import AsyncCommand from '../AsyncCommands/async-command';
+import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
 import { updateDelay } from '../../config';
 import { strings } from '../locale';

@@ -5,6 +5,7 @@ import c from 'classnames';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { bulkGranule } from '../../actions';
+import Modal from 'react-bootstrap/Modal';
 
 import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
 // import { getCollectionId, collectionHref } from '../../utils/format';
@@ -92,7 +93,7 @@ class BulkGranule extends React.Component {
     const status = null;
     // get(this.props.state.bulk, [pk, 'status']);
     const buttonText = status === 'inflight' ? 'loading...'
-      : status === 'success' ? 'Success!' : 'Submit';
+      : status === 'success' ? 'Success!' : 'Run Bulk Granules';
     const { modal } = this.state;
     const inflight = status === 'inflight';
     const props = {
@@ -110,43 +111,64 @@ class BulkGranule extends React.Component {
     return (
       <div>
         { button }
+        {/* Once the new Bootstrap Modal is working per the built in functionality */}
         { modal ? <div className='modal__cover'></div> : null }
         <div className={c({
           modal__container: true,
           'modal__container--onscreen': modal
         })}>
           { modal ? (
-            <div className='modal__large'>
-              <div className='modal__internal modal__formcenter'>
-                <h1 className='heading--large heading--shared-content with-description '>Bulk Granules</h1>
-                <h4>To run and complete your bulk granule task:</h4>
-                1. In the box below, enter your queueName and the workflowName. <br/>
-                2. Then add either an array of granule Ids or an elasticsearch query and index. <br/>
-                To construct a query, go to Kibana and run a search. Then place the elasticsearch query in the operation input. <br/>
-                <a href={kibanaRoot}>Open Kibana</a> <br/>
-                <form>
-                  <TextArea
-                    value={defaultValueString}
-                    id={'run-bulk-granule'}
-                    error={error}
-                    onChange={this.onChange}
-                    mode={'json'}
-                    minLines={30}
-                    maxLines={200}
-                  />
-                </form>
-                <button
-                  className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (status === 'inflight' ? ' button--disabled' : '')}
-                  onClick={this.submit}
-                  readOnly={true}
-                  >{buttonText}</button>
-                <button
-                  className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
-                  onClick={this.cancel}
-                  readOnly={true}
-                >Cancel</button>
-              </div>
-            </div>
+            <Modal
+              dialogClassName="bulk_granules-modal"
+              show
+              centered
+              size="lg"
+              aria-labelledby="modal__bulk_granules-modal"
+              style={{overflowY: 'scroll'}}
+            >
+              <Modal.Header className="bulk_granules-modal__header" closeButton></Modal.Header>
+                <Modal.Title id="modal__bulk_granules-modal" className="bulk_granules-modal__title">Bulk Granules</Modal.Title>
+                  <Modal.Body>
+                    <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
+                    <p>
+                      1. In the box below, enter your <strong>queueName</strong> and the <strong>workflowName</strong>. <br/>
+                      2. Then add either an array of granule Ids or an elasticsearch query and index. <br/>
+                    </p>
+                    <br/>
+                    <h4 className="modal_subtitle">If you need to construct a query</h4>
+                    <p>
+                      To construct a query, go to Kibana and run a search. Then place the elasticsearch query in the operation input. <br/>
+                      <button className="button button__kibana_open button--small" href={kibanaRoot} alt="Open Kibana">Open Kibana</button>
+                    </p>
+                    <br/>
+                    <form>
+                      <TextArea
+                        value={defaultValueString}
+                        id={'run-bulk-granule'}
+                        error={error}
+                        onChange={this.onChange}
+                        mode={'json'}
+                        minLines={30}
+                        maxLines={200}
+                      />
+                    </form>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <button
+                      className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
+                      onClick={this.cancel}
+                      readOnly={true}
+                      alt="Cancel Bulk Granules"
+                      >Cancel</button>
+                    <button
+                      className={'button button__bulkgranules button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (status === 'inflight' ? ' button--disabled' : '')}
+                      onClick={this.submit}
+                      readOnly={true}
+                      alt="Run Bulk Granules"
+                      >{buttonText}
+                    </button>
+                  </Modal.Footer>
+            </Modal>
           ) : null }
         </div>
       </div>
