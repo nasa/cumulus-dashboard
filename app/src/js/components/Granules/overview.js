@@ -32,6 +32,7 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import statusOptions from '../../utils/status';
+import Bulk from './bulk';
 import { updateInterval } from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
@@ -48,6 +49,7 @@ class GranulesOverview extends React.Component {
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
     this.csvDownloadSection = this.csvDownloadSection.bind(this);
     this.applyRecoveryWorkflow = this.applyRecoveryWorkflow.bind(this);
+    this.runBulkGranules = this.runBulkGranules.bind(this);
     this.state = {};
   }
 
@@ -89,6 +91,17 @@ class GranulesOverview extends React.Component {
       actions = actions.concat(recoverAction(granules, actionConfig));
     }
     return actions;
+  }
+
+  runBulkGranules () {
+    return (
+    <Bulk
+    element='a'
+    className={'button button--small button--green form-group__element--right link--no-underline'}
+    confirmAction={true}
+     />
+
+    );
   }
 
   selectWorkflow (selector, workflow) {
@@ -167,6 +180,7 @@ class GranulesOverview extends React.Component {
               action={searchGranules}
               clear={clearGranulesSearch}
             />
+            {this.runBulkGranules()}
           </div>
 
           <List
