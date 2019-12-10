@@ -10,7 +10,7 @@ import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
 // import { getCollectionId, collectionHref } from '../../utils/format';
 // import AddRaw from '../AddRaw/add-raw';
 import { kibanaRoot } from '../../config';
-import textArea from '../TextAreaForm/text-area';
+import TextArea from '../TextAreaForm/text-area';
 
 // const getBaseRoute = function (collectionId) {
 //   if (collectionId) {
@@ -88,6 +88,7 @@ class BulkGranule extends React.Component {
       index: '',
       query: ''
     };
+    const defaultValueString = JSON.stringify(defaultValue, null, 2);
     const status = null;
     // get(this.props.state.bulk, [pk, 'status']);
     const buttonText = status === 'inflight' ? 'loading...'
@@ -115,7 +116,7 @@ class BulkGranule extends React.Component {
           'modal__container--onscreen': modal
         })}>
           { modal ? (
-            <div className='modal'>
+            <div className='modal__large'>
               <div className='modal__internal modal__formcenter'>
                 <h1 className='heading--large heading--shared-content with-description '>Bulk Granules</h1>
                 <h4>To run and complete your bulk granule task:</h4>
@@ -124,18 +125,8 @@ class BulkGranule extends React.Component {
                 To construct a query, go to Kibana and run a search. Then place the elasticsearch query in the operation input. <br/>
                 <a href={kibanaRoot}>Open Kibana</a> <br/>
                 <form>
-                  {/* <AddRaw
-                    pk={'new-operation'}
-                    primaryProperty={'workflowName'}
-                    title={'Operation Input'}
-                    state={this.props}
-                    defaultValue={defaultValue}
-                    createRecord={bulkGranule}
-                    getBaseRoute={getBaseRoute}
-                    getPk={getCollectionId}
-                  /> */}
-                  <textArea
-                    value={defaultValue}
+                  <TextArea
+                    value={defaultValueString}
                     id={'run-bulk-granule'}
                     error={error}
                     onChange={this.onChange}
@@ -143,17 +134,17 @@ class BulkGranule extends React.Component {
                     minLines={30}
                     maxLines={200}
                   />
-                  </form>
-                  <button
-                    className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (status === 'inflight' ? ' button--disabled' : '')}
-                    onClick={this.submit}
-                    readOnly={true}
-                    >{buttonText}</button>
-                  <button
-                    className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
-                    onClick={this.cancel}
-                    readOnly={true}
-                  >Cancel</button>
+                </form>
+                <button
+                  className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (status === 'inflight' ? ' button--disabled' : '')}
+                  onClick={this.submit}
+                  readOnly={true}
+                  >{buttonText}</button>
+                <button
+                  className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
+                  onClick={this.cancel}
+                  readOnly={true}
+                >Cancel</button>
               </div>
             </div>
           ) : null }

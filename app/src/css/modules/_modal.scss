@@ -51,6 +51,17 @@
   text-align: left;
 }
 
+.modal__large {
+  border-radius: 5px;
+  display: inline-block;
+  background-color: $background-white;
+  box-shadow: $shadow__modal;
+  padding: 2em;
+  position: relative;
+  width: 65%;
+  overflow-y: scroll;
+  text-align: left;
+}
 
 .modal__formcenter {
   text-align: center;
