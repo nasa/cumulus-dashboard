@@ -148,7 +148,7 @@ class CollectionOverview extends React.Component {
                 <h1 className='heading--large heading--shared-content with-description'>{collectionName} / {collectionVersion}</h1>
               </li>
               <li>
-                <button className='button button--edit button--small button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</button>
+                <Link className='button button--edit button--small button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
               </li>
               <li>
                 <AsyncCommand

@@ -225,6 +225,7 @@ a:active {
 .heading-form-group--left {
   display: inline-flex;
   flex-direction: row;
+  position: relative;
 }
 
 .heading-form-group--left li h1{
@@ -233,6 +234,12 @@ a:active {
 
 .heading-form-group--left li:not(:first-child){
   margin-right: 2em;
+  margin-left: 1em;
+}
+
+.heading-form-group--left li a.button.button--edit{
+  position: absolute;
+  right: 12em;
 }
 
 //Sidebar//
