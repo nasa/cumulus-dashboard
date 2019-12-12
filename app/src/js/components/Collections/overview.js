@@ -145,19 +145,27 @@ class CollectionOverview extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>{strings.total_granules}<span className='num--title'>{meta.count ? ` ${meta.count}` : null}</span></h2>
           </div>
-          <div className='filters filters__wlabels'>
-            <Search dispatch={this.props.dispatch}
-              action={searchGranules}
-              clear={clearGranulesSearch}
-            />
-            <Dropdown
-                options={statusOptions}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey={'status'}
-                label={'Status'}
-            />
-            {this.runBulkGranules()}
+          <div className='filters filters__wlabels total_granules'>
+            <ul>
+              <li>
+                <Search dispatch={this.props.dispatch}
+                  action={searchGranules}
+                  clear={clearGranulesSearch}
+                />
+              </li>
+              <li>
+                <Dropdown
+                  options={statusOptions}
+                  action={filterGranules}
+                  clear={clearGranulesFilter}
+                  paramKey={'status'}
+                  label={'Status'}
+                />
+              </li>
+              <li className="run_bulk">
+                {this.runBulkGranules()}
+              </li>
+            </ul>
           </div>
           <List
             list={list}
