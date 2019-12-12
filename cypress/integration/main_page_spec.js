@@ -16,7 +16,7 @@ describe('Dashboard Home Page', () => {
 
   it('Logging in successfully redirects to the Dashboard main page', () => {
     cy.visit('/');
-    cy.get('div[class=modal__internal]').within(() => {
+    cy.get('div[class=modal-content]').within(() => {
       cy.get('a').click();
     });
 
@@ -38,7 +38,7 @@ describe('Dashboard Home Page', () => {
         window.location.hash = '#/auth?token=failed-token';
       });
 
-    cy.get('div[class=modal__internal]').within(() => {
+    cy.get('div[class=modal-content]').within(() => {
       cy.get('a').click();
     });
 

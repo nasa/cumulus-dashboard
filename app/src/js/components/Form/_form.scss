@@ -85,6 +85,19 @@ label {
   }
 }
 
+.filters.filters__wlabels ul{
+  display: flex;
+  align-items: baseline;
+}
+
+.filters.filters__wlabels .run_bulk{
+  margin-left: auto;
+}
+
+.filters.filters__wlabels.total_granules{
+  margin-bottom: 5em;
+}
+
 .form--controls {
   margin-bottom: 2em;
   display: flex;

@@ -161,26 +161,36 @@ class GranulesOverview extends React.Component {
             {this.csvDownloadSection(data)}
           </div>
           <div className='filters filters__wlabels'>
-            <Dropdown
-              getOptions={getOptionsCollectionName}
-              options={get(dropdowns, ['collectionName', 'options'])}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              paramKey={'collectionId'}
-              label={strings.collection}
-            />
-            <Dropdown
-              options={statusOptions}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              paramKey={'status'}
-              label={'Status'}
-            />
-            <Search dispatch={this.props.dispatch}
-              action={searchGranules}
-              clear={clearGranulesSearch}
-            />
-            {this.runBulkGranules()}
+            <ul>
+              <li>
+                <Dropdown
+                  getOptions={getOptionsCollectionName}
+                  options={get(dropdowns, ['collectionName', 'options'])}
+                  action={filterGranules}
+                  clear={clearGranulesFilter}
+                  paramKey={'collectionId'}
+                  label={strings.collection}
+                />
+              </li>
+              <li>
+                <Dropdown
+                  options={statusOptions}
+                  action={filterGranules}
+                  clear={clearGranulesFilter}
+                  paramKey={'status'}
+                  label={'Status'}
+                />
+              </li>
+              <li>
+                <Search dispatch={this.props.dispatch}
+                  action={searchGranules}
+                  clear={clearGranulesSearch}
+                />
+              </li>
+              <li className="run_bulk">
+                {this.runBulkGranules()}
+              </li>
+            </ul>
           </div>
 
           <List
