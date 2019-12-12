@@ -24,6 +24,7 @@ import Search from '../Search/search';
 import statusOptions from '../../utils/status';
 import ErrorReport from '../Errors/report';
 import List from '../Table/Table';
+import Bulk from '../Granules/bulk';
 import Overview from '../Overview/overview';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
@@ -40,6 +41,7 @@ class CollectionOverview extends React.Component {
     this.navigateBack = this.navigateBack.bind(this);
     this.errors = this.errors.bind(this);
     this.renderOverview = this.renderOverview.bind(this);
+    this.runBulkGranules = this.runBulkGranules.bind(this);
   }
 
   componentDidMount () {
@@ -52,6 +54,17 @@ class CollectionOverview extends React.Component {
        version !== prevProps.params.version) {
       this.load();
     }
+  }
+
+  runBulkGranules () {
+    return (
+    <Bulk
+    element='a'
+    className={'button button__bulkgranules button--green button__animation--md button__arrow button__arrow--md button__animation form-group__element--right link--no-underline'}
+    confirmAction={true}
+    state={this.props.granules}
+     />
+    );
   }
 
   load () {
@@ -144,6 +157,7 @@ class CollectionOverview extends React.Component {
                 paramKey={'status'}
                 label={'Status'}
             />
+            {this.runBulkGranules()}
           </div>
           <List
             list={list}

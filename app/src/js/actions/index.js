@@ -411,7 +411,8 @@ export const bulkGranule = (payload) => ({
     type: types.BULK_GRANULE,
     method: 'POST',
     path: 'granules/bulk',
-    body: payload
+    requestId: payload.requestId,
+    body: payload.json
   }
 });
 

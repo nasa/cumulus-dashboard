@@ -4,22 +4,12 @@ import PropTypes from 'prop-types';
 import c from 'classnames';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { bulkGranule } from '../../actions';
 import Modal from 'react-bootstrap/Modal';
 
+import { bulkGranule } from '../../actions';
 import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
-// import { getCollectionId, collectionHref } from '../../utils/format';
-// import AddRaw from '../AddRaw/add-raw';
 import { kibanaRoot } from '../../config';
 import TextArea from '../TextAreaForm/text-area';
-
-// const getBaseRoute = function (collectionId) {
-//   if (collectionId) {
-//     return collectionHref(collectionId);
-//   } else {
-//     return '/collections/collection';
-//   }
-// };
 
 class BulkGranule extends React.Component {
   constructor () {
@@ -39,15 +29,16 @@ class BulkGranule extends React.Component {
 
   submit (e) {
     e.preventDefault();
+    const requestId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     let { query } = this.state;
-
+    this.setState({requestId});
     if (this.props.status !== 'inflight') {
       try {
         var json = JSON.parse(query);
       } catch (e) {
         return this.setState({ error: 'Syntax error in JSON' });
       }
-      this.props.dispatch(bulkGranule(json));
+      this.props.dispatch(bulkGranule({requestId, json}));
     }
   }
 
@@ -71,9 +62,6 @@ class BulkGranule extends React.Component {
     if (this.props.confirmAction) {
       this.setState({ modal: true });
     }
-    // else if (this.props.status !== 'inflight') {
-    //   this.props.action();
-    // }
   }
 
   onChange (id, value) {
@@ -81,20 +69,17 @@ class BulkGranule extends React.Component {
   }
 
   render () {
-    // const { status } = this.props;
-    const { error } = this.state;
+    const { requestId, query, modal } = this.state;
     const defaultValue = {
-      queueName: '',
       workflowName: '',
       index: '',
       query: ''
     };
-    const defaultValueString = JSON.stringify(defaultValue, null, 2);
-    const status = null;
-    // get(this.props.state.bulk, [pk, 'status']);
+    const queryValue = query || JSON.stringify(defaultValue, null, 2);
+    const status = get(this.props.state.bulk, [requestId, 'status']);
+    const error = get(this.props.state.bulk, [requestId, 'error']) || this.state.error;
     const buttonText = status === 'inflight' ? 'loading...'
       : status === 'success' ? 'Success!' : 'Run Bulk Granules';
-    const { modal } = this.state;
     const inflight = status === 'inflight';
     const props = {
       className: this.props.element ? this.elementClass(inflight) : this.buttonClass(inflight),
@@ -108,6 +93,52 @@ class BulkGranule extends React.Component {
     );
     const element = this.props.element || 'button';
     const button = React.createElement(element, props, children);
+    if (status === 'success') {
+      const asyncOpId = get(this.props.state.bulk, [requestId, 'data', 'id']);
+      return (
+        <div>
+          { button }
+        {/* Once the new Bootstrap Modal is working per the built in functionality */}
+        { modal ? <div className='modal__cover'></div> : null }
+        <div className={c({
+          modal__container: true,
+          'modal__container--onscreen': modal
+        })}>
+          { modal ? (
+            <Modal
+              dialogClassName="bulk_granules-modal"
+              show
+              centered
+              aria-labelledby="modal__bulk_granules-modal"
+            >
+              <Modal.Header className="bulk_granules-modal__header" closeButton></Modal.Header>
+                <Modal.Title id="modal__bulk_granules-modal" className="bulk_granules-modal__title">Bulk Granules</Modal.Title>
+                  <p>
+                    Your request to process a bulk granules operation has been submitted. <br/>
+                    ID <strong>{asyncOpId}</strong>
+                  </p>
+                  <br/>
+                  <Modal.Footer>
+                    <button
+                      className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
+                      onClick={this.cancel}
+                      readOnly={true}
+                      alt="Close"
+                      >Close</button>
+                    <a
+                      className={'button button__bulkgranules button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right'}
+                      href='/#/executions'
+                      readOnly={true}
+                      alt="Go To Executions"
+                      >Go To Executions
+                    </a>
+                  </Modal.Footer>
+            </Modal>
+          ) : null }
+        </div>
+        </div>
+      );
+    }
     return (
       <div>
         { button }
@@ -143,7 +174,7 @@ class BulkGranule extends React.Component {
                     <br/>
                     <form>
                       <TextArea
-                        value={defaultValueString}
+                        value={queryValue}
                         id={'run-bulk-granule'}
                         error={error}
                         onChange={this.onChange}
@@ -177,7 +208,6 @@ class BulkGranule extends React.Component {
 }
 
 BulkGranule.propTypes = {
-  // collections: PropTypes.object
   dispatch: PropTypes.func,
   status: PropTypes.string,
   action: PropTypes.func,

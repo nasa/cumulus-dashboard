@@ -99,8 +99,8 @@ class GranulesOverview extends React.Component {
     element='a'
     className={'button button__bulkgranules button--green button__animation--md button__arrow button__arrow--md button__animation form-group__element--right link--no-underline'}
     confirmAction={true}
+    state={this.props.granules}
      />
-
     );
   }
 
