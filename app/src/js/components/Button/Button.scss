@@ -338,6 +338,31 @@
     }
 
      /******* Other States ******/
+     &__bulkgranules {
+      background-color: $light-green;
+      position: relative;
+    
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f51e';
+        font-weight: 900;
+        left: 10px;
+        
+      } 
+    }
+
+    &__bulkgranules:hover:before{
+      color: $white;
+      position: absolute;
+      font-family: 'Font Awesome 5 Free';
+      content: '\f51e';
+      font-weight: 900;
+      visibility: hidden;
+    }
+
+
      &__addcollections {
       float: right;
       margin-top: 1em;

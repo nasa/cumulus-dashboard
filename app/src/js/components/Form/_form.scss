@@ -92,6 +92,19 @@ select option{
   }
 }
 
+.filters.filters__wlabels ul{
+  display: flex;
+  align-items: baseline;
+}
+
+.filters.filters__wlabels .run_bulk{
+  margin-left: auto;
+}
+
+.filters.filters__wlabels.total_granules{
+  margin-bottom: 5em;
+}
+
 .form--controls {
   margin-bottom: 2em;
   display: flex;
@@ -389,7 +402,7 @@ select option{
   padding: 1.1em 1.4em;
   text-align: center;
   position: relative;
-  margin: 2em 2em 2em 0em;
+  margin: 2em 0em 2em 0em;
   color: $error-text-red;
   font-size: .86em;
   border: 1px solid $error-red;

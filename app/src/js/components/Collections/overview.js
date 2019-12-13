@@ -26,13 +26,10 @@ import Search from '../Search/search';
 import statusOptions from '../../utils/status';
 import ErrorReport from '../Errors/report';
 import List from '../Table/Table';
+import Bulk from '../Granules/bulk';
 import Overview from '../Overview/overview';
-import AsyncCommand from '../AsyncCommands/async-command';
-import {
-  tableHeader,
-  tableRow,
-  tableSortProps
-} from '../../utils/table-config/granules';
+import AsyncCommand from '../AsyncCommands/AsyncCommands';
+import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
 import { updateDelay } from '../../config';
 import { strings } from '../locale';
 
@@ -45,6 +42,8 @@ class CollectionOverview extends React.Component {
     this.changeCollection = this.changeCollection.bind(this);
     this.delete = this.delete.bind(this);
     this.errors = this.errors.bind(this);
+    this.renderOverview = this.renderOverview.bind(this);
+    this.runBulkGranules = this.runBulkGranules.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.load = this.load.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
@@ -60,6 +59,17 @@ class CollectionOverview extends React.Component {
        version !== prevProps.params.version) {
       this.load();
     }
+  }
+
+  runBulkGranules () {
+    return (
+    <Bulk
+    element='a'
+    className={'button button__bulkgranules button--green button__animation--md button__arrow button__arrow--md button__animation form-group__element--right link--no-underline'}
+    confirmAction={true}
+    state={this.props.granules}
+     />
+    );
   }
 
   load () {
@@ -173,18 +183,27 @@ class CollectionOverview extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>{strings.total_granules}<span className='num--title'>{meta.count ? ` ${meta.count}` : null}</span></h2>
           </div>
-          <div className='filters filters__wlabels'>
-            <Search dispatch={this.props.dispatch}
-              action={searchGranules}
-              clear={clearGranulesSearch}
-            />
-            <Dropdown
-              options={statusOptions}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              paramKey={'status'}
-              label={'Status'}
-            />
+          <div className='filters filters__wlabels total_granules'>
+            <ul>
+              <li>
+                <Search dispatch={this.props.dispatch}
+                  action={searchGranules}
+                  clear={clearGranulesSearch}
+                />
+              </li>
+              <li>
+                <Dropdown
+                  options={statusOptions}
+                  action={filterGranules}
+                  clear={clearGranulesFilter}
+                  paramKey={'status'}
+                  label={'Status'}
+                />
+              </li>
+              <li className="run_bulk">
+                {this.runBulkGranules()}
+              </li>
+            </ul>
           </div>
           <List
             list={list}

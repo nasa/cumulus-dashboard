@@ -147,7 +147,7 @@ const doBuild = (done) => {
 gulp.task('build', gulp.parallel(doBuild));
 
 gulp.task('styles', function () {
-  return gulp.src(['node_modules/bootstrap/scss/bootstrap.scss', 'app/src/css/main.scss'])
+  return gulp.src('app/src/css/main.scss')
     .pipe($.plumber(function (e) {
       notifier.notify({
         title: 'Oops! Sass errored:',

@@ -114,7 +114,6 @@ AddRaw.propTypes = {
   getPk: PropTypes.func,
   getBaseRoute: PropTypes.func,
   router: PropTypes.object,
-
   createRecord: PropTypes.func
 };
 
