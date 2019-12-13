@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- **CUMULUS-1581**
+  - Added support Bulk Granule Operations
+
 ### Fixed
 
 - **CUMULUS-1670**

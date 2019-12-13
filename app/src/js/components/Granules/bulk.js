@@ -162,7 +162,7 @@ class BulkGranule extends React.Component {
                   <Modal.Body>
                     <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
                     <p>
-                      1. In the box below, enter your <strong>queueName</strong> and the <strong>workflowName</strong>. <br/>
+                      1. In the box below, enter the <strong>workflowName</strong>. <br/>
                       2. Then add either an array of granule Ids or an elasticsearch query and index. <br/>
                     </p>
                     <br/>
