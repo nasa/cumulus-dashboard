@@ -222,6 +222,26 @@ a:active {
   padding-top: 3em;
 }
 
+.heading-form-group--left {
+  display: inline-flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.heading-form-group--left li h1{
+  margin-right: 5em;
+}
+
+.heading-form-group--left li:not(:first-child){
+  margin-right: 2em;
+  margin-left: 1em;
+}
+
+.heading-form-group--left li a.button.button--edit{
+  position: absolute;
+  right: 12em;
+}
+
 //Sidebar//
 
 .wrapper__sidebar{
@@ -319,7 +339,7 @@ a:active {
 
 .page__content--shortened {
   flex: 10;
-  padding: 4em 4em 2em 4em;
+  padding: 2em 4em 2em 4em;
   /*float: left;*/
   width: 80%;
 }
@@ -650,4 +670,3 @@ a:active {
     top: 0em;
   }
 }
-

@@ -8,7 +8,7 @@
     "plugins": [
       "react",
       "react-hooks"
-      ],
+    ],
     "parserOptions": {
       "ecmaVersion": 8,
       "ecmaFeatures": {
@@ -16,6 +16,7 @@
       }
     },
     "rules": {
+      "comma-dangle": ["error", "only-multiline"],
       "semi": [2, "always"],
       "no-extra-semi": 2,
       "semi-spacing": [2, { "before": false, "after": true }],
