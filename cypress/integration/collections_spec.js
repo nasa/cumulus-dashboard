@@ -1,4 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
+import { collectionName, getCollectionId } from '../../app/src/js/utils/format';
 
 describe('Dashboard Collections Page', () => {
   describe('When not logged in', () => {
@@ -108,6 +109,29 @@ describe('Dashboard Collections Page', () => {
       cy.contains('table tbody tr a', name)
         .should('have.attr', 'href',
           `#/collections/collection/${name}/${version}`);
+    });
+
+    it('should select a different collection', () => {
+      let name = 'http_testcollection';
+      let version = '001';
+
+      // First visit the collections page in order to fetch the list of
+      // collections with which to populate the dropdown on the collection
+      // details page.
+      cy.visit('/#/collections');
+      cy.get('table tbody tr').its('length').should('be.eq', 5);
+
+      cy.visit(`/#/collections/collection/${name}/${version}`);
+      cy.contains('.heading--large', `${name} / ${version}`);
+      cy.contains(/0 Granules? Running/i);
+
+      const collectionId = getCollectionId({ name: 'MOD09GQ', version: '006' });
+      const formattedCollectionName = collectionName(collectionId);
+
+      cy.get('#collection-chooser').select(collectionId);
+      cy.contains('.heading--large', `${formattedCollectionName}`);
+      cy.contains(/14 Granules? Running/i);
+      cy.get('#collection-chooser').find(':selected').contains(collectionId);
     });
 
     it('should edit a collection', () => {

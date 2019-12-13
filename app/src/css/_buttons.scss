@@ -366,6 +366,21 @@
       left: 85%;
     }
 
+    &__kibana_open{
+      background-color: $light-green;
+      position: relative;
+      margin-top: 1em;
+          
+      &:before{
+      color: $white;
+      position: absolute;
+      font-family: 'Font Awesome 5 Free';
+      content: '\f360';
+      font-weight: 900;
+      left: 10px;  
+      } 
+    }
+
      &__addcollections {
       float: right;
       margin-top: 1em;
@@ -402,21 +417,6 @@
       content: '\f0a9';
       font-weight: 900;
       visibility: hidden;
-    }
-
-    &__kibana_open{
-      background-color: $light-green;
-      position: relative;
-      margin-top: 1em;
-          
-      &:before{
-      color: $white;
-      position: absolute;
-      font-family: 'Font Awesome 5 Free';
-      content: '\f360';
-      font-weight: 900;
-      left: 10px;  
-      } 
     }
     
     &--tab {
