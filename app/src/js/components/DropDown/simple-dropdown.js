@@ -1,10 +1,11 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
+// import './DropDown.scss';
 
 class Dropdown extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.onChange = this.onChange.bind(this);
   }
 

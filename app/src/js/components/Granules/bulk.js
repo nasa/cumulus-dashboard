@@ -111,7 +111,7 @@ class BulkGranule extends React.Component {
               centered
               aria-labelledby="modal__bulk_granules-modal"
             >
-              <Modal.Header className="bulk_granules-modal__header" closeButton></Modal.Header>
+              <Modal.Header className="bulk_granules-modal__header" closeButton onClick={this.cancel}></Modal.Header>
                 <Modal.Title id="modal__bulk_granules-modal" className="bulk_granules-modal__title">Bulk Granules</Modal.Title>
                   <p>
                     Your request to process a bulk granules operation has been submitted. <br/>
@@ -157,12 +157,12 @@ class BulkGranule extends React.Component {
               aria-labelledby="modal__bulk_granules-modal"
               style={{overflowY: 'scroll'}}
             >
-              <Modal.Header className="bulk_granules-modal__header" closeButton></Modal.Header>
+              <Modal.Header className="bulk_granules-modal__header" closeButton onClick={this.cancel}></Modal.Header>
                 <Modal.Title id="modal__bulk_granules-modal" className="bulk_granules-modal__title">Bulk Granules</Modal.Title>
                   <Modal.Body>
                     <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
                     <p>
-                      1. In the box below, enter your <strong>queueName</strong> and the <strong>workflowName</strong>. <br/>
+                      1. In the box below, enter the <strong>workflowName</strong>. <br/>
                       2. Then add either an array of granule Ids or an elasticsearch query and index. <br/>
                     </p>
                     <br/>

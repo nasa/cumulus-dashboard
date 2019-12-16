@@ -88,7 +88,6 @@ export default function reducer (state = initialState, action) {
       break;
 
     case GRANULES:
-      console.log(action);
       set(state, ['list', 'data'], removeDeleted('granuleId', data.results, state.deleted));
       set(state, ['list', 'meta'], assignDate(data.meta));
       set(state, ['list', 'inflight'], false);
@@ -165,22 +164,11 @@ export default function reducer (state = initialState, action) {
       break;
 
     case BULK_GRANULE:
-    //   data = {
-    //     “createdAt”: 1574730504000,
-    //     “id”: “0eb8e809-8790-5409-1239-bcd9e8d28b8e”,
-    //     “updatedAt”: 1574730504762,
-    //     “status”: “RUNNING”,
-    //     “taskArn”: “arn:aws:ecs:us-east-1:111111111111:task/d481e76e-f5fc-9c1c-2411-fa13779b111a”
-    // }
-      // console.log('in case granule_BULK', data);
-      // console.log('id in reducer', requestId);
-      console.log('in reducer action:', action);
       set(state, ['bulk', config.requestId, 'data'], data);
       set(state, ['bulk', config.requestId, 'status'], 'success');
       set(state, ['bulk', config.requestId, 'error'], null);
       break;
     case BULK_GRANULE_INFLIGHT:
-      console.log('in case bulk INFLIGHT');
       set(state, ['bulk', config.requestId, 'status'], 'inflight');
       break;
     case BULK_GRANULE_ERROR:
