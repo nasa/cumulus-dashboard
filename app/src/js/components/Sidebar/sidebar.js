@@ -22,6 +22,7 @@ class Sidebar extends React.Component {
 
   renderNavSection (section) {
     const { base, routes } = section;
+    console.log('sections', section);
     const { currentPath, params, count } = this.props;
     return (
       <div key={base}>

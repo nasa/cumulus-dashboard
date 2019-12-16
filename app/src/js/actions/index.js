@@ -737,6 +737,8 @@ export const listExecutions = (options) => ({
   }
 });
 
+export const searchExecutions = (prefix) => ({ type: types.SEARCH_EXECUTIONS, prefix: prefix });
+export const clearExecutionsSearch = () => ({ type: types.CLEAR_EXECUTIONS_SEARCH });
 export const filterExecutions = (param) => ({ type: types.FILTER_EXECUTIONS, param: param });
 export const clearExecutionsFilter = (paramKey) => ({ type: types.CLEAR_EXECUTIONS_FILTER, paramKey: paramKey });
 

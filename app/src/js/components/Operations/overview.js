@@ -1,12 +1,14 @@
 'use strict';
 import React from 'react';
-import { get } from 'object-path';
+// import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import {
   clearExecutionsFilter,
   filterExecutions,
+  searchExecutions,
+  clearExecutionsSearch,
   getCount,
   getCumulusInstanceMetadata,
   interval,
@@ -19,8 +21,7 @@ import {
   seconds,
   tally,
   lastUpdated,
-  displayCase,
-  truncate
+  displayCase
 } from '../../utils/format';
 import {
   workflowOptions,
@@ -29,14 +30,15 @@ import {
 import statusOptions from '../../utils/status';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
+import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import { updateInterval } from '../../config';
-import {strings} from '../locale';
+// import {strings} from '../locale';
 
 const tableHeader = [
   'Status',
   'Async ID',
-  'Description',
+  // 'Description',
   'Type',
   'Duration',
   'Created'
@@ -45,10 +47,10 @@ const tableHeader = [
 const tableRow = [
   // (d) => <Link to={'/executions/execution/' + d.arn} title={d.name}>{truncate(d.name, 24)}</Link>,
   (d) => displayCase(d.status),
-  (d) => <Link to={'/operations/operation/' + d.asyncOperationId} title={d.asyncOperationId}>d.asyncOperationId</Link>,
-  'type',
-  (d) => fromNow(d.createdAt),
-  (d) => seconds(d.duration)
+  (d) => <Link to={'/executions/execution/' + d.arn} title={d.asyncOperationId}>{d.asyncOperationId}</Link>,
+  (d) => d.type,
+  (d) => seconds(d.duration),
+  (d) => fromNow(d.createdAt)
 ];
 
 const tableSortProps = [
@@ -63,7 +65,8 @@ class OperationOverview extends React.Component {
   constructor (props) {
     super(props);
     this.onlyAsync = this.onlyAsync.bind(this);
-    //somehitng else
+    this.queryMeta = this.queryMeta.bind(this);
+    this.renderOverview = this.renderOverview.bind(this);
   }
 
   componentDidMount () {
@@ -90,8 +93,8 @@ class OperationOverview extends React.Component {
   }
 
   onlyAsync (list) {
-    const filteredList = list.data.map(d => {
-      if (d.asyncOperationId) return d;
+    const filteredList = list.data.filter(d => {
+      return (d.asyncOperationId);
     });
     return filteredList;
   }
@@ -102,29 +105,36 @@ class OperationOverview extends React.Component {
   }
 
   render () {
-    const { stats, executions } = this.props;
+    const { executions } = this.props;
     const { list } = executions;
     console.log('list', executions);
     const newList = {
       data: this.onlyAsync(list),
       meta: list.meta,
-      error: list.error
+      error: list.error,
+      params: list.params
     };
+    newList.meta.count = newList.data.length;
+    console.log('newlist', newList);
     const { count, queriedAt } = list.meta;
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>Execution Overview</h1>
+            <h1 className='heading--large heading--shared-content with-description'>Operations Overview</h1>
             {lastUpdated(queriedAt)}
-            {this.renderOverview(get(stats, 'count.data.executions.count', []))}
+            {/* {this.renderOverview(get(stats, 'count.data.executions.count', []))} */}
           </div>
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>All Executions <span className='num--title'>{count ? ` ${tally(count)}` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>All Operations <span className='num--title'>{count ? ` ${tally(count)}` : null}</span></h2>
           </div>
           <div className='filters filters__wlabels'>
+            {/* <Search dispatch={this.props.dispatch}
+              action={searchExecutions}
+              clear={clearExecutionsSearch}
+            /> */}
             <Dropdown
               options={statusOptions}
               action={filterExecutions}
@@ -150,7 +160,7 @@ class OperationOverview extends React.Component {
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={{}}
-            rowId={'name'}
+            rowId={'asyncOperationId'}
             sortIdx={3}
           />
         </section>
