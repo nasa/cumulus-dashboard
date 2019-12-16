@@ -105,6 +105,25 @@ To run the dashboard locally:
   $ APIROOT=https://myapi.com npm run serve
 ```
 
+#### local API server
+
+For development and testing purposes, you can run the cumulus API locally. This requires running a localstack docker app, then separately starting the cumulus API.
+
+The docker app is started as a yarn script.
+```bash
+  $ yarn run start-localstack
+```
+
+Once the docker app is running, the cumulus API can be started.
+```bash
+  $ yarn run serve-api
+```
+
+After testing, you can stop the docker backend.
+```bash
+  $ yarn run stop-localstack
+```
+
 #### Fake API server
 
 For development and testing purposes, you can use a fake API server provided with the dashboard. To use the fake API server, run `node fake-api.js` in a separate terminal session, then launch the dashboard with:
