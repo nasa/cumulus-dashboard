@@ -33,10 +33,13 @@ Cypress.Commands.add('login', () => {
     qs: {
       state: encodeURIComponent(authUrl)
     },
-    followRedirect: false
+    followRedirect: true
   }).then((response) => {
-    const query = response.redirectedToUrl.substr(response.redirectedToUrl.indexOf('?') + 1);
-    const token = query.split('=')[1];
+    // mhs: When we get rid of the hash in the urls, we can just use url.parse()
+    const redirectStr = response.redirects[response.redirects.length - 1];
+    const redirectUrl = redirectStr.split(': ')[1];
+    const queryStr = redirectUrl.split('?')[1];
+    const token = queryStr.split('=')[1];
     cy.window().its('appStore').then((store) => {
       store.dispatch({
         type: SET_TOKEN,
