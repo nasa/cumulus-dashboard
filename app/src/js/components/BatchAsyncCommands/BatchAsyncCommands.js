@@ -1,9 +1,12 @@
+/* This will eventually just be a general batchasync */
+/* For Deleting Multiple Collections - The  Modal function (later other modals): Need to copy logic from here and implement in BatchDeleteCollectionModal.js */
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queue from 'stubborn-queue';
-import AsyncCommand from '../AsyncCommands/async-command';
+import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import { updateDelay } from '../../config';
+import Modal from 'react-bootstrap/Modal';
 
 const CONCURRENCY = 3;
 const IN_PROGRESS = 'Processing...';
@@ -131,6 +134,7 @@ class BatchCommand extends React.Component {
     const modalText = inflight ? IN_PROGRESS
       : !status ? confirm(todo)
       : status === 'success' ? 'Success!' : 'Error';
+
     return (
       <div>
         <AsyncCommand
@@ -144,28 +148,41 @@ class BatchCommand extends React.Component {
         { activeModal ? <div className='modal__cover'></div> : null }
         <div className={ activeModal ? 'modal__container modal__container--onscreen' : 'modal__container' }>
           { activeModal ? (
-            <div className='modal'>
-              <div className='modal__internal modal__formcenter'>
-                { confirmOptions ? (confirmOptions).map(option =>
-                  <div key={`option-${confirmOptions.indexOf(option)}`}>
-                    {option}
-                    <br />
-                  </div>
-                ) : null }
-                <h4 className={'modal__title--' + status}>{modalText}</h4>
-                <button className={'button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (buttonDisabled ? ' button--disabled' : '')}
-                  onClick={this.confirm}>Confirm</button>
-                <button className={'button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel' + (buttonDisabled ? ' button--disabled' : '')}
-                  onClick={this.cancel}>Cancel</button>
-                <div className='modal__loading'>
-                  <div className='modal__loading--inner'>
-                    <div className={'modal__loading--progress modal__loading--progress--' + status}
-                      style={{width: (todo ? (completed * 100 / todo) + '%' : 0)}}>
+            <Modal
+              dialogClassName="batch-async-modal"
+              show={true}
+              centered
+              size="md"
+              aria-labelledby="modal__batch-async-modal"
+            >
+              <Modal.Header className="batch-async-modal__header" closeButton></Modal.Header>
+                <Modal.Title id="modal__batch-async-modal" className="modal__batch-async-title"><h4 className={'modal__title--' + status}>{modalText}</h4></Modal.Title>
+                  <Modal.Body>
+                    <div className='modal__internal modal__formcenter'>
+                      { confirmOptions ? (confirmOptions).map(option =>
+                        <div key={`option-${confirmOptions.indexOf(option)}`}>
+                          {option}
+                          <br />
+                        </div>
+                      ) : null }
+                      <div className='modal__loading'>
+                        <div className='modal__loading--inner'>
+                          <div className={'modal__loading--progress modal__loading--progress--' + status}
+                            style={{width: (todo ? (completed * 100 / todo) + '%' : 0)}}>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <button className={'button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel' + (buttonDisabled ? ' button--disabled' : '')}
+                      onClick={this.cancel}>Cancel
+                    </button>
+                    <button className={'button button__deletecollections button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (buttonDisabled ? ' button--disabled' : '')}
+                      onClick={this.confirm}>Confirm
+                    </button>
+                  </Modal.Footer>
+              </Modal>
           ) : null}
         </div>
       </div>

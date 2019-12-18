@@ -1,4 +1,5 @@
 /* modal */
+
 .modal__cover {
   background-color: #999;
   opacity: 0.85;
@@ -40,18 +41,6 @@
   top: 0;
 }
 
-.modal {
-  border-radius: 5px;
-  display: inline-block;
-  background-color: $background-white;
-  box-shadow: $shadow__modal;
-  padding: 2em;
-  position: relative;
-  width: 300px;
-  text-align: left;
-}
-
-
 .modal__formcenter {
   text-align: center;
 }
@@ -85,3 +74,44 @@
 
 .modal__title--success { color: $light-green; }
 .modal__title--error { color: $error-red; }
+
+// Login Modal
+.oauth-modal__title.modal-title.h4{
+  text-align: center;
+  font-size: 1.125em;
+  font-weight: $base-font-semibold;
+  color: $ocean-blue;
+}
+
+.oauth-modal .modal-footer{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2em;
+}
+
+.modal_subtitle {
+  font-weight: $base-font-semibold;
+}
+
+.bulk_granules-modal .modal-dialog{
+  overflow-y: initial !important;
+  max-height:85%;  
+  margin-top: 50px; 
+  margin-bottom:50px;
+}
+
+.bulk_granules-modal .modal-body{
+height: 425px;
+overflow-y: auto;
+}
+
+/*.modal {
+  border-radius: 5px;
+  display: inline-block;
+  background-color: $background-white;
+  box-shadow: $shadow__modal;
+  padding: 2em;
+  position: relative;
+  width: 300px;
+  text-align: left;
+}*/ /*Working on replacing modal to use some default Bootstrap stylings*/

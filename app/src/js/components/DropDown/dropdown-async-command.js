@@ -1,7 +1,7 @@
 import React from 'react';
 import c from 'classnames';
 import { findDOMNode } from 'react-dom';
-import AsyncCommand from '../AsyncCommands/async-command';
+import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import PropTypes from 'prop-types';
 import { addGlobalListener } from '../../utils/browser';
 

@@ -36,7 +36,7 @@ import Search from '../Search/search';
 import status from '../../utils/status';
 import Metadata from '../Table/Metadata';
 import Loading from '../LoadingIndicator/loading-indicator';
-import AsyncCommand from '../AsyncCommands/async-command';
+import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import ErrorReport from '../Errors/report';
 import GranulesProgress from '../Granules/progress';
 import { updateInterval } from '../../config';

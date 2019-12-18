@@ -76,14 +76,18 @@ class ExecutionStatus extends React.Component {
       </dd>
       : <dd>N/A</dd>;
 
-    const output = (executionStatus.execution.output)
-      ? <dd>
-        <Collapse trigger={'Show Output'} triggerWhenOpen={'Hide Output'}>
-          <pre>{parseJson(executionStatus.execution.output)}</pre>
-        </Collapse>
-      </dd>
-      : <dd>N/A</dd>;
-
+    let output, outputJson, asyncOperationId;
+    if (executionStatus.execution.output) {
+      outputJson = JSON.parse(executionStatus.execution.output, null, 2);
+      output = (executionStatus.execution.output)
+        ? <dd>
+          <Collapse trigger={'Show Output'} triggerWhenOpen={'Hide Output'}>
+            <pre>{parseJson(executionStatus.execution.output)}</pre>
+          </Collapse>
+        </dd>
+        : <dd>N/A</dd>;
+      asyncOperationId = get(outputJson.cumulus_meta, 'asyncOperationId');
+    }
     let parentARN;
     if (executionStatus.execution.input) {
       const input = JSON.parse(executionStatus.execution.input);
@@ -134,6 +138,11 @@ class ExecutionStatus extends React.Component {
 
           <dt>State Machine Arn:</dt>
           <dd>{executionStatus.execution.stateMachineArn}</dd><br />
+
+          { asyncOperationId ? (<div>
+            <dt>Async Operation ID</dt>
+            <dd>{asyncOperationId}</dd>
+          </div>) : null }
 
           <dt>Started:</dt>
           <dd>{fullDate(executionStatus.execution.startDate)}</dd><br />

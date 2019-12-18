@@ -11,12 +11,6 @@
 Libraries/Vendors
  ========================================================================== */
 
-/**********************************
-* Bootstrap
-***********************************/
-
-/*@import "./vendor/bootstrap/bootstrap";*/
-
 /**
  * Using Bourbon for extended SASS functionality:
  * http://bourbon.io/
@@ -47,18 +41,26 @@ Libraries/Vendors
    ========================================================================== */
 
 @import "base";
-@import "../css/modules/modal";
+@import "../css/modules/modals";
 @import "../css/modules/jsonwindow";
 @import "typography";
-@import "../js/components/Button/button";
+@import "../css/buttons";
 @import "../js/components/Form/form";
+@import "../js/components/DropDown/DropDown";
 @import "lists";
 @import "../css/modules/table";
 @import "../js/components/Chart/chart";
 @import "../js/components/LoadingIndicator/loading-indicator";
 @import "pulse";
+@import "../js/components/DropDown/DropDown.scss";
 
 /* Fonts
    ========================================================================== */
 @import url('https://fonts.googleapis.com/css?family=Inconsolata|Open+Sans:300,400,400i,600,700');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap');
+
+/**********************************
+* Bootstrap
+***********************************/
+
+@import "vendor/bootstrap/bootstrap";

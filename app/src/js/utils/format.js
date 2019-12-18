@@ -137,9 +137,7 @@ export const collectionName = function (collectionId) {
 
 export const collectionNameVersion = function (collectionId) {
   if (!collectionId) return nullValue;
-  const split = collectionId.split('___');
-  const name = split[0];
-  const version = split[1];
+  const [name, version] = collectionId.split('___');
   return { name, version };
 };
 
