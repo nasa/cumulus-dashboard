@@ -4,6 +4,8 @@ import nock from 'nock';
 import { CALL_API } from '../../app/src/js/actions/types';
 import { requestMiddleware } from '../../app/src/js/middleware/request';
 
+const port = process.env.FAKEAPIPORT || 5001;
+
 test.beforeEach((t) => {
   const doDispatch = () => {};
   const doGetState = () => ({
@@ -53,7 +55,7 @@ test('should throw error if no method is set on API request action', (t) => {
 });
 
 test.cb('should add correct authorization headers to API request action', (t) => {
-  nock('http://localhost:5001', {
+  nock(`http://localhost:${port}`, {
     reqheaders: {
       'Authorization': 'Bearer fake-token'
     }
@@ -64,7 +66,7 @@ test.cb('should add correct authorization headers to API request action', (t) =>
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: 'http://localhost:5001/test-path'
+    url: `http://localhost:${port}/test-path`
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -79,7 +81,7 @@ test.cb('should add correct authorization headers to API request action', (t) =>
 });
 
 test.cb('should be able to use provided authorization headers', (t) => {
-  nock('http://localhost:5001', {
+  nock(`http://localhost:${port}`, {
     reqheaders: {
       'Authorization': 'Bearer another-token'
     }
@@ -90,7 +92,7 @@ test.cb('should be able to use provided authorization headers', (t) => {
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: 'http://localhost:5001/test-path',
+    url: `http://localhost:${port}/test-path`,
     skipAuth: true,
     headers: {
       Authorization: 'Bearer another-token'
@@ -109,14 +111,14 @@ test.cb('should be able to use provided authorization headers', (t) => {
 });
 
 test.cb('should dispatch error action for failed request', (t) => {
-  nock('http://localhost:5001')
+  nock(`http://localhost:${port}`)
     .get('/test-path')
     .reply(500, { message: 'Internal server error' });
 
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: 'http://localhost:5001/test-path'
+    url: `http://localhost:${port}/test-path`
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -144,14 +146,14 @@ test.cb('should dispatch error action for failed request', (t) => {
 test.cb('should return expected action for GET request action', (t) => {
   const stubbedResponse = { message: 'success' };
 
-  nock('http://localhost:5001')
+  nock(`http://localhost:${port}`)
     .get('/test-path')
     .reply(200, stubbedResponse);
 
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: 'http://localhost:5001/test-path'
+    url: `http://localhost:${port}/test-path`
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -183,7 +185,7 @@ test.cb('should return expected action for GET request action with query state',
   };
   const stubbedResponse = { message: 'success' };
 
-  nock('http://localhost:5001')
+  nock(`http://localhost:${port}`)
     .get('/test-path')
     .query(queryParams)
     .reply(200, stubbedResponse);
@@ -191,7 +193,7 @@ test.cb('should return expected action for GET request action with query state',
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: 'http://localhost:5001/test-path',
+    url: `http://localhost:${port}/test-path`,
     qs: queryParams
   };
   const actionObj = {
@@ -218,7 +220,7 @@ test.cb('should return expected action for GET request action with query state',
 });
 
 test.cb('should return expected action for POST request action', (t) => {
-  nock('http://localhost:5001')
+  nock(`http://localhost:${port}`)
     .post('/test-path')
     .reply(200, (_, requestBody) => {
       return requestBody;
@@ -228,7 +230,7 @@ test.cb('should return expected action for POST request action', (t) => {
   const requestAction = {
     type: 'TEST',
     method: 'POST',
-    url: 'http://localhost:5001/test-path',
+    url: `http://localhost:${port}/test-path`,
     body: requestBody
   };
   const actionObj = {
@@ -255,7 +257,7 @@ test.cb('should return expected action for POST request action', (t) => {
 });
 
 test.cb('should return expected action for PUT request action', (t) => {
-  nock('http://localhost:5001')
+  nock(`http://localhost:${port}`)
     .put('/test-path')
     .reply(200, (_, requestBody) => {
       return requestBody;
@@ -265,7 +267,7 @@ test.cb('should return expected action for PUT request action', (t) => {
   const requestAction = {
     type: 'TEST',
     method: 'PUT',
-    url: 'http://localhost:5001/test-path',
+    url: `http://localhost:${port}/test-path`,
     body: requestBody
   };
   const actionObj = {
@@ -293,14 +295,14 @@ test.cb('should return expected action for PUT request action', (t) => {
 
 test.cb('should return expected action for DELETE request action', (t) => {
   const stubbedResponse = { message: 'success' };
-  nock('http://localhost:5001')
+  nock(`http://localhost:${port}`)
     .delete('/test-path')
     .reply(200, stubbedResponse);
 
   const requestAction = {
     type: 'TEST',
     method: 'DELETE',
-    url: 'http://localhost:5001/test-path'
+    url: `http://localhost:${port}/test-path`
   };
   const actionObj = {
     [CALL_API]: requestAction
