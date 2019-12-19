@@ -1,8 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import Button from '../Button/Button';
-import '../Button/Button.scss';
 
 class BatchDeleteCollectionModal extends React.Component {
   render () {
