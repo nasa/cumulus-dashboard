@@ -8,7 +8,8 @@ import {
   Tooltip
 } from 'react-bootstrap';
 
-import './Button.scss';
+// This causes a ParseError
+// import './Button.scss';
 
 export const Button = ({
   badge,
