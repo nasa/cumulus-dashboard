@@ -7,9 +7,9 @@ describe('Rules page', () => {
   });
 
   describe('when logged in', () => {
-    const testRuleName = 'MOD09GQ_TEST_kinesisRule';
+    const testRuleName = 'MOD09GK_TEST_kinesisRule';
     const testProviderId = 'PODAAC_SWOT';
-    const testCollectionId = 'MOD09GQ / 006';
+    const testCollectionId = 'MOD09GK / 006';
 
     beforeEach(() => {
       cy.login();

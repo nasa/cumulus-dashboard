@@ -2,35 +2,63 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import Button from '../Button/Button';
-import '../Button/Button.scss';
+import {
+  collectionName as collectionLabelForId,
+  deleteText
+} from '../../utils/format';
 
 class DeleteCollectionModal extends React.Component {
+  constructor (props) {
+    super(props);
+
+    this.handleCancel = this.handleCancel.bind(this);
+    this.handleConfirm = this.handleConfirm.bind(this);
+  }
+
+  handleCancel () {
+    this.props.onCancel();
+  }
+
+  handleConfirm () {
+    this.props.onConfirm();
+  }
+
   render () {
     return (
       <Modal
         dialogClassName="delete-collection-modal"
-        show
+        show={this.props.show}
+        onHide={this.handleCancel}
         centered
         size="md"
         aria-labelledby="modal__delete-collection-modal"
+      >
+        <Modal.Header className="delete-collection-modal__header" closeButton />
+        <Modal.Title
+          id="modal__delete-collection-modal"
+          className="delete-collection-modal__title"
         >
-        <Modal.Header className="delete-collection-modal__header" closeButton></Modal.Header>
-        <Modal.Title id="modal__delete-collection-modal" className="delete-collection-modal__title">Delete Collection</Modal.Title>
+          Delete Collection
+        </Modal.Title>
         <Modal.Body>
           <p>
-           You have submitted a request to delete collection {(`${collectionName} ${collectionVersion}`)}. Are you sure that you want to delete this collection?
+            {deleteText(`collection "${collectionLabelForId(this.props.collectionLabel)}"`)}
           </p>
         </Modal.Body>
         <Modal.Footer>
           <Button
             className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
-            onClick={this.cancel}>
-              Cancel Request
+            label="cancel"
+            onClick={this.handleCancel}
+          >
+            Cancel Request
           </Button>
           <Button
             className='button button__deletecollections button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
-            onClick={this.confirm}>
-              Delete Collection
+            label="confirm"
+            onClick={this.handleConfirm}
+          >
+            Delete Collection
           </Button>
         </Modal.Footer>
       </Modal>
@@ -39,6 +67,10 @@ class DeleteCollectionModal extends React.Component {
 }
 
 DeleteCollectionModal.propTypes = {
+  collectionLabel: PropTypes.string,
+  onCancel: PropTypes.func,
+  onConfirm: PropTypes.func,
+  show: PropTypes.bool
 };
 
 export default DeleteCollectionModal;
