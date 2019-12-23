@@ -60,7 +60,7 @@
     background-color: $light-green;
   
     &:hover {
-      background-color: darken($light-green, 5%);
+      background-color: darken($light-green, 10%);
       color: #fff;
       border: 0;
     }
@@ -68,7 +68,7 @@
 
   &--primary, &--primary{
     &:hover, &:visited {
-      background-color: darken($light-green, 5%);
+      background-color: darken($light-green, 10%);
       color: $white;
       border: 0;
     }
@@ -176,6 +176,11 @@
         left: 10px;
         
       } 
+      &:hover {
+        background-color: darken($error-red, 5%);
+        color: #fff;
+        border: 0;
+      }
     }
   
     &--remove {
