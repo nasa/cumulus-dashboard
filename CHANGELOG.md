@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1581**
   - Added support Bulk Granule Operations
 
+- **CUMULUS-1582**
+  - Added Operations page to track Async Operations
+
 ### Fixed
 
 - **CUMULUS-1670**

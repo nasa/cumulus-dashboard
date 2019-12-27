@@ -169,7 +169,6 @@ render((
         </Route>
         <Route path='operations' component={Operations}>
           <IndexRoute component={OperationsOverview} />
-          {/* <Route path='operation/:asyncOperationId' component={Operation} /> */}
         </Route>
         <Route path='rules' component={Rules}>
           <IndexRoute component={RulesOverview} />
