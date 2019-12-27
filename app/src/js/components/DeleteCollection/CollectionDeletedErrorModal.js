@@ -21,12 +21,12 @@ class CollectionDeletedErrorModal extends React.Component {
       <Modal
         dialogClassName="collection-deleted-error-modal"
         show={this.props.show}
-        onHide={this.handleCancel}
+        onHide={this.handleClose}
         centered
         size="md"
         aria-labelledby="modal__collection-deleted-error-modal"
       >
-        <Modal.Header className="collection-deleted-error-modal__header" closeButton />
+        <Modal.Header className="collection-deleted-error-modal__header" closeButton onClick={this.handleClose}/>
         <Modal.Title
           id="modal__collection-deleted-error-modal"
           className="collection-deleted-error-modal__title"

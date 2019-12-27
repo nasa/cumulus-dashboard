@@ -31,7 +31,7 @@ class GranulesRedirectModal extends React.Component {
         size="md"
         aria-labelledby="modal__granules-redirect-modal"
       >
-        <Modal.Header className="granules-redirect-modal__header" closeButton />
+        <Modal.Header className="granules-redirect-modal__header" closeButton onClick={this.handleCancel}/>
         <Modal.Title
           id="modal__granules-redirect-modal"
           className="granules-redirect-modal__title"

@@ -25,7 +25,7 @@ class CollectionDeletedConfirmModal extends React.Component {
         size="md"
         aria-labelledby="modal__collection-deleted-confirm-modal"
       >
-        <Modal.Header className="collection-deleted-confirm-modal__header" closeButton />
+        <Modal.Header className="collection-deleted-confirm-modal__header" closeButton onClick={this.handleClose}/>
         <Modal.Title
           id="modal__collection-deleted-confirm-modal"
           className="collection-deleted-confirm-modal__title"
