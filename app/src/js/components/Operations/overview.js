@@ -81,6 +81,8 @@ class OperationOverview extends React.Component {
     this.queryMeta = this.queryMeta.bind(this);
     // this.renderOverview = this.renderOverview.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
+    this.filterOperations = this.filterOperations.bind(this);
+    this.searchOperations = this.searchOperations.bind(this);
   }
 
   componentDidMount () {
@@ -115,13 +117,44 @@ class OperationOverview extends React.Component {
   //   return <Overview items={count} inflight={false} />;
   // }
 
+  filterOperations (list) {
+    let newList = [];
+    if (list.params.status) {
+      newList = list.data.filter((item) => {
+        if (item.status.toLowerCase() === list.params.status) return item;
+      });
+    }
+    if (list.params.operationType) {
+      if (list.params.status) {
+        newList = newList.filter((item) => {
+          if (item.operationType === list.params.operationType) return item;
+        });
+      } else {
+        newList = list.data.filter((item) => {
+          if (item.operationType === list.params.operationType) return item;
+        });
+      }
+    }
+    return newList;
+  }
+
+  searchOperations (list, prefix) {
+    return list.filter((item) => {
+      if (item.id.includes(prefix)) return item;
+    });
+  }
+
   render () {
     const { operations } = this.props;
-    console.log(this.props);
     const { list } = operations;
-    // console.log('list', operations);
     list.meta = {};
-    // const count = 3;
+    if (list.params.status || list.params.operationType) {
+      list.data = this.filterOperations(list);
+    }
+    if (list.params.prefix && list.params.prefix.value) {
+      list.data = this.searchOperations(list.data, list.params.prefix.value);
+    }
+    const listCount = list.data.length;
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -133,7 +166,7 @@ class OperationOverview extends React.Component {
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>All Operations <span className='num--title'>{list.count ? ` ${tally(list.count)}` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>All Operations <span className='num--title'>{tally(listCount)}</span></h2>
           </div>
           <div className='filters filters__wlabels'>
             <Search dispatch={this.props.dispatch}
@@ -165,8 +198,8 @@ class OperationOverview extends React.Component {
             tableRow={tableRow}
             tableSortProps={tableSortProps}
             query={this.generateQuery()}
-            rowId={'asyncOperationId'}
-            sortIdx={3}
+            rowId={'id'}
+            sortIdx={4}
           />
         </section>
       </div>

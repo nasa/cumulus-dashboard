@@ -127,10 +127,10 @@ class BulkGranule extends React.Component {
                       >Close</button>
                     <a
                       className={'button button__bulkgranules button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right'}
-                      href='/#/executions'
+                      href='/#/operations'
                       readOnly={true}
-                      alt="Go To Executions"
-                      >Go To Executions
+                      alt="Go To Operations"
+                      >Go To Operations
                     </a>
                   </Modal.Footer>
             </Modal>
