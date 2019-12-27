@@ -290,7 +290,7 @@ app.put('/*', (req, res) => {
   res.sendStatus(200).end();
 });
 
-const port = process.env.PORT || 5001;
+const port = process.env.FAKEAPIPORT || 5001;
 
 /**
  * Init

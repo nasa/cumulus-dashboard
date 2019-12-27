@@ -43,6 +43,7 @@ class TextAreaForm extends React.Component {
         <label>{label}</label>
         <ErrorReport report={error} />
         <Ace
+          editorProps={{ $blockScrolling: Infinity }}
           mode={mode}
           theme={config.editorTheme}
           onChange={this.onChange}

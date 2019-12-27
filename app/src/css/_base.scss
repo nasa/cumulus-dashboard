@@ -63,7 +63,6 @@ body {
   }
 }
 
-
 a, a:visited {
   cursor: pointer;
   transition: opacity 0.24s ease 0s;
@@ -125,6 +124,30 @@ a:active {
   margin-bottom: 3em;
   font-size: .86em;
   line-height: 1.6em;
+}
+
+.async__element--loading {
+  position: relative;
+  display: inline-block;
+  .spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
+
+.tab--wrapper {
+  margin-bottom: 2em;
+  border-bottom: 1px solid $lightest-grey;
+  .button--active {
+    font-weight: $base-font-bold;
+    border-bottom: 2px solid $ocean-blue;
+    color: $ocean-blue;
+    &:hover {
+      color: $ocean-blue;
+    }
+  }
 }
 
 /**************************************************

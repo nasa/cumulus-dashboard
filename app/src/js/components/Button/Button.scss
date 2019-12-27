@@ -60,7 +60,7 @@
     background-color: $light-green;
   
     &:hover {
-      background-color: darken($light-green, 5%);
+      background-color: darken($light-green, 10%);
       color: #fff;
       border: 0;
     }
@@ -68,7 +68,7 @@
 
   &--primary, &--primary{
     &:hover, &:visited {
-      background-color: darken($light-green, 5%);
+      background-color: darken($light-green, 10%);
       color: $white;
       border: 0;
     }
@@ -176,6 +176,11 @@
         left: 10px;
         
       } 
+      &:hover {
+        background-color: darken($error-red, 5%);
+        color: #fff;
+        border: 0;
+      }
     }
   
     &--remove {
@@ -362,6 +367,24 @@
       visibility: hidden;
     }
 
+    &__bulkgranules.button__arrow--md:hover:after {
+      left: 85%;
+    }
+
+    &__kibana_open{
+      background-color: $light-green;
+      position: relative;
+      margin-top: 1em;
+          
+      &:before{
+      color: $white;
+      position: absolute;
+      font-family: 'Font Awesome 5 Free';
+      content: '\f360';
+      font-weight: 900;
+      left: 10px;  
+      } 
+    }
 
      &__addcollections {
       float: right;
@@ -382,7 +405,7 @@
         
       } 
     }
-
+    }
     &__deletecollections:hover:before{
       color: $white;
       position: absolute;
@@ -392,14 +415,28 @@
       visibility: hidden;
     }
 
-    &__gotogranules:hover:before{
-      color: $white;
-      position: absolute;
-      font-family: 'Font Awesome 5 Free';
-      content: '\f0a9';
-      font-weight: 900;
-      visibility: hidden;
+    &__gotogranules {
+      background-color: $light-green;
+      position: relative;
+    
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f0a9';
+        font-weight: 900;
+        left: 10px;
+      } 
     }
+    
+      &__gotogranules:hover:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f0a9';
+        font-weight: 900;
+        visibility: hidden;
+      }
     
     &--tab {
       border: none;

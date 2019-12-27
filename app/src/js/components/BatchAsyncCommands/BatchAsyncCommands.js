@@ -155,7 +155,7 @@ class BatchCommand extends React.Component {
               size="md"
               aria-labelledby="modal__batch-async-modal"
             >
-              <Modal.Header className="batch-async-modal__header" closeButton></Modal.Header>
+              <Modal.Header className="batch-async-modal__header" closeButton onClick={this.cancel}></Modal.Header>
                 <Modal.Title id="modal__batch-async-modal" className="modal__batch-async-title"><h4 className={'modal__title--' + status}>{modalText}</h4></Modal.Title>
                   <Modal.Body>
                     <div className='modal__internal modal__formcenter'>
@@ -178,7 +178,7 @@ class BatchCommand extends React.Component {
                     <button className={'button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel' + (buttonDisabled ? ' button--disabled' : '')}
                       onClick={this.cancel}>Cancel
                     </button>
-                    <button className={'button button__deletecollections button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (buttonDisabled ? ' button--disabled' : '')}
+                    <button className={'button button--confirm button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (buttonDisabled ? ' button--disabled' : '')}
                       onClick={this.confirm}>Confirm
                     </button>
                   </Modal.Footer>
