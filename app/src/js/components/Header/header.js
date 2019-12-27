@@ -15,6 +15,7 @@ const paths = [
   [strings.granules, '/granules'],
   ['Workflows', '/workflows'],
   ['Executions', '/executions'],
+  ['Operations', '/operations'],
   ['Rules', '/rules'],
   ['Logs', '/logs'],
   ['Reconciliation Reports', '/reconciliation-reports']

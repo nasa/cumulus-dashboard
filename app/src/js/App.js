@@ -82,6 +82,9 @@ import ExecutionsOverview from './components/Executions/overview';
 import ExecutionStatus from './components/Executions/execution-status';
 import ExecutionLogs from './components/Executions/execution-logs';
 
+import Operations from './components/Operations';
+import OperationsOverview from './components/Operations/overview';
+
 import Rules from './components/Rules';
 import RulesOverview from './components/Rules/overview';
 import Rule from './components/Rules/rule';
@@ -163,6 +166,9 @@ render((
         <Route path='executions' component={Executions}>
           <IndexRoute component={ExecutionsOverview} />
           <Route path='execution/:executionName/logs' component={ExecutionLogs} />
+        </Route>
+        <Route path='operations' component={Operations}>
+          <IndexRoute component={OperationsOverview} />
         </Route>
         <Route path='rules' component={Rules}>
           <IndexRoute component={RulesOverview} />

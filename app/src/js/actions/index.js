@@ -739,6 +739,31 @@ export const listExecutions = (options) => ({
 
 export const filterExecutions = (param) => ({ type: types.FILTER_EXECUTIONS, param: param });
 export const clearExecutionsFilter = (paramKey) => ({ type: types.CLEAR_EXECUTIONS_FILTER, paramKey: paramKey });
+export const searchExecutions = (prefix) => ({ type: types.SEARCH_EXECUTIONS, prefix: prefix });
+export const clearExecutionsSearch = () => ({ type: types.CLEAR_EXECUTIONS_SEARCH });
+
+export const listOperations = (options) => ({
+  [CALL_API]: {
+    type: types.OPERATIONS,
+    method: 'GET',
+    url: url.resolve(root, 'asyncOperations'),
+    qs: Object.assign({ limit: pageLimit }, options)
+  }
+});
+
+export const getOperation = (operationId) => ({
+  [CALL_API]: {
+    type: types.OPERATION,
+    id: operationId,
+    method: 'GET',
+    path: `asyncOperations/${operationId}`
+  }
+});
+
+export const searchOperations = (prefix) => ({ type: types.SEARCH_OPERATIONS, prefix: prefix });
+export const clearOperationsSearch = () => ({ type: types.CLEAR_OPERATIONS_SEARCH });
+export const filterOperations = (param) => ({ type: types.FILTER_OPERATIONS, param: param });
+export const clearOperationsFilter = (paramKey) => ({ type: types.CLEAR_OPERATIONS_FILTER, paramKey: paramKey });
 
 export const listRules = (options) => ({
   [CALL_API]: {

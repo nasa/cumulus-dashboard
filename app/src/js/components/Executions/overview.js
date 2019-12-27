@@ -7,6 +7,8 @@ import { Link } from 'react-router';
 import {
   clearExecutionsFilter,
   filterExecutions,
+  searchExecutions,
+  clearExecutionsSearch,
   getCount,
   getCumulusInstanceMetadata,
   interval,
@@ -29,6 +31,7 @@ import {
 import statusOptions from '../../utils/status';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
+import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import { updateInterval } from '../../config';
 import {strings} from '../locale';
@@ -65,6 +68,7 @@ class ExecutionOverview extends React.Component {
     super(props);
     this.queryMeta = this.queryMeta.bind(this);
     this.renderOverview = this.renderOverview.bind(this);
+    this.searchOperationId = this.searchOperationId.bind(this);
   }
 
   componentDidMount () {
@@ -90,6 +94,12 @@ class ExecutionOverview extends React.Component {
     }));
   }
 
+  searchOperationId (list, prefix) {
+    return list.filter((item) => {
+      if (item.asyncOperationId && item.asyncOperationId.includes(prefix)) return item;
+    });
+  }
+
   renderOverview (count) {
     const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
     return <Overview items={overview} inflight={false} />;
@@ -99,6 +109,9 @@ class ExecutionOverview extends React.Component {
     const { stats, executions } = this.props;
     const { list } = executions;
     const { count, queriedAt } = list.meta;
+    if (list.prefix && list.prefix.value) {
+      list.data = this.searchOperationId(list.data, list.prefix.value);
+    }
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -135,6 +148,13 @@ class ExecutionOverview extends React.Component {
               clear={clearExecutionsFilter}
               paramKey={'type'}
               label={'Workflow'}
+            />
+
+            <Search dispatch={this.props.dispatch}
+              action={searchExecutions}
+              clear={clearExecutionsSearch}
+              paramKey={'asyncOperationId'}
+              label={'Async Operation ID'}
             />
           </div>
 
