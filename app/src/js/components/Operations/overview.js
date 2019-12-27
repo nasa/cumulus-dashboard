@@ -3,7 +3,6 @@ import React from 'react';
 // import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import {
   clearOperationsFilter,
   filterOperations,
@@ -18,9 +17,7 @@ import {
 } from '../../actions';
 import {
   fromNow,
-  seconds,
   tally,
-  lastUpdated,
   displayCase
 } from '../../utils/format';
 import {
@@ -31,7 +28,6 @@ import {
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
-import Overview from '../Overview/overview';
 import { updateInterval } from '../../config';
 // import {strings} from '../locale';
 
@@ -112,11 +108,6 @@ class OperationOverview extends React.Component {
     }));
   }
 
-  // renderOverview (count) {
-  //   // const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
-  //   return <Overview items={count} inflight={false} />;
-  // }
-
   filterOperations (list) {
     let newList = [];
     if (list.params.status) {
@@ -160,8 +151,6 @@ class OperationOverview extends React.Component {
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description'>Operations Overview</h1>
-            {/* {lastUpdated(queriedAt)} */}
-            {/* {this.renderOverview(list.Count)} */}
           </div>
         </section>
         <section className='page__section'>
