@@ -15,6 +15,7 @@ import workflows from './workflows';
 import executions from './executions';
 import executionStatus from './execution-status';
 import executionLogs from './execution-logs';
+import operations from './operations';
 import rules from './rules';
 import reconciliationReports from './reconciliation-reports';
 import mmtLinks from './mmtLinks';
@@ -40,6 +41,7 @@ export const reducers = {
   executions,
   executionStatus,
   executionLogs,
+  operations,
   rules,
   reconciliationReports
 };
