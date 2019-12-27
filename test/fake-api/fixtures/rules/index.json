@@ -9,7 +9,7 @@
   },
   "results": [
     {
-      "name": "MOD09GQ_TEST_kinesisRule",
+      "name": "MOD09GK_TEST_kinesisRule",
       "createdAt": 1538105473704,
       "workflow": "KinesisTriggerTest",
       "provider": "PODAAC_SWOT",
@@ -22,7 +22,7 @@
         "value": "arn:aws:kinesis:us-east-1:12345678:stream/test-src-integration-testStream-12345678-KinesisError"
       },
       "collection": {
-        "name": "MOD09GQ",
+        "name": "MOD09GK",
         "version": "006"
       },
       "state": "ENABLED",

@@ -144,9 +144,9 @@ describe('Dashboard Granules Page', () => {
     it('Should show Search and Dropdown filters in URL.', () => {
       visitGranulePage();
       cy.get('.search').as('search');
-      cy.get('@search').click().type('L2');
+      cy.get('@search').should('be.visible').click().type('L2');
       cy.get('#form-Status-status > div > input').as('status-input');
-      cy.get('@status-input').click().type('comp{enter}');
+      cy.get('@status-input').should('be.visible').click().type('comp{enter}');
       cy.url().should('include', 'search=L2').and('include', 'status=completed');
     });
   });

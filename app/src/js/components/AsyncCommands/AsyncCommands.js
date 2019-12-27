@@ -38,7 +38,7 @@ class AsyncCommand extends React.Component {
   }
 
   buttonClass (processing) {
-    let className = 'button button--small form-group__element';// this button affects all Collections buttongroups -- the buttons need to be independent
+    let className = 'button button__group button--small form-group__element';// this button affects all Collections buttongroups -- the buttons need to be independent
     if (processing) className += ' button--loading';
     if (this.props.disabled) className += ' button--disabled';
     if (this.props.className) className += ' ' + this.props.className;

@@ -60,7 +60,7 @@
     background-color: $light-green;
   
     &:hover {
-      background-color: darken($light-green, 5%);
+      background-color: darken($light-green, 10%);
       color: #fff;
       border: 0;
     }
@@ -68,7 +68,7 @@
 
   &--primary, &--primary{
     &:hover, &:visited {
-      background-color: darken($light-green, 5%);
+      background-color: darken($light-green, 10%);
       color: $white;
       border: 0;
     }
@@ -174,8 +174,12 @@
         content: '\f187';
         font-weight: 900;
         left: 10px;
-        
       } 
+      &:hover {
+        background-color: darken($error-red, 10%);
+        color: #fff;
+        border: 0;
+      }
     }
   
     &--remove {
@@ -410,14 +414,28 @@
       visibility: hidden;
     }
 
-    &__gotogranules:hover:before{
-      color: $white;
-      position: absolute;
-      font-family: 'Font Awesome 5 Free';
-      content: '\f0a9';
-      font-weight: 900;
-      visibility: hidden;
+    &__gotogranules {
+      background-color: $light-green;
+      position: relative;
+    
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f0a9';
+        font-weight: 900;
+        left: 10px;
+      } 
     }
+    
+      &__gotogranules:hover:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f0a9';
+        font-weight: 900;
+        visibility: hidden;
+      }
     
     &--tab {
       border: none;
@@ -431,5 +449,21 @@
       &:hover {
         color: $dark-grey;
       }
+    }
+
+    //This is temporary until BatchAsyncCommands is refactored
+    &__group {
+      background-color: $ocean-blue;
+      position: relative;
+    
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f111';
+        font-weight: 900;
+        left: 10px;
+        
+      } 
     }
 }

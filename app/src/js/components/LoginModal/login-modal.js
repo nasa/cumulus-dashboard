@@ -48,7 +48,7 @@ class LoginModal extends React.Component {
 
     return (
       <div>
-        { show ? <div className='modal__cover'></div> : null }
+        { show ? <div className='modal__content'></div> : null }
         <div className={ show ? 'modal__container modal__container--onscreen' : 'modal__container' }>
           { show ? (
             <Modal
