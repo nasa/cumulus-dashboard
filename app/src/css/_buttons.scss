@@ -414,14 +414,28 @@
       visibility: hidden;
     }
 
-    &__gotogranules:hover:before{
-      color: $white;
-      position: absolute;
-      font-family: 'Font Awesome 5 Free';
-      content: '\f0a9';
-      font-weight: 900;
-      visibility: hidden;
+    &__gotogranules {
+      background-color: $light-green;
+      position: relative;
+    
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f0a9';
+        font-weight: 900;
+        left: 10px;
+      } 
     }
+    
+      &__gotogranules:hover:before{
+        color: $white;
+        position: absolute;
+        font-family: 'Font Awesome 5 Free';
+        content: '\f0a9';
+        font-weight: 900;
+        visibility: hidden;
+      }
     
     &--tab {
       border: none;
