@@ -8,16 +8,20 @@ const CSSNano = require('cssnano');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: './app/src/index.js',
+  entry: './app/src/js/App.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: '[name].bundle.js',
+    chunkFilename: '[name].bundle.js'
   },
-  devServer: {
+  /* devServer: {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
     port: 5001
-  },
+  },*/
+  externals: [
+    'tls', 'net', 'fs'
+  ],
   resolve: {
     alias: {
       Fonts: path.join(__dirname, './app/src/assets/fonts'),
@@ -74,6 +78,14 @@ module.exports = {
             ]
           }
         }
+      },
+      {
+        test: /\.html$/,
+        use: [
+          {
+            loader: 'html-loader'
+          }
+        ]
       },
       {
         test: /\.(css|scss)$/,
@@ -145,7 +157,11 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name].min.css',
       chunkFilename: '[id].min.css',
-    })
+    }),
+    new webpack.ProvidePlugin({
+      jQuery: 'jquery',
+      $: 'jquery'
+    }),
   ]
 };
 

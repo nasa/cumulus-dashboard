@@ -17,7 +17,8 @@
   "scripts": {
     "audit-ci": "audit-ci --high -p yarn",
     "build": "webpack --mode production",
-    "start": "webpack-dev-server --open --mode development",
+    "start": "npm run serve",
+    "serve": "webpack-dev-server --open --mode development",
     "lint": "eslint app/src/js/ --ext .js",
     "cypress": "CYPRESS_TESTING=true cypress open",
     "cypress-ci": "CYPRESS_TESTING=true cypress run --spec 'cypress/integration/*' --config video=false",

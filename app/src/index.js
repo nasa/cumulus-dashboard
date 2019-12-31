@@ -8,6 +8,8 @@ import Header from './js/components/Header/header';
 import Footer from './js/components/Footer/footer';
 import TopButton from './js/components/TopButton/TopButton';
 
+import './css/main.scss';
+
 import Alert from 'react-bootstrap/Alert';
 
 class App extends React.Component {
