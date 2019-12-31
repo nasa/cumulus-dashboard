@@ -9,6 +9,7 @@ import Footer from './js/components/Footer/footer';
 import TopButton from './js/components/TopButton/TopButton';
 
 import './css/main.scss';
+import './public/favicon.ico';
 
 import Alert from 'react-bootstrap/Alert';
 

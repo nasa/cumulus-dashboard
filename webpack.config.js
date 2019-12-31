@@ -91,12 +91,7 @@ module.exports = {
         test: /\.(css|scss)$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: (resourcePath, context) => {
-                return path.relative(path.dirname(resourcePath), context) + '/';
-              },
-            },
+            loader: MiniCssExtractPlugin.loader
           },
           {
             loader: 'css-loader',
@@ -132,11 +127,11 @@ module.exports = {
         ]
       },
       {
-        test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/,
+        test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|ico|svg)(\?[a-z0-9=.]+)?$/,
         use: {
           loader: 'file-loader',
           options: {
-            name: './app/src/assets/[path][name].[hash].[ext]'
+            name: './app/src/[path][name].[hash].[ext]'
           }
         }
       },
@@ -151,7 +146,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: path.join(__dirname, './app/src/index.html'),
+      template: path.join(__dirname, './app/src/public/index.html'),
       filename: 'index.html'
     }),
     new MiniCssExtractPlugin({
