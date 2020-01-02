@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1670**
   - Fixed bug preventing update of providers
 
+- **CUMULUS-
+  - Use `npm` instead of `yarn`
+  - Update packages to fix security vulnerabilities
+
 ## [v1.6.1] - 2019-11-12
 
 ### Fixed

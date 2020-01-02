@@ -44,11 +44,11 @@ The following environment variables override the default values in `config.js`:
 
 The dashboard uses node v8.11. To build/run the dashboard on your local machine using node v8.11, install [nvm](https://github.com/creationix/nvm) and run `nvm use`.
 
-`yarn` is required to install the correct dependencies for the dashboard. To install `yarn`:
+We use npm for local package management.
 
 ```bash
   $ nvm use
-  $ npm install -g yarn
+  $ npm install
 ```
 
 ## Building the dashboard
@@ -71,7 +71,7 @@ To build the dashboard:
 
 ```bash
   $ nvm use
-  $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com yarn run build
+  $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com npm run build
 ```
 
 **NOTE**: Only the `APIROOT` environment variable is required.
@@ -101,8 +101,8 @@ To run the dashboard locally:
   $ git clone https://github.com/nasa/cumulus-dashboard
   $ cd cumulus-dashboard
   $ nvm use
-  $ yarn install
-  $ APIROOT=https://myapi.com yarn run serve
+  $ npm install
+  $ APIROOT=https://myapi.com npm run serve
 ```
 
 #### Fake API server
@@ -111,7 +111,7 @@ For development and testing purposes, you can use a fake API server provided wit
 
 ```bash
   $ nvm use
-  $ APIROOT=http://localhost:5001 yarn run serve
+  $ APIROOT=http://localhost:5001 npm run serve
 ```
 
 #### NGAP Sandbox Metrics Development
@@ -179,7 +179,7 @@ First build the site
 
 ```bash
   $ nvm use
-  $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com yarn run build
+  $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com npm run build
 ```
 
 Then deploy the `dist` folder
@@ -193,7 +193,7 @@ Then deploy the `dist` folder
 ### Unit Tests
 
 ```bash
-  $ yarn run test
+  $ npm run test
 ```
 
 ## Integration & Validation Tests
@@ -202,14 +202,14 @@ For the integration tests to work, you have to launch the fake API and the dashb
 
 ```bash
   $ node fake-api.js
-  $ APIROOT=http://localhost:5001 yarn run serve
+  $ APIROOT=http://localhost:5001 npm run serve
 ```
 
 Run the test suite in another terminal:
 
 ```bash
-  $ yarn run validation
-  $ yarn run cypress
+  $ npm run validation
+  $ npm run cypress
 ```
 
 When the cypress editor opens, click on `run all specs`.
