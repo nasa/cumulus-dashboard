@@ -64,7 +64,7 @@ select option{
 
 .filters {
   margin: 1.5em 0 2em;
-  @include clearfix;
+  @extend .clearfix;
   label {
     font-size: .86em;
   }

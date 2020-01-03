@@ -11,7 +11,7 @@ import TopButton from './js/components/TopButton/TopButton';
 import './css/main.scss';
 import './public/favicon.ico';
 
-import Alert from 'react-bootstrap/Alert';
+import 'normalize.css';
 
 class App extends React.Component {
   constructor () {
@@ -24,10 +24,6 @@ class App extends React.Component {
       <div className='app'>
         { target !== 'cumulus' ? (
           <div className='app__target--container'>
-            { /*  Need to add alert function
-            <Alert variant="warning" onClose="dismissible">
-              <p>Warning: Dashboard incompatible with Cumulus API version (1.11.0), dashboard requires (>= 1.14.2)</p>
-            </Alert> */ }
             <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
           </div>
         ) : null }

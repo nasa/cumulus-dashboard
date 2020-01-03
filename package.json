@@ -14,6 +14,7 @@
     "url": "https://github.com/nasa/cumulus-dashboard/issues"
   },
   "homepage": "https://github.com/nasa/cumulus-dashboard",
+  "private": true,
   "scripts": {
     "audit-ci": "audit-ci --high -p yarn",
     "build": "webpack --mode production",
@@ -133,6 +134,7 @@
     "jquery": "3.4.0",
     "jsonwebtoken": "^8.3.0",
     "localized-strings": "0.0.11",
+    "lodash": "^4.17.15",
     "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",
     "lodash.findkey": "^4.6.0",
@@ -146,6 +148,8 @@
     "lodash.omitby": "^4.6.0",
     "lodash.throttle": "^4.1.1",
     "moment": "^2.17.1",
+    "normalize-opentype.css": "^0.2.4",
+    "normalize.css": "^8.0.1",
     "numeral": "^2.0.4",
     "object-path": "^0.11.3",
     "paginator": "^1.0.0",

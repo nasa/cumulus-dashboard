@@ -80,7 +80,7 @@ table {
 // Overview Number Card Group //
 
 .overview-num__wrapper {
-  @include clearfix;
+  @extend .clearfix;
   margin-top: 1.5em;
   .num--large {
     font-size: 1.85em;

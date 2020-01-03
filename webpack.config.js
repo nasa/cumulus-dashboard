@@ -1,66 +1,16 @@
-require('@babel/register');
-const webpack = require('webpack');
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
-const TerserJsPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const CSSNano = require('cssnano');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: './app/src/js/App.js',
+  entry: './app/src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].bundle.js',
-    chunkFilename: '[name].bundle.js'
+    filename: 'bundle.js'
   },
-  /* devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true,
-    port: 5001
-  },*/
   externals: [
     'tls', 'net', 'fs'
   ],
-  resolve: {
-    alias: {
-      Fonts: path.join(__dirname, './app/src/assets/fonts'),
-      Images: path.join(__dirname, './app/src/assets/images')
-    },
-  },
-  optimization: {
-    minimizer: [
-      new TerserJsPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true,
-        include: /\.js$/
-      }),
-      new OptimizeCSSAssetsPlugin({
-        cssProcessor: CSSNano,
-        cssProcessorPluginOptions: {
-          preset: ['default', { discardComments: { removeAll: true } }]
-        }
-      })
-    ],
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          name: 'vendor',
-          test: /[\\/]node_modules[\\/]/,
-          chunks: 'all',
-          maxSize: 500000
-        },
-        styles: {
-          name: 'styles',
-          test: /\.css$/,
-          chunks: 'all'
-        }
-      }
-    },
-    runtimeChunk: true,
-    sideEffects: true
-  },
   module: {
     rules: [
       {
@@ -88,42 +38,30 @@ module.exports = {
         ]
       },
       {
-        test: /\.(css|scss)$/,
+        test: /\.s(a|c)ss$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader
           },
           {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true
-            }
+            loader: 'css-loader'
           },
           {
-            loader: 'resolve-url-loader',
-            options: {
-              sourceMap: true
-            }
+            loader: 'resolve-url-loader'
           },
           {
-            loader: 'postcss-loader',
-            options: {
-              sourceMap: true
-            }
+            loader: 'postcss-loader'
           },
           {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true
-            }
-          },
-          {
-            loader: 'sass-resources-loader',
-            options: {
-              // eslint-disable-next-line
-              resources: require(path.join(process.cwd(), "./app/src/css/cssUtils.js")),
-            }
+            loader: 'sass-loader'
           }
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
         ]
       },
       {
@@ -150,13 +88,8 @@ module.exports = {
       filename: 'index.html'
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].min.css',
-      chunkFilename: '[id].min.css',
-    }),
-    new webpack.ProvidePlugin({
-      jQuery: 'jquery',
-      $: 'jquery'
+      filename: '[name].[contenthash].css',
+      chunkFilename: '[id].[contenthash].css'
     }),
   ]
 };
-

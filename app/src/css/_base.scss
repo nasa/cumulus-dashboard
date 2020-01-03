@@ -42,17 +42,7 @@ body {
   height: 100%;
 }
 
-.row {
-  @extend .clearfix;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1280px;
-  padding: 0 48px;
-  display: block;
-  width: auto;
-}
-
-.clearfix {
+.clearfix{
   &:before,
   &:after {
     content: " ";
@@ -61,6 +51,16 @@ body {
   &:after {
     clear: both;
   }
+}
+
+.row {
+  @extend .clearfix;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
+  padding: 0 48px;
+  display: block;
+  width: auto;
 }
 
 a, a:visited {
@@ -357,7 +357,7 @@ a:active {
 
 .page__content {
   width: 100%;
-  @include clearfix;
+  @extend .clearfix;
 }
 
 .page__content--shortened {
