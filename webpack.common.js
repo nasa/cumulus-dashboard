@@ -1,10 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
-// const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const pkg = require('./package.json');
+const nodeExternals = require('webpack-node-externals');
 
 const CommonConfig = {
   target: 'web',
@@ -16,9 +14,11 @@ const CommonConfig = {
     publicPath: '/'
   },
   externals: [
+    nodeExternals(),
     'tls', 'net', 'fs'
   ],
   resolve: {
+    extensions: ['.js', '.jsx', '.scss'],
     alias: {
       Fonts: path.join(__dirname, './app/src/assets/fonts'),
       Images: path.join(__dirname, './app/src/assets/images')
@@ -29,7 +29,7 @@ const CommonConfig = {
       {
         test: /\.(js|jsx)$/,
         exclude: [
-          /node_modules/,
+          /node_modules\/(?!(map-obj|snakecase-keys|strict-uri-encode|qs|fast-xml-parser)\/).*/,
           /font-awesome.config.js/
         ],
         use: [
@@ -56,18 +56,15 @@ const CommonConfig = {
         ]
       },
       {
-        test: /\.s(a|c)ss$/,
+        test: /\.(css|scss)$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              sourceMap: true
-            }
-          },
-          {
+            // Translates CSS into CommonJS
             loader: 'css-loader',
             options: {
-              sourceMap: true
+              modules: true,
+              sourceMap: true,
+              importLoaders: 1
             }
           },
           {
@@ -83,18 +80,18 @@ const CommonConfig = {
             }
           },
           {
+            // Compiles Sass to CSS
             loader: 'sass-loader',
             options: {
               sourceMap: true
             }
+          },
+          {
+            loader: 'sass-resources-loader',
+            options: {
+              resources: require(path.join(process.cwd(), './app/src/css/cssUtils.js')),
+            }
           }
-        ]
-      },
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
         ]
       },
       {
@@ -102,29 +99,28 @@ const CommonConfig = {
         use: {
           loader: 'file-loader',
           options: {
-            name: './app/src/[path][name].[hash].[ext]'
+            name: './app/src/assets/[path][name].[hash].[ext]'
           }
         }
       },
       {
         test: /font-awesome\.config\.js/,
         use: [
-          { loader: 'style-loader' },
-          { loader: 'font-awesome-loader' }
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'font-awesome-loader'
+          }
         ]
       },
     ]
   },
   plugins: [
-    // new CleanWebpackPlugin(),
     new HtmlWebPackPlugin({
       template: path.join(__dirname, './app/src/public/index.html'),
       filename: 'index.html',
       title: 'Production'
-    }),
-    new MiniCssExtractPlugin({
-      filename: '[name].[chunkhash:8]-' + pkg.version + '.css',
-      chunkFilename: '[id].[chunkhash:8]-' + pkg.version + '.css'
     }),
     new webpack.HashedModuleIdsPlugin(),
     new CopyWebpackPlugin([

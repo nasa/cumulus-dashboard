@@ -27,8 +27,9 @@ const DevConfig = merge.smartStrategy(
         test: /\.(css|scss)$/,
         use: [
           {
-            loader: 'style-loader'
-          }
+            // Creates `style` nodes from JS strings
+            loader: 'style-loader',
+          },
         ]
       }
     ]

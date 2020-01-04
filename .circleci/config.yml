@@ -18,7 +18,7 @@ jobs:
               -v /home/circleci/.cache:/root/.cache \
               -v $(pwd):/home \
               --workdir /home \
-              node:8.11.4 \
+              node:10.16.3 \
               yarn install --frozen-lockfile --cache-folder /root/.cache
 
       # save node_module folders
@@ -28,14 +28,14 @@ jobs:
             - ~/cumulus-dashboard/node_modules
             - ~/.cache
 
-      # image node:8.11.4 has yarn version 1.6.0 and yarn >=1.12.3 is needed for audit
+      # image node:10.16.3 has yarn version 1.6.0 and yarn >=1.12.3 is needed for audit
       # - run:
       #     name: Run audit-ci
       #     command: |
       #       export NVM_DIR="/opt/circleci/.nvm"
       #       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-      #       nvm install v8.11.4
-      #       nvm alias default v8.11.4
+      #       nvm install v10.16.3
+      #       nvm alias default v10.16.3
       #       npm install -g yarn
       #       yarn run audit-ci
 
@@ -48,7 +48,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               -e APIROOT=http://api:5001 \
-              node:8.11.4 \
+              node:10.16.3 \
               yarn run build
 
       - run:
@@ -58,7 +58,7 @@ jobs:
               -v /home/circleci/.cache:/root/.cache \
               -v $(pwd):/home \
               --workdir /home \
-              node:8.11.4 \
+              node:10.16.3 \
               yarn test --cache-folder /root/.cache
 
       - run:
@@ -71,7 +71,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               -p 5001:5001 \
-              node:8.11.4 \
+              node:10.16.3 \
               node fake-api.js
 
             # run dashboard
@@ -82,7 +82,7 @@ jobs:
               --workdir /home \
               -e APIROOT=http://api:5001 \
               -p 3000:3000 \
-              node:8.11.4 \
+              node:10.16.3 \
               yarn serve
 
             attempt_counter=0
@@ -110,7 +110,7 @@ jobs:
               -v /home/circleci/.cache:/root/.cache \
               -v $(pwd):/home \
               --workdir /home \
-              node:8.11.4 \
+              node:10.16.3 \
               yarn validation
 
       - run:
@@ -151,7 +151,7 @@ jobs:
               -v /home/circleci/.cache:/root/.cache \
               -v $(pwd):/home \
               --workdir /home \
-              node:8.11.4 \
+              node:10.16.3 \
               yarn install --frozen-lockfile --cache-folder /root/.cache
 
       - run:
@@ -170,7 +170,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               -e APIROOT=${SANDBOX_API} \
-              node:8.11.4 \
+              node:10.16.3 \
               yarn run build
 
       - run:
@@ -194,7 +194,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               -e APIROOT=${SANDBOX_API_ROOT} \
-              node:8.11.4 \
+              node:10.16.3 \
               yarn run build
 
       - run:
@@ -218,7 +218,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               -e APIROOT=${SIT_API_ROOT} \
-              node:8.11.4 \
+              node:10.16.3 \
               yarn run build
 
       - run:

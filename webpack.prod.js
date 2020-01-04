@@ -1,11 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserJsPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CSSNano = require('cssnano');
+const pkg = require('./package.json');
 
 const CommonConfig = require('./webpack.common');
 
@@ -70,9 +71,11 @@ const MainConfig = merge.smartStrategy({
         test: /\.(css|scss)$/,
         use: [
           {
-            loader: 'style-loader'
+            // Creates `style` nodes from JS strings
+            loader: 'style-loader',
           },
           {
+            // Minifies CSS files
             loader: MiniCssExtractPlugin.loader
           }
         ]
@@ -83,8 +86,8 @@ const MainConfig = merge.smartStrategy({
     new webpack.HashedModuleIdsPlugin(),
     new CleanWebpackPlugin([path.resolve(__dirname, 'dist')]),
     new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].min.css',
-      chunkFilename: '[id].[contenthash].min.css',
+      filename: '[name].[chunkhash:8]-' + pkg.version + '.css',
+      chunkFilename: '[id].[chunkhash:8]-' + pkg.version + '.css'
     })
   ]
 });

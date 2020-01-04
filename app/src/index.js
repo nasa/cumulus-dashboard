@@ -11,8 +11,6 @@ import TopButton from './js/components/TopButton/TopButton';
 import './css/main.scss';
 import './public/favicon.ico';
 
-import 'normalize.css';
-
 class App extends React.Component {
   constructor () {
     super();
@@ -22,18 +20,18 @@ class App extends React.Component {
   render () {
     return (
       <div className='app'>
-        { target !== 'cumulus' ? (
+        {target !== 'cumulus' ? (
           <div className='app__target--container'>
             <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
           </div>
-        ) : null }
-        <Header dispatch={this.props.dispatch} api={this.props.api} location={this.props.location}/>
+        ) : null}
+        <Header dispatch={this.props.dispatch} api={this.props.api} location={this.props.location} />
         <main className='main' role='main'>
           {this.props.children}
         </main>
         <section className='page__section--top'>
-            <TopButton/>
-          </section>
+          <TopButton />
+        </section>
         <Footer api={this.props.api} apiVersion={this.props.apiVersion} />
       </div>
     );
