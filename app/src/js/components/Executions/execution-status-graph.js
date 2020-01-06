@@ -2,10 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import dagre from 'dagre-d3v4';
+import dagre from 'dagre-d3';
 import * as d3 from 'd3';
 
-// dagre-d3v4 expects d3 to be attached to the window
+// dagre-d3 expects d3 to be attached to the window
 if (process.env.NODE_ENV !== 'test') window.d3 = d3;
 
 class ExecutionStatusGraph extends React.Component {

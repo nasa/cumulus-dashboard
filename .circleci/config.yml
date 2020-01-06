@@ -6,38 +6,23 @@ jobs:
     steps:
       - checkout
 
-      # restore cache
-      - restore_cache:
-          keys:
-            - dashboard-{{ .Branch }}-{{ checksum "package.json" }}
-
+      # image node:8.11.4 has npm version 5.6.0 and npm >=5.7.0 is needed npm ci
       - run:
           name: Install dependencies
           command: |
-            docker run --rm \
-              -v /home/circleci/.cache:/root/.cache \
-              -v $(pwd):/home \
-              --workdir /home \
-              node:8.11.4 \
-              yarn install --frozen-lockfile --cache-folder /root/.cache
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install v8.11.4
+            nvm alias default v8.11.4
+            npm install -g npm
+            npm ci
 
-      # save node_module folders
-      - save_cache:
-          key: dashboard-{{ .Branch }}-{{ checksum "package.json" }}
-          paths:
-            - ~/cumulus-dashboard/node_modules
-            - ~/.cache
-
-      # image node:8.11.4 has yarn version 1.6.0 and yarn >=1.12.3 is needed for audit
-      # - run:
-      #     name: Run audit-ci
-      #     command: |
-      #       export NVM_DIR="/opt/circleci/.nvm"
-      #       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-      #       nvm install v8.11.4
-      #       nvm alias default v8.11.4
-      #       npm install -g yarn
-      #       yarn run audit-ci
+      - run:
+          name: Run audit-ci
+          command: |
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            npm run audit-ci
 
       - run:
           name: Test dashboard build
@@ -49,7 +34,7 @@ jobs:
               --workdir /home \
               -e APIROOT=http://api:5001 \
               node:8.11.4 \
-              yarn run build
+              npm run build
 
       - run:
           name: Run tests
@@ -59,7 +44,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               node:8.11.4 \
-              yarn test --cache-folder /root/.cache
+              npm run test
 
       - run:
           name: Prepare servers
@@ -83,7 +68,7 @@ jobs:
               -e APIROOT=http://api:5001 \
               -p 3000:3000 \
               node:8.11.4 \
-              yarn serve
+              npm run serve
 
             attempt_counter=0
             max_attempts=20
@@ -111,7 +96,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               node:8.11.4 \
-              yarn validation
+              npm run validation
 
       - run:
           name: Run Integration Tests
@@ -126,7 +111,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               cypress/base:8 \
-              yarn cypress-ci
+              npm run cypress-ci
 
   deploy:
     machine: true
@@ -134,25 +119,19 @@ jobs:
     steps:
       - checkout
 
-      # restore cache
-      - restore_cache:
-          keys:
-            - dashboard-{{ .Branch }}-{{ checksum "package.json" }}
-
       - run:
           name: Install awscli
           command: sudo pip install awscli
 
-
       - run:
           name: Install dependencies
           command: |
-            docker run --rm \
-              -v /home/circleci/.cache:/root/.cache \
-              -v $(pwd):/home \
-              --workdir /home \
-              node:8.11.4 \
-              yarn install --frozen-lockfile --cache-folder /root/.cache
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install v8.11.4
+            nvm alias default v8.11.4
+            npm install -g npm
+            npm ci
 
       - run:
           # This has to be done in a separate step, like this, because Circle CI
@@ -171,7 +150,7 @@ jobs:
               --workdir /home \
               -e APIROOT=${SANDBOX_API} \
               node:8.11.4 \
-              yarn run build
+              npm run build
 
       - run:
           name: Deploy to S3
@@ -195,7 +174,7 @@ jobs:
               --workdir /home \
               -e APIROOT=${SANDBOX_API_ROOT} \
               node:8.11.4 \
-              yarn run build
+              npm run build
 
       - run:
           name: Deploy to Cumulus Sandbox
@@ -219,7 +198,7 @@ jobs:
               --workdir /home \
               -e APIROOT=${SIT_API_ROOT} \
               node:8.11.4 \
-              yarn run build
+              npm run build
 
       - run:
           name: Deploy to Cumulus SIT
