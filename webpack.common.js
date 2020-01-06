@@ -1,3 +1,4 @@
+require('@babel/register');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
@@ -8,8 +9,8 @@ const CommonConfig = {
   target: 'web',
   entry: './app/src/index.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, './dist'),
+    filename: 'bundle.js',
     chunkFilename: '[name].bundle.js',
     publicPath: '/'
   },
@@ -99,7 +100,7 @@ const CommonConfig = {
         use: {
           loader: 'file-loader',
           options: {
-            name: './app/src/assets/[path][name].[hash].[ext]'
+            name: '[path][name].[hash].[ext]'
           }
         }
       },

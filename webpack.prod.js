@@ -19,7 +19,7 @@ const MainConfig = merge.smartStrategy({
   output: {
     filename: '[name].[contenthash].bundle.js',
     chunkFilename: '[name].[contenthash].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, './dist'),
     publicPath: '/'
   },
   optimization: {
@@ -84,7 +84,7 @@ const MainConfig = merge.smartStrategy({
   },
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
-    new CleanWebpackPlugin([path.resolve(__dirname, 'dist')]),
+    new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].[chunkhash:8]-' + pkg.version + '.css',
       chunkFilename: '[id].[chunkhash:8]-' + pkg.version + '.css'

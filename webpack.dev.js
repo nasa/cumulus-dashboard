@@ -14,7 +14,7 @@ const DevConfig = merge.smartStrategy(
   devServer: {
     hot: true,
     historyApiFallback: true,
-    host: '0.0.0.0', // Required for Docker
+    // host: '0.0.0.0', // Required for Docker -- someone will need to link this somehow
     publicPath: '/',
     watchContentBase: true,
     compress: true,
