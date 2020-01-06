@@ -26,8 +26,8 @@
     "validation": "ava cypress/validation-tests/*.js",
     "test": "npm run lint && ava",
     "serve-api": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test FAKE_AUTH=true ./node_modules/@flamingbear/api/bin/cli.js serve",
-    "start-localstack": "export SSH_USERS=user:$(id -u):$(id -u) && docker-compose -f ./api/docker-compose.yml -f ./api/docker-compose-local.yml -p cumulusstack up -d",
-    "stop-localstack": "docker-compose -f ./api/docker-compose.yml -f ./api/docker-compose-local.yml -p cumulusstack down"
+    "start-localstack": "export SSH_USERS=user:$(id -u):$(id -u) && docker-compose -f ./localApi/docker-compose.yml -f ./localApi/docker-compose-local.yml -p cumulusstack up -d",
+    "stop-localstack": "docker-compose -f ./localApi/docker-compose.yml -f ./localApi/docker-compose-local.yml -p cumulusstack down"
   },
   "ava": {
     "files": [
