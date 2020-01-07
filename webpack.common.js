@@ -14,9 +14,12 @@ const CommonConfig = {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/'
   },
-  externals: [
-    'tls', 'net', 'fs'
-  ],
+  node: {
+    console: true,
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty'
+  },
   resolve: {
     extensions: ['.js', '.jsx', '.scss'],
     alias: {
