@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import { get } from 'object-path';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { fromNow, seconds, tally, collectionNameVersion } from '../format';
 import { deleteCollection } from '../../actions';
 import { strings } from '../../components/locale';

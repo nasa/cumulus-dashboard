@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import get from 'lodash.get';
 import { getExecutionStatus } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import {
   tableHeader,

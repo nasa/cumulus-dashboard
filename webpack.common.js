@@ -3,7 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const nodeExternals = require('webpack-node-externals');
+// const nodeExternals = require('webpack-node-externals');
 
 const CommonConfig = {
   target: 'web',
@@ -15,7 +15,6 @@ const CommonConfig = {
     publicPath: '/'
   },
   externals: [
-    nodeExternals(),
     'tls', 'net', 'fs'
   ],
   resolve: {
@@ -128,7 +127,7 @@ const CommonConfig = {
       { from: './app/src/public', to: './' }
     ]),
     new webpack.ProvidePlugin({
-      jQuery: 'jquery',
+      jQuery: 'jquery', // can use jquery anywhere in the app without having to require it
       $: 'jquery'
     }),
   ]

@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment';
 import numeral from 'numeral';
 import url from 'url';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 export const nullValue = '--';
 
