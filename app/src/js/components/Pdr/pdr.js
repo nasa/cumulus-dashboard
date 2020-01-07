@@ -141,12 +141,12 @@ class PDR extends React.Component {
           </div>
         </section>
 
-          <section className='page__section'>
-            <div className='heading__wrapper--border'>
-              <h2 className='heading--medium with-description'>PDR Overview</h2>
-            </div>
-            {!record || (record.inflight && !record.data) ? <Loading /> : <Metadata data={record.data} accessors={metaAccessors} />}
-          </section>
+        <section className='page__section'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium with-description'>PDR Overview</h2>
+          </div>
+          {!record || (record.inflight && !record.data) ? <Loading /> : <Metadata data={record.data} accessors={metaAccessors} />}
+        </section>
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>

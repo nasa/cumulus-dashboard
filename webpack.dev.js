@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
+const WebpackBar = require('webpackbar'); // visual indicator in terminal for development
 
 const CommonConfig = require('./webpack.common');
 
@@ -12,7 +13,7 @@ const DevConfig = merge.smartStrategy(
   mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
-    hot: true,
+    hot: false,
     historyApiFallback: true,
     // host: '0.0.0.0', // Required for Docker -- someone will need to link this somehow
     publicPath: '/',
@@ -35,7 +36,8 @@ const DevConfig = merge.smartStrategy(
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new WebpackBar()
   ]
 });
 

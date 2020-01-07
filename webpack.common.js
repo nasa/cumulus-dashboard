@@ -7,11 +7,11 @@ const nodeExternals = require('webpack-node-externals');
 
 const CommonConfig = {
   target: 'web',
-  entry: './app/src/index.js',
+  entry: './app/src/js/App.js',
   output: {
-    path: path.resolve(__dirname, './dist'),
     filename: 'bundle.js',
     chunkFilename: '[name].bundle.js',
+    path: path.resolve(__dirname, './dist'),
     publicPath: '/'
   },
   externals: [
@@ -39,7 +39,7 @@ const CommonConfig = {
             options: {
               presets: [
                 '@babel/preset-env',
-                '@babel/react'
+                '@babel/preset-react'
               ]
             }
           },
@@ -121,7 +121,7 @@ const CommonConfig = {
     new HtmlWebPackPlugin({
       template: path.join(__dirname, './app/src/public/index.html'),
       filename: 'index.html',
-      title: 'Production'
+      title: 'Cumulus Dashboard'
     }),
     new webpack.HashedModuleIdsPlugin(),
     new CopyWebpackPlugin([

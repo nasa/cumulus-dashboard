@@ -43,9 +43,9 @@ class Pagination extends React.Component {
         <div className='pagination'>
           <ol>
             <li><a
-                className={'previous' + (meta.has_previous_page ? '' : disabled)}
-                data-value={meta.previous_page}
-                onClick={(meta.has_previous_page ? this.onPageClick : noop)}>Previous</a></li>
+              className={'previous' + (meta.has_previous_page ? '' : disabled)}
+              data-value={meta.previous_page}
+              onClick={(meta.has_previous_page ? this.onPageClick : noop)}>Previous</a></li>
             {jumpToFirst}
             {pages.map(d => (
               <li key={d} className={d === currentPage ? 'pagination__link--active' : ''}>
@@ -54,9 +54,9 @@ class Pagination extends React.Component {
             ))}
             {jumpToLast}
             <li><a
-                className={'next' + (meta.has_next_page ? '' : disabled)}
-                data-value={meta.next_page}
-                onClick={(meta.has_next_page ? this.onPageClick : noop)}>Next</a></li>
+              className={'next' + (meta.has_next_page ? '' : disabled)}
+              data-value={meta.next_page}
+              onClick={(meta.has_next_page ? this.onPageClick : noop)}>Next</a></li>
           </ol>
         </div>
       );

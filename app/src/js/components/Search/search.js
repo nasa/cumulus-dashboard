@@ -66,13 +66,13 @@ class Search extends React.Component {
     const { label, paramKey } = this.props;
     const formID = `form-${label}-${paramKey}`;
     return (
-     <div className='filter__item'>
-       {label ? <label htmlFor={formID}>{label}</label> : null}
-       <form className='search__wrapper form-group__element' onSubmit={this.submit} >
-        <input className='search' type='search' onChange={this.complete} value={this.state.value}/>
-        <span className='search__icon'/>
-       </form>
-     </div>
+      <div className='filter__item'>
+        {label ? <label htmlFor={formID}>{label}</label> : null}
+        <form className='search__wrapper form-group__element' onSubmit={this.submit} >
+          <input className='search' type='search' onChange={this.complete} value={this.state.value}/>
+          <span className='search__icon'/>
+        </form>
+      </div>
     );
   }
 }

@@ -53,7 +53,7 @@ const typeOptions = {
   KinesisReplay: 'Kinesis Replay'
 };
 
-  // (d) => <Link to={'/executions/execution/' + d.arn} title={d.name}>{truncate(d.name, 24)}</Link>,
+// (d) => <Link to={'/executions/execution/' + d.arn} title={d.name}>{truncate(d.name, 24)}</Link>,
 
 const tableRow = [
   (d) => displayCase(d.status),

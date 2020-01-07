@@ -84,16 +84,16 @@ class Histogram extends React.Component {
     const histogram = get(data, 'histogram', []);
 
     const xScale = scaleLinear()
-    .range([0, innerWidth])
-    .domain([0, 1.25 * Math.max.apply(Math, histogram.map(d => +d.count))]);
+      .range([0, innerWidth])
+      .domain([0, 1.25 * Math.max.apply(Math, histogram.map(d => +d.count))]);
 
     const scaleOrdinal = scaleBand()
-    .paddingInner(0.6)
-    .paddingOuter(0.2);
+      .paddingInner(0.6)
+      .paddingOuter(0.2);
 
     const yScale = scaleOrdinal
-    .rangeRound([0, innerHeight])
-    .domain(histogram.map(d => d.date));
+      .rangeRound([0, innerHeight])
+      .domain(histogram.map(d => d.date));
 
     const band = yScale.bandwidth();
     const tooltipFormat = this.props.tooltipFormat || noop;
@@ -163,7 +163,7 @@ class Histogram extends React.Component {
           display: this.state.tooltip ? 'block' : 'none',
           left: this.state.tooltipX,
           top: this.state.tooltipY}}
-          >
+        >
           <div className='tooltip__inner'>
             {tooltipFormat(this.state.tooltip)}
           </div>

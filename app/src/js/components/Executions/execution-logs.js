@@ -38,27 +38,27 @@ class ExecutionLogs extends React.Component {
 
     return (
       <div className='page__component'>
-      <section className='page__section page__section__header-wrapper'>
-        <h1 className='heading--large heading--shared-content with-description'>
+        <section className='page__section page__section__header-wrapper'>
+          <h1 className='heading--large heading--shared-content with-description'>
           Logs for Execution {executionName}
-        </h1>
+          </h1>
 
-        {errors.length ? <ErrorReport report={errors} /> : null}
-      </section>
+          {errors.length ? <ErrorReport report={errors} /> : null}
+        </section>
 
-      <section className='page__section' style={{ display: 'inline-block', verticalAlign: 'top' }}>
+        <section className='page__section' style={{ display: 'inline-block', verticalAlign: 'top' }}>
 
-        <div className='status--process'>
-          <h2>Execution Details:</h2>
-          <pre>{JSON.stringify(executionLogs.details, null, 2)}</pre><br />
-        </div>
+          <div className='status--process'>
+            <h2>Execution Details:</h2>
+            <pre>{JSON.stringify(executionLogs.details, null, 2)}</pre><br />
+          </div>
 
-        <div className='status--process'>
-        <h2>Execution Logs:</h2>
-          <pre>{JSON.stringify(executionLogs.results, null, 2)}</pre><br />
-        </div>
+          <div className='status--process'>
+            <h2>Execution Logs:</h2>
+            <pre>{JSON.stringify(executionLogs.results, null, 2)}</pre><br />
+          </div>
 
-      </section>
+        </section>
       </div>
     );
   }

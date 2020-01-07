@@ -42,7 +42,7 @@ class ReconciliationReports extends React.Component {
           <div className='row'>
             <h1 className='heading--xlarge'>Reconciliation Reports</h1>
             <button className='button button--large button--white button__addcollections button__arrow button__animation' onClick={this.createReport}>
-             { reconciliationReports.createReportInflight ? <LoadingEllipsis /> : 'Create a Report'}
+              { reconciliationReports.createReportInflight ? <LoadingEllipsis /> : 'Create a Report'}
             </button>
           </div>
         </div>

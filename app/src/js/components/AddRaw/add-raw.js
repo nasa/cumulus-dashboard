@@ -88,16 +88,16 @@ class AddRaw extends React.Component {
                 minLines={30}
                 maxLines={200}
               />
-                <button
-                  className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (status === 'inflight' ? ' button--disabled' : '')}
-                  onClick={this.submit}
-                  readOnly={true}
-                  >{buttonText}</button>
-                <button
-                  className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
-                  onClick={this.cancel}
-                  readOnly={true}
-                >Cancel</button>
+              <button
+                className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (status === 'inflight' ? ' button--disabled' : '')}
+                onClick={this.submit}
+                readOnly={true}
+              >{buttonText}</button>
+              <button
+                className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
+                onClick={this.cancel}
+                readOnly={true}
+              >Cancel</button>
             </form>
           </div>
         </section>

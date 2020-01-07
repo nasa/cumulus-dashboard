@@ -193,7 +193,7 @@ class CollectionOverview extends React.Component {
                 {this.renderDeleteButton()}
               </li>
             </ul>
-           <span className="last-update">{lastUpdated(get(record, 'data.timestamp'))}</span>
+            <span className="last-update">{lastUpdated(get(record, 'data.timestamp'))}</span>
           </div>
         </section>
         <section className='page__section page__section__overview'>

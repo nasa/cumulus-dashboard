@@ -59,34 +59,34 @@ class LoginModal extends React.Component {
               aria-labelledby="modal__login-modal"
             >
               <Modal.Header className="login-modal__header" closeButton></Modal.Header>
-                <Modal.Title id="modal__login-modal" className="login-modal__title">Log in to Cumulus</Modal.Title>
-                  <Modal.Body>
-                    <p className='metadata__updated'>{ authenticated ? <strong>Success!</strong> : 'Enter your username and password' }</p>
-                    <form>
-                      <div className='form__login'>
-                        <Text label={'Username'}
-                          value={this.state.user}
-                          id={'login-user'}
-                          className='input--lg'
-                          onChange={(id, value) => this.setState({user: value})} />
-                        <Text label={'Password'}
-                          value={this.state.pass}
-                          id={'login-pass'}
-                          type={'password'}
-                          className='input--lg'
-                          onChange={(id, value) => this.setState({pass: value})} />
-                        <span className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
-                          <input
-                            type='submit'
-                            value={inflight ? 'Loading...' : 'Submit'}
-                            onClick={this.onSubmit}
-                            readOnly={true}
-                          />
-                        </span>
-                      </div>
-                    </form>
-                    { error ? <ErrorReport report={error} /> : null }
-                </Modal.Body>
+              <Modal.Title id="modal__login-modal" className="login-modal__title">Log in to Cumulus</Modal.Title>
+              <Modal.Body>
+                <p className='metadata__updated'>{ authenticated ? <strong>Success!</strong> : 'Enter your username and password' }</p>
+                <form>
+                  <div className='form__login'>
+                    <Text label={'Username'}
+                      value={this.state.user}
+                      id={'login-user'}
+                      className='input--lg'
+                      onChange={(id, value) => this.setState({user: value})} />
+                    <Text label={'Password'}
+                      value={this.state.pass}
+                      id={'login-pass'}
+                      type={'password'}
+                      className='input--lg'
+                      onChange={(id, value) => this.setState({pass: value})} />
+                    <span className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
+                      <input
+                        type='submit'
+                        value={inflight ? 'Loading...' : 'Submit'}
+                        onClick={this.onSubmit}
+                        readOnly={true}
+                      />
+                    </span>
+                  </div>
+                </form>
+                { error ? <ErrorReport report={error} /> : null }
+              </Modal.Body>
             </Modal>
           ) : null }
         </div>

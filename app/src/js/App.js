@@ -28,12 +28,12 @@ import { requestMiddleware } from './middleware/request';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(reducers,
-                          composeEnhancers(
-                            applyMiddleware(
-                              refreshTokenMiddleware,
-                              requestMiddleware,
-                              thunkMiddleware
-                            )));
+  composeEnhancers(
+    applyMiddleware(
+      refreshTokenMiddleware,
+      requestMiddleware,
+      thunkMiddleware
+    )));
 
 if (window.Cypress && window.Cypress.env('TESTING') === true) {
   window.appStore = store;

@@ -109,19 +109,19 @@ class CollectionGranules extends React.Component {
             <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num--title'>{meta.count ? ` ${meta.count}` : null}</span></h2>
           </div>
           <div className='filters filters__wlabels'>
-          {(view === 'all') ? <Dropdown
-            options={statusOptions}
-            action={filterGranules}
-            clear={clearGranulesFilter}
-            paramKey={'status'}
-            label={'Status'}
+            {(view === 'all') ? <Dropdown
+              options={statusOptions}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey={'status'}
+              label={'Status'}
             />
-            : <Search
-              dispatch={this.props.dispatch}
-              action={searchGranules}
-              clear={clearGranulesSearch}
-            />
-          }
+              : <Search
+                dispatch={this.props.dispatch}
+                action={searchGranules}
+                clear={clearGranulesSearch}
+              />
+            }
           </div>
 
           <List

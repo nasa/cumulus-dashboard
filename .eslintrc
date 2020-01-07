@@ -41,5 +41,12 @@
       "cy": true,
       "Cypress": true,
       "expect": true
+    },
+    // Define React version settings
+    "settings": {
+      "react": {
+        "pragma": "React",
+        "version": "16.10.2"
     }
+  }
 }
