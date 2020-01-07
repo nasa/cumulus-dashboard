@@ -174,6 +174,7 @@
     "react-router": "^5.1.2",
     "react-router-bootstrap": "^0.25.0",
     "react-router-dom": "^5.1.2",
+    "react-router-query-params": "^1.0.3",
     "react-router-scroll-4": "^1.0.0-beta.2",
     "recompose": "^0.30.0",
     "redux": "^3.6.0",
