@@ -15,7 +15,8 @@ import {
 
 import ErrorReport from '../Errors/report';
 
-import { ExecutionStatusGraph, getEventDetails } from './execution-status-graph';
+import ExecutionStatusGraph from './execution-status-graph';
+import { getEventDetails } from './execution-graph-utils';
 import SortableTable from '../SortableTable/SortableTable';
 
 class ExecutionStatus extends React.Component {
