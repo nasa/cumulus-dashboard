@@ -133,6 +133,19 @@ const CommonConfig = {
       jQuery: 'jquery', // can use jquery anywhere in the app without having to require it
       $: 'jquery'
     }),
+    new webpack.EnvironmentPlugin([
+      'APIROOT',
+      'DAAC_NAME',
+      'STAGE',
+      'HIDE_PDR',
+      'AUTH_METHOD',
+      'KIBANAROOT',
+      'ESROOT',
+      'SHOW_TEA_METRICS',
+      'SHOW_DISTRIBUTION_API_METRICS',
+      'BUCKET',
+      'ENABLE_RECOVERY'
+    ])
   ]
 };
 
