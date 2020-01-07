@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import withQueryParams from 'react-router-query-params';
 import url from 'url';
 import { login, setTokenState } from '../actions';
 import { window } from '../utils/browser';
@@ -36,9 +37,8 @@ class OAuth extends React.Component {
   }
 
   componentDidMount () {
-    const query = this.props.location.query;
-    if (query.token) {
-      const token = query.token;
+    const { token } = this.props.queryParams;
+    if (token) {
       const { dispatch } = this.props;
       this.setState({ token }, () => dispatch(login(token))); // eslint-disable-line react/no-did-mount-set-state
     }
@@ -90,7 +90,8 @@ OAuth.propTypes = {
   api: PropTypes.object,
   location: PropTypes.object,
   router: PropTypes.object,
-  apiVersion: PropTypes.object
+  apiVersion: PropTypes.object,
+  queryParams: PropTypes.object
 };
 
-export default connect(state => state)(OAuth);
+export default withQueryParams()(connect(state => state)(OAuth));
