@@ -5,7 +5,7 @@ import moment from 'moment';
 import url from 'url';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
-import { hashHistory } from 'react-router';
+import history from 'history';
 import { CMR } from '@cumulus/cmrjs';
 import clonedeep from 'lodash.clonedeep';
 
@@ -682,7 +682,7 @@ export const loginError = (error) => {
   return (dispatch) => {
     return dispatch(deleteToken())
       .then(() => dispatch({ type: 'LOGIN_ERROR', error }))
-      .then(() => hashHistory.push('/auth'));
+      .then(() => history.push('/auth'));
   };
 };
 

@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { connectRouter } from 'connected-react-router';
 import api from './api';
 import apiVersion from './api-version';
 import collections from './collections';
@@ -43,7 +44,8 @@ export const reducers = {
   executionLogs,
   operations,
   rules,
-  reconciliationReports
+  reconciliationReports,
+  router: connectRouter(history)
 };
 
 export default combineReducers(Object.assign({}, reducers));

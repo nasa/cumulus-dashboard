@@ -38,4 +38,4 @@ const baseConfig = {
 const config = Object.assign({}, baseConfig, deploymentConfig);
 config.apiRoot = config.apiRoot.replace(/\/?$/, '/');
 
-module.exports = config;
+export default config;

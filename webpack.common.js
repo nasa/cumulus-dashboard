@@ -7,7 +7,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const CommonConfig = {
   target: 'web',
-  entry: './app/src/js/App.js',
+  entry: './app/src/index.js',
   output: {
     filename: 'bundle.js',
     chunkFilename: '[name].bundle.js',

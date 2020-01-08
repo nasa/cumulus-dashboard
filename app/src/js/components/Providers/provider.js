@@ -35,7 +35,7 @@ const metaAccessors = [
 class ProviderOverview extends React.Component {
   constructor () {
     super();
-    this.displayName = 'Provider';
+    this.displayName = 'ProviderElem';
     this.reload = this.reload.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
     this.delete = this.delete.bind(this);

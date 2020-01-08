@@ -178,6 +178,7 @@
     "react-router-scroll-4": "^1.0.0-beta.2",
     "recompose": "^0.30.0",
     "redux": "^3.6.0",
+    "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.2.0",
     "request": "^2.79.0",
     "request-promise-native": "^1.0.5",
