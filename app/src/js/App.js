@@ -104,14 +104,14 @@ class App extends Component {
       // Routes
       <Provider store={store}>
         <ConnectedRouter history={history}>
-          <Router path="/" component={Main}>
+          <Router>
             {/* If path is / then load the Home component */}
             <Switch>
               <Route path='/404' component={NotFound} />
               <Redirect from='/collections' to='/collections/all' />
               <Redirect from='/login' to='/auth' />
               <Route path='/auth' component={OAuth} onEnter={checkAuth} />
-              <Route path='/' component={App} onEnter={requireAuth} >
+              <Route path='/' component={Main} onEnter={requireAuth} >
                 <Route exact path='/' component={Home} />
                 { /* Collections */}
                 <Route path='collections' component={Collections}>
