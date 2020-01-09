@@ -1,8 +1,7 @@
 'use strict';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-// import PropTypes from 'prop-types';
-import configureStore, { history } from './store/configureStore';
+import configureStore from './store/configureStore';
 // import { useScroll as notHookUseScroll } from 'react-router-scroll-4';
 
 //  Fontawesome Icons Library
@@ -16,11 +15,13 @@ import {
   // NavLink,
   Switch
 } from 'react-router-dom';
-import { ConnectedRouter } from 'connected-react-router';
+import { ConnectedRouter, history } from 'connected-react-router';
 
 import NotFound from './components/404';
 import OAuth from './components/oauth';
 import Home from './components/home';
+
+import Main from '../js/main';
 
 // Components
 import Collections from './components/Collections';
@@ -72,9 +73,7 @@ import ReconciliationReports from './components/ReconciliationReports';
 import ReconciliationReportList from './components/ReconciliationReports/list';
 import ReconciliationReport from './components/ReconciliationReports/reconciliation-report';
 
-// import Header from './components/Header/header';
-// import Footer from './components/Footer/footer';
-// import TopButton from './components/TopButton/TopButton';
+import config from './config';
 
 // Store
 const store = configureStore;
@@ -82,7 +81,6 @@ if (window.Cypress && window.Cypress.env('TESTING') === true) {
   window.appStore = store;
 }
 
-import config from './config';
 console.log.apply(console, config.consoleMessage);
 console.log('Environment', config.environment);
 
@@ -105,8 +103,8 @@ class App extends Component {
     return (
       // Routes
       <Provider store={store}>
-        <ConnectedRouter history={history} context={context}>
-          <Router>
+        <ConnectedRouter history={history}>
+          <Router path="/" component={Main}>
             {/* If path is / then load the Home component */}
             <Switch>
               <Route path='/404' component={NotFound} />
