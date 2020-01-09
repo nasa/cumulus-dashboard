@@ -1,21 +1,15 @@
 'use strict';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import configureStore from './store/configureStore';
+import { configureStore } from './store/configureStore';
+import { Route, Redirect, Switch } from 'react-router-dom';
+import { ConnectedRouter, history } from 'connected-react-router';
 // import { useScroll as notHookUseScroll } from 'react-router-scroll-4';
 
 //  Fontawesome Icons Library
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSignOutAlt, faSearch, faSync, faPlus, faInfoCircle, faTimesCircle, faSave, faCalendar, faExpand, faCompress, faClock, faCaretDown, faChevronDown, faSort, faSortDown, faSortUp, faArrowAltCircleLeft, faArrowAltCircleRight, faArrowAltCircleDown, faArrowAltCircleUp, faArrowRight, faCopy, faEdit, faArchive, faLaptopCode, faServer, faHdd, faExternalLinkSquareAlt, faToggleOn, faToggleOff, faExclamationTriangle, faCoins, faCheckCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
 library.add(faSignOutAlt, faSearch, faSync, faPlus, faInfoCircle, faTimesCircle, faSave, faCalendar, faExpand, faCompress, faClock, faCaretDown, faSort, faChevronDown, faSortDown, faSortUp, faArrowAltCircleLeft, faArrowAltCircleRight, faArrowAltCircleDown, faArrowAltCircleUp, faArrowRight, faCopy, faEdit, faArchive, faLaptopCode, faServer, faHdd, faExternalLinkSquareAlt, faToggleOn, faToggleOff, faExclamationTriangle, faCoins, faCheckCircle, faCircle);
-import {
-  Router,
-  Route,
-  Redirect,
-  // NavLink,
-  Switch
-} from 'react-router-dom';
-import { ConnectedRouter, history } from 'connected-react-router';
 
 import NotFound from './components/404';
 import OAuth from './components/oauth';
@@ -75,15 +69,10 @@ import ReconciliationReport from './components/ReconciliationReports/reconciliat
 
 import config from './config';
 
-// Store
-const store = configureStore;
-if (window.Cypress && window.Cypress.env('TESTING') === true) {
-  window.appStore = store;
-}
-
 console.log.apply(console, config.consoleMessage);
 console.log('Environment', config.environment);
 
+const store = configureStore;
 // redirect to login when not auth'd
 function requireAuth (nextState, replace) {
   if (!store.getState().api.authenticated) {
@@ -99,95 +88,99 @@ function checkAuth (nextState, replace) {
 }
 
 class App extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {};
+    this.store = configureStore;
+  }
+
   render () {
     return (
       // Routes
-      <Provider store={store}>
+      <Provider store={this.store}>
         <ConnectedRouter history={history}>
-          <Router>
-            {/* If path is / then load the Home component */}
-            <Switch>
-              <Route path='/404' component={NotFound} />
-              <Redirect from='/collections' to='/collections/all' />
-              <Redirect from='/login' to='/auth' />
-              <Route path='/auth' component={OAuth} onEnter={checkAuth} />
-              <Route path='/' component={Main} onEnter={requireAuth} >
-                <Route exact path='/' component={Home} />
-                { /* Collections */}
-                <Route path='collections' component={Collections}>
-                  <Route path='all' component={CollectionList} />
-                  <Route path='add' component={AddCollection} />
-                  <Route path='edit/:name/:version' component={EditCollection} />
-                  <Route path='collection/:name/:version' component={CollectionOverview} />
-                  { /* Collections - Granules */}
-                  <Route path='collection/:name/:version/granules' component={CollectionGranules}>
-                    <Route path='completed' component={CollectionGranules} />
-                    <Route path='processing' component={CollectionGranules} />
-                    <Route path='failed' component={CollectionGranules} />
-                    <Redirect from='running' to='processing' />
-                  </Route>
-                  <Route path='collection/:name/:version/definition' component={CollectionIngest} />
-                  <Route path='collection/:name/:version/logs' component={CollectionLogs} />
-                </Route>
-                { /* Granules */}
-                <Route path='granules' component={Granules}>
-                  <Route exact path='/' component={GranuleOverview} />
-                  <Route path='granule/:granuleId' component={Granule} />
-                  <Route path='completed' component={ListGranules} />
-                  <Route path='processing' component={ListGranules} />
-                  <Route path='failed' component={ListGranules} />
+          {/* If path is / then load the Home component */}
+          <Switch>
+            <Route path='/404' component={NotFound} />
+            <Redirect from='/collections' to='/collections/all' />
+            <Redirect from='/login' to='/auth' />
+            <Route path='/auth' component={OAuth} onEnter={checkAuth} />
+            <Route path='/' component={Main} onEnter={requireAuth} >
+              <Route exact path='/' component={Home} />
+              { /* Collections */}
+              <Route path='collections' component={Collections}>
+                <Route path='all' component={CollectionList} />
+                <Route path='add' component={AddCollection} />
+                <Route path='edit/:name/:version' component={EditCollection} />
+                <Route path='collection/:name/:version' component={CollectionOverview} />
+                { /* Collections - Granules */}
+                <Route path='collection/:name/:version/granules' component={CollectionGranules}>
+                  <Route path='completed' component={CollectionGranules} />
+                  <Route path='processing' component={CollectionGranules} />
+                  <Route path='failed' component={CollectionGranules} />
                   <Redirect from='running' to='processing' />
                 </Route>
-                { /* PDRs */}
-                <Route path='pdrs' component={Pdrs}>
-                  <Route exact path='/' component={PdrOverview} />
-                  <Route path='active' component={PdrList} />
-                  <Route path='failed' component={PdrList} />
-                  <Route path='completed' component={PdrList} />
-                  <Route path='pdr/:pdrName' component={Pdr} />
-                </Route>
-                { /* Providers */}
-                <Route path='providers' component={Providers}>
-                  <Route exact path='/' component={ProvidersOverview} />
-                  <Route path='add' component={AddProvider} />
-                  <Route path='edit/:providerId' component={EditProvider} />
-                  <Route path='provider/:providerId' component={ProviderElem} />
-                </Route>
-                { /* Workflows */}
-                <Route path='workflows' component={Workflows}>
-                  <Route exact path='/' component={WorkflowsOverview} />
-                  <Route path='workflow/:workflowName' component={Workflow} />
-                </Route>
-                { /* Executions */}
-                <Route path='executions' component={Executions}>
-                  <Route exact path='/' component={ExecutionsOverview} />
-                  <Route path='execution/:executionArn' component={ExecutionStatus} />
-                </Route>
-                <Route path='executions' component={Executions}>
-                  <Route exact path='/' component={ExecutionsOverview} />
-                  <Route path='execution/:executionName/logs' component={ExecutionLogs} />
-                </Route>
-                { /* Operations */}
-                <Route path='operations' component={Operations}>
-                  <Route exact path='/' component={OperationsOverview} />
-                </Route>
-                { /* Rules */}
-                <Route path='rules' component={Rules}>
-                  <Route exact path='/' component={RulesOverview} />
-                  <Route path='rule/:ruleName' component={Rule} />
-                  <Route path='edit/:ruleName' component={EditRule} />
-                  <Route path='add' component={AddRule} />
-                </Route>
-                { /* Logs */}
-                <Route path='logs' component={Logs} />
-                { /* Reports */}
-                <Route path='reconciliation-reports' component={ReconciliationReports}>
-                  <Route exact path='/' component={ReconciliationReportList} />
-                  <Route path='report/:reconciliationReportName' component={ReconciliationReport} />
-                </Route>
+                <Route path='collection/:name/:version/definition' component={CollectionIngest} />
+                <Route path='collection/:name/:version/logs' component={CollectionLogs} />
               </Route>
-            </Switch>
-          </Router>
+              { /* Granules */}
+              <Route path='granules' component={Granules}>
+                <Route exact path='/' component={GranuleOverview} />
+                <Route path='granule/:granuleId' component={Granule} />
+                <Route path='completed' component={ListGranules} />
+                <Route path='processing' component={ListGranules} />
+                <Route path='failed' component={ListGranules} />
+                <Redirect from='running' to='processing' />
+              </Route>
+              { /* PDRs */}
+              <Route path='pdrs' component={Pdrs}>
+                <Route exact path='/' component={PdrOverview} />
+                <Route path='active' component={PdrList} />
+                <Route path='failed' component={PdrList} />
+                <Route path='completed' component={PdrList} />
+                <Route path='pdr/:pdrName' component={Pdr} />
+              </Route>
+              { /* Providers */}
+              <Route path='providers' component={Providers}>
+                <Route exact path='/' component={ProvidersOverview} />
+                <Route path='add' component={AddProvider} />
+                <Route path='edit/:providerId' component={EditProvider} />
+                <Route path='provider/:providerId' component={ProviderElem} />
+              </Route>
+              { /* Workflows */}
+              <Route path='workflows' component={Workflows}>
+                <Route exact path='/' component={WorkflowsOverview} />
+                <Route path='workflow/:workflowName' component={Workflow} />
+              </Route>
+              { /* Executions */}
+              <Route path='executions' component={Executions}>
+                <Route exact path='/' component={ExecutionsOverview} />
+                <Route path='execution/:executionArn' component={ExecutionStatus} />
+              </Route>
+              <Route path='executions' component={Executions}>
+                <Route exact path='/' component={ExecutionsOverview} />
+                <Route path='execution/:executionName/logs' component={ExecutionLogs} />
+              </Route>
+              { /* Operations */}
+              <Route path='operations' component={Operations}>
+                <Route exact path='/' component={OperationsOverview} />
+              </Route>
+              { /* Rules */}
+              <Route path='rules' component={Rules}>
+                <Route exact path='/' component={RulesOverview} />
+                <Route path='rule/:ruleName' component={Rule} />
+                <Route path='edit/:ruleName' component={EditRule} />
+                <Route path='add' component={AddRule} />
+              </Route>
+              { /* Logs */}
+              <Route path='logs' component={Logs} />
+              { /* Reports */}
+              <Route path='reconciliation-reports' component={ReconciliationReports}>
+                <Route exact path='/' component={ReconciliationReportList} />
+                <Route path='report/:reconciliationReportName' component={ReconciliationReport} />
+              </Route>
+            </Route>
+          </Switch>
         </ConnectedRouter>
       </Provider>
     );

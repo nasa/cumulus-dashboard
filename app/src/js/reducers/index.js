@@ -44,8 +44,12 @@ export const reducers = {
   executionLogs,
   operations,
   rules,
-  reconciliationReports,
-  router: connectRouter(history)
+  reconciliationReports
 };
+
+export const createRootReducer = (history) => combineReducers({
+  router: connectRouter(history),
+  ...reducers
+});
 
 export default combineReducers(Object.assign({}, reducers));
