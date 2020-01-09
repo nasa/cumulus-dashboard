@@ -1,9 +1,8 @@
 'use strict';
-import isNil from 'lodash.isnil';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router';
+import { Link } from 'react-router';
 import { get } from 'object-path';
 import {
   getCount,
@@ -43,30 +42,15 @@ import {
   kibanaGatewayExecutionErrorsLink,
   kibanaGatewayExecutionSuccessesLink
 } from '../utils/kibana';
-import { initialValuesFromLocation, updateRouterLocation } from '../utils/url-helper';
-import { defaultDateRange, Datepicker } from './Datepicker/Datepicker';
 
 import { strings } from './locale';
 
 class Home extends React.Component {
-  constructor (props) {
-    super(props);
+  constructor () {
+    super();
     this.displayName = 'Home';
-
-    const datePicker = {
-      name: 'metricDatePicker',
-      dateRange: defaultDateRange,
-      startDateTime: undefined,
-      endDateTime: undefined,
-      hourFormat: undefined
-    };
-    const initialValues = initialValuesFromLocation(
-      props.location, Object.keys(datePicker));
-    this.state = { datePicker: {...datePicker, ...initialValues} };
-
     this.query = this.query.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
-    this.handleDatePickerChange = this.handleDatePickerChange.bind(this);
   }
 
   componentDidMount () {
@@ -115,14 +99,6 @@ class Home extends React.Component {
 
   isExternalLink (link) {
     return link.match('https?://');
-  }
-
-  handleDatePickerChange (value) {
-    this.setState({datePicker: {...this.state.datePicker, ...value}});
-    const { location, router } = this.props;
-    Object.keys(value).forEach(id => {
-      updateRouterLocation(router, location, id, isNil(value[id]) ? '' : value[id]);
-    });
   }
 
   renderButtonListSection (items, header, listId) {
@@ -199,27 +175,12 @@ class Home extends React.Component {
         </div>
 
         <div className='page__content page__content__nosidebar'>
-
-          <section className='page__section metrics--overview'>
+        <section className='page__section metrics--overview'>
             <div className='row'>
               <div className='heading__wrapper--border'>
                 <h2 className='heading--large heading--shared-content--right'>Metrics Overview</h2>
               </div>
-            </div>
-          </section>
-
-          <section className='page__section datetime'>
-            <div className='row'>
-              <div className='heading__wrapper'>
-                <h2 className='datetime__info heading--medium heading--shared-content--right'>
-                  Select date and time to refine your results. <em>Time is in UTC timezone.</em>
-                </h2>
               </div>
-              <Datepicker
-                {...this.state.datePicker}
-                onChange={(value) => this.handleDatePickerChange(value)}
-              />
-            </div>
           </section>
 
           {this.renderButtonListSection(overview, 'Updates')}
@@ -271,13 +232,11 @@ Home.propTypes = {
   granules: PropTypes.object,
   pdrs: PropTypes.object,
   executions: PropTypes.object,
-  cumulusInstance: PropTypes.object,
-  location: PropTypes.object,
-  router: PropTypes.object
+  cumulusInstance: PropTypes.object
 };
 
 export { Home };
-export default withRouter(connect(state => ({
+export default connect(state => ({
   rules: state.rules,
   stats: state.stats,
   dist: state.dist,
@@ -285,4 +244,4 @@ export default withRouter(connect(state => ({
   pdrs: state.pdrs,
   executions: state.executions,
   cumulusInstance: state.cumulusInstance
-}))(Home));
+}))(Home);

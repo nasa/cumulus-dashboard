@@ -91,7 +91,7 @@ describe('Dashboard Home Page', () => {
       });
     });
 
-    it('displays a date picker in metrics section', () => {
+    xit('displays a date picker in metrics section', () => {
       cy.get('main[class=main] section').eq(1).within(() => {
         cy.get('h3').should('have.text', 'Date and Time Range');
 

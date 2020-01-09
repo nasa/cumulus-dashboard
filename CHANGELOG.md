@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Added Operations page to track Async Operations
 
 - **CUMULUS-1463**
-  - Add Datepicker to Dashboard Home
+  - Add Datepicker Component
 
 ### Fixed
 
