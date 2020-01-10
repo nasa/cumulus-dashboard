@@ -1,4 +1,5 @@
 'use strict';
+import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 
 /**
@@ -15,6 +16,24 @@ export function initialValueFromLocation (props) {
     initialValue = location.query[paramKey];
   }
   return initialValue;
+}
+
+/**
+ * Retrieve initial values for component parameters based on react-router's location.
+ *
+ * @param {Object} location - react-router's location
+ * @param {Array<string>} paramsKeys - list of parameter keys
+ * @returns {Object} - object with parameters and values from the url
+ */
+export function initialValuesFromLocation (location, paramKeys) {
+  const initialValues = {};
+  paramKeys.forEach((paramKey) => {
+    const paramValue = get(location, `query.${paramKey}`, null);
+    if (paramValue) {
+      initialValues[paramKey] = paramValue;
+    }
+  });
+  return initialValues;
 }
 
 /**
