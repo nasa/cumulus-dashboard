@@ -31,7 +31,10 @@ class Dropdown extends React.Component {
         <span className='form__error'>{error}</span>
         <div className='dropdown__wrapper'>
           <select id={id} value={value} onChange={this.onChange}>
-            {renderedOptions.map((d, i) => <option value={d} key={i}>{d}</option>)}
+            {renderedOptions.map((option, i) => {
+              const [value, label] = Array.isArray(option) ? option : [option, option];
+              return (<option key={i} value={value}>{label}</option>);
+            })}
           </select>
         </div>
       </div>
