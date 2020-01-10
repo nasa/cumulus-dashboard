@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { target, environment } from './config';
+import _config from '../js/config';
 import { displayCase } from './utils/format';
 import Header from './components/Header/header';
 import Footer from './components/Footer/footer';
 import TopButton from './components/TopButton/TopButton';
+
+const { target, environment } = _config;
 
 class Main extends Component {
   constructor () {

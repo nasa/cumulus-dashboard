@@ -4,23 +4,37 @@ import { routerMiddleware } from 'connected-react-router';
 import { createRootReducer } from '../reducers';
 import { refreshTokenMiddleware } from '../middleware/token';
 import { requestMiddleware } from '../middleware/request';
-import thunkMiddleware from 'redux-thunk';
+import thunk from 'redux-thunk';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export const history = createBrowserHistory();
+
+// redirect to login when not auth'd
+export const requireAuth = (store) => (nextState, replace) => {
+  if (!store.getState().api.authenticated) {
+    replace('/auth');
+  }
+};
+
+// redirect to homepage from login if authed
+export const checkAuth = (store) => (nextState, replace) => {
+  if (store.getState().api.authenticated) {
+    replace('/');
+  }
+};
+
+// create the store and build redux middleware
 export default function configureStore (preloadedState) {
   const store = createStore(
     createRootReducer(history), // root reducer with router state
     preloadedState,
-    compose(
+    composeEnhancers(
       applyMiddleware(
         routerMiddleware(history), // for dispatching history actions
-        composeEnhancers(
-          refreshTokenMiddleware,
-          requestMiddleware,
-          thunkMiddleware
-        )
+        refreshTokenMiddleware,
+        requestMiddleware,
+        thunk
       ),
     ),
   );

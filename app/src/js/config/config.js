@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   target: process.env.DAAC_NAME || 'local',
   environment: process.env.STAGE || 'development',
   nav: {
@@ -16,3 +16,5 @@ module.exports = {
   graphicsPath: (process.env.BUCKET || '') + '/src/assets/images/',
   enableRecovery: process.env.ENABLE_RECOVERY || false
 };
+
+export default config;

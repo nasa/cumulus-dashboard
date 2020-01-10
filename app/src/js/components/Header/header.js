@@ -4,9 +4,11 @@ import c from 'classnames';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { logout, getApiVersion } from '../../actions';
-import { graphicsPath, nav } from '../../config';
+import _config from '../../config';
 import { window } from '../../utils/browser';
 import { strings } from '../locale';
+
+const { graphicsPath, nav } = _config;
 
 const paths = [
   ['PDRs', '/pdrs'],

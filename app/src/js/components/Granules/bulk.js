@@ -8,8 +8,10 @@ import Modal from 'react-bootstrap/Modal';
 
 import { bulkGranule } from '../../actions';
 import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
-import { kibanaRoot } from '../../config';
+import _config from '../../config';
 import TextArea from '../TextAreaForm/text-area';
+
+const { kibanaRoot } = _config;
 
 class BulkGranule extends React.Component {
   constructor () {

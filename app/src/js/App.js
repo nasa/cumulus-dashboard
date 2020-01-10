@@ -1,9 +1,9 @@
 'use strict';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { configureStore } from './store/configureStore';
+import configureStore, { requireAuth, checkAuth, history } from './store/configureStore';
 import { Route, Redirect, Switch } from 'react-router-dom';
-import { ConnectedRouter, history } from 'connected-react-router';
+import { ConnectedRouter } from 'connected-react-router';
 // import { useScroll as notHookUseScroll } from 'react-router-scroll-4';
 
 //  Fontawesome Icons Library
@@ -11,13 +11,14 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSignOutAlt, faSearch, faSync, faPlus, faInfoCircle, faTimesCircle, faSave, faCalendar, faExpand, faCompress, faClock, faCaretDown, faChevronDown, faSort, faSortDown, faSortUp, faArrowAltCircleLeft, faArrowAltCircleRight, faArrowAltCircleDown, faArrowAltCircleUp, faArrowRight, faCopy, faEdit, faArchive, faLaptopCode, faServer, faHdd, faExternalLinkSquareAlt, faToggleOn, faToggleOff, faExclamationTriangle, faCoins, faCheckCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
 library.add(faSignOutAlt, faSearch, faSync, faPlus, faInfoCircle, faTimesCircle, faSave, faCalendar, faExpand, faCompress, faClock, faCaretDown, faSort, faChevronDown, faSortDown, faSortUp, faArrowAltCircleLeft, faArrowAltCircleRight, faArrowAltCircleDown, faArrowAltCircleUp, faArrowRight, faCopy, faEdit, faArchive, faLaptopCode, faServer, faHdd, faExternalLinkSquareAlt, faToggleOn, faToggleOff, faExclamationTriangle, faCoins, faCheckCircle, faCircle);
 
+// Authorization & Error Handling
+// import ErrorBoundary from './components/Errors/ErrorBoundary';
 import NotFound from './components/404';
 import OAuth from './components/oauth';
-import Home from './components/home';
-
-import Main from '../js/main';
 
 // Components
+import Home from './components/home';
+import Main from '../js/main';
 import Collections from './components/Collections';
 import CollectionList from './components/Collections/list';
 import AddCollection from './components/Collections/add';
@@ -72,40 +73,26 @@ import config from './config';
 console.log.apply(console, config.consoleMessage);
 console.log('Environment', config.environment);
 
-const store = configureStore;
-// redirect to login when not auth'd
-function requireAuth (nextState, replace) {
-  if (!store.getState().api.authenticated) {
-    replace('/auth');
-  }
-}
-
-// redirect to homepage from login if authed
-function checkAuth (nextState, replace) {
-  if (store.getState().api.authenticated) {
-    replace('/');
-  }
-}
-
+// generate the root App Component
 class App extends Component {
   constructor (props) {
     super(props);
     this.state = {};
-    this.store = configureStore;
+    this.store = configureStore({});
   }
 
   render () {
     return (
+      // <ErrorBoundary> // Add after troublshooting other errors
       // Routes
       <Provider store={this.store}>
         <ConnectedRouter history={history}>
-          {/* If path is / then load the Home component */}
           <Switch>
             <Route path='/404' component={NotFound} />
             <Redirect from='/collections' to='/collections/all' />
             <Redirect from='/login' to='/auth' />
-            <Route path='/auth' component={OAuth} onEnter={checkAuth} />
-            <Route path='/' component={Main} onEnter={requireAuth} >
+            <Route path='/auth' component={OAuth} onEnter={checkAuth(this.store)} />
+            <Route path='/' component={Main} onEnter={requireAuth(this.store)} >
               <Route exact path='/' component={Home} />
               { /* Collections */}
               <Route path='collections' component={Collections}>
@@ -183,6 +170,7 @@ class App extends Component {
           </Switch>
         </ConnectedRouter>
       </Provider>
+      // </ErrorBoundary>
     );
   }
 }

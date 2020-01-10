@@ -7,11 +7,13 @@ import url from 'url';
 import { login, setTokenState } from '../actions';
 import { window } from '../utils/browser';
 import { buildRedirectUrl } from '../utils/format';
-import { updateDelay, apiRoot, oauthMethod } from '../config';
+import _config from '../config';
 import PropTypes from 'prop-types';
 import ErrorReport from './Errors/report';
 import Header from './Header/header';
 import Modal from 'react-bootstrap/Modal';
+
+const { updateDelay, apiRoot, oauthMethod } = _config;
 
 class OAuth extends React.Component {
   constructor () {

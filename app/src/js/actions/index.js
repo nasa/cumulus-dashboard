@@ -5,7 +5,7 @@ import moment from 'moment';
 import url from 'url';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
-import history from 'history';
+import { history } from '../store/configureStore';
 import { CMR } from '@cumulus/cmrjs';
 import clonedeep from 'lodash.clonedeep';
 

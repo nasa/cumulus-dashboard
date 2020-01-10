@@ -29,7 +29,7 @@ import {
   errorTableRow,
   errorTableSortProps
 } from '../utils/table-config/granules';
-import { recent, updateInterval } from '../config';
+import _config from '../config';
 import {
   kibanaS3AccessErrorsLink,
   kibanaS3AccessSuccessesLink,
@@ -44,6 +44,8 @@ import {
 } from '../utils/kibana';
 
 import { strings } from './locale';
+
+const { recent, updateInterval } = _config;
 
 class Home extends React.Component {
   constructor () {
