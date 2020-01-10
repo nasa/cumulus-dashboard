@@ -35,7 +35,8 @@
       "react/prop-types": 2,
       "react/react-in-jsx-scope": 2,
       "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn"
+      "react-hooks/exhaustive-deps": "warn",
+      "space-before-function-paren": "off"
     },
     "globals": {
       "cy": true,
