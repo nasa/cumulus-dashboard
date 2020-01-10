@@ -91,10 +91,9 @@ describe('Dashboard Home Page', () => {
       });
     });
 
-    xit('displays a date picker in metrics section', () => {
+    it('displays a date picker in metrics section', () => {
       cy.get('main[class=main] section').eq(1).within(() => {
         cy.get('h3').should('have.text', 'Date and Time Range');
-
         cy.get('div[class=datetime] ul li select[name=dateRange]').as('dateRange');
         cy.get('@dateRange').select('1 week', { force: true });
         cy.url().should('include', 'dateRange=1+week');

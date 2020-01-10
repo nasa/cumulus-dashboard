@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1463**
   - Add Datepicker Component
+  - Add Datepicker to Dashboard Home page
 
 ### Fixed
 
