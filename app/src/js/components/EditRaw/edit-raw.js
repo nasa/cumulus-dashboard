@@ -8,7 +8,9 @@ import { get } from 'object-path';
 import { getSchema } from '../../actions';
 import Loading from '../LoadingIndicator/loading-indicator';
 import { removeReadOnly } from '../FormSchema/schema';
-import { updateDelay } from '../../config';
+import _config from '../../config';
+
+const { updateDelay } = _config;
 
 class EditRaw extends React.Component {
   constructor () {

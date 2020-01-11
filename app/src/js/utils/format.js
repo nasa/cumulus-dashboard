@@ -77,6 +77,15 @@ export const collectionSearchResult = function (collection) {
   );
 };
 
+export const granuleSearchResult = function (granule) {
+  const { granuleId, status } = granule;
+  return (
+    <li key={granuleId}>
+      <Link to={`granules/granules/${granuleId}/${status}`}>{granuleId} / {status}</Link>
+    </li>
+  );
+};
+
 export const granuleLink = function (granuleId) {
   if (!granuleId) return nullValue;
   return <Link to={`granules/granule/${granuleId}`}>{granuleId}</Link>;

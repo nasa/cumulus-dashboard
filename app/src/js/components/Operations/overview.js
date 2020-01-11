@@ -28,8 +28,10 @@ import {
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 // import {strings} from '../locale';
+
+const { updateInterval } = _config;
 
 const tableHeader = [
   'Status',

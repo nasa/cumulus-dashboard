@@ -6,8 +6,10 @@ import c from 'classnames';
 import PropTypes from 'prop-types';
 import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
 import { preventDefault } from '../../utils/noop';
-import { updateDelay } from '../../config';
+import _config from '../../config';
 import Modal from 'react-bootstrap/Modal';
+
+const { updateDelay } = _config;
 
 class AsyncCommand extends React.Component {
   constructor () {

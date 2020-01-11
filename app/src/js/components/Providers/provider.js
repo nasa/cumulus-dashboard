@@ -22,7 +22,9 @@ import LogViewer from '../Logs/viewer';
 import AsyncCommands from '../DropDown/dropdown-async-command';
 import ErrorReport from '../Errors/report';
 import Metadata from '../Table/Metadata';
-import { updateInterval } from '../../config';
+import _config from '../../config';
+
+const { updateInterval } = _config;
 
 const metaAccessors = [
   ['Created', 'createdAt', fromNow],

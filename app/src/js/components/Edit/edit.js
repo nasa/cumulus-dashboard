@@ -8,8 +8,10 @@ import { getSchema } from '../../actions';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Schema from '../FormSchema/schema';
 import merge from '../../utils/merge';
-import { updateDelay } from '../../config';
+import _config from '../../config';
 import {strings} from '../locale';
+
+const { updateDelay } = _config;
 
 class EditRecord extends React.Component {
   constructor () {

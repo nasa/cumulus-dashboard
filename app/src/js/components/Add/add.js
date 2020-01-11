@@ -8,8 +8,10 @@ import { get } from 'object-path';
 import { getSchema } from '../../actions';
 import Schema from '../FormSchema/schema';
 import Loading from '../LoadingIndicator/loading-indicator';
-import { updateDelay } from '../../config';
+import _config from '../../config';
 import { strings } from '../locale';
+
+const { updateDelay } = _config;
 
 class AddCollection extends React.Component {
   constructor () {

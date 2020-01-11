@@ -9,7 +9,7 @@ import {
   interval,
   getReconciliationReport
 } from '../../actions';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 import {
   tableHeaderS3Files,
   tableRowS3File,
@@ -30,6 +30,8 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import ErrorReport from '../Errors/report';
 
 import ReportTable from './report-table';
+
+const { updateInterval } = _config;
 
 const reportMetaAccessors = [
   ['Created', 'reportStartTime'],

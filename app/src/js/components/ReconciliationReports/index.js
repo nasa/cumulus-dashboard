@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import Sidebar from '../Sidebar/sidebar';
 import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
 import { interval, getCount, createReconciliationReport } from '../../actions';
-import { updateInterval } from '../../config';
+import _config from '../../config';
+
+const { updateInterval } = _config;
 
 class ReconciliationReports extends React.Component {
   constructor () {

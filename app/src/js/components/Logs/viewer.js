@@ -2,12 +2,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { interval, getLogs, clearLogs } from '../../actions';
-import { logsUpdateInterval } from '../../config';
+import _config from '../../config';
 // import moment from 'moment';
 import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
 import ErrorReport from '../Errors/report';
 import Dropdown from '../DropDown/simple-dropdown';
 import { tally } from '../../utils/format';
+
+const { logsUpdateInterval } = _config;
 
 const noLogs = {
   displayText: 'There are no Cumulus logs from the past 48 hours.',

@@ -31,10 +31,12 @@ import LogViewer from '../Logs/viewer';
 import ErrorReport from '../Errors/report';
 import Metadata from '../Table/Metadata';
 import AsyncCommands from '../DropDown/dropdown-async-command';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import { simpleDropdownOption } from '../../utils/table-config/granules';
+
+const { updateInterval } = _config;
 
 const tableHeader = [
   'Filename',

@@ -5,7 +5,9 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import TextArea from '../TextAreaForm/text-area';
 import { get } from 'object-path';
-import { updateDelay } from '../../config';
+import _config from '../../config';
+
+const { updateDelay } = _config;
 
 class AddRaw extends React.Component {
   constructor () {

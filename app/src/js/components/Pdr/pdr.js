@@ -39,8 +39,10 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import ErrorReport from '../Errors/report';
 import GranulesProgress from '../Granules/progress';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 import {strings} from '../locale';
+
+const { updateInterval } = _config;
 
 const metaAccessors = [
   ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],

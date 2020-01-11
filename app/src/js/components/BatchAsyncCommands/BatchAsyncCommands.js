@@ -5,8 +5,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import queue from 'stubborn-queue';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
-import { updateDelay } from '../../config';
+import _config from '../../config';
 import Modal from 'react-bootstrap/Modal';
+
+const { updateDelay } = _config;
 
 const CONCURRENCY = 3;
 const IN_PROGRESS = 'Processing...';

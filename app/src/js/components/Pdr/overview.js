@@ -10,7 +10,9 @@ import { bulkActions } from '../../utils/table-config/pdrs';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdr-progress';
 import List from '../Table/Table';
 import Overview from '../Overview/overview';
-import { updateInterval } from '../../config';
+import _config from '../../config';
+
+const { updateInterval } = _config;
 
 class PdrOverview extends React.Component {
   constructor () {

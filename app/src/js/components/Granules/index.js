@@ -4,8 +4,10 @@ import { get } from 'object-path';
 import { connect } from 'react-redux';
 import Sidebar from '../Sidebar/sidebar';
 import { interval, getCount } from '../../actions';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 import { strings } from '../locale';
+
+const { updateInterval } = _config;
 
 class Granules extends React.Component {
   constructor () {

@@ -2,7 +2,7 @@
 import { get } from 'object-path';
 // manually filter out list items that have been deleted.
 // https://github.com/nasa/cumulus-dashboard/issues/276
-export const removeDeleted = (accessor, list, deleted) => {
+const removeDeleted = (accessor, list, deleted) => {
   const filterByDeletedSuccess = function (item) {
     const id = get(item, accessor);
     let record = deleted[id];
@@ -10,3 +10,5 @@ export const removeDeleted = (accessor, list, deleted) => {
   };
   return list.filter(filterByDeletedSuccess);
 };
+
+export default removeDeleted;

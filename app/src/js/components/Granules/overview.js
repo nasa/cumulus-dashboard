@@ -33,9 +33,11 @@ import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import statusOptions from '../../utils/status';
 import Bulk from './bulk';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
+
+const { updateInterval } = _config;
 
 class GranulesOverview extends React.Component {
   constructor () {

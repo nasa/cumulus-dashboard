@@ -31,8 +31,10 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import statusOptions from '../../utils/status';
 import { strings } from '../locale';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 import { workflowOptionNames } from '../../selectors';
+
+const { updateInterval } = _config;
 
 class AllGranules extends React.Component {
   constructor () {
