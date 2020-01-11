@@ -23,7 +23,7 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-
+import clonedeep from 'lodash.clonedeep';
 import { DELETE_TOKEN, SET_TOKEN } from '../../app/src/js/actions/types';
 
 Cypress.Commands.add('login', () => {
@@ -81,4 +81,17 @@ Cypress.Commands.add('getJsonTextareaValue', () => {
 Cypress.Commands.add('getFakeApiFixture', (fixturePath) => {
   const fixtureFile = `./test/fake-api/fixtures/${fixturePath}/index.json`;
   return cy.readFile(fixtureFile);
+});
+
+/**
+ * Adds custom command to compare two objects, where they are the same except
+ * for the updatedAt time must be newer on the new object.
+ */
+Cypress.Commands.add('expectDeepEqualButNewer', (inewObject, ifixtureObject) => {
+  const newObject =  clonedeep(inewObject);
+  const fixtureObject = clonedeep(ifixtureObject);
+  expect(newObject['updatedAt']).to.be.greaterThan(fixtureObject['updatedAt']);
+  delete newObject['updatedAt'];
+  delete fixtureObject['updatedAt'];
+  expect(newObject).to.deep.equal(fixtureObject);
 });

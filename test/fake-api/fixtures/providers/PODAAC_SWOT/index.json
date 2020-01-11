@@ -1,8 +1,0 @@
-{
-    "id": "PODAAC_SWOT",
-    "createdAt": 1524686535230,
-    "protocol": "s3",
-    "globalConnectionLimit": 10,
-    "host": "cumulus-test-sandbox-internal",
-    "updatedAt": 1525982459499
-}

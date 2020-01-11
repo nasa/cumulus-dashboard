@@ -14,8 +14,7 @@
             "protocol": "s3",
             "globalConnectionLimit": 10,
             "host": "cumulus-test-sandbox-internal",
-            "updatedAt": 1525982459499,
-            "timestamp": 1525983816537
+            "updatedAt": 1525982459499
         },
         {
             "id": "s3_provider",
@@ -23,8 +22,7 @@
             "protocol": "s3",
             "globalConnectionLimit": 10,
             "host": "cumulus-test-sandbox-internal",
-            "updatedAt": 1539104943690,
-            "timestamp": 1539723816537
+            "updatedAt": 1539104943690
         }
     ]
 }

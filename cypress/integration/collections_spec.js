@@ -15,6 +15,8 @@ describe('Dashboard Collections Page', () => {
   });
 
   describe('When logged in', () => {
+    before(() => cy.visit('/'));
+
     beforeEach(() => {
       cy.login();
       cy.task('resetState');
@@ -29,12 +31,7 @@ describe('Dashboard Collections Page', () => {
         .then((fixture) => fixture.forEach((options) => cy.route(options)));
     });
 
-    after(() => {
-      cy.task('resetState');
-    });
-
     it('should display a link to view collections', () => {
-      cy.visit('/');
 
       cy.contains('nav li a', 'Collections').as('collections');
       cy.get('@collections').should('have.attr', 'href', '#/collections');
@@ -87,12 +84,12 @@ describe('Dashboard Collections Page', () => {
       // After POSTing the new collection, make sure we GET it back
       cy.wait('@postCollection')
         .then((xhr) =>
-          cy.request({
-            method: 'GET',
-            url: `${new URL(xhr.url).origin}/collections/${name}/${version}`,
-            headers: xhr.request.headers
-          }))
-        .then((response) => expect(response.body).to.deep.equal(collection));
+              cy.request({
+                method: 'GET',
+                url: `${new URL(xhr.url).origin}/collections/${name}/${version}`,
+                headers: xhr.request.headers
+              }))
+        .then((response) => cy.expectDeepEqualButNewer(response.body, collection));
 
       // Display the new collection
       cy.wait('@getCollection');
@@ -100,15 +97,13 @@ describe('Dashboard Collections Page', () => {
       cy.hash().should('eq', `#/collections/collection/${name}/${version}`);
       cy.contains('.heading--xlarge', 'Collections');
       cy.contains('.heading--large', `${name} / ${version}`);
-      cy.get('table tbody tr[data-value]');
 
       // Verify the new collection appears in the collections list
       cy.contains('Back to Collections').click();
       cy.wait('@getCollections');
       cy.hash().should('eq', '#/collections/all');
       cy.contains('table tbody tr a', name)
-        .should('have.attr', 'href',
-          `#/collections/collection/${name}/${version}`);
+        .should('have.attr', 'href', `#/collections/collection/${name}/${version}`);
     });
 
     it('should select a different collection', () => {
