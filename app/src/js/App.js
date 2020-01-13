@@ -89,10 +89,12 @@ class App extends Component {
         <ConnectedRouter history={history}>
           <Switch>
             <Route path='/404' component={NotFound} />
-            <Redirect from='/collections' to='/collections/all' />
-            <Redirect from='/login' to='/auth' />
+            <Redirect exact from='/collections' to='/collections/all' />
+            <Redirect exact from='/login' to='/auth' />
             <Route path='/auth' component={OAuth} onEnter={checkAuth(this.store)} />
-            <Route path='/' component={Main} onEnter={requireAuth(this.store)} >
+          </Switch>
+          <Route path='/' component={Main} onEnter={requireAuth(this.store)} >
+            <Switch>
               <Route exact path='/' component={Home} />
               { /* Collections */}
               <Route path='collections' component={Collections}>
@@ -105,7 +107,7 @@ class App extends Component {
                   <Route path='completed' component={CollectionGranules} />
                   <Route path='processing' component={CollectionGranules} />
                   <Route path='failed' component={CollectionGranules} />
-                  <Redirect from='running' to='processing' />
+                  <Redirect exact from='running' to='processing' />
                 </Route>
                 <Route path='collection/:name/:version/definition' component={CollectionIngest} />
                 <Route path='collection/:name/:version/logs' component={CollectionLogs} />
@@ -117,7 +119,7 @@ class App extends Component {
                 <Route path='completed' component={ListGranules} />
                 <Route path='processing' component={ListGranules} />
                 <Route path='failed' component={ListGranules} />
-                <Redirect from='running' to='processing' />
+                <Redirect exact from='running' to='processing' />
               </Route>
               { /* PDRs */}
               <Route path='pdrs' component={Pdrs}>
@@ -166,8 +168,8 @@ class App extends Component {
                 <Route exact path='/' component={ReconciliationReportList} />
                 <Route path='report/:reconciliationReportName' component={ReconciliationReport} />
               </Route>
-            </Route>
-          </Switch>
+            </Switch>
+          </Route>
         </ConnectedRouter>
       </Provider>
       // </ErrorBoundary>

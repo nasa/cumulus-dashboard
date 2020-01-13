@@ -33,7 +33,7 @@ class OAuth extends React.Component {
       if (pathname !== '/auth' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/auth') {
-        setTimeout(() => this.props.router.push('/'), updateDelay);
+        setTimeout(() => this.props.history.push('/'), updateDelay); // react isn't seeing this a function
       }
     }
   }
@@ -91,7 +91,7 @@ OAuth.propTypes = {
   dispatch: PropTypes.func,
   api: PropTypes.object,
   location: PropTypes.object,
-  router: PropTypes.object,
+  history: PropTypes.object,
   apiVersion: PropTypes.object,
   queryParams: PropTypes.object
 };
