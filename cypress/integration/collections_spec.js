@@ -19,6 +19,7 @@ describe('Dashboard Collections Page', () => {
 
     beforeEach(() => {
       cy.login();
+      cy.visit('/');
       cy.task('resetState');
       cy.server();
       cy.route('POST', '/collections').as('postCollection');
@@ -32,7 +33,6 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should display a link to view collections', () => {
-
       cy.contains('nav li a', 'Collections').as('collections');
       cy.get('@collections').should('have.attr', 'href', '#/collections');
       cy.get('@collections').click();
@@ -125,7 +125,7 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('#collection-chooser').select(collectionId);
       cy.contains('.heading--large', `${formattedCollectionName}`);
-      cy.contains(/14 Granules? Running/i);
+      cy.contains(/2 Granules? Running/i);
       cy.get('#collection-chooser').find(':selected').contains(collectionId);
     });
 
@@ -144,7 +144,7 @@ describe('Dashboard Collections Page', () => {
 
       // update collection and submit
       const duplicateHandling = 'version';
-      const meta = 'metadata';
+      const meta = {metaObj: 'metadata'};
       cy.editJsonTextarea({ data: { duplicateHandling, meta }, update: true });
       cy.contains('form button', 'Submit').click();
 
@@ -157,7 +157,7 @@ describe('Dashboard Collections Page', () => {
 
       cy.getJsonTextareaValue().then((collectionJson) => {
         expect(collectionJson.duplicateHandling).to.equal(duplicateHandling);
-        expect(collectionJson.meta).to.equal(meta);
+        expect(collectionJson.meta).to.deep.equal(meta);
       });
       cy.contains('.heading--large', `${name}___${version}`);
     });

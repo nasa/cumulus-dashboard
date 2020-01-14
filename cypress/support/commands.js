@@ -78,8 +78,8 @@ Cypress.Commands.add('getJsonTextareaValue', () => {
   });
 });
 
-Cypress.Commands.add('getFakeApiFixture', (fixturePath) => {
-  const fixtureFile = `./test/fake-api/fixtures/${fixturePath}/index.json`;
+Cypress.Commands.add('getFakeApiFixture', (fixtureName) => {
+  const fixtureFile = `cypress/fixtures/seeds/${fixtureName}Fixture.json`;
   return cy.readFile(fixtureFile);
 });
 

@@ -10,18 +10,14 @@ describe('Dashboard Executions Page', () => {
   });
 
   describe('When logged in', () => {
+    before(() => cy.visit('/'));
     beforeEach(() => {
       cy.login();
       cy.task('resetState');
     });
 
-    after(() => {
-      cy.task('resetState');
-    });
-
     it('should display a link to view executions', () => {
       cy.visit('/');
-
       cy.contains('nav li a', 'Executions').as('executions');
       cy.get('@executions').should('have.attr', 'href', '#/executions');
       cy.get('@executions').click();
@@ -32,9 +28,9 @@ describe('Dashboard Executions Page', () => {
 
       // shows a summary count of completed and failed executions
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', '3 Completed')
-        .next().contains('li', '1 Failed')
-        .next().contains('li', '1 Running');
+        .first().contains('li', '10 Completed')
+        .next().contains('li', '3 Failed')
+        .next().contains('li', '3 Running');
 
       // shows a list of executions with IDs and status
       cy.getFakeApiFixture('executions').as('executionStatus');

@@ -1,9 +1,10 @@
 const { testUtils, serveUtils } = require('@cumulus/api');
 
 const collections = require('../fixtures/seeds/collectionsFixture.json');
-const granules = require('../fixtures/seeds/granulesFixture.json');
 const executions = require('../fixtures/seeds/executionsFixture.json');
+const granules = require('../fixtures/seeds/granulesFixture.json');
 const providers = require('../fixtures/seeds/providersFixture.json');
+const rules = require('../fixtures/seeds/rulesFixture.json');
 
 // Test values
 const stackName = 'localrun';
@@ -38,16 +39,22 @@ function seedExecutions(esClient, esIndex) {
   return serveUtils.addExecutions(executions.results, esClient, esIndex);
 }
 
+function seedRules(esClient, esIndex) {
+  return serveUtils.addRules(rules.results, esClient, esIndex);
+}
+
 function seedEverything() {
   return resetIt()
-    .then(({esClient, esIndex}) => Promise.all([
+    .then(({esClient, esIndex}) =>
+          Promise.all([
+            seedRules(esClient,esIndex),
             seedCollections(esClient, esIndex),
             seedGranules(esClient, esIndex),
             seedExecutions(esClient, esIndex),
             seedProviders(esClient, esIndex)
-    ]));
-}
-          
+          ]));
+};
+
 module.exports = {
   seedEverything,
   resetIt
