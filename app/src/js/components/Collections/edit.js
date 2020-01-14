@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
   getCollection,
   updateCollection,
@@ -38,6 +39,6 @@ EditCollection.propTypes = {
   router: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   collections: state.collections
-}))(EditCollection);
+}))(EditCollection));

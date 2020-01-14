@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { createCollection } from '../../actions';
 import { getCollectionId, collectionHref } from '../../utils/format';
 import AddRaw from '../AddRaw/add-raw';
@@ -34,6 +35,6 @@ AddCollection.propTypes = {
   collections: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   collections: state.collections
-}))(AddCollection);
+}))(AddCollection));

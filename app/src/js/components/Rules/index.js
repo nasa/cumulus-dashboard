@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 
 class Rules extends React.Component {
@@ -40,4 +40,4 @@ Rules.propTypes = {
   params: PropTypes.object
 };
 
-export default Rules;
+export default withRouter(Rules);

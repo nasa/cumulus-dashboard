@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   clearGranulesFilter,
@@ -262,7 +262,7 @@ CollectionOverview.propTypes = {
   router: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   collections: state.collections,
   granules: state.granules
-}))(CollectionOverview);
+}))(CollectionOverview));

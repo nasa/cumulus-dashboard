@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { get } from 'object-path';
 import {
   displayCase,
@@ -183,6 +183,6 @@ Rule.propTypes = {
   rules: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   rules: state.rules
-}))(Rule);
+}))(Rule));

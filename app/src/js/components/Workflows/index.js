@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 import PropTypes from 'prop-types';
 
@@ -34,4 +35,4 @@ Workflows.propTypes = {
   params: PropTypes.object
 };
 
-export default Workflows;
+export default withRouter(Workflows);

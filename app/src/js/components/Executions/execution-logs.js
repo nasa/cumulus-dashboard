@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getExecutionLogs } from '../../actions';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import ErrorReport from '../Errors/report';
 
@@ -71,6 +72,6 @@ ExecutionLogs.propTypes = {
   router: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   executionLogs: state.executionLogs
-}))(ExecutionLogs);
+}))(ExecutionLogs));

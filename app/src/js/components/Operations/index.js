@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
 
@@ -34,4 +35,4 @@ Operations.propTypes = {
   params: PropTypes.object
 };
 
-export default Operations;
+export default withRouter(Operations);

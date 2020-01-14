@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import get from 'lodash.get';
 import { getExecutionStatus } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import {
   tableHeader,
@@ -196,6 +196,6 @@ ExecutionStatus.propTypes = {
 
 export { ExecutionStatus };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   executionStatus: state.executionStatus
-}))(ExecutionStatus);
+}))(ExecutionStatus));

@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
   getProvider,
   updateProvider,
@@ -34,6 +35,6 @@ EditProvider.propTypes = {
   providers: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   providers: state.providers
-}))(EditProvider);
+}))(EditProvider));

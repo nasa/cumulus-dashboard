@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   listRules,
@@ -119,6 +119,6 @@ RulesOverview.propTypes = {
   rules: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   rules: state.rules
-}))(RulesOverview);
+}))(RulesOverview));

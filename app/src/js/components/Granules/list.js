@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
   searchGranules,
   clearGranulesSearch,
@@ -181,8 +182,8 @@ AllGranules.propTypes = {
   workflowOptions: PropTypes.array
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   logs: state.logs,
   granules: state.granules,
   workflowOptions: workflowOptionNames(state)
-}))(AllGranules);
+}))(AllGranules));

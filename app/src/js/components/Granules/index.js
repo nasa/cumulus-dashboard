@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 import { interval, getCount } from '../../actions';
 import _config from '../../config';
@@ -65,6 +66,6 @@ Granules.propTypes = {
   stats: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   stats: state.stats
-}))(Granules);
+}))(Granules));

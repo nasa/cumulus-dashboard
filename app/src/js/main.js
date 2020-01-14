@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import ReactDOM from 'react-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import _config from '../js/config';
 import { displayCase } from './utils/format';
@@ -38,11 +38,11 @@ class Main extends Component {
 }
 
 Main.propTypes = {
-  children: PropTypes.object,
+  children: PropTypes.array,
   dispatch: PropTypes.func,
   location: PropTypes.object,
   api: PropTypes.object,
   apiVersion: PropTypes.object
 };
 
-export default connect(state => state)(Main);
+export default withRouter(connect(state => state)(Main));

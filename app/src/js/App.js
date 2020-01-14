@@ -88,13 +88,11 @@ class App extends Component {
       <Provider store={this.store}>
         <ConnectedRouter history={history}>
           <Switch>
-            <Route path='/404' component={NotFound} />
-            <Redirect exact from='/collections' to='/collections/all' />
             <Redirect exact from='/login' to='/auth' />
             <Route path='/auth' component={OAuth} onEnter={checkAuth(this.store)} />
           </Switch>
-          <Route path='/' component={Main} onEnter={requireAuth(this.store)} >
-            <Switch>
+          <Switch>
+            <Main path='/' onEnter={requireAuth(this.store)} >
               <Route exact path='/' component={Home} />
               { /* Collections */}
               <Route path='collections' component={Collections}>
@@ -111,6 +109,7 @@ class App extends Component {
                 </Route>
                 <Route path='collection/:name/:version/definition' component={CollectionIngest} />
                 <Route path='collection/:name/:version/logs' component={CollectionLogs} />
+                <Redirect exact from='/collections' to='/collections/all' />
               </Route>
               { /* Granules */}
               <Route path='granules' component={Granules}>
@@ -168,8 +167,9 @@ class App extends Component {
                 <Route exact path='/' component={ReconciliationReportList} />
                 <Route path='report/:reconciliationReportName' component={ReconciliationReport} />
               </Route>
-            </Switch>
-          </Route>
+              <Route path='/404' component={NotFound} />
+            </Main>
+          </Switch>
         </ConnectedRouter>
       </Provider>
       // </ErrorBoundary>

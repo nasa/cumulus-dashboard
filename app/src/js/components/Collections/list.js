@@ -3,6 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import moment from 'moment';
 import {
   applyRecoveryWorkflowToCollection,
@@ -117,4 +118,4 @@ CollectionList.propTypes = {
 };
 
 export { CollectionList };
-export default connect(state => state)(CollectionList);
+export default withRouter(connect(state => state)(CollectionList));

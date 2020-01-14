@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 import PropTypes from 'prop-types';
 
@@ -43,4 +43,4 @@ Providers.propTypes = {
   params: PropTypes.object
 };
 
-export default Providers;
+export default withRouter(Providers);

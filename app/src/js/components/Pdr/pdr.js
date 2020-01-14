@@ -2,7 +2,7 @@
 import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   interval,
@@ -212,4 +212,4 @@ PDR.propTypes = {
   router: PropTypes.object
 };
 
-export default connect(state => state)(PDR);
+export default withRouter(connect(state => state)(PDR));

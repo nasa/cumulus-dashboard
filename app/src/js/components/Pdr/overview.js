@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { interval, listPdrs, getCount } from '../../actions';
@@ -96,7 +96,7 @@ PdrOverview.propTypes = {
   stats: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   stats: state.stats,
   pdrs: state.pdrs
-}))(PdrOverview);
+}))(PdrOverview));

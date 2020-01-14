@@ -3,6 +3,7 @@ import React from 'react';
 import Ace from 'react-ace';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { listWorkflows } from '../../actions';
 import config from '../../config';
 import { setWindowEditorRef } from '../../utils/browser';
@@ -94,6 +95,6 @@ Workflow.propTypes = {
   dispatch: PropTypes.func
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   workflows: state.workflows
-}))(Workflow);
+}))(Workflow));

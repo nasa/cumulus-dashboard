@@ -4,6 +4,7 @@ import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import {
   interval,
@@ -295,4 +296,4 @@ ReconciliationReport.defaultProps = {
 };
 
 export { ReconciliationReport };
-export default connect(state => state)(ReconciliationReport);
+export default withRouter(connect(state => state)(ReconciliationReport));

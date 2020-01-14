@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
 
@@ -42,4 +42,4 @@ Collections.propTypes = {
   params: PropTypes.object
 };
 
-export default connect(state => state)(Collections);
+export default withRouter(connect(state => state)(Collections));

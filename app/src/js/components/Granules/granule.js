@@ -2,7 +2,7 @@
 import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   interval,
@@ -276,8 +276,8 @@ GranuleOverview.defaultProps = {
 
 export { GranuleOverview };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   granules: state.granules,
   workflowOptions: workflowOptionNames(state),
   logs: state.logs
-}))(GranuleOverview);
+}))(GranuleOverview));

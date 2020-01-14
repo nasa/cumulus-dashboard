@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import Ace from 'react-ace';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -139,4 +139,4 @@ CollectionIngest.propTypes = {
   dispatch: PropTypes.func
 };
 
-export default connect(state => state)(CollectionIngest);
+export default withRouter(connect(state => state)(CollectionIngest));

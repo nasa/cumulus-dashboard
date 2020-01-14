@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { get } from 'object-path';
 import { listProviders, getCount, interval } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
@@ -98,4 +99,4 @@ ProvidersOverview.propTypes = {
   stats: PropTypes.object
 };
 
-export default connect(state => state)(ProvidersOverview);
+export default withRouter(connect(state => state)(ProvidersOverview));

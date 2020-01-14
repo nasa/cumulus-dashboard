@@ -3,6 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
+import { withRouter } from 'react-router-dom';
 import url from 'url';
 import { login, setTokenState } from '../actions';
 import { window } from '../utils/browser';
@@ -96,4 +97,4 @@ OAuth.propTypes = {
   queryParams: PropTypes.object
 };
 
-export default withQueryParams()(connect(state => state)(OAuth));
+export default withRouter(withQueryParams()(connect(state => state)(OAuth)));

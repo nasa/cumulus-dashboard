@@ -3,6 +3,7 @@ import React from 'react';
 // import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
   clearOperationsFilter,
   filterOperations,
@@ -206,9 +207,9 @@ OperationOverview.propTypes = {
   workflowOptions: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   stats: state.stats,
   operations: state.operations,
   workflowOptions: workflowOptions(state),
   collectionOptions: collectionOptions(state)
-}))(OperationOverview);
+}))(OperationOverview));

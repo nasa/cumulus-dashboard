@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { lastUpdated } from '../../utils/format';
 import LogViewer from '../Logs/viewer';
 import {strings} from '../locale';
@@ -37,6 +37,6 @@ CollectionLogs.propTypes = {
   logs: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   logs: state.logs
-}))(CollectionLogs);
+}))(CollectionLogs));

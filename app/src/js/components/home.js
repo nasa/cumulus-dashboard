@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { get } from 'object-path';
 import {
   getCount,
@@ -238,7 +238,7 @@ Home.propTypes = {
 };
 
 export { Home };
-export default connect(state => ({
+export default withRouter(connect(state => ({
   rules: state.rules,
   stats: state.stats,
   dist: state.dist,
@@ -246,4 +246,4 @@ export default connect(state => ({
   pdrs: state.pdrs,
   executions: state.executions,
   cumulusInstance: state.cumulusInstance
-}))(Home);
+}))(Home));

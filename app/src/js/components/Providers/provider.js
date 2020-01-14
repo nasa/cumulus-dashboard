@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import {
   interval,
   getProvider,
@@ -153,7 +153,7 @@ ProviderOverview.propTypes = {
   router: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   providers: state.providers,
   logs: state.logs
-}))(ProviderOverview);
+}))(ProviderOverview));

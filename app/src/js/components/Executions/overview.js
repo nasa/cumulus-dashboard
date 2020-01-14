@@ -3,7 +3,7 @@ import React from 'react';
 import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import {
   clearExecutionsFilter,
   filterExecutions,
@@ -185,9 +185,9 @@ ExecutionOverview.propTypes = {
   workflowOptions: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   stats: state.stats,
   executions: state.executions,
   workflowOptions: workflowOptions(state),
   collectionOptions: collectionOptions(state)
-}))(ExecutionOverview);
+}))(ExecutionOverview));

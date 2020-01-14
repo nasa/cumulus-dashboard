@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
 import { interval, getCount, createReconciliationReport } from '../../actions';
@@ -73,7 +74,7 @@ ReconciliationReports.propTypes = {
   reconciliationReports: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   stats: state.stats,
   reconciliationReports: state.reconciliationReports
-}))(ReconciliationReports);
+}))(ReconciliationReports));
