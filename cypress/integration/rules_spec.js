@@ -49,7 +49,7 @@ describe('Rules page', () => {
           cy.get('dt')
             .contains('Workflow')
             .next('dd')
-            .should('contain', 'KinesisTriggerTest');
+            .should('contain', 'HelloWorldWorkflow');
           cy.get('dt')
             .contains('Provider')
             .next('dd')

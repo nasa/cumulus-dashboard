@@ -9,18 +9,14 @@ describe('Dashboard Reconciliation Reports Page', () => {
   });
 
   describe('When logged in', () => {
+    before(() => cy.visit('/'));
     beforeEach(() => {
       cy.login();
       cy.task('resetState');
-    });
-
-    after(() => {
-      cy.task('resetState');
+      cy.visit('/');
     });
 
     it('displays a link to view reconciliation reports', () => {
-      cy.visit('/');
-
       cy.contains('nav li a', 'Reconciliation Reports').as('reconciliationReports');
       cy.get('@reconciliationReports').should('have.attr', 'href', '#/reconciliation-reports');
       cy.get('@reconciliationReports').click({ force: true });

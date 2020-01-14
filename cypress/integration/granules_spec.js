@@ -1,9 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
 
-function capitalize(theString) {
-    return theString.charAt(0).toUpperCase() + theString.slice(1);
-};
-
 function visitGranulePage () {
   cy.visit('/');
   cy.contains('nav li a', 'Granules').as('granules');
@@ -54,7 +50,7 @@ describe('Dashboard Granules Page', () => {
 
           // Granule Status Column is correct
           cy.get('@columns').eq(1).invoke('text')
-            .should('be.eq', capitalize(granule.status));
+            .should('be.eq', granule.status.replace(/^w/, c=>c.toUpperCase()));
           // has link to the granule list with the same status
           cy.get('@columns').eq(1).children('a')
             .should('have.attr', 'href')
