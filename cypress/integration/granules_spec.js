@@ -50,7 +50,7 @@ describe('Dashboard Granules Page', () => {
 
           // Granule Status Column is correct
           cy.get('@columns').eq(1).invoke('text')
-            .should('be.eq', granule.status.replace(/^w/, c=>c.toUpperCase()));
+            .should('be.eq', granule.status.replace(/^\w/, c => c.toUpperCase()));
           // has link to the granule list with the same status
           cy.get('@columns').eq(1).children('a')
             .should('have.attr', 'href')
