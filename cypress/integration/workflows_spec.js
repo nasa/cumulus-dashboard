@@ -25,9 +25,12 @@ describe('Dashboard Workflows Page', () => {
       cy.url().should('include', 'workflows');
       cy.contains('.heading--xlarge', 'Workflows');
 
-      cy.get('table tbody tr').its('length').should('be.eq', 1);
+      cy.get('table tbody tr').its('length').should('be.eq', 2);
       cy.contains('table tbody tr a', 'HelloWorldWorkflow')
         .should('have.attr', 'href', '#/workflows/workflow/HelloWorldWorkflow');
+      cy.contains('table tbody tr a', 'SecondTestWorkflow')
+        .should('have.attr', 'href', '#/workflows/workflow/SecondTestWorkflow');
+
     });
 
     it('displays a link to individual workflow', () => {
