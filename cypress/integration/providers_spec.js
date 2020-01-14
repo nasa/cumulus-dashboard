@@ -13,17 +13,16 @@ describe('Dashboard Providers Page', () => {
   });
 
   describe('When logged in', () => {
+    before(() => cy.visit('/'));
+
     beforeEach(() => {
-      cy.login();
       cy.task('resetState');
+      cy.login();
+      cy.visit('/');
     });
 
-    after(() => {
-      cy.task('resetState');
-    });
 
     it('should display a link to view providers', () => {
-      cy.visit('/');
 
       cy.contains('nav li a', 'Providers').as('providers');
       cy.get('@providers').should('have.attr', 'href', '#/providers');
@@ -37,7 +36,7 @@ describe('Dashboard Providers Page', () => {
 
     it('should add a new provider', () => {
       const name = 'TESTPROVIDER';
-      const connectionLimit = 5;
+      const connectionLimit = 10;
       const protocol = 's3';
       const host = 'test-host';
 
@@ -57,11 +56,6 @@ describe('Dashboard Providers Page', () => {
         .contains('Provider Name')
         .siblings('input')
         .type(name);
-      cy.get('@providerinput')
-        .contains('Concurrent Connnection Limit')
-        .siblings('input')
-        .clear()
-        .type(connectionLimit);
       cy.get('@providerinput')
         .contains('label', 'Protocol')
         .siblings()
@@ -102,7 +96,7 @@ describe('Dashboard Providers Page', () => {
 
     it('should edit a provider', () => {
       const name = 's3_provider';
-      const connectionLimit = 12;
+      const connectionLimit = 10;
       const host = 'test-host-new';
 
       cy.visit(`/#/providers/provider/${name}`);
@@ -116,11 +110,6 @@ describe('Dashboard Providers Page', () => {
       cy.contains('.heading--large', `Edit ${name}`);
 
       cy.get('form div ul').as('providerinput');
-      cy.get('@providerinput')
-        .contains('Concurrent Connnection Limit')
-        .siblings('input')
-        .clear()
-        .type(connectionLimit);
       cy.get('@providerinput')
         .contains('Host')
         .siblings('input')
