@@ -85,94 +85,108 @@ class App extends Component {
     return (
       // <ErrorBoundary> // Add after troublshooting other errors
       // Routes
-      <Provider store={this.store}>
-        <ConnectedRouter history={history}>
-          <Switch>
-            <Redirect exact from='/login' to='/auth' />
-            <Route path='/auth' component={OAuth} onEnter={checkAuth(this.store)} />
-          </Switch>
-          <Switch>
-            <Main path='/' onEnter={requireAuth(this.store)} >
-              <Route exact path='/' component={Home} />
-              { /* Collections */}
-              <Route path='collections' component={Collections}>
-                <Route path='all' component={CollectionList} />
-                <Route path='add' component={AddCollection} />
-                <Route path='edit/:name/:version' component={EditCollection} />
-                <Route path='collection/:name/:version' component={CollectionOverview} />
-                { /* Collections - Granules */}
-                <Route path='collection/:name/:version/granules' component={CollectionGranules}>
-                  <Route path='completed' component={CollectionGranules} />
-                  <Route path='processing' component={CollectionGranules} />
-                  <Route path='failed' component={CollectionGranules} />
+      <div className="routes">
+        <Provider store={this.store}>
+          <ConnectedRouter history={history}>
+            <Switch>
+              <Redirect exact from='/login' to='/auth' />
+              <Route path='/auth' component={OAuth} onEnter={checkAuth(this.store)} />
+            </Switch>
+            <Switch>
+              <Main path='/' onEnter={requireAuth(this.store)} >
+                <Route exact path='/' component={Home} />
+                { /* Collections */}
+                <Switch>
+                  <Route path='collections' component={Collections} />
+                  <Route path='all' component={CollectionList} />
+                  <Route path='add' component={AddCollection} />
+                  <Route path='edit/:name/:version' component={EditCollection} />
+                  <Route path='collection/:name/:version' component={CollectionOverview} />
+                  { /* Collections - Granules */}
+                  <Switch>
+                    <Route path='collection/:name/:version/granules' component={CollectionGranules} />
+                    <Route path='completed' component={CollectionGranules} />
+                    <Route path='processing' component={CollectionGranules} />
+                    <Route path='failed' component={CollectionGranules} />
+                    <Redirect exact from='running' to='processing' />
+                  </Switch>
+                  <Route path='collection/:name/:version/definition' component={CollectionIngest} />
+                  <Route path='collection/:name/:version/logs' component={CollectionLogs} />
+                  <Redirect exact from='/collections' to='/collections/all' />
+                </Switch>
+                { /* Granules */}
+                <Switch>
+                  <Route path='granules' component={Granules} />
+                  <Route exact path='/' component={GranuleOverview} />
+                  <Route path='granule/:granuleId' component={Granule} />
+                  <Route path='completed' component={ListGranules} />
+                  <Route path='processing' component={ListGranules} />
+                  <Route path='failed' component={ListGranules} />
                   <Redirect exact from='running' to='processing' />
-                </Route>
-                <Route path='collection/:name/:version/definition' component={CollectionIngest} />
-                <Route path='collection/:name/:version/logs' component={CollectionLogs} />
-                <Redirect exact from='/collections' to='/collections/all' />
-              </Route>
-              { /* Granules */}
-              <Route path='granules' component={Granules}>
-                <Route exact path='/' component={GranuleOverview} />
-                <Route path='granule/:granuleId' component={Granule} />
-                <Route path='completed' component={ListGranules} />
-                <Route path='processing' component={ListGranules} />
-                <Route path='failed' component={ListGranules} />
-                <Redirect exact from='running' to='processing' />
-              </Route>
-              { /* PDRs */}
-              <Route path='pdrs' component={Pdrs}>
-                <Route exact path='/' component={PdrOverview} />
-                <Route path='active' component={PdrList} />
-                <Route path='failed' component={PdrList} />
-                <Route path='completed' component={PdrList} />
-                <Route path='pdr/:pdrName' component={Pdr} />
-              </Route>
-              { /* Providers */}
-              <Route path='providers' component={Providers}>
-                <Route exact path='/' component={ProvidersOverview} />
-                <Route path='add' component={AddProvider} />
-                <Route path='edit/:providerId' component={EditProvider} />
-                <Route path='provider/:providerId' component={ProviderElem} />
-              </Route>
-              { /* Workflows */}
-              <Route path='workflows' component={Workflows}>
-                <Route exact path='/' component={WorkflowsOverview} />
-                <Route path='workflow/:workflowName' component={Workflow} />
-              </Route>
-              { /* Executions */}
-              <Route path='executions' component={Executions}>
-                <Route exact path='/' component={ExecutionsOverview} />
-                <Route path='execution/:executionArn' component={ExecutionStatus} />
-              </Route>
-              <Route path='executions' component={Executions}>
-                <Route exact path='/' component={ExecutionsOverview} />
-                <Route path='execution/:executionName/logs' component={ExecutionLogs} />
-              </Route>
-              { /* Operations */}
-              <Route path='operations' component={Operations}>
-                <Route exact path='/' component={OperationsOverview} />
-              </Route>
-              { /* Rules */}
-              <Route path='rules' component={Rules}>
-                <Route exact path='/' component={RulesOverview} />
-                <Route path='rule/:ruleName' component={Rule} />
-                <Route path='edit/:ruleName' component={EditRule} />
-                <Route path='add' component={AddRule} />
-              </Route>
-              { /* Logs */}
-              <Route path='logs' component={Logs} />
-              { /* Reports */}
-              <Route path='reconciliation-reports' component={ReconciliationReports}>
-                <Route exact path='/' component={ReconciliationReportList} />
-                <Route path='report/:reconciliationReportName' component={ReconciliationReport} />
-              </Route>
-              <Route path='/404' component={NotFound} />
-            </Main>
-          </Switch>
-        </ConnectedRouter>
-      </Provider>
-      // </ErrorBoundary>
+                </Switch>
+                { /* PDRs */}
+                <Switch>
+                  <Route path='pdrs' component={Pdrs} />
+                  <Route exact path='/' component={PdrOverview} />
+                  <Route path='active' component={PdrList} />
+                  <Route path='failed' component={PdrList} />
+                  <Route path='completed' component={PdrList} />
+                  <Route path='pdr/:pdrName' component={Pdr} />
+                </Switch>
+                { /* Providers */}
+                <Switch>
+                  <Route path='providers' component={Providers} />
+                  <Route exact path='/' component={ProvidersOverview} />
+                  <Route path='add' component={AddProvider} />
+                  <Route path='edit/:providerId' component={EditProvider} />
+                  <Route path='provider/:providerId' component={ProviderElem} />
+                </Switch>
+                { /* Workflows */}
+                <Switch>
+                  <Route path='workflows' component={Workflows} />
+                  <Route exact path='/' component={WorkflowsOverview} />
+                  <Route path='workflow/:workflowName' component={Workflow} />
+                </Switch>
+                { /* Executions */}
+                <Switch>
+                  <Route path='executions' component={Executions} />
+                  <Route exact path='/' component={ExecutionsOverview} />
+                  <Route path='execution/:executionArn' component={ExecutionStatus} />
+                </Switch>
+                <Switch>
+                  <Route path='executions' component={Executions} />
+                  <Route exact path='/' component={ExecutionsOverview} />
+                  <Route path='execution/:executionName/logs' component={ExecutionLogs} />
+                </Switch>
+                { /* Operations */}
+                <Switch>
+                  <Route path='operations' component={Operations} />
+                  <Route exact path='/' component={OperationsOverview} />
+                </Switch>
+                { /* Rules */}
+                <Switch>
+                  <Route path='rules' component={Rules} />
+                  <Route exact path='/' component={RulesOverview} />
+                  <Route path='rule/:ruleName' component={Rule} />
+                  <Route path='edit/:ruleName' component={EditRule} />
+                  <Route path='add' component={AddRule} />
+                </Switch>
+                { /* Logs */}
+                <Switch>
+                  <Route path='logs' component={Logs} />
+                </Switch>
+                { /* Reports */}
+                <Switch>
+                  <Route path='reconciliation-reports' component={ReconciliationReports} />
+                  <Route exact path='/' component={ReconciliationReportList} />
+                  <Route path='report/:reconciliationReportName' component={ReconciliationReport} />
+                </Switch>
+                <Route path='/404' component={NotFound} />
+              </Main>
+            </Switch>
+          </ConnectedRouter>
+        </Provider>
+      </div>
     );
   }
 }
