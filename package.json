@@ -21,14 +21,14 @@
     "build": "gulp",
     "lint": "eslint app/src/js/ --ext .js",
     "start": "npm run serve",
-    "cypress": "CYPRESS_TESTING=true cypress open",
-    "cypress-ci": "CYPRESS_TESTING=true cypress run --spec 'cypress/integration/*' --config video=false",
+    "cypress": "CYPRESS_TESTING=true NODE_ENV=test cypress open",
+    "cypress-ci": "CYPRESS_TESTING=true NODE_ENV=test cypress run --spec 'cypress/integration/*' --config video=false",
     "validation": "ava cypress/validation-tests/*.js",
     "test": "npm run lint && ava",
-    "seed-database" : "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test node ./localApi/runSeedDatabase.js",
+    "seed-database" : "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test node ./localAPI/runSeedDatabase.js",
     "serve-api": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test cmr_provider=CUMULUS FAKE_AUTH=true ./node_modules/@cumulus/api/bin/cli.js serve --no-reseed",
-    "start-localstack": "export SSH_USERS=user:$(id -u):$(id -u) && docker-compose -f ./localApi/docker-compose.yml -f ./localApi/docker-compose-local.yml -p cumulusstack up -d",
-    "stop-localstack": "docker-compose -f ./localApi/docker-compose.yml -f ./localApi/docker-compose-local.yml -p cumulusstack down"
+    "start-localstack": "export SSH_USERS=user:$(id -u):$(id -u) && docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-local.yml -p cumulusstack up -d",
+    "stop-localstack": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-local.yml -p cumulusstack down"
   },
   "ava": {
     "files": [

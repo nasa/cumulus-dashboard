@@ -107,31 +107,30 @@ To run the dashboard locally:
 
 #### local API server
 
-For development and testing purposes, you can run the cumulus API locally. This requires running a localstack docker app, then separately starting the cumulus API.
+For development and testing purposes, you can run the cumulus API locally. This requires running a localstack docker app in the background, and then starting the cumulus API.
 
-The docker app is started as a npm script.
+The localstack docker app is started as a npm script.
 ```bash
   $ npm run start-localstack
 ```
 
-Once the docker app is running, the cumulus API can be started.
+Once the docker app is running:
+
+If you would like some sample data (the same data that is used during integration tests), you can seed the database. This will load some sample data into the localstack appplication.
+```bash
+  $ npm run seed-database
+```
+
+And the cumulus API can be started.
 ```bash
   $ npm run serve-api
 ```
 
-After testing, you can stop the docker backend.
+After testing, you can stop the docker backend which will erase all data in the stack.
 ```bash
   $ npm run stop-localstack
 ```
 
-#### Fake API server
-
-For development and testing purposes, you can use a fake API server provided with the dashboard. To use the fake API server, run `node fake-api.js` in a separate terminal session, then launch the dashboard with:
-
-```bash
-  $ nvm use
-  $ APIROOT=http://localhost:5001 npm run serve
-```
 
 #### NGAP Sandbox Metrics Development
 

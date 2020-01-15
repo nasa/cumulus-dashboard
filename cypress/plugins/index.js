@@ -17,7 +17,7 @@ const { testUtils, serveUtils } = require('@cumulus/api');
 
 const { seedEverything } = require('./seedEverything');
 
-const fakeApiToken = require('../../test/fake-api/token');
+const fakeApiToken = require('./token');
 
 module.exports = (on) => {
   const options = browserify.defaultOptions;

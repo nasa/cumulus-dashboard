@@ -1,3 +1,4 @@
+// Helper code to generate and verify tokens in cypress tests.
 const jwt = require('jsonwebtoken');
 
 const tokenSecret = 'secret';
