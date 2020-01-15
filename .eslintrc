@@ -21,7 +21,7 @@
     "indent-legacy": [2, 2, {"SwitchCase": 1}],
     "new-cap": [2, { "properties": false }],
     "no-extra-semi": 2,
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
     "react-hooks/rules-of-hooks": "error",
     "react/jsx-no-duplicate-props": 2,
     "react/jsx-no-undef": 2,
@@ -37,7 +37,7 @@
     "react/prop-types": 2,
     "react/react-in-jsx-scope": 2,
     "semi": [2, "always"],
-    "semi-spacing": [2, { "before": false, "after": true }],
+    "semi-spacing": [2, { "before": false, "after": true }]
   },
   "globals": {
     "cy": true,
