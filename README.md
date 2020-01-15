@@ -216,21 +216,31 @@ Then deploy the `dist` folder
 
 ## Integration & Validation Tests
 
-For the integration tests to work, you have to launch the fake API and the dashboard first. Run the following commands in separate terminal sessions:
+For the integration tests to work, you have to first run the localstack application, launch the localAPI and serve the dashboard first. Run the following commands in separate terminal sessions:
 
+Run background localstack application.
 ```bash
-  $ node fake-api.js
-  $ APIROOT=http://localhost:5001 npm run serve
+  $ npm run start-localstack
 ```
 
-Run the test suite in another terminal:
+Serve the cumulus API
+```bash
+  $ npm run serve-api
+```
 
+Serve the dashboard web application
+```bash
+  $ npm run serve
+```
+
+Run the test suite
 ```bash
   $ npm run validation
   $ npm run cypress
 ```
 
 When the cypress editor opens, click on `run all specs`.
+
 
 ## develop vs. master branches
 
