@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Autocomplete from 'react-autocomplete';
 import { initialValueFromLocation, updateRouterLocation } from '../../utils/url-helper';
+import withQueryParams from 'react-router-query-params';
 
 function shouldItemRender ({ label }, value) {
   return label.toLowerCase().indexOf(value) >= 0;
@@ -49,7 +50,7 @@ class Dropdown extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
-    const {location, paramKey, dispatch, action, options} = this.props;
+    const {location, paramKey, dispatch, action, options} = this.props.queryParams;
     if (location.query[paramKey] !== prevProps.location.query[paramKey]) {
       let value = location.query[paramKey];
       dispatch(action({ key: paramKey, value }));
@@ -126,7 +127,8 @@ Dropdown.propTypes = {
   paramKey: PropTypes.string,
   label: PropTypes.any,
   location: PropTypes.object,
-  router: PropTypes.object
+  router: PropTypes.object,
+  queryParams: PropTypes.object
 };
 
-export default withRouter(connect()(Dropdown));
+export default withQueryParams(withRouter(connect()(Dropdown)));

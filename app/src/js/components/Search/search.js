@@ -1,9 +1,10 @@
 'use strict';
 import React from 'react';
-import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { initialValueFromLocation, updateRouterLocation } from '../../utils/url-helper';
+import withQueryParams from 'react-router-query-params';
+import { withRouter } from 'react-router-dom';
 
 class Search extends React.Component {
   constructor (props) {
@@ -17,12 +18,12 @@ class Search extends React.Component {
   }
 
   componentDidMount () {
-    const { dispatch, action, location, paramKey } = this.props;
+    const { dispatch, action, location, paramKey } = this.props.queryParams;
     dispatch(action({value: location.query[paramKey]}));
   }
 
   componentDidUpdate () {
-    const { dispatch, action, location, paramKey } = this.props;
+    const { dispatch, action, location, paramKey } = this.props.queryParams;
     dispatch(action({value: location.query[paramKey]}));
   }
 
@@ -88,7 +89,8 @@ Search.propTypes = {
   paramKey: PropTypes.string,
   label: PropTypes.any,
   location: PropTypes.object,
-  router: PropTypes.object
+  router: PropTypes.object,
+  queryParams: PropTypes.object
 };
 
-export default withRouter(connect()(Search));
+export default withRouter(withQueryParams()(connect()(Search)));
