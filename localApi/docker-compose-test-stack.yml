@@ -1,0 +1,77 @@
+version: "3"
+services:
+  elasticsearch:
+    image: elasticsearch:5.6
+    network_mode: "service:shim"
+    environment:
+      ES_JAVA_OPTS: "-Xms750m -Xmx750m"
+  localstack:
+    image: localstack/localstack:0.8.10
+    network_mode: "service:shim"
+    environment:
+      SERVICES: "kinesis,lambda,s3,sns,sqs,dynamodb,cloudwatch,cloudwatchlogs"
+  serve_api:
+    image: node:8.11.4
+    network_mode: "service:shim"
+    depends_on:
+      - localstack
+      - elasticsearch
+    command:
+      bash -c "sleep 45 && ./node_modules/@cumulus/api/bin/cli.js serve --no-reseed"
+    working_dir:
+      /cumulus-dashboard
+    volumes:
+      - ../:/cumulus-dashboard:cached
+    environment:
+      - LOCALSTACK_HOST=localhost
+      - LOCAL_ES_HOST=localhost
+      - NODE_ENV=test
+      - cmr_provider=CUMULUS
+      - FAKE_AUTH=true
+  dashboard:
+    image: node:8.11.4
+    depends_on:
+      - serve_api
+    network_mode: "service:shim"
+    command:
+      bash -c "npm run serve"
+    working_dir:
+      /cumulus-dashboard
+    volumes:
+      - ../:/cumulus-dashboard:cached
+    environment:
+      - APIROOT=http://localhost:5001
+      - HIDE_PDR=false
+      - DAAC_NAME=local
+      - STAGE=LOCALHOST-Development
+      - SHOW_DISTRIBUTION_API_METRICS=false
+      - SHOW_TEA_METRICS=false
+      - AUTH_METHOD=earthdata
+  shim:
+    image: node:8.11.4
+    command:
+      bash -c "tail -f /dev/null"
+    working_dir:
+      /cumulus-dashboard
+    volumes:
+      - ../:/cumulus-dashboard:cached
+    ports:
+      - "9200:9200"
+      - "4550-4586:4550-4586"
+      - "5001:5001"
+      - "3000:3000"
+  e2e:
+    image: cypress/included:3.8.2
+    network_mode: "service:shim"
+    entrypoint: bash -c "sleep 55 && npm run cypress-ci"
+    command:
+      bash -c "tail -f /dev/null"
+    working_dir:
+      /cumulus-dashboard
+    volumes:
+      - ../:/cumulus-dashboard:cached
+    environment:
+      - CYPRESS_TESTING=true
+      - NODE_ENV=test
+      - LOCALSTACK_HOST=localhost
+      - LOCAL_ES_HOST=localhost
