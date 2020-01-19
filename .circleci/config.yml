@@ -51,7 +51,7 @@ jobs:
           command: |
             echo $(pwd) && ls -l * && \
             docker-compose -f ./localAPI/docker-compose.yml \
-            -f ./localAPI/docker-compose-cypress up --exit-code-from=e2e --abort-on-container-exit
+            -f ./localAPI/docker-compose-cypress.yml up --exit-code-from=e2e --abort-on-container-exit
 
       - run:
           name: Run Validation Tests
