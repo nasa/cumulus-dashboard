@@ -15,7 +15,7 @@ done
 
 >&2 echo "Elasticsearch is up - checking Localstack"
 
-until curl --connect-timeout 5 -sS http://localhost:4574/ | grep AccessDeniedException > /dev/null 2>&1; do
+until curl --connect-timeout 5 -sS http://localhost:4568/ 2> /dev/null | grep 'AccessDeniedException' > /dev/null; do
   >&2 echo "Localstack is unavailable - sleeping"
   sleep 2
 done
