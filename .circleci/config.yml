@@ -4,52 +4,53 @@ jobs:
     machine: true
     working_directory: ~/cumulus-dashboard
     steps:
+
       - checkout
 
       # image node:8.11.4 has npm version 5.6.0 and npm >=5.7.0 is needed npm ci
-      - run:
-          name: Install dependencies
-          command: |
-            export NVM_DIR="/opt/circleci/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm install v8.11.4
-            nvm alias default v8.11.4
-            npm install -g npm
-            npm ci
+      # - run:
+      #     name: Install dependencies
+      #     command: |
+      #       export NVM_DIR="/opt/circleci/.nvm"
+      #       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+      #       nvm install v8.11.4
+      #       nvm alias default v8.11.4
+      #       npm install -g npm
+      #       npm ci
 
-      - run:
-          name: Run audit-ci
-          command: |
-            export NVM_DIR="/opt/circleci/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            npm run audit-ci
+      # - run:
+      #     name: Run audit-ci
+      #     command: |
+      #       export NVM_DIR="/opt/circleci/.nvm"
+      #       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+      #       npm run audit-ci
 
-      - run:
-          name: Test dashboard build
-          command: |
-            # build dashboard
-            docker run --rm \
-              -v /home/circleci/.cache:/root/.cache \
-              -v $(pwd):/home \
-              --workdir /home \
-              -e APIROOT=http://api:5001 \
-              node:8.11.4 \
-              npm run build
+      # - run:
+      #     name: Test dashboard build
+      #     command: |
+      #       # build dashboard
+      #       docker run --rm \
+      #         -v /home/circleci/.cache:/root/.cache \
+      #         -v $(pwd):/home \
+      #         --workdir /home \
+      #         -e APIROOT=http://api:5001 \
+      #         node:8.11.4 \
+      #         npm run build
 
-      - run:
-          name: Run tests
-          command: |
-            docker run --rm \
-              -v /home/circleci/.cache:/root/.cache \
-              -v $(pwd):/home \
-              --workdir /home \
-              node:8.11.4 \
-              npm run test
+      # - run:
+      #     name: Run tests
+      #     command: |
+      #       docker run --rm \
+      #         -v /home/circleci/.cache:/root/.cache \
+      #         -v $(pwd):/home \
+      #         --workdir /home \
+      #         node:8.11.4 \
+      #         npm run test
 
       - run:
           name: Run end-to-end tests.
           command: |
-            # run fake api
+            echo $(pwd) && ls -l * && \
             docker-compose -f ./localAPI/docker-compose.yml up --exit-code-from=e2e --abort-on-container-exit
 
       - run:
