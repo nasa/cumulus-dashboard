@@ -50,7 +50,7 @@ jobs:
           name: Run end-to-end tests.
           command: |
             # run fake api
-            docker-compose -f localAPI/docker-compose.yml up --exit-code-from=e2e --abort-on-container-exit
+            docker-compose -f ./localAPI/docker-compose.yml up --exit-code-from=e2e --abort-on-container-exit
 
       - run:
           name: Run Validation Tests
