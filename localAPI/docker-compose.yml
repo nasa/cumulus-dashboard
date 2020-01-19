@@ -16,7 +16,7 @@ services:
     depends_on:
       - localstack
       - elasticsearch
-    command: [ "./localApi/wait-for-stack.sh", "./node_modules/@cumulus/api/bin/cli.js", "serve", "--no-reseed" ]
+    command: [ "./localAPI/wait-for-stack.sh", "./node_modules/@cumulus/api/bin/cli.js", "serve", "--no-reseed" ]
     working_dir:
       /cumulus-dashboard
     volumes:
@@ -63,7 +63,7 @@ services:
   e2e:
     image: cypress/included:3.8.2
     network_mode: "service:shim"
-    entrypoint: [ "./localApi/wait-for-dashboard.sh", "npm", "run", "cypress-ci"]
+    entrypoint: [ "./localAPI/wait-for-dashboard.sh", "npm", "run", "cypress-ci"]
     working_dir:
       /cumulus-dashboard
     volumes:
@@ -76,7 +76,7 @@ services:
   validation:
     image: cypress/included:3.8.2
     network_mode: "service:shim"
-    entrypoint: [ "./localApi/wait-for-dashboard.sh", "npm", "run", "validation"]
+    entrypoint: [ "./localAPI/wait-for-dashboard.sh", "npm", "run", "validation"]
     working_dir:
       /cumulus-dashboard
     volumes:

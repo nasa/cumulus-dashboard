@@ -1,7 +1,7 @@
 #!/bin/sh
 # wait-for-stack.sh - Wait until both Elasticsearch and Localstack are available then execute command.
 # for example, a docker-compose.yml file with:
-#     command: [ "./localApi/wait-for-stack.sh", "./node_modules/@cumulus/api/bin/cli.js", "serve", "--no-reseed" ]
+#     command: [ "./localAPI/wait-for-stack.sh", "./node_modules/@cumulus/api/bin/cli.js", "serve", "--no-reseed" ]
 # would run the command `./node_modules/@cumulus/api/bin/cli.js serve --no-reseed` when the stack becomes ready.
 
 set -e
