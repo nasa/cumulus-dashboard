@@ -54,12 +54,18 @@ jobs:
             -f ./localAPI/docker-compose-cypress.yml up --exit-code-from=e2e --abort-on-container-exit
 
       - run:
+          name: status check?
+          command:
+            docker-compose ps -q | xargs docker inspect -f '{{ .Name }} exited with status {{ .State.ExitCode }}'
+
+      - run:
           name: Run Validation Tests
           command: |
             # TODO [MHS, 2020-01-19] This needs to be cleaned up, tons of overhead at the moment.
             docker-compose -f ./localAPI/docker-compose.yml \
             -f ./localAPI/docker-compose-validate.yml up \
             --exit-code-from=validate --abort-on-container-exit
+
 
 
   deploy:
