@@ -55,8 +55,9 @@ jobs:
 
       - run:
           name: status check?
-          command:
-            docker-compose ps -q | xargs docker inspect -f '{{ .Name }} exited with status {{ .State.ExitCode }}'
+          command: |
+            docker-compose -f ./localAPI/docker-compose.yml \
+            -f ./localAPI/docker-compose-cypress.yml ps -q | xargs docker inspect -f '{{ .Name }} exited with status {{ .State.ExitCode }}'
 
       - run:
           name: Run Validation Tests
