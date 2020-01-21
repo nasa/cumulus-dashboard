@@ -95,7 +95,7 @@ Then follow the steps noted above to build the dashboard locally or using Docker
 
 ### Running locally
 
-To run the dashboard locally:
+To run the dashboard locally against a running cumulus instance:
 
 ```bash
   $ git clone https://github.com/nasa/cumulus-dashboard
@@ -107,9 +107,11 @@ To run the dashboard locally:
 
 #### local API server
 
-For development and testing purposes, you can run the cumulus API locally. This requires running a localstack docker app in the background, and then starting the cumulus API.
+For development and testing purposes, you can run the Cumulus API locally. This requires `docker compose` in order to stand up a localstack docker app in the background and the cumulus-API locally.  Note that there are a number of commands that will stand up different portions of the stack.  Look in the `/localAPI/` directory for docker-compose files to see all of the available options. Below is described all of the commands for running the dashboard and Cumulus API locally. But the next section describes the "best" way to develop or test the dashboard.
 
-The localstack docker app is started as a npm script.
+If you just want to run the background stack, which leaves running the cumulus-api and dashboard up to you, just start the localstack.
+
+The localstack docker app is started:
 ```bash
   $ npm run start-localstack
 ```
@@ -120,8 +122,7 @@ If you would like some sample data (the same data that is used during integratio
 ```bash
   $ npm run seed-database
 ```
-
-And the cumulus API can be started.
+And the cumulus API can be run locally in a terminal window.  This allows a dashboard to connect at `localhost:5001`
 ```bash
   $ npm run serve-api
 ```
@@ -131,6 +132,31 @@ After testing, you can stop the docker backend which will erase all data in the 
   $ npm run stop-localstack
 ```
 
+#### Preferred development with docker-compose.
+
+The docker-compose stack looks pretty vertical.  There are services that will stand up Localstack, Elasticsearch, serve the Cumulus API, serve the dashbaoard. As well as additional services to run end to end tests with Cypress and the validation tests.
+
+To develop the dashboard you can fire up the entire stack with:
+```bash
+  $ npm run start-dashboard
+```
+This brings up everything including the local Cumulus API and dashboard.  Edits to your code will be reflected in the running dashboard. You can write and run Cypress tests after this has started with.
+
+```bash
+  $ npm run cypress
+```
+
+when you're finished with development, bring down the stack
+```bash
+  $ npm run stop-dashboard
+```
+
+#### local end to end testing.
+
+You can run all of the cypress tests circleCI runs with a single command:
+```bash
+  $ npm run e2e
+```
 
 #### NGAP Sandbox Metrics Development
 

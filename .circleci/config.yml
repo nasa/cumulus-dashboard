@@ -49,9 +49,8 @@ jobs:
       - run:
           name: Run end-to-end tests.
           command: |
-            echo $(pwd) && ls -l * && \
-            docker-compose -f ./localAPI/docker-compose.yml \
-            -f ./localAPI/docker-compose-cypress.yml up --exit-code-from=e2e --abort-on-container-exit
+            echo $(pwd) && \
+            npm run e2e
 
       - run:
           name: status check?
