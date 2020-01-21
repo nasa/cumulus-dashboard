@@ -31,7 +31,7 @@
     "stop-localstack": "docker-compose -f ./localAPI/docker-compose.yml down",
     "start-dashboard": "docker-compose -f ./localAPI/docker-compose.yml up -d",
     "stop-dashboard": "docker-compose -f ./localAPI/docker-compose.yml down",
-    "run-e2e": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-cypress.yml --exit-code-from=e2e --abort-on-container-exit"
+    "e2e-tests": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-cypress.yml --exit-code-from=e2e --abort-on-container-exit"
   },
   "ava": {
     "files": [

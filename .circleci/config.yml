@@ -50,7 +50,7 @@ jobs:
           name: Run end-to-end tests.
           command: |
             echo $(pwd) && \
-            npm run e2e
+            npm run e2e-tests
 
       - run:
           name: status check?
