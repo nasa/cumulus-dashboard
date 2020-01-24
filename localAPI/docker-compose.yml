@@ -33,7 +33,6 @@ services:
       - serve_api
     network_mode: "service:shim"
     command:
-      # TODO [MHS, 2020-01-19]  this should wait for api?
       bash -c "npm run serve"
     working_dir:
       /cumulus-dashboard

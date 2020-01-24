@@ -83,6 +83,11 @@ Cypress.Commands.add('getFakeApiFixture', (fixtureName) => {
   return cy.readFile(fixtureFile);
 });
 
+Cypress.Commands.add('getFixture', (fixtureName) => {
+  const fixtureFile = `cypress/fixtures/${fixtureName}.json`;
+  return cy.readFile(fixtureFile);
+});
+
 /**
  * Adds custom command to compare two objects, where they are the same except
  * for the updatedAt time must be newer on the new object.

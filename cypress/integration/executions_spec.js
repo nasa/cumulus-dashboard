@@ -38,7 +38,7 @@ describe('Dashboard Executions Page', () => {
       cy.getFakeApiFixture('executions').as('executionsFixture');
       cy.get('@executionsFixture').its('results')
         .each((execution) => {
-          const visiblePart = execution['name'].split('-').slice(0,3).join('-');
+          const visiblePart = execution['name'].split('-').slice(0, 3).join('-');
           cy.contains(visiblePart);
           cy.get(`[data-value="${execution['name']}"]`).children().as('columns');
           cy.get('@columns').its('length').should('be.eq', 6);
@@ -63,21 +63,28 @@ describe('Dashboard Executions Page', () => {
 
       cy.get('table tbody tr').as('list');
       cy.get('@list').its('length').should('be.eq', 6);
-
     });
 
-    // TODO [MHS, 2020-01-14] This will probably need mocked. but not sure.
-    it.skip('should show a single execution', () => {
+    it.only('should show a single execution', () => {
+      const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
+      const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
+      const stateMachine = 'arn:aws:states:us-east-1:012345678901:stateMachine:test-stack-HelloWorldWorkflow';
+
+      cy.server();
       cy.visit('#/executions');
+      cy.route({
+        method: 'GET',
+        url: `http://localhost:5001/executions/status/${executionArn}`,
+        response: 'fixture:valid-execution.json',
+        status: 200
+      });
+
       cy.contains('nav li a', 'Executions').as('executions');
       cy.get('@executions').should('have.attr', 'href', '#/executions');
       cy.get('@executions').click();
 
       cy.url().should('include', 'executions');
       cy.contains('.heading--xlarge', 'Executions');
-      const executionName = '50eaad71-bba8-4376-83d7-bb9cc1309b92';
-      const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:50eaad71-bba8-4376-83d7-bb9cc1309b92';
-      const stateMachine = 'arn:aws:states:us-east-1:596205514787:stateMachine:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf';
       cy.get('table tbody tr td[class=table__main-asset]').within(() => {
         cy.get(`a[title=${executionName}]`).click({force: true});
       });
@@ -85,22 +92,19 @@ describe('Dashboard Executions Page', () => {
       cy.contains('.heading--large', 'Execution');
       cy.contains('.heading--medium', 'Visual workflow');
 
-      const startMatch = fullDate('2018-11-12T20:05:10.401Z');
-      const endMatch = fullDate('2018-11-12T20:05:31.536Z');
-
       cy.get('.status--process')
         .within(() => {
           cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
           cy.contains('Execution Arn:').next().should('have.text', executionArn);
           cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
-          cy.contains('Started:').next().should('have.text', startMatch);
-          cy.contains('Ended:').next().should('have.text', endMatch);
+          cy.contains('Started:').next().should('have.text', fullDate('2019-12-13T15:16:46.753Z'));
+          cy.contains('Ended:').next().should('have.text', fullDate('2019-12-13T15:16:52.582Z'));
         });
+
       cy.get('table tbody tr').as('events');
       cy.get('@events').its('length').should('be.eq', 7);
 
-      cy.getFakeApiFixture(`executions/status/${executionName}`).as('executionStatus');
-
+      cy.getFixture('valid-execution').as('executionStatus');
       cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
         cy.get('@events').each(($el, index, $list) => {
           let timestamp = fullDate(events[index].timestamp);

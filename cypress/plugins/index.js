@@ -38,13 +38,9 @@ module.exports = (on) => {
     resetState: function () {
       return Promise.all([
         seedEverything(),
-        // serveUtils.eraseDataStack().then((values) => {
-        //   esClient = values.esClient;
-        //   esIndex = values.esIndex;
-        // }),
         testUtils.setAuthorizedOAuthUsers([user])
       ]).catch((error) => {
-        console.log(`Probably have a bad fixutre check error below.`);
+        console.log('Probably have a bad fixutre check error below.');
         console.log(JSON.stringify(error, null, 2));
         Promise.reject(error);
       });
