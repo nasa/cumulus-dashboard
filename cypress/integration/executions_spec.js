@@ -65,7 +65,7 @@ describe('Dashboard Executions Page', () => {
       cy.get('@list').its('length').should('be.eq', 6);
     });
 
-    it.only('should show a single execution', () => {
+    it('should show a single execution', () => {
       const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
       const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
       const stateMachine = 'arn:aws:states:us-east-1:012345678901:stateMachine:test-stack-HelloWorldWorkflow';
@@ -125,12 +125,24 @@ describe('Dashboard Executions Page', () => {
       });
     });
 
-    // TODO [MHS, 2020-01-14]
-    it.skip('should show logs for a single execution', () => {
-      const executionName = '50eaad71-bba8-4376-83d7-bb9cc1309b92';
-      const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:50eaad71-bba8-4376-83d7-bb9cc1309b92';
+    it.only('should show logs for a single execution', () => {
 
-      cy.getFakeApiFixture(`executions/logs/${executionName}`).as('executionLogs');
+      const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
+      const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
+
+      cy.server();
+      cy.route({
+        method: 'GET',
+        url: `http://localhost:5001/executions/status/${executionArn}`,
+        response: 'fixture:valid-execution.json',
+        status: 200
+      });
+      cy.route({
+        method: 'GET',
+        url: `http://localhost:5001/logs/${executionName}`,
+        response: 'fixture:execution-logs.json',
+        status: 200
+      });
 
       cy.visit(`/#/executions/execution/${executionArn}`);
       cy.contains('.heading--large', 'Execution');
@@ -145,7 +157,8 @@ describe('Dashboard Executions Page', () => {
 
       cy.contains('.heading--large', `Logs for Execution ${executionName}`);
       cy.get('div[class=status--process]').as('sections');
-      cy.get('@executionLogs').its('meta').then((meta) => {
+
+      cy.getFixture('execution-logs').its('meta').then((meta) => {
         cy.get('@sections').eq(0).within(() => {
           cy.get('h2').should('have.text', 'Execution Details:');
           cy.get('pre')
@@ -155,14 +168,13 @@ describe('Dashboard Executions Page', () => {
             .contains(meta.count);
         });
       });
-      cy.get('@executionLogs').its('results').then((logs) => {
+      cy.getFixture('execution-logs').its('results').then((logs) => {
         cy.get('@sections').eq(1).within(() => {
           cy.get('pre').contains(JSON.stringify(logs[0].message));
         });
       });
     });
 
-    // TODO [MHS, 2020-01-14]
     it.skip('should show an execution with limited information', () => {
       const executionName = 'b313e777-d28a-435b-a0dd-f1fad08116t1';
       const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
