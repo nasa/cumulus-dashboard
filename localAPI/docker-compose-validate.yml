@@ -2,7 +2,7 @@ version: "3"
 services:
   validate:
     # must be run in conjunction with the docker-compose stack.
-    image: node:8.11.4
+    image: node:10.16.3
     network_mode: "service:shim"
     entrypoint: [ "./localAPI/wait-for-dashboard.sh", "npm", "run", "validate"]
     working_dir:

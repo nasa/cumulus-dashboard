@@ -11,7 +11,7 @@ services:
     environment:
       SERVICES: "kinesis,lambda,s3,sns,sqs,dynamodb,cloudwatch,cloudwatchlogs"
   serve_api:
-    image: node:8.11.4
+    image: node:10.16.3
     network_mode: "service:shim"
     depends_on:
       - localstack
@@ -28,12 +28,12 @@ services:
       - cmr_provider=CUMULUS
       - FAKE_AUTH=true
   dashboard:
-    image: node:8.11.4
+    image: node:10.16.3
     depends_on:
       - serve_api
     network_mode: "service:shim"
     command:
-      bash -c "npm run serve"
+      bash -c "npm rebuild node-sass && npm run serve"
     working_dir:
       /cumulus-dashboard
     volumes:
@@ -47,7 +47,7 @@ services:
       - SHOW_TEA_METRICS=false
       - AUTH_METHOD=earthdata
   shim:   # empty container to open ports
-    image: node:8.11.4
+    image: node:10.16.3
     command:
       bash -c "tail -f /dev/null"
     working_dir:
