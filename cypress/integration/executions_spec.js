@@ -125,7 +125,7 @@ describe('Dashboard Executions Page', () => {
       });
     });
 
-    it.only('should show logs for a single execution', () => {
+    it.skip('should show logs for a single execution', () => {
 
       const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
       const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
@@ -175,10 +175,11 @@ describe('Dashboard Executions Page', () => {
       });
     });
 
-    it.skip('should show an execution with limited information', () => {
+    it('should show an execution with limited information', () => {
       const executionName = 'b313e777-d28a-435b-a0dd-f1fad08116t1';
-      const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
-      const stateMachine = 'arn:aws:states:us-east-1:596205514787:stateMachine:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo';
+      const executionArn = 'arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
+      const stateMachine = 'arn:aws:states:us-east-1:123456789012:stateMachine:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo';
+
       cy.visit(`/#/executions/execution/${executionArn}`);
 
       cy.contains('.heading--large', 'Execution');
@@ -186,8 +187,6 @@ describe('Dashboard Executions Page', () => {
 
       const startMatch = fullDate('2018-12-06T19:18:11.174Z');
       const endMatch = fullDate('2018-12-06T19:18:41.145Z');
-
-      cy.getFakeApiFixture(`executions/status/${executionName}`).as('executionStatus');
 
       cy.get('.status--process')
         .within(() => {
@@ -197,20 +196,24 @@ describe('Dashboard Executions Page', () => {
           cy.contains('Started:').next().should('have.text', startMatch);
           cy.contains('Ended:').next().should('have.text', endMatch);
 
-          cy.get('@executionStatus').its('execution').then((execution) => {
-            cy.contains('Input:').next().find('pre').then(($content) =>
-                                                          // parse and stringify JSON string to get the same format as in the fixture
-                                                          expect(JSON.stringify(JSON.parse($content.text()))).to.eq(execution.input));
+          cy.getFakeApiFixture('executions').as('executionsFixture');
+          cy.get('@executionsFixture').its('results')
+            .each((execution) => {
+              if (execution.name === executionName) {
+                cy.contains('Input:').next().find('pre')
+                  .then(($content) =>
+                        expect(JSON.parse($content.text())).to.deep.equal(execution.originalPayload));
+                cy.contains('Input:').next().contains('.Collapsible', 'Show Input').click('topLeft');
+                cy.contains('Input:').next().contains('.Collapsible', 'Hide Input');
 
-            cy.contains('Input:').next().contains('.Collapsible', 'Show Input').click('topLeft');
-            cy.contains('Input:').next().contains('.Collapsible', 'Hide Input');
+                cy.contains('Output:').next().find('pre')
+                  .then(($content) =>
+                        expect(JSON.parse($content.text())).to.deep.equal(execution.finalPayload));
 
-            cy.contains('Output:').next().find('pre').then(($content) =>
-                                                           expect(JSON.stringify(JSON.parse($content.text()))).to.eq(execution.output));
-
-            cy.contains('Output:').next().contains('.Collapsible', 'Show Output').click('topLeft');
-            cy.contains('Output:').next().contains('.Collapsible', 'Hide Output');
-          });
+                cy.contains('Output:').next().contains('.Collapsible', 'Show Output').click('topLeft');
+                cy.contains('Output:').next().contains('.Collapsible', 'Hide Output');
+              }
+            });
 
           cy.contains('Logs:').next()
             .within(() => {
