@@ -125,8 +125,7 @@ describe('Dashboard Executions Page', () => {
       });
     });
 
-    it.skip('should show logs for a single execution', () => {
-
+    it('should show logs for a single execution', () => {
       const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
       const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
 
@@ -175,7 +174,7 @@ describe('Dashboard Executions Page', () => {
       });
     });
 
-    it.only('should show an execution with limited information', () => {
+    it('should show an execution with limited information', () => {
       const executionName = 'b313e777-d28a-435b-a0dd-f1fad08116t1';
       const executionArn = 'arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
       const stateMachine = 'arn:aws:states:us-east-1:123456789012:stateMachine:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo';
