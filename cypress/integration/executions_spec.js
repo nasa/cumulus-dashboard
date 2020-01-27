@@ -175,10 +175,18 @@ describe('Dashboard Executions Page', () => {
       });
     });
 
-    it('should show an execution with limited information', () => {
+    it.only('should show an execution with limited information', () => {
       const executionName = 'b313e777-d28a-435b-a0dd-f1fad08116t1';
       const executionArn = 'arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
       const stateMachine = 'arn:aws:states:us-east-1:123456789012:stateMachine:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo';
+
+      cy.server();
+      cy.route({
+        method: 'GET',
+        url: `http://localhost:5001/logs/${executionName}`,
+        response: 'fixture:limited-execution.json',
+        status: 200
+      });
 
       cy.visit(`/#/executions/execution/${executionArn}`);
 
