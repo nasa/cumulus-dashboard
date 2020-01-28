@@ -224,7 +224,7 @@ GranulesOverview.propTypes = {
 
 export { GranulesOverview };
 
-export default withRouter(connect((state) => ({
+export default withRouter(connect(state => ({
   stats: state.stats,
   workflowOptions: workflowOptionNames(state),
   granules: state.granules,

@@ -23,7 +23,7 @@ class Search extends React.Component {
   }
 
   componentDidUpdate () {
-    const { dispatch, action, location, paramKey } = this.props.queryParams;
+    const { dispatch, action, location, paramKey } = this.props;
     dispatch(action({value: location.query[paramKey]}));
   }
 
@@ -93,4 +93,4 @@ Search.propTypes = {
   queryParams: PropTypes.object
 };
 
-export default withRouter(withQueryParams()(connect()(Search)));
+export default withRouter(withQueryParams()(connect(state => state)(Search)));

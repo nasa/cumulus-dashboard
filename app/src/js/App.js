@@ -31,7 +31,7 @@ import CollectionLogs from './components/Collections/logs';
 import Granules from './components/Granules';
 import ListGranules from './components/Granules/list';
 import Granule from './components/Granules/granule';
-import GranuleOverview from './components/Granules/overview';
+import GranulesOverview from './components/Granules/overview';
 
 import Pdrs from './components/Pdr';
 import Pdr from './components/Pdr/pdr';
@@ -117,7 +117,7 @@ class App extends Component {
                 { /* Granules */}
                 <Switch>
                   <Route path='granules' component={Granules} />
-                  <Route exact path='/' component={GranuleOverview} />
+                  <Route exact path='/' component={GranulesOverview} />
                   <Route path='granule/:granuleId' component={Granule} />
                   <Route path='completed' component={ListGranules} />
                   <Route path='processing' component={ListGranules} />
