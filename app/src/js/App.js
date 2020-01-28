@@ -30,7 +30,7 @@ import CollectionLogs from './components/Collections/logs';
 
 import Granules from './components/Granules';
 import ListGranules from './components/Granules/list';
-import Granule from './components/Granules/granule';
+import GranuleOverview from './components/Granules/granule';
 import GranulesOverview from './components/Granules/overview';
 
 import Pdrs from './components/Pdr';
@@ -49,12 +49,12 @@ import WorkflowsOverview from './components/Workflows/overview';
 import Workflow from './components/Workflows/workflow';
 
 import Executions from './components/Executions';
-import ExecutionsOverview from './components/Executions/overview';
+import ExecutionOverview from './components/Executions/overview';
 import ExecutionStatus from './components/Executions/execution-status';
 import ExecutionLogs from './components/Executions/execution-logs';
 
 import Operations from './components/Operations';
-import OperationsOverview from './components/Operations/overview';
+import OperationOverview from './components/Operations/overview';
 
 import Rules from './components/Rules';
 import RulesOverview from './components/Rules/overview';
@@ -118,7 +118,7 @@ class App extends Component {
                 <Switch>
                   <Route path='granules' component={Granules} />
                   <Route exact path='/' component={GranulesOverview} />
-                  <Route path='granule/:granuleId' component={Granule} />
+                  <Route path='granule/:granuleId' component={GranuleOverview} />
                   <Route path='completed' component={ListGranules} />
                   <Route path='processing' component={ListGranules} />
                   <Route path='failed' component={ListGranules} />
@@ -150,18 +150,18 @@ class App extends Component {
                 { /* Executions */}
                 <Switch>
                   <Route path='executions' component={Executions} />
-                  <Route exact path='/' component={ExecutionsOverview} />
+                  <Route exact path='/' component={ExecutionOverview} />
                   <Route path='execution/:executionArn' component={ExecutionStatus} />
                 </Switch>
                 <Switch>
                   <Route path='executions' component={Executions} />
-                  <Route exact path='/' component={ExecutionsOverview} />
+                  <Route exact path='/' component={ExecutionOverview} />
                   <Route path='execution/:executionName/logs' component={ExecutionLogs} />
                 </Switch>
                 { /* Operations */}
                 <Switch>
                   <Route path='operations' component={Operations} />
-                  <Route exact path='/' component={OperationsOverview} />
+                  <Route exact path='/' component={OperationOverview} />
                 </Switch>
                 { /* Rules */}
                 <Switch>
