@@ -26,12 +26,11 @@
     "validation": "ava cypress/validation-tests/*.js",
     "test": "npm run lint && ava",
     "seed-database": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test node ./localAPI/runSeedDatabase.js",
-    "serve-api": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test cmr_provider=CUMULUS FAKE_AUTH=true ./node_modules/@cumulus/api/bin/cli.js serve --no-reseed",
-    "start-localstack": "docker-compose -f ./localAPI/docker-compose.yml up -d elasticsearch localstack",
-    "stop-localstack": "docker-compose -f ./localAPI/docker-compose.yml down",
-    "start-dashboard": "docker-compose -f ./localAPI/docker-compose.yml up -d",
-    "stop-dashboard": "docker-compose -f ./localAPI/docker-compose.yml down",
-    "e2e-tests": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-cypress.yml up --exit-code-from=e2e --abort-on-container-exit"
+    "start-localapi": "docker-compose -f ./localAPI/docker-compose.yml up -d",
+    "stop-localapi": "docker-compose -f ./localAPI/docker-compose.yml down",
+    "start-dashboard": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-dashboard.yml up -d",
+    "stop-dashboard": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-dashboard.yml down",
+    "e2e-tests": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-dashboard.yml -f ./localAPI/docker-compose-cypress.yml up --exit-code-from=e2e --abort-on-container-exit"
   },
   "ava": {
     "files": [

@@ -9,7 +9,7 @@ services:
     image: localstack/localstack:0.10.7
     network_mode: "service:shim"
     environment:
-      SERVICES: "kinesis,lambda,s3,sns,sqs,dynamodb,cloudwatch,cloudwatchlogs"
+      SERVICES: "kinesis,lambda,s3,sns,sqs,dynamodb,cloudwatch,cloudwatchlogs,stepfunctions"
   serve_api:
     image: node:10.16.3
     network_mode: "service:shim"
@@ -27,25 +27,6 @@ services:
       - NODE_ENV=test
       - cmr_provider=CUMULUS
       - FAKE_AUTH=true
-  dashboard:
-    image: node:10.16.3
-    depends_on:
-      - serve_api
-    network_mode: "service:shim"
-    command:
-      bash -c "npm rebuild node-sass && npm run serve"
-    working_dir:
-      /cumulus-dashboard
-    volumes:
-      - ../:/cumulus-dashboard:cached
-    environment:
-      - APIROOT=http://localhost:5001
-      - HIDE_PDR=false
-      - DAAC_NAME=local
-      - STAGE=LOCALHOST-Development
-      - SHOW_DISTRIBUTION_API_METRICS=false
-      - SHOW_TEA_METRICS=false
-      - AUTH_METHOD=earthdata
   shim:   # empty container to open ports
     image: node:10.16.3
     command:
@@ -58,4 +39,3 @@ services:
       - "9200:9200"
       - "4550-4586:4550-4586"
       - "5001:5001"
-      - "3000:3000"

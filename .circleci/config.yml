@@ -61,7 +61,7 @@ jobs:
       - run:
           name: Run Validation Tests
           command: |
-            # TODO [MHS, 2020-01-19] This should be cleaned up, tons of overhead right now.
+            # [MHS, 2020-01-19] This could be cleaned up.
             docker-compose -f ./localAPI/docker-compose.yml \
             -f ./localAPI/docker-compose-validate.yml up \
             --exit-code-from=validate --abort-on-container-exit

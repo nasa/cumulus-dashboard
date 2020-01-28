@@ -93,7 +93,7 @@ Cypress.Commands.add('getFixture', (fixtureName) => {
  * for the updatedAt time must be newer on the new object.
  */
 Cypress.Commands.add('expectDeepEqualButNewer', (inewObject, ifixtureObject) => {
-  const newObject =  clonedeep(inewObject);
+  const newObject = clonedeep(inewObject);
   const fixtureObject = clonedeep(ifixtureObject);
   expect(newObject['updatedAt']).to.be.greaterThan(fixtureObject['updatedAt']);
   delete newObject['updatedAt'];
