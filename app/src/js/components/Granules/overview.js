@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   interval,
@@ -64,12 +64,13 @@ class GranulesOverview extends React.Component {
   }
 
   queryMeta () {
-    this.props.dispatch(listWorkflows());
-    this.props.dispatch(getCount({
+    const { dispatch } = this.props;
+    dispatch(listWorkflows());
+    dispatch(getCount({
       type: 'granules',
       field: 'status'
     }));
-    this.props.dispatch(getGranuleCSV());
+    dispatch(getGranuleCSV());
   }
 
   generateQuery () {
@@ -184,7 +185,7 @@ class GranulesOverview extends React.Component {
                 />
               </li>
               <li>
-                <Search dispatch={this.props.dispatch}
+                <Search dispatch={this.dispatch}
                   action={searchGranules}
                   clear={clearGranulesSearch}
                 />
