@@ -1,4 +1,6 @@
-const { testUtils, serveUtils } = require('@cumulus/api');
+const { testUtils } = require('@cumulus/api');
+const serveUtils = require('@cumulus/api/bin/serveUtils');
+const { eraseDataStack } = require('@cumulus/api/bin/serve');
 
 const collections = require('../fixtures/seeds/collectionsFixture.json');
 const executions = require('../fixtures/seeds/executionsFixture.json');
@@ -11,10 +13,10 @@ const stackName = 'localrun';
 const systemBucket = 'localbucket';
 const user = 'testUser';
 
-function resetIt() {
+function resetIt () {
   let esClient, esIndex;
   return Promise.all([
-    serveUtils.eraseDataStack(stackName, systemBucket)
+    eraseDataStack(stackName, systemBucket)
       .then((values) => {
         esClient = values.esClient;
         esIndex = values.esIndex;
@@ -23,31 +25,31 @@ function resetIt() {
   ]).then(() => ({esClient, esIndex}));
 }
 
-function seedProviders(esClient, esIndex) {
+function seedProviders (esClient, esIndex) {
   return serveUtils.addProviders(providers.results, esClient, esIndex);
 }
 
-function seedCollections(esClient, esIndex) {
+function seedCollections (esClient, esIndex) {
   return serveUtils.addCollections(collections.results, esClient, esIndex);
 }
 
-function seedGranules(esClient, esIndex) {
+function seedGranules (esClient, esIndex) {
   return serveUtils.addGranules(granules.results, esClient, esIndex);
 }
 
-function seedExecutions(esClient, esIndex) {
+function seedExecutions (esClient, esIndex) {
   return serveUtils.addExecutions(executions.results, esClient, esIndex);
 }
 
-function seedRules(esClient, esIndex) {
+function seedRules (esClient, esIndex) {
   return serveUtils.addRules(rules.results, esClient, esIndex);
 }
 
-function seedEverything() {
+function seedEverything () {
   return resetIt()
     .then(({esClient, esIndex}) =>
           Promise.all([
-            seedRules(esClient,esIndex),
+            seedRules(esClient, esIndex),
             seedCollections(esClient, esIndex),
             seedGranules(esClient, esIndex),
             seedExecutions(esClient, esIndex),

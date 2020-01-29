@@ -13,7 +13,7 @@
 
 const browserify = require('@cypress/browserify-preprocessor');
 
-const { testUtils, serveUtils } = require('@cumulus/api');
+const { testUtils } = require('@cumulus/api');
 
 const { seedEverything } = require('./seedEverything');
 
@@ -44,12 +44,6 @@ module.exports = (on) => {
         console.log(JSON.stringify(error, null, 2));
         Promise.reject(error);
       });
-    },
-    loadCollections: function (collections) {
-      return serveUtils.addCollections(collections, esClient, esIndex);
-    },
-    loadGranules: function (granules) {
-      return serveUtils.addGranules(granules, esClient, esIndex);
     },
     generateJWT: function (options) {
       return fakeApiToken.generateJWT(options);
