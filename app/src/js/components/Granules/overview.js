@@ -145,7 +145,7 @@ class GranulesOverview extends React.Component {
   }
 
   render () {
-    const { stats, granules, granuleCSV } = this.props;
+    const { stats, granules, granuleCSV, dispatch } = this.props;
     const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
     const { data } = granuleCSV;
@@ -185,7 +185,7 @@ class GranulesOverview extends React.Component {
                 />
               </li>
               <li>
-                <Search dispatch={this.dispatch}
+                <Search dispatch={dispatch}
                   action={searchGranules}
                   clear={clearGranulesSearch}
                 />

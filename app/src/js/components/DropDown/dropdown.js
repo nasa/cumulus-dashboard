@@ -51,7 +51,7 @@ class Dropdown extends React.Component {
 
   componentDidUpdate (prevProps, prevState, snapshot) {
     const {location, paramKey, dispatch, action, options} = this.props.queryParams;
-    if (location.query[paramKey] !== prevProps.location.query[paramKey]) {
+    if (location && location.query[paramKey] !== prevProps.location.query[paramKey]) {
       let value = location.query[paramKey];
       dispatch(action({ key: paramKey, value }));
       if (value) value = statusToLabel(options, value);
@@ -62,7 +62,7 @@ class Dropdown extends React.Component {
   componentDidMount () {
     const { dispatch, getOptions, action, location, paramKey } = this.props;
     if (getOptions) { dispatch(getOptions()); }
-    dispatch(action({key: paramKey, value: location.query[paramKey]}));
+    if (location && location.query) dispatch(action({key: paramKey, value: location.query[paramKey]}));
   }
 
   componentWillUnmount () {
@@ -131,4 +131,4 @@ Dropdown.propTypes = {
   queryParams: PropTypes.object
 };
 
-export default withQueryParams(withRouter(connect()(Dropdown)));
+export default withRouter(withQueryParams()(connect()(Dropdown)));

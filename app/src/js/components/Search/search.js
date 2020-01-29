@@ -19,12 +19,12 @@ class Search extends React.Component {
 
   componentDidMount () {
     const { dispatch, action, location, paramKey } = this.props.queryParams;
-    dispatch(action({value: location.query[paramKey]}));
+    if (location && location.query) dispatch(action({value: location.query[paramKey]}));
   }
 
   componentDidUpdate () {
     const { dispatch, action, location, paramKey } = this.props;
-    dispatch(action({value: location.query[paramKey]}));
+    if (location && location.query) dispatch(action({value: location.query[paramKey]}));
   }
 
   componentWillUnmount () {
