@@ -61,40 +61,11 @@ const CommonConfig = {
       {
         test: /\.(css|scss)$/,
         use: [
-          {
-            // Translates CSS into CommonJS
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              sourceMap: true,
-              importLoaders: 1
-            }
-          },
-          {
-            loader: 'resolve-url-loader',
-            options: {
-              sourceMap: true
-            }
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              sourceMap: true
-            }
-          },
-          {
-            // Compiles Sass to CSS
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true
-            }
-          },
-          {
-            loader: 'sass-resources-loader',
-            options: {
-              resources: require(path.join(process.cwd(), './app/src/css/cssUtils.js')),
-            }
-          }
+          'style-loader', // Inject styles into DOM
+          'css-loader', // Translates CSS into CommonJS
+          'resolve-url-loader',
+          'postcss-loader',
+          'sass-loader' // Compiles Sass to CSS
         ]
       },
       {
@@ -121,7 +92,7 @@ const CommonConfig = {
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: path.join(__dirname, './app/src/index.html'),
+      template: path.join(__dirname, './app/src/template.html'),
       filename: 'index.html',
       title: 'Cumulus Dashboard'
     }),
