@@ -11,7 +11,7 @@ const CommonConfig = {
   output: {
     filename: 'bundle.js',
     chunkFilename: '[name].bundle.js',
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve(__dirname, 'dist'),
     publicPath: '/'
   },
   node: {
@@ -121,7 +121,7 @@ const CommonConfig = {
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: path.join(__dirname, './app/src/public/index.html'),
+      template: path.join(__dirname, './app/src/index.html'),
       filename: 'index.html',
       title: 'Cumulus Dashboard'
     }),

@@ -20,7 +20,7 @@ const DevConfig = merge.smartStrategy(
     watchContentBase: true,
     compress: true,
     port: 3000,
-    contentBase: './dist',
+    contentBase: 'dist',
   },
   module: {
     rules: [
