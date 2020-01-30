@@ -1,6 +1,7 @@
 const { testUtils } = require('@cumulus/api');
 const serveUtils = require('@cumulus/api/bin/serveUtils');
 const { eraseDataStack } = require('@cumulus/api/bin/serve');
+const { localUserName } = require('@cumulus/api/bin/local-test-defaults');
 
 const collections = require('../fixtures/seeds/collectionsFixture.json');
 const executions = require('../fixtures/seeds/executionsFixture.json');
@@ -8,54 +9,41 @@ const granules = require('../fixtures/seeds/granulesFixture.json');
 const providers = require('../fixtures/seeds/providersFixture.json');
 const rules = require('../fixtures/seeds/rulesFixture.json');
 
-// Test values
-const stackName = 'localrun';
-const systemBucket = 'localbucket';
-const user = 'testUser';
-
 function resetIt () {
-  let esClient, esIndex;
   return Promise.all([
-    eraseDataStack(stackName, systemBucket)
-      .then((values) => {
-        esClient = values.esClient;
-        esIndex = values.esIndex;
-      }),
-    testUtils.setAuthorizedOAuthUsers([user])
-  ]).then(() => ({esClient, esIndex}));
+    eraseDataStack(),
+    testUtils.setAuthorizedOAuthUsers([localUserName])
+  ]);
 }
 
-function seedProviders (esClient, esIndex) {
-  return serveUtils.addProviders(providers.results, esClient, esIndex);
+function seedProviders () {
+  return serveUtils.addProviders(providers.results);
 }
 
-function seedCollections (esClient, esIndex) {
-  return serveUtils.addCollections(collections.results, esClient, esIndex);
+function seedCollections () {
+  return serveUtils.addCollections(collections.results);
 }
 
-function seedGranules (esClient, esIndex) {
-  return serveUtils.addGranules(granules.results, esClient, esIndex);
+function seedGranules () {
+  return serveUtils.addGranules(granules.results);
 }
 
-function seedExecutions (esClient, esIndex) {
-  return serveUtils.addExecutions(executions.results, esClient, esIndex);
+function seedExecutions () {
+  return serveUtils.addExecutions(executions.results);
 }
 
-function seedRules (esClient, esIndex) {
-  return serveUtils.addRules(rules.results, esClient, esIndex);
+function seedRules () {
+  return serveUtils.addRules(rules.results);
 }
 
 function seedEverything () {
   return resetIt()
-    .then(({esClient, esIndex}) =>
-          Promise.all([
-            seedRules(esClient, esIndex),
-            seedCollections(esClient, esIndex),
-            seedGranules(esClient, esIndex),
-            seedExecutions(esClient, esIndex),
-            seedProviders(esClient, esIndex)
-          ]));
-};
+    .then(seedRules)
+    .then(seedCollections)
+    .then(seedGranules)
+    .then(seedExecutions)
+    .then(seedProviders);
+}
 
 module.exports = {
   seedEverything,
