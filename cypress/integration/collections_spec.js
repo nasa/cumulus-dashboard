@@ -165,6 +165,7 @@ describe('Dashboard Collections Page', () => {
     it('should delete a collection', () => {
       const name = 'https_testcollection';
       const version = '001';
+      cy.route('DELETE', '/collections/https_testcollection/001').as('deleteCollection');
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
@@ -178,24 +179,24 @@ describe('Dashboard Collections Page', () => {
       // really delete this time instead of cancelling
       cy.contains('.modal-content .button__contents', 'Delete Collection')
         .should('be.visible').click();
+      cy.wait('@deleteCollection');
       // click close on confirmation modal
       cy.contains('.modal-content .button__contents', 'Close')
         .should('be.visible').click();
       cy.contains('.modal-content').should('not.be.visible');
+
       // successful delete should cause navigation back to collections list
       cy.url().should('include', 'collections');
       cy.contains('.heading--xlarge', 'Collections');
-      cy.get('.form__element__refresh').click();
-      cy.wait('@getCollections');
-      cy.get('[data-value="http_testcollection___001"] > .table__main-asset > a').should('exist');
-      cy.get(`[data-value="${name}___${version}"] > .table__main-asset > a`, {timeout: 30000}).should('not.exist');
+      // verify the collection is now gone
       cy.get('table tbody tr').its('length').should('be.eq', 4);
+      cy.contains('table tbody tr a', name).should('not.exist');
     });
 
-    // TODO [MHS, 2020-01-14]  Same as above problem.
-    it.only('should fail deleting a collection with an associated rule', () => {
+    it('should fail deleting a collection with an associated rule', () => {
       const name = 'MOD09GK';
       const version = '006';
+      cy.route('DELETE', '/collections/MOD09GK/006').as('deleteCollection');
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
@@ -204,8 +205,10 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.modal-content .button__contents', 'Delete Collection')
         .should('be.visible').click();
 
+      cy.wait('@deleteCollection');
+
       // modal error should be displayed indicating that deletion failed
-      cy.get('.modal-content .error__report').should('be.visible');
+      cy.get('.modal-content .error__report', {timeout: 25000}).should('be.visible');
       cy.contains('.modal-content .button__contents', 'Close')
         .should('be.visible').click();
 
