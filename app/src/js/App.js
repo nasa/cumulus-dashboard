@@ -42,7 +42,7 @@ import Providers from './components/Providers';
 import AddProvider from './components/Providers/add';
 import EditProvider from './components/Providers/edit';
 import ProvidersOverview from './components/Providers/overview';
-import ProviderElem from './components/Providers/provider';
+import ProviderOverview from './components/Providers/provider';
 
 import Workflows from './components/Workflows';
 import WorkflowsOverview from './components/Workflows/overview';
@@ -139,7 +139,7 @@ class App extends Component {
                   <Route exact path='/' component={ProvidersOverview} />
                   <Route path='add' component={AddProvider} />
                   <Route path='edit/:providerId' component={EditProvider} />
-                  <Route path='provider/:providerId' component={ProviderElem} />
+                  <Route path='provider/:providerId' component={ProviderOverview} />
                 </Switch>
                 { /* Workflows */}
                 <Switch>
