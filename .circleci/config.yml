@@ -6,14 +6,13 @@ jobs:
     steps:
       - checkout
 
-      # image node:8.11.4 has npm version 5.6.0 and npm >=5.7.0 is needed npm ci
       - run:
           name: Install dependencies
           command: |
             export NVM_DIR="/opt/circleci/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm install v8.11.4
-            nvm alias default v8.11.4
+            nvm install v10.16.3
+            nvm alias default v10.16.3
             npm install -g npm
             npm ci
 
@@ -33,7 +32,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               -e APIROOT=http://api:5001 \
-              node:8.11.4 \
+              node:10.16.3 \
               npm run build
 
       - run:
@@ -43,7 +42,7 @@ jobs:
               -v /home/circleci/.cache:/root/.cache \
               -v $(pwd):/home \
               --workdir /home \
-              node:8.11.4 \
+              node:10.16.3 \
               npm run test
 
       - run:
@@ -83,8 +82,8 @@ jobs:
           command: |
             export NVM_DIR="/opt/circleci/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm install v8.11.4
-            nvm alias default v8.11.4
+            nvm install v10.16.3
+            nvm alias default v10.16.3
             npm install -g npm
             npm ci
 
@@ -104,7 +103,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               -e APIROOT=${SANDBOX_API} \
-              node:8.11.4 \
+              node:10.16.3 \
               npm run build
 
       - run:
@@ -128,7 +127,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               -e APIROOT=${SANDBOX_API_ROOT} \
-              node:8.11.4 \
+              node:10.16.3 \
               npm run build
 
       - run:
@@ -152,7 +151,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               -e APIROOT=${SIT_API_ROOT} \
-              node:8.11.4 \
+              node:10.16.3 \
               npm run build
 
       - run:
