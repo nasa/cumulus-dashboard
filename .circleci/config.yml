@@ -61,11 +61,7 @@ jobs:
           name: Run Validation Tests
           command: |
             # [MHS, 2020-01-19] This could be cleaned up.
-            docker-compose -f ./localAPI/docker-compose.yml \
-            -f ./localAPI/docker-compose-validate.yml up \
-            --exit-code-from=validate --abort-on-container-exit
-
-
+            npm run validate-tests
 
   deploy:
     machine: true
