@@ -1,7 +1,7 @@
 'use strict';
-import moment from 'moment';
+const moment = require('moment');
 
-import deploymentConfig from './config';
+const deploymentConfig = require('./config');
 
 /**
 * These are base config values that you can override in your config.js file
@@ -13,7 +13,7 @@ const baseConfig = {
   minCompatibleApiVersion: '1.14.2',
   oauthMethod: 'earthdata',
 
-  // graphicsPath: '/src/assets/images/',
+  graphicsPath: '/src/assets/images/',
 
   // settings for Ace editor
   editorTheme: 'github',
@@ -38,4 +38,4 @@ const baseConfig = {
 const config = Object.assign({}, baseConfig, deploymentConfig);
 config.apiRoot = config.apiRoot.replace(/\/?$/, '/');
 
-export default config;
+module.exports = config;
