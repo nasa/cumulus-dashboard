@@ -60,7 +60,6 @@ jobs:
       - run:
           name: Run Validation Tests
           command: |
-            # [MHS, 2020-01-19] This could be cleaned up.
             npm run validation-tests
 
   deploy:
