@@ -26,8 +26,8 @@ const CommonConfig = {
   resolve: {
     extensions: ['.js', '.jsx', '.scss'],
     alias: {
-      Fonts: path.join(__dirname, './app/src/assets/fonts'),
-      Images: path.join(__dirname, './app/src/assets/images')
+      Fonts: path.join(__dirname, 'app/src/assets/fonts'),
+      Images: path.join(__dirname, 'app/src/assets/images')
     },
   },
   module: {
@@ -95,7 +95,7 @@ const CommonConfig = {
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: path.join(__dirname, './app/src/template.html'),
+      template: path.join(__dirname, 'app/src/template.html'),
       filename: 'index.html',
       title: 'Cumulus Dashboard'
     }),
@@ -112,7 +112,7 @@ const CommonConfig = {
         APIROOT: config.apiRoot,
         DAAC_NAME: config.target,
         STAGE: config.environment,
-        HIDE_PDR: config.nav,
+        HIDE_PDR: config.nav.exclude.pdrs,
         AUTH_METHOD: config.oauthMethod,
         KIBANAROOT: config.kibanaRoot,
         ESROOT: config.esRoot,
