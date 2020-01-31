@@ -11,23 +11,6 @@ services:
     environment:
       SERVICES: "kinesis,lambda,s3,sns,sqs,dynamodb,cloudwatch,cloudwatchlogs,stepfunctions"
       DATA_DIR: "/tmp/localstack/data"
-  serve_api:
-    image: node:10.16.3
-    network_mode: "service:shim"
-    depends_on:
-      - localstack
-      - elasticsearch
-    command: [ "./localAPI/wait-for-stack.sh", "./node_modules/@cumulus/api/bin/cli.js", "serve", "--no-reseed" ]
-    working_dir:
-      /cumulus-dashboard
-    volumes:
-      - ../:/cumulus-dashboard:cached
-    environment:
-      - LOCALSTACK_HOST=localhost
-      - LOCAL_ES_HOST=localhost
-      - NODE_ENV=test
-      - cmr_provider=CUMULUS
-      - FAKE_AUTH=true
   shim:   # empty container to open ports
     image: node:10.16.3
     command:
@@ -39,4 +22,3 @@ services:
     ports:
       - "9200:9200"
       - "4550-4586:4550-4586"
-      - "5001:5001"
