@@ -109,11 +109,20 @@ To run the dashboard locally against a running Cumulus instance:
 
 For **development** and **testing** purposes, you can run the Cumulus API locally. This requires `docker-compose` in order to stand up a docker app that serves the Cumulus API locally.  Note that there are a number of commands that will stand up different portions of the stack.  Look in the `/localAPI/` directory for `docker-compose` files to see all of the available options. Below are described each of the provided commands for running the dashboard and Cumulus API locally.  *Note: These `docker-compose` commands do not build distributable containers, but are a provided as testing conveniences.  The docker-compose[-\*].yml files show that they work by linking your local directories into the container.*
 
-If you just want to run the Cumulus API, which leaves running the dashboard up to you, just run the `localapi`
-
-The localapi docker app is started:
+In order to run the Cumulus API locally you must run at least the containers that provide LocalStack and Elasticsearch.
+These are started and stopped with the commands:
 ```bash
-  $ npm run start-localapi
+  $ npm run start-localstack
+  $ npm run stop-localstack
+```
+After running this, you can run a cumulus API locally in a terminal window `npm run serve-api`
+
+
+If you just want to run the Cumulus API, which leaves running the dashboard up to you, just run the `cumulusapi`
+
+The cumulusapi docker app is started:
+```bash
+  $ npm run start-cumulusapi
 ```
 
 Once the docker app is running, If you would like some sample data (the same data that is used during integration tests), you can seed the database. This will load sample data into the application.
@@ -126,16 +135,17 @@ You can run the dashboard locally (without docker):
   $ npm run serve
 ```
 
-After testing, you can stop the docker backend which will erase all data in the stack.
+After testing, you can stop the docker backend.
 ```bash
-  $ npm run stop-localstack
+  $ npm run stop-cumulusapi
 ```
 
-You can view the logs with a helper script, this will print out logs from each of the running docker containers.
+If something is not running correctly, or you're just interested, you can view the logs with a helper script, this will print out logs from each of the running docker containers.
 ```bash
   $ npm run view-docker-logs
 ```
 This can be helpful in debugging problems with the docker application.
+
 
 #### Alternative localAPI scripts.
 
@@ -159,6 +169,12 @@ You can run all of the cypress tests locally that circleCI runs with a single co
 ```bash
   $ npm run e2e
 ```
+
+and the validation tests can be run
+```bash
+  $ npm run validation-tests
+```
+
 
 #### NGAP Sandbox Metrics Development
 
@@ -251,17 +267,23 @@ Run background localstack application.
   $ npm run start-localstack
 ```
 
-Serve the cumulus API
+Serve the cumulus API (separate terminal)
 ```bash
   $ npm run serve-api
 ```
 
-Serve the dashboard web application
+Serve the dashboard web application (another terminal)
 ```bash
   $ npm run serve
 ```
 
-Run the test suite
+If you're just testing dashboard code, you can generally run all of the above commands as a single docker-compose stack.
+```bash
+  $ npm run start-dashboard
+```
+This brings up LocalStack, Elasticsearch, the Cumulus localAPI, and the dashboard.
+
+Run the test suite (yet another terminal window)
 ```bash
   $ npm run validation
   $ npm run cypress
