@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - ** CUMULUS-1102
   - Integration (cypress) tests and validation tests run in container against local Cumulus API.
+  - Upgrades to node 10.16.3
 
 ### Fixed
 

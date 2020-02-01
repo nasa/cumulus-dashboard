@@ -52,12 +52,6 @@ jobs:
             npm run e2e-tests
 
       - run:
-          name: status check?
-          command: |
-            docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml \
-            -f ./localAPI/docker-compose-cypress.yml ps -q | xargs docker inspect -f '{{ .Name }} exited with status {{ .State.ExitCode }}'
-
-      - run:
           name: Run Validation Tests
           command: |
             npm run validation-tests

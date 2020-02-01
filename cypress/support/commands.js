@@ -78,11 +78,19 @@ Cypress.Commands.add('getJsonTextareaValue', () => {
   });
 });
 
+/**
+ * Adds a cypress command to read database seed fixture
+ * example: `cy.getFakeApiFixture('granules')`
+ */
 Cypress.Commands.add('getFakeApiFixture', (fixtureName) => {
   const fixtureFile = `cypress/fixtures/seeds/${fixtureName}Fixture.json`;
   return cy.readFile(fixtureFile);
 });
 
+/**
+ * Adds a cypress command to read a standard cypress fixture file.
+ * example: `cy.getFixture('fixtureFile')`
+ */
 Cypress.Commands.add('getFixture', (fixtureName) => {
   const fixtureFile = `cypress/fixtures/${fixtureName}.json`;
   return cy.readFile(fixtureFile);
