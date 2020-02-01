@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- **CUMULUS-1102**
+  - Adds ability to run dashboard against Cumulus localAPI.
+    - Adds docker-compose commands to be run via npm
+        - seed-database
+        - start-localstack
+        - stop-localstack
+        - start-cumulusapi
+        - stop-cumulusapi
+        - start-dashboard
+        - stop-dashboard
+        - e2e-tests
+        - validation-tests
+        - view-docker-logs
+
+
+
+- **CUMULUS-1463**
+  - Add Datepicker Component
+
 - **CUMULUS-1581**
   - Added support Bulk Granule Operations
 
@@ -23,6 +42,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-
   - Use `npm` instead of `yarn`
   - Update packages to fix security vulnerabilities
+
+### Deleted
+
+- **CUMULUS-1102**
+  - Removes fake-api.js.  The fake-api is removed in favor of running a Cumulus API locally.
+
 
 ## [v1.6.1] - 2019-11-12
 

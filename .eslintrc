@@ -37,7 +37,8 @@
     "react/prop-types": 2,
     "react/react-in-jsx-scope": 2,
     "semi": [2, "always"],
-    "semi-spacing": [2, { "before": false, "after": true }]
+    "semi-spacing": [2, { "before": false, "after": true }],
+    "space-before-function-paren": "off"
   },
   "globals": {
     "cy": true,
