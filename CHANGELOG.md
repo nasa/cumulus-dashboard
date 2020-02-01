@@ -11,17 +11,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1102**
   - Adds ability to run dashboard against Cumulus localAPI.
-    - Adds docker-compose commands to be run via npm
-        - seed-database
-        - start-localstack
-        - stop-localstack
-        - start-cumulusapi
-        - stop-cumulusapi
-        - start-dashboard
-        - stop-dashboard
-        - e2e-tests
-        - validation-tests
-        - view-docker-logs
+    - Adds a number of docker-compose commands to be run via `npm run <command>`
+        - `seed-database` - loads data fixtures into a running stack for testing
+        - `start-localstack` - starts necessary backend for cumulus API. LocalStack + Elasticsearch
+        - `stop-localstack` - stops same
+        - `start-cumulusapi` - starts localstack and cumulus localAPI
+        - `stop-cumulusapi` - stops same
+        - `start-dashboard` - starts localstack, cumulus localAPI and dashboard
+        - `stop-dashboard` - stops same
+        - `e2e-tests` - starts starts localstack, cumulus localAPI, dashboard and cypress end to end tests.
+        - `validation-tests` - starts starts localstack, cumulus localAPI, dashboard and validation tests.
+        - `view-docker-logs`- helper to view logs for the currently running docker-compose stack.
 
 
 
@@ -33,6 +33,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1582**
   - Added Operations page to track Async Operations
+
+### Changed
+
+- ** CUMULUS-1102
+  - Integration (cypress) tests and validation tests run in container against local Cumulus API.
 
 ### Fixed
 
