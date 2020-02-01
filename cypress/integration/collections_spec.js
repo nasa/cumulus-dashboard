@@ -179,6 +179,7 @@ describe('Dashboard Collections Page', () => {
       // really delete this time instead of cancelling
       cy.contains('.modal-content .button__contents', 'Delete Collection')
         .should('be.visible').click();
+
       cy.wait('@deleteCollection');
       // click close on confirmation modal
       cy.contains('.modal-content .button__contents', 'Close')
@@ -189,8 +190,9 @@ describe('Dashboard Collections Page', () => {
       cy.url().should('include', 'collections');
       cy.contains('.heading--xlarge', 'Collections');
       // verify the collection is now gone
+      cy.get('[data-value="http_testcollection___001"] > .table__main-asset > a').should('exist');
+      cy.get('[data-value="${name}___${version}"] > .table__main-asset > a').should('not.exist');
       cy.get('table tbody tr').its('length').should('be.eq', 4);
-      cy.contains('table tbody tr a', name).should('not.exist');
     });
 
     it('should fail deleting a collection with an associated rule', () => {

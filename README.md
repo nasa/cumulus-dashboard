@@ -285,7 +285,7 @@ This brings up LocalStack, Elasticsearch, the Cumulus localAPI, and the dashboar
 
 Run the test suite (yet another terminal window)
 ```bash
-  $ npm run validation
+  $ npm run validate
   $ npm run cypress
 ```
 
