@@ -82,7 +82,6 @@
     "cls-bluebird": "^2.1.0",
     "cypress": "^3.8.2",
     "cypress-failed-log": "^2.5.0",
-    "cypress-pipe": "^1.6.0",
     "del": "^2.2.0",
     "envify": "^3.4.0",
     "enzyme": "^3.8.0",
