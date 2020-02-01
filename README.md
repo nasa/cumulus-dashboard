@@ -176,8 +176,9 @@ and the validation tests can be run
 ```
 
 
-#### Docker Container Service Diagram.
+#### <a name=dockerdiagram></a> Docker Container Service Diagram.
 ![Docker Service Diagram](./ancillary/DashboardDockerServices.png)
+
 #### NGAP Sandbox Metrics Development
 
 ##### Kibana and Elasticsearch access
