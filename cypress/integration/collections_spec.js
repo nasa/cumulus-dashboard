@@ -263,7 +263,7 @@ describe('Dashboard Collections Page', () => {
       // delete collection
       cy.contains('button', 'Delete').click();
       cy.contains('.modal-content .button__contents', 'Delete Collection')
-        .should('be.visible').click();
+        .should('be.visible').wait(500).click();
 
       // modal should take user to granules page upon clicking 'Go To Granules'
       cy.contains('.modal-content .button__contents', 'Go To Granules')
