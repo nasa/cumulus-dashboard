@@ -217,7 +217,7 @@ describe('Dashboard Collections Page', () => {
         .should('be.visible').click();
 
       cy.wait('@deleteCollection');
-      cy.wait('2000'); // TODO [MHS, 2020-02-02] see above note about hard wait.
+      cy.wait(2000); // TODO [MHS, 2020-02-02] see above note about hard wait.
 
       // modal error should be displayed indicating that deletion failed
       cy.get('.modal-content .error__report').should('be.visible');
