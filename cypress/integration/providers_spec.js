@@ -21,9 +21,7 @@ describe('Dashboard Providers Page', () => {
       cy.visit('/');
     });
 
-
     it('should display a link to view providers', () => {
-
       cy.contains('nav li a', 'Providers').as('providers');
       cy.get('@providers').should('have.attr', 'href', '#/providers');
       cy.get('@providers').click();

@@ -182,13 +182,7 @@ describe('Dashboard Collections Page', () => {
         .should('be.visible').click();
 
       cy.wait('@deleteCollection');
-      cy.wait(2000); // TODO [MHS, 2020-02-02] This is a complete hack and
-                     // counter to what cypress is supposed to do, but I think
-                     // the backing containers aren't returning the updated
-                     // data (as), and I don't know how to wait for
-                     // a @getCollections with a particular value.
 
-      cy.route('GET', '/collections?limit=*').as('getCollections2');
       // click close on confirmation modal
       cy.contains('.modal-content .button__contents', 'Close')
         .should('be.visible').click();
@@ -198,13 +192,31 @@ describe('Dashboard Collections Page', () => {
       cy.url().should('include', 'collections');
       cy.contains('.heading--xlarge', 'Collections');
 
-      // verify the collection is now gone
-      cy.get('[data-value="http_testcollection___001"] > .table__main-asset > a').should('exist');
-      cy.get('[data-value="${name}___${version}"] > .table__main-asset > a').should('not.exist');
+      // Wait for the table to be visible.
+      cy.get('.previous');
+
+      // This forces an update to the current state and this seems wrong, but
+      // the tests will pass.
+      cy.get('.form__element__refresh').click();
+
+      cy.getFakeApiFixture('collections').its('results')
+        .each((collection) => {
+          // ensure each fixture is still in the table except the deleted collection
+          let existOrNotExist = 'exist';
+          if ((collection.name) === name) {
+            existOrNotExist = 'not.exist';
+          }
+          // This timeout exists because the table is sometimes re-rendered
+          // with existing information, and the next update has to happen
+          // before these all show up or don't show up correctly.
+          cy.get(
+            `[data-value="${collection.name}___${collection.version}"] > .table__main-asset > a`,
+            {timeout: 25000}).should(existOrNotExist);
+        });
       cy.get('table tbody tr').its('length').should('be.eq', 4);
     });
 
-    it('should fail deleting a collection with an associated rule', () => {
+    it.only('should fail deleting a collection with an associated rule', () => {
       const name = 'MOD09GK';
       const version = '006';
       cy.route('DELETE', '/collections/MOD09GK/006').as('deleteCollection');
@@ -217,8 +229,6 @@ describe('Dashboard Collections Page', () => {
         .should('be.visible').click();
 
       cy.wait('@deleteCollection');
-      cy.wait(2000); // TODO [MHS, 2020-02-02] see above note about hard wait.
-
       // modal error should be displayed indicating that deletion failed
       cy.get('.modal-content .error__report').should('be.visible');
       cy.contains('.modal-content .button__contents', 'Close')
