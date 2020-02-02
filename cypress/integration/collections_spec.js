@@ -216,7 +216,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('table tbody tr').its('length').should('be.eq', 4);
     });
 
-    it.only('should fail deleting a collection with an associated rule', () => {
+    it('should fail deleting a collection with an associated rule', () => {
       const name = 'MOD09GK';
       const version = '006';
       cy.route('DELETE', '/collections/MOD09GK/006').as('deleteCollection');
