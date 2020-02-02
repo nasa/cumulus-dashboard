@@ -162,7 +162,7 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.heading--large', `${name}___${version}`);
     });
 
-    it.only('should delete a collection', () => {
+    it('should delete a collection', () => {
       const name = 'https_testcollection';
       const version = '001';
       cy.route('DELETE', '/collections/https_testcollection/001').as('deleteCollection');
