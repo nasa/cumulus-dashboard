@@ -162,10 +162,11 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.heading--large', `${name}___${version}`);
     });
 
-    it('should delete a collection', () => {
+    it.only('should delete a collection', () => {
       const name = 'https_testcollection';
       const version = '001';
       cy.route('DELETE', '/collections/https_testcollection/001').as('deleteCollection');
+
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
@@ -181,6 +182,13 @@ describe('Dashboard Collections Page', () => {
         .should('be.visible').click();
 
       cy.wait('@deleteCollection');
+      cy.wait(2000); // TODO [MHS, 2020-02-02] This is a complete hack and
+                     // counter to what cypress is supposed to do, but I think
+                     // the backing containers aren't returning the updated
+                     // data (as), and I don't know how to wait for
+                     // a @getCollections with a particular value.
+
+      cy.route('GET', '/collections?limit=*').as('getCollections2');
       // click close on confirmation modal
       cy.contains('.modal-content .button__contents', 'Close')
         .should('be.visible').click();
@@ -189,6 +197,7 @@ describe('Dashboard Collections Page', () => {
       // successful delete should cause navigation back to collections list
       cy.url().should('include', 'collections');
       cy.contains('.heading--xlarge', 'Collections');
+
       // verify the collection is now gone
       cy.get('[data-value="http_testcollection___001"] > .table__main-asset > a').should('exist');
       cy.get('[data-value="${name}___${version}"] > .table__main-asset > a').should('not.exist');
@@ -208,9 +217,10 @@ describe('Dashboard Collections Page', () => {
         .should('be.visible').click();
 
       cy.wait('@deleteCollection');
+      cy.wait('2000'); // TODO [MHS, 2020-02-02] see above note about hard wait.
 
       // modal error should be displayed indicating that deletion failed
-      cy.get('.modal-content .error__report', {timeout: 25000}).should('be.visible');
+      cy.get('.modal-content .error__report').should('be.visible');
       cy.contains('.modal-content .button__contents', 'Close')
         .should('be.visible').click();
 
