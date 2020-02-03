@@ -232,7 +232,7 @@ describe('Dashboard Collections Page', () => {
       // modal error should be displayed indicating that deletion failed
       cy.get('.modal-content .error__report').should('be.visible');
       cy.contains('.modal-content .button__contents', 'Close')
-        .should('be.visible').click();
+        .should('be.visible').wait(500).click();
 
       cy.contains('.modal-content').should('not.be.visible');
 
@@ -251,11 +251,11 @@ describe('Dashboard Collections Page', () => {
       // delete collection
       cy.contains('button', 'Delete').click();
       cy.contains('.modal-content .button__contents', 'Delete Collection')
-        .should('be.visible').click();
+        .should('be.visible').wait(200).click();
 
       // modal should ask if user wants to go to granules page
       cy.contains('.modal-content .button__contents', 'Cancel Request')
-        .should('be.visible').click();
+        .should('be.visible').wait(500).click();
       cy.get('.modal-content').should('not.exist');
 
       // collection should still exist in list
@@ -277,7 +277,7 @@ describe('Dashboard Collections Page', () => {
 
       // modal should take user to granules page upon clicking 'Go To Granules'
       cy.contains('.modal-content .button__contents', 'Go To Granules')
-        .should('be.visible').click();
+        .should('be.visible').wait(500).click();
       cy.contains('.modal-content').should('not.be.visible');
       cy.url().should('include', 'granules');
 
