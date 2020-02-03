@@ -226,7 +226,7 @@ describe('Dashboard Collections Page', () => {
       // delete collection
       cy.contains('button', 'Delete').click();
       cy.contains('.modal-content .button__contents', 'Delete Collection')
-        .should('be.visible').click();
+        .should('be.visible').wait(500).click();
 
       cy.wait('@deleteCollection');
       // modal error should be displayed indicating that deletion failed
