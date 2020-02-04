@@ -252,18 +252,19 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should go to granules upon request when deleting a collection with associated granules', () => {
+      cy.visit('/');
       const name = 'MOD09GQ';
       const version = '006';
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
-      cy.contains('button', 'Delete').click();
-      cy.contains('.modal-content .button__contents', 'Delete Collection')
+      cy.get('.DeleteCollection > .button').click();
+      cy.contains('.button__deletecollections', 'Delete Collection')
         .should('be.visible').click();
 
       // modal should take user to granules page upon clicking 'Go To Granules'
-      cy.contains('.modal-content .button__contents', 'Go To Granules')
+      cy.contains('.button__gotogranules', 'Go To Granules')
         .should('be.visible').click();
       cy.contains('.modal-content').should('not.be.visible');
       cy.url().should('include', 'granules');
