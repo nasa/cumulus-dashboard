@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
-import Button from '../Button/Button';
+// import Button from '../Button/Button';
 
 class CollectionDeletedConfirmModal extends React.Component {
   constructor (props) {
@@ -38,13 +38,13 @@ class CollectionDeletedConfirmModal extends React.Component {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button
+          <button
             className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
             label="close"
             onClick={this.handleClose}
           >
             Close
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
     );
