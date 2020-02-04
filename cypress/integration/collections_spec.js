@@ -229,18 +229,19 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should do nothing on cancel when deleting a collection with associated granules', () => {
+      cy.visit('/');
       const name = 'MOD09GQ';
       const version = '006';
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
-      cy.contains('button', 'Delete').click();
-      cy.contains('.modal-content .button__contents', 'Delete Collection')
+      cy.get('.DeleteCollection > .button').click();
+      cy.contains('.button__deletecollections', 'Delete Collection')
         .should('be.visible').click();
 
       // modal should ask if user wants to go to granules page
-      cy.contains('.modal-content .button__contents', 'Cancel Request')
+      cy.contains('.button--cancel', 'Cancel Request')
         .should('be.visible').click();
       cy.contains('.modal-content').should('not.be.visible');
 
