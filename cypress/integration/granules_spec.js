@@ -2,9 +2,7 @@ import { shouldBeRedirectedToLogin } from '../support/assertions';
 
 function visitGranulePage () {
   cy.visit('/');
-  cy.contains('nav li a', 'Granules').as('granules');
-  cy.get('@granules').should('have.attr', 'href', '#/granules');
-  cy.get('@granules').click();
+  cy.visit('/#/granules');
 }
 
 describe('Dashboard Granules Page', () => {
@@ -17,6 +15,7 @@ describe('Dashboard Granules Page', () => {
 
   describe('When logged in', () => {
     before(() => cy.visit('/'));
+
     beforeEach(() => {
       cy.login();
       cy.task('resetState');

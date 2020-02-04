@@ -11,6 +11,7 @@ describe('Dashboard Executions Page', () => {
 
   describe('When logged in', () => {
     before(() => cy.visit('/'));
+
     beforeEach(() => {
       cy.task('resetState');
       cy.login();
