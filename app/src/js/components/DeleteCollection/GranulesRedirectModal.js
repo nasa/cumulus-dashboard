@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
-import Button from '../Button/Button';
+// import Button from '../Button/Button';
 
 class GranulesRedirectModal extends React.Component {
   constructor (props) {
@@ -46,20 +46,20 @@ class GranulesRedirectModal extends React.Component {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button
+          <button
             className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
             onClick={this.handleCancel}
             label="cancel"
           >
             Cancel Request
-          </Button>
-          <Button
+          </button>
+          <button
             className='button button__gotogranules button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
             label="confirm"
             onClick={this.handleConfirm}
           >
             Go To Granules
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
     );
