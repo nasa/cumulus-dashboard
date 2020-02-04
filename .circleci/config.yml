@@ -112,6 +112,8 @@ jobs:
               --workdir /home \
               cypress/base:8 \
               npm run cypress-ci
+      - store_artifacts:
+          path: /home/cypress/screenshots/
 
   deploy:
     machine: true
