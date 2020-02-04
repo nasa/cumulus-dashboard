@@ -204,19 +204,21 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should fail deleting a collection with an associated rule', () => {
+      cy.visit('/');
       const name = 'MOD09GK';
       const version = '006';
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
-      cy.contains('button', 'Delete').click();
-      cy.contains('.modal-content .button__contents', 'Delete Collection')
+      cy.get('.DeleteCollection > .button').click();
+
+      cy.get('.button__deletecollections')
         .should('be.visible').click();
 
       // modal error should be displayed indicating that deletion failed
       cy.get('.modal-content .error__report').should('be.visible');
-      cy.contains('.modal-content .button__contents', 'Close')
+      cy.contains('.modal-footer > .button', 'Close')
         .should('be.visible').click();
       cy.contains('.modal-content').should('not.be.visible');
 
