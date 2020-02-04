@@ -15,6 +15,7 @@ describe('Dashboard Collections Page', () => {
   });
 
   describe('When logged in', () => {
+    before(() => cy.visit('/'));
     beforeEach(() => {
       cy.login();
       cy.task('resetState');
@@ -168,29 +169,34 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should delete a collection', () => {
+      cy.visit('/');
       const name = 'https_testcollection';
       const version = '001';
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
-      cy.contains('button', 'Delete').click();
+      cy.get('.DeleteCollection > .button').click();
       // cancel should close modal and remain on page
-      cy.contains('.modal-content .button__contents', 'Cancel Request')
+      cy.contains('.button', 'Cancel Request')
         .should('be.visible').click();
+
       cy.contains('.modal-content').should('not.be.visible');
+
       // click delete again to show modal again
-      cy.contains('button', 'Delete').click();
+      cy.get('.DeleteCollection > .button').click();
       // really delete this time instead of cancelling
-      cy.contains('.modal-content .button__contents', 'Delete Collection')
+      cy.contains('button', 'Delete Collection')
         .should('be.visible').click();
+
       // click close on confirmation modal
-      cy.contains('.modal-content .button__contents', 'Close')
+      cy.contains('.modal-footer > .button', 'Close')
+      // cy.contains('button', 'Close', {timeout: 60000})
         .should('be.visible').click();
       cy.contains('.modal-content').should('not.be.visible');
 
       // successful delete should cause navigation back to collections list
-      cy.url().should('include', 'collections');
+      cy.url().should('include', 'collections/all');
       cy.contains('.heading--xlarge', 'Collections');
       // verify the collection is now gone
       cy.get('table tbody tr').its('length').should('be.eq', 4);
