@@ -191,7 +191,6 @@ describe('Dashboard Collections Page', () => {
 
       // click close on confirmation modal
       cy.contains('.modal-footer > .button', 'Close')
-      // cy.contains('button', 'Close', {timeout: 60000})
         .should('be.visible').click();
       cy.contains('.modal-content').should('not.be.visible');
 
