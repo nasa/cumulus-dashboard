@@ -37,7 +37,7 @@ class Sidebar extends React.Component {
 
               return (
                 <li key={base + i}>
-                  <Link className={classes} to={path} onlyActiveOnIndex>
+                  <Link className={classes} to={path}>
                     {d[0]}
                   </Link>
                 </li>

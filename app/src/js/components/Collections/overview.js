@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
+import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import {
   clearGranulesFilter,
@@ -55,8 +56,8 @@ class CollectionOverview extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { name, version } = this.props.params;
-    if (name !== prevProps.params.name || version !== prevProps.params.version) {
+    const { name, version } = this.props.queryParams;
+    if (name !== prevProps.queryParams.name || version !== prevProps.queryParams.version) {
       this.load();
     }
   }
@@ -73,25 +74,25 @@ class CollectionOverview extends React.Component {
   }
 
   load () {
-    const { name, version } = this.props.params;
+    const { name, version } = this.props.queryParams;
     this.props.dispatch(getCumulusInstanceMetadata());
     this.props.dispatch(getCollection(name, version));
   }
 
   changeCollection (_, collectionId) {
     const { name, version } = collectionNameVersion(collectionId);
-    Object.assign(this.props.params, { name, version });
+    Object.assign(this.props.queryParams, { name, version });
     this.props.dispatch(getCollection(name, version));
   }
 
   generateQuery () {
     return {
-      collectionId: getCollectionId(this.props.params)
+      collectionId: getCollectionId(this.props.queryParams)
     };
   }
 
   deleteMe () {
-    const { name, version } = this.props.params;
+    const { name, version } = this.props.queryParams;
     this.props.dispatch(deleteCollection(name, version));
   }
 
@@ -106,7 +107,7 @@ class CollectionOverview extends React.Component {
   }
 
   errors () {
-    const { name, version } = this.props.params;
+    const { name, version } = this.props.queryParams;
     const collectionId = getCollectionId({name, version});
     return [
       get(this.props.collections.map, [collectionId, 'error']),
@@ -126,8 +127,8 @@ class CollectionOverview extends React.Component {
   }
 
   renderDeleteButton () {
-    const { params, collections } = this.props;
-    const collectionId = getCollectionId(params);
+    const { queryParams, collections } = this.props;
+    const collectionId = getCollectionId(queryParams);
     const deleteStatus = get(collections.deleted, [collectionId, 'status']);
     const hasGranules = get(
       collections.map[collectionId], 'data.stats.total', 0) > 0;
@@ -146,10 +147,17 @@ class CollectionOverview extends React.Component {
   }
 
   render () {
-    const { params, collections, granules: { list, list: { meta } } } = this.props;
-    const collectionName = params.name;
-    const collectionVersion = params.version;
-    const collectionId = getCollectionId(params);
+    const {
+      queryParams,
+      collections,
+      granules: {
+        list,
+        list: { meta }
+      }
+    } = this.props;
+    const collectionName = queryParams.name;
+    const collectionVersion = queryParams.version;
+    const collectionId = getCollectionId(queryParams);
     const sortedCollectionIds = collections.list.data.map(getCollectionId).sort(
       // Compare collection IDs ignoring case
       (id1, id2) => id1.localeCompare(id2, 'en', { sensitivity: 'base' }));
@@ -165,7 +173,7 @@ class CollectionOverview extends React.Component {
           <div className='dropdown__collection form-group__element--right'>
             <SimpleDropdown
               label={'Collection'}
-              value={getCollectionId(params)}
+              value={getCollectionId(queryParams)}
               options={sortedCollectionIds}
               id={'collection-chooser'}
               onChange={this.changeCollection}
@@ -255,14 +263,14 @@ class CollectionOverview extends React.Component {
 }
 
 CollectionOverview.propTypes = {
-  params: PropTypes.object,
+  queryParams: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
   collections: PropTypes.object,
   router: PropTypes.object
 };
 
-export default withRouter(connect(state => ({
+export default withRouter(withQueryParams()(connect(state => ({
   collections: state.collections,
   granules: state.granules
-}))(CollectionOverview));
+}))(CollectionOverview)));
