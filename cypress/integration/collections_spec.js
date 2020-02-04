@@ -15,6 +15,7 @@ describe('Dashboard Collections Page', () => {
   });
 
   describe('When logged in', () => {
+    before(() => cy.visit('/'));
     beforeEach(() => {
       cy.login();
       cy.task('resetState');
@@ -168,29 +169,33 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should delete a collection', () => {
+      cy.visit('/');
       const name = 'https_testcollection';
       const version = '001';
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
-      cy.contains('button', 'Delete').click();
+      cy.get('.DeleteCollection > .button').click();
       // cancel should close modal and remain on page
-      cy.contains('.modal-content .button__contents', 'Cancel Request')
+      cy.contains('.button', 'Cancel Request')
         .should('be.visible').click();
+
       cy.contains('.modal-content').should('not.be.visible');
+
       // click delete again to show modal again
-      cy.contains('button', 'Delete').click();
+      cy.get('.DeleteCollection > .button').click();
       // really delete this time instead of cancelling
-      cy.contains('.modal-content .button__contents', 'Delete Collection')
+      cy.contains('button', 'Delete Collection')
         .should('be.visible').click();
+
       // click close on confirmation modal
-      cy.contains('.modal-content .button__contents', 'Close')
+      cy.contains('.modal-footer > .button', 'Close')
         .should('be.visible').click();
       cy.contains('.modal-content').should('not.be.visible');
 
       // successful delete should cause navigation back to collections list
-      cy.url().should('include', 'collections');
+      cy.url().should('include', 'collections/all');
       cy.contains('.heading--xlarge', 'Collections');
       // verify the collection is now gone
       cy.get('table tbody tr').its('length').should('be.eq', 4);
@@ -198,19 +203,21 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should fail deleting a collection with an associated rule', () => {
+      cy.visit('/');
       const name = 'MOD09GK';
       const version = '006';
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
-      cy.contains('button', 'Delete').click();
-      cy.contains('.modal-content .button__contents', 'Delete Collection')
+      cy.get('.DeleteCollection > .button').click();
+
+      cy.get('.button__deletecollections')
         .should('be.visible').click();
 
       // modal error should be displayed indicating that deletion failed
       cy.get('.modal-content .error__report').should('be.visible');
-      cy.contains('.modal-content .button__contents', 'Close')
+      cy.contains('.modal-footer > .button', 'Close')
         .should('be.visible').click();
       cy.contains('.modal-content').should('not.be.visible');
 
@@ -221,18 +228,19 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should do nothing on cancel when deleting a collection with associated granules', () => {
+      cy.visit('/');
       const name = 'MOD09GQ';
       const version = '006';
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
-      cy.contains('button', 'Delete').click();
-      cy.contains('.modal-content .button__contents', 'Delete Collection')
+      cy.get('.DeleteCollection > .button').click();
+      cy.contains('.button__deletecollections', 'Delete Collection')
         .should('be.visible').click();
 
       // modal should ask if user wants to go to granules page
-      cy.contains('.modal-content .button__contents', 'Cancel Request')
+      cy.contains('.button--cancel', 'Cancel Request')
         .should('be.visible').click();
       cy.contains('.modal-content').should('not.be.visible');
 
@@ -243,18 +251,19 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should go to granules upon request when deleting a collection with associated granules', () => {
+      cy.visit('/');
       const name = 'MOD09GQ';
       const version = '006';
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
-      cy.contains('button', 'Delete').click();
-      cy.contains('.modal-content .button__contents', 'Delete Collection')
+      cy.get('.DeleteCollection > .button').click();
+      cy.contains('.button__deletecollections', 'Delete Collection')
         .should('be.visible').click();
 
       // modal should take user to granules page upon clicking 'Go To Granules'
-      cy.contains('.modal-content .button__contents', 'Go To Granules')
+      cy.contains('.button__gotogranules', 'Go To Granules')
         .should('be.visible').click();
       cy.contains('.modal-content').should('not.be.visible');
       cy.url().should('include', 'granules');
