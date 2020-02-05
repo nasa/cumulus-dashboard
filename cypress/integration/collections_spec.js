@@ -231,13 +231,13 @@ describe('Dashboard Collections Page', () => {
       cy.get('.DeleteCollection > .button').click();
 
       cy.get('.button__deletecollections')
-        .should('be.visible').click();  // TODO [MHS, 2020-02-04] should this wait?
+        .should('be.visible').wait(200).click();
 
       cy.wait('@deleteCollection');
       // modal error should be displayed indicating that deletion failed
       cy.get('.modal-content .error__report').should('be.visible');
       cy.contains('.modal-footer > .button', 'Close')
-        .should('be.visible').click();  // TODO [MHS, 2020-02-04] should this wait 500?
+        .should('be.visible').wait(200).click();
       cy.contains('.modal-content').should('not.be.visible');
 
       // collection should still exist in list
@@ -256,11 +256,11 @@ describe('Dashboard Collections Page', () => {
       // delete collection
       cy.get('.DeleteCollection > .button').click();
       cy.contains('.button__deletecollections', 'Delete Collection')
-        .should('be.visible').click();  // TODO [MHS, 2020-02-04] wait 200?
+        .should('be.visible').wait(200).click();
 
       // modal should ask if user wants to go to granules page
       cy.contains('.button--cancel', 'Cancel Request')
-        .should('be.visible').click();  // TODO [MHS, 2020-02-04]  wait 500?
+        .should('be.visible').wait(200).click();
       cy.contains('.modal-content').should('not.be.visible');
 
       // collection should still exist in list
@@ -279,11 +279,11 @@ describe('Dashboard Collections Page', () => {
       // delete collection
       cy.get('.DeleteCollection > .button').click();
       cy.contains('.button__deletecollections', 'Delete Collection')
-        .should('be.visible').click();  // TODO [MHS, 2020-02-04]  wait 500?
+        .should('be.visible').wait(200).click();
 
       // modal should take user to granules page upon clicking 'Go To Granules'
       cy.contains('.button__gotogranules', 'Go To Granules')
-        .should('be.visible').click();  // TODO [MHS, 2020-02-04] wait 500?
+        .should('be.visible').wait(200).click();
       cy.contains('.modal-content').should('not.be.visible');
       cy.url().should('include', 'granules');
 
