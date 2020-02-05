@@ -6,7 +6,7 @@ module.exports = {
   plugins: [
     precss,
     autoprefixer({
-      overrideBrowserslist: ['> 0.2%', 'last 1 versions']
+      overrideBrowserslist: ['> 0.2%', 'last 2 versions']
     }),
     cssnano
   ]

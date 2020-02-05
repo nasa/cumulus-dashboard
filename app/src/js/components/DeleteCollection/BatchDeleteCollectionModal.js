@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import Button from '../Button/Button';
+// import Button from '../Button/Button';
 
 class BatchDeleteCollectionModal extends React.Component {
   render () {
@@ -27,16 +27,16 @@ class BatchDeleteCollectionModal extends React.Component {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button
+          <button
             className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
             onClick={this.cancel}>
               Cancel Request
-          </Button>
-          <Button
+          </button>
+          <button
             className='button button__deletecollections button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
             onClick={this.confirm}>
               Delete Collections
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
     );

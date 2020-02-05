@@ -59,7 +59,7 @@ class Home extends React.Component {
     this.cancelInterval = interval(() => {
       this.query();
     }, updateInterval, true);
-    const {dispatch} = this.props;
+    const { dispatch } = this.props;
     dispatch(getCumulusInstanceMetadata())
       .then(() => {
         dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
@@ -112,24 +112,26 @@ class Home extends React.Component {
           <div className='heading__wrapper'>
             <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
           </div>
-          <ul id={listId}>
-            {data.map(d => {
-              const value = d[0];
-              return (
-                <li key={d[1]}>
-                  {this.isExternalLink(d[2]) ? (
-                    <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
-                      <span className='num--large'>{value}</span> {d[1]}
-                    </a>
-                  ) : (
-                    <Link id={d[1]} className='overview-num' to={d[2] || '#'}>
-                      <span className='num--large'>{value}</span> {d[1]}
-                    </Link>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+          <div className="overview-num__wrapper-home">
+            <ul id={listId}>
+              {data.map(d => {
+                const value = d[0];
+                return (
+                  <li key={d[1]}>
+                    {this.isExternalLink(d[2]) ? (
+                      <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
+                        <span className='num--large'>{value}</span> {d[1]}
+                      </a>
+                    ) : (
+                      <Link id={d[1]} className='overview-num' to={d[2] || '#'}>
+                        <span className='num--large'>{value}</span> {d[1]}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       </section>
     );

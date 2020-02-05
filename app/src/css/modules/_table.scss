@@ -1,7 +1,7 @@
 .table--wrapper {
   overflow-x: scroll;
-  /*border: 1px solid #ECEAEA;
   border-radius: 8px 8px 0px 0px;
+  /*border: 1px solid #ECEAEA;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.08);*/
 }
 
@@ -38,9 +38,9 @@ table {
         font-size: .86em;
         padding: 1em 2em;
         vertical-align: middle;
-        &:first-of-type {
+        /*&:first-of-type {
           padding: 1em 0 1em 2em;
-        }
+        }*/
       }
       .table__main-asset {
         font-weight: $base-font-semibold;
@@ -97,6 +97,10 @@ table {
   }
 }
 
+.overview-num__wrapper ul, .overview-num__wrapper-home ul{
+  display: inline-block
+}
+
 .overview-num, .overview-num:visited {
   background-color: #fff;
   padding: 1.5em 1em .5em;
@@ -109,7 +113,7 @@ table {
   width: 133px;
   height: 94px;
   margin: .8em 1.5em .8em 0;
-  float: left;
+  /*float: left;*/
   color: $lighter-grey;
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;

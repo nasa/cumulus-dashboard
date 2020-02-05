@@ -150,8 +150,8 @@ a:active {
   }
 }
 
-ul {
-  list-style-type: none;
+li{
+  display: inherit;
 }
 
 /**************************************************
@@ -276,7 +276,6 @@ ul {
   flex-direction: row;
   display: flex;
   width: 100%;
-
 }
 
 .sidebar {

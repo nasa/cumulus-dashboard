@@ -2,6 +2,20 @@
    ========================================================================== */
 @import './utils/variables/variables';
 
+/* Reboot
+   ========================================================================== */
+
+   @import "normalize";
+   @import "reset";
+
+/**
+ * Using Kenneth Ormandy's OpenType features—ligatures, kerning, and
+ * more—to Normalize.css:
+ * https://github.com/kennethormandy/normalize-opentype.css
+ */
+
+ @import "normalize-opentype";
+
 /* Application Styles
    ========================================================================== */
 
