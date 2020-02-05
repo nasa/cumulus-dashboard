@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import {
   clearGranulesFilter,
@@ -56,8 +55,10 @@ class CollectionOverview extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { name, version } = this.props.queryParams;
-    if (name !== prevProps.queryParams.name || version !== prevProps.queryParams.version) {
+    const { name, version } = this.props.match.params;
+    const { name: prevName, version: prevVersion } = prevProps.match.params;
+
+    if (name !== prevName || version !== prevVersion) {
       this.load();
     }
   }
@@ -74,40 +75,37 @@ class CollectionOverview extends React.Component {
   }
 
   load () {
-    const { name, version } = this.props.queryParams;
+    const { name, version } = this.props.match.params;
     this.props.dispatch(getCumulusInstanceMetadata());
     this.props.dispatch(getCollection(name, version));
   }
 
   changeCollection (_, collectionId) {
     const { name, version } = collectionNameVersion(collectionId);
-    Object.assign(this.props.queryParams, { name, version });
-    this.props.dispatch(getCollection(name, version));
+    this.props.history.push(`/collections/collection/${name}/${version}`);
   }
 
   generateQuery () {
     return {
-      collectionId: getCollectionId(this.props.queryParams)
+      collectionId: getCollectionId(this.props.match.params)
     };
   }
 
   deleteMe () {
-    const { name, version } = this.props.queryParams;
+    const { name, version } = this.props.match.params;
     this.props.dispatch(deleteCollection(name, version));
   }
 
   navigateBack () {
-    const { router } = this.props;
-    router.push('/collections/all');
+    this.props.history.push('/collections/all');
   }
 
   gotoGranules () {
-    const { router } = this.props;
-    router.push('/granules');
+    this.props.history.push('/granules');
   }
 
   errors () {
-    const { name, version } = this.props.queryParams;
+    const { name, version } = this.props.match.params;
     const collectionId = getCollectionId({name, version});
     return [
       get(this.props.collections.map, [collectionId, 'error']),
@@ -127,8 +125,8 @@ class CollectionOverview extends React.Component {
   }
 
   renderDeleteButton () {
-    const { queryParams, collections } = this.props;
-    const collectionId = getCollectionId(queryParams);
+    const { match: { params }, collections } = this.props;
+    const collectionId = getCollectionId(params);
     const deleteStatus = get(collections.deleted, [collectionId, 'status']);
     const hasGranules = get(
       collections.map[collectionId], 'data.stats.total', 0) > 0;
@@ -148,16 +146,20 @@ class CollectionOverview extends React.Component {
 
   render () {
     const {
-      queryParams,
+      match: { params },
       collections,
       granules: {
         list,
         list: { meta }
       }
     } = this.props;
-    const collectionName = queryParams.name;
-    const collectionVersion = queryParams.version;
-    const collectionId = getCollectionId(queryParams);
+
+    console.log('CollectionOverview props: ', this.props);
+    console.log('CollectionOverview params: ', params);
+    console.log('CollectionOverview collections: ', collections);
+    const collectionName = params.name;
+    const collectionVersion = params.version;
+    const collectionId = getCollectionId(params);
     const sortedCollectionIds = collections.list.data.map(getCollectionId).sort(
       // Compare collection IDs ignoring case
       (id1, id2) => id1.localeCompare(id2, 'en', { sensitivity: 'base' }));
@@ -173,7 +175,7 @@ class CollectionOverview extends React.Component {
           <div className='dropdown__collection form-group__element--right'>
             <SimpleDropdown
               label={'Collection'}
-              value={getCollectionId(queryParams)}
+              value={getCollectionId(params)}
               options={sortedCollectionIds}
               id={'collection-chooser'}
               onChange={this.changeCollection}
@@ -263,14 +265,15 @@ class CollectionOverview extends React.Component {
 }
 
 CollectionOverview.propTypes = {
-  queryParams: PropTypes.object,
+  match: PropTypes.object,
+  history: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
   collections: PropTypes.object,
   router: PropTypes.object
 };
 
-export default withRouter(withQueryParams()(connect(state => ({
+export default withRouter(connect(state => ({
   collections: state.collections,
   granules: state.granules
-}))(CollectionOverview)));
+}))(CollectionOverview));
