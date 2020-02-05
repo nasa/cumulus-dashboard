@@ -6,7 +6,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 // const nodeExternals = require('webpack-node-externals');
 
 const config = require('./app/src/js/config');
-console.log(config);
 
 const CommonConfig = {
   target: 'web',

@@ -20,8 +20,8 @@
   },
   "scripts": {
     "audit-ci": "audit-ci --high -p yarn",
-    "start": "NODE_ENV=development webpack-dev-server --open --config webpack.dev.js",
-    "start-hot": "NODE_ENV=development webpack-dev-server --open --hot --config webpack.dev.js",
+    "serve": "NODE_ENV=development webpack-dev-server --open --config webpack.dev.js",
+    "serve-hot": "NODE_ENV=development webpack-dev-server --open --hot --config webpack.dev.js",
     "build": "NODE_ENV=production webpack --config webpack.prod.js",
     "watch": "webpack --watch",
     "lint": "eslint app/src/js/ --ext .js",
