@@ -57,7 +57,7 @@ jobs:
             npm run validation-tests
 
       - store_artifacts:
-          path: /home/cypress/screenshots/
+          path: /home/cypress/screenshots
 
   deploy:
     machine: true
