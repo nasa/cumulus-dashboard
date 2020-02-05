@@ -274,7 +274,7 @@ Serve the cumulus API (separate terminal)
 
 Serve the dashboard web application (another terminal)
 ```bash
-  $ npm run serve
+  $ [APIROOT=http://localhost:5001] npm run serve
 ```
 
 If you're just testing dashboard code, you can generally run all of the above commands as a single docker-compose stack.
