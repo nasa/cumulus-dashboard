@@ -15,13 +15,11 @@ describe('Dashboard Collections Page', () => {
   });
 
   describe('When logged in', () => {
-    before(() => {
-      cy.visit('/');
-      cy.task('resetState');
-    });
+    before(() => cy.visit('/'));
 
     beforeEach(() => {
       cy.login();
+      cy.task('resetState');
       cy.visit('/');
       cy.server();
       cy.route('POST', '/collections').as('postCollection');
@@ -106,7 +104,6 @@ describe('Dashboard Collections Page', () => {
       cy.hash().should('eq', '#/collections/all');
       cy.contains('table tbody tr a', name)
         .should('have.attr', 'href', `#/collections/collection/${name}/${version}`);
-      cy.task('resetState');
     });
 
     it('should select a different collection', () => {
@@ -220,7 +217,6 @@ describe('Dashboard Collections Page', () => {
             {timeout: 25000}).should(existOrNotExist);
         });
       cy.get('table tbody tr').its('length').should('be.eq', 4);
-      cy.task('resetState');
     });
 
     it('should fail deleting a collection with an associated rule', () => {
