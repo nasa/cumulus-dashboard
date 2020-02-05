@@ -65,15 +65,14 @@ The Cumulus Dashboard can be built inside of a Docker container, without needing
 
 The compiled files will be placed in the `dist` directory.
 
-### Building locally
+### <a name=buildlocally></a>Building locally
 
 To build the dashboard:
 
 ```bash
   $ nvm use
-  $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com npm run build
+  $ [DAAC_NAME=LPDAAC] [STAGE=production] [HIDE_PDR=false] [LABELS=daac] APIROOT=https://myapi.com npm run build
 ```
-
 **NOTE**: Only the `APIROOT` environment variable is required.
 
 The compiled files will be placed in the `dist` directory.
@@ -107,38 +106,45 @@ To run the dashboard locally against a running Cumulus instance:
 
 #### local API server
 
-For **development** and **testing** purposes, you can run the Cumulus API locally. This requires `docker-compose` in order to stand up a docker app that serves the Cumulus API locally.  Note that there are a number of commands that will stand up different portions of the stack.  Look in the `/localAPI/` directory for `docker-compose` files to see all of the available options. Below are described each of the provided commands for running the dashboard and Cumulus API locally.  *Note: These `docker-compose` commands do not build distributable containers, but are a provided as testing conveniences.  The docker-compose[-\*].yml files show that they work by linking your local directories into the container.*
+For **development** and **testing** purposes, you can run a Cumulus API locally. This requires `docker-compose` in order to stand up the docker containers that serve Cumulus API.  There are a number of commands that will stand up different portions of the stack.  See the [Docker Service Diagram](#dockerdiagram) and examine the `docker-compose*.yml` file in the `/localAPI/` directory to see all of the possible combinations. Described below are each of the provided commands for running the dashboard and Cumulus API locally.
 
-In order to run the Cumulus API locally you must run at least the containers that provide LocalStack and Elasticsearch.
+*NOTE: These `docker-compose` commands do not build distributable containers, but are a provided as testing conveniences.  The docker-compose[-\*].yml files show that they work by linking your local directories into the container.*
+
+In order to run the Cumulus API locally you must first [build the dashboard](#buildlocally) and then run the containers that provide LocalStack and Elasticsearch services.
+
 These are started and stopped with the commands:
 ```bash
   $ npm run start-localstack
   $ npm run stop-localstack
 ```
-After running this, you can run a cumulus API locally in a terminal window `npm run serve-api`
+After these containers are running, you can start a cumulus API locally in a terminal window `npm run serve-api`, the dashboard in another window. `[APIROOT=http://localhost:5001] npm run serve` and finally cypress in a third window. `npm run cypress`.
 
-
-If you just want to run the Cumulus API, which leaves running the dashboard up to you, just run the `cumulusapi`
-
-The cumulusapi docker app is started:
-```bash
-  $ npm run start-cumulusapi
-```
-
-Once the docker app is running, If you would like some sample data (the same data that is used during integration tests), you can seed the database. This will load sample data into the application.
+Once the docker app is running, If you would like to see sample data you can seed the database. This will load the same sample data into the application that is used during cypress testing.
 ```bash
   $ npm run seed-database
 ```
 
-You can run the dashboard locally (without docker):
-```bash
-  $ npm run serve
-```
+If you prefer to stand up more of the stack in docker containers, you can include the cumulus api in the docker-compose stack. To run the Cumulus API in a docker container, (which still leaves running the dashboard and cypress up to you), just run the `cumulusapi` service.
 
-After testing, you can stop the docker backend.
+The cumulusapi docker service is started and stopped:
 ```bash
+  $ npm run start-cumulusapi
   $ npm run stop-cumulusapi
 ```
+Then you can run the dashboard locally (without docker) `[APIROOT=http://localhost:5001] npm run serve` and open cypress tests `npm run cypress`.
+
+
+The docker compose stack also includes a command to let a developer start all development containers with a single command.
+
+Bring up and down the entire stack (the localAPI and the dashboard) with:
+```bash
+  $ npm run start-dashboard
+  $ npm run stop-dashboard
+```
+This runs everything, the backing Localstack and Elasticsearch containers, the local Cumulus API and dashboard.  Edits to your code will be reflected in the running dashboard.  You can run cypress tests still with `npm run cypress`.
+
+
+##### Troubleshooting docker containers.
 
 If something is not running correctly, or you're just interested, you can view the logs with a helper script, this will print out logs from each of the running docker containers.
 ```bash
@@ -146,31 +152,22 @@ If something is not running correctly, or you're just interested, you can view t
 ```
 This can be helpful in debugging problems with the docker application.
 
+A common error is running the dashboard containers when the cumulus core unit-test-stack is running on your machine.  Just stop that stack and restart the dashboard stack to resolve.
+```sh
+ERROR: for localapi_shim_1  Cannot start service shim: driver failed programming external connectivity on endpoint localapi_shim_1 (7105603a4ff7fbb6f92211086f617bfab45d78cff47232793d152a244eb16feb): Bind for 0.0.0.0:9200 failed: port is already allocated
 
-#### Alternative localAPI scripts.
-
-Additional commands are provided that will run both the localAPI as well as your dashboard, allowing you to develop and run tests with a single command.
-
-Bring up the entire stack (the localAPI and the dashboard) with:
-```bash
-  $ npm run start-dashboard
-```
-This runs everything including the local Cumulus API and dashboard.  Edits to your code will be reflected in the running dashboard.
-
-
-when you're finished with development and testing, bring down the stack
-```bash
-  $ npm run stop-dashboard
+ERROR: for shim  Cannot start service shim: driver failed programming external connectivity on endpoint localapi_shim_1 (7105603a4ff7fbb6f92211086f617bfab45d78cff47232793d152a244eb16feb): Bind for 0.0.0.0:9200 failed: port is already allocated
 ```
 
-#### Local end to end testing.
+#### Fully contained cypress testing.
 
 You can run all of the cypress tests locally that circleCI runs with a single command:
 ```bash
-  $ npm run e2e
+  $ npm run e2e-tests
 ```
+This will stands up the entire stack as well as begin the e2e service that will run all cypress commands and report an exit code for their success or failure.  This is primarily used for CircleCI, but can be useful to developers.
 
-and the validation tests can be run
+Likewise the validation tests can be run with this command:
 ```bash
   $ npm run validation-tests
 ```
