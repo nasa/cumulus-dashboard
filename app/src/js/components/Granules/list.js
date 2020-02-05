@@ -182,6 +182,8 @@ AllGranules.propTypes = {
   workflowOptions: PropTypes.array
 };
 
+export {listGranules};
+
 export default withRouter(connect(state => ({
   logs: state.logs,
   granules: state.granules,

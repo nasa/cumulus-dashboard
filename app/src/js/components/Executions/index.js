@@ -1,8 +1,11 @@
 'use strict';
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
+import ExecutionOverview from './overview';
+import ExecutionStatus from './execution-status';
+import ExecutionLogs from './execution-logs';
 
 class Executions extends React.Component {
   render () {
@@ -20,7 +23,11 @@ class Executions extends React.Component {
               params={this.props.params}
             />
             <div className='page__content--shortened'>
-              {this.props.children}
+              <Switch>
+                <Route exact path='/executions' component={ExecutionOverview} />
+                <Route path='/executions/execution/:executionArn' component={ExecutionStatus} />
+                <Route path='/executions/execution/:executionName/logs' component={ExecutionLogs} />
+              </Switch>
             </div>
           </div>
         </div>

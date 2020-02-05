@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 import { interval, getCount } from '../../actions';
 import _config from '../../config';
 import { strings } from '../locale';
+import AllGranules from './list';
+import GranuleOverview from './granule';
+import GranulesOverview from './overview';
 
 const { updateInterval } = _config;
 
@@ -49,7 +52,14 @@ class Granules extends React.Component {
               count={count}
             />
             <div className='page__content--shortened'>
-              {this.props.children}
+              <Switch>
+                <Route exact path='/granules' component={GranulesOverview} />
+                <Route path='/granules/granule/:granuleId' component={GranuleOverview} />
+                <Route path='/granules/granule/:granuleId/completed' component={AllGranules} />
+                <Route path='/granules/granule/:granuleId/processing' component={AllGranules} />
+                <Route path='/granules/granule/:granuleId/failed' component={AllGranules} />
+                <Redirect exact from='/granules/running' to='/granules/processing' />
+              </Switch>
             </div>
           </div>
         </div>
