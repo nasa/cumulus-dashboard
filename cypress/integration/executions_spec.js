@@ -10,6 +10,8 @@ describe('Dashboard Executions Page', () => {
   });
 
   describe('When logged in', () => {
+    before(() => cy.visit('/'));
+
     beforeEach(() => {
       cy.login();
       cy.task('resetState');
@@ -71,6 +73,7 @@ describe('Dashboard Executions Page', () => {
     });
 
     it('should show a single execution', () => {
+      cy.visit('/');
       cy.contains('nav li a', 'Executions').as('executions');
       cy.get('@executions').should('have.attr', 'href', '#/executions');
       cy.get('@executions').click();

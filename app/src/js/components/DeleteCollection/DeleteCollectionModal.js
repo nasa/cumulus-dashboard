@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
-import Button from '../Button/Button';
+// import Button from '../Button/Button';
 import {
   collectionName as collectionLabelForId,
   deleteText
@@ -46,20 +46,20 @@ class DeleteCollectionModal extends React.Component {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button
+          <button
             className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
             label="cancel"
             onClick={this.handleCancel}
           >
             Cancel Request
-          </Button>
-          <Button
+          </button>
+          <button
             className='button button__deletecollections button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
             label="confirm"
             onClick={this.handleConfirm}
           >
             Delete Collection
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
     );
