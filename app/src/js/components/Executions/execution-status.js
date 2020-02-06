@@ -30,7 +30,7 @@ class ExecutionStatus extends React.Component {
 
   componentDidMount () {
     const { dispatch } = this.props;
-    const { executionArn } = this.props.params;
+    const { executionArn } = this.props.match.params;
     dispatch(getExecutionStatus(executionArn));
   }
 
@@ -189,7 +189,7 @@ class ExecutionStatus extends React.Component {
 
 ExecutionStatus.propTypes = {
   executionStatus: PropTypes.object,
-  params: PropTypes.object,
+  match: PropTypes.object,
   dispatch: PropTypes.func,
   router: PropTypes.object
 };
