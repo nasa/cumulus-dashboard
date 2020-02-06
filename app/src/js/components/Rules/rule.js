@@ -48,12 +48,12 @@ class Rule extends React.Component {
   }
 
   componentDidMount () {
-    this.load(this.props.params.ruleName);
+    this.load(this.props.match.params.ruleName);
   }
 
   componentDidUpdate (prevProps) {
-    if (this.props.params.ruleName !== prevProps.params.ruleName) {
-      this.load(this.props.params.ruleName);
+    if (this.props.match.params.ruleName !== prevProps.match.params.ruleName) {
+      this.load(this.props.match.params.ruleName);
     }
   }
 
@@ -62,22 +62,22 @@ class Rule extends React.Component {
   }
 
   delete () {
-    const { ruleName } = this.props.params;
+    const { ruleName } = this.props.match.params;
     this.props.dispatch(deleteRule(ruleName));
   }
 
   enable () {
-    const { ruleName } = this.props.params;
+    const { ruleName } = this.props.match.params;
     this.props.dispatch(enableRule(this.props.rules.map[ruleName].data));
   }
 
   disable () {
-    const { ruleName } = this.props.params;
+    const { ruleName } = this.props.match.params;
     this.props.dispatch(disableRule(this.props.rules.map[ruleName].data));
   }
 
   rerun () {
-    const { ruleName } = this.props.params;
+    const { ruleName } = this.props.match.params;
     this.props.dispatch(rerunRule(this.props.rules.map[ruleName].data));
   }
 
@@ -86,12 +86,12 @@ class Rule extends React.Component {
   }
 
   reload () {
-    const { ruleName } = this.props.params;
+    const { ruleName } = this.props.match.params;
     this.load(ruleName);
   }
 
   errors () {
-    const { ruleName } = this.props.params;
+    const { ruleName } = this.props.match.params;
     const { rules } = this.props;
     return [
       get(rules.map, [ruleName, 'error']),
@@ -102,8 +102,7 @@ class Rule extends React.Component {
   }
 
   render () {
-    const { params, rules } = this.props;
-    const { ruleName } = params;
+    const { match: { params: { ruleName } }, rules } = this.props;
     const record = rules.map[ruleName];
 
     if (!record || (record.inflight && !record.data)) {
@@ -177,7 +176,7 @@ class Rule extends React.Component {
 }
 
 Rule.propTypes = {
-  params: PropTypes.object,
+  match: PropTypes.object,
   router: PropTypes.object,
   dispatch: PropTypes.func,
   rules: PropTypes.object

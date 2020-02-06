@@ -93,12 +93,12 @@ export const granuleLink = function (granuleId) {
 
 export const pdrLink = function (pdrName) {
   if (!pdrName) return nullValue;
-  return <Link to={`pdrs/pdr/${pdrName}`}>{pdrName}</Link>;
+  return <Link to={`/pdrs/pdr/${pdrName}`}>{pdrName}</Link>;
 };
 
 export const providerLink = function (provider) {
   if (!provider) return nullValue;
-  return <Link to={`providers/provider/${provider}`}>{provider}</Link>;
+  return <Link to={`/providers/provider/${provider}`}>{provider}</Link>;
 };
 
 export const bool = function (bool) {
