@@ -20,7 +20,9 @@ export const initialState = {
   list: {
     data: [],
     count: {},
+    meta: {},
     params: {},
+    internal: {},
     inflight: false,
     error: false
   },
@@ -33,7 +35,7 @@ export default function reducer (state = initialState, action) {
   switch (action.type) {
     case OPERATIONS:
       set(state, ['list', 'data'], data.results);
-      set(state, ['list', 'count'], data.meta.count);
+      set(state, ['list', 'meta'], assignDate(data.meta));
       set(state, ['list', 'inflight'], false);
       set(state, ['list', 'error'], false);
       break;
@@ -67,10 +69,10 @@ export default function reducer (state = initialState, action) {
       break;
 
     case SEARCH_OPERATIONS:
-      set(state, ['list', 'params', 'prefix'], action.prefix);
+      set(state, ['list', 'internal', 'prefix'], action.prefix);
       break;
     case CLEAR_OPERATIONS_SEARCH:
-      set(state, ['list', 'params', 'prefix'], null);
+      set(state, ['list', 'internal', 'prefix'], null);
       break;
   }
   return state;
