@@ -19,14 +19,14 @@ describe('Dashboard authentication', () => {
     cy.window().its('appStore').then((store) => {
       store.dispatch({
         type: SET_TOKEN,
-        token: 'fake-token'
+        token: 'this-is-a-fake-token'
       });
 
       store.dispatch(listGranules());
 
       // token should not have been updated
       expect(store.getState().api.tokens.inflight).to.eq(false);
-      expect(store.getState().api.tokens.token).to.eq('fake-token');
+      expect(store.getState().api.tokens.token).to.eq('this-is-a-fake-token');
     });
 
     cy.url().should('not.include', '/#/auth');

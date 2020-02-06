@@ -13,17 +13,12 @@ describe('Dashboard Executions Page', () => {
     before(() => cy.visit('/'));
 
     beforeEach(() => {
+      cy.task('resetState');
       cy.login();
-      cy.task('resetState');
-    });
-
-    after(() => {
-      cy.task('resetState');
-    });
-
-    it('should display a link to view executions', () => {
       cy.visit('/');
+    });
 
+    it('should visit the link to view executions', () => {
       cy.contains('nav li a', 'Executions').as('executions');
       cy.get('@executions').should('have.attr', 'href', '#/executions');
       cy.get('@executions').click();
@@ -34,24 +29,21 @@ describe('Dashboard Executions Page', () => {
 
       // shows a summary count of completed and failed executions
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', '3 Completed')
-        .next().contains('li', '1 Failed')
-        .next().contains('li', '1 Running');
+        .first().contains('li', '10 Completed')
+        .next().contains('li', '3 Failed')
+        .next().contains('li', '3 Running');
+    });
 
-      // shows a list of executions with IDs and status
-      cy.getFakeApiFixture('executions').as('executionStatus');
+    it('should display the correct executions with Ids and status ', () => {
+      cy.visit('#/executions');
+      cy.getFakeApiFixture('executions').as('executionsFixture');
+      cy.get('@executionsFixture').its('results')
+        .each((execution) => {
+          const visiblePart = execution['name'].split('-').slice(0, 3).join('-');
+          cy.contains(visiblePart);
+          cy.get(`[data-value="${execution['name']}"]`).children().as('columns');
+          cy.get('@columns').its('length').should('be.eq', 6);
 
-      cy.get('table tbody tr').as('list');
-      cy.get('@list').its('length').should('be.eq', 6);
-
-      // compare data in each row with the data from fixture
-      cy.get('@list').each(($el, index, $list) => {
-         // columns in the row
-        cy.wrap($el).children().as('columns');
-        cy.get('@columns').its('length').should('be.eq', 6);
-
-        cy.get('@executionStatus').its('results').then((executions) => {
-          const execution = executions[index];
           cy.get('@columns').eq(0).children('a')
             .should('have.attr', 'href')
             .and('include', execution.arn);
@@ -69,20 +61,31 @@ describe('Dashboard Executions Page', () => {
           cy.get('@columns').eq(5).invoke('text')
             .should('be.eq', execution.collectionId);
         });
-      });
+
+      cy.get('table tbody tr').as('list');
+      cy.get('@list').its('length').should('be.eq', 6);
     });
 
     it('should show a single execution', () => {
-      cy.visit('/');
+      const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
+      const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
+      const stateMachine = 'arn:aws:states:us-east-1:012345678901:stateMachine:test-stack-HelloWorldWorkflow';
+
+      cy.server();
+      cy.visit('#/executions');
+      cy.route({
+        method: 'GET',
+        url: `http://localhost:5001/executions/status/${executionArn}`,
+        response: 'fixture:valid-execution.json',
+        status: 200
+      });
+
       cy.contains('nav li a', 'Executions').as('executions');
       cy.get('@executions').should('have.attr', 'href', '#/executions');
       cy.get('@executions').click();
 
       cy.url().should('include', 'executions');
       cy.contains('.heading--xlarge', 'Executions');
-      const executionName = '50eaad71-bba8-4376-83d7-bb9cc1309b92';
-      const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:50eaad71-bba8-4376-83d7-bb9cc1309b92';
-      const stateMachine = 'arn:aws:states:us-east-1:596205514787:stateMachine:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf';
       cy.get('table tbody tr td[class=table__main-asset]').within(() => {
         cy.get(`a[title=${executionName}]`).click({force: true});
       });
@@ -90,22 +93,19 @@ describe('Dashboard Executions Page', () => {
       cy.contains('.heading--large', 'Execution');
       cy.contains('.heading--medium', 'Visual workflow');
 
-      const startMatch = fullDate('2018-11-12T20:05:10.401Z');
-      const endMatch = fullDate('2018-11-12T20:05:31.536Z');
-
       cy.get('.status--process')
-      .within(() => {
-        cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
-        cy.contains('Execution Arn:').next().should('have.text', executionArn);
-        cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
-        cy.contains('Started:').next().should('have.text', startMatch);
-        cy.contains('Ended:').next().should('have.text', endMatch);
-      });
+        .within(() => {
+          cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
+          cy.contains('Execution Arn:').next().should('have.text', executionArn);
+          cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
+          cy.contains('Started:').next().should('have.text', fullDate('2019-12-13T15:16:46.753Z'));
+          cy.contains('Ended:').next().should('have.text', fullDate('2019-12-13T15:16:52.582Z'));
+        });
+
       cy.get('table tbody tr').as('events');
       cy.get('@events').its('length').should('be.eq', 7);
 
-      cy.getFakeApiFixture(`executions/status/${executionName}`).as('executionStatus');
-
+      cy.getFixture('valid-execution').as('executionStatus');
       cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
         cy.get('@events').each(($el, index, $list) => {
           let timestamp = fullDate(events[index].timestamp);
@@ -127,25 +127,38 @@ describe('Dashboard Executions Page', () => {
     });
 
     it('should show logs for a single execution', () => {
-      const executionName = '50eaad71-bba8-4376-83d7-bb9cc1309b92';
-      const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:50eaad71-bba8-4376-83d7-bb9cc1309b92';
+      const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
+      const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
 
-      cy.getFakeApiFixture(`executions/logs/${executionName}`).as('executionLogs');
+      cy.server();
+      cy.route({
+        method: 'GET',
+        url: `http://localhost:5001/executions/status/${executionArn}`,
+        response: 'fixture:valid-execution.json',
+        status: 200
+      });
+      cy.route({
+        method: 'GET',
+        url: `http://localhost:5001/logs/${executionName}`,
+        response: 'fixture:execution-logs.json',
+        status: 200
+      });
 
       cy.visit(`/#/executions/execution/${executionArn}`);
       cy.contains('.heading--large', 'Execution');
 
       cy.get('.status--process')
-      .within(() => {
-        cy.contains('Logs:').next()
-          .within(() => {
-            cy.get('a').should('have.attr', 'href', `#/executions/execution/${executionName}/logs`).click();
-          });
-      });
+        .within(() => {
+          cy.contains('Logs:').next()
+            .within(() => {
+              cy.get('a').should('have.attr', 'href', `#/executions/execution/${executionName}/logs`).click();
+            });
+        });
 
       cy.contains('.heading--large', `Logs for Execution ${executionName}`);
       cy.get('div[class=status--process]').as('sections');
-      cy.get('@executionLogs').its('meta').then((meta) => {
+
+      cy.getFixture('execution-logs').its('meta').then((meta) => {
         cy.get('@sections').eq(0).within(() => {
           cy.get('h2').should('have.text', 'Execution Details:');
           cy.get('pre')
@@ -155,7 +168,7 @@ describe('Dashboard Executions Page', () => {
             .contains(meta.count);
         });
       });
-      cy.get('@executionLogs').its('results').then((logs) => {
+      cy.getFixture('execution-logs').its('results').then((logs) => {
         cy.get('@sections').eq(1).within(() => {
           cy.get('pre').contains(JSON.stringify(logs[0].message));
         });
@@ -164,8 +177,17 @@ describe('Dashboard Executions Page', () => {
 
     it('should show an execution with limited information', () => {
       const executionName = 'b313e777-d28a-435b-a0dd-f1fad08116t1';
-      const executionArn = 'arn:aws:states:us-east-1:596205514787:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
-      const stateMachine = 'arn:aws:states:us-east-1:596205514787:stateMachine:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo';
+      const executionArn = 'arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
+      const stateMachine = 'arn:aws:states:us-east-1:123456789012:stateMachine:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo';
+
+      cy.server();
+      cy.route({
+        method: 'GET',
+        url: `http://localhost:5001/logs/${executionName}`,
+        response: 'fixture:limited-execution.json',
+        status: 200
+      });
+
       cy.visit(`/#/executions/execution/${executionArn}`);
 
       cy.contains('.heading--large', 'Execution');
@@ -173,8 +195,6 @@ describe('Dashboard Executions Page', () => {
 
       const startMatch = fullDate('2018-12-06T19:18:11.174Z');
       const endMatch = fullDate('2018-12-06T19:18:41.145Z');
-
-      cy.getFakeApiFixture(`executions/status/${executionName}`).as('executionStatus');
 
       cy.get('.status--process')
         .within(() => {
@@ -184,20 +204,24 @@ describe('Dashboard Executions Page', () => {
           cy.contains('Started:').next().should('have.text', startMatch);
           cy.contains('Ended:').next().should('have.text', endMatch);
 
-          cy.get('@executionStatus').its('execution').then((execution) => {
-            cy.contains('Input:').next().find('pre').then(($content) =>
-              // parse and stringify JSON string to get the same format as in the fixture
-              expect(JSON.stringify(JSON.parse($content.text()))).to.eq(execution.input));
+          cy.getFakeApiFixture('executions').as('executionsFixture');
+          cy.get('@executionsFixture').its('results')
+            .each((execution) => {
+              if (execution.name === executionName) {
+                cy.contains('Input:').next().find('pre')
+                  .then(($content) =>
+                        expect(JSON.parse($content.text())).to.deep.equal(execution.originalPayload));
+                cy.contains('Input:').next().contains('.Collapsible', 'Show Input').click('topLeft');
+                cy.contains('Input:').next().contains('.Collapsible', 'Hide Input');
 
-            cy.contains('Input:').next().contains('.Collapsible', 'Show Input').click('topLeft');
-            cy.contains('Input:').next().contains('.Collapsible', 'Hide Input');
+                cy.contains('Output:').next().find('pre')
+                  .then(($content) =>
+                        expect(JSON.parse($content.text())).to.deep.equal(execution.finalPayload));
 
-            cy.contains('Output:').next().find('pre').then(($content) =>
-              expect(JSON.stringify(JSON.parse($content.text()))).to.eq(execution.output));
-
-            cy.contains('Output:').next().contains('.Collapsible', 'Show Output').click('topLeft');
-            cy.contains('Output:').next().contains('.Collapsible', 'Hide Output');
-          });
+                cy.contains('Output:').next().contains('.Collapsible', 'Show Output').click('topLeft');
+                cy.contains('Output:').next().contains('.Collapsible', 'Hide Output');
+              }
+            });
 
           cy.contains('Logs:').next()
             .within(() => {
