@@ -55,9 +55,9 @@ class Granules extends React.Component {
               <Switch>
                 <Route exact path='/granules' component={GranulesOverview} />
                 <Route path='/granules/granule/:granuleId' component={GranuleOverview} />
-                <Route path='/granules/granule/:granuleId/completed' component={AllGranules} />
-                <Route path='/granules/granule/:granuleId/processing' component={AllGranules} />
-                <Route path='/granules/granule/:granuleId/failed' component={AllGranules} />
+                <Route path='/granules/completed' component={AllGranules} />
+                <Route path='/granules/processing' component={AllGranules} />
+                <Route path='/granules/failed' component={AllGranules} />
                 <Redirect exact from='/granules/running' to='/granules/processing' />
               </Switch>
             </div>
