@@ -32,8 +32,8 @@ export default function reducer (state = initialState, action) {
   const { data } = action;
   switch (action.type) {
     case OPERATIONS:
-      set(state, ['list', 'data'], data.Items);
-      set(state, ['list', 'count'], data.Count);
+      set(state, ['list', 'data'], data.results);
+      set(state, ['list', 'count'], data.meta.count);
       set(state, ['list', 'inflight'], false);
       set(state, ['list', 'error'], false);
       break;
