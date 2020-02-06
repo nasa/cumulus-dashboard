@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- **CUMULUS-1459**
+  - Updates Operations page to receive async operations list from Elasticsearch.  
+
 - **CUMULUS-1363**
   - Use `npm` instead of `yarn`
   - Update packages to fix security vulnerabilities
