@@ -45,7 +45,7 @@ class ProviderOverview extends React.Component {
   }
 
   componentDidMount () {
-    const { providerId } = this.props.params;
+    const { providerId } = this.props.match.params;
     const immediate = !this.props.providers.map[providerId];
     this.reload(immediate);
     this.props.dispatch(listCollections({
@@ -61,7 +61,7 @@ class ProviderOverview extends React.Component {
 
   reload (immediate, timeout) {
     timeout = timeout || updateInterval;
-    const providerId = this.props.params.providerId;
+    const providerId = this.props.match.params.providerId;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
     this.cancelInterval = interval(() => dispatch(getProvider(providerId)), timeout, immediate);
@@ -73,7 +73,7 @@ class ProviderOverview extends React.Component {
   }
 
   delete () {
-    const { providerId } = this.props.params;
+    const { providerId } = this.props.match.params;
     const provider = this.props.providers.map[providerId].data;
     if (!provider.published) {
       this.props.dispatch(deleteProvider(providerId));
@@ -81,7 +81,7 @@ class ProviderOverview extends React.Component {
   }
 
   errors () {
-    const providerId = this.props.params.providerId;
+    const providerId = this.props.match.params.providerId;
     return [
       get(this.props.providers.map, [providerId, 'error']),
       get(this.props.providers.deleted, [providerId, 'error'])
@@ -89,7 +89,7 @@ class ProviderOverview extends React.Component {
   }
 
   render () {
-    const providerId = this.props.params.providerId;
+    const providerId = this.props.match.params.providerId;
     const record = this.props.providers.map[providerId];
 
     if (!record || (record.inflight && !record.data)) {
@@ -146,7 +146,7 @@ class ProviderOverview extends React.Component {
 }
 
 ProviderOverview.propTypes = {
-  params: PropTypes.object,
+  match: PropTypes.object,
   dispatch: PropTypes.func,
   providers: PropTypes.object,
   logs: PropTypes.object,
