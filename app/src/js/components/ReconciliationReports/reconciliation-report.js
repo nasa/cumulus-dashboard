@@ -61,7 +61,7 @@ class ReconciliationReport extends React.Component {
   }
 
   componentDidMount () {
-    const { reconciliationReportName } = this.props.params;
+    const { reconciliationReportName } = this.props.match.params;
     const immediate = !this.props.reconciliationReports.map[reconciliationReportName];
     this.reload(immediate);
   }
@@ -71,7 +71,7 @@ class ReconciliationReport extends React.Component {
   }
 
   reload (immediate) {
-    const { reconciliationReportName } = this.props.params;
+    const { reconciliationReportName } = this.props.match.params;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
     this.cancelInterval = interval(() => dispatch(getReconciliationReport(reconciliationReportName)), updateInterval, immediate);
@@ -140,7 +140,7 @@ class ReconciliationReport extends React.Component {
 
   render () {
     const { reconciliationReports } = this.props;
-    const { reconciliationReportName } = this.props.params;
+    const { reconciliationReportName } = this.props.match.params;
 
     const record = reconciliationReports.map[reconciliationReportName];
 
@@ -287,7 +287,7 @@ class ReconciliationReport extends React.Component {
 ReconciliationReport.propTypes = {
   reconciliationReports: PropTypes.object,
   dispatch: PropTypes.func,
-  params: PropTypes.object,
+  match: PropTypes.object,
   router: PropTypes.object
 };
 
