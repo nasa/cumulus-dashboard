@@ -19,8 +19,8 @@ class Workflow extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { workflowName } = this.props.params;
-    if (workflowName !== prevProps.params.workflowName) {
+    const { workflowName } = this.props.match.params;
+    if (workflowName !== prevProps.match.params.workflowName) {
       this.get();
     }
   }
@@ -53,8 +53,7 @@ class Workflow extends React.Component {
   }
 
   render () {
-    const { workflows, params } = this.props;
-    const { workflowName } = params;
+    const { workflows, match: { params: { workflowName } } } = this.props;
     const data = workflows.map[workflowName];
     if (!data) {
       return <Loading />;
@@ -90,7 +89,7 @@ class Workflow extends React.Component {
 }
 
 Workflow.propTypes = {
-  params: PropTypes.object,
+  match: PropTypes.object,
   workflows: PropTypes.object,
   dispatch: PropTypes.func
 };
