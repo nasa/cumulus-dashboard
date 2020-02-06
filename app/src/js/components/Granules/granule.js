@@ -86,7 +86,7 @@ class GranuleOverview extends React.Component {
   }
 
   componentDidMount () {
-    const { granuleId } = this.props.params;
+    const { granuleId } = this.props.match.params;
     this.cancelInterval = interval(this.queryWorkflows, updateInterval, true);
 
     if (this.props.skipReloadOnMount) return;
@@ -101,7 +101,7 @@ class GranuleOverview extends React.Component {
 
   reload (immediate, timeout) {
     timeout = timeout || updateInterval;
-    const granuleId = this.props.params.granuleId;
+    const granuleId = this.props.match.params.granuleId;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
     this.cancelInterval = interval(() => dispatch(getGranule(granuleId)), timeout, immediate);
@@ -122,28 +122,28 @@ class GranuleOverview extends React.Component {
   }
 
   reingest () {
-    const { granuleId } = this.props.params;
+    const { granuleId } = this.props.match.params;
     this.props.dispatch(reingestGranule(granuleId));
   }
 
   applyWorkflow () {
-    const { granuleId } = this.props.params;
+    const { granuleId } = this.props.match.params;
     const { workflow } = this.state;
     this.props.dispatch(applyWorkflowToGranule(granuleId, workflow));
   }
 
   remove () {
-    const { granuleId } = this.props.params;
+    const { granuleId } = this.props.match.params;
     this.props.dispatch(removeGranule(granuleId));
   }
 
   delete () {
-    const { granuleId } = this.props.params;
+    const { granuleId } = this.props.match.params;
     this.props.dispatch(deleteGranule(granuleId));
   }
 
   errors () {
-    const granuleId = this.props.params.granuleId;
+    const granuleId = this.props.match.params.granuleId;
     return [
       get(this.props.granules.map, [granuleId, 'error']),
       get(this.props.granules.reprocessed, [granuleId, 'error']),
@@ -170,7 +170,7 @@ class GranuleOverview extends React.Component {
   }
 
   render () {
-    const granuleId = this.props.params.granuleId;
+    const granuleId = this.props.match.params.granuleId;
     const record = this.props.granules.map[granuleId];
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
@@ -261,7 +261,7 @@ class GranuleOverview extends React.Component {
 }
 
 GranuleOverview.propTypes = {
-  params: PropTypes.object,
+  match: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
   logs: PropTypes.object,

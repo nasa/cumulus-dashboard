@@ -88,7 +88,7 @@ export const granuleSearchResult = function (granule) {
 
 export const granuleLink = function (granuleId) {
   if (!granuleId) return nullValue;
-  return <Link to={`granules/granule/${granuleId}`}>{granuleId}</Link>;
+  return <Link to={`/granules/granule/${granuleId}`}>{granuleId}</Link>;
 };
 
 export const pdrLink = function (pdrName) {
