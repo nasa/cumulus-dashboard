@@ -1,8 +1,0 @@
-{
-    "createdAt": 1539104943690,
-    "id": "s3_provider",
-    "globalConnectionLimit": 10,
-    "host": "cumulus-test-sandbox-internal",
-    "updatedAt": 1539104943690,
-    "protocol": "s3"
-}

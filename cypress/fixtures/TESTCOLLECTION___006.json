@@ -5,6 +5,7 @@
     "dataType": "TESTCOLLECTION",
     "createdAt": 1537830419503,
     "name": "TESTCOLLECTION",
+    "reportToEms": true,
     "duplicateHandling": "replace",
     "provider_path": "cumulus-test-data/pdrs",
     "files": [
@@ -33,11 +34,5 @@
     "updatedAt": 1537830419503,
     "url_path": "{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}",
     "granuleId": "^TESTCOLLECTION\\.A[\\d]{7}\\.[\\S]{6}\\.006\\.[\\d]{13}$",
-    "sampleFileName": "TESTCOLLECTION.A2017025.h21v00.006.2017034065104.hdf",
-    "stats": {
-        "running": 14,
-        "completed": 156,
-        "failed": 119,
-        "total": 289
-    }
+    "sampleFileName": "TESTCOLLECTION.A2017025.h21v00.006.2017034065104.hdf"
 }

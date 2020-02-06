@@ -16,10 +16,6 @@ describe('Rules page', () => {
       cy.task('resetState');
     });
 
-    after(() => {
-      cy.task('resetState');
-    });
-
     it('should display a link to view rules', () => {
       cy.visit('/');
       cy.get('nav').contains('Rules');
@@ -53,7 +49,7 @@ describe('Rules page', () => {
           cy.get('dt')
             .contains('Workflow')
             .next('dd')
-            .should('contain', 'KinesisTriggerTest');
+            .should('contain', 'HelloWorldWorkflow');
           cy.get('dt')
             .contains('Provider')
             .next('dd')
