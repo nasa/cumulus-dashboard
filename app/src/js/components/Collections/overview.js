@@ -154,9 +154,6 @@ class CollectionOverview extends React.Component {
       }
     } = this.props;
 
-    console.log('CollectionOverview props: ', this.props);
-    console.log('CollectionOverview params: ', params);
-    console.log('CollectionOverview collections: ', collections);
     const collectionName = params.name;
     const collectionVersion = params.version;
     const collectionId = getCollectionId(params);
