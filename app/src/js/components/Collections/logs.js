@@ -14,7 +14,7 @@ class CollectionLogs extends React.Component {
   }
 
   render () {
-    const collectionName = this.props.params.name;
+    const collectionName = this.props.match.params.name;
     const { queriedAt } = this.props.logs;
     return (
       <div className='page__component'>
@@ -33,7 +33,7 @@ class CollectionLogs extends React.Component {
 
 CollectionLogs.propTypes = {
   dispatch: PropTypes.func,
-  params: PropTypes.object,
+  match: PropTypes.object,
   logs: PropTypes.object
 };
 

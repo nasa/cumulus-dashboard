@@ -15,8 +15,7 @@ const SCHEMA_KEY = 'collection';
 
 class EditCollection extends React.Component {
   render () {
-    const { params, collections } = this.props;
-    const { name, version } = params;
+    const { match: { params: { name, version } }, collections } = this.props;
     const collectionId = getCollectionId({ name, version });
     return (
       <EditRaw
@@ -34,7 +33,7 @@ class EditCollection extends React.Component {
 }
 
 EditCollection.propTypes = {
-  params: PropTypes.object,
+  match: PropTypes.object,
   collections: PropTypes.object,
   router: PropTypes.object
 };

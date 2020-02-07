@@ -8,21 +8,26 @@ import sections from '../../paths';
 const currentPathClass = 'sidebar__nav--selected';
 
 class Sidebar extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.displayName = 'Sidebar';
     this.resolvePath = this.resolvePath.bind(this);
     this.renderNavSection = this.renderNavSection.bind(this);
   }
 
   resolvePath (base, path) {
-    if (!path) { return resolve(base); }
-    return resolve(base, path);
+    return path ? resolve(base, path) : resolve(base);
   }
 
   renderNavSection (section) {
     const { base, routes } = section;
-    const { currentPath, params, count } = this.props;
+    const { count } = this.props;
+    const currentPath = this.props.currentPath || this.props.location.pathname;
+    const params = {
+      ...(this.props.params || {}),
+      ...(this.props.match ? this.props.match.params : {})
+    };
+
     return (
       <div key={base}>
         <ul>
@@ -63,7 +68,9 @@ class Sidebar extends React.Component {
 Sidebar.propTypes = {
   currentPath: PropTypes.string,
   params: PropTypes.object,
-  count: PropTypes.array
+  count: PropTypes.array,
+  location: PropTypes.object,
+  match: PropTypes.object
 };
 
 export default Sidebar;

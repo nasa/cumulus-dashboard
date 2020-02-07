@@ -52,9 +52,9 @@ class CollectionGranules extends React.Component {
   getView () {
     const { pathname } = this.props.location;
     if (pathname.includes('/granules/completed')) return 'completed';
-    else if (pathname.includes('/granules/processing')) return 'processing';
-    else if (pathname.includes('/granules/failed')) return 'failed';
-    else return 'all';
+    if (pathname.includes('/granules/processing')) return 'processing';
+    if (pathname.includes('/granules/failed')) return 'failed';
+    return 'all';
   }
 
   generateBulkActions () {
@@ -64,9 +64,8 @@ class CollectionGranules extends React.Component {
         action: this.applyWorkflow
       }
     };
-    const { granules } = this.props;
-    let actions = bulkActions(granules, actionConfig);
-    return actions;
+
+    return bulkActions(this.props.granules, actionConfig);
   }
 
   selectWorkflow (selector, workflow) {
@@ -94,34 +93,49 @@ class CollectionGranules extends React.Component {
     const { list } = this.props.granules;
     const { meta } = list;
     const view = this.getView();
+
     return (
-      <div className='page__component'>
-        <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description '>{collectionName} / {collectionVersion}</h1>
-          <Link className='button button--edit button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
+      <div className="page__component">
+        <section className="page__section page__section__header-wrapper">
+          <h1 className="heading--large heading--shared-content with-description ">
+            {collectionName} / {collectionVersion}
+          </h1>
+          <Link
+            className="button button--edit button--small form-group__element--right button--green"
+            to={`/collections/edit/${collectionName}/${collectionVersion}`}
+          >
+            Edit
+          </Link>
           <dl className="metadata__updated">
             <dd>{lastUpdated(meta.queriedAt)}</dd>
           </dl>
         </section>
 
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num--title'>{meta.count ? ` ${meta.count}` : null}</span></h2>
+        <section className="page__section">
+          <div className="heading__wrapper--border">
+            <h2 className="heading--medium heading--shared-content with-description">
+              {strings.granules}{' '}
+              <span className="num--title">
+                {meta.count ? ` ${meta.count}` : null}
+              </span>
+            </h2>
           </div>
-          <div className='filters filters__wlabels'>
-            {(view === 'all') ? <Dropdown
-              options={statusOptions}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              paramKey={'status'}
-              label={'Status'}
-            />
-              : <Search
+          <div className="filters filters__wlabels">
+            {view === 'all' ? (
+              <Dropdown
+                options={statusOptions}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey={'status'}
+                label={'Status'}
+              />
+            ) : (
+              <Search
                 dispatch={this.props.dispatch}
                 action={searchGranules}
                 clear={clearGranulesSearch}
               />
-            }
+            )}
           </div>
 
           <List
@@ -136,7 +150,6 @@ class CollectionGranules extends React.Component {
             sortIdx={6}
           />
         </section>
-
       </div>
     );
   }
