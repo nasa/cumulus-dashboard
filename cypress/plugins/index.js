@@ -13,12 +13,18 @@
 
 const browserify = require('@cypress/browserify-preprocessor');
 
-const fakeApiDb = require('../../test/fake-api/db');
-const fakeApiToken = require('../../test/fake-api/token');
+const { testUtils } = require('@cumulus/api');
+
+const { seedEverything } = require('./seedEverything');
+
+const fakeApiToken = require('./token');
 
 module.exports = (on) => {
   const options = browserify.defaultOptions;
   const babelOptions = options.browserifyOptions.transform[1][1];
+  const user = 'testUser';
+  let esClient;
+  let esIndex;
   babelOptions.global = true;
   // ignore all node_modules except files in @cumulus/
   // see https://github.com/cypress-io/cypress-browserify-preprocessor/issues/19
@@ -30,7 +36,14 @@ module.exports = (on) => {
 
   on('task', {
     resetState: function () {
-      return fakeApiDb.resetState();
+      return Promise.all([
+        seedEverything(),
+        testUtils.setAuthorizedOAuthUsers([user])
+      ]).catch((error) => {
+        console.log('You possibly have a bad fixture. Check the error below.');
+        console.log(JSON.stringify(error, null, 2));
+        Promise.reject(error);
+      });
     },
     generateJWT: function (options) {
       return fakeApiToken.generateJWT(options);
