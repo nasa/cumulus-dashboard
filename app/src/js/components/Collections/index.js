@@ -23,6 +23,7 @@ class Collections extends React.Component {
   render () {
     const { pathname } = this.props.location;
     const existingCollection = pathname !== '/collections/add';
+    console.log(pathname);
     return (
       <div className='page__collections'>
         <div className='content__header'>

@@ -40,7 +40,7 @@ class CollectionGranules extends React.Component {
   }
 
   generateQuery () {
-    const collectionId = getCollectionId(this.props.params);
+    const collectionId = getCollectionId(this.props.match.params);
     const options = { collectionId };
     const view = this.getView();
     if (view === 'completed') options.status = 'completed';
@@ -89,8 +89,8 @@ class CollectionGranules extends React.Component {
   }
 
   render () {
-    const collectionName = this.props.params.name;
-    const collectionVersion = this.props.params.version;
+    const collectionName = this.props.match.params.name;
+    const collectionVersion = this.props.match.params.version;
     const { list } = this.props.granules;
     const { meta } = list;
     const view = this.getView();
@@ -148,7 +148,8 @@ CollectionGranules.propTypes = {
   location: PropTypes.object,
   config: PropTypes.object,
   workflowOptions: PropTypes.array,
-  params: PropTypes.object
+  params: PropTypes.object,
+  match: PropTypes.object
 };
 
 export default withRouter(connect(state => ({

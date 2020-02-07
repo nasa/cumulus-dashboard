@@ -165,6 +165,10 @@ class CollectionOverview extends React.Component {
     // create the overview boxes
     const overview = record ? this.renderOverview(record) : <div></div>;
 
+    console.log(collectionName);
+    console.log(collectionVersion);
+    console.log(collectionId);
+
     return (
       <div className='page__component'>
         <section className='page__section page__section__controls'>
