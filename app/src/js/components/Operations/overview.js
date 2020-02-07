@@ -42,15 +42,15 @@ const tableHeader = [
 const statusOptions = {
   Running: 'RUNNING',
   Succeeded: 'SUCCEEDED',
-  Task_failed: 'TASK_FAILED',
-  Runner_failed: 'RUNNER_FAILED'
+  'Task Failed': 'TASK_FAILED',
+  'Runner Failed': 'RUNNER_FAILED'
 };
 
 const typeOptions = {
-  BulkGranules: 'Bulk Granules',
-  ESIndex: 'ES Index',
-  BulkDelete: 'Bulk Delete',
-  KinesisReplay: 'Kinesis Replay'
+  'Bulk Granules': 'Bulk Granules',
+  'ES Index': 'ES Index',
+  'Bulk Delete': 'Bulk Delete',
+  'Kinesis Replay': 'Kinesis Replay'
 };
 
   // (d) => <Link to={'/executions/execution/' + d.arn} title={d.name}>{truncate(d.name, 24)}</Link>,
