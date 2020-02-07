@@ -314,7 +314,7 @@ When changes are ready to be released, the version number must be updated in `pa
 
 ### 4. Update the minimum version of Cumulus API if necessary
 
-See the `minCompatibleApiVersion` value in `app/scrips/config/index.js`.
+See the `minCompatibleApiVersion` value in `app/src/js/config/index.js`.
 
 ### 5. Update CHANGELOG.md
 

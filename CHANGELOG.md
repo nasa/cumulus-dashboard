@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1463**
   - Add Datepicker Component
+  - Add Datepicker to Dashboard Home page
 
 ### Changed
 
@@ -46,7 +47,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - **CUMULUS-1459**
-  - Updates Operations page to receive async operations list from Elasticsearch.  
+  - Updates Operations page to receive async operations list from Elasticsearch.
 
 - **CUMULUS-1363**
   - Use `npm` instead of `yarn`
