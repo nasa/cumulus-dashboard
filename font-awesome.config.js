@@ -11,6 +11,7 @@ module.exports = {
     path: true,
     'rotated-flipped': true,
     animated: true,
-    stacked: true
+    stacked: true,
+    searchPseudoElements: true
   }
 };

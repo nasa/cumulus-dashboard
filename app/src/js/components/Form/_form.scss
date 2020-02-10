@@ -80,7 +80,7 @@ select option{
   &:after {
     color: $ocean-blue;
     position: absolute;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'FontAwesome';
     content: '\f0d7';
     font-weight: 900;
     width: 14px;
@@ -127,7 +127,7 @@ select option{
 .search__icon {
   &:after {
     position: absolute;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'FontAwesome';
     content: '\f002';
     font-weight: 900;
     right: .8em;
@@ -217,7 +217,7 @@ select option{
   top: -.2em;
   display: inline-block;
   &:before {
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'FontAwesome';
     content: '\f021';
     color: $ocean-blue;
     font-weight: 900;

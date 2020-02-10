@@ -150,6 +150,14 @@ a:active {
   }
 }
 
+.icon::before, .icon::after {
+  display: none;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
 /**************************************************
   Header & Navigation (Includes Sidebar)
 **************************************************/
@@ -214,6 +222,16 @@ a:active {
   padding-right: 0px;
   padding-left: 0px;
 }
+
+/* general styling shared between versions */
+.icon::before {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
 .rightalign.nav__order-8{
   position: relative;
 }
@@ -685,7 +703,7 @@ a:active {
     position: absolute;
     /*color: $error-red;*/
     color: $white;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'FontAwesome';
     content: '\f071';
     font-weight: 900;
     left: -1.5em;
