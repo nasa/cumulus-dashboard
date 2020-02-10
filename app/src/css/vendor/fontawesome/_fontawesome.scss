@@ -4,5 +4,6 @@
 /*
 We using Font Awesome for our icons and symbols
 */
-// @import '~@fortawesome/fontawesome/scss/fontawesome.scss';
-@import '~@fortawesome/fontawesome-svg-core';
+
+$fa-font-path: "~font-awesome/fonts";
+@import '~font-awesome/scss/font-awesome.scss';

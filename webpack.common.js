@@ -97,11 +97,24 @@ const CommonConfig = {
         ]
       },
       {
-        test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|ico|svg)(\?[a-z0-9=.]+)?$/,
+        test: /\.(woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/, // fonts
         use: {
           loader: 'file-loader',
           options: {
-            name: '[path][name].[hash].[ext]'
+            name: '[path][name].[hash].[ext]',
+            outputPath: 'fonts/',
+            publicPath: '../'
+          }
+        }
+      },
+      {
+        test: /\.(jpe?g|png|gif|ico|svg)(\?[a-z0-9=.]+)?$/, // images/graphics
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: '[path][name].[hash].[ext]',
+            outputPath: 'images/',
+            publicPath: '../'
           }
         }
       },
