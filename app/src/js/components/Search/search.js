@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { initialValueFromLocation, updateRouterLocation } from '../../utils/url-helper';
-// import withQueryParams from 'react-router-query-params';
+import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
 
 class Search extends React.Component {
@@ -18,7 +18,7 @@ class Search extends React.Component {
   }
 
   componentDidMount () {
-    const { dispatch, action, location, paramKey } = this.props;
+    const { dispatch, action, location, paramKey } = this.props.queryParams;
     if (location && location.query) dispatch(action({value: location.query[paramKey]}));
   }
 
@@ -90,7 +90,7 @@ Search.propTypes = {
   label: PropTypes.any,
   location: PropTypes.object,
   router: PropTypes.object,
-  query: PropTypes.object,
+  queryParams: PropTypes.object
 };
 
-export default withRouter(connect(state => state)(Search));
+export default withRouter(withQueryParams()(connect(state => state)(Search)));
