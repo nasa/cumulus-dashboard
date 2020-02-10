@@ -63,11 +63,37 @@ const CommonConfig = {
       {
         test: /\.(css|scss)$/,
         use: [
-          'style-loader', // Inject styles into DOM
-          'css-loader', // Translates CSS into CommonJS
-          'resolve-url-loader',
-          'postcss-loader',
-          'sass-loader' // Compiles Sass to CSS
+          {
+            loader: 'style-loader', // Inject styles into DOM
+            options: {
+              sourceMap: true,
+            }
+          },
+          {
+            loader: 'css-loader', // Translates CSS into CommonJS
+            options: {
+              sourceMap: true,
+              importLoaders: 1
+            }
+          },
+          {
+            loader: 'resolve-url-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'sass-loader', // Compiles Sass to CSS
+            options: {
+              sourceMap: true
+            }
+          },
         ]
       },
       {
