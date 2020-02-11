@@ -2,8 +2,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { initialValueFromLocation, updateRouterLocation } from '../../utils/url-helper';
-// import withQueryParams from 'react-router-query-params';
+import { initialValueFromLocation } from '../../utils/url-helper';
+import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
 
 class Search extends React.Component {
@@ -18,13 +18,18 @@ class Search extends React.Component {
   }
 
   componentDidMount () {
-    const { dispatch, action, location, paramKey } = this.props;
-    if (location && location.query) dispatch(action({value: location.query[paramKey]}));
+    const { dispatch, action, paramKey, queryParams } = this.props;
+    const queryValue = queryParams[paramKey];
+    if (queryValue) dispatch(action({value: queryValue}));
   }
 
-  componentDidUpdate () {
-    const { dispatch, action, location, paramKey } = this.props;
-    if (location && location.query) dispatch(action({value: location.query[paramKey]}));
+  componentDidUpdate (prevProps, prevState, snapshot) {
+    const {paramKey, dispatch, action, queryParams} = this.props;
+    const queryValue = queryParams[paramKey];
+    if (queryValue !== prevProps.queryParams[paramKey]) {
+      dispatch(action({ key: paramKey, queryValue }));
+      this.setState({queryValue}); // eslint-disable-line react/no-did-update-set-state
+    }
   }
 
   componentWillUnmount () {
@@ -50,13 +55,13 @@ class Search extends React.Component {
   }
 
   delayedQuery (value) {
-    const { dispatch, action, clear, location, router, paramKey } = this.props;
+    const { dispatch, action, clear, paramKey, setQueryParams } = this.props;
     const timeoutId = setTimeout(function () {
       if (value && value.length) {
-        updateRouterLocation(router, location, paramKey, value);
+        setQueryParams({[paramKey]: value});
         dispatch(action(value));
       } else {
-        updateRouterLocation(router, location, paramKey, '');
+        setQueryParams({[paramKey]: ''});
         dispatch(clear());
       }
     }, 650);
@@ -70,7 +75,7 @@ class Search extends React.Component {
       <div className='filter__item'>
         {label ? <label htmlFor={formID}>{label}</label> : null}
         <form className='search__wrapper form-group__element' onSubmit={this.submit} >
-          <input className='search' type='search' onChange={this.complete} value={this.state.value}/>
+          <input className='search' type='search' onChange={this.complete} value={this.state.value || ''}/>
           <span className='search__icon'/>
         </form>
       </div>
@@ -91,6 +96,8 @@ Search.propTypes = {
   location: PropTypes.object,
   router: PropTypes.object,
   query: PropTypes.object,
+  queryParams: PropTypes.object,
+  setQueryParams: PropTypes.func
 };
 
-export default withRouter(connect(state => state)(Search));
+export default withRouter(withQueryParams()(connect(state => state)(Search)));

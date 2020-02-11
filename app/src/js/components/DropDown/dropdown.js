@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Autocomplete from 'react-autocomplete';
-import { initialValueFromLocation, updateRouterLocation } from '../../utils/url-helper';
+import { initialValueFromLocation } from '../../utils/url-helper';
 import withQueryParams from 'react-router-query-params';
 
 function shouldItemRender ({ label }, value) {
@@ -50,9 +50,9 @@ class Dropdown extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
-    const {location, paramKey, dispatch, action, options} = this.props.queryParams;
-    if (location && location.query[paramKey] !== prevProps.location.query[paramKey]) {
-      let value = location.query[paramKey];
+    const {paramKey, dispatch, action, options, queryParams} = this.props;
+    if (queryParams[paramKey] !== prevProps.queryParams[paramKey]) {
+      let value = queryParams[paramKey];
       dispatch(action({ key: paramKey, value }));
       if (value) value = statusToLabel(options, value);
       this.setState({value}); // eslint-disable-line react/no-did-update-set-state
@@ -60,9 +60,9 @@ class Dropdown extends React.Component {
   }
 
   componentDidMount () {
-    const { dispatch, getOptions, action, location, paramKey } = this.props;
+    const { dispatch, getOptions, action, paramKey, queryParams } = this.props;
     if (getOptions) { dispatch(getOptions()); }
-    if (location && location.query) dispatch(action({key: paramKey, value: location.query[paramKey]}));
+    if (queryParams[paramKey]) dispatch(action({key: paramKey, value: queryParams[paramKey]}));
   }
 
   componentWillUnmount () {
@@ -71,19 +71,19 @@ class Dropdown extends React.Component {
   }
 
   onSelect (selected, item) {
-    const { dispatch, action, router, location, paramKey } = this.props;
+    const { dispatch, action, paramKey, setQueryParams } = this.props;
     dispatch(action({ key: paramKey, value: selected }));
     this.setState({ value: item.label });
-    updateRouterLocation(router, location, paramKey, item.value);
+    setQueryParams({ [paramKey]: item.value });
   }
 
   onChange (e) {
-    const { dispatch, clear, router, location, paramKey } = this.props;
+    const { dispatch, clear, paramKey, setQueryParams } = this.props;
     const { value } = e.target;
     this.setState({ value });
     if (!value.length) {
       dispatch(clear(paramKey));
-      updateRouterLocation(router, location, paramKey, '');
+      setQueryParams({ [paramKey]: '' });
     }
   }
 
@@ -128,7 +128,8 @@ Dropdown.propTypes = {
   label: PropTypes.any,
   location: PropTypes.object,
   router: PropTypes.object,
-  queryParams: PropTypes.object
+  queryParams: PropTypes.object,
+  setQueryParams: PropTypes.func
 };
 
 export default withRouter(withQueryParams()(connect()(Dropdown)));

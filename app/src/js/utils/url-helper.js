@@ -38,3 +38,14 @@ export function updateRouterLocation (router, location, paramKey, value) {
     router.push(location);
   }
 }
+
+export function parseQueryParams (search) {
+  const queryParams = {};
+  const queries = search.substring(1).split('&');
+  queries.forEach(query => {
+    query = query.split('=');
+    let [ key, value ] = query;
+    queryParams[key] = value;
+  });
+  return queryParams;
+}
