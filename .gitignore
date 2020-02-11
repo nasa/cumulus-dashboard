@@ -15,4 +15,3 @@ cypress/screenshots
 cypress/videos
 .vscode
 .idea/
-yarn-error.log
