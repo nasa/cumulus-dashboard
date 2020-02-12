@@ -44,7 +44,7 @@ import {
   kibanaGatewayExecutionSuccessesLink
 } from '../utils/kibana';
 import { initialValuesFromLocation, updateRouterLocation } from '../utils/url-helper';
-import { defaultDateRange, Datepicker } from './Datepicker/Datepicker';
+import Datepicker, { defaultDateRange } from './Datepicker/Datepicker';
 
 import { strings } from './locale';
 
@@ -53,20 +53,20 @@ class Home extends React.Component {
     super(props);
     this.displayName = 'Home';
 
-    const datePicker = {
-      name: 'metricDatePicker',
-      dateRange: defaultDateRange,
-      startDateTime: undefined,
-      endDateTime: undefined,
-      hourFormat: undefined
-    };
-    const initialValues = initialValuesFromLocation(
-      props.location, Object.keys(datePicker));
-    this.state = { datePicker: {...datePicker, ...initialValues} };
+    // const datePicker = {
+    //   name: 'metricDatePicker',
+    //   dateRange: defaultDateRange,
+    //   startDateTime: undefined,
+    //   endDateTime: undefined,
+    //   hourFormat: undefined
+    // };
+    // const initialValues = initialValuesFromLocation(
+    //   props.location, Object.keys(datePicker));
+    // this.state = { datePicker: {...datePicker, ...initialValues} };
 
     this.query = this.query.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
-    this.handleDatePickerChange = this.handleDatePickerChange.bind(this);
+    // this.handleDatePickerChange = this.handleDatePickerChange.bind(this);
   }
 
   componentDidMount () {
@@ -117,13 +117,15 @@ class Home extends React.Component {
     return link.match('https?://');
   }
 
-  handleDatePickerChange (value) {
-    this.setState({datePicker: {...this.state.datePicker, ...value}});
-    const { location, router } = this.props;
-    Object.keys(value).forEach(id => {
-      updateRouterLocation(router, location, id, isNil(value[id]) ? '' : value[id]);
-    });
-  }
+  // TODO [MHS, 2020-02-10] Update Router locations CUMULUS-1729
+  // handleDatePickerChange (value) {
+  //   // This should dispatch actions and not set state directly.
+  //   // this.setState({datePicker: {...this.state.datePicker, ...value}});
+  //   // const { location, router } = this.props;
+  //   // Object.keys(value).forEach(id => {
+  //   //   updateRouterLocation(router, location, id, isNil(value[id]) ? '' : value[id]);
+  //   // });
+  // }
 
   renderButtonListSection (items, header, listId) {
     const data = items.filter(d => d[0] !== nullValue);
@@ -212,13 +214,10 @@ class Home extends React.Component {
             <div className='row'>
               <div className='heading__wrapper'>
                 <h2 className='datetime__info heading--medium heading--shared-content--right'>
-                  Select date and time to refine your results. <em>Time is in UTC timezone.</em>
+                  Select date and time to refine your results. <em>Time is UTC.</em>
                 </h2>
               </div>
-              <Datepicker
-                {...this.state.datePicker}
-                onChange={(value) => this.handleDatePickerChange(value)}
-              />
+              <Datepicker {...this.props.datepicker }/>
             </div>
           </section>
 
@@ -264,25 +263,27 @@ class Home extends React.Component {
 }
 
 Home.propTypes = {
-  dispatch: PropTypes.func,
-  stats: PropTypes.object,
-  dist: PropTypes.object,
-  rules: PropTypes.object,
-  granules: PropTypes.object,
-  pdrs: PropTypes.object,
-  executions: PropTypes.object,
   cumulusInstance: PropTypes.object,
+  datepicker: PropTypes.object,
+  dist: PropTypes.object,
+  executions: PropTypes.object,
+  granules: PropTypes.object,
   location: PropTypes.object,
+  pdrs: PropTypes.object,
+  rules: PropTypes.object,
+  stats: PropTypes.object,
+  dispatch: PropTypes.func,
   router: PropTypes.object
 };
 
 export { Home };
 export default withRouter(connect(state => ({
-  rules: state.rules,
-  stats: state.stats,
+  cumulusInstance: state.cumulusInstance,
+  datepicker: state.datepicker,
   dist: state.dist,
+  executions: state.executions,
   granules: state.granules,
   pdrs: state.pdrs,
-  executions: state.executions,
-  cumulusInstance: state.cumulusInstance
+  rules: state.rules,
+  stats: state.stats
 }))(Home));

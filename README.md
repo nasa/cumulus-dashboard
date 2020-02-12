@@ -42,10 +42,9 @@ The following environment variables override the default values in `config.js`:
 
 ## Building or running locally
 
-The dashboard uses node v8.11. To build/run the dashboard on your local machine using node v8.11, install [nvm](https://github.com/creationix/nvm) and run `nvm use`.
+The dashboard uses node v10.16.3. To build/run the dashboard on your local machine, install [nvm](https://github.com/creationix/nvm) and run `nvm install v10.16.3`.
 
-We use npm for local package management.
-
+We use npm for local package management, to install the requirements:
 ```bash
   $ nvm use
   $ npm install

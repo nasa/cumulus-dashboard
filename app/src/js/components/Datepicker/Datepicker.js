@@ -3,18 +3,22 @@ import isNil from 'lodash.isnil';
 import moment from 'moment';
 import DateTimePicker from 'react-datetime-picker';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { DATEPICKER_DROPDOWN_FILTER, DATEPICKER_DATECHANGE } from '../../actions/types';
 
-export const defaultDateRange = '1 day';
+export const defaultDateRange = 1 / 24.0;
+export const customDateRange = null;
 const defaultHourFormat = '12HR';
 const allDateRanges = [
-  'All',
-  '1 hour',
-  '1 day',
-  '1 week',
-  '1 month',
-  '50 days',
-  '180 days',
-  '1 year'
+  {value: 'All', label: 'All'},
+  {value: 'Custom', label: 'Custom'},
+  {value: 1 / 24.0, label: 'Last hour'},
+  {value: 1, label: 'Last day'},
+  {value: 7, label: 'Last week'},
+  {value: 30, label: 'Last 30 Days'},
+  {value: 60, label: 'Last 60 days'},
+  {value: 60, label: 'Last 180 days'},
+  {value: 366, label: 'Last year'}
 ];
 const allHourFormats = ['12HR', '24HR'];
 const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss.sss';
@@ -46,7 +50,6 @@ export const getDateTimeRange = function (selection) {
  * Component representing the Datepicker.
  * Use by adding <Datepicker />. Use onChange prop for getting new values.
  * The returned value is an object with updates from user selections.
- * The startDateTime and endDateTime can have null value.
  *
  * onChangeFunction = (value) => this.setState(value);
  *
@@ -54,24 +57,26 @@ export const getDateTimeRange = function (selection) {
  *   onChange={onChangeFunction}
  * />
  */
-export class Datepicker extends React.PureComponent {
+class Datepicker extends React.PureComponent {
   constructor (props) {
     super(props);
-    this.handleDateRangeChange = this.handleDateRangeChange.bind(this);
+    this.handleDateRangeDropdownChange = this.handleDateRangeDropdownChange.bind(this);
     this.handleHourFormatChange = this.handleHourFormatChange.bind(this);
     this.handleDateTimeRangeChange = this.handleDateTimeRangeChange.bind(this);
     this.clear = this.clear.bind(this);
   }
 
   clear () {
+    // TODO [MHS, 2020-02-11] replace with dispatch with default values.
     this.onChange({...Datepicker.defaultProps});
   }
 
-  handleDateRangeChange (e) {
-    const dateRange = e.target.value;
-
-    // set dateRange and clear the dateTimeRange selection
-    this.onChange({...Datepicker.defaultProps, dateRange});
+  handleDateRangeDropdownChange (e) {
+    const { value, label } = allDateRanges[e.target.selectedIndex];
+    this.props.dispatch({
+      type: DATEPICKER_DROPDOWN_FILTER,
+      data: { dateRange: { value, label } }
+    });
   }
 
   handleHourFormatChange (e) {
@@ -81,23 +86,14 @@ export class Datepicker extends React.PureComponent {
   handleDateTimeRangeChange (name, newValue) {
     // The user input is in UTC time zone, but the DateTimePicker takes it as local time.
     // So we need convert the Date object to UTC time zone by ignoring the time zone offset.
-    const utcValue = moment.utc(moment(newValue).format(dateTimeFormat)).format();
+    const utcValue = new Date(moment.utc(moment(newValue).format(dateTimeFormat)).format());
     const updatedProps = {
       startDateTime: this.props.startDateTime,
       endDateTime: this.props.endDateTime,
       [name]: utcValue
     };
-
-    // only reset the date range if both start and end are selected
-    const { startDateTime, endDateTime } = updatedProps;
-    if (startDateTime && endDateTime) {
-      updatedProps.dateRange = defaultDateRange;
-    }
-    this.onChange(updatedProps);
-  }
-
-  onChange (value) {
-    this.props.onChange(value);
+    updatedProps.dateRange = allDateRanges.filter(a => a.label === 'Custom')[0];
+    this.props.dispatch({type: DATEPICKER_DATECHANGE, data: updatedProps});
   }
 
   renderDateRangeDropDown () {
@@ -106,9 +102,9 @@ export class Datepicker extends React.PureComponent {
         <div className="datetime dropdown__dtrange">
           <select
             name='dateRange'
-            value={this.props.dateRange}
-            onChange={this.handleDateRangeChange}>
-            {allDateRanges.map((option, i) => <option value={option} key={i}>{option}</option>)}
+            value={this.props.dateRange.value}
+            onChange={this.handleDateRangeDropdownChange}>
+            {allDateRanges.map((option, i) => <option value={option.value} key={i}>{option.label}</option>)}
           </select>
         </div>
       </React.Fragment>
@@ -208,7 +204,7 @@ export class Datepicker extends React.PureComponent {
 }
 
 Datepicker.defaultProps = {
-  dateRange: defaultDateRange,
+  dateRange: allDateRanges[0],
   startDateTime: null,
   endDateTime: null,
   hourFormat: defaultHourFormat
@@ -217,8 +213,11 @@ Datepicker.defaultProps = {
 Datepicker.propTypes = {
   name: PropTypes.string,
   dateRange: PropTypes.oneOf(allDateRanges),
-  startDateTime: PropTypes.string,
-  endDateTime: PropTypes.string,
+  startDateTime: PropTypes.instanceOf(Date),
+  endDateTime: PropTypes.instanceOf(Date),
   hourFormat: PropTypes.oneOf(allHourFormats),
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  dispatch: PropTypes.func
 };
+
+export default connect(state => state.datepicker)(Datepicker);

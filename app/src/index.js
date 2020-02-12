@@ -49,4 +49,4 @@ App.propTypes = {
   apiVersion: PropTypes.object
 };
 
-export default connect(state => state)(App);
+export default connect((state) => state)(App);
