@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "name": "cumulus-api",
+    "stack": "test-src-integration",
+    "table": "rule",
+    "limit": 10,
+    "page": 1,
+    "count": 1
+  },
+  "results": [
+    {
+      "name": "MOD09GK_TEST_kinesisRule",
+      "createdAt": 1538105473704,
+      "workflow": "HelloWorldWorkflow",
+      "provider": "PODAAC_SWOT",
+      "meta": {
+        "cnmResponseStream": "test-src-integration-cnmResponseStream"
+      },
+      "rule": {
+        "type": "onetime",
+        "value": "none"
+      },
+      "collection": {
+        "name": "MOD09GK",
+        "version": "006"
+      },
+      "state": "ENABLED",
+      "updatedAt": 1538105473704
+    }
+  ]
+}

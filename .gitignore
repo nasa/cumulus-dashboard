@@ -9,7 +9,7 @@ gulp-cache
 /artifacts
 /tmp/
 /docker/html/
-package-lock.json
+yarn.lock
 test/fake-api/db/*.json
 cypress/screenshots
 cypress/videos

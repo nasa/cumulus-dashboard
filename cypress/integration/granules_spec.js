@@ -2,9 +2,7 @@ import { shouldBeRedirectedToLogin } from '../support/assertions';
 
 function visitGranulePage () {
   cy.visit('/');
-  cy.contains('nav li a', 'Granules').as('granules');
-  cy.get('@granules').should('have.attr', 'href', '#/granules');
-  cy.get('@granules').click();
+  cy.visit('/#/granules');
 }
 
 describe('Dashboard Granules Page', () => {
@@ -16,13 +14,12 @@ describe('Dashboard Granules Page', () => {
   });
 
   describe('When logged in', () => {
+    before(() => cy.visit('/'));
+
     beforeEach(() => {
       cy.login();
       cy.task('resetState');
-    });
-
-    after(() => {
-      cy.task('resetState');
+      cy.visit('/');
     });
 
     it('should display a link to view granules', () => {
@@ -34,28 +31,23 @@ describe('Dashboard Granules Page', () => {
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
         .first()
-        .contains('li', '243 Completed')
+        .contains('li', '10 Completed')
         .next()
-        .contains('li', '32 Failed')
+        .contains('li', '3 Failed')
         .next()
-        .contains('li', '14 Running');
+        .contains('li', '3 Running');
 
       // shows a list of granules
-      cy.getFakeApiFixture('granules').as('granulesList');
+      cy.getFakeApiFixture('granules').as('granulesListFixture');
 
-      cy.get('table tbody tr').as('list');
-      cy.get('@list').its('length').should('be.eq', 10);
+      cy.get('@granulesListFixture').its('results')
+        .each((granule) => {
+          // Wait for this granule to appear before proceeding.
+          cy.contains(granule['granuleId']);
+          cy.get(`[data-value="${granule['granuleId']}"]`).children().as('columns');
+          cy.get('@columns').its('length').should('be.eq', 8);
 
-      // compare data in each row with the data from fixture
-      cy.get('@list').each(($el, index) => {
-        // columns in the row
-        cy.wrap($el).children().as('columns');
-        cy.get('@columns').its('length').should('be.eq', 8);
-
-        cy.get('@granulesList').its('results').then((granules) => {
-          const granule = granules[index];
-
-          // granule Status column
+          // Granule Status Column is correct
           cy.get('@columns').eq(1).invoke('text')
             .should('be.eq', granule.status.replace(/^\w/, c => c.toUpperCase()));
           // has link to the granule list with the same status
@@ -77,7 +69,7 @@ describe('Dashboard Granules Page', () => {
               .should('be.eq', 'Yes');
             cy.get('@columns').eq(3).children('a')
               .should('have.attr', 'href')
-              .and('include', 'https://cmr.uat.earthdata.nasa.gov/search/granules.json?concept_id=');
+              .and('be.eq', granule.cmrLink);
           } else {
             cy.get('@columns').eq(3).invoke('text')
               .should('be.eq', 'No');
@@ -88,6 +80,8 @@ describe('Dashboard Granules Page', () => {
           // Collection ID column
           cy.get('@columns').eq(4).invoke('text')
             .should('be.eq', granule.collectionId.replace('___', ' / '));
+
+
           // has link to the detailed collection page
           cy.get('@columns').eq(4).children('a')
             .should('have.attr', 'href')
@@ -104,8 +98,11 @@ describe('Dashboard Granules Page', () => {
           // Updated column
           cy.get('@columns').eq(7).invoke('text')
             .should('match', /.+ago$/);
+
         });
-      });
+
+      cy.get('table tbody tr').as('list');
+      cy.get('@list').its('length').should('be.eq', 10);
     });
 
     it('should display a link to download the granule list', () => {

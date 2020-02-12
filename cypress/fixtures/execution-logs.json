@@ -1,0 +1,264 @@
+{
+    "meta": {
+        "name": "cumulus-api",
+        "stack": "test-source-integration",
+        "table": "logs",
+        "limit": 50,
+        "page": 1,
+        "count": 3
+    },
+    "results": [
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "SyncGranule Complete. Returning output: {\"granules\":[{\"granuleId\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725\",\"dataType\":\"MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332\",\"version\":\"006\",\"files\":[{\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":17865615,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\"},{\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\"},{\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\"}]}],\"process\":\"modis\"}",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.684Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "finshed, await lock.removeLock(test-source-integration-internal, s3_provider_test-test-source-integration-IngestGranuleSuccess-1541685563332, MOD09GQ.A5033248.FyuAeH.006.3234109639725)",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.649Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "finished ingest()",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.649Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "await validateChecksum {\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":17865615,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\"}, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.648Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 30,
+            "message": "synced 1098034 bytes",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.648Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 30,
+            "message": "s3 Upload completed in 0.221 secs s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.607Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 30,
+            "message": "synced 9728 bytes",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.554Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "await validateChecksum {\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\"}, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.554Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 30,
+            "message": "s3 Upload completed in 0.087 secs s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.484Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 30,
+            "message": "synced 21708 bytes",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.469Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "await validateChecksum {\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\"}, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.469Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 30,
+            "message": "s3 Upload completed in 0.075 secs s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.448Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 30,
+            "message": "sync params: { Bucket: 'test-source-integration-internal',\n  CopySource: '/test-source-integration-internal/test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg',\n  Key: 'file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg',\n  ACL: 'private' }",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.397Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 30,
+            "message": "sync params: { Bucket: 'test-source-integration-internal',\n  CopySource: '/test-source-integration-internal/test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf',\n  Key: 'file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf',\n  ACL: 'private' }",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.386Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 30,
+            "message": "sync params: { Bucket: 'test-source-integration-internal',\n  CopySource: '/test-source-integration-internal/test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met',\n  Key: 'file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met',\n  ACL: 'private' }",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.373Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 30,
+            "message": "Sync s3://test-source-integration-internal/test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg to s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.371Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "await sync file to s3 test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.370Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "file file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg exists in test-source-integration-internal: false",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.370Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 30,
+            "message": "Sync s3://test-source-integration-internal/test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf to s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.354Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "await sync file to s3 test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.353Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "file file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf exists in test-source-integration-internal: false",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.353Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "await sync file to s3 test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.332Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "file file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met exists in test-source-integration-internal: false",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.332Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 30,
+            "message": "Sync s3://test-source-integration-internal/test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met to s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.332Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "awaiting all download.Files",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.313Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "await ingest.ingest({\"granuleId\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725\",\"dataType\":\"MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332\",\"version\":\"006\",\"files\":[{\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":17865615,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf\"},{\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met\"},{\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg\"}]}, test-source-integration-internal)",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.309Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "awaiting lock.proceed in download() bucket: test-source-integration-internal, provider: {\"protocol\":\"s3\",\"globalConnectionLimit\":10,\"host\":\"test-source-integration-internal\",\"updatedAt\":1541685568865,\"id\":\"s3_provider_test-test-source-integration-IngestGranuleSuccess-1541685563332\",\"createdAt\":1541685568865}, granuleID: MOD09GQ.A5033248.FyuAeH.006.3234109639725",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.259Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        },
+        {
+            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+            "level": 20,
+            "message": "Configured duplicateHandling value: replace",
+            "sender": "test-source-integration-SyncGranuleNoVpc",
+            "timestamp": "2018-11-08T14:01:47.259Z",
+            "version": "23",
+            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
+        }
+    ]
+}

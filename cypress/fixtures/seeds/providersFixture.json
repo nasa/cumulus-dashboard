@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "name": "cumulus-api",
+    "stack": "test-src-integration",
+    "table": "provider",
+    "limit": 10,
+    "page": 1,
+    "count": 2
+  },
+  "results": [
+    {
+      "id": "PODAAC_SWOT",
+      "createdAt": 1524686535230,
+      "protocol": "s3",
+      "globalConnectionLimit": 10,
+      "host": "cumulus-test-sandbox-internal",
+      "updatedAt": 1525982459499
+    },
+    {
+      "id": "s3_provider",
+      "createdAt": 1539104943690,
+      "protocol": "s3",
+      "globalConnectionLimit": 10,
+      "host": "cumulus-test-sandbox-internal",
+      "updatedAt": 1539104943690
+    }
+  ]
+}

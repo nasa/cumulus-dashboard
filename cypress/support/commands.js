@@ -23,7 +23,7 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-
+import clonedeep from 'lodash.clonedeep';
 import { DELETE_TOKEN, SET_TOKEN } from '../../app/src/js/actions/types';
 
 Cypress.Commands.add('login', () => {
@@ -33,10 +33,13 @@ Cypress.Commands.add('login', () => {
     qs: {
       state: encodeURIComponent(authUrl)
     },
-    followRedirect: false
+    followRedirect: true
   }).then((response) => {
-    const query = response.redirectedToUrl.substr(response.redirectedToUrl.indexOf('?') + 1);
-    const token = query.split('=')[1];
+    // mhs: When we get rid of the hash in the urls, we can just use url.parse()
+    const redirectStr = response.redirects[response.redirects.length - 1];
+    const redirectUrl = redirectStr.split(': ')[1];
+    const queryStr = redirectUrl.split('?')[1];
+    const token = queryStr.split('=')[1];
     cy.window().its('appStore').then((store) => {
       store.dispatch({
         type: SET_TOKEN,
@@ -75,7 +78,33 @@ Cypress.Commands.add('getJsonTextareaValue', () => {
   });
 });
 
-Cypress.Commands.add('getFakeApiFixture', (fixturePath) => {
-  const fixtureFile = `./test/fake-api/fixtures/${fixturePath}/index.json`;
+/**
+ * Adds a cypress command to read database seed fixture
+ * example: `cy.getFakeApiFixture('granules')`
+ */
+Cypress.Commands.add('getFakeApiFixture', (fixtureName) => {
+  const fixtureFile = `cypress/fixtures/seeds/${fixtureName}Fixture.json`;
   return cy.readFile(fixtureFile);
+});
+
+/**
+ * Adds a cypress command to read a standard cypress fixture file.
+ * example: `cy.getFixture('fixtureFile')`
+ */
+Cypress.Commands.add('getFixture', (fixtureName) => {
+  const fixtureFile = `cypress/fixtures/${fixtureName}.json`;
+  return cy.readFile(fixtureFile);
+});
+
+/**
+ * Adds custom command to compare two objects, where they are the same except
+ * for the updatedAt time must be newer on the new object.
+ */
+Cypress.Commands.add('expectDeepEqualButNewer', (inewObject, ifixtureObject) => {
+  const newObject = clonedeep(inewObject);
+  const fixtureObject = clonedeep(ifixtureObject);
+  expect(newObject['updatedAt']).to.be.greaterThan(fixtureObject['updatedAt']);
+  delete newObject['updatedAt'];
+  delete fixtureObject['updatedAt'];
+  expect(newObject).to.deep.equal(fixtureObject);
 });

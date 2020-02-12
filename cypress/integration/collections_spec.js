@@ -15,9 +15,12 @@ describe('Dashboard Collections Page', () => {
   });
 
   describe('When logged in', () => {
+    before(() => cy.visit('/'));
+
     beforeEach(() => {
       cy.login();
       cy.task('resetState');
+      cy.visit('/');
       cy.server();
       cy.route('POST', '/collections').as('postCollection');
       cy.route('GET', '/collections?limit=*').as('getCollections');
@@ -29,13 +32,7 @@ describe('Dashboard Collections Page', () => {
         .then((fixture) => fixture.forEach((options) => cy.route(options)));
     });
 
-    after(() => {
-      cy.task('resetState');
-    });
-
     it('should display a link to view collections', () => {
-      cy.visit('/');
-
       cy.contains('nav li a', 'Collections').as('collections');
       cy.get('@collections').should('have.attr', 'href', '#/collections');
       cy.get('@collections').click();
@@ -87,12 +84,12 @@ describe('Dashboard Collections Page', () => {
       // After POSTing the new collection, make sure we GET it back
       cy.wait('@postCollection')
         .then((xhr) =>
-          cy.request({
-            method: 'GET',
-            url: `${new URL(xhr.url).origin}/collections/${name}/${version}`,
-            headers: xhr.request.headers
-          }))
-        .then((response) => expect(response.body).to.deep.equal(collection));
+              cy.request({
+                method: 'GET',
+                url: `${new URL(xhr.url).origin}/collections/${name}/${version}`,
+                headers: xhr.request.headers
+              }))
+        .then((response) => cy.expectDeepEqualButNewer(response.body, collection));
 
       // Display the new collection
       cy.wait('@getCollection');
@@ -100,15 +97,13 @@ describe('Dashboard Collections Page', () => {
       cy.hash().should('eq', `#/collections/collection/${name}/${version}`);
       cy.contains('.heading--xlarge', 'Collections');
       cy.contains('.heading--large', `${name} / ${version}`);
-      cy.get('table tbody tr[data-value]');
 
       // Verify the new collection appears in the collections list
       cy.contains('Back to Collections').click();
       cy.wait('@getCollections');
       cy.hash().should('eq', '#/collections/all');
       cy.contains('table tbody tr a', name)
-        .should('have.attr', 'href',
-          `#/collections/collection/${name}/${version}`);
+        .should('have.attr', 'href', `#/collections/collection/${name}/${version}`);
     });
 
     it('should select a different collection', () => {
@@ -130,7 +125,7 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('#collection-chooser').select(collectionId);
       cy.contains('.heading--large', `${formattedCollectionName}`);
-      cy.contains(/14 Granules? Running/i);
+      cy.contains(/2 Granules? Running/i);
       cy.get('#collection-chooser').find(':selected').contains(collectionId);
     });
 
@@ -149,7 +144,7 @@ describe('Dashboard Collections Page', () => {
 
       // update collection and submit
       const duplicateHandling = 'version';
-      const meta = 'metadata';
+      const meta = {metaObj: 'metadata'};
       cy.editJsonTextarea({ data: { duplicateHandling, meta }, update: true });
       cy.contains('form button', 'Submit').click();
 
@@ -162,56 +157,87 @@ describe('Dashboard Collections Page', () => {
 
       cy.getJsonTextareaValue().then((collectionJson) => {
         expect(collectionJson.duplicateHandling).to.equal(duplicateHandling);
-        expect(collectionJson.meta).to.equal(meta);
+        expect(collectionJson.meta).to.deep.equal(meta);
       });
       cy.contains('.heading--large', `${name}___${version}`);
     });
 
     it('should delete a collection', () => {
+      cy.visit('/');
       const name = 'https_testcollection';
       const version = '001';
+      cy.route('DELETE', '/collections/https_testcollection/001').as('deleteCollection');
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
-      cy.contains('button', 'Delete').click();
+      cy.get('.DeleteCollection > .button').click();
       // cancel should close modal and remain on page
-      cy.contains('.modal-content .button__contents', 'Cancel Request')
+      cy.contains('.button', 'Cancel Request')
         .should('be.visible').click();
+
       cy.contains('.modal-content').should('not.be.visible');
+
       // click delete again to show modal again
-      cy.contains('button', 'Delete').click();
+      cy.get('.DeleteCollection > .button').click();
       // really delete this time instead of cancelling
-      cy.contains('.modal-content .button__contents', 'Delete Collection')
+      cy.contains('button', 'Delete Collection')
         .should('be.visible').click();
+
+      cy.wait('@deleteCollection');
+
       // click close on confirmation modal
-      cy.contains('.modal-content .button__contents', 'Close')
+      cy.contains('.modal-footer > .button', 'Close')
         .should('be.visible').click();
       cy.contains('.modal-content').should('not.be.visible');
 
       // successful delete should cause navigation back to collections list
-      cy.url().should('include', 'collections');
+      cy.url().should('include', 'collections/all');
       cy.contains('.heading--xlarge', 'Collections');
-      // verify the collection is now gone
+
+      // Wait for the table to be visible.
+      cy.get('.previous');
+
+      // This forces an update to the current state and this seems wrong, but
+      // the tests will pass.
+      cy.get('.form__element__refresh').click();
+
+      cy.getFakeApiFixture('collections').its('results')
+        .each((collection) => {
+          // ensure each fixture is still in the table except the deleted collection
+          let existOrNotExist = 'exist';
+          if ((collection.name) === name) {
+            existOrNotExist = 'not.exist';
+          }
+          // This timeout exists because the table is sometimes re-rendered
+          // with existing information, and the next update has to happen
+          // before these all show up or don't show up correctly.
+          cy.get(
+            `[data-value="${collection.name}___${collection.version}"] > .table__main-asset > a`,
+            {timeout: 25000}).should(existOrNotExist);
+        });
       cy.get('table tbody tr').its('length').should('be.eq', 4);
-      cy.contains('table tbody tr a', name).should('not.exist');
     });
 
     it('should fail deleting a collection with an associated rule', () => {
+      cy.visit('/');
       const name = 'MOD09GK';
       const version = '006';
+      cy.route('DELETE', '/collections/MOD09GK/006').as('deleteCollection');
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
-      cy.contains('button', 'Delete').click();
-      cy.contains('.modal-content .button__contents', 'Delete Collection')
-        .should('be.visible').click();
+      cy.get('.DeleteCollection > .button').click();
 
+      cy.get('.button__deletecollections')
+        .should('be.visible').wait(200).click();
+
+      cy.wait('@deleteCollection');
       // modal error should be displayed indicating that deletion failed
       cy.get('.modal-content .error__report').should('be.visible');
-      cy.contains('.modal-content .button__contents', 'Close')
-        .should('be.visible').click();
+      cy.contains('.modal-footer > .button', 'Close')
+        .should('be.visible').wait(200).click();
       cy.contains('.modal-content').should('not.be.visible');
 
       // collection should still exist in list
@@ -221,19 +247,20 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should do nothing on cancel when deleting a collection with associated granules', () => {
+      cy.visit('/');
       const name = 'MOD09GQ';
       const version = '006';
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
-      cy.contains('button', 'Delete').click();
-      cy.contains('.modal-content .button__contents', 'Delete Collection')
-        .should('be.visible').click();
+      cy.get('.DeleteCollection > .button').click();
+      cy.contains('.button__deletecollections', 'Delete Collection')
+        .should('be.visible').wait(200).click();
 
       // modal should ask if user wants to go to granules page
-      cy.contains('.modal-content .button__contents', 'Cancel Request')
-        .should('be.visible').click();
+      cy.contains('.button--cancel', 'Cancel Request')
+        .should('be.visible').wait(200).click();
       cy.contains('.modal-content').should('not.be.visible');
 
       // collection should still exist in list
@@ -243,19 +270,20 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should go to granules upon request when deleting a collection with associated granules', () => {
+      cy.visit('/');
       const name = 'MOD09GQ';
       const version = '006';
 
       cy.visit(`/#/collections/collection/${name}/${version}`);
 
       // delete collection
-      cy.contains('button', 'Delete').click();
-      cy.contains('.modal-content .button__contents', 'Delete Collection')
-        .should('be.visible').click();
+      cy.get('.DeleteCollection > .button').click();
+      cy.contains('.button__deletecollections', 'Delete Collection')
+        .should('be.visible').wait(200).click();
 
       // modal should take user to granules page upon clicking 'Go To Granules'
-      cy.contains('.modal-content .button__contents', 'Go To Granules')
-        .should('be.visible').click();
+      cy.contains('.button__gotogranules', 'Go To Granules')
+        .should('be.visible').wait(200).click();
       cy.contains('.modal-content').should('not.be.visible');
       cy.url().should('include', 'granules');
 

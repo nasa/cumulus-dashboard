@@ -25,10 +25,21 @@
     "build": "NODE_ENV=production webpack --config webpack.prod.js",
     "watch": "webpack --watch",
     "lint": "eslint app/src/js/ --ext .js",
-    "cypress": "CYPRESS_TESTING=true cypress open",
-    "cypress-ci": "CYPRESS_TESTING=true cypress run --spec 'cypress/integration/*' --config video=false",
-    "validation": "ava cypress/validation-tests/*.js",
-    "test": "npm run lint && ava"
+    "cypress": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress open",
+    "cypress-ci": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress run --spec 'cypress/integration/*' --config video=false",
+    "validate": "ava cypress/validation-tests/*.js",
+    "test": "npm run lint && ava",
+    "seed-database": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test node ./localAPI/runSeedDatabase.js",
+    "serve-api": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test cmr_provider=CUMULUS FAKE_AUTH=true ./node_modules/@cumulus/api/bin/cli.js serve --no-reseed",
+    "start-localstack": "docker-compose -f ./localAPI/docker-compose.yml up -d",
+    "stop-localstack": "docker-compose -f ./localAPI/docker-compose.yml down",
+    "start-cumulusapi": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml up -d",
+    "stop-cumulusapi": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml down",
+    "start-dashboard": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml up -d",
+    "stop-dashboard": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml down",
+    "e2e-tests": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml -f ./localAPI/docker-compose-cypress.yml up --exit-code-from=e2e --abort-on-container-exit",
+    "validation-tests": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml -f ./localAPI/docker-compose-validate.yml up --exit-code-from=validate --abort-on-container-exit",
+    "view-docker-logs": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml logs -f "
   },
   "ava": {
     "files": [
@@ -38,7 +49,7 @@
     ],
     "require": [
       "@babel/polyfill",
-      "@babel/register"
+      "./config/babel.register.js"
     ]
   },
   "browserslist": {
@@ -59,24 +70,28 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "@cumulus/api": "^1.18.0",
     "@cypress/webpack-preprocessor": "^4.1.1",
     "audit-ci": "1.3.0",
     "autoprefixer": "^9.7.3",
     "ava": "^2.4.0",
     "ava-http": "^1.0.0",
+    "babel-core": "^7.0.0-bridge",
     "babel-loader": "^8.0.6",
+    "babelify": "^9.0.0",
     "body-parser": "^1.18.3",
+    "cached-path-relative": "1.0.2",
     "clean-webpack-plugin": "^3.0.0",
     "cls-bluebird": "^2.1.0",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.4.0",
     "cssnano": "^4.1.10",
-    "cypress": "^3.4.1",
+    "cypress": "^3.8.3",
     "cypress-failed-log": "^2.5.0",
     "del": "^2.2.0",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
-    "eslint": "^5.0.0",
+    "eslint": "^5.16.0",
     "eslint-config-standard": "^5.3.1",
     "eslint-loader": "^3.0.3",
     "eslint-plugin-promise": "^1.1.0",
@@ -158,6 +173,7 @@
     "lodash.map": "^4.6.0",
     "lodash.omitby": "^4.6.0",
     "lodash.throttle": "^4.1.1",
+    "lodash.truncate": "^4.4.2",
     "moment": "^2.17.1",
     "normalize-opentype.css": "^0.2.4",
     "normalize.css": "^8.0.1",
@@ -171,6 +187,7 @@
     "react-autocomplete": "^1.7.1",
     "react-bootstrap": "^1.0.0-beta.14",
     "react-collapsible": "^2.0.4",
+    "react-datetime-picker": "2.8.0",
     "react-dom": "^16.6.3",
     "react-redux": "^6.0.0",
     "react-router": "^5.1.2",
@@ -188,9 +205,5 @@
     "slugify": "^1.1.0",
     "stubborn-queue": "^2.0.0",
     "url": "^0.11.0"
-  },
-  "resolutions": {
-    "event-stream": "3.3.4",
-    "cached-path-relative": "1.0.2"
   }
 }

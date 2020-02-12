@@ -31,14 +31,13 @@ rsync -av \
   set -evx
 
   cd /build
-  npm install -g yarn
-  yarn install
+  npm install
   APIROOT=$APIROOT \
     DAAC_NAME=$DAAC_NAME \
     STAGE=$STAGE \
     HIDE_PDR=$HIDE_PDR \
     LABELS=$LABELS \
-    AUTH_METHOD=$AUTH_METHOD yarn run build
+    AUTH_METHOD=$AUTH_METHOD npm run build
 
   rsync -av ./dist/ /dist/
   chown -R "${DOCKER_UID}:${DOCKER_GID}" /dist/

@@ -6,38 +6,22 @@ jobs:
     steps:
       - checkout
 
-      # restore cache
-      - restore_cache:
-          keys:
-            - dashboard-{{ .Branch }}-{{ checksum "package.json" }}
-
       - run:
           name: Install dependencies
           command: |
-            docker run --rm \
-              -v /home/circleci/.cache:/root/.cache \
-              -v $(pwd):/home \
-              --workdir /home \
-              node:10.16.3 \
-              yarn install --frozen-lockfile --cache-folder /root/.cache
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install v10.16.3
+            nvm alias default v10.16.3
+            npm install -g npm
+            npm ci
 
-      # save node_module folders
-      - save_cache:
-          key: dashboard-{{ .Branch }}-{{ checksum "package.json" }}
-          paths:
-            - ~/cumulus-dashboard/node_modules
-            - ~/.cache
-
-      # image node:10.16.3 has yarn version 1.6.0 and yarn >=1.12.3 is needed for audit
-      # - run:
-      #     name: Run audit-ci
-      #     command: |
-      #       export NVM_DIR="/opt/circleci/.nvm"
-      #       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-      #       nvm install v10.16.3
-      #       nvm alias default v10.16.3
-      #       npm install -g yarn
-      #       yarn run audit-ci
+      - run:
+          name: Run audit-ci
+          command: |
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            npm run audit-ci
 
       - run:
           name: Test dashboard build
@@ -49,7 +33,7 @@ jobs:
               --workdir /home \
               -e APIROOT=http://api:5001 \
               node:10.16.3 \
-              yarn run build
+              npm run build
 
       - run:
           name: Run tests
@@ -59,74 +43,21 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               node:10.16.3 \
-              yarn test --cache-folder /root/.cache
+              npm run test
 
       - run:
-          name: Prepare servers
+          name: Run end-to-end tests.
           command: |
-            # run fake api
-            docker run -d \
-              --rm \
-              --name api \
-              -v $(pwd):/home \
-              --workdir /home \
-              -p 5001:5001 \
-              node:10.16.3 \
-              node fake-api.js
-
-            # run dashboard
-            docker run -d \
-              --rm \
-              --name dashboard \
-              -v $(pwd):/home \
-              --workdir /home \
-              -e APIROOT=http://api:5001 \
-              -p 3000:3000 \
-              node:10.16.3 \
-              yarn serve
-
-            attempt_counter=0
-            max_attempts=20
-
-            until $(curl --output /dev/null --silent --head --fail http://localhost:3000); do
-              if [ ${attempt_counter} -eq ${max_attempts} ];then
-                echo "Max attempts reached"
-                exit 1
-              fi
-
-              printf '.'
-              attempt_counter=$(($attempt_counter+1))
-              sleep 5
-            done
+            echo $(pwd) && \
+            npm run e2e-tests
 
       - run:
           name: Run Validation Tests
           command: |
-            docker run \
-              --link api:api \
-              --link dashboard:dashboard \
-              -e CYPRESS_BASE_URL=http://dashboard:3000 \
-              --rm \
-              -v /home/circleci/.cache:/root/.cache \
-              -v $(pwd):/home \
-              --workdir /home \
-              node:10.16.3 \
-              yarn validation
+            npm run validation-tests
 
-      - run:
-          name: Run Integration Tests
-          command: |
-            docker run \
-              --link api:api \
-              --link dashboard:dashboard \
-              -e CYPRESS_BASE_URL=http://dashboard:3000 \
-              -e CYPRESS_APIROOT=http://api:5001 \
-              --rm \
-              -v /home/circleci/.cache:/root/.cache \
-              -v $(pwd):/home \
-              --workdir /home \
-              cypress/base:8 \
-              yarn cypress-ci
+      - store_artifacts:
+          path: /home/cypress/screenshots
 
   deploy:
     machine: true
@@ -134,25 +65,19 @@ jobs:
     steps:
       - checkout
 
-      # restore cache
-      - restore_cache:
-          keys:
-            - dashboard-{{ .Branch }}-{{ checksum "package.json" }}
-
       - run:
           name: Install awscli
           command: sudo pip install awscli
 
-
       - run:
           name: Install dependencies
           command: |
-            docker run --rm \
-              -v /home/circleci/.cache:/root/.cache \
-              -v $(pwd):/home \
-              --workdir /home \
-              node:10.16.3 \
-              yarn install --frozen-lockfile --cache-folder /root/.cache
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install v10.16.3
+            nvm alias default v10.16.3
+            npm install -g npm
+            npm ci
 
       - run:
           # This has to be done in a separate step, like this, because Circle CI
@@ -171,7 +96,7 @@ jobs:
               --workdir /home \
               -e APIROOT=${SANDBOX_API} \
               node:10.16.3 \
-              yarn run build
+              npm run build
 
       - run:
           name: Deploy to S3
@@ -195,7 +120,7 @@ jobs:
               --workdir /home \
               -e APIROOT=${SANDBOX_API_ROOT} \
               node:10.16.3 \
-              yarn run build
+              npm run build
 
       - run:
           name: Deploy to Cumulus Sandbox
@@ -219,7 +144,7 @@ jobs:
               --workdir /home \
               -e APIROOT=${SIT_API_ROOT} \
               node:10.16.3 \
-              yarn run build
+              npm run build
 
       - run:
           name: Deploy to Cumulus SIT
