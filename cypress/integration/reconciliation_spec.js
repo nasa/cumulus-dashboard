@@ -93,7 +93,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
           cy.contains('mhs3-private');
           cy.contains('a', 'Link')
             .should('have.attr', 'href',
-                    's3://mhs3-private/MOD09GQ___006/MOD/mhs3-IngestGranuleDuplicateHandling-1573838955288/MOD09GQ.A3119781.haeynr.006.4074740546315.hdf.met');
+              's3://mhs3-private/MOD09GQ___006/MOD/mhs3-IngestGranuleDuplicateHandling-1573838955288/MOD09GQ.A3119781.haeynr.006.4074740546315.hdf.met');
         });
 
       /** Collections **/
@@ -122,7 +122,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
           cy.contains('hs3wwlln___1');
         });
 
-     /** Granules **/
+      /** Granules **/
 
       cy.contains('h3', 'Granules only in Cumulus (7)')
         .next()

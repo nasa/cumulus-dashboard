@@ -210,13 +210,13 @@ describe('Dashboard Executions Page', () => {
               if (execution.name === executionName) {
                 cy.contains('Input:').next().find('pre')
                   .then(($content) =>
-                        expect(JSON.parse($content.text())).to.deep.equal(execution.originalPayload));
+                    expect(JSON.parse($content.text())).to.deep.equal(execution.originalPayload));
                 cy.contains('Input:').next().contains('.Collapsible', 'Show Input').click('topLeft');
                 cy.contains('Input:').next().contains('.Collapsible', 'Hide Input');
 
                 cy.contains('Output:').next().find('pre')
                   .then(($content) =>
-                        expect(JSON.parse($content.text())).to.deep.equal(execution.finalPayload));
+                    expect(JSON.parse($content.text())).to.deep.equal(execution.finalPayload));
 
                 cy.contains('Output:').next().contains('.Collapsible', 'Show Output').click('topLeft');
                 cy.contains('Output:').next().contains('.Collapsible', 'Hide Output');

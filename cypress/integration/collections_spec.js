@@ -84,11 +84,11 @@ describe('Dashboard Collections Page', () => {
       // After POSTing the new collection, make sure we GET it back
       cy.wait('@postCollection')
         .then((xhr) =>
-              cy.request({
-                method: 'GET',
-                url: `${new URL(xhr.url).origin}/collections/${name}/${version}`,
-                headers: xhr.request.headers
-              }))
+          cy.request({
+            method: 'GET',
+            url: `${new URL(xhr.url).origin}/collections/${name}/${version}`,
+            headers: xhr.request.headers
+          }))
         .then((response) => cy.expectDeepEqualButNewer(response.body, collection));
 
       // Display the new collection

@@ -137,7 +137,7 @@ export class Datepicker extends React.PureComponent {
           );
         })
         }
-        </React.Fragment>
+      </React.Fragment>
     );
   }
 
@@ -173,31 +173,31 @@ export class Datepicker extends React.PureComponent {
         <div className="datetime">
           <div className="datetime__range">
             <ul className="datetime__internal">
-                  <li>
-                    { this.renderDateRangeDropDown() }
-                  </li>
-                  <li>
-                    { this.renderDateTimeRange('startDateTime') }
-                  </li>
-                  <li>
-                  <span> to </span>
-                  </li>
-                  <li>
-                    { this.renderDateTimeRange('endDateTime') }
-                  </li>
-                  <li className="selector__hrformat">
-                    { this.renderHourFormatSelect() }
-                  </li>
-                </ul>
-              </div>
-            <div className="datetime__wrapper">
+              <li>
+                { this.renderDateRangeDropDown() }
+              </li>
+              <li>
+                { this.renderDateTimeRange('startDateTime') }
+              </li>
+              <li>
+                <span> to </span>
+              </li>
+              <li>
+                { this.renderDateTimeRange('endDateTime') }
+              </li>
+              <li className="selector__hrformat">
+                { this.renderHourFormatSelect() }
+              </li>
+            </ul>
+          </div>
+          <div className="datetime__wrapper">
             <h3>Date and Time Range</h3>
           </div>
         </div>
         <div className="datetime__clear">
           <button
-          className="button button--small"
-          onClick={this.clear}
+            className="button button--small"
+            onClick={this.clear}
           >
             Clear Selection
           </button>

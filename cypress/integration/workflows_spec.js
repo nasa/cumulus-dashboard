@@ -17,7 +17,6 @@ describe('Dashboard Workflows Page', () => {
     });
 
     it('displays a link to view workflows', () => {
-
       cy.contains('nav li a', 'Workflows').as('workflows');
       cy.get('@workflows').should('have.attr', 'href', '#/workflows');
       cy.get('@workflows').click();
@@ -30,7 +29,6 @@ describe('Dashboard Workflows Page', () => {
         .should('have.attr', 'href', '#/workflows/workflow/HelloWorldWorkflow');
       cy.contains('table tbody tr a', 'SecondTestWorkflow')
         .should('have.attr', 'href', '#/workflows/workflow/SecondTestWorkflow');
-
     });
 
     it('displays a link to individual workflow', () => {
@@ -48,7 +46,7 @@ describe('Dashboard Workflows Page', () => {
       cy.getJsonTextareaValue().then((workflowJson) => {
         expect(workflowJson.name).to.equal(workflowName);
         expect(workflowJson.definition.States.StartStatus)
-          .to.deep.equal({Type: "Task", Resource: "${SfSnsReportLambdaAliasOutput}", Next: "StopStatus"});
+          .to.deep.equal({Type: 'Task', Resource: '${SfSnsReportLambdaAliasOutput}', Next: 'StopStatus'});
       });
     });
   });

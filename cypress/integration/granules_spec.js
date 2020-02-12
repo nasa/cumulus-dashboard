@@ -81,7 +81,6 @@ describe('Dashboard Granules Page', () => {
           cy.get('@columns').eq(4).invoke('text')
             .should('be.eq', granule.collectionId.replace('___', ' / '));
 
-
           // has link to the detailed collection page
           cy.get('@columns').eq(4).children('a')
             .should('have.attr', 'href')
@@ -98,7 +97,6 @@ describe('Dashboard Granules Page', () => {
           // Updated column
           cy.get('@columns').eq(7).invoke('text')
             .should('match', /.+ago$/);
-
         });
 
       cy.get('table tbody tr').as('list');
@@ -111,7 +109,7 @@ describe('Dashboard Granules Page', () => {
       cy.contains('.heading--xlarge', 'Granules');
 
       cy.contains('a', 'Download Granule List')
-      .should('have.attr', 'href').should('include', 'blob:http://');
+        .should('have.attr', 'href').should('include', 'blob:http://');
     });
 
     it('Should update dropdown with label when visiting bookmarkable URL', () => {

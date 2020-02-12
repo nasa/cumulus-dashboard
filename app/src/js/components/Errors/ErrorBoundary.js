@@ -12,6 +12,7 @@ class ErrorBoundary extends Component {
     };
   }
 
+  // eslint-disable-next-line handle-callback-err
   static getDerivedStateFromError (error) {
     // Update state so the next render will show the fallback UI.
     return { hasError: true };
@@ -36,13 +37,13 @@ class ErrorBoundary extends Component {
       // You can render any custom fallback UI
       return (
         <div>
-        <h1>Oops. We're sorry something went wrong.</h1>;
-        <details style={{ whiteSpace: 'pre-wrap' }}>
+          <h1>Oops. We're sorry something went wrong.</h1>;
+          <details style={{ whiteSpace: 'pre-wrap' }}>
             {error && error.toString()}
             <br />
             {errorInfo.componentStack}
           </details>
-      </div>
+        </div>
       );
     }
     // Just render children
