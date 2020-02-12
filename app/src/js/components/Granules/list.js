@@ -34,7 +34,6 @@ import statusOptions from '../../utils/status';
 import { strings } from '../locale';
 import _config from '../../config';
 import { workflowOptionNames } from '../../selectors';
-import { parseQueryParams } from '../../utils/url-helper';
 
 const { updateInterval } = _config;
 
@@ -67,6 +66,7 @@ class AllGranules extends React.Component {
   generateQuery () {
     const options = {};
     const view = this.getView();
+    if (view && view !== 'all') options.status = view;
     options.status = view;
     return options;
   }
@@ -102,10 +102,7 @@ class AllGranules extends React.Component {
   }
 
   getView () {
-    const { pathname, search } = this.props.location;
-    const queryParams = parseQueryParams(search);
-    const { status } = queryParams;
-    if (status) return status;
+    const { pathname } = this.props.location;
     if (pathname === '/granules/completed') return 'completed';
     else if (pathname === '/granules/processing') return 'running';
     else if (pathname === '/granules/failed') return 'failed';

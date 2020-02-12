@@ -25,7 +25,6 @@ import Search from '../Search/search';
 import statusOptions from '../../utils/status';
 import {strings} from '../locale';
 import { workflowOptionNames } from '../../selectors';
-import { parseQueryParams } from '../../utils/url-helper';
 
 class CollectionGranules extends React.Component {
   constructor () {
@@ -44,15 +43,12 @@ class CollectionGranules extends React.Component {
     const collectionId = getCollectionId(this.props.match.params);
     const options = { collectionId };
     const view = this.getView();
-    options.status = view;
+    if (view && view !== 'all') options.status = view;
     return options;
   }
 
   getView () {
-    const { pathname, search } = this.props.location;
-    const queryParams = parseQueryParams(search);
-    const { status } = queryParams;
-    if (status) return status;
+    const { pathname } = this.props.location;
     if (pathname.includes('/granules/completed')) return 'completed';
     if (pathname.includes('/granules/processing')) return 'running';
     if (pathname.includes('/granules/failed')) return 'failed';
