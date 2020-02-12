@@ -48,25 +48,22 @@ import Datepicker, { defaultDateRange } from './Datepicker/Datepicker';
 
 import { strings } from './locale';
 
+
+const propsFromUrlLocation = (props) => {
+  const { location } = props;
+  const values = initialValuesFromLocation(
+    location, Object.keys(props.datepicker)
+  );
+  return {...props.datepicker, ...values};
+};
+
 class Home extends React.Component {
   constructor (props) {
     super(props);
     this.displayName = 'Home';
-
-    // const datePicker = {
-    //   name: 'metricDatePicker',
-    //   dateRange: defaultDateRange,
-    //   startDateTime: undefined,
-    //   endDateTime: undefined,
-    //   hourFormat: undefined
-    // };
-    // const initialValues = initialValuesFromLocation(
-    //   props.location, Object.keys(datePicker));
-    // this.state = { datePicker: {...datePicker, ...initialValues} };
-
+    this.datepickerMergedUrlProps = propsFromUrlLocation(this.props);
     this.query = this.query.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
-    // this.handleDatePickerChange = this.handleDatePickerChange.bind(this);
   }
 
   componentDidMount () {
@@ -217,7 +214,8 @@ class Home extends React.Component {
                   Select date and time to refine your results. <em>Time is UTC.</em>
                 </h2>
               </div>
-              <Datepicker {...this.props.datepicker }/>
+              <Datepicker {...this.datepickerMergedUrlProps}
+              />
             </div>
           </section>
 
@@ -277,7 +275,7 @@ Home.propTypes = {
 };
 
 export { Home };
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   cumulusInstance: state.cumulusInstance,
   datepicker: state.datepicker,
   dist: state.dist,

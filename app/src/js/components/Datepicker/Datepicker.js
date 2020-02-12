@@ -1,10 +1,12 @@
-import React from 'react';
 import isNil from 'lodash.isnil';
 import moment from 'moment';
-import DateTimePicker from 'react-datetime-picker';
 import PropTypes from 'prop-types';
+import React from 'react';
+import DateTimePicker from 'react-datetime-picker';
 import { connect } from 'react-redux';
-import { DATEPICKER_DROPDOWN_FILTER, DATEPICKER_DATECHANGE } from '../../actions/types';
+import { withRouter } from 'react-router';
+import { DATEPICKER_DATECHANGE, DATEPICKER_DROPDOWN_FILTER, DATEPICKER_HOUR_FORMAT } from '../../actions/types';
+import { updateRouterLocation } from '../../utils/url-helper';
 
 export const defaultDateRange = 1 / 24.0;
 export const customDateRange = null;
@@ -22,30 +24,6 @@ const allDateRanges = [
 ];
 const allHourFormats = ['12HR', '24HR'];
 const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss.sss';
-
-/**
- * Get the date time range based on the user selection with the Datepicker.
- * The startDateTime and endDateTime can be null.
- *
- * @function getDateTimeRange
- * @param  {Object} selection - the date selection with the Datepicker
- * @returns {Object} the selected date time range { startDateTime: <Date>, endDateTime: <Date> }
- */
-export const getDateTimeRange = function (selection) {
-  const selectedRange = { startDateTime: null, endDateTime: null };
-  const { dateRange, startDateTime, endDateTime } = selection;
-
-  if (!isNil(startDateTime) && !isNil(endDateTime)) {
-    selectedRange.startDateTime = moment.utc(startDateTime).toDate();
-    selectedRange.endDateTime = moment.utc(endDateTime).toDate();
-  } else if (dateRange !== 'All') {
-    const rangeFields = dateRange.split(/\s+/);
-    selectedRange.startDateTime = moment.utc().startOf('minute')
-      .subtract(parseInt(rangeFields[0], 10), rangeFields[1]).toDate();
-  }
-  return selectedRange;
-};
-
 /**
  * Component representing the Datepicker.
  * Use by adding <Datepicker />. Use onChange prop for getting new values.
@@ -67,20 +45,31 @@ class Datepicker extends React.PureComponent {
   }
 
   clear () {
-    // TODO [MHS, 2020-02-11] replace with dispatch with default values.
-    this.onChange({...Datepicker.defaultProps});
+    const { value, label } = allDateRanges[0];
+    this.props.dispatch(this.dispatchDropdownUpdate(value, label));
+  }
+
+  dispatchDropdownUpdate(value, label) {
+    return (dispatch, getState) => {
+      dispatch({
+        type: DATEPICKER_DROPDOWN_FILTER,
+        data: { dateRange: { value, label } }
+      });
+      const datepickerState = getState().datepicker;
+      this.updateRouterWithNewProps(datepickerState);
+    };
   }
 
   handleDateRangeDropdownChange (e) {
     const { value, label } = allDateRanges[e.target.selectedIndex];
-    this.props.dispatch({
-      type: DATEPICKER_DROPDOWN_FILTER,
-      data: { dateRange: { value, label } }
-    });
+    this.props.dispatch(this.dispatchDropdownUpdate(value, label));
   }
 
   handleHourFormatChange (e) {
-    this.onChange({[e.target.name]: e.target.value});
+    this.props.dispatch({
+      type: DATEPICKER_HOUR_FORMAT,
+      data: e.target.value
+    });
   }
 
   handleDateTimeRangeChange (name, newValue) {
@@ -94,6 +83,20 @@ class Datepicker extends React.PureComponent {
     };
     updatedProps.dateRange = allDateRanges.filter(a => a.label === 'Custom')[0];
     this.props.dispatch({type: DATEPICKER_DATECHANGE, data: updatedProps});
+    this.updateRouterWithNewProps(updatedProps);
+  }
+
+  updateRouterWithNewProps (newProps) {
+    const urlDateFormat = 'YYYYMMDDHHmmSS';
+    const urlProps = ['endDateTime', 'startDateTime'];
+
+    urlProps.map((time) => {
+      let urlValue = '';
+      if (newProps[time] !== null) {
+        urlValue = moment.utc(newProps[time]).format(urlDateFormat);
+      }
+      updateRouterLocation(this.props.router, this.props.location, time, urlValue);
+    });
   }
 
   renderDateRangeDropDown () {
@@ -133,7 +136,7 @@ class Datepicker extends React.PureComponent {
           );
         })
         }
-        </React.Fragment>
+      </React.Fragment>
     );
   }
 
@@ -143,8 +146,6 @@ class Datepicker extends React.PureComponent {
     const locale = (hourFormat === '24HR') ? 'en-GB' : 'en-US';
     const format = (hourFormat === '24HR') ? 'MM/dd/yyyyy HH:mm' : 'MM/dd/yyyyy hh:mm a';
 
-    // The input date value is in UTC time zone, but the DateTimePicker uses local time for
-    // display.  We want to display the UTC value by ignoring the time zone offset.
     const utcValue = isNil(value) ? null : moment(moment.utc(value).format(dateTimeFormat)).toDate();
 
     return (
@@ -169,31 +170,31 @@ class Datepicker extends React.PureComponent {
         <div className="datetime">
           <div className="datetime__range">
             <ul className="datetime__internal">
-                  <li>
-                    { this.renderDateRangeDropDown() }
-                  </li>
-                  <li>
-                    { this.renderDateTimeRange('startDateTime') }
-                  </li>
-                  <li>
-                  <span> to </span>
-                  </li>
-                  <li>
-                    { this.renderDateTimeRange('endDateTime') }
-                  </li>
-                  <li className="selector__hrformat">
-                    { this.renderHourFormatSelect() }
-                  </li>
-                </ul>
-              </div>
-            <div className="datetime__wrapper">
+              <li>
+                { this.renderDateRangeDropDown() }
+              </li>
+              <li>
+                { this.renderDateTimeRange('startDateTime') }
+              </li>
+              <li>
+                <span> to </span>
+              </li>
+              <li>
+                { this.renderDateTimeRange('endDateTime') }
+              </li>
+              <li className="selector__hrformat">
+                { this.renderHourFormatSelect() }
+              </li>
+            </ul>
+          </div>
+          <div className="datetime__wrapper">
             <h3>Date and Time Range</h3>
           </div>
         </div>
         <div className="datetime__clear">
           <button
-          className="button button--small"
-          onClick={this.clear}
+            className="button button--small"
+            onClick={this.clear}
           >
             Clear Selection
           </button>
@@ -203,13 +204,6 @@ class Datepicker extends React.PureComponent {
   }
 }
 
-Datepicker.defaultProps = {
-  dateRange: allDateRanges[0],
-  startDateTime: null,
-  endDateTime: null,
-  hourFormat: defaultHourFormat
-};
-
 Datepicker.propTypes = {
   name: PropTypes.string,
   dateRange: PropTypes.oneOf(allDateRanges),
@@ -217,7 +211,9 @@ Datepicker.propTypes = {
   endDateTime: PropTypes.instanceOf(Date),
   hourFormat: PropTypes.oneOf(allHourFormats),
   onChange: PropTypes.func,
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
+  router: PropTypes.object,
+  location: PropTypes.object
 };
 
-export default connect(state => state.datepicker)(Datepicker);
+export default withRouter(connect(state => state.datepicker)(Datepicker));

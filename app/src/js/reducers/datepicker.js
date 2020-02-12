@@ -2,14 +2,18 @@
 
 import {
   DATEPICKER_DATECHANGE,
-  DATEPICKER_DROPDOWN_FILTER
+  DATEPICKER_DROPDOWN_FILTER,
+  DATEPICKER_HOUR_FORMAT
 } from '../actions/types';
 
 const daysToMilliseconds = 1000 * 60 * 60 * 24;
+
+// Also becomes default props for Datepicker
 const initialState = {
   startDateTime: null,
   endDateTime: null,
-  dateRange: {value: 'All', label: 'All'}
+  dateRange: {value: 'All', label: 'All'},
+  hourFormat: '12HR'
 };
 
 /**
@@ -32,22 +36,22 @@ const computeDateTimeDelta = (timeDeltaInDays) => {
   return { startDateTime, endDateTime };
 };
 
-const setStateDate = (data) => {
-  console.log('setStateDate', JSON.stringify(data));
-};
-
 export default function reducer(state = initialState, action) {
   state = { ...state };
   const { data } = action;
   switch (action.type) {
     case DATEPICKER_DROPDOWN_FILTER:
       // Dropdown was selected by user
-      state = {...data, ...computeDateTimeDelta(data.dateRange.value)};
-      console.log(`reducer data: ${JSON.stringify(data)}`);
+      state = {...state, ...computeDateTimeDelta(data.dateRange.value)};
+      console.log(`DROPDOWN reducer state: ${JSON.stringify(state)}`);
       break;
     case DATEPICKER_DATECHANGE:
       state = { ...state, ...data };
+      console.log(`Datepicker reducer state: ${JSON.stringify(state)}`);
       break;
+    case DATEPICKER_HOUR_FORMAT:
+      state = { ...state, ...{hourFormat: data} };
+      console.log(`HOUR FORMAT reducer state: ${JSON.stringify(state)}`);
   }
   return state;
 }
