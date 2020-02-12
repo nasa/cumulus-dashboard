@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import dagre from 'dagre-d3';
+import dagre from 'dagre-d3v4';
 import * as d3 from 'd3';
 
 import {
