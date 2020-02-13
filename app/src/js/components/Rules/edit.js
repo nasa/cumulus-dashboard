@@ -15,8 +15,7 @@ const SCHEMA_KEY = 'rule';
 
 class EditRule extends React.Component {
   render () {
-    const { params, rules } = this.props;
-    const { ruleName } = params;
+    const { match: { params: { ruleName } }, rules } = this.props;
     return (
       <EditRaw
         pk={ruleName}
@@ -33,7 +32,7 @@ class EditRule extends React.Component {
 }
 
 EditRule.propTypes = {
-  params: PropTypes.object,
+  match: PropTypes.object,
   rules: PropTypes.object
 };
 
