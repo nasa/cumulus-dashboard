@@ -29,7 +29,7 @@ describe('Dashboard authentication', () => {
       expect(store.getState().api.tokens.token).to.eq('this-is-a-fake-token');
     });
 
-    cy.url().should('not.include', '/#/auth');
+    cy.url().should('not.include', '/auth');
   });
 
   it('should logout user on invalid JWT token', () => {

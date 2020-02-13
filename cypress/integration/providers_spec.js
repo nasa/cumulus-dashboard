@@ -3,11 +3,11 @@ import { shouldBeRedirectedToLogin } from '../support/assertions';
 describe('Dashboard Providers Page', () => {
   describe('When not logged in', () => {
     it('should redirect to login page', () => {
-      cy.visit('/#/providers');
+      cy.visit('/providers');
       shouldBeRedirectedToLogin();
 
       const name = 's3_provider';
-      cy.visit(`/#/providers/provider/${name}`);
+      cy.visit(`/providers/provider/${name}`);
       shouldBeRedirectedToLogin();
     });
   });
@@ -23,7 +23,7 @@ describe('Dashboard Providers Page', () => {
 
     it('should display a link to view providers', () => {
       cy.contains('nav li a', 'Providers').as('providers');
-      cy.get('@providers').should('have.attr', 'href', '#/providers');
+      cy.get('@providers').should('have.attr', 'href', '/providers');
       cy.get('@providers').click();
 
       cy.url().should('include', 'providers');
@@ -40,11 +40,11 @@ describe('Dashboard Providers Page', () => {
       const protocol = 's3';
       const host = 'test-host';
 
-      cy.visit('/#/providers');
+      cy.visit('/providers');
 
       cy.contains('.heading--large', 'Provider Overview');
       cy.contains('a', 'Add a Provider').as('addProvider');
-      cy.get('@addProvider').should('have.attr', 'href', '#/providers/add');
+      cy.get('@addProvider').should('have.attr', 'href', '/providers/add');
       cy.get('@addProvider').click();
 
       cy.contains('.heading--xlarge', 'Providers');
@@ -79,7 +79,7 @@ describe('Dashboard Providers Page', () => {
       cy.contains('.heading--xlarge', 'Providers');
       cy.contains('.heading--large', name);
       cy.contains('.heading--medium', 'Provider Overview');
-      cy.url().should('include', `#/providers/provider/${name}`);
+      cy.url().should('include', `providers/provider/${name}`);
       cy.get('.metadata__details')
         .within(() => {
           cy.contains('Global Connection Limit')
@@ -97,7 +97,7 @@ describe('Dashboard Providers Page', () => {
       // verify the new provider is added to the providers list
       cy.contains('a', 'Back to Provider').click();
       cy.contains('table tbody tr a', name)
-        .should('have.attr', 'href', `#providers/provider/${name}`);
+        .should('have.attr', 'href', `/providers/provider/${name}`);
     });
 
     it('should edit a provider', () => {
@@ -107,12 +107,12 @@ describe('Dashboard Providers Page', () => {
       // const connectionLimit = 12;
       const host = 'test-host-new';
 
-      cy.visit(`/#/providers/provider/${name}`);
+      cy.visit(`/providers/provider/${name}`);
       cy.contains('.heading--large', name);
       cy.contains('a', 'Edit').as('editprovider');
       cy.get('@editprovider')
         .should('have.attr', 'href')
-        .and('include', `#/providers/edit/${name}`);
+        .and('include', `/providers/edit/${name}`);
       cy.get('@editprovider').click();
 
       cy.contains('.heading--large', `Edit ${name}`);
@@ -150,7 +150,7 @@ describe('Dashboard Providers Page', () => {
 
     it('should delete a provider', () => {
       const name = 's3_provider';
-      cy.visit(`/#/providers/provider/${name}`);
+      cy.visit(`/providers/provider/${name}`);
       cy.contains('.heading--large', name);
 
       // delete provider
@@ -166,7 +166,7 @@ describe('Dashboard Providers Page', () => {
 
     it('should fail to delete a provider with an associated rule', () => {
       const name = 'PODAAC_SWOT';
-      cy.visit(`/#/providers/provider/${name}`);
+      cy.visit(`/providers/provider/${name}`);
       cy.contains('.heading--large', name);
 
       // delete provider

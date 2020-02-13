@@ -2,7 +2,7 @@ import { shouldBeRedirectedToLogin } from '../support/assertions';
 
 describe('Rules page', () => {
   it('when not logged in it should redirect to login page', () => {
-    cy.visit('#/rules');
+    cy.visit('/rules');
     shouldBeRedirectedToLogin();
   });
 
@@ -24,22 +24,22 @@ describe('Rules page', () => {
     it('should display a list of rules', () => {
       cy.visit('/');
       cy.get('nav').contains('Rules').click();
-      cy.url().should('include', '/#/rules');
+      cy.url().should('include', '/rules');
       cy.get('table tbody tr').should('have.length', 1);
       cy.contains('table tr', testRuleName)
         .within(() => {
           cy.contains(testProviderId);
           cy.contains(testCollectionId);
           cy.contains(testRuleName)
-            .should('have.attr', 'href', `#rules/rule/${testRuleName}`);
+            .should('have.attr', 'href', `/rules/rule/${testRuleName}`);
         });
     });
 
     it('display a rule with the correct data', () => {
-      cy.visit('/#/rules');
+      cy.visit('/rules');
       cy.contains('table tr a', testRuleName)
         .click();
-      cy.url().should('include', `/#/rules/rule/${testRuleName}`);
+      cy.url().should('include', `/rules/rule/${testRuleName}`);
       cy.get('.metadata__details')
         .within(() => {
           cy.get('dt')
@@ -54,14 +54,14 @@ describe('Rules page', () => {
             .contains('Provider')
             .next('dd')
             .contains(testProviderId)
-            .should('have.attr', 'href', `#providers/provider/${testProviderId}`);
+            .should('have.attr', 'href', `/providers/provider/${testProviderId}`);
         });
     });
 
     it('creating a rule should add it to the list', () => {
-      cy.visit('/#/rules');
+      cy.visit('/rules');
       cy.get('a').contains('Add a rule').as('addRule');
-      cy.get('@addRule').should('have.attr', 'href', '#/rules/add');
+      cy.get('@addRule').should('have.attr', 'href', '/rules/add');
       cy.get('@addRule').click();
 
       const ruleName = 'newRule';
@@ -85,12 +85,12 @@ describe('Rules page', () => {
 
       cy.contains('.heading--xlarge', 'Rules');
       cy.contains('table tbody tr a', ruleName)
-        .and('have.attr', 'href', `#rules/rule/${ruleName}`).click();
+        .and('have.attr', 'href', `/rules/rule/${ruleName}`).click();
 
       cy.contains('.heading--xlarge', 'Rules');
       cy.contains('.heading--large', ruleName);
       cy.contains('.heading--medium', 'Rule Overview');
-      cy.url().should('include', `#/rules/rule/${ruleName}`);
+      cy.url().should('include', `rules/rule/${ruleName}`);
       cy.get('.metadata__details')
         .within(() => {
           cy.contains('RuleName').next().should('have.text', ruleName);
@@ -98,14 +98,14 @@ describe('Rules page', () => {
           cy.contains('Provider')
             .next()
             .contains('a', provider)
-            .should('have.attr', 'href', `#providers/provider/${provider}`);
+            .should('have.attr', 'href', `/providers/provider/${provider}`);
         });
     });
 
     it('editing a rule and returning to the rules page should show the new changes', () => {
-      cy.visit('/#/rules');
+      cy.visit('/rules');
       cy.contains('table tbody tr a', testRuleName)
-        .and('have.attr', 'href', `#rules/rule/${testRuleName}`)
+        .and('have.attr', 'href', `/rules/rule/${testRuleName}`)
         .click();
 
       cy.contains('.heading--large', testRuleName);
@@ -127,12 +127,12 @@ describe('Rules page', () => {
       cy.contains('table tr', testRuleName)
         .within(() => {
           cy.contains(provider)
-            .should('have.attr', 'href', `#providers/provider/${provider}`);
+            .should('have.attr', 'href', `/providers/provider/${provider}`);
         });
     });
 
     it('deleting a rule should remove it from the list', () => {
-      cy.visit('/#/rules');
+      cy.visit('/rules');
       cy.contains('table tr', testRuleName)
         .within(() => {
           cy.get('input[type="checkbox"]').click();
