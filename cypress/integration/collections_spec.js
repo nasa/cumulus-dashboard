@@ -118,7 +118,9 @@ describe('Dashboard Collections Page', () => {
       cy.visit('/collections');
       cy.get('table tbody tr').its('length').should('be.eq', 5);
 
-      cy.visit(`/collections/collection/${name}/${version}`);
+      cy.contains('table tbody tr a', name)
+        .should('have.attr', 'href', `/collections/collection/${name}/${version}`)
+        .click();
       cy.contains('.heading--large', `${name} / ${version}`);
       cy.contains(/0 Granules? Running/i);
 
