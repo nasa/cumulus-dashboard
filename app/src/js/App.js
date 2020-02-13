@@ -1,7 +1,7 @@
 'use strict';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import configureStore, { requireAuth, checkAuth, history } from './store/configureStore';
+import configureStore, { history } from './store/configureStore';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 // import { useScroll as notHookUseScroll } from 'react-router-scroll-4';
@@ -36,12 +36,39 @@ import config from './config';
 console.log.apply(console, config.consoleMessage);
 console.log('Environment', config.environment);
 
+// Wrapper for Main component to include routing
+const MainRoutes = () => {
+  return (
+    <Main path='/'>
+      <Switch>
+        <Route exact path='/' component={Home} />
+        <Route path='/404' component={NotFound} />
+        <Route path='/collections' component={Collections} />
+        <Route path='/granules' component={Granules} />
+        <Route path='/pdrs' component={Pdrs} />
+        <Route path='/providers' component={Providers} />
+        <Route path='/workflows' component={Workflows} />
+        <Route path='/executions' component={Executions} />
+        <Route path='/operations' component={Operations} />
+        <Route path='/rules' component={Rules} />
+        <Route path='/logs' component={Logs} />
+        <Route path='/reconciliation-reports' component={ReconciliationReports} />
+      </Switch>
+    </Main>
+  );
+};
+
 // generate the root App Component
 class App extends Component {
   constructor (props) {
     super(props);
     this.state = {};
     this.store = configureStore({});
+    this.isLoggedIn = this.isLoggedIn.bind(this);
+  }
+
+  isLoggedIn () {
+    return this.store.getState().api.authenticated;
   }
 
   render () {
@@ -53,23 +80,8 @@ class App extends Component {
           <ConnectedRouter history={history}>
             <Switch>
               <Redirect exact from='/login' to='/auth' />
-              <Route path='/auth' component={OAuth} onEnter={checkAuth(this.store)} />
-              <Main path='/' onEnter={requireAuth(this.store)} >
-                <Route exact path='/' component={Home} />
-                <Switch>
-                  <Route path='/404' component={NotFound} />
-                  <Route path='/collections' component={Collections} />
-                  <Route path='/granules' component={Granules} />
-                  <Route path='/pdrs' component={Pdrs} />
-                  <Route path='/providers' component={Providers} />
-                  <Route path='/workflows' component={Workflows} />
-                  <Route path='/executions' component={Executions} />
-                  <Route path='/operations' component={Operations} />
-                  <Route path='/rules' component={Rules} />
-                  <Route path='/logs' component={Logs} />
-                  <Route path='/reconciliation-reports' component={ReconciliationReports} />
-                </Switch>
-              </Main>
+              <Route path='/auth' render={() => this.isLoggedIn() ? <Redirect to='/' /> : <OAuth />} />
+              <Route path='/' render={() => this.isLoggedIn() ? <MainRoutes /> : <Redirect to='/auth' />} />
             </Switch>
           </ConnectedRouter>
         </Provider>
