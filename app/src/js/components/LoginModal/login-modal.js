@@ -28,7 +28,7 @@ class LoginModal extends React.Component {
       if (pathname !== '/login' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/login') {
-        setTimeout(() => prevProps.router.push('/'), updateDelay);
+        setTimeout(() => prevProps.history.push('/'), updateDelay);
       }
     }
   }
@@ -99,7 +99,7 @@ LoginModal.propTypes = {
   dispatch: PropTypes.func,
   api: PropTypes.object,
   location: PropTypes.object,
-  router: PropTypes.object,
+  history: PropTypes.object,
   show: PropTypes.bool
 };
 

@@ -48,7 +48,7 @@ class EditRaw extends React.Component {
   }
 
   cancel () {
-    this.props.router.push(this.props.backRoute);
+    this.props.history.push(this.props.backRoute);
   }
 
   componentDidMount () {
@@ -58,12 +58,12 @@ class EditRaw extends React.Component {
 
   componentDidUpdate (prevProps) {
     const { pk, state, schema, schemaKey } = this.props;
-    const { dispatch, router, clearRecordUpdate, backRoute } = prevProps;
+    const { dispatch, history, clearRecordUpdate, backRoute } = prevProps;
     // successfully updated, navigate away
     if (get(state.updated, [pk, 'status']) === 'success') {
       return setTimeout(() => {
         dispatch(clearRecordUpdate(pk));
-        router.push(backRoute);
+        history.push(backRoute);
       }, updateDelay);
     }
     if (this.state.pk === pk || !schema[schemaKey]) { return; }
@@ -143,8 +143,7 @@ EditRaw.propTypes = {
   schemaKey: PropTypes.string,
   state: PropTypes.object,
   backRoute: PropTypes.string,
-  router: PropTypes.object,
-
+  history: PropTypes.object,
   getRecord: PropTypes.func,
   updateRecord: PropTypes.func,
   clearRecordUpdate: PropTypes.func

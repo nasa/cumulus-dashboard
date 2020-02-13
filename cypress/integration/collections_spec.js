@@ -89,21 +89,23 @@ describe('Dashboard Collections Page', () => {
             url: `${new URL(xhr.url).origin}/collections/${name}/${version}`,
             headers: xhr.request.headers
           }))
-        .then((response) => cy.expectDeepEqualButNewer(response.body, collection));
+        .then((response) => {
+          cy.expectDeepEqualButNewer(response.body, collection);
 
-      // Display the new collection
-      cy.wait('@getCollection');
-      cy.wait('@getGranules');
-      cy.url().should('include', `/collections/collection/${name}/${version}`);
-      cy.contains('.heading--xlarge', 'Collections');
-      cy.contains('.heading--large', `${name} / ${version}`);
+          // Display the new collection
+          cy.wait('@getCollection');
+          cy.wait('@getGranules');
+          cy.url().should('include', `/collections/collection/${name}/${version}`);
+          cy.contains('.heading--xlarge', 'Collections');
+          cy.contains('.heading--large', `${name} / ${version}`);
 
-      // Verify the new collection appears in the collections list
-      cy.contains('Back to Collections').click();
-      cy.wait('@getCollections');
-      cy.url().should('contain', '/collections/all');
-      cy.contains('table tbody tr a', name)
-        .should('have.attr', 'href', `/collections/collection/${name}/${version}`);
+          // Verify the new collection appears in the collections list
+          cy.contains('Back to Collections').click();
+          cy.wait('@getCollections');
+          cy.url().should('contain', '/collections/all');
+          cy.contains('table tbody tr a', name)
+            .should('have.attr', 'href', `/collections/collection/${name}/${version}`);
+        });
     });
 
     it('should select a different collection', () => {

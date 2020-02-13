@@ -23,7 +23,7 @@ class AddRaw extends React.Component {
   }
 
   cancel (e) {
-    this.props.router.push(this.props.getBaseRoute().split('/')[1]);
+    this.props.history.push(this.props.getBaseRoute());
   }
 
   submit (e) {
@@ -49,7 +49,7 @@ class AddRaw extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { router, getBaseRoute } = prevProps;
+    const { history, getBaseRoute } = prevProps;
     const { pk, error } = this.state;
     if (!pk) {
       return;
@@ -59,7 +59,7 @@ class AddRaw extends React.Component {
     if (status === 'success') {
       const baseRoute = getBaseRoute(pk);
       return setTimeout(() => {
-        router.push(baseRoute);
+        history.push(baseRoute);
       }, updateDelay);
     } else if (status === 'error' && !error) {
       this.setState({ error: get(this.props.state.created, [pk, 'error']) }); // eslint-disable-line react/no-did-update-set-state
@@ -115,7 +115,7 @@ AddRaw.propTypes = {
   title: PropTypes.string,
   getPk: PropTypes.func,
   getBaseRoute: PropTypes.func,
-  router: PropTypes.object,
+  history: PropTypes.object,
   createRecord: PropTypes.func
 };
 

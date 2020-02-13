@@ -8,7 +8,7 @@ const removeDeleted = (accessor, list, deleted) => {
     let record = deleted[id];
     return !(record && get(record, 'status') === 'success');
   };
-  return list.filter(filterByDeletedSuccess);
+  return list ? list.filter(filterByDeletedSuccess) : [];
 };
 
 export default removeDeleted;

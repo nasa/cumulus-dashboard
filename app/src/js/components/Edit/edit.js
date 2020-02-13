@@ -40,12 +40,12 @@ class EditRecord extends React.Component {
 
   componentDidUpdate (prevProps) {
     const { pk } = this.props;
-    const { dispatch, router, clearRecordUpdate, backRoute, state } = prevProps;
+    const { dispatch, history, clearRecordUpdate, backRoute, state } = prevProps;
     const updateStatus = get(state.updated, [pk, 'status']);
     if (updateStatus === 'success') {
       return setTimeout(() => {
         dispatch(clearRecordUpdate(pk));
-        router.push(backRoute);
+        history.push(backRoute);
       }, updateDelay);
     } else if (this.state.pk === pk) { return; }
 
@@ -70,7 +70,7 @@ class EditRecord extends React.Component {
   }
 
   navigateBack () {
-    this.props.router.push(this.props.backRoute);
+    this.props.history.push(this.props.backRoute);
   }
 
   onSubmit (id, payload) {
@@ -120,7 +120,7 @@ EditRecord.propTypes = {
   schemaKey: PropTypes.string,
   dispatch: PropTypes.func,
   state: PropTypes.object,
-  router: PropTypes.object,
+  history: PropTypes.object,
   backRoute: PropTypes.string,
 
   includedForms: PropTypes.array,

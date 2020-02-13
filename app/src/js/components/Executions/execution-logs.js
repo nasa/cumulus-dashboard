@@ -22,8 +22,8 @@ class ExecutionLogs extends React.Component {
   }
 
   navigateBack () {
-    const { router } = this.props;
-    router.push('/executions');
+    const { history } = this.props;
+    history.push('/executions');
   }
 
   errors () {
@@ -69,7 +69,7 @@ ExecutionLogs.propTypes = {
   executionLogs: PropTypes.object,
   match: PropTypes.object,
   dispatch: PropTypes.func,
-  router: PropTypes.object
+  history: PropTypes.object
 };
 
 export default withRouter(connect(state => ({

@@ -78,7 +78,7 @@ class ReconciliationReport extends React.Component {
   }
 
   navigateBack () {
-    this.props.router.push('/reconciliations');
+    this.props.history.push('/reconciliations');
   }
 
   getFilesSummary ({
@@ -288,7 +288,7 @@ ReconciliationReport.propTypes = {
   reconciliationReports: PropTypes.object,
   dispatch: PropTypes.func,
   match: PropTypes.object,
-  router: PropTypes.object
+  history: PropTypes.object
 };
 
 ReconciliationReport.defaultProps = {

@@ -11,7 +11,7 @@ const getBaseRoute = function (collectionId) {
   if (collectionId) {
     return collectionHref(collectionId);
   } else {
-    return '/collections/collection';
+    return '/collections/all';
   }
 };
 

@@ -113,8 +113,8 @@ class GranuleOverview extends React.Component {
   }
 
   navigateBack () {
-    const { router } = this.props;
-    router.push('/granules');
+    const { history } = this.props;
+    history.push('/granules');
   }
 
   queryWorkflows () {
@@ -265,7 +265,7 @@ GranuleOverview.propTypes = {
   dispatch: PropTypes.func,
   granules: PropTypes.object,
   logs: PropTypes.object,
-  router: PropTypes.object,
+  history: PropTypes.object,
   skipReloadOnMount: PropTypes.bool,
   workflowOptions: PropTypes.array
 };

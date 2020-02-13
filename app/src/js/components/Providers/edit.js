@@ -24,7 +24,7 @@ class EditProvider extends React.Component {
         getRecord={getProvider}
         updateRecord={updateProvider}
         clearRecordUpdate={clearUpdateProvider}
-        backRoute={`providers/provider/${providerId}`}
+        backRoute={`/providers/provider/${providerId}`}
       />
     );
   }

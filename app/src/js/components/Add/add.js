@@ -29,17 +29,17 @@ class AddCollection extends React.Component {
 
   componentDidUpdate (prevProps) {
     const { pk } = this.state;
-    const { router, baseRoute } = prevProps;
+    const { history, baseRoute } = prevProps;
     const status = get(this.props.state, ['created', pk, 'status']);
     if (status === 'success') {
       return setTimeout(() => {
-        router.push(path.join(baseRoute, pk));
+        history.push(path.join(baseRoute, pk));
       }, updateDelay);
     }
   }
 
   navigateBack () {
-    this.props.router.push(this.props.baseRoute.split('/')[1]);
+    this.props.history.push(this.props.baseRoute.split('/')[1]);
   }
 
   post (id, payload) {
@@ -97,7 +97,7 @@ AddCollection.propTypes = {
   dispatch: PropTypes.func,
   state: PropTypes.object,
 
-  router: PropTypes.object,
+  history: PropTypes.object,
   baseRoute: PropTypes.string,
   attachMeta: PropTypes.bool,
 

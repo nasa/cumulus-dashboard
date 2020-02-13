@@ -24,7 +24,7 @@ class EditRule extends React.Component {
         state={rules}
         getRecord={() => getRule(ruleName)}
         updateRecord={updateRule}
-        backRoute={`rules/rule/${ruleName}`}
+        backRoute={`/rules/rule/${ruleName}`}
         clearRecordUpdate={clearUpdateRule}
       />
     );

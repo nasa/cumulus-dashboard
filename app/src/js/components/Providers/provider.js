@@ -68,8 +68,8 @@ class ProviderOverview extends React.Component {
   }
 
   navigateBack () {
-    const { router } = this.props;
-    router.push('/providers');
+    const { history } = this.props;
+    history.push('/providers');
   }
 
   delete () {
@@ -150,7 +150,7 @@ ProviderOverview.propTypes = {
   dispatch: PropTypes.func,
   providers: PropTypes.object,
   logs: PropTypes.object,
-  router: PropTypes.object
+  history: PropTypes.object
 };
 
 export default withRouter(connect(state => ({

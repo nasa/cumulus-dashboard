@@ -95,7 +95,7 @@ class PDR extends React.Component {
   }
 
   navigateBack () {
-    this.props.router.push('/pdrs');
+    this.props.history.push('/pdrs');
   }
 
   generateBulkActions () {
@@ -209,7 +209,7 @@ PDR.propTypes = {
   pdrs: PropTypes.object,
   dispatch: PropTypes.func,
   params: PropTypes.object,
-  router: PropTypes.object
+  history: PropTypes.object
 };
 
 export default withRouter(connect(state => state)(PDR));

@@ -82,7 +82,7 @@ class Rule extends React.Component {
   }
 
   navigateBack () {
-    this.props.router.push('/rules');
+    this.props.history.push('/rules');
   }
 
   reload () {
@@ -177,7 +177,7 @@ class Rule extends React.Component {
 
 Rule.propTypes = {
   match: PropTypes.object,
-  router: PropTypes.object,
+  history: PropTypes.object,
   dispatch: PropTypes.func,
   rules: PropTypes.object
 };
