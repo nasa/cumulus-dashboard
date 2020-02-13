@@ -1,4 +1,4 @@
-import dagre from 'dagre-d3v4';
+import dagre from 'dagre-d3';
 
 export const select = (arr, predOrProp) => {
   var predicate = predOrProp;
