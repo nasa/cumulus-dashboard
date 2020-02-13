@@ -38,7 +38,7 @@ class Main extends Component {
 }
 
 Main.propTypes = {
-  children: PropTypes.array,
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.node]),
   dispatch: PropTypes.func,
   location: PropTypes.object,
   api: PropTypes.object,
