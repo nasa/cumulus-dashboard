@@ -14,7 +14,7 @@ const SCHEMA_KEY = 'provider';
 
 class EditProvider extends React.Component {
   render () {
-    const { providerId } = this.props.params;
+    const { providerId } = this.props.match.params;
     return (
       <EditRecord
         merge={true}
@@ -31,7 +31,7 @@ class EditProvider extends React.Component {
 }
 
 EditProvider.propTypes = {
-  params: PropTypes.object,
+  match: PropTypes.object,
   providers: PropTypes.object
 };
 

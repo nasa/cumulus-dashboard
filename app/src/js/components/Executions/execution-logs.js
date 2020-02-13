@@ -17,7 +17,7 @@ class ExecutionLogs extends React.Component {
 
   componentDidMount () {
     const { dispatch } = this.props;
-    const { executionName } = this.props.params;
+    const { executionName } = this.props.match.params;
     dispatch(getExecutionLogs(executionName));
   }
 
@@ -32,7 +32,7 @@ class ExecutionLogs extends React.Component {
 
   render () {
     const { executionLogs } = this.props;
-    const { executionName } = this.props.params;
+    const { executionName } = this.props.match.params;
     if (!executionLogs.results) return null;
 
     const errors = this.errors();
@@ -67,7 +67,7 @@ class ExecutionLogs extends React.Component {
 
 ExecutionLogs.propTypes = {
   executionLogs: PropTypes.object,
-  params: PropTypes.object,
+  match: PropTypes.object,
   dispatch: PropTypes.func,
   router: PropTypes.object
 };

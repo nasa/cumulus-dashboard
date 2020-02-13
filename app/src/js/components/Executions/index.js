@@ -25,8 +25,8 @@ class Executions extends React.Component {
             <div className='page__content--shortened'>
               <Switch>
                 <Route exact path='/executions' component={ExecutionOverview} />
-                <Route path='/executions/execution/:executionArn' component={ExecutionStatus} />
                 <Route path='/executions/execution/:executionName/logs' component={ExecutionLogs} />
+                <Route path='/executions/execution/:executionArn' component={ExecutionStatus} />
               </Switch>
             </div>
           </div>
