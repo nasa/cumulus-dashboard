@@ -24,6 +24,7 @@ const allDateRanges = [
 ];
 const allHourFormats = ['12HR', '24HR'];
 const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss.sss';
+
 /**
  * Component representing the Datepicker.
  * Use by adding <Datepicker />. Use onChange prop for getting new values.

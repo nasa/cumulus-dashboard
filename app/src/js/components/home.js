@@ -1,5 +1,6 @@
 'use strict';
-import isNil from 'lodash.isnil';
+import isEmpty from 'lodash.isempty';
+import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -49,19 +50,28 @@ import Datepicker, { defaultDateRange } from './Datepicker/Datepicker';
 import { strings } from './locale';
 
 
-const propsFromUrlLocation = (props) => {
+/**
+ * If this is a shared URL. grab the date and time
+ * @param {any} props
+ */
+const stateFromUrlLocation = (props) => {
+  const urlDateFormat = 'YYYYMMDDHHmmSS';
+  const urlProps = ['endDateTime', 'startDateTime'];
   const { location } = props;
-  const values = initialValuesFromLocation(
-    location, Object.keys(props.datepicker)
-  );
-  return {...props.datepicker, ...values};
+  const values = initialValuesFromLocation(location, urlProps);
+  if (!isEmpty(values)) {
+    for (const value in values) {
+      values[value] = moment.utc(values[value], urlDateFormat).toDate();
+    }
+    values.dateRange = {value: 'Custom', label: 'Custom'};
+    props.dispatch({type: 'DATEPICKER_DATECHANGE', data: {...props.datepicker, ...values}});
+  }
 };
 
 class Home extends React.Component {
   constructor (props) {
     super(props);
     this.displayName = 'Home';
-    this.datepickerMergedUrlProps = propsFromUrlLocation(this.props);
     this.query = this.query.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
   }
@@ -71,14 +81,14 @@ class Home extends React.Component {
       this.query();
     }, updateInterval, true);
     const {dispatch} = this.props;
+    stateFromUrlLocation(this.props);
     dispatch(getCumulusInstanceMetadata())
       .then(() => {
         dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
         dispatch(getTEALambdaMetrics(this.props.cumulusInstance));
         dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
         dispatch(getDistS3AccessMetrics(this.props.cumulusInstance));
-      }
-    );
+      });
   }
 
   componentWillUnmount () {
@@ -113,17 +123,6 @@ class Home extends React.Component {
   isExternalLink (link) {
     return link.match('https?://');
   }
-
-  // TODO [MHS, 2020-02-10] Update Router locations CUMULUS-1729
-  // handleDatePickerChange (value) {
-  //   // This should dispatch actions and not set state directly.
-  //   // this.setState({datePicker: {...this.state.datePicker, ...value}});
-  //   // const { location, router } = this.props;
-  //   // Object.keys(value).forEach(id => {
-  //   //   updateRouterLocation(router, location, id, isNil(value[id]) ? '' : value[id]);
-  //   // });
-  // }
-
   renderButtonListSection (items, header, listId) {
     const data = items.filter(d => d[0] !== nullValue);
     if (!data.length) return null;
@@ -214,8 +213,7 @@ class Home extends React.Component {
                   Select date and time to refine your results. <em>Time is UTC.</em>
                 </h2>
               </div>
-              <Datepicker {...this.datepickerMergedUrlProps}
-              />
+              <Datepicker />
             </div>
           </section>
 
