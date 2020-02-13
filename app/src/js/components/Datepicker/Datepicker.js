@@ -19,7 +19,7 @@ const allDateRanges = [
   {value: 7, label: 'Last week'},
   {value: 30, label: 'Last 30 Days'},
   {value: 60, label: 'Last 60 days'},
-  {value: 60, label: 'Last 180 days'},
+  {value: 180, label: 'Last 180 days'},
   {value: 366, label: 'Last year'}
 ];
 const allHourFormats = ['12HR', '24HR'];

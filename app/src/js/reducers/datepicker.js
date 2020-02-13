@@ -42,7 +42,7 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case DATEPICKER_DROPDOWN_FILTER:
       // Dropdown was selected by user
-      state = {...state, ...computeDateTimeDelta(data.dateRange.value)};
+      state = {...state, ...computeDateTimeDelta(data.dateRange.value), ...data};
       console.log(`DROPDOWN reducer state: ${JSON.stringify(state)}`);
       break;
     case DATEPICKER_DATECHANGE:
