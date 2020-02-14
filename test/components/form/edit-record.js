@@ -33,7 +33,7 @@ test('EditRecord sends full object when merge property is true', (t) => {
     <Provider store={store}>
       <EditRecord
         schema={schema}
-        dispatch={() => void 0}
+        dispatch={store.dispatch}
         merge={true}
         pk={`${provider.id}`}
         schemaKey={schemaKey}
