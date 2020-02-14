@@ -4,20 +4,14 @@ import nock from 'nock';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { CALL_API } from '../../app/src/js/actions';
+import { CALL_API } from '../../app/src/js/actions/types';
 import { requestMiddleware } from '../../app/src/js/middleware/request';
 
 const port = process.env.FAKEAPIPORT || 5001;
 
-// Simply unwrap the simple action from the complex action and pass it
-// along to the reducer.  We get `action` as { "undefined": simpleAction },
-// so we're extracting the single value (simpleAction) for the reducer.
-const monkeyInTheMiddle = () =>
-  (next) => (action) => next(Object.values(action)[0]);
 const middlewares = [
   requestMiddleware,
-  thunk,
-  monkeyInTheMiddle
+  thunk
 ];
 const mockStore = configureMockStore(middlewares);
 const store = mockStore({
