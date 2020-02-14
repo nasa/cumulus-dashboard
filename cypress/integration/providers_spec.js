@@ -1,7 +1,7 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
 
 describe('Dashboard Providers Page', () => {
-  describe('When not logged in', () => {
+  xdescribe('When not logged in', () => {
     it('should redirect to login page', () => {
       cy.visit('/providers');
       shouldBeRedirectedToLogin();
@@ -16,9 +16,13 @@ describe('Dashboard Providers Page', () => {
     before(() => cy.visit('/'));
 
     beforeEach(() => {
-      cy.task('resetState');
       cy.login();
+      cy.task('resetState');
       cy.visit('/');
+      cy.server();
+      cy.route('POST', '/providers').as('postProvider');
+      cy.route('GET', '/providers?limit=*').as('getProviders');
+      cy.route('GET', '/providers/*').as('getProvider');
     });
 
     it('should display a link to view providers', () => {
@@ -74,12 +78,12 @@ describe('Dashboard Providers Page', () => {
         .type(host);
 
       cy.get('form div button').contains('Submit').click();
-
-      // displays the new provider
+      cy.wait('@postProvider');
+      cy.wait('@getProvider');
+      cy.url().should('include', `providers/provider/${name}`);
       cy.contains('.heading--xlarge', 'Providers');
       cy.contains('.heading--large', name);
       cy.contains('.heading--medium', 'Provider Overview');
-      cy.url().should('include', `providers/provider/${name}`);
       cy.get('.metadata__details')
         .within(() => {
           cy.contains('Global Connection Limit')
@@ -94,8 +98,12 @@ describe('Dashboard Providers Page', () => {
             .should('have.attr', 'href', host);
         });
 
-      // verify the new provider is added to the providers list
-      cy.contains('a', 'Back to Provider').click();
+      // Verify the new provider is added to the providers list, after allowing
+      // ES indexing to finish (hopefully), so that the new provider is part
+      // of the query results.
+      cy.wait(1000);
+      cy.contains('a', 'Back to Providers').click();
+      cy.wait('@getProviders');
       cy.contains('table tbody tr a', name)
         .should('have.attr', 'href', `/providers/provider/${name}`);
     });
