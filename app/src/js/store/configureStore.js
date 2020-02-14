@@ -5,6 +5,7 @@ import { createRootReducer } from '../reducers';
 import { refreshTokenMiddleware } from '../middleware/token';
 import { requestMiddleware } from '../middleware/request';
 import thunk from 'redux-thunk';
+import { window } from '../utils/browser';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

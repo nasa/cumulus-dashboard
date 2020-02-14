@@ -64,8 +64,9 @@
       "@babel/register"
     ],
     "files": [
-      "./test/**/*",
-      "!node_modules/"
+      "test/**/*",
+      "!node_modules/",
+      "!test/fixtures/**/*"
     ]
   },
   "browserslist": {

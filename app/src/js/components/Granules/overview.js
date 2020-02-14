@@ -36,6 +36,7 @@ import Bulk from './bulk';
 import _config from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
+import { window } from '../../utils/browser';
 
 const { updateInterval } = _config;
 

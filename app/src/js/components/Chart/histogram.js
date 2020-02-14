@@ -7,6 +7,7 @@ import throttle from 'lodash.throttle';
 import PropTypes from 'prop-types';
 import { tally } from '../../utils/format';
 import LoadingIndicator from '../app/loading-indicator';
+import { window } from '../../utils/browser';
 
 const noop = (x) => x;
 const tooltipDelay = 100;
