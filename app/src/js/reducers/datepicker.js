@@ -9,7 +9,7 @@ import {
 const daysToMilliseconds = 1000 * 60 * 60 * 24;
 
 // Also becomes default props for Datepicker
-const initialState = {
+export const initialState = {
   startDateTime: null,
   endDateTime: null,
   dateRange: {value: 'All', label: 'All'},
@@ -43,7 +43,6 @@ export default function reducer(state = initialState, action) {
     case DATEPICKER_DROPDOWN_FILTER:
       // Dropdown was selected by user
       state = {...state, ...computeDateTimeDelta(data.dateRange.value), ...data};
-      console.log(`DROPDOWN reducer state: ${JSON.stringify(state)}`);
       break;
     case DATEPICKER_DATECHANGE:
       state = { ...state, ...data };

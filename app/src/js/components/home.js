@@ -44,17 +44,16 @@ import {
   kibanaGatewayExecutionErrorsLink,
   kibanaGatewayExecutionSuccessesLink
 } from '../utils/kibana';
-import { initialValuesFromLocation, updateRouterLocation } from '../utils/url-helper';
-import Datepicker, { defaultDateRange } from './Datepicker/Datepicker';
-
+import { initialValuesFromLocation } from '../utils/url-helper';
+import Datepicker from './Datepicker/Datepicker';
 import { strings } from './locale';
 
-
 /**
- * If this is a shared URL. grab the date and time
- * @param {any} props
+ * If this is a shared URL. grab the date and time and update the datepicker
+ * state to reflect the values.
+ * @param {Object} props - Home component's input props.
  */
-const stateFromUrlLocation = (props) => {
+const updateDatepickerStateFromUrl = (props) => {
   const urlDateFormat = 'YYYYMMDDHHmmSS';
   const urlProps = ['endDateTime', 'startDateTime'];
   const { location } = props;
@@ -81,7 +80,7 @@ class Home extends React.Component {
       this.query();
     }, updateInterval, true);
     const {dispatch} = this.props;
-    stateFromUrlLocation(this.props);
+    updateDatepickerStateFromUrl(this.props);
     dispatch(getCumulusInstanceMetadata())
       .then(() => {
         dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
@@ -197,7 +196,6 @@ class Home extends React.Component {
         </div>
 
         <div className='page__content page__content__nosidebar'>
-
           <section className='page__section metrics--overview'>
             <div className='row'>
               <div className='heading__wrapper--border'>

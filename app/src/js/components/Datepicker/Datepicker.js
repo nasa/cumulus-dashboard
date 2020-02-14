@@ -10,7 +10,6 @@ import { updateRouterLocation } from '../../utils/url-helper';
 
 export const defaultDateRange = 1 / 24.0;
 export const customDateRange = null;
-const defaultHourFormat = '12HR';
 const allDateRanges = [
   {value: 'All', label: 'All'},
   {value: 'Custom', label: 'Custom'},
@@ -27,14 +26,7 @@ const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss.sss';
 
 /**
  * Component representing the Datepicker.
- * Use by adding <Datepicker />. Use onChange prop for getting new values.
- * The returned value is an object with updates from user selections.
- *
- * onChangeFunction = (value) => this.setState(value);
- *
- * <Datepicker
- *   onChange={onChangeFunction}
- * />
+ * Use by adding <Datepicker />. Update the connected state.datepicker to make changes.
  */
 class Datepicker extends React.PureComponent {
   constructor (props) {
@@ -74,9 +66,9 @@ class Datepicker extends React.PureComponent {
   }
 
   handleDateTimeRangeChange (name, newValue) {
-    // The user input is in UTC time zone, but the DateTimePicker takes it as local time.
-    // So we need convert the Date object to UTC time zone by ignoring the time zone offset.
-    const utcValue = new Date(moment.utc(moment(newValue).format(dateTimeFormat)).format());
+    // User input is in UTC, but the DateTimePicker component interprets it's
+    // data as local time.  So we need convert the Date value to UTC.
+    const utcValue = moment.utc(moment(newValue).format(dateTimeFormat)).toDate();
     const updatedProps = {
       startDateTime: this.props.startDateTime,
       endDateTime: this.props.endDateTime,
@@ -207,7 +199,10 @@ class Datepicker extends React.PureComponent {
 
 Datepicker.propTypes = {
   name: PropTypes.string,
-  dateRange: PropTypes.oneOf(allDateRanges),
+  dateRange: PropTypes.shape({
+    value: PropTypes.node,
+    label: PropTypes.string
+  }),
   startDateTime: PropTypes.instanceOf(Date),
   endDateTime: PropTypes.instanceOf(Date),
   hourFormat: PropTypes.oneOf(allHourFormats),
@@ -217,4 +212,4 @@ Datepicker.propTypes = {
   location: PropTypes.object
 };
 
-export default withRouter(connect(state => state.datepicker)(Datepicker));
+export default withRouter(connect((state) => state.datepicker)(Datepicker));
