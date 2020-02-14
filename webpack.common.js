@@ -68,9 +68,6 @@ const CommonConfig = {
         test: /\.(css|scss)$/,
         use: [
           {
-            loader: 'style-loader' // Inject styles into DOM
-          },
-          {
             loader: 'css-loader', // Translates CSS into CommonJS
             options: {
               sourceMap: true,
