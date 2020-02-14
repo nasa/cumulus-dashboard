@@ -15,37 +15,52 @@ const getRuleName = function (item) {
     return 'unknown';
   }
 };
-class AddRule extends React.Component {
-  render () {
-    const defaultValue = {
-      name: '',
-      workflow: '',
-      provider: '',
-      collection: {
-        name: '',
-        version: ''
-      },
-      meta: {},
-      rule: {
-        type: '',
-        value: ''
-      },
-      state: 'ENABLED'
-    };
-    return (
-      <AddRaw
-        pk={'new-rule'}
-        title={'Add a rule'}
-        primaryProperty={'name'}
-        state={this.props.rules}
-        defaultValue={defaultValue}
-        createRecord={createRule}
-        getBaseRoute={getBaseRoute}
-        getPk={getRuleName}
-      />
-    );
-  }
-}
+
+const defaultValue = {
+  name: '',
+  workflow: '',
+  provider: '',
+  collection: {
+    name: '',
+    version: ''
+  },
+  meta: {},
+  rule: {
+    type: '',
+    value: ''
+  },
+  state: 'ENABLED'
+};
+
+const ModalBody = ({record}) => {
+  const { data } = record;
+  const json = JSON.parse(data);
+  return (
+    <p>Add rule {json.name}</p>
+  );
+};
+
+ModalBody.propTypes = {
+  record: PropTypes.object
+};
+
+const AddRule = ({ rules, ...rest }) => {
+  return (
+    <AddRaw
+      pk={'new-rule'}
+      title={'Add a rule'}
+      primaryProperty={'name'}
+      state={rules}
+      defaultValue={defaultValue}
+      createRecord={createRule}
+      getBaseRoute={getBaseRoute}
+      getPk={getRuleName}
+      requireConfirmation={true}
+      type={'rule'}
+      ModalBody={ModalBody}
+    />
+  );
+};
 
 AddRule.propTypes = {
   rules: PropTypes.object
