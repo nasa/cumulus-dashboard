@@ -32,16 +32,19 @@ test('CUMULUS-336 Granule file links use the correct URL', function (t) {
 
   const logs = { items: [] };
 
-  const params = { granuleId: 'my-granule-id' };
+  const match = { params: { granuleId: 'my-granule-id' } };
 
   const dispatch = () => {};
 
-  const granuleOverview = shallow(<GranuleOverview
+  const granuleOverview = shallow(
+    <GranuleOverview
       dispatch={dispatch}
-      params={params}
+      match={match}
       granules={granules}
       logs={logs}
-      skipReloadOnMount={true} />);
+      skipReloadOnMount={true}
+    />
+  );
 
   const sortableTable = granuleOverview.find('Table');
   t.is(sortableTable.length, 1);
