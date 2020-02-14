@@ -176,7 +176,6 @@ render((
           <Route path='edit/:ruleName' component={EditRule} />
           <Route path='add' component={AddRule} />
         </Route>
-        <Route path='logs' component={Logs} />
         <Route path='reconciliation-reports' component={ReconciliationReports}>
           <IndexRoute component={ReconciliationReportList} />
           <Route path='report/:reconciliationReportName' component={ReconciliationReport} />
