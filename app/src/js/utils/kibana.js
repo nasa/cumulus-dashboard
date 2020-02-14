@@ -71,3 +71,10 @@ export const kibanaGatewayAccessSuccessesLink = (cumulusInstanceMeta) => {
   const stackName = cumulusInstanceMeta.stackName;
   return `${kibanaRoot}/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(from:now-24h,mode:quick,to:now))&_a=(columns:!(message),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:${stackName},key:_index,negate:!f,params:(query:'${stackName}-cloudwatch*',type:phrase),type:phrase,value:'${stackName}-cloudwatch*'),query:(match:(_index:(query:'${stackName}-cloudwatch*',type:phrase)))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:${stackName},key:logGroup,negate:!f,params:(query:'%22API%5C-Gateway%5C-Execution*%22',type:phrase),type:phrase,value:'%22API%5C-Gateway%5C-Execution*%22'),query:(match:(logGroup:(query:'%22API%5C-Gateway%5C-Execution*%22',type:phrase))))),index:${stackName},interval:auto,query:(language:lucene,query:'status:%5B200%20TO%20399%5D'),sort:!('@timestamp',desc))`;
 };
+
+export const kibanaAllLogsLink = (cumulusInstanceMeta) => {
+  if (!cumulusInstanceMeta || !cumulusInstanceMeta.stackName) return '';
+  if (!kibanaRoot) return '';
+  const stackName = cumulusInstanceMeta.stackName;
+  return `${kibanaRoot}`;
+};

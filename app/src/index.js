@@ -28,7 +28,7 @@ class App extends React.Component {
             <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
           </div>
         ) : null }
-        <Header dispatch={this.props.dispatch} api={this.props.api} location={this.props.location}/>
+        <Header dispatch={this.props.dispatch} api={this.props.api} location={this.props.location} cumulusInstance={this.props.cumulusInstance}/>
         <main className='main' role='main'>
           {this.props.children}
         </main>
@@ -46,7 +46,8 @@ App.propTypes = {
   dispatch: PropTypes.func,
   location: PropTypes.object,
   api: PropTypes.object,
-  apiVersion: PropTypes.object
+  apiVersion: PropTypes.object,
+  cumulusInstance: PropTypes.object
 };
 
 export default connect(state => state)(App);

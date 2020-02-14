@@ -4,7 +4,8 @@ module.exports = {
   nav: {
     order: ['collections'],
     exclude: {
-      'pdrs': process.env.HIDE_PDR || true
+      'PDRs': process.env.HIDE_PDR || true,
+      'Logs': !process.env.KIBANAROOT
     }
   },
   apiRoot: process.env.APIROOT || 'https://example.com',
