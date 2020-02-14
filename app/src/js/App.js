@@ -91,8 +91,6 @@ import Rule from './components/Rules/rule';
 import EditRule from './components/Rules/edit';
 import AddRule from './components/Rules/add';
 
-import Logs from './components/Logs';
-
 import ReconciliationReports from './components/ReconciliationReports';
 import ReconciliationReportList from './components/ReconciliationReports/list';
 import ReconciliationReport from './components/ReconciliationReports/reconciliation-report';
