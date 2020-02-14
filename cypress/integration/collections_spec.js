@@ -19,23 +19,25 @@ describe('Dashboard Collections Page', () => {
 
     beforeEach(() => {
       cy.login();
-      cy.task('resetState');
-      cy.visit('/');
-      cy.server();
-      cy.route('POST', '/collections').as('postCollection');
-      cy.route('GET', '/collections?limit=*').as('getCollections');
-      cy.route('GET', '/collections?name=*').as('getCollection');
-      cy.route('GET', '/granules?limit=*').as('getGranules');
+      cy.task('resetState').then(() => {
+        cy.visit('/');
+        cy.server();
+        cy.route('POST', '/collections').as('postCollection');
+        cy.route('GET', '/collections?limit=*').as('getCollections');
+        cy.route('GET', '/collections?name=*').as('getCollection');
+        cy.route('GET', '/granules?limit=*').as('getGranules');
 
-      // Stub CMR response to avoid hitting UAT
-      cy.fixture('cmr')
-        .then((fixture) => fixture.forEach((options) => cy.route(options)));
+        // Stub CMR response to avoid hitting UAT
+        cy.fixture('cmr')
+          .then((fixture) => fixture.forEach((options) => cy.route(options)));
+      });
     });
 
     it('should display a link to view collections', () => {
       cy.contains('nav li a', 'Collections').as('collections');
       cy.get('@collections').should('have.attr', 'href', '/collections');
       cy.get('@collections').click();
+      cy.wait('@getCollections');
 
       cy.url().should('include', 'collections');
       cy.contains('.heading--xlarge', 'Collections');
@@ -45,6 +47,7 @@ describe('Dashboard Collections Page', () => {
 
     it('should display expected MMT Links for collections list', () => {
       cy.visit('/collections');
+      cy.wait('@getCollections');
 
       cy.get('table tbody tr').its('length').should('be.eq', 5);
 
@@ -116,6 +119,7 @@ describe('Dashboard Collections Page', () => {
       // collections with which to populate the dropdown on the collection
       // details page.
       cy.visit('/collections');
+      cy.wait('@getCollections');
       cy.get('table tbody tr').its('length').should('be.eq', 5);
 
       cy.contains('table tbody tr a', name)
@@ -153,6 +157,7 @@ describe('Dashboard Collections Page', () => {
       cy.contains('form button', 'Submit').click();
 
       // displays the updated collection and its granules
+      cy.wait('@getCollection');
       cy.contains('.heading--xlarge', 'Collections');
       cy.contains('.heading--large', `${name} / ${version}`);
 
