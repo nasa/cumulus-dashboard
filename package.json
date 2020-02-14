@@ -61,7 +61,8 @@
       ]
     },
     "require": [
-      "@babel/register"
+      "@babel/register",
+      "./test/_setup-browser-env.js"
     ],
     "files": [
       "test/**/*",
@@ -102,6 +103,7 @@
     "babel-plugin-webpack-alias-7": "^0.1.1",
     "babelify": "^9.0.0",
     "body-parser": "^1.18.3",
+    "browser-env": "^3.3.0",
     "cached-path-relative": "1.0.2",
     "clean-webpack-plugin": "^3.0.0",
     "cls-bluebird": "^2.1.0",
