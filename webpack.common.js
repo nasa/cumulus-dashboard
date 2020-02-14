@@ -9,7 +9,11 @@ const config = require('./app/src/js/config');
 
 const CommonConfig = {
   target: 'web',
-  entry: './app/src/index.js',
+  entry: [
+    'core-js/stable',
+    'regenerator-runtime/runtime',
+    './app/src/index.js',
+  ],
   output: {
     filename: 'bundle.js',
     chunkFilename: '[name].bundle.js',
@@ -63,9 +67,6 @@ const CommonConfig = {
       {
         test: /\.(css|scss)$/,
         use: [
-          {
-            loader: 'style-loader' // Inject styles into DOM
-          },
           {
             loader: 'css-loader', // Translates CSS into CommonJS
             options: {

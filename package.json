@@ -28,7 +28,7 @@
     "cypress": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress open",
     "cypress-ci": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress run --spec 'cypress/integration/*' --config video=false",
     "validate": "ava cypress/validation-tests/*.js",
-    "test": "npm run lint && ava",
+    "test": "NODE_ENV=test npm run lint && ava",
     "seed-database": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test node ./localAPI/runSeedDatabase.js",
     "serve-api": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test cmr_provider=CUMULUS FAKE_AUTH=true ./node_modules/@cumulus/api/bin/cli.js serve --no-reseed",
     "start-localstack": "docker-compose -f ./localAPI/docker-compose.yml up -d",
@@ -42,14 +42,30 @@
     "view-docker-logs": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml logs -f "
   },
   "ava": {
-    "files": [
-      "test/**/*.js",
-      "!test/fake-api/**/*",
-      "!test/fixtures/**/*"
-    ],
+    "babel": {
+      "testOptions": {
+        "plugins": [
+          "@babel/plugin-syntax-jsx",
+          [
+            "babel-plugin-webpack-alias-7",
+            {
+              "config": "./config/webpack.config.test.js"
+            }
+          ]
+        ]
+      },
+      "extensions": [
+        "js",
+        "jsx",
+        "ts"
+      ]
+    },
     "require": [
-      "@babel/polyfill",
-      "./config/babel.register.js"
+      "@babel/register"
+    ],
+    "files": [
+      "./test/**/*",
+      "!node_modules/"
     ]
   },
   "browserslist": {
@@ -65,7 +81,9 @@
     ]
   },
   "devDependencies": {
+    "@ava/babel": "^1.0.1",
     "@babel/core": "^7.0.0",
+    "@babel/plugin-syntax-jsx": "^7.8.3",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
@@ -78,6 +96,7 @@
     "ava-http": "^1.0.0",
     "babel-core": "^7.0.0-bridge",
     "babel-loader": "^8.0.6",
+    "babel-plugin-webpack-alias-7": "^0.1.1",
     "babelify": "^9.0.0",
     "body-parser": "^1.18.3",
     "cached-path-relative": "1.0.2",
