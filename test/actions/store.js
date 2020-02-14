@@ -9,9 +9,15 @@ import { requestMiddleware } from '../../app/src/js/middleware/request';
 
 const port = process.env.FAKEAPIPORT || 5001;
 
+// Simply unwrap the simple action from the complex action and pass it
+// along to the reducer.  We get `action` as { "undefined": simpleAction },
+// so we're extracting the single value (simpleAction) for the reducer.
+const monkeyInTheMiddle = () =>
+  (next) => (action) => next(Object.values(action)[0]);
 const middlewares = [
   requestMiddleware,
-  thunk
+  thunk,
+  monkeyInTheMiddle
 ];
 const mockStore = configureMockStore(middlewares);
 const store = mockStore({

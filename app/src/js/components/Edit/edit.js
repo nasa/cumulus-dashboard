@@ -132,6 +132,7 @@ EditRecord.propTypes = {
   clearRecordUpdate: PropTypes.func
 };
 
+export { EditRecord };
 export default withRouter(connect(state => ({
   schema: state.schema
 }))(EditRecord));
