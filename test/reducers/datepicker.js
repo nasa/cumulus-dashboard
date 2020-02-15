@@ -1,6 +1,7 @@
 'use strict';
 
 import test from 'ava';
+import sinon from 'sinon';
 import reducer, { initialState } from '../../app/src/js/reducers/datepicker';
 import {
   DATEPICKER_DATECHANGE,
@@ -23,22 +24,23 @@ test('reducer sets initial state of all data on first run with no input', (t) =>
   t.is(actual.hourFormat, '12HR');
 });
 
-test('dropdown event sets the "end-start" time to the daterange.value days', (t) => {
+test('dropdown event sets the start and end time time to reflect the daterange.value in days', (t) => {
+  const testStart = Date.now();
+  sinon.useFakeTimers(testStart);
   const value = 130;
   const action = {
     type: DATEPICKER_DROPDOWN_FILTER,
-    data: { dateRange: { value, label: 'Latest Random Days' } }
+    data: { dateRange: { value, label: 'Last 130 Days' } }
   };
 
   const actual = reducer(initialState, action);
   t.not(actual.startDateTime, null);
   t.not(actual.endDateTime, null);
-  t.is(actual.dateRange.label, 'Latest Random Days');
+  t.is(actual.dateRange.label, 'Last 130 Days');
   t.is(actual.dateRange.value, value);
-  t.is(
-    actual.endDateTime.valueOf() - actual.startDateTime.valueOf(),
-    value * 3600 * 24 * 1000
-  );
+  t.is(actual.endDateTime.valueOf(), testStart);
+  t.is(actual.startDateTime.valueOf(), testStart - 130 * 3600 * 24 * 1000);
+  sinon.restore();
 });
 
 test('datechange event updates state', (t) => {
