@@ -8,8 +8,6 @@ import { withRouter } from 'react-router';
 import { DATEPICKER_DATECHANGE, DATEPICKER_DROPDOWN_FILTER, DATEPICKER_HOUR_FORMAT } from '../../actions/types';
 import { updateRouterLocation } from '../../utils/url-helper';
 
-export const defaultDateRange = 1 / 24.0;
-export const customDateRange = null;
 const allDateRanges = [
   {value: 'All', label: 'All'},
   {value: 'Custom', label: 'Custom'},
@@ -38,7 +36,7 @@ class Datepicker extends React.PureComponent {
   }
 
   clear () {
-    const { value, label } = allDateRanges[0];
+    const { value, label } = allDateRanges.filter(a => a.label === 'All')[0];
     this.props.dispatch(this.dispatchDropdownUpdate(value, label));
   }
 

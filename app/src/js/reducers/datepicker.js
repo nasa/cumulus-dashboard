@@ -46,11 +46,9 @@ export default function reducer(state = initialState, action) {
       break;
     case DATEPICKER_DATECHANGE:
       state = { ...state, ...data };
-      console.log(`Datepicker reducer state: ${JSON.stringify(state)}`);
       break;
     case DATEPICKER_HOUR_FORMAT:
       state = { ...state, ...{hourFormat: data} };
-      console.log(`HOUR FORMAT reducer state: ${JSON.stringify(state)}`);
   }
   return state;
 }
