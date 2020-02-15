@@ -36,7 +36,7 @@ class Datepicker extends React.PureComponent {
   }
 
   clear () {
-    const { value, label } = allDateRanges.filter(a => a.label === 'All')[0];
+    const { value, label } = allDateRanges.find(a => a.label === 'All');
     this.props.dispatch(this.dispatchDropdownUpdate(value, label));
   }
 
@@ -73,7 +73,7 @@ class Datepicker extends React.PureComponent {
       endDateTime: this.props.endDateTime,
       [name]: utcValue
     };
-    updatedProps.dateRange = allDateRanges.filter(a => a.label === 'Custom')[0];
+    updatedProps.dateRange = allDateRanges.find(a => a.label === 'Custom');
     this.props.dispatch({type: DATEPICKER_DATECHANGE, data: updatedProps});
     this.updateRouterWithNewProps(updatedProps);
   }
