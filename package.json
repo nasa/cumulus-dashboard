@@ -81,7 +81,7 @@
     "browserify-css": "^0.15.0",
     "cached-path-relative": "1.0.2",
     "cls-bluebird": "^2.1.0",
-    "cypress": "^4.0.2",
+    "cypress": "^4.0.1",
     "cypress-failed-log": "^2.5.0",
     "del": "^2.2.0",
     "envify": "^3.4.0",
