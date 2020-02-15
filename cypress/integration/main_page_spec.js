@@ -46,35 +46,15 @@ describe('Dashboard Home Page', () => {
   });
 
   describe('When logged in', () => {
-    before(() => {
-      cy.visit('/');
-    });
+    before(() => cy.visit('/'));
 
     beforeEach(() => {
       // Logging to debug intermittent timeouts
       cy.task('log', 'Login');
+      cy.task('resetState');
       cy.login();
       cy.task('log', 'Login complete');
       cy.visit('/');
-      cy.task('log', 'Visit main page complete');
-    });
-
-    afterEach(() => {
-      // Cypress can sometimes have weird timeout issues if you try to
-      // cy.visit() the URL you are already on. To avoid this problem,
-      // we log out after each test and reload to the /auth page, so that
-      // cy.visit('/') should always work.
-      //
-      // https://github.com/cypress-io/cypress/issues/1311#issuecomment-393896371
-
-      // Logging to debug intermittent timeouts
-      cy.task('log', 'Logout');
-      cy.logout();
-      cy.task('log', 'Logout complete');
-    });
-
-    after(() => {
-      cy.task('resetState');
     });
 
     it('displays a compatible Cumulus API Version number', () => {
@@ -91,27 +71,64 @@ describe('Dashboard Home Page', () => {
       });
     });
 
-    it('displays a date picker in metrics section', () => {
+    it('Updates start and end time components when dropdown is selected', () => {
+      const now = Date.UTC(2009, 0, 5, 13, 35, 3);
+      cy.clock(now);
       cy.get('main[class=main] section').eq(1).within(() => {
         cy.get('h3').should('have.text', 'Date and Time Range');
-        cy.get('div[class=datetime] ul li select[name=dateRange]').as('dateRange');
-        cy.get('@dateRange').select('1 week', { force: true });
-        cy.url().should('include', 'dateRange=1+week');
+        cy.get('[data-cy=datetime-dropdown]').as('dateRange');
+        cy.get('@dateRange').select('Last week');
 
-        cy.get('div[class=datetime] ul li').eq(1).within(() => {
-          cy.get('div input').as('datetimeinputs');
-          cy.get('@datetimeinputs').eq(1).click({ force: true }).type('2');
-          cy.get('@datetimeinputs').eq(2).click({ force: true }).type('19');
-          cy.get('@datetimeinputs').eq(3).click({ force: true }).type('2019');
-          cy.get('@datetimeinputs').eq(4).click({ force: true }).type('6');
-          cy.get('@datetimeinputs').eq(5).click({ force: true }).type('59');
-          cy.get('div select[name=amPm]').select('PM', { force: true });
-          cy.url().should('include', 'startDateTime=2019-02-19T18%3A59%3A00Z');
+        cy.get('[data-cy=endDateTime]').within(() => {
+          cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2009');
+          cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '1');
+          cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '5');
+          cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '1');
+          cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
         });
 
-        cy.get('div[class=datetime__clear] button').click({ force: true });
-        cy.url().should('not.include', 'dateRange=1+week');
-        cy.url().should('not.include', 'startDateTime=2019-02-19T18%3A59%3A00Z');
+        cy.get('[data-cy=startDateTime]').within(() => {
+          cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2008');
+          cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '12');
+          cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '29');
+          cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '1');
+          cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
+        });
+        cy.url().should('include', 'startDateTime=20081229133500');
+        cy.url().should('include', 'endDateTime=20090105133500');
+
+        // URL doesn't change based on hour format
+        cy.get('[data-cy=hourFormat]').within(() => {
+          cy.get('input[value=24HR]').click();
+          cy.url().should('include', 'startDateTime=20081229133500');
+          cy.url().should('include', 'endDateTime=20090105133500');
+        });
+        // Displayed Hour does change.
+        cy.get('[data-cy=startDateTime]').within(() => {
+          cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '13');
+        });
+      });
+    });
+
+    it('Accepts dates entered on the date picker.', () => {
+      cy.get('[data-cy=startDateTime]').within(() => {
+        cy.get('input[name=month]').click().type(3);
+        cy.get('input[name=day]').click().type(17);
+        cy.get('input[name=year]').click().type(2009);
+        cy.get('input[name=hour12]').click().type(3);
+        cy.get('input[name=minute]').click().type(37);
+        cy.get('input[name=minute]').should('have.value', '37');
+        cy.get('select[name=amPm]').select('PM');
+      });
+      cy.url().should('include', 'startDateTime=20090317153700');
+
+      cy.get('[data-cy=datetime-clear]').click();
+      cy.url().should('not.include', 'startDateTime=20090317153700');
+      cy.get('[data-cy=startDateTime]').within(() => {
+        cy.get('input[name=month]').should('have.value', '');
+        cy.get('input[name=day]').should('have.value', '');
+        cy.get('input[name=year]').should('have.value', '');
+        cy.get('input[name=hour12]').should('have.value', '');
       });
     });
 

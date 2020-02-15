@@ -99,7 +99,8 @@ class Datepicker extends React.PureComponent {
           <select
             name='dateRange'
             value={this.props.dateRange.value}
-            onChange={this.handleDateRangeDropdownChange}>
+            onChange={this.handleDateRangeDropdownChange}
+            data-cy="datetime-dropdown">
             {allDateRanges.map((option, i) => <option value={option.value} key={i}>{option.label}</option>)}
           </select>
         </div>
@@ -166,16 +167,16 @@ class Datepicker extends React.PureComponent {
               <li>
                 { this.renderDateRangeDropDown() }
               </li>
-              <li>
+              <li data-cy='startDateTime'>
                 { this.renderDateTimeRange('startDateTime') }
               </li>
               <li>
                 <span> to </span>
               </li>
-              <li>
+              <li data-cy='endDateTime'>
                 { this.renderDateTimeRange('endDateTime') }
               </li>
-              <li className="selector__hrformat">
+              <li className="selector__hrformat" data-cy='hourFormat'>
                 { this.renderHourFormatSelect() }
               </li>
             </ul>
@@ -188,7 +189,7 @@ class Datepicker extends React.PureComponent {
           <button
             className="button button--small"
             onClick={this.clear}
-          >
+            data-cy="datetime-clear" >
             Clear Selection
           </button>
         </div>
