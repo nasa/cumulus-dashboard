@@ -29,7 +29,7 @@ const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss.sss';
 class Datepicker extends React.PureComponent {
   constructor (props) {
     super(props);
-    this.handleDateRangeDropdownChange = this.handleDateRangeDropdownChange.bind(this);
+    this.handleDropdownChange = this.handleDropdownChange.bind(this);
     this.handleHourFormatChange = this.handleHourFormatChange.bind(this);
     this.handleDateTimeRangeChange = this.handleDateTimeRangeChange.bind(this);
     this.clear = this.clear.bind(this);
@@ -51,7 +51,7 @@ class Datepicker extends React.PureComponent {
     };
   }
 
-  handleDateRangeDropdownChange (e) {
+  handleDropdownChange (e) {
     const { value, label } = allDateRanges[e.target.selectedIndex];
     this.props.dispatch(this.dispatchDropdownUpdate(value, label));
   }
@@ -98,7 +98,7 @@ class Datepicker extends React.PureComponent {
           <select
             name='dateRange'
             value={this.props.dateRange.value}
-            onChange={this.handleDateRangeDropdownChange}
+            onChange={this.handleDropdownChange}
             data-cy="datetime-dropdown">
             {allDateRanges.map((option, i) => <option value={option.value} key={i}>{option.label}</option>)}
           </select>
