@@ -10,21 +10,19 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
+process.env.TOKEN_SECRET = 'myDashboardSecret';
 
 const browserify = require('@cypress/browserify-preprocessor');
 
 const { testUtils } = require('@cumulus/api');
+const { createJwtToken } = require('@cumulus/api/lib/token');
 
 const { seedEverything } = require('./seedEverything');
-
-const fakeApiToken = require('./token');
 
 module.exports = (on) => {
   const options = browserify.defaultOptions;
   const babelOptions = options.browserifyOptions.transform[1][1];
   const user = 'testUser';
-  let esClient;
-  let esIndex;
   babelOptions.global = true;
   // ignore all node_modules except files in @cumulus/
   // see https://github.com/cypress-io/cypress-browserify-preprocessor/issues/19
@@ -46,7 +44,7 @@ module.exports = (on) => {
       });
     },
     generateJWT: function (options) {
-      return fakeApiToken.generateJWT(options);
+      return createJwtToken(options);
     },
     log (message) {
       console.log(message);

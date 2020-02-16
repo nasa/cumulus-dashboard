@@ -67,7 +67,8 @@ describe('Dashboard authentication', () => {
     });
 
     cy.window().its('appStore').then((store) => {
-      cy.task('generateJWT', { expiresIn: -10 }).then((expiredJwt) => {
+      const expirationTime = (new Date(Date.now() - 24 * 3600 * 1000)).valueOf();
+      cy.task('generateJWT', { expirationTime }).then((expiredJwt) => {
         store.dispatch({
           type: SET_TOKEN,
           token: expiredJwt

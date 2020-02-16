@@ -17,6 +17,7 @@ services:
       - NODE_ENV=test
       - cmr_provider=CUMULUS
       - FAKE_AUTH=true
+      - TOKEN_SECRET=myDashboardSecret
   shim:   # empty container to open ports
     image: node:10.16.3
     command:
