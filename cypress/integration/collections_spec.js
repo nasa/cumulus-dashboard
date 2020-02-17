@@ -22,7 +22,6 @@ describe('Dashboard Collections Page', () => {
 
     beforeEach(() => {
       cy.login();
-      // cy.task('resetState');
       cy.visit('/');
       cy.server();
       cy.route('POST', '/collections').as('postCollection');

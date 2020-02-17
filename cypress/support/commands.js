@@ -26,7 +26,6 @@
 process.env.TOKEN_SECRET = 'myDashboardSecret';
 import clonedeep from 'lodash.clonedeep';
 import { DELETE_TOKEN, SET_TOKEN } from '../../app/src/js/actions/types';
-import { createJwtToken } from '@cumulus/api/lib/token';
 
 Cypress.Commands.add('login', () => {
   const authUrl = `${Cypress.config('baseUrl')}/#/auth`;
@@ -49,14 +48,6 @@ Cypress.Commands.add('login', () => {
       });
     });
   });
-});
-
-Cypress.Commands.add('login-other', () => {
-  const accessToken = 'random';
-  const expirationTime = new Date(Date.now() + 3600 * 24 * 1000);
-  const username = 'testUser';
-  const token = createJwtToken({accessToken, expirationTime, username});
-  window.localStorage.setItem('auth-token', token);
 });
 
 Cypress.Commands.add('logout', () => {
