@@ -25,10 +25,33 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 process.env.TOKEN_SECRET = 'myDashboardSecret';
 import clonedeep from 'lodash.clonedeep';
-import { DELETE_TOKEN } from '../../app/src/js/actions/types';
+import { DELETE_TOKEN, SET_TOKEN } from '../../app/src/js/actions/types';
 import { createJwtToken } from '@cumulus/api/lib/token';
 
 Cypress.Commands.add('login', () => {
+  const authUrl = `${Cypress.config('baseUrl')}/#/auth`;
+  cy.request({
+    url: `${Cypress.env('APIROOT')}/token?code=somecode`,
+    qs: {
+      state: encodeURIComponent(authUrl)
+    },
+    followRedirect: true
+  }).then((response) => {
+    // mhs: When we get rid of the hash in the urls, we can just use url.parse()
+    const redirectStr = response.redirects[response.redirects.length - 1];
+    const redirectUrl = redirectStr.split(': ')[1];
+    const queryStr = redirectUrl.split('?')[1];
+    const token = queryStr.split('=')[1];
+    cy.window().its('appStore').then((store) => {
+      store.dispatch({
+        type: SET_TOKEN,
+        token
+      });
+    });
+  });
+});
+
+Cypress.Commands.add('login-other', () => {
   const accessToken = 'random';
   const expirationTime = new Date(Date.now() + 3600 * 24 * 1000);
   const username = 'testUser';
