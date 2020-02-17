@@ -10,8 +10,6 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-process.env.TOKEN_SECRET = 'myDashboardSecret';
-
 const browserify = require('@cypress/browserify-preprocessor');
 
 const { testUtils } = require('@cumulus/api');
