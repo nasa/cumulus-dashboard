@@ -1,10 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
 
-function visitGranulePage () {
-  cy.visit('/');
-  cy.visit('/#/granules');
-}
-
 describe('Dashboard Granules Page', () => {
   describe('When not logged in', () => {
     it('should redirect to login page', () => {
@@ -107,7 +102,7 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('should display a link to download the granule list', () => {
-      visitGranulePage();
+      cy.visit('/#/granules');
 
       cy.contains('.heading--xlarge', 'Granules');
 
@@ -126,21 +121,21 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('Should update URL when dropdown filters are activated.', () => {
-      visitGranulePage();
+      cy.visit('/#/granules');
       cy.get('#form-Status-status > div > input').as('status-input');
       cy.get('@status-input').click().type('fai').type('{enter}');
       cy.url().should('include', '?status=failed');
     });
 
     it('Should update URL when search filter is changed.', () => {
-      visitGranulePage();
+      cy.visit('/#/granules');
       cy.get('.search').as('search');
       cy.get('@search').click().type('L2');
       cy.url().should('include', 'search=L2');
     });
 
     it('Should show Search and Dropdown filters in URL.', () => {
-      visitGranulePage();
+      cy.visit('/#/granules');
       cy.get('.search').as('search');
       cy.get('@search').should('be.visible').click().type('L2');
       cy.get('#form-Status-status > div > input').as('status-input');
