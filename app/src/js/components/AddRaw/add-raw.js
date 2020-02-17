@@ -43,13 +43,13 @@ const AddRaw = ({
     const status = get(state.created, [pk, 'status']);
     if (status === 'success') {
       const baseRoute = getBaseRoute(pk);
-      return setTimeout(() => {
+      setTimeout(() => {
         router.push(baseRoute);
       }, updateDelay);
     } else if (status === 'error' && !error) {
       setRecord({ ...record, error: get(state.created, [pk, 'error']) });
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  });
 
   function handleCancel (e) {
     router.push(getBaseRoute().split('/')[1]);
