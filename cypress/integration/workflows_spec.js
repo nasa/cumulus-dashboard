@@ -9,15 +9,17 @@ describe('Dashboard Workflows Page', () => {
   });
 
   describe('When logged in', () => {
-    before(() => cy.visit('/'));
-    beforeEach(() => {
+    before(() => {
       cy.task('resetState');
-      cy.login();
       cy.visit('/');
     });
 
-    it('displays a link to view workflows', () => {
+    beforeEach(() => {
+      cy.login();
+    });
 
+    it('displays a link to view workflows', () => {
+      cy.visit('/');
       cy.contains('nav li a', 'Workflows').as('workflows');
       cy.get('@workflows').should('have.attr', 'href', '#/workflows');
       cy.get('@workflows').click();
@@ -30,7 +32,6 @@ describe('Dashboard Workflows Page', () => {
         .should('have.attr', 'href', '#/workflows/workflow/HelloWorldWorkflow');
       cy.contains('table tbody tr a', 'SecondTestWorkflow')
         .should('have.attr', 'href', '#/workflows/workflow/SecondTestWorkflow');
-
     });
 
     it('displays a link to individual workflow', () => {

@@ -13,10 +13,12 @@ describe('Dashboard Providers Page', () => {
   });
 
   describe('When logged in', () => {
-    before(() => cy.visit('/'));
+    before(() => {
+      cy.visit('/');
+      cy.task('resetState');
+    });
 
     beforeEach(() => {
-      cy.task('resetState');
       cy.login();
       cy.visit('/');
     });
@@ -98,6 +100,7 @@ describe('Dashboard Providers Page', () => {
       cy.contains('a', 'Back to Provider').click();
       cy.contains('table tbody tr a', name)
         .should('have.attr', 'href', `#providers/provider/${name}`);
+      cy.task('resetState');
     });
 
     it('should edit a provider', () => {
@@ -162,6 +165,7 @@ describe('Dashboard Providers Page', () => {
       cy.url().should('include', 'providers');
       cy.contains('.heading--xlarge', 'Providers');
       cy.contains('table tbody tr', name).should('not.exist');
+      cy.task('resetState');
     });
 
     it('should fail to delete a provider with an associated rule', () => {

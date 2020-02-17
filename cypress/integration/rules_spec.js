@@ -11,9 +11,13 @@ describe('Rules page', () => {
     const testProviderId = 'PODAAC_SWOT';
     const testCollectionId = 'MOD09GK / 006';
 
+    before(() => {
+      cy.visit('/');
+      cy.task('resetState');
+    });
+
     beforeEach(() => {
       cy.login();
-      cy.task('resetState');
     });
 
     it('should display a link to view rules', () => {
@@ -100,6 +104,7 @@ describe('Rules page', () => {
             .contains('a', provider)
             .should('have.attr', 'href', `#providers/provider/${provider}`);
         });
+      cy.task('resetState');
     });
 
     it('editing a rule and returning to the rules page should show the new changes', () => {
@@ -146,6 +151,7 @@ describe('Rules page', () => {
         .click();
       cy.contains('table tr a', testRuleName)
         .should('not.exist');
+      cy.task('resetState');
     });
   });
 });

@@ -14,16 +14,18 @@ describe('Dashboard Granules Page', () => {
   });
 
   describe('When logged in', () => {
-    before(() => cy.visit('/'));
+    before(() => {
+      cy.visit('/');
+      cy.task('resetState');
+    });
 
     beforeEach(() => {
       cy.login();
-      cy.task('resetState');
       cy.visit('/');
     });
 
     it('should display a link to view granules', () => {
-      visitGranulePage();
+      cy.visit('/#/granules');
       cy.url().should('include', 'granules');
       cy.contains('.heading--xlarge', 'Granules');
       cy.contains('.heading--large', 'Granule Overview');
@@ -98,7 +100,6 @@ describe('Dashboard Granules Page', () => {
           // Updated column
           cy.get('@columns').eq(7).invoke('text')
             .should('match', /.+ago$/);
-
         });
 
       cy.get('table tbody tr').as('list');
