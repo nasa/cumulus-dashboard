@@ -40,7 +40,8 @@ import {
   kibanaGatewayAccessErrorsLink,
   kibanaGatewayAccessSuccessesLink,
   kibanaGatewayExecutionErrorsLink,
-  kibanaGatewayExecutionSuccessesLink
+  kibanaGatewayExecutionSuccessesLink,
+  kibanaAllLogsLink,
 } from '../utils/kibana';
 
 import { strings } from './locale';
@@ -138,7 +139,7 @@ class Home extends React.Component {
     const { stats, count } = this.props.stats;
     const { dist } = this.props;
     const overview = [
-      [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
+      [tally(get(stats.data, 'errors.value')), 'Errors', kibanaAllLogsLink(this.props.cumulusInstance)],
       [tally(get(stats.data, 'collections.value')), strings.collections, '/collections'],
       [tally(get(stats.data, 'granules.value')), strings.granules, '/granules'],
       [tally(get(this.props.executions, 'list.meta.count')), 'Executions', '/executions'],
