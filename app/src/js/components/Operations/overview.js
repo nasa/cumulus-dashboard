@@ -119,8 +119,12 @@ class OperationOverview extends React.Component {
     const { operations } = this.props;
     const { list } = operations;
     const { count } = list.meta;
-    if (list.internal.prefix && list.internal.prefix.value) {
-      list.data = this.searchOperations(list.data, list.internal.prefix.value);
+    if (list.internal.prefix) {
+      if (list.internal.prefix.queryValue) {
+        list.data = this.searchOperations(list.data, list.internal.prefix.queryValue);
+      } else if (typeof list.internal.prefix === 'string') {
+        list.data = this.searchOperations(list.data, list.internal.prefix);
+      }
     }
 
     return (
