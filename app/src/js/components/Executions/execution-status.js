@@ -4,9 +4,10 @@ import Collapse from 'react-collapsible';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
-import { getExecutionStatus } from '../../actions';
+import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
 import { Link } from 'react-router';
+import { kibanaExecutionLink } from '../../utils/kibana';
 
 import {
   tableHeader,
@@ -31,6 +32,7 @@ class ExecutionStatus extends React.Component {
     const { dispatch } = this.props;
     const { executionArn } = this.props.params;
     dispatch(getExecutionStatus(executionArn));
+    dispatch(getCumulusInstanceMetadata());
   }
 
   navigateBack () {
@@ -65,7 +67,7 @@ class ExecutionStatus extends React.Component {
   }
 
   render () {
-    const { executionStatus } = this.props;
+    const { executionStatus, cumulusInstance } = this.props;
     if (!executionStatus.execution) return null;
 
     const input = (executionStatus.execution.input)
@@ -102,6 +104,8 @@ class ExecutionStatus extends React.Component {
     }
 
     const errors = this.errors();
+
+    const kibanaLink = kibanaExecutionLink(cumulusInstance, executionStatus.execution.name);
 
     return (
       <div className='page__component'>
@@ -165,6 +169,11 @@ class ExecutionStatus extends React.Component {
           <dt>Logs:</dt>
           <dd><Link to={'/executions/execution/' + executionStatus.execution.name + '/logs'} title={executionStatus.execution.name + '/logs'}>View Execution Logs</Link></dd>
           <br />
+          { kibanaLink && kibanaLink.length ? (<div>
+            <dt>Kibana Logs:</dt>
+            <dd><a href={kibanaLink} target="_blank">View Logs in Kibana</a></dd>
+            <br />
+            </div>) : null }
         </dl>
       </section>
 
@@ -190,11 +199,13 @@ ExecutionStatus.propTypes = {
   executionStatus: PropTypes.object,
   params: PropTypes.object,
   dispatch: PropTypes.func,
-  router: PropTypes.object
+  router: PropTypes.object,
+  cumulusInstance: PropTypes.object
 };
 
 export { ExecutionStatus };
 
 export default connect(state => ({
-  executionStatus: state.executionStatus
+  executionStatus: state.executionStatus,
+  cumulusInstance: state.cumulusInstance
 }))(ExecutionStatus);

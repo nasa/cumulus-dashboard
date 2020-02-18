@@ -78,3 +78,10 @@ export const kibanaAllLogsLink = (cumulusInstanceMeta) => {
   const stackName = cumulusInstanceMeta.stackName;
   return `${kibanaRoot}/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(from:now-48h,to:now))&_a=(columns:!(_source),index:${stackName},interval:auto,query:(language:kuery,query:''),sort:!('@timestamp',desc))`;
 };
+
+export const kibanaExecutionLink = (cumulusInstanceMeta, executionName) => {
+  if (!cumulusInstanceMeta || !cumulusInstanceMeta.stackName) return '';
+  if (!kibanaRoot) return '';
+  const stackName = cumulusInstanceMeta.stackName;
+  return `${kibanaRoot}/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(from:now-10y,to:now))&_a=(columns:!(_source),index:${stackName},interval:auto,query:(language:kuery,query:'executions:${executionName}'),sort:!('@timestamp',desc))`;
+};
