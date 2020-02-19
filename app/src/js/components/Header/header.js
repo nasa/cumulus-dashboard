@@ -18,7 +18,7 @@ const paths = [
   ['Executions', '/executions'],
   ['Operations', '/operations'],
   ['Rules', '/rules'],
-  ['Logs', '/logs'],
+  ['Logs', 'logs'],
   ['Reconciliation Reports', '/reconciliation-reports']
 ];
 
@@ -67,7 +67,7 @@ class Header extends React.Component {
 
   render () {
     const { authenticated } = this.props.api;
-    const activePaths = paths.filter(pathObj => nav.exclude[pathObj[0]] !== true);
+    const activePaths = paths.filter(path => nav.exclude[path[0]] !== true);
     return (
       <div className='header'>
         <div className='row'>
