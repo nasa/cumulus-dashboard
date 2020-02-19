@@ -42,7 +42,8 @@ Main.propTypes = {
   dispatch: PropTypes.func,
   location: PropTypes.object,
   api: PropTypes.object,
-  apiVersion: PropTypes.object
+  apiVersion: PropTypes.object,
+  cumulusInstance: PropTypes.object
 };
 
 export default withRouter(connect(state => state)(Main));

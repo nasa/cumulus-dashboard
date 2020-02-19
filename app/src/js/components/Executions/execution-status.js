@@ -119,22 +119,24 @@ class ExecutionStatus extends React.Component {
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description width--three-quarters'>
-          Execution {executionStatus.arn}
+            Execution {executionStatus.arn}
           </h1>
 
           {errors.length ? <ErrorReport report={errors} /> : null}
         </section>
 
         {/* stateMachine's definition and executionHistory's event statuses are needed to draw the graph */}
-        {(executionStatus.stateMachine && executionStatus.executionHistory)
-          ? <section className='page__section width--half' style={{ display: 'inline-block', marginRight: '5%' }}>
-            <div className='heading__wrapper--border'>
-              <h2 className='heading--medium with-description'>Visual workflow</h2>
-            </div>
+        {
+          (executionStatus.stateMachine && executionStatus.executionHistory)
+            ? <section className='page__section width--half' style={{ display: 'inline-block', marginRight: '5%' }}>
+              <div className='heading__wrapper--border'>
+                <h2 className='heading--medium with-description'>Visual workflow</h2>
+              </div>
 
-            <ExecutionStatusGraph executionStatus={executionStatus} />
-          </section>
-          : null}
+              <ExecutionStatusGraph executionStatus={executionStatus} />
+            </section>
+            : null
+        }
 
         <section className='page__section width--half' style={{ display: 'inline-block', verticalAlign: 'top' }}>
           <div className='heading__wrapper--border'>
@@ -174,11 +176,11 @@ class ExecutionStatus extends React.Component {
             {output}
             <br />
 
-          <dt>Logs:</dt>
-          {logsLink}
-          <br />
-        </dl>
-      </section>
+            <dt>Logs:</dt>
+            {logsLink}
+            <br />
+          </dl>
+        </section>
 
         {(executionStatus.executionHistory)
           ? <section className='page__section'>
