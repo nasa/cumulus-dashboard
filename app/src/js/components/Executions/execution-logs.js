@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getExecutionLogs } from '../../actions';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import ErrorReport from '../Errors/report';
 
@@ -16,13 +17,13 @@ class ExecutionLogs extends React.Component {
 
   componentDidMount () {
     const { dispatch } = this.props;
-    const { executionName } = this.props.params;
+    const { executionName } = this.props.match.params;
     dispatch(getExecutionLogs(executionName));
   }
 
   navigateBack () {
-    const { router } = this.props;
-    router.push('/executions');
+    const { history } = this.props;
+    history.push('/executions');
   }
 
   errors () {
@@ -31,34 +32,34 @@ class ExecutionLogs extends React.Component {
 
   render () {
     const { executionLogs } = this.props;
-    const { executionName } = this.props.params;
+    const { executionName } = this.props.match.params;
     if (!executionLogs.results) return null;
 
     const errors = this.errors();
 
     return (
       <div className='page__component'>
-      <section className='page__section page__section__header-wrapper'>
-        <h1 className='heading--large heading--shared-content with-description'>
+        <section className='page__section page__section__header-wrapper'>
+          <h1 className='heading--large heading--shared-content with-description'>
           Logs for Execution {executionName}
-        </h1>
+          </h1>
 
-        {errors.length ? <ErrorReport report={errors} /> : null}
-      </section>
+          {errors.length ? <ErrorReport report={errors} /> : null}
+        </section>
 
-      <section className='page__section' style={{ display: 'inline-block', verticalAlign: 'top' }}>
+        <section className='page__section' style={{ display: 'inline-block', verticalAlign: 'top' }}>
 
-        <div className='status--process'>
-          <h2>Execution Details:</h2>
-          <pre>{JSON.stringify(executionLogs.details, null, 2)}</pre><br />
-        </div>
+          <div className='status--process'>
+            <h2>Execution Details:</h2>
+            <pre>{JSON.stringify(executionLogs.details, null, 2)}</pre><br />
+          </div>
 
-        <div className='status--process'>
-        <h2>Execution Logs:</h2>
-          <pre>{JSON.stringify(executionLogs.results, null, 2)}</pre><br />
-        </div>
+          <div className='status--process'>
+            <h2>Execution Logs:</h2>
+            <pre>{JSON.stringify(executionLogs.results, null, 2)}</pre><br />
+          </div>
 
-      </section>
+        </section>
       </div>
     );
   }
@@ -66,11 +67,11 @@ class ExecutionLogs extends React.Component {
 
 ExecutionLogs.propTypes = {
   executionLogs: PropTypes.object,
-  params: PropTypes.object,
+  match: PropTypes.object,
   dispatch: PropTypes.func,
-  router: PropTypes.object
+  history: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   executionLogs: state.executionLogs
-}))(ExecutionLogs);
+}))(ExecutionLogs));

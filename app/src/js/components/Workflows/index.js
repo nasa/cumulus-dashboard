@@ -1,7 +1,10 @@
 'use strict';
 import React from 'react';
+import { withRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 import PropTypes from 'prop-types';
+import WorkflowsOverview from './overview';
+import Workflow from './workflow';
 
 class Workflows extends React.Component {
   render () {
@@ -19,7 +22,10 @@ class Workflows extends React.Component {
               params={this.props.params}
             />
             <div className='page__content--shortened'>
-              {this.props.children}
+              <Switch>
+                <Route exact path='/workflows' component={WorkflowsOverview} />
+                <Route path='/workflows/workflow/:workflowName' component={Workflow} />
+              </Switch>
             </div>
           </div>
         </div>
@@ -34,4 +40,4 @@ Workflows.propTypes = {
   params: PropTypes.object
 };
 
-export default Workflows;
+export default withRouter(Workflows);

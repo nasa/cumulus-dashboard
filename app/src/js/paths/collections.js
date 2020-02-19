@@ -30,7 +30,7 @@ const collections = {
         if (!d[1] || d[1].indexOf(':name') === -1) { return d; }
         let copy = d.slice();
         copy[1] = encode(copy[1].replace(':name', params.name)
-                                .replace(':version', params.version));
+          .replace(':version', params.version));
         return copy;
       });
     } else if (

@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { createProvider } from '../../actions';
 import AddRecord from '../Add/add';
 import PropTypes from 'prop-types';
@@ -31,6 +32,6 @@ AddProvider.propTypes = {
   providers: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   providers: state.providers
-}))(AddProvider);
+}))(AddProvider));

@@ -1,0 +1,10 @@
+/******************************************************************
+                    Font Awesome
+******************************************************************/
+/*
+We using Font Awesome for our icons and symbols
+*/
+
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";

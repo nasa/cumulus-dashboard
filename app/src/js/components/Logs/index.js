@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import LogViewer from './viewer';
 import PropTypes from 'prop-types';
 
@@ -28,4 +29,4 @@ Logs.propTypes = {
   logs: PropTypes.object
 };
 
-export default connect(state => state)(Logs);
+export default withRouter(connect(state => state)(Logs));

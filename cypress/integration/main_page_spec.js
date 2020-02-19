@@ -33,9 +33,9 @@ describe('Dashboard Home Page', () => {
 
   it('Logs in successfully after failed login', () => {
     // simulate failed login
-    cy.visit('/#/auth')
+    cy.visit('/auth')
       .window().then(function (window) {
-        window.location.hash = '#/auth?token=failed-token';
+        window.location.search = 'token=failed-token';
       });
 
     cy.get('div[class=modal-content]').within(() => {
@@ -127,14 +127,14 @@ describe('Dashboard Home Page', () => {
       cy.task('log', 'Click');
 
       cy.get('nav li').last().click();
-      cy.url().should('include', '/#/auth');
+      cy.url().should('include', '/auth');
 
       cy.task('log', 'Visit collections');
 
-      cy.visit('#/collections');
+      cy.visit('collections');
 
-      cy.url().should('not.include', '/#/collections');
-      cy.url().should('include', '/#/auth');
+      cy.url().should('not.include', '/collections');
+      cy.url().should('include', '/auth');
 
       shouldHaveDeletedToken();
     });

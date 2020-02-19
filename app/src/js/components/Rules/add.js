@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { createRule } from '../../actions';
 import AddRaw from '../AddRaw/add-raw';
 
@@ -66,6 +67,6 @@ AddRule.propTypes = {
   rules: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   rules: state.rules
-}))(AddRule);
+}))(AddRule));

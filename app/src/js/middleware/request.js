@@ -48,7 +48,7 @@ const handleError = ({ id, type, error, requestAction }, next) => {
   });
 };
 
-const requestMiddleware = ({ dispatch, getState }) => next => action => {
+export const requestMiddleware = ({ dispatch, getState }) => next => action => {
   if (isValidApiRequestAction(action)) {
     let requestAction = action[CALL_API];
 
@@ -85,8 +85,4 @@ const requestMiddleware = ({ dispatch, getState }) => next => action => {
   }
 
   return next(action);
-};
-
-module.exports = {
-  requestMiddleware
 };

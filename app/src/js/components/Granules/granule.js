@@ -2,7 +2,7 @@
 import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   interval,
@@ -31,10 +31,12 @@ import LogViewer from '../Logs/viewer';
 import ErrorReport from '../Errors/report';
 import Metadata from '../Table/Metadata';
 import AsyncCommands from '../DropDown/dropdown-async-command';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import { simpleDropdownOption } from '../../utils/table-config/granules';
+
+const { updateInterval } = _config;
 
 const tableHeader = [
   'Filename',
@@ -84,7 +86,7 @@ class GranuleOverview extends React.Component {
   }
 
   componentDidMount () {
-    const { granuleId } = this.props.params;
+    const { granuleId } = this.props.match.params;
     this.cancelInterval = interval(this.queryWorkflows, updateInterval, true);
 
     if (this.props.skipReloadOnMount) return;
@@ -99,7 +101,7 @@ class GranuleOverview extends React.Component {
 
   reload (immediate, timeout) {
     timeout = timeout || updateInterval;
-    const granuleId = this.props.params.granuleId;
+    const granuleId = this.props.match.params.granuleId;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
     this.cancelInterval = interval(() => dispatch(getGranule(granuleId)), timeout, immediate);
@@ -111,8 +113,8 @@ class GranuleOverview extends React.Component {
   }
 
   navigateBack () {
-    const { router } = this.props;
-    router.push('/granules');
+    const { history } = this.props;
+    history.push('/granules');
   }
 
   queryWorkflows () {
@@ -120,28 +122,28 @@ class GranuleOverview extends React.Component {
   }
 
   reingest () {
-    const { granuleId } = this.props.params;
+    const { granuleId } = this.props.match.params;
     this.props.dispatch(reingestGranule(granuleId));
   }
 
   applyWorkflow () {
-    const { granuleId } = this.props.params;
+    const { granuleId } = this.props.match.params;
     const { workflow } = this.state;
     this.props.dispatch(applyWorkflowToGranule(granuleId, workflow));
   }
 
   remove () {
-    const { granuleId } = this.props.params;
+    const { granuleId } = this.props.match.params;
     this.props.dispatch(removeGranule(granuleId));
   }
 
   delete () {
-    const { granuleId } = this.props.params;
+    const { granuleId } = this.props.match.params;
     this.props.dispatch(deleteGranule(granuleId));
   }
 
   errors () {
-    const granuleId = this.props.params.granuleId;
+    const granuleId = this.props.match.params.granuleId;
     return [
       get(this.props.granules.map, [granuleId, 'error']),
       get(this.props.granules.reprocessed, [granuleId, 'error']),
@@ -168,7 +170,7 @@ class GranuleOverview extends React.Component {
   }
 
   render () {
-    const granuleId = this.props.params.granuleId;
+    const granuleId = this.props.match.params.granuleId;
     const record = this.props.granules.map[granuleId];
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
@@ -259,11 +261,11 @@ class GranuleOverview extends React.Component {
 }
 
 GranuleOverview.propTypes = {
-  params: PropTypes.object,
+  match: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
   logs: PropTypes.object,
-  router: PropTypes.object,
+  history: PropTypes.object,
   skipReloadOnMount: PropTypes.bool,
   workflowOptions: PropTypes.array
 };
@@ -274,8 +276,8 @@ GranuleOverview.defaultProps = {
 
 export { GranuleOverview };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   granules: state.granules,
   workflowOptions: workflowOptionNames(state),
   logs: state.logs
-}))(GranuleOverview);
+}))(GranuleOverview));

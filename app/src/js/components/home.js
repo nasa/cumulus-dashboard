@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import { get } from 'object-path';
 import {
   getCount,
@@ -29,7 +29,7 @@ import {
   errorTableRow,
   errorTableSortProps
 } from '../utils/table-config/granules';
-import { recent, updateInterval } from '../config';
+import _config from '../config';
 import {
   kibanaS3AccessErrorsLink,
   kibanaS3AccessSuccessesLink,
@@ -45,6 +45,8 @@ import {
 
 import { strings } from './locale';
 
+const { recent, updateInterval } = _config;
+
 class Home extends React.Component {
   constructor () {
     super();
@@ -57,7 +59,7 @@ class Home extends React.Component {
     this.cancelInterval = interval(() => {
       this.query();
     }, updateInterval, true);
-    const {dispatch} = this.props;
+    const { dispatch } = this.props;
     dispatch(getCumulusInstanceMetadata())
       .then(() => {
         dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
@@ -65,7 +67,7 @@ class Home extends React.Component {
         dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
         dispatch(getDistS3AccessMetrics(this.props.cumulusInstance));
       }
-    );
+      );
   }
 
   componentWillUnmount () {
@@ -108,26 +110,28 @@ class Home extends React.Component {
       <section className='page__section'>
         <div className='row'>
           <div className='heading__wrapper'>
-              <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
+            <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
           </div>
-          <ul id={listId}>
-            {data.map(d => {
-              const value = d[0];
-              return (
+          <div className="overview-num__wrapper-home">
+            <ul id={listId}>
+              {data.map(d => {
+                const value = d[0];
+                return (
                   <li key={d[1]}>
-                  {this.isExternalLink(d[2]) ? (
-                    <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
-                      <span className='num--large'>{value}</span> {d[1]}
-                    </a>
-                  ) : (
-                    <Link id={d[1]} className='overview-num' to={d[2] || '#'}>
-                      <span className='num--large'>{value}</span> {d[1]}
-                    </Link>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+                    {this.isExternalLink(d[2]) ? (
+                      <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
+                        <span className='num--large'>{value}</span> {d[1]}
+                      </a>
+                    ) : (
+                      <Link id={d[1]} className='overview-num' to={d[2] || '#'}>
+                        <span className='num--large'>{value}</span> {d[1]}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       </section>
     );
@@ -175,12 +179,12 @@ class Home extends React.Component {
         </div>
 
         <div className='page__content page__content__nosidebar'>
-        <section className='page__section metrics--overview'>
+          <section className='page__section metrics--overview'>
             <div className='row'>
               <div className='heading__wrapper--border'>
                 <h2 className='heading--large heading--shared-content--right'>Metrics Overview</h2>
               </div>
-              </div>
+            </div>
           </section>
 
           {this.renderButtonListSection(overview, 'Updates')}
@@ -236,7 +240,7 @@ Home.propTypes = {
 };
 
 export { Home };
-export default connect(state => ({
+export default withRouter(connect(state => ({
   rules: state.rules,
   stats: state.stats,
   dist: state.dist,
@@ -244,4 +248,4 @@ export default connect(state => ({
   pdrs: state.pdrs,
   executions: state.executions,
   cumulusInstance: state.cumulusInstance
-}))(Home);
+}))(Home));

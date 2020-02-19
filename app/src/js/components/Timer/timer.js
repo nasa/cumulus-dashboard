@@ -1,7 +1,10 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { updateInterval } from '../../config';
+import _config from '../../config';
+
+const { updateInterval } = _config;
+
 const delay = updateInterval / 1000;
 
 class Timer extends React.Component {

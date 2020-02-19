@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
-
-import { updateDelay } from '../../config';
 import { displayCase } from '../../utils/format';
+import _config from '../../config';
+
+const { updateDelay } = _config;
 
 import TextArea from '../TextAreaForm/text-area';
 import DefaultModal from '../Modal/modal';
@@ -19,7 +20,7 @@ const defaultState = {
 
 const AddRaw = ({
   defaultValue = '',
-  router,
+  history,
   state,
   dispatch,
   createRecord,
@@ -44,7 +45,7 @@ const AddRaw = ({
     if (status === 'success') {
       const baseRoute = getBaseRoute(pk);
       setTimeout(() => {
-        router.push(baseRoute);
+        history.push(baseRoute);
       }, updateDelay);
     } else if (status === 'error' && !error) {
       setRecord({ ...record, error: get(state.created, [pk, 'error']) });
@@ -52,7 +53,7 @@ const AddRaw = ({
   });
 
   function handleCancel (e) {
-    router.push(getBaseRoute().split('/')[1]);
+    history.push(getBaseRoute().split('/')[1]);
   }
 
   function handleSubmit (e) {
@@ -141,7 +142,7 @@ AddRaw.propTypes = {
   title: PropTypes.string,
   getPk: PropTypes.func,
   getBaseRoute: PropTypes.func,
-  router: PropTypes.object,
+  history: PropTypes.object,
   createRecord: PropTypes.func,
   requireConfirmation: PropTypes.bool,
   type: PropTypes.string,
