@@ -107,6 +107,13 @@ class ExecutionStatus extends React.Component {
 
     const kibanaLink = kibanaExecutionLink(cumulusInstance, executionStatus.execution.name);
 
+    let logsLink;
+    if (kibanaLink && kibanaLink.length) {
+      logsLink = <dd><a href={kibanaLink} target="_blank">View Logs in Kibana</a></dd>;
+    } else {
+      logsLink = <dd><Link to={'/executions/execution/' + executionStatus.execution.name + '/logs'} title={executionStatus.execution.name + '/logs'}>View Execution Logs</Link></dd>;
+    }
+
     return (
       <div className='page__component'>
       <section className='page__section page__section__header-wrapper'>
@@ -167,13 +174,8 @@ class ExecutionStatus extends React.Component {
           <br />
 
           <dt>Logs:</dt>
-          <dd><Link to={'/executions/execution/' + executionStatus.execution.name + '/logs'} title={executionStatus.execution.name + '/logs'}>View Execution Logs</Link></dd>
+          {logsLink}
           <br />
-          { kibanaLink && kibanaLink.length ? (<div>
-            <dt>Kibana Logs:</dt>
-            <dd><a href={kibanaLink} target="_blank">View Logs in Kibana</a></dd>
-            <br />
-            </div>) : null }
         </dl>
       </section>
 
