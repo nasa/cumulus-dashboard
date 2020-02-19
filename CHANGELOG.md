@@ -9,9 +9,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- **CUMULUS-1534**
-  - Add confirmation modal when adding a new rule
-
 - **CUMULUS-1102**
   - Adds ability to run dashboard against Cumulus localAPI.
     - Adds a number of docker-compose commands to be run via `npm run <command>`
@@ -29,14 +26,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1463**
   - Add Datepicker Component
 
+- **CUMULUS-1534**
+  - Add confirmation modal when adding a new rule
+
 - **CUMULUS-1581**
   - Added support Bulk Granule Operations
 
 - **CUMULUS-1582**
   - Added Operations page to track Async Operations
-
-- **CUMULUS-1463**
-  - Add Datepicker Component
 
 ### Changed
 
@@ -59,7 +56,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - **CUMULUS-1459**
-  - Updates Operations page to receive async operations list from Elasticsearch.  
+  - Updates Operations page to receive async operations list from Elasticsearch.
 
 - **CUMULUS-1363**
   - Use `npm` instead of `yarn`
