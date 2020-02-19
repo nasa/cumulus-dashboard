@@ -50,7 +50,7 @@ const AddRaw = ({
     } else if (status === 'error' && !error) {
       setRecord({ ...record, error: get(state.created, [pk, 'error']) });
     }
-  }, [pk, state.created, error, getBaseRoute, history, record]);
+  });
 
   function handleCancel (e) {
     history.push(getBaseRoute().split('/')[1]);
