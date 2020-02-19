@@ -1,6 +1,5 @@
 'use strict';
 import get from 'lodash.get';
-import isEmpty from 'lodash.isempty';
 
 /**
  * Retrieve initial value for component based on react-router's location.
@@ -9,13 +8,8 @@ import isEmpty from 'lodash.isempty';
  * @returns {string} - value of this component's query string from the url .
  */
 export function initialValueFromLocation (props) {
-  const { location, paramKey } = props;
-  let initialValue = '';
-  if (!isEmpty(location.query) &&
-       Object.hasOwnProperty.call(location.query, paramKey)) {
-    initialValue = location.query[paramKey];
-  }
-  return initialValue;
+  const { location, paramKey, queryParams } = props;
+  return get(location, ['query', paramKey], get(queryParams, paramKey, ''));
 }
 
 /**
@@ -56,4 +50,15 @@ export function updateRouterLocation (router, location, paramKey, value) {
     location.query = nextQuery;
     router.push(location);
   }
+}
+
+export function parseQueryParams (search) {
+  const queryParams = {};
+  const queries = search.substring(1).split('&');
+  queries.forEach(query => {
+    query = query.split('=');
+    let [ key, value ] = query;
+    queryParams[key] = value;
+  });
+  return queryParams;
 }

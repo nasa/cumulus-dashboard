@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { interval, listPdrs, getCount } from '../../actions';
@@ -10,7 +10,9 @@ import { bulkActions } from '../../utils/table-config/pdrs';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdr-progress';
 import List from '../Table/Table';
 import Overview from '../Overview/overview';
-import { updateInterval } from '../../config';
+import _config from '../../config';
+
+const { updateInterval } = _config;
 
 class PdrOverview extends React.Component {
   constructor () {
@@ -94,7 +96,7 @@ PdrOverview.propTypes = {
   stats: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   stats: state.stats,
   pdrs: state.pdrs
-}))(PdrOverview);
+}))(PdrOverview));

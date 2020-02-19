@@ -3,6 +3,7 @@ import React from 'react';
 // import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
   clearOperationsFilter,
   filterOperations,
@@ -28,8 +29,10 @@ import {
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 // import {strings} from '../locale';
+
+const { updateInterval } = _config;
 
 const tableHeader = [
   'Status',
@@ -53,7 +56,7 @@ const typeOptions = {
   'Kinesis Replay': 'Kinesis Replay'
 };
 
-  // (d) => <Link to={'/executions/execution/' + d.arn} title={d.name}>{truncate(d.name, 24)}</Link>,
+// (d) => <Link to={'/executions/execution/' + d.arn} title={d.name}>{truncate(d.name, 24)}</Link>,
 
 const tableRow = [
   (d) => displayCase(d.status),
@@ -116,8 +119,12 @@ class OperationOverview extends React.Component {
     const { operations } = this.props;
     const { list } = operations;
     const { count } = list.meta;
-    if (list.internal.prefix && list.internal.prefix.value) {
-      list.data = this.searchOperations(list.data, list.internal.prefix.value);
+    if (list.internal.prefix) {
+      if (list.internal.prefix.queryValue) {
+        list.data = this.searchOperations(list.data, list.internal.prefix.queryValue);
+      } else if (typeof list.internal.prefix === 'string') {
+        list.data = this.searchOperations(list.data, list.internal.prefix);
+      }
     }
 
     return (
@@ -178,9 +185,9 @@ OperationOverview.propTypes = {
   workflowOptions: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   stats: state.stats,
   operations: state.operations,
   workflowOptions: workflowOptions(state),
   collectionOptions: collectionOptions(state)
-}))(OperationOverview);
+}))(OperationOverview));

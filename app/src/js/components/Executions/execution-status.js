@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import get from 'lodash.get';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import { kibanaExecutionLink } from '../../utils/kibana';
 
 import {
@@ -16,7 +16,8 @@ import {
 
 import ErrorReport from '../Errors/report';
 
-import { ExecutionStatusGraph, getEventDetails } from './execution-status-graph';
+import ExecutionStatusGraph from './execution-status-graph';
+import { getEventDetails } from './execution-graph-utils';
 import SortableTable from '../SortableTable/SortableTable';
 
 class ExecutionStatus extends React.Component {
@@ -30,14 +31,14 @@ class ExecutionStatus extends React.Component {
 
   componentDidMount () {
     const { dispatch } = this.props;
-    const { executionArn } = this.props.params;
+    const { executionArn } = this.props.match.params;
     dispatch(getExecutionStatus(executionArn));
     dispatch(getCumulusInstanceMetadata());
   }
 
   navigateBack () {
-    const { router } = this.props;
-    router.push('/executions');
+    const { history } = this.props;
+    history.push('/executions');
   }
 
   errors () {
@@ -116,62 +117,62 @@ class ExecutionStatus extends React.Component {
 
     return (
       <div className='page__component'>
-      <section className='page__section page__section__header-wrapper'>
-        <h1 className='heading--large heading--shared-content with-description width--three-quarters'>
+        <section className='page__section page__section__header-wrapper'>
+          <h1 className='heading--large heading--shared-content with-description width--three-quarters'>
           Execution {executionStatus.arn}
-        </h1>
+          </h1>
 
-        {errors.length ? <ErrorReport report={errors} /> : null}
-      </section>
+          {errors.length ? <ErrorReport report={errors} /> : null}
+        </section>
 
-      {/* stateMachine's definition and executionHistory's event statuses are needed to draw the graph */}
-      {(executionStatus.stateMachine && executionStatus.executionHistory)
-      ? <section className='page__section width--half' style={{ display: 'inline-block', marginRight: '5%' }}>
+        {/* stateMachine's definition and executionHistory's event statuses are needed to draw the graph */}
+        {(executionStatus.stateMachine && executionStatus.executionHistory)
+          ? <section className='page__section width--half' style={{ display: 'inline-block', marginRight: '5%' }}>
             <div className='heading__wrapper--border'>
               <h2 className='heading--medium with-description'>Visual workflow</h2>
             </div>
 
             <ExecutionStatusGraph executionStatus={executionStatus} />
-        </section>
-      : null}
+          </section>
+          : null}
 
-      <section className='page__section width--half' style={{ display: 'inline-block', verticalAlign: 'top' }}>
-        <div className='heading__wrapper--border'>
-          <h2 className='heading--medium with-description'>Execution Details</h2>
-        </div>
+        <section className='page__section width--half' style={{ display: 'inline-block', verticalAlign: 'top' }}>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium with-description'>Execution Details</h2>
+          </div>
 
-        <dl className='status--process'>
-          <dt>Execution Status:</dt>
-          <dd>{displayCase(executionStatus.execution.status)}</dd><br />
+          <dl className='status--process'>
+            <dt>Execution Status:</dt>
+            <dd>{displayCase(executionStatus.execution.status)}</dd><br />
 
-          <dt>Execution Arn:</dt>
-          <dd>{executionStatus.execution.executionArn}</dd><br />
+            <dt>Execution Arn:</dt>
+            <dd>{executionStatus.execution.executionArn}</dd><br />
 
-          <dt>State Machine Arn:</dt>
-          <dd>{executionStatus.execution.stateMachineArn}</dd><br />
+            <dt>State Machine Arn:</dt>
+            <dd>{executionStatus.execution.stateMachineArn}</dd><br />
 
-          { asyncOperationId ? (<div>
-            <dt>Async Operation ID</dt>
-            <dd>{asyncOperationId}</dd>
-          </div>) : null }
+            { asyncOperationId ? (<div>
+              <dt>Async Operation ID</dt>
+              <dd>{asyncOperationId}</dd>
+            </div>) : null }
 
-          <dt>Started:</dt>
-          <dd>{fullDate(executionStatus.execution.startDate)}</dd><br />
+            <dt>Started:</dt>
+            <dd>{fullDate(executionStatus.execution.startDate)}</dd><br />
 
-          <dt>Ended:</dt>
-          <dd>{fullDate(executionStatus.execution.stopDate)}</dd><br />
+            <dt>Ended:</dt>
+            <dd>{fullDate(executionStatus.execution.stopDate)}</dd><br />
 
-          <dt>Parent Workflow Execution</dt>
-          {parentARN}
-          <br />
+            <dt>Parent Workflow Execution</dt>
+            {parentARN}
+            <br />
 
-          <dt>Input:</dt>
-          {input}
-          <br />
+            <dt>Input:</dt>
+            {input}
+            <br />
 
-          <dt>Output:</dt>
-          {output}
-          <br />
+            <dt>Output:</dt>
+            {output}
+            <br />
 
           <dt>Logs:</dt>
           {logsLink}
@@ -179,18 +180,18 @@ class ExecutionStatus extends React.Component {
         </dl>
       </section>
 
-      {(executionStatus.executionHistory)
-      ? <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium with-description'>Events</h2>
-            <p>To find all task name and versions, select <b>More details</b> for the last Lambda- or Activity-type event. There you should find a key / value pair "workflow_tasks" which lists all tasks' version, name and arn.</p>
-            <p><b>NOTE:</b>Task / version tracking is enabled as of Cumulus version 1.9.1.</p>
-            <p><b>NOTE:</b>If the task output is greater than 10KB, the full message will be stored in an S3 Bucket. In these scenarios, task and version numbers are not part of the Lambda or Activity event output.</p>
-          </div>
+        {(executionStatus.executionHistory)
+          ? <section className='page__section'>
+            <div className='heading__wrapper--border'>
+              <h2 className='heading--medium with-description'>Events</h2>
+              <p>To find all task name and versions, select <b>More details</b> for the last Lambda- or Activity-type event. There you should find a key / value pair "workflow_tasks" which lists all tasks' version, name and arn.</p>
+              <p><b>NOTE:</b>Task / version tracking is enabled as of Cumulus version 1.9.1.</p>
+              <p><b>NOTE:</b>If the task output is greater than 10KB, the full message will be stored in an S3 Bucket. In these scenarios, task and version numbers are not part of the Lambda or Activity event output.</p>
+            </div>
 
-          {this.renderEvents()}
-        </section>
-      : null}
+            {this.renderEvents()}
+          </section>
+          : null}
 
       </div>
     );
@@ -199,15 +200,15 @@ class ExecutionStatus extends React.Component {
 
 ExecutionStatus.propTypes = {
   executionStatus: PropTypes.object,
-  params: PropTypes.object,
+  match: PropTypes.object,
   dispatch: PropTypes.func,
-  router: PropTypes.object,
-  cumulusInstance: PropTypes.object
+  cumulusInstance: PropTypes.object,
+  history: PropTypes.object
 };
 
 export { ExecutionStatus };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   executionStatus: state.executionStatus,
   cumulusInstance: state.cumulusInstance
-}))(ExecutionStatus);
+}))(ExecutionStatus));

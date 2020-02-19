@@ -4,12 +4,13 @@ import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import {
   interval,
   getReconciliationReport
 } from '../../actions';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 import {
   tableHeaderS3Files,
   tableRowS3File,
@@ -30,6 +31,8 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import ErrorReport from '../Errors/report';
 
 import ReportTable from './report-table';
+
+const { updateInterval } = _config;
 
 const reportMetaAccessors = [
   ['Created', 'reportStartTime'],
@@ -58,7 +61,7 @@ class ReconciliationReport extends React.Component {
   }
 
   componentDidMount () {
-    const { reconciliationReportName } = this.props.params;
+    const { reconciliationReportName } = this.props.match.params;
     const immediate = !this.props.reconciliationReports.map[reconciliationReportName];
     this.reload(immediate);
   }
@@ -68,14 +71,14 @@ class ReconciliationReport extends React.Component {
   }
 
   reload (immediate) {
-    const { reconciliationReportName } = this.props.params;
+    const { reconciliationReportName } = this.props.match.params;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
     this.cancelInterval = interval(() => dispatch(getReconciliationReport(reconciliationReportName)), updateInterval, immediate);
   }
 
   navigateBack () {
-    this.props.router.push('/reconciliations');
+    this.props.history.push('/reconciliations');
   }
 
   getFilesSummary ({
@@ -137,7 +140,7 @@ class ReconciliationReport extends React.Component {
 
   render () {
     const { reconciliationReports } = this.props;
-    const { reconciliationReportName } = this.props.params;
+    const { reconciliationReportName } = this.props.match.params;
 
     const record = reconciliationReports.map[reconciliationReportName];
 
@@ -284,8 +287,8 @@ class ReconciliationReport extends React.Component {
 ReconciliationReport.propTypes = {
   reconciliationReports: PropTypes.object,
   dispatch: PropTypes.func,
-  params: PropTypes.object,
-  router: PropTypes.object
+  match: PropTypes.object,
+  history: PropTypes.object
 };
 
 ReconciliationReport.defaultProps = {
@@ -293,4 +296,4 @@ ReconciliationReport.defaultProps = {
 };
 
 export { ReconciliationReport };
-export default connect(state => state)(ReconciliationReport);
+export default withRouter(connect(state => state)(ReconciliationReport));

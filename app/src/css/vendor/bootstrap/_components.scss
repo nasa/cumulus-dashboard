@@ -7,15 +7,14 @@ and behaviors for our Cumulus Dashboard components
 */
 
 
-@import "../../../../../node_modules/bootstrap/scss/_alert";
-@import "../../../../../node_modules/bootstrap/scss/_buttons";
-@import "../../../../../node_modules/bootstrap/scss/_card";
-@import "../../../../../node_modules/bootstrap/scss/_close";
-@import "../../../../../node_modules/bootstrap/scss/_modal";
-@import "../../../../../node_modules/bootstrap/scss/_nav";
-@import "../../../../../node_modules/bootstrap/scss/_popover";
-@import "../../../../../node_modules/bootstrap/scss/_progress";
-/*@import "../../../../../node_modules/bootstrap/scss/_reboot";*/
-@import "../../../../../node_modules/bootstrap/scss/_spinners";
-@import "../../../../../node_modules/bootstrap/scss/_tooltip";
-@import "../../../../../node_modules/bootstrap/scss/_transitions";
+@import "~bootstrap/scss/_alert";
+@import "~bootstrap/scss/_card";
+@import "~bootstrap/scss/_close";
+@import "~bootstrap/scss/_modal";
+@import "~bootstrap/scss/_nav";
+@import "~bootstrap/scss/_popover";
+@import "~bootstrap/scss/_progress";
+/*@import "~bootstrap/scss/_reboot";*/
+@import "~bootstrap/scss/_spinners";
+@import "~bootstrap/scss/_tooltip";
+@import "~bootstrap/scss/_transitions";

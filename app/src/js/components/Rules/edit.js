@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
   getRule,
   updateRule,
@@ -14,8 +15,7 @@ const SCHEMA_KEY = 'rule';
 
 class EditRule extends React.Component {
   render () {
-    const { params, rules } = this.props;
-    const { ruleName } = params;
+    const { match: { params: { ruleName } }, rules } = this.props;
     return (
       <EditRaw
         pk={ruleName}
@@ -24,7 +24,7 @@ class EditRule extends React.Component {
         state={rules}
         getRecord={() => getRule(ruleName)}
         updateRecord={updateRule}
-        backRoute={`rules/rule/${ruleName}`}
+        backRoute={`/rules/rule/${ruleName}`}
         clearRecordUpdate={clearUpdateRule}
       />
     );
@@ -32,10 +32,10 @@ class EditRule extends React.Component {
 }
 
 EditRule.propTypes = {
-  params: PropTypes.object,
+  match: PropTypes.object,
   rules: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   rules: state.rules
-}))(EditRule);
+}))(EditRule));

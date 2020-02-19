@@ -1,6 +1,8 @@
 'use strict';
 
-import { kibanaRoot } from '../config';
+import _config from '../config';
+
+const { kibanaRoot } = _config;
 
 export const kibanaS3AccessErrorsLink = (cumulusInstanceMeta) => {
   if (!cumulusInstanceMeta || !cumulusInstanceMeta.stackName) return '';

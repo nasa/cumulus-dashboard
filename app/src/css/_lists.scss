@@ -1,6 +1,6 @@
 .metadata__details {
   font-size: .86em;
-  @include clearfix;
+  @extend .clearfix;
   dt {
     font-weight: $base-font-semibold;
     width: 22%;
@@ -24,7 +24,7 @@
   a {
     font-size: .86em;
   }
-  @include clearfix;
+  @extend .clearfix;
   width: 25%;
   float: left;
   margin: .5em 0;
