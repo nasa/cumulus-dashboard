@@ -12,13 +12,13 @@ const DefaultModal = ({
   onCloseModal,
   onConfirm
 }) => {
-  function handleCloseModal(e) {
+  function handleCloseModal (e) {
     if (typeof onCloseModal === 'function') {
       onCloseModal(e);
     }
   }
 
-  function handleConfirm(e) {
+  function handleConfirm (e) {
     if (typeof onConfirm === 'function') {
       onConfirm(e);
     }
@@ -32,7 +32,7 @@ const DefaultModal = ({
       centered
       size="md"
       aria-labelledby={`modal__${className}`}
-      >
+    >
       <Modal.Header className={`${className}__header`} closeButton></Modal.Header>
       <Modal.Title id={`modal__${className}`} className={`${className}__title`}>
         { title }
@@ -49,7 +49,7 @@ const DefaultModal = ({
         <button
           className='button button--submit button__animation--md button__arrow button__arrow--md button__animation form-group__element--left'
           onClick={handleConfirm}>
-            { confirmButtonText }
+          { confirmButtonText }
         </button>
       </Modal.Footer>
     </Modal>
