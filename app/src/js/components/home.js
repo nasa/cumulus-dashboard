@@ -121,7 +121,7 @@ class Home extends React.Component {
                       <span className='num--large'>{value}</span> {d[1]}
                     </a>
                   ) : (
-                    <Link id={d[1]} className='overview-num' to={d[2] || '#'}>
+                    <Link id={d[1]} className='overview-num' to={d[2]}>
                       <span className='num--large'>{value}</span> {d[1]}
                     </Link>
                   )}
