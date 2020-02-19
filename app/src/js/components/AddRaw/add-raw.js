@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 // import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
+import { displayCase } from '../../utils/format';
 import _config from '../../config';
 
 const { updateDelay } = _config;
@@ -25,10 +26,16 @@ const AddRaw = ({
   createRecord,
   getPk,
   getBaseRoute,
-  title
+  requireConfirmation,
+  title,
+  type = '',
+  ModalBody
 }) => {
   const [record, setRecord] = useState({ ...defaultState, data: JSON.stringify(defaultValue, null, 2) });
+  const [showModal, setShowModal] = useState(false);
   const { data, pk, error } = record;
+
+  const handleOnClick = requireConfirmation ? handleModalOpen : handleSubmit;
 
   useEffect(() => {
     setRecord(record => {
@@ -77,9 +84,24 @@ const AddRaw = ({
     setRecord({ ...record, data: value });
   }
 
+  function handleModalOpen (e) {
+    e.preventDefault();
+    setShowModal(true);
+  }
+
+  function handleModalClose () {
+    setShowModal(false);
+  }
+
+  function handleModalConfirm (e) {
+    setShowModal(false);
+    handleSubmit(e);
+  }
+
   const status = get(state.created, [pk, 'status']);
   const buttonText = status === 'inflight' ? 'loading...'
     : status === 'success' ? 'Success!' : 'Submit';
+  const displayCaseType = displayCase(type);
   return (
     <div className='page__component page__content--shortened--centered'>
       <section className='page__section page__section--fullpage-form'>
@@ -97,7 +119,7 @@ const AddRaw = ({
             />
             <button
               className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (status === 'inflight' ? ' button--disabled' : '')}
-              onClick={handleSubmit}
+              onClick={handleOnClick}
               readOnly={true}
             >{buttonText}</button>
             <button
@@ -106,6 +128,17 @@ const AddRaw = ({
               readOnly={true}
             >Cancel</button>
           </form>
+          {requireConfirmation &&
+            <DefaultModal
+              title={`Add ${displayCaseType}`}
+              className={`add-${type}`}
+              showModal={showModal}
+              cancelButtonText='Cancel Edit'
+              confirmButtonText={`Confirm ${displayCaseType}`}
+              onConfirm={handleModalConfirm}
+              onCloseModal={handleModalClose}>
+              <ModalBody record={record} className="center" />
+            </DefaultModal>}
         </div>
       </section>
     </div>
@@ -120,7 +153,10 @@ AddRaw.propTypes = {
   getPk: PropTypes.func,
   getBaseRoute: PropTypes.func,
   history: PropTypes.object,
-  createRecord: PropTypes.func
+  createRecord: PropTypes.func,
+  requireConfirmation: PropTypes.bool,
+  type: PropTypes.string,
+  ModalBody: PropTypes.oneOfType([PropTypes.node, PropTypes.func])
 };
 
 export default withRouter(connect()(AddRaw));

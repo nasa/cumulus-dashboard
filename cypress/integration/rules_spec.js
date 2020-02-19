@@ -83,6 +83,10 @@ describe('Rules page', () => {
       cy.editJsonTextarea({ data: newRule });
       cy.contains('form button', 'Submit').click();
 
+      cy.contains('.default-modal .add-rule__title', 'Add Rule');
+      cy.contains('.default-modal .modal-body', `Add rule ${ruleName}`);
+      cy.contains('.modal-footer button', 'Confirm Rule').click();
+
       cy.contains('.heading--xlarge', 'Rules');
       cy.contains('table tbody tr a', ruleName)
         .and('have.attr', 'href', `/rules/rule/${ruleName}`).click();
