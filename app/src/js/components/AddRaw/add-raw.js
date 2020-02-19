@@ -11,6 +11,7 @@ import _config from '../../config';
 const { updateDelay } = _config;
 
 import TextArea from '../TextAreaForm/text-area';
+import DefaultModal from '../Modal/modal';
 
 const defaultState = {
   data: '',
