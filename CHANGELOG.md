@@ -41,6 +41,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Integration (cypress) tests and validation tests run in container against local Cumulus API.
   - Upgrades to node 10.16.3
 
+- **CUMULUS-1690**
+  - Update Task Manager from Gulp/Browserify to Webpack
+    - Removed Gulp configurations
+      - All dependencies with Gulp/Browserify are removed
+    - Added Webpack v4 configurations
+      - New/replacement dependencies are added for Webpack
+    - Upgraded to ReactJS 16.10.2 to work with Webpack v4 - Due to the React change the following dependencies are affected:
+      - Upgraded React-Router to v5.1.2
+      - Added Connected React Router 6.6.1
+      - Upgraded History to v4.7.2
+    - Updated Node from v8 to v10
+
 ### Fixed
 
 - **CUMULUS-1459**
@@ -62,6 +74,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1102**
   - Removes fake-api.js.  The fake-api is removed in favor of running a Cumulus API locally.
 
+- **CUMULUS-1690**
+  - Removed Gulp/Browserify and their dependencies.
 
 ## [v1.6.1] - 2019-11-12
 

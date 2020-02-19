@@ -73,6 +73,7 @@ export default function reducer (state = initialState, action) {
       break;
     case CLEAR_OPERATIONS_SEARCH:
       set(state, ['list', 'internal', 'prefix'], null);
+      set(state, ['list', 'data'], data.results);
       break;
   }
   return state;

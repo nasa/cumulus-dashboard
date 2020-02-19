@@ -4,12 +4,14 @@ import truncate from 'lodash.truncate';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { interval, getLogs, clearLogs } from '../../actions';
-import { logsUpdateInterval } from '../../config';
+import _config from '../../config';
 // import moment from 'moment';
 import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
 import ErrorReport from '../Errors/report';
 import Dropdown from '../DropDown/simple-dropdown';
 import { tally } from '../../utils/format';
+
+const { logsUpdateInterval } = _config;
 
 const noLogs = {
   displayText: 'There are no Cumulus logs from the past 48 hours.',
@@ -42,7 +44,7 @@ const logLevels = new Map([
 const logLevelName = (level) => (logLevels.get(`${level}`) || `${level}`);
 
 class LogViewer extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.displayName = 'LogViewer';
@@ -56,31 +58,31 @@ class LogViewer extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.query();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     if (this.props.logs.error) {
       this.cancelInterval();
       this.cancelInterval = () => { };
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.cancelInterval();
     this.props.dispatch(clearLogs());
   }
 
-  setSearch(search) {
+  setSearch (search) {
     this.setState({ search }, this.query);
   }
 
-  setSearchLevel(level) {
+  setSearchLevel (level) {
     this.setState({ level }, this.query);
   }
 
-  query() {
+  query () {
     const { dispatch } = this.props;
     const { search, level } = this.state;
     const query = Object.assign({}, this.props.query);
@@ -104,7 +106,7 @@ class LogViewer extends React.Component {
     dispatch(clearLogs());
 
     // let isFirstPull = true;
-    function querySinceLast() {
+    function querySinceLast () {
       // on first pull, get the last 48 hours
 
       // deactivating until timestamp filter works again on the API side
@@ -117,7 +119,7 @@ class LogViewer extends React.Component {
     this.cancelInterval = interval(querySinceLast, logsUpdateInterval, true);
   }
 
-  render() {
+  render () {
     const { logs, notFound } = this.props;
     const { level } = this.state;
     const count = tally(logs.items.length);

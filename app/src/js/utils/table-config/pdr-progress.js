@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { get } from 'object-path';
 import { tally, bool, fromNow, nullValue } from '../format';
 import ErrorReport from '../../components/Errors/report';

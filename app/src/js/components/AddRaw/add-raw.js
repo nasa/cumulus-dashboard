@@ -5,7 +5,9 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import TextArea from '../TextAreaForm/text-area';
 import { get } from 'object-path';
-import { updateDelay } from '../../config';
+import _config from '../../config';
+
+const { updateDelay } = _config;
 
 class AddRaw extends React.Component {
   constructor () {
@@ -21,7 +23,7 @@ class AddRaw extends React.Component {
   }
 
   cancel (e) {
-    this.props.router.push(this.props.getBaseRoute().split('/')[1]);
+    this.props.history.push(this.props.getBaseRoute());
   }
 
   submit (e) {
@@ -47,7 +49,7 @@ class AddRaw extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { router, getBaseRoute } = prevProps;
+    const { history, getBaseRoute } = prevProps;
     const { pk, error } = this.state;
     if (!pk) {
       return;
@@ -57,7 +59,7 @@ class AddRaw extends React.Component {
     if (status === 'success') {
       const baseRoute = getBaseRoute(pk);
       return setTimeout(() => {
-        router.push(baseRoute);
+        history.push(baseRoute);
       }, updateDelay);
     } else if (status === 'error' && !error) {
       this.setState({ error: get(this.props.state.created, [pk, 'error']) }); // eslint-disable-line react/no-did-update-set-state
@@ -88,16 +90,16 @@ class AddRaw extends React.Component {
                 minLines={30}
                 maxLines={200}
               />
-                <button
-                  className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (status === 'inflight' ? ' button--disabled' : '')}
-                  onClick={this.submit}
-                  readOnly={true}
-                  >{buttonText}</button>
-                <button
-                  className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
-                  onClick={this.cancel}
-                  readOnly={true}
-                >Cancel</button>
+              <button
+                className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (status === 'inflight' ? ' button--disabled' : '')}
+                onClick={this.submit}
+                readOnly={true}
+              >{buttonText}</button>
+              <button
+                className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
+                onClick={this.cancel}
+                readOnly={true}
+              >Cancel</button>
             </form>
           </div>
         </section>
@@ -113,7 +115,7 @@ AddRaw.propTypes = {
   title: PropTypes.string,
   getPk: PropTypes.func,
   getBaseRoute: PropTypes.func,
-  router: PropTypes.object,
+  history: PropTypes.object,
   createRecord: PropTypes.func
 };
 

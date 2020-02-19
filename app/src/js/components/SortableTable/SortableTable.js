@@ -74,7 +74,7 @@ class Table extends React.Component {
       data = data.sort((a, b) =>
         // If the sort field is the same, tie-break using the primary ID field
         a[sortName] === b[sortName] ? a[primaryName] > b[primaryName]
-        : (order === 'asc') ? a[sortName] < b[sortName] : a[sortName] > b[sortName]
+          : (order === 'asc') ? a[sortName] < b[sortName] : a[sortName] > b[sortName]
       );
     }
 

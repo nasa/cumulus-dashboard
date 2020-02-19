@@ -176,6 +176,7 @@ class Datepicker extends React.PureComponent {
                 { this.renderDateTimeRange('endDateTime') }
               </li>
               <li className="selector__hrformat" data-cy='hourFormat'>
+              <li className="selector__hrformat">
                 { this.renderHourFormatSelect() }
               </li>
             </ul>

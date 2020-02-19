@@ -40,7 +40,7 @@ For more on Router, including how to pass variables in the url, see the [docs on
 Instead of using `<a href="path/to/component">` tags, we use `<Link to="path/to/component" />`. This gives us a few convenience features.  Just remember to import the Link module:
 
 ```javascript
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 ```
 
 ## Writing an API query

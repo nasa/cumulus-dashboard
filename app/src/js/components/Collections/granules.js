@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getCollectionId, lastUpdated } from '../../utils/format';
 import {
@@ -40,21 +40,19 @@ class CollectionGranules extends React.Component {
   }
 
   generateQuery () {
-    const collectionId = getCollectionId(this.props.params);
+    const collectionId = getCollectionId(this.props.match.params);
     const options = { collectionId };
     const view = this.getView();
-    if (view === 'completed') options.status = 'completed';
-    else if (view === 'processing') options.status = 'running';
-    else if (view === 'failed') options.status = 'failed';
+    if (view && view !== 'all') options.status = view;
     return options;
   }
 
   getView () {
     const { pathname } = this.props.location;
     if (pathname.includes('/granules/completed')) return 'completed';
-    else if (pathname.includes('/granules/processing')) return 'processing';
-    else if (pathname.includes('/granules/failed')) return 'failed';
-    else return 'all';
+    if (pathname.includes('/granules/processing')) return 'running';
+    if (pathname.includes('/granules/failed')) return 'failed';
+    return 'all';
   }
 
   generateBulkActions () {
@@ -64,9 +62,8 @@ class CollectionGranules extends React.Component {
         action: this.applyWorkflow
       }
     };
-    const { granules } = this.props;
-    let actions = bulkActions(granules, actionConfig);
-    return actions;
+
+    return bulkActions(this.props.granules, actionConfig);
   }
 
   selectWorkflow (selector, workflow) {
@@ -89,39 +86,54 @@ class CollectionGranules extends React.Component {
   }
 
   render () {
-    const collectionName = this.props.params.name;
-    const collectionVersion = this.props.params.version;
+    const collectionName = this.props.match.params.name;
+    const collectionVersion = this.props.match.params.version;
     const { list } = this.props.granules;
     const { meta } = list;
     const view = this.getView();
+
     return (
-      <div className='page__component'>
-        <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description '>{collectionName} / {collectionVersion}</h1>
-          <Link className='button button--edit button--small form-group__element--right button--green' to={`/collections/edit/${collectionName}/${collectionVersion}`}>Edit</Link>
+      <div className="page__component">
+        <section className="page__section page__section__header-wrapper">
+          <h1 className="heading--large heading--shared-content with-description ">
+            {collectionName} / {collectionVersion}
+          </h1>
+          <Link
+            className="button button--edit button--small form-group__element--right button--green"
+            to={`/collections/edit/${collectionName}/${collectionVersion}`}
+          >
+            Edit
+          </Link>
           <dl className="metadata__updated">
             <dd>{lastUpdated(meta.queriedAt)}</dd>
           </dl>
         </section>
 
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num--title'>{meta.count ? ` ${meta.count}` : null}</span></h2>
+        <section className="page__section">
+          <div className="heading__wrapper--border">
+            <h2 className="heading--medium heading--shared-content with-description">
+              {strings.granules}{' '}
+              <span className="num--title">
+                {meta.count ? ` ${meta.count}` : null}
+              </span>
+            </h2>
           </div>
-          <div className='filters filters__wlabels'>
-          {(view === 'all') ? <Dropdown
-            options={statusOptions}
-            action={filterGranules}
-            clear={clearGranulesFilter}
-            paramKey={'status'}
-            label={'Status'}
-            />
-            : <Search
-              dispatch={this.props.dispatch}
-              action={searchGranules}
-              clear={clearGranulesSearch}
-            />
-          }
+          <div className="filters filters__wlabels">
+            {view === 'all' ? (
+              <Dropdown
+                options={statusOptions}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey={'status'}
+                label={'Status'}
+              />
+            ) : (
+              <Search
+                dispatch={this.props.dispatch}
+                action={searchGranules}
+                clear={clearGranulesSearch}
+              />
+            )}
           </div>
 
           <List
@@ -136,7 +148,6 @@ class CollectionGranules extends React.Component {
             sortIdx={6}
           />
         </section>
-
       </div>
     );
   }
@@ -148,7 +159,8 @@ CollectionGranules.propTypes = {
   location: PropTypes.object,
   config: PropTypes.object,
   workflowOptions: PropTypes.array,
-  params: PropTypes.object
+  params: PropTypes.object,
+  match: PropTypes.object
 };
 
 export default withRouter(connect(state => ({

@@ -8,7 +8,9 @@ import { get } from 'object-path';
 import { getSchema } from '../../actions';
 import Loading from '../LoadingIndicator/loading-indicator';
 import { removeReadOnly } from '../FormSchema/schema';
-import { updateDelay } from '../../config';
+import _config from '../../config';
+
+const { updateDelay } = _config;
 
 class EditRaw extends React.Component {
   constructor () {
@@ -46,7 +48,7 @@ class EditRaw extends React.Component {
   }
 
   cancel () {
-    this.props.router.push(this.props.backRoute);
+    this.props.history.push(this.props.backRoute);
   }
 
   componentDidMount () {
@@ -56,12 +58,12 @@ class EditRaw extends React.Component {
 
   componentDidUpdate (prevProps) {
     const { pk, state, schema, schemaKey } = this.props;
-    const { dispatch, router, clearRecordUpdate, backRoute } = prevProps;
+    const { dispatch, history, clearRecordUpdate, backRoute } = prevProps;
     // successfully updated, navigate away
     if (get(state.updated, [pk, 'status']) === 'success') {
       return setTimeout(() => {
         dispatch(clearRecordUpdate(pk));
-        router.push(backRoute);
+        history.push(backRoute);
       }, updateDelay);
     }
     if (this.state.pk === pk || !schema[schemaKey]) { return; }
@@ -103,9 +105,9 @@ class EditRaw extends React.Component {
     return (
       <div className='page__component'>
         <section className='page__section'>
-        <div className="heading__wrapper--border">
-          <h1 className='heading--large'>{pk}</h1>
-        </div>
+          <div className="heading__wrapper--border">
+            <h1 className='heading--large'>{pk}</h1>
+          </div>
           { data || data === '' ? (
             <form>
               <TextArea
@@ -121,11 +123,11 @@ class EditRaw extends React.Component {
                 className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (updateStatus === 'inflight' ? ' button--disabled' : '')}
                 onClick={this.submit}
                 value={buttonText}
-                >{buttonText}</button>
+              >{buttonText}</button>
               <button
                 className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
                 onClick={this.cancel}
-                >Cancel</button>
+              >Cancel</button>
             </form>
           ) : <Loading /> }
         </section>
@@ -141,8 +143,7 @@ EditRaw.propTypes = {
   schemaKey: PropTypes.string,
   state: PropTypes.object,
   backRoute: PropTypes.string,
-  router: PropTypes.object,
-
+  history: PropTypes.object,
   getRecord: PropTypes.func,
   updateRecord: PropTypes.func,
   clearRecordUpdate: PropTypes.func

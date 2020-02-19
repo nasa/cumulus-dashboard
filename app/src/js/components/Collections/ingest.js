@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import Ace from 'react-ace';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -24,7 +24,7 @@ class CollectionIngest extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { name, version } = prevProps.params;
+    const { name, version } = prevProps.match.params;
     const collectionId = getCollectionId({ name, version });
     const record = prevProps.collections.map[collectionId];
     if (!record) {
@@ -33,7 +33,7 @@ class CollectionIngest extends React.Component {
   }
 
   componentDidMount () {
-    const { name, version } = this.props.params;
+    const { name, version } = this.props.match.params;
     this.get(name, version);
   }
 
@@ -61,8 +61,8 @@ class CollectionIngest extends React.Component {
   }
 
   render () {
-    const { name, version } = this.props.params;
-    const collectionId = getCollectionId(this.props.params);
+    const { name, version } = this.props.match.params;
+    const collectionId = getCollectionId(this.props.match.params);
     const record = this.props.collections.map[collectionId];
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
@@ -134,9 +134,9 @@ class CollectionIngest extends React.Component {
 }
 
 CollectionIngest.propTypes = {
-  params: PropTypes.object,
+  match: PropTypes.object,
   collections: PropTypes.object,
   dispatch: PropTypes.func
 };
 
-export default connect(state => state)(CollectionIngest);
+export default withRouter(connect(state => state)(CollectionIngest));
