@@ -138,6 +138,37 @@ describe('Dashboard Collections Page', () => {
       cy.get('#collection-chooser').find(':selected').contains(collectionId);
     });
 
+    it('should copy a collection', () => {
+      const name = 'MOD09GQ';
+      const version = '006';
+
+      cy.visit(`/collections/collection/${name}/${version}`);
+      cy.contains('a', 'Copy').as('copyCollection');
+      cy.get('@copyCollection')
+        .should('have.attr', 'href')
+        .and('include', '/collections/add');
+      cy.get('@copyCollection').click();
+
+      cy.contains('.heading--large', 'Add a collection');
+
+      // update collection and submit
+      const newVersion = '007';
+      cy.editJsonTextarea({ data: { version: newVersion }, update: true });
+      cy.contains('form button', 'Submit').click();
+
+      // displays the copied collection and its granules
+      cy.contains('.heading--xlarge', 'Collections');
+      cy.contains('.heading--large', `${name} / ${version}`);
+
+      // verify the collection is updated by looking at the Edit page
+      cy.get('@copyCollection').click();
+
+      cy.getJsonTextareaValue().then((collectionJson) => {
+        expect(collectionJson.version).to.equal(newVersion);
+      });
+      cy.contains('.heading--large', `${name}___${newVersion}`);
+    });
+
     it('should edit a collection', () => {
       const name = 'MOD09GQ';
       const version = '006';
@@ -163,7 +194,7 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.heading--large', `${name} / ${version}`);
 
       // verify the collection is updated by looking at the Edit page
-      cy.contains('a', 'Edit').click();
+      cy.get('@editCollection').click();
 
       cy.getJsonTextareaValue().then((collectionJson) => {
         expect(collectionJson.duplicateHandling).to.equal(duplicateHandling);
