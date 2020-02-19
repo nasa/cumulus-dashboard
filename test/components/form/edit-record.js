@@ -5,13 +5,14 @@ import test from 'ava';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import configureMockStore from 'redux-mock-store';
-import {mount, configure} from 'enzyme';
+import { Provider } from 'react-redux';
+import { mount, configure } from 'enzyme';
 import {
   getProvider,
   updateProvider,
   clearUpdateProvider
 } from '../../../app/src/js/actions';
-import EditRecord from '../../../app/src/js/components/Edit/edit.js';
+import { EditRecord } from '../../../app/src/js/components/Edit/edit.js';
 
 configure({ adapter: new Adapter() });
 
@@ -25,20 +26,24 @@ test('EditRecord sends full object when merge property is true', (t) => {
   const provider = { id: 123, foo: 'bar' };
   const providersState = { map: { [provider.id]: { data: provider } } };
   const schemaKey = 'provider';
-  const store = mockStore({ schema: { [schemaKey]: {} } });
+  const schema = { [schemaKey]: {} };
+  const store = mockStore({});
 
   const editRecordWrapper = mount(
-    <EditRecord
-      store={store}
-      merge={true}
-      pk={`${provider.id}`}
-      schemaKey={schemaKey}
-      state={providersState}
-      getRecord={getProvider}
-      updateRecord={updateProvider}
-      clearRecordUpdate={clearUpdateProvider}
-      backRoute={`providers/provider/${provider.id}`}
-    />
+    <Provider store={store}>
+      <EditRecord
+        schema={schema}
+        dispatch={store.dispatch}
+        merge={true}
+        pk={`${provider.id}`}
+        schemaKey={schemaKey}
+        state={providersState}
+        getRecord={getProvider}
+        updateRecord={updateProvider}
+        clearRecordUpdate={clearUpdateProvider}
+        backRoute={`providers/provider/${provider.id}`}
+      />
+    </Provider>
   );
 
   const submitButton = editRecordWrapper.find('.button__submit');

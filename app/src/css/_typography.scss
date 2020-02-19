@@ -1,3 +1,8 @@
+/***** Fonts Imports ********/
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700&display=swap');
+
+/******* Typography *******/
 h1, h2, h3, h4, h5, h6 {
   color: $black;
   margin-bottom: .5em;
@@ -72,5 +77,5 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 1em;
   font-weight: $base-font-regular;
   -webkit-font-smoothing: antialiased;
-  @include transition(background 0.2s linear);
+  transition: background-color 0.2s linear;
 }

@@ -31,7 +31,7 @@ test('Collections Overview generates bulkAction for recovery button', function (
   const logs = {};
   const config = { enableRecovery: true };
   const store = {
-    setState: () => {},
+    getState: () => {},
     dispatch,
     subscribe: () => {}
   };

@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   target: process.env.DAAC_NAME || 'local',
   environment: process.env.STAGE || 'development',
   nav: {
@@ -13,6 +13,8 @@ module.exports = {
   esRoot: process.env.ESROOT || '',
   showTeaMetrics: process.env.SHOW_TEA_METRICS || true,
   showDistributionAPIMetrics: process.env.SHOW_DISTRIBUTION_API_METRICS || false,
-  graphicsPath: (process.env.BUCKET || '') + '/src/assets/images/',
+  graphicsPath: (process.env.BUCKET || ''),
   enableRecovery: process.env.ENABLE_RECOVERY || false
 };
+
+module.exports = config;

@@ -37,8 +37,8 @@ class GranuleRecipe extends React.Component {
   }
 
   navigateBack () {
-    const { router } = this.props;
-    router.push('/granules');
+    const { history } = this.props;
+    history.push('/granules');
   }
 
   reprocess () {
@@ -165,7 +165,7 @@ GranuleRecipe.propTypes = {
   params: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
-  router: PropTypes.object
+  history: PropTypes.object
 };
 
 export default connect(state => state)(GranuleRecipe);

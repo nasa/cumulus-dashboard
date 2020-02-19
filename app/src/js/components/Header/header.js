@@ -2,11 +2,13 @@
 import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import { logout, getApiVersion } from '../../actions';
-import { graphicsPath, nav } from '../../config';
+import _config from '../../config';
 import { window } from '../../utils/browser';
 import { strings } from '../locale';
+
+const { graphicsPath, nav } = _config;
 
 const paths = [
   ['PDRs', '/pdrs'],
@@ -44,7 +46,7 @@ class Header extends React.Component {
   }
 
   className (path) {
-    const active = this.props.location.pathname.slice(0, path.length) === path;
+    const active = this.props.location.pathname.slice(0, path.length) === path; // nav issue with router
     const menuItem = path.replace('/', '');
     const order = 'nav__order-' + (nav.order.indexOf(menuItem) === -1 ? 2 : nav.order.indexOf(menuItem));
     return c({
@@ -82,4 +84,4 @@ Header.propTypes = {
   minimal: PropTypes.bool
 };
 
-export default Header;
+export default withRouter(Header);

@@ -2,7 +2,7 @@
 import path from 'path';
 import React from 'react';
 import { get } from 'object-path';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import {
   fromNow,
   seconds,

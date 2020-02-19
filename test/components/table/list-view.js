@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import {shallow, configure} from 'enzyme';
 import {listGranules} from '../../../app/src/js/actions';
-import List from '../../../app/src/js/components/Table/Table';
+import { List } from '../../../app/src/js/components/Table/Table';
 import Timer from '../../../app/src/js/components/Timer/timer.js';
 import {
   errorTableHeader,
@@ -48,7 +48,7 @@ test('table should properly initialize timer config prop', async (t) => {
     }
   );
 
-  const timerWrapper = listWrapper.dive().find(Timer);
+  const timerWrapper = listWrapper.find(Timer);
 
   t.truthy(timerWrapper.exists(), 'Timer not found');
   // Is the Timer's query configuration properly initialized via the

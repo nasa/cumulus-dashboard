@@ -3,7 +3,7 @@ import React from 'react';
 import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import {
   clearExecutionsFilter,
   filterExecutions,
@@ -33,8 +33,10 @@ import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import Overview from '../Overview/overview';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 import {strings} from '../locale';
+
+const { updateInterval } = _config;
 
 const tableHeader = [
   'Name',
@@ -183,9 +185,9 @@ ExecutionOverview.propTypes = {
   workflowOptions: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   stats: state.stats,
   executions: state.executions,
   workflowOptions: workflowOptions(state),
   collectionOptions: collectionOptions(state)
-}))(ExecutionOverview);
+}))(ExecutionOverview));
