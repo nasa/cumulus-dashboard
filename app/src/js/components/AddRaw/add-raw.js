@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-// import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { displayCase } from '../../utils/format';
