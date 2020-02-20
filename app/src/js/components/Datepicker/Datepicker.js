@@ -12,7 +12,7 @@ const allDateRanges = [
   {value: 'All', label: 'All'},
   {value: 'Custom', label: 'Custom'},
   {value: 1 / 24.0, label: 'Last hour'},
-  {value: 1, label: 'Last day'},
+  {value: 1, label: 'Last 24 hours'},
   {value: 7, label: 'Last week'},
   {value: 30, label: 'Last 30 Days'},
   {value: 60, label: 'Last 60 days'},

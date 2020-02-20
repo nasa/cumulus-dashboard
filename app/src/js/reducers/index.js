@@ -55,6 +55,3 @@ export const createRootReducer = (history) => combineReducers({
   router: connectRouter(history),
   ...reducers
 });
-
-//TODO [MHS, 2020-02-19]  Can this be deleted now?  Are we still importing js/reducers?
-export default combineReducers(Object.assign({}, reducers));
