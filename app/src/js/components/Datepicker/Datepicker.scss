@@ -98,7 +98,7 @@
   &.dropdown__dtrange{
     &:after {
       position: absolute;
-      font-family: 'Font Awesome 5 Free';
+      font-family: 'FontAwesome';
       content: '\f0dc';
       color: $white;
       font-weight: 900;
@@ -129,7 +129,7 @@
     z-index: 2;
     &:after {
       position: absolute;
-      font-family: 'Font Awesome 5 Free';
+      font-family: 'FontAwesome';
       content: '\f00d';
       color: $white;
       font-weight: 900;
