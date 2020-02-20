@@ -88,7 +88,7 @@ class Datepicker extends React.PureComponent {
         urlValue = moment.utc(newProps[time]).format(urlDateFormat);
         updatedQueryParams[time] = urlValue;
       } else {
-        delete updatedQueryParams[time];
+        updatedQueryParams[time] = undefined;
       }
     });
     this.props.setQueryParams(updatedQueryParams);
