@@ -4,9 +4,10 @@ import Collapse from 'react-collapsible';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
-import { getExecutionStatus } from '../../actions';
+import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
 import { withRouter, Link } from 'react-router-dom';
+import { kibanaExecutionLink } from '../../utils/kibana';
 
 import {
   tableHeader,
@@ -32,6 +33,7 @@ class ExecutionStatus extends React.Component {
     const { dispatch } = this.props;
     const { executionArn } = this.props.match.params;
     dispatch(getExecutionStatus(executionArn));
+    dispatch(getCumulusInstanceMetadata());
   }
 
   navigateBack () {
@@ -66,7 +68,7 @@ class ExecutionStatus extends React.Component {
   }
 
   render () {
-    const { executionStatus } = this.props;
+    const { executionStatus, cumulusInstance } = this.props;
     if (!executionStatus.execution) return null;
 
     const input = (executionStatus.execution.input)
@@ -104,26 +106,37 @@ class ExecutionStatus extends React.Component {
 
     const errors = this.errors();
 
+    const kibanaLink = kibanaExecutionLink(cumulusInstance, executionStatus.execution.name);
+
+    let logsLink;
+    if (kibanaLink && kibanaLink.length) {
+      logsLink = <dd><a href={kibanaLink} target="_blank">View Logs in Kibana</a></dd>;
+    } else {
+      logsLink = <dd><Link to={'/executions/execution/' + executionStatus.execution.name + '/logs'} title={executionStatus.execution.name + '/logs'}>View Execution Logs</Link></dd>;
+    }
+
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description width--three-quarters'>
-          Execution {executionStatus.arn}
+            Execution {executionStatus.arn}
           </h1>
 
           {errors.length ? <ErrorReport report={errors} /> : null}
         </section>
 
         {/* stateMachine's definition and executionHistory's event statuses are needed to draw the graph */}
-        {(executionStatus.stateMachine && executionStatus.executionHistory)
-          ? <section className='page__section width--half' style={{ display: 'inline-block', marginRight: '5%' }}>
-            <div className='heading__wrapper--border'>
-              <h2 className='heading--medium with-description'>Visual workflow</h2>
-            </div>
+        {
+          (executionStatus.stateMachine && executionStatus.executionHistory)
+            ? <section className='page__section width--half' style={{ display: 'inline-block', marginRight: '5%' }}>
+              <div className='heading__wrapper--border'>
+                <h2 className='heading--medium with-description'>Visual workflow</h2>
+              </div>
 
-            <ExecutionStatusGraph executionStatus={executionStatus} />
-          </section>
-          : null}
+              <ExecutionStatusGraph executionStatus={executionStatus} />
+            </section>
+            : null
+        }
 
         <section className='page__section width--half' style={{ display: 'inline-block', verticalAlign: 'top' }}>
           <div className='heading__wrapper--border'>
@@ -164,7 +177,7 @@ class ExecutionStatus extends React.Component {
             <br />
 
             <dt>Logs:</dt>
-            <dd><Link to={'/executions/execution/' + executionStatus.execution.name + '/logs'} title={executionStatus.execution.name + '/logs'}>View Execution Logs</Link></dd>
+            {logsLink}
             <br />
           </dl>
         </section>
@@ -191,11 +204,13 @@ ExecutionStatus.propTypes = {
   executionStatus: PropTypes.object,
   match: PropTypes.object,
   dispatch: PropTypes.func,
+  cumulusInstance: PropTypes.object,
   history: PropTypes.object
 };
 
 export { ExecutionStatus };
 
 export default withRouter(connect(state => ({
-  executionStatus: state.executionStatus
+  executionStatus: state.executionStatus,
+  cumulusInstance: state.cumulusInstance
 }))(ExecutionStatus));

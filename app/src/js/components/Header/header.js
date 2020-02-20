@@ -3,12 +3,11 @@ import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
-import { logout, getApiVersion } from '../../actions';
-import _config from '../../config';
+import { logout, getApiVersion, getCumulusInstanceMetadata } from '../../actions';
+import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
 import { strings } from '../locale';
-
-const { graphicsPath, nav } = _config;
+import { kibanaAllLogsLink } from '../../utils/kibana';
 
 const paths = [
   ['PDRs', '/pdrs'],
@@ -19,7 +18,7 @@ const paths = [
   ['Executions', '/executions'],
   ['Operations', '/operations'],
   ['Rules', '/rules'],
-  ['Logs', '/logs'],
+  ['Logs', 'logs'],
   ['Reconciliation Reports', '/reconciliation-reports']
 ];
 
@@ -29,11 +28,13 @@ class Header extends React.Component {
     this.displayName = 'Header';
     this.logout = this.logout.bind(this);
     this.className = this.className.bind(this);
+    this.linkTo = this.linkTo.bind(this);
   }
 
   componentDidMount () {
     const { dispatch, api } = this.props;
     if (api.authenticated) dispatch(getApiVersion());
+    dispatch(getCumulusInstanceMetadata());
   }
 
   logout () {
@@ -55,10 +56,18 @@ class Header extends React.Component {
     });
   }
 
+  linkTo (path) {
+    if (path[0] === 'Logs') {
+      const kibanaLink = kibanaAllLogsLink(this.props.cumulusInstance);
+      return <a href={kibanaLink} target="_blank">{path[0]}</a>;
+    } else {
+      return <Link to={path[1]}>{path[0]}</Link>;
+    }
+  }
+
   render () {
     const { authenticated } = this.props.api;
-    const activePaths = paths.filter(pathObj => nav.exclude[pathObj[1].replace('/', '')] !== true);
-
+    const activePaths = paths.filter(path => nav.exclude[path[0]] !== true);
     return (
       <div className='header'>
         <div className='row'>
@@ -67,7 +76,7 @@ class Header extends React.Component {
             { !this.props.minimal ? <ul>
               {activePaths.map(path => <li
                 key={path[0]}
-                className={this.className(path[1])}><Link to={path[1]}>{path[0]}</Link></li>)}
+                className={this.className(path[1])}>{this.linkTo(path)}</li>)}
               <li className='rightalign nav__order-8'>{ authenticated ? <a onClick={this.logout}><span className="log-icon"></span>Log out</a> : <Link to={'/login'}>Log in</Link> }</li>
             </ul> : <li>&nbsp;</li> }
           </nav>
@@ -81,7 +90,8 @@ Header.propTypes = {
   api: PropTypes.object,
   dispatch: PropTypes.func,
   location: PropTypes.object,
-  minimal: PropTypes.bool
+  minimal: PropTypes.bool,
+  cumulusInstance: PropTypes.object
 };
 
 export default withRouter(Header);
