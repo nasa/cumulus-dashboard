@@ -1,13 +1,13 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
 
 describe('Dashboard Providers Page', () => {
-  describe('When not logged in', () => {
+  xdescribe('When not logged in', () => {
     it('should redirect to login page', () => {
-      cy.visit('/#/providers');
+      cy.visit('/providers');
       shouldBeRedirectedToLogin();
 
       const name = 's3_provider';
-      cy.visit(`/#/providers/provider/${name}`);
+      cy.visit(`/providers/provider/${name}`);
       shouldBeRedirectedToLogin();
     });
   });
@@ -20,12 +20,17 @@ describe('Dashboard Providers Page', () => {
 
     beforeEach(() => {
       cy.login();
+      cy.task('resetState');
       cy.visit('/');
+      cy.server();
+      cy.route('POST', '/providers').as('postProvider');
+      cy.route('GET', '/providers?limit=*').as('getProviders');
+      cy.route('GET', '/providers/*').as('getProvider');
     });
 
     it('should display a link to view providers', () => {
       cy.contains('nav li a', 'Providers').as('providers');
-      cy.get('@providers').should('have.attr', 'href', '#/providers');
+      cy.get('@providers').should('have.attr', 'href', '/providers');
       cy.get('@providers').click();
 
       cy.url().should('include', 'providers');
@@ -42,11 +47,11 @@ describe('Dashboard Providers Page', () => {
       const protocol = 's3';
       const host = 'test-host';
 
-      cy.visit('/#/providers');
+      cy.visit('/providers');
 
       cy.contains('.heading--large', 'Provider Overview');
       cy.contains('a', 'Add a Provider').as('addProvider');
-      cy.get('@addProvider').should('have.attr', 'href', '#/providers/add');
+      cy.get('@addProvider').should('have.attr', 'href', '/providers/add');
       cy.get('@addProvider').click();
 
       cy.contains('.heading--xlarge', 'Providers');
@@ -76,12 +81,12 @@ describe('Dashboard Providers Page', () => {
         .type(host);
 
       cy.get('form div button').contains('Submit').click();
-
-      // displays the new provider
+      cy.wait('@postProvider');
+      cy.wait('@getProvider');
+      cy.url().should('include', `providers/provider/${name}`);
       cy.contains('.heading--xlarge', 'Providers');
       cy.contains('.heading--large', name);
       cy.contains('.heading--medium', 'Provider Overview');
-      cy.url().should('include', `#/providers/provider/${name}`);
       cy.get('.metadata__details')
         .within(() => {
           cy.contains('Global Connection Limit')
@@ -96,10 +101,14 @@ describe('Dashboard Providers Page', () => {
             .should('have.attr', 'href', host);
         });
 
-      // verify the new provider is added to the providers list
-      cy.contains('a', 'Back to Provider').click();
+      // Verify the new provider is added to the providers list, after allowing
+      // ES indexing to finish (hopefully), so that the new provider is part
+      // of the query results.
+      cy.wait(1000);
+      cy.contains('a', 'Back to Providers').click();
+      cy.wait('@getProviders');
       cy.contains('table tbody tr a', name)
-        .should('have.attr', 'href', `#providers/provider/${name}`);
+        .should('have.attr', 'href', `/providers/provider/${name}`);
       cy.task('resetState');
     });
 
@@ -110,12 +119,12 @@ describe('Dashboard Providers Page', () => {
       // const connectionLimit = 12;
       const host = 'test-host-new';
 
-      cy.visit(`/#/providers/provider/${name}`);
+      cy.visit(`/providers/provider/${name}`);
       cy.contains('.heading--large', name);
       cy.contains('a', 'Edit').as('editprovider');
       cy.get('@editprovider')
         .should('have.attr', 'href')
-        .and('include', `#/providers/edit/${name}`);
+        .and('include', `/providers/edit/${name}`);
       cy.get('@editprovider').click();
 
       cy.contains('.heading--large', `Edit ${name}`);
@@ -153,7 +162,7 @@ describe('Dashboard Providers Page', () => {
 
     it('should delete a provider', () => {
       const name = 's3_provider';
-      cy.visit(`/#/providers/provider/${name}`);
+      cy.visit(`/providers/provider/${name}`);
       cy.contains('.heading--large', name);
 
       // delete provider
@@ -170,7 +179,7 @@ describe('Dashboard Providers Page', () => {
 
     it('should fail to delete a provider with an associated rule', () => {
       const name = 'PODAAC_SWOT';
-      cy.visit(`/#/providers/provider/${name}`);
+      cy.visit(`/providers/provider/${name}`);
       cy.contains('.heading--large', name);
 
       // delete provider

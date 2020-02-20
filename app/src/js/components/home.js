@@ -4,7 +4,8 @@ import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
+import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
 import {
   getCount,
@@ -42,25 +43,27 @@ import {
   kibanaGatewayAccessErrorsLink,
   kibanaGatewayAccessSuccessesLink,
   kibanaGatewayExecutionErrorsLink,
-  kibanaGatewayExecutionSuccessesLink
+  kibanaGatewayExecutionSuccessesLink,
+  kibanaAllLogsLink,
 } from '../utils/kibana';
-import { initialValuesFromLocation } from '../utils/url-helper';
+// import { initialValuesFromLocation } from '../utils/url-helper';
 import Datepicker from './Datepicker/Datepicker';
+import { urlDateFormat, urlDateProps } from '../utils/datepicker';
 import { strings } from './locale';
 
-/**
- * If this is a shared URL. grab the date and time and update the datepicker
+/*
+ * If this is a shared URL, grab the date and time and update the datepicker
  * state to reflect the values.
  * @param {Object} props - Home component's input props.
  */
-const updateDatepickerStateFromUrl = (props) => {
-  const urlDateFormat = 'YYYYMMDDHHmmSS';
-  const urlProps = ['endDateTime', 'startDateTime'];
-  const { location } = props;
-  const values = initialValuesFromLocation(location, urlProps);
-  if (!isEmpty(values)) {
+const updateDatepickerStateFromQueryParams = (props) => {
+  const { queryParams } = props;
+  const values = {...queryParams};
+  if (!isEmpty(queryParams)) {
     for (const value in values) {
-      values[value] = moment.utc(values[value], urlDateFormat).toDate();
+      if (urlDateProps.includes(value)) {
+        values[value] = moment.utc(values[value], urlDateFormat).toDate();
+      }
     }
     values.dateRange = {value: 'Custom', label: 'Custom'};
     props.dispatch({type: 'DATEPICKER_DATECHANGE', data: {...props.datepicker, ...values}});
@@ -79,8 +82,8 @@ class Home extends React.Component {
     this.cancelInterval = interval(() => {
       this.query();
     }, updateInterval, true);
-    const {dispatch} = this.props;
-    updateDatepickerStateFromUrl(this.props);
+    updateDatepickerStateFromQueryParams(this.props);
+    const { dispatch } = this.props;
     dispatch(getCumulusInstanceMetadata())
       .then(() => {
         dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
@@ -129,26 +132,28 @@ class Home extends React.Component {
       <section className='page__section'>
         <div className='row'>
           <div className='heading__wrapper'>
-              <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
+            <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
           </div>
-          <ul id={listId}>
-            {data.map(d => {
-              const value = d[0];
-              return (
+          <div className="overview-num__wrapper-home">
+            <ul id={listId}>
+              {data.map(d => {
+                const value = d[0];
+                return (
                   <li key={d[1]}>
-                  {this.isExternalLink(d[2]) ? (
-                    <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
-                      <span className='num--large'>{value}</span> {d[1]}
-                    </a>
-                  ) : (
-                    <Link id={d[1]} className='overview-num' to={d[2] || '#'}>
-                      <span className='num--large'>{value}</span> {d[1]}
-                    </Link>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+                    {this.isExternalLink(d[2]) ? (
+                      <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
+                        <span className='num--large'>{value}</span> {d[1]}
+                      </a>
+                    ) : (
+                      <Link id={d[1]} className='overview-num' to={d[2]}>
+                        <span className='num--large'>{value}</span> {d[1]}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       </section>
     );
@@ -159,7 +164,7 @@ class Home extends React.Component {
     const { stats, count } = this.props.stats;
     const { dist } = this.props;
     const overview = [
-      [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
+      [tally(get(stats.data, 'errors.value')), 'Errors', kibanaAllLogsLink(this.props.cumulusInstance)],
       [tally(get(stats.data, 'collections.value')), strings.collections, '/collections'],
       [tally(get(stats.data, 'granules.value')), strings.granules, '/granules'],
       [tally(get(this.props.executions, 'list.meta.count')), 'Executions', '/executions'],
@@ -262,16 +267,17 @@ Home.propTypes = {
   dist: PropTypes.object,
   executions: PropTypes.object,
   granules: PropTypes.object,
-  location: PropTypes.object,
   pdrs: PropTypes.object,
   rules: PropTypes.object,
   stats: PropTypes.object,
+  queryParams: PropTypes.object,
+  setQueryParams: PropTypes.func,
   dispatch: PropTypes.func,
-  router: PropTypes.object
 };
 
 export { Home };
-export default withRouter(connect((state) => ({
+
+export default withRouter(withQueryParams()(connect((state) => ({
   cumulusInstance: state.cumulusInstance,
   datepicker: state.datepicker,
   dist: state.dist,
@@ -280,4 +286,4 @@ export default withRouter(connect((state) => ({
   pdrs: state.pdrs,
   rules: state.rules,
   stats: state.stats
-}))(Home));
+}))(Home)));

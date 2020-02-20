@@ -4,7 +4,7 @@ import { fullDate } from '../../app/src/js/utils/format';
 describe('Dashboard Executions Page', () => {
   describe('When not logged in', () => {
     it('should redirect to login page', () => {
-      cy.visit('/#/executions');
+      cy.visit('/executions');
       shouldBeRedirectedToLogin();
     });
   });
@@ -22,7 +22,7 @@ describe('Dashboard Executions Page', () => {
 
     it('should visit the link to view executions', () => {
       cy.contains('nav li a', 'Executions').as('executions');
-      cy.get('@executions').should('have.attr', 'href', '#/executions');
+      cy.get('@executions').should('have.attr', 'href', '/executions');
       cy.get('@executions').click();
 
       cy.url().should('include', 'executions');
@@ -37,7 +37,7 @@ describe('Dashboard Executions Page', () => {
     });
 
     it('should display the correct executions with Ids and status ', () => {
-      cy.visit('#/executions');
+      cy.visit('/executions');
       cy.getFakeApiFixture('executions').as('executionsFixture');
       cy.get('@executionsFixture').its('results')
         .each((execution) => {
@@ -74,7 +74,7 @@ describe('Dashboard Executions Page', () => {
       const stateMachine = 'arn:aws:states:us-east-1:012345678901:stateMachine:test-stack-HelloWorldWorkflow';
 
       cy.server();
-      cy.visit('#/executions');
+      cy.visit('/executions');
       cy.route({
         method: 'GET',
         url: `http://localhost:5001/executions/status/${executionArn}`,
@@ -83,7 +83,7 @@ describe('Dashboard Executions Page', () => {
       });
 
       cy.contains('nav li a', 'Executions').as('executions');
-      cy.get('@executions').should('have.attr', 'href', '#/executions');
+      cy.get('@executions').should('have.attr', 'href', '/executions');
       cy.get('@executions').click();
 
       cy.url().should('include', 'executions');
@@ -146,14 +146,14 @@ describe('Dashboard Executions Page', () => {
         status: 200
       });
 
-      cy.visit(`/#/executions/execution/${executionArn}`);
+      cy.visit(`/executions/execution/${executionArn}`);
       cy.contains('.heading--large', 'Execution');
 
       cy.get('.status--process')
         .within(() => {
           cy.contains('Logs:').next()
             .within(() => {
-              cy.get('a').should('have.attr', 'href', `#/executions/execution/${executionName}/logs`).click();
+              cy.get('a').should('have.attr', 'href', `/executions/execution/${executionName}/logs`).click();
             });
         });
 
@@ -190,7 +190,7 @@ describe('Dashboard Executions Page', () => {
         status: 200
       });
 
-      cy.visit(`/#/executions/execution/${executionArn}`);
+      cy.visit(`/executions/execution/${executionArn}`);
 
       cy.contains('.heading--large', 'Execution');
       cy.contains('.heading--medium', 'Visual workflow').should('not.exist');
@@ -212,13 +212,13 @@ describe('Dashboard Executions Page', () => {
               if (execution.name === executionName) {
                 cy.contains('Input:').next().find('pre')
                   .then(($content) =>
-                        expect(JSON.parse($content.text())).to.deep.equal(execution.originalPayload));
+                    expect(JSON.parse($content.text())).to.deep.equal(execution.originalPayload));
                 cy.contains('Input:').next().contains('.Collapsible', 'Show Input').click('topLeft');
                 cy.contains('Input:').next().contains('.Collapsible', 'Hide Input');
 
                 cy.contains('Output:').next().find('pre')
                   .then(($content) =>
-                        expect(JSON.parse($content.text())).to.deep.equal(execution.finalPayload));
+                    expect(JSON.parse($content.text())).to.deep.equal(execution.finalPayload));
 
                 cy.contains('Output:').next().contains('.Collapsible', 'Show Output').click('topLeft');
                 cy.contains('Output:').next().contains('.Collapsible', 'Hide Output');
@@ -227,7 +227,7 @@ describe('Dashboard Executions Page', () => {
 
           cy.contains('Logs:').next()
             .within(() => {
-              cy.get('a').should('have.attr', 'href', `#/executions/execution/${executionName}/logs`);
+              cy.get('a').should('have.attr', 'href', `/executions/execution/${executionName}/logs`);
             });
         });
 

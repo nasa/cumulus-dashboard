@@ -3,7 +3,7 @@ exports.shouldBeLoggedIn = () => {
 };
 
 exports.shouldBeRedirectedToLogin = () => {
-  cy.url().should('include', '/#/auth');
+  cy.url().should('include', '/auth');
   cy.get('div[class=modal-content]').within(() => {
     cy.get('a').should('have.attr', 'href').and('include', 'token?');
     cy.get('a').should('have.text', 'Login with Earthdata Login');

@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   clearGranulesFilter,
@@ -55,8 +55,10 @@ class CollectionOverview extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { name, version } = this.props.params;
-    if (name !== prevProps.params.name || version !== prevProps.params.version) {
+    const { name, version } = this.props.match.params;
+    const { name: prevName, version: prevVersion } = prevProps.match.params;
+
+    if (name !== prevName || version !== prevVersion) {
       this.load();
     }
   }
@@ -73,40 +75,37 @@ class CollectionOverview extends React.Component {
   }
 
   load () {
-    const { name, version } = this.props.params;
+    const { name, version } = this.props.match.params;
     this.props.dispatch(getCumulusInstanceMetadata());
     this.props.dispatch(getCollection(name, version));
   }
 
   changeCollection (_, collectionId) {
     const { name, version } = collectionNameVersion(collectionId);
-    Object.assign(this.props.params, { name, version });
-    this.props.dispatch(getCollection(name, version));
+    this.props.history.push(`/collections/collection/${name}/${version}`);
   }
 
   generateQuery () {
     return {
-      collectionId: getCollectionId(this.props.params)
+      collectionId: getCollectionId(this.props.match.params)
     };
   }
 
   deleteMe () {
-    const { name, version } = this.props.params;
+    const { name, version } = this.props.match.params;
     this.props.dispatch(deleteCollection(name, version));
   }
 
   navigateBack () {
-    const { router } = this.props;
-    router.push('/collections/all');
+    this.props.history.push('/collections/all');
   }
 
   gotoGranules () {
-    const { router } = this.props;
-    router.push('/granules');
+    this.props.history.push('/granules');
   }
 
   errors () {
-    const { name, version } = this.props.params;
+    const { name, version } = this.props.match.params;
     const collectionId = getCollectionId({name, version});
     return [
       get(this.props.collections.map, [collectionId, 'error']),
@@ -126,7 +125,7 @@ class CollectionOverview extends React.Component {
   }
 
   renderDeleteButton () {
-    const { params, collections } = this.props;
+    const { match: { params }, collections } = this.props;
     const collectionId = getCollectionId(params);
     const deleteStatus = get(collections.deleted, [collectionId, 'status']);
     const hasGranules = get(
@@ -146,7 +145,15 @@ class CollectionOverview extends React.Component {
   }
 
   render () {
-    const { params, collections, granules: { list, list: { meta } } } = this.props;
+    const {
+      match: { params },
+      collections,
+      granules: {
+        list,
+        list: { meta }
+      }
+    } = this.props;
+
     const collectionName = params.name;
     const collectionVersion = params.version;
     const collectionId = getCollectionId(params);
@@ -183,6 +190,20 @@ class CollectionOverview extends React.Component {
               </li>
               <li>
                 <Link
+                  className='button button--copy button--small button--green'
+                  to={{
+                    pathname: '/collections/add',
+                    state: {
+                      name: collectionName,
+                      version: collectionVersion
+                    }
+                  }}
+                >
+                  Copy
+                </Link>
+              </li>
+              <li>
+                <Link
                   className='button button--edit button--small button--green'
                   to={`/collections/edit/${collectionName}/${collectionVersion}`}
                 >
@@ -193,7 +214,7 @@ class CollectionOverview extends React.Component {
                 {this.renderDeleteButton()}
               </li>
             </ul>
-           <span className="last-update">{lastUpdated(get(record, 'data.timestamp'))}</span>
+            <span className="last-update">{lastUpdated(get(record, 'data.timestamp'))}</span>
           </div>
         </section>
         <section className='page__section page__section__overview'>
@@ -255,14 +276,15 @@ class CollectionOverview extends React.Component {
 }
 
 CollectionOverview.propTypes = {
-  params: PropTypes.object,
+  match: PropTypes.object,
+  history: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
   collections: PropTypes.object,
   router: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   collections: state.collections,
   granules: state.granules
-}))(CollectionOverview);
+}))(CollectionOverview));

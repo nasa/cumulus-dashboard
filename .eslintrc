@@ -17,12 +17,10 @@
   },
   "rules": {
     "comma-dangle": ["error", "only-multiline"],
-    "indent": "off",
-    "indent-legacy": [2, 2, {"SwitchCase": 1}],
-    "new-cap": [2, { "properties": false }],
+    "semi": [2, "always"],
     "no-extra-semi": 2,
-    "react-hooks/exhaustive-deps": "warn",
-    "react-hooks/rules-of-hooks": "error",
+    "semi-spacing": [2, { "before": false, "after": true }],
+    "new-cap": [2, { "properties": false }],
     "react/jsx-no-duplicate-props": 2,
     "react/jsx-no-undef": 2,
     "react/jsx-uses-react": 2,
@@ -36,13 +34,19 @@
     "react/no-unknown-property": 2,
     "react/prop-types": 2,
     "react/react-in-jsx-scope": 2,
-    "semi": [2, "always"],
-    "semi-spacing": [2, { "before": false, "after": true }],
-    "space-before-function-paren": "off"
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   },
   "globals": {
     "cy": true,
     "Cypress": true,
     "expect": true
+  },
+  // Define React version settings
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "16.10.2"
+    }
   }
 }

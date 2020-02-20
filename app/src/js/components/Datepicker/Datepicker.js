@@ -5,14 +5,15 @@ import React from 'react';
 import DateTimePicker from 'react-datetime-picker';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import withQueryParams from 'react-router-query-params';
 import { DATEPICKER_DATECHANGE, DATEPICKER_DROPDOWN_FILTER, DATEPICKER_HOUR_FORMAT } from '../../actions/types';
-import { updateRouterLocation } from '../../utils/url-helper';
+import { urlDateFormat, urlDateProps } from '../../utils/datepicker';
 
 const allDateRanges = [
   {value: 'All', label: 'All'},
   {value: 'Custom', label: 'Custom'},
   {value: 1 / 24.0, label: 'Last hour'},
-  {value: 1, label: 'Last day'},
+  {value: 1, label: 'Last 24 hours'},
   {value: 7, label: 'Last week'},
   {value: 30, label: 'Last 30 Days'},
   {value: 60, label: 'Last 60 days'},
@@ -40,14 +41,14 @@ class Datepicker extends React.PureComponent {
     this.props.dispatch(this.dispatchDropdownUpdate(value, label));
   }
 
-  dispatchDropdownUpdate(value, label) {
+  dispatchDropdownUpdate (value, label) {
     return (dispatch, getState) => {
       dispatch({
         type: DATEPICKER_DROPDOWN_FILTER,
         data: { dateRange: { value, label } }
       });
       const datepickerState = getState().datepicker;
-      this.updateRouterWithNewProps(datepickerState);
+      this.updateQueryParams(datepickerState);
     };
   }
 
@@ -75,20 +76,19 @@ class Datepicker extends React.PureComponent {
     };
     updatedProps.dateRange = allDateRanges.find(a => a.label === 'Custom');
     this.props.dispatch({type: DATEPICKER_DATECHANGE, data: updatedProps});
-    this.updateRouterWithNewProps(updatedProps);
+    this.updateQueryParams(updatedProps);
   }
 
-  updateRouterWithNewProps (newProps) {
-    const urlDateFormat = 'YYYYMMDDHHmmSS';
-    const urlProps = ['endDateTime', 'startDateTime'];
-
-    urlProps.map((time) => {
-      let urlValue = '';
+  updateQueryParams (newProps) {
+    const updatedQueryParams = {...this.props.queryParams};
+    urlDateProps.map((time) => {
+      let urlValue;
       if (newProps[time] !== null) {
         urlValue = moment.utc(newProps[time]).format(urlDateFormat);
       }
-      updateRouterLocation(this.props.router, this.props.location, time, urlValue);
+      updatedQueryParams[time] = urlValue;
     });
+    this.props.setQueryParams(updatedQueryParams);
   }
 
   renderDateRangeDropDown () {
@@ -206,10 +206,10 @@ Datepicker.propTypes = {
   startDateTime: PropTypes.instanceOf(Date),
   endDateTime: PropTypes.instanceOf(Date),
   hourFormat: PropTypes.oneOf(allHourFormats),
+  queryParams: PropTypes.object,
+  setQueryParams: PropTypes.func,
   onChange: PropTypes.func,
   dispatch: PropTypes.func,
-  router: PropTypes.object,
-  location: PropTypes.object
 };
 
-export default withRouter(connect((state) => state.datepicker)(Datepicker));
+export default withRouter(withQueryParams()(connect((state) => state.datepicker)(Datepicker)));

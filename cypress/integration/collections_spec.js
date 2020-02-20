@@ -2,14 +2,14 @@ import { shouldBeRedirectedToLogin } from '../support/assertions';
 import { collectionName, getCollectionId } from '../../app/src/js/utils/format';
 
 describe('Dashboard Collections Page', () => {
-  describe('When not logged in', () => {
+  xdescribe('When not logged in', () => {
     it('should redirect to login page', () => {
-      cy.visit('/#/collections');
+      cy.visit('/collections');
       shouldBeRedirectedToLogin();
 
       const name = 'MOD09GQ';
       const version = '006';
-      cy.visit(`/#/collections/collection/${name}/${version}`);
+      cy.visit(`/collections/collection/${name}/${version}`);
       shouldBeRedirectedToLogin();
     });
   });
@@ -30,14 +30,14 @@ describe('Dashboard Collections Page', () => {
       cy.route('GET', '/granules?limit=*').as('getGranules');
 
       // Stub CMR response to avoid hitting UAT
-      cy.fixture('cmr')
-        .then((fixture) => fixture.forEach((options) => cy.route(options)));
+      cy.fixture('cmr').then((fixture) => fixture.forEach(cy.route));
     });
 
     it('should display a link to view collections', () => {
       cy.contains('nav li a', 'Collections').as('collections');
-      cy.get('@collections').should('have.attr', 'href', '#/collections');
+      cy.get('@collections').should('have.attr', 'href', '/collections');
       cy.get('@collections').click();
+      cy.wait('@getCollections');
 
       cy.url().should('include', 'collections');
       cy.contains('.heading--xlarge', 'Collections');
@@ -46,7 +46,8 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should display expected MMT Links for collections list', () => {
-      cy.visit('/#/collections');
+      cy.visit('/collections');
+      cy.wait('@getCollections');
 
       cy.get('table tbody tr').its('length').should('be.eq', 5);
 
@@ -68,12 +69,12 @@ describe('Dashboard Collections Page', () => {
       let collection;
 
       // On the Collections page, click the Add Collection button
-      cy.visit('/#/collections');
+      cy.visit('/collections');
       cy.contains('.heading--large', 'Collection Overview');
       cy.contains('a', 'Add a Collection').click();
 
       // Fill the form with the test collection JSON and submit it
-      cy.hash().should('eq', '#/collections/add');
+      cy.url().should('include', '/collections/add');
       cy.fixture('TESTCOLLECTION___006.json')
         .then((json) => {
           cy.editJsonTextarea({ data: json });
@@ -86,26 +87,31 @@ describe('Dashboard Collections Page', () => {
       // After POSTing the new collection, make sure we GET it back
       cy.wait('@postCollection')
         .then((xhr) =>
-              cy.request({
-                method: 'GET',
-                url: `${new URL(xhr.url).origin}/collections/${name}/${version}`,
-                headers: xhr.request.headers
-              }))
-        .then((response) => cy.expectDeepEqualButNewer(response.body, collection));
+          cy.request({
+            method: 'GET',
+            url: `${new URL(xhr.url).origin}/collections/${name}/${version}`,
+            headers: xhr.request.headers
+          }))
+        .then((response) => {
+          cy.expectDeepEqualButNewer(response.body, collection);
 
-      // Display the new collection
-      cy.wait('@getCollection');
-      cy.wait('@getGranules');
-      cy.hash().should('eq', `#/collections/collection/${name}/${version}`);
-      cy.contains('.heading--xlarge', 'Collections');
-      cy.contains('.heading--large', `${name} / ${version}`);
+          // Display the new collection
+          cy.wait('@getCollection');
+          cy.wait('@getGranules');
+          cy.url().should('include', `/collections/collection/${name}/${version}`);
+          cy.contains('.heading--xlarge', 'Collections');
+          cy.contains('.heading--large', `${name} / ${version}`);
 
-      // Verify the new collection appears in the collections list
-      cy.contains('Back to Collections').click();
-      cy.wait('@getCollections');
-      cy.hash().should('eq', '#/collections/all');
-      cy.contains('table tbody tr a', name)
-        .should('have.attr', 'href', `#/collections/collection/${name}/${version}`);
+          // Verify the new collection appears in the collections list, after
+          // allowing ES indexing to finish (hopefully), so that the new
+          // collection is part of the query results.
+          cy.wait(1000);
+          cy.contains('Back to Collections').click();
+          cy.wait('@getCollections');
+          cy.url().should('contain', '/collections/all');
+          cy.contains('table tbody tr a', name)
+            .should('have.attr', 'href', `/collections/collection/${name}/${version}`);
+        });
       cy.task('resetState');
     });
 
@@ -116,10 +122,13 @@ describe('Dashboard Collections Page', () => {
       // First visit the collections page in order to fetch the list of
       // collections with which to populate the dropdown on the collection
       // details page.
-      cy.visit('/#/collections');
+      cy.visit('/collections');
+      cy.wait('@getCollections');
       cy.get('table tbody tr').its('length').should('be.eq', 5);
 
-      cy.visit(`/#/collections/collection/${name}/${version}`);
+      cy.contains('table tbody tr a', name)
+        .should('have.attr', 'href', `/collections/collection/${name}/${version}`)
+        .click();
       cy.contains('.heading--large', `${name} / ${version}`);
       cy.contains(/0 Granules? Running/i);
 
@@ -132,15 +141,47 @@ describe('Dashboard Collections Page', () => {
       cy.get('#collection-chooser').find(':selected').contains(collectionId);
     });
 
+    it('should copy a collection', () => {
+      const name = 'MOD09GQ';
+      const version = '006';
+
+      cy.visit(`/collections/collection/${name}/${version}`);
+      cy.contains('a', 'Copy').as('copyCollection');
+      cy.get('@copyCollection')
+        .should('have.attr', 'href')
+        .and('include', '/collections/add');
+      cy.get('@copyCollection').click();
+
+      cy.contains('.heading--large', 'Add a collection');
+
+      // need to make sure defaultValue has been updated with collection json
+      cy.contains('.ace_variable', 'name');
+      cy.getJsonTextareaValue().then((jsonValue) => {
+        expect(jsonValue.version).to.equal(version);
+      });
+
+      // update collection and submit
+      const newVersion = '007';
+      cy.editJsonTextarea({ data: { version: newVersion }, update: true });
+      cy.contains('form button', 'Submit').click();
+
+      // should navigate to copied collections page
+      cy.url().should('include', `/collections/collection/${name}/${newVersion}`);
+
+      // displays the copied collection and its granules
+      cy.contains('.heading--xlarge', 'Collections');
+      cy.contains('.heading--large', `${name} / ${newVersion}`);
+    });
+
     it('should edit a collection', () => {
       const name = 'MOD09GQ';
       const version = '006';
 
-      cy.visit(`/#/collections/collection/${name}/${version}`);
+      cy.visit(`/collections/collection/${name}/${version}`);
       cy.contains('a', 'Edit').as('editCollection');
       cy.get('@editCollection')
         .should('have.attr', 'href')
-        .and('include', `#/collections/edit/${name}/${version}`);
+        .and('include', `/collections/edit/${name}/${version}`);
       cy.get('@editCollection').click();
 
       cy.contains('.heading--large', `${name}___${version}`);
@@ -152,6 +193,7 @@ describe('Dashboard Collections Page', () => {
       cy.contains('form button', 'Submit').click();
 
       // displays the updated collection and its granules
+      cy.wait('@getCollection');
       cy.contains('.heading--xlarge', 'Collections');
       cy.contains('.heading--large', `${name} / ${version}`);
 
@@ -171,7 +213,7 @@ describe('Dashboard Collections Page', () => {
       const version = '001';
       cy.route('DELETE', '/collections/https_testcollection/001').as('deleteCollection');
 
-      cy.visit(`/#/collections/collection/${name}/${version}`);
+      cy.visit(`/collections/collection/${name}/${version}`);
 
       // delete collection
       cy.get('.DeleteCollection > .button').click();
@@ -229,7 +271,7 @@ describe('Dashboard Collections Page', () => {
       const version = '006';
       cy.route('DELETE', '/collections/MOD09GK/006').as('deleteCollection');
 
-      cy.visit(`/#/collections/collection/${name}/${version}`);
+      cy.visit(`/collections/collection/${name}/${version}`);
 
       // delete collection
       cy.get('.DeleteCollection > .button').click();
@@ -255,7 +297,7 @@ describe('Dashboard Collections Page', () => {
       const name = 'MOD09GQ';
       const version = '006';
 
-      cy.visit(`/#/collections/collection/${name}/${version}`);
+      cy.visit(`/collections/collection/${name}/${version}`);
 
       // delete collection
       cy.get('.DeleteCollection > .button').click();
@@ -278,7 +320,7 @@ describe('Dashboard Collections Page', () => {
       const name = 'MOD09GQ';
       const version = '006';
 
-      cy.visit(`/#/collections/collection/${name}/${version}`);
+      cy.visit(`/collections/collection/${name}/${version}`);
 
       // delete collection
       cy.get('.DeleteCollection > .button').click();

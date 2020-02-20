@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
   searchPdrs,
   clearPdrsSearch,
@@ -105,6 +106,6 @@ ActivePdrs.propTypes = {
   pdrs: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   pdrs: state.pdrs
-}))(ActivePdrs);
+}))(ActivePdrs));

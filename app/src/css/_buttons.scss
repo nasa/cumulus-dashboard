@@ -94,7 +94,7 @@
     &:before{
       color: $white;
       position: absolute;
-      font-family: 'Font Awesome 5 Free';
+      font-family: 'FontAwesome';
       content: '\f0aa';
       font-weight: 900;
       left: 13px;
@@ -116,7 +116,7 @@
       &:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f067';
         font-weight: 900;
         top: 4px;
@@ -131,7 +131,7 @@
       &:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f057';
         font-weight: 900;
         left: 10px;
@@ -142,7 +142,7 @@
     &--cancel:hover:before{
       color: $white;
       position: absolute;
-      font-family: 'Font Awesome 5 Free';
+      font-family: 'FontAwesome';
       content: '\f057';
       font-weight: 900;
       visibility: hidden;
@@ -155,7 +155,7 @@
       &:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f044';
         font-weight: 900;
         left: 10px;
@@ -170,7 +170,7 @@
       &:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f187';
         font-weight: 900;
         left: 10px;
@@ -189,7 +189,7 @@
       &:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f0a0';
         font-weight: 900;
         left: 10px;
@@ -204,7 +204,7 @@
       &:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f5fc';
         font-weight: 900;
         left: 10px;
@@ -219,7 +219,7 @@
       &:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f233';
         font-weight: 900;
         left: 10px;
@@ -234,7 +234,7 @@
       &:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f0ab';
         font-weight: 900;
         left: 10px;
@@ -249,7 +249,7 @@
       &:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f0c5';
         font-weight: 900;
         left: 10px;
@@ -264,7 +264,7 @@
       &:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f0c7';
         font-weight: 900;
         left: 10px;
@@ -275,7 +275,7 @@
     &--confirm:hover:before, &--submit:hover:before{
       color: $white;
       position: absolute;
-      font-family: 'Font Awesome 5 Free';
+      font-family: 'FontAwesome';
       content: '\f0c7';
       font-weight: 900;
       visibility: hidden;
@@ -301,7 +301,7 @@
       &:after {
         position: absolute;
         /*color: $white;*/
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f061';
         font-weight: 900;
         -webkit-transition: all 0.3s;
@@ -335,7 +335,7 @@
       &:after {
         position: absolute;
         color: $white;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f061';
         font-weight: 900;
       }
@@ -349,7 +349,7 @@
       &:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f51e';
         font-weight: 900;
         left: 10px;
@@ -360,7 +360,7 @@
     &__bulkgranules:hover:before{
       color: $white;
       position: absolute;
-      font-family: 'Font Awesome 5 Free';
+      font-family: 'FontAwesome';
       content: '\f51e';
       font-weight: 900;
       visibility: hidden;
@@ -378,7 +378,7 @@
       &:before{
       color: $white;
       position: absolute;
-      font-family: 'Font Awesome 5 Free';
+      font-family: 'FontAwesome';
       content: '\f360';
       font-weight: 900;
       left: 10px;  
@@ -397,7 +397,7 @@
       &:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f187';
         font-weight: 900;
         left: 10px;
@@ -408,7 +408,7 @@
     &__deletecollections:hover:before{
       color: $white;
       position: absolute;
-      font-family: 'Font Awesome 5 Free';
+      font-family: 'FontAwesome';
       content: '\f187';
       font-weight: 900;
       visibility: hidden;
@@ -421,7 +421,7 @@
       &:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f0a9';
         font-weight: 900;
         left: 10px;
@@ -431,7 +431,7 @@
       &__gotogranules:hover:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f0a9';
         font-weight: 900;
         visibility: hidden;
@@ -459,7 +459,7 @@
       &:before{
         color: $white;
         position: absolute;
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'FontAwesome';
         content: '\f111';
         font-weight: 900;
         left: 10px;

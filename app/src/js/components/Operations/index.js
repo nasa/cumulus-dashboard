@@ -1,7 +1,9 @@
 'use strict';
 import React from 'react';
+import { withRouter, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
+import OperationOverview from './overview';
 
 class Operations extends React.Component {
   render () {
@@ -19,7 +21,7 @@ class Operations extends React.Component {
               params={this.props.params}
             />
             <div className='page__content--shortened'>
-              {this.props.children}
+              <Route exact path='/operations' component={OperationOverview} />
             </div>
           </div>
         </div>
@@ -34,4 +36,4 @@ Operations.propTypes = {
   params: PropTypes.object
 };
 
-export default Operations;
+export default withRouter(Operations);

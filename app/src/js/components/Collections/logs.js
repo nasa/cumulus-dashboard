@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import { lastUpdated } from '../../utils/format';
 import LogViewer from '../Logs/viewer';
 import {strings} from '../locale';
@@ -14,7 +14,7 @@ class CollectionLogs extends React.Component {
   }
 
   render () {
-    const collectionName = this.props.params.name;
+    const collectionName = this.props.match.params.name;
     const { queriedAt } = this.props.logs;
     return (
       <div className='page__component'>
@@ -33,10 +33,10 @@ class CollectionLogs extends React.Component {
 
 CollectionLogs.propTypes = {
   dispatch: PropTypes.func,
-  params: PropTypes.object,
+  match: PropTypes.object,
   logs: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   logs: state.logs
-}))(CollectionLogs);
+}))(CollectionLogs));

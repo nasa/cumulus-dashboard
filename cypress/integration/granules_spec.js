@@ -3,7 +3,7 @@ import { shouldBeRedirectedToLogin } from '../support/assertions';
 describe('Dashboard Granules Page', () => {
   describe('When not logged in', () => {
     it('should redirect to login page', () => {
-      cy.visit('/#/granules');
+      cy.visit('/granules');
       shouldBeRedirectedToLogin();
     });
   });
@@ -50,7 +50,7 @@ describe('Dashboard Granules Page', () => {
           // has link to the granule list with the same status
           cy.get('@columns').eq(1).children('a')
             .should('have.attr', 'href')
-            .and('be.eq', `#/granules/${granule.status}`);
+            .and('be.eq', `/granules/${granule.status}`);
 
           // granule Name (id) column
           cy.get('@columns').eq(2).invoke('text')
@@ -58,7 +58,7 @@ describe('Dashboard Granules Page', () => {
           // has link to the detailed granule page
           cy.get('@columns').eq(2).children('a')
             .should('have.attr', 'href')
-            .and('be.eq', `#granules/granule/${granule.granuleId}`);
+            .and('be.eq', `/granules/granule/${granule.granuleId}`);
 
           // Published column, only public granules have CMR link
           if (granule.published) {
@@ -78,16 +78,15 @@ describe('Dashboard Granules Page', () => {
           cy.get('@columns').eq(4).invoke('text')
             .should('be.eq', granule.collectionId.replace('___', ' / '));
 
-
           // has link to the detailed collection page
           cy.get('@columns').eq(4).children('a')
             .should('have.attr', 'href')
-            .and('be.eq', `#/collections/collection/${granule.collectionId.replace('___', '/')}`);
+            .and('be.eq', `/collections/collection/${granule.collectionId.replace('___', '/')}`);
 
           // Execution column has link to the detailed execution page
           cy.get('@columns').eq(5).children('a')
             .should('have.attr', 'href')
-            .and('be.eq', `#/executions/execution/${granule.execution.split('/').pop()}`);
+            .and('be.eq', `/executions/execution/${granule.execution.split('/').pop()}`);
 
           // Duration column
           cy.get('@columns').eq(6).invoke('text')
@@ -107,15 +106,15 @@ describe('Dashboard Granules Page', () => {
       cy.contains('.heading--xlarge', 'Granules');
 
       cy.contains('a', 'Download Granule List')
-      .should('have.attr', 'href').should('include', 'blob:http://');
+        .should('have.attr', 'href').should('include', 'blob:http://');
     });
 
     it('Should update dropdown with label when visiting bookmarkable URL', () => {
-      cy.visit('/#/granules?status=running');
+      cy.visit('/granules?status=running');
       cy.get('#form-Status-status > div > input').as('status-input');
       cy.get('@status-input').should('have.value', 'Running');
 
-      cy.visit('/#/granules?status=completed');
+      cy.visit('/granules?status=completed');
       cy.get('#form-Status-status > div > input').as('status-input');
       cy.get('@status-input').should('have.value', 'Completed');
     });

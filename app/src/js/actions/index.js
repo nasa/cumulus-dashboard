@@ -5,7 +5,7 @@ import moment from 'moment';
 import url from 'url';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
-import { hashHistory } from 'react-router';
+import { history } from '../store/configureStore';
 import { CMR } from '@cumulus/cmrjs';
 import clonedeep from 'lodash.clonedeep';
 
@@ -264,15 +264,20 @@ export const getGranule = (granuleId) => ({
   }
 });
 
-export const listGranules = (options) => ({
-  [CALL_API]: {
-    type: types.GRANULES,
-    method: 'GET',
-    id: null,
-    url: url.resolve(root, 'granules'),
-    qs: Object.assign({ limit: pageLimit }, options)
-  }
-});
+export const listGranules = (options) => {
+  return (dispatch, getState) => {
+    // TODO [MHS, 2020-02-18] Fill this out.
+    // const timefilter = fetchCurrentTimeFilters(getState());
+    dispatch({
+      [CALL_API]: {
+        type: types.GRANULES,
+        method: 'GET',
+        id: null,
+        url: url.resolve(root, 'granules'),
+        qs: Object.assign({ limit: pageLimit }, options)
+      }});
+  };
+};
 
 // only query the granules from the last hour
 export const getRecentGranules = () => ({
@@ -682,7 +687,7 @@ export const loginError = (error) => {
   return (dispatch) => {
     return dispatch(deleteToken())
       .then(() => dispatch({ type: 'LOGIN_ERROR', error }))
-      .then(() => hashHistory.push('/auth'));
+      .then(() => history.push('/auth'));
   };
 };
 
