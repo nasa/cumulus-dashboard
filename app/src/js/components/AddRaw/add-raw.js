@@ -47,7 +47,7 @@ const AddRaw = ({
     });
   }, [defaultValue]);
 
-  useEffect(() => {
+  useEffect(() => { // eslint-disable-line react-hooks/exhaustive-deps
     if (!pk) {
       return;
     }
@@ -60,7 +60,7 @@ const AddRaw = ({
     } else if (status === 'error' && !error) {
       setRecord({ ...record, error: get(state.created, [pk, 'error']) });
     }
-  }, [pk, state.created, error, getBaseRoute, history, record]);
+  });
 
   function handleCancel (e) {
     history.push(getBaseRoute());
