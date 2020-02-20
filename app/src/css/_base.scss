@@ -264,23 +264,22 @@ a:active {
 }
 
 .heading-form-group--left {
-  display: inline-flex;
+  display: flex;
   flex-direction: row;
-  position: relative;
-}
 
-.heading-form-group--left li h1{
-  margin-right: 5em;
-}
+  li {
+    &:not(:first-child) {
+      margin-right: 2em;
+    }
 
-.heading-form-group--left li:not(:first-child){
-  margin-right: 2em;
-  margin-left: 1em;
-}
+    h1 {
+      margin-right: 5em;
+    }
 
-.heading-form-group--left li a.button.button--edit{
-  position: absolute;
-  right: 12em;
+    a.button {
+      display: flex;
+    }
+  }
 }
 
 //Sidebar//

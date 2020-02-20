@@ -190,6 +190,20 @@ class CollectionOverview extends React.Component {
               </li>
               <li>
                 <Link
+                  className='button button--copy button--small button--green'
+                  to={{
+                    pathname: '/collections/add',
+                    state: {
+                      name: collectionName,
+                      version: collectionVersion
+                    }
+                  }}
+                >
+                  Copy
+                </Link>
+              </li>
+              <li>
+                <Link
                   className='button button--edit button--small button--green'
                   to={`/collections/edit/${collectionName}/${collectionVersion}`}
                 >
