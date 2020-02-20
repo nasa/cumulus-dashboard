@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
+import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
 import {
   getCount,
@@ -45,29 +46,30 @@ import {
   kibanaGatewayExecutionSuccessesLink,
   kibanaAllLogsLink,
 } from '../utils/kibana';
-import { initialValuesFromLocation } from '../utils/url-helper';
+// import { initialValuesFromLocation } from '../utils/url-helper';
 import Datepicker from './Datepicker/Datepicker';
 import { strings } from './locale';
 
-// TODO [MHS, 2020-02-19]  Hows this going to work?
-// /**
-//  * If this is a shared URL. grab the date and time and update the datepicker
-//  * state to reflect the values.
-//  * @param {Object} props - Home component's input props.
-//  */
-// const updateDatepickerStateFromUrl = (props) => {
-//   const urlDateFormat = 'YYYYMMDDHHmmSS';
-//   const urlProps = ['endDateTime', 'startDateTime'];
-//   const { location } = props;
-//   const values = initialValuesFromLocation(location, urlProps);
-//   if (!isEmpty(values)) {
-//     for (const value in values) {
-//       values[value] = moment.utc(values[value], urlDateFormat).toDate();
-//     }
-//     values.dateRange = {value: 'Custom', label: 'Custom'};
-//     props.dispatch({type: 'DATEPICKER_DATECHANGE', data: {...props.datepicker, ...values}});
-//   }
-// };
+/*
+ * If this is a shared URL, grab the date and time and update the datepicker
+ * state to reflect the values.
+ * @param {Object} props - Home component's input props.
+ */
+const updateDatepickerStateFromQueryParams = (props) => {
+  const urlDateFormat = 'YYYYMMDDHHmmSS';
+  const urlDateProps = ['endDateTime', 'startDateTime'];
+  const { queryParams } = props;
+  const values = {...queryParams};
+  if (!isEmpty(queryParams)) {
+    for (const value in values) {
+      if (urlDateProps.includes(value)) {
+        values[value] = moment.utc(values[value], urlDateFormat).toDate();
+      }
+    }
+    values.dateRange = {value: 'Custom', label: 'Custom'};
+    props.dispatch({type: 'DATEPICKER_DATECHANGE', data: {...props.datepicker, ...values}});
+  }
+};
 
 const { recent, updateInterval } = _config;
 
@@ -83,8 +85,7 @@ class Home extends React.Component {
     this.cancelInterval = interval(() => {
       this.query();
     }, updateInterval, true);
-    // TODO [MHS, 2020-02-19] Fix this too
-    // updateDatepickerStateFromUrl(this.props);
+    updateDatepickerStateFromQueryParams(this.props);
     const { dispatch } = this.props;
     dispatch(getCumulusInstanceMetadata())
       .then(() => {
@@ -269,17 +270,17 @@ Home.propTypes = {
   dist: PropTypes.object,
   executions: PropTypes.object,
   granules: PropTypes.object,
-  location: PropTypes.object,
   pdrs: PropTypes.object,
   rules: PropTypes.object,
   stats: PropTypes.object,
+  queryParams: PropTypes.object,
+  setQueryParams: PropTypes.func,
   dispatch: PropTypes.func,
-  router: PropTypes.object
 };
 
 export { Home };
 
-export default withRouter(connect((state) => ({
+export default withRouter(withQueryParams()(connect((state) => ({
   cumulusInstance: state.cumulusInstance,
   datepicker: state.datepicker,
   dist: state.dist,
@@ -288,4 +289,4 @@ export default withRouter(connect((state) => ({
   pdrs: state.pdrs,
   rules: state.rules,
   stats: state.stats
-}))(Home));
+}))(Home)));

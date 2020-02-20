@@ -36,7 +36,7 @@ const computeDateTimeDelta = (timeDeltaInDays) => {
   return { startDateTime, endDateTime };
 };
 
-export default function reducer(state = initialState, action) {
+export default function reducer (state = initialState, action) {
   state = { ...state };
   const { data } = action;
   switch (action.type) {
