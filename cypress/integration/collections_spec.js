@@ -151,8 +151,8 @@ describe('Dashboard Collections Page', () => {
 
       cy.contains('.heading--large', 'Add a collection');
 
-      cy.wait(500);
-
+      // need to make sure defaultValue has been updated with collection json
+      cy.contains('.ace_variable', 'name');
       cy.getJsonTextareaValue().then((jsonValue) => {
         expect(jsonValue.version).to.equal(version);
       });
