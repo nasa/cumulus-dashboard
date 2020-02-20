@@ -32,7 +32,7 @@ import {
   errorTableRow,
   errorTableSortProps
 } from '../utils/table-config/granules';
-import _config from '../config';
+import { recent, updateInterval } from '../config';
 import {
   kibanaS3AccessErrorsLink,
   kibanaS3AccessSuccessesLink,
@@ -48,6 +48,7 @@ import {
 } from '../utils/kibana';
 // import { initialValuesFromLocation } from '../utils/url-helper';
 import Datepicker from './Datepicker/Datepicker';
+import { urlDateFormat, urlDateProps } from '../utils/datepicker';
 import { strings } from './locale';
 
 /*
@@ -56,8 +57,6 @@ import { strings } from './locale';
  * @param {Object} props - Home component's input props.
  */
 const updateDatepickerStateFromQueryParams = (props) => {
-  const urlDateFormat = 'YYYYMMDDHHmmSS';
-  const urlDateProps = ['endDateTime', 'startDateTime'];
   const { queryParams } = props;
   const values = {...queryParams};
   if (!isEmpty(queryParams)) {
@@ -70,8 +69,6 @@ const updateDatepickerStateFromQueryParams = (props) => {
     props.dispatch({type: 'DATEPICKER_DATECHANGE', data: {...props.datepicker, ...values}});
   }
 };
-
-const { recent, updateInterval } = _config;
 
 class Home extends React.Component {
   constructor (props) {

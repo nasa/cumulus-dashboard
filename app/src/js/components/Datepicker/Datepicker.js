@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import withQueryParams from 'react-router-query-params';
 import { DATEPICKER_DATECHANGE, DATEPICKER_DROPDOWN_FILTER, DATEPICKER_HOUR_FORMAT } from '../../actions/types';
+import { urlDateFormat, urlDateProps } from '../../utils/datepicker';
 
 const allDateRanges = [
   {value: 'All', label: 'All'},
@@ -79,17 +80,13 @@ class Datepicker extends React.PureComponent {
   }
 
   updateQueryParams (newProps) {
-    const urlDateFormat = 'YYYYMMDDHHmmSS';
-    const urlProps = ['endDateTime', 'startDateTime'];
     const updatedQueryParams = {...this.props.queryParams};
-    urlProps.map((time) => {
-      let urlValue = null;
+    urlDateProps.map((time) => {
+      let urlValue;
       if (newProps[time] !== null) {
         urlValue = moment.utc(newProps[time]).format(urlDateFormat);
-        updatedQueryParams[time] = urlValue;
-      } else {
-        updatedQueryParams[time] = undefined;
       }
+      updatedQueryParams[time] = urlValue;
     });
     this.props.setQueryParams(updatedQueryParams);
   }

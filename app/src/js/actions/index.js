@@ -264,15 +264,20 @@ export const getGranule = (granuleId) => ({
   }
 });
 
-export const listGranules = (options) => ({
-  [CALL_API]: {
-    type: types.GRANULES,
-    method: 'GET',
-    id: null,
-    url: url.resolve(root, 'granules'),
-    qs: Object.assign({ limit: pageLimit }, options)
-  }
-});
+export const listGranules = (options) => {
+  return (dispatch, getState) => {
+    // TODO [MHS, 2020-02-18] Fill this out.
+    // const timefilter = fetchCurrentTimeFilters(getState());
+    dispatch({
+      [CALL_API]: {
+        type: types.GRANULES,
+        method: 'GET',
+        id: null,
+        url: url.resolve(root, 'granules'),
+        qs: Object.assign({ limit: pageLimit }, options)
+      }});
+  };
+};
 
 // only query the granules from the last hour
 export const getRecentGranules = () => ({
