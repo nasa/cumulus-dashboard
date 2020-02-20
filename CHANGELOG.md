@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1463**
   - Add Datepicker Component
 
+- **CUMULUS-1502**
+  - Add copy collection button
+
 - **CUMULUS-1534**
   - Add confirmation modal when adding a new rule
 
