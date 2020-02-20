@@ -151,22 +151,23 @@ describe('Dashboard Collections Page', () => {
 
       cy.contains('.heading--large', 'Add a collection');
 
+      cy.wait(500);
+
+      cy.getJsonTextareaValue().then((jsonValue) => {
+        expect(jsonValue.version).to.equal(version);
+      });
+
       // update collection and submit
       const newVersion = '007';
       cy.editJsonTextarea({ data: { version: newVersion }, update: true });
       cy.contains('form button', 'Submit').click();
 
+      // should navigate to copied collections page
+      cy.url().should('include', `/collections/collection/${name}/${newVersion}`);
+
       // displays the copied collection and its granules
       cy.contains('.heading--xlarge', 'Collections');
-      cy.contains('.heading--large', `${name} / ${version}`);
-
-      // verify the collection is updated by looking at the Edit page
-      cy.get('@copyCollection').click();
-
-      cy.getJsonTextareaValue().then((collectionJson) => {
-        expect(collectionJson.version).to.equal(newVersion);
-      });
-      cy.contains('.heading--large', `${name}___${newVersion}`);
+      cy.contains('.heading--large', `${name} / ${newVersion}`);
     });
 
     it('should edit a collection', () => {
@@ -194,7 +195,7 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.heading--large', `${name} / ${version}`);
 
       // verify the collection is updated by looking at the Edit page
-      cy.get('@editCollection').click();
+      cy.contains('a', 'Edit').click();
 
       cy.getJsonTextareaValue().then((collectionJson) => {
         expect(collectionJson.duplicateHandling).to.equal(duplicateHandling);
