@@ -28,7 +28,6 @@ import Workflows from './components/Workflows';
 import Executions from './components/Executions';
 import Operations from './components/Operations';
 import Rules from './components/Rules';
-import Logs from './components/Logs';
 import ReconciliationReports from './components/ReconciliationReports';
 
 import config from './config';
@@ -51,7 +50,6 @@ const MainRoutes = () => {
         <Route path='/executions' component={Executions} />
         <Route path='/operations' component={Operations} />
         <Route path='/rules' component={Rules} />
-        <Route path='/logs' component={Logs} />
         <Route path='/reconciliation-reports' component={ReconciliationReports} />
       </Switch>
     </Main>
