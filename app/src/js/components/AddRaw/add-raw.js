@@ -34,14 +34,23 @@ const AddRaw = ({
   const [record, setRecord] = useState({ ...defaultState, data: JSON.stringify(defaultValue, null, 2) });
   const [showModal, setShowModal] = useState(false);
   const { data, pk, error } = record;
-
+  const status = get(state.created, [pk, 'status']);
   const handleOnClick = requireConfirmation ? handleModalOpen : handleSubmit;
+
+  useEffect(() => {
+    setRecord(record => {
+      const data = JSON.stringify(defaultValue, null, 2);
+      return {
+        ...record,
+        data
+      };
+    });
+  }, [defaultValue]);
 
   useEffect(() => {
     if (!pk) {
       return;
     }
-    const status = get(state.created, [pk, 'status']);
     if (status === 'success') {
       const baseRoute = getBaseRoute(pk);
       setTimeout(() => {
@@ -50,10 +59,10 @@ const AddRaw = ({
     } else if (status === 'error' && !error) {
       setRecord({ ...record, error: get(state.created, [pk, 'error']) });
     }
-  });
+  }, [pk, status, error, getBaseRoute, history, record, state.created]);
 
   function handleCancel (e) {
-    history.push(getBaseRoute().split('/')[1]);
+    history.push(getBaseRoute());
   }
 
   function handleSubmit (e) {
@@ -88,7 +97,6 @@ const AddRaw = ({
     handleSubmit(e);
   }
 
-  const status = get(state.created, [pk, 'status']);
   const buttonText = status === 'inflight' ? 'loading...'
     : status === 'success' ? 'Success!' : 'Submit';
   const displayCaseType = displayCase(type);
