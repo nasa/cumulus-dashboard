@@ -27,10 +27,6 @@ module.exports = (on) => {
     watchOptions: {},
   };
   const user = 'testUser';
-  babelOptions.global = true;
-  // ignore all node_modules except files in @cumulus/
-  // see https://github.com/cypress-io/cypress-browserify-preprocessor/issues/19
-  babelOptions.ignore = [/\/node_modules\/(?!@cumulus\/)/];
 
   // Run specialized file preprocessor to transpile ES6+ -> ES5
   // This fixes compatibility issues with Electron
