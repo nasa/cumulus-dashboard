@@ -647,14 +647,20 @@ export const deletePdr = (pdrName) => ({
   }
 });
 
-export const getLogs = (options) => ({
-  [CALL_API]: {
-    type: types.LOGS,
-    method: 'GET',
-    url: url.resolve(root, 'logs'),
-    qs: Object.assign({limit: 100}, options)
-  }
-});
+export const getLogs = (options) => {
+  return (dispatch, getState) => {
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    dispatch({
+      [CALL_API]: {
+        type: types.LOGS,
+        method: 'GET',
+        url: url.resolve(root, 'logs'),
+        qs: Object.assign({limit: 100}, options, timeFilters)
+      }
+    });
+  };
+};
+
 
 export const clearLogs = () => ({ type: types.CLEAR_LOGS });
 
