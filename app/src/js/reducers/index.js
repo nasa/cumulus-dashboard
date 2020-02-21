@@ -5,6 +5,7 @@ import apiVersion from './api-version';
 import collections from './collections';
 import config from './config';
 import dist from './dist';
+import datepicker from './datepicker';
 import granules from './granules';
 import granuleCSV from './granule-csv';
 import stats from './stats';
@@ -22,13 +23,16 @@ import reconciliationReports from './reconciliation-reports';
 import mmtLinks from './mmtLinks';
 import cumulusInstance from './cumulus-instance';
 
+const def = (state = {}, action) => state;
+
 export const reducers = {
-  def: (state = {}, action) => state,
+  def,
   api,
   apiVersion,
   collections,
   config,
   dist,
+  datepicker,
   mmtLinks,
   cumulusInstance,
   granules,
@@ -51,5 +55,3 @@ export const createRootReducer = (history) => combineReducers({
   router: connectRouter(history),
   ...reducers
 });
-
-export default combineReducers(Object.assign({}, reducers));

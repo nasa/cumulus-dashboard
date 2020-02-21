@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
         - `view-docker-logs`- helper to view logs for the currently running docker-compose stack.
 
 - **CUMULUS-1463**
-  - Add Datepicker Component
+  - Add Datepicker to Dashboard Home page
 
 - **CUMULUS-1502**
   - Add copy collection button
@@ -37,6 +37,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1582**
   - Added Operations page to track Async Operations
+
+- **CUMULUS-1729**
+  - Connects Datepicker to the redux store.
 
 ### Changed
 

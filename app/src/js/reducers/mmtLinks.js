@@ -6,7 +6,7 @@ import {
   ADD_MMTLINK
 } from '../actions/types';
 
-export const initialState = {};
+const initialState = {};
 
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);

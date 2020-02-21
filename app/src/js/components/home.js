@@ -1,8 +1,11 @@
 'use strict';
+import isEmpty from 'lodash.isempty';
+import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
+import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
 import {
   getCount,
@@ -29,7 +32,7 @@ import {
   errorTableRow,
   errorTableSortProps
 } from '../utils/table-config/granules';
-import _config from '../config';
+import { recent, updateInterval } from '../config';
 import {
   kibanaS3AccessErrorsLink,
   kibanaS3AccessSuccessesLink,
@@ -43,14 +46,33 @@ import {
   kibanaGatewayExecutionSuccessesLink,
   kibanaAllLogsLink,
 } from '../utils/kibana';
-
+// import { initialValuesFromLocation } from '../utils/url-helper';
+import Datepicker from './Datepicker/Datepicker';
+import { urlDateFormat, urlDateProps } from '../utils/datepicker';
 import { strings } from './locale';
 
-const { recent, updateInterval } = _config;
+/*
+ * If this is a shared URL, grab the date and time and update the datepicker
+ * state to reflect the values.
+ * @param {Object} props - Home component's input props.
+ */
+const updateDatepickerStateFromQueryParams = (props) => {
+  const { queryParams } = props;
+  const values = {...queryParams};
+  if (!isEmpty(queryParams)) {
+    for (const value in values) {
+      if (urlDateProps.includes(value)) {
+        values[value] = moment.utc(values[value], urlDateFormat).toDate();
+      }
+    }
+    values.dateRange = {value: 'Custom', label: 'Custom'};
+    props.dispatch({type: 'DATEPICKER_DATECHANGE', data: {...props.datepicker, ...values}});
+  }
+};
 
 class Home extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.displayName = 'Home';
     this.query = this.query.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
@@ -60,6 +82,7 @@ class Home extends React.Component {
     this.cancelInterval = interval(() => {
       this.query();
     }, updateInterval, true);
+    updateDatepickerStateFromQueryParams(this.props);
     const { dispatch } = this.props;
     dispatch(getCumulusInstanceMetadata())
       .then(() => {
@@ -67,8 +90,7 @@ class Home extends React.Component {
         dispatch(getTEALambdaMetrics(this.props.cumulusInstance));
         dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
         dispatch(getDistS3AccessMetrics(this.props.cumulusInstance));
-      }
-      );
+      });
   }
 
   componentWillUnmount () {
@@ -103,7 +125,6 @@ class Home extends React.Component {
   isExternalLink (link) {
     return link.match('https?://');
   }
-
   renderButtonListSection (items, header, listId) {
     const data = items.filter(d => d[0] !== nullValue);
     if (!data.length) return null;
@@ -188,6 +209,17 @@ class Home extends React.Component {
             </div>
           </section>
 
+          <section className='page__section datetime'>
+            <div className='row'>
+              <div className='heading__wrapper'>
+                <h2 className='datetime__info heading--medium heading--shared-content--right'>
+                  Select date and time to refine your results. <em>Time is UTC.</em>
+                </h2>
+              </div>
+              <Datepicker />
+            </div>
+          </section>
+
           {this.renderButtonListSection(overview, 'Updates')}
           {this.renderButtonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
           {this.renderButtonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
@@ -230,23 +262,28 @@ class Home extends React.Component {
 }
 
 Home.propTypes = {
-  dispatch: PropTypes.func,
-  stats: PropTypes.object,
+  cumulusInstance: PropTypes.object,
+  datepicker: PropTypes.object,
   dist: PropTypes.object,
-  rules: PropTypes.object,
+  executions: PropTypes.object,
   granules: PropTypes.object,
   pdrs: PropTypes.object,
-  executions: PropTypes.object,
-  cumulusInstance: PropTypes.object
+  rules: PropTypes.object,
+  stats: PropTypes.object,
+  queryParams: PropTypes.object,
+  setQueryParams: PropTypes.func,
+  dispatch: PropTypes.func,
 };
 
 export { Home };
-export default withRouter(connect(state => ({
-  rules: state.rules,
-  stats: state.stats,
+
+export default withRouter(withQueryParams()(connect((state) => ({
+  cumulusInstance: state.cumulusInstance,
+  datepicker: state.datepicker,
   dist: state.dist,
+  executions: state.executions,
   granules: state.granules,
   pdrs: state.pdrs,
-  executions: state.executions,
-  cumulusInstance: state.cumulusInstance
-}))(Home));
+  rules: state.rules,
+  stats: state.stats
+}))(Home)));

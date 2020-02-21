@@ -98,7 +98,7 @@
   &.dropdown__dtrange{
     &:after {
       position: absolute;
-      font-family: 'Font Awesome 5 Free';
+      font-family: 'FontAwesome';
       content: '\f0dc';
       color: $white;
       font-weight: 900;
@@ -129,7 +129,7 @@
     z-index: 2;
     &:after {
       position: absolute;
-      font-family: 'Font Awesome 5 Free';
+      font-family: 'FontAwesome';
       content: '\f00d';
       color: $white;
       font-weight: 900;
@@ -137,43 +137,4 @@
       left: 1em;
     }
   }
-}
-
-.react-datetime-picker__clear-button {
-  content: "";
-  display: none;
-}
-
-.react-datetime-picker__calendar.react-datetime-picker__calendar--open, .react-datetime-picker__clock.react-datetime-picker__clock--open{
-  top: 100%;
-  bottom: unset;
-  left: 0px;
-  right: unset;
-}
-
-.react-datetime-picker__wrapper {
-  border: 1px solid lighten($lightest-grey, 4%);
-}
-
-.react-calendar__navigation {
-  background-color: $ocean-blue;
-  color: $white;
-}
-
-.react-datetime-picker__inputGroup__input{
-  box-shadow: none;
-}
-
-.react-datetime-picker__inputGroup__input:invalid {
-  background: rgba($color: #2685c1, $alpha: 0.1) !important;
-}
-
-.react-calendar__tile--active {
-  background: $ocean-blue !important;
-  color: $white !important;
-}
-
-.react-calendar__tile:enabled:hover, .react-calendar__tile:enabled:focus{
-  background-color: rgba($color: #2685c1, $alpha: 0.54) !important;
-  color: $black !important;
 }
