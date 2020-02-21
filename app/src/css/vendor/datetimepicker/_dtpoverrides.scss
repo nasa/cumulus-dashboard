@@ -1,0 +1,52 @@
+/******************************************************************
+                    React Date Time Picker - Overrides
+******************************************************************/
+/*
+We are using React Date Time Picker for the Datepicker component
+these are the styling imports for that dependency. Here are our
+styling overrides
+*/
+
+.react-datetime-picker__clear-button {
+  content: "";
+  display: none;
+}
+
+.react-datetime-picker__calendar.react-datetime-picker__calendar--open, .react-datetime-picker__clock.react-datetime-picker__clock--open{
+  top: 100%;
+  bottom: unset;
+  left: 0px;
+  right: unset;
+}
+
+.react-datetime-picker__wrapper {
+  border: 1px solid lighten($lightest-grey, 4%);
+}
+
+.react-datetime-picker__calendar .react-calendar__navigation {
+  background-color: $ocean-blue;
+  color: $white;
+}
+
+.react-datetime-picker__inputGroup__input{
+  box-shadow: none;
+}
+
+.react-datetime-picker__inputGroup__input:invalid {
+  background: rgba($color: #2685c1, $alpha: 0.1) !important;
+}
+
+.react-datetime-picker__calendar .react-calendar__tile--active {
+  background: $ocean-blue !important;
+  color: $white !important;
+}
+
+.react-datetime-picker__calendar .react-calendar__tile:enabled:hover, .react-calendar__tile:enabled:focus {
+  background-color: rgba($color: #2685c1, $alpha: 0.54) !important;
+  color: $black !important;
+}
+
+.react-datetime-picker__calendar .react-calendar, .react-datetime-picker__clock.react-datetime-picker__clock--open, .react-datetime-picker__calendar-button.react-datetime-picker__button {
+  visibility: hidden;
+  display: none;
+}
