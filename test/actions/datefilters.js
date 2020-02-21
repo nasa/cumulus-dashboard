@@ -9,7 +9,6 @@ import { requestMiddleware } from '../../app/src/js/middleware/request';
 import { initialState } from '../../app/src/js/reducers/datepicker';
 import {
   listGranules,
-  listCollections,
   listPdrs,
   listProviders,
   listExecutions,
@@ -73,11 +72,6 @@ test('listGranules add no extra information when datepicker state has not start 
 
 test('All implemented list endpoints pull data from datepicker state.', (t) => {
   const endpoints = [
-    // {
-    //   endpoint: '/collections',
-    //   action: 'COLLECTIONS_INFLIGHT',
-    //   dispatcher: listCollections
-    // },
     { endpoint: '/pdrs', action: 'PDRS_INFLIGHT', dispatcher: listPdrs },
     {
       endpoint: '/providers',
@@ -114,11 +108,12 @@ test('All implemented list endpoints pull data from datepicker state.', (t) => {
       .query(true)
       .reply(200);
 
-    store.dispatch(e.dispatcher());
-    const dispatchedAction = store.getActions()[0];
-    t.is(dispatchedAction.type, e.action);
-    t.true('timestamp__from' in dispatchedAction.config.qs);
-    t.true('timestamp__to' in dispatchedAction.config.qs);
-    store.clearActions();
+    return store.dispatch(e.dispatcher()).then(() => {
+      const dispatchedAction = store.getActions()[0];
+      t.is(dispatchedAction.type, e.action);
+      t.true('timestamp__from' in dispatchedAction.config.qs);
+      t.true('timestamp__to' in dispatchedAction.config.qs);
+      store.clearActions();
+    });
   });
 });
