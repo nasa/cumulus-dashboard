@@ -130,17 +130,21 @@ export const checkApiVersion = () => {
   };
 };
 
-export const listCollections = (options) =>
-  (dispatch) =>
-    dispatch({
-      [CALL_API]: {
-        type: types.COLLECTIONS,
-        method: 'GET',
-        id: null,
-        url: url.resolve(root, 'collections'),
-        qs: Object.assign({ limit: pageLimit }, options)
-      }
-    }).then(() => dispatch(getMMTLinks()));
+export const listCollections = (options) => {
+  return (dispatch, getState) => {
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    return (dispatch) =>
+      dispatch({
+        [CALL_API]: {
+          type: types.COLLECTIONS,
+          method: 'GET',
+          id: null,
+          url: url.resolve(root, 'collections'),
+          qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+        }
+      }).then(() => dispatch(getMMTLinks()));
+  };
+};
 
 export const createCollection = (payload) => ({
   [CALL_API]: {
@@ -267,15 +271,14 @@ export const getGranule = (granuleId) => ({
 
 export const listGranules = (options) => {
   return (dispatch, getState) => {
-    // TODO [MHS, 2020-02-18] Fill this out.
-    const timefilters = fetchCurrentTimeFilters(getState().datepicker);
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     dispatch({
       [CALL_API]: {
         type: types.GRANULES,
         method: 'GET',
         id: null,
         url: url.resolve(root, 'granules'),
-        qs: Object.assign({ limit: pageLimit }, options, timefilters)
+        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
       }});
   };
 };
@@ -543,14 +546,17 @@ export const getCount = (options) => ({
   }
 });
 
-export const listPdrs = (options) => ({
-  [CALL_API]: {
-    type: types.PDRS,
-    method: 'GET',
-    url: url.resolve(root, 'pdrs'),
-    qs: Object.assign({ limit: pageLimit }, options)
-  }
-});
+export const listPdrs = (options) => {
+  return (dispatch, getState) => {
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    dispatch({[CALL_API]: {
+      type: types.PDRS,
+      method: 'GET',
+      url: url.resolve(root, 'pdrs'),
+      qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+    }});
+  };
+};
 
 export const getPdr = (pdrName) => ({
   [CALL_API]: {
@@ -566,14 +572,17 @@ export const clearPdrsSearch = () => ({ type: types.CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: types.FILTER_PDRS, param: param });
 export const clearPdrsFilter = (paramKey) => ({ type: types.CLEAR_PDRS_FILTER, paramKey: paramKey });
 
-export const listProviders = (options) => ({
-  [CALL_API]: {
-    type: types.PROVIDERS,
-    method: 'GET',
-    url: url.resolve(root, 'providers'),
-    qs: Object.assign({ limit: pageLimit }, options)
-  }
-});
+export const listProviders = (options) => {
+  return (dispatch, getState) => {
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    dispatch({[CALL_API]: {
+      type: types.PROVIDERS,
+      method: 'GET',
+      url: url.resolve(root, 'providers'),
+      qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+    }});
+  };
+};
 
 export const getOptionsProviderGroup = () => ({
   [CALL_API]: {
@@ -726,36 +735,49 @@ export const getExecutionStatus = (arn) => ({
   }
 });
 
-export const getExecutionLogs = (executionName) => ({
-  [CALL_API]: {
-    type: types.EXECUTION_LOGS,
-    method: 'GET',
-    url: url.resolve(root, 'logs/' + executionName)
-  }
-});
+export const getExecutionLogs = (executionName) => {
+  return (dispatch, getState) => {
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    dispatch({
+      [CALL_API]: {
+        type: types.EXECUTION_LOGS,
+        method: 'GET',
+        url: url.resolve(root, 'logs/' + executionName, timeFilters)
+      }
+    });
+  };
+};
 
-export const listExecutions = (options) => ({
-  [CALL_API]: {
-    type: types.EXECUTIONS,
-    method: 'GET',
-    url: url.resolve(root, 'executions'),
-    qs: Object.assign({ limit: pageLimit }, options)
-  }
-});
+export const listExecutions = (options) => {
+  return (dispatch, getState) => {
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    dispatch({[CALL_API]: {
+      type: types.EXECUTIONS,
+      method: 'GET',
+      url: url.resolve(root, 'executions'),
+      qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+    }});
+  };
+};
 
 export const filterExecutions = (param) => ({ type: types.FILTER_EXECUTIONS, param: param });
 export const clearExecutionsFilter = (paramKey) => ({ type: types.CLEAR_EXECUTIONS_FILTER, paramKey: paramKey });
 export const searchExecutions = (prefix) => ({ type: types.SEARCH_EXECUTIONS, prefix: prefix });
 export const clearExecutionsSearch = () => ({ type: types.CLEAR_EXECUTIONS_SEARCH });
 
-export const listOperations = (options) => ({
-  [CALL_API]: {
-    type: types.OPERATIONS,
-    method: 'GET',
-    url: url.resolve(root, 'asyncOperations'),
-    qs: Object.assign({ limit: pageLimit }, options)
-  }
-});
+export const listOperations = (options) => {
+  return (dispatch, getState) => {
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    dispatch({
+      [CALL_API]: {
+        type: types.OPERATIONS,
+        method: 'GET',
+        url: url.resolve(root, 'asyncOperations'),
+        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+      }
+    });
+  };
+};
 
 export const getOperation = (operationId) => ({
   [CALL_API]: {
@@ -771,14 +793,19 @@ export const clearOperationsSearch = () => ({ type: types.CLEAR_OPERATIONS_SEARC
 export const filterOperations = (param) => ({ type: types.FILTER_OPERATIONS, param: param });
 export const clearOperationsFilter = (paramKey) => ({ type: types.CLEAR_OPERATIONS_FILTER, paramKey: paramKey });
 
-export const listRules = (options) => ({
-  [CALL_API]: {
-    type: types.RULES,
-    method: 'GET',
-    url: url.resolve(root, 'rules'),
-    qs: Object.assign({ limit: pageLimit }, options)
-  }
-});
+export const listRules = (options) => {
+  return (dispatch, getState) => {
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    dispatch({
+      [CALL_API]: {
+        type: types.RULES,
+        method: 'GET',
+        url: url.resolve(root, 'rules'),
+        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+      }
+    });
+  };
+};
 
 export const getRule = (ruleName) => ({
   [CALL_API]: {
