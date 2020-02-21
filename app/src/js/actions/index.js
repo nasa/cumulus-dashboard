@@ -12,6 +12,7 @@ import clonedeep from 'lodash.clonedeep';
 import { configureRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId, collectionNameVersion } from '../utils/format';
+import { fetchCurrentTimeFilters } from '../utils/datepicker';
 import log from '../utils/log';
 import { authHeader } from '../utils/basic-auth';
 import { apiGatewaySearchTemplate } from './action-config/apiGatewaySearch';
@@ -267,14 +268,14 @@ export const getGranule = (granuleId) => ({
 export const listGranules = (options) => {
   return (dispatch, getState) => {
     // TODO [MHS, 2020-02-18] Fill this out.
-    // const timefilter = fetchCurrentTimeFilters(getState());
+    const timefilters = fetchCurrentTimeFilters(getState().datepicker);
     dispatch({
       [CALL_API]: {
         type: types.GRANULES,
         method: 'GET',
         id: null,
         url: url.resolve(root, 'granules'),
-        qs: Object.assign({ limit: pageLimit }, options)
+        qs: Object.assign({ limit: pageLimit }, options, timefilters)
       }});
   };
 };
