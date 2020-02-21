@@ -188,6 +188,9 @@ describe('Dashboard Collections Page', () => {
       const meta = {metaObj: 'metadata'};
       cy.editJsonTextarea({ data: { duplicateHandling, meta }, update: true });
       cy.contains('form button', 'Submit').click();
+      cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
+      cy.contains('.default-modal .modal-body', `Collection ${name} / ${version} has been updated`);
+      cy.contains('.modal-footer button', 'Close').click();
 
       // displays the updated collection and its granules
       cy.wait('@getCollection');
@@ -324,7 +327,7 @@ describe('Dashboard Collections Page', () => {
         .should('be.visible').wait(200).click();
 
       // modal should take user to granules page upon clicking 'Go To Granules'
-      cy.contains('.button__gotogranules', 'Go To Granules')
+      cy.contains('.button__goto', 'Go To Granules')
         .should('be.visible').wait(200).click();
       cy.contains('.modal-content').should('not.be.visible');
       cy.url().should('include', 'granules');

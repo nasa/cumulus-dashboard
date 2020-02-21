@@ -1,77 +1,72 @@
 'use strict';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import TextArea from '../TextAreaForm/text-area';
 import { get } from 'object-path';
 import { getSchema } from '../../actions';
-import Loading from '../LoadingIndicator/loading-indicator';
 import { removeReadOnly } from '../FormSchema/schema';
+import { displayCase } from '../../utils/format';
+import Loading from '../LoadingIndicator/loading-indicator';
+import TextArea from '../TextAreaForm/text-area';
+import DefaultModal from '../Modal/modal';
 import _config from '../../config';
 
 const { updateDelay } = _config;
 
-class EditRaw extends React.Component {
-  constructor () {
-    super();
-    this.state = {
-      pk: null,
-      data: '',
-      error: null
-    };
-    this.queryRecord = this.queryRecord.bind(this);
-    this.submit = this.submit.bind(this);
-    this.cancel = this.cancel.bind(this);
-    this.onChange = this.onChange.bind(this);
-  }
+const defaultState = {
+  pk: null,
+  data: '',
+  error: null
+};
 
-  queryRecord (pk) {
-    if (!this.props.state.map[pk]) {
-      this.props.dispatch(this.props.getRecord(pk));
+const EditRaw = ({
+  state,
+  dispatch,
+  history,
+  backRoute,
+  getRecord,
+  updateRecord,
+  clearRecordUpdate,
+  pk,
+  schema,
+  schemaKey,
+  hasModal,
+  type,
+  ModalBody
+}) => {
+  const [record, setRecord] = useState(defaultState);
+  const [showModal, setShowModal] = useState(false);
+  const { data, pk: recordPk, error } = record;
+  const { updated, map: stateMap } = state;
+  const updateStatus = get(updated, [pk, 'status']);
+  const isSuccess = updateStatus === 'success';
+  const isError = !!error;
+  const buttonText = updateStatus === 'inflight' ? 'loading...'
+    : updateStatus === 'success' ? 'Success!' : 'Submit';
+
+  useEffect(() => {
+    if (!stateMap[pk]) {
+      dispatch(getRecord(pk));
     }
-  }
-
-  submit (e) {
-    e.preventDefault();
-    const { state, pk } = this.props;
-    const updateStatus = get(state.updated, [pk, 'status']);
-    if (updateStatus === 'inflight') { return; }
-    try {
-      var json = JSON.parse(this.state.data);
-    } catch (e) {
-      return this.setState({ error: 'Syntax error in JSON' });
+    if (!schema[schemaKey]) {
+      dispatch(getSchema(schemaKey));
     }
-    this.setState({ error: null });
-    console.log('About to update', json);
-    this.props.dispatch(this.props.updateRecord(json));
-  }
+  }, [dispatch, pk, stateMap, getRecord, schema, schemaKey]);
 
-  cancel () {
-    this.props.history.push(this.props.backRoute);
-  }
-
-  componentDidMount () {
-    this.queryRecord(this.props.pk);
-    this.props.dispatch(getSchema(this.props.schemaKey));
-  }
-
-  componentDidUpdate (prevProps) {
-    const { pk, state, schema, schemaKey } = this.props;
-    const { dispatch, history, clearRecordUpdate, backRoute } = prevProps;
-    // successfully updated, navigate away
-    if (get(state.updated, [pk, 'status']) === 'success') {
-      return setTimeout(() => {
+  useEffect(() => {
+    if (!hasModal && updateStatus === 'success') {
+      setTimeout(() => {
         dispatch(clearRecordUpdate(pk));
         history.push(backRoute);
       }, updateDelay);
     }
-    if (this.state.pk === pk || !schema[schemaKey]) { return; }
+    if (recordPk === pk || !schema[schemaKey]) { return; }
     const recordSchema = schema[schemaKey];
 
-    const newRecord = state.map[pk] || {};
+    const newRecord = stateMap[pk] || {};
     if (newRecord.error) {
-      this.setState({ // eslint-disable-line react/no-did-update-set-state
+      setRecord({
         pk,
         data: '',
         error: newRecord.error
@@ -81,60 +76,102 @@ class EditRaw extends React.Component {
       try {
         var text = JSON.stringify(data, null, '\t');
       } catch (error) {
-        this.setState({ error, pk }); // eslint-disable-line react/no-did-update-set-state
+        setRecord({ ...record, error, pk });
       }
-      this.setState({ // eslint-disable-line react/no-did-update-set-state
+      setRecord({
         pk,
         data: text,
         error: null
       });
-    } else if (!newRecord.inflight) {
-      this.queryRecord(pk);
+    } else if (!newRecord.inflight && !stateMap[pk]) {
+      dispatch(getRecord(pk));
     }
+  }, [hasModal, updateStatus, recordPk, pk, schema, schemaKey, stateMap, dispatch, clearRecordUpdate, history, backRoute, record, getRecord]);
+
+  function onSubmit (e) {
+    e.preventDefault();
+    if (updateStatus === 'inflight') { return; }
+    try {
+      var json = JSON.parse(data);
+    } catch (e) {
+      return setRecord({ ...record, error: 'Syntax error in JSON' });
+    }
+    setRecord({ ...record, error: null });
+    console.log('About to update', json);
+    dispatch(updateRecord(json));
   }
 
-  onChange (id, value) {
-    this.setState({ data: value });
+  function handleCancel () {
+    history.push(backRoute);
   }
 
-  render () {
-    const { data, pk } = this.state;
-    const updateStatus = get(this.props.state.updated, [pk, 'status']);
-    const buttonText = updateStatus === 'inflight' ? 'loading...'
-      : updateStatus === 'success' ? 'Success!' : 'Submit';
-    return (
-      <div className='page__component'>
-        <section className='page__section'>
-          <div className="heading__wrapper--border">
-            <h1 className='heading--large'>{pk}</h1>
-          </div>
-          { data || data === '' ? (
-            <form>
-              <TextArea
-                value={data}
-                id={`edit-${pk}`}
-                error={this.state.error}
-                onChange={this.onChange}
-                mode={'json'}
-                minLines={1}
-                maxLines={200}
-              />
-              <button
-                className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (updateStatus === 'inflight' ? ' button--disabled' : '')}
-                onClick={this.submit}
-                value={buttonText}
-              >{buttonText}</button>
-              <button
-                className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
-                onClick={this.cancel}
-              >Cancel</button>
-            </form>
-          ) : <Loading /> }
-        </section>
-      </div>
-    );
+  function onChange (id, value) {
+    setRecord({ ...record, data: value });
   }
-}
+
+  function handleOpenModal (e) {
+    e.preventDefault();
+    setShowModal(true);
+    onSubmit(e);
+  }
+
+  function handleModalConfirm (e) {
+    setShowModal(false);
+  }
+
+  function handleCloseModal () {
+    setShowModal(false);
+    handleCancel();
+  }
+
+  const handleSubmit = hasModal ? handleOpenModal : onSubmit;
+
+  return (
+    <div className='page__component'>
+      <section className='page__section'>
+        <div className="heading__wrapper--border">
+          <h1 className='heading--large'>{pk}</h1>
+        </div>
+        { data || data === '' ? (
+          <form>
+            <TextArea
+              value={data}
+              id={`edit-${pk}`}
+              error={error}
+              onChange={onChange}
+              mode={'json'}
+              minLines={1}
+              maxLines={200}
+            />
+            <button
+              className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (updateStatus === 'inflight' ? ' button--disabled' : '')}
+              onClick={handleSubmit}
+              value={buttonText}
+            >{hasModal ? 'Submit' : buttonText}</button>
+            <button
+              className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
+              onClick={handleCancel}
+            >Cancel</button>
+          </form>
+        ) : <Loading /> }
+      </section>
+      {hasModal &&
+      <DefaultModal
+        showModal={showModal}
+        className={`edit-${type}`}
+        onCloseModal={handleCloseModal}
+        onConfirm={isError ? handleModalConfirm : handleCloseModal}
+        title={`Edit ${displayCase(type)}`}
+        hasCancelButton={isError}
+        cancelButtonText={isError ? 'Cancel Request' : null}
+        confirmButtonText={isError ? 'Go To Collection' : 'Close'}
+        confirmButtonClass={isError ? 'button__goto' : 'button--green'}
+      >
+        <ModalBody isError={isError} isSuccess={isSuccess} error={error} />
+      </DefaultModal>}
+    </div>
+  );
+};
 
 EditRaw.propTypes = {
   dispatch: PropTypes.func,
@@ -146,7 +183,13 @@ EditRaw.propTypes = {
   history: PropTypes.object,
   getRecord: PropTypes.func,
   updateRecord: PropTypes.func,
-  clearRecordUpdate: PropTypes.func
+  clearRecordUpdate: PropTypes.func,
+  hasModal: PropTypes.bool,
+  type: PropTypes.string,
+  ModalBody: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ])
 };
 
 export default withRouter(connect(state => ({

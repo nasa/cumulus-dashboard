@@ -415,7 +415,7 @@
       visibility: hidden;
     }
 
-    &__gotogranules {
+    &__goto {
       background-color: $light-green;
       position: relative;
     
@@ -429,7 +429,7 @@
       } 
     }
     
-      &__gotogranules:hover:before{
+      &__goto:hover:before{
         color: $white;
         position: absolute;
         font-family: 'FontAwesome';
