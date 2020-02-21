@@ -8,12 +8,11 @@ import { initialState } from '../../app/src/js/reducers/datepicker';
 
 test('returns empty object if no start and end times provided', (t) => {
   const expected = {};
-
   const actual = fetchCurrentTimeFilters(initialState);
   t.deepEqual(expected, actual, 'did not create correct initial filters');
 });
 
-test('creates correct object if only endDateTime time is provided', (t) => {
+test('creates object with timestamp__to if only endDateTime time is provided', (t) => {
   const state = { ...initialState };
   const valueOfDate = 1582307006281;
   const endDateTime = new Date(valueOfDate);
@@ -25,7 +24,7 @@ test('creates correct object if only endDateTime time is provided', (t) => {
   t.deepEqual(expected, actual);
 });
 
-test('creates an object with only timestamp_from if only startDateTime time is provided', (t) => {
+test('creates an object with only timestamp__from if only startDateTime time is provided', (t) => {
   const state = { ...initialState };
   const valueOfDate = 1582307006281;
   const startDateTime = new Date(valueOfDate);
@@ -37,7 +36,7 @@ test('creates an object with only timestamp_from if only startDateTime time is p
   t.deepEqual(expected, actual);
 });
 
-test('creates an object with correct  timestamps when start and end dates are provides', (t) => {
+test('creates an object with correct timestamps when start and end dates are provides', (t) => {
   const state = { ...initialState };
   const valueOfStartDate = 1501907006251;
   const valueOfEndDate = 1582307006281;
