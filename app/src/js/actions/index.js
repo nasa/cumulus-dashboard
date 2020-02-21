@@ -735,18 +735,13 @@ export const getExecutionStatus = (arn) => ({
   }
 });
 
-export const getExecutionLogs = (executionName) => {
-  return (dispatch, getState) => {
-    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    dispatch({
-      [CALL_API]: {
-        type: types.EXECUTION_LOGS,
-        method: 'GET',
-        url: url.resolve(root, 'logs/' + executionName, timeFilters)
-      }
-    });
-  };
-};
+export const getExecutionLogs = (executionName) => ({
+  [CALL_API]: {
+    type: types.EXECUTION_LOGS,
+    method: 'GET',
+    url: url.resolve(root, 'logs/' + executionName)
+  }
+});
 
 export const listExecutions = (options) => {
   return (dispatch, getState) => {
