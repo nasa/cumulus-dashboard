@@ -2,7 +2,7 @@ import { shouldBeRedirectedToLogin } from '../support/assertions';
 import { collectionName, getCollectionId } from '../../app/src/js/utils/format';
 
 describe('Dashboard Collections Page', () => {
-  xdescribe('When not logged in', () => {
+  describe('When not logged in', () => {
     it('should redirect to login page', () => {
       cy.visit('/collections');
       shouldBeRedirectedToLogin();
@@ -171,6 +171,7 @@ describe('Dashboard Collections Page', () => {
       // displays the copied collection and its granules
       cy.contains('.heading--xlarge', 'Collections');
       cy.contains('.heading--large', `${name} / ${newVersion}`);
+      cy.task('resetState');
     });
 
     it('should edit a collection', () => {

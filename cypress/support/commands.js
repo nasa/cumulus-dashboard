@@ -27,7 +27,7 @@ import clonedeep from 'lodash.clonedeep';
 import { DELETE_TOKEN, SET_TOKEN } from '../../app/src/js/actions/types';
 
 Cypress.Commands.add('login', () => {
-  const authUrl = `${Cypress.config('baseUrl')}/#/auth`;
+  const authUrl = `${Cypress.config('baseUrl')}/auth`;
   cy.request({
     url: `${Cypress.env('APIROOT')}/token?code=somecode`,
     qs: {

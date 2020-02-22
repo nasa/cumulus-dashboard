@@ -1,7 +1,7 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
 
 describe('Dashboard Providers Page', () => {
-  xdescribe('When not logged in', () => {
+  describe('When not logged in', () => {
     it('should redirect to login page', () => {
       cy.visit('/providers');
       shouldBeRedirectedToLogin();
