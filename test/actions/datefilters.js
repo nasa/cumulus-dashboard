@@ -7,6 +7,7 @@ import thunk from 'redux-thunk';
 import {
   getExecutionLogs,
   getLogs,
+  listCollections,
   listExecutions,
   listGranules,
   listOperations,
@@ -75,6 +76,11 @@ test('listGranules add no extra information when datepicker state has not start 
 
 test('All implemented list endpoints pull data from datepicker state.', (t) => {
   const endpoints = [
+    {
+      endpoint: '/collections',
+      action: 'COLLECTIONS_INFLIGHT',
+      dispatcher: listCollections
+    },
     { endpoint: '/pdrs', action: 'PDRS_INFLIGHT', dispatcher: listPdrs },
     {
       endpoint: '/providers',

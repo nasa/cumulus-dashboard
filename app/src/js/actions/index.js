@@ -133,16 +133,15 @@ export const checkApiVersion = () => {
 export const listCollections = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return (dispatch) =>
-      dispatch({
-        [CALL_API]: {
-          type: types.COLLECTIONS,
-          method: 'GET',
-          id: null,
-          url: url.resolve(root, 'collections'),
-          qs: Object.assign({ limit: pageLimit }, options, timeFilters)
-        }
-      }).then(() => dispatch(getMMTLinks()));
+    dispatch({
+      [CALL_API]: {
+        type: types.COLLECTIONS,
+        method: 'GET',
+        id: null,
+        url: url.resolve(root, 'collections'),
+        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+      }
+    }).then(() => dispatch(getMMTLinks()));
   };
 };
 
@@ -660,7 +659,6 @@ export const getLogs = (options) => {
     });
   };
 };
-
 
 export const clearLogs = () => ({ type: types.CLEAR_LOGS });
 
