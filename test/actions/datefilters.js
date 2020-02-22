@@ -22,7 +22,7 @@ import { initialState } from '../../app/src/js/reducers/datepicker';
 const middlewares = [requestMiddleware, thunk];
 const mockStore = configureMockStore(middlewares);
 
-test('listGranules uses datepicker state when requesting data from cumulus API ', (t) => {
+test('listGranules injects timestamps from datepicker state when calling the Cumulus API.', (t) => {
   const testState = { ...initialState };
   const startDateTime = new Date('2020-01-18T13:05:00.000Z');
   const endDateTime = new Date('2020-02-10T20:55:00.000Z');
@@ -38,16 +38,14 @@ test('listGranules uses datepicker state when requesting data from cumulus API '
   t.is(dispatchedAction.type, 'GRANULES_INFLIGHT');
   t.true('timestamp__from' in dispatchedAction.config.qs);
   t.true('timestamp__to' in dispatchedAction.config.qs);
-  t.is(dispatchedAction.config.qs.timestamp__to, endDateTime.valueOf());
-  t.is(dispatchedAction.config.qs.timestamp__from, startDateTime.valueOf());
+  t.is(endDateTime.valueOf(), dispatchedAction.config.qs.timestamp__to);
+  t.is(startDateTime.valueOf(), dispatchedAction.config.qs.timestamp__from);
 });
 
-test('listGranules add no information when datepicker has no start or end time.', (t) => {
+test('listGranules does not inject information if datepicker state has no start or end values.', (t) => {
   const testState = { ...initialState };
-  const startDateTime = null;
-  const endDateTime = null;
-  testState.startDateTime = startDateTime;
-  testState.endDateTime = endDateTime;
+  testState.startDateTime = null;
+  testState.endDateTime = null;
 
   const store = mockStore({
     datepicker: testState
@@ -60,15 +58,16 @@ test('listGranules add no information when datepicker has no start or end time.'
   t.false('timestamp__to' in dispatchedAction.config.qs);
 });
 
-test('These list endpoints pull data from datepicker state.', (t) => {
+test('Each of these list action creators will pull data from datepicker state when calling the Cumulus API.', (t) => {
   const endpoints = [
     { action: 'COLLECTIONS_INFLIGHT', dispatcher: listCollections },
+    { action: 'EXECUTIONS_INFLIGHT', dispatcher: listExecutions },
+    { action: 'GRANULES_INFLIGHT', dispatcher: listGranules },
+    { action: 'LOGS_INFLIGHT', dispatcher: getLogs },
+    { action: 'OPERATIONS_INFLIGHT', dispatcher: listOperations },
     { action: 'PDRS_INFLIGHT', dispatcher: listPdrs },
     { action: 'PROVIDERS_INFLIGHT', dispatcher: listProviders },
-    { action: 'EXECUTIONS_INFLIGHT', dispatcher: listExecutions },
-    { action: 'OPERATIONS_INFLIGHT', dispatcher: listOperations },
-    { action: 'RULES_INFLIGHT', dispatcher: listRules },
-    { action: 'LOGS_INFLIGHT', dispatcher: getLogs }
+    { action: 'RULES_INFLIGHT', dispatcher: listRules }
   ];
 
   endpoints.forEach((e) => {
@@ -91,7 +90,7 @@ test('These list endpoints pull data from datepicker state.', (t) => {
   });
 });
 
-test('These list endpoints do not use data from datepicker state.', (t) => {
+test('Each of these list action creators will not use data from datepicker state when calling the Cumulus API.', (t) => {
   const endpoints = [
     { action: 'WORKFLOWS_INFLIGHT', dispatcher: listWorkflows },
     { action: 'RECONCILIATIONS_INFLIGHT', dispatcher: listReconciliationReports },
