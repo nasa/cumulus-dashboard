@@ -18,7 +18,7 @@ describe('Dashboard Collections Page', () => {
     before(() => {
       cy.visit('/');
       cy.task('resetState');
-     });
+    });
 
     beforeEach(() => {
       cy.login();
