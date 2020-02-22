@@ -11,10 +11,6 @@ const matchObjects = [
 
 export const urlDateProps = matchObjects.map((o) => o.dateProp);
 
-export const timestampFilters = matchObjects.map(
-  (o) => `timestamp${o.filterProp}`
-);
-
 /**
  * Build a timefilter object that will be passed to the cumulus core API calls as part of the querystring.
  *
