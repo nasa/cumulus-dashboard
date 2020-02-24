@@ -207,6 +207,25 @@ describe('Dashboard Collections Page', () => {
         expect(collectionJson.meta).to.deep.equal(meta);
       });
       cy.contains('.heading--large', `${name}___${version}`);
+
+      // Test error flow
+      const sampleFileName = 'test';
+      cy.contains('.ace_variable', 'name');
+      cy.editJsonTextarea({ data: { sampleFileName }, update: true });
+
+      // Go To Collection should allow for continued editing
+      cy.contains('form button', 'Submit').click();
+      cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
+      cy.contains('.default-modal .modal-body', `Collection ${name} / ${version} has encountered an error.`);
+      cy.contains('.modal-footer button', 'Go To Collection').click();
+      cy.url().should('include', `collections/edit/${name}/${version}`);
+
+      // Cancel Request should return to collection page
+      cy.contains('form button', 'Submit').click();
+      cy.contains('.modal-footer button', 'Cancel Request').click();
+      cy.wait('@getCollection');
+      cy.contains('.heading--xlarge', 'Collections');
+      cy.contains('.heading--large', `${name} / ${version}`);
     });
 
     it('should delete a collection', () => {

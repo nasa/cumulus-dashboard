@@ -40,11 +40,14 @@ const EditRaw = ({
   const { data, pk: recordPk, error } = record;
   const { updated, map: stateMap } = state;
   const updateStatus = get(updated, [pk, 'status']);
+  const errorMessage = get(updated, [pk, 'error']);
   const isSuccess = updateStatus === 'success';
   const isError = !!error;
   const buttonText = updateStatus === 'inflight' ? 'loading...'
     : updateStatus === 'success' ? 'Success!' : 'Submit';
 
+  // get record and schema
+  // ported from componentDidMount
   useEffect(() => {
     if (!stateMap[pk]) {
       dispatch(getRecord(pk));
@@ -54,13 +57,21 @@ const EditRaw = ({
     }
   }, [dispatch, pk, stateMap, getRecord, schema, schemaKey]);
 
+  // Handle effects of an update success or error
   useEffect(() => {
-    if (!hasModal && updateStatus === 'success') {
+    if (!hasModal && isSuccess) {
       setTimeout(() => {
         dispatch(clearRecordUpdate(pk));
         history.push(backRoute);
       }, updateDelay);
     }
+    if (updateStatus === 'error' && !isError) {
+      setRecord({ ...record, error: errorMessage });
+    }
+  }, [hasModal, isSuccess, updateStatus, isError, dispatch, clearRecordUpdate, pk, history, backRoute, record, errorMessage]);
+
+  // ported from componentDidUpdate
+  useEffect(() => {
     if (recordPk === pk || !schema[schemaKey]) { return; }
     const recordSchema = schema[schemaKey];
 
@@ -86,7 +97,7 @@ const EditRaw = ({
     } else if (!newRecord.inflight && !stateMap[pk]) {
       dispatch(getRecord(pk));
     }
-  }, [hasModal, updateStatus, recordPk, pk, schema, schemaKey, stateMap, dispatch, clearRecordUpdate, history, backRoute, record, getRecord]);
+  }, [recordPk, pk, schema, schemaKey, stateMap, dispatch, record, getRecord]);
 
   function onSubmit (e) {
     e.preventDefault();
@@ -102,6 +113,9 @@ const EditRaw = ({
   }
 
   function handleCancel () {
+    if (isError) {
+      dispatch(clearRecordUpdate(pk));
+    }
     history.push(backRoute);
   }
 
@@ -117,11 +131,14 @@ const EditRaw = ({
 
   function handleModalConfirm (e) {
     setShowModal(false);
+    dispatch(clearRecordUpdate(pk));
   }
 
   function handleCloseModal () {
     setShowModal(false);
-    handleCancel();
+    if (!isError) {
+      handleCancel();
+    }
   }
 
   const handleSubmit = hasModal ? handleOpenModal : onSubmit;
@@ -161,6 +178,7 @@ const EditRaw = ({
         className={`edit-${type}`}
         onCloseModal={handleCloseModal}
         onConfirm={isError ? handleModalConfirm : handleCloseModal}
+        onCancel={handleCancel}
         title={`Edit ${displayCase(type)}`}
         hasCancelButton={isError}
         cancelButtonText={isError ? 'Cancel Request' : null}
