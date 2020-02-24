@@ -186,6 +186,7 @@ describe('Dashboard Collections Page', () => {
       // update collection and submit
       const duplicateHandling = 'version';
       const meta = {metaObj: 'metadata'};
+      cy.contains('.ace_variable', 'name');
       cy.editJsonTextarea({ data: { duplicateHandling, meta }, update: true });
       cy.contains('form button', 'Submit').click();
       cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
@@ -200,6 +201,7 @@ describe('Dashboard Collections Page', () => {
       // verify the collection is updated by looking at the Edit page
       cy.contains('a', 'Edit').click();
 
+      cy.contains('.ace_variable', 'name');
       cy.getJsonTextareaValue().then((collectionJson) => {
         expect(collectionJson.duplicateHandling).to.equal(duplicateHandling);
         expect(collectionJson.meta).to.deep.equal(meta);
