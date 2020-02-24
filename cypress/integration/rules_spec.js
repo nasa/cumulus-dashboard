@@ -118,6 +118,7 @@ describe('Rules page', () => {
 
       // update rule and submit
       const provider = 'newProvider';
+      cy.contains('.ace_variable', 'name');
       cy.editJsonTextarea({ data: { provider }, update: true });
       cy.contains('form button', 'Submit').click();
       cy.contains('.heading--large', testRuleName);
