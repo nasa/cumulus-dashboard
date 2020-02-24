@@ -9,14 +9,17 @@ describe('Dashboard Workflows Page', () => {
   });
 
   describe('When logged in', () => {
-    before(() => cy.visit('/'));
-    beforeEach(() => {
+    before(() => {
       cy.task('resetState');
-      cy.login();
       cy.visit('/');
     });
 
+    beforeEach(() => {
+      cy.login();
+    });
+
     it('displays a link to view workflows', () => {
+      cy.visit('/');
       cy.contains('nav li a', 'Workflows').as('workflows');
       cy.get('@workflows').should('have.attr', 'href', '/workflows');
       cy.get('@workflows').click();

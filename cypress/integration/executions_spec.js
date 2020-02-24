@@ -10,10 +10,12 @@ describe('Dashboard Executions Page', () => {
   });
 
   describe('When logged in', () => {
-    before(() => cy.visit('/'));
+    before(() => {
+      cy.visit('/');
+      cy.task('resetState');
+    });
 
     beforeEach(() => {
-      cy.task('resetState');
       cy.login();
       cy.visit('/');
     });
