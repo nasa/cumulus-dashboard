@@ -13,16 +13,24 @@ import EditRaw from '../EditRaw/edit-raw';
 
 const SCHEMA_KEY = 'collection';
 
-const ModalBody = ({ isSuccess, isError, error, name, version }) => {
+const ModalBody = ({ isSuccess, isError, isInflight, error, name, version }) => {
+  console.log('success', isSuccess);
+  console.log('error', isError);
+  console.log('inflight', isInflight);
   return (
     <div>
-      {`Collection ${name} / ${version} `}
-      {(isSuccess && !isError) && 'has been updated'}
-      {isError &&
-       <>
-        {'has encountered an error.'}
-        <div className="error">{error}</div>
-       </>
+      {isInflight
+        ? 'Processing...'
+        : <>
+        {`Collection ${name} / ${version} `}
+        {(isSuccess && !isError) && 'has been updated'}
+        {isError &&
+         <>
+          {'has encountered an error.'}
+          <div className="error">{error}</div>
+         </>
+        }
+        </>
       }
     </div>
   );
@@ -31,6 +39,7 @@ const ModalBody = ({ isSuccess, isError, error, name, version }) => {
 ModalBody.propTypes = {
   isError: PropTypes.bool,
   isSuccess: PropTypes.bool,
+  isInflight: PropTypes.bool,
   error: PropTypes.string,
   name: PropTypes.string,
   version: PropTypes.string

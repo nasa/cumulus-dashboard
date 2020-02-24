@@ -42,9 +42,10 @@ const EditRaw = ({
   const updateStatus = get(updated, [pk, 'status']);
   const errorMessage = get(updated, [pk, 'error']);
   const isSuccess = updateStatus === 'success';
+  const isInflight = updateStatus === 'inflight';
   const isError = !!error;
-  const buttonText = updateStatus === 'inflight' ? 'loading...'
-    : updateStatus === 'success' ? 'Success!' : 'Submit';
+  const buttonText = isInflight ? 'loading...'
+    : isSuccess ? 'Success!' : 'Submit';
 
   // get record and schema
   // ported from componentDidMount
@@ -185,7 +186,7 @@ const EditRaw = ({
         confirmButtonText={isError ? 'Go To Collection' : 'Close'}
         confirmButtonClass={isError ? 'button__goto' : 'button--green'}
       >
-        <ModalBody isError={isError} isSuccess={isSuccess} error={error} />
+        <ModalBody isError={isError} isSuccess={isSuccess} isInflight={isInflight} error={error} />
       </DefaultModal>}
     </div>
   );
