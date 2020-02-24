@@ -18,7 +18,12 @@ const ModalBody = ({ isSuccess, isError, error, name, version }) => {
     <div>
       {`Collection ${name} / ${version} `}
       {(isSuccess && !isError) && 'has been updated'}
-      {isError && `has encountered an error. ${error}`}
+      {isError &&
+       <>
+        {'has encountered an error.'}
+        <div className="error">{error}</div>
+       </>
+      }
     </div>
   );
 };
