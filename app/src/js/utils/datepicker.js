@@ -15,7 +15,7 @@ export const urlDateProps = matchObjects.map((o) => o.dateProp);
  * Build a timefilter object that will be passed to the cumulus core API calls as part of the querystring.
  *
  * @param {Object} datepicker - redux datepicker state.
- * @return {Objecte} object suitable to passing to a request querystring that will contain
+ * @return {Object} object suitable to passing to a request querystring that will contain
  */
 export const fetchCurrentTimeFilters = (datepicker) => {
   const filters = {};
