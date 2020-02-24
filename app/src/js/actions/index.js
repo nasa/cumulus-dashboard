@@ -133,7 +133,7 @@ export const checkApiVersion = () => {
 export const listCollections = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    dispatch({
+    return dispatch({
       [CALL_API]: {
         type: types.COLLECTIONS,
         method: 'GET',
@@ -271,7 +271,7 @@ export const getGranule = (granuleId) => ({
 export const listGranules = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    dispatch({
+    return dispatch({
       [CALL_API]: {
         type: types.GRANULES,
         method: 'GET',
@@ -548,7 +548,7 @@ export const getCount = (options) => ({
 export const listPdrs = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    dispatch({[CALL_API]: {
+    return dispatch({[CALL_API]: {
       type: types.PDRS,
       method: 'GET',
       url: url.resolve(root, 'pdrs'),
@@ -574,7 +574,7 @@ export const clearPdrsFilter = (paramKey) => ({ type: types.CLEAR_PDRS_FILTER, p
 export const listProviders = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    dispatch({[CALL_API]: {
+    return dispatch({[CALL_API]: {
       type: types.PROVIDERS,
       method: 'GET',
       url: url.resolve(root, 'providers'),
@@ -649,7 +649,7 @@ export const deletePdr = (pdrName) => ({
 export const getLogs = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    dispatch({
+    return dispatch({
       [CALL_API]: {
         type: types.LOGS,
         method: 'GET',
@@ -750,7 +750,7 @@ export const getExecutionLogs = (executionName) => ({
 export const listExecutions = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    dispatch({[CALL_API]: {
+    return dispatch({[CALL_API]: {
       type: types.EXECUTIONS,
       method: 'GET',
       url: url.resolve(root, 'executions'),
@@ -767,7 +767,7 @@ export const clearExecutionsSearch = () => ({ type: types.CLEAR_EXECUTIONS_SEARC
 export const listOperations = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    dispatch({
+    return dispatch({
       [CALL_API]: {
         type: types.OPERATIONS,
         method: 'GET',
@@ -795,7 +795,7 @@ export const clearOperationsFilter = (paramKey) => ({ type: types.CLEAR_OPERATIO
 export const listRules = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    dispatch({
+    return dispatch({
       [CALL_API]: {
         type: types.RULES,
         method: 'GET',
