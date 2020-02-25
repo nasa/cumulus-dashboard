@@ -2,7 +2,7 @@ import { shouldBeRedirectedToLogin } from '../support/assertions';
 import { collectionName, getCollectionId } from '../../app/src/js/utils/format';
 
 describe('Dashboard Collections Page', () => {
-  xdescribe('When not logged in', () => {
+  describe('When not logged in', () => {
     it('should redirect to login page', () => {
       cy.visit('/collections');
       shouldBeRedirectedToLogin();
@@ -15,11 +15,13 @@ describe('Dashboard Collections Page', () => {
   });
 
   describe('When logged in', () => {
-    before(() => cy.visit('/'));
+    before(() => {
+      cy.visit('/');
+      cy.task('resetState');
+    });
 
     beforeEach(() => {
       cy.login();
-      cy.task('resetState');
       cy.visit('/');
       cy.server();
       cy.route('POST', '/collections').as('postCollection');
@@ -110,6 +112,7 @@ describe('Dashboard Collections Page', () => {
           cy.contains('table tbody tr a', name)
             .should('have.attr', 'href', `/collections/collection/${name}/${version}`);
         });
+      cy.task('resetState');
     });
 
     it('should select a different collection', () => {
@@ -168,6 +171,7 @@ describe('Dashboard Collections Page', () => {
       // displays the copied collection and its granules
       cy.contains('.heading--xlarge', 'Collections');
       cy.contains('.heading--large', `${name} / ${newVersion}`);
+      cy.task('resetState');
     });
 
     it('should edit a collection', () => {
@@ -259,6 +263,7 @@ describe('Dashboard Collections Page', () => {
             {timeout: 25000}).should(existOrNotExist);
         });
       cy.get('table tbody tr').its('length').should('be.eq', 4);
+      cy.task('resetState');
     });
 
     it('should fail deleting a collection with an associated rule', () => {

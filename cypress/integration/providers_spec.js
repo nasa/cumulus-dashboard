@@ -1,7 +1,7 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
 
 describe('Dashboard Providers Page', () => {
-  xdescribe('When not logged in', () => {
+  describe('When not logged in', () => {
     it('should redirect to login page', () => {
       cy.visit('/providers');
       shouldBeRedirectedToLogin();
@@ -13,7 +13,10 @@ describe('Dashboard Providers Page', () => {
   });
 
   describe('When logged in', () => {
-    before(() => cy.visit('/'));
+    before(() => {
+      cy.visit('/');
+      cy.task('resetState');
+    });
 
     beforeEach(() => {
       cy.login();
@@ -103,6 +106,7 @@ describe('Dashboard Providers Page', () => {
       cy.wait('@getProviders');
       cy.contains('table tbody tr a', name)
         .should('have.attr', 'href', `/providers/provider/${name}`);
+      cy.task('resetState');
     });
 
     it('should edit a provider', () => {
@@ -164,6 +168,7 @@ describe('Dashboard Providers Page', () => {
       cy.url().should('include', 'providers');
       cy.contains('.heading--xlarge', 'Providers');
       cy.contains('table tbody tr', name).should('not.exist');
+      cy.task('resetState');
     });
 
     it('should fail to delete a provider with an associated rule', () => {
