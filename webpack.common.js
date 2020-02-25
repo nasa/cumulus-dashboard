@@ -155,7 +155,9 @@ const CommonConfig = {
         SHOW_TEA_METRICS: config.showTeaMetrics,
         SHOW_DISTRIBUTION_API_METRICS: config.showDistributionAPIMetrics,
         BUCKET: config.graphicsPath,
-        ENABLE_RECOVERY: config.enableRecovery
+        ENABLE_RECOVERY: config.enableRecovery,
+        ES_USER: config.esUser,
+        ES_PASSWORD: config.esPassword
       }
     )
   ]
