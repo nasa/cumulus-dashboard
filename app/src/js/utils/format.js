@@ -177,12 +177,12 @@ export const rerunText = function (name) {
 export const buildRedirectUrl = function ({ origin, pathname, hash }) {
   const hasQuery = hash.indexOf('?');
   if (hasQuery !== -1) {
-    hash = hash.substr(hash.indexOf('#') + 1);
+    hash = hash.substr(hash.indexOf('/') + 1);
     const parsedUrl = url.parse(hash, true);
     // Remove any ?token query parameter to avoid polluting
     // the login link
     delete parsedUrl.query.token;
-    hash = `#${url.format({
+    hash = `${url.format({
       pathname: parsedUrl.pathname,
       query: parsedUrl.query
     })}`;

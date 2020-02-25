@@ -1,6 +1,4 @@
 'use strict';
-import isEmpty from 'lodash.isempty';
-import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -48,27 +46,7 @@ import {
 } from '../utils/kibana';
 // import { initialValuesFromLocation } from '../utils/url-helper';
 import Datepicker from './Datepicker/Datepicker';
-import { urlDateFormat, urlDateProps } from '../utils/datepicker';
 import { strings } from './locale';
-
-/*
- * If this is a shared URL, grab the date and time and update the datepicker
- * state to reflect the values.
- * @param {Object} props - Home component's input props.
- */
-const updateDatepickerStateFromQueryParams = (props) => {
-  const { queryParams } = props;
-  const values = {...queryParams};
-  if (!isEmpty(queryParams)) {
-    for (const value in values) {
-      if (urlDateProps.includes(value)) {
-        values[value] = moment.utc(values[value], urlDateFormat).toDate();
-      }
-    }
-    values.dateRange = {value: 'Custom', label: 'Custom'};
-    props.dispatch({type: 'DATEPICKER_DATECHANGE', data: {...props.datepicker, ...values}});
-  }
-};
 
 class Home extends React.Component {
   constructor (props) {
@@ -82,7 +60,6 @@ class Home extends React.Component {
     this.cancelInterval = interval(() => {
       this.query();
     }, updateInterval, true);
-    updateDatepickerStateFromQueryParams(this.props);
     const { dispatch } = this.props;
     dispatch(getCumulusInstanceMetadata())
       .then(() => {

@@ -13,7 +13,7 @@ export const initialState = {
   items: []
 };
 
-// https://momentjs.com/docs/#/displaying/
+// https://momentjs.com/docs/displaying/
 const format = 'MM/DD/YY hh:mma ss:SSS[s]';
 
 export default function reducer (state = initialState, action) {
