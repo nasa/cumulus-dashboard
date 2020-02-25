@@ -1,5 +1,11 @@
 .default-modal {
   .modal-body {
     text-align: center;
+
+    .error {
+      word-wrap: break-word;
+      margin: 1em auto;
+      font-style: italic;
+    }
   }
 }
