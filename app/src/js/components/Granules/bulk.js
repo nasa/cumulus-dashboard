@@ -129,7 +129,7 @@ class BulkGranule extends React.Component {
                 >Close</button>
                 <a
                   className={'button button__bulkgranules button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right'}
-                  href='/#/operations'
+                  href='/operations'
                   readOnly={true}
                   alt="Go To Operations"
                 >Go To Operations

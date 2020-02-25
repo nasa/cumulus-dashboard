@@ -7,17 +7,17 @@
 // You can read more here:
 // https://on.cypress.io/plugins-guide
 // ***********************************************************
-
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-
+const crypto = require('crypto');
 const webpack = require('@cypress/webpack-preprocessor');
 
 const { testUtils } = require('@cumulus/api');
+const { createJwtToken } = require('@cumulus/api/lib/token');
 
 const { seedEverything } = require('./seedEverything');
 
-const fakeApiToken = require('./token');
+process.env.TOKEN_SECRET = crypto.randomBytes(10).toString('hex');
 
 module.exports = (on) => {
   const options = {
@@ -44,7 +44,7 @@ module.exports = (on) => {
       });
     },
     generateJWT: function (options) {
-      return fakeApiToken.generateJWT(options);
+      return createJwtToken(options);
     },
     log (message) {
       console.log(message);

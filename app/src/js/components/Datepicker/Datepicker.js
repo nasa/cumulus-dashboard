@@ -1,3 +1,4 @@
+import isEmpty from 'lodash.isempty';
 import isNil from 'lodash.isnil';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -23,6 +24,25 @@ const allDateRanges = [
 const allHourFormats = ['12HR', '24HR'];
 const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss.sss';
 
+/*
+ * If this is a shared URL, grab the date and time and update the datepicker
+ * state to reflect the values.
+ * @param {Object} props - Home component's input props.
+ */
+const updateDatepickerStateFromQueryParams = (props) => {
+  const { queryParams } = props;
+  const values = {...queryParams};
+  if (!isEmpty(queryParams)) {
+    for (const value in values) {
+      if (urlDateProps.includes(value)) {
+        values[value] = moment.utc(values[value], urlDateFormat).toDate();
+      }
+    }
+    values.dateRange = {value: 'Custom', label: 'Custom'};
+    props.dispatch({type: 'DATEPICKER_DATECHANGE', data: {...props.datepicker, ...values}});
+  }
+};
+
 /**
  * Component representing the Datepicker.
  * Use by adding <Datepicker />. Update the connected state.datepicker to make changes.
@@ -34,6 +54,10 @@ class Datepicker extends React.PureComponent {
     this.handleHourFormatChange = this.handleHourFormatChange.bind(this);
     this.handleDateTimeRangeChange = this.handleDateTimeRangeChange.bind(this);
     this.clear = this.clear.bind(this);
+  }
+
+  componentDidMount () {
+    updateDatepickerStateFromQueryParams(this.props);
   }
 
   clear () {

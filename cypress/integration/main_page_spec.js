@@ -46,14 +46,13 @@ describe('Dashboard Home Page', () => {
   });
 
   describe('When logged in', () => {
-    before(() => cy.visit('/'));
+    before(() => {
+      cy.visit('/');
+      cy.task('resetState');
+    });
 
     beforeEach(() => {
-      // Logging to debug intermittent timeouts
-      cy.task('log', 'Login');
-      cy.task('resetState');
       cy.login();
-      cy.task('log', 'Login complete');
       cy.visit('/');
     });
 
