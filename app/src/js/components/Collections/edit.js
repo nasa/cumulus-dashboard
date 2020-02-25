@@ -14,9 +14,6 @@ import EditRaw from '../EditRaw/edit-raw';
 const SCHEMA_KEY = 'collection';
 
 const ModalBody = ({ isSuccess, isError, isInflight, error, name, version }) => {
-  console.log('success', isSuccess);
-  console.log('error', isError);
-  console.log('inflight', isInflight);
   return (
     <div>
       {isInflight

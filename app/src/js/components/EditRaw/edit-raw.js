@@ -184,7 +184,7 @@ const EditRaw = ({
         hasCancelButton={isError}
         cancelButtonText={isError ? 'Cancel Request' : null}
         confirmButtonText={isError ? 'Go To Collection' : 'Close'}
-        confirmButtonClass={isError ? 'button__goto' : 'button--green'}
+        confirmButtonClass={isError ? 'button__goto' : 'button--green button--close'}
       >
         <ModalBody isError={isError} isSuccess={isSuccess} isInflight={isInflight} error={error} />
       </DefaultModal>}
