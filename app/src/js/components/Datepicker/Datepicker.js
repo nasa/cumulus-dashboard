@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import DateTimePicker from 'react-datetime-picker';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import { DATEPICKER_DATECHANGE, DATEPICKER_DROPDOWN_FILTER, DATEPICKER_HOUR_FORMAT } from '../../actions/types';
 import { urlDateFormat, urlDateProps } from '../../utils/datepicker';
