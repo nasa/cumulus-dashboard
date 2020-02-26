@@ -15,6 +15,7 @@ describe('Dashboard Collections Page', () => {
   });
 
   describe('When logged in', () => {
+    let cmrFixtureIdx;
     before(() => {
       cy.visit('/');
       cy.task('resetState');
@@ -30,7 +31,8 @@ describe('Dashboard Collections Page', () => {
       cy.route('GET', '/granules?limit=*').as('getGranules');
 
       // Stub CMR response to avoid hitting UAT
-      cy.fixture('cmr').then((fixture) => fixture.forEach(cy.route));
+      cmrFixtureIdx = 0;
+      cy.fixture('cmr').then((fixture) => fixture.forEach((f) => cy.route(f).as(`cmr${cmrFixtureIdx++}`)));
     });
 
     it('should display a link to view collections', () => {
@@ -48,7 +50,8 @@ describe('Dashboard Collections Page', () => {
     it('should display expected MMT Links for collections list', () => {
       cy.visit('/collections');
       cy.wait('@getCollections');
-
+      let i = 0;
+      while (i < cmrFixtureIdx) cy.wait(`@cmr${i++}`);
       cy.get('table tbody tr').its('length').should('be.eq', 5);
 
       cy.contains('table tbody tr', 'MOD09GQ')
