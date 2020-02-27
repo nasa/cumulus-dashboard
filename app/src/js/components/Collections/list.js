@@ -28,6 +28,18 @@ import {
 import Search from '../Search/search';
 import List from '../Table/Table';
 import { strings } from '../locale';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/'
+  },
+  {
+    label: 'Collections',
+    active: true
+  }
+];
 
 class CollectionList extends React.Component {
   constructor () {
@@ -74,6 +86,7 @@ class CollectionList extends React.Component {
       <div className='page__component'>
         <section className='page__section'>
           <div className='page__section__header page__section__header-wrapper'>
+            <Breadcrumbs config={breadcrumbConfig} />
             <h1 className='heading--large heading--shared-content with-description'>{strings.collection_overview}</h1>
             {lastUpdated(queriedAt)}
           </div>

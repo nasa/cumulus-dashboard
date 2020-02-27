@@ -31,6 +31,22 @@ import Overview from '../Overview/overview';
 import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
 import { strings } from '../locale';
 import DeleteCollection from '../DeleteCollection/DeleteCollection';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/'
+  },
+  {
+    label: 'Collections',
+    href: '/collections'
+  },
+  {
+    label: 'Collection Overview',
+    active: true
+  }
+];
 
 class CollectionOverview extends React.Component {
   constructor (props) {
@@ -168,7 +184,7 @@ class CollectionOverview extends React.Component {
     return (
       <div className='page__component'>
         <section className='page__section page__section__controls'>
-          <div className='breadcrumbs' />
+          <Breadcrumbs config={breadcrumbConfig} />
           <div className='dropdown__collection form-group__element--right'>
             <SimpleDropdown
               label={'Collection'}

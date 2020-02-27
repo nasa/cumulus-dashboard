@@ -52,11 +52,28 @@ table {
   }
 }
 
+.list-action-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.list-actions {
+  display: flex;
+  justify-content: space-around;
+  flex-grow: 1;
+
+  .form--controls {
+    flex-grow: 1;
+  }
+}
+
 .list-view {
   position: relative;
   margin-top: 10px;
   /*border-bottom: 1px solid #E2DFDF;*/
   padding-bottom: 10px;
+  width: 100%;
 }
 
 .list__wrapper{
