@@ -35,7 +35,7 @@ class WorkflowOverview extends React.Component {
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>All Workflows <span className='num--title'>{count ? ` ${tally(count)}` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>All Workflows <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
           </div>
           {/* Someone needs to define the search parameters for workflows, e.g. steps, collections, granules, etc. }*/}
           {/* <div className='filters'>

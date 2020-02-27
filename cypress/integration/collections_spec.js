@@ -15,6 +15,7 @@ describe('Dashboard Collections Page', () => {
   });
 
   describe('When logged in', () => {
+    let cmrFixtureIdx;
     before(() => {
       cy.visit('/');
       cy.task('resetState');
@@ -30,7 +31,8 @@ describe('Dashboard Collections Page', () => {
       cy.route('GET', '/granules?limit=*').as('getGranules');
 
       // Stub CMR response to avoid hitting UAT
-      cy.fixture('cmr').then((fixture) => fixture.forEach(cy.route));
+      cmrFixtureIdx = 0;
+      cy.fixture('cmr').then((fixture) => fixture.forEach((f) => cy.route(f).as(`cmr${cmrFixtureIdx++}`)));
     });
 
     it('should display a link to view collections', () => {
@@ -48,7 +50,8 @@ describe('Dashboard Collections Page', () => {
     it('should display expected MMT Links for collections list', () => {
       cy.visit('/collections');
       cy.wait('@getCollections');
-
+      let i = 0;
+      while (i < cmrFixtureIdx) cy.wait(`@cmr${i++}`);
       cy.get('table tbody tr').its('length').should('be.eq', 5);
 
       cy.contains('table tbody tr', 'MOD09GQ')
@@ -190,8 +193,12 @@ describe('Dashboard Collections Page', () => {
       // update collection and submit
       const duplicateHandling = 'version';
       const meta = {metaObj: 'metadata'};
+      cy.contains('.ace_variable', 'name');
       cy.editJsonTextarea({ data: { duplicateHandling, meta }, update: true });
       cy.contains('form button', 'Submit').click();
+      cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
+      cy.contains('.default-modal .modal-body', `Collection ${name} / ${version} has been updated`);
+      cy.contains('.modal-footer button', 'Close').click();
 
       // displays the updated collection and its granules
       cy.wait('@getCollection');
@@ -201,11 +208,31 @@ describe('Dashboard Collections Page', () => {
       // verify the collection is updated by looking at the Edit page
       cy.contains('a', 'Edit').click();
 
+      cy.contains('.ace_variable', 'name');
       cy.getJsonTextareaValue().then((collectionJson) => {
         expect(collectionJson.duplicateHandling).to.equal(duplicateHandling);
         expect(collectionJson.meta).to.deep.equal(meta);
       });
       cy.contains('.heading--large', `${name}___${version}`);
+
+      // Test error flow
+      const sampleFileName = 'test';
+      cy.contains('.ace_variable', 'name');
+      cy.editJsonTextarea({ data: { sampleFileName }, update: true });
+
+      // Go To Collection should allow for continued editing
+      cy.contains('form button', 'Submit').click();
+      cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
+      cy.contains('.default-modal .modal-body', `Collection ${name} / ${version} has encountered an error.`);
+      cy.contains('.modal-footer button', 'Go To Collection').click();
+      cy.url().should('include', `collections/edit/${name}/${version}`);
+
+      // Cancel Request should return to collection page
+      cy.contains('form button', 'Submit').click();
+      cy.contains('.modal-footer button', 'Cancel Request').click();
+      cy.wait('@getCollection');
+      cy.contains('.heading--xlarge', 'Collections');
+      cy.contains('.heading--large', `${name} / ${version}`);
     });
 
     it('should delete a collection', () => {
@@ -329,7 +356,7 @@ describe('Dashboard Collections Page', () => {
         .should('be.visible').wait(200).click();
 
       // modal should take user to granules page upon clicking 'Go To Granules'
-      cy.contains('.button__gotogranules', 'Go To Granules')
+      cy.contains('.button__goto', 'Go To Granules')
         .should('be.visible').wait(200).click();
       cy.contains('.modal-content').should('not.be.visible');
       cy.url().should('include', 'granules');

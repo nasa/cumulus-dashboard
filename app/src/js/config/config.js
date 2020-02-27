@@ -15,7 +15,9 @@ const config = {
   showTeaMetrics: process.env.SHOW_TEA_METRICS || true,
   showDistributionAPIMetrics: process.env.SHOW_DISTRIBUTION_API_METRICS || false,
   graphicsPath: (process.env.BUCKET || ''),
-  enableRecovery: process.env.ENABLE_RECOVERY || false
+  enableRecovery: process.env.ENABLE_RECOVERY || false,
+  esUser: process.env.ES_USER || '',
+  esPassword: process.env.ES_PASSWORD || ''
 };
 
 module.exports = config;

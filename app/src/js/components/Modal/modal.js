@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 
 const DefaultModal = ({
-  className,
+  className = '',
   children,
   title,
   cancelButtonText = 'Cancel',
   confirmButtonText = 'Confirm',
   showModal,
   onCloseModal,
-  onConfirm
+  onConfirm,
+  onCancel,
+  hasCancelButton = true,
+  hasConfirmButton = true,
+  confirmButtonClass = 'button--submit'
 }) => {
   function handleCloseModal (e) {
     if (typeof onCloseModal === 'function') {
@@ -21,6 +25,14 @@ const DefaultModal = ({
   function handleConfirm (e) {
     if (typeof onConfirm === 'function') {
       onConfirm(e);
+    }
+  }
+
+  function handleCancel (e) {
+    if (typeof onConfirm === 'function') {
+      onCancel(e);
+    } else {
+      handleCloseModal(e);
     }
   }
 
@@ -41,16 +53,16 @@ const DefaultModal = ({
         { children }
       </Modal.Body>
       <Modal.Footer>
-        <button
+        {hasCancelButton && <button
           className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
-          onClick={handleCloseModal}>
+          onClick={handleCancel}>
           { cancelButtonText }
-        </button>
-        <button
-          className='button button--submit button__animation--md button__arrow button__arrow--md button__animation form-group__element--left'
+        </button>}
+        {hasConfirmButton && <button
+          className={`button ${confirmButtonClass} button__animation--md button__arrow button__arrow--md button__animation form-group__element--left`}
           onClick={handleConfirm}>
           { confirmButtonText }
-        </button>
+        </button>}
       </Modal.Footer>
     </Modal>
   );
@@ -64,7 +76,11 @@ DefaultModal.propTypes = {
   confirmButtonText: PropTypes.string,
   showModal: PropTypes.bool,
   onCloseModal: PropTypes.func,
-  onConfirm: PropTypes.func
+  onConfirm: PropTypes.func,
+  onCancel: PropTypes.fuunc,
+  hasCancelButton: PropTypes.bool,
+  hasConfirmButton: PropTypes.bool,
+  confirmButtonClass: PropTypes.string
 };
 
 export default DefaultModal;

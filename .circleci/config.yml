@@ -59,7 +59,7 @@ jobs:
             npm run validation-tests
 
       - store_artifacts:
-          path: /home/cypress/screenshots
+          path: ~/cumulus-dashboard/cypress/screenshots
 
   deploy:
     machine: true

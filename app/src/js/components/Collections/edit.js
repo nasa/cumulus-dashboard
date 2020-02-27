@@ -13,29 +13,67 @@ import EditRaw from '../EditRaw/edit-raw';
 
 const SCHEMA_KEY = 'collection';
 
-class EditCollection extends React.Component {
-  render () {
-    const { match: { params: { name, version } }, collections } = this.props;
-    const collectionId = getCollectionId({ name, version });
+const ModalBody = ({ isSuccess, isError, isInflight, error, name, version }) => {
+  return (
+    <div>
+      {isInflight
+        ? 'Processing...'
+        : <>
+        {`Collection ${name} / ${version} `}
+        {(isSuccess && !isError) && 'has been updated'}
+        {isError &&
+         <>
+          {'has encountered an error.'}
+          <div className="error">{error}</div>
+         </>
+        }
+        </>
+      }
+    </div>
+  );
+};
+
+ModalBody.propTypes = {
+  isError: PropTypes.bool,
+  isSuccess: PropTypes.bool,
+  isInflight: PropTypes.bool,
+  error: PropTypes.string,
+  name: PropTypes.string,
+  version: PropTypes.string
+};
+
+const EditCollection = ({ match, collections }) => {
+  const { params: { name, version } } = match;
+  const collectionId = getCollectionId({ name, version });
+
+  const wrapModalBody = ModalBody => ({ ...props }) => {
     return (
-      <EditRaw
-        pk={collectionId}
-        schemaKey={SCHEMA_KEY}
-        primaryProperty={'name'}
-        state={collections}
-        getRecord={() => getCollection(name, version)}
-        updateRecord={updateCollection}
-        backRoute={`/collections/collection/${name}/${version}`}
-        clearRecordUpdate={clearUpdateCollection}
-      />
+      <ModalBody name={name} version={version} {...props} />
     );
-  }
-}
+  };
+
+  const ModalBodyWrapper = wrapModalBody(ModalBody);
+
+  return (
+    <EditRaw
+      pk={collectionId}
+      schemaKey={SCHEMA_KEY}
+      primaryProperty={'name'}
+      state={collections}
+      getRecord={() => getCollection(name, version)}
+      updateRecord={updateCollection}
+      backRoute={`/collections/collection/${name}/${version}`}
+      clearRecordUpdate={clearUpdateCollection}
+      hasModal={true}
+      type='collection'
+      ModalBody={ModalBodyWrapper}
+    />
+  );
+};
 
 EditCollection.propTypes = {
   match: PropTypes.object,
-  collections: PropTypes.object,
-  router: PropTypes.object
+  collections: PropTypes.object
 };
 
 export default withRouter(connect(state => ({

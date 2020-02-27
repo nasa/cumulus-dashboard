@@ -1,5 +1,7 @@
 'use strict';
 
+import { esUser, esPassword } from '../config';
+
 // Build basic auth string
 export const partsEncode = (user, password) => new Buffer(`${user}:${password}`).toString('base64');
 
@@ -13,5 +15,5 @@ export const buildAuthHeader = (user, password) => {
 };
 
 export const authHeader = () => {
-  return buildAuthHeader(process.env.ES_USER, process.env.ES_PASSWORD);
+  return buildAuthHeader(esUser, esPassword);
 };
