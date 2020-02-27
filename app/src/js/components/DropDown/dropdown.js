@@ -83,7 +83,7 @@ class Dropdown extends React.Component {
     this.setState({ value });
     if (!value.length) {
       dispatch(clear(paramKey));
-      setQueryParams({ [paramKey]: '' });
+      setQueryParams({ [paramKey]: undefined });
     }
   }
 
