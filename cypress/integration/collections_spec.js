@@ -54,7 +54,7 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('table tbody tr').its('length').should('be.eq', 5);
 
-      while (i < cmrFixtureIdx) cy.wait(`@cmr${i++}`);
+      while (i < cmrFixtureIdx) cy.wait(`@cmr${i++}`, {timeout: 16000});
       cy.contains('table tbody tr', 'MOD09GQ')
         .contains('td a', 'MMT')
         .should('have.attr', 'href')
