@@ -23,7 +23,7 @@ class Progress extends React.Component {
   }
 
   tallyDisplay (type, item) {
-    if (type[1] === 'Failed') {
+    if (type[1] === 'Failed' && item > 0) {
       if (item > 99) {
         return (
           <span className='num--medium num--medium--red'>{item}</span>
