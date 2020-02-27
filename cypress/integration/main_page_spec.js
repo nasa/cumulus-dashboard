@@ -129,28 +129,20 @@ describe('Dashboard Home Page', () => {
       cy.url().should('include', 'startDateTime=201503171500');
       cy.url().should('include', 'endDateTime=201503171600');
 
-      cy.get('main[class=main] section').eq(1).within(() => {
-        cy.get('h3').should('have.text', 'Date and Time Range');
-        cy.get('[data-cy=datetime-dropdown]').as('dateRange');
+      cy.get('[data-cy=endDateTime]').within(() => {
+        cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2015');
+        cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '3');
+        cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '17');
+        cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '4');
+        cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '0');
+      });
 
-        // TODO [MHS, 2020-02-27] It would be nice to be able to set the label back correctly.
-        // cy.get('@dateRange').should('have.value', 'Last hour');
-
-        cy.get('[data-cy=endDateTime]').within(() => {
-          cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2015');
-          cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '3');
-          cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '17');
-          cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '4');
-          cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '0');
-        });
-
-        cy.get('[data-cy=startDateTime]').within(() => {
-          cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2015');
-          cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '3');
-          cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '17');
-          cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '3');
-          cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '0');
-        });
+      cy.get('[data-cy=startDateTime]').within(() => {
+        cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2015');
+        cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '3');
+        cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '17');
+        cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '3');
+        cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '0');
       });
     });
 
