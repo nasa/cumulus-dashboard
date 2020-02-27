@@ -183,6 +183,8 @@ class List extends React.Component {
         bulkActions={bulkActions}
         queryConfig={queryConfig}
         completedBulkActions={completedBulkActions}
+        onBulkActionSuccess={this.onBulkActionSuccess}
+        onBulkActionError={this.onBulkActionError}
         selected={selected}>
         {children}
       </ListActions>
