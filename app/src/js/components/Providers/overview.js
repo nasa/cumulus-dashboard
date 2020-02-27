@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { get } from 'object-path';
 import { listProviders, getCount, interval } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
@@ -9,7 +10,9 @@ import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/
 import List from '../Table/Table';
 import PropTypes from 'prop-types';
 import Overview from '../Overview/overview';
-import { updateInterval } from '../../config';
+import _config from '../../config';
+
+const { updateInterval } = _config;
 
 class ProvidersOverview extends React.Component {
   constructor () {
@@ -69,7 +72,7 @@ class ProvidersOverview extends React.Component {
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Ingesting Providers <span className='num--title'>{count ? `${count}` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content'>Ingesting Providers <span className='num--title'>{count ? `${count}` : 0}</span></h2>
           </div>
 
           <List
@@ -96,4 +99,4 @@ ProvidersOverview.propTypes = {
   stats: PropTypes.object
 };
 
-export default connect(state => state)(ProvidersOverview);
+export default withRouter(connect(state => state)(ProvidersOverview));

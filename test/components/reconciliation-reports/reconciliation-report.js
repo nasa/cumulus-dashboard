@@ -43,11 +43,11 @@ const reconciliationReports = {
 };
 
 test('show individual report', function (t) {
-  const params = { reconciliationReportName: 'exampleReport' };
+  const match = { params: { reconciliationReportName: 'exampleReport' } };
 
   const report = shallow(
     <ReconciliationReport
-      params={params}
+      match={match}
       reconciliationReports={reconciliationReports}
     />
   );
@@ -62,11 +62,11 @@ test('show individual report', function (t) {
 });
 
 test('report with error triggers error message', function (t) {
-  const params = { reconciliationReportName: 'exampleReportWithError' };
+  const match = { params: { reconciliationReportName: 'exampleReportWithError' } };
 
   const report = shallow(
     <ReconciliationReport
-      params={params}
+      match={match}
       reconciliationReports={reconciliationReports}
     />
   );

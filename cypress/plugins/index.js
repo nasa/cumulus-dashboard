@@ -7,32 +7,30 @@
 // You can read more here:
 // https://on.cypress.io/plugins-guide
 // ***********************************************************
-
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-
-const browserify = require('@cypress/browserify-preprocessor');
+const crypto = require('crypto');
+const webpack = require('@cypress/webpack-preprocessor');
 
 const { testUtils } = require('@cumulus/api');
+const { createJwtToken } = require('@cumulus/api/lib/token');
 
 const { seedEverything } = require('./seedEverything');
 
-const fakeApiToken = require('./token');
+process.env.TOKEN_SECRET = crypto.randomBytes(10).toString('hex');
 
 module.exports = (on) => {
-  const options = browserify.defaultOptions;
-  const babelOptions = options.browserifyOptions.transform[1][1];
+  const options = {
+    // send in the options from your webpack.config.js, so it works the same
+    // as your app's code
+    webpackOptions: require('../../webpack.common'),
+    watchOptions: {},
+  };
   const user = 'testUser';
-  let esClient;
-  let esIndex;
-  babelOptions.global = true;
-  // ignore all node_modules except files in @cumulus/
-  // see https://github.com/cypress-io/cypress-browserify-preprocessor/issues/19
-  babelOptions.ignore = [/\/node_modules\/(?!@cumulus\/)/];
 
   // Run specialized file preprocessor to transpile ES6+ -> ES5
   // This fixes compatibility issues with Electron
-  on('file:preprocessor', browserify(options));
+  on('file:preprocessor', webpack(options));
 
   on('task', {
     resetState: function () {
@@ -46,7 +44,7 @@ module.exports = (on) => {
       });
     },
     generateJWT: function (options) {
-      return fakeApiToken.generateJWT(options);
+      return createJwtToken(options);
     },
     log (message) {
       console.log(message);

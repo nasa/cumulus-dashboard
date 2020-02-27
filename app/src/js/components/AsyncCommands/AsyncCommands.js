@@ -6,8 +6,10 @@ import c from 'classnames';
 import PropTypes from 'prop-types';
 import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
 import { preventDefault } from '../../utils/noop';
-import { updateDelay } from '../../config';
+import _config from '../../config';
 import Modal from 'react-bootstrap/Modal';
+
+const { updateDelay } = _config;
 
 class AsyncCommand extends React.Component {
   constructor () {
@@ -107,28 +109,28 @@ class AsyncCommand extends React.Component {
               aria-labelledby="modal__async-modal"
             >
               <Modal.Header className="async-modal__header" closeButton></Modal.Header>
-                <Modal.Title id="modal__async-modal" className="modal__async-title"></Modal.Title>
-                  <Modal.Body>
-                    <div className='modal__internal modal__formcenter'>
-                      { confirmOptions ? (confirmOptions).map(option =>
-                        <div key={`option-${confirmOptions.indexOf(option)}`}>
-                          {option}
-                          <br />
-                        </div>
-                      ) : null }
-                      <h4>{confirmText}</h4>
+              <Modal.Title id="modal__async-modal" className="modal__async-title"></Modal.Title>
+              <Modal.Body>
+                <div className='modal__internal modal__formcenter'>
+                  { confirmOptions ? (confirmOptions).map(option =>
+                    <div key={`option-${confirmOptions.indexOf(option)}`}>
+                      {option}
+                      <br />
                     </div>
-                </Modal.Body>
-                <Modal.Footer>
-                  <button
-                      className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
-                      onClick={this.cancel}>Cancel
-                  </button>
-                  <button
-                      className='button button--confirm button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
-                      onClick={this.confirm}>Confirm
-                  </button>
-                </Modal.Footer>
+                  ) : null }
+                  <h4>{confirmText}</h4>
+                </div>
+              </Modal.Body>
+              <Modal.Footer>
+                <button
+                  className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
+                  onClick={this.cancel}>Cancel
+                </button>
+                <button
+                  className='button button--confirm button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
+                  onClick={this.confirm}>Confirm
+                </button>
+              </Modal.Footer>
             </Modal>
           ) : null }
         </div>

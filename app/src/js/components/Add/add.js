@@ -8,8 +8,10 @@ import { get } from 'object-path';
 import { getSchema } from '../../actions';
 import Schema from '../FormSchema/schema';
 import Loading from '../LoadingIndicator/loading-indicator';
-import { updateDelay } from '../../config';
+import _config from '../../config';
 import { strings } from '../locale';
+
+const { updateDelay } = _config;
 
 class AddCollection extends React.Component {
   constructor () {
@@ -27,17 +29,17 @@ class AddCollection extends React.Component {
 
   componentDidUpdate (prevProps) {
     const { pk } = this.state;
-    const { router, baseRoute } = prevProps;
+    const { history, baseRoute } = prevProps;
     const status = get(this.props.state, ['created', pk, 'status']);
     if (status === 'success') {
       return setTimeout(() => {
-        router.push(path.join(baseRoute, pk));
+        history.push(path.join(baseRoute, pk));
       }, updateDelay);
     }
   }
 
   navigateBack () {
-    this.props.router.push(this.props.baseRoute.split('/')[1]);
+    this.props.history.push(this.props.baseRoute.split('/')[1]);
   }
 
   post (id, payload) {
@@ -95,7 +97,7 @@ AddCollection.propTypes = {
   dispatch: PropTypes.func,
   state: PropTypes.object,
 
-  router: PropTypes.object,
+  history: PropTypes.object,
   baseRoute: PropTypes.string,
   attachMeta: PropTypes.bool,
 

@@ -9,7 +9,7 @@ services:
     image: localstack/localstack:0.10.7
     network_mode: "service:shim"
     environment:
-      SERVICES: "kinesis,lambda,s3,sns,sqs,dynamodb,cloudwatch,cloudwatchlogs,stepfunctions"
+      SERVICES: "cloudwatch,cloudwatchlogs,dynamodb,kinesis,kms,lambda,s3,secretsmanager,sns,sqs,stepfunctions"
       DATA_DIR: "/tmp/localstack/data"
   shim:   # empty container to open ports
     image: node:10.16.3

@@ -54,7 +54,7 @@ class GranulesRedirectModal extends React.Component {
             Cancel Request
           </button>
           <button
-            className='button button__gotogranules button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
+            className='button button__goto button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
             label="confirm"
             onClick={this.handleConfirm}
           >

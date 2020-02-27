@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
   searchGranules,
   clearGranulesSearch,
@@ -31,8 +32,10 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import statusOptions from '../../utils/status';
 import { strings } from '../locale';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 import { workflowOptionNames } from '../../selectors';
+
+const { updateInterval } = _config;
 
 class AllGranules extends React.Component {
   constructor () {
@@ -63,9 +66,8 @@ class AllGranules extends React.Component {
   generateQuery () {
     const options = {};
     const view = this.getView();
-    if (view === 'completed') options.status = 'completed';
-    else if (view === 'processing') options.status = 'running';
-    else if (view === 'failed') options.status = 'failed';
+    if (view && view !== 'all') options.status = view;
+    options.status = view;
     return options;
   }
 
@@ -102,7 +104,7 @@ class AllGranules extends React.Component {
   getView () {
     const { pathname } = this.props.location;
     if (pathname === '/granules/completed') return 'completed';
-    else if (pathname === '/granules/processing') return 'processing';
+    else if (pathname === '/granules/processing') return 'running';
     else if (pathname === '/granules/failed') return 'failed';
     else return 'all';
   }
@@ -120,7 +122,7 @@ class AllGranules extends React.Component {
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>
-              {displayCase(view)} {strings.granules} <span className='num--title'>{ !isNaN(count) ? `${tally(count)}` : null }</span>
+              {displayCase(view)} {strings.granules} <span className='num--title'>{ !isNaN(count) ? `${tally(count)}` : 0 }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>
@@ -179,8 +181,10 @@ AllGranules.propTypes = {
   workflowOptions: PropTypes.array
 };
 
-export default connect(state => ({
+export {listGranules};
+
+export default withRouter(connect(state => ({
   logs: state.logs,
   granules: state.granules,
   workflowOptions: workflowOptionNames(state)
-}))(AllGranules);
+}))(AllGranules));

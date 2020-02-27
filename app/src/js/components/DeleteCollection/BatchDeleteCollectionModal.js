@@ -11,13 +11,13 @@ class BatchDeleteCollectionModal extends React.Component {
         centered
         size="md"
         aria-labelledby="modal__batch-delete-collection-modal"
-        >
+      >
         <Modal.Header className="batch-delete-collection-modal__header" closeButton></Modal.Header>
         <Modal.Title id="modal__batch-delete-collection-modal" className="batch-delete-collection-modal__title">Delete Batch Collections</Modal.Title>
         <Modal.Body>
           <p>
            You have submitted a request to delete the following collections
-           { /* Need to map <li> based on what collections where selected by user in the table */ }
+            { /* Need to map <li> based on what collections where selected by user in the table */ }
             <ul>
               <li>
                 {/* {(`${collectionName} ${collectionVersion}`)} */}

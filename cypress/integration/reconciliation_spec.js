@@ -3,23 +3,25 @@ import { shouldBeRedirectedToLogin } from '../support/assertions';
 describe('Dashboard Reconciliation Reports Page', () => {
   describe('When not logged in', () => {
     it('should redirect to login page', () => {
-      cy.visit('/#/reconciliation-reports');
+      cy.visit('/reconciliation-reports');
       shouldBeRedirectedToLogin();
     });
   });
 
   describe('When logged in', () => {
-    before(() => cy.visit('/'));
+    before(() => {
+      cy.visit('/');
+      cy.task('resetState');
+    });
 
     beforeEach(() => {
-      cy.task('resetState');
       cy.login();
       cy.visit('/');
     });
 
     it('displays a link to view reconciliation reports', () => {
       cy.contains('nav li a', 'Reconciliation Reports').as('reconciliationReports');
-      cy.get('@reconciliationReports').should('have.attr', 'href', '#/reconciliation-reports');
+      cy.get('@reconciliationReports').should('have.attr', 'href', '/reconciliation-reports');
       cy.get('@reconciliationReports').click({ force: true });
 
       cy.url().should('include', 'reconciliation-reports');
@@ -27,20 +29,20 @@ describe('Dashboard Reconciliation Reports Page', () => {
     });
 
     it('displays a list of reconciliation reports', () => {
-      cy.visit('#/reconciliation-reports');
+      cy.visit('/reconciliation-reports');
 
       cy.get('table tbody tr').its('length').should('be.eq', 2);
       cy.contains('table tbody tr a', 'report-2020-01-14T20:25:29.026Z.json')
-        .should('have.attr', 'href', '#reconciliation-reports/report/report-2020-01-14T20:25:29.026Z.json');
+        .should('have.attr', 'href', '/reconciliation-reports/report/report-2020-01-14T20:25:29.026Z.json');
       cy.contains('table tbody tr a', 'report-2020-01-14T20:52:38.781Z.json')
-        .should('have.attr', 'href', '#reconciliation-reports/report/report-2020-01-14T20:52:38.781Z.json');
+        .should('have.attr', 'href', '/reconciliation-reports/report/report-2020-01-14T20:52:38.781Z.json');
     });
 
     it('displays a link to an individual report', () => {
-      cy.visit('/#/reconciliation-reports');
+      cy.visit('/reconciliation-reports');
 
       cy.contains('table tbody tr a', 'report-2020-01-14T20:52:38.781Z.json')
-        .should('have.attr', 'href', '#reconciliation-reports/report/report-2020-01-14T20:52:38.781Z.json')
+        .should('have.attr', 'href', '/reconciliation-reports/report/report-2020-01-14T20:52:38.781Z.json')
         .click();
 
       cy.contains('.heading--large', 'report-2020-01-14T20:52:38.781Z.json');
@@ -93,7 +95,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
           cy.contains('mhs3-private');
           cy.contains('a', 'Link')
             .should('have.attr', 'href',
-                    's3://mhs3-private/MOD09GQ___006/MOD/mhs3-IngestGranuleDuplicateHandling-1573838955288/MOD09GQ.A3119781.haeynr.006.4074740546315.hdf.met');
+              's3://mhs3-private/MOD09GQ___006/MOD/mhs3-IngestGranuleDuplicateHandling-1573838955288/MOD09GQ.A3119781.haeynr.006.4074740546315.hdf.met');
         });
 
       /** Collections **/
@@ -122,7 +124,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
           cy.contains('hs3wwlln___1');
         });
 
-     /** Granules **/
+      /** Granules **/
 
       cy.contains('h3', 'Granules only in Cumulus (7)')
         .next()

@@ -40,7 +40,7 @@ For more on Router, including how to pass variables in the url, see the [docs on
 Instead of using `<a href="path/to/component">` tags, we use `<Link to="path/to/component" />`. This gives us a few convenience features.  Just remember to import the Link module:
 
 ```javascript
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 ```
 
 ## Writing an API query
@@ -133,3 +133,24 @@ const Granule = React.createClass({
 ## Writing CSS
 
 We follow a [Bem](http://getbem.com/naming/) naming format.
+
+## Cross-repository Development
+
+What to do when you need to make changes to Cumulus core in order to implement a dashboard need.  For example, if you needed to update the Fake Authentication code on the @cumulus/api in order to test something on the dashboard. These instructions can be extrapolated for other core packages.
+
+The basic steps to follow are:
+
+1. Link your local @cumulus/api code so that it's visible to the dashboard.
+
+    This is a two step process, where you use [`npm link`](https://docs.npmjs.com/cli-commands/link.html) to prepare the @cumulus/api by running `npm link` in the `cumulus/packages/api` directory and then use it in the dashboard project by running `npm link @cumulus/api` in the dashboard root directory.
+
+    When you have done this, you need to make sure that you only use the LocalStack/Elasticsearch portion of the docker-compose containers, e.g. run `npm run start-localstack` and `npm run serve-api` in order to run the linked version of the @cumulus/api.  Do all of your development locally including running unit and integration tests.  When you are satisfied with the changes to the Cumulus core code (and when that is merged) you can do an alpha release of the code by building an alpha release of the package `npm version prerelease --preid=alpha` and then publishing to npm with a tag of `alpha`. `npm publish --tag next`.  This will upload the contents of your `cumulus/packages/api` to npm with a version that looks like `1.18.1-alpha.0` and a tag of `next`.
+
+2. Update the dashboard to use the alpha package for CI.
+
+    Update package.json to use the alpha version of the @cumulus/api by installing it `npm install @cumulus/api@1.18.1-alpha.0 --save-dev`  This will install the package from npm as well as allow circleCI to run all of the tests.
+
+
+3. Clean up when core package is released.
+
+    When Cumulus core releases a new version, install it to the dashboard, make sure that tests still pass and then deprecate the alpha version that was published.  `npm deprecate @cumulus/api@1.18.1-alpha.0`, this will remove it from the current version history on npm.  and `npm dist-tag rm @cumulus/api@1.18.1-alpha.0 next` to remove the tag and prevent the alpha package from showing up under current tags.

@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import {
   interval,
   getProvider,
@@ -22,7 +22,9 @@ import LogViewer from '../Logs/viewer';
 import AsyncCommands from '../DropDown/dropdown-async-command';
 import ErrorReport from '../Errors/report';
 import Metadata from '../Table/Metadata';
-import { updateInterval } from '../../config';
+import _config from '../../config';
+
+const { updateInterval } = _config;
 
 const metaAccessors = [
   ['Created', 'createdAt', fromNow],
@@ -35,7 +37,7 @@ const metaAccessors = [
 class ProviderOverview extends React.Component {
   constructor () {
     super();
-    this.displayName = 'Provider';
+    this.displayName = 'ProviderElem';
     this.reload = this.reload.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
     this.delete = this.delete.bind(this);
@@ -43,7 +45,7 @@ class ProviderOverview extends React.Component {
   }
 
   componentDidMount () {
-    const { providerId } = this.props.params;
+    const { providerId } = this.props.match.params;
     const immediate = !this.props.providers.map[providerId];
     this.reload(immediate);
     this.props.dispatch(listCollections({
@@ -59,19 +61,19 @@ class ProviderOverview extends React.Component {
 
   reload (immediate, timeout) {
     timeout = timeout || updateInterval;
-    const providerId = this.props.params.providerId;
+    const providerId = this.props.match.params.providerId;
     const { dispatch } = this.props;
     if (this.cancelInterval) { this.cancelInterval(); }
     this.cancelInterval = interval(() => dispatch(getProvider(providerId)), timeout, immediate);
   }
 
   navigateBack () {
-    const { router } = this.props;
-    router.push('/providers');
+    const { history } = this.props;
+    history.push('/providers');
   }
 
   delete () {
-    const { providerId } = this.props.params;
+    const { providerId } = this.props.match.params;
     const provider = this.props.providers.map[providerId].data;
     if (!provider.published) {
       this.props.dispatch(deleteProvider(providerId));
@@ -79,7 +81,7 @@ class ProviderOverview extends React.Component {
   }
 
   errors () {
-    const providerId = this.props.params.providerId;
+    const providerId = this.props.match.params.providerId;
     return [
       get(this.props.providers.map, [providerId, 'error']),
       get(this.props.providers.deleted, [providerId, 'error'])
@@ -87,7 +89,7 @@ class ProviderOverview extends React.Component {
   }
 
   render () {
-    const providerId = this.props.params.providerId;
+    const providerId = this.props.match.params.providerId;
     const record = this.props.providers.map[providerId];
 
     if (!record || (record.inflight && !record.data)) {
@@ -144,14 +146,14 @@ class ProviderOverview extends React.Component {
 }
 
 ProviderOverview.propTypes = {
-  params: PropTypes.object,
+  match: PropTypes.object,
   dispatch: PropTypes.func,
   providers: PropTypes.object,
   logs: PropTypes.object,
-  router: PropTypes.object
+  history: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   providers: state.providers,
   logs: state.logs
-}))(ProviderOverview);
+}))(ProviderOverview));

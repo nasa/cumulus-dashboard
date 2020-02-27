@@ -3,6 +3,7 @@ import React from 'react';
 // import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
   clearOperationsFilter,
   filterOperations,
@@ -28,8 +29,10 @@ import {
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 // import {strings} from '../locale';
+
+const { updateInterval } = _config;
 
 const tableHeader = [
   'Status',
@@ -40,20 +43,20 @@ const tableHeader = [
 ];
 
 const statusOptions = {
-  Running: 'running',
-  Succeeded: 'succeeded',
-  Task_failed: 'task_failed',
-  Runner_failed: 'runner_failed'
+  Running: 'RUNNING',
+  Succeeded: 'SUCCEEDED',
+  'Task Failed': 'TASK_FAILED',
+  'Runner Failed': 'RUNNER_FAILED'
 };
 
 const typeOptions = {
-  BulkGranules: 'Bulk Granules',
-  ESIndex: 'ES Index',
-  BulkDelete: 'Bulk Delete',
-  KinesisReplay: 'Kinesis Replay'
+  'Bulk Granules': 'Bulk Granules',
+  'ES Index': 'ES Index',
+  'Bulk Delete': 'Bulk Delete',
+  'Kinesis Replay': 'Kinesis Replay'
 };
 
-  // (d) => <Link to={'/executions/execution/' + d.arn} title={d.name}>{truncate(d.name, 24)}</Link>,
+// (d) => <Link to={'/executions/execution/' + d.arn} title={d.name}>{truncate(d.name, 24)}</Link>,
 
 const tableRow = [
   (d) => displayCase(d.status),
@@ -75,9 +78,7 @@ class OperationOverview extends React.Component {
   constructor (props) {
     super(props);
     this.queryMeta = this.queryMeta.bind(this);
-    // this.renderOverview = this.renderOverview.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
-    this.filterOperations = this.filterOperations.bind(this);
     this.searchOperations = this.searchOperations.bind(this);
   }
 
@@ -108,27 +109,6 @@ class OperationOverview extends React.Component {
     }));
   }
 
-  filterOperations (list) {
-    let newList = [];
-    if (list.params.status) {
-      newList = list.data.filter((item) => {
-        if (item.status.toLowerCase() === list.params.status) return item;
-      });
-    }
-    if (list.params.operationType) {
-      if (list.params.status) {
-        newList = newList.filter((item) => {
-          if (item.operationType === list.params.operationType) return item;
-        });
-      } else {
-        newList = list.data.filter((item) => {
-          if (item.operationType === list.params.operationType) return item;
-        });
-      }
-    }
-    return newList;
-  }
-
   searchOperations (list, prefix) {
     return list.filter((item) => {
       if (item.id.includes(prefix)) return item;
@@ -138,14 +118,15 @@ class OperationOverview extends React.Component {
   render () {
     const { operations } = this.props;
     const { list } = operations;
-    list.meta = {};
-    if (list.params.status || list.params.operationType) {
-      list.data = this.filterOperations(list);
+    const { count } = list.meta;
+    if (list.internal.prefix) {
+      if (list.internal.prefix.queryValue) {
+        list.data = this.searchOperations(list.data, list.internal.prefix.queryValue);
+      } else if (typeof list.internal.prefix === 'string') {
+        list.data = this.searchOperations(list.data, list.internal.prefix);
+      }
     }
-    if (list.params.prefix && list.params.prefix.value) {
-      list.data = this.searchOperations(list.data, list.params.prefix.value);
-    }
-    const listCount = list.data.length;
+
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -155,7 +136,7 @@ class OperationOverview extends React.Component {
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>All Operations <span className='num--title'>{tally(listCount)}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>All Operations <span className='num--title'>{tally(count)}</span></h2>
           </div>
           <div className='filters filters__wlabels'>
             <Search dispatch={this.props.dispatch}
@@ -204,9 +185,9 @@ OperationOverview.propTypes = {
   workflowOptions: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   stats: state.stats,
   operations: state.operations,
   workflowOptions: workflowOptions(state),
   collectionOptions: collectionOptions(state)
-}))(OperationOverview);
+}))(OperationOverview));

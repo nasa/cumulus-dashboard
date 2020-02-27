@@ -8,8 +8,10 @@ import Modal from 'react-bootstrap/Modal';
 
 import { bulkGranule } from '../../actions';
 import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
-import { kibanaRoot } from '../../config';
+import _config from '../../config';
 import TextArea from '../TextAreaForm/text-area';
+
+const { kibanaRoot } = _config;
 
 class BulkGranule extends React.Component {
   constructor () {
@@ -112,27 +114,27 @@ class BulkGranule extends React.Component {
               aria-labelledby="modal__bulk_granules-modal"
             >
               <Modal.Header className="bulk_granules-modal__header" closeButton onClick={this.cancel}></Modal.Header>
-                <Modal.Title id="modal__bulk_granules-modal" className="bulk_granules-modal__title">Bulk Granules</Modal.Title>
-                  <p>
+              <Modal.Title id="modal__bulk_granules-modal" className="bulk_granules-modal__title">Bulk Granules</Modal.Title>
+              <p>
                     Your request to process a bulk granules operation has been submitted. <br/>
                     ID <strong>{asyncOpId}</strong>
-                  </p>
-                  <br/>
-                  <Modal.Footer>
-                    <button
-                      className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
-                      onClick={this.cancel}
-                      readOnly={true}
-                      alt="Close"
-                      >Close</button>
-                    <a
-                      className={'button button__bulkgranules button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right'}
-                      href='/#/operations'
-                      readOnly={true}
-                      alt="Go To Operations"
-                      >Go To Operations
-                    </a>
-                  </Modal.Footer>
+              </p>
+              <br/>
+              <Modal.Footer>
+                <button
+                  className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
+                  onClick={this.cancel}
+                  readOnly={true}
+                  alt="Close"
+                >Close</button>
+                <a
+                  className={'button button__bulkgranules button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right'}
+                  href='/operations'
+                  readOnly={true}
+                  alt="Go To Operations"
+                >Go To Operations
+                </a>
+              </Modal.Footer>
             </Modal>
           </div>
         </div>
@@ -157,47 +159,47 @@ class BulkGranule extends React.Component {
             style={{overflowY: 'scroll'}}
           >
             <Modal.Header className="bulk_granules-modal__header" closeButton onClick={this.cancel}></Modal.Header>
-              <Modal.Title id="modal__bulk_granules-modal" className="bulk_granules-modal__title">Bulk Granules</Modal.Title>
-                <Modal.Body>
-                  <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
-                  <p>
+            <Modal.Title id="modal__bulk_granules-modal" className="bulk_granules-modal__title">Bulk Granules</Modal.Title>
+            <Modal.Body>
+              <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
+              <p>
                     1. In the box below, enter the <strong>workflowName</strong>. <br/>
                     2. Then add either an array of granule Ids or an elasticsearch query and index. <br/>
-                  </p>
-                  <br/>
-                  <h4 className="modal_subtitle">If you need to construct a query</h4>
-                  <p>
+              </p>
+              <br/>
+              <h4 className="modal_subtitle">If you need to construct a query</h4>
+              <p>
                     To construct a query, go to Kibana and run a search. Then place the elasticsearch query in the operation input. <br/>
-                    <button className="button button__kibana_open button--small" href={kibanaRoot} alt="Open Kibana">Open Kibana</button>
-                  </p>
-                  <br/>
-                  <form>
-                    <TextArea
-                      value={queryValue}
-                      id={'run-bulk-granule'}
-                      error={error}
-                      onChange={this.onChange}
-                      mode={'json'}
-                      minLines={30}
-                      maxLines={200}
-                    />
-                  </form>
-                </Modal.Body>
-                <Modal.Footer>
-                  <button
-                    className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
-                    onClick={this.cancel}
-                    readOnly={true}
-                    alt="Cancel Bulk Granules"
-                    >Cancel</button>
-                  <button
-                    className={'button button__bulkgranules button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (status === 'inflight' ? ' button--disabled' : '')}
-                    onClick={this.submit}
-                    readOnly={true}
-                    alt="Run Bulk Granules"
-                    >{buttonText}
-                  </button>
-                </Modal.Footer>
+                <button className="button button__kibana_open button--small" href={kibanaRoot} alt="Open Kibana">Open Kibana</button>
+              </p>
+              <br/>
+              <form>
+                <TextArea
+                  value={queryValue}
+                  id={'run-bulk-granule'}
+                  error={error}
+                  onChange={this.onChange}
+                  mode={'json'}
+                  minLines={30}
+                  maxLines={200}
+                />
+              </form>
+            </Modal.Body>
+            <Modal.Footer>
+              <button
+                className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
+                onClick={this.cancel}
+                readOnly={true}
+                alt="Cancel Bulk Granules"
+              >Cancel</button>
+              <button
+                className={'button button__bulkgranules button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (status === 'inflight' ? ' button--disabled' : '')}
+                onClick={this.submit}
+                readOnly={true}
+                alt="Run Bulk Granules"
+              >{buttonText}
+              </button>
+            </Modal.Footer>
           </Modal>
         </div>
       </div>

@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
   searchReconciliationReports,
   clearReconciliationReportSearch,
@@ -77,6 +78,6 @@ ReconciliationReportList.propTypes = {
   reconciliationReports: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   reconciliationReports: state.reconciliationReports
-}))(ReconciliationReportList);
+}))(ReconciliationReportList));

@@ -66,12 +66,12 @@ class List extends React.Component {
         { add ? <button
           onClick={this.add}
           className={'button form__addone--button' + (disabled ? ' button--disabled' : '')}>+</button>
-        : null }
+          : null }
 
         { !add ? <button
           onClick={(e) => { e.preventDefault(); this.remove(i); }}
           className='button form__addone--button'>-</button>
-        : null }
+          : null }
       </li>
     );
   }

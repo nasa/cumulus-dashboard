@@ -125,6 +125,7 @@ export const createFormConfig = function (data, schema, include) {
       case 'string':
         fields.push(textfield(config, property, (required && isText)));
         break;
+      case 'integer':
       case 'number':
         fields.push(numberfield(config, property, (required && isNumber)));
         break;
