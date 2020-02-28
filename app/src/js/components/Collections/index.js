@@ -39,7 +39,7 @@ class Collections extends React.Component {
             <Route path='/collections/collection/:name/:version' component={Sidebar} />
             <div className={existingCollection ? 'page__content--shortened' : 'page__content'}>
               <Switch>
-                <Redirect exact from='/collections' to='/collections/all' />
+                <Redirect exact from='/collections' to={{pathname: '/collections/all', search: this.props.location.search}} />
                 <Route path='/collections/all' component={CollectionList} />
                 <Route path='/collections/add' component={AddCollection} />
                 <Route exact path='/collections/edit/:name/:version' component={EditCollection} />

@@ -3,7 +3,7 @@ import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import { get } from 'object-path';
 import { getSchema } from '../../actions';
 import Schema from '../FormSchema/schema';
