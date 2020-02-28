@@ -122,7 +122,7 @@ class Home extends React.Component {
                         <span className='num--large'>{value}</span> {d[1]}
                       </a>
                     ) : (
-                      <Link id={d[1]} className='overview-num' to={d[2]}>
+                      <Link id={d[1]} className='overview-num' to={{pathname: d[2], search: this.props.location.search}}>
                         <span className='num--large'>{value}</span> {d[1]}
                       </Link>
                     )}
@@ -250,6 +250,7 @@ Home.propTypes = {
   queryParams: PropTypes.object,
   setQueryParams: PropTypes.func,
   dispatch: PropTypes.func,
+  location: PropTypes.object
 };
 
 export { Home };
