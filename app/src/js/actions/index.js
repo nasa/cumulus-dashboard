@@ -453,72 +453,76 @@ export const getStats = (options) => {
 };
 
 export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
-  const stackName = cumulusInstanceMeta.stackName;
-  const now = Date.now();
-  const twentyFourHoursAgo = now - msPerDay;
-  if (!esRoot) return { type: types.NOOP };
-  return {
-    [CALL_API]: {
+  return (dispatch, getState) => {
+    const stackName = cumulusInstanceMeta.stackName;
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    const endTime = timeFilters.timestamp__to || Date.now();
+    const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
+    if (!esRoot) return { type: types.NOOP };
+    return dispatch({[CALL_API]: {
       type: types.DIST_APIGATEWAY,
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
       headers: authHeader(),
-      body: JSON.parse(apiGatewaySearchTemplate(stackName, twentyFourHoursAgo, now))
-    }
+      body: JSON.parse(apiGatewaySearchTemplate(stackName, startTime, endTime))
+    }});
   };
 };
 
 export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
-  const stackName = cumulusInstanceMeta.stackName;
-  const now = Date.now();
-  const twentyFourHoursAgo = now - msPerDay;
-  if (!esRoot) return { type: types.NOOP };
-  if (!showDistributionAPIMetrics) return {type: types.NOOP};
-  return {
-    [CALL_API]: {
+  return (dispatch, getState) => {
+    const stackName = cumulusInstanceMeta.stackName;
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    const endTime = timeFilters.timestamp__to || Date.now();
+    const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
+    if (!esRoot) return { type: types.NOOP };
+    if (!showDistributionAPIMetrics) return {type: types.NOOP};
+    return dispatch({[CALL_API]: {
       type: types.DIST_API_LAMBDA,
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
       headers: authHeader(),
-      body: JSON.parse(apiLambdaSearchTemplate(stackName, twentyFourHoursAgo, now))
-    }
+      body: JSON.parse(apiLambdaSearchTemplate(stackName, startTime, endTime))
+    }});
   };
 };
 
 export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
-  const stackName = cumulusInstanceMeta.stackName;
-  const now = Date.now();
-  const twentyFourHoursAgo = now - msPerDay;
-  if (!esRoot) return { type: types.NOOP };
-  if (!showTeaMetrics) return { type: types.NOOP };
-  return {
-    [CALL_API]: {
+  return (dispatch, getState) => {
+    const stackName = cumulusInstanceMeta.stackName;
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    const endTime = timeFilters.timestamp__to || Date.now();
+    const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
+    if (!esRoot) return { type: types.NOOP };
+    if (!showTeaMetrics) return { type: types.NOOP };
+    return dispatch({[CALL_API]: {
       type: types.DIST_TEA_LAMBDA,
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
       headers: authHeader(),
-      body: JSON.parse(teaLambdaSearchTemplate(stackName, twentyFourHoursAgo, now))
-    }
+      body: JSON.parse(teaLambdaSearchTemplate(stackName, startTime, endTime))
+    }});
   };
 };
 
 export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
-  const stackName = cumulusInstanceMeta.stackName;
-  const now = Date.now();
-  const twentyFourHoursAgo = now - msPerDay;
-  if (!esRoot) return { type: types.NOOP };
-  return {
-    [CALL_API]: {
+  return (dispatch, getState) => {
+    const stackName = cumulusInstanceMeta.stackName;
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    const endTime = timeFilters.timestamp__to || Date.now();
+    const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
+    if (!esRoot) return { type: types.NOOP };
+    return dispatch({[CALL_API]: {
       type: types.DIST_S3ACCESS,
       skipAuth: true,
       method: 'POST',
       url: `${esRoot}/_search/`,
       headers: authHeader(),
-      body: JSON.parse(s3AccessSearchTemplate(stackName, twentyFourHoursAgo, now))
-    }
+      body: JSON.parse(s3AccessSearchTemplate(stackName, startTime, endTime))
+    }});
   };
 };
 
