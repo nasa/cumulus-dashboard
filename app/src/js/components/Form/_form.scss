@@ -106,6 +106,12 @@ select option{
   display: flex;
 }
 
+.dropdown__collection .form__dropdown label {
+  display: inline-block;
+  text-align: left;
+  padding-right: .75em;
+}
+
 .search__wrapper {
   position: relative;
   .form__dropdown label {

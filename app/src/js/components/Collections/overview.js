@@ -184,16 +184,25 @@ class CollectionOverview extends React.Component {
     return (
       <div className='page__component'>
         <section className='page__section page__section__controls'>
-          <Breadcrumbs config={breadcrumbConfig} />
-          <div className='dropdown__collection form-group__element--right'>
-            <SimpleDropdown
-              label={'Collection'}
-              value={getCollectionId(params)}
-              options={sortedCollectionIds}
-              id={'collection-chooser'}
-              onChange={this.changeCollection}
-              noNull={true}
-            />
+          <div className="collection__options--top">
+            <ul>
+              <li>
+                <Breadcrumbs config={breadcrumbConfig} />
+              </li>
+              <li>
+                <div className='dropdown__collection form-group__element--right'>
+                  <SimpleDropdown
+                    label={'Collection'}
+                    title={'Collections Dropdown'}
+                    value={getCollectionId(params)}
+                    options={sortedCollectionIds}
+                    id={'collection-chooser'}
+                    onChange={this.changeCollection}
+                    noNull={true}
+                  />
+                </div>
+              </li>
+            </ul>
           </div>
         </section>
         <section className='page__section page__section__header-wrapper'>
@@ -244,6 +253,12 @@ class CollectionOverview extends React.Component {
                 {meta.count ? ` ${meta.count}` : 0}
               </span>
             </h2>
+            <Link
+              className='link--secondary link--learn-more'
+              to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}
+            >
+              {strings.view_all_granules}
+            </Link>
           </div>
           <div className='filters filters__wlabels total_granules'>
             <ul>
@@ -279,12 +294,6 @@ class CollectionOverview extends React.Component {
             rowId={'granuleId'}
             sortIdx={6}
           />
-          <Link
-            className='link--secondary link--learn-more'
-            to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}
-          >
-            {strings.view_all_granules}
-          </Link>
         </section>
       </div>
     );

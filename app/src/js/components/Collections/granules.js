@@ -118,8 +118,10 @@ const CollectionGranules = ({
 
   return (
     <div className="page__component">
-      <section className="page__section page__section__header-wrapper">
+      <section className='page__section page__section__controls'>
         <Breadcrumbs config={breadcrumbConfig} />
+      </section>
+      <section className="page__section page__section__header-wrapper">
         <h1 className="heading--large heading--shared-content with-description ">
           {collectionName} / {collectionVersion}
         </h1>

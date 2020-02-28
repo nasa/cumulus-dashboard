@@ -85,8 +85,10 @@ class CollectionList extends React.Component {
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <div className='page__section__header page__section__header-wrapper'>
+          <section className='page__section page__section__controls'>
             <Breadcrumbs config={breadcrumbConfig} />
+          </section>
+          <div className='page__section__header page__section__header-wrapper'>
             <h1 className='heading--large heading--shared-content with-description'>{strings.collection_overview}</h1>
             {lastUpdated(queriedAt)}
           </div>

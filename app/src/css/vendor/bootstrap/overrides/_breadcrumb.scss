@@ -2,3 +2,7 @@
   background-color: initial;
   padding: 0;
 }
+
+.breadcrumb-item+.breadcrumb-item:before {
+  content: "|";
+}
