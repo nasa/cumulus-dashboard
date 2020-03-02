@@ -26,7 +26,7 @@ table {
     td {
       color: $white;
       font-weight: $base-font-semibold;
-      padding: 1em 2em 1.5em;
+      padding: 1em 2em;
       font-size: .86em;
     }
   }
@@ -343,7 +343,7 @@ table {
     background-size: 10px 13px;
     display: inline-block;
     margin-left: .5em;
-    margin-top: .2em;
+    margin-top: 0em;
   }
 }
 
@@ -365,7 +365,7 @@ table {
     font-family: 'FontAwesome';
     content: '\f0dd';
     font-weight: 900;
-    top: 5px;
+    top: 10px;
   }
 }
 .table__sort--asc {
