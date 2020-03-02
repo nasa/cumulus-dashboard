@@ -67,9 +67,9 @@ describe('Dashboard Providers Page', () => {
         .clear()
         .type(connectionLimit);
       cy.get('@providerinput')
-        .contains('label', 'Protocol')
+        .contains('.dropdown__label', 'Protocol')
         .siblings()
-        .children('select')
+        .find('select')
         .select(protocol, {force: true})
         .should('have.value', protocol);
       cy.get('@providerinput')
