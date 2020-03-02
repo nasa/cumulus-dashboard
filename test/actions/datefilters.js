@@ -6,6 +6,7 @@ import thunk from 'redux-thunk';
 import {
   getExecutionLogs,
   getLogs,
+  getStats,
   listCollections,
   listExecutions,
   listGranules,
@@ -67,7 +68,8 @@ test('Each of these list action creators will pull data from datepicker state wh
     { action: 'OPERATIONS_INFLIGHT', dispatcher: listOperations },
     { action: 'PDRS_INFLIGHT', dispatcher: listPdrs },
     { action: 'PROVIDERS_INFLIGHT', dispatcher: listProviders },
-    { action: 'RULES_INFLIGHT', dispatcher: listRules }
+    { action: 'RULES_INFLIGHT', dispatcher: listRules },
+    { action: 'STATS_INFLIGHT', dispatcher: getStats }
   ];
 
   endpoints.forEach((e) => {
