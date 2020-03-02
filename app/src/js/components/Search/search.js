@@ -61,7 +61,7 @@ class Search extends React.Component {
         setQueryParams({[paramKey]: value});
         dispatch(action(value));
       } else {
-        setQueryParams({[paramKey]: ''});
+        setQueryParams({[paramKey]: undefined});
         dispatch(clear());
       }
     }, 650);
