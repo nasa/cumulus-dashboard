@@ -3,7 +3,7 @@
 import test from 'ava';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import {shallow, configure} from 'enzyme';
+import {mount, configure} from 'enzyme';
 import {listGranules} from '../../../app/src/js/actions';
 import { List } from '../../../app/src/js/components/Table/Table';
 import Timer from '../../../app/src/js/components/Timer/timer.js';
@@ -21,7 +21,7 @@ test('table should properly initialize timer config prop', async (t) => {
     meta: {},
     data: []
   };
-  const listWrapper = shallow(
+  const listWrapper = mount(
     <List
       list={list}
       dispatch={dispatch}
@@ -54,4 +54,5 @@ test('table should properly initialize timer config prop', async (t) => {
   // Is the Timer's query configuration properly initialized via the
   // enclosing List's state, prior to any lifecycle method invocations?
   t.is(timerWrapper.props().config.q, query.q);
+  listWrapper.unmount();
 });

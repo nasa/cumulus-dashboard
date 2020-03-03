@@ -230,6 +230,14 @@
         
       } 
     }
+
+    &--remove, &--execute, &--reingest {
+      &:hover {
+        background-color: darken($light-green, 10%);
+        color: #fff;
+        border: 0;
+      }
+    }
   
     &--download{
       background-color: $light-green;
