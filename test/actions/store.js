@@ -4,8 +4,10 @@ import nock from 'nock';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { CALL_API } from '../../app/src/js/actions';
+import { CALL_API } from '../../app/src/js/actions/types';
 import { requestMiddleware } from '../../app/src/js/middleware/request';
+
+const port = process.env.FAKEAPIPORT || 5001;
 
 const middlewares = [
   requestMiddleware,
@@ -37,14 +39,14 @@ test.beforeEach((t) => {
 
 test.serial('dispatches TYPE_INFLIGHT and TYPE actions for API request action', async (t) => {
   const stubbedResponse = { test: 'test' };
-  nock('http://localhost:5001')
+  nock(`http://localhost:${port}`)
     .get('/test-path')
     .reply(200, stubbedResponse);
 
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: 'http://localhost:5001/test-path'
+    url: `http://localhost:${port}/test-path`
   };
   const actionObj = {
     [CALL_API]: requestAction

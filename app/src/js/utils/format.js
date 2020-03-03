@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment';
 import numeral from 'numeral';
 import url from 'url';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 export const nullValue = '--';
 
@@ -77,19 +77,28 @@ export const collectionSearchResult = function (collection) {
   );
 };
 
+export const granuleSearchResult = function (granule) {
+  const { granuleId, status } = granule;
+  return (
+    <li key={granuleId}>
+      <Link to={`granules/granules/${granuleId}/${status}`}>{granuleId} / {status}</Link>
+    </li>
+  );
+};
+
 export const granuleLink = function (granuleId) {
   if (!granuleId) return nullValue;
-  return <Link to={`granules/granule/${granuleId}`}>{granuleId}</Link>;
+  return <Link to={`/granules/granule/${granuleId}`}>{granuleId}</Link>;
 };
 
 export const pdrLink = function (pdrName) {
   if (!pdrName) return nullValue;
-  return <Link to={`pdrs/pdr/${pdrName}`}>{pdrName}</Link>;
+  return <Link to={`/pdrs/pdr/${pdrName}`}>{pdrName}</Link>;
 };
 
 export const providerLink = function (provider) {
   if (!provider) return nullValue;
-  return <Link to={`providers/provider/${provider}`}>{provider}</Link>;
+  return <Link to={`/providers/provider/${provider}`}>{provider}</Link>;
 };
 
 export const bool = function (bool) {
@@ -137,9 +146,7 @@ export const collectionName = function (collectionId) {
 
 export const collectionNameVersion = function (collectionId) {
   if (!collectionId) return nullValue;
-  const split = collectionId.split('___');
-  const name = split[0];
-  const version = split[1];
+  const [name, version] = collectionId.split('___');
   return { name, version };
 };
 
@@ -170,12 +177,12 @@ export const rerunText = function (name) {
 export const buildRedirectUrl = function ({ origin, pathname, hash }) {
   const hasQuery = hash.indexOf('?');
   if (hasQuery !== -1) {
-    hash = hash.substr(hash.indexOf('#') + 1);
+    hash = hash.substr(hash.indexOf('/') + 1);
     const parsedUrl = url.parse(hash, true);
     // Remove any ?token query parameter to avoid polluting
     // the login link
     delete parsedUrl.query.token;
-    hash = `#${url.format({
+    hash = `${url.format({
       pathname: parsedUrl.pathname,
       query: parsedUrl.query
     })}`;

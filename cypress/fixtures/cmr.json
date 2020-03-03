@@ -59,14 +59,5 @@
         ]
       }
     }
-  },
-  {
-    "method": "GET",
-    "url": "https://cmr.uat.earthdata.nasa.gov/search/collections.json?page_size=50&provider_short_name=CUMULUS&short_name=TESTCOLLECTION&version=006&page_num=1",
-    "response": {
-      "feed": {
-        "entry": []
-      }
-    }
   }
 ]

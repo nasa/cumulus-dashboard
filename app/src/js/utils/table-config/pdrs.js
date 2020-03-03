@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { get } from 'object-path';
 import { seconds, fromNow, bool, nullValue } from '../format';
 import { deletePdr } from '../../actions';

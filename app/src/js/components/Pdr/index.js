@@ -3,9 +3,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
+import { withRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 import { interval, getCount } from '../../actions';
-import { updateInterval } from '../../config';
+import _config from '../../config';
+import Pdr from './pdr';
+import PdrOverview from './overview';
+import PdrList from './list';
+
+const { updateInterval } = _config;
 
 class Pdrs extends React.Component {
   constructor () {
@@ -39,14 +45,20 @@ class Pdrs extends React.Component {
           </div>
         </div>
         <div className='page__content'>
-          <div className='row wrapper__sidebar'>
+          <div className='wrapper__sidebar'>
             <Sidebar
               currentPath={this.props.location.pathname}
               params={this.props.params}
               count={count}
             />
             <div className='page__content--shortened'>
-              {this.props.children}
+              <Switch>
+                <Route exact path='/pdrs' component={PdrOverview} />
+                <Route path='/pdrs/active' component={PdrList} />
+                <Route path='/pdrs/failed' component={PdrList} />
+                <Route path='/pdrs/completed' component={PdrList} />
+                <Route path='/pdrs/pdr/:pdrName' component={Pdr} />
+              </Switch>
             </div>
           </div>
         </div>
@@ -63,6 +75,6 @@ Pdrs.propTypes = {
   stats: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   stats: state.stats
-}))(Pdrs);
+}))(Pdrs));

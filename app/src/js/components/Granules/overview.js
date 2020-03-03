@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   interval,
@@ -32,9 +32,13 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import statusOptions from '../../utils/status';
-import { updateInterval } from '../../config';
+import Bulk from './bulk';
+import _config from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
+import { window } from '../../utils/browser';
+
+const { updateInterval } = _config;
 
 class GranulesOverview extends React.Component {
   constructor () {
@@ -48,6 +52,7 @@ class GranulesOverview extends React.Component {
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
     this.csvDownloadSection = this.csvDownloadSection.bind(this);
     this.applyRecoveryWorkflow = this.applyRecoveryWorkflow.bind(this);
+    this.runBulkGranules = this.runBulkGranules.bind(this);
     this.state = {};
   }
 
@@ -60,12 +65,13 @@ class GranulesOverview extends React.Component {
   }
 
   queryMeta () {
-    this.props.dispatch(listWorkflows());
-    this.props.dispatch(getCount({
+    const { dispatch } = this.props;
+    dispatch(listWorkflows());
+    dispatch(getCount({
       type: 'granules',
       field: 'status'
     }));
-    this.props.dispatch(getGranuleCSV());
+    dispatch(getGranuleCSV());
   }
 
   generateQuery () {
@@ -89,6 +95,17 @@ class GranulesOverview extends React.Component {
       actions = actions.concat(recoverAction(granules, actionConfig));
     }
     return actions;
+  }
+
+  runBulkGranules () {
+    return (
+      <Bulk
+        element='a'
+        className={'button button__bulkgranules button--green button__animation--md button__arrow button__arrow--md button__animation form-group__element--right link--no-underline'}
+        confirmAction={true}
+        state={this.props.granules}
+      />
+    );
   }
 
   selectWorkflow (selector, workflow) {
@@ -129,7 +146,7 @@ class GranulesOverview extends React.Component {
   }
 
   render () {
-    const { stats, granules, granuleCSV } = this.props;
+    const { stats, granules, granuleCSV, dispatch } = this.props;
     const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
     const { data } = granuleCSV;
@@ -148,25 +165,36 @@ class GranulesOverview extends React.Component {
             {this.csvDownloadSection(data)}
           </div>
           <div className='filters filters__wlabels'>
-            <Dropdown
-              getOptions={getOptionsCollectionName}
-              options={get(dropdowns, ['collectionName', 'options'])}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              paramKey={'collectionId'}
-              label={strings.collection}
-            />
-            <Dropdown
-              options={statusOptions}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              paramKey={'status'}
-              label={'Status'}
-            />
-            <Search dispatch={this.props.dispatch}
-              action={searchGranules}
-              clear={clearGranulesSearch}
-            />
+            <ul>
+              <li>
+                <Dropdown
+                  getOptions={getOptionsCollectionName}
+                  options={get(dropdowns, ['collectionName', 'options'])}
+                  action={filterGranules}
+                  clear={clearGranulesFilter}
+                  paramKey={'collectionId'}
+                  label={strings.collection}
+                />
+              </li>
+              <li>
+                <Dropdown
+                  options={statusOptions}
+                  action={filterGranules}
+                  clear={clearGranulesFilter}
+                  paramKey={'status'}
+                  label={'Status'}
+                />
+              </li>
+              <li>
+                <Search dispatch={dispatch}
+                  action={searchGranules}
+                  clear={clearGranulesSearch}
+                />
+              </li>
+              <li className="run_bulk">
+                {this.runBulkGranules()}
+              </li>
+            </ul>
           </div>
 
           <List
@@ -198,7 +226,7 @@ GranulesOverview.propTypes = {
 
 export { GranulesOverview };
 
-export default withRouter(connect((state) => ({
+export default withRouter(connect(state => ({
   stats: state.stats,
   workflowOptions: workflowOptionNames(state),
   granules: state.granules,

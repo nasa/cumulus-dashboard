@@ -1,0 +1,30 @@
+.ace_editor {
+  margin-bottom: 2em;
+  border: 1px solid $lightest-grey;
+  border-radius: .5em;
+}
+
+.ace-github .ace_gutter {
+  background: $dark-blue !important;
+  color: $white !important;
+  padding-top: 5px;
+}
+
+.ace_fold-widget {
+  background-image: none !important;
+  position: relative;
+
+  &:before{
+    color: $white;
+    position: absolute;
+    font-family: 'FontAwesome';
+    content: '\f0d7';
+    font-weight: 900;
+    top: 0;
+    right: 1px;
+  }
+}
+
+.ace_text-layer {
+  font-feature-settings: "liga" 0;
+}

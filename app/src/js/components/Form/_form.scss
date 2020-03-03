@@ -3,8 +3,9 @@
 }
 
 input, textarea, select, .form__element__select {
-  border: 1px solid $lightest-grey;
-  background-color: #fff;
+  border: 1px solid lighten($lightest-grey, 4%);
+  box-shadow: $shadow__default;
+  background-color: $white;
   border-radius: .5em;
   padding: .3em 2em .4em .7em;
   font-size: .86em;
@@ -36,28 +37,34 @@ label {
   }
 }
 
-.dropdown__wrapper {
-  display: inline-block;
-  border: 1px solid $lightest-grey;
-  border-radius: .5em;
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
   position: relative;
-  &:after {
-    position: absolute;
-    font-family: 'Font Awesome 5 Free';
-    content: '\f078';
-    font-weight: 900;
-    right: 1em;
-    top: .1em;
+  &:hover{
+    box-shadow: $shadow__hover;
   }
 }
 
-/*select {
-  -webkit-appearance: caret;
-}*/
+//For IE
+select::-ms-expand {
+  display: none;
+}
+
+select option{
+  background-color: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 2px 2px rgba(255, 255, 255, 0.08);
+  &:hover{
+    background-color: $ocean-blue;
+    box-shadow: inset 2px 2px $ocean-blue;
+    color: $white;
+}
+}
+
 
 .filters {
   margin: 1.5em 0 2em;
-  @include clearfix;
+  @extend .clearfix;
   label {
     font-size: .86em;
   }
@@ -73,7 +80,7 @@ label {
   &:after {
     color: $ocean-blue;
     position: absolute;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'FontAwesome';
     content: '\f0d7';
     font-weight: 900;
     width: 14px;
@@ -83,6 +90,19 @@ label {
     right: .8em;
     top: .5em;
   }
+}
+
+.filters.filters__wlabels ul{
+  display: flex;
+  align-items: baseline;
+}
+
+.filters.filters__wlabels .run_bulk{
+  margin-left: auto;
+}
+
+.filters.filters__wlabels.total_granules{
+  margin-bottom: 5em;
 }
 
 .form--controls {
@@ -107,7 +127,7 @@ label {
 .search__icon {
   &:after {
     position: absolute;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'FontAwesome';
     content: '\f002';
     font-weight: 900;
     right: .8em;
@@ -129,7 +149,7 @@ label {
 }
 
 .search__results {
-  background-color: #FFF;
+  background-color: $white;
   border: 1px solid $lightest-grey;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
   border-radius: .2em;
@@ -197,7 +217,7 @@ label {
   top: -.2em;
   display: inline-block;
   &:before {
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'FontAwesome';
     content: '\f021';
     color: $ocean-blue;
     font-weight: 900;
@@ -229,24 +249,6 @@ label {
   margin-right: 1em;
   margin-top: 2em;
   margin-left: 1em;
-}
-
-.ace_editor {
-  margin-bottom: 2em;
-  border: 1px solid $lightest-grey;
-  border-radius: .5em;
-}
-
-.ace-github .ace_gutter {
-  padding-top: .5em;
-}
-
-.ace_content {
-  padding-top: .5em;
-}
-
-.ace_text-layer {
-  font-feature-settings: "liga" 0;
 }
 
 .form__item {
@@ -400,7 +402,7 @@ label {
   padding: 1.1em 1.4em;
   text-align: center;
   position: relative;
-  margin: 2em 2em 2em 0em;
+  margin: 2em 0em;
   color: $error-text-red;
   font-size: .86em;
   border: 1px solid $error-red;
@@ -422,7 +424,7 @@ label {
   overflow: auto;
   max-height: 50%;
   z-index: 99;
-  background-color: #FFF;
+  background-color: $white;
   border: 1px solid $lightest-grey;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
   border-radius: .2em;
@@ -436,5 +438,43 @@ label {
 
 .autocomplete__select--highlighted {
   background-color: $ocean-blue;
-  color: #FFF;
+  color:$white;
+}
+
+.subform__item--last .subform__button {
+  position: relative;
+  padding: .65em 1.2em .65em 2.5em;
+  border-radius: 4px;
+  color: $white;
+  background-color: $ocean-blue;
+  font-weight: $base-font-regular;
+  font-size: .86em;
+  text-align: center;
+  border: none;
+  transition: all 0.3s ease 0s;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  overflow: hidden;
+  input {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+  }
+  :hover {
+    background-color: darken($light-green, 5%);
+    color: $white;
+    border: 0;
+  }
+}
+
+.subform__item--last {
+  .subform__button {
+    display: inline-block;
+    margin-top: 1.5em;
+    margin-left: 0;
+  }
+  .subform__name {
+    display: none;
+  }
 }

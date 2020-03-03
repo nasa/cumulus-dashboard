@@ -1,0 +1,58 @@
+/******************************************************************
+                    Bootstrap Overrides
+******************************************************************/
+/*
+We are using bootstrap components and adding our custom styling to
+the following
+*/
+
+/**************************************
+*           Custom Colors             *
+**************************************/
+
+/* Theme Colors */
+$theme-colors: (
+  "primary": $theme--blue,
+  "light": $theme--light,
+  "dark": $theme--dark,
+);
+
+/* Body */
+$body-bg: $background-white;
+$body-color: #4A4A4A;
+
+$border-color: $lightest-grey;
+
+/* Links */
+$link-color: $ocean-blue;
+$link-hover-color: darken($ocean-blue, 10%);
+$link-decoration: none;
+$link-hover-decoration: none;
+
+/**************************************
+*           Custom Components         *
+**************************************/
+
+/* Buttons */
+$btn-border-radius: 4px;
+
+/**************************************
+*           Custom Layout - Grid      *
+**************************************/
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 375px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1440px
+);
+
+$container-max-widths: (
+  sm: 375px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1440px
+);

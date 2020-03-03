@@ -2,28 +2,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
 import { interval, getCount, createReconciliationReport } from '../../actions';
-import { updateInterval } from '../../config';
+import _config from '../../config';
+import ReconciliationReportList from './list';
+import ReconciliationReport from './reconciliation-report';
+import withQueryParams from 'react-router-query-params';
+
+const { updateInterval } = _config;
 
 class ReconciliationReports extends React.Component {
   constructor () {
     super();
     this.displayName = 'Reconciliation Reports';
-    this.query = this.query.bind(this);
+    this.queryParams = this.queryParams.bind(this);
     this.createReport = this.createReport.bind(this);
   }
 
   componentDidMount () {
-    this.cancelInterval = interval(() => this.query(), updateInterval, true);
+    this.cancelInterval = interval(() => this.queryParams(), updateInterval, true);
   }
 
   componentWillUnmount () {
     if (this.cancelInterval) { this.cancelInterval(); }
   }
 
-  query () {
+  queryParams () {
     this.props.dispatch(getCount({
       type: 'reconciliationReports',
       field: 'status'
@@ -42,18 +48,21 @@ class ReconciliationReports extends React.Component {
           <div className='row'>
             <h1 className='heading--xlarge'>Reconciliation Reports</h1>
             <button className='button button--large button--white button__addcollections button__arrow button__animation' onClick={this.createReport}>
-             { reconciliationReports.createReportInflight ? <LoadingEllipsis /> : 'Create a Report'}
+              {reconciliationReports.createReportInflight ? <LoadingEllipsis /> : 'Create a Report'}
             </button>
           </div>
         </div>
         <div className='page__content'>
-          <div className='row wrapper__sidebar'>
+          <div className='wrapper__sidebar'>
             <Sidebar
               currentPath={this.props.location.pathname}
               params={this.props.params}
             />
             <div className='page__content--shortened'>
-              {this.props.children}
+              <Switch>
+                <Route exact path='/reconciliation-reports' component={ReconciliationReportList} />
+                <Route path='/reconciliation-reports/report/:reconciliationReportName' component={ReconciliationReport} />
+              </Switch>
             </div>
           </div>
         </div>
@@ -68,10 +77,11 @@ ReconciliationReports.propTypes = {
   params: PropTypes.object,
   dispatch: PropTypes.func,
   stats: PropTypes.object,
-  reconciliationReports: PropTypes.object
+  reconciliationReports: PropTypes.object,
+  queryParams: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(withQueryParams()(connect(state => ({
   stats: state.stats,
   reconciliationReports: state.reconciliationReports
-}))(ReconciliationReports);
+}))(ReconciliationReports)));

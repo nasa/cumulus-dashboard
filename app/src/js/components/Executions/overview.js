@@ -3,10 +3,12 @@ import React from 'react';
 import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import {
   clearExecutionsFilter,
   filterExecutions,
+  searchExecutions,
+  clearExecutionsSearch,
   getCount,
   getCumulusInstanceMetadata,
   interval,
@@ -29,9 +31,12 @@ import {
 import statusOptions from '../../utils/status';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
+import Search from '../Search/search';
 import Overview from '../Overview/overview';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 import {strings} from '../locale';
+
+const { updateInterval } = _config;
 
 const tableHeader = [
   'Name',
@@ -65,6 +70,7 @@ class ExecutionOverview extends React.Component {
     super(props);
     this.queryMeta = this.queryMeta.bind(this);
     this.renderOverview = this.renderOverview.bind(this);
+    this.searchOperationId = this.searchOperationId.bind(this);
   }
 
   componentDidMount () {
@@ -90,6 +96,12 @@ class ExecutionOverview extends React.Component {
     }));
   }
 
+  searchOperationId (list, prefix) {
+    return list.filter((item) => {
+      if (item.asyncOperationId && item.asyncOperationId.includes(prefix)) return item;
+    });
+  }
+
   renderOverview (count) {
     const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
     return <Overview items={overview} inflight={false} />;
@@ -99,6 +111,9 @@ class ExecutionOverview extends React.Component {
     const { stats, executions } = this.props;
     const { list } = executions;
     const { count, queriedAt } = list.meta;
+    if (list.prefix && list.prefix.value) {
+      list.data = this.searchOperationId(list.data, list.prefix.value);
+    }
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -110,7 +125,7 @@ class ExecutionOverview extends React.Component {
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>All Executions <span className='num--title'>{count ? ` ${tally(count)}` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>All Executions <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
           </div>
           <div className='filters filters__wlabels'>
             <Dropdown
@@ -135,6 +150,13 @@ class ExecutionOverview extends React.Component {
               clear={clearExecutionsFilter}
               paramKey={'type'}
               label={'Workflow'}
+            />
+
+            <Search dispatch={this.props.dispatch}
+              action={searchExecutions}
+              clear={clearExecutionsSearch}
+              paramKey={'asyncOperationId'}
+              label={'Async Operation ID'}
             />
           </div>
 
@@ -163,9 +185,9 @@ ExecutionOverview.propTypes = {
   workflowOptions: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   stats: state.stats,
   executions: state.executions,
   workflowOptions: workflowOptions(state),
   collectionOptions: collectionOptions(state)
-}))(ExecutionOverview);
+}))(ExecutionOverview));

@@ -2,7 +2,7 @@
 import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   interval,
@@ -36,11 +36,13 @@ import Search from '../Search/search';
 import status from '../../utils/status';
 import Metadata from '../Table/Metadata';
 import Loading from '../LoadingIndicator/loading-indicator';
-import AsyncCommand from '../AsyncCommands/async-command';
+import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import ErrorReport from '../Errors/report';
 import GranulesProgress from '../Granules/progress';
-import { updateInterval } from '../../config';
+import _config from '../../config';
 import {strings} from '../locale';
+
+const { updateInterval } = _config;
 
 const metaAccessors = [
   ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],
@@ -93,7 +95,7 @@ class PDR extends React.Component {
   }
 
   navigateBack () {
-    this.props.router.push('/pdrs');
+    this.props.history.push('/pdrs');
   }
 
   generateBulkActions () {
@@ -141,12 +143,12 @@ class PDR extends React.Component {
           </div>
         </section>
 
-          <section className='page__section'>
-            <div className='heading__wrapper--border'>
-              <h2 className='heading--medium with-description'>PDR Overview</h2>
-            </div>
-            {!record || (record.inflight && !record.data) ? <Loading /> : <Metadata data={record.data} accessors={metaAccessors} />}
-          </section>
+        <section className='page__section'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium with-description'>PDR Overview</h2>
+          </div>
+          {!record || (record.inflight && !record.data) ? <Loading /> : <Metadata data={record.data} accessors={metaAccessors} />}
+        </section>
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
@@ -207,7 +209,7 @@ PDR.propTypes = {
   pdrs: PropTypes.object,
   dispatch: PropTypes.func,
   params: PropTypes.object,
-  router: PropTypes.object
+  history: PropTypes.object
 };
 
-export default connect(state => state)(PDR);
+export default withRouter(connect(state => state)(PDR));

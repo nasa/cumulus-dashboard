@@ -32,6 +32,10 @@ import {
   GRANULE_REMOVE_INFLIGHT,
   GRANULE_REMOVE_ERROR,
 
+  BULK_GRANULE,
+  BULK_GRANULE_INFLIGHT,
+  BULK_GRANULE_ERROR,
+
   GRANULE_DELETE,
   GRANULE_DELETE_INFLIGHT,
   GRANULE_DELETE_ERROR,
@@ -67,7 +71,7 @@ export const initialState = {
 
 export default function reducer (state = initialState, action) {
   state = Object.assign({}, state);
-  const { id, data } = action;
+  const { id, data, config } = action;
 
   switch (action.type) {
     case GRANULE:
@@ -157,6 +161,19 @@ export default function reducer (state = initialState, action) {
     case GRANULE_REMOVE_ERROR:
       set(state, ['removed', id, 'status'], 'error');
       set(state, ['removed', id, 'error'], action.error);
+      break;
+
+    case BULK_GRANULE:
+      set(state, ['bulk', config.requestId, 'data'], data);
+      set(state, ['bulk', config.requestId, 'status'], 'success');
+      set(state, ['bulk', config.requestId, 'error'], null);
+      break;
+    case BULK_GRANULE_INFLIGHT:
+      set(state, ['bulk', config.requestId, 'status'], 'inflight');
+      break;
+    case BULK_GRANULE_ERROR:
+      set(state, ['bulk', config.requestId, 'status'], 'error');
+      set(state, ['bulk', config.requestId, 'error'], action.error);
       break;
 
     case GRANULE_DELETE:

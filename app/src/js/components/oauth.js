@@ -2,14 +2,19 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import withQueryParams from 'react-router-query-params';
+import { withRouter } from 'react-router-dom';
 import url from 'url';
 import { login, setTokenState } from '../actions';
 import { window } from '../utils/browser';
 import { buildRedirectUrl } from '../utils/format';
-import { updateDelay, apiRoot, oauthMethod } from '../config';
+import _config from '../config';
 import PropTypes from 'prop-types';
 import ErrorReport from './Errors/report';
 import Header from './Header/header';
+import Modal from 'react-bootstrap/Modal';
+
+const { updateDelay, apiRoot, oauthMethod } = _config;
 
 class OAuth extends React.Component {
   constructor () {
@@ -29,15 +34,14 @@ class OAuth extends React.Component {
       if (pathname !== '/auth' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/auth') {
-        setTimeout(() => this.props.router.push('/'), updateDelay);
+        setTimeout(() => this.props.history.push('/'), updateDelay); // react isn't seeing this a function
       }
     }
   }
 
   componentDidMount () {
-    const query = this.props.location.query;
-    if (query.token) {
-      const token = query.token;
+    const { token } = this.props.queryParams;
+    if (token) {
       const { dispatch } = this.props;
       this.setState({ token }, () => dispatch(login(token))); // eslint-disable-line react/no-did-mount-set-state
     }
@@ -54,21 +58,29 @@ class OAuth extends React.Component {
         button = <div style={{textAlign: 'center'}}><a className="button button--oauth" href={url.resolve(apiRoot, `token?state=${redirect}`)} >Login with Earthdata Login</a></div>;
       }
     }
+
     return (
       <div className='app'>
         <Header dispatch={dispatch} api={api} apiVersion={apiVersion} minimal={true}/>
         <main className='main' role='main'>
-          <div>
-            <div className='modal__cover'></div>
-            <div className='modal__container modal__container--onscreen'>
-              <div className='modal'>
-                <div className='modal__internal'>
-                  { api.inflight ? <h2 className='heading--medium'>Authenticating ... </h2> : null }
-                  { api.error ? <ErrorReport report={api.error} /> : null }
-                  { button }
-                </div>
-              </div>
-            </div>
+          <div className="modal-content">
+            <Modal
+              dialogClassName="oauth-modal"
+              show= {true}
+              centered
+              size="sm"
+              aria-labelledby="modal__oauth-modal"
+            >
+              <Modal.Header className="oauth-modal__header"></Modal.Header>
+              <Modal.Title id="modal__oauth-modal" className="oauth-modal__title">Welcome To Cumulus Dashboard</Modal.Title>
+              <Modal.Body>
+                { api.inflight ? <h2 className='heading--medium'>Authenticating ... </h2> : null }
+                { api.error ? <ErrorReport report={api.error} /> : null }
+              </Modal.Body>
+              <Modal.Footer>
+                { button }
+              </Modal.Footer>
+            </Modal>
           </div>
         </main>
       </div>
@@ -80,8 +92,9 @@ OAuth.propTypes = {
   dispatch: PropTypes.func,
   api: PropTypes.object,
   location: PropTypes.object,
-  router: PropTypes.object,
-  apiVersion: PropTypes.object
+  history: PropTypes.object,
+  apiVersion: PropTypes.object,
+  queryParams: PropTypes.object
 };
 
-export default connect(state => state)(OAuth);
+export default withRouter(withQueryParams()(connect(state => state)(OAuth)));

@@ -1,7 +1,11 @@
 'use strict';
 import React from 'react';
+import { withRouter, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
+import ExecutionOverview from './overview';
+import ExecutionStatus from './execution-status';
+import ExecutionLogs from './execution-logs';
 
 class Executions extends React.Component {
   render () {
@@ -13,13 +17,17 @@ class Executions extends React.Component {
           </div>
         </div>
         <div className='page__content'>
-          <div className='row wrapper__sidebar'>
+          <div className='wrapper__sidebar'>
             <Sidebar
               currentPath={this.props.location.pathname}
               params={this.props.params}
             />
             <div className='page__content--shortened'>
-              {this.props.children}
+              <Switch>
+                <Route exact path='/executions' component={ExecutionOverview} />
+                <Route path='/executions/execution/:executionName/logs' component={ExecutionLogs} />
+                <Route path='/executions/execution/:executionArn' component={ExecutionStatus} />
+              </Switch>
             </div>
           </div>
         </div>
@@ -34,4 +42,4 @@ Executions.propTypes = {
   params: PropTypes.object
 };
 
-export default Executions;
+export default withRouter(Executions);

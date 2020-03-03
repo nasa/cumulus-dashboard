@@ -1,0 +1,37 @@
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1rem 1rem 0rem 1rem;
+  border-bottom: none;
+  border-top-left-radius: 0.3rem;
+  border-top-right-radius: 0.3rem;
+}
+
+.modal-footer {
+  /* display: flex; */
+  align-items: center;
+  justify-content: flex-end;
+  padding: 2rem 1rem 2rem 1rem;
+  border-top: none;
+  border-bottom-right-radius: 0.3rem;
+  border-bottom-left-radius: 0.3rem;
+}
+
+.modal-footer > :not(:first-child) {
+  margin-left: 0;
+}
+
+.modal-footer .form-group__element--left {
+  margin-right: 1em;
+  margin-top: 0;
+  margin-left: 1em;
+}
+
+.modal-title {
+  padding: 0rem 1rem 1rem 1rem;
+}
+
+.modal-title.h4{
+  font-size: 18px;
+}

@@ -2,7 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
+import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
 import {
   getCount,
@@ -40,14 +41,16 @@ import {
   kibanaGatewayAccessErrorsLink,
   kibanaGatewayAccessSuccessesLink,
   kibanaGatewayExecutionErrorsLink,
-  kibanaGatewayExecutionSuccessesLink
+  kibanaGatewayExecutionSuccessesLink,
+  kibanaAllLogsLink,
 } from '../utils/kibana';
-
+// import { initialValuesFromLocation } from '../utils/url-helper';
+import Datepicker from './Datepicker/Datepicker';
 import { strings } from './locale';
 
 class Home extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.displayName = 'Home';
     this.query = this.query.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
@@ -57,15 +60,14 @@ class Home extends React.Component {
     this.cancelInterval = interval(() => {
       this.query();
     }, updateInterval, true);
-    const {dispatch} = this.props;
+    const { dispatch } = this.props;
     dispatch(getCumulusInstanceMetadata())
       .then(() => {
         dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
         dispatch(getTEALambdaMetrics(this.props.cumulusInstance));
         dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
         dispatch(getDistS3AccessMetrics(this.props.cumulusInstance));
-      }
-    );
+      });
   }
 
   componentWillUnmount () {
@@ -100,7 +102,6 @@ class Home extends React.Component {
   isExternalLink (link) {
     return link.match('https?://');
   }
-
   renderButtonListSection (items, header, listId) {
     const data = items.filter(d => d[0] !== nullValue);
     if (!data.length) return null;
@@ -108,26 +109,28 @@ class Home extends React.Component {
       <section className='page__section'>
         <div className='row'>
           <div className='heading__wrapper'>
-              <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
+            <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
           </div>
-          <ul id={listId}>
-            {data.map(d => {
-              const value = d[0];
-              return (
+          <div className="overview-num__wrapper-home">
+            <ul id={listId}>
+              {data.map(d => {
+                const value = d[0];
+                return (
                   <li key={d[1]}>
-                  {this.isExternalLink(d[2]) ? (
-                    <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
-                      <span className='num--large'>{value}</span> {d[1]}
-                    </a>
-                  ) : (
-                    <Link id={d[1]} className='overview-num' to={d[2] || '#'}>
-                      <span className='num--large'>{value}</span> {d[1]}
-                    </Link>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+                    {this.isExternalLink(d[2]) ? (
+                      <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
+                        <span className='num--large'>{value}</span> {d[1]}
+                      </a>
+                    ) : (
+                      <Link id={d[1]} className='overview-num' to={{pathname: d[2], search: this.props.location.search}}>
+                        <span className='num--large'>{value}</span> {d[1]}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       </section>
     );
@@ -138,7 +141,7 @@ class Home extends React.Component {
     const { stats, count } = this.props.stats;
     const { dist } = this.props;
     const overview = [
-      [tally(get(stats.data, 'errors.value')), 'Errors', '/logs'],
+      [tally(get(stats.data, 'errors.value')), 'Errors', kibanaAllLogsLink(this.props.cumulusInstance)],
       [tally(get(stats.data, 'collections.value')), strings.collections, '/collections'],
       [tally(get(stats.data, 'granules.value')), strings.granules, '/granules'],
       [tally(get(this.props.executions, 'list.meta.count')), 'Executions', '/executions'],
@@ -175,12 +178,23 @@ class Home extends React.Component {
         </div>
 
         <div className='page__content page__content__nosidebar'>
-        <section className='page__section metrics--overview'>
+          <section className='page__section metrics--overview'>
             <div className='row'>
               <div className='heading__wrapper--border'>
                 <h2 className='heading--large heading--shared-content--right'>Metrics Overview</h2>
               </div>
+            </div>
+          </section>
+
+          <section className='page__section datetime'>
+            <div className='row'>
+              <div className='heading__wrapper'>
+                <h2 className='datetime__info heading--medium heading--shared-content--right'>
+                  Select date and time to refine your results. <em>Time is UTC.</em>
+                </h2>
               </div>
+              <Datepicker />
+            </div>
           </section>
 
           {this.renderButtonListSection(overview, 'Updates')}
@@ -225,23 +239,29 @@ class Home extends React.Component {
 }
 
 Home.propTypes = {
-  dispatch: PropTypes.func,
-  stats: PropTypes.object,
+  cumulusInstance: PropTypes.object,
+  datepicker: PropTypes.object,
   dist: PropTypes.object,
-  rules: PropTypes.object,
+  executions: PropTypes.object,
   granules: PropTypes.object,
   pdrs: PropTypes.object,
-  executions: PropTypes.object,
-  cumulusInstance: PropTypes.object
+  rules: PropTypes.object,
+  stats: PropTypes.object,
+  queryParams: PropTypes.object,
+  setQueryParams: PropTypes.func,
+  dispatch: PropTypes.func,
+  location: PropTypes.object
 };
 
 export { Home };
-export default connect(state => ({
-  rules: state.rules,
-  stats: state.stats,
+
+export default withRouter(withQueryParams()(connect((state) => ({
+  cumulusInstance: state.cumulusInstance,
+  datepicker: state.datepicker,
   dist: state.dist,
+  executions: state.executions,
   granules: state.granules,
   pdrs: state.pdrs,
-  executions: state.executions,
-  cumulusInstance: state.cumulusInstance
-}))(Home);
+  rules: state.rules,
+  stats: state.stats
+}))(Home)));
