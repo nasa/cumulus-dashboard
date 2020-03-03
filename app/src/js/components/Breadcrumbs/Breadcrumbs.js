@@ -11,10 +11,9 @@ const Breadcrumbs = ({ config }) => {
         return (
           <li
             key={index}
-            href={href}
             className={`breadcrumb-item ${active ? 'active' : ''}`}
           >
-            {active ? <span>{label}</span> : <Link href={href}>{label}</Link>}
+            {active ? <span>{label}</span> : <Link to={href}>{label}</Link>}
           </li>
         );
       })}
