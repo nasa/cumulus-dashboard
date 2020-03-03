@@ -2,22 +2,22 @@ import { shouldBeRedirectedToLogin } from '../support/assertions';
 
 describe('Rules page', () => {
   it('when not logged in it should redirect to login page', () => {
-    cy.visit('#/rules');
+    cy.visit('/rules');
     shouldBeRedirectedToLogin();
   });
 
   describe('when logged in', () => {
-    const testRuleName = 'MOD09GQ_TEST_kinesisRule';
+    const testRuleName = 'MOD09GK_TEST_kinesisRule';
     const testProviderId = 'PODAAC_SWOT';
-    const testCollectionId = 'MOD09GQ / 006';
+    const testCollectionId = 'MOD09GK / 006';
 
-    beforeEach(() => {
-      cy.login();
+    before(() => {
+      cy.visit('/');
       cy.task('resetState');
     });
 
-    after(() => {
-      cy.task('resetState');
+    beforeEach(() => {
+      cy.login();
     });
 
     it('should display a link to view rules', () => {
@@ -28,22 +28,22 @@ describe('Rules page', () => {
     it('should display a list of rules', () => {
       cy.visit('/');
       cy.get('nav').contains('Rules').click();
-      cy.url().should('include', '/#/rules');
+      cy.url().should('include', '/rules');
       cy.get('table tbody tr').should('have.length', 1);
       cy.contains('table tr', testRuleName)
         .within(() => {
           cy.contains(testProviderId);
           cy.contains(testCollectionId);
           cy.contains(testRuleName)
-            .should('have.attr', 'href', `#rules/rule/${testRuleName}`);
+            .should('have.attr', 'href', `/rules/rule/${testRuleName}`);
         });
     });
 
     it('display a rule with the correct data', () => {
-      cy.visit('/#/rules');
+      cy.visit('/rules');
       cy.contains('table tr a', testRuleName)
         .click();
-      cy.url().should('include', `/#/rules/rule/${testRuleName}`);
+      cy.url().should('include', `/rules/rule/${testRuleName}`);
       cy.get('.metadata__details')
         .within(() => {
           cy.get('dt')
@@ -53,19 +53,19 @@ describe('Rules page', () => {
           cy.get('dt')
             .contains('Workflow')
             .next('dd')
-            .should('contain', 'KinesisTriggerTest');
+            .should('contain', 'HelloWorldWorkflow');
           cy.get('dt')
             .contains('Provider')
             .next('dd')
             .contains(testProviderId)
-            .should('have.attr', 'href', `#providers/provider/${testProviderId}`);
+            .should('have.attr', 'href', `/providers/provider/${testProviderId}`);
         });
     });
 
     it('creating a rule should add it to the list', () => {
-      cy.visit('/#/rules');
+      cy.visit('/rules');
       cy.get('a').contains('Add a rule').as('addRule');
-      cy.get('@addRule').should('have.attr', 'href', '#/rules/add');
+      cy.get('@addRule').should('have.attr', 'href', '/rules/add');
       cy.get('@addRule').click();
 
       const ruleName = 'newRule';
@@ -87,14 +87,18 @@ describe('Rules page', () => {
       cy.editJsonTextarea({ data: newRule });
       cy.contains('form button', 'Submit').click();
 
+      cy.contains('.default-modal .add-rule__title', 'Add Rule');
+      cy.contains('.default-modal .modal-body', `Add rule ${ruleName}`);
+      cy.contains('.modal-footer button', 'Confirm Rule').click();
+
       cy.contains('.heading--xlarge', 'Rules');
       cy.contains('table tbody tr a', ruleName)
-        .and('have.attr', 'href', `#rules/rule/${ruleName}`).click();
+        .and('have.attr', 'href', `/rules/rule/${ruleName}`).click();
 
       cy.contains('.heading--xlarge', 'Rules');
       cy.contains('.heading--large', ruleName);
       cy.contains('.heading--medium', 'Rule Overview');
-      cy.url().should('include', `#/rules/rule/${ruleName}`);
+      cy.url().should('include', `rules/rule/${ruleName}`);
       cy.get('.metadata__details')
         .within(() => {
           cy.contains('RuleName').next().should('have.text', ruleName);
@@ -102,22 +106,24 @@ describe('Rules page', () => {
           cy.contains('Provider')
             .next()
             .contains('a', provider)
-            .should('have.attr', 'href', `#providers/provider/${provider}`);
+            .should('have.attr', 'href', `/providers/provider/${provider}`);
         });
+      cy.task('resetState');
     });
 
     it('editing a rule and returning to the rules page should show the new changes', () => {
-      cy.visit('/#/rules');
+      cy.visit('/rules');
       cy.contains('table tbody tr a', testRuleName)
-        .and('have.attr', 'href', `#rules/rule/${testRuleName}`)
+        .and('have.attr', 'href', `/rules/rule/${testRuleName}`)
         .click();
 
       cy.contains('.heading--large', testRuleName);
       cy.contains('.button--small', 'Edit').click();
-      cy.contains('.heading--large', `Edit ${testRuleName}`);
+      cy.contains('.heading--large', `${testRuleName}`);
 
       // update rule and submit
       const provider = 'newProvider';
+      cy.contains('.ace_variable', 'name');
       cy.editJsonTextarea({ data: { provider }, update: true });
       cy.contains('form button', 'Submit').click();
       cy.contains('.heading--large', testRuleName);
@@ -131,12 +137,12 @@ describe('Rules page', () => {
       cy.contains('table tr', testRuleName)
         .within(() => {
           cy.contains(provider)
-            .should('have.attr', 'href', `#providers/provider/${provider}`);
+            .should('have.attr', 'href', `/providers/provider/${provider}`);
         });
     });
 
     it('deleting a rule should remove it from the list', () => {
-      cy.visit('/#/rules');
+      cy.visit('/rules');
       cy.contains('table tr', testRuleName)
         .within(() => {
           cy.get('input[type="checkbox"]').click();
@@ -150,6 +156,7 @@ describe('Rules page', () => {
         .click();
       cy.contains('table tr a', testRuleName)
         .should('not.exist');
+      cy.task('resetState');
     });
   });
 });

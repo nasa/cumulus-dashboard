@@ -3,6 +3,7 @@
 import test from 'ava';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
+import 'jsdom-global/register';
 import { Provider } from 'react-redux';
 import { shallow, configure } from 'enzyme';
 import { GranulesOverview } from '../../../app/src/js/components/Granules/overview';

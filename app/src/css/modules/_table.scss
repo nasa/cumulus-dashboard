@@ -1,7 +1,7 @@
 .table--wrapper {
   overflow-x: scroll;
-  /*border: 1px solid #ECEAEA;
   border-radius: 8px 8px 0px 0px;
+  /*border: 1px solid #ECEAEA;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.08);*/
 }
 
@@ -38,9 +38,9 @@ table {
         font-size: .86em;
         padding: 1em 2em;
         vertical-align: middle;
-        &:first-of-type {
+        /*&:first-of-type {
           padding: 1em 0 1em 2em;
-        }
+        }*/
       }
       .table__main-asset {
         font-weight: $base-font-semibold;
@@ -61,7 +61,7 @@ table {
 
 .list__wrapper{
   border: 1px solid #eceaea;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: $shadow__default;
   border-radius: 10px;
 }
 
@@ -80,7 +80,7 @@ table {
 // Overview Number Card Group //
 
 .overview-num__wrapper {
-  @include clearfix;
+  @extend .clearfix;
   margin-top: 1.5em;
   .num--large {
     font-size: 1.85em;
@@ -97,19 +97,23 @@ table {
   }
 }
 
+.overview-num__wrapper ul li, .overview-num__wrapper-home ul li{
+  display: inline-block
+}
+
 .overview-num, .overview-num:visited {
   background-color: #fff;
   padding: 1.5em 1em .5em;
   display: inline-block;
   border-radius: .5em;
   border: 1px solid lighten($lightest-grey, 4%);
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, .08);
+  box-shadow: $shadow__default;
   text-align: center;
   font-size: .86em;
   width: 133px;
   height: 94px;
   margin: .8em 1.5em .8em 0;
-  float: left;
+  /*float: left;*/
   color: $lighter-grey;
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
@@ -119,17 +123,17 @@ table {
   &:hover {
     border: 1px solid lighten($lightest-grey, 4%);
     margin: .1em 1.5em 1.5em 0;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, .1);
+    box-shadow: $shadow__hover;
   }
 }
 
 .timeline--processing--overall {
-  background-color: #fff;
+  background-color: $white;
   padding: 1.5em 1em .5em;
   display: inline-block;
   border-radius: .5em;
   border: 1px solid #eceaea;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: $shadow__default;
   text-align: center;
   font-size: .86em;
   width: 615px;
@@ -155,7 +159,6 @@ table {
     flex: 1;
     /*&:after {
       content: '';
-      background-image: url(#{$graphics}layout/chevron-right-green.svg);
       background-size: 15px 25px;
       background-repeat: no-repeat;
       width: 15px;
@@ -191,6 +194,14 @@ table {
   font-size: 1.7em;
   font-weight: $base-font-semibold;
   color: $midnight-blue;
+
+  &--yellow{
+    color: $orange;
+  }
+
+  &--red{
+    color: $error-red;
+  }
 }
 
 // Pagination - Top //
@@ -228,7 +239,7 @@ table {
     &:before{
       color: $ocean-blue;
       position: absolute;
-      font-family: 'Font Awesome 5 Free';
+      font-family: 'FontAwesome';
       content: '\f0a9';
       font-weight: 900;
       top: 1px;
@@ -240,7 +251,7 @@ table {
     &:before{
       color: $ocean-blue;
       position: absolute;
-      font-family: 'Font Awesome 5 Free';
+      font-family: 'FontAwesome';
       content: '\f0a8';
       font-weight: 900;
       top: 1px;
@@ -307,7 +318,7 @@ table {
   &:after {
     color: $white;
     position: absolute;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'FontAwesome';
     content: '\f0dc';
     font-weight: 900;
     width: 10px;
@@ -334,7 +345,7 @@ table {
   &:after {
     color: $white;
     position: absolute;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'FontAwesome';
     content: '\f0dd';
     font-weight: 900;
     top: 5px;
@@ -344,7 +355,7 @@ table {
   &:after {
     color: $white;
     position: absolute;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'FontAwesome';
     content: '\f0de';
     font-weight: 900;
     top: 5px;

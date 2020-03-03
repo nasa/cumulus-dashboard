@@ -1,0 +1,14 @@
+/******************************************************************
+                    Bootstrap Variables
+******************************************************************/
+/*
+We are using default bootstrap variables for styling and functionality
+*/
+
+//Our custom styling to override Bootstrap
+@import "overrides";
+
+//Import Bootstrap default mixins, variables, and functions
+@import "~bootstrap/scss/_functions";
+@import "~bootstrap/scss/_variables";
+@import "~bootstrap/scss/_mixins";

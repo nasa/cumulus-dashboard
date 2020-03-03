@@ -1,111 +1,147 @@
 'use strict';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import TextArea from '../TextAreaForm/text-area';
 import { get } from 'object-path';
-import { updateDelay } from '../../config';
+import { displayCase } from '../../utils/format';
+import _config from '../../config';
 
-class AddRaw extends React.Component {
-  constructor () {
-    super();
-    this.state = {
-      data: '',
-      pk: null,
-      error: null
-    };
-    this.cancel = this.cancel.bind(this);
-    this.submit = this.submit.bind(this);
-    this.onChange = this.onChange.bind(this);
+const { updateDelay } = _config;
+
+import TextArea from '../TextAreaForm/text-area';
+import DefaultModal from '../Modal/modal';
+
+const defaultState = {
+  data: '',
+  pk: null,
+  error: null
+};
+
+const AddRaw = ({
+  defaultValue = '',
+  history,
+  state,
+  dispatch,
+  createRecord,
+  getPk,
+  getBaseRoute,
+  requireConfirmation,
+  title,
+  type = '',
+  ModalBody
+}) => {
+  const [record, setRecord] = useState({ ...defaultState, data: JSON.stringify(defaultValue, null, 2) });
+  const [showModal, setShowModal] = useState(false);
+  const { data, pk, error } = record;
+  const status = get(state.created, [pk, 'status']);
+  const handleOnClick = requireConfirmation ? handleModalOpen : handleSubmit;
+
+  useEffect(() => {
+    setRecord(record => {
+      const data = JSON.stringify(defaultValue, null, 2);
+      return {
+        ...record,
+        data
+      };
+    });
+  }, [defaultValue]);
+
+  useEffect(() => {
+    if (!pk) {
+      return;
+    }
+    if (status === 'success') {
+      const baseRoute = getBaseRoute(pk);
+      setTimeout(() => {
+        history.push(baseRoute);
+      }, updateDelay);
+    } else if (status === 'error' && !error) {
+      setRecord({ ...record, error: get(state.created, [pk, 'error']) });
+    }
+  }, [pk, status, error, getBaseRoute, history, record, state.created]);
+
+  function handleCancel (e) {
+    history.push(getBaseRoute());
   }
 
-  cancel (e) {
-    this.props.router.push(this.props.getBaseRoute().split('/')[1]);
-  }
-
-  submit (e) {
+  function handleSubmit (e) {
     e.preventDefault();
-    const { state, dispatch, createRecord, getPk } = this.props;
-    let { pk, data } = this.state;
     // prevent duplicate submits while the first is inflight.
     if (!pk || get(state.created, [pk, 'status']) !== 'inflight') {
       try {
         var json = JSON.parse(data);
       } catch (e) {
-        return this.setState({ error: 'Syntax error in JSON' });
+        return setRecord({ ...record, error: 'Syntax error in JSON' });
       }
-      this.setState({ error: null, pk: getPk(json) });
+      setRecord({ ...record, error: null, pk: getPk(json) });
       dispatch(createRecord(json));
     }
   }
 
-  componentDidMount () {
-    if (this.props.defaultValue) {
-      this.setState({ data: JSON.stringify(this.props.defaultValue, null, 2) }); // eslint-disable-line react/no-did-mount-set-state
-    }
+  function handleChange (id, value) {
+    setRecord({ ...record, data: value });
   }
 
-  componentDidUpdate (prevProps) {
-    const { router, getBaseRoute } = prevProps;
-    const { pk, error } = this.state;
-    if (!pk) {
-      return;
-    }
-
-    const status = get(this.props.state.created, [pk, 'status']);
-    if (status === 'success') {
-      const baseRoute = getBaseRoute(pk);
-      return setTimeout(() => {
-        router.push(baseRoute);
-      }, updateDelay);
-    } else if (status === 'error' && !error) {
-      this.setState({ error: get(this.props.state.created, [pk, 'error']) }); // eslint-disable-line react/no-did-update-set-state
-    }
+  function handleModalOpen (e) {
+    e.preventDefault();
+    setShowModal(true);
   }
 
-  onChange (id, value) {
-    this.setState({ data: value });
+  function handleModalClose () {
+    setShowModal(false);
   }
 
-  render () {
-    const { pk, error, data } = this.state;
-    const status = get(this.props.state.created, [pk, 'status']);
-    const buttonText = status === 'inflight' ? 'loading...'
-      : status === 'success' ? 'Success!' : 'Submit';
-    return (
-      <div className='page__component page__content--shortened--centered'>
-        <section className='page__section page__section--fullpage-form'>
-          <div className='page__section__header'>
-            <h1 className='heading--large'>{this.props.title}</h1>
-            <form>
-              <TextArea
-                value={data}
-                id={'create-new-record'}
-                error={error}
-                onChange={this.onChange}
-                mode={'json'}
-                minLines={30}
-                maxLines={200}
-              />
-              <br />
-                <button
-                  className={'button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (status === 'inflight' ? ' button--disabled' : '')}
-                  onClick={this.submit}
-                  readOnly={true}
-                  >{buttonText}</button>
-                <button
-                  className='button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
-                  onClick={this.cancel}
-                  readOnly={true}
-                >Cancel</button>
-            </form>
-          </div>
-        </section>
-      </div>
-    );
+  function handleModalConfirm (e) {
+    setShowModal(false);
+    handleSubmit(e);
   }
-}
+
+  const buttonText = status === 'inflight' ? 'loading...'
+    : status === 'success' ? 'Success!' : 'Submit';
+  const displayCaseType = displayCase(type);
+  return (
+    <div className='page__component page__content--shortened--centered'>
+      <section className='page__section page__section--fullpage-form'>
+        <div className='page__section__header'>
+          <h1 className='heading--large'>{title}</h1>
+          <form>
+            <TextArea
+              value={data}
+              id={'create-new-record'}
+              error={error}
+              onChange={handleChange}
+              mode={'json'}
+              minLines={30}
+              maxLines={200}
+            />
+            <button
+              className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (status === 'inflight' ? ' button--disabled' : '')}
+              onClick={handleOnClick}
+              readOnly={true}
+            >{buttonText}</button>
+            <button
+              className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right'
+              onClick={handleCancel}
+              readOnly={true}
+            >Cancel</button>
+          </form>
+          {requireConfirmation &&
+            <DefaultModal
+              title={`Add ${displayCaseType}`}
+              className={`add-${type}`}
+              showModal={showModal}
+              cancelButtonText='Cancel Edit'
+              confirmButtonText={`Confirm ${displayCaseType}`}
+              onConfirm={handleModalConfirm}
+              onCloseModal={handleModalClose}>
+              <ModalBody record={record} className="center" />
+            </DefaultModal>}
+        </div>
+      </section>
+    </div>
+  );
+};
 
 AddRaw.propTypes = {
   dispatch: PropTypes.func,
@@ -114,9 +150,11 @@ AddRaw.propTypes = {
   title: PropTypes.string,
   getPk: PropTypes.func,
   getBaseRoute: PropTypes.func,
-  router: PropTypes.object,
-
-  createRecord: PropTypes.func
+  history: PropTypes.object,
+  createRecord: PropTypes.func,
+  requireConfirmation: PropTypes.bool,
+  type: PropTypes.string,
+  ModalBody: PropTypes.oneOfType([PropTypes.node, PropTypes.func])
 };
 
 export default withRouter(connect()(AddRaw));

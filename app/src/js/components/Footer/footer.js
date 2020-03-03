@@ -14,7 +14,7 @@ class Footer extends React.Component {
     const { warning, versionNumber } = this.props.apiVersion;
 
     let versionWarning;
-    if (warning) { versionWarning = <h5 className='api__warning'>Warning: { warning }</h5>; }
+    if (warning) { versionWarning = <h5 className='api__warning'><span className="warning-icon"></span>Warning: { warning }</h5>; }
 
     return (
       <div className='footer'>

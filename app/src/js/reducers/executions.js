@@ -7,7 +7,10 @@ import {
   EXECUTIONS_ERROR,
 
   FILTER_EXECUTIONS,
-  CLEAR_EXECUTIONS_FILTER
+  CLEAR_EXECUTIONS_FILTER,
+
+  SEARCH_EXECUTIONS,
+  CLEAR_EXECUTIONS_SEARCH
 } from '../actions/types';
 
 export const initialState = {
@@ -44,6 +47,13 @@ export default function reducer (state = initialState, action) {
       break;
     case CLEAR_EXECUTIONS_FILTER:
       set(state, ['list', 'params', action.paramKey], null);
+      break;
+
+    case SEARCH_EXECUTIONS:
+      set(state, ['list', 'prefix'], action.prefix);
+      break;
+    case CLEAR_EXECUTIONS_SEARCH:
+      set(state, ['list', 'prefix'], null);
       break;
   }
   return state;

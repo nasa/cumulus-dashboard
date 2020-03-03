@@ -1,0 +1,140 @@
+.datetime{
+  &__info{
+    font-weight: $base-font-regular;
+  }
+  &__wrapper{
+    background-color: $white;
+    padding: 1.5em 1em .5em;
+    display: inline-block;
+    border-radius: .5em;
+    border: 1px solid #eceaea;
+    box-shadow: $shadow__default;
+    font-size: .86em;
+    width: 775px;
+    height: 80px;
+    margin: .8em 1.5em .8em 0;
+    color: #8C8C8C;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s ease 0s;
+    overflow: hidden;
+    clear: right;
+    position: absolute;
+    z-index: 0;
+    top: 365px;
+  }
+  &__internal{
+    display: inline-flex;
+    align-items: center;
+    justify-items: center;
+    flex-direction: row;
+  }
+  &__internal li{
+    justify-content: space-evenly;
+    margin-right: 2em;
+  }
+
+  &__internal input[type="radio"] {
+    font-size: 2em;
+    margin-right: .25em;
+  }
+  
+  &__internal .selector__hrformat{
+    display: block;
+    position: relative;
+    padding-left: 24px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  &__internal .selector__hrformat input{
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  &__internal .selector__hrformat input:checked ~ .selector{
+    background-color: $white;
+    border: 2px solid $ocean-blue;
+    &:after{
+      display: block;
+    }
+  }
+
+  &__internal .selector{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 15px;
+    width: 15px;
+    background-color: $white;
+    border-radius: 50%;
+    border: 2px solid $lightest-grey;
+    &:hover{
+      background-color: rgba($color: #2685c1, $alpha: 0.54)
+    }
+    &:after{
+      content: "";
+      position: absolute;
+      display: none;
+    }
+  }
+
+  &__internal .selector__hrformat .selector:after{
+    top: .24em;
+    left: .2rem;
+    width: .5rem;
+    height: .5rem;
+    border-radius: 50%;
+    background-color: $ocean-blue;
+    border: 1px solid $ocean-blue;
+  }
+
+  &.dropdown__dtrange{
+    &:after {
+      position: absolute;
+      font-family: 'FontAwesome';
+      content: '\f0dc';
+      color: $white;
+      font-weight: 900;
+      top: 1em;
+      left: 7em;
+    }
+  }
+
+  &.dropdown__dtrange select{
+    background-color: $ocean-blue;
+    color: $white;
+    width: 120px;
+    height: 35px;
+    font-size: 14px;
+    position: relative;
+  }
+
+  &__range{
+    z-index: 1;
+    position: relative;
+    top: 51px;
+    left: 13px;
+  }
+
+  &__clear{
+    margin-left: 850px;
+    position: relative;
+    z-index: 2;
+    &:after {
+      position: absolute;
+      font-family: 'FontAwesome';
+      content: '\f00d';
+      color: $white;
+      font-weight: 900;
+      top: .25em;
+      left: 1em;
+    }
+  }
+}

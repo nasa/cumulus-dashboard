@@ -8,7 +8,7 @@ import { isValidApiRequestAction } from './validate';
 const refreshInterval = Math.ceil((config.updateInterval + 1000) / 1000);
 
 let deferred;
-const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
+export const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
   if (isValidApiRequestAction(action)) {
     const token = get(getState(), 'api.tokens.token');
     if (!token) {
@@ -59,7 +59,3 @@ function createDeferred () {
   });
   return deferred;
 }
-
-module.exports = {
-  refreshTokenMiddleware
-};

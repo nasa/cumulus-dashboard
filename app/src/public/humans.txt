@@ -1,0 +1,19 @@
+====================================================================================
+Cumulus OX Team
+====================================================================================
+
+Product Owner: Lauren Frederick
+Scrum Master: Katherine "Katie" Kelly
+
+------------------------------------------------------------------------------------
+
+/* Developers */
+Jacob Campbell
+Chuck Daniels
+Jenny Liu
+Matt Savoie
+Brian Tennity
+
+/* UI/UX */
+Juanisa McCoy
+Jeff Siarto

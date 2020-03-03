@@ -6,6 +6,7 @@ import { window } from '../../utils/browser';
 import { updateDelay } from '../../config';
 import ErrorReport from '../Errors/report';
 import Text from '../TextAreaForm/text';
+import Modal from 'react-bootstrap/Modal';
 
 class LoginModal extends React.Component {
   constructor () {
@@ -27,7 +28,7 @@ class LoginModal extends React.Component {
       if (pathname !== '/login' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/login') {
-        setTimeout(() => prevProps.router.push('/'), updateDelay);
+        setTimeout(() => prevProps.history.push('/'), updateDelay);
       }
     }
   }
@@ -47,12 +48,19 @@ class LoginModal extends React.Component {
 
     return (
       <div>
-        { show ? <div className='modal__cover'></div> : null }
+        { show ? <div className='modal__content'></div> : null }
         <div className={ show ? 'modal__container modal__container--onscreen' : 'modal__container' }>
           { show ? (
-            <div className='modal'>
-              <div className='modal__internal'>
-                <h2 className='heading--medium with-description'>Log in to Cumulus</h2>
+            <Modal
+              dialogClassName="login-modal"
+              show= {true}
+              centered
+              size="md"
+              aria-labelledby="modal__login-modal"
+            >
+              <Modal.Header className="login-modal__header" closeButton></Modal.Header>
+              <Modal.Title id="modal__login-modal" className="login-modal__title">Log in to Cumulus</Modal.Title>
+              <Modal.Body>
                 <p className='metadata__updated'>{ authenticated ? <strong>Success!</strong> : 'Enter your username and password' }</p>
                 <form>
                   <div className='form__login'>
@@ -78,8 +86,8 @@ class LoginModal extends React.Component {
                   </div>
                 </form>
                 { error ? <ErrorReport report={error} /> : null }
-              </div>
-            </div>
+              </Modal.Body>
+            </Modal>
           ) : null }
         </div>
       </div>
@@ -91,7 +99,7 @@ LoginModal.propTypes = {
   dispatch: PropTypes.func,
   api: PropTypes.object,
   location: PropTypes.object,
-  router: PropTypes.object,
+  history: PropTypes.object,
   show: PropTypes.bool
 };
 

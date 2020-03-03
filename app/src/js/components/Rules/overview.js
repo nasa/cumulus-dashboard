@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   listRules,
@@ -94,7 +94,7 @@ class RulesOverview extends React.Component {
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>All Rules <span className='num--title'>{count ? ` ${tally(count)}` : null}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>All Rules <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
           </div>
           <List
             list={list}
@@ -119,6 +119,6 @@ RulesOverview.propTypes = {
   rules: PropTypes.object
 };
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   rules: state.rules
-}))(RulesOverview);
+}))(RulesOverview));

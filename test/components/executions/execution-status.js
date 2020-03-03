@@ -20,15 +20,18 @@ test('Cumulus-690 Execution Status shows workflow task and version information',
     meta: {}
   };
 
-  const params = { executionArn: executionHistory.execution.executionArn };
+  const match = { params: { executionArn: executionHistory.execution.executionArn } };
 
   const dispatch = () => {};
 
-  const executionStatusRendered = shallow(<ExecutionStatus
+  const executionStatusRendered = shallow(
+    <ExecutionStatus
       dispatch={dispatch}
-      params={params}
+      match={match}
       executionStatus={executionStatus}
-      skipReloadOnMount={true} />);
+      skipReloadOnMount={true}
+    />
+  );
 
   const sortableTable = executionStatusRendered.find('Table');
   t.is(sortableTable.length, 1);

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="25" height="36" viewBox="0 0 25 36">
+  <g id="sel_arrow" transform="translate(-513.5 -90)">
+    <rect id="Rectangle_172" data-name="Rectangle 172" width="25" height="36" transform="translate(513.5 90)" fill="#2276ac"/>
+    <path id="ic_drop_dwn" d="M17.944,66.64h9.981a1.008,1.008,0,0,1,.713,1.719L23.647,73.35a1,1,0,0,1-1.422,0l-4.995-4.991A1.008,1.008,0,0,1,17.944,66.64Zm10.694-4.4-4.991-4.991a1,1,0,0,0-1.422,0l-4.995,4.991a1.008,1.008,0,0,0,.713,1.719h9.981A1.008,1.008,0,0,0,28.638,62.236Z" transform="translate(503.566 43.05)" fill="#fff"/>
+  </g>
+</svg>

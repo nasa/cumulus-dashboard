@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
+import { connectRouter } from 'connected-react-router';
 import api from './api';
 import apiVersion from './api-version';
 import collections from './collections';
 import config from './config';
 import dist from './dist';
+import datepicker from './datepicker';
 import granules from './granules';
 import granuleCSV from './granule-csv';
 import stats from './stats';
@@ -15,18 +17,22 @@ import workflows from './workflows';
 import executions from './executions';
 import executionStatus from './execution-status';
 import executionLogs from './execution-logs';
+import operations from './operations';
 import rules from './rules';
 import reconciliationReports from './reconciliation-reports';
 import mmtLinks from './mmtLinks';
 import cumulusInstance from './cumulus-instance';
 
+const def = (state = {}, action) => state;
+
 export const reducers = {
-  def: (state = {}, action) => state,
+  def,
   api,
   apiVersion,
   collections,
   config,
   dist,
+  datepicker,
   mmtLinks,
   cumulusInstance,
   granules,
@@ -40,8 +46,12 @@ export const reducers = {
   executions,
   executionStatus,
   executionLogs,
+  operations,
   rules,
   reconciliationReports
 };
 
-export default combineReducers(Object.assign({}, reducers));
+export const createRootReducer = (history) => combineReducers({
+  router: connectRouter(history),
+  ...reducers
+});
