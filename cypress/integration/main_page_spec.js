@@ -196,16 +196,9 @@ describe('Dashboard Home Page', () => {
         cy.get('select[name=amPm]').select('AM');
       });
 
-      // cy.window().its('appStore').then((store) => {
-      //   const startDateTime = new Date('2009-01-31T00:00:00-00:00');
-      //   const endDateTime = new Date('2010-05-01T12:00:00-00:00');
-      //   store.dispatch({
-      //     type: DATEPICKER_DATECHANGE,
-      //     data: { startDateTime, endDateTime }
-      //   });
-      // });
       cy.wait('@stats');
-      // cy.get('#Errors').contains('0');
+      // TODO [MHS, 2020-03-04] Update when "stats fix" is in the local @cumulus/API
+      cy.get('#Errors').contains('2');
       cy.get('#Collections').contains('5');
       cy.get('#Granules').contains('0');
       cy.get('#Executions').contains('0');
