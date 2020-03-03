@@ -90,7 +90,7 @@ class Dropdown extends React.Component {
   render () {
     // `options` are expected in the following format:
     // {displayValue1: optionElementValue1, displayValue2, optionElementValue2, ...}
-    const { options, label, paramKey } = this.props;
+    const { options, label, paramKey, inputProps } = this.props;
     const items = options ? Object.keys(options).map(label => ({label, value: options[label]})) : [];
 
     // Make sure this form ID is unique!
@@ -111,6 +111,7 @@ class Dropdown extends React.Component {
             onChange={this.onChange}
             onSelect={this.onSelect}
             renderMenu={renderMenu}
+            inputProps={inputProps}
           />
         </form>
       </div>
@@ -129,7 +130,8 @@ Dropdown.propTypes = {
   location: PropTypes.object,
   router: PropTypes.object,
   queryParams: PropTypes.object,
-  setQueryParams: PropTypes.func
+  setQueryParams: PropTypes.func,
+  inputProps: PropTypes.object
 };
 
 export default withRouter(withQueryParams()(connect()(Dropdown)));
