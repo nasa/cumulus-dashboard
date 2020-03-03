@@ -1,14 +1,17 @@
 'use strict';
 import { tally } from '../format';
 
-export const tableHeader = [
-  'Queue',
-  'Messages Available',
-  'Messages in Flight'
-];
-
-export const tableRow = [
-  'name',
-  (d) => tally(d['messagesAvailable']),
-  (d) => tally(d['messagesInFlight'])
-];
+export const tableColumns = [
+  {
+    Header: 'Queue',
+    id: 'name'
+  },
+  {
+    Header: 'Messages Available',
+    accessor: row => tally(row['messagesAvailable'])
+  },
+  {
+    Header: 'Messages in Flight',
+    accessor: row => tally(row['messagesInFlight'])
+  }
+]

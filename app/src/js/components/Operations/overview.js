@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-// import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -16,31 +15,18 @@ import {
   listOperations,
   listWorkflows
 } from '../../actions';
-import {
-  fromNow,
-  tally,
-  displayCase
-} from '../../utils/format';
+import { tally } from '../../utils/format';
 import {
   workflowOptions,
   collectionOptions
 } from '../../selectors';
-// import statusOptions from '../../utils/status';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import _config from '../../config';
-// import {strings} from '../locale';
+import { tableColumns } from '../../utils/table-config/operations';
 
 const { updateInterval } = _config;
-
-const tableHeader = [
-  'Status',
-  'Async ID',
-  'Description',
-  'Type',
-  'Created'
-];
 
 const statusOptions = {
   Running: 'RUNNING',
@@ -55,24 +41,6 @@ const typeOptions = {
   'Bulk Delete': 'Bulk Delete',
   'Kinesis Replay': 'Kinesis Replay'
 };
-
-// (d) => <Link to={'/executions/execution/' + d.arn} title={d.name}>{truncate(d.name, 24)}</Link>,
-
-const tableRow = [
-  (d) => displayCase(d.status),
-  (d) => d.id,
-  (d) => d.description,
-  (d) => d.operationType,
-  (d) => fromNow(d.createdAt)
-];
-
-const tableSortProps = [
-  'status',
-  'id',
-  null,
-  'operationType',
-  'createdAt'
-];
 
 class OperationOverview extends React.Component {
   constructor (props) {
@@ -164,12 +132,10 @@ class OperationOverview extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listOperations}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
+            tableColumns={tableColumns}
             query={this.generateQuery()}
-            rowId={'id'}
-            sortIdx={4}
+            rowId='id'
+            sortIdx='createdAt'
           />
         </section>
       </div>

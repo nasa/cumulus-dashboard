@@ -6,40 +6,56 @@ import { fromNow, seconds, tally, collectionNameVersion } from '../format';
 import { deleteCollection } from '../../actions';
 import { strings } from '../../components/locale';
 
-export const tableHeader = [
-  'Name',
-  'Version',
-  strings.granules,
-  'Completed',
-  'Running',
-  'Failed',
-  'MMT',
-  'Duration',
-  'Timestamp'
-];
-
-export const tableRow = [
-  (d) => <Link to={`/collections/collection/${d.name}/${d.version}`}>{d.name}</Link>,
-  'version',
-  (d) => tally(get(d, 'stats.total')),
-  (d) => tally(get(d, 'stats.completed')),
-  (d) => tally(get(d, 'stats.running')),
-  (d) => tally(get(d, 'stats.failed')),
-  (d) => d.mmtLink ? <a href={d.mmtLink} target="_blank">MMT</a> : null,
-  (d) => seconds(d.duration),
-  (d) => fromNow(d.timestamp)
-];
-
-export const tableSortProps = [
-  'name',
-  'version',
-  null,
-  null,
-  null,
-  null,
-  null,
-  'duration',
-  'timestamp'
+export const tableColumns = [
+  {
+    Header: 'Name',
+    accessor: row => <Link to={`/collections/collection/${row.name}/${row.version}`}>{row.name}</Link>,
+    id: 'name'
+  },
+  {
+    Header: 'Version',
+    accessor: 'version'
+  },
+  {
+    Header: strings.granules,
+    accessor: row => tally(get(row, 'stats.total')),
+    id: 'granules',
+    disableSortBy: true
+  },
+  {
+    Header: 'Completed',
+    accessor: row => tally(get(row, 'stats.completed')),
+    id: 'completed',
+    disableSortBy: true
+  },
+  {
+    Header: 'Running',
+    accessor: row => tally(get(row, 'stats.running')),
+    id: 'running',
+    disableSortBy: true
+  },
+  {
+    Header: 'Failed',
+    accessor: row => tally(get(row, 'stats.failed')),
+    id: 'failed',
+    disableSortBy: true
+  },
+  {
+    Header: 'MMT',
+    accessor: row => row.mmtLink ? <a href={row.mmtLink} target="_blank">MMT</a> : null,
+    id: 'mmtLink',
+    disableSortBy: true
+  },
+  {
+    Header: 'Duration',
+    accessor: row => seconds(row.duration),
+    id: 'duration'
+  },
+  {
+    Header: 'Timestamp',
+    accessor: row => fromNow(row.timestamp),
+    id: 'timestamp'
+  }
 ];
 
 const confirmRecover = (d) => `Recover ${d} ${strings.collection}(s)?`;

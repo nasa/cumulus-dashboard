@@ -1,164 +1,178 @@
 'use strict';
-import Collapse from 'react-collapsible';
-import React, { useState } from 'react';
+// import Collapse from 'react-collapsible';
+import React, {
+  useMemo,
+  useEffect,
+  forwardRef,
+  useRef
+} from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'object-path';
-import { isUndefined } from '../../utils/validate';
-import { nullValue } from '../../utils/format';
-import isEmpty from 'lodash.isempty';
-import isFunction from 'lodash.isfunction';
+// import { get } from 'object-path';
+// import { isUndefined } from '../../utils/validate';
+// import { nullValue } from '../../utils/format';
+import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect } from 'react-table';
 
-const defaultSortOrder = 'desc';
-const otherOrder = {
-  desc: 'asc',
-  asc: 'desc'
-};
+const IndeterminateCheckbox = forwardRef(
+  ({ indeterminate, ...rest }, ref) => {
+    const defaultRef = useRef();
+    const resolvedRef = ref || defaultRef;
 
-const Table = ({
-  primaryIdx = 0,
-  sortIdx,
-  order,
-  props,
-  header,
-  row,
-  rowId,
-  data,
-  canSelect,
-  collapsible,
-  changeSortProps,
-  onSelect
-}) => {
-  const [dumbState, setDumbState] = useState({
-    dumbOrder: null,
-    dumbSortIdx: null
-  });
-  const [selected, setSelected] = useState([]);
-  const isTableDumb = isUndefined(sortIdx) || !order || !Array.isArray(props);
-  const allChecked = !isEmpty(data) && selected.length === data.length;
+    useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate;
+    }, [resolvedRef, indeterminate]);
 
-  if (isTableDumb) {
-    props = [];
-    sortIdx = dumbState.dumbSortIdx;
-    order = dumbState.dumbOrder;
-    const sortName = props[sortIdx];
-    const primaryName = props[primaryIdx];
-    data = data.sort((a, b) =>
-      // If the sort field is the same, tie-break using the primary ID field
-      a[sortName] === b[sortName] ? a[primaryName] > b[primaryName]
-        : (order === 'asc') ? a[sortName] < b[sortName] : a[sortName] > b[sortName]
+    return (
+      <input type="checkbox" ref={resolvedRef} {...rest} />
     );
   }
+);
 
-  function changeSort (e) {
-    if (isTableDumb) {
-      sortIdx = dumbState.dumbSortIdx;
-      order = dumbState.dumbOrder;
+IndeterminateCheckbox.propTypes = {
+  indeterminate: PropTypes.any,
+  onChange: PropTypes.func
+};
+
+const SortableTable = ({
+  primaryIdx = 0,
+  sortIdx,
+  order = 'desc',
+  // props,
+  rowId,
+  canSelect,
+  // collapsible,
+  changeSortProps,
+  tableColumns = [],
+  data = [],
+  onSelect
+}) => {
+  const defaultColumn = useMemo(
+    () => ({
+      // When using the useFlexLayout:
+      minWidth: 30, // minWidth is only used as a limit for resizing
+      width: 125, // width is used for both the flex-basis and flex-grow
+      maxWidth: 300, // maxWidth is only used as a limit for resizing
+    }),
+    []
+  );
+
+  const shouldManualSort = !!sortIdx;
+
+  const {
+    getTableProps,
+    rows,
+    prepareRow,
+    headerGroups,
+    state: {
+      selectedRowIds,
+      sortBy
+    },
+  } = useTable(
+    {
+      data,
+      columns: tableColumns,
+      defaultColumn,
+      getRowId: (row, relativeIndex) => typeof rowId === 'function' ? rowId(row) : row[rowId] || relativeIndex,
+      autoResetSelectedRows: false,
+      autoResetSortBy: false,
+      manualSortBy: shouldManualSort
+    },
+    useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
+    useResizeColumns, // this allows for resizing columns
+    useSortBy, // this allows for sorting
+    useRowSelect, // this allows for checkbox in table
+    hooks => {
+      if (canSelect) {
+        hooks.visibleColumns.push(columns => [
+          {
+            id: 'selection',
+            Header: ({ getToggleAllRowsSelectedProps }) => ( // eslint-disable-line react/prop-types
+              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+            ),
+            Cell: ({ row }) => (
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+            ),
+            minWidth: 30,
+            width: 30,
+            maxWidth: 30
+          },
+          ...columns
+        ]);
+      }
     }
+  );
 
-    const headerName = e.currentTarget.getAttribute('data-value');
-    const newSortIdx = header.indexOf(headerName);
-    if (!props[newSortIdx]) { return; }
-    const newOrder = sortIdx === newSortIdx ? otherOrder[order] : defaultSortOrder;
+  useEffect(() => {
+    let selected = [];
 
-    if (typeof changeSortProps === 'function') {
-      changeSortProps({ sortIdx: newSortIdx, order: newOrder });
+    for (let [key, value] of Object.entries(selectedRowIds)) {
+      if (value) {
+        selected.push(key);
+      }
     }
-    if (isTableDumb) {
-      setDumbState({ dumbSortIdx: newSortIdx, dumbOrder: newOrder });
-    }
-  }
-
-  function select (e) {
-    const id = (e.currentTarget.getAttribute('data-value'));
-    const selectedRows = selected.includes(id)
-      ? selected.filter(anId => anId !== id)
-      : [...selected, id];
-    setSelected(selectedRows);
     if (typeof onSelect === 'function') {
-      onSelect(selectedRows);
+      onSelect(selected);
     }
-  }
+  }, [selectedRowIds, onSelect]);
 
-  function selectAll (e) {
-    if (!isEmpty(data)) {
-      const rowIdFn = isFunction(rowId) ? rowId : row => row[rowId];
-      const allSelected = selected.length === data.length;
-      const selectedRows = allSelected ? [] : data.map(rowIdFn);
-      setSelected(selectedRows);
+  useEffect(() => {
+    const [sortProps = {}] = sortBy;
+    const { id, desc } = sortProps;
+    const order = desc ? 'desc' : 'asc';
+    if (typeof changeSortProps === 'function') {
+      changeSortProps({ sortIdx: id, order });
     }
-  }
+  }, [changeSortProps, sortBy]);
 
   return (
     <div className='table--wrapper'>
       <form>
-        <table>
-          <thead>
-            <tr>
-              {canSelect &&
-                <td>
-                  <input
-                    type='checkbox'
-                    className='form-select__all'
-                    name='Select'
-                    checked={allChecked}
-                    onChange={selectAll}
-                  />
-                </td>
-              }
-              {header.map((h, i) => {
-                let className = (isTableDumb || props[i]) ? 'table__sort' : '';
-                if (i === sortIdx) { className += (' table__sort--' + order); }
-                return (
-                  <td
-                    className={className}
-                    key={h}
-                    data-value={h}
-                    onClick={changeSort}>{h}
-                  </td>
-                );
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((d, i) => {
-              const dataId = typeof rowId === 'function' ? rowId(d) : d[rowId];
-              const checked = canSelect && selected.indexOf(dataId) !== -1;
-              return (
-                <tr key={i} data-value={dataId} onClick={select}>
-                  {canSelect &&
-                    <td>
-                      <input type={'checkbox'} checked={checked} readOnly/>
-                    </td>
-                  }
-                  {row.map((accessor, k) => {
-                    let className = k === primaryIdx ? 'table__main-asset' : '';
-                    let text;
-
-                    if (typeof accessor === 'function') {
-                      text = accessor(d, k, data);
-                    } else {
-                      text = get(d, accessor, nullValue);
-                    }
-                    return <td key={String(i) + String(k) + text} className={className}>{text}</td>;
+        <div className='table' {...getTableProps()}>
+          <div className='thead'>
+            <div className='tr'>
+              {headerGroups.map(headerGroup => (
+                <div {...headerGroup.getHeaderGroupProps()} className="tr">
+                  {headerGroup.headers.map(column => {
+                    return (
+                      <div {...column.getHeaderProps(column.getSortByToggleProps())} className={`th ${column.canSort ? 'table__sort' : ''}`}>
+                        {column.render('Header')}
+                        <div
+                          {...column.getResizerProps()}
+                          className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
+                        />
+                      </div>
+                    );
                   })}
-                  {collapsible &&
-                    <td>
-                      <Collapse trigger={'More Details'} triggerWhenOpen={'Less Details'}>
-                        <pre className={'pre-style'}>{JSON.stringify(d.eventDetails, null, 2)}</pre>
-                      </Collapse>
-                    </td>
-                  }
-                </tr>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className='tbody'>
+            {rows.map((row, i) => {
+              prepareRow(row);
+              return (
+                <div className='tr' {...row.getRowProps()} key={i}>
+                  {row.cells.map((cell, cellIndex) => {
+                    return (
+                      <div
+                        className={`td ${cell.column.id === row.id ? 'table__main-asset' : ''}`}
+                        {...cell.getCellProps()}
+                        key={cellIndex}
+                      >
+                        {cell.render('Cell')}
+                      </div>
+                    );
+                  })}
+                </div>
               );
             })}
-          </tbody>
-        </table>
+          </div>
+        </div>
       </form>
     </div>
   );
 };
 
-Table.propTypes = {
+SortableTable.propTypes = {
   primaryIdx: PropTypes.number,
   data: PropTypes.array,
   header: PropTypes.array,
@@ -170,7 +184,9 @@ Table.propTypes = {
   onSelect: PropTypes.func,
   canSelect: PropTypes.bool,
   collapsible: PropTypes.bool,
-  rowId: PropTypes.any
+  selectedRows: PropTypes.array,
+  rowId: PropTypes.any,
+  tableColumns: PropTypes.array
 };
 
-export default Table;
+export default SortableTable;

@@ -13,11 +13,9 @@ import {
   clearGranulesSearch
 } from '../../actions';
 import {
-  tableHeader,
-  tableRow,
-  tableSortProps,
   simpleDropdownOption,
-  bulkActions
+  bulkActions,
+  tableColumns
 } from '../../utils/table-config/granules';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
@@ -148,13 +146,12 @@ const CollectionGranules = ({
         <List
           list={list}
           action={listGranules}
-          tableHeader={tableHeader}
-          tableRow={tableRow}
-          tableSortProps={tableSortProps}
           query={generateQuery()}
           bulkActions={generateBulkActions()}
-          rowId={'granuleId'}
-          sortIdx={6}>
+          rowId='granuleId'
+          sortIdx='timestamp'
+          tableColumns={tableColumns}
+        >
           <ListFilters>
             <Search
               dispatch={dispatch}

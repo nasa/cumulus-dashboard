@@ -12,12 +12,8 @@ import {
 } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
-  tableHeader,
-  tableRow,
-  tableSortProps,
-  errorTableHeader,
-  errorTableRow,
-  errorTableSortProps,
+  tableColumns,
+  errorTableColumns,
   bulkActions
 } from '../../utils/table-config/pdrs';
 import Dropdown from '../DropDown/dropdown';
@@ -57,6 +53,7 @@ class ActivePdrs extends React.Component {
 
   render () {
     const { list } = this.props.pdrs;
+    console.log(list);
     const { count, queriedAt } = list.meta;
     const view = this.getView();
     return (
@@ -87,12 +84,10 @@ class ActivePdrs extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listPdrs}
-            tableHeader={view === 'failed' ? errorTableHeader : tableHeader}
-            tableRow={view === 'failed' ? errorTableRow : tableRow}
-            tableSortProps={view === 'failed' ? errorTableSortProps : tableSortProps}
+            tableColumns={view === 'failed' ? errorTableColumns : tableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            rowId={'pdrName'}
+            rowId='pdrName'
           />
         </section>
       </div>

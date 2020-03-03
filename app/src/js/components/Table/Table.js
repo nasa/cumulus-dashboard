@@ -3,13 +3,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-// import BatchAsyncCommand from '../BatchAsyncCommands/BatchAsyncCommands';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/pagination';
 import SortableTable from '../SortableTable/SortableTable';
-// import Timer from '../Timer/timer';
-// import TableOptions from '../TableOptions/TableOptions'
 // Lodash
 import isEmpty from 'lodash.isempty';
 import isEqual from 'lodash.isequal';
@@ -24,7 +21,6 @@ class List extends React.Component {
     this.displayName = 'List';
     this.queryNewPage = this.queryNewPage.bind(this);
     this.queryNewSort = this.queryNewSort.bind(this);
-    this.getSortProp = this.getSortProp.bind(this);
     this.selectAll = this.selectAll.bind(this);
     this.updateSelection = this.updateSelection.bind(this);
     this.onBulkActionSuccess = this.onBulkActionSuccess.bind(this);
@@ -44,7 +40,7 @@ class List extends React.Component {
       queryConfig: {
         page: initialPage,
         order: initialOrder,
-        sort_by: this.getSortProp(initialSortIdx),
+        sort_by: initialSortIdx,
         ...(props.query || {})
       },
       params: {},
@@ -90,14 +86,10 @@ class List extends React.Component {
       ...sortProps,
       queryConfig: this.getQueryConfig({
         order: sortProps.order,
-        sort_by: this.getSortProp(sortProps.sortIdx)
+        sort_by: sortProps.sortIdx
       }),
       selected: []
     });
-  }
-
-  getSortProp (idx) {
-    return this.props.tableSortProps[idx];
   }
 
   selectAll (e) {
@@ -138,7 +130,7 @@ class List extends React.Component {
     return omitBy({
       page: this.state.page,
       order: this.state.order,
-      sort_by: this.getSortProp(this.state.sortIdx),
+      sort_by: this.state.sortIdx,
       ...this.state.params,
       ...config,
       ...query
@@ -150,19 +142,15 @@ class List extends React.Component {
       dispatch,
       action,
       children,
-      tableHeader,
-      tableRow,
-      tableSortProps,
       bulkActions,
       rowId,
       list,
-      list: {
-        meta: {
-          count,
-          limit
-        }
-      }
+      tableColumns,
+      data
     } = this.props;
+    const { meta, data: listData } = list;
+    const { count, limit } = meta;
+    const tableData = data || listData;
     const {
       page,
       sortIdx,
@@ -172,7 +160,7 @@ class List extends React.Component {
       completedBulkActions,
       bulkActionError
     } = this.state;
-    const primaryIdx = 0;
+    // const primaryIdx = 0;
     const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
     return (
@@ -201,18 +189,14 @@ class List extends React.Component {
             showPages={false}
           />*/}
           <SortableTable
-            primaryIdx={primaryIdx}
-            data={list.data}
-            header={tableHeader}
-            row={tableRow}
-            props={tableSortProps}
-            sortIdx={sortIdx}
-            order={order}
-            changeSortProps={this.queryNewSort}
-            onSelect={this.updateSelection}
+            tableColumns={tableColumns}
+            data={tableData}
             canSelect={hasActions}
-            selectedRows={selected}
             rowId={rowId}
+            onSelect={this.updateSelection}
+            sortIdx={sortIdx}
+            changeSortProps={this.queryNewSort}
+            order={order}
           />
           <Pagination
             count={count}
@@ -239,7 +223,9 @@ List.propTypes = {
   sortIdx: PropTypes.number,
   query: PropTypes.object,
   bulkActions: PropTypes.array,
-  rowId: PropTypes.any
+  rowId: PropTypes.any,
+  tableColumns: PropTypes.array,
+  data: PropTypes.array
 };
 
 export { List };

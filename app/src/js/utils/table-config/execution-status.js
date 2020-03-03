@@ -1,18 +1,24 @@
 'use strict';
 
-import {
-  fullDate
-} from '../format';
+import { fullDate } from '../format';
 
-export const tableHeader = [
-  'Id',
-  'Type',
-  'Timestamp',
-  'Input Details'
-];
-
-export const tableRow = [
-  (d) => d['id'],
-  'type',
-  (d) => fullDate(d['timestamp'])
+export const tableColumns = [
+  {
+    Header: 'Id',
+    accessor: row => row['id'],
+    id: 'id'
+  },
+  {
+    Header: 'Type',
+    accessor: 'type'
+  },
+  {
+    Header: 'Timestamp',
+    accessor: row => fullDate(row['timestamp']),
+    id: 'timestamp'
+  },
+  {
+    Header: 'Input Details',
+    accessor: 'inputDetails'
+  }
 ];
