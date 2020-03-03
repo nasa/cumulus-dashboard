@@ -30,7 +30,7 @@ import {
   errorTableRow,
   errorTableSortProps
 } from '../utils/table-config/granules';
-import { recent, updateInterval } from '../config';
+import { updateInterval } from '../config';
 import {
   kibanaS3AccessErrorsLink,
   kibanaS3AccessSuccessesLink,
@@ -54,6 +54,7 @@ class Home extends React.Component {
     this.displayName = 'Home';
     this.query = this.query.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
+    this.refreshQuery = this.refreshQuery.bind(this);
   }
 
   componentDidMount () {
@@ -77,9 +78,7 @@ class Home extends React.Component {
   query () {
     const { dispatch } = this.props;
     // TODO should probably time clamp this by most recent as well?
-    dispatch(getStats({
-      timestamp__from: recent
-    }));
+    dispatch(getStats());
     dispatch(getCount({
       type: 'granules',
       field: 'status'
@@ -90,6 +89,10 @@ class Home extends React.Component {
     dispatch(getDistS3AccessMetrics(this.props.cumulusInstance));
     dispatch(listExecutions({}));
     dispatch(listRules({}));
+  }
+
+  refreshQuery () {
+    this.query();
   }
 
   generateQuery () {
@@ -193,7 +196,7 @@ class Home extends React.Component {
                   Select date and time to refine your results. <em>Time is UTC.</em>
                 </h2>
               </div>
-              <Datepicker />
+              <Datepicker onChange={this.refreshQuery}/>
             </div>
           </section>
 

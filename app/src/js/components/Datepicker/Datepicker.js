@@ -50,6 +50,7 @@ const updateDatepickerStateFromQueryParams = (props) => {
 class Datepicker extends React.PureComponent {
   constructor (props) {
     super(props);
+    this.onChange = props.onChange || (() => {});
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
     this.handleHourFormatChange = this.handleHourFormatChange.bind(this);
     this.handleDateTimeRangeChange = this.handleDateTimeRangeChange.bind(this);
@@ -73,6 +74,7 @@ class Datepicker extends React.PureComponent {
       });
       const datepickerState = getState().datepicker;
       this.updateQueryParams(datepickerState);
+      this.onChange();
     };
   }
 
@@ -101,6 +103,7 @@ class Datepicker extends React.PureComponent {
     updatedProps.dateRange = allDateRanges.find(a => a.label === 'Custom');
     this.props.dispatch({type: DATEPICKER_DATECHANGE, data: updatedProps});
     this.updateQueryParams(updatedProps);
+    this.onChange();
   }
 
   updateQueryParams (newProps) {

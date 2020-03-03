@@ -168,6 +168,51 @@ describe('Dashboard Home Page', () => {
       });
     });
 
+    it('modifies the UPDATES section when datepicker changes.', () => {
+      cy.server();
+      cy.route('GET', '/stats?*timestamp__from=1233360000000*').as('stats');
+
+      cy.get('#Errors').contains('2');
+      cy.get('#Collections').contains('5');
+      cy.get('#Granules').contains('10');
+      cy.get('#Executions').contains('6');
+      // eslint-disable-next-line no-useless-escape
+      // cy.get('#Ingest Rules').contains('1');
+
+      cy.get('[data-cy=startDateTime]').within(() => {
+        cy.get('input[name=month]').click().type(1);
+        cy.get('input[name=day]').click().type(31);
+        cy.get('input[name=year]').click().type(2009);
+        cy.get('input[name=hour12]').click().type(0);
+        cy.get('input[name=minute]').click().type(0);
+        cy.get('select[name=amPm]').select('AM');
+      });
+      cy.get('[data-cy=endDateTime]').within(() => {
+        cy.get('input[name=month]').click().type(5);
+        cy.get('input[name=day]').click().type(1);
+        cy.get('input[name=year]').click().type(2010);
+        cy.get('input[name=hour12]').click().type(0);
+        cy.get('input[name=minute]').click().type(0);
+        cy.get('select[name=amPm]').select('AM');
+      });
+
+      // cy.window().its('appStore').then((store) => {
+      //   const startDateTime = new Date('2009-01-31T00:00:00-00:00');
+      //   const endDateTime = new Date('2010-05-01T12:00:00-00:00');
+      //   store.dispatch({
+      //     type: DATEPICKER_DATECHANGE,
+      //     data: { startDateTime, endDateTime }
+      //   });
+      // });
+      cy.wait('@stats');
+      // cy.get('#Errors').contains('0');
+      cy.get('#Collections').contains('5');
+      cy.get('#Granules').contains('0');
+      cy.get('#Executions').contains('0');
+      // eslint-disable-next-line no-useless-escape
+      // cy.get('#Ingest\ Rules').contains('0');
+    });
+
     it('Logging out successfully redirects to the login screen', () => {
       // Logging to debug intermittent timeouts
       cy.task('log', 'Start test');
