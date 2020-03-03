@@ -58,10 +58,8 @@ class Home extends React.Component {
   }
 
   componentDidMount () {
-    this.cancelInterval = interval(() => {
-      this.query();
-    }, updateInterval, true);
     const { dispatch } = this.props;
+    this.cancelInterval = interval(this.query, updateInterval, true);
     dispatch(getCumulusInstanceMetadata())
       .then(() => {
         dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
@@ -77,7 +75,6 @@ class Home extends React.Component {
 
   query () {
     const { dispatch } = this.props;
-    // TODO should probably time clamp this by most recent as well?
     dispatch(getStats());
     dispatch(getCount({
       type: 'granules',
@@ -92,7 +89,8 @@ class Home extends React.Component {
   }
 
   refreshQuery () {
-    this.query();
+    if (this.cancelInterval) { this.cancelInterval(); }
+    this.cancelInterval = interval(this.query, updateInterval, true);
   }
 
   generateQuery () {
