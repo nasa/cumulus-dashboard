@@ -455,14 +455,19 @@ export const getOptionsCollectionName = (options) => ({
   }
 });
 
-export const getStats = (options) => ({
-  [CALL_API]: {
-    type: types.STATS,
-    method: 'GET',
-    url: url.resolve(root, 'stats'),
-    qs: options
-  }
-});
+export const getStats = (options) => {
+  return (dispatch, getState) => {
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    return dispatch({
+      [CALL_API]: {
+        type: types.STATS,
+        method: 'GET',
+        url: url.resolve(root, 'stats'),
+        qs: {...options, ...timeFilters}
+      }
+    });
+  };
+};
 
 export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
   const stackName = cumulusInstanceMeta.stackName;

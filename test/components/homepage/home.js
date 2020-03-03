@@ -40,6 +40,7 @@ test('CUMULUS-799 Home page contains distribution error report', async (t) => {
       granules={granules}
       stats={stats}
       cumulusInstance={cumulusInstance}
+      location={{search: ''}}
     />
   );
 

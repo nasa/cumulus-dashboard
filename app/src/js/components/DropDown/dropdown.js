@@ -3,7 +3,7 @@ import c from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import Autocomplete from 'react-autocomplete';
 import { initialValueFromLocation } from '../../utils/url-helper';
 import withQueryParams from 'react-router-query-params';
@@ -83,7 +83,7 @@ class Dropdown extends React.Component {
     this.setState({ value });
     if (!value.length) {
       dispatch(clear(paramKey));
-      setQueryParams({ [paramKey]: '' });
+      setQueryParams({ [paramKey]: undefined });
     }
   }
 

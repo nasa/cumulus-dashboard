@@ -61,7 +61,7 @@ class Header extends React.Component {
       const kibanaLink = kibanaAllLogsLink(this.props.cumulusInstance);
       return <a href={kibanaLink} target="_blank">{path[0]}</a>;
     } else {
-      return <Link to={path[1]}>{path[0]}</Link>;
+      return <Link to={{pathname: path[1], search: this.props.location.search}}>{path[0]}</Link>;
     }
   }
 
@@ -71,7 +71,7 @@ class Header extends React.Component {
     return (
       <div className='header'>
         <div className='row'>
-          <h1 className='logo'><Link to='/'><img alt="Logo" src={graphicsPath + strings.logo} /></Link></h1>
+          <h1 className='logo'><Link to={{pathname: '/', search: this.props.location.search}}><img alt="Logo" src={graphicsPath + strings.logo} /></Link></h1>
           <nav>
             { !this.props.minimal ? <ul>
               {activePaths.map(path => <li

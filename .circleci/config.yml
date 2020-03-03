@@ -61,6 +61,9 @@ jobs:
       - store_artifacts:
           path: ~/cumulus-dashboard/cypress/screenshots
 
+      - store_artifacts:
+          path: ~/cumulus-dashboard/cypress/videos
+
   deploy:
     machine: true
     working_directory: ~/cumulus-dashboard
