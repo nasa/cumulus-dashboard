@@ -74,6 +74,7 @@
   /*border: 1px solid $lightest-grey;*/
   border-radius: .5em;
   position: relative;
+  float: right;
   &:after {
     position: absolute;
     font-family: 'FontAwesome';
@@ -88,6 +89,6 @@
   } 
 
   &__collection {
-    margin-bottom: 1em;
+    margin-bottom: 0em;
   }
 }

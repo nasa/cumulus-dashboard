@@ -106,22 +106,26 @@ export const bulkActions = function (granules, config) {
     text: 'Reingest',
     action: reingestGranule,
     state: granules.reingested,
-    confirm: confirmReingest
+    confirm: confirmReingest,
+    className: 'button--reingest'
   }, {
     text: 'Execute',
     action: config.execute.action,
     state: granules.executed,
     confirm: confirmApply,
-    confirmOptions: config.execute.options
+    confirmOptions: config.execute.options,
+    className: 'button--execute'
   }, {
     text: strings.remove_from_cmr,
     action: removeGranule,
     state: granules.removed,
-    confirm: confirmRemove
+    confirm: confirmRemove,
+    className: 'button--remove'
   }, {
     text: 'Delete',
     action: deleteGranule,
     state: granules.deleted,
-    confirm: confirmDelete
+    confirm: confirmDelete,
+    className: 'button--delete'
   }];
 };
