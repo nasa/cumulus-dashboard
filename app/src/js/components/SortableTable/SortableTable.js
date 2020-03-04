@@ -1,5 +1,5 @@
 'use strict';
-// import Collapse from 'react-collapsible';
+import Collapse from 'react-collapsible';
 import React, {
   useMemo,
   useEffect,
@@ -7,11 +7,13 @@ import React, {
   useRef
 } from 'react';
 import PropTypes from 'prop-types';
-// import { get } from 'object-path';
-// import { isUndefined } from '../../utils/validate';
-// import { nullValue } from '../../utils/format';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect } from 'react-table';
 
+/**
+ * IndeterminateCheckbox
+ * @description Component for rendering the header and column checkboxs when canSelect is true
+ * Taken from react-table examples
+ */
 const IndeterminateCheckbox = forwardRef(
   ({ indeterminate, ...rest }, ref) => {
     const defaultRef = useRef();
@@ -33,13 +35,10 @@ IndeterminateCheckbox.propTypes = {
 };
 
 const SortableTable = ({
-  primaryIdx = 0,
   sortIdx,
-  order = 'desc',
-  // props,
   rowId,
   canSelect,
-  // collapsible,
+  collapsible,
   changeSortProps,
   tableColumns = [],
   data = [],
@@ -91,9 +90,9 @@ const SortableTable = ({
             Cell: ({ row }) => (
               <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
             ),
-            minWidth: 30,
-            width: 30,
-            maxWidth: 30
+            minWidth: 61,
+            width: 61,
+            maxWidth: 61
           },
           ...columns
         ]);
@@ -133,8 +132,10 @@ const SortableTable = ({
                 <div {...headerGroup.getHeaderGroupProps()} className="tr">
                   {headerGroup.headers.map(column => {
                     return (
-                      <div {...column.getHeaderProps(column.getSortByToggleProps())} className={`th ${column.canSort ? 'table__sort' : ''}`}>
-                        {column.render('Header')}
+                      <div {...column.getHeaderProps()} className='th'>
+                        <div {...column.getSortByToggleProps()} className={`${column.canSort ? 'table__sort' : ''}`}>
+                          {column.render('Header')}
+                        </div>
                         <div
                           {...column.getResizerProps()}
                           className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
@@ -152,14 +153,24 @@ const SortableTable = ({
               return (
                 <div className='tr' {...row.getRowProps()} key={i}>
                   {row.cells.map((cell, cellIndex) => {
+                    const primaryIdx = canSelect ? 1 : 0;
                     return (
-                      <div
-                        className={`td ${cell.column.id === row.id ? 'table__main-asset' : ''}`}
-                        {...cell.getCellProps()}
-                        key={cellIndex}
-                      >
-                        {cell.render('Cell')}
-                      </div>
+                      <>
+                        <div
+                          className={`td ${cellIndex === primaryIdx ? 'table__main-asset' : ''}`}
+                          {...cell.getCellProps()}
+                          key={cellIndex}
+                        >
+                          {cell.render('Cell')}
+                        </div>
+                        {collapsible &&
+                          <td>
+                            <Collapse trigger={'More Details'} triggerWhenOpen={'Less Details'}>
+                              <pre className={'pre-style'}>{JSON.stringify(row.eventDetails, null, 2)}</pre>
+                            </Collapse>
+                          </td>
+                        }
+                      </>
                     );
                   })}
                 </div>
@@ -176,15 +187,13 @@ SortableTable.propTypes = {
   primaryIdx: PropTypes.number,
   data: PropTypes.array,
   header: PropTypes.array,
-  props: PropTypes.array,
+  order: PropTypes.string,
   row: PropTypes.array,
   sortIdx: PropTypes.number,
-  order: PropTypes.string,
   changeSortProps: PropTypes.func,
   onSelect: PropTypes.func,
   canSelect: PropTypes.bool,
   collapsible: PropTypes.bool,
-  selectedRows: PropTypes.array,
   rowId: PropTypes.any,
   tableColumns: PropTypes.array
 };

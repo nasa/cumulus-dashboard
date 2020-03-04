@@ -25,12 +25,14 @@ export const tableColumns = [
   {
     Header: 'Status',
     accessor: row => <Link to={`/granules/${row.status}`} className={`granule__status granule__status--${row.status}`}>{displayCase(row.status)}</Link>,
-    id: 'status'
+    id: 'status',
+    width: 100
   },
   {
     Header: 'Name',
     accessor: row => granuleLink(row.granuleId),
-    id: 'name'
+    id: 'name',
+    width: 225
   },
   {
     Header: 'Published',
@@ -46,12 +48,14 @@ export const tableColumns = [
     Header: 'Execution',
     accessor: row => <Link to={`/executions/execution/${path.basename(row.execution)}`}>link</Link>,
     id: 'execution',
-    disableSortBy: true
+    disableSortBy: true,
+    width: 90
   },
   {
     Header: 'Duration',
     accessor: row => seconds(row.duration),
-    id: 'duration'
+    id: 'duration',
+    width: 100
   },
   {
     Header: 'Updated',
@@ -65,18 +69,21 @@ export const errorTableColumns = [
     Header: 'Error',
     accessor: row => <ErrorReport report={get(row, 'error.Cause', nullValue)} truncate={true} />,
     id: 'error',
-    disableSortBy: true
+    disableSortBy: true,
+    width: 175
   },
   {
     Header: 'Type',
     accessor: row => get(row, 'error.Error', nullValue),
     id: 'type',
-    disableSortBy: true
+    disableSortBy: true,
+    width: 100
   },
   {
     Header: 'Granule',
     accessor: row => granuleLink(row.granuleId),
-    id: 'granuleId'
+    id: 'granuleId',
+    width: 200
   },
   {
     Header: 'Duration',

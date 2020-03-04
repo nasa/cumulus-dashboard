@@ -67,7 +67,7 @@ class List extends React.Component {
       }));
     }
 
-    if (sortIdx !== this.state.sortIdx) {
+    if (sortIdx && (sortIdx !== this.state.sortIdx)) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ sortIdx });
     }
@@ -134,7 +134,7 @@ class List extends React.Component {
       ...this.state.params,
       ...config,
       ...query
-    }, isEmpty);
+    }, isNil);
   }
 
   render () {
@@ -156,12 +156,12 @@ class List extends React.Component {
       sortIdx,
       order,
       selected,
-      queryConfig,
       completedBulkActions,
       bulkActionError
     } = this.state;
-    // const primaryIdx = 0;
     const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
+
+    const queryConfig = this.getQueryConfig();
 
     return (
       <>
@@ -220,7 +220,7 @@ List.propTypes = {
   tableHeader: PropTypes.array,
   tableRow: PropTypes.array,
   tableSortProps: PropTypes.array,
-  sortIdx: PropTypes.number,
+  sortIdx: PropTypes.string,
   query: PropTypes.object,
   bulkActions: PropTypes.array,
   rowId: PropTypes.any,

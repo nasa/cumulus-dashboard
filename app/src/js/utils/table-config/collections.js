@@ -10,7 +10,8 @@ export const tableColumns = [
   {
     Header: 'Name',
     accessor: row => <Link to={`/collections/collection/${row.name}/${row.version}`}>{row.name}</Link>,
-    id: 'name'
+    id: 'name',
+    width: 175
   },
   {
     Header: 'Version',
@@ -20,31 +21,36 @@ export const tableColumns = [
     Header: strings.granules,
     accessor: row => tally(get(row, 'stats.total')),
     id: 'granules',
-    disableSortBy: true
+    disableSortBy: true,
+    width: 100
   },
   {
     Header: 'Completed',
     accessor: row => tally(get(row, 'stats.completed')),
     id: 'completed',
-    disableSortBy: true
+    disableSortBy: true,
+    width: 100
   },
   {
     Header: 'Running',
     accessor: row => tally(get(row, 'stats.running')),
     id: 'running',
-    disableSortBy: true
+    disableSortBy: true,
+    width: 100
   },
   {
     Header: 'Failed',
     accessor: row => tally(get(row, 'stats.failed')),
     id: 'failed',
-    disableSortBy: true
+    disableSortBy: true,
+    width: 100
   },
   {
     Header: 'MMT',
     accessor: row => row.mmtLink ? <a href={row.mmtLink} target="_blank">MMT</a> : null,
     id: 'mmtLink',
-    disableSortBy: true
+    disableSortBy: true,
+    width: 100
   },
   {
     Header: 'Duration',
