@@ -28,4 +28,4 @@ export const tableColumns = [
     Header: 'Available Memory',
     accessor: 'availableMemory'
   }
-]
+];

@@ -14,4 +14,4 @@ export const tableColumns = [
     Header: 'Messages in Flight',
     accessor: row => tally(row['messagesInFlight'])
   }
-]
+];

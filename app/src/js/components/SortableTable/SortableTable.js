@@ -189,7 +189,7 @@ SortableTable.propTypes = {
   header: PropTypes.array,
   order: PropTypes.string,
   row: PropTypes.array,
-  sortIdx: PropTypes.number,
+  sortIdx: PropTypes.string,
   changeSortProps: PropTypes.func,
   onSelect: PropTypes.func,
   canSelect: PropTypes.bool,
