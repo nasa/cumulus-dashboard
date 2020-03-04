@@ -3,14 +3,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import moment from 'moment';
 import {
   applyRecoveryWorkflowToCollection,
   clearCollectionsSearch,
   getCumulusInstanceMetadata,
   listCollections,
-  searchCollections
+  searchCollections,
+  deleteCollection
 } from '../../actions';
 import {
   collectionSearchResult,
@@ -18,6 +19,7 @@ import {
   tally,
   getCollectionId
 } from '../../utils/format';
+import { get } from 'object-path';
 import {
   tableHeader,
   tableRow,
@@ -28,6 +30,7 @@ import {
 import Search from '../Search/search';
 import List from '../Table/Table';
 import { strings } from '../locale';
+import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 const breadcrumbConfig = [
@@ -41,6 +44,9 @@ const breadcrumbConfig = [
   }
 ];
 
+// const { pathname } = this.props.location;
+// const existingCollection = pathname !== '/collections/add';
+
 class CollectionList extends React.Component {
   constructor () {
     super();
@@ -51,8 +57,12 @@ class CollectionList extends React.Component {
       '1 Month Ago': moment().subtract(1, 'months').format(),
       '1 Year Ago': moment().subtract(1, 'years').format()
     };
-    this.generateQuery = this.generateQuery.bind(this);
-    this.generateBulkActions = this.generateBulkActions.bind(this);
+    [
+      this.generateQuery,
+      this.generateBulkActions,
+      this.deleteMe,
+      this.errors
+    ].forEach((fn) => (this[fn.name] = fn.bind(this)));
   }
 
   componentDidMount () {
@@ -76,6 +86,40 @@ class CollectionList extends React.Component {
     return actions;
   }
 
+  deleteMe () {
+    const { name, version } = this.props.match.params;
+    this.props.dispatch(deleteCollection(name, version));
+  }
+
+  errors () {
+    const { name, version } = this.props.match.params;
+    const collectionId = getCollectionId({name, version});
+    return [
+      get(this.props.collections.map, [collectionId, 'error']),
+      get(this.props.collections.deleted, [collectionId, 'error'])
+    ].filter(Boolean);
+  }
+
+  renderDeleteButton () {
+    const { match: { params }, collections } = this.props;
+    const collectionId = getCollectionId(params);
+    const deleteStatus = get(collections.deleted, [collectionId, 'status']);
+    const hasGranules = get(
+      collections.map[collectionId], 'data.stats.total', 0) > 0;
+
+    return (
+      <DeleteCollection
+        collectionId={collectionId}
+        errors={this.errors()}
+        hasGranules={hasGranules}
+        onDelete={this.deleteMe}
+        onGotoGranules={this.gotoGranules}
+        onSuccess={this.navigateBack}
+        status={deleteStatus}
+      />
+    );
+  }
+
   render () {
     const { list } = this.props.collections;
     // merge mmtLinks with the collection data;
@@ -97,12 +141,22 @@ class CollectionList extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>{strings.all_collections} <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
           </div>
-          <div className='filters'>
-            <Search dispatch={this.props.dispatch}
-              action={searchCollections}
-              format={collectionSearchResult}
-              clear={clearCollectionsSearch}
-            />
+          <div className='filters filters__wlabels'>
+            <ul>
+              <li>
+                <Search dispatch={this.props.dispatch}
+                  action={searchCollections}
+                  format={collectionSearchResult}
+                  clear={clearCollectionsSearch}
+                />
+              </li>
+              <li>
+                <Link className='button button--green button--small button--add' to='/collections/add'>{strings.add_a_collection}</Link>
+              </li>
+              <li>
+                {this.renderDeleteButton()}
+              </li>
+            </ul>
           </div>
 
           <List
@@ -129,7 +183,9 @@ CollectionList.propTypes = {
   mmtLinks: PropTypes.object,
   dispatch: PropTypes.func,
   logs: PropTypes.object,
-  config: PropTypes.object
+  config: PropTypes.object,
+  location: PropTypes.object,
+  match: PropTypes.object
 };
 
 export { CollectionList };
