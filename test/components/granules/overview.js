@@ -40,7 +40,7 @@ const data = '';
 test('GranulesOverview generates bulkAction for recovery button', function (t) {
   const dispatch = () => {};
   const workflowOptions = [];
-  const stats = { count: 0, histogram: {}, stats: {} };
+  const stats = { count: 0, stats: {} };
   const location = { pathname: 'granules' };
   const config = { enableRecovery: true };
   const store = {
@@ -73,7 +73,7 @@ test('GranulesOverview generates bulkAction for recovery button', function (t) {
 test('GranulesOverview does not generate bulkAction for recovery button', function (t) {
   const dispatch = () => {};
   const workflowOptions = [];
-  const stats = { count: 0, histogram: {}, stats: {} };
+  const stats = { count: 0, stats: {} };
   const location = { pathname: 'granules' };
   const config = { enableRecovery: false };
   const store = {

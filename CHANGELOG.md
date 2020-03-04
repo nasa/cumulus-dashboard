@@ -89,6 +89,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1690**
   - Removed Gulp/Browserify and their dependencies.
 
+### Fixed
+
+- **CUMULUS-1670**
+  - Fixed bug preventing update of providers
+
 ## [v1.6.1] - 2019-11-12
 
 ### Fixed
