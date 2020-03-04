@@ -41,7 +41,8 @@ export const tableColumns = [
   },
   {
     Header: 'Timestamp',
-    accessor: row => fromNow(row.timestamp)
+    accessor: row => fromNow(row.timestamp),
+    id: 'timestamp'
   }
 ];
 

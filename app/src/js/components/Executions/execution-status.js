@@ -58,7 +58,6 @@ class ExecutionStatus extends React.Component {
         sortIdx='id'
         props={[]}
         order='asc'
-        collapsible={true}
       />
     );
   }

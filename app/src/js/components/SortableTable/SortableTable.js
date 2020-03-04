@@ -1,5 +1,4 @@
 'use strict';
-import Collapse from 'react-collapsible';
 import React, {
   useMemo,
   useEffect,
@@ -37,8 +36,8 @@ IndeterminateCheckbox.propTypes = {
 const SortableTable = ({
   sortIdx,
   rowId,
+  order = 'desc',
   canSelect,
-  collapsible,
   changeSortProps,
   tableColumns = [],
   data = [],
@@ -116,11 +115,15 @@ const SortableTable = ({
   useEffect(() => {
     const [sortProps = {}] = sortBy;
     const { id, desc } = sortProps;
-    const order = desc ? 'desc' : 'asc';
-    if (typeof changeSortProps === 'function') {
-      changeSortProps({ sortIdx: id, order });
+    let sortOrder;
+    if (typeof desc !== 'undefined') {
+      sortOrder = desc ? 'desc' : 'asc';
     }
-  }, [changeSortProps, sortBy]);
+    const sortFieldId = id || sortIdx;
+    if (typeof changeSortProps === 'function') {
+      changeSortProps({ sortIdx: sortFieldId, order: sortOrder || order });
+    }
+  }, [changeSortProps, sortBy, sortIdx, order]);
 
   return (
     <div className='table--wrapper'>
@@ -151,11 +154,11 @@ const SortableTable = ({
             {rows.map((row, i) => {
               prepareRow(row);
               return (
-                <div className='tr' {...row.getRowProps()} key={i}>
+                <div className='tr' data-value={row.id} {...row.getRowProps()} key={i}>
                   {row.cells.map((cell, cellIndex) => {
                     const primaryIdx = canSelect ? 1 : 0;
                     return (
-                      <>
+                      <React.Fragment key={cellIndex}>
                         <div
                           className={`td ${cellIndex === primaryIdx ? 'table__main-asset' : ''}`}
                           {...cell.getCellProps()}
@@ -163,14 +166,7 @@ const SortableTable = ({
                         >
                           {cell.render('Cell')}
                         </div>
-                        {collapsible &&
-                          <td>
-                            <Collapse trigger={'More Details'} triggerWhenOpen={'Less Details'}>
-                              <pre className={'pre-style'}>{JSON.stringify(row.eventDetails, null, 2)}</pre>
-                            </Collapse>
-                          </td>
-                        }
-                      </>
+                      </React.Fragment>
                     );
                   })}
                 </div>

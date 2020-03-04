@@ -50,7 +50,7 @@ class List extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { query, list, sortIdx } = this.props;
+    const { query, list } = this.props;
 
     if (!isEqual(query, prevProps.query)) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -65,11 +65,6 @@ class List extends React.Component {
       this.setState({ params }, () => this.setState({
         queryConfig: this.getQueryConfig()
       }));
-    }
-
-    if (sortIdx && (sortIdx !== this.state.sortIdx)) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ sortIdx });
     }
   }
 

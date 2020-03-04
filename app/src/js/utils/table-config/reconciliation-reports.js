@@ -27,7 +27,7 @@ export const tableColumnsS3Files = [
   {
     Header: 'S3 Link',
     accessor: row => row ? <a href={row.path} target='_blank'>Link</a> : nullValue,
-    id: 'link'
+    id: 'path'
   }
 ];
 
@@ -47,7 +47,7 @@ export const tableColumnsFiles = [
   {
     Header: 'S3 Link',
     accessor: row => row ? <a href={row.path} target='_blank'>Link</a> : nullValue,
-    id: 'link'
+    id: 'path'
   }
 ];
 

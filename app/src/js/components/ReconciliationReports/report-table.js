@@ -15,8 +15,6 @@ const ReportTable = ({
     return null;
   }
 
-  console.log(data);
-
   const shouldCollapse = collapsible && data.length > collapseThreshold;
 
   let reportTable = (

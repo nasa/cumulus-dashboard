@@ -29,7 +29,7 @@ export const tableColumns = [
   {
     Header: 'Last Updated',
     accessor: row => fromNow(row.timestamp),
-    id: 'lastUpdated'
+    id: 'timestamp'
   }
 ];
 

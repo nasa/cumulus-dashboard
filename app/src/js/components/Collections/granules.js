@@ -34,7 +34,6 @@ const CollectionGranules = ({
   workflowOptions
 }) => {
   const { params } = match;
-  console.log(match);
   const { name: collectionName, version: collectionVersion } = params;
   const { pathname } = location;
   const { list } = granules;

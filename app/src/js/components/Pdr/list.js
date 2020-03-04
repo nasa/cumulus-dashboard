@@ -53,7 +53,6 @@ class ActivePdrs extends React.Component {
 
   render () {
     const { list } = this.props.pdrs;
-    console.log(list);
     const { count, queriedAt } = list.meta;
     const view = this.getView();
     return (

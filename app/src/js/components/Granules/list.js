@@ -152,7 +152,7 @@ class AllGranules extends React.Component {
             tableColumns={view === 'failed' ? errorTableColumns : tableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            rowId={'granuleId'}
+            rowId='granuleId'
             sortIdx={tableSortIdx}
           />
         </section>

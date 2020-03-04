@@ -1,4 +1,6 @@
 'use strict';
+import React from 'react';
+import Collapse from 'react-collapsible';
 
 import { fullDate } from '../format';
 
@@ -19,6 +21,11 @@ export const tableColumns = [
   },
   {
     Header: 'Input Details',
-    accessor: 'inputDetails'
+    accessor: row => (
+      <Collapse trigger={'More Details'} triggerWhenOpen={'Less Details'}>
+        <pre className={'pre-style'}>{JSON.stringify(row.eventDetails, null, 2)}</pre>
+      </Collapse>
+    ),
+    id: 'eventDetails'
   }
 ];
