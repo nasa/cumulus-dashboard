@@ -3,12 +3,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import BatchAsyncCommand from '../BatchAsyncCommands/BatchAsyncCommands';
+// import BatchAsyncCommand from '../BatchAsyncCommands/BatchAsyncCommands';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/pagination';
 import SortableTable from '../SortableTable/SortableTable';
-import Timer from '../Timer/timer';
+// import Timer from '../Timer/timer';
 // import TableOptions from '../TableOptions/TableOptions'
 // Lodash
 import isEmpty from 'lodash.isempty';
@@ -16,6 +16,7 @@ import isEqual from 'lodash.isequal';
 import isFunction from 'lodash.isfunction';
 import isNil from 'lodash.isnil';
 import omitBy from 'lodash.omitby';
+import ListActions from '../ListActions/ListActions';
 
 class List extends React.Component {
   constructor (props) {
@@ -29,7 +30,6 @@ class List extends React.Component {
     this.onBulkActionSuccess = this.onBulkActionSuccess.bind(this);
     this.onBulkActionError = this.onBulkActionError.bind(this);
     this.getQueryConfig = this.getQueryConfig.bind(this);
-    this.renderSelectAll = this.renderSelectAll.bind(this);
 
     const initialPage = 1;
     const initialSortIdx = props.sortIdx || 0;
@@ -112,14 +112,8 @@ class List extends React.Component {
     }
   }
 
-  updateSelection (id) {
-    const { selected } = this.state;
-
-    this.setState({
-      selected: selected.includes(id)
-        ? selected.filter(anId => anId !== id)
-        : [...selected, id]
-    });
+  updateSelection (selected) {
+    this.setState({selected});
   }
 
   onBulkActionSuccess () {
@@ -151,29 +145,11 @@ class List extends React.Component {
     }, isEmpty);
   }
 
-  renderSelectAll () {
-    const { list: { data } } = this.props;
-    const allChecked = !isEmpty(data) && this.state.selected.length === data.length;
-
-    return (
-      <label
-        className='form__element__select form-group__element form-group__element--small'>
-        <input
-          type='checkbox'
-          className='form-select__all'
-          name='Select'
-          checked={allChecked}
-          onChange={this.selectAll}
-        />
-        Select
-      </label>
-    );
-  }
-
   render () {
     const {
       dispatch,
       action,
+      children,
       tableHeader,
       tableRow,
       tableSortProps,
@@ -200,33 +176,19 @@ class List extends React.Component {
     const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
     return (
+      <>
+      <ListActions
+        dispatch={dispatch}
+        action={action}
+        bulkActions={bulkActions}
+        queryConfig={queryConfig}
+        completedBulkActions={completedBulkActions}
+        onBulkActionSuccess={this.onBulkActionSuccess}
+        onBulkActionError={this.onBulkActionError}
+        selected={selected}>
+        {children}
+      </ListActions>
       <div className='list-view'>
-        <Timer
-          noheader={!hasActions}
-          dispatch={dispatch}
-          action={action}
-          config={queryConfig}
-          reload={completedBulkActions}
-        />
-        {hasActions && (
-          <div className='form--controls'>
-            {this.renderSelectAll()}
-            {bulkActions.map((item) =>
-              <BatchAsyncCommand
-                key={item.text}
-                dispatch={dispatch}
-                action={item.action}
-                state={item.state}
-                text={item.text}
-                confirm={item.confirm}
-                confirmOptions={item.confirmOptions}
-                onSuccess={this.onBulkActionSuccess}
-                onError={this.onBulkActionError}
-                selection={selected}
-              />)}
-          </div>
-        )}
-
         {list.inflight && <Loading/>}
         {list.error && <ErrorReport report={list.error} truncate={true}/>}
         {bulkActionError && <ErrorReport report={bulkActionError}/>}
@@ -261,6 +223,7 @@ class List extends React.Component {
           />
         </div>
       </div>
+      </>
     );
   }
 }
@@ -269,6 +232,7 @@ List.propTypes = {
   list: PropTypes.object,
   dispatch: PropTypes.func,
   action: PropTypes.func,
+  children: PropTypes.node,
   tableHeader: PropTypes.array,
   tableRow: PropTypes.array,
   tableSortProps: PropTypes.array,

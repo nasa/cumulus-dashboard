@@ -101,13 +101,15 @@ select option{
   margin-left: auto;
 }
 
-.filters.filters__wlabels.total_granules{
-  margin-bottom: 5em;
-}
-
 .form--controls {
   margin-bottom: 2em;
   display: flex;
+}
+
+.dropdown__collection .form__dropdown label {
+  display: inline-block;
+  text-align: left;
+  padding-right: .75em;
 }
 
 .search__wrapper {
@@ -230,9 +232,7 @@ select option{
 }
 
 .form__element__updateToggle-noHeader {
-  position: absolute;
-  right: 0;
-  top: -3.2rem;
+  margin-left: auto;
 }
 
 .form-group__element--right {
