@@ -4,68 +4,64 @@ import { Link } from 'react-router-dom';
 
 import { nullValue } from '../format';
 
-export const tableHeader = [
-  'Report filename'
-];
-
-export const tableRow = [
-  (d) => <Link to={`reconciliation-reports/report/${d.reconciliationReportName}`}>{d.reconciliationReportName}</Link>
-];
-
-export const tableSortProps = [
-  'reconciliationReportName'
+export const tableColumns = [
+  {
+    Header: 'Report filename',
+    accessor: row => <Link to={`/reconciliation-reports/report/${row.reconciliationReportName}`}>{row.reconciliationReportName}</Link>
+  }
 ];
 
 export const bulkActions = function (reports) {
   return [];
 };
 
-export const tableHeaderS3Files = [
-  'Filename',
-  'Bucket',
-  'S3 Link'
+export const tableColumnsS3Files = [
+  {
+    Header: 'Filename',
+    accessor: 'filename'
+  },
+  {
+    Header: 'Bucket',
+    accessor: 'bucket'
+  },
+  {
+    Header: 'S3 Link',
+    accessor: row => row ? <a href={row.path} target='_blank'>Link</a> : nullValue,
+    id: 'path'
+  }
 ];
 
-export const tableRowS3File = [
-  (d) => d.filename,
-  (d) => d.bucket,
-  (d) => d ? <a href={d.path} target='_blank'>Link</a> : nullValue
+export const tableColumnsFiles = [
+  {
+    Header: 'GranuleId',
+    accessor: 'granuleId'
+  },
+  {
+    Header: 'Filename',
+    accessor: 'filename'
+  },
+  {
+    Header: 'Bucket',
+    accessor: 'bucket'
+  },
+  {
+    Header: 'S3 Link',
+    accessor: row => row ? <a href={row.path} target='_blank'>Link</a> : nullValue,
+    id: 'path'
+  }
 ];
 
-export const tablePropsS3File = ['filename', 'bucket', 'link'];
-
-export const tableHeaderFiles = [
-  'GranuleId',
-  'Filename',
-  'Bucket',
-  'S3 Link'
+export const tableColumnsCollections = [
+  {
+    Header: 'Collection name',
+    accessor: 'name'
+  }
 ];
 
-export const tableRowFile = [
-  (d) => d.granuleId,
-  (d) => d.filename,
-  (d) => d.bucket,
-  (d) => d ? <a href={d.path} target='_blank'>Link</a> : nullValue
+export const tableColumnsGranules = [
+  {
+    Header: 'Granule ID',
+    accessor: 'granuleId'
+  }
 ];
 
-export const tablePropsFile = ['granuleId', 'filename', 'bucket', 'link'];
-
-export const tableHeaderCollections = [
-  'Collection name'
-];
-
-export const tableRowCollection = [
-  (d) => d.name
-];
-
-export const tablePropsCollection = ['name'];
-
-export const tableHeaderGranules = [
-  'Granule ID'
-];
-
-export const tableRowGranule = [
-  (d) => d.granuleId
-];
-
-export const tablePropsGranule = ['granuleId'];

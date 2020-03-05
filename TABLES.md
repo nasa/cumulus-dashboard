@@ -1,6 +1,8 @@
 # Table documentation
 
-A lot of logic is encapsulated in the table components. They are central abstractions and wrap functionality like sorting, pagination, selection, and search. The main components are `sortable-table` and `list-view`.
+Our table components leverage [react-table](https://github.com/tannerlinsley/react-table/) to handle basic sorting, row selection, and resizable columns. The main components are `sortable-table` and `list-view`.
+
+react-table's main hook is `useTable()`. Options are passed into this hook for the desired functionality.
 
 ## `sortable-table`
 
@@ -8,20 +10,24 @@ A basic table component that supports row selection and dumb sorting (see below)
 
 **Props**
 
-- **primaryIdx**: Column number to apply bold typeface to. Default is `0` or far-left column.
-- **data**: Array of data items. Items can be objects or arrays, depending on the accessor functions defined in `row`.
-- **header**: Array of strings representing the header row.
-- **row**: Array of items representing columns in each row. Items can be accessor functions with the arguments `data[k], k, data` (where `k` is the index of the current loop), or string values, ie `"collectionName"`.
-- **props**: Array of property names to send to Elasticsearch for a re-ordering query.
-- **sortIdx**: The current index of the `props` array to sort by.
-- **order**: Either 'desc' or 'asc', corresponding to sort order.
-- **changeSortProps**: Callback when a new sort order is defined, passed an object with the properties `{ sortIdx, order }`.
-- **onSelect**: Callback when a row is selected (or unselected), passed a string id corresponding to the `rowId` selector.
-- **canSelect**: Boolean value defining whether 1. rows can be selected and 2. to render check marks.
-- **selectedRows**: Array of row ID's corresponding to rows that are currently selected.
-- **rowId**: String accessor to define as that row's id, ie `collectionName`.
+- **tableColumns**: This is an array containing the column configuration for the table. It is the value for the `columns` key in the options object that is passed to `useTable()`
+  * Options for each column include:
+    - Header: *text or component that will render as the header*
+    - accessor: *key or function for obtaining value*
+    - id: *unqiure column id. required if accessor is function*
+    - disableSortBy: *set to true if the column should not be sortable*
+    - width: *default is 125. set value if column needs to be wider/smaller*
 
-Note, `props`, `sortIdx`, `order`, and `changeSortProps` only apply to components that implement smart searching, such as `list-view`. This base component does internal prop checking to determine whether it uses smart or dumb sorting, based on whether the above props are defined.
+  * Additional options can be found [here](https://github.com/tannerlinsley/react-table/blob/master/docs/api/useTable.md#column-options) or in the documation for a specific plugin hook
+
+- **data**: Array of data items. Items can be any format.
+- **sortIdx**: The id of the column to sort on.
+- **changeSortProps**: Callback when a new sort order is defined, passed an object with the properties `{ sortIdx, order }`.
+- **onSelect**: Callback when a row is selected (or unselected), passed an array containing the ids of all selected rows.
+- **canSelect**: Boolean value defining whether 1. rows can be selected and 2. to render check marks.
+- **rowId**: String or function that defines a particular row's id. Passed to `useTable` options via `getRowId`.
+
+Note, `sortIdx` and `changeSortProps` only apply to components that implement smart searching, such as `list-view`. This base component does internal prop checking to determine whether it uses smart or dumb sorting, based on whether the above props are defined.
 
 ## `list-view`
 
@@ -32,15 +38,12 @@ Wraps `sortable-table` and implements auto-update and smart sort. When a new sor
 - **list**: Parent data structure, ie `state.granules.list` or `state.collections.list`. Expected to contain `{ data, inflight, error, meta }` properties corresponding to all `list` state objects.
 - **dispatch**: Redux dispatch function.
 - **action**: Redux-style action to send, ie `listCollections`.
-- **tableHeader**: Corresponds to `sortableTable#header`.
-- **tableRow**: Corresponds to `sortableTable#row`.
-- **tableSortProps**: Corresponds to `sortableTable#props`.
 - **sortIdx**: Corresponds to `sortableTable#sortIdx`.
 - **query**: Array of configuration objects passed to `batch-async-command`.
 - **rowId** Corresponds to `sortableTable#rowId`.
 
 ## Dumb vs smart sort
 
-Dumb sorting uses `Array.sort()` within the component to re-order table data that has **already** been received from the API. Smart sorting initiates a new API request, passing the sort parameter to the server (elasticsearch) which returns a sorted response.
+Dumb sorting uses react-table's built in sort functionality to sort table data that has **already** been received from the API. Smart sorting initiates a new API request, passing the sort parameter to the server (elasticsearch) which returns a sorted response. The `maunalSortBy` option passed to `useTable()` tells react-table whether we are doing server-side sorting (`true`) or letting react-table sort (`false`).
 
 Dumb sorting is for smaller, simple tables that do not need pagination.

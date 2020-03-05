@@ -4,7 +4,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
 import moment from 'moment';
 import {
   applyRecoveryWorkflowToCollection,
@@ -22,17 +21,16 @@ import {
 } from '../../utils/format';
 import { get } from 'object-path';
 import {
-  tableHeader,
-  tableRow,
-  tableSortProps,
   bulkActions,
-  recoverAction
+  recoverAction,
+  tableColumns
 } from '../../utils/table-config/collections';
 import Search from '../Search/search';
 import List from '../Table/Table';
 import { strings } from '../locale';
 import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import ListFilters from '../ListActions/ListFilters';
 
 const breadcrumbConfig = [
   {
@@ -123,7 +121,12 @@ class CollectionList extends React.Component {
     const { list } = this.props.collections;
     // merge mmtLinks with the collection data;
     const mmtLinks = this.props.mmtLinks;
-    list.data.forEach((collection) => { collection.mmtLink = mmtLinks[getCollectionId(collection)]; });
+    const data = list.data.map((collection) => {
+      return {
+        ...collection,
+        mmtLink: mmtLinks[getCollectionId(collection)]
+      };
+    });
     const { count, queriedAt } = list.meta;
     return (
       <div className='page__component'>
@@ -140,37 +143,26 @@ class CollectionList extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>{strings.all_collections} <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
           </div>
-          <div className='filter-action-wrapper'>
-            <div className='filters'>
+
+          <List
+            list={list}
+            data={data}
+            tableColumns={tableColumns}
+            dispatch={this.props.dispatch}
+            action={listCollections}
+            query={this.generateQuery()}
+            bulkActions={this.generateBulkActions()}
+            rowId={getCollectionId}
+            sortIdx='duration'
+          >
+            <ListFilters>
               <Search dispatch={this.props.dispatch}
                 action={searchCollections}
                 format={collectionSearchResult}
                 clear={clearCollectionsSearch}
               />
-            </div>
-            <div className="filter-actions">
-              <div className='form--controls'>
-                <ul className="form--controls__group">
-                  <li><Button className='button button--green button--add button--small form-group__element' href='/collections/add' role="button">{strings.add_collection}</Button></li>
-                  <li>{this.renderDeleteButton()}</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <List
-            list={list}
-            dispatch={this.props.dispatch}
-            action={listCollections}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
-            query={this.generateQuery()}
-            bulkActions={this.generateBulkActions()}
-            rowId={getCollectionId}
-            sortIdx={7}
-          />
-
+            </ListFilters>
+          </List>
         </section>
       </div>
     );

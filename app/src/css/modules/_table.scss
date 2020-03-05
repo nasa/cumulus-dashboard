@@ -13,7 +13,7 @@
   word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
-table {
+.table {
   width: 100%;
   line-height: 1.6em;
 
@@ -21,9 +21,9 @@ table {
     max-width: 500px;
   }
 
-  thead {
+  .thead {
     background-color: $ocean-blue;
-    td {
+    .th {
       color: $white;
       font-weight: $base-font-semibold;
       padding: 1em 2em;
@@ -31,13 +31,15 @@ table {
     }
   }
 
-  tbody {
-    tr {
+  .tbody {
+    .tr {
       border-bottom: 1px solid $lightest-grey;
-      td {
+      .td {
         font-size: .86em;
         padding: 1em 2em;
         vertical-align: middle;
+        overflow: hidden;
+        text-overflow: ellipsis;
         /*&:first-of-type {
           padding: 1em 0 1em 2em;
         }*/
@@ -82,15 +84,27 @@ table {
   border-radius: 10px;
 }
 
-.list--granules {
-  .table__main-asset {
-    max-width: 200px;
+.list--errors {
+  tbody tr td:first-of-type,
+  .tbody .tr .td:first-of-type {
+    max-width: 300px;
   }
 }
 
-.list--errors {
-  tbody tr td:first-of-type {
-    max-width: 300px;
+.resizer {
+  display: inline-block;
+  background: $lightest-grey;
+  width: 1px;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateX(50%);
+  z-index: 1;
+  touch-action:none;
+
+  &.isResizing {
+    background: red;
   }
 }
 

@@ -25,11 +25,7 @@ import {
 } from '../utils/format';
 import List from './Table/Table';
 import GranulesProgress from './Granules/progress';
-import {
-  errorTableHeader,
-  errorTableRow,
-  errorTableSortProps
-} from '../utils/table-config/granules';
+import { errorTableColumns } from '../utils/table-config/granules';
 import { recent, updateInterval } from '../config';
 import {
   kibanaS3AccessErrorsLink,
@@ -224,10 +220,8 @@ class Home extends React.Component {
                 list={list}
                 dispatch={this.props.dispatch}
                 action={listGranules}
-                tableHeader={errorTableHeader}
-                sortIdx={4}
-                tableRow={errorTableRow}
-                tableSortProps={errorTableSortProps}
+                tableColumns={errorTableColumns}
+                sortIdx='timestamp'
                 query={this.generateQuery()}
               />
             </div>
