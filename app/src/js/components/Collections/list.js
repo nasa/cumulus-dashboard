@@ -10,8 +10,7 @@ import {
   clearCollectionsSearch,
   getCumulusInstanceMetadata,
   listCollections,
-  searchCollections,
-  deleteCollection
+  searchCollections
 } from '../../actions';
 import {
   collectionSearchResult,
@@ -19,7 +18,6 @@ import {
   tally,
   getCollectionId
 } from '../../utils/format';
-import { get } from 'object-path';
 import {
   bulkActions,
   recoverAction,
@@ -28,7 +26,6 @@ import {
 import Search from '../Search/search';
 import List from '../Table/Table';
 import { strings } from '../locale';
-import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
 
@@ -43,9 +40,6 @@ const breadcrumbConfig = [
   }
 ];
 
-// const { pathname } = this.props.location;
-// const existingCollection = pathname !== '/collections/add';
-
 class CollectionList extends React.Component {
   constructor () {
     super();
@@ -58,8 +52,6 @@ class CollectionList extends React.Component {
     };
     this.generateQuery = this.generateQuery.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
-    this.deleteMe = this.deleteMe.bind(this);
-    this.errors = this.errors.bind(this);
   }
 
   componentDidMount () {
@@ -81,40 +73,6 @@ class CollectionList extends React.Component {
     let actions = bulkActions(collections);
     if (config.enableRecovery) actions = actions.concat(recoverAction(collections, actionConfig));
     return actions;
-  }
-
-  deleteMe () {
-    const { name, version } = this.props.match.params;
-    this.props.dispatch(deleteCollection(name, version));
-  }
-
-  errors () {
-    const { name, version } = this.props.match.params;
-    const collectionId = getCollectionId({ name, version });
-    return [
-      get(this.props.collections.map, [collectionId, 'error']),
-      get(this.props.collections.deleted, [collectionId, 'error'])
-    ].filter(Boolean);
-  }
-
-  renderDeleteButton () {
-    const { match: { params }, collections } = this.props;
-    const collectionId = getCollectionId(params);
-    const deleteStatus = get(collections.deleted, [collectionId, 'status']);
-    const hasGranules = get(
-      collections.map[collectionId], 'data.stats.total', 0) > 0;
-
-    return (
-      <DeleteCollection
-        collectionId={collectionId}
-        errors={this.errors()}
-        hasGranules={hasGranules}
-        onDelete={this.deleteMe}
-        onGotoGranules={this.gotoGranules}
-        onSuccess={this.navigateBack}
-        status={deleteStatus}
-      />
-    );
   }
 
   render () {
@@ -175,8 +133,7 @@ CollectionList.propTypes = {
   dispatch: PropTypes.func,
   logs: PropTypes.object,
   config: PropTypes.object,
-  location: PropTypes.object,
-  match: PropTypes.object
+  location: PropTypes.object
 };
 
 export { CollectionList };
