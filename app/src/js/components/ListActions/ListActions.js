@@ -34,15 +34,13 @@ const ListActions = ({
       <div className='list-actions'>
         {hasActions && (
           <div className='form--controls'>
-            {bulkActions.map((item) => {
+            {bulkActions.map((item, index) => {
+              const { Component, text } = item;
               return (
-                <>
-                  {item.Component &&
-                    item.Component
-                  }
-                  {!item.Component &&
+                <React.Fragment key={text || index}>
+                  {Component && Component}
+                  {!Component &&
                     <BatchAsyncCommand
-                      key={item.text}
                       dispatch={dispatch}
                       action={item.action}
                       state={item.state}
@@ -55,7 +53,7 @@ const ListActions = ({
                       className={item.className || ''}
                     />
                   }
-                </>
+                </React.Fragment>
               );
             })}
           </div>
