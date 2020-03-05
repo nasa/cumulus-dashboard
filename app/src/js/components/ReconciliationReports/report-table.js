@@ -4,63 +4,55 @@ import Collapsible from 'react-collapsible';
 
 import SortableTable from '../SortableTable/SortableTable';
 
-class ReportTable extends React.Component {
-  render () {
-    const {
-      collapsible,
-      collapseThreshold,
-      data,
-      title,
-      tableHeader,
-      tableRow,
-      tableProps
-    } = this.props;
+const ReportTable = ({
+  collapsible,
+  collapseThreshold,
+  data,
+  title,
+  tableColumns
+}) => {
+  if (!data || !data.length) {
+    return null;
+  }
 
-    if (!data || !data.length) {
-      return null;
-    }
+  const shouldCollapse = collapsible && data.length > collapseThreshold;
 
-    let reportTable = (
-      <SortableTable
-        data={data}
-        header={tableHeader}
-        row={tableRow}
-        props={tableProps}
-      />
-    );
+  let reportTable = (
+    <SortableTable
+      data={data}
+      tableColumns={tableColumns}
+    />
+  );
 
-    if (collapsible && data.length > collapseThreshold) {
-      reportTable = (
-        <Collapsible
-          trigger={`Show table (${data.length} rows)`}
-          triggerWhenOpen='Hide table'
-          triggerClassName={'button button--green button--small'}
-          triggerOpenedClassName={'button button--green button--small'}
-        >
-          { reportTable }
-        </Collapsible>
-      );
-    }
-
-    return (
-      <div className='page__section--small report__table'>
-        <h3 className='heading--small heading--shared-content with-description'>
-          {title} ({data.length})
-        </h3>
+  if (shouldCollapse) {
+    reportTable = (
+      <Collapsible
+        trigger={`Show table (${data.length} rows)`}
+        triggerWhenOpen='Hide table'
+        triggerClassName={'button button--green button--small'}
+        triggerOpenedClassName={'button button--green button--small'}
+      >
         { reportTable }
-      </div>
+      </Collapsible>
     );
   }
-}
+
+  return (
+    <div className='page__section--small report__table'>
+      <h3 className='heading--small heading--shared-content with-description'>
+        {title} ({data.length})
+      </h3>
+      { reportTable }
+    </div>
+  );
+};
 
 ReportTable.propTypes = {
   collapsible: PropTypes.bool,
   collapseThreshold: PropTypes.number,
   data: PropTypes.array,
   title: PropTypes.string,
-  tableHeader: PropTypes.array,
-  tableRow: PropTypes.array,
-  tableProps: PropTypes.array
+  tableColumns: PropTypes.array
 };
 
 ReportTable.defaultProps = {

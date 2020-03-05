@@ -9,10 +9,7 @@ import { displayCase, fullDate, parseJson } from '../../utils/format';
 import { withRouter, Link } from 'react-router-dom';
 import { kibanaExecutionLink } from '../../utils/kibana';
 
-import {
-  tableHeader,
-  tableRow
-} from '../../utils/table-config/execution-status';
+import { tableColumns } from '../../utils/table-config/execution-status';
 
 import ErrorReport from '../Errors/report';
 
@@ -56,13 +53,11 @@ class ExecutionStatus extends React.Component {
       <SortableTable
         data={events.sort((a, b) => a.id > b.id ? 1 : -1)}
         dispatch={this.props.dispatch}
-        header={tableHeader}
-        row={tableRow}
+        tableColumns={tableColumns}
         rowId='id'
-        sortIdx={0}
+        sortIdx='id'
         props={[]}
         order='asc'
-        collapsible={true}
       />
     );
   }

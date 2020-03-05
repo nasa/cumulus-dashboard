@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { get } from 'object-path';
 import { listProviders, getCount, interval } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/providers';
+import { tableColumns } from '../../utils/table-config/providers';
 import List from '../Table/Table';
 import PropTypes from 'prop-types';
 import Overview from '../Overview/overview';
@@ -79,13 +79,11 @@ class ProvidersOverview extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listProviders}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
+            tableColumns={tableColumns}
             query={this.generateQuery()}
             bulkActions={[]}
-            rowId={'name'}
-            sortIdx={5}
+            rowId='name'
+            sortIdx='timestamp'
           />
         </section>
       </div>

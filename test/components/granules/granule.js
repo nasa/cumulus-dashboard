@@ -46,8 +46,11 @@ test('CUMULUS-336 Granule file links use the correct URL', function (t) {
     />
   );
 
-  const sortableTable = granuleOverview.find('Table');
+  const sortableTable = granuleOverview.find('SortableTable');
   t.is(sortableTable.length, 1);
   const sortableTableWrapper = sortableTable.dive();
-  t.is(sortableTableWrapper.find('tbody tr td a[href="https://my-bucket.s3.amazonaws.com/my-key-path/my-name"]').length, 1);
+  t.is(sortableTableWrapper
+    .find('.tbody .tr')
+    .find('Cell').at(1).dive()
+    .find('a[href="https://my-bucket.s3.amazonaws.com/my-key-path/my-name"]').length, 1);
 });

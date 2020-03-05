@@ -38,22 +38,27 @@ import { simpleDropdownOption } from '../../utils/table-config/granules';
 
 const { updateInterval } = _config;
 
-const tableHeader = [
-  'Filename',
-  'Link',
-  'Bucket'
-];
-
 const link = 'Link';
 
 const makeLink = (bucket, key) => {
   return `https://${bucket}.s3.amazonaws.com/${key}`;
 };
 
-const tableRow = [
-  (d) => d.fileName || '(No name)',
-  (d) => (d.bucket && d.key) ? (<a href={makeLink(d.bucket, d.key)}>{d.fileName ? link : nullValue}</a>) : null,
-  (d) => d.bucket
+const tableColumns = [
+  {
+    Header: 'Filename',
+    accessor: row => row.fileName || '(No name)',
+    id: 'fileName'
+  },
+  {
+    Header: 'Link',
+    accessor: row => (row.bucket && row.key) ? (<a href={makeLink(row.bucket, row.key)}>{row.fileName ? link : nullValue}</a>) : null,
+    id: 'link'
+  },
+  {
+    Header: 'Bucket',
+    accessor: 'bucket'
+  }
 ];
 
 const metaAccessors = [
@@ -241,9 +246,7 @@ class GranuleOverview extends React.Component {
           </div>
           <Table
             data={files}
-            header={tableHeader}
-            row={tableRow}
-            props={['name', 'filename', 'bucket']}
+            tableColumns={tableColumns}
           />
         </section>
 

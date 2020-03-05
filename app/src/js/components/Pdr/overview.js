@@ -7,7 +7,7 @@ import { get } from 'object-path';
 import { interval, listPdrs, getCount } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import { bulkActions } from '../../utils/table-config/pdrs';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/pdr-progress';
+import { tableColumns } from '../../utils/table-config/pdr-progress';
 import List from '../Table/Table';
 import Overview from '../Overview/overview';
 import _config from '../../config';
@@ -75,13 +75,11 @@ class PdrOverview extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listPdrs}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
-            sortIdx={5}
+            tableColumns={tableColumns}
+            sortIdx='timestamp'
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            rowId={'pdrName'}
+            rowId='pdrName'
           />
           <Link className='link--secondary link--learn-more' to='/pdrs/active'>View Currently Active PDRs</Link>
         </section>
