@@ -8,10 +8,6 @@ import {
   GRANULE_INFLIGHT,
   GRANULE_ERROR,
 
-  RECENT_GRANULES,
-  RECENT_GRANULES_INFLIGHT,
-  RECENT_GRANULES_ERROR,
-
   GRANULES,
   GRANULES_INFLIGHT,
   GRANULES_ERROR,
@@ -99,20 +95,6 @@ export default function reducer (state = initialState, action) {
     case GRANULES_ERROR:
       set(state, ['list', 'inflight'], false);
       set(state, ['list', 'error'], action.error);
-      break;
-
-    // basically a dummy query to get the meta object,
-    // which contains the number of granules updated in the last hour.
-    case RECENT_GRANULES:
-      set(state, ['recent', 'data'], data.meta);
-      set(state, ['recent', 'inflight'], false);
-      break;
-    case RECENT_GRANULES_INFLIGHT:
-      set(state, ['recent', 'inflight'], true);
-      break;
-    case RECENT_GRANULES_ERROR:
-      set(state, ['recent', 'inflight'], false);
-      set(state, ['recent', 'error'], action.error);
       break;
 
     case GRANULE_REPROCESS:
