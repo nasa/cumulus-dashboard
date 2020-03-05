@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { fromNow, seconds, tally, collectionNameVersion } from '../format';
 import { deleteCollection } from '../../actions';
 import { strings } from '../../components/locale';
+import { Button } from 'react-bootstrap';
 
 export const tableHeader = [
   'Name',
@@ -54,14 +55,19 @@ export const recoverAction = function (collections, config) {
 
 const confirmDelete = (d) => `Delete ${d} ${strings.collection}(s)?`;
 export const bulkActions = function (collections) {
-  return [{
-    text: 'Delete Collection',
-    action: (collectionId) => {
-      const { name, version } = collectionNameVersion(collectionId);
-      return deleteCollection(name, version);
+  return [
+    {
+      Component: <Button className='button button--green button--add button--small form-group__element' href='/collections/add' role="button">{strings.add_collection}</Button>
     },
-    state: collections.deleted,
-    confirm: confirmDelete,
-    className: 'button button--delete button--small form-group__element'
-  }];
+    {
+      text: 'Delete Collection',
+      action: (collectionId) => {
+        const { name, version } = collectionNameVersion(collectionId);
+        return deleteCollection(name, version);
+      },
+      state: collections.deleted,
+      confirm: confirmDelete,
+      className: 'button button--delete button--small form-group__element'
+    }
+  ];
 };

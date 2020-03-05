@@ -34,20 +34,30 @@ const ListActions = ({
       <div className='list-actions'>
         {hasActions && (
           <div className='form--controls'>
-            {bulkActions.map((item) =>
-              <BatchAsyncCommand
-                key={item.text}
-                dispatch={dispatch}
-                action={item.action}
-                state={item.state}
-                text={item.text}
-                confirm={item.confirm}
-                confirmOptions={item.confirmOptions}
-                onSuccess={handleBulkActionSuccess}
-                onError={handleBulkActionError}
-                selection={selected}
-                className={item.className || ''}
-              />)}
+            {bulkActions.map((item) => {
+              return (
+                <>
+                  {item.Component &&
+                    item.Component
+                  }
+                  {!item.Component &&
+                    <BatchAsyncCommand
+                      key={item.text}
+                      dispatch={dispatch}
+                      action={item.action}
+                      state={item.state}
+                      text={item.text}
+                      confirm={item.confirm}
+                      confirmOptions={item.confirmOptions}
+                      onSuccess={handleBulkActionSuccess}
+                      onError={handleBulkActionError}
+                      selection={selected}
+                      className={item.className || ''}
+                    />
+                  }
+                </>
+              );
+            })}
           </div>
         )}
         <Timer
