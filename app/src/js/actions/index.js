@@ -1,7 +1,6 @@
 'use strict';
 
 import compareVersions from 'compare-versions';
-import moment from 'moment';
 import url from 'url';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
@@ -281,20 +280,6 @@ export const listGranules = (options) => {
       }});
   };
 };
-
-// only query the granules from the last hour
-export const getRecentGranules = () => ({
-  [CALL_API]: {
-    type: types.RECENT_GRANULES,
-    method: 'GET',
-    path: 'granules',
-    qs: {
-      limit: 1,
-      fields: 'granuleId',
-      updatedAt__from: moment().subtract(1, 'hour').format()
-    }
-  }
-});
 
 export const reprocessGranule = (granuleId) => ({
   [CALL_API]: {
