@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- **CUMULUS-1758**
+  - Adds the ability to resize table columns
+
+### Changed
+
+- **CUMULUS-1758**
+  - Updates table implementation to use [react-table](https://github.com/tannerlinsley/react-table)
+
 ## [v1.7.0] - 2020-03-02
 
 ### BREAKING CHANGES

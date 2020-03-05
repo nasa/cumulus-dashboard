@@ -28,7 +28,7 @@ import statusOptions from '../../utils/status';
 import List from '../Table/Table';
 import Bulk from '../Granules/bulk';
 import Overview from '../Overview/overview';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
+import { tableColumns } from '../../utils/table-config/granules';
 import { strings } from '../locale';
 import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
@@ -287,12 +287,10 @@ class CollectionOverview extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listGranules}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
+            tableColumns={tableColumns}
             query={this.generateQuery()}
-            rowId={'granuleId'}
-            sortIdx={6}
+            rowId='granuleId'
+            sortIdx='timestamp'
           />
         </section>
       </div>

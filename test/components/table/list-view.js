@@ -7,10 +7,7 @@ import {mount, configure} from 'enzyme';
 import {listGranules} from '../../../app/src/js/actions';
 import { List } from '../../../app/src/js/components/Table/Table';
 import Timer from '../../../app/src/js/components/Timer/timer.js';
-import {
-  errorTableHeader,
-  errorTableRow, errorTableSortProps
-} from '../../../app/src/js/utils/table-config/granules';
+import { errorTableColumns } from '../../../app/src/js/utils/table-config/granules';
 
 configure({ adapter: new Adapter() });
 
@@ -26,10 +23,8 @@ test('table should properly initialize timer config prop', async (t) => {
       list={list}
       dispatch={dispatch}
       action={listGranules}
-      tableHeader={errorTableHeader}
-      sortIdx={4}
-      tableRow={errorTableRow}
-      tableSortProps={errorTableSortProps}
+      tableColumns={errorTableColumns}
+      sortIdx='timestamp'
       query={query}
     />,
     {
