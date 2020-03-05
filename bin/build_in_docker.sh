@@ -18,7 +18,8 @@ set -evx
 apt-get update
 
 apt-get install -y \
-  rsync
+  rsync \
+  git
 
 mkdir /build
 rsync -av \
