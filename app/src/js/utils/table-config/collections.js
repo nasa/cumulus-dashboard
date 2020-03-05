@@ -55,12 +55,13 @@ export const recoverAction = function (collections, config) {
 const confirmDelete = (d) => `Delete ${d} ${strings.collection}(s)?`;
 export const bulkActions = function (collections) {
   return [{
-    text: 'Delete',
+    text: 'Delete Collection',
     action: (collectionId) => {
       const { name, version } = collectionNameVersion(collectionId);
       return deleteCollection(name, version);
     },
     state: collections.deleted,
-    confirm: confirmDelete
+    confirm: confirmDelete,
+    className: 'button button--delete button--small form-group__element'
   }];
 };

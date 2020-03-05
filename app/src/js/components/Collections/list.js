@@ -3,7 +3,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 import moment from 'moment';
 import {
   applyRecoveryWorkflowToCollection,
@@ -57,12 +58,10 @@ class CollectionList extends React.Component {
       '1 Month Ago': moment().subtract(1, 'months').format(),
       '1 Year Ago': moment().subtract(1, 'years').format()
     };
-    [
-      this.generateQuery,
-      this.generateBulkActions,
-      this.deleteMe,
-      this.errors
-    ].forEach((fn) => (this[fn.name] = fn.bind(this)));
+    this.generateQuery = this.generateQuery.bind(this);
+    this.generateBulkActions = this.generateBulkActions.bind(this);
+    this.deleteMe = this.deleteMe.bind(this);
+    this.errors = this.errors.bind(this);
   }
 
   componentDidMount () {
@@ -93,7 +92,7 @@ class CollectionList extends React.Component {
 
   errors () {
     const { name, version } = this.props.match.params;
-    const collectionId = getCollectionId({name, version});
+    const collectionId = getCollectionId({ name, version });
     return [
       get(this.props.collections.map, [collectionId, 'error']),
       get(this.props.collections.deleted, [collectionId, 'error'])
@@ -141,22 +140,22 @@ class CollectionList extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>{strings.all_collections} <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
           </div>
-          <div className='filters filters__wlabels'>
-            <ul>
-              <li>
-                <Search dispatch={this.props.dispatch}
-                  action={searchCollections}
-                  format={collectionSearchResult}
-                  clear={clearCollectionsSearch}
-                />
-              </li>
-              <li>
-                <Link className='button button--green button--small button--add' to='/collections/add'>{strings.add_a_collection}</Link>
-              </li>
-              <li>
-                {this.renderDeleteButton()}
-              </li>
-            </ul>
+          <div className='filter-action-wrapper'>
+            <div className='filters'>
+              <Search dispatch={this.props.dispatch}
+                action={searchCollections}
+                format={collectionSearchResult}
+                clear={clearCollectionsSearch}
+              />
+            </div>
+            <div className="filter-actions">
+              <div className='form--controls'>
+                <ul className="form--controls__group">
+                  <li><Button className='button button--green button--add button--small form-group__element' href='/collections/add' role="button">{strings.add_collection}</Button></li>
+                  <li>{this.renderDeleteButton()}</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <List
