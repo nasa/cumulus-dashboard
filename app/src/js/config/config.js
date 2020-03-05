@@ -17,7 +17,8 @@ const config = {
   graphicsPath: (process.env.BUCKET || ''),
   enableRecovery: process.env.ENABLE_RECOVERY || false,
   esUser: process.env.ES_USER || '',
-  esPassword: process.env.ES_PASSWORD || ''
+  esPassword: process.env.ES_PASSWORD || '',
+  servedByCumulusAPI: process.env.SERVED_BY_CUMULUS_API || ''
 };
 
 module.exports = config;
