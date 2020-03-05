@@ -9,12 +9,7 @@ import {
   listReconciliationReports
 } from '../../actions';
 import { lastUpdated } from '../../utils/format';
-import {
-  tableHeader,
-  tableRow,
-  tableSortProps,
-  bulkActions
-} from '../../utils/table-config/reconciliation-reports';
+import { tableColumns, bulkActions } from '../../utils/table-config/reconciliation-reports';
 import Search from '../Search/search';
 import List from '../Table/Table';
 
@@ -59,12 +54,10 @@ class ReconciliationReportList extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listReconciliationReports}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
+            tableColumns={tableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            rowId={'reconciliationReportName'}
+            rowId='reconciliationReportName'
           />
         </section>
       </div>

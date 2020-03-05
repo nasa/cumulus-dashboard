@@ -703,15 +703,6 @@ export const getSchema = (type) => ({
   }
 });
 
-export const queryHistogram = (options) => ({
-  [CALL_API]: {
-    type: types.HISTOGRAM,
-    method: 'GET',
-    url: url.resolve(root, 'stats/histogram'),
-    qs: options
-  }
-});
-
 export const listWorkflows = (options) => ({
   [CALL_API]: {
     type: types.WORKFLOWS,

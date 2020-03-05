@@ -16,6 +16,7 @@ and behaviors for our Cumulus Dashboard components
 @import "components";
 
 /* Bootstrap Overrides */
+@import "overrides/breadcrumb";
 @import "overrides/pagination";
 @import "overrides/modal";
 

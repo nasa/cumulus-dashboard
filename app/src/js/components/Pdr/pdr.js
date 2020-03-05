@@ -27,7 +27,7 @@ import {
   bool,
   deleteText
 } from '../../utils/format';
-import { tableHeader, tableRow, tableSortProps, bulkActions } from '../../utils/table-config/pdrs';
+import { tableColumns, bulkActions } from '../../utils/table-config/pdrs';
 import { renderProgress } from '../../utils/table-config/pdr-progress';
 import List from '../Table/Table';
 import LogViewer from '../Logs/viewer';
@@ -184,12 +184,10 @@ class PDR extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listGranules}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
+            tableColumns={tableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            rowId={'granuleId'}
+            rowId='granuleId'
           />
         </section>
         <LogViewer

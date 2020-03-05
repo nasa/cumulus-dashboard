@@ -3,7 +3,7 @@ import React from 'react';
 import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import {
   clearExecutionsFilter,
   filterExecutions,
@@ -17,12 +17,9 @@ import {
   listWorkflows
 } from '../../actions';
 import {
-  fromNow,
-  seconds,
   tally,
   lastUpdated,
-  displayCase,
-  truncate
+  displayCase
 } from '../../utils/format';
 import {
   workflowOptions,
@@ -34,36 +31,10 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import _config from '../../config';
-import {strings} from '../locale';
+import { strings } from '../locale';
+import { tableColumns } from '../../utils/table-config/executions';
 
 const { updateInterval } = _config;
-
-const tableHeader = [
-  'Name',
-  'Status',
-  'Type',
-  'Created',
-  'Duration',
-  strings.collection_name
-];
-
-const tableRow = [
-  (d) => <Link to={'/executions/execution/' + d.arn} title={d.name}>{truncate(d.name, 24)}</Link>,
-  (d) => displayCase(d.status),
-  'type',
-  (d) => fromNow(d.createdAt),
-  (d) => seconds(d.duration),
-  'collectionId'
-];
-
-const tableSortProps = [
-  'name',
-  'status',
-  'type',
-  'createdAt',
-  'duration',
-  strings.collection_id
-];
 
 class ExecutionOverview extends React.Component {
   constructor (props) {
@@ -164,12 +135,10 @@ class ExecutionOverview extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listExecutions}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
+            tableColumns={tableColumns}
             query={{}}
-            rowId={'name'}
-            sortIdx={3}
+            rowId='name'
+            sortIdx='createdAt'
           />
         </section>
       </div>

@@ -3,19 +3,17 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import BatchAsyncCommand from '../BatchAsyncCommands/BatchAsyncCommands';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/pagination';
 import SortableTable from '../SortableTable/SortableTable';
-import Timer from '../Timer/timer';
-// import TableOptions from '../TableOptions/TableOptions'
 // Lodash
 import isEmpty from 'lodash.isempty';
 import isEqual from 'lodash.isequal';
 import isFunction from 'lodash.isfunction';
 import isNil from 'lodash.isnil';
 import omitBy from 'lodash.omitby';
+import ListActions from '../ListActions/ListActions';
 
 class List extends React.Component {
   constructor (props) {
@@ -23,13 +21,11 @@ class List extends React.Component {
     this.displayName = 'List';
     this.queryNewPage = this.queryNewPage.bind(this);
     this.queryNewSort = this.queryNewSort.bind(this);
-    this.getSortProp = this.getSortProp.bind(this);
     this.selectAll = this.selectAll.bind(this);
     this.updateSelection = this.updateSelection.bind(this);
     this.onBulkActionSuccess = this.onBulkActionSuccess.bind(this);
     this.onBulkActionError = this.onBulkActionError.bind(this);
     this.getQueryConfig = this.getQueryConfig.bind(this);
-    this.renderSelectAll = this.renderSelectAll.bind(this);
 
     const initialPage = 1;
     const initialSortIdx = props.sortIdx || 0;
@@ -44,7 +40,7 @@ class List extends React.Component {
       queryConfig: {
         page: initialPage,
         order: initialOrder,
-        sort_by: this.getSortProp(initialSortIdx),
+        sort_by: initialSortIdx,
         ...(props.query || {})
       },
       params: {},
@@ -54,7 +50,7 @@ class List extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { query, list, sortIdx } = this.props;
+    const { query, list } = this.props;
 
     if (!isEqual(query, prevProps.query)) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -69,11 +65,6 @@ class List extends React.Component {
       this.setState({ params }, () => this.setState({
         queryConfig: this.getQueryConfig()
       }));
-    }
-
-    if (sortIdx !== this.state.sortIdx) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ sortIdx });
     }
   }
 
@@ -90,14 +81,10 @@ class List extends React.Component {
       ...sortProps,
       queryConfig: this.getQueryConfig({
         order: sortProps.order,
-        sort_by: this.getSortProp(sortProps.sortIdx)
+        sort_by: sortProps.sortIdx
       }),
       selected: []
     });
-  }
-
-  getSortProp (idx) {
-    return this.props.tableSortProps[idx];
   }
 
   selectAll (e) {
@@ -112,14 +99,8 @@ class List extends React.Component {
     }
   }
 
-  updateSelection (id) {
-    const { selected } = this.state;
-
-    this.setState({
-      selected: selected.includes(id)
-        ? selected.filter(anId => anId !== id)
-        : [...selected, id]
-    });
+  updateSelection (selected) {
+    this.setState({selected});
   }
 
   onBulkActionSuccess () {
@@ -144,89 +125,53 @@ class List extends React.Component {
     return omitBy({
       page: this.state.page,
       order: this.state.order,
-      sort_by: this.getSortProp(this.state.sortIdx),
+      sort_by: this.state.sortIdx,
       ...this.state.params,
       ...config,
       ...query
-    }, isEmpty);
-  }
-
-  renderSelectAll () {
-    const { list: { data } } = this.props;
-    const allChecked = !isEmpty(data) && this.state.selected.length === data.length;
-
-    return (
-      <label
-        className='form__element__select form-group__element form-group__element--small'>
-        <input
-          type='checkbox'
-          className='form-select__all'
-          name='Select'
-          checked={allChecked}
-          onChange={this.selectAll}
-        />
-        Select
-      </label>
-    );
+    }, isNil);
   }
 
   render () {
     const {
       dispatch,
       action,
-      tableHeader,
-      tableRow,
-      tableSortProps,
+      children,
       bulkActions,
       rowId,
       list,
-      list: {
-        meta: {
-          count,
-          limit
-        }
-      }
+      tableColumns,
+      data
     } = this.props;
+    const { meta, data: listData } = list;
+    const { count, limit } = meta;
+    const tableData = data || listData;
     const {
       page,
       sortIdx,
       order,
       selected,
-      queryConfig,
       completedBulkActions,
       bulkActionError
     } = this.state;
-    const primaryIdx = 0;
     const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
-    return (
-      <div className='list-view'>
-        <Timer
-          noheader={!hasActions}
-          dispatch={dispatch}
-          action={action}
-          config={queryConfig}
-          reload={completedBulkActions}
-        />
-        {hasActions && (
-          <div className='form--controls'>
-            {this.renderSelectAll()}
-            {bulkActions.map((item) =>
-              <BatchAsyncCommand
-                key={item.text}
-                dispatch={dispatch}
-                action={item.action}
-                state={item.state}
-                text={item.text}
-                confirm={item.confirm}
-                confirmOptions={item.confirmOptions}
-                onSuccess={this.onBulkActionSuccess}
-                onError={this.onBulkActionError}
-                selection={selected}
-              />)}
-          </div>
-        )}
+    const queryConfig = this.getQueryConfig();
 
+    return (
+      <>
+      <ListActions
+        dispatch={dispatch}
+        action={action}
+        bulkActions={bulkActions}
+        queryConfig={queryConfig}
+        completedBulkActions={completedBulkActions}
+        onBulkActionSuccess={this.onBulkActionSuccess}
+        onBulkActionError={this.onBulkActionError}
+        selected={selected}>
+        {children}
+      </ListActions>
+      <div className='list-view'>
         {list.inflight && <Loading/>}
         {list.error && <ErrorReport report={list.error} truncate={true}/>}
         {bulkActionError && <ErrorReport report={bulkActionError}/>}
@@ -239,18 +184,14 @@ class List extends React.Component {
             showPages={false}
           />*/}
           <SortableTable
-            primaryIdx={primaryIdx}
-            data={list.data}
-            header={tableHeader}
-            row={tableRow}
-            props={tableSortProps}
-            sortIdx={sortIdx}
-            order={order}
-            changeSortProps={this.queryNewSort}
-            onSelect={this.updateSelection}
+            tableColumns={tableColumns}
+            data={tableData}
             canSelect={hasActions}
-            selectedRows={selected}
             rowId={rowId}
+            onSelect={this.updateSelection}
+            sortIdx={sortIdx}
+            changeSortProps={this.queryNewSort}
+            order={order}
           />
           <Pagination
             count={count}
@@ -261,6 +202,7 @@ class List extends React.Component {
           />
         </div>
       </div>
+      </>
     );
   }
 }
@@ -269,13 +211,13 @@ List.propTypes = {
   list: PropTypes.object,
   dispatch: PropTypes.func,
   action: PropTypes.func,
-  tableHeader: PropTypes.array,
-  tableRow: PropTypes.array,
-  tableSortProps: PropTypes.array,
-  sortIdx: PropTypes.number,
+  children: PropTypes.node,
+  sortIdx: PropTypes.string,
   query: PropTypes.object,
   bulkActions: PropTypes.array,
-  rowId: PropTypes.any
+  rowId: PropTypes.any,
+  tableColumns: PropTypes.array,
+  data: PropTypes.array
 };
 
 export { List };

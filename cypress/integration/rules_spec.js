@@ -29,8 +29,8 @@ describe('Rules page', () => {
       cy.visit('/');
       cy.get('nav').contains('Rules').click();
       cy.url().should('include', '/rules');
-      cy.get('table tbody tr').should('have.length', 1);
-      cy.contains('table tr', testRuleName)
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.contains('.table .tr', testRuleName)
         .within(() => {
           cy.contains(testProviderId);
           cy.contains(testCollectionId);
@@ -41,7 +41,7 @@ describe('Rules page', () => {
 
     it('display a rule with the correct data', () => {
       cy.visit('/rules');
-      cy.contains('table tr a', testRuleName)
+      cy.contains('.table .tr a', testRuleName)
         .click();
       cy.url().should('include', `/rules/rule/${testRuleName}`);
       cy.get('.metadata__details')
@@ -92,7 +92,7 @@ describe('Rules page', () => {
       cy.contains('.modal-footer button', 'Confirm Rule').click();
 
       cy.contains('.heading--xlarge', 'Rules');
-      cy.contains('table tbody tr a', ruleName)
+      cy.contains('.table .tbody .tr a', ruleName)
         .and('have.attr', 'href', `/rules/rule/${ruleName}`).click();
 
       cy.contains('.heading--xlarge', 'Rules');
@@ -113,7 +113,7 @@ describe('Rules page', () => {
 
     it('editing a rule and returning to the rules page should show the new changes', () => {
       cy.visit('/rules');
-      cy.contains('table tbody tr a', testRuleName)
+      cy.contains('.table .tbody .tr a', testRuleName)
         .and('have.attr', 'href', `/rules/rule/${testRuleName}`)
         .click();
 
@@ -134,7 +134,7 @@ describe('Rules page', () => {
 
       cy.contains('a', 'Back to Rules').click();
       cy.contains('.heading--large', 'Rule Overview');
-      cy.contains('table tr', testRuleName)
+      cy.contains('.table .tr', testRuleName)
         .within(() => {
           cy.contains(provider)
             .should('have.attr', 'href', `/providers/provider/${provider}`);
@@ -143,7 +143,7 @@ describe('Rules page', () => {
 
     it('deleting a rule should remove it from the list', () => {
       cy.visit('/rules');
-      cy.contains('table tr', testRuleName)
+      cy.contains('.table .tr', testRuleName)
         .within(() => {
           cy.get('input[type="checkbox"]').click();
         });
@@ -154,7 +154,7 @@ describe('Rules page', () => {
         .get('button')
         .contains('Confirm')
         .click();
-      cy.contains('table tr a', testRuleName)
+      cy.contains('.table .tr a', testRuleName)
         .should('not.exist');
       cy.task('resetState');
     });

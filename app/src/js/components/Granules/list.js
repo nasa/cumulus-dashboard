@@ -17,12 +17,8 @@ import {
 import { get } from 'object-path';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
-  tableHeader,
-  tableRow,
-  tableSortProps,
-  errorTableHeader,
-  errorTableRow,
-  errorTableSortProps,
+  tableColumns,
+  errorTableColumns,
   bulkActions,
   simpleDropdownOption
 } from '../../utils/table-config/granules';
@@ -116,7 +112,7 @@ class AllGranules extends React.Component {
     const logsQuery = { 'granuleId__exists': 'true' };
     const view = this.getView();
     const statOptions = (view === 'all') ? statusOptions : null;
-    const tableSortIdx = view === 'failed' ? 3 : 6;
+    const tableSortIdx = view === 'failed' ? 'granuleId' : 'timestamp';
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
@@ -153,12 +149,10 @@ class AllGranules extends React.Component {
           <List
             list={list}
             action={listGranules}
-            tableHeader={view === 'failed' ? errorTableHeader : tableHeader}
-            tableRow={view === 'failed' ? errorTableRow : tableRow}
-            tableSortProps={view === 'failed' ? errorTableSortProps : tableSortProps}
+            tableColumns={view === 'failed' ? errorTableColumns : tableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            rowId={'granuleId'}
+            rowId='granuleId'
             sortIdx={tableSortIdx}
           />
         </section>

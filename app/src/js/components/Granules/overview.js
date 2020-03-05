@@ -20,9 +20,7 @@ import {
 import { get } from 'object-path';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
-  tableHeader,
-  tableRow,
-  tableSortProps,
+  tableColumns,
   simpleDropdownOption,
   bulkActions,
   recoverAction
@@ -200,13 +198,11 @@ class GranulesOverview extends React.Component {
           <List
             list={list}
             action={listGranules}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
+            tableColumns={tableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            rowId={'granuleId'}
-            sortIdx={6}
+            rowId='granuleId'
+            sortIdx='timestamp'
           />
         </section>
       </div>
