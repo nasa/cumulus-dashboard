@@ -96,7 +96,7 @@ describe('Dashboard Granules Page', () => {
             .should('match', /.+ago$/);
         });
 
-      cy.get('table tbody tr').as('list');
+      cy.get('.table .tbody .tr').as('list');
       cy.get('@list').its('length').should('be.eq', 10);
     });
 

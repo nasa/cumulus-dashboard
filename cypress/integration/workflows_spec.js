@@ -27,10 +27,10 @@ describe('Dashboard Workflows Page', () => {
       cy.url().should('include', 'workflows');
       cy.contains('.heading--xlarge', 'Workflows');
 
-      cy.get('table tbody tr').its('length').should('be.eq', 2);
-      cy.contains('table tbody tr a', 'HelloWorldWorkflow')
+      cy.get('.table .tbody .tr').its('length').should('be.eq', 2);
+      cy.contains('.table .tbody .tr a', 'HelloWorldWorkflow')
         .should('have.attr', 'href', '/workflows/workflow/HelloWorldWorkflow');
-      cy.contains('table tbody tr a', 'SecondTestWorkflow')
+      cy.contains('.table .tbody .tr a', 'SecondTestWorkflow')
         .should('have.attr', 'href', '/workflows/workflow/SecondTestWorkflow');
     });
 
@@ -41,7 +41,7 @@ describe('Dashboard Workflows Page', () => {
       cy.url().should('include', 'workflows');
       cy.contains('.heading--xlarge', 'Workflows');
 
-      cy.contains('table tbody tr a', workflowName)
+      cy.contains('.table .tbody .tr a', workflowName)
         .should('have.attr', 'href', `/workflows/workflow/${workflowName}`)
         .click();
 

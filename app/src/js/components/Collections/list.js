@@ -21,11 +21,9 @@ import {
 } from '../../utils/format';
 import { get } from 'object-path';
 import {
-  tableHeader,
-  tableRow,
-  tableSortProps,
   bulkActions,
-  recoverAction
+  recoverAction,
+  tableColumns
 } from '../../utils/table-config/collections';
 import Search from '../Search/search';
 import List from '../Table/Table';
@@ -123,7 +121,12 @@ class CollectionList extends React.Component {
     const { list } = this.props.collections;
     // merge mmtLinks with the collection data;
     const mmtLinks = this.props.mmtLinks;
-    list.data.forEach((collection) => { collection.mmtLink = mmtLinks[getCollectionId(collection)]; });
+    const data = list.data.map((collection) => {
+      return {
+        ...collection,
+        mmtLink: mmtLinks[getCollectionId(collection)]
+      };
+    });
     const { count, queriedAt } = list.meta;
     return (
       <div className='page__component'>
@@ -143,15 +146,14 @@ class CollectionList extends React.Component {
 
           <List
             list={list}
+            data={data}
+            tableColumns={tableColumns}
             dispatch={this.props.dispatch}
             action={listCollections}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={getCollectionId}
-            sortIdx={7}
+            sortIdx='duration'
           >
             <ListFilters>
               <Search dispatch={this.props.dispatch}

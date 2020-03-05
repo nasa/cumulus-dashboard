@@ -4,29 +4,32 @@ import { Link } from 'react-router-dom';
 import { fromNow } from '../format';
 import { strings } from '../../components/locale';
 
-export const tableHeader = [
-  'Name',
-  'Host',
-  strings.collections,
-  'Global Connection Limit',
-  'Protocol',
-  'Last Updated'
+export const tableColumns = [
+  {
+    Header: 'Name',
+    accessor: row => <Link to={`providers/provider/${row.id}`}>{row.id}</Link>,
+    id: 'name'
+  },
+  {
+    Header: 'Host',
+    accessor: 'host'
+  },
+  {
+    Header: strings.collections,
+    accessor: 'collections'
+  },
+  {
+    Header: 'Global Connection Limit',
+    accessor: 'globalConnectionLimit'
+  },
+  {
+    Header: 'Protocol',
+    accessor: 'protocol'
+  },
+  {
+    Header: 'Last Updated',
+    accessor: row => fromNow(row.timestamp),
+    id: 'timestamp'
+  }
 ];
 
-export const tableRow = [
-  (d) => <Link to={`providers/provider/${d.id}`}>{d.id}</Link>,
-  'host',
-  'collections',
-  'globalConnectionLimit',
-  'protocol',
-  (d) => fromNow(d.timestamp)
-];
-
-export const tableSortProps = [
-  'id',
-  'host',
-  'collections',
-  'globalConnectionLimit',
-  'protocol',
-  'timestamp'
-];

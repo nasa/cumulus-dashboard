@@ -12,18 +12,10 @@ import {
 } from '../../actions';
 import _config from '../../config';
 import {
-  tableHeaderS3Files,
-  tableRowS3File,
-  tablePropsS3File,
-  tableHeaderFiles,
-  tableRowFile,
-  tablePropsFile,
-  tableHeaderCollections,
-  tableRowCollection,
-  tablePropsCollection,
-  tableHeaderGranules,
-  tableRowGranule,
-  tablePropsGranule
+  tableColumnsS3Files,
+  tableColumnsFiles,
+  tableColumnsCollections,
+  tableColumnsGranules
 } from '../../utils/table-config/reconciliation-reports';
 
 import Metadata from '../Table/Metadata';
@@ -217,66 +209,50 @@ class ReconciliationReport extends React.Component {
 
           <ReportTable
             data={filesInDynamoDb}
-            title={'Files only in DynamoDB'}
-            tableHeader={tableHeaderFiles}
-            tableRow={tableRowFile}
-            tableProps={tablePropsFile}
+            title='Files only in DynamoDB'
+            tableColumns={tableColumnsFiles}
           />
 
           <ReportTable
             data={filesInS3}
-            title={'Files only in S3'}
-            tableHeader={tableHeaderS3Files}
-            tableRow={tableRowS3File}
-            tableProps={tablePropsS3File}
+            title='Files only in S3'
+            tableColumns={tableColumnsS3Files}
           />
 
           <ReportTable
             data={collectionsInCumulus}
-            title={'Collections only in Cumulus'}
-            tableHeader={tableHeaderCollections}
-            tableRow={tableRowCollection}
-            tableProps={tablePropsCollection}
+            title='Collections only in Cumulus'
+            tableColumns={tableColumnsCollections}
           />
 
           <ReportTable
             data={collectionsInCmr}
-            title={'Collections only in CMR'}
-            tableHeader={tableHeaderCollections}
-            tableRow={tableRowCollection}
-            tableProps={tablePropsCollection}
+            title='Collections only in CMR'
+            tableColumns={tableColumnsCollections}
           />
 
           <ReportTable
             data={granulesInCumulus}
-            title={'Granules only in Cumulus'}
-            tableHeader={tableHeaderGranules}
-            tableRow={tableRowGranule}
-            tableProps={tablePropsGranule}
+            title='Granules only in Cumulus'
+            tableColumns={tableColumnsGranules}
           />
 
           <ReportTable
             data={granulesInCmr}
-            title={'Granules only in CMR'}
-            tableHeader={tableHeaderGranules}
-            tableRow={tableRowGranule}
-            tableProps={tablePropsGranule}
+            title='Granules only in CMR'
+            tableColumns={tableColumnsGranules}
           />
 
           <ReportTable
             data={granuleFilesOnlyInCumulus}
-            title={'Granule files only in Cumulus'}
-            tableHeader={tableHeaderFiles}
-            tableRow={tableRowFile}
-            tableProps={tablePropsFile}
+            title='Granule files only in Cumulus'
+            tableColumns={tableColumnsFiles}
           />
 
           <ReportTable
             data={granuleFilesOnlyInCmr}
-            title={'Granule files only in CMR'}
-            tableHeader={tableHeaderFiles}
-            tableRow={tableRowFile}
-            tableProps={tablePropsFile}
+            title='Granule files only in CMR'
+            tableColumns={tableColumnsFiles}
           />
         </section>
       </div>
