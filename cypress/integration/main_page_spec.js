@@ -176,8 +176,8 @@ describe('Dashboard Home Page', () => {
       cy.get('#Collections').contains('5');
       cy.get('#Granules').contains('10');
       cy.get('#Executions').contains('6');
-      // eslint-disable-next-line no-useless-escape
-      // cy.get('#Ingest Rules').contains('1');
+      // This selector fails cy.get('#Ingest Rules').contains('1');
+      cy.get('.overview-num__wrapper-home > ul > :nth-child(5)').contains('1');
 
       cy.get('[data-cy=startDateTime]').within(() => {
         cy.get('input[name=month]').click().type(1);
@@ -198,12 +198,12 @@ describe('Dashboard Home Page', () => {
 
       cy.wait('@stats');
       // TODO [MHS, 2020-03-04] Update when "stats fix" is in the local @cumulus/API
+      // cy.get('#Errors').contains('0');
       cy.get('#Errors').contains('2');
       cy.get('#Collections').contains('5');
       cy.get('#Granules').contains('0');
       cy.get('#Executions').contains('0');
-      // eslint-disable-next-line no-useless-escape
-      // cy.get('#Ingest\ Rules').contains('0');
+      cy.get('.overview-num__wrapper-home > ul > :nth-child(5)').contains('0');
     });
 
     it('Logging out successfully redirects to the login screen', () => {
