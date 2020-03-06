@@ -70,9 +70,13 @@ To build the dashboard:
 
 ```bash
   $ nvm use
-  $ [DAAC_NAME=LPDAAC] [STAGE=production] [HIDE_PDR=false] [LABELS=daac] APIROOT=https://myapi.com npm run build
+  $ [SERVED_BY_CUMULUS_API=true] [DAAC_NAME=LPDAAC] [STAGE=production] [HIDE_PDR=false] [LABELS=daac] APIROOT=https://myapi.com npm run build
 ```
 **NOTE**: Only the `APIROOT` environment variable is required.
+
+#### Build the dashboard to be served by the Cumulus API.
+
+With the Cumulus API it is possible to [serve the dashboard from an s3 Bucket](https://nasa.github.io/cumulus-api/#serve-the-dashboard-from-a-bucket).  If you wish to do this, you must build the dashboard with the environment variable `SERVED_BY_CUMULUS_API` set to `true`.  This configures the dashboard to work from the Cumulus `dashboard` endpoint.
 
 The compiled files will be placed in the `dist` directory.
 
