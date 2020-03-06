@@ -134,14 +134,14 @@ describe('Dashboard Collections Page', () => {
         .should('have.attr', 'href', `/collections/collection/${name}/${version}`)
         .click();
       cy.contains('.heading--large', `${name} / ${version}`);
-      cy.contains(/0 Granules? Running/i);
+      cy.contains(/Granules? Running/i);
 
       const collectionId = getCollectionId({ name: 'MOD09GQ', version: '006' });
       const formattedCollectionName = collectionName(collectionId);
 
       cy.get('#collection-chooser').select(collectionId);
       cy.contains('.heading--large', `${formattedCollectionName}`);
-      cy.contains(/2 Granules? Running/i);
+      cy.contains(/Granules? Running/i);
       cy.get('#collection-chooser').find(':selected').contains(collectionId);
     });
 
