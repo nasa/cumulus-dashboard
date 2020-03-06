@@ -1,7 +1,6 @@
 'use strict';
 import assignDate from './assign-date';
 import { set } from 'object-path';
-import serialize from '../utils/serialize-config';
 
 import {
   STATS,
@@ -10,11 +9,7 @@ import {
 
   COUNT,
   COUNT_INFLIGHT,
-  COUNT_ERROR,
-
-  HISTOGRAM,
-  HISTOGRAM_INFLIGHT,
-  HISTOGRAM_ERROR
+  COUNT_ERROR
 } from '../actions/types';
 
 export const initialState = {
@@ -35,13 +30,12 @@ export const initialState = {
     data: {},
     inflight: false,
     error: null
-  },
-  histogram: {}
+  }
 };
 
 export default function reducer (state = initialState, action) {
   let nextState;
-  let stats, count, histogram;
+  let stats, count;
   switch (action.type) {
     case STATS:
       stats = { data: assignDate(action.data), inflight: false, error: null };
@@ -68,26 +62,6 @@ export default function reducer (state = initialState, action) {
     case COUNT_ERROR:
       count = { data: state.count.data, inflight: false, error: action.error };
       nextState = Object.assign({}, state, { count });
-      break;
-
-    case HISTOGRAM:
-      histogram = Object.assign({}, state.histogram);
-      set(histogram, serialize(action.config.qs), {
-        inflight: false,
-        data: action.data,
-        error: null
-      });
-      nextState = Object.assign({}, state, { histogram });
-      break;
-    case HISTOGRAM_INFLIGHT:
-      histogram = Object.assign({}, state.histogram);
-      set(histogram, [serialize(action.config.qs), 'inflight'], true);
-      nextState = Object.assign({}, state, { histogram });
-      break;
-    case HISTOGRAM_ERROR:
-      histogram = Object.assign({}, state.histogram);
-      set(histogram, [serialize(action.config.qs), 'error'], action.error);
-      nextState = Object.assign({}, state, { histogram });
       break;
   }
   return nextState || state;

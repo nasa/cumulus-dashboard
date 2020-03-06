@@ -1,20 +1,31 @@
 'use strict';
 import { tally } from '../format';
 
-export const tableHeader = [
-  'Instance ID',
-  'Status',
-  'Pending Tasks',
-  'Running Tasks',
-  'Available CPU',
-  'Available Memory'
-];
-
-export const tableRow = [
-  'id',
-  'status',
-  (d) => tally(d['pendingTasks']),
-  (d) => tally(d['runningTasks']),
-  'availableCpu',
-  'availableMemory'
+export const tableColumns = [
+  {
+    Header: 'Instance ID',
+    accessor: 'id'
+  },
+  {
+    Header: 'Status',
+    accessor: 'status'
+  },
+  {
+    Header: 'Pending Tasks',
+    accessor: row => tally(row['pendingTasks']),
+    id: 'pendingTasks'
+  },
+  {
+    Header: 'Running Tasks',
+    accessor: row => tally(row['runningTasks']),
+    id: 'runningTasks'
+  },
+  {
+    Header: 'Available CPU',
+    accessor: 'availableCpu'
+  },
+  {
+    Header: 'Available Memory',
+    accessor: 'availableMemory'
+  }
 ];

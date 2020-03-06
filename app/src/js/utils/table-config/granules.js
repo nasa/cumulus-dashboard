@@ -21,58 +21,80 @@ import ErrorReport from '../../components/Errors/report';
 import {strings} from '../../components/locale';
 import Dropdown from '../../components/DropDown/simple-dropdown';
 
-export const tableHeader = [
-  'Status',
-  'Name',
-  'Published',
-  strings.collection_id,
-  'Execution',
-  'Duration',
-  'Updated'
+export const tableColumns = [
+  {
+    Header: 'Status',
+    accessor: row => <Link to={`/granules/${row.status}`} className={`granule__status granule__status--${row.status}`}>{displayCase(row.status)}</Link>,
+    id: 'status',
+    width: 100
+  },
+  {
+    Header: 'Name',
+    accessor: row => granuleLink(row.granuleId),
+    id: 'name',
+    width: 225
+  },
+  {
+    Header: 'Published',
+    accessor: row => row.cmrLink ? <a href={row.cmrLink} target='_blank'>{bool(row.published)}</a> : bool(row.published),
+    id: 'published'
+  },
+  {
+    Header: strings.collection_id,
+    accessor: row => collectionLink(row.collectionId),
+    id: 'collectionId'
+  },
+  {
+    Header: 'Execution',
+    accessor: row => <Link to={`/executions/execution/${path.basename(row.execution)}`}>link</Link>,
+    id: 'execution',
+    disableSortBy: true,
+    width: 90
+  },
+  {
+    Header: 'Duration',
+    accessor: row => seconds(row.duration),
+    id: 'duration',
+    width: 100
+  },
+  {
+    Header: 'Updated',
+    accessor: row => fromNow(row.timestamp),
+    id: 'timestamp'
+  }
 ];
 
-export const tableRow = [
-  (d) => <Link to={`/granules/${d.status}`} className={`granule__status granule__status--${d.status}`}>{displayCase(d.status)}</Link>,
-  (d) => granuleLink(d.granuleId),
-  (d) => d.cmrLink ? <a href={d.cmrLink} target='_blank'>{bool(d.published)}</a> : bool(d.published),
-  (d) => collectionLink(d.collectionId),
-  (d) => <Link to={`/executions/execution/${path.basename(d.execution)}`}>link</Link>,
-  (d) => seconds(d.duration),
-  (d) => fromNow(d.timestamp)
-];
-
-export const tableSortProps = [
-  'status',
-  'granuleId',
-  'published',
-  'collectionId',
-  null,
-  'duration',
-  'timestamp'
-];
-
-export const errorTableHeader = [
-  'Error',
-  'Type',
-  'Granule',
-  'Duration',
-  'Updated'
-];
-
-export const errorTableRow = [
-  (d) => <ErrorReport report={get(d, 'error.Cause', nullValue)} truncate={true} />,
-  (d) => get(d, 'error.Error', nullValue),
-  (d) => granuleLink(d.granuleId),
-  (d) => seconds(d.duration),
-  (d) => fromNow(d.timestamp)
-];
-
-export const errorTableSortProps = [
-  null,
-  null,
-  'granuleId',
-  'duration',
-  'timestamp'
+export const errorTableColumns = [
+  {
+    Header: 'Error',
+    accessor: row => <ErrorReport report={get(row, 'error.Cause', nullValue)} truncate={true} />,
+    id: 'error',
+    disableSortBy: true,
+    width: 175
+  },
+  {
+    Header: 'Type',
+    accessor: row => get(row, 'error.Error', nullValue),
+    id: 'type',
+    disableSortBy: true,
+    width: 100
+  },
+  {
+    Header: 'Granule',
+    accessor: row => granuleLink(row.granuleId),
+    id: 'granuleId',
+    width: 200
+  },
+  {
+    Header: 'Duration',
+    accessor: row => seconds(row.duration),
+    id: 'duration'
+  },
+  {
+    Header: 'Updated',
+    accessor: row => fromNow(row.timestamp),
+    id: 'timestamp'
+  }
 ];
 
 export const simpleDropdownOption = function (config) {
@@ -106,22 +128,26 @@ export const bulkActions = function (granules, config) {
     text: 'Reingest',
     action: reingestGranule,
     state: granules.reingested,
-    confirm: confirmReingest
+    confirm: confirmReingest,
+    className: 'button--reingest'
   }, {
     text: 'Execute',
     action: config.execute.action,
     state: granules.executed,
     confirm: confirmApply,
-    confirmOptions: config.execute.options
+    confirmOptions: config.execute.options,
+    className: 'button--execute'
   }, {
     text: strings.remove_from_cmr,
     action: removeGranule,
     state: granules.removed,
-    confirm: confirmRemove
+    confirm: confirmRemove,
+    className: 'button--remove'
   }, {
     text: 'Delete',
     action: deleteGranule,
     state: granules.deleted,
-    confirm: confirmDelete
+    confirm: confirmDelete,
+    className: 'button--delete'
   }];
 };

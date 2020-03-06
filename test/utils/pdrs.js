@@ -1,6 +1,6 @@
 'use strict';
 import test from 'ava';
-import {tableRow} from '../../app/src/js/utils/table-config/pdrs.js';
+import {tableColumns} from '../../app/src/js/utils/table-config/pdrs.js';
 import {getProgress} from '../../app/src/js/utils/table-config/pdr-progress.js';
 const pdr =
   {
@@ -31,8 +31,8 @@ test('test pdr-progress.js getProgress', function (t) {
 });
 
 test('test pdrs.js tableRow', function (t) {
-  t.is(tableRow[4](pdr), 4);
-  t.is(tableRow[5](pdr), pdr.stats.processing);
-  t.is(tableRow[6](pdr), pdr.stats.failed);
-  t.is(tableRow[7](pdr), pdr.stats.completed);
+  t.is(tableColumns[4].accessor(pdr), 4);
+  t.is(tableColumns[5].accessor(pdr), pdr.stats.processing);
+  t.is(tableColumns[6].accessor(pdr), pdr.stats.failed);
+  t.is(tableColumns[7].accessor(pdr), pdr.stats.completed);
 });

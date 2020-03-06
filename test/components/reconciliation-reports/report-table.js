@@ -12,28 +12,32 @@ import { nullValue } from '../../../app/src/js/utils/format';
 
 configure({ adapter: new Adapter() });
 
+const tableColumns = [
+  {
+    Header: 'GranuleId',
+    accessor: 'granuleId'
+  },
+  {
+    Header: 'Filename',
+    accessor: 'filename'
+  },
+  {
+    Header: 'Bucket',
+    accessor: 'bucket'
+  },
+  {
+    Header: 'S3 Link',
+    accessor: row => row ? <a href={row.path} target='_blank'>Link</a> : nullValue,
+    id: 'link'
+  }
+]
+
 const tableData = [{
   granuleId: 'g-123',
   filename: 'filename.txt',
   bucket: 'some-bucket',
   path: 's3://some-bucket/filename.txt'
 }];
-
-export const tableHeader = [
-  'GranuleId',
-  'Filename',
-  'Bucket',
-  'S3 Link'
-];
-
-export const tableRow = [
-  (d) => d.granuleId,
-  (d) => d.filename,
-  (d) => d.bucket,
-  (d) => d ? <a href={d.path} target='_blank'>Link</a> : nullValue
-];
-
-export const tableProps = ['granuleId', 'filename', 'bucket', 'link'];
 
 test('render nothing when no data is provided', function (t) {
   const report = shallow(
@@ -60,9 +64,7 @@ test('render basic table', function (t) {
     <ReportTable
       data={tableData}
       title={'Test table'}
-      tableHeader={tableHeader}
-      tableRow={tableRow}
-      tableProps={tableProps}
+      tableColumns={tableColumns}
     />
   );
 
@@ -70,17 +72,17 @@ test('render basic table', function (t) {
 
   const Table = report.find(SortableTable).dive();
 
-  const headerRow = Table.find('tr').first();
-  t.is(headerRow.children('td').at(0).text(), 'GranuleId');
-  t.is(headerRow.children('td').at(1).text(), 'Filename');
-  t.is(headerRow.children('td').at(2).text(), 'Bucket');
-  t.is(headerRow.children('td').at(3).text(), 'S3 Link');
+  const headerRow = Table.find('.thead .tr').first();
+  t.is(headerRow.find('.th > div:first-child').at(0).text(), 'GranuleId');
+  t.is(headerRow.find('.th > div:first-child').at(1).text(), 'Filename');
+  t.is(headerRow.find('.th > div:first-child').at(2).text(), 'Bucket');
+  t.is(headerRow.find('.th > div:first-child').at(3).text(), 'S3 Link');
 
-  const dataRow = Table.find('tr').at(1);
-  t.is(dataRow.children('td').at(0).text(), 'g-123');
-  t.is(dataRow.children('td').at(1).text(), 'filename.txt');
-  t.is(dataRow.children('td').at(2).text(), 'some-bucket');
-  t.true(dataRow.children('td').at(3).contains(
+  const dataRow = Table.find('.tbody .tr').first();
+  t.is(dataRow.find('Cell').at(0).dive().text(), 'g-123');
+  t.is(dataRow.find('Cell').at(1).dive().text(), 'filename.txt');
+  t.is(dataRow.find('Cell').at(2).dive().text(), 'some-bucket');
+  t.true(dataRow.find('Cell').at(3).dive().contains(
     <a href="s3://some-bucket/filename.txt" target="_blank">Link</a>
   ));
 });
@@ -96,9 +98,7 @@ test('render buttons to show/hide table when configured', function (t) {
     <ReportTable
       data={data}
       title={'Test table'}
-      tableHeader={tableHeader}
-      tableRow={tableRow}
-      tableProps={tableProps}
+      tableColumns={tableColumns}
       collapseThreshold={2}
     />
   );
@@ -122,9 +122,7 @@ test('do not render buttons to show/hide table when data length is less than thr
     <ReportTable
       data={data}
       title={'Test table'}
-      tableHeader={tableHeader}
-      tableRow={tableRow}
-      tableProps={tableProps}
+      tableColumns={tableColumns}
       collapseThreshold={10}
     />
   );
@@ -146,9 +144,7 @@ test('do not render buttons to show/hide table when disabled', function (t) {
     <ReportTable
       data={data}
       title={'Test table'}
-      tableHeader={tableHeader}
-      tableRow={tableRow}
-      tableProps={tableProps}
+      tableColumns={tableColumns}
       collapsible={false}
       collapseThreshold={2}
     />

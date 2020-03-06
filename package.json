@@ -1,6 +1,6 @@
 {
   "name": "cumulus-dashboard",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "A dashboard for Cumulus API",
   "repository": {
     "type": "git",
@@ -220,6 +220,7 @@
     "react-router-dom": "^5.1.2",
     "react-router-query-params": "^1.0.3",
     "react-router-scroll-4": "^1.0.0-beta.2",
+    "react-table": "^7.0.0-rc.16",
     "recompose": "^0.30.0",
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.8",

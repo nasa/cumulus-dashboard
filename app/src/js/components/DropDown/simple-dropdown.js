@@ -27,16 +27,22 @@ class Dropdown extends React.Component {
 
     return (
       <div className='form__dropdown'>
-        <label htmlFor={id}>{label}</label>
+        <ul>
+          <li className="dropdown__label">
+            <label htmlFor={id}>{label}</label>
+          </li>
+          <li className="dropdown__element">
+            <div className='dropdown__wrapper'>
+              <select id={id} value={value} onChange={this.onChange}>
+                {renderedOptions.map((option, i) => {
+                  const [value, label] = Array.isArray(option) ? option : [option, option];
+                  return (<option key={i} value={value}>{label}</option>);
+                })}
+              </select>
+            </div>
+          </li>
+        </ul>
         <span className='form__error'>{error}</span>
-        <div className='dropdown__wrapper'>
-          <select id={id} value={value} onChange={this.onChange}>
-            {renderedOptions.map((option, i) => {
-              const [value, label] = Array.isArray(option) ? option : [option, option];
-              return (<option key={i} value={value}>{label}</option>);
-            })}
-          </select>
-        </div>
       </div>
     );
   }

@@ -36,7 +36,7 @@ describe('Dashboard Providers Page', () => {
       cy.url().should('include', 'providers');
       cy.contains('.heading--xlarge', 'Providers');
 
-      cy.get('table tbody tr').its('length').should('be.eq', 2);
+      cy.get('.table .tbody .tr').its('length').should('be.eq', 2);
     });
 
     it('should add a new provider', () => {
@@ -67,9 +67,9 @@ describe('Dashboard Providers Page', () => {
         .clear()
         .type(connectionLimit);
       cy.get('@providerinput')
-        .contains('label', 'Protocol')
+        .contains('.dropdown__label', 'Protocol')
         .siblings()
-        .children('select')
+        .find('select')
         .select(protocol, {force: true})
         .should('have.value', protocol);
       cy.get('@providerinput')
@@ -104,7 +104,7 @@ describe('Dashboard Providers Page', () => {
       cy.wait(1000);
       cy.contains('a', 'Back to Providers').click();
       cy.wait('@getProviders');
-      cy.contains('table tbody tr a', name)
+      cy.contains('.table .tbody .tr a', name)
         .should('have.attr', 'href', `/providers/provider/${name}`);
       cy.task('resetState');
     });
@@ -167,7 +167,7 @@ describe('Dashboard Providers Page', () => {
       // verify the provider is now gone
       cy.url().should('include', 'providers');
       cy.contains('.heading--xlarge', 'Providers');
-      cy.contains('table tbody tr', name).should('not.exist');
+      cy.contains('.table .tbody .tr', name).should('not.exist');
       cy.task('resetState');
     });
 
@@ -189,7 +189,7 @@ describe('Dashboard Providers Page', () => {
       // provider should still exist in list
       cy.contains('a', 'Back to Providers').click();
       cy.contains('.heading--xlarge', 'Providers');
-      cy.contains('table tbody tr a', name);
+      cy.contains('.table .tbody .tr a', name);
     });
   });
 });
