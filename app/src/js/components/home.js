@@ -26,7 +26,7 @@ import {
 import List from './Table/Table';
 import GranulesProgress from './Granules/progress';
 import { errorTableColumns } from '../utils/table-config/granules';
-import { recent, updateInterval } from '../config';
+import { updateInterval } from '../config';
 import {
   kibanaS3AccessErrorsLink,
   kibanaS3AccessSuccessesLink,
@@ -72,10 +72,7 @@ class Home extends React.Component {
   query () {
     const { dispatch } = this.props;
     dispatch(getStats());
-    dispatch(getCount({
-      type: 'granules',
-      field: 'status'
-    }));
+    dispatch(getCount({type: 'granules', field: 'status'}));
     dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
     dispatch(getTEALambdaMetrics(this.props.cumulusInstance));
     dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
@@ -97,7 +94,7 @@ class Home extends React.Component {
   }
 
   isExternalLink (link) {
-    return link.match('https?://');
+    return link && link.match('https?://');
   }
   renderButtonListSection (items, header, listId) {
     const data = items.filter(d => d[0] !== nullValue);
@@ -143,7 +140,7 @@ class Home extends React.Component {
       [tally(get(stats.data, 'granules.value')), strings.granules, '/granules'],
       [tally(get(this.props.executions, 'list.meta.count')), 'Executions', '/executions'],
       [tally(get(this.props.rules, 'list.meta.count')), 'Ingest Rules', '/rules'],
-      [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time']
+      [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time', null]
     ];
 
     const distSuccessStats = [
