@@ -87,7 +87,7 @@ class DeleteCollection extends React.Component {
           className='button button--delete button--small form-group__element'
           onClick={this.handleClick}
         >
-          Delete
+          Delete Collection
         </button>
 
         <DeleteCollectionModal

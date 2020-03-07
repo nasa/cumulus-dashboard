@@ -18,7 +18,7 @@ class Overview extends React.Component {
           {items.map(d => (
             <li key={d[1]}>
               <span className='overview-num overview-num--small' to='/'>
-                <span className='num--large'>{d[0]}</span> {d[1]}
+                <span className='num--large num--large--color'>{d[0]}</span><span className='num-status'>{d[1]}</span>
               </span>
             </li>
           ))}
