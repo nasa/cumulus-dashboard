@@ -12,24 +12,36 @@ export const initialState = {
 };
 
 export default function reducer (state = initialState, action) {
-  state = {...state};
+  let newState = null;
   switch (action.type) {
     case API_VERSION:
-      state.versionNumber = action.payload.versionNumber;
-      state.warning = '';
+      newState = {
+        ...state,
+        versionNumber: action.payload.versionNumber,
+        warning: ''
+      };
       break;
     case API_VERSION_ERROR:
-      state.apiVersion = action.payload.error.message;
-      state.warning = 'Failed to acquire Cumulus API Version';
+      newState = {
+        ...state,
+        apiVersion: action.payload.error.message,
+        warning: 'Failed to acquire Cumulus API Version'
+      };
       break;
     case API_VERSION_COMPATIBLE:
-      state.isCompatible = true;
-      state.warning = '';
+      newState = {
+        ...state,
+        isCompatible: true,
+        warning: ''
+      };
       break;
     case API_VERSION_INCOMPATIBLE:
-      state.isCompatible = false;
-      state.warning = action.payload.warning;
+      newState = {
+        ...state,
+        isCompatible: false,
+        warning: action.payload.warning
+      };
       break;
   }
-  return state;
+  return newState || state;
 }
