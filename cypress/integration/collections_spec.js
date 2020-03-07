@@ -75,7 +75,7 @@ describe('Dashboard Collections Page', () => {
       // On the Collections page, click the Add Collection button
       cy.visit('/collections');
       cy.contains('.heading--large', 'Collection Overview');
-      cy.contains('a', 'Add a Collection').click();
+      cy.contains('a', 'Add Collection').click();
 
       // Fill the form with the test collection JSON and submit it
       cy.url().should('include', '/collections/add');
@@ -134,14 +134,14 @@ describe('Dashboard Collections Page', () => {
         .should('have.attr', 'href', `/collections/collection/${name}/${version}`)
         .click();
       cy.contains('.heading--large', `${name} / ${version}`);
-      cy.contains(/0 Granules? Running/i);
+      cy.contains(/Granules? Running/i);
 
       const collectionId = getCollectionId({ name: 'MOD09GQ', version: '006' });
       const formattedCollectionName = collectionName(collectionId);
 
       cy.get('#collection-chooser').select(collectionId);
       cy.contains('.heading--large', `${formattedCollectionName}`);
-      cy.contains(/2 Granules? Running/i);
+      cy.contains(/Granules? Running/i);
       cy.get('#collection-chooser').find(':selected').contains(collectionId);
     });
 
@@ -255,7 +255,7 @@ describe('Dashboard Collections Page', () => {
       // click delete again to show modal again
       cy.get('.DeleteCollection > .button').click();
       // really delete this time instead of cancelling
-      cy.contains('button', 'Delete Collection')
+      cy.contains('.modal button', 'Delete Collection')
         .should('be.visible').click();
 
       cy.wait('@deleteCollection');

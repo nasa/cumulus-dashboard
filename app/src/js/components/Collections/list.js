@@ -27,6 +27,7 @@ import Search from '../Search/search';
 import List from '../Table/Table';
 import { strings } from '../locale';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import ListFilters from '../ListActions/ListFilters';
 
 const breadcrumbConfig = [
   {
@@ -100,13 +101,6 @@ class CollectionList extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>{strings.all_collections} <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
           </div>
-          <div className='filters'>
-            <Search dispatch={this.props.dispatch}
-              action={searchCollections}
-              format={collectionSearchResult}
-              clear={clearCollectionsSearch}
-            />
-          </div>
 
           <List
             list={list}
@@ -118,7 +112,15 @@ class CollectionList extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId={getCollectionId}
             sortIdx='duration'
-          />
+          >
+            <ListFilters>
+              <Search dispatch={this.props.dispatch}
+                action={searchCollections}
+                format={collectionSearchResult}
+                clear={clearCollectionsSearch}
+              />
+            </ListFilters>
+          </List>
         </section>
       </div>
     );
@@ -130,7 +132,8 @@ CollectionList.propTypes = {
   mmtLinks: PropTypes.object,
   dispatch: PropTypes.func,
   logs: PropTypes.object,
-  config: PropTypes.object
+  config: PropTypes.object,
+  location: PropTypes.object
 };
 
 export { CollectionList };
