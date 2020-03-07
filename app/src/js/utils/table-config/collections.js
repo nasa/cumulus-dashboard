@@ -76,13 +76,19 @@ export const recoverAction = function (collections, config) {
 
 const confirmDelete = (d) => `Delete ${d} ${strings.collection}(s)?`;
 export const bulkActions = function (collections) {
-  return [{
-    text: 'Delete',
-    action: (collectionId) => {
-      const { name, version } = collectionNameVersion(collectionId);
-      return deleteCollection(name, version);
+  return [
+    {
+      Component: <Link className='button button--green button--add button--small form-group__element' to='/collections/add' role="button">{strings.add_collection}</Link>
     },
-    state: collections.deleted,
-    confirm: confirmDelete
-  }];
+    {
+      text: 'Delete Collection',
+      action: (collectionId) => {
+        const { name, version } = collectionNameVersion(collectionId);
+        return deleteCollection(name, version);
+      },
+      state: collections.deleted,
+      confirm: confirmDelete,
+      className: 'button button--delete button--small form-group__element'
+    }
+  ];
 };

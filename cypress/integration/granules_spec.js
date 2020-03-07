@@ -28,11 +28,11 @@ describe('Dashboard Granules Page', () => {
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
         .first()
-        .contains('li', '10 Completed')
+        .contains('li', 'Completed')
         .next()
-        .contains('li', '3 Failed')
+        .contains('li', 'Failed')
         .next()
-        .contains('li', '3 Running');
+        .contains('li', 'Running');
 
       // shows a list of granules
       cy.getFakeApiFixture('granules').as('granulesListFixture');

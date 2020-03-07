@@ -133,9 +133,9 @@ class CollectionOverview extends React.Component {
     const data = get(record, 'data', {});
     const stats = get(data, 'stats', {});
     const overview = [
-      [tally(stats.running), strings.granules_running],
       [tally(stats.completed), strings.granules_completed],
-      [tally(stats.failed), strings.granules_failed]
+      [tally(stats.failed), strings.granules_failed],
+      [tally(stats.running), strings.granules_running]
     ];
     return <Overview items={overview} inflight={record.inflight} />;
   }
@@ -243,6 +243,9 @@ class CollectionOverview extends React.Component {
           </div>
         </section>
         <section className='page__section page__section__overview'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--large heading--shared-content--right'>Granule Metrics</h2>
+          </div>
           {overview}
         </section>
         <section className='page__section'>

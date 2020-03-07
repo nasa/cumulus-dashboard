@@ -121,6 +121,7 @@
     height: 85px;
     margin: .8em 1.2em .5em 0;
     border-bottom: 0;
+    position: relative;
     &:hover {
       margin: .1em 1.2em 1.2em 0;
       border-bottom: 0;
@@ -130,6 +131,16 @@
 
 .overview-num__wrapper ul li, .overview-num__wrapper-home ul li{
   display: inline-block
+}
+
+.overview-num__wrapper ul li:first-child .num-status{
+  background-color: $light-green;
+}
+.overview-num__wrapper ul li:nth-child(2) .num-status{
+  background-color: $error-red;
+}
+.overview-num__wrapper ul li:nth-child(3) .num-status{
+  background-color: $orange;
 }
 
 .overview-num, .overview-num:visited {
@@ -156,6 +167,17 @@
     margin: .1em 1.5em 1.5em 0;
     box-shadow: $shadow__hover;
   }
+}
+
+.num-status{
+  padding: 5px 0px 5px 0px;
+  color: $white;
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
 
 .timeline--processing--overall {
@@ -218,6 +240,13 @@
   font-size: 2.4em;
   font-weight: $base-font-semibold;
   color: $midnight-blue;
+
+  &--color{
+    position: relative;
+    top: 30px;
+    /*left: 55px;*/
+    text-align: center;
+  }
 }
 
 .num--medium {
