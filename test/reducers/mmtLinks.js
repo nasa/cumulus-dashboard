@@ -5,8 +5,9 @@ import { ADD_MMTLINK } from '../../app/src/js/actions/types';
 import { getCollectionId } from '../../app/src/js/utils/format';
 
 test('verify initial state', (t) => {
-  const newState = reducer({}, {data: {}, type: 'ANY'});
-  t.deepEqual(newState, {});
+  const initialState = {};
+  const newState = reducer(initialState, {data: {}, type: 'ANY'});
+  t.is(newState, initialState);
 });
 
 test('reducers/mmtLinks', (t) => {
