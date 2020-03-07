@@ -9,13 +9,14 @@ import {
 const initialState = {};
 
 export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
+  let newState;
   const { data } = action;
   switch (action.type) {
     case ADD_MMTLINK:
+      newState = {...state};
       const collectionId = getCollectionId(data);
-      set(state, [collectionId], data.url);
+      set(newState, [collectionId], data.url);
       break;
   }
-  return state;
+  return newState || state;
 }
