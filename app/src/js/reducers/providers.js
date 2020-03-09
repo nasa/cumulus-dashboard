@@ -124,7 +124,7 @@ export default function reducer (state = initialState, action) {
       set(newState, ['updated', id, 'error'], action.error);
       break;
     case UPDATE_PROVIDER_CLEAR:
-      newState = {...state};
+      newState = cloneDeep(state);
       del(newState, ['updated', id]);
       break;
 
