@@ -4,6 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { get } from 'object-path';
+import cloneDeep from 'lodash.clonedeep';
 import { listProviders, getCount, interval } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import { tableColumns } from '../../utils/table-config/providers';
@@ -52,7 +53,7 @@ class ProvidersOverview extends React.Component {
   }
 
   render () {
-    const { list } = this.props.providers;
+    const { list } = cloneDeep(this.props.providers);
     const { stats } = this.props;
     const { count, queriedAt } = list.meta;
 
@@ -97,4 +98,7 @@ ProvidersOverview.propTypes = {
   stats: PropTypes.object
 };
 
-export default withRouter(connect(state => state)(ProvidersOverview));
+export default withRouter(connect(state => ({
+  providers: state.providers,
+  stats: state.stats
+}))(ProvidersOverview));

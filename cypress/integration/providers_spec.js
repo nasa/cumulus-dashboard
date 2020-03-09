@@ -98,10 +98,6 @@ describe('Dashboard Providers Page', () => {
             .should('have.attr', 'href', host);
         });
 
-      // Verify the new provider is added to the providers list, after allowing
-      // ES indexing to finish (hopefully), so that the new provider is part
-      // of the query results.
-      cy.wait(1000);
       cy.contains('a', 'Back to Providers').click();
       cy.wait('@getProviders');
       cy.contains('.table .tbody .tr a', name)
