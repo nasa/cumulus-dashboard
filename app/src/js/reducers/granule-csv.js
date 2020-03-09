@@ -19,15 +19,15 @@ export default function reducer (state = initialState, action) {
   switch (action.type) {
     case GRANULE_CSV:
       csvData = { data: action.data, inflight: false, error: null };
-      nextState = Object.assign(state, csvData);
+      nextState = Object.assign({}, state, csvData);
       break;
     case GRANULE_CSV_INFLIGHT:
       csvData = { data: state.data, inflight: true, error: state.error };
-      nextState = Object.assign(state, csvData);
+      nextState = Object.assign({}, state, csvData);
       break;
     case GRANULE_CSV_ERROR:
       csvData = { data: state.data, inflight: false, error: action.error };
-      nextState = Object.assign(state, csvData);
+      nextState = Object.assign({}, state, csvData);
       break;
   }
   return nextState || state;

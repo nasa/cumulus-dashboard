@@ -39,15 +39,15 @@ export default function reducer (state = initialState, action) {
   switch (action.type) {
     case STATS:
       stats = { data: assignDate(action.data), inflight: false, error: null };
-      nextState = Object.assign(state, { stats });
+      nextState = Object.assign({}, state, { stats });
       break;
     case STATS_INFLIGHT:
       stats = { data: state.stats.data, inflight: true, error: state.stats.error };
-      nextState = Object.assign(state, { stats });
+      nextState = Object.assign({}, state, { stats });
       break;
     case STATS_ERROR:
       stats = { data: state.stats.data, inflight: false, error: action.error };
-      nextState = Object.assign(state, { stats });
+      nextState = Object.assign({}, state, { stats });
       break;
 
     case COUNT:
@@ -57,11 +57,11 @@ export default function reducer (state = initialState, action) {
       break;
     case COUNT_INFLIGHT:
       count = { data: state.count.data, inflight: true, error: state.count.error };
-      nextState = Object.assign(state, { count });
+      nextState = Object.assign({}, state, { count });
       break;
     case COUNT_ERROR:
       count = { data: state.count.data, inflight: false, error: action.error };
-      nextState = Object.assign(state, { count });
+      nextState = Object.assign({}, state, { count });
       break;
   }
   return nextState || state;

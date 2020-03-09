@@ -168,6 +168,44 @@ describe('Dashboard Home Page', () => {
       });
     });
 
+    it('modifies the UPDATES section when datepicker changes.', () => {
+      cy.server();
+      cy.route('GET', '/stats?*timestamp__from=1233360000000*').as('stats');
+
+      cy.get('#Errors').contains('2');
+      cy.get('#Collections').contains('5');
+      cy.get('#Granules').contains('10');
+      cy.get('#Executions').contains('6');
+      // This selector fails cy.get('#Ingest Rules').contains('1');
+      cy.get('.overview-num__wrapper-home > ul > :nth-child(5)').contains('1');
+
+      cy.get('[data-cy=startDateTime]').within(() => {
+        cy.get('input[name=month]').click().type(1);
+        cy.get('input[name=day]').click().type(31);
+        cy.get('input[name=year]').click().type(2009);
+        cy.get('input[name=hour12]').click().type(0);
+        cy.get('input[name=minute]').click().type(0);
+        cy.get('select[name=amPm]').select('AM');
+      });
+      cy.get('[data-cy=endDateTime]').within(() => {
+        cy.get('input[name=month]').click().type(5);
+        cy.get('input[name=day]').click().type(1);
+        cy.get('input[name=year]').click().type(2010);
+        cy.get('input[name=hour12]').click().type(0);
+        cy.get('input[name=minute]').click().type(0);
+        cy.get('select[name=amPm]').select('AM');
+      });
+
+      cy.wait('@stats');
+      // TODO [MHS, 2020-03-04] Update when "stats fix" is in the local @cumulus/API
+      // cy.get('#Errors').contains('0');
+      cy.get('#Errors').contains('2');
+      cy.get('#Collections').contains('5');
+      cy.get('#Granules').contains('0');
+      cy.get('#Executions').contains('0');
+      cy.get('.overview-num__wrapper-home > ul > :nth-child(5)').contains('0');
+    });
+
     it('Logging out successfully redirects to the login screen', () => {
       // Logging to debug intermittent timeouts
       cy.task('log', 'Start test');
