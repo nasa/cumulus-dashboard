@@ -7,13 +7,14 @@ import {
 export const initialState = {};
 
 export default function reducer (state = initialState, action) {
+  let newState = null;
   const { type, config } = action;
   switch (type) {
     case SCHEMA:
-      return Object.assign({}, state, { [key(config.url)]: action.data });
-    default:
-      return state;
+      newState = Object.assign({}, state, { [key(config.url)]: action.data });
+      break;
   }
+  return newState || state;
 }
 
 // sample config url is `{rootUrl}/schema/{type}`

@@ -1,6 +1,7 @@
 'use strict';
 import { set } from 'object-path';
 import assignDate from './assign-date';
+import cloneDeep from 'lodash.clonedeep';
 import {
   EXECUTIONS,
   EXECUTIONS_INFLIGHT,
@@ -25,36 +26,43 @@ export const initialState = {
 };
 
 export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
+  let newState = null;
   const { data } = action;
   switch (action.type) {
     case EXECUTIONS:
-      set(state, ['list', 'data'], data.results);
-      set(state, ['list', 'meta'], assignDate(data.meta));
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], false);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'data'], data.results);
+      set(newState, ['list', 'meta'], assignDate(data.meta));
+      set(newState, ['list', 'inflight'], false);
+      set(newState, ['list', 'error'], false);
       break;
     case EXECUTIONS_INFLIGHT:
-      set(state, ['list', 'inflight'], true);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'inflight'], true);
       break;
     case EXECUTIONS_ERROR:
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'inflight'], false);
+      set(newState, ['list', 'error'], action.error);
       break;
 
     case FILTER_EXECUTIONS:
-      set(state, ['list', 'params', action.param.key], action.param.value);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'params', action.param.key], action.param.value);
       break;
     case CLEAR_EXECUTIONS_FILTER:
-      set(state, ['list', 'params', action.paramKey], null);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'params', action.paramKey], null);
       break;
 
     case SEARCH_EXECUTIONS:
-      set(state, ['list', 'prefix'], action.prefix);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'prefix'], action.prefix);
       break;
     case CLEAR_EXECUTIONS_SEARCH:
-      set(state, ['list', 'prefix'], null);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'prefix'], null);
       break;
   }
-  return state;
+  return newState || state;
 }

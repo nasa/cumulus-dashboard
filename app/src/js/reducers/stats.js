@@ -1,6 +1,7 @@
 'use strict';
 import assignDate from './assign-date';
 import { set } from 'object-path';
+import cloneDeep from 'lodash.clonedeep';
 
 import {
   STATS,
@@ -34,7 +35,7 @@ export const initialState = {
 };
 
 export default function reducer (state = initialState, action) {
-  let nextState;
+  let nextState = null;
   let stats, count;
   switch (action.type) {
     case STATS:
@@ -51,7 +52,7 @@ export default function reducer (state = initialState, action) {
       break;
 
     case COUNT:
-      count = Object.assign({}, state.count);
+      count = cloneDeep(state.count);
       set(count, ['data', action.config.qs.type], action.data);
       nextState = Object.assign({}, state, { count });
       break;

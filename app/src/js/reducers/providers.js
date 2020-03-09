@@ -2,6 +2,7 @@
 
 import { get, set, del } from 'object-path';
 import assignDate from './assign-date';
+import cloneDeep from 'lodash.clonedeep';
 import {
   PROVIDER,
   PROVIDER_INFLIGHT,
@@ -57,104 +58,128 @@ export const initialState = {
 };
 
 export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
+  let newState = null;
   const { data, id } = action;
   switch (action.type) {
     case PROVIDER:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'data'], data);
-      set(state, ['map', id, 'error'], null);
-      if (get(state, ['deleted', id, 'status']) !== 'error') {
-        del(state, ['deleted', id]);
+      newState = cloneDeep(state);
+      set(newState, ['map', id, 'inflight'], false);
+      set(newState, ['map', id, 'data'], data);
+      set(newState, ['map', id, 'error'], null);
+      if (get(newState, ['deleted', id, 'status']) !== 'error') {
+        del(newState, ['deleted', id]);
       }
       break;
     case PROVIDER_INFLIGHT:
-      set(state, ['map', id, 'inflight'], true);
+      newState = cloneDeep(state);
+      set(newState, ['map', id, 'inflight'], true);
       break;
     case PROVIDER_ERROR:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['map', id, 'inflight'], false);
+      set(newState, ['map', id, 'error'], action.error);
       break;
 
     case NEW_PROVIDER:
-      set(state, ['created', id, 'status'], 'success');
+      newState = cloneDeep(state);
+      set(newState, ['created', id, 'status'], 'success');
       break;
     case NEW_PROVIDER_INFLIGHT:
-      set(state, ['created', id, 'status'], 'inflight');
+      newState = cloneDeep(state);
+      set(newState, ['created', id, 'status'], 'inflight');
       break;
     case NEW_PROVIDER_ERROR:
-      set(state, ['created', id, 'status'], 'error');
-      set(state, ['created', id, 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['created', id, 'status'], 'error');
+      set(newState, ['created', id, 'error'], action.error);
       break;
 
     case PROVIDER_COLLECTIONS:
-      set(state, ['collections', id, 'inflight'], false);
-      set(state, ['collections', id, 'data'], data.results.map(c => c.collectionName));
+      newState = cloneDeep(state);
+      set(newState, ['collections', id, 'inflight'], false);
+      set(newState, ['collections', id, 'data'], data.results.map(c => c.collectionName));
       break;
     case PROVIDER_COLLECTIONS_INFLIGHT:
-      set(state, ['collections', id, 'inflight'], true);
+      newState = cloneDeep(state);
+      set(newState, ['collections', id, 'inflight'], true);
       break;
     case PROVIDER_COLLECTIONS_ERROR:
-      set(state, ['collections', id, 'inflight'], false);
-      set(state, ['collections', id, 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['collections', id, 'inflight'], false);
+      set(newState, ['collections', id, 'error'], action.error);
       break;
 
     case UPDATE_PROVIDER:
-      set(state, ['map', id, 'data'], data);
-      set(state, ['updated', id, 'status'], 'success');
+      newState = cloneDeep(state);
+      set(newState, ['map', id, 'data'], data);
+      set(newState, ['updated', id, 'status'], 'success');
       break;
     case UPDATE_PROVIDER_INFLIGHT:
-      set(state, ['updated', id, 'status'], 'inflight');
+      newState = cloneDeep(state);
+      set(newState, ['updated', id, 'status'], 'inflight');
       break;
     case UPDATE_PROVIDER_ERROR:
-      set(state, ['updated', id, 'status'], 'error');
-      set(state, ['updated', id, 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['updated', id, 'status'], 'error');
+      set(newState, ['updated', id, 'error'], action.error);
       break;
     case UPDATE_PROVIDER_CLEAR:
-      del(state, ['updated', id]);
+      newState = {...state};
+      del(newState, ['updated', id]);
       break;
 
     case PROVIDERS:
-      set(state, ['list', 'data'], data.results);
-      set(state, ['list', 'meta'], assignDate(data.meta));
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], false);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'data'], data.results);
+      set(newState, ['list', 'meta'], assignDate(data.meta));
+      set(newState, ['list', 'inflight'], false);
+      set(newState, ['list', 'error'], false);
       break;
     case PROVIDERS_INFLIGHT:
-      set(state, ['list', 'inflight'], true);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'inflight'], true);
       break;
     case PROVIDERS_ERROR:
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'inflight'], false);
+      set(newState, ['list', 'error'], action.error);
       break;
 
     case SEARCH_PROVIDERS:
-      set(state, ['list', 'params', 'prefix'], action.prefix);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'params', 'prefix'], action.prefix);
       break;
     case CLEAR_PROVIDERS_SEARCH:
-      set(state, ['list', 'params', 'prefix'], null);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'params', 'prefix'], null);
       break;
 
     case FILTER_PROVIDERS:
-      set(state, ['list', 'params', action.param.key], action.param.value);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'params', action.param.key], action.param.value);
       break;
     case CLEAR_PROVIDERS_FILTER:
-      set(state, ['list', 'params', action.paramKey], null);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'params', action.paramKey], null);
       break;
 
     case PROVIDER_DELETE:
-      set(state, ['deleted', id, 'status'], 'success');
-      set(state, ['deleted', id, 'error'], null);
+      newState = cloneDeep(state);
+      set(newState, ['deleted', id, 'status'], 'success');
+      set(newState, ['deleted', id, 'error'], null);
       break;
     case PROVIDER_DELETE_INFLIGHT:
-      set(state, ['deleted', id, 'status'], 'inflight');
+      newState = cloneDeep(state);
+      set(newState, ['deleted', id, 'status'], 'inflight');
       break;
     case PROVIDER_DELETE_ERROR:
-      set(state, ['deleted', id, 'status'], 'error');
-      set(state, ['deleted', id, 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['deleted', id, 'status'], 'error');
+      set(newState, ['deleted', id, 'error'], action.error);
       break;
 
     case OPTIONS_PROVIDERGROUP:
+      newState = cloneDeep(state);
       // Map the list response to an object with key-value pairs like:
       // displayValue: optionElementValue
       const options = data.results.reduce((obj, provider) => {
@@ -163,14 +188,15 @@ export default function reducer (state = initialState, action) {
         obj[provider.providerName] = provider.providerName;
         return obj;
       }, {'': ''});
-      set(state, ['dropdowns', 'group', 'options'], options);
+      set(newState, ['dropdowns', 'group', 'options'], options);
       break;
     case OPTIONS_PROVIDERGROUP_INFLIGHT:
       break;
     case OPTIONS_PROVIDERGROUP_ERROR:
-      set(state, ['dropdowns', 'group', 'options'], []);
-      set(state, ['list', 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['dropdowns', 'group', 'options'], []);
+      set(newState, ['list', 'error'], action.error);
       break;
   }
-  return state;
+  return newState || state;
 }

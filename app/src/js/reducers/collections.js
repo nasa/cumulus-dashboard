@@ -34,6 +34,7 @@ import {
   FILTER_COLLECTIONS,
   CLEAR_COLLECTIONS_FILTER
 } from '../actions/types';
+import cloneDeep from 'lodash.clonedeep';
 
 export const initialState = {
   list: {
@@ -49,104 +50,127 @@ export const initialState = {
 };
 
 export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
+  let newState = null;
   const { id, data } = action;
 
   switch (action.type) {
     case COLLECTION:
+      newState = cloneDeep(state);
       const colName = id.split('___');
       const collection = data.results.find(function (element) {
         return element.name === colName[0];
       });
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'data'], assignDate(collection));
-      del(state, ['deleted', id]);
+      set(newState, ['map', id, 'inflight'], false);
+      set(newState, ['map', id, 'data'], assignDate(collection));
+      del(newState, ['deleted', id]);
       break;
     case COLLECTION_INFLIGHT:
-      set(state, ['map', id, 'inflight'], true);
+      newState = cloneDeep(state);
+      set(newState, ['map', id, 'inflight'], true);
       break;
     case COLLECTION_ERROR:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['map', id, 'inflight'], false);
+      set(newState, ['map', id, 'error'], action.error);
       break;
 
     case COLLECTION_APPLYWORKFLOW:
-      set(state, ['executed', id, 'status'], 'success');
-      set(state, ['executed', id, 'error'], null);
+      newState = cloneDeep(state);
+      set(newState, ['executed', id, 'status'], 'success');
+      set(newState, ['executed', id, 'error'], null);
       break;
     case COLLECTION_APPLYWORKFLOW_INFLIGHT:
-      set(state, ['executed', id, 'status'], 'inflight');
+      newState = cloneDeep(state);
+      set(newState, ['executed', id, 'status'], 'inflight');
       break;
     case COLLECTION_APPLYWORKFLOW_ERROR:
-      set(state, ['executed', id, 'status'], 'error');
-      set(state, ['executed', id, 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['executed', id, 'status'], 'error');
+      set(newState, ['executed', id, 'error'], action.error);
       break;
 
     case COLLECTIONS:
-      set(state, ['list', 'data'], data.results);
-      set(state, ['list', 'meta'], assignDate(data.meta));
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], false);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'data'], data.results);
+      set(newState, ['list', 'meta'], assignDate(data.meta));
+      set(newState, ['list', 'inflight'], false);
+      set(newState, ['list', 'error'], false);
       break;
     case COLLECTIONS_INFLIGHT:
-      set(state, ['list', 'inflight'], true);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'inflight'], true);
       break;
     case COLLECTIONS_ERROR:
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'inflight'], false);
+      set(newState, ['list', 'error'], action.error);
       break;
 
     case NEW_COLLECTION:
-      set(state, ['created', id, 'status'], 'success');
+      newState = cloneDeep(state);
+      set(newState, ['created', id, 'status'], 'success');
       break;
     case NEW_COLLECTION_INFLIGHT:
-      set(state, ['created', id, 'status'], 'inflight');
+      newState = cloneDeep(state);
+      set(newState, ['created', id, 'status'], 'inflight');
       break;
     case NEW_COLLECTION_ERROR:
-      set(state, ['created', id, 'status'], 'error');
-      set(state, ['created', id, 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['created', id, 'status'], 'error');
+      set(newState, ['created', id, 'error'], action.error);
       break;
 
     case UPDATE_COLLECTION:
-      set(state, ['map', id, 'data'], data);
-      set(state, ['updated', id, 'status'], 'success');
+      newState = cloneDeep(state);
+      set(newState, ['map', id, 'data'], data);
+      set(newState, ['updated', id, 'status'], 'success');
       break;
     case UPDATE_COLLECTION_INFLIGHT:
-      set(state, ['updated', id, 'status'], 'inflight');
+      newState = cloneDeep(state);
+      set(newState, ['updated', id, 'status'], 'inflight');
       break;
     case UPDATE_COLLECTION_ERROR:
-      set(state, ['updated', id, 'status'], 'error');
-      set(state, ['updated', id, 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['updated', id, 'status'], 'error');
+      set(newState, ['updated', id, 'error'], action.error);
       break;
     case UPDATE_COLLECTION_CLEAR:
-      del(state, ['updated', id]);
+      newState = cloneDeep(state);
+      del(newState, ['updated', id]);
       break;
 
     case COLLECTION_DELETE:
-      set(state, ['deleted', id, 'status'], 'success');
-      set(state, ['deleted', id, 'error'], null);
+      newState = cloneDeep(state);
+      set(newState, ['deleted', id, 'status'], 'success');
+      set(newState, ['deleted', id, 'error'], null);
       break;
     case COLLECTION_DELETE_INFLIGHT:
-      set(state, ['deleted', id, 'status'], 'inflight');
+      newState = cloneDeep(state);
+      set(newState, ['deleted', id, 'status'], 'inflight');
       break;
     case COLLECTION_DELETE_ERROR:
-      set(state, ['deleted', id, 'status'], 'error');
-      set(state, ['deleted', id, 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['deleted', id, 'status'], 'error');
+      set(newState, ['deleted', id, 'error'], action.error);
       break;
 
     case SEARCH_COLLECTIONS:
-      set(state, ['list', 'params', 'prefix'], action.prefix);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'params', 'prefix'], action.prefix);
       break;
     case CLEAR_COLLECTIONS_SEARCH:
-      set(state, ['list', 'params', 'prefix'], null);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'params', 'prefix'], null);
       break;
 
     case FILTER_COLLECTIONS:
-      set(state, ['list', 'params', action.param.key], action.param.value);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'params', action.param.key], action.param.value);
       break;
     case CLEAR_COLLECTIONS_FILTER:
-      set(state, ['list', 'params', action.paramKey], null);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'params', action.paramKey], null);
       break;
   }
-  return state;
+  return newState || state;
 }

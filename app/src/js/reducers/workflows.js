@@ -1,5 +1,6 @@
 'use strict';
 import { set } from 'object-path';
+import cloneDeep from 'lodash.clonedeep';
 import {
   WORKFLOWS,
   WORKFLOWS_INFLIGHT,
@@ -26,23 +27,26 @@ function createMap (data) {
 }
 
 export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
+  let newState = null;
   const { data } = action;
   switch (action.type) {
     case WORKFLOWS:
-      set(state, 'map', createMap(data));
-      set(state, ['list', 'data'], data);
-      set(state, ['list', 'meta'], { queriedAt: new Date() });
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], false);
+      newState = cloneDeep(state);
+      set(newState, 'map', createMap(data));
+      set(newState, ['list', 'data'], data);
+      set(newState, ['list', 'meta'], { queriedAt: new Date() });
+      set(newState, ['list', 'inflight'], false);
+      set(newState, ['list', 'error'], false);
       break;
     case WORKFLOWS_INFLIGHT:
-      set(state, ['list', 'inflight'], true);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'inflight'], true);
       break;
     case WORKFLOWS_ERROR:
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'inflight'], false);
+      set(newState, ['list', 'error'], action.error);
       break;
   }
-  return state;
+  return newState || state;
 }

@@ -2,6 +2,7 @@
 
 import get from 'lodash.get';
 import { set } from 'object-path';
+import cloneDeep from 'lodash.clonedeep';
 
 import {
   DIST_APIGATEWAY,
@@ -33,106 +34,118 @@ const countsFromElasticSearchQuery = (data, name) => {
 };
 
 export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
+  let newState = null;
   switch (action.type) {
     case DIST_APIGATEWAY:
-      set(state, 'apiGateway.error', null);
-      set(state, 'apiGateway.inflight', false);
-      set(state, 'apiGateway.queriedAt', new Date(Date.now()));
+      newState = cloneDeep(state);
+      set(newState, 'apiGateway.error', null);
+      set(newState, 'apiGateway.inflight', false);
+      set(newState, 'apiGateway.queriedAt', new Date(Date.now()));
       set(
-        state,
+        newState,
         'apiGateway.access.errors',
         countsFromElasticSearchQuery(action.data, 'ApiAccessErrors')
       );
       set(
-        state,
+        newState,
         'apiGateway.access.successes',
         countsFromElasticSearchQuery(action.data, 'ApiAccessSuccesses')
       );
       set(
-        state,
+        newState,
         'apiGateway.execution.errors',
         countsFromElasticSearchQuery(action.data, 'ApiExecutionErrors')
       );
       set(
-        state,
+        newState,
         'apiGateway.execution.successes',
         countsFromElasticSearchQuery(action.data, 'ApiExecutionSuccesses')
       );
       break;
     case DIST_APIGATEWAY_INFLIGHT:
-      set(state, 'apiGateway.inflight', true);
+      newState = cloneDeep(state);
+      set(newState, 'apiGateway.inflight', true);
       break;
     case DIST_APIGATEWAY_ERROR:
-      set(state, 'apiGateway.inflight', false);
-      set(state, 'apiGateway.error', action.error);
+      newState = cloneDeep(state);
+      set(newState, 'apiGateway.inflight', false);
+      set(newState, 'apiGateway.error', action.error);
       break;
     case DIST_API_LAMBDA:
-      set(state, 'apiLambda.error', null);
-      set(state, 'apiLambda.inflight', false);
-      set(state, 'apiLambda.queriedAt', new Date(Date.now()));
+      newState = cloneDeep(state);
+      set(newState, 'apiLambda.error', null);
+      set(newState, 'apiLambda.inflight', false);
+      set(newState, 'apiLambda.queriedAt', new Date(Date.now()));
       set(
-        state,
+        newState,
         'apiLambda.errors',
         countsFromElasticSearchQuery(action.data, 'LambdaAPIErrors')
       );
       set(
-        state,
+        newState,
         'apiLambda.successes',
         countsFromElasticSearchQuery(action.data, 'LambdaAPISuccesses')
       );
       break;
     case DIST_API_LAMBDA_INFLIGHT:
-      set(state, 'apiLambda.inflight', true);
+      newState = cloneDeep(state);
+      set(newState, 'apiLambda.inflight', true);
       break;
     case DIST_API_LAMBDA_ERROR:
-      set(state, 'apiLambda.inflight', false);
-      set(state, 'apiLambda.error', action.error);
+      newState = cloneDeep(state);
+      set(newState, 'apiLambda.inflight', false);
+      set(newState, 'apiLambda.error', action.error);
       break;
     case DIST_TEA_LAMBDA:
-      set(state, 'teaLambda.error', null);
-      set(state, 'teaLambda.inflight', false);
-      set(state, 'teaLambda.queriedAt', new Date(Date.now()));
+      newState = cloneDeep(state);
+      set(newState, 'teaLambda.error', null);
+      set(newState, 'teaLambda.inflight', false);
+      set(newState, 'teaLambda.queriedAt', new Date(Date.now()));
       set(
-        state,
+        newState,
         'teaLambda.errors',
         countsFromElasticSearchQuery(action.data, 'TEALambdaErrors')
       );
       set(
-        state,
+        newState,
         'teaLambda.successes',
         countsFromElasticSearchQuery(action.data, 'TEALambdaSuccesses')
       );
       break;
     case DIST_TEA_LAMBDA_INFLIGHT:
-      set(state, 'teaLambda.inflight', true);
+      newState = cloneDeep(state);
+      set(newState, 'teaLambda.inflight', true);
       break;
     case DIST_TEA_LAMBDA_ERROR:
-      set(state, 'teaLambda.inflight', false);
-      set(state, 'teaLambda.error', action.error);
+      newState = cloneDeep(state);
+      set(newState, 'teaLambda.inflight', false);
+      set(newState, 'teaLambda.error', action.error);
       break;
     case DIST_S3ACCESS:
-      set(state, 's3Access.error', null);
-      set(state, 's3Access.inflight', false);
-      set(state, 's3Access.queriedAt', new Date(Date.now()));
+      newState = cloneDeep(state);
+      set(newState, 's3Access.error', null);
+      set(newState, 's3Access.inflight', false);
+      set(newState, 's3Access.queriedAt', new Date(Date.now()));
       set(
-        state,
+        newState,
         's3Access.errors',
         countsFromElasticSearchQuery(action.data, 's3AccessFailures')
       );
       set(
-        state,
+        newState,
         's3Access.successes',
         countsFromElasticSearchQuery(action.data, 's3AccessSuccesses')
       );
       break;
     case DIST_S3ACCESS_INFLIGHT:
-      set(state, 's3Access.inflight', true);
+      newState = cloneDeep(state);
+      set(newState, 's3Access.inflight', true);
       break;
     case DIST_S3ACCESS_ERROR:
-      set(state, 's3Access.inflight', false);
-      set(state, 's3Access.error', action.error);
+      newState = cloneDeep(state);
+      set(newState, 's3Access.inflight', false);
+      set(newState, 's3Access.error', action.error);
       break;
   }
-  return state;
+  return newState || state;
 }

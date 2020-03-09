@@ -1,7 +1,7 @@
 'use strict';
 import { set } from 'object-path';
 import { get as getToken, set as setToken } from '../utils/auth';
-import clonedeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash.clonedeep';
 
 import {
   DELETE_TOKEN,
@@ -30,7 +30,7 @@ export default function reducer (state = initialState, action) {
   let newState = null;
   switch (action.type) {
     case DELETE_TOKEN:
-      newState = clonedeep(state);
+      newState = cloneDeep(state);
       set(newState, 'tokens.token', null);
       setToken('');
       break;
@@ -54,23 +54,23 @@ export default function reducer (state = initialState, action) {
       set(newState, 'authenticated', false);
       break;
     case REFRESH_TOKEN:
-      newState = clonedeep(state);
+      newState = cloneDeep(state);
       set(newState, 'tokens.error', null);
       set(newState, 'tokens.inflight', false);
       set(newState, 'tokens.token', action.token);
       setToken(action.token);
       break;
     case REFRESH_TOKEN_ERROR:
-      newState = clonedeep(state);
+      newState = cloneDeep(state);
       set(newState, 'tokens.error', action.error);
       set(newState, 'tokens.inflight', false);
       break;
     case REFRESH_TOKEN_INFLIGHT:
-      newState = clonedeep(state);
+      newState = cloneDeep(state);
       set(newState, 'tokens.inflight', true);
       break;
     case SET_TOKEN:
-      newState = clonedeep(state);
+      newState = cloneDeep(state);
       set(newState, 'tokens.token', action.token);
       setToken(action.token);
       break;

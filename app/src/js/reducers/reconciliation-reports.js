@@ -1,6 +1,7 @@
 'use strict';
 import { set, del } from 'object-path';
 import assignDate from './assign-date';
+import cloneDeep from 'lodash.clonedeep';
 
 import {
   RECONCILIATION,
@@ -31,52 +32,62 @@ export const initialState = {
 };
 
 export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
+  let newState = null;
   const { id, data } = action;
   switch (action.type) {
     case RECONCILIATION:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'data'], assignDate(data));
-      del(state, ['deleted', id]);
+      newState = cloneDeep(state);
+      set(newState, ['map', id, 'inflight'], false);
+      set(newState, ['map', id, 'data'], assignDate(data));
+      del(newState, ['deleted', id]);
       break;
     case RECONCILIATION_INFLIGHT:
-      set(state, ['map', id, 'inflight'], true);
+      newState = cloneDeep(state);
+      set(newState, ['map', id, 'inflight'], true);
       break;
     case RECONCILIATION_ERROR:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['map', id, 'inflight'], false);
+      set(newState, ['map', id, 'error'], action.error);
       break;
 
     case RECONCILIATIONS:
+      newState = cloneDeep(state);
       // response.results is a array of string filenames
       const results = data.results.map((filename) => ({ reconciliationReportName: filename }));
-      set(state, ['list', 'data'], results);
-      set(state, ['list', 'meta'], assignDate(data.meta));
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], false);
+      set(newState, ['list', 'data'], results);
+      set(newState, ['list', 'meta'], assignDate(data.meta));
+      set(newState, ['list', 'inflight'], false);
+      set(newState, ['list', 'error'], false);
       break;
     case RECONCILIATIONS_INFLIGHT:
-      set(state, ['list', 'inflight'], true);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'inflight'], true);
       break;
     case RECONCILIATIONS_ERROR:
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'inflight'], false);
+      set(newState, ['list', 'error'], action.error);
       break;
 
     case SEARCH_RECONCILIATIONS:
-      set(state, ['list', 'params', 'prefix'], action.prefix);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'params', 'prefix'], action.prefix);
       break;
     case CLEAR_RECONCILIATIONS_SEARCH:
-      set(state, ['list', 'params', 'prefix'], null);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'params', 'prefix'], null);
       break;
 
     case NEW_RECONCILIATION_INFLIGHT:
-      set(state, 'createReportInflight', true);
+      newState = {...state};
+      set(newState, 'createReportInflight', true);
       break;
 
     case NEW_RECONCILIATION:
-      set(state, 'createReportInflight', false);
+      newState = {...state};
+      set(newState, 'createReportInflight', false);
       break;
   }
-  return state;
+  return newState || state;
 }

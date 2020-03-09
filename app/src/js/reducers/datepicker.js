@@ -1,5 +1,7 @@
 'use strict';
 
+import cloneDeep from 'lodash.clonedeep';
+
 import {
   DATEPICKER_DATECHANGE,
   DATEPICKER_DROPDOWN_FILTER,
@@ -37,17 +39,20 @@ const computeDateTimeDelta = (timeDeltaInDays) => {
 };
 
 export default function reducer (state = initialState, action) {
-  state = { ...state };
+  let newState = null;
   const { data } = action;
   switch (action.type) {
     case DATEPICKER_DROPDOWN_FILTER:
-      state = {...state, ...computeDateTimeDelta(data.dateRange.value), ...data};
+      newState = cloneDeep(state);
+      newState = {...newState, ...computeDateTimeDelta(data.dateRange.value), ...data};
       break;
     case DATEPICKER_DATECHANGE:
-      state = { ...state, ...data };
+      newState = cloneDeep(state);
+      newState = { ...newState, ...data };
       break;
     case DATEPICKER_HOUR_FORMAT:
-      state = { ...state, ...{hourFormat: data} };
+      newState = cloneDeep(state);
+      newState = { ...newState, ...{hourFormat: data} };
   }
-  return state;
+  return newState || state;
 }

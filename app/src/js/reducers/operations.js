@@ -1,6 +1,7 @@
 'use strict';
 import { set } from 'object-path';
 import assignDate from './assign-date';
+import cloneDeep from 'lodash.clonedeep';
 import {
   OPERATIONS,
   OPERATIONS_INFLIGHT,
@@ -30,50 +31,60 @@ export const initialState = {
 };
 
 export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
+  let newState = null;
   const { data } = action;
   switch (action.type) {
     case OPERATIONS:
-      set(state, ['list', 'data'], data.results);
-      set(state, ['list', 'meta'], assignDate(data.meta));
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], false);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'data'], data.results);
+      set(newState, ['list', 'meta'], assignDate(data.meta));
+      set(newState, ['list', 'inflight'], false);
+      set(newState, ['list', 'error'], false);
       break;
     case OPERATIONS_INFLIGHT:
-      set(state, ['list', 'inflight'], true);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'inflight'], true);
       break;
     case OPERATIONS_ERROR:
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'inflight'], false);
+      set(newState, ['list', 'error'], action.error);
       break;
 
     case OPERATION:
-      set(state, ['list', 'data'], data.results);
-      set(state, ['list', 'meta'], assignDate(data.meta));
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], false);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'data'], data.results);
+      set(newState, ['list', 'meta'], assignDate(data.meta));
+      set(newState, ['list', 'inflight'], false);
+      set(newState, ['list', 'error'], false);
       break;
     case OPERATION_INFLIGHT:
-      set(state, ['list', 'inflight'], true);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'inflight'], true);
       break;
     case OPERATION_ERROR:
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], action.error);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'inflight'], false);
+      set(newState, ['list', 'error'], action.error);
       break;
 
     case FILTER_OPERATIONS:
-      set(state, ['list', 'params', action.param.key], action.param.value);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'params', action.param.key], action.param.value);
       break;
     case CLEAR_OPERATIONS_FILTER:
-      set(state, ['list', 'params', action.paramKey], null);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'params', action.paramKey], null);
       break;
 
     case SEARCH_OPERATIONS:
-      set(state, ['list', 'internal', 'prefix'], action.prefix);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'internal', 'prefix'], action.prefix);
       break;
     case CLEAR_OPERATIONS_SEARCH:
-      set(state, ['list', 'internal', 'prefix'], null);
+      newState = cloneDeep(state);
+      set(newState, ['list', 'internal', 'prefix'], null);
       break;
   }
-  return state;
+  return newState || state;
 }

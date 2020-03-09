@@ -17,24 +17,27 @@ export const initialState = {
 };
 
 export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
+  let newState = null;
   const { data } = action;
 
   switch (action.type) {
     case EXECUTION_STATUS:
-      set(state, ['inflight'], false);
-      set(state, ['error'], false);
-      set(state, ['execution'], data.execution);
-      set(state, ['executionHistory'], data.executionHistory);
-      set(state, ['stateMachine'], data.stateMachine);
+      newState = {...state};
+      set(newState, ['inflight'], false);
+      set(newState, ['error'], false);
+      set(newState, ['execution'], data.execution);
+      set(newState, ['executionHistory'], data.executionHistory);
+      set(newState, ['stateMachine'], data.stateMachine);
       break;
     case EXECUTION_STATUS_INFLIGHT:
-      set(state, ['inflight'], true);
+      newState = {...state};
+      set(newState, ['inflight'], true);
       break;
     case EXECUTION_STATUS_ERROR:
-      set(state, ['inflight'], false);
-      set(state, ['error'], action.error);
+      newState = {...state};
+      set(newState, ['inflight'], false);
+      set(newState, ['error'], action.error);
       break;
   }
-  return state;
+  return newState || state;
 }
