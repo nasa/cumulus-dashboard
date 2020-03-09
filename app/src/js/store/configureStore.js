@@ -42,10 +42,12 @@ const middlewares = [
 ];
 
 if (isDevelopment) {
+  const immutable = require('redux-immutable-state-invariant').default();
+  middlewares.push(immutable);
+
   const logger = createLogger({
     collapsed: true
   });
-
   middlewares.push(logger);
 }
 

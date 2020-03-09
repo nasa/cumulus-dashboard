@@ -1,6 +1,7 @@
 'use strict';
 import { set } from 'object-path';
 import { get as getToken, set as setToken } from '../utils/auth';
+import clonedeep from 'lodash.clonedeep';
 
 import {
   DELETE_TOKEN,
@@ -26,44 +27,53 @@ export const initialState = {
 };
 
 export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
+  let newState = null;
   switch (action.type) {
     case DELETE_TOKEN:
-      set(state, 'tokens.token', null);
+      newState = clonedeep(state);
+      set(newState, 'tokens.token', null);
       setToken('');
       break;
     case LOGIN:
-      set(state, 'authenticated', true);
-      set(state, 'inflight', false);
+      newState = {...state};
+      set(newState, 'authenticated', true);
+      set(newState, 'inflight', false);
       break;
     case LOGIN_INFLIGHT:
-      set(state, 'inflight', true);
+      newState = {...state};
+      set(newState, 'inflight', true);
       break;
     case LOGIN_ERROR:
-      set(state, 'error', action.error);
-      set(state, 'inflight', false);
-      set(state, 'authenticated', false);
+      newState = {...state};
+      set(newState, 'error', action.error);
+      set(newState, 'inflight', false);
+      set(newState, 'authenticated', false);
       break;
     case LOGOUT:
-      set(state, 'authenticated', false);
+      newState = {...state};
+      set(newState, 'authenticated', false);
       break;
     case REFRESH_TOKEN:
-      set(state, 'tokens.error', null);
-      set(state, 'tokens.inflight', false);
-      set(state, 'tokens.token', action.token);
+      newState = clonedeep(state);
+      set(newState, 'tokens.error', null);
+      set(newState, 'tokens.inflight', false);
+      set(newState, 'tokens.token', action.token);
       setToken(action.token);
       break;
     case REFRESH_TOKEN_ERROR:
-      set(state, 'tokens.error', action.error);
-      set(state, 'tokens.inflight', false);
+      newState = clonedeep(state);
+      set(newState, 'tokens.error', action.error);
+      set(newState, 'tokens.inflight', false);
       break;
     case REFRESH_TOKEN_INFLIGHT:
-      set(state, 'tokens.inflight', true);
+      newState = clonedeep(state);
+      set(newState, 'tokens.inflight', true);
       break;
     case SET_TOKEN:
-      set(state, 'tokens.token', action.token);
+      newState = clonedeep(state);
+      set(newState, 'tokens.token', action.token);
       setToken(action.token);
       break;
   }
-  return state;
+  return newState || state;
 }

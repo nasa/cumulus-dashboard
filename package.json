@@ -143,6 +143,7 @@
     "postcss-scss": "^2.0.0",
     "precss": "^4.0.0",
     "react-test-renderer": "^16.6.3",
+    "redux-immutable-state-invariant": "^2.1.0",
     "redux-mock-store": "^1.5.3",
     "redux-test-utils": "^0.2.2",
     "resolve-url-loader": "^3.1.1",
