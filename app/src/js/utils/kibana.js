@@ -2,7 +2,7 @@
 
 import _config from '../config';
 
-const formatKibanaDate = (datepicker) => {
+const formatKibanaDate = (datepicker = {}) => {
   const startTime = datepicker.startDateTime;
   const endTime = datepicker.endDateTime;
   let kibanaDate = '';
@@ -79,7 +79,8 @@ export const kibanaGatewayExecutionSuccessesLink = (cumulusInstanceMeta, datepic
   if (!kibanaConfigured(cumulusInstanceMeta)) return '';
   const stackName = cumulusInstanceMeta.stackName;
   const timeInterval = formatKibanaDate(datepicker);
-  return `${_config.kibanaRoot}/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(${timeInterval}))&_a=(columns:!(message),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:${stackName},key:_index,negate:!f,params:(query:'${stackName}-cloudwatch*',type:phrase),type:phrase,value:'${stackName}-cloudwatch*'),query:(match:(_index:(query:'${stackName}-cloudwatch*',type:phrase)))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:${stackName},key:logGroup,negate:!f,params:(query:'%22API%5C-Gateway%5C-Execution*%22',type:phrase),type:phrase,value:'%22API%5C-Gateway%5C-Execution*%22'),query:(match:(logGroup:(query:'%22API%5C-Gateway%5C-Execution*%22',type:phrase))))),index:${stackName},interval:auto,query:(language:lucene,query:'%2B%22Method%20completed%20with%20status:%22%20%2B(2%3F%3F%203%3F%3F)'),sort:!('@timestamp',desc))`;
+  const link = `${_config.kibanaRoot}/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(${timeInterval}))&_a=(columns:!(message),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:${stackName},key:_index,negate:!f,params:(query:'${stackName}-cloudwatch*',type:phrase),type:phrase,value:'${stackName}-cloudwatch*'),query:(match:(_index:(query:'${stackName}-cloudwatch*',type:phrase)))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:${stackName},key:logGroup,negate:!f,params:(query:'%22API%5C-Gateway%5C-Execution*%22',type:phrase),type:phrase,value:'%22API%5C-Gateway%5C-Execution*%22'),query:(match:(logGroup:(query:'%22API%5C-Gateway%5C-Execution*%22',type:phrase))))),index:${stackName},interval:auto,query:(language:lucene,query:'%2B%22Method%20completed%20with%20status:%22%20%2B(2%3F%3F%203%3F%3F)'),sort:!('@timestamp',desc))`;
+  return link;
 };
 
 export const kibanaGatewayAccessErrorsLink = (cumulusInstanceMeta, datepicker) => {
