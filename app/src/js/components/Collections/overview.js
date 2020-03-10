@@ -270,6 +270,7 @@ class CollectionOverview extends React.Component {
                   dispatch={this.props.dispatch}
                   action={searchGranules}
                   clear={clearGranulesSearch}
+                  placeholder='Search Granules'
                 />
               </li>
               <li>
@@ -277,8 +278,10 @@ class CollectionOverview extends React.Component {
                   options={statusOptions}
                   action={filterGranules}
                   clear={clearGranulesFilter}
-                  paramKey={'status'}
-                  label={'Status'}
+                  paramKey='status'
+                  inputProps={{
+                    placeholder: 'Status'
+                  }}
                 />
               </li>
               <li className="run_bulk">

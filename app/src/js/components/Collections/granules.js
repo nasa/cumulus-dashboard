@@ -138,7 +138,7 @@ const CollectionGranules = ({
           <h2 className="heading--medium heading--shared-content with-description">
             {`${displayCase(view)} ${displayName} `}
             <span className="num--title">
-              {meta.count ? ` ${meta.count}` : null}
+              {`${meta.count && meta.count || 0}`}
             </span>
           </h2>
         </div>
@@ -156,15 +156,17 @@ const CollectionGranules = ({
               dispatch={dispatch}
               action={searchGranules}
               clear={clearGranulesSearch}
-              placeholder='Search Collections'
+              placeholder='Search Granules'
             />
             {view === 'all' && (
               <Dropdown
                 options={statusOptions}
                 action={filterGranules}
                 clear={clearGranulesFilter}
-                paramKey={'status'}
-                inputProps={{placeholder: 'Status'}}
+                paramKey='status'
+                inputProps={{
+                  placeholder: 'Status'
+                }}
               />
             )}
           </ListFilters>
