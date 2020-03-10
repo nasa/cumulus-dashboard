@@ -58,7 +58,7 @@ export const initialState = {
 };
 
 export default function reducer (state = initialState, action) {
-  let newState = null;
+  let newState = Object.assign({}, state);
   const { data, id } = action;
   switch (action.type) {
     case PROVIDER:
@@ -110,7 +110,7 @@ export default function reducer (state = initialState, action) {
       break;
 
     case UPDATE_PROVIDER:
-      newState = cloneDeep(state);
+      // newState = cloneDeep(state);
       set(newState, ['map', id, 'data'], data);
       set(newState, ['updated', id, 'status'], 'success');
       break;
