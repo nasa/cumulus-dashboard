@@ -78,6 +78,7 @@ class Home extends React.Component {
     dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
     dispatch(getDistS3AccessMetrics(this.props.cumulusInstance));
     dispatch(listExecutions({}));
+    dispatch(listGranules());
     dispatch(listRules({}));
   }
 
@@ -141,7 +142,7 @@ class Home extends React.Component {
       [tally(get(stats.data, 'granules.value')), strings.granules, '/granules'],
       [tally(get(this.props.executions, 'list.meta.count')), 'Executions', '/executions'],
       [tally(get(this.props.rules, 'list.meta.count')), 'Ingest Rules', '/rules'],
-      [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time', null]
+      [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time', '/']
     ];
 
     const distSuccessStats = [
