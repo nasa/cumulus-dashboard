@@ -58,7 +58,7 @@ export const initialState = {
 };
 
 export default function reducer (state = initialState, action) {
-  let newState = Object.assign({}, state);
+  let newState = null;
   const { data, id } = action;
   switch (action.type) {
     case PROVIDER:
@@ -110,6 +110,9 @@ export default function reducer (state = initialState, action) {
       break;
 
     case UPDATE_PROVIDER:
+      // TODO [MHS, 2020-03-09] No IDEA what this problem is yet, but these require a shallow copy of the state.
+      // console.log(`state: ${JSON.stringify(state)}`);
+      newState = Object.assign({}, state);
       // newState = cloneDeep(state);
       set(newState, ['map', id, 'data'], data);
       set(newState, ['updated', id, 'status'], 'success');
