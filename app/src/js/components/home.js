@@ -78,7 +78,7 @@ class Home extends React.Component {
     dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
     dispatch(getDistS3AccessMetrics(this.props.cumulusInstance));
     dispatch(listExecutions({}));
-    dispatch(listGranules());
+    dispatch(listGranules(this.generateQuery()));
     dispatch(listRules({}));
   }
 
