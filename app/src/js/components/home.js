@@ -88,7 +88,8 @@ class Home extends React.Component {
 
   generateQuery () {
     return {
-      q: '_exists_:error AND status:failed',
+      error__exists: true,
+      status: 'failed',
       limit: 20
     };
   }
