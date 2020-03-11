@@ -38,5 +38,5 @@ export default function reducer (state = initialState, action) {
         warning: action.payload.warning
       };
   }
-  return newState || state;
+  return state;
 }
