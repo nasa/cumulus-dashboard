@@ -18,7 +18,8 @@ set -evx
 apt-get update
 
 apt-get install -y \
-  rsync
+  rsync \
+  git
 
 mkdir /build
 rsync -av \
@@ -37,6 +38,7 @@ rsync -av \
     STAGE=$STAGE \
     HIDE_PDR=$HIDE_PDR \
     LABELS=$LABELS \
+    SERVED_BY_CUMULUS_API=$SERVED_BY_CUMULUS_API \
     AUTH_METHOD=$AUTH_METHOD npm run build
 
   rsync -av ./dist/ /dist/
@@ -55,6 +57,7 @@ docker run \
   --env STAGE=$STAGE \
   --env HIDE_PDR=$HIDE_PDR \
   --env LABELS=$LABELS \
+  --env SERVED_BY_CUMULUS_API=${SERVED_BY_CUMULUS_API:-false} \
   --env AUTH_METHOD=$AUTH_METHOD \
-  node:8-slim \
+  node:10-slim \
   /cumulus-dashboard/tmp/script.sh
