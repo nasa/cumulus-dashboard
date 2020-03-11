@@ -114,10 +114,12 @@ class CollectionList extends React.Component {
             sortIdx='duration'
           >
             <ListFilters>
-              <Search dispatch={this.props.dispatch}
+              <Search
+                dispatch={this.props.dispatch}
                 action={searchCollections}
                 format={collectionSearchResult}
                 clear={clearCollectionsSearch}
+                placeholder='Search Collections'
               />
             </ListFilters>
           </List>
