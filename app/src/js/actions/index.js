@@ -453,12 +453,12 @@ export const getStats = (options) => {
 };
 
 export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
+  if (!esRoot) return { type: types.NOOP };
   return (dispatch, getState) => {
     const stackName = cumulusInstanceMeta.stackName;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
     const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
-    if (!esRoot) return { type: types.NOOP };
     return dispatch({[CALL_API]: {
       type: types.DIST_APIGATEWAY,
       skipAuth: true,
@@ -471,13 +471,13 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
 };
 
 export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
+  if (!esRoot) return { type: types.NOOP };
+  if (!showDistributionAPIMetrics) return {type: types.NOOP};
   return (dispatch, getState) => {
     const stackName = cumulusInstanceMeta.stackName;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
     const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
-    if (!esRoot) return { type: types.NOOP };
-    if (!showDistributionAPIMetrics) return {type: types.NOOP};
     return dispatch({[CALL_API]: {
       type: types.DIST_API_LAMBDA,
       skipAuth: true,
@@ -490,13 +490,13 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
 };
 
 export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
+  if (!esRoot) return { type: types.NOOP };
+  if (!showTeaMetrics) return { type: types.NOOP };
   return (dispatch, getState) => {
     const stackName = cumulusInstanceMeta.stackName;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
     const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
-    if (!esRoot) return { type: types.NOOP };
-    if (!showTeaMetrics) return { type: types.NOOP };
     return dispatch({[CALL_API]: {
       type: types.DIST_TEA_LAMBDA,
       skipAuth: true,
@@ -509,12 +509,12 @@ export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
 };
 
 export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
+  if (!esRoot) return { type: types.NOOP };
   return (dispatch, getState) => {
     const stackName = cumulusInstanceMeta.stackName;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
     const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
-    if (!esRoot) return { type: types.NOOP };
     return dispatch({[CALL_API]: {
       type: types.DIST_S3ACCESS,
       skipAuth: true,
