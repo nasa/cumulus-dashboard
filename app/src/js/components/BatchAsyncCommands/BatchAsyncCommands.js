@@ -8,6 +8,7 @@ import queue from 'stubborn-queue';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import _config from '../../config';
 import DefaultModal from '../Modal/modal';
+import isEmpty from 'lodash.isempty';
 
 const { updateDelay } = _config;
 
@@ -60,8 +61,10 @@ class BatchCommand extends React.Component {
     const { selected, history, getModalOptions } = this.props;
     if (typeof getModalOptions === 'function') {
       const modalOptions = getModalOptions(selected, history);
-      this.setState({ modalOptions });
-      return;
+      if (!isEmpty(modalOptions)) {
+        this.setState({ modalOptions });
+        return;
+      }
     }
     if (!this.isInflight()) this.start();
   }
@@ -122,6 +125,13 @@ class BatchCommand extends React.Component {
   }
 
   handleClick () {
+    const { selected, history, getModalOptions } = this.props;
+    if (typeof getModalOptions === 'function') {
+      const modalOptions = getModalOptions(selected, history);
+      if (isEmpty(modalOptions)) {
+        this.setState({ modalOptions });
+      }
+    }
     if (this.props.confirm) {
       this.setState({ activeModal: true, completed: 0 });
     } else this.start();

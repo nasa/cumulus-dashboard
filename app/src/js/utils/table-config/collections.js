@@ -106,10 +106,7 @@ DeleteModalContent.propTypes = {
 
 export const bulkActions = function (collections) {
   const getModalOptions = (selections, history) => {
-    let confirmButtonText;
-    let cancelButtonText;
-    let onConfirm = () => {};
-    let children = null;
+    let modalOptions = {};
 
     const selectionsWithGranules = selections.filter(selection => {
       const { name, version } = collectionNameVersion(selection);
@@ -118,21 +115,15 @@ export const bulkActions = function (collections) {
     });
 
     if (selectionsWithGranules.length > 0) {
-      confirmButtonText = 'Go To Granules';
-      cancelButtonText = 'Cancel Request';
-      onConfirm = () => {
+      modalOptions.confirmButtonText = 'Go To Granules';
+      modalOptions.cancelButtonText = 'Cancel Request';
+      modalOptions.onConfirm = () => {
         history.push('/granules');
       };
-      children = <DeleteModalContent selectionsWithGranules={selectionsWithGranules} />;
-      const modalOptions = {
-        confirmButtonText,
-        cancelButtonText,
-        onConfirm,
-        children
-      };
-
-      return modalOptions;
+      modalOptions.children = <DeleteModalContent selectionsWithGranules={selectionsWithGranules} />;
     }
+
+    return modalOptions;
   };
   return [
     {
