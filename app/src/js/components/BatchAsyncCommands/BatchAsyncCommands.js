@@ -150,7 +150,7 @@ class BatchCommand extends React.Component {
     const inflight = this.isInflight();
 
     // show button as disabled when loading, and in the delay before we clean up.
-    // const buttonDisabled = inflight || status;
+    const buttonClass = inflight || status ? 'button--disabled' : '';
     const modalText = inflight ? IN_PROGRESS
       : !status ? confirm(todo)
         : status === 'success' ? 'Success!' : 'Error';
@@ -174,6 +174,8 @@ class BatchCommand extends React.Component {
             onConfirm={this.confirm}
             title={modalText}
             showModal={activeModal}
+            confirmButtonClass={`${buttonClass} button--submit`}
+            cancelButtonClass={buttonClass}
             {...modalOptions}
           >
             {(!modalOptions || !modalOptions.children) &&
