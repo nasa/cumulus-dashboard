@@ -72,7 +72,7 @@ test('kibanaS3AccessErrorsLink() will return a Kibana link to query for S3 Acces
   t.is(kibanaLink, expectedLink);
 });
 
-test('kibanaS3AccessSuccessesLink() will return a Kibana link to query for S3 Acess Successes', function (t) {
+test('kibanaS3AccessSuccessesLink() will return a Kibana link to query for S3 Access Successes', function (t) {
   const expectedLink = "http://example.com/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(from:now-24h,mode:quick,to:now))&_a=(columns:!(response,key),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:cumulus-stack,key:_index,negate:!f,params:(query:'cumulus-stack-s3*',type:phrase),type:phrase,value:'cumulus-stack-s3*'),query:(match:(_index:(query:'cumulus-stack-s3*',type:phrase)))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:cumulus-stack,key:operation,negate:!f,params:(query:REST.GET.OBJECT,type:phrase),type:phrase,value:REST.GET.OBJECT),query:(match:(operation:(query:REST.GET.OBJECT,type:phrase))))),index:cumulus-stack,interval:auto,query:(language:lucene,query:'response:200'),sort:!('@timestamp',desc))";
 
   const kibanaLink = kibanaS3AccessSuccessesLink(cumulusInstanceMeta, {});
