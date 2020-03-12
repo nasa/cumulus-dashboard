@@ -77,7 +77,7 @@ DefaultModal.propTypes = {
   showModal: PropTypes.bool,
   onCloseModal: PropTypes.func,
   onConfirm: PropTypes.func,
-  onCancel: PropTypes.fuunc,
+  onCancel: PropTypes.func,
   hasCancelButton: PropTypes.bool,
   hasConfirmButton: PropTypes.bool,
   confirmButtonClass: PropTypes.string

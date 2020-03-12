@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { Link } from 'react-router-dom';
 import { fromNow, seconds, tally, collectionNameVersion } from '../format';
@@ -75,20 +76,78 @@ export const recoverAction = function (collections, config) {
 };
 
 const confirmDelete = (d) => `Delete ${d} ${strings.collection}(s)?`;
+
+const DeleteModalContent = ({selectionsWithGranules}) => {
+  return (
+    <>
+      <span>
+        You have submitted a request to delete multiple collections.
+        The following collections contain associated granules:
+      </span>
+      <ul className='collections-with-granules'>
+        {selectionsWithGranules.map((collection, index) => {
+          const {name, version} = collectionNameVersion(collection);
+          return (
+            <li className='collection-with-granules' key={index}>{`${name} / ${version}`}</li>
+          );
+        })}
+      </ul>
+      <span>
+        In order to complete this request, the granules associated with the above collections must first be deleted.
+        Would you like to be redirected to the Granules pages?
+      </span>
+    </>
+  );
+};
+
+DeleteModalContent.propTypes = {
+  selectionsWithGranules: PropTypes.array
+};
+
 export const bulkActions = function (collections) {
+  const getModalOptions = (selections, history) => {
+    let confirmButtonText;
+    let cancelButtonText;
+    let onConfirm = () => {};
+    let children = null;
+
+    const selectionsWithGranules = selections.filter(selection => {
+      const { name, version } = collectionNameVersion(selection);
+      const collectionItem = collections.list.data.find(item => item.name === name && item.version === version);
+      return get(collectionItem, 'stats.total', 0) > 0;
+    });
+
+    if (selectionsWithGranules.length > 0) {
+      confirmButtonText = 'Go To Granules';
+      cancelButtonText = 'Cancel Request';
+      onConfirm = () => {
+        history.push('/granules');
+      };
+      children = <DeleteModalContent selectionsWithGranules={selectionsWithGranules} />;
+      const modalOptions = {
+        confirmButtonText,
+        cancelButtonText,
+        onConfirm,
+        children
+      };
+
+      return modalOptions;
+    }
+  };
   return [
     {
       Component: <Link className='button button--green button--add button--small form-group__element' to='/collections/add' role="button">{strings.add_collection}</Link>
     },
     {
-      text: 'Delete Collection',
+      text: 'Delete Collection(s)',
       action: (collectionId) => {
         const { name, version } = collectionNameVersion(collectionId);
         return deleteCollection(name, version);
       },
       state: collections.deleted,
       confirm: confirmDelete,
-      className: 'button button--delete button--small form-group__element'
+      className: 'button button--delete button--small form-group__element',
+      getModalOptions
     }
   ];
 };

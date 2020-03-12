@@ -3,10 +3,11 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 import queue from 'stubborn-queue';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import _config from '../../config';
-import Modal from 'react-bootstrap/Modal';
+import DefaultModal from '../Modal/modal';
 
 const { updateDelay } = _config;
 
@@ -20,7 +21,8 @@ class BatchCommand extends React.Component {
       callbacks: {},
       activeModal: false,
       completed: 0,
-      status: null
+      status: null,
+      modalOptions: null
     };
     this.isRunning = false;
     this.confirm = this.confirm.bind(this);
@@ -55,6 +57,12 @@ class BatchCommand extends React.Component {
   }
 
   confirm () {
+    const { selected, history, getModalOptions } = this.props;
+    if (typeof getModalOptions === 'function') {
+      const modalOptions = getModalOptions(selected, history);
+      this.setState({ modalOptions });
+      return;
+    }
     if (!this.isInflight()) this.start();
   }
 
@@ -64,13 +72,13 @@ class BatchCommand extends React.Component {
   }
 
   start () {
-    const { selection } = this.props;
+    const { selected } = this.props;
     // if we have inflight callbacks, don't allow further clicks
-    if (!Array.isArray(selection) || !selection.length ||
+    if (!Array.isArray(selected) || !selected.length ||
       this.isInflight()) return false;
     const q = queue(CONCURRENCY);
-    for (let i = 0; i < selection.length; ++i) {
-      q.add(this.initAction, selection[i]);
+    for (let i = 0; i < selected.length; ++i) {
+      q.add(this.initAction, selected[i]);
     }
     q.done(this.onComplete);
   }
@@ -98,7 +106,7 @@ class BatchCommand extends React.Component {
   // combine multiple errors into one
   createErrorMessage (errors) {
     if (!errors || !errors.length) return;
-    return `${errors.length} errors occurred: \n${errors.map((err) => err.error.toString()).join('\n')}`;
+    return `${errors.length} error(s) occurred: \n${errors.map((err) => err.error.toString()).join('\n')}`;
   }
 
   // call onSuccess and onError functions as needed
@@ -106,7 +114,7 @@ class BatchCommand extends React.Component {
     const { onSuccess, onError } = this.props;
     this.setState({ activeModal: false, completed: 0, status: null });
     if (error && typeof onError === 'function') onError(error);
-    if (results && results.length && typeof onSuccess === 'function') onSuccess(results);
+    if (results && results.length && typeof onSuccess === 'function') onSuccess(results, error);
   }
 
   isInflight () {
@@ -122,17 +130,17 @@ class BatchCommand extends React.Component {
   render () {
     const {
       text,
-      selection,
+      selected,
       className,
       confirm,
       confirmOptions
     } = this.props;
-    const { activeModal, completed, status } = this.state;
-    const todo = selection.length;
+    const { activeModal, completed, status, modalOptions } = this.state;
+    const todo = selected.length;
     const inflight = this.isInflight();
 
     // show button as disabled when loading, and in the delay before we clean up.
-    const buttonDisabled = inflight || status;
+    // const buttonDisabled = inflight || status;
     const modalText = inflight ? IN_PROGRESS
       : !status ? confirm(todo)
         : status === 'success' ? 'Success!' : 'Error';
@@ -147,45 +155,35 @@ class BatchCommand extends React.Component {
           successTimeout={0}
           status={!activeModal && inflight ? 'inflight' : null}
         />
-        { activeModal ? <div className='modal__cover'></div> : null }
+        { activeModal && <div className='modal__cover'></div>}
         <div className={ activeModal ? 'modal__container modal__container--onscreen' : 'modal__container' }>
-          { activeModal ? (
-            <Modal
-              dialogClassName="batch-async-modal"
-              show={true}
-              centered
-              size="md"
-              aria-labelledby="modal__batch-async-modal"
-            >
-              <Modal.Header className="batch-async-modal__header" closeButton onClick={this.cancel}></Modal.Header>
-              <Modal.Title id="modal__batch-async-modal" className="modal__batch-async-title"><h4 className={'modal__title--' + status}>{modalText}</h4></Modal.Title>
-              <Modal.Body>
-                <div className='modal__internal modal__formcenter'>
-                  { confirmOptions ? (confirmOptions).map(option =>
-                    <div key={`option-${confirmOptions.indexOf(option)}`}>
-                      {option}
-                      <br />
-                    </div>
-                  ) : null }
-                  <div className='modal__loading'>
-                    <div className='modal__loading--inner'>
-                      <div className={'modal__loading--progress modal__loading--progress--' + status}
-                        style={{width: (todo ? (completed * 100 / todo) + '%' : 0)}}>
-                      </div>
-                    </div>
+          <DefaultModal
+            className='batch-async-modal'
+            onCancel={this.cancel}
+            onCloseModal={this.cancel}
+            onConfirm={this.confirm}
+            title={modalText}
+            showModal={activeModal}
+            {...modalOptions}
+          >
+            {(!modalOptions || !modalOptions.children) &&
+            (<div className='modal__internal modal__formcenter'>
+              {confirmOptions && (confirmOptions).map(option =>
+                <div key={`option-${confirmOptions.indexOf(option)}`}>
+                  {option}
+                  <br />
+                </div>
+              )}
+              <div className='modal__loading'>
+                <div className='modal__loading--inner'>
+                  <div className={'modal__loading--progress modal__loading--progress--' + status}
+                    style={{width: (todo ? (completed * 100 / todo) + '%' : 0)}}>
                   </div>
                 </div>
-              </Modal.Body>
-              <Modal.Footer>
-                <button className={'button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel' + (buttonDisabled ? ' button--disabled' : '')}
-                  onClick={this.cancel}>Cancel
-                </button>
-                <button className={'button button--confirm button__animation--md button__arrow button__arrow--md button__animation button__arrow--white' + (buttonDisabled ? ' button--disabled' : '')}
-                  onClick={this.confirm}>Confirm
-                </button>
-              </Modal.Footer>
-            </Modal>
-          ) : null}
+              </div>
+            </div>)}
+            {modalOptions && modalOptions.children}
+          </DefaultModal>
         </div>
       </div>
     );
@@ -197,13 +195,15 @@ BatchCommand.propTypes = {
   dispatch: PropTypes.func,
   state: PropTypes.object,
   text: PropTypes.string,
-  selection: PropTypes.array,
+  selected: PropTypes.array,
   className: PropTypes.string,
   onSuccess: PropTypes.func,
   onError: PropTypes.func,
   confirm: PropTypes.func,
   confirmOptions: PropTypes.array,
-  updateDelay: PropTypes.number
+  getModalOptions: PropTypes.func,
+  updateDelay: PropTypes.number,
+  history: PropTypes.object
 };
 
-export default BatchCommand;
+export default withRouter(BatchCommand);
