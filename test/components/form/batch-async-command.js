@@ -3,9 +3,9 @@
 import test from 'ava';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { shallow, configure } from 'enzyme';
+import { configure, shallow } from 'enzyme';
 
-import BatchCommand from '../../../app/src/js/components/BatchAsyncCommands/BatchAsyncCommands';
+import { BatchCommand } from '../../../app/src/js/components/BatchAsyncCommands/BatchAsyncCommands';
 
 configure({ adapter: new Adapter() });
 
@@ -13,7 +13,7 @@ test('collect multiple errors', function (t) {
   const noop = () => {};
 
   return new Promise((resolve, reject) => {
-    const selection = [
+    const selected = [
       '0-error',
       '1-pass',
       '2-error',
@@ -34,7 +34,7 @@ test('collect multiple errors', function (t) {
     };
 
     const onError = (err) => {
-      t.is(err.indexOf('2 errors occurred'), 0);
+      t.is(err.indexOf('2 error(s) occurred'), 0);
       done();
     };
 
@@ -72,7 +72,7 @@ test('collect multiple errors', function (t) {
         confirm={item.confirm}
         onSuccess={onSuccess}
         onError={onError}
-        selection={selection}
+        selected={selected}
         updateDelay={1}
       />
     );

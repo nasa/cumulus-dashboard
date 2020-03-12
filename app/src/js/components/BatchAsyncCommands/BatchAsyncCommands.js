@@ -15,7 +15,7 @@ const { updateDelay } = _config;
 const CONCURRENCY = 3;
 const IN_PROGRESS = 'Processing...';
 
-class BatchCommand extends React.Component {
+export class BatchCommand extends React.Component {
   constructor () {
     super();
     this.state = {
