@@ -41,6 +41,11 @@ const computeDateTimeDelta = (timeDeltaInDays) => {
   return { startDateTime, endDateTime };
 };
 
+/**
+* Sets the state for all data between Jan 1, 1970 and now.
+*
+* @returns {Object} with startDateTime, endDateTime and dateRange set to "All"
+*/
 const allData = () => {
   const endDateTime = new Date(Date.now());
   const startDateTime = new Date(earliestDate);
