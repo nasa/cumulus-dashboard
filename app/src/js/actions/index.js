@@ -18,6 +18,7 @@ import { apiGatewaySearchTemplate } from './action-config/apiGatewaySearch';
 import { apiLambdaSearchTemplate } from './action-config/apiLambdaSearch';
 import { teaLambdaSearchTemplate } from './action-config/teaLambdaSearch';
 import { s3AccessSearchTemplate } from './action-config/s3AccessSearch';
+import { setEndDateTimeToNow } from './datepicker';
 import * as types from './types';
 
 const CALL_API = types.CALL_API;
@@ -144,15 +145,19 @@ export const listCollections = (options) => {
   };
 };
 
-export const createCollection = (payload) => ({
-  [CALL_API]: {
-    type: types.NEW_COLLECTION,
-    method: 'POST',
-    id: getCollectionId(payload),
-    path: 'collections',
-    body: payload
-  }
-});
+export const createCollection = (payload) => {
+  return (dispatch) => {
+    return dispatch({
+      [CALL_API]: {
+        type: types.NEW_COLLECTION,
+        method: 'POST',
+        id: getCollectionId(payload),
+        path: 'collections',
+        body: payload
+      }
+    }).then(() => dispatch(setEndDateTimeToNow()));
+  };
+};
 
 export const updateCollection = (payload) => ({
   [CALL_API]: {
