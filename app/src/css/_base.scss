@@ -390,15 +390,31 @@ a:active {
 }
 
 .page__section {
-  margin-bottom: 3em;
   @extend .clearfix;
-  &:first-of-type {
-    margin-bottom: 0em; /* This is temporary until we had the datepicker component */
+  &:last-of-type {
+  margin-bottom: 3em; 
   }
+}
+
+.page_section__overview {
+  margin-top: 25px;
 }
 
 .page__section.datetime{
   margin-bottom: 8em;
+}
+
+.collection__options--top ul{
+  display: flex;
+  align-items: center;
+}
+
+.collection__options--top li:nth-child(2){
+  margin-left: auto;
+}
+
+.page__section__controls{
+  margin-bottom: 2em;
 }
 
 .page__section--small {

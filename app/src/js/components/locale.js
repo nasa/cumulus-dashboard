@@ -6,7 +6,7 @@ function getCustomInterfaceLanguage () {
 
 export const strings = new LocalizedStrings({
   daac: {
-    add_a_collection: 'Add a Collection',
+    add_collection: 'Add Collection',
     all_collections: 'All Collections',
     all_granules: 'All Granules',
     associated_collections: 'Associated Collections',
@@ -37,7 +37,7 @@ export const strings = new LocalizedStrings({
     view_granules_overview: 'View Granule Overview'
   },
   gitc: {
-    add_a_collection: 'Add a Layer',
+    add_collection: 'Add Layer',
     all_collections: 'All Layers',
     all_granules: 'All Products',
     associated_collections: 'Associated Layers',

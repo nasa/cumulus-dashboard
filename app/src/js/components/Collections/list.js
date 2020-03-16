@@ -19,15 +19,26 @@ import {
   getCollectionId
 } from '../../utils/format';
 import {
-  tableHeader,
-  tableRow,
-  tableSortProps,
   bulkActions,
-  recoverAction
+  recoverAction,
+  tableColumns
 } from '../../utils/table-config/collections';
 import Search from '../Search/search';
 import List from '../Table/Table';
 import { strings } from '../locale';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import ListFilters from '../ListActions/ListFilters';
+
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/'
+  },
+  {
+    label: 'Collections',
+    active: true
+  }
+];
 
 class CollectionList extends React.Component {
   constructor () {
@@ -68,11 +79,19 @@ class CollectionList extends React.Component {
     const { list } = this.props.collections;
     // merge mmtLinks with the collection data;
     const mmtLinks = this.props.mmtLinks;
-    list.data.forEach((collection) => { collection.mmtLink = mmtLinks[getCollectionId(collection)]; });
+    const data = list.data.map((collection) => {
+      return {
+        ...collection,
+        mmtLink: mmtLinks[getCollectionId(collection)]
+      };
+    });
     const { count, queriedAt } = list.meta;
     return (
       <div className='page__component'>
         <section className='page__section'>
+          <section className='page__section page__section__controls'>
+            <Breadcrumbs config={breadcrumbConfig} />
+          </section>
           <div className='page__section__header page__section__header-wrapper'>
             <h1 className='heading--large heading--shared-content with-description'>{strings.collection_overview}</h1>
             {lastUpdated(queriedAt)}
@@ -82,27 +101,28 @@ class CollectionList extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>{strings.all_collections} <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
           </div>
-          <div className='filters'>
-            <Search dispatch={this.props.dispatch}
-              action={searchCollections}
-              format={collectionSearchResult}
-              clear={clearCollectionsSearch}
-            />
-          </div>
 
           <List
             list={list}
+            data={data}
+            tableColumns={tableColumns}
             dispatch={this.props.dispatch}
             action={listCollections}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={getCollectionId}
-            sortIdx={7}
-          />
-
+            sortIdx='duration'
+          >
+            <ListFilters>
+              <Search
+                dispatch={this.props.dispatch}
+                action={searchCollections}
+                format={collectionSearchResult}
+                clear={clearCollectionsSearch}
+                placeholder='Search Collections'
+              />
+            </ListFilters>
+          </List>
         </section>
       </div>
     );
@@ -114,7 +134,8 @@ CollectionList.propTypes = {
   mmtLinks: PropTypes.object,
   dispatch: PropTypes.func,
   logs: PropTypes.object,
-  config: PropTypes.object
+  config: PropTypes.object,
+  location: PropTypes.object
 };
 
 export { CollectionList };

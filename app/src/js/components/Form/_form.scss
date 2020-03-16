@@ -101,13 +101,40 @@ select option{
   margin-left: auto;
 }
 
-.filters.filters__wlabels.total_granules{
-  margin-bottom: 5em;
+.filter-action-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: space-around;
+  flex-grow: 1;
+
+  .form--controls {
+    flex-grow: 1;
+  }
 }
 
 .form--controls {
   margin-bottom: 2em;
   display: flex;
+}
+
+.form--controls__group {
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.form--controls__group li {
+  display: flex;
+}
+
+.dropdown__collection .form__dropdown label {
+  display: inline-block;
+  text-align: left;
+  padding-right: .75em;
 }
 
 .search__wrapper {
@@ -230,9 +257,7 @@ select option{
 }
 
 .form__element__updateToggle-noHeader {
-  position: absolute;
-  right: 0;
-  top: -3.2rem;
+  margin-left: auto;
 }
 
 .form-group__element--right {

@@ -27,12 +27,9 @@ describe('Dashboard Granules Page', () => {
 
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
-        .first()
-        .contains('li', '10 Completed')
-        .next()
-        .contains('li', '3 Failed')
-        .next()
-        .contains('li', '3 Running');
+        .first().contains('li', 'Completed').contains('li', 6)
+        .next().contains('li', 'Failed').contains('li', 2)
+        .next().contains('li', 'Running').contains('li', 2);
 
       // shows a list of granules
       cy.getFakeApiFixture('granules').as('granulesListFixture');
@@ -96,7 +93,7 @@ describe('Dashboard Granules Page', () => {
             .should('match', /.+ago$/);
         });
 
-      cy.get('table tbody tr').as('list');
+      cy.get('.table .tbody .tr').as('list');
       cy.get('@list').its('length').should('be.eq', 10);
     });
 

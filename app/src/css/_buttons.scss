@@ -117,7 +117,7 @@
       background-color: $light-green;
       position: relative;
       
-      &:before{
+      &:before {
         color: $white;
         position: absolute;
         font-family: 'FontAwesome';
@@ -229,6 +229,14 @@
         left: 10px;
         
       } 
+    }
+
+    &--remove, &--execute, &--reingest {
+      &:hover {
+        background-color: darken($light-green, 10%);
+        color: #fff;
+        border: 0;
+      }
     }
   
     &--download{

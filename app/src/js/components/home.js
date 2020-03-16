@@ -25,12 +25,8 @@ import {
 } from '../utils/format';
 import List from './Table/Table';
 import GranulesProgress from './Granules/progress';
-import {
-  errorTableHeader,
-  errorTableRow,
-  errorTableSortProps
-} from '../utils/table-config/granules';
-import { recent, updateInterval } from '../config';
+import { errorTableColumns } from '../utils/table-config/granules';
+import { updateInterval } from '../config';
 import {
   kibanaS3AccessErrorsLink,
   kibanaS3AccessSuccessesLink,
@@ -54,13 +50,12 @@ class Home extends React.Component {
     this.displayName = 'Home';
     this.query = this.query.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
+    this.refreshQuery = this.refreshQuery.bind(this);
   }
 
   componentDidMount () {
-    this.cancelInterval = interval(() => {
-      this.query();
-    }, updateInterval, true);
     const { dispatch } = this.props;
+    this.cancelInterval = interval(this.query, updateInterval, true);
     dispatch(getCumulusInstanceMetadata())
       .then(() => {
         dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
@@ -76,31 +71,32 @@ class Home extends React.Component {
 
   query () {
     const { dispatch } = this.props;
-    // TODO should probably time clamp this by most recent as well?
-    dispatch(getStats({
-      timestamp__from: recent
-    }));
-    dispatch(getCount({
-      type: 'granules',
-      field: 'status'
-    }));
+    dispatch(getStats());
+    dispatch(getCount({type: 'granules', field: 'status'}));
     dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
     dispatch(getTEALambdaMetrics(this.props.cumulusInstance));
     dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
     dispatch(getDistS3AccessMetrics(this.props.cumulusInstance));
     dispatch(listExecutions({}));
+    dispatch(listGranules(this.generateQuery()));
     dispatch(listRules({}));
+  }
+
+  refreshQuery () {
+    if (this.cancelInterval) { this.cancelInterval(); }
+    this.cancelInterval = interval(this.query, updateInterval, true);
   }
 
   generateQuery () {
     return {
-      q: '_exists_:error AND status:failed',
+      error__exists: true,
+      status: 'failed',
       limit: 20
     };
   }
 
   isExternalLink (link) {
-    return link.match('https?://');
+    return link && link.match('https?://');
   }
   renderButtonListSection (items, header, listId) {
     const data = items.filter(d => d[0] !== nullValue);
@@ -146,7 +142,7 @@ class Home extends React.Component {
       [tally(get(stats.data, 'granules.value')), strings.granules, '/granules'],
       [tally(get(this.props.executions, 'list.meta.count')), 'Executions', '/executions'],
       [tally(get(this.props.rules, 'list.meta.count')), 'Ingest Rules', '/rules'],
-      [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time']
+      [seconds(get(stats.data, 'processingTime.value', nullValue)), 'Average processing Time', '/']
     ];
 
     const distSuccessStats = [
@@ -193,7 +189,7 @@ class Home extends React.Component {
                   Select date and time to refine your results. <em>Time is UTC.</em>
                 </h2>
               </div>
-              <Datepicker />
+              <Datepicker onChange={this.refreshQuery}/>
             </div>
           </section>
 
@@ -224,10 +220,8 @@ class Home extends React.Component {
                 list={list}
                 dispatch={this.props.dispatch}
                 action={listGranules}
-                tableHeader={errorTableHeader}
-                sortIdx={4}
-                tableRow={errorTableRow}
-                tableSortProps={errorTableSortProps}
+                tableColumns={errorTableColumns}
+                sortIdx='timestamp'
                 query={this.generateQuery()}
               />
             </div>

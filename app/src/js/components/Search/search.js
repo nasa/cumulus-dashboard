@@ -20,14 +20,14 @@ class Search extends React.Component {
   componentDidMount () {
     const { dispatch, action, paramKey, queryParams } = this.props;
     const queryValue = queryParams[paramKey];
-    if (queryValue) dispatch(action({value: queryValue}));
+    if (queryValue) dispatch(action(queryValue));
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
     const {paramKey, dispatch, action, queryParams} = this.props;
     const queryValue = queryParams[paramKey];
     if (queryValue !== prevProps.queryParams[paramKey]) {
-      dispatch(action({ key: paramKey, queryValue }));
+      dispatch(action(queryValue));
       this.setState({queryValue}); // eslint-disable-line react/no-did-update-set-state
     }
   }
@@ -47,11 +47,6 @@ class Search extends React.Component {
 
   submit (e) {
     e.preventDefault();
-    const value = e.currentTarget.getAttribute('value') || null;
-    this.setState({ value });
-    const { dispatch, action } = this.props;
-    if (this.cancelDelay) { this.cancelDelay(); }
-    dispatch(action(value));
   }
 
   delayedQuery (value) {
@@ -75,7 +70,7 @@ class Search extends React.Component {
       <div className='filter__item'>
         {label ? <label htmlFor={formID}>{label}</label> : null}
         <form className='search__wrapper form-group__element' onSubmit={this.submit} >
-          <input className='search' type='search' onChange={this.complete} value={this.state.value || ''}/>
+          <input className='search' type='search' onChange={this.complete} value={this.state.value || ''} placeholder={this.props.placeholder || ''}/>
           <span className='search__icon'/>
         </form>
       </div>
@@ -97,7 +92,8 @@ Search.propTypes = {
   router: PropTypes.object,
   query: PropTypes.object,
   queryParams: PropTypes.object,
-  setQueryParams: PropTypes.func
+  setQueryParams: PropTypes.func,
+  placeholder: PropTypes.string
 };
 
 export default withRouter(withQueryParams()(connect(state => state)(Search)));

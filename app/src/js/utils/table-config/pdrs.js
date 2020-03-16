@@ -6,62 +6,74 @@ import { seconds, fromNow, bool, nullValue } from '../format';
 import { deletePdr } from '../../actions';
 import { strings } from '../../components/locale';
 
-export const tableHeader = [
-  'Updated',
-  'Name',
-  'Status',
-  'Duration',
-  strings.granules,
-  'Processing',
-  'Failed',
-  'Completed'
+export const tableColumns = [
+  {
+    Header: 'Updated',
+    accessor: row => fromNow(row.timestamp),
+    id: 'timestamp'
+  },
+  {
+    Header: 'Name',
+    accessor: row => <Link to={`pdrs/pdr/${row.pdrName}`}>{row.pdrName}</Link>,
+    id: 'name'
+  },
+  {
+    Header: 'Status',
+    accessor: 'status'
+  },
+  {
+    Header: 'Duration',
+    accessor: row => seconds(row.duration),
+    id: 'duration'
+  },
+  {
+    Header: strings.granules,
+    accessor: row => Object.keys(row.stats).filter(k => k !== 'total')
+      .reduce((a, b) => a + get(row.stats, b, 0), 0),
+    id: 'granules'
+  },
+  {
+    Header: 'Processing',
+    accessor: row => get(row, ['stats', 'processing'], 0),
+    id: 'processing'
+  },
+  {
+    Header: 'Failed',
+    accessor: row => get(row, ['stats', 'failed'], 0),
+    id: 'failed'
+  },
+  {
+    Header: 'Completed',
+    accessor: row => get(row, ['stats', 'completed'], 0),
+    id: 'completed'
+  }
 ];
 
-export const tableRow = [
-  (d) => fromNow(d.timestamp),
-  (d) => <Link to={`pdrs/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
-  'status',
-  (d) => seconds(d.duration),
-  (d) => Object.keys(d.stats).filter(k => k !== 'total')
-    .reduce((a, b) => a + get(d.stats, b, 0), 0),
-  (d) => get(d, ['stats', 'processing'], 0),
-  (d) => get(d, ['stats', 'failed'], 0),
-  (d) => get(d, ['stats', 'completed'], 0)
-];
-
-export const tableSortProps = [
-  'timestamp',
-  'pdrName.keyword',
-  'status.keyword',
-  null,
-  null,
-  null,
-  null,
-  null
-];
-
-export const errorTableHeader = [
-  'Updated',
-  'Name',
-  'Error',
-  'PAN Sent',
-  'PAN Message'
-];
-
-export const errorTableRow = [
-  (d) => fromNow(d.timestamp),
-  (d) => <Link to={`pdrs/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
-  (d) => get(d, 'error.Cause', nullValue),
-  (d) => bool(d.PANSent),
-  'PANmessage'
-];
-
-export const errorTableSortProps = [
-  'timestamp',
-  'pdrName',
-  null,
-  'PANSent',
-  'PANmessage'
+export const errorTableColumns = [
+  {
+    Header: 'Updated',
+    accessor: row => fromNow(row.timestamp),
+    id: 'updated'
+  },
+  {
+    Header: 'Name',
+    accessor: row => <Link to={`pdrs/pdr/${row.pdrName}`}>{row.pdrName}</Link>,
+    id: 'name'
+  },
+  {
+    Header: 'Error',
+    accessor: row => get(row, 'error.Cause', nullValue),
+    id: 'error'
+  },
+  {
+    Header: 'PAN Sent',
+    accessor: row => bool(row.PANSent),
+    id: 'panSent'
+  },
+  {
+    Header: 'PAN Message',
+    accessor: 'PANmessage'
+  }
 ];
 
 const confirmDelete = (d) => `Delete ${d} PDR(s)?`;

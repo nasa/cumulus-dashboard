@@ -23,8 +23,8 @@ function bar (completed, failed, text) {
   );
 }
 
-export const getProgress = function (d) {
-  const granules = d.stats;
+export const getProgress = function (row) {
+  const granules = row.stats;
   // granule count in all states, total is 'null' in some pdrs
   const total = Object.keys(granules).filter(k => k !== 'total')
     .reduce((a, b) => a + get(granules, b, 0), 0);
@@ -40,13 +40,13 @@ export const getProgress = function (d) {
   };
 };
 
-export const renderProgress = function (d) {
+export const renderProgress = function (row) {
   // if the status is failed, return it as such
-  if (d.status === 'failed') {
-    const error = get(d, 'error', nullValue);
+  if (row.status === 'failed') {
+    const error = get(row, 'error', nullValue);
     return <ErrorReport report={error} truncate={true} />;
-  } else if (typeof d.status === 'undefined') return null;
-  const progress = getProgress(d);
+  } else if (typeof row.status === 'undefined') return null;
+  const progress = getProgress(row);
   return (
     <div className='table__progress'>
       {bar(progress.percentCompleted, progress.percentFailed, progress.granulesCompleted)}
@@ -54,29 +54,35 @@ export const renderProgress = function (d) {
   );
 };
 
-export const tableHeader = [
-  'Name',
-  'Status',
-  'Progress',
-  'Errors',
-  'PAN/PDRD Sent',
-  'Discovered'
+export const tableColumns = [
+  {
+    Header: 'Name',
+    accessor: row => <Link to={`pdrs/pdr/${row.pdrName}`}>{row.pdrName}</Link>,
+    id: 'name'
+  },
+  {
+    Header: 'Status',
+    accessor: 'status'
+  },
+  {
+    Header: 'Progress',
+    accessor: renderProgress,
+    id: 'progress'
+  },
+  {
+    Header: 'Errors',
+    accessor: row => tally(get(row, 'granulesStatus.failed', 0)),
+    id: 'errors'
+  },
+  {
+    Header: 'PAN/PDRD Sent',
+    accessor: row => bool(row.PANSent || row.PDRDSent),
+    id: 'panPdrdSent'
+  },
+  {
+    Header: 'Discovered',
+    accessor: row => fromNow(row.timestamp),
+    id: 'timestamp'
+  }
 ];
 
-export const tableRow = [
-  (d) => <Link to={`pdrs/pdr/${d.pdrName}`}>{d.pdrName}</Link>,
-  'status',
-  renderProgress,
-  (d) => tally(get(d, 'granulesStatus.failed', 0)),
-  (d) => bool(d.PANSent || d.PDRDSent),
-  (d) => fromNow(d.timestamp)
-];
-
-export const tableSortProps = [
-  'pdrName.keyword',
-  'status.keyword',
-  'progress',
-  null,
-  null,
-  'timestamp'
-];

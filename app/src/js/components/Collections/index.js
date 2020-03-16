@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter, Link, Redirect, Route, Switch } from 'react-router-dom';
+import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
@@ -29,7 +29,6 @@ class Collections extends React.Component {
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge heading--shared-content'>{strings.collections}</h1>
-            {existingCollection && <Link className='button button--large button--white button__addcollections button__arrow button__animation' to='/collections/add'>{strings.add_a_collection}</Link>}
           </div>
         </div>
         <div className='page__content'>

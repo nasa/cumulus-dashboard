@@ -47,6 +47,7 @@ class Dropdown extends React.Component {
     this.state = { value };
     this.onSelect = this.onSelect.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
@@ -78,6 +79,7 @@ class Dropdown extends React.Component {
   }
 
   onChange (e) {
+    e.preventDefault();
     const { dispatch, clear, paramKey, setQueryParams } = this.props;
     const { value } = e.target;
     this.setState({ value });
@@ -87,10 +89,14 @@ class Dropdown extends React.Component {
     }
   }
 
+  onSubmit (e) {
+    e.preventDefault();
+  }
+
   render () {
     // `options` are expected in the following format:
     // {displayValue1: optionElementValue1, displayValue2, optionElementValue2, ...}
-    const { options, label, paramKey } = this.props;
+    const { options, label, paramKey, inputProps } = this.props;
     const items = options ? Object.keys(options).map(label => ({label, value: options[label]})) : [];
 
     // Make sure this form ID is unique!
@@ -101,7 +107,7 @@ class Dropdown extends React.Component {
     return (
       <div className='filter__item'>
         {label ? <label htmlFor={formID}>{label}</label> : null}
-        <form className='form-group__element' id={formID}>
+        <form className='form-group__element' id={formID} onSubmit={this.onSubmit}>
           <Autocomplete
             getItemValue={item => item.value}
             items={items}
@@ -111,6 +117,7 @@ class Dropdown extends React.Component {
             onChange={this.onChange}
             onSelect={this.onSelect}
             renderMenu={renderMenu}
+            inputProps={inputProps}
           />
         </form>
       </div>
@@ -129,7 +136,8 @@ Dropdown.propTypes = {
   location: PropTypes.object,
   router: PropTypes.object,
   queryParams: PropTypes.object,
-  setQueryParams: PropTypes.func
+  setQueryParams: PropTypes.func,
+  inputProps: PropTypes.object
 };
 
 export default withRouter(withQueryParams()(connect()(Dropdown)));

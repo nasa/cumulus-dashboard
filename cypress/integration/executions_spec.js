@@ -31,9 +31,9 @@ describe('Dashboard Executions Page', () => {
 
       // shows a summary count of completed and failed executions
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', '10 Completed')
-        .next().contains('li', '3 Failed')
-        .next().contains('li', '3 Running');
+        .first().contains('li', 'Completed').contains('li', 4)
+        .next().contains('li', 'Failed').contains('li', 1)
+        .next().contains('li', 'Running').contains('li', 1);
     });
 
     it('should display the correct executions with Ids and status ', () => {
@@ -64,7 +64,7 @@ describe('Dashboard Executions Page', () => {
             .should('be.eq', execution.collectionId);
         });
 
-      cy.get('table tbody tr').as('list');
+      cy.get('.table .tbody .tr').as('list');
       cy.get('@list').its('length').should('be.eq', 6);
     });
 
@@ -88,7 +88,7 @@ describe('Dashboard Executions Page', () => {
 
       cy.url().should('include', 'executions');
       cy.contains('.heading--xlarge', 'Executions');
-      cy.get('table tbody tr td[class=table__main-asset]').within(() => {
+      cy.get('.table .tbody .tr .td.table__main-asset').within(() => {
         cy.get(`a[title=${executionName}]`).click({force: true});
       });
 
@@ -104,14 +104,14 @@ describe('Dashboard Executions Page', () => {
           cy.contains('Ended:').next().should('have.text', fullDate('2019-12-13T15:16:52.582Z'));
         });
 
-      cy.get('table tbody tr').as('events');
+      cy.get('.table .tbody .tr').as('events');
       cy.get('@events').its('length').should('be.eq', 7);
 
       cy.getFixture('valid-execution').as('executionStatus');
       cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
         cy.get('@events').each(($el, index, $list) => {
           let timestamp = fullDate(events[index].timestamp);
-          cy.wrap($el).children('td').as('columns');
+          cy.wrap($el).children('.td').as('columns');
           cy.get('@columns').its('length').should('be.eq', 4);
           let idMatch = `"id": ${index + 1},`;
           let previousIdMatch = `"previousEventId": ${index}`;

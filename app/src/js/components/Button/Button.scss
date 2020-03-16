@@ -117,7 +117,7 @@
       background-color: $light-green;
       position: relative;
       
-      &:before{
+      &:before {
         color: $white;
         position: absolute;
         font-family: 'FontAwesome';
@@ -178,10 +178,9 @@
         content: '\f187';
         font-weight: 900;
         left: 10px;
-        
       } 
       &:hover {
-        background-color: darken($error-red, 5%);
+        background-color: darken($error-red, 10%);
         color: #fff;
         border: 0;
       }
@@ -230,6 +229,14 @@
         left: 10px;
         
       } 
+    }
+
+    &--remove, &--execute, &--reingest {
+      &:hover {
+        background-color: darken($light-green, 10%);
+        color: #fff;
+        border: 0;
+      }
     }
   
     &--download{
@@ -409,7 +416,7 @@
         
       } 
     }
-    
+
     &__deletecollections:hover:before{
       color: $white;
       position: absolute;
@@ -433,7 +440,7 @@
       } 
     }
     
-      &__goto:hover:before{
+      &__goto:hover:before {
         color: $white;
         position: absolute;
         font-family: 'FontAwesome';
@@ -455,4 +462,4 @@
         color: $dark-grey;
       }
     }
-  }
+}

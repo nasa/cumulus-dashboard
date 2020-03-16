@@ -3,33 +3,28 @@
 import test from 'ava';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import {shallow, configure} from 'enzyme';
+import {mount, configure} from 'enzyme';
 import {listGranules} from '../../../app/src/js/actions';
 import { List } from '../../../app/src/js/components/Table/Table';
 import Timer from '../../../app/src/js/components/Timer/timer.js';
-import {
-  errorTableHeader,
-  errorTableRow, errorTableSortProps
-} from '../../../app/src/js/utils/table-config/granules';
+import { errorTableColumns } from '../../../app/src/js/utils/table-config/granules';
 
 configure({ adapter: new Adapter() });
 
 test('table should properly initialize timer config prop', async (t) => {
   const dispatch = () => Promise.resolve();
-  const query = { q: '_exists_:error AND status:failed' };
+  const query = { error__exists: true, status: 'failed' };
   const list = {
     meta: {},
     data: []
   };
-  const listWrapper = shallow(
+  const listWrapper = mount(
     <List
       list={list}
       dispatch={dispatch}
       action={listGranules}
-      tableHeader={errorTableHeader}
-      sortIdx={4}
-      tableRow={errorTableRow}
-      tableSortProps={errorTableSortProps}
+      tableColumns={errorTableColumns}
+      sortIdx='timestamp'
       query={query}
     />,
     {
@@ -54,4 +49,5 @@ test('table should properly initialize timer config prop', async (t) => {
   // Is the Timer's query configuration properly initialized via the
   // enclosing List's state, prior to any lifecycle method invocations?
   t.is(timerWrapper.props().config.q, query.q);
+  listWrapper.unmount();
 });

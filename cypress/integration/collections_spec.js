@@ -44,7 +44,7 @@ describe('Dashboard Collections Page', () => {
       cy.url().should('include', 'collections');
       cy.contains('.heading--xlarge', 'Collections');
 
-      cy.get('table tbody tr').its('length').should('be.eq', 5);
+      cy.get('.table .tbody .tr').its('length').should('be.eq', 5);
     });
 
     it('should display expected MMT Links for collections list', () => {
@@ -52,16 +52,16 @@ describe('Dashboard Collections Page', () => {
       cy.wait('@getCollections');
       let i = 0;
 
-      cy.get('table tbody tr').its('length').should('be.eq', 5);
+      cy.get('.table .tbody .tr').its('length').should('be.eq', 5);
 
       while (i < cmrFixtureIdx) cy.wait(`@cmr${i++}`, {timeout: 25000});
-      cy.contains('table tbody tr', 'MOD09GQ')
-        .contains('td a', 'MMT')
+      cy.contains('.table .tbody .tr', 'MOD09GQ')
+        .contains('.td a', 'MMT')
         .should('have.attr', 'href')
         .and('eq', 'https://mmt.uat.earthdata.nasa.gov/collections/CMOD09GQ-CUMULUS');
 
-      cy.contains('table tbody tr', 'L2_HR_PIXC')
-        .contains('td a', 'MMT')
+      cy.contains('.table .tbody .tr', 'L2_HR_PIXC')
+        .contains('.td a', 'MMT')
         .should('have.attr', 'href')
         .and('eq', 'https://mmt.uat.earthdata.nasa.gov/collections/CL2_HR_PIXC-CUMULUS');
     });
@@ -75,7 +75,7 @@ describe('Dashboard Collections Page', () => {
       // On the Collections page, click the Add Collection button
       cy.visit('/collections');
       cy.contains('.heading--large', 'Collection Overview');
-      cy.contains('a', 'Add a Collection').click();
+      cy.contains('a', 'Add Collection').click();
 
       // Fill the form with the test collection JSON and submit it
       cy.url().should('include', '/collections/add');
@@ -113,7 +113,7 @@ describe('Dashboard Collections Page', () => {
           cy.contains('Back to Collections').click();
           cy.wait('@getCollections');
           cy.url().should('contain', '/collections/all');
-          cy.contains('table tbody tr a', name)
+          cy.contains('.table .tbody .tr a', name)
             .should('have.attr', 'href', `/collections/collection/${name}/${version}`);
         });
       cy.task('resetState');
@@ -128,20 +128,20 @@ describe('Dashboard Collections Page', () => {
       // details page.
       cy.visit('/collections');
       cy.wait('@getCollections');
-      cy.get('table tbody tr').its('length').should('be.eq', 5);
+      cy.get('.table .tbody .tr').its('length').should('be.eq', 5);
 
-      cy.contains('table tbody tr a', name)
+      cy.contains('.table .tbody .tr a', name)
         .should('have.attr', 'href', `/collections/collection/${name}/${version}`)
         .click();
       cy.contains('.heading--large', `${name} / ${version}`);
-      cy.contains(/0 Granules? Running/i);
+      cy.contains(/Granules? Running/i);
 
       const collectionId = getCollectionId({ name: 'MOD09GQ', version: '006' });
       const formattedCollectionName = collectionName(collectionId);
 
       cy.get('#collection-chooser').select(collectionId);
       cy.contains('.heading--large', `${formattedCollectionName}`);
-      cy.contains(/2 Granules? Running/i);
+      cy.contains(/Granules? Running/i);
       cy.get('#collection-chooser').find(':selected').contains(collectionId);
     });
 
@@ -255,7 +255,7 @@ describe('Dashboard Collections Page', () => {
       // click delete again to show modal again
       cy.get('.DeleteCollection > .button').click();
       // really delete this time instead of cancelling
-      cy.contains('button', 'Delete Collection')
+      cy.contains('.modal button', 'Delete Collection')
         .should('be.visible').click();
 
       cy.wait('@deleteCollection');
@@ -290,7 +290,7 @@ describe('Dashboard Collections Page', () => {
             `[data-value="${collection.name}___${collection.version}"] > .table__main-asset > a`,
             {timeout: 25000}).should(existOrNotExist);
         });
-      cy.get('table tbody tr').its('length').should('be.eq', 4);
+      cy.get('.table .tbody .tr').its('length').should('be.eq', 4);
       cy.task('resetState');
     });
 
@@ -318,7 +318,7 @@ describe('Dashboard Collections Page', () => {
       // collection should still exist in list
       cy.contains('a', 'Back to Collections').click();
       cy.contains('.heading--xlarge', 'Collections');
-      cy.contains('table tbody tr a', name);
+      cy.contains('.table .tbody .tr a', name);
     });
 
     it('should do nothing on cancel when deleting a collection with associated granules', () => {
@@ -341,7 +341,7 @@ describe('Dashboard Collections Page', () => {
       // collection should still exist in list
       cy.contains('a', 'Back to Collections').click();
       cy.contains('.heading--xlarge', 'Collections');
-      cy.contains('table tbody tr a', name);
+      cy.contains('.table .tbody .tr a', name);
     });
 
     it('should go to granules upon request when deleting a collection with associated granules', () => {
@@ -365,7 +365,7 @@ describe('Dashboard Collections Page', () => {
       // collection should still exist in list
       cy.contains('a', 'Collections').click();
       cy.contains('.heading--xlarge', 'Collections');
-      cy.contains('table tbody tr a', name);
+      cy.contains('.table .tbody .tr a', name);
     });
   });
 });

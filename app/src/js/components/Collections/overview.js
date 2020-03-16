@@ -28,9 +28,25 @@ import statusOptions from '../../utils/status';
 import List from '../Table/Table';
 import Bulk from '../Granules/bulk';
 import Overview from '../Overview/overview';
-import { tableHeader, tableRow, tableSortProps } from '../../utils/table-config/granules';
+import { tableColumns } from '../../utils/table-config/granules';
 import { strings } from '../locale';
 import DeleteCollection from '../DeleteCollection/DeleteCollection';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/'
+  },
+  {
+    label: 'Collections',
+    href: '/collections'
+  },
+  {
+    label: 'Collection Overview',
+    active: true
+  }
+];
 
 class CollectionOverview extends React.Component {
   constructor (props) {
@@ -117,9 +133,9 @@ class CollectionOverview extends React.Component {
     const data = get(record, 'data', {});
     const stats = get(data, 'stats', {});
     const overview = [
-      [tally(stats.running), strings.granules_running],
       [tally(stats.completed), strings.granules_completed],
-      [tally(stats.failed), strings.granules_failed]
+      [tally(stats.failed), strings.granules_failed],
+      [tally(stats.running), strings.granules_running]
     ];
     return <Overview items={overview} inflight={record.inflight} />;
   }
@@ -168,16 +184,25 @@ class CollectionOverview extends React.Component {
     return (
       <div className='page__component'>
         <section className='page__section page__section__controls'>
-          <div className='breadcrumbs' />
-          <div className='dropdown__collection form-group__element--right'>
-            <SimpleDropdown
-              label={'Collection'}
-              value={getCollectionId(params)}
-              options={sortedCollectionIds}
-              id={'collection-chooser'}
-              onChange={this.changeCollection}
-              noNull={true}
-            />
+          <div className="collection__options--top">
+            <ul>
+              <li>
+                <Breadcrumbs config={breadcrumbConfig} />
+              </li>
+              <li>
+                <div className='dropdown__collection form-group__element--right'>
+                  <SimpleDropdown
+                    label={'Collection'}
+                    title={'Collections Dropdown'}
+                    value={getCollectionId(params)}
+                    options={sortedCollectionIds}
+                    id={'collection-chooser'}
+                    onChange={this.changeCollection}
+                    noNull={true}
+                  />
+                </div>
+              </li>
+            </ul>
           </div>
         </section>
         <section className='page__section page__section__header-wrapper'>
@@ -218,6 +243,9 @@ class CollectionOverview extends React.Component {
           </div>
         </section>
         <section className='page__section page__section__overview'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--large heading--shared-content--right'>Granule Metrics</h2>
+          </div>
           {overview}
         </section>
         <section className='page__section'>
@@ -228,6 +256,12 @@ class CollectionOverview extends React.Component {
                 {meta.count ? ` ${meta.count}` : 0}
               </span>
             </h2>
+            <Link
+              className='link--secondary link--learn-more'
+              to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}
+            >
+              {strings.view_all_granules}
+            </Link>
           </div>
           <div className='filters filters__wlabels total_granules'>
             <ul>
@@ -236,6 +270,7 @@ class CollectionOverview extends React.Component {
                   dispatch={this.props.dispatch}
                   action={searchGranules}
                   clear={clearGranulesSearch}
+                  placeholder='Search Granules'
                 />
               </li>
               <li>
@@ -243,8 +278,10 @@ class CollectionOverview extends React.Component {
                   options={statusOptions}
                   action={filterGranules}
                   clear={clearGranulesFilter}
-                  paramKey={'status'}
-                  label={'Status'}
+                  paramKey='status'
+                  inputProps={{
+                    placeholder: 'Status'
+                  }}
                 />
               </li>
               <li className="run_bulk">
@@ -256,19 +293,11 @@ class CollectionOverview extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listGranules}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
+            tableColumns={tableColumns}
             query={this.generateQuery()}
-            rowId={'granuleId'}
-            sortIdx={6}
+            rowId='granuleId'
+            sortIdx='timestamp'
           />
-          <Link
-            className='link--secondary link--learn-more'
-            to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}
-          >
-            {strings.view_all_granules}
-          </Link>
         </section>
       </div>
     );

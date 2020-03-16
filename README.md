@@ -325,15 +325,23 @@ Update the CHANGELOG.md. Put a header under the 'Unreleased' section with the ne
 
 Add a link reference for the GitHub "compare" view at the bottom of the CHANGELOG.md, following the existing pattern. This link reference should create a link in the CHANGELOG's release header to changes in the corresponding release.
 
-### 6. Create a pull request against the develop branch
+### 6. Update the version of the Cumulus API
+
+If this release corresponds to a Cumulus Core package release, update the version of `@cumulus/api` to the latest package version so that the integration tests will run against that version.
+
+### 7. Manual testing
+
+Test the dashboard against a live API deployed with the latest Cumulus packages. The dashboard should be served from an S3 bucket through the [`/dashboard` API endpoint](https://nasa.github.io/cumulus-api/#serve-the-dashboard-from-a-bucket).
+
+### 8. Create a pull request against the develop branch
 
 Create a PR for the `release-vX.X.X` branch against the `develop` branch. Verify that the Circle CI build for the PR succeeds and then merge to `develop`.
 
-### 7. Create a pull request against the master branch
+### 9. Create a pull request against the master branch
 
 Create a PR for the `develop` branch against the `master` branch. Verify that the Circle CI build for the PR succeeds and then merge to `master`.
 
-### 8. Create a git tag for the release
+### 10. Create a git tag for the release
 
 Push a new release tag to Github. The tag should be in the format `v1.2.3`, where `1.2.3` is the new version.
 
@@ -345,6 +353,6 @@ Create and push a new git tag:
   $ git push origin v1.x.x
 ```
 
-### 9. Add the release to GitHub
+### 11. Add the release to GitHub
 
 Follow the [Github documentation to create a new release](https://help.github.com/articles/creating-releases/) for the dashboard using the tag that you just pushed. Make sure to use the content from the CHANGELOG for this release as the description of the release on GitHub.

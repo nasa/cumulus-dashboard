@@ -1,70 +1,12 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import {
-  listRules,
-  enableRule,
-  disableRule,
-  deleteRule
-} from '../../actions';
-import {
-  lastUpdated,
-  tally,
-  getCollectionId,
-  collectionLink,
-  providerLink,
-  fromNow
-} from '../../utils/format';
+import { listRules } from '../../actions';
+import { lastUpdated, tally } from '../../utils/format';
 import List from '../Table/Table';
-import { strings } from '../locale';
-
-const tableHeader = [
-  'Name',
-  'Provider',
-  strings.collection_id,
-  'Type',
-  'State',
-  'Timestamp'
-];
-
-const tableRow = [
-  (d) => <Link to={`rules/rule/${d.name}`}>{d.name}</Link>,
-  (d) => providerLink(d.provider),
-  (d) => collectionLink(getCollectionId(d.collection)),
-  'rule.type',
-  'state',
-  (d) => fromNow(d.timestamp)
-];
-
-const tableSortProps = [
-  'name',
-  'provider',
-  null,
-  null,
-  'state',
-  'timestamp'
-];
-
-const bulkActions = (rules) => [{
-  text: 'Enable',
-  action: (ruleName) =>
-    enableRule(rules.list.data.find((rule) => rule.name === ruleName)),
-  state: rules.enabled,
-  confirm: (d) => `Enable ${d} Rule(s)?`
-}, {
-  text: 'Disable',
-  action: (ruleName) =>
-    disableRule(rules.list.data.find((rule) => rule.name === ruleName)),
-  state: rules.disabled,
-  confirm: (d) => `Disable ${d} Rule(s)?`
-}, {
-  text: 'Delete',
-  action: deleteRule,
-  state: rules.deleted,
-  confirm: (d) => `Delete ${d} Rule(s)?`
-}];
+import { tableColumns, bulkActions } from '../../utils/table-config/rules';
 
 class RulesOverview extends React.Component {
   constructor () {
@@ -100,13 +42,11 @@ class RulesOverview extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listRules}
-            tableHeader={tableHeader}
-            tableRow={tableRow}
-            tableSortProps={tableSortProps}
+            tableColumns={tableColumns}
             query={{}}
-            sortIdx={5}
+            sortIdx='timestamp'
             bulkActions={this.generateBulkActions()}
-            rowId={'name'}
+            rowId='name'
           />
         </section>
       </div>

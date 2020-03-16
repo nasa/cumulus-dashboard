@@ -1,158 +1,197 @@
 'use strict';
-import Collapse from 'react-collapsible';
-import React from 'react';
+import React, {
+  useMemo,
+  useEffect,
+  forwardRef,
+  useRef
+} from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'object-path';
-import { isUndefined } from '../../utils/validate';
-import { nullValue } from '../../utils/format';
+import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect } from 'react-table';
 
-const defaultSortOrder = 'desc';
-const otherOrder = {
-  desc: 'asc',
-  asc: 'desc'
-};
+/**
+ * IndeterminateCheckbox
+ * @description Component for rendering the header and column checkboxs when canSelect is true
+ * Taken from react-table examples
+ */
+const IndeterminateCheckbox = forwardRef(
+  ({ indeterminate, ...rest }, ref) => {
+    const defaultRef = useRef();
+    const resolvedRef = ref || defaultRef;
 
-class Table extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      dumbOrder: null,
-      dumbSortIdx: null
-    };
-    this.displayName = 'SortableTable';
-    this.isTableDumb = this.isTableDumb.bind(this);
-    this.changeSort = this.changeSort.bind(this);
-    this.select = this.select.bind(this);
-  }
-
-  isTableDumb () {
-    // identify whether the table is "dumb," as in it doesn't
-    // do its own data-updating, and cannot be sorted via its API call
-    return isUndefined(this.props.sortIdx) || !this.props.order || !Array.isArray(this.props.props);
-  }
-
-  changeSort (e) {
-    let { sortIdx, order, props, header } = this.props;
-    const isTableDumb = this.isTableDumb();
-
-    if (isTableDumb) {
-      sortIdx = this.state.dumbSortIdx;
-      order = this.state.dumbOrder;
-    }
-
-    const headerName = e.currentTarget.getAttribute('data-value');
-    const newSortIdx = header.indexOf(headerName);
-    if (!props[newSortIdx]) { return; }
-    const newOrder = sortIdx === newSortIdx ? otherOrder[order] : defaultSortOrder;
-
-    if (typeof this.props.changeSortProps === 'function') {
-      this.props.changeSortProps({ sortIdx: newSortIdx, order: newOrder });
-    }
-    if (isTableDumb) {
-      this.setState({ dumbSortIdx: newSortIdx, dumbOrder: newOrder });
-    }
-  }
-
-  select (e) {
-    if (typeof this.props.onSelect === 'function') {
-      const targetId = (e.currentTarget.getAttribute('data-value'));
-      this.props.onSelect(targetId);
-    }
-  }
-
-  render () {
-    let { primaryIdx, sortIdx, order, props, header, row, rowId, data, selectedRows, canSelect, collapsible } = this.props;
-    const isTableDumb = this.isTableDumb();
-    primaryIdx = primaryIdx || 0;
-
-    if (isTableDumb) {
-      props = [];
-      sortIdx = this.state.dumbSortIdx;
-      order = this.state.dumbOrder;
-      const sortName = props[sortIdx];
-      const primaryName = props[primaryIdx];
-      data = data.sort((a, b) =>
-        // If the sort field is the same, tie-break using the primary ID field
-        a[sortName] === b[sortName] ? a[primaryName] > b[primaryName]
-          : (order === 'asc') ? a[sortName] < b[sortName] : a[sortName] > b[sortName]
-      );
-    }
+    useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate;
+    }, [resolvedRef, indeterminate]);
 
     return (
-      <div className='table--wrapper'>
-        <form>
-          <table>
-            <thead>
-              <tr>
-                {canSelect && <td/> }
-                {header.map((h, i) => {
-                  let className = (isTableDumb || props[i]) ? 'table__sort' : '';
-                  if (i === sortIdx) { className += (' table__sort--' + order); }
-                  return (
-                    <td
-                      className={className}
-                      key={h}
-                      data-value={h}
-                      onClick={this.changeSort}>{h}
-                    </td>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((d, i) => {
-                const dataId = typeof rowId === 'function' ? rowId(d) : d[rowId];
-                const checked = canSelect && selectedRows.indexOf(dataId) !== -1;
-                return (
-                  <tr key={i} data-value={dataId} onClick={this.select}>
-                    {canSelect &&
-                      <td>
-                        <input type={'checkbox'} checked={checked} readOnly/>
-                      </td>
-                    }
-                    {row.map((accessor, k) => {
-                      let className = k === primaryIdx ? 'table__main-asset' : '';
-                      let text;
-
-                      if (typeof accessor === 'function') {
-                        text = accessor(d, k, data);
-                      } else {
-                        text = get(d, accessor, nullValue);
-                      }
-                      return <td key={String(i) + String(k) + text} className={className}>{text}</td>;
-                    })}
-                    {collapsible &&
-                      <td>
-                        <Collapse trigger={'More Details'} triggerWhenOpen={'Less Details'}>
-                          <pre className={'pre-style'}>{JSON.stringify(d.eventDetails, null, 2)}</pre>
-                        </Collapse>
-                      </td>
-                    }
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </form>
-      </div>
+      <input type="checkbox" ref={resolvedRef} {...rest} />
     );
   }
-}
+);
 
-Table.propTypes = {
+IndeterminateCheckbox.propTypes = {
+  indeterminate: PropTypes.any,
+  onChange: PropTypes.func
+};
+
+const SortableTable = ({
+  sortIdx,
+  rowId,
+  order = 'desc',
+  canSelect,
+  changeSortProps,
+  tableColumns = [],
+  data = [],
+  onSelect
+}) => {
+  const defaultColumn = useMemo(
+    () => ({
+      // When using the useFlexLayout:
+      minWidth: 30, // minWidth is only used as a limit for resizing
+      width: 125, // width is used for both the flex-basis and flex-grow
+      maxWidth: 300, // maxWidth is only used as a limit for resizing
+    }),
+    []
+  );
+
+  const shouldManualSort = !!sortIdx;
+
+  const {
+    getTableProps,
+    rows,
+    prepareRow,
+    headerGroups,
+    state: {
+      selectedRowIds,
+      sortBy
+    },
+  } = useTable(
+    {
+      data,
+      columns: tableColumns,
+      defaultColumn,
+      getRowId: (row, relativeIndex) => typeof rowId === 'function' ? rowId(row) : row[rowId] || relativeIndex,
+      autoResetSelectedRows: false,
+      autoResetSortBy: false,
+      manualSortBy: shouldManualSort
+    },
+    useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
+    useResizeColumns, // this allows for resizing columns
+    useSortBy, // this allows for sorting
+    useRowSelect, // this allows for checkbox in table
+    hooks => {
+      if (canSelect) {
+        hooks.visibleColumns.push(columns => [
+          {
+            id: 'selection',
+            Header: ({ getToggleAllRowsSelectedProps }) => ( // eslint-disable-line react/prop-types
+              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+            ),
+            Cell: ({ row }) => (
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+            ),
+            minWidth: 61,
+            width: 61,
+            maxWidth: 61
+          },
+          ...columns
+        ]);
+      }
+    }
+  );
+
+  useEffect(() => {
+    let selected = [];
+
+    for (let [key, value] of Object.entries(selectedRowIds)) {
+      if (value) {
+        selected.push(key);
+      }
+    }
+    if (typeof onSelect === 'function') {
+      onSelect(selected);
+    }
+  }, [selectedRowIds, onSelect]);
+
+  useEffect(() => {
+    const [sortProps = {}] = sortBy;
+    const { id, desc } = sortProps;
+    let sortOrder;
+    if (typeof desc !== 'undefined') {
+      sortOrder = desc ? 'desc' : 'asc';
+    }
+    const sortFieldId = id || sortIdx;
+    if (typeof changeSortProps === 'function') {
+      changeSortProps({ sortIdx: sortFieldId, order: sortOrder || order });
+    }
+  }, [changeSortProps, sortBy, sortIdx, order]);
+
+  return (
+    <div className='table--wrapper'>
+      <form>
+        <div className='table' {...getTableProps()}>
+          <div className='thead'>
+            <div className='tr'>
+              {headerGroups.map(headerGroup => (
+                <div {...headerGroup.getHeaderGroupProps()} className="tr">
+                  {headerGroup.headers.map(column => {
+                    return (
+                      <div {...column.getHeaderProps()} className='th'>
+                        <div {...column.getSortByToggleProps()} className={`${column.canSort ? 'table__sort' : ''}`}>
+                          {column.render('Header')}
+                        </div>
+                        <div
+                          {...column.getResizerProps()}
+                          className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className='tbody'>
+            {rows.map((row, i) => {
+              prepareRow(row);
+              return (
+                <div className='tr' data-value={row.id} {...row.getRowProps()} key={i}>
+                  {row.cells.map((cell, cellIndex) => {
+                    const primaryIdx = canSelect ? 1 : 0;
+                    return (
+                      <React.Fragment key={cellIndex}>
+                        <div
+                          className={`td ${cellIndex === primaryIdx ? 'table__main-asset' : ''}`}
+                          {...cell.getCellProps()}
+                          key={cellIndex}
+                        >
+                          {cell.render('Cell')}
+                        </div>
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+SortableTable.propTypes = {
   primaryIdx: PropTypes.number,
   data: PropTypes.array,
   header: PropTypes.array,
-  props: PropTypes.array,
-  row: PropTypes.array,
-  sortIdx: PropTypes.number,
   order: PropTypes.string,
+  row: PropTypes.array,
+  sortIdx: PropTypes.string,
   changeSortProps: PropTypes.func,
   onSelect: PropTypes.func,
   canSelect: PropTypes.bool,
   collapsible: PropTypes.bool,
-  selectedRows: PropTypes.array,
-  rowId: PropTypes.any
+  rowId: PropTypes.any,
+  tableColumns: PropTypes.array
 };
 
-export default Table;
+export default SortableTable;
