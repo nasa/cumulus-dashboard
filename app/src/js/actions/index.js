@@ -596,15 +596,19 @@ export const getProvider = (providerId) => ({
   }
 });
 
-export const createProvider = (providerId, payload) => ({
-  [CALL_API]: {
-    type: types.NEW_PROVIDER,
-    id: providerId,
-    method: 'POST',
-    path: 'providers',
-    body: payload
-  }
-});
+export const createProvider = (providerId, payload) => {
+  return (dispatch) => {
+    return dispatch({
+      [CALL_API]: {
+        type: types.NEW_PROVIDER,
+        id: providerId,
+        method: 'POST',
+        path: 'providers',
+        body: payload
+      }
+    }).then(() => dispatch(setEndDateTimeToNow()));
+  };
+};
 
 export const updateProvider = (providerId, payload) => ({
   [CALL_API]: {
