@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { collectionNameVersion } from '../../utils/format';
 
 const BatchDeleteWithGranulesContent = ({selectionsWithGranules}) => {
   return (
@@ -27,3 +28,5 @@ const BatchDeleteWithGranulesContent = ({selectionsWithGranules}) => {
 BatchDeleteWithGranulesContent.propTypes = {
   selectionsWithGranules: PropTypes.array
 };
+
+export default BatchDeleteWithGranulesContent;

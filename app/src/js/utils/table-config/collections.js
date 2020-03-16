@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { Link } from 'react-router-dom';
 import { fromNow, seconds, tally, collectionNameVersion } from '../format';
@@ -8,6 +7,7 @@ import { deleteCollection } from '../../actions';
 import { strings } from '../../components/locale';
 import BatchDeleteConfirmContent from '../../components/DeleteCollection/BatchDeleteConfirmContent';
 import BatchDeleteCompleteContent from '../../components/DeleteCollection/BatchDeleteCompleteContent';
+import BatchDeleteWithGranulesContent from '../../components/DeleteCollection/BatchDeleteWithGranulesContent';
 
 export const tableColumns = [
   {
@@ -79,33 +79,6 @@ export const recoverAction = function (collections, config) {
 
 const confirmDelete = (d) => `Delete ${d} ${strings.collection}(s)?`;
 
-const DeleteModalContent = ({selectionsWithGranules}) => {
-  return (
-    <>
-      <span>
-        You have submitted a request to delete multiple collections.
-        The following collections contain associated granules:
-      </span>
-      <ul className='collections-with-granules'>
-        {selectionsWithGranules.map((collection, index) => {
-          const {name, version} = collectionNameVersion(collection);
-          return (
-            <li className='collection-with-granules' key={index}>{`${name} / ${version}`}</li>
-          );
-        })}
-      </ul>
-      <span>
-        In order to complete this request, the granules associated with the above collections must first be deleted.
-        Would you like to be redirected to the Granules pages?
-      </span>
-    </>
-  );
-};
-
-DeleteModalContent.propTypes = {
-  selectionsWithGranules: PropTypes.array
-};
-
 export const bulkActions = function (collections) {
   const getModalOptions = ({
     selected = [],
@@ -128,11 +101,13 @@ export const bulkActions = function (collections) {
 
       if (selectionsWithGranules.length > 0) {
         modalOptions.confirmButtonText = 'Go To Granules';
+        modalOptions.confirmButtonClass = 'button__goto';
         modalOptions.cancelButtonText = 'Cancel Request';
+        modalOptions.title = 'Warning';
         modalOptions.onConfirm = () => {
           history.push('/granules');
         };
-        modalOptions.children = <DeleteModalContent selectionsWithGranules={selectionsWithGranules} />;
+        modalOptions.children = <BatchDeleteWithGranulesContent selectionsWithGranules={selectionsWithGranules} />;
       }
     } else if (isOnModalComplete) {
       modalOptions.children = <BatchDeleteCompleteContent results={results} error={error} />;

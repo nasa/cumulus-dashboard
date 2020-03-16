@@ -140,7 +140,6 @@ export class BatchCommand extends React.Component {
         isOnModalComplete: true
       });
       this.setState({ modalOptions });
-      return;
     }
     if (error && typeof onError === 'function') onError(error);
     if (results && results.length && typeof onSuccess === 'function') onSuccess(results, error);
@@ -202,7 +201,7 @@ export class BatchCommand extends React.Component {
             title={modalText}
             showModal={activeModal}
             confirmButtonClass={`${buttonClass} button--submit`}
-            cancelButtonClass={buttonClass}
+            cancelButtonClass={`${buttonClass} button--cancel`}
             {...modalOptions}
           >
             {(!modalOptions || !modalOptions.children) &&
