@@ -15,11 +15,11 @@ const IN_PROGRESS = 'Processing...';
 /** BatchCommand
  * @description a reusable component for implementing batch async commands. For example: bulk delete, update, etc.
  * @param {object} props
- * @param {function} props.getModalOptions This is the primary function used change the contents of the modal. 
+ * @param {function} props.getModalOptions This is the primary function used change the contents of the modal.
  * It returns a modalOptions object which is passed as props to <DefaultModal />
  * Without this prop, by default, an empty modal will open with a progress bar running as the batch commands execute.
  * When using this function, one conditionally display content based on whether it should be displayed after confirm is clicked 'isOnModalConfirm: true',
- * after the action has completed 'isOnModalComplete: true', or neither (e.g. after the inital button that triggered the modal is clicked). 
+ * after the action has completed 'isOnModalComplete: true', or neither (e.g. after the inital button that triggered the modal is clicked).
  * All those scenarios can display different content for the modal based on logic setup within getModalOptions.
  */
 
@@ -129,7 +129,7 @@ export class BatchCommand extends React.Component {
 
   // call onSuccess and onError functions as needed
   cleanup (error, results) {
-    const { onSuccess, onError, getModalOptions } = this.props;
+    const { onSuccess, onError, getModalOptions, selected, history } = this.props;
     this.setState({ completed: 0, status: null });
     if (typeof getModalOptions === 'function') {
       const modalOptions = getModalOptions({
