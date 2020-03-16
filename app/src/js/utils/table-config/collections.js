@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { fromNow, seconds, tally, collectionNameVersion } from '../format';
 import { deleteCollection } from '../../actions';
 import { strings } from '../../components/locale';
+import BatchDeleteConfirmContent from '../../components/DeleteCollection/BatchDeleteConfirmContent';
+import BatchDeleteCompleteContent from '../../components/DeleteCollection/BatchDeleteCompleteContent';
 
 export const tableColumns = [
   {
@@ -105,22 +107,40 @@ DeleteModalContent.propTypes = {
 };
 
 export const bulkActions = function (collections) {
-  const getModalOptions = (selections, history) => {
+  const getModalOptions = ({
+    selected = [],
+    history,
+    isOnModalConfirm,
+    isOnModalComplete,
+    error,
+    results,
+  }) => {
     let modalOptions = {};
 
-    const selectionsWithGranules = selections.filter(selection => {
-      const { name, version } = collectionNameVersion(selection);
-      const collectionItem = collections.list.data.find(item => item.name === name && item.version === version);
-      return get(collectionItem, 'stats.total', 0) > 0;
-    });
+    if (!isOnModalConfirm && !isOnModalComplete) {
+      modalOptions.children = <BatchDeleteConfirmContent selected={selected} />;
+    } else if (isOnModalConfirm && !isOnModalComplete) {
+      const selectionsWithGranules = selected.filter(selection => {
+        const { name, version } = collectionNameVersion(selection);
+        const collectionItem = collections.list.data.find(item => item.name === name && item.version === version);
+        return get(collectionItem, 'stats.total', 0) > 0;
+      });
 
-    if (selectionsWithGranules.length > 0) {
-      modalOptions.confirmButtonText = 'Go To Granules';
-      modalOptions.cancelButtonText = 'Cancel Request';
-      modalOptions.onConfirm = () => {
-        history.push('/granules');
-      };
-      modalOptions.children = <DeleteModalContent selectionsWithGranules={selectionsWithGranules} />;
+      if (selectionsWithGranules.length > 0) {
+        modalOptions.confirmButtonText = 'Go To Granules';
+        modalOptions.cancelButtonText = 'Cancel Request';
+        modalOptions.onConfirm = () => {
+          history.push('/granules');
+        };
+        modalOptions.children = <DeleteModalContent selectionsWithGranules={selectionsWithGranules} />;
+      }
+    } else if (isOnModalComplete) {
+      modalOptions.children = <BatchDeleteCompleteContent results={results} error={error} />;
+      // since cancel button closes the modal, let's use that.
+      modalOptions.hasConfirmButton = false;
+      modalOptions.cancelButtonClass = 'button--green';
+      modalOptions.cancelButtonText = 'Close';
+      modalOptions.title = 'Complete';
     }
 
     return modalOptions;

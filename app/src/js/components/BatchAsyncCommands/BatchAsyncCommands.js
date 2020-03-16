@@ -1,5 +1,3 @@
-/* This will eventually just be a general batchasync */
-/* For Deleting Multiple Collections - The  Modal function (later other modals): Need to copy logic from here and implement in BatchDeleteCollectionModal.js */
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -8,12 +6,22 @@ import queue from 'stubborn-queue';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import _config from '../../config';
 import DefaultModal from '../Modal/modal';
-import isEmpty from 'lodash.isempty';
 
 const { updateDelay } = _config;
 
 const CONCURRENCY = 3;
 const IN_PROGRESS = 'Processing...';
+
+/** BatchCommand
+ * @description a reusable component for implementing batch async commands. For example: bulk delete, update, etc.
+ * @param {object} props
+ * @param {function} props.getModalOptions This is the primary function used change the contents of the modal. 
+ * It returns a modalOptions object which is passed as props to <DefaultModal />
+ * Without this prop, by default, an empty modal will open with a progress bar running as the batch commands execute.
+ * When using this function, one conditionally display content based on whether it should be displayed after confirm is clicked 'isOnModalConfirm: true',
+ * after the action has completed 'isOnModalComplete: true', or neither (e.g. after the inital button that triggered the modal is clicked). 
+ * All those scenarios can display different content for the modal based on logic setup within getModalOptions.
+ */
 
 export class BatchCommand extends React.Component {
   constructor () {
@@ -60,9 +68,16 @@ export class BatchCommand extends React.Component {
   confirm () {
     const { selected, history, getModalOptions } = this.props;
     if (typeof getModalOptions === 'function') {
-      const modalOptions = getModalOptions(selected, history);
-      if (!isEmpty(modalOptions)) {
-        this.setState({ modalOptions });
+      const modalOptions = getModalOptions({
+        selected,
+        history,
+        isOnModalConfirm: true,
+        isOnModalComplete: false
+      });
+      this.setState({ modalOptions });
+
+      // if we're replacing the onConfirm function, we don't want to continue with the current one
+      if (modalOptions.onConfirm) {
         return;
       }
     }
@@ -114,8 +129,19 @@ export class BatchCommand extends React.Component {
 
   // call onSuccess and onError functions as needed
   cleanup (error, results) {
-    const { onSuccess, onError } = this.props;
-    this.setState({ activeModal: false, completed: 0, status: null });
+    const { onSuccess, onError, getModalOptions } = this.props;
+    this.setState({ completed: 0, status: null });
+    if (typeof getModalOptions === 'function') {
+      const modalOptions = getModalOptions({
+        history,
+        selected,
+        results,
+        error,
+        isOnModalComplete: true
+      });
+      this.setState({ modalOptions });
+      return;
+    }
     if (error && typeof onError === 'function') onError(error);
     if (results && results.length && typeof onSuccess === 'function') onSuccess(results, error);
   }
@@ -127,10 +153,11 @@ export class BatchCommand extends React.Component {
   handleClick () {
     const { selected, history, getModalOptions } = this.props;
     if (typeof getModalOptions === 'function') {
-      const modalOptions = getModalOptions(selected, history);
-      if (isEmpty(modalOptions)) {
-        this.setState({ modalOptions });
-      }
+      const modalOptions = getModalOptions({
+        selected,
+        history
+      });
+      this.setState({ modalOptions });
     }
     if (this.props.confirm) {
       this.setState({ activeModal: true, completed: 0 });
