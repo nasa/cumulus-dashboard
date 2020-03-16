@@ -119,7 +119,7 @@ describe('Rules page', () => {
 
       cy.contains('.heading--large', testRuleName);
       cy.contains('.button--small', 'Copy').click();
-      cy.contains('.heading--large', `${testRuleName}`);
+      cy.contains('.heading--large', 'Copy a rule');
 
       const newName = 'testRule2';
       cy.editJsonTextarea({ data: { name: newName }, update: true });
