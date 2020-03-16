@@ -7,10 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-### Added
 
+### Added
 - **CUMULUS-1526**
   - Add a copy rule button
+
+### Changed
+- **CUMULUS-1790**
+  - Changes default values and visuals for home page's datepicker. Now defaults to last 24 hours. Selecting "All" shows the actual representation of data from Jan 1, 1970 through approximately now.
+
 
 ## [v1.7.2] - 2020-03-16
 
