@@ -124,9 +124,6 @@ describe('Rules page', () => {
       const newName = 'testRule2';
       cy.editJsonTextarea({ data: { name: newName }, update: true });
       cy.contains('form button', 'Submit').click();
-
-      cy.contains('.default-modal .add-rule__title', 'Add Rule');
-      cy.contains('.default-modal .modal-body', `Add rule ${newName}`);
       cy.contains('.modal-footer button', 'Confirm Rule').click();
 
       cy.contains('.heading--xlarge', 'Rules');
