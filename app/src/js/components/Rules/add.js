@@ -1,9 +1,10 @@
 'use strict';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { createRule } from '../../actions';
+import { createRule, getSchema } from '../../actions';
+import { removeReadOnly } from '../FormSchema/schema';
 import AddRaw from '../AddRaw/add-raw';
 
 const getBaseRoute = function () {
@@ -17,7 +18,19 @@ const getRuleName = function (item) {
   }
 };
 
-const defaultValue = {
+const ModalBody = ({record}) => {
+  const { data } = record;
+  const json = JSON.parse(data);
+  return (
+    <p>Add rule {json.name}</p>
+  );
+};
+
+ModalBody.propTypes = {
+  record: PropTypes.object
+};
+
+const defaultRuleObject = {
   name: '',
   workflow: '',
   provider: '',
@@ -33,23 +46,33 @@ const defaultValue = {
   state: 'ENABLED'
 };
 
-const ModalBody = ({record}) => {
-  const { data } = record;
-  const json = JSON.parse(data);
-  return (
-    <p>Add rule {json.name}</p>
-  );
-};
+const AddRule = ({ rules, location = {}, dispatch, schema, ...rest }) => {
+  const [defaultValue, setDefaultValue] = useState(defaultRuleObject);
+  const { state: locationState } = location;
+  const { name } = locationState || {};
+  const { rule: ruleSchema } = schema || {};
+  const { map: rulesMap } = rules || {};
+  const isCopy = !!name;
+  const title = isCopy ? 'Copy a rule' : 'Add a rule';
 
-ModalBody.propTypes = {
-  record: PropTypes.object
-};
+  useEffect(() => {
+    if (isCopy) {
+      dispatch(getSchema('rule'));
+    }
+  }, [isCopy, dispatch]);
 
-const AddRule = ({ rules, ...rest }) => {
+  useEffect(() => {
+    const record = rulesMap[name];
+    const { data } = record || {};
+    if (isCopy && data && ruleSchema) {
+      setDefaultValue(removeReadOnly(data, ruleSchema));
+    }
+  }, [ruleSchema, name, rulesMap, isCopy]);
+
   return (
     <AddRaw
       pk={'new-rule'}
-      title={'Add a rule'}
+      title={title}
       primaryProperty={'name'}
       state={rules}
       defaultValue={defaultValue}
@@ -64,9 +87,13 @@ const AddRule = ({ rules, ...rest }) => {
 };
 
 AddRule.propTypes = {
-  rules: PropTypes.object
+  location: PropTypes.object,
+  rules: PropTypes.object,
+  dispatch: PropTypes.func,
+  schema: PropTypes.object,
 };
 
 export default withRouter(connect(state => ({
-  rules: state.rules
+  rules: state.rules,
+  schema: state.schema
 }))(AddRule));
