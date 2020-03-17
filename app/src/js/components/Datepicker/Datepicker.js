@@ -53,25 +53,31 @@ class Datepicker extends React.PureComponent {
     this.props.dispatch(this.dispatchReset());
   }
 
-  dispatchReset () {
+  /**
+   *  Dispatches action that updates the datepicker state, and after completion
+   *  updates the queryparams and calls the parent callback.
+   *
+   * @param {Object} action - Datepicker action to be dispatched.
+   * @returns {Function} - Dispatched function
+   */
+  dispatchDropdownAction (action) {
     return (dispatch, getState) => {
-      dispatch({ type: DATEPICKER_RESET });
+      dispatch(action);
       const datepickerState = getState().datepicker;
       this.updateQueryParams(datepickerState);
       this.onChange();
     };
   }
 
+  dispatchReset () {
+    return this.dispatchDropdownAction({ type: DATEPICKER_RESET });
+  }
+
   dispatchDropdownUpdate (value, label) {
-    return (dispatch, getState) => {
-      dispatch({
-        type: DATEPICKER_DROPDOWN_FILTER,
-        data: { dateRange: { value, label } }
-      });
-      const datepickerState = getState().datepicker;
-      this.updateQueryParams(datepickerState);
-      this.onChange();
-    };
+    return this.dispatchDropdownAction({
+      type: DATEPICKER_DROPDOWN_FILTER,
+      data: { dateRange: { value, label } }
+    });
   }
 
   handleDropdownChange (e) {
@@ -217,7 +223,7 @@ class Datepicker extends React.PureComponent {
             className="button button--small"
             onClick={this.clear}
             data-cy="datetime-clear" >
-            Reset Selection
+              Reset Selection
           </button>
         </div>
       </div>
