@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- **CUMULUS-1693**
+  - Updates the bulk delete collection flow
+
 - **CUMULUS-1758**
   - Updates table implementation to use [react-table](https://github.com/tannerlinsley/react-table)
 

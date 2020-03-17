@@ -14,7 +14,8 @@ const DefaultModal = ({
   onCancel,
   hasCancelButton = true,
   hasConfirmButton = true,
-  confirmButtonClass = 'button--submit'
+  confirmButtonClass = 'button--submit',
+  cancelButtonClass = 'button--cancel'
 }) => {
   function handleCloseModal (e) {
     if (typeof onCloseModal === 'function') {
@@ -54,7 +55,7 @@ const DefaultModal = ({
       </Modal.Body>
       <Modal.Footer>
         {hasCancelButton && <button
-          className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
+          className={`button ${cancelButtonClass} button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel`}
           onClick={handleCancel}>
           { cancelButtonText }
         </button>}
@@ -77,10 +78,11 @@ DefaultModal.propTypes = {
   showModal: PropTypes.bool,
   onCloseModal: PropTypes.func,
   onConfirm: PropTypes.func,
-  onCancel: PropTypes.fuunc,
+  onCancel: PropTypes.func,
   hasCancelButton: PropTypes.bool,
   hasConfirmButton: PropTypes.bool,
-  confirmButtonClass: PropTypes.string
+  confirmButtonClass: PropTypes.string,
+  cancelButtonClass: PropTypes.string
 };
 
 export default DefaultModal;
