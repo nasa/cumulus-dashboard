@@ -111,6 +111,48 @@ describe('Rules page', () => {
       cy.task('resetState');
     });
 
+    it('copying a rule should add it to the list', () => {
+      cy.visit('/rules');
+      cy.contains('.table .tbody .tr a', testRuleName)
+        .and('have.attr', 'href', `/rules/rule/${testRuleName}`)
+        .click();
+
+      cy.contains('.heading--large', testRuleName);
+      cy.contains('.button--small', 'Copy').click();
+      cy.contains('.heading--large', 'Copy a rule');
+
+      const newName = 'testRule2';
+      cy.contains('.ace_string', testRuleName);
+      cy.editJsonTextarea({ data: { name: newName }, update: true });
+      cy.getJsonTextareaValue().then((jsonValue) => {
+        expect(jsonValue.name).to.equal(newName);
+      });
+      cy.contains('.ace_string', newName);
+      cy.contains('form button', 'Submit').click();
+
+      cy.contains('.default-modal .add-rule__title', 'Add Rule');
+      cy.contains('.default-modal .modal-body', `Add rule ${newName}`);
+      cy.contains('.modal-footer button', 'Confirm Rule').click();
+
+      cy.contains('.heading--xlarge', 'Rules');
+      cy.contains('.table .tbody .tr a', newName)
+        .and('have.attr', 'href', `/rules/rule/${newName}`).click();
+
+      cy.contains('.heading--xlarge', 'Rules');
+      cy.contains('.heading--large', newName);
+      cy.contains('.heading--medium', 'Rule Overview');
+      cy.url().should('include', `rules/rule/${newName}`);
+      cy.get('.metadata__details')
+        .within(() => {
+          cy.contains('RuleName').next().should('have.text', newName);
+          cy.contains('Provider')
+            .next()
+            .contains('a', testProviderId)
+            .should('have.attr', 'href', `/providers/provider/${testProviderId}`);
+        });
+      cy.task('resetState');
+    });
+
     it('editing a rule and returning to the rules page should show the new changes', () => {
       cy.visit('/rules');
       cy.contains('.table .tbody .tr a', testRuleName)

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- **CUMULUS-1526**
+  - Add a copy rule button
+
 ## [v1.7.2] - 2020-03-16
 
 ### Added

@@ -151,6 +151,14 @@ class Rule extends React.Component {
             <AsyncCommands config={dropdownConfig} />
 
             <Link
+              className='button button--copy button--small button--green form-group__element--right'
+              to={{
+                pathname: '/rules/add',
+                state: {
+                  name: ruleName
+                }
+              }}>Copy</Link>
+            <Link
               className='button button--edit button--small button--green form-group__element--right'
               to={`/rules/edit/${ruleName}`}>Edit</Link>
             {lastUpdated(data.timestamp)}
