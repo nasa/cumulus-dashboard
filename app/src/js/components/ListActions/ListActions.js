@@ -16,15 +16,15 @@ const ListActions = ({
 }) => {
   const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
-  function handleBulkActionSuccess () {
+  function handleBulkActionSuccess (results, error) {
     if (typeof onBulkActionSuccess === 'function') {
-      onBulkActionSuccess();
+      onBulkActionSuccess(results, error);
     }
   }
 
-  function handleBulkActionError () {
+  function handleBulkActionError (error) {
     if (typeof onBulkActionError === 'function') {
-      onBulkActionError();
+      onBulkActionError(error);
     }
   }
 
@@ -47,9 +47,10 @@ const ListActions = ({
                       text={item.text}
                       confirm={item.confirm}
                       confirmOptions={item.confirmOptions}
+                      getModalOptions={item.getModalOptions}
                       onSuccess={handleBulkActionSuccess}
                       onError={handleBulkActionError}
-                      selection={selected}
+                      selected={selected}
                       className={item.className || ''}
                     />
                   }
