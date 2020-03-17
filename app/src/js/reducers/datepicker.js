@@ -3,7 +3,8 @@
 import {
   DATEPICKER_DATECHANGE,
   DATEPICKER_DROPDOWN_FILTER,
-  DATEPICKER_HOUR_FORMAT
+  DATEPICKER_HOUR_FORMAT,
+  DATEPICKER_RESET
 } from '../actions/types';
 import { secondsPerDay, allDateRanges } from '../utils/datepicker';
 const earliestDate = new Date(0);
@@ -15,8 +16,8 @@ export const initialState = () => {
   const now = new Date(Date.now());
   return {
     startDateTime: new Date(now - daysToMilliseconds),
-    endDateTime: new Date(now),
-    dateRange: allDateRanges.find((a) => a.value === 1),
+    endDateTime: null,
+    dateRange: allDateRanges.find((a) => a.value === 'Recent'),
     hourFormat: '12HR'
   };
 };
@@ -56,6 +57,8 @@ export default function reducer (state = initialState(), action) {
   state = { ...state };
   const { data } = action;
   switch (action.type) {
+    case DATEPICKER_RESET:
+      return initialState();
     case DATEPICKER_DROPDOWN_FILTER:
       switch (data.dateRange.label) {
         case 'Custom':

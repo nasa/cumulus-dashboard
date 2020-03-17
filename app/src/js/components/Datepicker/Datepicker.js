@@ -7,7 +7,7 @@ import DateTimePicker from 'react-datetime-picker';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
-import { DATEPICKER_DATECHANGE, DATEPICKER_DROPDOWN_FILTER, DATEPICKER_HOUR_FORMAT } from '../../actions/types';
+import { DATEPICKER_DATECHANGE, DATEPICKER_DROPDOWN_FILTER, DATEPICKER_HOUR_FORMAT, DATEPICKER_RESET } from '../../actions/types';
 import { allDateRanges, allHourFormats, dateTimeFormat, urlDateFormat, urlDateProps } from '../../utils/datepicker';
 
 /*
@@ -50,8 +50,7 @@ class Datepicker extends React.PureComponent {
   }
 
   clear () {
-    const { value, label } = allDateRanges.find(a => a.label === 'Last 24 hours');
-    this.props.dispatch(this.dispatchDropdownUpdate(value, label));
+    this.props.dispatch({type: DATEPICKER_RESET});
   }
 
   dispatchDropdownUpdate (value, label) {
@@ -209,7 +208,7 @@ class Datepicker extends React.PureComponent {
             className="button button--small"
             onClick={this.clear}
             data-cy="datetime-clear" >
-            Clear Selection
+            Reset Selection
           </button>
         </div>
       </div>

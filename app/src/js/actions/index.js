@@ -18,7 +18,6 @@ import { apiGatewaySearchTemplate } from './action-config/apiGatewaySearch';
 import { apiLambdaSearchTemplate } from './action-config/apiLambdaSearch';
 import { teaLambdaSearchTemplate } from './action-config/teaLambdaSearch';
 import { s3AccessSearchTemplate } from './action-config/s3AccessSearch';
-import { setEndDateTimeToNow } from './datepicker';
 import * as types from './types';
 
 const CALL_API = types.CALL_API;
@@ -145,19 +144,15 @@ export const listCollections = (options) => {
   };
 };
 
-export const createCollection = (payload) => {
-  return (dispatch) => {
-    return dispatch({
-      [CALL_API]: {
-        type: types.NEW_COLLECTION,
-        method: 'POST',
-        id: getCollectionId(payload),
-        path: 'collections',
-        body: payload
-      }
-    }).then(() => dispatch(setEndDateTimeToNow()));
-  };
-};
+export const createCollection = (payload) => ({
+  [CALL_API]: {
+    type: types.NEW_COLLECTION,
+    method: 'POST',
+    id: getCollectionId(payload),
+    path: 'collections',
+    body: payload
+  }
+});
 
 export const updateCollection = (payload) => ({
   [CALL_API]: {
@@ -596,19 +591,15 @@ export const getProvider = (providerId) => ({
   }
 });
 
-export const createProvider = (providerId, payload) => {
-  return (dispatch) => {
-    return dispatch({
-      [CALL_API]: {
-        type: types.NEW_PROVIDER,
-        id: providerId,
-        method: 'POST',
-        path: 'providers',
-        body: payload
-      }
-    }).then(() => dispatch(setEndDateTimeToNow()));
-  };
-};
+export const createProvider = (providerId, payload) => ({
+  [CALL_API]: {
+    type: types.NEW_PROVIDER,
+    id: providerId,
+    method: 'POST',
+    path: 'providers',
+    body: payload
+  }
+});
 
 export const updateProvider = (providerId, payload) => ({
   [CALL_API]: {

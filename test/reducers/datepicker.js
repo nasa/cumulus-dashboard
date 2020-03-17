@@ -6,7 +6,8 @@ import reducer, { initialState } from '../../app/src/js/reducers/datepicker';
 import {
   DATEPICKER_DATECHANGE,
   DATEPICKER_DROPDOWN_FILTER,
-  DATEPICKER_HOUR_FORMAT
+  DATEPICKER_HOUR_FORMAT,
+  DATEPICKER_RESET
 } from '../../app/src/js/actions/types';
 
 const secondsPerDay = 60 * 60 * 24;
@@ -17,15 +18,26 @@ test('verify initial state', (t) => {
   t.deepEqual(actual, inputstate);
 });
 
-test('reducer sets initial state to last 24 hours data on first initialization run.', (t) => {
+test('reducer sets initial state to "Recent" with start time 24 hours previous on initialization run.', (t) => {
   const testStart = Date.now();
   sinon.useFakeTimers(testStart);
   const actual = reducer(undefined, { type: 'ANY' });
-  t.is(actual.dateRange.label, 'Last 24 hours');
-  t.is(actual.dateRange.value, 1);
+  t.is(actual.dateRange.label, 'Recent');
+  t.is(actual.dateRange.value, 'Recent');
   t.is(actual.startDateTime.valueOf(), (new Date(testStart - secondsPerDay * 1000)).valueOf());
-  t.is(actual.endDateTime.valueOf(), (new Date(testStart)).valueOf());
+  t.is(actual.endDateTime, null);
   t.is(actual.hourFormat, '12HR');
+  sinon.restore();
+});
+
+test('reducer resets initial state on DATEPICKER_RESET', (t) => {
+  const testStart = Date.now();
+  sinon.useFakeTimers(testStart);
+  const inState = {};
+  const expected = initialState();
+  const action = {type: DATEPICKER_RESET, data: {}};
+  const actual = reducer(inState, action);
+  t.deepEqual(expected, actual);
   sinon.restore();
 });
 
