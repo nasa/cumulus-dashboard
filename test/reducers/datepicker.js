@@ -35,7 +35,7 @@ test('reducer resets initial state on DATEPICKER_RESET', (t) => {
   sinon.useFakeTimers(testStart);
   const inState = {};
   const expected = initialState();
-  const action = {type: DATEPICKER_RESET, data: {}};
+  const action = {type: DATEPICKER_RESET};
   const actual = reducer(inState, action);
   t.deepEqual(expected, actual);
   sinon.restore();

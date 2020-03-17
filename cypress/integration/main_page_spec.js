@@ -147,24 +147,29 @@ describe('Dashboard Home Page', () => {
     });
 
     it('Accepts dates entered on the date picker.', () => {
+      const now = Date.UTC(2020, 2, 18, 12, 35, 3);
+      cy.clock(now);
+
       cy.get('[data-cy=startDateTime]').within(() => {
-        cy.get('input[name=month]').click().type(3);
-        cy.get('input[name=day]').click().type(17);
-        cy.get('input[name=year]').click().type(2009);
-        cy.get('input[name=hour12]').click().type(3);
-        cy.get('input[name=minute]').click().type(37);
+        cy.get('input[name=month]').click().clear().type('5');
+        cy.get('input[name=day]').click().clear().type('18');
+        cy.get('input[name=year]').click().clear().type('2009');
+        cy.get('input[name=hour12]').click().clear().type('3');
+        cy.get('input[name=minute]').click().clear().type('37');
         cy.get('input[name=minute]').should('have.value', '37');
         cy.get('select[name=amPm]').select('PM');
       });
-      cy.url().should('include', 'startDateTime=20090317153700');
+      cy.url().should('include', 'startDateTime=20090518153700');
 
       cy.get('[data-cy=datetime-clear]').click();
-      cy.url().should('not.include', 'startDateTime=20090317153700');
+      cy.url().should('not.include', 'startDateTime=20090518153700');
+      cy.url().should('include', 'startDateTime=20200317123500');
       cy.get('[data-cy=startDateTime]').within(() => {
-        cy.get('input[name=month]').should('have.value', '');
-        cy.get('input[name=day]').should('have.value', '');
-        cy.get('input[name=year]').should('have.value', '');
-        cy.get('input[name=hour12]').should('have.value', '');
+        cy.get('input[name=month]').should('have.value', '3');
+        cy.get('input[name=day]').should('have.value', '17');
+        cy.get('input[name=year]').should('have.value', '2020');
+        cy.get('input[name=hour12]').should('have.value', '12');
+        cy.get('input[name=minute]').should('have.value', '35');
       });
     });
 
@@ -183,6 +188,8 @@ describe('Dashboard Home Page', () => {
 
       // This selector fails cy.get('#Ingest Rules').contains('1');
       cy.get('.overview-num__wrapper-home > ul > :nth-child(5)').contains('1');
+
+      cy.get('[data-cy=datetime-dropdown]').select('Last week');
 
       cy.get('[data-cy=startDateTime]').within(() => {
         cy.get('input[name=month]').click().type(1);

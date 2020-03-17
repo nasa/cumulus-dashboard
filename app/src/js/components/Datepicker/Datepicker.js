@@ -50,7 +50,16 @@ class Datepicker extends React.PureComponent {
   }
 
   clear () {
-    this.props.dispatch({type: DATEPICKER_RESET});
+    this.props.dispatch(this.dispatchReset());
+  }
+
+  dispatchReset () {
+    return (dispatch, getState) => {
+      dispatch({ type: DATEPICKER_RESET });
+      const datepickerState = getState().datepicker;
+      this.updateQueryParams(datepickerState);
+      this.onChange();
+    };
   }
 
   dispatchDropdownUpdate (value, label) {
