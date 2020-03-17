@@ -30,29 +30,30 @@ ModalBody.propTypes = {
   record: PropTypes.object
 };
 
-const AddRule = ({ rules, location = {}, dispatch, schema, ...rest }) => {
-  const [defaultValue, setDefaultValue] = useState({
+const defaultRuleObject = {
+  name: '',
+  workflow: '',
+  provider: '',
+  collection: {
     name: '',
-    workflow: '',
-    provider: '',
-    collection: {
-      name: '',
-      version: ''
-    },
-    meta: {},
-    rule: {
-      type: '',
-      value: ''
-    },
-    state: 'ENABLED'
-  });
+    version: ''
+  },
+  meta: {},
+  rule: {
+    type: '',
+    value: ''
+  },
+  state: 'ENABLED'
+};
+
+const AddRule = ({ rules, location = {}, dispatch, schema, ...rest }) => {
+  const [defaultValue, setDefaultValue] = useState(defaultRuleObject);
   const { state: locationState } = location;
   const { name } = locationState || {};
   const { rule: ruleSchema } = schema || {};
   const { map: rulesMap } = rules || {};
   const isCopy = !!name;
-  let title;
-  (isCopy) ? title = 'Copy a rule' : title = 'Add a rule';
+  const title = isCopy ? 'Copy a rule' : 'Add a rule';
 
   useEffect(() => {
     if (isCopy) {

@@ -122,8 +122,16 @@ describe('Rules page', () => {
       cy.contains('.heading--large', 'Copy a rule');
 
       const newName = 'testRule2';
+      cy.contains('.ace_variable', 'name');
       cy.editJsonTextarea({ data: { name: newName }, update: true });
+      cy.getJsonTextareaValue().then((jsonValue) => {
+        expect(jsonValue.name).to.equal(newName);
+      });
+      cy.contains('.ace_string', newName);
       cy.contains('form button', 'Submit').click();
+
+      cy.contains('.default-modal .add-rule__title', 'Add Rule');
+      cy.contains('.default-modal .modal-body', `Add rule ${newName}`);
       cy.contains('.modal-footer button', 'Confirm Rule').click();
 
       cy.contains('.heading--xlarge', 'Rules');
