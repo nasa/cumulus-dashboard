@@ -41,7 +41,8 @@ const SortableTable = ({
   changeSortProps,
   tableColumns = [],
   data = [],
-  onSelect
+  onSelect,
+  clearSelected
 }) => {
   const defaultColumn = useMemo(
     () => ({
@@ -64,6 +65,7 @@ const SortableTable = ({
       selectedRowIds,
       sortBy
     },
+    toggleAllRowsSelected
   } = useTable(
     {
       data,
@@ -98,6 +100,12 @@ const SortableTable = ({
       }
     }
   );
+
+  useEffect(() => {
+    if (clearSelected) {
+      toggleAllRowsSelected(false);
+    }
+  }, [clearSelected, toggleAllRowsSelected]);
 
   useEffect(() => {
     let selected = [];
@@ -191,7 +199,8 @@ SortableTable.propTypes = {
   canSelect: PropTypes.bool,
   collapsible: PropTypes.bool,
   rowId: PropTypes.any,
-  tableColumns: PropTypes.array
+  tableColumns: PropTypes.array,
+  clearSelected: PropTypes.bool
 };
 
 export default SortableTable;
