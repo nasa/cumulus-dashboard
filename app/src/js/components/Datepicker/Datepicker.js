@@ -148,7 +148,7 @@ class Datepicker extends React.PureComponent {
     );
   }
 
-  renderDateTimeRange (name) {
+  renderDateTimeRange (name, placeholder = 'Now') {
     const hourFormat = this.props.hourFormat;
     const value = this.props[name];
     const locale = (hourFormat === '24HR') ? 'en-GB' : 'en-US';
@@ -157,18 +157,23 @@ class Datepicker extends React.PureComponent {
     const utcValue = isNil(value) ? null : moment(moment.utc(value).format(dateTimeFormat)).toDate();
 
     return (
-      <DateTimePicker
-        dayPlaceholder='DD'
-        format={format}
-        hourPlaceholder='HH'
-        locale={locale}
-        monthPlaceholder='MM'
-        minutePlaceholder='mm'
-        name={name}
-        onChange={(value) => this.handleDateTimeRangeChange(name, value)}
-        value={utcValue}
-        yearPlaceholder='YYYY'
-      />
+      <div>
+        { (value) ? (
+          <DateTimePicker
+            dayPlaceholder='DD'
+            format={format}
+            hourPlaceholder='HH'
+            locale={locale}
+            monthPlaceholder='MM'
+            minutePlaceholder='mm'
+            name={name}
+            onChange={(value) => this.handleDateTimeRangeChange(name, value)}
+            value={utcValue}
+            yearPlaceholder='YYYY'
+          />
+        ) : <div className="placeholder">{placeholder}</div>
+        }
+      </div>
     );
   }
 

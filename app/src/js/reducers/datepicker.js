@@ -62,6 +62,8 @@ export default function reducer (state = initialState(), action) {
           return {...state, ...data};
         case 'All':
           return {...state, ...allData(), ...data};
+        case 'Recent':
+          return { ...state, ...{endDateTime: null}, ...data };
         default:
           return {...state, ...computeDateTimeDelta(data.dateRange.value), ...data};
       }

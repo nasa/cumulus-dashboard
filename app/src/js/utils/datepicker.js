@@ -6,6 +6,7 @@ export const secondsPerDay = 60.0 * 60.0 * 24.0;
 export const allDateRanges = [
   {value: 'All', label: 'All'},
   {value: 'Custom', label: 'Custom'},
+  {value: 'Recent', label: 'Recent'},
   {value: 1 / 24.0, label: 'Last hour'},
   {value: 1, label: 'Last 24 hours'},
   {value: 7, label: 'Last week'},

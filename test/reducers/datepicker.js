@@ -84,6 +84,24 @@ test('Dropdown set to "Custom" does not change any current state value.', (t) =>
   t.is(actual.startDateTime.valueOf(), state.startDateTime.valueOf());
 });
 
+test('Dropdown set to "Recent" sets endDateTime to null.', (t) => {
+  const state = initialState();
+  state.startDateTime = new Date('2020-03-16T19:50:24.757Z');
+  state.endDateTime = new Date('2020-03-17T00:00:00.000Z');
+  const value = 'Recent';
+  const label = 'Recent';
+  const action = {
+    type: DATEPICKER_DROPDOWN_FILTER,
+    data: { dateRange: { value, label } }
+  };
+
+  const actual = reducer(state, action);
+  t.is(actual.dateRange.label, 'Recent');
+  t.is(actual.dateRange.value, 'Recent');
+  t.is(actual.endDateTime, null);
+  t.is(actual.startDateTime.valueOf(), state.startDateTime.valueOf());
+});
+
 test('datechange event updates state', (t) => {
   const startDateTime = new Date('2000-01-15T12:50:01');
   const endDateTime = new Date('2013-12-10T10:00:00');
