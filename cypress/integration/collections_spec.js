@@ -198,7 +198,7 @@ describe('Dashboard Collections Page', () => {
       cy.editJsonTextarea({ data: { duplicateHandling, meta }, update: true });
       cy.contains('form button', 'Submit').click();
       cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
-      cy.contains('.default-modal .modal-body', `Collection ${name} / ${version} has been updated`);
+      cy.contains('.default-modal .modal-body', `Collection ${name}___${version} has been updated`);
       cy.contains('.modal-footer button', 'Close').click();
 
       // displays the updated collection and its granules
@@ -221,11 +221,11 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.ace_variable', 'name');
       cy.editJsonTextarea({ data: { sampleFileName }, update: true });
 
-      // Go To Collection should allow for continued editing
+      // Edit Collection should allow for continued editing
       cy.contains('form button', 'Submit').click();
       cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
-      cy.contains('.default-modal .modal-body', `Collection ${name} / ${version} has encountered an error.`);
-      cy.contains('.modal-footer button', 'Go To Collection').click();
+      cy.contains('.default-modal .modal-body', `Collection ${name}___${version} has encountered an error.`);
+      cy.contains('.modal-footer button', 'Edit Collection').click();
       cy.url().should('include', `collections/edit/${name}/${version}`);
 
       // Cancel Request should return to collection page
