@@ -122,7 +122,7 @@ describe('Rules page', () => {
       cy.contains('.heading--large', 'Copy a rule');
 
       const newName = 'testRule2';
-      cy.contains('.ace_variable', 'name');
+      cy.contains('.ace_string', testRuleName);
       cy.editJsonTextarea({ data: { name: newName }, update: true });
       cy.getJsonTextareaValue().then((jsonValue) => {
         expect(jsonValue.name).to.equal(newName);
