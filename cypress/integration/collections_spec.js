@@ -327,6 +327,8 @@ describe('Dashboard Collections Page', () => {
       const version = '006';
 
       cy.visit(`/collections/collection/${name}/${version}`);
+      cy.wait('@getCollection');
+      cy.wait('@getGranules');
 
       // delete collection
       cy.get('.DeleteCollection > .button').click();
@@ -350,6 +352,8 @@ describe('Dashboard Collections Page', () => {
       const version = '006';
 
       cy.visit(`/collections/collection/${name}/${version}`);
+      cy.wait('@getCollection');
+      cy.wait('@getGranules');
 
       // delete collection
       cy.get('.DeleteCollection > .button').click();
