@@ -71,12 +71,12 @@ describe('Dashboard Home Page', () => {
     });
 
     it('Updates start and end time components when dropdown is selected', () => {
-      const now = Date.UTC(2009, 0, 5, 13, 35, 3);
+      const now = Date.UTC(2009, 0, 5, 13, 35, 3); // 2009-01-05T13:35:03.000Z
       cy.clock(now);
       cy.get('main[class=main] section').eq(1).within(() => {
         cy.get('h3').should('have.text', 'Date and Time Range');
         cy.get('[data-cy=datetime-dropdown]').as('dateRange');
-        cy.get('@dateRange').select('Last week');
+        cy.get('@dateRange').select('1 week');
 
         cy.get('[data-cy=endDateTime]').within(() => {
           cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2009');
@@ -110,12 +110,12 @@ describe('Dashboard Home Page', () => {
     });
 
     it('should retain query parameters when moving between pages.', () => {
-      const now = Date.UTC(2015, 2, 17, 16, 0, 0);
+      const now = Date.UTC(2015, 2, 17, 16, 0, 0); // 2015-03-17T16:00:00.000Z
       cy.clock(now);
       cy.get('main[class=main] section').eq(1).within(() => {
         cy.get('h3').should('have.text', 'Date and Time Range');
         cy.get('[data-cy=datetime-dropdown]').as('dateRange');
-        cy.get('@dateRange').select('Last hour');
+        cy.get('@dateRange').select('1 hour');
 
         cy.url().should('include', 'startDateTime=201503171500');
         cy.url().should('include', 'endDateTime=201503171600');

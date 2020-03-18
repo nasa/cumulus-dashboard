@@ -8,24 +8,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import { DATEPICKER_DATECHANGE, DATEPICKER_DROPDOWN_FILTER, DATEPICKER_HOUR_FORMAT } from '../../actions/types';
-import { urlDateFormat, urlDateProps } from '../../utils/datepicker';
-
-const allDateRanges = [
-  {value: 'All', label: 'All'},
-  {value: 'Custom', label: 'Custom'},
-  {value: 1 / 24.0, label: 'Last hour'},
-  {value: 1, label: 'Last 24 hours'},
-  {value: 7, label: 'Last week'},
-  {value: 30, label: 'Last 30 Days'},
-  {value: 60, label: 'Last 60 days'},
-  {value: 180, label: 'Last 180 days'},
-  {value: 366, label: 'Last year'}
-];
-const allHourFormats = [
-  {value: '12HR', label: '12HR'},
-  {value: '24HR', label: '24HR'}
-];
-const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss.sss';
+import { allDateRanges, allHourFormats, dropdownValue, dateTimeFormat, urlDateFormat, urlDateProps } from '../../utils/datepicker';
 
 /*
  * If this is a shared URL, grab the date and time and update the datepicker
@@ -41,7 +24,7 @@ const updateDatepickerStateFromQueryParams = (props) => {
         values[value] = moment.utc(values[value], urlDateFormat).toDate();
       }
     }
-    values.dateRange = {value: 'Custom', label: 'Custom'};
+    values.dateRange = dropdownValue(values);
     props.dispatch({type: 'DATEPICKER_DATECHANGE', data: {...props.datepicker, ...values}});
   }
 };
@@ -65,7 +48,7 @@ class Datepicker extends React.PureComponent {
   }
 
   clear () {
-    const { value, label } = allDateRanges.find(a => a.label === 'All');
+    const { value, label } = allDateRanges.find(a => a.label === 'Custom');
     this.props.dispatch(this.dispatchDropdownUpdate(value, label));
   }
 

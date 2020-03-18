@@ -38,10 +38,44 @@
     justify-content: space-evenly;
     margin-right: 2em;
   }
+
   &__internal label{
     font-size: 1em;
     font-weight: $base-font-regular;
     margin-bottom: .4em;
+  }
+
+  &__internal input[type="radio"] {
+    font-size: 2em;
+    margin-right: .25em;
+  }
+
+  &__internal .selector__hrformat{
+    display: block;
+    position: relative;
+    padding-left: 24px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  &__internal .selector__hrformat input{
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  &__internal .selector__hrformat input:checked ~ .selector{
+    background-color: $white;
+    border: 2px solid $ocean-blue;
+    &:after{
+      display: block;
+    }
+
   }
 
   &.selector__hrformat{
@@ -109,6 +143,7 @@
       left: 1em;
     }
   }
+
   &__refresh{
     position: relative;
     &:after {
