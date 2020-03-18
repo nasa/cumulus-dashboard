@@ -22,7 +22,7 @@ const allDateRanges = [
   {value: 366, label: 'Last year'}
 ];
 const allHourFormats = [
-  {value:'12HR', label: '12HR'},
+  {value: '12HR', label: '12HR'},
   {value: '24HR', label: '24HR'}
 ];
 const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss.sss';
