@@ -228,7 +228,7 @@ Datepicker.propTypes = {
   }),
   startDateTime: PropTypes.instanceOf(Date),
   endDateTime: PropTypes.instanceOf(Date),
-  hourFormat: PropTypes.oneOf(allHourFormats),
+  hourFormat: PropTypes.oneOf(allHourFormats.map((a) => a.label)),
   queryParams: PropTypes.object,
   setQueryParams: PropTypes.func,
   onChange: PropTypes.func,
