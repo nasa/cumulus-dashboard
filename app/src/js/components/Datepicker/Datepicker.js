@@ -50,7 +50,7 @@ class Datepicker extends React.PureComponent {
   }
 
   clear () {
-    const { value, label } = allDateRanges.find(a => a.label === 'Last 24 hours');
+    const { value, label } = allDateRanges.find(a => a.label === 'Recent');
     this.props.dispatch(this.dispatchDropdownUpdate(value, label));
   }
 

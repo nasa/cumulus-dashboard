@@ -4,15 +4,16 @@ export const urlDateFormat = 'YYYYMMDDHHmmSS';
 export const secondsPerDay = 60.0 * 60.0 * 24.0;
 
 export const allDateRanges = [
-  {value: 'All', label: 'All'},
   {value: 'Custom', label: 'Custom'},
-  {value: 1 / 24.0, label: 'Last hour'},
-  {value: 1, label: 'Last 24 hours'},
-  {value: 7, label: 'Last week'},
-  {value: 30, label: 'Last 30 Days'},
-  {value: 60, label: 'Last 60 days'},
-  {value: 180, label: 'Last 180 days'},
-  {value: 366, label: 'Last year'}
+  {value: 'Recent', label: 'Recent'},
+  {value: 'All', label: 'All'},
+  {value: 1 / 24.0, label: '1 hour'},
+  {value: 1, label: '1 day'},
+  {value: 7, label: '1 week'},
+  {value: 30, label: '1 month'},
+  {value: 90, label: '90 days'},
+  {value: 180, label: '180 days'},
+  {value: 366, label: '1 year'}
 ];
 export const allHourFormats = ['12HR', '24HR'];
 export const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss.sss';
