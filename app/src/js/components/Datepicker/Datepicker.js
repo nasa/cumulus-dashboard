@@ -41,10 +41,16 @@ class Datepicker extends React.PureComponent {
     this.handleHourFormatChange = this.handleHourFormatChange.bind(this);
     this.handleDateTimeRangeChange = this.handleDateTimeRangeChange.bind(this);
     this.clear = this.clear.bind(this);
+    this.refresh = this.refresh.bind(this);
   }
 
   componentDidMount () {
     updateDatepickerStateFromQueryParams(this.props);
+  }
+
+  refresh (e) {
+    const { value, label } = this.props.dateRange;
+    this.props.dispatch(this.dispatchDropdownUpdate(value, label));
   }
 
   clear () {
@@ -188,6 +194,7 @@ class Datepicker extends React.PureComponent {
                   <li className="datetime__refresh">
                     <button
                       className="button button--small"
+                      onClick={this.refresh}
                       data-cy="datetime-refresh">
                       Refresh Results
                     </button>
