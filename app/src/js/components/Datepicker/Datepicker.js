@@ -24,8 +24,6 @@ const updateDatepickerStateFromQueryParams = (props) => {
         values[value] = moment.utc(values[value], urlDateFormat).toDate();
       }
     }
-    // TODO [MHS, 2020-03-16] see if we can't solve the problem with using a
-    // time delta to select correct label.
     values.dateRange = dropdownValue(values);
     props.dispatch({type: 'DATEPICKER_DATECHANGE', data: {...props.datepicker, ...values}});
   }
