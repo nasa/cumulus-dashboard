@@ -6,13 +6,12 @@ export const secondsPerDay = 60.0 * 60.0 * 24.0;
 export const allDateRanges = [
   {value: 'Custom', label: 'Custom'},
   {value: 'Recent', label: 'Recent'},
-  {value: 'All', label: 'All'},
   {value: 1 / 24.0, label: '1 hour'},
   {value: 1, label: '1 day'},
   {value: 7, label: '1 week'},
   {value: 30, label: '1 month'},
-  {value: 90, label: '90 days'},
-  {value: 180, label: '180 days'},
+  {value: 90, label: '3 months'},
+  {value: 180, label: '6 months'},
   {value: 366, label: '1 year'}
 ];
 export const allHourFormats = ['12HR', '24HR'];
