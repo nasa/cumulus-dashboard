@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 - **CUMULUS-1790**
-  - Changes default values and visuals for home page's datepicker. Now defaults to last 24 hours. Selecting "All" shows the actual representation of data from Jan 1, 1970 through approximately now.
+  - Changes default values and visuals for home page's datepicker. When the page loads, it defauls to display "Recent" data, which is the previous 24 hours with no end time.
 
 ## [v1.7.2] - 2020-03-16
 

@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import { DATEPICKER_DATECHANGE, DATEPICKER_DROPDOWN_FILTER, DATEPICKER_HOUR_FORMAT } from '../../actions/types';
-import { allDateRanges, allHourFormats, dateTimeFormat, urlDateFormat, urlDateProps } from '../../utils/datepicker';
+import { allDateRanges, allHourFormats, dropdownValue, dateTimeFormat, urlDateFormat, urlDateProps } from '../../utils/datepicker';
 
 /*
  * If this is a shared URL, grab the date and time and update the datepicker
@@ -26,7 +26,7 @@ const updateDatepickerStateFromQueryParams = (props) => {
     }
     // TODO [MHS, 2020-03-16] see if we can't solve the problem with using a
     // time delta to select correct label.
-    values.dateRange = {value: 'Custom', label: 'Custom'};
+    values.dateRange = dropdownValue(values);
     props.dispatch({type: 'DATEPICKER_DATECHANGE', data: {...props.datepicker, ...values}});
   }
 };

@@ -2,15 +2,20 @@
 
 import test from 'ava';
 
-import { fetchCurrentTimeFilters } from '../../app/src/js/utils/datepicker';
+import {
+  fetchCurrentTimeFilters,
+  dropdownValue,
+  allDateRanges,
+  secondsPerDay
+} from '../../app/src/js/utils/datepicker';
 
 import { initialState } from '../../app/src/js/reducers/datepicker';
 
 const testState = initialState();
 
-test('returns empty object if no start and end times provided', (t) => {
+test('fetchCurrentTimeFilters returns empty object if no start and end times provided', (t) => {
   const expected = {};
-  let state = {...testState};
+  let state = { ...testState };
   state.startDateTime = null;
   state.endDateTime = null;
 
@@ -18,7 +23,7 @@ test('returns empty object if no start and end times provided', (t) => {
   t.deepEqual(expected, actual);
 });
 
-test('creates object with "timestamp__to" if endDateTime time is provided.', (t) => {
+test('fetchCurrentTimeFilters creates object with "timestamp__to" if endDateTime time is provided.', (t) => {
   let state = { ...testState };
   const valueOfDate = 1582307006281;
   const endDateTime = new Date(valueOfDate);
@@ -31,7 +36,7 @@ test('creates object with "timestamp__to" if endDateTime time is provided.', (t)
   t.deepEqual(expected, actual);
 });
 
-test('creates an object with "timestamp__from" if startDateTime time is provided.', (t) => {
+test('fetchCurrentTimeFilters creates an object with "timestamp__from" if startDateTime time is provided.', (t) => {
   let state = { ...testState };
   const valueOfDate = 1582307006281;
   const startDateTime = new Date(valueOfDate);
@@ -44,7 +49,7 @@ test('creates an object with "timestamp__from" if startDateTime time is provided
   t.deepEqual(expected, actual);
 });
 
-test('creates an object with both timestamp__from and timestamp__to if start and end dates are provided.', (t) => {
+test('fetchCurrentTimeFilters creates an object with both timestamp__from and timestamp__to if start and end dates are provided.', (t) => {
   const state = { ...initialState() };
   const valueOfStartDate = 1501907006251;
   const valueOfEndDate = 1582307006281;
@@ -61,4 +66,39 @@ test('creates an object with both timestamp__from and timestamp__to if start and
 
   const actual = fetchCurrentTimeFilters(state);
   t.deepEqual(expected, actual);
+});
+
+test('dropdownValue returns the "Custom" value/label if object is missing a date.', (t) => {
+  const values = { startDateTime: new Date(Date.now()) };
+  const expected = allDateRanges.find((e) => e.value === 'Custom');
+  const actual = dropdownValue(values);
+  t.deepEqual(expected, actual);
+});
+
+test('dropdownValue returns the "Custom" value/label if datetimes do not match any dropdown values.', (t) => {
+  const values = {
+    startDateTime: new Date(Date.now()),
+    endDateTime: new Date(Date.now())
+  };
+  const expected = allDateRanges.find((e) => e.value === 'Custom');
+  const actual = dropdownValue(values);
+  t.deepEqual(expected, actual);
+});
+
+test('dropdownValue returns the correct value/label when datetimes match a dropdown value.', (t) => {
+  const testValues = [1 / 24, 1, 7, 30, 90, 180, 366];
+
+  testValues.forEach((testValue) => {
+    const endDateTime = new Date(Date.now());
+    const startDateTime = new Date(
+      endDateTime.valueOf() - testValue * secondsPerDay * 1000
+    );
+    const values = {
+      endDateTime,
+      startDateTime
+    };
+    const expected = allDateRanges.find((e) => e.value === testValue);
+    const actual = dropdownValue(values);
+    t.deepEqual(expected, actual);
+  });
 });

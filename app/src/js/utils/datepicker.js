@@ -27,6 +27,20 @@ const matchObjects = [
 export const urlDateProps = matchObjects.map((o) => o.dateProp);
 
 /**
+ * look and see if the start/end times of the input object match a dropdown label and return it.
+ * @param {Object} values - can contain startDateTime endDateTime
+ * @return {Object} returns a matching daterange object, or the custom value if no matches found.
+ */
+export const dropdownValue = (values) => {
+  let dropdownInfo = {value: 'Custom', label: 'Custom'};
+  if (!!values.startDateTime && !!values.endDateTime) {
+    const durationDays = ((values.endDateTime.valueOf() - values.startDateTime.valueOf()) / 1000.0) / secondsPerDay;
+    dropdownInfo = allDateRanges.find((r) => r.value === durationDays) || dropdownInfo;
+  }
+  return dropdownInfo;
+};
+
+/**
  * Build a timefilter object that will be passed to the cumulus core API calls as part of the querystring.
  *
  * @param {Object} datepicker - redux datepicker state.
