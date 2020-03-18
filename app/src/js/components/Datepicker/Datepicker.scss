@@ -11,7 +11,7 @@
     box-shadow: $shadow__default;
     font-size: .86em;
     width: 1255px;
-    height: 105px;
+    height: 115px;
     margin: .8em 1.5em .8em 0;
     color: #8C8C8C;
     -webkit-transition: all 0.3s;
@@ -24,11 +24,12 @@
     top: 365px;
   }
   &__wrapper h3{
-    font-size: 1.125em;
-    font-weight: $base-font-regular;
+    font-size: 1.3em;
+    font-weight: $base-font-semibold;
+    margin-bottom: .5em;
   }
   &__internal{
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-items: center;
     flex-direction: row;
@@ -38,7 +39,9 @@
     margin-right: 2em;
   }
   &__internal label{
-    margin-bottom: .2em;
+    font-size: 1em;
+    font-weight: $base-font-regular;
+    margin-bottom: .4em;
   }
 
   &.selector__hrformat{
@@ -89,18 +92,29 @@
   &__range{
     z-index: 1;
     position: relative;
-    top: 51px;
+    top: 65px;
     left: 13px;
   }
 
   &__clear{
-    margin-left: 1170px;
     position: relative;
-    z-index: 2;
+    margin-left: auto;
     &:after {
       position: absolute;
       font-family: 'FontAwesome';
       content: '\f00d';
+      color: $white;
+      font-weight: 900;
+      top: .25em;
+      left: 1em;
+    }
+  }
+  &__refresh{
+    position: relative;
+    &:after {
+      position: absolute;
+      font-family: 'FontAwesome';
+      content: '\f01e';
       color: $white;
       font-weight: 900;
       top: .25em;

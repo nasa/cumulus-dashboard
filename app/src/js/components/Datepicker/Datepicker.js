@@ -200,19 +200,30 @@ class Datepicker extends React.PureComponent {
                 <label>Time Hour Format</label>
                 { this.renderHourFormatSelect() }
               </li>
+              <li className="datetime__controls">
+                <ul>
+                  <li className="datetime__refresh">
+                    <button
+                      className="button button--small"
+                      data-cy="datetime-refresh">
+                      Refresh Results
+                    </button>
+                  </li>
+                  <li className="datetime__clear">
+                    <button
+                      className="button button--secondary button--small"
+                      onClick={this.clear}
+                      data-cy="datetime-clear" >
+                      Clear All
+                    </button>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </div>
           <div className="datetime__wrapper">
             <h3>Date and Time Range</h3>
           </div>
-        </div>
-        <div className="datetime__clear">
-          <button
-            className="button button--small"
-            onClick={this.clear}
-            data-cy="datetime-clear" >
-            Clear All
-          </button>
         </div>
       </div>
     );
