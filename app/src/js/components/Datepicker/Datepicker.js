@@ -50,7 +50,9 @@ class Datepicker extends React.PureComponent {
 
   refresh (e) {
     const { value, label } = this.props.dateRange;
-    this.props.dispatch(this.dispatchDropdownUpdate(value, label));
+    if (label !== 'Custom') {
+      this.props.dispatch(this.dispatchDropdownUpdate(value, label));
+    }
   }
 
   clear () {
