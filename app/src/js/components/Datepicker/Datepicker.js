@@ -21,7 +21,10 @@ const allDateRanges = [
   {value: 180, label: 'Last 180 days'},
   {value: 366, label: 'Last year'}
 ];
-const allHourFormats = ['12HR', '24HR'];
+const allHourFormats = [
+  {value:'12HR', label: '12HR'},
+  {value: '24HR', label: '24HR'}
+];
 const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss.sss';
 
 /*
@@ -139,23 +142,15 @@ class Datepicker extends React.PureComponent {
 
     return (
       <React.Fragment>
-        {allHourFormats.map((option, i) => {
-          return (
-            <label className="selector__hrformat" key={i}>
-              <input
-                type="radio"
-                name={name}
-                value={option}
-                key={i}
-                checked={option === this.props.hourFormat}
-                onChange={this.handleHourFormatChange}
-              />
-              <span className="selector"></span>
-              {option}
-            </label>
-          );
-        })
-        }
+        <div className="datetime selector__hrformat">
+          <select
+            type='text'
+            name={name}
+            value={this.props.hourFormat.value}
+            onChange={this.handleHourFormatChange}>
+            {allHourFormats.map((option, i) => <option value={option.value} key={i}>{option.label}</option>)}
+          </select>
+        </div>
       </React.Fragment>
     );
   }
@@ -194,15 +189,15 @@ class Datepicker extends React.PureComponent {
                 { this.renderDateRangeDropDown() }
               </li>
               <li data-cy='startDateTime'>
+                <label>Start Date and Time</label>
                 { this.renderDateTimeRange('startDateTime') }
               </li>
-              <li>
-                <span> to </span>
-              </li>
               <li data-cy='endDateTime'>
+                <label>End Date and Time</label>
                 { this.renderDateTimeRange('endDateTime') }
               </li>
               <li className="selector__hrformat" data-cy='hourFormat'>
+                <label>Time Hour Format</label>
                 { this.renderHourFormatSelect() }
               </li>
             </ul>
@@ -216,7 +211,7 @@ class Datepicker extends React.PureComponent {
             className="button button--small"
             onClick={this.clear}
             data-cy="datetime-clear" >
-            Clear Selection
+            Clear All
           </button>
         </div>
       </div>
