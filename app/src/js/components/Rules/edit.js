@@ -13,23 +13,26 @@ import EditRaw from '../EditRaw/edit-raw';
 
 const SCHEMA_KEY = 'rule';
 
-class EditRule extends React.Component {
-  render () {
-    const { match: { params: { ruleName } }, rules } = this.props;
-    return (
-      <EditRaw
-        pk={ruleName}
-        schemaKey={SCHEMA_KEY}
-        primaryProperty={'name'}
-        state={rules}
-        getRecord={() => getRule(ruleName)}
-        updateRecord={updateRule}
-        backRoute={`/rules/rule/${ruleName}`}
-        clearRecordUpdate={clearUpdateRule}
-      />
-    );
-  }
-}
+const EditRule = ({
+  match,
+  rules
+}) => {
+  const { params: { ruleName } } = match;
+
+  return (
+    <EditRaw
+      pk={ruleName}
+      schemaKey={SCHEMA_KEY}
+      primaryProperty='name'
+      state={rules}
+      getRecord={() => getRule(ruleName)}
+      updateRecord={updateRule}
+      backRoute={`/rules/rule/${ruleName}`}
+      clearRecordUpdate={clearUpdateRule}
+      hasModal={true}
+    />
+  );
+};
 
 EditRule.propTypes = {
   match: PropTypes.object,

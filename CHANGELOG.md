@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- **CUMULUS-1535**
+  - Adds a confirmation modal when editing a rule
+
 - **CUMULUS-1758**
   - Adds the ability to resize table columns
 
