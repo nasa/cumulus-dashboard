@@ -168,19 +168,44 @@ describe('Rules page', () => {
       cy.contains('.ace_variable', 'name');
       cy.editJsonTextarea({ data: { provider }, update: true });
       cy.contains('form button', 'Submit').click();
+      cy.contains('.default-modal .edit-rule__title', 'Edit Rule');
+      cy.contains('.default-modal .modal-body', `Rule ${testRuleName} has been updated`);
+      cy.contains('.modal-footer button', 'Close').click();
+
+      // displays the updated rule
       cy.contains('.heading--large', testRuleName);
       cy.get('.metadata__details')
         .within(() => {
           cy.contains('Provider').next().should('have.text', provider);
         });
 
-      cy.contains('a', 'Back to Rules').click();
-      cy.contains('.heading--large', 'Rule Overview');
-      cy.contains('.table .tr', testRuleName)
-        .within(() => {
-          cy.contains(provider)
-            .should('have.attr', 'href', `/providers/provider/${provider}`);
-        });
+      // verify the collection is updated by looking at the Edit page
+      cy.contains('a', 'Edit').click();
+
+      cy.contains('.ace_variable', 'name');
+      cy.getJsonTextareaValue().then((ruleJson) => {
+        expect(ruleJson.provider).to.equal(provider);
+      });
+      cy.contains('.heading--large', testRuleName);
+
+      // Test error flow
+      const errorRuleType = 'test';
+      cy.contains('.ace_variable', 'name');
+      cy.editJsonTextarea({ data: { rule: { type: errorRuleType } }, update: true });
+
+      // Edit Rule should allow for continued editing
+      cy.contains('form button', 'Submit').click();
+      cy.contains('.default-modal .edit-rule__title', 'Edit Rule');
+      cy.contains('.default-modal .modal-body', `Rule ${testRuleName} has encountered an error.`);
+      cy.contains('.modal-footer button', 'Edit Rule').click();
+      cy.url().should('include', `rules/edit/${testRuleName}`);
+
+      // Cancel Request should return to rule page
+      cy.contains('form button', 'Submit').click();
+      cy.contains('.modal-footer button', 'Cancel Request').click();
+      // cy.wait('@getCollection');
+      cy.contains('.heading--xlarge', 'Rules');
+      cy.contains('.heading--large', `${testRuleName}`);
     });
 
     it('deleting a rule should remove it from the list', () => {
