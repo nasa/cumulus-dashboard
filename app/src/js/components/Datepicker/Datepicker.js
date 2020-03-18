@@ -185,7 +185,7 @@ class Datepicker extends React.PureComponent {
             value={utcValue}
             yearPlaceholder='YYYY'
           />
-        ) : <div className="placeholder">{placeholder}</div>
+        ) : <div className="datetime__placeholder react-datetime-picker__wrapper react-datetime-picker__inputGroup">{placeholder}</div>
         }
       </div>
     );
