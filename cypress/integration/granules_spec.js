@@ -142,7 +142,7 @@ describe('Dashboard Granules Page', () => {
     });
 
     it.skip('should Update overview Tiles when datepicker state changes.', () => {
-      // TODO Enable test when
+      // TODO Enable test when CUMULUS-1805 is completed
       cy.visit('/granules');
       cy.url().should('include', 'granules');
       cy.contains('.heading--xlarge', 'Granules');
