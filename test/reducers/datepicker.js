@@ -3,14 +3,12 @@
 import test from 'ava';
 import sinon from 'sinon';
 import reducer, { initialState } from '../../app/src/js/reducers/datepicker';
-import { allDateRanges } from '../../app/src/js/utils/datepicker';
+import { allDateRanges, msPerDay } from '../../app/src/js/utils/datepicker';
 import {
   DATEPICKER_DATECHANGE,
   DATEPICKER_DROPDOWN_FILTER,
   DATEPICKER_HOUR_FORMAT
 } from '../../app/src/js/actions/types';
-
-const secondsPerDay = 60 * 60 * 24;
 
 test('verify initial state', (t) => {
   const inputstate = { some: 'initialState' };
@@ -24,7 +22,7 @@ test('reducer sets initial state to "Recent" on first initialization run.', (t) 
   const actual = reducer(undefined, { type: 'ANY' });
   t.is(actual.dateRange.label, 'Recent');
   t.is(actual.dateRange.value, 'Recent');
-  t.is(actual.startDateTime.valueOf(), (new Date(testStart - secondsPerDay * 1000)).valueOf());
+  t.is(actual.startDateTime.valueOf(), (new Date(testStart - msPerDay)).valueOf());
   t.is(actual.endDateTime, null);
   t.is(actual.hourFormat, '12HR');
   sinon.restore();
@@ -49,7 +47,7 @@ test('Dropdown: "Recent" sets start time to 24 hours ago and unsets end time.', 
 
   t.is(actual.dateRange.label, 'Recent');
   t.is(actual.dateRange.value, 'Recent');
-  t.is(actual.startDateTime.valueOf(), (new Date(testStart - secondsPerDay * 1000)).valueOf());
+  t.is(actual.startDateTime.valueOf(), (new Date(testStart - msPerDay)).valueOf());
   t.is(actual.endDateTime, null);
   sinon.restore();
 });

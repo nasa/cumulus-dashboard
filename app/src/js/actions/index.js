@@ -11,7 +11,7 @@ import clonedeep from 'lodash.clonedeep';
 import { configureRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId, collectionNameVersion } from '../utils/format';
-import { fetchCurrentTimeFilters } from '../utils/datepicker';
+import { fetchCurrentTimeFilters, msPerDay } from '../utils/datepicker';
 import log from '../utils/log';
 import { authHeader } from '../utils/basic-auth';
 import { apiGatewaySearchTemplate } from './action-config/apiGatewaySearch';
@@ -29,8 +29,6 @@ const {
   pageLimit,
   minCompatibleApiVersion
 } = _config;
-
-const millisecondsPerDay = 24 * 60 * 60 * 1000;
 
 /**
  * match MMT to CMR environment.
@@ -457,7 +455,7 @@ export const getStats = (options) => {
 export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
   const stackName = cumulusInstanceMeta.stackName;
   const now = Date.now();
-  const twentyFourHoursAgo = now - millisecondsPerDay;
+  const twentyFourHoursAgo = now - msPerDay;
   if (!esRoot) return { type: types.NOOP };
   return {
     [CALL_API]: {
@@ -474,7 +472,7 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
 export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
   const stackName = cumulusInstanceMeta.stackName;
   const now = Date.now();
-  const twentyFourHoursAgo = now - millisecondsPerDay;
+  const twentyFourHoursAgo = now - msPerDay;
   if (!esRoot) return { type: types.NOOP };
   if (!showDistributionAPIMetrics) return {type: types.NOOP};
   return {
@@ -492,7 +490,7 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
 export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
   const stackName = cumulusInstanceMeta.stackName;
   const now = Date.now();
-  const twentyFourHoursAgo = now - millisecondsPerDay;
+  const twentyFourHoursAgo = now - msPerDay;
   if (!esRoot) return { type: types.NOOP };
   if (!showTeaMetrics) return { type: types.NOOP };
   return {
@@ -510,7 +508,7 @@ export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
 export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
   const stackName = cumulusInstanceMeta.stackName;
   const now = Date.now();
-  const twentyFourHoursAgo = now - millisecondsPerDay;
+  const twentyFourHoursAgo = now - msPerDay;
   if (!esRoot) return { type: types.NOOP };
   return {
     [CALL_API]: {
