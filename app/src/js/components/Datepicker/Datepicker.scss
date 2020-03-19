@@ -2,6 +2,16 @@
   &__info{
     font-weight: $base-font-regular;
   }
+  &__header{
+    display: flex;
+    justify-content: space-between;
+  }
+  &__header li:first-child{
+    float: left;
+  }
+  &__header li:nth-child(2){
+    float: right;
+  }
   &__wrapper{
     background-color: $white;
     padding: 1.5em 1em .5em;
@@ -10,8 +20,8 @@
     border: 1px solid #eceaea;
     box-shadow: $shadow__default;
     font-size: .86em;
-    width: 1255px;
-    height: 115px;
+    width: 1015px;
+    height: 127px;
     margin: .8em 1.5em .8em 0;
     color: #8C8C8C;
     -webkit-transition: all 0.3s;
@@ -27,6 +37,13 @@
     font-size: 1.3em;
     font-weight: $base-font-semibold;
     margin-bottom: .5em;
+  }
+  &__wrapper hr{
+    height: 1px;
+    background-color: $lightest-grey;
+    border: none;
+    margin-bottom: 1em;
+    margin-top: .25em;
   }
   &__internal{
     display: flex;
@@ -93,13 +110,14 @@
   &__range{
     z-index: 1;
     position: relative;
-    top: 65px;
-    left: 13px;
+    top: 77px;
+    left: 25px;
+    display: flex;
   }
 
   &__clear{
     position: relative;
-    margin-left: auto;
+    margin: 1em 0em 0em 7.5em;
     &:after {
       position: absolute;
       font-family: 'FontAwesome';

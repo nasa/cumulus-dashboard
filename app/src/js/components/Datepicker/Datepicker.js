@@ -191,33 +191,38 @@ class Datepicker extends React.PureComponent {
                 { this.renderDateTimeRange('endDateTime') }
               </li>
               <li className="selector__hrformat" data-cy='hourFormat'>
-                <label>Time Hour Format</label>
+                <label>Time Format</label>
                 { this.renderHourFormatSelect() }
               </li>
-              <li className="datetime__controls">
-                <ul>
-                  <li className="datetime__refresh">
-                    <button
-                      className="button button--small"
-                      onClick={this.refresh}
-                      data-cy="datetime-refresh">
-                      Refresh Results
-                    </button>
-                  </li>
-                  <li className="datetime__clear">
-                    <button
-                      className="button button--secondary button--small"
-                      onClick={this.clear}
-                      data-cy="datetime-clear" >
-                      Clear All
-                    </button>
-                  </li>
-                </ul>
+              <li>
+                <div className="datetime__clear">
+                  <button
+                    className="button button--secondary button--small"
+                    onClick={this.clear}
+                    data-cy="datetime-clear" >
+                    Clear All
+                  </button>
+                </div>
               </li>
             </ul>
           </div>
           <div className="datetime__wrapper">
-            <h3>Date and Time Range</h3>
+            <ul className="datetime__header">
+              <li>
+                <h3>Date and Time Range</h3>
+              </li>
+              <li>
+                <div className="datetime__refresh">
+                  <button
+                    className="button button--small"
+                    onClick={this.refresh}
+                    data-cy="datetime-refresh">
+                    Refresh Time
+                  </button>
+                </div>
+              </li>
+            </ul>
+            <hr></hr>
           </div>
         </div>
       </div>
