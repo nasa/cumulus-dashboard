@@ -1,7 +1,8 @@
 'use strict';
 
 export const urlDateFormat = 'YYYYMMDDHHmmSS';
-export const secondsPerDay = 60.0 * 60.0 * 24.0;
+const secondsPerDay = 60.0 * 60.0 * 24.0;
+export const msPerDay = secondsPerDay * 1000.0;
 
 export const allDateRanges = [
   {value: 'Custom', label: 'Custom'},
@@ -34,7 +35,7 @@ export const urlDateProps = matchObjects.map((o) => o.dateProp);
 export const dropdownValue = (values) => {
   let dropdownInfo = {value: 'Custom', label: 'Custom'};
   if (!!values.startDateTime && !!values.endDateTime) {
-    const durationDays = ((values.endDateTime.valueOf() - values.startDateTime.valueOf()) / 1000.0) / secondsPerDay;
+    const durationDays = (values.endDateTime.valueOf() - values.startDateTime.valueOf()) / msPerDay;
     dropdownInfo = allDateRanges.find((r) => r.value === durationDays) || dropdownInfo;
   }
   return dropdownInfo;

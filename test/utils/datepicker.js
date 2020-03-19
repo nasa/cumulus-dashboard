@@ -6,7 +6,7 @@ import {
   fetchCurrentTimeFilters,
   dropdownValue,
   allDateRanges,
-  secondsPerDay
+  msPerDay
 } from '../../app/src/js/utils/datepicker';
 
 import { initialState } from '../../app/src/js/reducers/datepicker';
@@ -91,7 +91,7 @@ test('dropdownValue returns the correct value/label when datetimes match a dropd
   testValues.forEach((testValue) => {
     const endDateTime = new Date(Date.now());
     const startDateTime = new Date(
-      endDateTime.valueOf() - testValue * secondsPerDay * 1000
+      endDateTime.valueOf() - testValue * msPerDay
     );
     const values = {
       endDateTime,

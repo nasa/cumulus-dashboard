@@ -5,15 +5,13 @@ import {
   DATEPICKER_DROPDOWN_FILTER,
   DATEPICKER_HOUR_FORMAT
 } from '../actions/types';
-import { secondsPerDay, allDateRanges } from '../utils/datepicker';
-
-const daysToMilliseconds = 1000 * secondsPerDay;
+import { msPerDay, allDateRanges } from '../utils/datepicker';
 
 // Also becomes default props for Datepicker
 export const initialState = () => {
   const now = new Date(Date.now());
   return {
-    startDateTime: new Date(now - daysToMilliseconds),
+    startDateTime: new Date(now - msPerDay),
     endDateTime: null,
     dateRange: allDateRanges.find((a) => a.value === 'Recent'),
     hourFormat: '12HR'
@@ -34,7 +32,7 @@ const computeDateTimeDelta = (timeDeltaInDays) => {
   if (!isNaN(timeDeltaInDays)) {
     endDateTime = new Date(Date.now());
     startDateTime = new Date(
-      endDateTime - timeDeltaInDays * daysToMilliseconds
+      endDateTime - timeDeltaInDays * msPerDay
     );
   }
   return { startDateTime, endDateTime };
@@ -47,7 +45,7 @@ const computeDateTimeDelta = (timeDeltaInDays) => {
 */
 const recentData = () => {
   const endDateTime = null;
-  const startDateTime = new Date(Date.now() - secondsPerDay * 1000);
+  const startDateTime = new Date(Date.now() - msPerDay);
   return {startDateTime, endDateTime, dateRange: allDateRanges.find((a) => a.value === 'Recent')};
 };
 
