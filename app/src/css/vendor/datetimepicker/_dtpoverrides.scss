@@ -47,10 +47,10 @@ styling overrides
   color: $black !important;
 }
 
-/* .react-datetime-picker__calendar .react-calendar, .react-datetime-picker__clock.react-datetime-picker__clock--open, .react-datetime-picker__calendar-button.react-datetime-picker__button {
+.react-datetime-picker__clock.react-datetime-picker__clock--open {
   visibility: hidden;
   display: none;
-} */
+}
 
 .react-datetime-picker__wrapper {
   border: 1px solid lighten($lightest-grey, 4%) !important;
