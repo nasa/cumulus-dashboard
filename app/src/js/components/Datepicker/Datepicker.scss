@@ -38,6 +38,7 @@
     justify-content: space-evenly;
     margin-right: 2em;
   }
+
   &__internal label{
     font-size: 1em;
     font-weight: $base-font-regular;
@@ -109,6 +110,7 @@
       left: 1em;
     }
   }
+
   &__refresh{
     position: relative;
     &:after {

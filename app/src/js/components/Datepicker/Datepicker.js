@@ -8,24 +8,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import { DATEPICKER_DATECHANGE, DATEPICKER_DROPDOWN_FILTER, DATEPICKER_HOUR_FORMAT } from '../../actions/types';
-import { urlDateFormat, urlDateProps } from '../../utils/datepicker';
-
-const allDateRanges = [
-  {value: 'All', label: 'All'},
-  {value: 'Custom', label: 'Custom'},
-  {value: 1 / 24.0, label: 'Last hour'},
-  {value: 1, label: 'Last 24 hours'},
-  {value: 7, label: 'Last week'},
-  {value: 30, label: 'Last 30 Days'},
-  {value: 60, label: 'Last 60 days'},
-  {value: 180, label: 'Last 180 days'},
-  {value: 366, label: 'Last year'}
-];
-const allHourFormats = [
-  {value: '12HR', label: '12HR'},
-  {value: '24HR', label: '24HR'}
-];
-const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss.sss';
+import { allDateRanges, allHourFormats, dropdownValue, dateTimeFormat, urlDateFormat, urlDateProps } from '../../utils/datepicker';
 
 /*
  * If this is a shared URL, grab the date and time and update the datepicker
@@ -41,7 +24,7 @@ const updateDatepickerStateFromQueryParams = (props) => {
         values[value] = moment.utc(values[value], urlDateFormat).toDate();
       }
     }
-    values.dateRange = {value: 'Custom', label: 'Custom'};
+    values.dateRange = dropdownValue(values);
     props.dispatch({type: 'DATEPICKER_DATECHANGE', data: {...props.datepicker, ...values}});
   }
 };
@@ -58,14 +41,22 @@ class Datepicker extends React.PureComponent {
     this.handleHourFormatChange = this.handleHourFormatChange.bind(this);
     this.handleDateTimeRangeChange = this.handleDateTimeRangeChange.bind(this);
     this.clear = this.clear.bind(this);
+    this.refresh = this.refresh.bind(this);
   }
 
   componentDidMount () {
     updateDatepickerStateFromQueryParams(this.props);
   }
 
+  refresh (e) {
+    const { value, label } = this.props.dateRange;
+    if (label !== 'Custom') {
+      this.props.dispatch(this.dispatchDropdownUpdate(value, label));
+    }
+  }
+
   clear () {
-    const { value, label } = allDateRanges.find(a => a.label === 'All');
+    const { value, label } = allDateRanges.find(a => a.label === 'Custom');
     this.props.dispatch(this.dispatchDropdownUpdate(value, label));
   }
 
@@ -205,6 +196,7 @@ class Datepicker extends React.PureComponent {
                   <li className="datetime__refresh">
                     <button
                       className="button button--small"
+                      onClick={this.refresh}
                       data-cy="datetime-refresh">
                       Refresh Results
                     </button>
@@ -238,7 +230,7 @@ Datepicker.propTypes = {
   }),
   startDateTime: PropTypes.instanceOf(Date),
   endDateTime: PropTypes.instanceOf(Date),
-  hourFormat: PropTypes.oneOf(allHourFormats),
+  hourFormat: PropTypes.oneOf(allHourFormats.map((a) => a.label)),
   queryParams: PropTypes.object,
   setQueryParams: PropTypes.func,
   onChange: PropTypes.func,
