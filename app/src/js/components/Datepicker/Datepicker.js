@@ -87,8 +87,11 @@ class Datepicker extends React.PureComponent {
   handleDateTimeRangeChange (name, newValue) {
     // User input is in UTC, but the DateTimePicker component interprets it's
     // data as local time.  So we need convert the Date value to UTC.
-    const utcValue = moment.utc(moment(newValue).format(dateTimeFormat)).toDate();
-    if (isNaN(utcValue.valueOf())) return;
+    let utcValue = null;
+    if (newValue !== null) {
+      utcValue = moment.utc(moment(newValue).format(dateTimeFormat)).toDate();
+      if (isNaN(utcValue)) return;
+    }
     const updatedProps = {
       startDateTime: this.props.startDateTime,
       endDateTime: this.props.endDateTime,
