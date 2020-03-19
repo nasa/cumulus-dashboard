@@ -111,13 +111,15 @@
     z-index: 1;
     position: relative;
     top: 77px;
-    left: 25px;
     display: flex;
+    justify-content: center;
+    width: 1040px;
   }
 
   &__clear{
     position: relative;
-    margin: 1em 0em 0em 7.5em;
+    margin: .7em 0em 0em 5.1em !important;
+    float: right;
     &:after {
       position: absolute;
       font-family: 'FontAwesome';
