@@ -9,6 +9,8 @@ import {
   providerLink,
   fullDate,
   lastUpdated,
+  enableText,
+  disableText,
   rerunText,
   deleteText
 } from '../../utils/format';
@@ -119,12 +121,16 @@ class Rule extends React.Component {
       action: this.enable,
       disabled: data.type === 'onetime',
       status: enabledStatus,
+      confirmAction: true,
+      confirmText: enableText(ruleName),
       success: this.reload
     }, {
       text: 'Disable',
       action: this.disable,
       disabled: data.type === 'onetime',
       status: disabledStatus,
+      confirmAction: true,
+      confirmText: disableText(ruleName),
       success: this.reload
     }, {
       text: 'Delete',

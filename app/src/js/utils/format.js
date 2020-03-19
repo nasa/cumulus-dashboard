@@ -166,6 +166,22 @@ export const collectionHref = function (collectionId) {
   return `/collections/collection/${name}/${version}`;
 };
 
+export const enableText = function (name) {
+  return `You are enabling rule ${name}`;
+};
+
+export const enableConfirm = function (name) {
+  return `Rule ${name} was enabled`;
+};
+
+export const disableText = function (name) {
+  return `You are disabling rule ${name}`;
+};
+
+export const disableConfirm = function (name) {
+  return `Rule ${name} was disabled`;
+};
+
 export const deleteText = function (name) {
   return `Are you sure you want to permanently delete ${name}?`;
 };
