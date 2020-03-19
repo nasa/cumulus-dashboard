@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1798**
   - Add a refresh button
+  - Add individual cancel buttons for date time range inputs
 
 - **CUMULUS-1526**
   - Add a copy rule button
