@@ -1,7 +1,9 @@
 {
   "baseUrl": "http://localhost:3000",
   "env": {
-    "APIROOT": "http://localhost:5001"
+    "APIROOT": "http://localhost:5001",
+    "ESROOT": "http://example.com",
+    "SHOW_DISTRIBUTION_API_METRICS": true
   },
   "nodeVersion": "system"
 }
