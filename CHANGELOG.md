@@ -7,15 +7,39 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+
 ### Added
+
+- **CUMULUS-1526**
+  - Add a copy rule button
+
+### Changed
+
+
+- **CUMULUS-1790**
+  - Changes default values and visuals for home page's datepicker. When the page loads, it defauls to display "Recent" data, which is the previous 24 hours with no end time.
+
+## [v1.7.2] - 2020-03-16
+
+### Added
+
+- **CUMULUS-1535**
+  - Adds a confirmation modal when editing a rule
 
 - **CUMULUS-1758**
   - Adds the ability to resize table columns
 
 ### Changed
 
+- **CUMULUS-1693**
+  - Updates the bulk delete collection flow
+
 - **CUMULUS-1758**
   - Updates table implementation to use [react-table](https://github.com/tannerlinsley/react-table)
+
+## [v1.7.1] - 2020-03-06
+
+Fix for serving the dashboard through the Cumulus API.
 
 ## [v1.7.0] - 2020-03-02
 
@@ -265,7 +289,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.7.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.7.2...HEAD
+[v1.7.2]: https://github.com/nasa/cumulus-dashboard/compare/v1.7.1...v1.7.2
+[v1.7.1]: https://github.com/nasa/cumulus-dashboard/compare/v1.7.0...v1.7.1
 [v1.7.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.6.1...v1.7.0
 [v1.6.1]: https://github.com/nasa/cumulus-dashboard/compare/v1.6.0...v1.6.1
 [v1.6.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.5.0...v1.6.0

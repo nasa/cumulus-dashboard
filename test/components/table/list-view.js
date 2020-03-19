@@ -13,7 +13,7 @@ configure({ adapter: new Adapter() });
 
 test('table should properly initialize timer config prop', async (t) => {
   const dispatch = () => Promise.resolve();
-  const query = { q: '_exists_:error AND status:failed' };
+  const query = { error__exists: true, status: 'failed' };
   const list = {
     meta: {},
     data: []

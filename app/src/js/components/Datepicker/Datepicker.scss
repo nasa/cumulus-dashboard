@@ -10,7 +10,7 @@
     border: 1px solid #eceaea;
     box-shadow: $shadow__default;
     font-size: .86em;
-    width: 775px;
+    width: 780px;
     height: 80px;
     margin: .8em 1.5em .8em 0;
     color: #8C8C8C;
@@ -38,7 +38,7 @@
     font-size: 2em;
     margin-right: .25em;
   }
-  
+
   &__internal .selector__hrformat{
     display: block;
     position: relative;
@@ -103,14 +103,14 @@
       color: $white;
       font-weight: 900;
       top: 1em;
-      left: 7em;
+      left: 8.3em;
     }
   }
 
   &.dropdown__dtrange select{
     background-color: $ocean-blue;
     color: $white;
-    width: 120px;
+    width: 135px;
     height: 35px;
     font-size: 14px;
     position: relative;

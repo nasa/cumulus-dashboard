@@ -47,6 +47,7 @@ class Dropdown extends React.Component {
     this.state = { value };
     this.onSelect = this.onSelect.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
@@ -78,6 +79,7 @@ class Dropdown extends React.Component {
   }
 
   onChange (e) {
+    e.preventDefault();
     const { dispatch, clear, paramKey, setQueryParams } = this.props;
     const { value } = e.target;
     this.setState({ value });
@@ -85,6 +87,10 @@ class Dropdown extends React.Component {
       dispatch(clear(paramKey));
       setQueryParams({ [paramKey]: undefined });
     }
+  }
+
+  onSubmit (e) {
+    e.preventDefault();
   }
 
   render () {
@@ -101,7 +107,7 @@ class Dropdown extends React.Component {
     return (
       <div className='filter__item'>
         {label ? <label htmlFor={formID}>{label}</label> : null}
-        <form className='form-group__element' id={formID}>
+        <form className='form-group__element' id={formID} onSubmit={this.onSubmit}>
           <Autocomplete
             getItemValue={item => item.value}
             items={items}
