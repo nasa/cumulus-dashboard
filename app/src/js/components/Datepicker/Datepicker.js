@@ -41,10 +41,18 @@ class Datepicker extends React.PureComponent {
     this.handleHourFormatChange = this.handleHourFormatChange.bind(this);
     this.handleDateTimeRangeChange = this.handleDateTimeRangeChange.bind(this);
     this.clear = this.clear.bind(this);
+    this.refresh = this.refresh.bind(this);
   }
 
   componentDidMount () {
     updateDatepickerStateFromQueryParams(this.props);
+  }
+
+  refresh (e) {
+    const { value, label } = this.props.dateRange;
+    if (label !== 'Custom') {
+      this.props.dispatch(this.dispatchDropdownUpdate(value, label));
+    }
   }
 
   clear () {
@@ -79,8 +87,11 @@ class Datepicker extends React.PureComponent {
   handleDateTimeRangeChange (name, newValue) {
     // User input is in UTC, but the DateTimePicker component interprets it's
     // data as local time.  So we need convert the Date value to UTC.
-    const utcValue = moment.utc(moment(newValue).format(dateTimeFormat)).toDate();
-    if (isNaN(utcValue.valueOf())) return;
+    let utcValue = null;
+    if (newValue !== null) {
+      utcValue = moment.utc(moment(newValue).format(dateTimeFormat)).toDate();
+      if (isNaN(utcValue)) return;
+    }
     const updatedProps = {
       startDateTime: this.props.startDateTime,
       endDateTime: this.props.endDateTime,
@@ -125,23 +136,15 @@ class Datepicker extends React.PureComponent {
 
     return (
       <React.Fragment>
-        {allHourFormats.map((option, i) => {
-          return (
-            <label className="selector__hrformat" key={i}>
-              <input
-                type="radio"
-                name={name}
-                value={option}
-                key={i}
-                checked={option === this.props.hourFormat}
-                onChange={this.handleHourFormatChange}
-              />
-              <span className="selector"></span>
-              {option}
-            </label>
-          );
-        })
-        }
+        <div className="datetime selector__hrformat">
+          <select
+            type='text'
+            name={name}
+            value={this.props.hourFormat.value}
+            onChange={this.handleHourFormatChange}>
+            {allHourFormats.map((option, i) => <option value={option.value} key={i}>{option.label}</option>)}
+          </select>
+        </div>
       </React.Fragment>
     );
   }
@@ -180,30 +183,45 @@ class Datepicker extends React.PureComponent {
                 { this.renderDateRangeDropDown() }
               </li>
               <li data-cy='startDateTime'>
+                <label>Start Date and Time</label>
                 { this.renderDateTimeRange('startDateTime') }
               </li>
-              <li>
-                <span> to </span>
-              </li>
               <li data-cy='endDateTime'>
+                <label>End Date and Time</label>
                 { this.renderDateTimeRange('endDateTime') }
               </li>
               <li className="selector__hrformat" data-cy='hourFormat'>
+                <label>Time Format</label>
                 { this.renderHourFormatSelect() }
+              </li>
+              <li className="datetime__clear">
+                <button
+                  className="button button--secondary button--small"
+                  onClick={this.clear}
+                  data-cy="datetime-clear" >
+                  Clear All
+                </button>
               </li>
             </ul>
           </div>
           <div className="datetime__wrapper">
-            <h3>Date and Time Range</h3>
+            <ul className="datetime__header">
+              <li>
+                <h3>Date and Time Range</h3>
+              </li>
+              <li>
+                <div className="datetime__refresh">
+                  <button
+                    className="button button--small"
+                    onClick={this.refresh}
+                    data-cy="datetime-refresh">
+                    Refresh Time
+                  </button>
+                </div>
+              </li>
+            </ul>
+            <hr></hr>
           </div>
-        </div>
-        <div className="datetime__clear">
-          <button
-            className="button button--small"
-            onClick={this.clear}
-            data-cy="datetime-clear" >
-            Clear Selection
-          </button>
         </div>
       </div>
     );
@@ -218,7 +236,7 @@ Datepicker.propTypes = {
   }),
   startDateTime: PropTypes.instanceOf(Date),
   endDateTime: PropTypes.instanceOf(Date),
-  hourFormat: PropTypes.oneOf(allHourFormats),
+  hourFormat: PropTypes.oneOf(allHourFormats.map((a) => a.label)),
   queryParams: PropTypes.object,
   setQueryParams: PropTypes.func,
   onChange: PropTypes.func,

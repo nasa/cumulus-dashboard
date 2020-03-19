@@ -98,7 +98,7 @@ describe('Dashboard Home Page', () => {
 
         // URL doesn't change based on hour format
         cy.get('[data-cy=hourFormat]').within(() => {
-          cy.get('input[value=24HR]').click({force: true});
+          cy.get('.datetime > select').select('24HR');
           cy.url().should('include', 'startDateTime=20081229133500');
           cy.url().should('include', 'endDateTime=20090105133500');
         });

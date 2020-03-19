@@ -15,7 +15,10 @@ export const allDateRanges = [
   {value: 180, label: '6 months'},
   {value: 366, label: '1 year'}
 ];
-export const allHourFormats = ['12HR', '24HR'];
+export const allHourFormats = [
+  {value: '12HR', label: '12HR'},
+  {value: '24HR', label: '24HR'}
+];
 export const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss.sss';
 
 // These are created as lists of objects so that we can keep them together when

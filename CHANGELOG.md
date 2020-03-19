@@ -10,11 +10,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- **CUMULUS-1798**
+  - Add a refresh button
+  - Add individual cancel buttons for date time range inputs
+
 - **CUMULUS-1526**
   - Add a copy rule button
 
 ### Changed
 
+- **CUMULUS-1798**
+  - Change the 12HR/24HR Format selector from radio to dropdown
+  - Hide clock component in react-datetime-picker
 
 - **CUMULUS-1790**
   - Changes default values and visuals for home page's datepicker. When the page loads, it defauls to display "Recent" data, which is the previous 24 hours with no end time.
