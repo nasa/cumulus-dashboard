@@ -170,6 +170,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@fortawesome/react-fontawesome": "^0.1.7",
+    "@reduxjs/toolkit": "^1.2.5",
     "assert": "^1.4.1",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.3.1",
