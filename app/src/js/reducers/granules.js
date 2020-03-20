@@ -67,7 +67,6 @@ export const initialState = {
 };
 
 export default createReducer(initialState, {
-
   [GRANULE]: (state, action) => {
     const { id, data } = action;
     set(state, ['map', id, 'inflight'], false);
@@ -166,11 +165,11 @@ export default createReducer(initialState, {
     set(state, ['bulk', config.requestId, 'error'], null);
   },
   [BULK_GRANULE_INFLIGHT]: (state, action) => {
-    const {  config } = action;
+    const { config } = action;
     set(state, ['bulk', config.requestId, 'status'], 'inflight');
   },
   [BULK_GRANULE_ERROR]: (state, action) => {
-    const {  config } = action;
+    const { config } = action;
     set(state, ['bulk', config.requestId, 'status'], 'error');
     set(state, ['bulk', config.requestId, 'error'], action.error);
   },

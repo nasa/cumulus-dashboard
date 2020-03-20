@@ -50,7 +50,6 @@ const recentData = () => {
 };
 
 export default function reducer (state = initialState(), action) {
-  state = { ...state };
   const { data } = action;
   switch (action.type) {
     case DATEPICKER_DROPDOWN_FILTER:
@@ -64,10 +63,9 @@ export default function reducer (state = initialState(), action) {
           return {...state, ...computeDateTimeDelta(data.dateRange.value), ...data};
       }
     case DATEPICKER_DATECHANGE:
-      state = { ...state, ...data };
-      break;
+      return { ...state, ...data };
     case DATEPICKER_HOUR_FORMAT:
-      state = { ...state, ...{hourFormat: data} };
+      return { ...state, ...{hourFormat: data} };
   }
   return state;
 }

@@ -26,7 +26,6 @@ export const initialState = {
 };
 
 export default createReducer(initialState, {
-
   [EXECUTIONS]: (state, action) => {
     set(state, ['list', 'data'], action.data.results);
     set(state, ['list', 'meta'], assignDate(action.data.meta));

@@ -6,6 +6,7 @@ import {
   EXECUTION_STATUS_INFLIGHT,
   EXECUTION_STATUS_ERROR
 } from '../actions/types';
+import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
   execution: null,
@@ -16,25 +17,20 @@ export const initialState = {
   meta: {}
 };
 
-export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
-  const { data } = action;
-
-  switch (action.type) {
-    case EXECUTION_STATUS:
-      set(state, ['inflight'], false);
-      set(state, ['error'], false);
-      set(state, ['execution'], data.execution);
-      set(state, ['executionHistory'], data.executionHistory);
-      set(state, ['stateMachine'], data.stateMachine);
-      break;
-    case EXECUTION_STATUS_INFLIGHT:
-      set(state, ['inflight'], true);
-      break;
-    case EXECUTION_STATUS_ERROR:
-      set(state, ['inflight'], false);
-      set(state, ['error'], action.error);
-      break;
-  }
-  return state;
-}
+export default createReducer(initialState, {
+  [EXECUTION_STATUS]: (state, action) => {
+    const { data } = action;
+    set(state, ['inflight'], false);
+    set(state, ['error'], false);
+    set(state, ['execution'], data.execution);
+    set(state, ['executionHistory'], data.executionHistory);
+    set(state, ['stateMachine'], data.stateMachine);
+  },
+  [EXECUTION_STATUS_INFLIGHT]: (state, action) => {
+    set(state, ['inflight'], true);
+  },
+  [EXECUTION_STATUS_ERROR]: (state, action) => {
+    set(state, ['inflight'], false);
+    set(state, ['error'], action.error);
+  },
+});

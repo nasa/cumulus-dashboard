@@ -5,18 +5,14 @@ import { getCollectionId } from '../utils/format';
 import {
   ADD_MMTLINK
 } from '../actions/types';
+import { createReducer } from '@reduxjs/toolkit';
 
 const initialState = {};
 
-export default function reducer (state = initialState, action) {
-  let newState;
-  const { data } = action;
-  switch (action.type) {
-    case ADD_MMTLINK:
-      newState = {...state};
-      const collectionId = getCollectionId(data);
-      set(newState, [collectionId], data.url);
-      break;
-  }
-  return newState || state;
-}
+export default createReducer(initialState, {
+  [ADD_MMTLINK]: (state, action) => {
+    const { data } = action;
+    const collectionId = getCollectionId(data);
+    set(state, [collectionId], data.url);
+  },
+});
