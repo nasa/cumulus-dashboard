@@ -10,7 +10,9 @@ import {
   fullDate,
   lastUpdated,
   enableText,
+  enableConfirm,
   disableText,
+  disableConfirm,
   rerunText,
   deleteText
 } from '../../utils/format';
@@ -123,6 +125,7 @@ class Rule extends React.Component {
       status: enabledStatus,
       confirmAction: true,
       confirmText: enableText(ruleName),
+      postActionText: enableConfirm(ruleName),
       success: this.reload
     }, {
       text: 'Disable',
@@ -131,6 +134,7 @@ class Rule extends React.Component {
       status: disabledStatus,
       confirmAction: true,
       confirmText: disableText(ruleName),
+      postActionText: disableConfirm(ruleName),
       success: this.reload
     }, {
       text: 'Delete',
