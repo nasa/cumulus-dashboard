@@ -34,8 +34,6 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               -e APIROOT=http://api:5001 \
-              -e ESROOT=http://example.com \
-              -e SHOW_DISTRIBUTION_API_METRICS=true \
               node:10.16.3 \
               npm run build
 
