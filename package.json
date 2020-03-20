@@ -25,6 +25,7 @@
     "build": "NODE_ENV=production webpack --config webpack.prod.js",
     "watch": "webpack --watch",
     "lint": "eslint app/src/js/ --ext .js",
+    "lint-fix": "eslint --fix app/src/js/ --ext .js",
     "cypress": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress open",
     "cypress-ci": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress run --spec 'cypress/integration/*' --config video=true",
     "validate": "ava cypress/validation-tests/*.js",
