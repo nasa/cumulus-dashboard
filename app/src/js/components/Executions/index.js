@@ -3,6 +3,7 @@ import React from 'react';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import ExecutionOverview from './overview';
 import ExecutionStatus from './execution-status';
 import ExecutionLogs from './execution-logs';
@@ -14,6 +15,7 @@ class Executions extends React.Component {
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge'>Executions</h1>
+            <DatePickerHeader />
           </div>
         </div>
         <div className='page__content'>

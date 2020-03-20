@@ -3,6 +3,7 @@ import React from 'react';
 import { withRouter, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import OperationOverview from './overview';
 
 class Operations extends React.Component {
@@ -12,6 +13,7 @@ class Operations extends React.Component {
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge'>Operation</h1>
+            <DatePickerHeader />
           </div>
         </div>
         <div className='page__content'>

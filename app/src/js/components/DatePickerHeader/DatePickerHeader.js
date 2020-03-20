@@ -1,11 +1,15 @@
+import { window } from '../../utils/browser';
+import Datapicker from '../Datepicker/Datepicker';
 import React from 'react';
 
 class DatePickerHeader extends React.Component {
+  handleChange () {
+    window.location.reload();
+  }
+
   render () {
     return (
-      <div className="DatePickerHeader">
-        <h1>Future Home For Component</h1>
-      </div>
+      <Datapicker hideWrapper={true} onChange={() => this.handleChange()} />
     );
   }
 }

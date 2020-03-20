@@ -13,6 +13,7 @@ import CollectionOverview from '../../components/Collections/overview';
 import CollectionGranules from '../../components/Collections/granules';
 import CollectionIngest from '../../components/Collections/ingest';
 import CollectionLogs from '../../components/Collections/logs';
+import DatePickerHeader from '../../components/DatePickerHeader/DatePickerHeader';
 
 class Collections extends React.Component {
   constructor () {
@@ -29,6 +30,7 @@ class Collections extends React.Component {
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge heading--shared-content'>{strings.collections}</h1>
+            <DatePickerHeader />
           </div>
         </div>
         <div className='page__content'>

@@ -7,6 +7,7 @@ import { withRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 import { interval, getCount } from '../../actions';
 import _config from '../../config';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import Pdr from './pdr';
 import PdrOverview from './overview';
 import PdrList from './list';
@@ -42,6 +43,7 @@ class Pdrs extends React.Component {
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge'>PDRs</h1>
+            <DatePickerHeader />
           </div>
         </div>
         <div className='page__content'>

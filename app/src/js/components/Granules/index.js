@@ -8,6 +8,7 @@ import { interval, getCount } from '../../actions';
 import _config from '../../config';
 import { strings } from '../locale';
 import AllGranules from './list';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import GranuleOverview from './granule';
 import GranulesOverview from './overview';
 
@@ -42,6 +43,7 @@ class Granules extends React.Component {
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge'>{strings.granules}</h1>
+            <DatePickerHeader />
           </div>
         </div>
         <div className='page__content'>
