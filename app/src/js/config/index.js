@@ -26,8 +26,8 @@ const baseConfig = {
   //
 
   // auto-update frequency
-  updateInterval: 15000,
-  logsUpdateInterval: 10000,
+  updateInterval: 1500000,
+  logsUpdateInterval: 1000000,
 
   recent: moment().subtract(1, 'day').format(),
 

@@ -4,6 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { get } from 'object-path';
+import cloneDeep from 'lodash.clonedeep';
 import { listProviders, getCount, interval } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import { tableColumns } from '../../utils/table-config/providers';
@@ -57,8 +58,10 @@ class ProvidersOverview extends React.Component {
     const { count, queriedAt } = list.meta;
 
     // Incorporate the collection counts into the `list`
+    const modifiableList = cloneDeep(list);
     const collectionCounts = get(stats.count, 'data.collections.count', []);
-    list.data.forEach(d => {
+
+    modifiableList.data.forEach(d => {
       d.collections = get(collectionCounts.find(c => c.key === d.name), 'count', 0);
     });
     const providerStatus = get(stats.count, 'data.providers.count', []);
@@ -76,7 +79,7 @@ class ProvidersOverview extends React.Component {
           </div>
 
           <List
-            list={list}
+            list={modifiableList}
             dispatch={this.props.dispatch}
             action={listProviders}
             tableColumns={tableColumns}
