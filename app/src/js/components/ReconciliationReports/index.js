@@ -46,7 +46,7 @@ class ReconciliationReports extends React.Component {
       <div className='page__reconciliations'>
         <div className='content__header'>
           <div className='row'>
-            <h1 className='heading--xlarge'>Reconciliation Reports</h1>
+            <h1 className='heading--xlarge heading--shared-content'>Reconciliation Reports</h1>
             <button className='button button--large button--white button__addcollections button__arrow button__animation' onClick={this.createReport}>
               {reconciliationReports.createReportInflight ? <LoadingEllipsis /> : 'Create a Report'}
             </button>

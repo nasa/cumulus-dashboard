@@ -42,8 +42,16 @@ class Granules extends React.Component {
       <div className='page__granules'>
         <div className='content__header'>
           <div className='row'>
-            <h1 className='heading--xlarge'>{strings.granules}</h1>
-            <DatePickerHeader />
+            <ul className='datetimeheader'>
+              <li>
+                <div className='datetimeheader__content'>
+                  <h1 className='heading--xlarge'>{strings.granules}</h1>
+                </div>
+              </li>
+              <li>
+                <DatePickerHeader />
+              </li>
+            </ul>
           </div>
         </div>
         <div className='page__content'>
