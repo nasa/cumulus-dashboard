@@ -29,8 +29,16 @@ class Collections extends React.Component {
       <div className='page__collections'>
         <div className='content__header'>
           <div className='row'>
-            <h1 className='heading--xlarge heading--shared-content'>{strings.collections}</h1>
-            <DatePickerHeader />
+            <ul className='datetimeheader'>
+              <li>
+                <div className='datetimeheader__content'>
+                  <h1 className='heading--xlarge heading--shared-content'>{strings.collections}</h1>
+                </div>
+              </li>
+              <li>
+                <DatePickerHeader />
+              </li>
+            </ul>
           </div>
         </div>
         <div className='page__content'>
