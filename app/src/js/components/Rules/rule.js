@@ -125,6 +125,7 @@ class Rule extends React.Component {
       status: enabledStatus,
       confirmAction: true,
       confirmText: enableText(ruleName),
+      postActionModal: true,
       postActionText: enableConfirm(ruleName),
       success: this.reload
     }, {
@@ -133,6 +134,7 @@ class Rule extends React.Component {
       disabled: data.type === 'onetime',
       status: disabledStatus,
       confirmAction: true,
+      postActionModal: true,
       confirmText: disableText(ruleName),
       postActionText: disableConfirm(ruleName),
       success: this.reload

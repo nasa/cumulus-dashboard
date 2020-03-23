@@ -61,7 +61,7 @@ class DropdownAsync extends React.Component {
               confirmAction={d.confirmAction}
               confirmText={d.confirmText}
               confirmOptions={d.confirmOptions}
-              confirmModal={true}
+              confirmModal={d.postActionModal}
               postActionText={d.postActionText}
               className={'link--no-underline'}
               element='a'

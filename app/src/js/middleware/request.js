@@ -68,7 +68,6 @@ export const requestMiddleware = ({ dispatch, getState }) => next => action => {
     dispatch({ id, config: requestAction, type: inflightType });
 
     const start = new Date();
-
     return requestPromise(requestAction)
       .then((response) => {
         const { body } = response;
