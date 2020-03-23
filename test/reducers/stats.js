@@ -179,7 +179,7 @@ test('COUNT adds a requested type: collections added to counts  ', (t) => {
           ]
         }
       },
-      inflight: false,
+      inflight: true,
       error: null
     }
   };

@@ -49,7 +49,7 @@ export default function reducer (state = initialState, action) {
       break;
 
     case COUNT:
-      count = Object.assign({}, nextState.count);
+      count = Object.assign({}, nextState.count, {inflight: false, error: null});
       set(count, ['data', action.config.qs.type], action.data);
       nextState = Object.assign({}, nextState, { count });
       break;
