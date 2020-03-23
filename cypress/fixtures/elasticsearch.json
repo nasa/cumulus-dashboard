@@ -1,0 +1,54 @@
+{
+	"took": 343,
+	"timed_out": false,
+	"_shards": {
+		"total": 388,
+		"successful": 388,
+		"skipped": 386,
+		"failed": 0
+	},
+	"hits": {
+		"total": {
+			"value": 0,
+			"relation": "eq"
+		},
+		"max_score": null,
+		"hits": []
+	},
+	"aggregations": {
+		"2": {
+			"buckets": {
+				"ApiAccessErrors": {
+					"doc_count": 0
+				},
+				"ApiAccessSuccesses": {
+					"doc_count": 1
+				},
+				"ApiExecutionErrors": {
+					"doc_count": 2
+				},
+				"ApiExecutionSuccesses": {
+					"doc_count": 3
+				},
+				"LambdaAPIErrors": {
+					"doc_count": 4
+				},
+				"LambdaAPISuccesses": {
+					"doc_count": 5
+				},
+				"s3AccessFailures": {
+					"doc_count": 6
+				},
+				"s3AccessSuccesses": {
+					"doc_count": 7
+				},
+				"TEALambdaErrors": {
+					"doc_count": 8
+				},
+				"TEALambdaSuccesses": {
+					"doc_count": 9
+				}
+			}
+		}
+	}
+}
