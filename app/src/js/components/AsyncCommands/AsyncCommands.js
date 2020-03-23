@@ -109,7 +109,7 @@ class AsyncCommand extends React.Component {
               size="md"
               aria-labelledby="modal__async-modal"
             >
-              <Modal.Header className="async-modal__header" closeButton></Modal.Header>
+              <Modal.Header className="async-modal__header" closeButton onClick={this.cancel}></Modal.Header>
               <Modal.Title id="modal__async-modal" className="modal__async-title"></Modal.Title>
               <Modal.Body>
                 <div className='modal__internal modal__formcenter'>

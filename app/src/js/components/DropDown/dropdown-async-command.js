@@ -46,13 +46,14 @@ class DropdownAsync extends React.Component {
   }
 
   onSuccess () {
-    this.setState({ showActions: false, activeModal: true });
+    this.setState({ activeModal: true, showActions: false });
     // if (typeof success === 'function') success();
   }
 
   render () {
     const { config } = this.props;
     const { showActions, activeModal } = this.state;
+    console.log('posttext', config[0].postActionText);
     return (
       <div className='dropdown__options form-group__element--right'>
         <a className='dropdown__options__btn button--green button button--small' href='#' onClick={this.toggleActions}><span>Options</span></a>
@@ -60,7 +61,7 @@ class DropdownAsync extends React.Component {
           'dropdown__menu--hidden': !showActions
         })}>
           {config.map(d => <li key={d.text}>
-            <AsyncCommand action={() => this.handleClick(d.action)}
+            <AsyncCommand action={d.action}
               success={this.onSuccess}
               error={this.close}
               status={d.status}
@@ -76,14 +77,13 @@ class DropdownAsync extends React.Component {
               <DefaultModal
                 className='link--no-underline'
                 onCancel={this.close}
-                onCloseModal={this.handleClick(d.success)}
-                onConfirm={this.confirm}
+                onCloseModal={() => this.handleClick(d.success)}
+                cancelButtonText={'Close'}
+                hasConfirmButton={false}
                 title={d.postActionText}
-                children={d.postActionText}
+                children={(<p>{d.postActionText}</p>)}
                 showModal={activeModal}
-                // confirmButtonClass={`${buttonClass} button--submit`}
                 cancelButtonClass={'button--cancel'}
-                // {...modalOptions}
               />
             </div>
           </li>)}
