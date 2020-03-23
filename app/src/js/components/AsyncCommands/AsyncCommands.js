@@ -5,6 +5,7 @@ import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
 import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
+import DefaultModal from '../Modal/modal';
 import { preventDefault } from '../../utils/noop';
 import _config from '../../config';
 import Modal from 'react-bootstrap/Modal';
@@ -30,6 +31,7 @@ class AsyncCommand extends React.Component {
     ) {
       const timeout = isNaN(prevProps.successTimeout) ? updateDelay : prevProps.successTimeout;
       setTimeout(prevProps.success, timeout);
+      this.setState({ activeModal: true }); // react/no-did-update-set-state
     } else if (
       prevProps.status === 'inflight' &&
         this.props.status === 'error' &&
@@ -70,15 +72,16 @@ class AsyncCommand extends React.Component {
   confirm () {
     this.props.action();
     this.setState({ modal: false });
+    if (this.props.status === 'success') this.setState({ activeModal: true });
   }
 
   cancel () {
-    this.setState({ modal: false });
+    this.setState({ modal: false, activeModal: false });
   }
 
   render () {
-    const { status, text, confirmText, confirmOptions } = this.props;
-    const { modal } = this.state;
+    const { status, text, confirmText, confirmOptions, confirmModal, postActionText } = this.props;
+    const { modal, activeModal } = this.state;
     const inflight = status === 'inflight';
     const element = this.props.element || 'button';
     const props = {
@@ -134,6 +137,18 @@ class AsyncCommand extends React.Component {
               </Modal.Footer>
             </Modal>
           ) : null }
+          { (activeModal && confirmModal) ? (
+            <DefaultModal
+              className='link--no-underline'
+              onCancel={this.close}
+              onCloseModal={this.cancel}
+              cancelButtonText={'Close'}
+              hasConfirmButton={false}
+              title={text}
+              children={postActionText}
+              showModal={activeModal}
+              cancelButtonClass={'button--cancel'}
+            />) : null }
         </div>
       </div>
     );
@@ -153,6 +168,8 @@ AsyncCommand.propTypes = {
   confirmAction: PropTypes.bool,
   confirmText: PropTypes.string,
   confirmOptions: PropTypes.array,
+  confirmModal: PropTypes.bool,
+  postActionText: PropTypes.string,
   href: PropTypes.string
 };
 

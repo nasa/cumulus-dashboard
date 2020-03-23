@@ -2,7 +2,6 @@ import React from 'react';
 import c from 'classnames';
 import { findDOMNode } from 'react-dom';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
-import DefaultModal from '../Modal/modal';
 import PropTypes from 'prop-types';
 import { addGlobalListener } from '../../utils/browser';
 
@@ -14,7 +13,6 @@ class DropdownAsync extends React.Component {
     this.toggleActions = this.toggleActions.bind(this);
     this.close = this.close.bind(this);
     this.onSuccess = this.onSuccess.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount () {
@@ -36,24 +34,18 @@ class DropdownAsync extends React.Component {
     this.setState({ showActions: !this.state.showActions });
   }
 
-  handleClick (success) {
-    this.setState({ activeModal: false });
-    if (typeof success === 'function') success();
-  }
-
   close () {
     this.setState({ showActions: false });
   }
 
-  onSuccess () {
-    this.setState({ activeModal: true, showActions: false });
-    // if (typeof success === 'function') success();
+  onSuccess (success) {
+    this.setState({ showActions: false });
+    if (typeof success === 'function') success();
   }
 
   render () {
     const { config } = this.props;
-    const { showActions, activeModal } = this.state;
-    console.log('posttext', config[0].postActionText);
+    const { showActions } = this.state;
     return (
       <div className='dropdown__options form-group__element--right'>
         <a className='dropdown__options__btn button--green button button--small' href='#' onClick={this.toggleActions}><span>Options</span></a>
@@ -62,30 +54,18 @@ class DropdownAsync extends React.Component {
         })}>
           {config.map(d => <li key={d.text}>
             <AsyncCommand action={d.action}
-              success={this.onSuccess}
+              success={() => this.onSuccess(d.success)}
               error={this.close}
               status={d.status}
               disabled={d.disabled}
               confirmAction={d.confirmAction}
               confirmText={d.confirmText}
               confirmOptions={d.confirmOptions}
+              confirmModal={true}
+              postActionText={d.postActionText}
               className={'link--no-underline'}
               element='a'
               text={d.text} />
-            { activeModal && <div className='modal__cover'></div>}
-            <div className={ activeModal ? 'modal__container modal__container--onscreen' : 'modal__container' }>
-              <DefaultModal
-                className='link--no-underline'
-                onCancel={this.close}
-                onCloseModal={() => this.handleClick(d.success)}
-                cancelButtonText={'Close'}
-                hasConfirmButton={false}
-                title={d.postActionText}
-                children={(<p>{d.postActionText}</p>)}
-                showModal={activeModal}
-                cancelButtonClass={'button--cancel'}
-              />
-            </div>
           </li>)}
         </ul>
       </div>
