@@ -66,17 +66,18 @@
     }
   }
 
-  &--primary, &--primary{
-    &:hover, &:visited {
+  &--primary, &--primary:visited {
+    &:hover {
       background-color: darken($light-green, 10%);
       color: $white;
       border: 0;
     }
   }
   
-  &--secondary, &--secondary{
-    &:hover, &:visited {
-      background-color: $dolphin-grey;
+  &--secondary, &--secondary:visited{
+    background-color: $dolphin-grey;
+    &:hover {
+      background-color: darken($dolphin-grey, 20%);
     }
   }
 

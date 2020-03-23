@@ -31,7 +31,7 @@ class AsyncCommand extends React.Component {
     ) {
       const timeout = isNaN(prevProps.successTimeout) ? updateDelay : prevProps.successTimeout;
       setTimeout(prevProps.success, timeout);
-      this.setState({ activeModal: true }); // react/no-did-update-set-state
+      this.setState({ activeModal: true }); // eslint-disable-line react/no-did-update-set-state
     } else if (
       prevProps.status === 'inflight' &&
         this.props.status === 'error' &&

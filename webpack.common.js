@@ -52,7 +52,10 @@ const CommonConfig = {
             }
           },
           {
-            loader: 'eslint-loader'
+            loader: 'eslint-loader',
+            options: {
+              emitWarning: true
+            }
           }
         ]
       },

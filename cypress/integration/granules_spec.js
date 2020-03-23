@@ -1,4 +1,6 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
+import { DATEPICKER_DATECHANGE } from '../../app/src/js/actions/types';
+import { msPerDay } from '../../app/src/js/utils/datepicker';
 
 describe('Dashboard Granules Page', () => {
   describe('When not logged in', () => {
@@ -137,6 +139,33 @@ describe('Dashboard Granules Page', () => {
       cy.get('#form-Status-status > div > input').as('status-input');
       cy.get('@status-input').should('be.visible').click().type('comp{enter}');
       cy.url().should('include', 'search=L2').and('include', 'status=completed');
+    });
+
+    it.skip('should Update overview Tiles when datepicker state changes.', () => {
+      // TODO Enable test when CUMULUS-1805 is completed
+      cy.visit('/granules');
+      cy.url().should('include', 'granules');
+      cy.contains('.heading--xlarge', 'Granules');
+      cy.contains('.heading--large', 'Granule Overview');
+
+      // shows a summary count of completed and failed granules
+      cy.get('.overview-num__wrapper ul li')
+        .first().contains('li', 'Completed').contains('li', 6)
+        .next().contains('li', 'Failed').contains('li', 2)
+        .next().contains('li', 'Running').contains('li', 2);
+      cy.window().its('appStore').then((store) => {
+        store.dispatch({
+          type: DATEPICKER_DATECHANGE,
+          data: {
+            startDateTime: new Date(Date.now() - 5 * msPerDay),
+            endDateTime: new Date(Date.now() - 4 * msPerDay)
+          }
+        });
+        cy.get('.overview-num__wrapper ul li')
+          .first().contains('li', 'Completed').contains('li', 0)
+          .next().contains('li', 'Failed').contains('li', 0)
+          .next().contains('li', 'Running').contains('li', 0);
+      });
     });
   });
 });
