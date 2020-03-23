@@ -7,8 +7,17 @@ import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import ExecutionOverview from './overview';
 import ExecutionStatus from './execution-status';
 import ExecutionLogs from './execution-logs';
+import { getCount, listExecutions } from '../../actions';
 
 class Executions extends React.Component {
+  query () {
+    this.props.dispatch(getCount({
+      type: 'executions',
+      field: 'status'
+    }));
+    this.props.dispatch(listExecutions());
+  }
+
   render () {
     return (
       <div className='page__workflows'>
@@ -21,7 +30,7 @@ class Executions extends React.Component {
                 </div>
               </li>
               <li>
-                <DatePickerHeader />
+                <DatePickerHeader onChange={this.query} />
               </li>
             </ul>
           </div>
@@ -48,6 +57,7 @@ class Executions extends React.Component {
 
 Executions.propTypes = {
   children: PropTypes.object,
+  dispatch: PropTypes.func,
   location: PropTypes.object,
   params: PropTypes.object
 };

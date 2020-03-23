@@ -1,12 +1,18 @@
 'use strict';
+
 import React from 'react';
 import { withRouter, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import OperationOverview from './overview';
+import { listOperations } from '../../actions';
 
 class Operations extends React.Component {
+  query () {
+    this.props.dispatch(listOperations());
+  }
+
   render () {
     return (
       <div className='page__workflows'>
@@ -15,11 +21,11 @@ class Operations extends React.Component {
             <ul className='datetimeheader'>
               <li>
                 <div className='datetimeheader__content'>
-                  <h1 className='heading--xlarge'>Operation</h1>
+                  <h1 className='heading--xlarge'>Operations</h1>
                 </div>
               </li>
               <li>
-                <DatePickerHeader />
+                <DatePickerHeader onChange={this.query} />
               </li>
             </ul>
           </div>
@@ -42,6 +48,7 @@ class Operations extends React.Component {
 
 Operations.propTypes = {
   children: PropTypes.object,
+  dispatch: PropTypes.func,
   location: PropTypes.object,
   params: PropTypes.object
 };

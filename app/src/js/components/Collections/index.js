@@ -14,11 +14,16 @@ import CollectionGranules from '../../components/Collections/granules';
 import CollectionIngest from '../../components/Collections/ingest';
 import CollectionLogs from '../../components/Collections/logs';
 import DatePickerHeader from '../../components/DatePickerHeader/DatePickerHeader';
+import { listCollections } from '../../actions';
 
 class Collections extends React.Component {
   constructor () {
     super();
     this.displayName = strings.collection;
+  }
+
+  query () {
+    this.props.dispatch(listCollections());
   }
 
   render () {
@@ -36,7 +41,7 @@ class Collections extends React.Component {
                 </div>
               </li>
               <li>
-                <DatePickerHeader />
+                <DatePickerHeader onChange={this.query} />
               </li>
             </ul>
           </div>
@@ -72,6 +77,7 @@ class Collections extends React.Component {
 
 Collections.propTypes = {
   children: PropTypes.object,
+  dispatch: PropTypes.func,
   location: PropTypes.object,
   queryParams: PropTypes.object
 };

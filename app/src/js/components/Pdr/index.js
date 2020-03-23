@@ -5,7 +5,7 @@ import { get } from 'object-path';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
-import { interval, getCount } from '../../actions';
+import { interval, getCount, listPdrs } from '../../actions';
 import _config from '../../config';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import Pdr from './pdr';
@@ -34,6 +34,7 @@ class Pdrs extends React.Component {
       type: 'pdrs',
       field: 'status'
     }));
+    this.props.dispatch(listPdrs());
   }
 
   render () {
@@ -49,7 +50,7 @@ class Pdrs extends React.Component {
                 </div>
               </li>
               <li>
-                <DatePickerHeader />
+                <DatePickerHeader onChange={this.query} />
               </li>
             </ul>
           </div>

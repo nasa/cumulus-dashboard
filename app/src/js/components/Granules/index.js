@@ -4,7 +4,7 @@ import { get } from 'object-path';
 import { connect } from 'react-redux';
 import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
-import { interval, getCount } from '../../actions';
+import { interval, getCount, listGranules } from '../../actions';
 import _config from '../../config';
 import { strings } from '../locale';
 import AllGranules from './list';
@@ -34,6 +34,7 @@ class Granules extends React.Component {
       type: 'granules',
       field: 'status'
     }));
+    this.props.dispatch(listGranules());
   }
 
   render () {
@@ -49,7 +50,7 @@ class Granules extends React.Component {
                 </div>
               </li>
               <li>
-                <DatePickerHeader />
+                <DatePickerHeader onChange={this.query} />
               </li>
             </ul>
           </div>
