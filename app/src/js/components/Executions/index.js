@@ -3,19 +3,27 @@ import React from 'react';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import ExecutionOverview from './overview';
 import ExecutionStatus from './execution-status';
 import ExecutionLogs from './execution-logs';
+import { getCount, listExecutions } from '../../actions';
+import { strings } from '../locale';
 
 class Executions extends React.Component {
+  query () {
+    this.props.dispatch(getCount({
+      type: 'executions',
+      field: 'status'
+    }));
+    this.props.dispatch(listExecutions());
+    this.displayName = strings.executions;
+  }
+
   render () {
     return (
       <div className='page__workflows'>
-        <div className='content__header'>
-          <div className='row'>
-            <h1 className='heading--xlarge'>Executions</h1>
-          </div>
-        </div>
+        <DatePickerHeader onChange={this.query} heading={strings.executions}/>
         <div className='page__content'>
           <div className='wrapper__sidebar'>
             <Sidebar
@@ -38,6 +46,7 @@ class Executions extends React.Component {
 
 Executions.propTypes = {
   children: PropTypes.object,
+  dispatch: PropTypes.func,
   location: PropTypes.object,
   params: PropTypes.object
 };
