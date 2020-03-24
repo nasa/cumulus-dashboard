@@ -53,6 +53,8 @@ describe('Dashboard Home Page', () => {
 
     beforeEach(() => {
       cy.login();
+      cy.server();
+      cy.route('POST', '/_search/', 'fixture:elasticsearch.json');
       cy.visit('/');
     });
 
@@ -169,7 +171,6 @@ describe('Dashboard Home Page', () => {
     });
 
     it('modifies the UPDATES section and Granules Errors list as datepicker changes.', () => {
-      cy.server();
       cy.route('GET', '/stats?*timestamp__from=1233360000000*').as('stats');
 
       cy.get('#Errors').contains('2');
@@ -216,24 +217,19 @@ describe('Dashboard Home Page', () => {
       // Cypress only allows one stub per url. We make multiple POST requests to the same
       // elasticsearch endpoint. The fixture here returns a combined response of all the
       // responses for one url, effectively stubbing our elasticsearch searches.
-      cy.server();
-      cy.route('POST', '/_search/', 'fixture:elasticsearch.json').as('metrics');
-
-      cy.wait(['@metrics', '@metrics', '@metrics', '@metrics', '@metrics', '@metrics']);
-
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(1)').contains('6');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(2)').contains('8');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(3)').contains('4');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(4)').contains('2');
       cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(5)').contains('0');
+      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(4)').contains('2');
+      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(3)').contains('4');
+      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(2)').contains('8');
+      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(1)').contains('6');
 
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(1)').contains('7');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(2)').contains('9');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(3)').contains('5');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(4)').contains('3');
       cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(5)').contains('1');
+      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(4)').contains('3');
+      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(3)').contains('5');
+      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(2)').contains('9');
+      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(1)').contains('7');
 
-      cy.route('POST', 'http://example.com/_search/', 'fixture:updated_elasticsearch.json').as('new_metrics');
+      cy.route('POST', 'http://example.com/_search/', 'fixture:updated_elasticsearch.json');
 
       cy.get('[data-cy=startDateTime]').within(() => {
         cy.get('input[name=month]').click().type(1);
@@ -252,19 +248,17 @@ describe('Dashboard Home Page', () => {
         cy.get('select[name=amPm]').select('AM');
       });
 
-      cy.wait('@new_metrics');
-
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(1)').contains('16');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(2)').contains('18');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(3)').contains('14');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(4)').contains('12');
       cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(5)').contains('10');
+      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(4)').contains('12');
+      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(3)').contains('14');
+      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(2)').contains('18');
+      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(1)').contains('16');
 
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(1)').contains('17');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(2)').contains('19');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(3)').contains('15');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(4)').contains('13');
       cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(5)').contains('11');
+      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(4)').contains('13');
+      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(3)').contains('15');
+      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(2)').contains('19');
+      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(1)').contains('17');
     });
 
     it('Logging out successfully redirects to the login screen', () => {
