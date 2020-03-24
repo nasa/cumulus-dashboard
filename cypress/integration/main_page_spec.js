@@ -54,7 +54,7 @@ describe('Dashboard Home Page', () => {
     beforeEach(() => {
       cy.login();
       cy.server();
-      cy.route('POST', '/_search/', 'fixture:elasticsearch.json');
+      cy.route('POST', 'http://example.com/_search/', 'fixture:elasticsearch.json');
       cy.visit('/');
     });
 
