@@ -212,7 +212,10 @@ class Datepicker extends React.PureComponent {
         <div className='datetime'>
           <div className='datetime__range'>
             <ul className='datetime__internal'>
-              <li>{this.renderDateRangeDropDown()}</li>
+              <li>
+                <label>Duration</label>
+                {this.renderDateRangeDropDown()}
+              </li>
               <li data-cy='startDateTime'>
                 <label>Start Date and Time</label>
                 {this.renderDateTimeRange('startDateTime')}
