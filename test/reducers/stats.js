@@ -216,3 +216,53 @@ test('COUNT adds a requested type: collections added to counts  ', (t) => {
 
   t.deepEqual(expected, actual);
 });
+
+test('COUNT_INFLIGHT sets inflight to true.', (t) => {
+  var id = null;
+  var type = COUNT_INFLIGHT;
+  var action = { id, type, data: {}, config: {} };
+  var testState = {
+    stats: {
+      data: {},
+      inflight: false,
+      error: null
+    },
+    count: {
+      data: {
+        granules: {
+          count: [
+            { key: 'completed', count: 6034 },
+            { key: 'failed', count: 93 },
+            { key: 'running', count: 41 }
+          ]
+        }
+      },
+      inflight: false,
+      error: 'anything'
+    }
+  };
+
+  var expected = {
+    stats: {
+      data: {},
+      inflight: false,
+      error: null
+    },
+    count: {
+      data: {
+        granules: {
+          count: [
+            { key: 'completed', count: 6034 },
+            { key: 'failed', count: 93 },
+            { key: 'running', count: 41 }
+          ]
+        }
+      },
+      inflight: true,
+      error: 'anything'
+    }
+  };
+  var actual = reducer(testState, action);
+
+  t.deepEqual(expected, actual);
+});
