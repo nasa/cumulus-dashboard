@@ -13,10 +13,11 @@ services:
       - ../:/cumulus-dashboard:cached
     environment:
       - APIROOT=http://localhost:5001
+      - ESROOT=http://example.com
       - HIDE_PDR=false
       - DAAC_NAME=local
       - STAGE=LOCALHOST-Development
-      - SHOW_DISTRIBUTION_API_METRICS=false
+      - SHOW_DISTRIBUTION_API_METRICS=true
       - SHOW_TEA_METRICS=false
       - AUTH_METHOD=earthdata
   shim:   # empty container to open ports

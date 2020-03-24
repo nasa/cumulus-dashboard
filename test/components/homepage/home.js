@@ -48,8 +48,8 @@ test('CUMULUS-799 Home page contains distribution error report', async (t) => {
   t.is(errorMetrics.length, 3);
   t.is(errorMetrics.at(1).key(), 'Gateway Execution Errors');
   t.is(errorMetrics.at(2).key(), 'Gateway Access Errors');
-  t.is(errorMetrics.at(1).find('Link').text(), `${tally(dist.apiGateway.execution.errors)} Gateway Execution Errors`);
-  t.is(errorMetrics.at(2).find('Link').text(), `${tally(dist.apiGateway.access.errors)} Gateway Access Errors`);
+  t.is(errorMetrics.at(1).find('a').text(), `${tally(dist.apiGateway.execution.errors)} Gateway Execution Errors`);
+  t.is(errorMetrics.at(2).find('a').text(), `${tally(dist.apiGateway.access.errors)} Gateway Access Errors`);
   const successMetrics = home.find('#distributionSuccesses li');
   t.is(successMetrics.length, 5);
   t.is(successMetrics.at(0).key(), 'S3 Access Successes');
@@ -57,9 +57,9 @@ test('CUMULUS-799 Home page contains distribution error report', async (t) => {
   t.is(successMetrics.at(2).key(), 'Distribution API Lambda Successes');
   t.is(successMetrics.at(3).key(), 'Gateway Execution Successes');
   t.is(successMetrics.at(4).key(), 'Gateway Access Successes');
-  t.is(successMetrics.at(0).find('Link').text(), `${tally(dist.s3Access.successes)} S3 Access Successes`);
-  t.is(successMetrics.at(1).find('Link').text(), `${tally(dist.teaLambda.successes)} TEA Lambda Successes`);
-  t.is(successMetrics.at(2).find('Link').text(), `${tally(dist.apiLambda.successes)} Distribution API Lambda Successes`);
-  t.is(successMetrics.at(3).find('Link').text(), `${tally(dist.apiGateway.execution.successes)} Gateway Execution Successes`);
-  t.is(successMetrics.at(4).find('Link').text(), `${tally(dist.apiGateway.access.successes)} Gateway Access Successes`);
+  t.is(successMetrics.at(0).find('a').text(), `${tally(dist.s3Access.successes)} S3 Access Successes`);
+  t.is(successMetrics.at(1).find('a').text(), `${tally(dist.teaLambda.successes)} TEA Lambda Successes`);
+  t.is(successMetrics.at(2).find('a').text(), `${tally(dist.apiLambda.successes)} Distribution API Lambda Successes`);
+  t.is(successMetrics.at(3).find('a').text(), `${tally(dist.apiGateway.execution.successes)} Gateway Execution Successes`);
+  t.is(successMetrics.at(4).find('a').text(), `${tally(dist.apiGateway.access.successes)} Gateway Access Successes`);
 });
