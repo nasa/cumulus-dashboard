@@ -120,7 +120,7 @@ These are started and stopped with the commands:
   $ npm run start-localstack
   $ npm run stop-localstack
 ```
-After these containers are running, you can start a cumulus API locally in a terminal window `npm run serve-api`, the dashboard in another window. `[APIROOT=http://localhost:5001] npm run serve` and finally cypress in a third window. `npm run cypress`.
+After these containers are running, you can start a cumulus API locally in a terminal window `npm run serve-api`, the dashboard in another window. `[SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve` and finally cypress in a third window. `npm run cypress`.
 
 Once the docker app is running, If you would like to see sample data you can seed the database. This will load the same sample data into the application that is used during cypress testing.
 ```bash
@@ -134,7 +134,7 @@ The cumulusapi docker service is started and stopped:
   $ npm run start-cumulusapi
   $ npm run stop-cumulusapi
 ```
-Then you can run the dashboard locally (without docker) `[APIROOT=http://localhost:5001] npm run serve` and open cypress tests `npm run cypress`.
+Then you can run the dashboard locally (without docker) `[SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve` and open cypress tests `npm run cypress`.
 
 
 The docker compose stack also includes a command to let a developer start all development containers with a single command.
@@ -277,7 +277,7 @@ Serve the cumulus API (separate terminal)
 
 Serve the dashboard web application (another terminal)
 ```bash
-  $ [APIROOT=http://localhost:5001] npm run serve
+  $ [SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve
 ```
 
 If you're just testing dashboard code, you can generally run all of the above commands as a single docker-compose stack.
