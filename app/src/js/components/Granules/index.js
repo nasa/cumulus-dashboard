@@ -41,20 +41,7 @@ class Granules extends React.Component {
     const count = get(this.props.stats, 'count.data.granules.count');
     return (
       <div className='page__granules'>
-        <div className='content__header'>
-          <div className='row'>
-            <ul className='datetimeheader'>
-              <li>
-                <div className='datetimeheader__content'>
-                  <h1 className='heading--xlarge'>{strings.granules}</h1>
-                </div>
-              </li>
-              <li>
-                <DatePickerHeader onChange={this.query} />
-              </li>
-            </ul>
-          </div>
-        </div>
+        <DatePickerHeader onChange={this.query} heading={strings.granules}/>
         <div className='page__content'>
           <div className='wrapper__sidebar'>
             <Sidebar

@@ -7,29 +7,18 @@ import Sidebar from '../Sidebar/sidebar';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import OperationOverview from './overview';
 import { listOperations } from '../../actions';
+import { strings } from '../locale';
 
 class Operations extends React.Component {
   query () {
     this.props.dispatch(listOperations());
+    this.displayName = strings.operations;
   }
 
   render () {
     return (
       <div className='page__workflows'>
-        <div className='content__header'>
-          <div className='row'>
-            <ul className='datetimeheader'>
-              <li>
-                <div className='datetimeheader__content'>
-                  <h1 className='heading--xlarge'>Operations</h1>
-                </div>
-              </li>
-              <li>
-                <DatePickerHeader onChange={this.query} />
-              </li>
-            </ul>
-          </div>
-        </div>
+        <DatePickerHeader onChange={this.query} heading={strings.operations}/>
         <div className='page__content'>
           <div className='wrapper__sidebar'>
             <Sidebar

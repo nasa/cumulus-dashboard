@@ -32,20 +32,7 @@ class Collections extends React.Component {
 
     return (
       <div className='page__collections'>
-        <div className='content__header'>
-          <div className='row'>
-            <ul className='datetimeheader'>
-              <li>
-                <div className='datetimeheader__content'>
-                  <h1 className='heading--xlarge heading--shared-content'>{strings.collections}</h1>
-                </div>
-              </li>
-              <li>
-                <DatePickerHeader onChange={this.query} />
-              </li>
-            </ul>
-          </div>
-        </div>
+        <DatePickerHeader onChange={this.query} heading={strings.collections}/>
         <div className='page__content'>
           <div className='wrapper__sidebar'>
             <Route path='/collections/all' component={Sidebar} />

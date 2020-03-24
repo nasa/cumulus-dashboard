@@ -11,6 +11,7 @@ import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import Pdr from './pdr';
 import PdrOverview from './overview';
 import PdrList from './list';
+import { strings } from '../locale';
 
 const { updateInterval } = _config;
 
@@ -19,6 +20,7 @@ class Pdrs extends React.Component {
     super();
     this.displayName = 'Pdrs';
     this.query = this.query.bind(this);
+    this.displayName = strings.pdrs;
   }
 
   componentDidMount () {
@@ -41,20 +43,7 @@ class Pdrs extends React.Component {
     const count = get(this.props.stats, 'count.data.pdrs.count');
     return (
       <div className='page__pdrs'>
-        <div className='content__header'>
-          <div className='row'>
-            <ul className='datetimeheader'>
-              <li>
-                <div className='datetimeheader__content'>
-                  <h1 className='heading--xlarge'>PDRs</h1>
-                </div>
-              </li>
-              <li>
-                <DatePickerHeader onChange={this.query} />
-              </li>
-            </ul>
-          </div>
-        </div>
+        <DatePickerHeader onChange={this.query} heading={strings.pdrs}/>
         <div className='page__content'>
           <div className='wrapper__sidebar'>
             <Sidebar
