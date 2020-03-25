@@ -33,7 +33,13 @@ export const initialState = {
 };
 
 export default createReducer(initialState, {
-
+  // These actions' reducers are a bit strange because the createReducer
+  // function was not picking up the deep mutation, and because the wrapper
+  // thought the underlying state was unchanged (it wasn't) the wrapper
+  // returned the original object and the unit tests failed.  cloning the state
+  // on entry was a hacky way to force the wrapper to recognize new state in
+  // each reducer.  These could be cleaned up, but be sure the tests still pass
+  // as they are.
   [STATS]: (state, action) => {
     let newState = cloneDeep(state);
     const stats = { data: assignDate(action.data), inflight: false, error: null };
