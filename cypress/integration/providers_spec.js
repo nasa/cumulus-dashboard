@@ -110,7 +110,6 @@ describe('Dashboard Providers Page', () => {
     });
 
     it('should edit a provider', () => {
-      // TODO [MHS, 2020-03-24]  UH. what's going on there. with submit then success loop.
       const name = 's3_provider';
       const connectionLimit = 12;
       const host = 'test-host-new';
@@ -138,12 +137,11 @@ describe('Dashboard Providers Page', () => {
         .type(host);
 
       cy.get('form div button').contains('Submit').click();
-      cy.get('form div button').contains('Success').click();
-      cy.url().should('include', `providers/provider/${name}`);
+
       // displays the updated provider
       cy.contains('.heading--xlarge', 'Providers');
-      cy.contains('.heading--medium', 'Provider Overview');
       cy.contains('.heading--large', name);
+      cy.contains('.heading--medium', 'Provider Overview');
       cy.get('.metadata__details')
         .within(() => {
           cy.contains('Global Connection Limit')
