@@ -266,3 +266,54 @@ test('COUNT_INFLIGHT sets inflight to true.', (t) => {
 
   t.deepEqual(expected, actual);
 });
+
+test('COUNT_ERROR sets the error to the action error.', (t) => {
+  var id = null;
+  const type = COUNT_ERROR;
+  const theError = 'An Error Occurred' ;
+  var action = { id, type, error: theError};
+  var testState = {
+    stats: {
+      data: {},
+      inflight: false,
+      error: null
+    },
+    count: {
+      data: {
+        granules: {
+          count: [
+            { key: 'completed', count: 7 },
+            { key: 'failed', count: 9 },
+            { key: 'running', count: 0 }
+          ]
+        }
+      },
+      inflight: false,
+      error: 'anything'
+    }
+  };
+
+  var expected = {
+    stats: {
+      data: {},
+      inflight: false,
+      error: null
+    },
+    count: {
+      data: {
+        granules: {
+          count: [
+            { key: 'completed', count: 7 },
+            { key: 'failed', count: 9 },
+            { key: 'running', count: 0 }
+          ]
+        }
+      },
+      inflight: false,
+      error: theError
+    }
+  };
+  var actual = reducer(testState, action);
+
+  t.deepEqual(expected, actual);
+});
