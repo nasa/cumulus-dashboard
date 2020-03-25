@@ -270,8 +270,8 @@ test('COUNT_INFLIGHT sets inflight to true.', (t) => {
 test('COUNT_ERROR sets the error to the action error.', (t) => {
   var id = null;
   const type = COUNT_ERROR;
-  const theError = 'An Error Occurred' ;
-  var action = { id, type, error: theError};
+  const theError = 'An Error Occurred';
+  var action = {id, type, error: theError};
   var testState = {
     stats: {
       data: {},

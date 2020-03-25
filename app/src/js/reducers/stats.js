@@ -1,6 +1,7 @@
 'use strict';
 import assignDate from './assign-date';
 import { set } from 'object-path';
+import { createReducer } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash.clonedeep';
 
 import {
@@ -31,36 +32,44 @@ export const initialState = {
   }
 };
 
-export default function reducer (state = initialState, action) {
-  let nextState = cloneDeep(state);
-  let stats, count;
-  switch (action.type) {
-    case STATS:
-      stats = { data: assignDate(action.data), inflight: false, error: null };
-      nextState = Object.assign({}, nextState, { stats });
-      break;
-    case STATS_INFLIGHT:
-      stats = { data: nextState.stats.data, inflight: true, error: nextState.stats.error };
-      nextState = Object.assign({}, nextState, { stats });
-      break;
-    case STATS_ERROR:
-      stats = { data: nextState.stats.data, inflight: false, error: action.error };
-      nextState = Object.assign({}, nextState, { stats });
-      break;
+export default createReducer(initialState, {
 
-    case COUNT:
-      count = Object.assign({}, nextState.count, {inflight: false, error: null});
-      set(count, ['data', action.config.qs.type], action.data);
-      nextState = Object.assign({}, nextState, { count });
-      break;
-    case COUNT_INFLIGHT:
-      count = { data: nextState.count.data, inflight: true, error: nextState.count.error };
-      nextState = Object.assign({}, nextState, { count });
-      break;
-    case COUNT_ERROR:
-      count = { data: nextState.count.data, inflight: false, error: action.error };
-      nextState = Object.assign({}, nextState, { count });
-      break;
+  [STATS]: (state, action) => {
+    let newState = cloneDeep(state);
+    const stats = { data: assignDate(action.data), inflight: false, error: null };
+    newState = Object.assign({}, newState, { stats });
+    return newState;
+  },
+  [STATS_INFLIGHT]: (state) => {
+    let newState = cloneDeep(state);
+    const stats = { data: newState.stats.data, inflight: true, error: state.stats.error };
+    newState = Object.assign({}, newState, { stats });
+    return newState;
+  },
+  [STATS_ERROR]: (state, action) => {
+    let newState = cloneDeep(state);
+    const stats = { data: newState.stats.data, inflight: false, error: action.error };
+    newState = Object.assign({}, newState, { stats });
+    return newState;
+  },
+
+  [COUNT]: (state, action) => {
+    let newState = cloneDeep(state);
+    const count = Object.assign({}, newState.count, {inflight: false, error: null});
+    set(count, ['data', action.config.qs.type], action.data);
+    newState = Object.assign({}, newState, { count });
+    return newState;
+  },
+  [COUNT_INFLIGHT]: (state) => {
+    let newState = cloneDeep(state);
+    const count = { data: newState.count.data, inflight: true, error: newState.count.error };
+    newState = Object.assign({}, newState, { count });
+    return newState;
+  },
+  [COUNT_ERROR]: (state, action) => {
+    let newState = cloneDeep(state);
+    const count = { data: newState.count.data, inflight: false, error: action.error };
+    newState = Object.assign({}, newState, { count });
+    return newState;
   }
-  return nextState;
-}
+});
