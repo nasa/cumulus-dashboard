@@ -4,10 +4,11 @@ import { get } from 'object-path';
 import { connect } from 'react-redux';
 import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
-import { interval, getCount } from '../../actions';
+import { interval, getCount, listGranules } from '../../actions';
 import _config from '../../config';
 import { strings } from '../locale';
 import AllGranules from './list';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import GranuleOverview from './granule';
 import GranulesOverview from './overview';
 
@@ -33,17 +34,14 @@ class Granules extends React.Component {
       type: 'granules',
       field: 'status'
     }));
+    this.props.dispatch(listGranules());
   }
 
   render () {
     const count = get(this.props.stats, 'count.data.granules.count');
     return (
       <div className='page__granules'>
-        <div className='content__header'>
-          <div className='row'>
-            <h1 className='heading--xlarge'>{strings.granules}</h1>
-          </div>
-        </div>
+        <DatePickerHeader onChange={this.query} heading={strings.granules}/>
         <div className='page__content'>
           <div className='wrapper__sidebar'>
             <Sidebar

@@ -5,11 +5,13 @@ import { get } from 'object-path';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
-import { interval, getCount } from '../../actions';
+import { interval, getCount, listPdrs } from '../../actions';
 import _config from '../../config';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import Pdr from './pdr';
 import PdrOverview from './overview';
 import PdrList from './list';
+import { strings } from '../locale';
 
 const { updateInterval } = _config;
 
@@ -18,6 +20,7 @@ class Pdrs extends React.Component {
     super();
     this.displayName = 'Pdrs';
     this.query = this.query.bind(this);
+    this.displayName = strings.pdrs;
   }
 
   componentDidMount () {
@@ -33,17 +36,14 @@ class Pdrs extends React.Component {
       type: 'pdrs',
       field: 'status'
     }));
+    this.props.dispatch(listPdrs());
   }
 
   render () {
     const count = get(this.props.stats, 'count.data.pdrs.count');
     return (
       <div className='page__pdrs'>
-        <div className='content__header'>
-          <div className='row'>
-            <h1 className='heading--xlarge'>PDRs</h1>
-          </div>
-        </div>
+        <DatePickerHeader onChange={this.query} heading={strings.pdrs}/>
         <div className='page__content'>
           <div className='wrapper__sidebar'>
             <Sidebar

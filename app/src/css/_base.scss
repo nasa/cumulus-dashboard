@@ -165,6 +165,7 @@ a:active {
 .header {
   background-color: $ocean-blue;
   border-bottom: 1px solid rgba(255, 255, 255, .06);
+  z-index: 2;
 
   h1 {
     float: left;
@@ -400,8 +401,12 @@ a:active {
   margin-top: 25px;
 }
 
+.page_section.metrics--overview .heading__wrapper--border {
+  margin-top: 0em;
+}
+
 .page__section.datetime{
-  margin-bottom: 10em;
+  margin-bottom: 7.5em;
 }
 
 .collection__options--top ul{
