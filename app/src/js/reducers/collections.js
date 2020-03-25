@@ -28,6 +28,7 @@ import {
   CLEAR_COLLECTIONS_FILTER
 } from '../actions/types';
 import { createReducer } from '@reduxjs/toolkit';
+import { deconstructCollectionId } from '../utils/format';
 
 export const initialState = {
   list: {
@@ -45,10 +46,8 @@ export const initialState = {
 export default createReducer(initialState, {
   [COLLECTION]: (state, action) => {
     const { id, data } = action;
-    const colName = id.split('___');
-    const collection = data.results.find(function (element) {
-      return element.name === colName[0];
-    });
+    const { name } = deconstructCollectionId(id);
+    const collection = data.results.find((element) => element.name === name);
     set(state, ['map', id, 'inflight'], false);
     set(state, ['map', id, 'data'], assignDate(collection));
     del(state, ['deleted', id]);

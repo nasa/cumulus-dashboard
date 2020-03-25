@@ -11,7 +11,7 @@ export default createReducer(initialState, {
 
   [SCHEMA]: (state, action) => {
     const { config } = action;
-    return {...state, ...{ [key(config.url)]: action.data }};
+    return { ...state, [key(config.url)]: action.data };
   }
 });
 

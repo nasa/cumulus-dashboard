@@ -47,6 +47,7 @@ import {
   OPTIONS_COLLECTIONNAME_ERROR
 } from '../actions/types';
 import { createReducer } from '@reduxjs/toolkit';
+import { getCollectionId } from '../utils/format';
 
 export const initialState = {
   list: {
@@ -204,14 +205,13 @@ export default createReducer(initialState, {
   },
 
   [OPTIONS_COLLECTIONNAME]: (state, action) => {
-    const { data } = action;
-    // Map the list response to an object with key-value pairs like:
-    // displayValue: optionElementValue
-    const options = data.results.reduce((obj, d) => {
-      const { name, version } = d;
-      obj[`${name} ${version}`] = `${name}___${version}`;
-      return obj;
-    }, {});
+    const options = action.data.results.reduce(
+      (obj, { name, version }) =>
+        Object.assign(obj, {
+          [`${name} ${version}`]: getCollectionId({ name, version })
+        }),
+      {}
+    );
     set(state, ['dropdowns', 'collectionName', 'options'], options);
   },
   [OPTIONS_COLLECTIONNAME_INFLIGHT]: () => {},

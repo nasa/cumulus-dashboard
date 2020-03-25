@@ -15,12 +15,12 @@ export const initialState = {
 
 export default createReducer(initialState, {
   [GRANULE_CSV]: (state, action) => {
-    return {...state, ...{ data: action.data, inflight: false, error: null }};
+    return { ...state, data: action.data, inflight: false, error: null };
   },
   [GRANULE_CSV_INFLIGHT]: (state) => {
-    return {...state, ...{ inflight: true, error: state.error }};
+    return { ...state, inflight: true, error: state.error };
   },
   [GRANULE_CSV_ERROR]: (state, action) => {
-    return {...state, ...{ inflight: false, error: action.error }};
+    return { ...state, inflight: false, error: action.error };
   }
 });

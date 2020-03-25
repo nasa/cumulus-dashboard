@@ -31,12 +31,10 @@ test('stats', (t) => {
 
   const expected = {
     ...testState,
-    ...{
-      stats: {
-        data: { ...data, ...{ queriedAt: new Date(testStart) } },
-        inflight: false,
-        error: null
-      }
+    stats: {
+      data: { ...data, queriedAt: new Date(testStart) },
+      inflight: false,
+      error: null
     }
   };
 
@@ -51,8 +49,7 @@ test('stats_inflight', (t) => {
   const action = { type: STATS_INFLIGHT };
 
   const expected = {
-    ...testState,
-    ...{ stats: { ...testState.stats, ...{ inflight: true } } }
+    ...testState, stats: { ...testState.stats, inflight: true }
   };
 
   const actual = reducer(testState, action);
@@ -66,14 +63,7 @@ test('stats_error', (t) => {
   const action = { type: STATS_ERROR, error: 'an error' };
 
   const expected = {
-    ...initialState,
-    ...{
-      stats: {
-        ...initialState.stats,
-        ...{ inflight: false },
-        ...{ error: 'an error' }
-      }
-    }
+    ...initialState, stats: { ...initialState.stats, inflight: false, error: 'an error' }
   };
 
   const actual = reducer(testState, action);

@@ -57,7 +57,7 @@ export default createReducer(initialState(), {
     switch (data.dateRange.label) {
       case 'Custom':
       case 'All':
-        return {...state, ...data, ...{startDateTime: null, endDateTime: null}};
+        return {...state, ...data, startDateTime: null, endDateTime: null};
       case 'Recent':
         return {...state, ...data, ...recentData()};
       default:
@@ -70,6 +70,6 @@ export default createReducer(initialState(), {
   },
   [DATEPICKER_HOUR_FORMAT]: (state, action) => {
     const { data } = action;
-    return { ...state, ...{hourFormat: data} };
+    return { ...state, hourFormat: data };
   }
 });
