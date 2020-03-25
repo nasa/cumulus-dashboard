@@ -3,18 +3,17 @@
 import {
   SCHEMA
 } from '../actions/types';
+import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {};
 
-export default function reducer (state = initialState, action) {
-  const { type, config } = action;
-  switch (type) {
-    case SCHEMA:
-      return Object.assign({}, state, { [key(config.url)]: action.data });
-    default:
-      return state;
+export default createReducer(initialState, {
+
+  [SCHEMA]: (state, action) => {
+    const { config } = action;
+    return { ...state, [key(config.url)]: action.data };
   }
-}
+});
 
 // sample config url is `{rootUrl}/schema/{type}`
 function key (url) {

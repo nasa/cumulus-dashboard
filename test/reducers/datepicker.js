@@ -22,7 +22,7 @@ test('reducer sets initial state to "Recent" on first initialization run.', (t) 
   const actual = reducer(undefined, { type: 'ANY' });
   t.is(actual.dateRange.label, 'Recent');
   t.is(actual.dateRange.value, 'Recent');
-  t.is(actual.startDateTime.valueOf(), (new Date(testStart - msPerDay)).valueOf());
+  t.true(actual.startDateTime.valueOf() - (new Date(testStart - msPerDay)).valueOf() < 1000);
   t.is(actual.endDateTime, null);
   t.is(actual.hourFormat, '12HR');
   sinon.restore();

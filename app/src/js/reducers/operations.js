@@ -15,6 +15,7 @@ import {
   SEARCH_OPERATIONS,
   CLEAR_OPERATIONS_SEARCH
 } from '../actions/types';
+import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
   list: {
@@ -29,51 +30,48 @@ export const initialState = {
   map: {}
 };
 
-export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
-  const { data } = action;
-  switch (action.type) {
-    case OPERATIONS:
-      set(state, ['list', 'data'], data.results);
-      set(state, ['list', 'meta'], assignDate(data.meta));
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], false);
-      break;
-    case OPERATIONS_INFLIGHT:
-      set(state, ['list', 'inflight'], true);
-      break;
-    case OPERATIONS_ERROR:
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], action.error);
-      break;
+export default createReducer(initialState, {
+  [OPERATIONS]: (state, action) => {
+    const { data } = action;
+    set(state, ['list', 'data'], data.results);
+    set(state, ['list', 'meta'], assignDate(data.meta));
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], false);
+  },
+  [OPERATIONS_INFLIGHT]: (state, action) => {
+    set(state, ['list', 'inflight'], true);
+  },
+  [OPERATIONS_ERROR]: (state, action) => {
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], action.error);
+  },
 
-    case OPERATION:
-      set(state, ['list', 'data'], data.results);
-      set(state, ['list', 'meta'], assignDate(data.meta));
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], false);
-      break;
-    case OPERATION_INFLIGHT:
-      set(state, ['list', 'inflight'], true);
-      break;
-    case OPERATION_ERROR:
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], action.error);
-      break;
+  [OPERATION]: (state, action) => {
+    const { data } = action;
+    set(state, ['list', 'data'], data.results);
+    set(state, ['list', 'meta'], assignDate(data.meta));
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], false);
+  },
+  [OPERATION_INFLIGHT]: (state, action) => {
+    set(state, ['list', 'inflight'], true);
+  },
+  [OPERATION_ERROR]: (state, action) => {
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], action.error);
+  },
 
-    case FILTER_OPERATIONS:
-      set(state, ['list', 'params', action.param.key], action.param.value);
-      break;
-    case CLEAR_OPERATIONS_FILTER:
-      set(state, ['list', 'params', action.paramKey], null);
-      break;
+  [FILTER_OPERATIONS]: (state, action) => {
+    set(state, ['list', 'params', action.param.key], action.param.value);
+  },
+  [CLEAR_OPERATIONS_FILTER]: (state, action) => {
+    set(state, ['list', 'params', action.paramKey], null);
+  },
 
-    case SEARCH_OPERATIONS:
-      set(state, ['list', 'internal', 'prefix'], action.prefix);
-      break;
-    case CLEAR_OPERATIONS_SEARCH:
-      set(state, ['list', 'internal', 'prefix'], null);
-      break;
+  [SEARCH_OPERATIONS]: (state, action) => {
+    set(state, ['list', 'internal', 'prefix'], action.prefix);
+  },
+  [CLEAR_OPERATIONS_SEARCH]: (state, action) => {
+    set(state, ['list', 'internal', 'prefix'], null);
   }
-  return state;
-}
+});

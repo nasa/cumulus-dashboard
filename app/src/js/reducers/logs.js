@@ -8,6 +8,7 @@ import {
   LOGS_INFLIGHT,
   CLEAR_LOGS
 } from '../actions/types';
+import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
   items: []
@@ -16,42 +17,40 @@ export const initialState = {
 // https://momentjs.com/docs/#/displaying/
 const format = 'MM/DD/YY hh:mma ss:SSS[s]';
 
-export default function reducer (state = initialState, action) {
-  let nextState = Object.assign({}, state);
-  const { data } = action;
-  switch (action.type) {
-    case LOGS:
-      if (Array.isArray(data.results) && data.results.length) {
-        data.results.forEach(processLog);
-        let items = data.results.concat(state.items);
-        items = dedupe(items);
-        set(nextState, 'items', items);
-      }
-      set(nextState, 'inflight', false);
-      set(nextState, 'queriedAt', new Date());
-      set(nextState, 'error', false);
-      break;
-    case LOGS_INFLIGHT:
-      const query = get(action.config, 'qs.q', '');
-      const replace = state.query !== query;
-      if (replace) {
-        set(nextState, 'items', []);
-      }
-      set(nextState, 'inflight', true);
-      set(nextState, 'query', query);
-      break;
-    case LOGS_ERROR:
-      set(nextState, 'inflight', false);
-      set(nextState, 'error', action.error);
-      break;
-    case CLEAR_LOGS:
-      set(nextState, 'inflight', false);
-      set(nextState, 'error', action.error);
-      set(nextState, 'items', []);
-      break;
+export default createReducer(initialState, {
+
+  [LOGS]: (state, action) => {
+    const { data } = action;
+    if (Array.isArray(data.results) && data.results.length) {
+      data.results.forEach(processLog);
+      let items = data.results.concat(state.items);
+      items = dedupe(items);
+      set(state, 'items', items);
+    }
+    set(state, 'inflight', false);
+    set(state, 'queriedAt', new Date());
+    set(state, 'error', false);
+  },
+  [LOGS_INFLIGHT]: (state, action) => {
+    const query = get(action.config, 'qs.q', '');
+    const replace = state.query !== query;
+    if (replace) {
+      set(state, 'items', []);
+    }
+    set(state, 'inflight', true);
+    set(state, 'query', query);
+  },
+  [LOGS_ERROR]: (state, action) => {
+    set(state, 'inflight', false);
+    set(state, 'error', action.error);
+  },
+  [CLEAR_LOGS]: (state, action) => {
+    set(state, 'inflight', false);
+    set(state, 'error', action.error);
+    set(state, 'items', []);
   }
-  return nextState;
-}
+
+});
 
 function processLog (d) {
   d.displayTime = moment(d.timestamp).format(format);

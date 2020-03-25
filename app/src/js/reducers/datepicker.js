@@ -6,6 +6,7 @@ import {
   DATEPICKER_HOUR_FORMAT
 } from '../actions/types';
 import { msPerDay, allDateRanges } from '../utils/datepicker';
+import { createReducer } from '@reduxjs/toolkit';
 
 // Also becomes default props for Datepicker
 export const initialState = () => {
@@ -49,25 +50,26 @@ const recentData = () => {
   return {startDateTime, endDateTime, dateRange: allDateRanges.find((a) => a.value === 'Recent')};
 };
 
-export default function reducer (state = initialState(), action) {
-  state = { ...state };
-  const { data } = action;
-  switch (action.type) {
-    case DATEPICKER_DROPDOWN_FILTER:
-      switch (data.dateRange.label) {
-        case 'Custom':
-        case 'All':
-          return {...state, ...data, ...{startDateTime: null, endDateTime: null}};
-        case 'Recent':
-          return {...state, ...data, ...recentData()};
-        default:
-          return {...state, ...computeDateTimeDelta(data.dateRange.value), ...data};
-      }
-    case DATEPICKER_DATECHANGE:
-      state = { ...state, ...data };
-      break;
-    case DATEPICKER_HOUR_FORMAT:
-      state = { ...state, ...{hourFormat: data} };
+export default createReducer(initialState(), {
+
+  [DATEPICKER_DROPDOWN_FILTER]: (state, action) => {
+    const { data } = action;
+    switch (data.dateRange.label) {
+      case 'Custom':
+      case 'All':
+        return {...state, ...data, startDateTime: null, endDateTime: null};
+      case 'Recent':
+        return {...state, ...data, ...recentData()};
+      default:
+        return {...state, ...computeDateTimeDelta(data.dateRange.value), ...data};
+    }
+  },
+  [DATEPICKER_DATECHANGE]: (state, action) => {
+    const { data } = action;
+    return { ...state, ...data };
+  },
+  [DATEPICKER_HOUR_FORMAT]: (state, action) => {
+    const { data } = action;
+    return { ...state, hourFormat: data };
   }
-  return state;
-}
+});

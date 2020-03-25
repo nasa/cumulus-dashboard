@@ -154,6 +154,21 @@ export const constructCollectionNameVersion = function (name, version) {
   return `${name}___${version}`;
 };
 
+/**
+ * Returns the name and version of a collection based on
+ * the collectionId used in elasticsearch indexing
+ *
+ * @param {string} collectionId - collectionId used in elasticsearch index
+ * @returns {Object} name and version as object
+ */
+export const deconstructCollectionId = function (collectionId) {
+  const [name, version] = collectionId.split('___');
+  return {
+    name,
+    version
+  };
+};
+
 export const collectionLink = function (collectionId) {
   if (!collectionId) return nullValue;
   const { name, version } = collectionNameVersion(collectionId);

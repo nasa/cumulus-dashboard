@@ -23,7 +23,7 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-import clonedeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash.clonedeep';
 import { DELETE_TOKEN, SET_TOKEN } from '../../app/src/js/actions/types';
 
 Cypress.Commands.add('login', () => {
@@ -101,8 +101,8 @@ Cypress.Commands.add('getFixture', (fixtureName) => {
  * for the updatedAt time must be newer on the new object.
  */
 Cypress.Commands.add('expectDeepEqualButNewer', (inewObject, ifixtureObject) => {
-  const newObject = clonedeep(inewObject);
-  const fixtureObject = clonedeep(ifixtureObject);
+  const newObject = cloneDeep(inewObject);
+  const fixtureObject = cloneDeep(ifixtureObject);
   expect(newObject['updatedAt']).to.be.greaterThan(fixtureObject['updatedAt']);
   delete newObject['updatedAt'];
   delete fixtureObject['updatedAt'];
