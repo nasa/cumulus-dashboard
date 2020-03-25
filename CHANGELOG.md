@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1790**
   - Changes default values and visuals for home page's datepicker. When the page loads, it defauls to display "Recent" data, which is the previous 24 hours with no end time.
 
+- **CUMULUS-1467**
+  - Change the metrics section on the home page to update based on datepicker time period.
+
 ## [v1.7.2] - 2020-03-16
 
 ### Added
