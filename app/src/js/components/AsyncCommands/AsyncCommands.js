@@ -8,7 +8,6 @@ import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
 import DefaultModal from '../Modal/modal';
 import { preventDefault } from '../../utils/noop';
 import _config from '../../config';
-import Modal from 'react-bootstrap/Modal';
 
 const { updateDelay } = _config;
 
@@ -94,6 +93,17 @@ class AsyncCommand extends React.Component {
         {text}{inflight ? <Ellipsis /> : ''}
       </span>
     );
+    const confirmBody = (
+      <div className='modal__internal modal__formcenter'>
+        { confirmOptions ? (confirmOptions).map(option =>
+          <div key={`option-${confirmOptions.indexOf(option)}`}>
+            {option}
+            <br />
+          </div>
+        ) : null }
+        <h4>{confirmText}</h4>
+      </div>
+    );
     const button = React.createElement(element, props, children);
 
     return (
@@ -104,43 +114,21 @@ class AsyncCommand extends React.Component {
           modal__container: true,
           'modal__container--onscreen': modal
         })}>
-          { modal ? (
-            <Modal
-              dialogClassName="async-modal"
-              show
-              centered
-              size="md"
-              aria-labelledby="modal__async-modal"
-            >
-              <Modal.Header className="async-modal__header" closeButton onClick={this.cancel}></Modal.Header>
-              <Modal.Title id="modal__async-modal" className="modal__async-title"></Modal.Title>
-              <Modal.Body>
-                <div className='modal__internal modal__formcenter'>
-                  { confirmOptions ? (confirmOptions).map(option =>
-                    <div key={`option-${confirmOptions.indexOf(option)}`}>
-                      {option}
-                      <br />
-                    </div>
-                  ) : null }
-                  <h4>{confirmText}</h4>
-                </div>
-              </Modal.Body>
-              <Modal.Footer>
-                <button
-                  className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
-                  onClick={this.cancel}>Cancel
-                </button>
-                <button
-                  className='button button--confirm button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
-                  onClick={this.confirm}>Confirm
-                </button>
-              </Modal.Footer>
-            </Modal>
-          ) : null }
-          { (activeModal && confirmModal) ? (
+          { modal && (
+            <DefaultModal
+              className='async-modal'
+              onCancel={this.cancel}
+              onCloseModal={this.cancel}
+              onConfirm={this.confirm}
+              title={text}
+              children={confirmBody}
+              showModal={activeModal}
+            />) }
+
+          { (activeModal && confirmModal) && (
             <DefaultModal
               className='link--no-underline'
-              onCancel={this.close}
+              onCancel={this.cancel}
               onCloseModal={this.cancel}
               cancelButtonText={'Close'}
               hasConfirmButton={false}
@@ -148,7 +136,7 @@ class AsyncCommand extends React.Component {
               children={postActionText}
               showModal={activeModal}
               cancelButtonClass={'button--cancel'}
-            />) : null }
+            />) }
         </div>
       </div>
     );

@@ -30,7 +30,7 @@ const DefaultModal = ({
   }
 
   function handleCancel (e) {
-    if (typeof onConfirm === 'function') {
+    if (typeof onCancel === 'function') {
       onCancel(e);
     } else {
       handleCloseModal(e);
