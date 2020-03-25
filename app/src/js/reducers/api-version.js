@@ -4,6 +4,7 @@ import {
   API_VERSION_COMPATIBLE,
   API_VERSION_INCOMPATIBLE
 } from '../actions/types';
+import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
   versionNumber: '',
@@ -11,32 +12,34 @@ export const initialState = {
   warning: ''
 };
 
-export default function reducer (state = initialState, action) {
-  switch (action.type) {
-    case API_VERSION:
-      return {
-        ...state,
-        versionNumber: action.payload.versionNumber,
-        warning: ''
-      };
-    case API_VERSION_ERROR:
-      return {
-        ...state,
-        apiVersion: action.payload.error.message,
-        warning: 'Failed to acquire Cumulus API Version'
-      };
-    case API_VERSION_COMPATIBLE:
-      return {
-        ...state,
-        isCompatible: true,
-        warning: ''
-      };
-    case API_VERSION_INCOMPATIBLE:
-      return {
-        ...state,
-        isCompatible: false,
-        warning: action.payload.warning
-      };
+export default createReducer(initialState, {
+
+  [API_VERSION]: (state, action) => {
+    return {
+      ...state,
+      versionNumber: action.payload.versionNumber,
+      warning: ''
+    };
+  },
+  [API_VERSION_ERROR]: (state, action) => {
+    return {
+      ...state,
+      apiVersion: action.payload.error.message,
+      warning: 'Failed to acquire Cumulus API Version'
+    };
+  },
+  [API_VERSION_COMPATIBLE]: (state, action) => {
+    return {
+      ...state,
+      isCompatible: true,
+      warning: ''
+    };
+  },
+  [API_VERSION_INCOMPATIBLE]: (state, action) => {
+    return {
+      ...state,
+      isCompatible: false,
+      warning: action.payload.warning
+    };
   }
-  return state;
-}
+});

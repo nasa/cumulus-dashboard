@@ -58,10 +58,10 @@ class ProvidersOverview extends React.Component {
     const { count, queriedAt } = list.meta;
 
     // Incorporate the collection counts into the `list`
-    const modifiableList = cloneDeep(list);
+    const mutableList = cloneDeep(list);
     const collectionCounts = get(stats.count, 'data.collections.count', []);
 
-    modifiableList.data.forEach(d => {
+    mutableList.data.forEach(d => {
       d.collections = get(collectionCounts.find(c => c.key === d.name), 'count', 0);
     });
     const providerStatus = get(stats.count, 'data.providers.count', []);
@@ -79,7 +79,7 @@ class ProvidersOverview extends React.Component {
           </div>
 
           <List
-            list={modifiableList}
+            list={mutableList}
             dispatch={this.props.dispatch}
             action={listProviders}
             tableColumns={tableColumns}
