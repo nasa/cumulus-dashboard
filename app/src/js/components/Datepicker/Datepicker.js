@@ -1,7 +1,7 @@
 import isEmpty from 'lodash.isempty';
 import isNil from 'lodash.isnil';
 import moment from 'moment';
-import PropTypes from 'prop-types';
+import PropTypes, { string } from 'prop-types';
 import React from 'react';
 import DateTimePicker from 'react-datetime-picker';
 import { connect } from 'react-redux';
@@ -34,7 +34,7 @@ const updateDatepickerStateFromQueryParams = (props) => {
 
     for (const value in values) {
       if (urlDateProps.includes(value)) {
-        values[value] = moment.utc(values[value], urlDateFormat).toDate();
+        values[value] = moment.utc(values[value], urlDateFormat).valueOf();
       }
     }
 
@@ -106,7 +106,7 @@ class Datepicker extends React.PureComponent {
     // data as local time.  So we need convert the Date value to UTC.
     let utcValue = null;
     if (newValue !== null) {
-      utcValue = moment.utc(moment(newValue).format(dateTimeFormat)).toDate();
+      utcValue = moment.utc(moment(newValue).format(dateTimeFormat)).valueOf();
       if (isNaN(utcValue)) return;
     }
     const updatedProps = {
@@ -274,8 +274,8 @@ Datepicker.propTypes = {
     value: PropTypes.node,
     label: PropTypes.string
   }),
-  startDateTime: PropTypes.instanceOf(Date),
-  endDateTime: PropTypes.instanceOf(Date),
+  startDateTime: PropTypes.instanceOf(string),
+  endDateTime: PropTypes.instanceOf(string),
   hourFormat: PropTypes.oneOf(allHourFormats.map((a) => a.label)),
   queryParams: PropTypes.object,
   setQueryParams: PropTypes.func,

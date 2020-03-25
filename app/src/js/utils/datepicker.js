@@ -38,7 +38,7 @@ export const urlDateProps = matchObjects.map((o) => o.dateProp);
 export const dropdownValue = (values) => {
   let dropdownInfo = {value: 'Custom', label: 'Custom'};
   if (!!values.startDateTime && !!values.endDateTime) {
-    const durationDays = (values.endDateTime.valueOf() - values.startDateTime.valueOf()) / msPerDay;
+    const durationDays = (values.endDateTime - values.startDateTime) / msPerDay;
     dropdownInfo = allDateRanges.find((r) => r.value === durationDays) || dropdownInfo;
   }
   return dropdownInfo;
@@ -54,7 +54,7 @@ export const fetchCurrentTimeFilters = (datepicker) => {
   const filters = {};
   matchObjects.map((o) => {
     if (datepicker[o.dateProp] !== null) {
-      filters[`timestamp${o.filterProp}`] = datepicker[o.dateProp].valueOf();
+      filters[`timestamp${o.filterProp}`] = datepicker[o.dateProp];
     }
   });
   return filters;

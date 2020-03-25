@@ -26,7 +26,7 @@ test('fetchCurrentTimeFilters returns empty object if no start and end times pro
 test('fetchCurrentTimeFilters creates object with "timestamp__to" if endDateTime time is provided.', (t) => {
   let state = { ...testState };
   const valueOfDate = 1582307006281;
-  const endDateTime = new Date(valueOfDate);
+  const endDateTime = valueOfDate;
   state.endDateTime = endDateTime;
   state.startDateTime = null;
 
@@ -39,7 +39,7 @@ test('fetchCurrentTimeFilters creates object with "timestamp__to" if endDateTime
 test('fetchCurrentTimeFilters creates an object with "timestamp__from" if startDateTime time is provided.', (t) => {
   let state = { ...testState };
   const valueOfDate = 1582307006281;
-  const startDateTime = new Date(valueOfDate);
+  const startDateTime = valueOfDate;
   state.endDateTime = null;
   state.startDateTime = startDateTime;
 
@@ -54,8 +54,8 @@ test('fetchCurrentTimeFilters creates an object with both timestamp__from and ti
   const valueOfStartDate = 1501907006251;
   const valueOfEndDate = 1582307006281;
 
-  const startDateTime = new Date(valueOfStartDate);
-  const endDateTime = new Date(valueOfEndDate);
+  const startDateTime = valueOfStartDate;
+  const endDateTime = valueOfEndDate;
   state.startDateTime = startDateTime;
   state.endDateTime = endDateTime;
 
@@ -69,7 +69,7 @@ test('fetchCurrentTimeFilters creates an object with both timestamp__from and ti
 });
 
 test('dropdownValue returns the "Custom" value/label if object is missing a date.', (t) => {
-  const values = { startDateTime: new Date(Date.now()) };
+  const values = { startDateTime: Date.now() };
   const expected = allDateRanges.find((e) => e.value === 'Custom');
   const actual = dropdownValue(values);
   t.deepEqual(expected, actual);
@@ -77,8 +77,8 @@ test('dropdownValue returns the "Custom" value/label if object is missing a date
 
 test('dropdownValue returns the "Custom" value/label if datetimes do not match any dropdown values.', (t) => {
   const values = {
-    startDateTime: new Date(Date.now()),
-    endDateTime: new Date(Date.now())
+    startDateTime: Date.now(),
+    endDateTime: Date.now()
   };
   const expected = allDateRanges.find((e) => e.value === 'Custom');
   const actual = dropdownValue(values);
@@ -89,10 +89,9 @@ test('dropdownValue returns the correct value/label when datetimes match a dropd
   const testValues = [1 / 24, 1, 7, 30, 90, 180, 366];
 
   testValues.forEach((testValue) => {
-    const endDateTime = new Date(Date.now());
-    const startDateTime = new Date(
-      endDateTime.valueOf() - testValue * msPerDay
-    );
+    const endDateTime = Date.now();
+    const startDateTime = endDateTime - testValue * msPerDay;
+
     const values = {
       endDateTime,
       startDateTime
