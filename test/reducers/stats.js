@@ -32,7 +32,7 @@ test('stats', (t) => {
   const expected = {
     ...testState,
     stats: {
-      data: { ...data, queriedAt: new Date(testStart) },
+      data: { ...data, queriedAt: testStart },
       inflight: false,
       error: null
     }

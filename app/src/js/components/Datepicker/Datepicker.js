@@ -1,7 +1,7 @@
 import isEmpty from 'lodash.isempty';
 import isNil from 'lodash.isnil';
 import moment from 'moment';
-import PropTypes, { string } from 'prop-types';
+import PropTypes, { number } from 'prop-types';
 import React from 'react';
 import DateTimePicker from 'react-datetime-picker';
 import { connect } from 'react-redux';
@@ -274,8 +274,8 @@ Datepicker.propTypes = {
     value: PropTypes.node,
     label: PropTypes.string
   }),
-  startDateTime: PropTypes.instanceOf(string),
-  endDateTime: PropTypes.instanceOf(string),
+  startDateTime: PropTypes.instanceOf(number),
+  endDateTime: PropTypes.instanceOf(number),
   hourFormat: PropTypes.oneOf(allHourFormats.map((a) => a.label)),
   queryParams: PropTypes.object,
   setQueryParams: PropTypes.func,

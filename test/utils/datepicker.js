@@ -25,12 +25,11 @@ test('fetchCurrentTimeFilters returns empty object if no start and end times pro
 
 test('fetchCurrentTimeFilters creates object with "timestamp__to" if endDateTime time is provided.', (t) => {
   let state = { ...testState };
-  const valueOfDate = 1582307006281;
-  const endDateTime = valueOfDate;
-  state.endDateTime = endDateTime;
+  const valueOfEndDateTime = 1582307006281;
+  state.endDateTime = valueOfEndDateTime;
   state.startDateTime = null;
 
-  const expected = { timestamp__to: valueOfDate };
+  const expected = { timestamp__to: valueOfEndDateTime };
 
   const actual = fetchCurrentTimeFilters(state);
   t.deepEqual(expected, actual);
@@ -38,12 +37,11 @@ test('fetchCurrentTimeFilters creates object with "timestamp__to" if endDateTime
 
 test('fetchCurrentTimeFilters creates an object with "timestamp__from" if startDateTime time is provided.', (t) => {
   let state = { ...testState };
-  const valueOfDate = 1582307006281;
-  const startDateTime = valueOfDate;
+  const valueOfStartDateTime = 1582307006281;
   state.endDateTime = null;
-  state.startDateTime = startDateTime;
+  state.startDateTime = valueOfStartDateTime;
 
-  const expected = { timestamp__from: valueOfDate };
+  const expected = { timestamp__from: valueOfStartDateTime };
 
   const actual = fetchCurrentTimeFilters(state);
   t.deepEqual(expected, actual);
@@ -54,10 +52,8 @@ test('fetchCurrentTimeFilters creates an object with both timestamp__from and ti
   const valueOfStartDate = 1501907006251;
   const valueOfEndDate = 1582307006281;
 
-  const startDateTime = valueOfStartDate;
-  const endDateTime = valueOfEndDate;
-  state.startDateTime = startDateTime;
-  state.endDateTime = endDateTime;
+  state.startDateTime = valueOfStartDate;
+  state.endDateTime = valueOfEndDate;
 
   const expected = {
     timestamp__from: valueOfStartDate,

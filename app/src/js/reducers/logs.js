@@ -28,7 +28,7 @@ export default createReducer(initialState, {
       set(state, 'items', items);
     }
     set(state, 'inflight', false);
-    set(state, 'queriedAt', new Date());
+    set(state, 'queriedAt', Date.now());
     set(state, 'error', false);
   },
   [LOGS_INFLIGHT]: (state, action) => {
