@@ -8,13 +8,13 @@ const formatKibanaDate = (datepicker = {}) => {
   let kibanaDate = '';
 
   if (startTime && endTime) {
-    kibanaDate = `from:'${startTime.toISOString()}',to:'${endTime.toISOString()}'`;
+    kibanaDate = `from:'${new Date(startTime).toISOString()}',to:'${new Date(endTime).toISOString()}'`;
   } else if (startTime && !endTime) {
-    kibanaDate = `from:'${startTime.toISOString()}',to:now`;
+    kibanaDate = `from:'${new Date(startTime).toISOString()}',to:now`;
   } else if (!startTime && endTime) {
     const calculatedStartTime = new Date(0);
 
-    kibanaDate = `from:'${calculatedStartTime.toISOString()}',to:'${endTime.toISOString()}'`;
+    kibanaDate = `from:'${calculatedStartTime.toISOString()}',to:'${new Date(endTime).toISOString()}'`;
   } else {
     kibanaDate = 'from:now-24h,mode:quick,to:now';
   }

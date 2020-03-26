@@ -38,7 +38,7 @@ export default createReducer(initialState, {
   [DIST_APIGATEWAY]: (state, action) => {
     set(state, 'apiGateway.error', null);
     set(state, 'apiGateway.inflight', false);
-    set(state, 'apiGateway.queriedAt', new Date(Date.now()));
+    set(state, 'apiGateway.queriedAt', Date.now());
     set(
       state,
       'apiGateway.access.errors',
@@ -70,7 +70,7 @@ export default createReducer(initialState, {
   [DIST_API_LAMBDA]: (state, action) => {
     set(state, 'apiLambda.error', null);
     set(state, 'apiLambda.inflight', false);
-    set(state, 'apiLambda.queriedAt', new Date(Date.now()));
+    set(state, 'apiLambda.queriedAt', Date.now());
     set(
       state,
       'apiLambda.errors',
@@ -92,7 +92,7 @@ export default createReducer(initialState, {
   [DIST_TEA_LAMBDA]: (state, action) => {
     set(state, 'teaLambda.error', null);
     set(state, 'teaLambda.inflight', false);
-    set(state, 'teaLambda.queriedAt', new Date(Date.now()));
+    set(state, 'teaLambda.queriedAt', Date.now());
     set(
       state,
       'teaLambda.errors',
@@ -114,7 +114,7 @@ export default createReducer(initialState, {
   [DIST_S3ACCESS]: (state, action) => {
     set(state, 's3Access.error', null);
     set(state, 's3Access.inflight', false);
-    set(state, 's3Access.queriedAt', new Date(Date.now()));
+    set(state, 's3Access.queriedAt', Date.now());
     set(
       state,
       's3Access.errors',

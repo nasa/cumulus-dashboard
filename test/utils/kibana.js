@@ -36,8 +36,8 @@ test('Kibana links will return a range for the last 24 hours when no time is pro
 
 test('Kibana links will return a range with start date and end date when both are provided', function (t) {
   const datepicker = {
-    startDateTime: new Date(startDateString),
-    endDateTime: new Date(endDateString)
+    startDateTime: new Date(startDateString).valueOf(),
+    endDateTime: new Date(endDateString).valueOf()
   };
   const expectedRegEx = /from:'2020-02-20T17:43:26.281Z',to:'2020-02-21T17:43:26.281Z'/;
 
@@ -47,7 +47,7 @@ test('Kibana links will return a range with start date and end date when both ar
 
 test('Kibana links will return a range of start time to now when only start time is provided', function (t) {
   const datepicker = {
-    startDateTime: new Date(startDateString)
+    startDateTime: new Date(startDateString).valueOf()
   };
   const expectedRegEx = /from:'2020-02-20T17:43:26.281Z',to:now/;
 
@@ -57,7 +57,7 @@ test('Kibana links will return a range of start time to now when only start time
 
 test('Kibana links will return a range from Jan 1, 1970 until the end time when just end time is provided', function (t) {
   const datepicker = {
-    endDateTime: new Date(endDateString)
+    endDateTime: new Date(endDateString).valueOf()
   };
   const expectedRegEx = /from:'1970-01-01T00:00:00.000Z',to:'2020-02-21T17:43:26.281Z'/;
 

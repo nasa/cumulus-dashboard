@@ -10,9 +10,9 @@ import { createReducer } from '@reduxjs/toolkit';
 
 // Also becomes default props for Datepicker
 export const initialState = () => {
-  const now = new Date(Date.now());
+  const now = Date.now();
   return {
-    startDateTime: new Date(now - msPerDay),
+    startDateTime: now - msPerDay,
     endDateTime: null,
     dateRange: allDateRanges.find((a) => a.value === 'Recent'),
     hourFormat: '12HR'
@@ -31,10 +31,8 @@ const computeDateTimeDelta = (timeDeltaInDays) => {
   let startDateTime = null;
 
   if (!isNaN(timeDeltaInDays)) {
-    endDateTime = new Date(Date.now());
-    startDateTime = new Date(
-      endDateTime - timeDeltaInDays * msPerDay
-    );
+    endDateTime = Date.now();
+    startDateTime = endDateTime - timeDeltaInDays * msPerDay;
   }
   return { startDateTime, endDateTime };
 };
@@ -46,7 +44,7 @@ const computeDateTimeDelta = (timeDeltaInDays) => {
 */
 const recentData = () => {
   const endDateTime = null;
-  const startDateTime = new Date(Date.now() - msPerDay);
+  const startDateTime = Date.now() - msPerDay;
   return {startDateTime, endDateTime, dateRange: allDateRanges.find((a) => a.value === 'Recent')};
 };
 

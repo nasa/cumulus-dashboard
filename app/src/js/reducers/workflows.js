@@ -31,7 +31,7 @@ export default createReducer(initialState, {
     const { data } = action;
     set(state, 'map', createMap(data));
     set(state, ['list', 'data'], data);
-    set(state, ['list', 'meta'], { queriedAt: new Date() });
+    set(state, ['list', 'meta'], { queriedAt: Date.now() });
     set(state, ['list', 'inflight'], false);
     set(state, ['list', 'error'], false);
   },
