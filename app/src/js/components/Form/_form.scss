@@ -22,6 +22,10 @@ input[type="checkbox"], input[type="radio"] {
   font-size: 1em;
 }
 
+::placeholder{
+  color: $lighter-grey;
+}
+
 label {
   display: block;
   font-weight: $base-font-semibold;

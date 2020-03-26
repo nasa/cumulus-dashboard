@@ -6,8 +6,8 @@ import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
 import { history } from '../store/configureStore';
 import { CMR } from '@cumulus/cmrjs';
-import clonedeep from 'lodash.clonedeep';
 import isEmpty from 'lodash.isempty';
+import cloneDeep from 'lodash.clonedeep';
 
 import { configureRequest } from './helpers';
 import _config from '../config';
@@ -837,7 +837,7 @@ export const deleteRule = (ruleName) => ({
 });
 
 export const enableRule = (payload) => {
-  const rule = clonedeep(payload);
+  const rule = cloneDeep(payload);
 
   if (!rule.rule.value) {
     rule.rule.value = '';
@@ -858,7 +858,7 @@ export const enableRule = (payload) => {
 };
 
 export const disableRule = (payload) => {
-  const rule = clonedeep(payload);
+  const rule = cloneDeep(payload);
 
   if (!rule.rule.value) {
     rule.rule.value = '';

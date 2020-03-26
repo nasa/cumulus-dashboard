@@ -6,34 +6,29 @@ import {
   COLLECTION,
   COLLECTION_INFLIGHT,
   COLLECTION_ERROR,
-
   COLLECTION_APPLYWORKFLOW,
   COLLECTION_APPLYWORKFLOW_INFLIGHT,
   COLLECTION_APPLYWORKFLOW_ERROR,
-
   COLLECTIONS,
   COLLECTIONS_INFLIGHT,
   COLLECTIONS_ERROR,
-
   NEW_COLLECTION,
   NEW_COLLECTION_INFLIGHT,
   NEW_COLLECTION_ERROR,
-
   COLLECTION_DELETE,
   COLLECTION_DELETE_INFLIGHT,
   COLLECTION_DELETE_ERROR,
-
   UPDATE_COLLECTION,
   UPDATE_COLLECTION_INFLIGHT,
   UPDATE_COLLECTION_ERROR,
   UPDATE_COLLECTION_CLEAR,
-
   SEARCH_COLLECTIONS,
   CLEAR_COLLECTIONS_SEARCH,
-
   FILTER_COLLECTIONS,
   CLEAR_COLLECTIONS_FILTER
 } from '../actions/types';
+import { createReducer } from '@reduxjs/toolkit';
+import { deconstructCollectionId } from '../utils/format';
 
 export const initialState = {
   list: {
@@ -48,105 +43,114 @@ export const initialState = {
   updated: {}
 };
 
-export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
-  const { id, data } = action;
+export default createReducer(initialState, {
+  [COLLECTION]: (state, action) => {
+    const { id, data } = action;
+    const { name } = deconstructCollectionId(id);
+    const collection = data.results.find((element) => element.name === name);
+    set(state, ['map', id, 'inflight'], false);
+    set(state, ['map', id, 'data'], assignDate(collection));
+    del(state, ['deleted', id]);
+  },
+  [COLLECTION_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['map', id, 'inflight'], true);
+  },
+  [COLLECTION_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['map', id, 'inflight'], false);
+    set(state, ['map', id, 'error'], action.error);
+  },
 
-  switch (action.type) {
-    case COLLECTION:
-      const colName = id.split('___');
-      const collection = data.results.find(function (element) {
-        return element.name === colName[0];
-      });
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'data'], assignDate(collection));
-      del(state, ['deleted', id]);
-      break;
-    case COLLECTION_INFLIGHT:
-      set(state, ['map', id, 'inflight'], true);
-      break;
-    case COLLECTION_ERROR:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'error'], action.error);
-      break;
+  [COLLECTION_APPLYWORKFLOW]: (state, action) => {
+    const { id } = action;
+    set(state, ['executed', id, 'status'], 'success');
+    set(state, ['executed', id, 'error'], null);
+  },
+  [COLLECTION_APPLYWORKFLOW_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['executed', id, 'status'], 'inflight');
+  },
+  [COLLECTION_APPLYWORKFLOW_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['executed', id, 'status'], 'error');
+    set(state, ['executed', id, 'error'], action.error);
+  },
 
-    case COLLECTION_APPLYWORKFLOW:
-      set(state, ['executed', id, 'status'], 'success');
-      set(state, ['executed', id, 'error'], null);
-      break;
-    case COLLECTION_APPLYWORKFLOW_INFLIGHT:
-      set(state, ['executed', id, 'status'], 'inflight');
-      break;
-    case COLLECTION_APPLYWORKFLOW_ERROR:
-      set(state, ['executed', id, 'status'], 'error');
-      set(state, ['executed', id, 'error'], action.error);
-      break;
+  [COLLECTIONS]: (state, action) => {
+    const { data } = action;
+    set(state, ['list', 'data'], data.results);
+    set(state, ['list', 'meta'], assignDate(data.meta));
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], false);
+  },
+  [COLLECTIONS_INFLIGHT]: (state, action) => {
+    set(state, ['list', 'inflight'], true);
+  },
+  [COLLECTIONS_ERROR]: (state, action) => {
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], action.error);
+  },
 
-    case COLLECTIONS:
-      set(state, ['list', 'data'], data.results);
-      set(state, ['list', 'meta'], assignDate(data.meta));
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], false);
-      break;
-    case COLLECTIONS_INFLIGHT:
-      set(state, ['list', 'inflight'], true);
-      break;
-    case COLLECTIONS_ERROR:
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], action.error);
-      break;
+  [NEW_COLLECTION]: (state, action) => {
+    const { id } = action;
+    set(state, ['created', id, 'status'], 'success');
+  },
+  [NEW_COLLECTION_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['created', id, 'status'], 'inflight');
+  },
+  [NEW_COLLECTION_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['created', id, 'status'], 'error');
+    set(state, ['created', id, 'error'], action.error);
+  },
 
-    case NEW_COLLECTION:
-      set(state, ['created', id, 'status'], 'success');
-      break;
-    case NEW_COLLECTION_INFLIGHT:
-      set(state, ['created', id, 'status'], 'inflight');
-      break;
-    case NEW_COLLECTION_ERROR:
-      set(state, ['created', id, 'status'], 'error');
-      set(state, ['created', id, 'error'], action.error);
-      break;
+  [UPDATE_COLLECTION]: (state, action) => {
+    const { id, data } = action;
+    set(state, ['map', id, 'data'], data);
+    set(state, ['updated', id, 'status'], 'success');
+  },
+  [UPDATE_COLLECTION_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['updated', id, 'status'], 'inflight');
+  },
+  [UPDATE_COLLECTION_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['updated', id, 'status'], 'error');
+    set(state, ['updated', id, 'error'], action.error);
+  },
+  [UPDATE_COLLECTION_CLEAR]: (state, action) => {
+    const { id } = action;
+    del(state, ['updated', id]);
+  },
 
-    case UPDATE_COLLECTION:
-      set(state, ['map', id, 'data'], data);
-      set(state, ['updated', id, 'status'], 'success');
-      break;
-    case UPDATE_COLLECTION_INFLIGHT:
-      set(state, ['updated', id, 'status'], 'inflight');
-      break;
-    case UPDATE_COLLECTION_ERROR:
-      set(state, ['updated', id, 'status'], 'error');
-      set(state, ['updated', id, 'error'], action.error);
-      break;
-    case UPDATE_COLLECTION_CLEAR:
-      del(state, ['updated', id]);
-      break;
+  [COLLECTION_DELETE]: (state, action) => {
+    const { id } = action;
+    set(state, ['deleted', id, 'status'], 'success');
+    set(state, ['deleted', id, 'error'], null);
+  },
+  [COLLECTION_DELETE_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['deleted', id, 'status'], 'inflight');
+  },
+  [COLLECTION_DELETE_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['deleted', id, 'status'], 'error');
+    set(state, ['deleted', id, 'error'], action.error);
+  },
 
-    case COLLECTION_DELETE:
-      set(state, ['deleted', id, 'status'], 'success');
-      set(state, ['deleted', id, 'error'], null);
-      break;
-    case COLLECTION_DELETE_INFLIGHT:
-      set(state, ['deleted', id, 'status'], 'inflight');
-      break;
-    case COLLECTION_DELETE_ERROR:
-      set(state, ['deleted', id, 'status'], 'error');
-      set(state, ['deleted', id, 'error'], action.error);
-      break;
+  [SEARCH_COLLECTIONS]: (state, action) => {
+    set(state, ['list', 'params', 'prefix'], action.prefix);
+  },
+  [CLEAR_COLLECTIONS_SEARCH]: (state, action) => {
+    set(state, ['list', 'params', 'prefix'], null);
+  },
 
-    case SEARCH_COLLECTIONS:
-      set(state, ['list', 'params', 'prefix'], action.prefix);
-      break;
-    case CLEAR_COLLECTIONS_SEARCH:
-      set(state, ['list', 'params', 'prefix'], null);
-      break;
-
-    case FILTER_COLLECTIONS:
-      set(state, ['list', 'params', action.param.key], action.param.value);
-      break;
-    case CLEAR_COLLECTIONS_FILTER:
-      set(state, ['list', 'params', action.paramKey], null);
-      break;
+  [FILTER_COLLECTIONS]: (state, action) => {
+    set(state, ['list', 'params', action.param.key], action.param.value);
+  },
+  [CLEAR_COLLECTIONS_FILTER]: (state, action) => {
+    set(state, ['list', 'params', action.paramKey], null);
   }
-  return state;
-}
+});

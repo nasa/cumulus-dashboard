@@ -12,6 +12,10 @@ styling overrides
   display: none;
 }*/
 
+.react-datetime-picker__inputGroup, .react-calendar__month-view__days, .react-calendar__month-view__weekdays{
+  color: $dark-grey;
+}
+
 .react-datetime-picker__calendar.react-datetime-picker__calendar--open, .react-datetime-picker__clock.react-datetime-picker__clock--open{
   top: 100%;
   bottom: unset;

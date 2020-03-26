@@ -5,6 +5,7 @@ import {
   GRANULE_CSV_INFLIGHT,
   GRANULE_CSV_ERROR
 } from '../actions/types';
+import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
   data: null,
@@ -12,23 +13,14 @@ export const initialState = {
   error: null
 };
 
-export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
-  let csvData, nextState;
-
-  switch (action.type) {
-    case GRANULE_CSV:
-      csvData = { data: action.data, inflight: false, error: null };
-      nextState = Object.assign({}, state, csvData);
-      break;
-    case GRANULE_CSV_INFLIGHT:
-      csvData = { data: state.data, inflight: true, error: state.error };
-      nextState = Object.assign({}, state, csvData);
-      break;
-    case GRANULE_CSV_ERROR:
-      csvData = { data: state.data, inflight: false, error: action.error };
-      nextState = Object.assign({}, state, csvData);
-      break;
+export default createReducer(initialState, {
+  [GRANULE_CSV]: (state, action) => {
+    return { ...state, data: action.data, inflight: false, error: null };
+  },
+  [GRANULE_CSV_INFLIGHT]: (state) => {
+    return { ...state, inflight: true, error: state.error };
+  },
+  [GRANULE_CSV_ERROR]: (state, action) => {
+    return { ...state, inflight: false, error: action.error };
   }
-  return nextState || state;
-}
+});

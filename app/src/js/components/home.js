@@ -174,14 +174,6 @@ class Home extends React.Component {
         </div>
 
         <div className='page__content page__content__nosidebar'>
-          <section className='page__section metrics--overview'>
-            <div className='row'>
-              <div className='heading__wrapper--border'>
-                <h2 className='heading--large heading--shared-content--right'>Metrics Overview</h2>
-              </div>
-            </div>
-          </section>
-
           <section className='page__section datetime'>
             <div className='row'>
               <div className='heading__wrapper'>
@@ -190,6 +182,14 @@ class Home extends React.Component {
                 </h2>
               </div>
               <Datepicker onChange={this.refreshQuery}/>
+            </div>
+          </section>
+
+          <section className='page__section metrics--overview'>
+            <div className='row'>
+              <div className='heading__wrapper--border'>
+                <h2 className='heading--large heading--shared-content--right'>Metrics Overview</h2>
+              </div>
             </div>
           </section>
 

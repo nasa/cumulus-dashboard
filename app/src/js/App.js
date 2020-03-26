@@ -1,7 +1,7 @@
 'use strict';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import configureStore, { history } from './store/configureStore';
+import ourConfigureStore, { history } from './store/configureStore';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 // import { useScroll as notHookUseScroll } from 'react-router-scroll-4';
@@ -61,7 +61,7 @@ class App extends Component {
   constructor (props) {
     super(props);
     this.state = {};
-    this.store = configureStore({});
+    this.store = ourConfigureStore({});
     this.isLoggedIn = this.isLoggedIn.bind(this);
   }
 

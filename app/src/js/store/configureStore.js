@@ -1,15 +1,12 @@
 import { createHashHistory, createBrowserHistory } from 'history';
-import { applyMiddleware, compose, createStore } from 'redux';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { routerMiddleware } from 'connected-react-router';
 import { createRootReducer } from '../reducers';
 import { refreshTokenMiddleware } from '../middleware/token';
 import { requestMiddleware } from '../middleware/request';
-import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { window } from '../utils/browser';
 import config from '../config';
-
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export let history;
 if (config.servedByCumulusAPI) {
@@ -38,7 +35,7 @@ const middlewares = [
   routerMiddleware(history), // for dispatching history actions
   refreshTokenMiddleware,
   requestMiddleware,
-  thunk
+  ...getDefaultMiddleware()
 ];
 
 if (isDevelopment) {
@@ -50,14 +47,12 @@ if (isDevelopment) {
 }
 
 // create the store and build redux middleware
-export default function configureStore (preloadedState) {
-  const store = createStore(
-    createRootReducer(history), // root reducer with router state
-    preloadedState,
-    composeEnhancers(
-      applyMiddleware(...middlewares),
-    ),
-  );
+export default function ourConfigureStore (preloadedState) {
+  const store = configureStore({
+    reducer: createRootReducer(history), // root reducer with router state
+    middleware: middlewares,
+    preloadedState
+  });
 
   if (window.Cypress && window.Cypress.env('TESTING') === true) {
     window.appStore = store;
