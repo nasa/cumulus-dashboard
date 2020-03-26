@@ -4,6 +4,7 @@ import Collapse from 'react-collapsible';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
+import cloneDeep from 'lodash.clonedeep';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
 import { withRouter, Link } from 'react-router-dom';
@@ -45,13 +46,14 @@ class ExecutionStatus extends React.Component {
   renderEvents () {
     const { executionStatus } = this.props;
     let { executionHistory: { events } } = executionStatus;
-    events.forEach((event) => {
+    let mutableEvents = cloneDeep(events);
+    mutableEvents.forEach((event) => {
       event.eventDetails = getEventDetails(event);
     });
 
     return (
       <SortableTable
-        data={events.sort((a, b) => a.id > b.id ? 1 : -1)}
+        data={mutableEvents.sort((a, b) => a.id > b.id ? 1 : -1)}
         dispatch={this.props.dispatch}
         tableColumns={tableColumns}
         rowId='id'

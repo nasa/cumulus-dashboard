@@ -12,6 +12,7 @@ import {
   SEARCH_EXECUTIONS,
   CLEAR_EXECUTIONS_SEARCH
 } from '../actions/types';
+import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
   list: {
@@ -24,37 +25,32 @@ export const initialState = {
   map: {}
 };
 
-export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
-  const { data } = action;
-  switch (action.type) {
-    case EXECUTIONS:
-      set(state, ['list', 'data'], data.results);
-      set(state, ['list', 'meta'], assignDate(data.meta));
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], false);
-      break;
-    case EXECUTIONS_INFLIGHT:
-      set(state, ['list', 'inflight'], true);
-      break;
-    case EXECUTIONS_ERROR:
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], action.error);
-      break;
+export default createReducer(initialState, {
+  [EXECUTIONS]: (state, action) => {
+    set(state, ['list', 'data'], action.data.results);
+    set(state, ['list', 'meta'], assignDate(action.data.meta));
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], false);
+  },
+  [EXECUTIONS_INFLIGHT]: (state, action) => {
+    set(state, ['list', 'inflight'], true);
+  },
+  [EXECUTIONS_ERROR]: (state, action) => {
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], action.error);
+  },
 
-    case FILTER_EXECUTIONS:
-      set(state, ['list', 'params', action.param.key], action.param.value);
-      break;
-    case CLEAR_EXECUTIONS_FILTER:
-      set(state, ['list', 'params', action.paramKey], null);
-      break;
+  [FILTER_EXECUTIONS]: (state, action) => {
+    set(state, ['list', 'params', action.param.key], action.param.value);
+  },
+  [CLEAR_EXECUTIONS_FILTER]: (state, action) => {
+    set(state, ['list', 'params', action.paramKey], null);
+  },
 
-    case SEARCH_EXECUTIONS:
-      set(state, ['list', 'prefix'], action.prefix);
-      break;
-    case CLEAR_EXECUTIONS_SEARCH:
-      set(state, ['list', 'prefix'], null);
-      break;
+  [SEARCH_EXECUTIONS]: (state, action) => {
+    set(state, ['list', 'prefix'], action.prefix);
+  },
+  [CLEAR_EXECUTIONS_SEARCH]: (state, action) => {
+    set(state, ['list', 'prefix'], null);
   }
-  return state;
-}
+});
