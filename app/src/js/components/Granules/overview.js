@@ -140,7 +140,7 @@ class GranulesOverview extends React.Component {
     const data = new Blob([fileData], {type: 'text/csv'});
     const url = window.URL.createObjectURL(data);
 
-    return (<a className='csv__download' id='download_link' download='granules.csv' href={url}>Download Granule List</a>);
+    return <a className='csv__download button button--download button--green button__animation--md button__arrow button__arrow--md button__animation form-group__element--right' id='download_link' download='granules.csv' href={url}>Download List</a>
   }
 
   render () {

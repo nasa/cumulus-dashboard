@@ -251,8 +251,11 @@
         content: '\f0ab';
         font-weight: 900;
         left: 10px;
-        
-      } 
+      }
+
+      &.button__animation--md:hover:before {
+        visibility: hidden;
+      }
     }
   
     &--copy{

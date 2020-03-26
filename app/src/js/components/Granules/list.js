@@ -30,6 +30,7 @@ import statusOptions from '../../utils/status';
 import { strings } from '../locale';
 import _config from '../../config';
 import { workflowOptionNames } from '../../selectors';
+import ListFilters from '../ListActions/ListFilters';
 
 const { updateInterval } = _config;
 
@@ -122,29 +123,6 @@ class AllGranules extends React.Component {
             </h1>
             {lastUpdated(queriedAt)}
           </div>
-          <div className='filters filters__wlabels'>
-            <Dropdown
-              getOptions={getOptionsCollectionName}
-              options={get(dropdowns, ['collectionName', 'options'])}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              paramKey={'collectionId'}
-              label={strings.collection}
-            />
-            {statOptions ? (
-              <Dropdown
-                options={statOptions}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey={'status'}
-                label={'Status'}
-              />
-            ) : null}
-            <Search dispatch={this.props.dispatch}
-              action={searchGranules}
-              clear={clearGranulesSearch}
-            />
-          </div>
 
           <List
             list={list}
@@ -154,7 +132,33 @@ class AllGranules extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId='granuleId'
             sortIdx={tableSortIdx}
-          />
+          >
+            <ListFilters> 
+              <Dropdown
+                getOptions={getOptionsCollectionName}
+                options={get(dropdowns, ['collectionName', 'options'])}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey='collectionId'
+                inputProps={{placeholder: strings.collection}}
+              />
+              {statOptions &&
+                <Dropdown
+                  options={statOptions}
+                  action={filterGranules}
+                  clear={clearGranulesFilter}
+                  paramKey='status'
+                  inputProps={{placeholder: 'Status'}}
+                />
+              }
+              <Search 
+                dispatch={this.props.dispatch}
+                action={searchGranules}
+                clear={clearGranulesSearch}
+                placeholder='Search Granules'
+              />
+            </ListFilters>
+          </List>
         </section>
         <LogViewer
           query={logsQuery}
