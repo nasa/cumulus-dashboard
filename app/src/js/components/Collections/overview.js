@@ -25,6 +25,7 @@ import Dropdown from '../DropDown/dropdown';
 import SimpleDropdown from '../DropDown/simple-dropdown';
 import Search from '../Search/search';
 import statusOptions from '../../utils/status';
+import pageSizeOptions from '../../utils/page-size';
 import List from '../Table/Table';
 import Bulk from '../Granules/bulk';
 import Overview from '../Overview/overview';
@@ -289,6 +290,15 @@ class CollectionOverview extends React.Component {
                 label='Status'
                 inputProps={{
                   placeholder: 'All'
+                }}
+              />
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey='limit'
+                inputProps={{
+                  placeholder: 'Results Per Page'
                 }}
               />
             </ListFilters>
