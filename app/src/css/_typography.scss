@@ -58,28 +58,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: .1em;
 }
 
-.num--title {
-  /*font-weight: $base-font-light;
-  font-size: 90%;
-  color: $grey;
-  margin-left: .2em;
-  */
-  display: inline-block;
-  vertical-align: middle;
-  border-radius: 4px;
-  padding: 0.3em .5em .5em .5em;
-  margin-left: 10px;
-  background: $ocean-blue;
-  color: $white;
-  line-height: .8;
-  text-transform: uppercase;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
-  font-size: 1em;
-  font-weight: $base-font-regular;
-  -webkit-font-smoothing: antialiased;
-  transition: background-color 0.2s linear;
-}
-
 .breadcrumb, .caption {
   font-size: 0.875em;
 }
