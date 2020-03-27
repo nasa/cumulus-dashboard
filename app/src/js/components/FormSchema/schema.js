@@ -3,6 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get, set } from 'object-path';
+import { startCase } from 'lodash';
 import { Form, formTypes } from '../Form/Form';
 import {
   isText,
@@ -94,12 +95,14 @@ export const createFormConfig = function (data, schema, include, exclude) {
       Array.isArray(schemaProperty.required) &&
       schemaProperty.required.includes(property);
 
+    const labelText = startCase(meta.title) || property;
     const label = (
       <span>
-        { path ? <span className='label__path'>{path + ' - '}</span> : null }
-        <span className='label__name'>{meta.title || property}</span>
-        { required ? <span className='label__required'> *</span> : null }
-        { meta.description ? <span className='label__description'> ({meta.description})</span> : null }
+        <span className="label__name">{labelText}</span>
+        {required && <span className="label__required"> *</span>}
+        {meta.description && (
+          <span className="label__description"> ({meta.description})</span>
+        )}
       </span>
     );
 
