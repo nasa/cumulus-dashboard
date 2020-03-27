@@ -37,6 +37,13 @@ import ListFilters from '../ListActions/ListFilters';
 
 const { updateInterval } = _config;
 
+const pageSizeOptions = {
+  10: '10',
+  25: '25',
+  50: '50',
+  100: '100'
+};
+
 class ExecutionOverview extends React.Component {
   constructor (props) {
     super(props);
@@ -138,6 +145,14 @@ class ExecutionOverview extends React.Component {
                 clear={clearExecutionsSearch}
                 paramKey={'asyncOperationId'}
                 label={'Async Operation ID'}
+              />
+
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterExecutions}
+                clear={clearExecutionsFilter}
+                paramKey={'limit'}
+                label={'Results Per Page'}
               />
             </ListFilters>
           </List>
