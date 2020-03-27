@@ -198,7 +198,8 @@ AllGranules.propTypes = {
   logs: PropTypes.object,
   dispatch: PropTypes.func,
   location: PropTypes.object,
-  workflowOptions: PropTypes.array
+  workflowOptions: PropTypes.array,
+  onQueryChange: PropTypes.func
 };
 
 export {listGranules};

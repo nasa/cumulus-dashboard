@@ -31,7 +31,7 @@ const BulkGranule = ({
   const [showModal, setShowModal] = useState(false);
   const [query, setQuery] = useState(JSON.stringify(defaultQuery, null, 2));
   const [errorState, setErrorState] = useState();
-  const [requestId, setRequestId] = useState(Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
+  const [requestId] = useState(Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
   const status = get(granules.bulk, [requestId, 'status']);
   const error = get(granules.bulk, [requestId, 'error']) || errorState;
   const asyncOpId = get(granules.bulk, [requestId, 'data', 'id']);
@@ -153,7 +153,9 @@ BulkGranule.propTypes = {
   state: PropTypes.object,
   confirmAction: PropTypes.bool,
   className: PropTypes.string,
-  element: PropTypes.string
+  element: PropTypes.string,
+  granules: PropTypes.object,
+  selected: PropTypes.array
 };
 
 export default withRouter(connect(state => ({

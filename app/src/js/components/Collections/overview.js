@@ -58,7 +58,7 @@ const bulkActions = [
         confirmAction={true}
       />
   }
-]
+];
 
 class CollectionOverview extends React.Component {
   constructor (props) {
@@ -281,15 +281,15 @@ class CollectionOverview extends React.Component {
                 label='Search'
                 placeholder='Granule ID'
               />
-                <Dropdown
-                  options={statusOptions}
-                  action={filterGranules}
-                  clear={clearGranulesFilter}
-                  paramKey='status'
-                  inputProps={{
-                    placeholder: 'Status'
-                  }}
-                />
+              <Dropdown
+                options={statusOptions}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey='status'
+                inputProps={{
+                  placeholder: 'Status'
+                }}
+              />
             </ListFilters>
           </List>
         </section>

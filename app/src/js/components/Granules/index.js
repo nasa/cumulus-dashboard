@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 import { getCount, listGranules } from '../../actions';
-import _config from '../../config';
 import { strings } from '../locale';
 import AllGranules from './list';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
