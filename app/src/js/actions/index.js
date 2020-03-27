@@ -131,7 +131,7 @@ export const checkApiVersion = () => {
 export const listCollections = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    const urlPath = `collections${isEmpty(timeFilters) ? '' : '/granules'}`;
+    const urlPath = `collections${isEmpty(timeFilters) ? '' : '/active'}`;
     return dispatch({
       [CALL_API]: {
         type: types.COLLECTIONS,
