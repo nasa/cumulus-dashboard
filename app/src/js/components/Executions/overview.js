@@ -26,6 +26,7 @@ import {
   collectionOptions
 } from '../../selectors';
 import statusOptions from '../../utils/status';
+import pageSizeOptions from '../../utils/page-size';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
@@ -36,13 +37,6 @@ import { tableColumns } from '../../utils/table-config/executions';
 import ListFilters from '../ListActions/ListFilters';
 
 const { updateInterval } = _config;
-
-const pageSizeOptions = {
-  10: '10',
-  25: '25',
-  50: '50',
-  100: '100'
-};
 
 class ExecutionOverview extends React.Component {
   constructor (props) {
