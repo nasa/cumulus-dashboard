@@ -253,7 +253,7 @@
         left: 10px;
       }
 
-      &.button__animation--md:hover:before {
+      &.button__animation:hover:before {
         visibility: hidden;
       }
     }
@@ -370,7 +370,11 @@
         font-weight: 900;
         left: 10px;
         
-      } 
+      }
+
+      &.form-group__element:hover:before {
+        visibility: visible;
+      }
     }
 
     &__bulkgranules:hover:before{
@@ -442,6 +446,12 @@
         font-weight: 900;
         left: 10px;
       } 
+
+      &.form-group__element--right {
+        &:hover:before {
+          visibility: visible;
+        }
+      }
     }
     
       &__goto:hover:before {

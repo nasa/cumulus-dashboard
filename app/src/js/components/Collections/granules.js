@@ -42,6 +42,7 @@ const CollectionGranules = ({
   const collectionId = getCollectionId(params);
   const view = getView();
   const [workflow, setWorkflow] = useState();
+  const query = generateQuery();
 
   const breadcrumbConfig = [
     {
@@ -145,7 +146,7 @@ const CollectionGranules = ({
         <List
           list={list}
           action={listGranules}
-          query={generateQuery()}
+          query={query}
           bulkActions={generateBulkActions()}
           rowId='granuleId'
           sortIdx='timestamp'

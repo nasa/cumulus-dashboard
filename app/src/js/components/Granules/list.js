@@ -30,6 +30,7 @@ import statusOptions from '../../utils/status';
 import { strings } from '../locale';
 import _config from '../../config';
 import { workflowOptionNames } from '../../selectors';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
 
 const { updateInterval } = _config;
@@ -65,6 +66,7 @@ class AllGranules extends React.Component {
     const view = this.getView();
     if (view && view !== 'all') options.status = view;
     options.status = view;
+    this.props.onQueryChange(options);
     return options;
   }
 
@@ -107,33 +109,53 @@ class AllGranules extends React.Component {
   }
 
   render () {
-    const { granules } = this.props;
+    const { granules, dispatch, logs } = this.props;
     const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
     const logsQuery = { 'granuleId__exists': 'true' };
+    const query = this.generateQuery();
     const view = this.getView();
+    const displayCaseView = displayCase(view);
     const statOptions = (view === 'all') ? statusOptions : null;
     const tableSortIdx = view === 'failed' ? 'granuleId' : 'timestamp';
+    const breadcrumbConfig = [
+      {
+        label: 'Dashboard Home',
+        href: '/'
+      },
+      {
+        label: 'Granules',
+        href: '/granules'
+      },
+      {
+        label: displayCaseView,
+        active: true
+      }
+    ];
     return (
       <div className='page__component'>
-        <section className='page__section page__section__header-wrapper'>
-          <div className='page__section__header'>
+        <section className='page__section'>
+          <section className='page__section page__section__controls'>
+            <Breadcrumbs config={breadcrumbConfig} />
+          </section>
+          <div className='page__section__header page__section__header-wrapper'>
             <h1 className='heading--large heading--shared-content with-description '>
-              {displayCase(view)} {strings.granules} <span className='num--title'>{ !isNaN(count) ? `${tally(count)}` : 0 }</span>
+              {displayCaseView} {strings.granules} <span className='num--title'>{ !isNaN(count) ? `${tally(count)}` : 0 }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>
-
+        </section>
+        <section className='page__section'>
           <List
             list={list}
             action={listGranules}
             tableColumns={view === 'failed' ? errorTableColumns : tableColumns}
-            query={this.generateQuery()}
+            query={query}
             bulkActions={this.generateBulkActions()}
             rowId='granuleId'
             sortIdx={tableSortIdx}
           >
-            <ListFilters> 
+            <ListFilters>
               <Dropdown
                 getOptions={getOptionsCollectionName}
                 options={get(dropdowns, ['collectionName', 'options'])}
@@ -151,8 +173,8 @@ class AllGranules extends React.Component {
                   inputProps={{placeholder: 'Status'}}
                 />
               }
-              <Search 
-                dispatch={this.props.dispatch}
+              <Search
+                dispatch={dispatch}
                 action={searchGranules}
                 clear={clearGranulesSearch}
                 placeholder='Search Granules'
@@ -162,9 +184,9 @@ class AllGranules extends React.Component {
         </section>
         <LogViewer
           query={logsQuery}
-          dispatch={this.props.dispatch}
-          logs={this.props.logs}
-          notFound={'No recent logs for granules'}
+          dispatch={dispatch}
+          logs={logs}
+          notFound='No recent logs for granules'
         />
       </div>
     );
