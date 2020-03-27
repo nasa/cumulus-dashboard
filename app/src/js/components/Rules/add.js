@@ -1,99 +1,38 @@
 'use strict';
-import React, { useEffect, useState } from 'react';
+
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { createRule, getSchema } from '../../actions';
-import { removeReadOnly } from '../FormSchema/schema';
-import AddRaw from '../AddRaw/add-raw';
+import { createRule } from '../../actions';
+import AddRecord from '../Add/add';
 
-const getBaseRoute = function () {
-  return '/rules';
-};
-const getRuleName = function (item) {
-  if (item && item.name) {
-    return item.name;
-  } else {
-    return 'unknown';
-  }
-};
-
-const ModalBody = ({record}) => {
-  const { data } = record;
-  const json = JSON.parse(data);
-  return (
-    <p>Add rule {json.name}</p>
-  );
-};
-
-ModalBody.propTypes = {
-  record: PropTypes.object
-};
-
-const defaultRuleObject = {
-  name: '',
-  workflow: '',
-  provider: '',
-  collection: {
-    name: '',
-    version: ''
-  },
-  meta: {},
-  rule: {
-    type: '',
-    value: ''
-  },
-  state: 'ENABLED'
-};
-
-const AddRule = ({ rules, location = {}, dispatch, schema, ...rest }) => {
-  const [defaultValue, setDefaultValue] = useState(defaultRuleObject);
+const AddRule = ({ rules, location = {} }) => {
   const { state: locationState } = location;
   const { name } = locationState || {};
-  const { rule: ruleSchema } = schema || {};
-  const { map: rulesMap } = rules || {};
-  const isCopy = !!name;
+  const isCopy = name !== undefined;
   const title = isCopy ? 'Copy a rule' : 'Add a rule';
 
-  useEffect(() => {
-    if (isCopy) {
-      dispatch(getSchema('rule'));
-    }
-  }, [isCopy, dispatch]);
-
-  useEffect(() => {
-    const record = rulesMap[name];
-    const { data } = record || {};
-    if (isCopy && data && ruleSchema) {
-      setDefaultValue(removeReadOnly(data, ruleSchema));
-    }
-  }, [ruleSchema, name, rulesMap, isCopy]);
-
   return (
-    <AddRaw
-      pk={'new-rule'}
-      title={title}
+    <AddRecord
+      schemaKey={'rule'}
       primaryProperty={'name'}
+      title={title}
       state={rules}
-      defaultValue={defaultValue}
+      baseRoute={'/rules/rule'}
       createRecord={createRule}
-      getBaseRoute={getBaseRoute}
-      getPk={getRuleName}
-      requireConfirmation={true}
-      type={'rule'}
-      ModalBody={ModalBody}
+      exclude={[/^meta/, 'updatedAt']}
     />
   );
 };
 
 AddRule.propTypes = {
   location: PropTypes.object,
-  rules: PropTypes.object,
-  dispatch: PropTypes.func,
-  schema: PropTypes.object,
+  rules: PropTypes.object
 };
 
-export default withRouter(connect(state => ({
-  rules: state.rules,
-  schema: state.schema
-}))(AddRule));
+export default withRouter(
+  connect(state => ({
+    rules: state.rules
+  }))(AddRule)
+);
