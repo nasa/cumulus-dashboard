@@ -3,9 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { listRules } from '../../actions';
+import { listRules, searchRules, clearRulesSearch } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import List from '../Table/Table';
+import Search from '../Search/search';
+import ListFilters from '../ListActions/ListFilters';
 import { tableColumns, bulkActions } from '../../utils/table-config/rules';
 
 class RulesOverview extends React.Component {
@@ -47,7 +49,16 @@ class RulesOverview extends React.Component {
             sortIdx='timestamp'
             bulkActions={this.generateBulkActions()}
             rowId='name'
-          />
+          >
+            <ListFilters>
+              <Search
+                dispatch={this.props.dispatch}
+                action={searchRules}
+                clear={clearRulesSearch}
+                placeholder='Search Rules'
+              />
+            </ListFilters>
+          </List>
         </section>
       </div>
     );
