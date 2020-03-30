@@ -2,9 +2,6 @@
 
 import test from 'ava';
 
-// import * as assignDateModule from '../../app/scripts/reducers/assign-date';
-// assignDateModule.default = (object) => Object.assign({}, object, {queriedAt: 'fakeTime'});
-
 import { apiGatewayFixture } from '../fixtures/apiGatewayMetrics';
 import { apiLambdaFixture } from '../fixtures/apiLambdaMetrics';
 import { teaLambdaFixture } from '../fixtures/teaLambdaMetrics';
@@ -52,7 +49,7 @@ test('reducers/dist/dist_apigateway', (t) => {
     apiGateway: {
       inflight: false,
       error: null,
-      queriedAt: new Date(Date.now()),
+      queriedAt: Date.now(),
       execution: {
         errors: 0,
         successes: 7
@@ -109,7 +106,7 @@ test('reducers/dist/dist_apilambda', (t) => {
     apiLambda: {
       inflight: false,
       error: null,
-      queriedAt: new Date(Date.now()),
+      queriedAt: Date.now(),
       errors: 10,
       successes: 4001
     }
@@ -169,7 +166,7 @@ test('reducers/dist/dist_tea_lambda', (t) => {
     teaLambda: {
       inflight: false,
       error: null,
-      queriedAt: new Date(Date.now()),
+      queriedAt: Date.now(),
       errors: 18,
       successes: 34301
     }
@@ -230,7 +227,7 @@ test('reducers/dist/dist_s3access', (t) => {
     s3Access: {
       inflight: false,
       error: null,
-      queriedAt: new Date(Date.now()),
+      queriedAt: Date.now(),
       errors: 1,
       successes: 200
     }
