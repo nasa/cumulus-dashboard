@@ -62,6 +62,30 @@ describe('Rules page', () => {
         });
     });
 
+    it('clicking disable should disable a rule', () => {
+      cy.visit('/rules');
+      cy.contains('.table .tr a', testRuleName)
+        .click();
+      cy.url().should('include', `/rules/rule/${testRuleName}`);
+      cy.contains('.heading--large', testRuleName);
+      cy.contains('.status--process', 'Enabled');
+      cy.contains('.dropdown__options__btn', 'Options').click();
+      cy.contains('.async__element', 'Disable').click();
+
+      cy.get('h4').contains(`You are disabling rule ${testRuleName}`);
+      cy.contains('.modal-footer button', 'Cancel').click();
+
+      cy.contains('.dropdown__options__btn', 'Options').click();
+      cy.contains('.async__element', 'Disable').click();
+      cy.get('h4').contains(`You are disabling rule ${testRuleName}`);
+      cy.contains('.modal-footer button', 'Confirm').click();
+
+      cy.contains('.modal-body', `Rule ${testRuleName} was disabled`);
+      cy.contains('.modal-footer button', 'Close').click();
+
+      cy.contains('.status--process', 'Disabled');
+    });
+
     it('creating a rule should add it to the list', () => {
       cy.visit('/rules');
       cy.get('a').contains('Add a rule').as('addRule');
