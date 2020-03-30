@@ -15,23 +15,20 @@
   transition: background-color 0.2s linear;
 }
 
-.status--process .badge {
-  padding: .5em .5em .5em .5em;
+.status--badge {
+  padding: .5em;
+  border-radius: 4px;
   margin-left: 10px;
+  color: $white;
+  text-transform: uppercase;
+  font-weight: $base-font-regular;
+  display: inline-block;
   background-color: #30AD66;
-  color: $white;
-  text-transform: uppercase;
-  font-weight: $base-font-regular;
-  display: inline-block;
-}
-
-.status--process .badge--disabled {
-  padding: .5em .5em .5em .5em;
-  margin-left: 10px;
-  background-color: #36342D;
-  color: $white;
-  text-transform: uppercase;
-  font-weight: $base-font-regular;
-  display: inline-block;
+    &__enabled {
+      background-color: #30AD66;
+    }
+    &__disabled {
+      background-color: #36342D;
+  }
 }
 

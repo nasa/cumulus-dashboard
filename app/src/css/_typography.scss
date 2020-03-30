@@ -44,15 +44,24 @@ h1, h2, h3, h4, h5, h6 {
   margin-right: .6em;
 }
 
-.heading__wrapper--border {
-  border-bottom: 1px solid $lightest-grey;
-  padding-bottom: .3em;
-  margin-bottom: 2em;
-  margin-top: 2em;
-  h2, h3, h4 {
-    margin-bottom: .5em;
+.heading__wrapper {
+    &--border {
+      border-bottom: 1px solid $lightest-grey;
+      padding-bottom: .3em;
+      margin-bottom: 2em;
+      margin-top: 2em;
+      h2, h3, h4 {
+      margin-bottom: .5em;
+    }
   }
+    &--topborder {
+      border-top: 1px solid $lightest-grey;
+      margin-top: 1em;
+      padding-top: 1.5em;
+
+    }
 }
+ 
 
 .with-description {
   margin-bottom: .1em;
