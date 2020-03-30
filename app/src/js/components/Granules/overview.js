@@ -155,7 +155,7 @@ class GranulesOverview extends React.Component {
                 id='download_link'
                 download='granules.csv'
                 href={window.URL.createObjectURL(csvData)}
-              >Download List</a>}
+              >Download Granule List</a>}
           </div>
           <List
             list={list}
