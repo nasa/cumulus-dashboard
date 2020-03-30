@@ -21,7 +21,7 @@ const AddRule = ({ rules, location = {} }) => {
       state={rules}
       baseRoute={'/rules/rule'}
       createRecord={createRule}
-      exclude={[/^meta/, 'updatedAt']}
+      exclude={['updatedAt']}
     />
   );
 };

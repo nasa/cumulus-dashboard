@@ -3,7 +3,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get, set } from 'object-path';
-import { startCase } from 'lodash';
 import { Form, formTypes } from '../Form/Form';
 import {
   isText,
@@ -20,10 +19,10 @@ export const traverseSchema = function (schema, fn, path = []) {
   for (let property in schema.properties) {
     const meta = schema.properties[property];
 
-    if (meta.type === 'object' && meta.hasOwnProperty('properties')) {
-      traverseSchema(meta, fn, [...path, property]);
-    } else {
+    if (meta.type !== 'object' || meta.additionalProperties === true) {
       fn([...path, property], meta, schema);
+    } else if (typeof meta.properties === 'object') {
+      traverseSchema(meta, fn, [...path, property]);
     }
   }
 };
@@ -95,7 +94,7 @@ export const createFormConfig = function (data, schema, include, exclude) {
       Array.isArray(schemaProperty.required) &&
       schemaProperty.required.includes(property);
 
-    const labelText = startCase(meta.title) || property;
+    const labelText = meta.title || property;
     const label = (
       <span>
         <span className="label__name">{labelText}</span>
@@ -140,7 +139,7 @@ export const createFormConfig = function (data, schema, include, exclude) {
       case 'enum':
         // pass the enum fields as options
         config.options = meta.enum;
-        fields.push(dropdown(config, property, required && isText));
+        fields.push(dropdownField(config, property, required && isText));
         break;
       case 'array':
         // some array types have a minItems property
@@ -149,14 +148,17 @@ export const createFormConfig = function (data, schema, include, exclude) {
           : meta.minItems && isNaN(meta.minItems)
             ? arrayWithLength(+meta.minItems)
             : isArray;
-        fields.push(list(config, property, validate));
+        fields.push(listField(config, property, validate));
         break;
       case 'string':
-        fields.push(textfield(config, property, required && isText));
+        fields.push(textField(config, property, required && isText));
         break;
       case 'integer':
       case 'number':
-        fields.push(numberfield(config, property, required && isNumber));
+        fields.push(numberField(config, property, required && isNumber));
+        break;
+      case 'object':
+        fields.push(textAreaField(config, property, required && isText));
         break;
       default:
         return;
@@ -165,7 +167,16 @@ export const createFormConfig = function (data, schema, include, exclude) {
   return fields;
 };
 
-function textfield (config, property, validate) {
+const textAreaField = (config, property, validate) => ({
+  ...config,
+  type: formTypes.textArea,
+  mode: 'json',
+  value: '{}',
+  validate: validate,
+  error: validate && get(errors, property, errors.required)
+});
+
+function textField (config, property, validate) {
   config.type = formTypes.text;
   config.validate = validate;
   config.error = validate && get(errors, property, errors.required);
@@ -174,7 +185,7 @@ function textfield (config, property, validate) {
   return config;
 }
 
-function numberfield (config, property, validate) {
+function numberField (config, property, validate) {
   config.type = formTypes.number;
   config.validate = validate;
   config.error = validate && get(errors, property, errors.required);
@@ -182,14 +193,14 @@ function numberfield (config, property, validate) {
   return config;
 }
 
-function dropdown (config, property, validate) {
+function dropdownField (config, property, validate) {
   config.type = formTypes.dropdown;
   config.validate = validate;
   config.error = validate && get(errors, property, errors.required);
   return config;
 }
 
-function list (config, property, validate) {
+function listField (config, property, validate) {
   config.type = formTypes.list;
   config.validate = validate;
   config.error = validate && get(errors, property, errors.required);
