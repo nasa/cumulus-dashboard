@@ -39,6 +39,8 @@ import {
 
   SEARCH_RULES,
   CLEAR_RULES_SEARCH
+  FILTER_RULES,
+  CLEAR_RULES_FILTER
 } from '../actions/types';
 import { createReducer } from '@reduxjs/toolkit';
 
@@ -190,5 +192,11 @@ export default createReducer(initialState, {
   },
   [CLEAR_RULES_SEARCH]: (state, action) => {
     set(state, ['list', 'params', 'prefix'], null);
+  },
+  [FILTER_RULES]: (state, action) => {
+    set(state, ['list', 'params', action.param.key], action.param.value);
+  },
+  [CLEAR_RULES_FILTER]: (state, action) => {
+    set(state, ['list', 'params', action.paramKey], null);
   }
 });

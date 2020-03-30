@@ -893,6 +893,8 @@ export const rerunRule = (payload) => ({
 
 export const searchRules = (prefix) => ({ type: types.SEARCH_RULES, prefix: prefix });
 export const clearRulesSearch = () => ({ type: types.CLEAR_RULES_SEARCH });
+export const filterRules = (param) => ({ type: types.FILTER_RULES, param: param });
+export const clearRulesFilter = (paramKey) => ({ type: types.CLEAR_RULES_FILTER, paramKey: paramKey });
 
 export const listReconciliationReports = (options) => ({
   [CALL_API]: {
