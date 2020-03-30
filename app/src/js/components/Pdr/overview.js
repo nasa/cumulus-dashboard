@@ -4,13 +4,21 @@ import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { interval, listPdrs, getCount } from '../../actions';
+import {
+  interval,
+  listPdrs,
+  getCount,
+  clearPdrsFilter,
+  filterPdrs
+} from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import { bulkActions } from '../../utils/table-config/pdrs';
 import { tableColumns } from '../../utils/table-config/pdr-progress';
 import List from '../Table/Table';
 import Overview from '../Overview/overview';
 import _config from '../../config';
+import Dropdown from '../DropDown/dropdown';
+import pageSizeOptions from '../../utils/page-size';
 
 const { updateInterval } = _config;
 
@@ -69,6 +77,16 @@ class PdrOverview extends React.Component {
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>All PDRs <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
+          </div>
+
+          <div className='filters filters__wlabels'>
+            <Dropdown
+              options={pageSizeOptions}
+              action={filterPdrs}
+              clear={clearPdrsFilter}
+              paramKey={'limit'}
+              label={'Results Per Page'}
+            />
           </div>
 
           <List
