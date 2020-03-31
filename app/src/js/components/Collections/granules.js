@@ -157,7 +157,8 @@ const CollectionGranules = ({
               dispatch={dispatch}
               action={searchGranules}
               clear={clearGranulesSearch}
-              placeholder='Search Granules'
+              label='Search'
+              placeholder='Granule ID'
             />
             {view === 'all' && (
               <Dropdown
@@ -165,8 +166,9 @@ const CollectionGranules = ({
                 action={filterGranules}
                 clear={clearGranulesFilter}
                 paramKey='status'
+                label='Status'
                 inputProps={{
-                  placeholder: 'Status'
+                  placeholder: 'All'
                 }}
               />
             )}

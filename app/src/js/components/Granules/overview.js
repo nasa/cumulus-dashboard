@@ -174,7 +174,9 @@ class GranulesOverview extends React.Component {
                 clear={clearGranulesFilter}
                 paramKey='collectionId'
                 label={strings.collection}
-                inputProps={{placeholder: 'Collection'}}
+                inputProps={{
+                  placeholder: 'All'
+                }}
               />
               <Dropdown
                 options={statusOptions}
@@ -182,14 +184,16 @@ class GranulesOverview extends React.Component {
                 clear={clearGranulesFilter}
                 paramKey='status'
                 label='Status'
-                inputProps={{placeholder: 'Status'}}
+                inputProps={{
+                  placeholder: 'All'
+                }}
               />
               <Search
                 dispatch={dispatch}
                 action={searchGranules}
                 clear={clearGranulesSearch}
                 label='Search'
-                placeholder='Search'
+                placeholder='Granule ID'
               />
             </ListFilters>
           </List>

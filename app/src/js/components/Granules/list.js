@@ -116,7 +116,7 @@ class AllGranules extends React.Component {
     const query = this.generateQuery();
     const view = this.getView();
     const displayCaseView = displayCase(view);
-    const statOptions = (view === 'all') ? statusOptions : null;
+    const statusOptions = (view === 'all') ? statusOptions : null;
     const tableSortIdx = view === 'failed' ? 'granuleId' : 'timestamp';
     const breadcrumbConfig = [
       {
@@ -162,22 +162,29 @@ class AllGranules extends React.Component {
                 action={filterGranules}
                 clear={clearGranulesFilter}
                 paramKey='collectionId'
-                inputProps={{placeholder: strings.collection}}
+                label='Collection'
+                inputProps={{
+                  placeholder: 'All'
+                }}
               />
-              {statOptions &&
+              {statusOptions &&
                 <Dropdown
-                  options={statOptions}
+                  options={statusOptions}
                   action={filterGranules}
                   clear={clearGranulesFilter}
                   paramKey='status'
-                  inputProps={{placeholder: 'Status'}}
+                  label='Status'
+                  inputProps={{
+                    placeholder: 'All'
+                  }}
                 />
               }
               <Search
                 dispatch={dispatch}
                 action={searchGranules}
                 clear={clearGranulesSearch}
-                placeholder='Search Granules'
+                label='Search'
+                placeholder='Granule ID'
               />
             </ListFilters>
           </List>

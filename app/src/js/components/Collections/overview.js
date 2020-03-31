@@ -286,8 +286,9 @@ class CollectionOverview extends React.Component {
                 action={filterGranules}
                 clear={clearGranulesFilter}
                 paramKey='status'
+                label='Status'
                 inputProps={{
-                  placeholder: 'Status'
+                  placeholder: 'All'
                 }}
               />
             </ListFilters>
