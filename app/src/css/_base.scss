@@ -611,17 +611,17 @@ a:active {
 
 .status--process {
   margin-top: 1.5em;
+  font-weight: $base-font-semibold;
   dd, dt {
     display: inline-block;
     font-size: .9em;
   }
   dd {
     font-weight: $base-font-semibold;
-    margin-bottom: 10px;
   }
   dt {
-    color: $grey;
     margin-right: 0.5em;
+    color: $dark-grey;
   }
   .running,
   .enabled {
