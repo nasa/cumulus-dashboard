@@ -206,7 +206,7 @@ class Rule extends React.Component {
             {data.state ? (
               <dl className='status--process'>
                 <dt>State:</dt>
-                <dd className={`status--badge status--badge__${data.state.toUpperCase()}`}>{displayCase(data.state)}</dd>
+                <dd className={`status--badge status--badge__${data.state.toLowerCase()}`}>{displayCase(data.state)}</dd>
               </dl>
             ) : null}
           </div>
