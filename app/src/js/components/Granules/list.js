@@ -26,7 +26,6 @@ import List from '../Table/Table';
 import LogViewer from '../Logs/viewer';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
-import statusOptions from '../../utils/status';
 import { strings } from '../locale';
 import _config from '../../config';
 import { workflowOptionNames } from '../../selectors';
