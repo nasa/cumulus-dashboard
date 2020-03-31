@@ -39,6 +39,13 @@ describe('Rules page', () => {
         });
     });
 
+    it('Should update URL when search filter is changed.', () => {
+      cy.visit('/rules');
+      cy.get('.search').as('search');
+      cy.get('@search').click().type('L2');
+      cy.url().should('include', 'search=L2');
+    });
+
     it('display a rule with the correct data', () => {
       cy.visit('/rules');
       cy.contains('.table .tr a', testRuleName)
