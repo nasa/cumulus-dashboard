@@ -199,14 +199,14 @@ class Rule extends React.Component {
         </section>
         <section className='page__section'>
           {errors.length ? <ErrorReport report={errors} /> : null}
-          <div className='heading__wrapper--topborder'>
+          <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Rule Overview</h2>
           </div>
           <div className="rule__state">
             {data.state ? (
               <dl className='status--process'>
                 <dt>State:</dt>
-                <dd className='status--badge'>{displayCase(data.state)}</dd>
+                <dd className={`status--badge status--badge__${data.state.toUpperCase()}`}>{displayCase(data.state)}</dd>
               </dl>
             ) : null}
           </div>
