@@ -47,7 +47,7 @@ describe('Rules page', () => {
       cy.get('.metadata__details')
         .within(() => {
           cy.get('dt')
-            .contains('RuleName')
+            .contains('Rule Name')
             .next('dd')
             .should('contain', testRuleName);
           cy.get('dt')
@@ -125,7 +125,7 @@ describe('Rules page', () => {
       cy.url().should('include', `rules/rule/${ruleName}`);
       cy.get('.metadata__details')
         .within(() => {
-          cy.contains('RuleName').next().should('have.text', ruleName);
+          cy.contains('Rule Name').next().should('have.text', ruleName);
           cy.contains('Workflow').next().should('have.text', workflow);
           cy.contains('Provider')
             .next()
@@ -168,7 +168,7 @@ describe('Rules page', () => {
       cy.url().should('include', `rules/rule/${newName}`);
       cy.get('.metadata__details')
         .within(() => {
-          cy.contains('RuleName').next().should('have.text', newName);
+          cy.contains('Rule Name').next().should('have.text', newName);
           cy.contains('Provider')
             .next()
             .contains('a', testProviderId)
