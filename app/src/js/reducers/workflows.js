@@ -3,19 +3,18 @@ import { set } from 'object-path';
 import {
   WORKFLOWS,
   WORKFLOWS_INFLIGHT,
-  WORKFLOWS_ERROR
+  WORKFLOWS_ERROR,
+  SEARCH_WORKFLOWS,
+  CLEAR_WORKFLOWS_SEARCH
 } from '../actions/types';
 import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
-  list: {
-    data: [],
-    meta: {},
-    params: {},
-    inflight: false,
-    error: false
-  },
-  map: {}
+  data: [],
+  meta: {},
+  inflight: false,
+  error: false,
+  searchString: null
 };
 
 function createMap (data) {
@@ -26,20 +25,34 @@ function createMap (data) {
   return map;
 }
 
+export const filterData = (rawData, filterString) => {
+  if (filterString !== null) {
+    return rawData.filter(d => d.name.includes(filterString));
+  }
+  return rawData;
+};
+
 export default createReducer(initialState, {
   [WORKFLOWS]: (state, action) => {
-    const { data } = action;
+    const { data: rawData } = action;
+    const data = filterData(rawData, state.searchString);
     set(state, 'map', createMap(data));
-    set(state, ['list', 'data'], data);
-    set(state, ['list', 'meta'], { queriedAt: Date.now() });
-    set(state, ['list', 'inflight'], false);
-    set(state, ['list', 'error'], false);
+    set(state, ['data'], data);
+    set(state, ['meta'], { queriedAt: Date.now() });
+    set(state, ['inflight'], false);
+    set(state, ['error'], false);
   },
   [WORKFLOWS_INFLIGHT]: (state, action) => {
-    set(state, ['list', 'inflight'], true);
+    set(state, ['inflight'], true);
   },
   [WORKFLOWS_ERROR]: (state, action) => {
-    set(state, ['list', 'inflight'], false);
-    set(state, ['list', 'error'], action.error);
-  }
+    set(state, ['inflight'], false);
+    set(state, ['error'], action.error);
+  },
+  [SEARCH_WORKFLOWS]: (state, action) => {
+    set(state, ['searchString'], action.searchString);
+  },
+  [CLEAR_WORKFLOWS_SEARCH]: (state, action) => {
+    set(state, ['searchString'], null);
+  },
 });
