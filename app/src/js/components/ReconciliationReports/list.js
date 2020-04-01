@@ -12,6 +12,7 @@ import { lastUpdated } from '../../utils/format';
 import { tableColumns, bulkActions } from '../../utils/table-config/reconciliation-reports';
 import Search from '../Search/search';
 import List from '../Table/Table';
+import ListFilters from '../ListActions/ListFilters';
 
 class ReconciliationReportList extends React.Component {
   constructor () {
@@ -43,12 +44,6 @@ class ReconciliationReportList extends React.Component {
             </h1>
             {lastUpdated(queriedAt)}
           </div>
-          <div className='filters'>
-            <Search dispatch={this.props.dispatch}
-              action={searchReconciliationReports}
-              clear={clearReconciliationReportSearch}
-            />
-          </div>
 
           <List
             list={list}
@@ -58,7 +53,14 @@ class ReconciliationReportList extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId='reconciliationReportName'
-          />
+          >
+            <ListFilters>
+              <Search dispatch={this.props.dispatch}
+                action={searchReconciliationReports}
+                clear={clearReconciliationReportSearch}
+              />
+            </ListFilters>
+          </List>
         </section>
       </div>
     );
