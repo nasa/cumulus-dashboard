@@ -32,6 +32,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1527**
   - Style changes for individual rule page
 
+- **CUMULUS-1509**
+  - Update styles on grnaules page
+
 ## [v1.7.2] - 2020-03-16
 
 ### Added
