@@ -35,6 +35,7 @@ import _config from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import { simpleDropdownOption } from '../../utils/table-config/granules';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 const { updateInterval } = _config;
 
@@ -219,8 +220,26 @@ class GranuleOverview extends React.Component {
     }];
     const errors = this.errors();
 
+    const breadcrumbConfig = [
+      {
+        label: 'Dashboard Home',
+        href: '/'
+      },
+      {
+        label: 'Granules',
+        href: '/granules'
+      },
+      {
+        label: granuleId,
+        active: true
+      }
+    ];
+
     return (
       <div className='page__component'>
+        <section className='page__section page__section__controls'>
+          <Breadcrumbs config={breadcrumbConfig} />
+        </section>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description width--three-quarters'>{granuleId}</h1>
           <AsyncCommands config={dropdownConfig} />

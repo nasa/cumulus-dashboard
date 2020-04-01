@@ -20,6 +20,7 @@ import {
 import ErrorReport from '../../components/Errors/report';
 import {strings} from '../../components/locale';
 import Dropdown from '../../components/DropDown/simple-dropdown';
+import Bulk from '../../components/Granules/bulk';
 
 export const tableColumns = [
   {
@@ -143,7 +144,16 @@ export const bulkActions = function (granules, config) {
     state: granules.removed,
     confirm: confirmRemove,
     className: 'button--remove'
-  }, {
+  },
+  {
+    Component:
+      <Bulk
+        element='button'
+        className='button button__bulkgranules button--green button--small form-group__element'
+        confirmAction={true}
+      />
+  },
+  {
     text: 'Delete',
     action: deleteGranule,
     state: granules.deleted,

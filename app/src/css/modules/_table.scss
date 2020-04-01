@@ -58,6 +58,10 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
+
+  &.no-actions {
+    align-items: center;
+  }
 }
 
 .list-actions {

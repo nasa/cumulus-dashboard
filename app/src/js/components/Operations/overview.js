@@ -25,6 +25,7 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import _config from '../../config';
 import { tableColumns } from '../../utils/table-config/operations';
+import ListFilters from '../ListActions/ListFilters';
 
 const { updateInterval } = _config;
 
@@ -106,28 +107,6 @@ class OperationOverview extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>All Operations <span className='num--title'>{tally(count)}</span></h2>
           </div>
-          <div className='filters filters__wlabels'>
-            <Search dispatch={this.props.dispatch}
-              action={searchOperations}
-              clear={clearOperationsSearch}
-            />
-            <Dropdown
-              options={statusOptions}
-              action={filterOperations}
-              clear={clearOperationsFilter}
-              paramKey={'status'}
-              label={'Status'}
-            />
-
-            <Dropdown
-              options={typeOptions}
-              action={filterOperations}
-              clear={clearOperationsFilter}
-              paramKey={'operationType'}
-              label={'Type'}
-            />
-          </div>
-
           <List
             list={list}
             dispatch={this.props.dispatch}
@@ -136,7 +115,31 @@ class OperationOverview extends React.Component {
             query={this.generateQuery()}
             rowId='id'
             sortIdx='createdAt'
-          />
+          >
+            <ListFilters>
+
+              <Search dispatch={this.props.dispatch}
+                action={searchOperations}
+                clear={clearOperationsSearch}
+              />
+              <Dropdown
+                options={statusOptions}
+                action={filterOperations}
+                clear={clearOperationsFilter}
+                paramKey={'status'}
+                label={'Status'}
+              />
+
+              <Dropdown
+                options={typeOptions}
+                action={filterOperations}
+                clear={clearOperationsFilter}
+                paramKey={'operationType'}
+                label={'Type'}
+              />
+            </ListFilters>
+          </List>
+
         </section>
       </div>
     );
