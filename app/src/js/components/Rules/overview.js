@@ -56,6 +56,7 @@ class RulesOverview extends React.Component {
                 action={searchRules}
                 clear={clearRulesSearch}
                 placeholder='Search Rules'
+                label='Search'
               />
             </ListFilters>
           </List>
