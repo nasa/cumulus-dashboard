@@ -29,7 +29,7 @@ const ListActions = ({
   }
 
   return (
-    <div className='list-action-wrapper'>
+    <div className={`list-action-wrapper${!hasActions || !children ? ' no-actions' : ''}`}>
       {children}
       <div className='list-actions'>
         {hasActions && (

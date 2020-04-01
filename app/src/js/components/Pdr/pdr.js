@@ -41,6 +41,7 @@ import ErrorReport from '../Errors/report';
 import GranulesProgress from '../Granules/progress';
 import _config from '../../config';
 import {strings} from '../locale';
+import ListFilters from '../ListActions/ListFilters';
 
 const { updateInterval } = _config;
 
@@ -157,28 +158,6 @@ class PDR extends React.Component {
           <div>
             <GranulesProgress granules={granuleStatus} />
           </div>
-          <div className='filters filters__wlabels'>
-            <Dropdown
-              getOptions={getOptionsCollectionName}
-              options={get(dropdowns, ['collectionName', 'options'])}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              paramKey={'collectionName'}
-              label={strings.collection}
-            />
-            <Dropdown
-              options={status}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              paramKey={'status'}
-              label={'Status'}
-            />
-            <Search dispatch={this.props.dispatch}
-              action={searchGranules}
-              format={granuleSearchResult}
-              clear={clearGranulesSearch}
-            />
-          </div>
 
           <List
             list={list}
@@ -188,7 +167,30 @@ class PDR extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId='granuleId'
-          />
+          >
+            <ListFilters>
+              <Dropdown
+                getOptions={getOptionsCollectionName}
+                options={get(dropdowns, ['collectionName', 'options'])}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey={'collectionName'}
+                label={strings.collection}
+              />
+              <Dropdown
+                options={status}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey={'status'}
+                label={'Status'}
+              />
+              <Search dispatch={this.props.dispatch}
+                action={searchGranules}
+                format={granuleSearchResult}
+                clear={clearGranulesSearch}
+              />
+            </ListFilters>
+          </List>
         </section>
         <LogViewer
           query={logsQuery}
