@@ -15,8 +15,10 @@ class Metadata extends React.Component {
             value = meta[2](value);
           }
           return acc.concat([
-            <dt key={`meta-${meta[1]}--dt`}>{meta[0]}</dt>,
-            <dd key={`meta-${meta[1]}--dd`}>{value}</dd>
+            <div className="meta__row">
+              <dt key={`meta-${meta[1]}--dt`}>{meta[0]}</dt>
+              <dd key={`meta-${meta[1]}--dd`}>{value}</dd>
+            </div>
           ]);
         }, [])}
       </dl>

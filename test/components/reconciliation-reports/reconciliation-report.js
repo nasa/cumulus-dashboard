@@ -58,7 +58,7 @@ test('show individual report', function (t) {
   const MetadataWrapperChildren = MetadataWrapper.children();
   // ReconciliationReport is configured to use 6 metaAccessors,
   // so there will be 6 groups of dt, dd elements for a total of 12
-  t.is(MetadataWrapperChildren.length, 12);
+  t.is(MetadataWrapperChildren.length, 6);
 });
 
 test('report with error triggers error message', function (t) {
