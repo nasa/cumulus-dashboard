@@ -20,6 +20,7 @@ import Overview from '../Overview/overview';
 import _config from '../../config';
 import Dropdown from '../DropDown/dropdown';
 import pageSizeOptions from '../../utils/page-size';
+import ListFilters from '../ListActions/ListFilters';
 
 const { updateInterval } = _config;
 
@@ -86,18 +87,6 @@ class ProvidersOverview extends React.Component {
             <h2 className='heading--medium heading--shared-content'>Ingesting Providers <span className='num--title'>{count ? `${count}` : 0}</span></h2>
           </div>
 
-          <div className='filters filters__wlabels'>
-            <Dropdown
-              options={pageSizeOptions}
-              action={filterProviders}
-              clear={clearProvidersFilter}
-              paramKey={'limit'}
-              inputProps={{
-                placeholder: 'Results Per Page'
-              }}
-            />
-          </div>
-
           <List
             list={mutableList}
             dispatch={this.props.dispatch}
@@ -107,7 +96,19 @@ class ProvidersOverview extends React.Component {
             bulkActions={[]}
             rowId='name'
             sortIdx='timestamp'
-          />
+          >
+            <ListFilters>
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterProviders}
+                clear={clearProvidersFilter}
+                paramKey={'limit'}
+                inputProps={{
+                  placeholder: 'Results Per Page'
+                }}
+              />
+            </ListFilters>
+          </List>
         </section>
       </div>
     );
