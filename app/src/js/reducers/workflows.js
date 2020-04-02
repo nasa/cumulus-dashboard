@@ -42,7 +42,7 @@ export default createReducer(initialState, {
     set(state, ['inflight'], false);
     set(state, ['error'], false);
   },
-  [WORKFLOWS_INFLIGHT]: (state, action) => {
+  [WORKFLOWS_INFLIGHT]: (state) => {
     set(state, ['inflight'], true);
   },
   [WORKFLOWS_ERROR]: (state, action) => {
@@ -52,7 +52,7 @@ export default createReducer(initialState, {
   [SEARCH_WORKFLOWS]: (state, action) => {
     set(state, ['searchString'], action.searchString);
   },
-  [CLEAR_WORKFLOWS_SEARCH]: (state, action) => {
+  [CLEAR_WORKFLOWS_SEARCH]: (state) => {
     set(state, ['searchString'], null);
   },
 });

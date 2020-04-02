@@ -1,8 +1,8 @@
 'use strict';
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { tally } from '../../utils/format';
 import {
   listWorkflows,
@@ -13,8 +13,13 @@ import List from '../Table/Table';
 import Search from '../Search/search';
 import { tableColumns } from '../../utils/table-config/workflows';
 
-const WorkflowOverview = ({ dispatch, workflows }) => {
+const WorkflowOverview = ({ workflows }) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(listWorkflows());
+  }, [ workflows.searchString, dispatch ]);
   const count = workflows.data.length;
+
   return (
     <div className='page__component'>
       <section className='page__section page__section__header-wrapper'>
@@ -52,6 +57,6 @@ WorkflowOverview.propTypes = {
   workflows: PropTypes.object
 };
 
-export default withRouter(connect(state => ({
-  workflows: state.workflows
-}))(WorkflowOverview));
+export default withRouter(connect(
+  (state) => ({workflows: state.workflows})
+)(WorkflowOverview));
