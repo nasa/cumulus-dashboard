@@ -17,7 +17,6 @@ class Rules extends React.Component {
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge heading--shared-content'>Rules</h1>
-            {showSidebar}
           </div>
         </div>
         <div className='page__content'>
