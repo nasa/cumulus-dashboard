@@ -95,7 +95,7 @@ describe('Rules page', () => {
 
     it('creating a rule should add it to the list', () => {
       cy.visit('/rules');
-      cy.get('a').contains('Add a rule').as('addRule');
+      cy.get('a').contains('Add Rule').as('addRule');
       cy.get('@addRule').should('have.attr', 'href', '/rules/add');
       cy.get('@addRule').click();
 
