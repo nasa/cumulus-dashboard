@@ -29,7 +29,7 @@ describe('Dashboard Granules Page', () => {
 
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 6)
+        .first().contains('li', 'Completed').contains('li', 7)
         .next().contains('li', 'Failed').contains('li', 2)
         .next().contains('li', 'Running').contains('li', 2);
 
@@ -96,7 +96,7 @@ describe('Dashboard Granules Page', () => {
         });
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').its('length').should('be.eq', 10);
+      cy.get('@list').its('length').should('be.eq', 11);
     });
 
     it('should display a link to download the granule list', () => {
@@ -150,7 +150,7 @@ describe('Dashboard Granules Page', () => {
 
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 6)
+        .first().contains('li', 'Completed').contains('li', 7)
         .next().contains('li', 'Failed').contains('li', 2)
         .next().contains('li', 'Running').contains('li', 2);
       cy.window().its('appStore').then((store) => {
@@ -166,6 +166,14 @@ describe('Dashboard Granules Page', () => {
           .next().contains('li', 'Failed').contains('li', 0)
           .next().contains('li', 'Running').contains('li', 0);
       });
+    });
+
+    it('Should update the table when the Results Per Page dropdown is changed.', () => {
+      cy.visit('/granules');
+      cy.get('.filter__item').eq(3).as('page-size-input');
+      cy.get('@page-size-input').should('be.visible').click().type('10{enter}');
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('@list').its('length').should('be.eq', 10);
     });
   });
 });
