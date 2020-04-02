@@ -116,7 +116,7 @@ class AllGranules extends React.Component {
     const query = this.generateQuery();
     const view = this.getView();
     const displayCaseView = displayCase(view);
-    const statOptions = (view === 'all') ? statusOptions : null;
+    const statusOpts = (view === 'all') ? statusOptions : null;
     const tableSortIdx = view === 'failed' ? 'granuleId' : 'timestamp';
     const breadcrumbConfig = [
       {
@@ -167,9 +167,9 @@ class AllGranules extends React.Component {
                   placeholder: 'All'
                 }}
               />
-              {statOptions &&
+              {statusOpts &&
                 <Dropdown
-                  options={statOptions}
+                  options={statusOpts}
                   action={filterGranules}
                   clear={clearGranulesFilter}
                   paramKey='status'
