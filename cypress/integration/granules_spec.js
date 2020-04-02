@@ -172,8 +172,11 @@ describe('Dashboard Granules Page', () => {
       cy.visit('/granules');
       cy.get('.filter__item').eq(3).as('page-size-input');
       cy.get('@page-size-input').should('be.visible').click().type('10{enter}');
-      cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').its('length').should('be.eq', 10);
+      cy.get('.table .tbody .tr').its('length').should('be.eq', 10);
+      cy.get('.pagination ol li')
+        .first().contains('li', 'Previous')
+        .next().contains('li', '1')
+        .next().contains('li', '2');
     });
   });
 });
