@@ -296,6 +296,37 @@
       font-weight: 900;
       visibility: hidden;
     }
+
+    &--enable {
+      background-color: $light-green;
+      position: relative;
+      
+      &:before {
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        content: '\f205';
+        font-weight: 900;
+        top: 4px;
+        left: 10px;
+      } 
+    }
+
+    &--disable {
+      background-color: $light-green;
+      position: relative;
+      
+      &:before {
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        content: '\f204';
+        font-weight: 900;
+        top: 4px;
+        left: 10px;
+      } 
+    }
+  
   
      /*******Button Animations & Transitions ******/
     &--loading {
