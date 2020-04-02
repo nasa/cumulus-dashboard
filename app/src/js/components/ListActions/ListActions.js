@@ -29,7 +29,7 @@ const ListActions = ({
   }
 
   return (
-    <div className='list-action-wrapper'>
+    <div className={`list-action-wrapper${!hasActions || !children ? ' no-actions' : ''}`}>
       {children}
       <div className='list-actions'>
         {hasActions && (
@@ -38,7 +38,7 @@ const ListActions = ({
               const { Component, text } = item;
               return (
                 <React.Fragment key={text || index}>
-                  {Component && Component}
+                  {Component && React.cloneElement(Component, { selected })}
                   {!Component &&
                     <BatchAsyncCommand
                       dispatch={dispatch}

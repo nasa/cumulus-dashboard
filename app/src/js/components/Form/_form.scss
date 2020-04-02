@@ -507,3 +507,32 @@ select option{
     display: none;
   }
 }
+
+.rule__status {
+  display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 12;
+}
+
+.rule__content {
+  border: 1px solid #eceaea;
+  box-shadow: $shadow__default;
+  border-radius: 10px;
+  padding: 25px 40px;
+  margin-top: 15px;
+}
+
+.rule__content .metadata__details {
+  font-size: $base-font-size;
+  display: flex;
+  flex-direction: column;
+}
+
+.rule__content .metadata__details .meta__row {
+  flex-direction: row;
+}
+
+.rule__content .metadata__details dt{
+  width: 10%;
+}

@@ -27,15 +27,31 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import Metadata from '../Table/Metadata';
 import AsyncCommands from '../DropDown/dropdown-async-command';
 import ErrorReport from '../Errors/report';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/'
+  },
+  {
+    label: 'Rules',
+    href: '/Rules'
+  },
+  {
+    label: 'Rule Overview',
+    active: true
+  }
+];
 
 const metaAccessors = [
-  ['RuleName', 'name'],
+  ['Rule Name', 'name'],
+  ['Timestamp', 'timestamp', fullDate],
   ['Workflow', 'workflow'],
   ['Provider', 'provider', providerLink],
-  ['ProviderPath', 'provider_path'],
-  ['RuleType', 'rule.type'],
-  // PGC ['Collection', 'collection', d => collectionLink(getCollectionId(d))],
-  ['Timestamp', 'timestamp', fullDate]
+  ['Provider Path', 'provider_path'],
+  ['Rule Type', 'rule.type'],
+  // PGC ['Collection', 'collection', d => collectionLink(getCollectionId(d))],  /* Why was this commented out? */
 ];
 
 class Rule extends React.Component {
@@ -157,10 +173,15 @@ class Rule extends React.Component {
     const errors = this.errors();
     return (
       <div className='page__component'>
+        <section className='page__section page__section__controls'>
+          <div className="options--top">
+            <Breadcrumbs config={breadcrumbConfig} />
+          </div>
+        </section>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description'>{ruleName}</h1>
-            <AsyncCommands config={dropdownConfig} />
+            <AsyncCommands config={dropdownConfig}/>
 
             <Link
               className='button button--copy button--small button--green form-group__element--right'
@@ -169,18 +190,11 @@ class Rule extends React.Component {
                 state: {
                   name: ruleName
                 }
-              }}>Copy</Link>
+              }}>Copy Rule</Link>
             <Link
               className='button button--edit button--small button--green form-group__element--right'
-              to={`/rules/edit/${ruleName}`}>Edit</Link>
+              to={`/rules/edit/${ruleName}`}>Edit Rule</Link>
             {lastUpdated(data.timestamp)}
-            {data.state ? (
-              <dl className='status--process'>
-                <dt>State:</dt>
-                <dd className={data.state.toLowerCase()}>{displayCase(data.state)}</dd>
-              </dl>
-            ) : null}
-
           </div>
         </section>
         <section className='page__section'>
@@ -188,7 +202,17 @@ class Rule extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Rule Overview</h2>
           </div>
-          <Metadata data={data} accessors={metaAccessors} />
+          <div className="rule__state">
+            {data.state ? (
+              <dl className='status--process'>
+                <dt>State:</dt>
+                <dd className={`status--badge status--badge__${data.state.toLowerCase()}`}>{displayCase(data.state)}</dd>
+              </dl>
+            ) : null}
+          </div>
+          <div className="rule__content">
+            <Metadata data={data} accessors={metaAccessors} />
+          </div>
         </section>
       </div>
     );
