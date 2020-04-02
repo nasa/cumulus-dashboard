@@ -60,7 +60,7 @@ export const bulkActions = (rules) => [{
   state: rules.disabled,
   confirm: (d) => `Disable ${d} Rule(s)?`,
   className: 'button button--green button--disable button--small form-group__element'
-}, 
+},
 {
   Component: <Link className='button button--green button--add button--small form-group__element' to='/rules/add'>Add Rule</Link>
 },
