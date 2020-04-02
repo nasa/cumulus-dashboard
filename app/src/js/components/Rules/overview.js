@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import {
   listRules,
   searchRules,
-  clearRulesSearch
+  clearRulesSearch,
   filterRules,
   clearRulesFilter
 } from '../../actions';
@@ -64,18 +64,6 @@ class RulesOverview extends React.Component {
             <h2 className='heading--medium heading--shared-content with-description'>All Rules <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
           </div>
 
-          <div className='filters filters__wlabels'>
-            <Dropdown
-              options={pageSizeOptions}
-              action={filterRules}
-              clear={clearRulesFilter}
-              paramKey={'limit'}
-              inputProps={{
-                placeholder: 'Results Per Page'
-              }}
-            />
-          </div>
-
           <List
             list={list}
             dispatch={this.props.dispatch}
@@ -93,7 +81,17 @@ class RulesOverview extends React.Component {
                 clear={clearRulesSearch}
                 placeholder='Search Rules'
                 label='Search'
-                />
+              />
+
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterRules}
+                clear={clearRulesFilter}
+                paramKey={'limit'}
+                inputProps={{
+                  placeholder: 'Results Per Page'
+                }}
+              />
             </ListFilters>
           </List>
         </section>
