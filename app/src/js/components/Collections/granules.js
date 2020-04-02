@@ -42,6 +42,7 @@ const CollectionGranules = ({
   const collectionId = getCollectionId(params);
   const view = getView();
   const [workflow, setWorkflow] = useState();
+  const query = generateQuery();
 
   const breadcrumbConfig = [
     {
@@ -145,7 +146,7 @@ const CollectionGranules = ({
         <List
           list={list}
           action={listGranules}
-          query={generateQuery()}
+          query={query}
           bulkActions={generateBulkActions()}
           rowId='granuleId'
           sortIdx='timestamp'
@@ -156,7 +157,8 @@ const CollectionGranules = ({
               dispatch={dispatch}
               action={searchGranules}
               clear={clearGranulesSearch}
-              placeholder='Search Granules'
+              label='Search'
+              placeholder='Granule ID'
             />
             {view === 'all' && (
               <Dropdown
@@ -164,8 +166,9 @@ const CollectionGranules = ({
                 action={filterGranules}
                 clear={clearGranulesFilter}
                 paramKey='status'
+                label='Status'
                 inputProps={{
-                  placeholder: 'Status'
+                  placeholder: 'All'
                 }}
               />
             )}

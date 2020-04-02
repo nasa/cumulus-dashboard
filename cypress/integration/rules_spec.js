@@ -39,6 +39,13 @@ describe('Rules page', () => {
         });
     });
 
+    it('Should update URL when search filter is changed.', () => {
+      cy.visit('/rules');
+      cy.get('.search').as('search');
+      cy.get('@search').click().type('L2');
+      cy.url().should('include', 'search=L2');
+    });
+
     it('display a rule with the correct data', () => {
       cy.visit('/rules');
       cy.contains('.table .tr a', testRuleName)
@@ -47,7 +54,7 @@ describe('Rules page', () => {
       cy.get('.metadata__details')
         .within(() => {
           cy.get('dt')
-            .contains('RuleName')
+            .contains('Rule Name')
             .next('dd')
             .should('contain', testRuleName);
           cy.get('dt')
@@ -88,7 +95,7 @@ describe('Rules page', () => {
 
     it('creating a rule should add it to the list', () => {
       cy.visit('/rules');
-      cy.get('a').contains('Add a rule').as('addRule');
+      cy.get('a').contains('Add Rule').as('addRule');
       cy.get('@addRule').should('have.attr', 'href', '/rules/add');
       cy.get('@addRule').click();
 
@@ -125,7 +132,7 @@ describe('Rules page', () => {
       cy.url().should('include', `rules/rule/${ruleName}`);
       cy.get('.metadata__details')
         .within(() => {
-          cy.contains('RuleName').next().should('have.text', ruleName);
+          cy.contains('Rule Name').next().should('have.text', ruleName);
           cy.contains('Workflow').next().should('have.text', workflow);
           cy.contains('Provider')
             .next()
@@ -168,7 +175,7 @@ describe('Rules page', () => {
       cy.url().should('include', `rules/rule/${newName}`);
       cy.get('.metadata__details')
         .within(() => {
-          cy.contains('RuleName').next().should('have.text', newName);
+          cy.contains('Rule Name').next().should('have.text', newName);
           cy.contains('Provider')
             .next()
             .contains('a', testProviderId)

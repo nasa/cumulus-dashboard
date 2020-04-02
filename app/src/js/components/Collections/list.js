@@ -119,7 +119,8 @@ class CollectionList extends React.Component {
                 action={searchCollections}
                 format={collectionSearchResult}
                 clear={clearCollectionsSearch}
-                placeholder='Search Collections'
+                label='Search'
+                placeholder='Collection Name'
               />
             </ListFilters>
           </List>

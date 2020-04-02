@@ -3,10 +3,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { listRules } from '../../actions';
+import { listRules, searchRules, clearRulesSearch } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import List from '../Table/Table';
+import Search from '../Search/search';
+import ListFilters from '../ListActions/ListFilters';
 import { tableColumns, bulkActions } from '../../utils/table-config/rules';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/'
+  },
+  {
+    label: 'Rules',
+    active: true
+  }
+];
 
 class RulesOverview extends React.Component {
   constructor () {
@@ -28,9 +42,12 @@ class RulesOverview extends React.Component {
     const { count, queriedAt } = list.meta;
     return (
       <div className='page__component'>
+        <section className='page__section page__section__controls'>
+          <Breadcrumbs config={breadcrumbConfig} />
+        </section>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>Rule Overview</h1>
+            <h1 className='heading--large heading--shared-content with-description'>Rules Overview</h1>
             {lastUpdated(queriedAt)}
           </div>
         </section>
@@ -47,7 +64,17 @@ class RulesOverview extends React.Component {
             sortIdx='timestamp'
             bulkActions={this.generateBulkActions()}
             rowId='name'
-          />
+          >
+            <ListFilters>
+              <Search
+                dispatch={this.props.dispatch}
+                action={searchRules}
+                clear={clearRulesSearch}
+                placeholder='Search Rules'
+                label='Search'
+              />
+            </ListFilters>
+          </List>
         </section>
       </div>
     );

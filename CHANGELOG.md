@@ -32,6 +32,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1467**
   - Change the metrics section on the home page to update based on datepicker time period.
 
+- **CUMULUS-1527**
+  - Style changes for individual rule page
+
+- **CUMULUS-1509**
+  - Update styles on grnaules page
+
+- **CUMULUS-1525**
+  - Style changes for rules overview page
+
 ## [v1.7.2] - 2020-03-16
 
 ### Added
