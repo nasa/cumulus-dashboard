@@ -11,12 +11,13 @@ import Schema from '../FormSchema/schema';
 import Loading from '../LoadingIndicator/loading-indicator';
 import _config from '../../config';
 import { strings } from '../locale';
+import { window } from '../../utils/browser';
 
 const { updateDelay } = _config;
 
 class AddRecord extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.state = {
       pk: null
     };
@@ -36,6 +37,7 @@ class AddRecord extends React.Component {
     if (status === 'success') {
       return setTimeout(() => {
         history.push(path.join(baseRoute, pk));
+        window.scrollTo(0, 0);
       }, updateDelay);
     }
   }
@@ -68,7 +70,7 @@ class AddRecord extends React.Component {
   }
 
   render () {
-    const { title, state, schemaKey } = this.props;
+    const { data, title, state, schemaKey } = this.props;
     const { pk } = this.state;
     const record = pk ? get(state.created, pk, {}) : {};
     const schema = this.props.schema[schemaKey];
@@ -81,6 +83,7 @@ class AddRecord extends React.Component {
           </div>
           {schema ? (
             <Schema
+              data={data}
               schema={schema}
               pk={'new-collection'}
               onSubmit={this.post}
@@ -89,6 +92,7 @@ class AddRecord extends React.Component {
               error={record.status === 'inflight' ? null : record.error}
               include={this.props.include}
               exclude={this.props.exclude}
+              enums={this.props.enums}
             />
           ) : (
             <Loading />
@@ -100,10 +104,12 @@ class AddRecord extends React.Component {
 }
 
 AddRecord.propTypes = {
+  data: PropTypes.object,
   schema: PropTypes.object,
   schemaKey: PropTypes.string,
   primaryProperty: PropTypes.string,
   title: PropTypes.string,
+  enums: PropTypes.objectOf(PropTypes.array),
 
   dispatch: PropTypes.func,
   state: PropTypes.object,
@@ -140,7 +146,7 @@ Schema.defaultProps = {
 };
 
 export default withRouter(
-  connect(state => ({
+  connect((state) => ({
     schema: state.schema
   }))(AddRecord)
 );

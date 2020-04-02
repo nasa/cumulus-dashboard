@@ -5,24 +5,29 @@ import PropTypes from 'prop-types';
 import { get, set } from 'object-path';
 import { Form, formTypes } from '../Form/Form';
 import {
-  isText,
-  isNumber,
+  arrayWithLength,
   isArray,
-  arrayWithLength
+  isNumber,
+  isObject,
+  isText
 } from '../../utils/validate';
 import t from '../../utils/strings';
 import ErrorReport from '../Errors/report';
 
 const { errors } = t;
 
-export const traverseSchema = function (schema, fn, path = []) {
+const traverseSchema = (schema, enums, fn, path = []) => {
   for (let property in schema.properties) {
     const meta = schema.properties[property];
 
-    if (meta.type !== 'object' || meta.additionalProperties === true) {
+    if (
+      meta.type !== 'object' ||
+      meta.additionalProperties === true ||
+      (property in enums)
+    ) {
       fn([...path, property], meta, schema);
     } else if (typeof meta.properties === 'object') {
-      traverseSchema(meta, fn, [...path, property]);
+      traverseSchema(meta, enums, fn, [...path, property]);
     }
   }
 };
@@ -44,7 +49,7 @@ export const removeReadOnly = function (data, schema) {
   const readOnlyRemoved = {};
   const schemaFields = [];
 
-  traverseSchema(schema, function (path, meta) {
+  traverseSchema(schema, {}, (path, meta) => {
     schemaFields.push(path[path.length - 1]);
 
     if (!meta.readonly) {
@@ -55,31 +60,37 @@ export const removeReadOnly = function (data, schema) {
   // filter fields that are not in the schema
   const esFields = ['queriedAt', 'timestamp', 'stats'];
   const nonSchemaFields = Object.keys(data).filter(
-    f => !schemaFields.includes(f) && !esFields.includes(f)
+    (f) => !schemaFields.includes(f) && !esFields.includes(f)
   );
 
   // add them to the list of fields
-  nonSchemaFields.forEach(f => set(readOnlyRemoved, f, get(data, f)));
+  nonSchemaFields.forEach((f) => set(readOnlyRemoved, f, get(data, f)));
 
   return readOnlyRemoved;
 };
 
 // recursively scan a schema object and create a form config from it.
 // returns a flattened representation of the schema.
-export const createFormConfig = function (data, schema, include, exclude) {
+export const createFormConfig = function (
+  data,
+  schema,
+  include,
+  exclude,
+  enums = {}
+) {
   data = data || {};
   const fields = [];
-  const toRegExps = stringsOrRegExps =>
-    stringsOrRegExps.map(strOrRE =>
+  const toRegExps = (stringsOrRegExps) =>
+    stringsOrRegExps.map((strOrRE) =>
       typeof strOrRE === 'string' ? new RegExp(`^${strOrRE}$`, 'i') : strOrRE
     );
   const inclusions = toRegExps(include);
   const exclusions = toRegExps(exclude);
-  const matches = string => regexp => regexp.test(string);
-  const includeProperty = path =>
+  const matches = (string) => (regexp) => regexp.test(string);
+  const includeProperty = (path) =>
     inclusions.some(matches(path)) && !exclusions.some(matches(path));
 
-  traverseSchema(schema, function (path, meta, schemaProperty) {
+  traverseSchema(schema, enums, (path, meta, schemaProperty) => {
     const fullyQualifiedProperty = path.join('.');
 
     // If a field isn't user-editable, hide it from the form
@@ -91,7 +102,7 @@ export const createFormConfig = function (data, schema, include, exclude) {
     // determine the label
     const property = path[path.length - 1];
     const required =
-      Array.isArray(schemaProperty.required) &&
+      isArray(schemaProperty.required) &&
       schemaProperty.required.includes(property);
 
     const labelText = meta.title || property;
@@ -115,11 +126,12 @@ export const createFormConfig = function (data, schema, include, exclude) {
 
     // dropdowns have type set to string, but have an enum prop.
     // use enum as the type instead of string.
-    const type = Array.isArray(meta['enum'])
-      ? 'enum'
-      : meta.hasOwnProperty('patternProperties')
-        ? 'pattern'
-        : meta.type;
+    const type =
+      isArray(meta['enum']) || property in enums
+        ? 'enum'
+        : meta.hasOwnProperty('patternProperties')
+          ? 'pattern'
+          : meta.type;
 
     switch (type) {
       case 'pattern':
@@ -138,7 +150,7 @@ export const createFormConfig = function (data, schema, include, exclude) {
         break;
       case 'enum':
         // pass the enum fields as options
-        config.options = meta.enum;
+        config.options = meta.enum || enums[property];
         fields.push(dropdownField(config, property, required && isText));
         break;
       case 'array':
@@ -158,12 +170,13 @@ export const createFormConfig = function (data, schema, include, exclude) {
         fields.push(numberField(config, property, required && isNumber));
         break;
       case 'object':
-        fields.push(textAreaField(config, property, required && isText));
+        fields.push(textAreaField(config, property, required && isObject));
         break;
       default:
         return;
     }
   });
+
   return fields;
 };
 
@@ -171,7 +184,7 @@ const textAreaField = (config, property, validate) => ({
   ...config,
   type: formTypes.textArea,
   mode: 'json',
-  value: '{}',
+  value: isObject(config.value) ? JSON.stringify(config.value, null, 2) : config.value,
   validate: validate,
   error: validate && get(errors, property, errors.required)
 });
@@ -210,18 +223,21 @@ function listField (config, property, validate) {
 export class Schema extends React.Component {
   constructor (props) {
     super(props);
-    this.props = props;
-    const { schema, data, include, exclude } = this.props;
-    this.state = { fields: createFormConfig(data, schema, include, exclude) };
+
+    const { schema, data, include, exclude, enums } = props;
+
+    this.state = {
+      fields: createFormConfig(data, schema, include, exclude, enums)
+    };
   }
 
   componentDidUpdate (prevProps) {
-    const { schema, data, include, exclude, pk } = this.props;
+    const { schema, data, include, exclude, pk, enums } = this.props;
 
-    if (prevProps.pk !== pk) {
+    if (prevProps.pk !== pk || prevProps.enums !== enums || prevProps.data !== data) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
-        fields: createFormConfig(data, schema, include, exclude)
+        fields: createFormConfig(data, schema, include, exclude, enums)
       });
     }
   }
@@ -231,8 +247,8 @@ export class Schema extends React.Component {
     const { error } = this.props;
 
     return (
-      <div>
-        {error ? <ErrorReport report={error} /> : null}
+      <div ref={(element) => { error && element && element.scrollIntoView(true); }}>
+        {error && <ErrorReport report={error} />}
         <Form
           inputMeta={fields}
           submit={this.props.onSubmit}
@@ -246,6 +262,19 @@ export class Schema extends React.Component {
 
 Schema.propTypes = {
   schema: PropTypes.object,
+  // Mapping from property name to function that supplies dynamic enum values
+  // for cases where the list of enum values is not static, but rather is
+  // derived from the current state.  For example, the "workflow" property of
+  // a Rule must specify the name of an existing Workflow, thus the list of
+  // possible values for the property must come from the current state.
+  // When a schema property name is found in this enums component property,
+  // the associated function is invoked with no arguments and is expected to
+  // return a list of values to select from.  Each value in the list may
+  // be either a single value or a pair of values.  When a list element is a
+  // single value, it is used for both the value and text of the select option.
+  // When it is a pair of values (a 2-element array), the first element is used
+  // as the value of the select option, and the second value is the option text.
+  enums: PropTypes.objectOf(PropTypes.array),
   data: PropTypes.object,
   pk: PropTypes.string,
   onCancel: PropTypes.func,
@@ -253,14 +282,14 @@ Schema.propTypes = {
   status: PropTypes.string,
   error: PropTypes.any,
 
-  // Specifies schema properties to include on the form.  Each element in this
+  // Schema properties to include on the form.  Each element in this
   // array may be either a string that specifies the full path of the property
   // within the schema (e.g., "collection.name" and "collection.version") or a
   // regular expression (e.g., /^collection/).
   include: PropTypes.arrayOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)])
   ),
-  // Specifies schema properties to exclude from the form.  Elements in this
+  // Schema properties to exclude from the form.  Elements in this
   // array are specified the same was as in the "include" array.  However,
   // exclusions are applied after inclusions, so a property that is included
   // via the "include" array may be excluded by this array, preventing it from
@@ -271,6 +300,7 @@ Schema.propTypes = {
 };
 
 Schema.defaultProps = {
+  enums: {},
   // Exclude no schema properties
   exclude: [],
   // Include all schema properties
