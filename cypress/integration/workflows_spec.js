@@ -26,7 +26,10 @@ describe('Dashboard Workflows Page', () => {
 
       cy.url().should('include', 'workflows');
       cy.contains('.heading--xlarge', 'Workflows');
+    });
 
+    it('displays a list of workflows', () => {
+      cy.visit('/workflows');
       cy.get('.table .tbody .tr').its('length').should('be.eq', 2);
       cy.contains('.table .tbody .tr a', 'HelloWorldWorkflow')
         .should('have.attr', 'href', '/workflows/workflow/HelloWorldWorkflow');
@@ -51,6 +54,16 @@ describe('Dashboard Workflows Page', () => {
         expect(workflowJson.definition.States.StartStatus)
           .to.deep.equal({Type: 'Task', Resource: '${SfSnsReportLambdaAliasOutput}', Next: 'StopStatus'});
       });
+    });
+
+    it('filters workflows when a user types in the search box', () => {
+      cy.server();
+      cy.route('GET', '/workflows*').as('get-workflows');
+      cy.visit('/workflows');
+      cy.get('.table .tbody .tr').its('length').should('be.eq', 2);
+      cy.get('.table .tbody .tr').first().contains('HelloWorldWorkflow');
+      cy.get('.search').click().type('cond');
+      cy.get('.table .tbody .tr').first().contains('SecondTestWorkflow');
     });
   });
 });
