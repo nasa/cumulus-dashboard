@@ -88,6 +88,7 @@ class RulesOverview extends React.Component {
                 action={filterRules}
                 clear={clearRulesFilter}
                 paramKey={'limit'}
+                label={'Results Per Page'}
                 inputProps={{
                   placeholder: 'Results Per Page'
                 }}

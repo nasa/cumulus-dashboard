@@ -68,6 +68,7 @@ class ReconciliationReportList extends React.Component {
                 action={filterReconciliationReports}
                 clear={clearReconciliationReportsFilter}
                 paramKey={'limit'}
+                label={'Results Per Page'}
                 inputProps={{
                   placeholder: 'Results Per Page'
                 }}

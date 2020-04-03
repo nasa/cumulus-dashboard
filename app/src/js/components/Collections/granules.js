@@ -177,6 +177,7 @@ const CollectionGranules = ({
               options={pageSizeOptions}
               action={filterGranules}
               clear={clearGranulesFilter}
+              label='Results Per Page'
               paramKey='limit'
               inputProps={{
                 placeholder: 'Results Per Page'

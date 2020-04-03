@@ -297,6 +297,7 @@ class CollectionOverview extends React.Component {
                 action={filterGranules}
                 clear={clearGranulesFilter}
                 paramKey='limit'
+                label={'Results Per Page'}
                 inputProps={{
                   placeholder: 'Results Per Page'
                 }}

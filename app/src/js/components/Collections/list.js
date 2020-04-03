@@ -132,6 +132,7 @@ class CollectionList extends React.Component {
                 action={filterCollections}
                 clear={clearCollectionsFilter}
                 paramKey={'limit'}
+                label={'Results Per Page'}
                 inputProps={{
                   placeholder: 'Results Per Page'
                 }}

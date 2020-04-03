@@ -103,6 +103,7 @@ class ProvidersOverview extends React.Component {
                 action={filterProviders}
                 clear={clearProvidersFilter}
                 paramKey={'limit'}
+                label={'Results Per Page'}
                 inputProps={{
                   placeholder: 'Results Per Page'
                 }}
