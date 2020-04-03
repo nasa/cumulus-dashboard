@@ -3,6 +3,9 @@ import React from 'react';
 import test from 'ava';
 import cloneDeep from 'lodash.clonedeep';
 import { buildLink, makeSteps } from '../../../app/src/js/utils/table-config/workflows';
+import _config from '../../../app/src/js/config';
+
+_config.awsRegion = 'us-testRegion-1';
 
 const sampleRow = {
   arn: 'samplerow-arn',
@@ -46,7 +49,7 @@ test('buildLink returns link to ARN if available', (t) => {
 
   const expected = <a
     target="_blank"
-    href="https://console.aws.amazon.com/states/home?region=us-east-1#/statemachines/view/samplerow-arn">
+    href="https://console.aws.amazon.com/states/home?region=us-testRegion-1#/statemachines/view/samplerow-arn">
     Description of workflow.
   </a>;
   const actual = buildLink(testRow);
@@ -59,7 +62,7 @@ test('buildLink uses default title if description is not available', (t) => {
 
   const expected = <a
     target="_blank"
-    href="https://console.aws.amazon.com/states/home?region=us-east-1#/statemachines/view/samplerow-arn">
+    href="https://console.aws.amazon.com/states/home?region=us-testRegion-1#/statemachines/view/samplerow-arn">
     AWS Stepfunction
   </a>;
   const actual = buildLink(testRow);
