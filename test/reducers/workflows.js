@@ -67,3 +67,24 @@ test('if state has searchString, data list is filtered on WORKFLOW', (t) => {
 
   t.deepEqual(expected, actual);
 });
+
+
+test('if state has searchString, data list is filtered on WORKFLOW and is case insenstive', (t) => {
+  const inState = cloneDeep(initialState);
+  inState.searchString = 'elloworld';
+
+  const expected = cloneDeep({
+    data: [ testData[0] ],
+    meta: {queriedAt: t.context.testStart},
+    map: {
+      HelloWorldWorkflow: testData[0]
+    },
+    inflight: false,
+    error: false,
+    searchString: 'elloworld'
+  });
+
+  const actual = reducer(inState, {type: 'WORKFLOWS', data: testData});
+
+  t.deepEqual(expected, actual);
+});

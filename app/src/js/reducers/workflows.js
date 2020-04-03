@@ -14,7 +14,8 @@ export const initialState = {
   meta: {},
   inflight: false,
   error: false,
-  searchString: null
+  searchString: null,
+  map: {},
 };
 
 function createMap (data) {
@@ -34,7 +35,7 @@ function createMap (data) {
  */
 export const filterData = (rawData, filterString) => {
   if (filterString !== null) {
-    return rawData.filter(d => d.name.includes(filterString));
+    return rawData.filter(d => d.name.toLowerCase().includes(filterString.toLowerCase()));
   }
   return rawData;
 };

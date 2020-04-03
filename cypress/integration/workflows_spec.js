@@ -62,8 +62,9 @@ describe('Dashboard Workflows Page', () => {
       cy.visit('/workflows');
       cy.get('.table .tbody .tr').its('length').should('be.eq', 2);
       cy.get('.table .tbody .tr').first().contains('HelloWorldWorkflow');
-      cy.get('.search').click().type('cond');
+      cy.get('.search').click().type('condtes');
       cy.get('.table .tbody .tr').first().contains('SecondTestWorkflow');
+      cy.get('.table .tbody .tr').its('length').should('be.eq', 1);
     });
   });
 });
