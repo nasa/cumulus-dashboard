@@ -43,7 +43,7 @@ class AddRecord extends React.Component {
   }
 
   navigateBack () {
-    this.props.history.push(this.props.baseRoute.split('/')[1]);
+    this.props.history.push(`/${this.props.baseRoute.split('/')[1]}`);
   }
 
   post (id, payload) {

@@ -112,8 +112,7 @@ const AddRule = ({
     if (!collections.list.meta.queriedAt) dispatch(listCollections());
     if (!providers.list.meta.queriedAt) dispatch(listProviders());
     if (!workflows.list.meta.queriedAt) dispatch(listWorkflows());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  });
 
   useEffect(() => {
     setEnums({

@@ -13,6 +13,7 @@ import {
 } from '../../utils/validate';
 import t from '../../utils/strings';
 import ErrorReport from '../Errors/report';
+import { startCase } from 'lodash';
 
 const { errors } = t;
 
@@ -105,7 +106,7 @@ export const createFormConfig = function (
       isArray(schemaProperty.required) &&
       schemaProperty.required.includes(property);
 
-    const labelText = meta.title || property;
+    const labelText = startCase(meta.title || property);
     const label = (
       <span>
         <span className="label__name">{labelText}</span>
