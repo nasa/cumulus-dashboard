@@ -35,6 +35,8 @@ const WorkflowOverview = ({ workflows }) => {
             dispatch={dispatch}
             action={searchWorkflows}
             clear={clearWorkflowsSearch}
+            label='Search'
+            placeholder="Workflow Name"
           />
         </div>
 
