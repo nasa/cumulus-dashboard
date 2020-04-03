@@ -817,9 +817,9 @@ export const updateRule = (payload) => ({
 
 export const clearUpdateRule = (ruleName) => ({ type: types.UPDATE_RULE_CLEAR, id: ruleName });
 
-export const createRule = (payload) => ({
+export const createRule = (name, payload) => ({
   [CALL_API]: {
-    id: payload.name,
+    id: name,
     type: types.NEW_RULE,
     method: 'POST',
     path: 'rules',
