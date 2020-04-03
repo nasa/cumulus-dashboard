@@ -26,7 +26,7 @@ const {
   showDistributionAPIMetrics,
   showTeaMetrics,
   apiRoot: root,
-  pageLimit,
+  defaultPageLimit,
   minCompatibleApiVersion
 } = _config;
 
@@ -136,7 +136,7 @@ export const listCollections = (options) => {
         method: 'GET',
         id: null,
         url: url.resolve(root, 'collections'),
-        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
       }
     }).then(() => dispatch(getMMTLinks()));
   };
@@ -274,7 +274,7 @@ export const listGranules = (options) => {
         method: 'GET',
         id: null,
         url: url.resolve(root, 'granules'),
-        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
       }});
   };
 };
@@ -549,7 +549,7 @@ export const listPdrs = (options) => {
       type: types.PDRS,
       method: 'GET',
       url: url.resolve(root, 'pdrs'),
-      qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+      qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
     }});
   };
 };
@@ -575,7 +575,7 @@ export const listProviders = (options) => {
       type: types.PROVIDERS,
       method: 'GET',
       url: url.resolve(root, 'providers'),
-      qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+      qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
     }});
   };
 };
@@ -715,7 +715,7 @@ export const listWorkflows = (options) => ({
     type: types.WORKFLOWS,
     method: 'GET',
     url: url.resolve(root, 'workflows'),
-    qs: Object.assign({ limit: pageLimit }, options)
+    qs: Object.assign({ limit: defaultPageLimit }, options)
   }
 });
 export const searchWorkflows = (searchString) => ({ type: types.SEARCH_WORKFLOWS, searchString });
@@ -744,7 +744,7 @@ export const listExecutions = (options) => {
       type: types.EXECUTIONS,
       method: 'GET',
       url: url.resolve(root, 'executions'),
-      qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+      qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
     }});
   };
 };
@@ -762,7 +762,7 @@ export const listOperations = (options) => {
         type: types.OPERATIONS,
         method: 'GET',
         url: url.resolve(root, 'asyncOperations'),
-        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
       }
     });
   };
@@ -790,7 +790,7 @@ export const listRules = (options) => {
         type: types.RULES,
         method: 'GET',
         url: url.resolve(root, 'rules'),
-        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
       }
     });
   };
@@ -901,7 +901,7 @@ export const listReconciliationReports = (options) => ({
     type: types.RECONCILIATIONS,
     method: 'GET',
     url: url.resolve(root, 'reconciliationReports'),
-    qs: Object.assign({ limit: pageLimit }, options)
+    qs: Object.assign({ limit: defaultPageLimit }, options)
   }
 });
 
