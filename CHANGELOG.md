@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- **CUMULUS-1515**
+  - filter capability to workflow overview page.
+
 - **CUMULUS-1798**
   - Add a refresh button
   - Add individual cancel buttons for date time range inputs

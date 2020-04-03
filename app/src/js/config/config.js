@@ -9,6 +9,7 @@ const config = {
     }
   },
   apiRoot: process.env.APIROOT || 'https://example.com',
+  awsRegion: process.env.AWS_REGION || 'us-west-2',
   oauthMethod: process.env.AUTH_METHOD || 'earthdata',
   kibanaRoot: process.env.KIBANAROOT || '',
   esRoot: process.env.ESROOT || '',

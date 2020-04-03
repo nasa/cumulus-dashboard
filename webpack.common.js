@@ -149,6 +149,7 @@ const CommonConfig = {
     new webpack.EnvironmentPlugin(
       {
         APIROOT: config.apiRoot,
+        AWS_REGION: config.awsRegion,
         DAAC_NAME: config.target,
         STAGE: config.environment,
         HIDE_PDR: config.nav.exclude.PDRs,

@@ -718,6 +718,8 @@ export const listWorkflows = (options) => ({
     qs: Object.assign({ limit: pageLimit }, options)
   }
 });
+export const searchWorkflows = (searchString) => ({ type: types.SEARCH_WORKFLOWS, searchString });
+export const clearWorkflowsSearch = () => ({ type: types.CLEAR_WORKFLOWS_SEARCH });
 
 export const getExecutionStatus = (arn) => ({
   [CALL_API]: {
