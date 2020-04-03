@@ -10,12 +10,14 @@ import {
 import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
-  data: [],
-  meta: {},
-  inflight: false,
-  error: false,
-  searchString: null,
+  list: {
+    data: [],
+    meta: {},
+    inflight: false,
+    error: false,
+  },
   map: {},
+  searchString: null,
 };
 
 function createMap (data) {
@@ -45,17 +47,17 @@ export default createReducer(initialState, {
     const { data: rawData } = action;
     const data = filterData(rawData, state.searchString);
     set(state, 'map', createMap(data));
-    set(state, ['data'], data);
-    set(state, ['meta'], { queriedAt: Date.now() });
-    set(state, ['inflight'], false);
-    set(state, ['error'], false);
+    set(state, ['list', 'data'], data);
+    set(state, ['list', 'meta'], { queriedAt: Date.now() });
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], false);
   },
   [WORKFLOWS_INFLIGHT]: (state) => {
-    set(state, ['inflight'], true);
+    set(state, ['list', 'inflight'], true);
   },
   [WORKFLOWS_ERROR]: (state, action) => {
-    set(state, ['inflight'], false);
-    set(state, ['error'], action.error);
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], action.error);
   },
   [SEARCH_WORKFLOWS]: (state, action) => {
     set(state, ['searchString'], action.searchString);

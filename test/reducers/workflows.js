@@ -33,15 +33,17 @@ test('verify initial state', (t) => {
 
 test('verify WORKFLOWS loadState', (t) => {
   const expected = cloneDeep({
-    data: testData,
-    meta: {queriedAt: t.context.testStart},
+    list: {
+      data: testData,
+      meta: {queriedAt: t.context.testStart},
+      inflight: false,
+      error: false,
+    },
     map: {
       HelloWorldWorkflow: testData[0],
-      AnotherWorkflow: testData[1]
+      AnotherWorkflow: testData[1],
     },
-    inflight: false,
-    error: false,
-    searchString: null
+    searchString: null,
   });
 
   const actual = reducer(initialState, { type: 'WORKFLOWS', data: testData });
@@ -53,14 +55,16 @@ test('if state has searchString, data list is filtered on WORKFLOW', (t) => {
   inState.searchString = 'World';
 
   const expected = cloneDeep({
-    data: [ testData[0] ],
-    meta: {queriedAt: t.context.testStart},
+    list: {
+      data: [ testData[0] ],
+      meta: {queriedAt: t.context.testStart},
+      inflight: false,
+      error: false,
+    },
     map: {
       HelloWorldWorkflow: testData[0]
     },
-    inflight: false,
-    error: false,
-    searchString: 'World'
+    searchString: 'World',
   });
 
   const actual = reducer(inState, {type: 'WORKFLOWS', data: testData});
@@ -68,20 +72,21 @@ test('if state has searchString, data list is filtered on WORKFLOW', (t) => {
   t.deepEqual(expected, actual);
 });
 
-
 test('if state has searchString, data list is filtered on WORKFLOW and is case insenstive', (t) => {
   const inState = cloneDeep(initialState);
   inState.searchString = 'elloworld';
 
   const expected = cloneDeep({
-    data: [ testData[0] ],
-    meta: {queriedAt: t.context.testStart},
+    list: {
+      data: [ testData[0] ],
+      meta: {queriedAt: t.context.testStart},
+      inflight: false,
+      error: false,
+    },
     map: {
       HelloWorldWorkflow: testData[0]
     },
-    inflight: false,
-    error: false,
-    searchString: 'elloworld'
+    searchString: 'elloworld',
   });
 
   const actual = reducer(inState, {type: 'WORKFLOWS', data: testData});

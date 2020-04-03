@@ -18,7 +18,7 @@ const WorkflowOverview = ({ workflows }) => {
   useEffect(() => {
     dispatch(listWorkflows());
   }, [ workflows.searchString, dispatch ]);
-  const count = workflows.data.length;
+  const count = workflows.list.data.length;
 
   return (
     <div className='page__component'>
@@ -41,7 +41,7 @@ const WorkflowOverview = ({ workflows }) => {
         </div>
 
         <List
-          list={workflows}
+          list={workflows.list}
           dispatch={dispatch}
           action={listWorkflows}
           tableColumns={tableColumns}
