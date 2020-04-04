@@ -83,7 +83,7 @@ export const getCollection = (name, version) => ({
   [CALL_API]: {
     type: types.COLLECTION,
     method: 'GET',
-    id: getCollectionId({name, version}),
+    id: getCollectionId({ name, version }),
     path: `collections?name=${name}&version=${version}`
   }
 });
@@ -168,7 +168,7 @@ export const deleteCollection = (name, version) => ({
   [CALL_API]: {
     type: types.COLLECTION_DELETE,
     method: 'DELETE',
-    id: getCollectionId({name, version}),
+    id: getCollectionId({ name, version }),
     path: `collections/${name}/${version}`
   }
 });
@@ -275,7 +275,8 @@ export const listGranules = (options) => {
         id: null,
         url: url.resolve(root, 'granules'),
         qs: Object.assign({ limit: pageLimit }, options, timeFilters)
-      }});
+      }
+    });
   };
 };
 
@@ -295,7 +296,7 @@ export const applyWorkflowToCollection = (name, version, workflow) => ({
   [CALL_API]: {
     type: types.COLLECTION_APPLYWORKFLOW,
     method: 'PUT',
-    id: getCollectionId({name, version}),
+    id: getCollectionId({ name, version }),
     path: `collections/${name}/${version}`,
     body: {
       action: 'applyWorkflow',
@@ -446,7 +447,7 @@ export const getStats = (options) => {
         type: types.STATS,
         method: 'GET',
         url: url.resolve(root, 'stats'),
-        qs: {...options, ...timeFilters}
+        qs: { ...options, ...timeFilters }
       }
     });
   };
@@ -459,33 +460,37 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
     const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
-    return dispatch({[CALL_API]: {
-      type: types.DIST_APIGATEWAY,
-      skipAuth: true,
-      method: 'POST',
-      url: `${esRoot}/_search/`,
-      headers: authHeader(),
-      body: JSON.parse(apiGatewaySearchTemplate(stackName, startTime, endTime))
-    }});
+    return dispatch({
+      [CALL_API]: {
+        type: types.DIST_APIGATEWAY,
+        skipAuth: true,
+        method: 'POST',
+        url: `${esRoot}/_search/`,
+        headers: authHeader(),
+        body: JSON.parse(apiGatewaySearchTemplate(stackName, startTime, endTime))
+      }
+    });
   };
 };
 
 export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
   if (!esRoot) return { type: types.NOOP };
-  if (!showDistributionAPIMetrics) return {type: types.NOOP};
+  if (!showDistributionAPIMetrics) return { type: types.NOOP };
   return (dispatch, getState) => {
     const stackName = cumulusInstanceMeta.stackName;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
     const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
-    return dispatch({[CALL_API]: {
-      type: types.DIST_API_LAMBDA,
-      skipAuth: true,
-      method: 'POST',
-      url: `${esRoot}/_search/`,
-      headers: authHeader(),
-      body: JSON.parse(apiLambdaSearchTemplate(stackName, startTime, endTime))
-    }});
+    return dispatch({
+      [CALL_API]: {
+        type: types.DIST_API_LAMBDA,
+        skipAuth: true,
+        method: 'POST',
+        url: `${esRoot}/_search/`,
+        headers: authHeader(),
+        body: JSON.parse(apiLambdaSearchTemplate(stackName, startTime, endTime))
+      }
+    });
   };
 };
 
@@ -497,14 +502,16 @@ export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
     const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
-    return dispatch({[CALL_API]: {
-      type: types.DIST_TEA_LAMBDA,
-      skipAuth: true,
-      method: 'POST',
-      url: `${esRoot}/_search/`,
-      headers: authHeader(),
-      body: JSON.parse(teaLambdaSearchTemplate(stackName, startTime, endTime))
-    }});
+    return dispatch({
+      [CALL_API]: {
+        type: types.DIST_TEA_LAMBDA,
+        skipAuth: true,
+        method: 'POST',
+        url: `${esRoot}/_search/`,
+        headers: authHeader(),
+        body: JSON.parse(teaLambdaSearchTemplate(stackName, startTime, endTime))
+      }
+    });
   };
 };
 
@@ -515,14 +522,16 @@ export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
     const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
-    return dispatch({[CALL_API]: {
-      type: types.DIST_S3ACCESS,
-      skipAuth: true,
-      method: 'POST',
-      url: `${esRoot}/_search/`,
-      headers: authHeader(),
-      body: JSON.parse(s3AccessSearchTemplate(stackName, startTime, endTime))
-    }});
+    return dispatch({
+      [CALL_API]: {
+        type: types.DIST_S3ACCESS,
+        skipAuth: true,
+        method: 'POST',
+        url: `${esRoot}/_search/`,
+        headers: authHeader(),
+        body: JSON.parse(s3AccessSearchTemplate(stackName, startTime, endTime))
+      }
+    });
   };
 };
 
@@ -545,12 +554,14 @@ export const getCount = (options) => {
 export const listPdrs = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({[CALL_API]: {
-      type: types.PDRS,
-      method: 'GET',
-      url: url.resolve(root, 'pdrs'),
-      qs: Object.assign({ limit: pageLimit }, options, timeFilters)
-    }});
+    return dispatch({
+      [CALL_API]: {
+        type: types.PDRS,
+        method: 'GET',
+        url: url.resolve(root, 'pdrs'),
+        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+      }
+    });
   };
 };
 
@@ -571,12 +582,14 @@ export const clearPdrsFilter = (paramKey) => ({ type: types.CLEAR_PDRS_FILTER, p
 export const listProviders = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({[CALL_API]: {
-      type: types.PROVIDERS,
-      method: 'GET',
-      url: url.resolve(root, 'providers'),
-      qs: Object.assign({ limit: pageLimit }, options, timeFilters)
-    }});
+    return dispatch({
+      [CALL_API]: {
+        type: types.PROVIDERS,
+        method: 'GET',
+        url: url.resolve(root, 'providers'),
+        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+      }
+    });
   };
 };
 
@@ -651,7 +664,7 @@ export const getLogs = (options) => {
         type: types.LOGS,
         method: 'GET',
         url: url.resolve(root, 'logs'),
-        qs: Object.assign({limit: 100}, options, timeFilters)
+        qs: Object.assign({ limit: 100 }, options, timeFilters)
       }
     });
   };
@@ -740,12 +753,14 @@ export const getExecutionLogs = (executionName) => ({
 export const listExecutions = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({[CALL_API]: {
-      type: types.EXECUTIONS,
-      method: 'GET',
-      url: url.resolve(root, 'executions'),
-      qs: Object.assign({ limit: pageLimit }, options, timeFilters)
-    }});
+    return dispatch({
+      [CALL_API]: {
+        type: types.EXECUTIONS,
+        method: 'GET',
+        url: url.resolve(root, 'executions'),
+        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+      }
+    });
   };
 };
 

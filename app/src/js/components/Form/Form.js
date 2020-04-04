@@ -125,7 +125,7 @@ export class Form extends React.Component {
       const { inputs, dirty } = draftState;
 
       this.props.inputMeta.forEach(field => {
-        let inputId = generateComponentId(field.schemaProperty, this.id);
+        const inputId = generateComponentId(field.schemaProperty, this.id);
         let { value } = inputs[inputId];
 
         // don't set a value for values that haven't changed
@@ -150,7 +150,7 @@ export class Form extends React.Component {
 
         if (field.validate && !field.validate(value)) {
           errors.push(field.schemaProperty);
-          let error = field.error || t.errors.generic;
+          const error = field.error || t.errors.generic;
           inputs[inputId].error = error;
         } else if (inputs[inputId].error) {
           delete inputs[inputId].error;
@@ -206,7 +206,7 @@ export class Form extends React.Component {
         {errors.length > 0 && <ErrorReport report={errorMessage(errors)} />}
         <ul>
           {this.props.inputMeta.map(input => {
-            let { type, label } = input;
+            const { type, label } = input;
             let element;
 
             switch (type) {
@@ -228,7 +228,7 @@ export class Form extends React.Component {
                 break;
             }
 
-            let inputId = generateComponentId(input.schemaProperty, this.id);
+            const inputId = generateComponentId(input.schemaProperty, this.id);
             let { value, error } = inputState[inputId];
 
             // coerce non-null values to string to simplify proptype warnings on numbers

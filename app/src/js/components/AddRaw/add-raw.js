@@ -7,10 +7,10 @@ import { get } from 'object-path';
 import { displayCase } from '../../utils/format';
 import _config from '../../config';
 
-const { updateDelay } = _config;
-
 import TextArea from '../TextAreaForm/text-area';
 import DefaultModal from '../Modal/modal';
+
+const { updateDelay } = _config;
 
 const defaultState = {
   data: '',

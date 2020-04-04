@@ -18,7 +18,7 @@ import { startCase } from 'lodash';
 const { errors } = t;
 
 const traverseSchema = (schema, enums, fn, path = []) => {
-  for (let property in schema.properties) {
+  for (const property in schema.properties) {
     const meta = schema.properties[property];
 
     if (
@@ -128,7 +128,7 @@ export const createFormConfig = function (
     // dropdowns have type set to string, but have an enum prop.
     // use enum as the type instead of string.
     const type =
-      isArray(meta['enum']) || property in enums
+      isArray(meta.enum) || property in enums
         ? 'enum'
         : meta.hasOwnProperty('patternProperties')
           ? 'pattern'
@@ -156,7 +156,7 @@ export const createFormConfig = function (
         break;
       case 'array':
         // some array types have a minItems property
-        let validate = !required
+        const validate = !required
           ? null
           : meta.minItems && isNaN(meta.minItems)
             ? arrayWithLength(+meta.minItems)
@@ -174,7 +174,6 @@ export const createFormConfig = function (
         fields.push(textAreaField(config, property, required && isObject));
         break;
       default:
-        return;
     }
   });
 

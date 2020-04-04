@@ -45,7 +45,7 @@ const computeDateTimeDelta = (timeDeltaInDays) => {
 const recentData = () => {
   const endDateTime = null;
   const startDateTime = Date.now() - msPerDay;
-  return {startDateTime, endDateTime, dateRange: allDateRanges.find((a) => a.value === 'Recent')};
+  return { startDateTime, endDateTime, dateRange: allDateRanges.find((a) => a.value === 'Recent') };
 };
 
 export default createReducer(initialState(), {
@@ -55,11 +55,11 @@ export default createReducer(initialState(), {
     switch (data.dateRange.label) {
       case 'Custom':
       case 'All':
-        return {...state, ...data, startDateTime: null, endDateTime: null};
+        return { ...state, ...data, startDateTime: null, endDateTime: null };
       case 'Recent':
-        return {...state, ...data, ...recentData()};
+        return { ...state, ...data, ...recentData() };
       default:
-        return {...state, ...computeDateTimeDelta(data.dateRange.value), ...data};
+        return { ...state, ...computeDateTimeDelta(data.dateRange.value), ...data };
     }
   },
   [DATEPICKER_DATECHANGE]: (state, action) => {
