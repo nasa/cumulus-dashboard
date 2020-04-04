@@ -139,7 +139,7 @@ const CollectionGranules = ({
           <h2 className="heading--medium heading--shared-content with-description">
             {`${displayCase(view)} ${displayName} `}
             <span className="num--title">
-              {`${meta.count && meta.count || 0}`}
+              {`${(meta.count && meta.count) || 0}`}
             </span>
           </h2>
         </div>

@@ -237,11 +237,11 @@ export class Form extends React.Component {
             }
 
             // dropdowns have options
-            const options = type === formTypes.dropdown && input.options || null;
+            const options = (type === formTypes.dropdown && input.options) || null;
             // textarea forms pass a mode value to ace
-            const mode = type === formTypes.textArea && input.mode || null;
+            const mode = (type === formTypes.textArea && input.mode) || null;
             // subforms have fieldsets that define child form structure
-            const fieldSet = type === formTypes.subform && input.fieldSet || null;
+            const fieldSet = (type === formTypes.subform && input.fieldSet) || null;
             // text forms can be type=password or number
             let textType = (type === formTypes.text && input.isPassword) ? 'password' : null;
 

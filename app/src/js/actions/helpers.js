@@ -15,7 +15,7 @@ export const formatError = (response = {}, body) => {
 
 export const getErrorMessage = (response) => {
   const { body } = response;
-  const errorMessage = body && body.errorMessage || body && body.message || body && body.detail;
+  const errorMessage = (body && body.errorMessage) || (body && body.message) || (body && body.detail);
 
   if (errorMessage) return errorMessage;
   return formatError(response, body);
