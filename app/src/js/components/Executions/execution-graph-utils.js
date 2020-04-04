@@ -37,7 +37,7 @@ export const draw = (graph) => {
   var i;
   for (i = 0; i < nodes.length; i++) {
     var node = nodes[i];
-    setNode(g, node.id, {label: node.id, class: [node.type, node.status].join(' ')});
+    setNode(g, node.id, { label: node.id, class: [node.type, node.status].join(' ') });
     if (node.parent) {
       setParent(g, node.id, node.parent.id);
     }

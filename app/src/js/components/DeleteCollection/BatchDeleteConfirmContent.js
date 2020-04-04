@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { collectionNameVersion } from '../../utils/format';
 
-const BatchDeleteConfirmContent = ({selected = []}) => {
+const BatchDeleteConfirmContent = ({ selected = [] }) => {
   return (
     <>
-    <p>You have submitted a request to delete the following collections</p>
+      <p>You have submitted a request to delete the following collections</p>
       <ul>
         {selected.map((selection, index) => {
-          const {name, version} = collectionNameVersion(selection);
+          const { name, version } = collectionNameVersion(selection);
           return <li key={index}>{name} / {version}</li>;
         })}
       </ul>

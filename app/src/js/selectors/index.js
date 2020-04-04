@@ -4,7 +4,7 @@ import { get } from 'object-path';
 // functions all expect the full state as arguments
 
 export const workflowOptions = ({ workflows }) => {
-  const options = {'': ''};
+  const options = { '': '' };
   get(workflows, 'list.data', []).forEach(d => {
     options[d.name] = d.name;
   });
@@ -16,7 +16,7 @@ export const workflowOptionNames = ({ workflows }) => {
 };
 
 export const collectionOptions = ({ collections }) => {
-  const options = {'': ''};
+  const options = { '': '' };
   get(collections, 'list.data', []).forEach(d => {
     options[d.name] = d.name;
   });

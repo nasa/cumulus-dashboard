@@ -179,7 +179,7 @@ export default createReducer(initialState, {
       // these are de-duplciated by the key-value structure
       obj[provider.providerName] = provider.providerName;
       return obj;
-    }, {'': ''});
+    }, { '': '' });
     set(state, ['dropdowns', 'group', 'options'], options);
   },
   [OPTIONS_PROVIDERGROUP_INFLIGHT]: () => { },

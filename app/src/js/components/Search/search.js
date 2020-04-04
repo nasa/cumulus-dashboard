@@ -24,11 +24,11 @@ class Search extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
-    const {paramKey, dispatch, action, queryParams} = this.props;
+    const { paramKey, dispatch, action, queryParams } = this.props;
     const queryValue = queryParams[paramKey];
     if (queryValue !== prevProps.queryParams[paramKey]) {
       dispatch(action(queryValue));
-      this.setState({queryValue}); // eslint-disable-line react/no-did-update-set-state
+      this.setState({ queryValue }); // eslint-disable-line react/no-did-update-set-state
     }
   }
 
@@ -53,10 +53,10 @@ class Search extends React.Component {
     const { dispatch, action, clear, paramKey, setQueryParams } = this.props;
     const timeoutId = setTimeout(function () {
       if (value && value.length) {
-        setQueryParams({[paramKey]: value});
+        setQueryParams({ [paramKey]: value });
         dispatch(action(value));
       } else {
-        setQueryParams({[paramKey]: undefined});
+        setQueryParams({ [paramKey]: undefined });
         dispatch(clear());
       }
     }, 650);

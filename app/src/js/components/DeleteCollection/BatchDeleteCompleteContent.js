@@ -13,7 +13,7 @@ const BatchDeleteCompleteContent = ({
           <p>Successfully deleted these collections:</p>
           <ul>
             {results.map((result, index) => {
-              const {name, version} = collectionNameVersion(result);
+              const { name, version } = collectionNameVersion(result);
               return <li key={index}>{name} / {version}</li>;
             })}
           </ul>

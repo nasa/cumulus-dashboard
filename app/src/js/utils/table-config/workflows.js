@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {awsRegion} from '../../config';
+import { awsRegion } from '../../config';
 
 export const makeSteps = (row) => {
   try {

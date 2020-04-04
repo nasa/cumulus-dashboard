@@ -17,7 +17,7 @@ const WorkflowOverview = ({ workflows }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(listWorkflows());
-  }, [ workflows.searchString, dispatch ]);
+  }, [workflows.searchString, dispatch]);
   const count = workflows.list.data.length;
 
   return (
@@ -29,7 +29,7 @@ const WorkflowOverview = ({ workflows }) => {
         <div className='heading__wrapper--border'>
           <h2 className='heading--medium heading--shared-content with-description'>All Workflows <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
         </div>
-        {/* Someone needs to define the search parameters for workflows, e.g. steps, collections, granules, etc. }*/}
+        {/* Someone needs to define the search parameters for workflows, e.g. steps, collections, granules, etc. } */}
         <div className='filters'>
           <Search
             dispatch={dispatch}
@@ -60,5 +60,5 @@ WorkflowOverview.propTypes = {
 };
 
 export default withRouter(connect(
-  (state) => ({workflows: state.workflows})
+  (state) => ({ workflows: state.workflows })
 )(WorkflowOverview));

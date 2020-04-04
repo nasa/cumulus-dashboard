@@ -40,7 +40,7 @@ import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import ErrorReport from '../Errors/report';
 import GranulesProgress from '../Granules/progress';
 import _config from '../../config';
-import {strings} from '../locale';
+import { strings } from '../locale';
 import ListFilters from '../ListActions/ListFilters';
 
 const { updateInterval } = _config;
