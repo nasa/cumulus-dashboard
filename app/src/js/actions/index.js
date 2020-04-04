@@ -224,8 +224,9 @@ export const getMMTLinkFromCmr = (collection, getState) => {
   } = getState();
 
   if (!cmrProvider || !cmrEnvironment) {
-    return Promise.reject('Missing Cumulus Instance Metadata in state.' +
-      ' Make sure a call to getCumulusInstanceMetadata is dispatched.');
+    return Promise.reject(
+      new Error('Missing Cumulus Instance Metadata in state.' +
+                ' Make sure a call to getCumulusInstanceMetadata is dispatched.'));
   }
 
   if (getCollectionId(collection) in mmtLinks) {
@@ -446,7 +447,7 @@ export const getStats = (options) => {
       [CALL_API]: {
         type: types.STATS,
         method: 'GET',
-        url: new URL('stats',root).href,
+        url: new URL('stats', root).href,
         qs: { ...options, ...timeFilters }
       }
     });
