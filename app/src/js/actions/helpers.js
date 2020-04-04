@@ -1,5 +1,5 @@
 'use strict';
-import url from 'url';
+import { URL } from 'url';
 import { get as getProperty } from 'object-path';
 import _config from '../config';
 
@@ -44,7 +44,7 @@ export const configureRequest = (params = {}) => {
     if (typeof config.path !== 'string') {
       throw new Error('Path must be a string');
     }
-    config.url = url.resolve(_config.apiRoot, config.path);
+    config.url = new URL(config.path, _config.apiRoot).href;
   }
 
   const defaultRequestConfig = {

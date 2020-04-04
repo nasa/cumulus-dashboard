@@ -102,9 +102,7 @@ export const createFormConfig = function (
 
     // determine the label
     const property = path[path.length - 1];
-    const required =
-      isArray(schemaProperty.required) &&
-      schemaProperty.required.includes(property);
+    const required = isArray(schemaProperty.required) && schemaProperty.required.includes(property);
 
     const labelText = startCase(meta.title || property);
     const label = (
@@ -127,15 +125,10 @@ export const createFormConfig = function (
 
     // dropdowns have type set to string, but have an enum prop.
     // use enum as the type instead of string.
-    const type =
-      isArray(meta.enum) || property in enums
-        ? 'enum'
-        : meta.hasOwnProperty('patternProperties')
-          ? 'pattern'
-          : meta.type;
+    const type = isArray(meta.enum) || property in enums ? 'enum' : Object.prototype.hasOwnProperty.call(meta, 'patternProperties') ? 'pattern' : meta.type;
 
     switch (type) {
-      case 'pattern':
+      case 'pattern': {
         // pattern fields are an abstraction on arrays of objects.
         // each item in the array will be a grouped set of field inputs.
 
@@ -149,20 +142,19 @@ export const createFormConfig = function (
         config.type = formTypes.subform;
         fields.push(config);
         break;
-      case 'enum':
+      }
+      case 'enum': {
         // pass the enum fields as options
         config.options = meta.enum || enums[property];
         fields.push(dropdownField(config, property, required && isText));
         break;
-      case 'array':
+      }
+      case 'array': {
         // some array types have a minItems property
-        const validate = !required
-          ? null
-          : meta.minItems && isNaN(meta.minItems)
-            ? arrayWithLength(+meta.minItems)
-            : isArray;
+        const validate = !required ? null : (meta.minItems && isNaN(meta.minItems)) ? arrayWithLength(+meta.minItems) : isArray;
         fields.push(listField(config, property, validate));
         break;
+      }
       case 'string':
         fields.push(textField(config, property, required && isText));
         break;

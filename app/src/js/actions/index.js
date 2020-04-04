@@ -1,7 +1,7 @@
 'use strict';
 
 import compareVersions from 'compare-versions';
-import url from 'url';
+import { URL } from 'url';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
 import { history } from '../store/configureStore';
@@ -47,7 +47,7 @@ export const refreshAccessToken = (token) => {
 
     const requestConfig = configureRequest({
       method: 'POST',
-      url: url.resolve(root, 'refresh'),
+      url: new URL('refresh', root).href,
       body: { token },
       // make sure request failures are sent to .catch()
       simple: true
@@ -92,7 +92,7 @@ export const getApiVersion = () => {
   return (dispatch) => {
     const config = configureRequest({
       method: 'GET',
-      url: url.resolve(root, 'version'),
+      url: new URL('version', root).href,
       // make sure request failures are sent to .catch()
       simple: true
     });
@@ -135,7 +135,7 @@ export const listCollections = (options) => {
         type: types.COLLECTIONS,
         method: 'GET',
         id: null,
-        url: url.resolve(root, 'collections'),
+        url: new URL('collections', root).href,
         qs: Object.assign({ limit: pageLimit }, options, timeFilters)
       }
     }).then(() => dispatch(getMMTLinks()));
@@ -273,7 +273,7 @@ export const listGranules = (options) => {
         type: types.GRANULES,
         method: 'GET',
         id: null,
-        url: url.resolve(root, 'granules'),
+        url: new URL('granules', root).href,
         qs: Object.assign({ limit: pageLimit }, options, timeFilters)
       }
     });
@@ -426,7 +426,7 @@ export const getGranuleCSV = (options) => ({
   [CALL_API]: {
     type: types.GRANULE_CSV,
     method: 'GET',
-    url: url.resolve(root, 'granule-csv')
+    url: new URL('granule-csv', root).href
   }
 });
 
@@ -434,7 +434,7 @@ export const getOptionsCollectionName = (options) => ({
   [CALL_API]: {
     type: types.OPTIONS_COLLECTIONNAME,
     method: 'GET',
-    url: url.resolve(root, 'collections'),
+    url: new URL('collections', root).href,
     qs: { limit: 100, fields: 'name,version' }
   }
 });
@@ -446,7 +446,7 @@ export const getStats = (options) => {
       [CALL_API]: {
         type: types.STATS,
         method: 'GET',
-        url: url.resolve(root, 'stats'),
+        url: new URL('stats',root).href,
         qs: { ...options, ...timeFilters }
       }
     });
@@ -544,7 +544,7 @@ export const getCount = (options) => {
         type: types.COUNT,
         method: 'GET',
         id: null,
-        url: url.resolve(root, 'stats/aggregate'),
+        url: new URL('stats/aggregate', root).href,
         qs: Object.assign({ type: 'must-include-type', field: 'status' }, options, timeFilters)
       }
     });
@@ -558,7 +558,7 @@ export const listPdrs = (options) => {
       [CALL_API]: {
         type: types.PDRS,
         method: 'GET',
-        url: url.resolve(root, 'pdrs'),
+        url: new URL('pdrs', root).href,
         qs: Object.assign({ limit: pageLimit }, options, timeFilters)
       }
     });
@@ -586,7 +586,7 @@ export const listProviders = (options) => {
       [CALL_API]: {
         type: types.PROVIDERS,
         method: 'GET',
-        url: url.resolve(root, 'providers'),
+        url: new URL('providers', root).href,
         qs: Object.assign({ limit: pageLimit }, options, timeFilters)
       }
     });
@@ -597,7 +597,7 @@ export const getOptionsProviderGroup = () => ({
   [CALL_API]: {
     type: types.OPTIONS_PROVIDERGROUP,
     method: 'GET',
-    url: url.resolve(root, 'providers'),
+    url: new URL('providers', root).href,
     qs: { limit: 100, fields: 'providerName' }
   }
 });
@@ -663,7 +663,7 @@ export const getLogs = (options) => {
       [CALL_API]: {
         type: types.LOGS,
         method: 'GET',
-        url: url.resolve(root, 'logs'),
+        url: new URL('logs', root).href,
         qs: Object.assign({ limit: 100 }, options, timeFilters)
       }
     });
@@ -684,7 +684,7 @@ export const login = (token) => ({
     type: types.LOGIN,
     id: 'auth',
     method: 'GET',
-    url: url.resolve(root, 'granules'),
+    url: new URL('granules', root).href,
     qs: { limit: 1, fields: 'granuleId' },
     skipAuth: true,
     headers: {
@@ -700,7 +700,7 @@ export const deleteToken = () => {
 
     const requestConfig = configureRequest({
       method: 'DELETE',
-      url: url.resolve(root, `tokenDelete/${token}`)
+      url: new URL(`tokenDelete/${token}`, root).href
     });
     return requestPromise(requestConfig)
       .finally(() => dispatch({ type: types.DELETE_TOKEN }));
@@ -727,7 +727,7 @@ export const listWorkflows = (options) => ({
   [CALL_API]: {
     type: types.WORKFLOWS,
     method: 'GET',
-    url: url.resolve(root, 'workflows'),
+    url: new URL('workflows', root).href,
     qs: Object.assign({ limit: pageLimit }, options)
   }
 });
@@ -738,7 +738,7 @@ export const getExecutionStatus = (arn) => ({
   [CALL_API]: {
     type: types.EXECUTION_STATUS,
     method: 'GET',
-    url: url.resolve(root, 'executions/status/' + arn)
+    url: new URL('executions/status/' + arn, root).href
   }
 });
 
@@ -746,7 +746,7 @@ export const getExecutionLogs = (executionName) => ({
   [CALL_API]: {
     type: types.EXECUTION_LOGS,
     method: 'GET',
-    url: url.resolve(root, 'logs/' + executionName)
+    url: new URL('logs/' + executionName, root).href
   }
 });
 
@@ -757,7 +757,7 @@ export const listExecutions = (options) => {
       [CALL_API]: {
         type: types.EXECUTIONS,
         method: 'GET',
-        url: url.resolve(root, 'executions'),
+        url: new URL('executions', root).href,
         qs: Object.assign({ limit: pageLimit }, options, timeFilters)
       }
     });
@@ -776,7 +776,7 @@ export const listOperations = (options) => {
       [CALL_API]: {
         type: types.OPERATIONS,
         method: 'GET',
-        url: url.resolve(root, 'asyncOperations'),
+        url: new URL('asyncOperations', root).href,
         qs: Object.assign({ limit: pageLimit }, options, timeFilters)
       }
     });
@@ -804,7 +804,7 @@ export const listRules = (options) => {
       [CALL_API]: {
         type: types.RULES,
         method: 'GET',
-        url: url.resolve(root, 'rules'),
+        url: new URL('rules', root).href,
         qs: Object.assign({ limit: pageLimit }, options, timeFilters)
       }
     });
@@ -913,7 +913,7 @@ export const listReconciliationReports = (options) => ({
   [CALL_API]: {
     type: types.RECONCILIATIONS,
     method: 'GET',
-    url: url.resolve(root, 'reconciliationReports'),
+    url: new URL('reconciliationReports', root).href,
     qs: Object.assign({ limit: pageLimit }, options)
   }
 });
