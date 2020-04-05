@@ -1,7 +1,6 @@
 'use strict';
 
 import compareVersions from 'compare-versions';
-import { URL } from 'url';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
 import { history } from '../store/configureStore';

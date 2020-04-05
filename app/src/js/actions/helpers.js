@@ -1,5 +1,4 @@
 'use strict';
-import { URL } from 'url';
 import { get as getProperty } from 'object-path';
 import _config from '../config';
 
