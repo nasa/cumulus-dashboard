@@ -1,4 +1,6 @@
 'use strict';
+/* eslint node/no-deprecated-api: 0 */
+import url from 'url';
 import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -35,7 +37,7 @@ const reportMetaAccessors = [
 ];
 
 const parseFileObject = (d) => {
-  const parsed = new URL(d.uri);
+  const parsed = url.parse(d.uri);
   return {
     granuleId: d.granuleId,
     filename: path.basename(parsed.pathname),
@@ -77,7 +79,7 @@ class ReconciliationReport extends React.Component {
     onlyInS3 = []
   }) {
     const filesInS3 = onlyInS3.map(d => {
-      const parsed = new URL(d);
+      const parsed = url.parse(d);
       return {
         filename: path.basename(parsed.pathname),
         bucket: parsed.hostname,
@@ -116,7 +118,7 @@ class ReconciliationReport extends React.Component {
     const granuleFilesOnlyInCumulus = onlyInCumulus.map(parseFileObject);
 
     const granuleFilesOnlyInCmr = onlyInCmr.map(d => {
-      const parsed = new URL(d.URL);
+      const parsed = url.parse(d.URL);
       const bucket = parsed.hostname.split('.')[0];
       return {
         granuleId: d.GranuleUR,
