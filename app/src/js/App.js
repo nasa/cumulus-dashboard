@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import ourConfigureStore, { history } from './store/configureStore';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
-// import { useScroll as notHookUseScroll } from 'react-router-scroll-4';
 
 //  Fontawesome Icons Library
 import { library, dom } from '@fortawesome/fontawesome-svg-core';
