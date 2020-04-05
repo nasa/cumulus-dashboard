@@ -106,44 +106,47 @@ describe('Rules page', () => {
       const collection = getCollectionId({ name: 'MOD09GQ', version: '006' });
 
       // Fill the form and submit
+      // mhs: I think we're seeing https://www.cypress.io/blog/2018/02/05/when-can-the-test-start/
+      // Typing into a form that's not ready. (https://github.com/cypress-io/cypress/issues/3817)
       cy.get('form div ul').as('ruleInput');
       cy.get('@ruleInput')
         .contains('name', { matchCase: false })
         .siblings('input')
+        .wait(500)
         .type(ruleName);
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'workflow', { matchCase: false })
         .siblings()
         .find('select')
-        .select(workflow, { force: true })
+        .select(workflow)
         .should('have.value', workflow);
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'provider', { matchCase: false })
         .siblings()
         .find('select')
-        .select(provider, { force: true })
+        .select(provider)
         .should('have.value', provider);
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'collection', { matchCase: false })
         .siblings()
         .find('select')
-        .select(collection, { force: true })
+        .select(collection)
         .should('have.value', collection);
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'type', { matchCase: false })
         .siblings()
         .find('select')
-        .select('onetime', { force: true })
+        .select('onetime')
         .should('have.value', 'onetime');
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'state', { matchCase: false })
         .siblings()
         .find('select')
-        .select('ENABLED', { force: true })
+        .select('ENABLED')
         .should('have.value', 'ENABLED');
 
       cy.contains('form button', 'Submit').click();
-
+      cy.url().should('include', 'rule/newRule');
       cy.contains('.heading--xlarge', 'Rules');
       cy.contains('.heading--large', ruleName);
       cy.contains('.heading--medium', 'Rule Overview');
