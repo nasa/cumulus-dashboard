@@ -36,7 +36,7 @@ describe('Dashboard Providers Page', () => {
       cy.url().should('include', 'providers');
       cy.contains('.heading--xlarge', 'Providers');
 
-      cy.get('.table .tbody .tr').its('length').should('be.eq', 2);
+      cy.get('.table .tbody .tr').should('have.length', 2);
     });
 
     it('should add a new provider', () => {
