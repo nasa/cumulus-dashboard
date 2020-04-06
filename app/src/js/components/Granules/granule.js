@@ -187,7 +187,7 @@ class GranuleOverview extends React.Component {
     const granule = record.data;
     const files = [];
     if (granule.files) {
-      for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }
+      for (const key in get(granule, 'files', {})) { files.push(granule.files[key]); }
     }
     const dropdownConfig = [{
       text: 'Reingest',
@@ -271,7 +271,7 @@ class GranuleOverview extends React.Component {
 
         <section className='page__section'>
           <LogViewer
-            query={{q: granuleId}}
+            query={{ q: granuleId }}
             dispatch={this.props.dispatch}
             logs={this.props.logs}
             notFound={`No recent logs for ${granuleId}`}

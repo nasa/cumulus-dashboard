@@ -1,5 +1,4 @@
 'use strict';
-import url from 'url';
 import { get as getProperty } from 'object-path';
 import _config from '../config';
 
@@ -15,14 +14,14 @@ export const formatError = (response = {}, body) => {
 
 export const getErrorMessage = (response) => {
   const { body } = response;
-  const errorMessage = body && body.errorMessage || body && body.message || body && body.detail;
+  const errorMessage = (body && body.errorMessage) || (body && body.message) || (body && body.detail);
 
   if (errorMessage) return errorMessage;
   return formatError(response, body);
 };
 
 export const addRequestAuthorization = (config, state) => {
-  let token = getProperty(state, 'api.tokens.token');
+  const token = getProperty(state, 'api.tokens.token');
   if (token) {
     config.headers = Object.assign({}, config.headers, {
       Authorization: `Bearer ${token}`
@@ -44,7 +43,7 @@ export const configureRequest = (params = {}) => {
     if (typeof config.path !== 'string') {
       throw new Error('Path must be a string');
     }
-    config.url = url.resolve(_config.apiRoot, config.path);
+    config.url = new URL(config.path, _config.apiRoot).href;
   }
 
   const defaultRequestConfig = {

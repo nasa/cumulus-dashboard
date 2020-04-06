@@ -61,7 +61,7 @@ export default createReducer(initialState, {
 
   [COUNT]: (state, action) => {
     let newState = cloneDeep(state);
-    const count = Object.assign({}, newState.count, {inflight: false, error: null});
+    const count = Object.assign({}, newState.count, { inflight: false, error: null });
     set(count, ['data', action.config.qs.type], action.data);
     newState = Object.assign({}, newState, { count });
     return newState;

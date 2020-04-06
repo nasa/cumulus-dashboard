@@ -26,13 +26,13 @@ class List extends React.Component {
   }
 
   remove (index) {
-    let value = this.props.value.slice();
+    const value = this.props.value.slice();
     value.splice(index, 1);
     this.props.onChange(this.props.id, value);
   }
 
   render () {
-    let {
+    const {
       label,
       value,
       error

@@ -59,7 +59,7 @@ class ErrorReport extends React.Component {
         </div>
       );
     } else if (report instanceof Error) {
-      let name = report.name || 'Error';
+      const name = report.name || 'Error';
       let message, stack;
       if (!report.message) {
         message = JSON.stringify(report);
@@ -98,7 +98,7 @@ class ErrorReport extends React.Component {
         </div>
       );
     } else {
-      let stringified = this.truncate(JSON.stringify(obj));
+      const stringified = this.truncate(JSON.stringify(obj));
       return <p key={stringified}>{stringified}</p>;
     }
   }

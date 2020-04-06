@@ -7,7 +7,7 @@ import { fullDate } from '../format';
 export const tableColumns = [
   {
     Header: 'Id',
-    accessor: row => row['id'],
+    accessor: row => row.id,
     id: 'id'
   },
   {
@@ -16,7 +16,7 @@ export const tableColumns = [
   },
   {
     Header: 'Timestamp',
-    accessor: row => fullDate(row['timestamp']),
+    accessor: row => fullDate(row.timestamp),
     id: 'timestamp'
   },
   {

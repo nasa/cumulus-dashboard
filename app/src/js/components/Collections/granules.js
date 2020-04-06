@@ -21,7 +21,7 @@ import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import statusOptions from '../../utils/status';
-import {strings} from '../locale';
+import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
@@ -139,7 +139,7 @@ const CollectionGranules = ({
           <h2 className="heading--medium heading--shared-content with-description">
             {`${displayCase(view)} ${displayName} `}
             <span className="num--title">
-              {`${meta.count && meta.count || 0}`}
+              {`${(meta.count && meta.count) || 0}`}
             </span>
           </h2>
         </div>

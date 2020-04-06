@@ -55,7 +55,7 @@ export class BatchCommand extends React.Component {
     Object.keys(callbacks).forEach(id => {
       if (!state[id] || !callbacks[id]) return;
       else if (state[id].status === 'success') callbacks[id](null, id);
-      else if (state[id].status === 'error') callbacks[id]({error: state[id].error, id});
+      else if (state[id].status === 'error') callbacks[id]({ error: state[id].error, id });
 
       if (state[id].status === 'success' || state[id].status === 'error') {
         delete callbacks[id];
@@ -115,7 +115,7 @@ export class BatchCommand extends React.Component {
     const delay = this.props.updateDelay ? this.props.updateDelay : updateDelay;
     // turn array of errors from queue into single error for ui
     const error = this.createErrorMessage(errors);
-    this.setState({status: (error ? 'error' : 'success')});
+    this.setState({ status: (error ? 'error' : 'success') });
     setTimeout(() => {
       this.cleanup(error, results);
     }, delay);
@@ -215,7 +215,7 @@ export class BatchCommand extends React.Component {
               <div className='modal__loading'>
                 <div className='modal__loading--inner'>
                   <div className={'modal__loading--progress modal__loading--progress--' + status}
-                    style={{width: (todo ? (completed * 100 / todo) + '%' : 0)}}>
+                    style={{ width: (todo ? (completed * 100 / todo) + '%' : 0) }}>
                   </div>
                 </div>
               </div>

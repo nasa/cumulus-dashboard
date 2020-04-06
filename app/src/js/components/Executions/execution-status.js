@@ -45,8 +45,8 @@ class ExecutionStatus extends React.Component {
 
   renderEvents () {
     const { executionStatus } = this.props;
-    let { executionHistory: { events } } = executionStatus;
-    let mutableEvents = cloneDeep(events);
+    const { executionHistory: { events } } = executionStatus;
+    const mutableEvents = cloneDeep(events);
     mutableEvents.forEach((event) => {
       event.eventDetails = getEventDetails(event);
     });

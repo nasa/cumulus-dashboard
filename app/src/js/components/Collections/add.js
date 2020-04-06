@@ -12,7 +12,7 @@ const AddCollection = ({ location = {}, collections, dispatch, schema }) => {
   const [defaultValue, setDefaultValue] = useState({});
   const { state: locationState } = location;
   const { name, version } = locationState || {};
-  const collectionId = getCollectionId({name, version});
+  const collectionId = getCollectionId({ name, version });
   const { collection: collectionSchema } = schema || {};
   const { map: collectionsMap } = collections || {};
   const isCopy = !!(name && version);

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { collectionNameVersion } from '../../utils/format';
 
-const BatchDeleteWithGranulesContent = ({selectionsWithGranules}) => {
+const BatchDeleteWithGranulesContent = ({ selectionsWithGranules }) => {
   return (
     <>
       <span>
@@ -11,7 +11,7 @@ const BatchDeleteWithGranulesContent = ({selectionsWithGranules}) => {
       </span>
       <ul className='collections-with-granules'>
         {selectionsWithGranules.map((collection, index) => {
-          const {name, version} = collectionNameVersion(collection);
+          const { name, version } = collectionNameVersion(collection);
           return (
             <li className='collection-with-granules' key={index}>{`${name} / ${version}`}</li>
           );

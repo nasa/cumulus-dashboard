@@ -4,8 +4,8 @@ const config = {
   nav: {
     order: ['collections'],
     exclude: {
-      'PDRs': process.env.HIDE_PDR || true,
-      'Logs': !process.env.KIBANAROOT
+      PDRs: process.env.HIDE_PDR || true,
+      Logs: !process.env.KIBANAROOT
     }
   },
   apiRoot: process.env.APIROOT || 'https://example.com',

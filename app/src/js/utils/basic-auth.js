@@ -3,7 +3,7 @@
 import { esUser, esPassword } from '../config';
 
 // Build basic auth string
-export const partsEncode = (user, password) => new Buffer(`${user}:${password}`).toString('base64');
+export const partsEncode = (user, password) => Buffer.from(`${user}:${password}`).toString('base64');
 
 export const basicAuth = (user, password) => `Basic ${partsEncode(user, password)}`;
 

@@ -5,7 +5,7 @@ import { get } from 'object-path';
 const removeDeleted = (accessor, list, deleted) => {
   const filterByDeletedSuccess = function (item) {
     const id = get(item, accessor);
-    let record = deleted[id];
+    const record = deleted[id];
     return !(record && get(record, 'status') === 'success');
   };
   return list ? list.filter(filterByDeletedSuccess) : [];

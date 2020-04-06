@@ -9,7 +9,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import Schema from '../FormSchema/schema';
 import merge from '../../utils/merge';
 import _config from '../../config';
-import {strings} from '../locale';
+import { strings } from '../locale';
 
 const { updateDelay } = _config;
 
