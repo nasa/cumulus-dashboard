@@ -44,7 +44,7 @@ describe('Dashboard Executions Page', () => {
           const visiblePart = execution['name'].split('-').slice(0, 3).join('-');
           cy.contains(visiblePart);
           cy.get(`[data-value="${execution['name']}"]`).children().as('columns');
-          cy.get('@columns').its('length').should('be.eq', 6);
+          cy.get('@columns').should('have.length', 6);
 
           cy.get('@columns').eq(0).children('a')
             .should('have.attr', 'href')
@@ -65,7 +65,7 @@ describe('Dashboard Executions Page', () => {
         });
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').its('length').should('be.eq', 6);
+      cy.get('@list').should('have.length', 6);
     });
 
     it('should show a single execution', () => {
@@ -105,14 +105,14 @@ describe('Dashboard Executions Page', () => {
         });
 
       cy.get('.table .tbody .tr').as('events');
-      cy.get('@events').its('length').should('be.eq', 7);
+      cy.get('@events').should('have.length', 7);
 
       cy.getFixture('valid-execution').as('executionStatus');
       cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
         cy.get('@events').each(($el, index, $list) => {
           let timestamp = fullDate(events[index].timestamp);
           cy.wrap($el).children('.td').as('columns');
-          cy.get('@columns').its('length').should('be.eq', 4);
+          cy.get('@columns').should('have.length', 4);
           let idMatch = `"id": ${index + 1},`;
           let previousIdMatch = `"previousEventId": ${index}`;
 

@@ -1,5 +1,8 @@
 'use strict';
 
+export const isObject = (object) =>
+  !Array.isArray(object) && typeof object === 'object';
+
 export const isText = function (string) {
   return typeof string === 'string' && string.length;
 };
