@@ -41,7 +41,7 @@ describe('Dashboard Granules Page', () => {
           // Wait for this granule to appear before proceeding.
           cy.contains(granule['granuleId']);
           cy.get(`[data-value="${granule['granuleId']}"]`).children().as('columns');
-          cy.get('@columns').its('length').should('be.eq', 8);
+          cy.get('@columns').should('have.length', 8);
 
           // Granule Status Column is correct
           cy.get('@columns').eq(1).invoke('text')
@@ -96,7 +96,7 @@ describe('Dashboard Granules Page', () => {
         });
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').its('length').should('be.eq', 10);
+      cy.get('@list').should('have.length', 10);
     });
 
     it('should display a link to download the granule list', () => {

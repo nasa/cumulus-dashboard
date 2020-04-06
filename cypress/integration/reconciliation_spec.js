@@ -31,7 +31,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
     it('displays a list of reconciliation reports', () => {
       cy.visit('/reconciliation-reports');
 
-      cy.get('.table .tbody .tr').its('length').should('be.eq', 2);
+      cy.get('.table .tbody .tr').should('have.length', 2);
       cy.contains('.table .tbody .tr a', 'report-2020-01-14T20:25:29.026Z.json')
         .should('have.attr', 'href', '/reconciliation-reports/report/report-2020-01-14T20:25:29.026Z.json');
       cy.contains('.table .tbody .tr a', 'report-2020-01-14T20:52:38.781Z.json')
@@ -70,7 +70,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
         .next()
         .find('.table .tbody')
         .as('dynamoTable');
-      cy.get('@dynamoTable').find('.tr').its('length').should('be.eq', 35);
+      cy.get('@dynamoTable').find('.tr').should('have.length', 35);
       cy.get('@dynamoTable')
         .children('.tr')
         .first()
@@ -86,7 +86,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
         .next()
         .find('.table .tbody')
         .as('s3Table');
-      cy.get('@s3Table').find('.tr').its('length').should('be.eq', 216);
+      cy.get('@s3Table').find('.tr').should('have.length', 216);
       cy.get('@s3Table')
         .children('.tr')
         .first()
@@ -104,7 +104,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
         .next()
         .find('.table .tbody')
         .as('cumulusCollectionsTable');
-      cy.get('@cumulusCollectionsTable').find('.tr').its('length').should('be.eq', 13);
+      cy.get('@cumulusCollectionsTable').find('.tr').should('have.length', 13);
       cy.get('@cumulusCollectionsTable')
         .within(() => {
           cy.contains('L2_HR_PIXC_test-mhs3-KinesisTestError-1574717133091___000');
@@ -116,7 +116,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
         .next()
         .find('.table .tbody')
         .as('cmrCollectionsTable');
-      cy.get('@cmrCollectionsTable').find('.tr').its('length').should('be.eq', 25);
+      cy.get('@cmrCollectionsTable').find('.tr').should('have.length', 25);
       cy.get('@cmrCollectionsTable')
         .within(() => {
           cy.contains('A2_RainOcn_NRT___0');
@@ -130,7 +130,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
         .next()
         .find('.table .tbody')
         .as('cumulusGranulesTable');
-      cy.get('@cumulusGranulesTable').find('.tr').its('length').should('be.eq', 7);
+      cy.get('@cumulusGranulesTable').find('.tr').should('have.length', 7);
       cy.get('@cumulusGranulesTable')
         .within(() => {
           cy.contains('MOD14A1.A4135026.ekHe8x.006.3355759967228');
@@ -141,7 +141,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
         .next()
         .find('.table .tbody')
         .as('cmrGranulesTable');
-      cy.get('@cmrGranulesTable').find('.tr').its('length').should('be.eq', 365);
+      cy.get('@cmrGranulesTable').find('.tr').should('have.length', 365);
       cy.get('@cmrGranulesTable')
         .within(() => {
           cy.contains('MOD14A1.A0031922.9lenyG.006.4681412227733');
@@ -155,7 +155,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
         .next()
         .find('.table .tbody')
         .as('cumulusGranulesFilesTable');
-      cy.get('@cumulusGranulesFilesTable').find('.tr').its('length').should('be.eq', 1);
+      cy.get('@cumulusGranulesFilesTable').find('.tr').should('have.length', 1);
       cy.get('@cumulusGranulesFilesTable')
         .children('.tr')
         .first()
@@ -171,7 +171,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
         .next()
         .find('.table .tbody')
         .as('cmrGranulesFilesTable');
-      cy.get('@cmrGranulesFilesTable').find('.tr').its('length').should('be.eq', 1);
+      cy.get('@cmrGranulesFilesTable').find('.tr').should('have.length', 1);
       cy.get('@cmrGranulesFilesTable')
         .children('.tr')
         .first()
