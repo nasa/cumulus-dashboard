@@ -7,16 +7,12 @@ import {
   searchReconciliationReports,
   clearReconciliationReportSearch,
   listReconciliationReports,
-  filterReconciliationReports,
-  clearReconciliationReportsFilter
 } from '../../actions';
 import { lastUpdated } from '../../utils/format';
 import { tableColumns, bulkActions } from '../../utils/table-config/reconciliation-reports';
 import Search from '../Search/search';
 import List from '../Table/Table';
 import ListFilters from '../ListActions/ListFilters';
-import Dropdown from '../DropDown/dropdown';
-import pageSizeOptions from '../../utils/page-size';
 
 class ReconciliationReportList extends React.Component {
   constructor () {
@@ -62,16 +58,6 @@ class ReconciliationReportList extends React.Component {
               <Search dispatch={this.props.dispatch}
                 action={searchReconciliationReports}
                 clear={clearReconciliationReportSearch}
-              />
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterReconciliationReports}
-                clear={clearReconciliationReportsFilter}
-                paramKey={'limit'}
-                label={'Results Per Page'}
-                inputProps={{
-                  placeholder: 'Results Per Page'
-                }}
               />
             </ListFilters>
           </List>

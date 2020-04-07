@@ -15,10 +15,7 @@ import {
   CLEAR_RECONCILIATIONS_SEARCH,
 
   NEW_RECONCILIATION_INFLIGHT,
-  NEW_RECONCILIATION,
-
-  FILTER_RECONCILIATIONS,
-  CLEAR_RECONCILIATIONS_FILTER
+  NEW_RECONCILIATION
 } from '../actions/types';
 import { createReducer } from '@reduxjs/toolkit';
 
@@ -81,12 +78,5 @@ export default createReducer(initialState, {
 
   [NEW_RECONCILIATION]: (state, action) => {
     set(state, 'createReportInflight', false);
-  },
-
-  [FILTER_RECONCILIATIONS]: (state, action) => {
-    set(state, ['list', 'params', action.param.key], action.param.value);
-  },
-  [CLEAR_RECONCILIATIONS_FILTER]: (state, action) => {
-    set(state, ['list', 'params', action.paramKey], null);
-  },
+  }
 });
