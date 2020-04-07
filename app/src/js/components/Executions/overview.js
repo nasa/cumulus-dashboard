@@ -3,7 +3,7 @@ import React from 'react';
 import { get } from 'object-path';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import {
   clearExecutionsFilter,
   filterExecutions,
@@ -98,6 +98,12 @@ class ExecutionOverview extends React.Component {
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>All Executions <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
+            <Link
+              className='button button--small button__goto button--green form-group__element--right'
+              to={`/executions/execution/:executionArn`} //Need to update the url when Katie builds the events page
+            >
+              {strings.view_all_events}
+            </Link>
           </div>
           <List
             list={list}

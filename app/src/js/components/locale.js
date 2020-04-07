@@ -36,6 +36,7 @@ export const strings = new LocalizedStrings({
     remove_from_cmr: 'Remove from CMR',
     running_granules: 'Running Granules',
     total_granules: 'Total Granules',
+    view_all_events: 'View All Events',
     view_all_granules: 'View All Granules',
     view_granules_overview: 'View Granule Overview'
   },
@@ -69,6 +70,7 @@ export const strings = new LocalizedStrings({
     pdrs: 'Pdrs',
     remove_from_cmr: 'Remove from OnEarth',
     running_granules: 'Running Products',
+    view_all_events: 'View All Events',
     view_all_granules: 'View All Products',
     view_granules_overview: 'View Product Overview'
   }
