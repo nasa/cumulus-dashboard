@@ -32,7 +32,7 @@ function renderMenu (items, value, style) {
  * @returns {string} - either the correct label from the status Object, or the input status.
  */
 const statusToLabel = (statusObject = {}, status) => {
-  let result = Object.keys(statusObject).filter(
+  const result = Object.keys(statusObject).filter(
     (label) => statusObject[label] === status
   );
   if (result.length) return result[0];
@@ -51,19 +51,19 @@ class Dropdown extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
-    const {paramKey, dispatch, action, options, queryParams} = this.props;
+    const { paramKey, dispatch, action, options, queryParams } = this.props;
     if (queryParams[paramKey] !== prevProps.queryParams[paramKey]) {
       let value = queryParams[paramKey];
       dispatch(action({ key: paramKey, value }));
       if (value) value = statusToLabel(options, value);
-      this.setState({value}); // eslint-disable-line react/no-did-update-set-state
+      this.setState({ value }); // eslint-disable-line react/no-did-update-set-state
     }
   }
 
   componentDidMount () {
     const { dispatch, getOptions, action, paramKey, queryParams } = this.props;
     if (getOptions) { dispatch(getOptions()); }
-    if (queryParams[paramKey]) dispatch(action({key: paramKey, value: queryParams[paramKey]}));
+    if (queryParams[paramKey]) dispatch(action({ key: paramKey, value: queryParams[paramKey] }));
   }
 
   componentWillUnmount () {
@@ -97,7 +97,7 @@ class Dropdown extends React.Component {
     // `options` are expected in the following format:
     // {displayValue1: optionElementValue1, displayValue2, optionElementValue2, ...}
     const { options, label, paramKey, inputProps } = this.props;
-    const items = options ? Object.keys(options).map(label => ({label, value: options[label]})) : [];
+    const items = options ? Object.keys(options).map(label => ({ label, value: options[label] })) : [];
 
     // Make sure this form ID is unique!
     // If needed in future, could add MD5 hash of stringified options,

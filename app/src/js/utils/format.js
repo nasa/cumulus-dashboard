@@ -2,7 +2,6 @@
 import React from 'react';
 import moment from 'moment';
 import numeral from 'numeral';
-import url from 'url';
 import { Link } from 'react-router-dom';
 
 export const nullValue = '--';
@@ -207,16 +206,15 @@ export const rerunText = function (name) {
 
 export const buildRedirectUrl = function ({ origin, pathname, hash }) {
   const hasQuery = hash.indexOf('?');
+
   if (hasQuery !== -1) {
-    hash = hash.substr(hash.indexOf('/') + 1);
-    const parsedUrl = url.parse(hash, true);
-    // Remove any ?token query parameter to avoid polluting
-    // the login link
-    delete parsedUrl.query.token;
-    hash = `${url.format({
-      pathname: parsedUrl.pathname,
-      query: parsedUrl.query
-    })}`;
+    // TODO [MHS, 2020-04-04] Fix with the test changes.
+    // const hashPrefix = hash.substr(0, hash.indexOf('/') + 1);
+    const baseHash = hash.substr(hash.indexOf('/') + 1);
+    const parsedUrl = new URL(baseHash, origin);
+    // Remove any ?token query parameter to avoid poluting the login link
+    parsedUrl.searchParams.delete('token');
+    return encodeURIComponent(parsedUrl.href);
   }
-  return encodeURIComponent(url.resolve(origin, pathname) + hash);
+  return encodeURIComponent(new URL(pathname + hash, origin).href);
 };

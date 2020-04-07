@@ -62,7 +62,7 @@ const BulkGranule = ({
       } catch (e) {
         return setErrorState('Syntax error in JSON');
       }
-      dispatch(bulkGranule({requestId, json}));
+      dispatch(bulkGranule({ requestId, json }));
     }
   }
 

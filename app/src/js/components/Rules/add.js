@@ -104,7 +104,7 @@ const AddRule = ({
       // name, but first replace the collection name/version object with the
       // collection's ID (string) since the "Add/Copy Rule" form displays the
       // colleciton ID's in a dropdown.
-      setRule({ ...data, 'collection': getCollectionId(data.collection) });
+      setRule({ ...data, collection: getCollectionId(data.collection) });
     }
   }, [name, rulesMap, isCopy]);
 

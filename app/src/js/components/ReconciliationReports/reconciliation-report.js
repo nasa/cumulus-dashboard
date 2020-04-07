@@ -1,4 +1,5 @@
 'use strict';
+/* eslint node/no-deprecated-api: 0 */
 import url from 'url';
 import path from 'path';
 import React from 'react';

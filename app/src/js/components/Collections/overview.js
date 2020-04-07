@@ -123,7 +123,7 @@ class CollectionOverview extends React.Component {
 
   errors () {
     const { name, version } = this.props.match.params;
-    const collectionId = getCollectionId({name, version});
+    const collectionId = getCollectionId({ name, version });
     return [
       get(this.props.collections.map, [collectionId, 'error']),
       get(this.props.collections.deleted, [collectionId, 'error'])

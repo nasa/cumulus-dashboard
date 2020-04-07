@@ -1,7 +1,7 @@
 'use strict';
 
-import {get} from 'object-path';
-import {ADD_INSTANCE_META} from '../actions/types';
+import { get } from 'object-path';
+import { ADD_INSTANCE_META } from '../actions/types';
 // In Node 12.0.0+, use built-in Object.fromEntries instead of fromPairs
 import fromPairs from 'lodash.frompairs';
 import { createReducer } from '@reduxjs/toolkit';

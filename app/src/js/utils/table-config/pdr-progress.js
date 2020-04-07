@@ -10,15 +10,15 @@ function bar (completed, failed, text) {
   return (
     <div className='table__progress--outer'>
       <div className='table__progress--bar'
-        style={{width: completed + '%'}} />
+        style={{ width: completed + '%' }} />
       <div className='table__progress--bar table__progress--bar--failed'
-        style={{width: failed + '%', left: completed + '%'}} />
+        style={{ width: failed + '%', left: completed + '%' }} />
       {!completed && !failed ? (
         <div className='table__progress--bar'
-          style={{width: '0.5%'}} />
+          style={{ width: '0.5%' }} />
       ) : null}
       <div className='table__progress--text'
-        style={{left: (completed + failed) + '%'}}>{text}</div>
+        style={{ left: (completed + failed) + '%' }}>{text}</div>
     </div>
   );
 }
@@ -85,4 +85,3 @@ export const tableColumns = [
     id: 'timestamp'
   }
 ];
-

@@ -113,7 +113,7 @@ class AllGranules extends React.Component {
     const { granules, dispatch, logs } = this.props;
     const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
-    const logsQuery = { 'granuleId__exists': 'true' };
+    const logsQuery = { granuleId__exists: 'true' };
     const query = this.generateQuery();
     const view = this.getView();
     const displayCaseView = displayCase(view);
@@ -220,7 +220,7 @@ AllGranules.propTypes = {
   onQueryChange: PropTypes.func
 };
 
-export {listGranules};
+export { listGranules };
 
 export default withRouter(connect(state => ({
   logs: state.logs,

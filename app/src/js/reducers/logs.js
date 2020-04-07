@@ -57,7 +57,7 @@ function processLog (d) {
   d.displayText = d.message || d.msg;
   d.key = d.timestamp + '-' + d.displayText;
   let metafields = '';
-  for (let key in d) {
+  for (const key in d) {
     metafields += ' ' + d[key];
   }
   d.searchkey = metafields;
