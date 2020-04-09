@@ -37,6 +37,16 @@ class ExecutionEvents extends React.Component {
     dispatch(getCumulusInstanceMetadata());
   }
 
+  componentDidUpdate (prevProps) {
+    const { dispatch } = this.props;
+    const { executionArn } = this.props.match.params;
+    const { search } = this.props.location;
+    const { search: prevSearch } = prevProps.location;
+    if (search !== prevSearch) {
+      dispatch(getExecutionStatus(executionArn));
+    }
+  }
+
   renderEvents () {
     const { executionStatus } = this.props;
     const { executionHistory: { events } } = executionStatus;
@@ -106,9 +116,10 @@ class ExecutionEvents extends React.Component {
                   {`${executionStatus.executionHistory.events.length || 0}`}
                 </span>
               </h2>
-              <a className='csv__download button button--small button--download button--green form-group__element--right'
+              <a className='csv__download button button--small button--green form-group__element--right'
                 href='/workflows'
-              >View Workflows</a>
+                target='_blank'
+              ><FontAwesomeIcon icon="external-link-square-alt" /> View Workflows</a>
             </div>
             <div className='filters'>
               <Search
@@ -133,6 +144,7 @@ ExecutionEvents.propTypes = {
   executionStatus: PropTypes.object,
   match: PropTypes.object,
   dispatch: PropTypes.func,
+  location: PropTypes.object,
   cumulusInstance: PropTypes.object,
   history: PropTypes.object
 };

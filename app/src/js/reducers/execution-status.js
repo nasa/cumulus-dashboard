@@ -29,7 +29,14 @@ export const initialState = {
  */
 export const filterData = (rawData, searchString) => {
   if (searchString !== null) {
-    return rawData.executionHistory.events.filter(d => d.type.toLowerCase().includes(searchString.toLowerCase()));
+    const data = {
+      execution: rawData.execution,
+      stateMachine: rawData.stateMachine,
+      executionHistory: rawData.executionHistory
+    };
+    const filteredEvents = rawData.executionHistory.events.filter(d => d.type.toLowerCase().includes(searchString.toLowerCase()));
+    data.executionHistory.events = filteredEvents;
+    return data;
   }
   return rawData;
 };
