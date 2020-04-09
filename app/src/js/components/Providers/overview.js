@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { get } from 'object-path';
 import cloneDeep from 'lodash.clonedeep';
 import { listProviders, getCount, interval } from '../../actions';
@@ -18,7 +18,6 @@ const { updateInterval } = _config;
 class ProvidersOverview extends React.Component {
   constructor () {
     super();
-    this.displayName = 'ProvidersOverview';
     this.queryStats = this.queryStats.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.renderOverview = this.renderOverview.bind(this);
@@ -77,7 +76,9 @@ class ProvidersOverview extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content'>Ingesting Providers <span className='num--title'>{count ? `${count}` : 0}</span></h2>
           </div>
-
+          <div className='filter__button--add'>
+            <Link className='button button--green button--add button--small form-group__element' to='/providers/add'>Add Provider</Link>
+          </div>
           <List
             list={mutableList}
             dispatch={this.props.dispatch}
