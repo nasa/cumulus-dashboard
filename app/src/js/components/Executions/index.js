@@ -7,6 +7,7 @@ import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import ExecutionOverview from './overview';
 import ExecutionStatus from './execution-status';
 import ExecutionLogs from './execution-logs';
+import ExecutionEvents from './execution-events';
 import { getCount, listExecutions } from '../../actions';
 import { strings } from '../locale';
 
@@ -34,6 +35,7 @@ class Executions extends React.Component {
               <Switch>
                 <Route exact path='/executions' component={ExecutionOverview} />
                 <Route path='/executions/execution/:executionName/logs' component={ExecutionLogs} />
+                <Route path='/executions/execution/:executionArn/events' component={ExecutionEvents} />
                 <Route path='/executions/execution/:executionArn' component={ExecutionStatus} />
               </Switch>
             </div>
