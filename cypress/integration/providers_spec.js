@@ -48,7 +48,7 @@ describe('Dashboard Providers Page', () => {
       cy.visit('/providers');
 
       cy.contains('.heading--large', 'Provider Overview');
-      cy.contains('a', 'Add a Provider').as('addProvider');
+      cy.contains('a', 'Add Provider').as('addProvider');
       cy.get('@addProvider').should('have.attr', 'href', '/providers/add');
       cy.get('@addProvider').click();
 
