@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import Collapse from 'react-collapsible';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
@@ -18,6 +17,7 @@ import ExecutionStatusGraph from './execution-status-graph';
 import { getEventDetails } from './execution-graph-utils';
 import SortableTable from '../SortableTable/SortableTable';
 import Metadata from '../Table/Metadata';
+import DefaultModal from '../Modal/modal';
 
 class ExecutionStatus extends React.Component {
   constructor () {
@@ -25,6 +25,12 @@ class ExecutionStatus extends React.Component {
     this.navigateBack = this.navigateBack.bind(this);
     this.errors = this.errors.bind(this);
     this.renderEvents = this.renderEvents.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.state = {
+      showInputModal: false,
+      showOutputModal: false
+    };
   }
 
   componentDidMount () {
@@ -41,6 +47,26 @@ class ExecutionStatus extends React.Component {
 
   errors () {
     return [].filter(Boolean);
+  }
+
+  openModal (type) {
+    switch (type) {
+      case 'input':
+        this.setState({ showInputModal: true });
+        break;
+      case 'output':
+        this.setState({ showOutputModal: true });
+    }
+  }
+
+  closeModal (type) {
+    switch (type) {
+      case 'input':
+        this.setState({ showInputModal: false });
+        break;
+      case 'output':
+        this.setState({ showOutputModal: false });
+    }
   }
 
   renderEvents () {
@@ -65,6 +91,7 @@ class ExecutionStatus extends React.Component {
   }
 
   render () {
+    const { showInputModal, showOutputModal } = this.state;
     const { executionStatus, cumulusInstance } = this.props;
     const { execution } = executionStatus;
     if (!execution) return null;
@@ -122,12 +149,24 @@ class ExecutionStatus extends React.Component {
         property: 'input',
         accessor: d => {
           if (d) {
-            const trigger = <a href='#'>Show Input</a>;
-            const triggerWhenOpen = <a href='#'>Hide Input</a>;
             return (
-              <Collapse trigger={trigger} triggerWhenOpen={triggerWhenOpen}>
-                <pre>{parseJson(d)}</pre>
-              </Collapse>
+              <>
+                <button
+                  onClick={() => this.openModal('input')}
+                  className='button button--small'
+                >Show Input</button>
+                <DefaultModal
+                  showModal={showInputModal}
+                  title='Execution Input'
+                  onCloseModal={() => this.closeModal('input')}
+                  hasConfirmButton={false}
+                  cancelButtonClass='button--close'
+                  cancelButtonText='Close'
+                  className='execution--modal'
+                >
+                  <pre>{parseJson(d)}</pre>
+                </DefaultModal>
+              </>
             );
           } else {
             return 'N/A';
@@ -139,18 +178,30 @@ class ExecutionStatus extends React.Component {
         property: 'output',
         accessor: d => {
           if (d) {
-            const trigger = <a href='#'>Show Output</a>;
-            const triggerWhenOpen = <a href='#'>Hide Output</a>;
             const jsonData = new Blob([d], { type: 'text/json' });
             return (
-              <Collapse trigger={trigger} triggerWhenOpen={triggerWhenOpen}>
-                <a className='button button--small button--download button--green form-group__element--right'
-                  id='download_link'
-                  download='output.json'
-                  href={window.URL.createObjectURL(jsonData)}
-                >Download Output</a>
-                <pre>{parseJson(d)}</pre>
-              </Collapse>
+              <>
+                <button
+                  onClick={() => this.openModal('output')}
+                  className='button button--small'
+                >Show Output</button>
+                <DefaultModal
+                  showModal={showOutputModal}
+                  title='Execution Output'
+                  onCloseModal={() => this.closeModal('output')}
+                  hasConfirmButton={false}
+                  cancelButtonClass='button--close'
+                  cancelButtonText='Close'
+                  className='execution--modal'
+                >
+                  <a className='button button--small button--download button--green'
+                    id='download_link'
+                    download='output.json'
+                    href={window.URL.createObjectURL(jsonData)}
+                  >Download File</a>
+                  <pre>{parseJson(d)}</pre>
+                </DefaultModal>
+              </>
             );
           } else {
             return 'N/A';

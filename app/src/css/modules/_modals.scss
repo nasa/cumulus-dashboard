@@ -94,25 +94,6 @@
 }
 
 .default-modal {
-  &.bulk_granules {
-    &.modal-dialog {
-      overflow-y: initial !important;
-      max-height:85%;  
-      margin-top: 50px; 
-      margin-bottom:50px;
-      max-width: 750px;
-    }
-
-    .modal-body {
-      height: 425px;
-      overflow-y: auto;
-    }
-
-    .button__arrow--md:hover:after {
-      left: 85%;
-    }
-  }
-
   .modal-body {
     text-align: center;
 
@@ -132,6 +113,38 @@
 
     .dropdown__wrapper {
       float: none;
+    }
+  }
+
+  &.bulk_granules {
+    &.modal-dialog {
+      overflow-y: initial !important;
+      max-height:85%;  
+      margin-top: 50px; 
+      margin-bottom:50px;
+      max-width: 750px;
+    }
+
+    .modal-body {
+      height: 425px;
+      overflow-y: auto;
+    }
+
+    .button__arrow--md:hover:after {
+      left: 85%;
+    }
+  }
+
+  &.execution--modal {
+    max-width: 80%;
+
+    .modal-body {
+      text-align: left;
+
+      pre {
+        /* placeholder border to define pre region */
+        border: 1px solid gray;
+      }
     }
   }
 }
