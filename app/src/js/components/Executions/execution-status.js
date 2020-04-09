@@ -127,7 +127,7 @@ class ExecutionStatus extends React.Component {
       },
       {
         label: 'Ended',
-        property: 'endDate',
+        property: 'stopDate',
         accessor: fullDate
       },
       {
@@ -249,7 +249,7 @@ class ExecutionStatus extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Execution Details</h2>
           </div>
-          <div className='execution__content'>
+          <div className='execution__content status--process'>
             <Metadata data={executionStatus.execution} accessors={metaAccessors} />
           </div>
         </section>
