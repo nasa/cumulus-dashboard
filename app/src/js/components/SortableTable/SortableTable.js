@@ -108,9 +108,9 @@ const SortableTable = ({
   }, [clearSelected, toggleAllRowsSelected]);
 
   useEffect(() => {
-    let selected = [];
+    const selected = [];
 
-    for (let [key, value] of Object.entries(selectedRowIds)) {
+    for (const [key, value] of Object.entries(selectedRowIds)) {
       if (value) {
         selected.push(key);
       }

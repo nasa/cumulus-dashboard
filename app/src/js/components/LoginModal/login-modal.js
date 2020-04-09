@@ -37,7 +37,7 @@ class LoginModal extends React.Component {
     e.preventDefault();
     if (this.props.api.authenticated) return false;
     const { user, pass } = this.state;
-    const token = new Buffer(`${user}:${pass}`).toString('base64');
+    const token = Buffer.from(`${user}:${pass}`).toString('base64');
     const { dispatch } = this.props;
     this.setState({ token }, () => dispatch(login(token)));
   }
@@ -68,13 +68,13 @@ class LoginModal extends React.Component {
                       value={this.state.user}
                       id={'login-user'}
                       className='input--lg'
-                      onChange={(id, value) => this.setState({user: value})} />
+                      onChange={(id, value) => this.setState({ user: value })} />
                     <Text label={'Password'}
                       value={this.state.pass}
                       id={'login-pass'}
                       type={'password'}
                       className='input--lg'
-                      onChange={(id, value) => this.setState({pass: value})} />
+                      onChange={(id, value) => this.setState({ pass: value })} />
                     <span className='button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'>
                       <input
                         type='submit'

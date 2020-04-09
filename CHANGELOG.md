@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-
 ### Added
+
+- **CUMULUS-1515**
+  - filter capability to workflow overview page.
 
 - **CUMULUS-1798**
   - Add a refresh button
@@ -35,8 +37,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1527**
   - Style changes for individual rule page
 
+- **CUMULUS-1528**
+  - Change add/copy rule form from raw JSON input to individual form fields.
+    Workflow, Provider, and Collection inputs are now dropdowns populated with
+    currently available items.
+
 - **CUMULUS-1509**
   - Update styles on grnaules page
+
+- **CUMULUS-1525**
+  - Style changes for rules overview page
 
 ## [v1.7.2] - 2020-03-16
 

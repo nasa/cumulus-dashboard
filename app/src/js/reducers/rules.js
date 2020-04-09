@@ -35,7 +35,10 @@ import {
 
   RULE_DISABLE,
   RULE_DISABLE_INFLIGHT,
-  RULE_DISABLE_ERROR
+  RULE_DISABLE_ERROR,
+
+  SEARCH_RULES,
+  CLEAR_RULES_SEARCH
 } from '../actions/types';
 import { createReducer } from '@reduxjs/toolkit';
 
@@ -180,5 +183,12 @@ export default createReducer(initialState, {
     const { id } = action;
     set(state, ['disabled', id, 'status'], 'error');
     set(state, ['disabled', id, 'error'], action.error);
+  },
+
+  [SEARCH_RULES]: (state, action) => {
+    set(state, ['list', 'params', 'prefix'], action.prefix);
+  },
+  [CLEAR_RULES_SEARCH]: (state, action) => {
+    set(state, ['list', 'params', 'prefix'], null);
   }
 });

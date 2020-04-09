@@ -44,7 +44,7 @@ describe('Dashboard Collections Page', () => {
       cy.url().should('include', 'collections');
       cy.contains('.heading--xlarge', 'Collections');
 
-      cy.get('.table .tbody .tr').its('length').should('be.eq', 5);
+      cy.get('.table .tbody .tr').should('have.length', 5);
     });
 
     it('should display expected MMT Links for collections list', () => {
@@ -52,7 +52,7 @@ describe('Dashboard Collections Page', () => {
       cy.wait('@getCollections');
       let i = 0;
 
-      cy.get('.table .tbody .tr').its('length').should('be.eq', 5);
+      cy.get('.table .tbody .tr').should('have.length', 5);
 
       while (i < cmrFixtureIdx) cy.wait(`@cmr${i++}`, {timeout: 25000});
       cy.contains('.table .tbody .tr', 'MOD09GQ')
@@ -128,7 +128,7 @@ describe('Dashboard Collections Page', () => {
       // details page.
       cy.visit('/collections');
       cy.wait('@getCollections');
-      cy.get('.table .tbody .tr').its('length').should('be.eq', 5);
+      cy.get('.table .tbody .tr').should('have.length', 5);
 
       cy.contains('.table .tbody .tr a', name)
         .should('have.attr', 'href', `/collections/collection/${name}/${version}`)
@@ -290,7 +290,7 @@ describe('Dashboard Collections Page', () => {
             `[data-value="${collection.name}___${collection.version}"] > .table__main-asset > a`,
             {timeout: 25000}).should(existOrNotExist);
         });
-      cy.get('.table .tbody .tr').its('length').should('be.eq', 4);
+      cy.get('.table .tbody .tr').should('have.length', 4);
       cy.task('resetState');
     });
 

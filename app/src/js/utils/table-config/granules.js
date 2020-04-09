@@ -18,7 +18,7 @@ import {
   deleteGranule
 } from '../../actions';
 import ErrorReport from '../../components/Errors/report';
-import {strings} from '../../components/locale';
+import { strings } from '../../components/locale';
 import Dropdown from '../../components/DropDown/simple-dropdown';
 import Bulk from '../../components/Granules/bulk';
 

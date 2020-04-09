@@ -83,7 +83,7 @@ const EditRaw = ({
         error: newRecord.error
       });
     } else if (newRecord.data) {
-      let data = removeReadOnly(newRecord.data, recordSchema);
+      const data = removeReadOnly(newRecord.data, recordSchema);
       try {
         var text = JSON.stringify(data, null, '\t');
       } catch (error) {
@@ -189,14 +189,14 @@ const EditRaw = ({
           {isInflight
             ? 'Processing...'
             : <>
-            {`${recordDisplayName} ${recordPk} `}
-            {(isSuccess && !isError) && 'has been updated'}
-            {isError &&
+              {`${recordDisplayName} ${recordPk} `}
+              {(isSuccess && !isError) && 'has been updated'}
+              {isError &&
             <>
               {'has encountered an error.'}
               <div className="error">{error}</div>
             </>
-            }
+              }
             </>
           }
         </div>

@@ -132,7 +132,7 @@ class GranulesOverview extends React.Component {
     const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
     const { data } = granuleCSV;
-    const csvData = data ? new Blob([data], {type: 'text/csv'}) : null;
+    const csvData = data ? new Blob([data], { type: 'text/csv' }) : null;
     const statsCount = get(stats, 'count.data.granules.count', []);
     const overviewItems = statsCount.map(d => [tally(d.count), displayCase(d.key)]);
     return (

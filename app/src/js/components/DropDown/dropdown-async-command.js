@@ -24,8 +24,7 @@ class DropdownAsync extends React.Component {
   }
 
   onOutsideClick (e) {
-    if (findDOMNode(this).contains(e.target)) return;
-    else this.setState({ showActions: false });
+    if (!findDOMNode(this).contains(e.target)) this.setState({ showActions: false });
   }
 
   toggleActions (e) {

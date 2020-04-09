@@ -27,7 +27,7 @@ class SubForm extends React.Component {
       fieldSet
     } = this.props;
     const fields = [];
-    for (let key in value) {
+    for (const key in value) {
       fields.push({
         name: key,
         fields: createFormConfig(value[key], fieldSet)

@@ -72,7 +72,7 @@ class Home extends React.Component {
   query () {
     const { dispatch } = this.props;
     dispatch(getStats());
-    dispatch(getCount({type: 'granules', field: 'status'}));
+    dispatch(getCount({ type: 'granules', field: 'status' }));
     dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
     dispatch(getTEALambdaMetrics(this.props.cumulusInstance));
     dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
@@ -98,6 +98,7 @@ class Home extends React.Component {
   isExternalLink (link) {
     return link && link.match('https?://');
   }
+
   renderButtonListSection (items, header, listId) {
     const data = items.filter(d => d[0] !== nullValue);
     if (!data.length) return null;
@@ -118,7 +119,7 @@ class Home extends React.Component {
                         <span className='num--large'>{value}</span> {d[1]}
                       </a>
                     ) : (
-                      <Link id={d[1]} className='overview-num' to={{pathname: d[2], search: this.props.location.search}}>
+                      <Link id={d[1]} className='overview-num' to={{ pathname: d[2], search: this.props.location.search }}>
                         <span className='num--large'>{value}</span> {d[1]}
                       </Link>
                     )}

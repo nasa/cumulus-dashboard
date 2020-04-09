@@ -26,6 +26,7 @@ import List from '../Table/Table';
 import LogViewer from '../Logs/viewer';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
+import statusOptions from '../../utils/status';
 import { strings } from '../locale';
 import _config from '../../config';
 import { workflowOptionNames } from '../../selectors';
@@ -111,11 +112,11 @@ class AllGranules extends React.Component {
     const { granules, dispatch, logs } = this.props;
     const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
-    const logsQuery = { 'granuleId__exists': 'true' };
+    const logsQuery = { granuleId__exists: 'true' };
     const query = this.generateQuery();
     const view = this.getView();
     const displayCaseView = displayCase(view);
-    const statusOptions = (view === 'all') ? statusOptions : null;
+    const statusOpts = (view === 'all') ? statusOptions : null;
     const tableSortIdx = view === 'failed' ? 'granuleId' : 'timestamp';
     const breadcrumbConfig = [
       {
@@ -166,9 +167,9 @@ class AllGranules extends React.Component {
                   placeholder: 'All'
                 }}
               />
-              {statusOptions &&
+              {statusOpts &&
                 <Dropdown
-                  options={statusOptions}
+                  options={statusOpts}
                   action={filterGranules}
                   clear={clearGranulesFilter}
                   paramKey='status'
@@ -208,7 +209,7 @@ AllGranules.propTypes = {
   onQueryChange: PropTypes.func
 };
 
-export {listGranules};
+export { listGranules };
 
 export default withRouter(connect(state => ({
   logs: state.logs,

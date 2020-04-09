@@ -1,4 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
+import { getCollectionId } from '../../app/src/js/utils/format';
 
 describe('Rules page', () => {
   it('when not logged in it should redirect to login page', () => {
@@ -13,11 +14,11 @@ describe('Rules page', () => {
 
     before(() => {
       cy.visit('/');
-      cy.task('resetState');
     });
 
     beforeEach(() => {
       cy.login();
+      cy.task('resetState');
     });
 
     it('should display a link to view rules', () => {
@@ -37,6 +38,13 @@ describe('Rules page', () => {
           cy.contains(testRuleName)
             .should('have.attr', 'href', `/rules/rule/${testRuleName}`);
         });
+    });
+
+    it('Should update URL when search filter is changed.', () => {
+      cy.visit('/rules');
+      cy.get('.search').as('search');
+      cy.get('@search').click().type('L2');
+      cy.url().should('include', 'search=L2');
     });
 
     it('display a rule with the correct data', () => {
@@ -88,37 +96,57 @@ describe('Rules page', () => {
 
     it('creating a rule should add it to the list', () => {
       cy.visit('/rules');
-      cy.get('a').contains('Add a rule').as('addRule');
+      cy.get('a').contains('Add Rule').as('addRule');
       cy.get('@addRule').should('have.attr', 'href', '/rules/add');
       cy.get('@addRule').click();
 
       const ruleName = 'newRule';
       const workflow = 'HelloWorldWorkflow';
       const provider = 'PODAAC_SWOT';
-      const collection = { name: 'MOD09GQ', version: '006' };
-      const newRule = {
-        name: ruleName,
-        workflow,
-        provider,
-        collection,
-        meta: {},
-        rule: {
-          type: 'onetime',
-          'value': ''
-        },
-        state: 'ENABLED'
-      };
-      cy.editJsonTextarea({ data: newRule });
+      const collection = getCollectionId({ name: 'MOD09GQ', version: '006' });
+
+      // Fill the form and submit
+      // mhs: I think we're seeing https://www.cypress.io/blog/2018/02/05/when-can-the-test-start/
+      // Typing into a form that's not ready. (https://github.com/cypress-io/cypress/issues/3817)
+      cy.get('form div ul').as('ruleInput');
+      cy.get('@ruleInput')
+        .contains('name', { matchCase: false })
+        .siblings('input')
+        .wait(500)
+        .type(ruleName);
+      cy.get('@ruleInput')
+        .contains('.dropdown__label', 'workflow', { matchCase: false })
+        .siblings()
+        .find('select')
+        .select(workflow)
+        .should('have.value', workflow);
+      cy.get('@ruleInput')
+        .contains('.dropdown__label', 'provider', { matchCase: false })
+        .siblings()
+        .find('select')
+        .select(provider)
+        .should('have.value', provider);
+      cy.get('@ruleInput')
+        .contains('.dropdown__label', 'collection', { matchCase: false })
+        .siblings()
+        .find('select')
+        .select(collection)
+        .should('have.value', collection);
+      cy.get('@ruleInput')
+        .contains('.dropdown__label', 'type', { matchCase: false })
+        .siblings()
+        .find('select')
+        .select('onetime')
+        .should('have.value', 'onetime');
+      cy.get('@ruleInput')
+        .contains('.dropdown__label', 'state', { matchCase: false })
+        .siblings()
+        .find('select')
+        .select('ENABLED')
+        .should('have.value', 'ENABLED');
+
       cy.contains('form button', 'Submit').click();
-
-      cy.contains('.default-modal .add-rule__title', 'Add Rule');
-      cy.contains('.default-modal .modal-body', `Add rule ${ruleName}`);
-      cy.contains('.modal-footer button', 'Confirm Rule').click();
-
-      cy.contains('.heading--xlarge', 'Rules');
-      cy.contains('.table .tbody .tr a', ruleName)
-        .and('have.attr', 'href', `/rules/rule/${ruleName}`).click();
-
+      cy.url().should('include', 'rule/newRule');
       cy.contains('.heading--xlarge', 'Rules');
       cy.contains('.heading--large', ruleName);
       cy.contains('.heading--medium', 'Rule Overview');
@@ -132,10 +160,15 @@ describe('Rules page', () => {
             .contains('a', provider)
             .should('have.attr', 'href', `/providers/provider/${provider}`);
         });
-      cy.task('resetState');
+
+      cy.contains('a', 'Back to Rules').click();
+      cy.contains('.table .tbody .tr a', ruleName)
+        .should('have.attr', 'href', `/rules/rule/${ruleName}`);
     });
 
     it('copying a rule should add it to the list', () => {
+      const newName = 'testRule2';
+
       cy.visit('/rules');
       cy.contains('.table .tbody .tr a', testRuleName)
         .and('have.attr', 'href', `/rules/rule/${testRuleName}`)
@@ -145,22 +178,13 @@ describe('Rules page', () => {
       cy.contains('.button--small', 'Copy').click();
       cy.contains('.heading--large', 'Copy a rule');
 
-      const newName = 'testRule2';
-      cy.contains('.ace_string', testRuleName);
-      cy.editJsonTextarea({ data: { name: newName }, update: true });
-      cy.getJsonTextareaValue().then((jsonValue) => {
-        expect(jsonValue.name).to.equal(newName);
-      });
-      cy.contains('.ace_string', newName);
+      cy.get('form div ul')
+        .contains('name', { matchCase: false })
+        .siblings('input')
+        .clear()
+        .type(newName);
+
       cy.contains('form button', 'Submit').click();
-
-      cy.contains('.default-modal .add-rule__title', 'Add Rule');
-      cy.contains('.default-modal .modal-body', `Add rule ${newName}`);
-      cy.contains('.modal-footer button', 'Confirm Rule').click();
-
-      cy.contains('.heading--xlarge', 'Rules');
-      cy.contains('.table .tbody .tr a', newName)
-        .and('have.attr', 'href', `/rules/rule/${newName}`).click();
 
       cy.contains('.heading--xlarge', 'Rules');
       cy.contains('.heading--large', newName);
@@ -174,7 +198,10 @@ describe('Rules page', () => {
             .contains('a', testProviderId)
             .should('have.attr', 'href', `/providers/provider/${testProviderId}`);
         });
-      cy.task('resetState');
+
+      cy.contains('a', 'Back to Rules').click();
+      cy.contains('.table .tbody .tr a', newName)
+        .should('have.attr', 'href', `/rules/rule/${newName}`);
     });
 
     it('editing a rule and returning to the rules page should show the new changes', () => {
@@ -247,7 +274,6 @@ describe('Rules page', () => {
         .click();
       cy.contains('.table .tr a', testRuleName)
         .should('not.exist');
-      cy.task('resetState');
     });
   });
 });

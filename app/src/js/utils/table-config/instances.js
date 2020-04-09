@@ -12,12 +12,12 @@ export const tableColumns = [
   },
   {
     Header: 'Pending Tasks',
-    accessor: row => tally(row['pendingTasks']),
+    accessor: row => tally(row.pendingTasks),
     id: 'pendingTasks'
   },
   {
     Header: 'Running Tasks',
-    accessor: row => tally(row['runningTasks']),
+    accessor: row => tally(row.runningTasks),
     id: 'runningTasks'
   },
   {

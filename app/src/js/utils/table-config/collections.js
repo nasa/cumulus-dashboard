@@ -88,7 +88,7 @@ export const bulkActions = function (collections) {
     error,
     results,
   }) => {
-    let modalOptions = {};
+    const modalOptions = {};
 
     if (!isOnModalConfirm && !isOnModalComplete) {
       modalOptions.children = <BatchDeleteConfirmContent selected={selected} />;

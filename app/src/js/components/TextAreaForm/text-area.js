@@ -27,7 +27,7 @@ class TextAreaForm extends React.Component {
   }
 
   render () {
-    let {
+    const {
       label,
       value,
       id,
@@ -35,8 +35,8 @@ class TextAreaForm extends React.Component {
       mode
     } = this.props;
 
-    let minLines = this.props.minLines || _minLines;
-    let maxLines = this.props.maxLines || _maxLines;
+    const minLines = this.props.minLines || _minLines;
+    const maxLines = this.props.maxLines || _maxLines;
 
     return (
       <div className='form__textarea'>

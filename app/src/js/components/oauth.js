@@ -4,7 +4,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
-import url from 'url';
 import { login, setTokenState } from '../actions';
 import { window } from '../utils/browser';
 import { buildRedirectUrl } from '../utils/format';
@@ -53,9 +52,9 @@ class OAuth extends React.Component {
     if (!api.authenticated && !api.inflight) {
       const redirect = buildRedirectUrl(window.location);
       if (oauthMethod === 'launchpad') {
-        button = <div style={{textAlign: 'center'}}><a className="button button--oauth" href={url.resolve(apiRoot, `saml/login?RelayState=${redirect}`)}>Login with Launchpad</a></div>;
+        button = <div style={{ textAlign: 'center' }}><a className="button button--oauth" href={new URL(`saml/login?RelayState=${redirect}`, apiRoot).href}>Login with Launchpad</a></div>;
       } else {
-        button = <div style={{textAlign: 'center'}}><a className="button button--oauth" href={url.resolve(apiRoot, `token?state=${redirect}`)} >Login with Earthdata Login</a></div>;
+        button = <div style={{ textAlign: 'center' }}><a className="button button--oauth" href={new URL(`token?state=${redirect}`, apiRoot).href} >Login with Earthdata Login</a></div>;
       }
     }
 

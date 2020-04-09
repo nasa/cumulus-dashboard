@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
@@ -153,49 +153,49 @@ class List extends React.Component {
 
     return (
       <>
-      <ListActions
-        dispatch={dispatch}
-        action={action}
-        bulkActions={bulkActions}
-        queryConfig={queryConfig}
-        completedBulkActions={completedBulkActions}
-        onBulkActionSuccess={this.onBulkActionSuccess}
-        onBulkActionError={this.onBulkActionError}
-        selected={selected}>
-        {children}
-      </ListActions>
-      <div className='list-view'>
-        {list.inflight && <Loading/>}
-        {list.error && <ErrorReport report={list.error} truncate={true}/>}
-        {bulkActionError && <ErrorReport report={bulkActionError}/>}
-        <div className = "list__wrapper">
-          {/* Will add back when working on ticket 1462<TableOptions
+        <ListActions
+          dispatch={dispatch}
+          action={action}
+          bulkActions={bulkActions}
+          queryConfig={queryConfig}
+          completedBulkActions={completedBulkActions}
+          onBulkActionSuccess={this.onBulkActionSuccess}
+          onBulkActionError={this.onBulkActionError}
+          selected={selected}>
+          {children}
+        </ListActions>
+        <div className='list-view'>
+          {list.inflight && <Loading/>}
+          {list.error && <ErrorReport report={list.error} truncate={true}/>}
+          {bulkActionError && <ErrorReport report={bulkActionError}/>}
+          <div className = "list__wrapper">
+            {/* Will add back when working on ticket 1462<TableOptions
             count={count}
             limit={limit}
             page={page}
             onNewPage={this.queryNewPage}
             showPages={false}
-          />*/}
-          <SortableTable
-            tableColumns={tableColumns}
-            data={tableData}
-            canSelect={hasActions}
-            rowId={rowId}
-            onSelect={this.updateSelection}
-            sortIdx={sortIdx}
-            changeSortProps={this.queryNewSort}
-            order={order}
-            clearSelected={clearSelected}
-          />
-          <Pagination
-            count={count}
-            limit={limit}
-            page={page}
-            onNewPage={this.queryNewPage}
-            showPages={true}
-          />
+          /> */}
+            <SortableTable
+              tableColumns={tableColumns}
+              data={tableData}
+              canSelect={hasActions}
+              rowId={rowId}
+              onSelect={this.updateSelection}
+              sortIdx={sortIdx}
+              changeSortProps={this.queryNewSort}
+              order={order}
+              clearSelected={clearSelected}
+            />
+            <Pagination
+              count={count}
+              limit={limit}
+              page={page}
+              onNewPage={this.queryNewPage}
+              showPages={true}
+            />
+          </div>
         </div>
-      </div>
       </>
     );
   }
