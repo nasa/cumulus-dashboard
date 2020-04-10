@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- **CUMULUS-1537**
+  - Update execution details page format
+  - Move execution input and output json to modal
+
 - **CUMULUS-1798**
   - Change the 12HR/24HR Format selector from radio to dropdown
   - Hide clock component in react-datetime-picker
