@@ -63,14 +63,46 @@ const tableColumns = [
 ];
 
 const metaAccessors = [
-  ['PDR Name', 'pdrName', pdrLink],
-  ['Collection', 'collectionId', collectionLink],
-  ['Provider', 'provider', providerLink],
-  [`${strings.cmr} Link`, 'cmrLink', (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue],
-  ['Execution', 'execution', (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue],
-  ['Published', 'published', bool],
-  ['Duplicate', 'hasDuplicate', bool],
-  ['Total duration', 'duration', seconds]
+  {
+    label: 'PDR Name',
+    property: 'pdrName',
+    accessor: pdrLink
+  },
+  {
+    label: 'Collection',
+    property: 'collectionId',
+    accessor: collectionLink
+  },
+  {
+    label: 'Provider',
+    property: 'provider',
+    accessor: providerLink
+  },
+  {
+    label: `${strings.cmr} Link`,
+    property: 'cmrLink',
+    accesssor: (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue
+  },
+  {
+    label: 'Execution',
+    property: 'execution',
+    accessor: (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue
+  },
+  {
+    label: 'Published',
+    property: 'published',
+    accessor: bool
+  },
+  {
+    label: 'Duplicate',
+    property: 'hasDuplicate',
+    accessor: bool
+  },
+  {
+    label: 'Total duration',
+    property: 'duration',
+    accessor: seconds
+  }
 ];
 
 class GranuleOverview extends React.Component {
