@@ -48,10 +48,33 @@ describe('Dashboard Collections Page', () => {
       cy.get('.table .tbody .tr').should('have.length', 1);
 
       cy.clearStartDateTime();
-
       cy.wait('@getCollections');
 
       cy.get('.table .tbody .tr').should('have.length', 5);
+    });
+
+    it('should only display collections with active granules when time filter is applied', () => {
+      cy.contains('nav li a', 'Collections').as('collections');
+      cy.get('@collections').should('have.attr', 'href', '/collections');
+      cy.get('@collections').click();
+      cy.wait('@getActiveCollections');
+
+      cy.url().should('include', 'collections');
+      cy.contains('.heading--xlarge', 'Collections');
+
+      cy.get('.table .tbody .tr').as('listItems');
+
+      cy.get('@listItems').each(($row) => {
+        // verify granule column does not equal 0
+        cy.wrap($row).find('.td').eq(3).should('not.eq', '0');
+      });
+
+      cy.get('@listItems').find('.td a').eq(0).click();
+      cy.wait('@getGranules');
+
+      // verify there is a granule with a timestamp containing second or minute
+      // this would indicate it was updated within the default timeframe of 1 hour
+      cy.get('@listItems').should('have.length', 10).contains('.td', /second|minute/);
     });
 
     it('should display expected MMT Links for collections list', () => {
