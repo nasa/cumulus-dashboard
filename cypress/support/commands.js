@@ -63,7 +63,7 @@ Cypress.Commands.add('editJsonTextarea', ({ data, update = false }) => {
   cy.window().its('aceEditorRef').its('editor').then((editor) => {
     if (update) {
       const value = editor.getValue();
-      let currentObject = JSON.parse(value);
+      const currentObject = JSON.parse(value);
       data = Cypress._.assign(currentObject, data);
     }
     data = JSON.stringify(data);
@@ -103,8 +103,15 @@ Cypress.Commands.add('getFixture', (fixtureName) => {
 Cypress.Commands.add('expectDeepEqualButNewer', (inewObject, ifixtureObject) => {
   const newObject = cloneDeep(inewObject);
   const fixtureObject = cloneDeep(ifixtureObject);
-  expect(newObject['updatedAt']).to.be.greaterThan(fixtureObject['updatedAt']);
-  delete newObject['updatedAt'];
-  delete fixtureObject['updatedAt'];
+  expect(newObject.updatedAt).to.be.greaterThan(fixtureObject.updatedAt);
+  delete newObject.updatedAt;
+  delete fixtureObject.updatedAt;
   expect(newObject).to.deep.equal(fixtureObject);
+});
+
+/**
+ * Adds custom command to compare clear the default startDate filter
+ */
+Cypress.Commands.add('clearStartDateTime', () => {
+  cy.get('li[data-cy="startDateTime"]').find('.react-datetime-picker__clear-button').click();
 });
