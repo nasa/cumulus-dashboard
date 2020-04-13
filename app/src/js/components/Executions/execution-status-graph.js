@@ -35,7 +35,9 @@ class ExecutionStatusGraph extends React.Component {
     var svg = d3.select('svg');
     render(svg, this.g);
     var height = d3.select('svg g').node().getBBox().height;
+    var width = d3.select('svg g').node().getBBox().width;
     svg.style('height', height + 10);
+    svg.style('width', width);
     svg.style('padding-right', 150);
   }
 
