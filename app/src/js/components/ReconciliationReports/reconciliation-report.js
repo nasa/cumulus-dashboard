@@ -28,12 +28,12 @@ import ReportTable from './report-table';
 const { updateInterval } = _config;
 
 const reportMetaAccessors = [
-  ['Created', 'reportStartTime'],
-  ['Status', 'status'],
-  ['Files in DynamoDB and S3', 'filesInCumulus.okCount'],
-  ['Collections in Cumulus and CMR', 'collectionsInCumulusCmr.okCount'],
-  ['Granules in Cumulus and CMR', 'granulesInCumulusCmr.okCount'],
-  ['Granule files in Cumulus and CMR', 'filesInCumulusCmr.okCount']
+  { label: 'Created', property: 'reportStartTime' },
+  { label: 'Status', property: 'status' },
+  { label: 'Files in DynamoDB and S3', property: 'filesInCumulus.okCount' },
+  { label: 'Collections in Cumulus and CMR', property: 'collectionsInCumulusCmr.okCount' },
+  { label: 'Granules in Cumulus and CMR', property: 'granulesInCumulusCmr.okCount' },
+  { label: 'Granule files in Cumulus and CMR', property: 'filesInCumulusCmr.okCount' }
 ];
 
 const parseFileObject = (d) => {

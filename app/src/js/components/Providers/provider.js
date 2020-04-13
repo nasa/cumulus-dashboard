@@ -27,11 +27,30 @@ import _config from '../../config';
 const { updateInterval } = _config;
 
 const metaAccessors = [
-  ['Created', 'createdAt', fromNow],
-  ['Updated', 'updatedAt', fromNow],
-  ['Protocol', 'protocol'],
-  ['Host', 'host', link],
-  ['Global Connection Limit', 'globalConnectionLimit', tally]
+  {
+    label: 'Created',
+    property: 'createdAt',
+    accessor: fromNow
+  },
+  {
+    label: 'Updated',
+    property: 'updatedAt',
+    accessor: fromNow
+  },
+  {
+    label: 'Protocol',
+    property: 'protocol'
+  },
+  {
+    label: 'Host',
+    property: 'host',
+    accessor: link
+  },
+  {
+    label: 'Global Connection Limit',
+    property: 'globalConnectionLimit',
+    accessor: tally
+  }
 ];
 
 class ProviderOverview extends React.Component {
