@@ -212,12 +212,12 @@ describe('Dashboard Executions Page', () => {
         .each((execution) => {
           if (execution.name === executionName) {
             cy.contains('Input').next().contains('button', 'Show Input').click();
-            cy.get('.execution--modal').find('pre').then(($content) =>
+            cy.get('.execution__modal').find('pre').then(($content) =>
               expect(JSON.parse($content.text())).to.deep.equal(execution.originalPayload));
             cy.get('.button--close').click();
 
             cy.contains('Output').next().contains('button', 'Show Output').click();
-            cy.get('.execution--modal').find('pre').then(($content) =>
+            cy.get('.execution__modal').find('pre').then(($content) =>
               expect(JSON.parse($content.text())).to.deep.equal(execution.finalPayload));
             cy.get('.button--close').click();
           }

@@ -3,19 +3,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
-import cloneDeep from 'lodash.clonedeep';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
 import { withRouter, Link } from 'react-router-dom';
 import { kibanaExecutionLink } from '../../utils/kibana';
 
-import { tableColumns } from '../../utils/table-config/execution-status';
-
 import ErrorReport from '../Errors/report';
 
 import ExecutionStatusGraph from './execution-status-graph';
-import { getEventDetails } from './execution-graph-utils';
-import SortableTable from '../SortableTable/SortableTable';
 import Metadata from '../Table/Metadata';
 import DefaultModal from '../Modal/modal';
 
@@ -24,7 +19,6 @@ class ExecutionStatus extends React.Component {
     super();
     this.navigateBack = this.navigateBack.bind(this);
     this.errors = this.errors.bind(this);
-    this.renderEvents = this.renderEvents.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.state = {
@@ -69,31 +63,11 @@ class ExecutionStatus extends React.Component {
     }
   }
 
-  renderEvents () {
-    const { executionStatus } = this.props;
-    const { executionHistory: { events } } = executionStatus;
-    const mutableEvents = cloneDeep(events);
-    mutableEvents.forEach((event) => {
-      event.eventDetails = getEventDetails(event);
-    });
-
-    return (
-      <SortableTable
-        data={mutableEvents.sort((a, b) => a.id > b.id ? 1 : -1)}
-        dispatch={this.props.dispatch}
-        tableColumns={tableColumns}
-        rowId='id'
-        sortIdx='id'
-        props={[]}
-        order='asc'
-      />
-    );
-  }
-
   render () {
     const { showInputModal, showOutputModal } = this.state;
     const { executionStatus, cumulusInstance } = this.props;
-    const { execution } = executionStatus;
+    const { execution, executionHistory, stateMachine, arn } = executionStatus;
+
     if (!execution) return null;
 
     const errors = this.errors();
@@ -102,7 +76,11 @@ class ExecutionStatus extends React.Component {
       {
         label: 'Execution Status',
         property: 'status',
-        accessor: displayCase
+        accessor: d => {
+          return (
+            <span className={`execution-status-${d.toLowerCase()}`}>{displayCase(d)}</span>
+          );
+        }
       },
       {
         label: 'Execution Arn',
@@ -116,6 +94,7 @@ class ExecutionStatus extends React.Component {
         label: 'Async Operation ID',
         property: 'output',
         accessor: d => {
+          if (!d) return;
           const outputJson = JSON.parse(d);
           return get(outputJson.cumulus_meta, 'asyncOperationId');
         }
@@ -162,7 +141,7 @@ class ExecutionStatus extends React.Component {
                   hasConfirmButton={false}
                   cancelButtonClass='button--close'
                   cancelButtonText='Close'
-                  className='execution--modal'
+                  className='execution__modal'
                 >
                   <pre>{parseJson(d)}</pre>
                 </DefaultModal>
@@ -187,18 +166,22 @@ class ExecutionStatus extends React.Component {
                 >Show Output</button>
                 <DefaultModal
                   showModal={showOutputModal}
-                  title='Execution Output'
+                  title={
+                    <>
+                      <span>Execution Output</span>
+                      <a className='button button--small button--download button--green form-group__element--right'
+                        id='download_link'
+                        download='output.json'
+                        href={window.URL.createObjectURL(jsonData)}
+                      >Download File</a>
+                    </>
+                  }
                   onCloseModal={() => this.closeModal('output')}
                   hasConfirmButton={false}
                   cancelButtonClass='button--close'
                   cancelButtonText='Close'
-                  className='execution--modal'
+                  className='execution__modal'
                 >
-                  <a className='button button--small button--download button--green'
-                    id='download_link'
-                    download='output.json'
-                    href={window.URL.createObjectURL(jsonData)}
-                  >Download File</a>
                   <pre>{parseJson(d)}</pre>
                 </DefaultModal>
               </>
@@ -226,47 +209,30 @@ class ExecutionStatus extends React.Component {
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description width--three-quarters'>
-            Execution {executionStatus.arn}
+            Execution {arn}
           </h1>
 
-          {errors.length ? <ErrorReport report={errors} /> : null}
+          {(errors.length > 0) && <ErrorReport report={errors} />}
         </section>
 
         {/* stateMachine's definition and executionHistory's event statuses are needed to draw the graph */}
-        {
-          (executionStatus.stateMachine && executionStatus.executionHistory)
-            ? <section className='page__section'>
-              <div className='heading__wrapper--border'>
-                <h2 className='heading--medium with-description'>Visual workflow</h2>
-              </div>
-
-              <ExecutionStatusGraph executionStatus={executionStatus} />
-            </section>
-            : null
+        {(stateMachine && executionHistory) &&
+          <section className='page__section'>
+            <div className='heading__wrapper--border'>
+              <h2 className='heading--medium with-description'>Visual</h2>
+            </div>
+            <ExecutionStatusGraph executionStatus={executionStatus} />
+          </section>
         }
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium with-description'>Execution Details</h2>
+            <h2 className='heading--medium with-description'>Details</h2>
           </div>
           <div className='execution__content status--process'>
-            <Metadata data={executionStatus.execution} accessors={metaAccessors} />
+            <Metadata data={execution} accessors={metaAccessors} />
           </div>
         </section>
-
-        {(executionStatus.executionHistory)
-          ? <section className='page__section'>
-            <div className='heading__wrapper--border'>
-              <h2 className='heading--medium with-description'>Events</h2>
-              <p>To find all task name and versions, select <b>More details</b> for the last Lambda- or Activity-type event. There you should find a key / value pair "workflow_tasks" which lists all tasks' version, name and arn.</p>
-              <p><b>NOTE:</b>Task / version tracking is enabled as of Cumulus version 1.9.1.</p>
-              <p><b>NOTE:</b>If the task output is greater than 10KB, the full message will be stored in an S3 Bucket. In these scenarios, task and version numbers are not part of the Lambda or Activity event output.</p>
-            </div>
-
-            {this.renderEvents()}
-          </section>
-          : null}
-
       </div>
     );
   }
