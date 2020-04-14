@@ -110,7 +110,7 @@ Cypress.Commands.add('expectDeepEqualButNewer', (inewObject, ifixtureObject) => 
 });
 
 /**
- * Adds custom command to compare clear the default startDate filter
+ * Adds custom command to clear the default startDate filter
  */
 Cypress.Commands.add('clearStartDateTime', () => {
   cy.get('li[data-cy="startDateTime"]').find('.react-datetime-picker__clear-button').click();
