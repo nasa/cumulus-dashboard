@@ -127,7 +127,7 @@ export const checkApiVersion = () => {
   };
 };
 
-export const listCollections = (options) => {
+export const listCollections = (options = {}) => {
   const { listAll, ...queryOptions } = options;
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
