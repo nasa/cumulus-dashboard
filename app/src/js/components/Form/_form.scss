@@ -516,24 +516,39 @@ select option{
     flex: 12;
 }
 
-.rule__content {
+.rule__content,
+.execution__content {
   border: 1px solid #eceaea;
   box-shadow: $shadow__default;
   border-radius: 10px;
   padding: 25px 40px;
   margin-top: 15px;
+
+  .metadata__details {
+    font-size: $base-font-size;
+    display: flex;
+    flex-direction: column;
+
+    .meta__row {
+      flex-direction: row;
+      dt{
+        width: 10%;
+      }
+    }
+  }
 }
 
-.rule__content .metadata__details {
-  font-size: $base-font-size;
-  display: flex;
-  flex-direction: column;
-}
+.execution__content {
 
-.rule__content .metadata__details .meta__row {
-  flex-direction: row;
-}
+  .metadata__details .meta__row {
+    dd {
+      width: 80%;
+      margin: 0;
+    }
 
-.rule__content .metadata__details dt{
-  width: 10%;
+    dt {
+      width: 20%;
+      padding: 0;
+    }
+  }
 }
