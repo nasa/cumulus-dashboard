@@ -7,9 +7,11 @@ import {
   searchReconciliationReports,
   clearReconciliationReportSearch,
   listReconciliationReports,
+  createReconciliationReport
 } from '../../actions';
 import { lastUpdated } from '../../utils/format';
 import { tableColumns, bulkActions } from '../../utils/table-config/reconciliation-reports';
+import LoadingEllipsis from '../../components/LoadingEllipsis/loading-ellipsis';
 import Search from '../Search/search';
 import List from '../Table/Table';
 import ListFilters from '../ListActions/ListFilters';
@@ -17,9 +19,9 @@ import ListFilters from '../ListActions/ListFilters';
 class ReconciliationReportList extends React.Component {
   constructor () {
     super();
-    this.displayName = 'ReconciliationReportList';
     this.generateQuery = this.generateQuery.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
+    this.createReport = this.createReport.bind(this);
   }
 
   generateQuery () {
@@ -31,7 +33,12 @@ class ReconciliationReportList extends React.Component {
     return bulkActions(reconciliationReports);
   }
 
+  createReport () {
+    this.props.dispatch(createReconciliationReport());
+  }
+
   render () {
+    const { reconciliationReports } = this.props;
     const { list } = this.props.reconciliationReports;
     const { queriedAt } = list.meta;
 
@@ -44,7 +51,6 @@ class ReconciliationReportList extends React.Component {
             </h1>
             {lastUpdated(queriedAt)}
           </div>
-
           <List
             list={list}
             dispatch={this.props.dispatch}
@@ -60,6 +66,11 @@ class ReconciliationReportList extends React.Component {
                 clear={clearReconciliationReportSearch}
               />
             </ListFilters>
+            <div className='filter__button--add'>
+              <button className='button button--green button--add button--small form-group__element' onClick={this.createReport}>
+                {reconciliationReports.createReportInflight ? <LoadingEllipsis /> : 'Create Report'}
+              </button>
+            </div>
           </List>
         </section>
       </div>
