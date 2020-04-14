@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import cloneDeep from 'lodash.clonedeep';
 import {
   clearOperationsFilter,
   filterOperations,
@@ -89,11 +90,13 @@ class OperationOverview extends React.Component {
     const { operations } = this.props;
     const { list } = operations;
     const { count } = list.meta;
-    if (list.internal.prefix) {
-      if (list.internal.prefix.queryValue) {
-        list.data = this.searchOperations(list.data, list.internal.prefix.queryValue);
-      } else if (typeof list.internal.prefix === 'string') {
-        list.data = this.searchOperations(list.data, list.internal.prefix);
+    const mutableList = cloneDeep(list);
+    //  This data munging should probably be handled in the reducer, but this is a workaround.
+    if (mutableList.internal.prefix) {
+      if (mutableList.internal.prefix.queryValue) {
+        mutableList.data = this.searchOperations(mutableList.data, mutableList.internal.prefix.queryValue);
+      } else if (typeof mutableList.internal.prefix === 'string') {
+        mutableList.data = this.searchOperations(mutableList.data, mutableList.internal.prefix);
       }
     }
 
@@ -109,7 +112,7 @@ class OperationOverview extends React.Component {
             <h2 className='heading--medium heading--shared-content with-description'>All Operations <span className='num--title'>{tally(count)}</span></h2>
           </div>
           <List
-            list={list}
+            list={mutableList}
             dispatch={this.props.dispatch}
             action={listOperations}
             tableColumns={tableColumns}

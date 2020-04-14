@@ -37,7 +37,7 @@ function createMap (data) {
  */
 export const filterData = (rawData, filterString) => {
   if (filterString !== null) {
-    return rawData.filter(d => d.name.toLowerCase().includes(filterString.toLowerCase()));
+    return rawData.filter(d => d.name && d.name.toLowerCase().includes(filterString.toLowerCase()));
   }
   return rawData;
 };
