@@ -5,6 +5,7 @@ import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
 import { history } from '../store/configureStore';
 import { CMR } from '@cumulus/cmrjs';
+import isEmpty from 'lodash.isempty';
 import cloneDeep from 'lodash.clonedeep';
 
 import { configureRequest } from './helpers';
@@ -129,12 +130,13 @@ export const checkApiVersion = () => {
 export const listCollections = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    const urlPath = `collections${isEmpty(timeFilters) ? '' : '/active'}`;
     return dispatch({
       [CALL_API]: {
         type: types.COLLECTIONS,
         method: 'GET',
         id: null,
-        url: new URL('collections', root).href,
+        url: new URL(urlPath, root).href,
         qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
       }
     }).then(() => dispatch(getMMTLinks()));

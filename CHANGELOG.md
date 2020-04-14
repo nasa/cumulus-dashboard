@@ -24,12 +24,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- **CUMULUS-1537**
+  - Update execution details page format
+  - Move execution input and output json to modal
+
 - **CUMULUS-1798**
   - Change the 12HR/24HR Format selector from radio to dropdown
   - Hide clock component in react-datetime-picker
 
 - **CUMULUS-1790**
   - Changes default values and visuals for home page's datepicker. When the page loads, it defauls to display "Recent" data, which is the previous 24 hours with no end time.
+
+- **CUMULUS-1787**
+  - Changes `listCollections` action to hit `/collections/active` endpoint when timefilters are present
 
 - **CUMULUS-1467**
   - Change the metrics section on the home page to update based on datepicker time period.

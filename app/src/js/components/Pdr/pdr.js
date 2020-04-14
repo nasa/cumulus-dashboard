@@ -46,15 +46,50 @@ import ListFilters from '../ListActions/ListFilters';
 const { updateInterval } = _config;
 
 const metaAccessors = [
-  ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],
-  [strings.collection, 'collectionId', collectionLink],
-  ['Execution', 'execution', (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue],
-  ['Status', 'status', displayCase],
-  ['Timestamp', 'timestamp', fullDate],
-  ['Created at', 'createdAt', fullDate],
-  ['Duration', 'duration', seconds],
-  ['PAN Sent', 'PANSent', bool],
-  ['PAN Message', 'PANmessage']
+  {
+    label: 'Provider',
+    property: 'provider',
+    accessor: (d) => <Link to={`providers/provider/${d}`}>{d}</Link>
+  },
+  {
+    label: strings.collection,
+    property: 'collectionId',
+    accessor: collectionLink
+  },
+  {
+    label: 'Execution',
+    property: 'execution',
+    accessor: (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue
+  },
+  {
+    label: 'Status',
+    property: 'status',
+    accessor: displayCase
+  },
+  {
+    label: 'Timestamp',
+    property: 'timestamp',
+    accessor: fullDate
+  },
+  {
+    label: 'Created at',
+    property: 'createdAt',
+    accessor: fullDate
+  },
+  {
+    label: 'Duration',
+    property: 'duration',
+    accessor: seconds
+  },
+  {
+    label: 'PAN Sent',
+    property: 'PANSent',
+    accessor: bool
+  },
+  {
+    label: 'PAN Message',
+    property: 'PANmessage'
+  }
 ];
 
 class PDR extends React.Component {

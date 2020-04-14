@@ -41,9 +41,9 @@ describe('Dashboard Executions Page', () => {
       cy.getFakeApiFixture('executions').as('executionsFixture');
       cy.get('@executionsFixture').its('results')
         .each((execution) => {
-          const visiblePart = execution['name'].split('-').slice(0, 3).join('-');
+          const visiblePart = execution.name.split('-').slice(0, 3).join('-');
           cy.contains(visiblePart);
-          cy.get(`[data-value="${execution['name']}"]`).children().as('columns');
+          cy.get(`[data-value="${execution.name}"]`).children().as('columns');
           cy.get('@columns').should('have.length', 6);
 
           cy.get('@columns').eq(0).children('a')
@@ -89,7 +89,7 @@ describe('Dashboard Executions Page', () => {
       cy.url().should('include', 'executions');
       cy.contains('.heading--xlarge', 'Executions');
       cy.get('.table .tbody .tr .td.table__main-asset').within(() => {
-        cy.get(`a[title=${executionName}]`).click({force: true});
+        cy.get(`a[title=${executionName}]`).click({ force: true });
       });
 
       cy.contains('.heading--large', 'Execution');
@@ -97,11 +97,11 @@ describe('Dashboard Executions Page', () => {
 
       cy.get('.status--process')
         .within(() => {
-          cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
-          cy.contains('Execution Arn:').next().should('have.text', executionArn);
-          cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
-          cy.contains('Started:').next().should('have.text', fullDate('2019-12-13T15:16:46.753Z'));
-          cy.contains('Ended:').next().should('have.text', fullDate('2019-12-13T15:16:52.582Z'));
+          cy.contains('Execution Status').next().should('have.text', 'Succeeded');
+          cy.contains('Execution Arn').next().should('have.text', executionArn);
+          cy.contains('State Machine Arn').next().should('have.text', stateMachine);
+          cy.contains('Started').next().should('have.text', fullDate('2019-12-13T15:16:46.753Z'));
+          cy.contains('Ended').next().should('have.text', fullDate('2019-12-13T15:16:52.582Z'));
         });
 
       cy.get('.table .tbody .tr').as('events');
@@ -110,11 +110,11 @@ describe('Dashboard Executions Page', () => {
       cy.getFixture('valid-execution').as('executionStatus');
       cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
         cy.get('@events').each(($el, index, $list) => {
-          let timestamp = fullDate(events[index].timestamp);
+          const timestamp = fullDate(events[index].timestamp);
           cy.wrap($el).children('.td').as('columns');
           cy.get('@columns').should('have.length', 4);
-          let idMatch = `"id": ${index + 1},`;
-          let previousIdMatch = `"previousEventId": ${index}`;
+          const idMatch = `"id": ${index + 1},`;
+          const previousIdMatch = `"previousEventId": ${index}`;
 
           cy.get('@columns').eq(0).should('have.text', (index + 1).toString());
           cy.get('@columns').eq(2).should('have.text', timestamp);
@@ -151,7 +151,7 @@ describe('Dashboard Executions Page', () => {
 
       cy.get('.status--process')
         .within(() => {
-          cy.contains('Logs:').next()
+          cy.contains('Logs').next()
             .within(() => {
               cy.get('a').should('have.attr', 'href', `/executions/execution/${executionName}/logs`).click();
             });
@@ -200,35 +200,32 @@ describe('Dashboard Executions Page', () => {
 
       cy.get('.status--process')
         .within(() => {
-          cy.contains('Execution Status:').next().should('have.text', 'Succeeded');
-          cy.contains('Execution Arn:').next().should('have.text', executionArn);
-          cy.contains('State Machine Arn:').next().should('have.text', stateMachine);
-          cy.contains('Started:').next().should('have.text', startMatch);
-          cy.contains('Ended:').next().should('have.text', endMatch);
+          cy.contains('Execution Status').next().should('have.text', 'Succeeded');
+          cy.contains('Execution Arn').next().should('have.text', executionArn);
+          cy.contains('State Machine Arn').next().should('have.text', stateMachine);
+          cy.contains('Started').next().should('have.text', startMatch);
+          cy.contains('Ended').next().should('have.text', endMatch);
+        });
 
-          cy.getFakeApiFixture('executions').as('executionsFixture');
-          cy.get('@executionsFixture').its('results')
-            .each((execution) => {
-              if (execution.name === executionName) {
-                cy.contains('Input:').next().find('pre')
-                  .then(($content) =>
-                    expect(JSON.parse($content.text())).to.deep.equal(execution.originalPayload));
-                cy.contains('Input:').next().contains('.Collapsible', 'Show Input').click('topLeft');
-                cy.contains('Input:').next().contains('.Collapsible', 'Hide Input');
+      cy.getFakeApiFixture('executions').as('executionsFixture');
+      cy.get('@executionsFixture').its('results')
+        .each((execution) => {
+          if (execution.name === executionName) {
+            cy.contains('Input').next().contains('button', 'Show Input').click();
+            cy.get('.execution--modal').find('pre').then(($content) =>
+              expect(JSON.parse($content.text())).to.deep.equal(execution.originalPayload));
+            cy.get('.button--close').click();
 
-                cy.contains('Output:').next().find('pre')
-                  .then(($content) =>
-                    expect(JSON.parse($content.text())).to.deep.equal(execution.finalPayload));
+            cy.contains('Output').next().contains('button', 'Show Output').click();
+            cy.get('.execution--modal').find('pre').then(($content) =>
+              expect(JSON.parse($content.text())).to.deep.equal(execution.finalPayload));
+            cy.get('.button--close').click();
+          }
+        });
 
-                cy.contains('Output:').next().contains('.Collapsible', 'Show Output').click('topLeft');
-                cy.contains('Output:').next().contains('.Collapsible', 'Hide Output');
-              }
-            });
-
-          cy.contains('Logs:').next()
-            .within(() => {
-              cy.get('a').should('have.attr', 'href', `/executions/execution/${executionName}/logs`);
-            });
+      cy.contains('Logs').next()
+        .within(() => {
+          cy.get('a').should('have.attr', 'href', `/executions/execution/${executionName}/logs`);
         });
 
       cy.contains('.heading--medium', 'Events').should('not.exist');
