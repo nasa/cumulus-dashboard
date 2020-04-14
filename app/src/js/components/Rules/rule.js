@@ -45,13 +45,13 @@ const breadcrumbConfig = [
 ];
 
 const metaAccessors = [
-  ['Rule Name', 'name'],
-  ['Timestamp', 'timestamp', fullDate],
-  ['Workflow', 'workflow'],
-  ['Provider', 'provider', providerLink],
-  ['Provider Path', 'provider_path'],
-  ['Rule Type', 'rule.type'],
-  // PGC ['Collection', 'collection', d => collectionLink(getCollectionId(d))],  /* Why was this commented out? */
+  { label: 'Rule Name', property: 'name' },
+  { label: 'Timestamp', property: 'timestamp', accessor: fullDate },
+  { label: 'Workflow', property: 'workflow' },
+  { label: 'Provider', property: 'provider', accessor: providerLink },
+  { label: 'Provider Path', property: 'provider_path' },
+  { label: 'Rule Type', property: 'rule.type' },
+  // PGC { label: 'Collection', property: 'collection', accessor: d => collectionLink(getCollectionId(d)) },  /* Why was this commented out? */
 ];
 
 class Rule extends React.Component {
