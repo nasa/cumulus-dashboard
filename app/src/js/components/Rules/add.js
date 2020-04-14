@@ -108,11 +108,14 @@ const AddRule = ({
     }
   }, [name, rulesMap, isCopy]);
 
-  const dispatched = ({ list: { inflight, meta: { queriedAt } } }) =>
-    inflight || queriedAt !== undefined;
+  const dispatched = ({ list }) => {
+    const { inflight, meta, error } = list || {};
+    const { queriedAt } = meta || {};
+    return error || inflight || queriedAt !== undefined;
+  };
 
   useEffect(() => {
-    if (!dispatched(collections)) dispatch(listCollections());
+    if (!dispatched(collections)) dispatch(listCollections({ listAll: true }));
     if (!dispatched(providers)) dispatch(listProviders());
     if (!dispatched(workflows)) dispatch(listWorkflows());
   });

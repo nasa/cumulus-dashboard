@@ -128,16 +128,17 @@ export const checkApiVersion = () => {
 };
 
 export const listCollections = (options) => {
+  const { listAll, ...queryOptions } = options;
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    const urlPath = `collections${isEmpty(timeFilters) ? '' : '/active'}`;
+    const urlPath = `collections${isEmpty(timeFilters) || listAll ? '' : '/active'}`;
     return dispatch({
       [CALL_API]: {
         type: types.COLLECTIONS,
         method: 'GET',
         id: null,
         url: new URL(urlPath, root).href,
-        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+        qs: Object.assign({ limit: pageLimit }, queryOptions, timeFilters)
       }
     }).then(() => dispatch(getMMTLinks()));
   };
