@@ -74,7 +74,7 @@ describe('Dashboard Collections Page', () => {
 
       // verify there is a granule with a timestamp containing second or minute
       // this would indicate it was updated within the default timeframe of 1 hour
-      cy.get('@listItems').should('have.length', 10).contains('.td', /second|minute/);
+      cy.get('@listItems').should('have.length', 11).contains('.td', /second|minute/);
     });
 
     it('should display expected MMT Links for collections list', () => {

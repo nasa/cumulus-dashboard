@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1526**
   - Add a copy rule button
 
+- **CUMULUS-1646**
+  - Add 'Results Per Page' dropdown for tables that use pagination
+
 ### Changed
 
 - **CUMULUS-1537**

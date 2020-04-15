@@ -175,7 +175,7 @@ describe('Dashboard Home Page', () => {
 
       cy.get('#Errors').contains('2');
       cy.get('#Collections').contains('1');
-      cy.get('#Granules').contains('10');
+      cy.get('#Granules').contains('11');
       cy.get('#Executions').contains('6');
 
       // Test there are values in Granule Error list

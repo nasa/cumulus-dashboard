@@ -20,7 +20,7 @@ const baseConfig = {
   tabSize: 2,
 
   // list queries // This is static we need to change this for dynamic table page results
-  pageLimit: 50,
+  defaultPageLimit: 50,
 
   searchPageLimit: 7,
   //
