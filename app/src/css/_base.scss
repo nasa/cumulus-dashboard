@@ -672,6 +672,33 @@ a:active {
   width: 40%;
 }
 
+.error__report, .report__table {
+  .Collapsible {
+    display: flex;
+    flex-direction: column;
+
+    .Collapsible__trigger {
+      order: 1;
+    }
+  }
+}
+
+.report__table {
+  .Collapsible__trigger {
+    align-self: flex-start;
+    cursor: pointer;
+    margin: 1em 0;
+  }
+}
+
+.Collapsible__trigger {
+  align-self: flex-start;
+  cursor: pointer;
+  margin: 1em 0;
+  color: $ocean-blue;
+  border-bottom: 1px solid rgba(34, 118, 172, .2);
+}
+
 /**************************************************
   Footer
 **************************************************/
