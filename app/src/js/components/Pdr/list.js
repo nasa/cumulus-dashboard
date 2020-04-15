@@ -21,6 +21,7 @@ import Search from '../Search/search';
 import List from '../Table/Table';
 import { pdrStatus as statusOptions } from '../../utils/status';
 import ListFilters from '../ListActions/ListFilters';
+import pageSizeOptions from '../../utils/page-size';
 
 class ActivePdrs extends React.Component {
   constructor () {
@@ -86,6 +87,13 @@ class ActivePdrs extends React.Component {
               <Search dispatch={this.props.dispatch}
                 action={searchPdrs}
                 clear={clearPdrsSearch}
+              />
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterPdrs}
+                clear={clearPdrsFilter}
+                paramKey={'limit'}
+                label={'Results Per Page'}
               />
             </ListFilters>
           </List>

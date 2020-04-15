@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import {
   searchReconciliationReports,
   clearReconciliationReportSearch,
-  listReconciliationReports
+  listReconciliationReports,
 } from '../../actions';
 import { lastUpdated } from '../../utils/format';
 import { tableColumns, bulkActions } from '../../utils/table-config/reconciliation-reports';

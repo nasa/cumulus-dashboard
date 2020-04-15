@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1526**
   - Add a copy rule button
 
+- **CUMULUS-1646**
+  - Add 'Results Per Page' dropdown for tables that use pagination
+
 ### Changed
 
 - **CUMULUS-1537**
@@ -31,6 +34,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1790**
   - Changes default values and visuals for home page's datepicker. When the page loads, it defauls to display "Recent" data, which is the previous 24 hours with no end time.
+
+- **CUMULUS-1787**
+  - Changes `listCollections` action to hit `/collections/active` endpoint when timefilters are present
 
 - **CUMULUS-1467**
   - Change the metrics section on the home page to update based on datepicker time period.
