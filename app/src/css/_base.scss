@@ -691,6 +691,14 @@ a:active {
   }
 }
 
+.Collapsible__trigger {
+  align-self: flex-start;
+  cursor: pointer;
+  margin: 1em 0;
+  color: $ocean-blue;
+  border-bottom: 1px solid rgba(34, 118, 172, .2);
+}
+
 /**************************************************
   Footer
 **************************************************/
