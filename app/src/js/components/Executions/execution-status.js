@@ -132,7 +132,7 @@ class ExecutionStatus extends React.Component {
               <>
                 <button
                   onClick={() => this.openModal('input')}
-                  className='button button--small'
+                  className='button button--small button--no-icon'
                 >Show Input</button>
                 <DefaultModal
                   showModal={showInputModal}
@@ -162,7 +162,7 @@ class ExecutionStatus extends React.Component {
               <>
                 <button
                   onClick={() => this.openModal('output')}
-                  className='button button--small'
+                  className='button button--small button--no-icon'
                 >Show Output</button>
                 <DefaultModal
                   showModal={showOutputModal}
@@ -196,10 +196,11 @@ class ExecutionStatus extends React.Component {
         property: 'name',
         accessor: d => {
           const kibanaLink = kibanaExecutionLink(cumulusInstance, d);
+          const className = 'button button--small button__goto button__arrow button__animation button__arrow--white';
           if (kibanaLink && kibanaLink.length) {
-            return <a href={kibanaLink} target="_blank">View Logs in Kibana</a>;
+            return <a href={kibanaLink} target="_blank" className={className}>View Logs in Kibana</a>;
           } else {
-            return <Link to={'/executions/execution/' + d + '/logs'} title={d + '/logs'}>View Execution Logs</Link>;
+            return <Link to={'/executions/execution/' + d + '/logs'} title={d + '/logs'} className={className}>View Execution Logs</Link>;
           }
         }
       }

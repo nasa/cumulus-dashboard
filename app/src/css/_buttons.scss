@@ -30,6 +30,7 @@
 
   &:hover{
     background-color: $midnight-blue;
+    color: $white;
   }
 
   &--oauth{
@@ -38,13 +39,21 @@
 
   &--small{
     font-size: .86em;
-    padding: .4em 1.5em .3em 2.5em;
+    padding: .4em 1.5em .4em 2.5em;
+
+    &.button--no-icon {
+      padding: .4em 1.5em;
+    }
   }
   
   &--large{
     padding: .7em 2em;
     font-weight: $base-font-bold;
     font-size: 1em;
+  }
+
+  &--no-icon {
+    padding: .65em 1.2em;
   }
 
   &--white, &--white:visited {
@@ -356,10 +365,20 @@
         -moz-transition: all 0.3s;
         transition: all 0.3s;
       }
-    }
-    
-    &__animation:hover {
-      padding: .7em 3em .7em 1em;
+
+      &:hover {
+        padding: .7em 3em .7em 1em;
+      }
+
+      &.button--small {
+        &:hover {
+          padding: .4em 3em .4em 1em;
+        }
+
+        &:after {
+          top: unset;
+        }
+      }
     }
     
     &__arrow:after {
