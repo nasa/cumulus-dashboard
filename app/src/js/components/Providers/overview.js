@@ -5,13 +5,22 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { get } from 'object-path';
 import cloneDeep from 'lodash.clonedeep';
-import { listProviders, getCount, interval } from '../../actions';
+import {
+  listProviders,
+  getCount,
+  interval,
+  filterProviders,
+  clearProvidersFilter
+} from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import { tableColumns } from '../../utils/table-config/providers';
 import List from '../Table/Table';
 import PropTypes from 'prop-types';
 import Overview from '../Overview/overview';
 import _config from '../../config';
+import Dropdown from '../DropDown/dropdown';
+import pageSizeOptions from '../../utils/page-size';
+import ListFilters from '../ListActions/ListFilters';
 
 const { updateInterval } = _config;
 
@@ -87,7 +96,20 @@ class ProvidersOverview extends React.Component {
             bulkActions={[]}
             rowId='name'
             sortIdx='timestamp'
-          />
+          >
+            <ListFilters>
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterProviders}
+                clear={clearProvidersFilter}
+                paramKey={'limit'}
+                label={'Results Per Page'}
+                inputProps={{
+                  placeholder: 'Results Per Page'
+                }}
+              />
+            </ListFilters>
+          </List>
         </section>
       </div>
     );
