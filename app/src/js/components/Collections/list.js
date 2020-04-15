@@ -74,7 +74,7 @@ class CollectionList extends React.Component {
   render () {
     const { collections, mmtLinks, datepicker } = this.props;
     const { list } = collections;
-    const { startDateTime, endDateTime } = datepicker;
+    const { startDateTime, endDateTime } = datepicker || {};
     const hasTimeFilter = startDateTime || endDateTime;
 
     // merge mmtLinks with the collection data;
@@ -148,10 +148,7 @@ CollectionList.propTypes = {
   mmtLinks: PropTypes.object,
   dispatch: PropTypes.func,
   config: PropTypes.object,
-  datepicker: PropTypes.shape({
-    startDateTime: PropTypes.number,
-    endDateTime: PropTypes.number
-  })
+  datepicker: PropTypes.object
 };
 
 CollectionList.displayName = 'CollectionList';
