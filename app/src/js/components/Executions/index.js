@@ -7,6 +7,7 @@ import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import ExecutionOverview from './overview';
 import ExecutionStatus from './execution-status';
 import ExecutionLogs from './execution-logs';
+import ExecutionEvents from './execution-events';
 import { getCount, listExecutions } from '../../actions';
 import { strings } from '../locale';
 
@@ -26,15 +27,14 @@ class Executions extends React.Component {
         <DatePickerHeader onChange={this.query} heading={strings.executions}/>
         <div className='page__content'>
           <div className='wrapper__sidebar'>
-            <Sidebar
-              currentPath={this.props.location.pathname}
-              params={this.props.params}
-            />
+            <Route path='/executions/execution/:executionArn' component={Sidebar} />
+            <Route exact path='/executions' component={Sidebar} />
             <div className='page__content--shortened'>
               <Switch>
                 <Route exact path='/executions' component={ExecutionOverview} />
-                <Route path='/executions/execution/:executionName/logs' component={ExecutionLogs} />
-                <Route path='/executions/execution/:executionArn' component={ExecutionStatus} />
+                <Route exact path='/executions/execution/:executionName/logs' component={ExecutionLogs} />
+                <Route exact path='/executions/execution/:executionArn/events' component={ExecutionEvents} />
+                <Route exact path='/executions/execution/:executionArn' component={ExecutionStatus} />
               </Switch>
             </div>
           </div>

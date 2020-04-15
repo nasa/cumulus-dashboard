@@ -177,6 +177,36 @@ describe('Dashboard Executions Page', () => {
       });
     });
 
+    it('should show an events page for a single execution', () => {
+      const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
+      const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
+
+      cy.server();
+      cy.route({
+        method: 'GET',
+        url: `http://localhost:5001/executions/status/${executionArn}`,
+        response: 'fixture:valid-execution.json',
+        status: 200
+      });
+
+      cy.visit(`/executions/execution/${executionArn}`);
+      cy.contains('.heading--large', 'Execution');
+
+      cy.contains('div ul li a', 'Events')
+        .should('have.attr', 'href', `/executions/execution/${executionArn}/events`).click();
+
+      cy.contains('.heading--large', executionName);
+      cy.contains('.num--title', 7);
+
+      cy.get('.table .tbody .tr').as('events');
+      cy.get('@events').should('have.length', 7);
+
+      cy.get('.search').as('search');
+      cy.get('@search').click().type('task');
+      cy.url().should('include', 'search=task');
+      cy.get('@events').should('have.length', 2);
+    });
+
     it('should show an execution with limited information', () => {
       const executionName = 'b313e777-d28a-435b-a0dd-f1fad08116t1';
       const executionArn = 'arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
