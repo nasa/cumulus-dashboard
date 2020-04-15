@@ -36,6 +36,7 @@ import { workflowOptionNames } from '../../selectors';
 import { window } from '../../utils/browser';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import pageSizeOptions from '../../utils/page-size';
 
 const { updateInterval } = _config;
 
@@ -194,6 +195,16 @@ class GranulesOverview extends React.Component {
                 clear={clearGranulesSearch}
                 label='Search'
                 placeholder='Granule ID'
+              />
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey='limit'
+                label='Results Per Page'
+                inputProps={{
+                  placeholder: 'Results Per Page'
+                }}
               />
             </ListFilters>
           </List>

@@ -27,6 +27,7 @@ import Search from '../Search/search';
 import _config from '../../config';
 import { tableColumns } from '../../utils/table-config/operations';
 import ListFilters from '../ListActions/ListFilters';
+import pageSizeOptions from '../../utils/page-size';
 
 const { updateInterval } = _config;
 
@@ -139,6 +140,14 @@ class OperationOverview extends React.Component {
                 clear={clearOperationsFilter}
                 paramKey={'operationType'}
                 label={'Type'}
+              />
+
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterOperations}
+                clear={clearOperationsFilter}
+                paramKey={'limit'}
+                label={'Results Per Page'}
               />
             </ListFilters>
           </List>

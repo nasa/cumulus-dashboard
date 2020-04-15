@@ -26,6 +26,7 @@ import {
   collectionOptions
 } from '../../selectors';
 import statusOptions from '../../utils/status';
+import pageSizeOptions from '../../utils/page-size';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
@@ -138,6 +139,14 @@ class ExecutionOverview extends React.Component {
                 clear={clearExecutionsSearch}
                 paramKey={'asyncOperationId'}
                 label={'Async Operation ID'}
+              />
+
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterExecutions}
+                clear={clearExecutionsFilter}
+                paramKey={'limit'}
+                label={'Results Per Page'}
               />
             </ListFilters>
           </List>
