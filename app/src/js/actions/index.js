@@ -130,7 +130,7 @@ export const checkApiVersion = () => {
 export const listCollections = (options = {}) => {
   const { listAll = false, getMMT = true, ...queryOptions } = options;
   return (dispatch, getState) => {
-    const timeFilters = !listAll ? fetchCurrentTimeFilters(getState().datepicker) : {};
+    const timeFilters = listAll ? {} : fetchCurrentTimeFilters(getState().datepicker);
     const urlPath = `collections${isEmpty(timeFilters) || listAll ? '' : '/active'}`;
     return dispatch({
       [CALL_API]: {
@@ -589,7 +589,7 @@ export const clearPdrsFilter = (paramKey) => ({ type: types.CLEAR_PDRS_FILTER, p
 export const listProviders = (options = {}) => {
   const { listAll = false, ...queryOptions } = options;
   return (dispatch, getState) => {
-    const timeFilters = !listAll ? fetchCurrentTimeFilters(getState().datepicker) : {};
+    const timeFilters = listAll ? {} : fetchCurrentTimeFilters(getState().datepicker);
     return dispatch({
       [CALL_API]: {
         type: types.PROVIDERS,
