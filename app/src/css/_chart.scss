@@ -93,3 +93,9 @@ rect {
 .Failed rect {
   fill: #de322f;
 }
+
+svg:not(:root) {
+  display: block;
+  margin: 0 auto;
+  overflow: visible;
+}
