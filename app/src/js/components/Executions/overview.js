@@ -101,7 +101,7 @@ class ExecutionOverview extends React.Component {
             <h2 className='heading--medium heading--shared-content with-description'>All Executions <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
             <Link
               className='button button--small button__goto button--green form-group__element--right'
-              to={`/executions/execution/:executionArn/events`}
+              to={'/executions/execution/:executionArn/events'}
             >
               {strings.view_all_events}
             </Link>
