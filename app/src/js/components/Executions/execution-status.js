@@ -66,9 +66,11 @@ class ExecutionStatus extends React.Component {
   render () {
     const { showInputModal, showOutputModal } = this.state;
     const { executionStatus, cumulusInstance } = this.props;
-    const { execution, executionHistory, stateMachine, arn } = executionStatus;
+    const { execution, executionHistory, stateMachine } = executionStatus;
 
     if (!execution) return null;
+
+    const { name } = execution;
 
     const errors = this.errors();
 
@@ -193,7 +195,7 @@ class ExecutionStatus extends React.Component {
       },
       {
         label: 'Logs',
-        property: 'name',
+        property: 'executionArn',
         accessor: d => {
           const kibanaLink = kibanaExecutionLink(cumulusInstance, d);
           const className = 'button button--small button__goto button__arrow button__animation button__arrow--white';
@@ -210,7 +212,7 @@ class ExecutionStatus extends React.Component {
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description width--three-quarters'>
-            Execution {arn}
+            Execution {name}
           </h1>
 
           {(errors.length > 0) && <ErrorReport report={errors} />}

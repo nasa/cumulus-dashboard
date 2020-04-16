@@ -72,7 +72,7 @@ const DefaultModal = ({
 DefaultModal.propTypes = {
   className: PropTypes.string,
   children: PropTypes.node,
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   cancelButtonText: PropTypes.string,
   confirmButtonText: PropTypes.string,
   showModal: PropTypes.bool,
