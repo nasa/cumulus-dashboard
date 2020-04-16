@@ -100,7 +100,7 @@ class CollectionList extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>
               {hasTimeFilter ? strings.active_collections : strings.all_collections}
-              <span className='num--title'>{count ? `${tally(count)}` : 0}</span>
+              <span className='num--title'>{count ? tally(count) : 0}</span>
             </h2>
           </div>
 
