@@ -128,9 +128,9 @@ export const checkApiVersion = () => {
 };
 
 export const listCollections = (options = {}) => {
-  const { listAll, ...queryOptions } = options;
+  const { listAll = false, getMMT = true, ...queryOptions } = options;
   return (dispatch, getState) => {
-    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    const timeFilters = listAll ? {} : fetchCurrentTimeFilters(getState().datepicker);
     const urlPath = `collections${isEmpty(timeFilters) || listAll ? '' : '/active'}`;
     return dispatch({
       [CALL_API]: {
@@ -140,7 +140,11 @@ export const listCollections = (options = {}) => {
         url: new URL(urlPath, root).href,
         qs: Object.assign({ limit: defaultPageLimit }, queryOptions, timeFilters)
       }
-    }).then(() => dispatch(getMMTLinks()));
+    }).then(() => {
+      if (getMMT) {
+        dispatch(getMMTLinks());
+      }
+    });
   };
 };
 
@@ -582,15 +586,16 @@ export const clearPdrsSearch = () => ({ type: types.CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: types.FILTER_PDRS, param: param });
 export const clearPdrsFilter = (paramKey) => ({ type: types.CLEAR_PDRS_FILTER, paramKey: paramKey });
 
-export const listProviders = (options) => {
+export const listProviders = (options = {}) => {
+  const { listAll = false, ...queryOptions } = options;
   return (dispatch, getState) => {
-    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    const timeFilters = listAll ? {} : fetchCurrentTimeFilters(getState().datepicker);
     return dispatch({
       [CALL_API]: {
         type: types.PROVIDERS,
         method: 'GET',
         url: new URL('providers', root).href,
-        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
+        qs: Object.assign({ limit: defaultPageLimit }, queryOptions, timeFilters)
       }
     });
   };
@@ -736,6 +741,9 @@ export const listWorkflows = (options) => ({
 });
 export const searchWorkflows = (searchString) => ({ type: types.SEARCH_WORKFLOWS, searchString });
 export const clearWorkflowsSearch = () => ({ type: types.CLEAR_WORKFLOWS_SEARCH });
+
+export const searchExecutionEvents = (searchString) => ({ type: types.SEARCH_EXECUTION_EVENTS, searchString });
+export const clearExecutionEventsSearch = () => ({ type: types.CLEAR_EXECUTION_EVENTS_SEARCH });
 
 export const getExecutionStatus = (arn) => ({
   [CALL_API]: {
