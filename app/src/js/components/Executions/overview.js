@@ -99,12 +99,6 @@ class ExecutionOverview extends React.Component {
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>All Executions <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
-            <Link
-              className='button button--small button__goto button--green form-group__element--right'
-              to={'/executions/execution/:executionArn/events'}
-            >
-              {strings.view_all_events}
-            </Link>
           </div>
           <List
             list={list}
