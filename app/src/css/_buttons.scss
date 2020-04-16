@@ -380,6 +380,16 @@
         }
       }
     }
+
+    &__icon--animation {
+      cursor: pointer;
+      transition: font-size 0.2s;
+      font-size: 1em;
+
+      &:hover {
+        font-size: 1.1em;
+      }
+    }
     
     &__arrow:after {
       left: 130%;

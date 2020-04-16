@@ -11,7 +11,6 @@ import {
   searchExecutionEvents,
   clearExecutionEventsSearch
 } from '../../actions';
-// import { displayCase, fullDate, parseJson } from '../../utils/format';
 
 import { tableColumns } from '../../utils/table-config/execution-status';
 
@@ -24,7 +23,6 @@ import SortableTable from '../SortableTable/SortableTable';
 class ExecutionEvents extends React.Component {
   constructor () {
     super();
-    this.displayName = 'Execution';
     this.navigateBack = this.navigateBack.bind(this);
     this.errors = this.errors.bind(this);
     this.renderEvents = this.renderEvents.bind(this);
@@ -86,7 +84,7 @@ class ExecutionEvents extends React.Component {
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description width--three-quarters'>
-            {executionStatus.execution.name}
+            Events for Execution {executionStatus.execution.name}
           </h1>
 
           {errors.length ? <ErrorReport report={errors} /> : null}
@@ -148,9 +146,10 @@ ExecutionEvents.propTypes = {
   match: PropTypes.object,
   dispatch: PropTypes.func,
   location: PropTypes.object,
-  cumulusInstance: PropTypes.object,
   history: PropTypes.object
 };
+
+ExecutionEvents.displayName = 'Execution Events';
 
 export default withRouter(connect(state => ({
   executionStatus: state.executionStatus,

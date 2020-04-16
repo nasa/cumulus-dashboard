@@ -13,6 +13,7 @@ import {
   draw
 } from './execution-graph-utils';
 import Modal from 'react-bootstrap/Modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // dagre-d3 expects d3 to be attached to the window
 if (process.env.NODE_ENV !== 'test') window.d3 = d3;
@@ -77,9 +78,9 @@ class ExecutionStatusGraph extends React.Component {
     const { showModal } = this.state;
     return (
       <div className='execution__visual'>
-        <div className='header' onClick={this.handleClick}>
-          <div>Click <i className='fa fa-expand'></i> to enlarge to fullscreen</div>
-          <div onClick={this.handleClick}><i className='fa fa-expand'></i></div>
+        <div className='header'>
+          <div>Click <FontAwesomeIcon icon='expand'/> to enlarge to fullscreen</div>
+          <div onClick={this.handleClick}><FontAwesomeIcon className='button__icon--animation' icon='expand'/></div>
         </div>
         <div className='execution__content'>
           <div className='execution__content--visual'>
@@ -92,8 +93,8 @@ class ExecutionStatusGraph extends React.Component {
           className='default-modal execution__modal--visual'>
           <Modal.Header>
             <div className='header'>
-              <div>Click <i className='fa fa-compress'></i> to return to execution view</div>
-              <div onClick={this.onHide}><i className='fa fa-compress'></i></div>
+              <div>Click <FontAwesomeIcon icon='compress'/> to return to execution view</div>
+              <div onClick={this.onHide}><FontAwesomeIcon icon='compress' className='button__icon--animation'/></div>
             </div>
           </Modal.Header>
           <Modal.Body>
