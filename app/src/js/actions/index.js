@@ -865,10 +865,6 @@ export const deleteRule = (ruleName) => ({
 export const enableRule = (payload) => {
   const rule = cloneDeep(payload);
 
-  if (!rule.rule.value) {
-    rule.rule.value = '';
-  }
-
   return {
     [CALL_API]: {
       id: rule.name,
@@ -885,10 +881,6 @@ export const enableRule = (payload) => {
 
 export const disableRule = (payload) => {
   const rule = cloneDeep(payload);
-
-  if (!rule.rule.value) {
-    rule.rule.value = '';
-  }
 
   return {
     [CALL_API]: {
