@@ -151,6 +151,8 @@ ExecutionEvents.propTypes = {
 
 ExecutionEvents.displayName = 'Execution Events';
 
+export { ExecutionEvents };
+
 export default withRouter(connect(state => ({
   executionStatus: state.executionStatus,
   cumulusInstance: state.cumulusInstance

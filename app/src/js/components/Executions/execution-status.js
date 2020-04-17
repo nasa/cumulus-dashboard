@@ -7,6 +7,7 @@ import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
 import { withRouter, Link } from 'react-router-dom';
 import { kibanaExecutionLink } from '../../utils/kibana';
+import { window } from '../../utils/browser';
 
 import ErrorReport from '../Errors/report';
 
@@ -112,7 +113,7 @@ class ExecutionStatus extends React.Component {
         accessor: fullDate
       },
       {
-        label: 'Parent Workflow Exectuion',
+        label: 'Parent Workflow Execution',
         property: 'input',
         accessor: d => {
           if (!d) return 'N/A';
@@ -160,6 +161,7 @@ class ExecutionStatus extends React.Component {
         accessor: d => {
           if (d) {
             const jsonData = new Blob([d], { type: 'text/json' });
+            const downloadUrl = window ? window.URL.createObjectURL(jsonData) : '';
             return (
               <>
                 <button
@@ -174,7 +176,7 @@ class ExecutionStatus extends React.Component {
                       <a className='button button--small button--download button--green form-group__element--right'
                         id='download_link'
                         download='output.json'
-                        href={window.URL.createObjectURL(jsonData)}
+                        href={downloadUrl}
                       >Download File</a>
                     </>
                   }
