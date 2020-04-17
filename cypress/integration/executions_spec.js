@@ -260,5 +260,26 @@ describe('Dashboard Executions Page', () => {
 
       cy.contains('.heading--medium', 'Events').should('not.exist');
     });
+
+    it('should show an execution graph for a single execution', () => {
+      const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
+
+      cy.server();
+      cy.route({
+        method: 'GET',
+        url: `http://localhost:5001/executions/status/${executionArn}`,
+        response: 'fixture:valid-execution.json',
+        status: 200
+      });
+
+      cy.visit(`/executions/execution/${executionArn}`);
+
+      cy.contains('.heading--medium', 'Visual workflow').should('exist');
+      cy.get('svg').should('exist');
+      cy.get('svg > .output > .nodes > .node').as('executionGraphNodes');
+      cy.get('@executionGraphNodes').eq(0).should('have.text', 'start');
+      cy.get('@executionGraphNodes').eq(1).should('have.text', 'HelloWorld');
+      cy.get('@executionGraphNodes').eq(2).should('have.text', 'end');
+    });
   });
 });
