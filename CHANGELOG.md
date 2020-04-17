@@ -24,6 +24,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- **CUMULUS-1460**
+  - Update dashboard headers overall
+  - Move remaining "add" buttons to body content
+
 - **CUMULUS-1537**
   - Update execution details page format
   - Move execution input and output json to modal

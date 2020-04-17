@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import { withRouter, Link, Route, Switch } from 'react-router-dom';
+import { withRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 import PropTypes from 'prop-types';
 import AddProvider from './add';
@@ -22,7 +22,6 @@ class Providers extends React.Component {
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge heading--shared-content'>Providers</h1>
-            {showSidebar ? <Link className='button button--large button--white button__addcollections button__arrow button__animation' to='/providers/add'>Add a Provider</Link> : null}
           </div>
         </div>
         <div className='page__content'>
