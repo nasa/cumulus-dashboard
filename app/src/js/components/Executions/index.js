@@ -62,7 +62,8 @@ class Executions extends React.Component {
 }
 
 Executions.propTypes = {
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
+  location: PropTypes.object
 };
 
 export default withRouter(Executions);
