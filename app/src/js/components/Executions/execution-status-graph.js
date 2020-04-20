@@ -27,12 +27,9 @@ class ExecutionStatusGraph extends React.Component {
 
     const workflow = JSON.parse(stateMachine.definition);
 
-    console.log('WORKFLOW: ' + JSON.stringify(workflow));
-
     var events = getExecutionEvents(executionHistory);
 
     var graph = workflowToGraph(workflow);
-    console.log('GRAPH: ' + JSON.stringify(graph));
     addEventsToGraph(events, graph);
     this.g = draw(graph);
     var render = new dagre.render();
