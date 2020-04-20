@@ -28,6 +28,7 @@ class ExecutionStatusGraph extends React.Component {
     const workflow = JSON.parse(stateMachine.definition);
 
     var events = getExecutionEvents(executionHistory);
+
     var graph = workflowToGraph(workflow);
     addEventsToGraph(events, graph);
     this.g = draw(graph);
@@ -35,8 +36,9 @@ class ExecutionStatusGraph extends React.Component {
     var svg = d3.select('svg');
     render(svg, this.g);
     var height = d3.select('svg g').node().getBBox().height;
-    svg.style('height', height + 10);
-    svg.style('padding-right', 150);
+    var width = d3.select('svg g').node().getBBox().width;
+    svg.attr('height', height);
+    svg.attr('width', width);
   }
 
   componentWillUnmount () {

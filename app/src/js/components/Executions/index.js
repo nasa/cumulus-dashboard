@@ -21,10 +21,27 @@ class Executions extends React.Component {
     this.displayName = strings.executions;
   }
 
+  renderHeader () {
+    const { pathname } = this.props.location;
+    const showDatePicker = pathname === '/executions';
+
+    if (showDatePicker) {
+      return <DatePickerHeader onChange={this.query} heading={strings.executions}/>;
+    } else {
+      return (
+        <div className='content__header'>
+          <div className='row'>
+            <h1 className='heading--xlarge'>{strings.executions}</h1>
+          </div>
+        </div>
+      );
+    }
+  }
+
   render () {
     return (
       <div className='page__workflows'>
-        <DatePickerHeader onChange={this.query} heading={strings.executions}/>
+        {this.renderHeader()}
         <div className='page__content'>
           <div className='wrapper__sidebar'>
             <Route path='/executions/execution/:executionArn' component={Sidebar} />
