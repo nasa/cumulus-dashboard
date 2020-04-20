@@ -271,7 +271,7 @@ describe('Dashboard Executions Page', () => {
 
       cy.visit(`/executions/execution/${executionArn}`);
 
-      cy.contains('.heading--medium', 'Visual workflow').should('exist');
+      cy.contains('.heading--medium', 'Visual').should('exist');
       cy.get('svg').should('exist');
       cy.get('svg > .output > .nodes > .node').as('executionGraphNodes');
       cy.get('@executionGraphNodes').eq(0).should('have.text', 'start');
