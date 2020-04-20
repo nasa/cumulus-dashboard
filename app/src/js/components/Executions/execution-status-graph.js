@@ -56,8 +56,8 @@ class ExecutionStatusGraph extends React.Component {
     const height = d3.select(`${svgSelector} g`).node().getBBox().height;
     const width = d3.select(`${svgSelector} g`).node().getBBox().width;
     svg.attr('viewBox', `0 0 ${width} ${height}`);
-    svg.attr('width', width);
-    svg.attr('height', height);
+    svg.attr('width', '100%');
+    svg.attr('height', '100%');
   }
 
   handleClick (e) {
