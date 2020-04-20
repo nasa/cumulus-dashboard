@@ -65,6 +65,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1525**
   - Style changes for rules overview page
 
+### Fixed
+
+- **CUMULUS-1813**
+  - Fixed CSS for graph on Execution status page
+  - Removed Datepicker from Execution status page
+
 ## [v1.7.2] - 2020-03-16
 
 ### Added
