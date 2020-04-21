@@ -94,7 +94,7 @@ rect {
   fill: #de322f;
 }
 
-svg:not(:root) {
+svg:not(:root):not(.svg-inline--fa) {
   display: block;
   margin: 0 auto;
   overflow: visible;

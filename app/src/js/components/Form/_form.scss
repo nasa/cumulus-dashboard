@@ -539,6 +539,12 @@ select option{
 }
 
 .execution__content {
+  cursor: pointer;
+
+  .execution__content--visual {
+    width: 25%;
+    margin: 0 auto;
+  }
 
   .metadata__details .meta__row {
     dd {
@@ -550,5 +556,22 @@ select option{
       width: 20%;
       padding: 0;
     }
+  }
+}
+
+.execution__visual {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    padding: .5em 2em;
+    box-shadow: $shadow__default;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+  }
+
+  .execution__content {
+    margin-top: 0;
+    border-radius: 0 0 10px 10px;
   }
 }

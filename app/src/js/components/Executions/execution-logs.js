@@ -8,17 +8,21 @@ import { withRouter } from 'react-router-dom';
 import ErrorReport from '../Errors/report';
 
 class ExecutionLogs extends React.Component {
-  constructor () {
-    super();
-    this.displayName = 'Execution';
+  constructor (props) {
+    super(props);
     this.navigateBack = this.navigateBack.bind(this);
     this.errors = this.errors.bind(this);
+    this.executionName = this.getExecutionName();
   }
 
   componentDidMount () {
     const { dispatch } = this.props;
-    const { executionName } = this.props.match.params;
-    dispatch(getExecutionLogs(executionName));
+    dispatch(getExecutionLogs(this.executionName));
+  }
+
+  getExecutionName () {
+    const { executionArn } = this.props.match.params;
+    return executionArn.split(':').pop();
   }
 
   navigateBack () {
@@ -32,16 +36,14 @@ class ExecutionLogs extends React.Component {
 
   render () {
     const { executionLogs } = this.props;
-    const { executionName } = this.props.match.params;
     if (!executionLogs.results) return null;
-
     const errors = this.errors();
 
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>
-          Logs for Execution {executionName}
+          Logs for Execution {this.executionName}
           </h1>
 
           {errors.length ? <ErrorReport report={errors} /> : null}
@@ -71,6 +73,8 @@ ExecutionLogs.propTypes = {
   dispatch: PropTypes.func,
   history: PropTypes.object
 };
+
+ExecutionLogs.displayName = 'Execution Logs';
 
 export default withRouter(connect(state => ({
   executionLogs: state.executionLogs

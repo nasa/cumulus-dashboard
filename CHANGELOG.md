@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- **CUMULUS-1538**
+  - Add ability to expand size of visual on execution details page
+
 - **CUMULUS-1515**
   - filter capability to workflow overview page.
 
@@ -23,6 +26,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Add 'Results Per Page' dropdown for tables that use pagination
 
 ### Changed
+
+- **CUMULUS-1538**
+  - Update executions details page styles 
 
 - **CUMULUS-1460**
   - Update dashboard headers overall

@@ -135,15 +135,59 @@
     }
   }
 
-  &.execution--modal {
+  &.execution__modal {
     max-width: 80%;
 
+    .modal-title {
+      padding: 0 3rem;
+
+      .button {
+        font-size: 0.86rem;
+      }
+    }
+
+    .modal-content,
     .modal-body {
+      max-height: calc(100vh - 50px);
+      overflow-y: auto;
+    }
+
+    .modal-body {
+      padding: 1rem 3rem;
       text-align: left;
 
+
+
       pre {
-        /* placeholder border to define pre region */
-        border: 1px solid gray;
+        border: 1px solid $lightest-grey;
+      }
+    }
+
+    .modal-footer {
+      padding: 1rem 3rem;
+
+      .button {
+        margin: 0;
+      }
+    }
+
+    &--visual {
+      .modal-dialog {
+        max-width: none;
+        width: 75%;
+      }
+
+      .modal-header {
+        padding: 0;
+
+        .header {
+          width: 100%;
+          color: white;
+          padding: .5em 1em;
+          display: flex;
+          justify-content: space-between;
+          cursor: pointer;
+        }
       }
     }
   }

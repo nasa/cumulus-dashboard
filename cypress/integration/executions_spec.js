@@ -93,7 +93,7 @@ describe('Dashboard Executions Page', () => {
       });
 
       cy.contains('.heading--large', 'Execution');
-      cy.contains('.heading--medium', 'Visual workflow');
+      cy.contains('.heading--medium', 'Visual');
 
       cy.get('.status--process')
         .within(() => {
@@ -103,29 +103,6 @@ describe('Dashboard Executions Page', () => {
           cy.contains('Started').next().should('have.text', fullDate('2019-12-13T15:16:46.753Z'));
           cy.contains('Ended').next().should('have.text', fullDate('2019-12-13T15:16:52.582Z'));
         });
-
-      cy.get('.table .tbody .tr').as('events');
-      cy.get('@events').should('have.length', 7);
-
-      cy.getFixture('valid-execution').as('executionStatus');
-      cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
-        cy.get('@events').each(($el, index, $list) => {
-          const timestamp = fullDate(events[index].timestamp);
-          cy.wrap($el).children('.td').as('columns');
-          cy.get('@columns').should('have.length', 4);
-          const idMatch = `"id": ${index + 1},`;
-          const previousIdMatch = `"previousEventId": ${index}`;
-
-          cy.get('@columns').eq(0).should('have.text', (index + 1).toString());
-          cy.get('@columns').eq(2).should('have.text', timestamp);
-          cy.get('@columns').eq(3).contains('More Details').click();
-          cy.get('@columns').eq(3).contains(idMatch);
-          if (index !== 0) {
-            cy.get('@columns').eq(3).contains(previousIdMatch);
-          }
-          cy.get('@columns').eq(3).contains('Less Details').click();
-        });
-      });
     });
 
     it('should show logs for a single execution', () => {
@@ -153,7 +130,7 @@ describe('Dashboard Executions Page', () => {
         .within(() => {
           cy.contains('Logs').next()
             .within(() => {
-              cy.get('a').should('have.attr', 'href', `/executions/execution/${executionName}/logs`).click();
+              cy.get('a').should('have.attr', 'href', `/executions/execution/${executionArn}/logs`).click();
             });
         });
 
@@ -201,6 +178,26 @@ describe('Dashboard Executions Page', () => {
       cy.get('.table .tbody .tr').as('events');
       cy.get('@events').should('have.length', 7);
 
+      cy.getFixture('valid-execution').as('executionStatus');
+      cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
+        cy.get('@events').each(($el, index, $list) => {
+          const timestamp = fullDate(events[index].timestamp);
+          cy.wrap($el).children('.td').as('columns');
+          cy.get('@columns').should('have.length', 4);
+          const idMatch = `"id": ${index + 1},`;
+          const previousIdMatch = `"previousEventId": ${index}`;
+
+          cy.get('@columns').eq(0).should('have.text', (index + 1).toString());
+          cy.get('@columns').eq(2).should('have.text', timestamp);
+          cy.get('@columns').eq(3).contains('More Details').click();
+          cy.get('@columns').eq(3).contains(idMatch);
+          if (index !== 0) {
+            cy.get('@columns').eq(3).contains(previousIdMatch);
+          }
+          cy.get('@columns').eq(3).contains('Less Details').click();
+        });
+      });
+
       cy.get('.search').as('search');
       cy.get('@search').click().type('task');
       cy.url().should('include', 'search=task');
@@ -223,7 +220,7 @@ describe('Dashboard Executions Page', () => {
       cy.visit(`/executions/execution/${executionArn}`);
 
       cy.contains('.heading--large', 'Execution');
-      cy.contains('.heading--medium', 'Visual workflow').should('not.exist');
+      cy.contains('.heading--medium', 'Visual').should('not.exist');
 
       const startMatch = fullDate('2018-12-06T19:18:11.174Z');
       const endMatch = fullDate('2018-12-06T19:18:41.145Z');
@@ -242,20 +239,20 @@ describe('Dashboard Executions Page', () => {
         .each((execution) => {
           if (execution.name === executionName) {
             cy.contains('Input').next().contains('button', 'Show Input').click();
-            cy.get('.execution--modal').find('pre').then(($content) =>
+            cy.get('.execution__modal').find('pre').then(($content) =>
               expect(JSON.parse($content.text())).to.deep.equal(execution.originalPayload));
             cy.get('.button--close').click();
 
             cy.contains('Output').next().contains('button', 'Show Output').click();
-            cy.get('.execution--modal').find('pre').then(($content) =>
+            cy.get('.execution__modal').find('pre').then(($content) =>
               expect(JSON.parse($content.text())).to.deep.equal(execution.finalPayload));
             cy.get('.button--close').click();
           }
         });
 
-      cy.contains('Logs').next()
+      cy.contains('dt', 'Logs').next()
         .within(() => {
-          cy.get('a').should('have.attr', 'href', `/executions/execution/${executionName}/logs`);
+          cy.get('a').should('have.attr', 'href', `/executions/execution/${executionArn}/logs`);
         });
 
       cy.contains('.heading--medium', 'Events').should('not.exist');
@@ -274,7 +271,7 @@ describe('Dashboard Executions Page', () => {
 
       cy.visit(`/executions/execution/${executionArn}`);
 
-      cy.contains('.heading--medium', 'Visual workflow').should('exist');
+      cy.contains('.heading--medium', 'Visual').should('exist');
       cy.get('svg').should('exist');
       cy.get('svg > .output > .nodes > .node').as('executionGraphNodes');
       cy.get('@executionGraphNodes').eq(0).should('have.text', 'start');

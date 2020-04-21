@@ -8,7 +8,9 @@ const routes = [
 
 const singleRoutes = [
   ['Back to Executions', null, 'sidebar__nav--back'],
-  ['Events', 'execution/:executionArn/events']
+  ['Details', 'execution/:executionArn'],
+  ['Events', 'execution/:executionArn/events'],
+  ['Logs', 'execution/:executionArn/logs']
 ];
 
 const empty = [['', '']];

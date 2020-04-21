@@ -49,7 +49,7 @@ class Executions extends React.Component {
             <div className='page__content--shortened'>
               <Switch>
                 <Route exact path='/executions' component={ExecutionOverview} />
-                <Route exact path='/executions/execution/:executionName/logs' component={ExecutionLogs} />
+                <Route exact path='/executions/execution/:executionArn/logs' component={ExecutionLogs} />
                 <Route exact path='/executions/execution/:executionArn/events' component={ExecutionEvents} />
                 <Route exact path='/executions/execution/:executionArn' component={ExecutionStatus} />
               </Switch>
@@ -62,10 +62,8 @@ class Executions extends React.Component {
 }
 
 Executions.propTypes = {
-  children: PropTypes.object,
   dispatch: PropTypes.func,
-  location: PropTypes.object,
-  params: PropTypes.object
+  location: PropTypes.object
 };
 
 export default withRouter(Executions);
