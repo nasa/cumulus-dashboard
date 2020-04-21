@@ -36,15 +36,8 @@ test('Execution Events shows event history', function (t) {
   t.is(sortableTable.length, 1);
 
   const sortableTableWrapper = sortableTable.dive();
-  const moreDetails = sortableTableWrapper.find('Cell').first().find('pre');
-  const selectedTasks = moreDetails.findWhere((jsonDetails) => {
-    const parsedDetailsOutput = JSON.parse(jsonDetails.text()).output;
-    if (parsedDetailsOutput && parsedDetailsOutput.meta && parsedDetailsOutput.meta.workflow_tasks) {
-      return Object.keys(parsedDetailsOutput.meta.workflow_tasks).length === 3;
-    } else {
-      return false;
-    }
-  });
+  const tableRows = sortableTableWrapper.find('div.tr[data-value]');
+  t.is(tableRows.length, 19);
 
   const expectedWorkflowTasksData = {
     StatusReport: {
@@ -64,7 +57,17 @@ test('Execution Events shows event history', function (t) {
     }
   };
 
-  selectedTasks.forEach((s) => {
-    t.deepEqual(JSON.parse(s.text()).output.meta.workflow_tasks, expectedWorkflowTasksData);
+  tableRows.forEach(row => {
+    const columns = row.find('Cell');
+    t.is(columns.length, 4);
+    const moreDetails = columns.last().shallow().find('pre');
+    moreDetails.map(node => {
+      const parsedDetailsOutput = JSON.parse(node.text()).output;
+      if (parsedDetailsOutput && parsedDetailsOutput.meta &&
+        parsedDetailsOutput.meta.workflow_tasks &&
+        Object.keys(parsedDetailsOutput.meta.workflow_tasks).length === 3) {
+        t.deepEqual(parsedDetailsOutput.meta.workflow_tasks, expectedWorkflowTasksData);
+      }
+    });
   });
 });
