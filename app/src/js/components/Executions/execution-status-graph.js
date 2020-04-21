@@ -77,23 +77,24 @@ class ExecutionStatusGraph extends React.Component {
     const { showModal } = this.state;
     return (
       <div className='execution__visual'>
-        <div className='header'>
-          <div>Click <FontAwesomeIcon icon='expand'/> to enlarge to fullscreen</div>
-          <div onClick={this.handleClick}><FontAwesomeIcon className='button__icon--animation' icon='expand'/></div>
+        <div className='header' onClick={this.handleClick}>
+          <div>Click to enlarge to fullscreen</div>
+          <div><FontAwesomeIcon className='button__icon--animation' icon='expand'/></div>
         </div>
-        <div className='execution__content'>
+        <div className='execution__content' onClick={this.handleClick}>
           <div className='execution__content--visual'>
             <svg className='visual'></svg>
           </div>
         </div>
-        <Modal show={showModal}
+        <Modal
+          show={showModal}
           onHide={this.onHide}
           onShow={this.onShow}
           className='default-modal execution__modal--visual'>
           <Modal.Header>
-            <div className='header'>
+            <div className='header' onClick={this.onHide}>
               <div>Click <FontAwesomeIcon icon='compress'/> to return to execution view</div>
-              <div onClick={this.onHide}><FontAwesomeIcon icon='compress' className='button__icon--animation'/></div>
+              <div><FontAwesomeIcon icon='compress' className='button__icon--animation'/></div>
             </div>
           </Modal.Header>
           <Modal.Body>
