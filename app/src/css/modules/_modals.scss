@@ -146,13 +146,20 @@
       }
     }
 
+    .modal-content,
+    .modal-body {
+      max-height: calc(100vh - 50px);
+      overflow-y: auto;
+    }
+
     .modal-body {
       padding: 1rem 3rem;
       text-align: left;
 
+
+
       pre {
         border: 1px solid $lightest-grey;
-        max-height: 350px;
       }
     }
 
