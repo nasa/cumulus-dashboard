@@ -21,6 +21,8 @@ import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
 import Dropdown from '../../components/DropDown/simple-dropdown';
 import Bulk from '../../components/Granules/bulk';
+import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent';
+import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
 
 export const tableColumns = [
   {
@@ -120,7 +122,7 @@ export const recoverAction = (granules, config) => ({
   confirm: confirmRecover
 });
 
-const confirmReingest = (d) => `Reingest ${d} granules(s)? Note: the granule files will be overwritten.`;
+const confirmReingest = (d) => `Reingest ${d} granule${d > 1 ? 's' : ''}?`;
 const confirmApply = (d) => `Run workflow on ${d} granules?`;
 const confirmRemove = (d) => `Remove ${d} granule(s) from ${strings.cmr}?`;
 const confirmDelete = (d) => `Delete ${d} granule(s)?`;
@@ -130,7 +132,8 @@ export const bulkActions = function (granules, config) {
     action: reingestGranule,
     state: granules.reingested,
     confirm: confirmReingest,
-    className: 'button--reingest'
+    className: 'button--reingest',
+    getModalOptions: granuleModalJourney
   }, {
     text: 'Execute',
     action: config.execute.action,
@@ -160,4 +163,55 @@ export const bulkActions = function (granules, config) {
     confirm: confirmDelete,
     className: 'button--delete'
   }];
+};
+
+/**
+ * Determines next location based on granule success/error and number If
+ * there's an error do nothing, if there is a single granule visit that
+ * granule's detail page, if there are multiple granules reingested visit the
+ * running granules page.
+ *
+ * @param {Object} anonymous
+ * @param {Object} anonymous.history - Connected router history object.
+ * @param {Object} anonymous.error - error object.
+ * @param {Object} anonymous.selected - array of selected values.
+ * @returns {Function} function to call on confirm selection.
+ */
+const setOnConfirm = ({ history, error, selected }) => {
+  if (error) { return () => {}; } else {
+    if (selected.length > 1) {
+      return () => history.push('/granules/processing');
+    } else {
+      return () => history.push(`/granules/granule/${selected[0]}`);
+    }
+  }
+};
+
+const granuleModalJourney = ({
+  selected = [],
+  history,
+  isOnModalConfirm,
+  isOnModalComplete,
+  error,
+  results,
+}) => {
+  const initialEntry = !isOnModalConfirm && !isOnModalComplete;
+  const complete = isOnModalComplete;
+  const modalOptions = {};
+  if (initialEntry) {
+    modalOptions.children = <BatchReingestConfirmContent selected={selected}/>;
+  }
+  if (complete) {
+    modalOptions.children = <BatchReingestCompleteContent results={results} error={error} />;
+    modalOptions.hasConfirmButton = !error;
+    modalOptions.title = (error ? 'Error' : 'Complete');
+    modalOptions.cancelButtonText = 'Close';
+    if (!error) {
+      modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';
+      modalOptions.cancelButtonClass = 'button--green';
+      modalOptions.confirmButtonClass = 'button__goto';
+      modalOptions.onConfirm = setOnConfirm({ history, selected, error });
+    }
+  }
+  return modalOptions;
 };
