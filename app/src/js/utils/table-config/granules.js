@@ -126,43 +126,49 @@ const confirmReingest = (d) => `Reingest ${d} granule${d > 1 ? 's' : ''}?`;
 const confirmApply = (d) => `Run workflow on ${d} granules?`;
 const confirmRemove = (d) => `Remove ${d} granule(s) from ${strings.cmr}?`;
 const confirmDelete = (d) => `Delete ${d} granule(s)?`;
+
+export const reingestAction = (granules) => ({
+  text: 'Reingest',
+  action: reingestGranule,
+  state: granules.reingested,
+  confirm: confirmReingest,
+  className: 'button--reingest',
+  getModalOptions: granuleModalJourney
+});
+
 export const bulkActions = function (granules, config) {
-  return [{
-    text: 'Reingest',
-    action: reingestGranule,
-    state: granules.reingested,
-    confirm: confirmReingest,
-    className: 'button--reingest',
-    getModalOptions: granuleModalJourney
-  }, {
-    text: 'Execute',
-    action: config.execute.action,
-    state: granules.executed,
-    confirm: confirmApply,
-    confirmOptions: config.execute.options,
-    className: 'button--execute'
-  }, {
-    text: strings.remove_from_cmr,
-    action: removeGranule,
-    state: granules.removed,
-    confirm: confirmRemove,
-    className: 'button--remove'
-  },
-  {
-    Component:
-      <Bulk
-        element='button'
-        className='button button__bulkgranules button--green button--small form-group__element'
-        confirmAction={true}
-      />
-  },
-  {
-    text: 'Delete',
-    action: deleteGranule,
-    state: granules.deleted,
-    confirm: confirmDelete,
-    className: 'button--delete'
-  }];
+  return [
+    reingestAction(granules),
+    {
+      text: 'Execute',
+      action: config.execute.action,
+      state: granules.executed,
+      confirm: confirmApply,
+      confirmOptions: config.execute.options,
+      className: 'button--execute'
+    },
+    {
+      text: strings.remove_from_cmr,
+      action: removeGranule,
+      state: granules.removed,
+      confirm: confirmRemove,
+      className: 'button--remove'
+    },
+    {
+      Component:
+        <Bulk
+          element='button'
+          className='button button__bulkgranules button--green button--small form-group__element'
+          confirmAction={true}
+        />
+    },
+    {
+      text: 'Delete',
+      action: deleteGranule,
+      state: granules.deleted,
+      confirm: confirmDelete,
+      className: 'button--delete'
+    }];
 };
 
 /**
