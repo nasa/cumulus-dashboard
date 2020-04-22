@@ -11,7 +11,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { configureRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId, collectionNameVersion } from '../utils/format';
-import { fetchCurrentTimeFilters, msPerDay } from '../utils/datepicker';
+import { fetchCurrentTimeFilters } from '../utils/datepicker';
 import log from '../utils/log';
 import { authHeader } from '../utils/basic-auth';
 import { apiGatewaySearchTemplate } from './action-config/apiGatewaySearch';
