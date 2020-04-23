@@ -172,10 +172,10 @@ export const bulkActions = function (granules, config) {
 };
 
 /**
- * Determines next location based on granule success/error and number If
- * there's an error do nothing, if there is a single granule visit that
- * granule's detail page, if there are multiple granules reingested visit the
- * running granules page.
+ * Determines next location based on granule success/error and number of
+ * successes.  If there's an error do nothing, if there is a single granule
+ * visit that granule's detail page, if there are multiple granules reingested
+ * visit the running granules page.
  *
  * @param {Object} anonymous
  * @param {Object} anonymous.history - Connected router history object.
