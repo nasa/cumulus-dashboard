@@ -11,7 +11,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { configureRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId, collectionNameVersion } from '../utils/format';
-import { fetchCurrentTimeFilters, msPerDay } from '../utils/datepicker';
+import { fetchCurrentTimeFilters } from '../utils/datepicker';
 import log from '../utils/log';
 import { authHeader } from '../utils/basic-auth';
 import { apiGatewaySearchTemplate } from './action-config/apiGatewaySearch';
@@ -466,7 +466,7 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
     const stackName = cumulusInstanceMeta.stackName;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
-    const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
+    const startTime = timeFilters.timestamp__from || 0;
     return dispatch({
       [CALL_API]: {
         type: types.DIST_APIGATEWAY,
@@ -487,7 +487,7 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
     const stackName = cumulusInstanceMeta.stackName;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
-    const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
+    const startTime = timeFilters.timestamp__from || 0;
     return dispatch({
       [CALL_API]: {
         type: types.DIST_API_LAMBDA,
@@ -508,7 +508,7 @@ export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
     const stackName = cumulusInstanceMeta.stackName;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
-    const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
+    const startTime = timeFilters.timestamp__from || 0;
     return dispatch({
       [CALL_API]: {
         type: types.DIST_TEA_LAMBDA,
@@ -528,7 +528,7 @@ export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
     const stackName = cumulusInstanceMeta.stackName;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
-    const startTime = timeFilters.timestamp__from || (endTime - msPerDay);
+    const startTime = timeFilters.timestamp__from || 0;
     return dispatch({
       [CALL_API]: {
         type: types.DIST_S3ACCESS,
