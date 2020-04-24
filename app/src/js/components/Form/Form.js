@@ -195,10 +195,6 @@ export class Form extends React.Component {
         const entryValue = entry[1];
         const { value, required, schemaProperty, type, mode } = entryValue;
 
-        console.log(Array.isArray(value), value);
-        if (Array.isArray(value)) {
-          console.log(value.length);
-        }
         if (required ||
           // only add an optional array when it is not empty
           (Array.isArray(value) && value.length > 0) ||
@@ -206,9 +202,11 @@ export class Form extends React.Component {
           (!Array.isArray(value) && (value !== '' && value !== '{}'))
         ) {
           let payloadValue = value;
+          // these should be safe since we've already validated at this point
           if (type === formTypes.textArea && mode === 'json') {
-            // this should be safe since we've already validated at this point
             payloadValue = JSON.parse(value);
+          } else if (type === formTypes.number) {
+            payloadValue = parseInt(value);
           }
           set(payload, schemaProperty, payloadValue);
         }
