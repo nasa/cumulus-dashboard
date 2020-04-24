@@ -194,9 +194,20 @@ export class Form extends React.Component {
       Object.entries(inputs).forEach(entry => {
         const entryValue = entry[1];
         const { value, required, schemaProperty, type, mode } = entryValue;
-        if (value !== '' || required) {
+
+        console.log(Array.isArray(value), value);
+        if (Array.isArray(value)) {
+          console.log(value.length);
+        }
+        if (required ||
+          // only add an optional array when it is not empty
+          (Array.isArray(value) && value.length > 0) ||
+          // only add an optional value when it is not an empty string or will create an empty object
+          (!Array.isArray(value) && (value !== '' && value !== '{}'))
+        ) {
           let payloadValue = value;
           if (type === formTypes.textArea && mode === 'json') {
+            // this should be safe since we've already validated at this point
             payloadValue = JSON.parse(value);
           }
           set(payload, schemaProperty, payloadValue);
