@@ -127,6 +127,61 @@ const confirmApply = (d) => `Run workflow on ${d} granules?`;
 const confirmRemove = (d) => `Remove ${d} granule(s) from ${strings.cmr}?`;
 const confirmDelete = (d) => `Delete ${d} granule(s)?`;
 
+/**
+ * Determines next location based on granule success/error and number of
+ * successes.  If there's an error do nothing, if there is a single granule
+ * visit that granule's detail page, if there are multiple granules reingested
+ * visit the running granules page.  Multiple granules will redirect to a base
+ * if provided.  This is used by the collections overview to return the user to
+ * the correct collections page view context.
+ *
+ * @param {Object} anonymous
+ * @param {Object} anonymous.history - Connected router history object.
+ * @param {Object} anonymous.error - error object.
+ * @param {Object} anonymous.selected - array of selected values.
+ * @param {Object} anonymous.redirectBase - string to use in computing redirect of multiple granules.
+ * @returns {Function} function to call on confirm selection.
+ */
+const setOnConfirm = ({ history, error, selected, redirectBase }) => {
+  const baseRedirect = redirectBase || '/granules';
+  if (error) { return () => {}; } else {
+    if (selected.length > 1) {
+      return () => history.push(`${baseRedirect}/processing`);
+    } else {
+      return () => history.push(`/granules/granule/${selected[0]}`);
+    }
+  }
+};
+
+const granuleModalJourney = ({
+  selected = [],
+  history,
+  isOnModalConfirm,
+  isOnModalComplete,
+  error,
+  results
+}) => {
+  const initialEntry = !isOnModalConfirm && !isOnModalComplete;
+  const complete = isOnModalComplete;
+  const modalOptions = {};
+  if (initialEntry) {
+    modalOptions.children = <BatchReingestConfirmContent selected={selected}/>;
+  }
+  if (complete) {
+    modalOptions.children = <BatchReingestCompleteContent results={results} error={error} />;
+    modalOptions.hasConfirmButton = !error;
+    modalOptions.title = (error ? 'Error' : 'Complete');
+    modalOptions.cancelButtonText = 'Close';
+    if (!error) {
+      modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';
+      modalOptions.cancelButtonClass = 'button--green';
+      modalOptions.confirmButtonClass = 'button__goto';
+      modalOptions.onConfirm = setOnConfirm({ history, selected, error, redirectBase: determineCollectionsBase(history.location.pathname) });
+    }
+  }
+  return modalOptions;
+};
+
 export const reingestAction = (granules) => ({
   text: 'Reingest',
   action: reingestGranule,
@@ -172,52 +227,13 @@ export const bulkActions = function (granules, config) {
 };
 
 /**
- * Determines next location based on granule success/error and number of
- * successes.  If there's an error do nothing, if there is a single granule
- * visit that granule's detail page, if there are multiple granules reingested
- * visit the running granules page.
- *
- * @param {Object} anonymous
- * @param {Object} anonymous.history - Connected router history object.
- * @param {Object} anonymous.error - error object.
- * @param {Object} anonymous.selected - array of selected values.
- * @returns {Function} function to call on confirm selection.
+ * Determine the base context of a collection view
+ * @param {Object} path - react router history object
  */
-const setOnConfirm = ({ history, error, selected }) => {
-  if (error) { return () => {}; } else {
-    if (selected.length > 1) {
-      return () => history.push('/granules/processing');
-    } else {
-      return () => history.push(`/granules/granule/${selected[0]}`);
-    }
+const determineCollectionsBase = (path) => {
+  console.log(`getbase: ${path}`);
+  if (path.includes('granules')) {
+    return path.replace(/\/granules.*/, '/granules');
   }
-};
-
-const granuleModalJourney = ({
-  selected = [],
-  history,
-  isOnModalConfirm,
-  isOnModalComplete,
-  error,
-  results,
-}) => {
-  const initialEntry = !isOnModalConfirm && !isOnModalComplete;
-  const complete = isOnModalComplete;
-  const modalOptions = {};
-  if (initialEntry) {
-    modalOptions.children = <BatchReingestConfirmContent selected={selected}/>;
-  }
-  if (complete) {
-    modalOptions.children = <BatchReingestCompleteContent results={results} error={error} />;
-    modalOptions.hasConfirmButton = !error;
-    modalOptions.title = (error ? 'Error' : 'Complete');
-    modalOptions.cancelButtonText = 'Close';
-    if (!error) {
-      modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';
-      modalOptions.cancelButtonClass = 'button--green';
-      modalOptions.confirmButtonClass = 'button__goto';
-      modalOptions.onConfirm = setOnConfirm({ history, selected, error });
-    }
-  }
-  return modalOptions;
+  return `${path}/granules`;
 };
