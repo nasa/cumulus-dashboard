@@ -7,7 +7,6 @@ import { truncate } from '../../utils/format';
 class ErrorReport extends React.Component {
   constructor () {
     super();
-    this.displayName = 'ErrorReport';
     this.scrollToTop = this.scrollToTop.bind(this);
     this.truncate = this.truncate.bind(this);
     this.renderSingleError = this.renderSingleError.bind(this);
@@ -16,7 +15,7 @@ class ErrorReport extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    if (this.props.report !== prevProps.report) {
+    if (!this.props.disableScroll && (this.props.report !== prevProps.report)) {
       this.scrollToTop();
     }
   }
@@ -116,7 +115,8 @@ class ErrorReport extends React.Component {
 
 ErrorReport.propTypes = {
   report: PropTypes.any,
-  truncate: PropTypes.bool
+  truncate: PropTypes.bool,
+  disableScroll: PropTypes.bool
 };
 
 export default ErrorReport;

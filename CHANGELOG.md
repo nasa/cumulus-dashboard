@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- **CUMULUS-1822**
+  - Added dynamic form validation as user types
+
 - **CUMULUS-1538**
   - Add ability to expand size of visual on execution details page
 
@@ -66,6 +69,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Style changes for rules overview page
 
 ### Fixed
+
+- **CUMULUS-1822**
+  - Fixed no user feedback/errors when submitting a blank form
 
 - **CUMULUS-1813**
   - Fixed CSS for graph on Execution status page

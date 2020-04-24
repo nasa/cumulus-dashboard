@@ -119,6 +119,7 @@ export const createFormConfig = function (
     const config = {
       value,
       label,
+      labelText,
       schemaProperty: fullyQualifiedProperty,
       required
     };
@@ -126,7 +127,6 @@ export const createFormConfig = function (
     // dropdowns have type set to string, but have an enum prop.
     // use enum as the type instead of string.
     const type = isArray(meta.enum) || property in enums ? 'enum' : Object.prototype.hasOwnProperty.call(meta, 'patternProperties') ? 'pattern' : meta.type;
-
     switch (type) {
       case 'pattern': {
         // pattern fields are an abstraction on arrays of objects.
@@ -151,7 +151,7 @@ export const createFormConfig = function (
       }
       case 'array': {
         // some array types have a minItems property
-        const validate = !required ? null : (meta.minItems && isNaN(meta.minItems)) ? arrayWithLength(+meta.minItems) : isArray;
+        const validate = !required ? false : (meta.minItems && isNaN(meta.minItems)) ? arrayWithLength(+meta.minItems) : isArray;
         fields.push(listField(config, property, validate));
         break;
       }
