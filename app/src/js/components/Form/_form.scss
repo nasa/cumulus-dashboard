@@ -418,6 +418,13 @@ select option{
   }
 }
 
+.form__error--wrapper {
+  input,
+  select {
+    border-color: $error-red;
+  }
+}
+
 .form__error {
   font-size: 1em;
   display: block;

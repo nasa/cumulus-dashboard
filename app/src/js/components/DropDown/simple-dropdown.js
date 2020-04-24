@@ -26,7 +26,7 @@ class Dropdown extends React.Component {
     const renderedOptions = options[0] === '' || noNull ? options : [''].concat(options);
 
     return (
-      <div className='form__dropdown'>
+      <div className={`form__dropdown${error ? ' form__error--wrapper' : ''}`}>
         <ul>
           <li className="dropdown__label">
             <label htmlFor={id}>{label}</label>
@@ -42,7 +42,7 @@ class Dropdown extends React.Component {
             </div>
           </li>
         </ul>
-        <span className='form__error'>{error}</span>
+        {error && <span className='form__error'>{error}</span>}
       </div>
     );
   }

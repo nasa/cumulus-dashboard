@@ -31,7 +31,7 @@ export const defaults = {
   json: '{\n  \n}'
 };
 
-const errorMessage = (errors) => `Please review ${errors.join(', ')} and submit again.`;
+const errorMessage = (errors) => `Please review the following fields and submit again: ${errors.map(error => `'${error}'`).join(', ')}`;
 
 const generateDirty = (inputs) =>
   Object.entries(inputs).reduce(
@@ -46,7 +46,7 @@ const generateComponentId = (label, id) =>
 const generateInputState = (inputMeta, id) => {
   const inputState = {};
 
-  inputMeta.forEach(({ schemaProperty, type, value }) => {
+  inputMeta.forEach(({ schemaProperty, type, value, error, ...rest }) => {
     const inputId = generateComponentId(schemaProperty, id);
 
     if (!value && value !== 0) {
@@ -57,7 +57,14 @@ const generateInputState = (inputMeta, id) => {
       }
     }
 
-    inputState[inputId] = { value, error: null };
+    inputState[inputId] = {
+      ...rest,
+      type,
+      value,
+      schemaProperty,
+      validationError: error, // this is the stored error message for the field
+      error: null // this is the displayed error for the field
+    };
   });
 
   return inputState;
@@ -89,7 +96,8 @@ export class Form extends React.Component {
     this.state = {
       inputs,
       dirty,
-      errors: []
+      errors: [],
+      submitted: false
     };
   }
 
@@ -102,7 +110,51 @@ export class Form extends React.Component {
     this.setState(createNextState((draftState) => {
       draftState.inputs[inputId].value = value;
       draftState.dirty[inputId] = true;
+      // validate the field for live changes
+      this.validateField({
+        field: this.state.inputs[inputId],
+        inputId,
+        draftState
+      });
     }));
+  }
+
+  validateField ({
+    field,
+    inputId,
+    draftState
+  }) {
+    const { dirty, inputs, errors } = draftState;
+    let { value } = inputs[inputId];
+
+    // don't set a value for values that haven't changed and aren't required
+    if (!dirty[inputId] && !field.required) return;
+
+    // if expected type is json, validate as json first
+    if (field.type === formTypes.textArea && field.mode === 'json') {
+      try {
+        value = JSON.parse(value);
+      } catch (e) {
+        if (!errors.includes(field.labelText)) errors.push(field.labelText);
+        inputs[inputId].error = t.errors.json;
+      }
+    } else if (field.type === formTypes.number) {
+      try {
+        value = parseInt(value);
+      } catch (e) {
+        if (!errors.includes(field.labelText)) errors.push(field.labelText);
+        inputs[inputId].error = t.errors.integerRequired;
+      }
+    }
+
+    if (field.validate && !field.validate(value)) {
+      if (!errors.includes(field.labelText)) errors.push(field.labelText);
+      const error = field.error || field.validationError || t.errors.generic;
+      inputs[inputId].error = error;
+    } else if (inputs[inputId].error) {
+      draftState.errors = errors.filter(item => item !== field.labelText);
+      delete inputs[inputId].error;
+    }
   }
 
   onCancel (e) {
@@ -117,63 +169,45 @@ export class Form extends React.Component {
     e.preventDefault();
     if (this.isInflight()) return;
 
-    this.setState(createNextState((draftState) => {
-      // validate input values in the store
-      // if values pass validation, write to payload object
-      const errors = [];
-      const payload = {};
-      const { inputs, dirty } = draftState;
+    // validate input values in the store
 
+    this.setState(createNextState((draftState) => {
       this.props.inputMeta.forEach(field => {
         const inputId = generateComponentId(field.schemaProperty, this.id);
-        let { value } = inputs[inputId];
 
-        // don't set a value for values that haven't changed
-        if (!dirty[inputId]) return;
-
-        // if expected type is json, validate as json first
-        if (field.type === formTypes.textArea && field.mode === 'json') {
-          try {
-            value = JSON.parse(value);
-          } catch (e) {
-            errors.push(field.schemaProperty);
-            inputs[inputId].error = t.errors.json;
-          }
-        } else if (field.type === formTypes.number) {
-          try {
-            value = parseInt(value);
-          } catch (e) {
-            errors.push(field.schemaProperty);
-            inputs[inputId].error = t.errors.integerRequired;
-          }
-        }
-
-        if (field.validate && !field.validate(value)) {
-          errors.push(field.schemaProperty);
-          const error = field.error || t.errors.generic;
-          inputs[inputId].error = error;
-        } else if (inputs[inputId].error) {
-          delete inputs[inputId].error;
-        }
-
-        // Ignore empty fields that aren't required
-        // These may have input elements in the form, but
-        // the API will fail if it's sent empty strings
-        if (value !== '' || field.required) {
-          // Use 'set' function since the value of 'input.schemaProperty' may
-          // be a "path", such as 'rule.type', so we would want to set a nested
-          // property (i.e., the 'type' property within a 'rule' property).
-          set(payload, field.schemaProperty, value);
-        }
+        this.validateField({
+          field,
+          inputId,
+          draftState
+        });
       });
 
-      if (errors.length === 0) {
-        this.props.submit(this.props.id, payload);
-      } else {
-        this.scrollToTop();
-        draftState.errors = errors;
-      }
+      draftState.submitted = true;
     }));
+  }
+
+  submitPayload () {
+    const { inputs, errors } = this.state;
+    const payload = {};
+
+    if (errors.length === 0) {
+      Object.entries(inputs).forEach(entry => {
+        const entryValue = entry[1];
+        const { value, required, schemaProperty, type, mode } = entryValue;
+        if (value !== '' || required) {
+          let payloadValue = value;
+          if (type === formTypes.textArea && mode === 'json') {
+            payloadValue = JSON.parse(value);
+          }
+          set(payload, schemaProperty, payloadValue);
+        }
+      });
+      this.props.submit(this.props.id, payload);
+    } else {
+      this.scrollToTop();
+    }
+
+    this.setState({ submitted: false });
   }
 
   scrollToTop () {
@@ -194,6 +228,10 @@ export class Form extends React.Component {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ inputs, dirty });
     }
+
+    if (this.state.submitted) {
+      this.submitPayload();
+    }
   }
 
   render () {
@@ -203,7 +241,7 @@ export class Form extends React.Component {
 
     const form = (
       <div ref={(element) => { this.DOMElement = element; }}>
-        {errors.length > 0 && <ErrorReport report={errorMessage(errors)} />}
+        {errors.length > 0 && <ErrorReport report={errorMessage(errors)} disableScroll={true} />}
         <ul>
           {this.props.inputMeta.map(input => {
             const { type, label } = input;

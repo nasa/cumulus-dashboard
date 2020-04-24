@@ -25,9 +25,9 @@ class TextForm extends React.Component {
     type = type || 'text';
 
     return (
-      <div className='form__text'>
+      <div className={`form__text${error ? ' form__error--wrapper' : ''}`}>
         <label htmlFor={id}>{label}</label>
-        <span className='form__error'>{error}</span>
+        {error && <span className='form__error'>{error}</span>}
         <input
           id={id}
           type={type}
