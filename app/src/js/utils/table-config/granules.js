@@ -128,6 +128,17 @@ const confirmRemove = (d) => `Remove ${d} granule(s) from ${strings.cmr}?`;
 const confirmDelete = (d) => `Delete ${d} granule(s)?`;
 
 /**
+ * Determine the base context of a collection view
+ * @param {Object} path - react router history object
+ */
+const determineCollectionsBase = (path) => {
+  if (path.includes('granules')) {
+    return path.replace(/\/granules.*/, '/granules');
+  }
+  return `${path}/granules`;
+};
+
+/**
  * Determines next location based on granule success/error and number of
  * successes.  If there's an error do nothing, if there is a single granule
  * visit that granule's detail page, if there are multiple granules reingested
@@ -143,7 +154,7 @@ const confirmDelete = (d) => `Delete ${d} granule(s)?`;
  * @returns {Function} function to call on confirm selection.
  */
 const setOnConfirm = ({ history, error, selected, redirectBase }) => {
-  const baseRedirect = redirectBase || '/granules';
+  const baseRedirect = determineCollectionsBase(history.location.pathname);
   if (error) { return () => {}; } else {
     if (selected.length > 1) {
       return () => history.push(`${baseRedirect}/processing`);
@@ -176,7 +187,7 @@ const granuleModalJourney = ({
       modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';
       modalOptions.cancelButtonClass = 'button--green';
       modalOptions.confirmButtonClass = 'button__goto';
-      modalOptions.onConfirm = setOnConfirm({ history, selected, error, redirectBase: determineCollectionsBase(history.location.pathname) });
+      modalOptions.onConfirm = setOnConfirm({ history, selected, error});
     }
   }
   return modalOptions;
@@ -224,16 +235,4 @@ export const bulkActions = function (granules, config) {
       confirm: confirmDelete,
       className: 'button--delete'
     }];
-};
-
-/**
- * Determine the base context of a collection view
- * @param {Object} path - react router history object
- */
-const determineCollectionsBase = (path) => {
-  console.log(`getbase: ${path}`);
-  if (path.includes('granules')) {
-    return path.replace(/\/granules.*/, '/granules');
-  }
-  return `${path}/granules`;
 };
