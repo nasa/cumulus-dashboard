@@ -1,82 +1,70 @@
 'use strict';
-import { set, del } from 'object-path';
-import assignDate from './assign-date';
 
+import assignDate from './utils/assign-date';
+import { createReducer } from '@reduxjs/toolkit';
 import {
   RECONCILIATION,
   RECONCILIATION_INFLIGHT,
   RECONCILIATION_ERROR,
-
   RECONCILIATIONS,
   RECONCILIATIONS_INFLIGHT,
   RECONCILIATIONS_ERROR,
-
   SEARCH_RECONCILIATIONS,
   CLEAR_RECONCILIATIONS_SEARCH,
-
   NEW_RECONCILIATION_INFLIGHT,
-  NEW_RECONCILIATION
+  NEW_RECONCILIATION,
 } from '../actions/types';
-import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
   list: {
     data: [],
     meta: {},
-    params: {}
+    params: {},
   },
   map: {},
   createReportInflight: false,
   search: {},
-  deleted: {}
+  deleted: {},
 };
 
 export default createReducer(initialState, {
-  [RECONCILIATION]: (state, action) => {
-    const { id, data } = action;
-    set(state, ['map', id, 'inflight'], false);
-    set(state, ['map', id, 'data'], assignDate(data));
-    del(state, ['deleted', id]);
+  [RECONCILIATION]: ({ map, deleted }, { id, data }) => {
+    map[id] = { data: assignDate(data) };
+    delete deleted[id];
   },
-  [RECONCILIATION_INFLIGHT]: (state, action) => {
-    const { id } = action;
-    set(state, ['map', id, 'inflight'], true);
+  [RECONCILIATION_INFLIGHT]: ({ map }, { id }) => {
+    map[id] = { inflight: true };
   },
-  [RECONCILIATION_ERROR]: (state, action) => {
-    const { id } = action;
-    set(state, ['map', id, 'inflight'], false);
-    set(state, ['map', id, 'error'], action.error);
+  [RECONCILIATION_ERROR]: ({ map }, { id, error }) => {
+    map[id] = { error };
   },
-
-  [RECONCILIATIONS]: (state, action) => {
-    const { data } = action;
+  [RECONCILIATIONS]: ({ list }, { data }) => {
     // response.results is a array of string filenames
-    const results = data.results.map((filename) => ({ reconciliationReportName: filename }));
-    set(state, ['list', 'data'], results);
-    set(state, ['list', 'meta'], assignDate(data.meta));
-    set(state, ['list', 'inflight'], false);
-    set(state, ['list', 'error'], false);
+    const reports = data.results.map((filename) => ({
+      reconciliationReportName: filename,
+    }));
+    list.data = reports;
+    list.meta = assignDate(data.meta);
+    list.inflight = false;
+    list.error = false;
   },
-  [RECONCILIATIONS_INFLIGHT]: (state, action) => {
-    set(state, ['list', 'inflight'], true);
+  [RECONCILIATIONS_INFLIGHT]: ({ list }) => {
+    list.inflight = true;
   },
-  [RECONCILIATIONS_ERROR]: (state, action) => {
-    set(state, ['list', 'inflight'], false);
-    set(state, ['list', 'error'], action.error);
+  [RECONCILIATIONS_ERROR]: ({ list }, { error }) => {
+    list.inflight = false;
+    list.error = error;
   },
-
-  [SEARCH_RECONCILIATIONS]: (state, action) => {
-    set(state, ['list', 'params', 'prefix'], action.prefix);
+  [SEARCH_RECONCILIATIONS]: ({ list }, { prefix }) => {
+    list.params.prefix = prefix;
   },
-  [CLEAR_RECONCILIATIONS_SEARCH]: (state, action) => {
-    set(state, ['list', 'params', 'prefix'], null);
+  [CLEAR_RECONCILIATIONS_SEARCH]: ({ list }) => {
+    delete list.params.prefix;
   },
-
-  [NEW_RECONCILIATION_INFLIGHT]: (state, action) => {
-    set(state, 'createReportInflight', true);
+  [NEW_RECONCILIATION_INFLIGHT]: (draftState) => {
+    draftState.createReportInflight = true;
   },
-
-  [NEW_RECONCILIATION]: (state, action) => {
-    set(state, 'createReportInflight', false);
-  }
+  [NEW_RECONCILIATION]: (draftState) => {
+    draftState.createReportInflight = false;
+  },
 });

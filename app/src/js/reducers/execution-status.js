@@ -1,14 +1,13 @@
 'use strict';
-import { set } from 'object-path';
 
+import { createReducer } from '@reduxjs/toolkit';
 import {
   EXECUTION_STATUS,
   EXECUTION_STATUS_INFLIGHT,
   EXECUTION_STATUS_ERROR,
   SEARCH_EXECUTION_EVENTS,
-  CLEAR_EXECUTION_EVENTS_SEARCH
+  CLEAR_EXECUTION_EVENTS_SEARCH,
 } from '../actions/types';
-import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
   execution: null,
@@ -17,51 +16,37 @@ export const initialState = {
   searchString: null,
   inflight: false,
   error: false,
-  meta: {}
+  meta: {},
 };
 
-/**
- * Filters intput data by searchString on the data'a object's type.
-*
- * @param {Array} rawData - An array of objects with a type parameter.
- * @param {string} searchString - a string to check if type includes.
- * @returns {Array} Filtered Array of rawData's objects who's type include searchString.
- */
-export const filterData = (rawData, searchString) => {
-  if (searchString !== null) {
-    const data = {
-      execution: rawData.execution,
-      stateMachine: rawData.stateMachine,
-      executionHistory: rawData.executionHistory
-    };
-    const filteredEvents = rawData.executionHistory.events.filter(d => d.type.toLowerCase().includes(searchString.toLowerCase()));
-    data.executionHistory.events = filteredEvents;
-    return data;
-  }
-  return rawData;
-};
+const typeContains = (string) => ({ type }) =>
+  type.toLowerCase().includes(string.toLowerCase());
 
 export default createReducer(initialState, {
-  [EXECUTION_STATUS]: (state, action) => {
-    const { data: rawData } = action;
-    const data = filterData(rawData, state.searchString);
-    set(state, ['inflight'], false);
-    set(state, ['error'], false);
-    set(state, ['execution'], data.execution);
-    set(state, ['executionHistory'], data.executionHistory);
-    set(state, ['stateMachine'], data.stateMachine);
+  [EXECUTION_STATUS]: (draftState, { data }) => {
+    draftState.inflight = false;
+    draftState.error = false;
+    draftState.execution = data.execution;
+    draftState.executionHistory = data.executionHistory;
+    draftState.stateMachine = data.stateMachine;
+
+    if (draftState.searchString) {
+      draftState.executionHistory.events = data.executionHistory.events.filter(
+        typeContains(draftState.searchString)
+      );
+    }
   },
-  [EXECUTION_STATUS_INFLIGHT]: (state, action) => {
-    set(state, ['inflight'], true);
+  [EXECUTION_STATUS_INFLIGHT]: (draftState) => {
+    draftState.inflight = true;
   },
-  [EXECUTION_STATUS_ERROR]: (state, action) => {
-    set(state, ['inflight'], false);
-    set(state, ['error'], action.error);
+  [EXECUTION_STATUS_ERROR]: (draftState, { error }) => {
+    draftState.inflight = false;
+    draftState.error = error;
   },
-  [SEARCH_EXECUTION_EVENTS]: (state, action) => {
-    set(state, ['searchString'], action.searchString);
+  [SEARCH_EXECUTION_EVENTS]: (draftState, { searchString }) => {
+    draftState.searchString = searchString;
   },
-  [CLEAR_EXECUTION_EVENTS_SEARCH]: (state) => {
-    set(state, ['searchString'], null);
+  [CLEAR_EXECUTION_EVENTS_SEARCH]: (draftState) => {
+    draftState.searchString = null;
   },
 });

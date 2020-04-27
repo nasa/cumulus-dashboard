@@ -1,21 +1,19 @@
 'use strict';
-import { set } from 'object-path';
-import assignDate from './assign-date';
+
+import assignDate from './utils/assign-date';
+import { createReducer } from '@reduxjs/toolkit';
 import {
   OPERATIONS,
   OPERATIONS_INFLIGHT,
   OPERATIONS_ERROR,
-
   OPERATION,
   OPERATION_INFLIGHT,
   OPERATION_ERROR,
-
   FILTER_OPERATIONS,
   CLEAR_OPERATIONS_FILTER,
   SEARCH_OPERATIONS,
-  CLEAR_OPERATIONS_SEARCH
+  CLEAR_OPERATIONS_SEARCH,
 } from '../actions/types';
-import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
   list: {
@@ -25,53 +23,48 @@ export const initialState = {
     params: {},
     internal: {},
     inflight: false,
-    error: false
+    error: false,
   },
-  map: {}
+  map: {},
 };
 
 export default createReducer(initialState, {
-  [OPERATIONS]: (state, action) => {
-    const { data } = action;
-    set(state, ['list', 'data'], data.results);
-    set(state, ['list', 'meta'], assignDate(data.meta));
-    set(state, ['list', 'inflight'], false);
-    set(state, ['list', 'error'], false);
+  [OPERATIONS]: ({ list }, { data }) => {
+    list.data = data.results;
+    list.meta = assignDate(data.meta);
+    list.inflight = false;
+    list.error = false;
   },
-  [OPERATIONS_INFLIGHT]: (state, action) => {
-    set(state, ['list', 'inflight'], true);
+  [OPERATIONS_INFLIGHT]: ({ list }) => {
+    list.inflight = true;
   },
-  [OPERATIONS_ERROR]: (state, action) => {
-    set(state, ['list', 'inflight'], false);
-    set(state, ['list', 'error'], action.error);
+  [OPERATIONS_ERROR]: ({ list }, { error }) => {
+    list.inflight = false;
+    list.error = error;
   },
-
-  [OPERATION]: (state, action) => {
-    const { data } = action;
-    set(state, ['list', 'data'], data.results);
-    set(state, ['list', 'meta'], assignDate(data.meta));
-    set(state, ['list', 'inflight'], false);
-    set(state, ['list', 'error'], false);
+  [OPERATION]: ({ list }, { data }) => {
+    list.data = data.results;
+    list.meta = assignDate(data.meta);
+    list.inflight = false;
+    list.error = false;
   },
-  [OPERATION_INFLIGHT]: (state, action) => {
-    set(state, ['list', 'inflight'], true);
+  [OPERATION_INFLIGHT]: ({ list }) => {
+    list.inflight = true;
   },
-  [OPERATION_ERROR]: (state, action) => {
-    set(state, ['list', 'inflight'], false);
-    set(state, ['list', 'error'], action.error);
+  [OPERATION_ERROR]: ({ list }, { error }) => {
+    list.inflight = false;
+    list.error = error;
   },
-
-  [FILTER_OPERATIONS]: (state, action) => {
-    set(state, ['list', 'params', action.param.key], action.param.value);
+  [FILTER_OPERATIONS]: ({ list }, { param }) => {
+    list.params[param.key] = param.value;
   },
-  [CLEAR_OPERATIONS_FILTER]: (state, action) => {
-    set(state, ['list', 'params', action.paramKey], null);
+  [CLEAR_OPERATIONS_FILTER]: ({ list }, { paramKey }) => {
+    delete list.params[paramKey];
   },
-
-  [SEARCH_OPERATIONS]: (state, action) => {
-    set(state, ['list', 'internal', 'prefix'], action.prefix);
+  [SEARCH_OPERATIONS]: ({ list }, { prefix }) => {
+    list.internal.prefix = prefix;
   },
-  [CLEAR_OPERATIONS_SEARCH]: (state, action) => {
-    set(state, ['list', 'internal', 'prefix'], null);
-  }
+  [CLEAR_OPERATIONS_SEARCH]: ({ list }) => {
+    delete list.internal.prefix;
+  },
 });

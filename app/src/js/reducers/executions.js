@@ -1,18 +1,16 @@
 'use strict';
-import { set } from 'object-path';
-import assignDate from './assign-date';
+
+import assignDate from './utils/assign-date';
+import { createReducer } from '@reduxjs/toolkit';
 import {
   EXECUTIONS,
   EXECUTIONS_INFLIGHT,
   EXECUTIONS_ERROR,
-
   FILTER_EXECUTIONS,
   CLEAR_EXECUTIONS_FILTER,
-
   SEARCH_EXECUTIONS,
-  CLEAR_EXECUTIONS_SEARCH
+  CLEAR_EXECUTIONS_SEARCH,
 } from '../actions/types';
-import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
   list: {
@@ -20,37 +18,35 @@ export const initialState = {
     meta: {},
     params: {},
     inflight: false,
-    error: false
+    error: false,
   },
-  map: {}
+  map: {},
 };
 
 export default createReducer(initialState, {
-  [EXECUTIONS]: (state, action) => {
-    set(state, ['list', 'data'], action.data.results);
-    set(state, ['list', 'meta'], assignDate(action.data.meta));
-    set(state, ['list', 'inflight'], false);
-    set(state, ['list', 'error'], false);
+  [EXECUTIONS]: ({ list }, { data }) => {
+    list.data = data.results;
+    list.meta = assignDate(data.meta);
+    list.inflight = false;
+    list.error = false;
   },
-  [EXECUTIONS_INFLIGHT]: (state, action) => {
-    set(state, ['list', 'inflight'], true);
+  [EXECUTIONS_INFLIGHT]: ({ list }) => {
+    list.inflight = true;
   },
-  [EXECUTIONS_ERROR]: (state, action) => {
-    set(state, ['list', 'inflight'], false);
-    set(state, ['list', 'error'], action.error);
+  [EXECUTIONS_ERROR]: ({ list }, { error }) => {
+    list.inflight = false;
+    list.error = error;
   },
-
-  [FILTER_EXECUTIONS]: (state, action) => {
-    set(state, ['list', 'params', action.param.key], action.param.value);
+  [FILTER_EXECUTIONS]: ({ list }, { param }) => {
+    list.params[param.key] = param.value;
   },
-  [CLEAR_EXECUTIONS_FILTER]: (state, action) => {
-    set(state, ['list', 'params', action.paramKey], null);
+  [CLEAR_EXECUTIONS_FILTER]: ({ list }, { paramKey }) => {
+    list.params[paramKey] = null;
   },
-
-  [SEARCH_EXECUTIONS]: (state, action) => {
-    set(state, ['list', 'prefix'], action.prefix);
+  [SEARCH_EXECUTIONS]: ({ list }, { prefix }) => {
+    list.prefix = prefix;
   },
-  [CLEAR_EXECUTIONS_SEARCH]: (state, action) => {
-    set(state, ['list', 'prefix'], null);
-  }
+  [CLEAR_EXECUTIONS_SEARCH]: ({ list }) => {
+    list.prefix = null;
+  },
 });

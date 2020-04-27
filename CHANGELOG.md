@@ -51,6 +51,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1787**
   - Changes `listCollections` action to hit `/collections/active` endpoint when timefilters are present
 
+- **CUMULUS-1810**
+  - Unified the coding pattern used for creating Redux reducers to avoid
+    unnecessary object creation and reduce unnecessary UI component refreshes
+
 - **CUMULUS-1467**
   - Change the metrics section on the home page to update based on datepicker time period.
 
