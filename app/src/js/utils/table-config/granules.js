@@ -150,10 +150,9 @@ const determineCollectionsBase = (path) => {
  * @param {Object} anonymous.history - Connected router history object.
  * @param {Object} anonymous.error - error object.
  * @param {Object} anonymous.selected - array of selected values.
- * @param {Object} anonymous.redirectBase - string to use in computing redirect of multiple granules.
  * @returns {Function} function to call on confirm selection.
  */
-const setOnConfirm = ({ history, error, selected, redirectBase }) => {
+const setOnConfirm = ({ history, error, selected }) => {
   const baseRedirect = determineCollectionsBase(history.location.pathname);
   if (error) { return () => {}; } else {
     if (selected.length > 1) {
@@ -187,7 +186,7 @@ const granuleModalJourney = ({
       modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';
       modalOptions.cancelButtonClass = 'button--green';
       modalOptions.confirmButtonClass = 'button__goto';
-      modalOptions.onConfirm = setOnConfirm({ history, selected, error});
+      modalOptions.onConfirm = setOnConfirm({ history, selected, error });
     }
   }
   return modalOptions;

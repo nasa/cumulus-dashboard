@@ -95,6 +95,7 @@ class CollectionOverview extends React.Component {
   generateBulkActions () {
     const { granules } = this.props;
     return [
+      reingestAction(granules),
       {
         Component:
         <Bulk
@@ -102,8 +103,7 @@ class CollectionOverview extends React.Component {
           className='button button__bulkgranules button--green button--small form-group__element link--no-underline'
           confirmAction={true}
         />
-      },
-      reingestAction(granules)
+      }
     ];
   }
 
