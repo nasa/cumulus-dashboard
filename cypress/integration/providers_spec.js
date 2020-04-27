@@ -62,7 +62,7 @@ describe('Dashboard Providers Page', () => {
         .siblings('input')
         .type(name);
       cy.get('@providerinput')
-        .contains('Concurrent Connnection Limit')
+        .contains('Concurrent Connection Limit')
         .siblings('input')
         .clear()
         .type(connectionLimit);
@@ -125,7 +125,7 @@ describe('Dashboard Providers Page', () => {
 
       cy.get('form div ul').as('providerinput');
       cy.get('@providerinput')
-        .contains('Concurrent Connnection Limit')
+        .contains('Concurrent Connection Limit')
         .siblings('input')
         .clear()
         .type(connectionLimit);
