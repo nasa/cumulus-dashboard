@@ -98,7 +98,4 @@ test('setOnConfirm navigates to the correct processing page irrespective of the 
     confirmCallback();
     t.true(t.context.history.push.calledWith(o.expected));
   });
-  const confirmCallback = setOnConfirm(input);
-
-  confirmCallback();
 });
