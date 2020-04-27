@@ -140,16 +140,18 @@ const determineCollectionsBase = (path) => {
 
 /**
  * Determines next location based on granule success/error and number of
- * successes.  If there's an error do nothing, if there is a single granule
- * visit that granule's detail page, if there are multiple granules reingested
- * visit the running granules page.  Multiple granules will redirect to a base
- * if provided.  This is used by the collections overview to return the user to
- * the correct collections page view context.
+ * successes.
+ *   - If there's an error do nothing.
+ *   - If there is a single granule visit that granule's detail page
+ *   - If there are multiple granules reingested visit the running granules page.
+ * Multiple granules will redirect to a base location determined by the current
+ * location's pathname.
  *
  * @param {Object} anonymous
  * @param {Object} anonymous.history - Connected router history object.
  * @param {Object} anonymous.error - error object.
  * @param {Object} anonymous.selected - array of selected values.
+ * @param {Function} anonymous.setState - setState function for the Modal component.
  * @returns {Function} function to call on confirm selection.
  */
 const setOnConfirm = ({ history, error, selected, setState }) => {
