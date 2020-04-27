@@ -432,8 +432,8 @@ describe('Dashboard Collections Page', () => {
       cy.get('.heading--large').should('have.text', 'Granule Overview');
     });
 
-    it('Should reingest multiple granules and redirect to the running page on a collection detail page', () => {
-      cy.visit('/collections/collection/MOD09GQ/006');
+    it('Should reingest multiple granules and redirect to the running page on a collection\'s granule detail page and close the modal', () => {
+      cy.visit('/collections/collection/MOD09GQ/006/granules');
       const granuleIds = [
         'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
@@ -456,6 +456,9 @@ describe('Dashboard Collections Page', () => {
       });
       cy.url().should('include', '/collections/collection/MOD09GQ/006/granules/processing');
       cy.get('.heading--medium').should('have.text', 'Running Granules 2');
+
+      // Ensure we have closed the modal.
+      cy.get('.modal-content').should('not.be.visible');
     });
   });
 });

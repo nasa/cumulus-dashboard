@@ -49,6 +49,19 @@ test('setOnConfirm navigates to the processing page with multiple selected granu
   t.true(t.context.history.push.calledWith('/granules/processing'));
 });
 
+test('setOnConfirm calls setState to close the modal with multiple selected granules', (t) => {
+  const input = {
+    history: t.context.history,
+    selected: ['one-granule', 'two-granule'],
+    setState: sinon.fake()
+  };
+  const confirmCallback = setOnConfirm(input);
+
+  confirmCallback();
+  t.true(t.context.history.push.calledWith('/granules/processing'));
+  t.true(input.setState.calledWith({ activeModal: false }));
+});
+
 test('setOnConfirm navigates to the correct processing page irrespective of the current location.', (t) => {
   const input = {
     history: t.context.history,

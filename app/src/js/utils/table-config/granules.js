@@ -152,13 +152,19 @@ const determineCollectionsBase = (path) => {
  * @param {Object} anonymous.selected - array of selected values.
  * @returns {Function} function to call on confirm selection.
  */
-const setOnConfirm = ({ history, error, selected }) => {
+const setOnConfirm = ({ history, error, selected, setState }) => {
+  const redirectAndClose = (redirect) => {
+    return () => {
+      history.push(redirect);
+      if (typeof setState === 'function') setState({ activeModal: false });
+    };
+  };
   const baseRedirect = determineCollectionsBase(history.location.pathname);
   if (error) { return () => {}; } else {
     if (selected.length > 1) {
-      return () => history.push(`${baseRedirect}/processing`);
+      return redirectAndClose(`${baseRedirect}/processing`);
     } else {
-      return () => history.push(`/granules/granule/${selected[0]}`);
+      return redirectAndClose(`/granules/granule/${selected[0]}`);
     }
   }
 };
@@ -169,15 +175,15 @@ const granuleModalJourney = ({
   isOnModalConfirm,
   isOnModalComplete,
   error,
-  results
+  results,
+  setState
 }) => {
   const initialEntry = !isOnModalConfirm && !isOnModalComplete;
-  const complete = isOnModalComplete;
   const modalOptions = {};
   if (initialEntry) {
     modalOptions.children = <BatchReingestConfirmContent selected={selected}/>;
   }
-  if (complete) {
+  if (isOnModalComplete) {
     modalOptions.children = <BatchReingestCompleteContent results={results} error={error} />;
     modalOptions.hasConfirmButton = !error;
     modalOptions.title = (error ? 'Error' : 'Complete');
@@ -186,7 +192,7 @@ const granuleModalJourney = ({
       modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';
       modalOptions.cancelButtonClass = 'button--green';
       modalOptions.confirmButtonClass = 'button__goto';
-      modalOptions.onConfirm = setOnConfirm({ history, selected, error });
+      modalOptions.onConfirm = setOnConfirm({ history, selected, error, setState });
     }
   }
   return modalOptions;
