@@ -29,7 +29,7 @@ import pageSizeOptions from '../../utils/page-size';
 import List from '../Table/Table';
 import Bulk from '../Granules/bulk';
 import Overview from '../Overview/overview';
-import { tableColumns } from '../../utils/table-config/granules';
+import { tableColumns, reingestAction } from '../../utils/table-config/granules';
 import { strings } from '../locale';
 import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
@@ -50,17 +50,6 @@ const breadcrumbConfig = [
   }
 ];
 
-const bulkActions = [
-  {
-    Component:
-      <Bulk
-        element='a'
-        className='button button__bulkgranules button--green button--small form-group__element link--no-underline'
-        confirmAction={true}
-      />
-  }
-];
-
 class CollectionOverview extends React.Component {
   constructor (props) {
     super(props);
@@ -72,6 +61,7 @@ class CollectionOverview extends React.Component {
       this.deleteMe,
       this.errors,
       this.generateQuery,
+      this.generateBulkActions,
       this.gotoGranules,
       this.load,
       this.navigateBack
@@ -100,6 +90,21 @@ class CollectionOverview extends React.Component {
   changeCollection (_, collectionId) {
     const { name, version } = collectionNameVersion(collectionId);
     this.props.history.push(`/collections/collection/${name}/${version}`);
+  }
+
+  generateBulkActions () {
+    const { granules } = this.props;
+    return [
+      reingestAction(granules),
+      {
+        Component:
+        <Bulk
+          element='a'
+          className='button button__bulkgranules button--green button--small form-group__element link--no-underline'
+          confirmAction={true}
+        />
+      }
+    ];
   }
 
   generateQuery () {
@@ -270,7 +275,7 @@ class CollectionOverview extends React.Component {
             action={listGranules}
             tableColumns={tableColumns}
             query={this.generateQuery()}
-            bulkActions={bulkActions}
+            bulkActions={this.generateBulkActions()}
             rowId='granuleId'
             sortIdx='timestamp'
           >

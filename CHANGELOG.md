@@ -9,29 +9,32 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- **CUMULUS-1822**
-  - Added dynamic form validation as user types
+- **CUMULUS-1515**
+  - filter capability to workflow overview page.
+
+- **CUMULUS-1526**
+  - Add a copy rule button
 
 - **CUMULUS-1538**
   - Add ability to expand size of visual on execution details page
 
-- **CUMULUS-1515**
-  - filter capability to workflow overview page.
+- **CUMULUS-1677**
+  - Updates the user experience when re-ingesting granules. Adds Modal flow for better understanding.
+
+- **CUMULUS-1646**
+  - Add 'Results Per Page' dropdown for tables that use pagination
 
 - **CUMULUS-1798**
   - Add a refresh button
   - Add individual cancel buttons for date time range inputs
 
-- **CUMULUS-1526**
-  - Add a copy rule button
-
-- **CUMULUS-1646**
-  - Add 'Results Per Page' dropdown for tables that use pagination
+- **CUMULUS-1822**
+  - Added dynamic form validation as user types
 
 ### Changed
 
 - **CUMULUS-1538**
-  - Update executions details page styles 
+  - Update executions details page styles
 
 - **CUMULUS-1460**
   - Update dashboard headers overall
