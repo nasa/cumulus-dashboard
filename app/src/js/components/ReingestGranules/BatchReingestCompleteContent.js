@@ -7,20 +7,25 @@ const BatchReingestCompleteContent = ({
   results,
   error
 }) => {
-  const confirmation = `successfully reingested ${results.length > 1 ? 'these' : 'this'} granule${results.length > 1 ? 's' : ''}`;
+  const confirmation = () => `successfully reingested ${results.length > 1 ? 'these' : 'this'} granule${results.length > 1 ? 's' : ''}`;
+  const displayedItems = () => {
+    const items = [];
+    for (let i = 0; i < Math.min(results.length, maxDisplayed); i++) {
+      items.push(<li key={i}>{results[i]}</li>);
+    }
+    if (results.length > maxDisplayed) {
+      items.push(<li key={maxDisplayed}>and {results.length - maxDisplayed} more.</li>);
+    }
+    return items;
+  };
+
   return (
     <>
       {(results && results.length > 0) &&
        <>
-         <p>{confirmation}</p>
+         <p>{confirmation()}</p>
          <ul>
-           {results.map((result, index) => {
-             if (index < maxDisplayed) {
-               return <li key={index}>{result}</li>;
-             } return <></>;
-           })}
-           {(results.length > maxDisplayed) &&
-            <li key={maxDisplayed}>and {results.length - maxDisplayed} more.</li>}
+           {displayedItems()}
          </ul>
        </>
       }

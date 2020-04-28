@@ -10,19 +10,22 @@ const BatchReingestConfirmContent = ({ selected = [] }) => {
   const requestText = `You have submitted a request to reingest the following granule${s}.`;
   const confirmText = `Are you sure that you want to reingest ${these.toLowerCase()} granule${s}?\nNote: ${these} granule file${s} will be overwritten.`;
 
+  const displayedItems = () => {
+    const items = [];
+    for (let i = 0; i < Math.min(selected.length, maxDisplayed); i++) {
+      items.push(<li key={i}>{selected[i]}</li>);
+    }
+    if (selected.length > maxDisplayed) {
+      items.push(<li key={maxDisplayed}>and {selected.length - maxDisplayed} more.</li>);
+    }
+    return items;
+  };
+
   return (
     <>
       {requestText}
       <ul>
-        {selected.map((selection, index) => {
-          if (index < maxDisplayed) {
-            return <li key={index}>{selection}</li>;
-          }
-          return <></>;
-        })}
-        {selected.length > maxDisplayed && (
-          <li key={maxDisplayed}>and {selected.length - maxDisplayed} more.</li>
-        )}
+        {displayedItems()}
       </ul>
       {confirmText.split('\n').map((line, index) => (
         <p key={index}>{line}</p>

@@ -151,14 +151,14 @@ const determineCollectionsBase = (path) => {
  * @param {Object} anonymous.history - Connected router history object.
  * @param {Object} anonymous.error - error object.
  * @param {Object} anonymous.selected - array of selected values.
- * @param {Function} anonymous.setState - setState function for the Modal component.
+ * @param {Function} anonymous.closeModal - function to close the Modal component.
  * @returns {Function} function to call on confirm selection.
  */
-const setOnConfirm = ({ history, error, selected, setState }) => {
+const setOnConfirm = ({ history, error, selected, closeModal }) => {
   const redirectAndClose = (redirect) => {
     return () => {
       history.push(redirect);
-      if (typeof setState === 'function') setState({ activeModal: false });
+      if (typeof closeModal === 'function') closeModal();
     };
   };
   const baseRedirect = determineCollectionsBase(history.location.pathname);
@@ -178,7 +178,7 @@ const granuleModalJourney = ({
   isOnModalComplete,
   error,
   results,
-  setState
+  closeModal
 }) => {
   const initialEntry = !isOnModalConfirm && !isOnModalComplete;
   const modalOptions = {};
@@ -194,7 +194,7 @@ const granuleModalJourney = ({
       modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';
       modalOptions.cancelButtonClass = 'button--green';
       modalOptions.confirmButtonClass = 'button__goto';
-      modalOptions.onConfirm = setOnConfirm({ history, selected, error, setState });
+      modalOptions.onConfirm = setOnConfirm({ history, selected, error, closeModal });
     }
   }
   return modalOptions;

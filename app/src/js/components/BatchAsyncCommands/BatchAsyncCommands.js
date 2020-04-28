@@ -43,6 +43,11 @@ export class BatchCommand extends React.Component {
     this.cleanup = this.cleanup.bind(this);
     this.isInflight = this.isInflight.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+  }
+
+  closeModal () {
+    this.setState({ activeModal: false });
   }
 
   componentDidUpdate () {
@@ -73,7 +78,7 @@ export class BatchCommand extends React.Component {
         history,
         isOnModalConfirm: true,
         isOnModalComplete: false,
-        setState: this.setState.bind(this)
+        closeModal: this.closeModal
       });
       this.setState({ modalOptions });
 
@@ -139,7 +144,7 @@ export class BatchCommand extends React.Component {
         results,
         error,
         isOnModalComplete: true,
-        setState: this.setState.bind(this)
+        closeModal: this.closeModal
       });
       this.setState({ modalOptions });
     }
@@ -157,7 +162,7 @@ export class BatchCommand extends React.Component {
       const modalOptions = getModalOptions({
         selected,
         history,
-        setState: this.setState.bind(this)
+        closeModal: this.closeModal
       });
       this.setState({ modalOptions });
     }

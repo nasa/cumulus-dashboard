@@ -53,13 +53,13 @@ test('setOnConfirm calls setState to close the modal with multiple selected gran
   const input = {
     history: t.context.history,
     selected: ['one-granule', 'two-granule'],
-    setState: sinon.fake()
+    closeModal: sinon.fake()
   };
   const confirmCallback = setOnConfirm(input);
 
   confirmCallback();
   t.true(t.context.history.push.calledWith('/granules/processing'));
-  t.true(input.setState.calledWith({ activeModal: false }));
+  t.true(input.closeModal.called);
 });
 
 test('setOnConfirm navigates to the correct processing page irrespective of the current location.', (t) => {
