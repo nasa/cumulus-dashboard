@@ -241,6 +241,7 @@ describe('Rules page', () => {
 
       // Test error flow
       const errorRuleType = 'test';
+      const errorMessage = 'The record has validation errors: [{"keyword":"enum","dataPath":".rule.type","schemaPath":"#/properties/rule/properties/type/enum","params":{"allowedValues":["onetime","scheduled","sns","kinesis","sqs"]},"message":"should be equal to one of the allowed values"}]';
       cy.contains('.ace_variable', 'name');
       cy.editJsonTextarea({ data: { rule: { type: errorRuleType } }, update: true });
 
@@ -248,8 +249,12 @@ describe('Rules page', () => {
       cy.contains('form button', 'Submit').click();
       cy.contains('.default-modal .edit-rule__title', 'Edit Rule');
       cy.contains('.default-modal .modal-body', `Rule ${testRuleName} has encountered an error.`);
-      cy.contains('.modal-footer button', 'Edit Rule').click();
+      cy.contains('.default-modal .modal-body .error', errorMessage);
+      cy.contains('.modal-footer button', 'Contine Editing Rule').click();
       cy.url().should('include', `rules/edit/${testRuleName}`);
+
+      // There should be an error report
+      cy.contains('.error__report', errorMessage);
 
       // Cancel Request should return to rule page
       cy.contains('form button', 'Submit').click();
