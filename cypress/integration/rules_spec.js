@@ -250,7 +250,7 @@ describe('Rules page', () => {
       cy.contains('.default-modal .edit-rule__title', 'Edit Rule');
       cy.contains('.default-modal .modal-body', `Rule ${testRuleName} has encountered an error.`);
       cy.contains('.default-modal .modal-body .error', errorMessage);
-      cy.contains('.modal-footer button', 'Contine Editing Rule').click();
+      cy.contains('.modal-footer button', 'Continue Editing Rule').click();
       cy.url().should('include', `rules/edit/${testRuleName}`);
 
       // There should be an error report

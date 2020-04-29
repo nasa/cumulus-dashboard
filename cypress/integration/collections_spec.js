@@ -258,7 +258,7 @@ describe('Dashboard Collections Page', () => {
       cy.contains('form button', 'Submit').click();
       cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
       cy.contains('.default-modal .modal-body', `Collection ${name}___${version} has encountered an error.`);
-      cy.contains('.modal-footer button', 'Contine Editing Collection').click();
+      cy.contains('.modal-footer button', 'Continue Editing Collection').click();
       cy.url().should('include', `collections/edit/${name}/${version}`);
 
       // Cancel Request should return to collection page
