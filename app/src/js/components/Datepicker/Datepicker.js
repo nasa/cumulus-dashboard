@@ -63,6 +63,8 @@ class Datepicker extends React.PureComponent {
 
   componentDidMount () {
     updateDatepickerStateFromQueryParams(this.props);
+    console.log('PROPS: ' + JSON.stringify(this.props));
+    this.updateQueryParams(this.props);
   }
 
   refresh (e) {
@@ -124,11 +126,7 @@ class Datepicker extends React.PureComponent {
     const updatedQueryParams = { ...this.props.queryParams };
     urlDateProps.map((time) => {
       let urlValue;
-      // If user selects 'Recent', drop the start and end date/time query
-      // parameters, otherwise on the next navigation, the dropdown will switch
-      // back to 'Custom'.  Excluding these query params ensures that 'Recent'
-      // remains selected until the user selects otherwise.
-      if (newProps.dateRange.value !== 'Recent' && newProps[time] !== null) {
+      if (newProps[time] !== null) {
         urlValue = moment.utc(newProps[time]).format(urlDateFormat);
       }
       updatedQueryParams[time] = urlValue;
