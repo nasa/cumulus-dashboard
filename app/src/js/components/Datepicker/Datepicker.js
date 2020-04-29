@@ -40,7 +40,7 @@ const updateDatepickerStateFromQueryParams = (props) => {
 
     values.dateRange = dropdownValue(values);
     props.dispatch({
-      type: 'DATEPICKER_DATECHANGE',
+      type: DATEPICKER_DATECHANGE,
       data: { ...props.datepicker, ...values }
     });
   }
