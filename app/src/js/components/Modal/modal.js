@@ -55,12 +55,12 @@ const DefaultModal = ({
       </Modal.Body>
       <Modal.Footer>
         {hasCancelButton && <button
-          className={`button ${cancelButtonClass} button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel`}
+          className={`button ${cancelButtonClass} button__animation--md button__arrow button__animation button--secondary form-group__element--left button__cancel`}
           onClick={handleCancel}>
           { cancelButtonText }
         </button>}
         {hasConfirmButton && <button
-          className={`button ${confirmButtonClass} button__animation--md button__arrow button__arrow--md button__animation form-group__element--left`}
+          className={`button ${confirmButtonClass} button__animation--md button__arrow button__animation form-group__element--left`}
           onClick={handleConfirm}>
           { confirmButtonText }
         </button>}
