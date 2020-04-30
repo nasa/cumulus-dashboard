@@ -269,6 +269,32 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.heading--large', `${name} / ${version}`);
     });
 
+    it('should display an error when attempting to edit a collection name or version', () => {
+      const name = 'MOD09GQ';
+      const version = '006';
+
+      cy.visit(`/collections/collection/${name}/${version}`);
+      cy.contains('a', 'Edit').as('editCollection');
+      cy.get('@editCollection')
+        .should('have.attr', 'href')
+        .and('include', `/collections/edit/${name}/${version}`);
+      cy.get('@editCollection').click();
+
+      cy.contains('.heading--large', `${name}___${version}`);
+
+      // change name and version
+      // Edit Collection should display proper error message
+      const newName = 'TEST';
+      const newVersion = '2';
+      const errorMessage = `Expected collection name and version to be '${name}' and '${version}', respectively, but found '${newName}' and '${newVersion}' in payload`;
+      cy.contains('.ace_variable', 'name');
+      cy.editJsonTextarea({ data: { name: newName, version: newVersion }, update: true });
+      cy.contains('form button', 'Submit').click();
+      cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
+      cy.contains('.default-modal .modal-body', `Collection ${name}___${version} has encountered an error.`);
+      cy.get('.default-modal .modal-body .error').invoke('text').should('eq', errorMessage);
+    });
+
     it('should delete a collection', () => {
       cy.visit('/');
       const name = 'https_testcollection';

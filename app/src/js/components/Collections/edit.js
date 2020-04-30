@@ -24,7 +24,7 @@ const EditCollection = ({ match, collections }) => {
       primaryProperty='name'
       state={collections}
       getRecord={() => getCollection(name, version)}
-      updateRecord={updateCollection}
+      updateRecord={payload => updateCollection(payload, name, version)}
       backRoute={`/collections/collection/${name}/${version}`}
       clearRecordUpdate={clearUpdateCollection}
       hasModal={true}
