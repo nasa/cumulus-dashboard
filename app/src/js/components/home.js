@@ -44,6 +44,8 @@ import {
 import Datepicker from './Datepicker/Datepicker';
 import { strings } from './locale';
 
+let hasNotBeenCalled = true;
+
 class Home extends React.Component {
   constructor (props) {
     super(props);
@@ -51,6 +53,7 @@ class Home extends React.Component {
     this.query = this.query.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.refreshQuery = this.refreshQuery.bind(this);
+    this.firstTime = this.firstTime.bind(this);
   }
 
   componentDidMount () {
@@ -93,6 +96,14 @@ class Home extends React.Component {
       status: 'failed',
       limit: 20
     };
+  }
+
+  firstTime () {
+    if (hasNotBeenCalled) {
+      hasNotBeenCalled = false;
+      return true;
+    }
+    return false;
   }
 
   isExternalLink (link) {
@@ -182,7 +193,7 @@ class Home extends React.Component {
                   Select date and time to refine your results. <em>Time is UTC.</em>
                 </h2>
               </div>
-              <Datepicker onChange={this.refreshQuery}/>
+              <Datepicker onChange={this.refreshQuery} firstTime={this.firstTime()}/>
             </div>
           </section>
 

@@ -59,11 +59,11 @@ class Datepicker extends React.PureComponent {
     this.handleDateTimeRangeChange = this.handleDateTimeRangeChange.bind(this);
     this.clear = this.clear.bind(this);
     this.refresh = this.refresh.bind(this);
+    if (this.props.firstTime) this.homePageInitialDateTime();
   }
 
   componentDidMount () {
     updateDatepickerStateFromQueryParams(this.props);
-    this.homePageInitialDateTime();
   }
 
   refresh (e) {
@@ -79,8 +79,8 @@ class Datepicker extends React.PureComponent {
   }
 
   homePageInitialDateTime () {
-    const { location, queryParams } = this.props;
-    if (location.pathname === '/' && isEmpty(queryParams)) {
+    const { queryParams } = this.props;
+    if (isEmpty(queryParams)) {
       const { value, label } = allDateRanges.find((a) => a.label === 'Recent');
       this.props.dispatch(this.dispatchDropdownUpdate(value, label));
     }
@@ -281,6 +281,7 @@ Datepicker.propTypes = {
   }),
   startDateTime: PropTypes.number,
   endDateTime: PropTypes.number,
+  firstTime: PropTypes.bool,
   hourFormat: PropTypes.oneOf(allHourFormats.map((a) => a.label)),
   queryParams: PropTypes.object,
   setQueryParams: PropTypes.func,
