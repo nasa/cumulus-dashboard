@@ -44,8 +44,6 @@ import {
 import Datepicker from './Datepicker/Datepicker';
 import { strings } from './locale';
 
-let hasNotBeenCalled = true;
-
 class Home extends React.Component {
   constructor (props) {
     super(props);
@@ -99,8 +97,8 @@ class Home extends React.Component {
   }
 
   firstTime () {
-    if (hasNotBeenCalled) {
-      hasNotBeenCalled = false;
+    if (Home.hasNotBeenCalled) {
+      Home.hasNotBeenCalled = false;
       return true;
     }
     return false;
@@ -244,6 +242,7 @@ class Home extends React.Component {
   }
 }
 
+Home.hasNotBeenCalled = true;
 Home.propTypes = {
   cumulusInstance: PropTypes.object,
   datepicker: PropTypes.object,
