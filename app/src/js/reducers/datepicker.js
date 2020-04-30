@@ -10,11 +10,10 @@ import { createReducer } from '@reduxjs/toolkit';
 
 // Also becomes default props for Datepicker
 export const initialState = () => {
-  const now = Date.now();
   return {
-    startDateTime: now - msPerDay,
+    startDateTime: null,
     endDateTime: null,
-    dateRange: allDateRanges.find((a) => a.value === 'Recent'),
+    dateRange: allDateRanges.find((a) => a.value === 'Custom'),
     hourFormat: '12HR'
   };
 };
