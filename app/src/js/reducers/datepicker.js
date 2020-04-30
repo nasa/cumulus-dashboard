@@ -10,10 +10,10 @@ import {
 
 // Also becomes default props for Datepicker
 export const initialState = () => ({
-  startDateTime: Date.now() - msPerDay,
+  startDateTime: null,
   endDateTime: null,
-  dateRange: allDateRanges.find((a) => a.value === 'Recent'),
-  hourFormat: '12HR',
+  dateRange: allDateRanges.find((a) => a.value === 'Custom'),
+  hourFormat: '12HR'
 });
 
 /**
