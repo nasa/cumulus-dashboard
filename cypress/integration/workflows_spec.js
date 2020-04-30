@@ -21,7 +21,7 @@ describe('Dashboard Workflows Page', () => {
     it('displays a link to view workflows', () => {
       cy.visit('/');
       cy.contains('nav li a', 'Workflows').as('workflows');
-      cy.get('@workflows').should('have.attr', 'href', '/workflows');
+      cy.get('@workflows').should('have.attr', 'href').and('match', /\/workflows/);
       cy.get('@workflows').click();
 
       cy.url().should('include', 'workflows');

@@ -22,7 +22,7 @@ describe('Dashboard Executions Page', () => {
 
     it('should visit the link to view executions', () => {
       cy.contains('nav li a', 'Executions').as('executions');
-      cy.get('@executions').should('have.attr', 'href', '/executions');
+      cy.get('@executions').should('have.attr', 'href').and('match', /\/executions/);
       cy.get('@executions').click();
 
       cy.url().should('include', 'executions');
