@@ -93,7 +93,7 @@ class ExecutionStatusGraph extends React.Component {
           className='default-modal execution__modal--visual'>
           <Modal.Header>
             <div className='header' onClick={this.onHide}>
-              <div>Click <FontAwesomeIcon icon='compress'/> to return to execution view</div>
+              <div>Click to return to execution view</div>
               <div><FontAwesomeIcon icon='compress' className='button__icon--animation'/></div>
             </div>
           </Modal.Header>

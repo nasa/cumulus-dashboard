@@ -182,7 +182,7 @@ const EditRaw = ({
         title={`Edit ${recordDisplayName}`}
         hasCancelButton={isError}
         cancelButtonText={isError ? 'Cancel Request' : null}
-        confirmButtonText={isError ? `Edit ${recordDisplayName}` : 'Close'}
+        confirmButtonText={isError ? `Continue Editing ${recordDisplayName}` : 'Close'}
         confirmButtonClass={isError ? 'button__goto' : 'button--green button--close'}
       >
         <div>
