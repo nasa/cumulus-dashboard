@@ -281,5 +281,13 @@ describe('Dashboard Home Page', () => {
 
       shouldHaveDeletedToken();
     });
+
+    it('adds the default datepicker options to the URL', () => {
+      const now = Date.UTC(2009, 0, 5, 13, 35, 3);
+      cy.clock(now);
+
+      cy.visit('/');
+      cy.url().should('include', 'startDateTime=20090104133500');
+    });
   });
 });
