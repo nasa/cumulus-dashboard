@@ -80,7 +80,9 @@ class Datepicker extends React.PureComponent {
 
   homePageInitialDateTime () {
     const { location, queryParams } = this.props;
-    if (location.pathname === '/' && isEmpty(queryParams)) {
+    if (location.pathname === '/' && queryParams.new_session === 'true') {
+      queryParams.new_session = undefined;
+      this.props.setQueryParams(queryParams);
       const { value, label } = allDateRanges.find((a) => a.label === 'Recent');
       this.props.dispatch(this.dispatchDropdownUpdate(value, label));
     }
