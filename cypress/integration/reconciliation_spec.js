@@ -21,7 +21,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
     it('displays a link to view reconciliation reports', () => {
       cy.contains('nav li a', 'Reconciliation Reports').as('reconciliationReports');
-      cy.get('@reconciliationReports').should('have.attr', 'href').and('match', /\/reconciliation-reports/);
+      cy.get('@reconciliationReports').should('have.attr', 'href', '/reconciliation-reports');
       cy.get('@reconciliationReports').click({ force: true });
 
       cy.url().should('include', 'reconciliation-reports');
