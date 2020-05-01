@@ -304,5 +304,25 @@ describe('Dashboard Home Page', () => {
 
       cy.url().should('not.include', 'startDateTime=');
     });
+
+    it('should update the Datepicker with the params in the URL', () => {
+      cy.visit('/?startDateTime=20081229133500&endDateTime=20090105133500');
+
+      cy.get('[data-cy=endDateTime]').within(() => {
+        cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2009');
+        cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '1');
+        cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '5');
+        cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '1');
+        cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
+      });
+
+      cy.get('[data-cy=startDateTime]').within(() => {
+        cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2008');
+        cy.get('.react-datetime-picker__inputGroup__month').should('have.value', '12');
+        cy.get('.react-datetime-picker__inputGroup__day').should('have.value', '29');
+        cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '1');
+        cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
+      });
+    });
   });
 });
