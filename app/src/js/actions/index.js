@@ -158,12 +158,13 @@ export const createCollection = (payload) => ({
   }
 });
 
-export const updateCollection = (payload) => ({
+// include the option to specify the name and version of the collection to update in case they differ in the payload
+export const updateCollection = (payload, name, version) => ({
   [CALL_API]: {
     type: types.UPDATE_COLLECTION,
     method: 'PUT',
-    id: getCollectionId(payload),
-    path: `collections/${payload.name}/${payload.version}`,
+    id: (name && version) ? getCollectionId({ name, version }) : getCollectionId(payload),
+    path: `collections/${name || payload.name}/${version || payload.version}`,
     body: payload
   }
 });
