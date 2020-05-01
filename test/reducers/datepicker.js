@@ -16,16 +16,13 @@ test('verify initial state', (t) => {
   t.deepEqual(actual, inputstate);
 });
 
-test('reducer sets initial state to "Custom" on first initialization run.', (t) => {
-  // const testStart = Date.now();
-  // sinon.useFakeTimers(testStart);
+test('reducer sets initial state to have no set start/end times.', (t) => {
   const actual = reducer(undefined, { type: 'ANY' });
   t.is(actual.dateRange.label, 'Custom');
   t.is(actual.dateRange.value, 'Custom');
   t.is(actual.startDateTime, null);
   t.is(actual.endDateTime, null);
   t.is(actual.hourFormat, '12HR');
-  // sinon.restore();
 });
 
 test('Dropdown: "Recent" sets start time to 24 hours ago and unsets end time.', (t) => {
