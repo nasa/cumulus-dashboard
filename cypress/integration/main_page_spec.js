@@ -289,5 +289,20 @@ describe('Dashboard Home Page', () => {
       cy.visit('/?new_session=true');
       cy.url().should('include', 'startDateTime=20090104133500');
     });
+
+    it('should not add the initial Datepicker state to the URL once cleared', () => {
+      const now = Date.UTC(2009, 0, 5, 13, 35, 3);
+      cy.clock(now);
+
+      cy.visit('/?new_session=true');
+      cy.url().should('include', 'startDateTime=20090104133500');
+
+      cy.get('[data-cy=datetime-clear]').click();
+      cy.contains('nav li a', 'Collections').as('collections');
+      cy.get('@collections').click();
+      cy.get('.logo').click();
+
+      cy.url().should('not.include', 'startDateTime=');
+    });
   });
 });
