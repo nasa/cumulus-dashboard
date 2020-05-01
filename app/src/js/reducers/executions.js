@@ -24,29 +24,29 @@ export const initialState = {
 };
 
 export default createReducer(initialState, {
-  [EXECUTIONS]: ({ list }, { data }) => {
-    list.data = data.results;
-    list.meta = assignDate(data.meta);
-    list.inflight = false;
-    list.error = false;
+  [EXECUTIONS]: (state, action) => {
+    state.list.data = action.data.results;
+    state.list.meta = assignDate(action.data.meta);
+    state.list.inflight = false;
+    state.list.error = false;
   },
-  [EXECUTIONS_INFLIGHT]: ({ list }) => {
-    list.inflight = true;
+  [EXECUTIONS_INFLIGHT]: (state) => {
+    state.list.inflight = true;
   },
-  [EXECUTIONS_ERROR]: ({ list }, { error }) => {
-    list.inflight = false;
-    list.error = error;
+  [EXECUTIONS_ERROR]: (state, action) => {
+    state.list.inflight = false;
+    state.list.error = action.error;
   },
-  [FILTER_EXECUTIONS]: ({ list }, { param }) => {
-    list.params[param.key] = param.value;
+  [FILTER_EXECUTIONS]: (state, action) => {
+    state.list.params[action.param.key] = action.param.value;
   },
-  [CLEAR_EXECUTIONS_FILTER]: ({ list }, { paramKey }) => {
-    list.params[paramKey] = null;
+  [CLEAR_EXECUTIONS_FILTER]: (state, action) => {
+    state.list.params[action.paramKey] = null;
   },
-  [SEARCH_EXECUTIONS]: ({ list }, { prefix }) => {
-    list.prefix = prefix;
+  [SEARCH_EXECUTIONS]: (state, action) => {
+    state.list.prefix = action.prefix;
   },
-  [CLEAR_EXECUTIONS_SEARCH]: ({ list }) => {
-    list.prefix = null;
+  [CLEAR_EXECUTIONS_SEARCH]: (state) => {
+    state.list.prefix = null;
   },
 });

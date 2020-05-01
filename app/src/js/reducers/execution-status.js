@@ -23,30 +23,31 @@ const typeContains = (string) => ({ type }) =>
   type.toLowerCase().includes(string.toLowerCase());
 
 export default createReducer(initialState, {
-  [EXECUTION_STATUS]: (draftState, { data }) => {
-    draftState.inflight = false;
-    draftState.error = false;
-    draftState.execution = data.execution;
-    draftState.executionHistory = data.executionHistory;
-    draftState.stateMachine = data.stateMachine;
+  [EXECUTION_STATUS]: (state, action) => {
+    const { data } = action;
+    state.inflight = false;
+    state.error = false;
+    state.execution = data.execution;
+    state.executionHistory = data.executionHistory;
+    state.stateMachine = data.stateMachine;
 
-    if (draftState.searchString) {
-      draftState.executionHistory.events = data.executionHistory.events.filter(
-        typeContains(draftState.searchString)
+    if (state.searchString) {
+      state.executionHistory.events = data.executionHistory.events.filter(
+        typeContains(state.searchString)
       );
     }
   },
-  [EXECUTION_STATUS_INFLIGHT]: (draftState) => {
-    draftState.inflight = true;
+  [EXECUTION_STATUS_INFLIGHT]: (state) => {
+    state.inflight = true;
   },
-  [EXECUTION_STATUS_ERROR]: (draftState, { error }) => {
-    draftState.inflight = false;
-    draftState.error = error;
+  [EXECUTION_STATUS_ERROR]: (state, action) => {
+    state.inflight = false;
+    state.error = action.error;
   },
-  [SEARCH_EXECUTION_EVENTS]: (draftState, { searchString }) => {
-    draftState.searchString = searchString;
+  [SEARCH_EXECUTION_EVENTS]: (state, action) => {
+    state.searchString = action.searchString;
   },
-  [CLEAR_EXECUTION_EVENTS_SEARCH]: (draftState) => {
-    draftState.searchString = null;
+  [CLEAR_EXECUTION_EVENTS_SEARCH]: (state) => {
+    state.searchString = null;
   },
 });

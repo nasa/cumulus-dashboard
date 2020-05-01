@@ -16,17 +16,17 @@ export const initialState = {
 };
 
 export default createReducer(initialState, {
-  [EXECUTION_LOGS]: (draftState, { data }) => {
-    draftState.inflight = false;
-    draftState.error = false;
-    draftState.details = data.meta;
-    draftState.results = data.results;
+  [EXECUTION_LOGS]: (state, action) => {
+    state.inflight = false;
+    state.error = false;
+    state.details = action.data.meta;
+    state.results = action.data.results;
   },
-  [EXECUTION_LOGS_INFLIGHT]: (draftState) => {
-    draftState.inflight = true;
+  [EXECUTION_LOGS_INFLIGHT]: (state) => {
+    state.inflight = true;
   },
-  [EXECUTION_LOGS_ERROR]: (draftState, { error }) => {
-    draftState.inflight = false;
-    draftState.error = error;
+  [EXECUTION_LOGS_ERROR]: (state, action) => {
+    state.inflight = false;
+    state.error = action.error;
   },
 });

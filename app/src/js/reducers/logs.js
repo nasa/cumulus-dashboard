@@ -22,38 +22,40 @@ export const initialState = {
 };
 
 export default createReducer(initialState, {
-  [LOGS]: (draftState, { data }) => {
+  [LOGS]: (state, action) => {
+    const { data } = action;
+
     if (Array.isArray(data.results) && data.results.length) {
-      draftState.items = uniqBy(
+      state.items = uniqBy(
         'key',
         data.results
           .filter((result) => result.timestamp && result.displayText)
           .map(processLog)
-          .concat(draftState.items)
+          .concat(state.items)
       );
     }
 
-    draftState.inflight = false;
-    draftState.queriedAt = Date.now();
-    draftState.error = false;
+    state.inflight = false;
+    state.queriedAt = Date.now();
+    state.error = false;
   },
-  [LOGS_INFLIGHT]: (draftState, { config }) => {
-    const query = get(config, 'qs.q', '');
+  [LOGS_INFLIGHT]: (state, action) => {
+    const query = get(action.config, 'qs.q', '');
 
-    if (draftState.query !== query) {
-      draftState.query = query;
-      draftState.items = [];
+    if (state.query !== query) {
+      state.query = query;
+      state.items = [];
     }
 
-    draftState.inflight = true;
+    state.inflight = true;
   },
-  [LOGS_ERROR]: (draftState, { error }) => {
-    draftState.inflight = false;
-    draftState.error = error;
+  [LOGS_ERROR]: (state, action) => {
+    state.inflight = false;
+    state.error = action.error;
   },
-  [CLEAR_LOGS]: (draftState, { error }) => {
-    draftState.inflight = false;
-    draftState.error = error;
-    draftState.items = [];
+  [CLEAR_LOGS]: (state, action) => {
+    state.inflight = false;
+    state.error = action.error;
+    state.items = [];
   },
 });

@@ -6,8 +6,8 @@ import { createReducer } from '@reduxjs/toolkit';
 export const initialState = {};
 
 export default createReducer(initialState, {
-  [SCHEMA]: (draftState, { config, data }) => {
-    draftState[key(config.url)] = data;
+  [SCHEMA]: (state, action) => {
+    state[key(action.config.url)] = action.data;
   }
 });
 

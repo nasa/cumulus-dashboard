@@ -35,41 +35,41 @@ export const initialState = {
 };
 
 export default createReducer(initialState, {
-  [PDR]: ({ map, deleted }, { id, data }) => {
-    map[id] = { data: assignDate(data) };
+  [PDR]: (state, action) => {
+    state.map[action.id] = { data: assignDate(action.data) };
     // https://github.com/nasa/cumulus-dashboard/issues/284
-    delete deleted[id];
+    delete state.deleted[action.id];
   },
-  [PDR_INFLIGHT]: ({ map }, { id }) => {
-    map[id] = { inflight: true };
+  [PDR_INFLIGHT]: (state, action) => {
+    state.map[action.id] = { inflight: true };
   },
-  [PDR_ERROR]: ({ map }, { id, error }) => {
-    map[id] = { error };
+  [PDR_ERROR]: (state, action) => {
+    state.map[action.id] = { error: action.error };
   },
-  [PDRS]: ({ list }, { data }) => {
-    list.data = data.results;
-    list.meta = assignDate(data.meta);
-    list.inflight = false;
-    list.error = false;
+  [PDRS]: (state, action) => {
+    state.list.data = action.data.results;
+    state.list.meta = assignDate(action.data.meta);
+    state.list.inflight = false;
+    state.list.error = false;
   },
-  [PDRS_INFLIGHT]: ({ list }) => {
-    list.inflight = true;
+  [PDRS_INFLIGHT]: (state) => {
+    state.list.inflight = true;
   },
-  [PDRS_ERROR]: ({ list }, { error }) => {
-    list.inflight = false;
-    list.error = error;
+  [PDRS_ERROR]: (state, action) => {
+    state.list.inflight = false;
+    state.list.error = action.error;
   },
-  [SEARCH_PDRS]: ({ list }, { prefix }) => {
-    list.params.prefix = prefix;
+  [SEARCH_PDRS]: (state, action) => {
+    state.list.params.prefix = action.prefix;
   },
-  [CLEAR_PDRS_SEARCH]: ({ list }) => {
-    delete list.params.prefix;
+  [CLEAR_PDRS_SEARCH]: (state) => {
+    delete state.list.params.prefix;
   },
-  [FILTER_PDRS]: ({ list }, { param }) => {
-    list.params[param.key] = param.value;
+  [FILTER_PDRS]: (state, action) => {
+    state.list.params[action.param.key] = action.param.value;
   },
-  [CLEAR_PDRS_FILTER]: ({ list }, { paramKey }) => {
-    delete list.params[paramKey];
+  [CLEAR_PDRS_FILTER]: (state, action) => {
+    delete state.list.params[action.paramKey];
   },
   [PDR_DELETE]: createSuccessReducer('deleted'),
   [PDR_DELETE_INFLIGHT]: createInflightReducer('deleted'),

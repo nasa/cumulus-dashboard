@@ -28,43 +28,43 @@ export const initialState = {
 };
 
 export default createReducer(initialState, {
-  [RECONCILIATION]: ({ map, deleted }, { id, data }) => {
-    map[id] = { data: assignDate(data) };
-    delete deleted[id];
+  [RECONCILIATION]: (state, action) => {
+    state.map[action.id] = { data: assignDate(action.data) };
+    delete state.deleted[action.id];
   },
-  [RECONCILIATION_INFLIGHT]: ({ map }, { id }) => {
-    map[id] = { inflight: true };
+  [RECONCILIATION_INFLIGHT]: (state, action) => {
+    state.map[action.id] = { inflight: true };
   },
-  [RECONCILIATION_ERROR]: ({ map }, { id, error }) => {
-    map[id] = { error };
+  [RECONCILIATION_ERROR]: (state, action) => {
+    state.map[action.id] = { error: action.error };
   },
-  [RECONCILIATIONS]: ({ list }, { data }) => {
+  [RECONCILIATIONS]: (state, action) => {
     // response.results is a array of string filenames
-    const reports = data.results.map((filename) => ({
+    const reports = action.data.results.map((filename) => ({
       reconciliationReportName: filename,
     }));
-    list.data = reports;
-    list.meta = assignDate(data.meta);
-    list.inflight = false;
-    list.error = false;
+    state.list.data = reports;
+    state.list.meta = assignDate(action.data.meta);
+    state.list.inflight = false;
+    state.list.error = false;
   },
-  [RECONCILIATIONS_INFLIGHT]: ({ list }) => {
-    list.inflight = true;
+  [RECONCILIATIONS_INFLIGHT]: (state) => {
+    state.list.inflight = true;
   },
-  [RECONCILIATIONS_ERROR]: ({ list }, { error }) => {
-    list.inflight = false;
-    list.error = error;
+  [RECONCILIATIONS_ERROR]: (state, action) => {
+    state.list.inflight = false;
+    state.list.error = action.error;
   },
-  [SEARCH_RECONCILIATIONS]: ({ list }, { prefix }) => {
-    list.params.prefix = prefix;
+  [SEARCH_RECONCILIATIONS]: (state, action) => {
+    state.list.params.prefix = action.prefix;
   },
-  [CLEAR_RECONCILIATIONS_SEARCH]: ({ list }) => {
-    delete list.params.prefix;
+  [CLEAR_RECONCILIATIONS_SEARCH]: (state) => {
+    delete state.list.params.prefix;
   },
-  [NEW_RECONCILIATION_INFLIGHT]: (draftState) => {
-    draftState.createReportInflight = true;
+  [NEW_RECONCILIATION_INFLIGHT]: (state) => {
+    state.createReportInflight = true;
   },
-  [NEW_RECONCILIATION]: (draftState) => {
-    draftState.createReportInflight = false;
+  [NEW_RECONCILIATION]: (state) => {
+    state.createReportInflight = false;
   },
 });

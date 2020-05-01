@@ -47,31 +47,33 @@ const recentData = () => ({
 });
 
 export default createReducer(initialState(), {
-  [DATEPICKER_DROPDOWN_FILTER]: (draftState, { data }) => {
+  [DATEPICKER_DROPDOWN_FILTER]: (state, action) => {
+    const { data } = action;
+
     switch (data.dateRange.label) {
       case 'Custom':
       case 'All':
-        Object.assign(draftState, data, {
+        Object.assign(state, data, {
           startDateTime: null,
           endDateTime: null,
         });
         break;
       case 'Recent':
-        Object.assign(draftState, data, recentData());
+        Object.assign(state, data, recentData());
         break;
       default:
         Object.assign(
-          draftState,
+          state,
           computeDateTimeDelta(data.dateRange.value),
           data
         );
         break;
     }
   },
-  [DATEPICKER_DATECHANGE]: (draftState, { data }) => {
-    Object.assign(draftState, data);
+  [DATEPICKER_DATECHANGE]: (state, action) => {
+    Object.assign(state, action.data);
   },
-  [DATEPICKER_HOUR_FORMAT]: (draftState, { data }) => {
-    draftState.hourFormat = data;
+  [DATEPICKER_HOUR_FORMAT]: (state, action) => {
+    state.hourFormat = action.data;
   },
 });

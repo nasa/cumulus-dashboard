@@ -49,58 +49,78 @@ export const initialState = {
 };
 
 export default createReducer(initialState, {
-  [COLLECTION]: ({ deleted, map }, { id, data }) => {
+  [COLLECTION]: (state, action) => {
+    const { id, data } = action;
     const { name } = deconstructCollectionId(id);
     const collection = data.results.find((element) => element.name === name);
 
-    map[id] = { data: assignDate(collection) };
-    delete deleted[id];
+    state.map[id] = {
+      inflight: false,
+      data: assignDate(collection),
+    };
+    delete state.deleted[id];
   },
-  [COLLECTION_INFLIGHT]: ({ map }, { id }) => {
-    map[id] = { inflight: true };
+  [COLLECTION_INFLIGHT]: (state, action) => {
+    state.map[action.id] = { inflight: true };
   },
-  [COLLECTION_ERROR]: ({ map }, { id, error }) => {
-    map[id] = { error };
+  [COLLECTION_ERROR]: (state, action) => {
+    const { id, error } = action;
+    state.map[id] = {
+      inflight: false,
+      error,
+    };
   },
-  [COLLECTION_APPLYWORKFLOW]: createSuccessReducer('executed'),
+  [COLLECTION_APPLYWORKFLOW]: (state, action) => {
+    state.executed[action.id] = {
+      status: 'success',
+      error: null,
+    };
+  },
   [COLLECTION_APPLYWORKFLOW_INFLIGHT]: createInflightReducer('executed'),
   [COLLECTION_APPLYWORKFLOW_ERROR]: createErrorReducer('executed'),
-  [COLLECTIONS]: ({ list }, { data }) => {
-    list.data = data.results;
-    list.meta = assignDate(data.meta);
-    list.inflight = false;
-    list.error = false;
+  [COLLECTIONS]: (state, action) => {
+    state.list.data = action.data.results;
+    state.list.meta = assignDate(action.data.meta);
+    state.list.inflight = false;
+    state.list.error = false;
   },
-  [COLLECTIONS_INFLIGHT]: ({ list }) => {
-    list.inflight = true;
+  [COLLECTIONS_INFLIGHT]: (state) => {
+    state.list.inflight = true;
   },
-  [COLLECTIONS_ERROR]: ({ list }, { error }) => {
-    list.inflight = false;
-    list.error = error;
+  [COLLECTIONS_ERROR]: (state, action) => {
+    state.list.inflight = false;
+    state.list.error = action.error;
   },
   [NEW_COLLECTION]: createSuccessReducer('created'),
   [NEW_COLLECTION_INFLIGHT]: createInflightReducer('created'),
   [NEW_COLLECTION_ERROR]: createErrorReducer('created'),
-  [UPDATE_COLLECTION]: ({ map, updated }, { id, data }) => {
-    map[id] = { data };
-    updated[id] = { status: 'success' };
+  [UPDATE_COLLECTION]: (state, action) => {
+    const { id, data } = action;
+    state.map[id] = { data };
+    state.updated[id] = { status: 'success' };
   },
   [UPDATE_COLLECTION_INFLIGHT]: createInflightReducer('updated'),
   [UPDATE_COLLECTION_ERROR]: createErrorReducer('updated'),
   [UPDATE_COLLECTION_CLEAR]: createClearItemReducer('updated'),
-  [COLLECTION_DELETE]: createSuccessReducer('deleted'),
+  [COLLECTION_DELETE]: (state, action) => {
+    state.deleted[action.id] = {
+      status: 'success',
+      error: null,
+    };
+  },
   [COLLECTION_DELETE_INFLIGHT]: createInflightReducer('deleted'),
   [COLLECTION_DELETE_ERROR]: createErrorReducer('deleted'),
-  [SEARCH_COLLECTIONS]: ({ list }, { prefix }) => {
-    list.params.prefix = prefix;
+  [SEARCH_COLLECTIONS]: (state, action) => {
+    state.list.params.prefix = action.prefix;
   },
-  [CLEAR_COLLECTIONS_SEARCH]: ({ list }) => {
-    list.params.prefix = null;
+  [CLEAR_COLLECTIONS_SEARCH]: (state) => {
+    state.list.params.prefix = null;
   },
-  [FILTER_COLLECTIONS]: ({ list }, { param: { key, value } }) => {
-    list.params[key] = value;
+  [FILTER_COLLECTIONS]: (state, action) => {
+    const { key, value } = action.param;
+    state.list.params[key] = value;
   },
-  [CLEAR_COLLECTIONS_FILTER]: ({ list }, { paramKey }) => {
-    list.params[paramKey] = null;
+  [CLEAR_COLLECTIONS_FILTER]: (state, action) => {
+    state.list.params[action.paramKey] = null;
   },
 });

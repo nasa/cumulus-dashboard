@@ -65,29 +65,29 @@ export const initialState = {
 const getConfigRequestId = ({ config: { requestId } }) => requestId;
 
 export default createReducer(initialState, {
-  [GRANULE]: ({ map, deleted }, { id, data }) => {
-    map[id] = { data: assignDate(data) };
-    delete deleted[id];
+  [GRANULE]: (state, action) => {
+    state.map[action.id] = { data: assignDate(action.data) };
+    delete state.deleted[action.id];
   },
-  [GRANULE_INFLIGHT]: ({ map }, { id }) => {
-    map[id] = { inflight: true };
+  [GRANULE_INFLIGHT]: (state, action) => {
+    state.map[action.id] = { inflight: true };
   },
-  [GRANULE_ERROR]: ({ map }, { id, error }) => {
-    map[id] = { error };
+  [GRANULE_ERROR]: (state, action) => {
+    state.map[action.id] = { error: action.error };
   },
-  [GRANULES]: (draftState, { data }) => {
-    draftState.list = {
-      data: removeDeleted('granuleId', data.results, draftState.deleted),
-      meta: assignDate(data.meta),
+  [GRANULES]: (state, action) => {
+    state.list = {
+      data: removeDeleted('granuleId', action.data.results, state.deleted),
+      meta: assignDate(action.data.meta),
       params: {},
     };
   },
-  [GRANULES_INFLIGHT]: ({ list }) => {
-    list.inflight = true;
+  [GRANULES_INFLIGHT]: (state) => {
+    state.list.inflight = true;
   },
-  [GRANULES_ERROR]: ({ list }, { error }) => {
-    list.inflight = false;
-    list.error = error;
+  [GRANULES_ERROR]: (state, action) => {
+    state.list.inflight = false;
+    state.list.error = action.error;
   },
 
   [GRANULE_REPROCESS]: createSuccessReducer('reprocessed'),
@@ -109,31 +109,31 @@ export default createReducer(initialState, {
   [GRANULE_DELETE_INFLIGHT]: createInflightReducer('deleted'),
   [GRANULE_DELETE_ERROR]: createErrorReducer('deleted'),
 
-  [SEARCH_GRANULES]: ({ list }, { prefix }) => {
-    list.params.prefix = prefix;
+  [SEARCH_GRANULES]: (state, action) => {
+    state.list.params.prefix = action.prefix;
   },
-  [CLEAR_GRANULES_SEARCH]: ({ list }) => {
-    delete list.params.prefix;
+  [CLEAR_GRANULES_SEARCH]: (state) => {
+    delete state.list.params.prefix;
   },
-  [FILTER_GRANULES]: ({ list }, { param }) => {
-    list.params[param.key] = param.value;
+  [FILTER_GRANULES]: (state, action) => {
+    state.list.params[action.param.key] = action.param.value;
   },
-  [CLEAR_GRANULES_FILTER]: ({ list }, { paramKey }) => {
-    delete list.params[paramKey];
+  [CLEAR_GRANULES_FILTER]: (state, action) => {
+    delete state.list.params[action.paramKey];
   },
-  [OPTIONS_COLLECTIONNAME]: ({ dropdowns }, { data }) => {
-    const options = data.results.reduce(
+  [OPTIONS_COLLECTIONNAME]: (state, action) => {
+    const options = action.data.results.reduce(
       (obj, { name, version }) =>
         Object.assign(obj, {
           [`${name} ${version}`]: getCollectionId({ name, version }),
         }),
       {}
     );
-    dropdowns.collectionName = { options };
+    state.dropdowns.collectionName = { options };
   },
   [OPTIONS_COLLECTIONNAME_INFLIGHT]: () => {},
-  [OPTIONS_COLLECTIONNAME_ERROR]: ({ dropdowns, list }, { error }) => {
-    delete dropdowns.collectionName;
-    list.error = error;
+  [OPTIONS_COLLECTIONNAME_ERROR]: (state, action) => {
+    delete state.dropdowns.collectionName;
+    state.list.error = action.error;
   },
 });

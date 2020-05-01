@@ -11,53 +11,54 @@ import {
   REFRESH_TOKEN,
   REFRESH_TOKEN_ERROR,
   REFRESH_TOKEN_INFLIGHT,
-  SET_TOKEN
+  SET_TOKEN,
 } from '../actions/types';
 
 export const initialState = {
-  authenticated: getToken() != null,
+  authenticated: getToken() !== null,
   inflight: false,
   error: null,
   tokens: {
     error: null,
     inflight: false,
-    token: getToken()
-  }
+    token: getToken(),
+  },
 };
 
 export default createReducer(initialState, {
-  [DELETE_TOKEN]: ({ tokens }) => {
+  [DELETE_TOKEN]: (state) => {
     setToken('');
-    tokens.token = null;
+    state.tokens.token = null;
   },
-  [LOGIN]: (draftState) => {
-    draftState.authenticated = true;
-    draftState.inflight = false;
+  [LOGIN]: (state) => {
+    state.authenticated = true;
+    state.inflight = false;
   },
-  [LOGIN_ERROR]: (draftState, { error }) => {
-    draftState.error = error;
-    draftState.inflight = false;
-    draftState.authenticated = false;
+  [LOGIN_ERROR]: (state, action) => {
+    state.error = action.error;
+    state.inflight = false;
+    state.authenticated = false;
   },
-  [LOGIN_INFLIGHT]: (draftState) => {
-    draftState.inflight = true;
+  [LOGIN_INFLIGHT]: (state) => {
+    state.inflight = true;
   },
-  [LOGOUT]: (draftState) => {
-    draftState.authenticated = false;
+  [LOGOUT]: (state) => {
+    state.authenticated = false;
   },
-  [REFRESH_TOKEN]: ({ tokens }, { token }) => {
-    setToken(tokens.token = token);
-    tokens.error = null;
-    tokens.inflight = false;
+  [REFRESH_TOKEN]: (state, action) => {
+    setToken(action.token);
+    state.tokens.token = action.token;
+    state.tokens.error = null;
+    state.tokens.inflight = false;
   },
-  [REFRESH_TOKEN_ERROR]: ({ tokens }, { error }) => {
-    tokens.error = error;
-    tokens.inflight = false;
+  [REFRESH_TOKEN_ERROR]: (state, action) => {
+    state.tokens.error = action.error;
+    state.tokens.inflight = false;
   },
-  [REFRESH_TOKEN_INFLIGHT]: ({ tokens }) => {
-    tokens.inflight = true;
+  [REFRESH_TOKEN_INFLIGHT]: (state) => {
+    state.tokens.inflight = true;
   },
-  [SET_TOKEN]: ({ tokens }, { token }) => {
-    setToken(tokens.token = token);
+  [SET_TOKEN]: (state, action) => {
+    setToken((state.tokens.token = action.token));
   },
 });

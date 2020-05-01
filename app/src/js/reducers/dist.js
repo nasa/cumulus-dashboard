@@ -31,62 +31,63 @@ const count = (data, name) =>
   get(data, `aggregations.2.buckets.${name}.doc_count`, 0);
 
 export default createReducer(initialState, {
-  [DIST_APIGATEWAY]: ({ apiGateway }, { data }) => {
-    apiGateway.error = null;
-    apiGateway.inflight = false;
-    apiGateway.queriedAt = Date.now();
-    apiGateway.access.errors = count(data, 'ApiAccessErrors');
-    apiGateway.access.successes = count(data, 'ApiAccessSuccesses');
-    apiGateway.execution.errors = count(data, 'ApiExecutionErrors');
-    apiGateway.execution.successes = count(data, 'ApiExecutionSuccesses');
+  [DIST_APIGATEWAY]: (state, action) => {
+    const { data } = action;
+    state.apiGateway.error = null;
+    state.apiGateway.inflight = false;
+    state.apiGateway.queriedAt = Date.now();
+    state.apiGateway.access.errors = count(data, 'ApiAccessErrors');
+    state.apiGateway.access.successes = count(data, 'ApiAccessSuccesses');
+    state.apiGateway.execution.errors = count(data, 'ApiExecutionErrors');
+    state.apiGateway.execution.successes = count(data, 'ApiExecutionSuccesses');
   },
-  [DIST_APIGATEWAY_INFLIGHT]: ({ apiGateway }) => {
-    apiGateway.inflight = true;
+  [DIST_APIGATEWAY_INFLIGHT]: (state) => {
+    state.apiGateway.inflight = true;
   },
-  [DIST_APIGATEWAY_ERROR]: ({ apiGateway }, { error }) => {
-    apiGateway.inflight = false;
-    apiGateway.error = error;
+  [DIST_APIGATEWAY_ERROR]: (state, action) => {
+    state.apiGateway.inflight = false;
+    state.apiGateway.error = action.error;
   },
-  [DIST_API_LAMBDA]: ({ apiLambda }, { data }) => {
-    apiLambda.error = null;
-    apiLambda.inflight = false;
-    apiLambda.queriedAt = Date.now();
-    apiLambda.errors = count(data, 'LambdaAPIErrors');
-    apiLambda.successes = count(data, 'LambdaAPISuccesses');
+  [DIST_API_LAMBDA]: (state, action) => {
+    state.apiLambda.error = null;
+    state.apiLambda.inflight = false;
+    state.apiLambda.queriedAt = Date.now();
+    state.apiLambda.errors = count(action.data, 'LambdaAPIErrors');
+    state.apiLambda.successes = count(action.data, 'LambdaAPISuccesses');
   },
-  [DIST_API_LAMBDA_INFLIGHT]: ({ apiLambda }) => {
-    apiLambda.inflight = true;
+  [DIST_API_LAMBDA_INFLIGHT]: (state) => {
+    state.apiLambda.inflight = true;
   },
-  [DIST_API_LAMBDA_ERROR]: ({ apiLambda }, { error }) => {
-    apiLambda.inflight = false;
-    apiLambda.error = error;
+  [DIST_API_LAMBDA_ERROR]: (state, action) => {
+    state.apiLambda.inflight = false;
+    state.apiLambda.error = action.error;
   },
-  [DIST_TEA_LAMBDA]: ({ teaLambda }, { data }) => {
-    teaLambda.error = null;
-    teaLambda.inflight = false;
-    teaLambda.queriedAt = Date.now();
-    teaLambda.errors = count(data, 'TEALambdaErrors');
-    teaLambda.successes = count(data, 'TEALambdaSuccesses');
+  [DIST_TEA_LAMBDA]: (state, action) => {
+    state.teaLambda.error = null;
+    state.teaLambda.inflight = false;
+    state.teaLambda.queriedAt = Date.now();
+    state.teaLambda.errors = count(action.data, 'TEALambdaErrors');
+    state.teaLambda.successes = count(action.data, 'TEALambdaSuccesses');
   },
-  [DIST_TEA_LAMBDA_INFLIGHT]: ({ teaLambda }) => {
-    teaLambda.inflight = true;
+  [DIST_TEA_LAMBDA_INFLIGHT]: (state) => {
+    state.teaLambda.inflight = true;
   },
-  [DIST_TEA_LAMBDA_ERROR]: ({ teaLambda }, { error }) => {
-    teaLambda.inflight = false;
-    teaLambda.error = error;
+  [DIST_TEA_LAMBDA_ERROR]: (state, action) => {
+    state.teaLambda.inflight = false;
+    state.teaLambda.error = action.error;
   },
-  [DIST_S3ACCESS]: ({ s3Access }, { data }) => {
-    s3Access.error = null;
-    s3Access.inflight = false;
-    s3Access.queriedAt = Date.now();
-    s3Access.errors = count(data, 's3AccessFailures');
-    s3Access.successes = count(data, 's3AccessSuccesses');
+  [DIST_S3ACCESS]: (state, action) => {
+    state.s3Access.error = null;
+    state.s3Access.inflight = false;
+    state.s3Access.queriedAt = Date.now();
+    state.s3Access.errors = count(action.data, 's3AccessFailures');
+    state.s3Access.successes = count(action.data, 's3AccessSuccesses');
   },
-  [DIST_S3ACCESS_INFLIGHT]: ({ s3Access }) => {
-    s3Access.inflight = true;
+  [DIST_S3ACCESS_INFLIGHT]: (state) => {
+    state.s3Access.inflight = true;
   },
-  [DIST_S3ACCESS_ERROR]: ({ s3Access }, { error }) => {
-    s3Access.inflight = false;
-    s3Access.error = error;
+  [DIST_S3ACCESS_ERROR]: (state, action) => {
+    state.s3Access.inflight = false;
+    state.s3Access.error = action.error;
   },
 });

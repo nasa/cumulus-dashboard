@@ -107,14 +107,14 @@ export class Form extends React.Component {
 
   onChange (inputId, value) {
     // Update the internal key/value store, in addition to marking as dirty
-    this.setState(createNextState((draftState) => {
-      draftState.inputs[inputId].value = value;
-      draftState.dirty[inputId] = true;
+    this.setState(createNextState((state) => {
+      state.inputs[inputId].value = value;
+      state.dirty[inputId] = true;
       // validate the field for live changes
       this.validateField({
         field: this.state.inputs[inputId],
         inputId,
-        draftState
+        state
       });
     }));
   }
@@ -122,9 +122,9 @@ export class Form extends React.Component {
   validateField ({
     field,
     inputId,
-    draftState
+    state
   }) {
-    const { dirty, inputs, errors } = draftState;
+    const { dirty, inputs, errors } = state;
     let { value } = inputs[inputId];
 
     // don't set a value for values that haven't changed and aren't required
@@ -152,7 +152,7 @@ export class Form extends React.Component {
       const error = field.error || field.validationError || t.errors.generic;
       inputs[inputId].error = error;
     } else if (inputs[inputId].error) {
-      draftState.errors = errors.filter(item => item !== field.labelText);
+      state.errors = errors.filter(item => item !== field.labelText);
       delete inputs[inputId].error;
     }
   }
@@ -171,18 +171,18 @@ export class Form extends React.Component {
 
     // validate input values in the store
 
-    this.setState(createNextState((draftState) => {
+    this.setState(createNextState((state) => {
       this.props.inputMeta.forEach(field => {
         const inputId = generateComponentId(field.schemaProperty, this.id);
 
         this.validateField({
           field,
           inputId,
-          draftState
+          state
         });
       });
 
-      draftState.submitted = true;
+      state.submitted = true;
     }));
   }
 

@@ -42,26 +42,26 @@ export const filterData = (data, filterString) =>
     );
 
 export default createReducer(initialState, {
-  [WORKFLOWS]: (draftState, { data }) => {
-    const filteredData = filterData(data, draftState.searchString);
+  [WORKFLOWS]: (state, action) => {
+    const filteredData = filterData(action.data, state.searchString);
 
-    draftState.map = mapByName(filteredData);
-    draftState.list.data = filteredData;
-    draftState.list.meta = { queriedAt: Date.now() };
-    draftState.list.inflight = false;
-    draftState.list.error = false;
+    state.map = mapByName(filteredData);
+    state.list.data = filteredData;
+    state.list.meta = { queriedAt: Date.now() };
+    state.list.inflight = false;
+    state.list.error = false;
   },
-  [WORKFLOWS_INFLIGHT]: ({ list }) => {
-    list.inflight = true;
+  [WORKFLOWS_INFLIGHT]: (state) => {
+    state.list.inflight = true;
   },
-  [WORKFLOWS_ERROR]: ({ list }, { error }) => {
-    list.inflight = false;
-    list.error = error;
+  [WORKFLOWS_ERROR]: (state, action) => {
+    state.list.inflight = false;
+    state.list.error = action.error;
   },
-  [SEARCH_WORKFLOWS]: (draftState, { searchString }) => {
-    draftState.searchString = searchString;
+  [SEARCH_WORKFLOWS]: (state, action) => {
+    state.searchString = action.searchString;
   },
-  [CLEAR_WORKFLOWS_SEARCH]: (draftState) => {
-    draftState.searchString = null;
+  [CLEAR_WORKFLOWS_SEARCH]: (state) => {
+    state.searchString = null;
   },
 });

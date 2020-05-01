@@ -59,32 +59,32 @@ export const initialState = {
 };
 
 export default createReducer(initialState, {
-  [RULE]: ({ map, deleted }, { id, data }) => {
-    map[id] = { data };
-    delete deleted[id];
+  [RULE]: (state, action) => {
+    state.map[action.id] = { data: action.data };
+    delete state.deleted[action.id];
   },
-  [RULE_INFLIGHT]: ({ map }, { id }) => {
-    map[id] = { inflight: true };
+  [RULE_INFLIGHT]: (state, action) => {
+    state.map[action.id] = { inflight: true };
   },
-  [RULE_ERROR]: ({ map }, { id, error }) => {
-    map[id] = { error };
+  [RULE_ERROR]: (state, action) => {
+    state.map[action.id] = { error: action.error };
   },
-  [RULES]: ({ list, deleted }, { data }) => {
-    list.data = removeDeleted('name', data.results, deleted);
-    list.meta = assignDate(data.meta);
-    list.inflight = false;
-    list.error = false;
+  [RULES]: (state, action) => {
+    state.list.data = removeDeleted('name', action.data.results, state.deleted);
+    state.list.meta = assignDate(action.data.meta);
+    state.list.inflight = false;
+    state.list.error = false;
   },
-  [RULES_INFLIGHT]: ({ list }) => {
-    list.inflight = true;
+  [RULES_INFLIGHT]: (state) => {
+    state.list.inflight = true;
   },
-  [RULES_ERROR]: ({ list }, { error }) => {
-    list.inflight = false;
-    list.error = error;
+  [RULES_ERROR]: (state, action) => {
+    state.list.inflight = false;
+    state.list.error = action.error;
   },
-  [UPDATE_RULE]: ({ map, updated }, { id, data }) => {
-    map[id] = { data };
-    updated[id] = { status: 'success' };
+  [UPDATE_RULE]: (state, action) => {
+    state.map[action.id] = { data: action.data };
+    state.updated[action.id] = { status: 'success' };
   },
   [UPDATE_RULE_INFLIGHT]: createInflightReducer('updated'),
   [UPDATE_RULE_ERROR]: createErrorReducer('updated'),
@@ -110,16 +110,16 @@ export default createReducer(initialState, {
   ),
   [RULE_DISABLE_INFLIGHT]: createInflightReducer('disabled'),
   [RULE_DISABLE_ERROR]: createErrorReducer('disabled'),
-  [SEARCH_RULES]: ({ list }, { prefix }) => {
-    list.params.prefix = prefix;
+  [SEARCH_RULES]: (state, action) => {
+    state.list.params.prefix = action.prefix;
   },
-  [CLEAR_RULES_SEARCH]: ({ list }) => {
-    delete list.params.prefix;
+  [CLEAR_RULES_SEARCH]: (state) => {
+    delete state.list.params.prefix;
   },
-  [FILTER_RULES]: ({ list }, { param }) => {
-    list.params[param.key] = param.value;
+  [FILTER_RULES]: (state, action) => {
+    state.list.params[action.param.key] = action.param.value;
   },
-  [CLEAR_RULES_FILTER]: ({ list }, { paramKey }) => {
-    delete list.params[paramKey];
+  [CLEAR_RULES_FILTER]: (state, action) => {
+    delete state.list.params[action.paramKey];
   },
 });

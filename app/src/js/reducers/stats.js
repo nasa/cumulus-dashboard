@@ -32,28 +32,28 @@ export const initialState = {
 };
 
 export default createReducer(initialState, {
-  [STATS]: ({ stats }, { data }) => {
-    stats.data = assignDate(data);
-    stats.inflight = false;
-    stats.error = null;
+  [STATS]: (state, action) => {
+    state.stats.data = assignDate(action.data);
+    state.stats.inflight = false;
+    state.stats.error = null;
   },
-  [STATS_INFLIGHT]: ({ stats }) => {
-    stats.inflight = true;
+  [STATS_INFLIGHT]: (state) => {
+    state.stats.inflight = true;
   },
-  [STATS_ERROR]: ({ stats }, { error }) => {
-    stats.inflight = false;
-    stats.error = error;
+  [STATS_ERROR]: (state, action) => {
+    state.stats.inflight = false;
+    state.stats.error = action.error;
   },
-  [COUNT]: ({ count }, { config, data }) => {
-    count.inflight = false;
-    count.error = null;
-    count.data[config.qs.type] = data;
+  [COUNT]: (state, action) => {
+    state.count.inflight = false;
+    state.count.error = null;
+    state.count.data[action.config.qs.type] = action.data;
   },
-  [COUNT_INFLIGHT]: ({ count }) => {
-    count.inflight = true;
+  [COUNT_INFLIGHT]: (state) => {
+    state.count.inflight = true;
   },
-  [COUNT_ERROR]: ({ count }, { error }) => {
-    count.inflight = false;
-    count.error = error;
+  [COUNT_ERROR]: (state, action) => {
+    state.count.inflight = false;
+    state.count.error = action.error;
   },
 });

@@ -56,79 +56,81 @@ export const initialState = {
 };
 
 export default createReducer(initialState, {
-  [PROVIDER]: (draftState, { id, data }) => {
-    draftState.map[id].data = data;
+  [PROVIDER]: (state, action) => {
+    const { id, data } = action;
 
-    delete draftState.map[id].inflight;
-    delete draftState.map[id].error;
+    state.map[id].data = data;
 
-    if (get(draftState, ['deleted', id, 'status']) !== 'error') {
-      delete draftState.deleted[id];
+    delete state.map[id].inflight;
+    delete state.map[id].error;
+
+    if (get(state, ['deleted', id, 'status']) !== 'error') {
+      delete state.deleted[id];
     }
   },
-  [PROVIDER_INFLIGHT]: ({ map }, { id }) => {
-    map[id] = { inflight: true };
+  [PROVIDER_INFLIGHT]: (state, action) => {
+    state.map[action.id] = { inflight: true };
   },
   [PROVIDER_ERROR]: createErrorReducer('map'),
   [NEW_PROVIDER]: createSuccessReducer('created'),
   [NEW_PROVIDER_INFLIGHT]: createInflightReducer('created'),
   [NEW_PROVIDER_ERROR]: createErrorReducer('created'),
-  [PROVIDER_COLLECTIONS]: ({ collections }, { id, data }) => {
-    collections[id] = { data: data.results.map((c) => c.collectionName) };
+  [PROVIDER_COLLECTIONS]: (state, { id, data }) => {
+    state.collections[id] = { data: data.results.map((c) => c.collectionName) };
   },
-  [PROVIDER_COLLECTIONS_INFLIGHT]: ({ collections }, { id }) => {
-    collections[id] = { inflight: true };
+  [PROVIDER_COLLECTIONS_INFLIGHT]: (state, action) => {
+    state.collections[action.id] = { inflight: true };
   },
-  [PROVIDER_COLLECTIONS_ERROR]: ({ collections }, { id, error }) => {
-    collections[id] = { error };
+  [PROVIDER_COLLECTIONS_ERROR]: (state, action) => {
+    state.collections[action.id] = { error: action.error };
   },
-  [UPDATE_PROVIDER]: (draftState, action) => {
+  [UPDATE_PROVIDER]: (state, action) => {
     const { id, data } = action;
-    draftState.map[id] = { data };
-    createSuccessReducer('updated')(draftState, action);
+    state.map[id] = { data };
+    createSuccessReducer('updated')(state, action);
   },
   [UPDATE_PROVIDER_INFLIGHT]: createInflightReducer('updated'),
   [UPDATE_PROVIDER_ERROR]: createErrorReducer('updated'),
   [UPDATE_PROVIDER_CLEAR]: createClearItemReducer('updated'),
-  [PROVIDERS]: ({ list }, { data }) => {
-    list.data = data.results;
-    list.meta = assignDate(data.meta);
-    list.inflight = false;
-    list.error = false;
+  [PROVIDERS]: (state, action) => {
+    state.list.data = action.data.results;
+    state.list.meta = assignDate(action.data.meta);
+    state.list.inflight = false;
+    state.list.error = false;
   },
-  [PROVIDERS]: ({ list }, { data }) => {
-    list.data = data.results;
-    list.meta = assignDate(data.meta);
-    list.inflight = false;
-    list.error = false;
+  [PROVIDERS]: (state, action) => {
+    state.list.data = action.data.results;
+    state.list.meta = assignDate(action.data.meta);
+    state.list.inflight = false;
+    state.list.error = false;
   },
-  [PROVIDERS_INFLIGHT]: ({ list }) => {
-    list.inflight = true;
+  [PROVIDERS_INFLIGHT]: (state) => {
+    state.list.inflight = true;
   },
-  [PROVIDERS_ERROR]: ({ list }, { error }) => {
-    list.inflight = false;
-    list.error = error;
+  [PROVIDERS_ERROR]: (state, action) => {
+    state.list.inflight = false;
+    state.list.error = action.error;
   },
-  [SEARCH_PROVIDERS]: ({ list }, { prefix }) => {
-    list.params.prefix = prefix;
+  [SEARCH_PROVIDERS]: (state, action) => {
+    state.list.params.prefix = action.prefix;
   },
-  [CLEAR_PROVIDERS_SEARCH]: ({ list }) => {
-    delete list.params.prefix;
+  [CLEAR_PROVIDERS_SEARCH]: (state) => {
+    delete state.list.params.prefix;
   },
-  [FILTER_PROVIDERS]: ({ list }, { param }) => {
-    list.params[param.key] = param.value;
+  [FILTER_PROVIDERS]: (state, action) => {
+    state.list.params[action.param.key] = action.param.value;
   },
-  [CLEAR_PROVIDERS_FILTER]: ({ list }, { paramKey }) => {
-    delete list.params[paramKey];
+  [CLEAR_PROVIDERS_FILTER]: (state, action) => {
+    delete state.list.params[action.paramKey];
   },
   [PROVIDER_DELETE]: createSuccessReducer('deleted'),
   [PROVIDER_DELETE_INFLIGHT]: createInflightReducer('deleted'),
   [PROVIDER_DELETE_ERROR]: createErrorReducer('deleted'),
-  [OPTIONS_PROVIDERGROUP]: ({ dropdowns }, { data }) => {
+  [OPTIONS_PROVIDERGROUP]: (state, action) => {
     // Map the list response to an object with key-value pairs like:
     // displayValue: optionElementValue
-    dropdowns.group = {
-      options: data.results.reduce(
+    state.dropdowns.group = {
+      options: action.data.results.reduce(
         (obj, provider) => {
           // Several `results` items can share a `providerName`, but
           // these are de-duplciated by the key-value structure
@@ -140,8 +142,8 @@ export default createReducer(initialState, {
     };
   },
   [OPTIONS_PROVIDERGROUP_INFLIGHT]: () => {},
-  [OPTIONS_PROVIDERGROUP_ERROR]: ({ dropdowns, list }, { error }) => {
-    dropdowns.group = { options: [] };
-    list.error = error;
+  [OPTIONS_PROVIDERGROUP_ERROR]: (state, action) => {
+    state.dropdowns.group = { options: [] };
+    state.list.error = action.error;
   },
 });

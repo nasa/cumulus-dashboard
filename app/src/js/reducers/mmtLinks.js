@@ -7,7 +7,7 @@ import { ADD_MMTLINK } from '../actions/types';
 const initialState = {};
 
 export default createReducer(initialState, {
-  [ADD_MMTLINK]: (draftState, { data }) => {
-    draftState[getCollectionId(data)] = data.url;
+  [ADD_MMTLINK]: (state, action) => {
+    state[getCollectionId(action.data)] = action.data.url;
   },
 });

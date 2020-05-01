@@ -29,42 +29,42 @@ export const initialState = {
 };
 
 export default createReducer(initialState, {
-  [OPERATIONS]: ({ list }, { data }) => {
-    list.data = data.results;
-    list.meta = assignDate(data.meta);
-    list.inflight = false;
-    list.error = false;
+  [OPERATIONS]: (state, action) => {
+    state.list.data = action.data.results;
+    state.list.meta = assignDate(action.data.meta);
+    state.list.inflight = false;
+    state.list.error = false;
   },
-  [OPERATIONS_INFLIGHT]: ({ list }) => {
-    list.inflight = true;
+  [OPERATIONS_INFLIGHT]: (state) => {
+    state.list.inflight = true;
   },
-  [OPERATIONS_ERROR]: ({ list }, { error }) => {
-    list.inflight = false;
-    list.error = error;
+  [OPERATIONS_ERROR]: (state, action) => {
+    state.list.inflight = false;
+    state.list.error = action.error;
   },
-  [OPERATION]: ({ list }, { data }) => {
-    list.data = data.results;
-    list.meta = assignDate(data.meta);
-    list.inflight = false;
-    list.error = false;
+  [OPERATION]: (state, action) => {
+    state.list.data = action.data.results;
+    state.list.meta = assignDate(action.data.meta);
+    state.list.inflight = false;
+    state.list.error = false;
   },
-  [OPERATION_INFLIGHT]: ({ list }) => {
-    list.inflight = true;
+  [OPERATION_INFLIGHT]: (state) => {
+    state.list.inflight = true;
   },
-  [OPERATION_ERROR]: ({ list }, { error }) => {
-    list.inflight = false;
-    list.error = error;
+  [OPERATION_ERROR]: (state, action) => {
+    state.list.inflight = false;
+    state.list.error = action.error;
   },
-  [FILTER_OPERATIONS]: ({ list }, { param }) => {
-    list.params[param.key] = param.value;
+  [FILTER_OPERATIONS]: (state, action) => {
+    state.list.params[action.param.key] = action.param.value;
   },
-  [CLEAR_OPERATIONS_FILTER]: ({ list }, { paramKey }) => {
-    delete list.params[paramKey];
+  [CLEAR_OPERATIONS_FILTER]: (state, action) => {
+    delete state.list.params[action.paramKey];
   },
-  [SEARCH_OPERATIONS]: ({ list }, { prefix }) => {
-    list.internal.prefix = prefix;
+  [SEARCH_OPERATIONS]: (state, action) => {
+    state.list.internal.prefix = action.prefix;
   },
-  [CLEAR_OPERATIONS_SEARCH]: ({ list }) => {
-    delete list.internal.prefix;
+  [CLEAR_OPERATIONS_SEARCH]: (state) => {
+    delete state.list.internal.prefix;
   },
 });

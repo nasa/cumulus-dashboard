@@ -15,20 +15,20 @@ export const initialState = {
 };
 
 export default createReducer(initialState, {
-  [API_VERSION]: (draftState, { payload }) => {
-    draftState.versionNumber = payload.versionNumber;
-    draftState.warning = '';
+  [API_VERSION]: (state, action) => {
+    state.versionNumber = action.payload.versionNumber;
+    state.warning = '';
   },
-  [API_VERSION_COMPATIBLE]: (draftState) => {
-    draftState.isCompatible = true;
-    draftState.warning = '';
+  [API_VERSION_COMPATIBLE]: (state) => {
+    state.isCompatible = true;
+    state.warning = '';
   },
-  [API_VERSION_ERROR]: (draftState, { payload }) => {
-    draftState.apiVersion = payload.error.message;
-    draftState.warning = 'Failed to acquire Cumulus API Version';
+  [API_VERSION_ERROR]: (state, action) => {
+    state.apiVersion = action.payload.error.message;
+    state.warning = 'Failed to acquire Cumulus API Version';
   },
-  [API_VERSION_INCOMPATIBLE]: (draftState, { payload }) => {
-    draftState.isCompatible = false;
-    draftState.warning = payload.warning;
+  [API_VERSION_INCOMPATIBLE]: (state, action) => {
+    state.isCompatible = false;
+    state.warning = action.payload.warning;
   },
 });
