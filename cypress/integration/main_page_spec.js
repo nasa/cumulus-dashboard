@@ -286,7 +286,7 @@ describe('Dashboard Home Page', () => {
       const now = Date.UTC(2009, 0, 5, 13, 35, 3);
       cy.clock(now);
 
-      cy.visit('/');
+      cy.visit('/?new_session=true');
       cy.url().should('include', 'startDateTime=20090104133500');
     });
   });

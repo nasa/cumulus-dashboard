@@ -23,7 +23,7 @@ describe('Dashboard Collections Page', () => {
 
     beforeEach(() => {
       cy.login();
-      cy.visit('/');
+      cy.visit('/?new_session=true');
       cy.server();
       cy.route('POST', '/collections').as('postCollection');
       cy.route('GET', '/collections?limit=*').as('getCollections');
@@ -38,7 +38,7 @@ describe('Dashboard Collections Page', () => {
 
     it('should display a link to view collections', () => {
       cy.contains('nav li a', 'Collections').as('collections');
-      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections/);
+      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections\?startDateTime=/);
       cy.get('@collections').click();
       cy.wait('@getActiveCollections');
 
@@ -55,7 +55,7 @@ describe('Dashboard Collections Page', () => {
 
     it('should only display collections with active granules when time filter is applied', () => {
       cy.contains('nav li a', 'Collections').as('collections');
-      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections/);
+      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections\?startDateTime=/);
       cy.get('@collections').click();
       cy.wait('@getActiveCollections');
 
