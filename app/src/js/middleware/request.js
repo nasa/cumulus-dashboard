@@ -25,7 +25,6 @@ const handleError = ({
   console.groupEnd();
 
   if (+statusCode >= 400 && +statusCode < 500) {
-    debugger;
     return next(loginError(error.message));
   }
 
