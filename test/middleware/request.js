@@ -1,22 +1,38 @@
 import test from 'ava';
 import nock from 'nock';
+import sinon from 'sinon';
 
 import { CALL_API } from '../../app/src/js/actions/types';
 import { requestMiddleware } from '../../app/src/js/middleware/request';
 
 const port = process.env.FAKEAPIPORT || 5001;
 
-test.beforeEach((t) => {
-  const doDispatch = () => {};
-  const doGetState = () => ({
-    api: {
-      tokens: {
-        token: 'fake-token'
-      }
-    }
-  });
-  t.context.nextHandler = requestMiddleware({dispatch: doDispatch, getState: doGetState});
+const token = 'fake-token';
 
+const getStateStub = sinon.stub().callsFake(() => ({
+  api: {
+    tokens: {
+      token
+    }
+  }
+}));
+const dispatchStub = sinon.stub();
+const nextStub = sinon.stub();
+
+const create = () => {
+  const store = {
+    getState: getStateStub,
+    dispatch: dispatchStub
+  };
+  const next = nextStub;
+
+  const invokeMiddleware = action => requestMiddleware(store)(next)(action);
+
+  return { store, next, invokeMiddleware };
+};
+
+test.beforeEach((t) => {
+  // t.context.nextHandler = requestMiddleware({dispatch: doDispatch, getState: doGetState});
   t.context.defaultConfig = {
     json: true,
     resolveWithFullResponse: true,
@@ -24,9 +40,16 @@ test.beforeEach((t) => {
   };
 
   t.context.expectedHeaders = {
-    Authorization: 'Bearer fake-token',
+    Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json'
   };
+});
+
+test.afterEach.always(() => {
+  nock.cleanAll();
+  dispatchStub.resetHistory();
+  getStateStub.resetHistory();
+  nextStub.resetHistory();
 });
 
 test('should pass action to next if not an API request action', (t) => {
@@ -110,10 +133,12 @@ test.cb('should be able to use provided authorization headers', (t) => {
   actionHandler(actionObj);
 });
 
-test.cb('should dispatch error action for failed request', (t) => {
+test.serial.only('should dispatch error action for failed request', async (t) => {
   nock(`http://localhost:${port}`)
     .get('/test-path')
     .reply(500, { message: 'Internal server error' });
+
+  const { next, invokeMiddleware } = create();
 
   const requestAction = {
     type: 'TEST',
@@ -135,12 +160,38 @@ test.cb('should dispatch error action for failed request', (t) => {
     type: 'TEST_ERROR'
   };
 
-  const actionHandler = t.context.nextHandler(action => {
-    t.deepEqual(action, expectedAction);
-    t.end();
-  });
+  await invokeMiddleware(actionObj);
+  t.deepEqual(next.firstCall.args[0], expectedAction);
+});
 
-  actionHandler(actionObj);
+test.serial.only('should dispatch login error action for 4xx response', async (t) => {
+  nock(`http://localhost:${port}`)
+    .get('/test-path')
+    .reply(401, { message: 'Access denied' });
+
+  const { next, invokeMiddleware } = create();
+
+  const requestAction = {
+    type: 'TEST',
+    method: 'GET',
+    url: `http://localhost:${port}/test-path`
+  };
+  const actionObj = {
+    [CALL_API]: requestAction
+  };
+
+  const expectedAction = {
+    error: 'Access denied',
+    type: 'LOGIN_ERROR'
+  };
+
+  await invokeMiddleware(actionObj);
+
+  const dispatchStub = sinon.stub().resolves({});
+  debugger;
+  const loginErrorAction = next.firstCall.args[0];
+  await loginErrorAction(dispatchStub);
+  t.deepEqual(dispatchStub.lastCall.lastArg, expectedAction);
 });
 
 test.cb('should return expected action for GET request action', (t) => {
