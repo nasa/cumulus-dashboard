@@ -46,6 +46,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1787**
   - Changes `listCollections` action to hit `/collections/active` endpoint when timefilters are present
 
+- **CUMULUS-1538**
+  - Update executions details page styles
+
+- **CUMULUS-1460**
+  - Update dashboard headers overall
+  - Move remaining "add" buttons to body content
+
+- **CUMULUS-1537**
+  - Update execution details page format
+  - Move execution input and output json to modal
+
 - **CUMULUS-1467**
   - Change the metrics section on the home page to update based on datepicker time period.
 
