@@ -29,25 +29,6 @@ const handleError = ({
     return next(loginError(error.message));
   }
 
-  // if (error.message) {
-  //   // Temporary fix until the 'logs' endpoint is fixed
-  //   // TODO: is this still relevant?
-  //   if (error.message.includes('Invalid Authorization token') &&
-  //       requestAction.url.includes('logs')) {
-  //     const data = { results: [] };
-  //     return next({ id, type, data, config: requestAction });
-  //   }
-
-  //   // Catch the session expired error
-  //   // Weirdly error.message shows up as " : Session expired"
-  //   // So it's using indexOf instead of a direct comparison
-  //   if (error.message.includes('Your session has expired. Please login again.') ||
-  //       error.message.includes('Invalid Authorization token') ||
-  //       error.message.includes('Access token has expired')) {
-  //     return next(loginError(error.message.replace('Bad Request: ', '')));
-  //   }
-  // }
-
   const errorType = type + '_ERROR';
   log((id ? errorType + ': ' + id : errorType));
   log(error);
