@@ -7,7 +7,6 @@ export const maxDisplayed = 10;
 
 const BatchReingestCompleteContent = ({
   results,
-  errorMessage,
   errors
 }) => {
   const confirmation = () => `successfully reingested ${results.length > 1 ? 'these' : 'this'} granule${results.length > 1 ? 's' : ''}`;
@@ -51,7 +50,7 @@ const BatchReingestCompleteContent = ({
           <p>To quickly view the status, click "View Granules".</p>
         </>
       }
-      {errorMessage &&
+      {(results && results.length > 0) &&
         <>
           <Alert variant='danger'><strong>Error:</strong> There is an issue with the request.</Alert>
           <ul>
@@ -66,8 +65,7 @@ const BatchReingestCompleteContent = ({
 
 BatchReingestCompleteContent.propTypes = {
   results: PropTypes.array,
-  errors: PropTypes.array,
-  errorMessage: PropTypes.string
+  errors: PropTypes.array
 };
 
 export default BatchReingestCompleteContent;
