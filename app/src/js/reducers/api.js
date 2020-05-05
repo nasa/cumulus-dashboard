@@ -59,6 +59,7 @@ export default createReducer(initialState, {
     state.tokens.inflight = true;
   },
   [SET_TOKEN]: (state, action) => {
-    setToken((state.tokens.token = action.token));
+    setToken(action.token);
+    state.tokens.token = action.token;
   },
 });
