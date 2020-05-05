@@ -49,30 +49,30 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1538**
   - Update executions details page styles
 
-- **CUMULUS-1460**
-  - Update dashboard headers overall
-  - Move remaining "add" buttons to body content
-
 - **CUMULUS-1537**
   - Update execution details page format
   - Move execution input and output json to modal
-
-- **CUMULUS-1467**
-  - Change the metrics section on the home page to update based on datepicker time period.
-
-- **CUMULUS-1527**
-  - Style changes for individual rule page
 
 - **CUMULUS-1528**
   - Change add/copy rule form from raw JSON input to individual form fields.
     Workflow, Provider, and Collection inputs are now dropdowns populated with
     currently available items.
 
-- **CUMULUS-1509**
-  - Update styles on grnaules page
+- **CUMULUS-1527**
+  - Style changes for individual rule page
 
 - **CUMULUS-1525**
   - Style changes for rules overview page
+
+- **CUMULUS-1509**
+  - Update styles on grnaules page
+
+- **CUMULUS-1467**
+  - Change the metrics section on the home page to update based on datepicker time period.
+
+- **CUMULUS-1460**
+  - Update dashboard headers overall
+  - Move remaining "add" buttons to body content
 
 ### Fixed
 
