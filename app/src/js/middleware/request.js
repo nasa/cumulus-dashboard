@@ -25,7 +25,9 @@ const handleError = ({
   console.dir(requestAction);
   console.groupEnd();
 
-  if (+statusCode >= 400 && +statusCode < 500) {
+  // If the error response indicates lack or failure of request
+  // authorization, then the log user out
+  if ([401, 403].includes(+statusCode)) {
     return next(loginError(error.message));
   }
 

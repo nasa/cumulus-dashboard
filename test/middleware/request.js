@@ -171,10 +171,30 @@ test.serial('should dispatch error action for failed request', async (t) => {
   t.deepEqual(next.firstCall.args[0], expectedAction);
 });
 
-test.serial('should dispatch login error action for 4xx response', async (t) => {
+test.serial('should dispatch login error action for 401 response', async (t) => {
   nock(`http://localhost:${port}`)
     .get('/test-path')
-    .reply(401, { message: 'Access denied' });
+    .reply(401, { message: 'Unauthorized' });
+
+  const { invokeMiddleware } = create();
+
+  const requestAction = {
+    type: 'TEST',
+    method: 'GET',
+    url: `http://localhost:${port}/test-path`
+  };
+  const actionObj = {
+    [CALL_API]: requestAction
+  };
+
+  await invokeMiddleware(actionObj);
+  t.true(loginErrorStub.called);
+});
+
+test.serial('should dispatch login error action for 403 response', async (t) => {
+  nock(`http://localhost:${port}`)
+    .get('/test-path')
+    .reply(403, { message: 'Forbidden' });
 
   const { invokeMiddleware } = create();
 
