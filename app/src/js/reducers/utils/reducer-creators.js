@@ -51,6 +51,7 @@ export const createClearItemReducer = (stateProp, idSelector = idProp) => {
  * @example
  * createReducer(initialState, {
  *   [NEW_PROVIDER_INFLIGHT]: createInflightReducer('created'),
+ *   // The line above is equivalent to the following
  *   [NEW_PROVIDER_INFLIGHT]: (state, action) => {
  *     state.created[action.id] = { status: 'inflight' };
  *   },
@@ -158,7 +159,9 @@ export const createErrorReducer = (stateProp, idSelector = idProp) => {
 };
 
 /**
- * Returns a reducer function that calls all of the specified reducers in order.
+ * Returns a reducer function that calls all of the specified reducers (given
+ * as separate arguments, _not_ as a single array argument) in the order they
+ * appear as arguments.
  *
  * @example
  * createReducer(initialState, {
@@ -166,11 +169,19 @@ export const createErrorReducer = (stateProp, idSelector = idProp) => {
  *     createSuccessReducer('enabled'),
  *     createClearItemReducer('disabled')
  *   ),
+ *   // The lines above are equivalent to the following
+ *   [ACTION_NAME]: (state, action) => {
+ *     const successReducer = createSuccessReducer('enabled');
+ *     const clearReducer = createClearItemReducer('disabled');
+ *     successReducer(state, action);
+ *     clearReducer(state, action);
+ *   },
  *   ...
  * }
  *
- * @param  {...any} reducers - list of reducer functions to be invoked in order
- *    with the state and action
+ * @param  {...any} reducers - reducer functions to be invoked in the order
+ *    they are specified as individual arguments, each of which is passed a
+ *    state and action, respectively
  */
 export const createSerialReducer = (...reducers) => {
   return (state, action) =>

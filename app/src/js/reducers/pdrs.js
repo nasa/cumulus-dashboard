@@ -36,7 +36,10 @@ export const initialState = {
 
 export default createReducer(initialState, {
   [PDR]: (state, action) => {
-    state.map[action.id] = { data: assignDate(action.data) };
+    state.map[action.id] = {
+      inflight: false,
+      data: assignDate(action.data),
+    };
     // https://github.com/nasa/cumulus-dashboard/issues/284
     delete state.deleted[action.id];
   },
@@ -44,7 +47,10 @@ export default createReducer(initialState, {
     state.map[action.id] = { inflight: true };
   },
   [PDR_ERROR]: (state, action) => {
-    state.map[action.id] = { error: action.error };
+    state.map[action.id] = {
+      inflight: false,
+      error: action.error,
+    };
   },
   [PDRS]: (state, action) => {
     state.list.data = action.data.results;

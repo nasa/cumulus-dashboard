@@ -44,6 +44,7 @@ test('reducers/dist/dist_apigateway', (t) => {
   };
 
   const expectedState = {
+    ...initialState,
     apiGateway: {
       inflight: false,
       error: null,
@@ -59,7 +60,7 @@ test('reducers/dist/dist_apigateway', (t) => {
     }
   };
   const newState = reducer(initialState, action);
-  t.deepEqual(expectedState.apiGateway, newState.apiGateway);
+  t.deepEqual(expectedState, newState);
 });
 
 test('reducers/dist/dist_apigateway_inflight', (t) => {
@@ -110,7 +111,7 @@ test('reducers/dist/dist_apilambda_inflight', (t) => {
     type: DIST_API_LAMBDA_INFLIGHT
   };
   const newState = reducer(initialState, action);
-  t.deepEqual(true, newState.apiLambda.inflight);
+  t.true(newState.apiLambda.inflight);
 });
 
 test('reducers/dist/dist_apilambda_error', (t) => {
@@ -195,6 +196,7 @@ test('reducers/dist/dist_s3access', (t) => {
   };
 
   const expectedState = {
+    ...initialState,
     s3Access: {
       inflight: false,
       error: null,
@@ -204,7 +206,7 @@ test('reducers/dist/dist_s3access', (t) => {
     }
   };
   const newState = reducer(initialState, action);
-  t.deepEqual(expectedState.s3Access, newState.s3Access);
+  t.deepEqual(expectedState, newState);
 });
 
 test('reducers/dist/dist_s3access_inflight', (t) => {
@@ -214,11 +216,18 @@ test('reducers/dist/dist_s3access_inflight', (t) => {
     },
     s3Access: {}
   };
+  const expectedState = {
+    apiLambda: {
+      inflight: false,
+    },
+    s3Access: {
+      inflight: true,
+    },
+  };
   const action = { type: DIST_S3ACCESS_INFLIGHT };
   const newState = reducer(initialState, action);
 
-  t.false(newState.apiLambda.inflight);
-  t.true(newState.s3Access.inflight);
+  t.deepEqual(expectedState, newState);
 });
 
 test('reducers/dist/dist_s3access_error', (t) => {

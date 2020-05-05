@@ -60,14 +60,20 @@ export const initialState = {
 
 export default createReducer(initialState, {
   [RULE]: (state, action) => {
-    state.map[action.id] = { data: action.data };
+    state.map[action.id] = {
+      inflight: false,
+      data: action.data,
+    };
     delete state.deleted[action.id];
   },
   [RULE_INFLIGHT]: (state, action) => {
     state.map[action.id] = { inflight: true };
   },
   [RULE_ERROR]: (state, action) => {
-    state.map[action.id] = { error: action.error };
+    state.map[action.id] = {
+      inflight: false,
+      error: action.error,
+    };
   },
   [RULES]: (state, action) => {
     state.list.data = removeDeleted('name', action.data.results, state.deleted);

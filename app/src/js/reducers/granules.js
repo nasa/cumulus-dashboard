@@ -1,5 +1,6 @@
 'use strict';
 
+import { set } from 'object-path';
 import assignDate from './utils/assign-date';
 import removeDeleted from './utils/remove-deleted';
 import { createReducer } from '@reduxjs/toolkit';
@@ -66,20 +67,28 @@ const getConfigRequestId = ({ config: { requestId } }) => requestId;
 
 export default createReducer(initialState, {
   [GRANULE]: (state, action) => {
-    state.map[action.id] = { data: assignDate(action.data) };
+    state.map[action.id] = {
+      inflight: false,
+      data: assignDate(action.data),
+    };
     delete state.deleted[action.id];
   },
   [GRANULE_INFLIGHT]: (state, action) => {
     state.map[action.id] = { inflight: true };
   },
   [GRANULE_ERROR]: (state, action) => {
-    state.map[action.id] = { error: action.error };
+    state.map[action.id] = {
+      inflight: false,
+      error: action.error,
+    };
   },
   [GRANULES]: (state, action) => {
     state.list = {
       data: removeDeleted('granuleId', action.data.results, state.deleted),
       meta: assignDate(action.data.meta),
       params: {},
+      inflight: false,
+      error: false
     };
   },
   [GRANULES_INFLIGHT]: (state) => {
@@ -113,13 +122,13 @@ export default createReducer(initialState, {
     state.list.params.prefix = action.prefix;
   },
   [CLEAR_GRANULES_SEARCH]: (state) => {
-    delete state.list.params.prefix;
+    state.list.params.prefix = null;
   },
   [FILTER_GRANULES]: (state, action) => {
     state.list.params[action.param.key] = action.param.value;
   },
   [CLEAR_GRANULES_FILTER]: (state, action) => {
-    delete state.list.params[action.paramKey];
+    state.list.params[action.paramKey] = null;
   },
   [OPTIONS_COLLECTIONNAME]: (state, action) => {
     const options = action.data.results.reduce(
@@ -129,11 +138,12 @@ export default createReducer(initialState, {
         }),
       {}
     );
-    state.dropdowns.collectionName = { options };
+
+    set(state.dropdowns, 'collectionName.options', options);
   },
   [OPTIONS_COLLECTIONNAME_INFLIGHT]: () => {},
   [OPTIONS_COLLECTIONNAME_ERROR]: (state, action) => {
-    delete state.dropdowns.collectionName;
+    set(state.dropdowns, 'collectionName.options', []);
     state.list.error = action.error;
   },
 });

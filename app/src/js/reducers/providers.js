@@ -1,6 +1,6 @@
 'use strict';
 
-import { get } from 'object-path';
+import { get, set } from 'object-path';
 import { createReducer } from '@reduxjs/toolkit';
 import assignDate from './utils/assign-date';
 import {
@@ -59,10 +59,11 @@ export default createReducer(initialState, {
   [PROVIDER]: (state, action) => {
     const { id, data } = action;
 
-    state.map[id].data = data;
-
-    delete state.map[id].inflight;
-    delete state.map[id].error;
+    state.map[id] = {
+      inflight: false,
+      data,
+      error: null,
+    };
 
     if (get(state, ['deleted', id, 'status']) !== 'error') {
       delete state.deleted[id];
@@ -82,7 +83,10 @@ export default createReducer(initialState, {
     state.collections[action.id] = { inflight: true };
   },
   [PROVIDER_COLLECTIONS_ERROR]: (state, action) => {
-    state.collections[action.id] = { error: action.error };
+    state.collections[action.id] = {
+      inflight: false,
+      error: action.error,
+    };
   },
   [UPDATE_PROVIDER]: (state, action) => {
     const { id, data } = action;
@@ -129,21 +133,21 @@ export default createReducer(initialState, {
   [OPTIONS_PROVIDERGROUP]: (state, action) => {
     // Map the list response to an object with key-value pairs like:
     // displayValue: optionElementValue
-    state.dropdowns.group = {
-      options: action.data.results.reduce(
-        (obj, provider) => {
-          // Several `results` items can share a `providerName`, but
-          // these are de-duplciated by the key-value structure
-          obj[provider.providerName] = provider.providerName;
-          return obj;
-        },
-        { '': '' }
-      ),
-    };
+    const options = action.data.results.reduce(
+      (obj, provider) => {
+        // Several `results` items can share a `providerName`, but
+        // these are de-duplciated by the key-value structure
+        obj[provider.providerName] = provider.providerName;
+        return obj;
+      },
+      { '': '' }
+    );
+
+    set(state.dropdowns, 'group.options', options);
   },
   [OPTIONS_PROVIDERGROUP_INFLIGHT]: () => {},
   [OPTIONS_PROVIDERGROUP_ERROR]: (state, action) => {
-    state.dropdowns.group = { options: [] };
+    set(state.dropdowns, 'group.options', []);
     state.list.error = action.error;
   },
 });

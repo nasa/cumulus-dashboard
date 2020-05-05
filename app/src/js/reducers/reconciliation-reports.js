@@ -29,14 +29,20 @@ export const initialState = {
 
 export default createReducer(initialState, {
   [RECONCILIATION]: (state, action) => {
-    state.map[action.id] = { data: assignDate(action.data) };
+    state.map[action.id] = {
+      inflight: false,
+      data: assignDate(action.data),
+    };
     delete state.deleted[action.id];
   },
   [RECONCILIATION_INFLIGHT]: (state, action) => {
     state.map[action.id] = { inflight: true };
   },
   [RECONCILIATION_ERROR]: (state, action) => {
-    state.map[action.id] = { error: action.error };
+    state.map[action.id] = {
+      inflight: false,
+      error: action.error,
+    };
   },
   [RECONCILIATIONS]: (state, action) => {
     // response.results is a array of string filenames
