@@ -59,7 +59,7 @@ test.afterEach.always(() => {
 });
 
 test.serial('should pass action to next if not an API request action', (t) => {
-  const actionObj = {};
+  const actionObj = { type: 'anything', some: 'action' };
 
   const { next, invokeMiddleware } = create();
   invokeMiddleware(actionObj);
@@ -141,7 +141,7 @@ test.serial('should be able to use provided authorization headers', async (t) =>
 });
 
 test.serial('should dispatch error action for failed request', async (t) => {
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .get('/test-path')
     .reply(500, { message: 'Internal server error' });
 
@@ -150,7 +150,7 @@ test.serial('should dispatch error action for failed request', async (t) => {
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: `http://localhost:${port}/test-path`
+    url: 'http://anyhost/test-path'
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -172,7 +172,7 @@ test.serial('should dispatch error action for failed request', async (t) => {
 });
 
 test.serial('should dispatch login error action for 401 response', async (t) => {
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .get('/test-path')
     .reply(401, { message: 'Unauthorized' });
 
@@ -181,7 +181,7 @@ test.serial('should dispatch login error action for 401 response', async (t) => 
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: `http://localhost:${port}/test-path`
+    url: 'http://anyhost/test-path'
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -192,7 +192,7 @@ test.serial('should dispatch login error action for 401 response', async (t) => 
 });
 
 test.serial('should dispatch login error action for 403 response', async (t) => {
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .get('/test-path')
     .reply(403, { message: 'Forbidden' });
 
@@ -201,7 +201,7 @@ test.serial('should dispatch login error action for 403 response', async (t) => 
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: `http://localhost:${port}/test-path`
+    url: 'http://anyhost/test-path'
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -214,14 +214,14 @@ test.serial('should dispatch login error action for 403 response', async (t) => 
 test.serial('should return expected action for GET request action', async (t) => {
   const stubbedResponse = { message: 'success' };
 
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .get('/test-path')
     .reply(200, stubbedResponse);
 
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: `http://localhost:${port}/test-path`
+    url: 'http://anyhost/test-path'
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -252,7 +252,7 @@ test.serial('should return expected action for GET request action with query sta
   };
   const stubbedResponse = { message: 'success' };
 
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .get('/test-path')
     .query(queryParams)
     .reply(200, stubbedResponse);
@@ -260,7 +260,7 @@ test.serial('should return expected action for GET request action with query sta
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: `http://localhost:${port}/test-path`,
+    url: 'http://anyhost/test-path',
     qs: queryParams
   };
   const actionObj = {
@@ -286,7 +286,7 @@ test.serial('should return expected action for GET request action with query sta
 });
 
 test.serial('should return expected action for POST request action', async (t) => {
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .post('/test-path')
     .reply(200, (_, requestBody) => {
       return requestBody;
@@ -296,7 +296,7 @@ test.serial('should return expected action for POST request action', async (t) =
   const requestAction = {
     type: 'TEST',
     method: 'POST',
-    url: `http://localhost:${port}/test-path`,
+    url: 'http://anyhost/test-path',
     body: requestBody
   };
   const actionObj = {
@@ -322,7 +322,7 @@ test.serial('should return expected action for POST request action', async (t) =
 });
 
 test.serial('should return expected action for PUT request action', async (t) => {
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .put('/test-path')
     .reply(200, (_, requestBody) => {
       return requestBody;
@@ -332,7 +332,7 @@ test.serial('should return expected action for PUT request action', async (t) =>
   const requestAction = {
     type: 'TEST',
     method: 'PUT',
-    url: `http://localhost:${port}/test-path`,
+    url: 'http://anyhost/test-path',
     body: requestBody
   };
   const actionObj = {
@@ -359,14 +359,14 @@ test.serial('should return expected action for PUT request action', async (t) =>
 
 test.serial('should return expected action for DELETE request action', async (t) => {
   const stubbedResponse = { message: 'success' };
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .delete('/test-path')
     .reply(200, stubbedResponse);
 
   const requestAction = {
     type: 'TEST',
     method: 'DELETE',
-    url: `http://localhost:${port}/test-path`
+    url: 'http://anyhost/test-path'
   };
   const actionObj = {
     [CALL_API]: requestAction
