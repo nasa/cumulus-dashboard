@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- **CUMULUS-1816**
+  - Change Datepicker behavior on login. The default to "Recent" start/end dates
+    now only occurs on first login on the hompage.
+  - URL is updated on login to reflect Datepicker params
+
 - **CUMULUS-1920**
   - Updated styles for granule reingest modal
 
