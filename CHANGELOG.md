@@ -33,16 +33,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- **CUMULUS-1538**
-  - Update executions details page styles
-
-- **CUMULUS-1460**
-  - Update dashboard headers overall
-  - Move remaining "add" buttons to body content
-
-- **CUMULUS-1537**
-  - Update execution details page format
-  - Move execution input and output json to modal
+- **CUMULUS-1920**
+  - Updated styles for granule reingest modal
 
 - **CUMULUS-1798**
   - Change the 12HR/24HR Format selector from radio to dropdown
