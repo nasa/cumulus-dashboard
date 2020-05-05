@@ -2,22 +2,31 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { get } from 'object-path';
-import { listProviders, getCount, interval } from '../../actions';
+import cloneDeep from 'lodash.clonedeep';
+import {
+  listProviders,
+  getCount,
+  interval,
+  filterProviders,
+  clearProvidersFilter
+} from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import { tableColumns } from '../../utils/table-config/providers';
 import List from '../Table/Table';
 import PropTypes from 'prop-types';
 import Overview from '../Overview/overview';
 import _config from '../../config';
+import Dropdown from '../DropDown/dropdown';
+import pageSizeOptions from '../../utils/page-size';
+import ListFilters from '../ListActions/ListFilters';
 
 const { updateInterval } = _config;
 
 class ProvidersOverview extends React.Component {
   constructor () {
     super();
-    this.displayName = 'ProvidersOverview';
     this.queryStats = this.queryStats.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.renderOverview = this.renderOverview.bind(this);
@@ -57,8 +66,10 @@ class ProvidersOverview extends React.Component {
     const { count, queriedAt } = list.meta;
 
     // Incorporate the collection counts into the `list`
+    const mutableList = cloneDeep(list);
     const collectionCounts = get(stats.count, 'data.collections.count', []);
-    list.data.forEach(d => {
+
+    mutableList.data.forEach(d => {
       d.collections = get(collectionCounts.find(c => c.key === d.name), 'count', 0);
     });
     const providerStatus = get(stats.count, 'data.providers.count', []);
@@ -74,9 +85,11 @@ class ProvidersOverview extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content'>Ingesting Providers <span className='num--title'>{count ? `${count}` : 0}</span></h2>
           </div>
-
+          <div className='filter__button--add'>
+            <Link className='button button--green button--add button--small form-group__element' to='/providers/add'>Add Provider</Link>
+          </div>
           <List
-            list={list}
+            list={mutableList}
             dispatch={this.props.dispatch}
             action={listProviders}
             tableColumns={tableColumns}
@@ -84,7 +97,20 @@ class ProvidersOverview extends React.Component {
             bulkActions={[]}
             rowId='name'
             sortIdx='timestamp'
-          />
+          >
+            <ListFilters>
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterProviders}
+                clear={clearProvidersFilter}
+                paramKey={'limit'}
+                label={'Results Per Page'}
+                inputProps={{
+                  placeholder: 'Results Per Page'
+                }}
+              />
+            </ListFilters>
+          </List>
         </section>
       </div>
     );

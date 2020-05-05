@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Link, Route, Switch } from 'react-router-dom';
+import { withRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 import RulesOverview from './overview';
 import Rule from './rule';
@@ -17,7 +17,6 @@ class Rules extends React.Component {
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge heading--shared-content'>Rules</h1>
-            {showSidebar ? <Link className='button button--large button--white button__addcollections button__arrow button__animation' to='/rules/add'>Add a rule</Link> : null}
           </div>
         </div>
         <div className='page__content'>

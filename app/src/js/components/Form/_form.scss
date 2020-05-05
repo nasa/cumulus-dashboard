@@ -22,6 +22,10 @@ input[type="checkbox"], input[type="radio"] {
   font-size: 1em;
 }
 
+::placeholder{
+  color: $lighter-grey;
+}
+
 label {
   display: block;
   font-weight: $base-font-semibold;
@@ -377,6 +381,7 @@ select option{
     .dropdown__wrapper {
       width: 50%;
       margin-top: .2em;
+      float: left;
       select {
         width: 100%;
       }
@@ -410,6 +415,13 @@ select option{
     input {
       width: 80%;
     }
+  }
+}
+
+.form__error--wrapper {
+  input,
+  select {
+    border-color: $error-red;
   }
 }
 
@@ -501,5 +513,72 @@ select option{
   }
   .subform__name {
     display: none;
+  }
+}
+
+.rule__status {
+  display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 12;
+}
+
+.rule__content,
+.execution__content {
+  border: 1px solid #eceaea;
+  box-shadow: $shadow__default;
+  border-radius: 10px;
+  padding: 25px 40px;
+  margin-top: 15px;
+
+  .metadata__details {
+    font-size: $base-font-size;
+    display: flex;
+    flex-direction: column;
+
+    .meta__row {
+      flex-direction: row;
+      dt{
+        width: 10%;
+      }
+    }
+  }
+}
+
+.execution__content {
+  cursor: pointer;
+
+  .execution__content--visual {
+    width: 25%;
+    margin: 0 auto;
+  }
+
+  .metadata__details .meta__row {
+    dd {
+      width: 80%;
+      margin: 0;
+    }
+
+    dt {
+      width: 20%;
+      padding: 0;
+    }
+  }
+}
+
+.execution__visual {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    padding: .5em 2em;
+    box-shadow: $shadow__default;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+  }
+
+  .execution__content {
+    margin-top: 0;
+    border-radius: 0 0 10px 10px;
   }
 }

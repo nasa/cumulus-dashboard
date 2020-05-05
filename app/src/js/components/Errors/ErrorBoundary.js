@@ -25,7 +25,7 @@ class ErrorBoundary extends Component {
       errorInfo: errorInfo
     });
     // You can also log the error to an error reporting service
-    <ErrorReport />;
+    return (<ErrorReport />);
   }
 
   render () {

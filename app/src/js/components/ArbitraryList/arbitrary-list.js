@@ -20,19 +20,19 @@ class List extends React.Component {
   add (e) {
     e.preventDefault();
     const value = this.props.value.slice();
-    if (!value[value.length - 1]) return false;
+    if (!value[value.length - 1]) return;
     value.push('');
     this.props.onChange(this.props.id, value);
   }
 
   remove (index) {
-    let value = this.props.value.slice();
+    const value = this.props.value.slice();
     value.splice(index, 1);
     this.props.onChange(this.props.id, value);
   }
 
   render () {
-    let {
+    const {
       label,
       value,
       error
@@ -42,9 +42,9 @@ class List extends React.Component {
     const items = value.length ? value : [''];
 
     return (
-      <div className='form__addone'>
+      <div className={`form__addone${error ? ' form__error--wrapper' : ''}`}>
         <label>{label}</label>
-        <span className='form__error'>{error}</span>
+        {error && <span className='form__error'>{error}</span>}
         <ul className='form__addone--items'>
           {items.map(this.renderItem)}
         </ul>

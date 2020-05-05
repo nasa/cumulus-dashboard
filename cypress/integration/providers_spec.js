@@ -36,7 +36,7 @@ describe('Dashboard Providers Page', () => {
       cy.url().should('include', 'providers');
       cy.contains('.heading--xlarge', 'Providers');
 
-      cy.get('.table .tbody .tr').its('length').should('be.eq', 2);
+      cy.get('.table .tbody .tr').should('have.length', 2);
     });
 
     it('should add a new provider', () => {
@@ -48,7 +48,7 @@ describe('Dashboard Providers Page', () => {
       cy.visit('/providers');
 
       cy.contains('.heading--large', 'Provider Overview');
-      cy.contains('a', 'Add a Provider').as('addProvider');
+      cy.contains('a', 'Add Provider').as('addProvider');
       cy.get('@addProvider').should('have.attr', 'href', '/providers/add');
       cy.get('@addProvider').click();
 
@@ -62,7 +62,7 @@ describe('Dashboard Providers Page', () => {
         .siblings('input')
         .type(name);
       cy.get('@providerinput')
-        .contains('Concurrent Connnection Limit')
+        .contains('Concurrent Connection Limit')
         .siblings('input')
         .clear()
         .type(connectionLimit);
@@ -106,7 +106,6 @@ describe('Dashboard Providers Page', () => {
       cy.wait('@getProviders');
       cy.contains('.table .tbody .tr a', name)
         .should('have.attr', 'href', `/providers/provider/${name}`);
-      cy.task('resetState');
     });
 
     it('should edit a provider', () => {
@@ -126,7 +125,7 @@ describe('Dashboard Providers Page', () => {
 
       cy.get('form div ul').as('providerinput');
       cy.get('@providerinput')
-        .contains('Concurrent Connnection Limit')
+        .contains('Concurrent Connection Limit')
         .siblings('input')
         .clear()
         .type(connectionLimit);
@@ -168,7 +167,6 @@ describe('Dashboard Providers Page', () => {
       cy.url().should('include', 'providers');
       cy.contains('.heading--xlarge', 'Providers');
       cy.contains('.table .tbody .tr', name).should('not.exist');
-      cy.task('resetState');
     });
 
     it('should fail to delete a provider with an associated rule', () => {

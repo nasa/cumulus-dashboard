@@ -35,6 +35,7 @@ import _config from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import { simpleDropdownOption } from '../../utils/table-config/granules';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 const { updateInterval } = _config;
 
@@ -62,14 +63,46 @@ const tableColumns = [
 ];
 
 const metaAccessors = [
-  ['PDR Name', 'pdrName', pdrLink],
-  ['Collection', 'collectionId', collectionLink],
-  ['Provider', 'provider', providerLink],
-  [`${strings.cmr} Link`, 'cmrLink', (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue],
-  ['Execution', 'execution', (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue],
-  ['Published', 'published', bool],
-  ['Duplicate', 'hasDuplicate', bool],
-  ['Total duration', 'duration', seconds]
+  {
+    label: 'PDR Name',
+    property: 'pdrName',
+    accessor: pdrLink
+  },
+  {
+    label: 'Collection',
+    property: 'collectionId',
+    accessor: collectionLink
+  },
+  {
+    label: 'Provider',
+    property: 'provider',
+    accessor: providerLink
+  },
+  {
+    label: `${strings.cmr} Link`,
+    property: 'cmrLink',
+    accesssor: (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue
+  },
+  {
+    label: 'Execution',
+    property: 'execution',
+    accessor: (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue
+  },
+  {
+    label: 'Published',
+    property: 'published',
+    accessor: bool
+  },
+  {
+    label: 'Duplicate',
+    property: 'hasDuplicate',
+    accessor: bool
+  },
+  {
+    label: 'Total duration',
+    property: 'duration',
+    accessor: seconds
+  }
 ];
 
 class GranuleOverview extends React.Component {
@@ -186,7 +219,7 @@ class GranuleOverview extends React.Component {
     const granule = record.data;
     const files = [];
     if (granule.files) {
-      for (let key in get(granule, 'files', {})) { files.push(granule.files[key]); }
+      for (const key in get(granule, 'files', {})) { files.push(granule.files[key]); }
     }
     const dropdownConfig = [{
       text: 'Reingest',
@@ -219,8 +252,26 @@ class GranuleOverview extends React.Component {
     }];
     const errors = this.errors();
 
+    const breadcrumbConfig = [
+      {
+        label: 'Dashboard Home',
+        href: '/'
+      },
+      {
+        label: 'Granules',
+        href: '/granules'
+      },
+      {
+        label: granuleId,
+        active: true
+      }
+    ];
+
     return (
       <div className='page__component'>
+        <section className='page__section page__section__controls'>
+          <Breadcrumbs config={breadcrumbConfig} />
+        </section>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description width--three-quarters'>{granuleId}</h1>
           <AsyncCommands config={dropdownConfig} />
@@ -252,7 +303,7 @@ class GranuleOverview extends React.Component {
 
         <section className='page__section'>
           <LogViewer
-            query={{q: granuleId}}
+            query={{ q: granuleId }}
             dispatch={this.props.dispatch}
             logs={this.props.logs}
             notFound={`No recent logs for ${granuleId}`}

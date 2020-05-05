@@ -7,9 +7,13 @@ these are the styling imports for that dependency. Here are our
 styling overrides
 */
 
-.react-datetime-picker__clear-button {
+/*.react-datetime-picker__clear-button {
   content: "";
   display: none;
+}*/
+
+.react-datetime-picker__inputGroup, .react-calendar__month-view__days, .react-calendar__month-view__weekdays{
+  color: $dark-grey;
 }
 
 .react-datetime-picker__calendar.react-datetime-picker__calendar--open, .react-datetime-picker__clock.react-datetime-picker__clock--open{
@@ -17,6 +21,7 @@ styling overrides
   bottom: unset;
   left: 0px;
   right: unset;
+  z-index: 99;
 }
 
 .react-datetime-picker__wrapper {
@@ -46,7 +51,45 @@ styling overrides
   color: $black !important;
 }
 
-/* .react-datetime-picker__calendar .react-calendar, .react-datetime-picker__clock.react-datetime-picker__clock--open, .react-datetime-picker__calendar-button.react-datetime-picker__button {
+.react-datetime-picker__clock.react-datetime-picker__clock--open {
   visibility: hidden;
   display: none;
-} */
+}
+
+.react-datetime-picker__wrapper {
+  border: 1px solid lighten($lightest-grey, 4%) !important;
+  box-shadow: $shadow__default;
+  background-color: $white;
+  border-radius: .5em;
+}
+
+/*.react-datetime-picker__inputGroup__input option:first-child {
+    &:before {
+      color: $ocean-blue;
+      position: absolute;
+      font-family: 'FontAwesome';
+      content: '\f0d7';
+      font-weight: 900;
+      width: 14px;
+      height: 14px;
+      background-size: 14px 14px;
+      display: block;
+      right: .8em;
+      top: .5em;
+    }
+  }
+
+  .react-datetime-picker__inputGroup__leadingZero {
+  font-size: 1.2em;
+}
+
+  .react-datetime-picker__inputGroup__input--hasLeadingZero {
+   margin-left: 0px;
+   padding-left: 1px;
+}*/
+
+/*.react-datetime-picker__inputGroup__input.react-datetime-picker__inputGroup__month, 
+.react-datetime-picker__inputGroup__input.react-datetime-picker__inputGroup__day {
+  width: 26px !important;
+}*/
+

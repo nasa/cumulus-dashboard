@@ -2,6 +2,16 @@
   &__info{
     font-weight: $base-font-regular;
   }
+  &__header{
+    display: flex;
+    justify-content: space-between;
+  }
+  &__header li:first-child{
+    float: left;
+  }
+  &__header li:nth-child(2){
+    float: right;
+  }
   &__wrapper{
     background-color: $white;
     padding: 1.5em 1em .5em;
@@ -10,8 +20,8 @@
     border: 1px solid #eceaea;
     box-shadow: $shadow__default;
     font-size: .86em;
-    width: 775px;
-    height: 80px;
+    width: 1015px;
+    height: 127px;
     margin: .8em 1.5em .8em 0;
     color: #8C8C8C;
     -webkit-transition: all 0.3s;
@@ -21,10 +31,22 @@
     clear: right;
     position: absolute;
     z-index: 0;
-    top: 365px;
+    top: 268px;
+  }
+  &__wrapper h3{
+    font-size: 1.3em;
+    font-weight: $base-font-semibold;
+    margin-bottom: .5em;
+  }
+  &__wrapper hr{
+    height: 1px;
+    background-color: $lightest-grey;
+    border: none;
+    margin-bottom: 1em;
+    margin-top: .25em;
   }
   &__internal{
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-items: center;
     flex-direction: row;
@@ -34,83 +56,52 @@
     margin-right: 2em;
   }
 
-  &__internal input[type="radio"] {
-    font-size: 2em;
-    margin-right: .25em;
+  &__internal label{
+    font-size: 1em;
+    font-weight: $base-font-regular;
+    margin-bottom: .4em;
   }
-  
-  &__internal .selector__hrformat{
+
+  &.selector__hrformat{
+    position: relative;
+      &:after {
+        position: absolute;
+        font-family: 'FontAwesome';
+        content: '\f0dc';
+        color: $white;
+        font-weight: 900;
+        top: .28em;
+        left: 4em;
+      }
+  }
+
+  &.selector__hrformat select{
     display: block;
     position: relative;
-    padding-left: 24px;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  &__internal .selector__hrformat input{
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-  }
-
-  &__internal .selector__hrformat input:checked ~ .selector{
-    background-color: $white;
-    border: 2px solid $ocean-blue;
-    &:after{
-      display: block;
-    }
-  }
-
-  &__internal .selector{
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 15px;
-    width: 15px;
-    background-color: $white;
-    border-radius: 50%;
-    border: 2px solid $lightest-grey;
-    &:hover{
-      background-color: rgba($color: #2685c1, $alpha: 0.54)
-    }
-    &:after{
-      content: "";
-      position: absolute;
-      display: none;
-    }
-  }
-
-  &__internal .selector__hrformat .selector:after{
-    top: .24em;
-    left: .2rem;
-    width: .5rem;
-    height: .5rem;
-    border-radius: 50%;
+    padding-left: 11px;
     background-color: $ocean-blue;
-    border: 1px solid $ocean-blue;
+    color: $white;
+    width: 75px;
+    height: 28px;
   }
 
   &.dropdown__dtrange{
+    position: relative;
     &:after {
       position: absolute;
       font-family: 'FontAwesome';
       content: '\f0dc';
       color: $white;
       font-weight: 900;
-      top: 1em;
-      left: 7em;
+      top: .55em;
+      left: 8.3em;
     }
   }
 
   &.dropdown__dtrange select{
     background-color: $ocean-blue;
     color: $white;
-    width: 120px;
+    width: 135px;
     height: 35px;
     font-size: 14px;
     position: relative;
@@ -119,14 +110,16 @@
   &__range{
     z-index: 1;
     position: relative;
-    top: 51px;
-    left: 13px;
+    top: 73px;
+    display: flex;
+    justify-content: center;
+    width: 1040px;
   }
 
   &__clear{
-    margin-left: 850px;
     position: relative;
-    z-index: 2;
+    margin: .7em 0em 0em 5.1em !important;
+    float: right;
     &:after {
       position: absolute;
       font-family: 'FontAwesome';
@@ -135,6 +128,19 @@
       font-weight: 900;
       top: .25em;
       left: 1em;
+    }
+  }
+
+  &__refresh{
+    position: relative;
+    &:after {
+      position: absolute;
+      font-family: 'FontAwesome';
+      content: '\f01e';
+      color: $white;
+      font-weight: 900;
+      top: .25em;
+      left: .7em;
     }
   }
 }

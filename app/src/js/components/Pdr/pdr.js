@@ -40,20 +40,56 @@ import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import ErrorReport from '../Errors/report';
 import GranulesProgress from '../Granules/progress';
 import _config from '../../config';
-import {strings} from '../locale';
+import { strings } from '../locale';
+import ListFilters from '../ListActions/ListFilters';
 
 const { updateInterval } = _config;
 
 const metaAccessors = [
-  ['Provider', 'provider', (d) => <Link to={`providers/provider/${d}`}>{d}</Link>],
-  [strings.collection, 'collectionId', collectionLink],
-  ['Execution', 'execution', (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue],
-  ['Status', 'status', displayCase],
-  ['Timestamp', 'timestamp', fullDate],
-  ['Created at', 'createdAt', fullDate],
-  ['Duration', 'duration', seconds],
-  ['PAN Sent', 'PANSent', bool],
-  ['PAN Message', 'PANmessage']
+  {
+    label: 'Provider',
+    property: 'provider',
+    accessor: (d) => <Link to={`providers/provider/${d}`}>{d}</Link>
+  },
+  {
+    label: strings.collection,
+    property: 'collectionId',
+    accessor: collectionLink
+  },
+  {
+    label: 'Execution',
+    property: 'execution',
+    accessor: (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue
+  },
+  {
+    label: 'Status',
+    property: 'status',
+    accessor: displayCase
+  },
+  {
+    label: 'Timestamp',
+    property: 'timestamp',
+    accessor: fullDate
+  },
+  {
+    label: 'Created at',
+    property: 'createdAt',
+    accessor: fullDate
+  },
+  {
+    label: 'Duration',
+    property: 'duration',
+    accessor: seconds
+  },
+  {
+    label: 'PAN Sent',
+    property: 'PANSent',
+    accessor: bool
+  },
+  {
+    label: 'PAN Message',
+    property: 'PANmessage'
+  }
 ];
 
 class PDR extends React.Component {
@@ -152,32 +188,10 @@ class PDR extends React.Component {
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num--title'>{ !isNaN(count) ? `(${count})` : null }</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num--title'>{ !isNaN(count) ? `(${count})` : 0 }</span></h2>
           </div>
           <div>
             <GranulesProgress granules={granuleStatus} />
-          </div>
-          <div className='filters filters__wlabels'>
-            <Dropdown
-              getOptions={getOptionsCollectionName}
-              options={get(dropdowns, ['collectionName', 'options'])}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              paramKey={'collectionName'}
-              label={strings.collection}
-            />
-            <Dropdown
-              options={status}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              paramKey={'status'}
-              label={'Status'}
-            />
-            <Search dispatch={this.props.dispatch}
-              action={searchGranules}
-              format={granuleSearchResult}
-              clear={clearGranulesSearch}
-            />
           </div>
 
           <List
@@ -188,7 +202,30 @@ class PDR extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId='granuleId'
-          />
+          >
+            <ListFilters>
+              <Dropdown
+                getOptions={getOptionsCollectionName}
+                options={get(dropdowns, ['collectionName', 'options'])}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey={'collectionName'}
+                label={strings.collection}
+              />
+              <Dropdown
+                options={status}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey={'status'}
+                label={'Status'}
+              />
+              <Search dispatch={this.props.dispatch}
+                action={searchGranules}
+                format={granuleSearchResult}
+                clear={clearGranulesSearch}
+              />
+            </ListFilters>
+          </List>
         </section>
         <LogViewer
           query={logsQuery}

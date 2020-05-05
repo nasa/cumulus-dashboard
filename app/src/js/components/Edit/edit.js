@@ -9,7 +9,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import Schema from '../FormSchema/schema';
 import merge from '../../utils/merge';
 import _config from '../../config';
-import {strings} from '../locale';
+import { strings } from '../locale';
 
 const { updateDelay } = _config;
 
@@ -39,8 +39,8 @@ class EditRecord extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { pk } = this.props;
-    const { dispatch, history, clearRecordUpdate, backRoute, state } = prevProps;
+    const { pk, state } = this.props;
+    const { dispatch, history, clearRecordUpdate, backRoute } = prevProps;
     const updateStatus = get(state.updated, [pk, 'status']);
     if (updateStatus === 'success') {
       return setTimeout(() => {

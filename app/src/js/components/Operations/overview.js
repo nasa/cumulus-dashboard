@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import cloneDeep from 'lodash.clonedeep';
 import {
   clearOperationsFilter,
   filterOperations,
@@ -25,6 +26,8 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import _config from '../../config';
 import { tableColumns } from '../../utils/table-config/operations';
+import ListFilters from '../ListActions/ListFilters';
+import pageSizeOptions from '../../utils/page-size';
 
 const { updateInterval } = _config;
 
@@ -87,11 +90,13 @@ class OperationOverview extends React.Component {
     const { operations } = this.props;
     const { list } = operations;
     const { count } = list.meta;
-    if (list.internal.prefix) {
-      if (list.internal.prefix.queryValue) {
-        list.data = this.searchOperations(list.data, list.internal.prefix.queryValue);
-      } else if (typeof list.internal.prefix === 'string') {
-        list.data = this.searchOperations(list.data, list.internal.prefix);
+    const mutableList = cloneDeep(list);
+    //  This data munging should probably be handled in the reducer, but this is a workaround.
+    if (mutableList.internal.prefix) {
+      if (mutableList.internal.prefix.queryValue) {
+        mutableList.data = this.searchOperations(mutableList.data, mutableList.internal.prefix.queryValue);
+      } else if (typeof mutableList.internal.prefix === 'string') {
+        mutableList.data = this.searchOperations(mutableList.data, mutableList.internal.prefix);
       }
     }
 
@@ -106,37 +111,47 @@ class OperationOverview extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>All Operations <span className='num--title'>{tally(count)}</span></h2>
           </div>
-          <div className='filters filters__wlabels'>
-            <Search dispatch={this.props.dispatch}
-              action={searchOperations}
-              clear={clearOperationsSearch}
-            />
-            <Dropdown
-              options={statusOptions}
-              action={filterOperations}
-              clear={clearOperationsFilter}
-              paramKey={'status'}
-              label={'Status'}
-            />
-
-            <Dropdown
-              options={typeOptions}
-              action={filterOperations}
-              clear={clearOperationsFilter}
-              paramKey={'operationType'}
-              label={'Type'}
-            />
-          </div>
-
           <List
-            list={list}
+            list={mutableList}
             dispatch={this.props.dispatch}
             action={listOperations}
             tableColumns={tableColumns}
             query={this.generateQuery()}
             rowId='id'
             sortIdx='createdAt'
-          />
+          >
+            <ListFilters>
+
+              <Search dispatch={this.props.dispatch}
+                action={searchOperations}
+                clear={clearOperationsSearch}
+              />
+              <Dropdown
+                options={statusOptions}
+                action={filterOperations}
+                clear={clearOperationsFilter}
+                paramKey={'status'}
+                label={'Status'}
+              />
+
+              <Dropdown
+                options={typeOptions}
+                action={filterOperations}
+                clear={clearOperationsFilter}
+                paramKey={'operationType'}
+                label={'Type'}
+              />
+
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterOperations}
+                clear={clearOperationsFilter}
+                paramKey={'limit'}
+                label={'Results Per Page'}
+              />
+            </ListFilters>
+          </List>
+
         </section>
       </div>
     );

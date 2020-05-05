@@ -35,8 +35,14 @@ import {
 
   RULE_DISABLE,
   RULE_DISABLE_INFLIGHT,
-  RULE_DISABLE_ERROR
+  RULE_DISABLE_ERROR,
+
+  SEARCH_RULES,
+  CLEAR_RULES_SEARCH,
+  FILTER_RULES,
+  CLEAR_RULES_FILTER
 } from '../actions/types';
+import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
   list: {
@@ -54,112 +60,143 @@ export const initialState = {
   disabled: {}
 };
 
-export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
-  const { data, id } = action;
-  switch (action.type) {
-    case RULE:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'data'], data);
-      del(state, ['deleted', id]);
-      break;
-    case RULE_INFLIGHT:
-      set(state, ['map', id, 'inflight'], true);
-      break;
-    case RULE_ERROR:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'error'], action.error);
-      break;
+export default createReducer(initialState, {
+  [RULE]: (state, action) => {
+    const { data, id } = action;
+    set(state, ['map', id, 'inflight'], false);
+    set(state, ['map', id, 'data'], data);
+    del(state, ['deleted', id]);
+  },
+  [RULE_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['map', id, 'inflight'], true);
+  },
+  [RULE_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['map', id, 'inflight'], false);
+    set(state, ['map', id, 'error'], action.error);
+  },
 
-    case RULES:
-      set(state, ['list', 'data'], removeDeleted('name', data.results, state.deleted));
-      set(state, ['list', 'meta'], assignDate(data.meta));
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], false);
-      break;
-    case RULES_INFLIGHT:
-      set(state, ['list', 'inflight'], true);
-      break;
-    case RULES_ERROR:
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], action.error);
-      break;
+  [RULES]: (state, action) => {
+    const { data } = action;
+    set(state, ['list', 'data'], removeDeleted('name', data.results, state.deleted));
+    set(state, ['list', 'meta'], assignDate(data.meta));
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], false);
+  },
+  [RULES_INFLIGHT]: (state, action) => {
+    set(state, ['list', 'inflight'], true);
+  },
+  [RULES_ERROR]: (state, action) => {
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], action.error);
+  },
 
-    case UPDATE_RULE:
-      set(state, ['map', id, 'data'], data);
-      set(state, ['updated', id, 'status'], 'success');
-      break;
-    case UPDATE_RULE_INFLIGHT:
-      set(state, ['updated', id, 'status'], 'inflight');
-      break;
-    case UPDATE_RULE_ERROR:
-      set(state, ['updated', id, 'status'], 'error');
-      set(state, ['updated', id, 'error'], action.error);
-      break;
-    case UPDATE_RULE_CLEAR:
-      del(state, ['updated', id]);
-      break;
+  [UPDATE_RULE]: (state, action) => {
+    const { data, id } = action;
+    set(state, ['map', id, 'data'], data);
+    set(state, ['updated', id, 'status'], 'success');
+  },
+  [UPDATE_RULE_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['updated', id, 'status'], 'inflight');
+  },
+  [UPDATE_RULE_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['updated', id, 'status'], 'error');
+    set(state, ['updated', id, 'error'], action.error);
+  },
+  [UPDATE_RULE_CLEAR]: (state, action) => {
+    const { id } = action;
+    del(state, ['updated', id]);
+  },
 
-    case NEW_RULE:
-      set(state, ['created', id, 'status'], 'success');
-      break;
-    case NEW_RULE_INFLIGHT:
-      set(state, ['created', id, 'status'], 'inflight');
-      break;
-    case NEW_RULE_ERROR:
-      set(state, ['created', id, 'status'], 'error');
-      set(state, ['created', id, 'error'], action.error);
-      break;
+  [NEW_RULE]: (state, action) => {
+    const { id } = action;
+    set(state, ['created', id, 'status'], 'success');
+  },
+  [NEW_RULE_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['created', id, 'status'], 'inflight');
+  },
+  [NEW_RULE_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['created', id, 'status'], 'error');
+    set(state, ['created', id, 'error'], action.error);
+  },
 
-    case RULE_DELETE:
-      set(state, ['deleted', id, 'status'], 'success');
-      set(state, ['deleted', id, 'error'], null);
-      break;
-    case RULE_DELETE_INFLIGHT:
-      set(state, ['deleted', id, 'status'], 'inflight');
-      break;
-    case RULE_DELETE_ERROR:
-      set(state, ['deleted', id, 'status'], 'error');
-      set(state, ['deleted', id, 'error'], action.error);
-      break;
+  [RULE_DELETE]: (state, action) => {
+    const { id } = action;
+    set(state, ['deleted', id, 'status'], 'success');
+    set(state, ['deleted', id, 'error'], null);
+  },
+  [RULE_DELETE_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['deleted', id, 'status'], 'inflight');
+  },
+  [RULE_DELETE_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['deleted', id, 'status'], 'error');
+    set(state, ['deleted', id, 'error'], action.error);
+  },
 
-    case RULE_RERUN:
-      set(state, ['rerun', id, 'status'], 'success');
-      set(state, ['rerun', id, 'error'], null);
-      break;
-    case RULE_RERUN_INFLIGHT:
-      set(state, ['rerun', id, 'status'], 'inflight');
-      break;
-    case RULE_RERUN_ERROR:
-      set(state, ['rerun', id, 'status'], 'error');
-      set(state, ['rerun', id, 'error'], action.error);
-      break;
+  [RULE_RERUN]: (state, action) => {
+    const { id } = action;
+    set(state, ['rerun', id, 'status'], 'success');
+    set(state, ['rerun', id, 'error'], null);
+  },
+  [RULE_RERUN_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['rerun', id, 'status'], 'inflight');
+  },
+  [RULE_RERUN_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['rerun', id, 'status'], 'error');
+    set(state, ['rerun', id, 'error'], action.error);
+  },
 
-    case RULE_ENABLE:
-      set(state, ['enabled', id, 'status'], 'success');
-      set(state, ['enabled', id, 'error'], null);
-      del(state, ['disbled', id]);
-      break;
-    case RULE_ENABLE_INFLIGHT:
-      set(state, ['enabled', id, 'status'], 'inflight');
-      break;
-    case RULE_ENABLE_ERROR:
-      set(state, ['enabled', id, 'status'], 'error');
-      set(state, ['enabled', id, 'error'], action.error);
-      break;
+  [RULE_ENABLE]: (state, action) => {
+    const { id } = action;
+    set(state, ['enabled', id, 'status'], 'success');
+    set(state, ['enabled', id, 'error'], null);
+    del(state, ['disbled', id]);
+  },
+  [RULE_ENABLE_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['enabled', id, 'status'], 'inflight');
+  },
+  [RULE_ENABLE_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['enabled', id, 'status'], 'error');
+    set(state, ['enabled', id, 'error'], action.error);
+  },
 
-    case RULE_DISABLE:
-      set(state, ['disabled', id, 'status'], 'success');
-      set(state, ['disabled', id, 'error'], null);
-      del(state, ['enabled', id]);
-      break;
-    case RULE_DISABLE_INFLIGHT:
-      set(state, ['disabled', id, 'status'], 'inflight');
-      break;
-    case RULE_DISABLE_ERROR:
-      set(state, ['disabled', id, 'status'], 'error');
-      set(state, ['disabled', id, 'error'], action.error);
-      break;
+  [RULE_DISABLE]: (state, action) => {
+    const { id } = action;
+    set(state, ['disabled', id, 'status'], 'success');
+    set(state, ['disabled', id, 'error'], null);
+    del(state, ['enabled', id]);
+  },
+  [RULE_DISABLE_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['disabled', id, 'status'], 'inflight');
+  },
+  [RULE_DISABLE_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['disabled', id, 'status'], 'error');
+    set(state, ['disabled', id, 'error'], action.error);
+  },
+
+  [SEARCH_RULES]: (state, action) => {
+    set(state, ['list', 'params', 'prefix'], action.prefix);
+  },
+  [CLEAR_RULES_SEARCH]: (state, action) => {
+    set(state, ['list', 'params', 'prefix'], null);
+  },
+  [FILTER_RULES]: (state, action) => {
+    set(state, ['list', 'params', action.param.key], action.param.value);
+  },
+  [CLEAR_RULES_FILTER]: (state, action) => {
+    set(state, ['list', 'params', action.paramKey], null);
   }
-  return state;
-}
+});

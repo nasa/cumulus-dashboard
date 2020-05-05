@@ -25,13 +25,15 @@ import Dropdown from '../DropDown/dropdown';
 import SimpleDropdown from '../DropDown/simple-dropdown';
 import Search from '../Search/search';
 import statusOptions from '../../utils/status';
+import pageSizeOptions from '../../utils/page-size';
 import List from '../Table/Table';
 import Bulk from '../Granules/bulk';
 import Overview from '../Overview/overview';
-import { tableColumns } from '../../utils/table-config/granules';
+import { tableColumns, reingestAction } from '../../utils/table-config/granules';
 import { strings } from '../locale';
 import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import ListFilters from '../ListActions/ListFilters';
 
 const breadcrumbConfig = [
   {
@@ -59,10 +61,10 @@ class CollectionOverview extends React.Component {
       this.deleteMe,
       this.errors,
       this.generateQuery,
+      this.generateBulkActions,
       this.gotoGranules,
       this.load,
-      this.navigateBack,
-      this.renderRunBulkGranulesButton
+      this.navigateBack
     ].forEach((fn) => (this[fn.name] = fn.bind(this)));
   }
 
@@ -79,17 +81,6 @@ class CollectionOverview extends React.Component {
     }
   }
 
-  renderRunBulkGranulesButton () {
-    return (
-      <Bulk
-        element='a'
-        className='button button__bulkgranules button--green button__animation--md button__arrow button__arrow--md button__animation form-group__element--right link--no-underline'
-        confirmAction={true}
-        state={this.props.granules}
-      />
-    );
-  }
-
   load () {
     const { name, version } = this.props.match.params;
     this.props.dispatch(getCumulusInstanceMetadata());
@@ -99,6 +90,21 @@ class CollectionOverview extends React.Component {
   changeCollection (_, collectionId) {
     const { name, version } = collectionNameVersion(collectionId);
     this.props.history.push(`/collections/collection/${name}/${version}`);
+  }
+
+  generateBulkActions () {
+    const { granules } = this.props;
+    return [
+      reingestAction(granules),
+      {
+        Component:
+        <Bulk
+          element='a'
+          className='button button__bulkgranules button--green button--small form-group__element link--no-underline'
+          confirmAction={true}
+        />
+      }
+    ];
   }
 
   generateQuery () {
@@ -122,7 +128,7 @@ class CollectionOverview extends React.Component {
 
   errors () {
     const { name, version } = this.props.match.params;
-    const collectionId = getCollectionId({name, version});
+    const collectionId = getCollectionId({ name, version });
     return [
       get(this.props.collections.map, [collectionId, 'error']),
       get(this.props.collections.deleted, [collectionId, 'error'])
@@ -257,37 +263,11 @@ class CollectionOverview extends React.Component {
               </span>
             </h2>
             <Link
-              className='link--secondary link--learn-more'
+              className='button button--small button__goto button--green form-group__element--right'
               to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}
             >
               {strings.view_all_granules}
             </Link>
-          </div>
-          <div className='filters filters__wlabels total_granules'>
-            <ul>
-              <li>
-                <Search
-                  dispatch={this.props.dispatch}
-                  action={searchGranules}
-                  clear={clearGranulesSearch}
-                  placeholder='Search Granules'
-                />
-              </li>
-              <li>
-                <Dropdown
-                  options={statusOptions}
-                  action={filterGranules}
-                  clear={clearGranulesFilter}
-                  paramKey='status'
-                  inputProps={{
-                    placeholder: 'Status'
-                  }}
-                />
-              </li>
-              <li className="run_bulk">
-                {this.renderRunBulkGranulesButton()}
-              </li>
-            </ul>
           </div>
           <List
             list={list}
@@ -295,9 +275,40 @@ class CollectionOverview extends React.Component {
             action={listGranules}
             tableColumns={tableColumns}
             query={this.generateQuery()}
+            bulkActions={this.generateBulkActions()}
             rowId='granuleId'
             sortIdx='timestamp'
-          />
+          >
+            <ListFilters>
+              <Search
+                dispatch={this.props.dispatch}
+                action={searchGranules}
+                clear={clearGranulesSearch}
+                label='Search'
+                placeholder='Granule ID'
+              />
+              <Dropdown
+                options={statusOptions}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey='status'
+                label='Status'
+                inputProps={{
+                  placeholder: 'All'
+                }}
+              />
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey='limit'
+                label={'Results Per Page'}
+                inputProps={{
+                  placeholder: 'Results Per Page'
+                }}
+              />
+            </ListFilters>
+          </List>
         </section>
       </div>
     );

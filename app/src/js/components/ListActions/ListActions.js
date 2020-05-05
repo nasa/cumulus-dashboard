@@ -16,20 +16,20 @@ const ListActions = ({
 }) => {
   const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
-  function handleBulkActionSuccess () {
+  function handleBulkActionSuccess (results, error) {
     if (typeof onBulkActionSuccess === 'function') {
-      onBulkActionSuccess();
+      onBulkActionSuccess(results, error);
     }
   }
 
-  function handleBulkActionError () {
+  function handleBulkActionError (error) {
     if (typeof onBulkActionError === 'function') {
-      onBulkActionError();
+      onBulkActionError(error);
     }
   }
 
   return (
-    <div className='list-action-wrapper'>
+    <div className={`list-action-wrapper${!hasActions || !children ? ' no-actions' : ''}`}>
       {children}
       <div className='list-actions'>
         {hasActions && (
@@ -38,7 +38,7 @@ const ListActions = ({
               const { Component, text } = item;
               return (
                 <React.Fragment key={text || index}>
-                  {Component && Component}
+                  {Component && React.cloneElement(Component, { selected })}
                   {!Component &&
                     <BatchAsyncCommand
                       dispatch={dispatch}
@@ -47,9 +47,10 @@ const ListActions = ({
                       text={item.text}
                       confirm={item.confirm}
                       confirmOptions={item.confirmOptions}
+                      getModalOptions={item.getModalOptions}
                       onSuccess={handleBulkActionSuccess}
                       onError={handleBulkActionError}
-                      selection={selected}
+                      selected={selected}
                       className={item.className || ''}
                     />
                   }

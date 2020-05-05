@@ -30,27 +30,37 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import statusOptions from '../../utils/status';
-import Bulk from './bulk';
 import _config from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import { window } from '../../utils/browser';
+import ListFilters from '../ListActions/ListFilters';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import pageSizeOptions from '../../utils/page-size';
 
 const { updateInterval } = _config;
+
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/'
+  },
+  {
+    label: 'Granules',
+    active: true
+  }
+];
 
 class GranulesOverview extends React.Component {
   constructor () {
     super();
-    this.renderOverview = this.renderOverview.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
     this.queryMeta = this.queryMeta.bind(this);
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.applyWorkflow = this.applyWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
-    this.csvDownloadSection = this.csvDownloadSection.bind(this);
     this.applyRecoveryWorkflow = this.applyRecoveryWorkflow.bind(this);
-    this.runBulkGranules = this.runBulkGranules.bind(this);
     this.state = {};
   }
 
@@ -95,17 +105,6 @@ class GranulesOverview extends React.Component {
     return actions;
   }
 
-  runBulkGranules () {
-    return (
-      <Bulk
-        element='a'
-        className={'button button__bulkgranules button--green button__animation--md button__arrow button__arrow--md button__animation form-group__element--right link--no-underline'}
-        confirmAction={true}
-        state={this.props.granules}
-      />
-    );
-  }
-
   selectWorkflow (selector, workflow) {
     this.setState({ workflow });
   }
@@ -129,72 +128,36 @@ class GranulesOverview extends React.Component {
     ];
   }
 
-  renderOverview (count) {
-    const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
-    return <Overview items={overview} inflight={false} />;
-  }
-
-  csvDownloadSection (fileData) {
-    if (!fileData) return;
-
-    const data = new Blob([fileData], {type: 'text/csv'});
-    const url = window.URL.createObjectURL(data);
-
-    return (<a className='csv__download' id='download_link' download='granules.csv' href={url}>Download Granule List</a>);
-  }
-
   render () {
     const { stats, granules, granuleCSV, dispatch } = this.props;
     const { list, dropdowns } = granules;
     const { count, queriedAt } = list.meta;
     const { data } = granuleCSV;
+    const csvData = data ? new Blob([data], { type: 'text/csv' }) : null;
+    const statsCount = get(stats, 'count.data.granules.count', []);
+    const overviewItems = statsCount.map(d => [tally(d.count), displayCase(d.key)]);
     return (
       <div className='page__component'>
+        <section className='page__section page__section__controls'>
+          <Breadcrumbs config={breadcrumbConfig} />
+        </section>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>{strings.granule_overview}</h1>
             {lastUpdated(queriedAt)}
-            {this.renderOverview(get(stats, 'count.data.granules.count', []))}
+            <Overview items={overviewItems} inflight={false} />
           </div>
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num--title'>{count ? ` ${tally(count)}` : null}</span></h2>
-            {this.csvDownloadSection(data)}
+            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
+            {csvData &&
+              <a className='csv__download button button--small button--download button--green form-group__element--right'
+                id='download_link'
+                download='granules.csv'
+                href={window.URL.createObjectURL(csvData)}
+              >Download Granule List</a>}
           </div>
-          <div className='filters filters__wlabels'>
-            <ul>
-              <li>
-                <Dropdown
-                  getOptions={getOptionsCollectionName}
-                  options={get(dropdowns, ['collectionName', 'options'])}
-                  action={filterGranules}
-                  clear={clearGranulesFilter}
-                  paramKey={'collectionId'}
-                  label={strings.collection}
-                />
-              </li>
-              <li>
-                <Dropdown
-                  options={statusOptions}
-                  action={filterGranules}
-                  clear={clearGranulesFilter}
-                  paramKey={'status'}
-                  label={'Status'}
-                />
-              </li>
-              <li>
-                <Search dispatch={dispatch}
-                  action={searchGranules}
-                  clear={clearGranulesSearch}
-                />
-              </li>
-              <li className="run_bulk">
-                {this.runBulkGranules()}
-              </li>
-            </ul>
-          </div>
-
           <List
             list={list}
             action={listGranules}
@@ -203,7 +166,48 @@ class GranulesOverview extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId='granuleId'
             sortIdx='timestamp'
-          />
+          >
+            <ListFilters>
+              <Dropdown
+                getOptions={getOptionsCollectionName}
+                options={get(dropdowns, ['collectionName', 'options'])}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey='collectionId'
+                label={strings.collection}
+                inputProps={{
+                  placeholder: 'All'
+                }}
+              />
+              <Dropdown
+                options={statusOptions}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey='status'
+                label='Status'
+                inputProps={{
+                  placeholder: 'All'
+                }}
+              />
+              <Search
+                dispatch={dispatch}
+                action={searchGranules}
+                clear={clearGranulesSearch}
+                label='Search'
+                placeholder='Granule ID'
+              />
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey='limit'
+                label='Results Per Page'
+                inputProps={{
+                  placeholder: 'Results Per Page'
+                }}
+              />
+            </ListFilters>
+          </List>
         </section>
       </div>
     );

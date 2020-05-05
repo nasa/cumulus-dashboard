@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
-import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
-import { interval, getCount, createReconciliationReport } from '../../actions';
+import { interval, getCount } from '../../actions';
 import _config from '../../config';
 import ReconciliationReportList from './list';
 import ReconciliationReport from './reconciliation-report';
@@ -18,7 +17,6 @@ class ReconciliationReports extends React.Component {
     super();
     this.displayName = 'Reconciliation Reports';
     this.queryParams = this.queryParams.bind(this);
-    this.createReport = this.createReport.bind(this);
   }
 
   componentDidMount () {
@@ -36,20 +34,12 @@ class ReconciliationReports extends React.Component {
     }));
   }
 
-  createReport () {
-    this.props.dispatch(createReconciliationReport());
-  }
-
   render () {
-    const { reconciliationReports } = this.props;
     return (
       <div className='page__reconciliations'>
         <div className='content__header'>
           <div className='row'>
-            <h1 className='heading--xlarge'>Reconciliation Reports</h1>
-            <button className='button button--large button--white button__addcollections button__arrow button__animation' onClick={this.createReport}>
-              {reconciliationReports.createReportInflight ? <LoadingEllipsis /> : 'Create a Report'}
-            </button>
+            <h1 className='heading--xlarge heading--shared-content'>Reconciliation Reports</h1>
           </div>
         </div>
         <div className='page__content'>

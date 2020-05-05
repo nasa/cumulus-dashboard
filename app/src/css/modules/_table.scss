@@ -58,6 +58,10 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
+
+  &.no-actions {
+    align-items: center;
+  }
 }
 
 .list-actions {
@@ -106,6 +110,29 @@
   &.isResizing {
     background: red;
   }
+}
+
+.error__report, .report__table {
+  .Collapsible {
+    display: flex;
+    flex-direction: column;
+
+    .Collapsible__trigger {
+      order: 1;
+    }
+  }
+}
+
+.report__table {
+  .Collapsible__trigger {
+    align-self: flex-start;
+    cursor: pointer;
+    margin: 1em 0;
+  }
+}
+
+.Collapsible__contentInner {
+  max-width: 230px;
 }
 
 // Overview Number Card Group //

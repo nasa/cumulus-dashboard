@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { lastUpdated } from '../../utils/format';
 import LogViewer from '../Logs/viewer';
-import {strings} from '../locale';
+import { strings } from '../locale';
 
 class CollectionLogs extends React.Component {
   constructor () {

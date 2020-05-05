@@ -5,16 +5,16 @@ import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
 import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
+import DefaultModal from '../Modal/modal';
 import { preventDefault } from '../../utils/noop';
 import _config from '../../config';
-import Modal from 'react-bootstrap/Modal';
 
 const { updateDelay } = _config;
 
 class AsyncCommand extends React.Component {
   constructor () {
     super();
-    this.state = { modal: false };
+    this.state = { confirmModal: false };
     this.buttonClass = this.buttonClass.bind(this);
     this.elementClass = this.elementClass.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -30,6 +30,7 @@ class AsyncCommand extends React.Component {
     ) {
       const timeout = isNaN(prevProps.successTimeout) ? updateDelay : prevProps.successTimeout;
       setTimeout(prevProps.success, timeout);
+      this.setState({ successModal: true }); // eslint-disable-line react/no-did-update-set-state
     } else if (
       prevProps.status === 'inflight' &&
         this.props.status === 'error' &&
@@ -60,7 +61,7 @@ class AsyncCommand extends React.Component {
   handleClick (e) {
     e.preventDefault();
     if (this.props.confirmAction) {
-      this.setState({ modal: true });
+      this.setState({ confirmModal: true });
     } else if (this.props.status !== 'inflight' && !this.props.disabled) {
       // prevent duplicate action if the action is already inflight.
       this.props.action();
@@ -69,16 +70,17 @@ class AsyncCommand extends React.Component {
 
   confirm () {
     this.props.action();
-    this.setState({ modal: false });
+    this.setState({ confirmModal: false });
+    if (this.props.status === 'success') this.setState({ successModal: true });
   }
 
   cancel () {
-    this.setState({ modal: false });
+    this.setState({ confirmModal: false, successModal: false });
   }
 
   render () {
-    const { status, text, confirmText, confirmOptions } = this.props;
-    const { modal } = this.state;
+    const { status, text, confirmText, confirmOptions, showSuccessModal, postActionText } = this.props;
+    const { confirmModal, successModal } = this.state;
     const inflight = status === 'inflight';
     const element = this.props.element || 'button';
     const props = {
@@ -96,44 +98,41 @@ class AsyncCommand extends React.Component {
     return (
       <div>
         { button }
-        { modal ? <div className='modal__cover'></div> : null }
+        { confirmModal ? <div className='modal__cover'></div> : null }
         <div className={c({
           modal__container: true,
-          'modal__container--onscreen': modal
+          'modal__container--onscreen': confirmModal
         })}>
-          { modal ? (
-            <Modal
-              dialogClassName="async-modal"
-              show
-              centered
-              size="md"
-              aria-labelledby="modal__async-modal"
-            >
-              <Modal.Header className="async-modal__header" closeButton></Modal.Header>
-              <Modal.Title id="modal__async-modal" className="modal__async-title"></Modal.Title>
-              <Modal.Body>
-                <div className='modal__internal modal__formcenter'>
-                  { confirmOptions ? (confirmOptions).map(option =>
-                    <div key={`option-${confirmOptions.indexOf(option)}`}>
-                      {option}
-                      <br />
-                    </div>
-                  ) : null }
-                  <h4>{confirmText}</h4>
-                </div>
-              </Modal.Body>
-              <Modal.Footer>
-                <button
-                  className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
-                  onClick={this.cancel}>Cancel
-                </button>
-                <button
-                  className='button button--confirm button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
-                  onClick={this.confirm}>Confirm
-                </button>
-              </Modal.Footer>
-            </Modal>
-          ) : null }
+          <DefaultModal
+            className='async-modal'
+            onCancel={this.cancel}
+            onCloseModal={this.cancel}
+            onConfirm={this.confirm}
+            title={text}
+            children={(
+              <div className='modal__internal modal__formcenter'>
+                { confirmOptions ? (confirmOptions).map(option =>
+                  <div key={`option-${confirmOptions.indexOf(option)}`}>
+                    {option}
+                    <br />
+                  </div>
+                ) : null }
+                <h4>{confirmText}</h4>
+              </div>
+            )}
+            showModal={confirmModal}
+          />
+          <DefaultModal
+            className='link--no-underline'
+            onCancel={this.cancel}
+            onCloseModal={this.cancel}
+            cancelButtonText={'Close'}
+            hasConfirmButton={false}
+            title={text}
+            children={postActionText}
+            showModal={(successModal && showSuccessModal)}
+            cancelButtonClass={'button--cancel'}
+          />
         </div>
       </div>
     );
@@ -153,6 +152,8 @@ AsyncCommand.propTypes = {
   confirmAction: PropTypes.bool,
   confirmText: PropTypes.string,
   confirmOptions: PropTypes.array,
+  showSuccessModal: PropTypes.bool,
+  postActionText: PropTypes.string,
   href: PropTypes.string
 };
 

@@ -5,15 +5,18 @@ import {
   DATEPICKER_DROPDOWN_FILTER,
   DATEPICKER_HOUR_FORMAT
 } from '../actions/types';
-
-const daysToMilliseconds = 1000 * 60 * 60 * 24;
+import { msPerDay, allDateRanges } from '../utils/datepicker';
+import { createReducer } from '@reduxjs/toolkit';
 
 // Also becomes default props for Datepicker
-export const initialState = {
-  startDateTime: null,
-  endDateTime: null,
-  dateRange: {value: 'All', label: 'All'},
-  hourFormat: '12HR'
+export const initialState = () => {
+  const now = Date.now();
+  return {
+    startDateTime: now - msPerDay,
+    endDateTime: null,
+    dateRange: allDateRanges.find((a) => a.value === 'Recent'),
+    hourFormat: '12HR'
+  };
 };
 
 /**
@@ -28,26 +31,43 @@ const computeDateTimeDelta = (timeDeltaInDays) => {
   let startDateTime = null;
 
   if (!isNaN(timeDeltaInDays)) {
-    endDateTime = new Date(Date.now());
-    startDateTime = new Date(
-      endDateTime - timeDeltaInDays * daysToMilliseconds
-    );
+    endDateTime = Date.now();
+    startDateTime = endDateTime - timeDeltaInDays * msPerDay;
   }
   return { startDateTime, endDateTime };
 };
 
-export default function reducer (state = initialState, action) {
-  state = { ...state };
-  const { data } = action;
-  switch (action.type) {
-    case DATEPICKER_DROPDOWN_FILTER:
-      state = {...state, ...computeDateTimeDelta(data.dateRange.value), ...data};
-      break;
-    case DATEPICKER_DATECHANGE:
-      state = { ...state, ...data };
-      break;
-    case DATEPICKER_HOUR_FORMAT:
-      state = { ...state, ...{hourFormat: data} };
+/**
+* Sets the state for recent data start time is 24 hours ago, end time is null
+*
+* @returns {Object} with startDateTime and dateRange set to "Recent"
+*/
+const recentData = () => {
+  const endDateTime = null;
+  const startDateTime = Date.now() - msPerDay;
+  return { startDateTime, endDateTime, dateRange: allDateRanges.find((a) => a.value === 'Recent') };
+};
+
+export default createReducer(initialState(), {
+
+  [DATEPICKER_DROPDOWN_FILTER]: (state, action) => {
+    const { data } = action;
+    switch (data.dateRange.label) {
+      case 'Custom':
+      case 'All':
+        return { ...state, ...data, startDateTime: null, endDateTime: null };
+      case 'Recent':
+        return { ...state, ...data, ...recentData() };
+      default:
+        return { ...state, ...computeDateTimeDelta(data.dateRange.value), ...data };
+    }
+  },
+  [DATEPICKER_DATECHANGE]: (state, action) => {
+    const { data } = action;
+    return { ...state, ...data };
+  },
+  [DATEPICKER_HOUR_FORMAT]: (state, action) => {
+    const { data } = action;
+    return { ...state, hourFormat: data };
   }
-  return state;
-}
+});

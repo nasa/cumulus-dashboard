@@ -27,7 +27,7 @@ class SubForm extends React.Component {
       fieldSet
     } = this.props;
     const fields = [];
-    for (let key in value) {
+    for (const key in value) {
       fields.push({
         name: key,
         fields: createFormConfig(value[key], fieldSet)
@@ -50,9 +50,9 @@ class SubForm extends React.Component {
     }));
 
     return (
-      <div id={id} className='subform'>
+      <div id={id} className={`subform${error ? ' form__error--wrapper' : ''}`}>
         <label>{label}</label>
-        <span className='form__error'>{error}</span>
+        {error && <span className='form__error'>{error}</span>}
         {fields.map(this.renderFieldset)}
       </div>
     );

@@ -4,11 +4,12 @@ const config = {
   nav: {
     order: ['collections'],
     exclude: {
-      'PDRs': process.env.HIDE_PDR || true,
-      'Logs': !process.env.KIBANAROOT
+      PDRs: process.env.HIDE_PDR || true,
+      Logs: !process.env.KIBANAROOT
     }
   },
   apiRoot: process.env.APIROOT || 'https://example.com',
+  awsRegion: process.env.AWS_REGION || 'us-west-2',
   oauthMethod: process.env.AUTH_METHOD || 'earthdata',
   kibanaRoot: process.env.KIBANAROOT || '',
   esRoot: process.env.ESROOT || '',

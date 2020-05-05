@@ -1,4 +1,6 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
+import { DATEPICKER_DATECHANGE } from '../../app/src/js/actions/types';
+import { msPerDay } from '../../app/src/js/utils/datepicker';
 
 describe('Dashboard Granules Page', () => {
   describe('When not logged in', () => {
@@ -27,7 +29,7 @@ describe('Dashboard Granules Page', () => {
 
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 6)
+        .first().contains('li', 'Completed').contains('li', 7)
         .next().contains('li', 'Failed').contains('li', 2)
         .next().contains('li', 'Running').contains('li', 2);
 
@@ -39,7 +41,7 @@ describe('Dashboard Granules Page', () => {
           // Wait for this granule to appear before proceeding.
           cy.contains(granule['granuleId']);
           cy.get(`[data-value="${granule['granuleId']}"]`).children().as('columns');
-          cy.get('@columns').its('length').should('be.eq', 8);
+          cy.get('@columns').should('have.length', 8);
 
           // Granule Status Column is correct
           cy.get('@columns').eq(1).invoke('text')
@@ -94,7 +96,7 @@ describe('Dashboard Granules Page', () => {
         });
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').its('length').should('be.eq', 10);
+      cy.get('@list').should('have.length', 11);
     });
 
     it('should display a link to download the granule list', () => {
@@ -137,6 +139,111 @@ describe('Dashboard Granules Page', () => {
       cy.get('#form-Status-status > div > input').as('status-input');
       cy.get('@status-input').should('be.visible').click().type('comp{enter}');
       cy.url().should('include', 'search=L2').and('include', 'status=completed');
+    });
+
+    it.skip('should Update overview Tiles when datepicker state changes.', () => {
+      // TODO Enable test when CUMULUS-1805 is completed
+      cy.visit('/granules');
+      cy.url().should('include', 'granules');
+      cy.contains('.heading--xlarge', 'Granules');
+      cy.contains('.heading--large', 'Granule Overview');
+
+      // shows a summary count of completed and failed granules
+      cy.get('.overview-num__wrapper ul li')
+        .first().contains('li', 'Completed').contains('li', 7)
+        .next().contains('li', 'Failed').contains('li', 2)
+        .next().contains('li', 'Running').contains('li', 2);
+      cy.window().its('appStore').then((store) => {
+        store.dispatch({
+          type: DATEPICKER_DATECHANGE,
+          data: {
+            startDateTime: new Date(Date.now() - 5 * msPerDay),
+            endDateTime: new Date(Date.now() - 4 * msPerDay)
+          }
+        });
+        cy.get('.overview-num__wrapper ul li')
+          .first().contains('li', 'Completed').contains('li', 0)
+          .next().contains('li', 'Failed').contains('li', 0)
+          .next().contains('li', 'Running').contains('li', 0);
+      });
+    });
+
+    it('Should update the table when the Results Per Page dropdown is changed.', () => {
+      cy.visit('/granules');
+      cy.get('.filter__item').eq(3).as('page-size-input');
+      cy.get('@page-size-input').should('be.visible').click().type('10{enter}');
+      cy.url().should('include', 'limit=10');
+      cy.get('.table .tbody .tr').should('have.length', 10);
+      cy.get('.pagination ol li')
+        .first().contains('li', 'Previous')
+        .next().contains('li', '1')
+        .next().contains('li', '2');
+    });
+
+    it('Should reingest a granule and redirect to the granules detail page.', () => {
+      const granuleId = 'MOD09GQ.A0142558.ee5lpE.006.5112577830916';
+      cy.server();
+      cy.route({
+        method: 'PUT',
+        url: '/granules/*',
+        status: 200,
+        response: { message: 'ingested' }
+      });
+      cy.visit('/granules');
+      cy.get(`[data-value="${granuleId}"] > .td >input[type="checkbox"]`).click();
+      cy.get('.list-actions').contains('Reingest').click();
+      cy.get('.button--submit').click();
+      cy.get('.modal-content > .modal-title').should('contain.text', 'Complete');
+      cy.get('.button__goto').click();
+      cy.url().should('include', `granules/granule/${granuleId}`);
+      cy.get('.heading--large').should('have.text', granuleId);
+    });
+
+    it('Should reingest multiple granules and redirect to the running page.', () => {
+      const granuleIds = [
+        'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
+        'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
+      ];
+      cy.server();
+      cy.route({
+        method: 'PUT',
+        url: '/granules/*',
+        status: 200,
+        response: { message: 'ingested' }
+      });
+      cy.visit('/granules');
+      cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
+      cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
+      cy.get('.list-actions').contains('Reingest').click();
+      cy.get('.button--submit').click();
+      cy.get('.modal-content > .modal-title').should('contain.text', 'Complete');
+      cy.get('.button__goto').click();
+      cy.url().should('include', 'granules/processing');
+      cy.get('.heading--large').should('have.text', 'Running Granules 2');
+    });
+
+    it('Should fail to reingest multiple granules and remain on the page.', () => {
+      const granuleIds = [
+        'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
+        'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
+      ];
+      cy.server();
+      cy.route({
+        method: 'PUT',
+        url: '/granules/*',
+        status: 500,
+        response: { message: 'Oopsie' }
+      });
+      cy.visit('/granules');
+      cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
+      cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
+      cy.get('.list-actions').contains('Reingest').click();
+      cy.get('.button--submit').click();
+      cy.get('.modal-content > .modal-title').should('contain.text', 'Error');
+      cy.get('.error').should('contain.text', 'Oopsie');
+      cy.get('.button--cancel').click();
+      cy.url().should('match', /\/granules$/);
+      cy.get('.heading--large').should('have.text', 'Granule Overview');
     });
   });
 });

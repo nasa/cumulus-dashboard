@@ -47,20 +47,27 @@ export const tableColumns = [
 ];
 
 export const bulkActions = (rules) => [{
-  text: 'Enable',
+  text: 'Enable Rule',
   action: (ruleName) =>
     enableRule(rules.list.data.find((rule) => rule.name === ruleName)),
   state: rules.enabled,
-  confirm: (d) => `Enable ${d} Rule(s)?`
+  confirm: (d) => `Enable ${d} Rule(s)?`,
+  className: 'button button--green button--enable button--small form-group__element'
 }, {
-  text: 'Disable',
+  text: 'Disable Rule',
   action: (ruleName) =>
     disableRule(rules.list.data.find((rule) => rule.name === ruleName)),
   state: rules.disabled,
-  confirm: (d) => `Disable ${d} Rule(s)?`
-}, {
-  text: 'Delete',
+  confirm: (d) => `Disable ${d} Rule(s)?`,
+  className: 'button button--green button--disable button--small form-group__element'
+},
+{
+  Component: <Link className='button button--green button--add button--small form-group__element' to='/rules/add'>Add Rule</Link>
+},
+{
+  text: 'Delete Rule',
   action: deleteRule,
   state: rules.deleted,
-  confirm: (d) => `Delete ${d} Rule(s)?`
+  confirm: (d) => `Delete ${d} Rule(s)?`,
+  className: 'button button--delete button--small form-group__element'
 }];

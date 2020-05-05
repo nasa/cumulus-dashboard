@@ -13,6 +13,7 @@ import {
   REFRESH_TOKEN_INFLIGHT,
   SET_TOKEN
 } from '../actions/types';
+import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
   authenticated: !!getToken(),
@@ -25,45 +26,41 @@ export const initialState = {
   }
 };
 
-export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
-  switch (action.type) {
-    case DELETE_TOKEN:
-      set(state, 'tokens.token', null);
-      setToken('');
-      break;
-    case LOGIN:
-      set(state, 'authenticated', true);
-      set(state, 'inflight', false);
-      break;
-    case LOGIN_INFLIGHT:
-      set(state, 'inflight', true);
-      break;
-    case LOGIN_ERROR:
-      set(state, 'error', action.error);
-      set(state, 'inflight', false);
-      set(state, 'authenticated', false);
-      break;
-    case LOGOUT:
-      set(state, 'authenticated', false);
-      break;
-    case REFRESH_TOKEN:
-      set(state, 'tokens.error', null);
-      set(state, 'tokens.inflight', false);
-      set(state, 'tokens.token', action.token);
-      setToken(action.token);
-      break;
-    case REFRESH_TOKEN_ERROR:
-      set(state, 'tokens.error', action.error);
-      set(state, 'tokens.inflight', false);
-      break;
-    case REFRESH_TOKEN_INFLIGHT:
-      set(state, 'tokens.inflight', true);
-      break;
-    case SET_TOKEN:
-      set(state, 'tokens.token', action.token);
-      setToken(action.token);
-      break;
+export default createReducer(initialState, {
+  [DELETE_TOKEN]: (state) => {
+    set(state, 'tokens.token', null);
+    setToken('');
+  },
+  [LOGIN]: (state) => {
+    set(state, 'authenticated', true);
+    set(state, 'inflight', false);
+  },
+  [LOGIN_INFLIGHT]: (state) => {
+    set(state, 'inflight', true);
+  },
+  [LOGIN_ERROR]: (state, action) => {
+    set(state, 'error', action.error);
+    set(state, 'inflight', false);
+    set(state, 'authenticated', false);
+  },
+  [LOGOUT]: (state) => {
+    set(state, 'authenticated', false);
+  },
+  [REFRESH_TOKEN]: (state, action) => {
+    set(state, 'tokens.error', null);
+    set(state, 'tokens.inflight', false);
+    set(state, 'tokens.token', action.token);
+    setToken(action.token);
+  },
+  [REFRESH_TOKEN_ERROR]: (state, action) => {
+    set(state, 'tokens.error', action.error);
+    set(state, 'tokens.inflight', false);
+  },
+  [REFRESH_TOKEN_INFLIGHT]: (state) => {
+    set(state, 'tokens.inflight', true);
+  },
+  [SET_TOKEN]: (state, action) => {
+    set(state, 'tokens.token', action.token);
+    setToken(action.token);
   }
-  return state;
-}
+});

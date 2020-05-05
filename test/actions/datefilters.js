@@ -27,8 +27,8 @@ test('listGranules injects timestamps from datepicker state when calling the Cum
   const testState = { ...initialState };
   const startDateTime = new Date('2020-01-18T13:05:00.000Z');
   const endDateTime = new Date('2020-02-10T20:55:00.000Z');
-  testState.startDateTime = startDateTime;
-  testState.endDateTime = endDateTime;
+  testState.startDateTime = startDateTime.valueOf();
+  testState.endDateTime = endDateTime.valueOf();
 
   const store = mockStore({
     datepicker: testState

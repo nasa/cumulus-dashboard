@@ -20,6 +20,8 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import List from '../Table/Table';
 import { pdrStatus as statusOptions } from '../../utils/status';
+import ListFilters from '../ListActions/ListFilters';
+import pageSizeOptions from '../../utils/page-size';
 
 class ActivePdrs extends React.Component {
   constructor () {
@@ -60,25 +62,9 @@ class ActivePdrs extends React.Component {
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description'>{displayCase(view)} PDRs
-              <span className='num--title'>{!isNaN(count) ? `${tally(count)}` : null}</span></h1>
+              <span className='num--title'>{!isNaN(count) ? `${tally(count)}` : 0}</span></h1>
             {lastUpdated(queriedAt)}
           </div>
-          <div className='filters'>
-            {view === 'all' ? (
-              <Dropdown
-                options={statusOptions}
-                action={filterPdrs}
-                clear={clearPdrsFilter}
-                paramKey={'status'}
-                label={'Status'}
-              />
-            ) : null}
-            <Search dispatch={this.props.dispatch}
-              action={searchPdrs}
-              clear={clearPdrsSearch}
-            />
-          </div>
-
           <List
             list={list}
             dispatch={this.props.dispatch}
@@ -87,7 +73,30 @@ class ActivePdrs extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId='pdrName'
-          />
+          >
+            <ListFilters>
+              {view === 'all' ? (
+                <Dropdown
+                  options={statusOptions}
+                  action={filterPdrs}
+                  clear={clearPdrsFilter}
+                  paramKey={'status'}
+                  label={'Status'}
+                />
+              ) : null}
+              <Search dispatch={this.props.dispatch}
+                action={searchPdrs}
+                clear={clearPdrsSearch}
+              />
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterPdrs}
+                clear={clearPdrsFilter}
+                paramKey={'limit'}
+                label={'Results Per Page'}
+              />
+            </ListFilters>
+          </List>
         </section>
       </div>
     );

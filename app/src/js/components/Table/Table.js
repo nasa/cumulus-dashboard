@@ -1,16 +1,14 @@
 'use strict';
 
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/pagination';
 import SortableTable from '../SortableTable/SortableTable';
 // Lodash
-import isEmpty from 'lodash.isempty';
 import isEqual from 'lodash.isequal';
-import isFunction from 'lodash.isfunction';
 import isNil from 'lodash.isnil';
 import omitBy from 'lodash.omitby';
 import ListActions from '../ListActions/ListActions';
@@ -21,7 +19,6 @@ class List extends React.Component {
     this.displayName = 'List';
     this.queryNewPage = this.queryNewPage.bind(this);
     this.queryNewSort = this.queryNewSort.bind(this);
-    this.selectAll = this.selectAll.bind(this);
     this.updateSelection = this.updateSelection.bind(this);
     this.onBulkActionSuccess = this.onBulkActionSuccess.bind(this);
     this.onBulkActionError = this.onBulkActionError.bind(this);
@@ -36,6 +33,7 @@ class List extends React.Component {
       sortIdx: initialSortIdx,
       order: initialOrder,
       selected: [],
+      clearSelected: false,
       prefix: null,
       queryConfig: {
         page: initialPage,
@@ -72,7 +70,7 @@ class List extends React.Component {
     this.setState({
       page,
       queryConfig: this.getQueryConfig({ page }),
-      selected: []
+      clearSelected: true
     });
   }
 
@@ -83,32 +81,23 @@ class List extends React.Component {
         order: sortProps.order,
         sort_by: sortProps.sortIdx
       }),
-      selected: []
+      clearSelected: true
     });
   }
 
-  selectAll (e) {
-    const { rowId, list: { data } } = this.props;
-
-    if (!isEmpty(data)) {
-      const rowIdFn = isFunction(rowId) ? rowId : row => row[rowId];
-      const allSelected = this.state.selected.length === data.length;
-      const selected = allSelected ? [] : data.map(rowIdFn);
-
-      this.setState({ selected });
-    }
-  }
-
   updateSelection (selected) {
-    this.setState({selected});
+    this.setState({
+      selected,
+      clearSelected: false
+    });
   }
 
-  onBulkActionSuccess () {
+  onBulkActionSuccess (results, error) {
     // not-elegant way to trigger a re-fresh in the timer
     this.setState({
       completedBulkActions: this.state.completedBulkActions + 1,
-      bulkActionError: null,
-      selected: []
+      clearSelected: true,
+      bulkActionError: error ? this.state.bulkActionError : null
     });
   }
 
@@ -117,7 +106,10 @@ class List extends React.Component {
       ? `Could not process ${error.id}, ${error.error}`
       : error;
 
-    this.setState({ bulkActionError, selected: [] });
+    this.setState({
+      bulkActionError,
+      clearSelected: true
+    });
   }
 
   getQueryConfig (config = {}, query = (this.props.query || {})) {
@@ -151,6 +143,7 @@ class List extends React.Component {
       sortIdx,
       order,
       selected,
+      clearSelected,
       completedBulkActions,
       bulkActionError
     } = this.state;
@@ -160,48 +153,49 @@ class List extends React.Component {
 
     return (
       <>
-      <ListActions
-        dispatch={dispatch}
-        action={action}
-        bulkActions={bulkActions}
-        queryConfig={queryConfig}
-        completedBulkActions={completedBulkActions}
-        onBulkActionSuccess={this.onBulkActionSuccess}
-        onBulkActionError={this.onBulkActionError}
-        selected={selected}>
-        {children}
-      </ListActions>
-      <div className='list-view'>
-        {list.inflight && <Loading/>}
-        {list.error && <ErrorReport report={list.error} truncate={true}/>}
-        {bulkActionError && <ErrorReport report={bulkActionError}/>}
-        <div className = "list__wrapper">
-          {/* Will add back when working on ticket 1462<TableOptions
+        <ListActions
+          dispatch={dispatch}
+          action={action}
+          bulkActions={bulkActions}
+          queryConfig={queryConfig}
+          completedBulkActions={completedBulkActions}
+          onBulkActionSuccess={this.onBulkActionSuccess}
+          onBulkActionError={this.onBulkActionError}
+          selected={selected}>
+          {children}
+        </ListActions>
+        <div className='list-view'>
+          {list.inflight && <Loading/>}
+          {list.error && <ErrorReport report={list.error} truncate={true}/>}
+          {bulkActionError && <ErrorReport report={bulkActionError}/>}
+          <div className = "list__wrapper">
+            {/* Will add back when working on ticket 1462<TableOptions
             count={count}
             limit={limit}
             page={page}
             onNewPage={this.queryNewPage}
             showPages={false}
-          />*/}
-          <SortableTable
-            tableColumns={tableColumns}
-            data={tableData}
-            canSelect={hasActions}
-            rowId={rowId}
-            onSelect={this.updateSelection}
-            sortIdx={sortIdx}
-            changeSortProps={this.queryNewSort}
-            order={order}
-          />
-          <Pagination
-            count={count}
-            limit={limit}
-            page={page}
-            onNewPage={this.queryNewPage}
-            showPages={true}
-          />
+          /> */}
+            <SortableTable
+              tableColumns={tableColumns}
+              data={tableData}
+              canSelect={hasActions}
+              rowId={rowId}
+              onSelect={this.updateSelection}
+              sortIdx={sortIdx}
+              changeSortProps={this.queryNewSort}
+              order={order}
+              clearSelected={clearSelected}
+            />
+            <Pagination
+              count={count}
+              limit={limit}
+              page={page}
+              onNewPage={this.queryNewPage}
+              showPages={true}
+            />
+          </div>
         </div>
-      </div>
       </>
     );
   }

@@ -28,7 +28,7 @@ const collections = {
       return singleCollectionRoutes.map(d => {
         // replace wildcards with params
         if (!d[1] || d[1].indexOf(':name') === -1) { return d; }
-        let copy = d.slice();
+        const copy = d.slice();
         copy[1] = encode(copy[1].replace(':name', params.name)
           .replace(':version', params.version));
         return copy;

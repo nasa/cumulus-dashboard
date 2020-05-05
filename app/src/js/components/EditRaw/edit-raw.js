@@ -31,9 +31,7 @@ const EditRaw = ({
   pk,
   schema,
   schemaKey,
-  hasModal,
-  type,
-  ModalBody
+  hasModal
 }) => {
   const [record, setRecord] = useState(defaultState);
   const [showModal, setShowModal] = useState(false);
@@ -46,6 +44,7 @@ const EditRaw = ({
   const isError = !!error;
   const buttonText = isInflight ? 'loading...'
     : isSuccess ? 'Success!' : 'Submit';
+  const recordDisplayName = displayCase(schemaKey);
 
   // get record and schema
   // ported from componentDidMount
@@ -84,7 +83,7 @@ const EditRaw = ({
         error: newRecord.error
       });
     } else if (newRecord.data) {
-      let data = removeReadOnly(newRecord.data, recordSchema);
+      const data = removeReadOnly(newRecord.data, recordSchema);
       try {
         var text = JSON.stringify(data, null, '\t');
       } catch (error) {
@@ -176,17 +175,31 @@ const EditRaw = ({
       {hasModal &&
       <DefaultModal
         showModal={showModal}
-        className={`edit-${type}`}
+        className={`edit-${schemaKey}`}
         onCloseModal={handleCloseModal}
         onConfirm={isError ? handleModalConfirm : handleCloseModal}
         onCancel={handleCancel}
-        title={`Edit ${displayCase(type)}`}
+        title={`Edit ${recordDisplayName}`}
         hasCancelButton={isError}
         cancelButtonText={isError ? 'Cancel Request' : null}
-        confirmButtonText={isError ? 'Go To Collection' : 'Close'}
+        confirmButtonText={isError ? `Continue Editing ${recordDisplayName}` : 'Close'}
         confirmButtonClass={isError ? 'button__goto' : 'button--green button--close'}
       >
-        <ModalBody isError={isError} isSuccess={isSuccess} isInflight={isInflight} error={error} />
+        <div>
+          {isInflight
+            ? 'Processing...'
+            : <>
+              {`${recordDisplayName} ${recordPk} `}
+              {(isSuccess && !isError) && 'has been updated'}
+              {isError &&
+            <>
+              {'has encountered an error.'}
+              <div className="error">{error}</div>
+            </>
+              }
+            </>
+          }
+        </div>
       </DefaultModal>}
     </div>
   );
@@ -203,12 +216,7 @@ EditRaw.propTypes = {
   getRecord: PropTypes.func,
   updateRecord: PropTypes.func,
   clearRecordUpdate: PropTypes.func,
-  hasModal: PropTypes.bool,
-  type: PropTypes.string,
-  ModalBody: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.func
-  ])
+  hasModal: PropTypes.bool
 };
 
 export default withRouter(connect(state => ({

@@ -6,6 +6,7 @@ function getCustomInterfaceLanguage () {
 
 export const strings = new LocalizedStrings({
   daac: {
+    active_collections: 'Active Collections',
     add_collection: 'Add Collection',
     all_collections: 'All Collections',
     all_granules: 'All Granules',
@@ -21,6 +22,7 @@ export const strings = new LocalizedStrings({
     collection_overview: 'Collection Overview',
     collections: 'Collections',
     dashboard: 'CUMULUS Dashboard',
+    executions: 'Executions',
     granule: 'Granule',
     granules: 'Granules',
     granules_updated: 'Granules Updated',
@@ -30,6 +32,8 @@ export const strings = new LocalizedStrings({
     granules_completed: 'Granule Completed',
     granules_failed: 'Granule Failed',
     logo: 'cumulus-logo.png',
+    operations: 'Operations',
+    pdrs: 'Pdrs',
     remove_from_cmr: 'Remove from CMR',
     running_granules: 'Running Granules',
     total_granules: 'Total Granules',
@@ -52,6 +56,7 @@ export const strings = new LocalizedStrings({
     collection_overview: 'Layer Overview',
     collections: 'Layers',
     dashboard: 'GITC Dashboard',
+    executions: 'Executions',
     granule: 'Product',
     granules: 'Products',
     granules_updated: 'Products Updated',
@@ -61,10 +66,11 @@ export const strings = new LocalizedStrings({
     granule_overview: 'Product Overview',
     granules_running: 'Products Running',
     logo: 'gitc-logo.png',
+    operations: 'Operations',
+    pdrs: 'Pdrs',
     remove_from_cmr: 'Remove from OnEarth',
     running_granules: 'Running Products',
     view_all_granules: 'View All Products',
     view_granules_overview: 'View Product Overview'
   }
 }, getCustomInterfaceLanguage);
-

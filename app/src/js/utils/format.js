@@ -2,7 +2,6 @@
 import React from 'react';
 import moment from 'moment';
 import numeral from 'numeral';
-import url from 'url';
 import { Link } from 'react-router-dom';
 
 export const nullValue = '--';
@@ -154,6 +153,21 @@ export const constructCollectionNameVersion = function (name, version) {
   return `${name}___${version}`;
 };
 
+/**
+ * Returns the name and version of a collection based on
+ * the collectionId used in elasticsearch indexing
+ *
+ * @param {string} collectionId - collectionId used in elasticsearch index
+ * @returns {Object} name and version as object
+ */
+export const deconstructCollectionId = function (collectionId) {
+  const [name, version] = collectionId.split('___');
+  return {
+    name,
+    version
+  };
+};
+
 export const collectionLink = function (collectionId) {
   if (!collectionId) return nullValue;
   const { name, version } = collectionNameVersion(collectionId);
@@ -166,6 +180,22 @@ export const collectionHref = function (collectionId) {
   return `/collections/collection/${name}/${version}`;
 };
 
+export const enableText = function (name) {
+  return `You are enabling rule ${name}`;
+};
+
+export const enableConfirm = function (name) {
+  return `Rule ${name} was enabled`;
+};
+
+export const disableText = function (name) {
+  return `You are disabling rule ${name}`;
+};
+
+export const disableConfirm = function (name) {
+  return `Rule ${name} was disabled`;
+};
+
 export const deleteText = function (name) {
   return `Are you sure you want to permanently delete ${name}?`;
 };
@@ -176,16 +206,15 @@ export const rerunText = function (name) {
 
 export const buildRedirectUrl = function ({ origin, pathname, hash }) {
   const hasQuery = hash.indexOf('?');
+
   if (hasQuery !== -1) {
-    hash = hash.substr(hash.indexOf('/') + 1);
-    const parsedUrl = url.parse(hash, true);
-    // Remove any ?token query parameter to avoid polluting
-    // the login link
-    delete parsedUrl.query.token;
-    hash = `${url.format({
-      pathname: parsedUrl.pathname,
-      query: parsedUrl.query
-    })}`;
+    // TODO [MHS, 2020-04-04] Fix with the test changes.
+    // const hashPrefix = hash.substr(0, hash.indexOf('/') + 1);
+    const baseHash = hash.substr(hash.indexOf('/') + 1);
+    const parsedUrl = new URL(baseHash, origin);
+    // Remove any ?token query parameter to avoid polluting the login link
+    parsedUrl.searchParams.delete('token');
+    return encodeURIComponent(parsedUrl.href);
   }
-  return encodeURIComponent(url.resolve(origin, pathname) + hash);
+  return encodeURIComponent(new URL(pathname + hash, origin).href);
 };

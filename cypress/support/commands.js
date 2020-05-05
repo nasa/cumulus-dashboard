@@ -23,7 +23,7 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-import clonedeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash.clonedeep';
 import { DELETE_TOKEN, SET_TOKEN } from '../../app/src/js/actions/types';
 
 Cypress.Commands.add('login', () => {
@@ -63,7 +63,7 @@ Cypress.Commands.add('editJsonTextarea', ({ data, update = false }) => {
   cy.window().its('aceEditorRef').its('editor').then((editor) => {
     if (update) {
       const value = editor.getValue();
-      let currentObject = JSON.parse(value);
+      const currentObject = JSON.parse(value);
       data = Cypress._.assign(currentObject, data);
     }
     data = JSON.stringify(data);
@@ -101,10 +101,17 @@ Cypress.Commands.add('getFixture', (fixtureName) => {
  * for the updatedAt time must be newer on the new object.
  */
 Cypress.Commands.add('expectDeepEqualButNewer', (inewObject, ifixtureObject) => {
-  const newObject = clonedeep(inewObject);
-  const fixtureObject = clonedeep(ifixtureObject);
-  expect(newObject['updatedAt']).to.be.greaterThan(fixtureObject['updatedAt']);
-  delete newObject['updatedAt'];
-  delete fixtureObject['updatedAt'];
+  const newObject = cloneDeep(inewObject);
+  const fixtureObject = cloneDeep(ifixtureObject);
+  expect(newObject.updatedAt).to.be.greaterThan(fixtureObject.updatedAt);
+  delete newObject.updatedAt;
+  delete fixtureObject.updatedAt;
   expect(newObject).to.deep.equal(fixtureObject);
+});
+
+/**
+ * Adds custom command to clear the default startDate filter
+ */
+Cypress.Commands.add('clearStartDateTime', () => {
+  cy.get('li[data-cy="startDateTime"]').find('.react-datetime-picker__clear-button').click();
 });

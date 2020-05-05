@@ -114,7 +114,6 @@ a:active {
 
 .link--learn-more {
   margin-top: 1em;
-  display: inline-block;
   float: right;
 }
 
@@ -165,6 +164,7 @@ a:active {
 .header {
   background-color: $ocean-blue;
   border-bottom: 1px solid rgba(255, 255, 255, .06);
+  z-index: 2;
 
   h1 {
     float: left;
@@ -391,17 +391,25 @@ a:active {
 
 .page__section {
   @extend .clearfix;
-  &:last-of-type {
+  /*&:last-of-type {
   margin-bottom: 3em; 
-  }
+  }*/
 }
 
 .page_section__overview {
   margin-top: 25px;
 }
 
+.page__section__header-wrapper {
+  margin-bottom: 1em;
+}
+
+.page_section.metrics--overview .heading__wrapper--border {
+  margin-top: 0em;
+}
+
 .page__section.datetime{
-  margin-bottom: 8em;
+  margin-bottom: 7.5em;
 }
 
 .collection__options--top ul{
@@ -414,7 +422,7 @@ a:active {
 }
 
 .page__section__controls{
-  margin-bottom: 2em;
+  margin-bottom: 1.5em !important;
 }
 
 .page__section--small {
@@ -422,9 +430,7 @@ a:active {
 }
 
 .page__section--top{
-  /*margin-bottom: 25px;*/
   padding: 25px 0 25px 0;
-  /*border-top: 1px solid #E2DFDF;*/
   background-color: #1E6B9D;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
 }
@@ -606,17 +612,17 @@ a:active {
 
 .status--process {
   margin-top: 1.5em;
+  font-weight: $base-font-semibold;
   dd, dt {
     display: inline-block;
     font-size: .9em;
   }
   dd {
     font-weight: $base-font-semibold;
-    margin-bottom: 10px;
   }
   dt {
-    color: $grey;
     margin-right: 0.5em;
+    color: $dark-grey;
   }
   .running,
   .enabled {
@@ -640,6 +646,21 @@ a:active {
       background-color: $error-red;
     }
   }
+
+  .execution-status {
+    &-succeeded {
+      color: $light-green;
+    }
+
+    &-running {
+      color: $yellow;
+    }
+
+    &-failed {
+      color: $error-red;
+    }
+  }
+
 }
 
 .app__target--container {
@@ -682,6 +703,14 @@ a:active {
     cursor: pointer;
     margin: 1em 0;
   }
+}
+
+.Collapsible__trigger {
+  align-self: flex-start;
+  cursor: pointer;
+  margin: 1em 0;
+  color: $ocean-blue;
+  border-bottom: 1px solid rgba(34, 118, 172, .2);
 }
 
 /**************************************************

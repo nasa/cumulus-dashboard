@@ -38,6 +38,7 @@ import {
   OPTIONS_PROVIDERGROUP_INFLIGHT,
   OPTIONS_PROVIDERGROUP_ERROR
 } from '../actions/types';
+import { createReducer } from '@reduxjs/toolkit';
 
 export const initialState = {
   list: {
@@ -56,121 +57,134 @@ export const initialState = {
   stopped: {}
 };
 
-export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
-  const { data, id } = action;
-  switch (action.type) {
-    case PROVIDER:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'data'], data);
-      set(state, ['map', id, 'error'], null);
-      if (get(state, ['deleted', id, 'status']) !== 'error') {
-        del(state, ['deleted', id]);
-      }
-      break;
-    case PROVIDER_INFLIGHT:
-      set(state, ['map', id, 'inflight'], true);
-      break;
-    case PROVIDER_ERROR:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'error'], action.error);
-      break;
+export default createReducer(initialState, {
 
-    case NEW_PROVIDER:
-      set(state, ['created', id, 'status'], 'success');
-      break;
-    case NEW_PROVIDER_INFLIGHT:
-      set(state, ['created', id, 'status'], 'inflight');
-      break;
-    case NEW_PROVIDER_ERROR:
-      set(state, ['created', id, 'status'], 'error');
-      set(state, ['created', id, 'error'], action.error);
-      break;
+  [PROVIDER]: (state, action) => {
+    const { data, id } = action;
+    set(state, ['map', id, 'inflight'], false);
+    set(state, ['map', id, 'data'], data);
+    set(state, ['map', id, 'error'], null);
+    if (get(state, ['deleted', id, 'status']) !== 'error') {
+      del(state, ['deleted', id]);
+    }
+  },
+  [PROVIDER_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['map', id, 'inflight'], true);
+  },
+  [PROVIDER_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['map', id, 'inflight'], false);
+    set(state, ['map', id, 'error'], action.error);
+  },
 
-    case PROVIDER_COLLECTIONS:
-      set(state, ['collections', id, 'inflight'], false);
-      set(state, ['collections', id, 'data'], data.results.map(c => c.collectionName));
-      break;
-    case PROVIDER_COLLECTIONS_INFLIGHT:
-      set(state, ['collections', id, 'inflight'], true);
-      break;
-    case PROVIDER_COLLECTIONS_ERROR:
-      set(state, ['collections', id, 'inflight'], false);
-      set(state, ['collections', id, 'error'], action.error);
-      break;
+  [NEW_PROVIDER]: (state, action) => {
+    const { id } = action;
+    set(state, ['created', id, 'status'], 'success');
+  },
+  [NEW_PROVIDER_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['created', id, 'status'], 'inflight');
+  },
+  [NEW_PROVIDER_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['created', id, 'status'], 'error');
+    set(state, ['created', id, 'error'], action.error);
+  },
 
-    case UPDATE_PROVIDER:
-      set(state, ['map', id, 'data'], data);
-      set(state, ['updated', id, 'status'], 'success');
-      break;
-    case UPDATE_PROVIDER_INFLIGHT:
-      set(state, ['updated', id, 'status'], 'inflight');
-      break;
-    case UPDATE_PROVIDER_ERROR:
-      set(state, ['updated', id, 'status'], 'error');
-      set(state, ['updated', id, 'error'], action.error);
-      break;
-    case UPDATE_PROVIDER_CLEAR:
-      del(state, ['updated', id]);
-      break;
+  [PROVIDER_COLLECTIONS]: (state, action) => {
+    const { data, id } = action;
+    set(state, ['collections', id, 'inflight'], false);
+    set(state, ['collections', id, 'data'], data.results.map(c => c.collectionName));
+  },
+  [PROVIDER_COLLECTIONS_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['collections', id, 'inflight'], true);
+  },
+  [PROVIDER_COLLECTIONS_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['collections', id, 'inflight'], false);
+    set(state, ['collections', id, 'error'], action.error);
+  },
 
-    case PROVIDERS:
-      set(state, ['list', 'data'], data.results);
-      set(state, ['list', 'meta'], assignDate(data.meta));
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], false);
-      break;
-    case PROVIDERS_INFLIGHT:
-      set(state, ['list', 'inflight'], true);
-      break;
-    case PROVIDERS_ERROR:
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], action.error);
-      break;
+  [UPDATE_PROVIDER]: (state, action) => {
+    const { data, id } = action;
+    set(state, ['map', id, 'data'], data);
+    set(state, ['updated', id, 'status'], 'success');
+  },
+  [UPDATE_PROVIDER_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['updated', id, 'status'], 'inflight');
+  },
+  [UPDATE_PROVIDER_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['updated', id, 'status'], 'error');
+    set(state, ['updated', id, 'error'], action.error);
+  },
+  [UPDATE_PROVIDER_CLEAR]: (state, action) => {
+    const { id } = action;
+    del(state, ['updated', id]);
+  },
 
-    case SEARCH_PROVIDERS:
-      set(state, ['list', 'params', 'prefix'], action.prefix);
-      break;
-    case CLEAR_PROVIDERS_SEARCH:
-      set(state, ['list', 'params', 'prefix'], null);
-      break;
+  [PROVIDERS]: (state, action) => {
+    const { data } = action;
+    set(state, ['list', 'data'], data.results);
+    set(state, ['list', 'meta'], assignDate(data.meta));
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], false);
+  },
+  [PROVIDERS_INFLIGHT]: (state, action) => {
+    set(state, ['list', 'inflight'], true);
+  },
+  [PROVIDERS_ERROR]: (state, action) => {
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], action.error);
+  },
 
-    case FILTER_PROVIDERS:
-      set(state, ['list', 'params', action.param.key], action.param.value);
-      break;
-    case CLEAR_PROVIDERS_FILTER:
-      set(state, ['list', 'params', action.paramKey], null);
-      break;
+  [SEARCH_PROVIDERS]: (state, action) => {
+    set(state, ['list', 'params', 'prefix'], action.prefix);
+  },
+  [CLEAR_PROVIDERS_SEARCH]: (state, action) => {
+    set(state, ['list', 'params', 'prefix'], null);
+  },
 
-    case PROVIDER_DELETE:
-      set(state, ['deleted', id, 'status'], 'success');
-      set(state, ['deleted', id, 'error'], null);
-      break;
-    case PROVIDER_DELETE_INFLIGHT:
-      set(state, ['deleted', id, 'status'], 'inflight');
-      break;
-    case PROVIDER_DELETE_ERROR:
-      set(state, ['deleted', id, 'status'], 'error');
-      set(state, ['deleted', id, 'error'], action.error);
-      break;
+  [FILTER_PROVIDERS]: (state, action) => {
+    set(state, ['list', 'params', action.param.key], action.param.value);
+  },
+  [CLEAR_PROVIDERS_FILTER]: (state, action) => {
+    set(state, ['list', 'params', action.paramKey], null);
+  },
 
-    case OPTIONS_PROVIDERGROUP:
-      // Map the list response to an object with key-value pairs like:
-      // displayValue: optionElementValue
-      const options = data.results.reduce((obj, provider) => {
-        // Several `results` items can share a `providerName`, but
-        // these are de-duplciated by the key-value structure
-        obj[provider.providerName] = provider.providerName;
-        return obj;
-      }, {'': ''});
-      set(state, ['dropdowns', 'group', 'options'], options);
-      break;
-    case OPTIONS_PROVIDERGROUP_INFLIGHT:
-      break;
-    case OPTIONS_PROVIDERGROUP_ERROR:
-      set(state, ['dropdowns', 'group', 'options'], []);
-      set(state, ['list', 'error'], action.error);
-      break;
+  [PROVIDER_DELETE]: (state, action) => {
+    const { id } = action;
+    set(state, ['deleted', id, 'status'], 'success');
+    set(state, ['deleted', id, 'error'], null);
+  },
+  [PROVIDER_DELETE_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['deleted', id, 'status'], 'inflight');
+  },
+  [PROVIDER_DELETE_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['deleted', id, 'status'], 'error');
+    set(state, ['deleted', id, 'error'], action.error);
+  },
+
+  [OPTIONS_PROVIDERGROUP]: (state, action) => {
+    const { data } = action;
+    // Map the list response to an object with key-value pairs like:
+    // displayValue: optionElementValue
+    const options = data.results.reduce((obj, provider) => {
+      // Several `results` items can share a `providerName`, but
+      // these are de-duplciated by the key-value structure
+      obj[provider.providerName] = provider.providerName;
+      return obj;
+    }, { '': '' });
+    set(state, ['dropdowns', 'group', 'options'], options);
+  },
+  [OPTIONS_PROVIDERGROUP_INFLIGHT]: () => { },
+  [OPTIONS_PROVIDERGROUP_ERROR]: (state, action) => {
+    set(state, ['dropdowns', 'group', 'options'], []);
+    set(state, ['list', 'error'], action.error);
   }
-  return state;
-}
+});

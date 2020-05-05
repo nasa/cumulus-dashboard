@@ -24,8 +24,7 @@ class DropdownAsync extends React.Component {
   }
 
   onOutsideClick (e) {
-    if (findDOMNode(this).contains(e.target)) return;
-    else this.setState({ showActions: false });
+    if (!findDOMNode(this).contains(e.target)) this.setState({ showActions: false });
   }
 
   toggleActions (e) {
@@ -61,6 +60,8 @@ class DropdownAsync extends React.Component {
               confirmAction={d.confirmAction}
               confirmText={d.confirmText}
               confirmOptions={d.confirmOptions}
+              showSuccessModal={d.postActionModal}
+              postActionText={d.postActionText}
               className={'link--no-underline'}
               element='a'
               text={d.text} />

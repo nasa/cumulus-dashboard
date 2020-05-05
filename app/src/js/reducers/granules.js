@@ -46,6 +46,8 @@ import {
   OPTIONS_COLLECTIONNAME_INFLIGHT,
   OPTIONS_COLLECTIONNAME_ERROR
 } from '../actions/types';
+import { createReducer } from '@reduxjs/toolkit';
+import { getCollectionId } from '../utils/format';
 
 export const initialState = {
   list: {
@@ -65,141 +67,156 @@ export const initialState = {
   recent: {}
 };
 
-export default function reducer (state = initialState, action) {
-  state = Object.assign({}, state);
-  const { id, data, config } = action;
+export default createReducer(initialState, {
+  [GRANULE]: (state, action) => {
+    const { id, data } = action;
+    set(state, ['map', id, 'inflight'], false);
+    set(state, ['map', id, 'data'], assignDate(data));
+    del(state, ['deleted', id]);
+  },
+  [GRANULE_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['map', id, 'inflight'], true);
+  },
+  [GRANULE_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['map', id, 'inflight'], false);
+    set(state, ['map', id, 'error'], action.error);
+  },
 
-  switch (action.type) {
-    case GRANULE:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'data'], assignDate(data));
-      del(state, ['deleted', id]);
-      break;
-    case GRANULE_INFLIGHT:
-      set(state, ['map', id, 'inflight'], true);
-      break;
-    case GRANULE_ERROR:
-      set(state, ['map', id, 'inflight'], false);
-      set(state, ['map', id, 'error'], action.error);
-      break;
+  [GRANULES]: (state, action) => {
+    const { data } = action;
+    set(state, ['list', 'data'], removeDeleted('granuleId', data.results, state.deleted));
+    set(state, ['list', 'meta'], assignDate(data.meta));
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], false);
+  },
+  [GRANULES_INFLIGHT]: (state, action) => {
+    set(state, ['list', 'inflight'], true);
+  },
+  [GRANULES_ERROR]: (state, action) => {
+    set(state, ['list', 'inflight'], false);
+    set(state, ['list', 'error'], action.error);
+  },
 
-    case GRANULES:
-      set(state, ['list', 'data'], removeDeleted('granuleId', data.results, state.deleted));
-      set(state, ['list', 'meta'], assignDate(data.meta));
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], false);
-      break;
-    case GRANULES_INFLIGHT:
-      set(state, ['list', 'inflight'], true);
-      break;
-    case GRANULES_ERROR:
-      set(state, ['list', 'inflight'], false);
-      set(state, ['list', 'error'], action.error);
-      break;
+  [GRANULE_REPROCESS]: (state, action) => {
+    const { id } = action;
+    set(state, ['reprocessed', id, 'status'], 'success');
+    set(state, ['reprocessed', id, 'error'], null);
+  },
+  [GRANULE_REPROCESS_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['reprocessed', id, 'status'], 'inflight');
+  },
+  [GRANULE_REPROCESS_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['reprocessed', id, 'status'], 'error');
+    set(state, ['reprocessed', id, 'error'], action.error);
+  },
 
-    case GRANULE_REPROCESS:
-      set(state, ['reprocessed', id, 'status'], 'success');
-      set(state, ['reprocessed', id, 'error'], null);
-      break;
-    case GRANULE_REPROCESS_INFLIGHT:
-      set(state, ['reprocessed', id, 'status'], 'inflight');
-      break;
-    case GRANULE_REPROCESS_ERROR:
-      set(state, ['reprocessed', id, 'status'], 'error');
-      set(state, ['reprocessed', id, 'error'], action.error);
-      break;
+  [GRANULE_REINGEST]: (state, action) => {
+    const { id } = action;
+    set(state, ['reingested', id, 'status'], 'success');
+    set(state, ['reingested', id, 'error'], null);
+  },
+  [GRANULE_REINGEST_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['reingested', id, 'status'], 'inflight');
+  },
+  [GRANULE_REINGEST_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['reingested', id, 'status'], 'error');
+    set(state, ['reingested', id, 'error'], action.error);
+  },
 
-    case GRANULE_REINGEST:
-      set(state, ['reingested', id, 'status'], 'success');
-      set(state, ['reingested', id, 'error'], null);
-      break;
-    case GRANULE_REINGEST_INFLIGHT:
-      set(state, ['reingested', id, 'status'], 'inflight');
-      break;
-    case GRANULE_REINGEST_ERROR:
-      set(state, ['reingested', id, 'status'], 'error');
-      set(state, ['reingested', id, 'error'], action.error);
-      break;
+  [GRANULE_APPLYWORKFLOW]: (state, action) => {
+    const { id } = action;
+    set(state, ['executed', id, 'status'], 'success');
+    set(state, ['executed', id, 'error'], null);
+  },
+  [GRANULE_APPLYWORKFLOW_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['executed', id, 'status'], 'inflight');
+  },
+  [GRANULE_APPLYWORKFLOW_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['executed', id, 'status'], 'error');
+    set(state, ['executed', id, 'error'], action.error);
+  },
 
-    case GRANULE_APPLYWORKFLOW:
-      set(state, ['executed', id, 'status'], 'success');
-      set(state, ['executed', id, 'error'], null);
-      break;
-    case GRANULE_APPLYWORKFLOW_INFLIGHT:
-      set(state, ['executed', id, 'status'], 'inflight');
-      break;
-    case GRANULE_APPLYWORKFLOW_ERROR:
-      set(state, ['executed', id, 'status'], 'error');
-      set(state, ['executed', id, 'error'], action.error);
-      break;
+  [GRANULE_REMOVE]: (state, action) => {
+    const { id } = action;
+    set(state, ['removed', id, 'status'], 'success');
+    set(state, ['removed', id, 'error'], null);
+  },
+  [GRANULE_REMOVE_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['removed', id, 'status'], 'inflight');
+  },
+  [GRANULE_REMOVE_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['removed', id, 'status'], 'error');
+    set(state, ['removed', id, 'error'], action.error);
+  },
 
-    case GRANULE_REMOVE:
-      set(state, ['removed', id, 'status'], 'success');
-      set(state, ['removed', id, 'error'], null);
-      break;
-    case GRANULE_REMOVE_INFLIGHT:
-      set(state, ['removed', id, 'status'], 'inflight');
-      break;
-    case GRANULE_REMOVE_ERROR:
-      set(state, ['removed', id, 'status'], 'error');
-      set(state, ['removed', id, 'error'], action.error);
-      break;
+  [BULK_GRANULE]: (state, action) => {
+    const { data, config } = action;
+    set(state, ['bulk', config.requestId, 'data'], data);
+    set(state, ['bulk', config.requestId, 'status'], 'success');
+    set(state, ['bulk', config.requestId, 'error'], null);
+  },
+  [BULK_GRANULE_INFLIGHT]: (state, action) => {
+    const { config } = action;
+    set(state, ['bulk', config.requestId, 'status'], 'inflight');
+  },
+  [BULK_GRANULE_ERROR]: (state, action) => {
+    const { config } = action;
+    set(state, ['bulk', config.requestId, 'status'], 'error');
+    set(state, ['bulk', config.requestId, 'error'], action.error);
+  },
 
-    case BULK_GRANULE:
-      set(state, ['bulk', config.requestId, 'data'], data);
-      set(state, ['bulk', config.requestId, 'status'], 'success');
-      set(state, ['bulk', config.requestId, 'error'], null);
-      break;
-    case BULK_GRANULE_INFLIGHT:
-      set(state, ['bulk', config.requestId, 'status'], 'inflight');
-      break;
-    case BULK_GRANULE_ERROR:
-      set(state, ['bulk', config.requestId, 'status'], 'error');
-      set(state, ['bulk', config.requestId, 'error'], action.error);
-      break;
+  [GRANULE_DELETE]: (state, action) => {
+    const { id } = action;
+    set(state, ['deleted', id, 'status'], 'success');
+    set(state, ['deleted', id, 'error'], null);
+  },
+  [GRANULE_DELETE_INFLIGHT]: (state, action) => {
+    const { id } = action;
+    set(state, ['deleted', id, 'status'], 'inflight');
+  },
+  [GRANULE_DELETE_ERROR]: (state, action) => {
+    const { id } = action;
+    set(state, ['deleted', id, 'status'], 'error');
+    set(state, ['deleted', id, 'error'], action.error);
+  },
 
-    case GRANULE_DELETE:
-      set(state, ['deleted', id, 'status'], 'success');
-      set(state, ['deleted', id, 'error'], null);
-      break;
-    case GRANULE_DELETE_INFLIGHT:
-      set(state, ['deleted', id, 'status'], 'inflight');
-      break;
-    case GRANULE_DELETE_ERROR:
-      set(state, ['deleted', id, 'status'], 'error');
-      set(state, ['deleted', id, 'error'], action.error);
-      break;
+  [SEARCH_GRANULES]: (state, action) => {
+    set(state, ['list', 'params', 'prefix'], action.prefix);
+  },
+  [CLEAR_GRANULES_SEARCH]: (state, action) => {
+    set(state, ['list', 'params', 'prefix'], null);
+  },
 
-    case SEARCH_GRANULES:
-      set(state, ['list', 'params', 'prefix'], action.prefix);
-      break;
-    case CLEAR_GRANULES_SEARCH:
-      set(state, ['list', 'params', 'prefix'], null);
-      break;
+  [FILTER_GRANULES]: (state, action) => {
+    set(state, ['list', 'params', action.param.key], action.param.value);
+  },
+  [CLEAR_GRANULES_FILTER]: (state, action) => {
+    set(state, ['list', 'params', action.paramKey], null);
+  },
 
-    case FILTER_GRANULES:
-      set(state, ['list', 'params', action.param.key], action.param.value);
-      break;
-    case CLEAR_GRANULES_FILTER:
-      set(state, ['list', 'params', action.paramKey], null);
-      break;
-
-    case OPTIONS_COLLECTIONNAME:
-      // Map the list response to an object with key-value pairs like:
-      // displayValue: optionElementValue
-      const options = data.results.reduce((obj, d) => {
-        const { name, version } = d;
-        obj[`${name} ${version}`] = `${name}___${version}`;
-        return obj;
-      }, {});
-      set(state, ['dropdowns', 'collectionName', 'options'], options);
-      break;
-    case OPTIONS_COLLECTIONNAME_INFLIGHT:
-      break;
-    case OPTIONS_COLLECTIONNAME_ERROR:
-      set(state, ['dropdowns', 'collectionName', 'options'], []);
-      set(state, ['list', 'error'], action.error);
-      break;
+  [OPTIONS_COLLECTIONNAME]: (state, action) => {
+    const options = action.data.results.reduce(
+      (obj, { name, version }) =>
+        Object.assign(obj, {
+          [`${name} ${version}`]: getCollectionId({ name, version })
+        }),
+      {}
+    );
+    set(state, ['dropdowns', 'collectionName', 'options'], options);
+  },
+  [OPTIONS_COLLECTIONNAME_INFLIGHT]: () => {},
+  [OPTIONS_COLLECTIONNAME_ERROR]: (state, action) => {
+    set(state, ['dropdowns', 'collectionName', 'options'], []);
+    set(state, ['list', 'error'], action.error);
   }
-  return state;
-}
+});

@@ -23,21 +23,22 @@ The information needed to configure the dashboard is stored at `app/src/js/confi
 
 The following environment variables override the default values in `config.js`:
 
-| Env Name | Description |
-| -------- | ----------- |
-| HIDE_PDR | whether to hide the PDR menu, default to true |
-| DAAC\_NAME    | e.g. LPDAAC, default to Local |
-| STAGE | e.g. UAT, default to development |
-| LABELS | gitc or daac localization (defaults to daac) |
-| APIROOT | the API URL. This must be set by the user as it defaults to example.com |
-| AUTH_METHOD | The type of authorization method protecting the Cumulus API.  [launchpad or earthdata] Default: earthdata  |
-| ENABLE\_RECOVERY | If true, adds recovery options to the granule and collection pages. default: false |
-| KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set to examine distribution metrics details. |
-| SHOW\_TEA\_METRICS | \<optional\> display metrics from Thin Egress Application (TEA). default: true |
-| SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from Cumulus Distribution API. default: false |
-| ESROOT | \<optional\> Should point to an Elasticsearch endpoint. Must be set for distribution metrics to be displayed. |
-| ES\_USER | \<optional\> Elasticsearch username, needed when protected by basic authorization |
-| ES\_PASSWORD | \<optional\> Elasticsearch password,needed when protected by basic authorization |
+| Env Name | Description | Default |
+| -------- | ----------- | -------- |
+| HIDE\_PDR | Whether to hide the PDR menu. | *true* |
+| AWS\_REGION | Region in which Cumulus API is running. | *us-west-2*  |
+| DAAC\_NAME    | e.g. LPDAAC, | *Local* |
+| STAGE | e.g. PROD, UAT, | *development* |
+| LABELS | gitc or daac localization. | *daac* |
+| APIROOT | the API URL. This must be set by the user. | *example.com* |
+| AUTH_METHOD | The type of authorization method protecting the Cumulus API.  [launchpad or earthdata] | *earthdata*  |
+| ENABLE\_RECOVERY | If true, adds recovery options to the granule and collection pages. | *false* |
+| KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set to examine distribution metrics details. | |
+| SHOW\_TEA\_METRICS | \<optional\> display metrics from Thin Egress Application (TEA). | *true* |
+| SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from Cumulus Distribution API.| *false* |
+| ESROOT | \<optional\> Should point to an Elasticsearch endpoint. Must be set for distribution metrics to be displayed. | |
+| ES\_USER | \<optional\> Elasticsearch username, needed when protected by basic authorization | |
+| ES\_PASSWORD | \<optional\> Elasticsearch password,needed when protected by basic authorization | |
 
 
 ## Building or running locally
@@ -76,7 +77,7 @@ To build the dashboard:
 
 #### Build the dashboard to be served by the Cumulus API.
 
-With the Cumulus API it is possible to [serve the dashboard from an s3 Bucket](https://nasa.github.io/cumulus-api/#serve-the-dashboard-from-a-bucket).  If you wish to do this, you must build the dashboard with the environment variable `SERVED_BY_CUMULUS_API` set to `true`.  This configures the dashboard to work from the Cumulus `dashboard` endpoint.
+With the Cumulus API it is possible to [serve the dashboard from an s3 Bucket](https://nasa.github.io/cumulus-api/#serve-the-dashboard-from-a-bucket).  If you wish to do this, you must build the dashboard with the environment variable `SERVED_BY_CUMULUS_API` set to `true`.  This configures the dashboard to work from the Cumulus `dashboard` endpoint.  This option should be considered when you can't serve the dashboard from behind CloudFront, for example in NGAP sandbox environments.  If you wish to serve the dashboard from behind [CloudFront](https://aws.amazon.com/cloudfront/).  Build a `dist` with your configuration for `APIROOT` and omitting `SERVED_BY_CUMULUS_API` and follow the cumulus operator docs on [serving the dashboard from CloudFront](https://nasa.github.io/cumulus/docs/next/operator-docs/serve-dashboard-from-cloudfront).
 
 The compiled files will be placed in the `dist` directory.
 
@@ -120,7 +121,7 @@ These are started and stopped with the commands:
   $ npm run start-localstack
   $ npm run stop-localstack
 ```
-After these containers are running, you can start a cumulus API locally in a terminal window `npm run serve-api`, the dashboard in another window. `[APIROOT=http://localhost:5001] npm run serve` and finally cypress in a third window. `npm run cypress`.
+After these containers are running, you can start a cumulus API locally in a terminal window `npm run serve-api`, the dashboard in another window. `[SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve` and finally cypress in a third window. `npm run cypress`.
 
 Once the docker app is running, If you would like to see sample data you can seed the database. This will load the same sample data into the application that is used during cypress testing.
 ```bash
@@ -134,7 +135,7 @@ The cumulusapi docker service is started and stopped:
   $ npm run start-cumulusapi
   $ npm run stop-cumulusapi
 ```
-Then you can run the dashboard locally (without docker) `[APIROOT=http://localhost:5001] npm run serve` and open cypress tests `npm run cypress`.
+Then you can run the dashboard locally (without docker) `[SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve` and open cypress tests `npm run cypress`.
 
 
 The docker compose stack also includes a command to let a developer start all development containers with a single command.
@@ -277,7 +278,7 @@ Serve the cumulus API (separate terminal)
 
 Serve the dashboard web application (another terminal)
 ```bash
-  $ [APIROOT=http://localhost:5001] npm run serve
+  $ [SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve
 ```
 
 If you're just testing dashboard code, you can generally run all of the above commands as a single docker-compose stack.

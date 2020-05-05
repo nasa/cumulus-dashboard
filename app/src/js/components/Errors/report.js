@@ -7,7 +7,6 @@ import { truncate } from '../../utils/format';
 class ErrorReport extends React.Component {
   constructor () {
     super();
-    this.displayName = 'ErrorReport';
     this.scrollToTop = this.scrollToTop.bind(this);
     this.truncate = this.truncate.bind(this);
     this.renderSingleError = this.renderSingleError.bind(this);
@@ -16,7 +15,7 @@ class ErrorReport extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    if (this.props.report !== prevProps.report) {
+    if (!this.props.disableScroll && (this.props.report !== prevProps.report)) {
       this.scrollToTop();
     }
   }
@@ -37,7 +36,7 @@ class ErrorReport extends React.Component {
       trigger = this.truncate(report);
     }
     // No need to make error collapsible if the truncated
-    // output is the same length as the original ouptut
+    // output is the same length as the original output
     if (typeof report === 'string' &&
         report === trigger &&
         report.length === trigger.length) {
@@ -59,7 +58,7 @@ class ErrorReport extends React.Component {
         </div>
       );
     } else if (report instanceof Error) {
-      let name = report.name || 'Error';
+      const name = report.name || 'Error';
       let message, stack;
       if (!report.message) {
         message = JSON.stringify(report);
@@ -98,7 +97,7 @@ class ErrorReport extends React.Component {
         </div>
       );
     } else {
-      let stringified = this.truncate(JSON.stringify(obj));
+      const stringified = this.truncate(JSON.stringify(obj));
       return <p key={stringified}>{stringified}</p>;
     }
   }
@@ -116,7 +115,8 @@ class ErrorReport extends React.Component {
 
 ErrorReport.propTypes = {
   report: PropTypes.any,
-  truncate: PropTypes.bool
+  truncate: PropTypes.bool,
+  disableScroll: PropTypes.bool
 };
 
 export default ErrorReport;

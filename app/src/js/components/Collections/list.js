@@ -4,13 +4,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import moment from 'moment';
 import {
   applyRecoveryWorkflowToCollection,
   clearCollectionsSearch,
   getCumulusInstanceMetadata,
   listCollections,
-  searchCollections
+  searchCollections,
+  filterCollections,
+  clearCollectionsFilter
 } from '../../actions';
 import {
   collectionSearchResult,
@@ -28,6 +29,8 @@ import List from '../Table/Table';
 import { strings } from '../locale';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
+import Dropdown from '../DropDown/dropdown';
+import pageSizeOptions from '../../utils/page-size';
 
 const breadcrumbConfig = [
   {
@@ -43,13 +46,6 @@ const breadcrumbConfig = [
 class CollectionList extends React.Component {
   constructor () {
     super();
-    this.displayName = 'CollectionList';
-    this.timeOptions = {
-      '': '',
-      '1 Week Ago': moment().subtract(1, 'weeks').format(),
-      '1 Month Ago': moment().subtract(1, 'months').format(),
-      '1 Year Ago': moment().subtract(1, 'years').format()
-    };
     this.generateQuery = this.generateQuery.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
   }
@@ -76,9 +72,12 @@ class CollectionList extends React.Component {
   }
 
   render () {
-    const { list } = this.props.collections;
+    const { collections, mmtLinks, datepicker } = this.props;
+    const { list } = collections;
+    const { startDateTime, endDateTime } = datepicker || {};
+    const hasTimeFilter = startDateTime || endDateTime;
+
     // merge mmtLinks with the collection data;
-    const mmtLinks = this.props.mmtLinks;
     const data = list.data.map((collection) => {
       return {
         ...collection,
@@ -99,7 +98,10 @@ class CollectionList extends React.Component {
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>{strings.all_collections} <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>
+              {hasTimeFilter ? strings.active_collections : strings.all_collections}
+              <span className='num--title'>{count ? tally(count) : 0}</span>
+            </h2>
           </div>
 
           <List
@@ -119,7 +121,19 @@ class CollectionList extends React.Component {
                 action={searchCollections}
                 format={collectionSearchResult}
                 clear={clearCollectionsSearch}
-                placeholder='Search Collections'
+                label='Search'
+                placeholder='Collection Name'
+              />
+
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterCollections}
+                clear={clearCollectionsFilter}
+                paramKey={'limit'}
+                label={'Results Per Page'}
+                inputProps={{
+                  placeholder: 'Results Per Page'
+                }}
               />
             </ListFilters>
           </List>
@@ -133,10 +147,11 @@ CollectionList.propTypes = {
   collections: PropTypes.object,
   mmtLinks: PropTypes.object,
   dispatch: PropTypes.func,
-  logs: PropTypes.object,
   config: PropTypes.object,
-  location: PropTypes.object
+  datepicker: PropTypes.object
 };
+
+CollectionList.displayName = 'CollectionList';
 
 export { CollectionList };
 export default withRouter(connect(state => state)(CollectionList));

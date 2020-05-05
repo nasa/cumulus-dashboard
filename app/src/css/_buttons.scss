@@ -22,13 +22,15 @@
     color: $white;
   }
 
-  &:disabled{
+  &:disabled,
+  &--disabled {
     opacity: 0.6;
     pointer-events: none;
   }
 
   &:hover{
     background-color: $midnight-blue;
+    color: $white;
   }
 
   &--oauth{
@@ -37,13 +39,21 @@
 
   &--small{
     font-size: .86em;
-    padding: .4em 1.5em .3em 2.5em;
+    padding: .4em 1.5em .4em 2.5em;
+
+    &.button--no-icon {
+      padding: .4em 1.5em;
+    }
   }
   
   &--large{
     padding: .7em 2em;
     font-weight: $base-font-bold;
     font-size: 1em;
+  }
+
+  &--no-icon {
+    padding: .65em 1.2em;
   }
 
   &--white, &--white:visited {
@@ -66,17 +76,18 @@
     }
   }
 
-  &--primary, &--primary{
-    &:hover, &:visited {
+  &--primary, &--primary:visited {
+    &:hover {
       background-color: darken($light-green, 10%);
       color: $white;
       border: 0;
     }
   }
   
-  &--secondary, &--secondary{
-    &:hover, &:visited {
-      background-color: $dolphin-grey;
+  &--secondary, &--secondary:visited{
+    background-color: $dolphin-grey;
+    &:hover {
+      background-color: darken($dolphin-grey, 20%);
     }
   }
 
@@ -250,8 +261,11 @@
         content: '\f0ab';
         font-weight: 900;
         left: 10px;
-        
-      } 
+      }
+
+      &.button__animation:hover:before {
+        visibility: hidden;
+      }
     }
   
     &--copy{
@@ -292,6 +306,37 @@
       font-weight: 900;
       visibility: hidden;
     }
+
+    &--enable {
+      background-color: $light-green;
+      position: relative;
+      
+      &:before {
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        content: '\f205';
+        font-weight: 900;
+        top: 4px;
+        left: 10px;
+      } 
+    }
+
+    &--disable {
+      background-color: $light-green;
+      position: relative;
+      
+      &:before {
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        content: '\f204';
+        font-weight: 900;
+        top: 4px;
+        left: 10px;
+      } 
+    }
+  
   
      /*******Button Animations & Transitions ******/
     &--loading {
@@ -320,10 +365,30 @@
         -moz-transition: all 0.3s;
         transition: all 0.3s;
       }
+
+      &:hover {
+        padding: .7em 3em .7em 1em;
+      }
+
+      &.button--small {
+        &:hover {
+          padding: .4em 3em .4em 1em;
+        }
+
+        &:after {
+          top: unset;
+        }
+      }
     }
-    
-    &__animation:hover {
-      padding: .7em 3em .7em 1em;
+
+    &__icon--animation {
+      cursor: pointer;
+      transition: font-size 0.2s;
+      font-size: 1em;
+
+      &:hover {
+        font-size: 1.1em;
+      }
     }
     
     &__arrow:after {
@@ -366,7 +431,11 @@
         font-weight: 900;
         left: 10px;
         
-      } 
+      }
+
+      &.form-group__element:hover:before {
+        visibility: visible;
+      }
     }
 
     &__bulkgranules:hover:before{
@@ -438,6 +507,12 @@
         font-weight: 900;
         left: 10px;
       } 
+
+      &.form-group__element--right {
+        &:hover:before {
+          visibility: visible;
+        }
+      }
     }
     
       &__goto:hover:before {

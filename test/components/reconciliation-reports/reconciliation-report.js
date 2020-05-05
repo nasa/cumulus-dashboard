@@ -14,7 +14,7 @@ const reconciliationReports = {
     exampleReport: {
       data: {
         reportStartTime: '2018-06-11T18:52:37.710Z',
-        'reportEndTime': '2018-06-11T18:52:39.893Z',
+        reportEndTime: '2018-06-11T18:52:39.893Z',
         status: 'SUCCESS',
         error: null,
         okFileCount: 21,
@@ -31,7 +31,19 @@ const reconciliationReports = {
             uri: 's3://some-bucket/path/to/key-456.hdf',
             granuleId: 'g-456'
           }
-        ]
+        ],
+        filesInCumulus: {
+          okCount: 129
+        },
+        collectionsInCumulusCmr: {
+          okCount: 1
+        },
+        granulesInCumulusCmr: {
+          okCount: 7
+        },
+        filesInCumulusCmr: {
+          okCount: 4
+        }
       }
     },
     exampleReportWithError: {
@@ -57,8 +69,8 @@ test('show individual report', function (t) {
   const MetadataWrapper = Metadata.dive();
   const MetadataWrapperChildren = MetadataWrapper.children();
   // ReconciliationReport is configured to use 6 metaAccessors,
-  // so there will be 6 groups of dt, dd elements for a total of 12
-  t.is(MetadataWrapperChildren.length, 12);
+  // so there will be 6 groups of dt, dd elements
+  t.is(MetadataWrapperChildren.length, 6);
 });
 
 test('report with error triggers error message', function (t) {

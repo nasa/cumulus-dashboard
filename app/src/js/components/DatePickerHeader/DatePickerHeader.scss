@@ -1,0 +1,21 @@
+.datetimeheader{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  &__content{
+    margin-right: 0px;
+  }
+}
+
+.content__header .datetime__range {
+  top: 0px;
+}
+
+.content__header .datetime__internal {
+  margin-left: auto;
+}
+
+.content__header .selector__hrformat {
+  margin-right: 0em;
+}

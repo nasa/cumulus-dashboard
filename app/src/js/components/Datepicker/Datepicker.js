@@ -7,22 +7,19 @@ import DateTimePicker from 'react-datetime-picker';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
-import { DATEPICKER_DATECHANGE, DATEPICKER_DROPDOWN_FILTER, DATEPICKER_HOUR_FORMAT } from '../../actions/types';
-import { urlDateFormat, urlDateProps } from '../../utils/datepicker';
-
-const allDateRanges = [
-  {value: 'All', label: 'All'},
-  {value: 'Custom', label: 'Custom'},
-  {value: 1 / 24.0, label: 'Last hour'},
-  {value: 1, label: 'Last 24 hours'},
-  {value: 7, label: 'Last week'},
-  {value: 30, label: 'Last 30 Days'},
-  {value: 60, label: 'Last 60 days'},
-  {value: 180, label: 'Last 180 days'},
-  {value: 366, label: 'Last year'}
-];
-const allHourFormats = ['12HR', '24HR'];
-const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss.sss';
+import {
+  DATEPICKER_DATECHANGE,
+  DATEPICKER_DROPDOWN_FILTER,
+  DATEPICKER_HOUR_FORMAT
+} from '../../actions/types';
+import {
+  allDateRanges,
+  allHourFormats,
+  dropdownValue,
+  dateTimeFormat,
+  urlDateFormat,
+  urlDateProps
+} from '../../utils/datepicker';
 
 /*
  * If this is a shared URL, grab the date and time and update the datepicker
@@ -31,15 +28,21 @@ const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss.sss';
  */
 const updateDatepickerStateFromQueryParams = (props) => {
   const { queryParams } = props;
-  const values = {...queryParams};
+
   if (!isEmpty(queryParams)) {
+    const values = { ...queryParams };
+
     for (const value in values) {
       if (urlDateProps.includes(value)) {
-        values[value] = moment.utc(values[value], urlDateFormat).toDate();
+        values[value] = moment.utc(values[value], urlDateFormat).valueOf();
       }
     }
-    values.dateRange = {value: 'Custom', label: 'Custom'};
-    props.dispatch({type: 'DATEPICKER_DATECHANGE', data: {...props.datepicker, ...values}});
+
+    values.dateRange = dropdownValue(values);
+    props.dispatch({
+      type: 'DATEPICKER_DATECHANGE',
+      data: { ...props.datepicker, ...values }
+    });
   }
 };
 
@@ -55,14 +58,22 @@ class Datepicker extends React.PureComponent {
     this.handleHourFormatChange = this.handleHourFormatChange.bind(this);
     this.handleDateTimeRangeChange = this.handleDateTimeRangeChange.bind(this);
     this.clear = this.clear.bind(this);
+    this.refresh = this.refresh.bind(this);
   }
 
   componentDidMount () {
     updateDatepickerStateFromQueryParams(this.props);
   }
 
+  refresh (e) {
+    const { value, label } = this.props.dateRange;
+    if (label !== 'Custom') {
+      this.props.dispatch(this.dispatchDropdownUpdate(value, label));
+    }
+  }
+
   clear () {
-    const { value, label } = allDateRanges.find(a => a.label === 'All');
+    const { value, label } = allDateRanges.find((a) => a.label === 'Custom');
     this.props.dispatch(this.dispatchDropdownUpdate(value, label));
   }
 
@@ -93,24 +104,31 @@ class Datepicker extends React.PureComponent {
   handleDateTimeRangeChange (name, newValue) {
     // User input is in UTC, but the DateTimePicker component interprets it's
     // data as local time.  So we need convert the Date value to UTC.
-    const utcValue = moment.utc(moment(newValue).format(dateTimeFormat)).toDate();
-    if (isNaN(utcValue.valueOf())) return;
+    let utcValue = null;
+    if (newValue !== null) {
+      utcValue = moment.utc(moment(newValue).format(dateTimeFormat)).valueOf();
+      if (isNaN(utcValue)) return;
+    }
     const updatedProps = {
       startDateTime: this.props.startDateTime,
       endDateTime: this.props.endDateTime,
       [name]: utcValue
     };
-    updatedProps.dateRange = allDateRanges.find(a => a.label === 'Custom');
-    this.props.dispatch({type: DATEPICKER_DATECHANGE, data: updatedProps});
+    updatedProps.dateRange = allDateRanges.find((a) => a.label === 'Custom');
+    this.props.dispatch({ type: DATEPICKER_DATECHANGE, data: updatedProps });
     this.updateQueryParams(updatedProps);
     this.onChange();
   }
 
   updateQueryParams (newProps) {
-    const updatedQueryParams = {...this.props.queryParams};
+    const updatedQueryParams = { ...this.props.queryParams };
     urlDateProps.map((time) => {
       let urlValue;
-      if (newProps[time] !== null) {
+      // If user selects 'Recent', drop the start and end date/time query
+      // parameters, otherwise on the next navigation, the dropdown will switch
+      // back to 'Custom'.  Excluding these query params ensures that 'Recent'
+      // remains selected until the user selects otherwise.
+      if (newProps.dateRange.value !== 'Recent' && newProps[time] !== null) {
         urlValue = moment.utc(newProps[time]).format(urlDateFormat);
       }
       updatedQueryParams[time] = urlValue;
@@ -121,13 +139,18 @@ class Datepicker extends React.PureComponent {
   renderDateRangeDropDown () {
     return (
       <React.Fragment>
-        <div className="datetime dropdown__dtrange">
+        <div className='datetime dropdown__dtrange'>
           <select
             name='dateRange'
             value={this.props.dateRange.value}
             onChange={this.handleDropdownChange}
-            data-cy="datetime-dropdown">
-            {allDateRanges.map((option, i) => <option value={option.value} key={i}>{option.label}</option>)}
+            data-cy='datetime-dropdown'
+          >
+            {allDateRanges.map((option, i) => (
+              <option value={option.value} key={i}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
       </React.Fragment>
@@ -139,23 +162,20 @@ class Datepicker extends React.PureComponent {
 
     return (
       <React.Fragment>
-        {allHourFormats.map((option, i) => {
-          return (
-            <label className="selector__hrformat" key={i}>
-              <input
-                type="radio"
-                name={name}
-                value={option}
-                key={i}
-                checked={option === this.props.hourFormat}
-                onChange={this.handleHourFormatChange}
-              />
-              <span className="selector"></span>
-              {option}
-            </label>
-          );
-        })
-        }
+        <div className='datetime selector__hrformat'>
+          <select
+            type='text'
+            name={name}
+            value={this.props.hourFormat.value}
+            onChange={this.handleHourFormatChange}
+          >
+            {allHourFormats.map((option, i) => (
+              <option value={option.value} key={i}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
       </React.Fragment>
     );
   }
@@ -163,10 +183,12 @@ class Datepicker extends React.PureComponent {
   renderDateTimeRange (name) {
     const hourFormat = this.props.hourFormat;
     const value = this.props[name];
-    const locale = (hourFormat === '24HR') ? 'en-GB' : 'en-US';
-    const format = (hourFormat === '24HR') ? 'MM/dd/yyyyy HH:mm' : 'MM/dd/yyyyy hh:mm a';
+    const locale = hourFormat === '24HR' ? 'en-GB' : 'en-US';
+    const format = `MM/dd/yyyyy ${hourFormat === '24HR' ? 'HH:mm' : 'hh:mm a'}`;
 
-    const utcValue = isNil(value) ? null : moment(moment.utc(value).format(dateTimeFormat)).toDate();
+    const utcValue = isNil(value)
+      ? null
+      : moment(moment.utc(value).format(dateTimeFormat)).toDate();
 
     return (
       <DateTimePicker
@@ -186,38 +208,60 @@ class Datepicker extends React.PureComponent {
 
   render () {
     return (
-      <div className="datetime__module">
-        <div className="datetime">
-          <div className="datetime__range">
-            <ul className="datetime__internal">
+      <div className='datetime__module'>
+        <div className='datetime'>
+          <div className='datetime__range'>
+            <ul className='datetime__internal'>
               <li>
-                { this.renderDateRangeDropDown() }
+                <label>Duration</label>
+                {this.renderDateRangeDropDown()}
               </li>
               <li data-cy='startDateTime'>
-                { this.renderDateTimeRange('startDateTime') }
-              </li>
-              <li>
-                <span> to </span>
+                <label>Start Date and Time</label>
+                {this.renderDateTimeRange('startDateTime')}
               </li>
               <li data-cy='endDateTime'>
-                { this.renderDateTimeRange('endDateTime') }
+                <label>End Date and Time</label>
+                {this.renderDateTimeRange('endDateTime')}
               </li>
-              <li className="selector__hrformat" data-cy='hourFormat'>
-                { this.renderHourFormatSelect() }
+              <li className='selector__hrformat' data-cy='hourFormat'>
+                <label>Time Format</label>
+                {this.renderHourFormatSelect()}
               </li>
+              {this.props.hideWrapper || (
+                <li className='datetime__clear'>
+                  <button
+                    className='button button--secondary button--small'
+                    onClick={this.clear}
+                    data-cy='datetime-clear'
+                  >
+                    Clear All
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
-          <div className="datetime__wrapper">
-            <h3>Date and Time Range</h3>
-          </div>
-        </div>
-        <div className="datetime__clear">
-          <button
-            className="button button--small"
-            onClick={this.clear}
-            data-cy="datetime-clear" >
-            Clear Selection
-          </button>
+          {this.props.hideWrapper || (
+            <div className='datetime__wrapper'>
+              <ul className='datetime__header'>
+                <li>
+                  <h3>Date and Time Range</h3>
+                </li>
+                <li>
+                  <div className='datetime__refresh'>
+                    <button
+                      className='button button--small'
+                      onClick={this.refresh}
+                      data-cy='datetime-refresh'
+                    >
+                      Refresh Time
+                    </button>
+                  </div>
+                </li>
+              </ul>
+              <hr></hr>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -230,13 +274,16 @@ Datepicker.propTypes = {
     value: PropTypes.node,
     label: PropTypes.string
   }),
-  startDateTime: PropTypes.instanceOf(Date),
-  endDateTime: PropTypes.instanceOf(Date),
-  hourFormat: PropTypes.oneOf(allHourFormats),
+  startDateTime: PropTypes.number,
+  endDateTime: PropTypes.number,
+  hourFormat: PropTypes.oneOf(allHourFormats.map((a) => a.label)),
   queryParams: PropTypes.object,
   setQueryParams: PropTypes.func,
   onChange: PropTypes.func,
   dispatch: PropTypes.func,
+  hideWrapper: PropTypes.bool
 };
 
-export default withRouter(withQueryParams()(connect((state) => state.datepicker)(Datepicker)));
+export default withRouter(
+  withQueryParams()(connect(state => state.datepicker)(Datepicker))
+);

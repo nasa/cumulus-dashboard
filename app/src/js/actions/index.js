@@ -1,12 +1,12 @@
 'use strict';
 
 import compareVersions from 'compare-versions';
-import url from 'url';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
 import { history } from '../store/configureStore';
 import { CMR } from '@cumulus/cmrjs';
-import clonedeep from 'lodash.clonedeep';
+import isEmpty from 'lodash.isempty';
+import cloneDeep from 'lodash.clonedeep';
 
 import { configureRequest } from './helpers';
 import _config from '../config';
@@ -26,11 +26,9 @@ const {
   showDistributionAPIMetrics,
   showTeaMetrics,
   apiRoot: root,
-  pageLimit,
+  defaultPageLimit,
   minCompatibleApiVersion
 } = _config;
-
-const millisecondsPerDay = 24 * 60 * 60 * 1000;
 
 /**
  * match MMT to CMR environment.
@@ -49,7 +47,7 @@ export const refreshAccessToken = (token) => {
 
     const requestConfig = configureRequest({
       method: 'POST',
-      url: url.resolve(root, 'refresh'),
+      url: new URL('refresh', root).href,
       body: { token },
       // make sure request failures are sent to .catch()
       simple: true
@@ -85,7 +83,7 @@ export const getCollection = (name, version) => ({
   [CALL_API]: {
     type: types.COLLECTION,
     method: 'GET',
-    id: getCollectionId({name, version}),
+    id: getCollectionId({ name, version }),
     path: `collections?name=${name}&version=${version}`
   }
 });
@@ -94,7 +92,7 @@ export const getApiVersion = () => {
   return (dispatch) => {
     const config = configureRequest({
       method: 'GET',
-      url: url.resolve(root, 'version'),
+      url: new URL('version', root).href,
       // make sure request failures are sent to .catch()
       simple: true
     });
@@ -129,18 +127,24 @@ export const checkApiVersion = () => {
   };
 };
 
-export const listCollections = (options) => {
+export const listCollections = (options = {}) => {
+  const { listAll = false, getMMT = true, ...queryOptions } = options;
   return (dispatch, getState) => {
-    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    const timeFilters = listAll ? {} : fetchCurrentTimeFilters(getState().datepicker);
+    const urlPath = `collections${isEmpty(timeFilters) || listAll ? '' : '/active'}`;
     return dispatch({
       [CALL_API]: {
         type: types.COLLECTIONS,
         method: 'GET',
         id: null,
-        url: url.resolve(root, 'collections'),
-        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+        url: new URL(urlPath, root).href,
+        qs: Object.assign({ limit: defaultPageLimit }, queryOptions, timeFilters)
       }
-    }).then(() => dispatch(getMMTLinks()));
+    }).then(() => {
+      if (getMMT) {
+        dispatch(getMMTLinks());
+      }
+    });
   };
 };
 
@@ -154,12 +158,13 @@ export const createCollection = (payload) => ({
   }
 });
 
-export const updateCollection = (payload) => ({
+// include the option to specify the name and version of the collection to update in case they differ in the payload
+export const updateCollection = (payload, name, version) => ({
   [CALL_API]: {
     type: types.UPDATE_COLLECTION,
     method: 'PUT',
-    id: getCollectionId(payload),
-    path: `collections/${payload.name}/${payload.version}`,
+    id: (name && version) ? getCollectionId({ name, version }) : getCollectionId(payload),
+    path: `collections/${name || payload.name}/${version || payload.version}`,
     body: payload
   }
 });
@@ -170,7 +175,7 @@ export const deleteCollection = (name, version) => ({
   [CALL_API]: {
     type: types.COLLECTION_DELETE,
     method: 'DELETE',
-    id: getCollectionId({name, version}),
+    id: getCollectionId({ name, version }),
     path: `collections/${name}/${version}`
   }
 });
@@ -226,8 +231,9 @@ export const getMMTLinkFromCmr = (collection, getState) => {
   } = getState();
 
   if (!cmrProvider || !cmrEnvironment) {
-    return Promise.reject('Missing Cumulus Instance Metadata in state.' +
-      ' Make sure a call to getCumulusInstanceMetadata is dispatched.');
+    return Promise.reject(
+      new Error('Missing Cumulus Instance Metadata in state.' +
+                ' Make sure a call to getCumulusInstanceMetadata is dispatched.'));
   }
 
   if (getCollectionId(collection) in mmtLinks) {
@@ -275,9 +281,10 @@ export const listGranules = (options) => {
         type: types.GRANULES,
         method: 'GET',
         id: null,
-        url: url.resolve(root, 'granules'),
-        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
-      }});
+        url: new URL('granules', root).href,
+        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
+      }
+    });
   };
 };
 
@@ -297,7 +304,7 @@ export const applyWorkflowToCollection = (name, version, workflow) => ({
   [CALL_API]: {
     type: types.COLLECTION_APPLYWORKFLOW,
     method: 'PUT',
-    id: getCollectionId({name, version}),
+    id: getCollectionId({ name, version }),
     path: `collections/${name}/${version}`,
     body: {
       action: 'applyWorkflow',
@@ -427,7 +434,7 @@ export const getGranuleCSV = (options) => ({
   [CALL_API]: {
     type: types.GRANULE_CSV,
     method: 'GET',
-    url: url.resolve(root, 'granule-csv')
+    url: new URL('granule-csv', root).href
   }
 });
 
@@ -435,7 +442,7 @@ export const getOptionsCollectionName = (options) => ({
   [CALL_API]: {
     type: types.OPTIONS_COLLECTIONNAME,
     method: 'GET',
-    url: url.resolve(root, 'collections'),
+    url: new URL('collections', root).href,
     qs: { limit: 100, fields: 'name,version' }
   }
 });
@@ -447,103 +454,122 @@ export const getStats = (options) => {
       [CALL_API]: {
         type: types.STATS,
         method: 'GET',
-        url: url.resolve(root, 'stats'),
-        qs: {...options, ...timeFilters}
+        url: new URL('stats', root).href,
+        qs: { ...options, ...timeFilters }
       }
     });
   };
 };
 
 export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
-  const stackName = cumulusInstanceMeta.stackName;
-  const now = Date.now();
-  const twentyFourHoursAgo = now - millisecondsPerDay;
   if (!esRoot) return { type: types.NOOP };
-  return {
-    [CALL_API]: {
-      type: types.DIST_APIGATEWAY,
-      skipAuth: true,
-      method: 'POST',
-      url: `${esRoot}/_search/`,
-      headers: authHeader(),
-      body: JSON.parse(apiGatewaySearchTemplate(stackName, twentyFourHoursAgo, now))
-    }
+  return (dispatch, getState) => {
+    const stackName = cumulusInstanceMeta.stackName;
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    const endTime = timeFilters.timestamp__to || Date.now();
+    const startTime = timeFilters.timestamp__from || 0;
+    return dispatch({
+      [CALL_API]: {
+        type: types.DIST_APIGATEWAY,
+        skipAuth: true,
+        method: 'POST',
+        url: `${esRoot}/_search/`,
+        headers: authHeader(),
+        body: JSON.parse(apiGatewaySearchTemplate(stackName, startTime, endTime))
+      }
+    });
   };
 };
 
 export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
-  const stackName = cumulusInstanceMeta.stackName;
-  const now = Date.now();
-  const twentyFourHoursAgo = now - millisecondsPerDay;
   if (!esRoot) return { type: types.NOOP };
-  if (!showDistributionAPIMetrics) return {type: types.NOOP};
-  return {
-    [CALL_API]: {
-      type: types.DIST_API_LAMBDA,
-      skipAuth: true,
-      method: 'POST',
-      url: `${esRoot}/_search/`,
-      headers: authHeader(),
-      body: JSON.parse(apiLambdaSearchTemplate(stackName, twentyFourHoursAgo, now))
-    }
+  if (!showDistributionAPIMetrics) return { type: types.NOOP };
+  return (dispatch, getState) => {
+    const stackName = cumulusInstanceMeta.stackName;
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    const endTime = timeFilters.timestamp__to || Date.now();
+    const startTime = timeFilters.timestamp__from || 0;
+    return dispatch({
+      [CALL_API]: {
+        type: types.DIST_API_LAMBDA,
+        skipAuth: true,
+        method: 'POST',
+        url: `${esRoot}/_search/`,
+        headers: authHeader(),
+        body: JSON.parse(apiLambdaSearchTemplate(stackName, startTime, endTime))
+      }
+    });
   };
 };
 
 export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
-  const stackName = cumulusInstanceMeta.stackName;
-  const now = Date.now();
-  const twentyFourHoursAgo = now - millisecondsPerDay;
   if (!esRoot) return { type: types.NOOP };
   if (!showTeaMetrics) return { type: types.NOOP };
-  return {
-    [CALL_API]: {
-      type: types.DIST_TEA_LAMBDA,
-      skipAuth: true,
-      method: 'POST',
-      url: `${esRoot}/_search/`,
-      headers: authHeader(),
-      body: JSON.parse(teaLambdaSearchTemplate(stackName, twentyFourHoursAgo, now))
-    }
+  return (dispatch, getState) => {
+    const stackName = cumulusInstanceMeta.stackName;
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    const endTime = timeFilters.timestamp__to || Date.now();
+    const startTime = timeFilters.timestamp__from || 0;
+    return dispatch({
+      [CALL_API]: {
+        type: types.DIST_TEA_LAMBDA,
+        skipAuth: true,
+        method: 'POST',
+        url: `${esRoot}/_search/`,
+        headers: authHeader(),
+        body: JSON.parse(teaLambdaSearchTemplate(stackName, startTime, endTime))
+      }
+    });
   };
 };
 
 export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
-  const stackName = cumulusInstanceMeta.stackName;
-  const now = Date.now();
-  const twentyFourHoursAgo = now - millisecondsPerDay;
   if (!esRoot) return { type: types.NOOP };
-  return {
-    [CALL_API]: {
-      type: types.DIST_S3ACCESS,
-      skipAuth: true,
-      method: 'POST',
-      url: `${esRoot}/_search/`,
-      headers: authHeader(),
-      body: JSON.parse(s3AccessSearchTemplate(stackName, twentyFourHoursAgo, now))
-    }
+  return (dispatch, getState) => {
+    const stackName = cumulusInstanceMeta.stackName;
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    const endTime = timeFilters.timestamp__to || Date.now();
+    const startTime = timeFilters.timestamp__from || 0;
+    return dispatch({
+      [CALL_API]: {
+        type: types.DIST_S3ACCESS,
+        skipAuth: true,
+        method: 'POST',
+        url: `${esRoot}/_search/`,
+        headers: authHeader(),
+        body: JSON.parse(s3AccessSearchTemplate(stackName, startTime, endTime))
+      }
+    });
   };
 };
 
 // count queries *must* include type and field properties.
-export const getCount = (options) => ({
-  [CALL_API]: {
-    type: types.COUNT,
-    method: 'GET',
-    id: null,
-    url: url.resolve(root, 'stats/aggregate'),
-    qs: Object.assign({ type: 'must-include-type', field: 'status' }, options)
-  }
-});
+export const getCount = (options) => {
+  return (dispatch, getState) => {
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    return dispatch({
+      [CALL_API]: {
+        type: types.COUNT,
+        method: 'GET',
+        id: null,
+        url: new URL('stats/aggregate', root).href,
+        qs: Object.assign({ type: 'must-include-type', field: 'status' }, options, timeFilters)
+      }
+    });
+  };
+};
 
 export const listPdrs = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({[CALL_API]: {
-      type: types.PDRS,
-      method: 'GET',
-      url: url.resolve(root, 'pdrs'),
-      qs: Object.assign({ limit: pageLimit }, options, timeFilters)
-    }});
+    return dispatch({
+      [CALL_API]: {
+        type: types.PDRS,
+        method: 'GET',
+        url: new URL('pdrs', root).href,
+        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
+      }
+    });
   };
 };
 
@@ -561,15 +587,18 @@ export const clearPdrsSearch = () => ({ type: types.CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: types.FILTER_PDRS, param: param });
 export const clearPdrsFilter = (paramKey) => ({ type: types.CLEAR_PDRS_FILTER, paramKey: paramKey });
 
-export const listProviders = (options) => {
+export const listProviders = (options = {}) => {
+  const { listAll = false, ...queryOptions } = options;
   return (dispatch, getState) => {
-    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({[CALL_API]: {
-      type: types.PROVIDERS,
-      method: 'GET',
-      url: url.resolve(root, 'providers'),
-      qs: Object.assign({ limit: pageLimit }, options, timeFilters)
-    }});
+    const timeFilters = listAll ? {} : fetchCurrentTimeFilters(getState().datepicker);
+    return dispatch({
+      [CALL_API]: {
+        type: types.PROVIDERS,
+        method: 'GET',
+        url: new URL('providers', root).href,
+        qs: Object.assign({ limit: defaultPageLimit }, queryOptions, timeFilters)
+      }
+    });
   };
 };
 
@@ -577,7 +606,7 @@ export const getOptionsProviderGroup = () => ({
   [CALL_API]: {
     type: types.OPTIONS_PROVIDERGROUP,
     method: 'GET',
-    url: url.resolve(root, 'providers'),
+    url: new URL('providers', root).href,
     qs: { limit: 100, fields: 'providerName' }
   }
 });
@@ -643,8 +672,8 @@ export const getLogs = (options) => {
       [CALL_API]: {
         type: types.LOGS,
         method: 'GET',
-        url: url.resolve(root, 'logs'),
-        qs: Object.assign({limit: 100}, options, timeFilters)
+        url: new URL('logs', root).href,
+        qs: Object.assign({ limit: 100 }, options, timeFilters)
       }
     });
   };
@@ -664,7 +693,7 @@ export const login = (token) => ({
     type: types.LOGIN,
     id: 'auth',
     method: 'GET',
-    url: url.resolve(root, 'granules'),
+    url: new URL('granules', root).href,
     qs: { limit: 1, fields: 'granuleId' },
     skipAuth: true,
     headers: {
@@ -680,7 +709,7 @@ export const deleteToken = () => {
 
     const requestConfig = configureRequest({
       method: 'DELETE',
-      url: url.resolve(root, `tokenDelete/${token}`)
+      url: new URL(`tokenDelete/${token}`, root).href
     });
     return requestPromise(requestConfig)
       .finally(() => dispatch({ type: types.DELETE_TOKEN }));
@@ -707,16 +736,21 @@ export const listWorkflows = (options) => ({
   [CALL_API]: {
     type: types.WORKFLOWS,
     method: 'GET',
-    url: url.resolve(root, 'workflows'),
-    qs: Object.assign({ limit: pageLimit }, options)
+    url: new URL('workflows', root).href,
+    qs: Object.assign({ limit: defaultPageLimit }, options)
   }
 });
+export const searchWorkflows = (searchString) => ({ type: types.SEARCH_WORKFLOWS, searchString });
+export const clearWorkflowsSearch = () => ({ type: types.CLEAR_WORKFLOWS_SEARCH });
+
+export const searchExecutionEvents = (searchString) => ({ type: types.SEARCH_EXECUTION_EVENTS, searchString });
+export const clearExecutionEventsSearch = () => ({ type: types.CLEAR_EXECUTION_EVENTS_SEARCH });
 
 export const getExecutionStatus = (arn) => ({
   [CALL_API]: {
     type: types.EXECUTION_STATUS,
     method: 'GET',
-    url: url.resolve(root, 'executions/status/' + arn)
+    url: new URL('executions/status/' + arn, root).href
   }
 });
 
@@ -724,19 +758,21 @@ export const getExecutionLogs = (executionName) => ({
   [CALL_API]: {
     type: types.EXECUTION_LOGS,
     method: 'GET',
-    url: url.resolve(root, 'logs/' + executionName)
+    url: new URL('logs/' + executionName, root).href
   }
 });
 
 export const listExecutions = (options) => {
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({[CALL_API]: {
-      type: types.EXECUTIONS,
-      method: 'GET',
-      url: url.resolve(root, 'executions'),
-      qs: Object.assign({ limit: pageLimit }, options, timeFilters)
-    }});
+    return dispatch({
+      [CALL_API]: {
+        type: types.EXECUTIONS,
+        method: 'GET',
+        url: new URL('executions', root).href,
+        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
+      }
+    });
   };
 };
 
@@ -752,8 +788,8 @@ export const listOperations = (options) => {
       [CALL_API]: {
         type: types.OPERATIONS,
         method: 'GET',
-        url: url.resolve(root, 'asyncOperations'),
-        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+        url: new URL('asyncOperations', root).href,
+        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
       }
     });
   };
@@ -780,8 +816,8 @@ export const listRules = (options) => {
       [CALL_API]: {
         type: types.RULES,
         method: 'GET',
-        url: url.resolve(root, 'rules'),
-        qs: Object.assign({ limit: pageLimit }, options, timeFilters)
+        url: new URL('rules', root).href,
+        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
       }
     });
   };
@@ -808,9 +844,9 @@ export const updateRule = (payload) => ({
 
 export const clearUpdateRule = (ruleName) => ({ type: types.UPDATE_RULE_CLEAR, id: ruleName });
 
-export const createRule = (payload) => ({
+export const createRule = (name, payload) => ({
   [CALL_API]: {
-    id: payload.name,
+    id: name,
     type: types.NEW_RULE,
     method: 'POST',
     path: 'rules',
@@ -828,11 +864,7 @@ export const deleteRule = (ruleName) => ({
 });
 
 export const enableRule = (payload) => {
-  const rule = clonedeep(payload);
-
-  if (!rule.rule.value) {
-    rule.rule.value = '';
-  }
+  const rule = cloneDeep(payload);
 
   return {
     [CALL_API]: {
@@ -849,11 +881,7 @@ export const enableRule = (payload) => {
 };
 
 export const disableRule = (payload) => {
-  const rule = clonedeep(payload);
-
-  if (!rule.rule.value) {
-    rule.rule.value = '';
-  }
+  const rule = cloneDeep(payload);
 
   return {
     [CALL_API]: {
@@ -882,12 +910,17 @@ export const rerunRule = (payload) => ({
   }
 });
 
+export const searchRules = (prefix) => ({ type: types.SEARCH_RULES, prefix: prefix });
+export const clearRulesSearch = () => ({ type: types.CLEAR_RULES_SEARCH });
+export const filterRules = (param) => ({ type: types.FILTER_RULES, param: param });
+export const clearRulesFilter = (paramKey) => ({ type: types.CLEAR_RULES_FILTER, paramKey: paramKey });
+
 export const listReconciliationReports = (options) => ({
   [CALL_API]: {
     type: types.RECONCILIATIONS,
     method: 'GET',
-    url: url.resolve(root, 'reconciliationReports'),
-    qs: Object.assign({ limit: pageLimit }, options)
+    url: new URL('reconciliationReports', root).href,
+    qs: Object.assign({ limit: defaultPageLimit }, options)
   }
 });
 

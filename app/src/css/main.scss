@@ -23,15 +23,17 @@
 @import '../css/modules/modals';
 @import '../css/modules/jsonwindow';
 @import 'typography';
+@import '../css/badges';
 @import '../css/buttons';
 @import '../js/components/Form/form';
 @import '../js/components/DropDown/DropDown.scss';
 @import 'lists';
 @import '../css/modules/table';
 @import '../js/components/LoadingIndicator/loading-indicator';
-@import "../js/components/Modal/modal";
 @import 'pulse';
 @import "../js/components/Datepicker/Datepicker.scss";
+@import "../js/components/DatePickerHeader/DatePickerHeader.scss";
+@import "chart";
 
 /**********************************
 * Bootstrap

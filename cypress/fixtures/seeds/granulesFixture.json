@@ -372,6 +372,41 @@
       "status": "failed",
       "timestamp": 1537810219425,
       "updatedAt": 1537810218839
+    },
+    {
+      "beginningDateTime": "2017-10-24T00:00:00Z",
+      "collectionId": "MOD09GQ___006",
+      "createdAt": 1576106363823,
+      "duration": 7.546,
+      "endingDateTime": "2017-11-08T23:59:59Z",
+      "error": {
+        "Cause": "None",
+        "Error": "Unknown Error"
+      },
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:bt-tf-IngestGranule:17765a38-8d3a-445a-8f95-6f2e53179254",
+      "files": [
+        {
+          "bucket": "cumulus-test-sandbox-protected-2",
+          "fileName": "MOD09GQ.A4622742.B7A8Ma.006.7857260550036.cmr.xml",
+          "key": "MOD09GQ___006/MOD/MOD09GQ.A4622742.B7A8Ma.006.7857260550036.cmr.xml",
+          "size": 2488,
+          "source": "s3://cumulus-test-sandbox-protected-2/MOD09GQ___006/MOD/MOD09GQ.A4622742.B7A8Ma.006.7857260550036.cmr.xml",
+          "type": "metadata"
+        }
+      ],
+      "granuleId": "MOD09GQ.A4622742.B7A8Ma.006.7857260550036",
+      "lastUpdateDateTime": "2018-04-25T21:45:45.524053",
+      "processingEndDateTime": "2019-12-11T23:19:30.946Z",
+      "processingStartDateTime": "2019-12-11T23:19:23.823Z",
+      "productionDateTime": "2018-07-19T12:01:01Z",
+      "productVolume": 2488,
+      "provider": "s3_provider",
+      "published": false,
+      "status": "completed",
+      "timestamp": 1576106371369,
+      "timeToArchive": 0.01,
+      "timeToPreprocess": 0.318,
+      "updatedAt": 1576106371468
     }
   ]
 }

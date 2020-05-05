@@ -7,14 +7,95 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.8.0]
+
+### Added
+
+- **CUMULUS-1515**
+  - filter capability to workflow overview page.
+
+- **CUMULUS-1526**
+  - Add a copy rule button
+
+- **CUMULUS-1538**
+  - Add ability to expand size of visual on execution details page
+
+- **CUMULUS-1646**
+  - Add 'Results Per Page' dropdown for tables that use pagination
+
+- **CUMULUS-1677**
+  - Updates the user experience when re-ingesting granules. Adds Modal flow for better understanding.
+
+- **CUMULUS-1798**
+  - Add a refresh button
+  - Add individual cancel buttons for date time range inputs
+
+- **CUMULUS-1822**
+  - Added dynamic form validation as user types
+
+### Changed
+
+- **CUMULUS-1460**
+  - Update dashboard headers overall
+  - Move remaining "add" buttons to body content
+
+- **CUMULUS-1467**
+  - Change the metrics section on the home page to update based on datepicker time period.
+
+- **CUMULUS-1509**
+  - Update styles on grnaules page
+
+- **CUMULUS-1525**
+  - Style changes for rules overview page
+
+- **CUMULUS-1527**
+  - Style changes for individual rule page
+
+- **CUMULUS-1528**
+  - Change add/copy rule form from raw JSON input to individual form fields.
+    Workflow, Provider, and Collection inputs are now dropdowns populated with
+    currently available items.
+
+- **CUMULUS-1537**
+  - Update execution details page format
+  - Move execution input and output json to modal
+
+- **CUMULUS-1538**
+  - Update executions details page styles
+
+- **CUMULUS-1787**
+  - Changes `listCollections` action to hit `/collections/active` endpoint when timefilters are present (requires Cumulus API v1.22.1)
+
+- **CUMULUS-1798**
+  - Change the 12HR/24HR Format selector from radio to dropdown
+  - Hide clock component in react-datetime-picker
+
+- **CUMULUS-1790**
+  - Changes default values and visuals for home page's datepicker. When the page loads, it defauls to display "Recent" data, which is the previous 24 hours with no end time.
+
+### Fixed
+
+- **CUMULUS-1813**
+  - Fixed CSS for graph on Execution status page
+  - Removed Datepicker from Execution status page
+
+- **CUMULUS-1822**
+  - Fixed no user feedback/errors when submitting a blank form
+
 ## [v1.7.2] - 2020-03-16
 
 ### Added
+
+- **CUMULUS-1535**
+  - Adds a confirmation modal when editing a rule
 
 - **CUMULUS-1758**
   - Adds the ability to resize table columns
 
 ### Changed
+
+- **CUMULUS-1693**
+  - Updates the bulk delete collection flow
 
 - **CUMULUS-1758**
   - Updates table implementation to use [react-table](https://github.com/tannerlinsley/react-table)
@@ -271,7 +352,8 @@ Fix for serving the dashboard through the Cumulus API.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.7.2...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.8.0...HEAD
+[v1.8.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.7.2...v1.8.0
 [v1.7.2]: https://github.com/nasa/cumulus-dashboard/compare/v1.7.1...v1.7.2
 [v1.7.1]: https://github.com/nasa/cumulus-dashboard/compare/v1.7.0...v1.7.1
 [v1.7.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.6.1...v1.7.0

@@ -21,10 +21,11 @@ import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import statusOptions from '../../utils/status';
-import {strings} from '../locale';
+import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import pageSizeOptions from '../../utils/page-size';
 
 const CollectionGranules = ({
   dispatch,
@@ -42,6 +43,7 @@ const CollectionGranules = ({
   const collectionId = getCollectionId(params);
   const view = getView();
   const [workflow, setWorkflow] = useState();
+  const query = generateQuery();
 
   const breadcrumbConfig = [
     {
@@ -138,14 +140,14 @@ const CollectionGranules = ({
           <h2 className="heading--medium heading--shared-content with-description">
             {`${displayCase(view)} ${displayName} `}
             <span className="num--title">
-              {`${meta.count && meta.count || 0}`}
+              {`${(meta.count && meta.count) || 0}`}
             </span>
           </h2>
         </div>
         <List
           list={list}
           action={listGranules}
-          query={generateQuery()}
+          query={query}
           bulkActions={generateBulkActions()}
           rowId='granuleId'
           sortIdx='timestamp'
@@ -156,7 +158,8 @@ const CollectionGranules = ({
               dispatch={dispatch}
               action={searchGranules}
               clear={clearGranulesSearch}
-              placeholder='Search Granules'
+              label='Search'
+              placeholder='Granule ID'
             />
             {view === 'all' && (
               <Dropdown
@@ -164,11 +167,22 @@ const CollectionGranules = ({
                 action={filterGranules}
                 clear={clearGranulesFilter}
                 paramKey='status'
+                label='Status'
                 inputProps={{
-                  placeholder: 'Status'
+                  placeholder: 'All'
                 }}
               />
             )}
+            <Dropdown
+              options={pageSizeOptions}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              label='Results Per Page'
+              paramKey='limit'
+              inputProps={{
+                placeholder: 'Results Per Page'
+              }}
+            />
           </ListFilters>
         </List>
       </section>

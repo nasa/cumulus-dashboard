@@ -26,6 +26,7 @@ import {
   collectionOptions
 } from '../../selectors';
 import statusOptions from '../../utils/status';
+import pageSizeOptions from '../../utils/page-size';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
@@ -33,6 +34,7 @@ import Overview from '../Overview/overview';
 import _config from '../../config';
 import { strings } from '../locale';
 import { tableColumns } from '../../utils/table-config/executions';
+import ListFilters from '../ListActions/ListFilters';
 
 const { updateInterval } = _config;
 
@@ -98,39 +100,6 @@ class ExecutionOverview extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>All Executions <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
           </div>
-          <div className='filters filters__wlabels'>
-            <Dropdown
-              options={statusOptions}
-              action={filterExecutions}
-              clear={clearExecutionsFilter}
-              paramKey={'status'}
-              label={'Status'}
-            />
-
-            <Dropdown
-              options={this.props.collectionOptions}
-              action={filterExecutions}
-              clear={clearExecutionsFilter}
-              paramKey={'collectionId'}
-              label={strings.collection}
-            />
-
-            <Dropdown
-              options={this.props.workflowOptions}
-              action={filterExecutions}
-              clear={clearExecutionsFilter}
-              paramKey={'type'}
-              label={'Workflow'}
-            />
-
-            <Search dispatch={this.props.dispatch}
-              action={searchExecutions}
-              clear={clearExecutionsSearch}
-              paramKey={'asyncOperationId'}
-              label={'Async Operation ID'}
-            />
-          </div>
-
           <List
             list={list}
             dispatch={this.props.dispatch}
@@ -139,7 +108,48 @@ class ExecutionOverview extends React.Component {
             query={{}}
             rowId='name'
             sortIdx='createdAt'
-          />
+          >
+            <ListFilters>
+              <Dropdown
+                options={statusOptions}
+                action={filterExecutions}
+                clear={clearExecutionsFilter}
+                paramKey={'status'}
+                label={'Status'}
+              />
+
+              <Dropdown
+                options={this.props.collectionOptions}
+                action={filterExecutions}
+                clear={clearExecutionsFilter}
+                paramKey={'collectionId'}
+                label={strings.collection}
+              />
+
+              <Dropdown
+                options={this.props.workflowOptions}
+                action={filterExecutions}
+                clear={clearExecutionsFilter}
+                paramKey={'type'}
+                label={'Workflow'}
+              />
+
+              <Search dispatch={this.props.dispatch}
+                action={searchExecutions}
+                clear={clearExecutionsSearch}
+                paramKey={'asyncOperationId'}
+                label={'Async Operation ID'}
+              />
+
+              <Dropdown
+                options={pageSizeOptions}
+                action={filterExecutions}
+                clear={clearExecutionsFilter}
+                paramKey={'limit'}
+                label={'Results Per Page'}
+              />
+            </ListFilters>
+          </List>
         </section>
       </div>
     );
