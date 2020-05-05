@@ -19,7 +19,7 @@ const IN_PROGRESS = 'Processing...';
  * It returns a modalOptions object which is passed as props to <DefaultModal />
  * Without this prop, by default, an empty modal will open with a progress bar running as the batch commands execute.
  * When using this function, one conditionally display content based on whether it should be displayed after confirm is clicked 'isOnModalConfirm: true',
- * after the action has completed 'isOnModalComplete: true', or neither (e.g. after the inital button that triggered the modal is clicked).
+ * after the action has completed 'isOnModalComplete: true', or neither (e.g. after the initial button that triggered the modal is clicked).
  * All those scenarios can display different content for the modal based on logic setup within getModalOptions.
  */
 
@@ -43,6 +43,11 @@ export class BatchCommand extends React.Component {
     this.cleanup = this.cleanup.bind(this);
     this.isInflight = this.isInflight.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+  }
+
+  closeModal () {
+    this.setState({ activeModal: false });
   }
 
   componentDidUpdate () {
@@ -72,7 +77,8 @@ export class BatchCommand extends React.Component {
         selected,
         history,
         isOnModalConfirm: true,
-        isOnModalComplete: false
+        isOnModalComplete: false,
+        closeModal: this.closeModal
       });
       this.setState({ modalOptions });
 
@@ -137,7 +143,8 @@ export class BatchCommand extends React.Component {
         selected,
         results,
         error,
-        isOnModalComplete: true
+        isOnModalComplete: true,
+        closeModal: this.closeModal
       });
       this.setState({ modalOptions });
     }
@@ -154,7 +161,8 @@ export class BatchCommand extends React.Component {
     if (typeof getModalOptions === 'function') {
       const modalOptions = getModalOptions({
         selected,
-        history
+        history,
+        closeModal: this.closeModal
       });
       this.setState({ modalOptions });
     }

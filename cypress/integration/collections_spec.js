@@ -258,7 +258,7 @@ describe('Dashboard Collections Page', () => {
       cy.contains('form button', 'Submit').click();
       cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
       cy.contains('.default-modal .modal-body', `Collection ${name}___${version} has encountered an error.`);
-      cy.contains('.modal-footer button', 'Edit Collection').click();
+      cy.contains('.modal-footer button', 'Continue Editing Collection').click();
       cy.url().should('include', `collections/edit/${name}/${version}`);
 
       // Cancel Request should return to collection page
@@ -267,6 +267,32 @@ describe('Dashboard Collections Page', () => {
       cy.wait('@getCollection');
       cy.contains('.heading--xlarge', 'Collections');
       cy.contains('.heading--large', `${name} / ${version}`);
+    });
+
+    it('should display an error when attempting to edit a collection name or version', () => {
+      const name = 'MOD09GQ';
+      const version = '006';
+
+      cy.visit(`/collections/collection/${name}/${version}`);
+      cy.contains('a', 'Edit').as('editCollection');
+      cy.get('@editCollection')
+        .should('have.attr', 'href')
+        .and('include', `/collections/edit/${name}/${version}`);
+      cy.get('@editCollection').click();
+
+      cy.contains('.heading--large', `${name}___${version}`);
+
+      // change name and version
+      // Edit Collection should display proper error message
+      const newName = 'TEST';
+      const newVersion = '2';
+      const errorMessage = `Expected collection name and version to be '${name}' and '${version}', respectively, but found '${newName}' and '${newVersion}' in payload`;
+      cy.contains('.ace_variable', 'name');
+      cy.editJsonTextarea({ data: { name: newName, version: newVersion }, update: true });
+      cy.contains('form button', 'Submit').click();
+      cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
+      cy.contains('.default-modal .modal-body', `Collection ${name}___${version} has encountered an error.`);
+      cy.get('.default-modal .modal-body .error').invoke('text').should('eq', errorMessage);
     });
 
     it('should delete a collection', () => {
@@ -405,6 +431,60 @@ describe('Dashboard Collections Page', () => {
       cy.contains('a', 'Collections').click();
       cy.contains('.heading--xlarge', 'Collections');
       cy.contains('.table .tbody .tr a', name);
+    });
+
+    it('Should fail to reingest granules on a collection detail page', () => {
+      cy.visit('/collections/collection/MOD09GQ/006');
+      const granuleIds = [
+        'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
+        'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
+      ];
+      cy.server();
+      cy.route({
+        method: 'PUT',
+        url: '/granules/*',
+        status: 500,
+        response: { message: 'Oopsie' }
+      });
+      cy.visit('/granules');
+      cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
+      cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
+      cy.get('.list-actions').contains('Reingest').click();
+      cy.get('.button--submit').click();
+      cy.get('.modal-content > .modal-title').should('contain.text', 'Error');
+      cy.get('.error').should('contain.text', 'Oopsie');
+      cy.get('.button--cancel').click();
+      cy.url().should('match', /\/granules$/);
+      cy.get('.heading--large').should('have.text', 'Granule Overview');
+    });
+
+    it('Should reingest multiple granules and redirect to the running page on a collection\'s granule detail page and close the modal', () => {
+      cy.visit('/collections/collection/MOD09GQ/006/granules');
+      const granuleIds = [
+        'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
+        'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
+      ];
+      cy.server();
+      cy.route({
+        method: 'PUT',
+        url: '/granules/*',
+        status: 200,
+        response: { message: 'ingested' }
+      });
+
+      cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
+      cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
+      cy.get('.list-actions').contains('Reingest').click();
+      cy.get('.button--submit').click();
+      cy.get('.modal-content > .modal-title').should('contain.text', 'Complete');
+      cy.get('.modal-content').within(() => {
+        cy.get('.button__goto').click();
+      });
+      cy.url().should('include', '/collections/collection/MOD09GQ/006/granules/processing');
+      cy.get('.heading--medium').should('have.text', 'Running Granules 2');
+
+      // Ensure we have closed the modal.
+      cy.get('.modal-content').should('not.be.visible');
     });
   });
 });

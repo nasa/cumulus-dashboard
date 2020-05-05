@@ -177,13 +177,11 @@ describe('Dashboard Home Page', () => {
       cy.get('#Collections').contains('1');
       cy.get('#Granules').contains('11');
       cy.get('#Executions').contains('6');
+      cy.get('[id="Ingest Rules"]').contains('1');
 
       // Test there are values in Granule Error list
       cy.get('[data-value="0"]').contains('FileNotFound');
       cy.get('[data-value="1"]').contains('FileNotFound');
-
-      // This selector fails cy.get('#Ingest Rules').contains('1');
-      cy.get('.overview-num__wrapper-home > ul > :nth-child(5)').contains('1');
 
       cy.get('[data-cy=startDateTime]').within(() => {
         cy.get('input[name=month]').click().type(1);

@@ -179,5 +179,71 @@ describe('Dashboard Granules Page', () => {
         .next().contains('li', '1')
         .next().contains('li', '2');
     });
+
+    it('Should reingest a granule and redirect to the granules detail page.', () => {
+      const granuleId = 'MOD09GQ.A0142558.ee5lpE.006.5112577830916';
+      cy.server();
+      cy.route({
+        method: 'PUT',
+        url: '/granules/*',
+        status: 200,
+        response: { message: 'ingested' }
+      });
+      cy.visit('/granules');
+      cy.get(`[data-value="${granuleId}"] > .td >input[type="checkbox"]`).click();
+      cy.get('.list-actions').contains('Reingest').click();
+      cy.get('.button--submit').click();
+      cy.get('.modal-content > .modal-title').should('contain.text', 'Complete');
+      cy.get('.button__goto').click();
+      cy.url().should('include', `granules/granule/${granuleId}`);
+      cy.get('.heading--large').should('have.text', granuleId);
+    });
+
+    it('Should reingest multiple granules and redirect to the running page.', () => {
+      const granuleIds = [
+        'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
+        'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
+      ];
+      cy.server();
+      cy.route({
+        method: 'PUT',
+        url: '/granules/*',
+        status: 200,
+        response: { message: 'ingested' }
+      });
+      cy.visit('/granules');
+      cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
+      cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
+      cy.get('.list-actions').contains('Reingest').click();
+      cy.get('.button--submit').click();
+      cy.get('.modal-content > .modal-title').should('contain.text', 'Complete');
+      cy.get('.button__goto').click();
+      cy.url().should('include', 'granules/processing');
+      cy.get('.heading--large').should('have.text', 'Running Granules 2');
+    });
+
+    it('Should fail to reingest multiple granules and remain on the page.', () => {
+      const granuleIds = [
+        'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
+        'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
+      ];
+      cy.server();
+      cy.route({
+        method: 'PUT',
+        url: '/granules/*',
+        status: 500,
+        response: { message: 'Oopsie' }
+      });
+      cy.visit('/granules');
+      cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
+      cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
+      cy.get('.list-actions').contains('Reingest').click();
+      cy.get('.button--submit').click();
+      cy.get('.modal-content > .modal-title').should('contain.text', 'Error');
+      cy.get('.error').should('contain.text', 'Oopsie');
+      cy.get('.button--cancel').click();
+      cy.url().should('match', /\/granules$/);
+      cy.get('.heading--large').should('have.text', 'Granule Overview');
+    });
   });
 });
