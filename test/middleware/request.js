@@ -1,13 +1,19 @@
 import test from 'ava';
 import nock from 'nock';
 import sinon from 'sinon';
+import rewire from 'rewire';
 
 import { CALL_API } from '../../app/src/js/actions/types';
-import { requestMiddleware } from '../../app/src/js/middleware/request';
+const request = rewire('../../app/src/js/middleware/request');
 
 const port = process.env.FAKEAPIPORT || 5001;
-
 const token = 'fake-token';
+
+const requestMiddleware = request.__get__('requestMiddleware');
+const loginErrorStub = sinon.stub();
+request.__set__('loginError', () => {
+  loginErrorStub();
+});
 
 const getStateStub = sinon.stub().callsFake(() => ({
   api: {
@@ -32,7 +38,6 @@ const create = () => {
 };
 
 test.beforeEach((t) => {
-  // t.context.nextHandler = requestMiddleware({dispatch: doDispatch, getState: doGetState});
   t.context.defaultConfig = {
     json: true,
     resolveWithFullResponse: true,
@@ -50,72 +55,64 @@ test.afterEach.always(() => {
   dispatchStub.resetHistory();
   getStateStub.resetHistory();
   nextStub.resetHistory();
+  loginErrorStub.resetHistory();
 });
 
-test('should pass action to next if not an API request action', (t) => {
+test.serial('should pass action to next if not an API request action', (t) => {
   const actionObj = {};
 
-  const actionHandler = t.context.nextHandler(action => {
-    t.deepEqual(action, actionObj);
-  });
+  const { next, invokeMiddleware } = create();
+  invokeMiddleware(actionObj);
 
-  actionHandler(actionObj);
+  t.deepEqual(next.firstCall.args[0], actionObj);
 });
 
-test('should throw error if no method is set on API request action', (t) => {
+test.serial('should throw error if no method is set on API request action', (t) => {
   const actionObj = {
     [CALL_API]: {}
   };
 
-  const actionHandler = t.context.nextHandler(() => {});
+  const { invokeMiddleware } = create();
 
-  try {
-    actionHandler(actionObj);
-    t.fail('Expected error to be thrown');
-  } catch (err) {
-    t.is(err.message, 'Request action must include a method');
-  }
+  t.throws(
+    () => invokeMiddleware(actionObj),
+    { message: 'Request action must include a method' }
+  );
 });
 
-test.cb('should add correct authorization headers to API request action', (t) => {
-  nock(`http://localhost:${port}`, {
-    reqheaders: {
-      'Authorization': 'Bearer fake-token'
-    }
-  })
-    .get('/test-path')
-    .reply(200);
-
+test.serial('should add correct authorization headers to API request action', async (t) => {
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: `http://localhost:${port}/test-path`
+    url: 'http://any-url'
   };
   const actionObj = {
     [CALL_API]: requestAction
   };
 
-  const actionHandler = t.context.nextHandler(action => {
-    t.deepEqual(action.config.headers.Authorization, 'Bearer fake-token');
-    t.end();
+  const requestPromiseStub = sinon.stub().resolves({
+    body: {},
+    statusCode: 200
   });
+  const revertRequestStub = request.__set__('requestPromise', requestPromiseStub);
 
-  actionHandler(actionObj);
+  try {
+    const { invokeMiddleware } = create();
+
+    await invokeMiddleware(actionObj);
+
+    const nextAction = requestPromiseStub.firstCall.args[0];
+    t.deepEqual(nextAction.headers.Authorization, 'Bearer fake-token');
+  } finally {
+    revertRequestStub();
+  }
 });
 
-test.cb('should be able to use provided authorization headers', (t) => {
-  nock(`http://localhost:${port}`, {
-    reqheaders: {
-      'Authorization': 'Bearer another-token'
-    }
-  })
-    .get('/test-path')
-    .reply(200);
-
+test.serial('should be able to use provided authorization headers', async (t) => {
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: `http://localhost:${port}/test-path`,
+    url: 'http://any-url',
     skipAuth: true,
     headers: {
       Authorization: 'Bearer another-token'
@@ -125,15 +122,25 @@ test.cb('should be able to use provided authorization headers', (t) => {
     [CALL_API]: requestAction
   };
 
-  const actionHandler = t.context.nextHandler(action => {
-    t.deepEqual(action.config.headers.Authorization, 'Bearer another-token');
-    t.end();
+  const requestPromiseStub = sinon.stub().resolves({
+    body: {},
+    statusCode: 200
   });
+  const revertRequestStub = request.__set__('requestPromise', requestPromiseStub);
 
-  actionHandler(actionObj);
+  try {
+    const { invokeMiddleware } = create();
+
+    await invokeMiddleware(actionObj);
+
+    const nextAction = requestPromiseStub.firstCall.args[0];
+    t.deepEqual(nextAction.headers.Authorization, 'Bearer another-token');
+  } finally {
+    revertRequestStub();
+  }
 });
 
-test.serial.only('should dispatch error action for failed request', async (t) => {
+test.serial('should dispatch error action for failed request', async (t) => {
   nock(`http://localhost:${port}`)
     .get('/test-path')
     .reply(500, { message: 'Internal server error' });
@@ -164,12 +171,12 @@ test.serial.only('should dispatch error action for failed request', async (t) =>
   t.deepEqual(next.firstCall.args[0], expectedAction);
 });
 
-test.serial.only('should dispatch login error action for 4xx response', async (t) => {
+test.serial('should dispatch login error action for 4xx response', async (t) => {
   nock(`http://localhost:${port}`)
     .get('/test-path')
     .reply(401, { message: 'Access denied' });
 
-  const { next, invokeMiddleware } = create();
+  const { invokeMiddleware } = create();
 
   const requestAction = {
     type: 'TEST',
@@ -180,21 +187,11 @@ test.serial.only('should dispatch login error action for 4xx response', async (t
     [CALL_API]: requestAction
   };
 
-  const expectedAction = {
-    error: 'Access denied',
-    type: 'LOGIN_ERROR'
-  };
-
   await invokeMiddleware(actionObj);
-
-  const dispatchStub = sinon.stub().resolves({});
-  debugger;
-  const loginErrorAction = next.firstCall.args[0];
-  await loginErrorAction(dispatchStub);
-  t.deepEqual(dispatchStub.lastCall.lastArg, expectedAction);
+  t.true(loginErrorStub.called);
 });
 
-test.cb('should return expected action for GET request action', (t) => {
+test.serial('should return expected action for GET request action', async (t) => {
   const stubbedResponse = { message: 'success' };
 
   nock(`http://localhost:${port}`)
@@ -221,15 +218,14 @@ test.cb('should return expected action for GET request action', (t) => {
     data: stubbedResponse
   };
 
-  const actionHandler = t.context.nextHandler(action => {
-    t.deepEqual(action, expectedAction);
-    t.end();
-  });
+  const { next, invokeMiddleware } = create();
 
-  actionHandler(actionObj);
+  await invokeMiddleware(actionObj);
+
+  t.deepEqual(next.firstCall.args[0], expectedAction);
 });
 
-test.cb('should return expected action for GET request action with query state', (t) => {
+test.serial('should return expected action for GET request action with query state', async (t) => {
   const queryParams = {
     limit: 1,
     otherParam: 'value'
@@ -262,15 +258,14 @@ test.cb('should return expected action for GET request action with query state',
     data: stubbedResponse
   };
 
-  const actionHandler = t.context.nextHandler(action => {
-    t.deepEqual(action, expectedAction);
-    t.end();
-  });
+  const { next, invokeMiddleware } = create();
 
-  actionHandler(actionObj);
+  await invokeMiddleware(actionObj);
+
+  t.deepEqual(next.firstCall.args[0], expectedAction);
 });
 
-test.cb('should return expected action for POST request action', (t) => {
+test.serial('should return expected action for POST request action', async (t) => {
   nock(`http://localhost:${port}`)
     .post('/test-path')
     .reply(200, (_, requestBody) => {
@@ -299,15 +294,14 @@ test.cb('should return expected action for POST request action', (t) => {
     data: requestBody
   };
 
-  const actionHandler = t.context.nextHandler(action => {
-    t.deepEqual(action, expectedAction);
-    t.end();
-  });
+  const { next, invokeMiddleware } = create();
 
-  actionHandler(actionObj);
+  await invokeMiddleware(actionObj);
+
+  t.deepEqual(next.firstCall.args[0], expectedAction);
 });
 
-test.cb('should return expected action for PUT request action', (t) => {
+test.serial('should return expected action for PUT request action', async (t) => {
   nock(`http://localhost:${port}`)
     .put('/test-path')
     .reply(200, (_, requestBody) => {
@@ -336,15 +330,14 @@ test.cb('should return expected action for PUT request action', (t) => {
     data: requestBody
   };
 
-  const actionHandler = t.context.nextHandler(action => {
-    t.deepEqual(action, expectedAction);
-    t.end();
-  });
+  const { next, invokeMiddleware } = create();
 
-  actionHandler(actionObj);
+  await invokeMiddleware(actionObj);
+
+  t.deepEqual(next.firstCall.args[0], expectedAction);
 });
 
-test.cb('should return expected action for DELETE request action', (t) => {
+test.serial('should return expected action for DELETE request action', async (t) => {
   const stubbedResponse = { message: 'success' };
   nock(`http://localhost:${port}`)
     .delete('/test-path')
@@ -370,10 +363,9 @@ test.cb('should return expected action for DELETE request action', (t) => {
     data: stubbedResponse
   };
 
-  const actionHandler = t.context.nextHandler(action => {
-    t.deepEqual(action, expectedAction);
-    t.end();
-  });
+  const { next, invokeMiddleware } = create();
 
-  actionHandler(actionObj);
+  await invokeMiddleware(actionObj);
+
+  t.deepEqual(next.firstCall.args[0], expectedAction);
 });

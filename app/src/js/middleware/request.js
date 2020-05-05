@@ -1,6 +1,3 @@
-import requestPromise from 'request-promise';
-
-import { loginError } from '../actions';
 import { CALL_API } from '../actions/types';
 import {
   configureRequest,
@@ -9,6 +6,10 @@ import {
 } from '../actions/helpers';
 import log from '../utils/log';
 import { isValidApiRequestAction } from './validate';
+
+// Use require to allow for mocking
+const requestPromise = require('request-promise');
+const { loginError } = require('../actions');
 
 const handleError = ({
   id,
@@ -82,7 +83,6 @@ export const requestMiddleware = ({ dispatch, getState }) => next => action => {
     return requestPromise(requestAction)
       .then((response) => {
         const { body, statusCode } = response;
-
         if (+statusCode >= 400) {
           const error = new Error(getErrorMessage(response));
           return handleError(
