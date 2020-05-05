@@ -13,7 +13,7 @@ const BatchReingestCompleteContent = ({
 
   const displayedItems = (array, renderContent) => {
     const items = [];
-    for (let i = 0; i < Math.min(errors.length, maxDisplayed); i++) {
+    for (let i = 0; i < Math.min(array.length, maxDisplayed); i++) {
       items.push(renderContent(i, array[i]));
     }
     if (array.length > maxDisplayed) {
