@@ -50,7 +50,7 @@ const BatchReingestCompleteContent = ({
           <p>To quickly view the status, click "View Granules".</p>
         </>
       }
-      {(results && results.length > 0) &&
+      {(errors && errors.length > 0) &&
         <>
           <Alert variant='danger'><strong>Error:</strong> There is an issue with the request.</Alert>
           <ul>
