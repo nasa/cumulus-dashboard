@@ -14,7 +14,7 @@ If you want to submit your own contributions, follow these steps:
 
 * Fork the Cumulus Dashboard repo
 * Create a new branch from the branch you'd like to contribute to
-* If an issue does't already exist, submit one (see above)
+* If an issue doesn't already exist, submit one (see above)
 * [Create a pull request](https://help.github.com/articles/creating-a-pull-request/) from your fork into the target branch of the nasa/cumulus-dashboard repo
 * Be sure to [mention the corresponding issue number](https://help.github.com/articles/closing-issues-using-keywords/) in the PR description, i.e. "Fixes Issue #10"
 * If your contribution requires a specific version of the Cumulus API, bump (or add) the version in `app/src/js/config/index.js`.
