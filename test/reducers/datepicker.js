@@ -52,7 +52,7 @@ test('Dropdown: "Recent" sets start time to 24 hours ago and unsets end time.', 
   sinon.restore();
 });
 
-test('Dropdown: "All" sets displayed start time to -infinity  end time to infinity.', (t) => {
+test('Dropdown: "All" sets displayed start time to -infinity and end time to infinity.', (t) => {
   const testNow = Date.now();
   sinon.useFakeTimers(testNow);
   const value = 'All';
@@ -71,7 +71,7 @@ test('Dropdown: "All" sets displayed start time to -infinity  end time to infini
 });
 
 test('Dropdown: "Custom" unsets start and end times.', (t) => {
-  let state = initialState();
+  const state = initialState();
   state.startDateTime = new Date('2020-03-16T19:50:24.757Z');
   state.endDateTime = new Date('2020-03-17T00:00:00.000Z');
   const value = 'Custom';

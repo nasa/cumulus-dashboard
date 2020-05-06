@@ -91,20 +91,70 @@ This sends the granule data to the store. We need to specify the primary key so 
 export const SET_GRANULE = 'SET_GRANULE';
 ```
 
-Now in `reducers/api.js` we import the primary key and export a reducer function, which receives the current state, and the reducer in question. We use a primary key, because every action is sent to every reducer. The reducer doesn't manipulate the current state, but rather returns a new state object that includes the new data.
+Now in `reducers/api.js` we import the primary key and export a reducer
+function, which receives the current state, and the reducer in question.  We
+use a primary key, because every action is sent to every reducer. The reducer
+doesn't manipulate the current state, but rather returns a new state object
+that includes the new data.
+
+Since it is critical to avoid directly mutating the current state in a reducer
+function, we use the `createReducer` function from the
+[Redux Toolkit](https://redux-toolkit.js.org/).  This not only allows us to
+avoid the more verbose `switch` statement syntax that is normally used without
+the use of a convenience function such as `createReducer`, but also guarantees
+that we never mutate the current state by providing a proxy state object
+instead.
+
+We can then conveniently mutate the proxy state object _as if_ we were mutating
+the actual state object, and the underlying functionality takes care of
+producing a new state object for us, with the fewest possible changes.  The
+general pattern for each reducer within the `app/src/js/reducers` directory is
+as follows:
 
 ```javascript
-import { SET_GRANULE } from '../actions';
-export function reducer (currentState, action) {
-  const newState = Object.assign({}, currentState);
-  if (action.type === SET_GRANULE) {
-    newState.granuleDetail[action.id] = action.data;
-  }
-  return newState;
+import { createReducer } from '@reduxjs/toolkit';
+import {
+  ACTION_TYPE_1,
+  ACTION_TYPE_2,
+  ...
+  ACTION_TYPE_N
+} from '../actions/types';
+
+export const initialState = {
+  // Some initial state object appropriate for the reducer
+  ...
 };
+
+export default createReducer(initialState, {
+  [ACTION_TYPE_1]: (state, action) => {
+    state.path.to.prop1 = action.newValue1;
+    state.path.to.prop2 = action.newValue2;
+  },
+  [ACTION_TYPE_2]: (state, action) => {
+    ...
+  },
+  ...
+  [ACTION_TYPE_N]: (state, action) => {
+    ...
+  }
+});
 ```
 
-Finally, this allows us to access the data from a component, where component state is passed as a `prop`:
+Again, note that the `state` parameter for each of the case reducers above is
+a proxy object, not the actual state object, but it can be mutated just as if
+it were.  Further, you will likely never return a completely new state object,
+because that is the purpose of the proxy object instead.  The library manages
+the creation of a new object on your behalf.  Of course, if it is absolutely
+necessary for some reason to return a new object, you may, but do _not_ mutate
+the proxy _and also_ return a new object.  For more details, see
+[createReducer](https://redux-toolkit.js.org/api/createReducer).
+
+To reduce some common boilerplate code in the case reducers, there are a few
+convenience reducer creators in `app/src/js/reducers/utils/reducer-creators.js`.
+See the documentation in that file for more information.
+
+Finally, this allows us to access the data from a component, where component
+state is passed as a `prop`:
 
 ```javascript
 // import the action so we can call it
