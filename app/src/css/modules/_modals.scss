@@ -108,6 +108,12 @@
 
       li {
         font-weight: bold;
+
+        .Collapsible__contentInner {
+          font-weight: normal;
+          max-width: none;
+          color: $error-red;
+        }
       }
     }
 

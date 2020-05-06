@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- **CUMULUS-1920**
+  - Updated styles for granule reingest modal
+
 ## [v1.8.0]
 
 ### Added
