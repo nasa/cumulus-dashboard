@@ -170,10 +170,7 @@ class CollectionOverview extends React.Component {
     const {
       match: { params },
       collections,
-      granules: {
-        list,
-        list: { meta }
-      }
+      granules: { list },
     } = this.props;
 
     const collectionName = params.name;
@@ -259,7 +256,7 @@ class CollectionOverview extends React.Component {
             <h2 className='heading--medium heading--shared-content with-description'>
               {strings.total_granules}
               <span className='num--title'>
-                {meta.count ? ` ${meta.count}` : 0}
+                {list.meta.count ? ` ${list.meta.count}` : 0}
               </span>
             </h2>
             <Link
