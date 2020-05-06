@@ -66,12 +66,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1787**
   - Changes `listCollections` action to hit `/collections/active` endpoint when timefilters are present (requires Cumulus API v1.22.1)
 
+- **CUMULUS-1790**
+  - Changes default values and visuals for home page's datepicker. When the page loads, it defauls to display "Recent" data, which is the previous 24 hours with no end time.
+
 - **CUMULUS-1798**
   - Change the 12HR/24HR Format selector from radio to dropdown
   - Hide clock component in react-datetime-picker
 
-- **CUMULUS-1790**
-  - Changes default values and visuals for home page's datepicker. When the page loads, it defauls to display "Recent" data, which is the previous 24 hours with no end time.
+- **CUMULUS-1810**
+  - Unified the coding pattern used for creating Redux reducers to avoid
+    unnecessary object creation and reduce unnecessary UI component refreshes
 
 ### Fixed
 
