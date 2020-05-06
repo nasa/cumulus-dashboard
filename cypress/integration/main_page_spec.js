@@ -306,7 +306,7 @@ describe('Dashboard Home Page', () => {
     });
 
     it('should update the Datepicker with the params in the URL', () => {
-      cy.visit('/?startDateTime=20081229133500&endDateTime=20090105133500');
+      cy.visit('/granules/?startDateTime=20081229133500&endDateTime=20090105133500');
 
       cy.get('[data-cy=endDateTime]').within(() => {
         cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2009');
