@@ -33,7 +33,7 @@ class OAuth extends React.Component {
       if (pathname !== '/auth' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/auth') {
-        setTimeout(() => this.props.history.push('/'), updateDelay); // react isn't seeing this a function
+        setTimeout(() => this.props.history.push('/?new_session=true'), updateDelay); // react isn't seeing this a function
       }
     }
   }
