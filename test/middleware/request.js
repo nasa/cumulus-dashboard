@@ -6,7 +6,6 @@ import rewire from 'rewire';
 import { CALL_API } from '../../app/src/js/actions/types';
 const request = rewire('../../app/src/js/middleware/request');
 
-const port = process.env.FAKEAPIPORT || 5001;
 const token = 'fake-token';
 
 const requestMiddleware = request.__get__('requestMiddleware');
@@ -25,7 +24,7 @@ const getStateStub = sinon.stub().callsFake(() => ({
 const dispatchStub = sinon.stub();
 const nextStub = sinon.stub();
 
-const create = () => {
+const createTestMiddleware = () => {
   const store = {
     getState: getStateStub,
     dispatch: dispatchStub
@@ -59,9 +58,12 @@ test.afterEach.always(() => {
 });
 
 test.serial('should pass action to next if not an API request action', (t) => {
-  const actionObj = {};
+  const actionObj = {
+    type: 'ANYTHING',
+    some: 'action'
+  };
 
-  const { next, invokeMiddleware } = create();
+  const { next, invokeMiddleware } = createTestMiddleware();
   invokeMiddleware(actionObj);
 
   t.deepEqual(next.firstCall.args[0], actionObj);
@@ -72,7 +74,7 @@ test.serial('should throw error if no method is set on API request action', (t) 
     [CALL_API]: {}
   };
 
-  const { invokeMiddleware } = create();
+  const { invokeMiddleware } = createTestMiddleware();
 
   t.throws(
     () => invokeMiddleware(actionObj),
@@ -84,7 +86,7 @@ test.serial('should add correct authorization headers to API request action', as
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: 'http://any-url'
+    url: 'http://anyhost'
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -97,7 +99,7 @@ test.serial('should add correct authorization headers to API request action', as
   const revertRequestStub = request.__set__('requestPromise', requestPromiseStub);
 
   try {
-    const { invokeMiddleware } = create();
+    const { invokeMiddleware } = createTestMiddleware();
 
     await invokeMiddleware(actionObj);
 
@@ -112,7 +114,7 @@ test.serial('should be able to use provided authorization headers', async (t) =>
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: 'http://any-url',
+    url: 'http://anyhost',
     skipAuth: true,
     headers: {
       Authorization: 'Bearer another-token'
@@ -129,7 +131,7 @@ test.serial('should be able to use provided authorization headers', async (t) =>
   const revertRequestStub = request.__set__('requestPromise', requestPromiseStub);
 
   try {
-    const { invokeMiddleware } = create();
+    const { invokeMiddleware } = createTestMiddleware();
 
     await invokeMiddleware(actionObj);
 
@@ -141,16 +143,16 @@ test.serial('should be able to use provided authorization headers', async (t) =>
 });
 
 test.serial('should dispatch error action for failed request', async (t) => {
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .get('/test-path')
     .reply(500, { message: 'Internal server error' });
 
-  const { next, invokeMiddleware } = create();
+  const { next, invokeMiddleware } = createTestMiddleware();
 
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: `http://localhost:${port}/test-path`
+    url: 'http://anyhost/test-path'
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -172,16 +174,16 @@ test.serial('should dispatch error action for failed request', async (t) => {
 });
 
 test.serial('should dispatch login error action for 401 response', async (t) => {
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .get('/test-path')
     .reply(401, { message: 'Unauthorized' });
 
-  const { invokeMiddleware } = create();
+  const { invokeMiddleware } = createTestMiddleware();
 
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: `http://localhost:${port}/test-path`
+    url: 'http://anyhost/test-path'
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -192,16 +194,16 @@ test.serial('should dispatch login error action for 401 response', async (t) => 
 });
 
 test.serial('should dispatch login error action for 403 response', async (t) => {
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .get('/test-path')
     .reply(403, { message: 'Forbidden' });
 
-  const { invokeMiddleware } = create();
+  const { invokeMiddleware } = createTestMiddleware();
 
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: `http://localhost:${port}/test-path`
+    url: 'http://anyhost/test-path'
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -214,14 +216,14 @@ test.serial('should dispatch login error action for 403 response', async (t) => 
 test.serial('should return expected action for GET request action', async (t) => {
   const stubbedResponse = { message: 'success' };
 
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .get('/test-path')
     .reply(200, stubbedResponse);
 
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: `http://localhost:${port}/test-path`
+    url: 'http://anyhost/test-path'
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -238,7 +240,7 @@ test.serial('should return expected action for GET request action', async (t) =>
     data: stubbedResponse
   };
 
-  const { next, invokeMiddleware } = create();
+  const { next, invokeMiddleware } = createTestMiddleware();
 
   await invokeMiddleware(actionObj);
 
@@ -252,7 +254,7 @@ test.serial('should return expected action for GET request action with query sta
   };
   const stubbedResponse = { message: 'success' };
 
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .get('/test-path')
     .query(queryParams)
     .reply(200, stubbedResponse);
@@ -260,7 +262,7 @@ test.serial('should return expected action for GET request action with query sta
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: `http://localhost:${port}/test-path`,
+    url: 'http://anyhost/test-path',
     qs: queryParams
   };
   const actionObj = {
@@ -278,7 +280,7 @@ test.serial('should return expected action for GET request action with query sta
     data: stubbedResponse
   };
 
-  const { next, invokeMiddleware } = create();
+  const { next, invokeMiddleware } = createTestMiddleware();
 
   await invokeMiddleware(actionObj);
 
@@ -286,7 +288,7 @@ test.serial('should return expected action for GET request action with query sta
 });
 
 test.serial('should return expected action for POST request action', async (t) => {
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .post('/test-path')
     .reply(200, (_, requestBody) => {
       return requestBody;
@@ -296,7 +298,7 @@ test.serial('should return expected action for POST request action', async (t) =
   const requestAction = {
     type: 'TEST',
     method: 'POST',
-    url: `http://localhost:${port}/test-path`,
+    url: 'http://anyhost/test-path',
     body: requestBody
   };
   const actionObj = {
@@ -314,7 +316,7 @@ test.serial('should return expected action for POST request action', async (t) =
     data: requestBody
   };
 
-  const { next, invokeMiddleware } = create();
+  const { next, invokeMiddleware } = createTestMiddleware();
 
   await invokeMiddleware(actionObj);
 
@@ -322,7 +324,7 @@ test.serial('should return expected action for POST request action', async (t) =
 });
 
 test.serial('should return expected action for PUT request action', async (t) => {
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .put('/test-path')
     .reply(200, (_, requestBody) => {
       return requestBody;
@@ -332,7 +334,7 @@ test.serial('should return expected action for PUT request action', async (t) =>
   const requestAction = {
     type: 'TEST',
     method: 'PUT',
-    url: `http://localhost:${port}/test-path`,
+    url: 'http://anyhost/test-path',
     body: requestBody
   };
   const actionObj = {
@@ -350,7 +352,7 @@ test.serial('should return expected action for PUT request action', async (t) =>
     data: requestBody
   };
 
-  const { next, invokeMiddleware } = create();
+  const { next, invokeMiddleware } = createTestMiddleware();
 
   await invokeMiddleware(actionObj);
 
@@ -359,14 +361,14 @@ test.serial('should return expected action for PUT request action', async (t) =>
 
 test.serial('should return expected action for DELETE request action', async (t) => {
   const stubbedResponse = { message: 'success' };
-  nock(`http://localhost:${port}`)
+  nock('http://anyhost')
     .delete('/test-path')
     .reply(200, stubbedResponse);
 
   const requestAction = {
     type: 'TEST',
     method: 'DELETE',
-    url: `http://localhost:${port}/test-path`
+    url: 'http://anyhost/test-path'
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -383,7 +385,7 @@ test.serial('should return expected action for DELETE request action', async (t)
     data: stubbedResponse
   };
 
-  const { next, invokeMiddleware } = create();
+  const { next, invokeMiddleware } = createTestMiddleware();
 
   await invokeMiddleware(actionObj);
 
