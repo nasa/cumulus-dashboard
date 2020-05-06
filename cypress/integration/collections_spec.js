@@ -451,8 +451,8 @@ describe('Dashboard Collections Page', () => {
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
-      cy.get('.modal-content > .modal-title').should('contain.text', 'Error');
-      cy.get('.error').should('contain.text', 'Oopsie');
+      cy.get('.modal-content .modal-body .alert').should('contain.text', 'Error');
+      cy.get('.Collapsible__contentInner').should('contain.text', 'Oopsie');
       cy.get('.button--cancel').click();
       cy.url().should('match', /\/granules$/);
       cy.get('.heading--large').should('have.text', 'Granule Overview');
@@ -476,7 +476,7 @@ describe('Dashboard Collections Page', () => {
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
-      cy.get('.modal-content > .modal-title').should('contain.text', 'Complete');
+      cy.get('.modal-content .modal-body .alert').should('contain.text', 'Success');
       cy.get('.modal-content').within(() => {
         cy.get('.button__goto').click();
       });

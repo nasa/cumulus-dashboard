@@ -1,18 +1,13 @@
 'use strict';
-import { set } from 'object-path';
-import { getCollectionId } from '../utils/format';
 
-import {
-  ADD_MMTLINK
-} from '../actions/types';
+import { getCollectionId } from '../utils/format';
 import { createReducer } from '@reduxjs/toolkit';
+import { ADD_MMTLINK } from '../actions/types';
 
 const initialState = {};
 
 export default createReducer(initialState, {
   [ADD_MMTLINK]: (state, action) => {
-    const { data } = action;
-    const collectionId = getCollectionId(data);
-    set(state, [collectionId], data.url);
+    state[getCollectionId(action.data)] = action.data.url;
   },
 });

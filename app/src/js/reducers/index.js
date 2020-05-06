@@ -3,7 +3,7 @@ import { connectRouter } from 'connected-react-router';
 import api from './api';
 import apiVersion from './api-version';
 import collections from './collections';
-import config from './config';
+import config from './utils/config';
 import dist from './dist';
 import datepicker from './datepicker';
 import granules from './granules';
@@ -23,7 +23,7 @@ import reconciliationReports from './reconciliation-reports';
 import mmtLinks from './mmtLinks';
 import cumulusInstance from './cumulus-instance';
 
-const def = (state = {}, action) => state;
+const def = (state, _action) => state || {};
 
 export const reducers = {
   def,
