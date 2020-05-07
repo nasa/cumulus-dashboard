@@ -54,7 +54,6 @@ describe('Dashboard Home Page', () => {
     beforeEach(() => {
       cy.login();
       cy.server();
-      cy.route('POST', 'http://example.com/_search/', 'fixture:elasticsearch.json');
       cy.visit('/');
     });
 
@@ -215,6 +214,8 @@ describe('Dashboard Home Page', () => {
       // Cypress only allows one stub per url. We make multiple POST requests to the same
       // elasticsearch endpoint. The fixture here returns a combined response of all the
       // responses for one url, effectively stubbing our elasticsearch searches.
+      cy.route('POST', 'http://example.com/_search/', 'fixture:elasticsearch.json');
+
       cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(5)').contains('0');
       cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(4)').contains('2');
       cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(3)').contains('4');
@@ -323,6 +324,11 @@ describe('Dashboard Home Page', () => {
         cy.get('.react-datetime-picker__inputGroup__hour').should('have.value', '1');
         cy.get('.react-datetime-picker__inputGroup__minute').should('have.value', '35');
       });
+    });
+
+    it('should not display the Distribution stats when no data is provided', () => {
+      cy.get('ul#distributionErrors').should('not.exist');
+      cy.get('ul#distributionSuccesses').should('not.exist');
     });
   });
 });
