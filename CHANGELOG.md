@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1920**
   - Updated styles for granule reingest modal
 
+### Fixed
+
+- **CUMULUS-1881**
+  - Fix Elasticsearch query bug for Gateway Access Metrics
+
 ## [v1.8.0]
 
 ### Added
