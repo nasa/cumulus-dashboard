@@ -91,17 +91,11 @@ export default createReducer(initialState, {
   [UPDATE_PROVIDER]: (state, action) => {
     const { id, data } = action;
     state.map[id] = { data };
-    createSuccessReducer('updated')(state, action);
+    state.updated = { ...state.updated, [id]: { status: 'success' } };
   },
   [UPDATE_PROVIDER_INFLIGHT]: createInflightReducer('updated'),
   [UPDATE_PROVIDER_ERROR]: createErrorReducer('updated'),
   [UPDATE_PROVIDER_CLEAR]: createClearItemReducer('updated'),
-  [PROVIDERS]: (state, action) => {
-    state.list.data = action.data.results;
-    state.list.meta = assignDate(action.data.meta);
-    state.list.inflight = false;
-    state.list.error = false;
-  },
   [PROVIDERS]: (state, action) => {
     state.list.data = action.data.results;
     state.list.meta = assignDate(action.data.meta);
