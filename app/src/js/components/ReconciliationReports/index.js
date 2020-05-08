@@ -15,7 +15,6 @@ const { updateInterval } = _config;
 class ReconciliationReports extends React.Component {
   constructor () {
     super();
-    this.displayName = 'Reconciliation Reports';
     this.queryParams = this.queryParams.bind(this);
   }
 
@@ -62,13 +61,9 @@ class ReconciliationReports extends React.Component {
 }
 
 ReconciliationReports.propTypes = {
-  children: PropTypes.object,
   location: PropTypes.object,
   params: PropTypes.object,
   dispatch: PropTypes.func,
-  stats: PropTypes.object,
-  reconciliationReports: PropTypes.object,
-  queryParams: PropTypes.object
 };
 
 export default withRouter(withQueryParams()(connect(state => ({

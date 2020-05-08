@@ -113,7 +113,7 @@ class CollectionList extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={getCollectionId}
-            sortIdx='duration'
+            sortId='duration'
           >
             <ListFilters>
               <Search

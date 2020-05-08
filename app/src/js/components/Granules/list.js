@@ -118,7 +118,7 @@ class AllGranules extends React.Component {
     const view = this.getView();
     const displayCaseView = displayCase(view);
     const statusOpts = (view === 'all') ? statusOptions : null;
-    const tableSortIdx = view === 'failed' ? 'granuleId' : 'timestamp';
+    const tablesortId = view === 'failed' ? 'granuleId' : 'timestamp';
     const breadcrumbConfig = [
       {
         label: 'Dashboard Home',
@@ -154,7 +154,7 @@ class AllGranules extends React.Component {
             query={query}
             bulkActions={this.generateBulkActions()}
             rowId='granuleId'
-            sortIdx={tableSortIdx}
+            sortId={tablesortId}
           >
             <ListFilters>
               <Dropdown

@@ -1,0 +1,28 @@
+.card-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card {
+  width: 10em;
+  cursor: pointer;
+
+  .card-header {
+    color: $white;
+    background-color: $grey;
+  }
+
+  .h5 {
+    font-size: 1.25rem;
+  }
+
+  &:hover {
+    box-shadow: $shadow__hover;
+  }
+
+  &.active {
+    .card-header {
+      background-color: $theme--blue;
+    }
+  }
+}

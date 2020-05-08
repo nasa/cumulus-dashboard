@@ -222,7 +222,7 @@ class Home extends React.Component {
                 dispatch={this.props.dispatch}
                 action={listGranules}
                 tableColumns={errorTableColumns}
-                sortIdx='timestamp'
+                sortId='timestamp'
                 query={this.generateQuery()}
               />
             </div>

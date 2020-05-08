@@ -19,22 +19,13 @@ import {
   tableColumnsGranules
 } from '../../utils/table-config/reconciliation-reports';
 
-import Metadata from '../Table/Metadata';
 import Loading from '../LoadingIndicator/loading-indicator';
 import ErrorReport from '../Errors/report';
 
-import ReportTable from './report-table';
+import TableCards from './table-cards';
+import SortableTable from '../SortableTable/SortableTable';
 
 const { updateInterval } = _config;
-
-const reportMetaAccessors = [
-  { label: 'Created', property: 'reportStartTime' },
-  { label: 'Status', property: 'status' },
-  { label: 'Files in DynamoDB and S3', property: 'filesInCumulus.okCount' },
-  { label: 'Collections in Cumulus and CMR', property: 'collectionsInCumulusCmr.okCount' },
-  { label: 'Granules in Cumulus and CMR', property: 'granulesInCumulusCmr.okCount' },
-  { label: 'Granule files in Cumulus and CMR', property: 'filesInCumulusCmr.okCount' }
-];
 
 const parseFileObject = (d) => {
   const parsed = url.parse(d.uri);
@@ -51,6 +42,10 @@ class ReconciliationReport extends React.Component {
     super();
     this.reload = this.reload.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
+    this.handleCardClick = this.handleCardClick.bind(this);
+    this.state = {
+      active: 0
+    };
   }
 
   componentDidMount () {
@@ -131,9 +126,15 @@ class ReconciliationReport extends React.Component {
     return { granuleFilesOnlyInCumulus, granuleFilesOnlyInCmr };
   }
 
+  handleCardClick (e, index) {
+    e.preventDefault();
+    this.setState({ active: index });
+  }
+
   render () {
     const { reconciliationReports } = this.props;
     const { reconciliationReportName } = this.props.match.params;
+    const { active } = this.state;
 
     const record = reconciliationReports.map[reconciliationReportName];
 
@@ -154,8 +155,9 @@ class ReconciliationReport extends React.Component {
     let granulesInCmr = [];
 
     let report;
+    let error;
 
-    if (record && record.data) {
+    if (record.data) {
       report = record.data;
 
       const {
@@ -184,12 +186,60 @@ class ReconciliationReport extends React.Component {
         granuleFilesOnlyInCumulus,
         granuleFilesOnlyInCmr
       } = this.getGranuleFilesSummary(filesInCumulusCmr));
-    }
 
-    let error;
-    if (record && record.data) {
       error = record.data.error;
     }
+
+    const cardConfig = [
+      {
+        id: 'dynamo',
+        name: 'DynamoDB',
+        data: filesInDynamoDb,
+        columns: tableColumnsFiles,
+      },
+      {
+        id: 's3',
+        name: 'S3',
+        data: filesInS3,
+        columns: tableColumnsS3Files
+      },
+      {
+        id: 'cumulusCollections',
+        name: 'Cumulus Collections',
+        data: collectionsInCumulus,
+        columns: tableColumnsCollections
+      },
+      {
+        id: 'cmrCollections',
+        name: 'CMR Collections',
+        data: collectionsInCmr,
+        columns: tableColumnsCollections
+      },
+      {
+        id: 'cumulusGranules',
+        name: 'Cumlus Granules',
+        data: granulesInCumulus,
+        columns: tableColumnsGranules
+      },
+      {
+        id: 'cmrGranules',
+        name: 'CMR Granules',
+        data: granulesInCmr,
+        columns: tableColumnsGranules
+      },
+      {
+        id: 'cumulusGranules',
+        name: 'Cumlus Only Granules',
+        data: granuleFilesOnlyInCumulus,
+        columns: tableColumnsFiles
+      },
+      {
+        id: 'cmrGranules',
+        name: 'CMR Only Granules',
+        data: granuleFilesOnlyInCmr,
+        columns: tableColumnsFiles
+      }
+    ];
 
     return (
       <div className='page__component'>
@@ -200,21 +250,19 @@ class ReconciliationReport extends React.Component {
           </div>
         </section>
 
-        <section className='page__section'>
-          <div className='page__section--small'>
-            <div className='heading__wrapper--border'>
-              <h2 className='heading--medium with-description'>Reconciliation report</h2>
-            </div>
-            <Metadata data={report} accessors={reportMetaAccessors} />
-          </div>
+        <section className='page__section page__section--small'>
+          <TableCards config={cardConfig} onClick={this.handleCardClick} activeCard={active} />
+        </section>
 
-          <ReportTable
-            data={filesInDynamoDb}
-            title='Files only in DynamoDB'
-            tableColumns={tableColumnsFiles}
+        <section className='page__section'>
+
+          <SortableTable
+            data={cardConfig[active].data}
+            tableColumns={cardConfig[active].columns}
+            shouldUsePagination={true}
           />
 
-          <ReportTable
+          {/* <ReportTable
             data={filesInS3}
             title='Files only in S3'
             tableColumns={tableColumnsS3Files}
@@ -254,7 +302,7 @@ class ReconciliationReport extends React.Component {
             data={granuleFilesOnlyInCmr}
             title='Granule files only in CMR'
             tableColumns={tableColumnsFiles}
-          />
+          /> */}
         </section>
       </div>
     );

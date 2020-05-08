@@ -150,7 +150,7 @@ const CollectionGranules = ({
           query={query}
           bulkActions={generateBulkActions()}
           rowId='granuleId'
-          sortIdx='timestamp'
+          sortId='timestamp'
           tableColumns={tableColumns}
         >
           <ListFilters>
