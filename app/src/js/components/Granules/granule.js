@@ -81,7 +81,7 @@ const metaAccessors = [
   {
     label: `${strings.cmr} Link`,
     property: 'cmrLink',
-    accesssor: (d) => d ? <a href={d} target='_blank'>Link</a> : nullValue
+    accessor: (d) => d ? <a href={d} target='_blank'>link</a> : nullValue
   },
   {
     label: 'Execution',
