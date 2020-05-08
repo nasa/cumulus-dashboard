@@ -40,7 +40,7 @@ const updateDatepickerStateFromQueryParams = (props) => {
 
     values.dateRange = dropdownValue(values);
     props.dispatch({
-      type: 'DATEPICKER_DATECHANGE',
+      type: DATEPICKER_DATECHANGE,
       data: { ...props.datepicker, ...values }
     });
   }
@@ -63,6 +63,7 @@ class Datepicker extends React.PureComponent {
 
   componentDidMount () {
     updateDatepickerStateFromQueryParams(this.props);
+    this.homePageInitialDateTime();
   }
 
   refresh (e) {
@@ -75,6 +76,16 @@ class Datepicker extends React.PureComponent {
   clear () {
     const { value, label } = allDateRanges.find((a) => a.label === 'Custom');
     this.props.dispatch(this.dispatchDropdownUpdate(value, label));
+  }
+
+  homePageInitialDateTime () {
+    const { location, queryParams } = this.props;
+    if (location.pathname === '/' && queryParams.new_session === 'true') {
+      queryParams.new_session = undefined;
+      this.props.setQueryParams(queryParams);
+      const { value, label } = allDateRanges.find((a) => a.label === 'Recent');
+      this.props.dispatch(this.dispatchDropdownUpdate(value, label));
+    }
   }
 
   dispatchDropdownUpdate (value, label) {
@@ -124,11 +135,7 @@ class Datepicker extends React.PureComponent {
     const updatedQueryParams = { ...this.props.queryParams };
     urlDateProps.map((time) => {
       let urlValue;
-      // If user selects 'Recent', drop the start and end date/time query
-      // parameters, otherwise on the next navigation, the dropdown will switch
-      // back to 'Custom'.  Excluding these query params ensures that 'Recent'
-      // remains selected until the user selects otherwise.
-      if (newProps.dateRange.value !== 'Recent' && newProps[time] !== null) {
+      if (newProps[time] !== null) {
         urlValue = moment.utc(newProps[time]).format(urlDateFormat);
       }
       updatedQueryParams[time] = urlValue;
@@ -281,7 +288,8 @@ Datepicker.propTypes = {
   setQueryParams: PropTypes.func,
   onChange: PropTypes.func,
   dispatch: PropTypes.func,
-  hideWrapper: PropTypes.bool
+  hideWrapper: PropTypes.bool,
+  location: PropTypes.object
 };
 
 export default withRouter(

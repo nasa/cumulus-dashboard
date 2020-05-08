@@ -33,8 +33,10 @@ class Header extends React.Component {
 
   componentDidMount () {
     const { dispatch, api } = this.props;
-    if (api.authenticated) dispatch(getApiVersion());
-    dispatch(getCumulusInstanceMetadata());
+    if (api.authenticated) {
+      dispatch(getApiVersion());
+      dispatch(getCumulusInstanceMetadata());
+    }
   }
 
   logout () {

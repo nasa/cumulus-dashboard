@@ -6,7 +6,7 @@ import { apiGatewayFixture } from '../fixtures/apiGatewayMetrics';
 import { apiLambdaFixture } from '../fixtures/apiLambdaMetrics';
 import { teaLambdaFixture } from '../fixtures/teaLambdaMetrics';
 import { s3AccessFixture } from '../fixtures/s3AccessMetrics';
-import reducer from '../../app/src/js/reducers/dist';
+import reducer, { initialState } from '../../app/src/js/reducers/dist';
 import {
   DIST_APIGATEWAY,
   DIST_APIGATEWAY_INFLIGHT,
@@ -33,19 +33,18 @@ test.after((t) => {
 });
 
 test('verify initial state', (t) => {
-  const initialState = { some: 'initialState' };
   const newState = reducer(initialState, { data: {}, type: 'ANY' });
   t.deepEqual(newState, initialState);
 });
 
 test('reducers/dist/dist_apigateway', (t) => {
-  const initialState = {};
   const action = {
     type: DIST_APIGATEWAY,
     data: JSON.parse(apiGatewayFixture)
   };
 
   const expectedState = {
+    ...initialState,
     apiGateway: {
       inflight: false,
       error: null,
@@ -65,16 +64,9 @@ test('reducers/dist/dist_apigateway', (t) => {
 });
 
 test('reducers/dist/dist_apigateway_inflight', (t) => {
-  const initialState = {};
   const action = { type: DIST_APIGATEWAY_INFLIGHT };
-
-  const expectedState = {
-    apiGateway: {
-      inflight: true
-    }
-  };
   const newState = reducer(initialState, action);
-  t.deepEqual(expectedState, newState);
+  t.true(newState.apiGateway.inflight);
 });
 
 test('reducers/dist/dist_apigateway_Error', (t) => {
@@ -96,7 +88,6 @@ test('reducers/dist/dist_apigateway_Error', (t) => {
 });
 
 test('reducers/dist/dist_apilambda', (t) => {
-  const initialState = {};
   const action = {
     type: DIST_API_LAMBDA,
     data: JSON.parse(apiLambdaFixture)
@@ -112,22 +103,15 @@ test('reducers/dist/dist_apilambda', (t) => {
     }
   };
   const newState = reducer(initialState, action);
-  t.deepEqual(expectedState, newState);
+  t.deepEqual(expectedState.apiLambda, newState.apiLambda);
 });
 
 test('reducers/dist/dist_apilambda_inflight', (t) => {
-  const initialState = {};
   const action = {
     type: DIST_API_LAMBDA_INFLIGHT
   };
-
-  const expectedState = {
-    apiLambda: {
-      inflight: true
-    }
-  };
   const newState = reducer(initialState, action);
-  t.deepEqual(expectedState, newState);
+  t.true(newState.apiLambda.inflight);
 });
 
 test('reducers/dist/dist_apilambda_error', (t) => {
@@ -152,11 +136,10 @@ test('reducers/dist/dist_apilambda_error', (t) => {
     }
   };
   const newState = reducer(initialState, action);
-  t.deepEqual(expectedState, newState);
+  t.deepEqual(expectedState.apiLambda, newState.apiLambda);
 });
 
 test('reducers/dist/dist_tea_lambda', (t) => {
-  const initialState = {};
   const action = {
     type: DIST_TEA_LAMBDA,
     data: JSON.parse(teaLambdaFixture)
@@ -172,22 +155,13 @@ test('reducers/dist/dist_tea_lambda', (t) => {
     }
   };
   const newState = reducer(initialState, action);
-  t.deepEqual(expectedState, newState);
+  t.deepEqual(expectedState.teaLambda, newState.teaLambda);
 });
 
 test('reducers/dist/dist_tea_lambda_inflight', (t) => {
-  const initialState = {};
-  const action = {
-    type: DIST_TEA_LAMBDA_INFLIGHT
-  };
-
-  const expectedState = {
-    teaLambda: {
-      inflight: true
-    }
-  };
+  const action = { type: DIST_TEA_LAMBDA_INFLIGHT };
   const newState = reducer(initialState, action);
-  t.deepEqual(expectedState, newState);
+  t.true(newState.teaLambda.inflight);
 });
 
 test('reducers/dist/dist_tea_lambda_error', (t) => {
@@ -212,18 +186,17 @@ test('reducers/dist/dist_tea_lambda_error', (t) => {
     }
   };
   const newState = reducer(initialState, action);
-  t.deepEqual(expectedState, newState);
+  t.deepEqual(expectedState.teaLambda, newState.teaLambda);
 });
 
-
 test('reducers/dist/dist_s3access', (t) => {
-  const initialState = {};
   const action = {
     type: DIST_S3ACCESS,
     data: JSON.parse(s3AccessFixture)
   };
 
   const expectedState = {
+    ...initialState,
     s3Access: {
       inflight: false,
       error: null,
@@ -240,21 +213,20 @@ test('reducers/dist/dist_s3access_inflight', (t) => {
   const initialState = {
     apiLambda: {
       inflight: false
-    }
+    },
+    s3Access: {}
   };
-  const action = {
-    type: DIST_S3ACCESS_INFLIGHT
-  };
-
   const expectedState = {
     apiLambda: {
-      inflight: false
+      inflight: false,
     },
     s3Access: {
-      inflight: true
-    }
+      inflight: true,
+    },
   };
+  const action = { type: DIST_S3ACCESS_INFLIGHT };
   const newState = reducer(initialState, action);
+
   t.deepEqual(expectedState, newState);
 });
 
@@ -280,5 +252,5 @@ test('reducers/dist/dist_s3access_error', (t) => {
     }
   };
   const newState = reducer(initialState, action);
-  t.deepEqual(expectedState, newState);
+  t.deepEqual(expectedState.s3Access, newState.s3Access);
 });

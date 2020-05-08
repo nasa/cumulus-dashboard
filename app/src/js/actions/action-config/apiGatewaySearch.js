@@ -21,14 +21,14 @@ export const apiGatewaySearchTemplate = (prefix, startTimeEpochMilli, endTimeEpo
           },
           "ApiAccessErrors": {
             "query_string": {
-              "query": "status:[400 TO 599]",
+              "query": "statusCode:[400 TO 599]",
               "analyze_wildcard": true,
               "default_field": "*"
             }
           },
           "ApiAccessSuccesses": {
             "query_string": {
-              "query": "status:[200 TO 399]",
+              "query": "statusCode:[200 TO 399]",
               "analyze_wildcard": true,
               "default_field": "*"
             }

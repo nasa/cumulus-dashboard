@@ -11,20 +11,25 @@ import BatchReingestComplete, {
 
 configure({ adapter: new Adapter() });
 
-const anError = `1 error(s) occurred:
-Execution Does Not Exist: 'arn:aws:states:us-east-1:123456789012:execution:TestStateMachine-Rcei43QwgSP6:bab9c234-e492-40e6-a34c-a0f76a4c7968'; Function params: [
+const errors = [
   {
-    "executionArn": "arn:aws:states:us-east-1:123456789012:execution:TestStateMachine-Rcei43QwgSP6:bab9c234-e492-40e6-a34c-a0f76a4c7968"
+    id: '',
+    error: `Execution Does Not Exist: 'arn:aws:states:us-east-1:123456789012:execution:TestStateMachine-Rcei43QwgSP6:bab9c234-e492-40e6-a34c-a0f76a4c7968'; Function params: [
+      {
+        "executionArn": "arn:aws:states:us-east-1:123456789012:execution:TestStateMachine-Rcei43QwgSP6:bab9c234-e492-40e6-a34c-a0f76a4c7968"
+      }
+    ]`
   }
-]`;
+];
 
 test('Renders Error result', (t) => {
   const wrapper = shallow(
-    <BatchReingestComplete results={[]} error={anError} />
+    <BatchReingestComplete results={[]} errors={errors} />
   );
 
-  t.true(wrapper.find('span').hasClass('error'));
-  t.true(wrapper.text().includes(anError));
+  const errorWrapper = wrapper.find('Collapsible').dive();
+
+  t.true(errorWrapper.find('.Collapsible__contentInner').text().includes(errors[0].error));
 });
 
 test('Renders success results with multiple Granules', (t) => {

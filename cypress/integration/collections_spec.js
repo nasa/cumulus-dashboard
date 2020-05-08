@@ -23,7 +23,7 @@ describe('Dashboard Collections Page', () => {
 
     beforeEach(() => {
       cy.login();
-      cy.visit('/');
+      cy.visit('/?new_session=true');
       cy.server();
       cy.route('POST', '/collections').as('postCollection');
       cy.route('GET', '/collections?limit=*').as('getCollections');
@@ -38,7 +38,7 @@ describe('Dashboard Collections Page', () => {
 
     it('should display a link to view collections', () => {
       cy.contains('nav li a', 'Collections').as('collections');
-      cy.get('@collections').should('have.attr', 'href', '/collections');
+      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections\?startDateTime=/);
       cy.get('@collections').click();
       cy.wait('@getActiveCollections');
 
@@ -55,7 +55,7 @@ describe('Dashboard Collections Page', () => {
 
     it('should only display collections with active granules when time filter is applied', () => {
       cy.contains('nav li a', 'Collections').as('collections');
-      cy.get('@collections').should('have.attr', 'href', '/collections');
+      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections\?startDateTime=/);
       cy.get('@collections').click();
       cy.wait('@getActiveCollections');
 
@@ -451,8 +451,8 @@ describe('Dashboard Collections Page', () => {
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
-      cy.get('.modal-content > .modal-title').should('contain.text', 'Error');
-      cy.get('.error').should('contain.text', 'Oopsie');
+      cy.get('.modal-content .modal-body .alert').should('contain.text', 'Error');
+      cy.get('.Collapsible__contentInner').should('contain.text', 'Oopsie');
       cy.get('.button--cancel').click();
       cy.url().should('match', /\/granules$/);
       cy.get('.heading--large').should('have.text', 'Granule Overview');
@@ -476,7 +476,7 @@ describe('Dashboard Collections Page', () => {
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
-      cy.get('.modal-content > .modal-title').should('contain.text', 'Complete');
+      cy.get('.modal-content .modal-body .alert').should('contain.text', 'Success');
       cy.get('.modal-content').within(() => {
         cy.get('.button__goto').click();
       });
