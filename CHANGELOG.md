@@ -23,8 +23,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1881**
   - Fix Elasticsearch query bug for Gateway Access Metrics
 
+- **CUMULUS-1984**
+  - Fix bug where Distribution metrics were showing on the homepage even when
+    Elasaticsearch/Kibana not set up
+
 - **CUMULUS-1988**
   - Fix bugs in reducer-creators
+
 
 ## [v1.8.0]
 

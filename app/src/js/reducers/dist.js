@@ -19,12 +19,12 @@ import {
 
 export const initialState = {
   apiGateway: {
-    execution: { errors: 0, successes: 0 },
-    access: { errors: 0, successes: 0 },
+    execution: { errors: null, successes: null },
+    access: { errors: null, successes: null },
   },
-  apiLambda: { errors: 0, successes: 0 },
-  teaLambda: { errors: 0, successes: 0 },
-  s3Access: { errors: 0, successes: 0 },
+  apiLambda: { errors: null, successes: null },
+  teaLambda: { errors: null, successes: null },
+  s3Access: { errors: null, successes: null },
 };
 
 const count = (data, name) =>
