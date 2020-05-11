@@ -41,7 +41,7 @@ describe('Dashboard Granules Page', () => {
           // Wait for this granule to appear before proceeding.
           cy.contains(granule.granuleId);
           cy.get(`[data-value="${granule.granuleId}"]`).children().as('columns');
-          cy.get('@columns').should('have.length', 8);
+          cy.get('@columns').should('have.length', 9);
 
           // Granule Status Column is correct
           cy.get('@columns').eq(1).invoke('text')
@@ -82,16 +82,21 @@ describe('Dashboard Granules Page', () => {
             .should('have.attr', 'href')
             .and('be.eq', `/collections/collection/${granule.collectionId.replace('___', '/')}`);
 
-          // Execution column has link to the detailed execution page
+          // has link to provider
           cy.get('@columns').eq(5).children('a')
+            .should('have.attr', 'href')
+            .and('be.eq', `/providers/provider/${granule.provider}`);
+
+          // Execution column has link to the detailed execution page
+          cy.get('@columns').eq(6).children('a')
             .should('have.attr', 'href')
             .and('be.eq', `/executions/execution/${granule.execution.split('/').pop()}`);
 
           // Duration column
-          cy.get('@columns').eq(6).invoke('text')
+          cy.get('@columns').eq(7).invoke('text')
             .should('be.eq', `${Number(granule.duration.toFixed(2))}s`);
           // Updated column
-          cy.get('@columns').eq(7).invoke('text')
+          cy.get('@columns').eq(8).invoke('text')
             .should('match', /.+ago$/);
         });
 
