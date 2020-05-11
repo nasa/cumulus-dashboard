@@ -261,48 +261,6 @@ class ReconciliationReport extends React.Component {
             tableColumns={cardConfig[active].columns}
             shouldUsePagination={true}
           />
-
-          {/* <ReportTable
-            data={filesInS3}
-            title='Files only in S3'
-            tableColumns={tableColumnsS3Files}
-          />
-
-          <ReportTable
-            data={collectionsInCumulus}
-            title='Collections only in Cumulus'
-            tableColumns={tableColumnsCollections}
-          />
-
-          <ReportTable
-            data={collectionsInCmr}
-            title='Collections only in CMR'
-            tableColumns={tableColumnsCollections}
-          />
-
-          <ReportTable
-            data={granulesInCumulus}
-            title='Granules only in Cumulus'
-            tableColumns={tableColumnsGranules}
-          />
-
-          <ReportTable
-            data={granulesInCmr}
-            title='Granules only in CMR'
-            tableColumns={tableColumnsGranules}
-          />
-
-          <ReportTable
-            data={granuleFilesOnlyInCumulus}
-            title='Granule files only in Cumulus'
-            tableColumns={tableColumnsFiles}
-          />
-
-          <ReportTable
-            data={granuleFilesOnlyInCmr}
-            title='Granule files only in CMR'
-            tableColumns={tableColumnsFiles}
-          /> */}
         </section>
       </div>
     );
