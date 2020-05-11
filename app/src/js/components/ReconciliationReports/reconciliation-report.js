@@ -217,7 +217,7 @@ class ReconciliationReport extends React.Component {
       },
       {
         id: 'cumulusGranules',
-        name: 'Cumlus Granules',
+        name: 'Cumulus Granules',
         data: granulesInCumulus,
         columns: tableColumnsGranules
       },
@@ -229,7 +229,7 @@ class ReconciliationReport extends React.Component {
       },
       {
         id: 'cumulusGranules',
-        name: 'Cumlus Only Granules',
+        name: 'Cumulus Only Granules',
         data: granuleFilesOnlyInCumulus,
         columns: tableColumnsFiles
       },
