@@ -53,9 +53,6 @@ const breadcrumbConfig = [
 class CollectionOverview extends React.Component {
   constructor (props) {
     super(props);
-
-    this.displayName = 'CollectionOverview';
-
     [
       this.changeCollection,
       this.deleteMe,
@@ -97,12 +94,13 @@ class CollectionOverview extends React.Component {
     return [
       reingestAction(granules),
       {
-        Component:
-        <Bulk
-          element='a'
-          className='button button__bulkgranules button--green button--small form-group__element link--no-underline'
-          confirmAction={true}
-        />
+        Component: (
+          <Bulk
+            element="a"
+            className="button button__bulkgranules button--green button--small form-group__element link--no-underline"
+            confirmAction={true}
+          />
+        )
       }
     ];
   }
@@ -311,6 +309,8 @@ class CollectionOverview extends React.Component {
     );
   }
 }
+
+CollectionOverview.displayName = 'CollectionOverview';
 
 CollectionOverview.propTypes = {
   match: PropTypes.object,
