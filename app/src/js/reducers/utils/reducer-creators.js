@@ -1,4 +1,5 @@
 'use strict';
+import { del } from 'object-path';
 
 /**
  * Returns the value of the `id` property of the specified object.
@@ -36,7 +37,7 @@ const idProp = ({ id }) => id;
 export const createClearItemReducer = (stateProp, idSelector = idProp) => {
   return (state, action) => {
     const id = idSelector(action);
-    delete state[stateProp][id];
+    del(state, [stateProp, id]);
   };
 };
 
@@ -70,7 +71,7 @@ export const createClearItemReducer = (stateProp, idSelector = idProp) => {
 export const createInflightReducer = (stateProp, idSelector = idProp) => {
   return (state, action) => {
     const id = idSelector(action);
-    state[stateProp][id] = { status: 'inflight' };
+    state[stateProp] = { ...state[stateProp], [id]: { status: 'inflight' } };
   };
 };
 
@@ -109,9 +110,13 @@ export const createInflightReducer = (stateProp, idSelector = idProp) => {
 export const createSuccessReducer = (stateProp, idSelector = idProp) => {
   return (state, action) => {
     const id = idSelector(action);
-    state[stateProp][id] = {
-      status: 'success',
-      data: action.data,
+    state[stateProp] = {
+      ...state[stateProp],
+      [id]: {
+        status: 'success',
+        error: null,
+        data: action.data,
+      }
     };
   };
 };
@@ -151,9 +156,12 @@ export const createSuccessReducer = (stateProp, idSelector = idProp) => {
 export const createErrorReducer = (stateProp, idSelector = idProp) => {
   return (state, action) => {
     const id = idSelector(action);
-    state[stateProp][id] = {
-      status: 'error',
-      error: action.error,
+    state[stateProp] = {
+      ...state[stateProp],
+      [id]: {
+        status: 'error',
+        error: action.error,
+      }
     };
   };
 };
