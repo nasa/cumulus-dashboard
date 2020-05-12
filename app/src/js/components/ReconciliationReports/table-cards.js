@@ -20,8 +20,8 @@ const TableCards = ({
   return (
     <div className='card-wrapper'>
       {config.map((item, index) => {
-        const status = 'success';
-        const { name, data } = item;
+        // TODO: once API is updated with status indicator, remove the default
+        const { name, data, status = 'success' } = item;
         const count = data.length;
         if (!data || !count) {
           return null;
