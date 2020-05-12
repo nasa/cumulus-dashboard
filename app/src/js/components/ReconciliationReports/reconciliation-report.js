@@ -44,11 +44,9 @@ class ReconciliationReport extends React.Component {
   }
 
   componentDidMount () {
-    const { dispatch, match, reconciliationReports } = this.props;
+    const { dispatch, match } = this.props;
     const { reconciliationReportName } = match.params;
-    if (!reconciliationReports.map[reconciliationReportName]) {
-      dispatch(getReconciliationReport(reconciliationReportName));
-    }
+    dispatch(getReconciliationReport(reconciliationReportName));
   }
 
   navigateBack () {
