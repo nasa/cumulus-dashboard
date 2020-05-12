@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     now only occurs on first login on the hompage.
   - URL is updated on login to reflect Datepicker params
 
+- **CUMULUS-1903**
+  - Replace individual tables in reconciliation report with tabs that change which table is displayed on click
+
 - **CUMULUS-1920**
   - Updated styles for granule reingest modal
 
