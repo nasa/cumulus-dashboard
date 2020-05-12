@@ -25,7 +25,7 @@ const SimplePagination = ({
         <li>
           <a className={`previous ${canPreviousPage ? '' : disabled}`}
             data-value={currentPage - 1}
-            onClick={() => previousPage}
+            onClick={() => previousPage()}
           >Previous</a>
         </li>
         {pageOptions.map(page => {
