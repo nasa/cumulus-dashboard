@@ -4,13 +4,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
-import { interval, getCount } from '../../actions';
-import _config from '../../config';
+import { getCount } from '../../actions';
 import ReconciliationReportList from './list';
 import ReconciliationReport from './reconciliation-report';
 import withQueryParams from 'react-router-query-params';
-
-const { updateInterval } = _config;
 
 class ReconciliationReports extends React.Component {
   constructor () {
@@ -19,11 +16,7 @@ class ReconciliationReports extends React.Component {
   }
 
   componentDidMount () {
-    this.cancelInterval = interval(() => this.queryParams(), updateInterval, true);
-  }
-
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
+    this.queryParams();
   }
 
   queryParams () {

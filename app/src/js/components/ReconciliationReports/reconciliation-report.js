@@ -8,10 +8,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import {
-  interval,
   getReconciliationReport
 } from '../../actions';
-import _config from '../../config';
 import {
   tableColumnsS3Files,
   tableColumnsFiles,
@@ -24,8 +22,6 @@ import ErrorReport from '../Errors/report';
 
 import TableCards from './table-cards';
 import SortableTable from '../SortableTable/SortableTable';
-
-const { updateInterval } = _config;
 
 const parseFileObject = (d) => {
   const parsed = url.parse(d.uri);
@@ -40,29 +36,19 @@ const parseFileObject = (d) => {
 class ReconciliationReport extends React.Component {
   constructor () {
     super();
-    this.reload = this.reload.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
     this.handleCardClick = this.handleCardClick.bind(this);
     this.state = {
-      active: 0
+      activeIdx: 0
     };
   }
 
   componentDidMount () {
-    const { reconciliationReportName } = this.props.match.params;
-    const immediate = !this.props.reconciliationReports.map[reconciliationReportName];
-    this.reload(immediate);
-  }
-
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-  }
-
-  reload (immediate) {
-    const { reconciliationReportName } = this.props.match.params;
-    const { dispatch } = this.props;
-    if (this.cancelInterval) { this.cancelInterval(); }
-    this.cancelInterval = interval(() => dispatch(getReconciliationReport(reconciliationReportName)), updateInterval, immediate);
+    const { dispatch, match, reconciliationReports } = this.props;
+    const { reconciliationReportName } = match.params;
+    if (!reconciliationReports.map[reconciliationReportName]) {
+      dispatch(getReconciliationReport(reconciliationReportName));
+    }
   }
 
   navigateBack () {
@@ -128,13 +114,13 @@ class ReconciliationReport extends React.Component {
 
   handleCardClick (e, index) {
     e.preventDefault();
-    this.setState({ active: index });
+    this.setState({ activeIdx: index });
   }
 
   render () {
     const { reconciliationReports } = this.props;
     const { reconciliationReportName } = this.props.match.params;
-    const { active } = this.state;
+    const { activeIdx } = this.state;
 
     const record = reconciliationReports.map[reconciliationReportName];
 
@@ -251,14 +237,14 @@ class ReconciliationReport extends React.Component {
         </section>
 
         <section className='page__section page__section--small'>
-          <TableCards config={cardConfig} onClick={this.handleCardClick} activeCard={active} />
+          <TableCards config={cardConfig} onClick={this.handleCardClick} activeCard={activeIdx} />
         </section>
 
         <section className='page__section'>
 
           <SortableTable
-            data={cardConfig[active].data}
-            tableColumns={cardConfig[active].columns}
+            data={cardConfig[activeIdx].data}
+            tableColumns={cardConfig[activeIdx].columns}
             shouldUsePagination={true}
           />
         </section>
