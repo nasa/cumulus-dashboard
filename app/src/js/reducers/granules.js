@@ -84,9 +84,9 @@ export default createReducer(initialState, {
   },
   [GRANULES]: (state, action) => {
     state.list = {
+      ...state.list,
       data: removeDeleted('granuleId', action.data.results, state.deleted),
       meta: assignDate(action.data.meta),
-      params: {},
       inflight: false,
       error: false
     };
