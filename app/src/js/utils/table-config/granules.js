@@ -10,7 +10,8 @@ import {
   nullValue,
   displayCase,
   collectionLink,
-  granuleLink
+  granuleLink,
+  providerLink
 } from '../format';
 import {
   reingestGranule,
@@ -46,6 +47,11 @@ export const tableColumns = [
     Header: strings.collection_id,
     accessor: row => collectionLink(row.collectionId),
     id: 'collectionId'
+  },
+  {
+    Header: 'Provider',
+    accessor: row => providerLink(row.provider),
+    id: 'provider'
   },
   {
     Header: 'Execution',
