@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
-import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
 import CollectionList from '../../components/Collections/list';
@@ -66,7 +65,6 @@ Collections.propTypes = {
   children: PropTypes.object,
   dispatch: PropTypes.func,
   location: PropTypes.object,
-  queryParams: PropTypes.object
 };
 
-export default withRouter(withQueryParams()(connect(state => state)(Collections)));
+export default withRouter((connect(state => ({}))(Collections)));
