@@ -25,12 +25,12 @@ class List extends React.Component {
     this.getQueryConfig = this.getQueryConfig.bind(this);
 
     const initialPage = 1;
-    const initialSortIdx = props.sortIdx || 0;
+    const initialsortId = props.sortId;
     const initialOrder = 'desc';
 
     this.state = {
       page: initialPage,
-      sortIdx: initialSortIdx,
+      sortId: initialsortId,
       order: initialOrder,
       selected: [],
       clearSelected: false,
@@ -38,7 +38,7 @@ class List extends React.Component {
       queryConfig: {
         page: initialPage,
         order: initialOrder,
-        sort_by: initialSortIdx,
+        sort_by: initialsortId,
         ...(props.query || {})
       },
       params: {},
@@ -79,7 +79,7 @@ class List extends React.Component {
       ...sortProps,
       queryConfig: this.getQueryConfig({
         order: sortProps.order,
-        sort_by: sortProps.sortIdx
+        sort_by: sortProps.sortId
       }),
       clearSelected: true
     });
@@ -117,7 +117,7 @@ class List extends React.Component {
     return omitBy({
       page: this.state.page,
       order: this.state.order,
-      sort_by: this.state.sortIdx,
+      sort_by: this.state.sortId,
       ...this.state.params,
       ...config,
       ...query
@@ -140,7 +140,7 @@ class List extends React.Component {
     const tableData = data || listData;
     const {
       page,
-      sortIdx,
+      sortId,
       order,
       selected,
       clearSelected,
@@ -182,7 +182,7 @@ class List extends React.Component {
               canSelect={hasActions}
               rowId={rowId}
               onSelect={this.updateSelection}
-              sortIdx={sortIdx}
+              sortId={sortId}
               changeSortProps={this.queryNewSort}
               order={order}
               clearSelected={clearSelected}
@@ -206,7 +206,7 @@ List.propTypes = {
   dispatch: PropTypes.func,
   action: PropTypes.func,
   children: PropTypes.node,
-  sortIdx: PropTypes.string,
+  sortId: PropTypes.string,
   query: PropTypes.object,
   bulkActions: PropTypes.array,
   rowId: PropTypes.any,

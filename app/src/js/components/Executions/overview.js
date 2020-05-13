@@ -107,7 +107,7 @@ class ExecutionOverview extends React.Component {
             tableColumns={tableColumns}
             query={{}}
             rowId='name'
-            sortIdx='createdAt'
+            sortId='createdAt'
           >
             <ListFilters>
               <Dropdown

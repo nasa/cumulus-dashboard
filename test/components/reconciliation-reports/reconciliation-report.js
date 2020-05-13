@@ -18,22 +18,22 @@ const reconciliationReports = {
         status: 'SUCCESS',
         error: null,
         okFileCount: 21,
-        onlyInS3: [
-          's3://some-bucket/path/to/key-1.hdf',
-          's3://some-bucket/path/to/key-2.hdf'
-        ],
-        onlyInDynamoDb: [
-          {
-            uri: 's3://some-bucket/path/to/key-123.hdf',
-            granuleId: 'g-123'
-          },
-          {
-            uri: 's3://some-bucket/path/to/key-456.hdf',
-            granuleId: 'g-456'
-          }
-        ],
         filesInCumulus: {
-          okCount: 129
+          okCount: 129,
+          onlyInS3: [
+            's3://some-bucket/path/to/key-1.hdf',
+            's3://some-bucket/path/to/key-2.hdf'
+          ],
+          onlyInDynamoDb: [
+            {
+              uri: 's3://some-bucket/path/to/key-123.hdf',
+              granuleId: 'g-123'
+            },
+            {
+              uri: 's3://some-bucket/path/to/key-456.hdf',
+              granuleId: 'g-456'
+            }
+          ],
         },
         collectionsInCumulusCmr: {
           okCount: 1
@@ -57,29 +57,40 @@ const reconciliationReports = {
 test('show individual report', function (t) {
   const match = { params: { reconciliationReportName: 'exampleReport' } };
 
+  const dispatch = () => {};
+
   const report = shallow(
     <ReconciliationReport
       match={match}
       reconciliationReports={reconciliationReports}
+      dispatch={dispatch}
     />
   );
 
   t.is(report.length, 1);
-  const Metadata = report.find('Metadata');
-  const MetadataWrapper = Metadata.dive();
-  const MetadataWrapperChildren = MetadataWrapper.children();
-  // ReconciliationReport is configured to use 6 metaAccessors,
-  // so there will be 6 groups of dt, dd elements
-  t.is(MetadataWrapperChildren.length, 6);
+
+  const TableCards = report.find('TableCards');
+  t.is(TableCards.length, 1);
+  const TableCardWrapper = TableCards.dive();
+  const Cards = TableCardWrapper.find('Card');
+  // there should be one card for DynamoDB and one card for S3
+  t.is(Cards.length, 2);
+
+  // There should only be one table visible
+  const Table = report.find('SortableTable');
+  t.is(Table.length, 1);
 });
 
 test('report with error triggers error message', function (t) {
   const match = { params: { reconciliationReportName: 'exampleReportWithError' } };
 
+  const dispatch = () => {};
+
   const report = shallow(
     <ReconciliationReport
       match={match}
       reconciliationReports={reconciliationReports}
+      dispatch={dispatch}
     />
   );
 

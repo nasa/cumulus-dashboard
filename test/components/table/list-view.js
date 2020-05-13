@@ -24,7 +24,7 @@ test('table should properly initialize timer config prop', async (t) => {
       dispatch={dispatch}
       action={listGranules}
       tableColumns={errorTableColumns}
-      sortIdx='timestamp'
+      sortId='timestamp'
       query={query}
     />,
     {

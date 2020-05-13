@@ -6,7 +6,8 @@ import React, {
   useRef
 } from 'react';
 import PropTypes from 'prop-types';
-import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect } from 'react-table';
+import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
+import SimplePagination from '../Pagination/simple-pagniation';
 
 /**
  * IndeterminateCheckbox
@@ -34,7 +35,7 @@ IndeterminateCheckbox.propTypes = {
 };
 
 const SortableTable = ({
-  sortIdx,
+  sortId,
   rowId,
   order = 'desc',
   canSelect,
@@ -42,7 +43,8 @@ const SortableTable = ({
   tableColumns = [],
   data = [],
   onSelect,
-  clearSelected
+  clearSelected,
+  shouldUsePagination = false
 }) => {
   const defaultColumn = useMemo(
     () => ({
@@ -54,7 +56,7 @@ const SortableTable = ({
     []
   );
 
-  const shouldManualSort = !!sortIdx;
+  const shouldManualSort = !!sortId;
 
   const {
     getTableProps,
@@ -63,9 +65,18 @@ const SortableTable = ({
     headerGroups,
     state: {
       selectedRowIds,
-      sortBy
+      sortBy,
+      pageIndex
     },
-    toggleAllRowsSelected
+    toggleAllRowsSelected,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageCount,
+    pageOptions,
+    gotoPage,
+    nextPage,
+    previousPage
   } = useTable(
     {
       data,
@@ -74,12 +85,14 @@ const SortableTable = ({
       getRowId: (row, relativeIndex) => typeof rowId === 'function' ? rowId(row) : row[rowId] || relativeIndex,
       autoResetSelectedRows: false,
       autoResetSortBy: false,
-      manualSortBy: shouldManualSort
+      manualSortBy: shouldManualSort,
+      manualPagination: !shouldUsePagination, // if we want to use the pagination hook, then pagination should not be manual
     },
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
     useResizeColumns, // this allows for resizing columns
     useSortBy, // this allows for sorting
     useRowSelect, // this allows for checkbox in table
+    usePagination,
     hooks => {
       if (canSelect) {
         hooks.visibleColumns.push(columns => [
@@ -88,8 +101,8 @@ const SortableTable = ({
             Header: ({ getToggleAllRowsSelectedProps }) => ( // eslint-disable-line react/prop-types
               <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
             ),
-            Cell: ({ row }) => (
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+            Cell: ({ row }) => ( // eslint-disable-line react/prop-types
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} /> // eslint-disable-line react/prop-types
             ),
             minWidth: 61,
             width: 61,
@@ -100,6 +113,8 @@ const SortableTable = ({
       }
     }
   );
+
+  const tableRows = page || rows;
 
   useEffect(() => {
     if (clearSelected) {
@@ -127,11 +142,11 @@ const SortableTable = ({
     if (typeof desc !== 'undefined') {
       sortOrder = desc ? 'desc' : 'asc';
     }
-    const sortFieldId = id || sortIdx;
+    const sortFieldId = id || sortId;
     if (typeof changeSortProps === 'function') {
-      changeSortProps({ sortIdx: sortFieldId, order: sortOrder || order });
+      changeSortProps({ sortId: sortFieldId, order: sortOrder || order });
     }
-  }, [changeSortProps, sortBy, sortIdx, order]);
+  }, [changeSortProps, sortBy, sortId, order]);
 
   return (
     <div className='table--wrapper'>
@@ -142,9 +157,13 @@ const SortableTable = ({
               {headerGroups.map(headerGroup => (
                 <div {...headerGroup.getHeaderGroupProps()} className="tr">
                   {headerGroup.headers.map(column => {
+                    let columnClassName = '';
+                    if (column.canSort) {
+                      columnClassName = `table__sort${column.isSortedDesc === true ? '--desc' : (column.isSortedDesc === false ? '--asc' : '')}`;
+                    }
                     return (
                       <div {...column.getHeaderProps()} className='th'>
-                        <div {...column.getSortByToggleProps()} className={`${column.canSort ? 'table__sort' : ''}`}>
+                        <div {...column.getSortByToggleProps()} className={columnClassName}>
                           {column.render('Header')}
                         </div>
                         <div
@@ -159,7 +178,7 @@ const SortableTable = ({
             </div>
           </div>
           <div className='tbody'>
-            {rows.map((row, i) => {
+            {tableRows.map((row, i) => {
               prepareRow(row);
               return (
                 <div className='tr' data-value={row.id} {...row.getRowProps()} key={i}>
@@ -182,25 +201,33 @@ const SortableTable = ({
             })}
           </div>
         </div>
+        {shouldUsePagination &&
+          <SimplePagination
+            canPreviousPage={canPreviousPage}
+            canNextPage={canNextPage}
+            pageCount={pageCount}
+            gotoPage={gotoPage}
+            nextPage={nextPage}
+            previousPage={previousPage}
+            pageOptions={pageOptions}
+            pageIndex={pageIndex}
+          />}
       </form>
     </div>
   );
 };
 
 SortableTable.propTypes = {
-  primaryIdx: PropTypes.number,
   data: PropTypes.array,
-  header: PropTypes.array,
   order: PropTypes.string,
-  row: PropTypes.array,
-  sortIdx: PropTypes.string,
+  sortId: PropTypes.string,
   changeSortProps: PropTypes.func,
   onSelect: PropTypes.func,
   canSelect: PropTypes.bool,
-  collapsible: PropTypes.bool,
   rowId: PropTypes.any,
   tableColumns: PropTypes.array,
-  clearSelected: PropTypes.bool
+  clearSelected: PropTypes.bool,
+  shouldUsePagination: PropTypes.bool
 };
 
 export default SortableTable;

@@ -277,7 +277,7 @@ class CollectionOverview extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId='granuleId'
-            sortIdx='timestamp'
+            sortId='timestamp'
           >
             <ListFilters>
               <Search

@@ -81,6 +81,7 @@ class ReconciliationReportList extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId='reconciliationReportName'
+            sortId='filename'
           >
             <ListFilters>
               <Search dispatch={this.props.dispatch}
@@ -101,11 +102,8 @@ class ReconciliationReportList extends React.Component {
 }
 
 ReconciliationReportList.propTypes = {
-  location: PropTypes.object,
   dispatch: PropTypes.func,
-  reconciliationReports: PropTypes.object,
-  params: PropTypes.object,
-  queryParams: PropTypes.object
+  reconciliationReports: PropTypes.object
 };
 
 export default withRouter(withQueryParams()(connect(state => ({
