@@ -157,9 +157,13 @@ const SortableTable = ({
               {headerGroups.map(headerGroup => (
                 <div {...headerGroup.getHeaderGroupProps()} className="tr">
                   {headerGroup.headers.map(column => {
+                    let columnClassName = '';
+                    if (column.canSort) {
+                      columnClassName = `table-sort${column.isSortedDesc === true ? '--desc' : (column.isSortedDesc === false ? '--asc' : '')}`;
+                    }
                     return (
                       <div {...column.getHeaderProps()} className='th'>
-                        <div {...column.getSortByToggleProps()} className={`${column.canSort ? 'table__sort' : ''}${column.isSortedDesc === true ? '--desc' : (column.isSortedDesc === false ? '--asc' : '')}`}>
+                        <div {...column.getSortByToggleProps()} className={columnClassName}>
                           {column.render('Header')}
                         </div>
                         <div
