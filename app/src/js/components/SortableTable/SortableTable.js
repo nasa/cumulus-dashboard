@@ -159,7 +159,7 @@ const SortableTable = ({
                   {headerGroup.headers.map(column => {
                     let columnClassName = '';
                     if (column.canSort) {
-                      columnClassName = `table-sort${column.isSortedDesc === true ? '--desc' : (column.isSortedDesc === false ? '--asc' : '')}`;
+                      columnClassName = `table__sort${column.isSortedDesc === true ? '--desc' : (column.isSortedDesc === false ? '--asc' : '')}`;
                     }
                     return (
                       <div {...column.getHeaderProps()} className='th'>
