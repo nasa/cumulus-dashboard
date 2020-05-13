@@ -59,6 +59,8 @@ ReconciliationReports.propTypes = {
   dispatch: PropTypes.func,
 };
 
+ReconciliationReports.displayName = 'Reconciliation Reports';
+
 export default withRouter(withQueryParams()(connect(state => ({
   stats: state.stats,
   reconciliationReports: state.reconciliationReports
