@@ -8,11 +8,11 @@ const { updateInterval } = _config;
 const delay = updateInterval / 1000;
 
 class Timer extends React.Component {
-  constructor () {
+  constructor() {
     super();
     this.state = {
-      running: true,
-      seconds: delay
+      running: false,
+      seconds: -1,
     };
     this.stop = this.stop.bind(this);
     this.start = this.start.bind(this);
@@ -22,71 +22,99 @@ class Timer extends React.Component {
     this.parentClass = this.parentClass.bind(this);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.createTimer(this.props.config);
   }
 
-  componentDidUpdate (prevProps) {
-    if (JSON.stringify(prevProps.config) !== JSON.stringify(this.props.config) ||
-      (this.props.reload && prevProps.reload !== this.props.reload)) {
+  componentDidUpdate(prevProps) {
+    if (
+      JSON.stringify(prevProps.config) !== JSON.stringify(this.props.config) ||
+      (this.props.reload && prevProps.reload !== this.props.reload)
+    ) {
       this.createTimer(this.props.config);
     }
   }
 
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
+  componentWillUnmount() {
+    if (this.cancelInterval) {
+      this.cancelInterval();
+    }
   }
 
-  stop () {
-    if (this.cancelInterval) { this.cancelInterval(); }
+  stop() {
+    if (this.cancelInterval) {
+      this.cancelInterval();
+    }
     this.setState({ seconds: -1, running: false });
   }
 
-  start () {
+  start() {
     this.setState({ seconds: 0, running: true });
     this.createTimer(this.props.config);
   }
 
-  toggle () {
-    if (this.state.running) this.stop();
-    else this.start();
+  toggle() {
+    this.state.running ? this.stop() : this.start();
   }
 
-  createTimer (config) {
-    if (this.cancelInterval) { this.cancelInterval(); }
+  createTimer(config) {
+    if (this.cancelInterval) {
+      this.cancelInterval();
+    }
     const { dispatch, action } = this.props;
+
     this.cancelInterval = this.interval(() => dispatch(action(config)), delay);
   }
 
-  interval (action, seconds) {
+  clearThisInterval(intervalId) {
+    console.warn(`Timer ClearInterval ${intervalId}`);
+    clearInterval(intervalId);
+  }
+
+  interval(action, seconds) {
     action();
+
     const intervalId = setInterval(() => {
-      this.setState({ seconds: seconds });
-      if (seconds === 0) {
-        seconds = delay;
-        action();
+      if (this.state.running) {
+        this.setState({ seconds: seconds });
+        if (seconds === 0) {
+          seconds = delay;
+          action();
+        } else {
+          seconds -= 1;
+        }
       } else {
-        seconds -= 1;
+        this.setState({ seconds: -1 });
       }
     }, 1000);
-    return () => clearInterval(intervalId);
+
+    console.warn(`Timer SetInterval yeilded: ${intervalId}`);
+    return () => this.clearThisInterval(intervalId);
   }
 
-  parentClass () {
+  parentClass() {
     const className = 'form__element__updateToggle';
-    return this.props.noheader ? className + ' form__element__updateToggle-noHeader' : className;
+    return this.props.noheader
+      ? className + ' form__element__updateToggle-noHeader'
+      : className;
   }
 
-  render () {
-    const { seconds } = this.state;
+  render() {
+    const { seconds, running } = this.state;
     return (
       <div className={this.parentClass()}>
-        <span className='form__element__refresh' onClick={() => this.createTimer(this.props.config)}></span>
-        <span className='form-group__updating'>
-          Next update in: { seconds === -1 ? '-' : seconds }
+        <span
+          className="form__element__refresh"
+          onClick={() => this.createTimer(this.props.config)}
+        ></span>
+        <span className="form-group__updating">
+          {running ? `Next update in: ${seconds}` : 'Refresh'}
         </span>
-        <span className='metadata__updated form__element__clickable' onClick={this.toggle}>
-          {seconds === -1 ? 'Start automatic updates' : 'Stop automatic updates'}
+        <span
+          className="metadata__updated form__element__clickable"
+          onClick={this.toggle}
+        >
+          {running ? 'Stop automatic updates' : 'Start automatic updates'}
         </span>
       </div>
     );
@@ -98,7 +126,7 @@ Timer.propTypes = {
   dispatch: PropTypes.func,
   action: PropTypes.func,
   config: PropTypes.object,
-  reload: PropTypes.any
+  reload: PropTypes.any,
 };
 
 export default Timer;
