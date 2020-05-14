@@ -109,8 +109,7 @@ describe('Dashboard Granules Page', () => {
 
       cy.contains('.heading--xlarge', 'Granules');
 
-      cy.contains('a', 'Download Granule List')
-        .should('have.attr', 'href').should('include', 'blob:http://');
+      cy.contains('a', 'Download Granule List');
     });
 
     it('Should update dropdown with label when visiting bookmarkable URL', () => {
