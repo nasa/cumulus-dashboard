@@ -159,6 +159,10 @@ describe('Dashboard Collections Page', () => {
       // collections with which to populate the dropdown on the collection
       // details page.
       cy.visit('/collections');
+      // TODO [DOP, 2020-05-14] Workaround until CUMULUS-1996 is resolved
+      // Stop timer so that it does not dispatch listCollections and change
+      // the order of items in the list after date is cleared
+      cy.get('.form__element__updateToggle .form__element__clickable').click();
       cy.clearStartDateTime();
       cy.wait('@getCollections');
       cy.get('.table .tbody .tr').should('have.length', 5);
