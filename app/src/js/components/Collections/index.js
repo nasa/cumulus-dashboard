@@ -67,4 +67,4 @@ Collections.propTypes = {
   location: PropTypes.object,
 };
 
-export default withRouter((connect(state => ({}))(Collections)));
+export default withRouter((connect(null, null)(Collections)));
