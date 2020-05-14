@@ -83,8 +83,6 @@ class Timer extends React.Component {
         } else {
           seconds -= 1;
         }
-      } else {
-        this.setState({ seconds: -1 });
       }
     }, 1000);
 
