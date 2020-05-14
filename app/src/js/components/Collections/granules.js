@@ -194,9 +194,7 @@ CollectionGranules.propTypes = {
   granules: PropTypes.object,
   dispatch: PropTypes.func,
   location: PropTypes.object,
-  config: PropTypes.object,
   workflowOptions: PropTypes.array,
-  params: PropTypes.object,
   match: PropTypes.object,
 };
 
@@ -204,6 +202,5 @@ export default withRouter(
   connect((state) => ({
     workflowOptions: workflowOptionNames(state),
     granules: state.granules,
-    config: state.config,
   }))(CollectionGranules)
 );

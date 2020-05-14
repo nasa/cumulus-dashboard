@@ -32,9 +32,7 @@ const AddCollection = ({ location = {}, collections, dispatch, schema }) => {
   }, [collectionSchema, collectionId, collectionsMap, isCopy]);
 
   const getBaseRoute = (pk = collectionId) => {
-    return pk && pk !== 'unknown'
-      ? collectionHref(pk)
-      : '/collections';
+    return pk && pk !== 'unknown' ? collectionHref(pk) : '/collections';
   };
 
   return (

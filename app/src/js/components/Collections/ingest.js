@@ -162,4 +162,6 @@ CollectionIngest.propTypes = {
   dispatch: PropTypes.func,
 };
 
-export default withRouter(connect((state) => state)(CollectionIngest));
+export default withRouter(
+  connect((state) => ({ collections: state.collections }))(CollectionIngest)
+);

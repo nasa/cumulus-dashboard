@@ -67,8 +67,9 @@ class CollectionList extends React.Component {
     };
     const { collections, config } = this.props;
     let actions = bulkActions(collections);
-    if (config.enableRecovery)
+    if (config.enableRecovery) {
       actions = actions.concat(recoverAction(collections, actionConfig));
+    }
     return actions;
   }
 
@@ -159,4 +160,11 @@ CollectionList.propTypes = {
 CollectionList.displayName = 'CollectionList';
 
 export { CollectionList };
-export default withRouter(connect((state) => state)(CollectionList));
+export default withRouter(
+  connect((state) => ({
+    config: state.config,
+    collections: state.collections,
+    datepicker: state.datepicker,
+    mmtLinks: state.mmtLinks,
+  }))(CollectionList)
+);
