@@ -19,7 +19,7 @@
     "node": ">=10.16.3"
   },
   "scripts": {
-    "audit-ci": "audit-ci --high -p npm",
+    "audit-ci": "audit-ci --config $(pwd)/audit-ci.json",
     "serve": "NODE_ENV=development webpack-dev-server --open --config webpack.dev.js",
     "serve-hot": "NODE_ENV=development webpack-dev-server --open --hot --config webpack.dev.js",
     "serve-cypress": "SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com npm run serve",
@@ -214,7 +214,7 @@
     "prop-types": "^15.5.10",
     "react": "^16.10.2",
     "react-ace": "^6.2.0",
-    "react-autocomplete": "^1.7.1",
+    "react-autocomplete": "^1.8.1",
     "react-bootstrap": "^1.0.0-beta.14",
     "react-collapsible": "^2.6.3",
     "react-datetime-picker": "2.8.0",

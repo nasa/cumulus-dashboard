@@ -32,7 +32,7 @@ const AddCollection = ({ location = {}, collections, dispatch, schema }) => {
   }, [collectionSchema, collectionId, collectionsMap, isCopy]);
 
   const getBaseRoute = (pk = collectionId) => {
-    return (pk && pk !== 'unknown') ? collectionHref(pk) : '/collections';
+    return pk && pk !== 'unknown' ? collectionHref(pk) : '/collections';
   };
 
   return (
@@ -56,7 +56,9 @@ AddCollection.propTypes = {
   schema: PropTypes.object,
 };
 
-export default withRouter(connect(state => ({
-  collections: state.collections,
-  schema: state.schema
-}))(AddCollection));
+export default withRouter(
+  connect((state) => ({
+    collections: state.collections,
+    schema: state.schema,
+  }))(AddCollection)
+);

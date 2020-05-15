@@ -59,7 +59,7 @@ class ExecutionEvents extends React.Component {
         dispatch={this.props.dispatch}
         tableColumns={tableColumns}
         rowId='id'
-        sortIdx='id'
+        sortId='id'
         props={[]}
         order='asc'
       />

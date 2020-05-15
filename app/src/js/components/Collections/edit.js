@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import {
   getCollection,
   updateCollection,
-  clearUpdateCollection
+  clearUpdateCollection,
 } from '../../actions';
 import { getCollectionId } from '../../utils/format';
 import EditRaw from '../EditRaw/edit-raw';
@@ -14,17 +14,19 @@ import EditRaw from '../EditRaw/edit-raw';
 const SCHEMA_KEY = 'collection';
 
 const EditCollection = ({ match, collections }) => {
-  const { params: { name, version } } = match;
+  const {
+    params: { name, version },
+  } = match;
   const collectionId = getCollectionId({ name, version });
 
   return (
     <EditRaw
       pk={collectionId}
       schemaKey={SCHEMA_KEY}
-      primaryProperty='name'
+      primaryProperty="name"
       state={collections}
       getRecord={() => getCollection(name, version)}
-      updateRecord={payload => updateCollection(payload, name, version)}
+      updateRecord={(payload) => updateCollection(payload, name, version)}
       backRoute={`/collections/collection/${name}/${version}`}
       clearRecordUpdate={clearUpdateCollection}
       hasModal={true}
@@ -34,9 +36,11 @@ const EditCollection = ({ match, collections }) => {
 
 EditCollection.propTypes = {
   match: PropTypes.object,
-  collections: PropTypes.object
+  collections: PropTypes.object,
 };
 
-export default withRouter(connect(state => ({
-  collections: state.collections
-}))(EditCollection));
+export default withRouter(
+  connect((state) => ({
+    collections: state.collections,
+  }))(EditCollection)
+);

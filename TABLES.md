@@ -21,13 +21,13 @@ A basic table component that supports row selection and dumb sorting (see below)
   * Additional options can be found [here](https://github.com/tannerlinsley/react-table/blob/master/docs/api/useTable.md#column-options) or in the documation for a specific plugin hook
 
 - **data**: Array of data items. Items can be any format.
-- **sortIdx**: The id of the column to sort on.
-- **changeSortProps**: Callback when a new sort order is defined, passed an object with the properties `{ sortIdx, order }`.
+- **sortId**: The id of the column to sort on.
+- **changeSortProps**: Callback when a new sort order is defined, passed an object with the properties `{ sortId, order }`.
 - **onSelect**: Callback when a row is selected (or unselected), passed an array containing the ids of all selected rows.
 - **canSelect**: Boolean value defining whether 1. rows can be selected and 2. to render check marks.
 - **rowId**: String or function that defines a particular row's id. Passed to `useTable` options via `getRowId`.
 
-Note, `sortIdx` and `changeSortProps` only apply to components that implement smart searching, such as `list-view`. This base component does internal prop checking to determine whether it uses smart or dumb sorting, based on whether the above props are defined.
+Note, `sortId` and `changeSortProps` only apply to components that implement smart searching, such as `list-view`. This base component does internal prop checking to determine whether it uses smart or dumb sorting, based on whether the above props are defined.
 
 ## `list-view`
 
@@ -38,7 +38,7 @@ Wraps `sortable-table` and implements auto-update and smart sort. When a new sor
 - **list**: Parent data structure, ie `state.granules.list` or `state.collections.list`. Expected to contain `{ data, inflight, error, meta }` properties corresponding to all `list` state objects.
 - **dispatch**: Redux dispatch function.
 - **action**: Redux-style action to send, ie `listCollections`.
-- **sortIdx**: Corresponds to `sortableTable#sortIdx`.
+- **sortId**: Corresponds to `sortableTable#sortId`.
 - **query**: Array of configuration objects passed to `batch-async-command`.
 - **rowId** Corresponds to `sortableTable#rowId`.
 

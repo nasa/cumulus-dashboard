@@ -11,18 +11,18 @@ import {
   listCollections,
   searchCollections,
   filterCollections,
-  clearCollectionsFilter
+  clearCollectionsFilter,
 } from '../../actions';
 import {
   collectionSearchResult,
   lastUpdated,
   tally,
-  getCollectionId
+  getCollectionId,
 } from '../../utils/format';
 import {
   bulkActions,
   recoverAction,
-  tableColumns
+  tableColumns,
 } from '../../utils/table-config/collections';
 import Search from '../Search/search';
 import List from '../Table/Table';
@@ -35,43 +35,45 @@ import pageSizeOptions from '../../utils/page-size';
 const breadcrumbConfig = [
   {
     label: 'Dashboard Home',
-    href: '/'
+    href: '/',
   },
   {
     label: 'Collections',
-    active: true
-  }
+    active: true,
+  },
 ];
 
 class CollectionList extends React.Component {
-  constructor () {
+  constructor() {
     super();
     this.generateQuery = this.generateQuery.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { dispatch } = this.props;
     dispatch(getCumulusInstanceMetadata());
   }
 
-  generateQuery () {
+  generateQuery() {
     return {};
   }
 
-  generateBulkActions () {
+  generateBulkActions() {
     const actionConfig = {
       recover: {
-        action: applyRecoveryWorkflowToCollection
-      }
+        action: applyRecoveryWorkflowToCollection,
+      },
     };
     const { collections, config } = this.props;
     let actions = bulkActions(collections);
-    if (config.enableRecovery) actions = actions.concat(recoverAction(collections, actionConfig));
+    if (config.enableRecovery) {
+      actions = actions.concat(recoverAction(collections, actionConfig));
+    }
     return actions;
   }
 
-  render () {
+  render() {
     const { collections, mmtLinks, datepicker } = this.props;
     const { list } = collections;
     const { startDateTime, endDateTime } = datepicker || {};
@@ -81,26 +83,30 @@ class CollectionList extends React.Component {
     const data = list.data.map((collection) => {
       return {
         ...collection,
-        mmtLink: mmtLinks[getCollectionId(collection)]
+        mmtLink: mmtLinks[getCollectionId(collection)],
       };
     });
     const { count, queriedAt } = list.meta;
     return (
-      <div className='page__component'>
-        <section className='page__section'>
-          <section className='page__section page__section__controls'>
+      <div className="page__component">
+        <section className="page__section">
+          <section className="page__section page__section__controls">
             <Breadcrumbs config={breadcrumbConfig} />
           </section>
-          <div className='page__section__header page__section__header-wrapper'>
-            <h1 className='heading--large heading--shared-content with-description'>{strings.collection_overview}</h1>
+          <div className="page__section__header page__section__header-wrapper">
+            <h1 className="heading--large heading--shared-content with-description">
+              {strings.collection_overview}
+            </h1>
             {lastUpdated(queriedAt)}
           </div>
         </section>
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>
-              {hasTimeFilter ? strings.active_collections : strings.all_collections}
-              <span className='num--title'>{count ? tally(count) : 0}</span>
+        <section className="page__section">
+          <div className="heading__wrapper--border">
+            <h2 className="heading--medium heading--shared-content with-description">
+              {hasTimeFilter
+                ? strings.active_collections
+                : strings.all_collections}
+              <span className="num--title">{count ? tally(count) : 0}</span>
             </h2>
           </div>
 
@@ -113,7 +119,7 @@ class CollectionList extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={getCollectionId}
-            sortIdx='duration'
+            sortId="duration"
           >
             <ListFilters>
               <Search
@@ -121,8 +127,8 @@ class CollectionList extends React.Component {
                 action={searchCollections}
                 format={collectionSearchResult}
                 clear={clearCollectionsSearch}
-                label='Search'
-                placeholder='Collection Name'
+                label="Search"
+                placeholder="Collection Name"
               />
 
               <Dropdown
@@ -132,7 +138,7 @@ class CollectionList extends React.Component {
                 paramKey={'limit'}
                 label={'Results Per Page'}
                 inputProps={{
-                  placeholder: 'Results Per Page'
+                  placeholder: 'Results Per Page',
                 }}
               />
             </ListFilters>
@@ -148,10 +154,17 @@ CollectionList.propTypes = {
   mmtLinks: PropTypes.object,
   dispatch: PropTypes.func,
   config: PropTypes.object,
-  datepicker: PropTypes.object
+  datepicker: PropTypes.object,
 };
 
 CollectionList.displayName = 'CollectionList';
 
 export { CollectionList };
-export default withRouter(connect(state => state)(CollectionList));
+export default withRouter(
+  connect((state) => ({
+    config: state.config,
+    collections: state.collections,
+    datepicker: state.datepicker,
+    mmtLinks: state.mmtLinks,
+  }))(CollectionList)
+);

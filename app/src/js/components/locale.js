@@ -41,6 +41,7 @@ export const strings = new LocalizedStrings({
     view_granules_overview: 'View Granule Overview'
   },
   gitc: {
+    active_collections: 'Active Layers',
     add_collection: 'Add Layer',
     all_collections: 'All Layers',
     all_granules: 'All Products',

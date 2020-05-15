@@ -597,6 +597,27 @@ a:active {
 }
 
 /**************************************************
+  Status Indicator
+**************************************************/
+
+.status-indicator {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: $grey;
+  margin-right: 0.5em;
+
+  &--success {
+    background-color: $light-green;
+  }
+
+  &--failed {
+    background-color: $error-red;
+  }
+}
+
+/**************************************************
   Table
 **************************************************/
 .list-view {

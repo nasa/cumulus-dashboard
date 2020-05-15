@@ -11,11 +11,11 @@ import config from '../../config';
 import Loading from '../LoadingIndicator/loading-indicator';
 
 class CollectionIngest extends React.Component {
-  constructor () {
+  constructor() {
     super();
     this.displayName = 'CollectionIngest';
     this.state = {
-      view: 'json'
+      view: 'json',
     };
     this.get = this.get.bind(this);
     this.renderReadOnlyJson = this.renderReadOnlyJson.bind(this);
@@ -23,7 +23,7 @@ class CollectionIngest extends React.Component {
     this.renderJson = this.renderJson.bind(this);
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     const { name, version } = prevProps.match.params;
     const collectionId = getCollectionId({ name, version });
     const record = prevProps.collections.map[collectionId];
@@ -32,25 +32,24 @@ class CollectionIngest extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { name, version } = this.props.match.params;
     this.get(name, version);
   }
 
-  get (name, version) {
+  get(name, version) {
     this.props.dispatch(getCollection(name, version));
   }
 
-  renderReadOnlyJson (name, data) {
+  renderReadOnlyJson(name, data) {
     return (
       <Ace
-        mode='json'
+        mode="json"
         theme={config.editorTheme}
         name={`collection-read-only-${name}`}
         readOnly={true}
         value={JSON.stringify(data, null, '\t')}
-
-        width='auto'
+        width="auto"
         tabSize={config.tabSize}
         showPrintMargin={false}
         minLines={1}
@@ -60,7 +59,7 @@ class CollectionIngest extends React.Component {
     );
   }
 
-  render () {
+  render() {
     const { name, version } = this.props.match.params;
     const collectionId = getCollectionId(this.props.match.params);
     const record = this.props.collections.map[collectionId];
@@ -69,59 +68,83 @@ class CollectionIngest extends React.Component {
     }
     const { data } = record;
     return (
-      <div className='page__component'>
-        <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>{name}</h1>
-          <Link className='button button--edit button--small form-group__element--right button--green' to={`/collections/edit/${name}/${version}`}>Edit</Link>
+      <div className="page__component">
+        <section className="page__section page__section__header-wrapper">
+          <h1 className="heading--large heading--shared-content with-description">
+            {name}
+          </h1>
+          <Link
+            className="button button--edit button--small form-group__element--right button--green"
+            to={`/collections/edit/${name}/${version}`}
+          >
+            Edit
+          </Link>
           {lastUpdated(data.queriedAt)}
         </section>
-        <section className='page__section'>
-          <div className='tab--wrapper'>
-            <button className={'button--tab ' + (this.state.view === 'json' ? 'button--active' : '')}
-              onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}>JSON View</button>
+        <section className="page__section">
+          <div className="tab--wrapper">
+            <button
+              className={
+                'button--tab ' +
+                (this.state.view === 'json' ? 'button--active' : '')
+              }
+              onClick={() =>
+                this.state.view !== 'json' && this.setState({ view: 'json' })
+              }
+            >
+              JSON View
+            </button>
           </div>
           <div>
-            {this.state.view === 'list' ? this.renderList(data) : this.renderJson(data)}
+            {this.state.view === 'list'
+              ? this.renderList(data)
+              : this.renderJson(data)}
           </div>
         </section>
       </div>
     );
   }
 
-  renderList (data) {
+  renderList(data) {
     const ingest = get(data, 'ingest', {});
     const recipe = get(data, 'recipe', {});
 
     return (
-      <div className='list-view'>
-        <section className='page__section--small'>
-          <h2 className='heading--medium'>Ingest</h2>
+      <div className="list-view">
+        <section className="page__section--small">
+          <h2 className="heading--medium">Ingest</h2>
           <p>Type: {ingest.type}</p>
           <dt>Configuration</dt>
           <dd>Concurrency: {get(ingest, 'config.concurrency', nullValue)}</dd>
           <dd>Endpoint: {get(ingest, 'config.endpoint', nullValue)}</dd>
         </section>
 
-        <section className='page__section--small'>
-          <h2 className='heading--medium'>Recipe</h2>
+        <section className="page__section--small">
+          <h2 className="heading--medium">Recipe</h2>
 
           <dt>Order</dt>
-          {get(recipe, 'order', []).map((step, i) => <dd key={i}>{step}</dd>)}
+          {get(recipe, 'order', []).map((step, i) => (
+            <dd key={i}>{step}</dd>
+          ))}
 
           <dt>Process step</dt>
           <dd>Description: {get(recipe, 'processStep.description', '--')}</dd>
 
           <dt>Input files</dt>
-          {get(recipe, 'processStep.config.inputFiles', []).map((file, i) => <dd key={i}>{file}</dd>)}
+          {get(recipe, 'processStep.config.inputFiles', []).map((file, i) => (
+            <dd key={i}>{file}</dd>
+          ))}
 
           <dt>Output files</dt>
-          {get(recipe, 'processStep.config.outputFiles', []).map((file, i) => <dd key={i}>{file}</dd>)}
+          {get(recipe, 'processStep.config.outputFiles', []).map((file, i) => (
+            <dd key={i}>{file}</dd>
+          ))}
         </section>
       </div>
     );
   }
 
-  renderJson (data) {
+  renderJson(data) {
     return (
       <ul>
         <li>
@@ -136,7 +159,9 @@ class CollectionIngest extends React.Component {
 CollectionIngest.propTypes = {
   match: PropTypes.object,
   collections: PropTypes.object,
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
 };
 
-export default withRouter(connect(state => state)(CollectionIngest));
+export default withRouter(
+  connect((state) => ({ collections: state.collections }))(CollectionIngest)
+);
