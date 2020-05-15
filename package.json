@@ -19,7 +19,7 @@
     "node": ">=10.16.3"
   },
   "scripts": {
-    "audit-ci": "audit-ci --high -p npm",
+    "audit-ci": "audit-ci --config $(pwd)/audit-ci.json",
     "serve": "NODE_ENV=development webpack-dev-server --open --config webpack.dev.js",
     "serve-hot": "NODE_ENV=development webpack-dev-server --open --hot --config webpack.dev.js",
     "serve-cypress": "SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com npm run serve",
