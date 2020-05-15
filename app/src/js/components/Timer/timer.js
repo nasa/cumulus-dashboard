@@ -1,7 +1,13 @@
 'use strict';
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _config from '../../config';
+import {
+  TIMER_START,
+  TIMER_STOP,
+  TIMER_SET_COUNTDOWN,
+} from '../../actions/types';
 
 const { updateInterval } = _config;
 
@@ -9,22 +15,18 @@ const oneSecondTick = 1000;
 const secondsToRefresh = updateInterval / 1000;
 
 class Timer extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      running: false,
-      seconds: -1,
-    };
+  constructor(props) {
+    super(props);
     this.stop = this.stop.bind(this);
     this.start = this.start.bind(this);
     this.toggle = this.toggle.bind(this);
-    this.startTimer = this.startTimer.bind(this);
+    this.refreshTimer = this.refreshTimer.bind(this);
     this.interval = this.interval.bind(this);
     this.parentClass = this.parentClass.bind(this);
   }
 
   componentDidMount() {
-    this.startTimer(this.props.config);
+    this.refreshTimer(this.props.config);
   }
 
   componentDidUpdate(prevProps) {
@@ -32,7 +34,7 @@ class Timer extends React.Component {
       JSON.stringify(prevProps.config) !== JSON.stringify(this.props.config) ||
       (this.props.reload && prevProps.reload !== this.props.reload)
     ) {
-      this.startTimer(this.props.config);
+      this.refreshTimer(this.props.config);
     }
   }
 
@@ -46,32 +48,33 @@ class Timer extends React.Component {
     if (this.cancelInterval) {
       this.cancelInterval();
     }
-    this.setState({ seconds: -1, running: false });
+    this.props.dispatch({ type: TIMER_STOP });
   }
 
   start() {
-    this.setState({ seconds: secondsToRefresh, running: true });
-    this.startTimer(this.props.config);
+    this.props.dispatch({ type: TIMER_START, secondsToRefresh });
+    this.refreshTimer(this.props.config, true);
   }
 
   toggle() {
-    this.state.running ? this.stop() : this.start();
+    this.props.timer.running ? this.stop() : this.start();
   }
 
-  startTimer(config) {
+  refreshTimer(config, startCountdown) {
     if (this.cancelInterval) {
       this.cancelInterval();
     }
     const { dispatch, action } = this.props;
-
-    this.cancelInterval = this.interval(
-      () => dispatch(action(config)),
-      secondsToRefresh
-    );
+    dispatch(action(config));
+    if (this.props.timer.running || startCountdown) {
+      this.cancelInterval = this.interval(
+        () => dispatch(action(config)),
+        secondsToRefresh
+      );
+    }
   }
 
   interval(action, seconds) {
-    action();
     const intervalId = setInterval(() => {
       if (seconds === 0) {
         seconds = secondsToRefresh;
@@ -79,7 +82,10 @@ class Timer extends React.Component {
       } else {
         seconds -= 1;
       }
-      this.setState({ seconds: seconds });
+      this.props.dispatch({
+        type: TIMER_SET_COUNTDOWN,
+        secondsToRefresh: seconds,
+      });
     }, oneSecondTick);
     return () => clearInterval(intervalId);
   }
@@ -92,12 +98,12 @@ class Timer extends React.Component {
   }
 
   render() {
-    const { seconds, running } = this.state;
+    const { seconds, running } = this.props.timer;
     return (
       <div className={this.parentClass()}>
         <span
           className="form__element__refresh"
-          onClick={() => this.startTimer(this.props.config)}
+          onClick={() => this.refreshTimer(this.props.config)}
         ></span>
         <span className="form-group__updating">
           {running ? `Next update in: ${seconds}` : 'Update'}
@@ -114,11 +120,14 @@ class Timer extends React.Component {
 }
 
 Timer.propTypes = {
-  noheader: PropTypes.bool,
-  dispatch: PropTypes.func,
   action: PropTypes.func,
   config: PropTypes.object,
+  dispatch: PropTypes.func,
+  noheader: PropTypes.bool,
   reload: PropTypes.any,
+  timer: PropTypes.object,
 };
 
-export default Timer;
+export default connect((state) => ({
+  timer: state.timer,
+}))(Timer);
