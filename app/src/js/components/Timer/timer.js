@@ -100,7 +100,7 @@ class Timer extends React.Component {
           onClick={() => this.createTimer(this.props.config)}
         ></span>
         <span className="form-group__updating">
-          {running ? `Next update in: ${seconds}` : 'Refresh'}
+          {running ? `Next update in: ${seconds}` : 'Update'}
         </span>
         <span
           className="metadata__updated form__element__clickable"
