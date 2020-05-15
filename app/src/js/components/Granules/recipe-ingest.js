@@ -14,14 +14,13 @@ import { lastUpdated, seconds } from '../../utils/format';
 import Ace from 'react-ace';
 import config from '../../config';
 import Loading from '../app/loading-indicator';
-import AsyncCommands from '../form/dropdown-async-command';
+import DropdownAsync from '../form/dropdown-async-command';
 import { strings } from '.../../locale';
 
 const noop = () => true;
 class GranuleRecipe extends React.Component {
   constructor () {
     super();
-    this.displayName = 'GranuleRecipe';
     this.navigateBack = this.navigateBack.bind(this);
     this.reprocess = this.reprocess.bind(this);
     this.reingest = this.reingest.bind(this);
@@ -140,7 +139,7 @@ class GranuleRecipe extends React.Component {
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>{granuleId}</h1>
-          <AsyncCommands config={dropdownConfig} />
+          <DropdownAsync config={dropdownConfig} />
           {lastUpdated(granule.queriedAt)}
         </section>
 

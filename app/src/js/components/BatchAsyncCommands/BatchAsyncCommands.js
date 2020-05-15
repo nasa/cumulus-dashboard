@@ -197,7 +197,6 @@ export class BatchCommand extends React.Component {
           text={text}
           className={className}
           disabled={!activeModal && (!todo || !!inflight)}
-          successTimeout={0}
           status={!activeModal && inflight ? 'inflight' : null}
         />
         { activeModal && <div className='modal__cover'></div>}

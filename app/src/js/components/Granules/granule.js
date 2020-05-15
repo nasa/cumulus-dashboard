@@ -30,7 +30,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import LogViewer from '../Logs/viewer';
 import ErrorReport from '../Errors/report';
 import Metadata from '../Table/Metadata';
-import AsyncCommands from '../DropDown/dropdown-async-command';
+import DropdownAsync from '../DropDown/dropdown-async-command';
 import _config from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
@@ -119,7 +119,6 @@ class GranuleOverview extends React.Component {
     this.errors = this.errors.bind(this);
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
-    this.displayName = strings.granule;
     this.state = {};
   }
 
@@ -274,7 +273,7 @@ class GranuleOverview extends React.Component {
         </section>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description width--three-quarters'>{granuleId}</h1>
-          <AsyncCommands config={dropdownConfig} />
+          <DropdownAsync config={dropdownConfig} />
           {lastUpdated(granule.createdAt, 'Created')}
 
           <dl className='status--process'>
@@ -327,6 +326,8 @@ GranuleOverview.propTypes = {
 GranuleOverview.defaultProps = {
   skipReloadOnMount: false
 };
+
+GranuleOverview.displayName = strings.granule;
 
 export { GranuleOverview };
 
