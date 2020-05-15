@@ -102,13 +102,15 @@ class Timer extends React.Component {
     return (
       <div className={this.parentClass()}>
         <span
+          data-cy="refreshTimer"
           className="form__element__refresh"
           onClick={() => this.refreshTimer(this.props.config)}
         ></span>
-        <span className="form-group__updating">
+        <span data-cy="startStopLabel" className="form-group__updating">
           {running ? `Next update in: ${seconds}` : 'Update'}
         </span>
         <span
+          data-cy="toggleTimer"
           className="metadata__updated form__element__clickable"
           onClick={this.toggle}
         >

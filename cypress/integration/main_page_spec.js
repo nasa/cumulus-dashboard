@@ -330,5 +330,35 @@ describe('Dashboard Home Page', () => {
       cy.get('ul#distributionErrors').should('not.exist');
       cy.get('ul#distributionSuccesses').should('not.exist');
     });
+
+    describe('The Timer', () => {
+      beforeEach(() => {
+        cy.visit('/');
+      });
+
+      it('begins in the off state', () => {
+        cy.get('[data-cy=toggleTimer]').contains('Start');
+        cy.get('[data-cy=startStopLabel]').contains('Update');
+      });
+      it('retains its state during navigation.', () => {
+        cy.get('[data-cy=toggleTimer]').contains('Start');
+        cy.get('[data-cy=toggleTimer]').click();
+        cy.get('[data-cy=toggleTimer]').contains('Stop');
+        cy.get('[data-cy=startStopLabel]').contains('Next update in:');
+
+        cy.get('nav').contains('Granules').click();
+
+        cy.get('[data-cy=toggleTimer]').contains('Stop');
+        cy.get('[data-cy=startStopLabel]').contains('Next update in:');
+
+        cy.get('[data-cy=toggleTimer]').click();
+        cy.get('[data-cy=startStopLabel]').contains('Update');
+        cy.get('[data-cy=toggleTimer]').contains('Start');
+
+        cy.get('.logo > a').click();
+        cy.get('[data-cy=startStopLabel]').contains('Update');
+        cy.get('[data-cy=toggleTimer]').contains('Start');
+      });
+    });
   });
 });
