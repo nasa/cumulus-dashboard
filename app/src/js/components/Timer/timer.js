@@ -66,11 +66,6 @@ class Timer extends React.Component {
     this.cancelInterval = this.interval(() => dispatch(action(config)), delay);
   }
 
-  clearThisInterval(intervalId) {
-    console.warn(`Timer ClearInterval ${intervalId}`);
-    clearInterval(intervalId);
-  }
-
   interval(action, seconds) {
     action();
 
@@ -86,8 +81,7 @@ class Timer extends React.Component {
       }
     }, 1000);
 
-    console.warn(`Timer SetInterval yeilded: ${intervalId}`);
-    return () => this.clearThisInterval(intervalId);
+    return () => clearInterval(intervalId);
   }
 
   parentClass() {

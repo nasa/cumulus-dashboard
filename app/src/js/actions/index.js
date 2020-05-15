@@ -73,16 +73,10 @@ export const refreshAccessToken = (token) => {
 
 export const setTokenState = (token) => ({ type: types.SET_TOKEN, token });
 
-const clearThisInterval = (intervalId) => {
-  console.warn(`clearInterval ${intervalId}`);
-  clearInterval(intervalId);
-};
-
 export const interval = function (action, wait, immediate) {
   if (immediate) { action(); }
   const intervalId = setInterval(action, wait);
-  console.warn(`setInterval ${intervalId}`);
-  return () => clearThisInterval(intervalId);
+  return () => clearInterval(intervalId);
 };
 
 export const getCollection = (name, version) => ({
