@@ -295,8 +295,7 @@ describe('Rules page', () => {
       cy.get('.modal-content').should('not.be', 'visible');
     });
 
-    it.skip('Should display error workflow when a rule fails to rerun.', () => {
-      // TODO [MHS, 2020-05-11] this need to have work done before it can pass: CUMULUS-1990 elevate errors to the user.
+    it('Should display error when a rule fails to rerun.', () => {
       cy.server();
       cy.route({
         method: 'PUT',
@@ -309,6 +308,7 @@ describe('Rules page', () => {
       cy.get('.dropdown__menu').contains('Rerun').click();
       cy.get('.button--submit').click();
       cy.get('.modal-content').should('not.be', 'visible');
+      cy.contains('.error__report', 'Error');
     });
   });
 });

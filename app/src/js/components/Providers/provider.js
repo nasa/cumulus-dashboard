@@ -19,7 +19,7 @@ import {
 } from '../../utils/format';
 import Loading from '../LoadingIndicator/loading-indicator';
 import LogViewer from '../Logs/viewer';
-import AsyncCommands from '../DropDown/dropdown-async-command';
+import DropdownAsync from '../DropDown/dropdown-async-command';
 import ErrorReport from '../Errors/report';
 import Metadata from '../Table/Metadata';
 import _config from '../../config';
@@ -134,7 +134,7 @@ class ProviderOverview extends React.Component {
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>{providerId}</h1>
-          <AsyncCommands config={dropdownConfig} />
+          <DropdownAsync config={dropdownConfig} />
           <Link
             className='button button--small button--green button--edit form-group__element--right'
             to={'/providers/edit/' + providerId}>Edit</Link>
