@@ -124,14 +124,14 @@ class AsyncCommand extends React.Component {
           </DefaultModal>
           <DefaultModal
             className='async__modal--success'
-            onCancel={success}
+            onConfirm={success}
             onCloseModal={this.cancel}
-            cancelButtonText={'Close'}
-            hasConfirmButton={false}
+            confirmButtonText={'Close'}
+            confirmButtonClass='button--cancel button__arrow--md'
+            hasCancelButton={false}
             title={text}
             children={postActionText}
             showModal={successModal}
-            cancelButtonClass={'button--cancel'}
           />
         </div>
       </div>
