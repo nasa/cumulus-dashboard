@@ -8,6 +8,7 @@ import {
   TIMER_STOP,
   TIMER_SET_COUNTDOWN,
 } from '../../actions/types';
+import isEqual from 'lodash.isequal';
 
 const { updateInterval } = _config;
 
@@ -32,7 +33,8 @@ class Timer extends React.Component {
   componentDidUpdate(prevProps) {
     if (
       JSON.stringify(prevProps.config) !== JSON.stringify(this.props.config) ||
-      (this.props.reload && prevProps.reload !== this.props.reload)
+      (this.props.reload && prevProps.reload !== this.props.reload) ||
+      !isEqual(prevProps.datepicker, this.props.datepicker)
     ) {
       this.refreshTimer(this.props.config);
     }
@@ -124,6 +126,7 @@ class Timer extends React.Component {
 Timer.propTypes = {
   action: PropTypes.func,
   config: PropTypes.object,
+  datepicker: PropTypes.object,
   dispatch: PropTypes.func,
   noheader: PropTypes.bool,
   reload: PropTypes.any,
@@ -131,5 +134,6 @@ Timer.propTypes = {
 };
 
 export default connect((state) => ({
+  datepicker: state.datepicker,
   timer: state.timer,
 }))(Timer);
