@@ -4,21 +4,22 @@ import PropTypes from 'prop-types';
 import Loading from '../LoadingIndicator/loading-indicator';
 
 class Overview extends React.Component {
-  constructor () {
+  constructor() {
     super();
     this.displayName = 'Overview';
   }
 
-  render () {
+  render() {
     const { inflight, items } = this.props;
     return (
-      <div className='overview-num__wrapper'>
+      <div className="overview-num__wrapper" data-cy="overview-num">
         {inflight ? <Loading /> : null}
         <ul>
-          {items.map(d => (
+          {items.map((d) => (
             <li key={d[1]}>
-              <span className='overview-num overview-num--small' to='/'>
-                <span className='num--large num--large--color'>{d[0]}</span><span className='num-status'>{d[1]}</span>
+              <span className="overview-num overview-num--small" to="/">
+                <span className="num--large num--large--color">{d[0]}</span>
+                <span className="num-status">{d[1]}</span>
               </span>
             </li>
           ))}
@@ -30,7 +31,7 @@ class Overview extends React.Component {
 
 Overview.propTypes = {
   items: PropTypes.array,
-  inflight: PropTypes.bool
+  inflight: PropTypes.bool,
 };
 
 export default Overview;

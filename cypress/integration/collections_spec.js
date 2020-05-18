@@ -490,5 +490,34 @@ describe('Dashboard Collections Page', () => {
       // Ensure we have closed the modal.
       cy.get('.modal-content').should('not.be.visible');
     });
+
+    it('Should display Granule Metrics that match the datepicker selection', () => {
+      cy.visit('/collections/collection/MOD09GQ/006');
+
+      cy.get('[data-cy=endDateTime]').within(() => {
+        cy.get('input[name=month]').click().type(3);
+        cy.get('input[name=day]').click().type(17);
+        cy.get('input[name=year]').click().type(2009);
+        cy.get('input[name=hour12]').click().type(3);
+        cy.get('input[name=minute]').click().type(37);
+        cy.get('input[name=minute]').should('have.value', '37');
+        cy.get('select[name=amPm]').select('PM');
+      });
+      cy.get('[data-cy=overview-num]').within(() => {
+        cy.get('li')
+          .first().should('contain', '--').and('contain', 'Completed')
+          .next().should('contain', '--').and('contain', 'Failed')
+          .next().should('contain', '--').and('contain', 'Running');
+      });
+
+      cy.get('[data-cy=endDateTime] > .react-datetime-picker > .react-datetime-picker__wrapper > .react-datetime-picker__clear-button > .react-datetime-picker__clear-button__icon').click();
+
+      cy.get('[data-cy=overview-num]').within(() => {
+        cy.get('li')
+          .first().should('contain', 7).and('contain', 'Completed')
+          .next().should('contain', 2).and('contain', 'Failed')
+          .next().should('contain', 2).and('contain', 'Running');
+      });
+    });
   });
 });
