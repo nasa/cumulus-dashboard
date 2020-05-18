@@ -12,7 +12,8 @@ class DropdownAsync extends React.Component {
     this.onOutsideClick = this.onOutsideClick.bind(this);
     this.toggleActions = this.toggleActions.bind(this);
     this.close = this.close.bind(this);
-    this.onSuccess = this.onSuccess.bind(this);
+    this.handleSuccess = this.handleSuccess.bind(this);
+    this.handleError = this.handleError.bind(this);
   }
 
   componentDidMount () {
@@ -24,22 +25,31 @@ class DropdownAsync extends React.Component {
   }
 
   onOutsideClick (e) {
-    if (!findDOMNode(this).contains(e.target)) this.setState({ showActions: false });
+    if (!findDOMNode(this).contains(e.target)) this.close();
   }
 
   toggleActions (e) {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({ showActions: !this.state.showActions });
+    this.setState((prevState) => {
+      return {
+        showActions: !prevState.showActions
+      };
+    });
   }
 
   close () {
     this.setState({ showActions: false });
   }
 
-  onSuccess (success) {
-    this.setState({ showActions: false });
-    if (typeof success === 'function') success();
+  handleSuccess (onSuccess) {
+    this.close();
+    if (typeof onSuccess === 'function') onSuccess();
+  }
+
+  handleError (onError) {
+    this.close();
+    if (typeof onError === 'function') onError();
   }
 
   render () {
@@ -53,8 +63,8 @@ class DropdownAsync extends React.Component {
         })}>
           {config.map(d => <li key={d.text}>
             <AsyncCommand action={d.action}
-              success={() => this.onSuccess(d.success)}
-              error={this.close}
+              success={() => this.handleSuccess(d.success)}
+              error={() => this.handleError(d.error)}
               status={d.status}
               disabled={d.disabled}
               confirmAction={d.confirmAction}

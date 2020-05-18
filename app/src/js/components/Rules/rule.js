@@ -25,7 +25,7 @@ import {
 } from '../../actions';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Metadata from '../Table/Metadata';
-import AsyncCommands from '../DropDown/dropdown-async-command';
+import DropdownAsync from '../DropDown/dropdown-async-command';
 import ErrorReport from '../Errors/report';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
@@ -117,7 +117,8 @@ class Rule extends React.Component {
       get(rules.map, [ruleName, 'error']),
       get(rules.deleted, [ruleName, 'error']),
       get(rules.enabled, [ruleName, 'error']),
-      get(rules.disabled, [ruleName, 'error'])
+      get(rules.disabled, [ruleName, 'error']),
+      get(rules.rerun, [ruleName, 'error'])
     ].filter(Boolean);
   }
 
@@ -181,7 +182,7 @@ class Rule extends React.Component {
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description'>{ruleName}</h1>
-            <AsyncCommands config={dropdownConfig}/>
+            <DropdownAsync config={dropdownConfig}/>
 
             <Link
               className='button button--copy button--small button--green form-group__element--right'
@@ -194,21 +195,21 @@ class Rule extends React.Component {
             <Link
               className='button button--edit button--small button--green form-group__element--right'
               to={`/rules/edit/${ruleName}`}>Edit Rule</Link>
-            {lastUpdated(data.timestamp)}
+            {lastUpdated(data.timestamp || data.updatedAt)}
           </div>
         </section>
         <section className='page__section'>
-          {errors.length ? <ErrorReport report={errors} /> : null}
+          {errors.length > 0 && <ErrorReport report={errors} />}
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>Rule Overview</h2>
           </div>
           <div className="rule__state">
-            {data.state ? (
+            {data.state && (
               <dl className='status--process'>
                 <dt>State:</dt>
                 <dd className={`status--badge status--badge__${data.state.toLowerCase()}`}>{displayCase(data.state)}</dd>
               </dl>
-            ) : null}
+            )}
           </div>
           <div className="rule__content">
             <Metadata data={data} accessors={metaAccessors} />
