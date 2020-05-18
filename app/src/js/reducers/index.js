@@ -13,6 +13,7 @@ import pdrs from './pdrs';
 import providers from './providers';
 import logs from './logs';
 import schema from './schema';
+import timer from './timer';
 import workflows from './workflows';
 import executions from './executions';
 import executionStatus from './execution-status';
@@ -38,6 +39,7 @@ export const reducers = {
   granules,
   granuleCSV,
   stats,
+  timer,
   pdrs,
   providers,
   logs,
@@ -48,10 +50,11 @@ export const reducers = {
   executionLogs,
   operations,
   rules,
-  reconciliationReports
+  reconciliationReports,
 };
 
-export const createRootReducer = (history) => combineReducers({
-  router: connectRouter(history),
-  ...reducers
-});
+export const createRootReducer = (history) =>
+  combineReducers({
+    router: connectRouter(history),
+    ...reducers,
+  });
