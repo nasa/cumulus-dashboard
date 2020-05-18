@@ -74,19 +74,27 @@ export const refreshAccessToken = (token) => {
 export const setTokenState = (token) => ({ type: types.SET_TOKEN, token });
 
 export const interval = function (action, wait, immediate) {
-  if (immediate) { action(); }
+  if (immediate) {
+    action();
+  }
   const intervalId = setInterval(action, wait);
   return () => clearInterval(intervalId);
 };
 
-export const getCollection = (name, version) => ({
-  [CALL_API]: {
-    type: types.COLLECTION,
-    method: 'GET',
-    id: getCollectionId({ name, version }),
-    path: `collections?name=${name}&version=${version}`
-  }
-});
+export const getCollection = (name, version) => {
+  return (dispatch, getState) => {
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    return dispatch({
+      [CALL_API]: {
+        type: types.COLLECTION,
+        method: 'GET',
+        id: getCollectionId({ name, version }),
+        path: `collections?name=${name}&version=${version}`,
+        qs: timeFilters,
+      },
+    });
+  };
+};
 
 export const getApiVersion = () => {
   return (dispatch) => {

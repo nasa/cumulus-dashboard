@@ -1,8 +1,9 @@
 'use strict';
+import { get } from 'object-path';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { Link, withRouter } from 'react-router-dom';
 import {
   clearGranulesFilter,
   clearGranulesSearch,
@@ -13,30 +14,30 @@ import {
   listGranules,
   searchGranules,
 } from '../../actions';
-import { get } from 'object-path';
 import {
   collectionName as collectionLabelForId,
-  tally,
-  lastUpdated,
-  getCollectionId,
   collectionNameVersion,
+  getCollectionId,
+  lastUpdated,
+  tally,
 } from '../../utils/format';
+import pageSizeOptions from '../../utils/page-size';
+import statusOptions from '../../utils/status';
+import isEqual from 'lodash.isequal';
+import {
+  reingestAction,
+  tableColumns,
+} from '../../utils/table-config/granules';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Dropdown from '../DropDown/dropdown';
 import SimpleDropdown from '../DropDown/simple-dropdown';
-import Search from '../Search/search';
-import statusOptions from '../../utils/status';
-import pageSizeOptions from '../../utils/page-size';
-import List from '../Table/Table';
 import Bulk from '../Granules/bulk';
-import Overview from '../Overview/overview';
-import {
-  tableColumns,
-  reingestAction,
-} from '../../utils/table-config/granules';
-import { strings } from '../locale';
-import DeleteCollection from '../DeleteCollection/DeleteCollection';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
+import { strings } from '../locale';
+import Overview from '../Overview/overview';
+import Search from '../Search/search';
+import List from '../Table/Table';
 
 const breadcrumbConfig = [
   {
@@ -76,7 +77,11 @@ class CollectionOverview extends React.Component {
     const { name, version } = this.props.match.params;
     const { name: prevName, version: prevVersion } = prevProps.match.params;
 
-    if (name !== prevName || version !== prevVersion) {
+    if (
+      name !== prevName ||
+      version !== prevVersion ||
+      !isEqual(this.props.datepicker, prevProps.datepicker)
+    ) {
       this.load();
     }
   }
@@ -322,17 +327,19 @@ class CollectionOverview extends React.Component {
 CollectionOverview.displayName = 'CollectionOverview';
 
 CollectionOverview.propTypes = {
-  match: PropTypes.object,
-  history: PropTypes.object,
+  collections: PropTypes.object,
+  datepicker: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
-  collections: PropTypes.object,
+  history: PropTypes.object,
+  match: PropTypes.object,
   router: PropTypes.object,
 };
 
 export default withRouter(
   connect((state) => ({
     collections: state.collections,
+    datepicker: state.datepicker,
     granules: state.granules,
   }))(CollectionOverview)
 );
