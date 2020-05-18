@@ -28,6 +28,10 @@ const store = mockStore({
     recovered: {},
     executed: {},
     meta: {}
+  },
+  datepicker: {
+    startDateTime: null,
+    endDateTime: null,
   }
 });
 const getActionType = (action) => action.type;
