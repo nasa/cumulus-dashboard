@@ -16,7 +16,6 @@ import ListActions from '../ListActions/ListActions';
 class List extends React.Component {
   constructor (props) {
     super(props);
-    this.displayName = 'List';
     this.queryNewPage = this.queryNewPage.bind(this);
     this.queryNewSort = this.queryNewSort.bind(this);
     this.updateSelection = this.updateSelection.bind(this);
@@ -25,12 +24,12 @@ class List extends React.Component {
     this.getQueryConfig = this.getQueryConfig.bind(this);
 
     const initialPage = 1;
-    const initialsortId = props.sortId;
+    const initialSortId = props.sortId;
     const initialOrder = 'desc';
 
     this.state = {
       page: initialPage,
-      sortId: initialsortId,
+      sortId: initialSortId,
       order: initialOrder,
       selected: [],
       clearSelected: false,
@@ -38,7 +37,7 @@ class List extends React.Component {
       queryConfig: {
         page: initialPage,
         order: initialOrder,
-        sort_by: initialsortId,
+        sort_by: initialSortId,
         ...(props.query || {})
       },
       params: {},
@@ -131,6 +130,7 @@ class List extends React.Component {
       children,
       bulkActions,
       rowId,
+      sortId: initialSortId,
       list,
       tableColumns,
       data
@@ -182,6 +182,7 @@ class List extends React.Component {
               canSelect={hasActions}
               rowId={rowId}
               onSelect={this.updateSelection}
+              initialSortId={initialSortId}
               sortId={sortId}
               changeSortProps={this.queryNewSort}
               order={order}

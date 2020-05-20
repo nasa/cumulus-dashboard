@@ -2,12 +2,30 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { nullValue } from '../format';
+import { nullValue, fullDate } from '../format';
 
 export const tableColumns = [
   {
-    Header: 'Report filename',
-    accessor: row => <Link to={`/reconciliation-reports/report/${row.reconciliationReportName}`}>{row.reconciliationReportName}</Link>
+    Header: 'Name',
+    accessor: row => <Link to={`/reconciliation-reports/report/${row.name}`}>{row.name}</Link>
+  },
+  {
+    Header: 'Report Type',
+    accessor: 'type'
+  },
+  {
+    Header: 'Status',
+    accessor: 'status'
+  },
+  {
+    Header: 'Date Generated',
+    accessor: row => fullDate(row.createdAt)
+  },
+  {
+    Header: 'Download Report'
+  },
+  {
+    Header: 'Delete Report'
   }
 ];
 
