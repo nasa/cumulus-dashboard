@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "name": "cumulus-api",
+    "stack": "anyStack",
+    "table": "reconciliationReport",
+    "limit": 10,
+    "page": 1,
+    "count": 2,
+    "fixtureComment": "These files need to exist and be uploaded into the localstack s3 buckets that match the location"
+  },
+  "results": [
+    {
+      "name": "inventoryReport-20200114T205238781",
+      "location": "s3://localbucket/localrun/reconciliation-reports/inventoryReport-20200114T205238781.json",
+      "type": "Inventory",
+      "status": "Generated"
+    },
+    {
+      "name": "inventoryReport-20200114T202529026",
+      "location": "s3://localbucket/localrun/reconciliation-reports/inventoryReport-20200114T202529026.json",
+      "type": "Inventory",
+      "status": "Generated"
+    }
+  ]
+}
