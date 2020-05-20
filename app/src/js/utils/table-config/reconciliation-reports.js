@@ -7,6 +7,7 @@ import { nullValue, fullDate } from '../format';
 export const tableColumns = [
   {
     Header: 'Name',
+    id: 'name',
     accessor: row => <Link to={`/reconciliation-reports/report/${row.name}`}>{row.name}</Link>
   },
   {
@@ -19,6 +20,7 @@ export const tableColumns = [
   },
   {
     Header: 'Date Generated',
+    id: 'createdAt',
     accessor: row => fullDate(row.createdAt)
   },
   {
