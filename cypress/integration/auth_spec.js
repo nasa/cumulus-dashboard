@@ -33,7 +33,7 @@ describe('Dashboard authentication', () => {
 
   it('should logout user on invalid JWT token', () => {
     cy.window().its('appStore').then((store) => {
-      cy.task('generateJWT', { expirationTime: NaN }).then((invalidJwt) => {
+      cy.task('generateJWT', { expirationTime: 0 }).then((invalidJwt) => {
         // Dispatch an action to set the token
         store.dispatch({
           type: SET_TOKEN,
