@@ -36,6 +36,7 @@ IndeterminateCheckbox.propTypes = {
 
 const SortableTable = ({
   sortId,
+  initialSortId,
   rowId,
   order = 'desc',
   canSelect,
@@ -56,7 +57,7 @@ const SortableTable = ({
     []
   );
 
-  const shouldManualSort = !!sortId;
+  const shouldManualSort = !!initialSortId;
 
   const {
     getTableProps,
@@ -221,6 +222,7 @@ SortableTable.propTypes = {
   data: PropTypes.array,
   order: PropTypes.string,
   sortId: PropTypes.string,
+  initialSortId: PropTypes.string,
   changeSortProps: PropTypes.func,
   onSelect: PropTypes.func,
   canSelect: PropTypes.bool,

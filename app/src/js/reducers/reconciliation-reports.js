@@ -45,10 +45,7 @@ export default createReducer(initialState, {
     };
   },
   [RECONCILIATIONS]: (state, action) => {
-    // response.results is a array of string filenames
-    const reports = action.data.results.map((filename) => ({
-      reconciliationReportName: filename,
-    }));
+    const reports = action.data.results;
     state.list.data = reports;
     state.list.meta = assignDate(action.data.meta);
     state.list.inflight = false;

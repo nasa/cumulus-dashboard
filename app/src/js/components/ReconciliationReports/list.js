@@ -80,8 +80,8 @@ class ReconciliationReportList extends React.Component {
             tableColumns={tableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            rowId='reconciliationReportName'
-            sortId='filename'
+            rowId='name'
+            sortId='createdAt'
           >
             <ListFilters>
               <Search dispatch={this.props.dispatch}
