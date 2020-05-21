@@ -15,7 +15,7 @@ export const fullDate = function (datestring) {
 
 export const dateOnly = function (datestring) {
   if (!datestring) { return nullValue; }
-  return moment(datestring).format('MM/DD/YY');
+  return moment(datestring).format('MM/DD/YYYY');
 };
 
 export const parseJson = function (jsonString) {
