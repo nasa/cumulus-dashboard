@@ -37,22 +37,19 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.contains('.table .thead .th', 'Date Generated');
       cy.contains('.table .thead .th', 'Download Report');
       cy.contains('.table .thead .th', 'Delete Report');
-      // cy.get('.table .tbody .tr').should('have.length', 2);
-      // cy.contains('.table .tbody .tr a', 'report-2020-01-14T20:25:29.026Z.json')
-      //   .should('have.attr', 'href', '/reconciliation-reports/report/report-2020-01-14T20:25:29.026Z.json');
-      // cy.contains('.table .tbody .tr a', 'report-2020-01-14T20:52:38.781Z.json')
-      //   .should('have.attr', 'href', '/reconciliation-reports/report/report-2020-01-14T20:52:38.781Z.json');
+      cy.get('.table .tbody .tr').should('have.length', 2);
+      cy.get('[data-value="inventoryReport-20200114T202529026"] > .table__main-asset > a').should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T202529026');
+      cy.get('[data-value="inventoryReport-20200114T205238781"] > .table__main-asset > a').should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T205238781');
     });
 
-    // TODO add back in when api is updated
-    it.skip('displays a link to an individual report', () => {
+    it('displays a link to an individual report', () => {
       cy.visit('/reconciliation-reports');
 
-      cy.contains('.table .tbody .tr a', 'report-2020-01-14T20:52:38.781Z.json')
-        .should('have.attr', 'href', '/reconciliation-reports/report/report-2020-01-14T20:52:38.781Z.json')
+      cy.contains('.table .tbody .tr a', 'inventoryReport-20200114T205238781')
+        .should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T205238781')
         .click();
 
-      cy.contains('.heading--large', 'report-2020-01-14T20:52:38.781Z.json');
+      cy.contains('.heading--large', 'inventoryReport-20200114T205238781');
 
       /** Table Cards **/
 
