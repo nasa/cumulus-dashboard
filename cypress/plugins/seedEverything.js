@@ -1,5 +1,5 @@
 const { testUtils } = require('@cumulus/api');
-const { promiseS3Upload } = require('@cumulus/aws-client/s3');
+const { promiseS3Upload } = require('@cumulus/aws-client/S3');
 const fs = require('fs');
 const serveUtils = require('@cumulus/api/bin/serveUtils');
 const { eraseDataStack } = require('@cumulus/api/bin/serve');
