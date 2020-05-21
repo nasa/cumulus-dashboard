@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     of the data based on the timer. This could take a long time, depending on the number of granules.
     This has been changed so that the data is only fetched when the user clicks the "Download CSV" button.
 
+- **CUMULUS-1913**
+  - Add datepicker to reconcilation-reports page
+
 - **CUMULUS-1916**
   - reconcilation-reports page now requires Cumulus API version >= v1.23.0
 
