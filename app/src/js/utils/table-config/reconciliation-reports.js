@@ -21,7 +21,7 @@ export const tableColumns = [
   {
     Header: 'Date Generated',
     id: 'createdAt',
-    accessor: dateOnly
+    accessor: row => dateOnly(row.createdAt)
   },
   {
     Header: 'Download Report'
