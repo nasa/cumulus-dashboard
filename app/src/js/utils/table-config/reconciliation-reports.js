@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { nullValue, fullDate } from '../format';
+import { nullValue, dateOnly } from '../format';
 
 export const tableColumns = [
   {
@@ -21,7 +21,7 @@ export const tableColumns = [
   {
     Header: 'Date Generated',
     id: 'createdAt',
-    accessor: row => fullDate(row.createdAt)
+    accessor: dateOnly
   },
   {
     Header: 'Download Report'
