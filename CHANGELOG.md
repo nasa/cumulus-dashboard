@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
+### Changed
+- **CUMULUS-1888**
+  - On the Granules page, CSV data was being refreshed in the background alog with the rest
+    of the data based on the timer. This could take a long time, depending on the number of granules.
+    This has been changed so that the data is only fetched when the user clicks the "Download CSV" button.
+
 ## [v1.8.1]
 
 ### Changed
