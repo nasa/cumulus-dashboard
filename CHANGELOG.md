@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Replace individual tables in reconciliation report with tabs that change which table is displayed on click
 
 - **CUMULUS-1920**
+  - Add additional columns to reconciliation report list
+
+- **CUMULUS-1920**
   - Updated styles for granule reingest modal
 
 - **CUMULUS-1948**
