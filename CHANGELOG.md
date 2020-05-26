@@ -4,10 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
 ## [Unreleased]
 
+## [v1.9.0]
+
+### BREAKING CHANGES
+
+- This dashboard version requires Cumulus API version >= v1.23.0
 
 ### Changed
+
 - **CUMULUS-1888**
   - On the Granules page, CSV data was being refreshed in the background alog with the rest
     of the data based on the timer. This could take a long time, depending on the number of granules.
@@ -18,11 +25,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1916**
   - reconcilation-reports page now requires Cumulus API version >= v1.23.0
-
-### BREAKING CHANGES
-
-- This dashboard version requires Cumulus API version >= v1.23.0
-
 
 ## [v1.8.1]
 
@@ -407,7 +409,8 @@ Fix for serving the dashboard through the Cumulus API.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.8.1...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.9.0...HEAD
+[v1.9.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.8.1...v1.9.0
 [v1.8.1]: https://github.com/nasa/cumulus-dashboard/compare/v1.8.0...v1.8.1
 [v1.8.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.7.2...v1.8.0
 [v1.7.2]: https://github.com/nasa/cumulus-dashboard/compare/v1.7.1...v1.7.2
