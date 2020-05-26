@@ -266,4 +266,8 @@ ReconciliationReport.defaultProps = {
 };
 
 export { ReconciliationReport };
-export default withRouter(connect(state => state)(ReconciliationReport));
+export default withRouter(
+  connect((state) => ({
+    reconciliationReports: state.reconciliationReports,
+  }))(ReconciliationReport)
+);
