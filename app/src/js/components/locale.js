@@ -34,6 +34,7 @@ export const strings = new LocalizedStrings({
     logo: 'cumulus-logo.png',
     operations: 'Operations',
     pdrs: 'Pdrs',
+    reconciliation_reports: 'Reconciliation Reports',
     remove_from_cmr: 'Remove from CMR',
     running_granules: 'Running Granules',
     total_granules: 'Total Granules',
@@ -69,8 +70,10 @@ export const strings = new LocalizedStrings({
     logo: 'gitc-logo.png',
     operations: 'Operations',
     pdrs: 'Pdrs',
+    reconciliation_reports: 'Reconciliation Reports',
     remove_from_cmr: 'Remove from OnEarth',
     running_granules: 'Running Products',
+    total_granules: 'Total Products',
     view_all_granules: 'View All Products',
     view_granules_overview: 'View Product Overview'
   }
