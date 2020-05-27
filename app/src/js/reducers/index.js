@@ -3,7 +3,7 @@ import { connectRouter } from 'connected-react-router';
 import api from './api';
 import apiVersion from './api-version';
 import collections from './collections';
-import config from './config';
+import config from './utils/config';
 import dist from './dist';
 import datepicker from './datepicker';
 import granules from './granules';
@@ -13,6 +13,7 @@ import pdrs from './pdrs';
 import providers from './providers';
 import logs from './logs';
 import schema from './schema';
+import timer from './timer';
 import workflows from './workflows';
 import executions from './executions';
 import executionStatus from './execution-status';
@@ -23,7 +24,7 @@ import reconciliationReports from './reconciliation-reports';
 import mmtLinks from './mmtLinks';
 import cumulusInstance from './cumulus-instance';
 
-const def = (state = {}, action) => state;
+const def = (state, _action) => state || {};
 
 export const reducers = {
   def,
@@ -38,6 +39,7 @@ export const reducers = {
   granules,
   granuleCSV,
   stats,
+  timer,
   pdrs,
   providers,
   logs,
@@ -48,10 +50,11 @@ export const reducers = {
   executionLogs,
   operations,
   rules,
-  reconciliationReports
+  reconciliationReports,
 };
 
-export const createRootReducer = (history) => combineReducers({
-  router: connectRouter(history),
-  ...reducers
-});
+export const createRootReducer = (history) =>
+  combineReducers({
+    router: connectRouter(history),
+    ...reducers,
+  });

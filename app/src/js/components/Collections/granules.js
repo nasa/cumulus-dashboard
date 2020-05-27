@@ -10,12 +10,12 @@ import {
   clearGranulesFilter,
   applyWorkflowToGranule,
   searchGranules,
-  clearGranulesSearch
+  clearGranulesSearch,
 } from '../../actions';
 import {
   simpleDropdownOption,
   bulkActions,
-  tableColumns
+  tableColumns,
 } from '../../utils/table-config/granules';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
@@ -32,7 +32,7 @@ const CollectionGranules = ({
   match,
   location,
   granules,
-  workflowOptions
+  workflowOptions,
 }) => {
   const { params } = match;
   const { name: collectionName, version: collectionVersion } = params;
@@ -48,76 +48,76 @@ const CollectionGranules = ({
   const breadcrumbConfig = [
     {
       label: 'Dashboard Home',
-      href: '/'
+      href: '/',
     },
     {
       label: 'Collections',
-      href: '/collections'
+      href: '/collections',
     },
     {
       label: 'Collection Overview',
-      href: `/collections/collection/${collectionName}/${collectionVersion}`
+      href: `/collections/collection/${collectionName}/${collectionVersion}`,
     },
     {
       label: 'Collection Granules',
       href: `/collections/collection/${collectionName}/${collectionVersion}/granules`,
-      active: view === 'all'
-    }
+      active: view === 'all',
+    },
   ];
 
   if (view !== 'all') {
     breadcrumbConfig.push({
       label: displayCase(view),
-      active: true
+      active: true,
     });
   }
 
-  function generateQuery () {
+  function generateQuery() {
     const options = { collectionId };
     if (view && view !== 'all') options.status = view;
     return options;
   }
 
-  function getView () {
+  function getView() {
     if (pathname.includes('/granules/completed')) return 'completed';
     if (pathname.includes('/granules/processing')) return 'running';
     if (pathname.includes('/granules/failed')) return 'failed';
     return 'all';
   }
 
-  function generateBulkActions () {
+  function generateBulkActions() {
     const actionConfig = {
       execute: {
         options: getExecuteOptions(),
-        action: applyWorkflow
-      }
+        action: applyWorkflow,
+      },
     };
 
     return bulkActions(granules, actionConfig);
   }
 
-  function selectWorkflow (selector, workflow) {
+  function selectWorkflow(selector, workflow) {
     setWorkflow(workflow);
   }
 
-  function applyWorkflow (granuleId) {
+  function applyWorkflow(granuleId) {
     return applyWorkflowToGranule(granuleId, workflow);
   }
 
-  function getExecuteOptions () {
+  function getExecuteOptions() {
     return [
       simpleDropdownOption({
         handler: selectWorkflow,
         label: 'workflow',
         value: workflow,
-        options: workflowOptions
-      })
+        options: workflowOptions,
+      }),
     ];
   }
 
   return (
     <div className="page__component">
-      <section className='page__section page__section__controls'>
+      <section className="page__section page__section__controls">
         <Breadcrumbs config={breadcrumbConfig} />
       </section>
       <section className="page__section page__section__header-wrapper">
@@ -149,8 +149,8 @@ const CollectionGranules = ({
           action={listGranules}
           query={query}
           bulkActions={generateBulkActions()}
-          rowId='granuleId'
-          sortIdx='timestamp'
+          rowId="granuleId"
+          sortId="timestamp"
           tableColumns={tableColumns}
         >
           <ListFilters>
@@ -158,18 +158,18 @@ const CollectionGranules = ({
               dispatch={dispatch}
               action={searchGranules}
               clear={clearGranulesSearch}
-              label='Search'
-              placeholder='Granule ID'
+              label="Search"
+              placeholder="Granule ID"
             />
             {view === 'all' && (
               <Dropdown
                 options={statusOptions}
                 action={filterGranules}
                 clear={clearGranulesFilter}
-                paramKey='status'
-                label='Status'
+                paramKey="status"
+                label="Status"
                 inputProps={{
-                  placeholder: 'All'
+                  placeholder: 'All',
                 }}
               />
             )}
@@ -177,10 +177,10 @@ const CollectionGranules = ({
               options={pageSizeOptions}
               action={filterGranules}
               clear={clearGranulesFilter}
-              label='Results Per Page'
-              paramKey='limit'
+              label="Results Per Page"
+              paramKey="limit"
               inputProps={{
-                placeholder: 'Results Per Page'
+                placeholder: 'Results Per Page',
               }}
             />
           </ListFilters>
@@ -194,14 +194,13 @@ CollectionGranules.propTypes = {
   granules: PropTypes.object,
   dispatch: PropTypes.func,
   location: PropTypes.object,
-  config: PropTypes.object,
   workflowOptions: PropTypes.array,
-  params: PropTypes.object,
-  match: PropTypes.object
+  match: PropTypes.object,
 };
 
-export default withRouter(connect(state => ({
-  workflowOptions: workflowOptionNames(state),
-  granules: state.granules,
-  config: state.config
-}))(CollectionGranules));
+export default withRouter(
+  connect((state) => ({
+    workflowOptions: workflowOptionNames(state),
+    granules: state.granules,
+  }))(CollectionGranules)
+);

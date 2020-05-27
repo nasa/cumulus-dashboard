@@ -55,7 +55,7 @@ class Home extends React.Component {
 
   componentDidMount () {
     const { dispatch } = this.props;
-    this.cancelInterval = interval(this.query, updateInterval, true);
+    this.refreshQuery();
     dispatch(getCumulusInstanceMetadata())
       .then(() => {
         dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
@@ -222,7 +222,7 @@ class Home extends React.Component {
                 dispatch={this.props.dispatch}
                 action={listGranules}
                 tableColumns={errorTableColumns}
-                sortIdx='timestamp'
+                sortId='timestamp'
                 query={this.generateQuery()}
               />
             </div>

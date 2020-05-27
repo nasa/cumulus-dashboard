@@ -1,0 +1,19 @@
+{
+  "createdAt": 1589212222652,
+  "workflow": "HelloWorldWorkflow",
+  "provider": "PODAAC_SWOT",
+  "meta": {
+    "cnmResponseStream": "test-src-integration-cnmResponseStream"
+  },
+  "name": "MOD09GK_TEST_kinesisRule",
+  "rule": {
+    "type": "onetime",
+    "value": "none"
+  },
+  "collection": {
+    "name": "MOD09GK",
+    "version": "006"
+  },
+  "state": "ENABLED",
+  "updatedAt": 1589212222701
+}

@@ -10,7 +10,8 @@ import {
   nullValue,
   displayCase,
   collectionLink,
-  granuleLink
+  granuleLink,
+  providerLink
 } from '../format';
 import {
   reingestGranule,
@@ -46,6 +47,11 @@ export const tableColumns = [
     Header: strings.collection_id,
     accessor: row => collectionLink(row.collectionId),
     id: 'collectionId'
+  },
+  {
+    Header: 'Provider',
+    accessor: row => providerLink(row.provider),
+    id: 'provider'
   },
   {
     Header: 'Execution',
@@ -122,7 +128,7 @@ export const recoverAction = (granules, config) => ({
   confirm: confirmRecover
 });
 
-const confirmReingest = (d) => `Reingest ${d} granule${d > 1 ? 's' : ''}?`;
+const confirmReingest = (d) => `Reingest ${d} Granule${d > 1 ? 's' : ''}?`;
 const confirmApply = (d) => `Run workflow on ${d} granules?`;
 const confirmRemove = (d) => `Remove ${d} granule(s) from ${strings.cmr}?`;
 const confirmDelete = (d) => `Delete ${d} granule(s)?`;
@@ -176,7 +182,8 @@ const granuleModalJourney = ({
   history,
   isOnModalConfirm,
   isOnModalComplete,
-  error,
+  errorMessage,
+  errors,
   results,
   closeModal
 }) => {
@@ -186,15 +193,15 @@ const granuleModalJourney = ({
     modalOptions.children = <BatchReingestConfirmContent selected={selected}/>;
   }
   if (isOnModalComplete) {
-    modalOptions.children = <BatchReingestCompleteContent results={results} error={error} />;
-    modalOptions.hasConfirmButton = !error;
-    modalOptions.title = (error ? 'Error' : 'Complete');
+    modalOptions.children = <BatchReingestCompleteContent results={results} errorMessage={errorMessage} errors={errors} />;
+    modalOptions.hasConfirmButton = !errorMessage;
+    modalOptions.title = 'Reingest Granule(s)';
     modalOptions.cancelButtonText = 'Close';
-    if (!error) {
+    if (!errorMessage) {
       modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';
       modalOptions.cancelButtonClass = 'button--green';
       modalOptions.confirmButtonClass = 'button__goto';
-      modalOptions.onConfirm = setOnConfirm({ history, selected, error, closeModal });
+      modalOptions.onConfirm = setOnConfirm({ history, selected, errorMessage, closeModal });
     }
   }
   return modalOptions;

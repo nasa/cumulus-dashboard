@@ -120,10 +120,10 @@ export class BatchCommand extends React.Component {
   onComplete (errors, results) {
     const delay = this.props.updateDelay ? this.props.updateDelay : updateDelay;
     // turn array of errors from queue into single error for ui
-    const error = this.createErrorMessage(errors);
-    this.setState({ status: (error ? 'error' : 'success') });
+    const errorMessage = this.createErrorMessage(errors);
+    this.setState({ status: (errorMessage ? 'error' : 'success') });
     setTimeout(() => {
-      this.cleanup(error, results);
+      this.cleanup(errorMessage, errors, results);
     }, delay);
   }
 
@@ -134,7 +134,7 @@ export class BatchCommand extends React.Component {
   }
 
   // call onSuccess and onError functions as needed
-  cleanup (error, results) {
+  cleanup (errorMessage, errors, results) {
     const { onSuccess, onError, getModalOptions, selected, history } = this.props;
     this.setState({ completed: 0, status: null });
     if (typeof getModalOptions === 'function') {
@@ -142,14 +142,15 @@ export class BatchCommand extends React.Component {
         history,
         selected,
         results,
-        error,
+        errors,
+        errorMessage,
         isOnModalComplete: true,
         closeModal: this.closeModal
       });
       this.setState({ modalOptions });
     }
-    if (error && typeof onError === 'function') onError(error);
-    if (results && results.length && typeof onSuccess === 'function') onSuccess(results, error);
+    if (errorMessage && typeof onError === 'function') onError(errorMessage);
+    if (results && results.length && typeof onSuccess === 'function') onSuccess(results, errorMessage);
   }
 
   isInflight () {
@@ -196,7 +197,6 @@ export class BatchCommand extends React.Component {
           text={text}
           className={className}
           disabled={!activeModal && (!todo || !!inflight)}
-          successTimeout={0}
           status={!activeModal && inflight ? 'inflight' : null}
         />
         { activeModal && <div className='modal__cover'></div>}

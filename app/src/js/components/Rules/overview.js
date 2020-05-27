@@ -70,7 +70,7 @@ class RulesOverview extends React.Component {
             action={listRules}
             tableColumns={tableColumns}
             query={{}}
-            sortIdx='timestamp'
+            sortId='timestamp'
             bulkActions={this.generateBulkActions()}
             rowId='name'
           >

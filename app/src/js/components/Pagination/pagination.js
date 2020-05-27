@@ -9,7 +9,6 @@ const disabled = ' pagination__link--disabled';
 class Pagination extends React.Component {
   constructor () {
     super();
-    this.displayName = 'Pagination';
     this.onPageClick = this.onPageClick.bind(this);
     this.setPage = this.setPage.bind(this);
   }

@@ -23,7 +23,7 @@ describe('Dashboard Collections Page', () => {
 
     beforeEach(() => {
       cy.login();
-      cy.visit('/');
+      cy.visit('/?new_session=true');
       cy.server();
       cy.route('POST', '/collections').as('postCollection');
       cy.route('GET', '/collections?limit=*').as('getCollections');
@@ -38,7 +38,7 @@ describe('Dashboard Collections Page', () => {
 
     it('should display a link to view collections', () => {
       cy.contains('nav li a', 'Collections').as('collections');
-      cy.get('@collections').should('have.attr', 'href', '/collections');
+      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections\?startDateTime=/);
       cy.get('@collections').click();
       cy.wait('@getActiveCollections');
 
@@ -55,7 +55,7 @@ describe('Dashboard Collections Page', () => {
 
     it('should only display collections with active granules when time filter is applied', () => {
       cy.contains('nav li a', 'Collections').as('collections');
-      cy.get('@collections').should('have.attr', 'href', '/collections');
+      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections\?startDateTime=/);
       cy.get('@collections').click();
       cy.wait('@getActiveCollections');
 
@@ -159,6 +159,10 @@ describe('Dashboard Collections Page', () => {
       // collections with which to populate the dropdown on the collection
       // details page.
       cy.visit('/collections');
+      // TODO [DOP, 2020-05-14] Workaround until CUMULUS-1996 is resolved
+      // Stop timer so that it does not dispatch listCollections and change
+      // the order of items in the list after date is cleared
+      cy.get('.form__element__updateToggle .form__element__clickable').click();
       cy.clearStartDateTime();
       cy.wait('@getCollections');
       cy.get('.table .tbody .tr').should('have.length', 5);
@@ -451,8 +455,8 @@ describe('Dashboard Collections Page', () => {
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
-      cy.get('.modal-content > .modal-title').should('contain.text', 'Error');
-      cy.get('.error').should('contain.text', 'Oopsie');
+      cy.get('.modal-content .modal-body .alert').should('contain.text', 'Error');
+      cy.get('.Collapsible__contentInner').should('contain.text', 'Oopsie');
       cy.get('.button--cancel').click();
       cy.url().should('match', /\/granules$/);
       cy.get('.heading--large').should('have.text', 'Granule Overview');
@@ -476,7 +480,7 @@ describe('Dashboard Collections Page', () => {
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
-      cy.get('.modal-content > .modal-title').should('contain.text', 'Complete');
+      cy.get('.modal-content .modal-body .alert').should('contain.text', 'Success');
       cy.get('.modal-content').within(() => {
         cy.get('.button__goto').click();
       });
@@ -485,6 +489,35 @@ describe('Dashboard Collections Page', () => {
 
       // Ensure we have closed the modal.
       cy.get('.modal-content').should('not.be.visible');
+    });
+
+    it('Should display Granule Metrics that match the datepicker selection', () => {
+      cy.visit('/collections/collection/MOD09GQ/006');
+
+      cy.get('[data-cy=endDateTime]').within(() => {
+        cy.get('input[name=month]').click().type(3);
+        cy.get('input[name=day]').click().type(17);
+        cy.get('input[name=year]').click().type(2009);
+        cy.get('input[name=hour12]').click().type(3);
+        cy.get('input[name=minute]').click().type(37);
+        cy.get('input[name=minute]').should('have.value', '37');
+        cy.get('select[name=amPm]').select('PM');
+      });
+      cy.get('[data-cy=overview-num]').within(() => {
+        cy.get('li')
+          .first().should('contain', '--').and('contain', 'Completed')
+          .next().should('contain', '--').and('contain', 'Failed')
+          .next().should('contain', '--').and('contain', 'Running');
+      });
+
+      cy.get('[data-cy=endDateTime] > .react-datetime-picker > .react-datetime-picker__wrapper > .react-datetime-picker__clear-button > .react-datetime-picker__clear-button__icon').click();
+
+      cy.get('[data-cy=overview-num]').within(() => {
+        cy.get('li')
+          .first().should('contain', 7).and('contain', 'Completed')
+          .next().should('contain', 2).and('contain', 'Failed')
+          .next().should('contain', 2).and('contain', 'Running');
+      });
     });
   });
 });

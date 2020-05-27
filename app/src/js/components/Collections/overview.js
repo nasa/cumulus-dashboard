@@ -1,8 +1,9 @@
 'use strict';
+import { get } from 'object-path';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { Link, withRouter } from 'react-router-dom';
 import {
   clearGranulesFilter,
   clearGranulesSearch,
@@ -11,51 +12,51 @@ import {
   getCollection,
   getCumulusInstanceMetadata,
   listGranules,
-  searchGranules
+  searchGranules,
 } from '../../actions';
-import { get } from 'object-path';
 import {
   collectionName as collectionLabelForId,
-  tally,
-  lastUpdated,
+  collectionNameVersion,
   getCollectionId,
-  collectionNameVersion
+  lastUpdated,
+  tally,
 } from '../../utils/format';
+import pageSizeOptions from '../../utils/page-size';
+import statusOptions from '../../utils/status';
+import isEqual from 'lodash.isequal';
+import {
+  reingestAction,
+  tableColumns,
+} from '../../utils/table-config/granules';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Dropdown from '../DropDown/dropdown';
 import SimpleDropdown from '../DropDown/simple-dropdown';
-import Search from '../Search/search';
-import statusOptions from '../../utils/status';
-import pageSizeOptions from '../../utils/page-size';
-import List from '../Table/Table';
 import Bulk from '../Granules/bulk';
-import Overview from '../Overview/overview';
-import { tableColumns, reingestAction } from '../../utils/table-config/granules';
-import { strings } from '../locale';
-import DeleteCollection from '../DeleteCollection/DeleteCollection';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
+import { strings } from '../locale';
+import Overview from '../Overview/overview';
+import Search from '../Search/search';
+import List from '../Table/Table';
 
 const breadcrumbConfig = [
   {
     label: 'Dashboard Home',
-    href: '/'
+    href: '/',
   },
   {
     label: 'Collections',
-    href: '/collections'
+    href: '/collections',
   },
   {
     label: 'Collection Overview',
-    active: true
-  }
+    active: true,
+  },
 ];
 
 class CollectionOverview extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
-
-    this.displayName = 'CollectionOverview';
-
     [
       this.changeCollection,
       this.deleteMe,
@@ -64,94 +65,102 @@ class CollectionOverview extends React.Component {
       this.generateBulkActions,
       this.gotoGranules,
       this.load,
-      this.navigateBack
+      this.navigateBack,
     ].forEach((fn) => (this[fn.name] = fn.bind(this)));
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.load();
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     const { name, version } = this.props.match.params;
     const { name: prevName, version: prevVersion } = prevProps.match.params;
 
-    if (name !== prevName || version !== prevVersion) {
+    if (
+      name !== prevName ||
+      version !== prevVersion ||
+      !isEqual(this.props.datepicker, prevProps.datepicker)
+    ) {
       this.load();
     }
   }
 
-  load () {
+  load() {
     const { name, version } = this.props.match.params;
     this.props.dispatch(getCumulusInstanceMetadata());
     this.props.dispatch(getCollection(name, version));
   }
 
-  changeCollection (_, collectionId) {
+  changeCollection(_, collectionId) {
     const { name, version } = collectionNameVersion(collectionId);
     this.props.history.push(`/collections/collection/${name}/${version}`);
   }
 
-  generateBulkActions () {
+  generateBulkActions() {
     const { granules } = this.props;
     return [
       reingestAction(granules),
       {
-        Component:
-        <Bulk
-          element='a'
-          className='button button__bulkgranules button--green button--small form-group__element link--no-underline'
-          confirmAction={true}
-        />
-      }
+        Component: (
+          <Bulk
+            element="a"
+            className="button button__bulkgranules button--green button--small form-group__element link--no-underline"
+            confirmAction={true}
+          />
+        ),
+      },
     ];
   }
 
-  generateQuery () {
+  generateQuery() {
     return {
-      collectionId: getCollectionId(this.props.match.params)
+      collectionId: getCollectionId(this.props.match.params),
     };
   }
 
-  deleteMe () {
+  deleteMe() {
     const { name, version } = this.props.match.params;
     this.props.dispatch(deleteCollection(name, version));
   }
 
-  navigateBack () {
+  navigateBack() {
     this.props.history.push('/collections/all');
   }
 
-  gotoGranules () {
+  gotoGranules() {
     this.props.history.push('/granules');
   }
 
-  errors () {
+  errors() {
     const { name, version } = this.props.match.params;
     const collectionId = getCollectionId({ name, version });
     return [
       get(this.props.collections.map, [collectionId, 'error']),
-      get(this.props.collections.deleted, [collectionId, 'error'])
+      get(this.props.collections.deleted, [collectionId, 'error']),
     ].filter(Boolean);
   }
 
-  renderOverview (record) {
+  renderOverview(record) {
     const data = get(record, 'data', {});
     const stats = get(data, 'stats', {});
     const overview = [
       [tally(stats.completed), strings.granules_completed],
       [tally(stats.failed), strings.granules_failed],
-      [tally(stats.running), strings.granules_running]
+      [tally(stats.running), strings.granules_running],
     ];
     return <Overview items={overview} inflight={record.inflight} />;
   }
 
-  renderDeleteButton () {
-    const { match: { params }, collections } = this.props;
+  renderDeleteButton() {
+    const {
+      match: { params },
+      collections,
+    } = this.props;
     const collectionId = getCollectionId(params);
     const deleteStatus = get(collections.deleted, [collectionId, 'status']);
-    const hasGranules = get(
-      collections.map[collectionId], 'data.stats.total', 0) > 0;
+    const hasGranules =
+      get(collections.map[collectionId], 'data.stats.total', 0) > 0;
 
     return (
       <DeleteCollection
@@ -166,14 +175,11 @@ class CollectionOverview extends React.Component {
     );
   }
 
-  render () {
+  render() {
     const {
       match: { params },
       collections,
-      granules: {
-        list,
-        list: { meta }
-      }
+      granules: { list },
     } = this.props;
 
     const collectionName = params.name;
@@ -181,22 +187,23 @@ class CollectionOverview extends React.Component {
     const collectionId = getCollectionId(params);
     const sortedCollectionIds = collections.list.data.map(getCollectionId).sort(
       // Compare collection IDs ignoring case
-      (id1, id2) => id1.localeCompare(id2, 'en', { sensitivity: 'base' }));
+      (id1, id2) => id1.localeCompare(id2, 'en', { sensitivity: 'base' })
+    );
     const record = collections.map[collectionId];
 
     // create the overview boxes
     const overview = record ? this.renderOverview(record) : <div></div>;
 
     return (
-      <div className='page__component'>
-        <section className='page__section page__section__controls'>
+      <div className="page__component">
+        <section className="page__section page__section__controls">
           <div className="collection__options--top">
             <ul>
               <li>
                 <Breadcrumbs config={breadcrumbConfig} />
               </li>
               <li>
-                <div className='dropdown__collection form-group__element--right'>
+                <div className="dropdown__collection form-group__element--right">
                   <SimpleDropdown
                     label={'Collection'}
                     title={'Collections Dropdown'}
@@ -211,23 +218,23 @@ class CollectionOverview extends React.Component {
             </ul>
           </div>
         </section>
-        <section className='page__section page__section__header-wrapper'>
-          <div className='heading-group'>
-            <ul className='heading-form-group--left'>
+        <section className="page__section page__section__header-wrapper">
+          <div className="heading-group">
+            <ul className="heading-form-group--left">
               <li>
-                <h1 className='heading--large heading--shared-content with-description'>
+                <h1 className="heading--large heading--shared-content with-description">
                   {collectionLabelForId(collectionId)}
                 </h1>
               </li>
               <li>
                 <Link
-                  className='button button--copy button--small button--green'
+                  className="button button--copy button--small button--green"
                   to={{
                     pathname: '/collections/add',
                     state: {
                       name: collectionName,
-                      version: collectionVersion
-                    }
+                      version: collectionVersion,
+                    },
                   }}
                 >
                   Copy
@@ -235,35 +242,37 @@ class CollectionOverview extends React.Component {
               </li>
               <li>
                 <Link
-                  className='button button--edit button--small button--green'
+                  className="button button--edit button--small button--green"
                   to={`/collections/edit/${collectionName}/${collectionVersion}`}
                 >
                   Edit
                 </Link>
               </li>
-              <li>
-                {this.renderDeleteButton()}
-              </li>
+              <li>{this.renderDeleteButton()}</li>
             </ul>
-            <span className="last-update">{lastUpdated(get(record, 'data.timestamp'))}</span>
+            <span className="last-update">
+              {lastUpdated(get(record, 'data.timestamp'))}
+            </span>
           </div>
         </section>
-        <section className='page__section page__section__overview'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--large heading--shared-content--right'>Granule Metrics</h2>
+        <section className="page__section page__section__overview">
+          <div className="heading__wrapper--border">
+            <h2 className="heading--large heading--shared-content--right">
+              Granule Metrics
+            </h2>
           </div>
           {overview}
         </section>
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>
+        <section className="page__section">
+          <div className="heading__wrapper--border">
+            <h2 className="heading--medium heading--shared-content with-description">
               {strings.total_granules}
-              <span className='num--title'>
-                {meta.count ? ` ${meta.count}` : 0}
+              <span className="num--title">
+                {list.meta.count ? ` ${list.meta.count}` : 0}
               </span>
             </h2>
             <Link
-              className='button button--small button__goto button--green form-group__element--right'
+              className="button button--small button__goto button--green form-group__element--right"
               to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}
             >
               {strings.view_all_granules}
@@ -276,35 +285,35 @@ class CollectionOverview extends React.Component {
             tableColumns={tableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            rowId='granuleId'
-            sortIdx='timestamp'
+            rowId="granuleId"
+            sortId="timestamp"
           >
             <ListFilters>
               <Search
                 dispatch={this.props.dispatch}
                 action={searchGranules}
                 clear={clearGranulesSearch}
-                label='Search'
-                placeholder='Granule ID'
+                label="Search"
+                placeholder="Granule ID"
               />
               <Dropdown
                 options={statusOptions}
                 action={filterGranules}
                 clear={clearGranulesFilter}
-                paramKey='status'
-                label='Status'
+                paramKey="status"
+                label="Status"
                 inputProps={{
-                  placeholder: 'All'
+                  placeholder: 'All',
                 }}
               />
               <Dropdown
                 options={pageSizeOptions}
                 action={filterGranules}
                 clear={clearGranulesFilter}
-                paramKey='limit'
+                paramKey="limit"
                 label={'Results Per Page'}
                 inputProps={{
-                  placeholder: 'Results Per Page'
+                  placeholder: 'Results Per Page',
                 }}
               />
             </ListFilters>
@@ -315,16 +324,22 @@ class CollectionOverview extends React.Component {
   }
 }
 
+CollectionOverview.displayName = 'CollectionOverview';
+
 CollectionOverview.propTypes = {
-  match: PropTypes.object,
-  history: PropTypes.object,
+  collections: PropTypes.object,
+  datepicker: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
-  collections: PropTypes.object,
-  router: PropTypes.object
+  history: PropTypes.object,
+  match: PropTypes.object,
+  router: PropTypes.object,
 };
 
-export default withRouter(connect(state => ({
-  collections: state.collections,
-  granules: state.granules
-}))(CollectionOverview));
+export default withRouter(
+  connect((state) => ({
+    collections: state.collections,
+    datepicker: state.datepicker,
+    granules: state.granules,
+  }))(CollectionOverview)
+);

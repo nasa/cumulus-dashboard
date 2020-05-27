@@ -39,9 +39,9 @@ describe('Dashboard Granules Page', () => {
       cy.get('@granulesListFixture').its('results')
         .each((granule) => {
           // Wait for this granule to appear before proceeding.
-          cy.contains(granule['granuleId']);
-          cy.get(`[data-value="${granule['granuleId']}"]`).children().as('columns');
-          cy.get('@columns').should('have.length', 8);
+          cy.contains(granule.granuleId);
+          cy.get(`[data-value="${granule.granuleId}"]`).children().as('columns');
+          cy.get('@columns').should('have.length', 9);
 
           // Granule Status Column is correct
           cy.get('@columns').eq(1).invoke('text')
@@ -82,16 +82,21 @@ describe('Dashboard Granules Page', () => {
             .should('have.attr', 'href')
             .and('be.eq', `/collections/collection/${granule.collectionId.replace('___', '/')}`);
 
-          // Execution column has link to the detailed execution page
+          // has link to provider
           cy.get('@columns').eq(5).children('a')
+            .should('have.attr', 'href')
+            .and('be.eq', `/providers/provider/${granule.provider}`);
+
+          // Execution column has link to the detailed execution page
+          cy.get('@columns').eq(6).children('a')
             .should('have.attr', 'href')
             .and('be.eq', `/executions/execution/${granule.execution.split('/').pop()}`);
 
           // Duration column
-          cy.get('@columns').eq(6).invoke('text')
+          cy.get('@columns').eq(7).invoke('text')
             .should('be.eq', `${Number(granule.duration.toFixed(2))}s`);
           // Updated column
-          cy.get('@columns').eq(7).invoke('text')
+          cy.get('@columns').eq(8).invoke('text')
             .should('match', /.+ago$/);
         });
 
@@ -104,8 +109,7 @@ describe('Dashboard Granules Page', () => {
 
       cy.contains('.heading--xlarge', 'Granules');
 
-      cy.contains('a', 'Download Granule List')
-        .should('have.attr', 'href').should('include', 'blob:http://');
+      cy.contains('a', 'Download Granule List');
     });
 
     it('Should update dropdown with label when visiting bookmarkable URL', () => {
@@ -193,7 +197,7 @@ describe('Dashboard Granules Page', () => {
       cy.get(`[data-value="${granuleId}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
-      cy.get('.modal-content > .modal-title').should('contain.text', 'Complete');
+      cy.get('.modal-content .modal-body .alert').should('contain.text', 'Success');
       cy.get('.button__goto').click();
       cy.url().should('include', `granules/granule/${granuleId}`);
       cy.get('.heading--large').should('have.text', granuleId);
@@ -216,7 +220,7 @@ describe('Dashboard Granules Page', () => {
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
-      cy.get('.modal-content > .modal-title').should('contain.text', 'Complete');
+      cy.get('.modal-content .modal-body .alert').should('contain.text', 'Success');
       cy.get('.button__goto').click();
       cy.url().should('include', 'granules/processing');
       cy.get('.heading--large').should('have.text', 'Running Granules 2');
@@ -239,8 +243,8 @@ describe('Dashboard Granules Page', () => {
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
-      cy.get('.modal-content > .modal-title').should('contain.text', 'Error');
-      cy.get('.error').should('contain.text', 'Oopsie');
+      cy.get('.modal-content .modal-body .alert').should('contain.text', 'Error');
+      cy.get('.Collapsible__contentInner').should('contain.text', 'Oopsie');
       cy.get('.button--cancel').click();
       cy.url().should('match', /\/granules$/);
       cy.get('.heading--large').should('have.text', 'Granule Overview');

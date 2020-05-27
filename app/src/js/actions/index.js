@@ -74,19 +74,27 @@ export const refreshAccessToken = (token) => {
 export const setTokenState = (token) => ({ type: types.SET_TOKEN, token });
 
 export const interval = function (action, wait, immediate) {
-  if (immediate) { action(); }
+  if (immediate) {
+    action();
+  }
   const intervalId = setInterval(action, wait);
   return () => clearInterval(intervalId);
 };
 
-export const getCollection = (name, version) => ({
-  [CALL_API]: {
-    type: types.COLLECTION,
-    method: 'GET',
-    id: getCollectionId({ name, version }),
-    path: `collections?name=${name}&version=${version}`
-  }
-});
+export const getCollection = (name, version) => {
+  return (dispatch, getState) => {
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    return dispatch({
+      [CALL_API]: {
+        type: types.COLLECTION,
+        method: 'GET',
+        id: getCollectionId({ name, version }),
+        path: `collections?name=${name}&version=${version}`,
+        qs: timeFilters,
+      },
+    });
+  };
+};
 
 export const getApiVersion = () => {
   return (dispatch) => {
@@ -915,14 +923,19 @@ export const clearRulesSearch = () => ({ type: types.CLEAR_RULES_SEARCH });
 export const filterRules = (param) => ({ type: types.FILTER_RULES, param: param });
 export const clearRulesFilter = (paramKey) => ({ type: types.CLEAR_RULES_FILTER, paramKey: paramKey });
 
-export const listReconciliationReports = (options) => ({
-  [CALL_API]: {
-    type: types.RECONCILIATIONS,
-    method: 'GET',
-    url: new URL('reconciliationReports', root).href,
-    qs: Object.assign({ limit: defaultPageLimit }, options)
-  }
-});
+export const listReconciliationReports = (options) => {
+  return (dispatch, getState) => {
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    return dispatch({
+      [CALL_API]: {
+        type: types.RECONCILIATIONS,
+        method: 'GET',
+        url: new URL('reconciliationReports', root).href,
+        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
+      }
+    });
+  };
+};
 
 export const getReconciliationReport = (reconciliationName) => ({
   [CALL_API]: {

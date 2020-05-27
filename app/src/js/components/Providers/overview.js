@@ -96,7 +96,7 @@ class ProvidersOverview extends React.Component {
             query={this.generateQuery()}
             bulkActions={[]}
             rowId='name'
-            sortIdx='timestamp'
+            sortId='timestamp'
           >
             <ListFilters>
               <Dropdown

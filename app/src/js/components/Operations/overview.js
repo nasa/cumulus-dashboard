@@ -118,7 +118,7 @@ class OperationOverview extends React.Component {
             tableColumns={tableColumns}
             query={this.generateQuery()}
             rowId='id'
-            sortIdx='createdAt'
+            sortId='createdAt'
           >
             <ListFilters>
 

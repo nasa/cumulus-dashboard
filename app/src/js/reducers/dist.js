@@ -1,8 +1,7 @@
 'use strict';
 
 import get from 'lodash.get';
-import { set } from 'object-path';
-
+import { createReducer } from '@reduxjs/toolkit';
 import {
   DIST_APIGATEWAY,
   DIST_APIGATEWAY_INFLIGHT,
@@ -15,122 +14,80 @@ import {
   DIST_TEA_LAMBDA_ERROR,
   DIST_S3ACCESS,
   DIST_S3ACCESS_INFLIGHT,
-  DIST_S3ACCESS_ERROR
+  DIST_S3ACCESS_ERROR,
 } from '../actions/types';
-import { createReducer } from '@reduxjs/toolkit';
 
-const initialState = {
+export const initialState = {
   apiGateway: {
-    execution: { errors: {}, successes: {} },
-    access: { errors: {}, successes: {} }
+    execution: { errors: null, successes: null },
+    access: { errors: null, successes: null },
   },
-  apiLambda: { errors: {}, successes: {} },
-  teaLambda: { errors: {}, successes: {} },
-  s3Access: { errors: {}, successes: {} }
+  apiLambda: { errors: null, successes: null },
+  teaLambda: { errors: null, successes: null },
+  s3Access: { errors: null, successes: null },
 };
 
-const countsFromElasticSearchQuery = (data, name) => {
-  return get(data, `aggregations.2.buckets.${name}.doc_count`, null);
-};
+const count = (data, name) =>
+  get(data, `aggregations.2.buckets.${name}.doc_count`, 0);
 
 export default createReducer(initialState, {
-
   [DIST_APIGATEWAY]: (state, action) => {
-    set(state, 'apiGateway.error', null);
-    set(state, 'apiGateway.inflight', false);
-    set(state, 'apiGateway.queriedAt', Date.now());
-    set(
-      state,
-      'apiGateway.access.errors',
-      countsFromElasticSearchQuery(action.data, 'ApiAccessErrors')
-    );
-    set(
-      state,
-      'apiGateway.access.successes',
-      countsFromElasticSearchQuery(action.data, 'ApiAccessSuccesses')
-    );
-    set(
-      state,
-      'apiGateway.execution.errors',
-      countsFromElasticSearchQuery(action.data, 'ApiExecutionErrors')
-    );
-    set(
-      state,
-      'apiGateway.execution.successes',
-      countsFromElasticSearchQuery(action.data, 'ApiExecutionSuccesses')
-    );
+    const { data } = action;
+    state.apiGateway.error = null;
+    state.apiGateway.inflight = false;
+    state.apiGateway.queriedAt = Date.now();
+    state.apiGateway.access.errors = count(data, 'ApiAccessErrors');
+    state.apiGateway.access.successes = count(data, 'ApiAccessSuccesses');
+    state.apiGateway.execution.errors = count(data, 'ApiExecutionErrors');
+    state.apiGateway.execution.successes = count(data, 'ApiExecutionSuccesses');
   },
-  [DIST_APIGATEWAY_INFLIGHT]: (state, action) => {
-    set(state, 'apiGateway.inflight', true);
+  [DIST_APIGATEWAY_INFLIGHT]: (state) => {
+    state.apiGateway.inflight = true;
   },
   [DIST_APIGATEWAY_ERROR]: (state, action) => {
-    set(state, 'apiGateway.inflight', false);
-    set(state, 'apiGateway.error', action.error);
+    state.apiGateway.inflight = false;
+    state.apiGateway.error = action.error;
   },
   [DIST_API_LAMBDA]: (state, action) => {
-    set(state, 'apiLambda.error', null);
-    set(state, 'apiLambda.inflight', false);
-    set(state, 'apiLambda.queriedAt', Date.now());
-    set(
-      state,
-      'apiLambda.errors',
-      countsFromElasticSearchQuery(action.data, 'LambdaAPIErrors')
-    );
-    set(
-      state,
-      'apiLambda.successes',
-      countsFromElasticSearchQuery(action.data, 'LambdaAPISuccesses')
-    );
+    state.apiLambda.error = null;
+    state.apiLambda.inflight = false;
+    state.apiLambda.queriedAt = Date.now();
+    state.apiLambda.errors = count(action.data, 'LambdaAPIErrors');
+    state.apiLambda.successes = count(action.data, 'LambdaAPISuccesses');
   },
-  [DIST_API_LAMBDA_INFLIGHT]: (state, action) => {
-    set(state, 'apiLambda.inflight', true);
+  [DIST_API_LAMBDA_INFLIGHT]: (state) => {
+    state.apiLambda.inflight = true;
   },
   [DIST_API_LAMBDA_ERROR]: (state, action) => {
-    set(state, 'apiLambda.inflight', false);
-    set(state, 'apiLambda.error', action.error);
+    state.apiLambda.inflight = false;
+    state.apiLambda.error = action.error;
   },
   [DIST_TEA_LAMBDA]: (state, action) => {
-    set(state, 'teaLambda.error', null);
-    set(state, 'teaLambda.inflight', false);
-    set(state, 'teaLambda.queriedAt', Date.now());
-    set(
-      state,
-      'teaLambda.errors',
-      countsFromElasticSearchQuery(action.data, 'TEALambdaErrors')
-    );
-    set(
-      state,
-      'teaLambda.successes',
-      countsFromElasticSearchQuery(action.data, 'TEALambdaSuccesses')
-    );
+    state.teaLambda.error = null;
+    state.teaLambda.inflight = false;
+    state.teaLambda.queriedAt = Date.now();
+    state.teaLambda.errors = count(action.data, 'TEALambdaErrors');
+    state.teaLambda.successes = count(action.data, 'TEALambdaSuccesses');
   },
-  [DIST_TEA_LAMBDA_INFLIGHT]: (state, action) => {
-    set(state, 'teaLambda.inflight', true);
+  [DIST_TEA_LAMBDA_INFLIGHT]: (state) => {
+    state.teaLambda.inflight = true;
   },
   [DIST_TEA_LAMBDA_ERROR]: (state, action) => {
-    set(state, 'teaLambda.inflight', false);
-    set(state, 'teaLambda.error', action.error);
+    state.teaLambda.inflight = false;
+    state.teaLambda.error = action.error;
   },
   [DIST_S3ACCESS]: (state, action) => {
-    set(state, 's3Access.error', null);
-    set(state, 's3Access.inflight', false);
-    set(state, 's3Access.queriedAt', Date.now());
-    set(
-      state,
-      's3Access.errors',
-      countsFromElasticSearchQuery(action.data, 's3AccessFailures')
-    );
-    set(
-      state,
-      's3Access.successes',
-      countsFromElasticSearchQuery(action.data, 's3AccessSuccesses')
-    );
+    state.s3Access.error = null;
+    state.s3Access.inflight = false;
+    state.s3Access.queriedAt = Date.now();
+    state.s3Access.errors = count(action.data, 's3AccessFailures');
+    state.s3Access.successes = count(action.data, 's3AccessSuccesses');
   },
-  [DIST_S3ACCESS_INFLIGHT]: (state, action) => {
-    set(state, 's3Access.inflight', true);
+  [DIST_S3ACCESS_INFLIGHT]: (state) => {
+    state.s3Access.inflight = true;
   },
   [DIST_S3ACCESS_ERROR]: (state, action) => {
-    set(state, 's3Access.inflight', false);
-    set(state, 's3Access.error', action.error);
-  }
+    state.s3Access.inflight = false;
+    state.s3Access.error = action.error;
+  },
 });

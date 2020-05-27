@@ -1,92 +1,122 @@
 'use strict';
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _config from '../../config';
+import {
+  TIMER_START,
+  TIMER_STOP,
+  TIMER_SET_COUNTDOWN,
+} from '../../actions/types';
+import isEqual from 'lodash.isequal';
 
 const { updateInterval } = _config;
 
-const delay = updateInterval / 1000;
+const oneSecondTick = 1000;
+const secondsToRefresh = updateInterval / 1000;
 
 class Timer extends React.Component {
-  constructor () {
-    super();
-    this.state = {
-      running: true,
-      seconds: delay
-    };
+  constructor(props) {
+    super(props);
     this.stop = this.stop.bind(this);
     this.start = this.start.bind(this);
     this.toggle = this.toggle.bind(this);
-    this.createTimer = this.createTimer.bind(this);
+    this.refreshTimer = this.refreshTimer.bind(this);
     this.interval = this.interval.bind(this);
     this.parentClass = this.parentClass.bind(this);
   }
 
-  componentDidMount () {
-    this.createTimer(this.props.config);
+  componentDidMount() {
+    this.refreshTimer(this.props.config);
   }
 
-  componentDidUpdate (prevProps) {
-    if (JSON.stringify(prevProps.config) !== JSON.stringify(this.props.config) ||
-      (this.props.reload && prevProps.reload !== this.props.reload)) {
-      this.createTimer(this.props.config);
+  componentDidUpdate(prevProps) {
+    if (
+      JSON.stringify(prevProps.config) !== JSON.stringify(this.props.config) ||
+      (this.props.reload && prevProps.reload !== this.props.reload) ||
+      !isEqual(prevProps.datepicker, this.props.datepicker)
+    ) {
+      this.refreshTimer(this.props.config);
     }
   }
 
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
+  componentWillUnmount() {
+    if (this.cancelInterval) {
+      this.cancelInterval();
+    }
   }
 
-  stop () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-    this.setState({ seconds: -1, running: false });
+  stop() {
+    if (this.cancelInterval) {
+      this.cancelInterval();
+    }
+    this.props.dispatch({ type: TIMER_STOP });
   }
 
-  start () {
-    this.setState({ seconds: 0, running: true });
-    this.createTimer(this.props.config);
+  start() {
+    this.props.dispatch({ type: TIMER_START, secondsToRefresh });
+    this.refreshTimer(this.props.config, true);
   }
 
-  toggle () {
-    if (this.state.running) this.stop();
-    else this.start();
+  toggle() {
+    this.props.timer.running ? this.stop() : this.start();
   }
 
-  createTimer (config) {
-    if (this.cancelInterval) { this.cancelInterval(); }
+  refreshTimer(config, startCountdown) {
+    if (this.cancelInterval) {
+      this.cancelInterval();
+    }
     const { dispatch, action } = this.props;
-    this.cancelInterval = this.interval(() => dispatch(action(config)), delay);
+    dispatch(action(config));
+    if (this.props.timer.running || startCountdown) {
+      this.cancelInterval = this.interval(
+        () => dispatch(action(config)),
+        secondsToRefresh
+      );
+    }
   }
 
-  interval (action, seconds) {
-    action();
+  interval(action, seconds) {
     const intervalId = setInterval(() => {
-      this.setState({ seconds: seconds });
       if (seconds === 0) {
-        seconds = delay;
+        seconds = secondsToRefresh;
         action();
       } else {
         seconds -= 1;
       }
-    }, 1000);
+      this.props.dispatch({
+        type: TIMER_SET_COUNTDOWN,
+        secondsToRefresh: seconds,
+      });
+    }, oneSecondTick);
     return () => clearInterval(intervalId);
   }
 
-  parentClass () {
+  parentClass() {
     const className = 'form__element__updateToggle';
-    return this.props.noheader ? className + ' form__element__updateToggle-noHeader' : className;
+    return this.props.noheader
+      ? className + ' form__element__updateToggle-noHeader'
+      : className;
   }
 
-  render () {
-    const { seconds } = this.state;
+  render() {
+    const { seconds, running } = this.props.timer;
     return (
       <div className={this.parentClass()}>
-        <span className='form__element__refresh' onClick={() => this.createTimer(this.props.config)}></span>
-        <span className='form-group__updating'>
-          Next update in: { seconds === -1 ? '-' : seconds }
+        <span
+          data-cy="refreshTimer"
+          className="form__element__refresh"
+          onClick={() => this.refreshTimer(this.props.config)}
+        ></span>
+        <span data-cy="startStopLabel" className="form-group__updating">
+          {running ? `Next update in: ${seconds}` : 'Update'}
         </span>
-        <span className='metadata__updated form__element__clickable' onClick={this.toggle}>
-          {seconds === -1 ? 'Start automatic updates' : 'Stop automatic updates'}
+        <span
+          data-cy="toggleTimer"
+          className="metadata__updated form__element__clickable"
+          onClick={this.toggle}
+        >
+          {running ? 'Stop automatic updates' : 'Start automatic updates'}
         </span>
       </div>
     );
@@ -94,11 +124,16 @@ class Timer extends React.Component {
 }
 
 Timer.propTypes = {
-  noheader: PropTypes.bool,
-  dispatch: PropTypes.func,
   action: PropTypes.func,
   config: PropTypes.object,
-  reload: PropTypes.any
+  datepicker: PropTypes.object,
+  dispatch: PropTypes.func,
+  noheader: PropTypes.bool,
+  reload: PropTypes.any,
+  timer: PropTypes.object,
 };
 
-export default Timer;
+export default connect((state) => ({
+  datepicker: state.datepicker,
+  timer: state.timer,
+}))(Timer);

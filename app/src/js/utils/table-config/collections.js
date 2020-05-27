@@ -85,7 +85,7 @@ export const bulkActions = function (collections) {
     history,
     isOnModalConfirm,
     isOnModalComplete,
-    error,
+    errorMessage,
     results,
   }) => {
     const modalOptions = {};
@@ -110,7 +110,7 @@ export const bulkActions = function (collections) {
         modalOptions.children = <BatchDeleteWithGranulesContent selectionsWithGranules={selectionsWithGranules} />;
       }
     } else if (isOnModalComplete) {
-      modalOptions.children = <BatchDeleteCompleteContent results={results} error={error} />;
+      modalOptions.children = <BatchDeleteCompleteContent results={results} error={errorMessage} />;
       // since cancel button closes the modal, let's use that.
       modalOptions.hasConfirmButton = false;
       modalOptions.cancelButtonClass = 'button--green';

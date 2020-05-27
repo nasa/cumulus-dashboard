@@ -17,6 +17,7 @@
   },
   "rules": {
     "comma-dangle": ["error", "only-multiline"],
+    "space-before-function-paren": ["warn", {"anonymous": "ignore", "named": "ignore", "asyncArrow": "ignore"}],
     "semi": [2, "always"],
     "no-extra-semi": 2,
     "semi-spacing": [2, { "before": false, "after": true }],

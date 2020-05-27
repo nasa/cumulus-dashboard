@@ -7,6 +7,59 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.9.0]
+
+### BREAKING CHANGES
+
+- This dashboard version requires Cumulus API version >= v1.23.0
+
+### Changed
+
+- **CUMULUS-1888**
+  - On the Granules page, CSV data was being refreshed in the background alog with the rest
+    of the data based on the timer. This could take a long time, depending on the number of granules.
+    This has been changed so that the data is only fetched when the user clicks the "Download CSV" button.
+
+- **CUMULUS-1913**
+  - Add datepicker to reconcilation-reports page
+
+- **CUMULUS-1916**
+  - reconcilation-reports page now requires Cumulus API version >= v1.23.0
+
+## [v1.8.1]
+
+### Changed
+
+- **CUMULUS-1816**
+  - Change Datepicker behavior on login. The default to "Recent" start/end dates
+    now only occurs on first login on the hompage.
+  - URL is updated on login to reflect Datepicker params
+
+- **CUMULUS-1903**
+  - Replace individual tables in reconciliation report with tabs that change which table is displayed on click
+
+- **CUMULUS-1920**
+  - Add additional columns to reconciliation report list
+
+- **CUMULUS-1920**
+  - Updated styles for granule reingest modal
+
+- **CUMULUS-1948**
+  - Add provider to Granules tables
+
+### Fixed
+
+- **CUMULUS-1881**
+  - Fix Elasticsearch query bug for Gateway Access Metrics
+
+- **CUMULUS-1984**
+  - Fix bug where Distribution metrics were showing on the homepage even when
+    Elasaticsearch/Kibana not set up
+
+- **CUMULUS-1988**
+  - Fix bugs in reducer-creators
+
+
 ## [v1.8.0]
 
 ### Added
@@ -66,12 +119,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1787**
   - Changes `listCollections` action to hit `/collections/active` endpoint when timefilters are present (requires Cumulus API v1.22.1)
 
+- **CUMULUS-1790**
+  - Changes default values and visuals for home page's datepicker. When the page loads, it defauls to display "Recent" data, which is the previous 24 hours with no end time.
+
 - **CUMULUS-1798**
   - Change the 12HR/24HR Format selector from radio to dropdown
   - Hide clock component in react-datetime-picker
 
-- **CUMULUS-1790**
-  - Changes default values and visuals for home page's datepicker. When the page loads, it defauls to display "Recent" data, which is the previous 24 hours with no end time.
+- **CUMULUS-1810**
+  - Unified the coding pattern used for creating Redux reducers to avoid
+    unnecessary object creation and reduce unnecessary UI component refreshes
 
 ### Fixed
 
@@ -352,7 +409,9 @@ Fix for serving the dashboard through the Cumulus API.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.8.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.9.0...HEAD
+[v1.9.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.8.1...v1.9.0
+[v1.8.1]: https://github.com/nasa/cumulus-dashboard/compare/v1.8.0...v1.8.1
 [v1.8.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.7.2...v1.8.0
 [v1.7.2]: https://github.com/nasa/cumulus-dashboard/compare/v1.7.1...v1.7.2
 [v1.7.1]: https://github.com/nasa/cumulus-dashboard/compare/v1.7.0...v1.7.1
