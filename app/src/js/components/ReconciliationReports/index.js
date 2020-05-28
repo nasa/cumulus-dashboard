@@ -4,22 +4,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
-import { getCount } from '../../actions';
+import { strings } from '../locale';
+import { getCount, listReconciliationReports } from '../../actions';
 import ReconciliationReportList from './list';
 import ReconciliationReport from './reconciliation-report';
-import withQueryParams from 'react-router-query-params';
+import DatePickerHeader from '../../components/DatePickerHeader/DatePickerHeader';
 
 class ReconciliationReports extends React.Component {
-  constructor () {
-    super();
-    this.queryParams = this.queryParams.bind(this);
-  }
-
-  componentDidMount () {
-    this.queryParams();
-  }
-
-  queryParams () {
+  query() {
+    this.props.dispatch(listReconciliationReports());
     this.props.dispatch(getCount({
       type: 'reconciliationReports',
       field: 'status'
@@ -29,11 +22,7 @@ class ReconciliationReports extends React.Component {
   render () {
     return (
       <div className='page__reconciliations'>
-        <div className='content__header'>
-          <div className='row'>
-            <h1 className='heading--xlarge heading--shared-content'>Reconciliation Reports</h1>
-          </div>
-        </div>
+        <DatePickerHeader onChange={this.query} heading={strings.reconciliation_reports} />
         <div className='page__content'>
           <div className='wrapper__sidebar'>
             <Sidebar
@@ -61,7 +50,4 @@ ReconciliationReports.propTypes = {
 
 ReconciliationReports.displayName = 'Reconciliation Reports';
 
-export default withRouter(withQueryParams()(connect(state => ({
-  stats: state.stats,
-  reconciliationReports: state.reconciliationReports
-}))(ReconciliationReports)));
+export default withRouter(connect()(ReconciliationReports));

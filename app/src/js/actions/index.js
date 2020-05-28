@@ -923,14 +923,19 @@ export const clearRulesSearch = () => ({ type: types.CLEAR_RULES_SEARCH });
 export const filterRules = (param) => ({ type: types.FILTER_RULES, param: param });
 export const clearRulesFilter = (paramKey) => ({ type: types.CLEAR_RULES_FILTER, paramKey: paramKey });
 
-export const listReconciliationReports = (options) => ({
-  [CALL_API]: {
-    type: types.RECONCILIATIONS,
-    method: 'GET',
-    url: new URL('reconciliationReports', root).href,
-    qs: Object.assign({ limit: defaultPageLimit }, options)
-  }
-});
+export const listReconciliationReports = (options) => {
+  return (dispatch, getState) => {
+    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+    return dispatch({
+      [CALL_API]: {
+        type: types.RECONCILIATIONS,
+        method: 'GET',
+        url: new URL('reconciliationReports', root).href,
+        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
+      }
+    });
+  };
+};
 
 export const getReconciliationReport = (reconciliationName) => ({
   [CALL_API]: {

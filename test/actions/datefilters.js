@@ -68,6 +68,8 @@ test('Each of these list action creators will pull data from datepicker state wh
     { action: 'OPERATIONS_INFLIGHT', dispatcher: listOperations },
     { action: 'PDRS_INFLIGHT', dispatcher: listPdrs },
     { action: 'PROVIDERS_INFLIGHT', dispatcher: listProviders },
+    { action: 'PROVIDERS_INFLIGHT', dispatcher: listProviders },
+    { action: 'RECONCILIATIONS_INFLIGHT', dispatcher: listReconciliationReports },
     { action: 'RULES_INFLIGHT', dispatcher: listRules },
     { action: 'STATS_INFLIGHT', dispatcher: getStats }
   ];
@@ -95,7 +97,6 @@ test('Each of these list action creators will pull data from datepicker state wh
 test('Each of these list action creators will not use data from datepicker state when calling the Cumulus API.', (t) => {
   const endpoints = [
     { action: 'WORKFLOWS_INFLIGHT', dispatcher: listWorkflows },
-    { action: 'RECONCILIATIONS_INFLIGHT', dispatcher: listReconciliationReports },
     { action: 'EXECUTION_LOGS_INFLIGHT', dispatcher: getExecutionLogs }
   ];
 
