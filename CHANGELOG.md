@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- **CUMULUS-1994**
+  - No default datetime filters are applied when the application is loaded.
+
 ## [v1.9.0]
 
 ### BREAKING CHANGES
