@@ -3,14 +3,12 @@ import React, {
   useMemo,
   useEffect,
   forwardRef,
-  useRef,
-  useState
+  useRef
 } from 'react';
 import PropTypes from 'prop-types';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
 import SimplePagination from '../Pagination/simple-pagniation';
 import TableFilters from '../Table/TableFilters';
-import { Collapse } from 'react-bootstrap';
 
 /**
  * IndeterminateCheckbox
@@ -126,7 +124,6 @@ const SortableTable = ({
 
   const tableRows = page || rows;
   const includeFilters = initialHiddenColumns.length > 0;
-  const [filtersExpanded, setFiltersExpanded] = useState(true);
 
   useEffect(() => {
     if (clearSelected) {
@@ -163,22 +160,7 @@ const SortableTable = ({
   return (
     <div className='table--wrapper'>
       {includeFilters &&
-        <div className='table__filters'>
-          <button
-            aria-expanded={filtersExpanded}
-            aria-controls="table__filters--collapse"
-            className='button button--small button__filter'
-            onClick={() => setFiltersExpanded(!filtersExpanded)}
-          >
-            {`${filtersExpanded ? 'Hide' : 'Show'} Column Filters`}
-          </button>
-          <Collapse in={filtersExpanded}>
-            <div className='table__filters--collapse'>
-              <h3>Table Column Filters</h3>
-              <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
-            </div>
-          </Collapse>
-        </div>
+        <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
       }
       <form>
         <div className='table' {...getTableProps()}>
