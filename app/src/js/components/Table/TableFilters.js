@@ -7,7 +7,7 @@ import { Collapse } from 'react-bootstrap';
 const TableFilters = ({
   columns,
   onChange,
-  hiddenColumns
+  hiddenColumns = []
 }) => {
   const [filtersExpanded, setFiltersExpanded] = useState(true);
 
@@ -37,8 +37,8 @@ const TableFilters = ({
               const isChecked = !hiddenColumns.includes(columnId);
               return (
                 <div className='table__filters--filter' key={index}>
-                  <input type="checkbox" checked={isChecked} onChange={() => handleChange(columnId)} />
-                  <label>{Header}</label>
+                  <input id={columnId} type='checkbox' checked={isChecked} onChange={() => handleChange(columnId)} />
+                  <label htmlFor={columnId}>{Header}</label>
                 </div>
               );
             })}
