@@ -12,3 +12,9 @@ export const pdrStatus = {
   Completed: 'completed',
   Failed: 'failed'
 };
+
+export const reconciliationReportStatus = {
+  Generated: 'Generated',
+  Pending: 'Pending',
+  Failed: 'Failed'
+};

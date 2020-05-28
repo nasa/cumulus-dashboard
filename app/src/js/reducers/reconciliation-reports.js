@@ -13,6 +13,8 @@ import {
   CLEAR_RECONCILIATIONS_SEARCH,
   NEW_RECONCILIATION_INFLIGHT,
   NEW_RECONCILIATION,
+  FILTER_RECONCILIATIONS,
+  CLEAR_RECONCILIATIONS_FILTER,
 } from '../actions/types';
 
 export const initialState = {
@@ -69,5 +71,11 @@ export default createReducer(initialState, {
   },
   [NEW_RECONCILIATION]: (state) => {
     state.createReportInflight = false;
+  },
+  [FILTER_RECONCILIATIONS]: (state, action) => {
+    state.list.params[action.param.key] = action.param.value;
+  },
+  [CLEAR_RECONCILIATIONS_FILTER]: (state, action) => {
+    state.list.params[action.paramKey] = null;
   },
 });
