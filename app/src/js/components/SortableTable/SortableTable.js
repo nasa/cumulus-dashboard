@@ -3,11 +3,14 @@ import React, {
   useMemo,
   useEffect,
   forwardRef,
-  useRef
+  useRef,
+  useState
 } from 'react';
 import PropTypes from 'prop-types';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
 import SimplePagination from '../Pagination/simple-pagniation';
+import TableFilters from '../Table/TableFilters';
+import { Collapse } from 'react-bootstrap';
 
 /**
  * IndeterminateCheckbox
@@ -45,7 +48,8 @@ const SortableTable = ({
   data = [],
   onSelect,
   clearSelected,
-  shouldUsePagination = false
+  shouldUsePagination = false,
+  initialHiddenColumns = []
 }) => {
   const defaultColumn = useMemo(
     () => ({
@@ -67,7 +71,8 @@ const SortableTable = ({
     state: {
       selectedRowIds,
       sortBy,
-      pageIndex
+      pageIndex,
+      hiddenColumns
     },
     toggleAllRowsSelected,
     page,
@@ -77,7 +82,8 @@ const SortableTable = ({
     pageOptions,
     gotoPage,
     nextPage,
-    previousPage
+    previousPage,
+    toggleHideColumn
   } = useTable(
     {
       data,
@@ -88,6 +94,9 @@ const SortableTable = ({
       autoResetSortBy: false,
       manualSortBy: shouldManualSort,
       manualPagination: !shouldUsePagination, // if we want to use the pagination hook, then pagination should not be manual
+      initialState: {
+        hiddenColumns: initialHiddenColumns
+      }
     },
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
     useResizeColumns, // this allows for resizing columns
@@ -116,6 +125,8 @@ const SortableTable = ({
   );
 
   const tableRows = page || rows;
+  const includeFilters = initialHiddenColumns.length > 0;
+  const [filtersExpanded, setFiltersExpanded] = useState(true);
 
   useEffect(() => {
     if (clearSelected) {
@@ -151,6 +162,24 @@ const SortableTable = ({
 
   return (
     <div className='table--wrapper'>
+      {includeFilters &&
+        <div className='table__filters'>
+          <button
+            aria-expanded={filtersExpanded}
+            aria-controls="table__filters--collapse"
+            className='button button--small button__filter'
+            onClick={() => setFiltersExpanded(!filtersExpanded)}
+          >
+            {`${filtersExpanded ? 'Hide' : 'Show'} Column Filters`}
+          </button>
+          <Collapse in={filtersExpanded}>
+            <div className='table__filters--collapse'>
+              <h3>Table Column Filters</h3>
+              <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
+            </div>
+          </Collapse>
+        </div>
+      }
       <form>
         <div className='table' {...getTableProps()}>
           <div className='thead'>
@@ -229,7 +258,8 @@ SortableTable.propTypes = {
   rowId: PropTypes.any,
   tableColumns: PropTypes.array,
   clearSelected: PropTypes.bool,
-  shouldUsePagination: PropTypes.bool
+  shouldUsePagination: PropTypes.bool,
+  initialHiddenColumns: PropTypes.array
 };
 
 export default SortableTable;
