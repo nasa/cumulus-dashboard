@@ -246,6 +246,7 @@ class ReconciliationReport extends React.Component {
             data={cardConfig[activeIdx].data}
             tableColumns={cardConfig[activeIdx].columns}
             shouldUsePagination={true}
+            initialHiddenColumns={['']}
           />
         </section>
       </div>

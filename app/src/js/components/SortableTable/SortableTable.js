@@ -8,6 +8,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
 import SimplePagination from '../Pagination/simple-pagniation';
+import TableFilters from '../Table/TableFilters';
 
 /**
  * IndeterminateCheckbox
@@ -45,7 +46,8 @@ const SortableTable = ({
   data = [],
   onSelect,
   clearSelected,
-  shouldUsePagination = false
+  shouldUsePagination = false,
+  initialHiddenColumns = []
 }) => {
   const defaultColumn = useMemo(
     () => ({
@@ -67,7 +69,8 @@ const SortableTable = ({
     state: {
       selectedRowIds,
       sortBy,
-      pageIndex
+      pageIndex,
+      hiddenColumns
     },
     toggleAllRowsSelected,
     page,
@@ -77,7 +80,8 @@ const SortableTable = ({
     pageOptions,
     gotoPage,
     nextPage,
-    previousPage
+    previousPage,
+    toggleHideColumn
   } = useTable(
     {
       data,
@@ -88,6 +92,9 @@ const SortableTable = ({
       autoResetSortBy: false,
       manualSortBy: shouldManualSort,
       manualPagination: !shouldUsePagination, // if we want to use the pagination hook, then pagination should not be manual
+      initialState: {
+        hiddenColumns: initialHiddenColumns
+      }
     },
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
     useResizeColumns, // this allows for resizing columns
@@ -116,6 +123,7 @@ const SortableTable = ({
   );
 
   const tableRows = page || rows;
+  const includeFilters = initialHiddenColumns.length > 0;
 
   useEffect(() => {
     if (clearSelected) {
@@ -151,6 +159,9 @@ const SortableTable = ({
 
   return (
     <div className='table--wrapper'>
+      {includeFilters &&
+        <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
+      }
       <form>
         <div className='table' {...getTableProps()}>
           <div className='thead'>
@@ -229,7 +240,8 @@ SortableTable.propTypes = {
   rowId: PropTypes.any,
   tableColumns: PropTypes.array,
   clearSelected: PropTypes.bool,
-  shouldUsePagination: PropTypes.bool
+  shouldUsePagination: PropTypes.bool,
+  initialHiddenColumns: PropTypes.array
 };
 
 export default SortableTable;

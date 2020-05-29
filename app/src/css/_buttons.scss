@@ -553,4 +553,23 @@
         
       } 
     }
+
+    &__filter {
+      background-color: $light-green;
+      position: relative;
+    
+      &:before {
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        content: '\f0b0';
+        font-weight: 900;
+        left: 10px;
+        
+      }
+
+      &:hover {
+        background-color: $light-green;
+      }
+    }
 }

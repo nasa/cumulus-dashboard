@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- **CUMULUS-1904**
+  - Adds a TableFilters component for dynamically showing/hiding table columns
+
 ## [v1.9.0]
 
 ### BREAKING CHANGES
