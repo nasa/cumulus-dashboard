@@ -114,6 +114,7 @@ const BulkGranule = ({
       </Modal>
       <BulkOperationsModal
         className={modalClassName}
+        dispatch={dispatch}
         showModal={showBulkOpsModal}
         handleSuccessConfirm={handleSuccessConfirm}
         onCancel={hideBulkOperationsModal}
@@ -127,6 +128,7 @@ const BulkGranule = ({
       ></BulkOperationsModal>
       <BulkDeleteModal
         className={modalClassName}
+        dispatch={dispatch}
         showModal={showBulkDeleteModal}
         handleSuccessConfirm={handleSuccessConfirm}
         onCancel={hideBulkDeleteModal}

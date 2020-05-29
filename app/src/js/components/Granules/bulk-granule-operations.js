@@ -28,11 +28,10 @@ const BulkOperationsModal = ({
   success
 }) => {
   const [query, setQuery] = useState(JSON.stringify(defaultQuery, null, 2));
-  const [errorState, setErrorState] = useState();
+  const [errorState, setErrorState] = useState(error);
 
   const buttonText = inflight ? 'loading...'
     : success ? 'Success!' : 'Run Bulk Granules';
-  const formError = error || errorState;
 
   function handleSubmit (e) {
     e.preventDefault();
@@ -93,7 +92,7 @@ const BulkOperationsModal = ({
             <TextArea
               value={query}
               id='run-bulk-granule'
-              error={formError}
+              error={errorState}
               onChange={onChange}
               mode='json'
               minLines={30}
