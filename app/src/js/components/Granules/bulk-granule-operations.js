@@ -1,38 +1,66 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { bulkGranule } from '../../actions';
 import _config from '../../config';
 import DefaultModal from '../Modal/modal';
 import TextArea from '../TextAreaForm/text-area';
 
 const { kibanaRoot } = _config;
 
+const defaultQuery = {
+  workflowName: '',
+  index: '',
+  query: ''
+};
+
 const BulkOperationsModal = ({
-  showModal,
-  onChange,
-  onConfirm,
-  onCancel,
-  inflight,
-  query,
-  success,
   asyncOpId,
+  className,
+  dispatch,
   error,
-  selected
+  handleSuccessConfirm,
+  inflight,
+  onCancel,
+  requestId,
+  showModal,
+  selected,
+  success
 }) => {
+  const [query, setQuery] = useState(JSON.stringify(defaultQuery, null, 2));
+  const [errorState, setErrorState] = useState();
+
   const buttonText = inflight ? 'loading...'
     : success ? 'Success!' : 'Run Bulk Granules';
+  const formError = error || errorState;
+
+  function handleSubmit (e) {
+    e.preventDefault();
+    if (status !== 'inflight') {
+      try {
+        var json = JSON.parse(query);
+      } catch (e) {
+        return setErrorState('Syntax error in JSON');
+      }
+      dispatch(bulkGranule({ requestId, json }));
+    }
+  }
+
+  function onChange (id, value) {
+    setQuery(value);
+  }
 
   return (
     <DefaultModal
       title='Bulk Granule Operations'
-      className='bulk_granules'
+      className={className}
       showModal={showModal}
       cancelButtonText={success ? 'Close' : 'Cancel Bulk Granules'}
       confirmButtonText={success ? 'Go To Operations' : buttonText}
       confirmButtonClass='button__bulkgranules'
       onCancel={onCancel}
       onCloseModal={onCancel}
-      onConfirm={onConfirm}
+      onConfirm={success ? handleSuccessConfirm : handleSubmit}
     >
       {success &&
         <p>
@@ -65,7 +93,7 @@ const BulkOperationsModal = ({
             <TextArea
               value={query}
               id='run-bulk-granule'
-              error={error}
+              error={formError}
               onChange={onChange}
               mode='json'
               minLines={30}
@@ -79,17 +107,17 @@ const BulkOperationsModal = ({
 };
 
 BulkOperationsModal.propTypes = {
-  showModal: PropTypes.bool,
-  onChange: PropTypes.func,
-  onCloseModal: PropTypes.func,
-  onConfirm: PropTypes.func,
-  onCancel: PropTypes.func,
-  inflight: PropTypes.bool,
-  success: PropTypes.bool,
   asyncOpId: PropTypes.string,
+  className: PropTypes.string,
+  dispatch: PropTypes.func,
   error: PropTypes.string,
+  handleSuccessConfirm: PropTypes.func,
+  inflight: PropTypes.bool,
+  onCancel: PropTypes.func,
+  requestId: PropTypes.string,
   selected: PropTypes.array,
-  query: PropTypes.string
+  showModal: PropTypes.bool,
+  success: PropTypes.bool
 };
 
 export default BulkOperationsModal;

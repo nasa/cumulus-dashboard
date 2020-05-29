@@ -6,21 +6,9 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 
-import { bulkGranule } from '../../actions';
 import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
-// import _config from '../../config';
-// import TextArea from '../TextAreaForm/text-area';
-// import DefaultModal from '../Modal/modal';
 import BulkOperationsModal from './bulk-granule-operations';
 import BulkDeleteModal from './bulk-granule-delete';
-
-// const { kibanaRoot } = _config;
-
-const defaultQuery = {
-  workflowName: '',
-  index: '',
-  query: ''
-};
 
 const BulkGranule = ({
   history,
@@ -32,14 +20,12 @@ const BulkGranule = ({
   selected
 }) => {
   const [showModal, setShowModal] = useState(false);
-  const [query, setQuery] = useState(JSON.stringify(defaultQuery, null, 2));
-  const [errorState, setErrorState] = useState();
   const [requestId] = useState(Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
   const [showBulkOpsModal, setShowBulkOpsModal] = useState(false);
   const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
 
   const status = get(granules.bulk, [requestId, 'status']);
-  const error = get(granules.bulk, [requestId, 'error']) || errorState;
+  const error = get(granules.bulk, [requestId, 'error']);
   const asyncOpId = get(granules.bulk, [requestId, 'data', 'id']);
 
   const inflight = status === 'inflight';
@@ -59,27 +45,11 @@ const BulkGranule = ({
     setShowModal(false);
   }
 
-  function handleSubmit (e) {
-    e.preventDefault();
-    if (status !== 'inflight') {
-      try {
-        var json = JSON.parse(query);
-      } catch (e) {
-        return setErrorState('Syntax error in JSON');
-      }
-      dispatch(bulkGranule({ requestId, json }));
-    }
-  }
-
   function handleClick (e) {
     e.preventDefault();
     if (confirmAction) {
       setShowModal(true);
     }
-  }
-
-  function onChange (id, value) {
-    setQuery(value);
   }
 
   function handleSuccessConfirm (e) {
@@ -145,28 +115,28 @@ const BulkGranule = ({
       <BulkOperationsModal
         className={modalClassName}
         showModal={showBulkOpsModal}
+        handleSuccessConfirm={handleSuccessConfirm}
         onCancel={hideBulkOperationsModal}
-        onChange={onChange}
         onCloseModal={hideBulkOperationsModal}
-        onConfirm={success ? handleSuccessConfirm : handleSubmit}
-        query={query}
         error={error}
         asyncOpId={asyncOpId}
         inflight={inflight}
+        requestId={requestId}
         selected={selected}
+        success={success}
       ></BulkOperationsModal>
       <BulkDeleteModal
         className={modalClassName}
         showModal={showBulkDeleteModal}
+        handleSuccessConfirm={handleSuccessConfirm}
         onCancel={hideBulkDeleteModal}
-        onChange={onChange}
         onCloseModal={hideBulkDeleteModal}
-        onConfirm={success ? handleSuccessConfirm : handleSubmit}
-        query={query}
         error={error}
         asyncOpId={asyncOpId}
         inflight={inflight}
+        requestId={requestId}
         selected={selected}
+        success={success}
       ></BulkDeleteModal>
     </>
   );
