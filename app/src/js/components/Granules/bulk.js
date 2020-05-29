@@ -1,17 +1,19 @@
 'use strict';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import Modal from 'react-bootstrap/Modal';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 
 import { bulkGranule } from '../../actions';
 import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
-import _config from '../../config';
-import TextArea from '../TextAreaForm/text-area';
-import DefaultModal from '../Modal/modal';
+// import _config from '../../config';
+// import TextArea from '../TextAreaForm/text-area';
+// import DefaultModal from '../Modal/modal';
+import BulkOperationsModal from './bulk-granule-operations';
 
-const { kibanaRoot } = _config;
+// const { kibanaRoot } = _config;
 
 const defaultQuery = {
   workflowName: '',
@@ -32,12 +34,16 @@ const BulkGranule = ({
   const [query, setQuery] = useState(JSON.stringify(defaultQuery, null, 2));
   const [errorState, setErrorState] = useState();
   const [requestId] = useState(Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
+  const [showBulkOpsModal, setShowBulkOpsModal] = useState(false);
+
   const status = get(granules.bulk, [requestId, 'status']);
   const error = get(granules.bulk, [requestId, 'error']) || errorState;
   const asyncOpId = get(granules.bulk, [requestId, 'data', 'id']);
+
   const inflight = status === 'inflight';
   const success = status === 'success';
   const ButtonComponent = element;
+  const modalClassName = 'bulk_granules';
 
   const buttonClass = `button button--small form-group__element button--green
     ${inflight ? ' button--loading' : ''}
@@ -46,9 +52,6 @@ const BulkGranule = ({
   const elementClass = `async__element
     ${inflight ? ' async__element--loading' : ''}
     ${className ? ` ${className}` : ''}`;
-
-  const buttonText = inflight ? 'loading...'
-    : success ? 'Success!' : 'Run Bulk Granules';
 
   function handleCancel (e) {
     setShowModal(false);
@@ -82,6 +85,17 @@ const BulkGranule = ({
     history.push('/operations');
   }
 
+  function showBulkOperationsModal (e) {
+    e.preventDefault();
+    setShowModal(false);
+    setShowBulkOpsModal(true);
+  }
+
+  function hideBulkOperationsModal (e) {
+    setShowModal(false);
+    setShowBulkOpsModal(false);
+  }
+
   return (
     <>
       <ButtonComponent
@@ -90,58 +104,45 @@ const BulkGranule = ({
       >
         <span>Run Bulk Granules{inflight && <Ellipsis />}</span>
       </ButtonComponent>
-      <DefaultModal
-        title='Bulk Granules'
-        className='bulk_granules'
-        showModal={showModal}
-        cancelButtonText={success ? 'Close' : 'Cancel Bulk Granules'}
-        confirmButtonText={success ? 'Go To Operations' : buttonText}
-        confirmButtonClass='button__bulkgranules'
-        onCancel={handleCancel}
-        onCloseModal={handleCancel}
-        onConfirm={success ? handleSuccessConfirm : handleSubmit}
+      <Modal
+        dialogClassName={`default-modal ${modalClassName}`}
+        show={showModal}
+        onHide={handleCancel}
+        centered
+        size="sm"
+        aria-labelledby={`modal__${modalClassName}`}
       >
-        {success &&
-          <p>
-            Your request to process a bulk granules operation has been submitted. <br/>
-            ID <strong>{asyncOpId}</strong>
-          </p>
-        }
-        {!success &&
-          <>
-            <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
-            <p>
-                  1. In the box below, enter the <strong>workflowName</strong>. <br/>
-                  2. Then add either an array of granule Ids or an elasticsearch query and index. <br/>
-            </p>
-            {selected &&
-              <>
-                <br/>
-                <p>Currently selected granules are:</p>
-                <p>[{selected.map(selection => `"${selection}"`).join(', ')}]</p>
-              </>
-            }
-            <br/>
-            <h4 className="modal_subtitle">If you need to construct a query</h4>
-            <p>
-                  To construct a query, go to Kibana and run a search. Then place the elasticsearch query in the operation input. <br/>
-              <button className="button button__kibana_open button--small" href={kibanaRoot} alt="Open Kibana">Open Kibana</button>
-            </p>
-            <br/>
-            <form>
-              <TextArea
-                value={query}
-                id='run-bulk-granule'
-                error={error}
-                onChange={onChange}
-                mode='json'
-                minLines={30}
-                maxLines={200}
-              />
-            </form>
-          </>
-        }
-      </DefaultModal>
+        <Modal.Header className={`${modalClassName}__header`} closeButton></Modal.Header>
+        <Modal.Title id={`modal__${modalClassName}`} className={`${modalClassName}__title`}>
+          What would you like to do?
+        </Modal.Title>
+        <Modal.Body>
+          <button
+            className={'button button__animation--md button__arrow button__animation button--secondary form-group__element--left button--delete'}
+            onClick={handleCancel}>
+            Run Bulk Deletion
+          </button>
+          <button
+            className={'button button__animation--md button__arrow button__animation form-group__element--left'}
+            onClick={showBulkOperationsModal}>
+            Run Bulk Operations
+          </button>
+        </Modal.Body>
+      </Modal>
+      <BulkOperationsModal
+        title='Bulk Granules'
+        className={modalClassName}
+        showModal={showBulkOpsModal}
+        onCancel={hideBulkOperationsModal}
+        onChange={onChange}
+        onCloseModal={hideBulkOperationsModal}
+        onConfirm={success ? handleSuccessConfirm : handleSubmit}
+        query={query}
+        error={error}
+        asyncOpId={asyncOpId}
+        inflight={inflight}
+        selected={selected}
+      ></BulkOperationsModal>
     </>
   );
 };
