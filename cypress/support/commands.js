@@ -119,6 +119,6 @@ Cypress.Commands.add('clearStartDateTime', () => {
 /**
  * Add custom command to set the dropdown value to any value.
  */
-Cypress.Commands.add('setDropdown', (targetValue) => {
+Cypress.Commands.add('setDatepickerDropdown', (targetValue) => {
   cy.get('[data-cy=datetime-dropdown]').select(targetValue);
 });

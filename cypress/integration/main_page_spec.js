@@ -76,7 +76,7 @@ describe('Dashboard Home Page', () => {
       cy.clock(now);
       cy.get('main[class=main] section').within(() => {
         cy.get('h3').should('have.text', 'Date and Time Range');
-        cy.setDropdown('1 week');
+        cy.setDatepickerDropdown('1 week');
 
         cy.get('[data-cy=endDateTime]').within(() => {
           cy.get('.react-datetime-picker__inputGroup__year').should('have.value', '2009');
@@ -114,7 +114,7 @@ describe('Dashboard Home Page', () => {
       cy.clock(now);
       cy.get('main[class=main] section').within(() => {
         cy.get('h3').should('have.text', 'Date and Time Range');
-        cy.setDropdown('1 hour');
+        cy.setDatepickerDropdown('1 hour');
 
         cy.url().should('include', 'startDateTime=201503171500');
         cy.url().should('include', 'endDateTime=201503171600');
