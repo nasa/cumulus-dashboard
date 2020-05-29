@@ -12,6 +12,7 @@ import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
 // import TextArea from '../TextAreaForm/text-area';
 // import DefaultModal from '../Modal/modal';
 import BulkOperationsModal from './bulk-granule-operations';
+import BulkDeleteModal from './bulk-granule-delete';
 
 // const { kibanaRoot } = _config;
 
@@ -35,6 +36,7 @@ const BulkGranule = ({
   const [errorState, setErrorState] = useState();
   const [requestId] = useState(Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
   const [showBulkOpsModal, setShowBulkOpsModal] = useState(false);
+  const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
 
   const status = get(granules.bulk, [requestId, 'status']);
   const error = get(granules.bulk, [requestId, 'error']) || errorState;
@@ -85,7 +87,7 @@ const BulkGranule = ({
     history.push('/operations');
   }
 
-  function showBulkOperationsModal (e) {
+  function handleShowBulkOperationsModal (e) {
     e.preventDefault();
     setShowModal(false);
     setShowBulkOpsModal(true);
@@ -94,6 +96,17 @@ const BulkGranule = ({
   function hideBulkOperationsModal (e) {
     setShowModal(false);
     setShowBulkOpsModal(false);
+  }
+
+  function handleShowBulkDeleteModal (e) {
+    e.preventDefault();
+    setShowModal(false);
+    setShowBulkDeleteModal(true);
+  }
+
+  function hideBulkDeleteModal (e) {
+    setShowModal(false);
+    setShowBulkDeleteModal(false);
   }
 
   return (
@@ -119,18 +132,17 @@ const BulkGranule = ({
         <Modal.Body>
           <button
             className={'button button__animation--md button__arrow button__animation button--secondary form-group__element--left button--delete'}
-            onClick={handleCancel}>
+            onClick={handleShowBulkDeleteModal}>
             Run Bulk Deletion
           </button>
           <button
             className={'button button__animation--md button__arrow button__animation form-group__element--left'}
-            onClick={showBulkOperationsModal}>
+            onClick={handleShowBulkOperationsModal}>
             Run Bulk Operations
           </button>
         </Modal.Body>
       </Modal>
       <BulkOperationsModal
-        title='Bulk Granules'
         className={modalClassName}
         showModal={showBulkOpsModal}
         onCancel={hideBulkOperationsModal}
@@ -143,6 +155,19 @@ const BulkGranule = ({
         inflight={inflight}
         selected={selected}
       ></BulkOperationsModal>
+      <BulkDeleteModal
+        className={modalClassName}
+        showModal={showBulkDeleteModal}
+        onCancel={hideBulkDeleteModal}
+        onChange={onChange}
+        onCloseModal={hideBulkDeleteModal}
+        onConfirm={success ? handleSuccessConfirm : handleSubmit}
+        query={query}
+        error={error}
+        asyncOpId={asyncOpId}
+        inflight={inflight}
+        selected={selected}
+      ></BulkDeleteModal>
     </>
   );
 };

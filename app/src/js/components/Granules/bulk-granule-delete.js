@@ -7,7 +7,7 @@ import TextArea from '../TextAreaForm/text-area';
 
 const { kibanaRoot } = _config;
 
-const BulkOperationsModal = ({
+const BulkDeleteModal = ({
   showModal,
   onChange,
   onConfirm,
@@ -20,14 +20,14 @@ const BulkOperationsModal = ({
   selected
 }) => {
   const buttonText = inflight ? 'loading...'
-    : success ? 'Success!' : 'Run Bulk Granules';
+    : success ? 'Success!' : 'Run Bulk Delete';
 
   return (
     <DefaultModal
-      title='Bulk Granule Operations'
+      title='Bulk Granule Delete'
       className='bulk_granules'
       showModal={showModal}
-      cancelButtonText={success ? 'Close' : 'Cancel Bulk Granules'}
+      cancelButtonText={success ? 'Close' : 'Cancel Bulk Delete'}
       confirmButtonText={success ? 'Go To Operations' : buttonText}
       confirmButtonClass='button__bulkgranules'
       onCancel={onCancel}
@@ -36,16 +36,15 @@ const BulkOperationsModal = ({
     >
       {success &&
         <p>
-          Your request to process a bulk granules operation has been submitted. <br/>
+          Your request to process a bulk granule delete operation has been submitted. <br/>
           ID <strong>{asyncOpId}</strong>
         </p>
       }
       {!success &&
         <>
-          <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
+          <h4 className="modal_subtitle">To run and complete your bulk delete task:</h4>
           <p>
-            1. In the box below, enter the <strong>workflowName</strong>. <br/>
-            2. Then add either an array of granule Ids or an elasticsearch query and index. <br/>
+            1. In the box below, add either an array of granule Ids or an elasticsearch query and index. <br/>
           </p>
           {selected &&
             <>
@@ -78,7 +77,7 @@ const BulkOperationsModal = ({
   );
 };
 
-BulkOperationsModal.propTypes = {
+BulkDeleteModal.propTypes = {
   showModal: PropTypes.bool,
   onChange: PropTypes.func,
   onCloseModal: PropTypes.func,
@@ -92,4 +91,4 @@ BulkOperationsModal.propTypes = {
   query: PropTypes.string
 };
 
-export default BulkOperationsModal;
+export default BulkDeleteModal;
