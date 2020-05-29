@@ -37,9 +37,34 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.contains('.table .thead .th', 'Date Generated');
       cy.contains('.table .thead .th', 'Download Report');
       cy.contains('.table .thead .th', 'Delete Report');
-      cy.get('.table .tbody .tr').should('have.length', 2);
+      cy.get('.table .tbody .tr').should('have.length', 3);
       cy.get('[data-value="inventoryReport-20200114T202529026"] > .table__main-asset > a').should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T202529026');
       cy.get('[data-value="inventoryReport-20200114T205238781"] > .table__main-asset > a').should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T205238781');
+    });
+
+    it('should update dropdown with label when visiting bookmarkable URL', () => {
+      cy.visit('/reconciliation-reports?status=Generated');
+      cy.get('#form-Status-status > div > input').as('status-input');
+      cy.get('@status-input').should('have.value', 'Generated');
+
+      cy.visit('/reconciliation-reports?type=Inventory');
+      cy.get('#form-Report\\ Type-type > div > input').as('type-input');
+      cy.get('@type-input').should('have.value', 'Inventory');
+    });
+
+    it('should show Search and Dropdown filters in URL', () => {
+      cy.visit('/reconciliation-reports');
+      cy.get('.search').as('search');
+      cy.get('@search').should('be.visible').click().type('inventoryReport-2020');
+
+      cy.get('#form-Report\\ Type-type > div > input').as('type-input');
+      cy.get('@type-input').should('be.visible').click().type('invent{enter}');
+      cy.get('#form-Status-status > div > input').as('status-input');
+      cy.get('@status-input').should('be.visible').click().type('gener{enter}');
+      cy.url().should('include', 'search=inventoryReport-2020')
+        .and('include', 'type=Inventory')
+        .and('include', 'status=Generated');
+      cy.get('.table .tbody .tr').should('have.length', 2);
     });
 
     it('displays a link to an individual report', () => {
