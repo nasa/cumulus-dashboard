@@ -9,6 +9,7 @@ import {
   createErrorReducer,
   createInflightReducer,
   createSuccessReducer,
+  createClearItemReducer
 } from './utils/reducer-creators';
 
 import {
@@ -33,9 +34,11 @@ import {
   BULK_GRANULE,
   BULK_GRANULE_INFLIGHT,
   BULK_GRANULE_ERROR,
+  BULK_GRANULE_CLEAR_ERROR,
   BULK_GRANULE_DELETE,
   BULK_GRANULE_DELETE_INFLIGHT,
   BULK_GRANULE_DELETE_ERROR,
+  BULK_GRANULE_DELETE_CLEAR_ERROR,
   GRANULE_DELETE,
   GRANULE_DELETE_INFLIGHT,
   GRANULE_DELETE_ERROR,
@@ -67,6 +70,7 @@ export const initialState = {
 };
 
 const getConfigRequestId = ({ config: { requestId } }) => requestId;
+const getRequestId = ({ requestId }) => requestId;
 
 export default createReducer(initialState, {
   [GRANULE]: (state, action) => {
@@ -117,9 +121,11 @@ export default createReducer(initialState, {
   [BULK_GRANULE_DELETE]: createSuccessReducer('bulkDelete', getConfigRequestId),
   [BULK_GRANULE_DELETE_INFLIGHT]: createInflightReducer('bulkDelete', getConfigRequestId),
   [BULK_GRANULE_DELETE_ERROR]: createErrorReducer('bulkDelete', getConfigRequestId),
+  [BULK_GRANULE_DELETE_CLEAR_ERROR]: createClearItemReducer('bulkDelete', getRequestId),
   [BULK_GRANULE]: createSuccessReducer('bulk', getConfigRequestId),
   [BULK_GRANULE_INFLIGHT]: createInflightReducer('bulk', getConfigRequestId),
   [BULK_GRANULE_ERROR]: createErrorReducer('bulk', getConfigRequestId),
+  [BULK_GRANULE_CLEAR_ERROR]: createClearItemReducer('bulk', getRequestId),
   [GRANULE_DELETE]: createSuccessReducer('deleted'),
   [GRANULE_DELETE_INFLIGHT]: createInflightReducer('deleted'),
   [GRANULE_DELETE_ERROR]: createErrorReducer('deleted'),

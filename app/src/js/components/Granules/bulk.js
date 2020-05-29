@@ -6,6 +6,10 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 
+import {
+  bulkGranuleClearError,
+  bulkGranuleDeleteClearError
+} from '../../actions';
 import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
 import BulkOperationsModal from './bulk-granule-operations';
 import BulkDeleteModal from './bulk-granule-delete';
@@ -27,8 +31,10 @@ const BulkGranule = ({
   const bulkOperationInfo = get(granules.bulk, [requestId]);
   const bulkDeleteInfo = get(granules.bulkDelete, [requestId]);
 
-  const inflight = status === 'inflight';
-  const success = status === 'success';
+  // TODO: fix these
+  const inflight = false;
+  // const inflight = status === 'inflight';
+  // const success = status === 'success';
   const ButtonComponent = element;
   const modalClassName = 'bulk_granules';
 
@@ -63,6 +69,7 @@ const BulkGranule = ({
   }
 
   function hideBulkOperationsModal (e) {
+    dispatch(bulkGranuleClearError(requestId));
     setShowModal(false);
     setShowBulkOpsModal(false);
   }
@@ -74,6 +81,7 @@ const BulkGranule = ({
   }
 
   function hideBulkDeleteModal (e) {
+    dispatch(bulkGranuleDeleteClearError(requestId));
     setShowModal(false);
     setShowBulkDeleteModal(false);
   }

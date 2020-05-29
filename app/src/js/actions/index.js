@@ -424,6 +424,11 @@ export const bulkGranule = (payload) => ({
   }
 });
 
+export const bulkGranuleClearError = (requestId) => ({
+  type: types.BULK_GRANULE_CLEAR_ERROR,
+  requestId
+});
+
 export const bulkGranuleDelete = (payload) => ({
   [CALL_API]: {
     type: types.BULK_GRANULE_DELETE,
@@ -432,6 +437,11 @@ export const bulkGranuleDelete = (payload) => ({
     requestId: payload.requestId,
     body: payload.json
   }
+});
+
+export const bulkGranuleDeleteClearError = (requestId) => ({
+  type: types.BULK_GRANULE_DELETE_CLEAR_ERROR,
+  requestId
 });
 
 export const deleteGranule = (granuleId) => ({
