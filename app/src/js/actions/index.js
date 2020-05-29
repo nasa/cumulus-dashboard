@@ -957,3 +957,5 @@ export const createReconciliationReport = () => ({
 
 export const searchReconciliationReports = (prefix) => ({ type: types.SEARCH_RECONCILIATIONS, prefix: prefix });
 export const clearReconciliationReportSearch = () => ({ type: types.CLEAR_RECONCILIATIONS_SEARCH });
+export const filterReconciliationReports = (param) => ({ type: types.FILTER_RECONCILIATIONS, param: param });
+export const clearReconciliationReportsFilter = (paramKey) => ({ type: types.CLEAR_RECONCILIATIONS_FILTER, paramKey: paramKey });
