@@ -18,7 +18,8 @@ import {
   dropdownValue,
   dateTimeFormat,
   urlDateFormat,
-  urlDateProps
+  urlDateProps,
+  findDateRangeByValue
 } from '../../utils/datepicker';
 
 /*
@@ -73,7 +74,7 @@ class Datepicker extends React.PureComponent {
   }
 
   clear () {
-    const { value, label } = allDateRanges.find((a) => a.label === 'Custom');
+    const { value, label } = findDateRangeByValue('Custom');
     this.props.dispatch(this.dispatchDropdownUpdate(value, label));
   }
 
@@ -114,7 +115,7 @@ class Datepicker extends React.PureComponent {
       endDateTime: this.props.endDateTime,
       [name]: utcValue
     };
-    updatedProps.dateRange = allDateRanges.find((a) => a.label === 'Custom');
+    updatedProps.dateRange = findDateRangeByValue('Custom');
     this.props.dispatch({ type: DATEPICKER_DATECHANGE, data: updatedProps });
     this.updateQueryParams(updatedProps);
     this.onChange();
