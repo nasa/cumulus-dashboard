@@ -15,6 +15,9 @@ export const allDateRanges = [
   { value: 180, label: '6 months' },
   { value: 366, label: '1 year' }
 ];
+
+export const findDateRangeByValue = (value) => allDateRanges.find((r) => value === r.value);
+
 export const allHourFormats = [
   { value: '12HR', label: '12HR' },
   { value: '24HR', label: '24HR' }
@@ -36,10 +39,17 @@ export const urlDateProps = matchObjects.map((o) => o.dateProp);
  * @return {Object} returns a matching daterange object, or the custom value if no matches found.
  */
 export const dropdownValue = (values) => {
-  let dropdownInfo = { value: 'Custom', label: 'Custom' };
+  let dropdownInfo = findDateRangeByValue('Custom');
   if (!!values.startDateTime && !!values.endDateTime) {
     const durationDays = (values.endDateTime - values.startDateTime) / msPerDay;
-    dropdownInfo = allDateRanges.find((r) => r.value === durationDays) || dropdownInfo;
+    dropdownInfo = findDateRangeByValue(durationDays) || dropdownInfo;
+  }
+  if (values.startDateTime && !values.endDateTime) {
+    const durationDays = ((Date.now() - msPerDay) - values.startDateTime) / msPerDay;
+    // leave Recent as the tag for upto a day.
+    if (durationDays < 1 && durationDays > 0) {
+      dropdownInfo = findDateRangeByValue('Recent');
+    }
   }
   return dropdownInfo;
 };
