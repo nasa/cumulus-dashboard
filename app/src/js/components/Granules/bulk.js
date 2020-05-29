@@ -24,9 +24,8 @@ const BulkGranule = ({
   const [showBulkOpsModal, setShowBulkOpsModal] = useState(false);
   const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
 
-  const status = get(granules.bulk, [requestId, 'status']);
-  const error = get(granules.bulk, [requestId, 'error']);
-  const asyncOpId = get(granules.bulk, [requestId, 'data', 'id']);
+  const bulkOperationInfo = get(granules.bulk, [requestId]);
+  const bulkDeleteInfo = get(granules.bulkDelete, [requestId]);
 
   const inflight = status === 'inflight';
   const success = status === 'success';
@@ -119,12 +118,9 @@ const BulkGranule = ({
         handleSuccessConfirm={handleSuccessConfirm}
         onCancel={hideBulkOperationsModal}
         onCloseModal={hideBulkOperationsModal}
-        error={error}
-        asyncOpId={asyncOpId}
-        inflight={inflight}
+        operation={bulkOperationInfo}
         requestId={requestId}
         selected={selected}
-        success={success}
       ></BulkOperationsModal>
       <BulkDeleteModal
         className={modalClassName}
@@ -133,12 +129,9 @@ const BulkGranule = ({
         handleSuccessConfirm={handleSuccessConfirm}
         onCancel={hideBulkDeleteModal}
         onCloseModal={hideBulkDeleteModal}
-        error={error}
-        asyncOpId={asyncOpId}
-        inflight={inflight}
+        operation={bulkDeleteInfo}
         requestId={requestId}
         selected={selected}
-        success={success}
       ></BulkDeleteModal>
     </>
   );

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { get } from 'object-path';
 import PropTypes from 'prop-types';
 
 import { bulkGranule } from '../../actions';
@@ -15,23 +16,27 @@ const defaultQuery = {
 };
 
 const BulkOperationsModal = ({
-  asyncOpId,
   className,
   dispatch,
-  error,
   handleSuccessConfirm,
-  inflight,
   onCancel,
+  operation,
   requestId,
   showModal,
-  selected,
-  success
+  selected
 }) => {
   const [query, setQuery] = useState(JSON.stringify(defaultQuery, null, 2));
-  const [errorState, setErrorState] = useState(error);
+  const [errorState, setErrorState] = useState();
 
+  const status = get(operation, ['status']);
+  const error = get(operation, ['error']);
+  const asyncOpId = get(operation, ['data', 'id']);
+
+  const inflight = status === 'inflight';
+  const success = status === 'success';
   const buttonText = inflight ? 'loading...'
     : success ? 'Success!' : 'Run Bulk Granules';
+  const formError = error || errorState;
 
   function handleSubmit (e) {
     e.preventDefault();
@@ -92,7 +97,7 @@ const BulkOperationsModal = ({
             <TextArea
               value={query}
               id='run-bulk-granule'
-              error={errorState}
+              error={formError}
               onChange={onChange}
               mode='json'
               minLines={30}
@@ -106,17 +111,14 @@ const BulkOperationsModal = ({
 };
 
 BulkOperationsModal.propTypes = {
-  asyncOpId: PropTypes.string,
   className: PropTypes.string,
   dispatch: PropTypes.func,
-  error: PropTypes.string,
   handleSuccessConfirm: PropTypes.func,
-  inflight: PropTypes.bool,
   onCancel: PropTypes.func,
+  operation: PropTypes.object,
   requestId: PropTypes.string,
   selected: PropTypes.array,
-  showModal: PropTypes.bool,
-  success: PropTypes.bool
+  showModal: PropTypes.bool
 };
 
 export default BulkOperationsModal;

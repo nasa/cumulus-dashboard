@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { get } from 'object-path';
 import PropTypes from 'prop-types';
 
-import { bulkGranule } from '../../actions';
+import { bulkGranuleDelete } from '../../actions';
 import _config from '../../config';
 import DefaultModal from '../Modal/modal';
 import TextArea from '../TextAreaForm/text-area';
@@ -15,21 +16,24 @@ const defaultQuery = {
 };
 
 const BulkDeleteModal = ({
-  asyncOpId,
   className,
   dispatch,
-  error,
   handleSuccessConfirm,
-  inflight,
   onCancel,
+  operation,
   requestId,
   selected,
-  showModal,
-  success
+  showModal
 }) => {
   const [query, setQuery] = useState(JSON.stringify(defaultQuery, null, 2));
   const [errorState, setErrorState] = useState();
 
+  const status = get(operation, ['status']);
+  const error = get(operation, ['error']);
+  const asyncOpId = get(operation, ['data', 'id']);
+
+  const inflight = status === 'inflight';
+  const success = status === 'success';
   const buttonText = inflight ? 'loading...'
     : success ? 'Success!' : 'Run Bulk Delete';
   const formError = error || errorState;
@@ -42,7 +46,7 @@ const BulkDeleteModal = ({
       } catch (e) {
         return setErrorState('Syntax error in JSON');
       }
-      dispatch(bulkGranule({ requestId, json }));
+      dispatch(bulkGranuleDelete({ requestId, json }));
     }
   }
 
@@ -108,17 +112,14 @@ const BulkDeleteModal = ({
 };
 
 BulkDeleteModal.propTypes = {
-  asyncOpId: PropTypes.string,
   className: PropTypes.string,
   dispatch: PropTypes.func,
-  error: PropTypes.string,
   handleSuccessConfirm: PropTypes.func,
-  inflight: PropTypes.bool,
   onCancel: PropTypes.func,
+  operation: PropTypes.object,
   requestId: PropTypes.string,
   selected: PropTypes.array,
-  showModal: PropTypes.bool,
-  success: PropTypes.bool
+  showModal: PropTypes.bool
 };
 
 export default BulkDeleteModal;
