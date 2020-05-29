@@ -3,7 +3,7 @@
 import test from 'ava';
 import sinon from 'sinon';
 import reducer, { initialState } from '../../app/src/js/reducers/datepicker';
-import { allDateRanges, msPerDay } from '../../app/src/js/utils/datepicker';
+import { allDateRanges, msPerDay, findDateRangeByValue } from '../../app/src/js/utils/datepicker';
 import {
   DATEPICKER_DATECHANGE,
   DATEPICKER_DROPDOWN_FILTER,
@@ -31,7 +31,7 @@ test('Dropdown: "Recent" sets start time to 24 hours ago and unsets end time.', 
   const state = {
     startDateTime: new Date('2020-03-16T19:50:24.757Z'),
     endDateTime: new Date('2020-03-17T00:00:00.000Z'),
-    dateRange: allDateRanges.find((a) => a.value === 'Custom'),
+    dateRange: findDateRangeByValue('Custom'),
     hourFormat: '12HR'
   };
 
