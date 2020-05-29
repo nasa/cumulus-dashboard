@@ -106,6 +106,21 @@ describe('Dashboard Reconciliation Reports Page', () => {
         // verify correct table is displayed on click
         cy.get('.table .th').first().contains(cards[index].firstColumn);
       });
+
+      /** Table Filters **/
+      cy.get('.table__filters');
+      cy.contains('.table__filters .button__filter', 'Hide Column Filters');
+      cy.get('.table__filters--collapse').should('be.visible');
+
+      const filterLabel = 'GranuleId';
+
+      cy.contains('.table .th', filterLabel).should('be.visible');
+      cy.contains('.table__filters--filter label', filterLabel).prev().click();
+      cy.contains('.table .th', filterLabel).should('not.be.visible');
+
+      cy.get('.table__filters .button__filter').click();
+      cy.contains('.table__filters .button__filter', 'Show Column Filters');
+      cy.get('.table__filters--collapse').should('not.be.visible');
     });
   });
 });
