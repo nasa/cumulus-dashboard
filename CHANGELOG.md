@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1904**
   - Adds a TableFilters component for dynamically showing/hiding table columns
 
+- **CUMULUS-1917**
+  - Adds a download button to reconciliation report list page
+
 ### Changed
 - **CUMULUS-1994**
   - No default datetime filters are applied when the application is loaded.
