@@ -8,8 +8,7 @@ import { getCollectionId } from '../utils/format';
 import {
   createErrorReducer,
   createInflightReducer,
-  createSuccessReducer,
-  createClearItemReducer
+  createSuccessReducer
 } from './utils/reducer-creators';
 
 import {
