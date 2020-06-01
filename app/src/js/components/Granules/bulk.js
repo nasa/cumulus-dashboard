@@ -24,12 +24,13 @@ const BulkGranule = ({
   selected
 }) => {
   const [showModal, setShowModal] = useState(false);
-  const [requestId] = useState(Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
   const [showBulkOpsModal, setShowBulkOpsModal] = useState(false);
   const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
+  const [bulkOpRequestId] = useState(Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
+  const [bulkDeleteRequestId] = useState(Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
 
-  const bulkOperationInfo = get(granules.bulk, [requestId]);
-  const bulkDeleteInfo = get(granules.bulkDelete, [requestId]);
+  const bulkOperationInfo = get(granules.bulk, [bulkOpRequestId]);
+  const bulkDeleteInfo = get(granules.bulkDelete, [bulkDeleteRequestId]);
 
   // TODO: fix these
   const inflight = false;
@@ -69,8 +70,8 @@ const BulkGranule = ({
   }
 
   function hideBulkOperationsModal (e) {
-    dispatch(bulkGranuleClearError(requestId));
-    setShowModal(false);
+    // clear error from any previous request failure
+    dispatch(bulkGranuleClearError(bulkOpRequestId));
     setShowBulkOpsModal(false);
   }
 
@@ -81,8 +82,8 @@ const BulkGranule = ({
   }
 
   function hideBulkDeleteModal (e) {
-    dispatch(bulkGranuleDeleteClearError(requestId));
-    setShowModal(false);
+    // clear error from any previous request failure
+    dispatch(bulkGranuleDeleteClearError(bulkDeleteRequestId));
     setShowBulkDeleteModal(false);
   }
 
@@ -127,7 +128,7 @@ const BulkGranule = ({
         onCancel={hideBulkOperationsModal}
         onCloseModal={hideBulkOperationsModal}
         operation={bulkOperationInfo}
-        requestId={requestId}
+        requestId={bulkOpRequestId}
         selected={selected}
       ></BulkOperationsModal>
       <BulkDeleteModal
@@ -138,7 +139,7 @@ const BulkGranule = ({
         onCancel={hideBulkDeleteModal}
         onCloseModal={hideBulkDeleteModal}
         operation={bulkDeleteInfo}
-        requestId={requestId}
+        requestId={bulkDeleteRequestId}
         selected={selected}
       ></BulkDeleteModal>
     </>
