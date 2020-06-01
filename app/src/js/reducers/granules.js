@@ -1,6 +1,6 @@
 'use strict';
 
-import { set } from 'object-path';
+import { set, del } from 'object-path';
 import assignDate from './utils/assign-date';
 import removeDeleted from './utils/remove-deleted';
 import { createReducer } from '@reduxjs/toolkit';
@@ -122,14 +122,14 @@ export default createReducer(initialState, {
   [BULK_GRANULE_DELETE_ERROR]: createErrorReducer('bulkDelete', getConfigRequestId),
   [BULK_GRANULE_DELETE_CLEAR_ERROR]: (state, action) => {
     const requestId = getRequestId(action);
-    delete state.bulkDelete[requestId].error;
+    del(state, ['bulkDelete', requestId, 'error']);
   },
   [BULK_GRANULE]: createSuccessReducer('bulk', getConfigRequestId),
   [BULK_GRANULE_INFLIGHT]: createInflightReducer('bulk', getConfigRequestId),
   [BULK_GRANULE_ERROR]: createErrorReducer('bulk', getConfigRequestId),
   [BULK_GRANULE_CLEAR_ERROR]: (state, action) => {
     const requestId = getRequestId(action);
-    delete state.bulk[requestId].error;
+    del(state, ['bulk', requestId, 'error']);
   },
   [GRANULE_DELETE]: createSuccessReducer('deleted'),
   [GRANULE_DELETE_INFLIGHT]: createInflightReducer('deleted'),
