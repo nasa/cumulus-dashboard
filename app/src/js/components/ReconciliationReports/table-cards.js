@@ -5,6 +5,10 @@ import PropTypes from 'prop-types';
 
 import { Card } from 'react-bootstrap';
 
+const conflictedCount = (tables) => {
+  return tables.reduce((acc, cv) => acc + cv.data.length, 0);
+};
+
 const TableCards = ({
   config,
   onClick,
@@ -21,10 +25,10 @@ const TableCards = ({
     <div className='card-wrapper'>
       {config.map((item, index) => {
         // TODO: once API is updated with status indicator, remove the default
-        const { name, data, status = 'success' } = item;
-        const count = data.length;
-        if (!data || !count) {
-          return null;
+        let { name, tables, status = 'conflict' } = item;
+        const count = conflictedCount(tables);
+        if (count === 0) {
+          status = 'passed';
         }
         return (
           <Card key={index} className={`text-center${activeCard === index ? ' active' : ''}`} onClick={e => handleCardClick(e, index)}>
@@ -32,7 +36,7 @@ const TableCards = ({
             <Card.Body>
               <Card.Title>{count}</Card.Title>
               <Card.Text>
-                <span className={`status-indicator ${status === 'success' ? 'status-indicator--success' : 'status-indicator--failed'}`}></span>
+                <span className={`status-indicator ${status === 'passed' ? 'status-indicator--success' : 'status-indicator--failed'}`}></span>
                 {status}
               </Card.Text>
             </Card.Body>
