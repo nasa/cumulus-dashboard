@@ -109,6 +109,7 @@ describe('Dashboard Collections Page', () => {
       cy.visit('/collections');
       cy.contains('.heading--large', 'Collection Overview');
       cy.clearStartDateTime();
+      cy.wait('@getCollections');
       cy.contains('a', 'Add Collection').click();
 
       // Fill the form with the test collection JSON and submit it
@@ -189,6 +190,8 @@ describe('Dashboard Collections Page', () => {
       const version = '006';
 
       cy.visit(`/collections/collection/${name}/${version}`);
+      cy.wait('@getCollection');
+      cy.wait('@getGranules');
       cy.contains('a', 'Copy').as('copyCollection');
       cy.get('@copyCollection')
         .should('have.attr', 'href')
@@ -222,6 +225,8 @@ describe('Dashboard Collections Page', () => {
       const version = '006';
 
       cy.visit(`/collections/collection/${name}/${version}`);
+      cy.wait('@getCollection');
+      cy.wait('@getGranules');
       cy.contains('a', 'Edit').as('editCollection');
       cy.get('@editCollection')
         .should('have.attr', 'href')
@@ -280,6 +285,7 @@ describe('Dashboard Collections Page', () => {
       const version = '006';
 
       cy.visit(`/collections/collection/${name}/${version}`);
+      cy.wait('@getCollection');
       cy.contains('a', 'Edit').as('editCollection');
       cy.get('@editCollection')
         .should('have.attr', 'href')
@@ -309,6 +315,8 @@ describe('Dashboard Collections Page', () => {
 
       cy.visit(`/collections/collection/${name}/${version}`);
       cy.clearStartDateTime();
+      cy.wait('@getCollection');
+      cy.wait('@getGranules');
 
       // delete collection
       cy.get('.DeleteCollection > .button').click();
@@ -337,10 +345,12 @@ describe('Dashboard Collections Page', () => {
 
       // Wait for the table to be visible.
       cy.get('.previous');
+      cy.wait('@getCollections');
 
       // This forces an update to the current state and this seems wrong, but
       // the tests will pass.
       cy.get('.form__element__refresh').click();
+      cy.wait('@getCollections');
 
       cy.getFakeApiFixture('collections').its('results')
         .each((collection) => {
@@ -368,6 +378,7 @@ describe('Dashboard Collections Page', () => {
 
       cy.visit(`/collections/collection/${name}/${version}`);
       cy.clearStartDateTime();
+      cy.wait('@getCollection');
 
       // delete collection
       cy.get('.DeleteCollection > .button').click();
@@ -466,6 +477,7 @@ describe('Dashboard Collections Page', () => {
 
     it('Should reingest multiple granules and redirect to the running page on a collection\'s granule detail page and close the modal', () => {
       cy.visit('/collections/collection/MOD09GQ/006/granules');
+      cy.wait('@getGranules');
       const granuleIds = [
         'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
