@@ -7,7 +7,7 @@ import { strings } from '../../components/locale';
 export const tableColumns = [
   {
     Header: 'Name',
-    accessor: 'name',
+    accessor: 'id',
     Cell: ({ cell: { value } }) => <Link to={`providers/provider/${value}`}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
