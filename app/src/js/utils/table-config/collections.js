@@ -12,8 +12,11 @@ import BatchDeleteWithGranulesContent from '../../components/DeleteCollection/Ba
 export const tableColumns = [
   {
     Header: 'Name',
-    accessor: row => <Link to={`/collections/collection/${row.name}/${row.version}`}>{row.name}</Link>,
-    id: 'name',
+    accessor: 'name',
+    Cell: ({ cell: { value, row } }) => { // eslint-disable-line react/prop-types
+      const { values } = row; // eslint-disable-line react/prop-types
+      return <Link to={`/collections/collection/${value}/${values.version}`}>{value}</Link>; // eslint-disable-line react/prop-types
+    },
     width: 175
   },
   {
@@ -50,20 +53,20 @@ export const tableColumns = [
   },
   {
     Header: 'MMT',
-    accessor: row => row.mmtLink ? <a href={row.mmtLink} target="_blank">MMT</a> : null,
-    id: 'mmtLink',
+    accessor: 'mmtLink',
+    Cell: ({ cell: { value } }) => value ? <a href={value} target="_blank">MMT</a> : null, // eslint-disable-line react/prop-types
     disableSortBy: true,
     width: 100
   },
   {
     Header: 'Duration',
-    accessor: row => seconds(row.duration),
-    id: 'duration'
+    accessor: 'duration',
+    Cell: ({ cell: { value } }) => seconds(value)
   },
   {
     Header: 'Timestamp',
-    accessor: row => fromNow(row.timestamp),
-    id: 'timestamp'
+    accessor: 'timestamp',
+    Cell: ({ cell: { value } }) => fromNow(value)
   }
 ];
 

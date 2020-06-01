@@ -28,9 +28,9 @@ import BatchReingestCompleteContent from '../../components/ReingestGranules/Batc
 export const tableColumns = [
   {
     Header: 'Status',
-    accessor: row => <Link to={`/granules/${row.status}`} className={`granule__status granule__status--${row.status}`}>{displayCase(row.status)}</Link>,
-    id: 'status',
-    width: 100
+    accessor: 'status',
+    width: 100,
+    Cell: ({ cell: { value } }) => <Link to={`/granules/${value}`} className={`granule__status granule__status--${value}`}>{displayCase(value)}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Name',

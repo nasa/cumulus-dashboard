@@ -7,8 +7,7 @@ import { fullDate } from '../format';
 export const tableColumns = [
   {
     Header: 'Id',
-    accessor: row => row.id,
-    id: 'id'
+    accessor: 'id',
   },
   {
     Header: 'Type',
@@ -16,16 +15,16 @@ export const tableColumns = [
   },
   {
     Header: 'Timestamp',
-    accessor: row => fullDate(row.timestamp),
-    id: 'timestamp'
+    accessor: 'timestamp',
+    Cell: ({ cell: { value } }) => fullDate(value)
   },
   {
     Header: 'Input Details',
-    accessor: row => (
+    accessor: 'eventDetails',
+    Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
       <Collapse trigger={'More Details'} triggerWhenOpen={'Less Details'}>
-        <pre className={'pre-style'}>{JSON.stringify(row.eventDetails, null, 2)}</pre>
+        <pre className={'pre-style'}>{JSON.stringify(value, null, 2)}</pre>
       </Collapse>
     ),
-    id: 'eventDetails'
   }
 ];
