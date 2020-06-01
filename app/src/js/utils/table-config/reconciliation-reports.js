@@ -7,8 +7,8 @@ import { nullValue, dateOnly } from '../format';
 export const tableColumns = [
   {
     Header: 'Name',
-    id: 'name',
-    accessor: row => <Link to={`/reconciliation-reports/report/${row.name}`}>{row.name}</Link>
+    accessor: 'name',
+    Cell: ({ cell: { value } }) => <Link to={`/reconciliation-reports/report/${value}`}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Report Type',
@@ -20,11 +20,8 @@ export const tableColumns = [
   },
   {
     Header: 'Date Generated',
-    id: 'createdAt',
-    accessor: row => dateOnly(row.createdAt)
-  },
-  {
-    Header: 'Download Report'
+    accessor: 'createdAt',
+    Cell: ({ cell: { value } }) => dateOnly(value)
   },
   {
     Header: 'Delete Report'
@@ -46,8 +43,8 @@ export const tableColumnsS3Files = [
   },
   {
     Header: 'S3 Link',
-    accessor: row => row ? <a href={row.path} target='_blank'>Link</a> : nullValue,
-    id: 'path'
+    accessor: 'path',
+    Cell: ({ cell: { value } }) => value ? <a href={value} target='_blank'>Link</a> : nullValue // eslint-disable-line react/prop-types
   }
 ];
 
@@ -66,8 +63,8 @@ export const tableColumnsFiles = [
   },
   {
     Header: 'S3 Link',
-    accessor: row => row ? <a href={row.path} target='_blank'>Link</a> : nullValue,
-    id: 'path'
+    accessor: 'path',
+    Cell: ({ cell: { value } }) => value ? <a href={value} target='_blank'>Link</a> : nullValue // eslint-disable-line react/prop-types
   }
 ];
 
