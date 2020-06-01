@@ -1,0 +1,26 @@
+{
+    "reportStartTime": "2020-05-19T14:33:11.876Z",
+    "reportEndTime": null,
+    "status": "RUNNING",
+    "error": null,
+    "filesInCumulus": {
+        "okCount": 0,
+        "onlyInS3": [],
+        "onlyInDynamoDb": []
+    },
+    "collectionsInCumulusCmr": {
+        "okCount": 0,
+        "onlyInCumulus": [],
+        "onlyInCmr": []
+    },
+    "granulesInCumulusCmr": {
+        "okCount": 0,
+        "onlyInCumulus": [],
+        "onlyInCmr": []
+    },
+    "filesInCumulusCmr": {
+        "okCount": 0,
+        "onlyInCumulus": [],
+        "onlyInCmr": []
+    }
+}

@@ -8,9 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
-
 - **CUMULUS-1904**
   - Adds a TableFilters component for dynamically showing/hiding table columns
+
+### Changed
+- **CUMULUS-1994**
+  - No default datetime filters are applied when the application is loaded.
+  - Upgrade Cypress to latest version (4.7.0)
 
 ## [v1.9.0]
 
@@ -27,6 +31,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1913**
   - Add datepicker to reconcilation-reports page
+
+- **CUMULUS-1915**
+  - Add filters for `Report Type` and `Status` to reconcilation-reports page
 
 - **CUMULUS-1916**
   - reconcilation-reports page now requires Cumulus API version >= v1.23.0

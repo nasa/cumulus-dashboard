@@ -18,7 +18,8 @@ import {
   dropdownValue,
   dateTimeFormat,
   urlDateFormat,
-  urlDateProps
+  urlDateProps,
+  findDateRangeByValue
 } from '../../utils/datepicker';
 
 /*
@@ -63,7 +64,6 @@ class Datepicker extends React.PureComponent {
 
   componentDidMount () {
     updateDatepickerStateFromQueryParams(this.props);
-    this.homePageInitialDateTime();
   }
 
   refresh (e) {
@@ -74,18 +74,8 @@ class Datepicker extends React.PureComponent {
   }
 
   clear () {
-    const { value, label } = allDateRanges.find((a) => a.label === 'Custom');
+    const { value, label } = findDateRangeByValue('Custom');
     this.props.dispatch(this.dispatchDropdownUpdate(value, label));
-  }
-
-  homePageInitialDateTime () {
-    const { location, queryParams } = this.props;
-    if (location.pathname === '/' && queryParams.new_session === 'true') {
-      queryParams.new_session = undefined;
-      this.props.setQueryParams(queryParams);
-      const { value, label } = allDateRanges.find((a) => a.label === 'Recent');
-      this.props.dispatch(this.dispatchDropdownUpdate(value, label));
-    }
   }
 
   dispatchDropdownUpdate (value, label) {
@@ -125,7 +115,7 @@ class Datepicker extends React.PureComponent {
       endDateTime: this.props.endDateTime,
       [name]: utcValue
     };
-    updatedProps.dateRange = allDateRanges.find((a) => a.label === 'Custom');
+    updatedProps.dateRange = findDateRangeByValue('Custom');
     this.props.dispatch({ type: DATEPICKER_DATECHANGE, data: updatedProps });
     this.updateQueryParams(updatedProps);
     this.onChange();
@@ -289,7 +279,6 @@ Datepicker.propTypes = {
   onChange: PropTypes.func,
   dispatch: PropTypes.func,
   hideWrapper: PropTypes.bool,
-  location: PropTypes.object
 };
 
 export default withRouter(
