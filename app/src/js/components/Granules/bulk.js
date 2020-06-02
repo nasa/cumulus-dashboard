@@ -10,7 +10,6 @@ import {
   bulkGranuleClearError,
   bulkGranuleDeleteClearError
 } from '../../actions';
-import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
 import BulkOperationsModal from './bulk-granule-operations';
 import BulkDeleteModal from './bulk-granule-delete';
 
@@ -32,19 +31,13 @@ const BulkGranule = ({
   const bulkOperationInfo = get(granules.bulk, [bulkOpRequestId]);
   const bulkDeleteInfo = get(granules.bulkDelete, [bulkDeleteRequestId]);
 
-  // TODO: fix these
-  const inflight = false;
-  // const inflight = status === 'inflight';
-  // const success = status === 'success';
   const ButtonComponent = element;
   const modalClassName = 'bulk_granules';
 
   const buttonClass = `button button--small form-group__element button--green
-    ${inflight ? ' button--loading' : ''}
     ${className ? ` ${className}` : ''}`;
 
   const elementClass = `async__element
-    ${inflight ? ' async__element--loading' : ''}
     ${className ? ` ${className}` : ''}`;
 
   function handleCancel (e) {
@@ -93,7 +86,7 @@ const BulkGranule = ({
         className={element === 'button' ? buttonClass : elementClass}
         onClick={handleClick}
       >
-        <span>Run Bulk Granules{inflight && <Ellipsis />}</span>
+        <span>Run Bulk Granules</span>
       </ButtonComponent>
       <Modal
         dialogClassName={`default-modal ${modalClassName}`}
