@@ -2,6 +2,7 @@
 /* eslint node/no-deprecated-api: 0 */
 import path from 'path';
 import PropTypes from 'prop-types';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import React from 'react';
 import { useAccordionToggle } from 'react-bootstrap';
 import Accordian from 'react-bootstrap/Accordion';
@@ -19,6 +20,21 @@ import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import SortableTable from '../SortableTable/SortableTable';
 import TableCards from './table-cards';
+
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/',
+  },
+  {
+    label: 'Reports Overview',
+    href: '/reconciliation-reports',
+  },
+  {
+    label: 'Report',
+    active: true,
+  },
+];
 
 const parseFileObject = (d) => {
   const parsed = url.parse(d.uri);
@@ -244,6 +260,15 @@ class ReconciliationReport extends React.Component {
     }
     return (
       <div className="page__component">
+        <section className="page__section page__section__controls">
+          <div className="reconciliation-reports__options--top">
+            <ul>
+              <li>
+                <Breadcrumbs config={breadcrumbConfig} />
+              </li>
+            </ul>
+          </div>
+        </section>
         <section className="page__section page__section__header-wrapper">
           <div className="page__section__header">
             <h1 className="heading--large heading--shared-content with-description ">
