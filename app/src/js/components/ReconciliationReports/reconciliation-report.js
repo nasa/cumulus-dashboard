@@ -36,6 +36,20 @@ const breadcrumbConfig = [
   },
 ];
 
+const ReportStateHeader = ({ reportState, startDate, endDate }) => {
+  return (
+    <>
+      Date Range {startDate} to {endDate} state: {reportState}
+    </>
+  );
+};
+
+ReportStateHeader.propTypes = {
+  reportState: PropTypes.string,
+  endDate: PropTypes.string,
+  startDate: PropTypes.string,
+};
+
 const parseFileObject = (d) => {
   const parsed = url.parse(d.uri);
   return {
@@ -93,6 +107,17 @@ const getGranuleFilesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) => {
   return { granuleFilesOnlyInCumulus, granuleFilesOnlyInCmr };
 };
 
+/**
+ * returns PASSED or CONFLICT based on reconcilation report data.
+ * @param {Object} cardConfig - reshaped report data
+ */
+const reportState = (cardConfig) => {
+  const anyBad = cardConfig.some((item) =>
+    item.tables.some((table) => table.data.length)
+  );
+  return anyBad ? 'CONFLICT' : 'PASSED';
+};
+
 class ReconciliationReport extends React.Component {
   constructor() {
     super();
@@ -127,7 +152,6 @@ class ReconciliationReport extends React.Component {
 
     // TODO [MHS, 2020-05-27] Maybe consider reshaping the data in the reducer and removing some of the logic from here.
     const record = reconciliationReports.map[reconciliationReportName];
-
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
     }
@@ -145,6 +169,7 @@ class ReconciliationReport extends React.Component {
     let granulesInCmr = [];
 
     let error;
+    const { reportStartTime = null, reportEndTime = null } = record.data;
 
     if (record.data) {
       const {
@@ -245,9 +270,10 @@ class ReconciliationReport extends React.Component {
       },
     ];
 
+    const theReportState = reportState(cardConfig);
+
     function CustomToggle({ children, eventKey }) {
       const decoratedOnClick = useAccordionToggle(eventKey);
-
       return (
         <button
           type="button"
@@ -258,14 +284,20 @@ class ReconciliationReport extends React.Component {
         </button>
       );
     }
+
     return (
       <div className="page__component">
         <section className="page__section page__section__controls">
           <div className="reconciliation-reports__options--top">
             <ul>
-              <li>
+              <li key="breadcrumbs">
                 <Breadcrumbs config={breadcrumbConfig} />
               </li>
+              <ReportStateHeader
+                reportState={theReportState}
+                startDate={reportStartTime}
+                endDate={reportEndTime}
+              />
             </ul>
           </div>
         </section>
@@ -290,7 +322,7 @@ class ReconciliationReport extends React.Component {
           <Accordian>
             {cardConfig[activeIdx].tables.map((item, index) => {
               return (
-                <>
+                <div className="accordion__table" key={index}>
                   <CustomToggle eventKey={index}>
                     {item.name} {item.data.length}
                   </CustomToggle>
@@ -302,7 +334,7 @@ class ReconciliationReport extends React.Component {
                       initialHiddenColumns={['']}
                     />
                   </Accordian.Collapse>
-                </>
+                </div>
               );
             })}
           </Accordian>
