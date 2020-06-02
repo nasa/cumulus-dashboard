@@ -4,8 +4,8 @@ import path from 'path';
 import PropTypes from 'prop-types';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import React from 'react';
-import { useAccordionToggle } from 'react-bootstrap';
 import Accordian from 'react-bootstrap/Accordion';
+import Card from 'react-bootstrap/Card';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import url from 'url';
@@ -323,9 +323,9 @@ class ReconciliationReport extends React.Component {
             {cardConfig[activeIdx].tables.map((item, index) => {
               return (
                 <div className="accordion__table" key={index}>
-                  <CustomToggle eventKey={index}>
+                  <Accordian.Toggle as={Card.Header} eventKey={index}>
                     {item.name} {item.data.length}
-                  </CustomToggle>
+                  </Accordian.Toggle>
                   <Accordian.Collapse eventKey={index}>
                     <SortableTable
                       data={item.data}
