@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { nullValue, dateOnly } from '../format';
-import { deleteReconciliationReport } from '../../actions';
+import { getReconciliationReport, deleteReconciliationReport } from '../../actions';
 
 export const tableColumns = ({ dispatch }) => ([
   {
@@ -25,6 +25,17 @@ export const tableColumns = ({ dispatch }) => ([
     Cell: ({ cell: { value } }) => dateOnly(value)
   },
   {
+    Header: 'Download Report',
+    id: 'download',
+    accessor: 'name',
+    Cell: ({ cell: { value } }) => { // eslint-disable-line react/prop-types
+      return (
+        <button className='button button__row button__row--download' onClick={e => handleDownloadClick(e, value, dispatch)} />
+      );
+    },
+    disableSortBy: true
+  },
+  {
     Header: 'Delete Report',
     id: 'delete',
     accessor: 'name',
@@ -33,9 +44,25 @@ export const tableColumns = ({ dispatch }) => ([
       <button onClick={() => dispatch(deleteReconciliationReport(value))}
         className='button button__row button__row--delete'>
       </button>
-    )
+    ),
+    disableSortBy: true
   }
 ]);
+
+const handleDownloadClick = (e, reportName, dispatch) => {
+  e.preventDefault();
+  dispatch(getReconciliationReport(reportName)).then(response => {
+    const { data } = response;
+    const jsonHref = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data))}`;
+
+    const link = document.createElement('a');
+    link.setAttribute('download', `${reportName}.json`);
+    link.href = jsonHref;
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode.removeChild(link);
+  });
+};
 
 export const bulkActions = function (reports) {
   return [];

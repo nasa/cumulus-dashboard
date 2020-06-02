@@ -9,7 +9,6 @@ import {
   clearReconciliationReportsFilter,
   listReconciliationReports,
   createReconciliationReport,
-  getReconciliationReport,
   interval,
   getCount,
   filterReconciliationReports
@@ -34,7 +33,6 @@ class ReconciliationReportList extends React.Component {
     this.generateBulkActions = this.generateBulkActions.bind(this);
     this.createReport = this.createReport.bind(this);
     this.queryParams = this.queryParams.bind(this);
-    this.handleDownloadClick = this.handleDownloadClick.bind(this);
   }
 
   componentDidMount () {
@@ -65,40 +63,11 @@ class ReconciliationReportList extends React.Component {
     this.props.dispatch(createReconciliationReport());
   }
 
-  handleDownloadClick (e, reportName) {
-    e.preventDefault();
-    this.props.dispatch(getReconciliationReport(reportName)).then(response => {
-      const { data } = response;
-      const jsonHref = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data))}`;
-
-      const link = document.createElement('a');
-      link.setAttribute('download', `${reportName}.json`);
-      link.href = jsonHref;
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-    });
-  }
-
   render () {
     const { reconciliationReports } = this.props;
     const { list } = this.props.reconciliationReports;
     const { queriedAt } = list.meta;
     const tableColumnsArray = tableColumns({ dispatch: this.props.dispatch });
-
-    const downloadColumn = {
-      Header: 'Download Report',
-      id: 'download',
-      accessor: 'name',
-      Cell: ({ cell: { value } }) => {
-        return (
-          <button className='button button__row button__row--download' onClick={e => this.handleDownloadClick(e, value)} />
-        );
-      },
-      disableSortBy: true
-    };
-
-    tableColumnsArray.splice(4, 0, downloadColumn);
 
     return (
       <div className='page__component'>
