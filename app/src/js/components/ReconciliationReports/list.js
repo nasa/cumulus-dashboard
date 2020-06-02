@@ -84,6 +84,7 @@ class ReconciliationReportList extends React.Component {
     const { reconciliationReports } = this.props;
     const { list } = this.props.reconciliationReports;
     const { queriedAt } = list.meta;
+    const tableColumnsArray = tableColumns({ dispatch: this.props.dispatch });
 
     const downloadColumn = {
       Header: 'Download Report',
@@ -97,7 +98,7 @@ class ReconciliationReportList extends React.Component {
       disableSortBy: true
     };
 
-    tableColumns.splice(4, 0, downloadColumn);
+    tableColumnsArray.splice(4, 0, downloadColumn);
 
     return (
       <div className='page__component'>
@@ -112,7 +113,7 @@ class ReconciliationReportList extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listReconciliationReports}
-            tableColumns={tableColumns}
+            tableColumns={tableColumnsArray}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId='name'

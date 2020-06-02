@@ -586,5 +586,18 @@
           color: $light-green;
         }
       }
+      &--delete {
+        &:before {
+          content: '\f187';
+          font-family: 'FontAwesome';
+          background-color: transparent;
+          color: $grey;
+          font-weight: 900;
+        }
+
+        &:hover {
+          color: $dark-grey;
+        }
+      }
     }
 }
