@@ -572,4 +572,25 @@
         background-color: $light-green;
       }
     }
+
+    &__row {
+      padding: .65em 1.1em;
+      font-size: 1.1em;
+      line-height: 1.1em;
+      &--delete {
+        background-color: transparent;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0);
+        &:before {
+          content: '\f187';
+          font-family: 'FontAwesome';
+          background-color: transparent;
+          color: $grey;
+          font-weight: 900;
+        }
+
+        &:hover {
+          color: $dark-grey;
+        }
+      }
+    }
 }
