@@ -272,19 +272,6 @@ class ReconciliationReport extends React.Component {
 
     const theReportState = reportState(cardConfig);
 
-    function CustomToggle({ children, eventKey }) {
-      const decoratedOnClick = useAccordionToggle(eventKey);
-      return (
-        <button
-          type="button"
-          style={{ backgroundColor: 'pink' }}
-          onClick={decoratedOnClick}
-        >
-          {children}
-        </button>
-      );
-    }
-
     return (
       <div className="page__component">
         <section className="page__section page__section__controls">
@@ -323,8 +310,9 @@ class ReconciliationReport extends React.Component {
             {cardConfig[activeIdx].tables.map((item, index) => {
               return (
                 <div className="accordion__table" key={index}>
-                  <Accordian.Toggle as={Card.Header} eventKey={index}>
-                    {item.name} {item.data.length}
+                  <Accordian.Toggle eventKey={index}>
+                    {item.name}
+                    <span className="num--title">{item.data.length}</span>
                   </Accordian.Toggle>
                   <Accordian.Collapse eventKey={index}>
                     <SortableTable
