@@ -81,7 +81,7 @@ class ReconciliationReportList extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listReconciliationReports}
-            tableColumns={tableColumns}
+            tableColumns={tableColumns({ dispatch: this.props.dispatch })}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId='name'
