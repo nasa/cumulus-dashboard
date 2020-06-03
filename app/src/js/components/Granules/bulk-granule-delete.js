@@ -27,7 +27,7 @@ const BulkDeleteModal = ({
   requestId,
   showModal,
   selected = [],
-  success,
+  success
 }) => {
   const [query, setQuery] = useState(JSON.stringify(defaultQuery, null, 2));
   const [errorState, setErrorState] = useState();
@@ -75,13 +75,15 @@ const BulkDeleteModal = ({
       onConfirm={success ? handleSuccessConfirm : handleSubmit}
     >
       {success &&
-        <p>
-          Your request to process a bulk granule delete operation has been submitted. <br/>
-          ID <strong>{asyncOpId}</strong>
-        </p>
+        <div className="message__success">
+          <p>
+            Your request to process a bulk granule delete operation has been submitted. <br/>
+            ID <strong>{asyncOpId}</strong>
+          </p>
+        </div>
       }
       {!success &&
-        <>
+        <div className="form__bulkgranules">
           <h4 className="modal_subtitle">To run and complete your bulk delete task:</h4>
           <p>
             1. In the box below, add either an array of granule Ids or an elasticsearch query and index. <br/>
@@ -113,7 +115,7 @@ const BulkDeleteModal = ({
               maxLines={200}
             />
           </form>
-        </>
+        </div>
       }
     </DefaultModal>
   );

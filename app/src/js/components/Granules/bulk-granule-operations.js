@@ -26,8 +26,8 @@ const BulkOperationsModal = ({
   onCancel,
   requestId,
   showModal,
-  selected,
-  success,
+  selected = [],
+  success
 }) => {
   const [query, setQuery] = useState(JSON.stringify(defaultQuery, null, 2));
   const [errorState, setErrorState] = useState();
@@ -75,13 +75,15 @@ const BulkOperationsModal = ({
       onConfirm={success ? handleSuccessConfirm : handleSubmit}
     >
       {success &&
-        <p>
-          Your request to process a bulk granules operation has been submitted. <br/>
-          ID <strong>{asyncOpId}</strong>
-        </p>
+        <div className="message__success">
+          <p>
+            Your request to process a bulk granules operation has been submitted. <br/>
+            ID <strong>{asyncOpId}</strong>
+          </p>
+        </div>
       }
       {!success &&
-        <>
+        <div className="form__bulkgranules">
           <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
           <p>
             1. In the box below, enter the <strong>workflowName</strong>. <br/>
@@ -112,7 +114,7 @@ const BulkOperationsModal = ({
               maxLines={200}
             />
           </form>
-        </>
+        </div>
       }
     </DefaultModal>
   );
