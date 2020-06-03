@@ -2,10 +2,8 @@
 /* eslint node/no-deprecated-api: 0 */
 import path from 'path';
 import PropTypes from 'prop-types';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import React from 'react';
 import Accordian from 'react-bootstrap/Accordion';
-import Card from 'react-bootstrap/Card';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import url from 'url';
@@ -16,6 +14,7 @@ import {
   tableColumnsGranules,
   tableColumnsS3Files,
 } from '../../utils/table-config/reconciliation-reports';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import SortableTable from '../SortableTable/SortableTable';
@@ -37,9 +36,23 @@ const breadcrumbConfig = [
 ];
 
 const ReportStateHeader = ({ reportState, startDate, endDate }) => {
+  const displayStartDate = startDate
+    ? new Date(startDate).toLocaleDateString()
+    : 'missing';
+  const displayEndDate = endDate
+    ? new Date(startDate).toLocaleDateString()
+    : 'missing';
   return (
     <>
-      Date Range {startDate} to {endDate} state: {reportState}
+      <b>Date Range:</b> {displayStartDate} to {displayEndDate} state:{' '}
+      <span
+        className={`text-notifier-${
+          reportState === 'PASSED' ? 'PASSED' : 'CONFLICT'
+        }`}
+      >
+        {' '}
+        {reportState}{' '}
+      </span>
     </>
   );
 };
