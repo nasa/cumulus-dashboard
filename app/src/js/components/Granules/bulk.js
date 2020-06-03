@@ -132,12 +132,12 @@ const BulkGranule = ({
         </Modal.Title>
         <Modal.Body>
           <button
-            className={'button button__animation--md button__arrow button__animation button--secondary form-group__element--left button--delete'}
+            className={'button button__animation--md button__arrow button__animation button__bulkgranules button__bulkgranules--delete form-group__element--left'}
             onClick={handleShowBulkDeleteModal}>
             Run Bulk Delete
           </button>
           <button
-            className={'button button__animation--md button__arrow button__animation form-group__element--left'}
+            className={'button button__animation--md button__arrow button__animation button__bulkgranules button__bulkgranules--operations form-group__element--left'}
             onClick={handleShowBulkOperationsModal}>
             Run Bulk Operations
           </button>
