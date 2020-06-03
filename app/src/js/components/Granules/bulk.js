@@ -134,7 +134,7 @@ const BulkGranule = ({
           <button
             className={'button button__animation--md button__arrow button__animation button--secondary form-group__element--left button--delete'}
             onClick={handleShowBulkDeleteModal}>
-            Run Bulk Deletion
+            Run Bulk Delete
           </button>
           <button
             className={'button button__animation--md button__arrow button__animation form-group__element--left'}

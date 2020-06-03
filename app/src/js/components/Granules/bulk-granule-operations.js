@@ -32,7 +32,7 @@ const BulkOperationsModal = ({
   const [errorState, setErrorState] = useState();
 
   const buttonText = inflight ? 'loading...'
-    : success ? 'Success!' : 'Run Bulk Granules';
+    : success ? 'Success!' : 'Run Bulk Operations';
   const formError = error || errorState;
 
   function handleSubmit (e) {
@@ -54,9 +54,9 @@ const BulkOperationsModal = ({
   return (
     <DefaultModal
       title='Bulk Granule Operations'
-      className={className}
+      className={`${className} bulk_granules--operations`}
       showModal={showModal}
-      cancelButtonText={success ? 'Close' : 'Cancel Bulk Granules'}
+      cancelButtonText={success ? 'Close' : 'Cancel Bulk Operations'}
       confirmButtonText={success ? 'Go To Operations' : buttonText}
       confirmButtonClass='button__bulkgranules'
       onCancel={onCancel}
