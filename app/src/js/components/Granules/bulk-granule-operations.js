@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { bulkGranule } from '../../actions';
 import _config from '../../config';
-import { needsSelectedIdsQueryUpdate } from '../../utils/bulk';
+import { updateSelectedQueryIds } from '../../utils/bulk';
 import DefaultModal from '../Modal/modal';
 import TextArea from '../TextAreaForm/text-area';
 
@@ -32,17 +32,12 @@ const BulkOperationsModal = ({
   const [query, setQuery] = useState(JSON.stringify(defaultQuery, null, 2));
   const [errorState, setErrorState] = useState();
 
-  const currentQuery = JSON.parse(query);
-  if (needsSelectedIdsQueryUpdate(currentQuery, selected)) {
-    setQuery(JSON.stringify({
-      ...currentQuery,
-      ids: selected
-    }, null, 2));
-  }
+  // TODO: is there a better way to do this?
+  updateSelectedQueryIds(setQuery, query, selected);
 
   const buttonText = inflight ? 'loading...'
     : success ? 'Success!' : 'Run Bulk Operations';
-  const formError = error || errorState;
+  const formError = errorState || error;
 
   function handleSubmit (e) {
     e.preventDefault();
@@ -57,6 +52,13 @@ const BulkOperationsModal = ({
   }
 
   function onChange (id, value) {
+    if (errorState) {
+      try {
+        JSON.parse(value);
+        setErrorState();
+      } catch (_) {
+      }
+    }
     setQuery(value);
   }
 
