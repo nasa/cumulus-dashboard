@@ -28,6 +28,11 @@
     }
     &__disabled {
       background-color: #36342D;
+    }
+    &__passed {
+      background-color: $theme--success;
+    }
+    &__conflict {
+      background-color: $theme--conflict;
   }
 }
-

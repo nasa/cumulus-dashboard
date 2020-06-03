@@ -3,7 +3,8 @@
 import path from 'path';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Accordian from 'react-bootstrap/Accordion';
+import Accordion from 'react-bootstrap/Accordion';
+import Card from 'react-bootstrap/Card';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import url from 'url';
@@ -12,7 +13,7 @@ import {
   tableColumnsCollections,
   tableColumnsFiles,
   tableColumnsGranules,
-  tableColumnsS3Files,
+  tableColumnsS3Files
 } from '../../utils/table-config/reconciliation-reports';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ErrorReport from '../Errors/report';
@@ -46,8 +47,8 @@ const ReportStateHeader = ({ reportState, startDate, endDate }) => {
     <>
       <b>Date Range:</b> {displayStartDate} to {displayEndDate} state:{' '}
       <span
-        className={`text-notifier-${
-          reportState === 'PASSED' ? 'PASSED' : 'CONFLICT'
+        className={`status--badge status--badge__${
+         reportState === 'PASSED' ? 'passed' : 'conflict'
         }`}
       >
         {' '}
@@ -319,26 +320,26 @@ class ReconciliationReport extends React.Component {
         </section>
 
         <section className="page__section">
-          <Accordian>
+          <Accordion>
             {cardConfig[activeIdx].tables.map((item, index) => {
               return (
-                <div className="accordion__table" key={index}>
-                  <Accordian.Toggle eventKey={index}>
+                <div className="accordion--table" key={index}>
+                  <Accordion.Toggle as={Card.Header} eventKey={index}>
                     {item.name}
                     <span className="num--title">{item.data.length}</span>
-                  </Accordian.Toggle>
-                  <Accordian.Collapse eventKey={index}>
+                  </Accordion.Toggle>
+                  <Accordion.Collapse eventKey={index}>
                     <SortableTable
                       data={item.data}
                       tableColumns={item.columns}
                       shouldUsePagination={true}
                       initialHiddenColumns={['']}
                     />
-                  </Accordian.Collapse>
+                  </Accordion.Collapse>
                 </div>
               );
             })}
-          </Accordian>
+          </Accordion>
         </section>
       </div>
     );
