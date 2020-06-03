@@ -125,19 +125,25 @@
   &.bulk_granules {
     &.modal-dialog {
       overflow-y: initial !important;
-      max-height:85%;  
-      margin-top: 50px; 
+      max-height:85%;
+      margin-top: 50px;
       margin-bottom:50px;
       max-width: 750px;
     }
 
     .modal-body {
-      height: 425px;
+      height: 100px;
       overflow-y: auto;
     }
 
     .button__arrow--md:hover:after {
       left: 85%;
+    }
+  }
+
+  &.bulk_granules--operations, &.bulk_granules--delete {
+    .modal-body {
+      height: 425px;
     }
   }
 
