@@ -3,8 +3,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { nullValue, dateOnly } from '../format';
+import { deleteReconciliationReport, listReconciliationReports } from '../../actions';
 
-export const tableColumns = [
+export const tableColumns = ({ dispatch }) => ([
   {
     Header: 'Name',
     id: 'name',
@@ -27,9 +28,23 @@ export const tableColumns = [
     Header: 'Download Report'
   },
   {
-    Header: 'Delete Report'
+    Header: 'Delete Report',
+    id: 'delete',
+    accessor: 'name',
+    // eslint-disable-next-line react/prop-types
+    Cell: ({ cell: { value } }) => (
+      <button className='button button__row button__row--delete'
+        onClick={e => handleDeleteClick(e, value, dispatch)}
+      />
+    )
   }
-];
+]);
+
+const handleDeleteClick = (e, value, dispatch) => {
+  e.preventDefault();
+  dispatch(deleteReconciliationReport(value))
+    .then(() => dispatch(listReconciliationReports()));
+};
 
 export const bulkActions = function (reports) {
   return [];

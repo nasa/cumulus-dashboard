@@ -22,7 +22,6 @@
       "status": "Generated"
     },
     {
-      "createdAt": 1589898791935,
       "name": "inventoryReport-20200519T143311876",
       "location": "s3://localbucket/localrun/reconciliation-reports/inventoryReport-20200519T143311876.json",
       "type": "Inventory",

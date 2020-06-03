@@ -955,6 +955,15 @@ export const createReconciliationReport = () => ({
   }
 });
 
+export const deleteReconciliationReport = (reconciliationName) => ({
+  [CALL_API]: {
+    id: reconciliationName,
+    type: types.RECONCILIATION,
+    method: 'DELETE',
+    path: `reconciliationReports/${reconciliationName}`
+  }
+});
+
 export const searchReconciliationReports = (prefix) => ({ type: types.SEARCH_RECONCILIATIONS, prefix: prefix });
 export const clearReconciliationReportSearch = () => ({ type: types.CLEAR_RECONCILIATIONS_SEARCH });
 export const filterReconciliationReports = (param) => ({ type: types.FILTER_RECONCILIATIONS, param: param });
