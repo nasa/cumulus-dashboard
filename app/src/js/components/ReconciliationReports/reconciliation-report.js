@@ -1,5 +1,6 @@
 'use strict';
 /* eslint node/no-deprecated-api: 0 */
+import classnames from 'classnames';
 import path from 'path';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -13,7 +14,7 @@ import {
   tableColumnsCollections,
   tableColumnsFiles,
   tableColumnsGranules,
-  tableColumnsS3Files
+  tableColumnsS3Files,
 } from '../../utils/table-config/reconciliation-reports';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ErrorReport from '../Errors/report';
@@ -45,10 +46,10 @@ const ReportStateHeader = ({ reportState, startDate, endDate }) => {
     : 'missing';
   return (
     <>
-      <b>Date Range:</b> {displayStartDate} to {displayEndDate} state:{' '}
+      <b>Date Range:</b> {displayStartDate} to {displayEndDate} <b>state:</b>{' '}
       <span
-        className={`status--badge status--badge__${
-         reportState === 'PASSED' ? 'passed' : 'conflict'
+        className={`status__badge status__badge__${
+          reportState === 'PASSED' ? 'passed' : 'conflict'
         }`}
       >
         {' '}
@@ -138,7 +139,7 @@ class ReconciliationReport extends React.Component {
     this.navigateBack = this.navigateBack.bind(this);
     this.handleCardClick = this.handleCardClick.bind(this);
     this.state = {
-      activeIdx: 0,
+      activeIdx: 'dynamo',
     };
   }
 
@@ -154,9 +155,9 @@ class ReconciliationReport extends React.Component {
     this.props.history.push('/reconciliations');
   }
 
-  handleCardClick(e, index) {
+  handleCardClick(e, id) {
     e.preventDefault();
-    this.setState({ activeIdx: index });
+    this.setState({ activeIdx: id });
   }
 
   render() {
@@ -294,52 +295,68 @@ class ReconciliationReport extends React.Component {
               <li key="breadcrumbs">
                 <Breadcrumbs config={breadcrumbConfig} />
               </li>
-              <ReportStateHeader
-                reportState={theReportState}
-                startDate={reportStartTime}
-                endDate={reportEndTime}
-              />
             </ul>
           </div>
         </section>
         <section className="page__section page__section__header-wrapper">
           <div className="page__section__header">
-            <h1 className="heading--large heading--shared-content with-description ">
-              {reconciliationReportName}
-            </h1>
+            <div>
+              <h1 className="heading--large heading--shared-content with-description ">
+                {reconciliationReportName}
+              </h1>
+            </div>
+            <ReportStateHeader
+              reportState={theReportState}
+              startDate={reportStartTime}
+              endDate={reportEndTime}
+            />
             {error ? <ErrorReport report={error} /> : null}
           </div>
         </section>
 
         <section className="page__section page__section--small">
-          <TableCards
-            config={cardConfig}
-            onClick={this.handleCardClick}
-            activeCard={activeIdx}
-          />
+          <div className="tablecard--wrapper">
+            <TableCards
+              titleCaption="Internal Consistency"
+              config={cardConfig.slice(0, 2)}
+              onClick={this.handleCardClick}
+              activeCard={activeIdx}
+            />
+            <TableCards
+              titleCaption="Cumulus versus CMR"
+              config={cardConfig.slice(2, 4)}
+              onClick={this.handleCardClick}
+              activeCard={activeIdx}
+            />
+          </div>
         </section>
 
         <section className="page__section">
-          <Accordion>
-            {cardConfig[activeIdx].tables.map((item, index) => {
-              return (
-                <div className="accordion--table" key={index}>
-                  <Accordion.Toggle as={Card.Header} eventKey={index}>
-                    {item.name}
-                    <span className="num--title">{item.data.length}</span>
-                  </Accordion.Toggle>
-                  <Accordion.Collapse eventKey={index}>
-                    <SortableTable
-                      data={item.data}
-                      tableColumns={item.columns}
-                      shouldUsePagination={true}
-                      initialHiddenColumns={['']}
-                    />
-                  </Accordion.Collapse>
-                </div>
-              );
-            })}
-          </Accordion>
+          <div className="Accordion--wrapper">
+            <Accordion>
+              {cardConfig
+                .find((card) => card.id === activeIdx)
+                .tables.map((item, index) => {
+                  return (
+                    <div className="accordion--table" key={index}>
+                      <Accordion.Toggle as={Card.Header} eventKey={index}>
+                        {item.name}
+                        <span className="num--title">{item.data.length}</span>
+                      </Accordion.Toggle>
+                      {/* TODO [MHS, 2020-06-03]   add classnames here */}
+                      <Accordion.Collapse eventKey={index}>
+                        <SortableTable
+                          data={item.data}
+                          tableColumns={item.columns}
+                          shouldUsePagination={true}
+                          initialHiddenColumns={['']}
+                        />
+                      </Accordion.Collapse>
+                    </div>
+                  );
+                })}
+            </Accordion>
+          </div>
         </section>
       </div>
     );

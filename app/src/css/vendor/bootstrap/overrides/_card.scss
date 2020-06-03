@@ -1,11 +1,12 @@
 .card-wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .card {
   width: 10em;
   cursor: pointer;
+  margin: 1em;
 
   .card-header {
     color: $white;
@@ -25,4 +26,8 @@
       background-color: $theme--blue;
     }
   }
+}
+
+.tablecard--wrapper{
+  display: flex;
 }
