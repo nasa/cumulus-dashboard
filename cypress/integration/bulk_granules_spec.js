@@ -1,4 +1,4 @@
-describe('Dashboard Granules Page', () => {
+describe('Dashboard Bulk Granules', () => {
   describe('When logged in', () => {
     before(() => {
       cy.visit('/');
@@ -48,6 +48,36 @@ describe('Dashboard Granules Page', () => {
       cy.contains('button', 'Go To Operations');
     });
 
+    it('should display error from failed bulk granule operations request', () => {
+      const errorMessage = 'bulk operations failure';
+
+      cy.server();
+      cy.route({
+        method: 'POST',
+        status: 400,
+        url: '/granules/bulk',
+        response: {
+          message: errorMessage
+        }
+      }).as('postBulkGranules');
+
+      cy.visit('/granules');
+      cy.contains('button', 'Run Bulk Granules').click();
+
+      cy.get('.bulk_granules')
+        .within(() => {
+          cy.contains('button', 'Run Bulk Operations').click();
+        });
+
+      cy.get('.bulk_granules--operations')
+        .within(() => {
+          cy.contains('button', 'Run Bulk Operations').click();
+        });
+
+      cy.wait('@postBulkGranules');
+      cy.contains('.error__report', errorMessage);
+    });
+
     it('should display a modal to successfully run bulk granule deletion', () => {
       const asyncOperationId = Math.floor(Math.random() * 10);
 
@@ -64,7 +94,7 @@ describe('Dashboard Granules Page', () => {
           cy.contains('button', 'Run Bulk Delete').click();
         });
 
-      cy.get('.bulk_granules--deletion')
+      cy.get('.bulk_granules--delete')
         .within(() => {
           cy.contains('button', 'Cancel Bulk Delete');
           cy.contains('button', 'Run Bulk Delete').click();
@@ -74,6 +104,36 @@ describe('Dashboard Granules Page', () => {
       cy.contains('p', asyncOperationId);
       cy.contains('button', 'Close');
       cy.contains('button', 'Go To Operations');
+    });
+
+    it('should display error from failed bulk granule deletion request', () => {
+      const errorMessage = 'bulk delete failure';
+
+      cy.server();
+      cy.route({
+        method: 'POST',
+        status: 400,
+        url: '/granules/bulkDelete',
+        response: {
+          message: errorMessage
+        }
+      }).as('postBulkDelete');
+
+      cy.visit('/granules');
+      cy.contains('button', 'Run Bulk Granules').click();
+
+      cy.get('.bulk_granules')
+        .within(() => {
+          cy.contains('button', 'Run Bulk Delete').click();
+        });
+
+      cy.get('.bulk_granules--delete')
+        .within(() => {
+          cy.contains('button', 'Run Bulk Delete').click();
+        });
+
+      cy.wait('@postBulkDelete');
+      cy.contains('.error__report', errorMessage);
     });
   });
 });

@@ -54,7 +54,7 @@ const BulkDeleteModal = ({
   return (
     <DefaultModal
       title='Bulk Granule Delete'
-      className={`${className} bulk_granules--deletion`}
+      className={`${className} bulk_granules--delete`}
       showModal={showModal}
       cancelButtonText={success ? 'Close' : 'Cancel Bulk Delete'}
       confirmButtonText={success ? 'Go To Operations' : buttonText}
