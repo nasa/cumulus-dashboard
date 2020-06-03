@@ -13,14 +13,19 @@ import {
 test('BULK_GRANULE', (t) => {
   const inputState = cloneDeep(initialState);
   const expected = cloneDeep(initialState);
+  const data = { id: 5 };
   expected.bulk = {
-    requestedId: { data: 'some Data', status: 'success', error: null }
+    requestedId: {
+      data,
+      status: 'success',
+      error: null
+    }
   };
 
   const action = {
     type: BULK_GRANULE,
     config: { requestId: 'requestedId' },
-    data: 'some Data'
+    data
   };
 
   const actual = reducer(inputState, action);
@@ -55,14 +60,19 @@ test('BULK_GRANULE_CLEAR_ERROR', (t) => {
 test('BULK_GRANULE_DELETE', (t) => {
   const inputState = cloneDeep(initialState);
   const expected = cloneDeep(initialState);
+  const data = { id: 5 };
   expected.bulkDelete = {
-    requestedId: { data: 'some data', status: 'success', error: null }
+    requestedId: {
+      data,
+      status: 'success',
+      error: null
+    }
   };
 
   const action = {
     type: BULK_GRANULE_DELETE,
     config: { requestId: 'requestedId' },
-    data: 'some data'
+    data
   };
 
   const actual = reducer(inputState, action);
