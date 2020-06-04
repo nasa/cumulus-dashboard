@@ -107,7 +107,7 @@ const BulkDeleteModal = ({
           <form>
             <TextArea
               value={query}
-              id='run-bulk-granule'
+              id='run-bulk-delete'
               error={formError}
               onChange={onChange}
               mode='json'
