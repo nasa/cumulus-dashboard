@@ -3,11 +3,6 @@
 import assignDate from './utils/assign-date';
 import { createReducer } from '@reduxjs/toolkit';
 import {
-  createErrorReducer,
-  createInflightReducer,
-  createSuccessReducer,
-} from './utils/reducer-creators';
-import {
   RECONCILIATION,
   RECONCILIATION_INFLIGHT,
   RECONCILIATION_ERROR,
@@ -20,9 +15,6 @@ import {
   NEW_RECONCILIATION,
   FILTER_RECONCILIATIONS,
   CLEAR_RECONCILIATIONS_FILTER,
-  RECONCILIATION_DELETE,
-  RECONCILIATION_DELETE_INFLIGHT,
-  RECONCILIATION_DELETE_ERROR,
 } from '../actions/types';
 
 export const initialState = {
@@ -85,8 +77,5 @@ export default createReducer(initialState, {
   },
   [CLEAR_RECONCILIATIONS_FILTER]: (state, action) => {
     state.list.params[action.paramKey] = null;
-  },
-  [RECONCILIATION_DELETE]: createSuccessReducer('deleted'),
-  [RECONCILIATION_DELETE_INFLIGHT]: createInflightReducer('deleted'),
-  [RECONCILIATION_DELETE_ERROR]: createErrorReducer('deleted'),
+  }
 });
