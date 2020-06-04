@@ -67,6 +67,7 @@ class ReconciliationReportList extends React.Component {
     const { reconciliationReports } = this.props;
     const { list } = this.props.reconciliationReports;
     const { queriedAt } = list.meta;
+    const tableColumnsArray = tableColumns({ dispatch: this.props.dispatch });
 
     return (
       <div className='page__component'>
@@ -81,7 +82,7 @@ class ReconciliationReportList extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listReconciliationReports}
-            tableColumns={tableColumns({ dispatch: this.props.dispatch })}
+            tableColumns={tableColumnsArray}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId='name'

@@ -574,9 +574,18 @@
     }
 
     &__row {
+      background-color: $white;
       padding: .65em 1.1em;
       font-size: 1.1em;
       line-height: 1.1em;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+      &--download {
+        &:before {
+          content: '\f0ab';
+          font-family: 'FontAwesome';
+          color: $light-green;
+        }
+      }
       &--delete {
         background-color: transparent;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0);

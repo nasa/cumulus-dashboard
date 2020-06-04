@@ -77,5 +77,5 @@ export default createReducer(initialState, {
   },
   [CLEAR_RECONCILIATIONS_FILTER]: (state, action) => {
     state.list.params[action.paramKey] = null;
-  },
+  }
 });
