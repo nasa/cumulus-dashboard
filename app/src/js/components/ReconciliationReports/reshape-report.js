@@ -102,7 +102,18 @@ export const reshapeReport = (record) => {
       granuleFilesOnlyInCmr,
     } = getGranuleFilesSummary(compareFiles));
   }
-  const cardConfig = [
+
+  /**
+   * The reconciation report display mechanism is set up to display cards as
+   * headers for cumulus internal consistency as well as comparison between
+   * Cumulus and CMR.  We set up a configuration from the intput record to ease
+   * the display of that information.
+   *
+   * The comparison configuration should consist of an Array of Objects, where
+   * the objects have keys `id` used for selection and 'tables' which should be
+   * an array of Objects that are passed to Sortabletable.
+   */
+  const internalComparison = [
     {
       id: 'dynamo',
       name: 'DynamoDB',
@@ -125,6 +136,9 @@ export const reshapeReport = (record) => {
         },
       ],
     },
+  ];
+
+  const cumulusVsCmrComparison = [
     {
       id: 'cumulusOnly',
       name: 'Cumulus',
@@ -175,5 +189,5 @@ export const reshapeReport = (record) => {
     },
   ];
 
-  return cardConfig;
+  return { internalComparison, cumulusVsCmrComparison };
 };

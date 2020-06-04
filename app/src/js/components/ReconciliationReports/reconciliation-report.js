@@ -58,10 +58,10 @@ ReportStateHeader.propTypes = {
 
 /**
  * returns PASSED or CONFLICT based on reconcilation report data.
- * @param {Object} cardConfig - reshaped report data
+ * @param {Object} dataList - reshaped report data
  */
-const reportState = (cardConfig) => {
-  const anyBad = cardConfig.some((item) =>
+const reportState = (dataList) => {
+  const anyBad = dataList.some((item) =>
     item.tables.some((table) => table.data.length)
   );
   return anyBad ? 'CONFLICT' : 'PASSED';
@@ -99,15 +99,19 @@ class ReconciliationReport extends React.Component {
     const { reconciliationReportName } = this.props.match.params;
     const { activeIdx } = this.state;
 
-    // TODO [MHS, 2020-05-27] Maybe consider reshaping the data in the reducer and removing some of the logic from here.
     const record = reconciliationReports.map[reconciliationReportName];
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
     }
 
-    const cardConfig = reshapeReport(record);
+    const { internalComparison, cumulusVsCmrComparison } = reshapeReport(
+      record
+    );
 
-    const theReportState = reportState(cardConfig);
+    const theReportState = reportState([
+      ...internalComparison,
+      ...cumulusVsCmrComparison,
+    ]);
     const { reportStartTime = null, reportEndTime = null } = record.data;
     const error = record.data ? record.data.error : null;
 
@@ -142,13 +146,13 @@ class ReconciliationReport extends React.Component {
           <div className="tablecard--wrapper">
             <TableCards
               titleCaption="Cumulus intercomparison"
-              config={cardConfig.slice(0, 2)}
+              config={internalComparison}
               onClick={this.handleCardClick}
               activeCard={activeIdx}
             />
             <TableCards
               titleCaption="Cumulus versus CMR comparison"
-              config={cardConfig.slice(2, 4)}
+              config={cumulusVsCmrComparison}
               onClick={this.handleCardClick}
               activeCard={activeIdx}
             />
@@ -158,8 +162,8 @@ class ReconciliationReport extends React.Component {
         <section className="page__section">
           <div className="accordion__wrapper">
             <Accordion>
-              {cardConfig
-                .find((card) => card.id === activeIdx)
+              {[...internalComparison, ...cumulusVsCmrComparison]
+                .find((displayObj) => displayObj.id === activeIdx)
                 .tables.map((item, index) => {
                   return (
                     <div className="accordion__table" key={index}>
