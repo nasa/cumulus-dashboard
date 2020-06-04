@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { bulkGranuleDelete } from '../../actions';
 import _config from '../../config';
-import { updateSelectedQueryIds } from '../../utils/bulk';
 import DefaultModal from '../Modal/modal';
 import TextArea from '../TextAreaForm/text-area';
 
@@ -31,9 +30,6 @@ const BulkDeleteModal = ({
 }) => {
   const [query, setQuery] = useState(JSON.stringify(defaultQuery, null, 2));
   const [errorState, setErrorState] = useState();
-
-  // TODO: is there a better way to do this?
-  updateSelectedQueryIds(setQuery, query, selected);
 
   const buttonText = inflight ? 'loading...'
     : success ? 'Success!' : 'Run Bulk Delete';
