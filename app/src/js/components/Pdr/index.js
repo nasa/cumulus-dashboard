@@ -11,13 +11,7 @@ import Pdr from './pdr';
 import PdrOverview from './overview';
 import PdrList from './list';
 import { strings } from '../locale';
-import isEqual from 'lodash.isequal';
-
-const withQueryWrapper = (Component, onQueryChange) => (props) => {
-  return (
-    <Component onQueryChange={onQueryChange} {...props} />
-  );
-};
+import { withQueryWrapper } from '../QueryWrapper/query-wrapper';
 
 const Pdrs = ({
   dispatch,
@@ -27,8 +21,8 @@ const Pdrs = ({
 }) => {
   const { pathname } = location;
   const count = get(stats, 'count.data.pdrs.count');
-  const AllPdrsWithWrapper = withQueryWrapper(PdrList, onQueryChange);
   const [queryOptions, setQueryOptions] = useState({});
+  const AllPdrsWithWrapper = withQueryWrapper(PdrList, queryOptions, setQueryOptions);
 
   function query () {
     dispatch(getCount({
@@ -36,12 +30,6 @@ const Pdrs = ({
       field: 'status'
     }));
     dispatch(listPdrs(queryOptions));
-  }
-
-  function onQueryChange (newQueryOptions) {
-    if (!isEqual(newQueryOptions, queryOptions)) {
-      setQueryOptions(newQueryOptions);
-    }
   }
 
   return (

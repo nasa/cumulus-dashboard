@@ -10,13 +10,7 @@ import AllGranules from './list';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import GranuleOverview from './granule';
 import GranulesOverview from './overview';
-import isEqual from 'lodash.isequal';
-
-const withQueryWrapper = (Component, onQueryChange) => (props) => {
-  return (
-    <Component onQueryChange={onQueryChange} {...props} />
-  );
-};
+import { withQueryWrapper } from '../QueryWrapper/query-wrapper';
 
 const Granules = ({
   dispatch,
@@ -26,8 +20,8 @@ const Granules = ({
 }) => {
   const { pathname } = location;
   const count = get(stats, 'count.data.granules.count');
-  const AllGranulesWithWrapper = withQueryWrapper(AllGranules, onQueryChange);
   const [queryOptions, setQueryOptions] = useState({});
+  const AllGranulesWithWrapper = withQueryWrapper(AllGranules, queryOptions, setQueryOptions);
 
   function query () {
     dispatch(getCount({
@@ -35,12 +29,6 @@ const Granules = ({
       field: 'status'
     }));
     dispatch(listGranules(queryOptions));
-  }
-
-  function onQueryChange (newQueryOptions) {
-    if (!isEqual(newQueryOptions, queryOptions)) {
-      setQueryOptions(newQueryOptions);
-    }
   }
 
   return (
