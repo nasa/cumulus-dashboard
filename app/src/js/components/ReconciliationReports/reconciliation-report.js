@@ -1,4 +1,5 @@
 'use strict';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Accordion from 'react-bootstrap/Accordion';
@@ -10,8 +11,8 @@ import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import SortableTable from '../SortableTable/SortableTable';
-import TableCards from './table-cards';
 import { reshapeReport } from './reshape-report';
+import TableCards from './table-cards';
 
 const breadcrumbConfig = [
   {
@@ -72,8 +73,10 @@ class ReconciliationReport extends React.Component {
     super();
     this.navigateBack = this.navigateBack.bind(this);
     this.handleCardClick = this.handleCardClick.bind(this);
+    this.toggleExpansion = this.toggleExpansion.bind(this);
     this.state = {
       activeIdx: 'dynamo',
+      allExpanded: false,
     };
   }
 
@@ -89,15 +92,21 @@ class ReconciliationReport extends React.Component {
     this.props.history.push('/reconciliations');
   }
 
+  toggleExpansion(e) {
+    console.log('toggleExpansion');
+    const { allExpanded } = this.state;
+    this.setState({ ...this.state, allExpanded: !allExpanded });
+  }
+
   handleCardClick(e, id) {
     e.preventDefault();
-    this.setState({ activeIdx: id });
+    this.setState({ ...this.state, activeIdx: id });
   }
 
   render() {
     const { reconciliationReports } = this.props;
     const { reconciliationReportName } = this.props.match.params;
-    const { activeIdx } = this.state;
+    const { allExpanded, activeIdx } = this.state;
 
     const record = reconciliationReports.map[reconciliationReportName];
     if (!record || (record.inflight && !record.data)) {
@@ -160,6 +169,7 @@ class ReconciliationReport extends React.Component {
         </section>
 
         <section className="page__section">
+          <span onClick={this.toggleExpansion}>TOGGLE</span>
           <div className="accordion__wrapper">
             <Accordion>
               {[...internalComparison, ...cumulusVsCmrComparison]
@@ -175,7 +185,10 @@ class ReconciliationReport extends React.Component {
                         <span className="expand-icon"></span>
                       </Accordion.Toggle>
                       {/* TODO [MHS, 2020-06-03]   add classnames here */}
-                      <Accordion.Collapse eventKey={index}>
+                      <Accordion.Collapse
+                        className={classnames({ show: allExpanded })}
+                        eventKey={index}
+                      >
                         <SortableTable
                           data={item.data}
                           tableColumns={item.columns}
