@@ -7,8 +7,8 @@ import { strings } from '../../components/locale';
 export const tableColumns = [
   {
     Header: 'Name',
-    accessor: row => <Link to={`providers/provider/${row.id}`}>{row.id}</Link>,
-    id: 'name'
+    accessor: 'id',
+    Cell: ({ cell: { value } }) => <Link to={`providers/provider/${value}`}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Host',
