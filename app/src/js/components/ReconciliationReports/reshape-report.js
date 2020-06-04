@@ -79,7 +79,7 @@ export const reshapeReport = (record) => {
   let granulesInCumulus = [];
   let granulesInCmr = [];
 
-  if (record.data) {
+  if (record && record.data) {
     const {
       filesInCumulus: internalCompareFiles = {},
       filesInCumulusCmr: compareFiles = {},
@@ -119,6 +119,7 @@ export const reshapeReport = (record) => {
       name: 'DynamoDB',
       tables: [
         {
+          id: 'dynamoNotS3',
           name: 'Files in DynamoDb not found in S3',
           data: filesInDynamoDb,
           columns: tableColumnsFiles,
@@ -130,6 +131,7 @@ export const reshapeReport = (record) => {
       name: 'S3',
       tables: [
         {
+          id: 's3NotDynamo',
           name: 'Files in S3 not found in DynamoDb',
           data: filesInS3,
           columns: tableColumnsS3Files,

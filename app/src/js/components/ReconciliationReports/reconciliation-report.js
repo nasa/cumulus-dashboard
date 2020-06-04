@@ -1,8 +1,8 @@
 'use strict';
-import classnames from 'classnames';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import React from 'react';
-import Accordion from 'react-bootstrap/Accordion';
+import TableCards from './table-cards';
+import { Collapse } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -12,7 +12,7 @@ import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import SortableTable from '../SortableTable/SortableTable';
 import { reshapeReport } from './reshape-report';
-import TableCards from './table-cards';
+import cloneDeep from 'lodash.clonedeep';
 
 const breadcrumbConfig = [
   {
@@ -68,150 +68,167 @@ const reportState = (dataList) => {
   return anyBad ? 'CONFLICT' : 'PASSED';
 };
 
-class ReconciliationReport extends React.Component {
-  constructor() {
-    super();
-    this.navigateBack = this.navigateBack.bind(this);
-    this.handleCardClick = this.handleCardClick.bind(this);
-    this.toggleExpansion = this.toggleExpansion.bind(this);
-    this.state = {
-      activeIdx: 'dynamo',
-      allExpanded: false,
-    };
-  }
+const ReconciliationReport = ({
+  reconciliationReports,
+  dispatch,
+  match
+}) => {
+  const [activeIdx, setActiveIdx] = useState('dynamo');
+  const [allExpanded, setAllExpanded] = useState(false);
 
-  componentDidMount() {
-    const { dispatch, match, reconciliationReports } = this.props;
+  const { reconciliationReportName } = match.params;
+
+  useEffect(() => {
     const { reconciliationReportName } = match.params;
     if (!reconciliationReports.map[reconciliationReportName]) {
       dispatch(getReconciliationReport(reconciliationReportName));
     }
+  }, [dispatch, match.params, reconciliationReports.map]);
+
+  const record = reconciliationReports.map[reconciliationReportName];
+
+  const { internalComparison, cumulusVsCmrComparison } = reshapeReport(
+    record
+  );
+  const reportComparisons = [...internalComparison, ...cumulusVsCmrComparison];
+
+  const [collapseState, setCollapseState] = useState(
+    reportComparisons.reduce((object, item) => {
+      object[item.id] = item.tables.reduce((tableObject, table) => {
+        tableObject[table.id] = false;
+        return tableObject;
+      }, {});
+      return object;
+    }, {}));
+
+  if (!record || (record.inflight && !record.data)) {
+    return <Loading />;
   }
 
-  navigateBack() {
-    this.props.history.push('/reconciliations');
-  }
+  const theReportState = reportState([
+    ...internalComparison,
+    ...cumulusVsCmrComparison,
+  ]);
+  const { reportStartTime = null, reportEndTime = null } = record.data;
+  const error = record.data ? record.data.error : null;
 
-  toggleExpansion(e) {
-    console.log('toggleExpansion');
-    const { allExpanded } = this.state;
-    this.setState({ ...this.state, allExpanded: !allExpanded });
-  }
-
-  handleCardClick(e, id) {
+  function handleCardClick(e, id) {
     e.preventDefault();
-    this.setState({ ...this.state, activeIdx: id });
+    setActiveIdx(id);
   }
 
-  render() {
-    const { reconciliationReports } = this.props;
-    const { reconciliationReportName } = this.props.match.params;
-    const { allExpanded, activeIdx } = this.state;
+  function handleToggleClick (e, tableId) {
+    e.preventDefault();
+    const updatedState = {
+      [activeIdx]: {
+        ...collapseState[activeIdx],
+        [tableId]: !collapseState[activeIdx][tableId]
+      }
+    };
+    setCollapseState({
+      ...collapseState,
+      ...updatedState
+    });
+  }
 
-    const record = reconciliationReports.map[reconciliationReportName];
-    if (!record || (record.inflight && !record.data)) {
-      return <Loading />;
+  function handleExpandClick () {
+    const updatedState = cloneDeep(collapseState);
+    const expanded = !allExpanded;
+    for (const key in updatedState) {
+      const obj = updatedState[key];
+      for (const prop in obj) {
+        obj[prop] = expanded;
+      }
     }
-
-    const { internalComparison, cumulusVsCmrComparison } = reshapeReport(
-      record
-    );
-
-    const theReportState = reportState([
-      ...internalComparison,
-      ...cumulusVsCmrComparison,
-    ]);
-    const { reportStartTime = null, reportEndTime = null } = record.data;
-    const error = record.data ? record.data.error : null;
-
-    return (
-      <div className="page__component">
-        <section className="page__section page__section__controls">
-          <div className="reconciliation-reports__options--top">
-            <ul>
-              <li key="breadcrumbs">
-                <Breadcrumbs config={breadcrumbConfig} />
-              </li>
-            </ul>
-          </div>
-        </section>
-        <section className="page__section page__section__header-wrapper">
-          <div className="page__section__header">
-            <div>
-              <h1 className="heading--large heading--shared-content with-description ">
-                {reconciliationReportName}
-              </h1>
-            </div>
-            <ReportStateHeader
-              reportState={theReportState}
-              startDate={reportStartTime}
-              endDate={reportEndTime}
-            />
-            {error ? <ErrorReport report={error} /> : null}
-          </div>
-        </section>
-
-        <section className="page__section page__section--small">
-          <div className="tablecard--wrapper">
-            <TableCards
-              titleCaption="Cumulus intercomparison"
-              config={internalComparison}
-              onClick={this.handleCardClick}
-              activeCard={activeIdx}
-            />
-            <TableCards
-              titleCaption="Cumulus versus CMR comparison"
-              config={cumulusVsCmrComparison}
-              onClick={this.handleCardClick}
-              activeCard={activeIdx}
-            />
-          </div>
-        </section>
-
-        <section className="page__section">
-          <span onClick={this.toggleExpansion}>TOGGLE</span>
-          <div className="accordion__wrapper">
-            <Accordion>
-              {[...internalComparison, ...cumulusVsCmrComparison]
-                .find((displayObj) => displayObj.id === activeIdx)
-                .tables.map((item, index) => {
-                  return (
-                    <div className="accordion__table" key={index}>
-                      <Accordion.Toggle as={Card.Header} eventKey={index}>
-                        {item.name}
-                        <span className="num-title--inverted">
-                          {item.data.length}
-                        </span>
-                        <span className="expand-icon"></span>
-                      </Accordion.Toggle>
-                      {/* TODO [MHS, 2020-06-03]   add classnames here */}
-                      <Accordion.Collapse
-                        className={classnames({ show: allExpanded })}
-                        eventKey={index}
-                      >
-                        <SortableTable
-                          data={item.data}
-                          tableColumns={item.columns}
-                          shouldUsePagination={true}
-                          initialHiddenColumns={['']}
-                        />
-                      </Accordion.Collapse>
-                    </div>
-                  );
-                })}
-            </Accordion>
-          </div>
-        </section>
-      </div>
-    );
+    setAllExpanded(expanded);
+    setCollapseState(updatedState);
   }
-}
+
+  return (
+    <div className="page__component">
+      <section className="page__section page__section__controls">
+        <div className="reconciliation-reports__options--top">
+          <ul>
+            <li key="breadcrumbs">
+              <Breadcrumbs config={breadcrumbConfig} />
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section className="page__section page__section__header-wrapper">
+        <div className="page__section__header">
+          <div>
+            <h1 className="heading--large heading--shared-content with-description ">
+              {reconciliationReportName}
+            </h1>
+          </div>
+          <ReportStateHeader
+            reportState={theReportState}
+            startDate={reportStartTime}
+            endDate={reportEndTime}
+          />
+          {error ? <ErrorReport report={error} /> : null}
+        </div>
+      </section>
+
+      <section className="page__section page__section--small">
+        <div className="tablecard--wrapper">
+          <TableCards
+            titleCaption="Cumulus intercomparison"
+            config={internalComparison}
+            onClick={handleCardClick}
+            activeCard={activeIdx}
+          />
+          <TableCards
+            titleCaption="Cumulus versus CMR comparison"
+            config={cumulusVsCmrComparison}
+            onClick={handleCardClick}
+            activeCard={activeIdx}
+          />
+        </div>
+      </section>
+
+      <section className="page__section">
+        <span onClick={handleExpandClick}>TOGGLE</span>
+        <div className="accordion__wrapper">
+          {reportComparisons
+            .find((displayObj) => displayObj.id === activeIdx)
+            .tables.map((item, index) => {
+              console.log(collapseState[activeIdx][item.id]);
+              return (
+                <div className="accordion__table" key={index}>
+                  <Card.Header key={index} onClick={e => handleToggleClick(e, item.id)} aria-controls={item.id}>
+                    {item.name}
+                    <span className="num-title--inverted">
+                      {item.data.length}
+                    </span>
+                    <span className="expand-icon"></span>
+                  </Card.Header>
+                  <Collapse
+                    in={collapseState[activeIdx][item.id]}
+                  >
+                    <div id={item.id}>
+                      <SortableTable
+                        data={item.data}
+                        tableColumns={item.columns}
+                        shouldUsePagination={true}
+                        initialHiddenColumns={['']}
+                      />
+                    </div>
+                  </Collapse>
+                </div>
+              );
+            })}
+        </div>
+      </section>
+    </div>
+  );
+};
 
 ReconciliationReport.propTypes = {
   reconciliationReports: PropTypes.object,
   dispatch: PropTypes.func,
-  match: PropTypes.object,
-  history: PropTypes.object,
+  match: PropTypes.object
 };
 
 ReconciliationReport.defaultProps = {
