@@ -69,7 +69,11 @@ const BulkOperationsModal = ({
       showModal={showModal}
       cancelButtonText={success ? 'Close' : 'Cancel Bulk Operations'}
       confirmButtonText={success ? 'Go To Operations' : buttonText}
-      confirmButtonClass='button__bulkgranules button__bulkgranules--operations'
+      confirmButtonClass={
+        success
+          ? 'button__goto'
+          : 'button__bulkgranules button__bulkgranules--operations'
+      }
       onCancel={onCancel}
       onCloseModal={onCancel}
       onConfirm={success ? handleSuccessConfirm : handleSubmit}
