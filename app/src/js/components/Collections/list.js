@@ -106,7 +106,7 @@ class CollectionList extends React.Component {
               {hasTimeFilter
                 ? strings.active_collections
                 : strings.all_collections}
-              <span className="num--title">{count ? tally(count) : 0}</span>
+              <span className="num-title">{count ? tally(count) : 0}</span>
             </h2>
           </div>
 

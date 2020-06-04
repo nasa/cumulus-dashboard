@@ -267,7 +267,7 @@ class CollectionOverview extends React.Component {
           <div className="heading__wrapper--border">
             <h2 className="heading--medium heading--shared-content with-description">
               {strings.total_granules}
-              <span className="num--title">
+              <span className="num-title">
                 {list.meta.count ? ` ${list.meta.count}` : 0}
               </span>
             </h2>

@@ -317,13 +317,13 @@ class ReconciliationReport extends React.Component {
         <section className="page__section page__section--small">
           <div className="tablecard--wrapper">
             <TableCards
-              titleCaption="Internal Consistency"
+              titleCaption="Cumulus intercomparison"
               config={cardConfig.slice(0, 2)}
               onClick={this.handleCardClick}
               activeCard={activeIdx}
             />
             <TableCards
-              titleCaption="Cumulus versus CMR"
+              titleCaption="Cumulus versus CMR comparison"
               config={cardConfig.slice(2, 4)}
               onClick={this.handleCardClick}
               activeCard={activeIdx}
@@ -332,16 +332,19 @@ class ReconciliationReport extends React.Component {
         </section>
 
         <section className="page__section">
-          <div className="Accordion--wrapper">
+          <div className="accordion__wrapper">
             <Accordion>
               {cardConfig
                 .find((card) => card.id === activeIdx)
                 .tables.map((item, index) => {
                   return (
-                    <div className="accordion--table" key={index}>
+                    <div className="accordion__table" key={index}>
                       <Accordion.Toggle as={Card.Header} eventKey={index}>
                         {item.name}
-                        <span className="num--title">{item.data.length}</span>
+                        <span className="num-title--inverted">
+                          {item.data.length}
+                        </span>
+                        <span className="expand-icon"></span>
                       </Accordion.Toggle>
                       {/* TODO [MHS, 2020-06-03]   add classnames here */}
                       <Accordion.Collapse eventKey={index}>

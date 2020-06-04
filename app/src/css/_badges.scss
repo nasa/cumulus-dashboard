@@ -1,4 +1,4 @@
-.num--title {
+.num-title {
   display: inline-block;
   vertical-align: middle;
   border-radius: 4px;
@@ -13,6 +13,12 @@
   font-weight: $base-font-regular;
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.2s linear;
+
+  &--inverted {
+    @extend .num-title;
+    background: $white;
+    color: $ocean-blue;
+  }
 }
 
 .status__badge {
@@ -23,16 +29,16 @@
   text-transform: uppercase;
   font-weight: $base-font-regular;
   display: inline-block;
-    &__enabled {
-      background-color: #30AD66;
-    }
-    &__disabled {
-      background-color: #36342D;
-    }
-    &__passed {
-      background-color: $theme--success;
-    }
-    &__conflict {
-      background-color: $theme--conflict;
+  &__enabled {
+    background-color: #30AD66;
+  }
+  &__disabled {
+    background-color: #36342D;
+  }
+  &__passed {
+    background-color: $theme--success;
+  }
+  &__conflict {
+    background-color: $theme--conflict;
   }
 }

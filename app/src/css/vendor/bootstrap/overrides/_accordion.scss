@@ -1,6 +1,18 @@
-.accordion--table {
+.accordion__table {
   .card-header {
     background-color: $theme--blue;
     color: $white;
+  }
+  .expand-icon {
+    &:after {
+      font-family: 'FontAwesome';
+      content: '\f138';
+      // chevron circle right
+      color: $white;
+      font-weight: 900;
+      top: .55em;
+      left: 8.3em;
+      text-align: right;
+    }
   }
 }
