@@ -67,12 +67,14 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.table .tbody .tr').should('have.length', 2);
     });
 
+    it('should have a download button column', () => {
+      cy.visit('/reconciliation-reports');
+      cy.get('.button__row--download').should('have.length', 3);
+    });
+
     it('deletes a report when the Delete button is clicked', () => {
       cy.visit('/reconciliation-reports');
-      cy.get('[data-value="inventoryReport-20200114T202529026"] > .td')
-        .eq(5)
-        .find('button')
-        .click();
+      cy.get('[data-value="inventoryReport-20200114T202529026"] > .td .button__row--delete').click();
 
       cy.get('.table .tbody .tr').should('have.length', 2);
       cy.get('[data-value="inventoryReport-20200114T202529026"]')
