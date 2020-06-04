@@ -587,6 +587,8 @@
         }
       }
       &--delete {
+        background-color: transparent;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0);
         &:before {
           content: '\f187';
           font-family: 'FontAwesome';

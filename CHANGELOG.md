@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1917**
   - Adds a download button to reconciliation report list page
 
+- **CUMULUS-1918**
+  - Adds delete report button to the Reconciliation Reports page
+
 ### Changed
 - **CUMULUS-1994**
   - No default datetime filters are applied when the application is loaded.
