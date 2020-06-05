@@ -22,6 +22,7 @@ import List from '../Table/Table';
 import { pdrStatus as statusOptions } from '../../utils/status';
 import ListFilters from '../ListActions/ListFilters';
 import pageSizeOptions from '../../utils/page-size';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 class ActivePdrs extends React.Component {
   constructor () {
@@ -38,6 +39,7 @@ class ActivePdrs extends React.Component {
     if (pathname === '/pdrs/completed') query.status = 'completed';
     else if (pathname === '/pdrs/failed') query.status = 'failed';
     else if (pathname === '/pdrs/active') query.status = 'running';
+    this.props.onQueryChange(query);
     return query;
   }
 
@@ -56,13 +58,33 @@ class ActivePdrs extends React.Component {
   render () {
     const { list } = this.props.pdrs;
     const { count, queriedAt } = list.meta;
+    const query = this.generateQuery();
     const view = this.getView();
+    const displayCaseView = displayCase(view);
+    const breadcrumbConfig = [
+      {
+        label: 'Dashboard Home',
+        href: '/'
+      },
+      {
+        label: 'PDRs',
+        href: '/pdrs'
+      },
+      {
+        label: displayCaseView,
+        active: true
+      }
+    ];
     return (
       <div className='page__component'>
-        <section className='page__section page__section__header-wrapper'>
-          <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>{displayCase(view)} PDRs
-              <span className='num--title'>{!isNaN(count) ? `${tally(count)}` : 0}</span></h1>
+        <section className='page__section'>
+          <section className='page__section page__section__controls'>
+            <Breadcrumbs config={breadcrumbConfig} />
+          </section>
+          <div className='page__section__header page__section__header-wrapper'>
+            <h1 className='heading--large heading--shared-content with-description'>
+              {displayCaseView} PDRs <span className='num--title'>{!isNaN(count) ? `${tally(count)}` : 0}</span>
+            </h1>
             {lastUpdated(queriedAt)}
           </div>
           <List
@@ -70,7 +92,7 @@ class ActivePdrs extends React.Component {
             dispatch={this.props.dispatch}
             action={listPdrs}
             tableColumns={view === 'failed' ? errorTableColumns : tableColumns}
-            query={this.generateQuery()}
+            query={query}
             bulkActions={this.generateBulkActions()}
             rowId='pdrName'
           >
@@ -106,7 +128,8 @@ class ActivePdrs extends React.Component {
 ActivePdrs.propTypes = {
   location: PropTypes.object,
   dispatch: PropTypes.func,
-  pdrs: PropTypes.object
+  pdrs: PropTypes.object,
+  onQueryChange: PropTypes.func
 };
 
 export default withRouter(connect(state => ({

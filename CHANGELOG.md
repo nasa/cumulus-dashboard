@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
+
 - **CUMULUS-1904**
   - Adds a TableFilters component for dynamically showing/hiding table columns
 
@@ -18,9 +19,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Adds delete report button to the Reconciliation Reports page
 
 ### Changed
+
+- **CUMULUS-1815**
+  - Refactor some PDR components. No user facing changes.
+
 - **CUMULUS-1994**
   - No default datetime filters are applied when the application is loaded.
   - Upgrade Cypress to latest version (4.7.0)
+
+### Fixed
+
+- **CUMULUS-1815**
+  - Fix timer bug in PDR Tables. This was causing an issue where a table that
+    was supposed to be showing a subset of PDRs was showing all PDRS
 
 ## [v1.9.0]
 

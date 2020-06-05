@@ -14,7 +14,7 @@ export const tableColumns = [
   },
   {
     Header: 'Name',
-    accessor: 'name',
+    accessor: 'pdrName',
     Cell: ({ cell: { value } }) => <Link to={`pdrs/pdr/${value}`}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
