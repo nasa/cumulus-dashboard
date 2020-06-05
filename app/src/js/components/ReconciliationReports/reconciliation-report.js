@@ -109,8 +109,7 @@ const ReconciliationReport = ({
     ...internalComparison,
     ...cumulusVsCmrComparison,
   ]);
-  const { reportStartTime = null, reportEndTime = null } = record.data;
-  const error = record.data ? record.data.error : null;
+  const { reportStartTime = null, reportEndTime = null, error = null } = record.data;
 
   function handleCardClick(e, id) {
     e.preventDefault();
