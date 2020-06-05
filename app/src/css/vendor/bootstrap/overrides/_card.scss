@@ -6,7 +6,7 @@
 .card {
   width: 10em;
   cursor: pointer;
-  margin: 1em;
+  margin: 1em 1em 1em 0;
 
   .card-header {
     color: $white;
@@ -30,4 +30,12 @@
 
 .tablecard--wrapper{
   display: flex;
+
+  .table-card {
+    margin-right: 1em;
+
+    &:first-child {
+      border-right: 1px solid $light-grey;
+    }
+  }
 }

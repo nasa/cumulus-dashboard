@@ -18,37 +18,39 @@ const TableCards = ({ activeCard, config, onClick, titleCaption }) => {
   }
 
   return (
-    <div className="card-wrapper">
+    <div className='table-card'>
       <div className="table-card--title-caption">{titleCaption}</div>
-      {config.map((item, index) => {
-        let { id = index, name, tables, status = 'conflict' } = item;
-        const count = conflictedCount(tables);
-        if (count === 0) {
-          status = 'passed';
-        }
-        return (
-          <Card
-            key={id}
-            className={`text-center${activeCard === id ? ' active' : ''}`}
-            onClick={(e) => handleCardClick(e, id)}
-          >
-            <Card.Header as="h5">{name}</Card.Header>
-            <Card.Body>
-              <Card.Title>{count}</Card.Title>
-              <Card.Text>
-                <span
-                  className={`status-indicator ${
+      <div className="card-wrapper">
+        {config.map((item, index) => {
+          let { id = index, name, tables, status = 'conflict' } = item;
+          const count = conflictedCount(tables);
+          if (count === 0) {
+            status = 'passed';
+          }
+          return (
+            <Card
+              key={id}
+              className={`text-center${activeCard === id ? ' active' : ''}`}
+              onClick={(e) => handleCardClick(e, id)}
+            >
+              <Card.Header as="h5">{name}</Card.Header>
+              <Card.Body>
+                <Card.Title>{count}</Card.Title>
+                <Card.Text>
+                  <span
+                    className={`status-indicator ${
                     status === 'passed'
                       ? 'status-indicator--success'
                       : 'status-indicator--failed'
                   }`}
-                ></span>
-                {status}
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        );
-      })}
+                  ></span>
+                  {status}
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          );
+        })}
+      </div>
     </div>
   );
 };
