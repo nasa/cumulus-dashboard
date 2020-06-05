@@ -7,11 +7,12 @@ import { connect } from 'react-redux';
 import { get } from 'object-path';
 
 import {
+  bulkGranule,
+  bulkGranuleDelete,
   bulkGranuleClearError,
   bulkGranuleDeleteClearError
 } from '../../actions';
-import BulkOperationsModal from './bulk-granule-operations';
-import BulkDeleteModal from './bulk-granule-delete';
+import BulkGranuleModal from './bulk-granule-modal';
 
 const generateAsyncRequestId = () =>
   Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -22,6 +23,20 @@ const getRequestAsyncOpId = (request) => get(request, ['data', 'id']);
 
 const isStatusInflight = (status) => status === 'inflight';
 const isStatusSuccess = (status) => status === 'success';
+
+const bulkOperationsDefaultQuery = {
+  workflowName: '',
+  index: '',
+  query: '',
+  ids: []
+};
+
+const bulkDeleteDefaultQuery = {
+  index: '',
+  query: '',
+  ids: [],
+  forceRemoveFromCmr: false
+};
 
 const BulkGranule = ({
   history,
@@ -143,36 +158,59 @@ const BulkGranule = ({
           </button>
         </Modal.Body>
       </Modal>
-      <BulkOperationsModal
+      <BulkGranuleModal
         asyncOpId={getRequestAsyncOpId(bulkOpRequestInfo)}
-        className={modalClassName}
+        bulkRequestAction={bulkGranule}
+        cancelButtonText={'Cancel Bulk Operations'}
+        className={`${modalClassName} bulk_granules--operations`}
+        confirmButtonClass={'button__bulkgranules button__bulkgranules--operations'}
+        confirmButtonText={'Run Bulk Operations'}
+        defaultQuery={bulkOperationsDefaultQuery}
         dispatch={dispatch}
         error={bulkOpRequestError}
-        showModal={showBulkOpsModal}
         handleSuccessConfirm={handleSuccessConfirm}
         inflight={isStatusInflight(bulkOpRequestStatus)}
         onCancel={hideBulkOperationsModal}
-        onCloseModal={hideBulkOperationsModal}
-        operation={bulkOpRequestInfo}
         requestId={bulkOpRequestId}
         selected={selected}
+        showModal={showBulkOpsModal}
         success={isStatusSuccess(bulkOpRequestStatus)}
-      ></BulkOperationsModal>
-      <BulkDeleteModal
+        successMessage={'Your request to process a bulk granules operation has been submitted.'}
+        title={'Bulk Granule Operations'}
+      >
+        <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
+        <p>
+          1. In the box below, enter the <strong>workflowName</strong>. <br/>
+          2. Then add either an array of granule Ids or an elasticsearch query and index. <br/>
+        </p>
+      </BulkGranuleModal>
+      <BulkGranuleModal
         asyncOpId={getRequestAsyncOpId(bulkDeleteRequestInfo)}
-        className={modalClassName}
+        bulkRequestAction={bulkGranuleDelete}
+        cancelButtonText={'Cancel Bulk Delete'}
+        className={`${modalClassName} bulk_granules--delete`}
+        confirmButtonClass={'button__bulkgranules button__bulkgranules--delete'}
+        confirmButtonText={'Run Bulk Delete'}
+        defaultQuery={bulkDeleteDefaultQuery}
         dispatch={dispatch}
         error={bulkDeleteRequestError}
-        showModal={showBulkDeleteModal}
         handleSuccessConfirm={handleSuccessConfirm}
         inflight={isStatusInflight(bulkDeleteRequestStatus)}
         onCancel={hideBulkDeleteModal}
-        onCloseModal={hideBulkDeleteModal}
-        operation={bulkDeleteRequestInfo}
         requestId={bulkDeleteRequestId}
         selected={selected}
+        showModal={showBulkDeleteModal}
         success={isStatusSuccess(bulkDeleteRequestStatus)}
-      ></BulkDeleteModal>
+        successMessage={'Your request to process a bulk granule delete operation has been submitted.'}
+        title={'Bulk Granule Delete'}
+      >
+        <h4 className="modal_subtitle">To run and complete your bulk delete task:</h4>
+        <p>
+          1. In the box below, add either an array of granule Ids or an elasticsearch query and index. <br/>
+          2. Set <strong>forceRemoveFromCmr</strong> to <strong>true</strong> to automatically have granules removed from CMR as part of deletion.<br/>
+          If <strong>forceRemoveFromCmr</strong> is <strong>false</strong>, then the bulk granule deletion will <strong>fail for any granules that are published to CMR.</strong>
+        </p>
+      </BulkGranuleModal>
     </>
   );
 };

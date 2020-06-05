@@ -1,23 +1,21 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { bulkGranuleDelete } from '../../actions';
 import _config from '../../config';
 import DefaultModal from '../Modal/modal';
 import TextArea from '../TextAreaForm/text-area';
 
 const { kibanaRoot } = _config;
 
-const defaultQuery = {
-  index: '',
-  query: '',
-  ids: [],
-  forceRemoveFromCmr: false
-};
-
-const BulkDeleteModal = ({
+const BulkGranuleModal = ({
   asyncOpId,
+  bulkRequestAction,
+  cancelButtonText,
+  children,
   className,
+  confirmButtonClass,
+  confirmButtonText,
+  defaultQuery,
   dispatch,
   error,
   handleSuccessConfirm,
@@ -26,13 +24,15 @@ const BulkDeleteModal = ({
   requestId,
   showModal,
   selected = [],
-  success
+  success,
+  successMessage,
+  title
 }) => {
   const [query, setQuery] = useState(JSON.stringify(defaultQuery, null, 2));
   const [errorState, setErrorState] = useState();
 
   const buttonText = inflight ? 'loading...'
-    : success ? 'Success!' : 'Run Bulk Delete';
+    : success ? 'Success!' : confirmButtonText;
   const formError = errorState || error;
 
   function handleSubmit (e) {
@@ -43,7 +43,7 @@ const BulkDeleteModal = ({
       } catch (e) {
         return setErrorState('Syntax error in JSON');
       }
-      dispatch(bulkGranuleDelete({ requestId, json }));
+      dispatch(bulkRequestAction({ requestId, json }));
     }
   }
 
@@ -60,15 +60,15 @@ const BulkDeleteModal = ({
 
   return (
     <DefaultModal
-      title='Bulk Granule Delete'
-      className={`${className} bulk_granules--delete`}
+      title={title}
+      className={className}
       showModal={showModal}
-      cancelButtonText={success ? 'Close' : 'Cancel Bulk Delete'}
+      cancelButtonText={success ? 'Close' : cancelButtonText}
       confirmButtonText={success ? 'Go To Operations' : buttonText}
       confirmButtonClass={
         success
           ? 'button__goto'
-          : 'button__bulkgranules button__bulkgranules--delete'
+          : confirmButtonClass
       }
       onCancel={onCancel}
       onCloseModal={onCancel}
@@ -77,19 +77,14 @@ const BulkDeleteModal = ({
       {success &&
         <div className="message__success">
           <p>
-            Your request to process a bulk granule delete operation has been submitted. <br/>
+            { successMessage } <br/>
             ID <strong>{asyncOpId}</strong>
           </p>
         </div>
       }
       {!success &&
         <div className="form__bulkgranules">
-          <h4 className="modal_subtitle">To run and complete your bulk delete task:</h4>
-          <p>
-            1. In the box below, add either an array of granule Ids or an elasticsearch query and index. <br/>
-            2. Set <strong>forceRemoveFromCmr</strong> to <strong>true</strong> to automatically have granules removed from CMR as part of deletion.<br/>
-            If <strong>forceRemoveFromCmr</strong> is <strong>false</strong>, then the bulk granule deletion will <strong>fail for any granules that are published to CMR.</strong>
-          </p>
+          { children }
           {selected &&
             <>
               <br/>
@@ -107,7 +102,7 @@ const BulkDeleteModal = ({
           <form>
             <TextArea
               value={query}
-              id='run-bulk-delete'
+              id={`run-bulk-granule-${requestId}`}
               error={formError}
               onChange={onChange}
               mode='json'
@@ -121,9 +116,15 @@ const BulkDeleteModal = ({
   );
 };
 
-BulkDeleteModal.propTypes = {
+BulkGranuleModal.propTypes = {
   asyncOpId: PropTypes.string,
+  bulkRequestAction: PropTypes.func,
+  cancelButtonText: PropTypes.string,
+  confirmButtonClass: PropTypes.string,
+  confirmButtonText: PropTypes.string,
+  children: PropTypes.element,
   className: PropTypes.string,
+  defaultQuery: PropTypes.object,
   dispatch: PropTypes.func,
   error: PropTypes.string,
   handleSuccessConfirm: PropTypes.func,
@@ -132,7 +133,9 @@ BulkDeleteModal.propTypes = {
   requestId: PropTypes.string,
   selected: PropTypes.array,
   showModal: PropTypes.bool,
-  success: PropTypes.bool
+  success: PropTypes.bool,
+  successMessage: PropTypes.string,
+  title: PropTypes.string
 };
 
-export default BulkDeleteModal;
+export default BulkGranuleModal;
