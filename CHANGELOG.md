@@ -9,9 +9,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- **CUMULUS-1977**
-  - Added BulkOperationsModal component for submitting bulk granule operations requests
-  - Added BulkDeleteModal component for submitting bulk granule delete requests
 - **CUMULUS-1904**
   - Adds a TableFilters component for dynamically showing/hiding table columns
 
@@ -21,15 +18,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1918**
   - Adds delete report button to the Reconciliation Reports page
 
+- **CUMULUS-1977**
+  - Added BulkGranuleModal component for creating modals to submit bulk granule requests
+
 ### Changed
+
+- **CUMULUS-1815**
+  - Refactor some PDR components. No user facing changes.
 
 - **CUMULUS-1977**
   - Updated BulkGranule component to display a modal that allows you to choose
   the type of bulk request you want to submit: bulk granule operations or bulk
   granule delete.
+
 - **CUMULUS-1994**
   - No default datetime filters are applied when the application is loaded.
   - Upgrade Cypress to latest version (4.7.0)
+
+### Fixed
+
+- **CUMULUS-1815**
+  - Fix timer bug in PDR Tables. This was causing an issue where a table that
+    was supposed to be showing a subset of PDRs was showing all PDRS
 
 ## [v1.9.0]
 
