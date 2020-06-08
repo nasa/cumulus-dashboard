@@ -41,6 +41,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Fix timer bug in PDR Tables. This was causing an issue where a table that
     was supposed to be showing a subset of PDRs was showing all PDRS
 
+- **CUMULUS-1842**
+  - Fix dashboard table sort issue
+
 ## [v1.9.0]
 
 ### BREAKING CHANGES
