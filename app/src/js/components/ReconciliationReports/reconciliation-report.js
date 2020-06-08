@@ -1,7 +1,8 @@
 'use strict';
-import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
+import cloneDeep from 'lodash.clonedeep';
 import PropTypes from 'prop-types';
-import TableCards from './table-cards';
+import React, { useEffect, useState } from 'react';
 import { Collapse } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import { connect } from 'react-redux';
@@ -12,7 +13,7 @@ import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import SortableTable from '../SortableTable/SortableTable';
 import { reshapeReport } from './reshape-report';
-import cloneDeep from 'lodash.clonedeep';
+import TableCards from './table-cards';
 
 const breadcrumbConfig = [
   {
@@ -40,7 +41,7 @@ const ReportStateHeader = ({ reportState, startDate, endDate }) => {
     <>
       <b>Date Range:</b> {displayStartDate} to {displayEndDate} <b>state:</b>{' '}
       <span
-        className={`status__badge status__badge__${
+        className={`status__badge status__badge--${
           reportState === 'PASSED' ? 'passed' : 'conflict'
         }`}
       >
@@ -195,20 +196,35 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
           {reportComparisons
             .find((displayObj) => displayObj.id === activeIdx)
             .tables.map((item, index) => {
+              const isExpanded = expandedState[activeIdx][item.id];
               return (
                 <div className="multicard__table" key={index}>
                   <Card.Header
+                    className={classNames({
+                      'multicard-header': true,
+                      'multicard-header--expanded': isExpanded,
+                    })}
                     key={index}
                     onClick={(e) => handleToggleClick(e, item.id)}
                     aria-controls={item.id}
                   >
                     {item.name}
-                    <span className="num-title--inverted">
+                    <span
+                      className={classNames({
+                        'num-title--inverted': !isExpanded,
+                        'num-title': isExpanded,
+                      })}
+                    >
                       {item.data.length}
                     </span>
-                    <span className="expand-icon"></span>
+                    <span
+                      className={classNames({
+                        'expand-icon': !isExpanded,
+                        'collapse-icon': isExpanded,
+                      })}
+                    ></span>
                   </Card.Header>
-                  <Collapse in={expandedState[activeIdx][item.id]}>
+                  <Collapse in={isExpanded}>
                     <div id={item.id}>
                       <SortableTable
                         data={item.data}

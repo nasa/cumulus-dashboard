@@ -29,16 +29,16 @@
   text-transform: uppercase;
   font-weight: $base-font-regular;
   display: inline-block;
-  &__enabled {
+  &--enabled {
     background-color: #30AD66;
   }
-  &__disabled {
+  &--disabled {
     background-color: #36342D;
   }
-  &__passed {
+  &--passed {
     background-color: $theme--success;
   }
-  &__conflict {
+  &--conflict {
     background-color: $theme--conflict;
   }
 }

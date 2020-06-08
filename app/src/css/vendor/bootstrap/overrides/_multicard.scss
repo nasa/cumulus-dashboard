@@ -1,7 +1,24 @@
 .multicard__table {
-  .card-header {
+  .multicard-header {
     background-color: $theme--blue;
     color: $white;
+    &--expanded {
+      background-color: $white;
+      color: $theme--blue;
+    }
+  }
+
+  .collapse-icon {
+    &:after {
+      font-family: 'FontAwesome';
+      content: '\f139';
+      // chevron circle up
+      color: $theme--blue;
+      font-weight: 900;
+      top: .55em;
+      left: 8.3em;
+      text-align: right;
+    }
   }
   .expand-icon {
     &:after {
