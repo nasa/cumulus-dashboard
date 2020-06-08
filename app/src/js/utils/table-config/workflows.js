@@ -22,8 +22,8 @@ export const buildLink = (r) => {
 export const tableColumns = [
   {
     Header: 'Name',
-    accessor: (row) => <Link to={`/workflows/workflow/${row.name}`}>{row.name}</Link>,
-    id: 'name'
+    accessor: 'name',
+    Cell: ({ cell: { value } }) => <Link to={`/workflows/workflow/${value}`}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'AWS Step Function',

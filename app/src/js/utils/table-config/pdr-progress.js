@@ -57,8 +57,8 @@ export const renderProgress = function (row) {
 export const tableColumns = [
   {
     Header: 'Name',
-    accessor: row => <Link to={`pdrs/pdr/${row.pdrName}`}>{row.pdrName}</Link>,
-    id: 'name'
+    accessor: 'pdrName',
+    Cell: ({ cell: { value } }) => <Link to={`pdrs/pdr/${value}`}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Status',

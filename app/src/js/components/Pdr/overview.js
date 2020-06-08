@@ -20,8 +20,20 @@ import _config from '../../config';
 import Dropdown from '../DropDown/dropdown';
 import pageSizeOptions from '../../utils/page-size';
 import ListFilters from '../ListActions/ListFilters';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 const { updateInterval } = _config;
+
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/'
+  },
+  {
+    label: 'PDRs',
+    active: true
+  }
+];
 
 class PdrOverview extends React.Component {
   constructor () {
@@ -70,6 +82,9 @@ class PdrOverview extends React.Component {
     const overview = this.renderOverview(pdrCount);
     return (
       <div className='page__component'>
+        <section className='page__section page__section__controls'>
+          <Breadcrumbs config={breadcrumbConfig} />
+        </section>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>PDR Overview</h1>
           {lastUpdated(queriedAt)}
