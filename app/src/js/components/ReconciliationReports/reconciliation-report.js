@@ -70,7 +70,6 @@ const reportState = (dataList) => {
 
 const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
   const [activeIdx, setActiveIdx] = useState('dynamo');
-  const [allExpanded, setAllExpanded] = useState(false);
 
   const { reconciliationReportName } = match.params;
 
@@ -86,7 +85,7 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
   const { internalComparison, cumulusVsCmrComparison } = reshapeReport(record);
   const reportComparisons = [...internalComparison, ...cumulusVsCmrComparison];
 
-  const [collapseState, setCollapseState] = useState(
+  const [expandedState, setExpandedState] = useState(
     reportComparisons.reduce((object, item) => {
       object[item.id] = item.tables.reduce((tableObject, table) => {
         tableObject[table.id] = false;
@@ -100,10 +99,7 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
     return <Loading />;
   }
 
-  const theReportState = reportState([
-    ...internalComparison,
-    ...cumulusVsCmrComparison,
-  ]);
+  const theReportState = reportState(reportComparisons);
   const {
     reportStartTime = null,
     reportEndTime = null,
@@ -119,27 +115,30 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
     e.preventDefault();
     const updatedState = {
       [activeIdx]: {
-        ...collapseState[activeIdx],
-        [tableId]: !collapseState[activeIdx][tableId],
+        ...expandedState[activeIdx],
+        [tableId]: !expandedState[activeIdx][tableId],
       },
     };
-    setCollapseState({
-      ...collapseState,
+    setExpandedState({
+      ...expandedState,
       ...updatedState,
     });
   }
 
   function handleExpandClick() {
-    const updatedState = cloneDeep(collapseState);
-    const expanded = !allExpanded;
+    const updatedState = cloneDeep(expandedState);
+    const expanded = !allCollapsed();
     for (const key in updatedState) {
       const obj = updatedState[key];
       for (const prop in obj) {
         obj[prop] = expanded;
       }
     }
-    setAllExpanded(expanded);
-    setCollapseState(updatedState);
+    setExpandedState(updatedState);
+  }
+
+  function allCollapsed() {
+    return Object.keys(expandedState[activeIdx]).every(key => expandedState[activeIdx][key] === true);
   }
 
   return (
@@ -187,12 +186,12 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
       </section>
 
       <section className="page__section">
-        <span onClick={handleExpandClick}>TOGGLE</span>
+        <span onClick={handleExpandClick}>{!allCollapsed() ? 'Expand All' : 'Collapse All'}</span>
         <div className="accordion__wrapper">
           {reportComparisons
             .find((displayObj) => displayObj.id === activeIdx)
             .tables.map((item, index) => {
-              console.log(collapseState[activeIdx][item.id]);
+              console.log(expandedState[activeIdx][item.id]);
               return (
                 <div className="accordion__table" key={index}>
                   <Card.Header
@@ -206,7 +205,7 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
                     </span>
                     <span className="expand-icon"></span>
                   </Card.Header>
-                  <Collapse in={collapseState[activeIdx][item.id]}>
+                  <Collapse in={expandedState[activeIdx][item.id]}>
                     <div id={item.id}>
                       <SortableTable
                         data={item.data}
