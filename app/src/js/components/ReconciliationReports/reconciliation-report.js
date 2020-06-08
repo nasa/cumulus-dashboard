@@ -201,8 +201,8 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
                 <div className="multicard__table" key={index}>
                   <Card.Header
                     className={classNames({
-                      'multicard-header': true,
-                      'multicard-header--expanded': isExpanded,
+                      multicard__header: true,
+                      'multicard__header--expanded': isExpanded,
                     })}
                     key={index}
                     onClick={(e) => handleToggleClick(e, item.id)}
