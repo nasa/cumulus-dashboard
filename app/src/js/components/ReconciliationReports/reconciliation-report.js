@@ -68,11 +68,7 @@ const reportState = (dataList) => {
   return anyBad ? 'CONFLICT' : 'PASSED';
 };
 
-const ReconciliationReport = ({
-  reconciliationReports,
-  dispatch,
-  match
-}) => {
+const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
   const [activeIdx, setActiveIdx] = useState('dynamo');
   const [allExpanded, setAllExpanded] = useState(false);
 
@@ -87,9 +83,7 @@ const ReconciliationReport = ({
 
   const record = reconciliationReports.map[reconciliationReportName];
 
-  const { internalComparison, cumulusVsCmrComparison } = reshapeReport(
-    record
-  );
+  const { internalComparison, cumulusVsCmrComparison } = reshapeReport(record);
   const reportComparisons = [...internalComparison, ...cumulusVsCmrComparison];
 
   const [collapseState, setCollapseState] = useState(
@@ -99,7 +93,8 @@ const ReconciliationReport = ({
         return tableObject;
       }, {});
       return object;
-    }, {}));
+    }, {})
+  );
 
   if (!record || (record.inflight && !record.data)) {
     return <Loading />;
@@ -109,28 +104,32 @@ const ReconciliationReport = ({
     ...internalComparison,
     ...cumulusVsCmrComparison,
   ]);
-  const { reportStartTime = null, reportEndTime = null, error = null } = record.data;
+  const {
+    reportStartTime = null,
+    reportEndTime = null,
+    error = null,
+  } = record.data;
 
   function handleCardClick(e, id) {
     e.preventDefault();
     setActiveIdx(id);
   }
 
-  function handleToggleClick (e, tableId) {
+  function handleToggleClick(e, tableId) {
     e.preventDefault();
     const updatedState = {
       [activeIdx]: {
         ...collapseState[activeIdx],
-        [tableId]: !collapseState[activeIdx][tableId]
-      }
+        [tableId]: !collapseState[activeIdx][tableId],
+      },
     };
     setCollapseState({
       ...collapseState,
-      ...updatedState
+      ...updatedState,
     });
   }
 
-  function handleExpandClick () {
+  function handleExpandClick() {
     const updatedState = cloneDeep(collapseState);
     const expanded = !allExpanded;
     for (const key in updatedState) {
@@ -196,16 +195,18 @@ const ReconciliationReport = ({
               console.log(collapseState[activeIdx][item.id]);
               return (
                 <div className="accordion__table" key={index}>
-                  <Card.Header key={index} onClick={e => handleToggleClick(e, item.id)} aria-controls={item.id}>
+                  <Card.Header
+                    key={index}
+                    onClick={(e) => handleToggleClick(e, item.id)}
+                    aria-controls={item.id}
+                  >
                     {item.name}
                     <span className="num-title--inverted">
                       {item.data.length}
                     </span>
                     <span className="expand-icon"></span>
                   </Card.Header>
-                  <Collapse
-                    in={collapseState[activeIdx][item.id]}
-                  >
+                  <Collapse in={collapseState[activeIdx][item.id]}>
                     <div id={item.id}>
                       <SortableTable
                         data={item.data}
@@ -227,7 +228,7 @@ const ReconciliationReport = ({
 ReconciliationReport.propTypes = {
   reconciliationReports: PropTypes.object,
   dispatch: PropTypes.func,
-  match: PropTypes.object
+  match: PropTypes.object,
 };
 
 ReconciliationReport.defaultProps = {
