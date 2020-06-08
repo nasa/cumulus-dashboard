@@ -144,5 +144,19 @@ describe('Dashboard Reconciliation Reports Page', () => {
           cy.get('.table__filters--collapse').should('not.be.visible');
         });
     });
+
+    it('Has a way to expand/collapse all tables', () => {
+      cy.visit('/reconciliation-reports/report/inventoryReport-20200114T205238781');
+      cy.get('.multicard__header').should('exist');
+      cy.get('.multicard__header--expanded').should('not.exist');
+      cy.get('.link').should('contain', 'Expand All').click();
+
+      cy.get('.multicard__header--expanded').should('exist');
+      cy.get('.link').should('contain', 'Collapse All');
+
+      cy.get('.multicard__header').click();
+      cy.get('.link').should('contain', 'Expand All');
+      cy.get('.multicard__header--expanded').should('not.exist');
+    });
   });
 });

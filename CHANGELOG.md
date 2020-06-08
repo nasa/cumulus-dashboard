@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1815**
   - Refactor some PDR components. No user facing changes.
 
+- **CUMULUS-1905**
+  - Updates Inventory Report view to clarify Cumulus's internal consistency differences and Cumulus's differences with CMR.
+
 - **CUMULUS-1977**
   - Updated BulkGranule component to display a modal that allows you to choose
   the type of bulk request you want to submit: bulk granule operations or bulk
