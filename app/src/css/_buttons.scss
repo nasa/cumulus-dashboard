@@ -601,7 +601,7 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       }
       &--delete {
         background-color: transparent;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
         &:before {
           content: '\f187';
           font-family: 'FontAwesome';

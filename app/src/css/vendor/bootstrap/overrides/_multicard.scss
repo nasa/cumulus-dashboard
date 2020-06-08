@@ -2,6 +2,7 @@
   .multicard__header {
     background-color: $theme--blue;
     color: $white;
+    margin: 1em 0em;
     &--expanded {
       background-color: $white;
       color: $theme--blue;
@@ -10,6 +11,7 @@
 
   .collapse-icon {
     &:after {
+      float: right;
       font-family: 'FontAwesome';
       content: '\f139';
       // chevron circle up
@@ -22,6 +24,7 @@
   }
   .expand-icon {
     &:after {
+      float: right;
       font-family: 'FontAwesome';
       content: '\f138';
       // chevron circle right

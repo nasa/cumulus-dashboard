@@ -192,7 +192,7 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
         <span className="link" onClick={handleExpandClick}>
           {!allCollapsed() ? 'Expand All' : 'Collapse All'}
         </span>
-        <div className="multicard__wrapper">
+        <div className="multicard">
           {reportComparisons
             .find((displayObj) => displayObj.id === activeIdx)
             .tables.map((item, index) => {
