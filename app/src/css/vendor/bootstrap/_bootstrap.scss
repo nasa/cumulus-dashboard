@@ -16,10 +16,10 @@ and behaviors for our Cumulus Dashboard components
 @import "components";
 
 /* Bootstrap Overrides */
-@import "overrides/accordion";
 @import "overrides/breadcrumb";
 @import "overrides/card";
-@import "overrides/pagination";
 @import "overrides/modal";
+@import "overrides/multicard";
+@import "overrides/pagination";
 
 /*@import "overrides/reboot";*/

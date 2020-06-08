@@ -138,7 +138,9 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
   }
 
   function allCollapsed() {
-    return Object.keys(expandedState[activeIdx]).every(key => expandedState[activeIdx][key] === true);
+    return Object.keys(expandedState[activeIdx]).every(
+      (key) => expandedState[activeIdx][key] === true
+    );
   }
 
   return (
@@ -186,14 +188,15 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
       </section>
 
       <section className="page__section">
-        <span onClick={handleExpandClick}>{!allCollapsed() ? 'Expand All' : 'Collapse All'}</span>
-        <div className="accordion__wrapper">
+        <span className="link" onClick={handleExpandClick}>
+          {!allCollapsed() ? 'Expand All' : 'Collapse All'}
+        </span>
+        <div className="multicard__wrapper">
           {reportComparisons
             .find((displayObj) => displayObj.id === activeIdx)
             .tables.map((item, index) => {
-              console.log(expandedState[activeIdx][item.id]);
               return (
-                <div className="accordion__table" key={index}>
+                <div className="multicard__table" key={index}>
                   <Card.Header
                     key={index}
                     onClick={(e) => handleToggleClick(e, item.id)}
