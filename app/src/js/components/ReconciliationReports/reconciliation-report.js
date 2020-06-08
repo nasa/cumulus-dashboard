@@ -60,7 +60,7 @@ ReportStateHeader.propTypes = {
 
 /**
  * returns PASSED or CONFLICT based on reconcilation report data.
- * @param {Object} dataList - reshaped report data
+ * @param {Object} dataList - list of reconcilation report objects.
  */
 const reportState = (dataList) => {
   const anyBad = dataList.some((item) =>
