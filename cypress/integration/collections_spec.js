@@ -201,7 +201,7 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.heading--large', 'Add a collection');
 
       // need to make sure defaultValue has been updated with collection json
-      cy.contains('.ace_variable', 'name');
+      cy.contains('.ace_variable', 'name', { timeout: 10000 });
       cy.getJsonTextareaValue().then((jsonValue) => {
         expect(jsonValue.version).to.equal(version);
       });
@@ -238,7 +238,7 @@ describe('Dashboard Collections Page', () => {
       // update collection and submit
       const duplicateHandling = 'version';
       const meta = { metaObj: 'metadata' };
-      cy.contains('.ace_variable', 'name');
+      cy.contains('.ace_variable', 'name', { timeout: 10000 });
       cy.editJsonTextarea({ data: { duplicateHandling, meta }, update: true });
       cy.contains('form button', 'Submit').click();
       cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
@@ -299,7 +299,7 @@ describe('Dashboard Collections Page', () => {
       const newName = 'TEST';
       const newVersion = '2';
       const errorMessage = `Expected collection name and version to be '${name}' and '${version}', respectively, but found '${newName}' and '${newVersion}' in payload`;
-      cy.contains('.ace_variable', 'name');
+      cy.contains('.ace_variable', 'name', { timeout: 10000 });
       cy.editJsonTextarea({ data: { name: newName, version: newVersion }, update: true });
       cy.contains('form button', 'Submit').click();
       cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
@@ -468,7 +468,7 @@ describe('Dashboard Collections Page', () => {
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
-      cy.get('.modal-content .modal-body .alert').should('contain.text', 'Error');
+      cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Error');
       cy.get('.Collapsible__contentInner').should('contain.text', 'Oopsie');
       cy.get('.button--cancel').click();
       cy.url().should('match', /\/granules$/);
@@ -494,7 +494,7 @@ describe('Dashboard Collections Page', () => {
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
-      cy.get('.modal-content .modal-body .alert').should('contain.text', 'Success');
+      cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
       cy.get('.modal-content').within(() => {
         cy.get('.button__goto').click();
       });

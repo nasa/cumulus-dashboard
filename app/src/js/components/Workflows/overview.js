@@ -46,7 +46,6 @@ const WorkflowOverview = ({ workflows }) => {
           action={listWorkflows}
           tableColumns={tableColumns}
           query={{}}
-          sortId='name'
           rowId='name'
         />
       </section>
