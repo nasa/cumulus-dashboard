@@ -1,3 +1,9 @@
+.multicard {
+  .collapse-link {
+    text-align: right;
+  }
+}
+
 .multicard__table {
   .multicard__header {
     background-color: $theme--blue;
@@ -35,4 +41,5 @@
       text-align: right;
     }
   }
+
 }

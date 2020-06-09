@@ -189,10 +189,13 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
       </section>
 
       <section className="page__section">
-        <span className="link" onClick={handleExpandClick}>
-          {!allCollapsed() ? 'Expand All' : 'Collapse All'}
-        </span>
         <div className="multicard">
+          <div className="collapse-link">
+            <span className="link" onClick={handleExpandClick}>
+              {!allCollapsed() ? 'Expand All' : 'Collapse All'}
+            </span>
+          </div>
+
           {reportComparisons
             .find((displayObj) => displayObj.id === activeIdx)
             .tables.map((item, index) => {
