@@ -3,7 +3,8 @@ import classNames from 'classnames';
 import cloneDeep from 'lodash.clonedeep';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Collapse } from 'react-bootstrap';
+import TableCards from './table-cards';
+import { Collapse, Dropdown as DropdownBootstrap } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -13,7 +14,7 @@ import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import SortableTable from '../SortableTable/SortableTable';
 import { reshapeReport } from './reshape-report';
-import TableCards from './table-cards';
+import { downloadFile } from '../../utils/download-file';
 
 const breadcrumbConfig = [
   {
@@ -70,7 +71,7 @@ const reportState = (dataList) => {
 };
 
 const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
-  const [activeIdx, setActiveIdx] = useState('dynamo');
+  const [activeId, setActiveId] = useState('dynamo');
 
   const { reconciliationReportName } = match.params;
 
@@ -107,15 +108,17 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
     error = null,
   } = record.data;
 
+  const activeCardTables = reportComparisons.find((displayObj) => displayObj.id === activeId).tables;
+
   function handleCardClick(e, id) {
     e.preventDefault();
-    setActiveIdx(id);
+    setactiveId(id);
   }
 
   function handleToggleClick(e, tableId) {
     e.preventDefault();
     const updatedState = {
-      [activeIdx]: {
+      [activeId]: {
         ...expandedState[activeIdx],
         [tableId]: !expandedState[activeIdx][tableId],
       },
@@ -144,6 +147,38 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
     );
   }
 
+  function convertToCSV(data, columns) {
+    const csvHeader = columns.map((column) => {
+      return column.accessor;
+    }).join(',');
+
+    const csvData = data.map((item) => {
+      let line = '';
+      for (const prop in item) {
+        if (line !== '') line += ',';
+        line += item[prop];
+      }
+      return line;
+    }).join('\r\n');
+
+    return `${csvHeader}\r\n${csvData}`;
+  }
+
+  function handleDownloadJsonClick (e) {
+    e.preventDefault();
+    const jsonHref = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(record.data))}`;
+    downloadFile(jsonHref, `${reconciliationReportName}.json`);
+  }
+
+  function handleDownloadCsvClick (e, table) {
+    e.preventDefault();
+    const { name, data: tableData, columns: tableColumns } = table;
+    const data = convertToCSV(tableData, tableColumns);
+    const csvData = new Blob([data], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(csvData);
+    downloadFile(url, `${reconciliationReportName}-${name}.csv`);
+  }
+
   return (
     <div className="page__component">
       <section className="page__section page__section__controls">
@@ -167,6 +202,17 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
             startDate={reportStartTime}
             endDate={reportEndTime}
           />
+          <DropdownBootstrap className='form-group__element--right'>
+            <DropdownBootstrap.Toggle className='button button--small button--download' id="download-report-dropdown">
+                Download Report
+            </DropdownBootstrap.Toggle>
+            <DropdownBootstrap.Menu>
+              <DropdownBootstrap.Item as='button' onClick={handleDownloadJsonClick}>JSON - Full Report</DropdownBootstrap.Item>
+              {activeCardTables.map((table, index) => {
+                return <DropdownBootstrap.Item key={`${activeId}-${index}`} as='button' onClick={(e) => handleDownloadCsvClick(e, table)}>CSV - {table.name}</DropdownBootstrap.Item>;
+              })}
+            </DropdownBootstrap.Menu>
+          </DropdownBootstrap>
           {error ? <ErrorReport report={error} /> : null}
         </div>
       </section>
@@ -177,13 +223,13 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
             titleCaption="Cumulus intercomparison"
             config={internalComparison}
             onClick={handleCardClick}
-            activeCard={activeIdx}
+            activeCard={activeId}
           />
           <TableCards
             titleCaption="Cumulus versus CMR comparison"
             config={cumulusVsCmrComparison}
             onClick={handleCardClick}
-            activeCard={activeIdx}
+            activeCard={activeId}
           />
         </div>
       </section>
@@ -197,9 +243,9 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
           </div>
 
           {reportComparisons
-            .find((displayObj) => displayObj.id === activeIdx)
+            .find((displayObj) => displayObj.id === activeId)
             .tables.map((item, index) => {
-              const isExpanded = expandedState[activeIdx][item.id];
+              const isExpanded = expandedState[activeId][item.id];
               return (
                 <div className="multicard__table" key={index}>
                   <Card.Header
