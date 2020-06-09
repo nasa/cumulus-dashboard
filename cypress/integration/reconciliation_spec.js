@@ -144,5 +144,17 @@ describe('Dashboard Reconciliation Reports Page', () => {
           cy.get('.table__filters--collapse').should('not.be.visible');
         });
     });
+
+    it('should have download option for full report and individual tables', () => {
+      cy.visit('/reconciliation-reports/report/inventoryReport-20200114T205238781');
+
+      cy.contains('.card-header', 'Cumulus').click();
+      cy.get('#download-report-dropdown').click();
+      cy.get('.dropdown-item').should('have.length', 4);
+      cy.get('.dropdown-item').eq(0).should('contain', 'JSON - Full Report');
+      cy.get('.dropdown-item').eq(1).should('contain', 'CSV - Collections only in Cumulus');
+      cy.get('.dropdown-item').eq(2).should('contain', 'CSV - Granules only in Cumulus');
+      cy.get('.dropdown-item').eq(3).should('contain', 'CSV - Files only in Cumulus');
+    });
   });
 });
