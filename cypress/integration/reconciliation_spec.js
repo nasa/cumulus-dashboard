@@ -128,7 +128,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
       /** Table Filters **/
       cy.get('.table__filters');
-      cy.get('.multicard > :nth-child(1)')
+      cy.get('.multicard > :nth-child(2)')
         .within(() => {
           cy.get('.card-header').click();
           cy.contains('.table__filters .button__filter', 'Show Column Filters').click();
