@@ -112,15 +112,15 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
 
   function handleCardClick(e, id) {
     e.preventDefault();
-    setactiveId(id);
+    setActiveId(id);
   }
 
   function handleToggleClick(e, tableId) {
     e.preventDefault();
     const updatedState = {
       [activeId]: {
-        ...expandedState[activeIdx],
-        [tableId]: !expandedState[activeIdx][tableId],
+        ...expandedState[activeId],
+        [tableId]: !expandedState[activeId][tableId],
       },
     };
     setExpandedState({
@@ -142,8 +142,8 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
   }
 
   function allCollapsed() {
-    return Object.keys(expandedState[activeIdx]).every(
-      (key) => expandedState[activeIdx][key] === true
+    return Object.keys(expandedState[activeId]).every(
+      (key) => expandedState[activeId][key] === true
     );
   }
 
