@@ -1,269 +1,264 @@
 'use strict';
-/* eslint node/no-deprecated-api: 0 */
-import url from 'url';
-import path from 'path';
-import React from 'react';
+import classNames from 'classnames';
+import cloneDeep from 'lodash.clonedeep';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { Collapse } from 'react-bootstrap';
+import Card from 'react-bootstrap/Card';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-
-import {
-  getReconciliationReport
-} from '../../actions';
-import {
-  tableColumnsS3Files,
-  tableColumnsFiles,
-  tableColumnsCollections,
-  tableColumnsGranules
-} from '../../utils/table-config/reconciliation-reports';
-
-import Loading from '../LoadingIndicator/loading-indicator';
+import { getReconciliationReport } from '../../actions';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ErrorReport from '../Errors/report';
-
-import TableCards from './table-cards';
+import Loading from '../LoadingIndicator/loading-indicator';
 import SortableTable from '../SortableTable/SortableTable';
+import { reshapeReport } from './reshape-report';
+import TableCards from './table-cards';
 
-const parseFileObject = (d) => {
-  const parsed = url.parse(d.uri);
-  return {
-    granuleId: d.granuleId,
-    filename: path.basename(parsed.pathname),
-    bucket: parsed.hostname,
-    path: parsed.href
-  };
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/',
+  },
+  {
+    label: 'Reports Overview',
+    href: '/reconciliation-reports',
+  },
+  {
+    label: 'Report',
+    active: true,
+  },
+];
+
+const ReportStateHeader = ({ reportState, startDate, endDate }) => {
+  const displayStartDate = startDate
+    ? new Date(startDate).toLocaleDateString()
+    : 'missing';
+  const displayEndDate = endDate
+    ? new Date(endDate).toLocaleDateString()
+    : 'missing';
+  return (
+    <>
+      <b>Date Range:</b> {displayStartDate} to {displayEndDate} <b>state:</b>{' '}
+      <span
+        className={`status__badge status__badge--${
+          reportState === 'PASSED' ? 'passed' : 'conflict'
+        }`}
+      >
+        {' '}
+        {reportState}{' '}
+      </span>
+    </>
+  );
 };
 
-class ReconciliationReport extends React.Component {
-  constructor () {
-    super();
-    this.navigateBack = this.navigateBack.bind(this);
-    this.handleCardClick = this.handleCardClick.bind(this);
-    this.state = {
-      activeIdx: 0
-    };
-  }
+ReportStateHeader.propTypes = {
+  reportState: PropTypes.string,
+  endDate: PropTypes.string,
+  startDate: PropTypes.string,
+};
 
-  componentDidMount () {
-    const { dispatch, match, reconciliationReports } = this.props;
+/**
+ * returns PASSED or CONFLICT based on reconcilation report data.
+ * @param {Object} dataList - list of reconcilation report objects.
+ */
+const reportState = (dataList) => {
+  const anyBad = dataList.some((item) =>
+    item.tables.some((table) => table.data.length)
+  );
+  return anyBad ? 'CONFLICT' : 'PASSED';
+};
+
+const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
+  const [activeIdx, setActiveIdx] = useState('dynamo');
+
+  const { reconciliationReportName } = match.params;
+
+  useEffect(() => {
     const { reconciliationReportName } = match.params;
     if (!reconciliationReports.map[reconciliationReportName]) {
       dispatch(getReconciliationReport(reconciliationReportName));
     }
+  }, [dispatch, match.params, reconciliationReports.map]);
+
+  const record = reconciliationReports.map[reconciliationReportName];
+
+  const { internalComparison, cumulusVsCmrComparison } = reshapeReport(record);
+  const reportComparisons = [...internalComparison, ...cumulusVsCmrComparison];
+
+  const [expandedState, setExpandedState] = useState(
+    reportComparisons.reduce((object, item) => {
+      object[item.id] = item.tables.reduce((tableObject, table) => {
+        tableObject[table.id] = false;
+        return tableObject;
+      }, {});
+      return object;
+    }, {})
+  );
+
+  if (!record || (record.inflight && !record.data)) {
+    return <Loading />;
   }
 
-  navigateBack () {
-    this.props.history.push('/reconciliations');
-  }
+  const theReportState = reportState(reportComparisons);
+  const {
+    reportStartTime = null,
+    reportEndTime = null,
+    error = null,
+  } = record.data;
 
-  getFilesSummary ({
-    onlyInDynamoDb = [],
-    onlyInS3 = []
-  }) {
-    const filesInS3 = onlyInS3.map(d => {
-      const parsed = url.parse(d);
-      return {
-        filename: path.basename(parsed.pathname),
-        bucket: parsed.hostname,
-        path: parsed.href
-      };
-    });
-
-    const filesInDynamoDb = onlyInDynamoDb.map(parseFileObject);
-
-    return { filesInS3, filesInDynamoDb };
-  }
-
-  getCollectionsSummary ({
-    onlyInCumulus = [],
-    onlyInCmr = []
-  }) {
-    const getCollectionName = (collectionName) => ({ name: collectionName });
-    const collectionsInCumulus = onlyInCumulus.map(getCollectionName);
-    const collectionsInCmr = onlyInCmr.map(getCollectionName);
-    return { collectionsInCumulus, collectionsInCmr };
-  }
-
-  getGranulesSummary ({
-    onlyInCumulus = [],
-    onlyInCmr = []
-  }) {
-    const granulesInCumulus = onlyInCumulus;
-    const granulesInCmr = onlyInCmr.map((granule) => ({ granuleId: granule.GranuleUR }));
-    return { granulesInCumulus, granulesInCmr };
-  }
-
-  getGranuleFilesSummary ({
-    onlyInCumulus = [],
-    onlyInCmr = []
-  }) {
-    const granuleFilesOnlyInCumulus = onlyInCumulus.map(parseFileObject);
-
-    const granuleFilesOnlyInCmr = onlyInCmr.map(d => {
-      const parsed = url.parse(d.URL);
-      const bucket = parsed.hostname.split('.')[0];
-      return {
-        granuleId: d.GranuleUR,
-        filename: path.basename(parsed.pathname),
-        bucket,
-        path: `s3://${bucket}${parsed.pathname}`
-      };
-    });
-
-    return { granuleFilesOnlyInCumulus, granuleFilesOnlyInCmr };
-  }
-
-  handleCardClick (e, index) {
+  function handleCardClick(e, id) {
     e.preventDefault();
-    this.setState({ activeIdx: index });
+    setActiveIdx(id);
   }
 
-  render () {
-    const { reconciliationReports } = this.props;
-    const { reconciliationReportName } = this.props.match.params;
-    const { activeIdx } = this.state;
-
-    const record = reconciliationReports.map[reconciliationReportName];
-
-    if (!record || (record.inflight && !record.data)) {
-      return <Loading />;
-    }
-
-    let filesInS3 = [];
-    let filesInDynamoDb = [];
-
-    let granuleFilesOnlyInCumulus = [];
-    let granuleFilesOnlyInCmr = [];
-
-    let collectionsInCumulus = [];
-    let collectionsInCmr = [];
-
-    let granulesInCumulus = [];
-    let granulesInCmr = [];
-
-    let report;
-    let error;
-
-    if (record.data) {
-      report = record.data;
-
-      const {
-        filesInCumulus = {},
-        filesInCumulusCmr = {},
-        collectionsInCumulusCmr = {},
-        granulesInCumulusCmr = {}
-      } = report;
-
-      ({
-        filesInS3,
-        filesInDynamoDb
-      } = this.getFilesSummary(filesInCumulus));
-
-      ({
-        collectionsInCumulus,
-        collectionsInCmr
-      } = this.getCollectionsSummary(collectionsInCumulusCmr));
-
-      ({
-        granulesInCumulus,
-        granulesInCmr
-      } = this.getGranulesSummary(granulesInCumulusCmr));
-
-      ({
-        granuleFilesOnlyInCumulus,
-        granuleFilesOnlyInCmr
-      } = this.getGranuleFilesSummary(filesInCumulusCmr));
-
-      error = record.data.error;
-    }
-
-    const cardConfig = [
-      {
-        id: 'dynamo',
-        name: 'DynamoDB',
-        data: filesInDynamoDb,
-        columns: tableColumnsFiles,
+  function handleToggleClick(e, tableId) {
+    e.preventDefault();
+    const updatedState = {
+      [activeIdx]: {
+        ...expandedState[activeIdx],
+        [tableId]: !expandedState[activeIdx][tableId],
       },
-      {
-        id: 's3',
-        name: 'S3',
-        data: filesInS3,
-        columns: tableColumnsS3Files
-      },
-      {
-        id: 'cumulusCollections',
-        name: 'Cumulus Collections',
-        data: collectionsInCumulus,
-        columns: tableColumnsCollections
-      },
-      {
-        id: 'cmrCollections',
-        name: 'CMR Collections',
-        data: collectionsInCmr,
-        columns: tableColumnsCollections
-      },
-      {
-        id: 'cumulusGranules',
-        name: 'Cumulus Granules',
-        data: granulesInCumulus,
-        columns: tableColumnsGranules
-      },
-      {
-        id: 'cmrGranules',
-        name: 'CMR Granules',
-        data: granulesInCmr,
-        columns: tableColumnsGranules
-      },
-      {
-        id: 'cumulusGranules',
-        name: 'Cumulus Only Granules',
-        data: granuleFilesOnlyInCumulus,
-        columns: tableColumnsFiles
-      },
-      {
-        id: 'cmrGranules',
-        name: 'CMR Only Granules',
-        data: granuleFilesOnlyInCmr,
-        columns: tableColumnsFiles
+    };
+    setExpandedState({
+      ...expandedState,
+      ...updatedState,
+    });
+  }
+
+  function handleExpandClick() {
+    const updatedState = cloneDeep(expandedState);
+    const expanded = !allCollapsed();
+    for (const key in updatedState) {
+      const obj = updatedState[key];
+      for (const prop in obj) {
+        obj[prop] = expanded;
       }
-    ];
+    }
+    setExpandedState(updatedState);
+  }
 
-    return (
-      <div className='page__component'>
-        <section className='page__section page__section__header-wrapper'>
-          <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description '>{reconciliationReportName}</h1>
-            {error ? <ErrorReport report={error} /> : null}
-          </div>
-        </section>
-
-        <section className='page__section page__section--small'>
-          <TableCards config={cardConfig} onClick={this.handleCardClick} activeCard={activeIdx} />
-        </section>
-
-        <section className='page__section'>
-
-          <SortableTable
-            data={cardConfig[activeIdx].data}
-            tableColumns={cardConfig[activeIdx].columns}
-            shouldUsePagination={true}
-            initialHiddenColumns={['']}
-          />
-        </section>
-      </div>
+  function allCollapsed() {
+    return Object.keys(expandedState[activeIdx]).every(
+      (key) => expandedState[activeIdx][key] === true
     );
   }
-}
+
+  return (
+    <div className="page__component">
+      <section className="page__section page__section__controls">
+        <div className="reconciliation-reports__options--top">
+          <ul>
+            <li key="breadcrumbs">
+              <Breadcrumbs config={breadcrumbConfig} />
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section className="page__section page__section__header-wrapper">
+        <div className="page__section__header">
+          <div>
+            <h1 className="heading--large heading--shared-content with-description ">
+              {reconciliationReportName}
+            </h1>
+          </div>
+          <ReportStateHeader
+            reportState={theReportState}
+            startDate={reportStartTime}
+            endDate={reportEndTime}
+          />
+          {error ? <ErrorReport report={error} /> : null}
+        </div>
+      </section>
+
+      <section className="page__section page__section--small">
+        <div className="tablecard--wrapper">
+          <TableCards
+            titleCaption="Cumulus intercomparison"
+            config={internalComparison}
+            onClick={handleCardClick}
+            activeCard={activeIdx}
+          />
+          <TableCards
+            titleCaption="Cumulus versus CMR comparison"
+            config={cumulusVsCmrComparison}
+            onClick={handleCardClick}
+            activeCard={activeIdx}
+          />
+        </div>
+      </section>
+
+      <section className="page__section">
+        <div className="multicard">
+          <div className="collapse-link">
+            <span className="link" onClick={handleExpandClick}>
+              {!allCollapsed() ? 'Expand All' : 'Collapse All'}
+            </span>
+          </div>
+
+          {reportComparisons
+            .find((displayObj) => displayObj.id === activeIdx)
+            .tables.map((item, index) => {
+              const isExpanded = expandedState[activeIdx][item.id];
+              return (
+                <div className="multicard__table" key={index}>
+                  <Card.Header
+                    className={classNames({
+                      multicard__header: true,
+                      'multicard__header--expanded': isExpanded,
+                    })}
+                    key={index}
+                    onClick={(e) => handleToggleClick(e, item.id)}
+                    aria-controls={item.id}
+                  >
+                    {item.name}
+                    <span
+                      className={classNames({
+                        'num-title--inverted': !isExpanded,
+                        'num-title': isExpanded,
+                      })}
+                    >
+                      {item.data.length}
+                    </span>
+                    <span
+                      className={classNames({
+                        'expand-icon': !isExpanded,
+                        'collapse-icon': isExpanded,
+                      })}
+                    ></span>
+                  </Card.Header>
+                  <Collapse in={isExpanded}>
+                    <div id={item.id}>
+                      <SortableTable
+                        data={item.data}
+                        tableColumns={item.columns}
+                        shouldUsePagination={true}
+                        initialHiddenColumns={['']}
+                      />
+                    </div>
+                  </Collapse>
+                </div>
+              );
+            })}
+        </div>
+      </section>
+    </div>
+  );
+};
 
 ReconciliationReport.propTypes = {
   reconciliationReports: PropTypes.object,
   dispatch: PropTypes.func,
   match: PropTypes.object,
-  history: PropTypes.object
 };
 
 ReconciliationReport.defaultProps = {
-  reconciliationReports: []
+  reconciliationReports: [],
 };
 
 export { ReconciliationReport };
-export default withRouter(connect(state => state)(ReconciliationReport));
+export default withRouter(
+  connect((state) => ({
+    reconciliationReports: state.reconciliationReports,
+  }))(ReconciliationReport)
+);

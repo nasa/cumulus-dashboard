@@ -100,38 +100,18 @@ describe('Dashboard Reconciliation Reports Page', () => {
         },
         {
           title: 'S3',
-          count: 16,
+          count: 216,
           firstColumn: 'Filename'
         },
         {
-          title: 'Cumulus Collections',
-          count: 13,
+          title: 'Cumulus',
+          count: 21,
           firstColumn: 'Collection name'
         },
         {
-          title: 'CMR Collections',
-          count: 25,
+          title: 'CMR',
+          count: 391,
           firstColumn: 'Collection name'
-        },
-        {
-          title: 'Cumulus Granules',
-          count: 7,
-          firstColumn: 'Granule ID'
-        },
-        {
-          title: 'CMR Granules',
-          count: 365,
-          firstColumn: 'Granule ID'
-        },
-        {
-          title: 'Cumulus Only Granules',
-          count: 1,
-          firstColumn: 'GranuleId'
-        },
-        {
-          title: 'CMR Only Granules',
-          count: 1,
-          firstColumn: 'GranuleId'
         }
       ];
 
@@ -148,18 +128,35 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
       /** Table Filters **/
       cy.get('.table__filters');
-      cy.contains('.table__filters .button__filter', 'Hide Column Filters');
-      cy.get('.table__filters--collapse').should('be.visible');
+      cy.get('.multicard > :nth-child(2)')
+        .within(() => {
+          cy.get('.card-header').click();
+          cy.contains('.table__filters .button__filter', 'Show Column Filters').click();
+          cy.get('.table__filters--collapse').should('be.visible');
+          const filterLabel = 'Collection name';
 
-      const filterLabel = 'GranuleId';
+          cy.contains('.table .th', filterLabel).should('be.visible');
+          cy.contains('.table__filters--filter label', filterLabel).prev().click();
+          cy.contains('.table .th', filterLabel).should('not.be.visible');
 
-      cy.contains('.table .th', filterLabel).should('be.visible');
-      cy.contains('.table__filters--filter label', filterLabel).prev().click();
-      cy.contains('.table .th', filterLabel).should('not.be.visible');
+          cy.get('.table__filters .button__filter').click();
+          cy.contains('.table__filters .button__filter', 'Show Column Filters');
+          cy.get('.table__filters--collapse').should('not.be.visible');
+        });
+    });
 
-      cy.get('.table__filters .button__filter').click();
-      cy.contains('.table__filters .button__filter', 'Show Column Filters');
-      cy.get('.table__filters--collapse').should('not.be.visible');
+    it('Has a way to expand/collapse all tables', () => {
+      cy.visit('/reconciliation-reports/report/inventoryReport-20200114T205238781');
+      cy.get('.multicard__header').should('exist');
+      cy.get('.multicard__header--expanded').should('not.exist');
+      cy.get('.link').should('contain', 'Expand All').click();
+
+      cy.get('.multicard__header--expanded').should('exist');
+      cy.get('.link').should('contain', 'Collapse All');
+
+      cy.get('.multicard__header').click();
+      cy.get('.link').should('contain', 'Expand All');
+      cy.get('.multicard__header--expanded').should('not.exist');
     });
   });
 });

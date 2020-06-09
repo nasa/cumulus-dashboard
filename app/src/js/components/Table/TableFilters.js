@@ -9,7 +9,7 @@ const TableFilters = ({
   onChange,
   hiddenColumns = []
 }) => {
-  const [filtersExpanded, setFiltersExpanded] = useState(true);
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
 
   function handleChange (id) {
     if (typeof onChange === 'function') {

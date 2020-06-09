@@ -205,7 +205,7 @@ class Home extends React.Component {
                 <Link className='link--secondary link--learn-more' to='/granules'>{strings.view_granules_overview}</Link>
               </div>
               <div className="heading__wrapper">
-                <h2 className='heading--medium heading--shared-content--right'>{strings.granules_updated}<span className='num--title'>{numGranules}</span></h2>
+                <h2 className='heading--medium heading--shared-content--right'>{strings.granules_updated}<span className='num-title'>{numGranules}</span></h2>
               </div>
 
               <GranulesProgress granules={granuleStatus} />

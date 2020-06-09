@@ -1,5 +1,5 @@
 /**********************************************************************
-  This stylesheet is the core and general styles for the application. 
+  This stylesheet is the core and general styles for the application.
 **********************************************************************/
 
 /******** If Browser IE < 10 - Don't delete. *****/
@@ -83,6 +83,15 @@ a:hover {
 
 a:active {
   outline: 0;
+}
+
+.link {
+  color: $ocean-blue;
+  cursor: pointer;
+  border-bottom: 1px solid $ocean-blue;
+  &:hover {
+    color: $light-green;
+  }
 }
 
 .link--no-underline {
@@ -392,7 +401,7 @@ a:active {
 .page__section {
   @extend .clearfix;
   /*&:last-of-type {
-  margin-bottom: 3em; 
+  margin-bottom: 3em;
   }*/
 }
 
@@ -767,7 +776,7 @@ a:active {
 
 .api__warning .warning-icon{
     position: relative;
-    
+
   &:before {
     position: absolute;
     /*color: $error-red;*/

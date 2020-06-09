@@ -113,7 +113,7 @@ class ExecutionEvents extends React.Component {
             </div>
             <div className='heading__wrapper--border'>
               <h2 className='heading--medium heading--shared-content'>All Events
-                <span className="num--title">
+                <span className="num-title">
                   {`${executionStatus.executionHistory.events.length || 0}`}
                 </span>
               </h2>

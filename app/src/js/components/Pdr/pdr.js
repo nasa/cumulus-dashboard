@@ -188,7 +188,7 @@ class PDR extends React.Component {
 
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num--title'>{ !isNaN(count) ? `(${count})` : 0 }</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num-title'>{ !isNaN(count) ? `(${count})` : 0 }</span></h2>
           </div>
           <div>
             <GranulesProgress granules={granuleStatus} />

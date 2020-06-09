@@ -92,7 +92,7 @@ class PdrOverview extends React.Component {
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>All PDRs <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>All PDRs <span className='num-title'>{count ? ` ${tally(count)}` : 0}</span></h2>
           </div>
           <List
             list={list}
