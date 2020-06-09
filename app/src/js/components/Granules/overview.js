@@ -33,7 +33,7 @@ import statusOptions from '../../utils/status';
 import _config from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
-import { window, document } from '../../utils/browser';
+import { window } from '../../utils/browser';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import pageSizeOptions from '../../utils/page-size';
@@ -227,7 +227,6 @@ GranulesOverview.propTypes = {
   stats: PropTypes.object,
   dispatch: PropTypes.func,
   workflowOptions: PropTypes.array,
-  location: PropTypes.object,
   config: PropTypes.object,
   granuleCSV: PropTypes.object
 };
