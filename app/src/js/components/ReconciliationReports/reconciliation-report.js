@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import TableCards from './table-cards';
-import { Collapse } from 'react-bootstrap';
+import { Collapse, Dropdown as DropdownBootstrap } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -13,6 +13,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import SortableTable from '../SortableTable/SortableTable';
 import { reshapeReport } from './reshape-report';
 import cloneDeep from 'lodash.clonedeep';
+import { downloadFile } from '../../utils/download-file';
 
 const breadcrumbConfig = [
   {
@@ -69,7 +70,7 @@ const reportState = (dataList) => {
 };
 
 const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
-  const [activeIdx, setActiveIdx] = useState('dynamo');
+  const [activeId, setactiveId] = useState('dynamo');
   const [allExpanded, setAllExpanded] = useState(false);
 
   const { reconciliationReportName } = match.params;
@@ -110,17 +111,19 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
     error = null,
   } = record.data;
 
+  const activeCardTables = reportComparisons.find((displayObj) => displayObj.id === activeId).tables;
+
   function handleCardClick(e, id) {
     e.preventDefault();
-    setActiveIdx(id);
+    setactiveId(id);
   }
 
   function handleToggleClick(e, tableId) {
     e.preventDefault();
     const updatedState = {
-      [activeIdx]: {
-        ...collapseState[activeIdx],
-        [tableId]: !collapseState[activeIdx][tableId],
+      [activeId]: {
+        ...collapseState[activeId],
+        [tableId]: !collapseState[activeId][tableId],
       },
     };
     setCollapseState({
@@ -140,6 +143,38 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
     }
     setAllExpanded(expanded);
     setCollapseState(updatedState);
+  }
+
+  function convertToCSV(data, columns) {
+    const csvHeader = columns.map((column) => {
+      return column.accessor;
+    }).join(',');
+
+    const csvData = data.map((item) => {
+      let line = '';
+      for (const prop in item) {
+        if (line !== '') line += ',';
+        line += item[prop];
+      }
+      return line;
+    }).join('\r\n');
+
+    return `${csvHeader}\r\n${csvData}`;
+  }
+
+  function handleDownloadJsonClick (e) {
+    e.preventDefault();
+    const jsonHref = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(record.data))}`;
+    downloadFile(jsonHref, `${reconciliationReportName}.json`);
+  }
+
+  function handleDownloadCsvClick (e, table) {
+    e.preventDefault();
+    const { name, data: tableData, columns: tableColumns } = table;
+    const data = convertToCSV(tableData, tableColumns);
+    const csvData = new Blob([data], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(csvData);
+    downloadFile(url, `${reconciliationReportName}-${name}.csv`);
   }
 
   return (
@@ -165,6 +200,17 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
             startDate={reportStartTime}
             endDate={reportEndTime}
           />
+          <DropdownBootstrap className='form-group__element--right'>
+            <DropdownBootstrap.Toggle className='button button--small button--download' id="download-report-dropdown">
+                Download Report
+            </DropdownBootstrap.Toggle>
+            <DropdownBootstrap.Menu>
+              <DropdownBootstrap.Item as='button' onClick={handleDownloadJsonClick}>JSON - Full Report</DropdownBootstrap.Item>
+              {activeCardTables.map((table, index) => {
+                return <DropdownBootstrap.Item key={`${activeId}-${index}`} as='button' onClick={(e) => handleDownloadCsvClick(e, table)}>CSV - {table.name}</DropdownBootstrap.Item>;
+              })}
+            </DropdownBootstrap.Menu>
+          </DropdownBootstrap>
           {error ? <ErrorReport report={error} /> : null}
         </div>
       </section>
@@ -175,13 +221,13 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
             titleCaption="Cumulus intercomparison"
             config={internalComparison}
             onClick={handleCardClick}
-            activeCard={activeIdx}
+            activeCard={activeId}
           />
           <TableCards
             titleCaption="Cumulus versus CMR comparison"
             config={cumulusVsCmrComparison}
             onClick={handleCardClick}
-            activeCard={activeIdx}
+            activeCard={activeId}
           />
         </div>
       </section>
@@ -189,36 +235,33 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
       <section className="page__section">
         <span onClick={handleExpandClick}>TOGGLE</span>
         <div className="accordion__wrapper">
-          {reportComparisons
-            .find((displayObj) => displayObj.id === activeIdx)
-            .tables.map((item, index) => {
-              console.log(collapseState[activeIdx][item.id]);
-              return (
-                <div className="accordion__table" key={index}>
-                  <Card.Header
-                    key={index}
-                    onClick={(e) => handleToggleClick(e, item.id)}
-                    aria-controls={item.id}
-                  >
-                    {item.name}
-                    <span className="num-title--inverted">
-                      {item.data.length}
-                    </span>
-                    <span className="expand-icon"></span>
-                  </Card.Header>
-                  <Collapse in={collapseState[activeIdx][item.id]}>
-                    <div id={item.id}>
-                      <SortableTable
-                        data={item.data}
-                        tableColumns={item.columns}
-                        shouldUsePagination={true}
-                        initialHiddenColumns={['']}
-                      />
-                    </div>
-                  </Collapse>
-                </div>
-              );
-            })}
+          {activeCardTables.map((item, index) => {
+            return (
+              <div className="accordion__table" key={index}>
+                <Card.Header
+                  key={index}
+                  onClick={(e) => handleToggleClick(e, item.id)}
+                  aria-controls={item.id}
+                >
+                  {item.name}
+                  <span className="num-title--inverted">
+                    {item.data.length}
+                  </span>
+                  <span className="expand-icon"></span>
+                </Card.Header>
+                <Collapse in={collapseState[activeId][item.id]}>
+                  <div id={item.id}>
+                    <SortableTable
+                      data={item.data}
+                      tableColumns={item.columns}
+                      shouldUsePagination={true}
+                      initialHiddenColumns={['']}
+                    />
+                  </div>
+                </Collapse>
+              </div>
+            );
+          })}
         </div>
       </section>
     </div>
