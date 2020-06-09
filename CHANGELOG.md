@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1904**
   - Adds a TableFilters component for dynamically showing/hiding table columns
 
+- **CUMULUS-1906**
+  - Adds a download button dropdown to reconciliation report inventory view.
+    Option to download full report as json or indivdual tables as csv files.
+
 - **CUMULUS-1917**
   - Adds a download button to reconciliation report list page
 
