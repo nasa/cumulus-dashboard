@@ -35,7 +35,7 @@ const ReportStateHeader = ({ reportState, startDate, endDate }) => {
     ? new Date(startDate).toLocaleDateString()
     : 'missing';
   const displayEndDate = endDate
-    ? new Date(startDate).toLocaleDateString()
+    ? new Date(endDate).toLocaleDateString()
     : 'missing';
   return (
     <>
