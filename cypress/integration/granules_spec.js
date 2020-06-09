@@ -104,6 +104,40 @@ describe('Dashboard Granules Page', () => {
       cy.get('@list').should('have.length', 11);
     });
 
+    it('should be able to sort table by granule name', () => {
+      cy.visit('/granules');
+
+      // save the name of the first granule
+      let firstGranuleName;
+      cy.get('.table .tbody .tr').eq(0).children('.td').eq(2).invoke('text')
+        .then((name) => (firstGranuleName = name));
+
+      cy.get('.table .thead .tr .th').contains('.table__sort', 'Name').click();
+      cy.get('.table .thead .tr .th').contains('.table__sort--asc', 'Name');
+
+      // wait until the name of the first granule changes
+      cy.waitUntil(
+        () => cy.get('.table .tbody .tr').eq(0).children('.td').eq(2).invoke('text')
+          .then((name) => name !== firstGranuleName),
+        {
+          timeout: 5000,
+          interval: 500,
+          errorMsg: 'granule name sorting not working within time limit'
+        });
+
+      const granuleNames = [];
+      cy.get('.table .tbody .tr')
+        .each(($row, index, $list) => {
+          cy.wrap($row).children('.td').eq(2).invoke('text').then((name) =>
+            granuleNames.push(name));
+        })
+        .then(() => {
+          cy.wrap(granuleNames).should('have.length', 11);
+          const actual = granuleNames.slice();
+          cy.wrap(actual).should('deep.eq', granuleNames.sort());
+        });
+    });
+
     it('should display a link to download the granule list', () => {
       cy.visit('/granules');
 

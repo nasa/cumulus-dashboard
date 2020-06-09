@@ -21,13 +21,13 @@ export const tableColumns = [
   },
   {
     Header: 'Provider',
-    accessor: row => providerLink(row.provider),
-    id: 'provider'
+    accessor: 'provider',
+    Cell: ({ cell: { value } }) => providerLink(value)
   },
   {
     Header: strings.collection_id,
-    accessor: row => collectionLink(getCollectionId(row.collection)),
-    id: 'collectionId',
+    accessor: row => getCollectionId(row.collection),
+    Cell: ({ row }) => collectionLink(getCollectionId(row.original.collection)), // eslint-disable-line react/prop-types
     disableSortBy: true
   },
   {

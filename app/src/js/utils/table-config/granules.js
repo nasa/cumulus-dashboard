@@ -34,29 +34,31 @@ export const tableColumns = [
   },
   {
     Header: 'Name',
-    accessor: row => granuleLink(row.granuleId),
-    id: 'name',
+    accessor: 'granuleId',
+    Cell: ({ cell: { value } }) => granuleLink(value),
     width: 225
   },
   {
     Header: 'Published',
-    accessor: row => row.cmrLink ? <a href={row.cmrLink} target='_blank'>{bool(row.published)}</a> : bool(row.published),
-    id: 'published'
+    accessor: 'published',
+    Cell: ({ row: { original: { cmrLink, published } } }) => // eslint-disable-line react/prop-types
+      cmrLink ? <a href={cmrLink} target='_blank'>{bool(published)}</a> : bool(published)
   },
   {
     Header: strings.collection_id,
-    accessor: row => collectionLink(row.collectionId),
-    id: 'collectionId'
+    accessor: 'collectionId',
+    Cell: ({ cell: { value } }) => collectionLink(value)
   },
   {
     Header: 'Provider',
-    accessor: row => providerLink(row.provider),
-    id: 'provider'
+    accessor: 'provider',
+    Cell: ({ cell: { value } }) => providerLink(value)
   },
   {
     Header: 'Execution',
-    accessor: row => <Link to={`/executions/execution/${path.basename(row.execution)}`}>link</Link>,
-    id: 'execution',
+    accessor: 'execution',
+    Cell: ({ cell: { value } }) => // eslint-disable-line react/prop-types
+      <Link to={`/executions/execution/${path.basename(value)}`}>link</Link>,
     disableSortBy: true,
     width: 90
   },
@@ -76,8 +78,10 @@ export const tableColumns = [
 export const errorTableColumns = [
   {
     Header: 'Error',
-    accessor: row => <ErrorReport report={get(row, 'error.Cause', nullValue)} truncate={true} />,
+    accessor: row => get(row, 'error.Cause', nullValue),
     id: 'error',
+    Cell: ({ row: { original } }) => // eslint-disable-line react/prop-types
+      <ErrorReport report={get(original, 'error.Cause', nullValue)} truncate={true} />,
     disableSortBy: true,
     width: 175
   },
@@ -90,8 +94,8 @@ export const errorTableColumns = [
   },
   {
     Header: 'Granule',
-    accessor: row => granuleLink(row.granuleId),
-    id: 'granuleId',
+    accessor: 'granuleId',
+    Cell: ({ cell: { value } }) => granuleLink(value),
     width: 200
   },
   {
