@@ -33,10 +33,11 @@ import statusOptions from '../../utils/status';
 import _config from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
-import { window, document } from '../../utils/browser';
+import { window } from '../../utils/browser';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import pageSizeOptions from '../../utils/page-size';
+import { downloadFile } from '../../utils/download-file';
 
 const { updateInterval } = _config;
 
@@ -134,14 +135,8 @@ class GranulesOverview extends React.Component {
       const { granuleCSV } = this.props;
       const { data } = granuleCSV;
       const csvData = new Blob([data], { type: 'text/csv' });
-
-      const link = document.createElement('a');
-      link.setAttribute('download', 'granules.csv');
       const url = window.URL.createObjectURL(csvData);
-      link.href = url;
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
+      downloadFile(url, 'granules.csv');
     });
   }
 
@@ -232,7 +227,6 @@ GranulesOverview.propTypes = {
   stats: PropTypes.object,
   dispatch: PropTypes.func,
   workflowOptions: PropTypes.array,
-  location: PropTypes.object,
   config: PropTypes.object,
   granuleCSV: PropTypes.object
 };
