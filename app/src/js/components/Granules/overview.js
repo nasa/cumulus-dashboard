@@ -65,6 +65,7 @@ class GranulesOverview extends React.Component {
 
   componentDidMount () {
     this.queryMeta();
+    this.props.onQueryChange(this.generateQuery());
   }
 
   queryMeta () {
@@ -217,7 +218,8 @@ GranulesOverview.propTypes = {
   dispatch: PropTypes.func,
   workflowOptions: PropTypes.array,
   config: PropTypes.object,
-  granuleCSV: PropTypes.object
+  granuleCSV: PropTypes.object,
+  onQueryChange: PropTypes.func
 };
 
 export { GranulesOverview };

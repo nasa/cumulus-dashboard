@@ -65,9 +65,12 @@ const AllGranules = ({
   ];
 
   useEffect(() => {
+    onQueryChange(query);
+  }, [onQueryChange, query]);
+
+  useEffect(() => {
     dispatch(listWorkflows());
-    onQueryChange();
-  }, [dispatch, onQueryChange]);
+  }, [dispatch]);
 
   function getView () {
     const { pathname } = location;
