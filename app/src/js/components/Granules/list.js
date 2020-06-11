@@ -65,7 +65,9 @@ const AllGranules = ({
   ];
 
   useEffect(() => {
-    onQueryChange(query);
+    if (typeof onQueryChange === 'function') {
+      onQueryChange(query);
+    }
   }, [onQueryChange, query]);
 
   useEffect(() => {

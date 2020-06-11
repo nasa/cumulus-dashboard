@@ -39,7 +39,10 @@ class PdrOverview extends React.Component {
   }
 
   componentDidMount () {
-    this.props.onQueryChange(this.generateQuery());
+    const { onQueryChange } = this.props;
+    if (typeof onQueryChange === 'function') {
+      onQueryChange(this.generateQuery());
+    }
   }
 
   generateQuery () {

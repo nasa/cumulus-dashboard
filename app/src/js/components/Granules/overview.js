@@ -64,8 +64,11 @@ class GranulesOverview extends React.Component {
   }
 
   componentDidMount () {
+    const { onQueryChange } = this.props;
     this.queryMeta();
-    this.props.onQueryChange(this.generateQuery());
+    if (typeof onQueryChange === 'function') {
+      onQueryChange(this.generateQuery());
+    }
   }
 
   queryMeta () {

@@ -51,7 +51,9 @@ const ActivePdrs = ({
   ];
 
   useEffect(() => {
-    onQueryChange(query);
+    if (typeof onQueryChange === 'function') {
+      onQueryChange(query);
+    }
   }, [onQueryChange, query]);
 
   function generateQuery () {
