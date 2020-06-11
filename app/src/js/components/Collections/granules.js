@@ -42,7 +42,7 @@ const CollectionGranules = ({
   const displayName = strings.granules;
   const collectionId = getCollectionId(params);
   const view = getView();
-  const [workflow, setWorkflow] = useState();
+  const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const query = generateQuery();
 
   const breadcrumbConfig = [
@@ -74,7 +74,7 @@ const CollectionGranules = ({
 
   function generateQuery() {
     const options = { collectionId };
-    if (view && view !== 'all') options.status = view;
+    if (view !== 'all') options.status = view;
     return options;
   }
 

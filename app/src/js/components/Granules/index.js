@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
@@ -24,12 +24,15 @@ const Granules = ({
   const AllGranulesWithWrapper = withQueryWrapper(AllGranules, queryOptions, setQueryOptions);
 
   function query () {
+    dispatch(listGranules(queryOptions));
+  }
+
+  useEffect(() => {
     dispatch(getCount({
       type: 'granules',
       field: 'status'
     }));
-    dispatch(listGranules(queryOptions));
-  }
+  }, [dispatch]);
 
   return (
     <div className='page__granules'>

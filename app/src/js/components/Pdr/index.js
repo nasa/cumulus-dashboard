@@ -1,5 +1,5 @@
 'use strict';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
@@ -25,12 +25,15 @@ const Pdrs = ({
   const AllPdrsWithWrapper = withQueryWrapper(PdrList, queryOptions, setQueryOptions);
 
   function query () {
+    dispatch(listPdrs(queryOptions));
+  }
+
+  useEffect(() => {
     dispatch(getCount({
       type: 'pdrs',
       field: 'status'
     }));
-    dispatch(listPdrs(queryOptions));
-  }
+  }, [dispatch]);
 
   return (
     <div className='page__pdrs'>
