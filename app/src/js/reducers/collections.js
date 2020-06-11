@@ -111,10 +111,10 @@ export default createReducer(initialState, {
   [COLLECTION_DELETE_INFLIGHT]: createInflightReducer('deleted'),
   [COLLECTION_DELETE_ERROR]: createErrorReducer('deleted'),
   [SEARCH_COLLECTIONS]: (state, action) => {
-    state.list.params.prefix = action.prefix;
+    state.list.params.infix = action.infix;
   },
   [CLEAR_COLLECTIONS_SEARCH]: (state) => {
-    state.list.params.prefix = null;
+    state.list.params.infix = null;
   },
   [FILTER_COLLECTIONS]: (state, action) => {
     const { key, value } = action.param;

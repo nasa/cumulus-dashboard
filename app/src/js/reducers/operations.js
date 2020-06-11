@@ -62,9 +62,9 @@ export default createReducer(initialState, {
     delete state.list.params[action.paramKey];
   },
   [SEARCH_OPERATIONS]: (state, action) => {
-    state.list.internal.prefix = action.prefix;
+    state.list.internal.infix = action.infix;
   },
   [CLEAR_OPERATIONS_SEARCH]: (state) => {
-    delete state.list.internal.prefix;
+    delete state.list.internal.infix;
   },
 });
