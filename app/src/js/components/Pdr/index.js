@@ -23,6 +23,7 @@ const Pdrs = ({
   const count = get(stats, 'count.data.pdrs.count');
   const [queryOptions, setQueryOptions] = useState({});
   const AllPdrsWithWrapper = withQueryWrapper(PdrList, queryOptions, setQueryOptions);
+  const PdrOverviewWithWrapper = withQueryWrapper(PdrOverview, queryOptions, setQueryOptions);
 
   function query () {
     dispatch(listPdrs(queryOptions));
@@ -47,7 +48,7 @@ const Pdrs = ({
           />
           <div className='page__content--shortened'>
             <Switch>
-              <Route exact path='/pdrs' component={PdrOverview} />
+              <Route exact path='/pdrs' component={PdrOverviewWithWrapper} />
               <Route path='/pdrs/active' component={AllPdrsWithWrapper} />
               <Route path='/pdrs/failed' component={AllPdrsWithWrapper} />
               <Route path='/pdrs/completed' component={AllPdrsWithWrapper} />
