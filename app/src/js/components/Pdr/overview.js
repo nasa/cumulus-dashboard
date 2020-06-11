@@ -38,13 +38,6 @@ class PdrOverview extends React.Component {
     this.renderOverview = this.renderOverview.bind(this);
   }
 
-  componentDidMount () {
-    const { onQueryChange } = this.props;
-    if (typeof onQueryChange === 'function') {
-      onQueryChange(this.generateQuery());
-    }
-  }
-
   generateQuery () {
     return {};
   }
@@ -108,7 +101,6 @@ class PdrOverview extends React.Component {
 
 PdrOverview.propTypes = {
   dispatch: PropTypes.func,
-  onQueryChange: PropTypes.func,
   pdrs: PropTypes.object,
   stats: PropTypes.object
 };

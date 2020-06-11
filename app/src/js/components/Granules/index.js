@@ -22,7 +22,6 @@ const Granules = ({
   const count = get(stats, 'count.data.granules.count');
   const [queryOptions, setQueryOptions] = useState({});
   const AllGranulesWithWrapper = withQueryWrapper(AllGranules, queryOptions, setQueryOptions);
-  const GranulesOverviewWithWrapper = withQueryWrapper(GranulesOverview, queryOptions, setQueryOptions);
 
   function query () {
     dispatch(listGranules(queryOptions));
@@ -34,6 +33,8 @@ const Granules = ({
       field: 'status'
     }));
   }, [dispatch]);
+
+  console.log(queryOptions);
 
   return (
     <div className='page__granules'>
@@ -47,7 +48,7 @@ const Granules = ({
           />
           <div className='page__content--shortened'>
             <Switch>
-              <Route exact path='/granules' component={GranulesOverviewWithWrapper} />
+              <Route exact path='/granules' component={GranulesOverview} />
               <Route path='/granules/granule/:granuleId' component={GranuleOverview} />
               <Route path='/granules/completed' component={AllGranulesWithWrapper} />
               <Route path='/granules/processing' component={AllGranulesWithWrapper} />
