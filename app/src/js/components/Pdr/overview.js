@@ -5,7 +5,9 @@ import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import {
+  interval,
   listPdrs,
+  getCount,
   clearPdrsFilter,
   filterPdrs
 } from '../../actions';
@@ -14,10 +16,13 @@ import { bulkActions } from '../../utils/table-config/pdrs';
 import { tableColumns } from '../../utils/table-config/pdr-progress';
 import List from '../Table/Table';
 import Overview from '../Overview/overview';
+import _config from '../../config';
 import Dropdown from '../DropDown/dropdown';
 import pageSizeOptions from '../../utils/page-size';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+
+const { updateInterval } = _config;
 
 const breadcrumbConfig = [
   {
@@ -33,9 +38,26 @@ const breadcrumbConfig = [
 class PdrOverview extends React.Component {
   constructor () {
     super();
+    this.displayName = 'PdrOverview';
+    this.queryStats = this.queryStats.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
     this.renderOverview = this.renderOverview.bind(this);
+  }
+
+  componentDidMount () {
+    this.cancelInterval = interval(this.queryStats, updateInterval, true);
+  }
+
+  componentWillUnmount () {
+    if (this.cancelInterval) { this.cancelInterval(); }
+  }
+
+  queryStats () {
+    this.props.dispatch(getCount({
+      type: 'pdrs',
+      field: 'status'
+    }));
   }
 
   generateQuery () {
