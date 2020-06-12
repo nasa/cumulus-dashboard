@@ -188,7 +188,7 @@ export const deleteCollection = (name, version) => ({
   }
 });
 
-export const searchCollections = (prefix) => ({ type: types.SEARCH_COLLECTIONS, prefix: prefix });
+export const searchCollections = (infix) => ({ type: types.SEARCH_COLLECTIONS, infix: infix });
 export const clearCollectionsSearch = () => ({ type: types.CLEAR_COLLECTIONS_SEARCH });
 export const filterCollections = (param) => ({ type: types.FILTER_COLLECTIONS, param: param });
 export const clearCollectionsFilter = (paramKey) => ({ type: types.CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
@@ -453,7 +453,7 @@ export const deleteGranule = (granuleId) => ({
   }
 });
 
-export const searchGranules = (prefix) => ({ type: types.SEARCH_GRANULES, prefix: prefix });
+export const searchGranules = (infix) => ({ type: types.SEARCH_GRANULES, infix: infix });
 export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH });
 export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param: param });
 export const clearGranulesFilter = (paramKey) => ({ type: types.CLEAR_GRANULES_FILTER, paramKey: paramKey });
@@ -610,7 +610,7 @@ export const getPdr = (pdrName) => ({
   }
 });
 
-export const searchPdrs = (prefix) => ({ type: types.SEARCH_PDRS, prefix: prefix });
+export const searchPdrs = (infix) => ({ type: types.SEARCH_PDRS, infix: infix });
 export const clearPdrsSearch = () => ({ type: types.CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: types.FILTER_PDRS, param: param });
 export const clearPdrsFilter = (paramKey) => ({ type: types.CLEAR_PDRS_FILTER, paramKey: paramKey });
@@ -679,7 +679,7 @@ export const deleteProvider = (providerId) => ({
   }
 });
 
-export const searchProviders = (prefix) => ({ type: types.SEARCH_PROVIDERS, prefix: prefix });
+export const searchProviders = (infix) => ({ type: types.SEARCH_PROVIDERS, infix: infix });
 export const clearProvidersSearch = () => ({ type: types.CLEAR_PROVIDERS_SEARCH });
 export const filterProviders = (param) => ({ type: types.FILTER_PROVIDERS, param: param });
 export const clearProvidersFilter = (paramKey) => ({ type: types.CLEAR_PROVIDERS_FILTER, paramKey: paramKey });
@@ -806,7 +806,7 @@ export const listExecutions = (options) => {
 
 export const filterExecutions = (param) => ({ type: types.FILTER_EXECUTIONS, param: param });
 export const clearExecutionsFilter = (paramKey) => ({ type: types.CLEAR_EXECUTIONS_FILTER, paramKey: paramKey });
-export const searchExecutions = (prefix) => ({ type: types.SEARCH_EXECUTIONS, prefix: prefix });
+export const searchExecutions = (infix) => ({ type: types.SEARCH_EXECUTIONS, infix: infix });
 export const clearExecutionsSearch = () => ({ type: types.CLEAR_EXECUTIONS_SEARCH });
 
 export const listOperations = (options) => {
@@ -832,7 +832,7 @@ export const getOperation = (operationId) => ({
   }
 });
 
-export const searchOperations = (prefix) => ({ type: types.SEARCH_OPERATIONS, prefix: prefix });
+export const searchOperations = (infix) => ({ type: types.SEARCH_OPERATIONS, infix: infix });
 export const clearOperationsSearch = () => ({ type: types.CLEAR_OPERATIONS_SEARCH });
 export const filterOperations = (param) => ({ type: types.FILTER_OPERATIONS, param: param });
 export const clearOperationsFilter = (paramKey) => ({ type: types.CLEAR_OPERATIONS_FILTER, paramKey: paramKey });
@@ -938,7 +938,7 @@ export const rerunRule = (payload) => ({
   }
 });
 
-export const searchRules = (prefix) => ({ type: types.SEARCH_RULES, prefix: prefix });
+export const searchRules = (infix) => ({ type: types.SEARCH_RULES, infix: infix });
 export const clearRulesSearch = () => ({ type: types.CLEAR_RULES_SEARCH });
 export const filterRules = (param) => ({ type: types.FILTER_RULES, param: param });
 export const clearRulesFilter = (paramKey) => ({ type: types.CLEAR_RULES_FILTER, paramKey: paramKey });
@@ -984,7 +984,7 @@ export const deleteReconciliationReport = (reconciliationName) => ({
   }
 });
 
-export const searchReconciliationReports = (prefix) => ({ type: types.SEARCH_RECONCILIATIONS, prefix: prefix });
+export const searchReconciliationReports = (infix) => ({ type: types.SEARCH_RECONCILIATIONS, infix: infix });
 export const clearReconciliationReportSearch = () => ({ type: types.CLEAR_RECONCILIATIONS_SEARCH });
 export const filterReconciliationReports = (param) => ({ type: types.FILTER_RECONCILIATIONS, param: param });
 export const clearReconciliationReportsFilter = (paramKey) => ({ type: types.CLEAR_RECONCILIATIONS_FILTER, paramKey: paramKey });
