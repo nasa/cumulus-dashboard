@@ -34,8 +34,6 @@ const Granules = ({
     }));
   }, [dispatch]);
 
-  console.log(queryOptions);
-
   return (
     <div className='page__granules'>
       <DatePickerHeader onChange={query} heading={strings.granules}/>
