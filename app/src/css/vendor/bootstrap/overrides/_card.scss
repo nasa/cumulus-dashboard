@@ -1,11 +1,12 @@
 .card-wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .card {
   width: 10em;
   cursor: pointer;
+  margin: 1em 1em 1em 0;
 
   .card-header {
     color: $white;
@@ -23,6 +24,18 @@
   &.active {
     .card-header {
       background-color: $theme--blue;
+    }
+  }
+}
+
+.tablecard--wrapper{
+  display: flex;
+
+  .table-card {
+    margin-right: 1em;
+
+    &:first-child {
+      border-right: 1px solid $light-grey;
     }
   }
 }

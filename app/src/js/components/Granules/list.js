@@ -141,7 +141,7 @@ class AllGranules extends React.Component {
           </section>
           <div className='page__section__header page__section__header-wrapper'>
             <h1 className='heading--large heading--shared-content with-description '>
-              {displayCaseView} {strings.granules} <span className='num--title'>{ !isNaN(count) ? `${tally(count)}` : 0 }</span>
+              {displayCaseView} {strings.granules} <span className='num-title'>{ !isNaN(count) ? `${tally(count)}` : 0 }</span>
             </h1>
             {lastUpdated(queriedAt)}
           </div>

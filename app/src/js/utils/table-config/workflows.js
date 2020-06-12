@@ -27,8 +27,8 @@ export const tableColumns = [
   },
   {
     Header: 'AWS Step Function',
-    accessor: buildLink,
-    id: 'template'
+    accessor: row => (row.definition && row.definition.Comment) || 'AWS Stepfunction',
+    Cell: ({ row }) => buildLink(row.original),
   },
   {
     Header: 'Steps',

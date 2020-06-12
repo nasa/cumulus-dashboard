@@ -7,7 +7,6 @@
     "name": "TESTCOLLECTION",
     "reportToEms": true,
     "duplicateHandling": "replace",
-    "provider_path": "cumulus-test-data/pdrs",
     "files": [
         {
             "bucket": "protected",

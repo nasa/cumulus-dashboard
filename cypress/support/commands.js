@@ -23,6 +23,7 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+import 'cypress-wait-until';
 import cloneDeep from 'lodash.clonedeep';
 import { DELETE_TOKEN, SET_TOKEN } from '../../app/src/js/actions/types';
 

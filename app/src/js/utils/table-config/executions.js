@@ -11,8 +11,9 @@ import { strings } from '../../components/locale';
 export const tableColumns = [
   {
     Header: 'Name',
-    accessor: row => <Link to={'/executions/execution/' + row.arn} title={row.name}>{truncate(row.name, 24)}</Link>,
-    id: 'name'
+    accessor: 'name',
+    Cell: ({ row: { original: { arn, name } } }) => // eslint-disable-line react/prop-types
+      <Link to={'/executions/execution/' + arn} title={name}>{truncate(name, 24)}</Link>
   },
   {
     Header: 'Status',

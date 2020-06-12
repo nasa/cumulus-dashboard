@@ -88,7 +88,7 @@ class ProvidersOverview extends React.Component {
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>Ingesting Providers <span className='num--title'>{count ? `${count}` : 0}</span></h2>
+            <h2 className='heading--medium heading--shared-content'>Ingesting Providers <span className='num-title'>{count ? `${count}` : 0}</span></h2>
           </div>
           <div className='filter__button--add'>
             <Link className='button button--green button--add button--small form-group__element' to='/providers/add'>Add Provider</Link>
