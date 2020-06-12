@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 
 import { Card } from 'react-bootstrap';
@@ -19,6 +20,10 @@ const TableCards = ({
 
   return (
     <div className='card-wrapper'>
+      <Helmet>
+        <meta charset= "utf-8" />
+        <title> Table Cards </title>
+      </Helmet>
       {config.map((item, index) => {
         // TODO: once API is updated with status indicator, remove the default
         const { name, data, status = 'success' } = item;

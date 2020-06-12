@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import cloneDeep from 'lodash.clonedeep';
@@ -102,6 +103,10 @@ class OperationOverview extends React.Component {
 
     return (
       <div className='page__component'>
+        <Helmet>
+          <meta charset= "utf-8" />
+          <title> Operations overview </title>
+        </Helmet>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description'>Operations Overview</h1>

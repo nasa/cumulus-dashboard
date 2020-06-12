@@ -1,6 +1,7 @@
 // This is the main Collections Overview page
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -89,6 +90,10 @@ class CollectionList extends React.Component {
     const { count, queriedAt } = list.meta;
     return (
       <div className="page__component">
+        <Helmet>
+          <meta charset= "utf-8" />
+          <title> Collection List </title>
+        </Helmet>
         <section className="page__section">
           <section className="page__section page__section__controls">
             <Breadcrumbs config={breadcrumbConfig} />

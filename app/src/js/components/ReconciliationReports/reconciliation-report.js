@@ -3,6 +3,7 @@
 import url from 'url';
 import path from 'path';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -229,6 +230,10 @@ class ReconciliationReport extends React.Component {
 
     return (
       <div className='page__component'>
+        <Helmet>
+          <meta charset= "utf-8" />
+          <title> Reconcilation Reports </title>
+        </Helmet>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>{reconciliationReportName}</h1>

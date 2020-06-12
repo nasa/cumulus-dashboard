@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -129,18 +130,24 @@ const AddRule = ({
   }, [collections, providers, workflows]);
 
   return (
-    <AddRecord
-      data={rule}
-      schemaKey={'rule'}
-      primaryProperty={'name'}
-      title={title}
-      state={rules}
-      baseRoute={'/rules/rule'}
-      createRecord={createRule}
-      exclude={['updatedAt']}
-      enums={enums}
-      validate={validate}
-    />
+    <div className = "add_rules">
+      <Helmet>
+        <meta charset= "utf-8" />
+        <title> Add Rule </title>
+      </Helmet>
+      <AddRecord
+        data={rule}
+        schemaKey={'rule'}
+        primaryProperty={'name'}
+        title={title}
+        state={rules}
+        baseRoute={'/rules/rule'}
+        createRecord={createRule}
+        exclude={['updatedAt']}
+        enums={enums}
+        validate={validate}
+      />
+    </div>
   );
 };
 

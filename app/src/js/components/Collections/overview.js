@@ -1,5 +1,6 @@
 'use strict';
 import { get } from 'object-path';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -196,6 +197,10 @@ class CollectionOverview extends React.Component {
 
     return (
       <div className="page__component">
+        <Helmet>
+          <meta charset= "utf-8" />
+          <title> Collection Overview </title>
+        </Helmet>
         <section className="page__section page__section__controls">
           <div className="collection__options--top">
             <ul>

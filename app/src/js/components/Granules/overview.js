@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -153,6 +154,10 @@ class GranulesOverview extends React.Component {
     const overviewItems = statsCount.map(d => [tally(d.count), displayCase(d.key)]);
     return (
       <div className='page__component'>
+        <Helmet>
+          <meta charset= "utf-8" />
+          <title> Granules overview </title>
+        </Helmet>
         <section className='page__section page__section__controls'>
           <Breadcrumbs config={breadcrumbConfig} />
         </section>

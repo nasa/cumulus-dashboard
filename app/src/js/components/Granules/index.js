@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
 import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
@@ -45,6 +46,10 @@ const Granules = ({
 
   return (
     <div className='page__granules'>
+      <Helmet>
+        <meta charset= "utf-8" />
+        <title> Granules </title>
+      </Helmet>
       <DatePickerHeader onChange={query} heading={strings.granules}/>
       <div className='page__content'>
         <div className='wrapper__sidebar'>

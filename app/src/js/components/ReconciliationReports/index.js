@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
@@ -22,6 +23,10 @@ class ReconciliationReports extends React.Component {
   render () {
     return (
       <div className='page__reconciliations'>
+        <Helmet>
+          <meta charset= "utf-8" />
+          <title> Reconcilation Reports </title>
+        </Helmet>
         <DatePickerHeader onChange={this.query} heading={strings.reconciliation_reports} />
         <div className='page__content'>
           <div className='wrapper__sidebar'>
