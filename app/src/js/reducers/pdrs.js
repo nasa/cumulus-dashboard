@@ -66,10 +66,10 @@ export default createReducer(initialState, {
     state.list.error = action.error;
   },
   [SEARCH_PDRS]: (state, action) => {
-    state.list.params.prefix = action.prefix;
+    state.list.params.infix = action.infix;
   },
   [CLEAR_PDRS_SEARCH]: (state) => {
-    delete state.list.params.prefix;
+    delete state.list.params.infix;
   },
   [FILTER_PDRS]: (state, action) => {
     state.list.params[action.param.key] = action.param.value;
