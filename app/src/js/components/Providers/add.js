@@ -19,7 +19,6 @@ class AddProvider extends React.Component {
     return (
       <div className = "add_providers">
         <Helmet>
-          <meta charset= "utf-8" />
           <title> Add Provider </title>
         </Helmet>
         <AddRecord

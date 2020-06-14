@@ -1,5 +1,4 @@
 'use strict';
-
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
@@ -78,7 +77,6 @@ class ProvidersOverview extends React.Component {
     return (
       <div className='page__component'>
         <Helmet>
-          <meta charset= "utf-8" />
           <title> Provider overview </title>
         </Helmet>
         <section className='page__section page__section__header-wrapper'>

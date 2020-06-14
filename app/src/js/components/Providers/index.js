@@ -21,7 +21,6 @@ class Providers extends React.Component {
     return (
       <div className='page__providers'>
         <Helmet>
-          <meta charset= "utf-8" />
           <title> Cumulus Providers </title>
         </Helmet>
         <div className='content__header'>

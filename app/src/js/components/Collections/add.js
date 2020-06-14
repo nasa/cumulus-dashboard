@@ -38,8 +38,7 @@ const AddCollection = ({ location = {}, collections, dispatch, schema }) => {
   return (
     <div className = "add_collections">
       <Helmet>
-        <meta charset= "utf-8" />
-        <title> Add Collections </title>
+        <title> Add Collection </title>
       </Helmet>
       <AddRaw
         pk={'new-collection'}

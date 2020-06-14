@@ -1,5 +1,6 @@
 'use strict';
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
@@ -34,6 +35,9 @@ const Pdrs = ({
 
   return (
     <div className='page__pdrs'>
+      <Helmet>
+        <title> Cumulus PDRs </title>
+      </Helmet>
       <DatePickerHeader onChange={query} heading={strings.pdrs}/>
       <div className='page__content'>
         <div className='wrapper__sidebar'>

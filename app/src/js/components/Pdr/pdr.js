@@ -1,6 +1,7 @@
 'use strict';
 import path from 'path';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -163,6 +164,9 @@ class PDR extends React.Component {
     }));
     return (
       <div className='page__component'>
+        <Helmet>
+          <title> Cumulus PDRs </title>
+        </Helmet>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>{pdrName}</h1>

@@ -24,7 +24,6 @@ class ReconciliationReports extends React.Component {
     return (
       <div className='page__reconciliations'>
         <Helmet>
-          <meta charset= "utf-8" />
           <title> Reconcilation Reports </title>
         </Helmet>
         <DatePickerHeader onChange={this.query} heading={strings.reconciliation_reports} />

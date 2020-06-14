@@ -20,7 +20,6 @@ class Operations extends React.Component {
     return (
       <div className='page__workflows'>
         <Helmet>
-          <meta charset= "utf-8" />
           <title> Cumulus Operations </title>
         </Helmet>
         <DatePickerHeader onChange={this.query} heading={strings.operations}/>

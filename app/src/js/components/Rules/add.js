@@ -1,5 +1,4 @@
 'use strict';
-
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -132,7 +131,6 @@ const AddRule = ({
   return (
     <div className = "add_rules">
       <Helmet>
-        <meta charset= "utf-8" />
         <title> Add Rule </title>
       </Helmet>
       <AddRecord

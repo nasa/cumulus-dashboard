@@ -23,8 +23,7 @@ const EditCollection = ({ match, collections }) => {
   return (
     <div className = "edit_collections">
       <Helmet>
-        <meta charset= "utf-8" />
-        <title> Edit Collections </title>
+        <title> Edit Collection </title>
       </Helmet>
       <EditRaw
         pk={collectionId}

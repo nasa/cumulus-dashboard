@@ -12,7 +12,6 @@ class Workflows extends React.Component {
     return (
       <div className='page__workflows'>
         <Helmet>
-          <meta charset= "utf-8" />
           <title> Cumulus Workflows </title>
         </Helmet>
         <div className='content__header'>

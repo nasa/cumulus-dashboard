@@ -30,7 +30,6 @@ class Collections extends React.Component {
         <DatePickerHeader onChange={this.query} heading={strings.collections} />
         <div className="page__content">
           <Helmet>
-            <meta charset= "utf-8" />
             <title> Cumulus Collections </title>
           </Helmet>
           <div className="wrapper__sidebar">

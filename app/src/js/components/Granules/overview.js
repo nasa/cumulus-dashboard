@@ -150,7 +150,6 @@ class GranulesOverview extends React.Component {
     return (
       <div className='page__component'>
         <Helmet>
-          <meta charset= "utf-8" />
           <title> Granules overview </title>
         </Helmet>
         <section className='page__section page__section__controls'>

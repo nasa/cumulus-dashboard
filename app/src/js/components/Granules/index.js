@@ -35,7 +35,6 @@ const Granules = ({
   return (
     <div className='page__granules'>
       <Helmet>
-        <meta charset= "utf-8" />
         <title> Granules </title>
       </Helmet>
       <DatePickerHeader onChange={query} heading={strings.granules}/>
