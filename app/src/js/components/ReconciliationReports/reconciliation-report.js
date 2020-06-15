@@ -1,5 +1,4 @@
 'use strict';
-/* eslint node/no-deprecated-api: 0 */
 import classNames from 'classnames';
 import cloneDeep from 'lodash.clonedeep';
 import PropTypes from 'prop-types';

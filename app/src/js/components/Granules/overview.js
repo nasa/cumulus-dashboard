@@ -150,7 +150,7 @@ class GranulesOverview extends React.Component {
     return (
       <div className='page__component'>
         <Helmet>
-          <title> Granules overview </title>
+          <title> Granules Overview </title>
         </Helmet>
         <section className='page__section page__section__controls'>
           <Breadcrumbs config={breadcrumbConfig} />

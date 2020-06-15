@@ -77,7 +77,7 @@ class ProvidersOverview extends React.Component {
     return (
       <div className='page__component'>
         <Helmet>
-          <title> Provider overview </title>
+          <title> Provider </title>
         </Helmet>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>Provider Overview</h1>

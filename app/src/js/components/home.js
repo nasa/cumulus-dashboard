@@ -107,7 +107,6 @@ class Home extends React.Component {
       <section className='page__section'>
         <div className='row'>
           <Helmet>
-            <meta charset= "utf-8" />
             <title> Cumulus Home  </title>
           </Helmet>
           <div className='heading__wrapper'>

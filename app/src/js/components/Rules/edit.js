@@ -23,7 +23,6 @@ const EditRule = ({
   return (
     <div className = "edit_rules">
       <Helmet>
-        <meta charset= "utf-8" />
         <title> Edit Rule </title>
       </Helmet>
       <EditRaw
