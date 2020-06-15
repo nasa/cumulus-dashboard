@@ -1,5 +1,5 @@
 'use strict';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
@@ -12,6 +12,7 @@ import {
   applyWorkflowToGranule,
   searchGranules,
   clearGranulesSearch,
+  listWorkflows,
 } from '../../actions';
 import {
   simpleDropdownOption,
@@ -72,6 +73,10 @@ const CollectionGranules = ({
       active: true,
     });
   }
+
+  useEffect(() => {
+    dispatch(listWorkflows());
+  }, [dispatch]);
 
   function generateQuery() {
     const options = { collectionId };
