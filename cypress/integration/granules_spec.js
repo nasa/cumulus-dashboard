@@ -107,20 +107,25 @@ describe('Dashboard Granules Page', () => {
     it('should be able to sort table by granule name', () => {
       cy.visit('/granules');
 
-      // save the name of the first granule
-      let firstGranuleName;
-      cy.get('.table .tbody .tr').eq(0).children('.td').eq(2).invoke('text')
-        .then((name) => (firstGranuleName = name));
+      // save the names of the granules
+      const originalGranuleNames = [];
+      cy.get('.table .tbody .tr')
+        .each(($row, index, $list) => {
+          cy.wrap($row).children('.td').eq(2).invoke('text').then((name) =>
+            originalGranuleNames.push(name));
+        });
 
       cy.get('.table .thead .tr .th').contains('.table__sort', 'Name').click();
       cy.get('.table .thead .tr .th').contains('.table__sort--asc', 'Name');
 
-      // wait until the name of the first granule changes
+      // wait until the names of the first two granules change
       cy.waitUntil(
         () => cy.get('.table .tbody .tr').eq(0).children('.td').eq(2).invoke('text')
-          .then((name) => name !== firstGranuleName),
+          .then((name) => name !== originalGranuleNames[0]) ||
+          cy.get('.table .tbody .tr').eq(1).children('.td').eq(2).invoke('text')
+            .then((name) => name !== originalGranuleNames[1]),
         {
-          timeout: 5000,
+          timeout: 10000,
           interval: 500,
           errorMsg: 'granule name sorting not working within time limit'
         });
@@ -163,11 +168,14 @@ describe('Dashboard Granules Page', () => {
       cy.url().should('include', '?status=failed');
     });
 
-    it('Should update URL when search filter is changed.', () => {
+    it('Should update URL and table when search filter is changed.', () => {
+      const infix = 'A0142558';
       cy.visit('/granules');
       cy.get('.search').as('search');
-      cy.get('@search').click().type('L2');
-      cy.url().should('include', 'search=L2');
+      cy.get('@search').click().type(infix);
+      cy.url().should('include', 'search=A0142558');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('.table .tbody .tr').eq(0).children('.td').eq(2).contains(infix);
     });
 
     it('Should show Search and Dropdown filters in URL.', () => {

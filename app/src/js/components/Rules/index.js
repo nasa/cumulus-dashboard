@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
@@ -14,6 +15,9 @@ class Rules extends React.Component {
     const showSidebar = pathname !== '/rules/add';
     return (
       <div className='page__rules'>
+        <Helmet>
+          <title> Rules Overview </title>
+        </Helmet>
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge heading--shared-content'>Rules</h1>

@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -82,6 +83,9 @@ class PdrOverview extends React.Component {
     const overview = this.renderOverview(pdrCount);
     return (
       <div className='page__component'>
+        <Helmet>
+          <title> Cumulus PDRs </title>
+        </Helmet>
         <section className='page__section page__section__controls'>
           <Breadcrumbs config={breadcrumbConfig} />
         </section>

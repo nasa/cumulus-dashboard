@@ -117,10 +117,10 @@ export default createReducer(initialState, {
   [RULE_DISABLE_INFLIGHT]: createInflightReducer('disabled'),
   [RULE_DISABLE_ERROR]: createErrorReducer('disabled'),
   [SEARCH_RULES]: (state, action) => {
-    state.list.params.prefix = action.prefix;
+    state.list.params.infix = action.infix;
   },
   [CLEAR_RULES_SEARCH]: (state) => {
-    delete state.list.params.prefix;
+    delete state.list.params.infix;
   },
   [FILTER_RULES]: (state, action) => {
     state.list.params[action.param.key] = action.param.value;

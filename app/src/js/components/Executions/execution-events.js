@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
@@ -82,6 +83,9 @@ class ExecutionEvents extends React.Component {
     const errors = this.errors();
     return (
       <div className='page__component'>
+        <Helmet>
+          <title> Execution Events </title>
+        </Helmet>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description width--three-quarters'>
             Events for Execution {executionStatus.execution.name}

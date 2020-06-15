@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
@@ -41,6 +42,9 @@ class Executions extends React.Component {
   render () {
     return (
       <div className='page__workflows'>
+        <Helmet>
+          <title> Cumulus Executions </title>
+        </Helmet>
         {this.renderHeader()}
         <div className='page__content'>
           <div className='wrapper__sidebar'>

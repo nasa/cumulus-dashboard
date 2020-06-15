@@ -1,5 +1,6 @@
 'use strict';
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -117,6 +118,9 @@ const CollectionGranules = ({
 
   return (
     <div className="page__component">
+      <Helmet>
+        <title> Collection Granules </title>
+      </Helmet>
       <section className="page__section page__section__controls">
         <Breadcrumbs config={breadcrumbConfig} />
       </section>

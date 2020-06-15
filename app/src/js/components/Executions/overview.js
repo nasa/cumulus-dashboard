@@ -69,9 +69,9 @@ class ExecutionOverview extends React.Component {
     }));
   }
 
-  searchOperationId (list, prefix) {
+  searchOperationId (list, infix) {
     return list.filter((item) => {
-      if (item.asyncOperationId && item.asyncOperationId.includes(prefix)) return item;
+      if (item.asyncOperationId && item.asyncOperationId.includes(infix)) return item;
     });
   }
 
@@ -84,8 +84,8 @@ class ExecutionOverview extends React.Component {
     const { stats, executions } = this.props;
     const { list } = executions;
     const { count, queriedAt } = list.meta;
-    if (list.prefix && list.prefix.value) {
-      list.data = this.searchOperationId(list.data, list.prefix.value);
+    if (list.infix && list.infix.value) {
+      list.data = this.searchOperationId(list.data, list.infix.value);
     }
     return (
       <div className='page__component'>

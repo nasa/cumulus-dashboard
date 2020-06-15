@@ -33,7 +33,7 @@ class List extends React.Component {
       order: initialOrder,
       selected: [],
       clearSelected: false,
-      prefix: null,
+      infix: null,
       queryConfig: {
         page: initialPage,
         order: initialOrder,

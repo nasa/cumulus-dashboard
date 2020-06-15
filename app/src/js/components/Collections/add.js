@@ -1,6 +1,7 @@
 'use strict';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { createCollection, getSchema } from '../../actions';
@@ -34,18 +35,22 @@ const AddCollection = ({ location = {}, collections, dispatch, schema }) => {
   const getBaseRoute = (pk = collectionId) => {
     return pk && pk !== 'unknown' ? collectionHref(pk) : '/collections';
   };
-
   return (
-    <AddRaw
-      pk={'new-collection'}
-      title={'Add a collection'}
-      primaryProperty={'name'}
-      state={collections}
-      createRecord={createCollection}
-      getBaseRoute={getBaseRoute}
-      getPk={getCollectionId}
-      defaultValue={defaultValue}
-    />
+    <div className = "add_collections">
+      <Helmet>
+        <title> Add Collection </title>
+      </Helmet>
+      <AddRaw
+        pk={'new-collection'}
+        title={'Add a collection'}
+        primaryProperty={'name'}
+        state={collections}
+        createRecord={createCollection}
+        getBaseRoute={getBaseRoute}
+        getPk={getCollectionId}
+        defaultValue={defaultValue}
+      />
+    </div>
   );
 };
 

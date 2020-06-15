@@ -136,10 +136,10 @@ export default createReducer(initialState, {
   [GRANULE_DELETE_ERROR]: createErrorReducer('deleted'),
 
   [SEARCH_GRANULES]: (state, action) => {
-    state.list.params.prefix = action.prefix;
+    state.list.params.infix = action.infix;
   },
   [CLEAR_GRANULES_SEARCH]: (state) => {
-    state.list.params.prefix = null;
+    state.list.params.infix = null;
   },
   [FILTER_GRANULES]: (state, action) => {
     state.list.params[action.param.key] = action.param.value;

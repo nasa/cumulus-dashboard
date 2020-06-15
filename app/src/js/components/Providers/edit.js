@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -16,16 +17,21 @@ class EditProvider extends React.Component {
   render () {
     const { providerId } = this.props.match.params;
     return (
-      <EditRecord
-        merge={true}
-        pk={providerId}
-        schemaKey={SCHEMA_KEY}
-        state={this.props.providers}
-        getRecord={getProvider}
-        updateRecord={updateProvider}
-        clearRecordUpdate={clearUpdateProvider}
-        backRoute={`/providers/provider/${providerId}`}
-      />
+      <div className = "edit_provider">
+        <Helmet>
+          <title> Edit Provider </title>
+        </Helmet>
+        <EditRecord
+          merge={true}
+          pk={providerId}
+          schemaKey={SCHEMA_KEY}
+          state={this.props.providers}
+          getRecord={getProvider}
+          updateRecord={updateProvider}
+          clearRecordUpdate={clearUpdateProvider}
+          backRoute={`/providers/provider/${providerId}`}
+        />
+      </div>
     );
   }
 }

@@ -42,6 +42,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - No default datetime filters are applied when the application is loaded.
   - Upgrade Cypress to latest version (4.7.0)
 
+- **CUMULUS-2019**
+  - Support partial search
+
 ### Fixed
 
 - **CUMULUS-1815**

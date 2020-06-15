@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
@@ -105,6 +106,9 @@ class Home extends React.Component {
     return (
       <section className='page__section'>
         <div className='row'>
+          <Helmet>
+            <title> Cumulus Home  </title>
+          </Helmet>
           <div className='heading__wrapper'>
             <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
           </div>

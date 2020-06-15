@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { getExecutionLogs } from '../../actions';
 import { connect } from 'react-redux';
@@ -41,6 +42,9 @@ class ExecutionLogs extends React.Component {
 
     return (
       <div className='page__component'>
+        <Helmet>
+          <title> Execution Logs </title>
+        </Helmet>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>
           Logs for Execution {this.executionName}

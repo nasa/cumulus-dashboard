@@ -61,10 +61,10 @@ export default createReducer(initialState, {
     state.list.error = action.error;
   },
   [SEARCH_RECONCILIATIONS]: (state, action) => {
-    state.list.params.prefix = action.prefix;
+    state.list.params.infix = action.infix;
   },
   [CLEAR_RECONCILIATIONS_SEARCH]: (state) => {
-    delete state.list.params.prefix;
+    delete state.list.params.infix;
   },
   [NEW_RECONCILIATION_INFLIGHT]: (state) => {
     state.createReportInflight = true;
