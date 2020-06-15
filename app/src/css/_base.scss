@@ -621,6 +621,10 @@ a:active {
     background-color: $light-green;
   }
 
+  &--orange {
+    background-color: $orange;
+  }
+
   &--failed {
     background-color: $error-red;
   }

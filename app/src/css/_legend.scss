@@ -1,0 +1,15 @@
+.legend {
+  background-color: $white;
+  padding: 2em;
+  width: 50%;
+  border-radius: 4px;
+  box-shadow: $shadow__default;
+
+  .legend-items {
+    &--item {
+      display: flex;
+      align-items: center;
+      margin: .5em 0;
+    }
+  }
+}
