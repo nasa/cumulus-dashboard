@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
@@ -28,6 +29,9 @@ class Collections extends React.Component {
       <div className="page__collections">
         <DatePickerHeader onChange={this.query} heading={strings.collections} />
         <div className="page__content">
+          <Helmet>
+            <title> Cumulus Collections </title>
+          </Helmet>
           <div className="wrapper__sidebar">
             <Route path="/collections/all" component={Sidebar} />
             <Route

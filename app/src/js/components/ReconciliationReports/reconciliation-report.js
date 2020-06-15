@@ -160,7 +160,6 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
       }
       return line;
     }).join('\r\n');
-
     return `${csvHeader}\r\n${csvData}`;
   }
 

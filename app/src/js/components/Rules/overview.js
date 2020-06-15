@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -50,6 +51,9 @@ class RulesOverview extends React.Component {
     const { count, queriedAt } = list.meta;
     return (
       <div className='page__component'>
+        <Helmet>
+          <title> Rules Overview </title>
+        </Helmet>
         <section className='page__section page__section__controls'>
           <Breadcrumbs config={breadcrumbConfig} />
         </section>

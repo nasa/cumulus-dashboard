@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { withRouter, Route } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
@@ -18,6 +19,9 @@ class Operations extends React.Component {
   render () {
     return (
       <div className='page__workflows'>
+        <Helmet>
+          <title> Cumulus Operations </title>
+        </Helmet>
         <DatePickerHeader onChange={this.query} heading={strings.operations}/>
         <div className='page__content'>
           <div className='wrapper__sidebar'>

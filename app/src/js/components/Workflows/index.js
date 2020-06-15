@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
 import PropTypes from 'prop-types';
@@ -10,6 +11,9 @@ class Workflows extends React.Component {
   render () {
     return (
       <div className='page__workflows'>
+        <Helmet>
+          <title> Cumulus Workflows </title>
+        </Helmet>
         <div className='content__header'>
           <div className='row'>
             <h1 className='heading--xlarge'>Workflows</h1>

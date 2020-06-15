@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
@@ -212,6 +213,9 @@ class ExecutionStatus extends React.Component {
 
     return (
       <div className='page__component'>
+        <Helmet>
+          <title> Execution Status </title>
+        </Helmet>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description width--three-quarters'>
             Execution {name}
