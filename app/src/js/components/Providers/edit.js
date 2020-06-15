@@ -19,7 +19,6 @@ class EditProvider extends React.Component {
     return (
       <div className = "edit_provider">
         <Helmet>
-          <meta charset= "utf-8" />
           <title> Edit Provider </title>
         </Helmet>
         <EditRecord

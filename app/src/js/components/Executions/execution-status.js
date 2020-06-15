@@ -214,7 +214,6 @@ class ExecutionStatus extends React.Component {
     return (
       <div className='page__component'>
         <Helmet>
-          <meta charset= "utf-8" />
           <title> Execution Status </title>
         </Helmet>
         <section className='page__section page__section__header-wrapper'>
