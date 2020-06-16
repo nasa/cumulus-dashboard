@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
-  interval,
-  getCount,
   searchGranules,
   clearGranulesSearch,
   filterGranules,
@@ -31,7 +29,6 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import statusOptions from '../../utils/status';
-import _config from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import { window } from '../../utils/browser';
@@ -39,8 +36,7 @@ import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import pageSizeOptions from '../../utils/page-size';
 import { downloadFile } from '../../utils/download-file';
-
-const { updateInterval } = _config;
+import isEqual from 'lodash.isequal';
 
 const breadcrumbConfig = [
   {
@@ -54,8 +50,8 @@ const breadcrumbConfig = [
 ];
 
 class GranulesOverview extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.generateQuery = this.generateQuery.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
     this.queryMeta = this.queryMeta.bind(this);
@@ -64,24 +60,24 @@ class GranulesOverview extends React.Component {
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
     this.applyRecoveryWorkflow = this.applyRecoveryWorkflow.bind(this);
     this.downloadGranuleCSV = this.downloadGranuleCSV.bind(this);
-    this.state = {};
+    this.state = {
+      workflow: this.props.workflowOptions[0]
+    };
   }
 
   componentDidMount () {
-    this.cancelInterval = interval(this.queryMeta, updateInterval, true);
+    this.queryMeta();
   }
 
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
+  componentDidUpdate (prevProps) {
+    if (!isEqual(prevProps.workflowOptions, this.props.workflowOptions)) {
+      this.setState({ workflow: this.props.workflowOptions[0] }); // eslint-disable-line react/no-did-update-set-state
+    }
   }
 
   queryMeta () {
     const { dispatch } = this.props;
     dispatch(listWorkflows());
-    dispatch(getCount({
-      type: 'granules',
-      field: 'status'
-    }));
   }
 
   generateQuery () {

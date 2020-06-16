@@ -43,6 +43,7 @@ test('CUMULUS-336 Granule file links use the correct URL', function (t) {
       granules={granules}
       logs={logs}
       skipReloadOnMount={true}
+      workflowOptions={[]}
     />
   );
 

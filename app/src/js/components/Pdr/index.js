@@ -1,5 +1,5 @@
 'use strict';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
@@ -26,12 +26,15 @@ const Pdrs = ({
   const AllPdrsWithWrapper = withQueryWrapper(PdrList, queryOptions, setQueryOptions);
 
   function query () {
+    dispatch(listPdrs(queryOptions));
+  }
+
+  useEffect(() => {
     dispatch(getCount({
       type: 'pdrs',
       field: 'status'
     }));
-    dispatch(listPdrs(queryOptions));
-  }
+  }, [dispatch]);
 
   return (
     <div className='page__pdrs'>
