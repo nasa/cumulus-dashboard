@@ -5,7 +5,7 @@ import React from 'react';
 const Legend = () => {
   return (
     <div className='legend'>
-      <h3>Legend</h3>
+      <h3 className='legend--title'>Legend</h3>
       <p>When reviewing the reports, you may see the following indicators:</p>
       <ul className='legend-items'>
         <li className='legend-items--item'><span className='status-indicator status-indicator--failed'></span>Granule not found</li>

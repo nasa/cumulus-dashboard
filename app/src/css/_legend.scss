@@ -5,6 +5,11 @@
   border-radius: 4px;
   box-shadow: $shadow__default;
 
+  &--title {
+    font-size: 1.3em;
+    font-weight: normal;
+  }
+
   .legend-items {
     &--item {
       display: flex;
