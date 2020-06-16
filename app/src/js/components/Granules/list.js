@@ -74,6 +74,10 @@ const AllGranules = ({
     dispatch(listWorkflows());
   }, [dispatch]);
 
+  useEffect(() => {
+    setWorkflow(workflowOptions[0]);
+  }, [workflowOptions]);
+
   function getView () {
     const { pathname } = location;
     if (pathname === '/granules/completed') return 'completed';

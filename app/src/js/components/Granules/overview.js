@@ -36,6 +36,7 @@ import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import pageSizeOptions from '../../utils/page-size';
 import { downloadFile } from '../../utils/download-file';
+import isEqual from 'lodash.isequal';
 
 const breadcrumbConfig = [
   {
@@ -66,6 +67,12 @@ class GranulesOverview extends React.Component {
 
   componentDidMount () {
     this.queryMeta();
+  }
+
+  componentDidUpdate (prevProps) {
+    if (!isEqual(prevProps.workflowOptions, this.props.workflowOptions)) {
+      this.setState({ workflow: this.props.workflowOptions[0] }); // eslint-disable-line react/no-did-update-set-state
+    }
   }
 
   queryMeta () {

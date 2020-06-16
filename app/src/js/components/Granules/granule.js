@@ -34,6 +34,7 @@ import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import { simpleDropdownOption } from '../../utils/table-config/granules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import isEqual from 'lodash.isequal';
 
 const link = 'Link';
 
@@ -123,6 +124,12 @@ class GranuleOverview extends React.Component {
     this.queryWorkflows();
     if (this.props.skipReloadOnMount) return;
     this.loadGranule();
+  }
+
+  componentDidUpdate (prevProps) {
+    if (!isEqual(prevProps.workflowOptions, this.props.workflowOptions)) {
+      this.setState({ workflow: this.props.workflowOptions[0] }); // eslint-disable-line react/no-did-update-set-state
+    }
   }
 
   loadGranule () {
