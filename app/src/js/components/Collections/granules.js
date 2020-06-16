@@ -1,5 +1,5 @@
 'use strict';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
@@ -12,6 +12,7 @@ import {
   applyWorkflowToGranule,
   searchGranules,
   clearGranulesSearch,
+  listWorkflows,
 } from '../../actions';
 import {
   simpleDropdownOption,
@@ -43,7 +44,7 @@ const CollectionGranules = ({
   const displayName = strings.granules;
   const collectionId = getCollectionId(params);
   const view = getView();
-  const [workflow, setWorkflow] = useState();
+  const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const query = generateQuery();
 
   const breadcrumbConfig = [
@@ -73,9 +74,17 @@ const CollectionGranules = ({
     });
   }
 
+  useEffect(() => {
+    dispatch(listWorkflows());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setWorkflow(workflowOptions[0]);
+  }, [workflowOptions]);
+
   function generateQuery() {
     const options = { collectionId };
-    if (view && view !== 'all') options.status = view;
+    if (view !== 'all') options.status = view;
     return options;
   }
 
