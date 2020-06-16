@@ -78,6 +78,10 @@ const CollectionGranules = ({
     dispatch(listWorkflows());
   }, [dispatch]);
 
+  useEffect(() => {
+    setWorkflow(workflowOptions[0]);
+  }, [workflowOptions]);
+
   function generateQuery() {
     const options = { collectionId };
     if (view !== 'all') options.status = view;
