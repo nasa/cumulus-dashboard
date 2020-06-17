@@ -82,6 +82,10 @@
 
   &.no-actions {
     align-items: center;
+
+    .filters {
+      margin: 1em 0;
+    }
   }
 }
 
