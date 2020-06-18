@@ -170,5 +170,15 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.dropdown-item').eq(2).should('contain', 'CSV - Granules only in Cumulus');
       cy.get('.dropdown-item').eq(3).should('contain', 'CSV - Files only in Cumulus');
     });
+
+    it('should include legend on list page', () => {
+      cy.visit('/reconciliation-reports');
+
+      cy.get('.legend').should('have.length', 1);
+      cy.get('.legend-items--item').should('have.length', 3);
+      cy.get('.legend-items--item').eq(0).should('contain', 'Granule not found');
+      cy.get('.legend-items--item').eq(1).should('contain', 'Missing image file');
+      cy.get('.legend-items--item').eq(2).should('contain', 'No issues/conflicts');
+    });
   });
 });
