@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Adds a download button dropdown to reconciliation report inventory view.
     Option to download full report as json or indivdual tables as csv files.
 
+- **CUMULUS-1908**
+  - Adds Conflict Type and Conflict Details columns to reconciliation report inventory view tables.
+
 - **CUMULUS-1914**
   - Adds a legend component for reconciliation reports
 
