@@ -12,7 +12,7 @@ services:
       SERVICES: "cloudwatch,cloudwatchlogs,dynamodb,kinesis,kms,lambda,s3,secretsmanager,sns,sqs,stepfunctions"
       DATA_DIR: "/tmp/localstack/data"
   shim:   # empty container to open ports
-    image: node:10.16.3
+    image: node:12.18.0
     command:
       bash -c "tail -f /dev/null"
     working_dir:
