@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-**
   - upgrades node to 12.18.0
+  - Upgrade Cypress to latest version (4.8.0)
 
 ### Changed
 

@@ -114,7 +114,7 @@
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.4.0",
     "cssnano": "^4.1.10",
-    "cypress": "^4.7.0",
+    "cypress": "^4.8.0",
     "cypress-failed-log": "^2.6.1",
     "cypress-wait-until": "^1.7.1",
     "del": "^2.2.0",
