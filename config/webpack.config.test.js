@@ -4,28 +4,30 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.scss'],
     alias: {
-      path: path.join(__dirname, './app/src')
+      path: path.join(__dirname, './app/src'),
     },
   },
   presets: [
     [
-      '@babel/preset-env', {
+      '@babel/preset-env',
+      {
         targets: {
-          node: '10.6.3',
-          esmodules: true
-        }
-      }
+          node: '12.18.0',
+          esmodules: true,
+        },
+      },
     ],
-    '@babel/preset-react'
+    '@babel/preset-react',
   ],
-  plugins: [
-    '@babel/plugin-syntax-jsx'
-  ],
+  plugins: ['@babel/plugin-syntax-jsx'],
   env: {
-    'test': {
-      'plugins': [
-        ['babel-plugin-webpack-alias-7', { 'config': './config/webpack.config.test.js', 'findConfig': true }]
-      ]
-    }
-  }
+    test: {
+      plugins: [
+        [
+          'babel-plugin-webpack-alias-7',
+          { config: './config/webpack.config.test.js', findConfig: true },
+        ],
+      ],
+    },
+  },
 };
