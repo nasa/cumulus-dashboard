@@ -647,12 +647,19 @@ a:active {
 .status--process {
   margin-top: 1.5em;
   font-weight: $base-font-semibold;
+
+  &--report {
+    display: inline-block;
+    margin: 0;
+  }
+
   dd, dt {
     display: inline-block;
     font-size: .9em;
   }
   dd {
     font-weight: $base-font-semibold;
+    margin-right: 2em;
   }
   dt {
     margin-right: 0.5em;
