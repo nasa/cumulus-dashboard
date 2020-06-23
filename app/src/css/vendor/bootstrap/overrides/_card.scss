@@ -34,6 +34,10 @@
   .table-card {
     margin-right: 1em;
 
+    &--title-caption {
+      font-weight: $base-font-semibold;
+    }
+
     &:first-child {
       border-right: 1px solid $light-grey;
     }

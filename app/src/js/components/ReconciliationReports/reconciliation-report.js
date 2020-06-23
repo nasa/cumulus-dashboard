@@ -222,24 +222,24 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
         </div>
       </section>
 
-      <section className="page__section page__section--small">
+      <section className="page__section">
         <div className="heading__wrapper--border">
           <h2 className="heading--medium heading--shared-content with-description">
             Bucket Status
           </h2>
         </div>
         <p className="description">
-          Click on the bucket to see comparison report details below
+          Click on the bucket to see comparison report details below.
         </p>
         <div className="tablecard--wrapper">
           <TableCards
-            titleCaption="Cumulus intercomparison"
+            titleCaption="Cumulus (DynamoDB) versus S3"
             config={internalComparison}
             onClick={handleCardClick}
             activeCard={activeId}
           />
           <TableCards
-            titleCaption="Cumulus versus CMR comparison"
+            titleCaption="Cumulus versus CMR"
             config={cumulusVsCmrComparison}
             onClick={handleCardClick}
             activeCard={activeId}
