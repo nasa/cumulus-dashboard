@@ -18,10 +18,7 @@ import {
   listWorkflows
 } from '../../actions';
 import { tally } from '../../utils/format';
-import {
-  workflowOptions,
-  collectionOptions
-} from '../../selectors';
+import { workflowOptions } from '../../selectors';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
@@ -164,15 +161,11 @@ class OperationOverview extends React.Component {
 
 OperationOverview.propTypes = {
   dispatch: PropTypes.func,
-  stats: PropTypes.object,
   operations: PropTypes.object,
-  collectionOptions: PropTypes.object,
-  workflowOptions: PropTypes.object
 };
 
 export default withRouter(connect(state => ({
   stats: state.stats,
   operations: state.operations,
-  workflowOptions: workflowOptions(state),
-  collectionOptions: collectionOptions(state)
+  workflowOptions: workflowOptions(state)
 }))(OperationOverview));

@@ -33,6 +33,7 @@ import ListFilters from '../ListActions/ListFilters';
 import pageSizeOptions from '../../utils/page-size';
 
 const AllGranules = ({
+  collections,
   dispatch,
   granules,
   location,
@@ -41,7 +42,8 @@ const AllGranules = ({
   workflowOptions
 }) => {
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
-  const { list, dropdowns } = granules;
+  const { dropdowns } = collections;
+  const { list } = granules;
   const { count, queriedAt } = list.meta;
   const logsQuery = { granuleId__exists: 'true' };
   const query = generateQuery();
@@ -201,6 +203,7 @@ const AllGranules = ({
 };
 
 AllGranules.propTypes = {
+  collections: PropTypes.object,
   granules: PropTypes.object,
   logs: PropTypes.object,
   dispatch: PropTypes.func,
@@ -214,6 +217,7 @@ AllGranules.displayName = strings.all_granules;
 export { AllGranules };
 
 export default withRouter(connect(state => ({
+  collections: state.collections,
   logs: state.logs,
   granules: state.granules,
   workflowOptions: workflowOptionNames(state)

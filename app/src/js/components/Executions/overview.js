@@ -13,7 +13,8 @@ import {
   getCumulusInstanceMetadata,
   listCollections,
   listExecutions,
-  listWorkflows
+  listWorkflows,
+  getOptionsCollectionName
 } from '../../actions';
 import {
   tally,
@@ -21,8 +22,7 @@ import {
   displayCase
 } from '../../utils/format';
 import {
-  workflowOptions,
-  collectionOptions
+  workflowOptions
 } from '../../selectors';
 import statusOptions from '../../utils/status';
 import pageSizeOptions from '../../utils/page-size';
@@ -72,7 +72,8 @@ class ExecutionOverview extends React.Component {
   }
 
   render () {
-    const { dispatch, stats, executions, collectionOptions, workflowOptions } = this.props;
+    const { dispatch, stats, executions, collections, workflowOptions } = this.props;
+    const { dropdowns } = collections;
     const { list } = executions;
     const { count, queriedAt } = list.meta;
     if (list.infix && list.infix.value) {
@@ -107,14 +108,21 @@ class ExecutionOverview extends React.Component {
                 clear={clearExecutionsFilter}
                 paramKey={'status'}
                 label={'Status'}
+                inputProps={{
+                  placeholder: 'All'
+                }}
               />
 
               <Dropdown
-                options={collectionOptions}
+                getOptions={getOptionsCollectionName}
+                options={get(dropdowns, ['collectionName', 'options'])}
                 action={filterExecutions}
                 clear={clearExecutionsFilter}
                 paramKey={'collectionId'}
                 label={strings.collection_id}
+                inputProps={{
+                  placeholder: 'All'
+                }}
               />
 
               <Dropdown
@@ -123,6 +131,9 @@ class ExecutionOverview extends React.Component {
                 clear={clearExecutionsFilter}
                 paramKey={'type'}
                 label={'Workflow'}
+                inputProps={{
+                  placeholder: 'All'
+                }}
               />
 
               <Search dispatch={dispatch}
@@ -130,6 +141,7 @@ class ExecutionOverview extends React.Component {
                 clear={clearExecutionsSearch}
                 paramKey={'asyncOperationId'}
                 label={'Async Operation ID'}
+                placeholder='Search'
               />
 
               <Dropdown
@@ -138,6 +150,9 @@ class ExecutionOverview extends React.Component {
                 clear={clearExecutionsFilter}
                 paramKey={'limit'}
                 label={'Results Per Page'}
+                inputProps={{
+                  placeholder: 'Results Per Page'
+                }}
               />
             </ListFilters>
           </List>
@@ -151,7 +166,7 @@ ExecutionOverview.propTypes = {
   dispatch: PropTypes.func,
   stats: PropTypes.object,
   executions: PropTypes.object,
-  collectionOptions: PropTypes.object,
+  collections: PropTypes.object,
   workflowOptions: PropTypes.object
 };
 
@@ -159,5 +174,5 @@ export default withRouter(connect(state => ({
   stats: state.stats,
   executions: state.executions,
   workflowOptions: workflowOptions(state),
-  collectionOptions: collectionOptions(state)
+  collections: state.collections,
 }))(ExecutionOverview));
