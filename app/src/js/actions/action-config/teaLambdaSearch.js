@@ -7,14 +7,14 @@ export const teaLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpoc
         "filters": {
           "TEALambdaErrors": {
             "query_string": {
-              "query": "\\"Could not download\\"",
+              "query": "response_status:failure",
               "analyze_wildcard": true,
               "default_field": "*"
             }
           },
           "TEALambdaSuccesses": {
             "query_string": {
-              "query": "\\"to_url\\"",
+              "query": "response_status:success",
               "analyze_wildcard": true,
               "default_field": "*"
             }
