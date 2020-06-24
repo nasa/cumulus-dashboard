@@ -20,7 +20,7 @@ const SimplePagination = ({
 }) => {
   const currentPage = pageIndex + 1;
   return (
-    <div className='pagination'>
+    <div className='pagination simple-pagination'>
       <ol>
         <li>
           <a className={`previous ${canPreviousPage ? '' : disabled}`}
