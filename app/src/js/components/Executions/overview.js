@@ -11,7 +11,6 @@ import {
   clearExecutionsSearch,
   getCount,
   getCumulusInstanceMetadata,
-  interval,
   listCollections,
   listExecutions,
   listWorkflows
@@ -31,12 +30,9 @@ import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import Overview from '../Overview/overview';
-import _config from '../../config';
 import { strings } from '../locale';
 import { tableColumns } from '../../utils/table-config/executions';
 import ListFilters from '../ListActions/ListFilters';
-
-const { updateInterval } = _config;
 
 class ExecutionOverview extends React.Component {
   constructor (props) {
@@ -47,20 +43,15 @@ class ExecutionOverview extends React.Component {
   }
 
   componentDidMount () {
-    // use a slightly slower update interval, since the dropdown fields
-    // will change less frequently.
-    this.cancelInterval = interval(this.queryMeta, updateInterval, true);
+    this.queryMeta();
     this.props.dispatch(getCumulusInstanceMetadata());
-  }
-
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
   }
 
   queryMeta () {
     this.props.dispatch(listCollections({
       limit: 100,
-      fields: 'name,version'
+      fields: 'name,version',
+      getMMT: false
     }));
     this.props.dispatch(listWorkflows());
     this.props.dispatch(getCount({
@@ -81,7 +72,7 @@ class ExecutionOverview extends React.Component {
   }
 
   render () {
-    const { stats, executions } = this.props;
+    const { dispatch, stats, executions, collectionOptions, workflowOptions } = this.props;
     const { list } = executions;
     const { count, queriedAt } = list.meta;
     if (list.infix && list.infix.value) {
@@ -119,22 +110,22 @@ class ExecutionOverview extends React.Component {
               />
 
               <Dropdown
-                options={this.props.collectionOptions}
+                options={collectionOptions}
                 action={filterExecutions}
                 clear={clearExecutionsFilter}
                 paramKey={'collectionId'}
-                label={strings.collection}
+                label={strings.collection_id}
               />
 
               <Dropdown
-                options={this.props.workflowOptions}
+                options={workflowOptions}
                 action={filterExecutions}
                 clear={clearExecutionsFilter}
                 paramKey={'type'}
                 label={'Workflow'}
               />
 
-              <Search dispatch={this.props.dispatch}
+              <Search dispatch={dispatch}
                 action={searchExecutions}
                 clear={clearExecutionsSearch}
                 paramKey={'asyncOperationId'}
