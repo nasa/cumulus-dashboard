@@ -128,8 +128,7 @@ a:active {
 
 .description {
   color: $lighter-grey;
-  width: 80%;
-  margin-bottom: 3em;
+  margin-bottom: 2em;
   font-size: .86em;
   line-height: 1.6em;
 }
@@ -645,14 +644,21 @@ a:active {
 }
 
 .status--process {
-  margin-top: 1.5em;
+  margin-top: 1em;
   font-weight: $base-font-semibold;
+
+  &--report {
+    display: inline-block;
+    margin: 0;
+  }
+
   dd, dt {
     display: inline-block;
     font-size: .9em;
   }
   dd {
     font-weight: $base-font-semibold;
+    margin-right: 2em;
   }
   dt {
     margin-right: 0.5em;
