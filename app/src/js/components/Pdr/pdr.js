@@ -108,7 +108,6 @@ class PDR extends React.Component {
     const { match, pdrs } = this.props;
     const { pdrName } = match.params;
     const immediate = !pdrs.map[pdrName];
-    console.log(immediate);
     this.reload(immediate);
   }
 
