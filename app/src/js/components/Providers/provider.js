@@ -126,8 +126,7 @@ class ProviderOverview extends React.Component {
           <Link
             className='button button--small button--green button--edit form-group__element--right'
             to={'/providers/edit/' + providerId}>Edit</Link>
-
-          {lastUpdated(provider.updatedAt || provider.createdAt)}
+          {lastUpdated(provider.timestamp || provider.updatedAt)}
         </section>
 
         <section className='page__section'>
