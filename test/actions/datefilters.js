@@ -12,7 +12,6 @@ import {
   listGranules,
   listOperations,
   listPdrs,
-  listProviders,
   listReconciliationReports,
   listRules,
   listWorkflows
