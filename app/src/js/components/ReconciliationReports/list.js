@@ -33,7 +33,7 @@ const breadcrumbConfig = [
     href: '/'
   },
   {
-    label: 'Reports Overview',
+    label: 'Reports',
     active: true
   }
 ];

@@ -4,6 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Card } from 'react-bootstrap';
+import { displayCase } from '../../utils/format';
 
 const conflictedCount = (tables) => {
   return tables.reduce((acc, cv) => acc + cv.data.length, 0);
@@ -44,7 +45,7 @@ const TableCards = ({ activeCard, config, onClick, titleCaption }) => {
                       : 'status-indicator--failed'
                   }`}
                   ></span>
-                  {status}
+                  {displayCase(status)}
                 </Card.Text>
               </Card.Body>
             </Card>
