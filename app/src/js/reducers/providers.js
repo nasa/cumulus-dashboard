@@ -65,6 +65,8 @@ export default createReducer(initialState, {
       error: null,
     };
 
+    state.queriedAt = Date.now();
+
     if (get(state, ['deleted', id, 'status']) !== 'error') {
       delete state.deleted[id];
     }

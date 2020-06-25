@@ -41,6 +41,7 @@ EditProvider.propTypes = {
   providers: PropTypes.object
 };
 
-export default withRouter(connect(state => ({
-  providers: state.providers
-}))(EditProvider));
+export default withRouter(
+  connect((state) => ({
+    providers: state.providers
+  }))(EditProvider));
