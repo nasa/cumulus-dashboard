@@ -8,7 +8,6 @@ import cloneDeep from 'lodash.clonedeep';
 import {
   listProviders,
   getCount,
-  interval,
   filterProviders,
   clearProvidersFilter
 } from '../../actions';
@@ -17,12 +16,9 @@ import { tableColumns } from '../../utils/table-config/providers';
 import List from '../Table/Table';
 import PropTypes from 'prop-types';
 import Overview from '../Overview/overview';
-import _config from '../../config';
 import Dropdown from '../DropDown/dropdown';
 import pageSizeOptions from '../../utils/page-size';
 import ListFilters from '../ListActions/ListFilters';
-
-const { updateInterval } = _config;
 
 class ProvidersOverview extends React.Component {
   constructor () {
@@ -33,11 +29,7 @@ class ProvidersOverview extends React.Component {
   }
 
   componentDidMount () {
-    this.cancelInterval = interval(this.queryStats, updateInterval, true);
-  }
-
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
+    this.queryStats();
   }
 
   queryStats () {
@@ -126,4 +118,8 @@ ProvidersOverview.propTypes = {
   stats: PropTypes.object
 };
 
-export default withRouter(connect(state => state)(ProvidersOverview));
+export default withRouter(
+  connect((state) => ({
+    providers: state.providers,
+    stats: state.stats
+  }))(ProvidersOverview));
