@@ -45,9 +45,17 @@ export default createReducer(initialState, {
     state.stats.error = action.error;
   },
   [COUNT]: (state, action) => {
+    const { count } = action.data;
+    const empty = [{ key: 'completed', count: 0 },
+      { key: 'failed', count: 0 },
+      { key: 'running', count: 0 }
+    ];
     state.count.inflight = false;
     state.count.error = null;
-    state.count.data[action.config.qs.type] = action.data;
+    state.count.data[action.config.qs.type] = {
+      ...action.data,
+      count: (count.length === 0) ? empty : count
+    };
   },
   [COUNT_INFLIGHT]: (state) => {
     state.count.inflight = true;
