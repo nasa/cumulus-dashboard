@@ -44,6 +44,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Updates Inventory Report view to clarify Cumulus's internal consistency differences and Cumulus's differences with CMR.
 
 - **CUMULUS-1919**
+  - Update styles for report view
+
+- **CUMULUS-1919**
   - Updates styles on Reconciliation Report list page
 
 - **CUMULUS-1977**
