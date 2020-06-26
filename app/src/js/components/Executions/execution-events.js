@@ -30,16 +30,16 @@ class ExecutionEvents extends React.Component {
   }
 
   componentDidMount () {
-    const { dispatch } = this.props;
-    const { executionArn } = this.props.match.params;
+    const { dispatch, match } = this.props;
+    const { executionArn } = match.params;
     dispatch(getExecutionStatus(executionArn));
     dispatch(getCumulusInstanceMetadata());
   }
 
   componentDidUpdate (prevProps) {
-    const { dispatch } = this.props;
-    const { executionArn } = this.props.match.params;
-    const { search } = this.props.location;
+    const { dispatch, match, location } = this.props;
+    const { executionArn } = match.params;
+    const { search } = location;
     const { search: prevSearch } = prevProps.location;
     if (search !== prevSearch) {
       dispatch(getExecutionStatus(executionArn));

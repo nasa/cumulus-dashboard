@@ -76,6 +76,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1872**
   - Fix/remove unecessary timers on granules page
 
+- **CUMULUS-1873**
+  - Fix/remove unecessary timers on executions page
+
 - **CUMULUS-1882**
   - Fix ES query for TEA Lambda metrics
   - Update Kibana links on homepage for TEA metrics

@@ -42,18 +42,20 @@ const data = {
   error: null
 };
 
-test('GranulesOverview generates bulkAction for recovery button', function (t) {
-  const dispatch = () => {};
-  const workflowOptions = [];
-  const stats = { count: 0, stats: {} };
-  const location = { pathname: 'granules' };
-  const config = { enableRecovery: true };
-  const store = {
-    subscribe: () => {},
-    dispatch: dispatch,
-    getState: () => {}
-  };
+const dispatch = () => {};
+const workflowOptions = [];
+const collections = {};
+const stats = { count: 0, stats: {} };
+const location = { pathname: 'granules' };
+const config = { enableRecovery: false };
+const store = {
+  subscribe: () => {},
+  dispatch: dispatch,
+  getState: () => {}
+};
 
+test('GranulesOverview generates bulkAction for recovery button', function (t) {
+  const configWithRecovery = { enableRecovery: true };
   const providerWrapper = shallow(
     <Provider store={store}>
       <GranulesOverview
@@ -62,8 +64,9 @@ test('GranulesOverview generates bulkAction for recovery button', function (t) {
         stats = {stats}
         dispatch = {dispatch}
         workflowOptions = {workflowOptions}
+        collections = {collections}
         location = {location}
-        config={config}/>
+        config={configWithRecovery}/>
     </Provider>);
 
   const overviewWrapper = providerWrapper.find('GranulesOverview').dive();
@@ -76,17 +79,7 @@ test('GranulesOverview generates bulkAction for recovery button', function (t) {
 });
 
 test('GranulesOverview does not generate bulkAction for recovery button', function (t) {
-  const dispatch = () => {};
-  const workflowOptions = [];
-  const stats = { count: 0, stats: {} };
-  const location = { pathname: 'granules' };
   const config = { enableRecovery: false };
-  const store = {
-    subscribe: () => {},
-    dispatch: dispatch,
-    getState: () => {}
-  };
-
   const providerWrapper = shallow(
     <Provider store={store}>
       <GranulesOverview
@@ -95,6 +88,7 @@ test('GranulesOverview does not generate bulkAction for recovery button', functi
         granuleCSV = {data}
         dispatch = {dispatch}
         workflowOptions = {workflowOptions}
+        collections = {collections}
         location = {location}
         config={config}/>
     </Provider>);
@@ -110,23 +104,17 @@ test('GranulesOverview does not generate bulkAction for recovery button', functi
 
 test('GranulesOverview will download CSV data when the Download Granule List button is clicked and not leave extra link on the page', function (t) {
   window.URL.createObjectURL = sinon.fake.returns('www.example.com');
-  const dispatch = () => Promise.resolve();
-  const workflowOptions = [];
-  const config = { enableRecovery: false };
-  const store = {
-    subscribe: () => {},
-    dispatch: dispatch,
-    getState: () => {}
-  };
+  const dispatchPromise = () => Promise.resolve();
 
   const providerWrapper = shallow(
     <Provider store={store}>
       <GranulesOverview
         granules = {granules}
         granuleCSV = {data}
-        dispatch = {dispatch}
+        dispatch = {dispatchPromise}
         location = {location}
         workflowOptions = {workflowOptions}
+        collections = {collections}
         config={config}/>
     </Provider>);
 
