@@ -1,10 +1,9 @@
 'use strict';
 
-import { set, del } from 'object-path';
+import { del } from 'object-path';
 import assignDate from './utils/assign-date';
 import removeDeleted from './utils/remove-deleted';
 import { createReducer } from '@reduxjs/toolkit';
-import { getCollectionId } from '../utils/format';
 import {
   createErrorReducer,
   createInflightReducer,
@@ -45,9 +44,6 @@ import {
   CLEAR_GRANULES_SEARCH,
   FILTER_GRANULES,
   CLEAR_GRANULES_FILTER,
-  OPTIONS_COLLECTIONNAME,
-  OPTIONS_COLLECTIONNAME_INFLIGHT,
-  OPTIONS_COLLECTIONNAME_ERROR,
 } from '../actions/types';
 
 export const initialState = {
@@ -56,7 +52,6 @@ export const initialState = {
     meta: {},
     params: {},
   },
-  dropdowns: {},
   map: {},
   meta: {},
   reprocessed: {},
@@ -146,21 +141,5 @@ export default createReducer(initialState, {
   },
   [CLEAR_GRANULES_FILTER]: (state, action) => {
     state.list.params[action.paramKey] = null;
-  },
-  [OPTIONS_COLLECTIONNAME]: (state, action) => {
-    const options = action.data.results.reduce(
-      (obj, { name, version }) =>
-        Object.assign(obj, {
-          [`${name} ${version}`]: getCollectionId({ name, version }),
-        }),
-      {}
-    );
-
-    set(state.dropdowns, 'collectionName.options', options);
-  },
-  [OPTIONS_COLLECTIONNAME_INFLIGHT]: () => {},
-  [OPTIONS_COLLECTIONNAME_ERROR]: (state, action) => {
-    set(state.dropdowns, 'collectionName.options', []);
-    state.list.error = action.error;
-  },
+  }
 });
