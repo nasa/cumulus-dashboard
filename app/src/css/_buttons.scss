@@ -341,6 +341,18 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       }
     }
 
+    &--file {
+      &:before {
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        content: '\f15c';
+        font-weight: 900;
+        top: 4px;
+        left: 10px;
+      }
+    }
+
 
      /*******Button Animations & Transitions ******/
     &--loading {

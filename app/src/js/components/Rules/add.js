@@ -120,7 +120,7 @@ const AddRule = ({
 
   useEffect(() => {
     if (!dispatched(collections)) dispatch(listCollections({ listAll: true, getMMT: false }));
-    if (!dispatched(providers)) dispatch(listProviders({ listAll: true }));
+    if (!dispatched(providers)) dispatch(listProviders());
     if (!dispatched(workflows)) dispatch(listWorkflows());
   });
 

@@ -38,6 +38,7 @@ AddProvider.propTypes = {
   providers: PropTypes.object
 };
 
-export default withRouter(connect(state => ({
-  providers: state.providers
-}))(AddProvider));
+export default withRouter(
+  connect((state) => ({
+    providers: state.providers
+  }))(AddProvider));
