@@ -11,7 +11,6 @@ import {
   clearExecutionsSearch,
   getCount,
   getCumulusInstanceMetadata,
-  listCollections,
   listExecutions,
   listWorkflows,
   getOptionsCollectionName
@@ -48,11 +47,6 @@ class ExecutionOverview extends React.Component {
   }
 
   queryMeta () {
-    this.props.dispatch(listCollections({
-      limit: 100,
-      fields: 'name,version',
-      getMMT: false
-    }));
     this.props.dispatch(listWorkflows());
     this.props.dispatch(getCount({
       type: 'executions',
