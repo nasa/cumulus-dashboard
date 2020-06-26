@@ -85,6 +85,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Fix ES query for TEA Lambda metrics
   - Update Kibana links on homepage for TEA metrics
 
+- **CUMULUS-2024**
+  - Fix bug where new providers and collections were not being pulled in as options on the Add Rule page
+
 ## [v1.9.0]
 
 ### BREAKING CHANGES
