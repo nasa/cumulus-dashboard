@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
+-**CUMULUS-1805**
+  -Shows the same running, completed, and failed granules format for when there 
+   zero granules, each category would be zero.
 
 - **CUMULUS-1904**
   - Adds a TableFilters component for dynamically showing/hiding table columns
