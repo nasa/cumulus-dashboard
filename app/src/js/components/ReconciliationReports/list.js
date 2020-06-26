@@ -23,8 +23,20 @@ import Search from '../Search/search';
 import List from '../Table/Table';
 import ListFilters from '../ListActions/ListFilters';
 import _config from '../../config';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 const { updateInterval } = _config;
+
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/'
+  },
+  {
+    label: 'Reports',
+    active: true
+  }
+];
 
 class ReconciliationReportList extends React.Component {
   constructor () {
@@ -66,18 +78,30 @@ class ReconciliationReportList extends React.Component {
   render () {
     const { reconciliationReports } = this.props;
     const { list } = this.props.reconciliationReports;
-    const { queriedAt } = list.meta;
+    const { queriedAt, count } = list.meta;
     const tableColumnsArray = tableColumns({ dispatch: this.props.dispatch });
-
     return (
       <div className='page__component'>
+        <section className='page__section page__section__controls'>
+          <Breadcrumbs config={breadcrumbConfig} />
+        </section>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description'>
               Reconciliation Reports Overview
             </h1>
+            <button className='button button--green button--file button--small form-group__element--right' onClick={this.createReport}>
+              {reconciliationReports.createReportInflight ? <LoadingEllipsis /> : 'Create New Report'}
+            </button>
             {lastUpdated(queriedAt)}
           </div>
+        </section>
+        <section className='page__section'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium heading--shared-content'>All Reports <span className='num-title'>{count ? `${count}` : 0}</span></h2>
+          </div>
+        </section>
+        <section className='page__section'>
           <List
             list={list}
             dispatch={this.props.dispatch}
@@ -117,11 +141,6 @@ class ReconciliationReportList extends React.Component {
                 }}
               />
             </ListFilters>
-            <div className='filter__button--add'>
-              <button className='button button--green button--add button--small form-group__element' onClick={this.createReport}>
-                {reconciliationReports.createReportInflight ? <LoadingEllipsis /> : 'Create Report'}
-              </button>
-            </div>
           </List>
         </section>
       </div>

@@ -8,13 +8,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
-
+- **CUMULUS-1805**
+  - Shows running, completed, and failed granule format for when there are zero granules, 
+    before it would just say "Granules 0," but now will show zeros in all categories.
 - **CUMULUS-1904**
   - Adds a TableFilters component for dynamically showing/hiding table columns
 
 - **CUMULUS-1906**
   - Adds a download button dropdown to reconciliation report inventory view.
     Option to download full report as json or indivdual tables as csv files.
+
+- **CUMULUS-1908**
+  - Adds Conflict Type and Conflict Details columns to reconciliation report inventory view tables.
+
+- **CUMULUS-1914**
+  - Adds a legend component for reconciliation reports
 
 - **CUMULUS-1917**
   - Adds a download button to reconciliation report list page
@@ -25,6 +33,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1977**
   - Added BulkGranuleModal component for creating modals to submit bulk granule requests
 
+- **CUMULUS-**
+  - upgrades node to 12.18.0
+  - Upgrade Cypress to latest version (4.8.0)
+
 ### Changed
 
 - **CUMULUS-1815**
@@ -32,6 +44,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1905**
   - Updates Inventory Report view to clarify Cumulus's internal consistency differences and Cumulus's differences with CMR.
+
+- **CUMULUS-1919**
+  - Update styles for report view
+
+- **CUMULUS-1919**
+  - Updates styles on Reconciliation Report list page
 
 - **CUMULUS-1977**
   - Updated BulkGranule component to display a modal that allows you to choose
@@ -53,6 +71,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1842**
   - Fix dashboard table sort issue
+
+- **CUMULUS-1871**
+  - Fix the timer in Providers page
+
+- **CUMULUS-1872**
+  - Fix/remove unecessary timers on granules page
+
+- **CUMULUS-1882**
+  - Fix ES query for TEA Lambda metrics
+  - Update Kibana links on homepage for TEA metrics
 
 ## [v1.9.0]
 
