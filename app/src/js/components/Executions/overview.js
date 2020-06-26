@@ -11,10 +11,9 @@ import {
   clearExecutionsSearch,
   getCount,
   getCumulusInstanceMetadata,
-  interval,
-  listCollections,
   listExecutions,
-  listWorkflows
+  listWorkflows,
+  getOptionsCollectionName
 } from '../../actions';
 import {
   tally,
@@ -22,8 +21,7 @@ import {
   displayCase
 } from '../../utils/format';
 import {
-  workflowOptions,
-  collectionOptions
+  workflowOptions
 } from '../../selectors';
 import statusOptions from '../../utils/status';
 import pageSizeOptions from '../../utils/page-size';
@@ -31,12 +29,9 @@ import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import Overview from '../Overview/overview';
-import _config from '../../config';
 import { strings } from '../locale';
 import { tableColumns } from '../../utils/table-config/executions';
 import ListFilters from '../ListActions/ListFilters';
-
-const { updateInterval } = _config;
 
 class ExecutionOverview extends React.Component {
   constructor (props) {
@@ -47,21 +42,11 @@ class ExecutionOverview extends React.Component {
   }
 
   componentDidMount () {
-    // use a slightly slower update interval, since the dropdown fields
-    // will change less frequently.
-    this.cancelInterval = interval(this.queryMeta, updateInterval, true);
+    this.queryMeta();
     this.props.dispatch(getCumulusInstanceMetadata());
   }
 
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-  }
-
   queryMeta () {
-    this.props.dispatch(listCollections({
-      limit: 100,
-      fields: 'name,version'
-    }));
     this.props.dispatch(listWorkflows());
     this.props.dispatch(getCount({
       type: 'executions',
@@ -81,7 +66,8 @@ class ExecutionOverview extends React.Component {
   }
 
   render () {
-    const { stats, executions } = this.props;
+    const { dispatch, stats, executions, collections, workflowOptions } = this.props;
+    const { dropdowns } = collections;
     const { list } = executions;
     const { count, queriedAt } = list.meta;
     if (list.infix && list.infix.value) {
@@ -116,29 +102,40 @@ class ExecutionOverview extends React.Component {
                 clear={clearExecutionsFilter}
                 paramKey={'status'}
                 label={'Status'}
+                inputProps={{
+                  placeholder: 'All'
+                }}
               />
 
               <Dropdown
-                options={this.props.collectionOptions}
+                getOptions={getOptionsCollectionName}
+                options={get(dropdowns, ['collectionName', 'options'])}
                 action={filterExecutions}
                 clear={clearExecutionsFilter}
                 paramKey={'collectionId'}
-                label={strings.collection}
+                label={strings.collection_id}
+                inputProps={{
+                  placeholder: 'All'
+                }}
               />
 
               <Dropdown
-                options={this.props.workflowOptions}
+                options={workflowOptions}
                 action={filterExecutions}
                 clear={clearExecutionsFilter}
                 paramKey={'type'}
                 label={'Workflow'}
+                inputProps={{
+                  placeholder: 'All'
+                }}
               />
 
-              <Search dispatch={this.props.dispatch}
+              <Search dispatch={dispatch}
                 action={searchExecutions}
                 clear={clearExecutionsSearch}
                 paramKey={'asyncOperationId'}
                 label={'Async Operation ID'}
+                placeholder='Search'
               />
 
               <Dropdown
@@ -147,6 +144,9 @@ class ExecutionOverview extends React.Component {
                 clear={clearExecutionsFilter}
                 paramKey={'limit'}
                 label={'Results Per Page'}
+                inputProps={{
+                  placeholder: 'Results Per Page'
+                }}
               />
             </ListFilters>
           </List>
@@ -160,7 +160,7 @@ ExecutionOverview.propTypes = {
   dispatch: PropTypes.func,
   stats: PropTypes.object,
   executions: PropTypes.object,
-  collectionOptions: PropTypes.object,
+  collections: PropTypes.object,
   workflowOptions: PropTypes.object
 };
 
@@ -168,5 +168,5 @@ export default withRouter(connect(state => ({
   stats: state.stats,
   executions: state.executions,
   workflowOptions: workflowOptions(state),
-  collectionOptions: collectionOptions(state)
+  collections: state.collections,
 }))(ExecutionOverview));

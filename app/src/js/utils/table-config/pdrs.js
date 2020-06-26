@@ -15,7 +15,7 @@ export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'pdrName',
-    Cell: ({ cell: { value } }) => <Link to={`pdrs/pdr/${value}`}>{value}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={`/pdrs/pdr/${value}`}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Status',
@@ -28,8 +28,7 @@ export const tableColumns = [
   },
   {
     Header: strings.granules,
-    accessor: row => Object.keys(row.stats).filter(k => k !== 'total')
-      .reduce((a, b) => a + get(row.stats, b, 0), 0),
+    accessor: row => get(row, ['stats', 'total'], 0),
     id: 'granules'
   },
   {

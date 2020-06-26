@@ -14,38 +14,30 @@ import { strings } from '../locale';
 
 class Executions extends React.Component {
   query () {
-    this.props.dispatch(getCount({
+    const { dispatch } = this.props;
+    dispatch(getCount({
       type: 'executions',
       field: 'status'
     }));
-    this.props.dispatch(listExecutions());
-    this.displayName = strings.executions;
-  }
-
-  renderHeader () {
-    const { pathname } = this.props.location;
-    const showDatePicker = pathname === '/executions';
-
-    if (showDatePicker) {
-      return <DatePickerHeader onChange={this.query} heading={strings.executions}/>;
-    } else {
-      return (
-        <div className='content__header'>
-          <div className='row'>
-            <h1 className='heading--xlarge'>{strings.executions}</h1>
-          </div>
-        </div>
-      );
-    }
+    dispatch(listExecutions());
   }
 
   render () {
+    const { pathname } = this.props.location;
+    const showDatePicker = pathname === '/executions';
     return (
       <div className='page__workflows'>
         <Helmet>
           <title> Cumulus Executions </title>
         </Helmet>
-        {this.renderHeader()}
+        {showDatePicker
+          ? <DatePickerHeader onChange={this.query} heading={strings.executions}/>
+          : <div className='content__header'>
+            <div className='row'>
+              <h1 className='heading--xlarge'>{strings.executions}</h1>
+            </div>
+          </div>
+        }
         <div className='page__content'>
           <div className='wrapper__sidebar'>
             <Route path='/executions/execution/:executionArn' component={Sidebar} />
