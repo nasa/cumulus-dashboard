@@ -48,6 +48,7 @@ const validate = (rule) => {
   if (ruleCollection === nullValue) {
     ruleCollection = '';
   }
+  rule.collection = ruleCollection;
   return true;
 };
 
