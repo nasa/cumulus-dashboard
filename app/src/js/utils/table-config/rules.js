@@ -6,7 +6,7 @@ import {
   deleteRule
 } from '../../actions';
 import {
-  getCollectionId,
+  getFormattedCollectionId,
   collectionLink,
   providerLink,
   fromNow
@@ -26,8 +26,8 @@ export const tableColumns = [
   },
   {
     Header: strings.collection_id,
-    accessor: row => getCollectionId(row.collection),
-    Cell: ({ row }) => collectionLink(getCollectionId(row.original.collection)), // eslint-disable-line react/prop-types
+    accessor: row => getFormattedCollectionId(row.collection),
+    Cell: ({ row }) => collectionLink(getFormattedCollectionId(row.original.collection)), // eslint-disable-line react/prop-types
     disableSortBy: true
   },
   {

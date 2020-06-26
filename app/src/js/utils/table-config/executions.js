@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
+  displayCase,
   fromNow,
   seconds,
-  displayCase,
-  truncate
+  truncate,
+  formatCollectionId
 } from '../../utils/format';
 import { strings } from '../../components/locale';
 
@@ -36,6 +37,7 @@ export const tableColumns = [
   },
   {
     Header: strings.collection_name,
-    accessor: 'collectionId'
+    accessor: 'collectionId',
+    Cell: ({ row }) => formatCollectionId(row.original.collectionId)
   }
 ];

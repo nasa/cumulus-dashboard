@@ -11,7 +11,7 @@ import {
   listCollections
 } from '../../actions';
 import AddRecord from '../Add/add';
-import { getCollectionId, collectionNameVersion } from '../../utils/format';
+import { getCollectionId, nullValue, collectionNameVersion } from '../../utils/format';
 
 /**
  * Converts the Collection ID string associated with the `collection` property
@@ -44,7 +44,10 @@ import { getCollectionId, collectionNameVersion } from '../../utils/format';
  *    function does not perform any validation)
  */
 const validate = (rule) => {
-  rule.collection = collectionNameVersion(rule.collection);
+  let ruleCollection = collectionNameVersion(rule.collection);
+  if (ruleCollection === nullValue) {
+    ruleCollection = '';
+  }
   return true;
 };
 
