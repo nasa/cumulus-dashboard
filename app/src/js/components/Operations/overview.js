@@ -18,7 +18,6 @@ import {
   listWorkflows
 } from '../../actions';
 import { tally } from '../../utils/format';
-import { workflowOptions } from '../../selectors';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
@@ -165,7 +164,5 @@ OperationOverview.propTypes = {
 };
 
 export default withRouter(connect(state => ({
-  stats: state.stats,
   operations: state.operations,
-  workflowOptions: workflowOptions(state)
 }))(OperationOverview));
