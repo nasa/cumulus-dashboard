@@ -111,6 +111,7 @@ test('GranulesOverview does not generate bulkAction for recovery button', functi
 test('GranulesOverview will download CSV data when the Download Granule List button is clicked and not leave extra link on the page', function (t) {
   window.URL.createObjectURL = sinon.fake.returns('www.example.com');
   const dispatch = () => Promise.resolve();
+  const workflowOptions = [];
   const config = { enableRecovery: false };
   const store = {
     subscribe: () => {},
@@ -125,6 +126,7 @@ test('GranulesOverview will download CSV data when the Download Granule List but
         granuleCSV = {data}
         dispatch = {dispatch}
         location = {location}
+        workflowOptions = {workflowOptions}
         config={config}/>
     </Provider>);
 

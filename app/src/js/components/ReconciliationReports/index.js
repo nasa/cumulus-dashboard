@@ -10,6 +10,7 @@ import { getCount, listReconciliationReports } from '../../actions';
 import ReconciliationReportList from './list';
 import ReconciliationReport from './reconciliation-report';
 import DatePickerHeader from '../../components/DatePickerHeader/DatePickerHeader';
+import Legend from './legend';
 
 class ReconciliationReports extends React.Component {
   query() {
@@ -38,6 +39,9 @@ class ReconciliationReports extends React.Component {
                 <Route exact path='/reconciliation-reports' component={ReconciliationReportList} />
                 <Route path='/reconciliation-reports/report/:reconciliationReportName' component={ReconciliationReport} />
               </Switch>
+              <section className='page__section'>
+                <Legend />
+              </section>
             </div>
           </div>
         </div>

@@ -22,7 +22,7 @@
 }
 
 .status__badge {
-  padding: .5em;
+  padding: .4em 1em;
   border-radius: 4px;
   margin-left: 5px;
   color: $white;
@@ -40,5 +40,22 @@
   }
   &--conflict {
     background-color: $theme--conflict;
+  }
+  &--running,
+  &--enabled {
+    background-color: $yellow;
+  }
+
+  &--completed {
+    background-color: $light-green;
+  }
+
+  &--stopped {
+    background-color: $orange;
+  }
+
+  &--failed,
+  &--disabled {
+    background-color: $error-red;
   }
 }

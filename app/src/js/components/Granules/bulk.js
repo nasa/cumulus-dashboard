@@ -218,9 +218,6 @@ const BulkGranule = ({
 BulkGranule.propTypes = {
   history: PropTypes.object,
   dispatch: PropTypes.func,
-  status: PropTypes.string,
-  action: PropTypes.func,
-  state: PropTypes.object,
   confirmAction: PropTypes.bool,
   className: PropTypes.string,
   element: PropTypes.string,

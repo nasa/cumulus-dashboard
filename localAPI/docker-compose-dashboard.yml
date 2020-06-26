@@ -1,7 +1,7 @@
 version: "3"
 services:
   dashboard:
-    image: node:10.16.3
+    image: node:12.18.0
     depends_on:
       - serve_api
     network_mode: "service:shim"
@@ -21,7 +21,7 @@ services:
       - SHOW_TEA_METRICS=false
       - AUTH_METHOD=earthdata
   shim:   # empty container to open ports
-    image: node:10.16.3
+    image: node:12.18.0
     command:
       bash -c "tail -f /dev/null"
     working_dir:
