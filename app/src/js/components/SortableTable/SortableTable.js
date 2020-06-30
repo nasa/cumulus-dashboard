@@ -223,6 +223,7 @@ const SortableTable = ({
             previousPage={previousPage}
             pageOptions={pageOptions}
             pageIndex={pageIndex}
+            dataCount={data.length}
           />}
       </form>
     </div>
