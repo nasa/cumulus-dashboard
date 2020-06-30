@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
-  interval,
   getPdr,
   deletePdr,
   searchGranules,
@@ -40,11 +39,8 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import ErrorReport from '../Errors/report';
 import GranulesProgress from '../Granules/progress';
-import _config from '../../config';
 import { strings } from '../locale';
 import ListFilters from '../ListActions/ListFilters';
-
-const { updateInterval } = _config;
 
 const metaAccessors = [
   {
@@ -96,7 +92,6 @@ const metaAccessors = [
 class PDR extends React.Component {
   constructor () {
     super();
-    this.reload = this.reload.bind(this);
     this.deletePdr = this.deletePdr.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
@@ -105,24 +100,13 @@ class PDR extends React.Component {
   }
 
   componentDidMount () {
-    const { pdrName } = this.props.params;
-    const immediate = !this.props.pdrs.map[pdrName];
-    this.reload(immediate);
-  }
-
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-  }
-
-  reload (immediate) {
-    const { pdrName } = this.props.params;
-    const { dispatch } = this.props;
-    if (this.cancelInterval) { this.cancelInterval(); }
-    this.cancelInterval = interval(() => dispatch(getPdr(pdrName)), updateInterval, immediate);
+    const { dispatch, match } = this.props;
+    const { pdrName } = match.params;
+    dispatch(getPdr(pdrName));
   }
 
   deletePdr () {
-    const { pdrName } = this.props.params;
+    const { pdrName } = this.props.match.params;
     this.props.dispatch(deletePdr(pdrName));
   }
 
@@ -149,12 +133,15 @@ class PDR extends React.Component {
   }
 
   render () {
-    const { pdrName } = this.props.params;
-    const { list, dropdowns } = this.props.granules;
+    const { match, granules, collections, pdrs } = this.props;
+    const { pdrName } = match.params;
+    const record = pdrs.map[pdrName];
+    if (!record || (record.inflight && !record.data)) return <Loading />;
+    const { dropdowns } = collections;
+    const { list } = granules;
     const { count, queriedAt } = list.meta;
-    const record = this.props.pdrs.map[pdrName];
     const logsQuery = { 'meta.pdrName': pdrName };
-    const deleteStatus = get(this.props.pdrs.deleted, [pdrName, 'status']);
+    const deleteStatus = get(pdrs.deleted, [pdrName, 'status']);
     const error = record.error;
 
     const granulesCount = get(record, 'data.granulesStatus', []);
@@ -179,7 +166,7 @@ class PDR extends React.Component {
               text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'} />
             {lastUpdated(queriedAt)}
             {this.renderProgress(record)}
-            {error ? <ErrorReport report={error} /> : null}
+            {error && <ErrorReport report={error} />}
           </div>
         </section>
 
@@ -187,7 +174,7 @@ class PDR extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>PDR Overview</h2>
           </div>
-          {!record || (record.inflight && !record.data) ? <Loading /> : <Metadata data={record.data} accessors={metaAccessors} />}
+          <Metadata data={record.data} accessors={metaAccessors} />
         </section>
 
         <section className='page__section'>
@@ -243,12 +230,19 @@ class PDR extends React.Component {
 }
 
 PDR.propTypes = {
+  collections: PropTypes.object,
   granules: PropTypes.object,
   logs: PropTypes.object,
   pdrs: PropTypes.object,
   dispatch: PropTypes.func,
-  params: PropTypes.object,
+  match: PropTypes.object,
   history: PropTypes.object
 };
 
-export default withRouter(connect(state => state)(PDR));
+export default withRouter(
+  connect((state) => ({
+    collections: state.collections,
+    granules: state.granules,
+    logs: state.logs,
+    pdrs: state.pdrs
+  }))(PDR));

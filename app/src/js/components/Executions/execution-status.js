@@ -30,8 +30,8 @@ class ExecutionStatus extends React.Component {
   }
 
   componentDidMount () {
-    const { dispatch } = this.props;
-    const { executionArn } = this.props.match.params;
+    const { dispatch, match } = this.props;
+    const { executionArn } = match.params;
     dispatch(getExecutionStatus(executionArn));
     dispatch(getCumulusInstanceMetadata());
   }

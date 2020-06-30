@@ -36,7 +36,7 @@ export const tableColumns = [
     id: 'duration'
   },
   {
-    Header: strings.collection_name,
+    Header: strings.collection_id,
     accessor: 'collectionId',
     Cell: ({ row }) => formatCollectionId(row.original.collectionId)
   }

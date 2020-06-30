@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - This dashboard version requires Cumulus API version >= v1.25.0
 
 ### Added
-
+- **CUMULUS-1805**
+  - Shows running, completed, and failed granule format for when there are zero granules, 
+    before it would just say "Granules 0," but now will show zeros in all categories.
 - **CUMULUS-1904**
   - Adds a TableFilters component for dynamically showing/hiding table columns
 
@@ -79,15 +81,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1842**
   - Fix dashboard table sort issue
 
+- **CUMULUS-1870**
+  - Fix/remove unecessary timers on Pdrs page
+
 - **CUMULUS-1871**
-  - Fix the timer in Providers page
+  - Fix/remove unecessary timers on Providers page
 
 - **CUMULUS-1872**
   - Fix/remove unecessary timers on granules page
 
+- **CUMULUS-1873**
+  - Fix/remove unecessary timers on executions page
+
 - **CUMULUS-1882**
   - Fix ES query for TEA Lambda metrics
   - Update Kibana links on homepage for TEA metrics
+
+- **CUMULUS-2024**
+  - Fix bug where new providers and collections were not being pulled in as options on the Add Rule page
 
 ## [v1.9.0]
 

@@ -112,17 +112,17 @@ const AddRule = ({
     }
   }, [name, rulesMap, isCopy]);
 
-  const dispatched = ({ list }) => {
-    const { inflight, meta, error } = list || {};
-    const { queriedAt } = meta || {};
-    return error || inflight || queriedAt !== undefined;
-  };
+  useEffect(() => {
+    dispatch(listCollections({ listAll: true, getMMT: false }));
+  }, [dispatch]);
 
   useEffect(() => {
-    if (!dispatched(collections)) dispatch(listCollections({ listAll: true, getMMT: false }));
-    if (!dispatched(providers)) dispatch(listProviders());
-    if (!dispatched(workflows)) dispatch(listWorkflows());
-  });
+    dispatch(listProviders());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(listWorkflows());
+  }, [dispatch]);
 
   useEffect(() => {
     setEnums({
