@@ -241,5 +241,8 @@ PDR.propTypes = {
 
 export default withRouter(
   connect((state) => ({
+    collections: state.collections,
+    granules: state.granules,
+    logs: state.logs,
     pdrs: state.pdrs
   }))(PDR));
