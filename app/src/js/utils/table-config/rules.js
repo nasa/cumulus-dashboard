@@ -26,8 +26,8 @@ export const tableColumns = [
   },
   {
     Header: strings.collection_id,
-    accessor: row => getFormattedCollectionId(row.collection),
-    Cell: ({ row }) => collectionLink(getFormattedCollectionId(row.original.collection)), // eslint-disable-line react/prop-types
+    accessor: 'collection',
+    Cell: ({ cell: { value } }) => collectionLink(getFormattedCollectionId(value)), // eslint-disable-line react/prop-types
     disableSortBy: true
   },
   {
