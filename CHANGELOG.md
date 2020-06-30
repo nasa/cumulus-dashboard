@@ -72,8 +72,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1842**
   - Fix dashboard table sort issue
 
+- **CUMULUS-1870**
+  - Fix/remove unecessary timers on Pdrs page
+
 - **CUMULUS-1871**
-  - Fix the timer in Providers page
+  - Fix/remove unecessary timers on Providers page
 
 - **CUMULUS-1872**
   - Fix/remove unecessary timers on granules page

@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
-  interval,
   getPdr,
   deletePdr,
   searchGranules,
@@ -40,11 +39,8 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import ErrorReport from '../Errors/report';
 import GranulesProgress from '../Granules/progress';
-import _config from '../../config';
 import { strings } from '../locale';
 import ListFilters from '../ListActions/ListFilters';
-
-const { updateInterval } = _config;
 
 const metaAccessors = [
   {
@@ -96,7 +92,6 @@ const metaAccessors = [
 class PDR extends React.Component {
   constructor () {
     super();
-    this.reload = this.reload.bind(this);
     this.deletePdr = this.deletePdr.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
@@ -105,21 +100,9 @@ class PDR extends React.Component {
   }
 
   componentDidMount () {
-    const { match, pdrs } = this.props;
-    const { pdrName } = match.params;
-    const immediate = !pdrs.map[pdrName];
-    this.reload(immediate);
-  }
-
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-  }
-
-  reload (immediate) {
     const { dispatch, match } = this.props;
     const { pdrName } = match.params;
-    if (this.cancelInterval) { this.cancelInterval(); }
-    this.cancelInterval = interval(() => dispatch(getPdr(pdrName)), updateInterval, immediate);
+    dispatch(getPdr(pdrName));
   }
 
   deletePdr () {
@@ -256,4 +239,10 @@ PDR.propTypes = {
   history: PropTypes.object
 };
 
-export default withRouter(connect(state => state)(PDR));
+export default withRouter(
+  connect((state) => ({
+    collections: state.collections,
+    granules: state.granules,
+    logs: state.logs,
+    pdrs: state.pdrs
+  }))(PDR));

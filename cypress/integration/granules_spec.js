@@ -107,39 +107,27 @@ describe('Dashboard Granules Page', () => {
     it('should be able to sort table by granule name', () => {
       cy.visit('/granules');
 
-      // save the names of the granules
-      const originalGranuleNames = [];
-      cy.get('.table .tbody .tr')
-        .each(($row, index, $list) => {
-          cy.wrap($row).children('.td').eq(2).invoke('text').then((name) =>
-            originalGranuleNames.push(name));
-        });
-
       cy.get('.table .thead .tr .th').contains('.table__sort', 'Name').click();
       cy.get('.table .thead .tr .th').contains('.table__sort--asc', 'Name');
 
-      // wait until the names of the first two granules change
+      // wait until the names of the granules are in sorted order
       cy.waitUntil(
-        () => cy.get('.table .tbody .tr').eq(0).children('.td').eq(2).invoke('text')
-          .then((name) => name !== originalGranuleNames[0]) ||
-          cy.get('.table .tbody .tr').eq(1).children('.td').eq(2).invoke('text')
-            .then((name) => name !== originalGranuleNames[1]),
+        () => {
+          const granuleNames = [];
+          return cy.get('.table .tbody .tr')
+            .each(($row, index, $list) => {
+              cy.wrap($row).children('.td').eq(2).invoke('text').then((name) =>
+                granuleNames.push(name));
+            })
+            .then(() => (
+              granuleNames.length === 11 &&
+              granuleNames.slice().join(',') === granuleNames.sort().join(',')
+            ));
+        },
         {
           timeout: 10000,
-          interval: 500,
+          interval: 1000,
           errorMsg: 'granule name sorting not working within time limit'
-        });
-
-      const granuleNames = [];
-      cy.get('.table .tbody .tr')
-        .each(($row, index, $list) => {
-          cy.wrap($row).children('.td').eq(2).invoke('text').then((name) =>
-            granuleNames.push(name));
-        })
-        .then(() => {
-          cy.wrap(granuleNames).should('have.length', 11);
-          const actual = granuleNames.slice();
-          cy.wrap(actual).should('deep.eq', granuleNames.sort());
         });
     });
 
@@ -239,7 +227,7 @@ describe('Dashboard Granules Page', () => {
       cy.get(`[data-value="${granuleId}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
-      cy.get('.modal-content .modal-body .alert').should('contain.text', 'Success');
+      cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
       cy.get('.button__goto').click();
       cy.url().should('include', `granules/granule/${granuleId}`);
       cy.get('.heading--large').should('have.text', granuleId);
@@ -262,7 +250,7 @@ describe('Dashboard Granules Page', () => {
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
-      cy.get('.modal-content .modal-body .alert').should('contain.text', 'Success');
+      cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
       cy.get('.button__goto').click();
       cy.url().should('include', 'granules/processing');
       cy.get('.heading--large').should('have.text', 'Running Granules 2');
@@ -285,7 +273,7 @@ describe('Dashboard Granules Page', () => {
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
-      cy.get('.modal-content .modal-body .alert').should('contain.text', 'Error');
+      cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Error');
       cy.get('.Collapsible__contentInner').should('contain.text', 'Oopsie');
       cy.get('.button--cancel').click();
       cy.url().should('match', /\/granules$/);
