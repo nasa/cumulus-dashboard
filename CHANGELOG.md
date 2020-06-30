@@ -100,6 +100,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2024**
   - Fix bug where new providers and collections were not being pulled in as options on the Add Rule page
 
+- **CUMULUS-2040**
+  - Fix reconciliation report pagination so that it does not display all pages when there are a large number of conflicts
+
 ## [v1.9.0]
 
 ### BREAKING CHANGES
