@@ -44,11 +44,10 @@ import { getCollectionId, nullValue, collectionNameVersion } from '../../utils/f
  *    function does not perform any validation)
  */
 const validate = (rule) => {
-  let ruleCollection = collectionNameVersion(rule.collection);
-  if (ruleCollection === nullValue) {
-    ruleCollection = '';
+  const ruleCollection = collectionNameVersion(rule.collection);
+  if (ruleCollection !== nullValue) {
+    rule.collection = ruleCollection;
   }
-  rule.collection = ruleCollection;
   return true;
 };
 
