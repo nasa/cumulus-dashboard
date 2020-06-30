@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Paginator from 'paginator';
 
 /**
  * SimplePagination
@@ -8,65 +9,73 @@ import PropTypes from 'prop-types';
 
 const disabled = ' pagination__link--disabled';
 const VISIBLE_PAGES = 7;
-const PAGE_RANGE = Math.floor(VISIBLE_PAGES / 2);
+const PAGE_LIMIT = 10;
 
 const SimplePagination = ({
-  canPreviousPage,
   canNextPage,
-  pageCount,
+  canPreviousPage,
+  dataCount,
   gotoPage,
   nextPage,
-  previousPage,
+  pageCount,
+  pageIndex,
   pageOptions,
-  pageIndex
+  previousPage,
 }) => {
   const currentPage = pageIndex + 1;
-  let hiddenLowNumbers = 0;
-  let hiddenHighNumbers = 0;
+
+  const paginator = new Paginator(PAGE_LIMIT, VISIBLE_PAGES);
+  const pageMeta = paginator.build(dataCount, currentPage);
 
   return (
-    <div className='pagination simple-pagination'>
+    <div className="pagination simple-pagination">
       <ol>
         <li>
-          <a className={`previous ${canPreviousPage ? '' : disabled}`}
+          <a
+            className={`previous ${canPreviousPage ? '' : disabled}`}
             data-value={currentPage - 1}
             onClick={() => previousPage()}
-          >Previous</a>
+          >
+            Previous
+          </a>
         </li>
-        {pageOptions.map(page => {
+        {pageOptions.map((page) => {
           const firstPage = 1;
           const pageNumber = page + 1;
           const isNotFirstPage = pageNumber !== firstPage;
           const isNotLastPage = pageNumber !== pageCount;
-          const isLessThanCurrentPage = pageNumber < currentPage;
-          const isGreaterThanCurrentPage = pageNumber > currentPage;
-          /**
-           * 'buffers' for cases when we want to display 7 pages
-           * but the current page has fewer than 3 additional pages on one side or another
-           * ie: instead of 1 <2> 3 4 5 ... 25, it allows us to show 1 <2> 3 4 5 6 7 8 ... 25
-          */
-          const isNotLowerBuffer = pageNumber - firstPage < VISIBLE_PAGES;
-          const isNotHigherBuffer = pageCount - pageNumber < VISIBLE_PAGES;
-          const isOutsidePageRange = Math.abs(currentPage - pageNumber) > PAGE_RANGE;
-          if (isNotFirstPage && isLessThanCurrentPage && isNotLowerBuffer && isOutsidePageRange) {
-            hiddenLowNumbers++;
-            return <React.Fragment key={page}>{hiddenLowNumbers === 1 && <li>...</li>}</React.Fragment>;
+          const isHiddenPage =
+            pageNumber < pageMeta.first_page || pageNumber > pageMeta.last_page;
+          const shouldHaveEllipses =
+            isHiddenPage &&
+            (pageNumber === firstPage + 1 || pageNumber === pageCount - 1);
+
+          if (isNotFirstPage && isNotLastPage && isHiddenPage) {
+            if (shouldHaveEllipses) {
+              return <li key={page}>...</li>;
+            }
+            return;
           }
-          if (isNotLastPage && isGreaterThanCurrentPage && isNotHigherBuffer && isOutsidePageRange) {
-            hiddenHighNumbers++;
-            return <React.Fragment key={page}>{hiddenHighNumbers === 1 && <li>...</li>}</React.Fragment>;
-          }
+
           return (
-            <li key={page} className={page === pageIndex ? 'pagination__link--active' : ''}>
-              <a data-value={pageNumber} onClick={() => gotoPage(page)}>{pageNumber}</a>
+            <li
+              key={page}
+              className={page === pageIndex ? 'pagination__link--active' : ''}
+            >
+              <a data-value={pageNumber} onClick={() => gotoPage(page)}>
+                {pageNumber}
+              </a>
             </li>
           );
         })}
         <li>
-          <a className={`next ${canNextPage ? '' : disabled}`}
+          <a
+            className={`next ${canNextPage ? '' : disabled}`}
             data-value={currentPage + 1}
             onClick={() => nextPage()}
-          >Next</a>
+          >
+            Next
+          </a>
         </li>
       </ol>
     </div>
@@ -74,14 +83,15 @@ const SimplePagination = ({
 };
 
 SimplePagination.propTypes = {
-  canPreviousPage: PropTypes.bool,
   canNextPage: PropTypes.bool,
-  pageCount: PropTypes.number,
+  canPreviousPage: PropTypes.bool,
+  dataCount: PropTypes.number,
   gotoPage: PropTypes.func,
   nextPage: PropTypes.func,
-  previousPage: PropTypes.func,
+  pageCount: PropTypes.number,
+  pageIndex: PropTypes.number,
   pageOptions: PropTypes.array,
-  pageIndex: PropTypes.number
+  previousPage: PropTypes.func,
 };
 
 export default SimplePagination;
