@@ -38,6 +38,6 @@ export const tableColumns = [
   {
     Header: strings.collection_id,
     accessor: 'collectionId',
-   Cell: ({ cell: { value } }) => formatCollectionId(value)
+    Cell: ({ cell: { value } }) => formatCollectionId(value)
   }
 ];
