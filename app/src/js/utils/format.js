@@ -135,11 +135,19 @@ export const truncate = function (string, to) {
   else return string.slice(0, to) + '... Show More';
 };
 
+export const getFormattedCollectionId = function (collection) {
+  const collectionId = getCollectionId(collection);
+  return formatCollectionId(collectionId);
+};
+
+export const formatCollectionId = (collectionId) => {
+  return collectionId === undefined ? nullValue : collectionId;
+};
+
 export const getCollectionId = function (collection) {
   if (collection && collection.name && collection.version) {
     return `${collection.name}___${collection.version}`;
   }
-  return 'unknown';
 };
 
 // "MYD13A1___006" => "MYD13A1 / 006"
@@ -174,7 +182,7 @@ export const deconstructCollectionId = function (collectionId) {
 };
 
 export const collectionLink = function (collectionId) {
-  if (!collectionId) return nullValue;
+  if (!collectionId || collectionId === nullValue) return nullValue;
   const { name, version } = collectionNameVersion(collectionId);
   return <Link to={`/collections/collection/${name}/${version}`}>{collectionName(collectionId)}</Link>;
 };

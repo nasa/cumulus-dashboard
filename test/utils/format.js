@@ -1,6 +1,10 @@
 'use strict';
 import test from 'ava';
-import { buildRedirectUrl } from '../../app/src/js/utils/format.js';
+import {
+  buildRedirectUrl,
+  getFormattedCollectionId,
+  formatCollectionId
+} from '../../app/src/js/utils/format.js';
 
 test('buildRedirectUrl() properly strips ?token query parameter', function (t) {
   const redirect = buildRedirectUrl({
@@ -45,4 +49,24 @@ test('buildRedirectUrl() does not strip arbitrary query parameter with hashRoute
   // hash and path when we have a hashrouter.
   // t.is(redirect, encodeURIComponent('http://localhost:3000/#/auth?foo=bar'));
   t.is(redirect, encodeURIComponent('http://localhost:3000/auth?foo=bar'));
+});
+
+test('getFormattedCollectionId returns a formatted collection', function (t) {
+  t.is('foo___006', getFormattedCollectionId({ name: 'foo', version: '006' }));
+});
+
+test('getFormattedCollectionId returns a nullValue collection if the collection is empty', function (t) {
+  t.is('--', getFormattedCollectionId({}));
+});
+
+test('getFormattedCollectionId returns a nullValue collection if the collection is undefined', function (t) {
+  t.is('--', getFormattedCollectionId());
+});
+
+test('formatCollectionId returns a formatted collection', function (t) {
+  t.is('foo___006', formatCollectionId('foo___006'));
+});
+
+test('formatCollectionId returns a nullValue collection if the collection is undefined', function (t) {
+  t.is('--', formatCollectionId());
 });

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### BREAKING CHANGES
+
+- This dashboard version requires Cumulus API version >= v1.25.0
+
 ### Added
 - **CUMULUS-1805**
   - Shows running, completed, and failed granule format for when there are zero granules, 
@@ -38,6 +42,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Upgrade Cypress to latest version (4.8.0)
 
 ### Changed
+
+- **CUMULUS-1861**
+  - Update Execution/Rule tables to handle undefined collectionIds
+  - Update Rule add dialogue logic to allow Rule creation without a collection
+    value.
 
 - **CUMULUS-1815**
   - Refactor some PDR components. No user facing changes.
