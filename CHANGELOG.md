@@ -43,13 +43,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- **CUMULUS-1815**
+  - Refactor some PDR components. No user facing changes.
+
+- **CUMULUS-1830**
+  - Fix redirect issue when logging out from the page with URL path containing dot
+
 - **CUMULUS-1861**
   - Update Execution/Rule tables to handle undefined collectionIds
   - Update Rule add dialogue logic to allow Rule creation without a collection
     value.
-
-- **CUMULUS-1815**
-  - Refactor some PDR components. No user facing changes.
 
 - **CUMULUS-1905**
   - Updates Inventory Report view to clarify Cumulus's internal consistency differences and Cumulus's differences with CMR.
