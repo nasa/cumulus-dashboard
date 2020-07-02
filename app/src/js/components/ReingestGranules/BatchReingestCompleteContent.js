@@ -7,10 +7,9 @@ export const maxDisplayed = 10;
 
 const BatchReingestCompleteContent = ({
   results,
-  errors,
-  confirmation
+  errors
 }) => {
-  // const confirmation = () => `successfully reingested ${results.length > 1 ? 'these' : 'this'} granule${results.length > 1 ? 's' : ''}`;
+  const confirmation = () => `successfully reingested ${results.length > 1 ? 'these' : 'this'} granule${results.length > 1 ? 's' : ''}`;
 
   const displayedItems = (array, renderContent) => {
     const items = [];
@@ -44,7 +43,7 @@ const BatchReingestCompleteContent = ({
       {(results && results.length > 0) &&
         <>
           <Alert variant='success'><strong>Success:</strong> Your request has been processed.</Alert>
-          <p>{confirmation}</p>
+          <p>{confirmation()}</p>
           <ul>
             {displayedItems(results, renderResults)}
           </ul>
@@ -66,8 +65,7 @@ const BatchReingestCompleteContent = ({
 
 BatchReingestCompleteContent.propTypes = {
   results: PropTypes.array,
-  errors: PropTypes.array,
-  confirmation: PropTypes.string
+  errors: PropTypes.array
 };
 
 export default BatchReingestCompleteContent;
