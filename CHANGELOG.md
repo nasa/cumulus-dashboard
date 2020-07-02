@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### BREAKING CHANGES
+
+- This dashboard version requires Cumulus API version >= v1.25.0
+
 ### Added
 - **CUMULUS-1805**
   - Shows running, completed, and failed granule format for when there are zero granules, 
@@ -41,6 +45,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1815**
   - Refactor some PDR components. No user facing changes.
+
+- **CUMULUS-1830**
+  - Fix redirect issue when logging out from the page with URL path containing dot
+
+- **CUMULUS-1861**
+  - Update Execution/Rule tables to handle undefined collectionIds
+  - Update Rule add dialogue logic to allow Rule creation without a collection
+    value.
 
 - **CUMULUS-1905**
   - Updates Inventory Report view to clarify Cumulus's internal consistency differences and Cumulus's differences with CMR.
@@ -90,6 +102,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-2024**
   - Fix bug where new providers and collections were not being pulled in as options on the Add Rule page
+
+- **CUMULUS-2040**
+  - Fix reconciliation report pagination so that it does not display all pages when there are a large number of conflicts
 
 ## [v1.9.0]
 
