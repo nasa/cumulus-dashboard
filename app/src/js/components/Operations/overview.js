@@ -12,7 +12,6 @@ import {
   clearOperationsSearch,
   getCount,
   getCumulusInstanceMetadata,
-  interval,
   listCollections,
   listOperations,
   listWorkflows
@@ -21,12 +20,9 @@ import { tally } from '../../utils/format';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
-import _config from '../../config';
 import { tableColumns } from '../../utils/table-config/operations';
 import ListFilters from '../ListActions/ListFilters';
 import pageSizeOptions from '../../utils/page-size';
-
-const { updateInterval } = _config;
 
 const statusOptions = {
   Running: 'RUNNING',
@@ -51,14 +47,8 @@ class OperationOverview extends React.Component {
   }
 
   componentDidMount () {
-    // use a slightly slower update interval, since the dropdown fields
-    // will change less frequently.
-    this.cancelInterval = interval(this.queryMeta, updateInterval, true);
+    this.queryMeta();
     this.props.dispatch(getCumulusInstanceMetadata());
-  }
-
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
   }
 
   generateQuery () {
