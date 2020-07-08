@@ -9,7 +9,6 @@ import {
   clearReconciliationReportsFilter,
   listReconciliationReports,
   createReconciliationReport,
-  interval,
   getCount,
   filterReconciliationReports
 } from '../../actions';
@@ -22,10 +21,7 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import List from '../Table/Table';
 import ListFilters from '../ListActions/ListFilters';
-import _config from '../../config';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-
-const { updateInterval } = _config;
 
 const breadcrumbConfig = [
   {
@@ -48,11 +44,7 @@ class ReconciliationReportList extends React.Component {
   }
 
   componentDidMount () {
-    this.cancelInterval = interval(() => this.queryParams(), updateInterval, true);
-  }
-
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
+    this.queryParams();
   }
 
   queryParams () {
