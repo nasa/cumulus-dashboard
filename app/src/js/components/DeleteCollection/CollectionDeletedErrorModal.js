@@ -44,7 +44,7 @@ class CollectionDeletedErrorModal extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <button
-            className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button--cancel'
+            className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left'
             label="close"
             onClick={this.handleClose}
           >
