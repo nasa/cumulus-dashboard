@@ -181,7 +181,7 @@ const setOnConfirm = ({ history, error, selected, closeModal }) => {
   }
 };
 
-const reingestGranuleModalJourney = ({
+const granuleModalJourney = ({
   selected = [],
   history,
   isOnModalConfirm,
@@ -211,42 +211,13 @@ const reingestGranuleModalJourney = ({
   return modalOptions;
 };
 
-// const granuleModalJourney = ({
-//   selected = [],
-//   history,
-//   isOnModalConfirm,
-//   isOnModalComplete,
-//   errorMessage,
-//   errors,
-//   results,
-//   closeModal,
-//   confirmation
-// }) => {
-//   const modalOptions = {};
-//   if (isOnModalComplete) {
-//     modalOptions.children = <BatchReingestCompleteContent confirmation={confirmation} results={results} errorMessage={errorMessage} errors={errors} />;
-//     modalOptions.hasConfirmButton = !errorMessage;
-//     modalOptions.cancelButtonText = 'Close';
-//     if (!errorMessage) {
-//       modalOptions.title = 'Success';
-//       modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';
-//       modalOptions.cancelButtonClass = 'button--green';
-//       modalOptions.confirmButtonClass = 'button__goto';
-//       modalOptions.onConfirm = setOnConfirm({ history, selected, errorMessage, closeModal });
-//     } else {
-//       modalOptions.title = 'Error';
-//     }
-//   }
-//   return modalOptions;
-// };
-
 export const reingestAction = (granules) => ({
   text: 'Reingest',
   action: reingestGranule,
   state: granules.reingested,
   confirm: confirmReingest,
   className: 'button--reingest',
-  getModalOptions: reingestGranuleModalJourney
+  getModalOptions: granuleModalJourney
 });
 
 export const bulkActions = function (granules, config) {
@@ -258,16 +229,14 @@ export const bulkActions = function (granules, config) {
       state: granules.executed,
       confirm: confirmApply,
       confirmOptions: config.execute.options,
-      className: 'button--execute',
-      // getModalOptions: props => granuleModalJourney({ ...props, confirmation: 'Successful execution' })
+      className: 'button--execute'
     },
     {
       text: strings.remove_from_cmr,
       action: removeGranule,
       state: granules.removed,
       confirm: confirmRemove,
-      className: 'button--remove',
-      // getModalOptions: granuleModalJourney
+      className: 'button--remove'
     },
     {
       Component:
@@ -282,7 +251,6 @@ export const bulkActions = function (granules, config) {
       action: deleteGranule,
       state: granules.deleted,
       confirm: confirmDelete,
-      className: 'button--delete',
-      // getModalOptions: granuleModalJourney
+      className: 'button--delete'
     }];
 };
