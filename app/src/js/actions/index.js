@@ -982,3 +982,5 @@ export const searchReconciliationReports = (infix) => ({ type: types.SEARCH_RECO
 export const clearReconciliationReportSearch = () => ({ type: types.CLEAR_RECONCILIATIONS_SEARCH });
 export const filterReconciliationReports = (param) => ({ type: types.FILTER_RECONCILIATIONS, param: param });
 export const clearReconciliationReportsFilter = (paramKey) => ({ type: types.CLEAR_RECONCILIATIONS_FILTER, paramKey: paramKey });
+export const searchReconciliationReport = (searchString) => ({ type: types.SEARCH_RECONCILIATION, searchString });
+export const clearReconciliationSearch = () => ({ type: types.CLEAR_RECONCILIATION_SEARCH });
