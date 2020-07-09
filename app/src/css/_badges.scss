@@ -41,8 +41,7 @@
   &--conflict {
     background-color: $theme--conflict;
   }
-  &--running,
-  &--enabled {
+  &--running {
     background-color: $yellow;
   }
 

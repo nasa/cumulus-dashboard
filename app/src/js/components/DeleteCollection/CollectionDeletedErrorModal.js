@@ -38,13 +38,13 @@ class CollectionDeletedErrorModal extends React.Component {
             An error occurred attempting to delete collection
             {` "${this.props.collectionLabel}"`}
           </p>
-          {this.props.errors.length &&
+          {this.props.errors.length > 0 &&
             <ErrorReport report={this.props.errors} truncate={true} />
           }
         </Modal.Body>
         <Modal.Footer>
           <button
-            className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button__cancel'
+            className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left'
             label="close"
             onClick={this.handleClose}
           >
