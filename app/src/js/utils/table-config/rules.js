@@ -46,17 +46,28 @@ export const tableColumns = [
   }
 ];
 
+const removeEsFields = function (data) {
+  const { queriedAt, timestamp, stats, ...nonEsFields } = data;
+  return nonEsFields;
+};
+
 export const bulkActions = (rules) => [{
   text: 'Enable Rule',
-  action: (ruleName) =>
-    enableRule(rules.list.data.find((rule) => rule.name === ruleName)),
+  action: (ruleName) => {
+    const rule = rules.list.data.find((rule) => rule.name === ruleName);
+    const filteredRule = removeEsFields(rule);
+    return enableRule(filteredRule);
+  },
   state: rules.enabled,
   confirm: (d) => `Enable ${d} Rule(s)?`,
   className: 'button button--green button--enable button--small form-group__element'
 }, {
   text: 'Disable Rule',
-  action: (ruleName) =>
-    disableRule(rules.list.data.find((rule) => rule.name === ruleName)),
+  action: (ruleName) => {
+    const rule = rules.list.data.find((rule) => rule.name === ruleName);
+    const filteredRule = removeEsFields(rule);
+    return disableRule(filteredRule);
+  },
   state: rules.disabled,
   confirm: (d) => `Disable ${d} Rule(s)?`,
   className: 'button button--green button--disable button--small form-group__element'

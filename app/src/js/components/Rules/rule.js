@@ -36,7 +36,7 @@ const breadcrumbConfig = [
   },
   {
     label: 'Rules',
-    href: '/Rules'
+    href: '/rules'
   },
   {
     label: 'Rule Overview',
