@@ -66,7 +66,7 @@ class ExecutionOverview extends React.Component {
   }
 
   render () {
-    const { dispatch, stats, executions, collections, workflowOptions } = this.props;
+    const { dispatch, stats, executions, collections, queryParams, workflowOptions } = this.props;
     const { dropdowns } = collections;
     const { list } = executions;
     const { count, queriedAt } = list.meta;
@@ -88,10 +88,10 @@ class ExecutionOverview extends React.Component {
           </div>
           <List
             list={list}
-            dispatch={this.props.dispatch}
+            dispatch={dispatch}
             action={listExecutions}
             tableColumns={tableColumns}
-            query={{}}
+            query={{ ...queryParams }}
             rowId='name'
             sortId='createdAt'
           >
@@ -157,16 +157,17 @@ class ExecutionOverview extends React.Component {
 }
 
 ExecutionOverview.propTypes = {
-  dispatch: PropTypes.func,
-  stats: PropTypes.object,
-  executions: PropTypes.object,
   collections: PropTypes.object,
-  workflowOptions: PropTypes.object
+  dispatch: PropTypes.func,
+  executions: PropTypes.object,
+  queryParams: PropTypes.object,
+  stats: PropTypes.object,
+  workflowOptions: PropTypes.object,
 };
 
 export default withRouter(connect(state => ({
-  stats: state.stats,
-  executions: state.executions,
-  workflowOptions: workflowOptions(state),
   collections: state.collections,
+  executions: state.executions,
+  stats: state.stats,
+  workflowOptions: workflowOptions(state),
 }))(ExecutionOverview));

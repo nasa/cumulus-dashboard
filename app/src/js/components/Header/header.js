@@ -25,7 +25,6 @@ const paths = [
 class Header extends React.Component {
   constructor () {
     super();
-    this.displayName = 'Header';
     this.logout = this.logout.bind(this);
     this.className = this.className.bind(this);
     this.linkTo = this.linkTo.bind(this);
@@ -63,7 +62,7 @@ class Header extends React.Component {
       const kibanaLink = kibanaAllLogsLink(this.props.cumulusInstance);
       return <a href={kibanaLink} target="_blank">{path[0]}</a>;
     } else {
-      return <Link to={{ pathname: path[1], search: this.props.location.search }}>{path[0]}</Link>;
+      return <Link to={path[1]}>{path[0]}</Link>;
     }
   }
 

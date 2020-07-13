@@ -115,8 +115,10 @@ class CollectionOverview extends React.Component {
   }
 
   generateQuery() {
+    const { match, queryParams } = this.props;
     return {
-      collectionId: getCollectionId(this.props.match.params),
+      ...queryParams,
+      collectionId: getCollectionId(match.params),
     };
   }
 
@@ -337,7 +339,7 @@ CollectionOverview.propTypes = {
   granules: PropTypes.object,
   history: PropTypes.object,
   match: PropTypes.object,
-  router: PropTypes.object,
+  queryParams: PropTypes.object,
 };
 
 export default withRouter(

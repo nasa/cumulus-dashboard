@@ -38,7 +38,7 @@ const AllGranules = ({
   granules,
   location,
   logs,
-  onQueryChange,
+  queryParams,
   workflowOptions,
 }) => {
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
@@ -67,12 +67,6 @@ const AllGranules = ({
   ];
 
   useEffect(() => {
-    if (typeof onQueryChange === 'function') {
-      onQueryChange(query);
-    }
-  }, [onQueryChange, query]);
-
-  useEffect(() => {
     dispatch(listWorkflows());
   }, [dispatch]);
 
@@ -89,7 +83,7 @@ const AllGranules = ({
   }
 
   function generateQuery() {
-    const options = {};
+    const options = { ...queryParams };
     const view = getView();
     if (view !== 'all') options.status = view;
     options.status = view;
@@ -207,12 +201,12 @@ const AllGranules = ({
 
 AllGranules.propTypes = {
   collections: PropTypes.object,
-  granules: PropTypes.object,
-  logs: PropTypes.object,
   dispatch: PropTypes.func,
+  granules: PropTypes.object,
   location: PropTypes.object,
+  logs: PropTypes.object,
+  queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
-  onQueryChange: PropTypes.func,
 };
 
 AllGranules.displayName = strings.all_granules;
@@ -222,8 +216,8 @@ export { AllGranules };
 export default withRouter(
   connect((state) => ({
     collections: state.collections,
-    logs: state.logs,
     granules: state.granules,
+    logs: state.logs,
     workflowOptions: workflowOptionNames(state),
   }))(AllGranules)
 );

@@ -10,7 +10,6 @@ const currentPathClass = 'sidebar__nav--selected';
 class Sidebar extends React.Component {
   constructor (props) {
     super(props);
-    this.displayName = 'Sidebar';
     this.resolvePath = this.resolvePath.bind(this);
     this.renderNavSection = this.renderNavSection.bind(this);
   }
@@ -21,8 +20,9 @@ class Sidebar extends React.Component {
 
   renderNavSection (section) {
     const { base, routes } = section;
-    const { count } = this.props;
-    const currentPath = this.props.currentPath || this.props.location.pathname;
+    const { count, location } = this.props;
+    const { search } = location || {};
+    const currentPath = this.props.currentPath || location.pathname;
     const params = {
       ...(this.props.params || {}),
       ...(this.props.match ? this.props.match.params : {})
@@ -42,7 +42,10 @@ class Sidebar extends React.Component {
 
               return (
                 <li key={base + i}>
-                  <Link className={classes} to={path}>
+                  <Link className={classes} to={{
+                    pathname: path,
+                    search
+                  }}>
                     {d[0]}
                   </Link>
                 </li>

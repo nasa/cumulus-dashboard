@@ -81,7 +81,8 @@ class GranulesOverview extends React.Component {
   }
 
   generateQuery () {
-    return {};
+    const { queryParams } = this.props;
+    return { ...queryParams };
   }
 
   generateBulkActions () {
@@ -138,7 +139,7 @@ class GranulesOverview extends React.Component {
   }
 
   render () {
-    const { collections, stats, granules, dispatch } = this.props;
+    const { collections, dispatch, granules, stats } = this.props;
     const { list } = granules;
     const { dropdowns } = collections;
     const { count, queriedAt } = list.meta;
@@ -225,21 +226,22 @@ class GranulesOverview extends React.Component {
 
 GranulesOverview.propTypes = {
   collections: PropTypes.object,
-  granules: PropTypes.object,
-  stats: PropTypes.object,
-  dispatch: PropTypes.func,
-  workflowOptions: PropTypes.array,
   config: PropTypes.object,
-  granuleCSV: PropTypes.object
+  dispatch: PropTypes.func,
+  granuleCSV: PropTypes.object,
+  granules: PropTypes.object,
+  queryParams: PropTypes.object,
+  stats: PropTypes.object,
+  workflowOptions: PropTypes.array,
 };
 
 export { GranulesOverview };
 
 export default withRouter(connect(state => ({
   collections: state.collections,
-  stats: state.stats,
-  workflowOptions: workflowOptionNames(state),
-  granules: state.granules,
   config: state.config,
   granuleCSV: state.granuleCSV,
+  granules: state.granules,
+  stats: state.stats,
+  workflowOptions: workflowOptionNames(state),
 }))(GranulesOverview));
