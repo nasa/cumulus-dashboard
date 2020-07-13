@@ -4,10 +4,10 @@ import compareVersions from 'compare-versions';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
 import { history } from '../store/configureStore';
-import { CMR } from '@cumulus/cmrjs';
 import isEmpty from 'lodash.isempty';
 import cloneDeep from 'lodash.clonedeep';
 
+import CMR from '../utils/cmr-client/CMR';
 import { configureRequest } from './helpers';
 import _config from '../config';
 import { getCollectionId, collectionNameVersion } from '../utils/format';
@@ -235,7 +235,7 @@ export const getMMTLinks = () =>
  */
 export const getMMTLinkFromCmr = (collection, getState) => {
   const {
-    cumulusInstance: { cmrProvider, cmrEnvironment }, mmtLinks
+    cumulusInstance: { cmrProvider, cmrEnvironment, stackName }, mmtLinks
   } = getState();
 
   if (!cmrProvider || !cmrEnvironment) {
@@ -248,7 +248,8 @@ export const getMMTLinkFromCmr = (collection, getState) => {
     return Promise.resolve(mmtLinks[getCollectionId(collection)]);
   }
 
-  return new CMR(cmrProvider).searchCollections(
+  const cmrClientId = `cumulus-dashboard-${stackName}`;
+  return new CMR({ cmrProvider, cmrClientId, cmrEnvironment }).searchCollections(
     {
       short_name: collection.name,
       version: collection.version

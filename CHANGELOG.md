@@ -54,6 +54,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Update Rule add dialogue logic to allow Rule creation without a collection
     value.
 
+- **CUMULUS-1846**
+  - Remove old dependency on @cumulus/cmrjs@1.11.0
+
 - **CUMULUS-1905**
   - Updates Inventory Report view to clarify Cumulus's internal consistency differences and Cumulus's differences with CMR.
 

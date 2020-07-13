@@ -168,12 +168,12 @@
     "webpackbar": "^4.0.0"
   },
   "dependencies": {
-    "@cumulus/cmrjs": "1.11.0",
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@fortawesome/react-fontawesome": "^0.1.7",
     "@reduxjs/toolkit": "^1.2.5",
+    "axios": "^0.19.2",
     "assert": "^1.4.1",
     "bootstrap": "^4.3.1",
     "brace": "^0.9.1",
