@@ -9,7 +9,7 @@ import {
   searchRules,
   clearRulesSearch,
   filterRules,
-  clearRulesFilter
+  clearRulesFilter,
 } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import List from '../Table/Table';
@@ -23,68 +23,76 @@ import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 const breadcrumbConfig = [
   {
     label: 'Dashboard Home',
-    href: '/'
+    href: '/',
   },
   {
     label: 'Rules',
-    active: true
-  }
+    active: true,
+  },
 ];
 
 class RulesOverview extends React.Component {
-  constructor () {
+  constructor() {
     super();
     this.generateBulkActions = this.generateBulkActions.bind(this);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.dispatch(listRules);
   }
 
-  generateBulkActions () {
+  generateBulkActions() {
     const { rules } = this.props;
     return bulkActions(rules);
   }
 
-  render () {
-    const { list } = this.props.rules;
+  render() {
+    const { dispatch, queryParams, rules } = this.props;
+    const { list } = rules;
     const { count, queriedAt } = list.meta;
     return (
-      <div className='page__component'>
+      <div className="page__component">
         <Helmet>
           <title> Rules Overview </title>
         </Helmet>
-        <section className='page__section page__section__controls'>
+        <section className="page__section page__section__controls">
           <Breadcrumbs config={breadcrumbConfig} />
         </section>
-        <section className='page__section page__section__header-wrapper'>
-          <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>Rules Overview</h1>
+        <section className="page__section page__section__header-wrapper">
+          <div className="page__section__header">
+            <h1 className="heading--large heading--shared-content with-description">
+              Rules Overview
+            </h1>
             {lastUpdated(queriedAt)}
           </div>
         </section>
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>All Rules <span className='num-title'>{count ? ` ${tally(count)}` : 0}</span></h2>
+        <section className="page__section">
+          <div className="heading__wrapper--border">
+            <h2 className="heading--medium heading--shared-content with-description">
+              All Rules
+              <span className="num-title">
+                {count ? ` ${tally(count)}` : 0}
+              </span>
+            </h2>
           </div>
 
           <List
             list={list}
-            dispatch={this.props.dispatch}
+            dispatch={dispatch}
             action={listRules}
             tableColumns={tableColumns}
-            query={{}}
-            sortId='timestamp'
+            query={{ ...queryParams }}
+            sortId="timestamp"
             bulkActions={this.generateBulkActions()}
-            rowId='name'
+            rowId="name"
           >
             <ListFilters>
               <Search
-                dispatch={this.props.dispatch}
+                dispatch={dispatch}
                 action={searchRules}
                 clear={clearRulesSearch}
-                placeholder='Search Rules'
-                label='Search'
+                placeholder="Search Rules"
+                label="Search"
               />
 
               <Dropdown
@@ -94,7 +102,7 @@ class RulesOverview extends React.Component {
                 paramKey={'limit'}
                 label={'Results Per Page'}
                 inputProps={{
-                  placeholder: 'Results Per Page'
+                  placeholder: 'Results Per Page',
                 }}
               />
             </ListFilters>
@@ -107,9 +115,12 @@ class RulesOverview extends React.Component {
 
 RulesOverview.propTypes = {
   dispatch: PropTypes.func,
-  rules: PropTypes.object
+  queryParams: PropTypes.object,
+  rules: PropTypes.object,
 };
 
-export default withRouter(connect(state => ({
-  rules: state.rules
-}))(RulesOverview));
+export default withRouter(
+  connect((state) => ({
+    rules: state.rules,
+  }))(RulesOverview)
+);
