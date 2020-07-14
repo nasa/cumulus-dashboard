@@ -56,7 +56,6 @@ async function searchConcept({
 
   // if requested, recursively retrieve all the search results for collections or granules
   const query = { ...defaultParams, ...searchParams, page_num: pageNum };
-  // const response = await got.get(url, { json: format.endsWith('json'), query, headers });
   const response = await axios.get(url, { params: query, headers });
 
   const responseItems = (format === 'echo10')

@@ -1,6 +1,6 @@
 'use strict';
 
-import get from 'lodash/get';
+import get from 'lodash.get';
 
 /**
  * Returns the environment specific identifier for the input cmr environment.
