@@ -41,12 +41,22 @@ import ErrorReport from '../Errors/report';
 import GranulesProgress from '../Granules/progress';
 import { strings } from '../locale';
 import ListFilters from '../ListActions/ListFilters';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const metaAccessors = [
   {
     label: 'Provider',
     property: 'provider',
-    accessor: (d) => <Link to={`providers/provider/${d}`}>{d}</Link>,
+    accessor: (d) => (
+      <Link
+        to={(location) => ({
+          pathname: `providers/provider/${d}`,
+          search: getPersistentQueryParams(location),
+        })}
+      >
+        {d}
+      </Link>
+    ),
   },
   {
     label: strings.collection,
@@ -58,7 +68,14 @@ const metaAccessors = [
     property: 'execution',
     accessor: (d) =>
       d ? (
-        <Link to={`/executions/execution/${path.basename(d)}`}>link</Link>
+        <Link
+          to={(location) => ({
+            pathname: `/executions/execution/${path.basename(d)}`,
+            search: getPersistentQueryParams(location),
+          })}
+        >
+          link
+        </Link>
       ) : (
         nullValue
       ),
@@ -120,7 +137,7 @@ class PDR extends React.Component {
     const pdrName = get(this.props, ['params', 'pdrName']);
     return {
       ...queryParams,
-      pdrName
+      pdrName,
     };
   }
 

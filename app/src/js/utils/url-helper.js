@@ -1,5 +1,6 @@
 'use strict';
 import get from 'lodash.get';
+import queryString from 'query-string';
 
 /**
  * Retrieve initial value for component based on react-router's location.
@@ -28,4 +29,16 @@ export function initialValuesFromLocation (location, paramKeys) {
     }
   });
   return initialValues;
+}
+
+/**
+ * Returns a location.search string containing only the params that should persist across pages
+ *
+ * @param {Object} location - react-router's location
+ */
+
+export function getPersistentQueryParams(location = {}) {
+  const parsedQueryParams = queryString.parse(location.search);
+  const { startDateTime, endDateTime } = parsedQueryParams;
+  return queryString.stringify({ startDateTime, endDateTime });
 }

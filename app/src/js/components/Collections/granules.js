@@ -28,6 +28,7 @@ import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import pageSizeOptions from '../../utils/page-size';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const CollectionGranules = ({
   dispatch,
@@ -86,7 +87,7 @@ const CollectionGranules = ({
   function generateQuery() {
     const options = {
       ...queryParams,
-      collectionId
+      collectionId,
     };
     if (view !== 'all') options.status = view;
     return options;
@@ -143,7 +144,10 @@ const CollectionGranules = ({
         </h1>
         <Link
           className="button button--edit button--small form-group__element--right button--green"
-          to={`/collections/edit/${collectionName}/${collectionVersion}`}
+          to={{
+            pathname: `/collections/edit/${collectionName}/${collectionVersion}`,
+            search: getPersistentQueryParams(location),
+          }}
         >
           Edit
         </Link>

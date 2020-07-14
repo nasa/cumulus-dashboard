@@ -24,6 +24,7 @@ import {
 } from '../../utils/format';
 import pageSizeOptions from '../../utils/page-size';
 import statusOptions from '../../utils/status';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 import isEqual from 'lodash.isequal';
 import {
   reingestAction,
@@ -235,13 +236,14 @@ class CollectionOverview extends React.Component {
               <li>
                 <Link
                   className="button button--copy button--small button--green"
-                  to={{
+                  to={(location) => ({
                     pathname: '/collections/add',
+                    search: getPersistentQueryParams(location),
                     state: {
                       name: collectionName,
                       version: collectionVersion,
                     },
-                  }}
+                  })}
                 >
                   Copy
                 </Link>
@@ -249,7 +251,10 @@ class CollectionOverview extends React.Component {
               <li>
                 <Link
                   className="button button--edit button--small button--green"
-                  to={`/collections/edit/${collectionName}/${collectionVersion}`}
+                  to={(location) => ({
+                    pathname: `/collections/edit/${collectionName}/${collectionVersion}`,
+                    search: getPersistentQueryParams(location),
+                  })}
                 >
                   Edit
                 </Link>
@@ -279,7 +284,10 @@ class CollectionOverview extends React.Component {
             </h2>
             <Link
               className="button button--small button__goto button--green form-group__element--right"
-              to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}
+              to={(location) => ({
+                pathname: `/collections/collection/${collectionName}/${collectionVersion}/granules`,
+                search: getPersistentQueryParams(location),
+              })}
             >
               {strings.view_all_granules}
             </Link>

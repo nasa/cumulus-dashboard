@@ -28,6 +28,7 @@ import Metadata from '../Table/Metadata';
 import DropdownAsync from '../DropDown/dropdown-async-command';
 import ErrorReport from '../Errors/report';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const breadcrumbConfig = [
   {
@@ -186,15 +187,16 @@ class Rule extends React.Component {
 
             <Link
               className='button button--copy button--small button--green form-group__element--right'
-              to={{
+              to={location => ({
                 pathname: '/rules/add',
+                search: getPersistentQueryParams(location),
                 state: {
                   name: ruleName
                 }
-              }}>Copy Rule</Link>
+              })}>Copy Rule</Link>
             <Link
               className='button button--edit button--small button--green form-group__element--right'
-              to={`/rules/edit/${ruleName}`}>Edit Rule</Link>
+              to={location => ({ pathname: `/rules/edit/${ruleName}`, search: getPersistentQueryParams(location) })}>Edit Rule</Link>
             {lastUpdated(data.timestamp || data.updatedAt)}
           </div>
         </section>

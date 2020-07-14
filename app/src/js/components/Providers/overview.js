@@ -19,6 +19,7 @@ import Overview from '../Overview/overview';
 import Dropdown from '../DropDown/dropdown';
 import pageSizeOptions from '../../utils/page-size';
 import ListFilters from '../ListActions/ListFilters';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
 class ProvidersOverview extends React.Component {
   constructor() {
@@ -66,7 +67,7 @@ class ProvidersOverview extends React.Component {
       {
         Component: <Link
           className="button button--green button--add button--small form-group__element"
-          to="/providers/add"
+          to={location => ({ pathname: '/providers/add', search: getPersistentQueryParams(location) })}
         >
           Add Provider
         </Link>

@@ -15,6 +15,7 @@ import Dropdown from '../DropDown/dropdown';
 import pageSizeOptions from '../../utils/page-size';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const breadcrumbConfig = [
   {
@@ -114,7 +115,7 @@ class PdrOverview extends React.Component {
               />
             </ListFilters>
           </List>
-          <Link className="link--secondary link--learn-more" to="/pdrs/active">
+          <Link className="link--secondary link--learn-more" to={location => ({ pathname: '/pdrs/active', search: getPersistentQueryParams(location) })}>
             View Currently Active PDRs
           </Link>
         </section>

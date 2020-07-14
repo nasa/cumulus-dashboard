@@ -12,12 +12,13 @@ import {
   fromNow
 } from '../../utils/format';
 import { strings } from '../../components/locale';
+import { getPersistentQueryParams } from '../url-helper';
 
 export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'name',
-    Cell: ({ cell: { value } }) => <Link to={`/rules/rule/${value}`}>{value}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={location => ({ pathname: `/rules/rule/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Provider',
@@ -73,7 +74,7 @@ export const bulkActions = (rules) => [{
   className: 'button button--green button--disable button--small form-group__element'
 },
 {
-  Component: <Link className='button button--green button--add button--small form-group__element' to='/rules/add'>Add Rule</Link>
+  Component: <Link className='button button--green button--add button--small form-group__element' to={location => ({ pathname: '/rules/add', search: getPersistentQueryParams(location) })}>Add Rule</Link>
 },
 {
   text: 'Delete Rule',

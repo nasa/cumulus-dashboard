@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { resolve } from 'path';
 import sections from '../../paths';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const currentPathClass = 'sidebar__nav--selected';
 
@@ -20,9 +21,8 @@ class Sidebar extends React.Component {
 
   renderNavSection (section) {
     const { base, routes } = section;
-    const { count, location } = this.props;
-    const { search } = location || {};
-    const currentPath = this.props.currentPath || location.pathname;
+    const { count } = this.props;
+    const currentPath = this.props.currentPath || this.props.location.pathname;
     const params = {
       ...(this.props.params || {}),
       ...(this.props.match ? this.props.match.params : {})
@@ -42,10 +42,10 @@ class Sidebar extends React.Component {
 
               return (
                 <li key={base + i}>
-                  <Link className={classes} to={{
+                  <Link className={classes} to={location => ({
                     pathname: path,
-                    search
-                  }}>
+                    search: getPersistentQueryParams(location)
+                  })}>
                     {d[0]}
                   </Link>
                 </li>
