@@ -8,13 +8,14 @@ import { Collapse, Dropdown as DropdownBootstrap } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getReconciliationReport } from '../../actions';
+import { getReconciliationReport, searchReconciliationReport, clearReconciliationSearch } from '../../actions';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import SortableTable from '../SortableTable/SortableTable';
 import { reshapeReport } from './reshape-report';
 import { downloadFile } from '../../utils/download-file';
+import Search from '../Search/search';
 
 /**
  * returns PASSED or CONFLICT based on reconcilation report data.
@@ -76,10 +77,8 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
   );
 
   useEffect(() => {
-    if (!record) {
-      dispatch(getReconciliationReport(reconciliationReportName));
-    }
-  }, [dispatch, reconciliationReportName, record]);
+    dispatch(getReconciliationReport(reconciliationReportName));
+  }, [dispatch, reconciliationReportName, reconciliationReports.searchString]);
 
   if (!record || (record.inflight && !record.data)) {
     return <Loading />;
@@ -288,6 +287,15 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
                   </Card.Header>
                   <Collapse in={isExpanded}>
                     <div id={item.id}>
+                      <div className='filters'>
+                        <Search
+                          dispatch={dispatch}
+                          action={searchReconciliationReport}
+                          clear={clearReconciliationSearch}
+                          label='Search'
+                          placeholder='Search'
+                        />
+                      </div>
                       <SortableTable
                         data={item.data}
                         tableColumns={item.columns}
