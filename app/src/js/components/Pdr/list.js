@@ -1,5 +1,5 @@
 'use strict';
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -8,13 +8,13 @@ import {
   clearPdrsSearch,
   listPdrs,
   filterPdrs,
-  clearPdrsFilter
+  clearPdrsFilter,
 } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
   tableColumns,
   errorTableColumns,
-  bulkActions
+  bulkActions,
 } from '../../utils/table-config/pdrs';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
@@ -24,12 +24,7 @@ import ListFilters from '../ListActions/ListFilters';
 import pageSizeOptions from '../../utils/page-size';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
-const ActivePdrs = ({
-  dispatch,
-  location,
-  onQueryChange,
-  pdrs
-}) => {
+const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
   const { list } = pdrs;
   const { count, queriedAt } = list.meta;
   const query = generateQuery();
@@ -38,26 +33,20 @@ const ActivePdrs = ({
   const breadcrumbConfig = [
     {
       label: 'Dashboard Home',
-      href: '/'
+      href: '/',
     },
     {
       label: 'PDRs',
-      href: '/pdrs'
+      href: '/pdrs',
     },
     {
       label: displayCaseView,
-      active: true
-    }
+      active: true,
+    },
   ];
 
-  useEffect(() => {
-    if (typeof onQueryChange === 'function') {
-      onQueryChange(query);
-    }
-  }, [onQueryChange, query]);
-
-  function generateQuery () {
-    const query = {};
+  function generateQuery() {
+    const query = { ...queryParams };
     const { pathname } = location;
     if (pathname === '/pdrs/completed') query.status = 'completed';
     else if (pathname === '/pdrs/failed') query.status = 'failed';
@@ -65,7 +54,7 @@ const ActivePdrs = ({
     return query;
   }
 
-  function getView () {
+  function getView() {
     const { pathname } = location;
     if (pathname === '/pdrs/completed') return 'completed';
     else if (pathname === '/pdrs/failed') return 'failed';
@@ -73,18 +62,21 @@ const ActivePdrs = ({
     else return 'all';
   }
 
-  function generateBulkActions () {
+  function generateBulkActions() {
     return bulkActions(pdrs);
   }
   return (
-    <div className='page__component'>
-      <section className='page__section'>
-        <section className='page__section page__section__controls'>
+    <div className="page__component">
+      <section className="page__section">
+        <section className="page__section page__section__controls">
           <Breadcrumbs config={breadcrumbConfig} />
         </section>
-        <div className='page__section__header page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>
-            {displayCaseView} PDRs <span className='num-title'>{!isNaN(count) ? `${tally(count)}` : 0}</span>
+        <div className="page__section__header page__section__header-wrapper">
+          <h1 className="heading--large heading--shared-content with-description">
+            {displayCaseView} PDRs
+            <span className="num-title">
+              {!isNaN(count) ? `${tally(count)}` : 0}
+            </span>
           </h1>
           {lastUpdated(queriedAt)}
         </div>
@@ -95,7 +87,7 @@ const ActivePdrs = ({
           tableColumns={view === 'failed' ? errorTableColumns : tableColumns}
           query={query}
           bulkActions={generateBulkActions()}
-          rowId='pdrName'
+          rowId="pdrName"
         >
           <ListFilters>
             {view === 'all' ? (
@@ -107,7 +99,8 @@ const ActivePdrs = ({
                 label={'Status'}
               />
             ) : null}
-            <Search dispatch={dispatch}
+            <Search
+              dispatch={dispatch}
               action={searchPdrs}
               clear={clearPdrsSearch}
             />
@@ -129,9 +122,11 @@ ActivePdrs.propTypes = {
   location: PropTypes.object,
   dispatch: PropTypes.func,
   pdrs: PropTypes.object,
-  onQueryChange: PropTypes.func
+  queryParams: PropTypes.object,
 };
 
-export default withRouter(connect(state => ({
-  pdrs: state.pdrs
-}))(ActivePdrs));
+export default withRouter(
+  connect((state) => ({
+    pdrs: state.pdrs,
+  }))(ActivePdrs)
+);

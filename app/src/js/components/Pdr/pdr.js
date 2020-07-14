@@ -13,7 +13,7 @@ import {
   filterGranules,
   clearGranulesFilter,
   listGranules,
-  getOptionsCollectionName
+  getOptionsCollectionName,
 } from '../../actions';
 import { get } from 'object-path';
 import {
@@ -25,7 +25,7 @@ import {
   collectionLink,
   displayCase,
   bool,
-  deleteText
+  deleteText,
 } from '../../utils/format';
 import { tableColumns, bulkActions } from '../../utils/table-config/pdrs';
 import { renderProgress } from '../../utils/table-config/pdr-progress';
@@ -46,51 +46,56 @@ const metaAccessors = [
   {
     label: 'Provider',
     property: 'provider',
-    accessor: (d) => <Link to={`providers/provider/${d}`}>{d}</Link>
+    accessor: (d) => <Link to={`providers/provider/${d}`}>{d}</Link>,
   },
   {
     label: strings.collection,
     property: 'collectionId',
-    accessor: collectionLink
+    accessor: collectionLink,
   },
   {
     label: 'Execution',
     property: 'execution',
-    accessor: (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue
+    accessor: (d) =>
+      d ? (
+        <Link to={`/executions/execution/${path.basename(d)}`}>link</Link>
+      ) : (
+        nullValue
+      ),
   },
   {
     label: 'Status',
     property: 'status',
-    accessor: displayCase
+    accessor: displayCase,
   },
   {
     label: 'Timestamp',
     property: 'timestamp',
-    accessor: fullDate
+    accessor: fullDate,
   },
   {
     label: 'Created at',
     property: 'createdAt',
-    accessor: fullDate
+    accessor: fullDate,
   },
   {
     label: 'Duration',
     property: 'duration',
-    accessor: seconds
+    accessor: seconds,
   },
   {
     label: 'PAN Sent',
     property: 'PANSent',
-    accessor: bool
+    accessor: bool,
   },
   {
     label: 'PAN Message',
-    property: 'PANmessage'
-  }
+    property: 'PANmessage',
+  },
 ];
 
 class PDR extends React.Component {
-  constructor () {
+  constructor() {
     super();
     this.deletePdr = this.deletePdr.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
@@ -99,40 +104,44 @@ class PDR extends React.Component {
     this.renderProgress = this.renderProgress.bind(this);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { dispatch, match } = this.props;
     const { pdrName } = match.params;
     dispatch(getPdr(pdrName));
   }
 
-  deletePdr () {
+  deletePdr() {
     const { pdrName } = this.props.match.params;
     this.props.dispatch(deletePdr(pdrName));
   }
 
-  generateQuery () {
+  generateQuery() {
+    const { queryParams } = this.props;
     const pdrName = get(this.props, ['params', 'pdrName']);
-    return { pdrName };
+    return {
+      ...queryParams,
+      pdrName
+    };
   }
 
-  navigateBack () {
+  navigateBack() {
     this.props.history.push('/pdrs');
   }
 
-  generateBulkActions () {
+  generateBulkActions() {
     const { granules } = this.props;
     return bulkActions(granules);
   }
 
-  renderProgress (record) {
+  renderProgress(record) {
     return (
-      <div className='pdr__progress'>
+      <div className="pdr__progress">
         {renderProgress(get(record, 'data', {}))}
       </div>
     );
   }
 
-  render () {
+  render() {
     const { match, granules, collections, pdrs } = this.props;
     const { pdrName } = match.params;
     const record = pdrs.map[pdrName];
@@ -145,41 +154,50 @@ class PDR extends React.Component {
     const error = record.error;
 
     const granulesCount = get(record, 'data.granulesStatus', []);
-    const granuleStatus = Object.keys(granulesCount).map(key => ({
+    const granuleStatus = Object.keys(granulesCount).map((key) => ({
       count: granulesCount[key],
-      key
+      key,
     }));
     return (
-      <div className='page__component'>
+      <div className="page__component">
         <Helmet>
           <title> Cumulus PDRs </title>
         </Helmet>
-        <section className='page__section page__section__header-wrapper'>
-          <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description '>{pdrName}</h1>
-            <AsyncCommand action={this.deletePdr}
+        <section className="page__section page__section__header-wrapper">
+          <div className="page__section__header">
+            <h1 className="heading--large heading--shared-content with-description ">
+              {pdrName}
+            </h1>
+            <AsyncCommand
+              action={this.deletePdr}
               success={this.navigateBack}
               status={deleteStatus}
               className={'form-group__element--right'}
               confirmAction={true}
               confirmText={deleteText(pdrName)}
-              text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'} />
+              text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'}
+            />
             {lastUpdated(queriedAt)}
             {this.renderProgress(record)}
             {error && <ErrorReport report={error} />}
           </div>
         </section>
 
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium with-description'>PDR Overview</h2>
+        <section className="page__section">
+          <div className="heading__wrapper--border">
+            <h2 className="heading--medium with-description">PDR Overview</h2>
           </div>
           <Metadata data={record.data} accessors={metaAccessors} />
         </section>
 
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num-title'>{ !isNaN(count) ? `(${count})` : 0 }</span></h2>
+        <section className="page__section">
+          <div className="heading__wrapper--border">
+            <h2 className="heading--medium heading--shared-content with-description">
+              {strings.granules}{' '}
+              <span className="num-title">
+                {!isNaN(count) ? `(${count})` : 0}
+              </span>
+            </h2>
           </div>
           <div>
             <GranulesProgress granules={granuleStatus} />
@@ -192,7 +210,7 @@ class PDR extends React.Component {
             tableColumns={tableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            rowId='granuleId'
+            rowId="granuleId"
           >
             <ListFilters>
               <Dropdown
@@ -210,7 +228,8 @@ class PDR extends React.Component {
                 paramKey={'status'}
                 label={'Status'}
               />
-              <Search dispatch={this.props.dispatch}
+              <Search
+                dispatch={this.props.dispatch}
                 action={searchGranules}
                 format={granuleSearchResult}
                 clear={clearGranulesSearch}
@@ -231,12 +250,13 @@ class PDR extends React.Component {
 
 PDR.propTypes = {
   collections: PropTypes.object,
-  granules: PropTypes.object,
-  logs: PropTypes.object,
-  pdrs: PropTypes.object,
   dispatch: PropTypes.func,
+  granules: PropTypes.object,
+  history: PropTypes.object,
+  logs: PropTypes.object,
   match: PropTypes.object,
-  history: PropTypes.object
+  pdrs: PropTypes.object,
+  queryParams: PropTypes.object,
 };
 
 export default withRouter(
@@ -244,5 +264,6 @@ export default withRouter(
     collections: state.collections,
     granules: state.granules,
     logs: state.logs,
-    pdrs: state.pdrs
-  }))(PDR));
+    pdrs: state.pdrs,
+  }))(PDR)
+);

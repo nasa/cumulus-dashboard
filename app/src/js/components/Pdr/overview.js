@@ -5,12 +5,7 @@ import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import {
-  listPdrs,
-  getCount,
-  clearPdrsFilter,
-  filterPdrs
-} from '../../actions';
+import { listPdrs, getCount, clearPdrsFilter, filterPdrs } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import { bulkActions } from '../../utils/table-config/pdrs';
 import { tableColumns } from '../../utils/table-config/pdr-progress';
@@ -24,49 +19,51 @@ import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 const breadcrumbConfig = [
   {
     label: 'Dashboard Home',
-    href: '/'
+    href: '/',
   },
   {
     label: 'PDRs',
-    active: true
-  }
+    active: true,
+  },
 ];
 
 class PdrOverview extends React.Component {
-  constructor () {
+  constructor() {
     super();
-    this.displayName = 'PdrOverview';
     this.queryStats = this.queryStats.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
     this.renderOverview = this.renderOverview.bind(this);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.queryStats();
   }
 
-  queryStats () {
-    this.props.dispatch(getCount({
-      type: 'pdrs',
-      field: 'status'
-    }));
+  queryStats() {
+    this.props.dispatch(
+      getCount({
+        type: 'pdrs',
+        field: 'status',
+      })
+    );
   }
 
-  generateQuery () {
-    return {};
+  generateQuery() {
+    const { queryParams } = this.props;
+    return { ...queryParams };
   }
 
-  generateBulkActions () {
+  generateBulkActions() {
     return bulkActions(this.props.pdrs);
   }
 
-  renderOverview (count) {
-    const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
+  renderOverview(count) {
+    const overview = count.map((d) => [tally(d.count), displayCase(d.key)]);
     return <Overview items={overview} inflight={false} />;
   }
 
-  render () {
+  render() {
     const { stats } = this.props;
     const { list } = this.props.pdrs;
     const { count, queriedAt } = list.meta;
@@ -74,31 +71,38 @@ class PdrOverview extends React.Component {
     const pdrCount = get(stats.count, 'data.pdrs.count', []);
     const overview = this.renderOverview(pdrCount);
     return (
-      <div className='page__component'>
+      <div className="page__component">
         <Helmet>
           <title> Cumulus PDRs </title>
         </Helmet>
-        <section className='page__section page__section__controls'>
+        <section className="page__section page__section__controls">
           <Breadcrumbs config={breadcrumbConfig} />
         </section>
-        <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>PDR Overview</h1>
+        <section className="page__section page__section__header-wrapper">
+          <h1 className="heading--large heading--shared-content with-description">
+            PDR Overview
+          </h1>
           {lastUpdated(queriedAt)}
           {overview}
         </section>
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>All PDRs <span className='num-title'>{count ? ` ${tally(count)}` : 0}</span></h2>
+        <section className="page__section">
+          <div className="heading__wrapper--border">
+            <h2 className="heading--medium heading--shared-content with-description">
+              All PDRs
+              <span className="num-title">
+                {count ? ` ${tally(count)}` : 0}
+              </span>
+            </h2>
           </div>
           <List
             list={list}
             dispatch={this.props.dispatch}
             action={listPdrs}
             tableColumns={tableColumns}
-            sortId='timestamp'
+            sortId="timestamp"
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            rowId='pdrName'
+            rowId="pdrName"
           >
             <ListFilters>
               <Dropdown
@@ -110,7 +114,9 @@ class PdrOverview extends React.Component {
               />
             </ListFilters>
           </List>
-          <Link className='link--secondary link--learn-more' to='/pdrs/active'>View Currently Active PDRs</Link>
+          <Link className="link--secondary link--learn-more" to="/pdrs/active">
+            View Currently Active PDRs
+          </Link>
         </section>
       </div>
     );
@@ -120,11 +126,13 @@ class PdrOverview extends React.Component {
 PdrOverview.propTypes = {
   dispatch: PropTypes.func,
   pdrs: PropTypes.object,
-  stats: PropTypes.object
+  queryParams: PropTypes.object,
+  stats: PropTypes.object,
 };
 
 export default withRouter(
   connect((state) => ({
     stats: state.stats,
-    pdrs: state.pdrs
-  }))(PdrOverview));
+    pdrs: state.pdrs,
+  }))(PdrOverview)
+);
