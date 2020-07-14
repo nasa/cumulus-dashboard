@@ -8,6 +8,7 @@ import { graphicsPath, nav } from '../../config';
 import { window } from '../../utils/browser';
 import { strings } from '../locale';
 import { kibanaAllLogsLink } from '../../utils/kibana';
+import queryString from 'query-string';
 
 const paths = [
   ['PDRs', '/pdrs'],
@@ -57,28 +58,32 @@ class Header extends React.Component {
     });
   }
 
-  linkTo (path) {
+  linkTo (path, search) {
     if (path[0] === 'Logs') {
       const kibanaLink = kibanaAllLogsLink(this.props.cumulusInstance);
       return <a href={kibanaLink} target="_blank">{path[0]}</a>;
     } else {
-      return <Link to={path[1]}>{path[0]}</Link>;
+      return <Link to={{ pathname: path[1], search }}>{path[0]}</Link>;
     }
   }
 
   render () {
-    const { authenticated } = this.props.api;
+    const { api, location } = this.props;
+    const queryParams = queryString.parse(location.search);
+    const { startDateTime, endDateTime } = queryParams;
+    const locationSearch = queryString.stringify({ startDateTime, endDateTime });
+    const { authenticated } = api;
     const activePaths = paths.filter(path => nav.exclude[path[0]] !== true);
     const logoPath = graphicsPath.substr(-1) === '/' ? `${graphicsPath}${strings.logo}` : `${graphicsPath}/${strings.logo}`;
     return (
       <div className='header'>
         <div className='row'>
-          <h1 className='logo'><Link to={{ pathname: '/', search: this.props.location.search }}><img alt="Logo" src={logoPath} /></Link></h1>
+          <h1 className='logo'><Link to={{ pathname: '/', search: locationSearch }}><img alt="Logo" src={logoPath} /></Link></h1>
           <nav>
             { !this.props.minimal ? <ul>
               {activePaths.map(path => <li
                 key={path[0]}
-                className={this.className(path[1])}>{this.linkTo(path)}</li>)}
+                className={this.className(path[1])}>{this.linkTo(path, locationSearch)}</li>)}
               <li className='rightalign nav__order-8'>{ authenticated ? <a onClick={this.logout}><span className="log-icon"></span>Log out</a> : <Link to={'/login'}>Log in</Link> }</li>
             </ul> : <li>&nbsp;</li> }
           </nav>

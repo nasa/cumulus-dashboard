@@ -214,6 +214,7 @@
     "paginator": "^1.0.0",
     "popper.js": "^1.14.7",
     "prop-types": "^15.5.10",
+    "query-string": "^6.13.1",
     "react": "^16.10.2",
     "react-ace": "^6.2.0",
     "react-autocomplete": "^1.8.1",
