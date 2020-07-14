@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import get from 'lodash.get';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 import { withRouter, Link } from 'react-router-dom';
 import { kibanaExecutionLink } from '../../utils/kibana';
 import { window } from '../../utils/browser';
@@ -38,8 +38,7 @@ class ExecutionStatus extends React.Component {
   }
 
   navigateBack() {
-    const { history } = this.props;
-    history.push('/executions');
+    historyPushWithQueryParams('/executions');
   }
 
   errors() {
@@ -290,7 +289,6 @@ ExecutionStatus.propTypes = {
   match: PropTypes.object,
   dispatch: PropTypes.func,
   cumulusInstance: PropTypes.object,
-  history: PropTypes.object,
 };
 
 ExecutionStatus.displayName = 'Execution';

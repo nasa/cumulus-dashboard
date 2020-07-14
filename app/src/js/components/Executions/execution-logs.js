@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import ErrorReport from '../Errors/report';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 class ExecutionLogs extends React.Component {
   constructor (props) {
@@ -27,8 +28,7 @@ class ExecutionLogs extends React.Component {
   }
 
   navigateBack () {
-    const { history } = this.props;
-    history.push('/executions');
+    historyPushWithQueryParams('/executions');
   }
 
   errors () {
@@ -75,7 +75,6 @@ ExecutionLogs.propTypes = {
   executionLogs: PropTypes.object,
   match: PropTypes.object,
   dispatch: PropTypes.func,
-  history: PropTypes.object
 };
 
 ExecutionLogs.displayName = 'Execution Logs';

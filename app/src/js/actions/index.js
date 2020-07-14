@@ -3,7 +3,6 @@
 import compareVersions from 'compare-versions';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
-import { history } from '../store/configureStore';
 import { CMR } from '@cumulus/cmrjs';
 import isEmpty from 'lodash.isempty';
 import cloneDeep from 'lodash.clonedeep';
@@ -19,6 +18,7 @@ import { apiLambdaSearchTemplate } from './action-config/apiLambdaSearch';
 import { teaLambdaSearchTemplate } from './action-config/teaLambdaSearch';
 import { s3AccessSearchTemplate } from './action-config/s3AccessSearch';
 import * as types from './types';
+import { historyPushWithQueryParams } from '../utils/url-helper';
 
 const CALL_API = types.CALL_API;
 const {
@@ -742,7 +742,7 @@ export const loginError = (error) => {
   return (dispatch) => {
     return dispatch(deleteToken())
       .then(() => dispatch({ type: 'LOGIN_ERROR', error }))
-      .then(() => history.push('/auth'));
+      .then(() => historyPushWithQueryParams('/auth'));
   };
 };
 

@@ -24,7 +24,7 @@ import {
 } from '../../utils/format';
 import pageSizeOptions from '../../utils/page-size';
 import statusOptions from '../../utils/status';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 import isEqual from 'lodash.isequal';
 import {
   reingestAction,
@@ -96,7 +96,7 @@ class CollectionOverview extends React.Component {
 
   changeCollection(_, collectionId) {
     const { name, version } = collectionNameVersion(collectionId);
-    this.props.history.push(`/collections/collection/${name}/${version}`);
+    historyPushWithQueryParams(`/collections/collection/${name}/${version}`);
   }
 
   generateBulkActions() {
@@ -129,11 +129,11 @@ class CollectionOverview extends React.Component {
   }
 
   navigateBack() {
-    this.props.history.push('/collections/all');
+    historyPushWithQueryParams('/collections/all');
   }
 
   gotoGranules() {
-    this.props.history.push('/granules');
+    historyPushWithQueryParams('/granules');
   }
 
   errors() {
@@ -185,6 +185,8 @@ class CollectionOverview extends React.Component {
       collections,
       granules: { list },
     } = this.props;
+
+    console.log(this.props);
 
     const collectionName = params.name;
     const collectionVersion = params.version;

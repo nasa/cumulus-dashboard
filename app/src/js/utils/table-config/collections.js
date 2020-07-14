@@ -8,7 +8,7 @@ import { strings } from '../../components/locale';
 import BatchDeleteConfirmContent from '../../components/DeleteCollection/BatchDeleteConfirmContent';
 import BatchDeleteCompleteContent from '../../components/DeleteCollection/BatchDeleteCompleteContent';
 import BatchDeleteWithGranulesContent from '../../components/DeleteCollection/BatchDeleteWithGranulesContent';
-import { getPersistentQueryParams } from '../url-helper';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
 
 export const tableColumns = [
   {
@@ -109,7 +109,7 @@ export const bulkActions = function (collections) {
         modalOptions.cancelButtonText = 'Cancel Request';
         modalOptions.title = 'Warning';
         modalOptions.onConfirm = () => {
-          history.push('/granules');
+          historyPushWithQueryParams('/granules');
         };
         modalOptions.children = <BatchDeleteWithGranulesContent selectionsWithGranules={selectionsWithGranules} />;
       }

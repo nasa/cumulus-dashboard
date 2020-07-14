@@ -9,6 +9,7 @@ import _config from '../../config';
 
 import TextArea from '../TextAreaForm/text-area';
 import DefaultModal from '../Modal/modal';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 const { updateDelay } = _config;
 
@@ -54,7 +55,7 @@ const AddRaw = ({
     if (status === 'success') {
       const baseRoute = getBaseRoute(pk);
       setTimeout(() => {
-        history.push(baseRoute);
+        historyPushWithQueryParams(baseRoute);
       }, updateDelay);
     } else if (status === 'error' && !error) {
       setRecord({ ...record, error: get(state.created, [pk, 'error']) });
@@ -62,7 +63,7 @@ const AddRaw = ({
   }, [pk, status, error, getBaseRoute, history, record, state.created]);
 
   function handleCancel (e) {
-    history.push(getBaseRoute());
+    historyPushWithQueryParams(getBaseRoute());
   }
 
   function handleSubmit (e) {

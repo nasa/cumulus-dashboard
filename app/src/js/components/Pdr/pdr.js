@@ -41,7 +41,7 @@ import ErrorReport from '../Errors/report';
 import GranulesProgress from '../Granules/progress';
 import { strings } from '../locale';
 import ListFilters from '../ListActions/ListFilters';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 
 const metaAccessors = [
   {
@@ -142,7 +142,7 @@ class PDR extends React.Component {
   }
 
   navigateBack() {
-    this.props.history.push('/pdrs');
+    historyPushWithQueryParams('/pdrs');
   }
 
   generateBulkActions() {

@@ -35,7 +35,7 @@ import { workflowOptionNames } from '../../selectors';
 import { simpleDropdownOption } from '../../utils/table-config/granules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import isEqual from 'lodash.isequal';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 
 const link = 'Link';
 
@@ -164,8 +164,7 @@ class GranuleOverview extends React.Component {
   }
 
   navigateBack() {
-    const { history } = this.props;
-    history.push('/granules');
+    historyPushWithQueryParams('/granules');
   }
 
   queryWorkflows() {
@@ -346,7 +345,6 @@ GranuleOverview.propTypes = {
   dispatch: PropTypes.func,
   granules: PropTypes.object,
   logs: PropTypes.object,
-  history: PropTypes.object,
   skipReloadOnMount: PropTypes.bool,
   workflowOptions: PropTypes.array,
 };

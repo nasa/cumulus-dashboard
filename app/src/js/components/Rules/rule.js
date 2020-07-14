@@ -28,7 +28,7 @@ import Metadata from '../Table/Metadata';
 import DropdownAsync from '../DropDown/dropdown-async-command';
 import ErrorReport from '../Errors/report';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 
 const breadcrumbConfig = [
   {
@@ -103,7 +103,7 @@ class Rule extends React.Component {
   }
 
   navigateBack () {
-    this.props.history.push('/rules');
+    historyPushWithQueryParams('/rules');
   }
 
   reload () {
@@ -224,7 +224,6 @@ class Rule extends React.Component {
 
 Rule.propTypes = {
   match: PropTypes.object,
-  history: PropTypes.object,
   dispatch: PropTypes.func,
   rules: PropTypes.object
 };

@@ -16,6 +16,7 @@ import config from '../../config';
 import Loading from '../app/loading-indicator';
 import DropdownAsync from '../form/dropdown-async-command';
 import { strings } from '.../../locale';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 const noop = () => true;
 class GranuleRecipe extends React.Component {
@@ -36,8 +37,7 @@ class GranuleRecipe extends React.Component {
   }
 
   navigateBack () {
-    const { history } = this.props;
-    history.push('/granules');
+    historyPushWithQueryParams('/granules');
   }
 
   reprocess () {
@@ -164,7 +164,6 @@ GranuleRecipe.propTypes = {
   params: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
-  history: PropTypes.object
 };
 
 export default connect(state => state)(GranuleRecipe);

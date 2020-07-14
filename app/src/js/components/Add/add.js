@@ -12,6 +12,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import _config from '../../config';
 import { strings } from '../locale';
 import { window } from '../../utils/browser';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 const { updateDelay } = _config;
 
@@ -31,19 +32,20 @@ class AddRecord extends React.Component {
 
   componentDidUpdate (prevProps) {
     const { pk } = this.state;
-    const { history, baseRoute } = prevProps;
+    const { baseRoute } = prevProps;
     const status = get(this.props.state, ['created', pk, 'status']);
 
     if (status === 'success') {
       return setTimeout(() => {
-        history.push(path.join(baseRoute, pk));
+        historyPushWithQueryParams(path.join(baseRoute, pk));
         window.scrollTo(0, 0);
       }, updateDelay);
     }
   }
 
   navigateBack () {
-    this.props.history.push(`/${this.props.baseRoute.split('/')[1]}`);
+    const { baseRoute } = this.props;
+    historyPushWithQueryParams(`/${baseRoute.split('/')[1]}`);
   }
 
   post (id, payload) {
@@ -114,7 +116,6 @@ AddRecord.propTypes = {
   dispatch: PropTypes.func,
   state: PropTypes.object,
 
-  history: PropTypes.object,
   baseRoute: PropTypes.string,
   attachMeta: PropTypes.bool,
 

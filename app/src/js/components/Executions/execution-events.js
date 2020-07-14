@@ -20,6 +20,7 @@ import Search from '../Search/search';
 
 import { getEventDetails } from './execution-graph-utils';
 import SortableTable from '../SortableTable/SortableTable';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 class ExecutionEvents extends React.Component {
   constructor () {
@@ -68,8 +69,7 @@ class ExecutionEvents extends React.Component {
   }
 
   navigateBack () {
-    const { history } = this.props;
-    history.push('/executions');
+    historyPushWithQueryParams('/executions');
   }
 
   errors () {
@@ -150,7 +150,6 @@ ExecutionEvents.propTypes = {
   match: PropTypes.object,
   dispatch: PropTypes.func,
   location: PropTypes.object,
-  history: PropTypes.object
 };
 
 ExecutionEvents.displayName = 'Execution Events';

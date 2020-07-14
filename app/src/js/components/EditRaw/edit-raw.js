@@ -11,6 +11,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import TextArea from '../TextAreaForm/text-area';
 import DefaultModal from '../Modal/modal';
 import _config from '../../config';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 const { updateDelay } = _config;
 
@@ -62,7 +63,7 @@ const EditRaw = ({
     if (!hasModal && isSuccess) {
       setTimeout(() => {
         dispatch(clearRecordUpdate(pk));
-        history.push(backRoute);
+        historyPushWithQueryParams(backRoute);
       }, updateDelay);
     }
     if (updateStatus === 'error' && !isError) {
@@ -116,7 +117,7 @@ const EditRaw = ({
     if (isError) {
       dispatch(clearRecordUpdate(pk));
     }
-    history.push(backRoute);
+    historyPushWithQueryParams(backRoute);
   }
 
   function onChange (id, value) {

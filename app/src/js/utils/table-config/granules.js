@@ -24,7 +24,7 @@ import Dropdown from '../../components/DropDown/simple-dropdown';
 import Bulk from '../../components/Granules/bulk';
 import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent';
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
-import { getPersistentQueryParams } from '../url-helper';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
 
 export const tableColumns = [
   {
@@ -168,7 +168,7 @@ const determineCollectionsBase = (path) => {
 const setOnConfirm = ({ history, error, selected, closeModal }) => {
   const redirectAndClose = (redirect) => {
     return () => {
-      history.push(redirect);
+      historyPushWithQueryParams(redirect);
       if (typeof closeModal === 'function') closeModal();
     };
   };

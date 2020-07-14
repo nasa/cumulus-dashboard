@@ -21,7 +21,7 @@ import LogViewer from '../Logs/viewer';
 import DropdownAsync from '../DropDown/dropdown-async-command';
 import ErrorReport from '../Errors/report';
 import Metadata from '../Table/Metadata';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 
 const metaAccessors = [
   {
@@ -75,8 +75,7 @@ class ProviderOverview extends React.Component {
   }
 
   navigateBack () {
-    const { history } = this.props;
-    history.push('/providers');
+    historyPushWithQueryParams('/providers');
   }
 
   delete () {
@@ -156,7 +155,6 @@ ProviderOverview.propTypes = {
   dispatch: PropTypes.func,
   providers: PropTypes.object,
   logs: PropTypes.object,
-  history: PropTypes.object
 };
 
 ProviderOverview.displayName = 'ProviderElem';
