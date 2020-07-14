@@ -248,8 +248,8 @@ export const getMMTLinkFromCmr = (collection, getState) => {
     return Promise.resolve(mmtLinks[getCollectionId(collection)]);
   }
 
-  const cmrClientId = `cumulus-dashboard-${stackName}`;
-  return new CMR({ cmrProvider, cmrClientId, cmrEnvironment }).searchCollections(
+  const clientId = `cumulus-dashboard-${stackName}`;
+  return new CMR({ provider: cmrProvider, clientId, cmrEnvironment }).searchCollections(
     {
       short_name: collection.name,
       version: collection.version
