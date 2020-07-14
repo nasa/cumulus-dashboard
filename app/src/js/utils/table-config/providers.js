@@ -9,7 +9,7 @@ export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'id',
-    Cell: ({ cell: { value } }) => <Link to={location => ({ pathname: `providers/provider/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={location => ({ pathname: `/providers/provider/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Host',
