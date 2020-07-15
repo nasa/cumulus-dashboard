@@ -8,11 +8,7 @@ import get from 'lodash.get';
  * @returns {string} - value to use to build correct cmr url for environment.
  */
 function hostId(env) {
-  return get(
-    { OPS: '', SIT: 'sit', UAT: 'uat' },
-    env,
-    'sit'
-  );
+  return get({ OPS: '', SIT: 'sit', UAT: 'uat' }, env, 'sit');
 }
 
 /**
@@ -30,7 +26,9 @@ function hostId(env) {
 function getHost(cmrEnvironment, cmrHost) {
   if (cmrHost) return cmrHost;
 
-  const host = ['cmr', hostId(cmrEnvironment), 'earthdata.nasa.gov'].filter((d) => d).join('.');
+  const host = ['cmr', hostId(cmrEnvironment), 'earthdata.nasa.gov']
+    .filter((d) => d)
+    .join('.');
   return host;
 }
 

@@ -11,7 +11,7 @@ async function parseXMLString(xmlString) {
   const xmlParseOptions = {
     ignoreAttrs: true,
     mergeAttrs: true,
-    explicitArray: false
+    explicitArray: false,
   };
 
   return parseString(xmlString, xmlParseOptions);
@@ -43,24 +43,29 @@ async function searchConcept({
   recursive = true,
   cmrEnvironment,
   cmrLimit = process.env.CMR_LIMIT,
-  cmrPageSize = process.env.CMR_PAGE_SIZE
+  cmrPageSize = process.env.CMR_PAGE_SIZE,
 }) {
   const recordsLimit = cmrLimit || 100;
   const pageSize = searchParams.pageSize || cmrPageSize || 50;
 
   const defaultParams = { page_size: pageSize };
 
-  const url = `${getUrl('search', null, cmrEnvironment)}${type}.${format.toLowerCase()}`;
+  const url = `${getUrl(
+    'search',
+    null,
+    cmrEnvironment
+  )}${type}.${format.toLowerCase()}`;
 
-  const pageNum = (searchParams.page_num) ? searchParams.page_num + 1 : 1;
+  const pageNum = searchParams.page_num ? searchParams.page_num + 1 : 1;
 
   // if requested, recursively retrieve all the search results for collections or granules
   const query = { ...defaultParams, ...searchParams, page_num: pageNum };
   const response = await axios.get(url, { params: query, headers });
 
-  const responseItems = (format === 'echo10')
-    ? (await parseXMLString(response.data)).results.result || []
-    : (response.data.items || response.data.feed.entry);
+  const responseItems =
+    format === 'echo10'
+      ? (await parseXMLString(response.data)).results.result || []
+      : response.data.items || response.data.feed.entry;
 
   const fetchedResults = previousResults.concat(responseItems || []);
 
@@ -77,7 +82,7 @@ async function searchConcept({
       recursive,
       cmrEnvironment,
       cmrLimit,
-      cmrPageSize
+      cmrPageSize,
     });
   }
   return fetchedResults.slice(0, recordsLimit);

@@ -30,7 +30,7 @@ class CMR {
    */
   getReadHeaders(params = {}) {
     const headers = {
-      'Client-Id': this.clientId
+      'Client-Id': this.clientId,
     };
 
     if (params.token) headers['Echo-Token'] = params.token;
@@ -55,7 +55,7 @@ class CMR {
       headers,
       format,
       recursive: true,
-      cmrEnvironment: this.cmrEnvironment
+      cmrEnvironment: this.cmrEnvironment,
     });
   }
 }
