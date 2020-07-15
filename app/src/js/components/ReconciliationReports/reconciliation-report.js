@@ -8,7 +8,13 @@ import { Collapse, Dropdown as DropdownBootstrap } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getReconciliationReport, searchReconciliationReport, clearReconciliationSearch } from '../../actions';
+import {
+  getReconciliationReport,
+  searchReconciliationReport,
+  clearReconciliationSearch,
+  filterReconciliationReport,
+  clearReconciliationReportFilter
+} from '../../actions';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
@@ -16,6 +22,7 @@ import SortableTable from '../SortableTable/SortableTable';
 import { reshapeReport } from './reshape-report';
 import { downloadFile } from '../../utils/download-file';
 import Search from '../Search/search';
+import Dropdown from '../DropDown/dropdown';
 
 /**
  * returns PASSED or CONFLICT based on reconcilation report data.
@@ -26,6 +33,20 @@ const reportState = (dataList) => {
     item.tables.some((table) => table.data.length)
   );
   return anyBad ? 'CONFLICT' : 'PASSED';
+};
+
+const usesBuckets = (item) => {
+  return item.columns.some((column) => column.accessor === 'bucket');
+};
+
+const bucketsForFilter = (item) => {
+  return item.data.reduce((buckets, currentDataItem) => {
+    return {
+      ...buckets,
+      [currentDataItem.bucket]: currentDataItem.bucket,
+    };
+  },
+  {});
 };
 
 const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
@@ -44,7 +65,8 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
   const displayEndDate = reportEndTime
     ? new Date(reportEndTime).toLocaleDateString()
     : 'missing';
-  const { internalComparison, cumulusVsCmrComparison } = reshapeReport(record);
+  const filterBucket = reconciliationReports.list.params.bucket;
+  const { internalComparison, cumulusVsCmrComparison } = reshapeReport(record, filterBucket);
   const reportComparisons = [...internalComparison, ...cumulusVsCmrComparison];
   const theReportState = reportState(reportComparisons);
   const activeCardTables = reportComparisons.find(
@@ -295,6 +317,18 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
                           label='Search'
                           placeholder='Search'
                         />
+                        {usesBuckets(item) && (
+                          <Dropdown
+                            options={bucketsForFilter(item)}
+                            action={filterReconciliationReport}
+                            clear={clearReconciliationReportFilter}
+                            paramKey='bucket'
+                            label='Bucket'
+                            inputProps={{
+                              placeholder: 'All'
+                            }}
+                          />
+                        )}
                       </div>
                       <SortableTable
                         data={item.data}

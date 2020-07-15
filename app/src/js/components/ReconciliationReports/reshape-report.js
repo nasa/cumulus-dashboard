@@ -9,8 +9,8 @@ import {
 } from '../../utils/table-config/reconciliation-reports';
 import url from 'url';
 
-const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [] }) => {
-  const filesInS3 = onlyInS3.map((d) => {
+const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [] }, filterBucket) => {
+  let filesInS3 = onlyInS3.map((d) => {
     const parsed = url.parse(d);
     return {
       filename: path.basename(parsed.pathname),
@@ -19,7 +19,12 @@ const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [] }) => {
     };
   });
 
-  const filesInDynamoDb = onlyInDynamoDb.map(parseFileObject);
+  let filesInDynamoDb = onlyInDynamoDb.map(parseFileObject);
+
+  if (filterBucket) {
+    filesInS3 = filesInS3.filter((file) => file.bucket === filterBucket);
+    filesInDynamoDb = filesInDynamoDb.filter((file) => file.bucket === filterBucket);
+  }
 
   return { filesInS3, filesInDynamoDb };
 };
@@ -39,10 +44,10 @@ const getGranulesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) => {
   return { granulesInCumulus, granulesInCmr };
 };
 
-const getGranuleFilesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) => {
-  const granuleFilesOnlyInCumulus = onlyInCumulus.map(parseFileObject);
+const getGranuleFilesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }, filterBucket) => {
+  let granuleFilesOnlyInCumulus = onlyInCumulus.map(parseFileObject);
 
-  const granuleFilesOnlyInCmr = onlyInCmr.map((d) => {
+  let granuleFilesOnlyInCmr = onlyInCmr.map((d) => {
     const parsed = url.parse(d.URL);
     const bucket = parsed.hostname.split('.')[0];
     return {
@@ -52,6 +57,11 @@ const getGranuleFilesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) => {
       path: `s3://${bucket}${parsed.pathname}`,
     };
   });
+  console.log(filterBucket);
+  if (filterBucket) {
+    granuleFilesOnlyInCumulus = granuleFilesOnlyInCumulus.filter((file) => file.bucket === filterBucket);
+    granuleFilesOnlyInCmr = granuleFilesOnlyInCmr.filter((file) => file.bucket === filterBucket);
+  }
 
   return { granuleFilesOnlyInCumulus, granuleFilesOnlyInCmr };
 };
@@ -66,7 +76,7 @@ const parseFileObject = (d) => {
   };
 };
 
-export const reshapeReport = (record) => {
+export const reshapeReport = (record, filterBucket) => {
   let filesInS3 = [];
   let filesInDynamoDb = [];
 
@@ -87,7 +97,7 @@ export const reshapeReport = (record) => {
       granulesInCumulusCmr: compareGranules = {},
     } = record.data;
 
-    ({ filesInS3, filesInDynamoDb } = getFilesSummary(internalCompareFiles));
+    ({ filesInS3, filesInDynamoDb } = getFilesSummary(internalCompareFiles, filterBucket));
 
     ({ collectionsInCumulus, collectionsInCmr } = getCollectionsSummary(
       compareCollections
@@ -100,7 +110,7 @@ export const reshapeReport = (record) => {
     ({
       granuleFilesOnlyInCumulus,
       granuleFilesOnlyInCmr,
-    } = getGranuleFilesSummary(compareFiles));
+    } = getGranuleFilesSummary(compareFiles, filterBucket));
   }
 
   /**

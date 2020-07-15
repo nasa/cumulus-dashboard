@@ -16,7 +16,9 @@ import {
   FILTER_RECONCILIATIONS,
   CLEAR_RECONCILIATIONS_FILTER,
   SEARCH_RECONCILIATION,
-  CLEAR_RECONCILIATION_SEARCH
+  CLEAR_RECONCILIATION_SEARCH,
+  FILTER_RECONCILIATION,
+  CLEAR_RECONCILIATION_FILTER,
 } from '../actions/types';
 
 const filterData = (data, filterString) => {
@@ -100,5 +102,11 @@ export default createReducer(initialState, {
   },
   [CLEAR_RECONCILIATION_SEARCH]: (state) => {
     state.searchString = null;
+  },
+  [FILTER_RECONCILIATION]: (state, action) => {
+    state.list.params[action.param.key] = action.param.value;
+  },
+  [CLEAR_RECONCILIATION_FILTER]: (state, action) => {
+    state.list.params[action.paramKey] = null;
   }
 });
