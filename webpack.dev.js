@@ -32,7 +32,25 @@ const DevConfig = merge.smartStrategy(
             loader: 'style-loader',
           },
         ]
-      }
+      },
+      {
+        test: /\.(js|jsx)$/,
+        include: [/test/],
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              plugins: [
+                'babel-plugin-rewire'
+              ],
+              presets: [
+                '@babel/preset-env',
+                '@babel/preset-react'
+              ]
+            }
+          }
+        ]
+      },
     ]
   },
   plugins: [
