@@ -12,7 +12,6 @@ module.exports = {
   ],
   plugins: [
     '@babel/plugin-syntax-jsx',
-    '@babel/plugin-transform-runtime',
-    'babel-plugin-rewire'
+    '@babel/plugin-transform-runtime'
   ]
 };
