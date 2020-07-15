@@ -185,9 +185,6 @@ class CollectionOverview extends React.Component {
       collections,
       granules: { list },
     } = this.props;
-
-    console.log(this.props);
-
     const collectionName = params.name;
     const collectionVersion = params.version;
     const collectionId = getCollectionId(params);
@@ -347,7 +344,6 @@ CollectionOverview.propTypes = {
   datepicker: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
-  history: PropTypes.object,
   match: PropTypes.object,
   queryParams: PropTypes.object,
 };

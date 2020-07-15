@@ -48,6 +48,9 @@ const CommonConfig = {
               presets: [
                 '@babel/preset-env',
                 '@babel/preset-react'
+              ],
+              plugins: [
+                'babel-plugin-rewire'
               ]
             }
           },
