@@ -66,7 +66,8 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
     ? new Date(reportEndTime).toLocaleDateString()
     : 'missing';
   const filterBucket = reconciliationReports.list.params.bucket;
-  const { internalComparison, cumulusVsCmrComparison } = reshapeReport(record, filterBucket);
+  const filterString = reconciliationReports.searchString;
+  const { internalComparison, cumulusVsCmrComparison } = reshapeReport(record, filterString, filterBucket);
   const reportComparisons = [...internalComparison, ...cumulusVsCmrComparison];
   const theReportState = reportState(reportComparisons);
   const activeCardTables = reportComparisons.find(
@@ -100,7 +101,7 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
 
   useEffect(() => {
     dispatch(getReconciliationReport(reconciliationReportName));
-  }, [dispatch, reconciliationReportName, reconciliationReports.searchString]);
+  }, [dispatch, reconciliationReportName]);
 
   if (!record || (record.inflight && !record.data)) {
     return <Loading />;

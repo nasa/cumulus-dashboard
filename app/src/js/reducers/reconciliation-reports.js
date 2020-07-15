@@ -21,20 +21,6 @@ import {
   CLEAR_RECONCILIATION_FILTER,
 } from '../actions/types';
 
-const filterData = (data, filterString) => {
-  if (filterString) {
-    data.filesInCumulus.onlyInDynamoDb = data.filesInCumulus.onlyInDynamoDb.filter((granule) => granule.granuleId.toLowerCase().includes(filterString.toLowerCase()));
-    data.filesInCumulus.onlyInS3 = data.filesInCumulus.onlyInS3.filter((fileName) => fileName.toLowerCase().includes(filterString.toLowerCase()));
-    data.collectionsInCumulusCmr.onlyInCumulus = data.collectionsInCumulusCmr.onlyInCumulus.filter((collection) => collection.toLowerCase().includes(filterString.toLowerCase()));
-    data.collectionsInCumulusCmr.onlyInCmr = data.collectionsInCumulusCmr.onlyInCmr.filter((collection) => collection.toLowerCase().includes(filterString.toLowerCase()));
-    data.granulesInCumulusCmr.onlyInCumulus = data.granulesInCumulusCmr.onlyInCumulus.filter((granule) => granule.granuleId.toLowerCase().includes(filterString.toLowerCase()));
-    data.granulesInCumulusCmr.onlyInCmr = data.granulesInCumulusCmr.onlyInCmr.filter((granule) => granule.GranuleUR.toLowerCase().includes(filterString.toLowerCase()));
-    data.filesInCumulusCmr.onlyInCumulus = data.filesInCumulusCmr.onlyInCumulus.filter((file) => file.granuleId.toLowerCase().includes(filterString.toLowerCase()));
-    data.filesInCumulusCmr.onlyInCmr = data.filesInCumulusCmr.onlyInCmr.filter((file) => file.GranuleUR.toLowerCase().includes(filterString.toLowerCase()));
-  }
-  return data;
-};
-
 export const initialState = {
   list: {
     data: [],
@@ -49,10 +35,9 @@ export const initialState = {
 
 export default createReducer(initialState, {
   [RECONCILIATION]: (state, action) => {
-    // console.log('RECONCILLIATION: ' + JSON.stringify(action));
     state.map[action.id] = {
       inflight: false,
-      data: assignDate(filterData(action.data, state.searchString)),
+      data: assignDate(action.data),
     };
     delete state.deleted[action.id];
   },
