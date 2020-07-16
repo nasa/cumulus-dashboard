@@ -1,5 +1,5 @@
 exports.shouldBeLoggedIn = () => {
-  cy.get('h1[class=heading--xlarge').should('have.text', 'CUMULUS Dashboard');
+  cy.get('h1[class=heading--xlarge', { timeout: 10000 }).should('have.text', 'CUMULUS Dashboard');
 };
 
 exports.shouldBeRedirectedToLogin = () => {
