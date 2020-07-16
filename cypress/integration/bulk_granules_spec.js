@@ -48,6 +48,36 @@ describe('Dashboard Bulk Granules', () => {
       cy.contains('button', 'Go To Operations');
     });
 
+    it('appends correct query params after bulk granule operation request', () => {
+      const asyncOperationId = Math.floor(Math.random() * 10);
+
+      cy.server();
+      cy.route('POST', '/granules/bulk', {
+        id: asyncOperationId
+      }).as('postBulkGranules');
+
+      cy.visit('/granules');
+      cy.setDatepickerDropdown('Recent');
+      cy.url().should('include', '?startDateTime');
+      cy.contains('button', 'Run Bulk Granules').click();
+
+      cy.get('.bulk_granules')
+        .within(() => {
+          cy.contains('button', 'Run Bulk Operations').click();
+        });
+
+      cy.get('.bulk_granules--operations')
+        .within(() => {
+          cy.contains('button', 'Cancel Bulk Operations');
+          cy.contains('button', 'Run Bulk Operations').click();
+        });
+
+      cy.wait('@postBulkGranules');
+      cy.contains('p', asyncOperationId);
+      cy.contains('button', 'Go To Operations').click();
+      cy.url().should('include', '?startDateTime');
+    });
+
     it('handles successful bulk granule deletion request', () => {
       const asyncOperationId = Math.floor(Math.random() * 10);
 
