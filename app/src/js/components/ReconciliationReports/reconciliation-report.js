@@ -35,15 +35,11 @@ const reportState = (dataList) => {
   return anyBad ? 'CONFLICT' : 'PASSED';
 };
 
-const usesBuckets = (item) => {
-  return item.columns.some((column) => column.accessor === 'bucket');
-};
-
-const bucketsForFilter = (item) => {
-  return item.data.reduce((buckets, currentDataItem) => {
+const bucketsForFilter = (allBuckets) => {
+  return allBuckets.reduce((buckets, currentBucket) => {
     return {
       ...buckets,
-      [currentDataItem.bucket]: currentDataItem.bucket,
+      [currentBucket]: currentBucket,
     };
   },
   {});
@@ -67,7 +63,7 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
     : 'missing';
   const filterBucket = reconciliationReports.list.params.bucket;
   const filterString = reconciliationReports.searchString;
-  const { internalComparison, cumulusVsCmrComparison } = reshapeReport(record, filterString, filterBucket);
+  const { internalComparison, cumulusVsCmrComparison, allBuckets } = reshapeReport(record, filterString, filterBucket);
   const reportComparisons = [...internalComparison, ...cumulusVsCmrComparison];
   const theReportState = reportState(reportComparisons);
   const activeCardTables = reportComparisons.find(
@@ -277,6 +273,26 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
             </span>
           </div>
 
+          <div className='filters'>
+            <Search
+              dispatch={dispatch}
+              action={searchReconciliationReport}
+              clear={clearReconciliationSearch}
+              label='Search'
+              placeholder='Search'
+            />
+            <Dropdown
+              options={bucketsForFilter(allBuckets)}
+              action={filterReconciliationReport}
+              clear={clearReconciliationReportFilter}
+              paramKey='bucket'
+              label='Bucket'
+              inputProps={{
+                placeholder: 'All'
+              }}
+            />
+          </div>
+
           {reportComparisons
             .find((displayObj) => displayObj.id === activeId)
             .tables.map((item, index) => {
@@ -310,27 +326,6 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
                   </Card.Header>
                   <Collapse in={isExpanded}>
                     <div id={item.id}>
-                      <div className='filters'>
-                        <Search
-                          dispatch={dispatch}
-                          action={searchReconciliationReport}
-                          clear={clearReconciliationSearch}
-                          label='Search'
-                          placeholder='Search'
-                        />
-                        {usesBuckets(item) && (
-                          <Dropdown
-                            options={bucketsForFilter(item)}
-                            action={filterReconciliationReport}
-                            clear={clearReconciliationReportFilter}
-                            paramKey='bucket'
-                            label='Bucket'
-                            inputProps={{
-                              placeholder: 'All'
-                            }}
-                          />
-                        )}
-                      </div>
                       <SortableTable
                         data={item.data}
                         tableColumns={item.columns}

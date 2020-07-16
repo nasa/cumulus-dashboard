@@ -117,6 +117,14 @@ export const reshapeReport = (record, filterString, filterBucket) => {
     granuleFilesOnlyInCmr = granuleFilesOnlyInCmr.filter((file) => file.granuleId.toLowerCase().includes(filterString.toLowerCase()));
   }
 
+  const getBucket = (item) => (item.bucket);
+  const allBuckets = [
+    ...filesInS3.map(getBucket),
+    ...filesInDynamoDb.map(getBucket),
+    ...granuleFilesOnlyInCumulus.map(getBucket),
+    ...granuleFilesOnlyInCmr.map(getBucket),
+  ];
+
   const filterOnBucket = (file) => (file.bucket === filterBucket);
 
   if (filterBucket) {
@@ -214,5 +222,5 @@ export const reshapeReport = (record, filterString, filterBucket) => {
     },
   ];
 
-  return { internalComparison, cumulusVsCmrComparison };
+  return { internalComparison, cumulusVsCmrComparison, allBuckets };
 };
