@@ -3,6 +3,7 @@
 import React from 'react';
 import { withRouter, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
@@ -10,40 +11,46 @@ import OperationOverview from './overview';
 import { listOperations } from '../../actions';
 import { strings } from '../locale';
 
-class Operations extends React.Component {
-  query () {
-    this.props.dispatch(listOperations());
-    this.displayName = strings.operations;
+const Operations = ({ dispatch, location, params, queryParams }) => {
+  const { pathname } = location;
+  const { startDateTime, endDateTime, ...filteredQueryParams } = queryParams;
+
+  function query() {
+    dispatch(listOperations(filteredQueryParams));
   }
 
-  render () {
-    return (
-      <div className='page__workflows'>
-        <Helmet>
-          <title> Cumulus Operations </title>
-        </Helmet>
-        <DatePickerHeader onChange={this.query} heading={strings.operations}/>
-        <div className='page__content'>
-          <div className='wrapper__sidebar'>
-            <Sidebar
-              currentPath={this.props.location.pathname}
-              params={this.props.params}
+  return (
+    <div className="page__workflows">
+      <Helmet>
+        <title> Cumulus Operations </title>
+      </Helmet>
+      <DatePickerHeader onChange={query} heading={strings.operations} />
+      <div className="page__content">
+        <div className="wrapper__sidebar">
+          <Sidebar currentPath={pathname} params={params} />
+          <div className="page__content--shortened">
+            <Route
+              exact
+              path="/operations"
+              render={(props) => (
+                <OperationOverview
+                  {...props}
+                  queryParams={filteredQueryParams}
+                />
+              )}
             />
-            <div className='page__content--shortened'>
-              <Route exact path='/operations' component={OperationOverview} />
-            </div>
           </div>
         </div>
       </div>
-    );
-  }
-}
-
-Operations.propTypes = {
-  children: PropTypes.object,
-  dispatch: PropTypes.func,
-  location: PropTypes.object,
-  params: PropTypes.object
+    </div>
+  );
 };
 
-export default withRouter(Operations);
+Operations.propTypes = {
+  dispatch: PropTypes.func,
+  location: PropTypes.object,
+  params: PropTypes.object,
+  queryParams: PropTypes.object,
+};
+
+export default withRouter(withQueryParams()(Operations));

@@ -52,7 +52,7 @@ class OperationOverview extends React.Component {
   }
 
   generateQuery () {
-    return {};
+    return { ...this.props.queryParams };
   }
 
   queryMeta () {
@@ -74,7 +74,7 @@ class OperationOverview extends React.Component {
   }
 
   render () {
-    const { operations } = this.props;
+    const { dispatch, operations } = this.props;
     const { list } = operations;
     const { count } = list.meta;
     const mutableList = cloneDeep(list);
@@ -103,7 +103,7 @@ class OperationOverview extends React.Component {
           </div>
           <List
             list={mutableList}
-            dispatch={this.props.dispatch}
+            dispatch={dispatch}
             action={listOperations}
             tableColumns={tableColumns}
             query={this.generateQuery()}
@@ -112,7 +112,7 @@ class OperationOverview extends React.Component {
           >
             <ListFilters>
 
-              <Search dispatch={this.props.dispatch}
+              <Search dispatch={dispatch}
                 action={searchOperations}
                 clear={clearOperationsSearch}
               />
@@ -151,6 +151,7 @@ class OperationOverview extends React.Component {
 OperationOverview.propTypes = {
   dispatch: PropTypes.func,
   operations: PropTypes.object,
+  queryParams: PropTypes.object,
 };
 
 export default withRouter(connect(state => ({
