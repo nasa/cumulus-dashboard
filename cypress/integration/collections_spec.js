@@ -39,7 +39,7 @@ describe('Dashboard Collections Page', () => {
     it('should display a link to view collections', () => {
       cy.contains('nav li a', 'Collections').as('collections');
       cy.setDatepickerDropdown('Recent');
-      cy.url().should('match', /\/?startDateTime/);
+      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections\?startDateTime/);
       cy.get('@collections').click();
       cy.wait('@getActiveCollections');
 
@@ -57,7 +57,7 @@ describe('Dashboard Collections Page', () => {
     it('should only display collections with active granules when time filter is applied', () => {
       cy.contains('nav li a', 'Collections').as('collections');
       cy.setDatepickerDropdown('Recent');
-      cy.url().should('match', /\/?startDateTime/);
+      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections\?startDateTime/);
       cy.get('@collections').click();
       cy.wait('@getActiveCollections');
 
