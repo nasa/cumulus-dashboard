@@ -44,6 +44,11 @@ export function getPersistentQueryParams(location = {}) {
   return queryString.stringify({ startDateTime, endDateTime });
 }
 
+/**
+ * Calls history.push while perserving the queryParams that should persist across pages
+ *
+ * @param {string} path the path to be passed to history.push
+ */
 export function historyPushWithQueryParams(path) {
   const { location } = history;
   history.push({
