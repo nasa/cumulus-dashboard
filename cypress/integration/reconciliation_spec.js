@@ -181,5 +181,77 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.legend-items--item').eq(1).should('contain', 'Missing image file');
       cy.get('.legend-items--item').eq(2).should('contain', 'No issues/conflicts');
     });
+
+    it('should have the option to search the report', () => {
+      cy.visit('/reconciliation-reports/report/inventoryReport-20200114T205238781');
+
+      cy.get('.search').as('search');
+      cy.get('@search').should('be.visible').click().type('MOD09GQ');
+
+      /** Table Cards **/
+
+      const cards = [
+        {
+          title: 'DynamoDB',
+          count: 12
+        },
+        {
+          title: 'S3',
+          count: 214
+        },
+        {
+          title: 'Cumulus',
+          count: 3
+        },
+        {
+          title: 'CMR',
+          count: 1
+        }
+      ];
+
+      cy.get('.card').each(($card, index, $cards) => {
+        const card = cy.wrap($card);
+        card.click();
+        card.should('have.class', 'active');
+        card.get('.card-header').contains(cards[index].title);
+        card.get('.card-title').contains(cards[index].count);
+      });
+    });
+
+    it('should have the option to filter the report by S3 bucket', () => {
+      cy.visit('/reconciliation-reports/report/inventoryReport-20200114T205238781');
+
+      cy.get('#form-Bucket-bucket > div > input').as('bucket-input');
+      cy.get('@bucket-input').should('be.visible').click().type('mhs3-pri{enter}');
+
+      /** Table Cards **/
+
+      const cards = [
+        {
+          title: 'DynamoDB',
+          count: 10
+        },
+        {
+          title: 'S3',
+          count: 36
+        },
+        {
+          title: 'Cumulus',
+          count: 20
+        },
+        {
+          title: 'CMR',
+          count: 390
+        }
+      ];
+
+      cy.get('.card').each(($card, index, $cards) => {
+        const card = cy.wrap($card);
+        card.click();
+        card.should('have.class', 'active');
+        card.get('.card-header').contains(cards[index].title);
+        card.get('.card-title').contains(cards[index].count);
+      });
+    });
   });
 });
