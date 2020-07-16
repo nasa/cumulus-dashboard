@@ -4,12 +4,12 @@ import test from 'ava';
 import sinon from 'sinon';
 import cloneDeep from 'lodash.clonedeep';
 
-const granules = require('../../../app/src/js/utils/table-config/granules');
+import { __RewireAPI__ as GranulesRewireAPI } from '../../../app/src/js/utils/table-config/granules';
 
-const setOnConfirm = granules.__get__('setOnConfirm');
+const setOnConfirm = GranulesRewireAPI.__get__('setOnConfirm');
 
-granules.__Rewire__('historyPushWithQueryParams', sinon.fake());
-const historyPushWithQueryParams = granules.__get__('historyPushWithQueryParams');
+GranulesRewireAPI.__Rewire__('historyPushWithQueryParams', sinon.fake());
+const historyPushWithQueryParams = GranulesRewireAPI.__get__('historyPushWithQueryParams');
 
 test.beforeEach((t) => {
   t.context.history = {};
@@ -19,7 +19,7 @@ test.beforeEach((t) => {
 
 test.afterEach((t) => {
   sinon.restore();
-  granules.__ResetDependency__('historyPushWithQueryParams');
+  GranulesRewireAPI.__ResetDependency__('historyPushWithQueryParams');
 });
 
 test('setOnConfirm does nothing with an error', (t) => {

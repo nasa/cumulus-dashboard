@@ -29,6 +29,11 @@ const location = {
   query: {},
 };
 
+test.afterEach((t) => {
+  sinon.restore();
+  URLHelperRewireAPI.__ResetDependency__('historyPushWithQueryParams');
+});
+
 test('initialValueFromLocation returns empty string if location query empty', (t) => {
   const testLocation = { ...location };
   const expectedInitialValue = '';

@@ -1,16 +1,18 @@
 import test from 'ava';
 import nock from 'nock';
 import sinon from 'sinon';
-import rewire from 'rewire';
 
 import { CALL_API } from '../../app/src/js/actions/types';
-const request = rewire('../../app/src/js/middleware/request');
+
+import {
+  requestMiddleware,
+  __RewireAPI__ as RequestRewireAPI
+} from '../../app/src/js/middleware/request';
 
 const token = 'fake-token';
 
-const requestMiddleware = request.__get__('requestMiddleware');
 const loginErrorStub = sinon.stub();
-request.__set__('loginError', () => {
+RequestRewireAPI.__Rewire__('loginError', () => {
   loginErrorStub();
 });
 
@@ -96,7 +98,7 @@ test.serial('should add correct authorization headers to API request action', as
     body: {},
     statusCode: 200
   });
-  const revertRequestStub = request.__set__('requestPromise', requestPromiseStub);
+  const revertRequestStub = RequestRewireAPI.__Rewire__('requestPromise', requestPromiseStub);
 
   try {
     const { invokeMiddleware } = createTestMiddleware();
@@ -128,7 +130,7 @@ test.serial('should be able to use provided authorization headers', async (t) =>
     body: {},
     statusCode: 200
   });
-  const revertRequestStub = request.__set__('requestPromise', requestPromiseStub);
+  const revertRequestStub = RequestRewireAPI.__Rewire__('requestPromise', requestPromiseStub);
 
   try {
     const { invokeMiddleware } = createTestMiddleware();
