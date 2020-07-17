@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - **CUMULUS-1805**
-  - Shows running, completed, and failed granule format for when there are zero granules, 
+  - Shows running, completed, and failed granule format for when there are zero granules,
     before it would just say "Granules 0," but now will show zeros in all categories.
 - **CUMULUS-1904**
   - Adds a TableFilters component for dynamically showing/hiding table columns
@@ -36,6 +36,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1977**
   - Added BulkGranuleModal component for creating modals to submit bulk granule requests
+
+- **CUMULUS-2018**
+  - Add search option to individual Reconciliation Report page
+  - Add ability to filter by S3 bucket on Reconciliation Report page
 
 - **CUMULUS-**
   - upgrades node to 12.18.0
