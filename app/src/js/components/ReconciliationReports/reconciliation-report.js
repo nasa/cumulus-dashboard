@@ -8,13 +8,21 @@ import { Collapse, Dropdown as DropdownBootstrap } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getReconciliationReport } from '../../actions';
+import {
+  getReconciliationReport,
+  searchReconciliationReport,
+  clearReconciliationSearch,
+  filterReconciliationReport,
+  clearReconciliationReportFilter
+} from '../../actions';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import SortableTable from '../SortableTable/SortableTable';
 import { reshapeReport } from './reshape-report';
 import { downloadFile } from '../../utils/download-file';
+import Search from '../Search/search';
+import Dropdown from '../DropDown/dropdown';
 
 /**
  * returns PASSED or CONFLICT based on reconcilation report data.
@@ -25,6 +33,16 @@ const reportState = (dataList) => {
     item.tables.some((table) => table.data.length)
   );
   return anyBad ? 'CONFLICT' : 'PASSED';
+};
+
+const bucketsForFilter = (allBuckets) => {
+  return allBuckets.reduce((buckets, currentBucket) => {
+    return {
+      ...buckets,
+      [currentBucket]: currentBucket,
+    };
+  },
+  {});
 };
 
 const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
@@ -43,7 +61,9 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
   const displayEndDate = reportEndTime
     ? new Date(reportEndTime).toLocaleDateString()
     : 'missing';
-  const { internalComparison, cumulusVsCmrComparison } = reshapeReport(record);
+  const filterBucket = reconciliationReports.list.params.bucket;
+  const filterString = reconciliationReports.searchString;
+  const { internalComparison, cumulusVsCmrComparison, allBuckets } = reshapeReport(record, filterString, filterBucket);
   const reportComparisons = [...internalComparison, ...cumulusVsCmrComparison];
   const theReportState = reportState(reportComparisons);
   const activeCardTables = reportComparisons.find(
@@ -76,10 +96,8 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
   );
 
   useEffect(() => {
-    if (!record) {
-      dispatch(getReconciliationReport(reconciliationReportName));
-    }
-  }, [dispatch, reconciliationReportName, record]);
+    dispatch(getReconciliationReport(reconciliationReportName));
+  }, [dispatch, reconciliationReportName]);
 
   if (!record || (record.inflight && !record.data)) {
     return <Loading />;
@@ -253,6 +271,26 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
             <span className="link" onClick={handleExpandClick}>
               {!allCollapsed() ? 'Expand All' : 'Collapse All'}
             </span>
+          </div>
+
+          <div className='filters'>
+            <Search
+              dispatch={dispatch}
+              action={searchReconciliationReport}
+              clear={clearReconciliationSearch}
+              label='Search'
+              placeholder='Search'
+            />
+            <Dropdown
+              options={bucketsForFilter(allBuckets)}
+              action={filterReconciliationReport}
+              clear={clearReconciliationReportFilter}
+              paramKey='bucket'
+              label='Bucket'
+              inputProps={{
+                placeholder: 'All'
+              }}
+            />
           </div>
 
           {reportComparisons

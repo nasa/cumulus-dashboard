@@ -51,6 +51,9 @@ const reconciliationReports = {
         error: 'error creating report'
       }
     }
+  },
+  list: {
+    params: {}
   }
 };
 
