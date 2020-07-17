@@ -2,6 +2,8 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { withRouter, Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
+import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
@@ -11,7 +13,7 @@ import ExecutionLogs from './execution-logs';
 import ExecutionEvents from './execution-events';
 import { getCount, listExecutions } from '../../actions';
 import { strings } from '../locale';
-import withQueryParams from 'react-router-query-params';
+import { filterQueryParams } from '../../utils/url-helper';
 
 const Executions = ({
   dispatch,
@@ -20,7 +22,7 @@ const Executions = ({
 }) => {
   const { pathname } = location;
   const showDatePicker = pathname === '/executions';
-  const { startDateTime, endDateTime, ...filteredQueryParams } = queryParams;
+  const filteredQueryParams = filterQueryParams(queryParams);
 
   function query () {
     dispatch(getCount({
@@ -67,4 +69,4 @@ Executions.propTypes = {
   queryParams: PropTypes.object
 };
 
-export default withRouter(withQueryParams()(Executions));
+export default withRouter(withQueryParams()(connect()(Executions)));

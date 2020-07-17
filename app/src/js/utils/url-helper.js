@@ -33,6 +33,17 @@ export function initialValuesFromLocation (location, paramKeys) {
 }
 
 /**
+ * Returns filtered queryParams
+ *
+ * @param {Object} queryParams - object where key/value pairs are the queryparam and its value
+ */
+
+export function filterQueryParams(queryParams = {}) {
+  const { startDateTime, endDateTime, ...filteredQueryParams } = queryParams;
+  return filteredQueryParams;
+}
+
+/**
  * Returns a location.search string containing only the params that should persist across pages
  *
  * @param {Object} location - react-router's location

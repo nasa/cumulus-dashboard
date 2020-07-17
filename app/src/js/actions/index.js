@@ -615,14 +615,17 @@ export const clearPdrsSearch = () => ({ type: types.CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: types.FILTER_PDRS, param: param });
 export const clearPdrsFilter = (paramKey) => ({ type: types.CLEAR_PDRS_FILTER, paramKey: paramKey });
 
-export const listProviders = (options) => ({
-  [CALL_API]: {
-    type: types.PROVIDERS,
-    method: 'GET',
-    url: new URL('providers', root).href,
-    qs: Object.assign({ limit: defaultPageLimit }, options)
-  }
-});
+export const listProviders = (options) => {
+  console.log(options);
+  return {
+    [CALL_API]: {
+      type: types.PROVIDERS,
+      method: 'GET',
+      url: new URL('providers', root).href,
+      qs: Object.assign({ limit: defaultPageLimit }, options)
+    }
+  };
+};
 
 export const getOptionsProviderGroup = () => ({
   [CALL_API]: {

@@ -3,6 +3,7 @@
 import React from 'react';
 import { withRouter, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
 import PropTypes from 'prop-types';
 import Sidebar from '../Sidebar/sidebar';
@@ -10,10 +11,11 @@ import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import OperationOverview from './overview';
 import { listOperations } from '../../actions';
 import { strings } from '../locale';
+import { filterQueryParams } from '../../utils/url-helper';
 
 const Operations = ({ dispatch, location, params, queryParams }) => {
   const { pathname } = location;
-  const { startDateTime, endDateTime, ...filteredQueryParams } = queryParams;
+  const filteredQueryParams = filterQueryParams(queryParams);
 
   function query() {
     dispatch(listOperations(filteredQueryParams));
@@ -53,4 +55,4 @@ Operations.propTypes = {
   queryParams: PropTypes.object,
 };
 
-export default withRouter(withQueryParams()(Operations));
+export default withRouter(withQueryParams()(connect()(Operations)));

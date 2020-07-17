@@ -16,11 +16,12 @@ import CollectionIngest from '../../components/Collections/ingest';
 import CollectionLogs from '../../components/Collections/logs';
 import DatePickerHeader from '../../components/DatePickerHeader/DatePickerHeader';
 import { listCollections } from '../../actions';
+import { filterQueryParams } from '../../utils/url-helper';
 
 const Collections = ({ dispatch, location, queryParams }) => {
   const { pathname } = location;
   const existingCollection = pathname !== '/collections/add';
-  const { startDateTime, endDateTime, ...filteredQueryParams } = queryParams;
+  const filteredQueryParams = filterQueryParams(queryParams);
 
   function query() {
     dispatch(listCollections(filteredQueryParams));

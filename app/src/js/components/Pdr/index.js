@@ -13,11 +13,12 @@ import PdrOverview from './overview';
 import PdrList from './list';
 import { strings } from '../locale';
 import withQueryParams from 'react-router-query-params';
+import { filterQueryParams } from '../../utils/url-helper';
 
 const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
   const { pathname } = location;
   const count = get(stats, 'count.data.pdrs.count');
-  const { startDateTime, endDateTime, ...filteredQueryParams } = queryParams;
+  const filteredQueryParams = filterQueryParams(queryParams);
 
   function query() {
     dispatch(listPdrs(filteredQueryParams));

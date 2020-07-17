@@ -7,12 +7,14 @@ import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import WorkflowsOverview from './overview';
 import Workflow from './workflow';
+import { filterQueryParams } from '../../utils/url-helper';
 
 const Workflows = ({
   location,
   params,
   queryParams,
 }) => {
+  const filteredQueryParams = filterQueryParams(queryParams);
   return (
     <div className="page__workflows">
       <Helmet>
@@ -32,7 +34,7 @@ const Workflows = ({
                 exact
                 path="/workflows"
                 render={(props) => (
-                  <WorkflowsOverview {...props} queryParams={queryParams} />
+                  <WorkflowsOverview {...props} queryParams={filteredQueryParams} />
                 )}
               />
               <Route

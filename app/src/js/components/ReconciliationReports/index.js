@@ -12,6 +12,7 @@ import ReconciliationReportList from './list';
 import ReconciliationReport from './reconciliation-report';
 import DatePickerHeader from '../../components/DatePickerHeader/DatePickerHeader';
 import Legend from './legend';
+import { filterQueryParams } from '../../utils/url-helper';
 
 const ReconciliationReports = ({
   dispatch,
@@ -19,7 +20,7 @@ const ReconciliationReports = ({
   params,
   queryParams,
 }) => {
-  const { startDateTime, endDateTime, ...filteredQueryParams } = queryParams;
+  const filteredQueryParams = filterQueryParams(queryParams);
 
   function query() {
     dispatch(listReconciliationReports(filteredQueryParams));

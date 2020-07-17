@@ -12,11 +12,12 @@ import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import GranuleOverview from './granule';
 import GranulesOverview from './overview';
 import withQueryParams from 'react-router-query-params';
+import { filterQueryParams } from '../../utils/url-helper';
 
 const Granules = ({ dispatch, location, queryParams, stats }) => {
   const { pathname } = location;
   const count = get(stats, 'count.data.granules.count');
-  const { startDateTime, endDateTime, ...filteredQueryParams } = queryParams;
+  const filteredQueryParams = filterQueryParams(queryParams);
 
   function query() {
     dispatch(listGranules(filteredQueryParams));
