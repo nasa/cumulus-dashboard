@@ -579,8 +579,6 @@ export const getCount = (options = {}) => {
     field,
     ...sidebarCount ? {} : restOptions
   };
-  console.log(options);
-  console.log(params);
   const actionType = sidebarCount ? types.COUNT_SIDEBAR : types.COUNT;
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
