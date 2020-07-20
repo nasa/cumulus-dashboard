@@ -113,13 +113,15 @@ class List extends React.Component {
 
   getQueryConfig (config = {}, query = (this.props.query || {})) {
     // Remove empty keys so as not to mess up the query
+    const { search, ...restQuery } = query;
     return omitBy({
       page: this.state.page,
       order: this.state.order,
       sort_by: this.state.sortId,
+      infix: search,
       ...this.state.params,
       ...config,
-      ...query
+      ...restQuery
     }, isNil);
   }
 

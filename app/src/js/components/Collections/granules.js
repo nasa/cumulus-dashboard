@@ -28,12 +28,14 @@ import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import pageSizeOptions from '../../utils/page-size';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const CollectionGranules = ({
   dispatch,
-  match,
-  location,
   granules,
+  location,
+  match,
+  queryParams,
   workflowOptions,
 }) => {
   const { params } = match;
@@ -83,7 +85,10 @@ const CollectionGranules = ({
   }, [workflowOptions]);
 
   function generateQuery() {
-    const options = { collectionId };
+    const options = {
+      ...queryParams,
+      collectionId,
+    };
     if (view !== 'all') options.status = view;
     return options;
   }
@@ -139,7 +144,10 @@ const CollectionGranules = ({
         </h1>
         <Link
           className="button button--edit button--small form-group__element--right button--green"
-          to={`/collections/edit/${collectionName}/${collectionVersion}`}
+          to={{
+            pathname: `/collections/edit/${collectionName}/${collectionVersion}`,
+            search: getPersistentQueryParams(location),
+          }}
         >
           Edit
         </Link>
@@ -207,13 +215,14 @@ CollectionGranules.propTypes = {
   granules: PropTypes.object,
   dispatch: PropTypes.func,
   location: PropTypes.object,
-  workflowOptions: PropTypes.array,
   match: PropTypes.object,
+  queryParams: PropTypes.object,
+  workflowOptions: PropTypes.array,
 };
 
 export default withRouter(
   connect((state) => ({
-    workflowOptions: workflowOptionNames(state),
     granules: state.granules,
+    workflowOptions: workflowOptionNames(state),
   }))(CollectionGranules)
 );

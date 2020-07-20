@@ -57,7 +57,8 @@ class CollectionList extends React.Component {
   }
 
   generateQuery() {
-    return {};
+    const { queryParams } = this.props;
+    return { ...queryParams };
   }
 
   generateBulkActions() {
@@ -155,10 +156,11 @@ class CollectionList extends React.Component {
 
 CollectionList.propTypes = {
   collections: PropTypes.object,
-  mmtLinks: PropTypes.object,
-  dispatch: PropTypes.func,
   config: PropTypes.object,
   datepicker: PropTypes.object,
+  dispatch: PropTypes.func,
+  mmtLinks: PropTypes.object,
+  queryParams: PropTypes.object
 };
 
 CollectionList.displayName = 'CollectionList';
@@ -166,8 +168,8 @@ CollectionList.displayName = 'CollectionList';
 export { CollectionList };
 export default withRouter(
   connect((state) => ({
-    config: state.config,
     collections: state.collections,
+    config: state.config,
     datepicker: state.datepicker,
     mmtLinks: state.mmtLinks,
   }))(CollectionList)

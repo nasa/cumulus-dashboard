@@ -13,6 +13,7 @@ import {
   bulkGranuleDeleteClearError
 } from '../../actions';
 import BulkGranuleModal from './bulk-granule-modal';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 const generateAsyncRequestId = () =>
   Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -83,7 +84,7 @@ const BulkGranule = ({
 
   function handleSuccessConfirm (e) {
     e.preventDefault();
-    history.push('/operations');
+    historyPushWithQueryParams('/operations');
   }
 
   function handleShowBulkOperationsModal (e) {

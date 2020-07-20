@@ -10,7 +10,7 @@ import {
   removeGranule,
   deleteGranule,
   applyWorkflowToGranule,
-  listWorkflows
+  listWorkflows,
 } from '../../actions';
 import { get } from 'object-path';
 import {
@@ -22,7 +22,7 @@ import {
   collectionLink,
   providerLink,
   pdrLink,
-  deleteText
+  deleteText,
 } from '../../utils/format';
 import Table from '../SortableTable/SortableTable';
 import Loading from '../LoadingIndicator/loading-indicator';
@@ -35,6 +35,7 @@ import { workflowOptionNames } from '../../selectors';
 import { simpleDropdownOption } from '../../utils/table-config/granules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import isEqual from 'lodash.isequal';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 
 const link = 'Link';
 
@@ -45,65 +46,89 @@ const makeLink = (bucket, key) => {
 const tableColumns = [
   {
     Header: 'Filename',
-    accessor: row => row.fileName || '(No name)',
-    id: 'fileName'
+    accessor: (row) => row.fileName || '(No name)',
+    id: 'fileName',
   },
   {
     Header: 'Link',
-    accessor: row => (row.bucket && row.key) ? (<a href={makeLink(row.bucket, row.key)}>{row.fileName ? link : nullValue}</a>) : null,
-    id: 'link'
+    accessor: (row) =>
+      row.bucket && row.key ? (
+        <a href={makeLink(row.bucket, row.key)}>
+          {row.fileName ? link : nullValue}
+        </a>
+      ) : null,
+    id: 'link',
   },
   {
     Header: 'Bucket',
-    accessor: 'bucket'
-  }
+    accessor: 'bucket',
+  },
 ];
 
 const metaAccessors = [
   {
     label: 'PDR Name',
     property: 'pdrName',
-    accessor: pdrLink
+    accessor: pdrLink,
   },
   {
     label: 'Collection',
     property: 'collectionId',
-    accessor: collectionLink
+    accessor: collectionLink,
   },
   {
     label: 'Provider',
     property: 'provider',
-    accessor: providerLink
+    accessor: providerLink,
   },
   {
     label: `${strings.cmr} Link`,
     property: 'cmrLink',
-    accessor: (d) => d ? <a href={d} target='_blank'>link</a> : nullValue
+    accessor: (d) =>
+      d ? (
+        <a href={d} target="_blank">
+          link
+        </a>
+      ) : (
+        nullValue
+      ),
   },
   {
     label: 'Execution',
     property: 'execution',
-    accessor: (d) => d ? <Link to={`/executions/execution/${path.basename(d)}`}>link</Link> : nullValue
+    accessor: (d) =>
+      d ? (
+        <Link
+          to={(location) => ({
+            pathname: `/executions/execution/${path.basename(d)}`,
+            search: getPersistentQueryParams(location),
+          })}
+        >
+          link
+        </Link>
+      ) : (
+        nullValue
+      ),
   },
   {
     label: 'Published',
     property: 'published',
-    accessor: bool
+    accessor: bool,
   },
   {
     label: 'Duplicate',
     property: 'hasDuplicate',
-    accessor: bool
+    accessor: bool,
   },
   {
     label: 'Total duration',
     property: 'duration',
-    accessor: seconds
-  }
+    accessor: seconds,
+  },
 ];
 
 class GranuleOverview extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.loadGranule = this.loadGranule.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
@@ -116,59 +141,58 @@ class GranuleOverview extends React.Component {
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
     this.state = {
-      workflow: this.props.workflowOptions[0]
+      workflow: this.props.workflowOptions[0],
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.queryWorkflows();
     if (this.props.skipReloadOnMount) return;
     this.loadGranule();
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (!isEqual(prevProps.workflowOptions, this.props.workflowOptions)) {
       this.setState({ workflow: this.props.workflowOptions[0] }); // eslint-disable-line react/no-did-update-set-state
     }
   }
 
-  loadGranule () {
+  loadGranule() {
     const { dispatch, match } = this.props;
     const { granuleId } = match.params;
     dispatch(getGranule(granuleId));
   }
 
-  navigateBack () {
-    const { history } = this.props;
-    history.push('/granules');
+  navigateBack() {
+    historyPushWithQueryParams('/granules');
   }
 
-  queryWorkflows () {
+  queryWorkflows() {
     this.props.dispatch(listWorkflows());
   }
 
-  reingest () {
+  reingest() {
     const { granuleId } = this.props.match.params;
     this.props.dispatch(reingestGranule(granuleId));
   }
 
-  applyWorkflow () {
+  applyWorkflow() {
     const { granuleId } = this.props.match.params;
     const { workflow } = this.state;
     this.props.dispatch(applyWorkflowToGranule(granuleId, workflow));
   }
 
-  remove () {
+  remove() {
     const { granuleId } = this.props.match.params;
     this.props.dispatch(removeGranule(granuleId));
   }
 
-  delete () {
+  delete() {
     const { granuleId } = this.props.match.params;
     this.props.dispatch(deleteGranule(granuleId));
   }
 
-  errors () {
+  errors() {
     const granuleId = this.props.match.params.granuleId;
     return [
       get(this.props.granules.map, [granuleId, 'error']),
@@ -176,26 +200,26 @@ class GranuleOverview extends React.Component {
       get(this.props.granules.reingested, [granuleId, 'error']),
       get(this.props.granules.executed, [granuleId, 'error']),
       get(this.props.granules.removed, [granuleId, 'error']),
-      get(this.props.granules.deleted, [granuleId, 'error'])
+      get(this.props.granules.deleted, [granuleId, 'error']),
     ].filter(Boolean);
   }
 
-  selectWorkflow (selector, workflow) {
+  selectWorkflow(selector, workflow) {
     this.setState({ workflow });
   }
 
-  getExecuteOptions () {
+  getExecuteOptions() {
     return [
       simpleDropdownOption({
         handler: this.selectWorkflow,
         label: 'workflow',
         value: this.state.workflow,
-        options: this.props.workflowOptions
-      })
+        options: this.props.workflowOptions,
+      }),
     ];
   }
 
-  render () {
+  render() {
     const granuleId = this.props.match.params.granuleId;
     const record = this.props.granules.map[granuleId];
     if (!record || (record.inflight && !record.data)) {
@@ -207,89 +231,103 @@ class GranuleOverview extends React.Component {
     const granule = record.data;
     const files = [];
     if (granule.files) {
-      for (const key in get(granule, 'files', {})) { files.push(granule.files[key]); }
+      for (const key in get(granule, 'files', {})) {
+        files.push(granule.files[key]);
+      }
     }
-    const dropdownConfig = [{
-      text: 'Reingest',
-      action: this.reingest,
-      status: get(this.props.granules.reingested, [granuleId, 'status']),
-      success: this.loadGranule,
-      confirmAction: true,
-      confirmText: `Reingest ${granuleId}? Note: the granule files will be overwritten.`
-    }, {
-      text: 'Execute',
-      action: this.applyWorkflow,
-      status: get(this.props.granules.executed, [granuleId, 'status']),
-      success: this.loadGranule,
-      confirmAction: true,
-      confirmText: `Execute on ${granuleId}?`,
-      confirmOptions: this.getExecuteOptions()
-    }, {
-      text: strings.remove_from_cmr,
-      action: this.remove,
-      status: get(this.props.granules.removed, [granuleId, 'status']),
-      success: this.loadGranule
-    }, {
-      text: 'Delete',
-      action: this.delete,
-      disabled: !!granule.published,
-      status: get(this.props.granules.deleted, [granuleId, 'status']),
-      success: this.navigateBack,
-      confirmAction: true,
-      confirmText: deleteText(granuleId)
-    }];
+    const dropdownConfig = [
+      {
+        text: 'Reingest',
+        action: this.reingest,
+        status: get(this.props.granules.reingested, [granuleId, 'status']),
+        success: this.loadGranule,
+        confirmAction: true,
+        confirmText: `Reingest ${granuleId}? Note: the granule files will be overwritten.`,
+      },
+      {
+        text: 'Execute',
+        action: this.applyWorkflow,
+        status: get(this.props.granules.executed, [granuleId, 'status']),
+        success: this.loadGranule,
+        confirmAction: true,
+        confirmText: `Execute on ${granuleId}?`,
+        confirmOptions: this.getExecuteOptions(),
+      },
+      {
+        text: strings.remove_from_cmr,
+        action: this.remove,
+        status: get(this.props.granules.removed, [granuleId, 'status']),
+        success: this.loadGranule,
+      },
+      {
+        text: 'Delete',
+        action: this.delete,
+        disabled: !!granule.published,
+        status: get(this.props.granules.deleted, [granuleId, 'status']),
+        success: this.navigateBack,
+        confirmAction: true,
+        confirmText: deleteText(granuleId),
+      },
+    ];
     const errors = this.errors();
 
     const breadcrumbConfig = [
       {
         label: 'Dashboard Home',
-        href: '/'
+        href: '/',
       },
       {
         label: 'Granules',
-        href: '/granules'
+        href: '/granules',
       },
       {
         label: granuleId,
-        active: true
-      }
+        active: true,
+      },
     ];
 
     return (
-      <div className='page__component'>
-        <section className='page__section page__section__controls'>
+      <div className="page__component">
+        <section className="page__section page__section__controls">
           <Breadcrumbs config={breadcrumbConfig} />
         </section>
-        <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description width--three-quarters'>{granuleId}</h1>
+        <section className="page__section page__section__header-wrapper">
+          <h1 className="heading--large heading--shared-content with-description width--three-quarters">
+            {granuleId}
+          </h1>
           <DropdownAsync config={dropdownConfig} />
           {lastUpdated(granule.createdAt, 'Created')}
 
-          <dl className='status--process'>
+          <dl className="status--process">
             <dt>Status:</dt>
-            <dd className={`status__badge status__badge--${granule.status.toLowerCase()}`}>{displayCase(granule.status)}</dd>
+            <dd
+              className={`status__badge status__badge--${granule.status.toLowerCase()}`}
+            >
+              {displayCase(granule.status)}
+            </dd>
           </dl>
         </section>
 
-        <section className='page__section'>
+        <section className="page__section">
           {errors.length ? <ErrorReport report={errors} /> : null}
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium with-description'>{strings.granule_overview}</h2>
+          <div className="heading__wrapper--border">
+            <h2 className="heading--medium with-description">
+              {strings.granule_overview}
+            </h2>
           </div>
           <Metadata data={granule} accessors={metaAccessors} />
         </section>
 
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>Files</h2>
+        <section className="page__section">
+          <div className="heading__wrapper--border">
+            <h2 className="heading--medium heading--shared-content with-description">
+              Files
+            </h2>
           </div>
-          <Table
-            data={files}
-            tableColumns={tableColumns}
-          />
+          <Table data={files} tableColumns={tableColumns} />
         </section>
 
-        <section className='page__section'>
+        <section className="page__section">
           <LogViewer
             query={{ q: granuleId }}
             dispatch={this.props.dispatch}
@@ -307,21 +345,22 @@ GranuleOverview.propTypes = {
   dispatch: PropTypes.func,
   granules: PropTypes.object,
   logs: PropTypes.object,
-  history: PropTypes.object,
   skipReloadOnMount: PropTypes.bool,
-  workflowOptions: PropTypes.array
+  workflowOptions: PropTypes.array,
 };
 
 GranuleOverview.defaultProps = {
-  skipReloadOnMount: false
+  skipReloadOnMount: false,
 };
 
 GranuleOverview.displayName = strings.granule;
 
 export { GranuleOverview };
 
-export default withRouter(connect(state => ({
-  granules: state.granules,
-  workflowOptions: workflowOptionNames(state),
-  logs: state.logs
-}))(GranuleOverview));
+export default withRouter(
+  connect((state) => ({
+    granules: state.granules,
+    workflowOptions: workflowOptionNames(state),
+    logs: state.logs,
+  }))(GranuleOverview)
+);

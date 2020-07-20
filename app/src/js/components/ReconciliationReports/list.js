@@ -40,14 +40,14 @@ class ReconciliationReportList extends React.Component {
     this.generateQuery = this.generateQuery.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
     this.createReport = this.createReport.bind(this);
-    this.queryParams = this.queryParams.bind(this);
+    this.queryMeta = this.queryMeta.bind(this);
   }
 
   componentDidMount () {
-    this.queryParams();
+    this.queryMeta();
   }
 
-  queryParams () {
+  queryMeta () {
     this.props.dispatch(getCount({
       type: 'reconciliationReports',
       field: 'status'
@@ -55,7 +55,8 @@ class ReconciliationReportList extends React.Component {
   }
 
   generateQuery () {
-    return {};
+    const { queryParams } = this.props;
+    return { ...queryParams };
   }
 
   generateBulkActions () {
@@ -142,7 +143,8 @@ class ReconciliationReportList extends React.Component {
 
 ReconciliationReportList.propTypes = {
   dispatch: PropTypes.func,
-  reconciliationReports: PropTypes.object
+  queryParams: PropTypes.object,
+  reconciliationReports: PropTypes.object,
 };
 
 export default withRouter(connect(state => ({

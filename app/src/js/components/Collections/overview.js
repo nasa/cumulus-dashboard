@@ -24,6 +24,7 @@ import {
 } from '../../utils/format';
 import pageSizeOptions from '../../utils/page-size';
 import statusOptions from '../../utils/status';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 import isEqual from 'lodash.isequal';
 import {
   reingestAction,
@@ -95,7 +96,7 @@ class CollectionOverview extends React.Component {
 
   changeCollection(_, collectionId) {
     const { name, version } = collectionNameVersion(collectionId);
-    this.props.history.push(`/collections/collection/${name}/${version}`);
+    historyPushWithQueryParams(`/collections/collection/${name}/${version}`);
   }
 
   generateBulkActions() {
@@ -115,8 +116,10 @@ class CollectionOverview extends React.Component {
   }
 
   generateQuery() {
+    const { match, queryParams } = this.props;
     return {
-      collectionId: getCollectionId(this.props.match.params),
+      ...queryParams,
+      collectionId: getCollectionId(match.params),
     };
   }
 
@@ -126,11 +129,11 @@ class CollectionOverview extends React.Component {
   }
 
   navigateBack() {
-    this.props.history.push('/collections/all');
+    historyPushWithQueryParams('/collections/all');
   }
 
   gotoGranules() {
-    this.props.history.push('/granules');
+    historyPushWithQueryParams('/granules');
   }
 
   errors() {
@@ -182,7 +185,6 @@ class CollectionOverview extends React.Component {
       collections,
       granules: { list },
     } = this.props;
-
     const collectionName = params.name;
     const collectionVersion = params.version;
     const collectionId = getCollectionId(params);
@@ -233,13 +235,14 @@ class CollectionOverview extends React.Component {
               <li>
                 <Link
                   className="button button--copy button--small button--green"
-                  to={{
+                  to={(location) => ({
                     pathname: '/collections/add',
+                    search: getPersistentQueryParams(location),
                     state: {
                       name: collectionName,
                       version: collectionVersion,
                     },
-                  }}
+                  })}
                 >
                   Copy
                 </Link>
@@ -247,7 +250,10 @@ class CollectionOverview extends React.Component {
               <li>
                 <Link
                   className="button button--edit button--small button--green"
-                  to={`/collections/edit/${collectionName}/${collectionVersion}`}
+                  to={(location) => ({
+                    pathname: `/collections/edit/${collectionName}/${collectionVersion}`,
+                    search: getPersistentQueryParams(location),
+                  })}
                 >
                   Edit
                 </Link>
@@ -277,7 +283,10 @@ class CollectionOverview extends React.Component {
             </h2>
             <Link
               className="button button--small button__goto button--green form-group__element--right"
-              to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}
+              to={(location) => ({
+                pathname: `/collections/collection/${collectionName}/${collectionVersion}/granules`,
+                search: getPersistentQueryParams(location),
+              })}
             >
               {strings.view_all_granules}
             </Link>
@@ -335,9 +344,8 @@ CollectionOverview.propTypes = {
   datepicker: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
-  history: PropTypes.object,
   match: PropTypes.object,
-  router: PropTypes.object,
+  queryParams: PropTypes.object,
 };
 
 export default withRouter(

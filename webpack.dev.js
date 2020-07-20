@@ -32,7 +32,7 @@ const DevConfig = merge.smartStrategy(
             loader: 'style-loader',
           },
         ]
-      }
+      },
     ]
   },
   plugins: [

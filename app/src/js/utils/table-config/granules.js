@@ -24,13 +24,14 @@ import Dropdown from '../../components/DropDown/simple-dropdown';
 import Bulk from '../../components/Granules/bulk';
 import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent';
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
 
 export const tableColumns = [
   {
     Header: 'Status',
     accessor: 'status',
     width: 100,
-    Cell: ({ cell: { value } }) => <Link to={`/granules/${value}`} className={`granule__status granule__status--${value}`}>{displayCase(value)}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={location => ({ pathname: `/granules/${value}`, search: getPersistentQueryParams(location) })} className={`granule__status granule__status--${value}`}>{displayCase(value)}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Name',
@@ -58,7 +59,7 @@ export const tableColumns = [
     Header: 'Execution',
     accessor: 'execution',
     Cell: ({ cell: { value } }) => // eslint-disable-line react/prop-types
-      <Link to={`/executions/execution/${path.basename(value)}`}>link</Link>,
+      <Link to={location => ({ pathname: `/executions/execution/${path.basename(value)}`, search: getPersistentQueryParams(location) })}>link</Link>,
     disableSortBy: true,
     width: 90
   },
@@ -167,7 +168,7 @@ const determineCollectionsBase = (path) => {
 const setOnConfirm = ({ history, error, selected, closeModal }) => {
   const redirectAndClose = (redirect) => {
     return () => {
-      history.push(redirect);
+      historyPushWithQueryParams(redirect);
       if (typeof closeModal === 'function') closeModal();
     };
   };

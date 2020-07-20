@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Breadcrumb } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const Breadcrumbs = ({ config }) => {
   return (
@@ -13,7 +14,7 @@ const Breadcrumbs = ({ config }) => {
             key={index}
             className={`breadcrumb-item ${active ? 'active' : ''}`}
           >
-            {active ? <span>{label}</span> : <Link to={href}>{label}</Link>}
+            {active ? <span>{label}</span> : <Link to={location => ({ pathname: href, search: getPersistentQueryParams(location) })}>{label}</Link>}
           </li>
         );
       })}

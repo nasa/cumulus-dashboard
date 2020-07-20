@@ -4,12 +4,13 @@ import { Link } from 'react-router-dom';
 
 import { nullValue, dateOnly } from '../format';
 import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions';
+import { getPersistentQueryParams } from '../url-helper';
 
 export const tableColumns = ({ dispatch }) => ([
   {
     Header: 'Name',
     accessor: 'name',
-    Cell: ({ cell: { value } }) => <Link to={`/reconciliation-reports/report/${value}`}>{value}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={location => ({ pathname: `/reconciliation-reports/report/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Report Type',

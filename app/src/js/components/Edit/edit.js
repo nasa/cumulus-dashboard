@@ -10,6 +10,7 @@ import Schema from '../FormSchema/schema';
 import merge from '../../utils/merge';
 import _config from '../../config';
 import { strings } from '../locale';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 const { updateDelay } = _config;
 
@@ -40,12 +41,12 @@ class EditRecord extends React.Component {
 
   componentDidUpdate (prevProps) {
     const { pk, state } = this.props;
-    const { dispatch, history, clearRecordUpdate, backRoute } = prevProps;
+    const { dispatch, clearRecordUpdate, backRoute } = prevProps;
     const updateStatus = get(state.updated, [pk, 'status']);
     if (updateStatus === 'success') {
       return setTimeout(() => {
         dispatch(clearRecordUpdate(pk));
-        history.push(backRoute);
+        historyPushWithQueryParams(backRoute);
       }, updateDelay);
     } else if (this.state.pk === pk) { return; }
 
@@ -70,7 +71,8 @@ class EditRecord extends React.Component {
   }
 
   navigateBack () {
-    this.props.history.push(this.props.backRoute);
+    const { backRoute } = this.props;
+    historyPushWithQueryParams(backRoute);
   }
 
   onSubmit (id, payload) {
@@ -120,7 +122,6 @@ EditRecord.propTypes = {
   schemaKey: PropTypes.string,
   dispatch: PropTypes.func,
   state: PropTypes.object,
-  history: PropTypes.object,
   backRoute: PropTypes.string,
 
   includedForms: PropTypes.array,

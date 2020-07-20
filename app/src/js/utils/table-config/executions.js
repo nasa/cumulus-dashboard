@@ -8,13 +8,14 @@ import {
   formatCollectionId
 } from '../../utils/format';
 import { strings } from '../../components/locale';
+import { getPersistentQueryParams } from '../url-helper';
 
 export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'name',
     Cell: ({ row: { original: { arn, name } } }) => // eslint-disable-line react/prop-types
-      <Link to={'/executions/execution/' + arn} title={name}>{truncate(name, 24)}</Link>
+      <Link to={location => ({ pathname: '/executions/execution/' + arn, search: getPersistentQueryParams(location) })} title={name}>{truncate(name, 24)}</Link>
   },
   {
     Header: 'Status',

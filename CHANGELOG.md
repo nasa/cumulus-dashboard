@@ -47,6 +47,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- **CUMULUS-1773**
+  - Updated query param functionality so that when URLs are shared, the lists will be filtered based on those params
+  - Persists startDateTime and endDateTime params on all links and redirects within the app
+
 - **CUMULUS-1815**
   - Refactor some PDR components. No user facing changes.
 

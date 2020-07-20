@@ -44,11 +44,11 @@ import {
 // import { initialValuesFromLocation } from '../utils/url-helper';
 import Datepicker from './Datepicker/Datepicker';
 import { strings } from './locale';
+import { getPersistentQueryParams } from '../utils/url-helper';
 
 class Home extends React.Component {
   constructor (props) {
     super(props);
-    this.displayName = 'Home';
     this.query = this.query.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.refreshQuery = this.refreshQuery.bind(this);
@@ -123,7 +123,7 @@ class Home extends React.Component {
                         <span className='num--large'>{value}</span> {d[1]}
                       </a>
                     ) : (
-                      <Link id={d[1]} className='overview-num' to={{ pathname: d[2], search: this.props.location.search }}>
+                      <Link id={d[1]} className='overview-num' to={{ pathname: d[2], search: getPersistentQueryParams(this.props.location) }}>
                         <span className='num--large'>{value}</span> {d[1]}
                       </Link>
                     )}
@@ -140,7 +140,8 @@ class Home extends React.Component {
   render () {
     const { list } = this.props.granules;
     const { stats, count } = this.props.stats;
-    const { dist } = this.props;
+    const { dist, location } = this.props;
+    const searchString = getPersistentQueryParams(location);
     const overview = [
       [tally(get(stats.data, 'errors.value')), 'Errors', kibanaAllLogsLink(this.props.cumulusInstance)],
       [tally(get(stats.data, 'collections.value')), strings.collections, '/collections'],
@@ -206,7 +207,7 @@ class Home extends React.Component {
             <div className='row'>
               <div className='heading__wrapper--border'>
                 <h2 className='heading--large heading--shared-content--right'>Granules Updates</h2>
-                <Link className='link--secondary link--learn-more' to='/granules'>{strings.view_granules_overview}</Link>
+                <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
               </div>
               <div className="heading__wrapper">
                 <h2 className='heading--medium heading--shared-content--right'>{strings.granules_updated}<span className='num-title'>{numGranules}</span></h2>
@@ -219,7 +220,7 @@ class Home extends React.Component {
             <div className='row'>
               <div className='heading__wrapper'>
                 <h2 className='heading--medium heading--shared-content--right'>{strings.granules_errors}</h2>
-                <Link className='link--secondary link--learn-more' to='/logs'>{strings.view_logs}</Link>
+                <Link className='link--secondary link--learn-more' to={{ pathname: '/logs', search: searchString }}>{strings.view_logs}</Link>
               </div>
               <List
                 list={list}

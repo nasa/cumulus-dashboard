@@ -175,6 +175,16 @@ describe('Dashboard Granules Page', () => {
       cy.url().should('include', 'search=L2').and('include', 'status=completed');
     });
 
+    it('Should add datetime to sidebar link but no other filters', () => {
+      cy.visit('/granules');
+      cy.setDatepickerDropdown('Recent');
+      cy.get('.search').as('search');
+      cy.get('@search').should('be.visible').click().type('L2');
+      cy.get('#form-Status-status > div > input').as('status-input');
+      cy.get('@status-input').should('be.visible').click().type('comp{enter}');
+      cy.contains('.sidebar__row ul li a', 'Running').should('have.attr', 'href').and('match', /startDateTime/).and('not.match', /search|status/);
+    });
+
     it.skip('should Update overview Tiles when datepicker state changes.', () => {
       // TODO Enable test when CUMULUS-1805 is completed
       cy.visit('/granules');

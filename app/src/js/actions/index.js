@@ -3,7 +3,6 @@
 import compareVersions from 'compare-versions';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
-import { history } from '../store/configureStore';
 import { CMR } from '@cumulus/cmrjs';
 import isEmpty from 'lodash.isempty';
 import cloneDeep from 'lodash.clonedeep';
@@ -19,6 +18,7 @@ import { apiLambdaSearchTemplate } from './action-config/apiLambdaSearch';
 import { teaLambdaSearchTemplate } from './action-config/teaLambdaSearch';
 import { s3AccessSearchTemplate } from './action-config/s3AccessSearch';
 import * as types from './types';
+import { historyPushWithQueryParams } from '../utils/url-helper';
 
 const CALL_API = types.CALL_API;
 const {
@@ -615,14 +615,16 @@ export const clearPdrsSearch = () => ({ type: types.CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: types.FILTER_PDRS, param: param });
 export const clearPdrsFilter = (paramKey) => ({ type: types.CLEAR_PDRS_FILTER, paramKey: paramKey });
 
-export const listProviders = (options) => ({
-  [CALL_API]: {
-    type: types.PROVIDERS,
-    method: 'GET',
-    url: new URL('providers', root).href,
-    qs: Object.assign({ limit: defaultPageLimit }, options)
-  }
-});
+export const listProviders = (options) => {
+  return {
+    [CALL_API]: {
+      type: types.PROVIDERS,
+      method: 'GET',
+      url: new URL('providers', root).href,
+      qs: Object.assign({ limit: defaultPageLimit }, options)
+    }
+  };
+};
 
 export const getOptionsProviderGroup = () => ({
   [CALL_API]: {
@@ -742,7 +744,7 @@ export const loginError = (error) => {
   return (dispatch) => {
     return dispatch(deleteToken())
       .then(() => dispatch({ type: 'LOGIN_ERROR', error }))
-      .then(() => history.push('/auth'));
+      .then(() => historyPushWithQueryParams('/auth'));
   };
 };
 
