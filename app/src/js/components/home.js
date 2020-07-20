@@ -112,7 +112,7 @@ class Home extends React.Component {
           <div className='heading__wrapper'>
             <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
           </div>
-          <div className="overview-num__wrapper-home">
+          <div className="overview-num__wrapper overview-num__wrapper-home">
             <ul id={listId}>
               {data.map(d => {
                 const value = d[0];
@@ -244,11 +244,8 @@ Home.propTypes = {
   dist: PropTypes.object,
   executions: PropTypes.object,
   granules: PropTypes.object,
-  pdrs: PropTypes.object,
   rules: PropTypes.object,
   stats: PropTypes.object,
-  queryParams: PropTypes.object,
-  setQueryParams: PropTypes.func,
   dispatch: PropTypes.func,
   location: PropTypes.object
 };

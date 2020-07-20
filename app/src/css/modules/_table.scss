@@ -179,20 +179,34 @@
       border-bottom: 0;
     }
   }
-}
 
-.overview-num__wrapper ul li, .overview-num__wrapper-home ul li{
-  display: inline-block
-}
+  ul li {
+    display: inline-block;
 
-.overview-num__wrapper ul li:first-child .num-status{
-  background-color: $light-green;
-}
-.overview-num__wrapper ul li:nth-child(2) .num-status{
-  background-color: $error-red;
-}
-.overview-num__wrapper ul li:nth-child(3) .num-status{
-  background-color: $orange;
+    .num-status {
+      padding: 5px 0px 5px 0px;
+      color: $white;
+      width: 100%;
+      display: inline-block;
+      text-align: center;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+
+      &--completed {
+        background-color: $light-green;
+      }
+
+      &--failed {
+        background-color: $error-red;
+      }
+
+      &--running {
+        background-color: $orange;
+      }
+    }
+  }
+
 }
 
 .overview-num, .overview-num:visited {
@@ -219,17 +233,6 @@
     margin: .1em 1.5em 1.5em 0;
     box-shadow: $shadow__hover;
   }
-}
-
-.num-status{
-  padding: 5px 0px 5px 0px;
-  color: $white;
-  width: 100%;
-  display: inline-block;
-  text-align: center;
-  position: absolute;
-  top: 0px;
-  left: 0px;
 }
 
 .timeline--processing--overall {

@@ -56,14 +56,16 @@ class OperationOverview extends React.Component {
   }
 
   queryMeta () {
-    this.props.dispatch(listCollections({
+    const { dispatch, queryParams } = this.props;
+    dispatch(listCollections({
       limit: 100,
       fields: 'name,version'
     }));
-    this.props.dispatch(listWorkflows());
-    this.props.dispatch(getCount({
+    dispatch(listWorkflows());
+    dispatch(getCount({
       type: 'executions',
-      field: 'status'
+      field: 'status',
+      ...queryParams
     }));
   }
 

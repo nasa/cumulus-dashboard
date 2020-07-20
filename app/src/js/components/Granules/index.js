@@ -16,7 +16,7 @@ import { filterQueryParams } from '../../utils/url-helper';
 
 const Granules = ({ dispatch, location, queryParams, stats }) => {
   const { pathname } = location;
-  const count = get(stats, 'count.data.granules.count');
+  const count = get(stats, 'count.sidebar.granules.count');
   const filteredQueryParams = filterQueryParams(queryParams);
 
   function query() {
@@ -28,8 +28,10 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
       getCount({
         type: 'granules',
         field: 'status',
+        sidebarCount: true
       })
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   return (

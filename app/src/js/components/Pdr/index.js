@@ -17,7 +17,7 @@ import { filterQueryParams } from '../../utils/url-helper';
 
 const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
   const { pathname } = location;
-  const count = get(stats, 'count.data.pdrs.count');
+  const count = get(stats, 'count.sidebar.pdrs.count');
   const filteredQueryParams = filterQueryParams(queryParams);
 
   function query() {
@@ -29,6 +29,7 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
       getCount({
         type: 'pdrs',
         field: 'status',
+        sidebarCount: true
       })
     );
   }, [dispatch]);
