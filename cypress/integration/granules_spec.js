@@ -1,6 +1,4 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
-import { DATEPICKER_DATECHANGE } from '../../app/src/js/actions/types';
-import { msPerDay } from '../../app/src/js/utils/datepicker';
 
 describe('Dashboard Granules Page', () => {
   describe('When not logged in', () => {
@@ -149,11 +147,42 @@ describe('Dashboard Granules Page', () => {
       cy.get('@status-input').should('have.value', 'Completed');
     });
 
-    it('Should update URL when dropdown filters are activated.', () => {
+    it('Should update overview metrics when visiting bookmarkable URL', () => {
+      cy.visit('/granules?status=running');
+      cy.get('#form-Status-status > div > input').as('status-input');
+      cy.get('@status-input').should('have.value', 'Running');
+
+      cy.get('[data-cy=overview-num]').within(() => {
+        cy.get('li')
+          .first().should('contain', 0).and('contain', 'Completed')
+          .next().should('contain', 0).and('contain', 'Failed')
+          .next().should('contain', 2).and('contain', 'Running');
+      });
+
+      cy.visit('/granules?status=completed');
+      cy.get('#form-Status-status > div > input').as('status-input');
+      cy.get('@status-input').should('have.value', 'Completed');
+
+      cy.get('[data-cy=overview-num]').within(() => {
+        cy.get('li')
+          .first().should('contain', 7).and('contain', 'Completed')
+          .next().should('contain', 0).and('contain', 'Failed')
+          .next().should('contain', 0).and('contain', 'Running');
+      });
+    });
+
+    it('Should update URL and overview section when dropdown filters are activated.', () => {
       cy.visit('/granules');
       cy.get('#form-Status-status > div > input').as('status-input');
       cy.get('@status-input').click().type('fai').type('{enter}');
       cy.url().should('include', '?status=failed');
+
+      cy.get('[data-cy=overview-num]').within(() => {
+        cy.get('li')
+          .first().should('contain', 0).and('contain', 'Completed')
+          .next().should('contain', 2).and('contain', 'Failed')
+          .next().should('contain', 0).and('contain', 'Running');
+      });
     });
 
     it('Should update URL and table when search filter is changed.', () => {
@@ -185,8 +214,7 @@ describe('Dashboard Granules Page', () => {
       cy.contains('.sidebar__row ul li a', 'Running').should('have.attr', 'href').and('match', /startDateTime/).and('not.match', /search|status/);
     });
 
-    it.skip('should Update overview Tiles when datepicker state changes.', () => {
-      // TODO Enable test when CUMULUS-1805 is completed
+    it('should Update overview Tiles when datepicker state changes.', () => {
       cy.visit('/granules');
       cy.url().should('include', 'granules');
       cy.contains('.heading--xlarge', 'Granules');
@@ -197,19 +225,11 @@ describe('Dashboard Granules Page', () => {
         .first().contains('li', 'Completed').contains('li', 7)
         .next().contains('li', 'Failed').contains('li', 2)
         .next().contains('li', 'Running').contains('li', 2);
-      cy.window().its('appStore').then((store) => {
-        store.dispatch({
-          type: DATEPICKER_DATECHANGE,
-          data: {
-            startDateTime: new Date(Date.now() - 5 * msPerDay),
-            endDateTime: new Date(Date.now() - 4 * msPerDay)
-          }
-        });
-        cy.get('.overview-num__wrapper ul li')
-          .first().contains('li', 'Completed').contains('li', 0)
-          .next().contains('li', 'Failed').contains('li', 0)
-          .next().contains('li', 'Running').contains('li', 0);
-      });
+      cy.setDatepickerDropdown('Recent');
+      cy.get('.overview-num__wrapper ul li')
+        .first().contains('li', 'Completed').contains('li', 0)
+        .next().contains('li', 'Failed').contains('li', 0)
+        .next().contains('li', 'Running').contains('li', 0);
     });
 
     it('Should update the table when the Results Per Page dropdown is changed.', () => {
