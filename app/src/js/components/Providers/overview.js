@@ -15,7 +15,6 @@ import { lastUpdated } from '../../utils/format';
 import { tableColumns } from '../../utils/table-config/providers';
 import List from '../Table/Table';
 import PropTypes from 'prop-types';
-import Overview from '../Overview/overview';
 import Dropdown from '../DropDown/dropdown';
 import pageSizeOptions from '../../utils/page-size';
 import ListFilters from '../ListActions/ListFilters';
@@ -37,12 +36,6 @@ class ProvidersOverview extends React.Component {
       getCount({
         type: 'collections',
         field: 'providers',
-      })
-    );
-    this.props.dispatch(
-      getCount({
-        type: 'providers',
-        field: 'status',
       })
     );
   }
@@ -89,7 +82,6 @@ class ProvidersOverview extends React.Component {
             Provider Overview
           </h1>
           {lastUpdated(queriedAt)}
-          <Overview type='providers' inflight={false} />
         </section>
         <section className="page__section">
           <div className="heading__wrapper--border">
