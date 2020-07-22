@@ -27,7 +27,8 @@ const Executions = ({
   function query () {
     dispatch(getCount({
       type: 'executions',
-      field: 'status'
+      field: 'status',
+      ...filteredQueryParams
     }));
     dispatch(listExecutions(filteredQueryParams));
   }

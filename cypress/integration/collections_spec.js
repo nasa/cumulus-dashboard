@@ -174,14 +174,14 @@ describe('Dashboard Collections Page', () => {
         .should('have.attr', 'href', `/collections/collection/${name}/${version}`)
         .click();
       cy.contains('.heading--large', `${name} / ${version}`);
-      cy.contains(/Granules? Running/i);
+      cy.contains('.heading--large', 'Granule Metric');
 
       const collectionId = getCollectionId({ name: 'MOD09GQ', version: '006' });
       const formattedCollectionName = collectionName(collectionId);
 
       cy.get('#collection-chooser').select(collectionId);
       cy.contains('.heading--large', `${formattedCollectionName}`);
-      cy.contains(/Granules? Running/i);
+      cy.contains('.heading--large', 'Granule Metric');
       cy.get('#collection-chooser').find(':selected').contains(collectionId);
     });
 
@@ -519,9 +519,9 @@ describe('Dashboard Collections Page', () => {
       });
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', '--').and('contain', 'Completed')
-          .next().should('contain', '--').and('contain', 'Failed')
-          .next().should('contain', '--').and('contain', 'Running');
+          .first().should('contain', 0).and('contain', 'Completed')
+          .next().should('contain', 0).and('contain', 'Failed')
+          .next().should('contain', 0).and('contain', 'Running');
       });
 
       cy.get('[data-cy=endDateTime] > .react-datetime-picker > .react-datetime-picker__wrapper > .react-datetime-picker__clear-button > .react-datetime-picker__clear-button__icon').click();
@@ -531,6 +531,28 @@ describe('Dashboard Collections Page', () => {
           .first().should('contain', 7).and('contain', 'Completed')
           .next().should('contain', 2).and('contain', 'Failed')
           .next().should('contain', 2).and('contain', 'Running');
+      });
+    });
+
+    it('Should display Granule Metrics that match the dropdown selection', () => {
+      cy.visit('/collections/collection/MOD09GQ/006');
+
+      cy.get('[data-cy=overview-num]').within(() => {
+        cy.get('li')
+          .first().should('contain', 7).and('contain', 'Completed')
+          .next().should('contain', 2).and('contain', 'Failed')
+          .next().should('contain', 2).and('contain', 'Running');
+      });
+
+      cy.get('#form-Status-status > div > input').as('status-input');
+      cy.get('@status-input').click().type('fai').type('{enter}');
+      cy.url().should('include', '?status=failed');
+
+      cy.get('[data-cy=overview-num]').within(() => {
+        cy.get('li')
+          .first().should('contain', 0).and('contain', 'Completed')
+          .next().should('contain', 2).and('contain', 'Failed')
+          .next().should('contain', 0).and('contain', 'Running');
       });
     });
   });

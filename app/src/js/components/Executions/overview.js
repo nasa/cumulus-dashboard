@@ -9,20 +9,13 @@ import {
   filterExecutions,
   searchExecutions,
   clearExecutionsSearch,
-  getCount,
   getCumulusInstanceMetadata,
   listExecutions,
   listWorkflows,
-  getOptionsCollectionName
+  getOptionsCollectionName,
 } from '../../actions';
-import {
-  tally,
-  lastUpdated,
-  displayCase
-} from '../../utils/format';
-import {
-  workflowOptions
-} from '../../selectors';
+import { tally, lastUpdated } from '../../utils/format';
+import { workflowOptions } from '../../selectors';
 import statusOptions from '../../utils/status';
 import pageSizeOptions from '../../utils/page-size';
 import List from '../Table/Table';
@@ -34,39 +27,36 @@ import { tableColumns } from '../../utils/table-config/executions';
 import ListFilters from '../ListActions/ListFilters';
 
 class ExecutionOverview extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.queryMeta = this.queryMeta.bind(this);
-    this.renderOverview = this.renderOverview.bind(this);
     this.searchOperationId = this.searchOperationId.bind(this);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.queryMeta();
     this.props.dispatch(getCumulusInstanceMetadata());
   }
 
-  queryMeta () {
-    this.props.dispatch(listWorkflows());
-    this.props.dispatch(getCount({
-      type: 'executions',
-      field: 'status'
-    }));
+  queryMeta() {
+    const { dispatch } = this.props;
+    dispatch(listWorkflows());
   }
 
-  searchOperationId (list, infix) {
+  searchOperationId(list, infix) {
     return list.filter((item) => {
-      if (item.asyncOperationId && item.asyncOperationId.includes(infix)) return item;
+      if (item.asyncOperationId && item.asyncOperationId.includes(infix)) { return item; }
     });
   }
 
-  renderOverview (count) {
-    const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
-    return <Overview items={overview} inflight={false} />;
-  }
-
-  render () {
-    const { dispatch, stats, executions, collections, queryParams, workflowOptions } = this.props;
+  render() {
+    const {
+      collections,
+      dispatch,
+      executions,
+      queryParams,
+      workflowOptions,
+    } = this.props;
     const { dropdowns } = collections;
     const { list } = executions;
     const { count, queriedAt } = list.meta;
@@ -74,17 +64,24 @@ class ExecutionOverview extends React.Component {
       list.data = this.searchOperationId(list.data, list.infix.value);
     }
     return (
-      <div className='page__component'>
-        <section className='page__section page__section__header-wrapper'>
-          <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>Execution Overview</h1>
+      <div className="page__component">
+        <section className="page__section page__section__header-wrapper">
+          <div className="page__section__header">
+            <h1 className="heading--large heading--shared-content with-description">
+              Execution Overview
+            </h1>
             {lastUpdated(queriedAt)}
-            {this.renderOverview(get(stats, 'count.data.executions.count', []))}
+            <Overview type='executions' inflight={false} />
           </div>
         </section>
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>All Executions <span className='num-title'>{count ? ` ${tally(count)}` : 0}</span></h2>
+        <section className="page__section">
+          <div className="heading__wrapper--border">
+            <h2 className="heading--medium heading--shared-content with-description">
+              All Executions
+              <span className="num-title">
+                {count ? ` ${tally(count)}` : 0}
+              </span>
+            </h2>
           </div>
           <List
             list={list}
@@ -103,7 +100,7 @@ class ExecutionOverview extends React.Component {
                 paramKey={'status'}
                 label={'Status'}
                 inputProps={{
-                  placeholder: 'All'
+                  placeholder: 'All',
                 }}
               />
 
@@ -115,7 +112,7 @@ class ExecutionOverview extends React.Component {
                 paramKey={'collectionId'}
                 label={strings.collection_id}
                 inputProps={{
-                  placeholder: 'All'
+                  placeholder: 'All',
                 }}
               />
 
@@ -126,16 +123,17 @@ class ExecutionOverview extends React.Component {
                 paramKey={'type'}
                 label={'Workflow'}
                 inputProps={{
-                  placeholder: 'All'
+                  placeholder: 'All',
                 }}
               />
 
-              <Search dispatch={dispatch}
+              <Search
+                dispatch={dispatch}
                 action={searchExecutions}
                 clear={clearExecutionsSearch}
                 paramKey={'asyncOperationId'}
                 label={'Async Operation ID'}
-                placeholder='Search'
+                placeholder="Search"
               />
 
               <Dropdown
@@ -145,7 +143,7 @@ class ExecutionOverview extends React.Component {
                 paramKey={'limit'}
                 label={'Results Per Page'}
                 inputProps={{
-                  placeholder: 'Results Per Page'
+                  placeholder: 'Results Per Page',
                 }}
               />
             </ListFilters>
@@ -161,13 +159,11 @@ ExecutionOverview.propTypes = {
   dispatch: PropTypes.func,
   executions: PropTypes.object,
   queryParams: PropTypes.object,
-  stats: PropTypes.object,
   workflowOptions: PropTypes.object,
 };
 
 export default withRouter(connect(state => ({
   collections: state.collections,
   executions: state.executions,
-  stats: state.stats,
   workflowOptions: workflowOptions(state),
 }))(ExecutionOverview));

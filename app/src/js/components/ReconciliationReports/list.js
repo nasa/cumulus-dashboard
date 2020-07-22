@@ -48,9 +48,11 @@ class ReconciliationReportList extends React.Component {
   }
 
   queryMeta () {
-    this.props.dispatch(getCount({
+    const { dispatch, queryParams } = this.props;
+    dispatch(getCount({
       type: 'reconciliationReports',
-      field: 'status'
+      field: 'status',
+      ...queryParams,
     }));
   }
 
