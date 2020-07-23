@@ -60,6 +60,7 @@ function renderMenu(results, menuProps) {
 
 const Dropdown = ({
   action,
+  clear,
   dispatch,
   getOptions,
   inputProps,
@@ -100,6 +101,10 @@ const Dropdown = ({
       }
       setSelected(selectedValue);
     }
+
+    return function cleanup() {
+      dispatch(clear(paramKey));
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(queryParams)]);
 
@@ -127,6 +132,7 @@ const Dropdown = ({
 
 Dropdown.propTypes = {
   action: PropTypes.func,
+  clear: PropTypes.func,
   dispatch: PropTypes.func,
   getOptions: PropTypes.func,
   inputProps: PropTypes.object,
