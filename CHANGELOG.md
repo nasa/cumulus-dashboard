@@ -83,6 +83,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2019**
   - Support partial search
 
+- **CUMULUS-2029**
+  - Overview tiles are updated to represent what is shown in the table
+
 ### Fixed
 
 - **CUMULUS-1815**

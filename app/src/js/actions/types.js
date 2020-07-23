@@ -91,6 +91,7 @@ export const DIST_S3ACCESS_INFLIGHT = 'DIST_S3ACCESS_INFLIGHT';
 export const DIST_S3ACCESS_ERROR = 'DIST_S3ACCESS_ERROR';
 // Count
 export const COUNT = 'COUNT';
+export const COUNT_SIDEBAR = 'COUNT_SIDEBAR';
 export const COUNT_INFLIGHT = 'COUNT_INFLIGHT';
 export const COUNT_ERROR = 'COUNT_ERROR';
 // PDR

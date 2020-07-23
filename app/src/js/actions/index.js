@@ -572,16 +572,23 @@ export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
 };
 
 // count queries *must* include type and field properties.
-export const getCount = (options) => {
+export const getCount = (options = {}) => {
+  const { sidebarCount, type, field, ...restOptions } = options;
+  const params = {
+    type,
+    field,
+    ...sidebarCount ? {} : restOptions
+  };
+  const actionType = sidebarCount ? types.COUNT_SIDEBAR : types.COUNT;
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     return dispatch({
       [CALL_API]: {
-        type: types.COUNT,
+        type: actionType,
         method: 'GET',
         id: null,
         url: new URL('stats/aggregate', root).href,
-        qs: Object.assign({ type: 'must-include-type', field: 'status' }, options, timeFilters)
+        qs: Object.assign({ type: 'must-include-type', field: 'status' }, params, timeFilters)
       }
     });
   };

@@ -26,7 +26,8 @@ const ReconciliationReports = ({
     dispatch(listReconciliationReports(filteredQueryParams));
     dispatch(getCount({
       type: 'reconciliationReports',
-      field: 'status'
+      field: 'status',
+      ...filteredQueryParams
     }));
   }
 

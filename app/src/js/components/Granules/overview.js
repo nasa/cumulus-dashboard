@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import withQueryParams from 'react-router-query-params';
 import {
   searchGranules,
   clearGranulesSearch,
@@ -17,7 +18,7 @@ import {
   getGranuleCSV
 } from '../../actions';
 import { get } from 'object-path';
-import { lastUpdated, tally, displayCase } from '../../utils/format';
+import { lastUpdated, tally } from '../../utils/format';
 import {
   tableColumns,
   simpleDropdownOption,
@@ -139,12 +140,10 @@ class GranulesOverview extends React.Component {
   }
 
   render () {
-    const { collections, dispatch, granules, stats } = this.props;
+    const { collections, dispatch, granules } = this.props;
     const { list } = granules;
     const { dropdowns } = collections;
     const { count, queriedAt } = list.meta;
-    const statsCount = get(stats, 'count.data.granules.count', []);
-    const overviewItems = statsCount.map(d => [tally(d.count), displayCase(d.key)]);
     return (
       <div className='page__component'>
         <Helmet>
@@ -157,7 +156,7 @@ class GranulesOverview extends React.Component {
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>{strings.granule_overview}</h1>
             {lastUpdated(queriedAt)}
-            <Overview items={overviewItems} inflight={false} />
+            <Overview type='granules' inflight={false} />
           </div>
         </section>
         <section className='page__section'>
@@ -231,17 +230,15 @@ GranulesOverview.propTypes = {
   granuleCSV: PropTypes.object,
   granules: PropTypes.object,
   queryParams: PropTypes.object,
-  stats: PropTypes.object,
   workflowOptions: PropTypes.array,
 };
 
 export { GranulesOverview };
 
-export default withRouter(connect(state => ({
+export default withRouter(withQueryParams()(connect(state => ({
   collections: state.collections,
   config: state.config,
   granuleCSV: state.granuleCSV,
   granules: state.granules,
-  stats: state.stats,
   workflowOptions: workflowOptionNames(state),
-}))(GranulesOverview));
+}))(GranulesOverview)));
