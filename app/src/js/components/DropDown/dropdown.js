@@ -4,7 +4,26 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
-import { Typeahead, Menu, MenuItem } from 'react-bootstrap-typeahead';
+import {
+  Typeahead,
+  Menu,
+  MenuItem,
+  Hint,
+  Input,
+} from 'react-bootstrap-typeahead';
+
+function renderInput(inputProps) {
+  return (
+    <Hint
+      shouldSelect={(shouldSelect, e) => {
+        // Selects the hint when the user hits the 'enter' key.
+        return e.keyCode === 13 || shouldSelect;
+      }}
+    >
+      <Input {...inputProps} />
+    </Hint>
+  );
+}
 
 function renderMenu(items, menuProps) {
   return (
@@ -84,9 +103,9 @@ const Dropdown = ({
         inputProps={inputProps}
         onChange={onChange}
         options={options}
+        renderInput={renderInput}
         renderMenu={renderMenu}
         selected={selected || []}
-        selectHintOnEnter={true}
       />
     </div>
   );
