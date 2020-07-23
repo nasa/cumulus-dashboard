@@ -12,7 +12,7 @@ import {
   Input,
 } from 'react-bootstrap-typeahead';
 
-function renderInput(inputProps) {
+function renderInput({ inputRef, referenceElementRef, ...inputProps }) {
   return (
     <Hint
       shouldSelect={(shouldSelect, e) => {
@@ -20,23 +20,37 @@ function renderInput(inputProps) {
         return e.keyCode === 13 || shouldSelect;
       }}
     >
-      <Input {...inputProps} />
+      <Input
+        {...inputProps}
+        ref={(input) => {
+          inputRef(input);
+          referenceElementRef(input);
+        }}
+      />
     </Hint>
   );
 }
 
-function renderMenu(items, menuProps) {
+renderInput.propTypes = {
+  inputRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
+  referenceElementRef: PropTypes.func,
+};
+
+function renderMenu(results, menuProps) {
   return (
     <Menu {...menuProps} className="autocomplete__menu">
-      {items.map((item, index) => {
+      {results.map((result, index) => {
         return (
           <MenuItem
             className="autocomplete__select"
             key={index}
-            option={item}
+            option={result}
             position={index}
           >
-            {item.label}
+            {result.label}
           </MenuItem>
         );
       })}

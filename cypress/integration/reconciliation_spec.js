@@ -48,7 +48,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('@status-input').should('have.value', 'Generated');
 
       cy.visit('/reconciliation-reports?type=Inventory');
-      cy.get('.filter-type > div > input').as('type-input');
+      cy.get('.filter-type .rbt-input-main').as('type-input');
       cy.get('@type-input').should('have.value', 'Inventory');
     });
 
@@ -57,7 +57,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.search').as('search');
       cy.get('@search').should('be.visible').click().type('inventoryReport-2020');
 
-      cy.get('.filter-type > div > input').as('type-input');
+      cy.get('.filter-type .rbt-input-main').as('type-input');
       cy.get('@type-input').should('be.visible').click().type('invent{enter}');
       cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').should('be.visible').click().type('gener{enter}');
@@ -221,7 +221,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
     it('should have the option to filter the report by S3 bucket', () => {
       cy.visit('/reconciliation-reports/report/inventoryReport-20200114T205238781');
 
-      cy.get('.filter-bucket > div > input').as('bucket-input');
+      cy.get('.filter-bucket .rbt-input-main').as('bucket-input');
       cy.get('@bucket-input').should('be.visible').click().type('mhs3-pri{enter}');
 
       /** Table Cards **/
