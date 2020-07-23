@@ -147,11 +147,10 @@ class List extends React.Component {
       selected,
       clearSelected,
       completedBulkActions,
-      bulkActionError
+      bulkActionError,
+      queryConfig
     } = this.state;
     const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
-
-    const queryConfig = this.getQueryConfig();
 
     return (
       <>

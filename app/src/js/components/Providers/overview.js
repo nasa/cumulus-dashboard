@@ -11,11 +11,10 @@ import {
   filterProviders,
   clearProvidersFilter,
 } from '../../actions';
-import { lastUpdated, tally, displayCase } from '../../utils/format';
+import { lastUpdated } from '../../utils/format';
 import { tableColumns } from '../../utils/table-config/providers';
 import List from '../Table/Table';
 import PropTypes from 'prop-types';
-import Overview from '../Overview/overview';
 import Dropdown from '../DropDown/dropdown';
 import pageSizeOptions from '../../utils/page-size';
 import ListFilters from '../ListActions/ListFilters';
@@ -26,7 +25,6 @@ class ProvidersOverview extends React.Component {
     super();
     this.queryStats = this.queryStats.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
-    this.renderOverview = this.renderOverview.bind(this);
   }
 
   componentDidMount() {
@@ -40,12 +38,6 @@ class ProvidersOverview extends React.Component {
         field: 'providers',
       })
     );
-    this.props.dispatch(
-      getCount({
-        type: 'providers',
-        field: 'status',
-      })
-    );
   }
 
   generateQuery() {
@@ -53,12 +45,7 @@ class ProvidersOverview extends React.Component {
     return { ...queryParams };
   }
 
-  renderOverview(count) {
-    const overview = count.map((d) => [tally(d.count), displayCase(d.key)]);
-    return <Overview items={overview} inflight={false} />;
-  }
-
-  render() {
+  render () {
     const { dispatch, providers, stats } = this.props;
     const { list } = providers;
     const { count, queriedAt } = list.meta;
@@ -85,8 +72,6 @@ class ProvidersOverview extends React.Component {
         0
       );
     });
-    const providerStatus = get(stats.count, 'data.providers.count', []);
-    const overview = this.renderOverview(providerStatus);
     return (
       <div className="page__component">
         <Helmet>
@@ -97,7 +82,6 @@ class ProvidersOverview extends React.Component {
             Provider Overview
           </h1>
           {lastUpdated(queriedAt)}
-          {overview}
         </section>
         <section className="page__section">
           <div className="heading__wrapper--border">

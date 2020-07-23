@@ -20,7 +20,6 @@ import {
   collectionNameVersion,
   getCollectionId,
   lastUpdated,
-  tally,
 } from '../../utils/format';
 import pageSizeOptions from '../../utils/page-size';
 import statusOptions from '../../utils/status';
@@ -145,17 +144,6 @@ class CollectionOverview extends React.Component {
     ].filter(Boolean);
   }
 
-  renderOverview(record) {
-    const data = get(record, 'data', {});
-    const stats = get(data, 'stats', {});
-    const overview = [
-      [tally(stats.completed), strings.granules_completed],
-      [tally(stats.failed), strings.granules_failed],
-      [tally(stats.running), strings.granules_running],
-    ];
-    return <Overview items={overview} inflight={record.inflight} />;
-  }
-
   renderDeleteButton() {
     const {
       match: { params },
@@ -193,9 +181,6 @@ class CollectionOverview extends React.Component {
       (id1, id2) => id1.localeCompare(id2, 'en', { sensitivity: 'base' })
     );
     const record = collections.map[collectionId];
-
-    // create the overview boxes
-    const overview = record ? this.renderOverview(record) : <div></div>;
 
     return (
       <div className="page__component">
@@ -271,7 +256,7 @@ class CollectionOverview extends React.Component {
               Granule Metrics
             </h2>
           </div>
-          {overview}
+          {record && <Overview type='granules' inflight={record.inflight} />}
         </section>
         <section className="page__section">
           <div className="heading__wrapper--border">

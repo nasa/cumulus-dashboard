@@ -4,9 +4,13 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { get } from 'object-path';
-import { listPdrs, getCount, clearPdrsFilter, filterPdrs } from '../../actions';
-import { lastUpdated, tally, displayCase } from '../../utils/format';
+import {
+  listPdrs,
+  getCount,
+  clearPdrsFilter,
+  filterPdrs
+} from '../../actions';
+import { lastUpdated, tally } from '../../utils/format';
 import { bulkActions } from '../../utils/table-config/pdrs';
 import { tableColumns } from '../../utils/table-config/pdr-progress';
 import List from '../Table/Table';
@@ -34,7 +38,6 @@ class PdrOverview extends React.Component {
     this.queryStats = this.queryStats.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
-    this.renderOverview = this.renderOverview.bind(this);
   }
 
   componentDidMount() {
@@ -42,10 +45,12 @@ class PdrOverview extends React.Component {
   }
 
   queryStats() {
-    this.props.dispatch(
+    const { dispatch, queryParams } = this.props;
+    dispatch(
       getCount({
         type: 'pdrs',
         field: 'status',
+        ...queryParams,
       })
     );
   }
@@ -59,18 +64,11 @@ class PdrOverview extends React.Component {
     return bulkActions(this.props.pdrs);
   }
 
-  renderOverview(count) {
-    const overview = count.map((d) => [tally(d.count), displayCase(d.key)]);
-    return <Overview items={overview} inflight={false} />;
-  }
-
-  render() {
-    const { stats } = this.props;
-    const { list } = this.props.pdrs;
+  render () {
+    const { dispatch, pdrs } = this.props;
+    const { list } = pdrs;
     const { count, queriedAt } = list.meta;
     // create the overview boxes
-    const pdrCount = get(stats.count, 'data.pdrs.count', []);
-    const overview = this.renderOverview(pdrCount);
     return (
       <div className="page__component">
         <Helmet>
@@ -84,7 +82,7 @@ class PdrOverview extends React.Component {
             PDR Overview
           </h1>
           {lastUpdated(queriedAt)}
-          {overview}
+          <Overview type='pdrs' inflight={false} />
         </section>
         <section className="page__section">
           <div className="heading__wrapper--border">
@@ -97,7 +95,7 @@ class PdrOverview extends React.Component {
           </div>
           <List
             list={list}
-            dispatch={this.props.dispatch}
+            dispatch={dispatch}
             action={listPdrs}
             tableColumns={tableColumns}
             sortId="timestamp"
@@ -128,12 +126,10 @@ PdrOverview.propTypes = {
   dispatch: PropTypes.func,
   pdrs: PropTypes.object,
   queryParams: PropTypes.object,
-  stats: PropTypes.object,
 };
 
 export default withRouter(
   connect((state) => ({
-    stats: state.stats,
     pdrs: state.pdrs,
   }))(PdrOverview)
 );

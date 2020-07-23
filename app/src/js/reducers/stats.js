@@ -7,6 +7,7 @@ import {
   STATS_INFLIGHT,
   STATS_ERROR,
   COUNT,
+  COUNT_SIDEBAR,
   COUNT_INFLIGHT,
   COUNT_ERROR,
 } from '../actions/types';
@@ -26,6 +27,7 @@ export const initialState = {
   count: {
     // aggregate stats from /stats/aggregate?type=<type>&field=status
     data: {},
+    sidebar: {},
     inflight: false,
     error: null,
   },
@@ -45,16 +47,36 @@ export default createReducer(initialState, {
     state.stats.error = action.error;
   },
   [COUNT]: (state, action) => {
-    const { count } = action.data;
-    const empty = [{ key: 'completed', count: 0 },
-      { key: 'failed', count: 0 },
-      { key: 'running', count: 0 }
-    ];
+    const { count, meta } = action.data;
+    const { field } = meta || {};
+    const completed = count.find((item) => item.key === 'completed') || {
+      key: 'completed',
+      count: 0,
+    };
+    const failed = count.find((item) => item.key === 'failed') || {
+      key: 'failed',
+      count: 0,
+    };
+    const running = count.find((item) => item.key === 'running') || {
+      key: 'running',
+      count: 0,
+    };
+    const statsCount =
+      field === 'status' ? [completed, failed, running] : count;
     state.count.inflight = false;
     state.count.error = null;
     state.count.data[action.config.qs.type] = {
       ...action.data,
-      count: (count.length === 0) ? empty : count
+      count: statsCount,
+    };
+  },
+  [COUNT_SIDEBAR]: (state, action) => {
+    const { count } = action.data;
+    state.count.inflight = false;
+    state.count.error = null;
+    state.count.sidebar[action.config.qs.type] = {
+      ...action.data,
+      count,
     };
   },
   [COUNT_INFLIGHT]: (state) => {
