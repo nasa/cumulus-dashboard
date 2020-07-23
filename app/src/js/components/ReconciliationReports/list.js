@@ -14,7 +14,7 @@ import {
 } from '../../actions';
 import { lastUpdated } from '../../utils/format';
 import { reconciliationReportStatus as statusOptions } from '../../utils/status';
-import { reconciliationReportTypes as reportTypeOptions } from '../../utils/report-type';
+import { reconciliationReportTypes as reportTypeOptions } from '../../utils/type';
 import { tableColumns, bulkActions } from '../../utils/table-config/reconciliation-reports';
 import LoadingEllipsis from '../../components/LoadingEllipsis/loading-ellipsis';
 import Dropdown from '../DropDown/dropdown';

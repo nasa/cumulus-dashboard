@@ -219,6 +219,7 @@
     "react-ace": "^6.2.0",
     "react-autocomplete": "^1.8.1",
     "react-bootstrap": "^1.0.0-beta.14",
+    "react-bootstrap-typeahead": "^5.1.0",
     "react-collapsible": "^2.6.3",
     "react-datetime-picker": "2.8.0",
     "react-dom": "^16.6.3",

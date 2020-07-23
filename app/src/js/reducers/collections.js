@@ -130,13 +130,14 @@ export default createReducer(initialState, {
   },
   [OPTIONS_COLLECTIONNAME]: (state, action) => {
     const options = action.data.results.reduce(
-      (obj, { name, version }) => {
+      (arr, { name, version }) => {
         const collectionId = getCollectionId({ name, version });
-        return Object.assign(obj, {
-          [collectionId]: collectionId,
-        });
+        return [...arr, {
+          id: collectionId,
+          label: collectionId
+        }];
       },
-      {}
+      []
     );
     set(state.dropdowns, 'collectionName.options', options);
   },

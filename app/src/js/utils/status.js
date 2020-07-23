@@ -1,10 +1,38 @@
 'use strict';
-const status = {
-  Running: 'running',
-  Completed: 'completed',
-  Failed: 'failed'
-};
+const status = [
+  {
+    id: 'running',
+    label: 'Running',
+  },
+  {
+    id: 'completed',
+    label: 'Completed',
+  },
+  {
+    id: 'failed',
+    label: 'Failed'
+  }
+];
 export default status;
+
+export const operationStatus = [
+  {
+    id: 'RUNNING',
+    label: 'Running'
+  },
+  {
+    id: 'SUCCEEDED',
+    label: 'Succeeded'
+  },
+  {
+    id: 'TASK_FAILED',
+    label: 'Task Failed'
+  },
+  {
+    id: 'RUNNER_FAILED',
+    label: 'Runner Failed'
+  }
+];
 
 export const pdrStatus = {
   Discovered: 'discovered',
@@ -13,8 +41,17 @@ export const pdrStatus = {
   Failed: 'failed'
 };
 
-export const reconciliationReportStatus = {
-  Generated: 'Generated',
-  Pending: 'Pending',
-  Failed: 'Failed'
-};
+export const reconciliationReportStatus = [
+  {
+    id: 'Generated',
+    label: 'Generated'
+  },
+  {
+    id: 'Pending',
+    label: 'Pending'
+  },
+  {
+    id: 'Failed',
+    label: 'Failed'
+  }
+];

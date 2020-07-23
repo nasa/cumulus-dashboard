@@ -184,6 +184,7 @@ const CollectionGranules = ({
             />
             {view === 'all' && (
               <Dropdown
+                id='status'
                 options={statusOptions}
                 action={filterGranules}
                 clear={clearGranulesFilter}
@@ -195,6 +196,7 @@ const CollectionGranules = ({
               />
             )}
             <Dropdown
+              id="limit"
               options={pageSizeOptions}
               action={filterGranules}
               clear={clearGranulesFilter}
