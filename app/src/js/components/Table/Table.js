@@ -13,6 +13,12 @@ import isNil from 'lodash.isnil';
 import omitBy from 'lodash.omitby';
 import ListActions from '../ListActions/ListActions';
 
+function buildSortKey(sortProps) {
+  console.log('sortProps', sortProps);
+  return sortProps.map((item) =>
+    (item.desc === true) ? `-${item.id}` : item.id);
+}
+
 class List extends React.Component {
   constructor (props) {
     super(props);
@@ -26,18 +32,19 @@ class List extends React.Component {
     const initialPage = 1;
     const initialSortId = props.sortId;
     const initialOrder = 'desc';
+    const sortProps = [{ id: initialSortId, desc: true }];
 
     this.state = {
       page: initialPage,
       sortId: initialSortId,
       order: initialOrder,
+      sortProps,
       selected: [],
       clearSelected: false,
       infix: null,
       queryConfig: {
         page: initialPage,
-        order: initialOrder,
-        sort_by: initialSortId,
+        sort_key: buildSortKey(sortProps),
         ...(props.query || {})
       },
       params: {},
@@ -74,11 +81,11 @@ class List extends React.Component {
   }
 
   queryNewSort (sortProps) {
+    console.log('new sort', sortProps);
     this.setState({
-      ...sortProps,
+      sortProps,
       queryConfig: this.getQueryConfig({
-        order: sortProps.order,
-        sort_by: sortProps.sortId
+        sort_key: buildSortKey(sortProps)
       }),
       clearSelected: true
     });
@@ -116,8 +123,7 @@ class List extends React.Component {
     const { search, ...restQuery } = query;
     return omitBy({
       page: this.state.page,
-      order: this.state.order,
-      sort_by: this.state.sortId,
+      sort_key: buildSortKey(this.state.sortProps),
       infix: search,
       ...this.state.params,
       ...config,
@@ -171,13 +177,6 @@ class List extends React.Component {
           {list.error && <ErrorReport report={list.error} truncate={true}/>}
           {bulkActionError && <ErrorReport report={bulkActionError}/>}
           <div className = "list__wrapper">
-            {/* Will add back when working on ticket 1462<TableOptions
-            count={count}
-            limit={limit}
-            page={page}
-            onNewPage={this.queryNewPage}
-            showPages={false}
-          /> */}
             <SortableTable
               tableColumns={tableColumns}
               data={tableData}
@@ -209,6 +208,7 @@ List.propTypes = {
   dispatch: PropTypes.func,
   action: PropTypes.func,
   children: PropTypes.node,
+  sortProps: PropTypes.array,
   sortId: PropTypes.string,
   query: PropTypes.object,
   bulkActions: PropTypes.array,

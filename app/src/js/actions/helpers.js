@@ -49,7 +49,8 @@ export const configureRequest = (params = {}) => {
   const defaultRequestConfig = {
     json: true,
     resolveWithFullResponse: true,
-    simple: false
+    simple: false,
+    qsStringifyOptions: { arrayFormat: 'brackets' }
   };
   config = Object.assign({}, defaultRequestConfig, config);
 
