@@ -44,7 +44,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
     it('should update dropdown with label when visiting bookmarkable URL', () => {
       cy.visit('/reconciliation-reports?status=Generated');
-      cy.get('.filter-status .rbt-input').as('status-input');
+      cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').should('have.value', 'Generated');
 
       cy.visit('/reconciliation-reports?type=Inventory');
@@ -59,7 +59,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
       cy.get('.filter-type > div > input').as('type-input');
       cy.get('@type-input').should('be.visible').click().type('invent{enter}');
-      cy.get('.filter-status .rbt-input').as('status-input');
+      cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').should('be.visible').click().type('gener{enter}');
       cy.url().should('include', 'search=inventoryReport-2020')
         .and('include', 'type=Inventory')
