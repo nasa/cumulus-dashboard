@@ -34,13 +34,6 @@ export const operationStatus = [
   }
 ];
 
-export const pdrStatus = {
-  Discovered: 'discovered',
-  Parsed: 'parsed',
-  Completed: 'completed',
-  Failed: 'failed'
-};
-
 export const reconciliationReportStatus = [
   {
     id: 'Generated',
