@@ -37,7 +37,6 @@ const Dropdown = ({
   setQueryParams,
 }) => {
   const [selected, setSelected] = useState([]);
-  const formID = `form-${paramKey}`;
   const allowNew = paramKey === 'limit';
 
   function getOptionFromParam(options, paramValue) {
@@ -76,8 +75,8 @@ const Dropdown = ({
   }, [dispatch, getOptions]);
 
   return (
-    <div className="filter__item form-group__element">
-      {label && <label htmlFor={formID}>{label}</label>}
+    <div className={`filter__item form-group__element filter-${paramKey}`}>
+      {label && <label>{label}</label>}
       <Typeahead
         allowNew={allowNew}
         clearButton={true}
@@ -87,6 +86,7 @@ const Dropdown = ({
         options={options}
         renderMenu={renderMenu}
         selected={selected || []}
+        selectHintOnEnter={true}
       />
     </div>
   );

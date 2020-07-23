@@ -44,11 +44,11 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
     it('should update dropdown with label when visiting bookmarkable URL', () => {
       cy.visit('/reconciliation-reports?status=Generated');
-      cy.get('#form-status > div > input').as('status-input');
+      cy.get('.filter-status .rbt-input').as('status-input');
       cy.get('@status-input').should('have.value', 'Generated');
 
       cy.visit('/reconciliation-reports?type=Inventory');
-      cy.get('#form-type > div > input').as('type-input');
+      cy.get('.filter-type > div > input').as('type-input');
       cy.get('@type-input').should('have.value', 'Inventory');
     });
 
@@ -57,9 +57,9 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.search').as('search');
       cy.get('@search').should('be.visible').click().type('inventoryReport-2020');
 
-      cy.get('#form-type > div > input').as('type-input');
+      cy.get('.filter-type > div > input').as('type-input');
       cy.get('@type-input').should('be.visible').click().type('invent{enter}');
-      cy.get('#form-status > div > input').as('status-input');
+      cy.get('.filter-status .rbt-input').as('status-input');
       cy.get('@status-input').should('be.visible').click().type('gener{enter}');
       cy.url().should('include', 'search=inventoryReport-2020')
         .and('include', 'type=Inventory')
@@ -221,7 +221,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
     it('should have the option to filter the report by S3 bucket', () => {
       cy.visit('/reconciliation-reports/report/inventoryReport-20200114T205238781');
 
-      cy.get('#form-bucket > div > input').as('bucket-input');
+      cy.get('.filter-bucket > div > input').as('bucket-input');
       cy.get('@bucket-input').should('be.visible').click().type('mhs3-pri{enter}');
 
       /** Table Cards **/
