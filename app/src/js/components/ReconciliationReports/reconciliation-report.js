@@ -1,6 +1,6 @@
 'use strict';
 import classNames from 'classnames';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import TableCards from './table-cards';

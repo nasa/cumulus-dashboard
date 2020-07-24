@@ -15,7 +15,7 @@ const providers = {
   base: 'providers',
   heading: 'Providers',
   routes: (currentRoute, params, count) => {
-    if (currentRoute.indexOf('/providers/provider') >= 0) {
+    if (currentRoute.includes('/providers/provider')) {
       return singleProviderRoutes;
     } else if (currentRoute.slice(0, 10) !== '/providers') {
       return empty;

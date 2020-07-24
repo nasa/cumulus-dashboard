@@ -1,5 +1,11 @@
 {
-  "extends": ["standard"],
+  "extends": [
+    "standard",
+    "plugin:eslint-comments/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:lodash/recommended"
+  ],
   "env": {
     "es6": true,
     "browser": true,
@@ -7,7 +13,10 @@
   },
   "plugins": [
     "react",
-    "react-hooks"
+    "react-hooks",
+    "eslint-comments",
+    "import",
+    "lodash"
   ],
   "parserOptions": {
     "ecmaVersion": 2018,
@@ -36,7 +45,19 @@
     "react/prop-types": 2,
     "react/react-in-jsx-scope": 2,
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "eslint-comments/no-unused-disable": "warn",
+    "eslint-comments/disable-enable-pair": [
+      "error",
+      { "allowWholeFile": true }
+    ],
+    "import/no-extraneous-dependencies": "off",
+    "import/newline-after-import": "off",
+    "import/no-named-as-default": "off",
+    "lodash/import-scope": ["error", "method"],
+    "lodash/prefer-constant": "off",
+    "lodash/prefer-lodash-method": "off",
+    "lodash/prefer-lodash-typecheck": "off"
   },
   "globals": {
     "cy": true,

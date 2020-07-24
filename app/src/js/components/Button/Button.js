@@ -48,7 +48,7 @@ export const Button = ({
   let iconClasses;
 
   const buildIconClass = (icon) => {
-    if (icon.indexOf('edsc') > -1) {
+    if (icon.includes('edsc')) {
       return icon;
     }
     return `fa fa-${icon}`;

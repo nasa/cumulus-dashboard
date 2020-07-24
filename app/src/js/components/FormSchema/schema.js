@@ -13,7 +13,7 @@ import {
 } from '../../utils/validate';
 import t from '../../utils/strings';
 import ErrorReport from '../Errors/report';
-import { startCase } from 'lodash';
+import startCase from 'lodash/startCase';
 
 const { errors } = t;
 

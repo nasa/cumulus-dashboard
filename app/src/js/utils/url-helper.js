@@ -1,5 +1,5 @@
 'use strict';
-import get from 'lodash.get';
+import get from 'lodash/get';
 import queryString from 'query-string';
 import { history } from '../store/configureStore';
 
@@ -11,6 +11,7 @@ import { history } from '../store/configureStore';
  */
 export function initialValueFromLocation (props) {
   const { location, paramKey, queryParams } = props;
+  // eslint-disable-next-line lodash/path-style
   return get(location, ['query', paramKey], get(queryParams, paramKey, ''));
 }
 

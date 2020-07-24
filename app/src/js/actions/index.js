@@ -4,8 +4,8 @@ import compareVersions from 'compare-versions';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
 import { CMR } from '@cumulus/cmrjs';
-import isEmpty from 'lodash.isempty';
-import cloneDeep from 'lodash.clonedeep';
+import isEmpty from 'lodash/isEmpty';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { configureRequest } from './helpers';
 import _config from '../config';

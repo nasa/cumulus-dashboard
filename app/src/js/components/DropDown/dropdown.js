@@ -9,7 +9,7 @@ import { initialValueFromLocation } from '../../utils/url-helper';
 import withQueryParams from 'react-router-query-params';
 
 function shouldItemRender ({ label }, value) {
-  return label.toLowerCase().indexOf(value) >= 0;
+  return label.toLowerCase().includes(value);
 }
 
 function renderItem (item, highlighted) {

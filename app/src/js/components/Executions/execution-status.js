@@ -3,7 +3,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import get from 'lodash.get';
+import get from 'lodash/get';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';

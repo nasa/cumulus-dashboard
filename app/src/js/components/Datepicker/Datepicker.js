@@ -1,5 +1,5 @@
-import isEmpty from 'lodash.isempty';
-import isNil from 'lodash.isnil';
+import isEmpty from 'lodash/isEmpty';
+import isNil from 'lodash/isNil';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -21,6 +21,7 @@ import {
   urlDateProps,
   findDateRangeByValue
 } from '../../utils/datepicker';
+import noop from 'lodash/noop';
 
 /*
  * If this is a shared URL, grab the date and time and update the datepicker
@@ -54,7 +55,7 @@ const updateDatepickerStateFromQueryParams = (props) => {
 class Datepicker extends React.PureComponent {
   constructor (props) {
     super(props);
-    this.onChange = props.onChange || (() => {});
+    this.onChange = props.onChange || noop;
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
     this.handleHourFormatChange = this.handleHourFormatChange.bind(this);
     this.handleDateTimeRangeChange = this.handleDateTimeRangeChange.bind(this);

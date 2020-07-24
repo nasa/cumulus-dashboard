@@ -38,6 +38,7 @@ import {
   OPTIONS_COLLECTIONNAME_INFLIGHT,
   OPTIONS_COLLECTIONNAME_ERROR,
 } from '../actions/types';
+import noop from 'lodash/noop';
 
 export const initialState = {
   list: {
@@ -140,7 +141,7 @@ export default createReducer(initialState, {
     );
     set(state.dropdowns, 'collectionName.options', options);
   },
-  [OPTIONS_COLLECTIONNAME_INFLIGHT]: () => {},
+  [OPTIONS_COLLECTIONNAME_INFLIGHT]: noop,
   [OPTIONS_COLLECTIONNAME_ERROR]: (state, action) => {
     set(state.dropdowns, 'collectionName.options', []);
     state.list.error = action.error;

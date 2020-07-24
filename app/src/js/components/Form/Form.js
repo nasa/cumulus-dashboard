@@ -14,7 +14,8 @@ import SubForm from '../SubForm/sub-form';
 import t from '../../utils/strings';
 import PropTypes from 'prop-types';
 import { window } from '../../utils/browser';
-import { isEmpty, isFinite } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import isFinite from 'lodash/isFinite';
 
 const scrollTo = typeof window.scrollTo === 'function' ? window.scrollTo : () => true;
 

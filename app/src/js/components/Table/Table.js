@@ -8,9 +8,9 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/pagination';
 import SortableTable from '../SortableTable/SortableTable';
 // Lodash
-import isEqual from 'lodash.isequal';
-import isNil from 'lodash.isnil';
-import omitBy from 'lodash.omitby';
+import isEqual from 'lodash/isEqual';
+import isNil from 'lodash/isNil';
+import omitBy from 'lodash/omitBy';
 import ListActions from '../ListActions/ListActions';
 
 class List extends React.Component {

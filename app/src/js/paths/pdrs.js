@@ -18,7 +18,7 @@ const pdrs = {
   base: 'pdrs',
   heading: 'PDRs',
   routes: (currentRoute, params, count) => {
-    if (currentRoute.indexOf('pdrs/pdr') >= 0) {
+    if (currentRoute.includes('pdrs/pdr')) {
       return singlePdrRoutes;
     } else if (currentRoute.slice(0, 5) !== '/pdrs') {
       return empty;

@@ -20,9 +20,9 @@ const granules = {
   base: 'granules',
   heading: strings.granules,
   routes: (currentRoute, params, count) => {
-    if (currentRoute.indexOf('granules/granule') >= 0) {
+    if (currentRoute.includes('granules/granule')) {
       return singleGranuleRoutes.map(d => {
-        if (!d[1] || d[1].indexOf(':granuleId') === -1) return d;
+        if (!d[1] || d[1].includes(':granuleId')) return d;
         const copy = d.slice();
         copy[1] = encode(copy[1].replace(':granuleId', params.granuleId));
         return copy;

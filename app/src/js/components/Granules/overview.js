@@ -37,7 +37,7 @@ import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import pageSizeOptions from '../../utils/page-size';
 import { downloadFile } from '../../utils/download-file';
-import isEqual from 'lodash.isequal';
+import isEqual from 'lodash/isEqual';
 
 const breadcrumbConfig = [
   {

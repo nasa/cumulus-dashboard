@@ -13,7 +13,7 @@ const handler = {
   base: 'operations',
   heading: 'Operations',
   routes: (currentRoute, params) => {
-    if (currentRoute.indexOf('operations/operation') >= 0) {
+    if (currentRoute.includes('operations/operation')) {
       return singleRoutes;
     } else if (currentRoute.slice(0, 12) !== '/operations') {
       return empty;

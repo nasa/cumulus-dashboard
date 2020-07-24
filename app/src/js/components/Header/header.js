@@ -57,7 +57,7 @@ class Header extends React.Component {
     const menuItem = path.replace('/', '');
     const order =
       'nav__order-' +
-      (nav.order.indexOf(menuItem) === -1 ? 2 : nav.order.indexOf(menuItem));
+      (nav.order.includes(menuItem) ? 2 : nav.order.indexOf(menuItem));
     return c({
       active: active,
       [order]: true,

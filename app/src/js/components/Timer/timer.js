@@ -8,7 +8,7 @@ import {
   TIMER_STOP,
   TIMER_SET_COUNTDOWN,
 } from '../../actions/types';
-import isEqual from 'lodash.isequal';
+import isEqual from 'lodash/isEqual';
 
 const { updateInterval } = _config;
 

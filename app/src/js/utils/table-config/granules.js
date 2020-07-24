@@ -25,6 +25,7 @@ import Bulk from '../../components/Granules/bulk';
 import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent';
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
+import noop from 'lodash/noop';
 
 export const tableColumns = [
   {
@@ -173,7 +174,7 @@ const setOnConfirm = ({ history, error, selected, closeModal }) => {
     };
   };
   const baseRedirect = determineCollectionsBase(history.location.pathname);
-  if (error) { return () => {}; } else {
+  if (error) { return noop; } else {
     if (selected.length > 1) {
       return redirectAndClose(`${baseRedirect}/processing`);
     } else {

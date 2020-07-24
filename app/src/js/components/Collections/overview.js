@@ -24,7 +24,7 @@ import {
 import pageSizeOptions from '../../utils/page-size';
 import statusOptions from '../../utils/status';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
-import isEqual from 'lodash.isequal';
+import isEqual from 'lodash/isEqual';
 import {
   reingestAction,
   tableColumns,

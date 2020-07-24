@@ -34,7 +34,7 @@ import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import { simpleDropdownOption } from '../../utils/table-config/granules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import isEqual from 'lodash.isequal';
+import isEqual from 'lodash/isEqual';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 
 const link = 'Link';

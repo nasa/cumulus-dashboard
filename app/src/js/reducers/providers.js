@@ -37,6 +37,7 @@ import {
   OPTIONS_PROVIDERGROUP_INFLIGHT,
   OPTIONS_PROVIDERGROUP_ERROR,
 } from '../actions/types';
+import noop from 'lodash/noop';
 
 export const initialState = {
   list: {
@@ -139,7 +140,7 @@ export default createReducer(initialState, {
 
     set(state.dropdowns, 'group.options', options);
   },
-  [OPTIONS_PROVIDERGROUP_INFLIGHT]: () => {},
+  [OPTIONS_PROVIDERGROUP_INFLIGHT]: noop,
   [OPTIONS_PROVIDERGROUP_ERROR]: (state, action) => {
     set(state.dropdowns, 'group.options', []);
     state.list.error = action.error;

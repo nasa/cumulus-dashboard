@@ -13,9 +13,9 @@ import { get } from 'object-path';
 import { lastUpdated, seconds } from '../../utils/format';
 import Ace from 'react-ace';
 import config from '../../config';
-import Loading from '../app/loading-indicator';
-import DropdownAsync from '../form/dropdown-async-command';
-import { strings } from '.../../locale';
+import Loading from '../LoadingIndicator/loading-indicator';
+import DropdownAsync from '../DropDown/dropdown-async-command';
+import { strings } from '../locale';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 const noop = () => true;

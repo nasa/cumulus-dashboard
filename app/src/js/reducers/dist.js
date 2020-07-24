@@ -1,6 +1,6 @@
 'use strict';
 
-import get from 'lodash.get';
+import get from 'lodash/get';
 import { createReducer } from '@reduxjs/toolkit';
 import {
   DIST_APIGATEWAY,

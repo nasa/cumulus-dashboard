@@ -1,6 +1,7 @@
 'use strict';
 
-import truncate from 'lodash.truncate';
+import truncate from 'lodash/truncate';
+import noop from 'lodash/noop';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { interval, getLogs, clearLogs } from '../../actions';
@@ -50,7 +51,7 @@ class LogViewer extends React.Component {
     this.displayName = 'LogViewer';
 
     this.query = this.query.bind(this);
-    this.cancelInterval = () => { };
+    this.cancelInterval = noop;
 
     this.state = {
       level: logLevels.keys().next().value,
@@ -65,7 +66,7 @@ class LogViewer extends React.Component {
   componentDidUpdate () {
     if (this.props.logs.error) {
       this.cancelInterval();
-      this.cancelInterval = () => { };
+      this.cancelInterval = noop;
     }
   }
 

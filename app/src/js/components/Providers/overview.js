@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { get } from 'object-path';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import {
   listProviders,
   getCount,
