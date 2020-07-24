@@ -14,9 +14,8 @@ import omitBy from 'lodash.omitby';
 import ListActions from '../ListActions/ListActions';
 
 function buildSortKey(sortProps) {
-  console.log('sortProps', sortProps);
   return sortProps.map((item) =>
-    (item.desc === true) ? `-${item.id}` : item.id);
+    (item.desc === true) ? `-${item.id}` : `+${item.id}`);
 }
 
 class List extends React.Component {
@@ -81,7 +80,6 @@ class List extends React.Component {
   }
 
   queryNewSort (sortProps) {
-    console.log('new sort', sortProps);
     this.setState({
       sortProps,
       queryConfig: this.getQueryConfig({

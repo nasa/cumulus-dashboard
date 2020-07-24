@@ -145,12 +145,8 @@ const SortableTable = ({
   }, [selectedRowIds, onSelect]);
 
   useEffect(() => {
-    console.log('sortBy', sortBy);
-    // [{id: "collectionId", desc: false}, {id: "status", desc: false}]
-    console.log(sortId, order);
     const sortProps = (sortBy.length) ? sortBy : [{ id: sortId, desc: (order === 'desc') }];
     if (typeof changeSortProps === 'function') {
-      // changeSortProps({ sortId: sortFieldId, order: sortOrder || order });
       changeSortProps(sortProps);
     }
   }, [changeSortProps, sortBy, sortId, order]);
