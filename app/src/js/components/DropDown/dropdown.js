@@ -105,8 +105,8 @@ const Dropdown = ({
     return function cleanup() {
       dispatch(clear(paramKey));
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(queryParams)]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [action, allowNew, clear, dispatch, JSON.stringify(options), paramKey, JSON.stringify(queryParams)]);
 
   useEffect(() => {
     if (getOptions) dispatch(getOptions());
