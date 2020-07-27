@@ -22,7 +22,7 @@ export const getErrorMessage = (response) => {
 export const addRequestAuthorization = (config, state) => {
   const token = getProperty(state, 'api.tokens.token');
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers = { ...config.headers, Authorization: `Bearer ${token}` };
   }
 };
 

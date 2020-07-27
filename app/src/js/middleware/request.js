@@ -43,7 +43,7 @@ const handleError = ({
   });
 };
 
-const requestMiddleware = ({ dispatch, getState }) => (next) => (action) => {
+export const requestMiddleware = ({ dispatch, getState }) => (next) => (action) => {
   if (isValidApiRequestAction(action)) {
     let requestAction = action[CALL_API];
 
