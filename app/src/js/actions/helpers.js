@@ -47,7 +47,7 @@ export const configureRequest = (params = {}) => {
     config.url = new URL(config.path, _config.apiRoot).href;
   }
 
-  config.qs = filterQueryParams(config.qs);
+  if (config.qs) config.qs = filterQueryParams(config.qs);
 
   const defaultRequestConfig = {
     json: true,
