@@ -47,11 +47,11 @@ export const Button = ({
 
   let iconClasses;
 
-  const buildIconClass = (icon) => {
-    if (icon.includes('edsc')) {
-      return icon;
+  const buildIconClass = (iconClass) => {
+    if (iconClass.includes('edsc')) {
+      return iconClass;
     }
-    return `fa fa-${icon}`;
+    return `fa fa-${iconClass}`;
   };
 
   if (icon) {

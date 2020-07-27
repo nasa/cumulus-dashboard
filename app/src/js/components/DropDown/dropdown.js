@@ -1,12 +1,11 @@
-'use strict';
 import c from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Autocomplete from 'react-autocomplete';
-import { initialValueFromLocation } from '../../utils/url-helper';
 import withQueryParams from 'react-router-query-params';
+import { initialValueFromLocation } from '../../utils/url-helper';
 
 function shouldItemRender ({ label }, value) {
   return label.toLowerCase().includes(value);
@@ -97,7 +96,8 @@ class Dropdown extends React.Component {
     // `options` are expected in the following format:
     // {displayValue1: optionElementValue1, displayValue2, optionElementValue2, ...}
     const { options, label, paramKey, inputProps } = this.props;
-    const items = options ? Object.keys(options).map(label => ({ label, value: options[label] })) : [];
+    const items = options ? Object.keys(options).map((optionLabel) => (
+      { optionLabel, value: options[optionLabel] })) : [];
 
     // Make sure this form ID is unique!
     // If needed in future, could add MD5 hash of stringified options,
@@ -109,7 +109,7 @@ class Dropdown extends React.Component {
         {label ? <label htmlFor={formID}>{label}</label> : null}
         <form className='form-group__element' id={formID} onSubmit={this.onSubmit}>
           <Autocomplete
-            getItemValue={item => item.value}
+            getItemValue={(item) => item.value}
             items={items}
             renderItem={renderItem}
             shouldItemRender={shouldItemRender}

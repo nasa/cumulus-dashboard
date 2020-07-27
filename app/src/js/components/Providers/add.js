@@ -1,11 +1,10 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { createProvider } from '../../actions';
 import AddRecord from '../Add/add';
-import PropTypes from 'prop-types';
 
 const SCHEMA_KEY = 'provider';
 
@@ -41,4 +40,5 @@ AddProvider.propTypes = {
 export default withRouter(
   connect((state) => ({
     providers: state.providers
-  }))(AddProvider));
+  }))(AddProvider)
+);

@@ -1,16 +1,14 @@
-'use strict';
-
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
+import isNil from 'lodash/isNil';
+import omitBy from 'lodash/omitBy';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/pagination';
 import SortableTable from '../SortableTable/SortableTable';
 // Lodash
-import isEqual from 'lodash/isEqual';
-import isNil from 'lodash/isNil';
-import omitBy from 'lodash/omitBy';
 import ListActions from '../ListActions/ListActions';
 
 class List extends React.Component {

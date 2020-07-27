@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -7,14 +6,14 @@ import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { strings } from '../locale';
-import CollectionList from '../../components/Collections/list';
-import AddCollection from '../../components/Collections/add';
-import EditCollection from '../../components/Collections/edit';
-import CollectionOverview from '../../components/Collections/overview';
-import CollectionGranules from '../../components/Collections/granules';
-import CollectionIngest from '../../components/Collections/ingest';
-import CollectionLogs from '../../components/Collections/logs';
-import DatePickerHeader from '../../components/DatePickerHeader/DatePickerHeader';
+import CollectionList from './list';
+import AddCollection from './add';
+import EditCollection from './edit';
+import CollectionOverview from './overview';
+import CollectionGranules from './granules';
+import CollectionIngest from './ingest';
+import CollectionLogs from './logs';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import { listCollections } from '../../actions';
 import { filterQueryParams } from '../../utils/url-helper';
 

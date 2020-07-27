@@ -1,6 +1,4 @@
-'use strict';
-
-export const apiGatewaySearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
+const apiGatewaySearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
   "aggs": {
     "2": {
       "filters": {
@@ -87,3 +85,5 @@ export const apiGatewaySearchTemplate = (prefix, startTimeEpochMilli, endTimeEpo
     }
   }
 }`;
+
+export default apiGatewaySearchTemplate;

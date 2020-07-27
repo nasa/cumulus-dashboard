@@ -1,8 +1,11 @@
-'use strict';
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
+/* eslint-disable import/no-cycle */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, formTypes } from '../Form/Form';
 import { set } from 'object-path';
+import { Form, formTypes } from '../Form/Form';
 import { createFormConfig } from '../FormSchema/schema';
 import { isText } from '../../utils/validate';
 
@@ -41,7 +44,7 @@ class SubForm extends React.Component {
     });
 
     // add a 'name' field for each item
-    fields.forEach(field => field.fields.unshift({
+    fields.forEach((field) => field.fields.unshift({
       value: field.isEmpty ? '' : field.name,
       label: 'Name *',
       schemaProperty: '_id',
@@ -64,15 +67,25 @@ class SubForm extends React.Component {
     const expanded = isExpanded ? ' subform__item--expanded' : '';
     const isLast = index === fields.length - 1;
     const last = isLast ? ' subform__item--last' : '';
+    let subformButtonText;
+
+    if (isExpanded) {
+      subformButtonText = 'Cancel';
+    } else if (fieldset.isEmpty) {
+      subformButtonText = 'Add Another';
+    } else {
+      subformButtonText = 'Edit';
+    }
+
     return (
-      <div key={name} className={'subform__item' + expanded + last}>
+      <div key={name} className={`subform__item${expanded}${last}`}>
         <div className='subform__ui'>
           <span className='subform__name'>{name}</span>
           <a href='#'
             className='subform__button'
             onClick={this.toggleExpand}
             data-value={name}
-          >{isExpanded ? 'Cancel' : fieldset.isEmpty ? 'Add Another' : 'Edit'}</a>
+          >{subformButtonText}</a>
           {isExpanded && !fieldset.isEmpty ? (
             <a href='#'
               className='subform__button link--secondary subform__remove'

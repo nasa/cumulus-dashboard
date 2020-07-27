@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -52,7 +51,8 @@ const metaAccessors = [
   { label: 'Provider', property: 'provider', accessor: providerLink },
   { label: 'Provider Path', property: 'provider_path' },
   { label: 'Rule Type', property: 'rule.type' },
-  // PGC { label: 'Collection', property: 'collection', accessor: d => collectionLink(getCollectionId(d)) },  /* Why was this commented out? */
+  /* Why was this commented out? */
+  // PGC { label: 'Collection', property: 'collection', accessor: d => collectionLink(getCollectionId(d)) }
 ];
 
 class Rule extends React.Component {
@@ -187,7 +187,7 @@ class Rule extends React.Component {
 
             <Link
               className='button button--copy button--small button--green form-group__element--right'
-              to={location => ({
+              to={(location) => ({
                 pathname: '/rules/add',
                 search: getPersistentQueryParams(location),
                 state: {
@@ -196,7 +196,7 @@ class Rule extends React.Component {
               })}>Copy Rule</Link>
             <Link
               className='button button--edit button--small button--green form-group__element--right'
-              to={location => ({ pathname: `/rules/edit/${ruleName}`, search: getPersistentQueryParams(location) })}>Edit Rule</Link>
+              to={(location) => ({ pathname: `/rules/edit/${ruleName}`, search: getPersistentQueryParams(location) })}>Edit Rule</Link>
             {lastUpdated(data.timestamp || data.updatedAt)}
           </div>
         </section>
@@ -228,6 +228,6 @@ Rule.propTypes = {
   rules: PropTypes.object
 };
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   rules: state.rules
 }))(Rule));

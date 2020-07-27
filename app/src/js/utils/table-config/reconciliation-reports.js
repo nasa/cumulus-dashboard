@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -10,7 +9,7 @@ export const tableColumns = ({ dispatch }) => ([
   {
     Header: 'Name',
     accessor: 'name',
-    Cell: ({ cell: { value } }) => <Link to={location => ({ pathname: `/reconciliation-reports/report/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={(location) => ({ pathname: `/reconciliation-reports/report/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Report Type',
@@ -29,13 +28,11 @@ export const tableColumns = ({ dispatch }) => ([
     Header: 'Download Report',
     id: 'download',
     accessor: 'name',
-    Cell: ({ cell: { value } }) => { // eslint-disable-line react/prop-types
-      return (
-        <button className='button button__row button__row--download'
-          onClick={e => handleDownloadClick(e, value, dispatch)}
-        />
-      );
-    },
+    Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
+      <button className='button button__row button__row--download'
+        onClick={(e) => handleDownloadClick(e, value, dispatch)}
+      />
+    ),
     disableSortBy: true
   },
   {
@@ -44,7 +41,7 @@ export const tableColumns = ({ dispatch }) => ([
     accessor: 'name',
     Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
       <button className='button button__row button__row--delete'
-        onClick={e => handleDeleteClick(e, value, dispatch)}
+        onClick={(e) => handleDeleteClick(e, value, dispatch)}
       />
     ),
     disableSortBy: true
@@ -53,7 +50,7 @@ export const tableColumns = ({ dispatch }) => ([
 
 const handleDownloadClick = (e, reportName, dispatch) => {
   e.preventDefault();
-  dispatch(getReconciliationReport(reportName)).then(response => {
+  dispatch(getReconciliationReport(reportName)).then((response) => {
     const { data } = response;
     const jsonHref = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data))}`;
     const link = document.createElement('a');
@@ -72,9 +69,7 @@ const handleDeleteClick = (e, value, dispatch) => {
   });
 };
 
-export const bulkActions = function (reports) {
-  return [];
-};
+export const bulkActions = (reports) => [];
 
 export const tableColumnsS3Files = [
   {
@@ -100,7 +95,7 @@ export const tableColumnsS3Files = [
   {
     Header: 'S3 Link',
     accessor: 'path',
-    Cell: ({ cell: { value } }) => value ? <a href={value} target='_blank'>Link</a> : nullValue // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => (value ? <a href={value} target='_blank'>Link</a> : nullValue) // eslint-disable-line react/prop-types
   }
 ];
 
@@ -132,7 +127,7 @@ export const tableColumnsFiles = [
   {
     Header: 'S3 Link',
     accessor: 'path',
-    Cell: ({ cell: { value } }) => value ? <a href={value} target='_blank'>Link</a> : nullValue // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => (value ? <a href={value} target='_blank'>Link</a> : nullValue) // eslint-disable-line react/prop-types
   }
 ];
 

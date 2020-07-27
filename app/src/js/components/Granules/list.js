@@ -1,8 +1,9 @@
-'use strict';
+/* eslint-disable no-restricted-globals */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { get } from 'object-path';
 import {
   searchGranules,
   clearGranulesSearch,
@@ -13,7 +14,6 @@ import {
   listWorkflows,
   applyWorkflowToGranule,
 } from '../../actions';
-import { get } from 'object-path';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
   tableColumns,
@@ -77,14 +77,13 @@ const AllGranules = ({
   function getView() {
     const { pathname } = location;
     if (pathname === '/granules/completed') return 'completed';
-    else if (pathname === '/granules/processing') return 'running';
-    else if (pathname === '/granules/failed') return 'failed';
-    else return 'all';
+    if (pathname === '/granules/processing') return 'running';
+    if (pathname === '/granules/failed') return 'failed';
+    return 'all';
   }
 
   function generateQuery() {
     const options = { ...queryParams };
-    const view = getView();
     if (view !== 'all') options.status = view;
     options.status = view;
     return options;

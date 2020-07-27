@@ -1,13 +1,12 @@
-'use strict';
 /* eslint node/no-deprecated-api: 0 */
 import path from 'path';
+import url from 'url';
 import {
   tableColumnsCollections,
   tableColumnsFiles,
   tableColumnsGranules,
   tableColumnsS3Files,
 } from '../../utils/table-config/reconciliation-reports';
-import url from 'url';
 
 const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [] }) => {
   const filesInS3 = onlyInS3.map((d) => {
@@ -66,7 +65,7 @@ const parseFileObject = (d) => {
   };
 };
 
-export const reshapeReport = (record, filterString, filterBucket) => {
+const reshapeReport = (record, filterString, filterBucket) => {
   let filesInS3 = [];
   let filesInDynamoDb = [];
 
@@ -104,17 +103,24 @@ export const reshapeReport = (record, filterString, filterBucket) => {
   }
 
   if (filterString) {
-    filesInDynamoDb = filesInDynamoDb.filter((file) => file.granuleId.toLowerCase().includes(filterString.toLowerCase()));
+    filesInDynamoDb = filesInDynamoDb.filter((file) => file.granuleId.toLowerCase()
+      .includes(filterString.toLowerCase()));
     filesInS3 = filesInS3.filter((file) => file.filename.toLowerCase().includes(filterString.toLowerCase()));
 
-    collectionsInCumulus = collectionsInCumulus.filter((collection) => collection.name.toLowerCase().includes(filterString.toLowerCase()));
-    collectionsInCmr = collectionsInCmr.filter((collection) => collection.name.toLowerCase().includes(filterString.toLowerCase()));
+    collectionsInCumulus = collectionsInCumulus.filter((collection) => collection.name.toLowerCase()
+      .includes(filterString.toLowerCase()));
+    collectionsInCmr = collectionsInCmr.filter((collection) => collection.name.toLowerCase()
+      .includes(filterString.toLowerCase()));
 
-    granulesInCumulus = granulesInCumulus.filter((granule) => granule.granuleId.toLowerCase().includes(filterString.toLowerCase()));
-    granulesInCmr = granulesInCmr.filter((granule) => granule.granuleId.toLowerCase().includes(filterString.toLowerCase()));
+    granulesInCumulus = granulesInCumulus.filter((granule) => granule.granuleId.toLowerCase()
+      .includes(filterString.toLowerCase()));
+    granulesInCmr = granulesInCmr.filter((granule) => granule.granuleId.toLowerCase()
+      .includes(filterString.toLowerCase()));
 
-    granuleFilesOnlyInCumulus = granuleFilesOnlyInCumulus.filter((file) => file.granuleId.toLowerCase().includes(filterString.toLowerCase()));
-    granuleFilesOnlyInCmr = granuleFilesOnlyInCmr.filter((file) => file.granuleId.toLowerCase().includes(filterString.toLowerCase()));
+    granuleFilesOnlyInCumulus = granuleFilesOnlyInCumulus.filter((file) => file.granuleId.toLowerCase()
+      .includes(filterString.toLowerCase()));
+    granuleFilesOnlyInCmr = granuleFilesOnlyInCmr.filter((file) => file.granuleId.toLowerCase()
+      .includes(filterString.toLowerCase()));
   }
 
   const getBucket = (item) => (item.bucket);
@@ -224,3 +230,5 @@ export const reshapeReport = (record, filterString, filterBucket) => {
 
   return { internalComparison, cumulusVsCmrComparison, allBuckets };
 };
+
+export default reshapeReport;

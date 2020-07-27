@@ -1,4 +1,3 @@
-'use strict';
 const routes = [
   ['Overview', null]
 ];
@@ -15,11 +14,10 @@ const handler = {
   routes: (currentRoute, params) => {
     if (/^\/rules\/[rule|edit]/.test(currentRoute)) {
       return singleRoutes;
-    } else if (currentRoute.slice(0, 6) === '/rules') {
+    } if (currentRoute.slice(0, 6) === '/rules') {
       return routes;
-    } else {
-      return empty;
     }
+    return empty;
   }
 };
 

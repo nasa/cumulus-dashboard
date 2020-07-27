@@ -1,6 +1,4 @@
-'use strict';
-
-export const s3AccessSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
+const s3AccessSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
   "aggs": {
     "2": {
       "filters": {
@@ -73,3 +71,5 @@ export const s3AccessSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpoch
     }
   }
 }`;
+
+export default s3AccessSearchTemplate;

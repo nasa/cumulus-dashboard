@@ -1,14 +1,14 @@
+/* eslint-disable import/no-cycle */
 import { get } from 'object-path';
 import { decode as jwtDecode } from 'jsonwebtoken';
 
 import { loginError, refreshAccessToken } from '../actions';
 import config from '../config';
-import { isValidApiRequestAction } from './validate';
+import isValidApiRequestAction from './validate';
 
 const refreshInterval = Math.ceil((config.updateInterval + 1000) / 1000);
 
-let deferred;
-export const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
+const refreshTokenMiddleware = ({ dispatch, getState }) => (next) => (action) => {
   if (isValidApiRequestAction(action)) {
     const token = get(getState(), 'api.tokens.token');
     if (!token) {
@@ -30,6 +30,7 @@ export const refreshTokenMiddleware = ({ dispatch, getState }) => next => action
     // tokenExpiration = date seconds since epoch
     // Math.ceil(Date.now() / 1000) = now in seconds since epoch
     if ((tokenExpiration - Math.ceil(Date.now() / 1000)) <= refreshInterval) {
+      let deferred;
       const inflight = get(getState(), 'api.tokens.inflight');
       if (!inflight) {
         deferred = createDeferred();
@@ -38,14 +39,9 @@ export const refreshTokenMiddleware = ({ dispatch, getState }) => next => action
             deferred.resolve();
             return next(action);
           })
-          .catch(() => {
-            return dispatch(loginError('Session expired'));
-          });
-      } else {
-        return deferred.promise.then(() => {
-          return next(action);
-        });
+          .catch(() => dispatch(loginError('Session expired')));
       }
+      return deferred.promise.then(() => next(action));
     }
   }
   return next(action);
@@ -59,3 +55,5 @@ function createDeferred () {
   });
   return deferred;
 }
+
+export default refreshTokenMiddleware;

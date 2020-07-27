@@ -5,10 +5,9 @@ import { collectionNameVersion } from '../../utils/format';
 const BatchDeleteCompleteContent = ({
   results,
   error
-}) => {
-  return (
-    <>
-      {(results && results.length > 0) &&
+}) => (
+  <>
+    {(results && results.length > 0) &&
         <>
           <p>Successfully deleted these collections:</p>
           <ul>
@@ -18,11 +17,10 @@ const BatchDeleteCompleteContent = ({
             })}
           </ul>
         </>
-      }
-      {error && <span className='error'>{error}</span>}
-    </>
-  );
-};
+    }
+    {error && <span className='error'>{error}</span>}
+  </>
+);
 
 BatchDeleteCompleteContent.propTypes = {
   results: PropTypes.array,

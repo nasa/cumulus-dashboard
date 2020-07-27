@@ -1,4 +1,3 @@
-'use strict';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -127,6 +126,7 @@ const AddRule = ({
     setEnums({
       collection: collections.list.data.map(getCollectionId).sort(asc),
       provider: providers.list.data.map(({ id }) => id).sort(asc),
+      // eslint-disable-next-line no-shadow
       workflow: workflows.list.data.map(({ name }) => name).sort(asc)
     });
   }, [collections, providers, workflows]);

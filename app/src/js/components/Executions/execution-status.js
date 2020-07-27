@@ -1,13 +1,12 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash/get';
+import { withRouter, Link } from 'react-router-dom';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
-import { withRouter, Link } from 'react-router-dom';
 import { kibanaExecutionLink } from '../../utils/kibana';
 import { window } from '../../utils/browser';
 
@@ -52,6 +51,8 @@ class ExecutionStatus extends React.Component {
         break;
       case 'output':
         this.setState({ showOutputModal: true });
+        break;
+      // no default
     }
   }
 
@@ -62,6 +63,8 @@ class ExecutionStatus extends React.Component {
         break;
       case 'output':
         this.setState({ showOutputModal: false });
+        break;
+      // no default
     }
   }
 
@@ -80,13 +83,11 @@ class ExecutionStatus extends React.Component {
       {
         label: 'Execution Status',
         property: 'status',
-        accessor: (d) => {
-          return (
-            <span className={`execution-status-${d.toLowerCase()}`}>
-              {displayCase(d)}
-            </span>
-          );
-        },
+        accessor: (d) => (
+          <span className={`execution-status-${d.toLowerCase()}`}>
+            {displayCase(d)}
+          </span>
+        ),
       },
       {
         label: 'Execution Arn',
@@ -126,7 +127,7 @@ class ExecutionStatus extends React.Component {
             return (
               <Link
                 to={(location) => ({
-                  pathname: '/executions/execution/' + parent,
+                  pathname: `/executions/execution/${parent}`,
                   search: getPersistentQueryParams(location),
                 })}
                 title={parent}
@@ -134,9 +135,8 @@ class ExecutionStatus extends React.Component {
                 {parent}
               </Link>
             );
-          } else {
-            return 'N/A';
           }
+          return 'N/A';
         },
       },
       {
@@ -165,9 +165,8 @@ class ExecutionStatus extends React.Component {
                 </DefaultModal>
               </>
             );
-          } else {
-            return 'N/A';
           }
+          return 'N/A';
         },
       },
       {
@@ -212,9 +211,8 @@ class ExecutionStatus extends React.Component {
                 </DefaultModal>
               </>
             );
-          } else {
-            return 'N/A';
           }
+          return 'N/A';
         },
       },
       {
@@ -230,20 +228,19 @@ class ExecutionStatus extends React.Component {
                 View Logs in Kibana
               </a>
             );
-          } else {
-            return (
-              <Link
-                to={(location) => ({
-                  pathname: '/executions/execution/' + d + '/logs',
-                  search: getPersistentQueryParams(location),
-                })}
-                title={d + '/logs'}
-                className={className}
-              >
-                View Execution Logs
-              </Link>
-            );
           }
+          return (
+            <Link
+              to={(location) => ({
+                pathname: `/executions/execution/${d}/logs`,
+                search: getPersistentQueryParams(location),
+              })}
+              title={`${d}/logs`}
+              className={className}
+            >
+                View Execution Logs
+            </Link>
+          );
         },
       },
     ];

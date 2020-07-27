@@ -7,6 +7,7 @@ import DateTimePicker from 'react-datetime-picker';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
+import noop from 'lodash/noop';
 import {
   DATEPICKER_DATECHANGE,
   DATEPICKER_DROPDOWN_FILTER,
@@ -21,7 +22,6 @@ import {
   urlDateProps,
   findDateRangeByValue
 } from '../../utils/datepicker';
-import noop from 'lodash/noop';
 
 /*
  * If this is a shared URL, grab the date and time and update the datepicker
@@ -34,6 +34,7 @@ const updateDatepickerStateFromQueryParams = (props) => {
   if (!isEmpty(queryParams)) {
     const values = { ...queryParams };
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const value in values) {
       if (urlDateProps.includes(value)) {
         values[value] = moment.utc(values[value], urlDateFormat).valueOf();
@@ -109,6 +110,7 @@ class Datepicker extends React.PureComponent {
     let utcValue = null;
     if (newValue !== null) {
       utcValue = moment.utc(moment(newValue).format(dateTimeFormat)).valueOf();
+      // eslint-disable-next-line no-restricted-globals
       if (isNaN(utcValue)) return;
     }
     const updatedProps = {
@@ -124,6 +126,7 @@ class Datepicker extends React.PureComponent {
 
   updateQueryParams (newProps) {
     const updatedQueryParams = { ...this.props.queryParams };
+    // eslint-disable-next-line array-callback-return
     urlDateProps.map((time) => {
       let urlValue;
       if (newProps[time] !== null) {
@@ -179,7 +182,7 @@ class Datepicker extends React.PureComponent {
   }
 
   renderDateTimeRange (name) {
-    const hourFormat = this.props.hourFormat;
+    const { hourFormat } = this.props;
     const value = this.props[name];
     const locale = hourFormat === '24HR' ? 'en-GB' : 'en-US';
     const format = `MM/dd/yyyyy ${hourFormat === '24HR' ? 'HH:mm' : 'hh:mm a'}`;
@@ -197,7 +200,7 @@ class Datepicker extends React.PureComponent {
         monthPlaceholder='MM'
         minutePlaceholder='mm'
         name={name}
-        onChange={(value) => this.handleDateTimeRangeChange(name, value)}
+        onChange={(time) => this.handleDateTimeRangeChange(name, time)}
         value={utcValue}
         yearPlaceholder='YYYY'
       />
@@ -283,5 +286,5 @@ Datepicker.propTypes = {
 };
 
 export default withRouter(
-  withQueryParams()(connect(state => state.datepicker)(Datepicker))
+  withQueryParams()(connect((state) => state.datepicker)(Datepicker))
 );

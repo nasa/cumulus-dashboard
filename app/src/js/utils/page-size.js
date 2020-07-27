@@ -1,4 +1,3 @@
-'use strict';
 const pageSizeOptions = {
   10: '10',
   25: '25',

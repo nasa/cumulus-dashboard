@@ -1,14 +1,13 @@
-'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 import _config from '../../config';
 import {
   TIMER_START,
   TIMER_STOP,
   TIMER_SET_COUNTDOWN,
 } from '../../actions/types';
-import isEqual from 'lodash/isEqual';
 
 const { updateInterval } = _config;
 
@@ -78,15 +77,16 @@ class Timer extends React.Component {
 
   interval(action, seconds) {
     const intervalId = setInterval(() => {
+      let secondsRefreshRate;
       if (seconds === 0) {
-        seconds = secondsToRefresh;
+        secondsRefreshRate = secondsToRefresh;
         action();
       } else {
-        seconds -= 1;
+        secondsRefreshRate -= 1;
       }
       this.props.dispatch({
         type: TIMER_SET_COUNTDOWN,
-        secondsToRefresh: seconds,
+        secondsToRefresh: secondsRefreshRate,
       });
     }, oneSecondTick);
     return () => clearInterval(intervalId);
@@ -95,7 +95,7 @@ class Timer extends React.Component {
   parentClass() {
     const className = 'form__element__updateToggle';
     return this.props.noheader
-      ? className + ' form__element__updateToggle-noHeader'
+      ? `${className} form__element__updateToggle-noHeader`
       : className;
   }
 

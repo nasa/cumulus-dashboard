@@ -1,8 +1,10 @@
-'use strict';
-
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
+/* eslint-disable import/no-cycle */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get, set } from 'object-path';
+import startCase from 'lodash/startCase';
 import { Form, formTypes } from '../Form/Form';
 import {
   arrayWithLength,
@@ -13,7 +15,6 @@ import {
 } from '../../utils/validate';
 import t from '../../utils/strings';
 import ErrorReport from '../Errors/report';
-import startCase from 'lodash/startCase';
 
 const { errors } = t;
 
@@ -46,7 +47,7 @@ const traverseSchema = (schema, enums, fn, path = []) => {
  * @param  {object} schema the form schema
  * @return {object} updated list of fields
  */
-export const removeReadOnly = function (data, schema) {
+export const removeReadOnly = (data, schema) => {
   const readOnlyRemoved = {};
   const schemaFields = [];
 
@@ -72,24 +73,19 @@ export const removeReadOnly = function (data, schema) {
 
 // recursively scan a schema object and create a form config from it.
 // returns a flattened representation of the schema.
-export const createFormConfig = function (
-  data,
+export const createFormConfig = (
+  data = {},
   schema,
   include,
   exclude,
   enums = {}
-) {
-  data = data || {};
+) => {
   const fields = [];
-  const toRegExps = (stringsOrRegExps) =>
-    stringsOrRegExps.map((strOrRE) =>
-      typeof strOrRE === 'string' ? new RegExp(`^${strOrRE}$`, 'i') : strOrRE
-    );
+  const toRegExps = (stringsOrRegExps) => stringsOrRegExps.map((strOrRE) => (typeof strOrRE === 'string' ? new RegExp(`^${strOrRE}$`, 'i') : strOrRE));
   const inclusions = toRegExps(include);
   const exclusions = toRegExps(exclude);
   const matches = (string) => (regexp) => regexp.test(string);
-  const includeProperty = (path) =>
-    inclusions.some(matches(path)) && !exclusions.some(matches(path));
+  const includeProperty = (path) => inclusions.some(matches(path)) && !exclusions.some(matches(path));
 
   traverseSchema(schema, enums, (path, meta, schemaProperty) => {
     const fullyQualifiedProperty = path.join('.');
@@ -126,7 +122,16 @@ export const createFormConfig = function (
 
     // dropdowns have type set to string, but have an enum prop.
     // use enum as the type instead of string.
-    const type = isArray(meta.enum) || property in enums ? 'enum' : Object.prototype.hasOwnProperty.call(meta, 'patternProperties') ? 'pattern' : meta.type;
+    let type;
+
+    if (isArray(meta.enum) || property in enums) {
+      type = 'enum';
+    } else if (Object.prototype.hasOwnProperty.call(meta, 'patternProperties')) {
+      type = 'pattern';
+    } else {
+      type = 'meta.type';
+    }
+
     switch (type) {
       case 'pattern': {
         // pattern fields are an abstraction on arrays of objects.
@@ -151,7 +156,16 @@ export const createFormConfig = function (
       }
       case 'array': {
         // some array types have a minItems property
-        const validate = !required ? false : (meta.minItems && isNaN(meta.minItems)) ? arrayWithLength(+meta.minItems) : isArray;
+        let validate;
+
+        if (!required) {
+          validate = false;
+        // eslint-disable-next-line no-restricted-globals
+        } else if (meta.minItems && isNaN(meta.minItems)) {
+          validate = arrayWithLength(+meta.minItems);
+        } else {
+          validate = isArray;
+        }
         fields.push(listField(config, property, validate));
         break;
       }
@@ -177,7 +191,7 @@ const textAreaField = (config, property, validate) => ({
   type: formTypes.textArea,
   mode: 'json',
   value: isObject(config.value) ? JSON.stringify(config.value, null, 2) : config.value,
-  validate: validate,
+  validate,
   error: validate && get(errors, property, errors.required)
 });
 

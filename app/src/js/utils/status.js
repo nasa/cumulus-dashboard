@@ -1,4 +1,3 @@
-'use strict';
 const status = {
   Running: 'running',
   Completed: 'completed',

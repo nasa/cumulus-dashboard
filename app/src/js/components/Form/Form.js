@@ -1,10 +1,13 @@
-'use strict';
-
+/* eslint-disable import/no-cycle */
+/* eslint-disable no-param-reassign */
 import React from 'react';
 import { createNextState } from '@reduxjs/toolkit';
 import { generate } from 'shortid';
 import { set } from 'object-path';
 import slugify from 'slugify';
+import PropTypes from 'prop-types';
+import isEmpty from 'lodash/isEmpty';
+import isFinite from 'lodash/isFinite';
 import ErrorReport from '../Errors/report';
 import TextForm from '../TextAreaForm/text';
 import TextAreaForm from '../TextAreaForm/text-area';
@@ -12,10 +15,7 @@ import Dropdown from '../DropDown/simple-dropdown';
 import List from '../ArbitraryList/arbitrary-list';
 import SubForm from '../SubForm/sub-form';
 import t from '../../utils/strings';
-import PropTypes from 'prop-types';
 import { window } from '../../utils/browser';
-import isEmpty from 'lodash/isEmpty';
-import isFinite from 'lodash/isFinite';
 
 const scrollTo = typeof window.scrollTo === 'function' ? window.scrollTo : () => true;
 
@@ -32,17 +32,14 @@ export const defaults = {
   json: '{\n  \n}'
 };
 
-const errorMessage = (errors) => `Please review the following fields and submit again: ${errors.map(error => `'${error}'`).join(', ')}`;
+const errorMessage = (errors) => `Please review the following fields and submit again: ${errors.map((error) => `'${error}'`).join(', ')}`;
 
-const generateDirty = (inputs) =>
-  Object.entries(inputs).reduce(
-    (dirty, [id, { value }]) =>
-      ({ ...dirty, [id]: isFinite(value) || !isEmpty(value) }),
-    {}
-  );
+const generateDirty = (inputs) => Object.entries(inputs).reduce(
+  (dirty, [id, { value }]) => ({ ...dirty, [id]: isFinite(value) || !isEmpty(value) }),
+  {}
+);
 
-const generateComponentId = (label, id) =>
-  slugify(label) + '-' + id;
+const generateComponentId = (label, id) => `${slugify(label)}-${id}`;
 
 const generateInputState = (inputMeta, id) => {
   const inputState = {};
@@ -141,7 +138,7 @@ export class Form extends React.Component {
       }
     } else if (field.type === formTypes.number) {
       try {
-        value = parseInt(value);
+        value = parseInt(value, 10);
       } catch (e) {
         if (!errors.includes(field.labelText)) errors.push(field.labelText);
         inputs[inputId].error = t.errors.integerRequired;
@@ -153,7 +150,7 @@ export class Form extends React.Component {
       const error = field.error || field.validationError || t.errors.generic;
       inputs[inputId].error = error;
     } else if (inputs[inputId].error) {
-      state.errors = errors.filter(item => item !== field.labelText);
+      state.errors = errors.filter((item) => item !== field.labelText);
       delete inputs[inputId].error;
     }
   }
@@ -173,7 +170,7 @@ export class Form extends React.Component {
     // validate input values in the store
 
     this.setState(createNextState((state) => {
-      this.props.inputMeta.forEach(field => {
+      this.props.inputMeta.forEach((field) => {
         const inputId = generateComponentId(field.schemaProperty, this.id);
 
         this.validateField({
@@ -192,7 +189,7 @@ export class Form extends React.Component {
     const payload = {};
 
     if (errors.length === 0) {
-      Object.entries(inputs).forEach(entry => {
+      Object.entries(inputs).forEach((entry) => {
         const entryValue = entry[1];
         const { value, required, schemaProperty, type, mode } = entryValue;
 
@@ -207,7 +204,7 @@ export class Form extends React.Component {
           if (type === formTypes.textArea && mode === 'json') {
             payloadValue = JSON.parse(value);
           } else if (type === formTypes.number) {
-            payloadValue = parseInt(value);
+            payloadValue = parseInt(value, 10);
           }
           set(payload, schemaProperty, payloadValue);
         }
@@ -248,12 +245,20 @@ export class Form extends React.Component {
     const inputState = this.state.inputs;
     const { errors } = this.state;
     const { status } = this.props;
+    let buttonText;
 
+    if (this.isInflight()) {
+      buttonText = 'Loading...';
+    } else if (status === 'success') {
+      buttonText = 'Success!';
+    } else {
+      buttonText = 'Submit';
+    }
     const form = (
       <div ref={(element) => { this.DOMElement = element; }}>
         {errors.length > 0 && <ErrorReport report={errorMessage(errors)} disableScroll={true} />}
         <ul>
-          {this.props.inputMeta.map(input => {
+          {this.props.inputMeta.map((input) => {
             const { type, label } = input;
             let element;
 
@@ -315,16 +320,16 @@ export class Form extends React.Component {
 
         {this.props.submit && (
           <button
-            className={'button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white button--submit' + (this.isInflight() ? ' button--disabled' : '')}
+            className={`button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white button--submit${this.isInflight() ? ' button--disabled' : ''}`}
             onClick={this.onSubmit}
           >
-            {this.isInflight() ? 'Loading...' : status === 'success' ? 'Success!' : 'Submit'}
+            {buttonText}
           </button>
         )}
 
         {this.props.cancel && (
           <button
-            className={'button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button--cancel' + (this.isInflight() ? ' button--disabled' : '')}
+            className={`button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button--cancel${this.isInflight() ? ' button--disabled' : ''}`}
             onClick={this.onCancel}
           >
             Cancel

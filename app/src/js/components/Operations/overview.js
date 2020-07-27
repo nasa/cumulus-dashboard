@@ -1,4 +1,4 @@
-'use strict';
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
@@ -70,6 +70,7 @@ class OperationOverview extends React.Component {
   }
 
   searchOperations (list, infix) {
+    // eslint-disable-next-line array-callback-return
     return list.filter((item) => {
       if (item.id.includes(infix)) return item;
     });
@@ -156,6 +157,6 @@ OperationOverview.propTypes = {
   queryParams: PropTypes.object,
 };
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   operations: state.operations,
 }))(OperationOverview));

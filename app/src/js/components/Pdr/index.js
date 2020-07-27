@@ -1,10 +1,10 @@
-'use strict';
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
+import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { getCount, listPdrs } from '../../actions';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
@@ -12,7 +12,6 @@ import Pdr from './pdr';
 import PdrOverview from './overview';
 import PdrList from './list';
 import { strings } from '../locale';
-import withQueryParams from 'react-router-query-params';
 import { filterQueryParams } from '../../utils/url-helper';
 
 const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {

@@ -1,4 +1,3 @@
-'use strict';
 import tally from './tally';
 
 const pdrRoutes = [
@@ -17,15 +16,14 @@ const empty = [['', '']];
 const pdrs = {
   base: 'pdrs',
   heading: 'PDRs',
-  routes: (currentRoute, params, count) => {
+  routes: (currentRoute, params, count = []) => {
     if (currentRoute.includes('pdrs/pdr')) {
       return singlePdrRoutes;
-    } else if (currentRoute.slice(0, 5) !== '/pdrs') {
+    } if (currentRoute.slice(0, 5) !== '/pdrs') {
       return empty;
-    } else {
-      count = count || [];
-      return pdrRoutes.map(d => tally(d, count));
     }
+
+    return pdrRoutes.map((d) => tally(d, count));
   }
 };
 

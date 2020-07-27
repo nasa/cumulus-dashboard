@@ -1,4 +1,3 @@
-'use strict';
 const routes = [
   ['Overview', null]
 ];
@@ -15,11 +14,10 @@ const handler = {
   routes: (currentRoute, params) => {
     if (currentRoute.includes('operations/operation')) {
       return singleRoutes;
-    } else if (currentRoute.slice(0, 12) !== '/operations') {
+    } if (currentRoute.slice(0, 12) !== '/operations') {
       return empty;
-    } else {
-      return routes;
     }
+    return routes;
   }
 };
 

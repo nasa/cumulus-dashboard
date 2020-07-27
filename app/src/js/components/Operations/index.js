@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import { withRouter, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';

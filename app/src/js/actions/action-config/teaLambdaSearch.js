@@ -1,6 +1,4 @@
-'use strict';
-
-export const teaLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
+const teaLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
   "aggs": {
     "2": {
       "filters": {
@@ -73,3 +71,5 @@ export const teaLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpoc
     }
   }
 }`;
+
+export default teaLambdaSearchTemplate;

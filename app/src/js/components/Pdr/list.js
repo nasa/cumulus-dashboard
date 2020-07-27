@@ -1,4 +1,4 @@
-'use strict';
+/* eslint-disable no-restricted-globals */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -46,20 +46,20 @@ const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
   ];
 
   function generateQuery() {
-    const query = { ...queryParams };
+    const newQuery = { ...queryParams };
     const { pathname } = location;
-    if (pathname === '/pdrs/completed') query.status = 'completed';
-    else if (pathname === '/pdrs/failed') query.status = 'failed';
-    else if (pathname === '/pdrs/active') query.status = 'running';
-    return query;
+    if (pathname === '/pdrs/completed') newQuery.status = 'completed';
+    else if (pathname === '/pdrs/failed') newQuery.status = 'failed';
+    else if (pathname === '/pdrs/active') newQuery.status = 'running';
+    return newQuery;
   }
 
   function getView() {
     const { pathname } = location;
     if (pathname === '/pdrs/completed') return 'completed';
-    else if (pathname === '/pdrs/failed') return 'failed';
-    else if (pathname === '/pdrs/active') return 'active';
-    else return 'all';
+    if (pathname === '/pdrs/failed') return 'failed';
+    if (pathname === '/pdrs/active') return 'active';
+    return 'all';
   }
 
   function generateBulkActions() {

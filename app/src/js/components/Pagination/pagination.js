@@ -1,4 +1,4 @@
-'use strict';
+/* eslint-disable no-restricted-globals */
 import React from 'react';
 import Paginator from 'paginator';
 import PropTypes from 'prop-types';
@@ -33,7 +33,7 @@ class Pagination extends React.Component {
       const paginator = new Paginator(limit, 7);
       const meta = paginator.build(count, currentPage);
       const pages = [];
-      for (let i = meta.first_page; i <= meta.last_page; ++i) { pages.push(i); }
+      for (let i = meta.first_page; i <= meta.last_page; i += 1) { pages.push(i); }
       const jumpToFirst = meta.first_page > 1 && <li><a href='#' data-value={1} onClick={this.onPageClick}>1</a> ... </li>;
       const jumpToLast = meta.last_page < meta.total_pages &&
         <li> ... <a href='#' data-value={meta.total_pages} onClick={this.onPageClick}>{meta.total_pages}</a> </li>;
@@ -42,24 +42,24 @@ class Pagination extends React.Component {
         <div className='pagination'>
           <ol>
             <li><a
-              className={'previous' + (meta.has_previous_page ? '' : disabled)}
+              className={`previous${meta.has_previous_page ? '' : disabled}`}
               data-value={meta.previous_page}
               onClick={(meta.has_previous_page ? this.onPageClick : noop)}>Previous</a></li>
             {jumpToFirst}
-            {pages.map(d => (
+            {pages.map((d) => (
               <li key={d} className={d === currentPage ? 'pagination__link--active' : ''}>
                 <a href='#' data-value={d} onClick={this.onPageClick}>{d}</a>
               </li>
             ))}
             {jumpToLast}
             <li><a
-              className={'next' + (meta.has_next_page ? '' : disabled)}
+              className={`next${meta.has_next_page ? '' : disabled}`}
               data-value={meta.next_page}
               onClick={(meta.has_next_page ? this.onPageClick : noop)}>Next</a></li>
           </ol>
         </div>
       );
-    } else return <div></div>;
+    } return <div></div>;
   }
 }
 

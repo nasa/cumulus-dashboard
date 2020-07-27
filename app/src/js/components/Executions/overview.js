@@ -1,4 +1,4 @@
-'use strict';
+
 import React from 'react';
 import { get } from 'object-path';
 import PropTypes from 'prop-types';
@@ -15,7 +15,7 @@ import {
   getOptionsCollectionName,
 } from '../../actions';
 import { tally, lastUpdated } from '../../utils/format';
-import { workflowOptions } from '../../selectors';
+import { workflowOptions as defaultWorkflowOptions } from '../../selectors';
 import statusOptions from '../../utils/status';
 import pageSizeOptions from '../../utils/page-size';
 import List from '../Table/Table';
@@ -44,6 +44,7 @@ class ExecutionOverview extends React.Component {
   }
 
   searchOperationId(list, infix) {
+    // eslint-disable-next-line array-callback-return
     return list.filter((item) => {
       if (item.asyncOperationId && item.asyncOperationId.includes(infix)) { return item; }
     });
@@ -162,8 +163,8 @@ ExecutionOverview.propTypes = {
   workflowOptions: PropTypes.object,
 };
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   collections: state.collections,
   executions: state.executions,
-  workflowOptions: workflowOptions(state),
+  workflowOptions: defaultWorkflowOptions(state),
 }))(ExecutionOverview));

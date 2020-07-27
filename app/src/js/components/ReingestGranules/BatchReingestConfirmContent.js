@@ -13,7 +13,7 @@ const BatchReingestConfirmContent = ({ selected = [] }) => {
 
   const displayedItems = () => {
     const items = [];
-    for (let i = 0; i < Math.min(selected.length, maxDisplayed); i++) {
+    for (let i = 0; i < Math.min(selected.length, maxDisplayed); i += 1) {
       items.push(<li key={i}>{selected[i]}</li>);
     }
     if (selected.length > maxDisplayed) {

@@ -5,7 +5,7 @@
  * @param {*} fileName the name of the downloaded file
  */
 
-export const downloadFile = (file, fileName) => {
+const downloadFile = (file, fileName) => {
   const link = document.createElement('a');
   link.setAttribute('download', fileName);
   link.href = file;
@@ -13,3 +13,5 @@ export const downloadFile = (file, fileName) => {
   link.click();
   link.parentNode.removeChild(link);
 };
+
+export default downloadFile;
