@@ -33,6 +33,22 @@ export const initialState = {
   },
 };
 
+function shimEmptyCount(count) {
+  const completed = count.find((item) => item.key === 'completed') || {
+    key: 'completed',
+    count: 0,
+  };
+  const failed = count.find((item) => item.key === 'failed') || {
+    key: 'failed',
+    count: 0,
+  };
+  const running = count.find((item) => item.key === 'running') || {
+    key: 'running',
+    count: 0,
+  };
+  return [completed, failed, running];
+}
+
 export default createReducer(initialState, {
   [STATS]: (state, action) => {
     state.stats.data = assignDate(action.data);
@@ -49,20 +65,8 @@ export default createReducer(initialState, {
   [COUNT]: (state, action) => {
     const { count, meta } = action.data;
     const { field } = meta || {};
-    const completed = count.find((item) => item.key === 'completed') || {
-      key: 'completed',
-      count: 0,
-    };
-    const failed = count.find((item) => item.key === 'failed') || {
-      key: 'failed',
-      count: 0,
-    };
-    const running = count.find((item) => item.key === 'running') || {
-      key: 'running',
-      count: 0,
-    };
     const statsCount =
-      field === 'status' ? [completed, failed, running] : count;
+      field === 'status' ? shimEmptyCount(count) : count;
     state.count.inflight = false;
     state.count.error = null;
     state.count.data[action.config.qs.type] = {
@@ -71,12 +75,15 @@ export default createReducer(initialState, {
     };
   },
   [COUNT_SIDEBAR]: (state, action) => {
-    const { count } = action.data;
+    const { count, meta } = action.data;
+    const { field } = meta || {};
+    const statsCount =
+      field === 'status' ? shimEmptyCount(count) : count;
     state.count.inflight = false;
     state.count.error = null;
     state.count.sidebar[action.config.qs.type] = {
       ...action.data,
-      count,
+      count: statsCount,
     };
   },
   [COUNT_INFLIGHT]: (state) => {
