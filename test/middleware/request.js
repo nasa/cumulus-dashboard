@@ -112,45 +112,6 @@ test.serial('should add correct authorization headers to API request action', as
   }
 });
 
-test.serial('should add correct qs to API request', async (t) => {
-  const requestAction = {
-    type: 'TEST',
-    method: 'GET',
-    url: 'http://anyhost',
-    qs: {
-      endDateTime: 1000000,
-      timestamp__to: 1000000,
-      otherParam: 'test'
-    }
-  };
-  const actionObj = {
-    [CALL_API]: requestAction
-  };
-
-  const requestPromiseStub = sinon.stub().resolves({
-    body: {},
-    statusCode: 200
-  });
-  const revertRequestStub = RequestRewireAPI.__Rewire__('requestPromise', requestPromiseStub);
-
-  try {
-    const { invokeMiddleware } = createTestMiddleware();
-
-    await invokeMiddleware(actionObj);
-
-    const nextAction = requestPromiseStub.firstCall.args[0];
-
-    const expectedParams = {
-      timestamp__to: 1000000,
-      otherParam: 'test'
-    };
-
-    t.deepEqual(nextAction.qs, expectedParams);
-  } finally {
-    revertRequestStub();
-  }
-});
-
 test.serial('should be able to use provided authorization headers', async (t) => {
   const requestAction = {
     type: 'TEST',
@@ -326,6 +287,48 @@ test.serial('should return expected action for GET request action with query sta
   await invokeMiddleware(actionObj);
 
   t.deepEqual(next.firstCall.args[0], expectedAction);
+});
+
+test.serial('should filter startDateTime and endDateTime out of the query', async (t) => {
+  const requestAction = {
+    type: 'TEST',
+    method: 'GET',
+    url: 'http://anyhost',
+    qs: {
+      startDateTime: 1000000,
+      timestamp__from: 1000000,
+      endDateTime: 2000000,
+      timestamp__to: 2000000,
+      otherParam: 'test'
+    }
+  };
+  const actionObj = {
+    [CALL_API]: requestAction
+  };
+
+  const requestPromiseStub = sinon.stub().resolves({
+    body: {},
+    statusCode: 200
+  });
+  const revertRequestStub = RequestRewireAPI.__Rewire__('requestPromise', requestPromiseStub);
+
+  try {
+    const { invokeMiddleware } = createTestMiddleware();
+
+    await invokeMiddleware(actionObj);
+
+    const nextAction = requestPromiseStub.firstCall.args[0];
+
+    const expectedParams = {
+      timestamp__from: 1000000,
+      timestamp__to: 2000000,
+      otherParam: 'test'
+    };
+
+    t.deepEqual(nextAction.qs, expectedParams);
+  } finally {
+    revertRequestStub();
+  }
 });
 
 test.serial('should return expected action for POST request action', async (t) => {
