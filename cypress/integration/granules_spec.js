@@ -102,7 +102,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('@list').should('have.length', 11);
     });
 
-    it.only('should be able to sort table by multiple fields', () => {
+    it('should be able to sort table by multiple fields', () => {
       cy.visit('/granules');
 
       cy.get('.table .thead .tr .th').contains('.table__sort', 'Collection ID').dblclick();
