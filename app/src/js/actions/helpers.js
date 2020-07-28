@@ -1,12 +1,10 @@
-'use strict';
 import { get as getProperty } from 'object-path';
 import _config from '../config';
 
-export const formatError = (response = {}, body) => {
+export const formatError = (response = {}, body = {}) => {
   let error = response
     ? response.statusMessage || ''
     : '';
-  body = body || {};
   if (body.name) error = body.name;
   if (body.message) error += `${(error ? ': ' : '')}${body.message}`;
   return error;
@@ -23,9 +21,7 @@ export const getErrorMessage = (response) => {
 export const addRequestAuthorization = (config, state) => {
   const token = getProperty(state, 'api.tokens.token');
   if (token) {
-    config.headers = Object.assign({}, config.headers, {
-      Authorization: `Bearer ${token}`
-    });
+    config.headers = { ...config.headers, Authorization: `Bearer ${token}` };
   }
 };
 
@@ -51,7 +47,7 @@ export const configureRequest = (params = {}) => {
     resolveWithFullResponse: true,
     simple: false
   };
-  config = Object.assign({}, defaultRequestConfig, config);
+  config = { ...defaultRequestConfig, ...config };
 
   return config;
 };
