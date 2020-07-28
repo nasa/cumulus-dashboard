@@ -131,6 +131,7 @@
     "eslint-plugin-eslint-comments": "^3.0.1",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-lodash": "^2.7.0",
+    "eslint-config-airbnb-base": "^14.0.0",
     "express": "^4.16.3",
     "file-loader": "^5.1.0",
     "font-awesome": "^4.7.0",

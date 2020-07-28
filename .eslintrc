@@ -1,5 +1,6 @@
 {
   "extends": [
+    "airbnb-base",
     "standard",
     "plugin:eslint-comments/recommended",
     "plugin:import/errors",
@@ -57,7 +58,20 @@
     "lodash/import-scope": ["error", "method"],
     "lodash/prefer-constant": "off",
     "lodash/prefer-lodash-method": "off",
-    "lodash/prefer-lodash-typecheck": "off"
+    "lodash/prefer-lodash-typecheck": "off",
+    "no-param-reassign": ["error", { "props": false }],
+    "class-methods-use-this": "off",
+    "consistent-return": "off",
+    "no-console": "off",
+    "max-len": [
+      2,
+      {
+        "code": 120,
+        "ignorePattern": "(https?:|JSON\\.parse|[Uu]rl =)",
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true
+      }
+    ]
   },
   "globals": {
     "cy": true,
