@@ -23,7 +23,10 @@ import {
 } from '../../utils/format';
 import pageSizeOptions from '../../utils/page-size';
 import statusOptions from '../../utils/status';
-import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
+import {
+  getPersistentQueryParams,
+  historyPushWithQueryParams,
+} from '../../utils/url-helper';
 import isEqual from 'lodash.isequal';
 import {
   reingestAction,
@@ -67,6 +70,7 @@ class CollectionOverview extends React.Component {
       this.gotoGranules,
       this.load,
       this.navigateBack,
+      this.parseStats,
     ].forEach((fn) => (this[fn.name] = fn.bind(this)));
   }
 
@@ -142,6 +146,24 @@ class CollectionOverview extends React.Component {
       get(this.props.collections.map, [collectionId, 'error']),
       get(this.props.collections.deleted, [collectionId, 'error']),
     ].filter(Boolean);
+  }
+
+  parseStats(record) {
+    const stats = get(record, 'data.stats', {});
+    return [
+      {
+        key: 'completed',
+        count: stats.completed || 0,
+      },
+      {
+        key: 'failed',
+        count: stats.failed || 0,
+      },
+      {
+        key: 'running',
+        count: stats.running || 0,
+      },
+    ];
   }
 
   renderDeleteButton() {
@@ -256,7 +278,7 @@ class CollectionOverview extends React.Component {
               Granule Metrics
             </h2>
           </div>
-          {record && <Overview type='granules' inflight={record.inflight} />}
+          {record && <Overview items={this.parseStats(record)} inflight={record.inflight} />}
         </section>
         <section className="page__section">
           <div className="heading__wrapper--border">
