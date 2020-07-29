@@ -11,22 +11,22 @@ import { get } from 'object-path';
 const Overview = ({
   dispatch,
   inflight,
-  items,
+  params = {},
   queryParams,
   stats,
   type
 }) => {
-  const statsCount = items || get(stats, `count.data.${type}.count`, []);
+  const statsCount = get(stats, `count.data.${type}.count`, []);
 
   useEffect(() => {
-    if (items) return;
     dispatch(getCount({
       type,
       field: 'status',
+      ...params,
       ...queryParams
     }));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, items, JSON.stringify(queryParams), type]);
+  }, [dispatch, JSON.stringify(params), JSON.stringify(queryParams), type]);
   return (
     <div className="overview-num__wrapper" data-cy="overview-num">
       {inflight && <Loading />}
@@ -51,7 +51,7 @@ const Overview = ({
 Overview.propTypes = {
   dispatch: PropTypes.func,
   inflight: PropTypes.bool,
-  items: PropTypes.array,
+  params: PropTypes.object,
   queryParams: PropTypes.object,
   stats: PropTypes.object,
   type: PropTypes.string,
