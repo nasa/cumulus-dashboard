@@ -1,8 +1,8 @@
 import React from 'react';
 import c from 'classnames';
 import { findDOMNode } from 'react-dom';
-import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import PropTypes from 'prop-types';
+import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import { addGlobalListener } from '../../utils/browser';
 
 class DropdownAsync extends React.Component {
@@ -31,11 +31,9 @@ class DropdownAsync extends React.Component {
   toggleActions (e) {
     e.preventDefault();
     e.stopPropagation();
-    this.setState((prevState) => {
-      return {
-        showActions: !prevState.showActions
-      };
-    });
+    this.setState((prevState) => ({
+      showActions: !prevState.showActions
+    }));
   }
 
   close () {
@@ -61,7 +59,7 @@ class DropdownAsync extends React.Component {
         <ul className={c('dropdown__menu', {
           'dropdown__menu--hidden': !showActions
         })}>
-          {config.map(d => <li key={d.text}>
+          {config.map((d) => <li key={d.text}>
             <AsyncCommand action={d.action}
               success={() => this.handleSuccess(d.success)}
               error={() => this.handleError(d.error)}
