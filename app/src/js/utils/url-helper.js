@@ -39,8 +39,12 @@ export function initialValuesFromLocation (location, paramKeys) {
  */
 
 export function filterQueryParams(queryParams = {}) {
-  const { startDateTime, endDateTime, ...filteredQueryParams } = queryParams;
-  return filteredQueryParams;
+  const { startDateTime, endDateTime, search, ...filteredQueryParams } = queryParams;
+  const infix = search ? { infix: search } : {};
+  return {
+    ...infix,
+    ...filteredQueryParams
+  };
 }
 
 /**
