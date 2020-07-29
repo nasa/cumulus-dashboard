@@ -102,30 +102,41 @@ describe('Dashboard Granules Page', () => {
       cy.get('@list').should('have.length', 11);
     });
 
-    it('should be able to sort table by granule name', () => {
+    it('should be able to sort table by multiple fields', () => {
       cy.visit('/granules');
 
+      cy.get('.table .thead .tr .th').contains('.table__sort', 'Collection ID').dblclick();
+      cy.get('.table .thead .tr .th').contains('.table__sort--desc', 'Collection ID');
+      cy.get('.table .thead .tr .th').eq(0).type('{shift}', { release: false });
+      cy.get('.table .thead .tr .th').contains('.table__sort', 'Status').click();
+      cy.get('.table .thead .tr .th').contains('.table__sort--asc', 'Status');
       cy.get('.table .thead .tr .th').contains('.table__sort', 'Name').click();
       cy.get('.table .thead .tr .th').contains('.table__sort--asc', 'Name');
 
-      // wait until the names of the granules are in sorted order
+      // wait until the selected fields of granules are in sorted order
       cy.waitUntil(
         () => {
-          const granuleNames = [];
+          const granules = [];
           return cy.get('.table .tbody .tr')
             .each(($row, index, $list) => {
+              const granule = {};
+              cy.wrap($row).children('.td').eq(4).invoke('text').then((collectionId) =>
+                (granule.collectionId = collectionId));
+              cy.wrap($row).children('.td').eq(1).invoke('text').then((status) =>
+                (granule.status = status));
               cy.wrap($row).children('.td').eq(2).invoke('text').then((name) =>
-                granuleNames.push(name));
+                (granule.name = name));
+              granules.push(granule);
             })
             .then(() => (
-              granuleNames.length === 11 &&
-              granuleNames.slice().join(',') === granuleNames.sort().join(',')
+              granules.length === 11 &&
+              Cypress._.isEqual(granules, Cypress._.orderBy(granules, ['collectionId', 'status', 'name'], ['desc', 'asc', 'asc']))
             ));
         },
         {
           timeout: 10000,
           interval: 1000,
-          errorMsg: 'granule name sorting not working within time limit'
+          errorMsg: 'granule multi-column sorting not working within time limit'
         });
     });
 
