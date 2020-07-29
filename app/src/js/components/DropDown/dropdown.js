@@ -1,5 +1,5 @@
 'use strict';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -72,18 +72,38 @@ const Dropdown = ({
 }) => {
   const [selected, setSelected] = useState([]);
   const allowNew = paramKey === 'limit';
+  const typeaheadRef = createRef();
 
   function getOptionFromParam(options, paramValue) {
     return options.filter((item) => item.id === paramValue);
   }
 
-  function onChange(selectedValues) {
-    const item = selectedValues[0];
-    const { customOption, id, label } = item || {};
-    const value = customOption ? label : id;
+  function updateSelection(selectedValues, value) {
     dispatch(action({ key: paramKey, value }));
     setSelected(selectedValues);
     setQueryParams({ [paramKey]: value });
+  }
+
+  function handleChange(selectedValues) {
+    const item = selectedValues[0];
+    const { customOption, id, label } = item || {};
+    const value = customOption ? label : id;
+    updateSelection(selectedValues, value);
+  }
+
+  function handleKeyDown(e) {
+    if (!allowNew) return;
+    if (e.keyCode === 13) {
+      const value = e.target.value;
+      const selectedValue = [
+        {
+          id: value,
+          label: value,
+        },
+      ];
+      updateSelection(selectedValue, value);
+      typeaheadRef.current.hideMenu();
+    }
   }
 
   useEffect(() => {
@@ -120,8 +140,10 @@ const Dropdown = ({
         clearButton={true}
         id={paramKey}
         inputProps={inputProps}
-        onChange={onChange}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
         options={options}
+        ref={typeaheadRef}
         renderInput={renderInput}
         renderMenu={renderMenu}
         selected={selected || []}
