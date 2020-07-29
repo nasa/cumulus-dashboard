@@ -9,12 +9,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### BREAKING CHANGES
 
-- This dashboard version requires Cumulus API version >= v1.25.0
+- This dashboard version requires Cumulus API version >= v2.0.1
 
 ### Added
 - **CUMULUS-1805**
   - Shows running, completed, and failed granule format for when there are zero granules,
     before it would just say "Granules 0," but now will show zeros in all categories.
+- **CUMULUS-1886**
+  - Support sorting on multiple columns
 - **CUMULUS-1904**
   - Adds a TableFilters component for dynamically showing/hiding table columns
 
