@@ -1,13 +1,15 @@
 'use strict';
 
 import test from 'ava';
-import rewire from 'rewire';
 import sinon from 'sinon';
 import cloneDeep from 'lodash.clonedeep';
 
-const granules = rewire('../../../app/src/js/utils/table-config/granules');
+import { __RewireAPI__ as GranulesRewireAPI } from '../../../app/src/js/utils/table-config/granules';
 
-const setOnConfirm = granules.__get__('setOnConfirm');
+const setOnConfirm = GranulesRewireAPI.__get__('setOnConfirm');
+
+GranulesRewireAPI.__Rewire__('historyPushWithQueryParams', sinon.fake());
+const historyPushWithQueryParams = GranulesRewireAPI.__get__('historyPushWithQueryParams');
 
 test.beforeEach((t) => {
   t.context.history = {};
@@ -17,6 +19,7 @@ test.beforeEach((t) => {
 
 test.afterEach((t) => {
   sinon.restore();
+  GranulesRewireAPI.__ResetDependency__('historyPushWithQueryParams');
 });
 
 test('setOnConfirm does nothing with an error', (t) => {
@@ -25,7 +28,7 @@ test('setOnConfirm does nothing with an error', (t) => {
 
   confirmCallback();
 
-  t.true(t.context.history.push.notCalled);
+  t.true(historyPushWithQueryParams.notCalled);
 });
 
 test('setOnConfirm navigates to the target granule with a single selected granule', (t) => {
@@ -34,7 +37,7 @@ test('setOnConfirm navigates to the target granule with a single selected granul
 
   confirmCallback();
 
-  t.true(t.context.history.push.calledWith('/granules/granule/one-granule'));
+  t.true(historyPushWithQueryParams.calledWith('/granules/granule/one-granule'));
 });
 
 test('setOnConfirm navigates to the processing page with multiple selected granules', (t) => {
@@ -46,7 +49,7 @@ test('setOnConfirm navigates to the processing page with multiple selected granu
 
   confirmCallback();
 
-  t.true(t.context.history.push.calledWith('/granules/processing'));
+  t.true(historyPushWithQueryParams.calledWith('/granules/processing'));
 });
 
 test('setOnConfirm calls setState to close the modal with multiple selected granules', (t) => {
@@ -58,7 +61,7 @@ test('setOnConfirm calls setState to close the modal with multiple selected gran
   const confirmCallback = setOnConfirm(input);
 
   confirmCallback();
-  t.true(t.context.history.push.calledWith('/granules/processing'));
+  t.true(historyPushWithQueryParams.calledWith('/granules/processing'));
   t.true(input.closeModal.called);
 });
 
@@ -96,6 +99,6 @@ test('setOnConfirm navigates to the correct processing page irrespective of the 
     testInput.history.location.pathname = o.pathname;
     const confirmCallback = setOnConfirm(testInput);
     confirmCallback();
-    t.true(t.context.history.push.calledWith(o.expected));
+    t.true(historyPushWithQueryParams.calledWith(o.expected));
   });
 });

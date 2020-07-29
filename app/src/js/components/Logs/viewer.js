@@ -131,7 +131,7 @@ class LogViewer extends React.Component {
       <section className='page__section' >
         <div className='heading__wrapper--border'>
           <h2 className='heading--medium heading--shared-content with-description'>
-            Logs <span className='num--title'>{logs.inflight ? <LoadingEllipsis /> : count}</span>
+            Logs <span className='num-title'>{logs.inflight ? <LoadingEllipsis /> : count}</span>
           </h2>
 
           <form className='search__wrapper form-group__element form-group__element--right form-group__element--right--sm form-group__element--small'>

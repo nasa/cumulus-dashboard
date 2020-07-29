@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import ErrorReport from './Errors/report';
 import Header from './Header/header';
 import Modal from 'react-bootstrap/Modal';
+import { historyPushWithQueryParams } from '../utils/url-helper';
 
 const { updateDelay, apiRoot, oauthMethod } = _config;
 
@@ -33,7 +34,7 @@ class OAuth extends React.Component {
       if (pathname !== '/auth' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/auth') {
-        setTimeout(() => this.props.history.push('/'), updateDelay); // react isn't seeing this a function
+        setTimeout(() => historyPushWithQueryParams('/'), updateDelay); // react isn't seeing this a function
       }
     }
   }
@@ -91,7 +92,6 @@ OAuth.propTypes = {
   dispatch: PropTypes.func,
   api: PropTypes.object,
   location: PropTypes.object,
-  history: PropTypes.object,
   apiVersion: PropTypes.object,
   queryParams: PropTypes.object
 };

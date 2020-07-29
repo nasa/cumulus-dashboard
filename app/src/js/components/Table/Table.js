@@ -33,7 +33,7 @@ class List extends React.Component {
       order: initialOrder,
       selected: [],
       clearSelected: false,
-      prefix: null,
+      infix: null,
       queryConfig: {
         page: initialPage,
         order: initialOrder,
@@ -113,13 +113,15 @@ class List extends React.Component {
 
   getQueryConfig (config = {}, query = (this.props.query || {})) {
     // Remove empty keys so as not to mess up the query
+    const { search, ...restQuery } = query;
     return omitBy({
       page: this.state.page,
       order: this.state.order,
       sort_by: this.state.sortId,
+      infix: search,
       ...this.state.params,
       ...config,
-      ...query
+      ...restQuery
     }, isNil);
   }
 
@@ -145,11 +147,10 @@ class List extends React.Component {
       selected,
       clearSelected,
       completedBulkActions,
-      bulkActionError
+      bulkActionError,
+      queryConfig
     } = this.state;
     const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
-
-    const queryConfig = this.getQueryConfig();
 
     return (
       <>

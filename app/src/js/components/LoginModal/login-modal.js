@@ -7,6 +7,7 @@ import { updateDelay } from '../../config';
 import ErrorReport from '../Errors/report';
 import Text from '../TextAreaForm/text';
 import Modal from 'react-bootstrap/Modal';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 class LoginModal extends React.Component {
   constructor () {
@@ -28,7 +29,7 @@ class LoginModal extends React.Component {
       if (pathname !== '/login' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/login') {
-        setTimeout(() => prevProps.history.push('/'), updateDelay);
+        setTimeout(() => historyPushWithQueryParams('/'), updateDelay);
       }
     }
   }
@@ -99,7 +100,6 @@ LoginModal.propTypes = {
   dispatch: PropTypes.func,
   api: PropTypes.object,
   location: PropTypes.object,
-  history: PropTypes.object,
   show: PropTypes.bool
 };
 

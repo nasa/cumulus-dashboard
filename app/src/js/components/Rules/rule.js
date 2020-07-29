@@ -28,6 +28,7 @@ import Metadata from '../Table/Metadata';
 import DropdownAsync from '../DropDown/dropdown-async-command';
 import ErrorReport from '../Errors/report';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 
 const breadcrumbConfig = [
   {
@@ -36,7 +37,7 @@ const breadcrumbConfig = [
   },
   {
     label: 'Rules',
-    href: '/Rules'
+    href: '/rules'
   },
   {
     label: 'Rule Overview',
@@ -102,7 +103,7 @@ class Rule extends React.Component {
   }
 
   navigateBack () {
-    this.props.history.push('/rules');
+    historyPushWithQueryParams('/rules');
   }
 
   reload () {
@@ -186,15 +187,16 @@ class Rule extends React.Component {
 
             <Link
               className='button button--copy button--small button--green form-group__element--right'
-              to={{
+              to={location => ({
                 pathname: '/rules/add',
+                search: getPersistentQueryParams(location),
                 state: {
                   name: ruleName
                 }
-              }}>Copy Rule</Link>
+              })}>Copy Rule</Link>
             <Link
               className='button button--edit button--small button--green form-group__element--right'
-              to={`/rules/edit/${ruleName}`}>Edit Rule</Link>
+              to={location => ({ pathname: `/rules/edit/${ruleName}`, search: getPersistentQueryParams(location) })}>Edit Rule</Link>
             {lastUpdated(data.timestamp || data.updatedAt)}
           </div>
         </section>
@@ -207,7 +209,7 @@ class Rule extends React.Component {
             {data.state && (
               <dl className='status--process'>
                 <dt>State:</dt>
-                <dd className={`status--badge status--badge__${data.state.toLowerCase()}`}>{displayCase(data.state)}</dd>
+                <dd className={`status__badge status__badge--${data.state.toLowerCase()}`}>{displayCase(data.state)}</dd>
               </dl>
             )}
           </div>
@@ -222,7 +224,6 @@ class Rule extends React.Component {
 
 Rule.propTypes = {
   match: PropTypes.object,
-  history: PropTypes.object,
   dispatch: PropTypes.func,
   rules: PropTypes.object
 };

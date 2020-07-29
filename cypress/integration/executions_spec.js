@@ -173,7 +173,7 @@ describe('Dashboard Executions Page', () => {
         .should('have.attr', 'href', `/executions/execution/${executionArn}/events`).click();
 
       cy.contains('.heading--large', executionName);
-      cy.contains('.num--title', 7);
+      cy.contains('.num-title', 7);
 
       cy.get('.table .tbody .tr').as('events');
       cy.get('@events').should('have.length', 7);

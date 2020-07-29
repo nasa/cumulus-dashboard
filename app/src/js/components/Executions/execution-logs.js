@@ -1,11 +1,13 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { getExecutionLogs } from '../../actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import ErrorReport from '../Errors/report';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 class ExecutionLogs extends React.Component {
   constructor (props) {
@@ -26,8 +28,7 @@ class ExecutionLogs extends React.Component {
   }
 
   navigateBack () {
-    const { history } = this.props;
-    history.push('/executions');
+    historyPushWithQueryParams('/executions');
   }
 
   errors () {
@@ -41,6 +42,9 @@ class ExecutionLogs extends React.Component {
 
     return (
       <div className='page__component'>
+        <Helmet>
+          <title> Execution Logs </title>
+        </Helmet>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>
           Logs for Execution {this.executionName}
@@ -71,7 +75,6 @@ ExecutionLogs.propTypes = {
   executionLogs: PropTypes.object,
   match: PropTypes.object,
   dispatch: PropTypes.func,
-  history: PropTypes.object
 };
 
 ExecutionLogs.displayName = 'Execution Logs';

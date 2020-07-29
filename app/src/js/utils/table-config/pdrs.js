@@ -5,6 +5,7 @@ import { get } from 'object-path';
 import { seconds, fromNow, bool, nullValue } from '../format';
 import { deletePdr } from '../../actions';
 import { strings } from '../../components/locale';
+import { getPersistentQueryParams } from '../url-helper';
 
 export const tableColumns = [
   {
@@ -15,7 +16,7 @@ export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'pdrName',
-    Cell: ({ cell: { value } }) => <Link to={`pdrs/pdr/${value}`}>{value}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={location => ({ pathname: `/pdrs/pdr/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Status',
@@ -28,8 +29,7 @@ export const tableColumns = [
   },
   {
     Header: strings.granules,
-    accessor: row => Object.keys(row.stats).filter(k => k !== 'total')
-      .reduce((a, b) => a + get(row.stats, b, 0), 0),
+    accessor: row => get(row, ['stats', 'total'], 0),
     id: 'granules'
   },
   {
@@ -58,7 +58,7 @@ export const errorTableColumns = [
   {
     Header: 'Name',
     accessor: 'name',
-    Cell: ({ cell: { value } }) => <Link to={`pdrs/pdr/${value}`}>{value}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={location => ({ pathname: `/pdrs/pdr/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Error',

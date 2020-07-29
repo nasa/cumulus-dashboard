@@ -6,9 +6,9 @@ Cumulus is a moving system. Almost all of the data views in Dashboard will updat
 
 ## Searching and filtering
 
-Many tables provide dropdowns to filter the data based on attributes like status or parent collection. Often, you will find search fields where you can enter arbitrary search strings. As you type, the Cumulus Dashboard and API will attempt to find records containing attributes with **prefixes** that match your search string.
+Many tables provide dropdowns to filter the data based on attributes like status or parent collection. Often, you will find search fields where you can enter arbitrary search strings. As you type, the Cumulus Dashboard and API will attempt to find records containing attributes with **infixes** that match your search string.
 
-For example, say a granule belongs to a PDR with the name `MODAPSops8.15810456.PDR`. In the granules section under "All Granules," searching for "MODAPS" will return a selection containing this granule. However, searching for "1581" will not return this granule.
+For example, say a granule belongs to a PDR with the name `MODAPSops8.15810456.PDR`. In the granules section under "All Granules," searching for "MODAPS" or "15810" will return a selection containing this granule.
 
 ## Sorting
 

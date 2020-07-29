@@ -8,6 +8,7 @@ import { strings } from '../../components/locale';
 import BatchDeleteConfirmContent from '../../components/DeleteCollection/BatchDeleteConfirmContent';
 import BatchDeleteCompleteContent from '../../components/DeleteCollection/BatchDeleteCompleteContent';
 import BatchDeleteWithGranulesContent from '../../components/DeleteCollection/BatchDeleteWithGranulesContent';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
 
 export const tableColumns = [
   {
@@ -15,7 +16,7 @@ export const tableColumns = [
     accessor: 'name',
     Cell: ({ cell: { value, row } }) => { // eslint-disable-line react/prop-types
       const { values } = row; // eslint-disable-line react/prop-types
-      return <Link to={`/collections/collection/${value}/${values.version}`}>{value}</Link>; // eslint-disable-line react/prop-types
+      return <Link to={location => ({ pathname: `/collections/collection/${value}/${values.version}`, search: getPersistentQueryParams(location) })}>{value}</Link>; // eslint-disable-line react/prop-types
     },
     width: 175
   },
@@ -108,7 +109,7 @@ export const bulkActions = function (collections) {
         modalOptions.cancelButtonText = 'Cancel Request';
         modalOptions.title = 'Warning';
         modalOptions.onConfirm = () => {
-          history.push('/granules');
+          historyPushWithQueryParams('/granules');
         };
         modalOptions.children = <BatchDeleteWithGranulesContent selectionsWithGranules={selectionsWithGranules} />;
       }
@@ -125,7 +126,18 @@ export const bulkActions = function (collections) {
   };
   return [
     {
-      Component: <Link className='button button--green button--add button--small form-group__element' to='/collections/add' role="button">{strings.add_collection}</Link>
+      Component: (
+        <Link
+          className="button button--green button--add button--small form-group__element"
+          to={(location) => ({
+            pathname: '/collections/add',
+            search: getPersistentQueryParams(location),
+          })}
+          role="button"
+        >
+          {strings.add_collection}
+        </Link>
+      ),
     },
     {
       text: 'Delete Collection(s)',

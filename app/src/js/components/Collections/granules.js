@@ -1,5 +1,6 @@
 'use strict';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -11,6 +12,7 @@ import {
   applyWorkflowToGranule,
   searchGranules,
   clearGranulesSearch,
+  listWorkflows,
 } from '../../actions';
 import {
   simpleDropdownOption,
@@ -26,12 +28,14 @@ import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import pageSizeOptions from '../../utils/page-size';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const CollectionGranules = ({
   dispatch,
-  match,
-  location,
   granules,
+  location,
+  match,
+  queryParams,
   workflowOptions,
 }) => {
   const { params } = match;
@@ -42,7 +46,7 @@ const CollectionGranules = ({
   const displayName = strings.granules;
   const collectionId = getCollectionId(params);
   const view = getView();
-  const [workflow, setWorkflow] = useState();
+  const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const query = generateQuery();
 
   const breadcrumbConfig = [
@@ -72,9 +76,20 @@ const CollectionGranules = ({
     });
   }
 
+  useEffect(() => {
+    dispatch(listWorkflows());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setWorkflow(workflowOptions[0]);
+  }, [workflowOptions]);
+
   function generateQuery() {
-    const options = { collectionId };
-    if (view && view !== 'all') options.status = view;
+    const options = {
+      ...queryParams,
+      collectionId,
+    };
+    if (view !== 'all') options.status = view;
     return options;
   }
 
@@ -117,6 +132,9 @@ const CollectionGranules = ({
 
   return (
     <div className="page__component">
+      <Helmet>
+        <title> Collection Granules </title>
+      </Helmet>
       <section className="page__section page__section__controls">
         <Breadcrumbs config={breadcrumbConfig} />
       </section>
@@ -126,7 +144,10 @@ const CollectionGranules = ({
         </h1>
         <Link
           className="button button--edit button--small form-group__element--right button--green"
-          to={`/collections/edit/${collectionName}/${collectionVersion}`}
+          to={{
+            pathname: `/collections/edit/${collectionName}/${collectionVersion}`,
+            search: getPersistentQueryParams(location),
+          }}
         >
           Edit
         </Link>
@@ -139,7 +160,7 @@ const CollectionGranules = ({
         <div className="heading__wrapper--border">
           <h2 className="heading--medium heading--shared-content with-description">
             {`${displayCase(view)} ${displayName} `}
-            <span className="num--title">
+            <span className="num-title">
               {`${(meta.count && meta.count) || 0}`}
             </span>
           </h2>
@@ -194,13 +215,14 @@ CollectionGranules.propTypes = {
   granules: PropTypes.object,
   dispatch: PropTypes.func,
   location: PropTypes.object,
-  workflowOptions: PropTypes.array,
   match: PropTypes.object,
+  queryParams: PropTypes.object,
+  workflowOptions: PropTypes.array,
 };
 
 export default withRouter(
   connect((state) => ({
-    workflowOptions: workflowOptionNames(state),
     granules: state.granules,
+    workflowOptions: workflowOptionNames(state),
   }))(CollectionGranules)
 );

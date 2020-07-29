@@ -1,0 +1,45 @@
+.multicard {
+  .collapse-link {
+    text-align: right;
+  }
+}
+
+.multicard__table {
+  .multicard__header {
+    background-color: $theme--blue;
+    color: $white;
+    margin: 1em 0em;
+    &--expanded {
+      background-color: $white;
+      color: $theme--blue;
+    }
+  }
+
+  .collapse-icon {
+    &:after {
+      float: right;
+      font-family: 'FontAwesome';
+      content: '\f139';
+      // chevron circle up
+      color: $theme--blue;
+      font-weight: 900;
+      top: .55em;
+      left: 8.3em;
+      text-align: right;
+    }
+  }
+  .expand-icon {
+    &:after {
+      float: right;
+      font-family: 'FontAwesome';
+      content: '\f138';
+      // chevron circle right
+      color: $white;
+      font-weight: 900;
+      top: .55em;
+      left: 8.3em;
+      text-align: right;
+    }
+  }
+
+}

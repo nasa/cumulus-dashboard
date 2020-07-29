@@ -4,12 +4,13 @@ import { Link } from 'react-router-dom';
 
 import { nullValue, dateOnly } from '../format';
 import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions';
+import { getPersistentQueryParams } from '../url-helper';
 
 export const tableColumns = ({ dispatch }) => ([
   {
     Header: 'Name',
     accessor: 'name',
-    Cell: ({ cell: { value } }) => <Link to={`/reconciliation-reports/report/${value}`}>{value}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={location => ({ pathname: `/reconciliation-reports/report/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Report Type',
@@ -81,6 +82,18 @@ export const tableColumnsS3Files = [
     accessor: 'filename'
   },
   {
+    Header: 'Conflict Type',
+    id: 'conflictType',
+    Cell: <span className='status-indicator status-indicator--failed'></span>,
+    disableSortBy: true
+  },
+  {
+    Header: 'Conflict Details',
+    id: 'conflictDetails',
+    Cell: 'View Details',
+    disableSortBy: true
+  },
+  {
     Header: 'Bucket',
     accessor: 'bucket'
   },
@@ -101,6 +114,18 @@ export const tableColumnsFiles = [
     accessor: 'filename'
   },
   {
+    Header: 'Conflict Type',
+    id: 'conflictType',
+    Cell: <span className='status-indicator status-indicator--orange'></span>,
+    disableSortBy: true
+  },
+  {
+    Header: 'Conflict Details',
+    id: 'conflictDetails',
+    Cell: 'View Details',
+    disableSortBy: true
+  },
+  {
     Header: 'Bucket',
     accessor: 'bucket'
   },
@@ -114,7 +139,13 @@ export const tableColumnsFiles = [
 export const tableColumnsCollections = [
   {
     Header: 'Collection name',
-    accessor: 'name'
+    accessor: 'name',
+  },
+  {
+    Header: 'Conflict Details',
+    id: 'conflictDetails',
+    Cell: 'View Details',
+    disableSortBy: true
   }
 ];
 
@@ -122,5 +153,17 @@ export const tableColumnsGranules = [
   {
     Header: 'Granule ID',
     accessor: 'granuleId'
+  },
+  {
+    Header: 'Conflict Type',
+    id: 'conflictType',
+    Cell: <span className='status-indicator status-indicator--failed'></span>,
+    disableSortBy: true
+  },
+  {
+    Header: 'Conflict Details',
+    id: 'conflictDetails',
+    Cell: 'View Details',
+    disableSortBy: true
   }
 ];

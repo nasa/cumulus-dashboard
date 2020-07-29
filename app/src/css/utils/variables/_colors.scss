@@ -1,7 +1,7 @@
 /* EUI Colors */
-$light-green: #20ce6f;                                   
-$ocean-blue: #2276ac;                                
-$midnight-blue: #2c3e50;                              
+$light-green: #20ce6f;
+$ocean-blue: #2276ac;
+$midnight-blue: #2c3e50;
 $royal-purple: #673285;
 $dolphin-grey: #95a5a6;
 $sky-blue: #7ab5da;
@@ -9,11 +9,6 @@ $sky-blue: #7ab5da;
 /* Cumulus Secondary Blues */
 $sub-blue: #1E6B9D;
 $dark-blue: #1A557B;
-
-/* Theme */
-$theme--blue: #2276ac;
-$theme--light: #E2DFDF;
-$theme--dark: #2c3e50;
 
 /* Errors & Warnings */
 $error-red: #E74C3C;
@@ -30,3 +25,10 @@ $lighter-grey: #8C8C8C;
 $lightest-grey: #E2DFDF;
 $background-white: #F8F8F8;
 $white: #FFFFFF;
+
+/* Theme */
+$theme--blue: #2276ac;
+$theme--light: #E2DFDF;
+$theme--dark: #2c3e50;
+$theme--success: $light-green;
+$theme--conflict: $orange;

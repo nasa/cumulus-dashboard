@@ -15,6 +15,10 @@ import {
   NEW_RECONCILIATION,
   FILTER_RECONCILIATIONS,
   CLEAR_RECONCILIATIONS_FILTER,
+  SEARCH_RECONCILIATION,
+  CLEAR_RECONCILIATION_SEARCH,
+  FILTER_RECONCILIATION,
+  CLEAR_RECONCILIATION_FILTER,
 } from '../actions/types';
 
 export const initialState = {
@@ -61,10 +65,10 @@ export default createReducer(initialState, {
     state.list.error = action.error;
   },
   [SEARCH_RECONCILIATIONS]: (state, action) => {
-    state.list.params.prefix = action.prefix;
+    state.list.params.infix = action.infix;
   },
   [CLEAR_RECONCILIATIONS_SEARCH]: (state) => {
-    delete state.list.params.prefix;
+    delete state.list.params.infix;
   },
   [NEW_RECONCILIATION_INFLIGHT]: (state) => {
     state.createReportInflight = true;
@@ -76,6 +80,18 @@ export default createReducer(initialState, {
     state.list.params[action.param.key] = action.param.value;
   },
   [CLEAR_RECONCILIATIONS_FILTER]: (state, action) => {
+    state.list.params[action.paramKey] = null;
+  },
+  [SEARCH_RECONCILIATION]: (state, action) => {
+    state.searchString = action.searchString;
+  },
+  [CLEAR_RECONCILIATION_SEARCH]: (state) => {
+    state.searchString = null;
+  },
+  [FILTER_RECONCILIATION]: (state, action) => {
+    state.list.params[action.param.key] = action.param.value;
+  },
+  [CLEAR_RECONCILIATION_FILTER]: (state, action) => {
     state.list.params[action.paramKey] = null;
   }
 });

@@ -4,49 +4,63 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Card } from 'react-bootstrap';
+import { displayCase } from '../../utils/format';
 
-const TableCards = ({
-  config,
-  onClick,
-  activeCard
-}) => {
-  function handleCardClick (e, index) {
+const conflictedCount = (tables) => {
+  return tables.reduce((acc, cv) => acc + cv.data.length, 0);
+};
+
+const TableCards = ({ activeCard, config, onClick, titleCaption }) => {
+  function handleCardClick(e, id) {
     e.preventDefault();
     if (typeof onClick === 'function') {
-      onClick(e, index);
+      onClick(e, id);
     }
   }
 
   return (
-    <div className='card-wrapper'>
-      {config.map((item, index) => {
-        // TODO: once API is updated with status indicator, remove the default
-        const { name, data, status = 'success' } = item;
-        const count = data.length;
-        if (!data || !count) {
-          return null;
-        }
-        return (
-          <Card key={index} className={`text-center${activeCard === index ? ' active' : ''}`} onClick={e => handleCardClick(e, index)}>
-            <Card.Header as='h5'>{name}</Card.Header>
-            <Card.Body>
-              <Card.Title>{count}</Card.Title>
-              <Card.Text>
-                <span className={`status-indicator ${status === 'success' ? 'status-indicator--success' : 'status-indicator--failed'}`}></span>
-                {status}
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        );
-      })}
+    <div className='table-card'>
+      <div className="table-card--title-caption">{titleCaption}</div>
+      <div className="card-wrapper">
+        {config.map((item, index) => {
+          let { id = index, name, tables, status = 'conflict' } = item;
+          const count = conflictedCount(tables);
+          if (count === 0) {
+            status = 'passed';
+          }
+          return (
+            <Card
+              key={id}
+              className={`text-center${activeCard === id ? ' active' : ''}`}
+              onClick={(e) => handleCardClick(e, id)}
+            >
+              <Card.Header as="h5">{name}</Card.Header>
+              <Card.Body>
+                <Card.Title>{count}</Card.Title>
+                <Card.Text>
+                  <span
+                    className={`status-indicator ${
+                    status === 'passed'
+                      ? 'status-indicator--success'
+                      : 'status-indicator--failed'
+                  }`}
+                  ></span>
+                  {displayCase(status)}
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          );
+        })}
+      </div>
     </div>
   );
 };
 
 TableCards.propTypes = {
+  activeCard: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   config: PropTypes.array,
   onClick: PropTypes.func,
-  activeCard: PropTypes.number
+  titleCaption: PropTypes.string,
 };
 
 export default TableCards;
