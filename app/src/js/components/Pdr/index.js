@@ -19,7 +19,7 @@ const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
   const { pathname } = location;
   const count = get(stats, 'count.sidebar.pdrs.count');
   const filteredQueryParams = filterQueryParams(queryParams);
-  const queryAsJson = JSON.stringify(filteredQueryParams);
+  const queryAsJson = JSON.stringify(queryParams);
 
   function query() {
     dispatch(listPdrs(filteredQueryParams));
