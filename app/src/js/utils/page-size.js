@@ -1,8 +1,21 @@
 'use strict';
-const pageSizeOptions = {
-  10: '10',
-  25: '25',
-  50: '50',
-  100: '100'
-};
+const pageSizeOptions = [
+  {
+    id: '10',
+    label: '10',
+  },
+  {
+    id: '25',
+    label: '25',
+  },
+  {
+    id: '50',
+    label: '50',
+  },
+  {
+    id: '100',
+    label: '100',
+  },
+];
+
 export default pageSizeOptions;

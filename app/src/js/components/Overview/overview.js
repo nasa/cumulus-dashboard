@@ -11,6 +11,7 @@ import { get } from 'object-path';
 const Overview = ({
   dispatch,
   inflight,
+  params = {},
   queryParams,
   stats,
   type
@@ -21,10 +22,11 @@ const Overview = ({
     dispatch(getCount({
       type,
       field: 'status',
+      ...params,
       ...queryParams
     }));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, JSON.stringify(queryParams), type]);
+  }, [dispatch, JSON.stringify(params), JSON.stringify(queryParams), type]);
   return (
     <div className="overview-num__wrapper" data-cy="overview-num">
       {inflight && <Loading />}
@@ -49,6 +51,7 @@ const Overview = ({
 Overview.propTypes = {
   dispatch: PropTypes.func,
   inflight: PropTypes.bool,
+  params: PropTypes.object,
   queryParams: PropTypes.object,
   stats: PropTypes.object,
   type: PropTypes.string,

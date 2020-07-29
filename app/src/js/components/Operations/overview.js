@@ -23,20 +23,8 @@ import Search from '../Search/search';
 import { tableColumns } from '../../utils/table-config/operations';
 import ListFilters from '../ListActions/ListFilters';
 import pageSizeOptions from '../../utils/page-size';
-
-const statusOptions = {
-  Running: 'RUNNING',
-  Succeeded: 'SUCCEEDED',
-  'Task Failed': 'TASK_FAILED',
-  'Runner Failed': 'RUNNER_FAILED'
-};
-
-const typeOptions = {
-  'Bulk Granules': 'Bulk Granules',
-  'ES Index': 'ES Index',
-  'Bulk Delete': 'Bulk Delete',
-  'Kinesis Replay': 'Kinesis Replay'
-};
+import { operationStatus } from '../../utils/status';
+import { operationTypes } from '../../utils/type';
 
 class OperationOverview extends React.Component {
   constructor (props) {
@@ -119,7 +107,7 @@ class OperationOverview extends React.Component {
                 clear={clearOperationsSearch}
               />
               <Dropdown
-                options={statusOptions}
+                options={operationStatus}
                 action={filterOperations}
                 clear={clearOperationsFilter}
                 paramKey={'status'}
@@ -127,7 +115,7 @@ class OperationOverview extends React.Component {
               />
 
               <Dropdown
-                options={typeOptions}
+                options={operationTypes}
                 action={filterOperations}
                 clear={clearOperationsFilter}
                 paramKey={'operationType'}

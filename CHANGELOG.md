@@ -59,6 +59,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1830**
   - Fix redirect issue when logging out from the page with URL path containing dot
 
+- **CUMULUS-1836**
+  - Replace react-autocomplete with react-bootstrap-typeahead
+  - Allow custom values in Results per Page dropdowns
+
 - **CUMULUS-1861**
   - Update Execution/Rule tables to handle undefined collectionIds
   - Update Rule add dialogue logic to allow Rule creation without a collection

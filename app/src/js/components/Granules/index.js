@@ -18,6 +18,7 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
   const { pathname } = location;
   const count = get(stats, 'count.sidebar.granules.count');
   const filteredQueryParams = filterQueryParams(queryParams);
+  const queryAsJson = JSON.stringify(queryParams);
 
   function query() {
     dispatch(listGranules(filteredQueryParams));
@@ -31,7 +32,7 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
         sidebarCount: true
       })
     );
-  }, [dispatch]);
+  }, [dispatch, queryAsJson]);
 
   return (
     <div className="page__granules">

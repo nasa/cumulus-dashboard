@@ -19,7 +19,7 @@ import {
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import List from '../Table/Table';
-import { pdrStatus as statusOptions } from '../../utils/status';
+
 import ListFilters from '../ListActions/ListFilters';
 import pageSizeOptions from '../../utils/page-size';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
@@ -90,15 +90,6 @@ const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
           rowId="pdrName"
         >
           <ListFilters>
-            {view === 'all' ? (
-              <Dropdown
-                options={statusOptions}
-                action={filterPdrs}
-                clear={clearPdrsFilter}
-                paramKey={'status'}
-                label={'Status'}
-              />
-            ) : null}
             <Search
               dispatch={dispatch}
               action={searchPdrs}

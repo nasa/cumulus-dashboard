@@ -179,7 +179,7 @@ class GranulesOverview extends React.Component {
             <ListFilters>
               <Dropdown
                 getOptions={getOptionsCollectionName}
-                options={get(dropdowns, ['collectionName', 'options'])}
+                options={get(dropdowns, ['collectionName', 'options']) || []}
                 action={filterGranules}
                 clear={clearGranulesFilter}
                 paramKey='collectionId'
