@@ -1,4 +1,3 @@
-'use strict';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
@@ -32,9 +31,7 @@ const AddCollection = ({ location = {}, collections, dispatch, schema }) => {
     }
   }, [collectionSchema, collectionId, collectionsMap, isCopy]);
 
-  const getBaseRoute = (pk = collectionId) => {
-    return pk && pk !== 'unknown' ? collectionHref(pk) : '/collections';
-  };
+  const getBaseRoute = (pk = collectionId) => (pk && pk !== 'unknown' ? collectionHref(pk) : '/collections');
   return (
     <div className = "add_collections">
       <Helmet>
