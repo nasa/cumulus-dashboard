@@ -22,7 +22,7 @@ A basic table component that supports row selection and dumb sorting (see below)
 
 - **data**: Array of data items. Items can be any format.
 - **sortId**: The id of the column to sort on.
-- **changeSortProps**: Callback when a new sort order is defined, passed an object with the properties `{ sortId, order }`.
+- **changeSortProps**: Callback when a new sort order is defined, passed an array containing the sort properties `[{ id: sortId, desc: true|false }]`.  The object order in array impacts searching.
 - **onSelect**: Callback when a row is selected (or unselected), passed an array containing the ids of all selected rows.
 - **canSelect**: Boolean value defining whether 1. rows can be selected and 2. to render check marks.
 - **rowId**: String or function that defines a particular row's id. Passed to `useTable` options via `getRowId`.
@@ -45,5 +45,7 @@ Wraps `sortable-table` and implements auto-update and smart sort. When a new sor
 ## Dumb vs smart sort
 
 Dumb sorting uses react-table's built in sort functionality to sort table data that has **already** been received from the API. Smart sorting initiates a new API request, passing the sort parameter to the server (elasticsearch) which returns a sorted response. The `maunalSortBy` option passed to `useTable()` tells react-table whether we are doing server-side sorting (`true`) or letting react-table sort (`false`).
+
+When sorting on multiple columns, select the first column, hold down the shift key, and select another column.
 
 Dumb sorting is for smaller, simple tables that do not need pagination.

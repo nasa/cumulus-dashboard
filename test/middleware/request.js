@@ -38,6 +38,10 @@ const createTestMiddleware = () => {
   return { store, next, invokeMiddleware };
 };
 
+const qsStringifyOptions = {
+  arrayFormat: 'brackets'
+};
+
 test.beforeEach((t) => {
   t.context.defaultConfig = {
     json: true,
@@ -166,7 +170,8 @@ test.serial('should dispatch error action for failed request', async (t) => {
     config: {
       ...t.context.defaultConfig,
       ...requestAction,
-      headers: t.context.expectedHeaders
+      headers: t.context.expectedHeaders,
+      qsStringifyOptions
     },
     type: 'TEST_ERROR'
   };
@@ -236,7 +241,8 @@ test.serial('should return expected action for GET request action', async (t) =>
     config: {
       ...t.context.defaultConfig,
       ...requestAction,
-      headers: t.context.expectedHeaders
+      headers: t.context.expectedHeaders,
+      qsStringifyOptions
     },
     type: 'TEST',
     data: stubbedResponse
@@ -276,7 +282,8 @@ test.serial('should return expected action for GET request action with query sta
     config: {
       ...t.context.defaultConfig,
       ...requestAction,
-      headers: t.context.expectedHeaders
+      headers: t.context.expectedHeaders,
+      qsStringifyOptions
     },
     type: 'TEST',
     data: stubbedResponse
@@ -354,7 +361,8 @@ test.serial('should return expected action for POST request action', async (t) =
     config: {
       ...t.context.defaultConfig,
       ...requestAction,
-      headers: t.context.expectedHeaders
+      headers: t.context.expectedHeaders,
+      qsStringifyOptions
     },
     type: 'TEST',
     data: requestBody
@@ -390,7 +398,8 @@ test.serial('should return expected action for PUT request action', async (t) =>
     config: {
       ...t.context.defaultConfig,
       ...requestAction,
-      headers: t.context.expectedHeaders
+      headers: t.context.expectedHeaders,
+      qsStringifyOptions
     },
     type: 'TEST',
     data: requestBody
@@ -423,7 +432,8 @@ test.serial('should return expected action for DELETE request action', async (t)
     config: {
       ...t.context.defaultConfig,
       ...requestAction,
-      headers: t.context.expectedHeaders
+      headers: t.context.expectedHeaders,
+      qsStringifyOptions
     },
     type: 'TEST',
     data: stubbedResponse

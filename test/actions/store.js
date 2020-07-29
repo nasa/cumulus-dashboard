@@ -21,6 +21,9 @@ const store = mockStore({
     }
   }
 });
+const qsStringifyOptions = {
+  arrayFormat: 'brackets'
+};
 
 test.beforeEach((t) => {
   t.context.defaultConfig = {
@@ -59,7 +62,8 @@ test.serial('dispatches TYPE_INFLIGHT and TYPE actions for API request action', 
       config: {
         ...t.context.defaultConfig,
         ...requestAction,
-        headers: t.context.expectedHeaders
+        headers: t.context.expectedHeaders,
+        qsStringifyOptions
       }
     }, {
       id: undefined,
@@ -67,7 +71,8 @@ test.serial('dispatches TYPE_INFLIGHT and TYPE actions for API request action', 
       config: {
         ...t.context.defaultConfig,
         ...requestAction,
-        headers: t.context.expectedHeaders
+        headers: t.context.expectedHeaders,
+        qsStringifyOptions
       },
       data: stubbedResponse
     }];
