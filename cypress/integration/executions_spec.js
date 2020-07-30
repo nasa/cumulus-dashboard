@@ -68,6 +68,15 @@ describe('Dashboard Executions Page', () => {
       cy.get('@list').should('have.length', 6);
     });
 
+    it('should search executions', () => {
+      cy.visit('/executions');
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('@list').should('have.length', 6);
+      cy.get('.search__wrapper input').click().type('b313');
+      cy.url().should('include', 'search=b313');
+      cy.get('@list').should('have.length', 6);
+    });
+
     it('should show a single execution', () => {
       const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
       const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';

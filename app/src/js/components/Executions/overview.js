@@ -131,7 +131,6 @@ class ExecutionOverview extends React.Component {
                 dispatch={dispatch}
                 action={searchExecutions}
                 clear={clearExecutionsSearch}
-                paramKey={'asyncOperationId'}
                 label={'Async Operation ID'}
                 placeholder="Search"
               />
