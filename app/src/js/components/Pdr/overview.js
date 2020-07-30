@@ -17,6 +17,7 @@ import List from '../Table/Table';
 import Overview from '../Overview/overview';
 import Dropdown from '../DropDown/dropdown';
 import pageSizeOptions from '../../utils/page-size';
+import statusOptions from '../../utils/status';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { getPersistentQueryParams } from '../../utils/url-helper';
@@ -104,6 +105,13 @@ class PdrOverview extends React.Component {
             rowId="pdrName"
           >
             <ListFilters>
+              <Dropdown
+                options={statusOptions}
+                action={filterPdrs}
+                clear={clearPdrsFilter}
+                paramKey={'status'}
+                label={'Status'}
+              />
               <Dropdown
                 options={pageSizeOptions}
                 action={filterPdrs}

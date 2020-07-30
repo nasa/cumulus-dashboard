@@ -544,7 +544,7 @@ describe('Dashboard Collections Page', () => {
           .next().should('contain', 2).and('contain', 'Running');
       });
 
-      cy.get('#form-Status-status > div > input').as('status-input');
+      cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').click().type('fai').type('{enter}');
       cy.url().should('include', '?status=failed');
 

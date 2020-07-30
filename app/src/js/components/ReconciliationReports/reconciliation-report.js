@@ -36,13 +36,13 @@ const reportState = (dataList) => {
 };
 
 const bucketsForFilter = (allBuckets) => {
-  return allBuckets.reduce((buckets, currentBucket) => {
+  const uniqueBuckets = [...new Set(allBuckets)];
+  return uniqueBuckets.map((bucket) => {
     return {
-      ...buckets,
-      [currentBucket]: currentBucket,
+      id: bucket,
+      label: bucket
     };
-  },
-  {});
+  });
 };
 
 const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {

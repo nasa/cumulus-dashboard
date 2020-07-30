@@ -103,7 +103,7 @@ class ExecutionOverview extends React.Component {
 
               <Dropdown
                 getOptions={getOptionsCollectionName}
-                options={get(dropdowns, ['collectionName', 'options'])}
+                options={get(dropdowns, ['collectionName', 'options']) || []}
                 action={filterExecutions}
                 clear={clearExecutionsFilter}
                 paramKey={'collectionId'}

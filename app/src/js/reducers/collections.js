@@ -130,15 +130,13 @@ export default createReducer(initialState, {
     state.list.params[action.paramKey] = null;
   },
   [OPTIONS_COLLECTIONNAME]: (state, action) => {
-    const options = action.data.results.reduce(
-      (obj, { name, version }) => {
-        const collectionId = getCollectionId({ name, version });
-        return Object.assign(obj, {
-          [collectionId]: collectionId,
-        });
-      },
-      {}
-    );
+    const options = action.data.results.map(({ name, version }) => {
+      const collectionId = getCollectionId({ name, version });
+      return {
+        id: collectionId,
+        label: collectionId
+      };
+    });
     set(state.dropdowns, 'collectionName.options', options);
   },
   [OPTIONS_COLLECTIONNAME_INFLIGHT]: noop,

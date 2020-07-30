@@ -63,7 +63,7 @@ describe('Dashboard PDRs Page', () => {
 
     it('Should update URL when dropdown filters are changed', () => {
       cy.visit('/pdrs');
-      cy.get('.filter__item').eq(0).as('page-size-input');
+      cy.get('.filter__item').eq(1).as('page-size-input');
       cy.get('@page-size-input').should('be.visible').click().type('10{enter}');
       cy.url().should('include', 'limit=10');
     });

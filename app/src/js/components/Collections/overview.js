@@ -255,7 +255,7 @@ class CollectionOverview extends React.Component {
               Granule Metrics
             </h2>
           </div>
-          {record && <Overview type='granules' inflight={record.inflight} />}
+          {record && <Overview type='granules' params={{ collectionId }} inflight={record.inflight} />}
         </section>
         <section className="page__section">
           <div className="heading__wrapper--border">
