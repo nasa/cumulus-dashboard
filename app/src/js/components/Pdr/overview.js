@@ -1,95 +1,117 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { get } from 'object-path';
 import {
-  interval,
   listPdrs,
   getCount,
   clearPdrsFilter,
   filterPdrs
 } from '../../actions';
-import { lastUpdated, tally, displayCase } from '../../utils/format';
+import { lastUpdated, tally } from '../../utils/format';
 import { bulkActions } from '../../utils/table-config/pdrs';
 import { tableColumns } from '../../utils/table-config/pdr-progress';
 import List from '../Table/Table';
 import Overview from '../Overview/overview';
-import _config from '../../config';
 import Dropdown from '../DropDown/dropdown';
 import pageSizeOptions from '../../utils/page-size';
+import statusOptions from '../../utils/status';
 import ListFilters from '../ListActions/ListFilters';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
-const { updateInterval } = _config;
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/',
+  },
+  {
+    label: 'PDRs',
+    active: true,
+  },
+];
 
 class PdrOverview extends React.Component {
-  constructor () {
+  constructor() {
     super();
-    this.displayName = 'PdrOverview';
     this.queryStats = this.queryStats.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
-    this.renderOverview = this.renderOverview.bind(this);
   }
 
-  componentDidMount () {
-    this.cancelInterval = interval(this.queryStats, updateInterval, true);
+  componentDidMount() {
+    this.queryStats();
   }
 
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
+  queryStats() {
+    const { dispatch, queryParams } = this.props;
+    dispatch(
+      getCount({
+        type: 'pdrs',
+        field: 'status',
+        ...queryParams,
+      })
+    );
   }
 
-  queryStats () {
-    this.props.dispatch(getCount({
-      type: 'pdrs',
-      field: 'status'
-    }));
+  generateQuery() {
+    const { queryParams } = this.props;
+    return { ...queryParams };
   }
 
-  generateQuery () {
-    return {};
-  }
-
-  generateBulkActions () {
+  generateBulkActions() {
     return bulkActions(this.props.pdrs);
   }
 
-  renderOverview (count) {
-    const overview = count.map(d => [tally(d.count), displayCase(d.key)]);
-    return <Overview items={overview} inflight={false} />;
-  }
-
   render () {
-    const { stats } = this.props;
-    const { list } = this.props.pdrs;
+    const { dispatch, pdrs } = this.props;
+    const { list } = pdrs;
     const { count, queriedAt } = list.meta;
     // create the overview boxes
-    const pdrCount = get(stats.count, 'data.pdrs.count', []);
-    const overview = this.renderOverview(pdrCount);
     return (
-      <div className='page__component'>
-        <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>PDR Overview</h1>
-          {lastUpdated(queriedAt)}
-          {overview}
+      <div className="page__component">
+        <Helmet>
+          <title> Cumulus PDRs </title>
+        </Helmet>
+        <section className="page__section page__section__controls">
+          <Breadcrumbs config={breadcrumbConfig} />
         </section>
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>All PDRs <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
+        <section className="page__section page__section__header-wrapper">
+          <h1 className="heading--large heading--shared-content with-description">
+            PDR Overview
+          </h1>
+          {lastUpdated(queriedAt)}
+          <Overview type='pdrs' inflight={false} />
+        </section>
+        <section className="page__section">
+          <div className="heading__wrapper--border">
+            <h2 className="heading--medium heading--shared-content with-description">
+              All PDRs
+              <span className="num-title">
+                {count ? ` ${tally(count)}` : 0}
+              </span>
+            </h2>
           </div>
           <List
             list={list}
-            dispatch={this.props.dispatch}
+            dispatch={dispatch}
             action={listPdrs}
             tableColumns={tableColumns}
-            sortId='timestamp'
+            sortId="timestamp"
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
-            rowId='pdrName'
+            rowId="pdrName"
           >
             <ListFilters>
+              <Dropdown
+                options={statusOptions}
+                action={filterPdrs}
+                clear={clearPdrsFilter}
+                paramKey={'status'}
+                label={'Status'}
+              />
               <Dropdown
                 options={pageSizeOptions}
                 action={filterPdrs}
@@ -99,7 +121,9 @@ class PdrOverview extends React.Component {
               />
             </ListFilters>
           </List>
-          <Link className='link--secondary link--learn-more' to='/pdrs/active'>View Currently Active PDRs</Link>
+          <Link className="link--secondary link--learn-more" to={location => ({ pathname: '/pdrs/active', search: getPersistentQueryParams(location) })}>
+            View Currently Active PDRs
+          </Link>
         </section>
       </div>
     );
@@ -109,10 +133,11 @@ class PdrOverview extends React.Component {
 PdrOverview.propTypes = {
   dispatch: PropTypes.func,
   pdrs: PropTypes.object,
-  stats: PropTypes.object
+  queryParams: PropTypes.object,
 };
 
-export default withRouter(connect(state => ({
-  stats: state.stats,
-  pdrs: state.pdrs
-}))(PdrOverview));
+export default withRouter(
+  connect((state) => ({
+    pdrs: state.pdrs,
+  }))(PdrOverview)
+);

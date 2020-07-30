@@ -1,14 +1,13 @@
 'use strict';
 
-import { set } from 'object-path';
+import { del } from 'object-path';
 import assignDate from './utils/assign-date';
 import removeDeleted from './utils/remove-deleted';
 import { createReducer } from '@reduxjs/toolkit';
-import { getCollectionId } from '../utils/format';
 import {
   createErrorReducer,
   createInflightReducer,
-  createSuccessReducer,
+  createSuccessReducer
 } from './utils/reducer-creators';
 
 import {
@@ -33,6 +32,11 @@ import {
   BULK_GRANULE,
   BULK_GRANULE_INFLIGHT,
   BULK_GRANULE_ERROR,
+  BULK_GRANULE_CLEAR_ERROR,
+  BULK_GRANULE_DELETE,
+  BULK_GRANULE_DELETE_INFLIGHT,
+  BULK_GRANULE_DELETE_ERROR,
+  BULK_GRANULE_DELETE_CLEAR_ERROR,
   GRANULE_DELETE,
   GRANULE_DELETE_INFLIGHT,
   GRANULE_DELETE_ERROR,
@@ -40,9 +44,6 @@ import {
   CLEAR_GRANULES_SEARCH,
   FILTER_GRANULES,
   CLEAR_GRANULES_FILTER,
-  OPTIONS_COLLECTIONNAME,
-  OPTIONS_COLLECTIONNAME_INFLIGHT,
-  OPTIONS_COLLECTIONNAME_ERROR,
 } from '../actions/types';
 
 export const initialState = {
@@ -51,7 +52,6 @@ export const initialState = {
     meta: {},
     params: {},
   },
-  dropdowns: {},
   map: {},
   meta: {},
   reprocessed: {},
@@ -64,6 +64,7 @@ export const initialState = {
 };
 
 const getConfigRequestId = ({ config: { requestId } }) => requestId;
+const getRequestId = ({ requestId }) => requestId;
 
 export default createReducer(initialState, {
   [GRANULE]: (state, action) => {
@@ -111,39 +112,34 @@ export default createReducer(initialState, {
   [GRANULE_REMOVE]: createSuccessReducer('removed'),
   [GRANULE_REMOVE_INFLIGHT]: createInflightReducer('removed'),
   [GRANULE_REMOVE_ERROR]: createErrorReducer('removed'),
+  [BULK_GRANULE_DELETE]: createSuccessReducer('bulkDelete', getConfigRequestId),
+  [BULK_GRANULE_DELETE_INFLIGHT]: createInflightReducer('bulkDelete', getConfigRequestId),
+  [BULK_GRANULE_DELETE_ERROR]: createErrorReducer('bulkDelete', getConfigRequestId),
+  [BULK_GRANULE_DELETE_CLEAR_ERROR]: (state, action) => {
+    const requestId = getRequestId(action);
+    del(state, ['bulkDelete', requestId, 'error']);
+  },
   [BULK_GRANULE]: createSuccessReducer('bulk', getConfigRequestId),
   [BULK_GRANULE_INFLIGHT]: createInflightReducer('bulk', getConfigRequestId),
   [BULK_GRANULE_ERROR]: createErrorReducer('bulk', getConfigRequestId),
+  [BULK_GRANULE_CLEAR_ERROR]: (state, action) => {
+    const requestId = getRequestId(action);
+    del(state, ['bulk', requestId, 'error']);
+  },
   [GRANULE_DELETE]: createSuccessReducer('deleted'),
   [GRANULE_DELETE_INFLIGHT]: createInflightReducer('deleted'),
   [GRANULE_DELETE_ERROR]: createErrorReducer('deleted'),
 
   [SEARCH_GRANULES]: (state, action) => {
-    state.list.params.prefix = action.prefix;
+    state.list.params.infix = action.infix;
   },
   [CLEAR_GRANULES_SEARCH]: (state) => {
-    state.list.params.prefix = null;
+    state.list.params.infix = null;
   },
   [FILTER_GRANULES]: (state, action) => {
     state.list.params[action.param.key] = action.param.value;
   },
   [CLEAR_GRANULES_FILTER]: (state, action) => {
     state.list.params[action.paramKey] = null;
-  },
-  [OPTIONS_COLLECTIONNAME]: (state, action) => {
-    const options = action.data.results.reduce(
-      (obj, { name, version }) =>
-        Object.assign(obj, {
-          [`${name} ${version}`]: getCollectionId({ name, version }),
-        }),
-      {}
-    );
-
-    set(state.dropdowns, 'collectionName.options', options);
-  },
-  [OPTIONS_COLLECTIONNAME_INFLIGHT]: () => {},
-  [OPTIONS_COLLECTIONNAME_ERROR]: (state, action) => {
-    set(state.dropdowns, 'collectionName.options', []);
-    state.list.error = action.error;
-  },
+  }
 });

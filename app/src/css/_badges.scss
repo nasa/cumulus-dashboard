@@ -1,4 +1,4 @@
-.num--title {
+.num-title {
   display: inline-block;
   vertical-align: middle;
   border-radius: 4px;
@@ -13,21 +13,48 @@
   font-weight: $base-font-regular;
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.2s linear;
+
+  &--inverted {
+    @extend .num-title;
+    background: $white;
+    color: $ocean-blue;
+  }
 }
 
-.status--badge {
-  padding: .5em;
+.status__badge {
+  padding: .4em 1em;
   border-radius: 4px;
   margin-left: 5px;
   color: $white;
   text-transform: uppercase;
   font-weight: $base-font-regular;
   display: inline-block;
-    &__enabled {
-      background-color: #30AD66;
-    }
-    &__disabled {
-      background-color: #36342D;
+  &--enabled {
+    background-color: #30AD66;
+  }
+  &--disabled {
+    background-color: #36342D;
+  }
+  &--passed {
+    background-color: $theme--success;
+  }
+  &--conflict {
+    background-color: $theme--conflict;
+  }
+  &--running {
+    background-color: $yellow;
+  }
+
+  &--completed {
+    background-color: $light-green;
+  }
+
+  &--stopped {
+    background-color: $orange;
+  }
+
+  &--failed,
+  &--disabled {
+    background-color: $error-red;
   }
 }
-

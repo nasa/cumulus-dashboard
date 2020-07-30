@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
@@ -19,6 +20,7 @@ import Search from '../Search/search';
 
 import { getEventDetails } from './execution-graph-utils';
 import SortableTable from '../SortableTable/SortableTable';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 class ExecutionEvents extends React.Component {
   constructor () {
@@ -29,16 +31,16 @@ class ExecutionEvents extends React.Component {
   }
 
   componentDidMount () {
-    const { dispatch } = this.props;
-    const { executionArn } = this.props.match.params;
+    const { dispatch, match } = this.props;
+    const { executionArn } = match.params;
     dispatch(getExecutionStatus(executionArn));
     dispatch(getCumulusInstanceMetadata());
   }
 
   componentDidUpdate (prevProps) {
-    const { dispatch } = this.props;
-    const { executionArn } = this.props.match.params;
-    const { search } = this.props.location;
+    const { dispatch, match, location } = this.props;
+    const { executionArn } = match.params;
+    const { search } = location;
     const { search: prevSearch } = prevProps.location;
     if (search !== prevSearch) {
       dispatch(getExecutionStatus(executionArn));
@@ -67,8 +69,7 @@ class ExecutionEvents extends React.Component {
   }
 
   navigateBack () {
-    const { history } = this.props;
-    history.push('/executions');
+    historyPushWithQueryParams('/executions');
   }
 
   errors () {
@@ -82,6 +83,9 @@ class ExecutionEvents extends React.Component {
     const errors = this.errors();
     return (
       <div className='page__component'>
+        <Helmet>
+          <title> Execution Events </title>
+        </Helmet>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description width--three-quarters'>
             Events for Execution {executionStatus.execution.name}
@@ -113,7 +117,7 @@ class ExecutionEvents extends React.Component {
             </div>
             <div className='heading__wrapper--border'>
               <h2 className='heading--medium heading--shared-content'>All Events
-                <span className="num--title">
+                <span className="num-title">
                   {`${executionStatus.executionHistory.events.length || 0}`}
                 </span>
               </h2>
@@ -146,7 +150,6 @@ ExecutionEvents.propTypes = {
   match: PropTypes.object,
   dispatch: PropTypes.func,
   location: PropTypes.object,
-  history: PropTypes.object
 };
 
 ExecutionEvents.displayName = 'Execution Events';

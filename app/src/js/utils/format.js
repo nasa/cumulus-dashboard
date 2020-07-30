@@ -3,18 +3,23 @@ import React from 'react';
 import moment from 'moment';
 import numeral from 'numeral';
 import { Link } from 'react-router-dom';
+import { getPersistentQueryParams } from './url-helper';
 
 export const nullValue = '--';
 
 export const truthy = (value) => value || nullValue;
 
 export const fullDate = function (datestring) {
-  if (!datestring) { return nullValue; }
+  if (!datestring) {
+    return nullValue;
+  }
   return moment(datestring).format('kk:mm:ss MM/DD/YY');
 };
 
 export const dateOnly = function (datestring) {
-  if (!datestring) { return nullValue; }
+  if (!datestring) {
+    return nullValue;
+  }
   return moment(datestring).format('MM/DD/YYYY');
 };
 
@@ -24,7 +29,13 @@ export const parseJson = function (jsonString) {
 };
 
 export const bigTally = function (numberstring) {
-  if ((!numberstring && numberstring !== 0) || numberstring === nullValue || isNaN(numberstring)) { return nullValue; }
+  if (
+    (!numberstring && numberstring !== 0) ||
+    numberstring === nullValue ||
+    isNaN(numberstring)
+  ) {
+    return nullValue;
+  }
   numberstring = +numberstring;
   if (numberstring >= 1000) {
     return numeral(numberstring / 1000).format('0,0') + 'K';
@@ -34,7 +45,13 @@ export const bigTally = function (numberstring) {
 };
 
 export const tally = function (numberstring) {
-  if ((!numberstring && numberstring !== 0) || numberstring === nullValue || isNaN(numberstring)) { return nullValue; }
+  if (
+    (!numberstring && numberstring !== 0) ||
+    numberstring === nullValue ||
+    isNaN(numberstring)
+  ) {
+    return nullValue;
+  }
   numberstring = +numberstring;
   if (numberstring < 1000) {
     return numberstring;
@@ -46,12 +63,16 @@ export const tally = function (numberstring) {
 };
 
 export const seconds = function (numberstring) {
-  if (numberstring === null || isNaN(numberstring)) { return nullValue; }
+  if (numberstring === null || isNaN(numberstring)) {
+    return nullValue;
+  }
   return +numberstring.toFixed(2) + 's';
 };
 
 export const fromNow = function (numberstring) {
-  if (numberstring === null || isNaN(numberstring)) { return nullValue; }
+  if (numberstring === null || isNaN(numberstring)) {
+    return nullValue;
+  }
   return moment(numberstring).fromNow();
 };
 
@@ -67,7 +88,7 @@ export const lastUpdated = function (datestring, text) {
     <dl className="metadata__updated">
       <dt>{meta}:</dt>
       <dd>{day}</dd>
-      { time ? <dd className='metadata__updated__time'>{time}</dd> : null }
+      {time ? <dd className="metadata__updated__time">{time}</dd> : null}
     </dl>
   );
 };
@@ -76,7 +97,14 @@ export const collectionSearchResult = function (collection) {
   const { name, version } = collection;
   return (
     <li key={name}>
-      <Link to={`collections/collection/${name}/${version}`}>{name} / {version}</Link>
+      <Link
+        to={(location) => ({
+          pathname: `collections/collection/${name}/${version}`,
+          search: getPersistentQueryParams(location),
+        })}
+      >
+        {name} / {version}
+      </Link>
     </li>
   );
 };
@@ -85,24 +113,58 @@ export const granuleSearchResult = function (granule) {
   const { granuleId, status } = granule;
   return (
     <li key={granuleId}>
-      <Link to={`granules/granules/${granuleId}/${status}`}>{granuleId} / {status}</Link>
+      <Link
+        to={(location) => ({
+          pathname: `granules/granules/${granuleId}/${status}`,
+          search: getPersistentQueryParams(location),
+        })}
+      >
+        {granuleId} / {status}
+      </Link>
     </li>
   );
 };
 
 export const granuleLink = function (granuleId) {
   if (!granuleId) return nullValue;
-  return <Link to={`/granules/granule/${granuleId}`}>{granuleId}</Link>;
+  return (
+    <Link
+      to={(location) => ({
+        pathname: `/granules/granule/${granuleId}`,
+        search: getPersistentQueryParams(location),
+      })}
+    >
+      {granuleId}
+    </Link>
+  );
 };
 
 export const pdrLink = function (pdrName) {
   if (!pdrName) return nullValue;
-  return <Link to={`/pdrs/pdr/${pdrName}`}>{pdrName}</Link>;
+  return (
+    <Link
+      to={(location) => ({
+        pathname: `/pdrs/pdr/${pdrName}`,
+        location: getPersistentQueryParams(location),
+      })}
+    >
+      {pdrName}
+    </Link>
+  );
 };
 
 export const providerLink = function (provider) {
   if (!provider) return nullValue;
-  return <Link to={`/providers/provider/${provider}`}>{provider}</Link>;
+  return (
+    <Link
+      to={(location) => ({
+        pathname: `/providers/provider/${provider}`,
+        search: getPersistentQueryParams(location),
+      })}
+    >
+      {provider}
+    </Link>
+  );
 };
 
 export const bool = function (bool) {
@@ -111,7 +173,9 @@ export const bool = function (bool) {
 
 export const displayCase = function (string) {
   const split = string.split(' ');
-  return split.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+  return split
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
 };
 
 export const storage = function (n) {
@@ -126,7 +190,11 @@ export const storage = function (n) {
   else return (n / 1e15).toFixed(2) + 'pb';
 };
 
-export const link = (url) => <a href={url} target='_blank'>Link</a>;
+export const link = (url) => (
+  <a href={url} target="_blank">
+    Link
+  </a>
+);
 
 export const truncate = function (string, to) {
   if (!string) return nullValue;
@@ -135,11 +203,19 @@ export const truncate = function (string, to) {
   else return string.slice(0, to) + '... Show More';
 };
 
+export const getFormattedCollectionId = function (collection) {
+  const collectionId = getCollectionId(collection);
+  return formatCollectionId(collectionId);
+};
+
+export const formatCollectionId = (collectionId) => {
+  return collectionId === undefined ? nullValue : collectionId;
+};
+
 export const getCollectionId = function (collection) {
   if (collection && collection.name && collection.version) {
     return `${collection.name}___${collection.version}`;
   }
-  return 'unknown';
 };
 
 // "MYD13A1___006" => "MYD13A1 / 006"
@@ -169,14 +245,23 @@ export const deconstructCollectionId = function (collectionId) {
   const [name, version] = collectionId.split('___');
   return {
     name,
-    version
+    version,
   };
 };
 
 export const collectionLink = function (collectionId) {
-  if (!collectionId) return nullValue;
+  if (!collectionId || collectionId === nullValue) return nullValue;
   const { name, version } = collectionNameVersion(collectionId);
-  return <Link to={`/collections/collection/${name}/${version}`}>{collectionName(collectionId)}</Link>;
+  return (
+    <Link
+      to={(location) => ({
+        pathname: `/collections/collection/${name}/${version}`,
+        search: getPersistentQueryParams(location),
+      })}
+    >
+      {collectionName(collectionId)}
+    </Link>
+  );
 };
 
 export const collectionHref = function (collectionId) {

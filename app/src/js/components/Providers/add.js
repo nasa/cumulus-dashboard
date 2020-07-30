@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { createProvider } from '../../actions';
@@ -16,14 +17,19 @@ class AddProvider extends React.Component {
 
   render () {
     return (
-      <AddRecord
-        schemaKey={SCHEMA_KEY}
-        primaryProperty={'id'}
-        title={'Create a provider'}
-        state={this.props.providers}
-        baseRoute={'/providers/provider'}
-        createRecord={createProvider}
-      />
+      <div className = "add_providers">
+        <Helmet>
+          <title> Add Provider </title>
+        </Helmet>
+        <AddRecord
+          schemaKey={SCHEMA_KEY}
+          primaryProperty={'id'}
+          title={'Create a provider'}
+          state={this.props.providers}
+          baseRoute={'/providers/provider'}
+          createRecord={createProvider}
+        />
+      </div>
     );
   }
 }
@@ -32,6 +38,7 @@ AddProvider.propTypes = {
   providers: PropTypes.object
 };
 
-export default withRouter(connect(state => ({
-  providers: state.providers
-}))(AddProvider));
+export default withRouter(
+  connect((state) => ({
+    providers: state.providers
+  }))(AddProvider));

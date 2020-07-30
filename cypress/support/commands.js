@@ -23,6 +23,7 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+import 'cypress-wait-until';
 import cloneDeep from 'lodash.clonedeep';
 import { DELETE_TOKEN, SET_TOKEN } from '../../app/src/js/actions/types';
 
@@ -114,4 +115,11 @@ Cypress.Commands.add('expectDeepEqualButNewer', (inewObject, ifixtureObject) => 
  */
 Cypress.Commands.add('clearStartDateTime', () => {
   cy.get('li[data-cy="startDateTime"]').find('.react-datetime-picker__clear-button').click();
+});
+
+/**
+ * Add custom command to set the dropdown value to any value.
+ */
+Cypress.Commands.add('setDatepickerDropdown', (targetValue) => {
+  cy.get('[data-cy=datetime-dropdown]').select(targetValue);
 });

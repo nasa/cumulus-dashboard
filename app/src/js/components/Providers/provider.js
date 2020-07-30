@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import {
-  interval,
   getProvider,
   deleteProvider,
   listCollections
@@ -22,9 +21,7 @@ import LogViewer from '../Logs/viewer';
 import DropdownAsync from '../DropDown/dropdown-async-command';
 import ErrorReport from '../Errors/report';
 import Metadata from '../Table/Metadata';
-import _config from '../../config';
-
-const { updateInterval } = _config;
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 
 const metaAccessors = [
   {
@@ -56,7 +53,7 @@ const metaAccessors = [
 class ProviderOverview extends React.Component {
   constructor () {
     super();
-    this.reload = this.reload.bind(this);
+    this.loadProvider = this.loadProvider.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
     this.delete = this.delete.bind(this);
     this.errors = this.errors.bind(this);
@@ -64,8 +61,7 @@ class ProviderOverview extends React.Component {
 
   componentDidMount () {
     const { providerId } = this.props.match.params;
-    const immediate = !this.props.providers.map[providerId];
-    this.reload(immediate);
+    this.loadProvider();
     this.props.dispatch(listCollections({
       limit: 100,
       fields: 'collectionName',
@@ -73,21 +69,13 @@ class ProviderOverview extends React.Component {
     }));
   }
 
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-  }
-
-  reload (immediate, timeout) {
-    timeout = timeout || updateInterval;
+  loadProvider () {
     const providerId = this.props.match.params.providerId;
-    const { dispatch } = this.props;
-    if (this.cancelInterval) { this.cancelInterval(); }
-    this.cancelInterval = interval(() => dispatch(getProvider(providerId)), timeout, immediate);
+    this.props.dispatch(getProvider(providerId));
   }
 
   navigateBack () {
-    const { history } = this.props;
-    history.push('/providers');
+    historyPushWithQueryParams('/providers');
   }
 
   delete () {
@@ -137,9 +125,8 @@ class ProviderOverview extends React.Component {
           <DropdownAsync config={dropdownConfig} />
           <Link
             className='button button--small button--green button--edit form-group__element--right'
-            to={'/providers/edit/' + providerId}>Edit</Link>
-
-          {lastUpdated(provider.queriedAt)}
+            to={location => ({ pathname: '/providers/edit/' + providerId, search: getPersistentQueryParams(location) })}>Edit</Link>
+          {lastUpdated(provider.timestamp || provider.updatedAt)}
         </section>
 
         <section className='page__section'>
@@ -168,12 +155,12 @@ ProviderOverview.propTypes = {
   dispatch: PropTypes.func,
   providers: PropTypes.object,
   logs: PropTypes.object,
-  history: PropTypes.object
 };
 
 ProviderOverview.displayName = 'ProviderElem';
 
-export default withRouter(connect(state => ({
-  providers: state.providers,
-  logs: state.logs
-}))(ProviderOverview));
+export default withRouter(
+  connect((state) => ({
+    providers: state.providers,
+    logs: state.logs
+  }))(ProviderOverview));

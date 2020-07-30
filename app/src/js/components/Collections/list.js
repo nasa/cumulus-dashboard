@@ -1,6 +1,7 @@
 // This is the main Collections Overview page
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -56,7 +57,8 @@ class CollectionList extends React.Component {
   }
 
   generateQuery() {
-    return {};
+    const { queryParams } = this.props;
+    return { ...queryParams };
   }
 
   generateBulkActions() {
@@ -89,6 +91,9 @@ class CollectionList extends React.Component {
     const { count, queriedAt } = list.meta;
     return (
       <div className="page__component">
+        <Helmet>
+          <title> Collections </title>
+        </Helmet>
         <section className="page__section">
           <section className="page__section page__section__controls">
             <Breadcrumbs config={breadcrumbConfig} />
@@ -106,7 +111,7 @@ class CollectionList extends React.Component {
               {hasTimeFilter
                 ? strings.active_collections
                 : strings.all_collections}
-              <span className="num--title">{count ? tally(count) : 0}</span>
+              <span className="num-title">{count ? tally(count) : 0}</span>
             </h2>
           </div>
 
@@ -151,10 +156,11 @@ class CollectionList extends React.Component {
 
 CollectionList.propTypes = {
   collections: PropTypes.object,
-  mmtLinks: PropTypes.object,
-  dispatch: PropTypes.func,
   config: PropTypes.object,
   datepicker: PropTypes.object,
+  dispatch: PropTypes.func,
+  mmtLinks: PropTypes.object,
+  queryParams: PropTypes.object
 };
 
 CollectionList.displayName = 'CollectionList';
@@ -162,8 +168,8 @@ CollectionList.displayName = 'CollectionList';
 export { CollectionList };
 export default withRouter(
   connect((state) => ({
-    config: state.config,
     collections: state.collections,
+    config: state.config,
     datepicker: state.datepicker,
     mmtLinks: state.mmtLinks,
   }))(CollectionList)

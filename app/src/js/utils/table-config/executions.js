@@ -1,18 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
+  displayCase,
   fromNow,
   seconds,
-  displayCase,
-  truncate
+  truncate,
+  formatCollectionId
 } from '../../utils/format';
 import { strings } from '../../components/locale';
+import { getPersistentQueryParams } from '../url-helper';
 
 export const tableColumns = [
   {
     Header: 'Name',
-    accessor: row => <Link to={'/executions/execution/' + row.arn} title={row.name}>{truncate(row.name, 24)}</Link>,
-    id: 'name'
+    accessor: 'name',
+    Cell: ({ row: { original: { arn, name } } }) => // eslint-disable-line react/prop-types
+      <Link to={location => ({ pathname: '/executions/execution/' + arn, search: getPersistentQueryParams(location) })} title={name}>{truncate(name, 24)}</Link>
   },
   {
     Header: 'Status',
@@ -34,7 +37,8 @@ export const tableColumns = [
     id: 'duration'
   },
   {
-    Header: strings.collection_name,
-    accessor: 'collectionId'
+    Header: strings.collection_id,
+    accessor: 'collectionId',
+    Cell: ({ cell: { value } }) => formatCollectionId(value)
   }
 ];

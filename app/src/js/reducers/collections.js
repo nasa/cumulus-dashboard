@@ -1,8 +1,9 @@
 'use strict';
 
 import { createReducer } from '@reduxjs/toolkit';
-import { deconstructCollectionId } from '../utils/format';
+import { deconstructCollectionId, getCollectionId } from '../utils/format';
 import assignDate from './utils/assign-date';
+import { set } from 'object-path';
 import {
   createClearItemReducer,
   createErrorReducer,
@@ -33,6 +34,9 @@ import {
   UPDATE_COLLECTION_ERROR,
   UPDATE_COLLECTION_INFLIGHT,
   UPDATE_COLLECTION,
+  OPTIONS_COLLECTIONNAME,
+  OPTIONS_COLLECTIONNAME_INFLIGHT,
+  OPTIONS_COLLECTIONNAME_ERROR,
 } from '../actions/types';
 
 export const initialState = {
@@ -41,6 +45,7 @@ export const initialState = {
     meta: {},
     params: {},
   },
+  dropdowns: {},
   created: {},
   deleted: {},
   executed: {},
@@ -111,10 +116,10 @@ export default createReducer(initialState, {
   [COLLECTION_DELETE_INFLIGHT]: createInflightReducer('deleted'),
   [COLLECTION_DELETE_ERROR]: createErrorReducer('deleted'),
   [SEARCH_COLLECTIONS]: (state, action) => {
-    state.list.params.prefix = action.prefix;
+    state.list.params.infix = action.infix;
   },
   [CLEAR_COLLECTIONS_SEARCH]: (state) => {
-    state.list.params.prefix = null;
+    state.list.params.infix = null;
   },
   [FILTER_COLLECTIONS]: (state, action) => {
     const { key, value } = action.param;
@@ -122,5 +127,20 @@ export default createReducer(initialState, {
   },
   [CLEAR_COLLECTIONS_FILTER]: (state, action) => {
     state.list.params[action.paramKey] = null;
+  },
+  [OPTIONS_COLLECTIONNAME]: (state, action) => {
+    const options = action.data.results.map(({ name, version }) => {
+      const collectionId = getCollectionId({ name, version });
+      return {
+        id: collectionId,
+        label: collectionId
+      };
+    });
+    set(state.dropdowns, 'collectionName.options', options);
+  },
+  [OPTIONS_COLLECTIONNAME_INFLIGHT]: () => {},
+  [OPTIONS_COLLECTIONNAME_ERROR]: (state, action) => {
+    set(state.dropdowns, 'collectionName.options', []);
+    state.list.error = action.error;
   },
 });

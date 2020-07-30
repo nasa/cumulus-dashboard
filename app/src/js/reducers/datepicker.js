@@ -1,6 +1,6 @@
 'use strict';
 
-import { msPerDay, allDateRanges } from '../utils/datepicker';
+import { msPerDay, findDateRangeByValue } from '../utils/datepicker';
 import { createReducer } from '@reduxjs/toolkit';
 import {
   DATEPICKER_DATECHANGE,
@@ -12,7 +12,7 @@ import {
 export const initialState = () => ({
   startDateTime: null,
   endDateTime: null,
-  dateRange: allDateRanges.find((a) => a.value === 'Custom'),
+  dateRange: findDateRangeByValue('Custom'),
   hourFormat: '12HR'
 });
 
@@ -43,7 +43,7 @@ const computeDateTimeDelta = (timeDeltaInDays) => {
 const recentData = () => ({
   startDateTime: Date.now() - msPerDay,
   endDateTime: null,
-  dateRange: allDateRanges.find((a) => a.value === 'Recent'),
+  dateRange: findDateRangeByValue('Recent'),
 });
 
 export default createReducer(initialState(), {

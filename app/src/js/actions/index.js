@@ -3,7 +3,6 @@
 import compareVersions from 'compare-versions';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
-import { history } from '../store/configureStore';
 import { CMR } from '@cumulus/cmrjs';
 import isEmpty from 'lodash.isempty';
 import cloneDeep from 'lodash.clonedeep';
@@ -19,6 +18,7 @@ import { apiLambdaSearchTemplate } from './action-config/apiLambdaSearch';
 import { teaLambdaSearchTemplate } from './action-config/teaLambdaSearch';
 import { s3AccessSearchTemplate } from './action-config/s3AccessSearch';
 import * as types from './types';
+import { historyPushWithQueryParams } from '../utils/url-helper';
 
 const CALL_API = types.CALL_API;
 const {
@@ -188,7 +188,7 @@ export const deleteCollection = (name, version) => ({
   }
 });
 
-export const searchCollections = (prefix) => ({ type: types.SEARCH_COLLECTIONS, prefix: prefix });
+export const searchCollections = (infix) => ({ type: types.SEARCH_COLLECTIONS, infix: infix });
 export const clearCollectionsSearch = () => ({ type: types.CLEAR_COLLECTIONS_SEARCH });
 export const filterCollections = (param) => ({ type: types.FILTER_COLLECTIONS, param: param });
 export const clearCollectionsFilter = (paramKey) => ({ type: types.CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
@@ -424,6 +424,26 @@ export const bulkGranule = (payload) => ({
   }
 });
 
+export const bulkGranuleClearError = (requestId) => ({
+  type: types.BULK_GRANULE_CLEAR_ERROR,
+  requestId
+});
+
+export const bulkGranuleDelete = (payload) => ({
+  [CALL_API]: {
+    type: types.BULK_GRANULE_DELETE,
+    method: 'POST',
+    path: 'granules/bulkDelete',
+    requestId: payload.requestId,
+    body: payload.json
+  }
+});
+
+export const bulkGranuleDeleteClearError = (requestId) => ({
+  type: types.BULK_GRANULE_DELETE_CLEAR_ERROR,
+  requestId
+});
+
 export const deleteGranule = (granuleId) => ({
   [CALL_API]: {
     type: types.GRANULE_DELETE,
@@ -433,7 +453,7 @@ export const deleteGranule = (granuleId) => ({
   }
 });
 
-export const searchGranules = (prefix) => ({ type: types.SEARCH_GRANULES, prefix: prefix });
+export const searchGranules = (infix) => ({ type: types.SEARCH_GRANULES, infix: infix });
 export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH });
 export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param: param });
 export const clearGranulesFilter = (paramKey) => ({ type: types.CLEAR_GRANULES_FILTER, paramKey: paramKey });
@@ -552,16 +572,23 @@ export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
 };
 
 // count queries *must* include type and field properties.
-export const getCount = (options) => {
+export const getCount = (options = {}) => {
+  const { sidebarCount, type, field, ...restOptions } = options;
+  const params = {
+    type,
+    field,
+    ...sidebarCount ? {} : restOptions
+  };
+  const actionType = sidebarCount ? types.COUNT_SIDEBAR : types.COUNT;
   return (dispatch, getState) => {
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     return dispatch({
       [CALL_API]: {
-        type: types.COUNT,
+        type: actionType,
         method: 'GET',
         id: null,
         url: new URL('stats/aggregate', root).href,
-        qs: Object.assign({ type: 'must-include-type', field: 'status' }, options, timeFilters)
+        qs: Object.assign({ type: 'must-include-type', field: 'status' }, params, timeFilters)
       }
     });
   };
@@ -590,23 +617,19 @@ export const getPdr = (pdrName) => ({
   }
 });
 
-export const searchPdrs = (prefix) => ({ type: types.SEARCH_PDRS, prefix: prefix });
+export const searchPdrs = (infix) => ({ type: types.SEARCH_PDRS, infix: infix });
 export const clearPdrsSearch = () => ({ type: types.CLEAR_PDRS_SEARCH });
 export const filterPdrs = (param) => ({ type: types.FILTER_PDRS, param: param });
 export const clearPdrsFilter = (paramKey) => ({ type: types.CLEAR_PDRS_FILTER, paramKey: paramKey });
 
-export const listProviders = (options = {}) => {
-  const { listAll = false, ...queryOptions } = options;
-  return (dispatch, getState) => {
-    const timeFilters = listAll ? {} : fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({
-      [CALL_API]: {
-        type: types.PROVIDERS,
-        method: 'GET',
-        url: new URL('providers', root).href,
-        qs: Object.assign({ limit: defaultPageLimit }, queryOptions, timeFilters)
-      }
-    });
+export const listProviders = (options) => {
+  return {
+    [CALL_API]: {
+      type: types.PROVIDERS,
+      method: 'GET',
+      url: new URL('providers', root).href,
+      qs: Object.assign({ limit: defaultPageLimit }, options)
+    }
   };
 };
 
@@ -659,7 +682,7 @@ export const deleteProvider = (providerId) => ({
   }
 });
 
-export const searchProviders = (prefix) => ({ type: types.SEARCH_PROVIDERS, prefix: prefix });
+export const searchProviders = (infix) => ({ type: types.SEARCH_PROVIDERS, infix: infix });
 export const clearProvidersSearch = () => ({ type: types.CLEAR_PROVIDERS_SEARCH });
 export const filterProviders = (param) => ({ type: types.FILTER_PROVIDERS, param: param });
 export const clearProvidersFilter = (paramKey) => ({ type: types.CLEAR_PROVIDERS_FILTER, paramKey: paramKey });
@@ -728,7 +751,7 @@ export const loginError = (error) => {
   return (dispatch) => {
     return dispatch(deleteToken())
       .then(() => dispatch({ type: 'LOGIN_ERROR', error }))
-      .then(() => history.push('/auth'));
+      .then(() => historyPushWithQueryParams('/auth'));
   };
 };
 
@@ -786,7 +809,7 @@ export const listExecutions = (options) => {
 
 export const filterExecutions = (param) => ({ type: types.FILTER_EXECUTIONS, param: param });
 export const clearExecutionsFilter = (paramKey) => ({ type: types.CLEAR_EXECUTIONS_FILTER, paramKey: paramKey });
-export const searchExecutions = (prefix) => ({ type: types.SEARCH_EXECUTIONS, prefix: prefix });
+export const searchExecutions = (infix) => ({ type: types.SEARCH_EXECUTIONS, infix: infix });
 export const clearExecutionsSearch = () => ({ type: types.CLEAR_EXECUTIONS_SEARCH });
 
 export const listOperations = (options) => {
@@ -812,7 +835,7 @@ export const getOperation = (operationId) => ({
   }
 });
 
-export const searchOperations = (prefix) => ({ type: types.SEARCH_OPERATIONS, prefix: prefix });
+export const searchOperations = (infix) => ({ type: types.SEARCH_OPERATIONS, infix: infix });
 export const clearOperationsSearch = () => ({ type: types.CLEAR_OPERATIONS_SEARCH });
 export const filterOperations = (param) => ({ type: types.FILTER_OPERATIONS, param: param });
 export const clearOperationsFilter = (paramKey) => ({ type: types.CLEAR_OPERATIONS_FILTER, paramKey: paramKey });
@@ -918,7 +941,7 @@ export const rerunRule = (payload) => ({
   }
 });
 
-export const searchRules = (prefix) => ({ type: types.SEARCH_RULES, prefix: prefix });
+export const searchRules = (infix) => ({ type: types.SEARCH_RULES, infix: infix });
 export const clearRulesSearch = () => ({ type: types.CLEAR_RULES_SEARCH });
 export const filterRules = (param) => ({ type: types.FILTER_RULES, param: param });
 export const clearRulesFilter = (paramKey) => ({ type: types.CLEAR_RULES_FILTER, paramKey: paramKey });
@@ -955,5 +978,21 @@ export const createReconciliationReport = () => ({
   }
 });
 
-export const searchReconciliationReports = (prefix) => ({ type: types.SEARCH_RECONCILIATIONS, prefix: prefix });
+export const deleteReconciliationReport = (reconciliationName) => ({
+  [CALL_API]: {
+    id: reconciliationName,
+    type: types.RECONCILIATION,
+    method: 'DELETE',
+    path: `reconciliationReports/${reconciliationName}`
+  }
+});
+
+export const searchReconciliationReports = (infix) => ({ type: types.SEARCH_RECONCILIATIONS, infix: infix });
 export const clearReconciliationReportSearch = () => ({ type: types.CLEAR_RECONCILIATIONS_SEARCH });
+export const filterReconciliationReports = (param) => ({ type: types.FILTER_RECONCILIATIONS, param: param });
+export const clearReconciliationReportsFilter = (paramKey) => ({ type: types.CLEAR_RECONCILIATIONS_FILTER, paramKey: paramKey });
+
+export const searchReconciliationReport = (searchString) => ({ type: types.SEARCH_RECONCILIATION, searchString });
+export const clearReconciliationSearch = () => ({ type: types.CLEAR_RECONCILIATION_SEARCH });
+export const filterReconciliationReport = (param) => ({ type: types.FILTER_RECONCILIATION, param: param });
+export const clearReconciliationReportFilter = (paramKey) => ({ type: types.CLEAR_RECONCILIATION_FILTER, paramKey: paramKey });

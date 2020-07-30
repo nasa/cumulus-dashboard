@@ -5,7 +5,7 @@
     "table": "reconciliationReport",
     "limit": 10,
     "page": 1,
-    "count": 2,
+    "count": 3,
     "fixtureComment": "These files need to exist and be uploaded into the localstack s3 buckets that match the location"
   },
   "results": [
@@ -20,6 +20,12 @@
       "location": "s3://localbucket/localrun/reconciliation-reports/inventoryReport-20200114T202529026.json",
       "type": "Inventory",
       "status": "Generated"
+    },
+    {
+      "name": "inventoryReport-20200519T143311876",
+      "location": "s3://localbucket/localrun/reconciliation-reports/inventoryReport-20200519T143311876.json",
+      "type": "Inventory",
+      "status": "Failed"
     }
   ]
 }

@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -20,17 +21,22 @@ const EditRule = ({
   const { params: { ruleName } } = match;
 
   return (
-    <EditRaw
-      pk={ruleName}
-      schemaKey={SCHEMA_KEY}
-      primaryProperty='name'
-      state={rules}
-      getRecord={() => getRule(ruleName)}
-      updateRecord={updateRule}
-      backRoute={`/rules/rule/${ruleName}`}
-      clearRecordUpdate={clearUpdateRule}
-      hasModal={true}
-    />
+    <div className = "edit_rules">
+      <Helmet>
+        <title> Edit Rule </title>
+      </Helmet>
+      <EditRaw
+        pk={ruleName}
+        schemaKey={SCHEMA_KEY}
+        primaryProperty='name'
+        state={rules}
+        getRecord={() => getRule(ruleName)}
+        updateRecord={updateRule}
+        backRoute={`/rules/rule/${ruleName}`}
+        clearRecordUpdate={clearUpdateRule}
+        hasModal={true}
+      />
+    </div>
   );
 };
 

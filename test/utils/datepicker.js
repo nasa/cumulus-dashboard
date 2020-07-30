@@ -6,7 +6,8 @@ import {
   fetchCurrentTimeFilters,
   dropdownValue,
   allDateRanges,
-  msPerDay
+  msPerDay,
+  findDateRangeByValue
 } from '../../app/src/js/utils/datepicker';
 
 import { initialState } from '../../app/src/js/reducers/datepicker';
@@ -66,7 +67,7 @@ test('fetchCurrentTimeFilters creates an object with both timestamp__from and ti
 
 test('dropdownValue returns the "Custom" value/label if object is missing a date.', (t) => {
   const values = { startDateTime: Date.now() };
-  const expected = allDateRanges.find((e) => e.value === 'Custom');
+  const expected = findDateRangeByValue('Custom');
   const actual = dropdownValue(values);
   t.deepEqual(expected, actual);
 });
@@ -76,7 +77,7 @@ test('dropdownValue returns the "Custom" value/label if datetimes do not match a
     startDateTime: Date.now(),
     endDateTime: Date.now()
   };
-  const expected = allDateRanges.find((e) => e.value === 'Custom');
+  const expected = findDateRangeByValue('Custom');
   const actual = dropdownValue(values);
   t.deepEqual(expected, actual);
 });
@@ -92,7 +93,7 @@ test('dropdownValue returns the correct value/label when datetimes match a dropd
       endDateTime,
       startDateTime
     };
-    const expected = allDateRanges.find((e) => e.value === testValue);
+    const expected = findDateRangeByValue(testValue);
     const actual = dropdownValue(values);
     t.deepEqual(expected, actual);
   });

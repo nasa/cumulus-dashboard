@@ -1,12 +1,11 @@
 import test from 'ava';
-import rewire from 'rewire';
 
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import { requestMiddleware } from '../../app/src/js/middleware/request';
 
-const actions = rewire('../../app/src/js/actions');
+const actions = require('../../app/src/js/actions');
 
 const middlewares = [
   requestMiddleware,

@@ -9,11 +9,11 @@ import { getCollection } from '../../actions';
 import { lastUpdated, nullValue, getCollectionId } from '../../utils/format';
 import config from '../../config';
 import Loading from '../LoadingIndicator/loading-indicator';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
 class CollectionIngest extends React.Component {
   constructor() {
     super();
-    this.displayName = 'CollectionIngest';
     this.state = {
       view: 'json',
     };
@@ -75,7 +75,10 @@ class CollectionIngest extends React.Component {
           </h1>
           <Link
             className="button button--edit button--small form-group__element--right button--green"
-            to={`/collections/edit/${name}/${version}`}
+            to={(location) => ({
+              pathname: `/collections/edit/${name}/${version}`,
+              search: getPersistentQueryParams(location),
+            })}
           >
             Edit
           </Link>

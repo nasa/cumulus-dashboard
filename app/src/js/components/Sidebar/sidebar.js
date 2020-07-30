@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { resolve } from 'path';
 import sections from '../../paths';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const currentPathClass = 'sidebar__nav--selected';
 
 class Sidebar extends React.Component {
   constructor (props) {
     super(props);
-    this.displayName = 'Sidebar';
     this.resolvePath = this.resolvePath.bind(this);
     this.renderNavSection = this.renderNavSection.bind(this);
   }
@@ -42,7 +42,10 @@ class Sidebar extends React.Component {
 
               return (
                 <li key={base + i}>
-                  <Link className={classes} to={path}>
+                  <Link className={classes} to={location => ({
+                    pathname: path,
+                    search: getPersistentQueryParams(location)
+                  })}>
                     {d[0]}
                   </Link>
                 </li>

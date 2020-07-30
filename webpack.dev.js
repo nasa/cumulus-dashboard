@@ -14,7 +14,7 @@ const DevConfig = merge.smartStrategy(
   devtool: 'inline-source-map',
   devServer: {
     hot: false,
-    historyApiFallback: true,
+    historyApiFallback: { disableDotRule: true },
     // host: '0.0.0.0', // Required for Docker -- someone will need to link this somehow
     publicPath: '/',
     watchContentBase: true,
@@ -32,7 +32,7 @@ const DevConfig = merge.smartStrategy(
             loader: 'style-loader',
           },
         ]
-      }
+      },
     ]
   },
   plugins: [

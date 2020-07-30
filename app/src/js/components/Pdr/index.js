@@ -1,80 +1,102 @@
 'use strict';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from '../Sidebar/sidebar';
-import { interval, getCount, listPdrs } from '../../actions';
-import _config from '../../config';
+import { getCount, listPdrs } from '../../actions';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import Pdr from './pdr';
 import PdrOverview from './overview';
 import PdrList from './list';
 import { strings } from '../locale';
+import withQueryParams from 'react-router-query-params';
+import { filterQueryParams } from '../../utils/url-helper';
 
-const { updateInterval } = _config;
+const Pdrs = ({ dispatch, location, queryParams, params, stats }) => {
+  const { pathname } = location;
+  const count = get(stats, 'count.sidebar.pdrs.count');
+  const filteredQueryParams = filterQueryParams(queryParams);
+  const queryAsJson = JSON.stringify(queryParams);
 
-class Pdrs extends React.Component {
-  constructor () {
-    super();
-    this.displayName = 'Pdrs';
-    this.query = this.query.bind(this);
-    this.displayName = strings.pdrs;
+  function query() {
+    dispatch(listPdrs(filteredQueryParams));
   }
 
-  componentDidMount () {
-    this.cancelInterval = interval(() => this.query(), updateInterval, true);
-  }
+  useEffect(() => {
+    dispatch(
+      getCount({
+        type: 'pdrs',
+        field: 'status',
+        sidebarCount: true
+      })
+    );
+  }, [dispatch, queryAsJson]);
 
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-  }
-
-  query () {
-    this.props.dispatch(getCount({
-      type: 'pdrs',
-      field: 'status'
-    }));
-    this.props.dispatch(listPdrs());
-  }
-
-  render () {
-    const count = get(this.props.stats, 'count.data.pdrs.count');
-    return (
-      <div className='page__pdrs'>
-        <DatePickerHeader onChange={this.query} heading={strings.pdrs}/>
-        <div className='page__content'>
-          <div className='wrapper__sidebar'>
-            <Sidebar
-              currentPath={this.props.location.pathname}
-              params={this.props.params}
-              count={count}
-            />
-            <div className='page__content--shortened'>
-              <Switch>
-                <Route exact path='/pdrs' component={PdrOverview} />
-                <Route path='/pdrs/active' component={PdrList} />
-                <Route path='/pdrs/failed' component={PdrList} />
-                <Route path='/pdrs/completed' component={PdrList} />
-                <Route path='/pdrs/pdr/:pdrName' component={Pdr} />
-              </Switch>
-            </div>
+  return (
+    <div className="page__pdrs">
+      <Helmet>
+        <title> Cumulus PDRs </title>
+      </Helmet>
+      <DatePickerHeader onChange={query} heading={strings.pdrs} />
+      <div className="page__content">
+        <div className="wrapper__sidebar">
+          <Sidebar currentPath={pathname} params={params} count={count} />
+          <div className="page__content--shortened">
+            <Switch>
+              <Route
+                exact
+                path="/pdrs"
+                render={(props) => (
+                  <PdrOverview queryParams={filteredQueryParams} {...props} />
+                )}
+              />
+              <Route
+                path="/pdrs/active"
+                render={(props) => (
+                  <PdrList queryParams={filteredQueryParams} {...props} />
+                )}
+              />
+              <Route
+                path="/pdrs/failed"
+                render={(props) => (
+                  <PdrList queryParams={filteredQueryParams} {...props} />
+                )}
+              />
+              <Route
+                path="/pdrs/completed"
+                render={(props) => (
+                  <PdrList queryParams={filteredQueryParams} {...props} />
+                )}
+              />
+              <Route
+                path="/pdrs/pdr/:pdrName"
+                render={(props) => (
+                  <Pdr queryParams={filteredQueryParams} {...props} />
+                )}
+              />
+            </Switch>
           </div>
         </div>
       </div>
-    );
-  }
-}
-
-Pdrs.propTypes = {
-  children: PropTypes.object,
-  location: PropTypes.object,
-  params: PropTypes.object,
-  dispatch: PropTypes.func,
-  stats: PropTypes.object
+    </div>
+  );
 };
 
-export default withRouter(connect(state => ({
-  stats: state.stats
-}))(Pdrs));
+Pdrs.propTypes = {
+  dispatch: PropTypes.func,
+  location: PropTypes.object,
+  params: PropTypes.object,
+  queryParams: PropTypes.object,
+  stats: PropTypes.object,
+};
+
+export default withRouter(
+  withQueryParams()(
+    connect((state) => ({
+      stats: state.stats,
+    }))(Pdrs)
+  )
+);

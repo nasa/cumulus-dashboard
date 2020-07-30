@@ -1,3 +1,7 @@
+$delete-btn-icon: '\f187';
+$delete-btn-bg-color: $error-red;
+$delete-btn-hover-bg-color: darken($error-red, 10%);
+
 .button {
   position: relative;
   padding: .65em 1.2em .65em 2.5em;
@@ -45,7 +49,7 @@
       padding: .4em 1.5em;
     }
   }
-  
+
   &--large{
     padding: .7em 2em;
     font-weight: $base-font-bold;
@@ -59,7 +63,7 @@
   &--white, &--white:visited {
     color: $midnight-blue;
     background-color: $white;
-  
+
     &:hover{
       color: $white;
       background-color: $midnight-blue;
@@ -68,7 +72,7 @@
 
   &--green, &--green:visited {
     background-color: $light-green;
-  
+
     &:hover {
       background-color: darken($light-green, 10%);
       color: #fff;
@@ -83,7 +87,7 @@
       border: 0;
     }
   }
-  
+
   &--secondary, &--secondary:visited{
     background-color: $dolphin-grey;
     &:hover {
@@ -101,7 +105,7 @@
     justify-content: center;
     align-content: center;
     position: relative;
-  
+
     &:before{
       color: $white;
       position: absolute;
@@ -109,8 +113,8 @@
       content: '\f0aa';
       font-weight: 900;
       left: 13px;
-      
-    } 
+
+    }
 
     &:hover{
       &:hover {
@@ -122,12 +126,12 @@
   &--close{
     padding: .65em 1.2em .65em 1.2em;
   }
-  
+
   /*******ButtonGroup & Group CTA******/
     &--add {
       background-color: $light-green;
       position: relative;
-      
+
       &:before {
         color: $white;
         position: absolute;
@@ -136,13 +140,13 @@
         font-weight: 900;
         top: 4px;
         left: 10px;
-      } 
+      }
     }
-  
+
     &--cancel {
       background-color: $dolphin-grey;
       position: relative;
-      
+
       &:before{
         color: $white;
         position: absolute;
@@ -150,8 +154,8 @@
         content: '\f057';
         font-weight: 900;
         left: 10px;
-        
-      } 
+
+      }
     }
 
     &--cancel:hover:before{
@@ -162,11 +166,11 @@
       font-weight: 900;
       visibility: hidden;
   }
-  
+
     &--edit {
       background-color: $light-green;
       position: relative;
-    
+
       &:before{
         color: $white;
         position: absolute;
@@ -174,33 +178,33 @@
         content: '\f044';
         font-weight: 900;
         left: 10px;
-        
-      } 
+
+      }
     }
-  
+
     &--delete {
-      background-color: $error-red;
+      background-color: $delete-btn-bg-color;
       position: relative;
-    
+
       &:before{
         color: $white;
         position: absolute;
         font-family: 'FontAwesome';
-        content: '\f187';
+        content: $delete-btn-icon;
         font-weight: 900;
         left: 10px;
-      } 
+      }
       &:hover {
-        background-color: darken($error-red, 10%);
+        background-color: $delete-btn-hover-bg-color;
         color: #fff;
         border: 0;
       }
     }
-  
+
     &--remove {
       background-color: $light-green;
       position: relative;
-      
+
       &:before{
         color: $white;
         position: absolute;
@@ -208,14 +212,14 @@
         content: '\f0a0';
         font-weight: 900;
         left: 10px;
-        
-      } 
+
+      }
     }
-  
+
     &--execute{
       background-color: $light-green;
       position: relative;
-      
+
       &:before{
         color: $white;
         position: absolute;
@@ -223,14 +227,14 @@
         content: '\f5fc';
         font-weight: 900;
         left: 10px;
-        
-      } 
+
+      }
     }
-  
+
     &--reingest{
       background-color: $light-green;
       position: relative;
-      
+
       &:before{
         color: $white;
         position: absolute;
@@ -238,8 +242,8 @@
         content: '\f233';
         font-weight: 900;
         left: 10px;
-        
-      } 
+
+      }
     }
 
     &--remove, &--execute, &--reingest {
@@ -249,11 +253,11 @@
         border: 0;
       }
     }
-  
+
     &--download{
       background-color: $light-green;
       position: relative;
-    
+
       &:before{
         color: $white;
         position: absolute;
@@ -267,11 +271,11 @@
         visibility: hidden;
       }
     }
-  
+
     &--copy{
       background-color: $light-green;
       position: relative;
-    
+
       &:before{
         color: $white;
         position: absolute;
@@ -279,14 +283,14 @@
         content: '\f0c5';
         font-weight: 900;
         left: 10px;
-        
-      } 
+
+      }
     }
-  
+
     &--confirm, &--submit{
       background-color: $light-green;
       position: relative;
-    
+
       &:before{
         color: $white;
         position: absolute;
@@ -294,8 +298,8 @@
         content: '\f0c7';
         font-weight: 900;
         left: 10px;
-        
-      } 
+
+      }
     }
 
     &--confirm:hover:before, &--submit:hover:before{
@@ -310,7 +314,7 @@
     &--enable {
       background-color: $light-green;
       position: relative;
-      
+
       &:before {
         color: $white;
         position: absolute;
@@ -319,13 +323,13 @@
         font-weight: 900;
         top: 4px;
         left: 10px;
-      } 
+      }
     }
 
     &--disable {
       background-color: $light-green;
       position: relative;
-      
+
       &:before {
         color: $white;
         position: absolute;
@@ -334,10 +338,22 @@
         font-weight: 900;
         top: 4px;
         left: 10px;
-      } 
+      }
     }
-  
-  
+
+    &--file {
+      &:before {
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        content: '\f15c';
+        font-weight: 900;
+        top: 4px;
+        left: 10px;
+      }
+    }
+
+
      /*******Button Animations & Transitions ******/
     &--loading {
       position: relative;
@@ -350,7 +366,7 @@
       }
       color: $light-green;
     }
-    
+
     &__animation {
       position: relative;
       display: inline-block;
@@ -390,24 +406,24 @@
         font-size: 1.1em;
       }
     }
-    
+
     &__arrow:after {
       left: 130%;
       top: .75em;
     }
-    
+
     &__arrow:hover:after {
       left: 85%;
     }
-    
+
     &__animation--md:hover {
       padding: .65em 3em .65em 1em;
     }
-    
+
     &__arrow--md:hover:after {
       left: 75%;
     }
-    
+
     &__arrow--white {
       &:after {
         position: absolute;
@@ -420,9 +436,8 @@
 
      /******* Other States ******/
      &__bulkgranules {
-      background-color: $light-green;
       position: relative;
-    
+
       &:before{
         color: $white;
         position: absolute;
@@ -430,7 +445,6 @@
         content: '\f51e';
         font-weight: 900;
         left: 10px;
-        
       }
 
       &.form-group__element:hover:before {
@@ -439,11 +453,6 @@
     }
 
     &__bulkgranules:hover:before{
-      color: $white;
-      position: absolute;
-      font-family: 'FontAwesome';
-      content: '\f51e';
-      font-weight: 900;
       visibility: hidden;
     }
 
@@ -451,19 +460,35 @@
       left: 85%;
     }
 
+    &__bulkgranules--operations {
+      background-color: $light-green;
+    }
+
+    &__bulkgranules--delete {
+      background-color: $delete-btn-bg-color;
+
+      &:hover {
+        background-color: $delete-btn-hover-bg-color;
+      }
+
+      &:before {
+        content: $delete-btn-icon;
+      }
+    }
+
     &__kibana_open{
       background-color: $light-green;
       position: relative;
       margin-top: 1em;
-          
+
       &:before{
       color: $white;
       position: absolute;
       font-family: 'FontAwesome';
       content: '\f360';
       font-weight: 900;
-      left: 10px;  
-      } 
+      left: 10px;
+      }
     }
 
      &__addcollections {
@@ -474,7 +499,7 @@
     &__deletecollections {
       background-color: $light-green;
       position: relative;
-    
+
       &:before{
         color: $white;
         position: absolute;
@@ -482,8 +507,8 @@
         content: '\f187';
         font-weight: 900;
         left: 10px;
-        
-      } 
+
+      }
     }
 
     &__deletecollections:hover:before{
@@ -498,7 +523,7 @@
     &__goto {
       background-color: $light-green;
       position: relative;
-    
+
       &:before{
         color: $white;
         position: absolute;
@@ -506,7 +531,7 @@
         content: '\f0a9';
         font-weight: 900;
         left: 10px;
-      } 
+      }
 
       &.form-group__element--right {
         &:hover:before {
@@ -514,7 +539,7 @@
         }
       }
     }
-    
+
       &__goto:hover:before {
         color: $white;
         position: absolute;
@@ -523,7 +548,7 @@
         font-weight: 900;
         visibility: hidden;
       }
-    
+
     &--tab {
       border: none;
       background: none;
@@ -542,7 +567,7 @@
     &__group {
       background-color: $ocean-blue;
       position: relative;
-    
+
       &:before{
         color: $white;
         position: absolute;
@@ -550,7 +575,56 @@
         content: '\f111';
         font-weight: 900;
         left: 10px;
-        
-      } 
+
+      }
+    }
+
+    &__filter {
+      background-color: $light-green;
+      position: relative;
+
+      &:before {
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        content: '\f0b0';
+        font-weight: 900;
+        left: 10px;
+
+      }
+
+      &:hover {
+        background-color: $light-green;
+      }
+    }
+
+    &__row {
+      background-color: $white;
+      padding: .65em 1.1em;
+      font-size: 1.1em;
+      line-height: 1.1em;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+      &--download {
+        &:before {
+          content: '\f0ab';
+          font-family: 'FontAwesome';
+          color: $light-green;
+        }
+      }
+      &--delete {
+        background-color: transparent;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+        &:before {
+          content: '\f187';
+          font-family: 'FontAwesome';
+          background-color: transparent;
+          color: $grey;
+          font-weight: 900;
+        }
+
+        &:hover {
+          color: $dark-grey;
+        }
+      }
     }
 }

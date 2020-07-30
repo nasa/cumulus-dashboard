@@ -24,39 +24,42 @@ import Dropdown from '../../components/DropDown/simple-dropdown';
 import Bulk from '../../components/Granules/bulk';
 import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent';
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
 
 export const tableColumns = [
   {
     Header: 'Status',
-    accessor: row => <Link to={`/granules/${row.status}`} className={`granule__status granule__status--${row.status}`}>{displayCase(row.status)}</Link>,
-    id: 'status',
-    width: 100
+    accessor: 'status',
+    width: 100,
+    Cell: ({ cell: { value } }) => <Link to={location => ({ pathname: `/granules/${value}`, search: getPersistentQueryParams(location) })} className={`granule__status granule__status--${value}`}>{displayCase(value)}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Name',
-    accessor: row => granuleLink(row.granuleId),
-    id: 'name',
+    accessor: 'granuleId',
+    Cell: ({ cell: { value } }) => granuleLink(value),
     width: 225
   },
   {
     Header: 'Published',
-    accessor: row => row.cmrLink ? <a href={row.cmrLink} target='_blank'>{bool(row.published)}</a> : bool(row.published),
-    id: 'published'
+    accessor: 'published',
+    Cell: ({ row: { original: { cmrLink, published } } }) => // eslint-disable-line react/prop-types
+      cmrLink ? <a href={cmrLink} target='_blank'>{bool(published)}</a> : bool(published)
   },
   {
     Header: strings.collection_id,
-    accessor: row => collectionLink(row.collectionId),
-    id: 'collectionId'
+    accessor: 'collectionId',
+    Cell: ({ cell: { value } }) => collectionLink(value)
   },
   {
     Header: 'Provider',
-    accessor: row => providerLink(row.provider),
-    id: 'provider'
+    accessor: 'provider',
+    Cell: ({ cell: { value } }) => providerLink(value)
   },
   {
     Header: 'Execution',
-    accessor: row => <Link to={`/executions/execution/${path.basename(row.execution)}`}>link</Link>,
-    id: 'execution',
+    accessor: 'execution',
+    Cell: ({ cell: { value } }) => // eslint-disable-line react/prop-types
+      <Link to={location => ({ pathname: `/executions/execution/${path.basename(value)}`, search: getPersistentQueryParams(location) })}>link</Link>,
     disableSortBy: true,
     width: 90
   },
@@ -76,8 +79,10 @@ export const tableColumns = [
 export const errorTableColumns = [
   {
     Header: 'Error',
-    accessor: row => <ErrorReport report={get(row, 'error.Cause', nullValue)} truncate={true} />,
+    accessor: row => get(row, 'error.Cause', nullValue),
     id: 'error',
+    Cell: ({ row: { original } }) => // eslint-disable-line react/prop-types
+      <ErrorReport report={get(original, 'error.Cause', nullValue)} truncate={true} />,
     disableSortBy: true,
     width: 175
   },
@@ -90,8 +95,8 @@ export const errorTableColumns = [
   },
   {
     Header: 'Granule',
-    accessor: row => granuleLink(row.granuleId),
-    id: 'granuleId',
+    accessor: 'granuleId',
+    Cell: ({ cell: { value } }) => granuleLink(value),
     width: 200
   },
   {
@@ -163,7 +168,7 @@ const determineCollectionsBase = (path) => {
 const setOnConfirm = ({ history, error, selected, closeModal }) => {
   const redirectAndClose = (redirect) => {
     return () => {
-      history.push(redirect);
+      historyPushWithQueryParams(redirect);
       if (typeof closeModal === 'function') closeModal();
     };
   };

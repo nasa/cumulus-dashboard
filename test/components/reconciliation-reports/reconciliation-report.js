@@ -51,10 +51,13 @@ const reconciliationReports = {
         error: 'error creating report'
       }
     }
+  },
+  list: {
+    params: {}
   }
 };
 
-test('show individual report', function (t) {
+test('shows an individual report', function (t) {
   const match = { params: { reconciliationReportName: 'exampleReport' } };
 
   const dispatch = () => {};
@@ -70,13 +73,13 @@ test('show individual report', function (t) {
   t.is(report.length, 1);
 
   const TableCards = report.find('TableCards');
-  t.is(TableCards.length, 1);
-  const TableCardWrapper = TableCards.dive();
+  t.is(TableCards.length, 2);
+  const TableCardWrapper = TableCards.at(0).dive();
   const Cards = TableCardWrapper.find('Card');
+
   // there should be one card for DynamoDB and one card for S3
   t.is(Cards.length, 2);
 
-  // There should only be one table visible
   const Table = report.find('SortableTable');
   t.is(Table.length, 1);
 });

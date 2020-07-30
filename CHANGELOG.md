@@ -7,6 +7,133 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.10.0]
+
+### BREAKING CHANGES
+
+- This dashboard version requires Cumulus API version >= v2.0.1
+
+### Added
+- **CUMULUS-1805**
+  - Shows running, completed, and failed granule format for when there are zero granules,
+    before it would just say "Granules 0," but now will show zeros in all categories.
+- **CUMULUS-1886**
+  - Support sorting on multiple columns
+- **CUMULUS-1904**
+  - Adds a TableFilters component for dynamically showing/hiding table columns
+
+- **CUMULUS-1906**
+  - Adds a download button dropdown to reconciliation report inventory view.
+    Option to download full report as json or indivdual tables as csv files.
+
+- **CUMULUS-1908**
+  - Adds Conflict Type and Conflict Details columns to reconciliation report inventory view tables.
+
+- **CUMULUS-1914**
+  - Adds a legend component for reconciliation reports
+
+- **CUMULUS-1917**
+  - Adds a download button to reconciliation report list page
+
+- **CUMULUS-1918**
+  - Adds delete report button to the Reconciliation Reports page
+
+- **CUMULUS-1977**
+  - Added BulkGranuleModal component for creating modals to submit bulk granule requests
+
+- **CUMULUS-2018**
+  - Add search option to individual Reconciliation Report page
+  - Add ability to filter by S3 bucket on Reconciliation Report page
+
+- **CUMULUS-**
+  - upgrades node to 12.18.0
+  - Upgrade Cypress to latest version (4.8.0)
+
+### Changed
+
+- **CUMULUS-1773**
+  - Updated query param functionality so that when URLs are shared, the lists will be filtered based on those params
+  - Persists startDateTime and endDateTime params on all links and redirects within the app
+
+- **CUMULUS-1815**
+  - Refactor some PDR components. No user facing changes.
+
+- **CUMULUS-1830**
+  - Fix redirect issue when logging out from the page with URL path containing dot
+
+- **CUMULUS-1836**
+  - Replace react-autocomplete with react-bootstrap-typeahead
+  - Allow custom values in Results per Page dropdowns
+
+- **CUMULUS-1861**
+  - Update Execution/Rule tables to handle undefined collectionIds
+  - Update Rule add dialogue logic to allow Rule creation without a collection
+    value.
+
+- **CUMULUS-1905**
+  - Updates Inventory Report view to clarify Cumulus's internal consistency differences and Cumulus's differences with CMR.
+
+- **CUMULUS-1919**
+  - Update styles for report view
+
+- **CUMULUS-1919**
+  - Updates styles on Reconciliation Report list page
+
+- **CUMULUS-1977**
+  - Updated BulkGranule component to display a modal that allows you to choose
+  the type of bulk request you want to submit: bulk granule operations or bulk
+  granule delete.
+
+- **CUMULUS-1994**
+  - No default datetime filters are applied when the application is loaded.
+  - Upgrade Cypress to latest version (4.7.0)
+
+- **CUMULUS-2019**
+  - Support partial search
+
+- **CUMULUS-2029**
+  - Overview tiles are updated to represent what is shown in the table
+
+### Fixed
+
+- **CUMULUS-1815**
+  - Fix timer bug in PDR Tables. This was causing an issue where a table that
+    was supposed to be showing a subset of PDRs was showing all PDRS
+
+- **CUMULUS-1831**
+  - Fix batch async modals so they close on success/error
+
+- **CUMULUS-1842**
+  - Fix dashboard table sort issue
+
+- **CUMULUS-1870**
+  - Fix/remove unecessary timers on Pdrs page
+
+- **CUMULUS-1871**
+  - Fix/remove unecessary timers on Providers page
+
+- **CUMULUS-1872**
+  - Fix/remove unecessary timers on granules page
+
+- **CUMULUS-1873**
+  - Fix/remove unecessary timers on executions page
+
+- **CUMULUS-1875**
+  - Fix/remove unecessary timers on Operations Page
+
+- **CUMULUS-1877**
+  - Fix/remove unecessary timers on Reconcilation Reports page
+
+- **CUMULUS-1882**
+  - Fix ES query for TEA Lambda metrics
+  - Update Kibana links on homepage for TEA metrics
+
+- **CUMULUS-2024**
+  - Fix bug where new providers and collections were not being pulled in as options on the Add Rule page
+
+- **CUMULUS-2040**
+  - Fix reconciliation report pagination so that it does not display all pages when there are a large number of conflicts
+
 ## [v1.9.0]
 
 ### BREAKING CHANGES
@@ -22,6 +149,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1913**
   - Add datepicker to reconcilation-reports page
+
+- **CUMULUS-1915**
+  - Add filters for `Report Type` and `Status` to reconcilation-reports page
 
 - **CUMULUS-1916**
   - reconcilation-reports page now requires Cumulus API version >= v1.23.0
@@ -409,7 +539,8 @@ Fix for serving the dashboard through the Cumulus API.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.9.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.10.0...HEAD
+[v1.10.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.9.0...v1.10.0
 [v1.9.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.8.1...v1.9.0
 [v1.8.1]: https://github.com/nasa/cumulus-dashboard/compare/v1.8.0...v1.8.1
 [v1.8.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.7.2...v1.8.0

@@ -1,6 +1,6 @@
 {
   "name": "cumulus-dashboard",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "A dashboard for Cumulus API",
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
   "homepage": "https://github.com/nasa/cumulus-dashboard",
   "private": true,
   "engines": {
-    "node": ">=10.16.3"
+    "node": ">=12.18.0"
   },
   "scripts": {
     "audit-ci": "audit-ci --config $(pwd)/audit-ci.json",
@@ -29,7 +29,7 @@
     "lint-fix": "eslint --fix app/src/js/ --ext .js",
     "cypress": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress open",
     "cypress-ci": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress run --spec 'cypress/integration/*' --config video=true",
-    "validate": "ava cypress/validation-tests/*.js",
+    "validate": "ava --config ./validation-tests.config.cjs",
     "test": "NODE_ENV=test npm run lint && ava",
     "seed-database": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test node ./localAPI/runSeedDatabase.js",
     "serve-api": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test cmr_provider=CUMULUS FAKE_AUTH=true ./node_modules/@cumulus/api/bin/cli.js serve --no-reseed",
@@ -44,36 +44,7 @@
     "validation-tests": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml -f ./localAPI/docker-compose-validate.yml up --exit-code-from=validate --abort-on-container-exit",
     "view-docker-logs": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml logs -f "
   },
-  "ava": {
-    "babel": {
-      "testOptions": {
-        "plugins": [
-          "@babel/plugin-syntax-jsx",
-          [
-            "babel-plugin-webpack-alias-7",
-            {
-              "config": "./config/webpack.config.test.js"
-            }
-          ]
-        ]
-      },
-      "extensions": [
-        "js",
-        "jsx",
-        "ts"
-      ]
-    },
-    "require": [
-      "@babel/register",
-      "./test/_setup-browser-env.js",
-      "ignore-styles"
-    ],
-    "files": [
-      "test/**/*",
-      "!node_modules/",
-      "!test/fixtures/**/*"
-    ]
-  },
+  "ava": {},
   "browserslist": {
     "production": [
       ">0.2%",
@@ -96,15 +67,16 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@babel/runtime": "^7.8.4",
-    "@cumulus/api": "1.23.2",
-    "@cumulus/aws-client": "^1.22.1",
+    "@cumulus/api": "2.0.1",
+    "@cumulus/aws-client": "2.0.1",
     "@cypress/webpack-preprocessor": "^4.1.2",
     "audit-ci": "1.3.0",
     "autoprefixer": "^9.7.3",
-    "ava": "^2.4.0",
+    "ava": "^3.11.0",
     "ava-http": "^1.0.0",
     "babel-core": "^7.0.0-bridge",
     "babel-loader": "^8.0.6",
+    "babel-plugin-rewire": "^1.2.0",
     "babel-plugin-webpack-alias-7": "^0.1.1",
     "babelify": "^9.0.0",
     "browser-env": "^3.3.0",
@@ -114,8 +86,9 @@
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.4.0",
     "cssnano": "^4.1.10",
-    "cypress": "4.0.2",
+    "cypress": "^4.8.0",
     "cypress-failed-log": "^2.6.1",
+    "cypress-wait-until": "^1.7.1",
     "del": "^2.2.0",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
@@ -149,7 +122,6 @@
     "redux-mock-store": "^1.5.3",
     "redux-test-utils": "^0.2.2",
     "resolve-url-loader": "^3.1.1",
-    "rewire": "^5.0.0",
     "sass-loader": "^8.0.0",
     "sass-resources-loader": "^2.0.1",
     "sinon": "^8.1.1",
@@ -176,7 +148,7 @@
     "assert": "^1.4.1",
     "bootstrap": "^4.3.1",
     "brace": "^0.9.1",
-    "classnames": "^2.2.5",
+    "classnames": "^2.2.6",
     "compare-versions": "^3.6.0",
     "connected-react-router": "^6.6.1",
     "core-js": "3",
@@ -203,6 +175,7 @@
     "lodash.isnil": "^4.0.0",
     "lodash.map": "^4.6.0",
     "lodash.omitby": "^4.6.0",
+    "lodash.orderby": "^4.6.0",
     "lodash.throttle": "^4.1.1",
     "lodash.truncate": "^4.4.2",
     "moment": "^2.17.1",
@@ -213,19 +186,21 @@
     "paginator": "^1.0.0",
     "popper.js": "^1.14.7",
     "prop-types": "^15.5.10",
+    "query-string": "^6.13.1",
     "react": "^16.10.2",
     "react-ace": "^6.2.0",
-    "react-autocomplete": "^1.8.1",
     "react-bootstrap": "^1.0.0-beta.14",
+    "react-bootstrap-typeahead": "^5.1.0",
     "react-collapsible": "^2.6.3",
     "react-datetime-picker": "2.8.0",
     "react-dom": "^16.6.3",
+    "react-helmet": "^6.1.0",
     "react-redux": "^7.2.0",
     "react-router": "^5.1.2",
     "react-router-bootstrap": "^0.25.0",
     "react-router-dom": "^5.1.2",
     "react-router-query-params": "^1.0.3",
-    "react-table": "^7.0.0-rc.16",
+    "react-table": "^7.1.0",
     "recompose": "^0.30.0",
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.8",

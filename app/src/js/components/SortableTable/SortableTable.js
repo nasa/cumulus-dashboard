@@ -8,6 +8,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
 import SimplePagination from '../Pagination/simple-pagniation';
+import TableFilters from '../Table/TableFilters';
 
 /**
  * IndeterminateCheckbox
@@ -45,14 +46,15 @@ const SortableTable = ({
   data = [],
   onSelect,
   clearSelected,
-  shouldUsePagination = false
+  shouldUsePagination = false,
+  initialHiddenColumns = []
 }) => {
   const defaultColumn = useMemo(
     () => ({
       // When using the useFlexLayout:
       minWidth: 30, // minWidth is only used as a limit for resizing
       width: 125, // width is used for both the flex-basis and flex-grow
-      maxWidth: 300, // maxWidth is only used as a limit for resizing
+      maxWidth: 350, // maxWidth is only used as a limit for resizing
     }),
     []
   );
@@ -67,7 +69,8 @@ const SortableTable = ({
     state: {
       selectedRowIds,
       sortBy,
-      pageIndex
+      pageIndex,
+      hiddenColumns
     },
     toggleAllRowsSelected,
     page,
@@ -77,7 +80,8 @@ const SortableTable = ({
     pageOptions,
     gotoPage,
     nextPage,
-    previousPage
+    previousPage,
+    toggleHideColumn
   } = useTable(
     {
       data,
@@ -88,6 +92,9 @@ const SortableTable = ({
       autoResetSortBy: false,
       manualSortBy: shouldManualSort,
       manualPagination: !shouldUsePagination, // if we want to use the pagination hook, then pagination should not be manual
+      initialState: {
+        hiddenColumns: initialHiddenColumns
+      }
     },
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
     useResizeColumns, // this allows for resizing columns
@@ -116,6 +123,7 @@ const SortableTable = ({
   );
 
   const tableRows = page || rows;
+  const includeFilters = initialHiddenColumns.length > 0;
 
   useEffect(() => {
     if (clearSelected) {
@@ -137,20 +145,17 @@ const SortableTable = ({
   }, [selectedRowIds, onSelect]);
 
   useEffect(() => {
-    const [sortProps = {}] = sortBy;
-    const { id, desc } = sortProps;
-    let sortOrder;
-    if (typeof desc !== 'undefined') {
-      sortOrder = desc ? 'desc' : 'asc';
-    }
-    const sortFieldId = id || sortId;
+    const sortProps = (sortBy.length) ? sortBy : [{ id: sortId, desc: (order === 'desc') }];
     if (typeof changeSortProps === 'function') {
-      changeSortProps({ sortId: sortFieldId, order: sortOrder || order });
+      changeSortProps(sortProps);
     }
   }, [changeSortProps, sortBy, sortId, order]);
 
   return (
     <div className='table--wrapper'>
+      {includeFilters &&
+        <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
+      }
       <form>
         <div className='table' {...getTableProps()}>
           <div className='thead'>
@@ -212,6 +217,7 @@ const SortableTable = ({
             previousPage={previousPage}
             pageOptions={pageOptions}
             pageIndex={pageIndex}
+            dataCount={data.length}
           />}
       </form>
     </div>
@@ -229,7 +235,8 @@ SortableTable.propTypes = {
   rowId: PropTypes.any,
   tableColumns: PropTypes.array,
   clearSelected: PropTypes.bool,
-  shouldUsePagination: PropTypes.bool
+  shouldUsePagination: PropTypes.bool,
+  initialHiddenColumns: PropTypes.array
 };
 
 export default SortableTable;

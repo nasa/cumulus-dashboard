@@ -55,7 +55,7 @@ const DefaultModal = ({
       </Modal.Body>
       <Modal.Footer>
         {hasCancelButton && <button
-          className={`button ${cancelButtonClass} button__animation--md button__arrow button__animation button--secondary form-group__element--left button__cancel`}
+          className={`button ${cancelButtonClass} button__animation--md button__arrow button__animation button--secondary form-group__element--left`}
           onClick={handleCancel}>
           { cancelButtonText }
         </button>}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { awsRegion } from '../../config';
+import { getPersistentQueryParams } from '../url-helper';
 
 export const makeSteps = (row) => {
   try {
@@ -22,13 +23,13 @@ export const buildLink = (r) => {
 export const tableColumns = [
   {
     Header: 'Name',
-    accessor: (row) => <Link to={`/workflows/workflow/${row.name}`}>{row.name}</Link>,
-    id: 'name'
+    accessor: 'name',
+    Cell: ({ cell: { value } }) => <Link to={location => ({ pathname: `/workflows/workflow/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'AWS Step Function',
-    accessor: buildLink,
-    id: 'template'
+    accessor: row => (row.definition && row.definition.Comment) || 'AWS Stepfunction',
+    Cell: ({ row }) => buildLink(row.original),
   },
   {
     Header: 'Steps',

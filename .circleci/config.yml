@@ -13,8 +13,8 @@ jobs:
           command: |
             export NVM_DIR="/opt/circleci/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm install v10.16.3
-            nvm alias default v10.16.3
+            nvm install v12.18.0
+            nvm alias default v12.18.0
             npm install -g npm
             npm ci
 
@@ -34,7 +34,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               -e APIROOT=http://api:5001 \
-              node:10.16.3 \
+              node:12.18.0 \
               npm run build
 
       - run:
@@ -44,7 +44,7 @@ jobs:
               -v /home/circleci/.cache:/root/.cache \
               -v $(pwd):/home \
               --workdir /home \
-              node:10.16.3 \
+              node:12.18.0 \
               npm run test
 
       - run:
@@ -79,8 +79,8 @@ jobs:
           command: |
             export NVM_DIR="/opt/circleci/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm install v10.16.3
-            nvm alias default v10.16.3
+            nvm install v12.18.0
+            nvm alias default v12.18.0
             npm install -g npm
             npm ci
 
@@ -100,7 +100,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               -e APIROOT=${SANDBOX_API} \
-              node:10.16.3 \
+              node:12.18.0 \
               npm run build
 
       - run:
@@ -124,7 +124,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               -e APIROOT=${SANDBOX_API_ROOT} \
-              node:10.16.3 \
+              node:12.18.0 \
               npm run build
 
       - run:
@@ -148,7 +148,7 @@ jobs:
               -v $(pwd):/home \
               --workdir /home \
               -e APIROOT=${SIT_API_ROOT} \
-              node:10.16.3 \
+              node:12.18.0 \
               npm run build
 
       - run:

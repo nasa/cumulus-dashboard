@@ -1,6 +1,7 @@
 'use strict';
 import { get as getProperty } from 'object-path';
 import _config from '../config';
+import { filterQueryParams } from '../utils/url-helper';
 
 export const formatError = (response = {}, body) => {
   let error = response
@@ -46,10 +47,13 @@ export const configureRequest = (params = {}) => {
     config.url = new URL(config.path, _config.apiRoot).href;
   }
 
+  if (config.qs) config.qs = filterQueryParams(config.qs);
+
   const defaultRequestConfig = {
     json: true,
     resolveWithFullResponse: true,
-    simple: false
+    simple: false,
+    qsStringifyOptions: { arrayFormat: 'brackets' }
   };
   config = Object.assign({}, defaultRequestConfig, config);
 

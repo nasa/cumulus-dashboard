@@ -1,11 +1,11 @@
 'use strict';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import withQueryParams from 'react-router-query-params';
 import {
-  interval,
-  getCount,
   searchGranules,
   clearGranulesSearch,
   filterGranules,
@@ -18,7 +18,7 @@ import {
   getGranuleCSV
 } from '../../actions';
 import { get } from 'object-path';
-import { lastUpdated, tally, displayCase } from '../../utils/format';
+import { lastUpdated, tally } from '../../utils/format';
 import {
   tableColumns,
   simpleDropdownOption,
@@ -30,15 +30,14 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import statusOptions from '../../utils/status';
-import _config from '../../config';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
-import { window, document } from '../../utils/browser';
+import { window } from '../../utils/browser';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import pageSizeOptions from '../../utils/page-size';
-
-const { updateInterval } = _config;
+import { downloadFile } from '../../utils/download-file';
+import isEqual from 'lodash.isequal';
 
 const breadcrumbConfig = [
   {
@@ -52,8 +51,8 @@ const breadcrumbConfig = [
 ];
 
 class GranulesOverview extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.generateQuery = this.generateQuery.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
     this.queryMeta = this.queryMeta.bind(this);
@@ -62,28 +61,29 @@ class GranulesOverview extends React.Component {
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
     this.applyRecoveryWorkflow = this.applyRecoveryWorkflow.bind(this);
     this.downloadGranuleCSV = this.downloadGranuleCSV.bind(this);
-    this.state = {};
+    this.state = {
+      workflow: this.props.workflowOptions[0]
+    };
   }
 
   componentDidMount () {
-    this.cancelInterval = interval(this.queryMeta, updateInterval, true);
+    this.queryMeta();
   }
 
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
+  componentDidUpdate (prevProps) {
+    if (!isEqual(prevProps.workflowOptions, this.props.workflowOptions)) {
+      this.setState({ workflow: this.props.workflowOptions[0] }); // eslint-disable-line react/no-did-update-set-state
+    }
   }
 
   queryMeta () {
     const { dispatch } = this.props;
     dispatch(listWorkflows());
-    dispatch(getCount({
-      type: 'granules',
-      field: 'status'
-    }));
   }
 
   generateQuery () {
-    return {};
+    const { queryParams } = this.props;
+    return { ...queryParams };
   }
 
   generateBulkActions () {
@@ -134,25 +134,21 @@ class GranulesOverview extends React.Component {
       const { granuleCSV } = this.props;
       const { data } = granuleCSV;
       const csvData = new Blob([data], { type: 'text/csv' });
-
-      const link = document.createElement('a');
-      link.setAttribute('download', 'granules.csv');
       const url = window.URL.createObjectURL(csvData);
-      link.href = url;
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
+      downloadFile(url, 'granules.csv');
     });
   }
 
   render () {
-    const { stats, granules, dispatch } = this.props;
-    const { list, dropdowns } = granules;
+    const { collections, dispatch, granules } = this.props;
+    const { list } = granules;
+    const { dropdowns } = collections;
     const { count, queriedAt } = list.meta;
-    const statsCount = get(stats, 'count.data.granules.count', []);
-    const overviewItems = statsCount.map(d => [tally(d.count), displayCase(d.key)]);
     return (
       <div className='page__component'>
+        <Helmet>
+          <title> Granules Overview </title>
+        </Helmet>
         <section className='page__section page__section__controls'>
           <Breadcrumbs config={breadcrumbConfig} />
         </section>
@@ -160,12 +156,12 @@ class GranulesOverview extends React.Component {
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>{strings.granule_overview}</h1>
             {lastUpdated(queriedAt)}
-            <Overview items={overviewItems} inflight={false} />
+            <Overview type='granules' inflight={false} />
           </div>
         </section>
         <section className='page__section'>
           <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num--title'>{count ? ` ${tally(count)}` : 0}</span></h2>
+            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num-title'>{count ? ` ${tally(count)}` : 0}</span></h2>
             <a className='csv__download button button--small button--download button--green form-group__element--right'
               id='download_link'
               onClick={this.downloadGranuleCSV}
@@ -183,7 +179,7 @@ class GranulesOverview extends React.Component {
             <ListFilters>
               <Dropdown
                 getOptions={getOptionsCollectionName}
-                options={get(dropdowns, ['collectionName', 'options'])}
+                options={get(dropdowns, ['collectionName', 'options']) || []}
                 action={filterGranules}
                 clear={clearGranulesFilter}
                 paramKey='collectionId'
@@ -228,21 +224,21 @@ class GranulesOverview extends React.Component {
 }
 
 GranulesOverview.propTypes = {
-  granules: PropTypes.object,
-  stats: PropTypes.object,
-  dispatch: PropTypes.func,
-  workflowOptions: PropTypes.array,
-  location: PropTypes.object,
+  collections: PropTypes.object,
   config: PropTypes.object,
-  granuleCSV: PropTypes.object
+  dispatch: PropTypes.func,
+  granuleCSV: PropTypes.object,
+  granules: PropTypes.object,
+  queryParams: PropTypes.object,
+  workflowOptions: PropTypes.array,
 };
 
 export { GranulesOverview };
 
-export default withRouter(connect(state => ({
-  stats: state.stats,
-  workflowOptions: workflowOptionNames(state),
-  granules: state.granules,
+export default withRouter(withQueryParams()(connect(state => ({
+  collections: state.collections,
   config: state.config,
-  granuleCSV: state.granuleCSV
-}))(GranulesOverview));
+  granuleCSV: state.granuleCSV,
+  granules: state.granules,
+  workflowOptions: workflowOptionNames(state),
+}))(GranulesOverview)));

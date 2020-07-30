@@ -110,10 +110,10 @@ export default createReducer(initialState, {
     state.list.error = action.error;
   },
   [SEARCH_PROVIDERS]: (state, action) => {
-    state.list.params.prefix = action.prefix;
+    state.list.params.infix = action.infix;
   },
   [CLEAR_PROVIDERS_SEARCH]: (state) => {
-    delete state.list.params.prefix;
+    delete state.list.params.infix;
   },
   [FILTER_PROVIDERS]: (state, action) => {
     state.list.params[action.param.key] = action.param.value;
