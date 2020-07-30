@@ -1,15 +1,15 @@
 import dagre from 'dagre-d3';
 
 export const select = (arr, predOrProp) => {
-  var predicate = predOrProp;
+  let predicate = predOrProp;
   if (typeof predOrProp === 'string') {
     predicate = function hasTruthyProp (item) {
       return item[predOrProp];
     };
   }
-  var result = [];
-  var i;
-  for (i = 0; i < arr.length; i++) {
+  const result = [];
+  let i;
+  for (i = 0; i < arr.length; i += 1) {
     if (predicate(arr[i])) result.push(arr[i]);
   }
   return result;
@@ -28,36 +28,29 @@ export const setParent = (g, child, parent) => {
 };
 
 export const draw = (graph) => {
-  var g = new dagre.graphlib.Graph({ compound: true })
+  const g = new dagre.graphlib.Graph({ compound: true })
     .setGraph({})
-    .setDefaultEdgeLabel(function () { return {}; });
+    .setDefaultEdgeLabel(() => ({}));
 
-  var nodes = Object.values(graph);
+  const nodes = Object.values(graph);
 
-  var i;
-  for (i = 0; i < nodes.length; i++) {
-    var node = nodes[i];
+  for (let i = 0; i < nodes.length; i += 1) {
+    const node = nodes[i];
     setNode(g, node.id, { label: node.id, class: [node.type, node.status].join(' ') });
     if (node.parent) {
       setParent(g, node.id, node.parent.id);
     }
 
-    var j;
-    var k;
-    for (j = 0; j < node.edges.length; j++) {
-      var target = graph[node.edges[j]];
+    for (let j = 0; j < node.edges.length; j += 1) {
+      const target = graph[node.edges[j]];
       if (node.isGroup) {
-        var ends = select(nodes, function isGroupStart (tnode) {
-          return tnode.parent && tnode.parent.id === node.id && tnode.isEnd;
-        });
-        for (k = 0; k < ends.length; k++) {
+        const ends = select(nodes, (tnode) => tnode.parent && tnode.parent.id === node.id && tnode.isEnd);
+        for (let k = 0; k < ends.length; k += 1) {
           setEdge(g, ends[k].id, target.id);
         }
       } else if (target.isGroup) {
-        var starts = select(nodes, function isGroupStart (tnode) {
-          return tnode.parent && tnode.parent.id === target.id && tnode.isStart;
-        });
-        for (k = 0; k < starts.length; k++) {
+        const starts = select(nodes, (tnode) => tnode.parent && tnode.parent.id === target.id && tnode.isStart);
+        for (let k = 0; k < starts.length; k += 1) {
           setEdge(g, node.id, starts[k].id);
         }
       } else {
@@ -66,11 +59,12 @@ export const draw = (graph) => {
     }
   }
 
-  g.nodes().forEach(function (v) {
-    var n = g.node(v);
+  g.nodes().forEach((v) => {
+    const n = g.node(v);
     // Round the corners of the nodes
     if (n.class === 'terminus') {
-      n.height = n.width = 40;
+      n.height = 40;
+      n.width = 40;
     }
   });
 
@@ -78,12 +72,10 @@ export const draw = (graph) => {
 };
 
 export const workflowToGraph = (workflow, parent) => {
-  var graph = {};
-  var i;
-  var j;
-  var clause;
+  const graph = {};
+  let clause;
 
-  var props = Object.keys(workflow.States);
+  const props = Object.keys(workflow.States);
 
   if (!parent) {
     graph.start = {
@@ -109,13 +101,13 @@ export const workflowToGraph = (workflow, parent) => {
     };
   }
 
-  for (i = 0; i < props.length; i++) {
-    var id = props[i];
-    var def = workflow.States[id];
-    var node = {
-      id: id,
-      def: def,
-      parent: parent,
+  for (let i = 0; i < props.length; i += 1) {
+    const id = props[i];
+    const def = workflow.States[id];
+    const node = {
+      id,
+      def,
+      parent,
       type: def.Type,
       isGroup: def.Type === 'Parallel',
       isStart: id === workflow.StartAt,
@@ -139,7 +131,7 @@ export const workflowToGraph = (workflow, parent) => {
     }
 
     if (def.Catch) {
-      for (j = 0; j < def.Catch.length; j++) {
+      for (let j = 0; j < def.Catch.length; j += 1) {
         clause = def.Catch[j];
         if (clause.Next) {
           node.edges.push(clause.Next);
@@ -148,15 +140,15 @@ export const workflowToGraph = (workflow, parent) => {
     }
 
     if (def.Type === 'Choice') {
-      for (j = 0; j < def.Choices.length; j++) {
+      for (let j = 0; j < def.Choices.length; j += 1) {
         clause = def.Choices[j];
         if (clause.Next) {
           node.edges.push(clause.Next);
         }
       }
     } else if (def.Type === 'Parallel') {
-      for (j = 0; j < def.Branches.length; j++) {
-        var branch = def.Branches[j];
+      for (let j = 0; j < def.Branches.length; j += 1) {
+        const branch = def.Branches[j];
         Object.assign(graph, workflowToGraph(branch, node));
       }
     }
@@ -166,15 +158,15 @@ export const workflowToGraph = (workflow, parent) => {
 };
 
 export const getEventDetails = (event) => {
-  var result = Object.assign({}, event);
-  var prop;
+  let result = { ...event };
+  let prop;
 
   if (event.type.endsWith('StateEntered')) {
     prop = 'stateEnteredEventDetails';
   } else if (event.type.endsWith('StateExited')) {
     prop = 'stateExitedEventDetails';
   } else if (event.type) {
-    prop = event.type.charAt(0).toLowerCase() + event.type.slice(1) + 'EventDetails';
+    prop = `${event.type.charAt(0).toLowerCase() + event.type.slice(1)}EventDetails`;
   }
 
   if (prop && event[prop]) {
@@ -201,17 +193,17 @@ export const getEventDetails = (event) => {
 };
 
 export const getExecutionEvents = (execution) => {
-  var result = [];
-  for (var i = 0; i < execution.events.length; i++) {
+  const result = [];
+  for (let i = 0; i < execution.events.length; i += 1) {
     result.push(getEventDetails(execution.events[i]));
   }
   return result;
 };
 
 export const cancelAllWorkflowEvents = (graph) => {
-  var stateNames = Object.keys(graph);
-  for (var i = 0; i < stateNames.length; i++) {
-    var state = graph[stateNames[i]];
+  const stateNames = Object.keys(graph);
+  for (let i = 0; i < stateNames.length; i += 1) {
+    const state = graph[stateNames[i]];
     if (state.status === 'InProgress') {
       state.status = 'Cancelled';
     }
@@ -219,7 +211,7 @@ export const cancelAllWorkflowEvents = (graph) => {
 };
 
 export const findFailure = (events, failedEvent) => {
-  var event = failedEvent;
+  let event = failedEvent;
   while (event && event.previousEventId) {
     if (event.type.endsWith('StateEntered')) {
       return event.name;
@@ -230,10 +222,10 @@ export const findFailure = (events, failedEvent) => {
 };
 
 export const addEventsToGraph = (events, graph) => {
-  var result = [];
-  var node;
-  for (var i = 0; i < events.length; i++) {
-    var event = events[i];
+  const result = [];
+  let node;
+  for (let i = 0; i < events.length; i += 1) {
+    const event = events[i];
     if (event.type.endsWith('StateEntered')) {
       node = graph[event.name];
       node.status = 'InProgress';
@@ -243,7 +235,7 @@ export const addEventsToGraph = (events, graph) => {
       node.status = 'Succeeded';
       node.output = event.output;
     } else if (event.type === 'ExecutionFailed') {
-      var name = findFailure(events, event);
+      const name = findFailure(events, event);
       if (name) {
         node = graph[name];
         node.status = 'Failed';
