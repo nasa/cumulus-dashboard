@@ -68,6 +68,7 @@
       "./test/_setup-browser-env.js",
       "ignore-styles"
     ],
+    "timeout": "3m",
     "files": [
       "test/**/*",
       "!node_modules/",
@@ -101,7 +102,7 @@
     "@cypress/webpack-preprocessor": "^4.1.2",
     "audit-ci": "1.3.0",
     "autoprefixer": "^9.7.3",
-    "ava": "^2.4.0",
+    "ava": "^3.11.0",
     "ava-http": "^1.0.0",
     "babel-core": "^7.0.0-bridge",
     "babel-loader": "^8.0.6",
