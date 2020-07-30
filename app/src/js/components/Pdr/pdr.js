@@ -1,10 +1,10 @@
-'use strict';
 import path from 'path';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { get } from 'object-path';
 import {
   getPdr,
   deletePdr,
@@ -15,7 +15,6 @@ import {
   listGranules,
   getOptionsCollectionName,
 } from '../../actions';
-import { get } from 'object-path';
 import {
   granuleSearchResult,
   lastUpdated,
@@ -66,19 +65,18 @@ const metaAccessors = [
   {
     label: 'Execution',
     property: 'execution',
-    accessor: (d) =>
-      d ? (
-        <Link
-          to={(location) => ({
-            pathname: `/executions/execution/${path.basename(d)}`,
-            search: getPersistentQueryParams(location),
-          })}
-        >
-          link
-        </Link>
-      ) : (
-        nullValue
-      ),
+    accessor: (d) => (d ? (
+      <Link
+        to={(location) => ({
+          pathname: `/executions/execution/${path.basename(d)}`,
+          search: getPersistentQueryParams(location),
+        })}
+      >
+        link
+      </Link>
+    ) : (
+      nullValue
+    )),
   },
   {
     label: 'Status',
@@ -168,7 +166,7 @@ class PDR extends React.Component {
     const { count, queriedAt } = list.meta;
     const logsQuery = { 'meta.pdrName': pdrName };
     const deleteStatus = get(pdrs.deleted, [pdrName, 'status']);
-    const error = record.error;
+    const { error } = record;
 
     const granulesCount = get(record, 'data.granulesStatus', []);
     const granuleStatus = Object.keys(granulesCount).map((key) => ({
@@ -212,7 +210,7 @@ class PDR extends React.Component {
             <h2 className="heading--medium heading--shared-content with-description">
               {strings.granules}{' '}
               <span className="num-title">
-                {!isNaN(count) ? `(${count})` : 0}
+                {!Number.isNaN(count) ? `(${count})` : 0}
               </span>
             </h2>
           </div>
