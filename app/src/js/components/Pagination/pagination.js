@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import Paginator from 'paginator';
 import PropTypes from 'prop-types';
@@ -28,7 +27,7 @@ class Pagination extends React.Component {
 
   render () {
     const { page, limit, count } = this.props;
-    if (!isNaN(count) && !isNaN(limit) && !isNaN(page)) {
+    if (!Number.isNaN(count) && !Number.isNaN(limit) && !Number.isNaN(page)) {
       const currentPage = +page;
       const paginator = new Paginator(limit, 7);
       const meta = paginator.build(count, currentPage);
@@ -42,24 +41,25 @@ class Pagination extends React.Component {
         <div className='pagination'>
           <ol>
             <li><a
-              className={'previous' + (meta.has_previous_page ? '' : disabled)}
+              className={`previous${meta.has_previous_page ? '' : disabled}`}
               data-value={meta.previous_page}
               onClick={(meta.has_previous_page ? this.onPageClick : noop)}>Previous</a></li>
             {jumpToFirst}
-            {pages.map(d => (
+            {pages.map((d) => (
               <li key={d} className={d === currentPage ? 'pagination__link--active' : ''}>
                 <a href='#' data-value={d} onClick={this.onPageClick}>{d}</a>
               </li>
             ))}
             {jumpToLast}
             <li><a
-              className={'next' + (meta.has_next_page ? '' : disabled)}
+              className={`next${meta.has_next_page ? '' : disabled}`}
               data-value={meta.next_page}
               onClick={(meta.has_next_page ? this.onPageClick : noop)}>Next</a></li>
           </ol>
         </div>
       );
-    } else return <div></div>;
+    }
+    return <div></div>;
   }
 }
 
