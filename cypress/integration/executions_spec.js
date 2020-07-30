@@ -68,13 +68,13 @@ describe('Dashboard Executions Page', () => {
       cy.get('@list').should('have.length', 6);
     });
 
-    it('should search executions', () => {
+    it('should search executions by asyncOperationId', () => {
       cy.visit('/executions');
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 6);
-      cy.get('.search__wrapper input').click().type('b313');
-      cy.url().should('include', 'search=b313');
-      cy.get('@list').should('have.length', 6);
+      cy.get('.search__wrapper input').click().type('0eb8e809-8790-5409-1239-bcd9e8d28b8e');
+      cy.url().should('include', 'asyncOperationId=0eb8e809-8790-5409-1239-bcd9e8d28b8e');
+      cy.get('@list').should('have.length', 1);
     });
 
     it('should show a single execution', () => {

@@ -22,7 +22,7 @@ const Executions = ({
 }) => {
   const { pathname } = location;
   const showDatePicker = pathname === '/executions';
-  const filteredQueryParams = filterQueryParams(queryParams);
+  const { asyncOperationId, ...filteredQueryParams } = filterQueryParams(queryParams);
 
   function query () {
     dispatch(getCount({

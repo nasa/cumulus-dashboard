@@ -44,8 +44,11 @@ class ExecutionOverview extends React.Component {
   }
 
   searchOperationId(list, infix) {
+    console.log(list, infix);
     return list.filter((item) => {
-      if (item.asyncOperationId && item.asyncOperationId.includes(infix)) { return item; }
+      if (item.asyncOperationId && item.asyncOperationId.includes(infix)) {
+        return item;
+      }
     });
   }
 
@@ -60,8 +63,9 @@ class ExecutionOverview extends React.Component {
     const { dropdowns } = collections;
     const { list } = executions;
     const { count, queriedAt } = list.meta;
-    if (list.infix && list.infix.value) {
-      list.data = this.searchOperationId(list.data, list.infix.value);
+    const filteredList = { ...list };
+    if (list.infix) {
+      filteredList.data = this.searchOperationId(list.data, list.infix);
     }
     return (
       <div className="page__component">
@@ -71,7 +75,7 @@ class ExecutionOverview extends React.Component {
               Execution Overview
             </h1>
             {lastUpdated(queriedAt)}
-            <Overview type='executions' inflight={false} />
+            <Overview type="executions" inflight={false} />
           </div>
         </section>
         <section className="page__section">
@@ -84,13 +88,13 @@ class ExecutionOverview extends React.Component {
             </h2>
           </div>
           <List
-            list={list}
+            list={filteredList}
             dispatch={dispatch}
             action={listExecutions}
             tableColumns={tableColumns}
             query={{ ...queryParams }}
-            rowId='name'
-            sortId='createdAt'
+            rowId="name"
+            sortId="createdAt"
           >
             <ListFilters>
               <Dropdown
@@ -131,6 +135,7 @@ class ExecutionOverview extends React.Component {
                 dispatch={dispatch}
                 action={searchExecutions}
                 clear={clearExecutionsSearch}
+                paramKey="asyncOperationId"
                 label={'Async Operation ID'}
                 placeholder="Search"
               />
@@ -161,8 +166,10 @@ ExecutionOverview.propTypes = {
   workflowOptions: PropTypes.object,
 };
 
-export default withRouter(connect(state => ({
-  collections: state.collections,
-  executions: state.executions,
-  workflowOptions: workflowOptions(state),
-}))(ExecutionOverview));
+export default withRouter(
+  connect((state) => ({
+    collections: state.collections,
+    executions: state.executions,
+    workflowOptions: workflowOptions(state),
+  }))(ExecutionOverview)
+);

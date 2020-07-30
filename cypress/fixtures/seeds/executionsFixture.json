@@ -10,6 +10,7 @@
   "results": [
     {
       "arn": "arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
+      "asyncOperationId": "0eb8e809-8790-5409-1239-bcd9e8d28b8e",
       "duration": 26.635,
       "createdAt": 1542129071756,
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
