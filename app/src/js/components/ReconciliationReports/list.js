@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -16,7 +15,7 @@ import { lastUpdated } from '../../utils/format';
 import { reconciliationReportStatus as statusOptions } from '../../utils/status';
 import { reconciliationReportTypes as reportTypeOptions } from '../../utils/type';
 import { tableColumns, bulkActions } from '../../utils/table-config/reconciliation-reports';
-import LoadingEllipsis from '../../components/LoadingEllipsis/loading-ellipsis';
+import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import List from '../Table/Table';
@@ -149,6 +148,6 @@ ReconciliationReportList.propTypes = {
   reconciliationReports: PropTypes.object,
 };
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   reconciliationReports: state.reconciliationReports
 }))(ReconciliationReportList));

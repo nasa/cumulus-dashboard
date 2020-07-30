@@ -1,13 +1,14 @@
-'use strict';
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
 import classNames from 'classnames';
 import cloneDeep from 'lodash/cloneDeep';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import TableCards from './table-cards';
 import { Collapse, Dropdown as DropdownBootstrap } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import TableCards from './table-cards';
 import {
   getReconciliationReport,
   searchReconciliationReport,
@@ -29,20 +30,16 @@ import Dropdown from '../DropDown/dropdown';
  * @param {Object} dataList - list of reconcilation report objects.
  */
 const reportState = (dataList) => {
-  const anyBad = dataList.some((item) =>
-    item.tables.some((table) => table.data.length)
-  );
+  const anyBad = dataList.some((item) => item.tables.some((table) => table.data.length));
   return anyBad ? 'CONFLICT' : 'PASSED';
 };
 
 const bucketsForFilter = (allBuckets) => {
   const uniqueBuckets = [...new Set(allBuckets)];
-  return uniqueBuckets.map((bucket) => {
-    return {
-      id: bucket,
-      label: bucket
-    };
-  });
+  return uniqueBuckets.map((bucket) => ({
+    id: bucket,
+    label: bucket
+  }));
 };
 
 const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
@@ -142,9 +139,7 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
 
   function convertToCSV(data, columns) {
     const csvHeader = columns
-      .map((column) => {
-        return column.accessor;
-      })
+      .map((column) => column.accessor)
       .join(',');
 
     const csvData = data
@@ -222,17 +217,15 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
                 >
                   JSON - Full Report
                 </DropdownBootstrap.Item>
-                {activeCardTables.map((table, index) => {
-                  return (
-                    <DropdownBootstrap.Item
-                      key={`${activeId}-${index}`}
-                      as="button"
-                      onClick={(e) => handleDownloadCsvClick(e, table)}
-                    >
-                      CSV - {table.name}
-                    </DropdownBootstrap.Item>
-                  );
-                })}
+                {activeCardTables.map((table, index) => (
+                  <DropdownBootstrap.Item
+                    key={`${activeId}-${index}`}
+                    as="button"
+                    onClick={(e) => handleDownloadCsvClick(e, table)}
+                  >
+                    CSV - {table.name}
+                  </DropdownBootstrap.Item>
+                ))}
               </DropdownBootstrap.Menu>
             </DropdownBootstrap>
           </div>

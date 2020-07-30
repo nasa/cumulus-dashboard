@@ -1,14 +1,10 @@
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Card } from 'react-bootstrap';
 import { displayCase } from '../../utils/format';
 
-const conflictedCount = (tables) => {
-  return tables.reduce((acc, cv) => acc + cv.data.length, 0);
-};
+const conflictedCount = (tables) => tables.reduce((acc, cv) => acc + cv.data.length, 0);
 
 const TableCards = ({ activeCard, config, onClick, titleCaption }) => {
   function handleCardClick(e, id) {
