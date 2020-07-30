@@ -70,7 +70,8 @@
     ],
     "timeout": "3m",
     "files": [
-      "test/**/*",
+      "**/test/**/*",
+      "**/validation-tests/**/*",
       "!node_modules/",
       "!test/fixtures/**/*"
     ]
