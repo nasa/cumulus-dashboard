@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import _config from '../js/config';
+import _config from './config';
 import { displayCase } from './utils/format';
 import Header from './components/Header/header';
 import Footer from './components/Footer/footer';
@@ -24,7 +24,12 @@ class Main extends Component {
             <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
           </div>
         ) : null}
-        <Header dispatch={this.props.dispatch} api={this.props.api} location={this.props.location} cumulusInstance={this.props.cumulusInstance}/>
+        <Header
+          dispatch={this.props.dispatch}
+          api={this.props.api}
+          location={this.props.location}
+          cumulusInstance={this.props.cumulusInstance}
+        />
         <main className='main' role='main'>
           {this.props.children}
         </main>
@@ -46,4 +51,4 @@ Main.propTypes = {
   cumulusInstance: PropTypes.object
 };
 
-export default withRouter(connect(state => state)(Main));
+export default withRouter(connect((state) => state)(Main));
