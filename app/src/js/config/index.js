@@ -1,4 +1,3 @@
-'use strict';
 const moment = require('moment');
 
 const deploymentConfig = require('./config');
@@ -35,7 +34,7 @@ const baseConfig = {
   updateDelay: 1000
 };
 
-const config = Object.assign({}, baseConfig, deploymentConfig);
+const config = { ...baseConfig, ...deploymentConfig };
 config.apiRoot = config.apiRoot.replace(/\/?$/, '/');
 
 module.exports = config;
