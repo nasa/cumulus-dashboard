@@ -1,4 +1,4 @@
-'use strict';
+/* eslint-disable import/no-cycle */
 import get from 'lodash/get';
 import queryString from 'query-string';
 import { history } from '../store/configureStore';

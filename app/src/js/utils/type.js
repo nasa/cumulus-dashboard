@@ -1,5 +1,3 @@
-'use strict';
-
 export const reconciliationReportTypes = [
   { id: 'Inventory', label: 'Inventory' },
 ];

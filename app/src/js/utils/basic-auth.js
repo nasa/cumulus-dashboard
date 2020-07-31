@@ -1,5 +1,3 @@
-'use strict';
-
 import { esUser, esPassword } from '../config';
 
 // Build basic auth string
@@ -14,6 +12,4 @@ export const buildAuthHeader = (user, password) => {
   };
 };
 
-export const authHeader = () => {
-  return buildAuthHeader(esUser, esPassword);
-};
+export const authHeader = () => buildAuthHeader(esUser, esPassword);

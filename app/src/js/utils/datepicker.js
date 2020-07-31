@@ -1,5 +1,3 @@
-'use strict';
-
 export const urlDateFormat = 'YYYYMMDDHHmmSS';
 const secondsPerDay = 60.0 * 60.0 * 24.0;
 export const msPerDay = secondsPerDay * 1000.0;
@@ -60,12 +58,17 @@ export const dropdownValue = (values) => {
  * @param {Object} datepicker - redux datepicker state.
  * @return {Object} object suitable to passing to a request querystring that will contain
  */
-export const fetchCurrentTimeFilters = (datepicker) => {
-  const filters = {};
-  matchObjects.map((o) => {
-    if (datepicker[o.dateProp] !== null) {
-      filters[`timestamp${o.filterProp}`] = datepicker[o.dateProp];
-    }
-  });
+export const fetchCurrentTimeFilters = (datepicker) => matchObjects.reduce((filters, dateObject) => {
+  if (datepicker[dateObject.dateProp] !== null) {
+    filters[`timestamp${dateObject.filterProp}`] = datepicker[dateObject.dateProp];
+  }
   return filters;
-};
+}, {});
+
+// const filters = {};
+// matchObjects.map((o) => {
+//   if (datepicker[o.dateProp] !== null) {
+//     filters[`timestamp${o.filterProp}`] = datepicker[o.dateProp];
+//   }
+// });
+// return filters;
