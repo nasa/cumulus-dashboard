@@ -14,7 +14,7 @@ import omitBy from 'lodash.omitby';
 import ListActions from '../ListActions/ListActions';
 
 function buildSortKey(sortProps) {
-  return sortProps.map((item) =>
+  return sortProps.filter((item) => item.id).map((item) =>
     (item.desc === true) ? `-${item.id}` : `+${item.id}`);
 }
 
@@ -31,7 +31,7 @@ class List extends React.Component {
     const initialPage = 1;
     const initialSortId = props.sortId;
     const initialOrder = 'desc';
-    const sortProps = [{ id: initialSortId, desc: true }];
+    const sortProps = initialSortId ? [{ id: initialSortId, desc: true }] : [];
 
     this.state = {
       page: initialPage,
