@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { get as getProperty } from 'object-path';
 import _config from '../config';
 import { filterQueryParams } from '../utils/url-helper';
