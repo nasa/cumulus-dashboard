@@ -1,10 +1,9 @@
-'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { initialValueFromLocation } from '../../utils/url-helper';
 import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
+import { initialValueFromLocation } from '../../utils/url-helper';
 
 class Search extends React.Component {
   constructor (props) {
@@ -51,7 +50,7 @@ class Search extends React.Component {
 
   delayedQuery (value) {
     const { dispatch, action, clear, paramKey, setQueryParams } = this.props;
-    const timeoutId = setTimeout(function () {
+    const timeoutId = setTimeout(() => {
       if (value && value.length) {
         setQueryParams({ [paramKey]: value });
         dispatch(action(value));
@@ -96,4 +95,4 @@ Search.propTypes = {
   placeholder: PropTypes.string
 };
 
-export default withRouter(withQueryParams()(connect(state => state)(Search)));
+export default withRouter(withQueryParams()(connect((state) => state)(Search)));
