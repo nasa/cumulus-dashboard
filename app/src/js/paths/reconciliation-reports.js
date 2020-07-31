@@ -1,4 +1,3 @@
-'use strict';
 const routes = [
   ['Overview', null]
 ];
@@ -15,11 +14,13 @@ const handler = {
   routes: (currentRoute, params) => {
     if (currentRoute.includes('reconciliation-reports/report')) {
       return singleRoutes;
-    } else if (!currentRoute.includes('reconciliation-reports')) {
-      return empty;
-    } else {
-      return routes;
     }
+
+    if (!currentRoute.includes('reconciliation-reports')) {
+      return empty;
+    }
+
+    return routes;
   }
 };
 
