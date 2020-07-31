@@ -34,7 +34,8 @@ const baseConfig = {
   updateDelay: 1000
 };
 
-const config = { ...baseConfig, ...deploymentConfig };
+// eslint-disable-next-line prefer-object-spread
+const config = Object.assign({}, baseConfig, deploymentConfig);
 config.apiRoot = config.apiRoot.replace(/\/?$/, '/');
 
 module.exports = config;
