@@ -1,4 +1,3 @@
-'use strict';
 import { tally } from '../format';
 
 export const tableColumns = [
@@ -8,12 +7,14 @@ export const tableColumns = [
   },
   {
     Header: 'Messages Available',
-    accessor: row => tally(row.messagesAvailable),
+    accessor: (row) => tally(row.messagesAvailable),
     id: 'messagesAvailable'
   },
   {
     Header: 'Messages in Flight',
-    accessor: row => tally(row.messagesInFlight),
+    accessor: (row) => tally(row.messagesInFlight),
     id: 'messagesInFlight'
   }
 ];
+
+export default tableColumns;
