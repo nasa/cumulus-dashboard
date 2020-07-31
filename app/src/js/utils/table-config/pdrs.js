@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { get } from 'object-path';
-import { seconds, fromNow, bool, nullValue } from '../format';
+import { seconds, fromNow, bool, nullValue, collectionLink, displayCase, granuleLink } from '../format';
 import { deletePdr } from '../../actions';
 import { strings } from '../../components/locale';
 import { getPersistentQueryParams } from '../url-helper';
@@ -73,6 +73,35 @@ export const errorTableColumns = [
   {
     Header: 'PAN Message',
     accessor: 'PANmessage'
+  }
+];
+
+export const granuleTableColumns = [
+  {
+    Header: 'Status',
+    accessor: 'status',
+    Cell: ({ cell: { value } }) => displayCase(value)
+  },
+  {
+    Header: 'Name',
+    accessor: 'granuleId',
+    Cell: ({ cell: { value } }) => granuleLink(value),
+    width: 200
+  },
+  {
+    Header: strings.collection_id,
+    accessor: 'collectionId',
+    Cell: ({ cell: { value } }) => collectionLink(value)
+  },
+  {
+    Header: 'Duration',
+    accessor: row => seconds(row.duration),
+    id: 'duration'
+  },
+  {
+    Header: 'Updated',
+    accessor: row => fromNow(row.timestamp),
+    id: 'timestamp'
   }
 ];
 

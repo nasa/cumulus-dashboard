@@ -27,7 +27,7 @@ import {
   bool,
   deleteText,
 } from '../../utils/format';
-import { tableColumns, bulkActions } from '../../utils/table-config/pdrs';
+import { granuleTableColumns, bulkActions } from '../../utils/table-config/pdrs';
 import { renderProgress } from '../../utils/table-config/pdr-progress';
 import List from '../Table/Table';
 import LogViewer from '../Logs/viewer';
@@ -134,7 +134,7 @@ class PDR extends React.Component {
 
   generateQuery() {
     const { queryParams } = this.props;
-    const pdrName = get(this.props, ['params', 'pdrName']);
+    const pdrName = get(this.props, ['match', 'params', 'pdrName']);
     return {
       ...queryParams,
       pdrName,
@@ -170,11 +170,12 @@ class PDR extends React.Component {
     const deleteStatus = get(pdrs.deleted, [pdrName, 'status']);
     const error = record.error;
 
-    const granulesCount = get(record, 'data.granulesStatus', []);
+    const granulesCount = get(record, 'data.stats', []);
     const granuleStatus = Object.keys(granulesCount).map((key) => ({
       count: granulesCount[key],
-      key,
+      key: (key === 'processing') ? 'running' : key
     }));
+
     return (
       <div className="page__component">
         <Helmet>
@@ -224,7 +225,7 @@ class PDR extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listGranules}
-            tableColumns={tableColumns}
+            tableColumns={granuleTableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId="granuleId"
@@ -235,7 +236,7 @@ class PDR extends React.Component {
                 options={get(dropdowns, ['collectionName', 'options']) || []}
                 action={filterGranules}
                 clear={clearGranulesFilter}
-                paramKey={'collectionName'}
+                paramKey={'collectionId'}
                 label={strings.collection}
               />
               <Dropdown
