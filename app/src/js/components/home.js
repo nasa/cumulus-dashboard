@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -101,7 +100,7 @@ class Home extends React.Component {
   }
 
   renderButtonListSection (items, header, listId) {
-    const data = items.filter(d => d[0] !== nullValue);
+    const data = items.filter((d) => d[0] !== nullValue);
     if (!data.length) return null;
     return (
       <section className='page__section'>
@@ -114,7 +113,7 @@ class Home extends React.Component {
           </div>
           <div className="overview-num__wrapper overview-num__wrapper-home">
             <ul id={listId}>
-              {data.map(d => {
+              {data.map((d) => {
                 const value = d[0];
                 return (
                   <li key={d[1]}>
@@ -168,7 +167,7 @@ class Home extends React.Component {
     ];
 
     const granuleCount = get(count.data, 'granules.meta.count');
-    const numGranules = !isNaN(granuleCount) ? `${tally(granuleCount)}` : 0;
+    const numGranules = !Number.isNaN(granuleCount) ? `${tally(granuleCount)}` : 0;
     const granuleStatus = get(count.data, 'granules.count', []);
 
     return (
