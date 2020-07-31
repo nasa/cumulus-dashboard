@@ -1,9 +1,9 @@
-'use strict';
-
+/* eslint-disable import/no-cycle */
 import { createReducer } from '@reduxjs/toolkit';
+import { set } from 'object-path';
+import noop from 'lodash/noop';
 import { deconstructCollectionId, getCollectionId } from '../utils/format';
 import assignDate from './utils/assign-date';
-import { set } from 'object-path';
 import {
   createClearItemReducer,
   createErrorReducer,
@@ -38,7 +38,6 @@ import {
   OPTIONS_COLLECTIONNAME_INFLIGHT,
   OPTIONS_COLLECTIONNAME_ERROR,
 } from '../actions/types';
-import noop from 'lodash/noop';
 
 export const initialState = {
   list: {

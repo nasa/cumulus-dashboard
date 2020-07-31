@@ -1,7 +1,6 @@
-'use strict';
-
 import { get, set } from 'object-path';
 import { createReducer } from '@reduxjs/toolkit';
+import noop from 'lodash/noop';
 import assignDate from './utils/assign-date';
 import {
   createClearItemReducer,
@@ -37,7 +36,6 @@ import {
   OPTIONS_PROVIDERGROUP_INFLIGHT,
   OPTIONS_PROVIDERGROUP_ERROR,
 } from '../actions/types';
-import noop from 'lodash/noop';
 
 export const initialState = {
   list: {

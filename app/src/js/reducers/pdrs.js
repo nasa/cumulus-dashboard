@@ -1,5 +1,3 @@
-'use strict';
-
 import { createReducer } from '@reduxjs/toolkit';
 import assignDate from './utils/assign-date';
 import {
