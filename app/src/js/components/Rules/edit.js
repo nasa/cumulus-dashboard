@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -45,6 +44,6 @@ EditRule.propTypes = {
   rules: PropTypes.object
 };
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   rules: state.rules
 }))(EditRule));
