@@ -2,7 +2,7 @@ export const isObject = (object) => !Array.isArray(object) && typeof object === 
 
 export const isText = (string) => typeof string === 'string' && string.length;
 
-export const isNumber = (string) => !Number.isNaN(string);
+export const isNumber = (string) => !Number.isNaN(+string);
 
 export const isArray = (object) => Array.isArray(object) && object.every(Boolean);
 

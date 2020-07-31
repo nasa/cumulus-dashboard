@@ -25,7 +25,7 @@ const computeDateTimeDelta = (timeDeltaInDays) => {
   let endDateTime = null;
   let startDateTime = null;
 
-  if (!Number.isNaN(timeDeltaInDays)) {
+  if (!Number.isNaN(+timeDeltaInDays)) {
     endDateTime = Date.now();
     startDateTime = endDateTime - timeDeltaInDays * msPerDay;
   }

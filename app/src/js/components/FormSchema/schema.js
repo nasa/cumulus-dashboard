@@ -160,8 +160,7 @@ export const createFormConfig = (
 
         if (!required) {
           validate = false;
-        // eslint-disable-next-line no-restricted-globals
-        } else if (meta.minItems && isNaN(meta.minItems)) {
+        } else if (meta.minItems && Number.isNaN(+meta.minItems)) {
           validate = arrayWithLength(+meta.minItems);
         } else {
           validate = isArray;

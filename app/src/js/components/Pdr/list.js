@@ -74,7 +74,7 @@ const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
           <h1 className="heading--large heading--shared-content with-description">
             {displayCaseView} PDRs
             <span className="num-title">
-              {!Number.isNaN(count) ? `${tally(count)}` : 0}
+              {!Number.isNaN(+count) ? `${tally(count)}` : 0}
             </span>
           </h1>
           {lastUpdated(queriedAt)}

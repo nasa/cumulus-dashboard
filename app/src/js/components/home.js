@@ -167,7 +167,7 @@ class Home extends React.Component {
     ];
 
     const granuleCount = get(count.data, 'granules.meta.count');
-    const numGranules = !Number.isNaN(granuleCount) ? `${tally(granuleCount)}` : 0;
+    const numGranules = !Number.isNaN(+granuleCount) ? `${tally(granuleCount)}` : 0;
     const granuleStatus = get(count.data, 'granules.count', []);
 
     return (

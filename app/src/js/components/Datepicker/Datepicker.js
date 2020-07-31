@@ -109,7 +109,7 @@ class Datepicker extends React.PureComponent {
     let utcValue = null;
     if (newValue !== null) {
       utcValue = moment.utc(moment(newValue).format(dateTimeFormat)).valueOf();
-      if (Number.isNaN(utcValue)) return;
+      if (Number.isNaN(+utcValue)) return;
     }
     const updatedProps = {
       startDateTime: this.props.startDateTime,

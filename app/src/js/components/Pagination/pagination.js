@@ -27,7 +27,7 @@ class Pagination extends React.Component {
 
   render () {
     const { page, limit, count } = this.props;
-    if (!Number.isNaN(count) && !Number.isNaN(limit) && !Number.isNaN(page)) {
+    if (!Number.isNaN(+count) && !Number.isNaN(+limit) && !Number.isNaN(+page)) {
       const currentPage = +page;
       const paginator = new Paginator(limit, 7);
       const meta = paginator.build(count, currentPage);
