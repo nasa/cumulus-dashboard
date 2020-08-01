@@ -63,9 +63,54 @@ describe('Dashboard PDRs Page', () => {
 
     it('Should update URL when dropdown filters are changed', () => {
       cy.visit('/pdrs');
+      cy.get('.filter-status .rbt-input-main').as('status-input');
+      cy.get('@status-input').click().type('comp').type('{enter}');
+      cy.url().should('include', '?status=completed');
       cy.get('.filter__item').eq(1).as('page-size-input');
       cy.get('@page-size-input').should('be.visible').click().type('10{enter}');
       cy.url().should('include', 'limit=10');
+
+      cy.get('.overview-num__wrapper ul li')
+        .first().contains('li', 'Completed').contains('li', 4)
+        .next().contains('li', 'Failed').contains('li', 0)
+        .next().contains('li', 'Running').contains('li', 0);
+
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('@list').should('have.length', 4);
+    });
+
+    it('should display PDR details', () => {
+      const pdrName = 'MOD09GQ_1granule_v3.PDR';
+      cy.visit(`/pdrs/pdr/${pdrName}`);
+      cy.contains('.heading--large', pdrName);
+      cy.contains('.heading--medium', 'PDR Overview');
+
+      cy.getFakeApiFixture('pdrs').its('results').then((pdrs) => {
+        const pdr = pdrs.filter((item) => item.pdrName === pdrName)[0];
+        cy.get('.metadata__details')
+          .within(() => {
+            cy.contains('Provider').next()
+              .contains('a', pdr.provider)
+              .should('have.attr', 'href', `/providers/provider/${pdr.provider}`);
+
+            cy.contains('Collection').next()
+              .contains('a', pdr.collectionId.split('___').join(' / '))
+              .should('have.attr', 'href', `/collections/collection/${pdr.collectionId.split('___').join('/')}`);
+
+            cy.contains('Execution').next()
+              .contains('a', 'link')
+              .should('have.attr', 'href', `/executions/execution/${pdr.execution.split('/').pop()}`);
+
+            cy.contains('Status').next().contains(pdr.status, { matchCase: false });
+            cy.contains('Duration').next().should('have.text', `${Number(pdr.duration.toFixed(2))}s`);
+            cy.contains('PAN Sent').next().should('have.text', pdr.PANSent ? 'Yes' : 'No');
+            cy.contains('PAN Message').next().should('have.text', pdr.PANmessage);
+          });
+
+        cy.contains('.heading--medium', 'Granules')
+          .contains('.num-title', pdr.stats.total);
+      });
+      // granules table TODO
     });
   });
 });

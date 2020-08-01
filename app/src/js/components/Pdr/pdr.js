@@ -50,7 +50,7 @@ const metaAccessors = [
     accessor: (d) => (
       <Link
         to={(location) => ({
-          pathname: `providers/provider/${d}`,
+          pathname: `/providers/provider/${d}`,
           search: getPersistentQueryParams(location),
         })}
       >
