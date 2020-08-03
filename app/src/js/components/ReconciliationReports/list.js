@@ -106,6 +106,8 @@ class ReconciliationReportList extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId='name'
             sortId='createdAt'
+            filterAction={filterReconciliationReports}
+            filterClear={clearReconciliationReportsFilter}
           >
             <ListFilters>
               <Search
