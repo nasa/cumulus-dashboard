@@ -27,7 +27,6 @@ import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import pageSizeOptions from '../../utils/page-size';
 import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const CollectionGranules = ({
@@ -173,6 +172,8 @@ const CollectionGranules = ({
           rowId="granuleId"
           sortId="timestamp"
           tableColumns={tableColumns}
+          filterAction={filterGranules}
+          filterClear={clearGranulesFilter}
         >
           <ListFilters>
             <Search
@@ -194,16 +195,6 @@ const CollectionGranules = ({
                 }}
               />
             )}
-            <Dropdown
-              options={pageSizeOptions}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              label="Results Per Page"
-              paramKey="limit"
-              inputProps={{
-                placeholder: 'Results Per Page',
-              }}
-            />
           </ListFilters>
         </List>
       </section>

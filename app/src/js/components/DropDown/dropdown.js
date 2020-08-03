@@ -61,34 +61,43 @@ function renderMenu(results, menuProps) {
 const Dropdown = ({
   action,
   clear,
+  clearButton = true,
   dispatch,
   getOptions,
   inputProps,
   label,
+  onChange,
   options,
   paramKey,
   queryParams,
+  selectedValues = [],
   setQueryParams,
 }) => {
-  const [selected, setSelected] = useState([]);
-  const allowNew = paramKey === 'limit';
   const typeaheadRef = createRef();
+  const [selected, setSelected] = useState(selectedValues);
+  const allowNew = paramKey === 'limit' || paramKey === 'page';
 
   function getOptionFromParam(options, paramValue) {
     return options.filter((item) => item.id === paramValue);
   }
 
-  function updateSelection(selectedValues, value) {
+  function updateSelection(selections, value) {
     dispatch(action({ key: paramKey, value }));
-    setSelected(selectedValues);
+    setSelected(selections);
     setQueryParams({ [paramKey]: value });
   }
 
-  function handleChange(selectedValues) {
-    const item = selectedValues[0];
+  function handleChange(selections) {
+    const item = selections[0];
     const { customOption, id, label } = item || {};
     const value = customOption ? label : id;
-    updateSelection(selectedValues, value);
+    const updateSelectionCallback = () => updateSelection(selections, value);
+    if (typeof onChange === 'function') {
+      onChange(selections, updateSelectionCallback);
+    } else {
+      updateSelectionCallback();
+    }
+    updateSelection(selections, value);
   }
 
   function handleKeyDown(e) {
@@ -101,7 +110,12 @@ const Dropdown = ({
           label: value,
         },
       ];
-      updateSelection(selectedValue, value);
+      const updateSelectionCallback = () => updateSelection(selectedValue, value);
+      if (typeof onChange === 'function') {
+        onChange(selectedValue, updateSelectionCallback);
+      } else {
+        updateSelectionCallback();
+      }
       typeaheadRef.current.hideMenu();
     }
   }
@@ -123,7 +137,7 @@ const Dropdown = ({
     }
 
     return function cleanup() {
-      dispatch(clear(paramKey));
+      if (typeof clear === 'function') dispatch(clear(paramKey));
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [action, allowNew, clear, dispatch, JSON.stringify(options), paramKey, JSON.stringify(queryParams)]);
@@ -132,12 +146,22 @@ const Dropdown = ({
     if (getOptions) dispatch(getOptions());
   }, [dispatch, getOptions]);
 
+  useEffect(() => {
+    if (selectedValues.length !== 0) {
+      const { id: value } = selectedValues[0];
+      updateSelection(selectedValues, value || selectedValues[0]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(selectedValues)]);
+
+  console.log(selectedValues);
+
   return (
     <div className={`filter__item form-group__element filter-${paramKey}`}>
       {label && <label>{label}</label>}
       <Typeahead
         allowNew={allowNew}
-        clearButton={true}
+        clearButton={clearButton}
         id={paramKey}
         inputProps={inputProps}
         onChange={handleChange}
@@ -146,7 +170,7 @@ const Dropdown = ({
         ref={typeaheadRef}
         renderInput={renderInput}
         renderMenu={renderMenu}
-        selected={selected || []}
+        selected={selected}
       />
     </div>
   );
@@ -155,13 +179,16 @@ const Dropdown = ({
 Dropdown.propTypes = {
   action: PropTypes.func,
   clear: PropTypes.func,
+  clearButton: PropTypes.bool,
   dispatch: PropTypes.func,
   getOptions: PropTypes.func,
   inputProps: PropTypes.object,
   label: PropTypes.any,
+  onChange: PropTypes.func,
   options: PropTypes.array,
   paramKey: PropTypes.string,
   queryParams: PropTypes.object,
+  selectedValues: PropTypes.array,
   setQueryParams: PropTypes.func,
 };
 

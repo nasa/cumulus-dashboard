@@ -21,7 +21,6 @@ import {
   getCollectionId,
   lastUpdated,
 } from '../../utils/format';
-import pageSizeOptions from '../../utils/page-size';
 import statusOptions from '../../utils/status';
 import {
   getPersistentQueryParams,
@@ -288,6 +287,8 @@ class CollectionOverview extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId="granuleId"
             sortId="timestamp"
+            filterAction={filterGranules}
+            filterClear={clearGranulesFilter}
           >
             <ListFilters>
               <Search
@@ -305,16 +306,6 @@ class CollectionOverview extends React.Component {
                 label="Status"
                 inputProps={{
                   placeholder: 'All',
-                }}
-              />
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey="limit"
-                label={'Results Per Page'}
-                inputProps={{
-                  placeholder: 'Results Per Page',
                 }}
               />
             </ListFilters>

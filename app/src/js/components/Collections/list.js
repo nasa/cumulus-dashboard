@@ -30,8 +30,6 @@ import List from '../Table/Table';
 import { strings } from '../locale';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
-import Dropdown from '../DropDown/dropdown';
-import pageSizeOptions from '../../utils/page-size';
 
 const breadcrumbConfig = [
   {
@@ -125,6 +123,8 @@ class CollectionList extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId={getCollectionId}
             sortId="duration"
+            filterAction={filterCollections}
+            filterClear={clearCollectionsFilter}
           >
             <ListFilters>
               <Search
@@ -134,17 +134,6 @@ class CollectionList extends React.Component {
                 clear={clearCollectionsSearch}
                 label="Search"
                 placeholder="Collection Name"
-              />
-
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterCollections}
-                clear={clearCollectionsFilter}
-                paramKey={'limit'}
-                label={'Results Per Page'}
-                inputProps={{
-                  placeholder: 'Results Per Page',
-                }}
               />
             </ListFilters>
           </List>

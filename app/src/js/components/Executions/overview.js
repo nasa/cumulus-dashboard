@@ -17,7 +17,6 @@ import {
 import { tally, lastUpdated } from '../../utils/format';
 import { workflowOptions } from '../../selectors';
 import statusOptions from '../../utils/status';
-import pageSizeOptions from '../../utils/page-size';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
@@ -91,6 +90,8 @@ class ExecutionOverview extends React.Component {
             query={{ ...queryParams }}
             rowId='name'
             sortId='createdAt'
+            filterAction={filterExecutions}
+            filterClear={clearExecutionsFilter}
           >
             <ListFilters>
               <Dropdown
@@ -134,17 +135,6 @@ class ExecutionOverview extends React.Component {
                 paramKey={'asyncOperationId'}
                 label={'Async Operation ID'}
                 placeholder="Search"
-              />
-
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterExecutions}
-                clear={clearExecutionsFilter}
-                paramKey={'limit'}
-                label={'Results Per Page'}
-                inputProps={{
-                  placeholder: 'Results Per Page',
-                }}
               />
             </ListFilters>
           </List>

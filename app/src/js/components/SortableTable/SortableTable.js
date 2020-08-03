@@ -7,8 +7,9 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
-import SimplePagination from '../Pagination/simple-pagniation';
+import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
+// import TableHeader from '../TableHeader/table-header';
 
 /**
  * IndeterminateCheckbox
@@ -156,6 +157,17 @@ const SortableTable = ({
       {includeFilters &&
         <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
       }
+      {/* <TableHeader
+        canPreviousPage={canPreviousPage}
+        canNextPage={canNextPage}
+        pageCount={pageCount}
+        gotoPage={gotoPage}
+        nextPage={nextPage}
+        previousPage={previousPage}
+        pageOptions={pageOptions}
+        pageIndex={pageIndex}
+        dataCount={data.length}
+      /> */}
       <form>
         <div className='table' {...getTableProps()}>
           <div className='thead'>

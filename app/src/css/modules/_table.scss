@@ -49,6 +49,20 @@
   }
 }
 
+.table__header {
+  display: flex;
+  align-items: center;
+  padding: 0 1em;
+
+  .filter__item {
+    margin: 0 .3em;
+  }
+
+  input {
+    width: 2em;
+  }
+}
+
 .table__filters {
 
   .button__filter {
