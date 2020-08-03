@@ -32,7 +32,7 @@ const TableHeader = ({
 }) => {
   const selectedValues = limit
     ? [{
-      id: limit.toString(),
+      id: limit,
       label: limit.toString(),
     }]
     : [];

@@ -93,7 +93,11 @@ const Pagination = ({
               },
             ]}
             paramKey="page"
-            selectedValues={[`${currentPage}`]}
+            selectedValues={[
+              {
+                id: currentPage,
+                label: `${currentPage}`
+              }]}
           />
         )}
         {!displayAsInput && (

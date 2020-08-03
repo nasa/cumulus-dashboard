@@ -40,15 +40,28 @@ renderInput.propTypes = {
 };
 
 function renderMenu(results, menuProps) {
+  const customOption = results.find((result) => result.customOption);
   return (
     <Menu {...menuProps} className="autocomplete__menu">
+      {customOption &&
+        <MenuItem
+          className="autocomplete__select"
+          key={0}
+          option={customOption}
+          position={0}
+        >
+          {customOption.label}
+        </MenuItem>
+      }
       {results.map((result, index) => {
+        if (result.customOption) return;
+        const position = customOption ? index + 1 : index;
         return (
           <MenuItem
             className="autocomplete__select"
-            key={index}
+            key={position}
             option={result}
-            position={index}
+            position={position}
           >
             {result.label}
           </MenuItem>
@@ -149,12 +162,10 @@ const Dropdown = ({
   useEffect(() => {
     if (selectedValues.length !== 0) {
       const { id: value } = selectedValues[0];
-      updateSelection(selectedValues, value || selectedValues[0]);
+      updateSelection(selectedValues, value);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(selectedValues)]);
-
-  console.log(selectedValues);
 
   return (
     <div className={`filter__item form-group__element filter-${paramKey}`}>

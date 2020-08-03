@@ -167,8 +167,6 @@ class List extends React.Component {
     } = this.state;
     const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
-    console.log(page);
-
     return (
       <>
         <ListActions
