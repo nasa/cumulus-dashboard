@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+- **CUMULUS-2121**
+  - Fix PDR list page with status filter
+  - Update individual PDR page to properly display granules
+
 ## [v1.10.0]
 
 ### BREAKING CHANGES
