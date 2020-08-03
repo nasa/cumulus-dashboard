@@ -150,21 +150,20 @@ jobs:
               -e APIROOT=${SIT_API_ROOT} \
               node:12.18.0 \
               npm run build
-      # TODO [MHS, 2020-08-07] Re-enable deployment to SIT after
-      # - run:
-      #     name: Deploy to Cumulus SIT
-      #     command: |
-      #       aws s3 sync $(pwd)/dist s3://${SIT_DASHBOARD_BUCKET}
+
+      - run:
+          name: Deploy to Cumulus SIT
+          command: |
+            aws s3 sync $(pwd)/dist s3://${SIT_DASHBOARD_BUCKET}
 
 workflows:
   version: 2
   build_test_deploy:
     jobs:
       - build
-      # TODO [MHS, 2020-08-07]  re-enable deployment to SIT
-      # - deploy:
-      #     requires:
-      #       - build
-      #     filters:
-      #       branches:
-      #         only: develop
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: develop
