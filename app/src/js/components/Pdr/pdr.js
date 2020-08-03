@@ -27,7 +27,7 @@ import {
   bool,
   deleteText,
 } from '../../utils/format';
-import { granuleTableColumns, bulkActions } from '../../utils/table-config/pdrs';
+import { granuleTableColumns, granuleBulkActions } from '../../utils/table-config/pdrs';
 import { renderProgress } from '../../utils/table-config/pdr-progress';
 import List from '../Table/Table';
 import LogViewer from '../Logs/viewer';
@@ -147,7 +147,7 @@ class PDR extends React.Component {
 
   generateBulkActions() {
     const { granules } = this.props;
-    return bulkActions(granules);
+    return granuleBulkActions(granules);
   }
 
   renderProgress(record) {

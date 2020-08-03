@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { get } from 'object-path';
 import { seconds, fromNow, bool, nullValue, collectionLink, displayCase, granuleLink } from '../format';
-import { deletePdr } from '../../actions';
+import { deleteGranule, deletePdr } from '../../actions';
 import { strings } from '../../components/locale';
 import { getPersistentQueryParams } from '../url-helper';
 
@@ -76,6 +76,16 @@ export const errorTableColumns = [
   }
 ];
 
+const confirmDelete = (d) => `Delete ${d} PDR(s)?`;
+export const bulkActions = function (pdrs) {
+  return [{
+    text: 'Delete',
+    action: deletePdr,
+    state: pdrs.deleted,
+    confirm: confirmDelete
+  }];
+};
+
 export const granuleTableColumns = [
   {
     Header: 'Status',
@@ -105,12 +115,12 @@ export const granuleTableColumns = [
   }
 ];
 
-const confirmDelete = (d) => `Delete ${d} PDR(s)?`;
-export const bulkActions = function (pdrs) {
+const confirmGranuleDelete = (d) => `Delete ${d} Granule(s)?`;
+export const granuleBulkActions = function (granules) {
   return [{
     text: 'Delete',
-    action: deletePdr,
-    state: pdrs.deleted,
-    confirm: confirmDelete
+    action: deleteGranule,
+    state: granules.deleted,
+    confirm: confirmGranuleDelete
   }];
 };

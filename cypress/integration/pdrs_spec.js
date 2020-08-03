@@ -79,7 +79,7 @@ describe('Dashboard PDRs Page', () => {
       cy.get('@list').should('have.length', 4);
     });
 
-    it('should display PDR details', () => {
+    it('should display PDR details in the individual PDR page', () => {
       const pdrName = 'MOD09GQ_1granule_v3.PDR';
       cy.visit(`/pdrs/pdr/${pdrName}`);
       cy.contains('.heading--large', pdrName);
@@ -109,8 +109,60 @@ describe('Dashboard PDRs Page', () => {
 
         cy.contains('.heading--medium', 'Granules')
           .contains('.num-title', pdr.stats.total);
+
+        cy.contains('.timeline--processing--running', 'Granules Running')
+          .contains('.num--medium', pdr.stats.processing);
+        cy.contains('.timeline--processing--completed', 'Granules Completed')
+          .contains('.num--medium', pdr.stats.completed);
+        cy.contains('.timeline--processing--failed', 'Granules Failed')
+          .contains('.num--medium', pdr.stats.failed);
       });
-      // granules table TODO
+    });
+
+    it.only('should display granules in the individual PDR page', () => {
+      const pdrName = 'MOD09GQ_1granule_v3.PDR';
+      cy.visit(`/pdrs/pdr/${pdrName}`);
+      cy.contains('.heading--large', pdrName);
+
+      cy.get('.filter-status .rbt-input-main').as('status-input');
+      cy.get('@status-input').click().type('fai').type('{enter}');
+      cy.url().should('include', '?status=failed');
+
+      cy.get('@status-input').click().clear().type('comp').type('{enter}');
+      cy.get('.search').as('search');
+      cy.get('@search').eq(0).should('be.visible').click().type('GQ');
+      cy.url().should('include', 'status=completed');
+      cy.url().should('include', 'search=GQ');
+
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('@list').should('have.length', 1);
+      cy.get('@list').eq(0).children().as('columns');
+
+      cy.getFakeApiFixture('granules').its('results')
+        .then((granules) => granules.filter((item) => item.pdrName === pdrName))
+        .each((granule) => {
+          cy.get(`[data-value="${granule.granuleId}"]`).children().as('columns');
+          cy.get('@columns').eq(1)
+            .contains(granule.status, { matchCase: false });
+          cy.get('@columns').eq(2)
+            .contains('a', granule.granuleId)
+            .should('have.attr', 'href')
+            .and('be.eq', `/granules/granule/${granule.granuleId}`);
+          cy.get('@columns').eq(3)
+            .contains('a', granule.collectionId.split('___').join(' / '))
+            .should('have.attr', 'href', `/collections/collection/${granule.collectionId.split('___').join('/')}`);
+          cy.get('@columns').eq(4)
+            .should('have.text', `${Number(granule.duration.toFixed(2))}s`);
+          cy.get('@columns').eq(5).invoke('text')
+            .should('match', /.+ago$/);
+
+          cy.get(`[data-value="${granule.granuleId}"] > .td >input[type="checkbox"]`).click();
+          cy.get('.list-actions').contains('Delete').click();
+          cy.get('.button--submit').click();
+        });
+
+      cy.url().should('include', `/pdrs/pdr/${pdrName}`);
+      cy.get('.heading--large').should('have.text', pdrName);
     });
   });
 });
