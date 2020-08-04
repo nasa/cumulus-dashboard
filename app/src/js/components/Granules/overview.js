@@ -1,10 +1,11 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
+import { get } from 'object-path';
+import isEqual from 'lodash/isEqual';
 import {
   searchGranules,
   clearGranulesSearch,
@@ -17,7 +18,6 @@ import {
   getOptionsCollectionName,
   getGranuleCSV
 } from '../../actions';
-import { get } from 'object-path';
 import { lastUpdated, tally } from '../../utils/format';
 import {
   tableColumns,
@@ -37,7 +37,6 @@ import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import pageSizeOptions from '../../utils/page-size';
 import { downloadFile } from '../../utils/download-file';
-import isEqual from 'lodash.isequal';
 
 const breadcrumbConfig = [
   {
@@ -179,7 +178,7 @@ class GranulesOverview extends React.Component {
             <ListFilters>
               <Dropdown
                 getOptions={getOptionsCollectionName}
-                options={get(dropdowns, ['collectionName', 'options']) || []}
+                options={get(dropdowns, ['collectionName', 'options'])}
                 action={filterGranules}
                 clear={clearGranulesFilter}
                 paramKey='collectionId'
@@ -235,7 +234,7 @@ GranulesOverview.propTypes = {
 
 export { GranulesOverview };
 
-export default withRouter(withQueryParams()(connect(state => ({
+export default withRouter(withQueryParams()(connect((state) => ({
   collections: state.collections,
   config: state.config,
   granuleCSV: state.granuleCSV,

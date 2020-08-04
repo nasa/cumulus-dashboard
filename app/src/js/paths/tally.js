@@ -1,4 +1,3 @@
-'use strict';
 import { get } from 'object-path';
 import { tally } from '../utils/format';
 function tallyFn (route, count) {

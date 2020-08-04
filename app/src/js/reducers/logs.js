@@ -1,5 +1,3 @@
-'use strict';
-
 import moment from 'moment';
 import uniqBy from 'lodash/fp';
 import { get } from 'object-path';

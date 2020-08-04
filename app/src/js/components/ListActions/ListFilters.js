@@ -4,13 +4,11 @@ import PropTypes from 'prop-types';
 const ListFilters = ({
   children,
   className = ''
-}) => {
-  return (
-    <div className={`filters ${className}`} >
-      {children}
-    </div>
-  );
-};
+}) => (
+  <div className={`filters ${className}`} >
+    {children}
+  </div>
+);
 
 ListFilters.propTypes = {
   children: PropTypes.node,

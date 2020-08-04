@@ -1,35 +1,15 @@
-'use strict';
+export const isObject = (object) => !Array.isArray(object) && typeof object === 'object';
 
-export const isObject = (object) =>
-  !Array.isArray(object) && typeof object === 'object';
+export const isText = (string) => typeof string === 'string' && string.length;
 
-export const isText = function (string) {
-  return typeof string === 'string' && string.length;
-};
+export const isNumber = (string) => !Number.isNaN(+string);
 
-export const isNumber = function (string) {
-  return !isNaN(string);
-};
+export const isArray = (object) => Array.isArray(object) && object.every(Boolean);
 
-export const isArray = function (object) {
-  return Array.isArray(object) && object.every(Boolean);
-};
+export const arrayWithLength = (length) => (object) => isArray(object) && object.length >= length;
 
-export const arrayWithLength = function (length) {
-  return function (object) {
-    return isArray(object) && object.length >= length;
-  };
-};
+export const granuleModel = (obj) => isText(obj.granuleId);
 
-export const granuleModel = function (obj) {
-  return isText(obj.granuleId);
-};
+export const collectionModel = (obj) => isText(obj.collectionName) && granuleModel(obj.granuleDefinition);
 
-export const collectionModel = function (obj) {
-  return isText(obj.collectionName) &&
-    granuleModel(obj.granuleDefinition);
-};
-
-export const isUndefined = function (test) {
-  return typeof test === 'undefined';
-};
+export const isUndefined = (test) => typeof test === 'undefined';

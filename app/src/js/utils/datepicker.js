@@ -1,5 +1,3 @@
-'use strict';
-
 export const urlDateFormat = 'YYYYMMDDHHmmSS';
 const secondsPerDay = 60.0 * 60.0 * 24.0;
 export const msPerDay = secondsPerDay * 1000.0;
@@ -62,7 +60,7 @@ export const dropdownValue = (values) => {
  */
 export const fetchCurrentTimeFilters = (datepicker) => {
   const filters = {};
-  matchObjects.map((o) => {
+  matchObjects.forEach((o) => {
     if (datepicker[o.dateProp] !== null) {
       filters[`timestamp${o.filterProp}`] = datepicker[o.dateProp];
     }

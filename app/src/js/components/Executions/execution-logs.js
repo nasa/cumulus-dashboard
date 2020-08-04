@@ -1,10 +1,9 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { getExecutionLogs } from '../../actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { getExecutionLogs } from '../../actions';
 
 import ErrorReport from '../Errors/report';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
@@ -79,6 +78,6 @@ ExecutionLogs.propTypes = {
 
 ExecutionLogs.displayName = 'Execution Logs';
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   executionLogs: state.executionLogs
 }))(ExecutionLogs));

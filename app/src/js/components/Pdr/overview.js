@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -121,7 +120,7 @@ class PdrOverview extends React.Component {
               />
             </ListFilters>
           </List>
-          <Link className="link--secondary link--learn-more" to={location => ({ pathname: '/pdrs/active', search: getPersistentQueryParams(location) })}>
+          <Link className="link--secondary link--learn-more" to={(location) => ({ pathname: '/pdrs/active', search: getPersistentQueryParams(location) })}>
             View Currently Active PDRs
           </Link>
         </section>

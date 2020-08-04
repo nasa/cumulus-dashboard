@@ -1,4 +1,3 @@
-'use strict';
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -111,8 +110,8 @@ const CollectionGranules = ({
     return bulkActions(granules, actionConfig);
   }
 
-  function selectWorkflow(selector, workflow) {
-    setWorkflow(workflow);
+  function selectWorkflow(selector, selectedWorkflow) {
+    setWorkflow(selectedWorkflow);
   }
 
   function applyWorkflow(granuleId) {

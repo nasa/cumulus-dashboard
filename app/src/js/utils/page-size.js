@@ -1,4 +1,3 @@
-'use strict';
 const pageSizeOptions = [
   {
     id: '10',

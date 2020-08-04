@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import api from './api';
@@ -53,8 +54,7 @@ export const reducers = {
   reconciliationReports,
 };
 
-export const createRootReducer = (history) =>
-  combineReducers({
-    router: connectRouter(history),
-    ...reducers,
-  });
+export const createRootReducer = (history) => combineReducers({
+  router: connectRouter(history),
+  ...reducers,
+});

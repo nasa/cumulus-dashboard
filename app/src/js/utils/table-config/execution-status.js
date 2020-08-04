@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import Collapse from 'react-collapsible';
 
@@ -28,3 +27,5 @@ export const tableColumns = [
     ),
   }
 ];
+
+export default tableColumns;

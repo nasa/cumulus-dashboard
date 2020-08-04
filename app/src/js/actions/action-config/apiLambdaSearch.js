@@ -1,5 +1,3 @@
-'use strict';
-
 export const apiLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
   "aggs": {
     "2": {
@@ -73,3 +71,5 @@ export const apiLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpoc
     }
   }
 }`;
+
+export default apiLambdaSearchTemplate;

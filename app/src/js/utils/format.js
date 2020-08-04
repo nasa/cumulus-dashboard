@@ -1,4 +1,5 @@
-'use strict';
+/* eslint-disable import/no-cycle */
+
 import React from 'react';
 import moment from 'moment';
 import numeral from 'numeral';
@@ -9,76 +10,82 @@ export const nullValue = '--';
 
 export const truthy = (value) => value || nullValue;
 
-export const fullDate = function (datestring) {
+export const fullDate = (datestring) => {
   if (!datestring) {
     return nullValue;
   }
   return moment(datestring).format('kk:mm:ss MM/DD/YY');
 };
 
-export const dateOnly = function (datestring) {
+export const dateOnly = (datestring) => {
   if (!datestring) {
     return nullValue;
   }
   return moment(datestring).format('MM/DD/YYYY');
 };
 
-export const parseJson = function (jsonString) {
+export const parseJson = (jsonString) => {
   const parsed = JSON.parse(jsonString);
   return JSON.stringify(parsed, null, 2);
 };
 
-export const bigTally = function (numberstring) {
+export const bigTally = (numberstring) => {
+  const number = +numberstring;
   if (
     (!numberstring && numberstring !== 0) ||
     numberstring === nullValue ||
-    isNaN(numberstring)
+    Number.isNaN(number)
   ) {
     return nullValue;
   }
-  numberstring = +numberstring;
-  if (numberstring >= 1000) {
-    return numeral(numberstring / 1000).format('0,0') + 'K';
-  } else {
-    return numeral(numberstring / 1000000).format('0,0') + 'M';
+
+  if (number >= 1000) {
+    return `${numeral(number / 1000).format('0,0')}K`;
   }
+  return `${numeral(number / 1000000).format('0,0')}M`;
 };
 
-export const tally = function (numberstring) {
+export const tally = (numberstring) => {
+  const number = +numberstring;
   if (
     (!numberstring && numberstring !== 0) ||
     numberstring === nullValue ||
-    isNaN(numberstring)
+    Number.isNaN(number)
   ) {
     return nullValue;
   }
-  numberstring = +numberstring;
-  if (numberstring < 1000) {
-    return numberstring;
-  } else if (numberstring < 100000) {
-    return numeral(numberstring).format('0,0');
-  } else {
-    return bigTally(numberstring);
+
+  if (number < 1000) {
+    return number;
   }
+
+  if (number < 100000) {
+    return numeral(number).format('0,0');
+  }
+
+  return bigTally(number);
 };
 
-export const seconds = function (numberstring) {
-  if (numberstring === null || isNaN(numberstring)) {
+export const seconds = (numberstring) => {
+  const number = +numberstring;
+  if (numberstring === null || Number.isNaN(number)) {
     return nullValue;
   }
-  return +numberstring.toFixed(2) + 's';
+  return `${number.toFixed(2)}s`;
 };
 
-export const fromNow = function (numberstring) {
-  if (numberstring === null || isNaN(numberstring)) {
+export const fromNow = (numberstring) => {
+  const number = +numberstring;
+  if (numberstring === null || Number.isNaN(number)) {
     return nullValue;
   }
   return moment(numberstring).fromNow();
 };
 
-export const lastUpdated = function (datestring, text) {
+export const lastUpdated = (datestring, text) => {
   const meta = text || 'Last Updated';
-  let day, time;
+  let day,
+    time;
   if (datestring) {
     const date = moment(datestring);
     day = date.format('MMM. D, YYYY');
@@ -93,7 +100,7 @@ export const lastUpdated = function (datestring, text) {
   );
 };
 
-export const collectionSearchResult = function (collection) {
+export const collectionSearchResult = (collection) => {
   const { name, version } = collection;
   return (
     <li key={name}>
@@ -109,7 +116,7 @@ export const collectionSearchResult = function (collection) {
   );
 };
 
-export const granuleSearchResult = function (granule) {
+export const granuleSearchResult = (granule) => {
   const { granuleId, status } = granule;
   return (
     <li key={granuleId}>
@@ -125,7 +132,7 @@ export const granuleSearchResult = function (granule) {
   );
 };
 
-export const granuleLink = function (granuleId) {
+export const granuleLink = (granuleId) => {
   if (!granuleId) return nullValue;
   return (
     <Link
@@ -139,7 +146,7 @@ export const granuleLink = function (granuleId) {
   );
 };
 
-export const pdrLink = function (pdrName) {
+export const pdrLink = (pdrName) => {
   if (!pdrName) return nullValue;
   return (
     <Link
@@ -153,7 +160,7 @@ export const pdrLink = function (pdrName) {
   );
 };
 
-export const providerLink = function (provider) {
+export const providerLink = (provider) => {
   if (!provider) return nullValue;
   return (
     <Link
@@ -167,27 +174,25 @@ export const providerLink = function (provider) {
   );
 };
 
-export const bool = function (bool) {
-  return bool ? 'Yes' : 'No';
-};
+export const bool = (value) => (value ? 'Yes' : 'No');
 
-export const displayCase = function (string) {
+export const displayCase = (string) => {
   const split = string.split(' ');
   return split
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 };
 
-export const storage = function (n) {
-  if (!n || isNaN(n)) return nullValue;
+export const storage = (n) => {
+  const number = +n;
+  if (!n || Number.isNaN(number)) return nullValue;
 
-  n = +n;
-  if (n === 0) return n;
+  if (number === 0) return n;
 
-  if (n < 1e9) return (n / 1e6).toFixed(2) + 'mb';
-  else if (n < 1e12) return (n / 1e9).toFixed(2) + 'gb';
-  else if (n < 1e15) return (n / 1e12).toFixed(2) + 'tb';
-  else return (n / 1e15).toFixed(2) + 'pb';
+  if (number < 1e9) return `${(number / 1e6).toFixed(2)}mb`;
+  if (number < 1e12) return `${(number / 1e9).toFixed(2)}gb`;
+  if (number < 1e15) return `${(number / 1e12).toFixed(2)}tb`;
+  return `${(number / 1e15).toFixed(2)}pb`;
 };
 
 export const link = (url) => (
@@ -196,43 +201,38 @@ export const link = (url) => (
   </a>
 );
 
-export const truncate = function (string, to) {
+export const truncate = (string, to = 100) => {
   if (!string) return nullValue;
-  to = to || 100;
   if (string.length <= to) return string;
-  else return string.slice(0, to) + '... Show More';
+  return `${string.slice(0, to)}... Show More`;
 };
 
-export const getFormattedCollectionId = function (collection) {
+export const getFormattedCollectionId = (collection) => {
   const collectionId = getCollectionId(collection);
   return formatCollectionId(collectionId);
 };
 
-export const formatCollectionId = (collectionId) => {
-  return collectionId === undefined ? nullValue : collectionId;
-};
+export const formatCollectionId = (collectionId) => (collectionId === undefined ? nullValue : collectionId);
 
-export const getCollectionId = function (collection) {
+export const getCollectionId = (collection) => {
   if (collection && collection.name && collection.version) {
     return `${collection.name}___${collection.version}`;
   }
 };
 
 // "MYD13A1___006" => "MYD13A1 / 006"
-export const collectionName = function (collectionId) {
+export const collectionName = (collectionId) => {
   if (!collectionId) return nullValue;
   return collectionId.split('___').join(' / ');
 };
 
-export const collectionNameVersion = function (collectionId) {
+export const collectionNameVersion = (collectionId) => {
   if (!collectionId) return nullValue;
   const [name, version] = collectionId.split('___');
   return { name, version };
 };
 
-export const constructCollectionNameVersion = function (name, version) {
-  return `${name}___${version}`;
-};
+export const constructCollectionNameVersion = (name, version) => `${name}___${version}`;
 
 /**
  * Returns the name and version of a collection based on
@@ -241,7 +241,7 @@ export const constructCollectionNameVersion = function (name, version) {
  * @param {string} collectionId - collectionId used in elasticsearch index
  * @returns {Object} name and version as object
  */
-export const deconstructCollectionId = function (collectionId) {
+export const deconstructCollectionId = (collectionId) => {
   const [name, version] = collectionId.split('___');
   return {
     name,
@@ -249,7 +249,7 @@ export const deconstructCollectionId = function (collectionId) {
   };
 };
 
-export const collectionLink = function (collectionId) {
+export const collectionLink = (collectionId) => {
   if (!collectionId || collectionId === nullValue) return nullValue;
   const { name, version } = collectionNameVersion(collectionId);
   return (
@@ -264,37 +264,25 @@ export const collectionLink = function (collectionId) {
   );
 };
 
-export const collectionHref = function (collectionId) {
+export const collectionHref = (collectionId) => {
   if (!collectionId) return nullValue;
   const { name, version } = collectionNameVersion(collectionId);
   return `/collections/collection/${name}/${version}`;
 };
 
-export const enableText = function (name) {
-  return `You are enabling rule ${name}`;
-};
+export const enableText = (name) => `You are enabling rule ${name}`;
 
-export const enableConfirm = function (name) {
-  return `Rule ${name} was enabled`;
-};
+export const enableConfirm = (name) => `Rule ${name} was enabled`;
 
-export const disableText = function (name) {
-  return `You are disabling rule ${name}`;
-};
+export const disableText = (name) => `You are disabling rule ${name}`;
 
-export const disableConfirm = function (name) {
-  return `Rule ${name} was disabled`;
-};
+export const disableConfirm = (name) => `Rule ${name} was disabled`;
 
-export const deleteText = function (name) {
-  return `Are you sure you want to permanently delete ${name}?`;
-};
+export const deleteText = (name) => `Are you sure you want to permanently delete ${name}?`;
 
-export const rerunText = function (name) {
-  return `Are you sure you want to rerun ${name}?`;
-};
+export const rerunText = (name) => `Are you sure you want to rerun ${name}?`;
 
-export const buildRedirectUrl = function ({ origin, pathname, hash }) {
+export const buildRedirectUrl = ({ origin, pathname, hash }) => {
   const hasQuery = hash.indexOf('?');
 
   if (hasQuery !== -1) {

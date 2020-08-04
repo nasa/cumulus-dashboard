@@ -59,7 +59,7 @@ describe('Dashboard Executions Page', () => {
           cy.get('@columns').eq(3).invoke('text')
             .should('match', /.+ago$/);
           cy.get('@columns').eq(4).invoke('text')
-            .should('be.eq', `${Number(execution.duration.toFixed(2))}s`);
+            .should('be.eq', `${Number(execution.duration).toFixed(2)}s`);
           cy.get('@columns').eq(5).invoke('text')
             .should('be.eq', execution.collectionId);
         });

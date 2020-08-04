@@ -1,6 +1,8 @@
-// Will need to review: Modal needs to be put into its own component and link the actions to that component as well as ButtonGroup aka bulkactions
-/* For Delete Collection Modal (later other modals): Need to copy logic from here and implement in AsyncDeleteCollectionModal.js */
-'use strict';
+/** Will need to review: Modal needs to be put into its own component and link the actions to that component as well
+ *  as ButtonGroup aka bulkactions
+ *  For Delete Collection Modal (later other modals): Need to copy logic from here and implement in
+ *  AsyncDeleteCollectionModal.js
+*/
 import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
@@ -56,7 +58,7 @@ class AsyncCommand extends React.Component {
     let className = 'async__element';
     if (processing) className += ' async__element--loading';
     if (this.props.disabled) className += ' async__element--disabled';
-    if (this.props.className) className += ' ' + this.props.className;
+    if (this.props.className) className += ` ${this.props.className}`;
     return className;
   }
 
@@ -113,12 +115,10 @@ class AsyncCommand extends React.Component {
             showModal={confirmModal}
           >
             <div className='modal__internal modal__formcenter'>
-              { confirmOptions && (confirmOptions).map(option =>
-                <div key={`option-${confirmOptions.indexOf(option)}`}>
-                  {option}
-                  <br />
-                </div>
-              )}
+              { confirmOptions && (confirmOptions).map((option) => <div key={`option-${confirmOptions.indexOf(option)}`}>
+                {option}
+                <br />
+              </div>)}
               <h4>{confirmText}</h4>
             </div>
           </DefaultModal>

@@ -1,7 +1,5 @@
-'use strict';
-
-import { get as getToken, set as setToken } from '../utils/auth';
 import { createReducer } from '@reduxjs/toolkit';
+import { get as getToken, set as setToken } from '../utils/auth';
 import {
   DELETE_TOKEN,
   LOGIN,

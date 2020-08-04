@@ -1,6 +1,4 @@
-'use strict';
-
-import get from 'lodash.get';
+import get from 'lodash/get';
 import { createReducer } from '@reduxjs/toolkit';
 import {
   DIST_APIGATEWAY,
@@ -27,8 +25,7 @@ export const initialState = {
   s3Access: { errors: null, successes: null },
 };
 
-const count = (data, name) =>
-  get(data, `aggregations.2.buckets.${name}.doc_count`, 0);
+const count = (data, name) => get(data, `aggregations.2.buckets.${name}.doc_count`, 0);
 
 export default createReducer(initialState, {
   [DIST_APIGATEWAY]: (state, action) => {

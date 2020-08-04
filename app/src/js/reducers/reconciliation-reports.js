@@ -1,7 +1,5 @@
-'use strict';
-
-import assignDate from './utils/assign-date';
 import { createReducer } from '@reduxjs/toolkit';
+import assignDate from './utils/assign-date';
 import {
   RECONCILIATION,
   RECONCILIATION_INFLIGHT,

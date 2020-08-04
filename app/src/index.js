@@ -4,6 +4,6 @@ import ReactDOM from 'react-dom';
 import './css/main.scss';
 import './public/favicon.ico';
 
-import App from '../src/js/App';
+import App from './js/App';
 
 ReactDOM.render(<App />, document.getElementById('site-canvas'));

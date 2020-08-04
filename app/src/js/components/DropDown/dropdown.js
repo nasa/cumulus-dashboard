@@ -1,4 +1,3 @@
-'use strict';
 import React, { useState, useEffect, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -15,10 +14,8 @@ import {
 function renderInput({ inputRef, referenceElementRef, ...inputProps }) {
   return (
     <Hint
-      shouldSelect={(shouldSelect, e) => {
-        // Selects the hint when the user hits the 'enter' key.
-        return e.keyCode === 13 || shouldSelect;
-      }}
+      // Selects the hint when the user hits the 'enter' key.
+      shouldSelect={(shouldSelect, e) => e.keyCode === 13 || shouldSelect}
     >
       <Input
         {...inputProps}
@@ -42,18 +39,16 @@ renderInput.propTypes = {
 function renderMenu(results, menuProps) {
   return (
     <Menu {...menuProps} className="autocomplete__menu">
-      {results.map((result, index) => {
-        return (
-          <MenuItem
-            className="autocomplete__select"
-            key={index}
-            option={result}
-            position={index}
-          >
-            {result.label}
-          </MenuItem>
-        );
-      })}
+      {results.map((result, index) => (
+        <MenuItem
+          className="autocomplete__select"
+          key={index}
+          option={result}
+          position={index}
+        >
+          {result.label}
+        </MenuItem>
+      ))}
     </Menu>
   );
 }
@@ -74,8 +69,8 @@ const Dropdown = ({
   const allowNew = paramKey === 'limit';
   const typeaheadRef = createRef();
 
-  function getOptionFromParam(options, paramValue) {
-    return options.filter((item) => item.id === paramValue);
+  function getOptionFromParam(paramOptions, paramValue) {
+    return paramOptions.filter((item) => item.id === paramValue);
   }
 
   function updateSelection(selectedValues, value) {
@@ -86,15 +81,15 @@ const Dropdown = ({
 
   function handleChange(selectedValues) {
     const item = selectedValues[0];
-    const { customOption, id, label } = item || {};
-    const value = customOption ? label : id;
+    const { customOption, id, label: selectedLabel } = item || {};
+    const value = customOption ? selectedLabel : id;
     updateSelection(selectedValues, value);
   }
 
   function handleKeyDown(e) {
     if (!allowNew) return;
     if (e.keyCode === 13) {
-      const value = e.target.value;
+      const { value } = e.target;
       const selectedValue = [
         {
           id: value,
