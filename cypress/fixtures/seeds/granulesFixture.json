@@ -100,6 +100,7 @@
     },
     {
       "granuleId": "MOD09GQ.A2016358.h13v04.006.2016360104606.hdf",
+      "pdrName": "MOD09GQ_1granule_v3.PDR",
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationSyncGranuleStateMachine-YBWU89xSgeQb:2890dde4-3ef8-45c2-a190-d21e26d503a3",
       "published": false,
       "error": {

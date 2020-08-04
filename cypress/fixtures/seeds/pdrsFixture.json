@@ -197,8 +197,8 @@
       "provider": "s3_provider",
       "stats": {
         "processing": 0,
-        "total": 1,
-        "completed": 1,
+        "total": 2,
+        "completed": 2,
         "failed": 0
       },
       "progress": 100,

@@ -135,7 +135,7 @@ describe('Dashboard PDRs Page', () => {
       cy.url().should('include', 'search=GQ');
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 1);
+      cy.get('@list').should('have.length', 2);
       cy.get('@list').eq(0).children().as('columns');
 
       cy.getFakeApiFixture('granules').its('results')
