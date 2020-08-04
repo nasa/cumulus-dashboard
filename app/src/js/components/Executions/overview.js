@@ -14,7 +14,7 @@ import {
   getOptionsCollectionName,
 } from '../../actions';
 import { tally, lastUpdated } from '../../utils/format';
-import { workflowOptions as wokflowSelectOptions } from '../../selectors';
+import { workflowOptions as workflowSelectOptions } from '../../selectors';
 import statusOptions from '../../utils/status';
 import pageSizeOptions from '../../utils/page-size';
 import List from '../Table/Table';
@@ -162,5 +162,5 @@ ExecutionOverview.propTypes = {
 export default withRouter(connect((state) => ({
   collections: state.collections,
   executions: state.executions,
-  workflowOptions: wokflowSelectOptions(state),
+  workflowOptions: workflowSelectOptions(state),
 }))(ExecutionOverview));
