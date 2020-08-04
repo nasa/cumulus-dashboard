@@ -106,7 +106,7 @@ const Dropdown = ({
     const value = customOption ? label : id;
     const updateSelectionCallback = () => updateSelection(selections, value);
     if (typeof onChange === 'function') {
-      onChange(selections, updateSelectionCallback);
+      onChange({ selections, updateSelection: updateSelectionCallback, value });
     } else {
       updateSelectionCallback();
     }
@@ -125,7 +125,7 @@ const Dropdown = ({
       ];
       const updateSelectionCallback = () => updateSelection(selectedValue, value);
       if (typeof onChange === 'function') {
-        onChange(selectedValue, updateSelectionCallback);
+        onChange({ selections: selectedValue, updateSelection: updateSelectionCallback, value });
       } else {
         updateSelectionCallback();
       }
@@ -135,7 +135,6 @@ const Dropdown = ({
 
   useEffect(() => {
     const paramValue = queryParams[paramKey];
-    dispatch(action({ key: paramKey, value: paramValue }));
     if (paramValue) {
       let selectedValue = getOptionFromParam(options, paramValue);
       if (allowNew && selectedValue.length === 0) {
@@ -146,6 +145,7 @@ const Dropdown = ({
           },
         ];
       }
+      dispatch(action({ key: paramKey, value: paramValue }));
       setSelected(selectedValue);
     }
 
@@ -162,7 +162,8 @@ const Dropdown = ({
   useEffect(() => {
     if (selectedValues.length !== 0) {
       const { id: value } = selectedValues[0];
-      updateSelection(selectedValues, value);
+      dispatch(action({ key: paramKey, value }));
+      setSelected(selectedValues);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(selectedValues)]);

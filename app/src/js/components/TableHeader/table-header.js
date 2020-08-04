@@ -1,17 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Pagination from '../Pagination/pagination';
 import Dropdown from '../DropDown/dropdown';
 import pageSizeOptions from '../../utils/page-size';
+import withQueryParams from 'react-router-query-params';
 
 /**
  * TableHeader
  * @description Component for rendering table header section that allows for page and number of results selection.
  */
-
-// const disabled = ' pagination__link--disabled';
-// const VISIBLE_PAGES = 7;
-// const PAGE_LIMIT = 10;
 
 const TableHeader = ({
   action,
@@ -20,6 +17,7 @@ const TableHeader = ({
   limit,
   page,
   onNewPage,
+  setQueryParams,
 }) => {
   const selectedValues = limit
     ? [{
@@ -27,6 +25,22 @@ const TableHeader = ({
       label: limit.toString(),
     }]
     : [];
+
+  const [updatedLimit, setUpdatedLimit] = useState(limit);
+  const [updatedPage, setUpdatedPage] = useState(page);
+
+  function handleLimitChange({ value: newLimit }) {
+    setUpdatedLimit(newLimit);
+  }
+
+  function handlePageChange(newPage) {
+    setUpdatedPage(newPage);
+  }
+
+  useEffect(() => {
+    setQueryParams({ limit: updatedLimit || limit, page: updatedPage || page });
+  }, [limit, page, setQueryParams, updatedLimit, updatedPage]);
+
   return (
     <div className="table__header">
       <span>
@@ -39,6 +53,7 @@ const TableHeader = ({
         displayAsInput={true}
         limit={limit}
         page={page}
+        onDropdownChange={handlePageChange}
         onNewPage={onNewPage}
         showPages={true}
       />
@@ -48,6 +63,7 @@ const TableHeader = ({
           action={action}
           clear={clear}
           clearButton={false}
+          onChange={handleLimitChange}
           options={pageSizeOptions}
           paramKey="limit"
           selectedValues={selectedValues}
@@ -65,6 +81,7 @@ TableHeader.propTypes = {
   limit: PropTypes.number,
   onNewPage: PropTypes.func,
   page: PropTypes.number,
+  setQueryParams: PropTypes.func,
 };
 
-export default TableHeader;
+export default withQueryParams()(TableHeader);
