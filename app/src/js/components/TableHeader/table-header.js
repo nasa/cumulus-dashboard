@@ -14,15 +14,6 @@ import pageSizeOptions from '../../utils/page-size';
 // const PAGE_LIMIT = 10;
 
 const TableHeader = ({
-  canNextPage,
-  canPreviousPage,
-  dataCount,
-  gotoPage,
-  nextPage,
-  pageCount,
-  pageIndex,
-  pageOptions,
-  previousPage,
   action,
   clear,
   count,
@@ -71,18 +62,9 @@ TableHeader.propTypes = {
   action: PropTypes.func,
   clear: PropTypes.func,
   count: PropTypes.number,
-  canNextPage: PropTypes.bool,
-  canPreviousPage: PropTypes.bool,
-  dataCount: PropTypes.number,
-  gotoPage: PropTypes.func,
   limit: PropTypes.number,
   onNewPage: PropTypes.func,
   page: PropTypes.number,
-  nextPage: PropTypes.func,
-  pageCount: PropTypes.number,
-  pageIndex: PropTypes.number,
-  pageOptions: PropTypes.array,
-  previousPage: PropTypes.func,
 };
 
 export default TableHeader;
