@@ -27,8 +27,6 @@ const SimplePagination = ({
   const paginator = new Paginator(PAGE_LIMIT, VISIBLE_PAGES);
   const pageMeta = paginator.build(dataCount, currentPage);
 
-  console.log(pageOptions);
-
   return (
     <div className="pagination simple-pagination">
       <ol>

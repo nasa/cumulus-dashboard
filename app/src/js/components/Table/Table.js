@@ -76,7 +76,6 @@ class List extends React.Component {
   }
 
   queryNewPage(page) {
-    console.log('query', page);
     this.setState({
       page,
       queryConfig: this.getQueryConfig({ page }),
