@@ -58,7 +58,7 @@ export const dropdownValue = (values) => {
  * @param {Object} datepicker - redux datepicker state.
  * @return {Object} object suitable to passing to a request querystring that will contain
  */
-export const fetchCurrentTimeFilters2 = (datepicker) => {
+export const fetchCurrentTimeFilters = (datepicker) => {
   const filters = {};
   matchObjects.forEach((o) => {
     if (datepicker[o.dateProp] !== null) {
