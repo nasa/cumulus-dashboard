@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { get } from 'object-path';
 import { decode as jwtDecode } from 'jsonwebtoken';
 
@@ -8,7 +9,7 @@ import { isValidApiRequestAction } from './validate';
 const refreshInterval = Math.ceil((config.updateInterval + 1000) / 1000);
 
 let deferred;
-export const refreshTokenMiddleware = ({ dispatch, getState }) => next => action => {
+export const refreshTokenMiddleware = ({ dispatch, getState }) => (next) => (action) => {
   if (isValidApiRequestAction(action)) {
     const token = get(getState(), 'api.tokens.token');
     if (!token) {
@@ -38,24 +39,22 @@ export const refreshTokenMiddleware = ({ dispatch, getState }) => next => action
             deferred.resolve();
             return next(action);
           })
-          .catch(() => {
-            return dispatch(loginError('Session expired'));
-          });
-      } else {
-        return deferred.promise.then(() => {
-          return next(action);
-        });
+          .catch(() => dispatch(loginError('Session expired')));
       }
+
+      return deferred.promise.then(() => next(action));
     }
   }
   return next(action);
 };
 
 function createDeferred () {
-  const deferred = {};
-  deferred.promise = new Promise((resolve, reject) => {
-    deferred.resolve = resolve;
-    deferred.reject = reject;
+  const deferredObj = {};
+  deferredObj.promise = new Promise((resolve, reject) => {
+    deferredObj.resolve = resolve;
+    deferredObj.reject = reject;
   });
-  return deferred;
+  return deferredObj;
 }
+
+export default refreshTokenMiddleware;

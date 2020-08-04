@@ -13,3 +13,5 @@ export const downloadFile = (file, fileName) => {
   link.click();
   link.parentNode.removeChild(link);
 };
+
+export default downloadFile;

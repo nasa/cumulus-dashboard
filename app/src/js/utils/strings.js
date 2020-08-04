@@ -1,4 +1,3 @@
-'use strict';
 const strings = {
   errors: {
     required: 'Sorry, this field is required',

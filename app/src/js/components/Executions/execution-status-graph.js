@@ -1,19 +1,16 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { window } from '../../utils/browser';
 import dagre from 'dagre-d3';
 import * as d3 from 'd3';
-
+import Modal from 'react-bootstrap/Modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   getExecutionEvents,
   workflowToGraph,
   addEventsToGraph,
   draw
 } from './execution-graph-utils';
-import Modal from 'react-bootstrap/Modal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { window } from '../../utils/browser';
 
 // dagre-d3 expects d3 to be attached to the window
 if (process.env.NODE_ENV !== 'test') window.d3 = d3;
@@ -53,8 +50,8 @@ class ExecutionStatusGraph extends React.Component {
     const render = new dagre.render();
     const svg = d3.select(svgSelector);
     render(svg, this.g);
-    const height = d3.select(`${svgSelector} g`).node().getBBox().height;
-    const width = d3.select(`${svgSelector} g`).node().getBBox().width;
+    const { height } = d3.select(`${svgSelector} g`).node().getBBox();
+    const { width } = d3.select(`${svgSelector} g`).node().getBBox();
     svg.attr('viewBox', `0 0 ${width} ${height}`);
     svg.attr('width', '100%');
     svg.attr('height', '100%');
@@ -110,4 +107,4 @@ ExecutionStatusGraph.propTypes = {
   executionStatus: PropTypes.object
 };
 
-export default connect(state => ({}))(ExecutionStatusGraph);
+export default ExecutionStatusGraph;

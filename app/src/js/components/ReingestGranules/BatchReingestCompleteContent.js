@@ -22,9 +22,7 @@ const BatchReingestCompleteContent = ({
     return items;
   };
 
-  const renderResults = (index, result) => {
-    return <li key={index}>{result}</li>;
-  };
+  const renderResults = (index, result) => <li key={index}>{result}</li>;
 
   const renderErrors = (index, error) => {
     const { id, error: errorMessage } = error;

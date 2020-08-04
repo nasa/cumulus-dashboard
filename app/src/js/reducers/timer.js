@@ -1,4 +1,3 @@
-'use strict';
 import { createReducer } from '@reduxjs/toolkit';
 import { TIMER_START, TIMER_STOP, TIMER_SET_COUNTDOWN } from '../actions/types';
 

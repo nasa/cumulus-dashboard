@@ -1,16 +1,14 @@
-'use strict';
-
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import isNil from 'lodash/isNil';
+import isEqual from 'lodash/isEqual';
+import omitBy from 'lodash/omitBy';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/pagination';
 import SortableTable from '../SortableTable/SortableTable';
 // Lodash
-import isEqual from 'lodash.isequal';
-import isNil from 'lodash.isnil';
-import omitBy from 'lodash.omitby';
 import ListActions from '../ListActions/ListActions';
 
 function buildSortKey(sortProps) {

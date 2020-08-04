@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -13,14 +12,20 @@ const CONCURRENCY = 3;
 const IN_PROGRESS = 'Processing...';
 
 /** BatchCommand
- * @description a reusable component for implementing batch async commands. For example: bulk delete, update, etc.
+ * @description a reusable component for implementing batch async commands. For example:
+ * bulk delete, update, etc.
  * @param {object} props
- * @param {function} props.getModalOptions This is the primary function used change the contents of the modal.
+ * @param {function} props.getModalOptions This is the primary function used change the
+ * contents of the modal.
  * It returns a modalOptions object which is passed as props to <DefaultModal />
- * Without this prop, by default, an empty modal will open with a progress bar running as the batch commands execute.
- * When using this function, one conditionally display content based on whether it should be displayed after confirm is clicked 'isOnModalConfirm: true',
- * after the action has completed 'isOnModalComplete: true', or neither (e.g. after the initial button that triggered the modal is clicked).
- * All those scenarios can display different content for the modal based on logic setup within getModalOptions.
+ * Without this prop, by default, an empty modal will open with a progress bar running as
+ * the batch commands execute.
+ * When using this function, one conditionally display content based on whether it should be
+ * displayed after confirm is clicked 'isOnModalConfirm: true',
+ * after the action has completed 'isOnModalComplete: true', or neither (e.g. after the initial
+ * button that triggered the modal is clicked).
+ * All those scenarios can display different content for the modal based on logic setup
+ * within getModalOptions.
  */
 
 export class BatchCommand extends React.Component {
@@ -59,7 +64,7 @@ export class BatchCommand extends React.Component {
     // on success or error, call and remove the saved callback
     Object.keys(callbacks).forEach((id) => {
       if (!state[id] || !callbacks[id]) return;
-      else if (state[id].status === 'success') callbacks[id](null, id);
+      if (state[id].status === 'success') callbacks[id](null, id);
       else if (state[id].status === 'error') { callbacks[id]({ error: state[id].error, id }); }
 
       if (state[id].status === 'success' || state[id].status === 'error') {
@@ -100,7 +105,7 @@ export class BatchCommand extends React.Component {
     // if we have inflight callbacks, don't allow further clicks
     if (!Array.isArray(selected) || !selected.length || this.isInflight()) { return false; }
     const q = queue(CONCURRENCY);
-    for (let i = 0; i < selected.length; ++i) {
+    for (let i = 0; i < selected.length; i += 1) {
       q.add(this.initAction, selected[i]);
     }
     q.done(this.onComplete);
@@ -188,13 +193,16 @@ export class BatchCommand extends React.Component {
 
     // show button as disabled when loading, and in the delay before we clean up.
     const buttonClass = inflight || status ? 'button--disabled' : '';
-    const modalTitle = inflight
-      ? IN_PROGRESS
-      : !status
-        ? confirm(todo)
-        : status === 'success'
-          ? 'Success!'
-          : 'Error';
+    let modalTitle;
+    if (inflight) {
+      modalTitle = IN_PROGRESS;
+    } else if (!status) {
+      modalTitle = confirm(todo);
+    } else if (status === 'success') {
+      modalTitle = 'Success!';
+    } else {
+      modalTitle = 'Error';
+    }
 
     return (
       <div>
@@ -237,11 +245,11 @@ export class BatchCommand extends React.Component {
                   <div className="modal__loading--inner">
                     <div
                       className={
-                        'modal__loading--progress modal__loading--progress--' +
-                        status
+                        `modal__loading--progress modal__loading--progress--${
+                        status}`
                       }
                       style={{
-                        width: todo ? (completed * 100) / todo + '%' : 0,
+                        width: todo ? `${(completed * 100) / todo}%` : 0,
                       }}
                     ></div>
                   </div>

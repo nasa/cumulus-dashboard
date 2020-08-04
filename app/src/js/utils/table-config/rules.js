@@ -10,7 +10,7 @@ import {
   collectionLink,
   providerLink,
   fromNow
-} from '../../utils/format';
+} from '../format';
 import { strings } from '../../components/locale';
 import { getPersistentQueryParams } from '../url-helper';
 
@@ -18,7 +18,7 @@ export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'name',
-    Cell: ({ cell: { value } }) => <Link to={location => ({ pathname: `/rules/rule/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={(location) => ({ pathname: `/rules/rule/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Provider',
@@ -28,7 +28,7 @@ export const tableColumns = [
   {
     Header: strings.collection_id,
     accessor: 'collection',
-    Cell: ({ cell: { value } }) => collectionLink(getFormattedCollectionId(value)), // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => collectionLink(getFormattedCollectionId(value)),
     disableSortBy: true
   },
   {
@@ -42,12 +42,12 @@ export const tableColumns = [
   },
   {
     Header: 'Timestamp',
-    accessor: row => fromNow(row.timestamp),
+    accessor: (row) => fromNow(row.timestamp),
     id: 'timestamp'
   }
 ];
 
-const removeEsFields = function (data) {
+const removeEsFields = (data) => {
   const { queriedAt, timestamp, stats, ...nonEsFields } = data;
   return nonEsFields;
 };
@@ -55,7 +55,7 @@ const removeEsFields = function (data) {
 export const bulkActions = (rules) => [{
   text: 'Enable Rule',
   action: (ruleName) => {
-    const rule = rules.list.data.find((rule) => rule.name === ruleName);
+    const rule = rules.list.data.find((ruleData) => ruleData.name === ruleName);
     const filteredRule = removeEsFields(rule);
     return enableRule(filteredRule);
   },
@@ -65,7 +65,7 @@ export const bulkActions = (rules) => [{
 }, {
   text: 'Disable Rule',
   action: (ruleName) => {
-    const rule = rules.list.data.find((rule) => rule.name === ruleName);
+    const rule = rules.list.data.find((ruleData) => ruleData.name === ruleName);
     const filteredRule = removeEsFields(rule);
     return disableRule(filteredRule);
   },
@@ -74,7 +74,7 @@ export const bulkActions = (rules) => [{
   className: 'button button--green button--disable button--small form-group__element'
 },
 {
-  Component: <Link className='button button--green button--add button--small form-group__element' to={location => ({ pathname: '/rules/add', search: getPersistentQueryParams(location) })}>Add Rule</Link>
+  Component: <Link className='button button--green button--add button--small form-group__element' to={(location) => ({ pathname: '/rules/add', search: getPersistentQueryParams(location) })}>Add Rule</Link>
 },
 {
   text: 'Delete Rule',

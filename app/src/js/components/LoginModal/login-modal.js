@@ -1,12 +1,11 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
+import Modal from 'react-bootstrap/Modal';
 import { login, setTokenState } from '../../actions';
 import { window } from '../../utils/browser';
 import { updateDelay } from '../../config';
 import ErrorReport from '../Errors/report';
 import Text from '../TextAreaForm/text';
-import Modal from 'react-bootstrap/Modal';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 class LoginModal extends React.Component {

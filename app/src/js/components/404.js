@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -19,4 +18,4 @@ class NotFound extends React.Component {
   }
 }
 
-export default withRouter(connect(state => state)(NotFound));
+export default withRouter(connect((state) => state)(NotFound));

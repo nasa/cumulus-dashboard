@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import Ace from 'react-ace';
@@ -88,12 +87,10 @@ class CollectionIngest extends React.Component {
           <div className="tab--wrapper">
             <button
               className={
-                'button--tab ' +
-                (this.state.view === 'json' ? 'button--active' : '')
+                `button--tab ${
+                this.state.view === 'json' ? 'button--active' : ''}`
               }
-              onClick={() =>
-                this.state.view !== 'json' && this.setState({ view: 'json' })
-              }
+              onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}
             >
               JSON View
             </button>

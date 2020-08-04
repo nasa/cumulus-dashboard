@@ -1,8 +1,9 @@
-'use strict';
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable import/no-cycle */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, formTypes } from '../Form/Form';
 import { set } from 'object-path';
+import { Form, formTypes } from '../Form/Form';
 import { createFormConfig } from '../FormSchema/schema';
 import { isText } from '../../utils/validate';
 
@@ -26,13 +27,11 @@ class SubForm extends React.Component {
       value,
       fieldSet
     } = this.props;
-    const fields = [];
-    for (const key in value) {
-      fields.push({
-        name: key,
-        fields: createFormConfig(value[key], fieldSet)
-      });
-    }
+
+    const fields = Object.keys(value).map((key) => ({
+      name: key,
+      fields: createFormConfig(value[key], fieldSet)
+    }));
 
     fields.push({
       name: 'Add',
@@ -41,7 +40,7 @@ class SubForm extends React.Component {
     });
 
     // add a 'name' field for each item
-    fields.forEach(field => field.fields.unshift({
+    fields.forEach((field) => field.fields.unshift({
       value: field.isEmpty ? '' : field.name,
       label: 'Name *',
       schemaProperty: '_id',
@@ -64,15 +63,25 @@ class SubForm extends React.Component {
     const expanded = isExpanded ? ' subform__item--expanded' : '';
     const isLast = index === fields.length - 1;
     const last = isLast ? ' subform__item--last' : '';
+    let linkText;
+
+    if (isExpanded) {
+      linkText = 'Cancel';
+    } else if (fieldset.isEmpty) {
+      linkText = 'Add Another';
+    } else {
+      linkText = 'Edit';
+    }
+
     return (
-      <div key={name} className={'subform__item' + expanded + last}>
+      <div key={name} className={`subform__item${expanded}${last}`}>
         <div className='subform__ui'>
           <span className='subform__name'>{name}</span>
           <a href='#'
             className='subform__button'
             onClick={this.toggleExpand}
             data-value={name}
-          >{isExpanded ? 'Cancel' : fieldset.isEmpty ? 'Add Another' : 'Edit'}</a>
+          >{linkText}</a>
           {isExpanded && !fieldset.isEmpty ? (
             <a href='#'
               className='subform__button link--secondary subform__remove'

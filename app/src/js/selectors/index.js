@@ -1,10 +1,9 @@
-'use strict';
 import { get } from 'object-path';
 
 // functions all expect the full state as arguments
 
 export const workflowOptions = ({ workflows }) => {
-  const options = get(workflows, 'list.data', []).map(workflow => {
+  const options = get(workflows, 'list.data', []).map((workflow) => {
     const { name } = workflow;
     return {
       id: name,
@@ -14,6 +13,4 @@ export const workflowOptions = ({ workflows }) => {
   return options;
 };
 
-export const workflowOptionNames = ({ workflows }) => {
-  return get(workflows, 'list.data', []).map(workflow => workflow.name);
-};
+export const workflowOptionNames = ({ workflows }) => get(workflows, 'list.data', []).map((workflow) => workflow.name);

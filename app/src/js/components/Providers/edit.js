@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -44,4 +43,5 @@ EditProvider.propTypes = {
 export default withRouter(
   connect((state) => ({
     providers: state.providers
-  }))(EditProvider));
+  }))(EditProvider)
+);

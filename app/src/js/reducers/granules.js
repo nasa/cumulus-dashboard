@@ -1,9 +1,7 @@
-'use strict';
-
 import { del } from 'object-path';
+import { createReducer } from '@reduxjs/toolkit';
 import assignDate from './utils/assign-date';
 import removeDeleted from './utils/remove-deleted';
-import { createReducer } from '@reduxjs/toolkit';
 import {
   createErrorReducer,
   createInflightReducer,

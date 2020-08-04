@@ -1,5 +1,3 @@
-'use strict';
-
 import { createReducer } from '@reduxjs/toolkit';
 import {
   EXECUTION_STATUS,
@@ -19,8 +17,7 @@ export const initialState = {
   meta: {},
 };
 
-const typeContains = (string) => ({ type }) =>
-  type.toLowerCase().includes(string.toLowerCase());
+const typeContains = (string) => ({ type }) => type.toLowerCase().includes(string.toLowerCase());
 
 export default createReducer(initialState, {
   [EXECUTION_STATUS]: (state, action) => {

@@ -1,5 +1,3 @@
-'use strict';
-
 export const apiGatewaySearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
   "aggs": {
     "2": {
@@ -87,3 +85,5 @@ export const apiGatewaySearchTemplate = (prefix, startTimeEpochMilli, endTimeEpo
     }
   }
 }`;
+
+export default apiGatewaySearchTemplate;

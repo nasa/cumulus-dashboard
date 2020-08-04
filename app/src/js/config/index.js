@@ -1,4 +1,3 @@
-'use strict';
 const moment = require('moment');
 
 const deploymentConfig = require('./config');
@@ -35,6 +34,7 @@ const baseConfig = {
   updateDelay: 1000
 };
 
+// eslint-disable-next-line prefer-object-spread
 const config = Object.assign({}, baseConfig, deploymentConfig);
 config.apiRoot = config.apiRoot.replace(/\/?$/, '/');
 
