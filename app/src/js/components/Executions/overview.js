@@ -159,7 +159,7 @@ ExecutionOverview.propTypes = {
   dispatch: PropTypes.func,
   executions: PropTypes.object,
   queryParams: PropTypes.object,
-  workflowOptions: PropTypes.object,
+  workflowOptions: PropTypes.array,
 };
 
 export default withRouter(connect(state => ({
