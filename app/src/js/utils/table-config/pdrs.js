@@ -103,12 +103,12 @@ export const granuleTableColumns = [
   },
   {
     Header: 'Duration',
-    accessor: row => seconds(row.duration),
+    accessor: (row) => seconds(row.duration),
     id: 'duration'
   },
   {
     Header: 'Updated',
-    accessor: row => fromNow(row.timestamp),
+    accessor: (row) => fromNow(row.timestamp),
     id: 'timestamp'
   }
 ];

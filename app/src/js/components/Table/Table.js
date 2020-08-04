@@ -12,8 +12,7 @@ import SortableTable from '../SortableTable/SortableTable';
 import ListActions from '../ListActions/ListActions';
 
 function buildSortKey(sortProps) {
-  return sortProps.filter((item) => item.id).map((item) =>
-    (item.desc === true) ? `-${item.id}` : `+${item.id}`);
+  return sortProps.filter((item) => item.id).map((item) => ((item.desc === true) ? `-${item.id}` : `+${item.id}`));
 }
 
 class List extends React.Component {
