@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import withQueryParams from 'react-router-query-params';
 import Pagination from '../Pagination/pagination';
 import Dropdown from '../DropDown/dropdown';
 import pageSizeOptions from '../../utils/page-size';
-import withQueryParams from 'react-router-query-params';
 
 /**
  * TableHeader

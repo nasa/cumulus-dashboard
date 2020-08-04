@@ -13,9 +13,7 @@ import ListActions from '../ListActions/ListActions';
 import TableHeader from '../TableHeader/table-header';
 
 function buildSortKey(sortProps) {
-  return sortProps.map((item) =>
-    item.desc === true ? `-${item.id}` : `+${item.id}`
-  );
+  return sortProps.map((item) => (item.desc === true ? `-${item.id}` : `+${item.id}`));
 }
 
 class List extends React.Component {
@@ -65,11 +63,9 @@ class List extends React.Component {
 
     if (!isEqual(params, this.state.params)) {
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ params }, () =>
-        this.setState({
-          queryConfig: this.getQueryConfig(),
-        })
-      );
+      this.setState({ params }, () => this.setState({
+        queryConfig: this.getQueryConfig(),
+      }));
     }
   }
 

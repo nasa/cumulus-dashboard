@@ -96,7 +96,7 @@ const Dropdown = ({
     setSelected(selections);
     setQueryParams({ [paramKey]: value });
   }
-  
+
   function handleChange(selections) {
     const item = selections[0];
     const { customOption, id, label: selectedLabel } = item || {};
@@ -107,7 +107,7 @@ const Dropdown = ({
     } else {
       updateSelectionCallback();
     }
-    updateSelection(selections, value);velop
+    updateSelection(selections, value);
   }
 
   function handleKeyDown(e) {

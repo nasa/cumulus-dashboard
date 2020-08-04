@@ -35,14 +35,13 @@ const Pagination = ({
 
   function handleDropdownChange({ selections, updateSelection }) {
     if (selections.length > 0) {
-      let { id: value } = selections[0];
-      if (typeof value === 'string') value = parseInt(value);
+      const { id: value } = selections[0];
       setPage(value, updateSelection);
       if (typeof onDropdownChange === 'function') onDropdownChange(value);
     }
   }
 
-  if (isNaN(count) && isNaN(limit) && isNaN(page)) return null;
+  if (Number.isNaN(count) && Number.isNaN(limit) && Number.isNaN(page)) return null;
 
   const currentPage = +page;
   const paginator = new Paginator(limit, 7);
@@ -74,7 +73,7 @@ const Pagination = ({
       <ol>
         <li>
           <a
-            className={'previous' + (meta.has_previous_page ? '' : disabled)}
+            className={`previous${meta.has_previous_page ? '' : disabled}`}
             data-value={meta.previous_page}
             onClick={meta.has_previous_page ? onPageClick : noop}
           >
@@ -119,7 +118,7 @@ const Pagination = ({
         )}
         <li>
           <a
-            className={'next' + (meta.has_next_page ? '' : disabled)}
+            className={`next${meta.has_next_page ? '' : disabled}`}
             data-value={meta.next_page}
             onClick={meta.has_next_page ? onPageClick : noop}
           >
