@@ -57,7 +57,7 @@ class ExecutionOverview extends React.Component {
     const { dropdowns } = collections;
     const { list } = executions;
     const { count, queriedAt } = list.meta;
-    if (list.asyncOperationId && list.asyncOperationId.value) {
+    if (list.infix && list.infix.value) {
       list.data = this.searchOperationId(list.data, list.infix.value);
     }
     return (
