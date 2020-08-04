@@ -92,7 +92,7 @@ describe('Dashboard Granules Page', () => {
 
           // Duration column
           cy.get('@columns').eq(7).invoke('text')
-            .should('be.eq', `${Number(granule.duration.toFixed(2))}s`);
+            .should('be.eq', `${Number(granule.duration).toFixed(2)}s`);
           // Updated column
           cy.get('@columns').eq(8).invoke('text')
             .should('match', /.+ago$/);

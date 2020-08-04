@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { get } from 'object-path';
 import { connect } from 'react-redux';
 import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
+import withQueryParams from 'react-router-query-params';
 import Sidebar from '../Sidebar/sidebar';
 import { getCount, listGranules } from '../../actions';
 import { strings } from '../locale';
@@ -11,14 +12,12 @@ import AllGranules from './list';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import GranuleOverview from './granule';
 import GranulesOverview from './overview';
-import withQueryParams from 'react-router-query-params';
 import { filterQueryParams } from '../../utils/url-helper';
 
 const Granules = ({ dispatch, location, queryParams, stats }) => {
   const { pathname } = location;
   const count = get(stats, 'count.sidebar.granules.count');
   const filteredQueryParams = filterQueryParams(queryParams);
-  const queryAsJson = JSON.stringify(queryParams);
 
   function query() {
     dispatch(listGranules(filteredQueryParams));
@@ -32,7 +31,7 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
         sidebarCount: true
       })
     );
-  }, [dispatch, queryAsJson]);
+  }, [dispatch]);
 
   return (
     <div className="page__granules">

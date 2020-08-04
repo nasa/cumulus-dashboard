@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -42,7 +41,7 @@ class Sidebar extends React.Component {
 
               return (
                 <li key={base + i}>
-                  <Link className={classes} to={location => ({
+                  <Link className={classes} to={(location) => ({
                     pathname: path,
                     search: getPersistentQueryParams(location)
                   })}>

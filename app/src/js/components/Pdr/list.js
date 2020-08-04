@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -44,20 +43,20 @@ const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
   ];
 
   function generateQuery() {
-    const query = { ...queryParams };
+    const currentQuery = { ...queryParams };
     const { pathname } = location;
-    if (pathname === '/pdrs/completed') query.status = 'completed';
-    else if (pathname === '/pdrs/failed') query.status = 'failed';
-    else if (pathname === '/pdrs/active') query.status = 'running';
-    return query;
+    if (pathname === '/pdrs/completed') currentQuery.status = 'completed';
+    else if (pathname === '/pdrs/failed') currentQuery.status = 'failed';
+    else if (pathname === '/pdrs/active') currentQuery.status = 'running';
+    return currentQuery;
   }
 
   function getView() {
     const { pathname } = location;
     if (pathname === '/pdrs/completed') return 'completed';
-    else if (pathname === '/pdrs/failed') return 'failed';
-    else if (pathname === '/pdrs/active') return 'active';
-    else return 'all';
+    if (pathname === '/pdrs/failed') return 'failed';
+    if (pathname === '/pdrs/active') return 'active';
+    return 'all';
   }
 
   function generateBulkActions() {
@@ -73,7 +72,7 @@ const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
           <h1 className="heading--large heading--shared-content with-description">
             {displayCaseView} PDRs
             <span className="num-title">
-              {!isNaN(count) ? `${tally(count)}` : 0}
+              {!Number.isNaN(+count) ? `${tally(count)}` : 0}
             </span>
           </h1>
           {lastUpdated(queriedAt)}

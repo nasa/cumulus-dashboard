@@ -1,4 +1,3 @@
-'use strict';
 import React, { useState, useEffect, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -15,10 +14,8 @@ import {
 function renderInput({ inputRef, referenceElementRef, ...inputProps }) {
   return (
     <Hint
-      shouldSelect={(shouldSelect, e) => {
-        // Selects the hint when the user hits the 'enter' key.
-        return e.keyCode === 13 || shouldSelect;
-      }}
+      // Selects the hint when the user hits the 'enter' key.
+      shouldSelect={(shouldSelect, e) => e.keyCode === 13 || shouldSelect}
     >
       <Input
         {...inputProps}
@@ -90,8 +87,8 @@ const Dropdown = ({
   const [selected, setSelected] = useState(selectedValues);
   const allowNew = paramKey === 'limit' || paramKey === 'page';
 
-  function getOptionFromParam(options, paramValue) {
-    return options.filter((item) => item.id === paramValue);
+  function getOptionFromParam(paramOptions, paramValue) {
+    return paramOptions.filter((item) => item.id === paramValue);
   }
 
   function updateSelection(selections, value) {
@@ -99,24 +96,24 @@ const Dropdown = ({
     setSelected(selections);
     setQueryParams({ [paramKey]: value });
   }
-
+  
   function handleChange(selections) {
     const item = selections[0];
-    const { customOption, id, label } = item || {};
-    const value = customOption ? label : id;
+    const { customOption, id, label: selectedLabel } = item || {};
+    const value = customOption ? selectedLabel : id;
     const updateSelectionCallback = () => updateSelection(selections, value);
     if (typeof onChange === 'function') {
       onChange({ selections, updateSelection: updateSelectionCallback, value });
     } else {
       updateSelectionCallback();
     }
-    updateSelection(selections, value);
+    updateSelection(selections, value);velop
   }
 
   function handleKeyDown(e) {
     if (!allowNew) return;
     if (e.keyCode === 13) {
-      const value = e.target.value;
+      const { value } = e.target;
       const selectedValue = [
         {
           id: value,

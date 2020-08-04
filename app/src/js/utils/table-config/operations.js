@@ -1,9 +1,9 @@
-import { fromNow, displayCase } from '../../utils/format';
+import { fromNow, displayCase } from '../format';
 
 export const tableColumns = [
   {
     Header: 'Status',
-    accessor: row => displayCase(row.status),
+    accessor: (row) => displayCase(row.status),
     id: 'status'
   },
   {
@@ -21,7 +21,9 @@ export const tableColumns = [
   },
   {
     Header: 'Created',
-    accessor: row => fromNow(row.createdAt),
+    accessor: (row) => fromNow(row.createdAt),
     id: 'createdAt'
   }
 ];
+
+export default tableColumns;

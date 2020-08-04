@@ -78,3 +78,5 @@ export const strings = new LocalizedStrings({
     view_granules_overview: 'View Product Overview'
   }
 }, getCustomInterfaceLanguage);
+
+export default strings;

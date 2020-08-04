@@ -1,6 +1,5 @@
-'use strict';
-
-import truncate from 'lodash.truncate';
+import truncate from 'lodash/truncate';
+import noop from 'lodash/noop';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { interval, getLogs, clearLogs } from '../../actions';
@@ -50,7 +49,7 @@ class LogViewer extends React.Component {
     this.displayName = 'LogViewer';
 
     this.query = this.query.bind(this);
-    this.cancelInterval = () => { };
+    this.cancelInterval = noop;
 
     this.state = {
       level: logLevels.keys().next().value,
@@ -65,7 +64,7 @@ class LogViewer extends React.Component {
   componentDidUpdate () {
     if (this.props.logs.error) {
       this.cancelInterval();
-      this.cancelInterval = () => { };
+      this.cancelInterval = noop;
     }
   }
 
@@ -85,7 +84,7 @@ class LogViewer extends React.Component {
   query () {
     const { dispatch } = this.props;
     const { search, level } = this.state;
-    const query = Object.assign({}, this.props.query);
+    const query = { ...this.props.query };
 
     if (search || query.q) {
       // Since the API ignores most other parameters when the `q` parameter is
@@ -125,7 +124,7 @@ class LogViewer extends React.Component {
     const count = tally(logs.items.length);
     const items = (logs.items.length || logs.inflight)
       ? logs.items
-      : [Object.assign({}, noLogs, notFound ? { displayText: notFound } : {})];
+      : [{ ...noLogs, ...(notFound ? { displayText: notFound } : {}) }];
 
     return (
       <section className='page__section' >
@@ -150,7 +149,7 @@ class LogViewer extends React.Component {
               value={level}
               options={Array.from(logLevels.entries())}
               id={'logs-viewer-dropdown'}
-              onChange={(_, level) => this.setSearchLevel(level)}
+              onChange={(_, searchLevel) => this.setSearchLevel(searchLevel)}
               noNull={true}
             />
           </form>
@@ -161,15 +160,15 @@ class LogViewer extends React.Component {
         <div className='logs'>
           {items.map((item) => {
             const text = truncate(item.displayText, { length: 200 });
-            const level = logLevelName(item.level);
+            const logLevel = logLevelName(item.level);
 
             return (
               <p key={item.key} className='logs__item'>
                 <span className='logs__item--date'>
                   {item.displayTime}
                 </span>
-                <span className={`logs__item--level logs__item--${level.toLowerCase()}`}>
-                  {` ${level.toUpperCase()} `}
+                <span className={`logs__item--level logs__item--${logLevel.toLowerCase()}`}>
+                  {` ${logLevel.toUpperCase()} `}
                 </span>
                 {text}
               </p>

@@ -1,10 +1,10 @@
-'use strict';
 import { get } from 'object-path';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
+import isEqual from 'lodash/isEqual';
 import {
   clearGranulesFilter,
   clearGranulesSearch,
@@ -22,11 +22,7 @@ import {
   lastUpdated,
 } from '../../utils/format';
 import statusOptions from '../../utils/status';
-import {
-  getPersistentQueryParams,
-  historyPushWithQueryParams,
-} from '../../utils/url-helper';
-import isEqual from 'lodash.isequal';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 import {
   reingestAction,
   tableColumns,

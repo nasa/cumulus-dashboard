@@ -1,5 +1,4 @@
 // This is the main Collections Overview page
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -80,12 +79,10 @@ class CollectionList extends React.Component {
     const hasTimeFilter = startDateTime || endDateTime;
 
     // merge mmtLinks with the collection data;
-    const data = list.data.map((collection) => {
-      return {
-        ...collection,
-        mmtLink: mmtLinks[getCollectionId(collection)],
-      };
-    });
+    const data = list.data.map((collection) => ({
+      ...collection,
+      mmtLink: mmtLinks[getCollectionId(collection)],
+    }));
     const { count, queriedAt } = list.meta;
     return (
       <div className="page__component">

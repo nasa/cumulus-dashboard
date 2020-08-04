@@ -1,4 +1,3 @@
-'use strict';
 const routes = [
   ['Overview', null]
 ];
@@ -13,13 +12,15 @@ const handler = {
   base: 'workflows',
   heading: 'Workflows',
   routes: (currentRoute, params) => {
-    if (currentRoute.indexOf('workflows/workflow') >= 0) {
+    if (currentRoute.includes('workflows/workflow')) {
       return singleRoutes;
-    } else if (currentRoute.slice(0, 11) !== '/workflows') {
-      return empty;
-    } else {
-      return routes;
     }
+
+    if (currentRoute.slice(0, 11) !== '/workflows') {
+      return empty;
+    }
+
+    return routes;
   }
 };
 
