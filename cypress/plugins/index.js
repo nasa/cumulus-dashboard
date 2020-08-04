@@ -11,29 +11,30 @@
 // the project's config changing)
 const crypto = require('crypto');
 const webpack = require('@cypress/webpack-preprocessor');
-
+const cypressFailed = require('cypress-failed-log/src/failed');
 const { testUtils } = require('@cumulus/api');
 const { createJwtToken } = require('@cumulus/api/lib/token');
+const webpackCommon = require('../../webpack.common');
 
 const { seedEverything } = require('./seedEverything');
 
 process.env.TOKEN_SECRET = crypto.randomBytes(10).toString('hex');
 
 module.exports = (on) => {
-  const options = {
+  const webpackOptions = {
     // send in the options from your webpack.config.js, so it works the same
     // as your app's code
-    webpackOptions: require('../../webpack.common'),
+    webpackOptions: webpackCommon,
     watchOptions: {},
   };
   const user = 'testUser';
 
   // Run specialized file preprocessor to transpile ES6+ -> ES5
   // This fixes compatibility issues with Electron
-  on('file:preprocessor', webpack(options));
+  on('file:preprocessor', webpack(webpackOptions));
 
   on('task', {
-    resetState: function () {
+    resetState () {
       return Promise.all([
         seedEverything(),
         testUtils.setAuthorizedOAuthUsers([user])
@@ -43,13 +44,13 @@ module.exports = (on) => {
         Promise.reject(error);
       });
     },
-    generateJWT: function (options) {
+    generateJWT (options) {
       return createJwtToken(options);
     },
     log (message) {
       console.log(message);
       return null;
     },
-    failed: require('cypress-failed-log/src/failed')()
+    failed: cypressFailed()
   });
 };
