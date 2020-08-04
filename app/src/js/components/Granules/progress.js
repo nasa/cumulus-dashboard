@@ -44,8 +44,8 @@ class Progress extends React.Component {
       <ul className='timeline--processing--overall'>
         {granuleMeta.map((d) => {
           const item = Array.isArray(d[0])
-                ? d[0].map(this.getItem).reduce((a, b) => a + get(b, 'count', 0), 0)
-                : get(this.getItem(d[0]), 'count', 0);
+            ? d[0].map(this.getItem).reduce((a, b) => a + get(b, 'count', 0), 0)
+            : get(this.getItem(d[0]), 'count', 0);
 
           return (
             <li key={d[0]} className={`timeline--processing--${d[0]}`}>
