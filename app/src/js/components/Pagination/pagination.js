@@ -69,7 +69,7 @@ const Pagination = ({
   );
 
   return (
-    <div className="pagination">
+    <div className={`pagination ${displayAsInput ? 'pagination-dropdown' : 'pagination-list'}`}>
       <ol>
         <li>
           <a

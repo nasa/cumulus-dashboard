@@ -39,7 +39,7 @@ describe('Dashboard Collections Page', () => {
     it('should display a link to view collections', () => {
       cy.contains('nav li a', 'Collections').as('collections');
       cy.setDatepickerDropdown('Recent');
-      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections\?startDateTime/);
+      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections.*startDateTime/);
       cy.get('@collections').click();
       cy.wait('@getActiveCollections');
 
@@ -57,7 +57,7 @@ describe('Dashboard Collections Page', () => {
     it('should only display collections with active granules when time filter is applied', () => {
       cy.contains('nav li a', 'Collections').as('collections');
       cy.setDatepickerDropdown('Recent');
-      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections\?startDateTime/);
+      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections.*startDateTime/);
       cy.get('@collections').click();
       cy.wait('@getActiveCollections');
 
@@ -471,7 +471,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Error');
       cy.get('.Collapsible__contentInner').should('contain.text', 'Oopsie');
       cy.get('.button--cancel').click();
-      cy.url().should('match', /\/granules$/);
+      cy.url().should('match', /\/granules/);
       cy.get('.heading--large').should('have.text', 'Granule Overview');
     });
 
@@ -546,7 +546,7 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').click().type('fai').type('{enter}');
-      cy.url().should('include', '?status=failed');
+      cy.url().should('include', 'status=failed');
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
