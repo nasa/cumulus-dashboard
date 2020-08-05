@@ -107,7 +107,6 @@ const Dropdown = ({
     } else {
       updateSelectionCallback();
     }
-    updateSelection(selections, value);
   }
 
   function handleKeyDown(e) {
@@ -142,6 +141,9 @@ const Dropdown = ({
           },
         ];
       }
+      if (typeof onChange === 'function') {
+        onChange({ value: paramValue });
+      }
       dispatch(action({ key: paramKey, value: paramValue }));
       setSelected(selectedValue);
     }
@@ -157,10 +159,10 @@ const Dropdown = ({
   }, [dispatch, getOptions]);
 
   useEffect(() => {
+    if (queryParams[paramKey]) return;
     if (selectedValues.length !== 0) {
       const { id: value } = selectedValues[0];
-      dispatch(action({ key: paramKey, value }));
-      setSelected(selectedValues);
+      updateSelection(selectedValues, value);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(selectedValues)]);

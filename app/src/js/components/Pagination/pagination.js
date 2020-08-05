@@ -12,7 +12,6 @@ const Pagination = ({
   count,
   displayAsInput = false,
   limit,
-  onDropdownChange,
   onNewPage,
   page,
 }) => {
@@ -33,11 +32,9 @@ const Pagination = ({
     }
   }
 
-  function handleDropdownChange({ selections, updateSelection }) {
-    if (selections.length > 0) {
-      const { id: value } = selections[0];
+  function handleDropdownChange({ updateSelection, value }) {
+    if (value) {
       setPage(value, updateSelection);
-      if (typeof onDropdownChange === 'function') onDropdownChange(value);
     }
   }
 
@@ -136,7 +133,6 @@ Pagination.propTypes = {
   count: PropTypes.number,
   displayAsInput: PropTypes.bool,
   limit: PropTypes.number,
-  onDropdownChange: PropTypes.func,
   onNewPage: PropTypes.func,
   page: PropTypes.number,
 };
