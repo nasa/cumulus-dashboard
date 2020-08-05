@@ -34,7 +34,7 @@ describe('Dashboard Home Page', () => {
   it('Logs in successfully after failed login', () => {
     // simulate failed login
     cy.visit('/auth')
-      .window().then(function (window) {
+      .window().then((window) => {
         window.location.search = 'token=failed-token';
       });
 
