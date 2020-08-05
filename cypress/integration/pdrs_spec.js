@@ -79,6 +79,57 @@ describe('Dashboard PDRs Page', () => {
       cy.get('@list').should('have.length', 4);
     });
 
+    it('should display active PDRs', () => {
+      cy.visit('/pdrs');
+      cy.contains('.sidebar__row ul li a', 'Active 4')
+      .should('have.attr', 'href', '/pdrs/active')
+      .click();
+
+      cy.contains('.heading--xlarge', 'Pdrs');
+      cy.contains('.heading--large', 'Active PDRs')
+        .contains('.num-title', 4);
+
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('@list').should('have.length', 4);
+
+      cy.get('.search').as('search');
+      cy.get('@search').eq(0).should('be.visible').click().type('A03861');
+      cy.url().should('include', 'search=A0386');
+
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('@list').should('have.length', 1);
+    });
+
+    it('should display completed PDRs', () => {
+      cy.visit('/pdrs/completed');
+      cy.contains('.heading--xlarge', 'Pdrs');
+      cy.contains('.heading--large', 'Completed PDRs')
+        .contains('.num-title', 4);
+
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('@list').should('have.length', 4);
+    });
+
+    it('should display failed PDRs', () => {
+      cy.visit('/pdrs');
+      cy.contains('.sidebar__row ul li a', 'Failed 2')
+        .should('have.attr', 'href', '/pdrs/failed')
+        .click();
+      cy.contains('.heading--xlarge', 'Pdrs');
+      cy.contains('.heading--large', 'Failed PDRs')
+        .contains('.num-title', 2);
+
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('@list').should('have.length', 2);
+
+      cy.get('.search').as('search');
+      cy.get('@search').eq(0).should('be.visible').click().type('9272');
+      cy.url().should('include', 'search=9272');
+
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('@list').should('have.length', 1);
+    });
+
     it('should display PDR details in the individual PDR page', () => {
       const pdrName = 'MOD09GQ_1granule_v3.PDR';
       cy.visit(`/pdrs/pdr/${pdrName}`);
@@ -119,7 +170,7 @@ describe('Dashboard PDRs Page', () => {
       });
     });
 
-    it.only('should display granules in the individual PDR page', () => {
+    it('should display granules in the individual PDR page', () => {
       const pdrName = 'MOD09GQ_1granule_v3.PDR';
       cy.visit(`/pdrs/pdr/${pdrName}`);
       cy.contains('.heading--large', pdrName);
