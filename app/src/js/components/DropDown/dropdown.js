@@ -77,13 +77,14 @@ const Dropdown = ({
   inputProps,
   label,
   onChange,
-  options,
+  options = [],
   paramKey,
   queryParams,
   selectedValues = [],
   setQueryParams,
 }) => {
   const typeaheadRef = createRef();
+  const [initialQueryParams] = useState(queryParams);
   const [selected, setSelected] = useState(selectedValues);
   const allowNew = paramKey === 'limit' || paramKey === 'page';
 
@@ -130,7 +131,7 @@ const Dropdown = ({
   }
 
   useEffect(() => {
-    const paramValue = queryParams[paramKey];
+    const paramValue = initialQueryParams[paramKey];
     if (paramValue) {
       let selectedValue = getOptionFromParam(options, paramValue);
       if (allowNew && selectedValue.length === 0) {
@@ -152,20 +153,21 @@ const Dropdown = ({
       if (typeof clear === 'function') dispatch(clear(paramKey));
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [action, allowNew, clear, dispatch, JSON.stringify(options), paramKey, JSON.stringify(queryParams)]);
+  }, [action, allowNew, clear, dispatch, JSON.stringify(options), paramKey, JSON.stringify(initialQueryParams)]);
+
+  useEffect(() => {
+    if (selectedValues.length > 0) {
+      const { id: value } = selectedValues[0];
+      dispatch(action({ key: paramKey, value }));
+      setSelected(selectedValues);
+      setQueryParams({ [paramKey]: value });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(selectedValues)]);
 
   useEffect(() => {
     if (getOptions) dispatch(getOptions());
   }, [dispatch, getOptions]);
-
-  useEffect(() => {
-    if (queryParams[paramKey]) return;
-    if (selectedValues.length !== 0) {
-      const { id: value } = selectedValues[0];
-      updateSelection(selectedValues, value);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(selectedValues)]);
 
   return (
     <div className={`filter__item form-group__element filter-${paramKey}`}>

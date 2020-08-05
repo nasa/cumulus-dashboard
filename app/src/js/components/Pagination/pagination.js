@@ -132,9 +132,9 @@ Pagination.propTypes = {
   clear: PropTypes.func,
   count: PropTypes.number,
   displayAsInput: PropTypes.bool,
-  limit: PropTypes.number,
+  limit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onNewPage: PropTypes.func,
-  page: PropTypes.number,
+  page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default Pagination;
