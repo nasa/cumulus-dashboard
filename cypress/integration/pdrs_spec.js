@@ -136,7 +136,8 @@ describe('Dashboard PDRs Page', () => {
 
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 2);
-      cy.get('@list').eq(0).children().as('columns');
+
+      cy.server();
 
       cy.getFakeApiFixture('granules').its('results')
         .then((granules) => granules.filter((item) => item.pdrName === pdrName))
@@ -156,9 +157,11 @@ describe('Dashboard PDRs Page', () => {
           cy.get('@columns').eq(5).invoke('text')
             .should('match', /.+ago$/);
 
+          cy.route('DELETE', `/granules/${granule.granuleId}`).as('deleteGranule');
           cy.get(`[data-value="${granule.granuleId}"] > .td >input[type="checkbox"]`).click();
           cy.get('.list-actions').contains('Delete').click();
           cy.get('.button--submit').click();
+          cy.wait('@deleteGranule');
         });
 
       cy.url().should('include', `/pdrs/pdr/${pdrName}`);
