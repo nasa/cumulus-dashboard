@@ -213,6 +213,7 @@ describe('Dashboard Home Page', () => {
       // elasticsearch endpoint. The fixture here returns a combined response of all the
       // responses for one url, effectively stubbing our elasticsearch searches.
       cy.route('POST', 'http://example.com/_search/', 'fixture:elasticsearch.json');
+      cy.visit('/');
 
       cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(5)').contains('0');
       cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(4)').contains('2');
