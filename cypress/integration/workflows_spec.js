@@ -49,11 +49,13 @@ describe('Dashboard Workflows Page', () => {
         .click();
 
       cy.contains('.heading--large', workflowName);
+      /* eslint-disable no-template-curly-in-string */
       cy.getJsonTextareaValue().then((workflowJson) => {
         expect(workflowJson.name).to.equal(workflowName);
         expect(workflowJson.definition.States.StartStatus)
-          .to.deep.equal({Type: 'Task', Resource: '${SfSnsReportLambdaAliasOutput}', Next: 'StopStatus'});
+          .to.deep.equal({ Type: 'Task', Resource: '${SfSnsReportLambdaAliasOutput}', Next: 'StopStatus' });
       });
+      /* eslint-enable no-template-curly-in-string */
     });
 
     it('filters workflows when a user types in the search box', () => {
