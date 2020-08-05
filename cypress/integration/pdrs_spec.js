@@ -76,8 +76,12 @@ describe('Dashboard PDRs Page', () => {
 
       cy.get('.overview-num__wrapper ul li')
         .first().contains('li', 'Completed').contains('li', 4)
-        .next().contains('li', 'Failed').contains('li', 0)
-        .next().contains('li', 'Running').contains('li', 0);
+        .next()
+        .contains('li', 'Failed')
+        .contains('li', 0)
+        .next()
+        .contains('li', 'Running')
+        .contains('li', 0);
 
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 4);
@@ -86,8 +90,8 @@ describe('Dashboard PDRs Page', () => {
     it('should display active PDRs', () => {
       cy.visit('/pdrs');
       cy.contains('.sidebar__row ul li a', 'Active 4')
-      .should('have.attr', 'href', '/pdrs/active')
-      .click();
+        .should('have.attr', 'href', '/pdrs/active')
+        .click();
 
       cy.contains('.heading--xlarge', 'Pdrs');
       cy.contains('.heading--large', 'Active PDRs')
@@ -97,7 +101,8 @@ describe('Dashboard PDRs Page', () => {
       cy.get('@list').should('have.length', 4);
 
       cy.get('.search').as('search');
-      cy.get('@search').eq(0).should('be.visible').click().type('A03861');
+      cy.get('@search').eq(0).should('be.visible').click()
+        .type('A03861');
       cy.url().should('include', 'search=A0386');
 
       cy.get('.table .tbody .tr').as('list');
@@ -127,7 +132,8 @@ describe('Dashboard PDRs Page', () => {
       cy.get('@list').should('have.length', 2);
 
       cy.get('.search').as('search');
-      cy.get('@search').eq(0).should('be.visible').click().type('9272');
+      cy.get('@search').eq(0).should('be.visible').click()
+        .type('9272');
       cy.url().should('include', 'search=9272');
 
       cy.get('.table .tbody .tr').as('list');
@@ -183,9 +189,11 @@ describe('Dashboard PDRs Page', () => {
       cy.get('@status-input').click().type('fai').type('{enter}');
       cy.url().should('include', '?status=failed');
 
-      cy.get('@status-input').click().clear().type('comp').type('{enter}');
+      cy.get('@status-input').click().clear().type('comp')
+        .type('{enter}');
       cy.get('.search').as('search');
-      cy.get('@search').eq(0).should('be.visible').click().type('GQ');
+      cy.get('@search').eq(0).should('be.visible').click()
+        .type('GQ');
       cy.url().should('include', 'status=completed');
       cy.url().should('include', 'search=GQ');
 
