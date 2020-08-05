@@ -13,7 +13,6 @@ import {
   getTEALambdaMetrics,
   getDistS3AccessMetrics,
   getStats,
-  interval,
   listExecutions,
   listGranules,
   listRules
@@ -26,7 +25,6 @@ import {
 import List from './Table/Table';
 import GranulesProgress from './Granules/progress';
 import { errorTableColumns } from '../utils/table-config/granules';
-import { updateInterval } from '../config';
 import {
   kibanaS3AccessErrorsLink,
   kibanaS3AccessSuccessesLink,
@@ -40,7 +38,6 @@ import {
   kibanaGatewayExecutionSuccessesLink,
   kibanaAllLogsLink,
 } from '../utils/kibana';
-// import { initialValuesFromLocation } from '../utils/url-helper';
 import Datepicker from './Datepicker/Datepicker';
 import { strings } from './locale';
 import { getPersistentQueryParams } from '../utils/url-helper';
@@ -49,24 +46,12 @@ class Home extends React.Component {
   constructor (props) {
     super(props);
     this.query = this.query.bind(this);
-    this.generateQuery = this.generateQuery.bind(this);
-    this.refreshQuery = this.refreshQuery.bind(this);
   }
 
   componentDidMount () {
     const { dispatch } = this.props;
-    this.refreshQuery();
     dispatch(getCumulusInstanceMetadata())
-      .then(() => {
-        dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
-        dispatch(getTEALambdaMetrics(this.props.cumulusInstance));
-        dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
-        dispatch(getDistS3AccessMetrics(this.props.cumulusInstance));
-      });
-  }
-
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
+      .then(() => this.query());
   }
 
   query () {
@@ -80,11 +65,6 @@ class Home extends React.Component {
     dispatch(listExecutions({}));
     dispatch(listGranules(this.generateQuery()));
     dispatch(listRules({}));
-  }
-
-  refreshQuery () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-    this.cancelInterval = interval(this.query, updateInterval, true);
   }
 
   generateQuery () {
@@ -186,7 +166,7 @@ class Home extends React.Component {
                   Select date and time to refine your results. <em>Time is UTC.</em>
                 </h2>
               </div>
-              <Datepicker onChange={this.refreshQuery}/>
+              <Datepicker onChange={this.query}/>
             </div>
           </section>
 
