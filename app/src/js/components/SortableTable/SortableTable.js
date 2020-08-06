@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
-import SimplePagination from '../Pagination/simple-pagniation';
+import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
 
 /**

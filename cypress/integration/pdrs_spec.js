@@ -67,9 +67,13 @@ describe('Dashboard PDRs Page', () => {
 
     it('Should update URL when dropdown filters are changed', () => {
       cy.visit('/pdrs');
-      cy.get('.filter__item').eq(1).as('page-size-input');
-      cy.get('@page-size-input').should('be.visible').click().type('10{enter}');
-      cy.url().should('include', 'limit=10');
+      cy.get('.table__header .filter-limit').as('limit-input');
+      cy.get('@limit-input').should('be.visible').click().type('{backspace}{backspace}1{enter}');
+      cy.url().should('include', 'limit=1');
+      cy.get('.table__header .filter-page').as('page-input');
+      cy.get('@page-input').should('be.visible').click().type('{backspace}2{enter}');
+      cy.url().should('include', 'page=2');
+      cy.get('.table .tbody .tr').should('have.length', 1);
     });
   });
 });

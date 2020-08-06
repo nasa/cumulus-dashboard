@@ -21,7 +21,6 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import { tableColumns } from '../../utils/table-config/operations';
 import ListFilters from '../ListActions/ListFilters';
-import pageSizeOptions from '../../utils/page-size';
 import { operationStatus } from '../../utils/status';
 import { operationTypes } from '../../utils/type';
 
@@ -96,9 +95,10 @@ class OperationOverview extends React.Component {
             query={this.generateQuery()}
             rowId='id'
             sortId='createdAt'
+            filterAction={filterOperations}
+            filterClear={clearOperationsFilter}
           >
             <ListFilters>
-
               <Search dispatch={dispatch}
                 action={searchOperations}
                 clear={clearOperationsSearch}
@@ -110,21 +110,12 @@ class OperationOverview extends React.Component {
                 paramKey={'status'}
                 label={'Status'}
               />
-
               <Dropdown
                 options={operationTypes}
                 action={filterOperations}
                 clear={clearOperationsFilter}
                 paramKey={'operationType'}
                 label={'Type'}
-              />
-
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterOperations}
-                clear={clearOperationsFilter}
-                paramKey={'limit'}
-                label={'Results Per Page'}
               />
             </ListFilters>
           </List>

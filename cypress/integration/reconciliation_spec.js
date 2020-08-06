@@ -74,7 +74,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
     it('deletes a report when the Delete button is clicked', () => {
       cy.visit('/reconciliation-reports');
-      cy.get('[data-value="inventoryReport-20200114T202529026"] > .td .button__row--delete').click();
+      cy.get('[data-value="inventoryReport-20200114T202529026"]').find('.button__row--delete').click({ force: true });
 
       cy.get('.table .tbody .tr').should('have.length', 2);
       cy.get('[data-value="inventoryReport-20200114T202529026"]')
@@ -85,8 +85,9 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.visit('/reconciliation-reports');
 
       cy.contains('.table .tbody .tr a', 'inventoryReport-20200114T205238781')
-        .should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T205238781')
-        .click();
+        .should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T205238781');
+
+      cy.contains('.table .tbody .tr a', 'inventoryReport-20200114T205238781').click();
 
       cy.contains('.heading--large', 'inventoryReport-20200114T205238781');
 

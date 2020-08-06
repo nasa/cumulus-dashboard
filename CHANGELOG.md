@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1876**
   - Fix/remove unnecessary timers on home page
 
+### Added
+
+- **CUMULUS-1892**
+  - Added TableHeader component to allow user to select page and limit params
+  - Removed all Results Per Page dropdowns in favor of the header
+
 ## [v1.10.0]
 
 ### BREAKING CHANGES

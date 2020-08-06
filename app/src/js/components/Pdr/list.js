@@ -15,12 +15,10 @@ import {
   errorTableColumns,
   bulkActions,
 } from '../../utils/table-config/pdrs';
-import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import List from '../Table/Table';
 
 import ListFilters from '../ListActions/ListFilters';
-import pageSizeOptions from '../../utils/page-size';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
@@ -87,19 +85,14 @@ const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
           query={query}
           bulkActions={generateBulkActions()}
           rowId="pdrName"
+          filterAction={filterPdrs}
+          filterClear={clearPdrsFilter}
         >
           <ListFilters>
             <Search
               dispatch={dispatch}
               action={searchPdrs}
               clear={clearPdrsSearch}
-            />
-            <Dropdown
-              options={pageSizeOptions}
-              action={filterPdrs}
-              clear={clearPdrsFilter}
-              paramKey={'limit'}
-              label={'Results Per Page'}
             />
           </ListFilters>
         </List>
