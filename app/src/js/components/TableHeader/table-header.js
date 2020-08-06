@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Pagination from '../Pagination/pagination';
 import Dropdown from '../DropDown/dropdown';
 import pageSizeOptions from '../../utils/page-size';
+import _config from '../../config';
+
+const { defaultPageLimit } = _config;
 
 /**
  * TableHeader
@@ -13,16 +16,27 @@ const TableHeader = ({
   action,
   clear,
   count,
-  limit,
+  limit = defaultPageLimit,
   page,
   onNewPage,
 }) => {
-  const selectedValues = limit
-    ? [{
-      id: limit,
-      label: limit.toString(),
-    }]
-    : [];
+  const [selectedValues, setSelectedValues] = useState([{
+    id: limit,
+    label: limit.toString(),
+  }]);
+
+  function handleLimitChange({ selections, updateSelection }) {
+    if (selections.length === 0) {
+      setSelectedValues([]);
+    } else {
+      const { id: value } = selections[0];
+      setSelectedValues([{
+        id: value,
+        label: value,
+      }]);
+    }
+    updateSelection();
+  }
 
   return (
     <div className="table__header">
@@ -45,6 +59,7 @@ const TableHeader = ({
           action={action}
           clear={clear}
           clearButton={false}
+          onChange={handleLimitChange}
           options={pageSizeOptions}
           paramKey="limit"
           selectedValues={selectedValues}

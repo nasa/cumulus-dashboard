@@ -32,9 +32,12 @@ const Pagination = ({
     }
   }
 
-  function handleDropdownChange({ updateSelection, value }) {
-    if (value) {
-      setPage(value, updateSelection);
+  function handleDropdownChange({ selections, updateSelection }) {
+    if (selections && selections.length > 0) {
+      const { id: selectedValue } = selections[0];
+      setPage(selectedValue, updateSelection);
+    } else {
+      updateSelection();
     }
   }
 
