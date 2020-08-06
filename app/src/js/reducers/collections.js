@@ -84,7 +84,7 @@ export default createReducer(initialState, {
   [COLLECTION_APPLYWORKFLOW_INFLIGHT]: createInflightReducer('executed'),
   [COLLECTION_APPLYWORKFLOW_ERROR]: createErrorReducer('executed'),
   [COLLECTIONS]: (state, action) => {
-    state.list.data = action.data.results;
+    state.list.data = action.data.results || [];
     state.list.meta = assignDate(action.data.meta);
     state.list.inflight = false;
     state.list.error = false;
