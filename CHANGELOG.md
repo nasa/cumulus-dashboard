@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+
+- **CUMULUS-417**
+  - Add some ESLint configuration to improve code quality
+  - Upgrades Cypress to 4.12.0
+
+### Fixed
+
+- **CUMULUS-1876**
+  - Fix/remove unnecessary timers on home page
 
 ### Fixed
 - **CUMULUS-2121**
@@ -19,9 +29,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - This dashboard version requires Cumulus API version >= v2.0.1
 
 ### Added
-- **CUMULUS-417**
-  - Add some ESLint configuration to improve code quality
-  - Upgrades Cypress to 4.12.0
+
 - **CUMULUS-1805**
   - Shows running, completed, and failed granule format for when there are zero granules,
     before it would just say "Granules 0," but now will show zeros in all categories.
