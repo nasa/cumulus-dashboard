@@ -74,7 +74,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
     it('deletes a report when the Delete button is clicked', () => {
       cy.visit('/reconciliation-reports');
-      cy.get('[data-value="inventoryReport-20200114T202529026"]').find('.button__row--delete').click();
+      cy.get('[data-value="inventoryReport-20200114T202529026"]').find('.button__row--delete').click({ force: true });
 
       cy.get('.table .tbody .tr').should('have.length', 2);
       cy.get('[data-value="inventoryReport-20200114T202529026"]')
