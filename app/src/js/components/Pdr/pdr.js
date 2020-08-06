@@ -105,8 +105,9 @@ class PDR extends React.Component {
   }
 
   componentDidMount () {
-    const { pdrName } = this.props.params;
-    const immediate = !this.props.pdrs.map[pdrName];
+    const { match, pdrs } = this.props;
+    const { pdrName } = match.params;
+    const immediate = !pdrs.map[pdrName];
     this.reload(immediate);
   }
 
@@ -115,14 +116,14 @@ class PDR extends React.Component {
   }
 
   reload (immediate) {
-    const { pdrName } = this.props.params;
-    const { dispatch } = this.props;
+    const { dispatch, match } = this.props;
+    const { pdrName } = match.params;
     if (this.cancelInterval) { this.cancelInterval(); }
     this.cancelInterval = interval(() => dispatch(getPdr(pdrName)), updateInterval, immediate);
   }
 
   deletePdr () {
-    const { pdrName } = this.props.params;
+    const { pdrName } = this.props.match.params;
     this.props.dispatch(deletePdr(pdrName));
   }
 
@@ -149,12 +150,15 @@ class PDR extends React.Component {
   }
 
   render () {
-    const { pdrName } = this.props.params;
-    const { list, dropdowns } = this.props.granules;
+    const { match, granules, collections, pdrs } = this.props;
+    const { pdrName } = match.params;
+    const record = pdrs.map[pdrName];
+    if (!record || (record.inflight && !record.data)) return <Loading />;
+    const { dropdowns } = collections;
+    const { list } = granules;
     const { count, queriedAt } = list.meta;
-    const record = this.props.pdrs.map[pdrName];
     const logsQuery = { 'meta.pdrName': pdrName };
-    const deleteStatus = get(this.props.pdrs.deleted, [pdrName, 'status']);
+    const deleteStatus = get(pdrs.deleted, [pdrName, 'status']);
     const error = record.error;
 
     const granulesCount = get(record, 'data.granulesStatus', []);
@@ -179,7 +183,7 @@ class PDR extends React.Component {
               text={deleteStatus === 'success' ? 'Deleted!' : 'Delete'} />
             {lastUpdated(queriedAt)}
             {this.renderProgress(record)}
-            {error ? <ErrorReport report={error} /> : null}
+            {error && <ErrorReport report={error} />}
           </div>
         </section>
 
@@ -187,7 +191,7 @@ class PDR extends React.Component {
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium with-description'>PDR Overview</h2>
           </div>
-          {!record || (record.inflight && !record.data) ? <Loading /> : <Metadata data={record.data} accessors={metaAccessors} />}
+          <Metadata data={record.data} accessors={metaAccessors} />
         </section>
 
         <section className='page__section'>
@@ -243,11 +247,12 @@ class PDR extends React.Component {
 }
 
 PDR.propTypes = {
+  collections: PropTypes.object,
   granules: PropTypes.object,
   logs: PropTypes.object,
   pdrs: PropTypes.object,
   dispatch: PropTypes.func,
-  params: PropTypes.object,
+  match: PropTypes.object,
   history: PropTypes.object
 };
 
