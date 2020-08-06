@@ -42,6 +42,15 @@ body {
   height: 100%;
 }
 
+row {
+    flexDirection: 'row';
+    height: 50;
+    justifyContent: 'center';
+    alignItems: 'center';
+    position: 'absolute'; //Here is the trick
+    bottom: 0;
+}
+
 .clearfix{
   &:before,
   &:after {

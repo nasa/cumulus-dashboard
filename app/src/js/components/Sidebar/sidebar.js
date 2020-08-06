@@ -56,9 +56,11 @@ class Sidebar extends React.Component {
 
   render () {
     return (
-      <div className='sidebar'>
-        <div className='sidebar__row'>
-          {sections.map(this.renderNavSection)}
+      <div id="content">
+        <div className='sidebar'>
+          <div className='sidebar__row'>
+            {sections.map(this.renderNavSection)}
+          </div>
         </div>
       </div>
     );
@@ -70,7 +72,9 @@ Sidebar.propTypes = {
   params: PropTypes.object,
   count: PropTypes.array,
   location: PropTypes.object,
-  match: PropTypes.object
+  match: PropTypes.object,
+  toggleSidebar: PropTypes.object,
+  isOpen: PropTypes.object
 };
 
 export default Sidebar;

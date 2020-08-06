@@ -10,6 +10,8 @@ class Footer extends React.Component {
   }
 
   render () {
+    const pckg = require('../../../../../package.json');
+    const DASH_VERSION = pckg.version;
     const { authenticated } = this.props.api;
     const { warning, versionNumber } = this.props.apiVersion;
 
@@ -20,7 +22,10 @@ class Footer extends React.Component {
       <div className='footer'>
         <div className='api__summary'>
           { authenticated &&
-            <h5 className='api__version'>Cumulus API Version: { versionNumber }</h5>
+            <div>
+              <h5 className='dashboard_version'> Cumulus Dashboard Version: { DASH_VERSION } </h5>
+              <h5 className='api__version'> Cumulus API Version: { versionNumber }</h5>
+            </div>
           }
           { versionWarning }
         </div>

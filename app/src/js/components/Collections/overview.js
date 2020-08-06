@@ -39,7 +39,6 @@ import { strings } from '../locale';
 import Overview from '../Overview/overview';
 import Search from '../Search/search';
 import List from '../Table/Table';
-
 const breadcrumbConfig = [
   {
     label: 'Dashboard Home',
