@@ -758,9 +758,8 @@ a:active {
 **************************************************/
 
 .footer{
-  border-top: 1px solid #E2DFDF;
   background-color: $ocean-blue;
-  padding-top: 15px;
+  padding: 15px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -768,7 +767,7 @@ a:active {
   text-align: center;
 }
 
-.api__version{
+.api__version,.dashboard__version{
   font-weight: 400;
   color: $white;
   padding: 10px 0 2px 0;
