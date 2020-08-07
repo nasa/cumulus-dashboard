@@ -1,4 +1,3 @@
-'use strict';
 import { tally } from '../format';
 
 export const tableColumns = [
@@ -12,17 +11,19 @@ export const tableColumns = [
   },
   {
     Header: 'Desired Tasks',
-    accessor: row => tally(row.desiredCount),
+    accessor: (row) => tally(row.desiredCount),
     id: 'desiredCount'
   },
   {
     Header: 'Pending Tasks',
-    accessor: row => tally(row.pendingCount),
+    accessor: (row) => tally(row.pendingCount),
     id: 'pendingCount'
   },
   {
     Header: 'Running Tasks',
-    accessor: row => tally(row.runningCount),
+    accessor: (row) => tally(row.runningCount),
     id: 'runningCount'
   }
 ];
+
+export default tableColumns;

@@ -1,4 +1,3 @@
-'use strict';
 const routes = [
   ['Overview', null]
 ];
@@ -13,13 +12,15 @@ const handler = {
   base: 'reconciliation-reports',
   heading: 'Reconciliation Reports',
   routes: (currentRoute, params) => {
-    if (currentRoute.indexOf('reconciliation-reports/report') >= 0) {
+    if (currentRoute.includes('reconciliation-reports/report')) {
       return singleRoutes;
-    } else if (currentRoute.indexOf('reconciliation-reports') < 0) {
-      return empty;
-    } else {
-      return routes;
     }
+
+    if (!currentRoute.includes('reconciliation-reports')) {
+      return empty;
+    }
+
+    return routes;
   }
 };
 

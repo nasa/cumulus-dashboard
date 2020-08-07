@@ -1,16 +1,18 @@
 import test from 'ava';
 import nock from 'nock';
 import sinon from 'sinon';
-import rewire from 'rewire';
 
 import { CALL_API } from '../../app/src/js/actions/types';
-const request = rewire('../../app/src/js/middleware/request');
+
+import {
+  requestMiddleware,
+  __RewireAPI__ as RequestRewireAPI
+} from '../../app/src/js/middleware/request';
 
 const token = 'fake-token';
 
-const requestMiddleware = request.__get__('requestMiddleware');
 const loginErrorStub = sinon.stub();
-request.__set__('loginError', () => {
+RequestRewireAPI.__Rewire__('loginError', () => {
   loginErrorStub();
 });
 
@@ -34,6 +36,10 @@ const createTestMiddleware = () => {
   const invokeMiddleware = action => requestMiddleware(store)(next)(action);
 
   return { store, next, invokeMiddleware };
+};
+
+const qsStringifyOptions = {
+  arrayFormat: 'brackets'
 };
 
 test.beforeEach((t) => {
@@ -96,7 +102,7 @@ test.serial('should add correct authorization headers to API request action', as
     body: {},
     statusCode: 200
   });
-  const revertRequestStub = request.__set__('requestPromise', requestPromiseStub);
+  const revertRequestStub = RequestRewireAPI.__Rewire__('requestPromise', requestPromiseStub);
 
   try {
     const { invokeMiddleware } = createTestMiddleware();
@@ -128,7 +134,7 @@ test.serial('should be able to use provided authorization headers', async (t) =>
     body: {},
     statusCode: 200
   });
-  const revertRequestStub = request.__set__('requestPromise', requestPromiseStub);
+  const revertRequestStub = RequestRewireAPI.__Rewire__('requestPromise', requestPromiseStub);
 
   try {
     const { invokeMiddleware } = createTestMiddleware();
@@ -164,7 +170,8 @@ test.serial('should dispatch error action for failed request', async (t) => {
     config: {
       ...t.context.defaultConfig,
       ...requestAction,
-      headers: t.context.expectedHeaders
+      headers: t.context.expectedHeaders,
+      qsStringifyOptions
     },
     type: 'TEST_ERROR'
   };
@@ -234,7 +241,8 @@ test.serial('should return expected action for GET request action', async (t) =>
     config: {
       ...t.context.defaultConfig,
       ...requestAction,
-      headers: t.context.expectedHeaders
+      headers: t.context.expectedHeaders,
+      qsStringifyOptions
     },
     type: 'TEST',
     data: stubbedResponse
@@ -274,7 +282,8 @@ test.serial('should return expected action for GET request action with query sta
     config: {
       ...t.context.defaultConfig,
       ...requestAction,
-      headers: t.context.expectedHeaders
+      headers: t.context.expectedHeaders,
+      qsStringifyOptions
     },
     type: 'TEST',
     data: stubbedResponse
@@ -285,6 +294,48 @@ test.serial('should return expected action for GET request action with query sta
   await invokeMiddleware(actionObj);
 
   t.deepEqual(next.firstCall.args[0], expectedAction);
+});
+
+test.serial('should filter startDateTime and endDateTime out of the query', async (t) => {
+  const requestAction = {
+    type: 'TEST',
+    method: 'GET',
+    url: 'http://anyhost',
+    qs: {
+      startDateTime: 1000000,
+      timestamp__from: 1000000,
+      endDateTime: 2000000,
+      timestamp__to: 2000000,
+      otherParam: 'test'
+    }
+  };
+  const actionObj = {
+    [CALL_API]: requestAction
+  };
+
+  const requestPromiseStub = sinon.stub().resolves({
+    body: {},
+    statusCode: 200
+  });
+  const revertRequestStub = RequestRewireAPI.__Rewire__('requestPromise', requestPromiseStub);
+
+  try {
+    const { invokeMiddleware } = createTestMiddleware();
+
+    await invokeMiddleware(actionObj);
+
+    const nextAction = requestPromiseStub.firstCall.args[0];
+
+    const expectedParams = {
+      timestamp__from: 1000000,
+      timestamp__to: 2000000,
+      otherParam: 'test'
+    };
+
+    t.deepEqual(nextAction.qs, expectedParams);
+  } finally {
+    revertRequestStub();
+  }
 });
 
 test.serial('should return expected action for POST request action', async (t) => {
@@ -310,7 +361,8 @@ test.serial('should return expected action for POST request action', async (t) =
     config: {
       ...t.context.defaultConfig,
       ...requestAction,
-      headers: t.context.expectedHeaders
+      headers: t.context.expectedHeaders,
+      qsStringifyOptions
     },
     type: 'TEST',
     data: requestBody
@@ -346,7 +398,8 @@ test.serial('should return expected action for PUT request action', async (t) =>
     config: {
       ...t.context.defaultConfig,
       ...requestAction,
-      headers: t.context.expectedHeaders
+      headers: t.context.expectedHeaders,
+      qsStringifyOptions
     },
     type: 'TEST',
     data: requestBody
@@ -379,7 +432,8 @@ test.serial('should return expected action for DELETE request action', async (t)
     config: {
       ...t.context.defaultConfig,
       ...requestAction,
-      headers: t.context.expectedHeaders
+      headers: t.context.expectedHeaders,
+      qsStringifyOptions
     },
     type: 'TEST',
     data: stubbedResponse

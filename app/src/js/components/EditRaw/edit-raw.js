@@ -1,4 +1,3 @@
-'use strict';
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -11,6 +10,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import TextArea from '../TextAreaForm/text-area';
 import DefaultModal from '../Modal/modal';
 import _config from '../../config';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 const { updateDelay } = _config;
 
@@ -42,9 +42,17 @@ const EditRaw = ({
   const isSuccess = updateStatus === 'success';
   const isInflight = updateStatus === 'inflight';
   const isError = !!error;
-  const buttonText = isInflight ? 'loading...'
-    : isSuccess ? 'Success!' : 'Submit';
   const recordDisplayName = displayCase(schemaKey);
+
+  let buttonText;
+
+  if (isInflight) {
+    buttonText = 'loading...';
+  } else if (isSuccess) {
+    buttonText = 'Success!';
+  } else {
+    buttonText = 'Submit';
+  }
 
   // get record and schema
   // ported from componentDidMount
@@ -62,13 +70,14 @@ const EditRaw = ({
     if (!hasModal && isSuccess) {
       setTimeout(() => {
         dispatch(clearRecordUpdate(pk));
-        history.push(backRoute);
+        historyPushWithQueryParams(backRoute);
       }, updateDelay);
     }
     if (updateStatus === 'error' && !isError) {
       setRecord({ ...record, error: errorMessage });
     }
-  }, [hasModal, isSuccess, updateStatus, isError, dispatch, clearRecordUpdate, pk, history, backRoute, record, errorMessage]);
+  }, [hasModal, isSuccess, updateStatus, isError, dispatch, clearRecordUpdate, pk, history, backRoute,
+    record, errorMessage]);
 
   // ported from componentDidUpdate
   useEffect(() => {
@@ -83,11 +92,12 @@ const EditRaw = ({
         error: newRecord.error
       });
     } else if (newRecord.data) {
-      const data = removeReadOnly(newRecord.data, recordSchema);
+      const newRecordData = removeReadOnly(newRecord.data, recordSchema);
+      let text;
       try {
-        var text = JSON.stringify(data, null, '\t');
-      } catch (error) {
-        setRecord({ ...record, error, pk });
+        text = JSON.stringify(newRecordData, null, '\t');
+      } catch (e) {
+        setRecord({ ...record, e, pk });
       }
       setRecord({
         pk,
@@ -102,9 +112,10 @@ const EditRaw = ({
   function onSubmit (e) {
     e.preventDefault();
     if (updateStatus === 'inflight') { return; }
+    let json;
     try {
-      var json = JSON.parse(data);
-    } catch (e) {
+      json = JSON.parse(data);
+    } catch (jsonError) {
       return setRecord({ ...record, error: 'Syntax error in JSON' });
     }
     setRecord({ ...record, error: null });
@@ -116,7 +127,7 @@ const EditRaw = ({
     if (isError) {
       dispatch(clearRecordUpdate(pk));
     }
-    history.push(backRoute);
+    historyPushWithQueryParams(backRoute);
   }
 
   function onChange (id, value) {
@@ -161,7 +172,7 @@ const EditRaw = ({
               maxLines={200}
             />
             <button
-              className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (updateStatus === 'inflight' ? ' button--disabled' : '')}
+              className={`button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right${updateStatus === 'inflight' ? ' button--disabled' : ''}`}
               onClick={handleSubmit}
               value={buttonText}
             >{hasModal ? 'Submit' : buttonText}</button>
@@ -219,6 +230,6 @@ EditRaw.propTypes = {
   hasModal: PropTypes.bool
 };
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   schema: state.schema
 }))(EditRaw));

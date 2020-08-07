@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -13,25 +12,31 @@ const CONCURRENCY = 3;
 const IN_PROGRESS = 'Processing...';
 
 /** BatchCommand
- * @description a reusable component for implementing batch async commands. For example: bulk delete, update, etc.
+ * @description a reusable component for implementing batch async commands. For example:
+ * bulk delete, update, etc.
  * @param {object} props
- * @param {function} props.getModalOptions This is the primary function used change the contents of the modal.
+ * @param {function} props.getModalOptions This is the primary function used change the
+ * contents of the modal.
  * It returns a modalOptions object which is passed as props to <DefaultModal />
- * Without this prop, by default, an empty modal will open with a progress bar running as the batch commands execute.
- * When using this function, one conditionally display content based on whether it should be displayed after confirm is clicked 'isOnModalConfirm: true',
- * after the action has completed 'isOnModalComplete: true', or neither (e.g. after the initial button that triggered the modal is clicked).
- * All those scenarios can display different content for the modal based on logic setup within getModalOptions.
+ * Without this prop, by default, an empty modal will open with a progress bar running as
+ * the batch commands execute.
+ * When using this function, one conditionally display content based on whether it should be
+ * displayed after confirm is clicked 'isOnModalConfirm: true',
+ * after the action has completed 'isOnModalComplete: true', or neither (e.g. after the initial
+ * button that triggered the modal is clicked).
+ * All those scenarios can display different content for the modal based on logic setup
+ * within getModalOptions.
  */
 
 export class BatchCommand extends React.Component {
-  constructor () {
+  constructor() {
     super();
     this.state = {
       callbacks: {},
       activeModal: false,
       completed: 0,
       status: null,
-      modalOptions: null
+      modalOptions: null,
     };
     this.isRunning = false;
     this.confirm = this.confirm.bind(this);
@@ -46,21 +51,21 @@ export class BatchCommand extends React.Component {
     this.closeModal = this.closeModal.bind(this);
   }
 
-  closeModal () {
+  closeModal() {
     this.setState({ activeModal: false });
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     if (this.isRunning) return;
     this.isRunning = true;
     const { state } = this.props;
     const { callbacks, completed } = this.state;
 
     // on success or error, call and remove the saved callback
-    Object.keys(callbacks).forEach(id => {
+    Object.keys(callbacks).forEach((id) => {
       if (!state[id] || !callbacks[id]) return;
-      else if (state[id].status === 'success') callbacks[id](null, id);
-      else if (state[id].status === 'error') callbacks[id]({ error: state[id].error, id });
+      if (state[id].status === 'success') callbacks[id](null, id);
+      else if (state[id].status === 'error') { callbacks[id]({ error: state[id].error, id }); }
 
       if (state[id].status === 'success' || state[id].status === 'error') {
         delete callbacks[id];
@@ -70,7 +75,7 @@ export class BatchCommand extends React.Component {
     this.isRunning = false;
   }
 
-  confirm () {
+  confirm() {
     const { selected, history, getModalOptions } = this.props;
     if (typeof getModalOptions === 'function') {
       const modalOptions = getModalOptions({
@@ -78,7 +83,7 @@ export class BatchCommand extends React.Component {
         history,
         isOnModalConfirm: true,
         isOnModalComplete: false,
-        closeModal: this.closeModal
+        closeModal: this.closeModal,
       });
       this.setState({ modalOptions });
 
@@ -90,25 +95,24 @@ export class BatchCommand extends React.Component {
     if (!this.isInflight()) this.start();
   }
 
-  cancel () {
+  cancel() {
     // prevent cancel when inflight
     if (!this.isInflight()) this.setState({ activeModal: false });
   }
 
-  start () {
+  start() {
     const { selected } = this.props;
     // if we have inflight callbacks, don't allow further clicks
-    if (!Array.isArray(selected) || !selected.length ||
-      this.isInflight()) return false;
+    if (!Array.isArray(selected) || !selected.length || this.isInflight()) { return false; }
     const q = queue(CONCURRENCY);
-    for (let i = 0; i < selected.length; ++i) {
+    for (let i = 0; i < selected.length; i += 1) {
       q.add(this.initAction, selected[i]);
     }
     q.done(this.onComplete);
   }
 
   // save a reference to the callback in state, then init the action
-  initAction (id, callback) {
+  initAction(id, callback) {
     const { dispatch, action } = this.props;
     const { callbacks } = this.state;
     callbacks[id] = callback;
@@ -117,26 +121,33 @@ export class BatchCommand extends React.Component {
   }
 
   // immediately change the UI to show either success or error
-  onComplete (errors, results) {
+  onComplete(errors, results) {
     const delay = this.props.updateDelay ? this.props.updateDelay : updateDelay;
     // turn array of errors from queue into single error for ui
     const errorMessage = this.createErrorMessage(errors);
-    this.setState({ status: (errorMessage ? 'error' : 'success') });
+    this.setState({ status: errorMessage ? 'error' : 'success' });
     setTimeout(() => {
       this.cleanup(errorMessage, errors, results);
     }, delay);
   }
 
   // combine multiple errors into one
-  createErrorMessage (errors) {
+  createErrorMessage(errors) {
     if (!errors || !errors.length) return;
-    return `${errors.length} error(s) occurred: \n${errors.map((err) => err.error.toString()).join('\n')}`;
+    return `${errors.length} error(s) occurred: \n${errors
+      .map((err) => err.error.toString())
+      .join('\n')}`;
   }
 
   // call onSuccess and onError functions as needed
-  cleanup (errorMessage, errors, results) {
-    const { onSuccess, onError, getModalOptions, selected, history } = this.props;
-    this.setState({ completed: 0, status: null });
+  cleanup(errorMessage, errors, results) {
+    const {
+      onSuccess,
+      onError,
+      getModalOptions,
+      selected,
+      history,
+    } = this.props;
     if (typeof getModalOptions === 'function') {
       const modalOptions = getModalOptions({
         history,
@@ -145,25 +156,27 @@ export class BatchCommand extends React.Component {
         errors,
         errorMessage,
         isOnModalComplete: true,
-        closeModal: this.closeModal
+        closeModal: this.closeModal,
       });
-      this.setState({ modalOptions });
+      this.setState({ modalOptions, status: null });
+    } else {
+      this.setState({ completed: 0, status: null, activeModal: false });
     }
     if (errorMessage && typeof onError === 'function') onError(errorMessage);
-    if (results && results.length && typeof onSuccess === 'function') onSuccess(results, errorMessage);
+    if (results && results.length && typeof onSuccess === 'function') { onSuccess(results, errorMessage); }
   }
 
-  isInflight () {
+  isInflight() {
     return !!Object.keys(this.state.callbacks).length;
   }
 
-  handleClick () {
+  handleClick() {
     const { selected, history, getModalOptions } = this.props;
     if (typeof getModalOptions === 'function') {
       const modalOptions = getModalOptions({
         selected,
         history,
-        closeModal: this.closeModal
+        closeModal: this.closeModal,
       });
       this.setState({ modalOptions });
     }
@@ -172,23 +185,24 @@ export class BatchCommand extends React.Component {
     } else this.start();
   }
 
-  render () {
-    const {
-      text,
-      selected,
-      className,
-      confirm,
-      confirmOptions
-    } = this.props;
+  render() {
+    const { text, selected, className, confirm, confirmOptions } = this.props;
     const { activeModal, completed, status, modalOptions } = this.state;
     const todo = selected.length;
     const inflight = this.isInflight();
 
     // show button as disabled when loading, and in the delay before we clean up.
     const buttonClass = inflight || status ? 'button--disabled' : '';
-    const modalText = inflight ? IN_PROGRESS
-      : !status ? confirm(todo)
-        : status === 'success' ? 'Success!' : 'Error';
+    let modalTitle;
+    if (inflight) {
+      modalTitle = IN_PROGRESS;
+    } else if (!status) {
+      modalTitle = confirm(todo);
+    } else if (status === 'success') {
+      modalTitle = 'Success!';
+    } else {
+      modalTitle = 'Error';
+    }
 
     return (
       <div>
@@ -199,35 +213,49 @@ export class BatchCommand extends React.Component {
           disabled={!activeModal && (!todo || !!inflight)}
           status={!activeModal && inflight ? 'inflight' : null}
         />
-        { activeModal && <div className='modal__cover'></div>}
-        <div className={ activeModal ? 'modal__container modal__container--onscreen' : 'modal__container' }>
+        {activeModal && <div className="modal__cover"></div>}
+        <div
+          className={
+            activeModal
+              ? 'modal__container modal__container--onscreen'
+              : 'modal__container'
+          }
+        >
           <DefaultModal
-            className='batch-async-modal'
+            className="batch-async-modal"
             onCancel={this.cancel}
             onCloseModal={this.cancel}
             onConfirm={this.confirm}
-            title={modalText}
+            title={modalTitle}
             showModal={activeModal}
             confirmButtonClass={`${buttonClass} button--submit`}
             cancelButtonClass={`${buttonClass} button--cancel`}
             {...modalOptions}
           >
-            {(!modalOptions || !modalOptions.children) &&
-            (<div className='modal__internal modal__formcenter'>
-              {confirmOptions && (confirmOptions).map(option =>
-                <div key={`option-${confirmOptions.indexOf(option)}`}>
-                  {option}
-                  <br />
-                </div>
-              )}
-              <div className='modal__loading'>
-                <div className='modal__loading--inner'>
-                  <div className={'modal__loading--progress modal__loading--progress--' + status}
-                    style={{ width: (todo ? (completed * 100 / todo) + '%' : 0) }}>
+            {(!modalOptions || !modalOptions.children) && (
+              <div className="modal__internal modal__formcenter">
+                {confirmOptions &&
+                  confirmOptions.map((option) => (
+                    <div key={`option-${confirmOptions.indexOf(option)}`}>
+                      {option}
+                      <br />
+                    </div>
+                  ))}
+                <div className="modal__loading">
+                  <div className="modal__loading--inner">
+                    <div
+                      className={
+                        `modal__loading--progress modal__loading--progress--${
+                        status}`
+                      }
+                      style={{
+                        width: todo ? `${(completed * 100) / todo}%` : 0,
+                      }}
+                    ></div>
                   </div>
                 </div>
               </div>
-            </div>)}
+            )}
             {modalOptions && modalOptions.children}
           </DefaultModal>
         </div>
@@ -249,7 +277,7 @@ BatchCommand.propTypes = {
   confirmOptions: PropTypes.array,
   getModalOptions: PropTypes.func,
   updateDelay: PropTypes.number,
-  history: PropTypes.object
+  history: PropTypes.object,
 };
 
 export default withRouter(BatchCommand);

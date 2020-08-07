@@ -1,7 +1,5 @@
-'use strict';
-
-import { msPerDay, findDateRangeByValue } from '../utils/datepicker';
 import { createReducer } from '@reduxjs/toolkit';
+import { msPerDay, findDateRangeByValue } from '../utils/datepicker';
 import {
   DATEPICKER_DATECHANGE,
   DATEPICKER_DROPDOWN_FILTER,
@@ -27,7 +25,7 @@ const computeDateTimeDelta = (timeDeltaInDays) => {
   let endDateTime = null;
   let startDateTime = null;
 
-  if (!isNaN(timeDeltaInDays)) {
+  if (!Number.isNaN(+timeDeltaInDays)) {
     endDateTime = Date.now();
     startDateTime = endDateTime - timeDeltaInDays * msPerDay;
   }

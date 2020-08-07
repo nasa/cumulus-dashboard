@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import Ace from 'react-ace';
@@ -9,11 +8,11 @@ import { getCollection } from '../../actions';
 import { lastUpdated, nullValue, getCollectionId } from '../../utils/format';
 import config from '../../config';
 import Loading from '../LoadingIndicator/loading-indicator';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
 class CollectionIngest extends React.Component {
   constructor() {
     super();
-    this.displayName = 'CollectionIngest';
     this.state = {
       view: 'json',
     };
@@ -75,7 +74,10 @@ class CollectionIngest extends React.Component {
           </h1>
           <Link
             className="button button--edit button--small form-group__element--right button--green"
-            to={`/collections/edit/${name}/${version}`}
+            to={(location) => ({
+              pathname: `/collections/edit/${name}/${version}`,
+              search: getPersistentQueryParams(location),
+            })}
           >
             Edit
           </Link>
@@ -85,12 +87,10 @@ class CollectionIngest extends React.Component {
           <div className="tab--wrapper">
             <button
               className={
-                'button--tab ' +
-                (this.state.view === 'json' ? 'button--active' : '')
+                `button--tab ${
+                this.state.view === 'json' ? 'button--active' : ''}`
               }
-              onClick={() =>
-                this.state.view !== 'json' && this.setState({ view: 'json' })
-              }
+              onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}
             >
               JSON View
             </button>

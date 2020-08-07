@@ -1,4 +1,3 @@
-'use strict';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -11,7 +10,7 @@ import {
   listCollections
 } from '../../actions';
 import AddRecord from '../Add/add';
-import { getCollectionId, collectionNameVersion } from '../../utils/format';
+import { getCollectionId, nullValue, collectionNameVersion } from '../../utils/format';
 
 /**
  * Converts the Collection ID string associated with the `collection` property
@@ -44,7 +43,10 @@ import { getCollectionId, collectionNameVersion } from '../../utils/format';
  *    function does not perform any validation)
  */
 const validate = (rule) => {
-  rule.collection = collectionNameVersion(rule.collection);
+  const ruleCollection = collectionNameVersion(rule.collection);
+  if (ruleCollection !== nullValue) {
+    rule.collection = ruleCollection;
+  }
   return true;
 };
 
@@ -108,23 +110,23 @@ const AddRule = ({
     }
   }, [name, rulesMap, isCopy]);
 
-  const dispatched = ({ list }) => {
-    const { inflight, meta, error } = list || {};
-    const { queriedAt } = meta || {};
-    return error || inflight || queriedAt !== undefined;
-  };
+  useEffect(() => {
+    dispatch(listCollections({ listAll: true, getMMT: false }));
+  }, [dispatch]);
 
   useEffect(() => {
-    if (!dispatched(collections)) dispatch(listCollections({ listAll: true, getMMT: false }));
-    if (!dispatched(providers)) dispatch(listProviders());
-    if (!dispatched(workflows)) dispatch(listWorkflows());
-  });
+    dispatch(listProviders());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(listWorkflows());
+  }, [dispatch]);
 
   useEffect(() => {
     setEnums({
       collection: collections.list.data.map(getCollectionId).sort(asc),
       provider: providers.list.data.map(({ id }) => id).sort(asc),
-      workflow: workflows.list.data.map(({ name }) => name).sort(asc)
+      workflow: workflows.list.data.map(({ name: workflowName }) => workflowName).sort(asc)
     });
   }, [collections, providers, workflows]);
 

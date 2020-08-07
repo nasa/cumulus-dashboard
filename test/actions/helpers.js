@@ -17,6 +17,10 @@ const getStateStub = () => ({
   }
 });
 
+const qsStringifyOptions = {
+  arrayFormat: 'brackets'
+};
+
 test.beforeEach((t) => {
   t.context.defaultConfig = {
     json: true,
@@ -87,13 +91,13 @@ test('addRequestAuthorization() should return correct headers', (t) => {
 test('configureRequest() should throw error if no URL or path is provided', (t) => {
   const requestParams = {};
 
-  t.throws(() => configureRequest(requestParams), 'Must include a URL or path with request');
+  t.throws(() => configureRequest(requestParams), { message: 'Must include a URL or path with request' });
 });
 
 test('configureRequest() should throw error if path is not a string', (t) => {
   const requestParams = { path: {} };
 
-  t.throws(() => configureRequest(requestParams), 'Path must be a string');
+  t.throws(() => configureRequest(requestParams), { message: 'Path must be a string' });
 });
 
 test('configureRequest() should add default parameters', (t) => {
@@ -103,7 +107,8 @@ test('configureRequest() should add default parameters', (t) => {
   const expectedConfig = {
     ...t.context.defaultConfig,
     url: 'http://localhost/test',
-    headers: t.context.defaultHeaders
+    headers: t.context.defaultHeaders,
+    qsStringifyOptions
   };
   const requestConfig = configureRequest(requestParams);
   t.deepEqual(requestConfig, expectedConfig);
@@ -117,7 +122,8 @@ test('configureRequest() should convert path to URL', (t) => {
     ...t.context.defaultConfig,
     path: 'test',
     url: 'http://localhost/test',
-    headers: t.context.defaultHeaders
+    headers: t.context.defaultHeaders,
+    qsStringifyOptions
   };
   const requestConfig = configureRequest(requestParams);
   t.deepEqual(requestConfig, expectedConfig);
@@ -135,7 +141,8 @@ test('configureRequest() should maintain the request body', (t) => {
     ...t.context.defaultConfig,
     url: 'http://localhost/test',
     body: requestBody,
-    headers: t.context.defaultHeaders
+    headers: t.context.defaultHeaders,
+    qsStringifyOptions
   };
   const requestConfig = configureRequest(requestParams);
   t.deepEqual(requestConfig, expectedConfig);
@@ -153,14 +160,15 @@ test('configureRequest() should maintain query state parameters', (t) => {
     ...t.context.defaultConfig,
     url: 'http://localhost/test',
     qs: queryParameters,
-    headers: t.context.defaultHeaders
+    headers: t.context.defaultHeaders,
+    qsStringifyOptions
   };
   const requestConfig = configureRequest(requestParams);
   t.deepEqual(requestConfig, expectedConfig);
 });
 
 test('configureRequest() should not overwrite auth headers', (t) => {
-  let requestParams = {
+  const requestParams = {
     path: 'test',
     headers: {
       Authorization: 'Bearer fake-token'
@@ -174,7 +182,8 @@ test('configureRequest() should not overwrite auth headers', (t) => {
     headers: {
       ...t.context.defaultHeaders,
       Authorization: 'Bearer fake-token'
-    }
+    },
+    qsStringifyOptions
   };
 
   const requestConfig = configureRequest(requestParams);

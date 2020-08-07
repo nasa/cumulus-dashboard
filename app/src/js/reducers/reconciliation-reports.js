@@ -1,7 +1,5 @@
-'use strict';
-
-import assignDate from './utils/assign-date';
 import { createReducer } from '@reduxjs/toolkit';
+import assignDate from './utils/assign-date';
 import {
   RECONCILIATION,
   RECONCILIATION_INFLIGHT,
@@ -15,6 +13,10 @@ import {
   NEW_RECONCILIATION,
   FILTER_RECONCILIATIONS,
   CLEAR_RECONCILIATIONS_FILTER,
+  SEARCH_RECONCILIATION,
+  CLEAR_RECONCILIATION_SEARCH,
+  FILTER_RECONCILIATION,
+  CLEAR_RECONCILIATION_FILTER,
 } from '../actions/types';
 
 export const initialState = {
@@ -76,6 +78,18 @@ export default createReducer(initialState, {
     state.list.params[action.param.key] = action.param.value;
   },
   [CLEAR_RECONCILIATIONS_FILTER]: (state, action) => {
+    state.list.params[action.paramKey] = null;
+  },
+  [SEARCH_RECONCILIATION]: (state, action) => {
+    state.searchString = action.searchString;
+  },
+  [CLEAR_RECONCILIATION_SEARCH]: (state) => {
+    state.searchString = null;
+  },
+  [FILTER_RECONCILIATION]: (state, action) => {
+    state.list.params[action.param.key] = action.param.value;
+  },
+  [CLEAR_RECONCILIATION_FILTER]: (state, action) => {
     state.list.params[action.paramKey] = null;
   }
 });

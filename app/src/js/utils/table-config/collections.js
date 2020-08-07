@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { get } from 'object-path';
 import { Link } from 'react-router-dom';
@@ -8,6 +7,7 @@ import { strings } from '../../components/locale';
 import BatchDeleteConfirmContent from '../../components/DeleteCollection/BatchDeleteConfirmContent';
 import BatchDeleteCompleteContent from '../../components/DeleteCollection/BatchDeleteCompleteContent';
 import BatchDeleteWithGranulesContent from '../../components/DeleteCollection/BatchDeleteWithGranulesContent';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
 
 export const tableColumns = [
   {
@@ -15,7 +15,7 @@ export const tableColumns = [
     accessor: 'name',
     Cell: ({ cell: { value, row } }) => { // eslint-disable-line react/prop-types
       const { values } = row; // eslint-disable-line react/prop-types
-      return <Link to={`/collections/collection/${value}/${values.version}`}>{value}</Link>; // eslint-disable-line react/prop-types
+      return <Link to={(location) => ({ pathname: `/collections/collection/${value}/${values.version}`, search: getPersistentQueryParams(location) })}>{value}</Link>; // eslint-disable-line react/prop-types
     },
     width: 175
   },
@@ -25,28 +25,28 @@ export const tableColumns = [
   },
   {
     Header: strings.granules,
-    accessor: row => tally(get(row, 'stats.total')),
+    accessor: (row) => tally(get(row, 'stats.total')),
     id: 'granules',
     disableSortBy: true,
     width: 100
   },
   {
     Header: 'Completed',
-    accessor: row => tally(get(row, 'stats.completed')),
+    accessor: (row) => tally(get(row, 'stats.completed')),
     id: 'completed',
     disableSortBy: true,
     width: 100
   },
   {
     Header: 'Running',
-    accessor: row => tally(get(row, 'stats.running')),
+    accessor: (row) => tally(get(row, 'stats.running')),
     id: 'running',
     disableSortBy: true,
     width: 100
   },
   {
     Header: 'Failed',
-    accessor: row => tally(get(row, 'stats.failed')),
+    accessor: (row) => tally(get(row, 'stats.failed')),
     id: 'failed',
     disableSortBy: true,
     width: 100
@@ -54,7 +54,7 @@ export const tableColumns = [
   {
     Header: 'MMT',
     accessor: 'mmtLink',
-    Cell: ({ cell: { value } }) => value ? <a href={value} target="_blank">MMT</a> : null, // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => (value ? <a href={value} target="_blank">MMT</a> : null), // eslint-disable-line react/prop-types
     disableSortBy: true,
     width: 100
   },
@@ -71,18 +71,16 @@ export const tableColumns = [
 ];
 
 const confirmRecover = (d) => `Recover ${d} ${strings.collection}(s)?`;
-export const recoverAction = function (collections, config) {
-  return [{
-    text: 'Recover',
-    action: config.recover.action,
-    state: collections.executed, // this will probably need to be changed
-    confirm: confirmRecover
-  }];
-};
+export const recoverAction = (collections, config) => [{
+  text: 'Recover',
+  action: config.recover.action,
+  state: collections.executed, // this will probably need to be changed
+  confirm: confirmRecover
+}];
 
 const confirmDelete = (d) => `Delete ${d} ${strings.collection}(s)?`;
 
-export const bulkActions = function (collections) {
+export const bulkActions = (collections) => {
   const getModalOptions = ({
     selected = [],
     history,
@@ -96,9 +94,9 @@ export const bulkActions = function (collections) {
     if (!isOnModalConfirm && !isOnModalComplete) {
       modalOptions.children = <BatchDeleteConfirmContent selected={selected} />;
     } else if (isOnModalConfirm && !isOnModalComplete) {
-      const selectionsWithGranules = selected.filter(selection => {
+      const selectionsWithGranules = selected.filter((selection) => {
         const { name, version } = collectionNameVersion(selection);
-        const collectionItem = collections.list.data.find(item => item.name === name && item.version === version);
+        const collectionItem = collections.list.data.find((item) => item.name === name && item.version === version);
         return get(collectionItem, 'stats.total', 0) > 0;
       });
 
@@ -108,7 +106,7 @@ export const bulkActions = function (collections) {
         modalOptions.cancelButtonText = 'Cancel Request';
         modalOptions.title = 'Warning';
         modalOptions.onConfirm = () => {
-          history.push('/granules');
+          historyPushWithQueryParams('/granules');
         };
         modalOptions.children = <BatchDeleteWithGranulesContent selectionsWithGranules={selectionsWithGranules} />;
       }
@@ -125,7 +123,18 @@ export const bulkActions = function (collections) {
   };
   return [
     {
-      Component: <Link className='button button--green button--add button--small form-group__element' to='/collections/add' role="button">{strings.add_collection}</Link>
+      Component: (
+        <Link
+          className="button button--green button--add button--small form-group__element"
+          to={(location) => ({
+            pathname: '/collections/add',
+            search: getPersistentQueryParams(location),
+          })}
+          role="button"
+        >
+          {strings.add_collection}
+        </Link>
+      ),
     },
     {
       text: 'Delete Collection(s)',

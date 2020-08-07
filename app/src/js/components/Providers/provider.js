@@ -1,14 +1,13 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
+import { get } from 'object-path';
 import {
   getProvider,
   deleteProvider,
   listCollections
 } from '../../actions';
-import { get } from 'object-path';
 import {
   fromNow,
   lastUpdated,
@@ -21,6 +20,7 @@ import LogViewer from '../Logs/viewer';
 import DropdownAsync from '../DropDown/dropdown-async-command';
 import ErrorReport from '../Errors/report';
 import Metadata from '../Table/Metadata';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 
 const metaAccessors = [
   {
@@ -69,13 +69,12 @@ class ProviderOverview extends React.Component {
   }
 
   loadProvider () {
-    const providerId = this.props.match.params.providerId;
+    const { providerId } = this.props.match.params;
     this.props.dispatch(getProvider(providerId));
   }
 
   navigateBack () {
-    const { history } = this.props;
-    history.push('/providers');
+    historyPushWithQueryParams('/providers');
   }
 
   delete () {
@@ -87,7 +86,7 @@ class ProviderOverview extends React.Component {
   }
 
   errors () {
-    const providerId = this.props.match.params.providerId;
+    const { providerId } = this.props.match.params;
     return [
       get(this.props.providers.map, [providerId, 'error']),
       get(this.props.providers.deleted, [providerId, 'error'])
@@ -95,12 +94,14 @@ class ProviderOverview extends React.Component {
   }
 
   render () {
-    const providerId = this.props.match.params.providerId;
+    const { providerId } = this.props.match.params;
     const record = this.props.providers.map[providerId];
 
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
-    } else if (record.error) {
+    }
+
+    if (record.error) {
       return <ErrorReport report={record.error} truncate={true} />;
     }
     const provider = record.data;
@@ -125,7 +126,7 @@ class ProviderOverview extends React.Component {
           <DropdownAsync config={dropdownConfig} />
           <Link
             className='button button--small button--green button--edit form-group__element--right'
-            to={'/providers/edit/' + providerId}>Edit</Link>
+            to={(location) => ({ pathname: `/providers/edit/${providerId}`, search: getPersistentQueryParams(location) })}>Edit</Link>
           {lastUpdated(provider.timestamp || provider.updatedAt)}
         </section>
 
@@ -155,7 +156,6 @@ ProviderOverview.propTypes = {
   dispatch: PropTypes.func,
   providers: PropTypes.object,
   logs: PropTypes.object,
-  history: PropTypes.object
 };
 
 ProviderOverview.displayName = 'ProviderElem';
@@ -164,4 +164,5 @@ export default withRouter(
   connect((state) => ({
     providers: state.providers,
     logs: state.logs
-  }))(ProviderOverview));
+  }))(ProviderOverview)
+);

@@ -467,15 +467,15 @@ select option{
   border-radius: .2em;
 }
 
-.autocomplete__select {
+.autocomplete__select.dropdown-item {
   cursor: pointer;
   padding: .3em .9em;
   font-size: .86em;
-}
 
-.autocomplete__select--highlighted {
-  background-color: $ocean-blue;
-  color:$white;
+  &:hover {
+    background-color: $ocean-blue;
+    color:$white;
+  }
 }
 
 .subform__item--last .subform__button {

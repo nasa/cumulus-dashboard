@@ -1,7 +1,5 @@
-'use strict';
-
-import { SCHEMA } from '../actions/types';
 import { createReducer } from '@reduxjs/toolkit';
+import { SCHEMA } from '../actions/types';
 
 export const initialState = {};
 

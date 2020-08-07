@@ -1,9 +1,11 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import withQueryParams from 'react-router-query-params';
+import { get } from 'object-path';
+import isEqual from 'lodash/isEqual';
 import {
   searchGranules,
   clearGranulesSearch,
@@ -16,8 +18,7 @@ import {
   getOptionsCollectionName,
   getGranuleCSV
 } from '../../actions';
-import { get } from 'object-path';
-import { lastUpdated, tally, displayCase } from '../../utils/format';
+import { lastUpdated, tally } from '../../utils/format';
 import {
   tableColumns,
   simpleDropdownOption,
@@ -34,9 +35,7 @@ import { workflowOptionNames } from '../../selectors';
 import { window } from '../../utils/browser';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import pageSizeOptions from '../../utils/page-size';
 import { downloadFile } from '../../utils/download-file';
-import isEqual from 'lodash.isequal';
 
 const breadcrumbConfig = [
   {
@@ -81,7 +80,8 @@ class GranulesOverview extends React.Component {
   }
 
   generateQuery () {
-    return {};
+    const { queryParams } = this.props;
+    return { ...queryParams };
   }
 
   generateBulkActions () {
@@ -138,12 +138,10 @@ class GranulesOverview extends React.Component {
   }
 
   render () {
-    const { collections, stats, granules, dispatch } = this.props;
+    const { collections, dispatch, granules } = this.props;
     const { list } = granules;
     const { dropdowns } = collections;
     const { count, queriedAt } = list.meta;
-    const statsCount = get(stats, 'count.data.granules.count', []);
-    const overviewItems = statsCount.map(d => [tally(d.count), displayCase(d.key)]);
     return (
       <div className='page__component'>
         <Helmet>
@@ -156,7 +154,7 @@ class GranulesOverview extends React.Component {
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>{strings.granule_overview}</h1>
             {lastUpdated(queriedAt)}
-            <Overview items={overviewItems} inflight={false} />
+            <Overview type='granules' inflight={false} />
           </div>
         </section>
         <section className='page__section'>
@@ -175,6 +173,8 @@ class GranulesOverview extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId='granuleId'
             sortId='timestamp'
+            filterAction={filterGranules}
+            filterClear={clearGranulesFilter}
           >
             <ListFilters>
               <Dropdown
@@ -205,16 +205,6 @@ class GranulesOverview extends React.Component {
                 label='Search'
                 placeholder='Granule ID'
               />
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey='limit'
-                label='Results Per Page'
-                inputProps={{
-                  placeholder: 'Results Per Page'
-                }}
-              />
             </ListFilters>
           </List>
         </section>
@@ -225,21 +215,20 @@ class GranulesOverview extends React.Component {
 
 GranulesOverview.propTypes = {
   collections: PropTypes.object,
-  granules: PropTypes.object,
-  stats: PropTypes.object,
-  dispatch: PropTypes.func,
-  workflowOptions: PropTypes.array,
   config: PropTypes.object,
-  granuleCSV: PropTypes.object
+  dispatch: PropTypes.func,
+  granuleCSV: PropTypes.object,
+  granules: PropTypes.object,
+  queryParams: PropTypes.object,
+  workflowOptions: PropTypes.array,
 };
 
 export { GranulesOverview };
 
-export default withRouter(connect(state => ({
+export default withRouter(withQueryParams()(connect((state) => ({
   collections: state.collections,
-  stats: state.stats,
-  workflowOptions: workflowOptionNames(state),
-  granules: state.granules,
   config: state.config,
   granuleCSV: state.granuleCSV,
-}))(GranulesOverview));
+  granules: state.granules,
+  workflowOptions: workflowOptionNames(state),
+}))(GranulesOverview)));

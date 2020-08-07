@@ -1,10 +1,10 @@
-'use strict';
 import { get } from 'object-path';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
+import isEqual from 'lodash/isEqual';
 import {
   clearGranulesFilter,
   clearGranulesSearch,
@@ -20,11 +20,9 @@ import {
   collectionNameVersion,
   getCollectionId,
   lastUpdated,
-  tally,
 } from '../../utils/format';
-import pageSizeOptions from '../../utils/page-size';
 import statusOptions from '../../utils/status';
-import isEqual from 'lodash.isequal';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 import {
   reingestAction,
   tableColumns,
@@ -94,7 +92,7 @@ class CollectionOverview extends React.Component {
 
   changeCollection(_, collectionId) {
     const { name, version } = collectionNameVersion(collectionId);
-    this.props.history.push(`/collections/collection/${name}/${version}`);
+    historyPushWithQueryParams(`/collections/collection/${name}/${version}`);
   }
 
   generateBulkActions() {
@@ -114,8 +112,10 @@ class CollectionOverview extends React.Component {
   }
 
   generateQuery() {
+    const { match, queryParams } = this.props;
     return {
-      collectionId: getCollectionId(this.props.match.params),
+      ...queryParams,
+      collectionId: getCollectionId(match.params),
     };
   }
 
@@ -125,11 +125,11 @@ class CollectionOverview extends React.Component {
   }
 
   navigateBack() {
-    this.props.history.push('/collections/all');
+    historyPushWithQueryParams('/collections/all');
   }
 
   gotoGranules() {
-    this.props.history.push('/granules');
+    historyPushWithQueryParams('/granules');
   }
 
   errors() {
@@ -139,17 +139,6 @@ class CollectionOverview extends React.Component {
       get(this.props.collections.map, [collectionId, 'error']),
       get(this.props.collections.deleted, [collectionId, 'error']),
     ].filter(Boolean);
-  }
-
-  renderOverview(record) {
-    const data = get(record, 'data', {});
-    const stats = get(data, 'stats', {});
-    const overview = [
-      [tally(stats.completed), strings.granules_completed],
-      [tally(stats.failed), strings.granules_failed],
-      [tally(stats.running), strings.granules_running],
-    ];
-    return <Overview items={overview} inflight={record.inflight} />;
   }
 
   renderDeleteButton() {
@@ -181,7 +170,6 @@ class CollectionOverview extends React.Component {
       collections,
       granules: { list },
     } = this.props;
-
     const collectionName = params.name;
     const collectionVersion = params.version;
     const collectionId = getCollectionId(params);
@@ -190,9 +178,6 @@ class CollectionOverview extends React.Component {
       (id1, id2) => id1.localeCompare(id2, 'en', { sensitivity: 'base' })
     );
     const record = collections.map[collectionId];
-
-    // create the overview boxes
-    const overview = record ? this.renderOverview(record) : <div></div>;
 
     return (
       <div className="page__component">
@@ -232,13 +217,14 @@ class CollectionOverview extends React.Component {
               <li>
                 <Link
                   className="button button--copy button--small button--green"
-                  to={{
+                  to={(location) => ({
                     pathname: '/collections/add',
+                    search: getPersistentQueryParams(location),
                     state: {
                       name: collectionName,
                       version: collectionVersion,
                     },
-                  }}
+                  })}
                 >
                   Copy
                 </Link>
@@ -246,7 +232,10 @@ class CollectionOverview extends React.Component {
               <li>
                 <Link
                   className="button button--edit button--small button--green"
-                  to={`/collections/edit/${collectionName}/${collectionVersion}`}
+                  to={(location) => ({
+                    pathname: `/collections/edit/${collectionName}/${collectionVersion}`,
+                    search: getPersistentQueryParams(location),
+                  })}
                 >
                   Edit
                 </Link>
@@ -264,7 +253,7 @@ class CollectionOverview extends React.Component {
               Granule Metrics
             </h2>
           </div>
-          {overview}
+          {record && <Overview type='granules' params={{ collectionId }} inflight={record.inflight} />}
         </section>
         <section className="page__section">
           <div className="heading__wrapper--border">
@@ -276,7 +265,10 @@ class CollectionOverview extends React.Component {
             </h2>
             <Link
               className="button button--small button__goto button--green form-group__element--right"
-              to={`/collections/collection/${collectionName}/${collectionVersion}/granules`}
+              to={(location) => ({
+                pathname: `/collections/collection/${collectionName}/${collectionVersion}/granules`,
+                search: getPersistentQueryParams(location),
+              })}
             >
               {strings.view_all_granules}
             </Link>
@@ -290,6 +282,8 @@ class CollectionOverview extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId="granuleId"
             sortId="timestamp"
+            filterAction={filterGranules}
+            filterClear={clearGranulesFilter}
           >
             <ListFilters>
               <Search
@@ -309,16 +303,6 @@ class CollectionOverview extends React.Component {
                   placeholder: 'All',
                 }}
               />
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey="limit"
-                label={'Results Per Page'}
-                inputProps={{
-                  placeholder: 'Results Per Page',
-                }}
-              />
             </ListFilters>
           </List>
         </section>
@@ -334,9 +318,8 @@ CollectionOverview.propTypes = {
   datepicker: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
-  history: PropTypes.object,
   match: PropTypes.object,
-  router: PropTypes.object,
+  queryParams: PropTypes.object,
 };
 
 export default withRouter(

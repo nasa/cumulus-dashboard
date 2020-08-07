@@ -1,4 +1,3 @@
-'use strict';
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -27,13 +26,14 @@ import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import pageSizeOptions from '../../utils/page-size';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const CollectionGranules = ({
   dispatch,
-  match,
-  location,
   granules,
+  location,
+  match,
+  queryParams,
   workflowOptions,
 }) => {
   const { params } = match;
@@ -83,7 +83,10 @@ const CollectionGranules = ({
   }, [workflowOptions]);
 
   function generateQuery() {
-    const options = { collectionId };
+    const options = {
+      ...queryParams,
+      collectionId,
+    };
     if (view !== 'all') options.status = view;
     return options;
   }
@@ -106,8 +109,8 @@ const CollectionGranules = ({
     return bulkActions(granules, actionConfig);
   }
 
-  function selectWorkflow(selector, workflow) {
-    setWorkflow(workflow);
+  function selectWorkflow(selector, selectedWorkflow) {
+    setWorkflow(selectedWorkflow);
   }
 
   function applyWorkflow(granuleId) {
@@ -139,7 +142,10 @@ const CollectionGranules = ({
         </h1>
         <Link
           className="button button--edit button--small form-group__element--right button--green"
-          to={`/collections/edit/${collectionName}/${collectionVersion}`}
+          to={{
+            pathname: `/collections/edit/${collectionName}/${collectionVersion}`,
+            search: getPersistentQueryParams(location),
+          }}
         >
           Edit
         </Link>
@@ -165,6 +171,8 @@ const CollectionGranules = ({
           rowId="granuleId"
           sortId="timestamp"
           tableColumns={tableColumns}
+          filterAction={filterGranules}
+          filterClear={clearGranulesFilter}
         >
           <ListFilters>
             <Search
@@ -186,16 +194,6 @@ const CollectionGranules = ({
                 }}
               />
             )}
-            <Dropdown
-              options={pageSizeOptions}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              label="Results Per Page"
-              paramKey="limit"
-              inputProps={{
-                placeholder: 'Results Per Page',
-              }}
-            />
           </ListFilters>
         </List>
       </section>
@@ -207,13 +205,14 @@ CollectionGranules.propTypes = {
   granules: PropTypes.object,
   dispatch: PropTypes.func,
   location: PropTypes.object,
-  workflowOptions: PropTypes.array,
   match: PropTypes.object,
+  queryParams: PropTypes.object,
+  workflowOptions: PropTypes.array,
 };
 
 export default withRouter(
   connect((state) => ({
-    workflowOptions: workflowOptionNames(state),
     granules: state.granules,
+    workflowOptions: workflowOptionNames(state),
   }))(CollectionGranules)
 );

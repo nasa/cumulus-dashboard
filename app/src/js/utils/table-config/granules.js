@@ -1,8 +1,8 @@
-'use strict';
 import path from 'path';
 import React from 'react';
 import { get } from 'object-path';
 import { Link } from 'react-router-dom';
+import noop from 'lodash/noop';
 import {
   fromNow,
   seconds,
@@ -24,13 +24,14 @@ import Dropdown from '../../components/DropDown/simple-dropdown';
 import Bulk from '../../components/Granules/bulk';
 import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent';
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
 
 export const tableColumns = [
   {
     Header: 'Status',
     accessor: 'status',
     width: 100,
-    Cell: ({ cell: { value } }) => <Link to={`/granules/${value}`} className={`granule__status granule__status--${value}`}>{displayCase(value)}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={(location) => ({ pathname: `/granules/${value}`, search: getPersistentQueryParams(location) })} className={`granule__status granule__status--${value}`}>{displayCase(value)}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Name',
@@ -41,8 +42,9 @@ export const tableColumns = [
   {
     Header: 'Published',
     accessor: 'published',
-    Cell: ({ row: { original: { cmrLink, published } } }) => // eslint-disable-line react/prop-types
+    Cell: ({ row: { original: { cmrLink, published } } }) => (// eslint-disable-line react/prop-types
       cmrLink ? <a href={cmrLink} target='_blank'>{bool(published)}</a> : bool(published)
+    )
   },
   {
     Header: strings.collection_id,
@@ -57,20 +59,20 @@ export const tableColumns = [
   {
     Header: 'Execution',
     accessor: 'execution',
-    Cell: ({ cell: { value } }) => // eslint-disable-line react/prop-types
-      <Link to={`/executions/execution/${path.basename(value)}`}>link</Link>,
+    Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
+      <Link to={(location) => ({ pathname: `/executions/execution/${path.basename(value)}`, search: getPersistentQueryParams(location) })}>link</Link>),
     disableSortBy: true,
     width: 90
   },
   {
     Header: 'Duration',
-    accessor: row => seconds(row.duration),
+    accessor: (row) => seconds(row.duration),
     id: 'duration',
     width: 100
   },
   {
     Header: 'Updated',
-    accessor: row => fromNow(row.timestamp),
+    accessor: (row) => fromNow(row.timestamp),
     id: 'timestamp'
   }
 ];
@@ -78,16 +80,16 @@ export const tableColumns = [
 export const errorTableColumns = [
   {
     Header: 'Error',
-    accessor: row => get(row, 'error.Cause', nullValue),
+    accessor: (row) => get(row, 'error.Cause', nullValue),
     id: 'error',
-    Cell: ({ row: { original } }) => // eslint-disable-line react/prop-types
-      <ErrorReport report={get(original, 'error.Cause', nullValue)} truncate={true} />,
+    Cell: ({ row: { original } }) => ( // eslint-disable-line react/prop-types
+      <ErrorReport report={get(original, 'error.Cause', nullValue)} truncate={true} />),
     disableSortBy: true,
     width: 175
   },
   {
     Header: 'Type',
-    accessor: row => get(row, 'error.Error', nullValue),
+    accessor: (row) => get(row, 'error.Error', nullValue),
     id: 'type',
     disableSortBy: true,
     width: 100
@@ -100,29 +102,27 @@ export const errorTableColumns = [
   },
   {
     Header: 'Duration',
-    accessor: row => seconds(row.duration),
+    accessor: (row) => seconds(row.duration),
     id: 'duration'
   },
   {
     Header: 'Updated',
-    accessor: row => fromNow(row.timestamp),
+    accessor: (row) => fromNow(row.timestamp),
     id: 'timestamp'
   }
 ];
 
-export const simpleDropdownOption = function (config) {
-  return (
-    <Dropdown
-      key={config.label}
-      label={config.label.toUpperCase()}
-      value={config.value}
-      options={config.options}
-      id={config.label}
-      onChange={config.handler}
-      noNull={true}
-    />
-  );
-};
+export const simpleDropdownOption = (config) => (
+  <Dropdown
+    key={config.label}
+    label={config.label.toUpperCase()}
+    value={config.value}
+    options={config.options}
+    id={config.label}
+    onChange={config.handler}
+    noNull={true}
+  />
+);
 
 const confirmRecover = (d) => `Recover ${d} granule(s)?`;
 export const recoverAction = (granules, config) => ({
@@ -141,11 +141,11 @@ const confirmDelete = (d) => `Delete ${d} granule(s)?`;
  * Determine the base context of a collection view
  * @param {Object} path - react router history object
  */
-const determineCollectionsBase = (path) => {
-  if (path.includes('granules')) {
-    return path.replace(/\/granules.*/, '/granules');
+const determineCollectionsBase = (currPath) => {
+  if (currPath.includes('granules')) {
+    return currPath.replace(/\/granules.*/, '/granules');
   }
-  return `${path}/granules`;
+  return `${currPath}/granules`;
 };
 
 /**
@@ -165,20 +165,16 @@ const determineCollectionsBase = (path) => {
  * @returns {Function} function to call on confirm selection.
  */
 const setOnConfirm = ({ history, error, selected, closeModal }) => {
-  const redirectAndClose = (redirect) => {
-    return () => {
-      history.push(redirect);
-      if (typeof closeModal === 'function') closeModal();
-    };
+  const redirectAndClose = (redirect) => () => {
+    historyPushWithQueryParams(redirect);
+    if (typeof closeModal === 'function') closeModal();
   };
   const baseRedirect = determineCollectionsBase(history.location.pathname);
-  if (error) { return () => {}; } else {
-    if (selected.length > 1) {
-      return redirectAndClose(`${baseRedirect}/processing`);
-    } else {
-      return redirectAndClose(`/granules/granule/${selected[0]}`);
-    }
+  if (error) { return noop; }
+  if (selected.length > 1) {
+    return redirectAndClose(`${baseRedirect}/processing`);
   }
+  return redirectAndClose(`/granules/granule/${selected[0]}`);
 };
 
 const granuleModalJourney = ({
@@ -197,7 +193,8 @@ const granuleModalJourney = ({
     modalOptions.children = <BatchReingestConfirmContent selected={selected}/>;
   }
   if (isOnModalComplete) {
-    modalOptions.children = <BatchReingestCompleteContent results={results} errorMessage={errorMessage} errors={errors} />;
+    modalOptions.children = <BatchReingestCompleteContent results={results} errorMessage={errorMessage}
+      errors={errors} />;
     modalOptions.hasConfirmButton = !errorMessage;
     modalOptions.title = 'Reingest Granule(s)';
     modalOptions.cancelButtonText = 'Close';
@@ -220,37 +217,35 @@ export const reingestAction = (granules) => ({
   getModalOptions: granuleModalJourney
 });
 
-export const bulkActions = function (granules, config) {
-  return [
-    reingestAction(granules),
-    {
-      text: 'Execute',
-      action: config.execute.action,
-      state: granules.executed,
-      confirm: confirmApply,
-      confirmOptions: config.execute.options,
-      className: 'button--execute'
-    },
-    {
-      text: strings.remove_from_cmr,
-      action: removeGranule,
-      state: granules.removed,
-      confirm: confirmRemove,
-      className: 'button--remove'
-    },
-    {
-      Component:
-        <Bulk
-          element='button'
-          className='button button__bulkgranules button--green button--small form-group__element'
-          confirmAction={true}
-        />
-    },
-    {
-      text: 'Delete',
-      action: deleteGranule,
-      state: granules.deleted,
-      confirm: confirmDelete,
-      className: 'button--delete'
-    }];
-};
+export const bulkActions = (granules, config) => [
+  reingestAction(granules),
+  {
+    text: 'Execute',
+    action: config.execute.action,
+    state: granules.executed,
+    confirm: confirmApply,
+    confirmOptions: config.execute.options,
+    className: 'button--execute'
+  },
+  {
+    text: strings.remove_from_cmr,
+    action: removeGranule,
+    state: granules.removed,
+    confirm: confirmRemove,
+    className: 'button--remove'
+  },
+  {
+    Component:
+      <Bulk
+        element='button'
+        className='button button__bulkgranules button--green button--small form-group__element'
+        confirmAction={true}
+      />
+  },
+  {
+    text: 'Delete',
+    action: deleteGranule,
+    state: granules.deleted,
+    confirm: confirmDelete,
+    className: 'button--delete'
+  }];

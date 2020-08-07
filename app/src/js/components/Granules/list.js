@@ -1,8 +1,8 @@
-'use strict';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { get } from 'object-path';
 import {
   searchGranules,
   clearGranulesSearch,
@@ -13,7 +13,6 @@ import {
   listWorkflows,
   applyWorkflowToGranule,
 } from '../../actions';
-import { get } from 'object-path';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
   tableColumns,
@@ -30,7 +29,6 @@ import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
-import pageSizeOptions from '../../utils/page-size';
 
 const AllGranules = ({
   collections,
@@ -38,7 +36,7 @@ const AllGranules = ({
   granules,
   location,
   logs,
-  onQueryChange,
+  queryParams,
   workflowOptions,
 }) => {
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
@@ -67,12 +65,6 @@ const AllGranules = ({
   ];
 
   useEffect(() => {
-    if (typeof onQueryChange === 'function') {
-      onQueryChange(query);
-    }
-  }, [onQueryChange, query]);
-
-  useEffect(() => {
     dispatch(listWorkflows());
   }, [dispatch]);
 
@@ -83,16 +75,16 @@ const AllGranules = ({
   function getView() {
     const { pathname } = location;
     if (pathname === '/granules/completed') return 'completed';
-    else if (pathname === '/granules/processing') return 'running';
-    else if (pathname === '/granules/failed') return 'failed';
-    else return 'all';
+    if (pathname === '/granules/processing') return 'running';
+    if (pathname === '/granules/failed') return 'failed';
+    return 'all';
   }
 
   function generateQuery() {
-    const options = {};
-    const view = getView();
-    if (view !== 'all') options.status = view;
-    options.status = view;
+    const options = { ...queryParams };
+    const currentView = getView();
+    if (currentView !== 'all') options.status = currentView;
+    options.status = currentView;
     return options;
   }
 
@@ -135,7 +127,7 @@ const AllGranules = ({
           <h1 className="heading--large heading--shared-content with-description ">
             {displayCaseView} {strings.granules}{' '}
             <span className="num-title">
-              {!isNaN(count) ? `${tally(count)}` : 0}
+              {!Number.isNaN(+count) ? `${tally(count)}` : 0}
             </span>
           </h1>
           {lastUpdated(queriedAt)}
@@ -150,11 +142,13 @@ const AllGranules = ({
           bulkActions={generateBulkActions()}
           rowId="granuleId"
           sortId={tablesortId}
+          filterAction={filterGranules}
+          filterClear={clearGranulesFilter}
         >
           <ListFilters>
             <Dropdown
               getOptions={getOptionsCollectionName}
-              options={get(dropdowns, ['collectionName', 'options'])}
+              options={get(dropdowns, ['collectionName', 'options']) || []}
               action={filterGranules}
               clear={clearGranulesFilter}
               paramKey="collectionId"
@@ -182,16 +176,6 @@ const AllGranules = ({
               label="Search"
               placeholder="Granule ID"
             />
-            <Dropdown
-              options={pageSizeOptions}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              paramKey="limit"
-              label="Results Per Page"
-              inputProps={{
-                placeholder: 'Results Per Page',
-              }}
-            />
           </ListFilters>
         </List>
       </section>
@@ -207,12 +191,12 @@ const AllGranules = ({
 
 AllGranules.propTypes = {
   collections: PropTypes.object,
-  granules: PropTypes.object,
-  logs: PropTypes.object,
   dispatch: PropTypes.func,
+  granules: PropTypes.object,
   location: PropTypes.object,
+  logs: PropTypes.object,
+  queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
-  onQueryChange: PropTypes.func,
 };
 
 AllGranules.displayName = strings.all_granules;
@@ -222,8 +206,8 @@ export { AllGranules };
 export default withRouter(
   connect((state) => ({
     collections: state.collections,
-    logs: state.logs,
     granules: state.granules,
+    logs: state.logs,
     workflowOptions: workflowOptionNames(state),
   }))(AllGranules)
 );

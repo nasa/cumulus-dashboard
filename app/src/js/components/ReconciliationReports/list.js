@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -9,23 +8,19 @@ import {
   clearReconciliationReportsFilter,
   listReconciliationReports,
   createReconciliationReport,
-  interval,
   getCount,
   filterReconciliationReports
 } from '../../actions';
 import { lastUpdated } from '../../utils/format';
 import { reconciliationReportStatus as statusOptions } from '../../utils/status';
-import { reconciliationReportTypes as reportTypeOptions } from '../../utils/report-type';
+import { reconciliationReportTypes as reportTypeOptions } from '../../utils/type';
 import { tableColumns, bulkActions } from '../../utils/table-config/reconciliation-reports';
-import LoadingEllipsis from '../../components/LoadingEllipsis/loading-ellipsis';
+import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import List from '../Table/Table';
 import ListFilters from '../ListActions/ListFilters';
-import _config from '../../config';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-
-const { updateInterval } = _config;
 
 const breadcrumbConfig = [
   {
@@ -44,26 +39,25 @@ class ReconciliationReportList extends React.Component {
     this.generateQuery = this.generateQuery.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
     this.createReport = this.createReport.bind(this);
-    this.queryParams = this.queryParams.bind(this);
+    this.queryMeta = this.queryMeta.bind(this);
   }
 
   componentDidMount () {
-    this.cancelInterval = interval(() => this.queryParams(), updateInterval, true);
+    this.queryMeta();
   }
 
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-  }
-
-  queryParams () {
-    this.props.dispatch(getCount({
+  queryMeta () {
+    const { dispatch, queryParams } = this.props;
+    dispatch(getCount({
       type: 'reconciliationReports',
-      field: 'status'
+      field: 'status',
+      ...queryParams,
     }));
   }
 
   generateQuery () {
-    return {};
+    const { queryParams } = this.props;
+    return { ...queryParams };
   }
 
   generateBulkActions () {
@@ -111,6 +105,8 @@ class ReconciliationReportList extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId='name'
             sortId='createdAt'
+            filterAction={filterReconciliationReports}
+            filterClear={clearReconciliationReportsFilter}
           >
             <ListFilters>
               <Search
@@ -150,9 +146,10 @@ class ReconciliationReportList extends React.Component {
 
 ReconciliationReportList.propTypes = {
   dispatch: PropTypes.func,
-  reconciliationReports: PropTypes.object
+  queryParams: PropTypes.object,
+  reconciliationReports: PropTypes.object,
 };
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   reconciliationReports: state.reconciliationReports
 }))(ReconciliationReportList));

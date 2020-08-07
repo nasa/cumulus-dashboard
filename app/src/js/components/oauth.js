@@ -1,17 +1,16 @@
-'use strict';
-
 import React from 'react';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Modal from 'react-bootstrap/Modal';
 import { login, setTokenState } from '../actions';
 import { window } from '../utils/browser';
 import { buildRedirectUrl } from '../utils/format';
 import _config from '../config';
-import PropTypes from 'prop-types';
 import ErrorReport from './Errors/report';
 import Header from './Header/header';
-import Modal from 'react-bootstrap/Modal';
+import { historyPushWithQueryParams } from '../utils/url-helper';
 
 const { updateDelay, apiRoot, oauthMethod } = _config;
 
@@ -33,7 +32,7 @@ class OAuth extends React.Component {
       if (pathname !== '/auth' && window.location && window.location.reload) {
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/auth') {
-        setTimeout(() => this.props.history.push('/'), updateDelay); // react isn't seeing this a function
+        setTimeout(() => historyPushWithQueryParams('/'), updateDelay); // react isn't seeing this a function
       }
     }
   }
@@ -91,9 +90,8 @@ OAuth.propTypes = {
   dispatch: PropTypes.func,
   api: PropTypes.object,
   location: PropTypes.object,
-  history: PropTypes.object,
   apiVersion: PropTypes.object,
   queryParams: PropTypes.object
 };
 
-export default withRouter(withQueryParams()(connect(state => state)(OAuth)));
+export default withRouter(withQueryParams()(connect((state) => state)(OAuth)));

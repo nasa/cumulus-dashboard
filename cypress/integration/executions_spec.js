@@ -32,8 +32,12 @@ describe('Dashboard Executions Page', () => {
       // shows a summary count of completed and failed executions
       cy.get('.overview-num__wrapper ul li')
         .first().contains('li', 'Completed').contains('li', 4)
-        .next().contains('li', 'Failed').contains('li', 1)
-        .next().contains('li', 'Running').contains('li', 1);
+        .next()
+        .contains('li', 'Failed')
+        .contains('li', 1)
+        .next()
+        .contains('li', 'Running')
+        .contains('li', 1);
     });
 
     it('should display the correct executions with Ids and status ', () => {
@@ -53,13 +57,13 @@ describe('Dashboard Executions Page', () => {
             .should('have.attr', 'title')
             .and('be.eq', execution.name);
           cy.get('@columns').eq(1).invoke('text')
-            .should('be.eq', execution.status.replace(/^\w/, c => c.toUpperCase()));
+            .should('be.eq', execution.status.replace(/^\w/, (c) => c.toUpperCase()));
           cy.get('@columns').eq(2).invoke('text')
             .should('be.eq', execution.type);
           cy.get('@columns').eq(3).invoke('text')
             .should('match', /.+ago$/);
           cy.get('@columns').eq(4).invoke('text')
-            .should('be.eq', `${Number(execution.duration.toFixed(2))}s`);
+            .should('be.eq', `${Number(execution.duration).toFixed(2)}s`);
           cy.get('@columns').eq(5).invoke('text')
             .should('be.eq', execution.collectionId);
         });
@@ -239,13 +243,11 @@ describe('Dashboard Executions Page', () => {
         .each((execution) => {
           if (execution.name === executionName) {
             cy.contains('Input').next().contains('button', 'Show Input').click();
-            cy.get('.execution__modal').find('pre').then(($content) =>
-              expect(JSON.parse($content.text())).to.deep.equal(execution.originalPayload));
+            cy.get('.execution__modal').find('pre').then(($content) => expect(JSON.parse($content.text())).to.deep.equal(execution.originalPayload));
             cy.get('.button--close').click();
 
             cy.contains('Output').next().contains('button', 'Show Output').click();
-            cy.get('.execution__modal').find('pre').then(($content) =>
-              expect(JSON.parse($content.text())).to.deep.equal(execution.finalPayload));
+            cy.get('.execution__modal').find('pre').then(($content) => expect(JSON.parse($content.text())).to.deep.equal(execution.finalPayload));
             cy.get('.button--close').click();
           }
         });

@@ -86,8 +86,8 @@ const MainConfig = merge.smartStrategy({
     new webpack.HashedModuleIdsPlugin(),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
-      filename: '[name].[chunkhash:8]-' + pkg.version + '.css',
-      chunkFilename: '[id].[chunkhash:8]-' + pkg.version + '.css'
+      filename: `[name].[chunkhash:8]-${pkg.version}.css`,
+      chunkFilename: `[id].[chunkhash:8]-${pkg.version}.css`
     })
   ]
 });

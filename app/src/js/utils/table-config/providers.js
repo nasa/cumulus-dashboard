@@ -1,14 +1,14 @@
-'use strict';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { fromNow } from '../format';
 import { strings } from '../../components/locale';
+import { getPersistentQueryParams } from '../url-helper';
 
 export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'id',
-    Cell: ({ cell: { value } }) => <Link to={`providers/provider/${value}`}>{value}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={(location) => ({ pathname: `/providers/provider/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Host',
@@ -28,7 +28,9 @@ export const tableColumns = [
   },
   {
     Header: 'Last Updated',
-    accessor: row => fromNow(row.timestamp),
+    accessor: (row) => fromNow(row.timestamp),
     id: 'timestamp'
   }
 ];
+
+export default tableColumns;

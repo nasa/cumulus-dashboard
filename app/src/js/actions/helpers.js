@@ -1,12 +1,12 @@
-'use strict';
+/* eslint-disable import/no-cycle */
 import { get as getProperty } from 'object-path';
 import _config from '../config';
+import { filterQueryParams } from '../utils/url-helper';
 
-export const formatError = (response = {}, body) => {
+export const formatError = (response = {}, body = {}) => {
   let error = response
     ? response.statusMessage || ''
     : '';
-  body = body || {};
   if (body.name) error = body.name;
   if (body.message) error += `${(error ? ': ' : '')}${body.message}`;
   return error;
@@ -23,9 +23,7 @@ export const getErrorMessage = (response) => {
 export const addRequestAuthorization = (config, state) => {
   const token = getProperty(state, 'api.tokens.token');
   if (token) {
-    config.headers = Object.assign({}, config.headers, {
-      Authorization: `Bearer ${token}`
-    });
+    config.headers = { ...config.headers, Authorization: `Bearer ${token}` };
   }
 };
 
@@ -46,12 +44,15 @@ export const configureRequest = (params = {}) => {
     config.url = new URL(config.path, _config.apiRoot).href;
   }
 
+  if (config.qs) config.qs = filterQueryParams(config.qs);
+
   const defaultRequestConfig = {
     json: true,
     resolveWithFullResponse: true,
-    simple: false
+    simple: false,
+    qsStringifyOptions: { arrayFormat: 'brackets' }
   };
-  config = Object.assign({}, defaultRequestConfig, config);
+  config = { ...defaultRequestConfig, ...config };
 
   return config;
 };

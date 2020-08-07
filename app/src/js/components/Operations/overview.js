@@ -1,10 +1,9 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import {
   clearOperationsFilter,
   filterOperations,
@@ -12,7 +11,6 @@ import {
   clearOperationsSearch,
   getCount,
   getCumulusInstanceMetadata,
-  interval,
   listCollections,
   listOperations,
   listWorkflows
@@ -21,26 +19,10 @@ import { tally } from '../../utils/format';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
-import _config from '../../config';
 import { tableColumns } from '../../utils/table-config/operations';
 import ListFilters from '../ListActions/ListFilters';
-import pageSizeOptions from '../../utils/page-size';
-
-const { updateInterval } = _config;
-
-const statusOptions = {
-  Running: 'RUNNING',
-  Succeeded: 'SUCCEEDED',
-  'Task Failed': 'TASK_FAILED',
-  'Runner Failed': 'RUNNER_FAILED'
-};
-
-const typeOptions = {
-  'Bulk Granules': 'Bulk Granules',
-  'ES Index': 'ES Index',
-  'Bulk Delete': 'Bulk Delete',
-  'Kinesis Replay': 'Kinesis Replay'
-};
+import { operationStatus } from '../../utils/status';
+import { operationTypes } from '../../utils/type';
 
 class OperationOverview extends React.Component {
   constructor (props) {
@@ -51,40 +33,34 @@ class OperationOverview extends React.Component {
   }
 
   componentDidMount () {
-    // use a slightly slower update interval, since the dropdown fields
-    // will change less frequently.
-    this.cancelInterval = interval(this.queryMeta, updateInterval, true);
+    this.queryMeta();
     this.props.dispatch(getCumulusInstanceMetadata());
   }
 
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-  }
-
   generateQuery () {
-    return {};
+    return { ...this.props.queryParams };
   }
 
   queryMeta () {
-    this.props.dispatch(listCollections({
+    const { dispatch, queryParams } = this.props;
+    dispatch(listCollections({
       limit: 100,
       fields: 'name,version'
     }));
-    this.props.dispatch(listWorkflows());
-    this.props.dispatch(getCount({
+    dispatch(listWorkflows());
+    dispatch(getCount({
       type: 'executions',
-      field: 'status'
+      field: 'status',
+      ...queryParams
     }));
   }
 
   searchOperations (list, infix) {
-    return list.filter((item) => {
-      if (item.id.includes(infix)) return item;
-    });
+    return list.filter((item) => item.id.includes(infix));
   }
 
   render () {
-    const { operations } = this.props;
+    const { dispatch, operations } = this.props;
     const { list } = operations;
     const { count } = list.meta;
     const mutableList = cloneDeep(list);
@@ -113,41 +89,33 @@ class OperationOverview extends React.Component {
           </div>
           <List
             list={mutableList}
-            dispatch={this.props.dispatch}
+            dispatch={dispatch}
             action={listOperations}
             tableColumns={tableColumns}
             query={this.generateQuery()}
             rowId='id'
             sortId='createdAt'
+            filterAction={filterOperations}
+            filterClear={clearOperationsFilter}
           >
             <ListFilters>
-
-              <Search dispatch={this.props.dispatch}
+              <Search dispatch={dispatch}
                 action={searchOperations}
                 clear={clearOperationsSearch}
               />
               <Dropdown
-                options={statusOptions}
+                options={operationStatus}
                 action={filterOperations}
                 clear={clearOperationsFilter}
                 paramKey={'status'}
                 label={'Status'}
               />
-
               <Dropdown
-                options={typeOptions}
+                options={operationTypes}
                 action={filterOperations}
                 clear={clearOperationsFilter}
                 paramKey={'operationType'}
                 label={'Type'}
-              />
-
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterOperations}
-                clear={clearOperationsFilter}
-                paramKey={'limit'}
-                label={'Results Per Page'}
               />
             </ListFilters>
           </List>
@@ -161,8 +129,9 @@ class OperationOverview extends React.Component {
 OperationOverview.propTypes = {
   dispatch: PropTypes.func,
   operations: PropTypes.object,
+  queryParams: PropTypes.object,
 };
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   operations: state.operations,
 }))(OperationOverview));

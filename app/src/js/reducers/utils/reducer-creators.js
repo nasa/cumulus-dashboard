@@ -1,4 +1,3 @@
-'use strict';
 import { del } from 'object-path';
 
 /**
@@ -34,11 +33,9 @@ const idProp = ({ id }) => id;
  *    property where the key (property name) of the nested object is obtained
  *    by applying the ID selector function to the action
  */
-export const createClearItemReducer = (stateProp, idSelector = idProp) => {
-  return (state, action) => {
-    const id = idSelector(action);
-    del(state, [stateProp, id]);
-  };
+export const createClearItemReducer = (stateProp, idSelector = idProp) => (state, action) => {
+  const id = idSelector(action);
+  del(state, [stateProp, id]);
 };
 
 /**
@@ -68,11 +65,9 @@ export const createClearItemReducer = (stateProp, idSelector = idProp) => {
  *    mutates the state by setting the `status` of the nested object to
  *    `'inflight'`
  */
-export const createInflightReducer = (stateProp, idSelector = idProp) => {
-  return (state, action) => {
-    const id = idSelector(action);
-    state[stateProp] = { ...state[stateProp], [id]: { status: 'inflight' } };
-  };
+export const createInflightReducer = (stateProp, idSelector = idProp) => (state, action) => {
+  const id = idSelector(action);
+  state[stateProp] = { ...state[stateProp], [id]: { status: 'inflight' } };
 };
 
 /**
@@ -107,17 +102,15 @@ export const createInflightReducer = (stateProp, idSelector = idProp) => {
  *    `'success'`, and the `data` property to the value of the action's `data`
  *    property, if it has one
  */
-export const createSuccessReducer = (stateProp, idSelector = idProp) => {
-  return (state, action) => {
-    const id = idSelector(action);
-    state[stateProp] = {
-      ...state[stateProp],
-      [id]: {
-        status: 'success',
-        error: null,
-        data: action.data,
-      }
-    };
+export const createSuccessReducer = (stateProp, idSelector = idProp) => (state, action) => {
+  const id = idSelector(action);
+  state[stateProp] = {
+    ...state[stateProp],
+    [id]: {
+      status: 'success',
+      error: null,
+      data: action.data,
+    }
   };
 };
 
@@ -153,16 +146,14 @@ export const createSuccessReducer = (stateProp, idSelector = idProp) => {
  *    `'error'`, and the `error` property to the value of the action's `error`
  *    property, if it has one
  */
-export const createErrorReducer = (stateProp, idSelector = idProp) => {
-  return (state, action) => {
-    const id = idSelector(action);
-    state[stateProp] = {
-      ...state[stateProp],
-      [id]: {
-        status: 'error',
-        error: action.error,
-      }
-    };
+export const createErrorReducer = (stateProp, idSelector = idProp) => (state, action) => {
+  const id = idSelector(action);
+  state[stateProp] = {
+    ...state[stateProp],
+    [id]: {
+      status: 'error',
+      error: action.error,
+    }
   };
 };
 
@@ -191,7 +182,5 @@ export const createErrorReducer = (stateProp, idSelector = idProp) => {
  *    they are specified as individual arguments, each of which is passed a
  *    state and action, respectively
  */
-export const createSerialReducer = (...reducers) => {
-  return (state, action) =>
-    reducers.forEach((reducer) => reducer(state, action));
-};
+// eslint-disable-next-line max-len
+export const createSerialReducer = (...reducers) => (state, action) => reducers.forEach((reducer) => reducer(state, action));

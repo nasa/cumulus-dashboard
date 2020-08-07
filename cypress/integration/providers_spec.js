@@ -70,7 +70,7 @@ describe('Dashboard Providers Page', () => {
         .contains('.dropdown__label', 'Protocol')
         .siblings()
         .find('select')
-        .select(protocol, {force: true})
+        .select(protocol, { force: true })
         .should('have.value', protocol);
       cy.get('@providerinput')
         .contains('Host')

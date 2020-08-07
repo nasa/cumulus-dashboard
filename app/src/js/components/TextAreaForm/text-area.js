@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -12,8 +11,8 @@ import config from '../../config';
 import { setWindowEditorRef } from '../../utils/browser';
 import ErrorReport from '../Errors/report';
 
-const _minLines = 8;
-const _maxLines = 18;
+const minLinesDefault = 8;
+const maxLinesDefault = 18;
 
 class TextAreaForm extends React.Component {
   constructor () {
@@ -35,8 +34,8 @@ class TextAreaForm extends React.Component {
       mode
     } = this.props;
 
-    const minLines = this.props.minLines || _minLines;
-    const maxLines = this.props.maxLines || _maxLines;
+    const minLines = this.props.minLines || minLinesDefault;
+    const maxLines = this.props.maxLines || maxLinesDefault;
 
     return (
       <div className='form__textarea'>
@@ -74,4 +73,4 @@ TextAreaForm.propTypes = {
   maxLines: PropTypes.number
 };
 
-export default connect(state => state)(TextAreaForm);
+export default connect((state) => state)(TextAreaForm);
