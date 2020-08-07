@@ -16,10 +16,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Added TableHeader component to allow user to select page and limit params
   - Removed all Results Per Page dropdowns in favor of the header
 
+- **CUMULUS-2046**
+  - Add dashboard version to footer
+
 ### Fixed
 
 - **CUMULUS-1876**
   - Fix/remove unnecessary timers on home page
+
+- **CUMULUS-2067**
+  - Tweak footer styles
 
 - **CUMULUS-2121**
   - Fix PDR list page with status filter
