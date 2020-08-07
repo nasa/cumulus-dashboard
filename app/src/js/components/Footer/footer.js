@@ -21,7 +21,7 @@ class Footer extends React.Component {
         <div className='api__summary'>
           { authenticated &&
             <div>
-              <h5 className='dashboard_version'> Cumulus Dashboard Version: { DASH_VERSION } </h5>
+              <h5 className='dashboard__version'> Cumulus Dashboard Version: { DASH_VERSION } </h5>
               <h5 className='api__version'> Cumulus API Version: { versionNumber } </h5>
             </div>
           }

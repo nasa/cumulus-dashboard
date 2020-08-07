@@ -42,15 +42,6 @@ body {
   height: 100%;
 }
 
-row {
-    flexDirection: 'row';
-    height: 50;
-    justifyContent: 'center';
-    alignItems: 'center';
-    position: 'absolute'; //Here is the trick
-    bottom: 0;
-}
-
 .clearfix{
   &:before,
   &:after {
@@ -776,7 +767,7 @@ a:active {
   text-align: center;
 }
 
-.api__version{
+.api__version,.dashboard__version{
   font-weight: 400;
   color: $white;
   padding: 10px 0 2px 0;
