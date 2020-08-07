@@ -85,6 +85,7 @@ const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
           query={query}
           bulkActions={generateBulkActions()}
           rowId="pdrName"
+          sortId="timestamp"
           filterAction={filterPdrs}
           filterClear={clearPdrsFilter}
         >

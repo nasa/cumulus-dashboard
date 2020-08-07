@@ -13,7 +13,7 @@ import ListActions from '../ListActions/ListActions';
 import TableHeader from '../TableHeader/table-header';
 
 function buildSortKey(sortProps) {
-  return sortProps.map((item) => (item.desc === true ? `-${item.id}` : `+${item.id}`));
+  return sortProps.filter((item) => item.id).map((item) => (item.desc === true ? `-${item.id}` : `+${item.id}`));
 }
 
 class List extends React.Component {
@@ -29,7 +29,7 @@ class List extends React.Component {
     const initialPage = 1;
     const initialSortId = props.sortId;
     const initialOrder = 'desc';
-    const sortProps = [{ id: initialSortId, desc: true }];
+    const sortProps = initialSortId ? [{ id: initialSortId, desc: true }] : [];
 
     this.state = {
       page: initialPage,
