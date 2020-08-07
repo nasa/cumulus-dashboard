@@ -67,14 +67,6 @@ describe('Dashboard PDRs Page', () => {
 
     it('Should update URL when dropdown filters are changed', () => {
       cy.visit('/pdrs');
-      cy.get('.table__header .filter-limit').as('limit-input');
-      cy.get('@limit-input').should('be.visible').click().type('{backspace}{backspace}1{enter}');
-      cy.url().should('include', 'limit=1');
-      cy.get('.table__header .filter-page').as('page-input');
-      cy.get('@page-input').should('be.visible').click().type('{backspace}2{enter}');
-      cy.url().should('include', 'page=2');
-      cy.get('.table .tbody .tr').should('have.length', 1);
-  
       cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').click().type('comp').type('{enter}');
       cy.url().should('include', 'status=completed');
@@ -90,6 +82,13 @@ describe('Dashboard PDRs Page', () => {
 
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 4);
+      cy.get('.table__header .filter-limit').as('limit-input');
+      cy.get('@limit-input').should('be.visible').click().type('{backspace}{backspace}1{enter}');
+      cy.url().should('include', 'limit=1');
+      cy.get('.table__header .filter-page').as('page-input');
+      cy.get('@page-input').should('be.visible').click().type('{backspace}2{enter}');
+      cy.url().should('include', 'page=2');
+      cy.get('.table .tbody .tr').should('have.length', 1);
     });
 
     it('should display active PDRs', () => {
