@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { get } from 'object-path';
-import { seconds, fromNow, bool, nullValue } from '../format';
-import { deletePdr } from '../../actions';
+import { seconds, fromNow, bool, nullValue, collectionLink, displayCase, granuleLink } from '../format';
+import { deleteGranule, deletePdr } from '../../actions';
+import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
 import { getPersistentQueryParams } from '../url-helper';
 
@@ -56,13 +57,24 @@ export const errorTableColumns = [
   },
   {
     Header: 'Name',
-    accessor: 'name',
+    accessor: 'pdrName',
     Cell: ({ cell: { value } }) => <Link to={(location) => ({ pathname: `/pdrs/pdr/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'Error',
     accessor: (row) => get(row, 'error.Cause', nullValue),
-    id: 'error'
+    id: 'error',
+    Cell: ({ row: { original } }) => ( // eslint-disable-line react/prop-types
+      <ErrorReport report={get(original, 'error.Cause', nullValue)} truncate={true} />),
+    disableSortBy: true,
+    width: 175
+  },
+  {
+    Header: 'Type',
+    accessor: (row) => get(row, 'error.Error', nullValue),
+    id: 'type',
+    disableSortBy: true,
+    width: 100
   },
   {
     Header: 'PAN Sent',
@@ -76,9 +88,47 @@ export const errorTableColumns = [
 ];
 
 const confirmDelete = (d) => `Delete ${d} PDR(s)?`;
+
 export const bulkActions = (pdrs) => [{
   text: 'Delete',
   action: deletePdr,
   state: pdrs.deleted,
   confirm: confirmDelete
+}];
+
+export const granuleTableColumns = [
+  {
+    Header: 'Status',
+    accessor: 'status',
+    Cell: ({ cell: { value } }) => displayCase(value)
+  },
+  {
+    Header: 'Name',
+    accessor: 'granuleId',
+    Cell: ({ cell: { value } }) => granuleLink(value),
+    width: 200
+  },
+  {
+    Header: strings.collection_id,
+    accessor: 'collectionId',
+    Cell: ({ cell: { value } }) => collectionLink(value)
+  },
+  {
+    Header: 'Duration',
+    accessor: (row) => seconds(row.duration),
+    id: 'duration'
+  },
+  {
+    Header: 'Updated',
+    accessor: (row) => fromNow(row.timestamp),
+    id: 'timestamp'
+  }
+];
+
+const confirmGranuleDelete = (d) => `Delete ${d} Granule(s)?`;
+export const granuleBulkActions = (granules) => [{
+  text: 'Delete',
+  action: deleteGranule,
+  state: granules.deleted,
+  confirm: confirmGranuleDelete
 }];

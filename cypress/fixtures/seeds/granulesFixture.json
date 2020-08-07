@@ -100,6 +100,7 @@
     },
     {
       "granuleId": "MOD09GQ.A2016358.h13v04.006.2016360104606.hdf",
+      "pdrName": "MOD09GQ_1granule_v3.PDR",
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationSyncGranuleStateMachine-YBWU89xSgeQb:2890dde4-3ef8-45c2-a190-d21e26d503a3",
       "published": false,
       "error": {
@@ -159,8 +160,8 @@
       ],
       "collectionId": "MOD09GQ___006",
       "status": "completed",
-      "timestamp": 1542053131328,
-      "updatedAt": 1542053130920
+      "timestamp": 1596203544626,
+      "updatedAt": 1596203544157
     },
     {
       "granuleId": "MOD09GQ.A5456658.rso6Y4.006.4979096122140",
@@ -383,7 +384,7 @@
         "Cause": "None",
         "Error": "Unknown Error"
       },
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:bt-tf-IngestGranule:17765a38-8d3a-445a-8f95-6f2e53179254",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:bt-tf-IngestGranule:17765a38-8d3a-445a-8f95-6f2e53179254",
       "files": [
         {
           "bucket": "cumulus-test-sandbox-protected-2",
