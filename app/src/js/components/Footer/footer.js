@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+const pckg = require('../../../../../package.json');
 
 class Footer extends React.Component {
   constructor () {
@@ -8,7 +9,6 @@ class Footer extends React.Component {
   }
 
   render () {
-    const pckg = require('../../../../../package.json');
     const DASH_VERSION = pckg.version;
     const { authenticated } = this.props.api;
     const { warning, versionNumber } = this.props.apiVersion;
