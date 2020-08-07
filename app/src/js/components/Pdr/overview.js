@@ -15,7 +15,6 @@ import { tableColumns } from '../../utils/table-config/pdr-progress';
 import List from '../Table/Table';
 import Overview from '../Overview/overview';
 import Dropdown from '../DropDown/dropdown';
-import pageSizeOptions from '../../utils/page-size';
 import statusOptions from '../../utils/status';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
@@ -102,6 +101,8 @@ class PdrOverview extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId="pdrName"
+            filterAction={filterPdrs}
+            filterClear={clearPdrsFilter}
           >
             <ListFilters>
               <Dropdown
@@ -110,13 +111,6 @@ class PdrOverview extends React.Component {
                 clear={clearPdrsFilter}
                 paramKey={'status'}
                 label={'Status'}
-              />
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterPdrs}
-                clear={clearPdrsFilter}
-                paramKey={'limit'}
-                label={'Results Per Page'}
               />
             </ListFilters>
           </List>

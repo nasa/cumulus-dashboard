@@ -58,7 +58,7 @@ describe('Dashboard Bulk Granules', () => {
 
       cy.visit('/granules');
       cy.setDatepickerDropdown('Recent');
-      cy.url().should('include', '?startDateTime');
+      cy.url().should('include', 'startDateTime');
       cy.contains('button', 'Run Bulk Granules').click();
 
       cy.get('.bulk_granules')
@@ -75,7 +75,7 @@ describe('Dashboard Bulk Granules', () => {
       cy.wait('@postBulkGranules');
       cy.contains('p', asyncOperationId);
       cy.contains('button', 'Go To Operations').click();
-      cy.url().should('include', '?startDateTime');
+      cy.url().should('include', 'startDateTime');
     });
 
     it('handles successful bulk granule deletion request', () => {

@@ -14,9 +14,6 @@ import {
 import { lastUpdated } from '../../utils/format';
 import { tableColumns } from '../../utils/table-config/providers';
 import List from '../Table/Table';
-import Dropdown from '../DropDown/dropdown';
-import pageSizeOptions from '../../utils/page-size';
-import ListFilters from '../ListActions/ListFilters';
 import { getPersistentQueryParams } from '../../utils/url-helper';
 
 class ProvidersOverview extends React.Component {
@@ -98,19 +95,9 @@ class ProvidersOverview extends React.Component {
             bulkActions={bulkActions}
             rowId="name"
             sortId="timestamp"
+            filterAction={filterProviders}
+            filterClear={clearProvidersFilter}
           >
-            <ListFilters>
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterProviders}
-                clear={clearProvidersFilter}
-                paramKey={'limit'}
-                label={'Results Per Page'}
-                inputProps={{
-                  placeholder: 'Results Per Page',
-                }}
-              />
-            </ListFilters>
           </List>
         </section>
       </div>

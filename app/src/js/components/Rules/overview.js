@@ -15,8 +15,6 @@ import List from '../Table/Table';
 import Search from '../Search/search';
 import ListFilters from '../ListActions/ListFilters';
 import { tableColumns, bulkActions } from '../../utils/table-config/rules';
-import Dropdown from '../DropDown/dropdown';
-import pageSizeOptions from '../../utils/page-size';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 const breadcrumbConfig = [
@@ -84,6 +82,8 @@ class RulesOverview extends React.Component {
             sortId="timestamp"
             bulkActions={this.generateBulkActions()}
             rowId="name"
+            filterAction={filterRules}
+            filterClear={clearRulesFilter}
           >
             <ListFilters>
               <Search
@@ -92,17 +92,6 @@ class RulesOverview extends React.Component {
                 clear={clearRulesSearch}
                 placeholder="Search Rules"
                 label="Search"
-              />
-
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterRules}
-                clear={clearRulesFilter}
-                paramKey={'limit'}
-                label={'Results Per Page'}
-                inputProps={{
-                  placeholder: 'Results Per Page',
-                }}
               />
             </ListFilters>
           </List>

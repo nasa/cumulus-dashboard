@@ -10,13 +10,14 @@ import Pagination from '../Pagination/pagination';
 import SortableTable from '../SortableTable/SortableTable';
 // Lodash
 import ListActions from '../ListActions/ListActions';
+import TableHeader from '../TableHeader/table-header';
 
 function buildSortKey(sortProps) {
-  return sortProps.filter((item) => item.id).map((item) => ((item.desc === true) ? `-${item.id}` : `+${item.id}`));
+  return sortProps.filter((item) => item.id).map((item) => (item.desc === true ? `-${item.id}` : `+${item.id}`));
 }
 
 class List extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.queryNewPage = this.queryNewPage.bind(this);
     this.queryNewSort = this.queryNewSort.bind(this);
@@ -41,15 +42,15 @@ class List extends React.Component {
       queryConfig: {
         page: initialPage,
         sort_key: buildSortKey(sortProps),
-        ...(props.query || {})
+        ...(props.query || {}),
       },
       params: {},
       completedBulkActions: 0,
-      bulkActionError: null
+      bulkActionError: null,
     };
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     const { query, list } = this.props;
 
     if (!isEqual(query, prevProps.query)) {
@@ -63,70 +64,74 @@ class List extends React.Component {
     if (!isEqual(params, this.state.params)) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ params }, () => this.setState({
-        queryConfig: this.getQueryConfig()
+        queryConfig: this.getQueryConfig(),
       }));
     }
   }
 
-  queryNewPage (page) {
+  queryNewPage(page) {
     this.setState({
       page,
       queryConfig: this.getQueryConfig({ page }),
-      clearSelected: true
+      clearSelected: true,
     });
   }
 
-  queryNewSort (sortProps) {
+  queryNewSort(sortProps) {
     this.setState({
       sortProps,
       queryConfig: this.getQueryConfig({
-        sort_key: buildSortKey(sortProps)
+        sort_key: buildSortKey(sortProps),
       }),
-      clearSelected: true
+      clearSelected: true,
     });
   }
 
-  updateSelection (selected) {
+  updateSelection(selected) {
     this.setState({
       selected,
-      clearSelected: false
+      clearSelected: false,
     });
   }
 
-  onBulkActionSuccess (results, error) {
+  onBulkActionSuccess(results, error) {
     // not-elegant way to trigger a re-fresh in the timer
     this.setState({
       completedBulkActions: this.state.completedBulkActions + 1,
       clearSelected: true,
-      bulkActionError: error ? this.state.bulkActionError : null
+      bulkActionError: error ? this.state.bulkActionError : null,
     });
   }
 
-  onBulkActionError (error) {
-    const bulkActionError = (error.id && error.error)
-      ? `Could not process ${error.id}, ${error.error}`
-      : error;
+  onBulkActionError(error) {
+    const bulkActionError =
+      error.id && error.error
+        ? `Could not process ${error.id}, ${error.error}`
+        : error;
 
     this.setState({
       bulkActionError,
-      clearSelected: true
+      clearSelected: true,
     });
   }
 
-  getQueryConfig (config = {}, query = (this.props.query || {})) {
+  getQueryConfig(config = {}, query = this.props.query || {}) {
     // Remove empty keys so as not to mess up the query
     const { search, ...restQuery } = query;
-    return omitBy({
-      page: this.state.page,
-      sort_key: buildSortKey(this.state.sortProps),
-      infix: search,
-      ...this.state.params,
-      ...config,
-      ...restQuery
-    }, isNil);
+    return omitBy(
+      {
+        page: this.state.page,
+        sort_key: buildSortKey(this.state.sortProps),
+        infix: search,
+        ...this.state.params,
+        ...config,
+        ...restQuery,
+      },
+      isNil
+    );
   }
 
-  render () {
+  render() {
     const {
       dispatch,
       action,
@@ -136,7 +141,9 @@ class List extends React.Component {
       sortId: initialSortId,
       list,
       tableColumns,
-      data
+      data,
+      filterAction,
+      filterClear,
     } = this.props;
     const { meta, data: listData } = list;
     const { count, limit } = meta;
@@ -149,7 +156,7 @@ class List extends React.Component {
       clearSelected,
       completedBulkActions,
       bulkActionError,
-      queryConfig
+      queryConfig,
     } = this.state;
     const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
@@ -163,14 +170,25 @@ class List extends React.Component {
           completedBulkActions={completedBulkActions}
           onBulkActionSuccess={this.onBulkActionSuccess}
           onBulkActionError={this.onBulkActionError}
-          selected={selected}>
+          selected={selected}
+        >
           {children}
         </ListActions>
-        <div className='list-view'>
-          {list.inflight && <Loading/>}
-          {list.error && <ErrorReport report={list.error} truncate={true}/>}
-          {bulkActionError && <ErrorReport report={bulkActionError}/>}
-          <div className = "list__wrapper">
+        <div className="list-view">
+          {list.inflight && <Loading />}
+          {list.error && <ErrorReport report={list.error} truncate={true} />}
+          {bulkActionError && <ErrorReport report={bulkActionError} />}
+          <div className="list__wrapper">
+            {filterAction && (
+              <TableHeader
+                action={filterAction}
+                clear={filterClear}
+                count={count}
+                limit={limit}
+                page={page}
+                onNewPage={this.queryNewPage}
+              />
+            )}
             <SortableTable
               tableColumns={tableColumns}
               data={tableData}
@@ -198,17 +216,18 @@ class List extends React.Component {
 }
 
 List.propTypes = {
-  list: PropTypes.object,
-  dispatch: PropTypes.func,
   action: PropTypes.func,
-  children: PropTypes.node,
-  sortProps: PropTypes.array,
-  sortId: PropTypes.string,
-  query: PropTypes.object,
   bulkActions: PropTypes.array,
+  children: PropTypes.node,
+  data: PropTypes.array,
+  dispatch: PropTypes.func,
+  filterAction: PropTypes.func,
+  filterClear: PropTypes.func,
+  list: PropTypes.object,
+  query: PropTypes.object,
   rowId: PropTypes.any,
+  sortId: PropTypes.string,
   tableColumns: PropTypes.array,
-  data: PropTypes.array
 };
 
 export { List };

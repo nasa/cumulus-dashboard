@@ -199,7 +199,7 @@ describe('Dashboard Granules Page', () => {
       cy.visit('/granules');
       cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').click().type('fai').type('{enter}');
-      cy.url().should('include', '?status=failed');
+      cy.url().should('include', 'status=failed');
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
@@ -280,18 +280,22 @@ describe('Dashboard Granules Page', () => {
         .contains('li', 0);
     });
 
-    it('Should update the table when the Results Per Page dropdown is changed.', () => {
+    it('Should update the table when the Results Per Page and Page dropdowns are changed.', () => {
       cy.visit('/granules');
-      cy.get('.filter__item').eq(3).as('page-size-input');
-      cy.get('@page-size-input').should('be.visible').click().type('10{enter}');
+      cy.get('.table__header .filter-limit').as('limit-input');
+      cy.get('@limit-input').should('be.visible').click().type('{backspace}{backspace}10{enter}');
       cy.url().should('include', 'limit=10');
       cy.get('.table .tbody .tr').should('have.length', 10);
-      cy.get('.pagination ol li')
+      cy.get('.pagination-list ol li')
         .first().contains('li', 'Previous')
         .next()
         .contains('li', '1')
         .next()
         .contains('li', '2');
+      cy.get('.table__header .filter-page').as('page-input');
+      cy.get('@page-input').should('be.visible').click().type('{backspace}2{enter}');
+      cy.url().should('include', 'page=2');
+      cy.get('.table .tbody .tr').should('have.length', 1);
     });
 
     it('Should reingest a granule and redirect to the granules detail page.', () => {
@@ -356,7 +360,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Error');
       cy.get('.Collapsible__contentInner').should('contain.text', 'Oopsie');
       cy.get('.button--cancel').click();
-      cy.url().should('match', /\/granules$/);
+      cy.url().should('match', /\/granules/);
       cy.get('.heading--large').should('have.text', 'Granule Overview');
     });
   });

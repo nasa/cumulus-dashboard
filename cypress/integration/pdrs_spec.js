@@ -67,12 +67,17 @@ describe('Dashboard PDRs Page', () => {
 
     it('Should update URL when dropdown filters are changed', () => {
       cy.visit('/pdrs');
+      cy.get('.table__header .filter-limit').as('limit-input');
+      cy.get('@limit-input').should('be.visible').click().type('{backspace}{backspace}1{enter}');
+      cy.url().should('include', 'limit=1');
+      cy.get('.table__header .filter-page').as('page-input');
+      cy.get('@page-input').should('be.visible').click().type('{backspace}2{enter}');
+      cy.url().should('include', 'page=2');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+  
       cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').click().type('comp').type('{enter}');
-      cy.url().should('include', '?status=completed');
-      cy.get('.filter__item').eq(1).as('page-size-input');
-      cy.get('@page-size-input').should('be.visible').click().type('10{enter}');
-      cy.url().should('include', 'limit=10');
+      cy.url().should('include', 'status=completed');
 
       cy.get('.overview-num__wrapper ul li')
         .first().contains('li', 'Completed').contains('li', 4)
@@ -187,7 +192,7 @@ describe('Dashboard PDRs Page', () => {
 
       cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').click().type('fai').type('{enter}');
-      cy.url().should('include', '?status=failed');
+      cy.url().should('include', 'status=failed');
 
       cy.get('@status-input').click().clear().type('comp')
         .type('{enter}');
