@@ -19,6 +19,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2046**
   - Add dashboard version to footer
 
+### Changed
+
+- **CUMULUS-2090**
+  - Moved report headings that include breadcrumbs, name, dates, status, and download button into a reusable ReportHeading component to be used for all report types.
+
 ### Fixed
 
 - **CUMULUS-1876**
