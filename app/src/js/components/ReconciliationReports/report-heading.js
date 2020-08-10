@@ -6,10 +6,11 @@ import ErrorReport from '../Errors/report';
 
 const ReportHeading = ({
   downloadOptions,
-  endDate,
+  endTime,
   error,
   name,
-  startDate,
+  onDownloadClick,
+  startTime,
   reportState,
 }) => {
   const breadcrumbConfig = [
@@ -27,12 +28,12 @@ const ReportHeading = ({
     },
   ];
 
-  const formattedStartDate = startDate
-    ? new Date(startDate).toLocaleDateString()
+  const formattedStartTime = startTime
+    ? new Date(startTime).toLocaleDateString()
     : 'missing';
 
-  const formattedEndDate = endDate
-    ? new Date(endDate).toLocaleDateString()
+  const formattedEndTime = endTime
+    ? new Date(endTime).toLocaleDateString()
     : 'missing';
   return (
     <>
@@ -55,7 +56,7 @@ const ReportHeading = ({
           <div className="status--process">
             <dl className="status--process--report">
               <dt>Date Range:</dt>
-              <dd>{`${formattedStartDate} to ${formattedEndDate}`}</dd>
+              <dd>{`${formattedStartTime} to ${formattedEndTime}`}</dd>
               <dt>State:</dt>
               <dd
                 className={`status__badge status__badge--${
@@ -86,6 +87,14 @@ const ReportHeading = ({
                 </DropdownBootstrap.Menu>
               </DropdownBootstrap>
             )}
+            {onDownloadClick && (
+              <button
+                className="form-group__element--right button button--small button--download"
+                onClick={onDownloadClick}
+              >
+                Downlaod Report
+              </button>
+            )}
           </div>
           {error && <ErrorReport report={error} />}
         </div>
@@ -96,10 +105,11 @@ const ReportHeading = ({
 
 ReportHeading.propTypes = {
   downloadOptions: PropTypes.arrayOf(PropTypes.object),
-  endDate: PropTypes.string,
+  endTime: PropTypes.string,
   error: PropTypes.string,
   name: PropTypes.string,
-  startDate: PropTypes.string,
+  onDownloadClick: PropTypes.func,
+  startTime: PropTypes.string,
   reportState: PropTypes.string,
 };
 

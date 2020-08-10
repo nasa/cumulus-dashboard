@@ -165,11 +165,11 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
     <div className="page__component">
       <ReportHeading
         downloadOptions={downloadOptions}
-        endDate={reportEndTime}
+        endTime={reportEndTime}
         error={error}
         name={reconciliationReportName}
         reportState={theReportState}
-        startDate={reportStartTime}
+        startTime={reportStartTime}
       />
       <section className="page__section">
         <div className="heading__wrapper--border">
