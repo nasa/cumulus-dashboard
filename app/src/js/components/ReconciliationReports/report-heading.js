@@ -4,6 +4,11 @@ import { Dropdown as DropdownBootstrap } from 'react-bootstrap';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ErrorReport from '../Errors/report';
 
+/**
+ * ReportHeading
+ * @description Reusable heading for all report types
+ */
+
 const ReportHeading = ({
   downloadOptions,
   endTime,
@@ -104,10 +109,21 @@ const ReportHeading = ({
 };
 
 ReportHeading.propTypes = {
-  downloadOptions: PropTypes.arrayOf(PropTypes.object),
+  /**
+   * Create dropdown for downloading multiple tables using these options
+   */
+  downloadOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      onClick: PropTypes.func,
+    })
+  ),
   endTime: PropTypes.string,
   error: PropTypes.string,
   name: PropTypes.string,
+  /**
+   * Create button for single download
+   */
   onDownloadClick: PropTypes.func,
   startTime: PropTypes.string,
   reportState: PropTypes.string,
