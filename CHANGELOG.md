@@ -31,6 +31,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Fix PDR list page with status filter
   - Update individual PDR page to properly display granules
 
+- **CUMULUS-2136**
+  - Fix Form component to report invalid json error
+
 ## [v1.10.0]
 
 ### BREAKING CHANGES

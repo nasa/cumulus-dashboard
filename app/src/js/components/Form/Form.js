@@ -122,11 +122,18 @@ export class Form extends React.Component {
     inputId,
     state
   }) {
-    const { dirty, inputs, errors } = state;
+    const { dirty, inputs } = state;
     let { value } = inputs[inputId];
 
     // don't set a value for values that haven't changed and aren't required
     if (!dirty[inputId] && !field.required) return;
+
+    if (inputs[inputId].error) {
+      state.errors = state.errors.filter((item) => item !== field.labelText);
+      delete inputs[inputId].error;
+    }
+
+    const { errors } = state;
 
     // if expected type is json, validate as json first
     if (field.type === formTypes.textArea && field.mode === 'json') {
@@ -149,9 +156,6 @@ export class Form extends React.Component {
       if (!errors.includes(field.labelText)) errors.push(field.labelText);
       const error = field.error || field.validationError || t.errors.generic;
       inputs[inputId].error = error;
-    } else if (inputs[inputId].error) {
-      state.errors = errors.filter((item) => item !== field.labelText);
-      delete inputs[inputId].error;
     }
   }
 

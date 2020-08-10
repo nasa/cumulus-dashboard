@@ -132,6 +132,15 @@ describe('Rules page', () => {
         .find('select')
         .select(collection)
         .should('have.value', collection);
+
+      cy.get('@ruleInput')
+        .contains('.form__textarea', 'Optional Meta Data For The Rule');
+      // test invalid json error
+      cy.window().its('aceEditorRef').its('editor').then((editor) => {
+        editor.setValue('{badjson}');
+      });
+      cy.contains('.error__report', 'Must be valid JSON');
+
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'type', { matchCase: false })
         .siblings()
@@ -146,6 +155,14 @@ describe('Rules page', () => {
         .should('have.value', 'ENABLED');
 
       cy.contains('form button', 'Submit').click();
+      const errorMessage = 'Please review the following fields and submit again: \'Optional Meta Data For The Rule\'';
+      cy.contains('.error__report', errorMessage);
+
+      // fix the json input
+      cy.editJsonTextarea({ data: { metakey: 'metavalue' } });
+      cy.contains('form button', 'Submit').click();
+
+      cy.get('.error__report').should('not.exist');
       cy.url().should('include', 'rule/newRule');
       cy.contains('.heading--xlarge', 'Rules');
       cy.contains('.heading--large', ruleName);
