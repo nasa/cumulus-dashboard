@@ -87,7 +87,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.contains('.table .tbody .tr a', 'inventoryReport-20200114T205238781')
         .should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T205238781');
 
-      cy.contains('.table .tbody .tr a', 'inventoryReport-20200114T205238781').click();
+      cy.contains('.table .tbody .tr a', 'inventoryReport-20200114T205238781').click({ force: true });
 
       cy.contains('.heading--large', 'inventoryReport-20200114T205238781');
 
