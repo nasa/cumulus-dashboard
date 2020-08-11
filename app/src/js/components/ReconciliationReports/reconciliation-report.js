@@ -46,7 +46,7 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
   const { reconciliationReportName } = match.params;
   const record = reconciliationReports.map[reconciliationReportName];
   const { data: recordData } = record || {};
-  const { reportStartTime = null, reportEndTime = null, error = null } =
+  const { reportStartTime = null, reportEndTime = null, error = null, type } =
     recordData || {};
   const filterBucket = reconciliationReports.list.params.bucket;
   const filterString = reconciliationReports.searchString;
@@ -170,6 +170,7 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
         name={reconciliationReportName}
         reportState={theReportState}
         startTime={reportStartTime}
+        type={type}
       />
       <section className="page__section">
         <div className="heading__wrapper--border">
