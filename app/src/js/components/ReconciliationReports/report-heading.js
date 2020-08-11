@@ -15,8 +15,8 @@ const ReportHeading = ({
   error,
   name,
   onDownloadClick,
-  startTime,
   reportState,
+  startTime,
 }) => {
   const breadcrumbConfig = [
     {
@@ -125,8 +125,8 @@ ReportHeading.propTypes = {
    * Create button for single download
    */
   onDownloadClick: PropTypes.func,
-  startTime: PropTypes.string,
   reportState: PropTypes.string,
+  startTime: PropTypes.string,
 };
 
 export default ReportHeading;
