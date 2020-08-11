@@ -1,7 +1,6 @@
 {
   "reportStartTime": "2020-01-14T20:25:29.026Z",
   "reportEndTime": "2020-01-14T20:25:35.573Z",
-  "type": "Inventory",
   "status": "SUCCESS",
   "error": null,
   "filesInCumulus": {
