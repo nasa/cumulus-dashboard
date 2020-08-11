@@ -75,7 +75,7 @@ const Sidebar = ({
         onClick={handleToggleClick}
         title={sidebarOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
       />
-      <div className={`sidebar${sidebarOpen ? ' active' : ''}`}>
+      <div className="sidebar">
         <div className="sidebar__row">{sections.map(renderNavSection)}</div>
       </div>
     </div>

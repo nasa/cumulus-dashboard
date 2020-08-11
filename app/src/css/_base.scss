@@ -315,6 +315,10 @@ a:active {
     .sidebar-toggle {
       right: -1em;
     }
+
+    .sidebar {
+      display: block;
+    }
   }
 
   .sidebar-toggle {
@@ -329,10 +333,6 @@ a:active {
 
 .sidebar {
   display: none;
-
-  &.active {
-    display: block;
-  }
 
   a {
     color: #E7E4E4;
