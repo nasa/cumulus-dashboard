@@ -46,7 +46,7 @@ const breadcrumbConfig = [
 
 const metaAccessors = [
   { label: 'Rule Name', property: 'name' },
-  { label: 'Timestamp', property: 'timestamp', accessor: fullDate },
+  { label: 'Timestamp', property: 'updatedAt', accessor: fullDate },
   { label: 'Workflow', property: 'workflow' },
   { label: 'Provider', property: 'provider', accessor: providerLink },
   { label: 'Provider Path', property: 'provider_path' },
