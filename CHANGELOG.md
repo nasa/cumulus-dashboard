@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2046**
   - Add dashboard version to footer
 
+### Changed
+
+- **CUMULUS-2090**
+  - Moved report headings that include breadcrumbs, name, dates, status, and download button into a reusable ReportHeading component to be used for all report types.
+
 ### Fixed
 
 - **CUMULUS-1876**
@@ -33,6 +38,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2121**
   - Fix PDR list page with status filter
   - Update individual PDR page to properly display granules
+
+- **CUMULUS-2140**
+  - Update npm packages to fix security vulnerabilities
 
 ## [v1.10.0]
 

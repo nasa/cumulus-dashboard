@@ -28,6 +28,11 @@
   }
 }
 
+// Removes console warning described here https://github.com/react-bootstrap/react-bootstrap/issues/5081
+& &-menu {
+  margin: 0;
+}
+
 &__menu {
   position: absolute;
   background-color: #fff;

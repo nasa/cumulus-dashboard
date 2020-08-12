@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import cloneDeep from 'lodash/cloneDeep';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Collapse, Dropdown as DropdownBootstrap } from 'react-bootstrap';
+import { Collapse } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -14,16 +14,15 @@ import {
   searchReconciliationReport,
   clearReconciliationSearch,
   filterReconciliationReport,
-  clearReconciliationReportFilter
+  clearReconciliationReportFilter,
 } from '../../actions';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import SortableTable from '../SortableTable/SortableTable';
 import { reshapeReport } from './reshape-report';
 import { downloadFile } from '../../utils/download-file';
 import Search from '../Search/search';
 import Dropdown from '../DropDown/dropdown';
+import ReportHeading from './report-heading';
 
 /**
  * returns PASSED or CONFLICT based on reconcilation report data.
@@ -38,7 +37,7 @@ const bucketsForFilter = (allBuckets) => {
   const uniqueBuckets = [...new Set(allBuckets)];
   return uniqueBuckets.map((bucket) => ({
     id: bucket,
-    label: bucket
+    label: bucket,
   }));
 };
 
@@ -47,38 +46,30 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
   const { reconciliationReportName } = match.params;
   const record = reconciliationReports.map[reconciliationReportName];
   const { data: recordData } = record || {};
-  const {
-    reportStartTime = null,
-    reportEndTime = null,
-    error = null,
-  } = recordData || {};
-  const displayStartDate = reportStartTime
-    ? new Date(reportStartTime).toLocaleDateString()
-    : 'missing';
-  const displayEndDate = reportEndTime
-    ? new Date(reportEndTime).toLocaleDateString()
-    : 'missing';
+  const { reportStartTime = null, reportEndTime = null, error = null } =
+    recordData || {};
   const filterBucket = reconciliationReports.list.params.bucket;
   const filterString = reconciliationReports.searchString;
-  const { internalComparison, cumulusVsCmrComparison, allBuckets } = reshapeReport(record, filterString, filterBucket);
+  const {
+    internalComparison,
+    cumulusVsCmrComparison,
+    allBuckets,
+  } = reshapeReport(record, filterString, filterBucket);
   const reportComparisons = [...internalComparison, ...cumulusVsCmrComparison];
   const theReportState = reportState(reportComparisons);
   const activeCardTables = reportComparisons.find(
     (displayObj) => displayObj.id === activeId
   ).tables;
-  const breadcrumbConfig = [
+
+  const downloadOptions = [
     {
-      label: 'Dashboard Home',
-      href: '/',
+      label: 'JSON - Full Report',
+      onClick: handleDownloadJsonClick,
     },
-    {
-      label: 'Reports',
-      href: '/reconciliation-reports',
-    },
-    {
-      label: reconciliationReportName,
-      active: true,
-    },
+    ...activeCardTables.map((table) => ({
+      label: `CSV - ${table.name}`,
+      onClick: (e) => handleDownloadCsvClick(e, table),
+    })),
   ];
 
   const [expandedState, setExpandedState] = useState(
@@ -138,9 +129,7 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
   }
 
   function convertToCSV(data, columns) {
-    const csvHeader = columns
-      .map((column) => column.accessor)
-      .join(',');
+    const csvHeader = columns.map((column) => column.accessor).join(',');
 
     const csvData = data
       .map((item) => {
@@ -174,65 +163,14 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
 
   return (
     <div className="page__component">
-      <section className="page__section page__section__controls">
-        <div className="reconciliation-reports__options--top">
-          <ul>
-            <li key="breadcrumbs">
-              <Breadcrumbs config={breadcrumbConfig} />
-            </li>
-          </ul>
-        </div>
-      </section>
-      <section className="page__section page__section__header-wrapper">
-        <div className="page__section__header">
-          <div>
-            <h1 className="heading--large heading--shared-content with-description ">
-              {reconciliationReportName}
-            </h1>
-          </div>
-          <div className="status--process">
-            <dl className="status--process--report">
-              <dt>Date Range:</dt>
-              <dd>{`${displayStartDate} to ${displayEndDate}`}</dd>
-              <dt>State:</dt>
-              <dd
-                className={`status__badge status__badge--${
-                  theReportState === 'PASSED' ? 'passed' : 'conflict'
-                }`}
-              >
-                {theReportState}
-              </dd>
-            </dl>
-            <DropdownBootstrap className="form-group__element--right">
-              <DropdownBootstrap.Toggle
-                className="button button--small button--download"
-                id="download-report-dropdown"
-              >
-                Download Report
-              </DropdownBootstrap.Toggle>
-              <DropdownBootstrap.Menu>
-                <DropdownBootstrap.Item
-                  as="button"
-                  onClick={handleDownloadJsonClick}
-                >
-                  JSON - Full Report
-                </DropdownBootstrap.Item>
-                {activeCardTables.map((table, index) => (
-                  <DropdownBootstrap.Item
-                    key={`${activeId}-${index}`}
-                    as="button"
-                    onClick={(e) => handleDownloadCsvClick(e, table)}
-                  >
-                    CSV - {table.name}
-                  </DropdownBootstrap.Item>
-                ))}
-              </DropdownBootstrap.Menu>
-            </DropdownBootstrap>
-          </div>
-          {error && <ErrorReport report={error} />}
-        </div>
-      </section>
-
+      <ReportHeading
+        downloadOptions={downloadOptions}
+        endTime={reportEndTime}
+        error={error}
+        name={reconciliationReportName}
+        reportState={theReportState}
+        startTime={reportStartTime}
+      />
       <section className="page__section">
         <div className="heading__wrapper--border">
           <h2 className="heading--medium heading--shared-content with-description">
@@ -266,22 +204,22 @@ const ReconciliationReport = ({ reconciliationReports, dispatch, match }) => {
             </span>
           </div>
 
-          <div className='filters'>
+          <div className="filters">
             <Search
               dispatch={dispatch}
               action={searchReconciliationReport}
               clear={clearReconciliationSearch}
-              label='Search'
-              placeholder='Search'
+              label="Search"
+              placeholder="Search"
             />
             <Dropdown
               options={bucketsForFilter(allBuckets)}
               action={filterReconciliationReport}
               clear={clearReconciliationReportFilter}
-              paramKey='bucket'
-              label='Bucket'
+              paramKey="bucket"
+              label="Bucket"
               inputProps={{
-                placeholder: 'All'
+                placeholder: 'All',
               }}
             />
           </div>
