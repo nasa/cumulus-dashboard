@@ -24,6 +24,7 @@ import rules from './rules';
 import reconciliationReports from './reconciliation-reports';
 import mmtLinks from './mmtLinks';
 import cumulusInstance from './cumulus-instance';
+import sidebar from './sidebar';
 
 const def = (state, _action) => state || {};
 
@@ -41,6 +42,7 @@ export const reducers = {
   granuleCSV,
   stats,
   timer,
+  sidebar,
   pdrs,
   providers,
   logs,
