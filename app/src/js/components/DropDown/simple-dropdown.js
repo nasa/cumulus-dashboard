@@ -1,60 +1,87 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import './DropDown.scss';
+import Select, { components } from 'react-select';
 
-class Dropdown extends React.Component {
-  constructor (props) {
-    super(props);
-    this.onChange = this.onChange.bind(this);
+const DropdownIndicator = (props) => (
+  <components.DropdownIndicator {...props}>
+    <div className="dropdown__indicator" />
+  </components.DropdownIndicator>
+);
+
+const customStyles = {
+  control: (base, state) => ({
+    ...base,
+    // backgroundColor: '#2276ac',
+  }),
+  menu: (base) => ({
+    ...base,
+    margin: 0,
+    zIndex: 9999,
+  }),
+};
+
+const SimpleDropdown = ({
+  className,
+  error,
+  id,
+  label,
+  noNull,
+  onChange,
+  options = [],
+  value,
+}) => {
+  // const renderedOptions =
+  //   options[0] === '' || noNull ? options : [''].concat(options);
+
+  console.log(options);
+
+  const optionsObject = options.map((option) => {
+    if (typeof option === 'object') return option;
+    return {
+      label: option,
+      value: option,
+    };
+  });
+
+  const valueObject =
+    typeof value === 'object' ? value : { label: value, value };
+
+  function handleChange(option) {
+    if (typeof onChange === 'function') onChange(id, option.value, option);
   }
 
-  onChange (e) {
-    this.props.onChange(this.props.id, e.target.value);
-  }
+  return (
+    <div className={`form__dropdown${error ? ' form__error--wrapper' : ''}`}>
+      <ul>
+        <li className="dropdown__label">
+          <label htmlFor={id}>{label}</label>
+        </li>
+        <li className="dropdown__element">
+          <Select
+            className={className}
+            components={{ DropdownIndicator }}
+            options={optionsObject}
+            // styles={customStyles}
+            onChange={handleChange}
+            styles={customStyles}
+            value={valueObject}
+          />
+        </li>
+      </ul>
+      {error && <span className="form__error">{error}</span>}
+    </div>
+  );
+};
 
-  render () {
-    const {
-      label,
-      value,
-      options,
-      id,
-      error,
-      noNull
-    } = this.props;
-
-    const renderedOptions = options[0] === '' || noNull ? options : [''].concat(options);
-
-    return (
-      <div className={`form__dropdown${error ? ' form__error--wrapper' : ''}`}>
-        <ul>
-          <li className="dropdown__label">
-            <label htmlFor={id}>{label}</label>
-          </li>
-          <li className="dropdown__element">
-            <div className='dropdown__wrapper'>
-              <select id={id} value={value} onChange={this.onChange}>
-                {renderedOptions.map((option, i) => {
-                  const [optionValue, optionLabel] = Array.isArray(option) ? option : [option, option];
-                  return (<option key={i} value={optionValue}>{optionLabel}</option>);
-                })}
-              </select>
-            </div>
-          </li>
-        </ul>
-        {error && <span className='form__error'>{error}</span>}
-      </div>
-    );
-  }
-}
-
-Dropdown.propTypes = {
+SimpleDropdown.propTypes = {
+  className: PropTypes.string,
   label: PropTypes.any,
   value: PropTypes.string,
   options: PropTypes.array,
   id: PropTypes.string,
   error: PropTypes.string,
   onChange: PropTypes.func,
-  noNull: PropTypes.bool
+  noNull: PropTypes.bool,
 };
 
-export default Dropdown;
+export default SimpleDropdown;

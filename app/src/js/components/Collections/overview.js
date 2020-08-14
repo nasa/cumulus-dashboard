@@ -14,6 +14,7 @@ import {
   getCumulusInstanceMetadata,
   listGranules,
   searchGranules,
+  listCollections,
 } from '../../actions';
 import {
   collectionName as collectionLabelForId,
@@ -86,6 +87,7 @@ class CollectionOverview extends React.Component {
 
   load() {
     const { name, version } = this.props.match.params;
+    this.props.dispatch(listCollections());
     this.props.dispatch(getCumulusInstanceMetadata());
     this.props.dispatch(getCollection(name, version));
   }

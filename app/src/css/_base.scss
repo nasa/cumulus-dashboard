@@ -420,6 +420,34 @@ a:active {
   margin-bottom: 7.5em;
 }
 
+.page__section--logs {
+
+  .heading__wrapper--border {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: .5em;
+
+    .log-query-items {
+      display: flex;
+    }
+  }
+
+  .dropdown__element {
+    width: 80px;
+  }
+
+  .search__wrapper {
+    input {
+      height: 29px;
+    }
+
+    .search__icon:after {
+      top:.85em;
+    }
+  }
+}
+
 .collection__options--top ul{
   display: flex;
   align-items: center;
