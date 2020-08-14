@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Add some ESLint configuration to improve code quality
   - Upgrades Cypress to 4.12.0
 
+- **CUMULUS-1884**
+  - Add collapse/expand sidebar functionality
+
 - **CUMULUS-1892**
   - Added TableHeader component to allow user to select page and limit params
   - Removed all Results Per Page dropdowns in favor of the header

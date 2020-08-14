@@ -943,3 +943,5 @@ export const searchReconciliationReport = (searchString) => ({ type: types.SEARC
 export const clearReconciliationSearch = () => ({ type: types.CLEAR_RECONCILIATION_SEARCH });
 export const filterReconciliationReport = (param) => ({ type: types.FILTER_RECONCILIATION, param });
 export const clearReconciliationReportFilter = (paramKey) => ({ type: types.CLEAR_RECONCILIATION_FILTER, paramKey });
+
+export const toggleSidebar = () => ({ type: types.TOGGLE_SIDEBAR });
