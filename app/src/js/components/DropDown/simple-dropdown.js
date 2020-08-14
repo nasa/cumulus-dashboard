@@ -61,7 +61,6 @@ const SimpleDropdown = ({
             className={className}
             components={{ DropdownIndicator }}
             options={optionsObject}
-            // styles={customStyles}
             onChange={handleChange}
             styles={customStyles}
             value={valueObject}
@@ -75,13 +74,13 @@ const SimpleDropdown = ({
 
 SimpleDropdown.propTypes = {
   className: PropTypes.string,
-  label: PropTypes.any,
-  value: PropTypes.string,
-  options: PropTypes.array,
-  id: PropTypes.string,
   error: PropTypes.string,
-  onChange: PropTypes.func,
+  id: PropTypes.string,
+  label: PropTypes.any,
   noNull: PropTypes.bool,
+  onChange: PropTypes.func,
+  options: PropTypes.array,
+  value: PropTypes.string,
 };
 
 export default SimpleDropdown;

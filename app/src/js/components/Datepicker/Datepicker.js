@@ -135,50 +135,6 @@ class Datepicker extends React.PureComponent {
     this.props.setQueryParams(updatedQueryParams);
   }
 
-  renderDateRangeDropDown () {
-    return (
-      <React.Fragment>
-        <div className='datetime dropdown__dtrange'>
-          <select
-            name='dateRange'
-            value={this.props.dateRange.value}
-            onChange={this.handleDropdownChange}
-            data-cy='datetime-dropdown'
-          >
-            {allDateRanges.map((option, i) => (
-              <option value={option.value} key={i}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </React.Fragment>
-    );
-  }
-
-  renderHourFormatSelect () {
-    const name = 'hourFormat';
-
-    return (
-      <React.Fragment>
-        <div className='datetime selector__hrformat'>
-          <select
-            type='text'
-            name={name}
-            value={this.props.hourFormat.value}
-            onChange={this.handleHourFormatChange}
-          >
-            {allHourFormats.map((option, i) => (
-              <option value={option.value} key={i}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </React.Fragment>
-    );
-  }
-
   renderDateTimeRange (name) {
     const { hourFormat } = this.props;
     const value = this.props[name];
