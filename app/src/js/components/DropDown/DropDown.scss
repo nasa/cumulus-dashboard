@@ -74,17 +74,6 @@
     visibility: hidden;
   }
 
-  &__element {
-
-    & > div > div {
-      border: 1px solid #eceaea !important;
-      -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-      // background-color: #fff;
-      border-radius: 0.5em;
-    }
-  }
-
   &__indicator {
     &:after {
       font-family: 'FontAwesome';

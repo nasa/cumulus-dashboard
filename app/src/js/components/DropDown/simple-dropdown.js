@@ -8,16 +8,37 @@ const DropdownIndicator = (props) => (
   </components.DropdownIndicator>
 );
 
+const borderRadius = '0.5em';
+const boxShadow = '0 1px 3px rgba(0,0,0,.08)';
+
 const customStyles = {
-  control: (base, state) => ({
+  control: (base) => ({
     ...base,
-    // backgroundColor: '#2276ac',
+    border: 'none',
   }),
   menu: (base) => ({
     ...base,
     margin: 0,
     zIndex: 9999,
   }),
+  indicatorsContainer: (base) => ({
+    ...base,
+    backgroundColor: '#2276ac',
+    borderRadius: `0 ${borderRadius} ${borderRadius} 0`,
+    boxShadow,
+  }),
+  indicatorSeparator: (base) => ({
+    display: 'none',
+  }),
+  valueContainer: (base) => ({
+    ...base,
+    border: '1px solid #eceaea',
+    borderRadius: `${borderRadius} 0 0 ${borderRadius}`,
+    borderRight: 'none',
+    boxShadow,
+    padding: '4px 8px',
+  })
+
 };
 
 const SimpleDropdown = ({
