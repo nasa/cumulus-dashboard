@@ -195,6 +195,7 @@ class CollectionOverview extends React.Component {
               <li>
                 <div className="dropdown__collection form-group__element--right">
                   <SimpleDropdown
+                    className='collection-chooser'
                     label={'Collection'}
                     title={'Collections Dropdown'}
                     value={getCollectionId(params)}

@@ -179,10 +179,11 @@ describe('Dashboard Collections Page', () => {
       const collectionId = getCollectionId({ name: 'MOD09GQ', version: '006' });
       const formattedCollectionName = collectionName(collectionId);
 
-      cy.get('#collection-chooser').select(collectionId);
+      cy.get('.collection-chooser').click();
+      cy.contains('div[class*="MenuList"] > div', collectionId).click();
       cy.contains('.heading--large', `${formattedCollectionName}`);
       cy.contains('.heading--large', 'Granule Metric');
-      cy.get('#collection-chooser').find(':selected').contains(collectionId);
+      cy.get('.collection-chooser').find('div[class*="singleValue"]').contains(collectionId);
     });
 
     it('should copy a collection', () => {
