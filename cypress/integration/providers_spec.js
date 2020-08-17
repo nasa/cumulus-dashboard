@@ -69,9 +69,9 @@ describe('Dashboard Providers Page', () => {
       cy.get('@providerinput')
         .contains('.dropdown__label', 'Protocol')
         .siblings()
-        .find('select')
-        .select(protocol, { force: true })
-        .should('have.value', protocol);
+        .find('div[class*="container"]')
+        .click();
+      cy.contains('div[class*="MenuList"] > div', protocol).click();
       cy.get('@providerinput')
         .contains('Host')
         .siblings('input')
