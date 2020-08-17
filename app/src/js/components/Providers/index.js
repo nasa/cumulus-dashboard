@@ -1,10 +1,9 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
-import Sidebar from '../Sidebar/sidebar';
 import PropTypes from 'prop-types';
+import Sidebar from '../Sidebar/sidebar';
 import AddProvider from './add';
 import EditProvider from './edit';
 import ProvidersOverview from './overview';

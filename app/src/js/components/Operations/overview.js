@@ -1,10 +1,9 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import {
   clearOperationsFilter,
   filterOperations,
@@ -22,7 +21,6 @@ import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import { tableColumns } from '../../utils/table-config/operations';
 import ListFilters from '../ListActions/ListFilters';
-import pageSizeOptions from '../../utils/page-size';
 import { operationStatus } from '../../utils/status';
 import { operationTypes } from '../../utils/type';
 
@@ -58,9 +56,7 @@ class OperationOverview extends React.Component {
   }
 
   searchOperations (list, infix) {
-    return list.filter((item) => {
-      if (item.id.includes(infix)) return item;
-    });
+    return list.filter((item) => item.id.includes(infix));
   }
 
   render () {
@@ -99,9 +95,10 @@ class OperationOverview extends React.Component {
             query={this.generateQuery()}
             rowId='id'
             sortId='createdAt'
+            filterAction={filterOperations}
+            filterClear={clearOperationsFilter}
           >
             <ListFilters>
-
               <Search dispatch={dispatch}
                 action={searchOperations}
                 clear={clearOperationsSearch}
@@ -113,21 +110,12 @@ class OperationOverview extends React.Component {
                 paramKey={'status'}
                 label={'Status'}
               />
-
               <Dropdown
                 options={operationTypes}
                 action={filterOperations}
                 clear={clearOperationsFilter}
                 paramKey={'operationType'}
                 label={'Type'}
-              />
-
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterOperations}
-                clear={clearOperationsFilter}
-                paramKey={'limit'}
-                label={'Results Per Page'}
               />
             </ListFilters>
           </List>
@@ -144,6 +132,6 @@ OperationOverview.propTypes = {
   queryParams: PropTypes.object,
 };
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   operations: state.operations,
 }))(OperationOverview));

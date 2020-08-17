@@ -1,7 +1,6 @@
-'use strict';
-
-import { getCollectionId } from '../utils/format';
+/* eslint-disable import/no-cycle */
 import { createReducer } from '@reduxjs/toolkit';
+import { getCollectionId } from '../utils/format';
 import { ADD_MMTLINK } from '../actions/types';
 
 const initialState = {};

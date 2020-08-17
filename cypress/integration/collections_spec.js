@@ -33,13 +33,14 @@ describe('Dashboard Collections Page', () => {
 
       // Stub CMR response to avoid hitting UAT
       cmrFixtureIdx = 0;
+      // eslint-disable-next-line no-plusplus
       cy.fixture('cmr').then((fixture) => fixture.forEach((f) => cy.route(f).as(`cmr${cmrFixtureIdx++}`)));
     });
 
     it('should display a link to view collections', () => {
       cy.contains('nav li a', 'Collections').as('collections');
       cy.setDatepickerDropdown('Recent');
-      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections\?startDateTime/);
+      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections.*startDateTime/);
       cy.get('@collections').click();
       cy.wait('@getActiveCollections');
 
@@ -57,7 +58,7 @@ describe('Dashboard Collections Page', () => {
     it('should only display collections with active granules when time filter is applied', () => {
       cy.contains('nav li a', 'Collections').as('collections');
       cy.setDatepickerDropdown('Recent');
-      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections\?startDateTime/);
+      cy.get('@collections').should('have.attr', 'href').and('match', /\/collections.*startDateTime/);
       cy.get('@collections').click();
       cy.wait('@getActiveCollections');
 
@@ -86,7 +87,7 @@ describe('Dashboard Collections Page', () => {
       let i = 0;
 
       cy.get('.table .tbody .tr').should('have.length', 5);
-
+      // eslint-disable-next-line no-plusplus
       while (i < cmrFixtureIdx) cy.wait(`@cmr${i++}`, { timeout: 25000 });
       cy.contains('.table .tbody .tr', 'MOD09GQ')
         .contains('.td a', 'MMT')
@@ -125,12 +126,11 @@ describe('Dashboard Collections Page', () => {
 
       // After POSTing the new collection, make sure we GET it back
       cy.wait('@postCollection')
-        .then((xhr) =>
-          cy.request({
-            method: 'GET',
-            url: `${new URL(xhr.url).origin}/collections/${name}/${version}`,
-            headers: xhr.request.headers
-          }))
+        .then((xhr) => cy.request({
+          method: 'GET',
+          url: `${new URL(xhr.url).origin}/collections/${name}/${version}`,
+          headers: xhr.request.headers
+        }))
         .then((response) => {
           cy.expectDeepEqualButNewer(response.body, collection);
 
@@ -364,7 +364,8 @@ describe('Dashboard Collections Page', () => {
           // before these all show up or don't show up correctly.
           cy.get(
             `[data-value="${collection.name}___${collection.version}"] > .table__main-asset > a`,
-            { timeout: 25000 }).should(existOrNotExist);
+            { timeout: 25000 }
+          ).should(existOrNotExist);
         });
       cy.get('.table .tbody .tr').should('have.length', 4);
       cy.task('resetState');
@@ -471,7 +472,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Error');
       cy.get('.Collapsible__contentInner').should('contain.text', 'Oopsie');
       cy.get('.button--cancel').click();
-      cy.url().should('match', /\/granules$/);
+      cy.url().should('match', /\/granules/);
       cy.get('.heading--large').should('have.text', 'Granule Overview');
     });
 
@@ -520,8 +521,12 @@ describe('Dashboard Collections Page', () => {
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
           .first().should('contain', 0).and('contain', 'Completed')
-          .next().should('contain', 0).and('contain', 'Failed')
-          .next().should('contain', 0).and('contain', 'Running');
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Failed')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Running');
       });
 
       cy.get('[data-cy=endDateTime] > .react-datetime-picker > .react-datetime-picker__wrapper > .react-datetime-picker__clear-button > .react-datetime-picker__clear-button__icon').click();
@@ -529,8 +534,12 @@ describe('Dashboard Collections Page', () => {
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
           .first().should('contain', 7).and('contain', 'Completed')
-          .next().should('contain', 2).and('contain', 'Failed')
-          .next().should('contain', 2).and('contain', 'Running');
+          .next()
+          .should('contain', 2)
+          .and('contain', 'Failed')
+          .next()
+          .should('contain', 2)
+          .and('contain', 'Running');
       });
     });
 
@@ -540,19 +549,27 @@ describe('Dashboard Collections Page', () => {
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
           .first().should('contain', 7).and('contain', 'Completed')
-          .next().should('contain', 2).and('contain', 'Failed')
-          .next().should('contain', 2).and('contain', 'Running');
+          .next()
+          .should('contain', 2)
+          .and('contain', 'Failed')
+          .next()
+          .should('contain', 2)
+          .and('contain', 'Running');
       });
 
       cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').click().type('fai').type('{enter}');
-      cy.url().should('include', '?status=failed');
+      cy.url().should('include', 'status=failed');
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
           .first().should('contain', 0).and('contain', 'Completed')
-          .next().should('contain', 2).and('contain', 'Failed')
-          .next().should('contain', 0).and('contain', 'Running');
+          .next()
+          .should('contain', 2)
+          .and('contain', 'Failed')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Running');
       });
     });
   });

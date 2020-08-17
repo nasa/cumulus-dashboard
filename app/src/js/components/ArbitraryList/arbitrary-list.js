@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -65,7 +64,7 @@ class List extends React.Component {
         />
         { add ? <button
           onClick={this.add}
-          className={'button form__addone--button' + (disabled ? ' button--disabled' : '')}>+</button>
+          className={`button form__addone--button${disabled ? ' button--disabled' : ''}`}>+</button>
           : null }
 
         { !add ? <button

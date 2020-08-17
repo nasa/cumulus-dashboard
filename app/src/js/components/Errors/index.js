@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -31,4 +30,4 @@ Errors.propTypes = {
   children: PropTypes.object
 };
 
-export default connect(state => state)(Errors);
+export default connect((state) => state)(Errors);

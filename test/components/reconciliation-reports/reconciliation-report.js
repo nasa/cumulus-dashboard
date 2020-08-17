@@ -72,6 +72,9 @@ test('shows an individual report', function (t) {
 
   t.is(report.length, 1);
 
+  const ReportHeading = report.find('ReportHeading');
+  t.is(ReportHeading.length, 1);
+
   const TableCards = report.find('TableCards');
   t.is(TableCards.length, 2);
   const TableCardWrapper = TableCards.at(0).dive();
@@ -82,6 +85,45 @@ test('shows an individual report', function (t) {
 
   const Table = report.find('SortableTable');
   t.is(Table.length, 1);
+});
+
+test('correctly renders the heading', function (t) {
+
+  const match = { params: { reconciliationReportName: 'exampleReport' } };
+
+  const dispatch = () => {};
+
+  const report = shallow(
+    <ReconciliationReport
+      match={match}
+      reconciliationReports={reconciliationReports}
+      dispatch={dispatch}
+    />
+  );
+
+  t.is(report.length, 1);
+
+  const ReportHeading = report.find('ReportHeading');
+  t.is(ReportHeading.length, 1);
+
+  const { downloadOptions, ...headingProps } = ReportHeading.props();
+
+  const expectedHeadingProps = {
+    endTime: '2018-06-11T18:52:39.893Z',
+    error: null,
+    name: 'exampleReport',
+    reportState: 'CONFLICT',
+    startTime: '2018-06-11T18:52:37.710Z',
+  };
+
+  t.is(downloadOptions.length, 2);
+
+  t.deepEqual(headingProps, expectedHeadingProps);
+
+  const reportHeadingWrapper = ReportHeading.dive();
+
+  const downloadItems = reportHeadingWrapper.find('DropdownItem');
+  t.is(downloadItems.length, 2);
 });
 
 test('report with error triggers error message', function (t) {
@@ -98,7 +140,13 @@ test('report with error triggers error message', function (t) {
   );
 
   t.is(report.length, 1);
-  const ErrorReport = report.find('ErrorReport');
+
+  const ReportHeading = report.find('ReportHeading');
+  t.is(ReportHeading.length, 1);
+
+  const reportHeadingWrapper = ReportHeading.dive();
+
+  const ErrorReport = reportHeadingWrapper.find('ErrorReport');
   const props = ErrorReport.props();
   t.is(props.report, reconciliationReports.map.exampleReportWithError.data.error);
   t.is(ErrorReport.dive().find('div p').text(), reconciliationReports.map.exampleReportWithError.data.error);

@@ -1,10 +1,10 @@
-'use strict';
 import { get } from 'object-path';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
+import isEqual from 'lodash/isEqual';
 import {
   clearGranulesFilter,
   clearGranulesSearch,
@@ -21,13 +21,8 @@ import {
   getCollectionId,
   lastUpdated,
 } from '../../utils/format';
-import pageSizeOptions from '../../utils/page-size';
 import statusOptions from '../../utils/status';
-import {
-  getPersistentQueryParams,
-  historyPushWithQueryParams,
-} from '../../utils/url-helper';
-import isEqual from 'lodash.isequal';
+import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 import {
   reingestAction,
   tableColumns,
@@ -42,7 +37,6 @@ import { strings } from '../locale';
 import Overview from '../Overview/overview';
 import Search from '../Search/search';
 import List from '../Table/Table';
-
 const breadcrumbConfig = [
   {
     label: 'Dashboard Home',
@@ -288,6 +282,8 @@ class CollectionOverview extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId="granuleId"
             sortId="timestamp"
+            filterAction={filterGranules}
+            filterClear={clearGranulesFilter}
           >
             <ListFilters>
               <Search
@@ -305,16 +301,6 @@ class CollectionOverview extends React.Component {
                 label="Status"
                 inputProps={{
                   placeholder: 'All',
-                }}
-              />
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey="limit"
-                label={'Results Per Page'}
-                inputProps={{
-                  placeholder: 'Results Per Page',
                 }}
               />
             </ListFilters>

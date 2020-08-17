@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -17,4 +16,4 @@ class ErrorsOverview extends React.Component {
   }
 }
 
-export default connect(state => state)(ErrorsOverview);
+export default connect((state) => state)(ErrorsOverview);

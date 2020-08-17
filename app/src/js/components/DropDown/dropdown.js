@@ -1,4 +1,3 @@
-'use strict';
 import React, { useState, useEffect, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -15,10 +14,8 @@ import {
 function renderInput({ inputRef, referenceElementRef, ...inputProps }) {
   return (
     <Hint
-      shouldSelect={(shouldSelect, e) => {
-        // Selects the hint when the user hits the 'enter' key.
-        return e.keyCode === 13 || shouldSelect;
-      }}
+      // Selects the hint when the user hits the 'enter' key.
+      shouldSelect={(shouldSelect, e) => e.keyCode === 13 || shouldSelect}
     >
       <Input
         {...inputProps}
@@ -40,15 +37,28 @@ renderInput.propTypes = {
 };
 
 function renderMenu(results, menuProps) {
+  const customOption = results.find((result) => result.customOption);
   return (
     <Menu {...menuProps} className="autocomplete__menu">
+      {customOption &&
+        <MenuItem
+          className="autocomplete__select"
+          key={0}
+          option={customOption}
+          position={0}
+        >
+          {customOption.label}
+        </MenuItem>
+      }
       {results.map((result, index) => {
+        if (result.customOption) return;
+        const position = customOption ? index + 1 : index;
         return (
           <MenuItem
             className="autocomplete__select"
-            key={index}
+            key={position}
             option={result}
-            position={index}
+            position={position}
           >
             {result.label}
           </MenuItem>
@@ -61,54 +71,67 @@ function renderMenu(results, menuProps) {
 const Dropdown = ({
   action,
   clear,
+  clearButton = true,
   dispatch,
   getOptions,
   inputProps,
   label,
-  options,
+  onChange,
+  options = [],
   paramKey,
   queryParams,
+  selectedValues = [],
   setQueryParams,
 }) => {
-  const [selected, setSelected] = useState([]);
-  const allowNew = paramKey === 'limit';
   const typeaheadRef = createRef();
+  const [initialQueryParams] = useState(queryParams);
+  const [selected, setSelected] = useState(selectedValues);
+  const allowNew = paramKey === 'limit' || paramKey === 'page';
 
-  function getOptionFromParam(options, paramValue) {
-    return options.filter((item) => item.id === paramValue);
+  function getOptionFromParam(paramOptions, paramValue) {
+    return paramOptions.filter((item) => item.id === paramValue);
   }
 
-  function updateSelection(selectedValues, value) {
+  function updateSelection(selections, value) {
     dispatch(action({ key: paramKey, value }));
-    setSelected(selectedValues);
+    setSelected(selections);
     setQueryParams({ [paramKey]: value });
   }
 
-  function handleChange(selectedValues) {
-    const item = selectedValues[0];
-    const { customOption, id, label } = item || {};
-    const value = customOption ? label : id;
-    updateSelection(selectedValues, value);
+  function handleChange(selections) {
+    const item = selections[0];
+    const { customOption, id, label: selectedLabel } = item || {};
+    const value = customOption ? selectedLabel : id;
+    const updateSelectionCallback = () => updateSelection(selections, value);
+    if (typeof onChange === 'function') {
+      onChange({ selections, updateSelection: updateSelectionCallback });
+    } else {
+      updateSelectionCallback();
+    }
   }
 
   function handleKeyDown(e) {
     if (!allowNew) return;
     if (e.keyCode === 13) {
-      const value = e.target.value;
+      const { value } = e.target;
       const selectedValue = [
         {
           id: value,
           label: value,
         },
       ];
-      updateSelection(selectedValue, value);
+      const updateSelectionCallback = () => updateSelection(selectedValue, value);
+      if (typeof onChange === 'function') {
+        onChange({ selections: selectedValue, updateSelection: updateSelectionCallback, value });
+      } else {
+        updateSelectionCallback();
+      }
       typeaheadRef.current.hideMenu();
     }
   }
 
   useEffect(() => {
-    const paramValue = queryParams[paramKey];
-    dispatch(action({ key: paramKey, value: paramValue }));
+    const paramValue = initialQueryParams[paramKey];
     if (paramValue) {
       let selectedValue = getOptionFromParam(options, paramValue);
       if (allowNew && selectedValue.length === 0) {
@@ -119,14 +142,31 @@ const Dropdown = ({
           },
         ];
       }
+      const updateSelectionCallback = () => updateSelection(selectedValue, paramValue);
+      if (typeof onChange === 'function') {
+        onChange({ selections: selectedValue, updateSelection: updateSelectionCallback, value: paramValue });
+      } else {
+        updateSelectionCallback();
+      }
+      dispatch(action({ key: paramKey, value: paramValue }));
       setSelected(selectedValue);
     }
 
     return function cleanup() {
-      dispatch(clear(paramKey));
+      if (typeof clear === 'function') dispatch(clear(paramKey));
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [action, allowNew, clear, dispatch, JSON.stringify(options), paramKey, JSON.stringify(queryParams)]);
+  }, [action, allowNew, clear, dispatch, JSON.stringify(options), paramKey, JSON.stringify(initialQueryParams)]);
+
+  useEffect(() => {
+    if (selectedValues.length > 0) {
+      const { id: value } = selectedValues[0];
+      dispatch(action({ key: paramKey, value }));
+      setSelected(selectedValues);
+      setQueryParams({ [paramKey]: value });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [action, dispatch, paramKey, JSON.stringify(selectedValues), setQueryParams]);
 
   useEffect(() => {
     if (getOptions) dispatch(getOptions());
@@ -137,7 +177,7 @@ const Dropdown = ({
       {label && <label>{label}</label>}
       <Typeahead
         allowNew={allowNew}
-        clearButton={true}
+        clearButton={clearButton}
         id={paramKey}
         inputProps={inputProps}
         onChange={handleChange}
@@ -146,7 +186,7 @@ const Dropdown = ({
         ref={typeaheadRef}
         renderInput={renderInput}
         renderMenu={renderMenu}
-        selected={selected || []}
+        selected={selected}
       />
     </div>
   );
@@ -155,13 +195,16 @@ const Dropdown = ({
 Dropdown.propTypes = {
   action: PropTypes.func,
   clear: PropTypes.func,
+  clearButton: PropTypes.bool,
   dispatch: PropTypes.func,
   getOptions: PropTypes.func,
   inputProps: PropTypes.object,
   label: PropTypes.any,
+  onChange: PropTypes.func,
   options: PropTypes.array,
   paramKey: PropTypes.string,
   queryParams: PropTypes.object,
+  selectedValues: PropTypes.array,
   setQueryParams: PropTypes.func,
 };
 

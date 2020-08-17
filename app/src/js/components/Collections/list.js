@@ -1,5 +1,4 @@
 // This is the main Collections Overview page
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -30,8 +29,6 @@ import List from '../Table/Table';
 import { strings } from '../locale';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
-import Dropdown from '../DropDown/dropdown';
-import pageSizeOptions from '../../utils/page-size';
 
 const breadcrumbConfig = [
   {
@@ -82,12 +79,10 @@ class CollectionList extends React.Component {
     const hasTimeFilter = startDateTime || endDateTime;
 
     // merge mmtLinks with the collection data;
-    const data = list.data.map((collection) => {
-      return {
-        ...collection,
-        mmtLink: mmtLinks[getCollectionId(collection)],
-      };
-    });
+    const data = list.data.map((collection) => ({
+      ...collection,
+      mmtLink: mmtLinks[getCollectionId(collection)],
+    }));
     const { count, queriedAt } = list.meta;
     return (
       <div className="page__component">
@@ -125,6 +120,8 @@ class CollectionList extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId={getCollectionId}
             sortId="duration"
+            filterAction={filterCollections}
+            filterClear={clearCollectionsFilter}
           >
             <ListFilters>
               <Search
@@ -134,17 +131,6 @@ class CollectionList extends React.Component {
                 clear={clearCollectionsSearch}
                 label="Search"
                 placeholder="Collection Name"
-              />
-
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterCollections}
-                clear={clearCollectionsFilter}
-                paramKey={'limit'}
-                label={'Results Per Page'}
-                inputProps={{
-                  placeholder: 'Results Per Page',
-                }}
               />
             </ListFilters>
           </List>

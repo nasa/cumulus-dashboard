@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import api from './api';
@@ -23,6 +24,7 @@ import rules from './rules';
 import reconciliationReports from './reconciliation-reports';
 import mmtLinks from './mmtLinks';
 import cumulusInstance from './cumulus-instance';
+import sidebar from './sidebar';
 
 const def = (state, _action) => state || {};
 
@@ -40,6 +42,7 @@ export const reducers = {
   granuleCSV,
   stats,
   timer,
+  sidebar,
   pdrs,
   providers,
   logs,
@@ -53,8 +56,7 @@ export const reducers = {
   reconciliationReports,
 };
 
-export const createRootReducer = (history) =>
-  combineReducers({
-    router: connectRouter(history),
-    ...reducers,
-  });
+export const createRootReducer = (history) => combineReducers({
+  router: connectRouter(history),
+  ...reducers,
+});

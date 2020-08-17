@@ -6,6 +6,44 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+
+- **CUMULUS-417**
+  - Add some ESLint configuration to improve code quality
+  - Upgrades Cypress to 4.12.0
+
+- **CUMULUS-1884**
+  - Add collapse/expand sidebar functionality
+
+- **CUMULUS-1892**
+  - Added TableHeader component to allow user to select page and limit params
+  - Removed all Results Per Page dropdowns in favor of the header
+
+- **CUMULUS-2046**
+  - Add dashboard version to footer
+
+### Changed
+
+- **CUMULUS-2090**
+  - Moved report headings that include breadcrumbs, name, dates, status, and download button into a reusable ReportHeading component to be used for all report types.
+
+### Fixed
+
+- **CUMULUS-1876**
+  - Fix/remove unnecessary timers on home page
+
+- **CUMULUS-2067**
+  - Tweak footer styles
+
+- **CUMULUS-2121**
+  - Fix PDR list page with status filter
+  - Update individual PDR page to properly display granules
+
+- **CUMULUS-2136**
+  - Fix Form component to report invalid json error
+
+- **CUMULUS-2140**
+  - Update npm packages to fix security vulnerabilities
 
 ## [v1.10.0]
 
@@ -14,6 +52,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - This dashboard version requires Cumulus API version >= v2.0.1
 
 ### Added
+
 - **CUMULUS-1805**
   - Shows running, completed, and failed granule format for when there are zero granules,
     before it would just say "Granules 0," but now will show zeros in all categories.

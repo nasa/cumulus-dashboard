@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 // import './DropDown.scss';
@@ -35,8 +34,8 @@ class Dropdown extends React.Component {
             <div className='dropdown__wrapper'>
               <select id={id} value={value} onChange={this.onChange}>
                 {renderedOptions.map((option, i) => {
-                  const [value, label] = Array.isArray(option) ? option : [option, option];
-                  return (<option key={i} value={value}>{label}</option>);
+                  const [optionValue, optionLabel] = Array.isArray(option) ? option : [option, option];
+                  return (<option key={i} value={optionValue}>{optionLabel}</option>);
                 })}
               </select>
             </div>

@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -10,7 +9,7 @@ import { strings } from '../locale';
 import { getCount, listReconciliationReports } from '../../actions';
 import ReconciliationReportList from './list';
 import ReconciliationReport from './reconciliation-report';
-import DatePickerHeader from '../../components/DatePickerHeader/DatePickerHeader';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import Legend from './legend';
 import { filterQueryParams } from '../../utils/url-helper';
 

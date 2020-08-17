@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -12,4 +11,4 @@ class PdrCompleted extends React.Component {
   }
 }
 
-export default connect(state => state)(PdrCompleted);
+export default connect((state) => state)(PdrCompleted);

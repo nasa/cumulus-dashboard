@@ -1,10 +1,10 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { get } from 'object-path';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
+import PropTypes from 'prop-types';
 import {
   listProviders,
   getCount,
@@ -14,10 +14,6 @@ import {
 import { lastUpdated } from '../../utils/format';
 import { tableColumns } from '../../utils/table-config/providers';
 import List from '../Table/Table';
-import PropTypes from 'prop-types';
-import Dropdown from '../DropDown/dropdown';
-import pageSizeOptions from '../../utils/page-size';
-import ListFilters from '../ListActions/ListFilters';
 import { getPersistentQueryParams } from '../../utils/url-helper';
 
 class ProvidersOverview extends React.Component {
@@ -54,7 +50,7 @@ class ProvidersOverview extends React.Component {
       {
         Component: <Link
           className="button button--green button--add button--small form-group__element"
-          to={location => ({ pathname: '/providers/add', search: getPersistentQueryParams(location) })}
+          to={(location) => ({ pathname: '/providers/add', search: getPersistentQueryParams(location) })}
         >
           Add Provider
         </Link>
@@ -99,19 +95,9 @@ class ProvidersOverview extends React.Component {
             bulkActions={bulkActions}
             rowId="name"
             sortId="timestamp"
+            filterAction={filterProviders}
+            filterClear={clearProvidersFilter}
           >
-            <ListFilters>
-              <Dropdown
-                options={pageSizeOptions}
-                action={filterProviders}
-                clear={clearProvidersFilter}
-                paramKey={'limit'}
-                label={'Results Per Page'}
-                inputProps={{
-                  placeholder: 'Results Per Page',
-                }}
-              />
-            </ListFilters>
           </List>
         </section>
       </div>
