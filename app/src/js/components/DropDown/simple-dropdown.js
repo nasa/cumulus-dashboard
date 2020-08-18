@@ -37,8 +37,7 @@ const customStyles = {
     borderRight: 'none',
     boxShadow,
     padding: '4px 8px',
-  })
-
+  }),
 };
 
 const SimpleDropdown = ({
@@ -94,7 +93,7 @@ SimpleDropdown.propTypes = {
   label: PropTypes.any,
   onChange: PropTypes.func,
   options: PropTypes.array,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
 };
 
 export default SimpleDropdown;
