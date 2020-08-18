@@ -46,16 +46,10 @@ const SimpleDropdown = ({
   error,
   id,
   label,
-  noNull,
   onChange,
   options = [],
   value,
 }) => {
-  // const renderedOptions =
-  //   options[0] === '' || noNull ? options : [''].concat(options);
-
-  console.log(options);
-
   const optionsObject = options.map((option) => {
     if (typeof option === 'object') return option;
     return {
@@ -98,7 +92,6 @@ SimpleDropdown.propTypes = {
   error: PropTypes.string,
   id: PropTypes.string,
   label: PropTypes.any,
-  noNull: PropTypes.bool,
   onChange: PropTypes.func,
   options: PropTypes.array,
   value: PropTypes.string,

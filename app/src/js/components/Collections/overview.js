@@ -202,7 +202,6 @@ class CollectionOverview extends React.Component {
                     options={sortedCollectionIds}
                     id={'collection-chooser'}
                     onChange={this.changeCollection}
-                    noNull={true}
                   />
                 </div>
               </li>

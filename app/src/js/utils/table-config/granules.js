@@ -120,7 +120,6 @@ export const simpleDropdownOption = (config) => (
     options={config.options}
     id={config.label}
     onChange={config.handler}
-    noNull={true}
   />
 );
 

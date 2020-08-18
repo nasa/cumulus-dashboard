@@ -167,7 +167,6 @@ class LogViewer extends React.Component {
                 options={logLevels}
                 id={'logs-viewer-dropdown'}
                 onChange={(_, searchLevel, option) => this.setSearchLevel(option)}
-                noNull={true}
               />
             </form>
             <form className="form-group__element form-group__element--small">

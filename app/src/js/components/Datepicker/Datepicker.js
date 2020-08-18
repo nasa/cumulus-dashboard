@@ -141,9 +141,6 @@ class Datepicker extends React.PureComponent {
     const locale = hourFormat === '24HR' ? 'en-GB' : 'en-US';
     const format = `MM/dd/yyyyy ${hourFormat === '24HR' ? 'HH:mm' : 'hh:mm a'}`;
 
-    console.log(locale);
-    console.log(format);
-
     const utcValue = isNil(value)
       ? null
       : moment(moment.utc(value).format(dateTimeFormat)).toDate();
