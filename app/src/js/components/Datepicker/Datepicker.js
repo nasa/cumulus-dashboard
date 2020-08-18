@@ -97,10 +97,10 @@ class Datepicker extends React.PureComponent {
     this.props.dispatch(this.dispatchDropdownUpdate(value, label));
   }
 
-  handleHourFormatChange (id, value, option) {
+  handleHourFormatChange (id, value) {
     this.props.dispatch({
       type: DATEPICKER_HOUR_FORMAT,
-      data: option
+      data: value
     });
   }
 
@@ -140,6 +140,9 @@ class Datepicker extends React.PureComponent {
     const value = this.props[name];
     const locale = hourFormat === '24HR' ? 'en-GB' : 'en-US';
     const format = `MM/dd/yyyyy ${hourFormat === '24HR' ? 'HH:mm' : 'hh:mm a'}`;
+
+    console.log(locale);
+    console.log(format);
 
     const utcValue = isNil(value)
       ? null
