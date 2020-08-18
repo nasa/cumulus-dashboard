@@ -8,13 +8,14 @@ const DropdownIndicator = (props) => (
   </components.DropdownIndicator>
 );
 
+const border = '1px solid #eceaea';
 const borderRadius = '0.5em';
 const boxShadow = '0 1px 3px rgba(0,0,0,.08)';
 
 const customStyles = {
   control: (base) => ({
     ...base,
-    border: '1px solid #eceaea',
+    border,
     borderRadius,
     boxShadow,
   }),
