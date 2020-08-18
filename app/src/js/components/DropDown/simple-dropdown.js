@@ -16,6 +16,7 @@ const customStyles = {
     ...base,
     border: '1px solid #eceaea',
     borderRadius,
+    boxShadow,
   }),
   menu: (base) => ({
     ...base,
