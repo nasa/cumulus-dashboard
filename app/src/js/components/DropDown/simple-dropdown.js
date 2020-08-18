@@ -14,7 +14,8 @@ const boxShadow = '0 1px 3px rgba(0,0,0,.08)';
 const customStyles = {
   control: (base) => ({
     ...base,
-    border: 'none',
+    border: '1px solid #eceaea',
+    borderRadius,
   }),
   menu: (base) => ({
     ...base,
@@ -29,14 +30,6 @@ const customStyles = {
   }),
   indicatorSeparator: (base) => ({
     display: 'none',
-  }),
-  valueContainer: (base) => ({
-    ...base,
-    border: '1px solid #eceaea',
-    borderRadius: `${borderRadius} 0 0 ${borderRadius}`,
-    borderRight: 'none',
-    boxShadow,
-    padding: '4px 8px',
   }),
 };
 
