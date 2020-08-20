@@ -307,12 +307,14 @@ describe('Dashboard Granules Page', () => {
         status: 200,
         response: { message: 'ingested' }
       });
+      cy.route('GET', `/granules/${granuleId}`).as('getGranule');
       cy.visit('/granules');
       cy.get(`[data-value="${granuleId}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
       cy.get('.button__goto').click();
+      cy.wait('@getGranule');
       cy.url().should('include', `granules/granule/${granuleId}`);
       cy.get('.heading--large').should('have.text', granuleId);
     });
