@@ -2,3 +2,7 @@ $shadow__default: 0px 1px 3px rgba(0, 0, 0, .08);
 $shadow__hover: 0px 2px 8px rgba(0, 0, 0, .1);
 $shadow__header: 0px 4px 8px rgba(0, 0, 0, 0.12);
 $shadow__modal: 0px 4px 8px rgba(0, 0, 0, 0.12);
+
+:export {
+    shadowDefault: $shadow__default;
+}

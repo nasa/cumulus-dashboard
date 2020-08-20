@@ -23,6 +23,7 @@ $grey: #8C8C8C;
 $light-grey: #C4C4C4;
 $lighter-grey: #8C8C8C;
 $lightest-grey: #E2DFDF;
+$border-grey: #ECEAEA;
 $background-white: #F8F8F8;
 $white: #FFFFFF;
 
@@ -32,3 +33,10 @@ $theme--light: #E2DFDF;
 $theme--dark: #2c3e50;
 $theme--success: $light-green;
 $theme--conflict: $orange;
+
+
+:export {
+    borderGrey: $border-grey;
+    oceanBlue: $ocean-blue;
+    white: $white;
+}

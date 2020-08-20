@@ -535,7 +535,7 @@ select option{
 
 .rule__content,
 .execution__content {
-  border: 1px solid #eceaea;
+  border: 1px solid $border-grey;
   box-shadow: $shadow__default;
   border-radius: 10px;
   padding: 25px 40px;

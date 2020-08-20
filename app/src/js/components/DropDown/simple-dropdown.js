@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
+import { borderGrey, oceanBlue, white } from '../../../css/utils/variables/_colors.scss';
+import { shadowDefault } from '../../../css/utils/variables/_shadows.scss';
 
 const DropdownIndicator = (props) => (
   <components.DropdownIndicator {...props}>
@@ -8,9 +10,9 @@ const DropdownIndicator = (props) => (
   </components.DropdownIndicator>
 );
 
-const border = '1px solid #eceaea';
+const border = `1px solid ${borderGrey}`;
 const borderRadius = '0.5em';
-const boxShadow = '0 1px 3px rgba(0,0,0,.08)';
+const boxShadow = shadowDefault;
 
 const customStyles = {
   control: (base) => ({
@@ -26,13 +28,23 @@ const customStyles = {
   }),
   indicatorsContainer: (base) => ({
     ...base,
-    backgroundColor: '#2276ac',
+    backgroundColor: oceanBlue,
     borderRadius: `0 ${borderRadius} ${borderRadius} 0`,
     boxShadow,
   }),
-  indicatorSeparator: (base) => ({
+  indicatorSeparator: () => ({
     display: 'none',
   }),
+  option: (base, state) => {
+    const styles = state.isFocused || state.isSelected ? {
+      backgroundColor: oceanBlue,
+      color: white,
+    } : {};
+    return {
+      ...base,
+      ...styles,
+    };
+  },
 };
 
 const SimpleDropdown = ({
@@ -67,6 +79,7 @@ const SimpleDropdown = ({
         </li>
         <li className="dropdown__element">
           <Select
+            blurInputOnSelect={true}
             className={className}
             components={{ DropdownIndicator }}
             options={optionsObject}
