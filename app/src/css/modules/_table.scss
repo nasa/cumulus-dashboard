@@ -126,7 +126,7 @@
 }
 
 .list__wrapper{
-  border: 1px solid #eceaea;
+  border: 1px solid $border-grey;
   box-shadow: $shadow__default;
   border-radius: 10px;
 }
@@ -258,7 +258,7 @@
   padding: 1.5em 1em .5em;
   display: inline-block;
   border-radius: .5em;
-  border: 1px solid #eceaea;
+  border: 1px solid $border-grey;
   box-shadow: $shadow__default;
   text-align: center;
   font-size: .86em;
@@ -348,7 +348,7 @@
   padding-bottom: 25px;
 
   &.simple-pagination {
-    border: 1px solid #eceaea;
+    border: 1px solid $border-grey;
     -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.08);
     box-shadow: 0 1px 3px rgba(0,0,0,.08);
     border-radius: 0 0 10px 10px;

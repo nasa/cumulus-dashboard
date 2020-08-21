@@ -1,60 +1,119 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import './DropDown.scss';
+import Select, { components } from 'react-select';
+import { borderGrey, hoverBlue, oceanBlue, white } from '../../../css/utils/variables/_colors.scss';
+import { shadowDefault } from '../../../css/utils/variables/_shadows.scss';
 
-class Dropdown extends React.Component {
-  constructor (props) {
-    super(props);
-    this.onChange = this.onChange.bind(this);
-  }
+const DropdownIndicator = (props) => (
+  <components.DropdownIndicator {...props}>
+    <div className="dropdown__indicator" />
+  </components.DropdownIndicator>
+);
 
-  onChange (e) {
-    this.props.onChange(this.props.id, e.target.value);
-  }
+const border = `1px solid ${borderGrey}`;
+const borderRadius = '0.5em';
+const boxShadow = shadowDefault;
 
-  render () {
-    const {
-      label,
-      value,
-      options,
-      id,
-      error,
-      noNull
-    } = this.props;
+const customStyles = {
+  control: (base) => ({
+    ...base,
+    border,
+    borderRadius,
+    boxShadow,
+  }),
+  menu: (base) => ({
+    ...base,
+    margin: 0,
+    zIndex: 9999,
+  }),
+  indicatorsContainer: (base) => ({
+    ...base,
+    backgroundColor: oceanBlue,
+    borderRadius: `0 ${borderRadius} ${borderRadius} 0`,
+    boxShadow,
+  }),
+  indicatorSeparator: () => ({
+    display: 'none',
+  }),
+  option: (base, state) => {
+    const { isFocused, isSelected } = state;
+    let styles = {};
 
-    const renderedOptions = options[0] === '' || noNull ? options : [''].concat(options);
+    if (isFocused) {
+      styles = {
+        backgroundColor: hoverBlue,
+      };
+    }
 
-    return (
-      <div className={`form__dropdown${error ? ' form__error--wrapper' : ''}`}>
-        <ul>
-          <li className="dropdown__label">
-            <label htmlFor={id}>{label}</label>
-          </li>
-          <li className="dropdown__element">
-            <div className='dropdown__wrapper'>
-              <select id={id} value={value} onChange={this.onChange}>
-                {renderedOptions.map((option, i) => {
-                  const [optionValue, optionLabel] = Array.isArray(option) ? option : [option, option];
-                  return (<option key={i} value={optionValue}>{optionLabel}</option>);
-                })}
-              </select>
-            </div>
-          </li>
-        </ul>
-        {error && <span className='form__error'>{error}</span>}
-      </div>
-    );
-  }
-}
+    if (isSelected) {
+      styles = {
+        backgroundColor: oceanBlue,
+        color: white,
+      };
+    }
 
-Dropdown.propTypes = {
-  label: PropTypes.any,
-  value: PropTypes.string,
-  options: PropTypes.array,
-  id: PropTypes.string,
-  error: PropTypes.string,
-  onChange: PropTypes.func,
-  noNull: PropTypes.bool
+    return {
+      ...base,
+      ...styles,
+    };
+  },
 };
 
-export default Dropdown;
+const SimpleDropdown = ({
+  className,
+  error,
+  id,
+  label,
+  onChange,
+  options = [],
+  value,
+}) => {
+  const optionsObject = options.map((option) => {
+    if (typeof option === 'object') return option;
+    return {
+      label: option,
+      value: option,
+    };
+  });
+
+  const valueObject =
+    typeof value === 'object' ? value : { label: value, value };
+
+  function handleChange(option) {
+    if (typeof onChange === 'function') onChange(id, option.value, option);
+  }
+
+  return (
+    <div className={`form__dropdown${error ? ' form__error--wrapper' : ''}`}>
+      <ul>
+        <li className="dropdown__label">
+          <label htmlFor={id}>{label}</label>
+        </li>
+        <li className="dropdown__element">
+          <Select
+            blurInputOnSelect={true}
+            className={className}
+            components={{ DropdownIndicator }}
+            options={optionsObject}
+            onChange={handleChange}
+            styles={customStyles}
+            value={valueObject}
+          />
+        </li>
+      </ul>
+      {error && <span className="form__error">{error}</span>}
+    </div>
+  );
+};
+
+SimpleDropdown.propTypes = {
+  className: PropTypes.string,
+  error: PropTypes.string,
+  id: PropTypes.string,
+  label: PropTypes.any,
+  onChange: PropTypes.func,
+  options: PropTypes.array,
+  value: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+};
+
+export default SimpleDropdown;

@@ -9,6 +9,7 @@ $sky-blue: #7ab5da;
 /* Cumulus Secondary Blues */
 $sub-blue: #1E6B9D;
 $dark-blue: #1A557B;
+$hover-blue: #EBF3F8;
 
 /* Errors & Warnings */
 $error-red: #E74C3C;
@@ -23,6 +24,7 @@ $grey: #8C8C8C;
 $light-grey: #C4C4C4;
 $lighter-grey: #8C8C8C;
 $lightest-grey: #E2DFDF;
+$border-grey: #ECEAEA;
 $background-white: #F8F8F8;
 $white: #FFFFFF;
 
@@ -32,3 +34,11 @@ $theme--light: #E2DFDF;
 $theme--dark: #2c3e50;
 $theme--success: $light-green;
 $theme--conflict: $orange;
+
+
+:export {
+    borderGrey: $border-grey;
+    hoverBlue: $hover-blue;
+    oceanBlue: $ocean-blue;
+    white: $white;
+}

@@ -11,7 +11,7 @@ import isEmpty from 'lodash/isEmpty';
 import ErrorReport from '../Errors/report';
 import TextForm from '../TextAreaForm/text';
 import TextAreaForm from '../TextAreaForm/text-area';
-import Dropdown from '../DropDown/simple-dropdown';
+import SimpleDropdown from '../DropDown/simple-dropdown';
 import List from '../ArbitraryList/arbitrary-list';
 import SubForm from '../SubForm/sub-form';
 import t from '../../utils/strings';
@@ -272,7 +272,7 @@ export class Form extends React.Component {
                 element = TextAreaForm;
                 break;
               case formTypes.dropdown:
-                element = Dropdown;
+                element = SimpleDropdown;
                 break;
               case formTypes.list:
                 element = List;

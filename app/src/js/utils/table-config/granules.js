@@ -20,7 +20,7 @@ import {
 } from '../../actions';
 import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
-import Dropdown from '../../components/DropDown/simple-dropdown';
+import SimpleDropdown from '../../components/DropDown/simple-dropdown';
 import Bulk from '../../components/Granules/bulk';
 import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent';
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
@@ -113,14 +113,13 @@ export const errorTableColumns = [
 ];
 
 export const simpleDropdownOption = (config) => (
-  <Dropdown
+  <SimpleDropdown
     key={config.label}
     label={config.label.toUpperCase()}
     value={config.value}
     options={config.options}
     id={config.label}
     onChange={config.handler}
-    noNull={true}
   />
 );
 

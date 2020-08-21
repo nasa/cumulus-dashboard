@@ -135,10 +135,17 @@ select option{
   display: flex;
 }
 
-.dropdown__collection .form__dropdown label {
-  display: inline-block;
-  text-align: left;
-  padding-right: .75em;
+.dropdown__collection {
+  .form__dropdown label {
+    display: inline-block;
+    text-align: left;
+    padding-right: .75em;
+  }
+
+  .dropdown__element {
+    font-size: .8em;
+    width: 180px;
+  }
 }
 
 .search__wrapper {
@@ -295,7 +302,7 @@ select option{
 }
 
 .form__addone--button {
-  padding: 0.06em 1.8em 0.07em;
+  padding: 0.3em 1.8em;
   font-size: 1.4em;
   min-width: 4.2em;
 }
@@ -347,8 +354,11 @@ select option{
 .page__content--shortened--centered {
   .page__section--fullpage-form {
     .form__item {
-      input[type=text] {
-        width: 90%;
+      input {
+        padding: 10px;
+        &[type=text] {
+          width: 90%;
+        }
       }
       .subform__item--expanded {
         width: 87%;
@@ -473,8 +483,8 @@ select option{
   font-size: .86em;
 
   &:hover {
-    background-color: $ocean-blue;
-    color:$white;
+    background-color: $hover-blue;
+    border: none;
   }
 }
 
@@ -525,7 +535,7 @@ select option{
 
 .rule__content,
 .execution__content {
-  border: 1px solid #eceaea;
+  border: 1px solid $border-grey;
   box-shadow: $shadow__default;
   border-radius: 10px;
   padding: 25px 40px;

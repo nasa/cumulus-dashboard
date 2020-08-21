@@ -22,6 +22,7 @@ import {
   urlDateProps,
   findDateRangeByValue
 } from '../../utils/datepicker';
+import SimpleDropdown from '../DropDown/simple-dropdown';
 
 /*
  * If this is a shared URL, grab the date and time and update the datepicker
@@ -91,15 +92,15 @@ class Datepicker extends React.PureComponent {
     };
   }
 
-  handleDropdownChange (e) {
-    const { value, label } = allDateRanges[e.target.selectedIndex];
+  handleDropdownChange (id, optionValue, option) {
+    const { value, label } = option;
     this.props.dispatch(this.dispatchDropdownUpdate(value, label));
   }
 
-  handleHourFormatChange (e) {
+  handleHourFormatChange (id, value) {
     this.props.dispatch({
       type: DATEPICKER_HOUR_FORMAT,
-      data: e.target.value
+      data: value
     });
   }
 
@@ -132,50 +133,6 @@ class Datepicker extends React.PureComponent {
       updatedQueryParams[time] = urlValue;
     });
     this.props.setQueryParams(updatedQueryParams);
-  }
-
-  renderDateRangeDropDown () {
-    return (
-      <React.Fragment>
-        <div className='datetime dropdown__dtrange'>
-          <select
-            name='dateRange'
-            value={this.props.dateRange.value}
-            onChange={this.handleDropdownChange}
-            data-cy='datetime-dropdown'
-          >
-            {allDateRanges.map((option, i) => (
-              <option value={option.value} key={i}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </React.Fragment>
-    );
-  }
-
-  renderHourFormatSelect () {
-    const name = 'hourFormat';
-
-    return (
-      <React.Fragment>
-        <div className='datetime selector__hrformat'>
-          <select
-            type='text'
-            name={name}
-            value={this.props.hourFormat.value}
-            onChange={this.handleHourFormatChange}
-          >
-            {allHourFormats.map((option, i) => (
-              <option value={option.value} key={i}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </React.Fragment>
-    );
   }
 
   renderDateTimeRange (name) {
@@ -211,8 +168,13 @@ class Datepicker extends React.PureComponent {
           <div className='datetime__range'>
             <ul className='datetime__internal'>
               <li>
-                <label>Duration</label>
-                {this.renderDateRangeDropDown()}
+                <SimpleDropdown
+                  className='datetime dropdown__dtrange'
+                  label='Duration'
+                  value={this.props.dateRange}
+                  onChange={this.handleDropdownChange}
+                  options={allDateRanges}
+                />
               </li>
               <li data-cy='startDateTime'>
                 <label>Start Date and Time</label>
@@ -224,7 +186,12 @@ class Datepicker extends React.PureComponent {
               </li>
               <li className='selector__hrformat' data-cy='hourFormat'>
                 <label>Time Format</label>
-                {this.renderHourFormatSelect()}
+                <SimpleDropdown
+                  className='datetime selector__hrformat'
+                  value={this.props.hourFormat}
+                  onChange={this.handleHourFormatChange}
+                  options={allHourFormats}
+                />
               </li>
               {this.props.hideWrapper || (
                 <li className='datetime__clear'>

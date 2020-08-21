@@ -14,6 +14,7 @@ import {
   getCumulusInstanceMetadata,
   listGranules,
   searchGranules,
+  listCollections,
 } from '../../actions';
 import {
   collectionName as collectionLabelForId,
@@ -86,6 +87,7 @@ class CollectionOverview extends React.Component {
 
   load() {
     const { name, version } = this.props.match.params;
+    this.props.dispatch(listCollections());
     this.props.dispatch(getCumulusInstanceMetadata());
     this.props.dispatch(getCollection(name, version));
   }
@@ -193,13 +195,13 @@ class CollectionOverview extends React.Component {
               <li>
                 <div className="dropdown__collection form-group__element--right">
                   <SimpleDropdown
+                    className='collection-chooser'
                     label={'Collection'}
                     title={'Collections Dropdown'}
                     value={getCollectionId(params)}
                     options={sortedCollectionIds}
                     id={'collection-chooser'}
                     onChange={this.changeCollection}
-                    noNull={true}
                   />
                 </div>
               </li>
