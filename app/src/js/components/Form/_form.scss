@@ -483,8 +483,8 @@ select option{
   font-size: .86em;
 
   &:hover {
-    background-color: $ocean-blue;
-    color:$white;
+    background-color: $hover-blue;
+    border: none;
   }
 }
 
