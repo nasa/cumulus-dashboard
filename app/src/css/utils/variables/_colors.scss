@@ -9,6 +9,7 @@ $sky-blue: #7ab5da;
 /* Cumulus Secondary Blues */
 $sub-blue: #1E6B9D;
 $dark-blue: #1A557B;
+$hover-blue: #EBF3F8;
 
 /* Errors & Warnings */
 $error-red: #E74C3C;
@@ -37,6 +38,7 @@ $theme--conflict: $orange;
 
 :export {
     borderGrey: $border-grey;
+    hoverBlue: $hover-blue;
     oceanBlue: $ocean-blue;
     white: $white;
 }

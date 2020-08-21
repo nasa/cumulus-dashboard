@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
-import { borderGrey, oceanBlue, white } from '../../../css/utils/variables/_colors.scss';
+import { borderGrey, hoverBlue, oceanBlue, white } from '../../../css/utils/variables/_colors.scss';
 import { shadowDefault } from '../../../css/utils/variables/_shadows.scss';
 
 const DropdownIndicator = (props) => (
@@ -36,10 +36,22 @@ const customStyles = {
     display: 'none',
   }),
   option: (base, state) => {
-    const styles = state.isFocused || state.isSelected ? {
-      backgroundColor: oceanBlue,
-      color: white,
-    } : {};
+    const { isFocused, isSelected } = state;
+    let styles = {};
+
+    if (isFocused) {
+      styles = {
+        backgroundColor: hoverBlue,
+      };
+    }
+
+    if (isSelected) {
+      styles = {
+        backgroundColor: oceanBlue,
+        color: white,
+      };
+    }
+
     return {
       ...base,
       ...styles,
