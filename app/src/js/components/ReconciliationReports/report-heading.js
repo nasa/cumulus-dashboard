@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown as DropdownBootstrap } from 'react-bootstrap';
+import moment from 'moment';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ErrorReport from '../Errors/report';
 
@@ -34,11 +35,11 @@ const ReportHeading = ({
   ];
 
   const formattedStartTime = startTime
-    ? new Date(startTime).toLocaleDateString()
+    ? moment(startTime).utc().format('YYYY-MM-DD H:mm:ss UTC')
     : 'missing';
 
   const formattedEndTime = endTime
-    ? new Date(endTime).toLocaleDateString()
+    ? moment(endTime).utc().format('YYYY-MM-DD H:mm:ss UTC')
     : 'missing';
   return (
     <>
