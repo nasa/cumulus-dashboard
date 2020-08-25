@@ -35,11 +35,11 @@ const ReportHeading = ({
   ];
 
   const formattedStartTime = startTime
-    ? moment(startTime).utc().toLocaleString()
+    ? moment(startTime).utc().format('YYYY-MM-DD H:mm:ss UTC')
     : 'missing';
 
   const formattedEndTime = endTime
-    ? moment(endTime).utc().toLocaleString()
+    ? moment(endTime).utc().format('YYYY-MM-DD H:mm:ss UTC')
     : 'missing';
   return (
     <>
