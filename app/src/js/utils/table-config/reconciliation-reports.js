@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { nullValue, dateOnly } from '../format';
+import { nullValue, dateOnly, collectionNameVersion } from '../format';
 import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions';
 import { getPersistentQueryParams } from '../url-helper';
 
@@ -161,4 +161,52 @@ export const tableColumnsGranules = [
     Cell: 'View Details',
     disableSortBy: true
   }
+];
+
+export const tableColumnsGnf = [
+  {
+    Header: 'Collection ID',
+    accessor: 'collectionId',
+    Cell: ({ cell: { value } }) => { // eslint-disable-line react/prop-types
+      const { name, version } = collectionNameVersion(value);
+      return <Link to={(location) => ({ pathname: `/collections/collection/${name}/${version}`, search: getPersistentQueryParams(location) })}>{value}</Link>;
+    }
+  },
+  {
+    Header: 'Granule ID',
+    accessor: 'granuleId',
+  },
+  {
+    Header: 'Provider',
+    accessor: 'provider',
+  },
+  // {
+  //   Header: 'DynamoDB',
+  //   id: 'dynamoDb',
+  //   Cell: <span className='status-indicator status-indicator--failed'></span>,
+  // },
+  // {
+  //   Header: 'S3',
+  //   id: 's3',
+  //   Cell: <span className='status-indicator status-indicator--failed'></span>,
+  // },
+  // {
+  //   Header: 'S3 Glacier',
+  //   id: 'glacier',
+  //   Cell: <span className='status-indicator status-indicator--failed'></span>,
+  // },
+  {
+    Header: 'Cumulus',
+    id: 'Cumulus',
+    Cell: ({ row: { original: { location } } }) => ( // eslint-disable-line react/prop-types
+      <span className={`status-indicator status-indicator--${location === 'cumulus' ? 'success' : 'failed'}`}></span>
+    ),
+  },
+  {
+    Header: 'CMR',
+    id: 'cmr',
+    Cell: ({ row: { original: { location } } }) => ( // eslint-disable-line react/prop-types
+      <span className={`status-indicator status-indicator--${location === 'cmr' ? 'success' : 'failed'}`}></span>
+    ),
+  },
 ];
