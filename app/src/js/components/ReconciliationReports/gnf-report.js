@@ -13,16 +13,14 @@ import { getCollectionId } from '../../utils/format';
 
 const GnfReport = ({
   dispatch,
-  filterBucket,
   filterString,
-  record,
+  recordData,
   reportName,
 }) => {
-  const { data: recordData } = record || {};
   const { granulesInCumulusCmr, reportStartTime = null, reportEndTime = null, error = null } =
     recordData || {};
 
-  const { onlyInCmr, onlyInCumulus } = granulesInCumulusCmr;
+  const { onlyInCmr = [], onlyInCumulus = [] } = granulesInCumulusCmr;
 
   const cmrGranules = onlyInCmr.map((granule) => {
     const { GranuleUR, ShortName, Version } = granule;
@@ -89,10 +87,9 @@ const GnfReport = ({
 
 GnfReport.propTypes = {
   dispatch: PropTypes.func,
-  filterBucket: PropTypes.string,
   filterString: PropTypes.string,
+  recordData: PropTypes.object,
   reportName: PropTypes.string,
-  record: PropTypes.object,
 };
 
 export default GnfReport;

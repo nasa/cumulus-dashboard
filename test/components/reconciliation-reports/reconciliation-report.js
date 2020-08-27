@@ -11,13 +11,50 @@ configure({ adapter: new Adapter() });
 
 const reconciliationReports = {
   map: {
-    exampleReport: {
+    exampleInventoryReport: {
       data: {
         reportStartTime: '2018-06-11T18:52:37.710Z',
         reportEndTime: '2018-06-11T18:52:39.893Z',
         status: 'SUCCESS',
         error: null,
         type: 'Inventory',
+        okFileCount: 21,
+        filesInCumulus: {
+          okCount: 129,
+          onlyInS3: [
+            's3://some-bucket/path/to/key-1.hdf',
+            's3://some-bucket/path/to/key-2.hdf'
+          ],
+          onlyInDynamoDb: [
+            {
+              uri: 's3://some-bucket/path/to/key-123.hdf',
+              granuleId: 'g-123'
+            },
+            {
+              uri: 's3://some-bucket/path/to/key-456.hdf',
+              granuleId: 'g-456'
+            }
+          ],
+        },
+        collectionsInCumulusCmr: {
+          okCount: 1
+        },
+        granulesInCumulusCmr: {
+          okCount: 7
+        },
+        filesInCumulusCmr: {
+          okCount: 4
+        }
+      }
+    },
+    // TODO: change this once we have the actual GNF format
+    exampleGranuleNotFoundReport: {
+      data: {
+        reportStartTime: '2018-06-11T18:52:37.710Z',
+        reportEndTime: '2018-06-11T18:52:39.893Z',
+        status: 'SUCCESS',
+        error: null,
+        type: 'gnf',
         okFileCount: 21,
         filesInCumulus: {
           okCount: 129,
@@ -58,8 +95,8 @@ const reconciliationReports = {
   }
 };
 
-test('shows an individual report', function (t) {
-  const match = { params: { reconciliationReportName: 'exampleReport' } };
+test('shows an individual inventory report', function (t) {
+  const match = { params: { reconciliationReportName: 'exampleInventoryReport' } };
 
   const dispatch = () => {};
 
@@ -92,9 +129,35 @@ test('shows an individual report', function (t) {
   t.is(Table.length, 1);
 });
 
+test('shows an individual Granule Not Found report', function (t) {
+  const match = { params: { reconciliationReportName: 'exampleGranuleNotFoundReport' } };
+
+  const dispatch = () => {};
+
+  const report = shallow(
+    <ReconciliationReport
+      match={match}
+      reconciliationReports={reconciliationReports}
+      dispatch={dispatch}
+    />
+  );
+
+  t.is(report.length, 1);
+
+  const GnfReport = report.find('GnfReport');
+  t.is(GnfReport.length, 1);
+  const gnfReportWrapper = GnfReport.dive();
+
+  const ReportHeading = gnfReportWrapper.find('ReportHeading');
+  t.is(ReportHeading.length, 1);
+
+  const Table = gnfReportWrapper.find('SortableTable');
+  t.is(Table.length, 1);
+});
+
 test('correctly renders the heading', function (t) {
 
-  const match = { params: { reconciliationReportName: 'exampleReport' } };
+  const match = { params: { reconciliationReportName: 'exampleInventoryReport' } };
 
   const dispatch = () => {};
 
@@ -120,7 +183,7 @@ test('correctly renders the heading', function (t) {
   const expectedHeadingProps = {
     endTime: '2018-06-11T18:52:39.893Z',
     error: null,
-    name: 'exampleReport',
+    name: 'exampleInventoryReport',
     reportState: 'CONFLICT',
     startTime: '2018-06-11T18:52:37.710Z',
     type: 'Inventory'

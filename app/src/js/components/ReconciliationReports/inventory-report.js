@@ -39,18 +39,17 @@ const InventoryReport = ({
   dispatch,
   filterBucket,
   filterString,
-  record,
+  recordData,
   reportName,
 }) => {
   const [activeId, setActiveId] = useState('dynamo');
-  const { data: recordData } = record || {};
   const { reportStartTime = null, reportEndTime = null, error = null } =
     recordData || {};
   const {
     internalComparison,
     cumulusVsCmrComparison,
     allBuckets,
-  } = reshapeReport(record, filterString, filterBucket);
+  } = reshapeReport(recordData, filterString, filterBucket);
   const reportComparisons = [...internalComparison, ...cumulusVsCmrComparison];
   const theReportState = reportState(reportComparisons);
   const activeCardTables = reportComparisons.find(
@@ -234,8 +233,8 @@ InventoryReport.propTypes = {
   dispatch: PropTypes.func,
   filterBucket: PropTypes.string,
   filterString: PropTypes.string,
+  recordData: PropTypes.object,
   reportName: PropTypes.string,
-  record: PropTypes.object,
 };
 
 export default InventoryReport;
