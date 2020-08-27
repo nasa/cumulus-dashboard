@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
 import classNames from 'classnames';
 import cloneDeep from 'lodash/cloneDeep';
 import PropTypes from 'prop-types';
@@ -15,7 +13,7 @@ import {
 } from '../../actions';
 import SortableTable from '../SortableTable/SortableTable';
 import { reshapeReport } from './reshape-report';
-import { downloadFile } from '../../utils/download-file';
+import { handleDownloadJsonClick, handleDownloadCsvClick } from '../../utils/download-file';
 import Search from '../Search/search';
 import Dropdown from '../DropDown/dropdown';
 import ReportHeading from './report-heading';
@@ -62,11 +60,11 @@ const InventoryReport = ({
   const downloadOptions = [
     {
       label: 'JSON - Full Report',
-      onClick: handleDownloadJsonClick,
+      onClick: (e) => handleDownloadJsonClick(e, { data: recordData, reportName })
     },
     ...activeCardTables.map((table) => ({
       label: `CSV - ${table.name}`,
-      onClick: (e) => handleDownloadCsvClick(e, table),
+      onClick: (e) => handleDownloadCsvClick(e, { reportName, table }),
     })),
   ];
 
@@ -103,12 +101,12 @@ const InventoryReport = ({
   function handleExpandClick() {
     const updatedState = cloneDeep(expandedState);
     const expanded = !allCollapsed();
-    for (const key in updatedState) {
+    Object.keys(updatedState).forEach((key) => {
       const obj = updatedState[key];
-      for (const prop in obj) {
+      Object.keys(obj).forEach((prop) => {
         obj[prop] = expanded;
-      }
-    }
+      });
+    });
     setExpandedState(updatedState);
   }
 
@@ -116,39 +114,6 @@ const InventoryReport = ({
     return Object.keys(expandedState[activeId]).every(
       (key) => expandedState[activeId][key] === true
     );
-  }
-
-  function convertToCSV(data, columns) {
-    const csvHeader = columns.map((column) => column.accessor).join(',');
-
-    const csvData = data
-      .map((item) => {
-        let line = '';
-        for (const prop in item) {
-          if (line !== '') line += ',';
-          line += item[prop];
-        }
-        return line;
-      })
-      .join('\r\n');
-    return `${csvHeader}\r\n${csvData}`;
-  }
-
-  function handleDownloadJsonClick(e) {
-    e.preventDefault();
-    const jsonHref = `data:text/json;charset=utf-8,${encodeURIComponent(
-      JSON.stringify(record.data)
-    )}`;
-    downloadFile(jsonHref, `${reportName}.json`);
-  }
-
-  function handleDownloadCsvClick(e, table) {
-    e.preventDefault();
-    const { name: tableName, data: tableData, columns: tableColumns } = table;
-    const data = convertToCSV(tableData, tableColumns);
-    const csvData = new Blob([data], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(csvData);
-    downloadFile(url, `${reportName}-${tableName}.csv`);
   }
 
   return (

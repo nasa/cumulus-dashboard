@@ -39,7 +39,7 @@ const ReconciliationReport = ({
           />,
           gnf: <GnfReport
             dispatch={dispatch}
-            match={match}
+            filterString={filterString}
             record={record}
             reportName={reconciliationReportName}
           />
