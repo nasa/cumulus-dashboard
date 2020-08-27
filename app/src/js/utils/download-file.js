@@ -5,7 +5,7 @@
  * @param {*} fileName the name of the downloaded file
  */
 
-const downloadFile = (file, fileName) => {
+export const downloadFile = (file, fileName) => {
   const link = document.createElement('a');
   link.setAttribute('download', fileName);
   link.href = file;
@@ -46,5 +46,3 @@ export function handleDownloadCsvClick(e, { reportName, table }) {
   const url = window.URL.createObjectURL(csvData);
   downloadFile(url, `${reportName}-${tableName}.csv`);
 }
-
-export default downloadFile;
