@@ -17,6 +17,7 @@ const reconciliationReports = {
         reportEndTime: '2018-06-11T18:52:39.893Z',
         status: 'SUCCESS',
         error: null,
+        type: 'Inventory',
         okFileCount: 21,
         filesInCumulus: {
           okCount: 129,
@@ -72,10 +73,14 @@ test('shows an individual report', function (t) {
 
   t.is(report.length, 1);
 
-  const ReportHeading = report.find('ReportHeading');
+  const InventoryReport = report.find('InventoryReport');
+  t.is(InventoryReport.length, 1);
+  const inventoryReportWrapper = InventoryReport.dive();
+
+  const ReportHeading = inventoryReportWrapper.find('ReportHeading');
   t.is(ReportHeading.length, 1);
 
-  const TableCards = report.find('TableCards');
+  const TableCards = inventoryReportWrapper.find('TableCards');
   t.is(TableCards.length, 2);
   const TableCardWrapper = TableCards.at(0).dive();
   const Cards = TableCardWrapper.find('Card');
@@ -83,7 +88,7 @@ test('shows an individual report', function (t) {
   // there should be one card for DynamoDB and one card for S3
   t.is(Cards.length, 2);
 
-  const Table = report.find('SortableTable');
+  const Table = inventoryReportWrapper.find('SortableTable');
   t.is(Table.length, 1);
 });
 
@@ -103,7 +108,11 @@ test('correctly renders the heading', function (t) {
 
   t.is(report.length, 1);
 
-  const ReportHeading = report.find('ReportHeading');
+  const InventoryReport = report.find('InventoryReport');
+  t.is(InventoryReport.length, 1);
+  const inventoryReportWrapper = InventoryReport.dive();
+
+  const ReportHeading = inventoryReportWrapper.find('ReportHeading');
   t.is(ReportHeading.length, 1);
 
   const { downloadOptions, ...headingProps } = ReportHeading.props();
@@ -114,6 +123,7 @@ test('correctly renders the heading', function (t) {
     name: 'exampleReport',
     reportState: 'CONFLICT',
     startTime: '2018-06-11T18:52:37.710Z',
+    type: 'Inventory'
   };
 
   t.is(downloadOptions.length, 2);
@@ -141,9 +151,12 @@ test('report with error triggers error message', function (t) {
 
   t.is(report.length, 1);
 
-  const ReportHeading = report.find('ReportHeading');
-  t.is(ReportHeading.length, 1);
+  const InventoryReport = report.find('InventoryReport');
+  t.is(InventoryReport.length, 1);
+  const inventoryReportWrapper = InventoryReport.dive();
 
+  const ReportHeading = inventoryReportWrapper.find('ReportHeading');
+  t.is(ReportHeading.length, 1);
   const reportHeadingWrapper = ReportHeading.dive();
 
   const ErrorReport = reportHeadingWrapper.find('ErrorReport');
