@@ -82,7 +82,10 @@ describe('Dashboard Reconciliation Reports Page', () => {
     });
 
     it('displays a link to an individual report', () => {
+      cy.server();
+      cy.route('GET', '/reconciliationReports*').as('getReports');
       cy.visit('/reconciliation-reports');
+      cy.wait('@getReports');
 
       cy.contains('.table .tbody .tr a', 'inventoryReport-20200114T205238781')
         .should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T205238781')
