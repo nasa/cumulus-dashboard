@@ -8,7 +8,7 @@ import {
   tableColumnsS3Files,
 } from '../../utils/table-config/reconciliation-reports';
 
-const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [] }) => {
+export const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [], okCountByGranule }) => {
   const filesInS3 = onlyInS3.map((d) => {
     const parsed = url.parse(d);
     return {
@@ -18,7 +18,19 @@ const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [] }) => {
     };
   });
 
-  const filesInDynamoDb = onlyInDynamoDb.map(parseFileObject);
+  const filesInDynamoDb = onlyInDynamoDb.map((file) => {
+    const parsedFile = parseFileObject(file);
+    const { granuleId } = parsedFile;
+    let s3 = false;
+    if (okCountByGranule) {
+      s3 = okCountByGranule[granuleId] > 0 ? 'missing' : 'notFound';
+    }
+    return {
+      s3,
+      cumulus: true,
+      ...parsedFile
+    };
+  });
 
   return { filesInS3, filesInDynamoDb };
 };
@@ -38,8 +50,14 @@ const getGranulesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) => {
   return { granulesInCumulus, granulesInCmr };
 };
 
-const getGranuleFilesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) => {
-  const granuleFilesOnlyInCumulus = onlyInCumulus.map(parseFileObject);
+export const getGranuleFilesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) => {
+  const granuleFilesOnlyInCumulus = onlyInCumulus.map((file) => {
+    const parsedFile = parseFileObject(file);
+    return {
+      cmr: 'missing',
+      ...parsedFile
+    };
+  });
 
   const granuleFilesOnlyInCmr = onlyInCmr.map((d) => {
     const parsed = url.parse(d.URL);
@@ -49,6 +67,7 @@ const getGranuleFilesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) => {
       filename: path.basename(parsed.pathname),
       bucket,
       path: `s3://${bucket}${parsed.pathname}`,
+      cumulus: 'missing'
     };
   });
 

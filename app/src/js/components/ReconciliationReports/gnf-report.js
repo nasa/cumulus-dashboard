@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import groupBy from 'lodash/groupBy';
 import {
   searchReconciliationReport,
   clearReconciliationSearch,
@@ -10,6 +11,7 @@ import ReportHeading from './report-heading';
 import { handleDownloadJsonClick } from '../../utils/download-file';
 import { tableColumnsGnf } from '../../utils/table-config/reconciliation-reports';
 import { getCollectionId } from '../../utils/format';
+import { getFilesSummary, getGranuleFilesSummary } from './reshape-report';
 
 const GnfReport = ({
   dispatch,
@@ -17,8 +19,19 @@ const GnfReport = ({
   recordData,
   reportName,
 }) => {
-  const { granulesInCumulusCmr, reportStartTime = null, reportEndTime = null, error = null } =
-    recordData || {};
+  const {
+    filesInCumulus,
+    granulesInCumulusCmr,
+    filesInCumulusCmr,
+    reportStartTime = null,
+    reportEndTime = null,
+    error = null
+  } = recordData || {};
+
+  const { filesInDynamoDb } = getFilesSummary(filesInCumulus);
+  const { granuleFilesOnlyInCumulus, granuleFilesOnlyInCmr } = getGranuleFilesSummary(filesInCumulusCmr);
+
+  console.log(granuleFilesOnlyInCmr, granuleFilesOnlyInCumulus);
 
   const { onlyInCmr = [], onlyInCumulus = [] } = granulesInCumulusCmr;
 
@@ -27,23 +40,41 @@ const GnfReport = ({
     return {
       granuleId: GranuleUR,
       collectionId: getCollectionId({ name: ShortName, version: Version }),
-      location: 'cmr'
+      cmr: true,
+      cumulus: false,
+      s3: false,
     };
   });
 
   const cumulusGranules = onlyInCumulus.map((granule) => ({
     ...granule,
-    location: 'cumulus'
+    cmr: false,
+    cumulus: true,
   }));
 
-  let allGranules = [...cmrGranules, ...cumulusGranules];
+  const allGranules = [
+    ...filesInDynamoDb,
+    ...granuleFilesOnlyInCmr,
+    ...granuleFilesOnlyInCumulus,
+    ...cmrGranules,
+    ...cumulusGranules
+  ];
+
+  const groupedGranules = groupBy(allGranules, 'granuleId');
+
+  let combinedGranules = Object.entries(groupedGranules).map(([key, value]) => value.reduce((prev, curr) => ({
+    ...prev,
+    ...curr,
+  }), {}));
+
+  console.log(combinedGranules);
 
   if (filterString) {
-    allGranules = allGranules.filter((granule) => granule.granuleId.toLowerCase()
+    combinedGranules = combinedGranules.filter((granule) => granule.granuleId.toLowerCase()
       .includes(filterString.toLowerCase()));
   }
 
-  const reportState = allGranules.length > 0 ? 'CONFLICT' : 'PASSED';
+  const reportState = combinedGranules.length > 0 ? 'CONFLICT' : 'PASSED';
 
   const downloadOptions = [
     {
@@ -75,7 +106,7 @@ const GnfReport = ({
         </div>
 
         <SortableTable
-          data={allGranules}
+          data={combinedGranules}
           tableColumns={tableColumnsGnf}
           shouldUsePagination={true}
           initialHiddenColumns={['']}

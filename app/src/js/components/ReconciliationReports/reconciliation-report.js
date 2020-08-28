@@ -38,7 +38,7 @@ const ReconciliationReport = ({
             recordData={recordData}
             reportName={reconciliationReportName}
           />,
-          gnf: <GnfReport
+          GranuleNotFound: <GnfReport
             dispatch={dispatch}
             filterString={filterString}
             recordData={recordData}

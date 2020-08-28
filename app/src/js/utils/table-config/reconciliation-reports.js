@@ -163,6 +163,25 @@ export const tableColumnsGranules = [
   }
 ];
 
+const getIndicatorColor = (prop) => {
+  let indicatorColor = '';
+  switch (prop) {
+    case 'missing':
+      indicatorColor = 'orange';
+      break;
+    case 'notFound':
+      indicatorColor = 'failed';
+      break;
+    case false:
+      indicatorColor = 'failed';
+      break;
+    default:
+      indicatorColor = 'success';
+      break;
+  }
+  return indicatorColor;
+};
+
 export const tableColumnsGnf = [
   {
     Header: 'Collection ID',
@@ -170,26 +189,26 @@ export const tableColumnsGnf = [
     Cell: ({ cell: { value } }) => { // eslint-disable-line react/prop-types
       const { name, version } = collectionNameVersion(value);
       return <Link to={(location) => ({ pathname: `/collections/collection/${name}/${version}`, search: getPersistentQueryParams(location) })}>{value}</Link>;
-    }
+    },
+    width: 125,
   },
   {
     Header: 'Granule ID',
     accessor: 'granuleId',
+    width: 200,
   },
+  // {
+  //   Header: 'Provider',
+  //   accessor: 'provider',
+  // },
   {
-    Header: 'Provider',
-    accessor: 'provider',
+    Header: 'S3',
+    id: 's3',
+    Cell: ({ row: { original: { s3 } } }) => ( // eslint-disable-line react/prop-types
+      <span className={`status-indicator status-indicator--${getIndicatorColor(s3)}`}></span>
+    ),
+    width: 50,
   },
-  // {
-  //   Header: 'DynamoDB',
-  //   id: 'dynamoDb',
-  //   Cell: <span className='status-indicator status-indicator--failed'></span>,
-  // },
-  // {
-  //   Header: 'S3',
-  //   id: 's3',
-  //   Cell: <span className='status-indicator status-indicator--failed'></span>,
-  // },
   // {
   //   Header: 'S3 Glacier',
   //   id: 'glacier',
@@ -198,15 +217,17 @@ export const tableColumnsGnf = [
   {
     Header: 'Cumulus',
     id: 'Cumulus',
-    Cell: ({ row: { original: { location } } }) => ( // eslint-disable-line react/prop-types
-      <span className={`status-indicator status-indicator--${location === 'cumulus' ? 'success' : 'failed'}`}></span>
+    Cell: ({ row: { original: { cumulus } } }) => ( // eslint-disable-line react/prop-types
+      <span className={`status-indicator status-indicator--${getIndicatorColor(cumulus)}`}></span>
     ),
+    width: 50,
   },
   {
     Header: 'CMR',
     id: 'cmr',
-    Cell: ({ row: { original: { location } } }) => ( // eslint-disable-line react/prop-types
-      <span className={`status-indicator status-indicator--${location === 'cmr' ? 'success' : 'failed'}`}></span>
+    Cell: ({ row: { original: { cmr } } }) => ( // eslint-disable-line react/prop-types
+      <span className={`status-indicator status-indicator--${getIndicatorColor(cmr)}`}></span>
     ),
+    width: 50,
   },
 ];
