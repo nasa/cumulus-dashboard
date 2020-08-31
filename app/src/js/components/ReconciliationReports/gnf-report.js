@@ -10,7 +10,6 @@ import Search from '../Search/search';
 import ReportHeading from './report-heading';
 import { handleDownloadJsonClick } from '../../utils/download-file';
 import { tableColumnsGnf } from '../../utils/table-config/reconciliation-reports';
-import { getCollectionId } from '../../utils/format';
 import { getFilesSummary, getGranuleFilesSummary } from './reshape-report';
 
 const GnfReport = ({
@@ -34,10 +33,9 @@ const GnfReport = ({
   const { onlyInCmr = [], onlyInCumulus = [] } = granulesInCumulusCmr;
 
   const cmrGranules = onlyInCmr.map((granule) => {
-    const { GranuleUR, ShortName, Version } = granule;
+    const { GranuleUR } = granule;
     return {
       granuleId: GranuleUR,
-      collectionId: getCollectionId({ name: ShortName, version: Version }),
       cmr: true,
       cumulus: false,
       s3: false,
