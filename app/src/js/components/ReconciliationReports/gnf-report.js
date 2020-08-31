@@ -31,8 +31,6 @@ const GnfReport = ({
   const { filesInDynamoDb } = getFilesSummary(filesInCumulus);
   const { granuleFilesOnlyInCumulus, granuleFilesOnlyInCmr } = getGranuleFilesSummary(filesInCumulusCmr);
 
-  console.log(granuleFilesOnlyInCmr, granuleFilesOnlyInCumulus);
-
   const { onlyInCmr = [], onlyInCumulus = [] } = granulesInCumulusCmr;
 
   const cmrGranules = onlyInCmr.map((granule) => {
@@ -66,8 +64,6 @@ const GnfReport = ({
     ...prev,
     ...curr,
   }), {}));
-
-  console.log(combinedGranules);
 
   if (filterString) {
     combinedGranules = combinedGranules.filter((granule) => granule.granuleId.toLowerCase()
