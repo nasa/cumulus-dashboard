@@ -158,7 +158,7 @@ const EditRaw = ({
     <div className='page__component'>
       <section className='page__section'>
         <div className="heading__wrapper--border">
-          <h1 className='heading--large'>{pk}</h1>
+          <h1 className='heading--large'>Edit {recordDisplayName}: {pk}</h1>
         </div>
         { data || data === '' ? (
           <form>
