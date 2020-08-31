@@ -54,7 +54,7 @@ const reconciliationReports = {
         reportEndTime: '2018-06-11T18:52:39.893Z',
         status: 'SUCCESS',
         error: null,
-        type: 'gnf',
+        type: 'GranuleNotFound',
         okFileCount: 21,
         filesInCumulus: {
           okCount: 129,
