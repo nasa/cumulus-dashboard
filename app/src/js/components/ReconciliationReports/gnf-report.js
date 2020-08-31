@@ -70,20 +70,17 @@ const GnfReport = ({
 
   const reportState = combinedGranules.length > 0 ? 'CONFLICT' : 'PASSED';
 
-  const downloadOptions = [
-    {
-      label: 'JSON - Full Report',
-      onClick: (e) => handleDownloadJsonClick(e, { data: recordData, reportName }),
-    },
-  ];
+  function handleDownloadClick(e) {
+    handleDownloadJsonClick(e, { data: recordData, reportName });
+  }
 
   return (
     <div className="page__component">
       <ReportHeading
-        downloadOptions={downloadOptions}
         endTime={reportEndTime}
         error={error}
         name={reportName}
+        onDownloadClick={handleDownloadClick}
         reportState={reportState}
         startTime={reportStartTime}
         type='Granule Not Found'
