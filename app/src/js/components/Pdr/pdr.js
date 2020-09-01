@@ -182,7 +182,7 @@ class PDR extends React.Component {
         <section className="page__section page__section__header-wrapper">
           <div className="page__section__header">
             <h1 className="heading--large heading--shared-content with-description ">
-              {pdrName}
+              PDR: {pdrName}
             </h1>
             <AsyncCommand
               action={this.deletePdr}
