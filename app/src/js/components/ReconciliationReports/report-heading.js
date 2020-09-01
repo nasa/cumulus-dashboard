@@ -56,7 +56,7 @@ const ReportHeading = ({
         <div className="page__section__header">
           <div>
             <h1 className="heading--large heading--shared-content with-description ">
-              {name}
+              Report: {name}
             </h1>
           </div>
           <div className="status--process">
