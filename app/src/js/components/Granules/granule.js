@@ -289,7 +289,7 @@ class GranuleOverview extends React.Component {
         </section>
         <section className="page__section page__section__header-wrapper">
           <h1 className="heading--large heading--shared-content with-description width--three-quarters">
-            {granuleId}
+            {strings.granule}: {granuleId}
           </h1>
           <DropdownAsync config={dropdownConfig} />
           {lastUpdated(granule.createdAt, 'Created')}
