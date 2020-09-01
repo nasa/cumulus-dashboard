@@ -232,7 +232,7 @@ describe('Dashboard PDRs Page', () => {
         });
 
       cy.url().should('include', `/pdrs/pdr/${pdrName}`);
-      cy.get('.heading--large').should('have.text', pdrName);
+      cy.get('.heading--large').should('have.text', `PDR: ${pdrName}`);
     });
   });
 });
