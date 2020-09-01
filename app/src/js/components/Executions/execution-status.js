@@ -254,7 +254,7 @@ class ExecutionStatus extends React.Component {
         </Helmet>
         <section className="page__section page__section__header-wrapper">
           <h1 className="heading--large heading--shared-content with-description width--three-quarters">
-            Execution {name}
+            Execution: {name}
           </h1>
 
           {errors.length > 0 && <ErrorReport report={errors} />}
