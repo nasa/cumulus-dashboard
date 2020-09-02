@@ -60,7 +60,7 @@ class Workflow extends React.Component {
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>{workflowName}</h1>
+          <h1 className='heading--large heading--shared-content with-description'>Workflow: {workflowName}</h1>
         </section>
         <section className='page__section'>
           <div className='tab--wrapper'>

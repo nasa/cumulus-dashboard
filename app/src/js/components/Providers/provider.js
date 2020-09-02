@@ -122,7 +122,7 @@ class ProviderOverview extends React.Component {
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>{providerId}</h1>
+          <h1 className='heading--large heading--shared-content with-description'>Provider: {providerId}</h1>
           <DropdownAsync config={dropdownConfig} />
           <Link
             className='button button--small button--green button--edit form-group__element--right'

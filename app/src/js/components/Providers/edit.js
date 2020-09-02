@@ -12,28 +12,29 @@ import EditRecord from '../Edit/edit';
 
 const SCHEMA_KEY = 'provider';
 
-class EditProvider extends React.Component {
-  render () {
-    const { providerId } = this.props.match.params;
-    return (
-      <div className = "edit_provider">
-        <Helmet>
-          <title> Edit Provider </title>
-        </Helmet>
-        <EditRecord
-          merge={true}
-          pk={providerId}
-          schemaKey={SCHEMA_KEY}
-          state={this.props.providers}
-          getRecord={getProvider}
-          updateRecord={updateProvider}
-          clearRecordUpdate={clearUpdateProvider}
-          backRoute={`/providers/provider/${providerId}`}
-        />
-      </div>
-    );
-  }
-}
+const EditProvider = ({
+  match,
+  providers,
+}) => {
+  const { providerId } = match.params;
+  return (
+    <div className = "edit_provider">
+      <Helmet>
+        <title> Edit Provider </title>
+      </Helmet>
+      <EditRecord
+        merge={true}
+        pk={providerId}
+        schemaKey={SCHEMA_KEY}
+        state={providers}
+        getRecord={getProvider}
+        updateRecord={updateProvider}
+        clearRecordUpdate={clearUpdateProvider}
+        backRoute={`/providers/provider/${providerId}`}
+      />
+    </div>
+  );
+};
 
 EditProvider.propTypes = {
   match: PropTypes.object,

@@ -22,6 +22,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2046**
   - Add dashboard version to footer
 
+- **CUMULUS-2076**
+  - Add context references in headings on indivdual pages for screen reader accessibility
+
 - **CUMULUS-2089**
   - Add component for Granule Not Found reports
 

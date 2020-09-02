@@ -213,7 +213,7 @@ class CollectionOverview extends React.Component {
             <ul className="heading-form-group--left">
               <li>
                 <h1 className="heading--large heading--shared-content with-description">
-                  {collectionLabelForId(collectionId)}
+                  {strings.collection}: {collectionLabelForId(collectionId)}
                 </h1>
               </li>
               <li>

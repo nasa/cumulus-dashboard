@@ -316,7 +316,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.button__goto').click();
       cy.wait('@getGranule');
       cy.url().should('include', `granules/granule/${granuleId}`);
-      cy.get('.heading--large').should('have.text', granuleId);
+      cy.get('.heading--large').should('have.text', `Granule: ${granuleId}`);
     });
 
     it('Should reingest multiple granules and redirect to the running page.', () => {
