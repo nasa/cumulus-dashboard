@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getCollectionId, lastUpdated, displayCase } from '../../utils/format';
+import { getCollectionId, displayCase } from '../../utils/format';
 import {
   listGranules,
   filterGranules,
@@ -25,8 +25,7 @@ import statusOptions from '../../utils/status';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import CollectionHeader from './collection-header';
 
 const CollectionGranules = ({
   dispatch,
@@ -48,18 +47,6 @@ const CollectionGranules = ({
   const query = generateQuery();
 
   const breadcrumbConfig = [
-    {
-      label: 'Dashboard Home',
-      href: '/',
-    },
-    {
-      label: 'Collections',
-      href: '/collections',
-    },
-    {
-      label: 'Collection Overview',
-      href: `/collections/collection/${collectionName}/${collectionVersion}`,
-    },
     {
       label: 'Collection Granules',
       href: `/collections/collection/${collectionName}/${collectionVersion}/granules`,
@@ -133,27 +120,12 @@ const CollectionGranules = ({
       <Helmet>
         <title> Collection Granules </title>
       </Helmet>
-      <section className="page__section page__section__controls">
-        <Breadcrumbs config={breadcrumbConfig} />
-      </section>
-      <section className="page__section page__section__header-wrapper">
-        <h1 className="heading--large heading--shared-content with-description ">
-          {collectionName} / {collectionVersion}
-        </h1>
-        <Link
-          className="button button--edit button--small form-group__element--right button--green"
-          to={{
-            pathname: `/collections/edit/${collectionName}/${collectionVersion}`,
-            search: getPersistentQueryParams(location),
-          }}
-        >
-          Edit
-        </Link>
-        <dl className="metadata__updated">
-          <dd>{lastUpdated(meta.queriedAt)}</dd>
-        </dl>
-      </section>
-
+      <CollectionHeader
+        breadcrumbConfig={breadcrumbConfig}
+        name={collectionName}
+        queriedAt={meta.queriedAt}
+        version={collectionVersion}
+      />
       <section className="page__section">
         <div className="heading__wrapper--border">
           <h2 className="heading--medium heading--shared-content with-description">

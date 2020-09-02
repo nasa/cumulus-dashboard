@@ -98,7 +98,7 @@ class EditRecord extends React.Component {
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large'>Edit {pk}</h1>
+          <h1 className='heading--large'>Edit {schemaKey}: {pk}</h1>
           {schema && record.data ? (
             <Schema
               schema={schema}
