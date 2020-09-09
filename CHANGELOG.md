@@ -25,6 +25,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2076**
   - Add context references in headings on indivdual pages for screen reader accessibility
 
+- **CUMULUS-2087**
+  - Add Reconciliation Report creation page with report type selection
+
 ### Changed
 
 - **CUMULUS-2068**
