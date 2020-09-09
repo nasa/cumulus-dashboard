@@ -47,7 +47,6 @@ const reconciliationReports = {
         }
       }
     },
-    // TODO: change this once we have the actual GNF format
     exampleGranuleNotFoundReport: {
       data: {
         reportStartTime: '2018-06-11T18:52:37.710Z',
