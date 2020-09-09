@@ -11,6 +11,7 @@ import ReportHeading from './report-heading';
 import { handleDownloadJsonClick } from '../../utils/download-file';
 import { tableColumnsGnf } from '../../utils/table-config/reconciliation-reports';
 import { getFilesSummary, getGranuleFilesSummary } from './reshape-report';
+import { getCollectionId } from '../../utils/format';
 
 const GnfReport = ({
   dispatch,
@@ -33,9 +34,11 @@ const GnfReport = ({
   const { onlyInCmr = [], onlyInCumulus = [] } = granulesInCumulusCmr;
 
   const cmrGranules = onlyInCmr.map((granule) => {
-    const { GranuleUR } = granule;
+    const { GranuleUR, ShortName, Version } = granule;
     return {
+      ...granule,
       granuleId: GranuleUR,
+      collectionId: getCollectionId({ name: ShortName, version: Version }),
       cmr: true,
       cumulus: false,
       s3: false,
