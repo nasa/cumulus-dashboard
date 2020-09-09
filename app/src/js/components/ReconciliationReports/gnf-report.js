@@ -23,8 +23,8 @@ const GnfReport = ({
     filesInCumulus,
     granulesInCumulusCmr,
     filesInCumulusCmr,
-    reportStartTime = null,
-    reportEndTime = null,
+    createStartTime = null,
+    createEndTime = null,
     error = null
   } = recordData || {};
 
@@ -80,12 +80,12 @@ const GnfReport = ({
   return (
     <div className="page__component">
       <ReportHeading
-        endTime={reportEndTime}
+        endTime={createEndTime}
         error={error}
         name={reportName}
         onDownloadClick={handleDownloadClick}
         reportState={reportState}
-        startTime={reportStartTime}
+        startTime={createStartTime}
         type='Granule Not Found'
       />
       <section className="page__section">
