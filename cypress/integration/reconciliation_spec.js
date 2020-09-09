@@ -81,7 +81,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
         .should('not.exist');
     });
 
-    it('displays a link to an individual report', () => {
+    it('displays a link to an individual Inventory report', () => {
       cy.server();
       cy.route('GET', '/reconciliationReports*').as('getReports');
       cy.visit('/reconciliation-reports');
@@ -89,7 +89,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
       cy.get('.table .tbody .tr a[href="/reconciliation-reports/report/inventoryReport-20200114T205238781"]').click();
 
-      cy.contains('.heading--large', 'inventoryReport-20200114T205238781');
+      cy.contains('.heading--large', 'Inventory Report: inventoryReport-20200114T205238781');
 
       /** Table Cards **/
 
@@ -171,6 +171,29 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.dropdown-item').eq(1).should('contain', 'CSV - Collections only in Cumulus');
       cy.get('.dropdown-item').eq(2).should('contain', 'CSV - Granules only in Cumulus');
       cy.get('.dropdown-item').eq(3).should('contain', 'CSV - Files only in Cumulus');
+    });
+
+    it('displays a link to an individual Granule Not Found report', () => {
+      cy.server();
+      cy.route('GET', '/reconciliationReports*').as('getReports');
+      cy.visit('/reconciliation-reports');
+      cy.wait('@getReports');
+
+      cy.get('.table .tbody .tr a[href="/reconciliation-reports/report/granuleNotFoundReport-20200827T210339679"]').click();
+
+      cy.contains('.heading--large', 'Granule Not Found Report: granuleNotFoundReport-20200827T210339679');
+
+      cy.get('.table .th').eq(0).should('contain', 'Collection ID');
+      cy.get('.table .th').eq(1).should('contain', 'Granule ID');
+      cy.get('.table .th').eq(2).should('contain', 'S3');
+      cy.get('.table .th').eq(3).should('contain', 'Cumulus');
+      cy.get('.table .th').eq(4).should('contain', 'CMR');
+
+      cy.get('.table .tr[data-value="4"] .td').eq(0).should('contain', 'MOD09GQ___006');
+      cy.get('.table .tr[data-value="4"] .td').eq(1).should('contain', 'MOD09GQ.A0002421.oD4zvB.006.4281362831355');
+      cy.get('.table .tr[data-value="4"] .td').eq(2).find('span').should('have.class', 'status-indicator--failed');
+      cy.get('.table .tr[data-value="4"] .td').eq(3).find('span').should('have.class', 'status-indicator--failed');
+      cy.get('.table .tr[data-value="4"] .td').eq(4).find('span').should('have.class', 'status-indicator--success');
     });
 
     it('should include legend on list page', () => {
