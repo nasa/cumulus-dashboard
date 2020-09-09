@@ -3,7 +3,7 @@
   "reportEndTime": "2019-03-05T15:34:37.243Z",
   "status": "SUCCESS",
   "error": null,
-  "type": "GranuleNotFound",
+  "reportType": "Granule Not Found",
   "filesInCumulus": {
       "okCount": 40,
       "okCountByGranule": {

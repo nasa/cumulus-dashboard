@@ -16,7 +16,7 @@ const ReconciliationReport = ({
   const { list, map, searchString: filterString } = reconciliationReports;
   const record = map[reconciliationReportName];
   const { data: recordData } = record || {};
-  const { type: reportType = 'Inventory' } = recordData || {};
+  const { reportType = 'Inventory' } = recordData || {};
   const filterBucket = list.params.bucket;
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const ReconciliationReport = ({
             recordData={recordData}
             reportName={reconciliationReportName}
           />,
-          GranuleNotFound: <GnfReport
+          'Granule Not Found': <GnfReport
             dispatch={dispatch}
             filterString={filterString}
             recordData={recordData}
