@@ -17,7 +17,7 @@ const reconciliationReports = {
         reportEndTime: '2018-06-11T18:52:39.893Z',
         status: 'SUCCESS',
         error: null,
-        type: 'Inventory',
+        reportType: 'Inventory',
         okFileCount: 21,
         filesInCumulus: {
           okCount: 129,
@@ -49,11 +49,11 @@ const reconciliationReports = {
     },
     exampleGranuleNotFoundReport: {
       data: {
-        reportStartTime: '2018-06-11T18:52:37.710Z',
-        reportEndTime: '2018-06-11T18:52:39.893Z',
+        createStartTime: '2018-06-11T18:52:37.710Z',
+        createEndTime: '2018-06-11T18:52:39.893Z',
         status: 'SUCCESS',
         error: null,
-        type: 'GranuleNotFound',
+        reportType: 'Granule Not Found',
         okFileCount: 21,
         filesInCumulus: {
           okCount: 129,
