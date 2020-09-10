@@ -16,6 +16,12 @@
       "status": "Generated"
     },
     {
+      "name": "granuleNotFoundReport-20200827T210339679",
+      "location": "s3://localbucket/localrun/reconciliation-reports/granuleNotFoundReport-20200827T210339679.json",
+      "type": "Granule Not Found",
+      "status": "Generated"
+    },
+    {
       "name": "inventoryReport-20200114T202529026",
       "location": "s3://localbucket/localrun/reconciliation-reports/inventoryReport-20200114T202529026.json",
       "type": "Inventory",

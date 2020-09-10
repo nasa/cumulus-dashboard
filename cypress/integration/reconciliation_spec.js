@@ -37,7 +37,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.contains('.table .thead .th', 'Date Generated');
       cy.contains('.table .thead .th', 'Download Report');
       cy.contains('.table .thead .th', 'Delete Report');
-      cy.get('.table .tbody .tr').should('have.length', 3);
+      cy.get('.table .tbody .tr').should('have.length', 4);
       cy.get('[data-value="inventoryReport-20200114T202529026"] > .table__main-asset > a').should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T202529026');
       cy.get('[data-value="inventoryReport-20200114T205238781"] > .table__main-asset > a').should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T205238781');
     });
@@ -69,26 +69,27 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
     it('should have a download button column', () => {
       cy.visit('/reconciliation-reports');
-      cy.get('.button__row--download').should('have.length', 3);
+      cy.get('.button__row--download').should('have.length', 4);
     });
 
     it('deletes a report when the Delete button is clicked', () => {
       cy.visit('/reconciliation-reports');
       cy.get('[data-value="inventoryReport-20200114T202529026"]').find('.button__row--delete').click({ force: true });
 
-      cy.get('.table .tbody .tr').should('have.length', 2);
+      cy.get('.table .tbody .tr').should('have.length', 3);
       cy.get('[data-value="inventoryReport-20200114T202529026"]')
         .should('not.exist');
     });
 
-    it('displays a link to an individual report', () => {
+    it('displays an individual Inventory report', () => {
+      const reportName = 'inventoryReport-20200114T205238781';
+      const path = `/reconciliation-reports/report/${reportName}`;
+
       cy.visit('/reconciliation-reports');
+      cy.contains(`.table .tbody .tr a[href="${path}"]`, reportName);
 
-      cy.contains('.table .tbody .tr a', 'inventoryReport-20200114T205238781')
-        .should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T205238781')
-        .click();
-
-      cy.contains('.heading--large', 'inventoryReport-20200114T205238781');
+      cy.visit(path);
+      cy.contains('.heading--large', `Inventory Report: ${reportName}`);
 
       /** Table Cards **/
 
@@ -170,6 +171,29 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.dropdown-item').eq(1).should('contain', 'CSV - Collections only in Cumulus');
       cy.get('.dropdown-item').eq(2).should('contain', 'CSV - Granules only in Cumulus');
       cy.get('.dropdown-item').eq(3).should('contain', 'CSV - Files only in Cumulus');
+    });
+
+    it('displays an individual Granule Not Found report', () => {
+      const reportName = 'granuleNotFoundReport-20200827T210339679';
+      const path = `/reconciliation-reports/report/${reportName}`;
+
+      cy.visit('/reconciliation-reports');
+      cy.contains(`.table .tbody .tr a[href="${path}"]`, reportName);
+
+      cy.visit(path);
+      cy.contains('.heading--large', `Granule Not Found Report: ${reportName}`);
+
+      cy.get('.table .th').eq(0).should('contain', 'Collection ID');
+      cy.get('.table .th').eq(1).should('contain', 'Granule ID');
+      cy.get('.table .th').eq(2).should('contain', 'S3');
+      cy.get('.table .th').eq(3).should('contain', 'Cumulus');
+      cy.get('.table .th').eq(4).should('contain', 'CMR');
+
+      cy.get('.table .tr[data-value="4"] .td').eq(0).should('contain', 'MOD09GQ___006');
+      cy.get('.table .tr[data-value="4"] .td').eq(1).should('contain', 'MOD09GQ.A0002421.oD4zvB.006.4281362831355');
+      cy.get('.table .tr[data-value="4"] .td').eq(2).find('span').should('have.class', 'status-indicator--failed');
+      cy.get('.table .tr[data-value="4"] .td').eq(3).find('span').should('have.class', 'status-indicator--failed');
+      cy.get('.table .tr[data-value="4"] .td').eq(4).find('span').should('have.class', 'status-indicator--success');
     });
 
     it('should include legend on list page', () => {
