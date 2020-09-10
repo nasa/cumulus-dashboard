@@ -37,7 +37,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.contains('.table .thead .th', 'Date Generated');
       cy.contains('.table .thead .th', 'Download Report');
       cy.contains('.table .thead .th', 'Delete Report');
-      cy.get('.table .tbody .tr').should('have.length', 4);
+      cy.get('.table .tbody .tr').should('have.length', 5);
       cy.get('[data-value="inventoryReport-20200114T202529026"] > .table__main-asset > a').should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T202529026');
       cy.get('[data-value="inventoryReport-20200114T205238781"] > .table__main-asset > a').should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T205238781');
     });
@@ -69,16 +69,31 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
     it('should have a download button column', () => {
       cy.visit('/reconciliation-reports');
-      cy.get('.button__row--download').should('have.length', 4);
+      cy.get('.button__row--download').should('have.length', 5);
     });
 
     it('deletes a report when the Delete button is clicked', () => {
       cy.visit('/reconciliation-reports');
       cy.get('[data-value="inventoryReport-20200114T202529026"]').find('.button__row--delete').click({ force: true });
 
-      cy.get('.table .tbody .tr').should('have.length', 3);
+      cy.get('.table .tbody .tr').should('have.length', 4);
       cy.get('[data-value="inventoryReport-20200114T202529026"]')
         .should('not.exist');
+    });
+
+    it('should have the create a report page', () => {
+      const path = '/reconciliation-reports/create';
+      cy.visit('/reconciliation-reports');
+      cy.contains(`div a[href="${path}"]`, 'Create New Report').click();
+
+      cy.contains('.heading--large', 'Create Report');
+      cy.get('form div input[id="reportName').as('reportName');
+      cy.get('@reportName').should('be.visible').click().type('InternalReport2020');
+      cy.get('form div .form__dropdown .dropdown__element').as('reportType');
+      cy.get('@reportType').should('be.visible').click().type('inter{enter}');
+      cy.get('.button--submit').click();
+      cy.url().should('not.include', path);
+      cy.url().should('include', '/reconciliation-reports');
     });
 
     it('displays an individual Inventory report', () => {

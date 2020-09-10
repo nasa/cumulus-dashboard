@@ -36,7 +36,6 @@ class CreateReconciliationReport extends React.Component {
   }
 
   handleDropdownChange(id, optionValue, option) {
-    console.log(id, option);
     this.setState(createNextState((state) => {
       state.inputs[id] = option.value;
     }));
@@ -55,7 +54,6 @@ class CreateReconciliationReport extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log('payload', this.state.inputs);
     this.props.dispatch(createReconciliationReport(this.state.inputs));
     historyPushWithQueryParams(`/${baseRoute.split('/')[1]}`);
   }
