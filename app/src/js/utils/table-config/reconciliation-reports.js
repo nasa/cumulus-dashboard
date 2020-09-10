@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { nullValue, dateOnly } from '../format';
+import { nullValue, dateOnly, collectionNameVersion } from '../format';
 import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions';
 import { getPersistentQueryParams } from '../url-helper';
 
@@ -161,4 +161,73 @@ export const tableColumnsGranules = [
     Cell: 'View Details',
     disableSortBy: true
   }
+];
+
+const getIndicatorColor = (prop) => {
+  let indicatorColor = '';
+  switch (prop) {
+    case 'missing':
+      indicatorColor = 'orange';
+      break;
+    case 'notFound':
+      indicatorColor = 'failed';
+      break;
+    case false:
+      indicatorColor = 'failed';
+      break;
+    default:
+      indicatorColor = 'success';
+      break;
+  }
+  return indicatorColor;
+};
+
+export const tableColumnsGnf = [
+  {
+    Header: 'Collection ID',
+    accessor: 'collectionId',
+    Cell: ({ cell: { value } }) => { // eslint-disable-line react/prop-types
+      const { name, version } = collectionNameVersion(value);
+      return <Link to={(location) => ({ pathname: `/collections/collection/${name}/${version}`, search: getPersistentQueryParams(location) })}>{value}</Link>;
+    },
+    width: 125,
+  },
+  {
+    Header: 'Granule ID',
+    accessor: 'granuleId',
+    width: 200,
+  },
+  // {
+  //   Header: 'Provider',
+  //   accessor: 'provider',
+  // },
+  {
+    Header: 'S3',
+    id: 's3',
+    Cell: ({ row: { original: { s3 } } }) => ( // eslint-disable-line react/prop-types
+      <span className={`status-indicator status-indicator--${getIndicatorColor(s3)}`}></span>
+    ),
+    width: 50,
+  },
+  // {
+  //   Header: 'S3 Glacier',
+  //   id: 'glacier',
+  //   Cell: <span className='status-indicator status-indicator--failed'></span>,
+  // },
+  {
+    Header: 'Cumulus',
+    id: 'Cumulus',
+    Cell: ({ row: { original: { cumulus } } }) => ( // eslint-disable-line react/prop-types
+      <span className={`status-indicator status-indicator--${getIndicatorColor(cumulus)}`}></span>
+    ),
+    width: 50,
+  },
+  {
+    Header: 'CMR',
+    id: 'cmr',
+    Cell: ({ row: { original: { cmr } } }) => ( // eslint-disable-line react/prop-types
+      <span className={`status-indicator status-indicator--${getIndicatorColor(cmr)}`}></span>
+    ),
+    width: 50,
+  },
 ];

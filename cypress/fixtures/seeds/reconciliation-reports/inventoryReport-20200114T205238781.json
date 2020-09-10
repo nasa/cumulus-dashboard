@@ -2,6 +2,7 @@
   "reportStartTime": "2020-01-14T20:52:38.781Z",
   "reportEndTime": "2020-01-14T20:52:45.789Z",
   "status": "SUCCESS",
+  "reportType": "Inventory",
   "error": null,
   "filesInCumulus": {
     "okCount": 129,

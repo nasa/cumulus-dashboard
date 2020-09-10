@@ -28,6 +28,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2087**
   - Add Reconciliation Report creation page with report type selection
 
+- **CUMULUS-2089**
+  - Add component for Granule Not Found reports
+
 ### Changed
 
 - **CUMULUS-2068**
