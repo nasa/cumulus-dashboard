@@ -72,12 +72,10 @@ class CreateReconciliationReport extends React.Component {
         <ul>
           <li>
             <TextForm
-              // className=
               label={'Report Name'}
               id={'reportName'}
               value={this.state.inputs.reportName || ''}
               onChange={this.handleTextInputChange}
-              // error
               type={'text'}
             />
           </li>
