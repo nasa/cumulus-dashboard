@@ -81,15 +81,15 @@ describe('Dashboard Reconciliation Reports Page', () => {
         .should('not.exist');
     });
 
-    it('displays a link to an individual Inventory report', () => {
-      cy.server();
-      cy.route('GET', '/reconciliationReports*').as('getReports');
+    it('displays an individual Inventory report', () => {
+      const reportName = 'inventoryReport-20200114T205238781';
+      const path = `/reconciliation-reports/report/${reportName}`;
+
       cy.visit('/reconciliation-reports');
-      cy.wait('@getReports');
+      cy.contains(`.table .tbody .tr a[href="${path}"]`, reportName);
 
-      cy.get('.table .tbody .tr a[href="/reconciliation-reports/report/inventoryReport-20200114T205238781"]').click();
-
-      cy.contains('.heading--large', 'Inventory Report: inventoryReport-20200114T205238781');
+      cy.visit(path);
+      cy.contains('.heading--large', `Inventory Report: ${reportName}`);
 
       /** Table Cards **/
 
@@ -173,15 +173,15 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.dropdown-item').eq(3).should('contain', 'CSV - Files only in Cumulus');
     });
 
-    it('displays a link to an individual Granule Not Found report', () => {
-      cy.server();
-      cy.route('GET', '/reconciliationReports*').as('getReports');
+    it('displays an individual Granule Not Found report', () => {
+      const reportName = 'granuleNotFoundReport-20200827T210339679';
+      const path = `/reconciliation-reports/report/${reportName}`;
+
       cy.visit('/reconciliation-reports');
-      cy.wait('@getReports');
+      cy.contains(`.table .tbody .tr a[href="${path}"]`, reportName);
 
-      cy.get('.table .tbody .tr a[href="/reconciliation-reports/report/granuleNotFoundReport-20200827T210339679"]').click();
-
-      cy.contains('.heading--large', 'Granule Not Found Report: granuleNotFoundReport-20200827T210339679');
+      cy.visit(path);
+      cy.contains('.heading--large', `Granule Not Found Report: ${reportName}`);
 
       cy.get('.table .th').eq(0).should('contain', 'Collection ID');
       cy.get('.table .th').eq(1).should('contain', 'Granule ID');
