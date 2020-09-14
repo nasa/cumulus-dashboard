@@ -211,6 +211,13 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.table .tr[data-value="4"] .td').eq(4).find('span').should('have.class', 'status-indicator--success');
     });
 
+    it('downloads the Internal report when the report link is clicked', () => {
+      const reportName = 'InternalReport092020';
+      cy.visit('/reconciliation-reports');
+      cy.get(`[data-value="${reportName}"]`).as('internalReport');
+      cy.get('@internalReport').find('.button__row--download').should('have.length', 1);
+    });
+
     it('should include legend on list page', () => {
       cy.visit('/reconciliation-reports');
 
