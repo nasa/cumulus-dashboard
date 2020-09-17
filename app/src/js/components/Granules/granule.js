@@ -34,7 +34,7 @@ import Metadata from '../Table/Metadata';
 import DropdownAsync from '../DropDown/dropdown-async-command';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
-import { simpleDropdownOption } from '../../utils/table-config/granules';
+import { executeDialog } from '../../utils/table-config/granules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 
@@ -123,6 +123,8 @@ const metaAccessors = [
   },
 ];
 
+const defaultWorkflowMeta = JSON.stringify({ meta: {} }, null, 2);
+
 class GranuleOverview extends React.Component {
   constructor(props) {
     super(props);
@@ -136,8 +138,10 @@ class GranuleOverview extends React.Component {
     this.errors = this.errors.bind(this);
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
+    this.setWorkflowMeta = this.setWorkflowMeta.bind(this);
     this.state = {
       workflow: this.props.workflowOptions[0],
+      workflowMeta: defaultWorkflowMeta,
     };
   }
 
@@ -174,8 +178,10 @@ class GranuleOverview extends React.Component {
 
   applyWorkflow() {
     const { granuleId } = this.props.match.params;
-    const { workflow } = this.state;
-    this.props.dispatch(applyWorkflowToGranule(granuleId, workflow));
+    const { workflow, workflowMeta } = this.state;
+    const meta = JSON.parse(workflowMeta).meta;
+    this.setState({ workflowMeta: defaultWorkflowMeta });
+    this.props.dispatch(applyWorkflowToGranule(granuleId, workflow, meta));
   }
 
   remove() {
@@ -204,13 +210,19 @@ class GranuleOverview extends React.Component {
     this.setState({ workflow });
   }
 
+  setWorkflowMeta(id, value) {
+    this.setState({ workflowMeta: value });
+  }
+
   getExecuteOptions() {
     return [
-      simpleDropdownOption({
-        handler: this.selectWorkflow,
+      executeDialog({
+        selectHandler: this.selectWorkflow,
         label: 'workflow',
         value: this.state.workflow,
         options: this.props.workflowOptions,
+        initialMeta: this.state.workflowMeta,
+        metaHandler: this.setWorkflowMeta,
       }),
     ];
   }

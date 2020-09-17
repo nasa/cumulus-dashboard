@@ -326,7 +326,7 @@ export const applyRecoveryWorkflowToCollection = (collectionId) => (dispatch) =>
     }));
 };
 
-export const applyWorkflowToGranule = (granuleId, workflow) => ({
+export const applyWorkflowToGranule = (granuleId, workflow, meta) => ({
   [CALL_API]: {
     type: types.GRANULE_APPLYWORKFLOW,
     method: 'PUT',
@@ -334,7 +334,8 @@ export const applyWorkflowToGranule = (granuleId, workflow) => ({
     path: `granules/${granuleId}`,
     body: {
       action: 'applyWorkflow',
-      workflow
+      workflow,
+      meta
     }
   }
 });
