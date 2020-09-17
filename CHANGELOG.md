@@ -31,6 +31,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2089**
   - Add component for Granule Not Found reports
 
+- **CUMULUS-2114**
+  - Add download button to the Internal report link
+
 ### Changed
 
 - **CUMULUS-2068**
