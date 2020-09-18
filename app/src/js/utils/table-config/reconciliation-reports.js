@@ -9,7 +9,12 @@ export const tableColumns = ({ dispatch }) => ([
   {
     Header: 'Name',
     accessor: 'name',
-    Cell: ({ cell: { value } }) => <Link to={(location) => ({ pathname: `/reconciliation-reports/report/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value }, row: { original: { type } } }) => { // eslint-disable-line react/prop-types
+      const link = (location) => ({ pathname: `/reconciliation-reports/report/${value}`, search: getPersistentQueryParams(location) });
+      return (type !== 'Internal')
+        ? <Link to={link} >{value}</Link>
+        : <Link to={link} onClick={(e) => handleDownloadClick(e, value, dispatch)}>{value}</Link>;
+    }
   },
   {
     Header: 'Report Type',
