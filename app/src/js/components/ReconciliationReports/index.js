@@ -38,7 +38,8 @@ const ReconciliationReports = ({
       <Helmet>
         <title> Reconcilation Reports </title>
       </Helmet>
-      <DatePickerHeader onChange={query} heading={strings.reconciliation_reports} />
+      <DatePickerHeader onChange={query} heading={strings.reconciliation_reports} showDatePicker={showSidebar} />
+
       <div className='page__content'>
         <div className="wrapper__sidebar">
           {showSidebar && <Sidebar currentPath={pathname} params={params} />}

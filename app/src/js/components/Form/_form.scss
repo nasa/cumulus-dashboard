@@ -355,7 +355,9 @@ select option{
   .page__section--fullpage-form {
     .form__item {
       input {
-        padding: 10px;
+        &:not([type=number]) {
+          padding: 10px;
+        }
         &[type=text] {
           width: 90%;
         }

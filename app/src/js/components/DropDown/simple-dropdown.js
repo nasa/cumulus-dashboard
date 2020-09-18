@@ -67,6 +67,7 @@ const SimpleDropdown = ({
   onChange,
   options = [],
   value,
+  ...rest
 }) => {
   const optionsObject = options.map((option) => {
     if (typeof option === 'object') return option;
@@ -76,11 +77,16 @@ const SimpleDropdown = ({
     };
   });
 
-  const valueObject =
-    typeof value === 'object' ? value : { label: value, value };
+  let valueObject = value;
+
+  if (!value) valueObject = null;
+  else if (typeof value !== 'object') valueObject = { label: value, value };
 
   function handleChange(option) {
-    if (typeof onChange === 'function') onChange(id, option.value, option);
+    if (typeof onChange === 'function') {
+      if (!option || Array.isArray(option)) onChange(id, option);
+      else onChange(id, option.value, option);
+    }
   }
 
   return (
@@ -91,6 +97,7 @@ const SimpleDropdown = ({
         </li>
         <li className="dropdown__element">
           <Select
+            {...rest}
             blurInputOnSelect={true}
             className={className}
             components={{ DropdownIndicator }}
@@ -113,7 +120,7 @@ SimpleDropdown.propTypes = {
   label: PropTypes.any,
   onChange: PropTypes.func,
   options: PropTypes.array,
-  value: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  value: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
 };
 
 export default SimpleDropdown;
