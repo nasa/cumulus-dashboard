@@ -23,14 +23,11 @@ import TextForm from '../TextAreaForm/text';
 import { displayCase, getCollectionId } from '../../utils/format';
 
 const baseRoute = '/reconciliation-reports';
+const defaultReportType = 'Inventory';
 const reportTypeOptions = reconciliationReportTypes.map((recType) => ({
   value: recType.id,
   label: recType.label,
 }));
-
-const defaultReportType = reportTypeOptions.find(
-  (report) => report.value === 'Inventory'
-);
 
 // eslint-disable-next-line react/prop-types
 const SimpleDropdownAdapter = ({ input, ...rest }) => (
@@ -64,7 +61,7 @@ const TextFormAdapter = ({ input, ...rest }) => (
 
 function getTooltipInfoFromType(reportType) {
   return reconciliationReportTypes.find(
-    (recType) => recType.id === reportType.value
+    (recType) => recType.id === reportType
   ).description;
 }
 
@@ -105,7 +102,15 @@ const CreateReconciliationReport = ({
   //   historyPushWithQueryParams(`/${baseRoute.split('/')[1]}`);
   // }
 
-  function onSubmit(payload) {
+  function onSubmit(fields = {}) {
+    const { location, ...otherFields } = fields;
+    let payload = { ...otherFields };
+    if (location !== 'all') {
+      payload = {
+        ...payload,
+        location
+      };
+    }
     dispatch(createReconciliationReport(payload));
     historyPushWithQueryParams(`/${baseRoute.split('/')[1]}`);
   }
@@ -122,12 +127,25 @@ const CreateReconciliationReport = ({
       : moment(moment.utc(value).format(dateTimeFormat)).toDate();
   }
 
-  function parseMulti(arrayValue) {
+  function parseDropdown(value) {
+    if (!value) return;
+    return value.value;
+  }
+
+  function formatDropdown(value) {
+    if (!value) return;
+    return {
+      label: value,
+      value
+    };
+  }
+
+  function parseMultiDropdown(arrayValue) {
     if (!arrayValue || arrayValue.length < 1) return;
     return arrayValue.map((v) => v.value);
   }
 
-  function formatMulti(arrayValue) {
+  function formatMultiDropdown(arrayValue) {
     if (!arrayValue) return;
     return arrayValue.map((v) => ({
       label: v,
@@ -140,7 +158,7 @@ const CreateReconciliationReport = ({
   // }
 
   // eslint-disable-next-line react/prop-types
-  function renderForm({ handleSubmit, form, submitting, pristine, values }) {
+  function renderForm({ handleSubmit, form, submitting, values }) {
     const { collectionId, granuleId, provider, reportType } = values || {};
 
     const collectionIdDisabled = !!granuleId || !!provider;
@@ -148,15 +166,16 @@ const CreateReconciliationReport = ({
     const providerDisabled = !!collectionId || !!granuleId;
 
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="create-report">
         <div>
           <label>Report Type</label>
-          <div className="field-with-tooltip">
+          <div className="form__item form__item--tooltip">
             <Field
               name="reportType"
               component={SimpleDropdownAdapter}
               options={reportTypeOptions}
-              initialValue={defaultReportType}
+              parse={parseDropdown}
+              format={formatDropdown}
             />
             {reportType && (
               <OverlayTrigger
@@ -176,7 +195,9 @@ const CreateReconciliationReport = ({
           </div>
         </div>
         <div className="main-form--wrapper">
-          {reportType && <div>{displayCase(reportType.label)}</div>}
+          {reportType && (
+            <h2 className="heading--large">{displayCase(reportType)}</h2>
+          )}
           <div className="form__item">
             <label>Report Name</label>
             <Field
@@ -204,7 +225,7 @@ const CreateReconciliationReport = ({
               format={formatDate}
             />
           </div>
-          <div>
+          <div className="form__item form__item--tooltip">
             <span>Additional Filters</span>
             <OverlayTrigger
               placement="right"
@@ -229,8 +250,8 @@ const CreateReconciliationReport = ({
               isDisabled={providerDisabled}
               isMulti={true}
               options={providerOptions}
-              format={formatMulti}
-              parse={parseMulti}
+              format={formatMultiDropdown}
+              parse={parseMultiDropdown}
             />
           </div>
           <div className="form__item">
@@ -242,8 +263,8 @@ const CreateReconciliationReport = ({
               isDisabled={collectionIdDisabled}
               isMulti={true}
               options={collectionOptions}
-              format={formatMulti}
-              parse={parseMulti}
+              format={formatMultiDropdown}
+              parse={parseMultiDropdown}
             />
           </div>
           <div className="form__item">
@@ -255,9 +276,45 @@ const CreateReconciliationReport = ({
               isDisabled={granuleIdDisabled}
               isMulti={true}
               options={granuleOptions}
-              format={formatMulti}
-              parse={parseMulti}
+              format={formatMultiDropdown}
+              parse={parseMultiDropdown}
             />
+          </div>
+
+          <div className="form__item">
+            <span className="description">
+              Select the areas that you would like to apply in your comparison
+              results.
+            </span>
+            <div className="multi-checkbox">
+              <label>
+                <Field
+                  name="location"
+                  component="input"
+                  type="radio"
+                  value="all"
+                />
+                All <i>(default)</i>
+              </label>
+              <label>
+                <Field
+                  name="location"
+                  component="input"
+                  type="radio"
+                  value="S3"
+                />
+                S3
+              </label>
+              <label>
+                <Field
+                  name="location"
+                  component="input"
+                  type="radio"
+                  value="CMR"
+                />
+                CMR
+              </label>
+            </div>
           </div>
           <div className="buttons">
             <button type="submit" disabled={submitting}>
@@ -286,9 +343,18 @@ const CreateReconciliationReport = ({
       <div className="page__component page__content--shortened--centered">
         <section className="page__section page__section--fullpage-form">
           <div className="page__section__header">
-            <h1 className="heading--large">Create Report</h1>
+            <div className="heading__wrapper--border">
+              <h1 className="heading--large">Create Report</h1>
+            </div>
           </div>
-          <Form onSubmit={onSubmit} render={renderForm} />
+          <Form
+            onSubmit={onSubmit}
+            render={renderForm}
+            initialValues={{
+              reportType: defaultReportType,
+              location: 'all',
+            }}
+          />
         </section>
       </div>
     </div>

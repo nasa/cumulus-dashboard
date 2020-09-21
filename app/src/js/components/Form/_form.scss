@@ -289,6 +289,30 @@ select option{
 
 .form__item {
   margin-bottom: 1.5em;
+
+  &--tooltip {
+    display: flex;
+    align-items: center;
+
+    svg {
+      color: $ocean-blue;
+      margin-left: .5em;
+    }
+
+  }
+
+  .multi-checkbox {
+    display: flex;
+
+    label {
+      margin: 1em 2em 1em 0;
+
+      input {
+        margin-right: .5em;
+      }
+    }
+  }
+
 }
 
 .subform__item,
@@ -371,6 +395,14 @@ select option{
         }
       }
     }
+
+    .main-form--wrapper {
+      background-color: $white;
+      padding: 2em;
+      margin-bottom: 2em;
+      border: 1px solid $border-grey;
+      box-shadow: $shadow__default;
+    }
   }
 }
 
@@ -407,6 +439,22 @@ select option{
       }
     }
   }
+}
+
+.create-report {
+  .form__dropdown {
+    width: 50%;
+  }
+
+  .main-form--wrapper {
+    .form__dropdown {
+      width: 92%;
+    }
+  }
+}
+
+.form__dropdown {
+  width: 92%;
 }
 
 .label__description {
