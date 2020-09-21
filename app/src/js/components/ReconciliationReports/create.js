@@ -230,7 +230,7 @@ const CreateReconciliationReport = ({
               placement="right"
               overlay={
                 <Tooltip className="tooltip">
-                  You can only apply Provider OR Granule ID OR Collection ID
+                  Only one of Provider, Collection ID, or Granule ID may be applied for each report
                 </Tooltip>
               }
             >
