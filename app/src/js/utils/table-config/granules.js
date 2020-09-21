@@ -114,6 +114,8 @@ export const errorTableColumns = [
   }
 ];
 
+export const defaultWorkflowMeta = JSON.stringify({ meta: {} }, null, 2);
+
 export const executeDialog = (config) => (
   <div>
     <SimpleDropdown

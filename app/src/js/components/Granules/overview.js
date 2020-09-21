@@ -21,7 +21,8 @@ import {
 import { lastUpdated, tally } from '../../utils/format';
 import {
   tableColumns,
-  simpleDropdownOption,
+  defaultWorkflowMeta,
+  executeDialog,
   bulkActions,
   recoverAction
 } from '../../utils/table-config/granules';
@@ -57,10 +58,12 @@ class GranulesOverview extends React.Component {
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.applyWorkflow = this.applyWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
+    this.setWorkflowMeta = this.setWorkflowMeta.bind(this);
     this.applyRecoveryWorkflow = this.applyRecoveryWorkflow.bind(this);
     this.downloadGranuleCSV = this.downloadGranuleCSV.bind(this);
     this.state = {
-      workflow: this.props.workflowOptions[0]
+      workflow: this.props.workflowOptions[0],
+      workflowMeta: defaultWorkflowMeta
     };
   }
 
@@ -107,8 +110,15 @@ class GranulesOverview extends React.Component {
     this.setState({ workflow });
   }
 
+  setWorkflowMeta (id, workflowMeta) {
+    this.setState({ workflowMeta });
+  }
+
   applyWorkflow (granuleId) {
-    return applyWorkflowToGranule(granuleId, this.state.workflow);
+    const { workflow, workflowMeta } = this.state;
+    const { meta } = JSON.parse(workflowMeta);
+    this.setState({ workflowMeta: defaultWorkflowMeta });
+    return applyWorkflowToGranule(granuleId, workflow, meta);
   }
 
   applyRecoveryWorkflow (granuleId) {
@@ -117,11 +127,13 @@ class GranulesOverview extends React.Component {
 
   getExecuteOptions () {
     return [
-      simpleDropdownOption({
-        handler: this.selectWorkflow,
+      executeDialog({
+        selectHandler: this.selectWorkflow,
         label: 'workflow',
         value: this.state.workflow,
-        options: this.props.workflowOptions
+        options: this.props.workflowOptions,
+        initialMeta: this.state.workflowMeta,
+        metaHandler: this.setWorkflowMeta,
       })
     ];
   }

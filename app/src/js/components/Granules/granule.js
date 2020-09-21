@@ -34,7 +34,7 @@ import Metadata from '../Table/Metadata';
 import DropdownAsync from '../DropDown/dropdown-async-command';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
-import { executeDialog } from '../../utils/table-config/granules';
+import { defaultWorkflowMeta, executeDialog } from '../../utils/table-config/granules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 
@@ -123,8 +123,6 @@ const metaAccessors = [
   },
 ];
 
-const defaultWorkflowMeta = JSON.stringify({ meta: {} }, null, 2);
-
 class GranuleOverview extends React.Component {
   constructor(props) {
     super(props);
@@ -179,7 +177,7 @@ class GranuleOverview extends React.Component {
   applyWorkflow() {
     const { granuleId } = this.props.match.params;
     const { workflow, workflowMeta } = this.state;
-    const meta = JSON.parse(workflowMeta).meta;
+    const { meta } = JSON.parse(workflowMeta);
     this.setState({ workflowMeta: defaultWorkflowMeta });
     this.props.dispatch(applyWorkflowToGranule(granuleId, workflow, meta));
   }
