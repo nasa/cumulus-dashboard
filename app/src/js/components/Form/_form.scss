@@ -375,6 +375,14 @@ select option{
   }
 }
 
+.main-form--wrapper {
+  background-color: $white;
+  padding: 2em;
+  margin-bottom: 2em;
+  border: 1px solid $border-grey;
+  box-shadow: $shadow__default;
+}
+
 .page__content--shortened--centered {
   .page__section--fullpage-form {
     .form__item {
@@ -394,14 +402,6 @@ select option{
           width: 75%;
         }
       }
-    }
-
-    .main-form--wrapper {
-      background-color: $white;
-      padding: 2em;
-      margin-bottom: 2em;
-      border: 1px solid $border-grey;
-      box-shadow: $shadow__default;
     }
   }
 }
@@ -447,6 +447,7 @@ select option{
   }
 
   .main-form--wrapper {
+    padding-bottom: 5em;
     .form__dropdown {
       width: 92%;
     }

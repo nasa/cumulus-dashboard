@@ -60,9 +60,8 @@ const TextFormAdapter = ({ input, ...rest }) => (
 );
 
 function getTooltipInfoFromType(reportType) {
-  return reconciliationReportTypes.find(
-    (recType) => recType.id === reportType
-  ).description;
+  return reconciliationReportTypes.find((recType) => recType.id === reportType)
+    .description;
 }
 
 const CreateReconciliationReport = ({
@@ -98,9 +97,9 @@ const CreateReconciliationReport = ({
     dispatch(listGranules());
   }, [dispatch]);
 
-  // function onCancel() {
-  //   historyPushWithQueryParams(`/${baseRoute.split('/')[1]}`);
-  // }
+  function onCancel() {
+    historyPushWithQueryParams(`/${baseRoute.split('/')[1]}`);
+  }
 
   function onSubmit(fields = {}) {
     const { location, ...otherFields } = fields;
@@ -108,7 +107,7 @@ const CreateReconciliationReport = ({
     if (location !== 'all') {
       payload = {
         ...payload,
-        location
+        location,
       };
     }
     dispatch(createReconciliationReport(payload));
@@ -136,7 +135,7 @@ const CreateReconciliationReport = ({
     if (!value) return;
     return {
       label: value,
-      value
+      value,
     };
   }
 
@@ -158,7 +157,7 @@ const CreateReconciliationReport = ({
   // }
 
   // eslint-disable-next-line react/prop-types
-  function renderForm({ handleSubmit, form, submitting, values }) {
+  function renderForm({ handleSubmit, submitting, values }) {
     const { collectionId, granuleId, provider, reportType } = values || {};
 
     const collectionIdDisabled = !!granuleId || !!provider;
@@ -282,7 +281,7 @@ const CreateReconciliationReport = ({
           </div>
 
           <div className="form__item">
-            <span className="description">
+            <span>
               Select the areas that you would like to apply in your comparison
               results.
             </span>
@@ -317,19 +316,20 @@ const CreateReconciliationReport = ({
             </div>
           </div>
           <div className="buttons">
-            <button type="submit" disabled={submitting}>
-              Submit
-            </button>
             <button
-              type="button"
-              // eslint-disable-next-line react/prop-types
-              onClick={form.reset}
+              className="button button--submit button__animation--md button__arrow button__animation button__arrow--white form-group__element--right"
               disabled={submitting}
             >
-              Reset
+              Create New Report
+            </button>
+            <button
+              className="button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right"
+              onClick={onCancel}
+            >
+              Cancel
             </button>
           </div>
-          <pre>{JSON.stringify(values, null, 2)}</pre>
+          {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
         </div>
       </form>
     );
