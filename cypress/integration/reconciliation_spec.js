@@ -145,11 +145,6 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.button--submit').click();
       cy.wait('@createReport');
 
-      // cy.get('@createReport').should((req) => {
-      //   console.log(req);
-      //   expect(req).to.have.property('reportType', 'Internal');
-      // });
-
       cy.url().should('not.include', path);
       cy.url().should('include', '/reconciliation-reports');
     });
