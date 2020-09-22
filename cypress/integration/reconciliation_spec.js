@@ -83,15 +83,73 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
     it('should have the create a report page', () => {
       const path = '/reconciliation-reports/create';
+      const reportType = 'Internal';
+      const reportName = 'InternalReport2020';
+      const startTimestamp = 1233396000000;
+      const endTimestamp = 1272700800000;
+      const collectionId = ['http_testcollection___001'];
+      const location = 'S3';
+
       cy.visit('/reconciliation-reports');
       cy.contains(`div a[href="${path}"]`, 'Create New Report').click();
 
       cy.contains('.heading--large', 'Create Report');
-      cy.get('form div input[id="reportName').as('reportName');
-      cy.get('@reportName').should('be.visible').click().type('InternalReport2020');
-      cy.get('form div .form__dropdown .dropdown__element').as('reportType');
-      cy.get('@reportType').should('be.visible').click().type('inter{enter}');
+
+      cy.get('form .form__item .reportType').as('reportType');
+      cy.get('@reportType').find('input[name="reportType"]').should('have.value', 'Inventory');
+      cy.contains('.main-form--wrapper h2', 'Inventory');
+      cy.get('@reportType').click().type('inter{enter}');
+      cy.get('@reportType').find('input[name="reportType"]').should('have.value', reportType);
+      cy.contains('.main-form--wrapper h2', reportType);
+
+      cy.get('form .form__item .reportName').as('reportName');
+      cy.get('@reportName').should('be.visible').click().type(reportName);
+
+      cy.get('form .form__item .startTimestamp').within(() => {
+        cy.get('input[name=month]').click().type(1);
+        cy.get('input[name=day]').click().type(31);
+        cy.get('input[name=year]').click().type(2009);
+        cy.get('input[name=hour12]').click().type(0);
+        cy.get('input[name=minute]').click().type(0);
+        cy.get('select[name=amPm]').select('AM');
+      });
+      cy.get('form .form__item .endTimestamp').within(() => {
+        cy.get('input[name=month]').click().type(5);
+        cy.get('input[name=day]').click().type(1);
+        cy.get('input[name=year]').click().type(2010);
+        cy.get('input[name=hour12]').click().type(0);
+        cy.get('input[name=minute]').click().type(0);
+        cy.get('select[name=amPm]').select('AM');
+      });
+
+      cy.get('form .form__item .collectionId').as('collectionId');
+      cy.get('@collectionId').click().type('http_{enter}');
+      cy.get('form .form__item .provider input').should('have.attr', 'disabled');
+      cy.get('form .form__item .granuleId input').should('have.attr', 'disabled');
+
+      cy.get(`form .form__item .location input[value="${location}"]`).check();
+
+      cy.route2({
+        url: '/reconciliationReports',
+        method: 'POST'
+      }, (req) => {
+        const requestBody = JSON.parse(req.body);
+        expect(requestBody).to.have.property('reportType', reportType);
+        expect(requestBody).to.have.property('reportName', reportName);
+        expect(requestBody).to.have.property('startTimestamp', startTimestamp);
+        expect(requestBody).to.have.property('endTimestamp', endTimestamp);
+        expect(requestBody).to.have.deep.property('collectionId', collectionId);
+        expect(requestBody).to.have.property('location', location);
+      }).as('createReport');
+
       cy.get('.button--submit').click();
+      cy.wait('@createReport');
+
+      // cy.get('@createReport').should((req) => {
+      //   console.log(req);
+      //   expect(req).to.have.property('reportType', 'Internal');
+      // });
+
       cy.url().should('not.include', path);
       cy.url().should('include', '/reconciliation-reports');
     });

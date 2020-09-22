@@ -12,7 +12,7 @@ ConditionalWrapper.propTypes = {
   wrapper: PropTypes.func,
 };
 
-const Datepicker = ({ format, id, label, locale, name, onChange, value }) => {
+const Datepicker = ({ format, id, label, locale, name, onChange, value, ...rest }) => {
   function handleOnChange(date) {
     if (typeof onChange === 'function') {
       onChange(id, date);
@@ -31,6 +31,7 @@ const Datepicker = ({ format, id, label, locale, name, onChange, value }) => {
         )}
       >
         <DateTimePicker
+          {...rest}
           dayPlaceholder="DD"
           disableClock={true}
           format={format}

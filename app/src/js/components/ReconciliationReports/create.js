@@ -69,7 +69,6 @@ const CreateReconciliationReport = ({
   dispatch,
   granules,
   providers,
-  reconciliationReports,
 }) => {
   const {
     list: { data: collectionData },
@@ -152,10 +151,6 @@ const CreateReconciliationReport = ({
     }));
   }
 
-  // function isInflight() {
-  //   return reconciliationReports.createReportInflight;
-  // }
-
   // eslint-disable-next-line react/prop-types
   function renderForm({ handleSubmit, submitting, values }) {
     const { collectionId, granuleId, provider, reportType } = values || {};
@@ -170,6 +165,7 @@ const CreateReconciliationReport = ({
           <label>Report Type</label>
           <div className="form__item form__item--tooltip">
             <Field
+              className="reportType"
               name="reportType"
               component={SimpleDropdownAdapter}
               options={reportTypeOptions}
@@ -200,6 +196,7 @@ const CreateReconciliationReport = ({
           <div className="form__item">
             <label>Report Name</label>
             <Field
+              className="reportName"
               name="reportName"
               component={TextFormAdapter}
               type="text"
@@ -209,6 +206,7 @@ const CreateReconciliationReport = ({
           <div className="form__item">
             <label>Date Range</label>
             <Field
+              className="startTimestamp"
               name="startTimestamp"
               component={DatePickerAdapter}
               type="date"
@@ -217,6 +215,7 @@ const CreateReconciliationReport = ({
             />
             <span> to </span>
             <Field
+              className="endTimestamp"
               name="endTimestamp"
               component={DatePickerAdapter}
               type="date"
@@ -243,6 +242,7 @@ const CreateReconciliationReport = ({
           <div className="form__item">
             <label>Provider</label>
             <Field
+              className="provider"
               name="provider"
               component={SimpleDropdownAdapter}
               placeholder="Provider"
@@ -256,6 +256,7 @@ const CreateReconciliationReport = ({
           <div className="form__item">
             <label>Collection ID</label>
             <Field
+              className="collectionId"
               name="collectionId"
               component={SimpleDropdownAdapter}
               placeholder="Collection ID"
@@ -269,6 +270,7 @@ const CreateReconciliationReport = ({
           <div className="form__item">
             <label>Granule ID</label>
             <Field
+              className="granuleId"
               name="granuleId"
               component={SimpleDropdownAdapter}
               placeholder="Granule ID"
@@ -285,7 +287,7 @@ const CreateReconciliationReport = ({
               Select the areas that you would like to apply in your comparison
               results.
             </span>
-            <div className="multi-checkbox">
+            <div className="radio location">
               <label>
                 <Field
                   name="location"
@@ -329,7 +331,6 @@ const CreateReconciliationReport = ({
               Cancel
             </button>
           </div>
-          {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
         </div>
       </form>
     );
@@ -366,7 +367,6 @@ CreateReconciliationReport.propTypes = {
   dispatch: PropTypes.func,
   granules: PropTypes.object,
   providers: PropTypes.object,
-  reconciliationReports: PropTypes.object,
 };
 
 export default withRouter(
@@ -374,6 +374,5 @@ export default withRouter(
     collections: state.collections,
     granules: state.granules,
     providers: state.providers,
-    reconciliationReports: state.reconciliationReports,
   }))(CreateReconciliationReport)
 );
