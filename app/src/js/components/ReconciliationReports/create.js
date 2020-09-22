@@ -215,7 +215,7 @@ const CreateReconciliationReport = ({
               parse={parseDate}
               format={formatDate}
             />
-            <span>to</span>
+            <span> to </span>
             <Field
               name="endTimestamp"
               component={DatePickerAdapter}
