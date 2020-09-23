@@ -130,8 +130,7 @@ export const executeDialog = (config) => (
       <form>
         <TextArea
           value={config.initialMeta}
-          id={'workflow-meta-text-area'}
-          error={null} // TODO: fixme
+          id={`${config.label}-meta-text-area`}
           onChange={config.metaHandler}
           mode='json'
           minLines={30}
