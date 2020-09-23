@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-1966**
   - Add form fields for new params to create report form
+  - Upgrades Cypress to 5.2.0
 
 - **CUMULUS-2046**
   - Add dashboard version to footer
