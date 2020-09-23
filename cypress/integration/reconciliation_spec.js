@@ -21,7 +21,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.visit('/');
     });
 
-    it.skip('displays a link to view reconciliation reports', () => {
+    it('displays a link to view reconciliation reports', () => {
       cy.contains('nav li a', 'Reconciliation Reports').as('reconciliationReports');
       cy.get('@reconciliationReports').should('have.attr', 'href', '/reconciliation-reports');
       cy.get('@reconciliationReports').click({ force: true });
@@ -30,7 +30,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.contains('.heading--large', 'Reconciliation Reports Overview');
     });
 
-    it.skip('displays a list of reconciliation reports', () => {
+    it('displays a list of reconciliation reports', () => {
       cy.visit('/reconciliation-reports');
 
       cy.contains('.table .thead .th', 'Name');
@@ -44,7 +44,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('[data-value="inventoryReport-20200114T205238781"] > .table__main-asset > a').should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T205238781');
     });
 
-    it.skip('should update dropdown with label when visiting bookmarkable URL', () => {
+    it('should update dropdown with label when visiting bookmarkable URL', () => {
       cy.visit('/reconciliation-reports?status=Generated');
       cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').should('have.value', 'Generated');
@@ -54,7 +54,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('@type-input').should('have.value', 'Inventory');
     });
 
-    it.skip('should show Search and Dropdown filters in URL', () => {
+    it('should show Search and Dropdown filters in URL', () => {
       cy.visit('/reconciliation-reports');
       cy.get('.search').as('search');
       cy.get('@search').should('be.visible').click().type('inventoryReport-2020');
@@ -69,12 +69,12 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.table .tbody .tr').should('have.length', 2);
     });
 
-    it.skip('should have a download button column', () => {
+    it('should have a download button column', () => {
       cy.visit('/reconciliation-reports');
       cy.get('.button__row--download').should('have.length', 5);
     });
 
-    it.skip('deletes a report when the Delete button is clicked', () => {
+    it('deletes a report when the Delete button is clicked', () => {
       cy.visit('/reconciliation-reports');
       cy.get('[data-value="inventoryReport-20200114T202529026"]').find('.button__row--delete').click({ force: true });
 
