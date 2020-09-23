@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import isNil from 'lodash/isNil';
 import moment from 'moment';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
@@ -101,28 +100,15 @@ const CreateReconciliationReport = ({
   }
 
   function onSubmit(fields = {}) {
-    const { location, ...otherFields } = fields;
-    let payload = { ...otherFields };
-    if (location !== 'all') {
-      payload = {
-        ...payload,
-        location,
-      };
-    }
+    const { location, startTimestamp, endTimestamp, ...otherFields } = fields;
+    const payload = {
+      ...((location && location !== 'all') && { location }),
+      ...(startTimestamp && { startTimestamp: moment(moment.utc(startTimestamp).format(dateTimeFormat)).valueOf() }),
+      ...(endTimestamp && { endTimestamp: moment(moment.utc(endTimestamp).format(dateTimeFormat)).valueOf() }),
+      ...otherFields
+    };
     dispatch(createReconciliationReport(payload));
     historyPushWithQueryParams(`/${baseRoute.split('/')[1]}`);
-  }
-
-  function parseDate(value) {
-    return isNil(value)
-      ? null
-      : moment(moment.utc(value).format(dateTimeFormat)).valueOf();
-  }
-
-  function formatDate(value) {
-    return isNil(value)
-      ? null
-      : moment(moment.utc(value).format(dateTimeFormat)).toDate();
   }
 
   function parseDropdown(value) {
@@ -210,8 +196,6 @@ const CreateReconciliationReport = ({
               name="startTimestamp"
               component={DatePickerAdapter}
               type="date"
-              parse={parseDate}
-              format={formatDate}
             />
             <span> to </span>
             <Field
@@ -219,8 +203,6 @@ const CreateReconciliationReport = ({
               name="endTimestamp"
               component={DatePickerAdapter}
               type="date"
-              parse={parseDate}
-              format={formatDate}
             />
           </div>
           <div className="form__item form__item--tooltip">
