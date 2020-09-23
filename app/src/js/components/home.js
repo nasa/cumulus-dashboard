@@ -38,7 +38,7 @@ import {
   kibanaGatewayExecutionSuccessesLink,
   kibanaAllLogsLink,
 } from '../utils/kibana';
-import Datepicker from './Datepicker/Datepicker';
+import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
 import { getPersistentQueryParams } from '../utils/url-helper';
 
@@ -166,7 +166,7 @@ class Home extends React.Component {
                   Select date and time to refine your results. <em>Time is UTC.</em>
                 </h2>
               </div>
-              <Datepicker onChange={this.query}/>
+              <DatepickerRange onChange={this.query}/>
             </div>
           </section>
 

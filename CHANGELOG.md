@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Added TableHeader component to allow user to select page and limit params
   - Removed all Results Per Page dropdowns in favor of the header
 
+- **CUMULUS-1966**
+  - Add form fields for new params to create report form
+  - Upgrades Cypress to 5.2.0
+
 - **CUMULUS-2046**
   - Add dashboard version to footer
 
