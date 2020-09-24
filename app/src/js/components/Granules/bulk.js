@@ -28,7 +28,8 @@ const bulkOperationsDefaultQuery = {
   workflowName: '',
   index: '',
   query: '',
-  ids: []
+  ids: [],
+  meta: {}
 };
 
 const bulkDeleteDefaultQuery = {

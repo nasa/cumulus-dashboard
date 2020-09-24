@@ -14,7 +14,8 @@ import {
   listWorkflows,
 } from '../../actions';
 import {
-  simpleDropdownOption,
+  defaultWorkflowMeta,
+  executeDialog,
   bulkActions,
   tableColumns,
 } from '../../utils/table-config/granules';
@@ -44,6 +45,7 @@ const CollectionGranules = ({
   const collectionId = getCollectionId(params);
   const view = getView();
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
+  const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const query = generateQuery();
 
   const breadcrumbConfig = [
@@ -101,16 +103,20 @@ const CollectionGranules = ({
   }
 
   function applyWorkflow(granuleId) {
-    return applyWorkflowToGranule(granuleId, workflow);
+    const metaObject = JSON.parse(workflowMeta).meta;
+    setWorkflowMeta(defaultWorkflowMeta);
+    return applyWorkflowToGranule(granuleId, workflow, metaObject);
   }
 
   function getExecuteOptions() {
     return [
-      simpleDropdownOption({
-        handler: selectWorkflow,
+      executeDialog({
+        selectHandler: selectWorkflow,
         label: 'workflow',
         value: workflow,
         options: workflowOptions,
+        initialMeta: workflowMeta,
+        metaHandler: setWorkflowMeta,
       }),
     ];
   }
