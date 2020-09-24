@@ -18,7 +18,8 @@ import {
   tableColumns,
   errorTableColumns,
   bulkActions,
-  simpleDropdownOption,
+  defaultWorkflowMeta,
+  executeDialog,
 } from '../../utils/table-config/granules';
 import List from '../Table/Table';
 import LogViewer from '../Logs/viewer';
@@ -40,6 +41,7 @@ const AllGranules = ({
   workflowOptions,
 }) => {
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
+  const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const { dropdowns } = collections;
   const { list } = granules;
   const { count, queriedAt } = list.meta;
@@ -103,16 +105,20 @@ const AllGranules = ({
   }
 
   function applyWorkflow(granuleId) {
-    return applyWorkflowToGranule(granuleId, workflow);
+    const { meta } = JSON.parse(workflowMeta);
+    setWorkflowMeta(defaultWorkflowMeta);
+    return applyWorkflowToGranule(granuleId, workflow, meta);
   }
 
   function getExecuteOptions() {
     return [
-      simpleDropdownOption({
-        handler: selectWorkflow,
+      executeDialog({
+        selectHandler: selectWorkflow,
         label: 'workflow',
         value: workflow,
         options: workflowOptions,
+        initialMeta: workflowMeta,
+        metaHandler: setWorkflowMeta,
       }),
     ];
   }

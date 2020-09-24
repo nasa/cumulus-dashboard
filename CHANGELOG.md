@@ -35,10 +35,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2089**
   - Add component for Granule Not Found reports
 
+- **CUMULUS-2108**
+  - Additions to support passing custom `meta` into a workflow via the dashboard as required by CUMULUS-2107:
+    - Added a `meta` field to the bulk granule default input. This field will be merged into the workflow input's `meta` context.
+    - Added a collapsible textArea containing a `meta` field (linked as `Add Custom Workflow Meta`) to the `Execute` modal on granules overview, list and details views.
+
 - **CUMULUS-2114**
   - Add download button to the Internal report link
 
 ### Changed
+
+- **CUMULUS-2023**
+  - Update filter drop downs to have the same order as columns
 
 - **CUMULUS-2068**
   - Converts select dropdowns to react-select component
