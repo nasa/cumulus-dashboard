@@ -131,7 +131,7 @@ export const executeDialog = (config) => (
         <TextArea
           value={config.initialMeta}
           id={`${config.label}-meta-text-area`}
-          onChange={config.metaHandler}
+          onChange={(id, value) => config.metaHandler(value)}
           mode='json'
           minLines={30}
           maxLines={200}

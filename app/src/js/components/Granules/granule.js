@@ -208,8 +208,8 @@ class GranuleOverview extends React.Component {
     this.setState({ workflow });
   }
 
-  setWorkflowMeta(id, value) {
-    this.setState({ workflowMeta: value });
+  setWorkflowMeta(workflowMeta) {
+    this.setState({ workflowMeta });
   }
 
   getExecuteOptions() {
