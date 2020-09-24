@@ -163,6 +163,10 @@
     .Collapsible__trigger {
       order: 1;
     }
+
+    .Collapsible__contentInner {
+      max-width: 230px;
+    }
   }
 }
 
@@ -172,10 +176,6 @@
     cursor: pointer;
     margin: 1em 0;
   }
-}
-
-.Collapsible__contentInner {
-  max-width: 230px;
 }
 
 // Overview Number Card Group //
