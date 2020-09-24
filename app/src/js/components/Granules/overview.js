@@ -189,16 +189,12 @@ class GranulesOverview extends React.Component {
             filterClear={clearGranulesFilter}
           >
             <ListFilters>
-              <Dropdown
-                getOptions={getOptionsCollectionName}
-                options={get(dropdowns, ['collectionName', 'options'])}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey='collectionId'
-                label={strings.collection}
-                inputProps={{
-                  placeholder: 'All'
-                }}
+              <Search
+                dispatch={dispatch}
+                action={searchGranules}
+                clear={clearGranulesSearch}
+                label='Search'
+                placeholder='Granule ID'
               />
               <Dropdown
                 options={statusOptions}
@@ -210,12 +206,16 @@ class GranulesOverview extends React.Component {
                   placeholder: 'All'
                 }}
               />
-              <Search
-                dispatch={dispatch}
-                action={searchGranules}
-                clear={clearGranulesSearch}
-                label='Search'
-                placeholder='Granule ID'
+              <Dropdown
+                getOptions={getOptionsCollectionName}
+                options={get(dropdowns, ['collectionName', 'options'])}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey='collectionId'
+                label={strings.collection}
+                inputProps={{
+                  placeholder: 'All'
+                }}
               />
             </ListFilters>
           </List>

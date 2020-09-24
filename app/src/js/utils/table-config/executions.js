@@ -23,7 +23,7 @@ export const tableColumns = [
     id: 'status'
   },
   {
-    Header: 'Type',
+    Header: 'Workflow',
     accessor: 'type'
   },
   {

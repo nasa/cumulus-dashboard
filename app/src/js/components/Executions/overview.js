@@ -91,6 +91,14 @@ class ExecutionOverview extends React.Component {
             filterClear={clearExecutionsFilter}
           >
             <ListFilters>
+              <Search
+                dispatch={dispatch}
+                action={searchExecutions}
+                clear={clearExecutionsSearch}
+                paramKey={'asyncOperationId'}
+                label={'Async Operation ID'}
+                placeholder="Search"
+              />
               <Dropdown
                 options={statusOptions}
                 action={filterExecutions}
@@ -101,19 +109,6 @@ class ExecutionOverview extends React.Component {
                   placeholder: 'All',
                 }}
               />
-
-              <Dropdown
-                getOptions={getOptionsCollectionName}
-                options={get(dropdowns, ['collectionName', 'options']) || []}
-                action={filterExecutions}
-                clear={clearExecutionsFilter}
-                paramKey={'collectionId'}
-                label={strings.collection_id}
-                inputProps={{
-                  placeholder: 'All',
-                }}
-              />
-
               <Dropdown
                 options={workflowOptions}
                 action={filterExecutions}
@@ -124,14 +119,16 @@ class ExecutionOverview extends React.Component {
                   placeholder: 'All',
                 }}
               />
-
-              <Search
-                dispatch={dispatch}
-                action={searchExecutions}
-                clear={clearExecutionsSearch}
-                paramKey={'asyncOperationId'}
-                label={'Async Operation ID'}
-                placeholder="Search"
+              <Dropdown
+                getOptions={getOptionsCollectionName}
+                options={get(dropdowns, ['collectionName', 'options']) || []}
+                action={filterExecutions}
+                clear={clearExecutionsFilter}
+                paramKey={'collectionId'}
+                label={strings.collection_id}
+                inputProps={{
+                  placeholder: 'All',
+                }}
               />
             </ListFilters>
           </List>
