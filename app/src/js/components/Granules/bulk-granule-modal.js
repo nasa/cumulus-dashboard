@@ -106,7 +106,7 @@ const BulkGranuleModal = ({
           <p>
             To construct a query, go to Kibana and run a search. Then place the elasticsearch query
             in the operation input. <br/>
-            <button className="button button__kibana_open button--small" href={kibanaRoot} alt="Open Kibana">Open Kibana</button>
+            <a className="button button__kibana_open button--small" href={kibanaRoot} alt="Open Kibana">Open Kibana</a>
           </p>
           <br/>
           <form>
