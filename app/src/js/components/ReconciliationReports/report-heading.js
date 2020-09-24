@@ -18,6 +18,7 @@ const ReportHeading = ({
   onDownloadClick,
   reportState,
   startTime,
+  type,
 }) => {
   const breadcrumbConfig = [
     {
@@ -56,7 +57,7 @@ const ReportHeading = ({
         <div className="page__section__header">
           <div>
             <h1 className="heading--large heading--shared-content with-description ">
-              Report: {name}
+              {type && `${type} Report: `}{name}
             </h1>
           </div>
           <div className="status--process">
@@ -128,6 +129,7 @@ ReportHeading.propTypes = {
   onDownloadClick: PropTypes.func,
   reportState: PropTypes.string,
   startTime: PropTypes.string,
+  type: PropTypes.string,
 };
 
 export default ReportHeading;

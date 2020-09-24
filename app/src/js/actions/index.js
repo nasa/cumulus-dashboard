@@ -3,6 +3,7 @@ import compareVersions from 'compare-versions';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
 import { CMR } from '@cumulus/cmrjs';
+import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import cloneDeep from 'lodash/cloneDeep';
 
@@ -917,12 +918,13 @@ export const getReconciliationReport = (reconciliationName) => ({
   }
 });
 
-export const createReconciliationReport = () => ({
+export const createReconciliationReport = (payload) => ({
   [CALL_API]: {
-    id: `reconciliation-report-${new Date().toISOString()}`,
+    id: get(payload, 'reportName', `reconciliation-report-${new Date().toISOString()}`),
     type: types.NEW_RECONCILIATION,
     method: 'POST',
-    path: 'reconciliationReports'
+    path: 'reconciliationReports',
+    body: payload
   }
 });
 

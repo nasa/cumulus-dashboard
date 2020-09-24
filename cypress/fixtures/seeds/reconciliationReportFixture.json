@@ -5,7 +5,7 @@
     "table": "reconciliationReport",
     "limit": 10,
     "page": 1,
-    "count": 3,
+    "count": 5,
     "fixtureComment": "These files need to exist and be uploaded into the localstack s3 buckets that match the location"
   },
   "results": [
@@ -13,6 +13,12 @@
       "name": "inventoryReport-20200114T205238781",
       "location": "s3://localbucket/localrun/reconciliation-reports/inventoryReport-20200114T205238781.json",
       "type": "Inventory",
+      "status": "Generated"
+    },
+    {
+      "name": "granuleNotFoundReport-20200827T210339679",
+      "location": "s3://localbucket/localrun/reconciliation-reports/granuleNotFoundReport-20200827T210339679.json",
+      "type": "Granule Not Found",
       "status": "Generated"
     },
     {
@@ -26,6 +32,12 @@
       "location": "s3://localbucket/localrun/reconciliation-reports/inventoryReport-20200519T143311876.json",
       "type": "Inventory",
       "status": "Failed"
+    },
+    {
+      "name": "InternalReport092020",
+      "location": "s3://localbucket/localrun/reconciliation-reports/InternalReport092020.json",
+      "type": "Internal",
+      "status": "Generated"
     }
   ]
 }

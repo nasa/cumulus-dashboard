@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import {
   searchReconciliationReports,
   clearReconciliationReportSearch,
@@ -14,6 +14,7 @@ import {
 import { lastUpdated } from '../../utils/format';
 import { reconciliationReportStatus as statusOptions } from '../../utils/status';
 import { reconciliationReportTypes as reportTypeOptions } from '../../utils/type';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 import { tableColumns, bulkActions } from '../../utils/table-config/reconciliation-reports';
 import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
 import Dropdown from '../DropDown/dropdown';
@@ -84,9 +85,15 @@ class ReconciliationReportList extends React.Component {
             <h1 className='heading--large heading--shared-content with-description'>
               Reconciliation Reports Overview
             </h1>
-            <button className='button button--green button--file button--small form-group__element--right' onClick={this.createReport}>
+            <Link
+              className='button button--green button--file button--small form-group__element--right'
+              to={(location) => ({
+                pathname: '/reconciliation-reports/create',
+                search: getPersistentQueryParams(location),
+              })}
+            >
               {reconciliationReports.createReportInflight ? <LoadingEllipsis /> : 'Create New Report'}
-            </button>
+            </Link>
             {lastUpdated(queriedAt)}
           </div>
         </section>
