@@ -40,6 +40,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- **CUMULUS-2023**
+  - Update filter drop downs to have the same order as columns
+
 - **CUMULUS-2068**
   - Converts select dropdowns to react-select component
 
