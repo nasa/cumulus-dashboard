@@ -34,7 +34,7 @@ import Metadata from '../Table/Metadata';
 import DropdownAsync from '../DropDown/dropdown-async-command';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
-import { simpleDropdownOption } from '../../utils/table-config/granules';
+import { defaultWorkflowMeta, executeDialog } from '../../utils/table-config/granules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 
@@ -136,8 +136,10 @@ class GranuleOverview extends React.Component {
     this.errors = this.errors.bind(this);
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
+    this.setWorkflowMeta = this.setWorkflowMeta.bind(this);
     this.state = {
       workflow: this.props.workflowOptions[0],
+      workflowMeta: defaultWorkflowMeta,
     };
   }
 
@@ -174,8 +176,10 @@ class GranuleOverview extends React.Component {
 
   applyWorkflow() {
     const { granuleId } = this.props.match.params;
-    const { workflow } = this.state;
-    this.props.dispatch(applyWorkflowToGranule(granuleId, workflow));
+    const { workflow, workflowMeta } = this.state;
+    const { meta } = JSON.parse(workflowMeta);
+    this.setState({ workflowMeta: defaultWorkflowMeta });
+    this.props.dispatch(applyWorkflowToGranule(granuleId, workflow, meta));
   }
 
   remove() {
@@ -204,13 +208,19 @@ class GranuleOverview extends React.Component {
     this.setState({ workflow });
   }
 
+  setWorkflowMeta(workflowMeta) {
+    this.setState({ workflowMeta });
+  }
+
   getExecuteOptions() {
     return [
-      simpleDropdownOption({
-        handler: this.selectWorkflow,
+      executeDialog({
+        selectHandler: this.selectWorkflow,
         label: 'workflow',
         value: this.state.workflow,
         options: this.props.workflowOptions,
+        initialMeta: this.state.workflowMeta,
+        metaHandler: this.setWorkflowMeta,
       }),
     ];
   }

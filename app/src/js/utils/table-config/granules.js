@@ -1,6 +1,7 @@
 import path from 'path';
 import React from 'react';
 import { get } from 'object-path';
+import Collapsible from 'react-collapsible';
 import { Link } from 'react-router-dom';
 import noop from 'lodash/noop';
 import {
@@ -24,6 +25,7 @@ import SimpleDropdown from '../../components/DropDown/simple-dropdown';
 import Bulk from '../../components/Granules/bulk';
 import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent';
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
+import TextArea from '../../components/TextAreaForm/text-area';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
 
 export const tableColumns = [
@@ -111,6 +113,33 @@ export const errorTableColumns = [
     id: 'timestamp'
   }
 ];
+
+export const defaultWorkflowMeta = JSON.stringify({ meta: {} }, null, 2);
+
+export const executeDialog = (config) => (
+  <div>
+    <SimpleDropdown
+      key={config.label}
+      label={config.label.toUpperCase()}
+      value={config.value}
+      options={config.options}
+      id={config.label}
+      onChange={config.selectHandler}
+    />
+    <Collapsible trigger='Add Custom Workflow Meta' triggerWhenOpen='Collapse'>
+      <form>
+        <TextArea
+          value={config.initialMeta}
+          id={`${config.label}-meta-text-area`}
+          onChange={(id, value) => config.metaHandler(value)}
+          mode='json'
+          minLines={30}
+          maxLines={200}
+        />
+      </form>
+    </Collapsible>
+  </div>
+);
 
 export const simpleDropdownOption = (config) => (
   <SimpleDropdown
