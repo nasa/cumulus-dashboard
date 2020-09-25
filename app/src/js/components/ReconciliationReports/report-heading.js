@@ -99,7 +99,7 @@ const ReportHeading = ({
                 className="form-group__element--right button button--small button--download"
                 onClick={onDownloadClick}
               >
-                Downlaod Report
+                Download Report
               </button>
             )}
           </div>
