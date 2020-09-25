@@ -56,6 +56,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Fixed broken Kibana links in bulk granule operation modals
+
 - **CUMULUS-1876**
   - Fix/remove unnecessary timers on home page
 
