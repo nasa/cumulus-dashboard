@@ -255,6 +255,9 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.visit(path);
       cy.contains('.heading--large', `Granule Not Found Report: ${reportName}`);
 
+      cy.contains('.heading--medium', 'Granules Not Found');
+      cy.contains('.num-title', '7');
+
       cy.get('.table .th').eq(0).should('contain', 'Collection ID');
       cy.get('.table .th').eq(1).should('contain', 'Granule ID');
       cy.get('.table .th').eq(2).should('contain', 'S3');

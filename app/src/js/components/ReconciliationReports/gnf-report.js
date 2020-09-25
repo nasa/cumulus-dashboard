@@ -71,6 +71,16 @@ const GnfReport = ({
       .includes(filterString.toLowerCase()));
   }
 
+  function calculateMissingGranules(totalMissing, currentGranuleData) {
+    const missingS3 = currentGranuleData.s3 === 'notFound' || currentGranuleData.s3 === false ? 1 : 0;
+    const missingCumulus = currentGranuleData.cumulus === 'notFound' || currentGranuleData.cumulus === false ? 1 : 0;
+    const missingCmr = currentGranuleData.cmr === 'notFound' || currentGranuleData.cmr === false ? 1 : 0;
+
+    return totalMissing + missingS3 + missingCumulus + missingCmr;
+  }
+
+  const totalMissingGranules = combinedGranules.reduce(calculateMissingGranules, 0);
+
   const reportState = combinedGranules.length > 0 ? 'CONFLICT' : 'PASSED';
 
   function handleDownloadClick(e) {
@@ -79,16 +89,23 @@ const GnfReport = ({
 
   return (
     <div className="page__component">
-      <ReportHeading
-        endTime={createEndTime}
-        error={error}
-        name={reportName}
-        onDownloadClick={handleDownloadClick}
-        reportState={reportState}
-        startTime={createStartTime}
-        type='Granule Not Found'
-      />
+      <div className="heading__wrapper">
+        <ReportHeading
+          endTime={createEndTime}
+          error={error}
+          name={reportName}
+          onDownloadClick={handleDownloadClick}
+          reportState={reportState}
+          startTime={createStartTime}
+          type='Granule Not Found'
+        />
+      </div>
       <section className="page__section">
+        <div className="title-count">
+          <h2 className="heading--medium heading--shared-content with-description">
+            Granules Not Found <span className="num-title">{totalMissingGranules}</span>
+          </h2>
+        </div>
         <div className="filters">
           <Search
             dispatch={dispatch}

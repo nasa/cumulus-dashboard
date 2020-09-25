@@ -51,6 +51,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2068**
   - Converts select dropdowns to react-select component
 
+- **CUMULUS-2086**
+  - Update the styling on the Granule Not Found report page
+
 - **CUMULUS-2090**
   - Moved report headings that include breadcrumbs, name, dates, status, and download button into a reusable ReportHeading component to be used for all report types.
 
