@@ -89,7 +89,7 @@ const GnfReport = ({
 
   return (
     <div className="page__component">
-      <div className="heading__wrapper--border">
+      <div className="heading__wrapper">
         <ReportHeading
           endTime={createEndTime}
           error={error}
@@ -99,9 +99,13 @@ const GnfReport = ({
           startTime={createStartTime}
           type='Granule Not Found'
         />
-        <h2 className='heading--medium heading--shared-content with-description'>Granules Not Found <span className='num-title'>{totalMissingGranules}</span></h2>
       </div>
       <section className="page__section">
+        <div className="title-count">
+          <h2 className="heading--medium heading--shared-content with-description">
+            Granules Not Found <span className="num-title">{totalMissingGranules}</span>
+          </h2>
+        </div>
         <div className="filters">
           <Search
             dispatch={dispatch}
