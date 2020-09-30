@@ -45,6 +45,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- **CUMULUS-2021**
+  - Update search to use react-bootstrap-typeahead to get autocomplete functionality
+  - Adds clear button when search option is selected
+  - Highlights text on input focus
+
 - **CUMULUS-2023**
   - Update filter drop downs to have the same order as columns
 
