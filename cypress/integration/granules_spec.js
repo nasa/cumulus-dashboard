@@ -218,7 +218,7 @@ describe('Dashboard Granules Page', () => {
       cy.visit('/granules');
       cy.get('.search').as('search');
       cy.get('@search').click().type(infix);
-      cy.url().should('include', 'search=A0142558');
+      cy.url().should('include', `search=${infix}`);
       cy.get('.table .tbody .tr').should('have.length', 1);
       cy.get('.table .tbody .tr').eq(0).children('.td').eq(2)
         .contains(infix);
