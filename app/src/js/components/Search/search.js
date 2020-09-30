@@ -7,7 +7,7 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { get } from 'object-path';
 import { getInitialValueFromLocation } from '../../utils/url-helper';
 import {
-  renderNoHintInput,
+  renderSearchInput,
   renderSearchMenu,
 } from '../../utils/typeahead-helpers';
 
@@ -81,6 +81,9 @@ const Search = ({
           defaultInputValue={initialValue}
           highlightOnlyResult={true}
           id="Search"
+          inputProps={{
+            className: 'search'
+          }}
           isLoading={inflight}
           labelKey={labelKey}
           onChange={handleChange}
@@ -91,7 +94,7 @@ const Search = ({
           options={searchOptions || options}
           placeholder={placeholder}
           ref={searchRef}
-          renderInput={renderNoHintInput}
+          renderInput={renderSearchInput}
           renderMenu={(results, menuProps) => renderSearchMenu(results, menuProps, labelKey)}
         />
       </form>

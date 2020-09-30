@@ -27,19 +27,22 @@ renderTypeaheadInput.propTypes = {
   referenceElementRef: PropTypes.func,
 };
 
-export function renderNoHintInput({ inputRef, referenceElementRef, ...inputProps }) {
+export function renderSearchInput({ inputRef, referenceElementRef, ...inputProps }) {
   return (
-    <Input
-      {...inputProps}
-      ref={(input) => {
-        inputRef(input);
-        referenceElementRef(input);
-      }}
-    />
+    <>
+      <Input
+        {...inputProps}
+        ref={(input) => {
+          inputRef(input);
+          referenceElementRef(input);
+        }}
+      />
+      <span className='search__icon'/>
+    </>
   );
 }
 
-renderNoHintInput.propTypes = {
+renderSearchInput.propTypes = {
   inputRef: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
