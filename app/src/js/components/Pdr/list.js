@@ -91,9 +91,10 @@ const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
         >
           <ListFilters>
             <Search
-              dispatch={dispatch}
               action={searchPdrs}
               clear={clearPdrsSearch}
+              labelKey="pdrName"
+              searchKey="pdrs"
             />
           </ListFilters>
         </List>

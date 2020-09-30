@@ -14,7 +14,6 @@ import { getFilesSummary, getGranuleFilesSummary } from './reshape-report';
 import { getCollectionId } from '../../utils/format';
 
 const GnfReport = ({
-  dispatch,
   filterString,
   recordData,
   reportName,
@@ -108,10 +107,11 @@ const GnfReport = ({
         </div>
         <div className="filters">
           <Search
-            dispatch={dispatch}
             action={searchReconciliationReport}
             clear={clearReconciliationSearch}
             label="Search"
+            labelKey="granuleId"
+            options={combinedGranules}
             placeholder="Search"
           />
         </div>
@@ -128,7 +128,6 @@ const GnfReport = ({
 };
 
 GnfReport.propTypes = {
-  dispatch: PropTypes.func,
   filterString: PropTypes.string,
   recordData: PropTypes.object,
   reportName: PropTypes.string,

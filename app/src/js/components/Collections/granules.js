@@ -154,11 +154,12 @@ const CollectionGranules = ({
         >
           <ListFilters>
             <Search
-              dispatch={dispatch}
               action={searchGranules}
               clear={clearGranulesSearch}
               label="Search"
+              labelKey="granuleId"
               placeholder="Granule ID"
+              searchKey="granules"
             />
             {view === 'all' && (
               <Dropdown

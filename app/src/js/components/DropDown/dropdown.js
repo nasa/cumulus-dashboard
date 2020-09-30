@@ -3,70 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
-import {
-  Typeahead,
-  Menu,
-  MenuItem,
-  Hint,
-  Input,
-} from 'react-bootstrap-typeahead';
-
-function renderInput({ inputRef, referenceElementRef, ...inputProps }) {
-  return (
-    <Hint
-      // Selects the hint when the user hits the 'enter' key.
-      shouldSelect={(shouldSelect, e) => e.keyCode === 13 || shouldSelect}
-    >
-      <Input
-        {...inputProps}
-        ref={(input) => {
-          inputRef(input);
-          referenceElementRef(input);
-        }}
-      />
-    </Hint>
-  );
-}
-
-renderInput.propTypes = {
-  inputRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]),
-  referenceElementRef: PropTypes.func,
-};
-
-function renderMenu(results, menuProps) {
-  const customOption = results.find((result) => result.customOption);
-  return (
-    <Menu {...menuProps} className="autocomplete__menu">
-      {customOption &&
-        <MenuItem
-          className="autocomplete__select"
-          key={0}
-          option={customOption}
-          position={0}
-        >
-          {customOption.label}
-        </MenuItem>
-      }
-      {results.map((result, index) => {
-        if (result.customOption) return;
-        const position = customOption ? index + 1 : index;
-        return (
-          <MenuItem
-            className="autocomplete__select"
-            key={position}
-            option={result}
-            position={position}
-          >
-            {result.label}
-          </MenuItem>
-        );
-      })}
-    </Menu>
-  );
-}
+import { Typeahead } from 'react-bootstrap-typeahead';
+import { renderTypeaheadInput, renderTypeaheadMenu } from '../../utils/typeahead-helpers';
 
 const Dropdown = ({
   action,
@@ -184,8 +122,8 @@ const Dropdown = ({
         onKeyDown={handleKeyDown}
         options={options}
         ref={typeaheadRef}
-        renderInput={renderInput}
-        renderMenu={renderMenu}
+        renderInput={renderTypeaheadInput}
+        renderMenu={renderTypeaheadMenu}
         selected={selected}
       />
     </div>

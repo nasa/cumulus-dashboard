@@ -45,11 +45,12 @@ const WorkflowOverview = ({
             {/* Someone needs to define the search parameters for workflows,
             e.g. steps, collections, granules, etc. } */}
             <Search
-              dispatch={dispatch}
               action={searchWorkflows}
               clear={clearWorkflowsSearch}
               label="Search"
+              labelKey="name"
               placeholder="Workflow Name"
+              searchKey="workflows"
             />
           </ListFilters>
         </List>

@@ -92,12 +92,13 @@ class ExecutionOverview extends React.Component {
           >
             <ListFilters>
               <Search
-                dispatch={dispatch}
                 action={searchExecutions}
                 clear={clearExecutionsSearch}
-                paramKey={'asyncOperationId'}
-                label={'Async Operation ID'}
+                paramKey="asyncOperationId"
+                label="Async Operation ID"
+                labelKey="asyncOperationId"
                 placeholder="Search"
+                searchKey="executions"
               />
               <Dropdown
                 options={statusOptions}

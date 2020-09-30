@@ -150,7 +150,7 @@ class GranulesOverview extends React.Component {
   }
 
   render () {
-    const { collections, dispatch, granules } = this.props;
+    const { collections, granules } = this.props;
     const { list } = granules;
     const { dropdowns } = collections;
     const { count, queriedAt } = list.meta;
@@ -190,11 +190,12 @@ class GranulesOverview extends React.Component {
           >
             <ListFilters>
               <Search
-                dispatch={dispatch}
                 action={searchGranules}
                 clear={clearGranulesSearch}
                 label='Search'
+                labelKey="granuleId"
                 placeholder='Granule ID'
+                searchKey="granules"
               />
               <Dropdown
                 options={statusOptions}

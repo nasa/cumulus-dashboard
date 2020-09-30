@@ -99,9 +99,11 @@ class OperationOverview extends React.Component {
             filterClear={clearOperationsFilter}
           >
             <ListFilters>
-              <Search dispatch={dispatch}
+              <Search
                 action={searchOperations}
                 clear={clearOperationsSearch}
+                labelKey="id"
+                searchKey="operations"
               />
               <Dropdown
                 options={operationStatus}

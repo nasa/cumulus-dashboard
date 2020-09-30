@@ -36,7 +36,6 @@ const bucketsForFilter = (allBuckets) => {
 };
 
 const InventoryReport = ({
-  dispatch,
   filterBucket,
   filterString,
   recordData,
@@ -51,6 +50,7 @@ const InventoryReport = ({
     allBuckets,
   } = reshapeReport(recordData, filterString, filterBucket);
   const reportComparisons = [...internalComparison, ...cumulusVsCmrComparison];
+  console.log(reportComparisons);
   const theReportState = reportState(reportComparisons);
   const activeCardTables = reportComparisons.find(
     (displayObj) => displayObj.id === activeId
@@ -161,10 +161,11 @@ const InventoryReport = ({
 
           <div className="filters">
             <Search
-              dispatch={dispatch}
               action={searchReconciliationReport}
               clear={clearReconciliationSearch}
               label="Search"
+              labelKey="granuleId"
+              options={[]}
               placeholder="Search"
             />
             <Dropdown
@@ -230,7 +231,6 @@ const InventoryReport = ({
 };
 
 InventoryReport.propTypes = {
-  dispatch: PropTypes.func,
   filterBucket: PropTypes.string,
   filterString: PropTypes.string,
   recordData: PropTypes.object,

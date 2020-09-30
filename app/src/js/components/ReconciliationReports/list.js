@@ -117,11 +117,12 @@ class ReconciliationReportList extends React.Component {
           >
             <ListFilters>
               <Search
-                dispatch={this.props.dispatch}
                 action={searchReconciliationReports}
                 clear={clearReconciliationReportSearch}
                 label="Search"
+                labelKey="name"
                 placeholder="Report Name"
+                searchKey="reconciliationReports"
               />
               <Dropdown
                 options={reportTypeOptions}
