@@ -76,7 +76,7 @@ class ExecutionEvents extends React.Component {
   }
 
   render () {
-    const { executionStatus, dispatch } = this.props;
+    const { executionStatus } = this.props;
     if (!executionStatus.execution) return null;
 
     const errors = this.errors();
@@ -131,11 +131,12 @@ class ExecutionEvents extends React.Component {
             </div>
             <div className='filters'>
               <Search
-                dispatch={dispatch}
                 action={searchExecutionEvents}
                 clear={clearExecutionEventsSearch}
-                label='Search'
+                label="Search"
+                labelKey="type"
                 placeholder="Search Type"
+                searchKey="executions"
               />
             </div>
 

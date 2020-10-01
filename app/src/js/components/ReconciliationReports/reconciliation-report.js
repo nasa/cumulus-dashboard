@@ -32,14 +32,12 @@ const ReconciliationReport = ({
       {
         {
           Inventory: <InventoryReport
-            dispatch={dispatch}
             filterBucket={filterBucket}
             filterString={filterString}
             recordData={recordData}
             reportName={reconciliationReportName}
           />,
           'Granule Not Found': <GnfReport
-            dispatch={dispatch}
             filterString={filterString}
             recordData={recordData}
             reportName={reconciliationReportName}

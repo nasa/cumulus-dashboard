@@ -16,7 +16,6 @@ import {
   getOptionsCollectionName,
 } from '../../actions';
 import {
-  granuleSearchResult,
   lastUpdated,
   nullValue,
   fullDate,
@@ -245,10 +244,10 @@ class PDR extends React.Component {
                 label={'Status'}
               />
               <Search
-                dispatch={this.props.dispatch}
                 action={searchGranules}
-                format={granuleSearchResult}
                 clear={clearGranulesSearch}
+                labelKey="granuleId"
+                searchKey="granules"
               />
             </ListFilters>
           </List>

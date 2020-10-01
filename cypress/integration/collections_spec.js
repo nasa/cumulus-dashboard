@@ -80,6 +80,18 @@ describe('Dashboard Collections Page', () => {
       cy.get('@listItems').should('have.length', 11).contains('.td', /second|minute/);
     });
 
+    it('should search collections by name', () => {
+      const infix = 'https';
+      cy.visit('/collections');
+      cy.wait('@getCollections');
+      cy.get('.search').as('search');
+      cy.get('@search').click().type(infix);
+      cy.url().should('include', `search=${infix}`);
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('.table .tbody .tr').eq(0).children('.td').eq(1)
+        .contains(infix);
+    });
+
     it('should display expected MMT Links for collections list', () => {
       cy.visit('/collections');
       cy.clearStartDateTime();

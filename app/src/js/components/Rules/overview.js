@@ -87,11 +87,12 @@ class RulesOverview extends React.Component {
           >
             <ListFilters>
               <Search
-                dispatch={dispatch}
                 action={searchRules}
                 clear={clearRulesSearch}
-                placeholder="Search Rules"
                 label="Search"
+                labelKey="name"
+                placeholder="Search Rules"
+                searchKey="rules"
               />
             </ListFilters>
           </List>

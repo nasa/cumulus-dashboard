@@ -13,12 +13,7 @@ import {
   filterCollections,
   clearCollectionsFilter,
 } from '../../actions';
-import {
-  collectionSearchResult,
-  lastUpdated,
-  tally,
-  getCollectionId,
-} from '../../utils/format';
+import { lastUpdated, tally, getCollectionId } from '../../utils/format';
 import {
   bulkActions,
   recoverAction,
@@ -125,12 +120,12 @@ class CollectionList extends React.Component {
           >
             <ListFilters>
               <Search
-                dispatch={this.props.dispatch}
                 action={searchCollections}
-                format={collectionSearchResult}
                 clear={clearCollectionsSearch}
                 label="Search"
+                labelKey="name"
                 placeholder="Collection Name"
+                searchKey="collections"
               />
             </ListFilters>
           </List>
@@ -146,7 +141,7 @@ CollectionList.propTypes = {
   datepicker: PropTypes.object,
   dispatch: PropTypes.func,
   mmtLinks: PropTypes.object,
-  queryParams: PropTypes.object
+  queryParams: PropTypes.object,
 };
 
 CollectionList.displayName = 'CollectionList';
