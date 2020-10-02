@@ -292,7 +292,7 @@ class CollectionOverview extends React.Component {
                 action={searchGranules}
                 clear={clearGranulesSearch}
                 inputProps={{
-                  className: 'search--large',
+                  className: 'search search--large',
                 }}
                 label="Search"
                 labelKey="granuleId"

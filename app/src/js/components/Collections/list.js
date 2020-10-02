@@ -123,7 +123,7 @@ class CollectionList extends React.Component {
                 action={searchCollections}
                 clear={clearCollectionsSearch}
                 inputProps={{
-                  className: 'search--medium',
+                  className: 'search search--medium',
                 }}
                 label="Search"
                 labelKey="name"
