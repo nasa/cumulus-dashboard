@@ -160,6 +160,14 @@ select option{
   .dropdown__wrapper select {
     min-width: 6em;
   }
+  .search {
+    &--medium:focus {
+      width: 20em;
+    }
+    &--large:focus {
+      width: 30em;
+    }
+  }
 }
 
 .search__icon {

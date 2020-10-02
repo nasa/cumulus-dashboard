@@ -163,6 +163,9 @@ const InventoryReport = ({
             <Search
               action={searchReconciliationReport}
               clear={clearReconciliationSearch}
+              inputProps={{
+                className: 'search--large',
+              }}
               label="Search"
               labelKey="granuleId"
               options={[]}

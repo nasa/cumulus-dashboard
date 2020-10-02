@@ -156,6 +156,9 @@ const CollectionGranules = ({
             <Search
               action={searchGranules}
               clear={clearGranulesSearch}
+              inputProps={{
+                className: 'search--large',
+              }}
               label="Search"
               labelKey="granuleId"
               placeholder="Granule ID"

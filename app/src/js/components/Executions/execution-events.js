@@ -133,6 +133,9 @@ class ExecutionEvents extends React.Component {
               <Search
                 action={searchExecutionEvents}
                 clear={clearExecutionEventsSearch}
+                inputProps={{
+                  className: 'search--medium',
+                }}
                 label="Search"
                 labelKey="type"
                 placeholder="Search Type"
