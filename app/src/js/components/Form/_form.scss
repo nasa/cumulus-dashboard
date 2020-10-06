@@ -161,10 +161,10 @@ select option{
     min-width: 6em;
   }
   .search {
-    &--medium:focus {
+    &--medium {
       width: 20em;
     }
-    &--large:focus {
+    &--large {
       width: 30em;
     }
   }
