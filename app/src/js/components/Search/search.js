@@ -24,6 +24,9 @@ const Search = ({
   action,
   clear,
   dispatch,
+  inputProps = {
+    className: 'search',
+  },
   label,
   labelKey,
   location,
@@ -90,9 +93,7 @@ const Search = ({
           defaultInputValue={initialValue}
           highlightOnlyResult={true}
           id="Search"
-          inputProps={{
-            className: 'search'
-          }}
+          inputProps={inputProps}
           isLoading={inflight}
           labelKey={labelKey}
           onChange={handleChange}
@@ -115,6 +116,7 @@ Search.propTypes = {
   dispatch: PropTypes.func,
   action: PropTypes.func,
   clear: PropTypes.func,
+  inputProps: PropTypes.object,
   paramKey: PropTypes.string,
   label: PropTypes.any,
   labelKey: PropTypes.string,

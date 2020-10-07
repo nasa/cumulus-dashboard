@@ -160,6 +160,22 @@ select option{
   .dropdown__wrapper select {
     min-width: 6em;
   }
+  .search {
+    &--small {
+      width: 15em;
+    }
+    &--medium {
+      width: 25em;
+    }
+    &--large {
+      width: 35em;
+    }
+  }
+  
+  button[aria-label="Clear"] {
+    position: absolute;
+    right: 1.4em;
+  }
 }
 
 .search__icon {

@@ -89,6 +89,9 @@ class RulesOverview extends React.Component {
               <Search
                 action={searchRules}
                 clear={clearRulesSearch}
+                inputProps={{
+                  className: 'search search--small',
+                }}
                 label="Search"
                 labelKey="name"
                 placeholder="Search Rules"
