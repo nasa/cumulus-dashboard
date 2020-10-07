@@ -119,6 +119,9 @@ class ReconciliationReportList extends React.Component {
               <Search
                 action={searchReconciliationReports}
                 clear={clearReconciliationReportSearch}
+                inputProps={{
+                  className: 'search search--medium',
+                }}
                 label="Search"
                 labelKey="name"
                 placeholder="Report Name"
