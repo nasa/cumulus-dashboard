@@ -16,7 +16,7 @@ import {
   applyWorkflowToGranule,
   applyRecoveryWorkflowToGranule,
   getOptionsCollectionName,
-  getGranuleCSV
+  createReconciliationReport
 } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import {
@@ -26,17 +26,18 @@ import {
   bulkActions,
   recoverAction
 } from '../../utils/table-config/granules';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
+import statusOptions from '../../utils/status';
+import { strings } from '../locale';
+import { workflowOptionNames } from '../../selectors';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import Overview from '../Overview/overview';
-import statusOptions from '../../utils/status';
-import { strings } from '../locale';
-import { workflowOptionNames } from '../../selectors';
-import { window } from '../../utils/browser';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import { downloadFile } from '../../utils/download-file';
+import DefaultModal from '../Modal/modal';
+import TextForm from '../TextAreaForm/text';
 
 const breadcrumbConfig = [
   {
@@ -60,8 +61,16 @@ class GranulesOverview extends React.Component {
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
     this.setWorkflowMeta = this.setWorkflowMeta.bind(this);
     this.applyRecoveryWorkflow = this.applyRecoveryWorkflow.bind(this);
-    this.downloadGranuleCSV = this.downloadGranuleCSV.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.submitListRequest = this.submitListRequest.bind(this);
+    this.goToListPage = this.goToListPage.bind(this);
+    this.handleReportTypeInputChange = this.handleReportTypeInputChange.bind(this);
+    this.defaultListName = () => `${new Date(Date.now()).toLocaleDateString()} Granule List`;
     this.state = {
+      isModalOpen: false,
+      isListRequestSubmitted: false,
+      listName: this.defaultListName(),
       workflow: this.props.workflowOptions[0],
       workflowMeta: defaultWorkflowMeta
     };
@@ -110,6 +119,40 @@ class GranulesOverview extends React.Component {
     this.setState({ workflow });
   }
 
+  toggleModal() {
+    this.setState((prevState) => ({
+      ...prevState,
+      isModalOpen: !prevState.isModalOpen
+    }));
+  }
+
+  submitListRequest(e) {
+    const { listName } = this.state;
+    this.setState({ isListRequestSubmitted: true });
+    this.props.dispatch(createReconciliationReport(
+      {
+        reportName: listName,
+        type: 'Granule Inventory'
+      }
+    ));
+  }
+
+  goToListPage() {
+    historyPushWithQueryParams('/granules/lists');
+  }
+
+  closeModal() {
+    this.toggleModal();
+    this.setState({
+      isListRequestSubmitted: false,
+      listName: this.defaultListName()
+    });
+  }
+
+  handleReportTypeInputChange(id, value) {
+    this.setState({ listName: value });
+  }
+
   setWorkflowMeta (workflowMeta) {
     this.setState({ workflowMeta });
   }
@@ -138,18 +181,8 @@ class GranulesOverview extends React.Component {
     ];
   }
 
-  downloadGranuleCSV () {
-    const { dispatch } = this.props;
-    dispatch(getGranuleCSV()).then(() => {
-      const { granuleCSV } = this.props;
-      const { data } = granuleCSV;
-      const csvData = new Blob([data], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(csvData);
-      downloadFile(url, 'granules.csv');
-    });
-  }
-
   render () {
+    const { isModalOpen, isListRequestSubmitted, listName } = this.state;
     const { collections, granules } = this.props;
     const { list } = granules;
     const { dropdowns } = collections;
@@ -172,10 +205,35 @@ class GranulesOverview extends React.Component {
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num-title'>{count ? ` ${tally(count)}` : 0}</span></h2>
-            <a className='csv__download button button--small button--download button--green form-group__element--right'
+            <a className='button button--small button--file button--green form-group__element--right'
               id='download_link'
-              onClick={this.downloadGranuleCSV}
-            >Download Granule List</a>
+              onClick={this.toggleModal}
+            >Create Granule Inventory List</a>
+            <DefaultModal
+              showModal={isModalOpen}
+              onCloseModal={this.closeModal}
+              onConfirm={isListRequestSubmitted ? this.goToListPage : this.submitListRequest}
+            >
+              {!isListRequestSubmitted && (
+                <div>
+                  <div>You have generated a selection to process for the following list:</div>
+                  <TextForm
+                    id="reportName"
+                    label="List Name"
+                    onChange={this.handleReportTypeInputChange}
+                    value={listName}
+                  />
+                  <div>Would you like to continue with generating the list?</div>
+                </div>
+              )}
+              {isListRequestSubmitted && (
+                <div>
+                  <div>The following request is being processed and will be available shortly</div>
+                  <div>{listName}</div>
+                  <div>On the Lists page, view the status and download your list when available</div>
+                </div>
+              )}
+            </DefaultModal>
           </div>
           <List
             list={list}
@@ -230,7 +288,6 @@ GranulesOverview.propTypes = {
   collections: PropTypes.object,
   config: PropTypes.object,
   dispatch: PropTypes.func,
-  granuleCSV: PropTypes.object,
   granules: PropTypes.object,
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
@@ -241,7 +298,6 @@ export { GranulesOverview };
 export default withRouter(withQueryParams()(connect((state) => ({
   collections: state.collections,
   config: state.config,
-  granuleCSV: state.granuleCSV,
   granules: state.granules,
   workflowOptions: workflowOptionNames(state),
 }))(GranulesOverview)));

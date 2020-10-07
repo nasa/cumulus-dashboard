@@ -7,15 +7,16 @@ import {
   clearReconciliationReportSearch,
   clearReconciliationReportsFilter,
   listReconciliationReports,
-  createReconciliationReport,
-  getCount,
-  filterReconciliationReports
+  filterReconciliationReports,
 } from '../../actions';
 import { lastUpdated } from '../../utils/format';
 import { reconciliationReportStatus as statusOptions } from '../../utils/status';
 import { reconciliationReportTypes as reportTypeOptions } from '../../utils/type';
 import { getPersistentQueryParams } from '../../utils/url-helper';
-import { tableColumns, bulkActions } from '../../utils/table-config/reconciliation-reports';
+import {
+  tableColumns,
+  bulkActions,
+} from '../../utils/table-config/reconciliation-reports';
 import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
@@ -26,104 +27,112 @@ import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 const breadcrumbConfig = [
   {
     label: 'Dashboard Home',
-    href: '/'
+    href: '/',
   },
   {
     label: 'Reports',
-    active: true
-  }
+    active: true,
+  },
 ];
 
-class ReconciliationReportList extends React.Component {
-  constructor () {
-    super();
-    this.generateQuery = this.generateQuery.bind(this);
-    this.generateBulkActions = this.generateBulkActions.bind(this);
-    this.createReport = this.createReport.bind(this);
-    this.queryMeta = this.queryMeta.bind(this);
-  }
+const granuleBreadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/',
+  },
+  {
+    label: 'Granules',
+    href: '/granules',
+  },
+  {
+    label: 'Lists',
+    active: true,
+  },
+];
 
-  componentDidMount () {
-    this.queryMeta();
-  }
+const ReconciliationReportList = ({
+  dispatch,
+  location,
+  queryParams,
+  reconciliationReports,
+}) => {
+  const { pathname } = location;
+  const isGranules = pathname.includes('granules');
+  const { list } = reconciliationReports;
+  const { queriedAt, count } = list.meta;
+  const tableColumnsArray = tableColumns({ dispatch, isGranules });
 
-  queryMeta () {
-    const { dispatch, queryParams } = this.props;
-    dispatch(getCount({
-      type: 'reconciliationReports',
-      field: 'status',
+  function generateQuery() {
+    return {
+      [`type${isGranules ? '' : '__not'}`]: 'Granule Inventory',
       ...queryParams,
-    }));
+    };
   }
 
-  generateQuery () {
-    const { queryParams } = this.props;
-    return { ...queryParams };
-  }
-
-  generateBulkActions () {
-    const { reconciliationReports } = this.props;
+  function generateBulkActions() {
     return bulkActions(reconciliationReports);
   }
 
-  createReport () {
-    this.props.dispatch(createReconciliationReport());
-  }
-
-  render () {
-    const { reconciliationReports } = this.props;
-    const { list } = this.props.reconciliationReports;
-    const { queriedAt, count } = list.meta;
-    const tableColumnsArray = tableColumns({ dispatch: this.props.dispatch });
-    return (
-      <div className='page__component'>
-        <section className='page__section page__section__controls'>
-          <Breadcrumbs config={breadcrumbConfig} />
-        </section>
-        <section className='page__section page__section__header-wrapper'>
-          <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>
-              Reconciliation Reports Overview
-            </h1>
+  return (
+    <div className="page__component">
+      <section className="page__section page__section__controls">
+        <Breadcrumbs
+          config={isGranules ? granuleBreadcrumbConfig : breadcrumbConfig}
+        />
+      </section>
+      <section className="page__section page__section__header-wrapper">
+        <div className="page__section__header">
+          <h1 className="heading--large heading--shared-content with-description">
+            {isGranules ? 'Lists' : 'Reconciliation Reports Overview'}
+          </h1>
+          {!isGranules && (
             <Link
-              className='button button--green button--file button--small form-group__element--right'
-              to={(location) => ({
+              className="button button--green button--file button--small form-group__element--right"
+              to={(routerLocation) => ({
                 pathname: '/reconciliation-reports/create',
-                search: getPersistentQueryParams(location),
+                search: getPersistentQueryParams(routerLocation),
               })}
             >
-              {reconciliationReports.createReportInflight ? <LoadingEllipsis /> : 'Create New Report'}
+              {reconciliationReports.createReportInflight ? (
+                <LoadingEllipsis />
+              ) : (
+                'Create New Report'
+              )}
             </Link>
-            {lastUpdated(queriedAt)}
-          </div>
-        </section>
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content'>All Reports <span className='num-title'>{count ? `${count}` : 0}</span></h2>
-          </div>
-        </section>
-        <section className='page__section'>
-          <List
-            list={list}
-            dispatch={this.props.dispatch}
-            action={listReconciliationReports}
-            tableColumns={tableColumnsArray}
-            query={this.generateQuery()}
-            bulkActions={this.generateBulkActions()}
-            rowId='name'
-            sortId='createdAt'
-            filterAction={filterReconciliationReports}
-            filterClear={clearReconciliationReportsFilter}
-          >
-            <ListFilters>
-              <Search
-                action={searchReconciliationReports}
-                clear={clearReconciliationReportSearch}
-                label="Search"
-                labelKey="name"
-                placeholder="Report Name"
-                searchKey="reconciliationReports"
-              />
+          )}
+          {lastUpdated(queriedAt)}
+        </div>
+      </section>
+      <section className="page__section">
+        <div className="heading__wrapper--border">
+          <h2 className="heading--medium heading--shared-content">
+            All {isGranules ? 'Lists' : 'Reports'}
+            <span className="num-title">{count ? `${count}` : 0}</span>
+          </h2>
+        </div>
+      </section>
+      <section className="page__section">
+        <List
+          list={list}
+          action={listReconciliationReports}
+          tableColumns={tableColumnsArray}
+          query={generateQuery()}
+          bulkActions={generateBulkActions()}
+          rowId="name"
+          sortId="createdAt"
+          filterAction={filterReconciliationReports}
+          filterClear={clearReconciliationReportsFilter}
+        >
+          <ListFilters>
+            <Search
+              action={searchReconciliationReports}
+              clear={clearReconciliationReportSearch}
+              label="Search"
+              labelKey="name"
+              placeholder={`${isGranules ? 'List' : 'Report'} Name`}
+              searchKey="reconciliationReports"
+            />
+            {!isGranules && (
               <Dropdown
                 options={reportTypeOptions}
                 action={filterReconciliationReports}
@@ -134,30 +143,33 @@ class ReconciliationReportList extends React.Component {
                   placeholder: 'All',
                 }}
               />
-              <Dropdown
-                options={statusOptions}
-                action={filterReconciliationReports}
-                clear={clearReconciliationReportsFilter}
-                paramKey="status"
-                label="Status"
-                inputProps={{
-                  placeholder: 'All',
-                }}
-              />
-            </ListFilters>
-          </List>
-        </section>
-      </div>
-    );
-  }
-}
+            )}
+            <Dropdown
+              options={statusOptions}
+              action={filterReconciliationReports}
+              clear={clearReconciliationReportsFilter}
+              paramKey="status"
+              label="Status"
+              inputProps={{
+                placeholder: 'All',
+              }}
+            />
+          </ListFilters>
+        </List>
+      </section>
+    </div>
+  );
+};
 
 ReconciliationReportList.propTypes = {
   dispatch: PropTypes.func,
+  location: PropTypes.object,
   queryParams: PropTypes.object,
   reconciliationReports: PropTypes.object,
 };
 
-export default withRouter(connect((state) => ({
-  reconciliationReports: state.reconciliationReports
-}))(ReconciliationReportList));
+export default withRouter(
+  connect((state) => ({
+    reconciliationReports: state.reconciliationReports,
+  }))(ReconciliationReportList)
+);

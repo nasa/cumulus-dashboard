@@ -38,6 +38,12 @@
       "location": "s3://localbucket/localrun/reconciliation-reports/InternalReport092020.json",
       "type": "Internal",
       "status": "Generated"
+    },
+    {
+      "name": "GranuleList100220",
+      "location": "s3://localbucket/localrun/reconciliation-reports/GranuleList100220.csv",
+      "type": "Granule Inventory",
+      "status": "Generated"
     }
   ]
 }

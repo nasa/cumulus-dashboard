@@ -4,22 +4,27 @@ import { Link } from 'react-router-dom';
 import { nullValue, dateOnly, collectionNameVersion } from '../format';
 import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions';
 import { getPersistentQueryParams } from '../url-helper';
+import { downloadFile } from '../download-file';
 
-export const tableColumns = ({ dispatch }) => ([
+export const tableColumns = ({ dispatch, isGranules }) => ([
   {
     Header: 'Name',
     accessor: 'name',
     Cell: ({ cell: { value }, row: { original: { type } } }) => { // eslint-disable-line react/prop-types
       const link = (location) => ({ pathname: `/reconciliation-reports/report/${value}`, search: getPersistentQueryParams(location) });
-      return (type !== 'Internal')
-        ? <Link to={link} >{value}</Link>
-        : <Link to={link} onClick={(e) => handleDownloadClick(e, value, dispatch)}>{value}</Link>;
+      switch (type) {
+        case 'Internal':
+          return <Link to={link} onClick={(e) => handleDownloadClick(e, value, dispatch)}>{value}</Link>;
+        case 'Granule Inventory':
+          return <Link to={link} onClick={(e) => handleCsvDownloadClick(e, value, dispatch)}>{value}</Link>;
+        default:
+          return <Link to={link} >{value}</Link>;
+      }
     }
-  },
-  {
+  }, ...(!isGranules ? [{
     Header: 'Report Type',
     accessor: 'type'
-  },
+  }] : []),
   {
     Header: 'Status',
     accessor: 'status'
@@ -35,7 +40,9 @@ export const tableColumns = ({ dispatch }) => ([
     accessor: 'name',
     Cell: ({ cell: { value } }) => (// eslint-disable-line react/prop-types
       <button className='button button__row button__row--download'
-        onClick={(e) => handleDownloadClick(e, value, dispatch)}
+        onClick={(e) => (isGranules
+          ? handleCsvDownloadClick(e, value, dispatch)
+          : handleDownloadClick(e, value, dispatch))}
       />
     ),
     disableSortBy: true
@@ -64,6 +71,16 @@ const handleDownloadClick = (e, reportName, dispatch) => {
     document.body.appendChild(link);
     link.click();
     link.parentNode.removeChild(link);
+  });
+};
+
+const handleCsvDownloadClick = (e, reportName, dispatch) => {
+  e.preventDefault();
+  dispatch(getReconciliationReport(reportName)).then((response) => {
+    const { data } = response;
+    const csvData = new Blob([data], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(csvData);
+    downloadFile(url, reportName);
   });
 };
 

@@ -9,9 +9,10 @@ import Sidebar from '../Sidebar/sidebar';
 import { getCount, listGranules } from '../../actions';
 import { strings } from '../locale';
 import AllGranules from './list';
-import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import GranuleOverview from './granule';
 import GranulesOverview from './overview';
+import ReconciliationReportList from '../ReconciliationReports/list';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import { filterQueryParams } from '../../utils/url-helper';
 
 const Granules = ({ dispatch, location, queryParams, stats }) => {
@@ -24,6 +25,7 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
   }
 
   useEffect(() => {
+    console.log('in effect');
     dispatch(
       getCount({
         type: 'granules',
@@ -74,6 +76,12 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
                 path="/granules/failed"
                 render={(props) => (
                   <AllGranules queryParams={filteredQueryParams} {...props} />
+                )}
+              />
+              <Route
+                path="/granules/lists"
+                render={(props) => (
+                  <ReconciliationReportList queryParams={filteredQueryParams} {...props} />
                 )}
               />
               <Redirect

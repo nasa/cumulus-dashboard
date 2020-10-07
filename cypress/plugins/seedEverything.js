@@ -56,12 +56,14 @@ function seedPdrs() {
 function uploadReconciliationReportFiles() {
   const reconcileReportList = fs
     .readdirSync(reconciliationReportDir)
-    .map((f) => ({
-      filename: f,
-      data: JSON.parse(
-        fs.readFileSync(`${reconciliationReportDir}/${f}`).toString()
-      ),
-    }));
+    .map((f) => {
+      let data = fs.readFileSync(`${reconciliationReportDir}/${f}`).toString();
+      if (f.endsWith('.json')) { data = JSON.parse(data); }
+      return {
+        filename: f,
+        data,
+      };
+    });
 
   return Promise.all(
     reconcileReportList.map((obj) => {
