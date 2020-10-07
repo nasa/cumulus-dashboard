@@ -63,7 +63,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Moved report headings that include breadcrumbs, name, dates, status, and download button into a reusable ReportHeading component to be used for all report types.
 
 - **CUMULUS-2022**
-  - Character limit improvement in search module
+  - Improve search character limit
 
 ### Fixed
 
