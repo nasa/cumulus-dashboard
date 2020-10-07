@@ -25,7 +25,6 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
   }
 
   useEffect(() => {
-    console.log('in effect');
     dispatch(
       getCount({
         type: 'granules',
