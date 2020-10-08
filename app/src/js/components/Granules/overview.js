@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
+import moment from 'moment';
 import isEqual from 'lodash/isEqual';
 import {
   searchGranules,
@@ -66,7 +67,7 @@ class GranulesOverview extends React.Component {
     this.submitListRequest = this.submitListRequest.bind(this);
     this.goToListPage = this.goToListPage.bind(this);
     this.handleReportTypeInputChange = this.handleReportTypeInputChange.bind(this);
-    this.defaultListName = () => `${new Date(Date.now()).toLocaleDateString()} Granule List`;
+    this.defaultListName = () => `granuleList${moment().format('YYYYMMDD')}`;
     this.state = {
       isModalOpen: false,
       isListRequestSubmitted: false,
@@ -132,7 +133,7 @@ class GranulesOverview extends React.Component {
     this.props.dispatch(createReconciliationReport(
       {
         reportName: listName,
-        type: 'Granule Inventory'
+        reportType: 'Granule Inventory'
       }
     ));
   }
