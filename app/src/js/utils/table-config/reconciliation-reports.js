@@ -64,13 +64,8 @@ const handleDownloadClick = (e, reportName, dispatch) => {
   e.preventDefault();
   dispatch(getReconciliationReport(reportName)).then((response) => {
     const { data } = response;
-    const jsonHref = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data))}`;
-    const link = document.createElement('a');
-    link.setAttribute('download', `${reportName}.json`);
-    link.href = jsonHref;
-    document.body.appendChild(link);
-    link.click();
-    link.parentNode.removeChild(link);
+    const url = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data))}`;
+    downloadFile(url, `${reportName}.json`);
   });
 };
 
@@ -78,9 +73,8 @@ const handleCsvDownloadClick = (e, reportName, dispatch) => {
   e.preventDefault();
   dispatch(getReconciliationReport(reportName)).then((response) => {
     const { data } = response;
-    const csvData = new Blob([data], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(csvData);
-    downloadFile(url, reportName);
+    const { url } = data;
+    window.open(url);
   });
 };
 
