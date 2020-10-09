@@ -2,7 +2,6 @@
     "process": "modis",
     "granuleIdExtraction": "(TESTCOLLECTION\\..*)(\\.hdf|\\.cmr|_ndvi\\.jpg)",
     "version": "006",
-    "dataType": "TESTCOLLECTION",
     "createdAt": 1537830419503,
     "name": "TESTCOLLECTION",
     "reportToEms": true,
