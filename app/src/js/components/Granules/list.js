@@ -178,6 +178,9 @@ const AllGranules = ({
             <Search
               action={searchGranules}
               clear={clearGranulesSearch}
+              inputProps={{
+                className: 'search search--large',
+              }}
               label="Search"
               labelKey="granuleId"
               placeholder="Granule ID"

@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [v2.0.0]
+
+### BREAKING CHANGES
+
+- This dashboard version requires Cumulus API version >= v3.0.0
+
 ### Added
 
 - **CUMULUS-417**
@@ -61,6 +68,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-2090**
   - Moved report headings that include breadcrumbs, name, dates, status, and download button into a reusable ReportHeading component to be used for all report types.
+
+- **CUMULUS-2022**
+  - Improve search character limit
 
 ### Fixed
 
