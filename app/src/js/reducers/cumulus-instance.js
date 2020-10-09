@@ -1,5 +1,3 @@
-'use strict';
-
 import { createReducer } from '@reduxjs/toolkit';
 import { ADD_INSTANCE_META } from '../actions/types';
 

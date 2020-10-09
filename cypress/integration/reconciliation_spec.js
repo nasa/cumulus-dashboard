@@ -1,4 +1,6 @@
+import moment from 'moment';
 import { shouldBeRedirectedToLogin } from '../support/assertions';
+import { dateTimeFormat } from '../../app/src/js/utils/datepicker';
 
 describe('Dashboard Reconciliation Reports Page', () => {
   describe('When not logged in', () => {
@@ -37,7 +39,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.contains('.table .thead .th', 'Date Generated');
       cy.contains('.table .thead .th', 'Download Report');
       cy.contains('.table .thead .th', 'Delete Report');
-      cy.get('.table .tbody .tr').should('have.length', 3);
+      cy.get('.table .tbody .tr').should('have.length', 5);
       cy.get('[data-value="inventoryReport-20200114T202529026"] > .table__main-asset > a').should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T202529026');
       cy.get('[data-value="inventoryReport-20200114T205238781"] > .table__main-asset > a').should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T205238781');
     });
@@ -69,26 +71,97 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
     it('should have a download button column', () => {
       cy.visit('/reconciliation-reports');
-      cy.get('.button__row--download').should('have.length', 3);
+      cy.get('.button__row--download').should('have.length', 5);
     });
 
     it('deletes a report when the Delete button is clicked', () => {
       cy.visit('/reconciliation-reports');
-      cy.get('[data-value="inventoryReport-20200114T202529026"] > .td .button__row--delete').click();
+      cy.get('[data-value="inventoryReport-20200114T202529026"]').find('.button__row--delete').click({ force: true });
 
-      cy.get('.table .tbody .tr').should('have.length', 2);
+      cy.get('.table .tbody .tr').should('have.length', 4);
       cy.get('[data-value="inventoryReport-20200114T202529026"]')
         .should('not.exist');
     });
 
-    it('displays a link to an individual report', () => {
+    it('should have the create a report page', () => {
+      const path = '/reconciliation-reports/create';
+      const reportType = 'Internal';
+      const reportName = 'InternalReport2020';
+      const startTime = new Date('2009-01-31T00:00:00.000');
+      const startTimestamp = moment(moment.utc(startTime).format(dateTimeFormat)).valueOf();
+      const endTime = new Date('2010-05-01T00:00:00.000');
+      const endTimestamp = moment(moment.utc(endTime).format(dateTimeFormat)).valueOf();
+      const collectionId = ['http_testcollection___001'];
+      const location = 'S3';
+
       cy.visit('/reconciliation-reports');
+      cy.contains(`div a[href="${path}"]`, 'Create New Report').click();
 
-      cy.contains('.table .tbody .tr a', 'inventoryReport-20200114T205238781')
-        .should('have.attr', 'href', '/reconciliation-reports/report/inventoryReport-20200114T205238781')
-        .click();
+      cy.contains('.heading--large', 'Create Report');
 
-      cy.contains('.heading--large', 'inventoryReport-20200114T205238781');
+      cy.get('form .form__item .reportType').as('reportType');
+      cy.get('@reportType').find('input[name="reportType"]').should('have.value', 'Inventory');
+      cy.contains('.main-form--wrapper h2', 'Inventory');
+      cy.get('@reportType').click().type('inter{enter}');
+      cy.get('@reportType').find('input[name="reportType"]').should('have.value', reportType);
+      cy.contains('.main-form--wrapper h2', reportType);
+
+      cy.get('form .form__item .reportName').as('reportName');
+      cy.get('@reportName').should('be.visible').click().type(reportName);
+
+      cy.get('form .form__item .startTimestamp').within(() => {
+        cy.get('input[name=month]').click().type(1);
+        cy.get('input[name=day]').click().type(31);
+        cy.get('input[name=year]').click().type(2009);
+        cy.get('input[name=hour12]').click().type(0);
+        cy.get('input[name=minute]').click().type(0);
+        cy.get('select[name=amPm]').select('AM');
+      });
+      cy.get('form .form__item .endTimestamp').within(() => {
+        cy.get('input[name=month]').click().type(5);
+        cy.get('input[name=day]').click().type(1);
+        cy.get('input[name=year]').click().type(2010);
+        cy.get('input[name=hour12]').click().type(0);
+        cy.get('input[name=minute]').click().type(0);
+        cy.get('select[name=amPm]').select('AM');
+      });
+
+      cy.get('form .form__item .collectionId').as('collectionId');
+      cy.get('@collectionId').click().type('http_{enter}');
+      cy.get('form .form__item .provider input').should('have.attr', 'disabled');
+      cy.get('form .form__item .granuleId input').should('have.attr', 'disabled');
+
+      cy.get(`form .form__item .location input[value="${location}"]`).check();
+
+      cy.route2({
+        url: '/reconciliationReports',
+        method: 'POST'
+      }, (req) => {
+        const requestBody = JSON.parse(req.body);
+        expect(requestBody).to.have.property('reportType', reportType);
+        expect(requestBody).to.have.property('reportName', reportName);
+        expect(requestBody).to.have.property('startTimestamp', startTimestamp);
+        expect(requestBody).to.have.property('endTimestamp', endTimestamp);
+        expect(requestBody).to.have.deep.property('collectionId', collectionId);
+        expect(requestBody).to.have.property('location', location);
+      }).as('createReport');
+
+      cy.get('.button--submit').click();
+      cy.wait('@createReport');
+
+      cy.url().should('not.include', path);
+      cy.url().should('include', '/reconciliation-reports');
+    });
+
+    it('displays an individual Inventory report', () => {
+      const reportName = 'inventoryReport-20200114T205238781';
+      const path = `/reconciliation-reports/report/${reportName}`;
+
+      cy.visit('/reconciliation-reports');
+      cy.contains(`.table .tbody .tr a[href="${path}"]`, reportName);
+
+      cy.visit(path);
+      cy.contains('.heading--large', `Inventory Report: ${reportName}`);
 
       /** Table Cards **/
 
@@ -170,6 +243,38 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.dropdown-item').eq(1).should('contain', 'CSV - Collections only in Cumulus');
       cy.get('.dropdown-item').eq(2).should('contain', 'CSV - Granules only in Cumulus');
       cy.get('.dropdown-item').eq(3).should('contain', 'CSV - Files only in Cumulus');
+    });
+
+    it('displays an individual Granule Not Found report', () => {
+      const reportName = 'granuleNotFoundReport-20200827T210339679';
+      const path = `/reconciliation-reports/report/${reportName}`;
+
+      cy.visit('/reconciliation-reports');
+      cy.contains(`.table .tbody .tr a[href="${path}"]`, reportName);
+
+      cy.visit(path);
+      cy.contains('.heading--large', `Granule Not Found Report: ${reportName}`);
+
+      cy.contains('.heading--medium', 'Granules Not Found');
+      cy.contains('.num-title', '7');
+
+      cy.get('.table .th').eq(0).should('contain', 'Collection ID');
+      cy.get('.table .th').eq(1).should('contain', 'Granule ID');
+      cy.get('.table .th').eq(2).should('contain', 'S3');
+      cy.get('.table .th').eq(3).should('contain', 'Cumulus');
+      cy.get('.table .th').eq(4).should('contain', 'CMR');
+
+      cy.get('.table .tr[data-value="4"] .td').eq(0).should('contain', 'MOD09GQ___006');
+      cy.get('.table .tr[data-value="4"] .td').eq(1).should('contain', 'MOD09GQ.A0002421.oD4zvB.006.4281362831355');
+      cy.get('.table .tr[data-value="4"] .td').eq(2).find('span').should('have.class', 'status-indicator--failed');
+      cy.get('.table .tr[data-value="4"] .td').eq(3).find('span').should('have.class', 'status-indicator--failed');
+      cy.get('.table .tr[data-value="4"] .td').eq(4).find('span').should('have.class', 'status-indicator--success');
+    });
+
+    it('should download the Internal report with the report link', () => {
+      const reportName = 'InternalReport092020';
+      cy.visit('/reconciliation-reports');
+      cy.get(`[data-value="${reportName}"]`).find('.button__row--download').should('have.length', 1);
     });
 
     it('should include legend on list page', () => {

@@ -1,8 +1,7 @@
-'use strict';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { nullValue, dateOnly } from '../format';
+import { nullValue, dateOnly, collectionNameVersion } from '../format';
 import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions';
 import { getPersistentQueryParams } from '../url-helper';
 
@@ -10,7 +9,12 @@ export const tableColumns = ({ dispatch }) => ([
   {
     Header: 'Name',
     accessor: 'name',
-    Cell: ({ cell: { value } }) => <Link to={location => ({ pathname: `/reconciliation-reports/report/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value }, row: { original: { type } } }) => { // eslint-disable-line react/prop-types
+      const link = (location) => ({ pathname: `/reconciliation-reports/report/${value}`, search: getPersistentQueryParams(location) });
+      return (type !== 'Internal')
+        ? <Link to={link} >{value}</Link>
+        : <Link to={link} onClick={(e) => handleDownloadClick(e, value, dispatch)}>{value}</Link>;
+    }
   },
   {
     Header: 'Report Type',
@@ -29,13 +33,11 @@ export const tableColumns = ({ dispatch }) => ([
     Header: 'Download Report',
     id: 'download',
     accessor: 'name',
-    Cell: ({ cell: { value } }) => { // eslint-disable-line react/prop-types
-      return (
-        <button className='button button__row button__row--download'
-          onClick={e => handleDownloadClick(e, value, dispatch)}
-        />
-      );
-    },
+    Cell: ({ cell: { value } }) => (// eslint-disable-line react/prop-types
+      <button className='button button__row button__row--download'
+        onClick={(e) => handleDownloadClick(e, value, dispatch)}
+      />
+    ),
     disableSortBy: true
   },
   {
@@ -44,7 +46,7 @@ export const tableColumns = ({ dispatch }) => ([
     accessor: 'name',
     Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
       <button className='button button__row button__row--delete'
-        onClick={e => handleDeleteClick(e, value, dispatch)}
+        onClick={(e) => handleDeleteClick(e, value, dispatch)}
       />
     ),
     disableSortBy: true
@@ -53,7 +55,7 @@ export const tableColumns = ({ dispatch }) => ([
 
 const handleDownloadClick = (e, reportName, dispatch) => {
   e.preventDefault();
-  dispatch(getReconciliationReport(reportName)).then(response => {
+  dispatch(getReconciliationReport(reportName)).then((response) => {
     const { data } = response;
     const jsonHref = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data))}`;
     const link = document.createElement('a');
@@ -72,9 +74,7 @@ const handleDeleteClick = (e, value, dispatch) => {
   });
 };
 
-export const bulkActions = function (reports) {
-  return [];
-};
+export const bulkActions = (reports) => [];
 
 export const tableColumnsS3Files = [
   {
@@ -100,7 +100,7 @@ export const tableColumnsS3Files = [
   {
     Header: 'S3 Link',
     accessor: 'path',
-    Cell: ({ cell: { value } }) => value ? <a href={value} target='_blank'>Link</a> : nullValue // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => (value ? <a href={value} target='_blank'>Link</a> : nullValue) // eslint-disable-line react/prop-types
   }
 ];
 
@@ -132,7 +132,7 @@ export const tableColumnsFiles = [
   {
     Header: 'S3 Link',
     accessor: 'path',
-    Cell: ({ cell: { value } }) => value ? <a href={value} target='_blank'>Link</a> : nullValue // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => (value ? <a href={value} target='_blank'>Link</a> : nullValue) // eslint-disable-line react/prop-types
   }
 ];
 
@@ -166,4 +166,73 @@ export const tableColumnsGranules = [
     Cell: 'View Details',
     disableSortBy: true
   }
+];
+
+const getIndicatorColor = (prop) => {
+  let indicatorColor = '';
+  switch (prop) {
+    case 'missing':
+      indicatorColor = 'orange';
+      break;
+    case 'notFound':
+      indicatorColor = 'failed';
+      break;
+    case false:
+      indicatorColor = 'failed';
+      break;
+    default:
+      indicatorColor = 'success';
+      break;
+  }
+  return indicatorColor;
+};
+
+export const tableColumnsGnf = [
+  {
+    Header: 'Collection ID',
+    accessor: 'collectionId',
+    Cell: ({ cell: { value } }) => { // eslint-disable-line react/prop-types
+      const { name, version } = collectionNameVersion(value);
+      return <Link to={(location) => ({ pathname: `/collections/collection/${name}/${version}`, search: getPersistentQueryParams(location) })}>{value}</Link>;
+    },
+    width: 125,
+  },
+  {
+    Header: 'Granule ID',
+    accessor: 'granuleId',
+    width: 200,
+  },
+  // {
+  //   Header: 'Provider',
+  //   accessor: 'provider',
+  // },
+  {
+    Header: 'S3',
+    id: 's3',
+    Cell: ({ row: { original: { s3 } } }) => ( // eslint-disable-line react/prop-types
+      <span className={`status-indicator status-indicator--${getIndicatorColor(s3)}`}></span>
+    ),
+    width: 50,
+  },
+  // {
+  //   Header: 'S3 Glacier',
+  //   id: 'glacier',
+  //   Cell: <span className='status-indicator status-indicator--failed'></span>,
+  // },
+  {
+    Header: 'Cumulus',
+    id: 'Cumulus',
+    Cell: ({ row: { original: { cumulus } } }) => ( // eslint-disable-line react/prop-types
+      <span className={`status-indicator status-indicator--${getIndicatorColor(cumulus)}`}></span>
+    ),
+    width: 50,
+  },
+  {
+    Header: 'CMR',
+    id: 'cmr',
+    Cell: ({ row: { original: { cmr } } }) => ( // eslint-disable-line react/prop-types
+      <span className={`status-indicator status-indicator--${getIndicatorColor(cmr)}`}></span>
+    ),
+    width: 50,
+  },
 ];

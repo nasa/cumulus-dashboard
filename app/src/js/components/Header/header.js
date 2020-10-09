@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
@@ -55,11 +54,9 @@ class Header extends React.Component {
   className(path) {
     const active = this.props.location.pathname.slice(0, path.length) === path; // nav issue with router
     const menuItem = path.replace('/', '');
-    const order =
-      'nav__order-' +
-      (nav.order.indexOf(menuItem) === -1 ? 2 : nav.order.indexOf(menuItem));
+    const order = `nav__order-${!nav.order.includes(menuItem) ? 2 : nav.order.indexOf(menuItem)}`;
     return c({
-      active: active,
+      active,
       [order]: true,
     });
   }
@@ -72,9 +69,9 @@ class Header extends React.Component {
           {path[0]}
         </a>
       );
-    } else {
-      return <Link to={{ pathname: path[1], search }}>{path[0]}</Link>;
     }
+
+    return <Link to={{ pathname: path[1], search }}>{path[0]}</Link>;
   }
 
   render() {

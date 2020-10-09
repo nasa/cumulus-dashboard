@@ -1,15 +1,21 @@
-'use strict';
 import React from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Ace from 'react-ace';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import { getCollection } from '../../actions';
-import { lastUpdated, nullValue, getCollectionId } from '../../utils/format';
+import { getCollectionId, nullValue } from '../../utils/format';
 import config from '../../config';
 import Loading from '../LoadingIndicator/loading-indicator';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import CollectionHeader from './collection-header';
+
+const breadcrumbConfig = [
+  {
+    label: 'Definition',
+    active: true,
+  }
+];
 
 class CollectionIngest extends React.Component {
   constructor() {
@@ -69,31 +75,20 @@ class CollectionIngest extends React.Component {
     const { data } = record;
     return (
       <div className="page__component">
-        <section className="page__section page__section__header-wrapper">
-          <h1 className="heading--large heading--shared-content with-description">
-            {name}
-          </h1>
-          <Link
-            className="button button--edit button--small form-group__element--right button--green"
-            to={(location) => ({
-              pathname: `/collections/edit/${name}/${version}`,
-              search: getPersistentQueryParams(location),
-            })}
-          >
-            Edit
-          </Link>
-          {lastUpdated(data.queriedAt)}
-        </section>
+        <CollectionHeader
+          breadcrumbConfig={breadcrumbConfig}
+          name={name}
+          queriedAt={data.queriedAt}
+          version={version}
+        />
         <section className="page__section">
           <div className="tab--wrapper">
             <button
               className={
-                'button--tab ' +
-                (this.state.view === 'json' ? 'button--active' : '')
+                `button--tab ${
+                this.state.view === 'json' ? 'button--active' : ''}`
               }
-              onClick={() =>
-                this.state.view !== 'json' && this.setState({ view: 'json' })
-              }
+              onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}
             >
               JSON View
             </button>

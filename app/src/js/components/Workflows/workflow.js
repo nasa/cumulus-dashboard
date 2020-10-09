@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import Ace from 'react-ace';
 import PropTypes from 'prop-types';
@@ -61,11 +60,11 @@ class Workflow extends React.Component {
     return (
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
-          <h1 className='heading--large heading--shared-content with-description'>{workflowName}</h1>
+          <h1 className='heading--large heading--shared-content with-description'>Workflow: {workflowName}</h1>
         </section>
         <section className='page__section'>
           <div className='tab--wrapper'>
-            <button className={'button--tab ' + (this.state.view === 'json' ? 'button--active' : '')}
+            <button className={`button--tab ${this.state.view === 'json' ? 'button--active' : ''}`}
               onClick={() => this.state.view !== 'json' && this.setState({ view: 'json' })}>JSON View</button>
           </div>
           <div>
@@ -94,6 +93,6 @@ Workflow.propTypes = {
   dispatch: PropTypes.func
 };
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   workflows: state.workflows
 }))(Workflow));

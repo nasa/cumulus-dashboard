@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'object-path';
@@ -19,7 +18,7 @@ class Progress extends React.Component {
   }
 
   getItem (key) {
-    return this.props.granules.find(count => count.key === key);
+    return this.props.granules.find((count) => count.key === key);
   }
 
   tallyDisplay (type, item) {
@@ -28,7 +27,7 @@ class Progress extends React.Component {
         return (
           <span className='num--medium num--medium--red'>{item}</span>
         );
-      } else if (item > 0) {
+      } if (item > 0) {
         return (
           <span className='num--medium num--medium--yellow'>{item}</span>
         );
@@ -43,12 +42,13 @@ class Progress extends React.Component {
   render () {
     return (
       <ul className='timeline--processing--overall'>
-        {granuleMeta.map(d => {
-          const item = Array.isArray(d[0]) ? d[0].map(this.getItem).reduce((a, b) => {
-            return a + get(b, 'count', 0);
-          }, 0) : get(this.getItem(d[0]), 'count', 0);
+        {granuleMeta.map((d) => {
+          const item = Array.isArray(d[0])
+            ? d[0].map(this.getItem).reduce((a, b) => a + get(b, 'count', 0), 0)
+            : get(this.getItem(d[0]), 'count', 0);
+
           return (
-            <li key={d[0]} className={'timeline--processing--' + d[0]}>
+            <li key={d[0]} className={`timeline--processing--${d[0]}`}>
               {this.tallyDisplay(d, tally(item))}
               {strings.granules} {d[1]}
             </li>

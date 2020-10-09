@@ -56,6 +56,14 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
     font-size: 1em;
   }
 
+  &--round {
+    border-radius: 50%;
+    height: 2em;
+    width: 2em;
+    background-color: $midnight-blue;
+    border: none;
+  }
+
   &--no-icon {
     padding: .65em 1.2em;
   }
@@ -353,6 +361,22 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       }
     }
 
+    &--close-sidebar {
+      &:before {
+        color: $white;
+        font-family: 'FontAwesome';
+        content: '\f100';
+      }
+    }
+
+    &--open-sidebar {
+      &:before {
+        color: $white;
+        font-family: 'FontAwesome';
+        content: '\f101';
+      }
+    }
+
 
      /*******Button Animations & Transitions ******/
     &--loading {
@@ -480,6 +504,7 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       background-color: $light-green;
       position: relative;
       margin-top: 1em;
+      display: inline-block;
 
       &:before{
       color: $white;

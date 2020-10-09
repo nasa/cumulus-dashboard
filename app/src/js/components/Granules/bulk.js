@@ -1,4 +1,3 @@
-'use strict';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
@@ -15,8 +14,8 @@ import {
 import BulkGranuleModal from './bulk-granule-modal';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
 
-const generateAsyncRequestId = () =>
-  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+const generateAsyncRequestId = () => Math.random().toString(36).substring(2, 15) +
+  Math.random().toString(36).substring(2, 15);
 
 const getRequestStatus = (request) => get(request, ['status']);
 const getRequestError = (request) => get(request, ['error']);
@@ -29,7 +28,8 @@ const bulkOperationsDefaultQuery = {
   workflowName: '',
   index: '',
   query: '',
-  ids: []
+  ids: [],
+  meta: {}
 };
 
 const bulkDeleteDefaultQuery = {
@@ -208,8 +208,10 @@ const BulkGranule = ({
         <h4 className="modal_subtitle">To run and complete your bulk delete task:</h4>
         <p>
           1. In the box below, add either an array of granule Ids or an elasticsearch query and index. <br/>
-          2. Set <strong>forceRemoveFromCmr</strong> to <strong>true</strong> to automatically have granules removed from CMR as part of deletion.<br/>
-          If <strong>forceRemoveFromCmr</strong> is <strong>false</strong>, then the bulk granule deletion will <strong>fail for any granules that are published to CMR.</strong>
+          2. Set <strong>forceRemoveFromCmr</strong> to <strong>true</strong> to automatically have granules
+          removed from CMR as part of deletion.<br/>
+          If <strong>forceRemoveFromCmr</strong> is <strong>false</strong>, then the bulk granule deletion will
+          <strong>fail for any granules that are published to CMR.</strong>
         </p>
       </BulkGranuleModal>
     </>
@@ -226,6 +228,6 @@ BulkGranule.propTypes = {
   selected: PropTypes.array
 };
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   granules: state.granules
 }))(BulkGranule));

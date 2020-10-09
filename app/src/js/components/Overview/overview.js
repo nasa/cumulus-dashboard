@@ -1,12 +1,11 @@
-'use strict';
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Loading from '../LoadingIndicator/loading-indicator';
-import { displayCase } from '../../utils/format';
 import withQueryParams from 'react-router-query-params';
-import { getCount } from '../../actions';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
+import Loading from '../LoadingIndicator/loading-indicator';
+import { displayCase } from '../../utils/format';
+import { getCount } from '../../actions';
 
 const Overview = ({
   dispatch,
@@ -31,18 +30,16 @@ const Overview = ({
     <div className="overview-num__wrapper" data-cy="overview-num">
       {inflight && <Loading />}
       <ul>
-        {statsCount.map((d) => {
-          return (
-            <li key={d.key}>
-              <span className="overview-num overview-num--small" to="/">
-                <span className="num--large num--large--color">{d.count}</span>
-                <span className={`num-status num-status--${d.key}`}>
-                  {displayCase(d.key)}
-                </span>
+        {statsCount.map((d) => (
+          <li key={d.key}>
+            <span className="overview-num overview-num--small" to="/">
+              <span className="num--large num--large--color">{d.count}</span>
+              <span className={`num-status num-status--${d.key}`}>
+                {displayCase(d.key)}
               </span>
-            </li>
-          );
-        })}
+            </span>
+          </li>
+        ))}
       </ul>
     </div>
   );
@@ -57,4 +54,4 @@ Overview.propTypes = {
   type: PropTypes.string,
 };
 
-export default withQueryParams()(connect(state => ({ stats: state.stats }))(Overview));
+export default withQueryParams()(connect((state) => ({ stats: state.stats }))(Overview));

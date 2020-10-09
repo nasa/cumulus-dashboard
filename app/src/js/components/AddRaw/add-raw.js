@@ -1,4 +1,3 @@
-'use strict';
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -39,11 +38,12 @@ const AddRaw = ({
   const handleOnClick = requireConfirmation ? handleModalOpen : handleSubmit;
 
   useEffect(() => {
-    setRecord(record => {
-      const data = JSON.stringify(defaultValue, null, 2);
+    setRecord((currRecord) => {
+      const defaultData = JSON.stringify(defaultValue, null, 2);
+      console.log(`DATA: ${defaultData}`);
       return {
-        ...record,
-        data
+        ...currRecord,
+        data: defaultData,
       };
     });
   }, [defaultValue]);
@@ -68,11 +68,12 @@ const AddRaw = ({
 
   function handleSubmit (e) {
     e.preventDefault();
+    let json;
     // prevent duplicate submits while the first is inflight.
     if (!pk || get(state.created, [pk, 'status']) !== 'inflight') {
       try {
-        var json = JSON.parse(data);
-      } catch (e) {
+        json = JSON.parse(data);
+      } catch (jsonError) {
         return setRecord({ ...record, error: 'Syntax error in JSON' });
       }
       setRecord({ ...record, error: null, pk: getPk(json) });
@@ -98,8 +99,16 @@ const AddRaw = ({
     handleSubmit(e);
   }
 
-  const buttonText = status === 'inflight' ? 'loading...'
-    : status === 'success' ? 'Success!' : 'Submit';
+  let buttonText;
+
+  if (status === 'inflight') {
+    buttonText = 'loading...';
+  } else if (status === 'success') {
+    buttonText = 'Success!';
+  } else {
+    buttonText = 'Submit';
+  }
+
   const displayCaseType = displayCase(type);
   return (
     <div className='page__component page__content--shortened--centered'>
@@ -117,7 +126,7 @@ const AddRaw = ({
               maxLines={200}
             />
             <button
-              className={'button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right' + (status === 'inflight' ? ' button--disabled' : '')}
+              className={`button button--submit button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right${status === 'inflight' ? ' button--disabled' : ''}`}
               onClick={handleOnClick}
               readOnly={true}
             >{buttonText}</button>

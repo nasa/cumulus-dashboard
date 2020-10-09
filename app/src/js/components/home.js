@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -14,7 +13,6 @@ import {
   getTEALambdaMetrics,
   getDistS3AccessMetrics,
   getStats,
-  interval,
   listExecutions,
   listGranules,
   listRules
@@ -27,7 +25,6 @@ import {
 import List from './Table/Table';
 import GranulesProgress from './Granules/progress';
 import { errorTableColumns } from '../utils/table-config/granules';
-import { updateInterval } from '../config';
 import {
   kibanaS3AccessErrorsLink,
   kibanaS3AccessSuccessesLink,
@@ -41,8 +38,7 @@ import {
   kibanaGatewayExecutionSuccessesLink,
   kibanaAllLogsLink,
 } from '../utils/kibana';
-// import { initialValuesFromLocation } from '../utils/url-helper';
-import Datepicker from './Datepicker/Datepicker';
+import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
 import { getPersistentQueryParams } from '../utils/url-helper';
 
@@ -50,24 +46,12 @@ class Home extends React.Component {
   constructor (props) {
     super(props);
     this.query = this.query.bind(this);
-    this.generateQuery = this.generateQuery.bind(this);
-    this.refreshQuery = this.refreshQuery.bind(this);
   }
 
   componentDidMount () {
     const { dispatch } = this.props;
-    this.refreshQuery();
     dispatch(getCumulusInstanceMetadata())
-      .then(() => {
-        dispatch(getDistApiGatewayMetrics(this.props.cumulusInstance));
-        dispatch(getTEALambdaMetrics(this.props.cumulusInstance));
-        dispatch(getDistApiLambdaMetrics(this.props.cumulusInstance));
-        dispatch(getDistS3AccessMetrics(this.props.cumulusInstance));
-      });
-  }
-
-  componentWillUnmount () {
-    if (this.cancelInterval) { this.cancelInterval(); }
+      .then(() => this.query());
   }
 
   query () {
@@ -83,11 +67,6 @@ class Home extends React.Component {
     dispatch(listRules({}));
   }
 
-  refreshQuery () {
-    if (this.cancelInterval) { this.cancelInterval(); }
-    this.cancelInterval = interval(this.query, updateInterval, true);
-  }
-
   generateQuery () {
     return {
       error__exists: true,
@@ -101,7 +80,7 @@ class Home extends React.Component {
   }
 
   renderButtonListSection (items, header, listId) {
-    const data = items.filter(d => d[0] !== nullValue);
+    const data = items.filter((d) => d[0] !== nullValue);
     if (!data.length) return null;
     return (
       <section className='page__section'>
@@ -114,7 +93,7 @@ class Home extends React.Component {
           </div>
           <div className="overview-num__wrapper overview-num__wrapper-home">
             <ul id={listId}>
-              {data.map(d => {
+              {data.map((d) => {
                 const value = d[0];
                 return (
                   <li key={d[1]}>
@@ -168,7 +147,7 @@ class Home extends React.Component {
     ];
 
     const granuleCount = get(count.data, 'granules.meta.count');
-    const numGranules = !isNaN(granuleCount) ? `${tally(granuleCount)}` : 0;
+    const numGranules = !Number.isNaN(+granuleCount) ? `${tally(granuleCount)}` : 0;
     const granuleStatus = get(count.data, 'granules.count', []);
 
     return (
@@ -187,7 +166,7 @@ class Home extends React.Component {
                   Select date and time to refine your results. <em>Time is UTC.</em>
                 </h2>
               </div>
-              <Datepicker onChange={this.refreshQuery}/>
+              <DatepickerRange onChange={this.query}/>
             </div>
           </section>
 

@@ -1,7 +1,8 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { get } from 'object-path';
+import Ace from 'react-ace';
 import {
   getGranule,
   reprocessGranule,
@@ -9,13 +10,11 @@ import {
   removeGranule,
   deleteGranule
 } from '../../actions';
-import { get } from 'object-path';
 import { lastUpdated, seconds } from '../../utils/format';
-import Ace from 'react-ace';
 import config from '../../config';
-import Loading from '../app/loading-indicator';
-import DropdownAsync from '../form/dropdown-async-command';
-import { strings } from '.../../locale';
+import Loading from '../LoadingIndicator/loading-indicator';
+import DropdownAsync from '../DropDown/dropdown-async-command';
+import { strings } from '../locale';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 const noop = () => true;
@@ -30,7 +29,7 @@ class GranuleRecipe extends React.Component {
   }
 
   componentDidMount () {
-    const granuleId = this.props.params.granuleId;
+    const { granuleId } = this.props.params;
     if (!this.props.granules.map[granuleId]) {
       this.props.dispatch(getGranule(granuleId));
     }
@@ -61,7 +60,7 @@ class GranuleRecipe extends React.Component {
   }
 
   render () {
-    const granuleId = this.props.params.granuleId;
+    const { granuleId } = this.props.params;
     const record = this.props.granules.map[granuleId];
 
     if (!record || (record.inflight && !record.data)) {
@@ -166,4 +165,4 @@ GranuleRecipe.propTypes = {
   granules: PropTypes.object,
 };
 
-export default connect(state => state)(GranuleRecipe);
+export default connect((state) => state)(GranuleRecipe);

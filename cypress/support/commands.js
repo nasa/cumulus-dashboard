@@ -24,7 +24,7 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import 'cypress-wait-until';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import { DELETE_TOKEN, SET_TOKEN } from '../../app/src/js/actions/types';
 
 Cypress.Commands.add('login', () => {
@@ -62,22 +62,21 @@ Cypress.Commands.add('logout', () => {
 
 Cypress.Commands.add('editJsonTextarea', ({ data, update = false }) => {
   cy.window().its('aceEditorRef').its('editor').then((editor) => {
+    let editedData = data;
     if (update) {
       const value = editor.getValue();
       const currentObject = JSON.parse(value);
-      data = Cypress._.assign(currentObject, data);
+      editedData = Cypress._.assign(currentObject, editedData);
     }
-    data = JSON.stringify(data);
-    editor.setValue(data);
+    editedData = JSON.stringify(editedData);
+    editor.setValue(editedData);
   });
 });
 
-Cypress.Commands.add('getJsonTextareaValue', () => {
-  return cy.window().its('aceEditorRef').its('editor').then((editor) => {
-    const value = editor.getValue();
-    return JSON.parse(value);
-  });
-});
+Cypress.Commands.add('getJsonTextareaValue', () => cy.window().its('aceEditorRef').its('editor').then((editor) => {
+  const value = editor.getValue();
+  return JSON.parse(value);
+}));
 
 /**
  * Adds a cypress command to read database seed fixture
@@ -121,5 +120,6 @@ Cypress.Commands.add('clearStartDateTime', () => {
  * Add custom command to set the dropdown value to any value.
  */
 Cypress.Commands.add('setDatepickerDropdown', (targetValue) => {
-  cy.get('[data-cy=datetime-dropdown]').select(targetValue);
+  cy.get('.datetime.dropdown__dtrange').click();
+  cy.contains('div[class*="MenuList"] > div', targetValue).click();
 });

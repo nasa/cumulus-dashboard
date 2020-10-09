@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -19,7 +18,8 @@ class TextForm extends React.Component {
       id,
       error,
       type,
-      className
+      className,
+      ...rest
     } = this.props;
 
     type = type || 'text';
@@ -29,6 +29,7 @@ class TextForm extends React.Component {
         <label htmlFor={id}>{label}</label>
         {error && <span className='form__error'>{error}</span>}
         <input
+          {...rest}
           id={id}
           type={type}
           value={value}

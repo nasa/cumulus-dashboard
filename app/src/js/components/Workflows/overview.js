@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
@@ -43,13 +42,18 @@ const WorkflowOverview = ({
           query={{ ...queryParams }}
           rowId="name">
           <ListFilters>
-            {/* Someone needs to define the search parameters for workflows, e.g. steps, collections, granules, etc. } */}
+            {/* Someone needs to define the search parameters for workflows,
+            e.g. steps, collections, granules, etc. } */}
             <Search
-              dispatch={dispatch}
               action={searchWorkflows}
               clear={clearWorkflowsSearch}
+              inputProps={{
+                className: 'search search--small',
+              }}
               label="Search"
+              labelKey="name"
               placeholder="Workflow Name"
+              searchKey="workflows"
             />
           </ListFilters>
         </List>

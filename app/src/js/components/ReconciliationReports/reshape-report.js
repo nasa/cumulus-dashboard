@@ -1,15 +1,14 @@
-'use strict';
 /* eslint node/no-deprecated-api: 0 */
 import path from 'path';
+import url from 'url';
 import {
   tableColumnsCollections,
   tableColumnsFiles,
   tableColumnsGranules,
   tableColumnsS3Files,
 } from '../../utils/table-config/reconciliation-reports';
-import url from 'url';
 
-const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [] }) => {
+export const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [], okCountByGranule }) => {
   const filesInS3 = onlyInS3.map((d) => {
     const parsed = url.parse(d);
     return {
@@ -19,7 +18,19 @@ const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [] }) => {
     };
   });
 
-  const filesInDynamoDb = onlyInDynamoDb.map(parseFileObject);
+  const filesInDynamoDb = onlyInDynamoDb.map((file) => {
+    const parsedFile = parseFileObject(file);
+    const { granuleId } = parsedFile;
+    let s3 = false;
+    if (okCountByGranule) {
+      s3 = okCountByGranule[granuleId] > 0 ? 'missing' : 'notFound';
+    }
+    return {
+      s3,
+      cumulus: true,
+      ...parsedFile
+    };
+  });
 
   return { filesInS3, filesInDynamoDb };
 };
@@ -39,8 +50,14 @@ const getGranulesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) => {
   return { granulesInCumulus, granulesInCmr };
 };
 
-const getGranuleFilesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }, filterBucket) => {
-  const granuleFilesOnlyInCumulus = onlyInCumulus.map(parseFileObject);
+export const getGranuleFilesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) => {
+  const granuleFilesOnlyInCumulus = onlyInCumulus.map((file) => {
+    const parsedFile = parseFileObject(file);
+    return {
+      cmr: 'missing',
+      ...parsedFile
+    };
+  });
 
   const granuleFilesOnlyInCmr = onlyInCmr.map((d) => {
     const parsed = url.parse(d.URL);
@@ -50,6 +67,7 @@ const getGranuleFilesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }, filterBu
       filename: path.basename(parsed.pathname),
       bucket,
       path: `s3://${bucket}${parsed.pathname}`,
+      cumulus: 'missing'
     };
   });
 
@@ -66,7 +84,7 @@ const parseFileObject = (d) => {
   };
 };
 
-export const reshapeReport = (record, filterString, filterBucket) => {
+export const reshapeReport = (recordData, filterString, filterBucket) => {
   let filesInS3 = [];
   let filesInDynamoDb = [];
 
@@ -79,15 +97,15 @@ export const reshapeReport = (record, filterString, filterBucket) => {
   let granulesInCumulus = [];
   let granulesInCmr = [];
 
-  if (record && record.data) {
+  if (recordData) {
     const {
       filesInCumulus: internalCompareFiles = {},
       filesInCumulusCmr: compareFiles = {},
       collectionsInCumulusCmr: compareCollections = {},
       granulesInCumulusCmr: compareGranules = {},
-    } = record.data;
+    } = recordData;
 
-    ({ filesInS3, filesInDynamoDb } = getFilesSummary(internalCompareFiles, filterBucket));
+    ({ filesInS3, filesInDynamoDb } = getFilesSummary(internalCompareFiles));
 
     ({ collectionsInCumulus, collectionsInCmr } = getCollectionsSummary(
       compareCollections
@@ -100,21 +118,28 @@ export const reshapeReport = (record, filterString, filterBucket) => {
     ({
       granuleFilesOnlyInCumulus,
       granuleFilesOnlyInCmr,
-    } = getGranuleFilesSummary(compareFiles, filterBucket));
+    } = getGranuleFilesSummary(compareFiles));
   }
 
   if (filterString) {
-    filesInDynamoDb = filesInDynamoDb.filter((file) => file.granuleId.toLowerCase().includes(filterString.toLowerCase()));
+    filesInDynamoDb = filesInDynamoDb.filter((file) => file.granuleId.toLowerCase()
+      .includes(filterString.toLowerCase()));
     filesInS3 = filesInS3.filter((file) => file.filename.toLowerCase().includes(filterString.toLowerCase()));
 
-    collectionsInCumulus = collectionsInCumulus.filter((collection) => collection.name.toLowerCase().includes(filterString.toLowerCase()));
-    collectionsInCmr = collectionsInCmr.filter((collection) => collection.name.toLowerCase().includes(filterString.toLowerCase()));
+    collectionsInCumulus = collectionsInCumulus.filter((collection) => collection.name.toLowerCase()
+      .includes(filterString.toLowerCase()));
+    collectionsInCmr = collectionsInCmr.filter((collection) => collection.name.toLowerCase()
+      .includes(filterString.toLowerCase()));
 
-    granulesInCumulus = granulesInCumulus.filter((granule) => granule.granuleId.toLowerCase().includes(filterString.toLowerCase()));
-    granulesInCmr = granulesInCmr.filter((granule) => granule.granuleId.toLowerCase().includes(filterString.toLowerCase()));
+    granulesInCumulus = granulesInCumulus.filter((granule) => granule.granuleId.toLowerCase()
+      .includes(filterString.toLowerCase()));
+    granulesInCmr = granulesInCmr.filter((granule) => granule.granuleId.toLowerCase()
+      .includes(filterString.toLowerCase()));
 
-    granuleFilesOnlyInCumulus = granuleFilesOnlyInCumulus.filter((file) => file.granuleId.toLowerCase().includes(filterString.toLowerCase()));
-    granuleFilesOnlyInCmr = granuleFilesOnlyInCmr.filter((file) => file.granuleId.toLowerCase().includes(filterString.toLowerCase()));
+    granuleFilesOnlyInCumulus = granuleFilesOnlyInCumulus.filter((file) => file.granuleId.toLowerCase()
+      .includes(filterString.toLowerCase()));
+    granuleFilesOnlyInCmr = granuleFilesOnlyInCmr.filter((file) => file.granuleId.toLowerCase()
+      .includes(filterString.toLowerCase()));
   }
 
   const getBucket = (item) => (item.bucket);
@@ -137,7 +162,7 @@ export const reshapeReport = (record, filterString, filterBucket) => {
   /**
    * The reconciation report display mechanism is set up to display cards as
    * headers for cumulus internal consistency as well as comparison between
-   * Cumulus and CMR.  We set up a configuration from the intput record to ease
+   * Cumulus and CMR.  We set up a configuration from the input record to ease
    * the display of that information.
    *
    * The comparison configuration should consist of an Array of Objects, where
@@ -224,3 +249,5 @@ export const reshapeReport = (record, filterString, filterBucket) => {
 
   return { internalComparison, cumulusVsCmrComparison, allBuckets };
 };
+
+export default reshapeReport;

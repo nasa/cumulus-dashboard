@@ -28,8 +28,12 @@ describe('Dashboard Granules Page', () => {
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
         .first().contains('li', 'Completed').contains('li', 7)
-        .next().contains('li', 'Failed').contains('li', 2)
-        .next().contains('li', 'Running').contains('li', 2);
+        .next()
+        .contains('li', 'Failed')
+        .contains('li', 2)
+        .next()
+        .contains('li', 'Running')
+        .contains('li', 2);
 
       // shows a list of granules
       cy.getFakeApiFixture('granules').as('granulesListFixture');
@@ -43,7 +47,7 @@ describe('Dashboard Granules Page', () => {
 
           // Granule Status Column is correct
           cy.get('@columns').eq(1).invoke('text')
-            .should('be.eq', granule.status.replace(/^\w/, c => c.toUpperCase()));
+            .should('be.eq', granule.status.replace(/^\w/, (c) => c.toUpperCase()));
           // has link to the granule list with the same status
           cy.get('@columns').eq(1).children('a')
             .should('have.attr', 'href')
@@ -92,7 +96,7 @@ describe('Dashboard Granules Page', () => {
 
           // Duration column
           cy.get('@columns').eq(7).invoke('text')
-            .should('be.eq', `${Number(granule.duration.toFixed(2))}s`);
+            .should('be.eq', `${Number(granule.duration).toFixed(2)}s`);
           // Updated column
           cy.get('@columns').eq(8).invoke('text')
             .should('match', /.+ago$/);
@@ -120,12 +124,12 @@ describe('Dashboard Granules Page', () => {
           return cy.get('.table .tbody .tr')
             .each(($row, index, $list) => {
               const granule = {};
-              cy.wrap($row).children('.td').eq(4).invoke('text').then((collectionId) =>
-                (granule.collectionId = collectionId));
-              cy.wrap($row).children('.td').eq(1).invoke('text').then((status) =>
-                (granule.status = status));
-              cy.wrap($row).children('.td').eq(2).invoke('text').then((name) =>
-                (granule.name = name));
+              cy.wrap($row).children('.td').eq(4).invoke('text')
+                .then((collectionId) => (granule.collectionId = collectionId));
+              cy.wrap($row).children('.td').eq(1).invoke('text')
+                .then((status) => (granule.status = status));
+              cy.wrap($row).children('.td').eq(2).invoke('text')
+                .then((name) => (granule.name = name));
               granules.push(granule);
             })
             .then(() => (
@@ -137,7 +141,8 @@ describe('Dashboard Granules Page', () => {
           timeout: 10000,
           interval: 1000,
           errorMsg: 'granule multi-column sorting not working within time limit'
-        });
+        }
+      );
     });
 
     it('should display a link to download the granule list', () => {
@@ -166,8 +171,12 @@ describe('Dashboard Granules Page', () => {
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
           .first().should('contain', 0).and('contain', 'Completed')
-          .next().should('contain', 0).and('contain', 'Failed')
-          .next().should('contain', 2).and('contain', 'Running');
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Failed')
+          .next()
+          .should('contain', 2)
+          .and('contain', 'Running');
       });
 
       cy.visit('/granules?status=completed');
@@ -177,8 +186,12 @@ describe('Dashboard Granules Page', () => {
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
           .first().should('contain', 7).and('contain', 'Completed')
-          .next().should('contain', 0).and('contain', 'Failed')
-          .next().should('contain', 0).and('contain', 'Running');
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Failed')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Running');
       });
     });
 
@@ -186,13 +199,17 @@ describe('Dashboard Granules Page', () => {
       cy.visit('/granules');
       cy.get('.filter-status .rbt-input-main').as('status-input');
       cy.get('@status-input').click().type('fai').type('{enter}');
-      cy.url().should('include', '?status=failed');
+      cy.url().should('include', 'status=failed');
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
           .first().should('contain', 0).and('contain', 'Completed')
-          .next().should('contain', 2).and('contain', 'Failed')
-          .next().should('contain', 0).and('contain', 'Running');
+          .next()
+          .should('contain', 2)
+          .and('contain', 'Failed')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Running');
       });
     });
 
@@ -201,9 +218,10 @@ describe('Dashboard Granules Page', () => {
       cy.visit('/granules');
       cy.get('.search').as('search');
       cy.get('@search').click().type(infix);
-      cy.url().should('include', 'search=A0142558');
+      cy.url().should('include', `search=${infix}`);
       cy.get('.table .tbody .tr').should('have.length', 1);
-      cy.get('.table .tbody .tr').eq(0).children('.td').eq(2).contains(infix);
+      cy.get('.table .tbody .tr').eq(0).children('.td').eq(2)
+        .contains(infix);
     });
 
     it('Should show Search and Dropdown filters in URL.', () => {
@@ -234,32 +252,50 @@ describe('Dashboard Granules Page', () => {
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
         .first().contains('li', 'Completed').contains('li', 7)
-        .next().contains('li', 'Failed').contains('li', 2)
-        .next().contains('li', 'Running').contains('li', 2);
+        .next()
+        .contains('li', 'Failed')
+        .contains('li', 2)
+        .next()
+        .contains('li', 'Running')
+        .contains('li', 2);
       cy.setDatepickerDropdown('Recent');
       cy.get('.overview-num__wrapper ul li')
         .first().contains('li', 'Completed').contains('li', 7)
-        .next().contains('li', 'Failed').contains('li', 2)
-        .next().contains('li', 'Running').contains('li', 2);
+        .next()
+        .contains('li', 'Failed')
+        .contains('li', 2)
+        .next()
+        .contains('li', 'Running')
+        .contains('li', 2);
       cy.setDatepickerDropdown('Custom');
       cy.get('[data-cy="endDateTime"] .react-datetime-picker__inputGroup__month').click();
       cy.get('.react-calendar__month-view__days__day--neighboringMonth').eq(0).click();
       cy.get('.overview-num__wrapper ul li')
         .first().contains('li', 'Completed').contains('li', 0)
-        .next().contains('li', 'Failed').contains('li', 0)
-        .next().contains('li', 'Running').contains('li', 0);
+        .next()
+        .contains('li', 'Failed')
+        .contains('li', 0)
+        .next()
+        .contains('li', 'Running')
+        .contains('li', 0);
     });
 
-    it('Should update the table when the Results Per Page dropdown is changed.', () => {
+    it('Should update the table when the Results Per Page and Page dropdowns are changed.', () => {
       cy.visit('/granules');
-      cy.get('.filter__item').eq(3).as('page-size-input');
-      cy.get('@page-size-input').should('be.visible').click().type('10{enter}');
+      cy.get('.table__header .filter-limit').as('limit-input');
+      cy.get('@limit-input').should('be.visible').click().type('{backspace}{backspace}10{enter}');
       cy.url().should('include', 'limit=10');
       cy.get('.table .tbody .tr').should('have.length', 10);
-      cy.get('.pagination ol li')
+      cy.get('.pagination-list ol li')
         .first().contains('li', 'Previous')
-        .next().contains('li', '1')
-        .next().contains('li', '2');
+        .next()
+        .contains('li', '1')
+        .next()
+        .contains('li', '2');
+      cy.get('.table__header .filter-page').as('page-input');
+      cy.get('@page-input').should('be.visible').click().type('{backspace}2{enter}');
+      cy.url().should('include', 'page=2');
+      cy.get('.table .tbody .tr').should('have.length', 1);
     });
 
     it('Should reingest a granule and redirect to the granules detail page.', () => {
@@ -271,14 +307,16 @@ describe('Dashboard Granules Page', () => {
         status: 200,
         response: { message: 'ingested' }
       });
+      cy.route('GET', `/granules/${granuleId}`).as('getGranule');
       cy.visit('/granules');
       cy.get(`[data-value="${granuleId}"] > .td >input[type="checkbox"]`).click();
       cy.get('.list-actions').contains('Reingest').click();
       cy.get('.button--submit').click();
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
       cy.get('.button__goto').click();
+      cy.wait('@getGranule');
       cy.url().should('include', `granules/granule/${granuleId}`);
-      cy.get('.heading--large').should('have.text', granuleId);
+      cy.get('.heading--large').should('have.text', `Granule: ${granuleId}`);
     });
 
     it('Should reingest multiple granules and redirect to the running page.', () => {
@@ -324,7 +362,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Error');
       cy.get('.Collapsible__contentInner').should('contain.text', 'Oopsie');
       cy.get('.button--cancel').click();
-      cy.url().should('match', /\/granules$/);
+      cy.url().should('match', /\/granules/);
       cy.get('.heading--large').should('have.text', 'Granule Overview');
     });
   });

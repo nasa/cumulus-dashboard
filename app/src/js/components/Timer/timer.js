@@ -1,14 +1,14 @@
-'use strict';
+/* eslint-disable no-param-reassign */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 import _config from '../../config';
 import {
   TIMER_START,
   TIMER_STOP,
   TIMER_SET_COUNTDOWN,
 } from '../../actions/types';
-import isEqual from 'lodash.isequal';
 
 const { updateInterval } = _config;
 
@@ -95,7 +95,7 @@ class Timer extends React.Component {
   parentClass() {
     const className = 'form__element__updateToggle';
     return this.props.noheader
-      ? className + ' form__element__updateToggle-noHeader'
+      ? `${className} form__element__updateToggle-noHeader`
       : className;
   }
 

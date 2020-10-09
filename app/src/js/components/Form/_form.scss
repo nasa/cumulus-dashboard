@@ -135,10 +135,17 @@ select option{
   display: flex;
 }
 
-.dropdown__collection .form__dropdown label {
-  display: inline-block;
-  text-align: left;
-  padding-right: .75em;
+.dropdown__collection {
+  .form__dropdown label {
+    display: inline-block;
+    text-align: left;
+    padding-right: .75em;
+  }
+
+  .dropdown__element {
+    font-size: .8em;
+    width: 180px;
+  }
 }
 
 .search__wrapper {
@@ -152,6 +159,22 @@ select option{
   }
   .dropdown__wrapper select {
     min-width: 6em;
+  }
+  .search {
+    &--small {
+      width: 15em;
+    }
+    &--medium {
+      width: 25em;
+    }
+    &--large {
+      width: 35em;
+    }
+  }
+  
+  button[aria-label="Clear"] {
+    position: absolute;
+    right: 1.4em;
   }
 }
 
@@ -282,6 +305,30 @@ select option{
 
 .form__item {
   margin-bottom: 1.5em;
+
+  &--tooltip {
+    display: flex;
+    align-items: center;
+
+    svg {
+      color: $ocean-blue;
+      margin-left: .5em;
+    }
+
+  }
+
+  .radio {
+    display: flex;
+
+    label {
+      margin: 1em 2em 1em 0;
+
+      input {
+        margin-right: .5em;
+      }
+    }
+  }
+
 }
 
 .subform__item,
@@ -295,7 +342,7 @@ select option{
 }
 
 .form__addone--button {
-  padding: 0.06em 1.8em 0.07em;
+  padding: 0.3em 1.8em;
   font-size: 1.4em;
   min-width: 4.2em;
 }
@@ -344,11 +391,24 @@ select option{
   }
 }
 
+.main-form--wrapper {
+  background-color: $white;
+  padding: 2em;
+  margin-bottom: 2em;
+  border: 1px solid $border-grey;
+  box-shadow: $shadow__default;
+}
+
 .page__content--shortened--centered {
   .page__section--fullpage-form {
     .form__item {
-      input[type=text] {
-        width: 90%;
+      input {
+        &:not([type=number]) {
+          padding: 10px;
+        }
+        &[type=text] {
+          width: 90%;
+        }
       }
       .subform__item--expanded {
         width: 87%;
@@ -395,6 +455,23 @@ select option{
       }
     }
   }
+}
+
+.create-report {
+  .form__dropdown {
+    width: 50%;
+  }
+
+  .main-form--wrapper {
+    padding-bottom: 5em;
+    .form__dropdown {
+      width: 92%;
+    }
+  }
+}
+
+.form__dropdown {
+  width: 92%;
 }
 
 .label__description {
@@ -473,8 +550,8 @@ select option{
   font-size: .86em;
 
   &:hover {
-    background-color: $ocean-blue;
-    color:$white;
+    background-color: $hover-blue;
+    border: none;
   }
 }
 
@@ -525,7 +602,7 @@ select option{
 
 .rule__content,
 .execution__content {
-  border: 1px solid #eceaea;
+  border: 1px solid $border-grey;
   box-shadow: $shadow__default;
   border-radius: 10px;
   padding: 25px 40px;

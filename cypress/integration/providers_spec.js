@@ -69,9 +69,9 @@ describe('Dashboard Providers Page', () => {
       cy.get('@providerinput')
         .contains('.dropdown__label', 'Protocol')
         .siblings()
-        .find('select')
-        .select(protocol, {force: true})
-        .should('have.value', protocol);
+        .find('div[class*="container"]')
+        .click();
+      cy.contains('div[class*="MenuList"] > div', protocol).click();
       cy.get('@providerinput')
         .contains('Host')
         .siblings('input')
@@ -121,7 +121,7 @@ describe('Dashboard Providers Page', () => {
         .and('include', `/providers/edit/${name}`);
       cy.get('@editprovider').click();
 
-      cy.contains('.heading--large', `Edit ${name}`);
+      cy.contains('.heading--large', `Edit provider: ${name}`);
 
       cy.get('form div ul').as('providerinput');
       cy.get('@providerinput')

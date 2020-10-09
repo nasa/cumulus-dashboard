@@ -1,4 +1,3 @@
-'use strict';
 const moment = require('moment');
 
 const deploymentConfig = require('./config');
@@ -10,7 +9,7 @@ const baseConfig = {
   environment: 'development',
   requireEarthdataLogin: false,
   apiRoot: 'https://wjdkfyb6t6.execute-api.us-east-1.amazonaws.com/dev/',
-  minCompatibleApiVersion: '2.0.1',
+  minCompatibleApiVersion: '3.0.0',
   oauthMethod: 'earthdata',
 
   graphicsPath: '/src/assets/images/',
@@ -35,6 +34,7 @@ const baseConfig = {
   updateDelay: 1000
 };
 
+// eslint-disable-next-line prefer-object-spread
 const config = Object.assign({}, baseConfig, deploymentConfig);
 config.apiRoot = config.apiRoot.replace(/\/?$/, '/');
 

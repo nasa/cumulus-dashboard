@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import Collapsible from 'react-collapsible';
 import PropTypes from 'prop-types';
@@ -23,18 +22,17 @@ class ErrorReport extends React.Component {
   scrollToTop () {
     if (this.DOMElement && typeof this.DOMElement.scrollIntoView === 'function') {
       this.DOMElement.scrollIntoView(true);
-    } else scrollTo(0, 0);
+    } else {
+      window.scrollTo(0, 0);
+    }
   }
 
   truncate (string) {
     if (!this.props.truncate) return string;
-    else return truncate(string);
+    return truncate(string);
   }
 
-  renderSingleError (report, trigger) {
-    if (!trigger) {
-      trigger = this.truncate(report);
-    }
+  renderSingleError (report, trigger = this.truncate(report)) {
     // No need to make error collapsible if the truncated
     // output is the same length as the original output
     if (typeof report === 'string' &&
@@ -57,9 +55,12 @@ class ErrorReport extends React.Component {
           { this.renderSingleError(report) }
         </div>
       );
-    } else if (report instanceof Error) {
+    }
+
+    if (report instanceof Error) {
       const name = report.name || 'Error';
-      let message, stack;
+      let message;
+      let stack;
       if (!report.message) {
         message = JSON.stringify(report);
       } else {
@@ -74,15 +75,20 @@ class ErrorReport extends React.Component {
           { this.renderSingleError(stack, this.truncate(report.stack)) }
         </div>
       );
-    } else if (Array.isArray(report)) {
+    }
+
+    if (Array.isArray(report)) {
       return report.map(this.renderReport);
-    } else if (typeof report === 'object') {
+    }
+
+    if (typeof report === 'object') {
       return this.stringifyErrorObject(report);
     }
   }
 
   stringifyErrorObject (obj) {
-    let error, cause;
+    let error;
+    let cause;
     if (typeof obj.Error !== 'undefined') {
       error = obj.Error;
     }
@@ -96,10 +102,10 @@ class ErrorReport extends React.Component {
           { this.renderSingleError(cause) }
         </div>
       );
-    } else {
-      const stringified = this.truncate(JSON.stringify(obj));
-      return <p key={stringified}>{stringified}</p>;
     }
+
+    const stringified = this.truncate(JSON.stringify(obj));
+    return <p key={stringified}>{stringified}</p>;
   }
 
   render () {

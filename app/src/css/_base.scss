@@ -299,18 +299,41 @@ a:active {
   width: 100%;
 }
 
+.sidebar-toggle--wrapper {
+  position: relative;
+
+  &.active {
+    flex: 2;
+    padding: 0;
+    max-width: 225px;
+    min-width: 175px;
+    min-height: 100vh;
+    background-color: $sub-blue;
+    color: #E7E4E4;
+    margin: 0;
+
+    .sidebar-toggle {
+      right: -1em;
+    }
+
+    .sidebar {
+      display: block;
+    }
+  }
+
+  .sidebar-toggle {
+    position: absolute;
+    top: -1em;
+
+    &:hover {
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+    }
+  }
+}
+
 .sidebar {
-  flex: 2;
-  padding: 0;
-  /* width: 20%; */
-  max-width: 225px;
-  min-width: 175px;
-  /* float: left; */
-  min-height: 100vh;
-  background-color: $sub-blue;
-  color: #E7E4E4;
-  /* position: absolute; */
-  margin: 0;
+  display: none;
+
   a {
     color: #E7E4E4;
     border-bottom: none;
@@ -420,6 +443,34 @@ a:active {
   margin-bottom: 7.5em;
 }
 
+.page__section--logs {
+
+  .heading__wrapper--border {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: .5em;
+
+    .log-query-items {
+      display: flex;
+    }
+  }
+
+  .dropdown__element {
+    width: 80px;
+  }
+
+  .search__wrapper {
+    input {
+      height: 29px;
+    }
+
+    .search__icon:after {
+      top:.85em;
+    }
+  }
+}
+
 .collection__options--top ul{
   display: flex;
   align-items: center;
@@ -469,6 +520,12 @@ a:active {
     padding-left: 1em;
     border-left: 1px solid lighten($lighter-grey, 20%);
   }
+}
+
+.title-count {
+  border-bottom: 1px solid $lightest-grey;
+  padding-bottom: 1em;
+  margin-top: 1.5em;
 }
 
 /**************************************************
@@ -758,9 +815,8 @@ a:active {
 **************************************************/
 
 .footer{
-  border-top: 1px solid #E2DFDF;
   background-color: $ocean-blue;
-  padding-top: 15px;
+  padding: 15px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -768,7 +824,7 @@ a:active {
   text-align: center;
 }
 
-.api__version{
+.api__version,.dashboard__version{
   font-weight: 400;
   color: $white;
   padding: 10px 0 2px 0;

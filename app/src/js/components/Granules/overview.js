@@ -1,10 +1,11 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
+import { get } from 'object-path';
+import isEqual from 'lodash/isEqual';
 import {
   searchGranules,
   clearGranulesSearch,
@@ -17,11 +18,11 @@ import {
   getOptionsCollectionName,
   getGranuleCSV
 } from '../../actions';
-import { get } from 'object-path';
 import { lastUpdated, tally } from '../../utils/format';
 import {
   tableColumns,
-  simpleDropdownOption,
+  defaultWorkflowMeta,
+  executeDialog,
   bulkActions,
   recoverAction
 } from '../../utils/table-config/granules';
@@ -35,9 +36,7 @@ import { workflowOptionNames } from '../../selectors';
 import { window } from '../../utils/browser';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import pageSizeOptions from '../../utils/page-size';
 import { downloadFile } from '../../utils/download-file';
-import isEqual from 'lodash.isequal';
 
 const breadcrumbConfig = [
   {
@@ -59,10 +58,12 @@ class GranulesOverview extends React.Component {
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.applyWorkflow = this.applyWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
+    this.setWorkflowMeta = this.setWorkflowMeta.bind(this);
     this.applyRecoveryWorkflow = this.applyRecoveryWorkflow.bind(this);
     this.downloadGranuleCSV = this.downloadGranuleCSV.bind(this);
     this.state = {
-      workflow: this.props.workflowOptions[0]
+      workflow: this.props.workflowOptions[0],
+      workflowMeta: defaultWorkflowMeta
     };
   }
 
@@ -109,8 +110,15 @@ class GranulesOverview extends React.Component {
     this.setState({ workflow });
   }
 
+  setWorkflowMeta (workflowMeta) {
+    this.setState({ workflowMeta });
+  }
+
   applyWorkflow (granuleId) {
-    return applyWorkflowToGranule(granuleId, this.state.workflow);
+    const { workflow, workflowMeta } = this.state;
+    const { meta } = JSON.parse(workflowMeta);
+    this.setState({ workflowMeta: defaultWorkflowMeta });
+    return applyWorkflowToGranule(granuleId, workflow, meta);
   }
 
   applyRecoveryWorkflow (granuleId) {
@@ -119,11 +127,13 @@ class GranulesOverview extends React.Component {
 
   getExecuteOptions () {
     return [
-      simpleDropdownOption({
-        handler: this.selectWorkflow,
+      executeDialog({
+        selectHandler: this.selectWorkflow,
         label: 'workflow',
         value: this.state.workflow,
-        options: this.props.workflowOptions
+        options: this.props.workflowOptions,
+        initialMeta: this.state.workflowMeta,
+        metaHandler: this.setWorkflowMeta,
       })
     ];
   }
@@ -140,7 +150,7 @@ class GranulesOverview extends React.Component {
   }
 
   render () {
-    const { collections, dispatch, granules } = this.props;
+    const { collections, granules } = this.props;
     const { list } = granules;
     const { dropdowns } = collections;
     const { count, queriedAt } = list.meta;
@@ -175,18 +185,20 @@ class GranulesOverview extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId='granuleId'
             sortId='timestamp'
+            filterAction={filterGranules}
+            filterClear={clearGranulesFilter}
           >
             <ListFilters>
-              <Dropdown
-                getOptions={getOptionsCollectionName}
-                options={get(dropdowns, ['collectionName', 'options']) || []}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey='collectionId'
-                label={strings.collection}
+              <Search
+                action={searchGranules}
+                clear={clearGranulesSearch}
                 inputProps={{
-                  placeholder: 'All'
+                  className: 'search search--large',
                 }}
+                label='Search'
+                labelKey="granuleId"
+                placeholder='Granule ID'
+                searchKey="granules"
               />
               <Dropdown
                 options={statusOptions}
@@ -198,21 +210,15 @@ class GranulesOverview extends React.Component {
                   placeholder: 'All'
                 }}
               />
-              <Search
-                dispatch={dispatch}
-                action={searchGranules}
-                clear={clearGranulesSearch}
-                label='Search'
-                placeholder='Granule ID'
-              />
               <Dropdown
-                options={pageSizeOptions}
+                getOptions={getOptionsCollectionName}
+                options={get(dropdowns, ['collectionName', 'options'])}
                 action={filterGranules}
                 clear={clearGranulesFilter}
-                paramKey='limit'
-                label='Results Per Page'
+                paramKey='collectionId'
+                label={strings.collection}
                 inputProps={{
-                  placeholder: 'Results Per Page'
+                  placeholder: 'All'
                 }}
               />
             </ListFilters>
@@ -235,7 +241,7 @@ GranulesOverview.propTypes = {
 
 export { GranulesOverview };
 
-export default withRouter(withQueryParams()(connect(state => ({
+export default withRouter(withQueryParams()(connect((state) => ({
   collections: state.collections,
   config: state.config,
   granuleCSV: state.granuleCSV,

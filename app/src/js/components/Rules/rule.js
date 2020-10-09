@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -47,12 +46,13 @@ const breadcrumbConfig = [
 
 const metaAccessors = [
   { label: 'Rule Name', property: 'name' },
-  { label: 'Timestamp', property: 'timestamp', accessor: fullDate },
+  { label: 'Timestamp', property: 'updatedAt', accessor: fullDate },
   { label: 'Workflow', property: 'workflow' },
   { label: 'Provider', property: 'provider', accessor: providerLink },
   { label: 'Provider Path', property: 'provider_path' },
   { label: 'Rule Type', property: 'rule.type' },
-  // PGC { label: 'Collection', property: 'collection', accessor: d => collectionLink(getCollectionId(d)) },  /* Why was this commented out? */
+  /* Why was this commented out? */
+  // PGC { label: 'Collection', property: 'collection', accessor: d => collectionLink(getCollectionId(d)) },
 ];
 
 class Rule extends React.Component {
@@ -182,12 +182,12 @@ class Rule extends React.Component {
         </section>
         <section className='page__section page__section__header-wrapper'>
           <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>{ruleName}</h1>
+            <h1 className='heading--large heading--shared-content with-description'>Rule: {ruleName}</h1>
             <DropdownAsync config={dropdownConfig}/>
 
             <Link
               className='button button--copy button--small button--green form-group__element--right'
-              to={location => ({
+              to={(location) => ({
                 pathname: '/rules/add',
                 search: getPersistentQueryParams(location),
                 state: {
@@ -196,7 +196,7 @@ class Rule extends React.Component {
               })}>Copy Rule</Link>
             <Link
               className='button button--edit button--small button--green form-group__element--right'
-              to={location => ({ pathname: `/rules/edit/${ruleName}`, search: getPersistentQueryParams(location) })}>Edit Rule</Link>
+              to={(location) => ({ pathname: `/rules/edit/${ruleName}`, search: getPersistentQueryParams(location) })}>Edit Rule</Link>
             {lastUpdated(data.timestamp || data.updatedAt)}
           </div>
         </section>
@@ -228,6 +228,6 @@ Rule.propTypes = {
   rules: PropTypes.object
 };
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   rules: state.rules
 }))(Rule));

@@ -1,10 +1,9 @@
-'use strict';
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getCollectionId, lastUpdated, displayCase } from '../../utils/format';
+import { getCollectionId, displayCase } from '../../utils/format';
 import {
   listGranules,
   filterGranules,
@@ -15,7 +14,8 @@ import {
   listWorkflows,
 } from '../../actions';
 import {
-  simpleDropdownOption,
+  defaultWorkflowMeta,
+  executeDialog,
   bulkActions,
   tableColumns,
 } from '../../utils/table-config/granules';
@@ -26,9 +26,7 @@ import statusOptions from '../../utils/status';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import pageSizeOptions from '../../utils/page-size';
-import { getPersistentQueryParams } from '../../utils/url-helper';
+import CollectionHeader from './collection-header';
 
 const CollectionGranules = ({
   dispatch,
@@ -47,21 +45,10 @@ const CollectionGranules = ({
   const collectionId = getCollectionId(params);
   const view = getView();
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
+  const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const query = generateQuery();
 
   const breadcrumbConfig = [
-    {
-      label: 'Dashboard Home',
-      href: '/',
-    },
-    {
-      label: 'Collections',
-      href: '/collections',
-    },
-    {
-      label: 'Collection Overview',
-      href: `/collections/collection/${collectionName}/${collectionVersion}`,
-    },
     {
       label: 'Collection Granules',
       href: `/collections/collection/${collectionName}/${collectionVersion}/granules`,
@@ -111,21 +98,25 @@ const CollectionGranules = ({
     return bulkActions(granules, actionConfig);
   }
 
-  function selectWorkflow(selector, workflow) {
-    setWorkflow(workflow);
+  function selectWorkflow(selector, selectedWorkflow) {
+    setWorkflow(selectedWorkflow);
   }
 
   function applyWorkflow(granuleId) {
-    return applyWorkflowToGranule(granuleId, workflow);
+    const metaObject = JSON.parse(workflowMeta).meta;
+    setWorkflowMeta(defaultWorkflowMeta);
+    return applyWorkflowToGranule(granuleId, workflow, metaObject);
   }
 
   function getExecuteOptions() {
     return [
-      simpleDropdownOption({
-        handler: selectWorkflow,
+      executeDialog({
+        selectHandler: selectWorkflow,
         label: 'workflow',
         value: workflow,
         options: workflowOptions,
+        initialMeta: workflowMeta,
+        metaHandler: setWorkflowMeta,
       }),
     ];
   }
@@ -135,27 +126,12 @@ const CollectionGranules = ({
       <Helmet>
         <title> Collection Granules </title>
       </Helmet>
-      <section className="page__section page__section__controls">
-        <Breadcrumbs config={breadcrumbConfig} />
-      </section>
-      <section className="page__section page__section__header-wrapper">
-        <h1 className="heading--large heading--shared-content with-description ">
-          {collectionName} / {collectionVersion}
-        </h1>
-        <Link
-          className="button button--edit button--small form-group__element--right button--green"
-          to={{
-            pathname: `/collections/edit/${collectionName}/${collectionVersion}`,
-            search: getPersistentQueryParams(location),
-          }}
-        >
-          Edit
-        </Link>
-        <dl className="metadata__updated">
-          <dd>{lastUpdated(meta.queriedAt)}</dd>
-        </dl>
-      </section>
-
+      <CollectionHeader
+        breadcrumbConfig={breadcrumbConfig}
+        name={collectionName}
+        queriedAt={meta.queriedAt}
+        version={collectionVersion}
+      />
       <section className="page__section">
         <div className="heading__wrapper--border">
           <h2 className="heading--medium heading--shared-content with-description">
@@ -173,14 +149,20 @@ const CollectionGranules = ({
           rowId="granuleId"
           sortId="timestamp"
           tableColumns={tableColumns}
+          filterAction={filterGranules}
+          filterClear={clearGranulesFilter}
         >
           <ListFilters>
             <Search
-              dispatch={dispatch}
               action={searchGranules}
               clear={clearGranulesSearch}
+              inputProps={{
+                className: 'search search--large',
+              }}
               label="Search"
+              labelKey="granuleId"
               placeholder="Granule ID"
+              searchKey="granules"
             />
             {view === 'all' && (
               <Dropdown
@@ -194,16 +176,6 @@ const CollectionGranules = ({
                 }}
               />
             )}
-            <Dropdown
-              options={pageSizeOptions}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              label="Results Per Page"
-              paramKey="limit"
-              inputProps={{
-                placeholder: 'Results Per Page',
-              }}
-            />
           </ListFilters>
         </List>
       </section>

@@ -30,17 +30,25 @@ const BulkGranuleModal = ({
 }) => {
   const [query, setQuery] = useState(JSON.stringify(defaultQuery, null, 2));
   const [errorState, setErrorState] = useState();
+  let buttonText;
 
-  const buttonText = inflight ? 'loading...'
-    : success ? 'Success!' : confirmButtonText;
+  if (inflight) {
+    buttonText = 'loading...';
+  } else if (success) {
+    buttonText = 'Success!';
+  } else {
+    buttonText = confirmButtonText;
+  }
+
   const formError = errorState || error;
 
   function handleSubmit (e) {
     e.preventDefault();
+    let json;
     if (!inflight) {
       try {
-        var json = JSON.parse(query);
-      } catch (e) {
+        json = JSON.parse(query);
+      } catch (jsonError) {
         return setErrorState('Syntax error in JSON');
       }
       dispatch(bulkRequestAction({ requestId, json }));
@@ -53,6 +61,7 @@ const BulkGranuleModal = ({
         JSON.parse(value);
         setErrorState();
       } catch (_) {
+        // empty
       }
     }
     setQuery(value);
@@ -89,14 +98,15 @@ const BulkGranuleModal = ({
             <>
               <br/>
               <p>Currently selected granules are:</p>
-              <p>[{selected.map(selection => `"${selection}"`).join(', ')}]</p>
+              <p>[{selected.map((selection) => `"${selection}"`).join(', ')}]</p>
             </>
           }
           <br/>
           <h4 className="modal_subtitle">If you need to construct a query</h4>
           <p>
-            To construct a query, go to Kibana and run a search. Then place the elasticsearch query in the operation input. <br/>
-            <button className="button button__kibana_open button--small" href={kibanaRoot} alt="Open Kibana">Open Kibana</button>
+            To construct a query, go to Kibana and run a search. Then place the elasticsearch query
+            in the operation input. <br/>
+            <a className="button button__kibana_open button--small" href={kibanaRoot} alt="Open Kibana" target="_blank">Open Kibana</a>
           </p>
           <br/>
           <form>

@@ -1,7 +1,6 @@
-'use strict';
-
 import { get, set } from 'object-path';
 import { createReducer } from '@reduxjs/toolkit';
+import noop from 'lodash/noop';
 import assignDate from './utils/assign-date';
 import {
   createClearItemReducer,
@@ -139,7 +138,7 @@ export default createReducer(initialState, {
 
     set(state.dropdowns, 'group.options', options);
   },
-  [OPTIONS_PROVIDERGROUP_INFLIGHT]: () => {},
+  [OPTIONS_PROVIDERGROUP_INFLIGHT]: noop,
   [OPTIONS_PROVIDERGROUP_ERROR]: (state, action) => {
     set(state.dropdowns, 'group.options', []);
     state.list.error = action.error;

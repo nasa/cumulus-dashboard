@@ -2,7 +2,7 @@ version: "3"
 services:
   e2e:
     # must be run in conjunction with the docker-compose stack.
-    image: cypress/included:4.8.0
+    image: cypress/included:5.2.0
     network_mode: "service:shim"
     entrypoint: [ "./localAPI/wait-for-dashboard.sh", "npm", "run", "cypress-ci"]
     working_dir:

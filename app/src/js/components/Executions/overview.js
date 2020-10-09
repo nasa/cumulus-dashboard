@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import { get } from 'object-path';
 import PropTypes from 'prop-types';
@@ -15,9 +14,8 @@ import {
   getOptionsCollectionName,
 } from '../../actions';
 import { tally, lastUpdated } from '../../utils/format';
-import { workflowOptions } from '../../selectors';
+import { workflowOptions as workflowSelectOptions } from '../../selectors';
 import statusOptions from '../../utils/status';
-import pageSizeOptions from '../../utils/page-size';
 import List from '../Table/Table';
 import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
@@ -44,9 +42,7 @@ class ExecutionOverview extends React.Component {
   }
 
   searchOperationId(list, infix) {
-    return list.filter((item) => {
-      if (item.asyncOperationId && item.asyncOperationId.includes(infix)) { return item; }
-    });
+    return list.filter((item) => item.asyncOperationId && item.asyncOperationId.includes(infix));
   }
 
   render() {
@@ -91,8 +87,22 @@ class ExecutionOverview extends React.Component {
             query={{ ...queryParams }}
             rowId='name'
             sortId='createdAt'
+            filterAction={filterExecutions}
+            filterClear={clearExecutionsFilter}
           >
             <ListFilters>
+              <Search
+                action={searchExecutions}
+                clear={clearExecutionsSearch}
+                inputProps={{
+                  className: 'search search--medium',
+                }}
+                paramKey="asyncOperationId"
+                label="Async Operation ID"
+                labelKey="asyncOperationId"
+                placeholder="Search"
+                searchKey="executions"
+              />
               <Dropdown
                 options={statusOptions}
                 action={filterExecutions}
@@ -103,19 +113,6 @@ class ExecutionOverview extends React.Component {
                   placeholder: 'All',
                 }}
               />
-
-              <Dropdown
-                getOptions={getOptionsCollectionName}
-                options={get(dropdowns, ['collectionName', 'options']) || []}
-                action={filterExecutions}
-                clear={clearExecutionsFilter}
-                paramKey={'collectionId'}
-                label={strings.collection_id}
-                inputProps={{
-                  placeholder: 'All',
-                }}
-              />
-
               <Dropdown
                 options={workflowOptions}
                 action={filterExecutions}
@@ -126,24 +123,15 @@ class ExecutionOverview extends React.Component {
                   placeholder: 'All',
                 }}
               />
-
-              <Search
-                dispatch={dispatch}
-                action={searchExecutions}
-                clear={clearExecutionsSearch}
-                paramKey={'asyncOperationId'}
-                label={'Async Operation ID'}
-                placeholder="Search"
-              />
-
               <Dropdown
-                options={pageSizeOptions}
+                getOptions={getOptionsCollectionName}
+                options={get(dropdowns, ['collectionName', 'options']) || []}
                 action={filterExecutions}
                 clear={clearExecutionsFilter}
-                paramKey={'limit'}
-                label={'Results Per Page'}
+                paramKey={'collectionId'}
+                label={strings.collection_id}
                 inputProps={{
-                  placeholder: 'Results Per Page',
+                  placeholder: 'All',
                 }}
               />
             </ListFilters>
@@ -159,11 +147,11 @@ ExecutionOverview.propTypes = {
   dispatch: PropTypes.func,
   executions: PropTypes.object,
   queryParams: PropTypes.object,
-  workflowOptions: PropTypes.object,
+  workflowOptions: PropTypes.array,
 };
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   collections: state.collections,
   executions: state.executions,
-  workflowOptions: workflowOptions(state),
+  workflowOptions: workflowSelectOptions(state),
 }))(ExecutionOverview));

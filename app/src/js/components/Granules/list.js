@@ -1,8 +1,8 @@
-'use strict';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { get } from 'object-path';
 import {
   searchGranules,
   clearGranulesSearch,
@@ -13,13 +13,13 @@ import {
   listWorkflows,
   applyWorkflowToGranule,
 } from '../../actions';
-import { get } from 'object-path';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
   tableColumns,
   errorTableColumns,
   bulkActions,
-  simpleDropdownOption,
+  defaultWorkflowMeta,
+  executeDialog,
 } from '../../utils/table-config/granules';
 import List from '../Table/Table';
 import LogViewer from '../Logs/viewer';
@@ -30,7 +30,6 @@ import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
-import pageSizeOptions from '../../utils/page-size';
 
 const AllGranules = ({
   collections,
@@ -42,6 +41,7 @@ const AllGranules = ({
   workflowOptions,
 }) => {
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
+  const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const { dropdowns } = collections;
   const { list } = granules;
   const { count, queriedAt } = list.meta;
@@ -77,16 +77,16 @@ const AllGranules = ({
   function getView() {
     const { pathname } = location;
     if (pathname === '/granules/completed') return 'completed';
-    else if (pathname === '/granules/processing') return 'running';
-    else if (pathname === '/granules/failed') return 'failed';
-    else return 'all';
+    if (pathname === '/granules/processing') return 'running';
+    if (pathname === '/granules/failed') return 'failed';
+    return 'all';
   }
 
   function generateQuery() {
     const options = { ...queryParams };
-    const view = getView();
-    if (view !== 'all') options.status = view;
-    options.status = view;
+    const currentView = getView();
+    if (currentView !== 'all') options.status = currentView;
+    options.status = currentView;
     return options;
   }
 
@@ -105,16 +105,20 @@ const AllGranules = ({
   }
 
   function applyWorkflow(granuleId) {
-    return applyWorkflowToGranule(granuleId, workflow);
+    const { meta } = JSON.parse(workflowMeta);
+    setWorkflowMeta(defaultWorkflowMeta);
+    return applyWorkflowToGranule(granuleId, workflow, meta);
   }
 
   function getExecuteOptions() {
     return [
-      simpleDropdownOption({
-        handler: selectWorkflow,
+      executeDialog({
+        selectHandler: selectWorkflow,
         label: 'workflow',
         value: workflow,
         options: workflowOptions,
+        initialMeta: workflowMeta,
+        metaHandler: setWorkflowMeta,
       }),
     ];
   }
@@ -129,7 +133,7 @@ const AllGranules = ({
           <h1 className="heading--large heading--shared-content with-description ">
             {displayCaseView} {strings.granules}{' '}
             <span className="num-title">
-              {!isNaN(count) ? `${tally(count)}` : 0}
+              {!Number.isNaN(+count) ? `${tally(count)}` : 0}
             </span>
           </h1>
           {lastUpdated(queriedAt)}
@@ -144,6 +148,8 @@ const AllGranules = ({
           bulkActions={generateBulkActions()}
           rowId="granuleId"
           sortId={tablesortId}
+          filterAction={filterGranules}
+          filterClear={clearGranulesFilter}
         >
           <ListFilters>
             <Dropdown
@@ -170,21 +176,15 @@ const AllGranules = ({
               />
             )}
             <Search
-              dispatch={dispatch}
               action={searchGranules}
               clear={clearGranulesSearch}
-              label="Search"
-              placeholder="Granule ID"
-            />
-            <Dropdown
-              options={pageSizeOptions}
-              action={filterGranules}
-              clear={clearGranulesFilter}
-              paramKey="limit"
-              label="Results Per Page"
               inputProps={{
-                placeholder: 'Results Per Page',
+                className: 'search search--large',
               }}
+              label="Search"
+              labelKey="granuleId"
+              placeholder="Granule ID"
+              searchKey="granules"
             />
           </ListFilters>
         </List>

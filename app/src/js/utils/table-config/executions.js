@@ -6,7 +6,7 @@ import {
   seconds,
   truncate,
   formatCollectionId
-} from '../../utils/format';
+} from '../format';
 import { strings } from '../../components/locale';
 import { getPersistentQueryParams } from '../url-helper';
 
@@ -14,26 +14,26 @@ export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'name',
-    Cell: ({ row: { original: { arn, name } } }) => // eslint-disable-line react/prop-types
-      <Link to={location => ({ pathname: '/executions/execution/' + arn, search: getPersistentQueryParams(location) })} title={name}>{truncate(name, 24)}</Link>
+    Cell: ({ row: { original: { arn, name } } }) => ( // eslint-disable-line react/prop-types
+      <Link to={(location) => ({ pathname: `/executions/execution/${arn}`, search: getPersistentQueryParams(location) })} title={name}>{truncate(name, 24)}</Link>)
   },
   {
     Header: 'Status',
-    accessor: row => displayCase(row.status),
+    accessor: (row) => displayCase(row.status),
     id: 'status'
   },
   {
-    Header: 'Type',
+    Header: 'Workflow',
     accessor: 'type'
   },
   {
     Header: 'Created',
-    accessor: row => fromNow(row.createdAt),
+    accessor: (row) => fromNow(row.createdAt),
     id: 'createdAt'
   },
   {
     Header: 'Duration',
-    accessor: row => seconds(row.duration),
+    accessor: (row) => seconds(row.duration),
     id: 'duration'
   },
   {
@@ -42,3 +42,5 @@ export const tableColumns = [
     Cell: ({ cell: { value } }) => formatCollectionId(value)
   }
 ];
+
+export default tableColumns;

@@ -1,9 +1,9 @@
-'use strict';
-
+/* eslint-disable import/no-cycle */
 import { createReducer } from '@reduxjs/toolkit';
+import { set } from 'object-path';
+import noop from 'lodash/noop';
 import { deconstructCollectionId, getCollectionId } from '../utils/format';
 import assignDate from './utils/assign-date';
-import { set } from 'object-path';
 import {
   createClearItemReducer,
   createErrorReducer,
@@ -84,7 +84,7 @@ export default createReducer(initialState, {
   [COLLECTION_APPLYWORKFLOW_INFLIGHT]: createInflightReducer('executed'),
   [COLLECTION_APPLYWORKFLOW_ERROR]: createErrorReducer('executed'),
   [COLLECTIONS]: (state, action) => {
-    state.list.data = action.data.results;
+    state.list.data = action.data.results || [];
     state.list.meta = assignDate(action.data.meta);
     state.list.inflight = false;
     state.list.error = false;
@@ -138,7 +138,7 @@ export default createReducer(initialState, {
     });
     set(state.dropdowns, 'collectionName.options', options);
   },
-  [OPTIONS_COLLECTIONNAME_INFLIGHT]: () => {},
+  [OPTIONS_COLLECTIONNAME_INFLIGHT]: noop,
   [OPTIONS_COLLECTIONNAME_ERROR]: (state, action) => {
     set(state.dropdowns, 'collectionName.options', []);
     state.list.error = action.error;

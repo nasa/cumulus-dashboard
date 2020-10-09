@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -48,7 +47,9 @@ class EditRecord extends React.Component {
         dispatch(clearRecordUpdate(pk));
         historyPushWithQueryParams(backRoute);
       }, updateDelay);
-    } else if (this.state.pk === pk) { return; }
+    }
+
+    if (this.state.pk === pk) { return; }
 
     const record = get(state.map, pk, {});
 
@@ -97,7 +98,7 @@ class EditRecord extends React.Component {
     return (
       <div className='page__component'>
         <section className='page__section'>
-          <h1 className='heading--large'>Edit {pk}</h1>
+          <h1 className='heading--large'>Edit {schemaKey}: {pk}</h1>
           {schema && record.data ? (
             <Schema
               schema={schema}
@@ -134,6 +135,6 @@ EditRecord.propTypes = {
 };
 
 export { EditRecord };
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   schema: state.schema
 }))(EditRecord));

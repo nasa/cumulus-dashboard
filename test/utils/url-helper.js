@@ -4,7 +4,7 @@ import test from 'ava';
 import sinon from 'sinon';
 
 import {
-  initialValueFromLocation,
+  getInitialValueFromLocation,
   initialValuesFromLocation,
   getPersistentQueryParams,
   historyPushWithQueryParams,
@@ -34,30 +34,30 @@ test.afterEach((t) => {
   URLHelperRewireAPI.__ResetDependency__('historyPushWithQueryParams');
 });
 
-test('initialValueFromLocation returns empty string if location query empty', (t) => {
+test('getInitialValueFromLocation returns empty string if location query empty', (t) => {
   const testLocation = { ...location };
   const expectedInitialValue = '';
-  const actualInitialValue = initialValueFromLocation({
+  const actualInitialValue = getInitialValueFromLocation({
     location: testLocation,
   });
   t.is(expectedInitialValue, actualInitialValue);
 });
 
-test('initialValueFromLocation returns empty string if paramKey missing', (t) => {
+test('getInitialValueFromLocation returns empty string if paramKey missing', (t) => {
   const testLocation = { ...location };
   testLocation.query = { status: 'running' };
   const expectedInitialValue = '';
-  const actualInitialValue = initialValueFromLocation({
+  const actualInitialValue = getInitialValueFromLocation({
     location: testLocation,
   });
   t.is(expectedInitialValue, actualInitialValue);
 });
 
-test('initialValueFromLocation returns query initialValue if paramKey found', (t) => {
+test('getInitialValueFromLocation returns query initialValue if paramKey found', (t) => {
   const testLocation = { ...location };
   testLocation.query = { status: 'running' };
   const expectedInitialValue = 'running';
-  const actualInitialValue = initialValueFromLocation({
+  const actualInitialValue = getInitialValueFromLocation({
     location: testLocation,
     paramKey: 'status',
   });

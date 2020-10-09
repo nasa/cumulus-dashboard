@@ -1,19 +1,15 @@
+/* eslint-disable import/no-cycle */
 import { createHashHistory, createBrowserHistory } from 'history';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { routerMiddleware } from 'connected-react-router';
+import { createLogger } from 'redux-logger';
 import { createRootReducer } from '../reducers';
 import { refreshTokenMiddleware } from '../middleware/token';
 import { requestMiddleware } from '../middleware/request';
-import { createLogger } from 'redux-logger';
 import { window } from '../utils/browser';
 import config from '../config';
 
-export let history;
-if (config.servedByCumulusAPI) {
-  history = createHashHistory({});
-} else {
-  history = createBrowserHistory({});
-}
+export const history = config.servedByCumulusAPI ? createHashHistory({}) : createBrowserHistory({});
 
 // redirect to login when not auth'd
 export const requireAuth = (store) => (nextState, replace) => {

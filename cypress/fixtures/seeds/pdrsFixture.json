@@ -10,7 +10,7 @@
   "results": [
     {
       "pdrName": "MOD09GQ.A6423561.F7TLUN.006.8525200467566.hdf.PDR",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:test-src-integration-IngestGranule:c039a2bb-8eac-4563-a33b-3eb646779768",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestGranule:c039a2bb-8eac-4563-a33b-3eb646779768",
       "PANmessage": "N/A",
       "duration": 1.778,
       "createdAt": 1582837648763,
@@ -30,7 +30,7 @@
     },
     {
       "pdrName": "MOD09GQ.A6461550.PnYuhI.006.2894803998382.hdf.PDR",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:test-src-integration-IngestAndPublishGranule:1d4a2c8e-e612-4503-aeb6-a70c84c35d3b",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestAndPublishGranule:1d4a2c8e-e612-4503-aeb6-a70c84c35d3b",
       "PANmessage": "N/A",
       "duration": 1.242,
       "createdAt": 1582837649015,
@@ -50,7 +50,7 @@
     },
     {
       "pdrName": "MOD09GQ_1granule_v3.PDR_test-test-src-integration-IngestGranuleDuplicateHandling-1582837549352",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:test-src-integration-IngestGranuleCatchDuplicateErrorTest:c0d2d497-89ba-40c5-8a1f-f8f1441795fa",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestGranuleCatchDuplicateErrorTest:c0d2d497-89ba-40c5-8a1f-f8f1441795fa",
       "PANmessage": "N/A",
       "duration": 1.344,
       "createdAt": 1582837637618,
@@ -70,7 +70,7 @@
     },
     {
       "pdrName": "MOD09GQ_1granule_v3.PDR_test-test-src-integration-sqsRule-1582837549345",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:test-src-integration-IngestGranule:c9b6d0e9-810b-4eaa-a382-89452a1a0e6b",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestGranule:c9b6d0e9-810b-4eaa-a382-89452a1a0e6b",
       "PANmessage": "N/A",
       "duration": 0.728,
       "createdAt": 1582837600659,
@@ -90,7 +90,7 @@
     },
     {
       "pdrName": "MOD09GQ_1granule_v3.PDR_test-test-src-integration-IngestGranuleFailure-1582837549318",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:test-src-integration-IngestGranule:2220ccf3-b4d3-4e89-bc43-372c10860d85",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestGranule:2220ccf3-b4d3-4e89-bc43-372c10860d85",
       "PANmessage": "N/A",
       "duration": 28.759,
       "createdAt": 1582837570203,
@@ -110,7 +110,7 @@
     },
     {
       "pdrName": "MOD09GQ_1granule_v3.PDR_test-test-src-integration-SyncGranuleSuccess-1582837549272",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:test-src-integration-SyncGranule:912598f3-e798-4e7b-b06f-e2dc2a3a6c6a",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-SyncGranule:912598f3-e798-4e7b-b06f-e2dc2a3a6c6a",
       "PANmessage": "N/A",
       "duration": 4.513,
       "createdAt": 1582837590846,
@@ -130,7 +130,7 @@
     },
     {
       "pdrName": "MOD09GQ.A2185204.QJXYmH.006.3637470927183.hdf.PDR",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:test-src-integration-IngestAndPublishGranule:b154f982-70bd-434f-a5ca-b7b21f9ee368",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestAndPublishGranule:b154f982-70bd-434f-a5ca-b7b21f9ee368",
       "PANmessage": "N/A",
       "duration": 1.307,
       "createdAt": 1582837574128,
@@ -150,7 +150,7 @@
     },
     {
       "pdrName": "MOD09GQ.A0386170.g1r6ua.006.5469189628473.hdf.PDR",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:test-src-integration-IngestAndPublishGranule:39a312dd-195b-41a7-88cd-cdf2e4a1d172",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestAndPublishGranule:39a312dd-195b-41a7-88cd-cdf2e4a1d172",
       "PANmessage": "N/A",
       "duration": 1.569,
       "createdAt": 1582837574205,
@@ -170,7 +170,7 @@
     },
     {
       "pdrName": "MOD09GQ.A6196635.exz_C5.006.6638820642953.hdf.PDR",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:test-src-integration-IngestGranule:a9ac9b6b-e161-497d-98af-75809c275453",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestGranule:a9ac9b6b-e161-497d-98af-75809c275453",
       "PANmessage": "N/A",
       "duration": 1.52,
       "createdAt": 1582837574013,
@@ -189,24 +189,24 @@
       "updatedAt": 1582837575707
     },
     {
-      "pdrName": "MOD09GQ.A2417055.tHgAan.006.8624879785917.hdf.PDR",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:596205514787:execution:test-src-integration-IngestAndPublishGranule:92d578d1-ed13-47a5-bb73-4771bcf791af",
+      "pdrName": "MOD09GQ_1granule_v3.PDR",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-ParsePdr:d1725972-b8a4-4629-b9dd-c3bd222a8757",
       "PANmessage": "N/A",
-      "duration": 2.136,
-      "createdAt": 1582837568277,
+      "duration": 23.538,
+      "createdAt": 1596203522716,
       "provider": "s3_provider",
       "stats": {
-        "total": 0,
         "processing": 0,
-        "completed": 0,
+        "total": 2,
+        "completed": 2,
         "failed": 0
       },
-      "progress": 0,
+      "progress": 100,
       "PANSent": false,
       "collectionId": "MOD09GQ___006",
       "status": "completed",
-      "timestamp": 1582837573893,
-      "updatedAt": 1582837571627
+      "timestamp": 1596203546254,
+      "updatedAt": 1581694541453
     }
   ]
 }

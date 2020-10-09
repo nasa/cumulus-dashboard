@@ -117,35 +117,52 @@ describe('Rules page', () => {
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'workflow', { matchCase: false })
         .siblings()
-        .find('select')
-        .select(workflow)
-        .should('have.value', workflow);
+        .find('div[class*="container"]')
+        .click();
+      cy.contains('div[class*="MenuList"] > div', workflow).click();
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'provider', { matchCase: false })
         .siblings()
-        .find('select')
-        .select(provider)
-        .should('have.value', provider);
+        .find('div[class*="container"]')
+        .click();
+      cy.contains('div[class*="MenuList"] > div', provider).click();
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'collection', { matchCase: false })
         .siblings()
-        .find('select')
-        .select(collection)
-        .should('have.value', collection);
+        .find('div[class*="container"]')
+        .click();
+      cy.contains('div[class*="MenuList"] > div', collection).click();
+
+      cy.get('@ruleInput')
+        .contains('.form__textarea', 'Optional Meta Data For The Rule');
+      // test invalid json error
+      cy.window().its('aceEditorRef').its('editor').then((editor) => {
+        editor.setValue('{badjson}');
+      });
+      cy.contains('.error__report', 'Must be valid JSON');
+
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'type', { matchCase: false })
         .siblings()
-        .find('select')
-        .select('onetime')
-        .should('have.value', 'onetime');
+        .find('div[class*="container"]')
+        .click();
+      cy.contains('div[class*="MenuList"] > div', 'onetime').click();
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'state', { matchCase: false })
         .siblings()
-        .find('select')
-        .select('ENABLED')
-        .should('have.value', 'ENABLED');
+        .find('div[class*="container"]')
+        .click();
+      cy.contains('div[class*="MenuList"] > div', 'ENABLED').click();
 
       cy.contains('form button', 'Submit').click();
+      const errorMessage = 'Please review the following fields and submit again: \'Optional Meta Data For The Rule\'';
+      cy.contains('.error__report', errorMessage);
+
+      // fix the json input
+      cy.editJsonTextarea({ data: { metakey: 'metavalue' } });
+      cy.contains('form button', 'Submit').click();
+
+      cy.get('.error__report').should('not.exist');
       cy.url().should('include', 'rule/newRule');
       cy.contains('.heading--xlarge', 'Rules');
       cy.contains('.heading--large', ruleName);

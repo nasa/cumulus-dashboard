@@ -1,9 +1,8 @@
-'use strict';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { withRouter } from 'react-router-dom';
 import {
@@ -57,7 +56,7 @@ class ExecutionEvents extends React.Component {
 
     return (
       <SortableTable
-        data={mutableEvents.sort((a, b) => a.id > b.id ? 1 : -1)}
+        data={mutableEvents.sort((a, b) => (a.id > b.id ? 1 : -1))}
         dispatch={this.props.dispatch}
         tableColumns={tableColumns}
         rowId='id'
@@ -77,7 +76,7 @@ class ExecutionEvents extends React.Component {
   }
 
   render () {
-    const { executionStatus, dispatch } = this.props;
+    const { executionStatus } = this.props;
     if (!executionStatus.execution) return null;
 
     const errors = this.errors();
@@ -107,11 +106,15 @@ class ExecutionEvents extends React.Component {
         {(executionStatus.executionHistory)
           ? <section className='page__section'>
             <div className='heading__wrapper--top-border'>
-              <p>To find all task name and versions, select “More Details” for the last Lambda- or Activity-type event. There you should find a key / value pair “workflow_tasks” which lists all tasks’ version, name and arn.</p>
+              <p>
+                To find all task name and versions, select “More Details” for the last Lambda- or Activity-type event.
+                There you should find a key / value pair “workflow_tasks” which lists all tasks’ version, name and arn.
+              </p>
               <br></br>
               <p><b>NOTE:</b> Task / version tracking is enabled as of Cumulus version 1.9.1.</p>
               <br></br>
-              <p><b>NOTE:</b> If the task output is greater than 10KB, the full message will be stored in an S3 Bucket. In these scenarios, task and version numbers are not part of the Lambda or Activity event output.</p>
+              <p><b>NOTE:</b> If the task output is greater than 10KB, the full message will be stored in an S3 Bucket.
+              In these scenarios, task and version numbers are not part of the Lambda or Activity event output.</p>
               <br></br>
               <FontAwesomeIcon icon="external-link-square-alt" /> <i>Related workflow will open up into another window to view.</i>
             </div>
@@ -128,11 +131,15 @@ class ExecutionEvents extends React.Component {
             </div>
             <div className='filters'>
               <Search
-                dispatch={dispatch}
                 action={searchExecutionEvents}
                 clear={clearExecutionEventsSearch}
-                label='Search'
+                inputProps={{
+                  className: 'search search--medium',
+                }}
+                label="Search"
+                labelKey="type"
                 placeholder="Search Type"
+                searchKey="executions"
               />
             </div>
 
@@ -156,7 +163,7 @@ ExecutionEvents.displayName = 'Execution Events';
 
 export { ExecutionEvents };
 
-export default withRouter(connect(state => ({
+export default withRouter(connect((state) => ({
   executionStatus: state.executionStatus,
   cumulusInstance: state.cumulusInstance
 }))(ExecutionEvents));

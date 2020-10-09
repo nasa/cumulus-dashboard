@@ -17,7 +17,7 @@
     padding: 1.5em 1em .5em;
     display: inline-block;
     border-radius: .5em;
-    border: 1px solid #eceaea;
+    border: 1px solid $border-grey;
     box-shadow: $shadow__default;
     font-size: .86em;
     width: 1015px;
@@ -51,7 +51,7 @@
     justify-items: center;
     flex-direction: row;
   }
-  &__internal li{
+  &__internal > li{
     justify-content: space-evenly;
     margin-right: 2em;
   }
@@ -62,49 +62,14 @@
     margin-bottom: .4em;
   }
 
-  &.selector__hrformat{
-    position: relative;
-      &:after {
-        position: absolute;
-        font-family: 'FontAwesome';
-        content: '\f0dc';
-        color: $white;
-        font-weight: 900;
-        top: .28em;
-        left: 4em;
-      }
+  &.selector__hrformat {
+    color: $grey;
+    width: 80px;
   }
 
-  &.selector__hrformat select{
-    display: block;
-    position: relative;
-    padding-left: 11px;
-    background-color: $ocean-blue;
-    color: $white;
-    width: 75px;
-    height: 28px;
-  }
-
-  &.dropdown__dtrange{
-    position: relative;
-    &:after {
-      position: absolute;
-      font-family: 'FontAwesome';
-      content: '\f0dc';
-      color: $white;
-      font-weight: 900;
-      top: .55em;
-      left: 8.3em;
-    }
-  }
-
-  &.dropdown__dtrange select{
-    background-color: $ocean-blue;
-    color: $white;
+  &.dropdown__dtrange {
+    color: $grey;
     width: 135px;
-    height: 35px;
-    font-size: 14px;
-    position: relative;
   }
 
   &__range{

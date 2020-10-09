@@ -1,92 +1,86 @@
 .dropdown {
   background-color: $white;
-  
+
   &__options {
-  margin-top: .3em;
-  position: relative;
-}
-
-&__options__btn {
-  position: relative;
-  padding: .6em 2em .2em;
-  &:before {
-    position: absolute;
-    color: $white;
-    position: absolute;
-    font-family: 'FontAwesome';
-    content: '\f013';
-    font-weight: 900;
-    left: 1.4em;
-    top: .45em;
+    margin-top: 0.3em;
+    position: relative;
   }
-  span {
-    clip: rect(0,0,0,0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    position: absolute;
-  }
-}
 
-&__menu {
-  position: absolute;
-  background-color: #fff;
-  right: 0;
-  z-index: 15;
-  margin-top: 1em;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  box-shadow: 0px 1px 8px rgba(0, 0, 0, .1);
-  padding: .5em 0;
-  min-width: 12em;
-  li {
-    display: block;
-    padding: .8em 1.5em;
-    border-bottom: 1px solid darken($background-white, 2%);
-    a {
+  &__options__btn {
+    position: relative;
+    padding: 0.6em 2em 0.2em;
+    &:before {
+      position: absolute;
+      color: $white;
+      position: absolute;
+      font-family: 'FontAwesome';
+      content: '\f013';
+      font-weight: 900;
+      left: 1.4em;
+      top: 0.45em;
+    }
+    span {
+      clip: rect(0, 0, 0, 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      position: absolute;
+    }
+  }
+
+  // Removes console warning described here https://github.com/react-bootstrap/react-bootstrap/issues/5081
+  & &-menu {
+    margin: 0;
+  }
+
+  &__menu {
+    position: absolute;
+    background-color: #fff;
+    right: 0;
+    z-index: 15;
+    margin-top: 1em;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 0.5em 0;
+    min-width: 12em;
+    li {
       display: block;
-      color: $dark-grey;
-      &:hover {
-        color: $ocean-blue;
+      padding: 0.8em 1.5em;
+      border-bottom: 1px solid darken($background-white, 2%);
+      a {
+        display: block;
+        color: $dark-grey;
+        &:hover {
+          color: $ocean-blue;
+        }
+        &.async__element--loading {
+          color: $lightest-grey;
+        }
+        &.async__element--disabled {
+          color: $light-grey;
+          cursor: default;
+        }
       }
-      &.async__element--loading {
-        color: $lightest-grey;
+      &:last-of-type {
+        border-bottom: 0;
       }
-      &.async__element--disabled {
-        color: $light-grey;
-        cursor: default;
-      }
-    }
-    &:last-of-type {
-      border-bottom: 0;
     }
   }
-}
 
-&__menu--hidden {
-  display: none;
-  visibility: hidden;
-}
+  &__menu--hidden {
+    display: none;
+    visibility: hidden;
+  }
 
-&__wrapper {
-  display: inline-block;
-  /*border: 1px solid $lightest-grey;*/
-  border-radius: .5em;
-  position: relative;
-  float: right;
-  &:after {
-    position: absolute;
-    font-family: 'FontAwesome';
-    content: '\f0dc';
-    color: $white;
-    font-weight: 900;
-    right: .1em;
-    background-color: $ocean-blue;
-    padding: 3.5px;
-    border-radius: 0em .5em .5em 0em;
+  &__indicator {
+    &:after {
+      font-family: 'FontAwesome';
+      content: '\f0dc';
+      color: $white;
     }
-  } 
+  }
 
   &__collection {
     margin-bottom: 0em;

@@ -1,10 +1,10 @@
-'use strict';
 import path from 'path';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { get } from 'object-path';
 import {
   getPdr,
   deletePdr,
@@ -15,9 +15,7 @@ import {
   listGranules,
   getOptionsCollectionName,
 } from '../../actions';
-import { get } from 'object-path';
 import {
-  granuleSearchResult,
   lastUpdated,
   nullValue,
   fullDate,
@@ -27,7 +25,7 @@ import {
   bool,
   deleteText,
 } from '../../utils/format';
-import { tableColumns, bulkActions } from '../../utils/table-config/pdrs';
+import { granuleTableColumns, granuleBulkActions } from '../../utils/table-config/pdrs';
 import { renderProgress } from '../../utils/table-config/pdr-progress';
 import List from '../Table/Table';
 import LogViewer from '../Logs/viewer';
@@ -50,7 +48,7 @@ const metaAccessors = [
     accessor: (d) => (
       <Link
         to={(location) => ({
-          pathname: `providers/provider/${d}`,
+          pathname: `/providers/provider/${d}`,
           search: getPersistentQueryParams(location),
         })}
       >
@@ -66,19 +64,18 @@ const metaAccessors = [
   {
     label: 'Execution',
     property: 'execution',
-    accessor: (d) =>
-      d ? (
-        <Link
-          to={(location) => ({
-            pathname: `/executions/execution/${path.basename(d)}`,
-            search: getPersistentQueryParams(location),
-          })}
-        >
-          link
-        </Link>
-      ) : (
-        nullValue
-      ),
+    accessor: (d) => (d ? (
+      <Link
+        to={(location) => ({
+          pathname: `/executions/execution/${path.basename(d)}`,
+          search: getPersistentQueryParams(location),
+        })}
+      >
+        link
+      </Link>
+    ) : (
+      nullValue
+    )),
   },
   {
     label: 'Status',
@@ -134,7 +131,7 @@ class PDR extends React.Component {
 
   generateQuery() {
     const { queryParams } = this.props;
-    const pdrName = get(this.props, ['params', 'pdrName']);
+    const pdrName = get(this.props, ['match', 'params', 'pdrName']);
     return {
       ...queryParams,
       pdrName,
@@ -147,7 +144,7 @@ class PDR extends React.Component {
 
   generateBulkActions() {
     const { granules } = this.props;
-    return bulkActions(granules);
+    return granuleBulkActions(granules);
   }
 
   renderProgress(record) {
@@ -168,13 +165,14 @@ class PDR extends React.Component {
     const { count, queriedAt } = list.meta;
     const logsQuery = { 'meta.pdrName': pdrName };
     const deleteStatus = get(pdrs.deleted, [pdrName, 'status']);
-    const error = record.error;
+    const { error } = record;
 
-    const granulesCount = get(record, 'data.granulesStatus', []);
+    const granulesCount = get(record, 'data.stats', []);
     const granuleStatus = Object.keys(granulesCount).map((key) => ({
       count: granulesCount[key],
-      key,
+      key: (key === 'processing') ? 'running' : key
     }));
+
     return (
       <div className="page__component">
         <Helmet>
@@ -183,7 +181,7 @@ class PDR extends React.Component {
         <section className="page__section page__section__header-wrapper">
           <div className="page__section__header">
             <h1 className="heading--large heading--shared-content with-description ">
-              {pdrName}
+              PDR: {pdrName}
             </h1>
             <AsyncCommand
               action={this.deletePdr}
@@ -212,7 +210,7 @@ class PDR extends React.Component {
             <h2 className="heading--medium heading--shared-content with-description">
               {strings.granules}{' '}
               <span className="num-title">
-                {!isNaN(count) ? `(${count})` : 0}
+                {!Number.isNaN(+count) ? `(${count})` : 0}
               </span>
             </h2>
           </div>
@@ -224,7 +222,7 @@ class PDR extends React.Component {
             list={list}
             dispatch={this.props.dispatch}
             action={listGranules}
-            tableColumns={tableColumns}
+            tableColumns={granuleTableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId="granuleId"
@@ -235,7 +233,7 @@ class PDR extends React.Component {
                 options={get(dropdowns, ['collectionName', 'options']) || []}
                 action={filterGranules}
                 clear={clearGranulesFilter}
-                paramKey={'collectionName'}
+                paramKey={'collectionId'}
                 label={strings.collection}
               />
               <Dropdown
@@ -246,10 +244,13 @@ class PDR extends React.Component {
                 label={'Status'}
               />
               <Search
-                dispatch={this.props.dispatch}
                 action={searchGranules}
-                format={granuleSearchResult}
                 clear={clearGranulesSearch}
+                inputProps={{
+                  className: 'search search--large',
+                }}
+                labelKey="granuleId"
+                searchKey="granules"
               />
             </ListFilters>
           </List>

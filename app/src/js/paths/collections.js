@@ -1,4 +1,3 @@
-'use strict';
 import { encode } from '../utils/browser';
 import { strings } from '../components/locale';
 
@@ -25,20 +24,20 @@ const collections = {
   routes: (currentRoute, params) => {
     // determine which set of routes to show, based on the current route
     if (/^\/collections\/[collection|edit]/.test(currentRoute)) {
-      return singleCollectionRoutes.map(d => {
+      return singleCollectionRoutes.map((d) => {
         // replace wildcards with params
-        if (!d[1] || d[1].indexOf(':name') === -1) { return d; }
+        if (!d[1] || !d[1].includes(':name')) { return d; }
         const copy = d.slice();
         copy[1] = encode(copy[1].replace(':name', params.name)
           .replace(':version', params.version));
         return copy;
       });
-    } else if (
+    }
+    if (
       currentRoute.slice(0, 12) === '/collections') {
       return collectionRoutes;
-    } else {
-      return empty;
     }
+    return empty;
   }
 };
 

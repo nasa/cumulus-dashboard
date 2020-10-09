@@ -1,9 +1,12 @@
-'use strict';
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
 import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { get } from 'object-path';
+import isEqual from 'lodash/isEqual';
 import {
   getGranule,
   reingestGranule,
@@ -12,7 +15,6 @@ import {
   applyWorkflowToGranule,
   listWorkflows,
 } from '../../actions';
-import { get } from 'object-path';
 import {
   displayCase,
   lastUpdated,
@@ -32,16 +34,13 @@ import Metadata from '../Table/Metadata';
 import DropdownAsync from '../DropDown/dropdown-async-command';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
-import { simpleDropdownOption } from '../../utils/table-config/granules';
+import { defaultWorkflowMeta, executeDialog } from '../../utils/table-config/granules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import isEqual from 'lodash.isequal';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 
 const link = 'Link';
 
-const makeLink = (bucket, key) => {
-  return `https://${bucket}.s3.amazonaws.com/${key}`;
-};
+const makeLink = (bucket, key) => `https://${bucket}.s3.amazonaws.com/${key}`;
 
 const tableColumns = [
   {
@@ -51,12 +50,11 @@ const tableColumns = [
   },
   {
     Header: 'Link',
-    accessor: (row) =>
-      row.bucket && row.key ? (
-        <a href={makeLink(row.bucket, row.key)}>
-          {row.fileName ? link : nullValue}
-        </a>
-      ) : null,
+    accessor: (row) => (row.bucket && row.key ? (
+      <a href={makeLink(row.bucket, row.key)}>
+        {row.fileName ? link : nullValue}
+      </a>
+    ) : null),
     id: 'link',
   },
   {
@@ -84,31 +82,29 @@ const metaAccessors = [
   {
     label: `${strings.cmr} Link`,
     property: 'cmrLink',
-    accessor: (d) =>
-      d ? (
-        <a href={d} target="_blank">
+    accessor: (d) => (d ? (
+      <a href={d} target="_blank">
           link
-        </a>
-      ) : (
-        nullValue
-      ),
+      </a>
+    ) : (
+      nullValue
+    )),
   },
   {
     label: 'Execution',
     property: 'execution',
-    accessor: (d) =>
-      d ? (
-        <Link
-          to={(location) => ({
-            pathname: `/executions/execution/${path.basename(d)}`,
-            search: getPersistentQueryParams(location),
-          })}
-        >
+    accessor: (d) => (d ? (
+      <Link
+        to={(location) => ({
+          pathname: `/executions/execution/${path.basename(d)}`,
+          search: getPersistentQueryParams(location),
+        })}
+      >
           link
-        </Link>
-      ) : (
-        nullValue
-      ),
+      </Link>
+    ) : (
+      nullValue
+    )),
   },
   {
     label: 'Published',
@@ -140,8 +136,10 @@ class GranuleOverview extends React.Component {
     this.errors = this.errors.bind(this);
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
+    this.setWorkflowMeta = this.setWorkflowMeta.bind(this);
     this.state = {
       workflow: this.props.workflowOptions[0],
+      workflowMeta: defaultWorkflowMeta,
     };
   }
 
@@ -178,8 +176,10 @@ class GranuleOverview extends React.Component {
 
   applyWorkflow() {
     const { granuleId } = this.props.match.params;
-    const { workflow } = this.state;
-    this.props.dispatch(applyWorkflowToGranule(granuleId, workflow));
+    const { workflow, workflowMeta } = this.state;
+    const { meta } = JSON.parse(workflowMeta);
+    this.setState({ workflowMeta: defaultWorkflowMeta });
+    this.props.dispatch(applyWorkflowToGranule(granuleId, workflow, meta));
   }
 
   remove() {
@@ -193,7 +193,7 @@ class GranuleOverview extends React.Component {
   }
 
   errors() {
-    const granuleId = this.props.match.params.granuleId;
+    const { granuleId } = this.props.match.params;
     return [
       get(this.props.granules.map, [granuleId, 'error']),
       get(this.props.granules.reprocessed, [granuleId, 'error']),
@@ -208,23 +208,29 @@ class GranuleOverview extends React.Component {
     this.setState({ workflow });
   }
 
+  setWorkflowMeta(workflowMeta) {
+    this.setState({ workflowMeta });
+  }
+
   getExecuteOptions() {
     return [
-      simpleDropdownOption({
-        handler: this.selectWorkflow,
+      executeDialog({
+        selectHandler: this.selectWorkflow,
         label: 'workflow',
         value: this.state.workflow,
         options: this.props.workflowOptions,
+        initialMeta: this.state.workflowMeta,
+        metaHandler: this.setWorkflowMeta,
       }),
     ];
   }
 
   render() {
-    const granuleId = this.props.match.params.granuleId;
+    const { granuleId } = this.props.match.params;
     const record = this.props.granules.map[granuleId];
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
-    } else if (record.error) {
+    } if (record.error) {
       return <ErrorReport report={record.error} />;
     }
 
@@ -293,7 +299,7 @@ class GranuleOverview extends React.Component {
         </section>
         <section className="page__section page__section__header-wrapper">
           <h1 className="heading--large heading--shared-content with-description width--three-quarters">
-            {granuleId}
+            {strings.granule}: {granuleId}
           </h1>
           <DropdownAsync config={dropdownConfig} />
           {lastUpdated(granule.createdAt, 'Created')}

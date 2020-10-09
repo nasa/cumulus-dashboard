@@ -1,5 +1,3 @@
-'use strict';
-
 import { createReducer } from '@reduxjs/toolkit';
 import {
   WORKFLOWS,
@@ -20,8 +18,7 @@ export const initialState = {
   searchString: null,
 };
 
-const mapByName = (data) =>
-  data.reduce((map, datum) => ({ ...map, [datum.name]: datum }), {});
+const mapByName = (data) => data.reduce((map, datum) => ({ ...map, [datum.name]: datum }), {});
 
 /**
  * Returns all items from specified data array where each item's name property
@@ -32,14 +29,12 @@ const mapByName = (data) =>
  * @param {string} filterString - string to check if name includes
  * @returns {Array} array of data's objects with names that include filterString
  */
-export const filterData = (data, filterString) =>
-  !filterString
-    ? data
-    : data.filter(
-      (item) =>
-        item.name &&
-          item.name.toLowerCase().includes(filterString.toLowerCase())
-    );
+export const filterData = (data, filterString) => (!filterString
+  ? data
+  : data.filter(
+    (item) => item.name &&
+        item.name.toLowerCase().includes(filterString.toLowerCase())
+  ));
 
 export default createReducer(initialState, {
   [WORKFLOWS]: (state, action) => {

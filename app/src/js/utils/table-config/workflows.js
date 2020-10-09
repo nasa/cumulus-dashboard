@@ -24,11 +24,11 @@ export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'name',
-    Cell: ({ cell: { value } }) => <Link to={location => ({ pathname: `/workflows/workflow/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={(location) => ({ pathname: `/workflows/workflow/${value}`, search: getPersistentQueryParams(location) })}>{value}</Link> // eslint-disable-line react/prop-types
   },
   {
     Header: 'AWS Step Function',
-    accessor: row => (row.definition && row.definition.Comment) || 'AWS Stepfunction',
+    accessor: (row) => (row.definition && row.definition.Comment) || 'AWS Stepfunction',
     Cell: ({ row }) => buildLink(row.original),
   },
   {

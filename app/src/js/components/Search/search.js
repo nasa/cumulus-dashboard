@@ -1,99 +1,132 @@
-'use strict';
-import React from 'react';
+import React, { createRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { initialValueFromLocation } from '../../utils/url-helper';
 import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import { get } from 'object-path';
+import { getInitialValueFromLocation } from '../../utils/url-helper';
+import {
+  renderSearchInput,
+  renderSearchMenu,
+} from '../../utils/typeahead-helpers';
 
-class Search extends React.Component {
-  constructor (props) {
-    super(props);
-    this.displayName = 'Search';
-    const value = initialValueFromLocation(props);
-    this.state = { value };
-    this.complete = this.complete.bind(this);
-    this.submit = this.submit.bind(this);
-    this.delayedQuery = this.delayedQuery.bind(this);
+/**
+ * Search
+ * @description Search component
+ * @param {string} labelKey The propery of the search results that will be displayed in the dropdown menu
+ * (ex: for a granule, this would be set to 'granuleId')
+ * @param {string} paramKey The parameter that should be appended to the url when searching
+ * @param {string} searchKey This defines what is being searched (ex: collections, granules, rules, etc)
+ */
+
+const Search = ({
+  action,
+  clear,
+  dispatch,
+  inputProps = {
+    className: 'search',
+  },
+  label,
+  labelKey,
+  location,
+  options,
+  paramKey = 'search',
+  placeholder,
+  queryParams,
+  searchKey = '',
+  setQueryParams,
+  ...rest
+}) => {
+  const searchRef = createRef();
+  const formID = `form-${label}-${paramKey}`;
+  const initialValue = getInitialValueFromLocation({
+    location,
+    paramKey,
+    queryParams,
+  });
+  const searchList = get(rest[searchKey], 'list');
+  const { data: searchOptions, inflight = false } = searchList || {};
+
+  function handleSearch(query) {
+    if (query) dispatch(action(query));
+    else dispatch(clear);
   }
 
-  componentDidMount () {
-    const { dispatch, action, paramKey, queryParams } = this.props;
-    const queryValue = queryParams[paramKey];
-    if (queryValue) dispatch(action(queryValue));
-  }
-
-  componentDidUpdate (prevProps, prevState, snapshot) {
-    const { paramKey, dispatch, action, queryParams } = this.props;
-    const queryValue = queryParams[paramKey];
-    if (queryValue !== prevProps.queryParams[paramKey]) {
-      dispatch(action(queryValue));
-      this.setState({ queryValue }); // eslint-disable-line react/no-did-update-set-state
+  function handleChange(selections) {
+    if (selections && selections.length > 0) {
+      const query = selections[0][labelKey];
+      dispatch(action(query));
+      setQueryParams({ [paramKey]: query });
+    } else {
+      dispatch(clear());
+      setQueryParams({ [paramKey]: undefined });
     }
   }
 
-  componentWillUnmount () {
-    if (this.cancelDelay) { this.cancelDelay(); }
-    const { dispatch, clear } = this.props;
-    dispatch(clear());
+  function handleInputChange(text, event) {
+    if (text) {
+      dispatch(action(text));
+      setQueryParams({ [paramKey]: text });
+    } else {
+      dispatch(clear());
+      setQueryParams({ [paramKey]: undefined });
+    }
   }
 
-  complete (e) {
-    const value = e.currentTarget.value || null;
-    this.setState({ value });
-    if (this.cancelDelay) { this.cancelDelay(); }
-    this.cancelDelay = this.delayedQuery(value);
+  function handleFocus(event) {
+    event.target.select();
   }
 
-  submit (e) {
-    e.preventDefault();
+  function handleKeyDown(event) {
+    if (event.keyCode === 13) {
+      searchRef.current.hideMenu();
+    }
   }
 
-  delayedQuery (value) {
-    const { dispatch, action, clear, paramKey, setQueryParams } = this.props;
-    const timeoutId = setTimeout(function () {
-      if (value && value.length) {
-        setQueryParams({ [paramKey]: value });
-        dispatch(action(value));
-      } else {
-        setQueryParams({ [paramKey]: undefined });
-        dispatch(clear());
-      }
-    }, 650);
-    return () => clearTimeout(timeoutId);
-  }
-
-  render () {
-    const { label, paramKey } = this.props;
-    const formID = `form-${label}-${paramKey}`;
-    return (
-      <div className='filter__item'>
-        {label ? <label htmlFor={formID}>{label}</label> : null}
-        <form className='search__wrapper form-group__element' onSubmit={this.submit} >
-          <input className='search' type='search' onChange={this.complete} value={this.state.value || ''} placeholder={this.props.placeholder || ''}/>
-          <span className='search__icon'/>
-        </form>
-      </div>
-    );
-  }
-}
-
-Search.defaultProps = {
-  paramKey: 'search'
+  return (
+    <div className="filter__item">
+      {label && <label htmlFor={formID}>{label}</label>}
+      <form className="search__wrapper form-group__element">
+        <AsyncTypeahead
+          clearButton={true}
+          defaultInputValue={initialValue}
+          highlightOnlyResult={true}
+          id="Search"
+          inputProps={inputProps}
+          isLoading={inflight}
+          labelKey={labelKey}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onInputChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          onSearch={handleSearch}
+          options={searchOptions || options}
+          placeholder={placeholder}
+          ref={searchRef}
+          renderInput={renderSearchInput}
+          renderMenu={(results, menuProps) => renderSearchMenu(results, menuProps, labelKey)}
+        />
+      </form>
+    </div>
+  );
 };
 
 Search.propTypes = {
   dispatch: PropTypes.func,
   action: PropTypes.func,
   clear: PropTypes.func,
+  inputProps: PropTypes.object,
   paramKey: PropTypes.string,
   label: PropTypes.any,
+  labelKey: PropTypes.string,
   location: PropTypes.object,
-  router: PropTypes.object,
+  options: PropTypes.array,
   query: PropTypes.object,
   queryParams: PropTypes.object,
+  searchKey: PropTypes.string,
   setQueryParams: PropTypes.func,
-  placeholder: PropTypes.string
+  placeholder: PropTypes.string,
 };
 
-export default withRouter(withQueryParams()(connect(state => state)(Search)));
+export default withRouter(withQueryParams()(connect((state) => state)(Search)));

@@ -1,5 +1,5 @@
-'use strict';
-import get from 'lodash.get';
+/* eslint-disable import/no-cycle */
+import get from 'lodash/get';
 import queryString from 'query-string';
 import { history } from '../store/configureStore';
 
@@ -9,8 +9,9 @@ import { history } from '../store/configureStore';
  * @param {Object} props - react component props
  * @returns {string} - value of this component's query string from the url .
  */
-export function initialValueFromLocation (props) {
+export function getInitialValueFromLocation (props) {
   const { location, paramKey, queryParams } = props;
+  // eslint-disable-next-line lodash/path-style
   return get(location, ['query', paramKey], get(queryParams, paramKey, ''));
 }
 

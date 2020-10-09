@@ -1,4 +1,3 @@
-'use strict';
 import React, {
   useMemo,
   useEffect,
@@ -7,7 +6,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
-import SimplePagination from '../Pagination/simple-pagniation';
+import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
 
 /**
@@ -87,11 +86,12 @@ const SortableTable = ({
       data,
       columns: tableColumns,
       defaultColumn,
-      getRowId: (row, relativeIndex) => typeof rowId === 'function' ? rowId(row) : row[rowId] || relativeIndex,
+      getRowId: (row, relativeIndex) => (typeof rowId === 'function' ? rowId(row) : row[rowId] || relativeIndex),
       autoResetSelectedRows: false,
       autoResetSortBy: false,
       manualSortBy: shouldManualSort,
-      manualPagination: !shouldUsePagination, // if we want to use the pagination hook, then pagination should not be manual
+      // if we want to use the pagination hook, then pagination should not be manual
+      manualPagination: !shouldUsePagination,
       initialState: {
         hiddenColumns: initialHiddenColumns
       }
@@ -101,9 +101,9 @@ const SortableTable = ({
     useSortBy, // this allows for sorting
     useRowSelect, // this allows for checkbox in table
     usePagination,
-    hooks => {
+    (hooks) => {
       if (canSelect) {
-        hooks.visibleColumns.push(columns => [
+        hooks.visibleColumns.push((columns) => [
           {
             id: 'selection',
             Header: ({ getToggleAllRowsSelectedProps }) => ( // eslint-disable-line react/prop-types
@@ -132,20 +132,21 @@ const SortableTable = ({
   }, [clearSelected, toggleAllRowsSelected]);
 
   useEffect(() => {
-    const selected = [];
-
-    for (const [key, value] of Object.entries(selectedRowIds)) {
-      if (value) {
-        selected.push(key);
+    const selected = Object.keys(selectedRowIds).reduce((selectedRows, key) => {
+      if (selectedRowIds[key]) {
+        selectedRows.push(key);
       }
-    }
+      return selectedRows;
+    }, []);
+
     if (typeof onSelect === 'function') {
       onSelect(selected);
     }
   }, [selectedRowIds, onSelect]);
 
   useEffect(() => {
-    const sortProps = (sortBy.length) ? sortBy : [{ id: sortId, desc: (order === 'desc') }];
+    const sortIdProps = sortId ? [{ id: sortId, desc: (order === 'desc') }] : [];
+    const sortProps = (sortBy.length) ? sortBy : sortIdProps;
     if (typeof changeSortProps === 'function') {
       changeSortProps(sortProps);
     }
@@ -160,12 +161,22 @@ const SortableTable = ({
         <div className='table' {...getTableProps()}>
           <div className='thead'>
             <div className='tr'>
-              {headerGroups.map(headerGroup => (
+              {headerGroups.map((headerGroup) => (
                 <div {...headerGroup.getHeaderGroupProps()} className="tr">
-                  {headerGroup.headers.map(column => {
+                  {headerGroup.headers.map((column) => {
                     let columnClassName = '';
                     if (column.canSort) {
-                      columnClassName = `table__sort${column.isSortedDesc === true ? '--desc' : (column.isSortedDesc === false ? '--asc' : '')}`;
+                      let columnClassNameSuffix;
+
+                      if (column.isSortedDesc === true) {
+                        columnClassNameSuffix = '--desc';
+                      } else if (column.isSortedDesc === false) {
+                        columnClassNameSuffix = '--asc';
+                      } else {
+                        columnClassNameSuffix = '';
+                      }
+
+                      columnClassName = `table__sort${columnClassNameSuffix}`;
                     }
                     return (
                       <div {...column.getHeaderProps()} className='th'>

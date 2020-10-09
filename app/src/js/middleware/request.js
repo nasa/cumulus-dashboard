@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { CALL_API } from '../actions/types';
 import {
   configureRequest,
@@ -31,8 +32,8 @@ const handleError = ({
     return next(loginError(error.message));
   }
 
-  const errorType = type + '_ERROR';
-  log((id ? errorType + ': ' + id : errorType));
+  const errorType = `${type}_ERROR`;
+  log((id ? `${errorType}: ${id}` : errorType));
   log(error);
 
   return next({
@@ -43,7 +44,7 @@ const handleError = ({
   });
 };
 
-export const requestMiddleware = ({ dispatch, getState }) => next => action => {
+export const requestMiddleware = ({ dispatch, getState }) => (next) => (action) => {
   if (isValidApiRequestAction(action)) {
     let requestAction = action[CALL_API];
 
@@ -58,8 +59,8 @@ export const requestMiddleware = ({ dispatch, getState }) => next => action => {
 
     const { id, type } = requestAction;
 
-    const inflightType = type + '_INFLIGHT';
-    log((id ? inflightType + ': ' + id : inflightType));
+    const inflightType = `${type}_INFLIGHT`;
+    log((id ? `${inflightType}: ${id}` : inflightType));
     dispatch({ id, config: requestAction, type: inflightType });
 
     const start = new Date();
@@ -81,7 +82,7 @@ export const requestMiddleware = ({ dispatch, getState }) => next => action => {
         }
 
         const duration = new Date() - start;
-        log((id ? type + ': ' + id : type), duration + 'ms');
+        log((id ? `${type}: ${id}` : type), `${duration}ms`);
         return next({ id, type, data: body, config: requestAction });
       })
       .catch((error) => handleError({ id, type, error, requestAction }, next));
@@ -89,3 +90,5 @@ export const requestMiddleware = ({ dispatch, getState }) => next => action => {
 
   return next(action);
 };
+
+export default requestMiddleware;

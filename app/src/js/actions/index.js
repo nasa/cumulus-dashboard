@@ -1,11 +1,11 @@
-'use strict';
-
+/* eslint-disable import/no-cycle */
 import compareVersions from 'compare-versions';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
 import { CMR } from '@cumulus/cmrjs';
-import isEmpty from 'lodash.isempty';
-import cloneDeep from 'lodash.clonedeep';
+import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { configureRequest } from './helpers';
 import _config from '../config';
@@ -13,14 +13,14 @@ import { getCollectionId, collectionNameVersion } from '../utils/format';
 import { fetchCurrentTimeFilters } from '../utils/datepicker';
 import log from '../utils/log';
 import { authHeader } from '../utils/basic-auth';
-import { apiGatewaySearchTemplate } from './action-config/apiGatewaySearch';
-import { apiLambdaSearchTemplate } from './action-config/apiLambdaSearch';
-import { teaLambdaSearchTemplate } from './action-config/teaLambdaSearch';
-import { s3AccessSearchTemplate } from './action-config/s3AccessSearch';
+import apiGatewaySearchTemplate from './action-config/apiGatewaySearch';
+import apiLambdaSearchTemplate from './action-config/apiLambdaSearch';
+import teaLambdaSearchTemplate from './action-config/teaLambdaSearch';
+import s3AccessSearchTemplate from './action-config/s3AccessSearch';
 import * as types from './types';
 import { historyPushWithQueryParams } from '../utils/url-helper';
 
-const CALL_API = types.CALL_API;
+const { CALL_API } = types;
 const {
   esRoot,
   showDistributionAPIMetrics,
@@ -35,45 +35,41 @@ const {
  * @param {string} env - cmr environment defaults to 'SIT'
  * @returns {string} correct hostname for mmt environment
  */
-const hostId = (env = 'SIT') => {
-  return getProperty({ OPS: '', SIT: 'sit', UAT: 'uat' }, env, 'sit');
-};
+const hostId = (env = 'SIT') => getProperty({ OPS: '', SIT: 'sit', UAT: 'uat' }, env, 'sit');
 
-export const refreshAccessToken = (token) => {
-  return (dispatch) => {
-    const start = new Date();
-    log('REFRESH_TOKEN_INFLIGHT');
-    dispatch({ type: types.REFRESH_TOKEN_INFLIGHT });
+export const refreshAccessToken = (token) => (dispatch) => {
+  const start = new Date();
+  log('REFRESH_TOKEN_INFLIGHT');
+  dispatch({ type: types.REFRESH_TOKEN_INFLIGHT });
 
-    const requestConfig = configureRequest({
-      method: 'POST',
-      url: new URL('refresh', root).href,
-      body: { token },
-      // make sure request failures are sent to .catch()
-      simple: true
-    });
-    return requestPromise(requestConfig)
-      .then(({ body }) => {
-        const duration = new Date() - start;
-        log('REFRESH_TOKEN', duration + 'ms');
-        return dispatch({
-          type: types.REFRESH_TOKEN,
-          token: body.token
-        });
-      })
-      .catch(({ error }) => {
-        dispatch({
-          type: types.REFRESH_TOKEN_ERROR,
-          error
-        });
-        throw error;
+  const requestConfig = configureRequest({
+    method: 'POST',
+    url: new URL('refresh', root).href,
+    body: { token },
+    // make sure request failures are sent to .catch()
+    simple: true
+  });
+  return requestPromise(requestConfig)
+    .then(({ body }) => {
+      const duration = new Date() - start;
+      log('REFRESH_TOKEN', `${duration}ms`);
+      return dispatch({
+        type: types.REFRESH_TOKEN,
+        token: body.token
       });
-  };
+    })
+    .catch(({ error }) => {
+      dispatch({
+        type: types.REFRESH_TOKEN_ERROR,
+        error
+      });
+      throw error;
+    });
 };
 
 export const setTokenState = (token) => ({ type: types.SET_TOKEN, token });
 
-export const interval = function (action, wait, immediate) {
+export const interval = (action, wait, immediate) => {
   if (immediate) {
     action();
   }
@@ -81,58 +77,52 @@ export const interval = function (action, wait, immediate) {
   return () => clearInterval(intervalId);
 };
 
-export const getCollection = (name, version) => {
-  return (dispatch, getState) => {
-    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({
-      [CALL_API]: {
-        type: types.COLLECTION,
-        method: 'GET',
-        id: getCollectionId({ name, version }),
-        path: `collections?name=${name}&version=${version}`,
-        qs: timeFilters,
-      },
-    });
-  };
-};
-
-export const getApiVersion = () => {
-  return (dispatch) => {
-    const config = configureRequest({
+export const getCollection = (name, version) => (dispatch, getState) => {
+  const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+  return dispatch({
+    [CALL_API]: {
+      type: types.COLLECTION,
       method: 'GET',
-      url: new URL('version', root).href,
-      // make sure request failures are sent to .catch()
-      simple: true
-    });
-    return requestPromise(config)
-      .then(({ body }) => dispatch({
-        type: types.API_VERSION,
-        payload: { versionNumber: body.api_version }
-      }))
-      .then(() => dispatch(checkApiVersion()))
-      .catch(({ error }) => dispatch({
-        type: types.API_VERSION_ERROR,
-        payload: { error }
-      }));
-  };
+      id: getCollectionId({ name, version }),
+      path: `collections?name=${name}&version=${version}`,
+      qs: timeFilters,
+    },
+  });
 };
 
-export const checkApiVersion = () => {
-  return (dispatch, getState) => {
-    const { versionNumber } = getState().apiVersion;
-    if (compareVersions(versionNumber, minCompatibleApiVersion) >= 0) {
-      dispatch({
-        type: types.API_VERSION_COMPATIBLE
-      });
-    } else {
-      dispatch({
-        type: types.API_VERSION_INCOMPATIBLE,
-        payload: {
-          warning: `Dashboard incompatible with Cumulus API version (${versionNumber}), dashboard requires (>= ${minCompatibleApiVersion})`
-        }
-      });
-    }
-  };
+export const getApiVersion = () => (dispatch) => {
+  const config = configureRequest({
+    method: 'GET',
+    url: new URL('version', root).href,
+    // make sure request failures are sent to .catch()
+    simple: true
+  });
+  return requestPromise(config)
+    .then(({ body }) => dispatch({
+      type: types.API_VERSION,
+      payload: { versionNumber: body.api_version }
+    }))
+    .then(() => dispatch(checkApiVersion()))
+    .catch(({ error }) => dispatch({
+      type: types.API_VERSION_ERROR,
+      payload: { error }
+    }));
+};
+
+export const checkApiVersion = () => (dispatch, getState) => {
+  const { versionNumber } = getState().apiVersion;
+  if (compareVersions(versionNumber, minCompatibleApiVersion) >= 0) {
+    dispatch({
+      type: types.API_VERSION_COMPATIBLE
+    });
+  } else {
+    dispatch({
+      type: types.API_VERSION_INCOMPATIBLE,
+      payload: {
+        warning: `This dashboard is incompatible with the current Cumulus API v.${versionNumber}.  This dashboard requires a Cumulus API of v.${minCompatibleApiVersion} or later.`
+      }
+    });
+  }
 };
 
 export const listCollections = (options = {}) => {
@@ -146,7 +136,7 @@ export const listCollections = (options = {}) => {
         method: 'GET',
         id: null,
         url: new URL(urlPath, root).href,
-        qs: Object.assign({ limit: defaultPageLimit }, queryOptions, timeFilters)
+        qs: { limit: defaultPageLimit, ...queryOptions, ...timeFilters }
       }
     }).then(() => {
       if (getMMT) {
@@ -188,10 +178,10 @@ export const deleteCollection = (name, version) => ({
   }
 });
 
-export const searchCollections = (infix) => ({ type: types.SEARCH_COLLECTIONS, infix: infix });
+export const searchCollections = (infix) => ({ type: types.SEARCH_COLLECTIONS, infix });
 export const clearCollectionsSearch = () => ({ type: types.CLEAR_COLLECTIONS_SEARCH });
-export const filterCollections = (param) => ({ type: types.FILTER_COLLECTIONS, param: param });
-export const clearCollectionsFilter = (paramKey) => ({ type: types.CLEAR_COLLECTIONS_FILTER, paramKey: paramKey });
+export const filterCollections = (param) => ({ type: types.FILTER_COLLECTIONS, param });
+export const clearCollectionsFilter = (paramKey) => ({ type: types.CLEAR_COLLECTIONS_FILTER, paramKey });
 
 export const getCumulusInstanceMetadata = () => ({
   [CALL_API]: {
@@ -207,21 +197,17 @@ export const getCumulusInstanceMetadata = () => ({
  *
  * @returns {function} anonymous redux-thunk function
  */
-export const getMMTLinks = () =>
-  (dispatch, getState) => {
-    const { data } = getState().collections.list;
-    const doDispatch = ({ name, version }) =>
-      (url) =>
-        dispatch({
-          type: types.ADD_MMTLINK,
-          data: { name, version, url }
-        });
+export const getMMTLinks = () => (dispatch, getState) => {
+  const { data } = getState().collections.list;
+  const doDispatch = ({ name, version }) => (url) => dispatch({
+    type: types.ADD_MMTLINK,
+    data: { name, version, url }
+  });
 
-    data.forEach((collection) =>
-      getMMTLinkFromCmr(collection, getState)
-        .then(doDispatch(collection))
-        .catch((error) => console.error(error)));
-  };
+  data.forEach((collection) => getMMTLinkFromCmr(collection, getState)
+    .then(doDispatch(collection))
+    .catch((error) => console.error(error)));
+};
 
 /**
  * Returns a Promise for the Metadata Management Toolkit (MMT) URL string for
@@ -241,7 +227,8 @@ export const getMMTLinkFromCmr = (collection, getState) => {
   if (!cmrProvider || !cmrEnvironment) {
     return Promise.reject(
       new Error('Missing Cumulus Instance Metadata in state.' +
-                ' Make sure a call to getCumulusInstanceMetadata is dispatched.'));
+                ' Make sure a call to getCumulusInstanceMetadata is dispatched.')
+    );
   }
 
   if (getCollectionId(collection) in mmtLinks) {
@@ -252,9 +239,9 @@ export const getMMTLinkFromCmr = (collection, getState) => {
     {
       short_name: collection.name,
       version: collection.version
-    })
-    .then(([result]) =>
-      result && result.id && buildMMTLink(result.id, cmrEnvironment));
+    }
+  )
+    .then(([result]) => result && result.id && buildMMTLink(result.id, cmrEnvironment));
 };
 
 /**
@@ -281,19 +268,17 @@ export const getGranule = (granuleId) => ({
   }
 });
 
-export const listGranules = (options) => {
-  return (dispatch, getState) => {
-    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({
-      [CALL_API]: {
-        type: types.GRANULES,
-        method: 'GET',
-        id: null,
-        url: new URL('granules', root).href,
-        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
-      }
-    });
-  };
+export const listGranules = (options) => (dispatch, getState) => {
+  const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+  return dispatch({
+    [CALL_API]: {
+      type: types.GRANULES,
+      method: 'GET',
+      id: null,
+      url: new URL('granules', root).href,
+      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+    }
+  });
 };
 
 export const reprocessGranule = (granuleId) => ({
@@ -321,31 +306,28 @@ export const applyWorkflowToCollection = (name, version, workflow) => ({
   }
 });
 
-export const applyRecoveryWorkflowToCollection = (collectionId) => {
-  return (dispatch) => {
-    const { name, version } = collectionNameVersion(collectionId);
-    return dispatch(getCollection(name, version))
-      .then((collectionResponse) => {
-        const collectionRecoveryWorkflow = getProperty(
-          collectionResponse, 'data.results.0.meta.collectionRecoveryWorkflow'
-        );
-        if (collectionRecoveryWorkflow) {
-          return dispatch(applyWorkflowToCollection(name, version, collectionRecoveryWorkflow));
-        } else {
-          throw new ReferenceError(
+export const applyRecoveryWorkflowToCollection = (collectionId) => (dispatch) => {
+  const { name, version } = collectionNameVersion(collectionId);
+  return dispatch(getCollection(name, version))
+    .then((collectionResponse) => {
+      const collectionRecoveryWorkflow = getProperty(
+        collectionResponse, 'data.results.0.meta.collectionRecoveryWorkflow'
+      );
+      if (collectionRecoveryWorkflow) {
+        return dispatch(applyWorkflowToCollection(name, version, collectionRecoveryWorkflow));
+      }
+      throw new ReferenceError(
             `Unable to apply recovery workflow to ${collectionId} because the attribute collectionRecoveryWorkflow is not set in collection.meta`
-          );
-        }
-      })
-      .catch((error) => dispatch({
-        id: collectionId,
-        type: types.COLLECTION_APPLYWORKFLOW_ERROR,
-        error: error
-      }));
-  };
+      );
+    })
+    .catch((error) => dispatch({
+      id: collectionId,
+      type: types.COLLECTION_APPLYWORKFLOW_ERROR,
+      error
+    }));
 };
 
-export const applyWorkflowToGranule = (granuleId, workflow) => ({
+export const applyWorkflowToGranule = (granuleId, workflow, meta) => ({
   [CALL_API]: {
     type: types.GRANULE_APPLYWORKFLOW,
     method: 'PUT',
@@ -353,42 +335,35 @@ export const applyWorkflowToGranule = (granuleId, workflow) => ({
     path: `granules/${granuleId}`,
     body: {
       action: 'applyWorkflow',
-      workflow
+      workflow,
+      meta
     }
   }
 });
 
-export const getCollectionByGranuleId = (granuleId) => {
-  return (dispatch) => {
-    return dispatch(getGranule(granuleId)).then((granuleResponse) => {
-      const { name, version } = collectionNameVersion(granuleResponse.data.collectionId);
-      return dispatch(getCollection(name, version));
-    });
-  };
-};
+export const getCollectionByGranuleId = (granuleId) => (dispatch) => dispatch(getGranule(granuleId))
+  .then((granuleResponse) => {
+    const { name, version } = collectionNameVersion(granuleResponse.data.collectionId);
+    return dispatch(getCollection(name, version));
+  });
 
-export const applyRecoveryWorkflowToGranule = (granuleId) => {
-  return (dispatch) => {
-    return dispatch(getCollectionByGranuleId(granuleId))
-      .then((collectionResponse) => {
-        const granuleRecoveryWorkflow = getProperty(
-          collectionResponse, 'data.results.0.meta.granuleRecoveryWorkflow'
-        );
-        if (granuleRecoveryWorkflow) {
-          return dispatch(applyWorkflowToGranule(granuleId, granuleRecoveryWorkflow));
-        } else {
-          throw new ReferenceError(
+export const applyRecoveryWorkflowToGranule = (granuleId) => (dispatch) => dispatch(getCollectionByGranuleId(granuleId))
+  .then((collectionResponse) => {
+    const granuleRecoveryWorkflow = getProperty(
+      collectionResponse, 'data.results.0.meta.granuleRecoveryWorkflow'
+    );
+    if (granuleRecoveryWorkflow) {
+      return dispatch(applyWorkflowToGranule(granuleId, granuleRecoveryWorkflow));
+    }
+    throw new ReferenceError(
             `Unable to apply recovery workflow to ${granuleId} because the attribute granuleRecoveryWorkflow is not set in collection.meta`
-          );
-        }
-      })
-      .catch((error) => dispatch({
-        id: granuleId,
-        type: types.GRANULE_APPLYWORKFLOW_ERROR,
-        error: error
-      }));
-  };
-};
+    );
+  })
+  .catch((error) => dispatch({
+    id: granuleId,
+    type: types.GRANULE_APPLYWORKFLOW_ERROR,
+    error
+  }));
 
 export const reingestGranule = (granuleId) => ({
   [CALL_API]: {
@@ -453,10 +428,10 @@ export const deleteGranule = (granuleId) => ({
   }
 });
 
-export const searchGranules = (infix) => ({ type: types.SEARCH_GRANULES, infix: infix });
+export const searchGranules = (infix) => ({ type: types.SEARCH_GRANULES, infix });
 export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH });
-export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param: param });
-export const clearGranulesFilter = (paramKey) => ({ type: types.CLEAR_GRANULES_FILTER, paramKey: paramKey });
+export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param });
+export const clearGranulesFilter = (paramKey) => ({ type: types.CLEAR_GRANULES_FILTER, paramKey });
 
 export const getGranuleCSV = (options) => ({
   [CALL_API]: {
@@ -475,24 +450,22 @@ export const getOptionsCollectionName = (options) => ({
   }
 });
 
-export const getStats = (options) => {
-  return (dispatch, getState) => {
-    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({
-      [CALL_API]: {
-        type: types.STATS,
-        method: 'GET',
-        url: new URL('stats', root).href,
-        qs: { ...options, ...timeFilters }
-      }
-    });
-  };
+export const getStats = (options) => (dispatch, getState) => {
+  const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+  return dispatch({
+    [CALL_API]: {
+      type: types.STATS,
+      method: 'GET',
+      url: new URL('stats', root).href,
+      qs: { ...options, ...timeFilters }
+    }
+  });
 };
 
 export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
   if (!esRoot) return { type: types.NOOP };
   return (dispatch, getState) => {
-    const stackName = cumulusInstanceMeta.stackName;
+    const { stackName } = cumulusInstanceMeta;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
     const startTime = timeFilters.timestamp__from || 0;
@@ -513,7 +486,7 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
   if (!esRoot) return { type: types.NOOP };
   if (!showDistributionAPIMetrics) return { type: types.NOOP };
   return (dispatch, getState) => {
-    const stackName = cumulusInstanceMeta.stackName;
+    const { stackName } = cumulusInstanceMeta;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
     const startTime = timeFilters.timestamp__from || 0;
@@ -534,7 +507,7 @@ export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
   if (!esRoot) return { type: types.NOOP };
   if (!showTeaMetrics) return { type: types.NOOP };
   return (dispatch, getState) => {
-    const stackName = cumulusInstanceMeta.stackName;
+    const { stackName } = cumulusInstanceMeta;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
     const startTime = timeFilters.timestamp__from || 0;
@@ -554,7 +527,7 @@ export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
 export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
   if (!esRoot) return { type: types.NOOP };
   return (dispatch, getState) => {
-    const stackName = cumulusInstanceMeta.stackName;
+    const { stackName } = cumulusInstanceMeta;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
     const endTime = timeFilters.timestamp__to || Date.now();
     const startTime = timeFilters.timestamp__from || 0;
@@ -588,24 +561,22 @@ export const getCount = (options = {}) => {
         method: 'GET',
         id: null,
         url: new URL('stats/aggregate', root).href,
-        qs: Object.assign({ type: 'must-include-type', field: 'status' }, params, timeFilters)
+        qs: { type: 'must-include-type', field: 'status', ...params, ...timeFilters }
       }
     });
   };
 };
 
-export const listPdrs = (options) => {
-  return (dispatch, getState) => {
-    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({
-      [CALL_API]: {
-        type: types.PDRS,
-        method: 'GET',
-        url: new URL('pdrs', root).href,
-        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
-      }
-    });
-  };
+export const listPdrs = (options) => (dispatch, getState) => {
+  const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+  return dispatch({
+    [CALL_API]: {
+      type: types.PDRS,
+      method: 'GET',
+      url: new URL('pdrs', root).href,
+      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+    }
+  });
 };
 
 export const getPdr = (pdrName) => ({
@@ -617,21 +588,19 @@ export const getPdr = (pdrName) => ({
   }
 });
 
-export const searchPdrs = (infix) => ({ type: types.SEARCH_PDRS, infix: infix });
+export const searchPdrs = (infix) => ({ type: types.SEARCH_PDRS, infix });
 export const clearPdrsSearch = () => ({ type: types.CLEAR_PDRS_SEARCH });
-export const filterPdrs = (param) => ({ type: types.FILTER_PDRS, param: param });
-export const clearPdrsFilter = (paramKey) => ({ type: types.CLEAR_PDRS_FILTER, paramKey: paramKey });
+export const filterPdrs = (param) => ({ type: types.FILTER_PDRS, param });
+export const clearPdrsFilter = (paramKey) => ({ type: types.CLEAR_PDRS_FILTER, paramKey });
 
-export const listProviders = (options) => {
-  return {
-    [CALL_API]: {
-      type: types.PROVIDERS,
-      method: 'GET',
-      url: new URL('providers', root).href,
-      qs: Object.assign({ limit: defaultPageLimit }, options)
-    }
-  };
-};
+export const listProviders = (options) => ({
+  [CALL_API]: {
+    type: types.PROVIDERS,
+    method: 'GET',
+    url: new URL('providers', root).href,
+    qs: { limit: defaultPageLimit, ...options }
+  }
+});
 
 export const getOptionsProviderGroup = () => ({
   [CALL_API]: {
@@ -682,10 +651,10 @@ export const deleteProvider = (providerId) => ({
   }
 });
 
-export const searchProviders = (infix) => ({ type: types.SEARCH_PROVIDERS, infix: infix });
+export const searchProviders = (infix) => ({ type: types.SEARCH_PROVIDERS, infix });
 export const clearProvidersSearch = () => ({ type: types.CLEAR_PROVIDERS_SEARCH });
-export const filterProviders = (param) => ({ type: types.FILTER_PROVIDERS, param: param });
-export const clearProvidersFilter = (paramKey) => ({ type: types.CLEAR_PROVIDERS_FILTER, paramKey: paramKey });
+export const filterProviders = (param) => ({ type: types.FILTER_PROVIDERS, param });
+export const clearProvidersFilter = (paramKey) => ({ type: types.CLEAR_PROVIDERS_FILTER, paramKey });
 
 export const deletePdr = (pdrName) => ({
   [CALL_API]: {
@@ -696,28 +665,22 @@ export const deletePdr = (pdrName) => ({
   }
 });
 
-export const getLogs = (options) => {
-  return (dispatch, getState) => {
-    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({
-      [CALL_API]: {
-        type: types.LOGS,
-        method: 'GET',
-        url: new URL('logs', root).href,
-        qs: Object.assign({ limit: 100 }, options, timeFilters)
-      }
-    });
-  };
+export const getLogs = (options) => (dispatch, getState) => {
+  const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+  return dispatch({
+    [CALL_API]: {
+      type: types.LOGS,
+      method: 'GET',
+      url: new URL('logs', root).href,
+      qs: { limit: 100, ...options, ...timeFilters }
+    }
+  });
 };
 
 export const clearLogs = () => ({ type: types.CLEAR_LOGS });
 
-export const logout = () => {
-  return (dispatch) => {
-    return dispatch(deleteToken())
-      .then(() => dispatch({ type: types.LOGOUT }));
-  };
-};
+export const logout = () => (dispatch) => dispatch(deleteToken())
+  .then(() => dispatch({ type: types.LOGOUT }));
 
 export const login = (token) => ({
   [CALL_API]: {
@@ -733,27 +696,21 @@ export const login = (token) => ({
   }
 });
 
-export const deleteToken = () => {
-  return (dispatch, getState) => {
-    const token = getProperty(getState(), 'api.tokens.token');
-    if (!token) return Promise.resolve();
+export const deleteToken = () => (dispatch, getState) => {
+  const token = getProperty(getState(), 'api.tokens.token');
+  if (!token) return Promise.resolve();
 
-    const requestConfig = configureRequest({
-      method: 'DELETE',
-      url: new URL(`tokenDelete/${token}`, root).href
-    });
-    return requestPromise(requestConfig)
-      .finally(() => dispatch({ type: types.DELETE_TOKEN }));
-  };
+  const requestConfig = configureRequest({
+    method: 'DELETE',
+    url: new URL(`tokenDelete/${token}`, root).href
+  });
+  return requestPromise(requestConfig)
+    .finally(() => dispatch({ type: types.DELETE_TOKEN }));
 };
 
-export const loginError = (error) => {
-  return (dispatch) => {
-    return dispatch(deleteToken())
-      .then(() => dispatch({ type: 'LOGIN_ERROR', error }))
-      .then(() => historyPushWithQueryParams('/auth'));
-  };
-};
+export const loginError = (error) => (dispatch) => dispatch(deleteToken())
+  .then(() => dispatch({ type: 'LOGIN_ERROR', error }))
+  .then(() => historyPushWithQueryParams('/auth'));
 
 export const getSchema = (type) => ({
   [CALL_API]: {
@@ -768,7 +725,7 @@ export const listWorkflows = (options) => ({
     type: types.WORKFLOWS,
     method: 'GET',
     url: new URL('workflows', root).href,
-    qs: Object.assign({ limit: defaultPageLimit }, options)
+    qs: { limit: defaultPageLimit, ...options }
   }
 });
 export const searchWorkflows = (searchString) => ({ type: types.SEARCH_WORKFLOWS, searchString });
@@ -781,7 +738,7 @@ export const getExecutionStatus = (arn) => ({
   [CALL_API]: {
     type: types.EXECUTION_STATUS,
     method: 'GET',
-    url: new URL('executions/status/' + arn, root).href
+    url: new URL(`executions/status/${arn}`, root).href
   }
 });
 
@@ -789,41 +746,37 @@ export const getExecutionLogs = (executionName) => ({
   [CALL_API]: {
     type: types.EXECUTION_LOGS,
     method: 'GET',
-    url: new URL('logs/' + executionName, root).href
+    url: new URL(`logs/${executionName}`, root).href
   }
 });
 
-export const listExecutions = (options) => {
-  return (dispatch, getState) => {
-    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({
-      [CALL_API]: {
-        type: types.EXECUTIONS,
-        method: 'GET',
-        url: new URL('executions', root).href,
-        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
-      }
-    });
-  };
+export const listExecutions = (options) => (dispatch, getState) => {
+  const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+  return dispatch({
+    [CALL_API]: {
+      type: types.EXECUTIONS,
+      method: 'GET',
+      url: new URL('executions', root).href,
+      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+    }
+  });
 };
 
-export const filterExecutions = (param) => ({ type: types.FILTER_EXECUTIONS, param: param });
-export const clearExecutionsFilter = (paramKey) => ({ type: types.CLEAR_EXECUTIONS_FILTER, paramKey: paramKey });
-export const searchExecutions = (infix) => ({ type: types.SEARCH_EXECUTIONS, infix: infix });
+export const filterExecutions = (param) => ({ type: types.FILTER_EXECUTIONS, param });
+export const clearExecutionsFilter = (paramKey) => ({ type: types.CLEAR_EXECUTIONS_FILTER, paramKey });
+export const searchExecutions = (infix) => ({ type: types.SEARCH_EXECUTIONS, infix });
 export const clearExecutionsSearch = () => ({ type: types.CLEAR_EXECUTIONS_SEARCH });
 
-export const listOperations = (options) => {
-  return (dispatch, getState) => {
-    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({
-      [CALL_API]: {
-        type: types.OPERATIONS,
-        method: 'GET',
-        url: new URL('asyncOperations', root).href,
-        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
-      }
-    });
-  };
+export const listOperations = (options) => (dispatch, getState) => {
+  const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+  return dispatch({
+    [CALL_API]: {
+      type: types.OPERATIONS,
+      method: 'GET',
+      url: new URL('asyncOperations', root).href,
+      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+    }
+  });
 };
 
 export const getOperation = (operationId) => ({
@@ -835,23 +788,21 @@ export const getOperation = (operationId) => ({
   }
 });
 
-export const searchOperations = (infix) => ({ type: types.SEARCH_OPERATIONS, infix: infix });
+export const searchOperations = (infix) => ({ type: types.SEARCH_OPERATIONS, infix });
 export const clearOperationsSearch = () => ({ type: types.CLEAR_OPERATIONS_SEARCH });
-export const filterOperations = (param) => ({ type: types.FILTER_OPERATIONS, param: param });
-export const clearOperationsFilter = (paramKey) => ({ type: types.CLEAR_OPERATIONS_FILTER, paramKey: paramKey });
+export const filterOperations = (param) => ({ type: types.FILTER_OPERATIONS, param });
+export const clearOperationsFilter = (paramKey) => ({ type: types.CLEAR_OPERATIONS_FILTER, paramKey });
 
-export const listRules = (options) => {
-  return (dispatch, getState) => {
-    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({
-      [CALL_API]: {
-        type: types.RULES,
-        method: 'GET',
-        url: new URL('rules', root).href,
-        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
-      }
-    });
-  };
+export const listRules = (options) => (dispatch, getState) => {
+  const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+  return dispatch({
+    [CALL_API]: {
+      type: types.RULES,
+      method: 'GET',
+      url: new URL('rules', root).href,
+      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+    }
+  });
 };
 
 export const getRule = (ruleName) => ({
@@ -941,23 +892,21 @@ export const rerunRule = (payload) => ({
   }
 });
 
-export const searchRules = (infix) => ({ type: types.SEARCH_RULES, infix: infix });
+export const searchRules = (infix) => ({ type: types.SEARCH_RULES, infix });
 export const clearRulesSearch = () => ({ type: types.CLEAR_RULES_SEARCH });
-export const filterRules = (param) => ({ type: types.FILTER_RULES, param: param });
-export const clearRulesFilter = (paramKey) => ({ type: types.CLEAR_RULES_FILTER, paramKey: paramKey });
+export const filterRules = (param) => ({ type: types.FILTER_RULES, param });
+export const clearRulesFilter = (paramKey) => ({ type: types.CLEAR_RULES_FILTER, paramKey });
 
-export const listReconciliationReports = (options) => {
-  return (dispatch, getState) => {
-    const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
-    return dispatch({
-      [CALL_API]: {
-        type: types.RECONCILIATIONS,
-        method: 'GET',
-        url: new URL('reconciliationReports', root).href,
-        qs: Object.assign({ limit: defaultPageLimit }, options, timeFilters)
-      }
-    });
-  };
+export const listReconciliationReports = (options) => (dispatch, getState) => {
+  const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
+  return dispatch({
+    [CALL_API]: {
+      type: types.RECONCILIATIONS,
+      method: 'GET',
+      url: new URL('reconciliationReports', root).href,
+      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+    }
+  });
 };
 
 export const getReconciliationReport = (reconciliationName) => ({
@@ -969,12 +918,13 @@ export const getReconciliationReport = (reconciliationName) => ({
   }
 });
 
-export const createReconciliationReport = () => ({
+export const createReconciliationReport = (payload) => ({
   [CALL_API]: {
-    id: `reconciliation-report-${new Date().toISOString()}`,
+    id: get(payload, 'reportName', `reconciliation-report-${new Date().toISOString()}`),
     type: types.NEW_RECONCILIATION,
     method: 'POST',
-    path: 'reconciliationReports'
+    path: 'reconciliationReports',
+    body: payload
   }
 });
 
@@ -987,12 +937,14 @@ export const deleteReconciliationReport = (reconciliationName) => ({
   }
 });
 
-export const searchReconciliationReports = (infix) => ({ type: types.SEARCH_RECONCILIATIONS, infix: infix });
+export const searchReconciliationReports = (infix) => ({ type: types.SEARCH_RECONCILIATIONS, infix });
 export const clearReconciliationReportSearch = () => ({ type: types.CLEAR_RECONCILIATIONS_SEARCH });
-export const filterReconciliationReports = (param) => ({ type: types.FILTER_RECONCILIATIONS, param: param });
-export const clearReconciliationReportsFilter = (paramKey) => ({ type: types.CLEAR_RECONCILIATIONS_FILTER, paramKey: paramKey });
+export const filterReconciliationReports = (param) => ({ type: types.FILTER_RECONCILIATIONS, param });
+export const clearReconciliationReportsFilter = (paramKey) => ({ type: types.CLEAR_RECONCILIATIONS_FILTER, paramKey });
 
 export const searchReconciliationReport = (searchString) => ({ type: types.SEARCH_RECONCILIATION, searchString });
 export const clearReconciliationSearch = () => ({ type: types.CLEAR_RECONCILIATION_SEARCH });
-export const filterReconciliationReport = (param) => ({ type: types.FILTER_RECONCILIATION, param: param });
-export const clearReconciliationReportFilter = (paramKey) => ({ type: types.CLEAR_RECONCILIATION_FILTER, paramKey: paramKey });
+export const filterReconciliationReport = (param) => ({ type: types.FILTER_RECONCILIATION, param });
+export const clearReconciliationReportFilter = (paramKey) => ({ type: types.CLEAR_RECONCILIATION_FILTER, paramKey });
+
+export const toggleSidebar = () => ({ type: types.TOGGLE_SIDEBAR });
