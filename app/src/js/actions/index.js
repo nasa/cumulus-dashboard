@@ -923,7 +923,7 @@ export const createReconciliationReport = (payload) => ({
 export const deleteReconciliationReport = (reconciliationName) => ({
   [CALL_API]: {
     id: reconciliationName,
-    type: types.RECONCILIATION,
+    type: types.RECONCILIATION_DELETE,
     method: 'DELETE',
     path: `reconciliationReports/${reconciliationName}`
   }

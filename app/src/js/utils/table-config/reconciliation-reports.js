@@ -80,7 +80,7 @@ const handleCsvDownloadClick = (e, reportName, dispatch) => {
 
 const handleDeleteClick = (e, value, dispatch, query) => {
   e.preventDefault();
-  dispatch(deleteReconciliationReport(value)).then(() => {
+  dispatch(deleteReconciliationReport(value)).then((response) => {
     dispatch(listReconciliationReports(query));
   });
 };
