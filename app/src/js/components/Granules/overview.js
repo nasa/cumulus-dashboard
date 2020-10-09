@@ -67,7 +67,7 @@ class GranulesOverview extends React.Component {
     this.submitListRequest = this.submitListRequest.bind(this);
     this.goToListPage = this.goToListPage.bind(this);
     this.handleReportTypeInputChange = this.handleReportTypeInputChange.bind(this);
-    this.defaultListName = () => `granuleList${moment().format('YYYYMMDD')}`;
+    this.defaultListName = () => `granuleList-${moment().format('YYYYMMDDTHHmmssSSS')}`;
     this.state = {
       isModalOpen: false,
       isListRequestSubmitted: false,
@@ -211,6 +211,7 @@ class GranulesOverview extends React.Component {
               onClick={this.toggleModal}
             >Create Granule Inventory List</a>
             <DefaultModal
+              className="granule-inventory"
               showModal={isModalOpen}
               onCloseModal={this.closeModal}
               onConfirm={isListRequestSubmitted ? this.goToListPage : this.submitListRequest}
@@ -218,19 +219,21 @@ class GranulesOverview extends React.Component {
               {!isListRequestSubmitted && (
                 <div>
                   <div>You have generated a selection to process for the following list:</div>
-                  <TextForm
-                    id="reportName"
-                    label="List Name"
-                    onChange={this.handleReportTypeInputChange}
-                    value={listName}
-                  />
+                  <div className="list-name">
+                    <TextForm
+                      id="reportName"
+                      label="List Name"
+                      onChange={this.handleReportTypeInputChange}
+                      value={listName}
+                    />
+                  </div>
                   <div>Would you like to continue with generating the list?</div>
                 </div>
               )}
               {isListRequestSubmitted && (
                 <div>
                   <div>The following request is being processed and will be available shortly</div>
-                  <div>{listName}</div>
+                  <div className="list-name">{listName}</div>
                   <div>On the Lists page, view the status and download your list when available</div>
                 </div>
               )}

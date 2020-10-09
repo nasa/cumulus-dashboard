@@ -6,7 +6,7 @@ import { getReconciliationReport, deleteReconciliationReport, listReconciliation
 import { getPersistentQueryParams } from '../url-helper';
 import { downloadFile } from '../download-file';
 
-export const tableColumns = ({ dispatch, isGranules }) => ([
+export const tableColumns = ({ dispatch, isGranules, query }) => ([
   {
     Header: 'Name',
     accessor: 'name',
@@ -53,7 +53,7 @@ export const tableColumns = ({ dispatch, isGranules }) => ([
     accessor: 'name',
     Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
       <button className='button button__row button__row--delete'
-        onClick={(e) => handleDeleteClick(e, value, dispatch)}
+        onClick={(e) => handleDeleteClick(e, value, dispatch, query)}
       />
     ),
     disableSortBy: true
@@ -78,10 +78,10 @@ const handleCsvDownloadClick = (e, reportName, dispatch) => {
   });
 };
 
-const handleDeleteClick = (e, value, dispatch) => {
+const handleDeleteClick = (e, value, dispatch, query) => {
   e.preventDefault();
   dispatch(deleteReconciliationReport(value)).then(() => {
-    dispatch(listReconciliationReports());
+    dispatch(listReconciliationReports(query));
   });
 };
 
