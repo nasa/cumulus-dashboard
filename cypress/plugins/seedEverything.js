@@ -69,7 +69,6 @@ function uploadReconciliationReportFiles() {
   return Promise.all(
     reconcileReportList.map((obj) => {
       const { filename, data } = obj;
-      console.log(filename, data);
       const body = filename.endsWith('.csv') ? CSV.stringify(data) : JSON.stringify(data);
       return promiseS3Upload({
         Bucket: `${localSystemBucket}`,

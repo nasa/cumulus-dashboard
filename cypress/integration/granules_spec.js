@@ -377,7 +377,33 @@ describe('Dashboard Granules Page', () => {
       cy.get('@list').should('have.length', 1);
       cy.get('@list').contains('.td a', listName).click();
 
-      cy.wait('@getList').its('request.body').should('include', 'url');
+      cy.wait('@getList').its('response.body').should('include', 'url');
+    });
+
+    it('Should open modal to create granule inventory report', () => {
+      const listName = 'GranuleListTest';
+      cy.route2({
+        url: '/reconciliationReports',
+        method: 'POST'
+      }, (req) => {
+        const requestBody = JSON.parse(req.body);
+        expect(requestBody).to.have.property('reportType', 'Granule Inventory');
+        expect(requestBody).to.have.property('reportName', listName);
+      }).as('createList');
+
+      cy.visit('/granules');
+
+      cy.get('.csv__download').click();
+      cy.get('.default-modal.granule-inventory ').as('modal');
+
+      cy.get('@modal').contains('div', 'You have generated a selection to process for the following list:');
+      cy.get('@modal').find('.list-name input').clear().type(listName);
+      cy.get('@modal').find('.button--submit').click();
+      cy.get('@modal').contains('div', 'The following request is being processed and will be available shortly');
+      cy.get('@modal').contains('.list-name', listName);
+      cy.get('@modal').find('.button--submit').click();
+
+      cy.url().should('include', '/granules/lists');
     });
   });
 });
