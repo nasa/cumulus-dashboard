@@ -49,6 +49,16 @@
   }
 }
 
+#table-row-tooltip {
+  .tooltip-inner {
+    background: $dark-blue;
+  }
+
+  .arrow::before {
+    border-top-color: $dark-blue;
+  }
+}
+
 .table__header {
   display: flex;
   align-items: center;

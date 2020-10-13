@@ -5,6 +5,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import { Link } from 'react-router-dom';
 import { getPersistentQueryParams } from './url-helper';
+import Tooltip from '../components/Tooltip/tooltip';
 
 export const nullValue = '--';
 
@@ -81,6 +82,16 @@ export const fromNow = (numberstring) => {
   }
   return moment(numberstring).fromNow();
 };
+
+export const fromNowWithTooltip = (timestamp) => (
+  <Tooltip
+    placement='top'
+    tip={fullDate(timestamp)}
+    id='table-row-tooltip'
+    target={<span>{fromNow(timestamp)}</span>}
+    className='tooltip'
+  />
+);
 
 export const lastUpdated = (datestring, text) => {
   const meta = text || 'Last Updated';

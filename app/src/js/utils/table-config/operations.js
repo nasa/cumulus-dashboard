@@ -1,4 +1,4 @@
-import { fromNow, displayCase } from '../format';
+import { fromNowWithTooltip, displayCase } from '../format';
 
 export const tableColumns = [
   {
@@ -21,7 +21,8 @@ export const tableColumns = [
   },
   {
     Header: 'Created',
-    accessor: (row) => fromNow(row.createdAt),
+    accessor: 'createdAt',
+    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
     id: 'createdAt'
   }
 ];

@@ -9,7 +9,7 @@ import {
   getFormattedCollectionId,
   collectionLink,
   providerLink,
-  fromNow
+  fromNowWithTooltip
 } from '../format';
 import { strings } from '../../components/locale';
 import { getPersistentQueryParams } from '../url-helper';
@@ -42,7 +42,8 @@ export const tableColumns = [
   },
   {
     Header: 'Timestamp',
-    accessor: (row) => fromNow(row.timestamp),
+    accessor: 'timestamp',
+    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
     id: 'timestamp'
   }
 ];
