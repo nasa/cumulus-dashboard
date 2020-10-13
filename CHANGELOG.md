@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- **CUMULUS-2200**
+  - Add Granule List page. Use Granule Inventory reports for generating granule CSVs
+
 ## [v2.0.0]
 
 ### BREAKING CHANGES
