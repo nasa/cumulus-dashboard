@@ -365,5 +365,19 @@ describe('Dashboard Granules Page', () => {
       cy.url().should('match', /\/granules/);
       cy.get('.heading--large').should('have.text', 'Granule Overview');
     });
+
+    it('Should have a Granule Lists page', () => {
+      const listName = 'GranuleList100220';
+      cy.route2(`/reconciliationReports/${listName}`).as('getList');
+
+      cy.visit('/granules');
+      cy.contains('.sidebar li a', 'Lists').click();
+      cy.url().should('include', 'granules/lists');
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('@list').should('have.length', 1);
+      cy.get('@list').contains('.td a', listName).click();
+
+      cy.wait('@getList').its('request.body').should('include', 'url');
+    });
   });
 });
