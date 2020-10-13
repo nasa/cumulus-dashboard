@@ -1,6 +1,7 @@
 const { testUtils } = require('@cumulus/api');
 const { promiseS3Upload } = require('@cumulus/aws-client/S3');
 const fs = require('fs');
+const CSV = require('csv-string');
 const serveUtils = require('@cumulus/api/bin/serveUtils');
 const { eraseDataStack } = require('@cumulus/api/bin/serve');
 const {
@@ -58,7 +59,7 @@ function uploadReconciliationReportFiles() {
     .readdirSync(reconciliationReportDir)
     .map((f) => {
       let data = fs.readFileSync(`${reconciliationReportDir}/${f}`).toString();
-      if (f.endsWith('.json')) { data = JSON.parse(data); }
+      data = f.endsWith('.csv') ? CSV.parse(data) : JSON.parse(data);
       return {
         filename: f,
         data,
@@ -68,10 +69,12 @@ function uploadReconciliationReportFiles() {
   return Promise.all(
     reconcileReportList.map((obj) => {
       const { filename, data } = obj;
+      console.log(filename, data);
+      const body = filename.endsWith('.csv') ? CSV.stringify(data) : JSON.stringify(data);
       return promiseS3Upload({
         Bucket: `${localSystemBucket}`,
         Key: `${localStackName}/reconciliation-reports/${filename}`,
-        Body: JSON.stringify(data),
+        Body: body,
       });
     })
   );
