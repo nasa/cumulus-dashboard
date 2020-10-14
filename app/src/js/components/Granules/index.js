@@ -17,7 +17,9 @@ import { filterQueryParams } from '../../utils/url-helper';
 
 const Granules = ({ dispatch, location, queryParams, stats }) => {
   const { pathname } = location;
-  const count = get(stats, 'count.sidebar.granules.count');
+  const granulesCount = get(stats, 'count.sidebar.granules.count') || [];
+  const reportCount = get(stats, 'count.sidebar.reconciliationReports.count') || [];
+  const count = [...granulesCount, ...reportCount];
   const filteredQueryParams = filterQueryParams(queryParams);
 
   function query() {
@@ -29,6 +31,16 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
       getCount({
         type: 'granules',
         field: 'status',
+        sidebarCount: true
+      })
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      getCount({
+        type: 'reconciliationReports',
+        field: 'type',
         sidebarCount: true
       })
     );
