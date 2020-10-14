@@ -5,14 +5,14 @@ import Collapsible from 'react-collapsible';
 import { Link } from 'react-router-dom';
 import noop from 'lodash/noop';
 import {
-  fromNow,
   seconds,
   bool,
   nullValue,
   displayCase,
   collectionLink,
   granuleLink,
-  providerLink
+  providerLink,
+  fromNowWithTooltip
 } from '../format';
 import {
   reingestGranule,
@@ -74,7 +74,8 @@ export const tableColumns = [
   },
   {
     Header: 'Updated',
-    accessor: (row) => fromNow(row.timestamp),
+    accessor: 'timestamp',
+    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
     id: 'timestamp'
   }
 ];
@@ -109,7 +110,8 @@ export const errorTableColumns = [
   },
   {
     Header: 'Updated',
-    accessor: (row) => fromNow(row.timestamp),
+    accessor: 'timestamp',
+    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
     id: 'timestamp'
   }
 ];
