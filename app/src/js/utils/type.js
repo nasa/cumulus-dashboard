@@ -7,12 +7,12 @@ export const reconciliationReportTypes = [
   {
     id: 'Internal',
     label: 'Internal',
-    description: 'This report compares the granules that are in DynamoDB versus ElasticSearch.',
+    description: 'This report compares the collections and granules that are in DynamoDB versus ElasticSearch.',
   },
   {
     id: 'Inventory',
     label: 'Inventory',
-    description: 'This report allows you to select what bucket (s3, Cumulus, S3 Glacier, CMR) you would like to generate validation for all granules for a duration.',
+    description: 'This report allows you to select what bucket (s3, Cumulus, CMR) you would like to generate validation for all collections, granules and files for a duration.',
   },
 ];
 

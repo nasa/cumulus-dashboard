@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   displayCase,
-  fromNow,
   seconds,
+  fromNowWithTooltip,
   truncate,
   formatCollectionId
 } from '../format';
@@ -28,7 +28,8 @@ export const tableColumns = [
   },
   {
     Header: 'Created',
-    accessor: (row) => fromNow(row.createdAt),
+    accessor: 'createdAt',
+    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
     id: 'createdAt'
   },
   {

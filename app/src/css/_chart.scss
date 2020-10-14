@@ -29,6 +29,10 @@
   pointer-events: none;
   transition: all 0.1s;
   z-index: 99;
+
+  &.show {
+    opacity: 1 !important;
+  }
 }
 
 .tooltip__inner {
@@ -37,6 +41,49 @@
   border-radius: 5px;
   background: #FFF;
   max-width: 240px;
+}
+
+.tooltip--blue {
+  @extend .tooltip;
+  .tooltip-inner {
+    @extend .tooltip__inner;
+    background-color: $ocean-blue;
+  }
+
+  &.bs-tooltip-top .arrow::before {
+    border-top-color: $ocean-blue;
+  }
+  &.bs-tooltip-right .arrow::before {
+    border-right-color: $ocean-blue;
+  }
+  &.bs-tooltip-bottom .arrow::before {
+    border-bottom-color: $ocean-blue;
+  }
+  &.bs-tooltip-left .arrow::before {
+    border-left-color: $ocean-blue;
+  }
+}
+
+.tooltip--light {
+  @extend .tooltip;
+  .tooltip-inner {
+    @extend .tooltip__inner;
+    color: $ocean-blue;
+    background-color: $white;
+  }
+
+  &.bs-tooltip-top .arrow::before {
+    border-top-color: $white;
+  }
+  &.bs-tooltip-right .arrow::before {
+    border-right-color: $white;
+  }
+  &.bs-tooltip-bottom .arrow::before {
+    border-bottom-color: $white;
+  }
+  &.bs-tooltip-left .arrow::before {
+    border-left-color: $white;
+  }
 }
 
 .clusters rect {
