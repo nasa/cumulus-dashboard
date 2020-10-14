@@ -168,7 +168,7 @@ const CreateReconciliationReport = ({
                     icon="info-circle"
                   />
                 }
-                className='tooltip'
+                className='tooltip--light'
               />
             )}
           </div>
@@ -214,7 +214,7 @@ const CreateReconciliationReport = ({
                   icon="info-circle"
                 />
               }
-              className='tooltip'
+              className='tooltip--light'
             />
           </div>
           <div className="form__item">

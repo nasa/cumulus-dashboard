@@ -39,6 +39,49 @@
   max-width: 240px;
 }
 
+.tooltip--blue {
+  @extend .tooltip;
+  .tooltip-inner {
+    @extend .tooltip__inner;
+    background: $dark-blue;
+  }
+
+  &.bs-tooltip-top .arrow::before {
+    border-top-color: $dark-blue;
+  }
+  &.bs-tooltip-right .arrow::before {
+    border-right-color: $dark-blue;
+  }
+  &.bs-tooltip-bottom .arrow::before {
+    border-bottom-color: $dark-blue;
+  }
+  &.bs-tooltip-left .arrow::before {
+    border-left-color: $dark-blue;
+  }
+}
+
+.tooltip--light {
+  @extend .tooltip;
+  .tooltip-inner {
+    @extend .tooltip__inner;
+    color: $dark-blue;
+    background-color: $white;
+  }
+
+  &.bs-tooltip-top .arrow::before {
+    border-top-color: $white;
+  }
+  &.bs-tooltip-right .arrow::before {
+    border-right-color: $white;
+  }
+  &.bs-tooltip-bottom .arrow::before {
+    border-bottom-color: $white;
+  }
+  &.bs-tooltip-left .arrow::before {
+    border-left-color: $white;
+  }
+}
+
 .clusters rect {
   fill: transparent;
   stroke: #555;

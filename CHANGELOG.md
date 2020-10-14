@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- **CUMULUS-2091**
+  - Add Tooltip component
+  - Add blue tooltip for timestamp values in the table
+
 ## [v2.0.0]
 
 ### BREAKING CHANGES
