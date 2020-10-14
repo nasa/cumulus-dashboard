@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import { OverlayTrigger, Tooltip as TOOLTIP } from 'react-bootstrap';
 
 const Tooltip = ({
-  placement,
-  tip,
-  id,
-  target,
   className = 'tooltip',
+  id = 'tooltip-id',
+  placement,
+  target,
+  tip,
 }) => (
   <OverlayTrigger
     placement={placement}
     overlay={
-      <TOOLTIP id={id} className={className}>
+      <TOOLTIP className={className} id={id}>
         {tip}
       </TOOLTIP>
     }
@@ -22,14 +22,11 @@ const Tooltip = ({
 );
 
 Tooltip.propTypes = {
-  tip: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.node
-  ]),
-  placement: PropTypes.string,
-  id: PropTypes.string,
-  target: PropTypes.node,
   className: PropTypes.string,
+  id: PropTypes.string,
+  placement: PropTypes.string,
+  target: PropTypes.node,
+  tip: PropTypes.node,
 };
 
 export default Tooltip;

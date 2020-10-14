@@ -160,15 +160,16 @@ const CreateReconciliationReport = ({
             />
             {reportType && (
               <Tooltip
-                placement="bottom"
-                tip={getTooltipInfoFromType(reportType)}
+                className="tooltip--light"
+                id="report-type-tooltip"
+                placement="right"
                 target={
                   <FontAwesomeIcon
                     className="button__icon--animation"
                     icon="info-circle"
                   />
                 }
-                className='tooltip--light'
+                tip={getTooltipInfoFromType(reportType)}
               />
             )}
           </div>
@@ -206,15 +207,16 @@ const CreateReconciliationReport = ({
           <div className="form__item form__item--tooltip">
             <span>Additional Filters</span>
             <Tooltip
+              className="tooltip--light"
+              id="report-filter-tooltip"
               placement="right"
-              tip="Only one of Provider, Collection ID, or Granule ID may be applied for each report"
               target={
                 <FontAwesomeIcon
                   className="button__icon--animation"
                   icon="info-circle"
                 />
               }
-              className='tooltip--light'
+              tip="Only one of Provider, Collection ID, or Granule ID may be applied for each report"
             />
           </div>
           <div className="form__item">
