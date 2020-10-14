@@ -35,7 +35,7 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
     Cell: ({ cell: { value } }) => dateOnly(value)
   },
   {
-    Header: 'Download Report',
+    Header: `Download ${isGranules ? 'List' : 'Report'}`,
     id: 'download',
     accessor: 'name',
     Cell: ({ cell: { value } }) => (// eslint-disable-line react/prop-types
@@ -48,7 +48,7 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
     disableSortBy: true
   },
   {
-    Header: 'Delete Report',
+    Header: `Delete ${isGranules ? 'List' : 'Report'}`,
     id: 'delete',
     accessor: 'name',
     Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
