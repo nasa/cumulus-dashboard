@@ -212,9 +212,10 @@ class GranulesOverview extends React.Component {
             >Create Granule Inventory List</a>
             <DefaultModal
               className="granule-inventory"
-              showModal={isModalOpen}
               onCloseModal={this.closeModal}
               onConfirm={isListRequestSubmitted ? this.goToListPage : this.submitListRequest}
+              showModal={isModalOpen}
+              title='Create Granule List'
             >
               {!isListRequestSubmitted && (
                 <div>
