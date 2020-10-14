@@ -29,6 +29,10 @@
   pointer-events: none;
   transition: all 0.1s;
   z-index: 99;
+
+  &.show {
+    opacity: 1 !important;
+  }
 }
 
 .tooltip__inner {
@@ -43,20 +47,20 @@
   @extend .tooltip;
   .tooltip-inner {
     @extend .tooltip__inner;
-    background: $dark-blue;
+    background-color: $ocean-blue;
   }
 
   &.bs-tooltip-top .arrow::before {
-    border-top-color: $dark-blue;
+    border-top-color: $ocean-blue;
   }
   &.bs-tooltip-right .arrow::before {
-    border-right-color: $dark-blue;
+    border-right-color: $ocean-blue;
   }
   &.bs-tooltip-bottom .arrow::before {
-    border-bottom-color: $dark-blue;
+    border-bottom-color: $ocean-blue;
   }
   &.bs-tooltip-left .arrow::before {
-    border-left-color: $dark-blue;
+    border-left-color: $ocean-blue;
   }
 }
 
