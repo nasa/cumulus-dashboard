@@ -2,7 +2,6 @@
 import compareVersions from 'compare-versions';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
-import { CMR } from '@cumulus/cmrjs';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import cloneDeep from 'lodash/cloneDeep';
@@ -234,7 +233,7 @@ export const getMMTLinkFromCmr = (collection, getState) => {
   if (getCollectionId(collection) in mmtLinks) {
     return Promise.resolve(mmtLinks[getCollectionId(collection)]);
   }
-
+  const CMR = {searchCollections: () => {}};
   return new CMR(cmrProvider).searchCollections(
     {
       short_name: collection.name,
