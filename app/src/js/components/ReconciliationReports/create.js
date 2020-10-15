@@ -137,7 +137,6 @@ const CreateReconciliationReport = ({
     }));
   }
 
-  // eslint-disable-next-line react/prop-types
   function renderForm({ handleSubmit, submitting, values }) {
     const { collectionId, granuleId, provider, reportType } = values || {};
 

@@ -92,7 +92,7 @@ describe('Dashboard Collections Page', () => {
         .contains(infix);
     });
 
-    it('should display expected MMT Links for collections list', () => {
+    it('should display expected MMT Links for a collections list', () => {
       cy.visit('/collections');
       cy.clearStartDateTime();
       cy.wait('@getCollections');

@@ -68,16 +68,13 @@ class CollectionList extends React.Component {
   }
 
   render() {
-    const { collections, mmtLinks, datepicker } = this.props;
+    const { collections, datepicker } = this.props;
     const { list } = collections;
     const { startDateTime, endDateTime } = datepicker || {};
     const hasTimeFilter = startDateTime || endDateTime;
 
-    // merge mmtLinks with the collection data;
-    const data = list.data.map((collection) => ({
-      ...collection,
-      mmtLink: mmtLinks[getCollectionId(collection)],
-    }));
+    // TODO [MHS, 10/15/2020] where we used to merge mmtLinks with the collection data;
+    const data = list.data.map((collection) => ({ ...collection }));
     const { count, queriedAt } = list.meta;
     return (
       <div className="page__component">
@@ -143,7 +140,6 @@ CollectionList.propTypes = {
   config: PropTypes.object,
   datepicker: PropTypes.object,
   dispatch: PropTypes.func,
-  mmtLinks: PropTypes.object,
   queryParams: PropTypes.object,
 };
 
@@ -155,6 +151,5 @@ export default withRouter(
     collections: state.collections,
     config: state.config,
     datepicker: state.datepicker,
-    mmtLinks: state.mmtLinks,
   }))(CollectionList)
 );
