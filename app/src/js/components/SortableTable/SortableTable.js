@@ -50,6 +50,7 @@ const SortableTable = ({
 }) => {
   const defaultColumn = useMemo(
     () => ({
+      Cell: ({ value = '' }) => value,
       // When using the useFlexLayout:
       minWidth: 30, // minWidth is only used as a limit for resizing
       width: 125, // width is used for both the flex-basis and flex-grow
