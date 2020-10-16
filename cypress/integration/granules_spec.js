@@ -368,14 +368,17 @@ describe('Dashboard Granules Page', () => {
 
     it('Should have a Granule Lists page', () => {
       const listName = 'GranuleList100220';
-      cy.route2(`/reconciliationReports/${listName}`).as('getList');
-
+      const url = `**/reconciliationReports/${listName}`;
+      cy.route2({ url: '**/reconciliationReports?limit=*', method: 'GET' }).as('getLists');
+      cy.route2({ url, method: 'GET' }).as('getList');
       cy.visit('/granules');
       cy.contains('.sidebar li a', 'Lists').click();
-      cy.url().should('include', 'granules/lists');
+      cy.wait('@getLists');
+      cy.url().should('include', '/granules/lists');
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 1);
-      cy.contains('.table .td a', listName).should('be.visible').wait(200).click();
+      cy.contains('.table .td a', listName).should('be.visible');
+      cy.contains('.table .td a', listName).click();
 
       cy.wait('@getList').its('response.body').should('include', 'url');
     });
