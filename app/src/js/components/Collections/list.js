@@ -73,8 +73,6 @@ class CollectionList extends React.Component {
     const { startDateTime, endDateTime } = datepicker || {};
     const hasTimeFilter = startDateTime || endDateTime;
 
-    // TODO [MHS, 10/15/2020] where we used to merge mmtLinks with the collection data;
-    const data = list.data.map((collection) => ({ ...collection }));
     const { count, queriedAt } = list.meta;
     return (
       <div className="page__component">
@@ -104,7 +102,7 @@ class CollectionList extends React.Component {
 
           <List
             list={list}
-            data={data}
+            data={list.data}
             tableColumns={tableColumns}
             dispatch={this.props.dispatch}
             action={listCollections}
