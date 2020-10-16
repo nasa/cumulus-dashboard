@@ -36,7 +36,7 @@ const DevConfig = merge.smartStrategy(
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    // new webpack.HotModuleReplacementPlugin(),
     // new WebpackBar()
   ]
 });
