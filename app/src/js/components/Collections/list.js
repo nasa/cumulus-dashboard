@@ -102,7 +102,6 @@ class CollectionList extends React.Component {
 
           <List
             list={list}
-            data={list.data}
             tableColumns={tableColumns}
             dispatch={this.props.dispatch}
             action={listCollections}
