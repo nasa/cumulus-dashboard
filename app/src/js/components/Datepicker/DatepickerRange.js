@@ -33,11 +33,11 @@ const updateDatepickerStateFromQueryParams = (props) => {
   const { queryParams } = props;
 
   if (!isEmpty(queryParams)) {
-    const values = { ...queryParams };
+    const values = {};
 
-    Object.keys(values).forEach((key) => {
+    Object.keys(queryParams).forEach((key) => {
       if (urlDateProps.includes(key)) {
-        values[key] = moment.utc(values[key], urlDateFormat).valueOf();
+        values[key] = moment.utc(queryParams[key], urlDateFormat).valueOf();
       }
     });
 

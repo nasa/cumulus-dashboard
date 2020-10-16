@@ -433,14 +433,6 @@ export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH })
 export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param });
 export const clearGranulesFilter = (paramKey) => ({ type: types.CLEAR_GRANULES_FILTER, paramKey });
 
-export const getGranuleCSV = (options) => ({
-  [CALL_API]: {
-    type: types.GRANULE_CSV,
-    method: 'GET',
-    url: new URL('granule-csv', root).href
-  }
-});
-
 export const getOptionsCollectionName = (options) => ({
   [CALL_API]: {
     type: types.OPTIONS_COLLECTIONNAME,
@@ -931,7 +923,7 @@ export const createReconciliationReport = (payload) => ({
 export const deleteReconciliationReport = (reconciliationName) => ({
   [CALL_API]: {
     id: reconciliationName,
-    type: types.RECONCILIATION,
+    type: types.RECONCILIATION_DELETE,
     method: 'DELETE',
     path: `reconciliationReports/${reconciliationName}`
   }

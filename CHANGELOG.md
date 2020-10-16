@@ -13,7 +13,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Add Tooltip component
   - Add blue tooltip for timestamp values in the table
 
+- **CUMULUS-2200**
+  - Add Granule List page. Use Granule Inventory reports for generating granule CSVs
+
 ### Changed
+
 - **CUMULUS-2063**
   - Updates the dashboard to use alpha version `@cumulus/api@3.0.1-alpha.2` for testing.
 

@@ -50,7 +50,6 @@ const InventoryReport = ({
     allBuckets,
   } = reshapeReport(recordData, filterString, filterBucket);
   const reportComparisons = [...internalComparison, ...cumulusVsCmrComparison];
-  console.log(reportComparisons);
   const theReportState = reportState(reportComparisons);
   const activeCardTables = reportComparisons.find(
     (displayObj) => displayObj.id === activeId
