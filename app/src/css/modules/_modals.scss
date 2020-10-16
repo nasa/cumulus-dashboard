@@ -122,6 +122,28 @@
     }
   }
 
+  &.granule-inventory {
+    .list-name {
+      color: $theme--blue;
+      margin: 1em;
+
+      .form__text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        label {
+          margin-right: .5em;
+        }
+
+        input {
+          min-width: 200px;
+        }
+        
+      }
+    }
+  }
+
   &.bulk_granules {
     &.modal-dialog {
       overflow-y: initial !important;

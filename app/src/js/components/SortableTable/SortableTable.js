@@ -50,6 +50,7 @@ const SortableTable = ({
 }) => {
   const defaultColumn = useMemo(
     () => ({
+      Cell: ({ value = '' }) => value,
       // When using the useFlexLayout:
       minWidth: 30, // minWidth is only used as a limit for resizing
       width: 125, // width is used for both the flex-basis and flex-grow
@@ -99,8 +100,8 @@ const SortableTable = ({
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
     useResizeColumns, // this allows for resizing columns
     useSortBy, // this allows for sorting
-    useRowSelect, // this allows for checkbox in table
     usePagination,
+    useRowSelect, // this allows for checkbox in table
     (hooks) => {
       if (canSelect) {
         hooks.visibleColumns.push((columns) => [
