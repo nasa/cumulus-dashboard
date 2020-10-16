@@ -27,7 +27,6 @@ const collections = {
 
 test('Collections Overview generates bulkAction for recovery button', function (t) {
   const dispatch = () => {};
-  const mmtLinks = {};
   const logs = {};
   const config = { enableRecovery: true };
   const store = {
@@ -40,7 +39,6 @@ test('Collections Overview generates bulkAction for recovery button', function (
     <Provider store={store}>
       <CollectionList
         collections = {collections}
-        mmtLinks = {mmtLinks}
         dispatch = {dispatch}
         logs = {logs}
         config = {config}/>
@@ -57,7 +55,6 @@ test('Collections Overview generates bulkAction for recovery button', function (
 
 test('Collections Overview does not generate bulkAction for recovery button', function (t) {
   const dispatch = () => {};
-  const mmtLinks = {};
   const logs = {};
   const config = { enableRecovery: false };
   const store = {
@@ -70,7 +67,6 @@ test('Collections Overview does not generate bulkAction for recovery button', fu
     <Provider store={store}>
       <CollectionList
         collections = {collections}
-        mmtLinks = {mmtLinks}
         dispatch = {dispatch}
         logs = {logs}
         config = {config}/>

@@ -1,0 +1,115 @@
+{
+  "meta": {
+    "name": "cumulus-api",
+    "stack": "localrun",
+    "table": "collection",
+    "limit": 50,
+    "page": 1,
+    "count": 4
+  },
+  "results": [
+    {
+      "createdAt": 1537830419369,
+      "name": "https_testcollection",
+      "version": "001",
+      "granuleId": "^.*$",
+      "sampleFileName": "20170603090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc",
+      "dataType": "L4_GHRSST-SSTfnd-MUR-GLOB",
+      "files": [
+        {
+          "bucket": "internal",
+          "regex": ".*.nc$",
+          "sampleFileName": "20170603090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc"
+        },
+        {
+          "bucket": "internal",
+          "regex": ".*.nc.md5$",
+          "sampleFileName": "20170603090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.md5"
+        }
+      ],
+      "granuleIdExtraction": "^(.*)\\.(nc|nc\\.md5)$",
+      "duplicateHandling": "replace",
+      "updatedAt": 1602868532655,
+      "reportToEms": true,
+      "timestamp": 1602868532717,
+      "stats": {
+        "running": 0,
+        "completed": 0,
+        "failed": 0,
+        "total": 0
+      }
+    },
+    {
+      "createdAt": 1528996960585,
+      "name": "FAKE09GK",
+      "version": "006",
+      "process": "modis",
+      "sampleFileName": "FAKE09GK.A2017025.h21v00.006.2017034065104.hdf",
+      "dataType": "FAKE09GK",
+      "granuleIdExtraction": "(MOD09GQ\\..*)(\\.hdf|\\.cmr|_ndvi\\.jpg)",
+      "granuleId": "^MOD09GQ\\.A[\\d]{7}\\.[\\S]{6}\\.006.[\\d]{13}$",
+      "files": [
+        {
+          "bucket": "protected",
+          "regex": "^FAKE09GK\\.A[\\d]{7}\\.[\\S]{6}\\.006.[\\d]{13}\\.hdf$",
+          "sampleFileName": "FAKE09GK.A2017025.h21v00.006.2017034065104.hdf",
+          "url_path": "{cmrMetadata.Granule.Collection.ShortName}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}"
+        },
+        {
+          "bucket": "private",
+          "regex": "^FAKE09GK\\.A[\\d]{7}\\.[\\S]{6}\\.006.[\\d]{13}\\.hdf\\.met$",
+          "sampleFileName": "FAKE09GK.A2017025.h21v00.006.2017034065104.hdf.met"
+        },
+        {
+          "bucket": "protected-2",
+          "regex": "^FAKE09GK\\.A[\\d]{7}\\.[\\S]{6}\\.006.[\\d]{13}\\.cmr\\.xml$",
+          "sampleFileName": "FAKE09GK.A2017025.h21v00.006.2017034065104.cmr.xml"
+        },
+        {
+          "bucket": "public",
+          "regex": "^FAKE09GK\\.A[\\d]{7}\\.[\\S]{6}\\.006.[\\d]{13}_ndvi\\.jpg$",
+          "sampleFileName": "FAKE09GK.A2017025.h21v00.006.2017034065104_ndvi.jpg"
+        }
+      ],
+      "duplicateHandling": "replace",
+      "updatedAt": 1602868532664,
+      "url_path": "{cmrMetadata.Granule.Collection.ShortName}/{substring(file.name, 0, 3)}",
+      "reportToEms": true,
+      "timestamp": 1602868532713,
+      "stats": {
+        "running": 0,
+        "completed": 0,
+        "failed": 0,
+        "total": 0
+      },
+      "MMTLink": "https://mmt.uat.earthdata.nasa.gov/collections/CFAKE09GK-CUMULUS"
+    },
+    {
+      "createdAt": 1537830419272,
+      "name": "L2_HR_PIXC",
+      "version": "000",
+      "granuleId": "^.*$",
+      "sampleFileName": "L2_HR_PIXC_product_0001-of-4154.h5",
+      "dataType": "L2_HR_PIXC",
+      "files": [
+        {
+          "bucket": "private",
+          "regex": ".*.h5$",
+          "sampleFileName": "L2_HR_PIXC_product_0001-of-4154.h5"
+        }
+      ],
+      "granuleIdExtraction": "^(.*)(\\.h5|\\.cmr)",
+      "duplicateHandling": "replace",
+      "updatedAt": 1602868532635,
+      "reportToEms": true,
+      "timestamp": 1602868532721,
+      "stats": {
+        "running": 0,
+        "completed": 0,
+        "failed": 0,
+        "total": 0
+      },
+      "MMTLink": "https://mmt.uat.earthdata.nasa.gov/collections/CL2_HR_PIXC-CUMULUS"
+    }
+  ]
+}
