@@ -15,7 +15,6 @@ describe('Dashboard Collections Page', () => {
   });
 
   describe('When logged in', () => {
-    let cmrFixtureIdx;
     before(() => {
       cy.visit('/');
       cy.task('resetState');
