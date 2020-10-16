@@ -15,7 +15,6 @@ describe('Dashboard Collections Page', () => {
   });
 
   describe('When logged in', () => {
-    let cmrFixtureIdx;
     before(() => {
       cy.visit('/');
       cy.task('resetState');
@@ -30,11 +29,6 @@ describe('Dashboard Collections Page', () => {
       cy.route('GET', '/collections/active?limit=*').as('getActiveCollections');
       cy.route('GET', '/collections?name=*').as('getCollection');
       cy.route('GET', '/granules?limit=*').as('getGranules');
-
-      // Stub CMR response to avoid hitting UAT
-      cmrFixtureIdx = 0;
-      // eslint-disable-next-line no-plusplus
-      cy.fixture('cmr').then((fixture) => fixture.forEach((f) => cy.route(f).as(`cmr${cmrFixtureIdx++}`)));
     });
 
     it('should display a link to view collections', () => {
@@ -92,19 +86,23 @@ describe('Dashboard Collections Page', () => {
         .contains(infix);
     });
 
-    it('should display expected MMT Links for collections list', () => {
+    it('should display expected MMT Links for a collections list', () => {
+      cy.server();
+      cy.route({
+        method: 'GET',
+        url: '/collections?limit=*',
+        response: 'fixture:collections-with-mmtLinks.json',
+      }).as('getCollections');
       cy.visit('/collections');
       cy.clearStartDateTime();
       cy.wait('@getCollections');
-      let i = 0;
 
-      cy.get('.table .tbody .tr').should('have.length', 5);
-      // eslint-disable-next-line no-plusplus
-      while (i < cmrFixtureIdx) cy.wait(`@cmr${i++}`, { timeout: 25000 });
-      cy.contains('.table .tbody .tr', 'MOD09GQ')
+      cy.get('.table .tbody .tr').should('have.length', 3);
+
+      cy.contains('.table .tbody .tr', 'FAKE09GK')
         .contains('.td a', 'MMT')
         .should('have.attr', 'href')
-        .and('eq', 'https://mmt.uat.earthdata.nasa.gov/collections/CMOD09GQ-CUMULUS');
+        .and('eq', 'https://mmt.uat.earthdata.nasa.gov/collections/CFAKE09GK-CUMULUS');
 
       cy.contains('.table .tbody .tr', 'L2_HR_PIXC')
         .contains('.td a', 'MMT')
