@@ -150,7 +150,7 @@ describe('Dashboard Granules Page', () => {
 
       cy.contains('.heading--xlarge', 'Granules');
 
-      cy.contains('a', 'Download Granule List');
+      cy.contains('a', 'Create Granule Inventory List');
     });
 
     it('Should update dropdown with label when visiting bookmarkable URL', () => {
@@ -364,6 +364,49 @@ describe('Dashboard Granules Page', () => {
       cy.get('.button--cancel').click();
       cy.url().should('match', /\/granules/);
       cy.get('.heading--large').should('have.text', 'Granule Overview');
+    });
+
+    it('Should have a Granule Lists page', () => {
+      const listName = 'GranuleList100220';
+      const url = `**/reconciliationReports/${listName}`;
+      cy.route2({ url: '**/reconciliationReports?limit=*', method: 'GET' }).as('getLists');
+      cy.route2({ url, method: 'GET' }).as('getList');
+      cy.visit('/granules');
+      cy.contains('.sidebar li a', 'Lists').click();
+      cy.wait('@getLists');
+      cy.url().should('include', '/granules/lists');
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('@list').should('have.length', 1);
+      cy.contains('.table .td a', listName).should('be.visible');
+      cy.contains('.table .td a', listName).click();
+
+      cy.wait('@getList').its('response.body').should('include', 'url');
+    });
+
+    it('Should open modal to create granule inventory report', () => {
+      const listName = 'GranuleListTest';
+      cy.route2({
+        url: '/reconciliationReports',
+        method: 'POST'
+      }, (req) => {
+        const requestBody = JSON.parse(req.body);
+        expect(requestBody).to.have.property('reportType', 'Granule Inventory');
+        expect(requestBody).to.have.property('reportName', listName);
+      }).as('createList');
+
+      cy.visit('/granules');
+
+      cy.get('.csv__download').click();
+      cy.get('.default-modal.granule-inventory ').as('modal');
+
+      cy.get('@modal').contains('div', 'You have generated a selection to process for the following list:');
+      cy.get('@modal').find('.list-name input').clear().type(listName);
+      cy.get('@modal').find('.button--submit').click();
+      cy.get('@modal').contains('div', 'The following request is being processed and will be available shortly');
+      cy.get('@modal').contains('.list-name', listName);
+      cy.get('@modal').find('.button--submit').click();
+
+      cy.url().should('include', '/granules/lists');
     });
   });
 });

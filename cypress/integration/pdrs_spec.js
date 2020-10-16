@@ -225,7 +225,7 @@ describe('Dashboard PDRs Page', () => {
             .should('match', /.+ago$/);
 
           cy.route('DELETE', `/granules/${granule.granuleId}`).as('deleteGranule');
-          cy.get(`[data-value="${granule.granuleId}"] > .td >input[type="checkbox"]`).click();
+          cy.get(`[data-value="${granule.granuleId}"] > .td >input[type="checkbox"]`).check();
           cy.get('.list-actions').contains('Delete').click();
           cy.get('.button--submit').click();
           cy.wait('@deleteGranule');

@@ -9,14 +9,17 @@ import Sidebar from '../Sidebar/sidebar';
 import { getCount, listGranules } from '../../actions';
 import { strings } from '../locale';
 import AllGranules from './list';
-import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import GranuleOverview from './granule';
 import GranulesOverview from './overview';
+import ReconciliationReportList from '../ReconciliationReports/list';
+import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import { filterQueryParams } from '../../utils/url-helper';
 
 const Granules = ({ dispatch, location, queryParams, stats }) => {
   const { pathname } = location;
-  const count = get(stats, 'count.sidebar.granules.count');
+  const granulesCount = get(stats, 'count.sidebar.granules.count') || [];
+  const reportCount = get(stats, 'count.sidebar.reconciliationReports.count') || [];
+  const count = [...granulesCount, ...reportCount];
   const filteredQueryParams = filterQueryParams(queryParams);
 
   function query() {
@@ -28,6 +31,16 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
       getCount({
         type: 'granules',
         field: 'status',
+        sidebarCount: true
+      })
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      getCount({
+        type: 'reconciliationReports',
+        field: 'type',
         sidebarCount: true
       })
     );
@@ -74,6 +87,12 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
                 path="/granules/failed"
                 render={(props) => (
                   <AllGranules queryParams={filteredQueryParams} {...props} />
+                )}
+              />
+              <Route
+                path="/granules/lists"
+                render={(props) => (
+                  <ReconciliationReportList queryParams={filteredQueryParams} {...props} />
                 )}
               />
               <Redirect
