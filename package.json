@@ -28,7 +28,7 @@
     "lint": "eslint . --ext .js",
     "lint-fix": "eslint --fix . --ext .js",
     "cypress": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress open",
-    "cypress-ci": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress run --spec 'cypress/integration/*' --config video=false",
+    "cypress-ci": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress run --spec 'cypress/integration/*' --config video=true",
     "validate": "ava --config ./validation-tests.config.cjs",
     "test": "NODE_ENV=test npm run lint && ava",
     "seed-database": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test node ./localAPI/runSeedDatabase.js",
