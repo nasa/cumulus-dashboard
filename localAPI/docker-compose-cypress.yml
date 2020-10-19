@@ -16,4 +16,3 @@ services:
       - LOCAL_ES_HOST=localhost
     # cargo cult guesses from https://github.com/cypress-io/cypress/issues/350
     shm_size: '512MB'
-    ipc: host
