@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
-// const WebpackBar = require('webpackbar'); // visual indicator in terminal for development
 
 const CommonConfig = require('./webpack.common');
 
@@ -37,7 +36,6 @@ const DevConfig = merge.smartStrategy(
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    // new WebpackBar()
   ]
 });
 
