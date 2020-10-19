@@ -87,7 +87,6 @@ describe('Dashboard Collections Page', () => {
     });
 
     it('should display expected MMT Links for a collections list', () => {
-      cy.server();
       cy.route({
         method: 'GET',
         url: '/collections?limit=*',
