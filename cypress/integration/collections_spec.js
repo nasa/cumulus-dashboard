@@ -175,8 +175,10 @@ describe('Dashboard Collections Page', () => {
       cy.get('.table .tbody .tr').should('have.length', 5);
 
       cy.contains('.table .tbody .tr a', name)
-        .should('have.attr', 'href', `/collections/collection/${name}/${version}`);
-      cy.get(`[data-value=${name}___${version}] > .table__main-asset > a`).click();
+        .then(($res) => {
+          expect($res).to.have.attr('href', `/collections/collection/${name}/${version}`);
+          cy.wrap($res).click();
+        });
       cy.contains('.heading--large', `${name} / ${version}`);
       cy.contains('.heading--large', 'Granule Metric');
 
