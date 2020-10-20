@@ -3,6 +3,10 @@
   "env": {
     "APIROOT": "http://localhost:5001"
   },
+  "retries":{
+    "runMode": 2,
+    "openMode": 0
+  },
   "nodeVersion": "system",
   "viewportWidth": 1300,
   "viewportHeight": 1000,

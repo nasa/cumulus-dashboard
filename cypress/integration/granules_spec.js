@@ -377,8 +377,9 @@ describe('Dashboard Granules Page', () => {
       cy.url().should('include', '/granules/lists');
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 1);
-      cy.contains('.table .td a', listName).should('be.visible');
-      cy.contains('.table .td a', listName).click();
+      cy.contains('.table .td a', listName)
+        .should('be.visible')
+        .click({ force: true });
 
       cy.wait('@getList').its('response.body').should('include', 'url');
     });
