@@ -58,6 +58,9 @@ jobs:
           command: |
             npm run validation-tests
 
+      - store_test_results:
+          path: test-results
+
       - store_artifacts:
           path: ~/cumulus-dashboard/cypress/screenshots
 
