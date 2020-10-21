@@ -21,7 +21,6 @@ import executionLogs from './execution-logs';
 import operations from './operations';
 import rules from './rules';
 import reconciliationReports from './reconciliation-reports';
-import mmtLinks from './mmtLinks';
 import cumulusInstance from './cumulus-instance';
 import sidebar from './sidebar';
 
@@ -35,7 +34,6 @@ export const reducers = {
   config,
   dist,
   datepicker,
-  mmtLinks,
   cumulusInstance,
   granules,
   stats,

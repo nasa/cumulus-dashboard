@@ -53,7 +53,7 @@ export const tableColumns = [
   },
   {
     Header: 'MMT',
-    accessor: 'mmtLink',
+    accessor: 'MMTLink',
     Cell: ({ cell: { value } }) => (value ? <a href={value} target="_blank">MMT</a> : null), // eslint-disable-line react/prop-types
     disableSortBy: true,
     width: 100

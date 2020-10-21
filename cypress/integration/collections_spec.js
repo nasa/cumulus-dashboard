@@ -15,7 +15,6 @@ describe('Dashboard Collections Page', () => {
   });
 
   describe('When logged in', () => {
-    let cmrFixtureIdx;
     before(() => {
       cy.visit('/');
       cy.task('resetState');
@@ -30,11 +29,6 @@ describe('Dashboard Collections Page', () => {
       cy.route('GET', '/collections/active?limit=*').as('getActiveCollections');
       cy.route('GET', '/collections?name=*').as('getCollection');
       cy.route('GET', '/granules?limit=*').as('getGranules');
-
-      // Stub CMR response to avoid hitting UAT
-      cmrFixtureIdx = 0;
-      // eslint-disable-next-line no-plusplus
-      cy.fixture('cmr').then((fixture) => fixture.forEach((f) => cy.route(f).as(`cmr${cmrFixtureIdx++}`)));
     });
 
     it('should display a link to view collections', () => {
@@ -92,19 +86,22 @@ describe('Dashboard Collections Page', () => {
         .contains(infix);
     });
 
-    it('should display expected MMT Links for collections list', () => {
+    it('should display expected MMT Links for a collections list', () => {
+      cy.route({
+        method: 'GET',
+        url: '/collections?limit=*',
+        response: 'fixture:collections-with-mmtLinks.json',
+      }).as('getCollections');
       cy.visit('/collections');
       cy.clearStartDateTime();
       cy.wait('@getCollections');
-      let i = 0;
 
-      cy.get('.table .tbody .tr').should('have.length', 5);
-      // eslint-disable-next-line no-plusplus
-      while (i < cmrFixtureIdx) cy.wait(`@cmr${i++}`, { timeout: 25000 });
-      cy.contains('.table .tbody .tr', 'MOD09GQ')
+      cy.get('.table .tbody .tr').should('have.length', 3);
+
+      cy.contains('.table .tbody .tr', 'FAKE09GK')
         .contains('.td a', 'MMT')
         .should('have.attr', 'href')
-        .and('eq', 'https://mmt.uat.earthdata.nasa.gov/collections/CMOD09GQ-CUMULUS');
+        .and('eq', 'https://mmt.uat.earthdata.nasa.gov/collections/CFAKE09GK-CUMULUS');
 
       cy.contains('.table .tbody .tr', 'L2_HR_PIXC')
         .contains('.td a', 'MMT')
@@ -174,17 +171,14 @@ describe('Dashboard Collections Page', () => {
       // collections with which to populate the dropdown on the collection
       // details page.
       cy.visit('/collections');
-      // TODO [DOP, 2020-05-14] Workaround until CUMULUS-1996 is resolved
-      // Stop timer so that it does not dispatch listCollections and change
-      // the order of items in the list after date is cleared
-      cy.get('.form__element__updateToggle .form__element__clickable').click();
-      cy.clearStartDateTime();
       cy.wait('@getCollections');
       cy.get('.table .tbody .tr').should('have.length', 5);
 
       cy.contains('.table .tbody .tr a', name)
-        .should('have.attr', 'href', `/collections/collection/${name}/${version}`)
-        .click();
+        .then(($res) => {
+          expect($res).to.have.attr('href', `/collections/collection/${name}/${version}`);
+          cy.wrap($res).click();
+        });
       cy.contains('.heading--large', `${name} / ${version}`);
       cy.contains('.heading--large', 'Granule Metric');
 
