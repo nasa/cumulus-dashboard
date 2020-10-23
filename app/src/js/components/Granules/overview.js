@@ -73,7 +73,8 @@ class GranulesOverview extends React.Component {
       isListRequestSubmitted: false,
       listName: this.defaultListName(),
       workflow: this.props.workflowOptions[0],
-      workflowMeta: defaultWorkflowMeta
+      workflowMeta: defaultWorkflowMeta,
+      selected: []
     };
   }
 
@@ -128,13 +129,32 @@ class GranulesOverview extends React.Component {
   }
 
   submitListRequest(e) {
-    const { listName } = this.state;
+    const { listName, selected } = this.state;
+    const queryParams = this.generateQuery();
+    const selectedGranuleIds = selected;
+    const granuleIdFilter = queryParams.search;
+    const granuleIds = [];
+    
+    // If there are no selected granules but a Granule ID is specified
+    // in the search filter, use only that.
+    if (selectedGranuleIds.length < 1 && granuleIdFilter) {
+      granuleIds.push(granuleIdFilter);
+    }
+
+    const requestBody = {
+      reportName: listName,
+      reportType: 'Granule Inventory',
+      status: queryParams.status,
+      collectionId: queryParams.collectionId
+    };
+
+    if (granuleIds.length > 0) {
+      requestBody.granuleIds = granuleIds;
+    }
+
     this.setState({ isListRequestSubmitted: true });
     this.props.dispatch(createReconciliationReport(
-      {
-        reportName: listName,
-        reportType: 'Granule Inventory'
-      }
+      requestBody
     ));
   }
 
@@ -182,12 +202,17 @@ class GranulesOverview extends React.Component {
     ];
   }
 
+  updateSelection(selected) {
+    this.setState({ selected });
+  }
+
   render () {
     const { isModalOpen, isListRequestSubmitted, listName } = this.state;
     const { collections, granules } = this.props;
     const { list } = granules;
     const { dropdowns } = collections;
     const { count, queriedAt } = list.meta;
+
     return (
       <div className='page__component'>
         <Helmet>
@@ -250,6 +275,7 @@ class GranulesOverview extends React.Component {
             sortId='timestamp'
             filterAction={filterGranules}
             filterClear={clearGranulesFilter}
+            onSelect={this.updateSelection}
           >
             <ListFilters>
               <Search

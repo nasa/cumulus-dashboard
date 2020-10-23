@@ -386,6 +386,13 @@ describe('Dashboard Granules Page', () => {
 
     it('Should open modal to create granule inventory report', () => {
       const listName = 'GranuleListTest';
+      const status = 'running';
+      const collectionId = 'MOD09GQ___006';
+      const granuleIds = [
+        "MOD09GQ.A1657416.CbyoRi.006.9697917818587",
+        "MOD09GQ.A0501579.PZB_CG.006.8580266395214"
+      ];
+
       cy.route2({
         url: '/reconciliationReports',
         method: 'POST'
@@ -393,9 +400,24 @@ describe('Dashboard Granules Page', () => {
         const requestBody = JSON.parse(req.body);
         expect(requestBody).to.have.property('reportType', 'Granule Inventory');
         expect(requestBody).to.have.property('reportName', listName);
+        expect(requestBody).to.have.property('status', status);
+        expect(requestBody).to.have.property('collectionId', collectionId);
+        expect(requestBody).to.have.property('granuleIds', granuleIds);
       }).as('createList');
 
       cy.visit('/granules');
+
+      // Enter status field
+      cy.get('.filter-status .rbt-input-main').as('status-input');
+      cy.get('@status-input').click().type(status).type('{enter}');
+
+      // Enter collection field
+      cy.get('.filter-collectionId .rbt-input-main').as('collection-input');
+      cy.get('@collection-input').click().type(collectionId).type('{enter}');
+
+      // Select both granules in list
+      cy.get('.table .tbody .tr .td input[type=checkbox]').as('granule-checkbox');
+      cy.get('@granule-checkbox').click({ multiple: true });
 
       cy.get('.csv__download').click();
       cy.get('.default-modal.granule-inventory ').as('modal');

@@ -25,6 +25,10 @@ class List extends React.Component {
     this.onBulkActionSuccess = this.onBulkActionSuccess.bind(this);
     this.onBulkActionError = this.onBulkActionError.bind(this);
     this.getQueryConfig = this.getQueryConfig.bind(this);
+    
+    if (typeof props.onSelect === 'function') {
+      this.onSelect = props.onSelect.bind(this);
+    }
 
     const initialPage = 1;
     const initialSortId = props.sortId;
@@ -92,6 +96,11 @@ class List extends React.Component {
       selected,
       clearSelected: false,
     });
+
+    // Current selection is passed to the parent component
+    if (typeof this.onSelect === 'function') {
+      this.onSelect(selected);
+    }
   }
 
   onBulkActionSuccess(results, error) {
@@ -228,6 +237,7 @@ List.propTypes = {
   rowId: PropTypes.any,
   sortId: PropTypes.string,
   tableColumns: PropTypes.array,
+  onSelect: PropTypes.func,
 };
 
 export { List };
