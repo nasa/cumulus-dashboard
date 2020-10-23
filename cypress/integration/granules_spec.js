@@ -389,8 +389,8 @@ describe('Dashboard Granules Page', () => {
       const status = 'running';
       const collectionId = 'MOD09GQ___006';
       const granuleIds = [
-        'MOD09GQ.A1657416.CbyoRi.006.9697917818587',
-        'MOD09GQ.A0501579.PZB_CG.006.8580266395214'
+        'MOD09GQ.A0501579.PZB_CG.006.8580266395214',
+        'MOD09GQ.A1657416.CbyoRi.006.9697917818587'
       ];
 
       cy.route2({
@@ -402,7 +402,7 @@ describe('Dashboard Granules Page', () => {
         expect(requestBody).to.have.property('reportName', listName);
         expect(requestBody).to.have.property('status', status);
         expect(requestBody).to.have.property('collectionId', collectionId);
-        expect(requestBody.granuleIds).to.deep.equal(granuleIds);
+        expect(requestBody.granuleIds.sort()).to.deep.equal(granuleIds);
       }).as('createList');
 
       cy.visit('/granules');

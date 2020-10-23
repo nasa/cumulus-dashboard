@@ -27,7 +27,7 @@ class List extends React.Component {
     this.getQueryConfig = this.getQueryConfig.bind(this);
     
     if (typeof props.onSelect === 'function') {
-      this.onSelect = props.onSelect.bind(this);
+      this.onSelect = props.onSelect;
     }
 
     const initialPage = 1;

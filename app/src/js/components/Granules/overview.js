@@ -206,7 +206,7 @@ class GranulesOverview extends React.Component {
   }
 
   render () {
-    const { isModalOpen, isListRequestSubmitted, listName, selected } = this.state;
+    const { isModalOpen, isListRequestSubmitted, listName } = this.state;
     const { collections, granules } = this.props;
     const { list } = granules;
     const { dropdowns } = collections;
