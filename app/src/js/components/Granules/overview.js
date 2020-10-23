@@ -131,14 +131,13 @@ class GranulesOverview extends React.Component {
   submitListRequest(e) {
     const { listName, selected } = this.state;
     const queryParams = this.generateQuery();
-    const selectedGranuleIds = selected;
     const granuleIdFilter = queryParams.search;
-    const granuleIds = [];
+    let granuleIds = selected;
     
     // If there are no selected granules but a Granule ID is specified
     // in the search filter, use only that.
-    if (selectedGranuleIds.length < 1 && granuleIdFilter) {
-      granuleIds.push(granuleIdFilter);
+    if (granuleIds.length < 1 && granuleIdFilter) {
+      granuleIds = [granuleIdFilter];
     }
 
     const requestBody = {
@@ -207,7 +206,7 @@ class GranulesOverview extends React.Component {
   }
 
   render () {
-    const { isModalOpen, isListRequestSubmitted, listName } = this.state;
+    const { isModalOpen, isListRequestSubmitted, listName, selected } = this.state;
     const { collections, granules } = this.props;
     const { list } = granules;
     const { dropdowns } = collections;
@@ -275,7 +274,7 @@ class GranulesOverview extends React.Component {
             sortId='timestamp'
             filterAction={filterGranules}
             filterClear={clearGranulesFilter}
-            onSelect={this.updateSelection}
+            onSelect={this.updateSelection.bind(this)}
           >
             <ListFilters>
               <Search
@@ -333,5 +332,6 @@ export default withRouter(withQueryParams()(connect((state) => ({
   collections: state.collections,
   config: state.config,
   granules: state.granules,
+  selected: state.selected,
   workflowOptions: workflowOptionNames(state),
 }))(GranulesOverview)));
