@@ -118,7 +118,7 @@ export const checkApiVersion = () => (dispatch, getState) => {
 };
 
 export const listCollections = (options = {}) => {
-  const { listAll = false, getMMT = true, ...queryOptions } = options;
+  const { listAll = false, getMMT = true, includeStats = true, ...queryOptions } = options;
   return (dispatch, getState) => {
     const timeFilters = listAll ? {} : fetchCurrentTimeFilters(getState().datepicker);
     const urlPath = `collections${isEmpty(timeFilters) || listAll ? '' : '/active'}`;
@@ -128,7 +128,7 @@ export const listCollections = (options = {}) => {
         method: 'GET',
         id: null,
         url: new URL(urlPath, root).href,
-        qs: { limit: defaultPageLimit, ...queryOptions, ...timeFilters, getMMT }
+        qs: { limit: defaultPageLimit, ...queryOptions, ...timeFilters, getMMT, includeStats }
       }
     });
   };
