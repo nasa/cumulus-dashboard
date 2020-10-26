@@ -133,7 +133,7 @@ class GranulesOverview extends React.Component {
     const queryParams = this.generateQuery();
     const granuleIdFilter = queryParams.search;
     let granuleIds = selected;
-    
+
     // If there are no selected granules but a Granule ID is specified
     // in the search filter, use only that.
     if (granuleIds.length < 1 && granuleIdFilter) {

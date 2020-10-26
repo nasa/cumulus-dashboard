@@ -25,7 +25,7 @@ class List extends React.Component {
     this.onBulkActionSuccess = this.onBulkActionSuccess.bind(this);
     this.onBulkActionError = this.onBulkActionError.bind(this);
     this.getQueryConfig = this.getQueryConfig.bind(this);
-    
+
     if (typeof props.onSelect === 'function') {
       this.onSelect = props.onSelect;
     }
