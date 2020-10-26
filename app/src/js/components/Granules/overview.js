@@ -67,6 +67,7 @@ class GranulesOverview extends React.Component {
     this.submitListRequest = this.submitListRequest.bind(this);
     this.goToListPage = this.goToListPage.bind(this);
     this.handleReportTypeInputChange = this.handleReportTypeInputChange.bind(this);
+    this.updateSelection = this.updateSelection.bind(this);
     this.defaultListName = () => `granuleList-${moment().format('YYYYMMDDTHHmmssSSS')}`;
     this.state = {
       isModalOpen: false,
@@ -131,7 +132,8 @@ class GranulesOverview extends React.Component {
   submitListRequest(e) {
     const { listName, selected } = this.state;
     const queryParams = this.generateQuery();
-    const granuleIdFilter = queryParams.search;
+    const { collectionId, status, search: granuleIdFilter } = queryParams;
+
     let granuleIds = selected;
 
     // If there are no selected granules but a Granule ID is specified
@@ -143,8 +145,8 @@ class GranulesOverview extends React.Component {
     const requestBody = {
       reportName: listName,
       reportType: 'Granule Inventory',
-      status: queryParams.status,
-      collectionId: queryParams.collectionId
+      status: status,
+      collectionId: collectionId
     };
 
     if (granuleIds.length > 0) {
@@ -274,7 +276,7 @@ class GranulesOverview extends React.Component {
             sortId='timestamp'
             filterAction={filterGranules}
             filterClear={clearGranulesFilter}
-            onSelect={this.updateSelection.bind(this)}
+            onSelect={this.updateSelection}
           >
             <ListFilters>
               <Search

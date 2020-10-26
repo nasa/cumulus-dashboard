@@ -26,10 +26,6 @@ class List extends React.Component {
     this.onBulkActionError = this.onBulkActionError.bind(this);
     this.getQueryConfig = this.getQueryConfig.bind(this);
 
-    if (typeof props.onSelect === 'function') {
-      this.onSelect = props.onSelect;
-    }
-
     const initialPage = 1;
     const initialSortId = props.sortId;
     const initialOrder = 'desc';
@@ -98,8 +94,8 @@ class List extends React.Component {
     });
 
     // Current selection is passed to the parent component
-    if (typeof this.onSelect === 'function') {
-      this.onSelect(selected);
+    if (typeof this.props.onSelect === 'function') {
+      this.props.onSelect(selected);
     }
   }
 
