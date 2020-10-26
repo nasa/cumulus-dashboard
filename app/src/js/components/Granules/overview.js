@@ -145,8 +145,8 @@ class GranulesOverview extends React.Component {
     const requestBody = {
       reportName: listName,
       reportType: 'Granule Inventory',
-      status: status,
-      collectionId: collectionId
+      status,
+      collectionId
     };
 
     if (granuleIds.length > 0) {
