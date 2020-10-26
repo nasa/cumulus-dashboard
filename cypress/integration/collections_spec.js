@@ -427,7 +427,6 @@ describe('Dashboard Collections Page', () => {
 
       cy.get('.modal.show > .modal-dialog > .modal-content > .modal-body > p').should('contain', 'must first delete the granules associated with it');
 
-
       // modal should ask if user wants to go to granules page
       cy.contains('.button--cancel', 'Cancel Request')
         .should('be.visible').wait(200).click();
