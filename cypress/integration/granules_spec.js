@@ -384,10 +384,11 @@ describe('Dashboard Granules Page', () => {
       cy.wait('@getList').its('response.body').should('include', 'url');
     });
 
-    it.only('Should open modal to create granule inventory report', () => {
+    it('Should open modal to create granule inventory report', () => {
       const listName = 'GranuleListTest';
       const status = 'running';
       const collectionId = 'MOD09GQ___006';
+      // granule IDs in alphanumeric order. We sort the actual result for comparison.
       const granuleIds = [
         'MOD09GQ.A0501579.PZB_CG.006.8580266395214',
         'MOD09GQ.A1657416.CbyoRi.006.9697917818587'
