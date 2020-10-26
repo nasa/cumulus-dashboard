@@ -76,7 +76,7 @@ export const getCollection = (name, version) => (dispatch, getState) => {
       type: types.COLLECTION,
       method: 'GET',
       id: getCollectionId({ name, version }),
-      path: `collections?name=${name}&version=${version}`,
+      path: `collections?name=${name}&version=${version}&includeStats=true`,
       qs: timeFilters,
     },
   });
