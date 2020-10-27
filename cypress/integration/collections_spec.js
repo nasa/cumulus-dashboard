@@ -42,6 +42,10 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.heading--xlarge', 'Collections');
 
       cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('.tbody > .tr > :nth-child(4)').should('contain', '11');
+      cy.get('.tbody > .tr > :nth-child(5)').should('contain', '7');
+      cy.get('.tbody > .tr > :nth-child(6)').should('contain', '2');
+      cy.get('.tbody > .tr > :nth-child(7)').should('contain', '2');
 
       cy.clearStartDateTime();
       cy.wait('@getCollections');
@@ -420,6 +424,8 @@ describe('Dashboard Collections Page', () => {
       cy.get('.DeleteCollection > .button').click();
       cy.contains('.button__deletecollections', 'Delete Collection')
         .should('be.visible').wait(200).click();
+
+      cy.get('.modal.show > .modal-dialog > .modal-content > .modal-body > p').should('contain', 'must first delete the granules associated with it');
 
       // modal should ask if user wants to go to granules page
       cy.contains('.button--cancel', 'Cancel Request')

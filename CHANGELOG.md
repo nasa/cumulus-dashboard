@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2063**
   - Updates the dashboard to use alpha version `@cumulus/api@3.0.1-alpha.2` for testing.
   - Code changes to allow for private CMR collections to have links to the MMT.
+- **CUMULUS-2215**
+  - Omits unnecesary statistics request when building the option list of collection names on the granules page.
+
 
 ## [v2.0.0]
 
