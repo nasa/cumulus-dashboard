@@ -8,8 +8,10 @@ import { get } from 'object-path';
 import {
   bulkGranule,
   bulkGranuleDelete,
+  bulkGranuleReingest,
   bulkGranuleClearError,
-  bulkGranuleDeleteClearError
+  bulkGranuleDeleteClearError,
+  bulkGranuleReingestClearError,
 } from '../../actions';
 import BulkGranuleModal from './bulk-granule-modal';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
@@ -39,6 +41,12 @@ const bulkDeleteDefaultQuery = {
   forceRemoveFromCmr: false
 };
 
+const bulkReingestDefaultQuery = {
+  index: '',
+  query: '',
+  ids: []
+};
+
 const BulkGranule = ({
   history,
   dispatch,
@@ -51,8 +59,10 @@ const BulkGranule = ({
   const [showModal, setShowModal] = useState(false);
   const [showBulkOpsModal, setShowBulkOpsModal] = useState(false);
   const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
+  const [showBulkReingestModal, setShowBulkReingestModal] = useState(false);
   const [bulkOpRequestId, setBulkOpRequestId] = useState(generateAsyncRequestId());
   const [bulkDeleteRequestId, setBulkDeleteRequestId] = useState(generateAsyncRequestId());
+  const [bulkReingestRequestId, setBulkReingestRequestId] = useState(generateAsyncRequestId());
 
   const bulkOpRequestInfo = get(granules.bulk, [bulkOpRequestId]);
   const bulkOpRequestStatus = getRequestStatus(bulkOpRequestInfo);
@@ -61,6 +71,10 @@ const BulkGranule = ({
   const bulkDeleteRequestInfo = get(granules.bulkDelete, [bulkDeleteRequestId]);
   const bulkDeleteRequestStatus = getRequestStatus(bulkDeleteRequestInfo);
   const bulkDeleteRequestError = getRequestError(bulkDeleteRequestInfo);
+
+  const bulkReingestRequestInfo = get(granules.bulkReingest, [bulkReingestRequestId]);
+  const bulkReingestRequestStatus = getRequestStatus(bulkReingestRequestInfo);
+  const bulkReingestRequestError = getRequestError(bulkReingestRequestInfo);
 
   const ButtonComponent = element;
   const modalClassName = 'bulk_granules';
@@ -126,6 +140,26 @@ const BulkGranule = ({
     setShowBulkDeleteModal(false);
   }
 
+  function handleShowBulkReingestModal (e) {
+    e.preventDefault();
+    setShowModal(false);
+    setShowBulkReingestModal(true);
+  }
+
+  function hideBulkReingestModal () {
+    // If last operation succeeded, generate a new request ID so
+    // modal doesn't still show success of last operation
+    if (isStatusSuccess(bulkReingestRequestStatus)) {
+      setBulkReingestRequestId(generateAsyncRequestId());
+    }
+    // clear error from any previous request failure
+    if (bulkReingestRequestError) {
+      dispatch(bulkGranuleReingestClearError(bulkReingestRequestId));
+    }
+    // clear error from any previous request failure
+    setShowBulkReingestModal(false);
+  }
+
   return (
     <>
       <ButtonComponent
@@ -144,13 +178,19 @@ const BulkGranule = ({
       >
         <Modal.Header className={`${modalClassName}__header`} closeButton></Modal.Header>
         <Modal.Title id={`modal__${modalClassName}`} className={`${modalClassName}__title`}>
-          What would you like to do?
+          <h4 className="modal_subtitle">Run Bulk Granules</h4>
+          <p>What action would you like to perform for your bulk granules selection?</p>
         </Modal.Title>
         <Modal.Body>
           <button
             className={'button button__animation--md button__arrow button__animation button__bulkgranules button__bulkgranules--delete form-group__element--left'}
             onClick={handleShowBulkDeleteModal}>
             Run Bulk Delete
+          </button>
+          <button
+            className={'button button__animation--md button__arrow button__animation button__bulkgranules button__bulkgranules--reingest form-group__element--left'}
+            onClick={handleShowBulkReingestModal}>
+            Run Bulk Reingest
           </button>
           <button
             className={'button button__animation--md button__arrow button__animation button__bulkgranules button__bulkgranules--operations form-group__element--left'}
@@ -212,6 +252,31 @@ const BulkGranule = ({
           removed from CMR as part of deletion.<br/>
           If <strong>forceRemoveFromCmr</strong> is <strong>false</strong>, then the bulk granule deletion will
           <strong>fail for any granules that are published to CMR.</strong>
+        </p>
+      </BulkGranuleModal>
+      <BulkGranuleModal
+        asyncOpId={getRequestAsyncOpId(bulkReingestRequestInfo)}
+        bulkRequestAction={bulkGranuleReingest}
+        cancelButtonText={'Cancel Bulk Reingest'}
+        className={`${modalClassName} bulk_granules--reingest`}
+        confirmButtonClass={'button__bulkgranules button__bulkgranules--reingest'}
+        confirmButtonText={'Run Bulk Reingest'}
+        defaultQuery={bulkReingestDefaultQuery}
+        dispatch={dispatch}
+        error={bulkReingestRequestError}
+        handleSuccessConfirm={handleSuccessConfirm}
+        inflight={isStatusInflight(bulkReingestRequestStatus)}
+        onCancel={hideBulkReingestModal}
+        requestId={bulkReingestRequestId}
+        selected={selected}
+        showModal={showBulkReingestModal}
+        success={isStatusSuccess(bulkReingestRequestStatus)}
+        successMessage={'Your request to process a bulk granule reingest operation has been submitted.'}
+        title={'Bulk Granule Reingest'}
+      >
+        <h4 className="modal_subtitle">To run and complete your bulk reingest task:</h4>
+        <p>
+          In the box below, add either an array of granule Ids or an elasticsearch query and index. <br/>
         </p>
       </BulkGranuleModal>
     </>

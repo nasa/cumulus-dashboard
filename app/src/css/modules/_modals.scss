@@ -163,7 +163,7 @@
     }
   }
 
-  &.bulk_granules--operations, &.bulk_granules--delete {
+  &.bulk_granules--operations, &.bulk_granules--delete, &.bulk_granules--reingest {
     .modal-body {
       height: 425px;
     }

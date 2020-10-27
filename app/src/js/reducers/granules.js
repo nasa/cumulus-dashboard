@@ -35,6 +35,10 @@ import {
   BULK_GRANULE_DELETE_INFLIGHT,
   BULK_GRANULE_DELETE_ERROR,
   BULK_GRANULE_DELETE_CLEAR_ERROR,
+  BULK_GRANULE_REINGEST,
+  BULK_GRANULE_REINGEST_INFLIGHT,
+  BULK_GRANULE_REINGEST_ERROR,
+  BULK_GRANULE_REINGEST_CLEAR_ERROR,
   GRANULE_DELETE,
   GRANULE_DELETE_INFLIGHT,
   GRANULE_DELETE_ERROR,
@@ -123,6 +127,13 @@ export default createReducer(initialState, {
   [BULK_GRANULE_CLEAR_ERROR]: (state, action) => {
     const requestId = getRequestId(action);
     del(state, ['bulk', requestId, 'error']);
+  },
+  [BULK_GRANULE_REINGEST]: createSuccessReducer('bulkReingest', getConfigRequestId),
+  [BULK_GRANULE_REINGEST_INFLIGHT]: createInflightReducer('bulkReingest', getConfigRequestId),
+  [BULK_GRANULE_REINGEST_ERROR]: createErrorReducer('bulkReingest', getConfigRequestId),
+  [BULK_GRANULE_REINGEST_CLEAR_ERROR]: (state, action) => {
+    const requestId = getRequestId(action);
+    del(state, ['bulkReingest', requestId, 'error']);
   },
   [GRANULE_DELETE]: createSuccessReducer('deleted'),
   [GRANULE_DELETE_INFLIGHT]: createInflightReducer('deleted'),
