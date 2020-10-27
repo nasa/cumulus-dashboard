@@ -111,38 +111,6 @@ export const lastUpdated = (datestring, text) => {
   );
 };
 
-export const collectionSearchResult = (collection) => {
-  const { name, version } = collection;
-  return (
-    <li key={name}>
-      <Link
-        to={(location) => ({
-          pathname: `collections/collection/${name}/${version}`,
-          search: getPersistentQueryParams(location),
-        })}
-      >
-        {name} / {version}
-      </Link>
-    </li>
-  );
-};
-
-export const granuleSearchResult = (granule) => {
-  const { granuleId, status } = granule;
-  return (
-    <li key={granuleId}>
-      <Link
-        to={(location) => ({
-          pathname: `granules/granules/${granuleId}/${status}`,
-          search: getPersistentQueryParams(location),
-        })}
-      >
-        {granuleId} / {status}
-      </Link>
-    </li>
-  );
-};
-
 export const granuleLink = (granuleId) => {
   if (!granuleId) return nullValue;
   return (
