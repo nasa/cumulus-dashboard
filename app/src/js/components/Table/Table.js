@@ -92,6 +92,11 @@ class List extends React.Component {
       selected,
       clearSelected: false,
     });
+
+    // Current selection is passed to the parent component
+    if (typeof this.props.onSelect === 'function') {
+      this.props.onSelect(selected);
+    }
   }
 
   onBulkActionSuccess(results, error) {
@@ -228,6 +233,7 @@ List.propTypes = {
   rowId: PropTypes.any,
   sortId: PropTypes.string,
   tableColumns: PropTypes.array,
+  onSelect: PropTypes.func,
 };
 
 export { List };
