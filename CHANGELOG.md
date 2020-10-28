@@ -25,6 +25,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Omits unnecesary statistics request when building the option list of collection names on the granules page.
 
 
+- **CUMULUS-2171**
+  - Allows filtering of the Granule Inventory List CSV download based on Granule IDs, Status, and Collection.
+
 ## [v2.0.0]
 
 ### BREAKING CHANGES
