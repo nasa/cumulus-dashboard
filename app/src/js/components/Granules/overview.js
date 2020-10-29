@@ -134,24 +134,13 @@ class GranulesOverview extends React.Component {
     const queryParams = this.generateQuery();
     const { collectionId, status, search: granuleIdFilter } = queryParams;
 
-    let granuleIds = selected;
-
-    // If there are no selected granules but a Granule ID is specified
-    // in the search filter, use only that.
-    if (granuleIds.length < 1 && granuleIdFilter) {
-      granuleIds = [granuleIdFilter];
-    }
-
     const requestBody = {
       reportName: listName,
       reportType: 'Granule Inventory',
       status,
-      collectionId
+      collectionId,
+      granuleId: granuleIdFilter || selected,
     };
-
-    if (granuleIds.length > 0) {
-      requestBody.granuleId = granuleIds;
-    }
 
     this.setState({ isListRequestSubmitted: true });
     this.props.dispatch(createReconciliationReport(
