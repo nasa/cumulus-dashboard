@@ -141,7 +141,7 @@ class GranulesOverview extends React.Component {
       collectionId,
       // granuleId accepts a string or an array of granuleIds.
       // In this case, the granuleIdFilter is a search infix and selected is an array of granuleIds.
-      granuleId: granuleIdFilter || selected,
+      granuleId: granuleIdFilter || ((selected.length > 0) ? selected : undefined),
     };
 
     this.setState({ isListRequestSubmitted: true });
