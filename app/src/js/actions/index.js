@@ -339,6 +339,21 @@ export const bulkGranuleDeleteClearError = (requestId) => ({
   requestId
 });
 
+export const bulkGranuleReingest = (payload) => ({
+  [CALL_API]: {
+    type: types.BULK_GRANULE_REINGEST,
+    method: 'POST',
+    path: 'granules/bulkReingest',
+    requestId: payload.requestId,
+    body: payload.json
+  }
+});
+
+export const bulkGranuleReingestClearError = (requestId) => ({
+  type: types.BULK_GRANULE_REINGEST_CLEAR_ERROR,
+  requestId
+});
+
 export const deleteGranule = (granuleId) => ({
   [CALL_API]: {
     type: types.GRANULE_DELETE,
