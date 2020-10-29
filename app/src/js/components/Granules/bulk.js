@@ -178,7 +178,7 @@ const BulkGranule = ({
       >
         <Modal.Header className={`${modalClassName}__header`} closeButton></Modal.Header>
         <Modal.Title id={`modal__${modalClassName}`} className={`${modalClassName}__title`}>
-          <h4 className="modal_subtitle">Run Bulk Granules</h4>
+          <h4>Run Bulk Granules</h4>
           <p>What action would you like to perform for your bulk granules selection?</p>
         </Modal.Title>
         <Modal.Body>

@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2200**
   - Add Granule List page. Use Granule Inventory reports for generating granule CSVs
 
+- **CUMULUS-2218**
+  - Add `Bulk Reingest` to Bulk Granules actions
+
 ### Changed
 
 - **CUMULUS-2063**
