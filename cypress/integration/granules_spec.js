@@ -403,7 +403,7 @@ describe('Dashboard Granules Page', () => {
         expect(requestBody).to.have.property('reportName', listName);
         expect(requestBody).to.have.property('status', status);
         expect(requestBody).to.have.property('collectionId', collectionId);
-        expect(requestBody.granuleIds.sort()).to.deep.equal(granuleIds);
+        expect(requestBody.granuleId.sort()).to.deep.equal(granuleIds);
       }).as('createList');
 
       cy.visit('/granules');
