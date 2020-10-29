@@ -59,7 +59,7 @@ const SortableTable = ({
     []
   );
 
-  const shouldManualSort = !!initialSortId;
+  const shouldManualSort = !initialSortId;
 
   const {
     getTableProps,
