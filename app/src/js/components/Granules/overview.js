@@ -150,7 +150,7 @@ class GranulesOverview extends React.Component {
     };
 
     if (granuleIds.length > 0) {
-      requestBody.granuleIds = granuleIds;
+      requestBody.granuleId = granuleIds;
     }
 
     this.setState({ isListRequestSubmitted: true });
