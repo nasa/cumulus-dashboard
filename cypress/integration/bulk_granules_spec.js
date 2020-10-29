@@ -22,7 +22,7 @@ describe('Dashboard Bulk Granules', () => {
     });
 
     it('handles a successful bulk granule operation request', () => {
-      const asyncOperationId = Math.floor(Math.random() * 10);
+      const asyncOperationId = Math.random().toString(36).substring(2, 15);
 
       cy.server();
       cy.route('POST', '/granules/bulk', {
@@ -49,7 +49,7 @@ describe('Dashboard Bulk Granules', () => {
     });
 
     it('appends correct query params after bulk granule operation request', () => {
-      const asyncOperationId = Math.floor(Math.random() * 10);
+      const asyncOperationId = Math.random().toString(36).substring(2, 15);
 
       cy.server();
       cy.route('POST', '/granules/bulk', {
@@ -79,7 +79,7 @@ describe('Dashboard Bulk Granules', () => {
     });
 
     it('handles successful bulk granule deletion request', () => {
-      const asyncOperationId = Math.floor(Math.random() * 10);
+      const asyncOperationId = Math.random().toString(36).substring(2, 15);
 
       cy.server();
       cy.route('POST', '/granules/bulkDelete', {
@@ -107,7 +107,7 @@ describe('Dashboard Bulk Granules', () => {
     });
 
     it('handles successful bulk granule reingest request', () => {
-      const asyncOperationId = Math.floor(Math.random() * 10);
+      const asyncOperationId = Math.random().toString(36).substring(2, 15);
 
       cy.server();
       cy.route('POST', '/granules/bulkReingest', {
@@ -115,7 +115,7 @@ describe('Dashboard Bulk Granules', () => {
       }).as('postBulkReingest');
 
       cy.visit('/granules');
-      cy.contains('button', 'Run Bulk Reingest').click();
+      cy.contains('button', 'Run Bulk Granules').click();
 
       cy.get('.bulk_granules')
         .within(() => {
