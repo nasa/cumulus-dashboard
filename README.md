@@ -171,11 +171,6 @@ You can run all of the cypress tests locally that circleCI runs with a single co
 ```
 This will stands up the entire stack as well as begin the e2e service that will run all cypress commands and report an exit code for their success or failure.  This is primarily used for CircleCI, but can be useful to developers.
 
-Likewise the validation tests can be run with this command:
-```bash
-  $ npm run validation-tests
-```
-
 
 #### <a name=dockerdiagram></a> Docker Container Service Diagram.
 ![Docker Service Diagram](./ancillary/DashboardDockerServices.png)
@@ -289,7 +284,6 @@ This brings up LocalStack, Elasticsearch, the Cumulus localAPI, and the dashboar
 
 Run the test suite (yet another terminal window)
 ```bash
-  $ npm run validate
   $ npm run cypress
 ```
 

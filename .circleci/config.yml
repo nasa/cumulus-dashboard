@@ -53,11 +53,6 @@ jobs:
             echo $(pwd) && \
             npm run e2e-tests
 
-      - run:
-          name: Run Validation Tests
-          command: |
-            npm run validation-tests
-
       - store_artifacts:
           path: ~/cumulus-dashboard/cypress/screenshots
 

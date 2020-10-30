@@ -121,5 +121,5 @@ Cypress.Commands.add('clearStartDateTime', () => {
  */
 Cypress.Commands.add('setDatepickerDropdown', (targetValue) => {
   cy.get('.datetime.dropdown__dtrange').click();
-  cy.contains('div[class*="MenuList"] > div', targetValue).click();
+  cy.contains('div[id*="react-select"]', targetValue).click();
 });
