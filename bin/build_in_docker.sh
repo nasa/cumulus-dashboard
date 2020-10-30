@@ -28,10 +28,12 @@ rsync -av \
   --exclude tmp \
   /cumulus-dashboard/ /build/
 
+
 (
   set -evx
-
   cd /build
+  mv package.json original.package.json
+  cat original.package.json | grep -iv cypress > package.json
   npm install
   APIROOT=$APIROOT \
     DAAC_NAME=$DAAC_NAME \
@@ -59,5 +61,5 @@ docker run \
   --env LABELS=$LABELS \
   --env SERVED_BY_CUMULUS_API=${SERVED_BY_CUMULUS_API:-false} \
   --env AUTH_METHOD=$AUTH_METHOD \
-  node:10-slim \
+  node:12-slim \
   /cumulus-dashboard/tmp/script.sh
