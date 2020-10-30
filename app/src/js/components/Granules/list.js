@@ -123,6 +123,14 @@ const AllGranules = ({
     ];
   }
 
+  // TODO: this should be an API call to get all available options
+  const errorTypeOptions = [
+    {
+      id: 'FileNotFound',
+      label: 'FileNotFound'
+    }
+  ];
+
   return (
     <div className="page__component">
       <section className="page__section">
@@ -186,6 +194,18 @@ const AllGranules = ({
               placeholder="Granule ID"
               searchKey="granules"
             />
+            {view === 'failed' && (
+              <Dropdown
+                options={errorTypeOptions}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey='error.Error'
+                label={strings.error_type}
+                inputProps={{
+                  placeholder: 'All'
+                }}
+              />
+            )}
           </ListFilters>
         </List>
       </section>

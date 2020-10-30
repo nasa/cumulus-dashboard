@@ -84,7 +84,7 @@ export const errorTableColumns = [
   {
     Header: 'Error Type',
     accessor: (row) => get(row, 'error.Error', nullValue),
-    id: 'type',
+    id: 'error.Error.keyword',
     width: 100
   },
   {
