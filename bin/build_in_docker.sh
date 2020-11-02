@@ -15,9 +15,7 @@ cat > tmp/script.sh <<EOS
 
 set -evx
 
-apt-get update
-
-apt-get install -y \
+apt-get update && apt-get install -y \
   rsync \
   git
 
@@ -27,7 +25,6 @@ rsync -av \
   --exclude node_modules \
   --exclude tmp \
   /cumulus-dashboard/ /build/
-
 
 (
   set -evx
