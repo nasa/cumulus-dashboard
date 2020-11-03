@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2242** and **CUMULUS-2177**
   - building with `npm run build` will now build a distribution that can be served from behind cloudfront.
 
+- **CUMULUS-2249**
+  - clear infix search parameter when Search component is unmounted
+
 ### Added
 
 - **CUMULUS-2091**
