@@ -17,31 +17,34 @@ const TableHeader = ({
   clear,
   count,
   limit = defaultPageLimit,
-  page,
   onNewPage,
+  page,
+  selected = [],
 }) => {
   const [selectedValues, setSelectedValues] = useState([{
     id: limit,
     label: limit.toString(),
   }]);
 
-  function handleLimitChange({ selections, updateSelection }) {
-    if (selections.length === 0) {
+  const numberChecked = selected.length;
+
+  function handleLimitChange({ selections: dropdownSelections, updateSelection: updateDropdownSelection }) {
+    if (dropdownSelections.length === 0) {
       setSelectedValues([]);
     } else {
-      const { id: value } = selections[0];
+      const { id: value } = dropdownSelections[0];
       setSelectedValues([{
         id: value,
         label: value,
       }]);
     }
-    updateSelection();
+    updateDropdownSelection();
   }
 
   return (
     <div className="table__header">
       <span>
-        Showing <b>{count}</b> records
+        {count && <><b>{count}</b> total records</>} {numberChecked > 0 && <>(<b>{numberChecked}</b> selected)</>}
       </span>
       <Pagination
         action={action}
@@ -77,6 +80,7 @@ TableHeader.propTypes = {
   limit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onNewPage: PropTypes.func,
   page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  selected: PropTypes.array,
 };
 
 export default TableHeader;

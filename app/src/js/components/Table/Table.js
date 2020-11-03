@@ -1,6 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import withQueryParams from 'react-router-query-params';
 import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
 import omitBy from 'lodash/omitBy';
@@ -51,7 +51,7 @@ class List extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { query, list } = this.props;
+    const { list, query, queryParams } = this.props;
 
     if (!isEqual(query, prevProps.query)) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -67,13 +67,19 @@ class List extends React.Component {
         queryConfig: this.getQueryConfig(),
       }));
     }
+
+    const { limit, page, ...filters } = queryParams;
+    const { limit: prevLimit, page: prevPage, ...prevFilters } = prevProps.queryParams;
+    if (!isEqual(filters, prevFilters)) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ clearSelected: true });
+    }
   }
 
   queryNewPage(page) {
     this.setState({
       page,
       queryConfig: this.getQueryConfig({ page }),
-      clearSelected: true,
     });
   }
 
@@ -83,7 +89,6 @@ class List extends React.Component {
       queryConfig: this.getQueryConfig({
         sort_key: buildSortKey(sortProps),
       }),
-      clearSelected: true,
     });
   }
 
@@ -190,8 +195,9 @@ class List extends React.Component {
                 clear={filterClear}
                 count={count}
                 limit={limit}
-                page={page}
                 onNewPage={this.queryNewPage}
+                page={page}
+                selected={selected}
               />
             )}
             <SortableTable
@@ -234,7 +240,7 @@ List.propTypes = {
   sortId: PropTypes.string,
   tableColumns: PropTypes.array,
   onSelect: PropTypes.func,
+  queryParams: PropTypes.object,
 };
 
-export { List };
-export default connect()(List);
+export default withQueryParams()(List);
