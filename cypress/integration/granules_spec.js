@@ -269,7 +269,10 @@ describe('Dashboard Granules Page', () => {
         .contains('li', 2);
       cy.setDatepickerDropdown('Custom');
       cy.get('[data-cy="endDateTime"] .react-datetime-picker__inputGroup__month').click();
-      cy.get('.react-calendar__month-view__days__day--neighboringMonth').eq(0).click();
+      cy.get('.react-calendar__navigation__prev-button').click();
+      cy.get('.react-calendar__navigation__prev-button').click();
+      cy.get('.react-calendar__navigation__prev-button').click();
+      cy.get('.react-calendar__month-view__days > :nth-child(1)').click();
       cy.get('.overview-num__wrapper ul li')
         .first().contains('li', 'Completed').contains('li', 0)
         .next()
