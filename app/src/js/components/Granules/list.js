@@ -137,13 +137,9 @@ const AllGranules = ({
   }
 
   function getGranuleErrorTypes() {
-    const errorTypes = [];
-
-    errorCount.map((e) => errorTypes.push(e.key));
-
-    return errorTypes.map((e) => ({
-      id: e,
-      label: e,
+    return errorCount.map((e) => ({
+      id: e.key,
+      label: e.key
     }));
   }
 
