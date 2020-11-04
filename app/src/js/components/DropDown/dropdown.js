@@ -111,7 +111,7 @@ const Dropdown = ({
   }, [dispatch, getOptions]);
 
   return (
-    <div className={`filter__item form-group__element filter-${paramKey}`}>
+    <div className={`filter__item form-group__element filter-${paramKey.includes('.') ? paramKey.split('.')[0] : paramKey}`}>
       {label && <label>{label}</label>}
       <Typeahead
         allowNew={allowNew}

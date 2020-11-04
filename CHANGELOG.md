@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2200**
   - Add Granule List page. Use Granule Inventory reports for generating granule CSVs
 
+- **CUMULUS-2225**
+  - Rename "Type" column "Error Type" on Failed Granules and Home pages and allow sorting
+  - Add Error Type filter to Failed Granules page
+
 ### Changed
 
 - **CUMULUS-2063**
