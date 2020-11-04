@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
 import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
@@ -169,6 +170,7 @@ class List extends React.Component {
       queryConfig,
     } = this.state;
     const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
+    console.log(this.props);
 
     return (
       <>
@@ -245,4 +247,4 @@ List.propTypes = {
 
 export { List };
 
-export default withQueryParams()(List);
+export default withQueryParams()(connect()(List));
