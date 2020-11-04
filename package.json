@@ -20,6 +20,7 @@
   },
   "scripts": {
     "audit-ci": "audit-ci --config $(pwd)/audit-ci.json",
+    "serve:prod": "NODE_ENV=production http-server dist -p 3000 --proxy http://localhost:3000?",
     "serve": "NODE_ENV=development webpack-dev-server --open --config webpack.dev.js",
     "serve-hot": "NODE_ENV=development webpack-dev-server --open --hot --config webpack.dev.js",
     "serve-cypress": "SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com npm run serve",
@@ -29,7 +30,6 @@
     "lint-fix": "eslint --fix . --ext .js",
     "cypress": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress open",
     "cypress-ci": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress run --spec 'cypress/integration/*' --config video=false",
-    "validate": "ava --config ./validation-tests.config.cjs",
     "test": "NODE_ENV=test npm run lint && ava",
     "seed-database": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test node ./localAPI/runSeedDatabase.js",
     "serve-api": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost NODE_ENV=test cmr_provider=CUMULUS FAKE_AUTH=true ./node_modules/@cumulus/api/bin/cli.js serve --no-reseed",
@@ -41,7 +41,6 @@
     "start-dashboard": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml up -d",
     "stop-dashboard": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml down",
     "e2e-tests": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml -f ./localAPI/docker-compose-cypress.yml up --exit-code-from=e2e --abort-on-container-exit",
-    "validation-tests": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml -f ./localAPI/docker-compose-validate.yml up --exit-code-from=validate --abort-on-container-exit",
     "view-docker-logs": "docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml -f ./localAPI/docker-compose-dashboard.yml logs -f "
   },
   "ava": {},
@@ -112,6 +111,7 @@
     "fs-extra": "^5.0.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "http-server": "^0.12.3",
     "ignore-styles": "^5.0.1",
     "jsdom": "^15.1.1",
     "jsdom-global": "^3.0.2",

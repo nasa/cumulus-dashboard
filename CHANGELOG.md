@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+- **CUMULUS-2242** and **CUMULUS-2177**
+  - building with `npm run build` will now build a distribution that can be served from behind cloudfront.
+
+- **CUMULUS-2249**
+  - clear infix search parameter when Search component is unmounted
+
 ### Added
 
 - **CUMULUS-2091**
@@ -20,6 +27,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Rename "Type" column "Error Type" on Failed Granules and Home pages and allow sorting
   - Add Error Type filter to Failed Granules page
 
+- **CUMULUS-2218**
+  - Add `Bulk Reingest` to Bulk Granules actions
+
 ### Changed
 
 - **CUMULUS-2063**
@@ -27,10 +37,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Code changes to allow for private CMR collections to have links to the MMT.
 - **CUMULUS-2215**
   - Omits unnecesary statistics request when building the option list of collection names on the granules page.
-
-
 - **CUMULUS-2171**
   - Allows filtering of the Granule Inventory List CSV download based on Granule IDs, Status, and Collection.
+- **CUMULUS-2242**
+  - Moves cypress testing to run against production build in CI.
+
+### Removed
+ -**CUMULUS-2242**
+   - Removes unnecessary validation tests.
 
 ## [v2.0.0]
 

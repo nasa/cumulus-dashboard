@@ -22,7 +22,7 @@ describe('Dashboard Bulk Granules', () => {
     });
 
     it('handles a successful bulk granule operation request', () => {
-      const asyncOperationId = Math.floor(Math.random() * 10);
+      const asyncOperationId = Math.random().toString(36).substring(2, 15);
 
       cy.server();
       cy.route('POST', '/granules/bulk', {
@@ -49,7 +49,7 @@ describe('Dashboard Bulk Granules', () => {
     });
 
     it('appends correct query params after bulk granule operation request', () => {
-      const asyncOperationId = Math.floor(Math.random() * 10);
+      const asyncOperationId = Math.random().toString(36).substring(2, 15);
 
       cy.server();
       cy.route('POST', '/granules/bulk', {
@@ -79,7 +79,7 @@ describe('Dashboard Bulk Granules', () => {
     });
 
     it('handles successful bulk granule deletion request', () => {
-      const asyncOperationId = Math.floor(Math.random() * 10);
+      const asyncOperationId = Math.random().toString(36).substring(2, 15);
 
       cy.server();
       cy.route('POST', '/granules/bulkDelete', {
@@ -101,6 +101,34 @@ describe('Dashboard Bulk Granules', () => {
         });
 
       cy.wait('@postBulkDelete');
+      cy.contains('p', asyncOperationId);
+      cy.contains('button', 'Close');
+      cy.contains('button', 'Go To Operations');
+    });
+
+    it('handles successful bulk granule reingest request', () => {
+      const asyncOperationId = Math.random().toString(36).substring(2, 15);
+
+      cy.server();
+      cy.route('POST', '/granules/bulkReingest', {
+        id: asyncOperationId
+      }).as('postBulkReingest');
+
+      cy.visit('/granules');
+      cy.contains('button', 'Run Bulk Granules').click();
+
+      cy.get('.bulk_granules')
+        .within(() => {
+          cy.contains('button', 'Run Bulk Reingest').click();
+        });
+
+      cy.get('.bulk_granules--reingest')
+        .within(() => {
+          cy.contains('button', 'Cancel Bulk Reingest');
+          cy.contains('button', 'Run Bulk Reingest').click();
+        });
+
+      cy.wait('@postBulkReingest');
       cy.contains('p', asyncOperationId);
       cy.contains('button', 'Close');
       cy.contains('button', 'Go To Operations');
@@ -198,6 +226,55 @@ describe('Dashboard Bulk Granules', () => {
         cy.get('.bulk_granules')
           .within(() => {
             cy.contains('button', 'Run Bulk Delete').click();
+          });
+
+        cy.get('.error__report').should('not.exist');
+      });
+    });
+
+    describe('handles error from failed bulk granule reingest request', () => {
+      const errorMessage = 'bulk reingest failure';
+
+      beforeEach(() => {
+        cy.server();
+        cy.route({
+          method: 'POST',
+          status: 400,
+          url: '/granules/bulkReingest',
+          response: {
+            message: errorMessage
+          }
+        }).as('postBulkReingest');
+
+        cy.visit('/granules');
+        cy.contains('button', 'Run Bulk Granules').click();
+
+        cy.get('.bulk_granules')
+          .within(() => {
+            cy.contains('button', 'Run Bulk Reingest').click();
+          });
+
+        cy.get('.bulk_granules--reingest')
+          .within(() => {
+            cy.contains('button', 'Run Bulk Reingest').click();
+          });
+
+        cy.wait('@postBulkReingest');
+      });
+
+      it('show error message', () => {
+        cy.contains('.error__report', errorMessage);
+      });
+
+      it('hides error message when modal is closed and re-opened', () => {
+        cy.contains('.error__report', errorMessage);
+        cy.contains('button', 'Cancel Bulk Reingest').click();
+
+        cy.contains('button', 'Run Bulk Granules').click();
+
+        cy.get('.bulk_granules')
+          .within(() => {
+            cy.contains('button', 'Run Bulk Reingest').click();
           });
 
         cy.get('.error__report').should('not.exist');
