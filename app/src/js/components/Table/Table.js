@@ -170,7 +170,6 @@ class List extends React.Component {
       queryConfig,
     } = this.state;
     const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
-    console.log(this.props);
 
     return (
       <>
