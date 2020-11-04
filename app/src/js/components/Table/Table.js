@@ -243,4 +243,6 @@ List.propTypes = {
   queryParams: PropTypes.object,
 };
 
+export { List };
+
 export default withQueryParams()(List);

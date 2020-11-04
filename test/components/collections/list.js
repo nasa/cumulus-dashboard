@@ -45,7 +45,7 @@ test('Collections Overview generates bulkAction for recovery button', function (
     </Provider>);
 
   const collectionsWrapper = providerWrapper.find('CollectionList').dive();
-  const listWrapper = collectionsWrapper.find('Connect(List)');
+  const listWrapper = collectionsWrapper.find('withRouter(withQueryParams(List))');
   const listBulkActions = listWrapper.prop('bulkActions');
 
   const recoverFilter = (object) => object.text === 'Recover';
@@ -73,7 +73,7 @@ test('Collections Overview does not generate bulkAction for recovery button', fu
     </Provider>);
 
   const collectionsWrapper = providerWrapper.find('CollectionList').dive();
-  const listWrapper = collectionsWrapper.find('Connect(List)');
+  const listWrapper = collectionsWrapper.find('withRouter(withQueryParams(List))');
   const listBulkActions = listWrapper.prop('bulkActions');
 
   const recoverFilter = (object) => object.text === 'Recover';
