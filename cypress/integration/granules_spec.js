@@ -432,5 +432,19 @@ describe('Dashboard Granules Page', () => {
 
       cy.url().should('include', '/granules/lists');
     });
+
+    it('Should filter failed granules by error type', () => {
+      cy.visit('/granules/failed');
+
+      // Get initial table size
+      cy.get('.table .tbody .tr').should('have.length', 2);
+
+      // Filter the results by an error type
+      cy.get('.filter-error .rbt-input-main').as('error-input');
+      cy.get('@error-input').click().type('FileNotFound').type('{enter}');
+
+      // Get new table size
+      cy.get('.table .tbody .tr').should('have.length', 1);
+    });
   });
 });
