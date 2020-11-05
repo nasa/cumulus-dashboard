@@ -12,6 +12,7 @@ import {
   getOptionsCollectionName,
   listWorkflows,
   applyWorkflowToGranule,
+  getCount,
 } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
@@ -39,6 +40,7 @@ const AllGranules = ({
   logs,
   queryParams,
   workflowOptions,
+  stats,
 }) => {
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
@@ -51,6 +53,7 @@ const AllGranules = ({
   const displayCaseView = displayCase(view);
   const statusOpts = view === 'all' ? statusOptions : null;
   const tablesortId = view === 'failed' ? 'granuleId' : 'timestamp';
+  const errorCount = get(stats, 'count.data.granules.count') || [];
   const breadcrumbConfig = [
     {
       label: 'Dashboard Home',
@@ -73,6 +76,16 @@ const AllGranules = ({
   useEffect(() => {
     setWorkflow(workflowOptions[0]);
   }, [workflowOptions]);
+
+  useEffect(() => {
+    dispatch(
+      getCount({
+        type: 'granules',
+        field: 'error.Error.keyword',
+        sidebarCount: false
+      })
+    );
+  }, [dispatch]);
 
   function getView() {
     const { pathname } = location;
@@ -121,6 +134,13 @@ const AllGranules = ({
         metaHandler: setWorkflowMeta,
       }),
     ];
+  }
+
+  function getGranuleErrorTypes() {
+    return errorCount.map((e) => ({
+      id: e.key,
+      label: e.key
+    }));
   }
 
   return (
@@ -186,6 +206,18 @@ const AllGranules = ({
               placeholder="Granule ID"
               searchKey="granules"
             />
+            {view === 'failed' && (
+              <Dropdown
+                options={getGranuleErrorTypes()}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey='error.Error'
+                label={strings.error_type}
+                inputProps={{
+                  placeholder: 'All'
+                }}
+              />
+            )}
           </ListFilters>
         </List>
       </section>
@@ -207,6 +239,7 @@ AllGranules.propTypes = {
   logs: PropTypes.object,
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
+  stats: PropTypes.object,
 };
 
 AllGranules.displayName = strings.all_granules;
@@ -218,6 +251,7 @@ export default withRouter(
     collections: state.collections,
     granules: state.granules,
     logs: state.logs,
+    stats: state.stats,
     workflowOptions: workflowOptionNames(state),
   }))(AllGranules)
 );

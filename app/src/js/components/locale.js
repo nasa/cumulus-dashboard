@@ -39,7 +39,8 @@ export const strings = new LocalizedStrings({
     running_granules: 'Running Granules',
     total_granules: 'Total Granules',
     view_all_granules: 'View All Granules',
-    view_granules_overview: 'View Granule Overview'
+    view_granules_overview: 'View Granule Overview',
+    error_type: 'Error Type'
   },
   gitc: {
     active_collections: 'Active Layers',
@@ -75,7 +76,8 @@ export const strings = new LocalizedStrings({
     running_granules: 'Running Products',
     total_granules: 'Total Products',
     view_all_granules: 'View All Products',
-    view_granules_overview: 'View Product Overview'
+    view_granules_overview: 'View Product Overview',
+    error_type: 'Error Type'
   }
 }, getCustomInterfaceLanguage);
 

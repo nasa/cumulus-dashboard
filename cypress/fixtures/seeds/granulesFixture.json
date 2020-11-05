@@ -209,8 +209,8 @@
       "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-Rcei43QwgSP6:ffdb0984-c64e-4b1d-8af0-81938ec8acf9",
       "published": false,
       "error": {
-        "Cause": "{\"errorMessage\":\"Source file not found s3://cumulus-test-sandbox-internal/non-existent-path/non-existent-file\",\"errorType\":\"FileNotFound\",\"stackTrace\":[\"S3Granule.sync (/var/task/index.js:147549:13)\",\"<anonymous>\",\"process._tickDomainCallback (internal/process/next_tick.js:228:7)\"]}",
-        "Error": "FileNotFound"
+        "Cause": "{\"errorMessage\":\"verifyFile s3://cumulus-test-sandbox-internal/non-existent-path/non-existent-file failed: Actual file size 2MB did not match expected file size 3MB\",\"errorType\":\"UnexpectedFileSize\",\"stackTrace\":[\"S3Granule.sync (/var/task/index.js:147549:13)\",\"<anonymous>\",\"process._tickDomainCallback (internal/process/next_tick.js:228:7)\"]}",
+        "Error": "UnexpectedFileSize"
       },
       "productVolume": 17953851,
       "timeToPreprocess": 0.935,
