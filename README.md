@@ -10,11 +10,6 @@ Code to generate and deploy the dashboard for the Cumulus API.
 - [Development Guide](https://github.com/nasa/cumulus-dashboard/blob/master/DEVELOPMENT.md)
 - [Technical documentation on tables](https://github.com/nasa/cumulus-dashboard/blob/master/TABLES.md)
 
-## Wireframes and mocks
-
-- [Designs](ancillary/dashboard-designs.pdf)
-- [Wireframes](ancillary/dashboard-wireframes.pdf)
-
 ## Configuration
 
 The dashboard is populated from the Cumulus API. The dashboard has to point to a working version of the Cumulus API before it is installed and built.
