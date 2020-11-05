@@ -86,7 +86,6 @@
     "css-loader": "^3.6.0",
     "cssnano": "^4.1.10",
     "csv-string": "^4.0.1",
-    "cypress": "^5.4.0",
     "cypress-failed-log": "^2.7.0",
     "cypress-wait-until": "^1.7.1",
     "del": "^2.2.0",
@@ -202,5 +201,8 @@
     "slugify": "^1.4.5",
     "stubborn-queue": "^2.0.0",
     "url": "^0.11.0"
+  },
+  "optionalDependencies": {
+    "cypress": "5.5.0"
   }
 }
