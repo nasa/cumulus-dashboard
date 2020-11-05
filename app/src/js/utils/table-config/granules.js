@@ -15,9 +15,13 @@ import {
   fromNowWithTooltip
 } from '../format';
 import {
+  applyWorkflowToGranuleClearError,
+  deleteGranule,
+  deleteGranuleClearError,
   reingestGranule,
+  reingestGranuleClearError,
   removeGranule,
-  deleteGranule
+  removeGranuleClearError,
 } from '../../actions';
 import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
@@ -159,6 +163,7 @@ export const recoverAction = (granules, config) => ({
   text: 'Recover Granule',
   action: config.recover.action,
   state: granules.executed,
+  clearError: applyWorkflowToGranuleClearError,
   confirm: confirmRecover
 });
 
@@ -242,6 +247,7 @@ export const reingestAction = (granules) => ({
   text: 'Reingest',
   action: reingestGranule,
   state: granules.reingested,
+  clearError: reingestGranuleClearError,
   confirm: confirmReingest,
   className: 'button--reingest',
   getModalOptions: granuleModalJourney
@@ -253,6 +259,7 @@ export const bulkActions = (granules, config) => [
     text: 'Execute',
     action: config.execute.action,
     state: granules.executed,
+    clearError: applyWorkflowToGranuleClearError,
     confirm: confirmApply,
     confirmOptions: config.execute.options,
     className: 'button--execute'
@@ -261,6 +268,7 @@ export const bulkActions = (granules, config) => [
     text: strings.remove_from_cmr,
     action: removeGranule,
     state: granules.removed,
+    clearError: removeGranuleClearError,
     confirm: confirmRemove,
     className: 'button--remove'
   },
@@ -276,6 +284,7 @@ export const bulkActions = (granules, config) => [
     text: 'Delete',
     action: deleteGranule,
     state: granules.deleted,
+    clearError: deleteGranuleClearError,
     confirm: confirmDelete,
     className: 'button--delete'
   }];

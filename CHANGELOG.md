@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2249**
   - clear infix search parameter when Search component is unmounted
 
+- **CUMULUS-2147**
+  - clear execution errors from granules list when async commands are completed
+
 ### Added
 
 - **CUMULUS-2091**
