@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - **CUMULUS-2242** and **CUMULUS-2177**
   - building with `npm run build` will now build a distribution that can be served from behind cloudfront.
+  - Fixed bug in nginx config that allows the application to run in the continer built by `bin/build_docker_image.sh`.
 
 - **CUMULUS-2249**
   - clear infix search parameter when Search component is unmounted
