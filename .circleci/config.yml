@@ -16,7 +16,7 @@ jobs:
             nvm install v12.18.0
             nvm alias default v12.18.0
             npm install -g npm
-            npm ci
+            npm ci --no-opitional
 
       - run:
           name: Run audit-ci
@@ -77,7 +77,7 @@ jobs:
             nvm install v12.18.0
             nvm alias default v12.18.0
             npm install -g npm
-            npm ci
+            npm ci --no-opitional
 
       - run:
           # This has to be done in a separate step, like this, because Circle CI
