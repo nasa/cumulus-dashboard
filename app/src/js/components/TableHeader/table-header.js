@@ -28,17 +28,17 @@ const TableHeader = ({
 
   const numberChecked = selected.length;
 
-  function handleLimitChange({ selections: dropdownSelections, updateSelection: updateDropdownSelection }) {
-    if (dropdownSelections.length === 0) {
+  function handleLimitChange({ selections, updateSelection }) {
+    if (selections.length === 0) {
       setSelectedValues([]);
     } else {
-      const { id: value } = dropdownSelections[0];
+      const { id: value } = selections[0];
       setSelectedValues([{
         id: value,
         label: value,
       }]);
     }
-    updateDropdownSelection();
+    updateSelection();
   }
 
   return (
