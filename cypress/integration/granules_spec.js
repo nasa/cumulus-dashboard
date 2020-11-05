@@ -446,5 +446,46 @@ describe('Dashboard Granules Page', () => {
       // Get new table size
       cy.get('.table .tbody .tr').should('have.length', 1);
     });
+
+    it('should show number of selected results in table', () => {
+      cy.visit('/granules');
+      cy.get('.table .thead').as('table-head');
+      cy.get('@table-head').find('input[type="checkbox"]').check();
+      cy.contains('.table__header', '(11 selected)');
+    });
+
+    it('should clear the selection when a filter is applied', () => {
+      const granuleIds = [
+        'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
+        'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
+      ];
+      cy.visit('/granules');
+
+      cy.get('.table .tbody').as('table-body');
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('.filter-status .rbt-input-main').as('status-input');
+
+      cy.get('@list').should('have.length', 11);
+      cy.get('@table-body').contains('.td', granuleIds[0]).as('granule1');
+      cy.get('@granule1').siblings().contains('.td', 'Completed');
+      cy.get('@granule1').siblings().find('input[type="checkbox"]').check();
+
+      cy.get('@table-body').contains('.td', granuleIds[1]).as('granule2');
+      cy.get('@granule2').siblings().contains('.td', 'Failed');
+      cy.get('@granule2').siblings().find('input[type="checkbox"]').check();
+
+      cy.contains('.table__header', '(2 selected)');
+
+      // (X selected) only in header when items are selected
+      // verify that nothing is selected when filter is applied
+      cy.get('@status-input').click().type('run').type('{enter}');
+      cy.get('@list').should('have.length', 2);
+      cy.get('.table__header').should('not.contain.text', 'selected');
+
+      // verify items still not selected when filter is cleared
+      cy.get('@status-input').clear();
+      cy.get('@list').should('have.length', 11);
+      cy.get('.table__header').should('not.contain.text', 'selected');
+    });
   });
 });

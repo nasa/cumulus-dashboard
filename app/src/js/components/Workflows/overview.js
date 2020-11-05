@@ -36,7 +36,6 @@ const WorkflowOverview = ({
         </div>
         <List
           list={workflows.list}
-          dispatch={dispatch}
           action={listWorkflows}
           tableColumns={tableColumns}
           query={{ ...queryParams }}

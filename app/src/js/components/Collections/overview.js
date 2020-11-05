@@ -277,7 +277,6 @@ class CollectionOverview extends React.Component {
           </div>
           <List
             list={list}
-            dispatch={this.props.dispatch}
             action={listGranules}
             tableColumns={tableColumns}
             query={this.generateQuery()}

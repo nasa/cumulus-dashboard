@@ -42,7 +42,7 @@ class ProvidersOverview extends React.Component {
   }
 
   render () {
-    const { dispatch, providers, stats } = this.props;
+    const { providers, stats } = this.props;
     const { list } = providers;
     const { count, queriedAt } = list.meta;
 
@@ -88,7 +88,6 @@ class ProvidersOverview extends React.Component {
           </div>
           <List
             list={mutableList}
-            dispatch={dispatch}
             action={listProviders}
             tableColumns={tableColumns}
             query={this.generateQuery()}
