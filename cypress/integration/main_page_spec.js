@@ -179,7 +179,7 @@ describe('Dashboard Home Page', () => {
 
       // Test there are values in Granule Error list
       cy.get('[data-value="0"]').contains('FileNotFound');
-      cy.get('[data-value="1"]').contains('FileNotFound');
+      cy.get('[data-value="1"]').contains('UnexpectedFileSize');
 
       cy.get('[data-cy=startDateTime]').within(() => {
         cy.get('input[name=month]').click().type(1);
