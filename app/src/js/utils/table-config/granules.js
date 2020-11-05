@@ -86,6 +86,12 @@ export const tableColumns = [
 
 export const errorTableColumns = [
   {
+    Header: 'Error Type',
+    accessor: (row) => get(row, 'error.Error', nullValue),
+    id: 'error.Error.keyword',
+    width: 100
+  },
+  {
     Header: 'Error',
     accessor: (row) => get(row, 'error.Cause', nullValue),
     id: 'error',
@@ -93,13 +99,6 @@ export const errorTableColumns = [
       <ErrorReport report={get(original, 'error.Cause', nullValue)} truncate={true} />),
     disableSortBy: true,
     width: 175
-  },
-  {
-    Header: 'Type',
-    accessor: (row) => get(row, 'error.Error', nullValue),
-    id: 'type',
-    disableSortBy: true,
-    width: 100
   },
   {
     Header: 'Granule',
