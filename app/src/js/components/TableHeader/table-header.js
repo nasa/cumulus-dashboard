@@ -44,7 +44,7 @@ const TableHeader = ({
   return (
     <div className="table__header">
       <span>
-        {count && <><b>{count}</b> total records</>} {numberChecked > 0 && <>(<b>{numberChecked}</b> selected)</>}
+        <b>{count}</b> total records {numberChecked > 0 && <>(<b>{numberChecked}</b> selected)</>}
       </span>
       <Pagination
         action={action}
