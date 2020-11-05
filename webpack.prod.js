@@ -10,6 +10,10 @@ const pkg = require('./package.json');
 
 const CommonConfig = require('./webpack.common');
 
+const servedByCumulusAPI = process.env.SERVED_BY_CUMULUS_API;
+
+const publicPath = servedByCumulusAPI ? './' : '/';
+
 const MainConfig = merge.smartStrategy({
   devtool: 'replace',
   'module.rules.use': 'prepend'
@@ -20,11 +24,12 @@ const MainConfig = merge.smartStrategy({
     filename: '[name].[contenthash].bundle.js',
     chunkFilename: '[name].[contenthash].bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: './'
+    publicPath,
   },
   optimization: {
     nodeEnv: 'production',
     concatenateModules: true,
+    minimize: false,
     minimizer: [
       new TerserJsPlugin({
         cache: true,

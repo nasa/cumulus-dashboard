@@ -71,7 +71,7 @@ describe('Dashboard Providers Page', () => {
         .siblings()
         .find('div[class*="container"]')
         .click();
-      cy.contains('div[class*="MenuList"] > div', protocol).click();
+      cy.contains('div[id*="react-select"]', protocol).click();
       cy.get('@providerinput')
         .contains('Host')
         .siblings('input')
