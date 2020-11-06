@@ -449,8 +449,9 @@ describe('Dashboard Granules Page', () => {
 
     it('should show number of selected results in table', () => {
       cy.visit('/granules');
-      cy.get('.table .thead').as('table-head');
-      cy.get('@table-head').find('input[type="checkbox"]').check();
+      cy.get('.table .thead input[type="checkbox"]').as('select-all');
+      cy.get('@select-all').check();
+      cy.get('@select-all').should('be.checked');
       cy.contains('.table__header', '(11 selected)');
     });
 
