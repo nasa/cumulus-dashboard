@@ -92,7 +92,7 @@ export const errorTableColumns = [
     accessor: (row) => get(row, 'error.Cause', nullValue),
     id: 'error',
     Cell: ({ row: { original } }) => ( // eslint-disable-line react/prop-types
-      <ErrorReport report={get(original, 'error.Cause', nullValue)} truncate={true} />),
+      <ErrorReport report={get(original, 'error.Cause', nullValue)} truncate={true} disableScroll={true} />),
     disableSortBy: true,
     width: 175
   },
