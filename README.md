@@ -6,8 +6,10 @@ Code to generate and deploy the dashboard for the Cumulus API.
 
 ## Documentation
 
-- [configuration](#configuration)
-- [quick start](#quick-start)
+- [Configuration](#configuration)
+- [Quick start](#quick-start)
+- [Dashboard development](#dashboard-development)
+- [Testing](#testing)
 
 
 Other pages:
@@ -39,6 +41,14 @@ The following environment variables override the default values.
 | STAGE | e.g. PROD, UAT, displayed at top of dashboard page | *development* |
 
 ## Quick start
+
+### Get dashboard source code
+The dashboard source is available on github and can be cloned with git.
+
+```bash
+  $ git clone https://github.com/nasa/cumulus-dashboard
+```
+The cloned directory `./cumulus-dashboard` will be refered as the root directory of the project and commands that are referenced in this document, should start from that directory.
 
 ### Build the dashboard using docker (users/operators)
 
@@ -85,44 +95,44 @@ That command builds a Docker image with the name `cumulus-dashboard` and tag `pr
 
 In this example, the dashboard would be available at `http://localhost:3000/` in any browser.
 
+To stop the container, find the container id with `docker ps`.  In our exaple it will be a container with NAME `cumulus-dashboard` and TAG `production-1`, then running `docker stop <containerID>` will stop the docker container.
+
+
 --------
 
-## Cumulus Dashboard Development (developers/advanced users/operators)
+## Dashboard Development
 
-### Build and run the dashboard locally
+### Build the dashboard
 
 The dashboard uses node v12.18.0. To build/run the dashboard on your local machine, install [nvm](https://github.com/creationix/nvm) and run `nvm install v12.18.0`.
 
+#### install requirements
 We use npm for local package management, to install the requirements:
 ```bash
   $ nvm use
   $ npm install
 ```
 
-## Build the dashboard
-
-### <a name=buildlocally></a>Build
-
-To build the dashboard:
+To build a dashboard bundle<sup>[1](#bundlefootnote)</sup>:
 
 ```bash
   $ nvm use
   $ [SERVED_BY_CUMULUS_API=true] [DAAC_NAME=LPDAAC] [STAGE=production] [HIDE_PDR=false] [LABELS=daac] APIROOT=https://myapi.com npm run build
 ```
-**NOTE**: Only the `APIROOT` environment variable is required.
+**NOTE**: Only the `APIROOT` environment variable is required and any of the environment varaibles currently set are passed to the build.
 
-The compiled files will be placed in the `dist` directory.
+The compiled dashboard files (dashboard bundle) will be placed in the `./dist` directory.
 
-#### Build the dashboard to be served by the Cumulus API.
+#### Build dashboard to be served by the Cumulus API.
 
-It is possible to [serve the dashboard](https://nasa.github.io/cumulus-api/#serve-the-dashboard-from-a-bucket) with the Cumulus API. If you need to do this, you must build the dashboard with the environment variable `SERVED_BY_CUMULUS_API` set to `true`.  This configures the dashboard to work from the Cumulus `dashboard` endpoint.  This option should only be considered when you can't serve the dashboard from behind CloudFront, for example in NGAP sandbox environments.
+It is possible to [serve the dashboard](https://nasa.github.io/cumulus-api/#serve-the-dashboard-from-a-bucket) with the Cumulus API. If you need to do this, you must build the dashboard with the environment variable `SERVED_BY_CUMULUS_API` set to `true`.  This configures the dashboard to work from the Cumulus `dashboard` endpoint.  This option should **only** be considered when you can't serve the dashboard from behind CloudFront, for example in NGAP sandbox environments.
 
 #### Build dashboard to be served by CloudFront
 
 If you wish to serve the dashboard from behind [CloudFront](https://aws.amazon.com/cloudfront/).  Build a `dist` with your configuration including `APIROOT` and ensure the `SERVED_BY_CUMULUS_API` variable is unset. Follow the cumulus operator docs on [serving the dashboard from CloudFront](https://nasa.github.io/cumulus/docs/next/operator-docs/serve-dashboard-from-cloudfront).
 
 
-### Build a specific dashboard version
+#### Build a specific dashboard version
 
 `cumulus-dashboard` versions are distributed using tags in GitHub. You can select specific version in the following manner:
 
@@ -133,27 +143,37 @@ If you wish to serve the dashboard from behind [CloudFront](https://aws.amazon.c
   $ git checkout ${tagNumber}
 ```
 
-Then follow the steps noted above to build the dashboard locally or using Docker.
+Then follow the steps noted above to build the [dashboard locally](#build-the-dashboard) or [using Docker](#quick-start).
+
+It is also possible to visit the repository at https://github.com/nasa/cumulus-dashboard/releases and download the source code bundle directly without cloneing the repository.
 
 ## Run the dashboard
 
-### Run locally
-
-To run the dashboard locally against a running Cumulus instance:
+### Run the dashboard with hot reload
+During development you can run the webpack development webserver to serve the dashboard while you are developing. When you run the dashboard this way, the compiled code in `./dist` is ignored, and the soruce code is served by the webpack-dev-server, which will watch for changes to the source and recompile as files are changed. Make sure you have [installed the requirements](#install-requirements) and then:
 
 ```bash
-  $ git clone https://github.com/nasa/cumulus-dashboard
-  $ cd cumulus-dashboard
-  $ nvm use
-  $ npm install
-  $ APIROOT=https://myapi.com npm run serve
+APIROOT=http://<myapi>.com npm run serve
 ```
+The dashboard should be available at http://localhost:3000
 
-#### local API server
+### Run a built dashboard
 
-For **development** and **testing** purposes, you can run a Cumulus API locally. This requires `docker-compose` in order to stand up the docker containers that serve Cumulus API.  There are a number of commands that will stand up different portions of the stack.  See the [Docker Service Diagram](#dockerdiagram) and examine the `docker-compose*.yml` file in the `/localAPI/` directory to see all of the possible combinations. Described below are each of the provided commands for running the dashboard and Cumulus API locally.
+To run a built dashboard, first [build the dashboard](#build-the-dashboard), then run:
 
-*NOTE: These `docker-compose` commands do not build distributable containers, but are a provided as testing conveniences.  The docker-compose[-\*].yml files show that they work by linking your local directories into the container.*
+```bash
+  $ npm run serve:prod
+```
+This runs a node http-server in front of whatever exists in the `./dist` directory.  It's fast, but will not pick up any changes as you are working.
+
+
+## Testing
+
+### local API server
+
+For **development** and **testing** purposes only, you can run a Cumulus API locally. This requires `docker-compose` in order to stand up the docker containers that serve Cumulus API.  There are a number of commands that will stand up different portions of the stack.  See the [Docker Service Diagram](#dockerdiagram) and examine the `docker-compose*.yml` file in the `/localAPI/` directory to see all of the possible combinations. Described below are each of the provided commands for running the dashboard and Cumulus API locally.
+
+*Important Note: These `docker-compose` commands do not build distributable containers, but are a provided as testing conveniences.  The docker-compose[-\*].yml files show that they work by linking your local directories into the container.*
 
 In order to run the Cumulus API locally you must first [build the dashboard](#buildlocally) and then run the containers that provide LocalStack and Elasticsearch services.
 
@@ -162,6 +182,7 @@ These are started and stopped with the commands:
   $ npm run start-localstack
   $ npm run stop-localstack
 ```
+
 After these containers are running, you can start a cumulus API locally in a terminal window `npm run serve-api`, the dashboard in another window. `[HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve` and finally cypress in a third window. `npm run cypress`.
 
 Once the docker app is running, If you would like to see sample data you can seed the database. This will load the same sample data into the application that is used during cypress testing.
@@ -176,8 +197,30 @@ The cumulusapi docker service is started and stopped:
   $ npm run start-cumulusapi
   $ npm run stop-cumulusapi
 ```
-Then you can run the dashboard locally (without docker) `[HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve` and open cypress tests `npm run cypress`.
 
+the start command, will exit successfully long before the stack is actually ready to run.
+The output looks like this:
+```bash
+> cumulus-dashboard@2.0.0 start-cumulusapi /Users/savoie/projects/cumulus/cumulus-dashboard
+> docker-compose -f ./localAPI/docker-compose.yml -f ./localAPI/docker-compose-serve-api.yml up -d
+
+Creating localapi_shim_1 ... done
+Creating localapi_elasticsearch_1 ... done
+Creating localapi_localstack_1    ... done
+Creating localapi_serve_api_1     ... done
+```
+In order to find out that the stack is fully up and ready to receive requests, you can run the command `npm run view-docker-logs` to follow the progress of the stack.  When the docker logs have shown the following:
+```bash
+serve_api_1      | Starting server on port 5001
+```
+and
+```bash
+localstack_1     | Ready.
+```
+you should be able to verify access to the local Cumulus API at http://localhost:5001/token
+
+
+Then you can run the dashboard locally (without docker) `[HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve` and open cypress tests `npm run cypress`.
 
 The docker compose stack also includes a command to let a developer start all development containers with a single command.
 
@@ -186,7 +229,18 @@ Bring up and down the entire stack (the localAPI and the dashboard) with:
   $ npm run start-dashboard
   $ npm run stop-dashboard
 ```
-This runs everything, the backing Localstack and Elasticsearch containers, the local Cumulus API and dashboard.  Edits to your code will be reflected in the running dashboard.  You can run cypress tests still with `npm run cypress`.
+This runs everything, the backing Localstack and Elasticsearch containers, the local Cumulus API and dashboard.  Edits to your code will be reflected in the running dashboard.  You can run cypress tests still with `npm run cypress`.  As a warning, this command takes a very long time to start up because the containers come up in a specific order and generally this should be reserved for use by CircleCI or some other continuous intergration service.  But if you are using it locally, be sure to wait until all containers are fully up before trying to visit the dashboard which is exposed at http://localhost:3000
+The stack is ready when the `view-docker-logs` task shows:
+```bash
+dashboard_1      | > NODE_ENV=production http-server dist -p 3000 --proxy http://localhost:3000?
+dashboard_1      |
+dashboard_1      | Starting up http-server, serving dist
+dashboard_1      | Available on:
+dashboard_1      |   http://127.0.0.1:3000
+dashboard_1      |   http://172.18.0.2:3000
+dashboard_1      | Unhandled requests will be served from: http://localhost:3000?
+dashboard_1      | Hit CTRL-C to stop the server
+```
 
 
 ##### Troubleshooting docker containers.
@@ -254,7 +308,9 @@ export ES_USER=<username>
 export ES_PASSWORD=<password>
 ```
 
-## Deployment Using S3
+## Deployment
+
+### Using S3
 
 First build the site
 
@@ -266,7 +322,7 @@ First build the site
 Then deploy the `dist` folder
 
 ```bash
-  $ aws s3 sync dist s3://my-bucket-to-be-used --acl public-read
+  $ aws s3 sync dist s3://my-bucket-to-be-used
 ```
 
 ## Tests
@@ -371,3 +427,5 @@ Create and push a new git tag:
 ### 11. Add the release to GitHub
 
 Follow the [Github documentation to create a new release](https://help.github.com/articles/creating-releases/) for the dashboard using the tag that you just pushed. Make sure to use the content from the CHANGELOG for this release as the description of the release on GitHub.
+
+<a name="bundlefootnote">1</a>: A dashboard bundle is just a ready-to-deploy compiled version of the dashboard and it's environment..
