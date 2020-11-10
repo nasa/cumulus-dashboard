@@ -270,43 +270,6 @@ This will stands up the entire stack as well as begin the e2e service that will 
 #### <a name=dockerdiagram></a> Docker Container Service Diagram.
 ![Docker Service Diagram](./ancillary/DashboardDockerServices.png)
 
-#### NGAP Sandbox Metrics Development
-
-##### Kibana and Elasticsearch access
-
-In order to develop features that interact with Kibana or Elasticsearch in the NGAP sandbox, you need to set up tunnels through the metric's teams bastion-host.  First you must get access to the metric's host. This will require a [NASD ticket](https://bugs.earthdata.nasa.gov/servicedesk/customer/portal/7/create/79) and permission from the metrics team.  Once you have access to the metrics-bastion-host you can get the IP addresses for the Bastion, Kibana and Elasticsearch from the metrics team and configure your `.ssh/config` file to create you local tunnels.  This configuration will open traffic to the Kibana endpoint on localhost:5601 and Elasticsearch on localhost:9201 tunneling traffic through the Bastion and Kibana machines.
-
-```
-Host metrics-bastion-host
-  Hostname "Bastion.Host.Ip.Address"
-  User ec2-user
-  IdentitiesOnly yes
-  IdentityFile ~/.ssh/your_private_bastion_key
-Host metrics-elk-tunnels
-  Hostname "Kibana.Host.IP.Address"
-  IdentitiesOnly yes
-  ProxyCommand ssh metrics-bastion-host -W %h:%p
-  User ec2-user
-  IdentityFile ~/.ssh/your_private_bastion_key
-  # kibana
-  LocalForward 5601 "Kibana.Host.IP.Address":5601
-  # elastic search
-  LocalForward 9201 "Elasticsearch.Host.IP.Address":9201
-```
-
-Now you can configure you sandbox environment with these variables.
-
-```sh
-export ESROOT=http://localhost:9201
-export KIBANAROOT=http://localhost:5601
-```
-
-If the Elasticsearch machine is protected by basic authorization, the following two variables should also be set.
-
-```sh
-export ES_USER=<username>
-export ES_PASSWORD=<password>
-```
 
 ## Deployment
 
