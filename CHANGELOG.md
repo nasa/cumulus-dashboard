@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Fixed
+- **CUMULUS-2226**
+  - Loading and sorting the Failed Granules table no longer causes the screen to jump to the top of the table.
+
 - **CUMULUS-2242** and **CUMULUS-2177**
   - building with `npm run build` will now build a distribution that can be served from behind cloudfront.
   - Fixed bug in nginx config that allows the application to run in the continer built by `bin/build_dashboard_image.sh`.
