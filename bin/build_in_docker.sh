@@ -1,4 +1,9 @@
 #!/bin/sh
+#
+# Script that will build the Cumulus dashboard entirely within a dockerized environment.
+#
+# Running this script will create a build of the dashboard to the ($cwd)/dist directory.
+#
 
 set -evx
 
@@ -22,7 +27,14 @@ apt-get update && apt-get install -y \
 mkdir /build
 rsync -av \
   --exclude .git \
+  --exclude ancillary \
+  --exclude bin \
+  --exclude cypress \
+  --exclude dist \
+  --exclude localAPI \
+  --exclude ngap \
   --exclude node_modules \
+  --exclude test \
   --exclude tmp \
   /cumulus-dashboard/ /build/
 
@@ -30,13 +42,23 @@ rsync -av \
   set -evx
   cd /build
   npm install --no-optional
+
   APIROOT=$APIROOT \
-    DAAC_NAME=$DAAC_NAME \
-    STAGE=$STAGE \
-    HIDE_PDR=$HIDE_PDR \
-    LABELS=$LABELS \
-    SERVED_BY_CUMULUS_API=$SERVED_BY_CUMULUS_API \
-    AUTH_METHOD=$AUTH_METHOD npm run build
+  AUTH_METHOD=$AUTH_METHOD \
+  AWS_REGION=$AWS_REGION \
+  DAAC_NAME=$DAAC_NAME \
+  ENABLE_RECOVERY=$ENABLE_RECOVERY \
+  ESROOT=$ESROOT \
+  ES_PASSWORD=$ES_PASSWORD \
+  ES_USER=$ES_USER \
+  HIDE_PDR=$HIDE_PDR \
+  KIBANAROOT=$KIBANAROOT \
+  LABELS=$LABELS \
+  SERVED_BY_CUMULUS_API=$SERVED_BY_CUMULUS_API \
+  SHOW_DISTRIBUTION_API_METRICS=$SHOW_DISTRIBUTION_API_METRICS \
+  SHOW_TEA_METRICS=$SHOW_TEA_METRICS \
+  STAGE=$STAGE \
+  npm run build
 
   rsync -av ./dist/ /dist/
   chown -R "${DOCKER_UID}:${DOCKER_GID}" /dist/
@@ -50,11 +72,19 @@ docker run \
   --volume "${DIST}:/dist" \
   --volume "$(pwd):/cumulus-dashboard:ro" \
   --env APIROOT=$APIROOT \
-  --env DAAC_NAME=$DAAC_NAME \
-  --env STAGE=$STAGE \
-  --env HIDE_PDR=$HIDE_PDR \
-  --env LABELS=$LABELS \
-  --env SERVED_BY_CUMULUS_API=${SERVED_BY_CUMULUS_API:-false} \
   --env AUTH_METHOD=$AUTH_METHOD \
+  --env AWS_REGION=$AWS_REGION \
+  --env DAAC_NAME=$DAAC_NAME \
+  --env ENABLE_RECOVERY=$ENABLE_RECOVERY \
+  --env ESROOT=$ESROOT \
+  --env ES_PASSWORD=$ES_PASSWORD \
+  --env ES_USER=$ES_USER \
+  --env HIDE_PDR=$HIDE_PDR \
+  --env KIBANAROOT=$KIBANAROOT \
+  --env LABELS=$LABELS \
+  --env SERVED_BY_CUMULUS_API=$SERVED_BY_CUMULUS_API \
+  --env SHOW_DISTRIBUTION_API_METRICS=$SHOW_DISTRIBUTION_API_METRICS \
+  --env SHOW_TEA_METRICS=$SHOW_TEA_METRICS \
+  --env STAGE=$STAGE \
   node:12 \
   /cumulus-dashboard/tmp/script.sh
