@@ -131,7 +131,7 @@ If you wish to serve the dashboard from behind [CloudFront](https://aws.amazon.c
 
 #### Build dashboard to be served by the Cumulus API.
 
-It is possible to [serve the dashboard](https://nasa.github.io/cumulus-api/#serve-the-dashboard-from-a-bucket) with the Cumulus API. If you need to do this, you must build the dashboard with the environment variable `SERVED_BY_CUMULUS_API` set to `true`.  This configures the dashboard to work from the Cumulus `dashboard` endpoint.  This option should **only** be considered when you can't serve the dashboard from behind CloudFront, for example in an NGAP Sandbox environment.
+It is possible to [serve the dashboard](https://nasa.github.io/cumulus-api/#serve-the-dashboard-from-a-bucket) with the Cumulus API. If you need to do this, you must build the dashboard with the environment variable `SERVED_BY_CUMULUS_API` set to `true`.  This configures the dashboard to work from the Cumulus `dashboard` endpoint.  This option should **only** be considered when you can't serve the dashboard from behind CloudFront, for example in an NGAP Sandbox environment. *NOTE: Your dashboard bucket must be in the bucket definitions in your Cumulus `terraform.tfvars`, otherwise you will not be able to access the bucket from the API.*
 
 
 #### Build a specific dashboard version
