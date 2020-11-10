@@ -40,55 +40,56 @@ The following environment variables override the default values.
 
 ## Quick start
 
-## Build the dashboard with docker (for users/operators)
+### Build the dashboard using docker (users/operators)
 
-It is easy to build a deployable version of the Cumulus dashboard without having to learn the complicated build process details.  A single script, `./bin/build_dashboard_via_docker.sh`, allows you to run a Docker command that will read your environment, download and install all dependencies, and create a production ready bundle of your dashboard.
+It is easy to build a producution-ready, deployable version of the Cumulus dashboard without having to learn the complicated build process details.  A single script, `./bin/build_dashboard_via_docker.sh`, when combined with your dashboard's environment customizations, allows you to run the entire build process within a Docker container.
 
-All of the environment variables in the previous section are available to override with values you want in your dashboard.  One recommended method, is to store your variables in a sourceable environment file for each dashboard you are going to deploy.
+All of the environment variables in the [configuration](#configuration) section are available to override with custom values for your dashboard.  A recommended method is to store your variables in a sourceable environment file for each dashboard you are going to build and deploy.
 
 If you are using bash, export the values for each configuration option. An example `production.env` could look like:
-####**`production.env`**
 ```sh
+# production.env
 export APIROOT=https://afakeidentifier.cloudfront.net
 export DAAC_NAME=MY-DAAC
 export STAGE=production
 export HIDE_PDR=false
 ```
+
 All values are optional except `APIROOT` which must point to the Cumulus API that the dashboard will connect to.
 
-Load an environment file and build the dashboard.
-
+Set the environment and build the dashboard with these commands:
 ```sh
   $ source production.env && ./bin/build_dashboard_via_docker.sh
 ```
 
-The compiled dashboard is created in the `dist` directory. You can deploy this directory to AWS behind [CloudFront](https://aws.amazon.com/cloudfront/).
-Follow the cumulus operator docs on [serving the dashboard from CloudFront](https://nasa.github.io/cumulus/docs/next/operator-docs/serve-dashboard-from-cloudfront).
+This creates the compiled dashboard in the `./dist` directory. You can now deploy this directory to AWS behind [CloudFront](https://aws.amazon.com/cloudfront/),
+following the cumulus operator docs for [serving the dashboard from CloudFront](https://nasa.github.io/cumulus/docs/next/operator-docs/serve-dashboard-from-cloudfront).
 
 
-## Run the dashboard locally via Docker Image (for users/operators)
+### Run the dashboard locally via Docker Image (users/operators)
 
-`bin/build_dashboard_image.sh` is a script that builds a Docker image that serves a pre-built dashboard (from `/dist`) behind a basic nginx configuration. The script takes one optional parameter, the tag to name the generated image which defaults to cumulus-dashboard:latest.
+Once you have a built a dashboard and the contents are in the `./dist` directory, you can create a docker container that will serve the dashboard behind a simple nginx configuration. Having a runnable Docker image is useful for testing a build before deployment or for NGAP Sandbox environments, where if you configure your computer to [access Cumulus APIs via SSM](https://wiki.earthdata.nasa.gov/display/CUMULUS/Accessing+Cumulus+APIs+via+SSM), you can run the dashboard container locally against the live Sandbox Cumulus API.
+
+The script `./bin/build_dashboard_image.sh` takes a pre-built dashboard in the `./dist` directly and packages it in a Docker container behind a basic nginx configuration. The script takes one optional parameter, the tag to name the generated image which defaults to cumulus-dashboard:latest.
 
 Example of building and running the project in Docker:
-
 ```bash
   $ ./bin/build_dashboard_image.sh cumulus-dashboard:production-1
 ```
 
-That command builds a Docker image with the tag `cumulus-dashboard:production-1` and the image can be run in Docker.
+That command builds a Docker image with the name `cumulus-dashboard` and tag `production-1`. This image can be run in Docker to serve the Dashboard.
 
 ```bash
   $ docker run --rm  -p 3000:80 cumulus-dashboard:production-1
 ```
 
-In this example, the dashboard would be available at `http://localhost:3000/`.
+In this example, the dashboard would be available at `http://localhost:3000/` in any browser.
 
+--------
 
-## TODO [MHS, 11/09/2020] I think I should point to ssm + tunneling instructions here for running a sandbox dashboard.
+## Cumulus Dashboard Development (developers/advanced users/operators)
 
-
-## Build and run the dashboard locally (for developers)
+### Build and run the dashboard locally
 
 The dashboard uses node v12.18.0. To build/run the dashboard on your local machine, install [nvm](https://github.com/creationix/nvm) and run `nvm install v12.18.0`.
 
