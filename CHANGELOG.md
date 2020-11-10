@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - **CUMULUS-2242** and **CUMULUS-2177**
   - building with `npm run build` will now build a distribution that can be served from behind cloudfront.
-  - Fixed bug in nginx config that allows the application to run in the continer built by `bin/build_docker_image.sh`.
+  - Fixed bug in nginx config that allows the application to run in the continer built by `bin/build_dashboard_image.sh`.
 
 - **CUMULUS-1873**
   - Clear selected items in table when filter is applied
@@ -45,6 +45,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Allows filtering of the Granule Inventory List CSV download based on Granule IDs, Status, and Collection.
 - **CUMULUS-2242**
   - Moves cypress testing to run against production build in CI.
+  - renames helper scripts to better describe their purposes
+    - `./bin/build_in_docker.sh` -> `./bin/build_dashboard_via_docker.sh`
+    - `./bin/build_docker_image.sh` -> `./bin/build_dashboard_image.sh`
 
 ### Removed
  -**CUMULUS-2242**

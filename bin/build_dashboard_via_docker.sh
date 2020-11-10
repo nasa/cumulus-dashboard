@@ -2,8 +2,9 @@
 #
 # Script that will build the Cumulus dashboard entirely within a dockerized environment.
 #
-# Running this script will create a build of the dashboard to the ($cwd)/dist directory.
-#
+# Running this script will use the current environment variables and create a
+# build of the dashboard in the $root/dist directory.
+
 
 set -evx
 

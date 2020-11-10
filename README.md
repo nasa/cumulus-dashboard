@@ -42,7 +42,7 @@ The following environment variables override the default values.
 
 ## Build the dashboard with docker (for users/operators)
 
-It is easy to build a deployable version of the Cumulus dashboard without having to learn the build process details.  A single script, `./bin/build_in_docker.sh`, allows you to run a Docker command that will read your environment, download and install all dependencies, and create a production ready bundle of your dashboard.
+It is easy to build a deployable version of the Cumulus dashboard without having to learn the complicated build process details.  A single script, `./bin/build_dashboard_via_docker.sh`, allows you to run a Docker command that will read your environment, download and install all dependencies, and create a production ready bundle of your dashboard.
 
 All of the environment variables in the previous section are available to override with values you want in your dashboard.  One recommended method, is to store your variables in a sourceable environment file for each dashboard you are going to deploy.
 
@@ -59,7 +59,7 @@ All values are optional except `APIROOT` which must point to the Cumulus API tha
 Load an environment file and build the dashboard.
 
 ```sh
-  $ source production.env && ./bin/build_in_docker.sh
+  $ source production.env && ./bin/build_dashboard_via_docker.sh
 ```
 
 The compiled dashboard is created in the `dist` directory. You can deploy this directory to AWS behind [CloudFront](https://aws.amazon.com/cloudfront/).
@@ -68,12 +68,12 @@ Follow the cumulus operator docs on [serving the dashboard from CloudFront](http
 
 ## Run the dashboard locally via Docker Image (for users/operators)
 
-`bin/build_docker_image.sh` is a script that builds a Docker image that serves a pre-built dashboard (from `/dist`) behind a basic nginx configuration. The script takes one optional parameter, the tag to name the generated image which defaults to cumulus-dashboard:latest.
+`bin/build_dashboard_image.sh` is a script that builds a Docker image that serves a pre-built dashboard (from `/dist`) behind a basic nginx configuration. The script takes one optional parameter, the tag to name the generated image which defaults to cumulus-dashboard:latest.
 
 Example of building and running the project in Docker:
 
 ```bash
-  $ ./bin/build_docker_image.sh cumulus-dashboard:production-1
+  $ ./bin/build_dashboard_image.sh cumulus-dashboard:production-1
 ```
 
 That command builds a Docker image with the tag `cumulus-dashboard:production-1` and the image can be run in Docker.
@@ -110,15 +110,20 @@ To build the dashboard:
 ```
 **NOTE**: Only the `APIROOT` environment variable is required.
 
-#### Build the dashboard to be served by the Cumulus API.
-
-With the Cumulus API it is possible to [serve the dashboard from an s3 Bucket](https://nasa.github.io/cumulus-api/#serve-the-dashboard-from-a-bucket).  If you wish to do this, you must build the dashboard with the environment variable `SERVED_BY_CUMULUS_API` set to `true`.  This configures the dashboard to work from the Cumulus `dashboard` endpoint.  This option should be considered when you can't serve the dashboard from behind CloudFront, for example in NGAP sandbox environments.  If you wish to serve the dashboard from behind [CloudFront](https://aws.amazon.com/cloudfront/).  Build a `dist` with your configuration for `APIROOT` and omitting `SERVED_BY_CUMULUS_API` and follow the cumulus operator docs on [serving the dashboard from CloudFront](https://nasa.github.io/cumulus/docs/next/operator-docs/serve-dashboard-from-cloudfront).
-
 The compiled files will be placed in the `dist` directory.
 
-### Building a specific dashboard version
+#### Build the dashboard to be served by the Cumulus API.
 
-`cumulus-dashboard` versions are distributed using tags in GitHub. You can pull a specific version in the following manner:
+It is possible to [serve the dashboard](https://nasa.github.io/cumulus-api/#serve-the-dashboard-from-a-bucket) with the Cumulus API. If you need to do this, you must build the dashboard with the environment variable `SERVED_BY_CUMULUS_API` set to `true`.  This configures the dashboard to work from the Cumulus `dashboard` endpoint.  This option should only be considered when you can't serve the dashboard from behind CloudFront, for example in NGAP sandbox environments.
+
+#### Build dashboard to be served by CloudFront
+
+If you wish to serve the dashboard from behind [CloudFront](https://aws.amazon.com/cloudfront/).  Build a `dist` with your configuration including `APIROOT` and ensure the `SERVED_BY_CUMULUS_API` variable is unset. Follow the cumulus operator docs on [serving the dashboard from CloudFront](https://nasa.github.io/cumulus/docs/next/operator-docs/serve-dashboard-from-cloudfront).
+
+
+### Build a specific dashboard version
+
+`cumulus-dashboard` versions are distributed using tags in GitHub. You can select specific version in the following manner:
 
 ```bash
   $ git clone https://github.com/nasa/cumulus-dashboard
@@ -129,9 +134,9 @@ The compiled files will be placed in the `dist` directory.
 
 Then follow the steps noted above to build the dashboard locally or using Docker.
 
-## Running the dashboard
+## Run the dashboard
 
-### Running locally
+### Run locally
 
 To run the dashboard locally against a running Cumulus instance:
 
@@ -247,27 +252,6 @@ If the Elasticsearch machine is protected by basic authorization, the following 
 export ES_USER=<username>
 export ES_PASSWORD=<password>
 ```
-
-
-
-### Running locally in Docker
-
-There is a script called `bin/build_docker_image.sh` which will build a Docker image
-that runs the Cumulus dashboard.  It expects that the dashboard has already been
-built and can be found in the `dist` directory.
-
-The script takes one optional parameter, the tag that you would like to apply to
-the generated image.
-
-Example of building and running the project in Docker:
-
-```bash
-  $ ./bin/build_docker_image.sh cumulus-dashboard:production-1
-  ...
-  $ docker run -e PORT=8181 -p 8181:8181 cumulus-dashboard:production-1
-```
-
-In this example, the dashboard would be available at http://localhost:8181/.
 
 ## Deployment Using S3
 
