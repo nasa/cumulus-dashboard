@@ -9,6 +9,8 @@ Code to generate and deploy the dashboard for the Cumulus API.
 - [Configuration](#configuration)
 - [Quick start](#quick-start)
 - [Dashboard development](#dashboard-development)
+- [Run the dashboard](#run-the-dashboard)
+- [Deployment](#deployment)
 - [Testing](#testing)
 
 
@@ -166,8 +168,58 @@ To run a built dashboard, first [build the dashboard](#build-the-dashboard), the
 ```
 This runs a node http-server in front of whatever exists in the `./dist` directory.  It's fast, but will not pick up any changes as you are working.
 
+## Deployment
+
+### Using S3
+
+First [build the dasbboard](#build-the-dashboard).
+
+Then deploy the `./dist` folder
+
+```bash
+  $ aws s3 sync dist s3://my-bucket-to-be-used
+```
 
 ## Testing
+
+### Unit Tests
+
+```bash
+  $ npm run test
+```
+
+### Integration & Validation Tests
+
+For the integration tests to work, you have to first run the localstack application, launch the localAPI and serve the dashboard first. Run the following commands in separate terminal sessions:
+
+Run background localstack application.
+```bash
+  $ npm run start-localstack
+```
+
+Serve the cumulus API (separate terminal)
+```bash
+  $ npm run serve-api
+```
+
+Serve the dashboard web application (another terminal)
+```bash
+  $ [HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve
+```
+
+If you're just testing dashboard code, you can generally run all of the above commands as a single docker-compose stack.
+```bash
+  $ npm run start-dashboard
+```
+This brings up LocalStack, Elasticsearch, the Cumulus localAPI, and the dashboard.
+
+Run the test suite (yet another terminal window)
+```bash
+  $ npm run cypress
+```
+
+When the cypress editor opens, click on `run all specs`.
+
 
 ### local API server
 
@@ -269,64 +321,6 @@ This will stands up the entire stack as well as begin the e2e service that will 
 
 #### <a name=dockerdiagram></a> Docker Container Service Diagram.
 ![Docker Service Diagram](./ancillary/DashboardDockerServices.png)
-
-
-## Deployment
-
-### Using S3
-
-First build the site
-
-```bash
-  $ nvm use
-  $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com npm run build
-```
-
-Then deploy the `dist` folder
-
-```bash
-  $ aws s3 sync dist s3://my-bucket-to-be-used
-```
-
-## Tests
-
-### Unit Tests
-
-```bash
-  $ npm run test
-```
-
-## Integration & Validation Tests
-
-For the integration tests to work, you have to first run the localstack application, launch the localAPI and serve the dashboard first. Run the following commands in separate terminal sessions:
-
-Run background localstack application.
-```bash
-  $ npm run start-localstack
-```
-
-Serve the cumulus API (separate terminal)
-```bash
-  $ npm run serve-api
-```
-
-Serve the dashboard web application (another terminal)
-```bash
-  $ [HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve
-```
-
-If you're just testing dashboard code, you can generally run all of the above commands as a single docker-compose stack.
-```bash
-  $ npm run start-dashboard
-```
-This brings up LocalStack, Elasticsearch, the Cumulus localAPI, and the dashboard.
-
-Run the test suite (yet another terminal window)
-```bash
-  $ npm run cypress
-```
-
-When the cypress editor opens, click on `run all specs`.
 
 
 ## develop vs. master branches
