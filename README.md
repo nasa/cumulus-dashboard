@@ -125,13 +125,13 @@ To build a dashboard bundle<sup>[1](#bundlefootnote)</sup>:
 
 The compiled dashboard files (dashboard bundle) will be placed in the `./dist` directory.
 
-#### Build dashboard to be served by the Cumulus API.
-
-It is possible to [serve the dashboard](https://nasa.github.io/cumulus-api/#serve-the-dashboard-from-a-bucket) with the Cumulus API. If you need to do this, you must build the dashboard with the environment variable `SERVED_BY_CUMULUS_API` set to `true`.  This configures the dashboard to work from the Cumulus `dashboard` endpoint.  This option should **only** be considered when you can't serve the dashboard from behind CloudFront, for example in NGAP sandbox environments.
-
 #### Build dashboard to be served by CloudFront
 
 If you wish to serve the dashboard from behind [CloudFront](https://aws.amazon.com/cloudfront/).  Build a `dist` with your configuration including `APIROOT` and ensure the `SERVED_BY_CUMULUS_API` variable is unset. Follow the cumulus operator docs on [serving the dashboard from CloudFront](https://nasa.github.io/cumulus/docs/next/operator-docs/serve-dashboard-from-cloudfront).
+
+#### Build dashboard to be served by the Cumulus API.
+
+It is possible to [serve the dashboard](https://nasa.github.io/cumulus-api/#serve-the-dashboard-from-a-bucket) with the Cumulus API. If you need to do this, you must build the dashboard with the environment variable `SERVED_BY_CUMULUS_API` set to `true`.  This configures the dashboard to work from the Cumulus `dashboard` endpoint.  This option should **only** be considered when you can't serve the dashboard from behind CloudFront, for example in an NGAP Sandbox environment.
 
 
 #### Build a specific dashboard version
@@ -172,13 +172,16 @@ This runs a node http-server in front of whatever exists in the `./dist` directo
 
 ### Using S3
 
-First [build the dasbboard](#build-the-dashboard).
-
-Then deploy the `./dist` folder
+First, [build the dasbboard](#build-the-dashboard). Then deploy the `./dist` folder, the dashboard bundle, to an AWS bucket.
 
 ```bash
   $ aws s3 sync dist s3://my-bucket-to-be-used
 ```
+If you are not in an NGAP environment, Look at the instructions for [Hosting a static website on Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html)
+and [configuring a bucket as a static website](https://docs.aws.amazon.com/AmazonS3/latest/dev/HowDoIWebsiteConfiguration.html).
+
+Otherwise, follow the instructions for building and deploying the dashboard for [cloudfront](#build-dashboard-to-be-served-by-cloudfront) or [the Cumulus API](#build-dashboard-to-be-served-by-the-cumulus-api).
+
 
 ## Testing
 
@@ -385,4 +388,4 @@ Create and push a new git tag:
 
 Follow the [Github documentation to create a new release](https://help.github.com/articles/creating-releases/) for the dashboard using the tag that you just pushed. Make sure to use the content from the CHANGELOG for this release as the description of the release on GitHub.
 
-<a name="bundlefootnote">1</a>: A dashboard bundle is just a ready-to-deploy compiled version of the dashboard and it's environment..
+<a name="bundlefootnote">1</a>: A dashboard bundle is just a ready-to-deploy compiled version of the dashboard and environment.
