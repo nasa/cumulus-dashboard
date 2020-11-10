@@ -6,37 +6,89 @@ Code to generate and deploy the dashboard for the Cumulus API.
 
 ## Documentation
 
+- [configuration](#configuration)
+- [quick start](#quick-start)
+
+
+Other pages:
 - [Usage](https://github.com/nasa/cumulus-dashboard/blob/master/USAGE.md)
 - [Development Guide](https://github.com/nasa/cumulus-dashboard/blob/master/DEVELOPMENT.md)
 - [Technical documentation on tables](https://github.com/nasa/cumulus-dashboard/blob/master/TABLES.md)
 
 ## Configuration
 
-The dashboard is populated from the Cumulus API. The dashboard has to point to a working version of the Cumulus API before it is installed and built.
+The dashboard is populated from data retrieved from the Cumulus API. The environment for the Cumulus API must be predetermined and set before the dashboard can be built and deployed. The information needed to configure the dashboard is found in `app/src/js/config/config.js`, but it is generally preferred to set environmental variables overriding the default values during the build process.
 
-The information needed to configure the dashboard is stored at `app/src/js/config/config.js`.
-
-The following environment variables override the default values in `config.js`:
+The following environment variables override the default values.
 
 | Env Name | Description | Default |
 | -------- | ----------- | -------- |
-| HIDE\_PDR | Whether to hide the PDR menu. | *true* |
-| AWS\_REGION | Region in which Cumulus API is running. | *us-west-2*  |
-| DAAC\_NAME    | e.g. LPDAAC, | *Local* |
-| STAGE | e.g. PROD, UAT, | *development* |
-| LABELS | gitc or daac localization. | *daac* |
 | APIROOT | the API URL. This must be set by the user. | *example.com* |
-| AUTH_METHOD | The type of authorization method protecting the Cumulus API.  [launchpad or earthdata] | *earthdata*  |
+| AUTH_METHOD | The type of authorization method protecting the Cumulus API. [launchpad or earthdata] | *earthdata*  |
+| AWS\_REGION | Region in which Cumulus API is running. | *us-west-2*  |
+| DAAC\_NAME | e.g. LPDAAC, | *Local* |
 | ENABLE\_RECOVERY | If true, adds recovery options to the granule and collection pages. | *false* |
-| KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set to examine distribution metrics details. | |
-| SHOW\_TEA\_METRICS | \<optional\> display metrics from Thin Egress Application (TEA). | *true* |
-| SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from Cumulus Distribution API.| *false* |
 | ESROOT | \<optional\> Should point to an Elasticsearch endpoint. Must be set for distribution metrics to be displayed. | |
-| ES\_USER | \<optional\> Elasticsearch username, needed when protected by basic authorization | |
 | ES\_PASSWORD | \<optional\> Elasticsearch password,needed when protected by basic authorization | |
+| ES\_USER | \<optional\> Elasticsearch username, needed when protected by basic authorization | |
+| HIDE\_PDR | Whether to hide (or show) the PDR menu. | *true* |
+| KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set to examine distribution metrics details. | |
+| LABELS | Choose `gitc` or `daac` localization. | *daac* |
+| SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from Cumulus Distribution API.| *false* |
+| SHOW\_TEA\_METRICS | \<optional\> display metrics from Thin Egress Application (TEA). | *true* |
+| STAGE | e.g. PROD, UAT, displayed at top of dashboard page | *development* |
+
+## Quick start
+
+## Build the dashboard with docker (for users/operators)
+
+It is easy to build a deployable version of the Cumulus dashboard without having to learn the build process details.  A single script, `./bin/build_in_docker.sh`, allows you to run a Docker command that will read your environment, download and install all dependencies, and create a production ready bundle of your dashboard.
+
+All of the environment variables in the previous section are available to override with values you want in your dashboard.  One recommended method, is to store your variables in a sourceable environment file for each dashboard you are going to deploy.
+
+If you are using bash, export the values for each configuration option. An example `production.env` could look like:
+####**`production.env`**
+```sh
+export APIROOT=https://afakeidentifier.cloudfront.net
+export DAAC_NAME=MY-DAAC
+export STAGE=production
+export HIDE_PDR=false
+```
+All values are optional except `APIROOT` which must point to the Cumulus API that the dashboard will connect to.
+
+Load an environment file and build the dashboard.
+
+```sh
+  $ source production.env && ./bin/build_in_docker.sh
+```
+
+The compiled dashboard is created in the `dist` directory. You can deploy this directory to AWS behind [CloudFront](https://aws.amazon.com/cloudfront/).
+Follow the cumulus operator docs on [serving the dashboard from CloudFront](https://nasa.github.io/cumulus/docs/next/operator-docs/serve-dashboard-from-cloudfront).
 
 
-## Building or running locally
+## Run the dashboard locally via Docker Image (for users/operators)
+
+`bin/build_docker_image.sh` is a script that builds a Docker image that serves a pre-built dashboard (from `/dist`) behind a basic nginx configuration. The script takes one optional parameter, the tag to name the generated image which defaults to cumulus-dashboard:latest.
+
+Example of building and running the project in Docker:
+
+```bash
+  $ ./bin/build_docker_image.sh cumulus-dashboard:production-1
+```
+
+That command builds a Docker image with the tag `cumulus-dashboard:production-1` and the image can be run in Docker.
+
+```bash
+  $ docker run --rm  -p 3000:80 cumulus-dashboard:production-1
+```
+
+In this example, the dashboard would be available at `http://localhost:3000/`.
+
+
+## TODO [MHS, 11/09/2020] I think I should point to ssm + tunneling instructions here for running a sandbox dashboard.
+
+
+## Build and run the dashboard locally (for developers)
 
 The dashboard uses node v12.18.0. To build/run the dashboard on your local machine, install [nvm](https://github.com/creationix/nvm) and run `nvm install v12.18.0`.
 
@@ -46,21 +98,9 @@ We use npm for local package management, to install the requirements:
   $ npm install
 ```
 
-## Building the dashboard
+## Build the dashboard
 
-### Building in Docker
-
-The Cumulus Dashboard can be built inside of a Docker container, without needing to install any local dependencies.
-
-```bash
-  $ DAAC_NAME=LPDAAC STAGE=production HIDE_PDR=false LABELS=daac APIROOT=https://myapi.com ./bin/build_in_docker.sh
-```
-
-**NOTE**: Only the `APIROOT` environment variable is required.
-
-The compiled files will be placed in the `dist` directory.
-
-### <a name=buildlocally></a>Building locally
+### <a name=buildlocally></a>Build
 
 To build the dashboard:
 
