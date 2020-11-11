@@ -36,7 +36,7 @@ styling overrides
 }
 
 .react-datetime-picker__inputGroup {
-  min-width: 217px !important;
+  width: 200px !important;
   font-family: $code-font-family;
 
   // Firefox hack -- Mozilla does not render the <select> carrot correctly.
