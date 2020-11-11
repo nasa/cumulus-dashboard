@@ -1,8 +1,14 @@
 #!/bin/sh
+#
+# Script to build a Docker image that uses a basic nginx configuration to serve
+# a pre-built dashboard located in ${root}/dist.
+
+# The resulting image can be run exposing the dashboard with a simple command
+# docker run --rm -p 3000:80 cumulus-dashboard:latest
 
 set -evx
 
-IMAGE_NAME="$1"
+IMAGE_NAME="${1:-cumulus-dashboard:latest}"
 
 if [ ! -d dist ]; then
   echo "No dist directory found" >&2
