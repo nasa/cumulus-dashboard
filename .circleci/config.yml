@@ -118,6 +118,7 @@ jobs:
               -v /home/circleci/.cache:/root/.cache \
               -v $(pwd):/home \
               --workdir /home \
+              -e AWS_REGION=${SANDBOX_AWS_REGION} \
               -e APIROOT=${SANDBOX_API_ROOT} \
               node:12.18.0 \
               npm run build
@@ -142,6 +143,7 @@ jobs:
               -v /home/circleci/.cache:/root/.cache \
               -v $(pwd):/home \
               --workdir /home \
+              -e AWS_REGION=${SIT_AWS_REGION} \
               -e APIROOT=${SIT_API_ROOT} \
               node:12.18.0 \
               npm run build
