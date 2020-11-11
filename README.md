@@ -92,13 +92,9 @@ Example of building and running the project in Docker:
 That command builds a Docker image with the name `cumulus-dashboard` and tag `production-1`. This image can be run in Docker to serve the Dashboard.
 
 ```bash
-  $ docker run --rm  -p 3000:80 cumulus-dashboard:production-1
+  $ docker run --rm -it -p 3000:80 cumulus-dashboard:production-1
 ```
-
 In this example, the dashboard would be available at `http://localhost:3000/` in any browser.
-
-To stop the container, find the container id with `docker ps`.  In our example it will be a container with NAME `cumulus-dashboard` and TAG `production-1`, then running `docker stop <containerID>` will stop the docker container.
-
 
 --------
 
