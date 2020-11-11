@@ -97,7 +97,7 @@ That command builds a Docker image with the name `cumulus-dashboard` and tag `pr
 
 In this example, the dashboard would be available at `http://localhost:3000/` in any browser.
 
-To stop the container, find the container id with `docker ps`.  In our exaple it will be a container with NAME `cumulus-dashboard` and TAG `production-1`, then running `docker stop <containerID>` will stop the docker container.
+To stop the container, find the container id with `docker ps`.  In our example it will be a container with NAME `cumulus-dashboard` and TAG `production-1`, then running `docker stop <containerID>` will stop the docker container.
 
 
 --------
@@ -147,12 +147,12 @@ It is possible to [serve the dashboard](https://nasa.github.io/cumulus-api/#serv
 
 Then follow the steps noted above to build the [dashboard locally](#build-the-dashboard) or [using Docker](#quick-start).
 
-It is also possible to visit the repository at https://github.com/nasa/cumulus-dashboard/releases and download the source code bundle directly without cloneing the repository.
+It is also possible to visit the repository at https://github.com/nasa/cumulus-dashboard/releases and download the source code bundle directly without cloning the repository.
 
 ## Run the dashboard
 
 ### Run the dashboard with hot reload
-During development you can run the webpack development webserver to serve the dashboard while you are developing. When you run the dashboard this way, the compiled code in `./dist` is ignored, and the soruce code is served by the webpack-dev-server, which will watch for changes to the source and recompile as files are changed. Make sure you have [installed the requirements](#install-requirements) and then:
+During development you can run the webpack development webserver to serve the dashboard while you are developing. When you run the dashboard this way, the compiled code in `./dist` is ignored, and the source code is served by the webpack-dev-server, which will watch for changes to the source and recompile as files are changed. Make sure you have [installed the requirements](#install-requirements) and then:
 
 ```bash
 APIROOT=http://<myapi>.com npm run serve
@@ -224,7 +224,7 @@ Run the test suite (yet another terminal window)
 When the cypress editor opens, click on `run all specs`.
 
 
-### local API server
+### Local API server
 
 For **development** and **testing** purposes only, you can run a Cumulus API locally. This requires `docker-compose` in order to stand up the docker containers that serve Cumulus API.  There are a number of commands that will stand up different portions of the stack.  See the [Docker Service Diagram](#dockerdiagram) and examine the `docker-compose*.yml` file in the `/localAPI/` directory to see all of the possible combinations. Described below are each of the provided commands for running the dashboard and Cumulus API locally.
 
@@ -319,7 +319,7 @@ You can run all of the cypress tests locally that circleCI runs with a single co
 ```bash
   $ npm run e2e-tests
 ```
-This will stands up the entire stack as well as begin the e2e service that will run all cypress commands and report an exit code for their success or failure.  This is primarily used for CircleCI, but can be useful to developers.
+This stands up the entire stack as well as begins the e2e service that will run all cypress commands and report an exit code for their success or failure.  This is primarily used for CircleCI, but can be useful to developers.
 
 
 #### <a name=dockerdiagram></a> Docker Container Service Diagram.
