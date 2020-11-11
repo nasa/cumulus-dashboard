@@ -52,7 +52,7 @@ The dashboard source is available on github and can be cloned with git.
 ```
 The cloned directory `./cumulus-dashboard` will be refered as the root directory of the project and commands that are referenced in this document, should start from that directory.
 
-### Build the dashboard using docker (users/operators)
+### Build the dashboard using docker
 
 It is easy to build a producution-ready, deployable version of the Cumulus dashboard without having to learn the complicated build process details.  A single script, `./bin/build_dashboard_via_docker.sh`, when combined with your dashboard's environment customizations, allows you to run the entire build process within a Docker container.
 
@@ -78,7 +78,7 @@ This creates the compiled dashboard in the `./dist` directory. You can now deplo
 following the cumulus operator docs for [serving the dashboard from CloudFront](https://nasa.github.io/cumulus/docs/next/operator-docs/serve-dashboard-from-cloudfront).
 
 
-### Run the dashboard locally via Docker Image (users/operators)
+### Run the dashboard locally via Docker Image
 
 Once you have a built a dashboard and the contents are in the `./dist` directory, you can create a docker container that will serve the dashboard behind a simple nginx configuration. Having a runnable Docker image is useful for testing a build before deployment or for NGAP Sandbox environments, where if you configure your computer to [access Cumulus APIs via SSM](https://wiki.earthdata.nasa.gov/display/CUMULUS/Accessing+Cumulus+APIs+via+SSM), you can run the dashboard container locally against the live Sandbox Cumulus API.
 
