@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
@@ -8,10 +8,11 @@ import omitBy from 'lodash/omitBy';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/pagination';
-import SortableTable from '../SortableTable/SortableTable';
 // Lodash
 import ListActions from '../ListActions/ListActions';
 import TableHeader from '../TableHeader/table-header';
+
+const SortableTable = lazy(() => import('../SortableTable/SortableTable'));
 
 function buildSortKey(sortProps) {
   return sortProps.filter((item) => item.id).map((item) => (item.desc === true ? `-${item.id}` : `+${item.id}`));
@@ -184,18 +185,20 @@ const List = ({
               selected={selected}
             />
           )}
-          <SortableTable
-            tableColumns={tableColumns}
-            data={tableData}
-            canSelect={hasActions}
-            rowId={rowId}
-            onSelect={updateSelection}
-            changeSortProps={queryNewSort}
-            clearSelected={clearSelected}
-            // if there's an initialSortId, it means the first fetch request for the list should be sorted
-            // according to that id, and therefore we are using sever-side/manual sorting
-            shouldManualSort={!!initialSortId}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <SortableTable
+              tableColumns={tableColumns}
+              data={tableData}
+              canSelect={hasActions}
+              rowId={rowId}
+              onSelect={updateSelection}
+              changeSortProps={queryNewSort}
+              clearSelected={clearSelected}
+              // if there's an initialSortId, it means the first fetch request for the list should be sorted
+              // according to that id, and therefore we are using sever-side/manual sorting
+              shouldManualSort={!!initialSortId}
+            />
+          </Suspense>
           <Pagination
             count={count}
             limit={limit}

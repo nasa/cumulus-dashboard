@@ -8,7 +8,7 @@ const config = {
       Logs: !process.env.KIBANAROOT
     }
   },
-  apiRoot: process.env.APIROOT || 'https://example.com',
+  apiRoot: process.env.APIROOT || 'http://localhost:5001',
   awsRegion: process.env.AWS_REGION || 'us-west-2',
   oauthMethod: process.env.AUTH_METHOD || 'earthdata',
   kibanaRoot: process.env.KIBANAROOT || '',
