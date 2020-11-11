@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2249**
   - clear infix search parameter when Search component is unmounted
 
+**CUMULUS-2238**
+  - Fix "Date and Time Range" CSS on Chrome and Firefox. Dropdowns now display icons correctly and elements don't shift when selected.
+
 ### Added
 
 - **CUMULUS-2091**
