@@ -50,10 +50,12 @@
     align-items: center;
     justify-items: center;
     flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 1em 0;
   }
   &__internal > li{
     justify-content: space-evenly;
-    margin-right: 2em;
   }
 
   &__internal label{
@@ -83,7 +85,7 @@
 
   &__clear{
     position: relative;
-    margin: .7em 0em 0em 5.1em !important;
+    margin: .7em 0em 0em 0em !important;
     float: right;
     &:after {
       position: absolute;
