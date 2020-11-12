@@ -60,7 +60,7 @@ class OperationOverview extends React.Component {
   }
 
   render () {
-    const { dispatch, operations } = this.props;
+    const { operations } = this.props;
     const { list } = operations;
     const { count } = list.meta;
     const mutableList = cloneDeep(list);
@@ -89,7 +89,6 @@ class OperationOverview extends React.Component {
           </div>
           <List
             list={mutableList}
-            dispatch={dispatch}
             action={listOperations}
             tableColumns={tableColumns}
             query={this.generateQuery()}

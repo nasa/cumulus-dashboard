@@ -9,24 +9,24 @@ jobs:
       - checkout
 
       - run:
-          name: Install dependencies
+          name: Install Dependencies
           command: |
             export NVM_DIR="/opt/circleci/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm install v12.18.0
             nvm alias default v12.18.0
             npm install -g npm
-            npm ci
+            npm ci --no-optional
 
       - run:
-          name: Run audit-ci
+          name: Run Audit-CI
           command: |
             export NVM_DIR="/opt/circleci/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             npm run audit-ci
 
       - run:
-          name: Test dashboard build
+          name: Build Dashboard
           command: |
             # build dashboard
             docker run --rm \
@@ -38,7 +38,7 @@ jobs:
               npm run build
 
       - run:
-          name: Run tests
+          name: Run Unit Tests
           command: |
             docker run --rm \
               -v /home/circleci/.cache:/root/.cache \
@@ -48,7 +48,7 @@ jobs:
               npm run test
 
       - run:
-          name: Run end-to-end tests.
+          name: Run End-To-End Tests
           command: |
             echo $(pwd) && \
             npm run e2e-tests
@@ -66,18 +66,18 @@ jobs:
       - checkout
 
       - run:
-          name: Install awscli
+          name: Install AWSCLI
           command: sudo pip install awscli
 
       - run:
-          name: Install dependencies
+          name: Install Dependencies
           command: |
             export NVM_DIR="/opt/circleci/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm install v12.18.0
             nvm alias default v12.18.0
             npm install -g npm
-            npm ci
+            npm ci --no-optional
 
       - run:
           # This has to be done in a separate step, like this, because Circle CI
