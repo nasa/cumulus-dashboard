@@ -34,6 +34,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Add Tooltip component
   - Add blue tooltip for timestamp values in the table
 
+- **CUMULUS-2206**
+  - Implement lazy loading for SortableTable, Datepicker, and Sidebar
+  - Improve performance
+
 - **CUMULUS-2200**
   - Add Granule List page. Use Granule Inventory reports for generating granule CSVs
 
