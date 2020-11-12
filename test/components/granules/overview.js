@@ -70,7 +70,7 @@ test('GranulesOverview generates bulkAction for recovery button', function (t) {
     </Provider>);
 
   const overviewWrapper = providerWrapper.find('GranulesOverview').dive();
-  const listWrapper = overviewWrapper.find('Connect(List)');
+  const listWrapper = overviewWrapper.find('withRouter(withQueryParams(Connect(List)))');
   const listBulkActions = listWrapper.prop('bulkActions');
 
   const recoverFilter = (object) => object.text === 'Recover Granule';
@@ -94,7 +94,7 @@ test('GranulesOverview does not generate bulkAction for recovery button', functi
     </Provider>);
 
   const overviewWrapper = providerWrapper.find('GranulesOverview').dive();
-  const listWrapper = overviewWrapper.find('Connect(List)');
+  const listWrapper = overviewWrapper.find('withRouter(withQueryParams(Connect(List)))');
   const listBulkActions = listWrapper.prop('bulkActions');
 
   const recoverFilter = (object) => object.text === 'Recover Granule';

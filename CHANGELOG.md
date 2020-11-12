@@ -8,11 +8,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Fixed
+- **CUMULUS-2226**
+  - Loading and sorting the Failed Granules table no longer causes the screen to jump to the top of the table.
+
 - **CUMULUS-2242** and **CUMULUS-2177**
   - building with `npm run build` will now build a distribution that can be served from behind cloudfront.
+  - Fixed bug in nginx config that allows the application to run in the continer built by `bin/build_dashboard_image.sh`.
+  - Overhauled the README.md and added a "Quick start" section
+
+- **CUMULUS-1873**
+  - Clear selected items in table when filter is applied
 
 - **CUMULUS-2249**
   - clear infix search parameter when Search component is unmounted
+
+- **CUMULUS-2147**
+  - clear execution errors from granules list when async commands are completed
 
 ### Added
 
@@ -22,6 +33,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-2200**
   - Add Granule List page. Use Granule Inventory reports for generating granule CSVs
+
+- **CUMULUS-2225**
+  - Rename "Type" column "Error Type" on Failed Granules and Home pages and allow sorting
+  - Add Error Type filter to Failed Granules page
 
 - **CUMULUS-2218**
   - Add `Bulk Reingest` to Bulk Granules actions
@@ -37,10 +52,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Allows filtering of the Granule Inventory List CSV download based on Granule IDs, Status, and Collection.
 - **CUMULUS-2242**
   - Moves cypress testing to run against production build in CI.
+  - renames helper scripts to better describe their purposes
+    - `./bin/build_in_docker.sh` -> `./bin/build_dashboard_via_docker.sh`
+    - `./bin/build_docker_image.sh` -> `./bin/build_dashboard_image.sh`
 
 ### Removed
  -**CUMULUS-2242**
    - Removes unnecessary validation tests.
+   - Removes README.md documentation for NGAP Sandbox Metrics Development
 
 ## [v2.0.0]
 

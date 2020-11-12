@@ -203,7 +203,6 @@ class Home extends React.Component {
               </div>
               <List
                 list={list}
-                dispatch={this.props.dispatch}
                 action={listGranules}
                 tableColumns={errorTableColumns}
                 sortId='timestamp'
