@@ -107,7 +107,7 @@ const List = ({
       setClearSelected(false);
       // Current selection is passed to the parent component
       if (typeof onSelect === 'function') {
-        onSelect(selected);
+        onSelect(newSelections);
       }
     }
   }
