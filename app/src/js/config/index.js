@@ -8,7 +8,6 @@ const deploymentConfig = require('./config');
 const baseConfig = {
   environment: 'development',
   requireEarthdataLogin: false,
-  apiRoot: 'https://wjdkfyb6t6.execute-api.us-east-1.amazonaws.com/dev/',
   minCompatibleApiVersion: '3.0.0',
   oauthMethod: 'earthdata',
 
