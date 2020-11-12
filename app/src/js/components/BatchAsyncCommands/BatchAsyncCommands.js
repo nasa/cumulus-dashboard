@@ -142,6 +142,8 @@ export class BatchCommand extends React.Component {
   // call onSuccess and onError functions as needed
   cleanup(errorMessage, errors, results) {
     const {
+      clearError,
+      dispatch,
       onSuccess,
       onError,
       getModalOptions,
@@ -164,6 +166,10 @@ export class BatchCommand extends React.Component {
     }
     if (errorMessage && typeof onError === 'function') onError(errorMessage);
     if (results && results.length && typeof onSuccess === 'function') { onSuccess(results, errorMessage); }
+
+    if (typeof clearError === 'function') {
+      selected.forEach((id) => dispatch(clearError(id)));
+    }
   }
 
   isInflight() {
@@ -271,6 +277,7 @@ BatchCommand.propTypes = {
   text: PropTypes.string,
   selected: PropTypes.array,
   className: PropTypes.string,
+  clearError: PropTypes.func,
   onSuccess: PropTypes.func,
   onError: PropTypes.func,
   confirm: PropTypes.func,

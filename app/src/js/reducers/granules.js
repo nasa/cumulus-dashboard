@@ -3,6 +3,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import assignDate from './utils/assign-date';
 import removeDeleted from './utils/remove-deleted';
 import {
+  createClearItemReducer,
   createErrorReducer,
   createInflightReducer,
   createSuccessReducer
@@ -21,12 +22,15 @@ import {
   GRANULE_REINGEST,
   GRANULE_REINGEST_INFLIGHT,
   GRANULE_REINGEST_ERROR,
+  GRANULE_REINGEST_CLEAR_ERROR,
   GRANULE_APPLYWORKFLOW,
   GRANULE_APPLYWORKFLOW_INFLIGHT,
   GRANULE_APPLYWORKFLOW_ERROR,
+  GRANULE_APPLYWORKFLOW_CLEAR_ERROR,
   GRANULE_REMOVE,
   GRANULE_REMOVE_INFLIGHT,
   GRANULE_REMOVE_ERROR,
+  GRANULE_REMOVE_CLEAR_ERROR,
   BULK_GRANULE,
   BULK_GRANULE_INFLIGHT,
   BULK_GRANULE_ERROR,
@@ -42,6 +46,7 @@ import {
   GRANULE_DELETE,
   GRANULE_DELETE_INFLIGHT,
   GRANULE_DELETE_ERROR,
+  GRANULE_DELETE_CLEAR_ERROR,
   SEARCH_GRANULES,
   CLEAR_GRANULES_SEARCH,
   FILTER_GRANULES,
@@ -108,12 +113,15 @@ export default createReducer(initialState, {
   [GRANULE_REINGEST]: createSuccessReducer('reingested'),
   [GRANULE_REINGEST_INFLIGHT]: createInflightReducer('reingested'),
   [GRANULE_REINGEST_ERROR]: createErrorReducer('reingested'),
+  [GRANULE_REINGEST_CLEAR_ERROR]: createClearItemReducer('reingested'),
   [GRANULE_APPLYWORKFLOW]: createSuccessReducer('executed'),
   [GRANULE_APPLYWORKFLOW_INFLIGHT]: createInflightReducer('executed'),
   [GRANULE_APPLYWORKFLOW_ERROR]: createErrorReducer('executed'),
+  [GRANULE_APPLYWORKFLOW_CLEAR_ERROR]: createClearItemReducer('executed'),
   [GRANULE_REMOVE]: createSuccessReducer('removed'),
   [GRANULE_REMOVE_INFLIGHT]: createInflightReducer('removed'),
   [GRANULE_REMOVE_ERROR]: createErrorReducer('removed'),
+  [GRANULE_REMOVE_CLEAR_ERROR]: createClearItemReducer('removed'),
   [BULK_GRANULE_DELETE]: createSuccessReducer('bulkDelete', getConfigRequestId),
   [BULK_GRANULE_DELETE_INFLIGHT]: createInflightReducer('bulkDelete', getConfigRequestId),
   [BULK_GRANULE_DELETE_ERROR]: createErrorReducer('bulkDelete', getConfigRequestId),
@@ -138,6 +146,7 @@ export default createReducer(initialState, {
   [GRANULE_DELETE]: createSuccessReducer('deleted'),
   [GRANULE_DELETE_INFLIGHT]: createInflightReducer('deleted'),
   [GRANULE_DELETE_ERROR]: createErrorReducer('deleted'),
+  [GRANULE_DELETE_CLEAR_ERROR]: createClearItemReducer('deleted'),
 
   [SEARCH_GRANULES]: (state, action) => {
     state.list.params.infix = action.infix;

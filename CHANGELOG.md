@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-2242** and **CUMULUS-2177**
   - building with `npm run build` will now build a distribution that can be served from behind cloudfront.
+  - Fixed bug in nginx config that allows the application to run in the continer built by `bin/build_dashboard_image.sh`.
+  - Overhauled the README.md and added a "Quick start" section
 
 - **CUMULUS-1873**
   - Clear selected items in table when filter is applied
@@ -20,8 +22,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2249**
   - clear infix search parameter when Search component is unmounted
 
-**CUMULUS-2238**
+- **CUMULUS-2238**
   - Fix "Date and Time Range" CSS on Chrome and Firefox. Dropdowns now display icons correctly and elements don't shift when selected.
+
+- **CUMULUS-2147**
+  - clear execution errors from granules list when async commands are completed
 
 ### Added
 
@@ -50,10 +55,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Allows filtering of the Granule Inventory List CSV download based on Granule IDs, Status, and Collection.
 - **CUMULUS-2242**
   - Moves cypress testing to run against production build in CI.
+  - renames helper scripts to better describe their purposes
+    - `./bin/build_in_docker.sh` -> `./bin/build_dashboard_via_docker.sh`
+    - `./bin/build_docker_image.sh` -> `./bin/build_dashboard_image.sh`
 
 ### Removed
  -**CUMULUS-2242**
    - Removes unnecessary validation tests.
+   - Removes README.md documentation for NGAP Sandbox Metrics Development
 
 ## [v2.0.0]
 
