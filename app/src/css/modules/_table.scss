@@ -66,6 +66,9 @@
 
   input {
     width: 2em;
+    text-align: center;
+    margin: 0;
+    padding: .4em .7em;
   }
 
   & + .table--wrapper .table {
