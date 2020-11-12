@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { lazy, Suspense } from 'react';
-// import Datepicker from '../Datepicker/DatepickerRange';
 
 const Datepicker = lazy(() => import('../Datepicker/DatepickerRange'));
 

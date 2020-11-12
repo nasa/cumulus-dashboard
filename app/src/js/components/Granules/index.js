@@ -5,7 +5,6 @@ import { get } from 'object-path';
 import { connect } from 'react-redux';
 import { withRouter, Redirect, Route, Switch } from 'react-router-dom';
 import withQueryParams from 'react-router-query-params';
-// import Sidebar from '../Sidebar/sidebar';
 import { getCount, listGranules } from '../../actions';
 import { strings } from '../locale';
 import AllGranules from './list';
