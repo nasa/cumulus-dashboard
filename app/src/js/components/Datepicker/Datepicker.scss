@@ -80,7 +80,6 @@
     top: 73px;
     display: flex;
     justify-content: center;
-    width: 1040px;
   }
 
   &__clear{
@@ -109,5 +108,9 @@
       top: .25em;
       left: .7em;
     }
+  }
+
+  &__range_wrapper{
+    width: 1040px;
   }
 }
