@@ -6,7 +6,7 @@ import get from 'lodash/get';
 import { withRouter, Link } from 'react-router-dom';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import { displayCase, fullDate, parseJson } from '../../utils/format';
-import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
+import { getPersistentQueryParams } from '../../utils/url-helper';
 import { kibanaExecutionLink } from '../../utils/kibana';
 import { window } from '../../utils/browser';
 
@@ -19,8 +19,6 @@ import DefaultModal from '../Modal/modal';
 class ExecutionStatus extends React.Component {
   constructor() {
     super();
-    this.navigateBack = this.navigateBack.bind(this);
-    this.errors = this.errors.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.state = {
@@ -29,19 +27,11 @@ class ExecutionStatus extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { dispatch, match } = this.props;
     const { executionArn } = match.params;
     dispatch(getExecutionStatus(executionArn));
     dispatch(getCumulusInstanceMetadata());
-  }
-
-  navigateBack() {
-    historyPushWithQueryParams('/executions');
-  }
-
-  errors() {
-    return [].filter(Boolean);
   }
 
   openModal(type) {
@@ -73,13 +63,11 @@ class ExecutionStatus extends React.Component {
   render() {
     const { showInputModal, showOutputModal } = this.state;
     const { executionStatus, cumulusInstance } = this.props;
-    const { execution, executionHistory, stateMachine } = executionStatus;
+    const { error, execution, executionHistory, stateMachine } = executionStatus;
 
     if (!execution) return null;
 
     const { name } = execution;
-
-    const errors = this.errors();
 
     const metaAccessors = [
       {
@@ -257,7 +245,7 @@ class ExecutionStatus extends React.Component {
             Execution: {name}
           </h1>
 
-          {errors.length > 0 && <ErrorReport report={errors} />}
+          {error && <ErrorReport report={error} />}
         </section>
 
         {/* stateMachine's definition and executionHistory's event statuses are needed to draw the graph */}
