@@ -29,7 +29,7 @@ const ExecutionEvents = ({
   const { params } = match || {};
   const { executionArn } = params;
   const { search } = location;
-  const { execution, executionHistory, stateMachine } = executionStatus || {};
+  const { error, execution, executionHistory, stateMachine } = executionStatus || {};
   const { events } = executionHistory || {};
   const mutableEvents = cloneDeep(events);
   if (mutableEvents) {
@@ -37,7 +37,6 @@ const ExecutionEvents = ({
       event.eventDetails = getEventDetails(event);
     });
   }
-  const errors = [].filter(Boolean);
 
   useEffect(() => {
     dispatch(getCumulusInstanceMetadata());
@@ -60,7 +59,7 @@ const ExecutionEvents = ({
           Events for Execution {execution.name}
         </h1>
 
-        {(errors.length > 0) && <ErrorReport report={errors} />}
+        {error && <ErrorReport report={error} />}
       </section>
 
       {(stateMachine && executionHistory) &&
