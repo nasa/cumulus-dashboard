@@ -193,7 +193,7 @@ describe('Dashboard Executions Page', () => {
 
           cy.get('@columns').eq(0).should('have.text', (index + 1).toString());
           cy.get('@columns').eq(2).should('have.text', timestamp);
-          cy.get('@columns').eq(3).contains('More Details').click();
+          cy.get('@columns').eq(3).contains('Show Input').click();
           cy.get('@columns').eq(3).contains(idMatch);
           if (index !== 0) {
             cy.get('@columns').eq(3).contains(previousIdMatch);
