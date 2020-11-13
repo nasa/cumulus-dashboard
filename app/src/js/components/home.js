@@ -166,7 +166,9 @@ class Home extends React.Component {
                   Select date and time to refine your results. <em>Time is UTC.</em>
                 </h2>
               </div>
-              <DatepickerRange onChange={this.query}/>
+              <div className='datetime__range_wrapper'>
+                <DatepickerRange onChange={this.query}/>
+              </div>
             </div>
           </section>
 
