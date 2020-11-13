@@ -29,7 +29,7 @@ const ExecutionEvents = ({
   const { params } = match || {};
   const { executionArn } = params;
   const { search } = location;
-  const { execution, executionHistory } = executionStatus || {};
+  const { execution, executionHistory, stateMachine } = executionStatus || {};
   const { events } = executionHistory || {};
   const mutableEvents = cloneDeep(events);
   if (mutableEvents) {
@@ -37,7 +37,6 @@ const ExecutionEvents = ({
       event.eventDetails = getEventDetails(event);
     });
   }
-
   const errors = [].filter(Boolean);
 
   useEffect(() => {
@@ -58,23 +57,20 @@ const ExecutionEvents = ({
       </Helmet>
       <section className='page__section page__section__header-wrapper'>
         <h1 className='heading--large heading--shared-content with-description width--three-quarters'>
-          Events for Execution {executionStatus.execution.name}
+          Events for Execution {execution.name}
         </h1>
 
-        {errors.length ? <ErrorReport report={errors} /> : null}
+        {(errors.length > 0) && <ErrorReport report={errors} />}
       </section>
 
-      {
-        (executionStatus.stateMachine && executionStatus.executionHistory)
-          ? <section className='page__section'>
-            <div className='heading__wrapper--border'>
-              <h2 className='heading--medium with-description'>Details About The Events</h2>
-            </div>
-          </section>
-          : null
-      }
+      {(stateMachine && executionHistory) &&
+        <section className='page__section'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--medium with-description'>Details About The Events</h2>
+          </div>
+        </section>}
 
-      {(executionStatus.executionHistory) &&
+      {executionHistory &&
         <section className='page__section'>
           <div className='heading__wrapper--top-border'>
             <p>
@@ -116,7 +112,7 @@ const ExecutionEvents = ({
 
           <SortableTable
             data={mutableEvents.sort((a, b) => (a.id > b.id ? 1 : -1))}
-            tableColumns={tableColumns()}
+            tableColumns={tableColumns}
             rowId='id'
             sortId='id'
             order='asc'
@@ -128,10 +124,10 @@ const ExecutionEvents = ({
 };
 
 ExecutionEvents.propTypes = {
-  executionStatus: PropTypes.object,
-  match: PropTypes.object,
   dispatch: PropTypes.func,
+  executionStatus: PropTypes.object,
   location: PropTypes.object,
+  match: PropTypes.object,
 };
 
 ExecutionEvents.displayName = 'Execution Events';

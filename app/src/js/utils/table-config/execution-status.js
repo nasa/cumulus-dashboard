@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { fullDate } from '../format';
+import DefaultModal from '../../components/Modal/modal';
 
-export const tableColumns = () => [
+export const tableColumns = [
   {
     Header: 'Id',
     accessor: 'id',
@@ -18,27 +19,32 @@ export const tableColumns = () => [
   {
     Header: 'Input Details',
     accessor: 'eventDetails',
-    Cell: ({ cell: { value } }) => { // eslint-disable-line react/prop-types
+    Cell: ({ cell: { value } }) => {
+      const [showModal, setShowModal] = useState(false);
+      function toggleModal(e) {
+        e.preventDefault();
+        setShowModal(!showModal);
+      }
       if (value) {
         return (
           <>
             <button
-              onClick={() => this.openModal('input')}
+              onClick={toggleModal}
               className="button button--small button--no-icon"
             >
               Show Input
             </button>
-            {/* <DefaultModal
-              // showModal={showInputModal}
+            <DefaultModal
+              showModal={showModal}
               title="Execution Input"
-              // onCloseModal={() => this.closeModal('input')}
+              onCloseModal={toggleModal}
               hasConfirmButton={false}
               cancelButtonClass="button--close"
               cancelButtonText="Close"
               className="execution__modal"
             >
-              <pre>{parseJson(value)}</pre>
-            </DefaultModal> */}
+              <pre>{JSON.stringify(value, null, 2)}</pre>
+            </DefaultModal>
           </>
         );
       }
