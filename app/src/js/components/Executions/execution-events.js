@@ -41,15 +41,13 @@ const ExecutionEvents = ({
   const errors = [].filter(Boolean);
 
   useEffect(() => {
-    dispatch(getExecutionStatus(executionArn));
     dispatch(getCumulusInstanceMetadata());
-  }, [dispatch, executionArn]);
+  }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (search) {
-  //     dispatch(getExecutionStatus(executionArn));
-  //   }
-  // }, [dispatch, executionArn, search]);
+  useEffect(() => {
+    dispatch(getExecutionStatus(executionArn));
+    // when we have a new search, we also want to dispatch
+  }, [dispatch, executionArn, search]);
 
   if (!execution) return null;
 
