@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v3.0.0]
+
 ### Fixed
 - **CUMULUS-2226**
   - Loading and sorting the Failed Granules table no longer causes the screen to jump to the top of the table.
@@ -27,6 +29,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-2147**
   - clear execution errors from granules list when async commands are completed
+
+- **CUMULUS-2135**
+  - Pagination table header UI CSS tweaks
 
 ### Added
 
@@ -682,7 +687,9 @@ Fix for serving the dashboard through the Cumulus API.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.10.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v3.0.0...HEAD
+[v3.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v2.0.0...v3.0.0
+[v2.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.10.0...v2.0.0
 [v1.10.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.9.0...v1.10.0
 [v1.9.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.8.1...v1.9.0
 [v1.8.1]: https://github.com/nasa/cumulus-dashboard/compare/v1.8.0...v1.8.1
