@@ -1,9 +1,7 @@
 import React from 'react';
-import Collapse from 'react-collapsible';
-
 import { fullDate } from '../format';
 
-export const tableColumns = [
+export const tableColumns = () => [
   {
     Header: 'Id',
     accessor: 'id',
@@ -20,11 +18,32 @@ export const tableColumns = [
   {
     Header: 'Input Details',
     accessor: 'eventDetails',
-    Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
-      <Collapse trigger={'More Details'} triggerWhenOpen={'Less Details'}>
-        <pre className={'pre-style'}>{JSON.stringify(value, null, 2)}</pre>
-      </Collapse>
-    ),
+    Cell: ({ cell: { value } }) => { // eslint-disable-line react/prop-types
+      if (value) {
+        return (
+          <>
+            <button
+              onClick={() => this.openModal('input')}
+              className="button button--small button--no-icon"
+            >
+              Show Input
+            </button>
+            {/* <DefaultModal
+              // showModal={showInputModal}
+              title="Execution Input"
+              // onCloseModal={() => this.closeModal('input')}
+              hasConfirmButton={false}
+              cancelButtonClass="button--close"
+              cancelButtonText="Close"
+              className="execution__modal"
+            >
+              <pre>{parseJson(value)}</pre>
+            </DefaultModal> */}
+          </>
+        );
+      }
+      return 'N/A';
+    },
   }
 ];
 
