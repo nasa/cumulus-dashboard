@@ -13,7 +13,9 @@ const DatePickerHeader = ({ heading, onChange, showDatePicker = true }) => (
             </div>
           </li>
           <li>
-            <Datepicker hideWrapper={true} onChange={onChange} />
+            <div className='datetimeheader__datetime_range_wrapper'>
+              <Datepicker hideWrapper={true} onChange={onChange} />
+            </div>
           </li>
         </ul>
       </div>
