@@ -17,7 +17,8 @@ import {
   applyWorkflowToGranule,
   applyRecoveryWorkflowToGranule,
   getOptionsCollectionName,
-  createReconciliationReport
+  createReconciliationReport,
+  getOptionsProviderName,
 } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import {
@@ -200,7 +201,7 @@ class GranulesOverview extends React.Component {
 
   render () {
     const { isModalOpen, isListRequestSubmitted, listName } = this.state;
-    const { collections, granules } = this.props;
+    const { collections, granules, providers: { dropdowns: providerDropdowns } } = this.props;
     const { list } = granules;
     const { dropdowns } = collections;
     const { count, queriedAt } = list.meta;
@@ -302,6 +303,17 @@ class GranulesOverview extends React.Component {
                   placeholder: 'All'
                 }}
               />
+              <Dropdown
+                getOptions={getOptionsProviderName}
+                options={get(providerDropdowns, ['provider', 'options'])}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey="provider"
+                label="Provider"
+                inputProps={{
+                  placeholder: 'All'
+                }}
+              />
             </ListFilters>
           </List>
         </section>
@@ -317,6 +329,7 @@ GranulesOverview.propTypes = {
   granules: PropTypes.object,
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
+  providers: PropTypes.object,
 };
 
 export { GranulesOverview };
@@ -327,4 +340,5 @@ export default withRouter(withQueryParams()(connect((state) => ({
   granules: state.granules,
   selected: state.selected,
   workflowOptions: workflowOptionNames(state),
+  providers: state.providers
 }))(GranulesOverview)));

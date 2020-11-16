@@ -15,6 +15,7 @@ import {
   listGranules,
   searchGranules,
   listCollections,
+  getOptionsProviderName,
 } from '../../actions';
 import {
   collectionName as collectionLabelForId,
@@ -171,6 +172,7 @@ class CollectionOverview extends React.Component {
       match: { params },
       collections,
       granules: { list },
+      providers: { dropdowns },
     } = this.props;
     const collectionName = params.name;
     const collectionVersion = params.version;
@@ -308,6 +310,17 @@ class CollectionOverview extends React.Component {
                   placeholder: 'All',
                 }}
               />
+              <Dropdown
+                getOptions={getOptionsProviderName}
+                options={get(dropdowns, ['provider', 'options'])}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey="provider"
+                label="Provider"
+                inputProps={{
+                  placeholder: 'All'
+                }}
+              />
             </ListFilters>
           </List>
         </section>
@@ -325,6 +338,7 @@ CollectionOverview.propTypes = {
   granules: PropTypes.object,
   match: PropTypes.object,
   queryParams: PropTypes.object,
+  providers: PropTypes.object
 };
 
 export default withRouter(
@@ -332,5 +346,6 @@ export default withRouter(
     collections: state.collections,
     datepicker: state.datepicker,
     granules: state.granules,
+    providers: state.providers
   }))(CollectionOverview)
 );
