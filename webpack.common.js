@@ -50,12 +50,6 @@ const CommonConfig = {
                 '@babel/preset-react'
               ]
             }
-          },
-          {
-            loader: 'eslint-loader',
-            options: {
-              emitWarning: true
-            }
           }
         ]
       },

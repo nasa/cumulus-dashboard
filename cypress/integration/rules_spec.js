@@ -119,19 +119,19 @@ describe('Rules page', () => {
         .siblings()
         .find('div[class*="container"]')
         .click();
-      cy.contains('div[class*="MenuList"] > div', workflow).click();
+      cy.contains('div[id*="react-select"]', workflow).click();
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'provider', { matchCase: false })
         .siblings()
         .find('div[class*="container"]')
         .click();
-      cy.contains('div[class*="MenuList"] > div', provider).click();
+      cy.contains('div[id*="react-select"]', provider).click();
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'collection', { matchCase: false })
         .siblings()
         .find('div[class*="container"]')
         .click();
-      cy.contains('div[class*="MenuList"] > div', collection).click();
+      cy.contains('div[id*="react-select"]', collection).click();
 
       cy.get('@ruleInput')
         .contains('.form__textarea', 'Optional Meta Data For The Rule');
@@ -146,13 +146,13 @@ describe('Rules page', () => {
         .siblings()
         .find('div[class*="container"]')
         .click();
-      cy.contains('div[class*="MenuList"] > div', 'onetime').click();
+      cy.contains('div[id*="react-select"]', 'onetime').click();
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'state', { matchCase: false })
         .siblings()
         .find('div[class*="container"]')
         .click();
-      cy.contains('div[class*="MenuList"] > div', 'ENABLED').click();
+      cy.contains('div[id*="react-select"]', 'ENABLED').click();
 
       cy.contains('form button', 'Submit').click();
       const errorMessage = 'Please review the following fields and submit again: \'Optional Meta Data For The Rule\'';

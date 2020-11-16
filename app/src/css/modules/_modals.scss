@@ -122,6 +122,28 @@
     }
   }
 
+  &.granule-inventory {
+    .list-name {
+      color: $theme--blue;
+      margin: 1em;
+
+      .form__text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        label {
+          margin-right: .5em;
+        }
+
+        input {
+          min-width: 200px;
+        }
+        
+      }
+    }
+  }
+
   &.bulk_granules {
     &.modal-dialog {
       overflow-y: initial !important;
@@ -141,7 +163,17 @@
     }
   }
 
-  &.bulk_granules--operations, &.bulk_granules--delete {
+  .bulk_granules__title.modal-title.h4 {
+      padding: 0 1.25rem;
+      font-size: 1.125rem;
+
+      p {
+        text-align: center;
+        padding-top: 1.125rem;
+      }
+  }
+
+  &.bulk_granules--operations, &.bulk_granules--delete, &.bulk_granules--reingest {
     .modal-body {
       height: 425px;
     }

@@ -27,7 +27,6 @@ const collections = {
 
 test('Collections Overview generates bulkAction for recovery button', function (t) {
   const dispatch = () => {};
-  const mmtLinks = {};
   const logs = {};
   const config = { enableRecovery: true };
   const store = {
@@ -40,14 +39,13 @@ test('Collections Overview generates bulkAction for recovery button', function (
     <Provider store={store}>
       <CollectionList
         collections = {collections}
-        mmtLinks = {mmtLinks}
         dispatch = {dispatch}
         logs = {logs}
         config = {config}/>
     </Provider>);
 
   const collectionsWrapper = providerWrapper.find('CollectionList').dive();
-  const listWrapper = collectionsWrapper.find('Connect(List)');
+  const listWrapper = collectionsWrapper.find('withRouter(withQueryParams(Connect(List)))');
   const listBulkActions = listWrapper.prop('bulkActions');
 
   const recoverFilter = (object) => object.text === 'Recover';
@@ -57,7 +55,6 @@ test('Collections Overview generates bulkAction for recovery button', function (
 
 test('Collections Overview does not generate bulkAction for recovery button', function (t) {
   const dispatch = () => {};
-  const mmtLinks = {};
   const logs = {};
   const config = { enableRecovery: false };
   const store = {
@@ -70,14 +67,13 @@ test('Collections Overview does not generate bulkAction for recovery button', fu
     <Provider store={store}>
       <CollectionList
         collections = {collections}
-        mmtLinks = {mmtLinks}
         dispatch = {dispatch}
         logs = {logs}
         config = {config}/>
     </Provider>);
 
   const collectionsWrapper = providerWrapper.find('CollectionList').dive();
-  const listWrapper = collectionsWrapper.find('Connect(List)');
+  const listWrapper = collectionsWrapper.find('withRouter(withQueryParams(Connect(List)))');
   const listBulkActions = listWrapper.prop('bulkActions');
 
   const recoverFilter = (object) => object.text === 'Recover';

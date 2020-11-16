@@ -7,6 +7,68 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v3.0.0]
+
+### Fixed
+- **CUMULUS-2226**
+  - Loading and sorting the Failed Granules table no longer causes the screen to jump to the top of the table.
+
+- **CUMULUS-2242** and **CUMULUS-2177**
+  - building with `npm run build` will now build a distribution that can be served from behind cloudfront.
+  - Fixed bug in nginx config that allows the application to run in the continer built by `bin/build_dashboard_image.sh`.
+  - Overhauled the README.md and added a "Quick start" section
+
+- **CUMULUS-1873**
+  - Clear selected items in table when filter is applied
+
+- **CUMULUS-2249**
+  - clear infix search parameter when Search component is unmounted
+
+- **CUMULUS-2238**
+  - Fix "Date and Time Range" CSS on Chrome and Firefox. Dropdowns now display icons correctly and elements don't shift when selected.
+
+- **CUMULUS-2147**
+  - clear execution errors from granules list when async commands are completed
+
+- **CUMULUS-2135**
+  - Pagination table header UI CSS tweaks
+
+### Added
+
+- **CUMULUS-2091**
+  - Add Tooltip component
+  - Add blue tooltip for timestamp values in the table
+
+- **CUMULUS-2200**
+  - Add Granule List page. Use Granule Inventory reports for generating granule CSVs
+
+- **CUMULUS-2225**
+  - Rename "Type" column "Error Type" on Failed Granules and Home pages and allow sorting
+  - Add Error Type filter to Failed Granules page
+
+- **CUMULUS-2218**
+  - Add `Bulk Reingest` to Bulk Granules actions
+
+### Changed
+
+- **CUMULUS-2063**
+  - Updates the dashboard to use alpha version `@cumulus/api@3.0.1-alpha.2` for testing.
+  - Code changes to allow for private CMR collections to have links to the MMT.
+- **CUMULUS-2215**
+  - Omits unnecesary statistics request when building the option list of collection names on the granules page.
+- **CUMULUS-2171**
+  - Allows filtering of the Granule Inventory List CSV download based on Granule IDs, Status, and Collection.
+- **CUMULUS-2242**
+  - Moves cypress testing to run against production build in CI.
+  - renames helper scripts to better describe their purposes
+    - `./bin/build_in_docker.sh` -> `./bin/build_dashboard_via_docker.sh`
+    - `./bin/build_docker_image.sh` -> `./bin/build_dashboard_image.sh`
+
+### Removed
+ -**CUMULUS-2242**
+   - Removes unnecessary validation tests.
+   - Removes README.md documentation for NGAP Sandbox Metrics Development
+
 ## [v2.0.0]
 
 ### BREAKING CHANGES
@@ -625,7 +687,9 @@ Fix for serving the dashboard through the Cumulus API.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v1.10.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v3.0.0...HEAD
+[v3.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v2.0.0...v3.0.0
+[v2.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.10.0...v2.0.0
 [v1.10.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.9.0...v1.10.0
 [v1.9.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.8.1...v1.9.0
 [v1.8.1]: https://github.com/nasa/cumulus-dashboard/compare/v1.8.0...v1.8.1

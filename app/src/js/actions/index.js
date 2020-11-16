@@ -2,7 +2,6 @@
 import compareVersions from 'compare-versions';
 import { get as getProperty } from 'object-path';
 import requestPromise from 'request-promise';
-import { CMR } from '@cumulus/cmrjs';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import cloneDeep from 'lodash/cloneDeep';
@@ -29,13 +28,6 @@ const {
   defaultPageLimit,
   minCompatibleApiVersion
 } = _config;
-
-/**
- * match MMT to CMR environment.
- * @param {string} env - cmr environment defaults to 'SIT'
- * @returns {string} correct hostname for mmt environment
- */
-const hostId = (env = 'SIT') => getProperty({ OPS: '', SIT: 'sit', UAT: 'uat' }, env, 'sit');
 
 export const refreshAccessToken = (token) => (dispatch) => {
   const start = new Date();
@@ -84,7 +76,7 @@ export const getCollection = (name, version) => (dispatch, getState) => {
       type: types.COLLECTION,
       method: 'GET',
       id: getCollectionId({ name, version }),
-      path: `collections?name=${name}&version=${version}`,
+      path: `collections?name=${name}&version=${version}&includeStats=true`,
       qs: timeFilters,
     },
   });
@@ -126,7 +118,7 @@ export const checkApiVersion = () => (dispatch, getState) => {
 };
 
 export const listCollections = (options = {}) => {
-  const { listAll = false, getMMT = true, ...queryOptions } = options;
+  const { listAll = false, getMMT = true, includeStats = true, ...queryOptions } = options;
   return (dispatch, getState) => {
     const timeFilters = listAll ? {} : fetchCurrentTimeFilters(getState().datepicker);
     const urlPath = `collections${isEmpty(timeFilters) || listAll ? '' : '/active'}`;
@@ -136,11 +128,7 @@ export const listCollections = (options = {}) => {
         method: 'GET',
         id: null,
         url: new URL(urlPath, root).href,
-        qs: { limit: defaultPageLimit, ...queryOptions, ...timeFilters }
-      }
-    }).then(() => {
-      if (getMMT) {
-        dispatch(getMMTLinks());
+        qs: { limit: defaultPageLimit, ...queryOptions, ...timeFilters, getMMT, includeStats }
       }
     });
   };
@@ -190,74 +178,6 @@ export const getCumulusInstanceMetadata = () => ({
     path: 'instanceMeta'
   }
 });
-
-/**
- * Iterates over each collection in the application collections state
- * dispatching the action to add the MMT link to the state.
- *
- * @returns {function} anonymous redux-thunk function
- */
-export const getMMTLinks = () => (dispatch, getState) => {
-  const { data } = getState().collections.list;
-  const doDispatch = ({ name, version }) => (url) => dispatch({
-    type: types.ADD_MMTLINK,
-    data: { name, version, url }
-  });
-
-  data.forEach((collection) => getMMTLinkFromCmr(collection, getState)
-    .then(doDispatch(collection))
-    .catch((error) => console.error(error)));
-};
-
-/**
- * Returns a Promise for the Metadata Management Toolkit (MMT) URL string for
- * the specified collection, or an empty promise if the collection is not found
- * in the CMR.
- *
- * @param {Object} collection - application collections item
- * @param {function} getState - redux function to access app state
- * @returns {Promise<string>} - Promise for a Metadata Management Toolkit (MMT)
- *    Link (URL string) to the input collection, or undefined if it isn't found
- */
-export const getMMTLinkFromCmr = (collection, getState) => {
-  const {
-    cumulusInstance: { cmrProvider, cmrEnvironment }, mmtLinks
-  } = getState();
-
-  if (!cmrProvider || !cmrEnvironment) {
-    return Promise.reject(
-      new Error('Missing Cumulus Instance Metadata in state.' +
-                ' Make sure a call to getCumulusInstanceMetadata is dispatched.')
-    );
-  }
-
-  if (getCollectionId(collection) in mmtLinks) {
-    return Promise.resolve(mmtLinks[getCollectionId(collection)]);
-  }
-
-  return new CMR(cmrProvider).searchCollections(
-    {
-      short_name: collection.name,
-      version: collection.version
-    }
-  )
-    .then(([result]) => result && result.id && buildMMTLink(result.id, cmrEnvironment));
-};
-
-/**
- * Returns the MMT URL string for collection based on conceptId and Cumulus
- * environment.
- *
- * @param {string} conceptId - CMR's concept id
- * @param {string} cmrEnv - Cumulus instance operating environ UAT/SIT/PROD
- * @returns {string} MMT URL string to edit the collection at conceptId
- */
-export const buildMMTLink = (conceptId, cmrEnv) => {
-  const url = ['mmt', hostId(cmrEnv), 'earthdata.nasa.gov']
-    .filter((value) => value)
-    .join('.');
-  return `https://${url}/collections/${conceptId}`;
-};
 
 export const getGranule = (granuleId) => ({
   [CALL_API]: {
@@ -341,6 +261,11 @@ export const applyWorkflowToGranule = (granuleId, workflow, meta) => ({
   }
 });
 
+export const applyWorkflowToGranuleClearError = (granuleId) => ({
+  type: types.GRANULE_APPLYWORKFLOW_CLEAR_ERROR,
+  id: granuleId
+});
+
 export const getCollectionByGranuleId = (granuleId) => (dispatch) => dispatch(getGranule(granuleId))
   .then((granuleResponse) => {
     const { name, version } = collectionNameVersion(granuleResponse.data.collectionId);
@@ -377,6 +302,11 @@ export const reingestGranule = (granuleId) => ({
   }
 });
 
+export const reingestGranuleClearError = (granuleId) => ({
+  type: types.GRANULE_REINGEST_CLEAR_ERROR,
+  id: granuleId
+});
+
 export const removeGranule = (granuleId) => ({
   [CALL_API]: {
     type: types.GRANULE_REMOVE,
@@ -387,6 +317,11 @@ export const removeGranule = (granuleId) => ({
       action: 'removeFromCmr'
     }
   }
+});
+
+export const removeGranuleClearError = (granuleId) => ({
+  type: types.GRANULE_REMOVE_CLEAR_ERROR,
+  id: granuleId
 });
 
 export const bulkGranule = (payload) => ({
@@ -419,6 +354,21 @@ export const bulkGranuleDeleteClearError = (requestId) => ({
   requestId
 });
 
+export const bulkGranuleReingest = (payload) => ({
+  [CALL_API]: {
+    type: types.BULK_GRANULE_REINGEST,
+    method: 'POST',
+    path: 'granules/bulkReingest',
+    requestId: payload.requestId,
+    body: payload.json
+  }
+});
+
+export const bulkGranuleReingestClearError = (requestId) => ({
+  type: types.BULK_GRANULE_REINGEST_CLEAR_ERROR,
+  requestId
+});
+
 export const deleteGranule = (granuleId) => ({
   [CALL_API]: {
     type: types.GRANULE_DELETE,
@@ -428,18 +378,15 @@ export const deleteGranule = (granuleId) => ({
   }
 });
 
+export const deleteGranuleClearError = (granuleId) => ({
+  type: types.GRANULE_DELETE_CLEAR_ERROR,
+  id: granuleId
+});
+
 export const searchGranules = (infix) => ({ type: types.SEARCH_GRANULES, infix });
 export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH });
 export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param });
 export const clearGranulesFilter = (paramKey) => ({ type: types.CLEAR_GRANULES_FILTER, paramKey });
-
-export const getGranuleCSV = (options) => ({
-  [CALL_API]: {
-    type: types.GRANULE_CSV,
-    method: 'GET',
-    url: new URL('granule-csv', root).href
-  }
-});
 
 export const getOptionsCollectionName = (options) => ({
   [CALL_API]: {
@@ -931,7 +878,7 @@ export const createReconciliationReport = (payload) => ({
 export const deleteReconciliationReport = (reconciliationName) => ({
   [CALL_API]: {
     id: reconciliationName,
-    type: types.RECONCILIATION,
+    type: types.RECONCILIATION_DELETE,
     method: 'DELETE',
     path: `reconciliationReports/${reconciliationName}`
   }

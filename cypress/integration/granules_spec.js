@@ -150,7 +150,7 @@ describe('Dashboard Granules Page', () => {
 
       cy.contains('.heading--xlarge', 'Granules');
 
-      cy.contains('a', 'Download Granule List');
+      cy.contains('a', 'Create Granule Inventory List');
     });
 
     it('Should update dropdown with label when visiting bookmarkable URL', () => {
@@ -269,7 +269,7 @@ describe('Dashboard Granules Page', () => {
         .contains('li', 2);
       cy.setDatepickerDropdown('Custom');
       cy.get('[data-cy="endDateTime"] .react-datetime-picker__inputGroup__month').click();
-      cy.get('.react-calendar__month-view__days__day--neighboringMonth').eq(0).click();
+      cy.get('.react-calendar__month-view__days__day--weekend').eq(0).click();
       cy.get('.overview-num__wrapper ul li')
         .first().contains('li', 'Completed').contains('li', 0)
         .next()
@@ -364,6 +364,133 @@ describe('Dashboard Granules Page', () => {
       cy.get('.button--cancel').click();
       cy.url().should('match', /\/granules/);
       cy.get('.heading--large').should('have.text', 'Granule Overview');
+    });
+
+    it('Should have a Granule Lists page', () => {
+      const listName = 'GranuleList100220';
+      const url = `**/reconciliationReports/${listName}`;
+      cy.route2({ url: '**/reconciliationReports?limit=*', method: 'GET' }).as('getLists');
+      cy.route2({ url, method: 'GET' }).as('getList');
+      cy.visit('/granules');
+      cy.contains('.sidebar li a', 'Lists').click();
+      cy.wait('@getLists');
+      cy.url().should('include', '/granules/lists');
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('@list').should('have.length', 1);
+      cy.contains('.table .td a', listName)
+        .should('be.visible')
+        .click({ force: true });
+
+      cy.wait('@getList').its('response.body').should('include', 'url');
+    });
+
+    it('Should open modal to create granule inventory report', () => {
+      const listName = 'GranuleListTest';
+      const status = 'running';
+      const collectionId = 'MOD09GQ___006';
+      // granule IDs in alphanumeric order. We sort the actual result for comparison.
+      const granuleIds = [
+        'MOD09GQ.A0501579.PZB_CG.006.8580266395214',
+        'MOD09GQ.A1657416.CbyoRi.006.9697917818587'
+      ];
+
+      cy.route2({
+        url: '/reconciliationReports',
+        method: 'POST'
+      }, (req) => {
+        const requestBody = JSON.parse(req.body);
+        expect(requestBody).to.have.property('reportType', 'Granule Inventory');
+        expect(requestBody).to.have.property('reportName', listName);
+        expect(requestBody).to.have.property('status', status);
+        expect(requestBody).to.have.property('collectionId', collectionId);
+        expect(requestBody.granuleId.sort()).to.deep.equal(granuleIds);
+      }).as('createList');
+
+      cy.visit('/granules');
+
+      // Enter status field
+      cy.get('.filter-status .rbt-input-main').as('status-input');
+      cy.get('@status-input').click().type(status).type('{enter}');
+
+      // Enter collection field
+      cy.get('.filter-collectionId .rbt-input-main').as('collection-input');
+      cy.get('@collection-input').click().type(collectionId).type('{enter}');
+
+      // Select both granules in list
+      cy.get('.table .tbody .tr .td input[type=checkbox]').as('granule-checkbox');
+      cy.get('@granule-checkbox').click({ multiple: true });
+
+      cy.get('.csv__download').click();
+      cy.get('.default-modal.granule-inventory ').as('modal');
+
+      cy.get('@modal').contains('div', 'You have generated a selection to process for the following list:');
+      cy.get('@modal').find('.list-name input').clear().type(listName);
+      cy.get('@modal').find('.button--submit').click();
+      cy.get('@modal').contains('div', 'The following request is being processed and will be available shortly');
+      cy.get('@modal').contains('.list-name', listName);
+      cy.get('@modal').find('.button--submit').click();
+
+      cy.url().should('include', '/granules/lists');
+    });
+
+    it('Should filter failed granules by error type', () => {
+      cy.visit('/granules/failed');
+
+      // Get initial table size
+      cy.get('.table .tbody .tr').should('have.length', 2);
+
+      // Filter the results by an error type
+      cy.get('.filter-error .rbt-input-main').as('error-input');
+      cy.get('@error-input').click().type('FileNotFound').type('{enter}');
+
+      // Get new table size
+      cy.get('.table .tbody .tr').should('have.length', 1);
+    });
+
+    it('should show number of selected results in table', () => {
+      cy.visit('/granules');
+
+      cy.get('.table .thead input[type="checkbox"]').as('select-all');
+      cy.get('.table .tbody .tr').as('list');
+
+      cy.get('@list').should('have.length', 11);
+      cy.get('@select-all').check();
+      cy.get('@select-all').should('be.checked');
+      cy.contains('.table__header', '(11 selected)');
+    });
+
+    it('should clear the selection when a filter is applied', () => {
+      const granuleIds = [
+        'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
+        'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
+      ];
+      cy.visit('/granules');
+
+      cy.get('.table .tbody').as('table-body');
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('.filter-status .rbt-input-main').as('status-input');
+
+      cy.get('@list').should('have.length', 11);
+      cy.get('@table-body').contains('.td', granuleIds[0]).as('granule1');
+      cy.get('@granule1').siblings().contains('.td', 'Completed');
+      cy.get('@granule1').siblings().find('input[type="checkbox"]').check();
+
+      cy.get('@table-body').contains('.td', granuleIds[1]).as('granule2');
+      cy.get('@granule2').siblings().contains('.td', 'Failed');
+      cy.get('@granule2').siblings().find('input[type="checkbox"]').check();
+
+      cy.contains('.table__header', '(2 selected)');
+
+      // (X selected) only in header when items are selected
+      // verify that nothing is selected when filter is applied
+      cy.get('@status-input').click().type('run').type('{enter}');
+      cy.get('@list').should('have.length', 2);
+      cy.get('.table__header').should('not.contain.text', 'selected');
+
+      // verify items still not selected when filter is cleared
+      cy.get('@status-input').clear();
+      cy.get('@list').should('have.length', 11);
+      cy.get('.table__header').should('not.contain.text', 'selected');
     });
   });
 });

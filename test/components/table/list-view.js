@@ -40,6 +40,7 @@ test('table should properly initialize timer config prop', async (t) => {
         tableColumns={errorTableColumns}
         sortId="timestamp"
         query={query}
+        queryParams={{}}
       />
     </Provider>,
     {

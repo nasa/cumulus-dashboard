@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Form, Field } from 'react-final-form';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   createReconciliationReport,
@@ -17,6 +16,7 @@ import { historyPushWithQueryParams } from '../../utils/url-helper';
 import { reconciliationReportTypes } from '../../utils/type';
 import { dateTimeFormat } from '../../utils/datepicker';
 import SimpleDropdown from '../DropDown/simple-dropdown';
+import Tooltip from '../Tooltip/tooltip';
 import Datepicker from '../Datepicker/Datepicker';
 import TextForm from '../TextAreaForm/text';
 import { displayCase, getCollectionId } from '../../utils/format';
@@ -137,7 +137,6 @@ const CreateReconciliationReport = ({
     }));
   }
 
-  // eslint-disable-next-line react/prop-types
   function renderForm({ handleSubmit, submitting, values }) {
     const { collectionId, granuleId, provider, reportType } = values || {};
 
@@ -159,19 +158,18 @@ const CreateReconciliationReport = ({
               format={formatDropdown}
             />
             {reportType && (
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip className="tooltip">
-                    {getTooltipInfoFromType(reportType)}
-                  </Tooltip>
+              <Tooltip
+                className="tooltip--light"
+                id="report-type-tooltip"
+                placement="right"
+                target={
+                  <FontAwesomeIcon
+                    className="button__icon--animation"
+                    icon="info-circle"
+                  />
                 }
-              >
-                <FontAwesomeIcon
-                  className="button__icon--animation"
-                  icon="info-circle"
-                />
-              </OverlayTrigger>
+                tip={getTooltipInfoFromType(reportType)}
+              />
             )}
           </div>
         </div>
@@ -207,19 +205,18 @@ const CreateReconciliationReport = ({
           </div>
           <div className="form__item form__item--tooltip">
             <span>Additional Filters</span>
-            <OverlayTrigger
+            <Tooltip
+              className="tooltip--light"
+              id="report-filter-tooltip"
               placement="right"
-              overlay={
-                <Tooltip className="tooltip">
-                  Only one of Provider, Collection ID, or Granule ID may be applied for each report
-                </Tooltip>
+              target={
+                <FontAwesomeIcon
+                  className="button__icon--animation"
+                  icon="info-circle"
+                />
               }
-            >
-              <FontAwesomeIcon
-                className="button__icon--animation"
-                icon="info-circle"
-              />
-            </OverlayTrigger>
+              tip="Only one of Provider, Collection ID, or Granule ID may be applied for each report"
+            />
           </div>
           <div className="form__item">
             <label>Provider</label>

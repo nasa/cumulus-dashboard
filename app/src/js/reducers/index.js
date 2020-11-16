@@ -8,7 +8,6 @@ import config from './utils/config';
 import dist from './dist';
 import datepicker from './datepicker';
 import granules from './granules';
-import granuleCSV from './granule-csv';
 import stats from './stats';
 import pdrs from './pdrs';
 import providers from './providers';
@@ -22,7 +21,6 @@ import executionLogs from './execution-logs';
 import operations from './operations';
 import rules from './rules';
 import reconciliationReports from './reconciliation-reports';
-import mmtLinks from './mmtLinks';
 import cumulusInstance from './cumulus-instance';
 import sidebar from './sidebar';
 
@@ -36,10 +34,8 @@ export const reducers = {
   config,
   dist,
   datepicker,
-  mmtLinks,
   cumulusInstance,
   granules,
-  granuleCSV,
   stats,
   timer,
   sidebar,

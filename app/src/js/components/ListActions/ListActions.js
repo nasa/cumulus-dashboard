@@ -45,6 +45,7 @@ const ListActions = ({
                       action={item.action}
                       state={item.state}
                       text={item.text}
+                      clearError={item.clearError}
                       confirm={item.confirm}
                       confirmOptions={item.confirmOptions}
                       getModalOptions={item.getModalOptions}

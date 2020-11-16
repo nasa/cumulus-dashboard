@@ -4,22 +4,27 @@ import { Link } from 'react-router-dom';
 import { nullValue, dateOnly, collectionNameVersion } from '../format';
 import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions';
 import { getPersistentQueryParams } from '../url-helper';
+import { downloadFile } from '../download-file';
 
-export const tableColumns = ({ dispatch }) => ([
+export const tableColumns = ({ dispatch, isGranules, query }) => ([
   {
     Header: 'Name',
     accessor: 'name',
     Cell: ({ cell: { value }, row: { original: { type } } }) => { // eslint-disable-line react/prop-types
       const link = (location) => ({ pathname: `/reconciliation-reports/report/${value}`, search: getPersistentQueryParams(location) });
-      return (type !== 'Internal')
-        ? <Link to={link} >{value}</Link>
-        : <Link to={link} onClick={(e) => handleDownloadClick(e, value, dispatch)}>{value}</Link>;
+      switch (type) {
+        case 'Internal':
+          return <Link to={link} onClick={(e) => handleDownloadClick(e, value, dispatch)}>{value}</Link>;
+        case 'Granule Inventory':
+          return <Link to={link} onClick={(e) => handleCsvDownloadClick(e, value, dispatch)}>{value}</Link>;
+        default:
+          return <Link to={link} >{value}</Link>;
+      }
     }
-  },
-  {
+  }, ...(!isGranules ? [{
     Header: 'Report Type',
     accessor: 'type'
-  },
+  }] : []),
   {
     Header: 'Status',
     accessor: 'status'
@@ -30,23 +35,25 @@ export const tableColumns = ({ dispatch }) => ([
     Cell: ({ cell: { value } }) => dateOnly(value)
   },
   {
-    Header: 'Download Report',
+    Header: `Download ${isGranules ? 'List' : 'Report'}`,
     id: 'download',
     accessor: 'name',
     Cell: ({ cell: { value } }) => (// eslint-disable-line react/prop-types
       <button className='button button__row button__row--download'
-        onClick={(e) => handleDownloadClick(e, value, dispatch)}
+        onClick={(e) => (isGranules
+          ? handleCsvDownloadClick(e, value, dispatch)
+          : handleDownloadClick(e, value, dispatch))}
       />
     ),
     disableSortBy: true
   },
   {
-    Header: 'Delete Report',
+    Header: `Delete ${isGranules ? 'List' : 'Report'}`,
     id: 'delete',
     accessor: 'name',
     Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
       <button className='button button__row button__row--delete'
-        onClick={(e) => handleDeleteClick(e, value, dispatch)}
+        onClick={(e) => handleDeleteClick(e, value, dispatch, query)}
       />
     ),
     disableSortBy: true
@@ -57,20 +64,24 @@ const handleDownloadClick = (e, reportName, dispatch) => {
   e.preventDefault();
   dispatch(getReconciliationReport(reportName)).then((response) => {
     const { data } = response;
-    const jsonHref = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data))}`;
-    const link = document.createElement('a');
-    link.setAttribute('download', `${reportName}.json`);
-    link.href = jsonHref;
-    document.body.appendChild(link);
-    link.click();
-    link.parentNode.removeChild(link);
+    const url = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data))}`;
+    downloadFile(url, `${reportName}.json`);
   });
 };
 
-const handleDeleteClick = (e, value, dispatch) => {
+const handleCsvDownloadClick = (e, reportName, dispatch) => {
   e.preventDefault();
-  dispatch(deleteReconciliationReport(value)).then(() => {
-    dispatch(listReconciliationReports());
+  dispatch(getReconciliationReport(reportName)).then((response) => {
+    const { data } = response;
+    const { url } = data;
+    if (url && !window.Cypress) window.open(url);
+  });
+};
+
+const handleDeleteClick = (e, value, dispatch, query) => {
+  e.preventDefault();
+  dispatch(deleteReconciliationReport(value)).then((response) => {
+    dispatch(listReconciliationReports(query));
   });
 };
 

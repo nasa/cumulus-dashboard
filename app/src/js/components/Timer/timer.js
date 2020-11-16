@@ -31,9 +31,8 @@ class Timer extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (
-      JSON.stringify(prevProps.config) !== JSON.stringify(this.props.config) ||
-      (this.props.reload && prevProps.reload !== this.props.reload) ||
+    if (!isEqual(prevProps.config, this.props.config) ||
+      (this.props.reload && (prevProps.reload !== this.props.reload)) ||
       !isEqual(prevProps.datepicker, this.props.datepicker)
     ) {
       this.refreshTimer(this.props.config);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { fromNow } from '../format';
+import { fromNowWithTooltip } from '../format';
 import { strings } from '../../components/locale';
 import { getPersistentQueryParams } from '../url-helper';
 
@@ -28,7 +28,8 @@ export const tableColumns = [
   },
   {
     Header: 'Last Updated',
-    accessor: (row) => fromNow(row.timestamp),
+    accessor: 'timestamp',
+    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
     id: 'timestamp'
   }
 ];

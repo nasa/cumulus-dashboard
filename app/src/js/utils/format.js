@@ -5,6 +5,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import { Link } from 'react-router-dom';
 import { getPersistentQueryParams } from './url-helper';
+import Tooltip from '../components/Tooltip/tooltip';
 
 export const nullValue = '--';
 
@@ -82,6 +83,16 @@ export const fromNow = (numberstring) => {
   return moment(numberstring).fromNow();
 };
 
+export const fromNowWithTooltip = (timestamp) => (
+  <Tooltip
+    className="tooltip--blue"
+    id="table-timestamp-tooltip"
+    placement="top"
+    target={<span>{fromNow(timestamp)}</span>}
+    tip={fullDate(timestamp)}
+  />
+);
+
 export const lastUpdated = (datestring, text) => {
   const meta = text || 'Last Updated';
   let day,
@@ -97,38 +108,6 @@ export const lastUpdated = (datestring, text) => {
       <dd>{day}</dd>
       {time ? <dd className="metadata__updated__time">{time}</dd> : null}
     </dl>
-  );
-};
-
-export const collectionSearchResult = (collection) => {
-  const { name, version } = collection;
-  return (
-    <li key={name}>
-      <Link
-        to={(location) => ({
-          pathname: `collections/collection/${name}/${version}`,
-          search: getPersistentQueryParams(location),
-        })}
-      >
-        {name} / {version}
-      </Link>
-    </li>
-  );
-};
-
-export const granuleSearchResult = (granule) => {
-  const { granuleId, status } = granule;
-  return (
-    <li key={granuleId}>
-      <Link
-        to={(location) => ({
-          pathname: `granules/granules/${granuleId}/${status}`,
-          search: getPersistentQueryParams(location),
-        })}
-      >
-        {granuleId} / {status}
-      </Link>
-    </li>
   );
 };
 

@@ -1,12 +1,21 @@
 import { createReducer } from '@reduxjs/toolkit';
 import assignDate from './utils/assign-date';
 import {
+  createErrorReducer,
+  createInflightReducer,
+  createSuccessReducer
+} from './utils/reducer-creators';
+
+import {
   RECONCILIATION,
   RECONCILIATION_INFLIGHT,
   RECONCILIATION_ERROR,
   RECONCILIATIONS,
   RECONCILIATIONS_INFLIGHT,
   RECONCILIATIONS_ERROR,
+  RECONCILIATION_DELETE,
+  RECONCILIATION_DELETE_INFLIGHT,
+  RECONCILIATION_DELETE_ERROR,
   SEARCH_RECONCILIATIONS,
   CLEAR_RECONCILIATIONS_SEARCH,
   NEW_RECONCILIATION_INFLIGHT,
@@ -62,6 +71,9 @@ export default createReducer(initialState, {
     state.list.inflight = false;
     state.list.error = action.error;
   },
+  [RECONCILIATION_DELETE]: createSuccessReducer('deleted'),
+  [RECONCILIATION_DELETE_INFLIGHT]: createInflightReducer('deleted'),
+  [RECONCILIATION_DELETE_ERROR]: createErrorReducer('deleted'),
   [SEARCH_RECONCILIATIONS]: (state, action) => {
     state.list.params.infix = action.infix;
   },

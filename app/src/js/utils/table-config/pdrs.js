@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { get } from 'object-path';
-import { seconds, fromNow, bool, nullValue, collectionLink, displayCase, granuleLink } from '../format';
+import { seconds, bool, nullValue, collectionLink, displayCase, granuleLink, fromNowWithTooltip } from '../format';
 import { deleteGranule, deletePdr } from '../../actions';
 import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
@@ -10,7 +10,8 @@ import { getPersistentQueryParams } from '../url-helper';
 export const tableColumns = [
   {
     Header: 'Updated',
-    accessor: (row) => fromNow(row.timestamp),
+    accessor: 'timestamp',
+    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
     id: 'timestamp'
   },
   {
@@ -52,8 +53,9 @@ export const tableColumns = [
 export const errorTableColumns = [
   {
     Header: 'Updated',
-    accessor: (row) => fromNow(row.timestamp),
-    id: 'updated'
+    accessor: 'timestamp',
+    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
+    id: 'timestamp'
   },
   {
     Header: 'Name',
@@ -120,7 +122,8 @@ export const granuleTableColumns = [
   },
   {
     Header: 'Updated',
-    accessor: (row) => fromNow(row.timestamp),
+    accessor: 'timestamp',
+    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
     id: 'timestamp'
   }
 ];

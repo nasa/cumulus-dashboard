@@ -220,7 +220,6 @@ class PDR extends React.Component {
 
           <List
             list={list}
-            dispatch={this.props.dispatch}
             action={listGranules}
             tableColumns={granuleTableColumns}
             query={this.generateQuery()}

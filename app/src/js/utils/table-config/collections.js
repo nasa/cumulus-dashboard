@@ -1,7 +1,7 @@
 import React from 'react';
 import { get } from 'object-path';
 import { Link } from 'react-router-dom';
-import { fromNow, seconds, tally, collectionNameVersion } from '../format';
+import { seconds, tally, collectionNameVersion, fromNowWithTooltip } from '../format';
 import { deleteCollection } from '../../actions';
 import { strings } from '../../components/locale';
 import BatchDeleteConfirmContent from '../../components/DeleteCollection/BatchDeleteConfirmContent';
@@ -53,7 +53,7 @@ export const tableColumns = [
   },
   {
     Header: 'MMT',
-    accessor: 'mmtLink',
+    accessor: 'MMTLink',
     Cell: ({ cell: { value } }) => (value ? <a href={value} target="_blank">MMT</a> : null), // eslint-disable-line react/prop-types
     disableSortBy: true,
     width: 100
@@ -66,7 +66,8 @@ export const tableColumns = [
   {
     Header: 'Timestamp',
     accessor: 'timestamp',
-    Cell: ({ cell: { value } }) => fromNow(value)
+    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
+    id: 'timestamp'
   }
 ];
 

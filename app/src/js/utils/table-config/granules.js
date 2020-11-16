@@ -5,19 +5,23 @@ import Collapsible from 'react-collapsible';
 import { Link } from 'react-router-dom';
 import noop from 'lodash/noop';
 import {
-  fromNow,
   seconds,
   bool,
   nullValue,
   displayCase,
   collectionLink,
   granuleLink,
-  providerLink
+  providerLink,
+  fromNowWithTooltip
 } from '../format';
 import {
+  applyWorkflowToGranuleClearError,
+  deleteGranule,
+  deleteGranuleClearError,
   reingestGranule,
+  reingestGranuleClearError,
   removeGranule,
-  deleteGranule
+  removeGranuleClearError,
 } from '../../actions';
 import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
@@ -74,27 +78,27 @@ export const tableColumns = [
   },
   {
     Header: 'Updated',
-    accessor: (row) => fromNow(row.timestamp),
+    accessor: 'timestamp',
+    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
     id: 'timestamp'
   }
 ];
 
 export const errorTableColumns = [
   {
+    Header: 'Error Type',
+    accessor: (row) => get(row, 'error.Error', nullValue),
+    id: 'error.Error.keyword',
+    width: 100
+  },
+  {
     Header: 'Error',
     accessor: (row) => get(row, 'error.Cause', nullValue),
     id: 'error',
     Cell: ({ row: { original } }) => ( // eslint-disable-line react/prop-types
-      <ErrorReport report={get(original, 'error.Cause', nullValue)} truncate={true} />),
+      <ErrorReport report={get(original, 'error.Cause', nullValue)} truncate={true} disableScroll={true} />),
     disableSortBy: true,
     width: 175
-  },
-  {
-    Header: 'Type',
-    accessor: (row) => get(row, 'error.Error', nullValue),
-    id: 'type',
-    disableSortBy: true,
-    width: 100
   },
   {
     Header: 'Granule',
@@ -109,7 +113,8 @@ export const errorTableColumns = [
   },
   {
     Header: 'Updated',
-    accessor: (row) => fromNow(row.timestamp),
+    accessor: 'timestamp',
+    Cell: ({ cell: { value } }) => fromNowWithTooltip(value),
     id: 'timestamp'
   }
 ];
@@ -157,6 +162,7 @@ export const recoverAction = (granules, config) => ({
   text: 'Recover Granule',
   action: config.recover.action,
   state: granules.executed,
+  clearError: applyWorkflowToGranuleClearError,
   confirm: confirmRecover
 });
 
@@ -240,6 +246,7 @@ export const reingestAction = (granules) => ({
   text: 'Reingest',
   action: reingestGranule,
   state: granules.reingested,
+  clearError: reingestGranuleClearError,
   confirm: confirmReingest,
   className: 'button--reingest',
   getModalOptions: granuleModalJourney
@@ -251,6 +258,7 @@ export const bulkActions = (granules, config) => [
     text: 'Execute',
     action: config.execute.action,
     state: granules.executed,
+    clearError: applyWorkflowToGranuleClearError,
     confirm: confirmApply,
     confirmOptions: config.execute.options,
     className: 'button--execute'
@@ -259,6 +267,7 @@ export const bulkActions = (granules, config) => [
     text: strings.remove_from_cmr,
     action: removeGranule,
     state: granules.removed,
+    clearError: removeGranuleClearError,
     confirm: confirmRemove,
     className: 'button--remove'
   },
@@ -274,6 +283,7 @@ export const bulkActions = (granules, config) => [
     text: 'Delete',
     action: deleteGranule,
     state: granules.deleted,
+    clearError: deleteGranuleClearError,
     confirm: confirmDelete,
     className: 'button--delete'
   }];
