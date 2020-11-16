@@ -3,8 +3,13 @@
   align-items: center;
   justify-content: space-between;
   position: relative;
+
   &__content{
     margin-right: 0px;
+  }
+
+  &__datetime_range_wrapper{
+    width: 850px;
   }
 }
 

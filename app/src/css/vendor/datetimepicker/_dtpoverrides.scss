@@ -35,12 +35,45 @@ styling overrides
   color: $white;
 }
 
+.react-datetime-picker__inputGroup {
+  width: 200px !important;
+  font-family: $code-font-family;
+
+  // Firefox hack -- Mozilla does not render the <select> carrot correctly.
+  // this replaces the icon only in Firefox.
+  @-moz-document url-prefix() {
+    &:before {
+      content: '\f107';
+      font-family: 'FontAwesome';
+      color: $black;
+      display: inline-block;
+      position: relative;
+      left: 13.25em;
+      pointer-events: none;
+      z-index: 1;
+    }
+  }
+
+}
+
 .react-datetime-picker__inputGroup__input {
   box-shadow: none;
 }
 
 .react-datetime-picker__inputGroup__input:invalid {
   background: rgba($color: #2685c1, $alpha: 0.1) !important;
+}
+
+.react-datetime-picker__inputGroup__amPm {
+  appearance: menulist;
+  -moz-appearance: none !important;
+  width: 40px;
+
+  // Firefox hack -- We need to ensure the <select> dropdown
+  // is large enough to contain the replacement carrot above.
+  @-moz-document url-prefix() {
+    width: 55px;
+  }
 }
 
 .react-datetime-picker__calendar .react-calendar__tile--active {
@@ -87,7 +120,7 @@ styling overrides
    padding-left: 1px;
 }*/
 
-/*.react-datetime-picker__inputGroup__input.react-datetime-picker__inputGroup__month, 
+/*.react-datetime-picker__inputGroup__input.react-datetime-picker__inputGroup__month,
 .react-datetime-picker__inputGroup__input.react-datetime-picker__inputGroup__day {
   width: 26px !important;
 }*/

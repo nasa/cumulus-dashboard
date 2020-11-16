@@ -15,7 +15,9 @@ const DatePickerHeader = ({ heading, onChange, showDatePicker = true }) => (
           </li>
           <li>
             <Suspense fallback={<div>Loading...</div>}>
-              <Datepicker hideWrapper={true} onChange={onChange} />
+              <div className='datetimeheader__datetime_range_wrapper'>
+                <Datepicker hideWrapper={true} onChange={onChange} />
+              </div>
             </Suspense>
           </li>
         </ul>
