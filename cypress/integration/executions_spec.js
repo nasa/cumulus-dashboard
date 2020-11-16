@@ -198,7 +198,7 @@ describe('Dashboard Executions Page', () => {
           cy.get('.execution__modal').should('exist');
           cy.get('.execution__modal').contains(idMatch);
           if (index !== 0) {
-            cy.get('.execution__modal').eq(3).contains(previousIdMatch);
+            cy.get('.execution__modal').contains(previousIdMatch);
           }
           cy.contains('.execution__modal .button', 'Close').click();
         });
