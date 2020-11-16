@@ -22,7 +22,9 @@ export const tableColumns = [
     Cell: ({ cell: { value } }) => {
       const [showModal, setShowModal] = useState(false);
       function toggleModal(e) {
-        e.preventDefault();
+        if (e) {
+          e.preventDefault();
+        }
         setShowModal(!showModal);
       }
       if (value) {
@@ -32,7 +34,7 @@ export const tableColumns = [
               onClick={toggleModal}
               className="button button--small button--no-icon"
             >
-              Show Input
+              More Details
             </button>
             <DefaultModal
               showModal={showModal}
