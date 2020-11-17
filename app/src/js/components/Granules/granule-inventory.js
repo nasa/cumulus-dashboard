@@ -23,12 +23,15 @@ const GranuleInventory = ({
   const [listRequestSubmitted, setListRequestSubmitted] = useState(false);
   const [listName, setListName] = useState(defaultListName);
 
-  function toggleModal() {
-    setShowModal(!showModal);
+  const ButtonComponent = element;
+
+  function openModal(e) {
+    e.preventDefault();
+    setShowModal(true);
   }
 
   function submitListRequest(e) {
-    const { collectionId, status, search: granuleIdFilter } = queryConfig;
+    const { collectionId, status, infix: granuleIdFilter } = queryConfig;
 
     const requestBody = {
       reportName: listName,
@@ -51,7 +54,7 @@ const GranuleInventory = ({
   }
 
   function closeModal() {
-    toggleModal();
+    setShowModal(false);
     setListRequestSubmitted(false);
     setListName(defaultListName);
   }
@@ -62,10 +65,11 @@ const GranuleInventory = ({
 
   return (
     <>
-      <button className='csv__download button button--small button--file button--green form-group__element'
-        id='download_link'
-        onClick={toggleModal}
-      >Create Granule Inventory List</button>
+      <ButtonComponent className={className}
+        onClick={openModal}
+      >
+        Create Granule Inventory List
+      </ButtonComponent>
       <DefaultModal
         className="granule-inventory"
         onCloseModal={closeModal}
@@ -106,11 +110,9 @@ GranuleInventory.propTypes = {
   className: PropTypes.string,
   element: PropTypes.string,
   granules: PropTypes.object,
-  selected: PropTypes.array,
   queryConfig: PropTypes.object,
+  selected: PropTypes.array,
 };
-
-export { GranuleInventory };
 
 export default withRouter(connect((state) => ({
   granules: state.granules

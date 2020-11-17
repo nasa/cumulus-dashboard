@@ -31,7 +31,7 @@ import BatchReingestConfirmContent from '../../components/ReingestGranules/Batch
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
 import TextArea from '../../components/TextAreaForm/text-area';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
-import { GranuleInventory } from '../../components/Granules/granule-inventory';
+import GranuleInventory from '../../components/Granules/granule-inventory';
 
 export const tableColumns = [
   {
