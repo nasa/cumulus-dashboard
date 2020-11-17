@@ -136,6 +136,25 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
   }
 
   /*******ButtonGroup & Group CTA******/
+  &--actions {
+    background-color: $light-green;
+    position: relative;
+
+    &--collapsed {
+      background-color: $midnight-blue;
+      color: $white;
+    }
+
+    &:before, &--collapsed:before {
+      color: $white;
+      position: absolute;
+      font-family: 'FontAwesome';
+      content: '\f144';
+      font-weight: 900;
+      left: 10px;
+    }
+  }
+
     &--add {
       background-color: $light-green;
       position: relative;

@@ -204,6 +204,10 @@ class GranulesOverview extends React.Component {
     const { list } = granules;
     const { dropdowns } = collections;
     const { count, queriedAt } = list.meta;
+    const groupActions = {
+      title: 'Granule Actions',
+      description: 'Select the action you would like to perform on the selected granules from the table below',
+    };
 
     return (
       <div className='page__component'>
@@ -263,6 +267,7 @@ class GranulesOverview extends React.Component {
             tableColumns={tableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
+            groupActions={groupActions}
             rowId='granuleId'
             sortId='timestamp'
             filterAction={filterGranules}

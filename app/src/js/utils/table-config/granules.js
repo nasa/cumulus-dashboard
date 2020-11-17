@@ -31,6 +31,7 @@ import BatchReingestConfirmContent from '../../components/ReingestGranules/Batch
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
 import TextArea from '../../components/TextAreaForm/text-area';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
+import { GranuleInventory } from '../../components/Granules/granule-inventory';
 
 export const tableColumns = [
   {
@@ -262,6 +263,14 @@ export const bulkActions = (granules, config) => [
     confirm: confirmApply,
     confirmOptions: config.execute.options,
     className: 'button--execute'
+  },
+  {
+    Component:
+      <GranuleInventory
+        element='button'
+        className='csv__download button button--small button--file button--green form-group__element'
+        confirmAction={true}
+      />
   },
   {
     text: strings.remove_from_cmr,

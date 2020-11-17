@@ -148,6 +148,7 @@ class List extends React.Component {
       action,
       children,
       bulkActions,
+      groupActions,
       rowId,
       sortId: initialSortId,
       list,
@@ -171,12 +172,14 @@ class List extends React.Component {
     } = this.state;
     const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
+    // TODO here for collapsible actions
     return (
       <>
         <ListActions
           dispatch={dispatch}
           action={action}
           bulkActions={bulkActions}
+          groupActions={groupActions}
           queryConfig={queryConfig}
           completedBulkActions={completedBulkActions}
           onBulkActionSuccess={this.onBulkActionSuccess}
@@ -235,6 +238,7 @@ List.propTypes = {
   dispatch: PropTypes.func,
   filterAction: PropTypes.func,
   filterClear: PropTypes.func,
+  groupActions: PropTypes.object,
   list: PropTypes.object,
   query: PropTypes.object,
   rowId: PropTypes.any,
