@@ -115,8 +115,6 @@ const ExecutionEvents = ({
             data={mutableEvents.sort((a, b) => (a.id > b.id ? 1 : -1))}
             tableColumns={tableColumns}
             rowId='id'
-            sortId='id'
-            order='asc'
           />
         </section>}
 
