@@ -27,6 +27,7 @@ test('Execution Events shows event history', function (t) {
   const executionEventsRendered = shallow(
     <ExecutionEvents
       dispatch={dispatch}
+      location={{}}
       match={match}
       executionStatus={executionStatus}
     />

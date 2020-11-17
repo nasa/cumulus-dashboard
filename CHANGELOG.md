@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- **CUMULUS-1895**
+  - Update execution events to display more details in modal
+
 ## [v3.0.0]
 
 ### Fixed
