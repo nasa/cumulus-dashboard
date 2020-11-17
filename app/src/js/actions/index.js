@@ -383,6 +383,10 @@ export const deleteGranuleClearError = (granuleId) => ({
   id: granuleId
 });
 
+export const removeAndDeleteGranuleClearError = (granuleId) => ({
+
+});
+
 export const searchGranules = (infix) => ({ type: types.SEARCH_GRANULES, infix });
 export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH });
 export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param });

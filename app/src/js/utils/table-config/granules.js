@@ -22,6 +22,8 @@ import {
   reingestGranuleClearError,
   removeGranule,
   removeGranuleClearError,
+  removeAndDeleteGranule,
+  removeAndDeleteGranuleClearError,
 } from '../../actions';
 import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
@@ -31,6 +33,7 @@ import BatchReingestConfirmContent from '../../components/ReingestGranules/Batch
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
 import TextArea from '../../components/TextAreaForm/text-area';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
+import { array } from 'prop-types';
 
 export const tableColumns = [
   {
@@ -170,6 +173,7 @@ const confirmReingest = (d) => `Reingest ${d} Granule${d > 1 ? 's' : ''}?`;
 const confirmApply = (d) => `Run workflow on ${d} granules?`;
 const confirmRemove = (d) => `Remove ${d} granule(s) from ${strings.cmr}?`;
 const confirmDelete = (d) => `Delete ${d} granule(s)?`;
+const confirmRemoveFromCMR = (d) => 'Selection contains granules that are published to CMR which must be removed before deleting. Remove published granules from CMR and delete?';
 
 /**
  * Determine the base context of a collection view
@@ -242,6 +246,20 @@ const granuleModalJourney = ({
   return modalOptions;
 };
 
+const findGranulesByIds = (granules, granuleIds) => granuleIds.map((id) => granules.find((g) => id === g.granuleId));
+const findPublishedGranules = (granules) => granules.filter((g) => g.published === true);
+
+const containsPublishedGranules = (granules, selected) => {
+  const selectedGranules = findGranulesByIds(granules.list.data, selected);
+  const publishedGranules = findPublishedGranules(selectedGranules);
+
+  if (!Array.isArray(publishedGranules) || !publishedGranules.length) {
+    return false;
+  }
+
+  return true;
+};
+
 export const reingestAction = (granules) => ({
   text: 'Reingest',
   action: reingestGranule,
@@ -252,7 +270,7 @@ export const reingestAction = (granules) => ({
   getModalOptions: granuleModalJourney
 });
 
-export const bulkActions = (granules, config) => [
+export const bulkActions = (granules, config, selected) => [
   reingestAction(granules),
   {
     text: 'Execute',
@@ -281,9 +299,9 @@ export const bulkActions = (granules, config) => [
   },
   {
     text: 'Delete',
-    action: deleteGranule,
+    action: containsPublishedGranules(granules, selected) ? removeAndDeleteGranule : deleteGranule,
     state: granules.deleted,
-    clearError: deleteGranuleClearError,
-    confirm: confirmDelete,
+    clearError: removeAndDeleteGranuleClearError,
+    confirm: containsPublishedGranules(granules, selected) ? confirmRemoveFromCMR : confirmDelete,
     className: 'button--delete'
   }];
