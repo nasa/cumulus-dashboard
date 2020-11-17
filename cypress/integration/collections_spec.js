@@ -585,5 +585,22 @@ describe('Dashboard Collections Page', () => {
           .and('contain', 'Running');
       });
     });
+
+    it('Should display Granules based on provider dropdown selection', () => {
+      cy.visit('/collections/collection/MOD09GQ/006');
+      cy.get('.filter-provider .rbt-input-main').as('provider-input');
+
+      cy.get('@provider-input').click().type('POD').type('{enter}');
+      cy.get('[data-cy=overview-num]').within(() => {
+        cy.get('li')
+          .first().should('contain', 0).and('contain', 'Completed')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Failed')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Running');
+      });
+    });
   });
 });

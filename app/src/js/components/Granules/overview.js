@@ -201,9 +201,10 @@ class GranulesOverview extends React.Component {
 
   render () {
     const { isModalOpen, isListRequestSubmitted, listName } = this.state;
-    const { collections, granules, providers: { dropdowns: providerDropdowns } } = this.props;
+    const { collections, granules, providers } = this.props;
     const { list } = granules;
     const { dropdowns } = collections;
+    const { dropdowns: providerDropdowns } = providers;
     const { count, queriedAt } = list.meta;
 
     return (
