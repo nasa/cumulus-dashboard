@@ -282,7 +282,7 @@ class CollectionOverview extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId="granuleId"
-            sortId="timestamp"
+            initialSortId="timestamp"
             filterAction={filterGranules}
             filterClear={clearGranulesFilter}
           >

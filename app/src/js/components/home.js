@@ -207,7 +207,7 @@ class Home extends React.Component {
                 list={list}
                 action={listGranules}
                 tableColumns={errorTableColumns}
-                sortId='timestamp'
+                initialSortId='timestamp'
                 query={this.generateQuery()}
               />
             </div>
