@@ -21,6 +21,7 @@ export const tableColumns = [
     accessor: 'eventDetails',
     Cell: ({ cell: { value } }) => {
       const [showModal, setShowModal] = useState(false);
+      const { id } = value || {};
       function toggleModal(e) {
         if (e) {
           e.preventDefault();
@@ -38,7 +39,7 @@ export const tableColumns = [
             </button>
             <DefaultModal
               showModal={showModal}
-              title="Execution Input"
+              title={`ID ${id}: Event Details`}
               onCloseModal={toggleModal}
               hasConfirmButton={false}
               cancelButtonClass="button--close"
