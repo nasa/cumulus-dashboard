@@ -78,7 +78,7 @@ class RulesOverview extends React.Component {
             action={listRules}
             tableColumns={tableColumns}
             query={{ ...queryParams }}
-            sortId="timestamp"
+            initialSortId="timestamp"
             bulkActions={this.generateBulkActions()}
             rowId="name"
             filterAction={filterRules}

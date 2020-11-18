@@ -244,18 +244,13 @@ a:active {
   -webkit-font-smoothing: antialiased;
 }
 
-.rightalign.nav__order-8{
-  position: relative;
-}
 .rightalign.nav__order-8 .log-icon{
+  margin-right: .2em;
   &:before {
-    position: absolute;
     color: $white;
     font-family: 'FontAwesome';
     content: '\f2f5';
     font-weight: 900;
-    right: 3.9em;
-    top: 1.54em;
   }
 }
 

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import cloneDeep from 'lodash/cloneDeep';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExternalLinkSquareAlt } from '@fortawesome/free-solid-svg-icons';
 import { withRouter } from 'react-router-dom';
 import {
   getExecutionStatus,
@@ -82,7 +83,8 @@ const ExecutionEvents = ({
             <p><b>NOTE:</b> If the task output is greater than 10KB, the full message will be stored in an S3 Bucket.
             In these scenarios, task and version numbers are not part of the Lambda or Activity event output.</p>
             <br></br>
-            <FontAwesomeIcon icon="external-link-square-alt" /> <i>Related workflow will open up into another window to view.</i>
+            <FontAwesomeIcon icon={faExternalLinkSquareAlt} />
+            <i>Related workflow will open up into another window to view.</i>
           </div>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content'>All Events
@@ -93,7 +95,7 @@ const ExecutionEvents = ({
             <a className='csv__download button button--small button--green form-group__element--right'
               href='/workflows'
               target='_blank'
-            ><FontAwesomeIcon icon="external-link-square-alt" /> View Workflows</a>
+            ><FontAwesomeIcon icon={faExternalLinkSquareAlt} /> View Workflows</a>
           </div>
           <div className='filters'>
             <Search
@@ -113,8 +115,6 @@ const ExecutionEvents = ({
             data={mutableEvents.sort((a, b) => (a.id > b.id ? 1 : -1))}
             tableColumns={tableColumns}
             rowId='id'
-            sortId='id'
-            order='asc'
           />
         </section>}
 

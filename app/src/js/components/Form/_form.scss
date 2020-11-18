@@ -243,22 +243,15 @@ select option{
 }
 
 .form__element__updateToggle {
-  float: right;
-  margin-top: -6px;
-  position: relative;
-  .form-group__updating, .metadata__updated {
-    display: block;
-  }
+  padding-right: .1em;
   .metadata__updated {
-    margin-top: 18px;
-    padding-right: 4px;
+    display: block;
     &:hover {
       text-decoration: underline;
     }
   }
   .form-group__updating {
-    position: absolute;
-    left: 14px;
+    margin-left: .2em;
     font-weight: $base-font-semibold;
     font-size: .86em;
     min-width: 120px;
@@ -266,10 +259,6 @@ select option{
 }
 
 .form__element__refresh {
-  position: absolute;
-  left: -.3em;
-  top: -.2em;
-  display: inline-block;
   &:before {
     font-family: 'FontAwesome';
     content: '\f021';

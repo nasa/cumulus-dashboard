@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Form, Field } from 'react-final-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import {
   createReconciliationReport,
   listCollections,
@@ -166,7 +167,7 @@ const CreateReconciliationReport = ({
                 target={
                   <FontAwesomeIcon
                     className="button__icon--animation"
-                    icon="info-circle"
+                    icon={faInfoCircle}
                   />
                 }
                 tip={getTooltipInfoFromType(reportType)}
@@ -214,7 +215,7 @@ const CreateReconciliationReport = ({
               target={
                 <FontAwesomeIcon
                   className="button__icon--animation"
-                  icon="info-circle"
+                  icon={faInfoCircle}
                 />
               }
               tip="Only one of Provider, Collection ID, or Granule ID may be applied for each report"
