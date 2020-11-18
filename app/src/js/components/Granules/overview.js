@@ -19,11 +19,12 @@ import {
 } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import {
-  tableColumns,
+  bulkActions,
   defaultWorkflowMeta,
   executeDialog,
-  bulkActions,
-  recoverAction
+  groupAction,
+  recoverAction,
+  tableColumns,
 } from '../../utils/table-config/granules';
 import statusOptions from '../../utils/status';
 import { strings } from '../locale';
@@ -145,10 +146,6 @@ class GranulesOverview extends React.Component {
     const { list } = granules;
     const { dropdowns } = collections;
     const { count, queriedAt } = list.meta;
-    const groupAction = {
-      title: 'Granule Actions',
-      description: 'Select the action you would like to perform on the selected granules from the table below',
-    };
 
     return (
       <div className='page__component'>

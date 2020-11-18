@@ -14,9 +14,10 @@ import {
   listWorkflows,
 } from '../../actions';
 import {
+  bulkActions,
   defaultWorkflowMeta,
   executeDialog,
-  bulkActions,
+  groupAction,
   tableColumns,
 } from '../../utils/table-config/granules';
 import List from '../Table/Table';
@@ -146,6 +147,7 @@ const CollectionGranules = ({
           action={listGranules}
           query={query}
           bulkActions={generateBulkActions()}
+          groupAction={groupAction}
           rowId="granuleId"
           initialSortId="timestamp"
           tableColumns={tableColumns}

@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Implement lazy loading for SortableTable, Datepicker, and Sidebar
   - Improve performance
 
+### Changed
+
+- **CUMULUS-2251**
+  - Add the `Granule Actions` button
+
 ## [v3.0.0]
 
 ### Fixed

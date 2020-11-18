@@ -33,6 +33,11 @@ import TextArea from '../../components/TextAreaForm/text-area';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
 import GranuleInventory from '../../components/Granules/granule-inventory';
 
+export const groupAction = {
+  title: 'Granule Actions',
+  description: 'Select the action you would like to perform on the selected granules from the table below',
+};
+
 export const tableColumns = [
   {
     Header: 'Status',
