@@ -7,7 +7,7 @@ import Timer from '../Timer/timer';
 const ListActions = ({
   children,
   bulkActions,
-  groupActions,
+  groupAction,
   onBulkActionSuccess,
   onBulkActionError,
   selected,
@@ -18,7 +18,7 @@ const ListActions = ({
 }) => {
   const [actionsExpanded, setFiltersExpanded] = useState(false);
   const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
-  const hasGroupActions = hasActions && groupActions;
+  const hasGroupAction = hasActions && groupAction;
 
   function handleBulkActionSuccess(results, error) {
     if (typeof onBulkActionSuccess === 'function') {
@@ -66,10 +66,10 @@ const ListActions = ({
           <div className='form--controls'>
             <button
               aria-expanded={actionsExpanded}
-              className={`button button--small form-group__element button--actions${actionsExpanded ? '--collapsed' : ''}`}
+              className={`button button--small form-group__element button--group-action${actionsExpanded ? '--collapsed' : ''}`}
               onClick={() => setFiltersExpanded(!actionsExpanded)}
             >
-              {groupActions.title}
+              {groupAction.title}
             </button>
           </div>
           <Timer
@@ -82,8 +82,8 @@ const ListActions = ({
         </div>
         <Collapse in={actionsExpanded}>
           <div className='group-action--wrapper'>
-            <h4>{groupActions.title}</h4>
-            <p>{groupActions.description}</p>
+            <h4>{groupAction.title}</h4>
+            <p>{groupAction.description}</p>
             <div className='form--controls'>
               {listBulkActions()}
             </div>
@@ -115,8 +115,8 @@ const ListActions = ({
   return (
     <div className={`list-action-wrapper${!hasActions || !children ? ' no-actions' : ''}`}>
       {children}
-      {hasGroupActions && renderGroupActions()}
-      {!hasGroupActions && renderActions()}
+      {hasGroupAction && renderGroupActions()}
+      {!hasGroupAction && renderActions()}
     </div>
   );
 };
@@ -124,7 +124,7 @@ const ListActions = ({
 ListActions.propTypes = {
   children: PropTypes.node,
   bulkActions: PropTypes.array,
-  groupActions: PropTypes.object,
+  groupAction: PropTypes.object,
   onBulkActionSuccess: PropTypes.func,
   onBulkActionError: PropTypes.func,
   selected: PropTypes.array,

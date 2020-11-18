@@ -136,7 +136,7 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
   }
 
   /*******ButtonGroup & Group CTA******/
-  &--actions {
+  &--group-action {
     background-color: $light-green;
     position: relative;
     &:hover {
