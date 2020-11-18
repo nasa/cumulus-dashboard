@@ -139,10 +139,16 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
   &--actions {
     background-color: $light-green;
     position: relative;
+    &:hover {
+      background-color: darken($light-green, 10%);
+    }
 
     &--collapsed {
       background-color: $midnight-blue;
       color: $white;
+      &:hover {
+        background-color: lighten($midnight-blue, 25%);
+      }
     }
 
     &:before, &--collapsed:before {

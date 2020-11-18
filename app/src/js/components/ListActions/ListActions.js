@@ -84,26 +84,37 @@ const ListActions = ({
     <div className={`list-action-wrapper${!hasActions || !children ? ' no-actions' : ''}`}>
       {children}
       {hasGroupActions && (
-        <div className={'filters filter__item form-group__element'}>
-          <button
-            aria-expanded={actionsExpanded}
-            className={`button button--small form-group__element button--actions${actionsExpanded ? '--collapsed' : ''}`}
-            onClick={() => setFiltersExpanded(!actionsExpanded)}
-          >
-            {groupActions.title}
-          </button>
+        <div className={'list-actions'}>
+          <div className='form--controls'>
+            <button
+              aria-expanded={actionsExpanded}
+              className={`button button--small form-group__element button--actions${actionsExpanded ? '--collapsed' : ''}`}
+              onClick={() => setFiltersExpanded(!actionsExpanded)}
+            >
+              {groupActions.title}
+            </button>
+          </div>
+          <Timer
+            noheader={!hasActions}
+            dispatch={dispatch}
+            action={action}
+            config={queryConfig}
+            reload={completedBulkActions}
+          />
         </div>
       )}
       <div className={`list-actions${hasGroupActions ? ' group-actions--wrapper' : ''}`}>
         {hasActions &&
           renderActions()}
-        <Timer
-          noheader={!hasActions}
-          dispatch={dispatch}
-          action={action}
-          config={queryConfig}
-          reload={completedBulkActions}
-        />
+        {!hasGroupActions && (
+          <Timer
+            noheader={!hasActions}
+            dispatch={dispatch}
+            action={action}
+            config={queryConfig}
+            reload={completedBulkActions}
+          />
+        )}
       </div>
     </div>
   );
