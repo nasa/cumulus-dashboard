@@ -150,7 +150,7 @@ describe('Dashboard Granules Page', () => {
 
       cy.contains('.heading--xlarge', 'Granules');
 
-      cy.contains('a', 'Create Granule Inventory List');
+      cy.contains('button', 'Create Granule Inventory List');
     });
 
     it('Should update dropdown with label when visiting bookmarkable URL', () => {

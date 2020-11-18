@@ -542,7 +542,7 @@ describe('Dashboard Collections Page', () => {
           .and('contain', 'Running');
       });
 
-      cy.get('[data-cy=endDateTime] > .react-datetime-picker > .react-datetime-picker__wrapper > .react-datetime-picker__clear-button > .react-datetime-picker__clear-button__icon').click();
+      cy.get('[data-cy="endDateTime"] .react-datetime-picker__clear-button__icon').click();
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')

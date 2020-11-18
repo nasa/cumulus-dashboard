@@ -265,7 +265,7 @@ describe('Dashboard Home Page', () => {
       cy.task('log', 'Start test');
 
       cy.get('nav li').last().within(() => {
-        cy.get('a').should('have.text', 'Log out');
+        cy.get('button').should('have.text', 'Log out');
       });
 
       cy.task('log', 'Click');
