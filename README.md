@@ -27,10 +27,10 @@ The following environment variables override the default values.
 
 | Env Name | Description | Default |
 | -------- | ----------- | -------- |
-| APIROOT | the API URL. This must be set by the user. | *example.com* |
+| APIROOT | The API URL. This must be set by the user. | *example.com* |
 | AUTH_METHOD | The type of authorization method protecting the Cumulus API. [launchpad or earthdata] | *earthdata*  |
 | AWS\_REGION | Region in which Cumulus API is running. | *us-west-2*  |
-| DAAC\_NAME | e.g. LPDAAC, | *Local* |
+| DAAC\_NAME | An identifier: e.g. LPDAAC, | *Local* |
 | ENABLE\_RECOVERY | If true, adds recovery options to the granule and collection pages. | *false* |
 | ESROOT | \<optional\> Should point to an Elasticsearch endpoint. Must be set for distribution metrics to be displayed. | |
 | ES\_PASSWORD | \<optional\> Elasticsearch password,needed when protected by basic authorization | |
@@ -39,8 +39,8 @@ The following environment variables override the default values.
 | KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set to examine distribution metrics details. | |
 | LABELS | Choose `gitc` or `daac` localization. | *daac* |
 | SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from Cumulus Distribution API.| *false* |
-| SHOW\_TEA\_METRICS | \<optional\> display metrics from Thin Egress Application (TEA). | *true* |
-| STAGE | e.g. PROD, UAT, displayed at top of dashboard page | *development* |
+| SHOW\_TEA\_METRICS | \<optional\> Display metrics from Thin Egress Application (TEA). | *true* |
+| STAGE | Identifier displayed at top of dashboard page: e.g. PROD, UAT | *development* |
 
 ## Quick start
 
@@ -52,7 +52,7 @@ The dashboard source is available on github and can be cloned with git.
 ```
 The cloned directory `./cumulus-dashboard` will be refered as the root directory of the project and commands that are referenced in this document, should start from that directory.
 
-### Build the dashboard using docker
+### Build the dashboard using Docker
 
 It is easy to build a producution-ready, deployable version of the Cumulus dashboard without having to learn the complicated build process details.  A single script, `./bin/build_dashboard_via_docker.sh`, when combined with your dashboard's environment customizations, allows you to run the entire build process within a Docker container.
 
@@ -74,13 +74,12 @@ Set the environment and build the dashboard with these commands:
   $ source production.env && ./bin/build_dashboard_via_docker.sh
 ```
 
-This creates the compiled dashboard in the `./dist` directory. You can now deploy this directory to AWS behind [CloudFront](https://aws.amazon.com/cloudfront/),
-following the cumulus operator docs for [serving the dashboard from CloudFront](https://nasa.github.io/cumulus/docs/next/operator-docs/serve-dashboard-from-cloudfront).
+This creates the compiled dashboard in the `./dist` directory. You can now deploy this directory to AWS behind [CloudFront](https://aws.amazon.com/cloudfront/).  If you are in NGAP, follow the instructions for "Request Public or Protected Access to the APIs and Dashboard" on the earthdata wiki page [Using Cumulus with Private APIs](https://wiki.earthdata.nasa.gov/display/CUMULUS/Cumulus+Deployments+in+NGAP).
 
 
 ### Run the dashboard locally via Docker Image
 
-Once you have a built a dashboard and the contents are in the `./dist` directory, you can create a docker container that will serve the dashboard behind a simple nginx configuration. Having a runnable Docker image is useful for testing a build before deployment or for NGAP Sandbox environments, where if you configure your computer to [access Cumulus APIs via SSM](https://wiki.earthdata.nasa.gov/display/CUMULUS/Accessing+Cumulus+APIs+via+SSM), you can run the dashboard container locally against the live Sandbox Cumulus API.
+Once you have a built a dashboard and the contents are in the `./dist` directory, you can create a Docker container that will serve the dashboard behind a simple nginx configuration. Having a runnable Docker image is useful for testing a build before deployment or for NGAP Sandbox environments, where if you configure your computer to [access Cumulus APIs via SSM](https://wiki.earthdata.nasa.gov/display/CUMULUS/Accessing+Cumulus+APIs+via+SSM), you can run the dashboard container locally against the live Sandbox Cumulus API.
 
 The script `./bin/build_dashboard_image.sh` takes a pre-built dashboard in the `./dist` directly and packages it in a Docker container behind a basic nginx configuration. The script takes one optional parameter, the tag to name the generated image which defaults to cumulus-dashboard:latest.
 
@@ -222,7 +221,7 @@ When the cypress editor opens, click on `run all specs`.
 
 ### Local API server
 
-For **development** and **testing** purposes only, you can run a Cumulus API locally. This requires `docker-compose` in order to stand up the docker containers that serve Cumulus API.  There are a number of commands that will stand up different portions of the stack.  See the [Docker Service Diagram](#dockerdiagram) and examine the `docker-compose*.yml` file in the `/localAPI/` directory to see all of the possible combinations. Described below are each of the provided commands for running the dashboard and Cumulus API locally.
+For **development** and **testing** purposes only, you can run a Cumulus API locally. This requires `docker-compose` in order to stand up the Docker containers that serve Cumulus API.  There are a number of commands that will stand up different portions of the stack.  See the [Docker Service Diagram](#dockerdiagram) and examine the `docker-compose*.yml` file in the `/localAPI/` directory to see all of the possible combinations. Described below are each of the provided commands for running the dashboard and Cumulus API locally.
 
 *Important Note: These `docker-compose` commands do not build distributable containers, but are a provided as testing conveniences.  The docker-compose[-\*].yml files show that they work by linking your local directories into the container.*
 
@@ -236,14 +235,14 @@ These are started and stopped with the commands:
 
 After these containers are running, you can start a cumulus API locally in a terminal window `npm run serve-api`, the dashboard in another window. `[HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve` and finally cypress in a third window. `npm run cypress`.
 
-Once the docker app is running, If you would like to see sample data you can seed the database. This will load the same sample data into the application that is used during cypress testing.
+Once the Docker app is running, If you would like to see sample data you can seed the database. This will load the same sample data into the application that is used during cypress testing.
 ```bash
   $ npm run seed-database
 ```
 
-If you prefer to stand up more of the stack in docker containers, you can include the cumulus api in the docker-compose stack. To run the Cumulus API in a docker container, (which still leaves running the dashboard and cypress up to you), just run the `cumulusapi` service.
+If you prefer to stand up more of the stack in Docker containers, you can include the cumulus api in the docker-compose stack. To run the Cumulus API in a Docker container, (which still leaves running the dashboard and cypress up to you), just run the `cumulusapi` service.
 
-The cumulusapi docker service is started and stopped:
+The cumulusapi Docker service is started and stopped:
 ```bash
   $ npm run start-cumulusapi
   $ npm run stop-cumulusapi
@@ -260,7 +259,7 @@ Creating localapi_elasticsearch_1 ... done
 Creating localapi_localstack_1    ... done
 Creating localapi_serve_api_1     ... done
 ```
-In order to find out that the stack is fully up and ready to receive requests, you can run the command `npm run view-docker-logs` to follow the progress of the stack.  When the docker logs have shown the following:
+In order to find out that the stack is fully up and ready to receive requests, you can run the command `npm run view-docker-logs` to follow the progress of the stack.  When the Docker logs have shown the following:
 ```bash
 serve_api_1      | Starting server on port 5001
 ```
@@ -271,9 +270,9 @@ localstack_1     | Ready.
 you should be able to verify access to the local Cumulus API at http://localhost:5001/token
 
 
-Then you can run the dashboard locally (without docker) `[HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve` and open cypress tests `npm run cypress`.
+Then you can run the dashboard locally (without Docker) `[HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve` and open cypress tests `npm run cypress`.
 
-The docker compose stack also includes a command to let a developer start all development containers with a single command.
+The Docker compose stack also includes a command to let a developer start all development containers with a single command.
 
 Bring up and down the entire stack (the localAPI and the dashboard) with:
 ```bash
@@ -294,7 +293,7 @@ dashboard_1      | Hit CTRL-C to stop the server
 ```
 
 
-##### Troubleshooting docker containers.
+##### Troubleshooting Docker containers.
 
 If something is not running correctly, or you're just interested, you can view the logs with a helper script, this will print out logs from each of the running docker containers.
 ```bash
