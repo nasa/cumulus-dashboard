@@ -32,7 +32,7 @@ const ListActions = ({
     }
   }
 
-  function renderBulkActions() {
+  function listBulkActions() {
     return bulkActions.map((item, index) => {
       const { Component, text } = item;
       return (
@@ -59,31 +59,9 @@ const ListActions = ({
     });
   }
 
-  function renderActions() {
-    if (groupActions) {
-      return (
-        <Collapse in={actionsExpanded}>
-          <div className='group-actions'>
-            <h4>{groupActions.title}</h4>
-            <p>{groupActions.description}</p>
-            <div className='form--controls'>
-              {renderBulkActions()}
-            </div>
-          </div>
-        </Collapse>
-      );
-    }
+  function renderGroupActions() {
     return (
-      <div className='form--controls'>
-        {renderBulkActions()}
-      </div>
-    );
-  }
-
-  return (
-    <div className={`list-action-wrapper${!hasActions || !children ? ' no-actions' : ''}`}>
-      {children}
-      {hasGroupActions && (
+      <>
         <div className={'list-actions'}>
           <div className='form--controls'>
             <button
@@ -102,20 +80,45 @@ const ListActions = ({
             reload={completedBulkActions}
           />
         </div>
-      )}
-      <div className={`list-actions${hasGroupActions ? ' group-actions--wrapper' : ''}`}>
-        {hasActions &&
-          renderActions()}
-        {!hasGroupActions && (
-          <Timer
-            noheader={!hasActions}
-            dispatch={dispatch}
-            action={action}
-            config={queryConfig}
-            reload={completedBulkActions}
-          />
+        <div className={'list-actions group-actions--wrapper'}>
+          <Collapse in={actionsExpanded}>
+            <div className='group-actions'>
+              <h4>{groupActions.title}</h4>
+              <p>{groupActions.description}</p>
+              <div className='form--controls'>
+                {listBulkActions()}
+              </div>
+            </div>
+          </Collapse>
+        </div>
+      </>
+    );
+  }
+
+  function renderActions() {
+    return (
+      <div className='list-actions'>
+        {hasActions && (
+          <div className='form--controls'>
+            {listBulkActions()}
+          </div>
         )}
+        <Timer
+          noheader={!hasActions}
+          dispatch={dispatch}
+          action={action}
+          config={queryConfig}
+          reload={completedBulkActions}
+        />
       </div>
+    );
+  }
+
+  return (
+    <div className={`list-action-wrapper${!hasActions || !children ? ' no-actions' : ''}`}>
+      {children}
+      {hasGroupActions && renderGroupActions()}
+      {!hasGroupActions && renderActions()}
     </div>
   );
 };
