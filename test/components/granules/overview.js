@@ -120,7 +120,7 @@ test('GranulesOverview will download CSV data when the Download Granule List but
 
   const overviewWrapper = providerWrapper.find('GranulesOverview').dive();
 
-  const granuleCSVButton = overviewWrapper.find('a.csv__download');
+  const granuleCSVButton = overviewWrapper.find('.csv__download');
   granuleCSVButton.simulate('click');
 
   // should not leave extra link on the page
