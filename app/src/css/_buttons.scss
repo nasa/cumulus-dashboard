@@ -147,7 +147,7 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       background-color: $midnight-blue;
       color: $white;
       &:hover {
-        background-color: lighten($midnight-blue, 25%);
+        background-color: lighten($midnight-blue, 20%);
       }
     }
 

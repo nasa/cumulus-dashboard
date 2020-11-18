@@ -106,14 +106,21 @@
   }
 }
 
-.group-actions-wrapper {
-  display: flex;
+.group-action--wrapper {
   background-color: $white;
-  padding: 2em;
-  margin-left: 0;
-  margin-bottom: 2em;
+  padding: 1em 1em .4em 1em;
   border: 1px solid $border-grey;
   box-shadow: $shadow__default;
+  width: 100%;
+
+  h {
+    font-size: .86em;
+  }
+
+  p {
+    font-size: .86em;
+    padding-bottom: 1.25em;
+  }
 }
 
 .list-action-wrapper {
@@ -137,27 +144,6 @@
 
   .form--controls {
     flex-grow: 1;
-  }
-
-  &.group-actions--wrapper {
-    justify-content: space-between;
-
-    .group-actions {
-      background-color: $white;
-      padding: 1em;
-      border: 1px solid $border-grey;
-      box-shadow: $shadow__default;
-      text-align: left;
-
-      h {
-        font-size: .86em;
-      }
-
-      p {
-        font-size: .86em;
-        padding-bottom: 1.25rem;
-      }
-    }
   }
 }
 

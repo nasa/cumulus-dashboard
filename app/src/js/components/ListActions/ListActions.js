@@ -80,17 +80,15 @@ const ListActions = ({
             reload={completedBulkActions}
           />
         </div>
-        <div className={'list-actions group-actions--wrapper'}>
-          <Collapse in={actionsExpanded}>
-            <div className='group-actions'>
-              <h4>{groupActions.title}</h4>
-              <p>{groupActions.description}</p>
-              <div className='form--controls'>
-                {listBulkActions()}
-              </div>
+        <Collapse in={actionsExpanded}>
+          <div className='group-action--wrapper'>
+            <h4>{groupActions.title}</h4>
+            <p>{groupActions.description}</p>
+            <div className='form--controls'>
+              {listBulkActions()}
             </div>
-          </Collapse>
-        </div>
+          </div>
+        </Collapse>
       </>
     );
   }
