@@ -121,7 +121,7 @@ describe('Dashboard Collections Page', () => {
 
       // On the Collections page, click the Add Collection button
       cy.visit('/collections');
-      cy.contains('.heading--large', 'Collection Overview');
+      cy.contains('.heading--large', 'Collections Overview');
       cy.clearStartDateTime();
       cy.wait('@getCollections');
       cy.contains('a', 'Add Collection').click();
