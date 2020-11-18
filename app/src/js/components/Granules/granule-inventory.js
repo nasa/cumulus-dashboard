@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import queryString from 'query-string';
 import { createReconciliationReport } from '../../actions';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
 import DefaultModal from '../Modal/modal';
@@ -15,8 +16,7 @@ const GranuleInventory = ({
   confirmAction,
   granules,
   element = 'button',
-  selected,
-  queryConfig
+  selected
 }) => {
   const defaultListName = `granuleList-${moment().format('YYYYMMDDTHHmmssSSS')}`;
   const [showModal, setShowModal] = useState(false);
@@ -31,7 +31,8 @@ const GranuleInventory = ({
   }
 
   function submitListRequest(e) {
-    const { collectionId, status, infix: granuleIdFilter } = queryConfig;
+    const queryParams = queryString.parse(history.location.search);
+    const { collectionId, status, search: granuleIdFilter } = queryParams;
 
     const requestBody = {
       reportName: listName,
@@ -110,7 +111,6 @@ GranuleInventory.propTypes = {
   className: PropTypes.string,
   element: PropTypes.string,
   granules: PropTypes.object,
-  queryConfig: PropTypes.object,
   selected: PropTypes.array,
 };
 

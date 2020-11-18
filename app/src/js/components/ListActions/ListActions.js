@@ -37,7 +37,7 @@ const ListActions = ({
       const { Component, text } = item;
       return (
         <React.Fragment key={text || index}>
-          {Component && React.cloneElement(Component, { selected, queryConfig })}
+          {Component && React.cloneElement(Component, { selected })}
           {!Component &&
             <BatchAsyncCommand
               dispatch={dispatch}
