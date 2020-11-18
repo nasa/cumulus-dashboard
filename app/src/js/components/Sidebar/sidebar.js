@@ -69,6 +69,7 @@ const Sidebar = ({
   return (
     <div className={`sidebar-toggle--wrapper${sidebarOpen ? ' active' : ''}`}>
       <button
+        aria-label={sidebarOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
         className={`sidebar-toggle button--round button--${
           sidebarOpen ? 'close' : 'open'
         }-sidebar`}
