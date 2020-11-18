@@ -299,7 +299,8 @@ export class Form extends React.Component {
             // textarea forms pass a mode value to ace
             const mode = (type === formTypes.textArea && input.mode) || null;
             // subforms have fieldsets that define child form structure
-            const fieldSet = (type === formTypes.subform && input.fieldSet) || null;
+            const fieldset = (type === formTypes.subform && input.fieldSet) || null;
+            const autoComplete = (type === formTypes.text && input.isPassword) ? 'on' : null;
             // text forms can be type=password or number
             let textType = (type === formTypes.text && input.isPassword) ? 'password' : null;
 
@@ -314,8 +315,9 @@ export class Form extends React.Component {
               error,
               mode,
               options,
-              fieldSet,
+              fieldset,
               type: textType,
+              autoComplete,
               onChange: this.onChange
             });
 

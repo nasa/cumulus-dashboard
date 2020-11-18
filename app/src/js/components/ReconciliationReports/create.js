@@ -151,7 +151,7 @@ const CreateReconciliationReport = ({
           <label htmlFor="reportType">Report Type</label>
           <div className="form__item form__item--tooltip">
             <Field
-              id="reportType"
+              inputId="reportType"
               className="reportType"
               name="reportType"
               component={SimpleDropdownAdapter}
@@ -224,7 +224,7 @@ const CreateReconciliationReport = ({
           <div className="form__item">
             <label htmlFor="provider">Provider</label>
             <Field
-              id="provider"
+              inputId="provider"
               className="provider"
               name="provider"
               component={SimpleDropdownAdapter}
@@ -239,7 +239,7 @@ const CreateReconciliationReport = ({
           <div className="form__item">
             <label htmlFor="collectionId">Collection ID</label>
             <Field
-              id="collectionId"
+              inputId="collectionId"
               className="collectionId"
               name="collectionId"
               component={SimpleDropdownAdapter}
@@ -254,7 +254,7 @@ const CreateReconciliationReport = ({
           <div className="form__item">
             <label htmlFor="granuleId">Granule ID</label>
             <Field
-              id="granuleId"
+              inputId="granuleId"
               className="granuleId"
               name="granuleId"
               component={SimpleDropdownAdapter}

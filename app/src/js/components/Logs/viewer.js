@@ -170,11 +170,11 @@ class LogViewer extends React.Component {
               />
             </form>
             <form className="form-group__element form-group__element--small">
-              <label htmlFor="search">Search</label>
+              <label htmlFor="search-logs">Search</label>
               <div className="search__wrapper">
                 <input
                   className="search"
-                  id="search"
+                  id="search-logs"
                   type="search"
                   placeholder="Search all logs"
                   value={this.state.search}

@@ -64,6 +64,7 @@ const TableHeader = ({
           action={action}
           clear={clear}
           clearButton={false}
+          inputProps={{ 'aria-label': 'Limit' }}
           onChange={handleLimitChange}
           options={pageSizeOptions}
           paramKey="limit"

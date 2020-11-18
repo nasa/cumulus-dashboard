@@ -15,7 +15,7 @@ import TableFilters from '../Table/TableFilters';
  * Taken from react-table examples
  */
 const IndeterminateCheckbox = forwardRef(
-  ({ indeterminate, ...rest }, ref) => {
+  ({ indeterminate, title, ...rest }, ref) => {
     const defaultRef = useRef();
     const resolvedRef = ref || defaultRef;
 
@@ -24,14 +24,15 @@ const IndeterminateCheckbox = forwardRef(
     }, [resolvedRef, indeterminate]);
 
     return (
-      <input type="checkbox" ref={resolvedRef} {...rest} />
+      <input type="checkbox" ref={resolvedRef} aria-label={title} title={title} {...rest} />
     );
   }
 );
 
 IndeterminateCheckbox.propTypes = {
   indeterminate: PropTypes.any,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  title: PropTypes.string,
 };
 
 const SortableTable = ({

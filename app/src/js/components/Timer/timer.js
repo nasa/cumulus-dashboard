@@ -108,6 +108,7 @@ class Timer extends React.Component {
           onClick={() => this.refreshTimer(this.props.config)}
           role="button"
           tabIndex="0"
+          aria-label="Refresh Timer"
         ></span>
         <span data-cy="startStopLabel" className="form-group__updating">
           {running ? `Next update in: ${seconds}` : 'Update'}

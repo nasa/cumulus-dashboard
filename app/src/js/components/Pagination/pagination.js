@@ -88,6 +88,7 @@ const Pagination = ({
             action={action}
             clear={clear}
             clearButton={false}
+            inputProps={{ 'aria-label': 'Page' }}
             onChange={handleDropdownChange}
             options={[
               {
