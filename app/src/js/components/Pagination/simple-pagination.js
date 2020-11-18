@@ -31,13 +31,13 @@ const SimplePagination = ({
     <div className="pagination simple-pagination">
       <ol>
         <li>
-          <a
+          <button
             className={`previous ${canPreviousPage ? '' : disabled}`}
             data-value={currentPage - 1}
             onClick={() => previousPage()}
           >
             Previous
-          </a>
+          </button>
         </li>
         {pageOptions.map((page) => {
           const firstPage = 1;
@@ -62,20 +62,20 @@ const SimplePagination = ({
               key={page}
               className={page === pageIndex ? 'pagination__link--active' : ''}
             >
-              <a data-value={pageNumber} onClick={() => gotoPage(page)}>
+              <button data-value={pageNumber} onClick={() => gotoPage(page)}>
                 {pageNumber}
-              </a>
+              </button>
             </li>
           );
         })}
         <li>
-          <a
+          <button
             className={`next ${canNextPage ? '' : disabled}`}
             data-value={currentPage + 1}
             onClick={() => nextPage()}
           >
             Next
-          </a>
+          </button>
         </li>
       </ol>
     </div>

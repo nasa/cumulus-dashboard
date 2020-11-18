@@ -26,7 +26,7 @@ input[type="checkbox"], input[type="radio"] {
   color: $lighter-grey;
 }
 
-label {
+label, .label {
   display: block;
   font-weight: $base-font-semibold;
   margin-bottom: .3em;
@@ -376,6 +376,8 @@ select option{
 
 .subform__button {
   margin-left: 1em;
+  background: none;
+  border: none;
 }
 
 .subform__fields {
@@ -468,10 +470,6 @@ select option{
       width: 92%;
     }
   }
-}
-
-.form__dropdown {
-  width: 92%;
 }
 
 .label__description {

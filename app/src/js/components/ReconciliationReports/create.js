@@ -147,9 +147,10 @@ const CreateReconciliationReport = ({
     return (
       <form onSubmit={handleSubmit} className="create-report">
         <div>
-          <label>Report Type</label>
+          <label htmlFor="reportType">Report Type</label>
           <div className="form__item form__item--tooltip">
             <Field
+              id="reportType"
               className="reportType"
               name="reportType"
               component={SimpleDropdownAdapter}
@@ -178,8 +179,9 @@ const CreateReconciliationReport = ({
             <h2 className="heading--large">{displayCase(reportType)}</h2>
           )}
           <div className="form__item">
-            <label>Report Name</label>
+            <label htmlFor="reportName">Report Name</label>
             <Field
+              id="reportName"
               className="reportName"
               name="reportName"
               component={TextFormAdapter}
@@ -188,7 +190,7 @@ const CreateReconciliationReport = ({
             />
           </div>
           <div className="form__item">
-            <label>Date Range</label>
+            <span className="label">Date Range</span>
             <Field
               className="startTimestamp"
               name="startTimestamp"
@@ -219,8 +221,9 @@ const CreateReconciliationReport = ({
             />
           </div>
           <div className="form__item">
-            <label>Provider</label>
+            <label htmlFor="provider">Provider</label>
             <Field
+              id="provider"
               className="provider"
               name="provider"
               component={SimpleDropdownAdapter}
@@ -233,8 +236,9 @@ const CreateReconciliationReport = ({
             />
           </div>
           <div className="form__item">
-            <label>Collection ID</label>
+            <label htmlFor="collectionId">Collection ID</label>
             <Field
+              id="collectionId"
               className="collectionId"
               name="collectionId"
               component={SimpleDropdownAdapter}
@@ -247,8 +251,9 @@ const CreateReconciliationReport = ({
             />
           </div>
           <div className="form__item">
-            <label>Granule ID</label>
+            <label htmlFor="granuleId">Granule ID</label>
             <Field
+              id="granuleId"
               className="granuleId"
               name="granuleId"
               component={SimpleDropdownAdapter}
@@ -267,8 +272,9 @@ const CreateReconciliationReport = ({
               results.
             </span>
             <div className="radio location">
-              <label>
+              <label htmlFor="all">
                 <Field
+                  id="all"
                   name="location"
                   component="input"
                   type="radio"
@@ -276,8 +282,9 @@ const CreateReconciliationReport = ({
                 />
                 All <i>(default)</i>
               </label>
-              <label>
+              <label htmlFor="S3">
                 <Field
+                  id="S3"
                   name="location"
                   component="input"
                   type="radio"
@@ -285,8 +292,9 @@ const CreateReconciliationReport = ({
                 />
                 S3
               </label>
-              <label>
+              <label htmlFor="CMR">
                 <Field
+                  id="CMR"
                   name="location"
                   component="input"
                   type="radio"

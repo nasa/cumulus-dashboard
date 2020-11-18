@@ -223,10 +223,10 @@ class GranulesOverview extends React.Component {
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num-title'>{count ? ` ${tally(count)}` : 0}</span></h2>
-            <a className='csv__download button button--small button--file button--green form-group__element--right'
+            <button className='csv__download button button--small button--file button--green form-group__element--right'
               id='download_link'
               onClick={this.toggleModal}
-            >Create Granule Inventory List</a>
+            >Create Granule Inventory List</button>
             <DefaultModal
               className="granule-inventory"
               onCloseModal={this.closeModal}
