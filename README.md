@@ -27,10 +27,10 @@ The following environment variables override the default values.
 
 | Env Name | Description | Default |
 | -------- | ----------- | -------- |
-| APIROOT | the API URL. This must be set by the user. | *example.com* |
+| APIROOT | The API URL. This must be set by the user. | *example.com* |
 | AUTH_METHOD | The type of authorization method protecting the Cumulus API. [launchpad or earthdata] | *earthdata*  |
 | AWS\_REGION | Region in which Cumulus API is running. | *us-west-2*  |
-| DAAC\_NAME | e.g. LPDAAC, | *Local* |
+| DAAC\_NAME | An identifier: e.g. LPDAAC, | *Local* |
 | ENABLE\_RECOVERY | If true, adds recovery options to the granule and collection pages. | *false* |
 | ESROOT | \<optional\> Should point to an Elasticsearch endpoint. Must be set for distribution metrics to be displayed. | |
 | ES\_PASSWORD | \<optional\> Elasticsearch password,needed when protected by basic authorization | |
@@ -39,8 +39,8 @@ The following environment variables override the default values.
 | KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set to examine distribution metrics details. | |
 | LABELS | Choose `gitc` or `daac` localization. | *daac* |
 | SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from Cumulus Distribution API.| *false* |
-| SHOW\_TEA\_METRICS | \<optional\> display metrics from Thin Egress Application (TEA). | *true* |
-| STAGE | e.g. PROD, UAT, displayed at top of dashboard page | *development* |
+| SHOW\_TEA\_METRICS | \<optional\> Display metrics from Thin Egress Application (TEA). | *true* |
+| STAGE | Identifier displayed at top of dashboard page: e.g. PROD, UAT | *development* |
 
 ## Quick start
 
