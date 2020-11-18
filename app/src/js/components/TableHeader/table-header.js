@@ -32,7 +32,7 @@ const TableHeader = ({
     if (selections.length === 0) {
       setSelectedValues([]);
     } else {
-      const { id: value } = selections[0];
+      const { label: value } = selections[0];
       setSelectedValues([{
         id: value,
         label: value,
