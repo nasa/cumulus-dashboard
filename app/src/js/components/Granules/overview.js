@@ -112,7 +112,8 @@ class GranulesOverview extends React.Component {
     };
     const { granules, config } = this.props;
     const { selected } = this.state;
-    let actions = bulkActions(granules, actionConfig, selected);
+    const selectedGranules = selected.map((id) => granules.list.data.find((g) => id === g.granuleId));
+    let actions = bulkActions(granules, actionConfig, selectedGranules);
     if (config.enableRecovery) {
       actions = actions.concat(recoverAction(granules, actionConfig));
     }

@@ -383,6 +383,24 @@ export const deleteGranuleClearError = (granuleId) => ({
   id: granuleId
 });
 
+export const removeAndDeleteGranule = (granuleId) => (dispatch, getState) => {
+  const granules = getState().granules.list.data;
+  const granuleToDelete = granules.find((g) => g.granuleId === granuleId);
+
+  // If the granule is published to CMR, remove it from CMR and then delete.
+  if (granuleToDelete.published) {
+    return dispatch(removeGranule(granuleId))
+      .then((removeResponse) => dispatch(deleteGranule(granuleId))) // TODO if not removed, don't delete
+      .catch((error) => dispatch({
+        id: granuleId,
+        type: types.GRANULE_DELETE_CLEAR_ERROR, // TODO is this right?
+        error
+      }));
+  }
+
+  return dispatch(deleteGranule(granuleId));
+};
+
 export const removeAndDeleteGranuleClearError = (granuleId) => ({
 
 });

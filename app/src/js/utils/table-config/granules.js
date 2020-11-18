@@ -246,11 +246,9 @@ const granuleModalJourney = ({
   return modalOptions;
 };
 
-const findGranulesByIds = (granules, granuleIds) => granuleIds.map((id) => granules.find((g) => id === g.granuleId));
 const findPublishedGranules = (granules) => granules.filter((g) => g.published === true);
 
-const containsPublishedGranules = (granules, selected) => {
-  const selectedGranules = findGranulesByIds(granules.list.data, selected);
+const containsPublishedGranules = (selectedGranules) => {
   const publishedGranules = findPublishedGranules(selectedGranules);
 
   if (!Array.isArray(publishedGranules) || !publishedGranules.length) {
@@ -270,7 +268,7 @@ export const reingestAction = (granules) => ({
   getModalOptions: granuleModalJourney
 });
 
-export const bulkActions = (granules, config, selected) => [
+export const bulkActions = (granules, config, selectedGranules) => [
   reingestAction(granules),
   {
     text: 'Execute',
@@ -299,9 +297,9 @@ export const bulkActions = (granules, config, selected) => [
   },
   {
     text: 'Delete',
-    action: containsPublishedGranules(granules, selected) ? removeAndDeleteGranule : deleteGranule,
+    action: containsPublishedGranules(selectedGranules) ? removeAndDeleteGranule : deleteGranule,
     state: granules.deleted,
-    clearError: removeAndDeleteGranuleClearError,
-    confirm: containsPublishedGranules(granules, selected) ? confirmRemoveFromCMR : confirmDelete,
+    clearError: deleteGranuleClearError,
+    confirm: containsPublishedGranules(selectedGranules) ? confirmRemoveFromCMR : confirmDelete,
     className: 'button--delete'
   }];
