@@ -53,6 +53,7 @@ export const tableColumns = [
       }
       return 'N/A';
     },
+    disableSortBy: true,
   }
 ];
 

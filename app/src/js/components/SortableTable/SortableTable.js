@@ -35,18 +35,16 @@ IndeterminateCheckbox.propTypes = {
 };
 
 const SortableTable = ({
-  sortId,
-  initialSortId,
-  rowId,
-  order = 'desc',
   canSelect,
   changeSortProps,
-  tableColumns = [],
-  data = [],
-  onSelect,
   clearSelected,
+  data = [],
+  initialHiddenColumns = [],
+  onSelect,
+  rowId,
+  shouldManualSort = false,
   shouldUsePagination = false,
-  initialHiddenColumns = []
+  tableColumns = [],
 }) => {
   const defaultColumn = useMemo(
     () => ({
@@ -58,8 +56,6 @@ const SortableTable = ({
     }),
     []
   );
-
-  const shouldManualSort = !!initialSortId;
 
   const {
     getTableProps,
@@ -146,12 +142,10 @@ const SortableTable = ({
   }, [selectedRowIds, onSelect]);
 
   useEffect(() => {
-    const sortIdProps = sortId ? [{ id: sortId, desc: (order === 'desc') }] : [];
-    const sortProps = (sortBy.length) ? sortBy : sortIdProps;
     if (typeof changeSortProps === 'function') {
-      changeSortProps(sortProps);
+      changeSortProps(sortBy);
     }
-  }, [changeSortProps, sortBy, sortId, order]);
+  }, [changeSortProps, sortBy]);
 
   return (
     <div className='table--wrapper'>
@@ -237,18 +231,16 @@ const SortableTable = ({
 };
 
 SortableTable.propTypes = {
-  data: PropTypes.array,
-  order: PropTypes.string,
-  sortId: PropTypes.string,
-  initialSortId: PropTypes.string,
-  changeSortProps: PropTypes.func,
-  onSelect: PropTypes.func,
   canSelect: PropTypes.bool,
-  rowId: PropTypes.any,
-  tableColumns: PropTypes.array,
+  changeSortProps: PropTypes.func,
   clearSelected: PropTypes.bool,
+  data: PropTypes.array,
+  initialHiddenColumns: PropTypes.array,
+  onSelect: PropTypes.func,
+  rowId: PropTypes.any,
+  shouldManualSort: PropTypes.bool,
   shouldUsePagination: PropTypes.bool,
-  initialHiddenColumns: PropTypes.array
+  tableColumns: PropTypes.array,
 };
 
 export default SortableTable;

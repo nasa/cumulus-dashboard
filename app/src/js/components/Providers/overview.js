@@ -93,7 +93,7 @@ class ProvidersOverview extends React.Component {
             query={this.generateQuery()}
             bulkActions={bulkActions}
             rowId="name"
-            sortId="timestamp"
+            initialSortId="timestamp"
             filterAction={filterProviders}
             filterClear={clearProvidersFilter}
           >
