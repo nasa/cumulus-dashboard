@@ -177,7 +177,7 @@ class GranulesOverview extends React.Component {
             bulkActions={this.generateBulkActions()}
             groupActions={groupActions}
             rowId='granuleId'
-            sortId='timestamp'
+            initialSortId='timestamp'
             filterAction={filterGranules}
             filterClear={clearGranulesFilter}
             onSelect={this.updateSelection}

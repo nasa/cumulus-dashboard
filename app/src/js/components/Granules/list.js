@@ -167,7 +167,7 @@ const AllGranules = ({
           query={query}
           bulkActions={generateBulkActions()}
           rowId="granuleId"
-          sortId={tablesortId}
+          initialSortId={tablesortId}
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
         >

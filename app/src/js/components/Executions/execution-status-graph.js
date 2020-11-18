@@ -4,6 +4,7 @@ import dagre from 'dagre-d3';
 import * as d3 from 'd3';
 import Modal from 'react-bootstrap/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 import {
   getExecutionEvents,
   workflowToGraph,
@@ -76,7 +77,7 @@ class ExecutionStatusGraph extends React.Component {
       <div className='execution__visual'>
         <div className='header' onClick={this.handleClick}>
           <div>Click to enlarge to fullscreen</div>
-          <div><FontAwesomeIcon className='button__icon--animation' icon='expand'/></div>
+          <div><FontAwesomeIcon className='button__icon--animation' icon={faExpand} /></div>
         </div>
         <div className='execution__content' onClick={this.handleClick}>
           <div className='execution__content--visual'>
@@ -91,7 +92,7 @@ class ExecutionStatusGraph extends React.Component {
           <Modal.Header>
             <div className='header' onClick={this.onHide}>
               <div>Click to return to execution view</div>
-              <div><FontAwesomeIcon icon='compress' className='button__icon--animation'/></div>
+              <div><FontAwesomeIcon icon={faCompress} className='button__icon--animation'/></div>
             </div>
           </Modal.Header>
           <Modal.Body>
