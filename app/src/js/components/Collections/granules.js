@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { get } from 'object-path';
 import { getCollectionId, displayCase } from '../../utils/format';
 import {
   listGranules,
@@ -12,6 +13,7 @@ import {
   searchGranules,
   clearGranulesSearch,
   listWorkflows,
+  getOptionsProviderName
 } from '../../actions';
 import {
   defaultWorkflowMeta,
@@ -35,6 +37,7 @@ const CollectionGranules = ({
   match,
   queryParams,
   workflowOptions,
+  providers
 }) => {
   const { params } = match;
   const { name: collectionName, version: collectionVersion } = params;
@@ -47,6 +50,7 @@ const CollectionGranules = ({
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const query = generateQuery();
+  const { dropdowns } = providers;
 
   const breadcrumbConfig = [
     {
@@ -176,6 +180,17 @@ const CollectionGranules = ({
                 }}
               />
             )}
+            <Dropdown
+              getOptions={getOptionsProviderName}
+              options={get(dropdowns, ['provider', 'options'])}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey="provider"
+              label="Provider"
+              inputProps={{
+                placeholder: 'All'
+              }}
+            />
           </ListFilters>
         </List>
       </section>
@@ -190,11 +205,13 @@ CollectionGranules.propTypes = {
   match: PropTypes.object,
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
+  providers: PropTypes.object,
 };
 
 export default withRouter(
   connect((state) => ({
     granules: state.granules,
     workflowOptions: workflowOptionNames(state),
+    providers: state.providers
   }))(CollectionGranules)
 );

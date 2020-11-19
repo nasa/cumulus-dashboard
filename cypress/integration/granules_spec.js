@@ -492,5 +492,55 @@ describe('Dashboard Granules Page', () => {
       cy.get('@list').should('have.length', 11);
       cy.get('.table__header').should('not.contain.text', 'selected');
     });
+
+    it('Should update overview metrics when visiting bookmarkable URL with a provider param', () => {
+      cy.visit('/granules?provider=PODAAC_SWOT');
+      cy.get('.filter-provider .rbt-input-main').as('provider-input');
+      cy.get('@provider-input').should('have.value', 'PODAAC_SWOT');
+
+      cy.get('[data-cy=overview-num]').within(() => {
+        cy.get('li')
+          .first().should('contain', 0).and('contain', 'Completed')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Failed')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Running');
+      });
+
+      cy.visit('/granules?provider=s3_provider');
+      cy.get('.filter-provider .rbt-input-main').as('provider-input');
+      cy.get('@provider-input').should('have.value', 's3_provider');
+
+      cy.get('[data-cy=overview-num]').within(() => {
+        cy.get('li')
+          .first().should('contain', 7).and('contain', 'Completed')
+          .next()
+          .should('contain', 2)
+          .and('contain', 'Failed')
+          .next()
+          .should('contain', 2)
+          .and('contain', 'Running');
+      });
+    });
+
+    it('Should update URL and overview section when provider dropdown filters are activated.', () => {
+      cy.visit('/granules');
+      cy.get('.filter-provider .rbt-input-main').as('provider-input');
+      cy.get('@provider-input').click().type('POD').type('{enter}');
+      cy.url().should('include', 'provider=PODAAC_SWOT');
+
+      cy.get('[data-cy=overview-num]').within(() => {
+        cy.get('li')
+          .first().should('contain', 0).and('contain', 'Completed')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Failed')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Running');
+      });
+    });
   });
 });
