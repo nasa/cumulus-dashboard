@@ -1,12 +1,12 @@
 'use strict';
 
 import test from 'ava';
+import { get } from 'object-path';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import 'jsdom-global/register';
 import { Provider } from 'react-redux';
 import { shallow, configure } from 'enzyme';
-import sinon from 'sinon';
 import { GranulesOverview } from '../../../app/src/js/components/Granules/overview';
 
 configure({ adapter: new Adapter() });
@@ -102,10 +102,7 @@ test('GranulesOverview does not generate bulkAction for recovery button', functi
   t.is(recoverActionList.length, 0);
 });
 
-test('GranulesOverview will download CSV data when the Download Granule List button is clicked and not leave extra link on the page', function (t) {
-  window.URL.createObjectURL = sinon.fake.returns('www.example.com');
-  const dispatchPromise = () => Promise.resolve();
-
+test('GranulesOverview generates Granule Inventory List button', function (t) {
   const providerWrapper = shallow(
     <Provider store={store}>
       <GranulesOverview
@@ -120,10 +117,9 @@ test('GranulesOverview will download CSV data when the Download Granule List but
 
   const overviewWrapper = providerWrapper.find('GranulesOverview').dive();
 
-  const granuleCSVButton = overviewWrapper.find('a.csv__download');
-  granuleCSVButton.simulate('click');
-
-  // should not leave extra link on the page
-  const downloadLink = overviewWrapper.find('a[href="www.example.com"]');
-  t.is(downloadLink.length, 0);
+  const listWrapper = overviewWrapper.find('withRouter(withQueryParams(Connect(List)))');
+  const listBulkActions = listWrapper.prop('bulkActions');
+  const filter = (object) => get(object, 'Component.props.className', '').includes('csv__download');
+  const granuleInventoryActionList = listBulkActions.filter(filter);
+  t.is(granuleInventoryActionList.length, 1);
 });
