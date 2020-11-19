@@ -277,13 +277,12 @@ class CollectionOverview extends React.Component {
           </div>
           <List
             list={list}
-            dispatch={this.props.dispatch}
             action={listGranules}
             tableColumns={tableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId="granuleId"
-            sortId="timestamp"
+            initialSortId="timestamp"
             filterAction={filterGranules}
             filterClear={clearGranulesFilter}
           >

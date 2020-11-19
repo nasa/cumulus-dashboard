@@ -64,7 +64,7 @@ class PdrOverview extends React.Component {
   }
 
   render () {
-    const { dispatch, pdrs } = this.props;
+    const { pdrs } = this.props;
     const { list } = pdrs;
     const { count, queriedAt } = list.meta;
     // create the overview boxes
@@ -94,10 +94,9 @@ class PdrOverview extends React.Component {
           </div>
           <List
             list={list}
-            dispatch={dispatch}
             action={listPdrs}
             tableColumns={tableColumns}
-            sortId="timestamp"
+            initialSortId="timestamp"
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId="pdrName"

@@ -190,7 +190,7 @@ describe('Dashboard Collections Page', () => {
       const formattedCollectionName = collectionName(collectionId);
 
       cy.get('.collection-chooser').click();
-      cy.contains('div[class*="MenuList"] > div', collectionId).click();
+      cy.get('.collection-chooser').find('div[class*="option"]').contains(collectionId).click();
       cy.contains('.heading--large', `${formattedCollectionName}`);
       cy.contains('.heading--large', 'Granule Metric');
       cy.get('.collection-chooser').find('div[class*="singleValue"]').contains(collectionId);

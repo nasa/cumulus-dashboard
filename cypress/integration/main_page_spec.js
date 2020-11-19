@@ -99,7 +99,7 @@ describe('Dashboard Home Page', () => {
         // URL doesn't change based on hour format
         cy.get('[data-cy=hourFormat]').within(() => {
           cy.get('.datetime.selector__hrformat').click();
-          cy.contains('div[class*="MenuList"] > div', '24HR').click();
+          cy.contains('div[id*="react-select"]', '24HR').click();
           cy.url().should('include', 'startDateTime=20081229133500');
           cy.url().should('include', 'endDateTime=20090105133500');
         });
@@ -178,8 +178,8 @@ describe('Dashboard Home Page', () => {
       cy.get('[id="Ingest Rules"]').contains('1');
 
       // Test there are values in Granule Error list
-      cy.get('[data-value="0"]').contains('FileNotFound');
-      cy.get('[data-value="1"]').contains('FileNotFound');
+      cy.get('[data-value="0"]').contains('Error');
+      cy.get('[data-value="1"]').contains('Error');
 
       cy.get('[data-cy=startDateTime]').within(() => {
         cy.get('input[name=month]').click().type(1);

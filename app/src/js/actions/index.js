@@ -261,6 +261,11 @@ export const applyWorkflowToGranule = (granuleId, workflow, meta) => ({
   }
 });
 
+export const applyWorkflowToGranuleClearError = (granuleId) => ({
+  type: types.GRANULE_APPLYWORKFLOW_CLEAR_ERROR,
+  id: granuleId
+});
+
 export const getCollectionByGranuleId = (granuleId) => (dispatch) => dispatch(getGranule(granuleId))
   .then((granuleResponse) => {
     const { name, version } = collectionNameVersion(granuleResponse.data.collectionId);
@@ -297,6 +302,11 @@ export const reingestGranule = (granuleId) => ({
   }
 });
 
+export const reingestGranuleClearError = (granuleId) => ({
+  type: types.GRANULE_REINGEST_CLEAR_ERROR,
+  id: granuleId
+});
+
 export const removeGranule = (granuleId) => ({
   [CALL_API]: {
     type: types.GRANULE_REMOVE,
@@ -307,6 +317,11 @@ export const removeGranule = (granuleId) => ({
       action: 'removeFromCmr'
     }
   }
+});
+
+export const removeGranuleClearError = (granuleId) => ({
+  type: types.GRANULE_REMOVE_CLEAR_ERROR,
+  id: granuleId
 });
 
 export const bulkGranule = (payload) => ({
@@ -339,6 +354,21 @@ export const bulkGranuleDeleteClearError = (requestId) => ({
   requestId
 });
 
+export const bulkGranuleReingest = (payload) => ({
+  [CALL_API]: {
+    type: types.BULK_GRANULE_REINGEST,
+    method: 'POST',
+    path: 'granules/bulkReingest',
+    requestId: payload.requestId,
+    body: payload.json
+  }
+});
+
+export const bulkGranuleReingestClearError = (requestId) => ({
+  type: types.BULK_GRANULE_REINGEST_CLEAR_ERROR,
+  requestId
+});
+
 export const deleteGranule = (granuleId) => ({
   [CALL_API]: {
     type: types.GRANULE_DELETE,
@@ -346,6 +376,11 @@ export const deleteGranule = (granuleId) => ({
     id: granuleId,
     path: `granules/${granuleId}`
   }
+});
+
+export const deleteGranuleClearError = (granuleId) => ({
+  type: types.GRANULE_DELETE_CLEAR_ERROR,
+  id: granuleId
 });
 
 export const searchGranules = (infix) => ({ type: types.SEARCH_GRANULES, infix });

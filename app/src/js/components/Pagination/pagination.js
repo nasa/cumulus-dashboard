@@ -47,6 +47,9 @@ const Pagination = ({
   const paginator = new Paginator(limit, 7);
   const meta = paginator.build(count, currentPage);
   const pages = [];
+  const hasTotalPages = !!meta.total_pages;
+  const renderInput = displayAsInput && hasTotalPages;
+
   for (let i = meta.first_page; i <= meta.last_page; ++i) {
     pages.push(i);
   }
@@ -80,7 +83,7 @@ const Pagination = ({
             Previous
           </a>
         </li>
-        {displayAsInput && (
+        {renderInput && (
           <Dropdown
             action={action}
             clear={clear}

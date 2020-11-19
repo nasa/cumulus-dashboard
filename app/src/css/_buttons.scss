@@ -486,6 +486,10 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
 
     &__bulkgranules--operations {
       background-color: $light-green;
+
+      &:before {
+        content: '\f1b3';
+      }
     }
 
     &__bulkgranules--delete {
@@ -497,6 +501,14 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
 
       &:before {
         content: $delete-btn-icon;
+      }
+    }
+
+    &__bulkgranules--reingest {
+      background-color: $light-green;
+
+      &:before {
+        content: '\f233';
       }
     }
 

@@ -103,12 +103,11 @@ class CollectionList extends React.Component {
           <List
             list={list}
             tableColumns={tableColumns}
-            dispatch={this.props.dispatch}
             action={listCollections}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={getCollectionId}
-            sortId="duration"
+            initialSortId="duration"
             filterAction={filterCollections}
             filterClear={clearCollectionsFilter}
           >

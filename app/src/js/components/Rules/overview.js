@@ -44,7 +44,7 @@ class RulesOverview extends React.Component {
   }
 
   render() {
-    const { dispatch, queryParams, rules } = this.props;
+    const { queryParams, rules } = this.props;
     const { list } = rules;
     const { count, queriedAt } = list.meta;
     return (
@@ -75,11 +75,10 @@ class RulesOverview extends React.Component {
 
           <List
             list={list}
-            dispatch={dispatch}
             action={listRules}
             tableColumns={tableColumns}
             query={{ ...queryParams }}
-            sortId="timestamp"
+            initialSortId="timestamp"
             bulkActions={this.generateBulkActions()}
             rowId="name"
             filterAction={filterRules}

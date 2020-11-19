@@ -48,7 +48,6 @@ class ExecutionOverview extends React.Component {
   render() {
     const {
       collections,
-      dispatch,
       executions,
       queryParams,
       workflowOptions,
@@ -81,12 +80,11 @@ class ExecutionOverview extends React.Component {
           </div>
           <List
             list={list}
-            dispatch={dispatch}
             action={listExecutions}
             tableColumns={tableColumns}
             query={{ ...queryParams }}
             rowId='name'
-            sortId='createdAt'
+            initialSortId='createdAt'
             filterAction={filterExecutions}
             filterClear={clearExecutionsFilter}
           >
