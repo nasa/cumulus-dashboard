@@ -108,7 +108,7 @@ test('GranulesOverview generates Granule Inventory List button', function (t) {
       <GranulesOverview
         granules = {granules}
         granuleCSV = {data}
-        dispatch = {dispatchPromise}
+        dispatch = {dispatch}
         location = {location}
         workflowOptions = {workflowOptions}
         collections = {collections}
