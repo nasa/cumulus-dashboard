@@ -22,8 +22,7 @@ import {
   reingestGranuleClearError,
   removeGranule,
   removeGranuleClearError,
-  removeAndDeleteGranule,
-  removeAndDeleteGranuleClearError,
+  removeAndDeleteGranule
 } from '../../actions';
 import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
