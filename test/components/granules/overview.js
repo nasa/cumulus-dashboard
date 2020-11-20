@@ -40,6 +40,7 @@ const granules = {
 const dispatch = () => {};
 const workflowOptions = [];
 const collections = {};
+const providers = {};
 const stats = { count: 0, stats: {} };
 const location = { pathname: 'granules' };
 const config = { enableRecovery: false };
@@ -60,7 +61,8 @@ test('GranulesOverview generates bulkAction for recovery button', function (t) {
         workflowOptions = {workflowOptions}
         collections = {collections}
         location = {location}
-        config={configWithRecovery}/>
+        config={configWithRecovery}
+        providers={providers}/>
     </Provider>);
 
   const overviewWrapper = providerWrapper.find('GranulesOverview').dive();
@@ -83,7 +85,8 @@ test('GranulesOverview does not generate bulkAction for recovery button', functi
         workflowOptions = {workflowOptions}
         collections = {collections}
         location = {location}
-        config={config}/>
+        config={config}
+        providers={providers}/>
     </Provider>);
 
   const overviewWrapper = providerWrapper.find('GranulesOverview').dive();
@@ -104,7 +107,8 @@ test('GranulesOverview generates Granule Inventory List button', function (t) {
         location = {location}
         workflowOptions = {workflowOptions}
         collections = {collections}
-        config={config}/>
+        config={config}
+        providers={providers}/>
     </Provider>);
 
   const overviewWrapper = providerWrapper.find('GranulesOverview').dive();

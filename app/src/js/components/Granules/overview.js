@@ -16,6 +16,7 @@ import {
   applyWorkflowToGranule,
   applyRecoveryWorkflowToGranule,
   getOptionsCollectionName,
+  getOptionsProviderName,
 } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import {
@@ -142,9 +143,10 @@ class GranulesOverview extends React.Component {
   }
 
   render () {
-    const { collections, granules } = this.props;
+    const { collections, granules, providers } = this.props;
     const { list } = granules;
     const { dropdowns } = collections;
+    const { dropdowns: providerDropdowns } = providers;
     const { count, queriedAt } = list.meta;
 
     return (
@@ -212,6 +214,17 @@ class GranulesOverview extends React.Component {
                   placeholder: 'All'
                 }}
               />
+              <Dropdown
+                getOptions={getOptionsProviderName}
+                options={get(providerDropdowns, ['provider', 'options'])}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey="provider"
+                label="Provider"
+                inputProps={{
+                  placeholder: 'All'
+                }}
+              />
             </ListFilters>
           </List>
         </section>
@@ -227,6 +240,7 @@ GranulesOverview.propTypes = {
   granules: PropTypes.object,
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
+  providers: PropTypes.object,
 };
 
 export { GranulesOverview };
@@ -237,4 +251,5 @@ export default withRouter(withQueryParams()(connect((state) => ({
   granules: state.granules,
   selected: state.selected,
   workflowOptions: workflowOptionNames(state),
+  providers: state.providers
 }))(GranulesOverview)));

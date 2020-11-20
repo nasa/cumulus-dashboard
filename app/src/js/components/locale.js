@@ -19,7 +19,7 @@ export const strings = new LocalizedStrings({
     collection_granules: 'CollectionGranules',
     collection_logs: 'Collection Logs',
     collection_name: 'Collection Name',
-    collection_overview: 'Collection Overview',
+    collection_overview: 'Collections Overview',
     collections: 'Collections',
     dashboard: 'CUMULUS Dashboard',
     executions: 'Executions',
