@@ -568,18 +568,101 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('Should handle a successful API response from the Remove and Delete granule requests', () => {
+      cy.server();
+      cy.route({
+        method: 'PUT',
+        url: '/granules/*',
+        status: 200,
+        response: { message: 'success' }
+      });
 
+      cy.route({
+        method: 'DELETE',
+        url: '/granules/*',
+        status: 200,
+        response: { message: 'success' }
+      });
 
+      // this granules query will have a combination of published and unpublished granules
+      cy.visit('/granules?limit=50&page=1&status=completed');
+
+      cy.get('.table .tbody .tr .td input[type=checkbox]').as('granule-checkbox');
+      cy.get('@granule-checkbox').click({ multiple: true });
+
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Delete').click();
+      cy.contains('.button--submit', 'Confirm').click();
+
+      cy.route2({
+        url: '/granules',
+        method: 'PUT'
+      }, (req) => {
+        const requestBody = JSON.parse(req.body);
+        expect(requestBody).to.have.property('action', 'removeFromCmr');
+      });
+
+      cy.get('.default-modal.batch-async-modal ').as('modal');
+      cy.get('@modal').contains('div', 'Success!');
     });
 
     it('Should handle a failed API response from the Remove granule requests', () => {
+      cy.server();
+      cy.route({
+        method: 'PUT',
+        url: '/granules/*',
+        status: 400,
+        response: { message: 'error' }
+      });
 
+      cy.route({
+        method: 'DELETE',
+        url: '/granules/*',
+        status: 200,
+        response: { message: 'success' }
+      });
 
+      // this granules query will have a combination of published and unpublished granules
+      cy.visit('/granules?limit=50&page=1&status=completed');
+
+      cy.get('.table .tbody .tr .td input[type=checkbox]').as('granule-checkbox');
+      cy.get('@granule-checkbox').click({ multiple: true });
+
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Delete').click();
+      cy.contains('.button--submit', 'Confirm').click();
+
+      cy.get('.default-modal.batch-async-modal ').as('modal');
+      cy.get('@modal').contains('div', 'Error');
     });
 
     it('Should handle a failed API response from the Delete granule requests', () => {
+      cy.server();
+      cy.route({
+        method: 'PUT',
+        url: '/granules/*',
+        status: 200,
+        response: { message: 'success' }
+      });
 
+      cy.route({
+        method: 'DELETE',
+        url: '/granules/*',
+        status: 400,
+        response: { message: 'error' }
+      });
 
+      // this granules query will have a combination of published and unpublished granules
+      cy.visit('/granules?limit=50&page=1&status=completed');
+
+      cy.get('.table .tbody .tr .td input[type=checkbox]').as('granule-checkbox');
+      cy.get('@granule-checkbox').click({ multiple: true });
+
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Delete').click();
+      cy.contains('.button--submit', 'Confirm').click();
+
+      cy.get('.default-modal.batch-async-modal ').as('modal');
+      cy.get('@modal').contains('div', 'Error');
     });
   });
 });
