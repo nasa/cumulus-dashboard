@@ -386,24 +386,34 @@ export const deleteGranuleClearError = (granuleId) => ({
 export const removeAndDeleteGranule = (granuleId) => (dispatch, getState) => {
   const granules = getState().granules.list.data;
   const granuleToDelete = granules.find((g) => g.granuleId === granuleId);
+  const errorPresent = (response, errorType) => response && response.type && response.type === errorType;
 
   // If the granule is published to CMR, remove it from CMR and then delete.
   if (granuleToDelete.published) {
     return dispatch(removeGranule(granuleId))
-      .then((removeResponse) => dispatch(deleteGranule(granuleId))) // TODO if not removed, don't delete
-      .catch((error) => dispatch({
-        id: granuleId,
-        type: types.GRANULE_DELETE_CLEAR_ERROR, // TODO is this right?
-        error
-      }));
+      .then(
+        (removeResponse) => {
+          if (errorPresent(removeResponse, types.GRANULE_REMOVE_ERROR)) {
+            // If the remove request is unsuccessful, we still dispatch a DELETE error because
+            // that is what the action is expecting.
+            return dispatch({
+              type: types.GRANULE_DELETE_ERROR,
+              id: granuleId,
+              error: removeResponse.error
+            });
+          }
+        }
+      )
+      .then(
+        (removeResponse) => {
+          // If the previous remove request was successful, delete the granule
+          if (!errorPresent(removeResponse, types.GRANULE_DELETE_ERROR)) {
+            return dispatch(deleteGranule(granuleId));
+          }
+        }
+      );
   }
-
-  return dispatch(deleteGranule(granuleId));
 };
-
-export const removeAndDeleteGranuleClearError = (granuleId) => ({
-
-});
 
 export const searchGranules = (infix) => ({ type: types.SEARCH_GRANULES, infix });
 export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH });
