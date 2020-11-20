@@ -145,14 +145,6 @@ describe('Dashboard Granules Page', () => {
       );
     });
 
-    it('should display a link to download the granule list', () => {
-      cy.visit('/granules');
-
-      cy.contains('.heading--xlarge', 'Granules');
-
-      cy.contains('a', 'Create Granule Inventory List');
-    });
-
     it('Should update dropdown with label when visiting bookmarkable URL', () => {
       cy.visit('/granules?status=running');
       cy.get('.filter-status .rbt-input-main').as('status-input');
@@ -310,7 +302,8 @@ describe('Dashboard Granules Page', () => {
       cy.route('GET', `/granules/${granuleId}`).as('getGranule');
       cy.visit('/granules');
       cy.get(`[data-value="${granuleId}"] > .td >input[type="checkbox"]`).click();
-      cy.get('.list-actions').contains('Reingest').click();
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Reingest').click();
       cy.get('.button--submit').click();
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
       cy.get('.button__goto').click();
@@ -334,7 +327,8 @@ describe('Dashboard Granules Page', () => {
       cy.visit('/granules');
       cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
-      cy.get('.list-actions').contains('Reingest').click();
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Reingest').click();
       cy.get('.button--submit').click();
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
       cy.get('.button__goto').click();
@@ -357,7 +351,8 @@ describe('Dashboard Granules Page', () => {
       cy.visit('/granules');
       cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
-      cy.get('.list-actions').contains('Reingest').click();
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Reingest').click();
       cy.get('.button--submit').click();
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Error');
       cy.get('.Collapsible__contentInner').should('contain.text', 'Oopsie');
@@ -420,7 +415,8 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .tbody .tr .td input[type=checkbox]').as('granule-checkbox');
       cy.get('@granule-checkbox').click({ multiple: true });
 
-      cy.get('.csv__download').click();
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Create Granule Inventory List').click();
       cy.get('.default-modal.granule-inventory ').as('modal');
 
       cy.get('@modal').contains('div', 'You have generated a selection to process for the following list:');
