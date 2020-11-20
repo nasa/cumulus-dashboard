@@ -13,6 +13,7 @@ import {
   listWorkflows,
   applyWorkflowToGranule,
   getCount,
+  getOptionsProviderName,
 } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
@@ -41,6 +42,7 @@ const AllGranules = ({
   queryParams,
   workflowOptions,
   stats,
+  providers,
 }) => {
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
@@ -68,6 +70,7 @@ const AllGranules = ({
       active: true,
     },
   ];
+  const { dropdowns: providerDropdowns } = providers;
 
   useEffect(() => {
     dispatch(listWorkflows());
@@ -167,7 +170,7 @@ const AllGranules = ({
           query={query}
           bulkActions={generateBulkActions()}
           rowId="granuleId"
-          sortId={tablesortId}
+          initialSortId={tablesortId}
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
         >
@@ -206,6 +209,17 @@ const AllGranules = ({
               placeholder="Granule ID"
               searchKey="granules"
             />
+            <Dropdown
+              getOptions={getOptionsProviderName}
+              options={get(providerDropdowns, ['provider', 'options'])}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey="provider"
+              label="Provider"
+              inputProps={{
+                placeholder: 'All'
+              }}
+            />
             {view === 'failed' && (
               <Dropdown
                 options={getGranuleErrorTypes()}
@@ -240,6 +254,7 @@ AllGranules.propTypes = {
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
   stats: PropTypes.object,
+  providers: PropTypes.object,
 };
 
 AllGranules.displayName = strings.all_granules;
@@ -253,5 +268,6 @@ export default withRouter(
     logs: state.logs,
     stats: state.stats,
     workflowOptions: workflowOptionNames(state),
+    providers: state.providers
   }))(AllGranules)
 );
