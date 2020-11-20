@@ -188,17 +188,21 @@ describe('Dashboard Executions Page', () => {
           const timestamp = fullDate(events[index].timestamp);
           cy.wrap($el).children('.td').as('columns');
           cy.get('@columns').should('have.length', 4);
-          const idMatch = `"id": ${index + 1},`;
+          const id = index + 1;
+          const idMatch = `"id": ${id},`;
           const previousIdMatch = `"previousEventId": ${index}`;
 
           cy.get('@columns').eq(0).should('have.text', (index + 1).toString());
           cy.get('@columns').eq(2).should('have.text', timestamp);
+          cy.get('.execution__modal').should('not.exist');
           cy.get('@columns').eq(3).contains('More Details').click();
-          cy.get('@columns').eq(3).contains(idMatch);
+          cy.get('.execution__modal').should('exist');
+          cy.get('.execution__modal .modal-title').contains(`ID ${id}: Event Details`);
+          cy.get('.execution__modal .modal-body').contains(idMatch);
           if (index !== 0) {
-            cy.get('@columns').eq(3).contains(previousIdMatch);
+            cy.get('.execution__modal .modal-body').contains(previousIdMatch);
           }
-          cy.get('@columns').eq(3).contains('Less Details').click();
+          cy.contains('.execution__modal .button', 'Close').click();
         });
       });
 

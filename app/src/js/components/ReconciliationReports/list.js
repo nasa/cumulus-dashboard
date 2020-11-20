@@ -120,7 +120,7 @@ const ReconciliationReportList = ({
           query={query}
           bulkActions={generateBulkActions()}
           rowId="name"
-          sortId="createdAt"
+          initialSortId="createdAt"
           filterAction={filterReconciliationReports}
           filterClear={clearReconciliationReportsFilter}
         >

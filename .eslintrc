@@ -19,11 +19,13 @@
     "import",
     "lodash"
   ],
+  "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 2018,
     "ecmaFeatures": {
       "jsx": true
-    }
+    },
+    "allowImportExportEverywhere": true
   },
   "rules": {
     "comma-dangle": ["error", "only-multiline"],

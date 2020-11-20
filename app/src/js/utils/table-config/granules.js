@@ -33,7 +33,12 @@ import BatchReingestConfirmContent from '../../components/ReingestGranules/Batch
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
 import TextArea from '../../components/TextAreaForm/text-area';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
-import { array } from 'prop-types';
+import GranuleInventory from '../../components/Granules/granule-inventory';
+
+export const groupAction = {
+  title: 'Granule Actions',
+  description: 'Select the action you would like to perform on the selected granules from the table below',
+};
 
 export const tableColumns = [
   {
@@ -278,6 +283,14 @@ export const bulkActions = (granules, config, selectedGranules) => [
     confirm: confirmApply,
     confirmOptions: config.execute.options,
     className: 'button--execute'
+  },
+  {
+    Component:
+      <GranuleInventory
+        element='button'
+        className='csv__download button button--small button--file button--green form-group__element'
+        confirmAction={true}
+      />
   },
   {
     text: strings.remove_from_cmr,

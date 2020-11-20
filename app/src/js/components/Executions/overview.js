@@ -84,7 +84,7 @@ class ExecutionOverview extends React.Component {
             tableColumns={tableColumns}
             query={{ ...queryParams }}
             rowId='name'
-            sortId='createdAt'
+            initialSortId='createdAt'
             filterAction={filterExecutions}
             filterClear={clearExecutionsFilter}
           >

@@ -581,12 +581,12 @@ export const listProviders = (options) => ({
   }
 });
 
-export const getOptionsProviderGroup = () => ({
+export const getOptionsProviderName = () => ({
   [CALL_API]: {
-    type: types.OPTIONS_PROVIDERGROUP,
+    type: types.OPTIONS_PROVIDERNAME,
     method: 'GET',
     url: new URL('providers', root).href,
-    qs: { limit: 100, fields: 'providerName' }
+    qs: { limit: 100, fields: 'id' }
   }
 });
 
