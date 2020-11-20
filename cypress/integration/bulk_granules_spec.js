@@ -12,6 +12,7 @@ describe('Dashboard Bulk Granules', () => {
 
     it('should display a modal to choose a bulk granules operation', () => {
       cy.visit('/granules');
+      cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Run Bulk Granules').click();
 
       cy.get('.bulk_granules')
@@ -30,6 +31,7 @@ describe('Dashboard Bulk Granules', () => {
       }).as('postBulkGranules');
 
       cy.visit('/granules');
+      cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Run Bulk Granules').click();
 
       cy.get('.bulk_granules')
@@ -59,6 +61,7 @@ describe('Dashboard Bulk Granules', () => {
       cy.visit('/granules');
       cy.setDatepickerDropdown('Recent');
       cy.url().should('include', 'startDateTime');
+      cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Run Bulk Granules').click();
 
       cy.get('.bulk_granules')
@@ -87,6 +90,7 @@ describe('Dashboard Bulk Granules', () => {
       }).as('postBulkDelete');
 
       cy.visit('/granules');
+      cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Run Bulk Granules').click();
 
       cy.get('.bulk_granules')
@@ -115,6 +119,7 @@ describe('Dashboard Bulk Granules', () => {
       }).as('postBulkReingest');
 
       cy.visit('/granules');
+      cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Run Bulk Granules').click();
 
       cy.get('.bulk_granules')
@@ -149,6 +154,7 @@ describe('Dashboard Bulk Granules', () => {
         }).as('postBulkGranules');
 
         cy.visit('/granules');
+        cy.contains('button', 'Granule Actions').click();
         cy.contains('button', 'Run Bulk Granules').click();
 
         cy.get('.bulk_granules')
@@ -198,6 +204,7 @@ describe('Dashboard Bulk Granules', () => {
         }).as('postBulkDelete');
 
         cy.visit('/granules');
+        cy.contains('button', 'Granule Actions').click();
         cy.contains('button', 'Run Bulk Granules').click();
 
         cy.get('.bulk_granules')
@@ -247,6 +254,7 @@ describe('Dashboard Bulk Granules', () => {
         }).as('postBulkReingest');
 
         cy.visit('/granules');
+        cy.contains('button', 'Granule Actions').click();
         cy.contains('button', 'Run Bulk Granules').click();
 
         cy.get('.bulk_granules')
