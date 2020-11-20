@@ -251,12 +251,14 @@ const granuleModalJourney = ({
   return modalOptions;
 };
 
-const findPublishedGranules = (granules) => granules.filter((g) => g.published === true);
-
 const containsPublishedGranules = (selectedGranules) => {
-  const publishedGranules = findPublishedGranules(selectedGranules);
+  let publishedGranules = [];
 
-  if (!Array.isArray(publishedGranules) || !publishedGranules.length) {
+  if (Array.isArray(selectedGranules) && selectedGranules.length > 0) {
+    publishedGranules = selectedGranules.filter((g) => g.published === true);
+  }
+
+  if (publishedGranules.length < 1) {
     return false;
   }
 

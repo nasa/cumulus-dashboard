@@ -413,6 +413,9 @@ export const removeAndDeleteGranule = (granuleId) => (dispatch, getState) => {
         }
       );
   }
+
+  // If this granule is NOT published, just delete it
+  return dispatch(deleteGranule(granuleId));
 };
 
 export const searchGranules = (infix) => ({ type: types.SEARCH_GRANULES, infix });
