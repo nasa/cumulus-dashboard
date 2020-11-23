@@ -21,7 +21,7 @@ const ShowMoreOrLess = ({
 
   function render() {
     const truncatedText = truncateFunc(text);
-    const textShow = showMore ? text : truncatedText;
+    const textShown = showMore ? text : truncatedText;
     const buttonText = showMore ? 'Show Less' : 'Show More';
 
     // No need to make error collapsible if the truncated
@@ -34,9 +34,9 @@ const ShowMoreOrLess = ({
 
     return (
       <>
-`      <p>{textShow}</p>
+`      <p>{textShown}</p>
         <button
-          className="button button--small button--primary form-group__element--left"
+          className="button button--small button--primary form-group__element"
           onClick={handleClick}
         >
           {buttonText}
