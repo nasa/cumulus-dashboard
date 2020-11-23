@@ -153,7 +153,7 @@ const InventoryReport = ({
       <section className="page__section">
         <div className="multicard">
           <div className="collapse-link">
-            <span className="link" onClick={handleExpandClick}>
+            <span className="link" onClick={handleExpandClick} role="button" tabIndex="0">
               {!allCollapsed() ? 'Expand All' : 'Collapse All'}
             </span>
           </div>
