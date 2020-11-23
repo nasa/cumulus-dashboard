@@ -55,9 +55,9 @@ const Pagination = ({
   }
   const jumpToFirst = meta.first_page > 1 && (
     <li>
-      <a href="#" data-value={1} onClick={onPageClick}>
+      <button data-value={1} onClick={onPageClick}>
         1
-      </a>{' '}
+      </button>{' '}
       ...{' '}
     </li>
   );
@@ -65,9 +65,9 @@ const Pagination = ({
     <li>
       {' '}
       ...{' '}
-      <a href="#" data-value={meta.total_pages} onClick={onPageClick}>
+      <button data-value={meta.total_pages} onClick={onPageClick}>
         {meta.total_pages}
-      </a>{' '}
+      </button>{' '}
     </li>
   );
 
@@ -75,19 +75,21 @@ const Pagination = ({
     <div className={`pagination ${displayAsInput ? 'pagination-dropdown' : 'pagination-list'}`}>
       <ol>
         <li>
-          <a
+          <button
             className={`previous${meta.has_previous_page ? '' : disabled}`}
             data-value={meta.previous_page}
             onClick={meta.has_previous_page ? onPageClick : noop}
           >
             Previous
-          </a>
+          </button>
         </li>
         {renderInput && (
           <Dropdown
             action={action}
             clear={clear}
             clearButton={false}
+            inputProps={{ 'aria-label': 'Page' }}
+            label={<span className="sr-only">Page</span>}
             onChange={handleDropdownChange}
             options={[
               {
@@ -111,22 +113,22 @@ const Pagination = ({
                 key={d}
                 className={d === currentPage ? 'pagination__link--active' : ''}
               >
-                <a href="#" data-value={d} onClick={onPageClick}>
+                <button data-value={d} onClick={onPageClick}>
                   {d}
-                </a>
+                </button>
               </li>
             ))}
             {jumpToLast}
           </>
         )}
         <li>
-          <a
+          <button
             className={`next${meta.has_next_page ? '' : disabled}`}
             data-value={meta.next_page}
             onClick={meta.has_next_page ? onPageClick : noop}
           >
             Next
-          </a>
+          </button>
         </li>
       </ol>
     </div>

@@ -41,6 +41,7 @@ const List = ({
 
   const [selected, setSelected] = useState([]);
   const [clearSelected, setClearSelected] = useState(false);
+  const [page, setPage] = useState(1);
 
   const [queryConfig, setQueryConfig] = useState({
     page: 1,
@@ -53,7 +54,6 @@ const List = ({
     bulkActionError: null,
   });
 
-  const { page } = queryConfig;
   const { bulkActionError, completedBulkActions } = bulkActionMeta;
   const { limit: limitQueryParam, page: pageQueryParam, ...queryFilters } = queryParams;
 
@@ -87,10 +87,7 @@ const List = ({
   }, [JSON.stringify(queryFilters)]);
 
   function queryNewPage(newPage) {
-    setQueryConfig((prevQueryConfig) => ({
-      ...prevQueryConfig,
-      ...getQueryConfig({ page: newPage })
-    }));
+    setPage(newPage);
   }
 
   function queryNewSort(sortProps) {

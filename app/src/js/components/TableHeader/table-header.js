@@ -32,7 +32,7 @@ const TableHeader = ({
     if (selections.length === 0) {
       setSelectedValues([]);
     } else {
-      const { id: value } = selections[0];
+      const { label: value } = selections[0];
       setSelectedValues([{
         id: value,
         label: value,
@@ -64,6 +64,8 @@ const TableHeader = ({
           action={action}
           clear={clear}
           clearButton={false}
+          inputProps={{ 'aria-label': 'Limit' }}
+          label={<span className="sr-only">Limit</span>}
           onChange={handleLimitChange}
           options={pageSizeOptions}
           paramKey="limit"

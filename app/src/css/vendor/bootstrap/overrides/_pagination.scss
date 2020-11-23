@@ -19,16 +19,17 @@
     margin: 0 .4em;
   }
 
-  a, a:visited {
+  button {
     color: $lighter-grey;
+    background: none;
+    border: none;
     transition: all 0.3s ease 0s;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     padding: 0 .3em;
-    border-bottom: none;
   }
 
-  a:hover {
+  button:hover {
     color: $ocean-blue;
   }
 
@@ -77,7 +78,7 @@
     text-decoration: none;
   }
 
-  .pagination__link--active a, .pagination__link--active a:visited {
+  .pagination__link--active button {
     color: $ocean-blue;
     font-weight: $base-font-semibold;
     border-bottom: 2px solid $ocean-blue;

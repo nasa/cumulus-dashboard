@@ -101,9 +101,9 @@ class Header extends React.Component {
                 ))}
                 <li className="rightalign nav__order-8">
                   {authenticated ? (
-                    <a onClick={this.logout}>
+                    <button onClick={this.logout}>
                       <span className="log-icon"></span>Log out
-                    </a>
+                    </button>
                   ) : (
                     <Link to={'/login'}>Log in</Link>
                   )}
