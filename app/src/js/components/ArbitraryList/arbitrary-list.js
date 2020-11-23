@@ -42,11 +42,12 @@ class List extends React.Component {
 
     return (
       <div className={`form__addone${error ? ' form__error--wrapper' : ''}`}>
-        <label>{label}</label>
-        {error && <span className='form__error'>{error}</span>}
-        <ul className='form__addone--items'>
-          {items.map(this.renderItem)}
-        </ul>
+        <label>{label}
+          {error && <span className='form__error'>{error}</span>}
+          <ul className='form__addone--items'>
+            {items.map(this.renderItem)}
+          </ul>
+        </label>
       </div>
     );
   }
@@ -63,11 +64,13 @@ class List extends React.Component {
           onChange={(e) => this.onChange(i, e.target.value)}
         />
         { add ? <button
+          aria-label="Add"
           onClick={this.add}
           className={`button form__addone--button${disabled ? ' button--disabled' : ''}`}>+</button>
           : null }
 
         { !add ? <button
+          aria-label="Remove"
           onClick={(e) => { e.preventDefault(); this.remove(i); }}
           className='button form__addone--button'>-</button>
           : null }

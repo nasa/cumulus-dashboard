@@ -112,12 +112,12 @@ const Dropdown = ({
 
   return (
     <div className={`filter__item form-group__element filter-${paramKey.includes('.') ? paramKey.split('.')[0] : paramKey}`}>
-      {label && <label>{label}</label>}
+      {label && <label htmlFor={paramKey}>{label}</label>}
       <Typeahead
         allowNew={allowNew}
         clearButton={clearButton}
         id={paramKey}
-        inputProps={inputProps}
+        inputProps={{ id: paramKey, ...inputProps }}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         options={options}

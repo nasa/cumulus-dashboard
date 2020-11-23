@@ -39,7 +39,9 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
     id: 'download',
     accessor: 'name',
     Cell: ({ cell: { value } }) => (// eslint-disable-line react/prop-types
-      <button className='button button__row button__row--download'
+      <button
+        aria-label="Download Report"
+        className='button button__row button__row--download'
         onClick={(e) => (isGranules
           ? handleCsvDownloadClick(e, value, dispatch)
           : handleDownloadClick(e, value, dispatch))}
@@ -52,7 +54,9 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
     id: 'delete',
     accessor: 'name',
     Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
-      <button className='button button__row button__row--delete'
+      <button
+        aria-label="Delete Report"
+        className='button button__row button__row--delete'
         onClick={(e) => handleDeleteClick(e, value, dispatch, query)}
       />
     ),
