@@ -13,6 +13,7 @@ import {
   listWorkflows,
   applyWorkflowToGranule,
   getCount,
+  getOptionsProviderName,
 } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
@@ -21,6 +22,7 @@ import {
   bulkActions,
   defaultWorkflowMeta,
   executeDialog,
+  groupAction,
 } from '../../utils/table-config/granules';
 import List from '../Table/Table';
 import LogViewer from '../Logs/viewer';
@@ -41,6 +43,7 @@ const AllGranules = ({
   queryParams,
   workflowOptions,
   stats,
+  providers,
 }) => {
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
@@ -68,6 +71,7 @@ const AllGranules = ({
       active: true,
     },
   ];
+  const { dropdowns: providerDropdowns } = providers;
 
   useEffect(() => {
     dispatch(listWorkflows());
@@ -166,6 +170,7 @@ const AllGranules = ({
           tableColumns={view === 'failed' ? errorTableColumns : tableColumns}
           query={query}
           bulkActions={generateBulkActions()}
+          groupAction={groupAction}
           rowId="granuleId"
           initialSortId={tablesortId}
           filterAction={filterGranules}
@@ -206,6 +211,17 @@ const AllGranules = ({
               placeholder="Granule ID"
               searchKey="granules"
             />
+            <Dropdown
+              getOptions={getOptionsProviderName}
+              options={get(providerDropdowns, ['provider', 'options'])}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey="provider"
+              label="Provider"
+              inputProps={{
+                placeholder: 'All'
+              }}
+            />
             {view === 'failed' && (
               <Dropdown
                 options={getGranuleErrorTypes()}
@@ -240,6 +256,7 @@ AllGranules.propTypes = {
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
   stats: PropTypes.object,
+  providers: PropTypes.object,
 };
 
 AllGranules.displayName = strings.all_granules;
@@ -253,5 +270,6 @@ export default withRouter(
     logs: state.logs,
     stats: state.stats,
     workflowOptions: workflowOptionNames(state),
+    providers: state.providers
   }))(AllGranules)
 );

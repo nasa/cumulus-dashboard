@@ -26,6 +26,7 @@ const List = ({
   dispatch,
   filterAction,
   filterClear,
+  groupAction,
   initialSortId,
   list,
   onSelect,
@@ -152,12 +153,14 @@ const List = ({
       isNil
     );
   }
+
   return (
     <>
       <ListActions
         dispatch={dispatch}
         action={action}
         bulkActions={bulkActions}
+        groupAction={groupAction}
         queryConfig={queryConfig}
         completedBulkActions={completedBulkActions}
         onBulkActionSuccess={onBulkActionSuccess}
@@ -217,6 +220,10 @@ List.propTypes = {
   dispatch: PropTypes.func,
   filterAction: PropTypes.func,
   filterClear: PropTypes.func,
+  groupAction: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+  }),
   initialSortId: PropTypes.string,
   list: PropTypes.object,
   query: PropTypes.object,

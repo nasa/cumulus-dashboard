@@ -15,9 +15,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Add [eslint-plugin-jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
   - Add [@ace-core/react](https://www.npmjs.com/package/@axe-core/react)
 
+- **CUMULUS-2169**
+  - Add provider drop down to granule tables to filter by provider
+
 - **CUMULUS-2206**
   - Implement lazy loading for SortableTable, Datepicker, and Sidebar
   - Improve performance
+
+### Changed
+
+- **CUMULUS-2251**
+  - Add the `Granule Actions` button
 
 ## [v3.0.0]
 
