@@ -2,5 +2,5 @@
   "high": true,
   "pass-enoaudit": true,
   "retry-count": 20,
-  "whitelist": ["node-forge", "node-fetch", "object-path"]
+  "whitelist": []
 }

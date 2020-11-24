@@ -135,7 +135,7 @@ class DatepickerRange extends React.PureComponent {
     this.props.setQueryParams(updatedQueryParams);
   }
 
-  renderDateTimeRange (name) {
+  renderDateTimeRange (name, label) {
     const { hourFormat } = this.props;
     const value = this.props[name];
     const locale = hourFormat === '24HR' ? 'en-GB' : 'en-US';
@@ -150,6 +150,7 @@ class DatepickerRange extends React.PureComponent {
         format={format}
         locale={locale}
         name={name}
+        label={label}
         onChange={(id, date) => this.handleDateTimeRangeChange(name, date)}
         value={utcValue}
       />
@@ -172,17 +173,15 @@ class DatepickerRange extends React.PureComponent {
                 />
               </li>
               <li data-cy='startDateTime'>
-                <label>Start Date and Time</label>
-                {this.renderDateTimeRange('startDateTime')}
+                {this.renderDateTimeRange('startDateTime', 'Start Date and Time')}
               </li>
               <li data-cy='endDateTime'>
-                <label>End Date and Time</label>
-                {this.renderDateTimeRange('endDateTime')}
+                {this.renderDateTimeRange('endDateTime', 'End Date and Time')}
               </li>
               <li className='selector__hrformat' data-cy='hourFormat'>
-                <label>Time Format</label>
                 <SimpleDropdown
                   className='datetime selector__hrformat'
+                  label='Time Format'
                   value={this.props.hourFormat}
                   onChange={this.handleHourFormatChange}
                   options={allHourFormats}

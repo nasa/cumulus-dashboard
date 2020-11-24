@@ -32,16 +32,27 @@ const Datepicker = ({ format, id, label, locale, name, onChange, value, ...rest 
       >
         <DateTimePicker
           {...rest}
+          amPmAriaLabel="Select AM/PM"
+          calendarAriaLabel="Toggle calendar"
+          clearAriaLabel="Clear value"
+          dayAriaLabel="Day"
           dayPlaceholder="DD"
           disableClock={true}
           format={format}
+          hourAriaLabel="Hour"
           hourPlaceholder="HH"
           locale={locale}
-          monthPlaceholder="MM"
+          minuteAriaLabel="Minute"
           minutePlaceholder="mm"
+          monthAriaLabel="Month"
+          monthPlaceholder="MM"
           name={name}
+          nativeInputAriaLabel="Date"
           onChange={handleOnChange}
+          secondAriaLabel="Second"
+          secondPlaceholder="ss"
           value={value}
+          yearAriaLabel="Year"
           yearPlaceholder="YYYY"
         />
       </ConditionalWrapper>

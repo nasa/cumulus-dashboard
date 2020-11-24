@@ -97,6 +97,7 @@ const SimpleDropdown = ({
         </li>
         <li className="dropdown__element">
           <Select
+            aria-label={label}
             {...rest}
             blurInputOnSelect={true}
             className={className}

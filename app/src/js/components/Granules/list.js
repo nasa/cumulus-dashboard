@@ -22,6 +22,7 @@ import {
   bulkActions,
   defaultWorkflowMeta,
   executeDialog,
+  groupAction,
 } from '../../utils/table-config/granules';
 import List from '../Table/Table';
 import LogViewer from '../Logs/viewer';
@@ -176,6 +177,7 @@ const AllGranules = ({
           tableColumns={view === 'failed' ? errorTableColumns : tableColumns}
           query={query}
           bulkActions={generateBulkActions()}
+          groupAction={groupAction}
           rowId="granuleId"
           initialSortId={tablesortId}
           filterAction={filterGranules}

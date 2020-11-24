@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-1895**
   - Update execution events to display more details in modal
 
+- **CUMULUS-2066**
+  - Add [eslint-plugin-jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
+  - Add [@ace-core/react](https://www.npmjs.com/package/@axe-core/react)
+
 - **CUMULUS-2169**
   - Add provider drop down to granule tables to filter by provider
 

@@ -201,7 +201,9 @@ class Home extends React.Component {
             <div className='row'>
               <div className='heading__wrapper'>
                 <h2 className='heading--medium heading--shared-content--right'>{strings.granules_errors}</h2>
-                <Link className='link--secondary link--learn-more' to={{ pathname: '/logs', search: searchString }}>{strings.view_logs}</Link>
+                {/* commenting out because this is not visible */}
+                {/* <Link className='link--secondary link--learn-more'
+                to={{ pathname: '/logs', search: searchString }}>{strings.view_logs}</Link> */}
               </div>
               <List
                 list={list}
