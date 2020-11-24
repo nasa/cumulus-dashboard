@@ -90,7 +90,7 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
 
   &--primary, &--primary:visited {
     &:hover {
-      background-color: darken($light-green, 10%);
+      background-color: darken($ocean-blue, 10%);
       color: $white;
       border: 0;
     }
