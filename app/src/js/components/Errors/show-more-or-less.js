@@ -28,7 +28,7 @@ const ShowMoreOrLess = ({
       <>
 `       <p>{textShown}</p>
         <button
-          className="button button--small button--primary"
+          className="button button--small button--primary button--show"
           onClick={handleClick}
         >
           {buttonText}
