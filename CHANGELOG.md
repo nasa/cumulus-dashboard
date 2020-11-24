@@ -31,6 +31,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2251**
   - Add the `Granule Actions` button
 
+  **CUMULUS-2262**
+  - Revised `Delete Granule` workflow to allow removing from CMR and then deleting in one step
+
 ## [v3.0.0]
 
 ### Fixed
