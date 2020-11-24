@@ -46,6 +46,7 @@ const AllGranules = ({
 }) => {
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
+  const [selected, setSelected] = useState([]);
   const { dropdowns } = collections;
   const { list } = granules;
   const { count, queriedAt } = list.meta;
@@ -113,7 +114,9 @@ const AllGranules = ({
         action: applyWorkflow,
       },
     };
-    return bulkActions(granules, config);
+    const selectedGranules = selected.map((id) => granules.list.data.find((g) => id === g.granuleId));
+
+    return bulkActions(granules, config, selectedGranules);
   }
 
   function selectWorkflow(selector, selectedWorkflow) {
@@ -146,6 +149,10 @@ const AllGranules = ({
     }));
   }
 
+  function updateSelection(selection) {
+    setSelected(selection);
+  }
+
   return (
     <div className="page__component">
       <section className="page__section">
@@ -173,6 +180,7 @@ const AllGranules = ({
           initialSortId={tablesortId}
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
+          onSelect={updateSelection}
         >
           <ListFilters>
             <Dropdown
