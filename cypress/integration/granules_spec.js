@@ -553,6 +553,20 @@ describe('Dashboard Granules Page', () => {
       cy.get('@modal').contains('div', 'Selection contains granules that are published to CMR which must be removed before deleting. Remove published granules from CMR and delete?');
     });
 
+    it('Should show the correct DELETE modal when published granules are selected on the "processing granules" page', () => {
+      // All granules in the "processing" state are published
+      cy.visit('/granules/processing?limit=50');
+
+      cy.get('.table .tbody .tr .td input[type=checkbox]').as('granule-checkbox');
+      cy.get('@granule-checkbox').click({ multiple: true });
+
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Delete').click();
+      cy.get('.default-modal.batch-async-modal ').as('modal');
+
+      cy.get('@modal').contains('div', 'Selection contains granules that are published to CMR which must be removed before deleting. Remove published granules from CMR and delete?');
+    });
+
     it('Should show the correct DELETE modal when published granules are NOT selected', () => {
       // published = false will return a table with only unpublished granules
       cy.visit('/granules?limit=50&page=1&published=false');
