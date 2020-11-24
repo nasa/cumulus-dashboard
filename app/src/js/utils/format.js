@@ -180,10 +180,10 @@ export const link = (url) => (
   </a>
 );
 
-export const truncate = (string, to = 100, showMoreText = true) => {
+export const truncate = (string, to = 100) => {
   if (!string) return nullValue;
   if (string.length <= to) return string;
-  return `${string.slice(0, to)}... ${showMoreText ? 'Show More' : ''}`;
+  return `${string.slice(0, to)}...`;
 };
 
 export const getFormattedCollectionId = (collection) => {

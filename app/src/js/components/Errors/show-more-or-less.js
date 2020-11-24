@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { truncate as truncateText } from '../../utils/format';
 
 const ShowMoreOrLess = ({
@@ -14,27 +13,20 @@ const ShowMoreOrLess = ({
     setShowMore(!showMore);
   }
 
-  function truncateFunc (string) {
-    if (!truncate) return string;
-    return truncateText(string, 100, false);
-  }
-
   function render() {
-    const truncatedText = truncateFunc(text);
+    const truncatedText = truncate ? truncateText(text) : text;
     const textShown = showMore ? text : truncatedText;
     const buttonText = showMore ? 'Show Less' : 'Show More';
 
     // No need to make error collapsible if the truncated
     // output is the same length as the original output
-    if (typeof text === 'string' &&
-        text === truncatedText &&
-        text.length === truncatedText.length) {
+    if (!truncate || text.length === truncatedText.length) {
       return <p>{text}</p>;
     }
 
     return (
       <>
-`      <p>{textShown}</p>
+`       <p>{textShown}</p>
         <button
           className="button button--small button--primary form-group__element"
           onClick={handleClick}
@@ -53,4 +45,4 @@ ShowMoreOrLess.propTypes = {
   truncate: PropTypes.bool,
 };
 
-export default connect((state) => state)(ShowMoreOrLess);
+export default ShowMoreOrLess;
