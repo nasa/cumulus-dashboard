@@ -90,7 +90,7 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
 
   &--primary, &--primary:visited {
     &:hover {
-      background-color: darken($light-green, 10%);
+      background-color: darken($ocean-blue, 10%);
       color: $white;
       border: 0;
     }
@@ -133,6 +133,10 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
 
   &--close{
     padding: .65em 1.2em .65em 1.2em;
+  }
+
+  &--show {
+    padding: .25em .75em;
   }
 
   /*******ButtonGroup & Group CTA******/

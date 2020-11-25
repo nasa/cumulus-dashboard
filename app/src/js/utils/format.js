@@ -183,7 +183,7 @@ export const link = (url) => (
 export const truncate = (string, to = 100) => {
   if (!string) return nullValue;
   if (string.length <= to) return string;
-  return `${string.slice(0, to)}... Show More`;
+  return `${string.slice(0, to)}...`;
 };
 
 export const getFormattedCollectionId = (collection) => {
