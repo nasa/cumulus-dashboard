@@ -20,6 +20,7 @@ const Dropdown = ({
   queryParams,
   selectedValues = [],
   setQueryParams,
+  clearOnClick,
 }) => {
   const typeaheadRef = createRef();
   const [initialQueryParams] = useState(queryParams);
@@ -110,6 +111,12 @@ const Dropdown = ({
     if (getOptions) dispatch(getOptions());
   }, [dispatch, getOptions]);
 
+  function handleFocus(e) {
+    if (clearOnClick) {
+      setSelected([]);
+    }
+  }
+
   return (
     <div className={`filter__item form-group__element filter-${paramKey.includes('.') ? paramKey.split('.')[0] : paramKey}`}>
       {label && <label htmlFor={paramKey}>{label}</label>}
@@ -125,6 +132,7 @@ const Dropdown = ({
         renderInput={renderTypeaheadInput}
         renderMenu={renderTypeaheadMenu}
         selected={selected}
+        onFocus={handleFocus}
       />
     </div>
   );
@@ -144,6 +152,7 @@ Dropdown.propTypes = {
   queryParams: PropTypes.object,
   selectedValues: PropTypes.array,
   setQueryParams: PropTypes.func,
+  clearOnClick: PropTypes.bool,
 };
 
 export default withRouter(withQueryParams()(connect()(Dropdown)));
