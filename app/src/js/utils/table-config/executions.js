@@ -4,7 +4,6 @@ import {
   displayCase,
   seconds,
   fromNowWithTooltip,
-  truncate,
   formatCollectionId
 } from '../format';
 import { strings } from '../../components/locale';
@@ -15,7 +14,7 @@ export const tableColumns = [
     Header: 'Name',
     accessor: 'name',
     Cell: ({ row: { original: { arn, name } } }) => ( // eslint-disable-line react/prop-types
-      <Link to={(location) => ({ pathname: `/executions/execution/${arn}`, search: getPersistentQueryParams(location) })} title={name}>{truncate(name, 24)}</Link>)
+      <Link to={(location) => ({ pathname: `/executions/execution/${arn}`, search: getPersistentQueryParams(location) })} title={name}>{name}</Link>)
   },
   {
     Header: 'Status',

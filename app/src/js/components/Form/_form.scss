@@ -509,6 +509,7 @@ select option{
   border: 1px solid $error-red;
   p {
     margin-bottom: 0;
+    overflow-x: scroll;
     color: $error-text-red;
   }
 }
