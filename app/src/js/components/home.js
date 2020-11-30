@@ -158,7 +158,7 @@ class Home extends React.Component {
           </div>
         </div>
 
-        <div className='page__content page__content__nosidebar'>
+        <div className='page__content page__content--nosidebar'>
           <section className='page__section datetime'>
             <div className='row'>
               <div className='heading__wrapper'>

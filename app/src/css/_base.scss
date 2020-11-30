@@ -396,9 +396,10 @@ a:active {
   margin-bottom: 1em;
 }
 
-.page__content__nosidebar {
+.page__content--nosidebar {
   margin-top: 2em;
   flex-direction: column;
+  padding-bottom: 2em;
 }
 
 .page__content {
@@ -417,6 +418,7 @@ a:active {
   width: 70%;
   margin: 0 auto;
   padding-top: 4em;
+  padding-bottom: 2em;
 }
 
 .page__section {
