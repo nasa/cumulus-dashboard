@@ -197,8 +197,12 @@ a:active {
     font-weight: $base-font-light;
     border-bottom: 1px solid $ocean-blue;
     transition: all 0.3s ease 0s;
-    a {
+    a, button {
       color: lighten($lightest-grey, 2%);
+    }
+    button {
+      background: none;
+      border: none;
     }
     &.active,
     &:hover {

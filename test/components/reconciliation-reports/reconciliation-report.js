@@ -224,5 +224,5 @@ test('report with error triggers error message', function (t) {
   const ErrorReport = reportHeadingWrapper.find('ErrorReport');
   const props = ErrorReport.props();
   t.is(props.report, reconciliationReports.map.exampleReportWithError.data.error);
-  t.is(ErrorReport.dive().find('div p').text(), reconciliationReports.map.exampleReportWithError.data.error);
+  t.is(ErrorReport.dive().find('ShowMoreOrLess').props().text, reconciliationReports.map.exampleReportWithError.data.error);
 });

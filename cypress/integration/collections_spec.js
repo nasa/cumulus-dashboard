@@ -480,7 +480,8 @@ describe('Dashboard Collections Page', () => {
       cy.visit('/granules');
       cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
-      cy.get('.list-actions').contains('Reingest').click();
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Reingest').click();
       cy.get('.button--submit').click();
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Error');
       cy.get('.Collapsible__contentInner').should('contain.text', 'Oopsie');
@@ -506,7 +507,8 @@ describe('Dashboard Collections Page', () => {
 
       cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
-      cy.get('.list-actions').contains('Reingest').click();
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Reingest').click();
       cy.get('.button--submit').click();
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
       cy.get('.modal-content').within(() => {
@@ -542,7 +544,7 @@ describe('Dashboard Collections Page', () => {
           .and('contain', 'Running');
       });
 
-      cy.get('[data-cy=endDateTime] > .react-datetime-picker > .react-datetime-picker__wrapper > .react-datetime-picker__clear-button > .react-datetime-picker__clear-button__icon').click();
+      cy.get('[data-cy="endDateTime"] .react-datetime-picker__clear-button__icon').click();
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')

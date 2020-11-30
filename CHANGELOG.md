@@ -7,9 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+- **CUMULUS-2072**
+  - Add 'Show More' and 'Show Less' buttons to error report
+
 ### Added
 - **CUMULUS-1895**
   - Update execution events to display more details in modal
+
+- **CUMULUS-2066**
+  - Add [eslint-plugin-jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
+  - Add [@ace-core/react](https://www.npmjs.com/package/@axe-core/react)
 
 - **CUMULUS-2169**
   - Add provider drop down to granule tables to filter by provider
@@ -17,6 +25,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2206**
   - Implement lazy loading for SortableTable, Datepicker, and Sidebar
   - Improve performance
+
+### Changed
+
+- **CUMULUS-2251**
+  - Add the `Granule Actions` button
+
+  **CUMULUS-2262**
+  - Revised `Delete Granule` workflow to allow removing from CMR and then deleting in one step
 
 ## [v3.0.0]
 

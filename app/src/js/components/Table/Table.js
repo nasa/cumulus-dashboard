@@ -26,6 +26,7 @@ const List = ({
   dispatch,
   filterAction,
   filterClear,
+  groupAction,
   initialSortId,
   list,
   onSelect,
@@ -40,6 +41,7 @@ const List = ({
 
   const [selected, setSelected] = useState([]);
   const [clearSelected, setClearSelected] = useState(false);
+  const [page, setPage] = useState(1);
 
   const [queryConfig, setQueryConfig] = useState({
     page: 1,
@@ -52,7 +54,6 @@ const List = ({
     bulkActionError: null,
   });
 
-  const { page } = queryConfig;
   const { bulkActionError, completedBulkActions } = bulkActionMeta;
   const { limit: limitQueryParam, page: pageQueryParam, ...queryFilters } = queryParams;
 
@@ -86,10 +87,7 @@ const List = ({
   }, [JSON.stringify(queryFilters)]);
 
   function queryNewPage(newPage) {
-    setQueryConfig((prevQueryConfig) => ({
-      ...prevQueryConfig,
-      ...getQueryConfig({ page: newPage })
-    }));
+    setPage(newPage);
   }
 
   function queryNewSort(sortProps) {
@@ -155,12 +153,14 @@ const List = ({
       isNil
     );
   }
+
   return (
     <>
       <ListActions
         dispatch={dispatch}
         action={action}
         bulkActions={bulkActions}
+        groupAction={groupAction}
         queryConfig={queryConfig}
         completedBulkActions={completedBulkActions}
         onBulkActionSuccess={onBulkActionSuccess}
@@ -220,6 +220,10 @@ List.propTypes = {
   dispatch: PropTypes.func,
   filterAction: PropTypes.func,
   filterClear: PropTypes.func,
+  groupAction: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+  }),
   initialSortId: PropTypes.string,
   list: PropTypes.object,
   query: PropTypes.object,
