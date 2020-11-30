@@ -52,7 +52,7 @@ The dashboard source is available on github and can be cloned with git.
 ```
 The cloned directory `./cumulus-dashboard` will be refered as the root directory of the project and commands that are referenced in this document, should start from that directory.
 
-### Build the dashboard using Docker
+### Build the dashboard using Docker and Docker Compose
 
 It is easy to build a producution-ready, deployable version of the Cumulus dashboard without having to learn the complicated build process details.  A single script, `./bin/build_dashboard_via_docker.sh`, when combined with your dashboard's environment customizations, allows you to run the entire build process within a Docker container.
 
