@@ -43,6 +43,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   **CUMULUS-2242**
   - Changes underlying Docker files for building dashboard bundle and dashboard image via docker.  The user interface remains the same.
 
+  **CUMULUS-2070**
+  - Styling changes included a small css refactor.
+
 ## [v3.0.0]
 
 ### Fixed
