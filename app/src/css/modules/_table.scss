@@ -34,10 +34,10 @@
         padding: 1em 2em;
         vertical-align: middle;
         overflow: hidden;
-        text-overflow: ellipsis;
-        /*&:first-of-type {
-          padding: 1em 0 1em 2em;
-        }*/
+        min-height: 65px;
+        &:hover {
+          overflow: auto;
+        }
       }
       .table__main-asset {
         font-weight: $base-font-semibold;
