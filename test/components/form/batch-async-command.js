@@ -77,5 +77,8 @@ test('collect multiple errors', function (t) {
     );
 
     command.instance().start();
+    setTimeout(()=> {
+      command.instance().cleanup();
+    }, 1000)
   });
 });
