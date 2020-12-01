@@ -206,8 +206,6 @@ export class BatchCommand extends React.Component {
     const modalTitle = confirm(todo);
     const percentage = todo ? ((completed * 100) / todo).toFixed(2) : 0;
 
-    // console.log(modalOptions);
-
     return (
       <div>
         <AsyncCommand
@@ -244,22 +242,18 @@ export class BatchCommand extends React.Component {
                 <FontAwesomeIcon icon={faCheck} />
               </CircularProgressbarWithChildren>
             }
-            {(!inflight && !status) &&
-            <>
-              {(!modalOptions || !modalOptions.children) && (
-                <div className="modal__internal modal__formcenter">
-                  {confirmOptions &&
+            {(!inflight && !status) && (!modalOptions || !modalOptions.children) && (
+              <div className="modal__internal modal__formcenter">
+                {confirmOptions &&
                     confirmOptions.map((option) => (
                       <div key={`option-${confirmOptions.indexOf(option)}`}>
                         {option}
                         <br />
                       </div>))
-                  }
-                </div>
-              )}
-              {modalOptions && modalOptions.children}
-            </>
-            }
+                }
+              </div>
+            )}
+            {modalOptions && modalOptions.children}
           </DefaultModal>
         </div>
       </div>
