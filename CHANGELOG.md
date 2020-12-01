@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Fixed
+- **CUMULUS-2069**
+  - Standardize UI button groups
+
 - **CUMULUS-2072**
   - Add 'Show More' and 'Show Less' buttons to error report
 
