@@ -172,10 +172,10 @@ export const recoverAction = (granules, config) => ({
   confirm: confirmRecover
 });
 
-const confirmReingest = (d) => `Reingest ${d} Granule${d > 1 ? 's' : ''}?`;
-const confirmApply = (d) => `Run workflow on ${d} granules?`;
-const confirmRemove = (d) => `Remove ${d} granule(s) from ${strings.cmr}?`;
-const confirmDelete = (d) => `Delete ${d} granule(s)?`;
+const confirmReingest = (d) => `Reingest ${d} Granule${d > 1 ? 's' : ''}`;
+const confirmApply = (d) => `Run workflow on ${d} granule${d > 1 ? 's' : ''}`;
+const confirmRemove = (d) => `Remove ${d} granule${d > 1 ? 's' : ''} from ${strings.cmr}`;
+const confirmDelete = (d) => `Delete ${d} granule${d > 1 ? 's' : ''}`;
 
 /**
  * Determine the base context of a collection view

@@ -89,7 +89,7 @@ export const errorTableColumns = [
   }
 ];
 
-const confirmDelete = (d) => `Delete ${d} PDR(s)?`;
+const confirmDelete = (d) => `Delete ${d} PDR${d > 1 ? 's' : ''}`;
 
 export const bulkActions = (pdrs) => [{
   text: 'Delete',
@@ -128,7 +128,7 @@ export const granuleTableColumns = [
   }
 ];
 
-const confirmGranuleDelete = (d) => `Delete ${d} Granule(s)?`;
+const confirmGranuleDelete = (d) => `Delete ${d} Granule${d > 1 ? 's' : ''}`;
 export const granuleBulkActions = (granules) => [{
   text: 'Delete',
   action: deleteGranule,

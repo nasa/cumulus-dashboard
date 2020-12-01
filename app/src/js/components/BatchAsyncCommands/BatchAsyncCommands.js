@@ -2,14 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import queue from 'stubborn-queue';
+import {
+  CircularProgressbar,
+  CircularProgressbarWithChildren
+} from 'react-circular-progressbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
-import _config from '../../config';
 import DefaultModal from '../Modal/modal';
 
-const { updateDelay } = _config;
-
 const CONCURRENCY = 3;
-const IN_PROGRESS = 'Processing...';
 
 /** BatchCommand
  * @description a reusable component for implementing batch async commands. For example:
@@ -37,6 +39,7 @@ export class BatchCommand extends React.Component {
       completed: 0,
       status: null,
       modalOptions: null,
+      errorMessage: null,
     };
     this.isRunning = false;
     this.confirm = this.confirm.bind(this);
@@ -122,13 +125,27 @@ export class BatchCommand extends React.Component {
 
   // immediately change the UI to show either success or error
   onComplete(errors, results) {
-    const delay = this.props.updateDelay ? this.props.updateDelay : updateDelay;
+    const {
+      getModalOptions,
+      selected,
+      history,
+    } = this.props;
     // turn array of errors from queue into single error for ui
     const errorMessage = this.createErrorMessage(errors);
-    this.setState({ status: errorMessage ? 'error' : 'success' });
-    setTimeout(() => {
-      this.cleanup(errorMessage, errors, results);
-    }, delay);
+    this.setState({ errorMessage, results, status: errorMessage ? 'error' : 'success' });
+    if (typeof getModalOptions === 'function') {
+      // setTimeout(() => {
+      const modalOptions = getModalOptions({
+        history,
+        selected,
+        results,
+        errors,
+        errorMessage,
+        isOnModalComplete: true,
+        closeModal: this.closeModal,
+      });
+      this.setState({ modalOptions, status: null });
+    }
   }
 
   // combine multiple errors into one
@@ -140,36 +157,23 @@ export class BatchCommand extends React.Component {
   }
 
   // call onSuccess and onError functions as needed
-  cleanup(errorMessage, errors, results) {
+  cleanup(e) {
+    const { errorMessage, results } = this.state;
     const {
       clearError,
       dispatch,
       onSuccess,
       onError,
-      getModalOptions,
       selected,
-      history,
     } = this.props;
-    if (typeof getModalOptions === 'function') {
-      const modalOptions = getModalOptions({
-        history,
-        selected,
-        results,
-        errors,
-        errorMessage,
-        isOnModalComplete: true,
-        closeModal: this.closeModal,
-      });
-      this.setState({ modalOptions, status: null });
-    } else {
-      this.setState({ completed: 0, status: null, activeModal: false });
-    }
     if (errorMessage && typeof onError === 'function') onError(errorMessage);
     if (results && results.length && typeof onSuccess === 'function') { onSuccess(results, errorMessage); }
 
     if (typeof clearError === 'function') {
       selected.forEach((id) => dispatch(clearError(id)));
     }
+
+    this.setState({ activeModal: false, completed: 0, errorMessage: null, results: null, status: null });
   }
 
   isInflight() {
@@ -198,17 +202,11 @@ export class BatchCommand extends React.Component {
     const inflight = this.isInflight();
 
     // show button as disabled when loading, and in the delay before we clean up.
-    const buttonClass = inflight || status ? 'button--disabled' : '';
-    let modalTitle;
-    if (inflight) {
-      modalTitle = IN_PROGRESS;
-    } else if (!status) {
-      modalTitle = confirm(todo);
-    } else if (status === 'success') {
-      modalTitle = 'Success!';
-    } else {
-      modalTitle = 'Error';
-    }
+    const buttonClass = inflight ? 'button--disabled' : '';
+    const modalTitle = confirm(todo);
+    const percentage = todo ? ((completed * 100) / todo).toFixed(2) : 0;
+
+    // console.log(modalOptions);
 
     return (
       <div>
@@ -229,40 +227,39 @@ export class BatchCommand extends React.Component {
         >
           <DefaultModal
             className="batch-async-modal"
-            onCancel={this.cancel}
-            onCloseModal={this.cancel}
+            onCancel={status ? this.cleanup : this.cancel}
+            cancelButtonText={status ? 'Close' : 'Cancel'}
+            onCloseModal={status ? this.cleanup : this.cancel}
             onConfirm={this.confirm}
             title={modalTitle}
             showModal={activeModal}
             confirmButtonClass={`${buttonClass} button--submit`}
             cancelButtonClass={`${buttonClass} button--cancel`}
+            hasConfirmButton={!status} /* if status is set, we just want to close the modal */
             {...modalOptions}
           >
-            {(!modalOptions || !modalOptions.children) && (
-              <div className="modal__internal modal__formcenter">
-                {confirmOptions &&
-                  confirmOptions.map((option) => (
-                    <div key={`option-${confirmOptions.indexOf(option)}`}>
-                      {option}
-                      <br />
-                    </div>
-                  ))}
-                <div className="modal__loading">
-                  <div className="modal__loading--inner">
-                    <div
-                      className={
-                        `modal__loading--progress modal__loading--progress--${
-                        status}`
-                      }
-                      style={{
-                        width: todo ? `${(completed * 100) / todo}%` : 0,
-                      }}
-                    ></div>
-                  </div>
+            {inflight && <CircularProgressbar background="true" text={`${percentage}%`} strokeWidth="2" value={percentage} />}
+            {status === 'success' &&
+              <CircularProgressbarWithChildren background="true" className="success" strokeWidth="2" value={100}>
+                <FontAwesomeIcon icon={faCheck} />
+              </CircularProgressbarWithChildren>
+            }
+            {(!inflight && !status) &&
+            <>
+              {(!modalOptions || !modalOptions.children) && (
+                <div className="modal__internal modal__formcenter">
+                  {confirmOptions &&
+                    confirmOptions.map((option) => (
+                      <div key={`option-${confirmOptions.indexOf(option)}`}>
+                        {option}
+                        <br />
+                      </div>))
+                  }
                 </div>
-              </div>
-            )}
-            {modalOptions && modalOptions.children}
+              )}
+              {modalOptions && modalOptions.children}
+            </>
+            }
           </DefaultModal>
         </div>
       </div>
@@ -283,7 +280,6 @@ BatchCommand.propTypes = {
   confirm: PropTypes.func,
   confirmOptions: PropTypes.array,
   getModalOptions: PropTypes.func,
-  updateDelay: PropTypes.number,
   history: PropTypes.object,
 };
 

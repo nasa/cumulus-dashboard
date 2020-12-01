@@ -71,7 +71,7 @@ export const tableColumns = [
   }
 ];
 
-const confirmRecover = (d) => `Recover ${d} ${strings.collection}(s)?`;
+const confirmRecover = (d) => `Recover ${d} ${strings.collection}${d > 1 ? 's' : ''}`;
 export const recoverAction = (collections, config) => [{
   text: 'Recover',
   action: config.recover.action,
@@ -79,7 +79,7 @@ export const recoverAction = (collections, config) => [{
   confirm: confirmRecover
 }];
 
-const confirmDelete = (d) => `Delete ${d} ${strings.collection}(s)?`;
+const confirmDelete = (d) => `Delete ${d} ${strings.collection}${d > 1 ? 's' : ''}`;
 
 export const bulkActions = (collections) => {
   const getModalOptions = ({

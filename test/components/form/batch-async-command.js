@@ -73,7 +73,6 @@ test('collect multiple errors', function (t) {
         onSuccess={onSuccess}
         onError={onError}
         selected={selected}
-        updateDelay={1}
       />
     );
 
