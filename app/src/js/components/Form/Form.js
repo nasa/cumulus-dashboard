@@ -327,7 +327,7 @@ export class Form extends React.Component {
 
         {this.props.submit && (
           <button
-            className={`button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white button--submit${this.isInflight() ? ' button--disabled' : ''}`}
+            className={`button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right button--submit${this.isInflight() ? ' button--disabled' : ''}`}
             onClick={this.onSubmit}
           >
             { submitButtonText }
@@ -336,7 +336,7 @@ export class Form extends React.Component {
 
         {this.props.cancel && (
           <button
-            className={`button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button--cancel${this.isInflight() ? ' button--disabled' : ''}`}
+            className={`button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right button--cancel${this.isInflight() ? ' button--disabled' : ''}`}
             onClick={this.onCancel}
           >
             Cancel

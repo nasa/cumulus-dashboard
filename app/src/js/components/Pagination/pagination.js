@@ -41,6 +41,21 @@ const Pagination = ({
     }
   }
 
+  function renderOptions(totalPages) {
+    const pages = [];
+
+    for (let p = 1; p <= totalPages; p++) {
+      pages.push(
+        {
+          id: p,
+          label: p.toString(),
+        }
+      );
+    }
+
+    return pages;
+  }
+
   if (Number.isNaN(count) && Number.isNaN(limit) && Number.isNaN(page)) return null;
 
   const currentPage = +page;
@@ -91,13 +106,9 @@ const Pagination = ({
             inputProps={{ 'aria-label': 'Page' }}
             label={<span className="sr-only">Page</span>}
             onChange={handleDropdownChange}
-            options={[
-              {
-                id: meta.total_pages,
-                label: meta.total_pages.toString(),
-              },
-            ]}
+            options={renderOptions(meta.total_pages)}
             paramKey="page"
+            clearOnClick={true}
             selectedValues={[
               {
                 id: currentPage,

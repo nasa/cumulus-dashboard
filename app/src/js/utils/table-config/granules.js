@@ -22,6 +22,7 @@ import {
   reingestGranuleClearError,
   removeGranule,
   removeGranuleClearError,
+  removeAndDeleteGranule
 } from '../../actions';
 import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
@@ -176,6 +177,7 @@ const confirmReingest = (d) => `Reingest ${d} Granule${d > 1 ? 's' : ''}`;
 const confirmApply = (d) => `Run workflow on ${d} granule${d > 1 ? 's' : ''}`;
 const confirmRemove = (d) => `Remove ${d} granule${d > 1 ? 's' : ''} from ${strings.cmr}`;
 const confirmDelete = (d) => `Delete ${d} granule${d > 1 ? 's' : ''}`;
+const confirmRemoveFromCMR = (d) => 'Selection contains granules that are published to CMR which must be removed before deleting. Remove published granules from CMR and delete?';
 
 /**
  * Determine the base context of a collection view
@@ -248,6 +250,20 @@ const granuleModalJourney = ({
   return modalOptions;
 };
 
+const containsPublishedGranules = (selectedGranules) => {
+  let publishedGranules = [];
+
+  if (Array.isArray(selectedGranules) && selectedGranules.length > 0) {
+    publishedGranules = selectedGranules.filter((g) => g.published === true);
+  }
+
+  if (publishedGranules.length < 1) {
+    return false;
+  }
+
+  return true;
+};
+
 export const reingestAction = (granules) => ({
   text: 'Reingest',
   action: reingestGranule,
@@ -258,7 +274,7 @@ export const reingestAction = (granules) => ({
   getModalOptions: granuleModalJourney
 });
 
-export const bulkActions = (granules, config) => [
+export const bulkActions = (granules, config, selectedGranules) => [
   reingestAction(granules),
   {
     text: 'Execute',
@@ -295,9 +311,9 @@ export const bulkActions = (granules, config) => [
   },
   {
     text: 'Delete',
-    action: deleteGranule,
+    action: containsPublishedGranules(selectedGranules) ? removeAndDeleteGranule : deleteGranule,
     state: granules.deleted,
     clearError: deleteGranuleClearError,
-    confirm: confirmDelete,
+    confirm: containsPublishedGranules(selectedGranules) ? confirmRemoveFromCMR : confirmDelete,
     className: 'button--delete'
   }];
