@@ -83,7 +83,7 @@ class AsyncCommand extends React.Component {
   }
 
   render () {
-    const { status, text, confirmText, confirmOptions, postActionText, success } = this.props;
+    const { status, text, confirmText, confirmOptions, postActionText, success, showSuccessModal } = this.props;
     const { confirmModal, successModal } = this.state;
     const inflight = status === 'inflight';
     const element = this.props.element || 'button';
@@ -122,7 +122,7 @@ class AsyncCommand extends React.Component {
               <h4>{confirmText}</h4>
             </div>
           </DefaultModal>
-          <DefaultModal
+          {showSuccessModal && <DefaultModal
             className='async__modal--success'
             onConfirm={success}
             onCloseModal={this.cancel}
@@ -132,7 +132,7 @@ class AsyncCommand extends React.Component {
             title={text}
             children={postActionText}
             showModal={successModal}
-          />
+          />}
         </div>
       </div>
     );
