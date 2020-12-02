@@ -300,10 +300,7 @@ describe('Rules page', () => {
         .contains('Confirm')
         .click();
       cy.wait('@deleteRule');
-      cy.get('.modal')
-        .get('button')
-        .contains('Close')
-        .click();
+      cy.get('.modal .button--cancel').click();
       cy.contains('.table .tr a', testRuleName)
         .should('not.exist');
       cy.task('resetState');
