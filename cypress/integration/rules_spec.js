@@ -309,6 +309,8 @@ describe('Rules page', () => {
       cy.get('.dropdown__options__btn').click();
       cy.get('.dropdown__menu').contains('Rerun').click();
       cy.get('.button--submit').click();
+      cy.wait('@putRule');
+      cy.get('.button--cancel').click();
       cy.get('.modal-content').should('not.be', 'visible');
     });
 
@@ -324,6 +326,8 @@ describe('Rules page', () => {
       cy.get('.dropdown__options__btn').click();
       cy.get('.dropdown__menu').contains('Rerun').click();
       cy.get('.button--submit').click();
+      cy.wait('@putRule');
+      cy.get('.button--cancel').click();
       cy.get('.modal-content').should('not.be', 'visible');
       cy.contains('.error__report', 'Error');
     });
