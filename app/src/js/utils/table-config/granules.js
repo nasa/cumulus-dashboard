@@ -173,10 +173,10 @@ export const recoverAction = (granules, config) => ({
   confirm: confirmRecover
 });
 
-const confirmReingest = (d) => `Reingest ${d} Granule${d > 1 ? 's' : ''}`;
-const confirmApply = (d) => `Run workflow on ${d} granule${d > 1 ? 's' : ''}`;
-const confirmRemove = (d) => `Remove ${d} granule${d > 1 ? 's' : ''} from ${strings.cmr}`;
-const confirmDelete = (d) => `Delete ${d} granule${d > 1 ? 's' : ''}`;
+const confirmReingest = (d) => `Reingest ${d} Granule${d > 1 ? 's' : ''}?`;
+const confirmApply = (d) => `Run workflow on ${d} granule${d > 1 ? 's' : ''}?`;
+const confirmRemove = (d) => `Remove ${d} granule${d > 1 ? 's' : ''} from ${strings.cmr}?`;
+const confirmDelete = (d) => `Delete ${d} granule${d > 1 ? 's' : ''}?`;
 const confirmRemoveFromCMR = (d) => 'Selection contains granules that are published to CMR which must be removed before deleting. Remove published granules from CMR and delete?';
 
 /**
