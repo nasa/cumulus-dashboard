@@ -1,4 +1,5 @@
 // This is the main Collections Overview page
+import { get } from 'object-path';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
@@ -8,6 +9,7 @@ import {
   applyRecoveryWorkflowToCollection,
   clearCollectionsSearch,
   getCumulusInstanceMetadata,
+  getOptionsProviderName,
   listCollections,
   searchCollections,
   filterCollections,
@@ -19,6 +21,7 @@ import {
   recoverAction,
   tableColumns,
 } from '../../utils/table-config/collections';
+import Dropdown from '../DropDown/dropdown';
 import Search from '../Search/search';
 import List from '../Table/Table';
 import { strings } from '../locale';
@@ -68,7 +71,7 @@ class CollectionList extends React.Component {
   }
 
   render() {
-    const { collections, datepicker } = this.props;
+    const { collections, datepicker, providers: { dropdowns } } = this.props;
     const { list } = collections;
     const { startDateTime, endDateTime } = datepicker || {};
     const hasTimeFilter = startDateTime || endDateTime;
@@ -123,6 +126,17 @@ class CollectionList extends React.Component {
                 placeholder="Collection Name"
                 searchKey="collections"
               />
+              <Dropdown
+                getOptions={getOptionsProviderName}
+                options={get(dropdowns, ['provider', 'options'])}
+                action={filterCollections}
+                clear={clearCollectionsFilter}
+                paramKey="provider"
+                label="Provider"
+                inputProps={{
+                  placeholder: 'All'
+                }}
+              />
             </ListFilters>
           </List>
         </section>
@@ -136,6 +150,7 @@ CollectionList.propTypes = {
   config: PropTypes.object,
   datepicker: PropTypes.object,
   dispatch: PropTypes.func,
+  providers: PropTypes.object,
   queryParams: PropTypes.object,
 };
 
@@ -147,5 +162,6 @@ export default withRouter(
     collections: state.collections,
     config: state.config,
     datepicker: state.datepicker,
+    providers: state.providers,
   }))(CollectionList)
 );
