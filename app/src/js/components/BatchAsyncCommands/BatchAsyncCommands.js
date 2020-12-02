@@ -8,6 +8,7 @@ import {
 } from 'react-circular-progressbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { Alert } from 'react-bootstrap';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import DefaultModal from '../Modal/modal';
 
@@ -197,13 +198,13 @@ export class BatchCommand extends React.Component {
 
   render() {
     const { text, selected, className, confirm, confirmOptions } = this.props;
-    const { activeModal, completed, status, modalOptions } = this.state;
+    const { activeModal, completed, errorMessage, status, modalOptions } = this.state;
     const todo = selected.length;
     const inflight = this.isInflight();
 
     // show button as disabled when loading, and in the delay before we clean up.
     const buttonClass = inflight ? 'button--disabled' : '';
-    const modalTitle = confirm(todo);
+    const confirmText = confirm(todo);
     const percentage = todo ? ((completed * 100) / todo).toFixed(2) : 0;
 
     return (
@@ -229,7 +230,7 @@ export class BatchCommand extends React.Component {
             cancelButtonText={status ? 'Close' : 'Cancel'}
             onCloseModal={status ? this.cleanup : this.cancel}
             onConfirm={this.confirm}
-            title={modalTitle}
+            title={text}
             showModal={activeModal}
             confirmButtonClass={`${buttonClass} button--submit`}
             cancelButtonClass={`${buttonClass} button--cancel`}
@@ -238,20 +239,29 @@ export class BatchCommand extends React.Component {
           >
             {inflight && <CircularProgressbar background="true" text={`${percentage}%`} strokeWidth="2" value={percentage} />}
             {status === 'success' &&
+            <>
+              <Alert variant="success"></Alert>
               <CircularProgressbarWithChildren background="true" className="success" strokeWidth="2" value={100}>
                 <FontAwesomeIcon icon={faCheck} />
               </CircularProgressbarWithChildren>
+            </>
+            }
+            {status === 'error' &&
+              <Alert variant="danger">{errorMessage}</Alert>
             }
             {(!inflight && !status) && (!modalOptions || !modalOptions.children) && (
-              <div className="modal__internal modal__formcenter">
-                {confirmOptions &&
+              <>
+                <Alert variant="light">{confirmText}</Alert>
+                <div className="modal__internal modal__formcenter">
+                  {confirmOptions &&
                     confirmOptions.map((option) => (
                       <div key={`option-${confirmOptions.indexOf(option)}`}>
                         {option}
                         <br />
                       </div>))
-                }
-              </div>
+                  }
+                </div>
+              </>
             )}
             {modalOptions && modalOptions.children}
           </DefaultModal>
