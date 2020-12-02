@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Fixed
+- **CUMULUS-2069**
+  - Standardize UI button groups
+
 - **CUMULUS-2072**
   - Add 'Show More' and 'Show Less' buttons to error report
 
@@ -42,6 +45,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-2271**
   - Allow horizontal scrolling in table cells when content doesn't fit in view
+
+  **CUMULUS-2070**
+  - Styling changes included a small css refactor.
 
 ## [v3.0.0]
 
