@@ -37,6 +37,22 @@
         &:hover {
           overflow: auto;
         }
+
+        /*
+         * From https://stackoverflow.com/questions/7492062/css-overflow-scroll-always-show-vertical-scroll-bar/10100209#10100209
+         * The horizontal scrollbar does not always show, depending on the user's OS settings.
+         * This forces a bar to render.
+        */
+        &::-webkit-scrollbar {
+          -webkit-appearance: none;
+          height: 8px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          border-radius: 4px;
+          background-color: rgba(0, 0, 0, .5);
+          box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+        }
       }
       .table__main-asset {
         font-weight: $base-font-semibold;
