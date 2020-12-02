@@ -247,7 +247,7 @@ export class BatchCommand extends React.Component {
             </>
             }
             {status === 'error' &&
-              <Alert variant="danger">{errorMessage}</Alert>
+              <Alert variant="danger">Error! {errorMessage}</Alert>
             }
             {(!inflight && !status) && (!modalOptions || !modalOptions.children) && (
               <>
