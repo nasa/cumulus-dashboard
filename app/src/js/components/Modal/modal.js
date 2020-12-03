@@ -54,18 +54,20 @@ const DefaultModal = ({
       <Modal.Body>
         { children }
       </Modal.Body>
-      <Modal.Footer>
-        {hasCancelButton && <button
-          className={`button ${cancelButtonClass} button__animation--md button__arrow button__animation button--secondary form-group__element--left`}
-          onClick={handleCancel}>
-          { cancelButtonText }
-        </button>}
-        {hasConfirmButton && <button
-          className={`button ${confirmButtonClass} button__animation--md button__arrow button__animation form-group__element--left`}
-          onClick={handleConfirm}>
-          { confirmButtonText }
-        </button>}
-      </Modal.Footer>
+      {(hasCancelButton || hasConfirmButton) &&
+        <Modal.Footer>
+          {hasCancelButton && <button
+            className={`button ${cancelButtonClass} button__animation--md button__arrow button__animation button--secondary form-group__element--left`}
+            onClick={handleCancel}>
+            { cancelButtonText }
+          </button>}
+          {hasConfirmButton && <button
+            className={`button ${confirmButtonClass} button__animation--md button__arrow button__animation form-group__element--left`}
+            onClick={handleConfirm}>
+            { confirmButtonText }
+          </button>}
+        </Modal.Footer>
+      }
     </Modal>
   );
 };
