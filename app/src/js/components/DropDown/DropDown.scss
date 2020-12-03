@@ -2,13 +2,10 @@
   background-color: $white;
 
   &__options {
-    margin-top: 0.3em;
     position: relative;
   }
 
   &__options__btn {
-    position: relative;
-    padding: 0.6em 2em 0.2em;
     &:before {
       position: absolute;
       color: $white;
@@ -16,15 +13,8 @@
       font-family: 'FontAwesome';
       content: '\f013';
       font-weight: 900;
-      left: 1.4em;
+      left: 10px;
       top: 0.45em;
-    }
-    span {
-      clip: rect(0, 0, 0, 0);
-      height: 1px;
-      margin: -1px;
-      overflow: hidden;
-      position: absolute;
     }
   }
 

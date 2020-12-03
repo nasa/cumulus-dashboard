@@ -15,7 +15,8 @@ const DefaultModal = ({
   hasCancelButton = true,
   hasConfirmButton = true,
   confirmButtonClass = 'button--submit',
-  cancelButtonClass = 'button--cancel'
+  cancelButtonClass = 'button--cancel',
+  size = 'md'
 }) => {
   function handleCloseModal (e) {
     if (typeof onCloseModal === 'function') {
@@ -43,7 +44,7 @@ const DefaultModal = ({
       show={showModal}
       onHide={handleCloseModal}
       centered
-      size="md"
+      size={size}
       aria-labelledby={`modal__${className}`}
     >
       <Modal.Header className={`${className}__header`} closeButton></Modal.Header>
@@ -53,18 +54,20 @@ const DefaultModal = ({
       <Modal.Body>
         { children }
       </Modal.Body>
-      <Modal.Footer>
-        {hasCancelButton && <button
-          className={`button ${cancelButtonClass} button__animation--md button__arrow button__animation button--secondary form-group__element--left`}
-          onClick={handleCancel}>
-          { cancelButtonText }
-        </button>}
-        {hasConfirmButton && <button
-          className={`button ${confirmButtonClass} button__animation--md button__arrow button__animation form-group__element--left`}
-          onClick={handleConfirm}>
-          { confirmButtonText }
-        </button>}
-      </Modal.Footer>
+      {(hasCancelButton || hasConfirmButton) &&
+        <Modal.Footer>
+          {hasCancelButton && <button
+            className={`button ${cancelButtonClass} button__animation--md button__arrow button__animation button--secondary form-group__element--left`}
+            onClick={handleCancel}>
+            { cancelButtonText }
+          </button>}
+          {hasConfirmButton && <button
+            className={`button ${confirmButtonClass} button__animation--md button__arrow button__animation form-group__element--left`}
+            onClick={handleConfirm}>
+            { confirmButtonText }
+          </button>}
+        </Modal.Footer>
+      }
     </Modal>
   );
 };
@@ -82,7 +85,8 @@ DefaultModal.propTypes = {
   hasCancelButton: PropTypes.bool,
   hasConfirmButton: PropTypes.bool,
   confirmButtonClass: PropTypes.string,
-  cancelButtonClass: PropTypes.string
+  cancelButtonClass: PropTypes.string,
+  size: PropTypes.string,
 };
 
 export default DefaultModal;

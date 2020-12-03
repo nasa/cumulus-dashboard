@@ -578,7 +578,7 @@ describe('Dashboard Granules Page', () => {
       cy.contains('button', 'Delete').click();
       cy.get('.default-modal.batch-async-modal ').as('modal');
 
-      cy.get('@modal').contains('div', 'Delete 5 granule(s)?');
+      cy.get('@modal').contains('div', 'Delete 5 granules?');
     });
 
     it('Should handle a successful API response from the Remove and Delete granule requests', () => {

@@ -185,7 +185,7 @@ const List = ({
               selected={selected}
             />
           )}
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Loading/>}>
             <SortableTable
               tableColumns={tableColumns}
               data={tableData}
