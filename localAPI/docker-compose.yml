@@ -18,7 +18,7 @@ services:
     working_dir:
       /cumulus-dashboard
     volumes:
-      - ../:/cumulus-dashboard:cached
+      - ../:/cumulus-dashboard
     ports:
       - "9200:9200"
       - "4550-4586:4550-4586"
