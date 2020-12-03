@@ -238,7 +238,12 @@ export class BatchCommand extends React.Component {
             {...modalOptions}
             {...inflight ? { size: 'md' } : {}}
           >
-            {inflight && <CircularProgressbar background="true" text={`${percentage}%`} strokeWidth="2" value={percentage} />}
+            {inflight &&
+              <>
+                <p className="progress-text">One moment while your request is processing</p>
+                <CircularProgressbar background="true" text={`${percentage}%`} strokeWidth="2" value={percentage} />
+              </>
+            }
             {status === 'success' &&
             <>
               <Alert variant="success"><strong>Success!</strong></Alert>
