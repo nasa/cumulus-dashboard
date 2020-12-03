@@ -90,6 +90,21 @@ describe('Dashboard Collections Page', () => {
         .contains(infix);
     });
 
+    it.only('should display collections with active granules when a provider is selected from dropdown', () => {
+      cy.visit('/collections');
+      cy.wait('@getCollections');
+
+      cy.get('.filter-provider .rbt-input-main').as('provider-input');
+      cy.get('@provider-input').click().type('s3').type('{enter}');
+      cy.url().should('include', 'provider=s3_provider');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+
+      cy.get('@provider-input').click().clear().type('POD')
+        .type('{enter}');
+      cy.url().should('include', 'provider=PODAAC_SWOT');
+      cy.get('.table .tbody .tr').should('not.exist');
+    });
+
     it('should display expected MMT Links for a collections list', () => {
       cy.route({
         method: 'GET',

@@ -121,7 +121,8 @@ export const listCollections = (options = {}) => {
   const { listAll = false, getMMT = true, includeStats = true, ...queryOptions } = options;
   return (dispatch, getState) => {
     const timeFilters = listAll ? {} : fetchCurrentTimeFilters(getState().datepicker);
-    const urlPath = `collections${isEmpty(timeFilters) || listAll ? '' : '/active'}`;
+    const providerFilter = get(queryOptions, 'provider');
+    const urlPath = `collections${(isEmpty(timeFilters) && providerFilter === undefined) || listAll ? '' : '/active'}`;
     return dispatch({
       [CALL_API]: {
         type: types.COLLECTIONS,

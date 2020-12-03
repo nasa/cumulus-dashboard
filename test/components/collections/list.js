@@ -25,6 +25,30 @@ const collections = {
   updated: {}
 };
 
+const providers = {
+  providers: {
+    list: {
+      data: [],
+      meta: {},
+      params: {}
+    },
+    dropdowns: {
+      provider: {
+        options: [
+          {
+            id: 's3_provider',
+            label: 's3_provider'
+          },
+          {
+            id: 'http_provider',
+            label: 'http_provider'
+          }
+        ],
+      }
+    }
+  }
+};
+
 test('Collections Overview generates bulkAction for recovery button', function (t) {
   const dispatch = () => {};
   const logs = {};
@@ -41,7 +65,8 @@ test('Collections Overview generates bulkAction for recovery button', function (
         collections = {collections}
         dispatch = {dispatch}
         logs = {logs}
-        config = {config}/>
+        config = {config}
+        providers = {providers}/>
     </Provider>);
 
   const collectionsWrapper = providerWrapper.find('CollectionList').dive();
@@ -69,7 +94,8 @@ test('Collections Overview does not generate bulkAction for recovery button', fu
         collections = {collections}
         dispatch = {dispatch}
         logs = {logs}
-        config = {config}/>
+        config = {config}
+        providers = {providers}/>
     </Provider>);
 
   const collectionsWrapper = providerWrapper.find('CollectionList').dive();
