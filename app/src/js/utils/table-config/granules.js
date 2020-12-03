@@ -174,9 +174,9 @@ export const recoverAction = (granules, config) => ({
 });
 
 const confirmReingest = (d) => `Reingest ${d} Granule${d > 1 ? 's' : ''}?`;
-const confirmApply = (d) => `Run workflow on ${d} granules?`;
-const confirmRemove = (d) => `Remove ${d} granule(s) from ${strings.cmr}?`;
-const confirmDelete = (d) => `Delete ${d} granule(s)?`;
+const confirmApply = (d) => `Run workflow on ${d} granule${d > 1 ? 's' : ''}?`;
+const confirmRemove = (d) => `Remove ${d} granule${d > 1 ? 's' : ''} from ${strings.cmr}?`;
+const confirmDelete = (d) => `Delete ${d} granule${d > 1 ? 's' : ''}?`;
 const confirmRemoveFromCMR = (d) => 'Selection contains granules that are published to CMR which must be removed before deleting. Remove published granules from CMR and delete?';
 
 /**
@@ -230,15 +230,17 @@ const granuleModalJourney = ({
   closeModal
 }) => {
   const initialEntry = !isOnModalConfirm && !isOnModalComplete;
-  const modalOptions = {};
+  const modalOptions = {
+    size: 'lg'
+  };
   if (initialEntry) {
     modalOptions.children = <BatchReingestConfirmContent selected={selected}/>;
   }
   if (isOnModalComplete) {
     modalOptions.children = <BatchReingestCompleteContent results={results} errorMessage={errorMessage}
       errors={errors} />;
+    modalOptions.size = 'lg';
     modalOptions.hasConfirmButton = !errorMessage;
-    modalOptions.title = 'Reingest Granule(s)';
     modalOptions.cancelButtonText = 'Close';
     if (!errorMessage) {
       modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';

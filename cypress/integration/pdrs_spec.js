@@ -229,6 +229,7 @@ describe('Dashboard PDRs Page', () => {
           cy.get('.list-actions').contains('Delete').click();
           cy.get('.button--submit').click();
           cy.wait('@deleteGranule');
+          cy.get('.button--cancel').click();
         });
 
       cy.url().should('include', `/pdrs/pdr/${pdrName}`);

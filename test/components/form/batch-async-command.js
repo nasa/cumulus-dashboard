@@ -73,10 +73,12 @@ test('collect multiple errors', function (t) {
         onSuccess={onSuccess}
         onError={onError}
         selected={selected}
-        updateDelay={1}
       />
     );
 
     command.instance().start();
+    setTimeout(()=> {
+      command.instance().cleanup();
+    }, 1000)
   });
 });

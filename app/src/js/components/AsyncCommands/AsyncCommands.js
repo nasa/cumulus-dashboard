@@ -3,141 +3,129 @@
  *  For Delete Collection Modal (later other modals): Need to copy logic from here and implement in
  *  AsyncDeleteCollectionModal.js
 */
-import React from 'react';
-import c from 'classnames';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
-import DefaultModal from '../Modal/modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { Alert } from 'react-bootstrap';
+import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import { preventDefault } from '../../utils/noop';
+import DefaultModal from '../Modal/modal';
+import Ellipsis from '../LoadingEllipsis/loading-ellipsis';
 
-class AsyncCommand extends React.Component {
-  constructor () {
-    super();
-    this.state = {
-      confirmModal: false,
-      successModal: false
-    };
-    this.buttonClass = this.buttonClass.bind(this);
-    this.elementClass = this.elementClass.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.confirm = this.confirm.bind(this);
-    this.cancel = this.cancel.bind(this);
-  }
+const AsyncCommand = ({
+  action,
+  className,
+  confirmAction,
+  confirmText,
+  confirmOptions,
+  disabled,
+  element = 'button',
+  error,
+  postActionText,
+  status,
+  success,
+  text,
+}) => {
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
 
-  componentDidUpdate (prevProps) {
-    const { status, showSuccessModal } = this.props;
-    if (
-      prevProps.status === 'inflight' &&
-      status === 'success'
-    ) {
-      if (showSuccessModal) {
-        this.setState({ successModal: true }); // eslint-disable-line react/no-did-update-set-state
-      } else if (typeof prevProps.success === 'function') {
-        prevProps.success();
-      }
-    } else if (
-      prevProps.status === 'inflight' &&
-      status === 'error' &&
-      typeof prevProps.error === 'function'
-    ) {
-      prevProps.error();
+  const inflight = status === 'inflight';
+  const props = {
+    className: element !== 'button' ? elementClass(inflight) : buttonClass(inflight),
+    onClick: disabled ? preventDefault : handleClick
+  };
+  if (element === 'a') props.href = '#';
+  const children = (
+    <span>
+      {text}{inflight && <Ellipsis />}
+    </span>
+  );
+  const button = React.createElement(element, props, children);
+  const prevStatusRef = useRef();
+
+  useEffect(() => {
+    const prevStatusInflight = prevStatusRef.current === 'inflight';
+    if (prevStatusInflight && status === 'success') {
+      setSuccessModal(true);
+    } else if (prevStatusInflight && status === 'error' && typeof error === 'function') {
+      error();
     }
-  }
+  }, [error, status]);
 
-  buttonClass (processing) {
+  useEffect(() => {
+    prevStatusRef.current = status;
+  });
+
+  function buttonClass (processing) {
     return [
       'button button--small form-group__element',
       `${processing ? 'button--loading' : ''}`,
-      `${this.props.disabled ? 'button--disabled' : ''}`,
-      `${this.props.className ? this.props.className : 'button__group'}`
+      `${disabled ? 'button--disabled' : ''}`,
+      `${className || 'button__group'}`
     ].join(' ');
   }
 
   // a generic className generator for non-button elements
-  elementClass (processing) {
-    let className = 'async__element';
-    if (processing) className += ' async__element--loading';
-    if (this.props.disabled) className += ' async__element--disabled';
-    if (this.props.className) className += ` ${this.props.className}`;
-    return className;
+  function elementClass (processing) {
+    let newClassName = 'async__element';
+    if (processing) newClassName += ' async__element--loading';
+    if (disabled) newClassName += ' async__element--disabled';
+    if (className) newClassName += ` ${className}`;
+    return newClassName;
   }
 
-  handleClick (e) {
+  function handleClick (e) {
     e.preventDefault();
-    if (this.props.confirmAction) {
-      this.setState({ confirmModal: true });
-    } else if (this.props.status !== 'inflight' && !this.props.disabled) {
+    if (confirmAction) {
+      setConfirmModal(true);
+    } else if (status !== 'inflight' && !disabled) {
       // prevent duplicate action if the action is already inflight.
-      this.props.action();
+      action();
     }
   }
 
-  confirm () {
-    this.props.action();
-    this.setState({ confirmModal: false });
-    if (this.props.status === 'success') this.setState({ successModal: true });
+  function confirm () {
+    action();
+    setConfirmModal(false);
+    if (status === 'success') setSuccessModal(true);
   }
 
-  cancel () {
-    this.setState({ confirmModal: false, successModal: false });
+  function cancel () {
+    setConfirmModal(false);
+    setSuccessModal(false);
   }
-
-  render () {
-    const { status, text, confirmText, confirmOptions, postActionText, success } = this.props;
-    const { confirmModal, successModal } = this.state;
-    const inflight = status === 'inflight';
-    const element = this.props.element || 'button';
-    const props = {
-      className: this.props.element ? this.elementClass(inflight) : this.buttonClass(inflight),
-      onClick: this.props.disabled ? preventDefault : this.handleClick
-    };
-    if (element === 'a') props.href = '#';
-    const children = (
-      <span>
-        {text}{inflight && <Ellipsis />}
-      </span>
-    );
-    const button = React.createElement(element, props, children);
-    return (
-      <div>
-        { button }
-        { confirmModal ? <div className='modal__cover'></div> : null }
-        <div className={c({
-          modal__container: true,
-          'modal__container--onscreen': confirmModal
-        })}>
-          <DefaultModal
-            className='async__modal--confirm'
-            onCancel={this.cancel}
-            onCloseModal={this.cancel}
-            onConfirm={this.confirm}
-            title={text}
-            showModal={confirmModal}
-          >
-            <div className='modal__internal modal__formcenter'>
-              { confirmOptions && (confirmOptions).map((option) => <div key={`option-${confirmOptions.indexOf(option)}`}>
-                {option}
-                <br />
-              </div>)}
-              <h4>{confirmText}</h4>
-            </div>
-          </DefaultModal>
-          <DefaultModal
-            className='async__modal--success'
-            onConfirm={success}
-            onCloseModal={this.cancel}
-            confirmButtonText={'Close'}
-            confirmButtonClass='button--cancel button__arrow--md'
-            hasCancelButton={false}
-            title={text}
-            children={postActionText}
-            showModal={successModal}
-          />
-        </div>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      { button }
+      <DefaultModal
+        className='async__modal'
+        onCancel={successModal ? success : cancel}
+        onCloseModal={cancel}
+        onConfirm={confirm}
+        showModal={confirmModal || successModal}
+        hasConfirmButton={!successModal}
+        cancelButtonText={successModal ? 'Close' : 'Cancel'}
+      >
+        {confirmModal && <div className='modal__internal modal__formcenter'>
+          { confirmOptions && (confirmOptions).map((option) => <div key={`option-${confirmOptions.indexOf(option)}`}>
+            {option}
+            <br />
+          </div>)}
+          <h4>{confirmText}</h4>
+        </div>}
+        {successModal &&
+        <>
+          <Alert variant='success'>Success! {postActionText}</Alert>
+          <CircularProgressbarWithChildren background="true" className="success" strokeWidth="2" value={100}>
+            <FontAwesomeIcon icon={faCheck} />
+          </CircularProgressbarWithChildren>
+        </>
+        }
+      </DefaultModal>
+    </div>
+  );
+};
 
 AsyncCommand.propTypes = {
   action: PropTypes.func,
@@ -151,7 +139,6 @@ AsyncCommand.propTypes = {
   confirmAction: PropTypes.bool,
   confirmText: PropTypes.string,
   confirmOptions: PropTypes.array,
-  showSuccessModal: PropTypes.bool,
   postActionText: PropTypes.string
 };
 

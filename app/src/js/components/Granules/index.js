@@ -13,6 +13,7 @@ import GranulesOverview from './overview';
 import ReconciliationReportList from '../ReconciliationReports/list';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import { filterQueryParams } from '../../utils/url-helper';
+import Loading from '../LoadingIndicator/loading-indicator';
 
 const Sidebar = lazy(() => import('../Sidebar/sidebar'));
 
@@ -55,7 +56,7 @@ const Granules = ({ dispatch, location, queryParams, stats }) => {
       <DatePickerHeader onChange={query} heading={strings.granules} />
       <div className="page__content">
         <div className="wrapper__sidebar">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Loading/>}>
             <Sidebar currentPath={pathname} count={count} location={location} />
           </Suspense>
           <div className="page__content--shortened">
