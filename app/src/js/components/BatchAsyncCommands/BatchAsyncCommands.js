@@ -254,7 +254,7 @@ export class BatchCommand extends React.Component {
             }
             {(!inflight && !status) && (!modalOptions || !modalOptions.children) && (
               <>
-                <Alert variant="light">{confirmText}</Alert>
+                <div>{confirmText}</div>
                 <div className="modal__internal modal__formcenter">
                   {confirmOptions &&
                     confirmOptions.map((option) => (
