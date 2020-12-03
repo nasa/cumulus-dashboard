@@ -212,12 +212,14 @@ class Home extends React.Component {
 
           {this.renderButtonListSection(
             distErrorStats,
-            <h2 className='heading--medium heading--shared-content--right'>Distribution Errors</h2>
+            <h2 className='heading--medium heading--shared-content--right'>Distribution Errors</h2>,
+            'distributionErrors'
           )}
 
           {this.renderButtonListSection(
             distSuccessStats,
-            <h2 className='heading--medium heading--shared-content--right'>Distribution Successes</h2>
+            <h2 className='heading--medium heading--shared-content--right'>Distribution Successes</h2>,
+            'distributionSuccesses'
           )}
 
           <section className='page__section update--granules'>
