@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Alert } from 'react-bootstrap';
 import { collectionNameVersion } from '../../utils/format';
 
 const BatchDeleteWithGranulesContent = ({ selectionsWithGranules }) => (
   <>
+    <Alert variant='warning'><strong>Warning:</strong> You have submitted a request to delete multiple collections.</Alert>
     <span>
-      You have submitted a request to delete multiple collections.
       The following collections contain associated granules:
     </span>
     <ul className='collections-with-granules'>

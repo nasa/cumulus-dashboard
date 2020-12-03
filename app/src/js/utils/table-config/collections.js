@@ -105,7 +105,6 @@ export const bulkActions = (collections) => {
         modalOptions.confirmButtonText = 'Go To Granules';
         modalOptions.confirmButtonClass = 'button__goto';
         modalOptions.cancelButtonText = 'Cancel Request';
-        modalOptions.title = 'Warning';
         modalOptions.onConfirm = () => {
           historyPushWithQueryParams('/granules');
         };
@@ -117,7 +116,6 @@ export const bulkActions = (collections) => {
       modalOptions.hasConfirmButton = false;
       modalOptions.cancelButtonClass = 'button--green';
       modalOptions.cancelButtonText = 'Close';
-      modalOptions.title = 'Complete';
     }
 
     return modalOptions;

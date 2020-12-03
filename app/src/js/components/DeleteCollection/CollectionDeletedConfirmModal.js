@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
+import { Alert } from 'react-bootstrap';
 // import Button from '../Button/Button';
 
 class CollectionDeletedConfirmModal extends React.Component {
@@ -33,9 +34,8 @@ class CollectionDeletedConfirmModal extends React.Component {
           Delete Collection
         </Modal.Title>
         <Modal.Body>
-          <p>
+          <Alert variant="success"><strong>Success</strong></Alert>
             Collection {`"${this.props.collectionLabel}"`} has been deleted.
-          </p>
         </Modal.Body>
         <Modal.Footer>
           <button

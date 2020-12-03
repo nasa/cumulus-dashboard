@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Alert } from 'react-bootstrap';
 import { collectionNameVersion } from '../../utils/format';
 
 const BatchDeleteCompleteContent = ({
@@ -9,6 +10,7 @@ const BatchDeleteCompleteContent = ({
   <>
     {(results && results.length > 0) &&
       <>
+        <Alert variant="success"><strong>Success</strong></Alert>
         <p>Successfully deleted these collections:</p>
         <ul>
           {results.map((result, index) => {
@@ -18,7 +20,12 @@ const BatchDeleteCompleteContent = ({
         </ul>
       </>
     }
-    {error && <span className='error'>{error}</span>}
+    {error &&
+    <>
+      <Alert variant="danger"><strong>Error</strong></Alert>
+      <span className='error'>{error}</span>
+    </>
+    }
   </>
 );
 

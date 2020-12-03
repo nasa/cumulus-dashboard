@@ -236,6 +236,7 @@ export class BatchCommand extends React.Component {
             cancelButtonClass={`${buttonClass} button--cancel`}
             hasConfirmButton={!status} /* if status is set, we just want to close the modal */
             {...modalOptions}
+            {...inflight ? { size: 'md' } : {}}
           >
             {inflight && <CircularProgressbar background="true" text={`${percentage}%`} strokeWidth="2" value={percentage} />}
             {status === 'success' &&

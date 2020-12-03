@@ -230,15 +230,17 @@ const granuleModalJourney = ({
   closeModal
 }) => {
   const initialEntry = !isOnModalConfirm && !isOnModalComplete;
-  const modalOptions = {};
+  const modalOptions = {
+    size: 'lg'
+  };
   if (initialEntry) {
     modalOptions.children = <BatchReingestConfirmContent selected={selected}/>;
   }
   if (isOnModalComplete) {
     modalOptions.children = <BatchReingestCompleteContent results={results} errorMessage={errorMessage}
       errors={errors} />;
+    modalOptions.size = 'lg';
     modalOptions.hasConfirmButton = !errorMessage;
-    modalOptions.title = 'Reingest Granule(s)';
     modalOptions.cancelButtonText = 'Close';
     if (!errorMessage) {
       modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';
