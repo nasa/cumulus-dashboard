@@ -240,14 +240,17 @@ export class BatchCommand extends React.Component {
             {inflight && <CircularProgressbar background="true" text={`${percentage}%`} strokeWidth="2" value={percentage} />}
             {status === 'success' &&
             <>
-              <Alert variant="success">Success!</Alert>
+              <Alert variant="success"><strong>Success!</strong></Alert>
               <CircularProgressbarWithChildren background="true" className="success" strokeWidth="2" value={100}>
                 <FontAwesomeIcon icon={faCheck} />
               </CircularProgressbarWithChildren>
             </>
             }
             {status === 'error' &&
-              <Alert variant="danger">Error! {errorMessage}</Alert>
+            <>
+              <Alert variant="danger"><strong>Error</strong></Alert>
+              <pre className='error__report'>{errorMessage}</pre>
+            </>
             }
             {(!inflight && !status) && (!modalOptions || !modalOptions.children) && (
               <>
