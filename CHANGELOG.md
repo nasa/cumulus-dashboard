@@ -35,6 +35,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Implement lazy loading for SortableTable, Datepicker, and Sidebar
   - Improve performance
 
+- **CUMULUS-2270**
+  - Add provider drop down filter to Collections Overview page
+
 ### Changed
 
 - **CUMULUS-2251**
