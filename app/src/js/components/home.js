@@ -220,7 +220,9 @@ class Home extends React.Component {
                 <h2 className='heading--medium heading--shared-content--right'>{strings.granules_updated}<span className='num-title'>{numGranules}</span></h2>
               </div>
             </div>
+
             {this.renderButtonListSection(updated, '')}
+
           </section>
           <section className='page__section list--granules'>
             <div className='row'>
