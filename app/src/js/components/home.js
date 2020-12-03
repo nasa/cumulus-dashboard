@@ -96,11 +96,8 @@ class Home extends React.Component {
     return (
       <section className='page__section'>
         <div className='row'>
-          <Helmet>
-            <title> Cumulus Home  </title>
-          </Helmet>
           <div className='heading__wrapper'>
-            <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
+            {header}
           </div>
           <div className="overview-num__wrapper overview-num__wrapper-home">
             <ul id={listId}>
@@ -177,6 +174,9 @@ class Home extends React.Component {
 
     return (
       <div className='page__home'>
+        <Helmet>
+          <title> Cumulus Home  </title>
+        </Helmet>
         <div className='content__header content__header--lg'>
           <div className='row'>
             <h1 className='heading--xlarge'>{strings.dashboard}</h1>
@@ -205,9 +205,20 @@ class Home extends React.Component {
             </div>
           </section>
 
-          {this.renderButtonListSection(overview, 'Updates')}
-          {this.renderButtonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
-          {this.renderButtonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
+          {this.renderButtonListSection(
+            overview,
+            <h2 className='heading--medium heading--shared-content--right'>Updates</h2>
+          )}
+
+          {this.renderButtonListSection(
+            distErrorStats,
+            <h2 className='heading--medium heading--shared-content--right'>Distribution Errors</h2>
+          )}
+
+          {this.renderButtonListSection(
+            distSuccessStats,
+            <h2 className='heading--medium heading--shared-content--right'>Distribution Successes</h2>
+          )}
 
           <section className='page__section update--granules'>
             <div className='row'>
@@ -215,12 +226,12 @@ class Home extends React.Component {
                 <h2 className='heading--large heading--shared-content--right'>Granules Updates</h2>
                 <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
               </div>
-              <div className="heading__wrapper">
-                <h2 className='heading--medium heading--shared-content--right'>{strings.granules_updated}<span className='num-title'>{numGranules}</span></h2>
-              </div>
             </div>
 
-            {this.renderButtonListSection(updated, '')}
+            {this.renderButtonListSection(
+              updated,
+              <h2 className='heading--medium heading--shared-content--right'>{strings.granules_updated}<span className='num-title'>{numGranules}</span></h2>
+            )}
 
           </section>
           <section className='page__section list--granules'>
