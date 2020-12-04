@@ -3,8 +3,7 @@ import qs from 'qs';
 import { CALL_API } from '../actions/types';
 import {
   configureRequest,
-  addRequestAuthorization,
-  getErrorMessage
+  addRequestAuthorization
 } from '../actions/helpers';
 import log from '../utils/log';
 import { isValidApiRequestAction } from './validate';
@@ -78,26 +77,27 @@ export const requestMiddleware = ({ dispatch, getState }) => (next) => (action) 
     const start = new Date();
     return axios(requestConfig)
       .then((response) => {
-        const { data, status } = response;
-        if (+status >= 400) {
-          const error = new Error(getErrorMessage(response));
+        const { data } = response;
+        const duration = new Date() - start;
+        log((id ? `${type}: ${id}` : type), `${duration}ms`);
+        return next({ id, type, data, config: requestAction });
+      })
+      .catch((error) => {
+        if (error.response) {
+          const { data, status } = error.response;
           return handleError(
             {
               id,
               type,
-              error,
+              error: data,
               requestAction,
               statusCode: status
             },
             next
           );
         }
-
-        const duration = new Date() - start;
-        log((id ? `${type}: ${id}` : type), `${duration}ms`);
-        return next({ id, type, data, config: requestAction });
-      })
-      .catch((error) => handleError({ id, type, error, requestAction }, next));
+        handleError({ id, type, error, requestAction }, next);
+      });
   }
 
   return next(action);

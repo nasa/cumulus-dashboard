@@ -1,7 +1,7 @@
 'use strict';
 
 import test from 'ava';
-import { configure, mount } from 'enzyme';
+import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { Provider } from 'react-redux';
@@ -31,7 +31,7 @@ test('table should properly initialize timer config prop', async (t) => {
     datepicker: initialState(),
   });
 
-  const listWrapper = mount(
+  const providerWrapper = shallow(
     <Provider store={someStore}>
       <List
         list={list}
@@ -52,11 +52,13 @@ test('table should properly initialize timer config prop', async (t) => {
     }
   );
 
-  const timerWrapper = listWrapper.find(Timer);
+  const listWrapper = providerWrapper.find('List').dive();
+  const listActionsWrapper = listWrapper.find('ListActions').dive();
+  const timerWrapper = listActionsWrapper.find(Timer);
+  t.is(timerWrapper.length, 1);
 
   t.truthy(timerWrapper.exists(), 'Timer not found');
   // Is the Timer's query configuration properly initialized via the
   // enclosing List's state, prior to any lifecycle method invocations?
   t.is(timerWrapper.props().config.q, query.q);
-  listWrapper.unmount();
 });

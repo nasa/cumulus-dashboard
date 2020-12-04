@@ -12,7 +12,7 @@ export const addGlobalListener = (type, callback) => {
 };
 
 export const setWindowEditorRef = (editorRef) => {
-  if (window.Cypress && window.Cypress.env('TESTING') === true) {
+  if (window && window.Cypress && window.Cypress.env('TESTING') === true) {
     window.aceEditorRef = editorRef;
   }
 };

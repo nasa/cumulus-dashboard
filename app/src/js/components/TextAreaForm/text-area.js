@@ -2,11 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import 'brace';
-import 'brace/mode/json';
-import 'brace/theme/github';
-
-import Ace from 'react-ace';
 import config from '../../config';
 import { setWindowEditorRef } from '../../utils/browser';
 import ErrorReport from '../Errors/report';
@@ -18,6 +13,17 @@ class TextAreaForm extends React.Component {
   constructor () {
     super();
     this.onChange = this.onChange.bind(this);
+    this.state = {
+      Ace: null
+    };
+  }
+
+  componentDidMount() {
+    if (window) {
+      import('react-ace').then((AceEditor) => {
+        this.setState({ Ace: AceEditor.default });
+      });
+    }
   }
 
   onChange (value) {
@@ -33,6 +39,8 @@ class TextAreaForm extends React.Component {
       mode
     } = this.props;
 
+    const { Ace } = this.state;
+
     const minLines = this.props.minLines || minLinesDefault;
     const maxLines = this.props.maxLines || maxLinesDefault;
 
@@ -40,7 +48,7 @@ class TextAreaForm extends React.Component {
       <div className='form__textarea'>
         <label>{label}
           <ErrorReport report={error} />
-          <Ace
+          {Ace && <Ace
             editorProps={{ $blockScrolling: Infinity }}
             mode={mode}
             theme={config.editorTheme}
@@ -54,7 +62,7 @@ class TextAreaForm extends React.Component {
             maxLines={maxLines}
             wrapEnabled={true}
             ref={setWindowEditorRef}
-          />
+          />}
         </label>
       </div>
     );

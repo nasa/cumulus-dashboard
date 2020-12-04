@@ -168,7 +168,7 @@ export class Form extends React.Component {
   }
 
   onSubmit (e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (this.isInflight()) return;
 
     // validate input values in the store

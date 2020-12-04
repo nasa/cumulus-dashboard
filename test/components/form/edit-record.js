@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import configureMockStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-import { mount, configure } from 'enzyme';
+import { configure, shallow } from 'enzyme';
 import {
   getProvider,
   updateProvider,
@@ -28,7 +28,7 @@ test('EditRecord sends full object when merge property is true', (t) => {
   const schema = { [schemaKey]: {} };
   const store = mockStore({});
 
-  const editRecordWrapper = mount(
+  const providerWrapper = shallow(
     <Provider store={store}>
       <EditRecord
         schema={schema}
@@ -45,7 +45,10 @@ test('EditRecord sends full object when merge property is true', (t) => {
     </Provider>
   );
 
-  const submitButton = editRecordWrapper.find('.button--submit');
+  const editRecordWrapper = providerWrapper.find(EditRecord).dive();
+  const schemaWrapper = editRecordWrapper.find('Schema').dive();
+  const formWrapper = schemaWrapper.find('Form').dive();
+  const submitButton = formWrapper.find('.button--submit');
 
   store.clearActions();
   submitButton.simulate('click');

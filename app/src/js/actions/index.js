@@ -684,7 +684,8 @@ export const deleteToken = () => (dispatch, getState) => {
     url: new URL(`tokenDelete/${token}`, root).href
   });
   return axios(requestConfig)
-    .finally(() => dispatch({ type: types.DELETE_TOKEN }));
+    .then(() => dispatch({ type: types.DELETE_TOKEN }))
+    .catch(() => dispatch({ type: types.DELETE_TOKEN }));
 };
 
 export const loginError = (error) => (dispatch) => dispatch(deleteToken())

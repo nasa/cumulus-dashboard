@@ -4,14 +4,11 @@ import test from 'ava';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
-import sinon from 'sinon';
 
 import { ExecutionStatus } from '../../../app/src/js/components/Executions/execution-status';
 import executionHistory from '../../../test/fixtures/execution-history-all';
 
 configure({ adapter: new Adapter() });
-
-window.URL.createObjectURL = sinon.spy();
 
 test('Cumulus-690 Execution Status shows workflow task and version information', function (t) {
   const executionStatus = {

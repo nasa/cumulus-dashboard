@@ -90,18 +90,18 @@ test.serial('should add correct authorization headers to API request action', as
     [CALL_API]: requestAction
   };
 
-  const requestPromiseStub = sinon.stub().resolves({
-    body: {},
-    statusCode: 200
+  const axiosStub = sinon.stub().resolves({
+    data: {},
+    status: 200
   });
-  const revertRequestStub = RequestRewireAPI.__Rewire__('requestPromise', requestPromiseStub);
+  const revertRequestStub = RequestRewireAPI.__Rewire__('axios', axiosStub);
 
   try {
     const { invokeMiddleware } = createTestMiddleware();
 
     await invokeMiddleware(actionObj);
 
-    const nextAction = requestPromiseStub.firstCall.args[0];
+    const nextAction = axiosStub.firstCall.args[0];
     t.deepEqual(nextAction.headers.Authorization, 'Bearer fake-token');
   } finally {
     revertRequestStub();
@@ -122,18 +122,18 @@ test.serial('should be able to use provided authorization headers', async (t) =>
     [CALL_API]: requestAction
   };
 
-  const requestPromiseStub = sinon.stub().resolves({
-    body: {},
-    statusCode: 200
+  const axiosStub = sinon.stub().resolves({
+    data: {},
+    status: 200
   });
-  const revertRequestStub = RequestRewireAPI.__Rewire__('requestPromise', requestPromiseStub);
+  const revertRequestStub = RequestRewireAPI.__Rewire__('axios', axiosStub);
 
   try {
     const { invokeMiddleware } = createTestMiddleware();
 
     await invokeMiddleware(actionObj);
 
-    const nextAction = requestPromiseStub.firstCall.args[0];
+    const nextAction = axiosStub.firstCall.args[0];
     t.deepEqual(nextAction.headers.Authorization, 'Bearer another-token');
   } finally {
     revertRequestStub();
@@ -261,7 +261,7 @@ test.serial('should return expected action for GET request action with query sta
     type: 'TEST',
     method: 'GET',
     url: 'http://anyhost/test-path',
-    qs: queryParams
+    params: queryParams
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -302,18 +302,18 @@ test.serial('should filter startDateTime and endDateTime out of the query', asyn
     [CALL_API]: requestAction
   };
 
-  const requestPromiseStub = sinon.stub().resolves({
-    body: {},
-    statusCode: 200
+  const axiosStub = sinon.stub().resolves({
+    data: {},
+    status: 200
   });
-  const revertRequestStub = RequestRewireAPI.__Rewire__('requestPromise', requestPromiseStub);
+  const revertRequestStub = RequestRewireAPI.__Rewire__('axios', axiosStub);
 
   try {
     const { invokeMiddleware } = createTestMiddleware();
 
     await invokeMiddleware(actionObj);
 
-    const nextAction = requestPromiseStub.firstCall.args[0];
+    const nextAction = axiosStub.firstCall.args[0];
 
     const expectedParams = {
       timestamp__from: 1000000,
@@ -339,7 +339,7 @@ test.serial('should return expected action for POST request action', async (t) =
     type: 'TEST',
     method: 'POST',
     url: 'http://anyhost/test-path',
-    body: requestBody
+    data: requestBody
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -375,7 +375,7 @@ test.serial('should return expected action for PUT request action', async (t) =>
     type: 'TEST',
     method: 'PUT',
     url: 'http://anyhost/test-path',
-    body: requestBody
+    data: requestBody
   };
   const actionObj = {
     [CALL_API]: requestAction
