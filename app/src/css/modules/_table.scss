@@ -362,8 +362,19 @@
   &--color{
     position: relative;
     top: 30px;
-    /*left: 55px;*/
     text-align: center;
+  }
+
+  &--yellow{
+    color: $orange;
+  }
+
+  &--red{
+    color: $error-red;
+  }
+
+  &--blue{
+    color: $midnight-blue;
   }
 }
 
