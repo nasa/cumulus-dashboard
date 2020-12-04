@@ -23,7 +23,6 @@ import {
   seconds
 } from '../utils/format';
 import List from './Table/Table';
-import GranulesProgress from './Granules/progress';
 import { errorTableColumns } from '../utils/table-config/granules';
 import {
   kibanaS3AccessErrorsLink,
@@ -79,15 +78,24 @@ class Home extends React.Component {
     return link && link.match('https?://');
   }
 
+  getCountColor (type, count) {
+    if (type === 'Failed' && count > 0) {
+      if (count > 99) {
+        return 'red';
+      } if (count > 0) {
+        return 'yellow';
+      }
+    } else {
+      return 'blue';
+    }
+  }
+
   renderButtonListSection (items, header, listId) {
     const data = items.filter((d) => d[0] !== nullValue);
     if (!data.length) return null;
     return (
       <section className='page__section'>
         <div className='row'>
-          <Helmet>
-            <title> Cumulus Home  </title>
-          </Helmet>
           <div className='heading__wrapper'>
             <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
           </div>
@@ -99,11 +107,11 @@ class Home extends React.Component {
                   <li key={d[1]}>
                     {this.isExternalLink(d[2]) ? (
                       <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
-                        <span className='num--large'>{value}</span> {d[1]}
+                        <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
                       </a>
                     ) : (
                       <Link id={d[1]} className='overview-num' to={{ pathname: d[2], search: getPersistentQueryParams(this.props.location) }}>
-                        <span className='num--large'>{value}</span> {d[1]}
+                        <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
                       </Link>
                     )}
                   </li>
@@ -114,6 +122,14 @@ class Home extends React.Component {
         </div>
       </section>
     );
+  }
+
+  getCountByKey (counts, key) {
+    const granuleCount = counts.find((c) => c.key === key);
+
+    if (granuleCount) {
+      return granuleCount.count;
+    }
   }
 
   render () {
@@ -150,8 +166,17 @@ class Home extends React.Component {
     const numGranules = !Number.isNaN(+granuleCount) ? `${tally(granuleCount)}` : 0;
     const granuleStatus = get(count.data, 'granules.count', []);
 
+    const updated = [
+      [tally(this.getCountByKey(granuleStatus, 'running')), 'Running', '/granules/running'],
+      [tally(this.getCountByKey(granuleStatus, 'completed')), 'Completed', '/granules/completed'],
+      [tally(this.getCountByKey(granuleStatus, 'failed')), 'Failed', '/granules/failed'],
+    ];
+
     return (
       <div className='page__home'>
+        <Helmet>
+          <title> Cumulus Home  </title>
+        </Helmet>
         <div className='content__header content__header--lg'>
           <div className='row'>
             <h1 className='heading--xlarge'>{strings.dashboard}</h1>
@@ -190,12 +215,13 @@ class Home extends React.Component {
                 <h2 className='heading--large heading--shared-content--right'>Granules Updates</h2>
                 <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
               </div>
-              <div className="heading__wrapper">
-                <h2 className='heading--medium heading--shared-content--right'>{strings.granules_updated}<span className='num-title'>{numGranules}</span></h2>
-              </div>
-
-              <GranulesProgress granules={granuleStatus} />
             </div>
+
+            {this.renderButtonListSection(
+              updated,
+              <>{strings.granules_updated}<span className='num-title'>{numGranules}</span></>
+            )}
+
           </section>
           <section className='page__section list--granules'>
             <div className='row'>
