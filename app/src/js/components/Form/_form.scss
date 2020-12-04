@@ -303,7 +303,6 @@ select option{
       color: $ocean-blue;
       margin-left: .5em;
     }
-
   }
 
   .radio {
@@ -317,7 +316,6 @@ select option{
       }
     }
   }
-
 }
 
 .subform__item,
@@ -445,6 +443,10 @@ select option{
         float: left;
       }
     }
+    &--require__description {
+      font-size: .86em;
+      text-align: right;
+    }
   }
 }
 
@@ -467,6 +469,9 @@ select option{
   margin: .2em 0 .6em;
 }
 
+.label__required {
+  color: $error-text-red;
+}
 
 /*log in*/
 .form__login {
