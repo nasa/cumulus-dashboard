@@ -55,6 +55,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2070**
   - Styling changes included a small css refactor.
 
+- **CUMULUS-2071**
+  - Replace the static "Granule Updates" stats on the home page with clickable cards
+  - Animate the Reconciliation Report > "Bucket Status" cards
+
 ## [v3.0.0]
 
 ### Fixed
