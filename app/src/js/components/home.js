@@ -97,7 +97,7 @@ class Home extends React.Component {
       <section className='page__section'>
         <div className='row'>
           <div className='heading__wrapper'>
-            {header}
+            <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
           </div>
           <div className="overview-num__wrapper overview-num__wrapper-home">
             <ul id={listId}>
@@ -205,22 +205,9 @@ class Home extends React.Component {
             </div>
           </section>
 
-          {this.renderButtonListSection(
-            overview,
-            <h2 className='heading--medium heading--shared-content--right'>Updates</h2>
-          )}
-
-          {this.renderButtonListSection(
-            distErrorStats,
-            <h2 className='heading--medium heading--shared-content--right'>Distribution Errors</h2>,
-            'distributionErrors'
-          )}
-
-          {this.renderButtonListSection(
-            distSuccessStats,
-            <h2 className='heading--medium heading--shared-content--right'>Distribution Successes</h2>,
-            'distributionSuccesses'
-          )}
+          {this.renderButtonListSection(overview, 'Updates')}
+          {this.renderButtonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
+          {this.renderButtonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
 
           <section className='page__section update--granules'>
             <div className='row'>
@@ -232,7 +219,7 @@ class Home extends React.Component {
 
             {this.renderButtonListSection(
               updated,
-              <h2 className='heading--medium heading--shared-content--right'>{strings.granules_updated}<span className='num-title'>{numGranules}</span></h2>
+              <>{strings.granules_updated}<span className='num-title'>{numGranules}</span></>
             )}
 
           </section>
