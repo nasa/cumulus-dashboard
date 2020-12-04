@@ -1,4 +1,5 @@
 /* eslint-disable import/no-cycle */
+import qs from 'qs';
 import { CALL_API } from '../actions/types';
 import {
   configureRequest,
@@ -9,7 +10,7 @@ import log from '../utils/log';
 import { isValidApiRequestAction } from './validate';
 
 // Use require to allow for mocking
-const requestPromise = require('request-promise');
+const axios = require('axios');
 const { loginError } = require('../actions');
 
 const handleError = ({
@@ -59,15 +60,26 @@ export const requestMiddleware = ({ dispatch, getState }) => (next) => (action) 
 
     const { id, type } = requestAction;
 
+    const defaultRequestConfig = {
+      paramsSerializer (params) {
+        return qs.stringify(params, { arrayFormat: 'brackets' });
+      }
+    };
+
+    const requestConfig = {
+      ...defaultRequestConfig,
+      ...requestAction
+    };
+
     const inflightType = `${type}_INFLIGHT`;
     log((id ? `${inflightType}: ${id}` : inflightType));
     dispatch({ id, config: requestAction, type: inflightType });
 
     const start = new Date();
-    return requestPromise(requestAction)
+    return axios(requestConfig)
       .then((response) => {
-        const { body, statusCode } = response;
-        if (+statusCode >= 400) {
+        const { data, status } = response;
+        if (+status >= 400) {
           const error = new Error(getErrorMessage(response));
           return handleError(
             {
@@ -75,7 +87,7 @@ export const requestMiddleware = ({ dispatch, getState }) => (next) => (action) 
               type,
               error,
               requestAction,
-              statusCode
+              statusCode: status
             },
             next
           );
@@ -83,7 +95,7 @@ export const requestMiddleware = ({ dispatch, getState }) => (next) => (action) 
 
         const duration = new Date() - start;
         log((id ? `${type}: ${id}` : type), `${duration}ms`);
-        return next({ id, type, data: body, config: requestAction });
+        return next({ id, type, data, config: requestAction });
       })
       .catch((error) => handleError({ id, type, error, requestAction }, next));
   }

@@ -4,6 +4,7 @@ import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
+import get from 'lodash/get';
 import { login, setTokenState } from '../actions';
 import { window } from '../utils/browser';
 import { buildRedirectUrl } from '../utils/format';
@@ -29,7 +30,7 @@ class OAuth extends React.Component {
         this.props.api.authenticated !== prevProps.api.authenticated) {
       prevProps.dispatch(setTokenState(this.state.token));
       const { pathname } = prevProps.location;
-      if (pathname !== '/auth' && window.location && window.location.reload) {
+      if (pathname !== '/auth' && get(window, 'location.reload')) {
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/auth') {
         setTimeout(() => historyPushWithQueryParams('/'), updateDelay); // react isn't seeing this a function

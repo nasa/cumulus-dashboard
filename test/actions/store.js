@@ -21,16 +21,9 @@ const store = mockStore({
     }
   }
 });
-const qsStringifyOptions = {
-  arrayFormat: 'brackets'
-};
 
 test.beforeEach((t) => {
-  t.context.defaultConfig = {
-    json: true,
-    resolveWithFullResponse: true,
-    simple: false
-  };
+  t.context.defaultConfig = {};
 
   t.context.expectedHeaders = {
     Authorization: 'Bearer fake-token',
@@ -63,7 +56,6 @@ test.serial('dispatches TYPE_INFLIGHT and TYPE actions for API request action', 
         ...t.context.defaultConfig,
         ...requestAction,
         headers: t.context.expectedHeaders,
-        qsStringifyOptions
       }
     }, {
       id: undefined,
@@ -72,7 +64,6 @@ test.serial('dispatches TYPE_INFLIGHT and TYPE actions for API request action', 
         ...t.context.defaultConfig,
         ...requestAction,
         headers: t.context.expectedHeaders,
-        qsStringifyOptions
       },
       data: stubbedResponse
     }];

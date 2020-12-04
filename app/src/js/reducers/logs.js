@@ -38,7 +38,7 @@ export default createReducer(initialState, {
     state.error = false;
   },
   [LOGS_INFLIGHT]: (state, action) => {
-    const query = get(action.config, 'qs.q', '');
+    const query = get(action.config, 'params.q', '');
 
     if (state.query !== query) {
       state.query = query;

@@ -8,7 +8,9 @@ class TopButton extends React.Component {
   }
 
   topPage () {
-    window.scrollTo(0, 0);
+    if (window) {
+      window.scrollTo(0, 0);
+    }
   }
 
   render () {

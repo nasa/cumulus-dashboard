@@ -38,16 +38,8 @@ const createTestMiddleware = () => {
   return { store, next, invokeMiddleware };
 };
 
-const qsStringifyOptions = {
-  arrayFormat: 'brackets'
-};
-
 test.beforeEach((t) => {
-  t.context.defaultConfig = {
-    json: true,
-    resolveWithFullResponse: true,
-    simple: false
-  };
+  t.context.defaultConfig = {};
 
   t.context.expectedHeaders = {
     Authorization: `Bearer ${token}`,
@@ -171,7 +163,6 @@ test.serial('should dispatch error action for failed request', async (t) => {
       ...t.context.defaultConfig,
       ...requestAction,
       headers: t.context.expectedHeaders,
-      qsStringifyOptions
     },
     type: 'TEST_ERROR'
   };
@@ -242,7 +233,6 @@ test.serial('should return expected action for GET request action', async (t) =>
       ...t.context.defaultConfig,
       ...requestAction,
       headers: t.context.expectedHeaders,
-      qsStringifyOptions
     },
     type: 'TEST',
     data: stubbedResponse
@@ -283,7 +273,6 @@ test.serial('should return expected action for GET request action with query sta
       ...t.context.defaultConfig,
       ...requestAction,
       headers: t.context.expectedHeaders,
-      qsStringifyOptions
     },
     type: 'TEST',
     data: stubbedResponse
@@ -301,7 +290,7 @@ test.serial('should filter startDateTime and endDateTime out of the query', asyn
     type: 'TEST',
     method: 'GET',
     url: 'http://anyhost',
-    qs: {
+    params: {
       startDateTime: 1000000,
       timestamp__from: 1000000,
       endDateTime: 2000000,
@@ -332,7 +321,7 @@ test.serial('should filter startDateTime and endDateTime out of the query', asyn
       otherParam: 'test'
     };
 
-    t.deepEqual(nextAction.qs, expectedParams);
+    t.deepEqual(nextAction.params, expectedParams);
   } finally {
     revertRequestStub();
   }
@@ -362,7 +351,6 @@ test.serial('should return expected action for POST request action', async (t) =
       ...t.context.defaultConfig,
       ...requestAction,
       headers: t.context.expectedHeaders,
-      qsStringifyOptions
     },
     type: 'TEST',
     data: requestBody
@@ -399,7 +387,6 @@ test.serial('should return expected action for PUT request action', async (t) =>
       ...t.context.defaultConfig,
       ...requestAction,
       headers: t.context.expectedHeaders,
-      qsStringifyOptions
     },
     type: 'TEST',
     data: requestBody
@@ -433,7 +420,6 @@ test.serial('should return expected action for DELETE request action', async (t)
       ...t.context.defaultConfig,
       ...requestAction,
       headers: t.context.expectedHeaders,
-      qsStringifyOptions
     },
     type: 'TEST',
     data: stubbedResponse

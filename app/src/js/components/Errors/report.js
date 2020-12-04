@@ -21,7 +21,7 @@ class ErrorReport extends React.Component {
   scrollToTop () {
     if (this.DOMElement && typeof this.DOMElement.scrollIntoView === 'function') {
       this.DOMElement.scrollIntoView(true);
-    } else {
+    } else if (window) {
       window.scrollTo(0, 0);
     }
   }

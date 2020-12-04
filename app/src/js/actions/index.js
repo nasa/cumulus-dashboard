@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import compareVersions from 'compare-versions';
 import { get as getProperty } from 'object-path';
-import requestPromise from 'request-promise';
+import axios from 'axios';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import cloneDeep from 'lodash/cloneDeep';
@@ -38,10 +38,8 @@ export const refreshAccessToken = (token) => (dispatch) => {
     method: 'POST',
     url: new URL('refresh', root).href,
     body: { token },
-    // make sure request failures are sent to .catch()
-    simple: true
   });
-  return requestPromise(requestConfig)
+  return axios(requestConfig)
     .then(({ body }) => {
       const duration = new Date() - start;
       log('REFRESH_TOKEN', `${duration}ms`);
@@ -77,7 +75,7 @@ export const getCollection = (name, version) => (dispatch, getState) => {
       method: 'GET',
       id: getCollectionId({ name, version }),
       path: `collections?name=${name}&version=${version}&includeStats=true`,
-      qs: timeFilters,
+      params: timeFilters,
     },
   });
 };
@@ -86,13 +84,11 @@ export const getApiVersion = () => (dispatch) => {
   const config = configureRequest({
     method: 'GET',
     url: new URL('version', root).href,
-    // make sure request failures are sent to .catch()
-    simple: true
   });
-  return requestPromise(config)
-    .then(({ body }) => dispatch({
+  return axios(config)
+    .then(({ data }) => dispatch({
       type: types.API_VERSION,
-      payload: { versionNumber: body.api_version }
+      payload: { versionNumber: data.api_version }
     }))
     .then(() => dispatch(checkApiVersion()))
     .catch(({ error }) => dispatch({
@@ -129,7 +125,7 @@ export const listCollections = (options = {}) => {
         method: 'GET',
         id: null,
         url: new URL(urlPath, root).href,
-        qs: { limit: defaultPageLimit, ...queryOptions, ...timeFilters, getMMT, includeStats }
+        params: { limit: defaultPageLimit, ...queryOptions, ...timeFilters, getMMT, includeStats }
       }
     });
   };
@@ -197,7 +193,7 @@ export const listGranules = (options) => (dispatch, getState) => {
       method: 'GET',
       id: null,
       url: new URL('granules', root).href,
-      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+      params: { limit: defaultPageLimit, ...options, ...timeFilters }
     }
   });
 };
@@ -429,7 +425,7 @@ export const getOptionsCollectionName = (options) => ({
     type: types.OPTIONS_COLLECTIONNAME,
     method: 'GET',
     url: new URL('collections', root).href,
-    qs: { limit: 100, fields: 'name,version' }
+    params: { limit: 100, fields: 'name,version' }
   }
 });
 
@@ -440,7 +436,7 @@ export const getStats = (options) => (dispatch, getState) => {
       type: types.STATS,
       method: 'GET',
       url: new URL('stats', root).href,
-      qs: { ...options, ...timeFilters }
+      params: { ...options, ...timeFilters }
     }
   });
 };
@@ -544,7 +540,7 @@ export const getCount = (options = {}) => {
         method: 'GET',
         id: null,
         url: new URL('stats/aggregate', root).href,
-        qs: { type: 'must-include-type', field: 'status', ...params, ...timeFilters }
+        params: { type: 'must-include-type', field: 'status', ...params, ...timeFilters }
       }
     });
   };
@@ -557,7 +553,7 @@ export const listPdrs = (options) => (dispatch, getState) => {
       type: types.PDRS,
       method: 'GET',
       url: new URL('pdrs', root).href,
-      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+      params: { limit: defaultPageLimit, ...options, ...timeFilters }
     }
   });
 };
@@ -581,7 +577,7 @@ export const listProviders = (options) => ({
     type: types.PROVIDERS,
     method: 'GET',
     url: new URL('providers', root).href,
-    qs: { limit: defaultPageLimit, ...options }
+    params: { limit: defaultPageLimit, ...options }
   }
 });
 
@@ -590,7 +586,7 @@ export const getOptionsProviderName = () => ({
     type: types.OPTIONS_PROVIDERNAME,
     method: 'GET',
     url: new URL('providers', root).href,
-    qs: { limit: 100, fields: 'id' }
+    params: { limit: 100, fields: 'id' }
   }
 });
 
@@ -655,7 +651,7 @@ export const getLogs = (options) => (dispatch, getState) => {
       type: types.LOGS,
       method: 'GET',
       url: new URL('logs', root).href,
-      qs: { limit: 100, ...options, ...timeFilters }
+      params: { limit: 100, ...options, ...timeFilters }
     }
   });
 };
@@ -671,7 +667,7 @@ export const login = (token) => ({
     id: 'auth',
     method: 'GET',
     url: new URL('granules', root).href,
-    qs: { limit: 1, fields: 'granuleId' },
+    params: { limit: 1, fields: 'granuleId' },
     skipAuth: true,
     headers: {
       Authorization: `Bearer ${token}`
@@ -687,7 +683,7 @@ export const deleteToken = () => (dispatch, getState) => {
     method: 'DELETE',
     url: new URL(`tokenDelete/${token}`, root).href
   });
-  return requestPromise(requestConfig)
+  return axios(requestConfig)
     .finally(() => dispatch({ type: types.DELETE_TOKEN }));
 };
 
@@ -708,7 +704,7 @@ export const listWorkflows = (options) => ({
     type: types.WORKFLOWS,
     method: 'GET',
     url: new URL('workflows', root).href,
-    qs: { limit: defaultPageLimit, ...options }
+    params: { limit: defaultPageLimit, ...options }
   }
 });
 export const searchWorkflows = (searchString) => ({ type: types.SEARCH_WORKFLOWS, searchString });
@@ -740,7 +736,7 @@ export const listExecutions = (options) => (dispatch, getState) => {
       type: types.EXECUTIONS,
       method: 'GET',
       url: new URL('executions', root).href,
-      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+      params: { limit: defaultPageLimit, ...options, ...timeFilters }
     }
   });
 };
@@ -757,7 +753,7 @@ export const listOperations = (options) => (dispatch, getState) => {
       type: types.OPERATIONS,
       method: 'GET',
       url: new URL('asyncOperations', root).href,
-      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+      params: { limit: defaultPageLimit, ...options, ...timeFilters }
     }
   });
 };
@@ -783,7 +779,7 @@ export const listRules = (options) => (dispatch, getState) => {
       type: types.RULES,
       method: 'GET',
       url: new URL('rules', root).href,
-      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+      params: { limit: defaultPageLimit, ...options, ...timeFilters }
     }
   });
 };
@@ -887,7 +883,7 @@ export const listReconciliationReports = (options) => (dispatch, getState) => {
       type: types.RECONCILIATIONS,
       method: 'GET',
       url: new URL('reconciliationReports', root).href,
-      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+      params: { limit: defaultPageLimit, ...options, ...timeFilters }
     }
   });
 };

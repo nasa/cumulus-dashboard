@@ -1,6 +1,5 @@
 'use strict';
 
-import 'jsdom-global/register';
 import test from 'ava';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
