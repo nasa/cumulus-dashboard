@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Add 'Show More' and 'Show Less' buttons to error report
 
 - **CUMULUS-2073**
-  - Update forms with the require indicator and description
+  - Update forms with the required indicator and description
 
 - **CUMULUS-2263**
   - Update Pagination input to show possible page options in dropdown
