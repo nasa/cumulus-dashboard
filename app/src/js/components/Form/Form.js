@@ -259,6 +259,8 @@ export class Form extends React.Component {
       submitButtonText = 'Submit';
     }
 
+    const hasRequiredFields = this.props.inputMeta.filter((input) => input.required).length >= 0;
+
     const form = (
       <div ref={(element) => { this.DOMElement = element; }}>
         {errors.length > 0 && <ErrorReport report={errorMessage(errors)} disableScroll={true} />}
@@ -324,6 +326,15 @@ export class Form extends React.Component {
             return <li className='form__item' key={inputId}>{elem}</li>;
           })}
         </ul>
+
+        {hasRequiredFields && (
+          <div className='form__item form__item--require__description'>
+            <p>
+              <span className="label__required">* </span>
+              <span className="label__name">Required field</span>
+            </p>
+          </div>
+        )}
 
         {this.props.submit && (
           <button
