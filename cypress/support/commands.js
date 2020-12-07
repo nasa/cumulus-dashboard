@@ -31,7 +31,7 @@ Cypress.Commands.add('login', () => {
   const authUrl = `${Cypress.config('baseUrl')}/auth`;
   cy.request({
     url: `${Cypress.env('APIROOT')}/token?code=somecode`,
-    params: {
+    qs: {
       state: encodeURIComponent(authUrl)
     },
     followRedirect: true

@@ -143,12 +143,12 @@ test('configureRequest() should maintain query state parameters', (t) => {
   };
   const requestParams = {
     url: 'http://localhost/test',
-    qs: queryParameters
+    params: queryParameters
   };
   const expectedConfig = {
     ...t.context.defaultConfig,
     url: 'http://localhost/test',
-    qs: queryParameters,
+    params: queryParameters,
     headers: t.context.defaultHeaders,
   };
   const requestConfig = configureRequest(requestParams);

@@ -111,7 +111,7 @@ test('Each of these list action creators will not use data from datepicker state
     store.dispatch(e.dispatcher());
     const dispatchedAction = store.getActions()[0];
     t.is(dispatchedAction.type, e.action);
-    if ('qs' in dispatchedAction.config) {
+    if ('params' in dispatchedAction.config) {
       t.false('timestamp__from' in dispatchedAction.config.params);
       t.false('timestamp__to' in dispatchedAction.config.params);
     }
