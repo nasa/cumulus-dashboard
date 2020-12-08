@@ -1,9 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import AceEditor from 'react-ace';
-import 'ace-builds/src-noconflict/mode-json';
-import 'ace-builds/src-noconflict/theme-github';
 import config from '../../config';
 import { setWindowEditorRef } from '../../utils/browser';
 import ErrorReport from '../Errors/report';
@@ -15,6 +12,21 @@ class TextAreaForm extends React.Component {
   constructor () {
     super();
     this.onChange = this.onChange.bind(this);
+    this.state = {
+      Ace: null
+    };
+  }
+
+  componentDidMount() {
+    if (window) {
+      import('react-ace').then((AceEditor) => {
+        // eslint-disable-next-line no-unused-expressions
+        import('ace-builds/src-noconflict/mode-json');
+        // eslint-disable-next-line no-unused-expressions
+        import('ace-builds/src-noconflict/theme-github');
+        this.setState({ Ace: AceEditor.default });
+      });
+    }
   }
 
   onChange (newValue, event) {
@@ -29,6 +41,7 @@ class TextAreaForm extends React.Component {
       error,
       mode
     } = this.props;
+    const { Ace } = this.state;
 
     const minLines = this.props.minLines || minLinesDefault;
     const maxLines = this.props.maxLines || maxLinesDefault;
@@ -37,7 +50,7 @@ class TextAreaForm extends React.Component {
       <div className='form__textarea'>
         <label>{label}
           <ErrorReport report={error} />
-          <AceEditor
+          {Ace && <Ace
             editorProps={{ $blockScrolling: Infinity }}
             mode={mode}
             theme={config.editorTheme}
@@ -52,7 +65,7 @@ class TextAreaForm extends React.Component {
             wrapEnabled={true}
             ref={setWindowEditorRef}
             setOptions={{ useWorker: false }}
-          />
+          />}
         </label>
       </div>
     );
