@@ -36,6 +36,7 @@ const EditRaw = ({
   const [record, setRecord] = useState(defaultState);
   const [showModal, setShowModal] = useState(false);
   const { data, pk: recordPk, error } = record;
+  let value = data;
   const { updated, map: stateMap } = state;
   const updateStatus = get(updated, [pk, 'status']);
   const errorMessage = get(updated, [pk, 'error']);
@@ -114,11 +115,11 @@ const EditRaw = ({
     if (updateStatus === 'inflight') { return; }
     let json;
     try {
-      json = JSON.parse(data);
+      json = JSON.parse(value);
     } catch (jsonError) {
-      return setRecord({ ...record, error: 'Syntax error in JSON' });
+      return setRecord({ ...record, error: 'Syntax error in JSON', data: value });
     }
-    setRecord({ ...record, error: null });
+    setRecord({ ...record, error: null, data: value });
     console.log('About to update', json);
     dispatch(updateRecord(json));
   }
@@ -130,8 +131,8 @@ const EditRaw = ({
     historyPushWithQueryParams(backRoute);
   }
 
-  function onChange (id, value) {
-    setRecord({ ...record, data: value });
+  function onChange (id, newValue) {
+    value = newValue;
   }
 
   function handleOpenModal (e) {
