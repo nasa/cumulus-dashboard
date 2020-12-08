@@ -1,5 +1,4 @@
 # Cumulus Dashboard
-tweet
 
 [![CircleCI](https://circleci.com/gh/nasa/cumulus-dashboard.svg?style=svg)](https://circleci.com/gh/nasa/cumulus-dashboard)
 
