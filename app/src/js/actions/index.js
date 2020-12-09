@@ -37,7 +37,7 @@ export const refreshAccessToken = (token) => (dispatch) => {
   const requestConfig = configureRequest({
     method: 'POST',
     url: new URL('refresh', root).href,
-    body: { token },
+    data: { token },
   });
   return axios(requestConfig)
     .then(({ body }) => {
@@ -137,7 +137,7 @@ export const createCollection = (payload) => ({
     method: 'POST',
     id: getCollectionId(payload),
     path: 'collections',
-    body: payload
+    data: payload
   }
 });
 
@@ -148,7 +148,7 @@ export const updateCollection = (payload, name, version) => ({
     method: 'PUT',
     id: (name && version) ? getCollectionId({ name, version }) : getCollectionId(payload),
     path: `collections/${name || payload.name}/${version || payload.version}`,
-    body: payload
+    data: payload
   }
 });
 
@@ -204,7 +204,7 @@ export const reprocessGranule = (granuleId) => ({
     method: 'PUT',
     id: granuleId,
     path: `granules/${granuleId}`,
-    body: {
+    data: {
       action: 'reprocess'
     }
   }
@@ -216,7 +216,7 @@ export const applyWorkflowToCollection = (name, version, workflow) => ({
     method: 'PUT',
     id: getCollectionId({ name, version }),
     path: `collections/${name}/${version}`,
-    body: {
+    data: {
       action: 'applyWorkflow',
       workflow
     }
@@ -250,7 +250,7 @@ export const applyWorkflowToGranule = (granuleId, workflow, meta) => ({
     method: 'PUT',
     id: granuleId,
     path: `granules/${granuleId}`,
-    body: {
+    data: {
       action: 'applyWorkflow',
       workflow,
       meta
@@ -293,7 +293,7 @@ export const reingestGranule = (granuleId) => ({
     method: 'PUT',
     id: granuleId,
     path: `granules/${granuleId}`,
-    body: {
+    data: {
       action: 'reingest'
     }
   }
@@ -310,7 +310,7 @@ export const removeGranule = (granuleId) => ({
     method: 'PUT',
     id: granuleId,
     path: `granules/${granuleId}`,
-    body: {
+    data: {
       action: 'removeFromCmr'
     }
   }
@@ -327,7 +327,7 @@ export const bulkGranule = (payload) => ({
     method: 'POST',
     path: 'granules/bulk',
     requestId: payload.requestId,
-    body: payload.json
+    data: payload.json
   }
 });
 
@@ -342,7 +342,7 @@ export const bulkGranuleDelete = (payload) => ({
     method: 'POST',
     path: 'granules/bulkDelete',
     requestId: payload.requestId,
-    body: payload.json
+    data: payload.json
   }
 });
 
@@ -357,7 +357,7 @@ export const bulkGranuleReingest = (payload) => ({
     method: 'POST',
     path: 'granules/bulkReingest',
     requestId: payload.requestId,
-    body: payload.json
+    data: payload.json
   }
 });
 
@@ -455,7 +455,7 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
         method: 'POST',
         url: `${esRoot}/_search/`,
         headers: authHeader(),
-        body: JSON.parse(apiGatewaySearchTemplate(stackName, startTime, endTime))
+        data: JSON.parse(apiGatewaySearchTemplate(stackName, startTime, endTime))
       }
     });
   };
@@ -476,7 +476,7 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
         method: 'POST',
         url: `${esRoot}/_search/`,
         headers: authHeader(),
-        body: JSON.parse(apiLambdaSearchTemplate(stackName, startTime, endTime))
+        data: JSON.parse(apiLambdaSearchTemplate(stackName, startTime, endTime))
       }
     });
   };
@@ -497,7 +497,7 @@ export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
         method: 'POST',
         url: `${esRoot}/_search/`,
         headers: authHeader(),
-        body: JSON.parse(teaLambdaSearchTemplate(stackName, startTime, endTime))
+        data: JSON.parse(teaLambdaSearchTemplate(stackName, startTime, endTime))
       }
     });
   };
@@ -517,7 +517,7 @@ export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
         method: 'POST',
         url: `${esRoot}/_search/`,
         headers: authHeader(),
-        body: JSON.parse(s3AccessSearchTemplate(stackName, startTime, endTime))
+        data: JSON.parse(s3AccessSearchTemplate(stackName, startTime, endTime))
       }
     });
   };
@@ -605,7 +605,7 @@ export const createProvider = (providerId, payload) => ({
     id: providerId,
     method: 'POST',
     path: 'providers',
-    body: payload
+    data: payload
   }
 });
 
@@ -615,7 +615,7 @@ export const updateProvider = (providerId, payload) => ({
     id: providerId,
     method: 'PUT',
     path: `providers/${providerId}`,
-    body: payload
+    data: payload
   }
 });
 
@@ -800,7 +800,7 @@ export const updateRule = (payload) => ({
     type: types.UPDATE_RULE,
     method: 'PUT',
     path: `rules/${payload.name}`,
-    body: payload
+    data: payload
   }
 });
 
@@ -812,7 +812,7 @@ export const createRule = (name, payload) => ({
     type: types.NEW_RULE,
     method: 'POST',
     path: 'rules',
-    body: payload
+    data: payload
   }
 });
 
@@ -834,7 +834,7 @@ export const enableRule = (payload) => {
       type: types.RULE_ENABLE,
       method: 'PUT',
       path: `rules/${rule.name}`,
-      body: {
+      data: {
         ...rule,
         state: 'ENABLED'
       }
@@ -851,7 +851,7 @@ export const disableRule = (payload) => {
       type: types.RULE_DISABLE,
       method: 'PUT',
       path: `rules/${rule.name}`,
-      body: {
+      data: {
         ...rule,
         state: 'DISABLED'
       }
@@ -865,7 +865,7 @@ export const rerunRule = (payload) => ({
     type: types.RULE_RERUN,
     method: 'PUT',
     path: `rules/${payload.name}`,
-    body: {
+    data: {
       ...payload,
       action: 'rerun'
     }
@@ -904,7 +904,7 @@ export const createReconciliationReport = (payload) => ({
     type: types.NEW_RECONCILIATION,
     method: 'POST',
     path: 'reconciliationReports',
-    body: payload
+    data: payload
   }
 });
 
