@@ -3,51 +3,21 @@ set -ex
 
 # Bamboo envs are prefixed with bamboo_SECRET to avoid being printed
 declare -a param_list=(
-  "bamboo_AWS_REGION"
-  "bamboo_CMR_PASSWORD"
-  "bamboo_CMR_USERNAME"
-  "bamboo_DEPLOYMENT"
-  "bamboo_FAKE_PROVIDER_CONFIG_BUCKET"
-  "bamboo_METRICS_ES_HOST"
-  "bamboo_METRICS_ES_USER"
-  "bamboo_NGAP_ENV"
-  "bamboo_PDR_NODE_NAME_PROVIDER_BUCKET"
-  "bamboo_PUBLISH_FLAG"
-  "bamboo_REPORT_BUILD_STATUS"
-  "bamboo_SECRET_AWS_ACCESS_KEY_ID"
-  "bamboo_SECRET_AWS_ACCOUNT_ID"
-  "bamboo_SECRET_AWS_DEFAULT_REGION"
-  "bamboo_SECRET_AWS_SECRET_ACCESS_KEY"
-  "bamboo_SECRET_AWS_SUBNET"
-  "bamboo_SECRET_DOCSEARCH_API_KEY"
-  "bamboo_SECRET_DOCSEARCH_INDEX_NAME"
-  "bamboo_SECRET_EARTHDATA_CLIENT_ID"
-  "bamboo_SECRET_EARTHDATA_CLIENT_PASSWORD"
-  "bamboo_SECRET_EARTHDATA_PASSWORD"
-  "bamboo_SECRET_EARTHDATA_USERNAME"
-  "bamboo_SECRET_GITHUB_TOKEN"
-  "bamboo_SECRET_GITHUB_USER"
-  "bamboo_SECRET_LAUNCHPAD_PASSPHRASE"
-  "bamboo_SECRET_METRICS_ES_PASS"
-  "bamboo_SECRET_NPM_TOKEN"
-  "bamboo_SECRET_PROVIDER_FTP_PORT"
-  "bamboo_SECRET_PROVIDER_HTTP_PORT"
-  "bamboo_SECRET_RDS_ADMIN_ACCESS_SECRET_ARN"
-  "bamboo_SECRET_RDS_SECURITY_GROUP"
-  "bamboo_SECRET_SECURITY_GROUP"
-  "bamboo_SECRET_TOKEN_SECRET"
-  "bamboo_SECRET_VPC_CIDR_IP"
-  "bamboo_SECRET_VPC_ID"
-  "bamboo_SHARED_LOG_DESTINATION_ARN"
-  "bamboo_SKIP_AUDIT"
-  "bamboo_SKIP_INTEGRATION_TESTS"
-  "bamboo_SKIP_NPM_PUBLISH"
-  "bamboo_TFSTATE_BUCKET"
-  "bamboo_TFSTATE_LOCK_TABLE"
-  "bamboo_USE_CACHED_BOOTSTRAP"
-  "bamboo_USE_NPM_PACKAGES"
-  "bamboo_USE_TERRAFORM_ZIPS"
-  "bamboo_VERSION_FLAG"
+    "bamboo_GIT_PR"
+    "bamboo_REPORT_BUILD_STATUS"
+    "bamboo_SECRET_GITHUB_TOKEN"
+    "bamboo_SECRET_GITHUB_USER"
+    "bamboo_SECRET_SIT_AWS_ACCESS_KEY_ID"
+    "bamboo_SECRET_SIT_AWS_SECRET_ACCESS_KEY"
+    "bamboo_SECRET_SIT_DASHBOARD_ES_PASSWORD"
+    "bamboo_SECRET_SIT_DASHBOARD_ES_USER"
+    "bamboo_SIT_DASHBOARD_APIROOT"
+    "bamboo_SIT_DASHBOARD_AUTH_METHOD"
+    "bamboo_SIT_DASHBOARD_AWS_REGION"
+    "bamboo_SIT_DASHBOARD_BUCKET"
+    "bamboo_SIT_DASHBOARD_DAAC_NAME"
+    "bamboo_SIT_DASHBOARD_ESROOT"
+    "bamboo_SIT_DASHBOARD_KIBANAROOT"
 )
 regex='bamboo(_SECRET)?_(.*)'
 
@@ -62,8 +32,8 @@ done
 ## Get the current git SHA
 export GIT_SHA=$(git rev-parse HEAD)
 
-## Always set GIT_PR true if master branch
-if [[ $BRANCH == master ]]; then
+## Always set GIT_PR true if master or develop branch
+if [[ $BRANCH == master || $BRANCH == develop ]]; then
   export GIT_PR=true
   echo export GIT_PR=true >> .bamboo_env_vars
 fi
@@ -90,42 +60,10 @@ if [[ -z $BRANCH ]]; then
 fi
 echo export BRANCH=$BRANCH >> .bamboo_env_vars
 
-
-## If tag matching the current ref is a version tag, set
-export GIT_TAG=$(git describe --exact-match HEAD 2>/dev/null | sed -n '1p')
-if [[ $GIT_TAG =~ ^v[0-9]+.* ]]; then
-  export VERSION_FLAG=${BASH_REMATCH[0]}
-fi
-
-# Timeout is 40 minutes, can be overridden by setting bamboo env variable on build
-if [[ -z $TIMEOUT_PERIODS ]]; then
-  TIMEOUT_PERIODS=80
-fi
-
-## Set environment variable overrides if SIT deployment
-if [[ $bamboo_NGAP_ENV = "SIT" ]]; then
-  export AWS_ACCESS_KEY_ID=$bamboo_SECRET_SIT_AWS_ACCESS_KEY_ID
-  export AWS_SECRET_ACCESS_KEY=$bamboo_SECRET_SIT_AWS_SECRET_ACCESS_KEY
-  export AWS_ACCOUNT_ID=$bamboo_SECRET_SIT_AWS_ACCOUNT_ID
-  export VPC_ID=$bamboo_SECRET_SIT_VPC_ID
-  export AWS_SUBNET=$bamboo_SECRET_SIT_AWS_SUBNET
-  export VPC_CIDR_IP=$bamboo_SECRET_SIT_VPC_CIDR_IP
-  export PROVIDER_HOST=$bamboo_SECRET_SIT_PROVIDER_HOST
-  export SECURITY_GROUP=$bamboo_SECRET_SIT_SECURITY_GROUP
-  export TFSTATE_BUCKET=$bamboo_SIT_TFSTATE_BUCKET
-  export TFSTATE_LOCK_TABLE=$bamboo_SIT_TFSTATE_LOCK_TABLE
-  export SHARED_LOG_DESTINATION_ARN=$bamboo_SIT_SHARED_LOG_DESTINATION_ARN
-  export TF_VAR_distribution_url=$bamboo_SIT_TEA_CLOUDFRONT_URL
-  export RDS_SECURITY_GROUP=$bamboo_SECRET_SIT_RDS_SECURITY_GROUP
-  export RDS_ADMIN_ACCESS_SECRET_ARN=$bamboo_SECRET_SIT_RDS_ADMIN_ACCESS_SECRET_ARN
-  export PDR_NODE_NAME_PROVIDER_BUCKET=$bamboo_SIT_PDR_NODE_NAME_PROVIDER_BUCKET
-  DEPLOYMENT=$bamboo_SIT_DEPLOYMENT
-fi
-
 # Target master by default.
 # Update with appropriate conditional
 # when creating a feature branch.
-export PR_BRANCH=master
+export PR_BRANCH=develop
 
 ## Run detect-pr script and set flag to true/false
 ## depending on if there is a PR associated with the
@@ -149,33 +87,3 @@ if [[ -z $GIT_PR ]]; then
 fi
 
 echo GIT_PR is $GIT_PR
-
-## Exporting the commit message as an env variable to be brought in
-## for yes/no toggles on build
-if [[ -z $COMMIT_MESSAGE ]]; then
-  export COMMIT_MESSAGE=$(git log --pretty='format:%Creset%s' -1)
-  echo export COMMIT_MESSAGE=\"$COMMIT_MESSAGE\" >> .bamboo_env_vars
-fi
-
-## Set integration stack name if it's not been overridden *or* set by SIT
-if [[ -z $DEPLOYMENT ]]; then
-  DEPLOYMENT=$(node ./bamboo/select-stack.js)
-
-  echo "Using terraform stack name $DEPLOYMENT-tf"
-  DEPLOYMENT=$DEPLOYMENT-tf
-
-  echo deployment "$DEPLOYMENT"
-  if [[ $DEPLOYMENT == none ]]; then
-    echo "Unable to determine integration stack" >&2
-    exit 1
-  fi
-  echo export DEPLOYMENT=$DEPLOYMENT >> .bamboo_env_vars
-fi
-
-if [[ $USE_CACHED_BOOTSTRAP == true ]]; then
-  export UNIT_TEST_BUILD_DIR=/cumulus
-else
-  export UNIT_TEST_BUILD_DIR=/source/cumulus
-fi
-
-export TS_BUILD_CACHE_FILE=ts-build-cache.tgz
