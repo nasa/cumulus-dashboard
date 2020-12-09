@@ -2,7 +2,7 @@
 
 'use strict';
 
-const {graphql} = require('@octokit/graphql');
+const { graphql } = require('@octokit/graphql');
 // Query Github API for first commit on target ref and see if it has an associated pull request
 
 async function getPrsForRef(headRefName, baseRefName) {
