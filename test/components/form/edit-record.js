@@ -54,5 +54,5 @@ test('EditRecord sends full object when merge property is true', (t) => {
   submitButton.simulate('click');
 
   t.is(store.getActions().length, 1);
-  t.deepEqual(store.getActions()[0].body, provider);
+  t.deepEqual(store.getActions()[0].data, provider);
 });
