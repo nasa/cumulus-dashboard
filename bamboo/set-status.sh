@@ -1,12 +1,14 @@
 #!/bin/bash
 
 set -ex
-export GIT_SHA=$(git rev-parse HEAD)
+source .bamboo_env_vars || true
+. ./bamboo/set-bamboo-env-variables.sh
+. ./bamboo/abort-if-not-pr.sh
 
-if [[ $bamboo_REPORT_BUILD_STATUS == true ]]; then
+if [[ $REPORT_BUILD_STATUS == true ]]; then
   ### Post status to github.
   curl -H\
-  "Authorization: token $bamboo_GITHUB_TOKEN"\
+  "Authorization: token $GITHUB_TOKEN"\
    -d "{\"state\":\"$1\", \"target_url\": \"$2\", \"description\": \"$3\", \"context\": \"earthdata-bamboo\"}"\
    -H "Content-Type: application/json"\
    -X POST\
