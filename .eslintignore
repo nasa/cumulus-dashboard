@@ -1,3 +1,4 @@
 test/*
 dist/*
 docker/*
+bamboo/*
