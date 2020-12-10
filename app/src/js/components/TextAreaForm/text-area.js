@@ -25,6 +25,12 @@ class TextAreaForm extends React.Component {
       import('react-ace').then((AceEditor) => {
         this.setState({ Ace: AceEditor.default });
       });
+      // eslint-disable-next-line no-unused-expressions
+      import('brace');
+      // eslint-disable-next-line no-unused-expressions
+      import('brace/mode/json');
+      // eslint-disable-next-line no-unused-expressions
+      import('brace/theme/github');
     }
   }
 
