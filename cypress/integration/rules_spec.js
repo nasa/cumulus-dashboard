@@ -324,7 +324,7 @@ describe('Rules page', () => {
         method: 'PUT',
         url: '/rules/MOD09GK_TEST_kinesisRule',
         status: 503,
-        response: 'fixtures:rule-error.json'
+        response: 'fixture:rule-error.json'
       }).as('putRule');
       cy.visit('/rules/rule/MOD09GK_TEST_kinesisRule');
       cy.get('.dropdown__options__btn').click();
