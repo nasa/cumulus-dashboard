@@ -110,7 +110,7 @@ const BulkGranuleModal = ({
           </p>
           <br/>
           <form>
-            <TextArea
+            {window && <TextArea
               value={query}
               id={`run-bulk-granule-${requestId}`}
               error={formError}
@@ -118,7 +118,7 @@ const BulkGranuleModal = ({
               mode='json'
               minLines={30}
               maxLines={200}
-            />
+            />}
           </form>
         </div>
       }

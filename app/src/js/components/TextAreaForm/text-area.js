@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import 'brace';
 import 'brace/mode/json';
 import 'brace/theme/github';
+import Ace from 'react-ace';
 import config from '../../config';
 import { setWindowEditorRef } from '../../utils/browser';
 import ErrorReport from '../Errors/report';
@@ -15,24 +16,6 @@ class TextAreaForm extends React.Component {
   constructor (props) {
     super(props);
     this.onChange = this.onChange.bind(this);
-    this.state = {
-      Ace: null
-    };
-  }
-
-  // dynamic imports so we can run unit tests
-  componentDidMount() {
-    if (window) {
-      import('react-ace').then((AceEditor) => {
-        this.setState({ Ace: AceEditor.default });
-      });
-      // eslint-disable-next-line no-unused-expressions
-      import('brace');
-      // eslint-disable-next-line no-unused-expressions
-      import('brace/mode/json');
-      // eslint-disable-next-line no-unused-expressions
-      import('brace/theme/github');
-    }
   }
 
   onChange (newValue, event) {
@@ -47,7 +30,6 @@ class TextAreaForm extends React.Component {
       error,
       mode
     } = this.props;
-    const { Ace } = this.state;
 
     const minLines = this.props.minLines || minLinesDefault;
     const maxLines = this.props.maxLines || maxLinesDefault;
@@ -56,7 +38,7 @@ class TextAreaForm extends React.Component {
       <div className='form__textarea'>
         <label>{label}
           <ErrorReport report={error} />
-          {Ace && <Ace
+          <Ace
             editorProps={{ $blockScrolling: Infinity }}
             mode={mode}
             theme={config.editorTheme}
@@ -71,7 +53,7 @@ class TextAreaForm extends React.Component {
             wrapEnabled={true}
             ref={setWindowEditorRef}
             setOptions={{ useWorker: false }}
-          />}
+          />
         </label>
       </div>
     );
