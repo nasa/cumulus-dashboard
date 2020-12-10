@@ -3,7 +3,6 @@
 set -ex
 source .bamboo_env_vars || true
 . ./bamboo/set-bamboo-env-variables.sh
-. ./bamboo/abort-if-not-pr.sh
 
 if [[ $REPORT_BUILD_STATUS == true ]]; then
   ### Post status to github.
