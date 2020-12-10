@@ -1,7 +1,4 @@
-/* eslint-disable no-console */
-
-'use strict';
-
+/* eslint-disable-next-line import/no-unresolved */
 const { graphql } = require('@octokit/graphql');
 // Query Github API for first commit on target ref and see if it has an associated pull request
 
@@ -38,7 +35,7 @@ async function getPrsForRef(headRefName, baseRefName) {
     },
   });
   console.log(JSON.stringify(queryResponse));
-  const edges = queryResponse.repository.ref.target.history.nodes[0].associatedPullRequests.edges;
+  const { edges } = queryResponse.repository.ref.target.history.nodes[0].associatedPullRequests;
   const nodes = edges
     .map((x) => x.node)
     .filter(
