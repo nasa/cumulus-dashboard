@@ -46,10 +46,6 @@ if [[ ! -z $bamboo_GIT_PR ]]; then
   echo export GIT_PR=$GIT_PR >> .bamboo_env_vars
 fi
 
-## Set container IDs for docker-compose stack identification
-container_id=${bamboo_planKey,,}
-export container_id=${container_id/-/}
-
 source .bamboo_env_vars || true
 
 ## Branch should be set in the .bamboo_env_vars *or* the
@@ -60,7 +56,7 @@ if [[ -z $BRANCH ]]; then
 fi
 echo export BRANCH=$BRANCH >> .bamboo_env_vars
 
-# Target master by default.
+# Target develop by default.
 # Update with appropriate conditional
 # when creating a feature branch.
 export PR_BRANCH=develop
