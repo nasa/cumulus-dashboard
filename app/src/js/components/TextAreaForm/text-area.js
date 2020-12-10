@@ -20,6 +20,7 @@ class TextAreaForm extends React.Component {
     };
   }
 
+  // dynamic imports so we can run unit tests
   componentDidMount() {
     if (window) {
       import('react-ace').then((AceEditor) => {
