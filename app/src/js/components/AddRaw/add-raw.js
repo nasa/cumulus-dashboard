@@ -34,7 +34,6 @@ const AddRaw = ({
   const [record, setRecord] = useState({ ...defaultState, data: JSON.stringify(defaultValue, null, 2) });
   const [showModal, setShowModal] = useState(false);
   const { data, pk, error } = record;
-  let value = data;
   const status = get(state.created, [pk, 'status']);
   const handleOnClick = requireConfirmation ? handleModalOpen : handleSubmit;
 
@@ -73,17 +72,17 @@ const AddRaw = ({
     // prevent duplicate submits while the first is inflight.
     if (!pk || get(state.created, [pk, 'status']) !== 'inflight') {
       try {
-        json = JSON.parse(value);
+        json = JSON.parse(data);
       } catch (jsonError) {
-        return setRecord({ ...record, data: value, error: 'Syntax error in JSON' });
+        return setRecord({ ...record, error: 'Syntax error in JSON' });
       }
-      setRecord({ ...record, error: null, pk: getPk(json), data: value });
+      setRecord({ ...record, error: null, pk: getPk(json) });
       dispatch(createRecord(json));
     }
   }
 
-  function handleChange (id, newValue) {
-    value = newValue;
+  function handleChange (id, value) {
+    setRecord({ ...record, data: value });
   }
 
   function handleModalOpen (e) {
@@ -118,7 +117,7 @@ const AddRaw = ({
           <h1 className='heading--large'>{title}</h1>
           <form>
             <TextArea
-              value={value}
+              value={data}
               id={'create-new-record'}
               error={error}
               onChange={handleChange}

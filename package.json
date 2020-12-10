@@ -177,7 +177,7 @@
     "prop-types": "^15.5.10",
     "query-string": "^6.13.7",
     "react": "^16.14.0",
-    "react-ace": "^9.2.1",
+    "react-ace": "^7.0.5",
     "react-bootstrap": "^1.4.0",
     "react-bootstrap-typeahead": "^5.1.2",
     "react-circular-progressbar": "^2.0.3",

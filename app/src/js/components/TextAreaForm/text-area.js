@@ -1,6 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import 'brace';
+import 'brace/mode/json';
+import 'brace/theme/github';
 import config from '../../config';
 import { setWindowEditorRef } from '../../utils/browser';
 import ErrorReport from '../Errors/report';
@@ -9,8 +12,8 @@ const minLinesDefault = 8;
 const maxLinesDefault = 18;
 
 class TextAreaForm extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
     this.onChange = this.onChange.bind(this);
     this.state = {
       Ace: null
@@ -20,10 +23,6 @@ class TextAreaForm extends React.Component {
   componentDidMount() {
     if (window) {
       import('react-ace').then((AceEditor) => {
-        // eslint-disable-next-line no-unused-expressions
-        import('ace-builds/src-noconflict/mode-json');
-        // eslint-disable-next-line no-unused-expressions
-        import('ace-builds/src-noconflict/theme-github');
         this.setState({ Ace: AceEditor.default });
       });
     }
@@ -79,7 +78,6 @@ TextAreaForm.propTypes = {
   error: PropTypes.any,
   mode: PropTypes.string,
   onChange: PropTypes.func,
-
   minLines: PropTypes.number,
   maxLines: PropTypes.number
 };

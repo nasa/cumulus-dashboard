@@ -29,7 +29,6 @@ const BulkGranuleModal = ({
   title
 }) => {
   const [query, setQuery] = useState(JSON.stringify(defaultQuery, null, 2));
-  let value = query;
   const [errorState, setErrorState] = useState();
   let buttonText;
 
@@ -45,7 +44,6 @@ const BulkGranuleModal = ({
 
   function handleSubmit (e) {
     e.preventDefault();
-    setQuery(value);
     let json;
     if (!inflight) {
       try {
@@ -57,7 +55,7 @@ const BulkGranuleModal = ({
     }
   }
 
-  function onChange (id, newValue) {
+  function onChange (id, value) {
     if (errorState) {
       try {
         JSON.parse(value);
@@ -66,7 +64,7 @@ const BulkGranuleModal = ({
         // empty
       }
     }
-    value = newValue;
+    setQuery(value);
   }
 
   return (
@@ -113,7 +111,7 @@ const BulkGranuleModal = ({
           <br/>
           <form>
             <TextArea
-              value={value}
+              value={query}
               id={`run-bulk-granule-${requestId}`}
               error={formError}
               onChange={onChange}
