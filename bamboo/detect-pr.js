@@ -1,7 +1,7 @@
 /* eslint-disable-next-line import/no-unresolved */
 const { graphql } = require('@octokit/graphql');
-// Query Github API for first commit on target ref and see if it has an associated pull request
 
+// Query Github API for first commit on target ref and see if it has an associated pull request
 async function getPrsForRef(headRefName, baseRefName) {
   const queryResponse = await graphql(`{
     repository(owner:"nasa", name:"cumulus-dashboard") {
