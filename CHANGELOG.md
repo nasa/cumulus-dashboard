@@ -62,6 +62,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Replace the static "Granule Updates" stats on the home page with clickable cards
   - Animate the Reconciliation Report > "Bucket Status" cards
 
+- **CUMULUS-2280**
+  - Continuous integration moved to earthdata bamboo.
+
 ## [v3.0.0]
 
 ### Fixed
