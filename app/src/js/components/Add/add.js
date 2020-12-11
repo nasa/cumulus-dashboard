@@ -36,7 +36,9 @@ class AddRecord extends React.Component {
     if (status === 'success') {
       return setTimeout(() => {
         historyPushWithQueryParams(path.join(baseRoute, pk));
-        window.scrollTo(0, 0);
+        if (window) {
+          window.scrollTo(0, 0);
+        }
       }, updateDelay);
     }
   }

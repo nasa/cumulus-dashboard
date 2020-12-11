@@ -78,7 +78,7 @@ const handleCsvDownloadClick = (e, reportName, dispatch) => {
   dispatch(getReconciliationReport(reportName)).then((response) => {
     const { data } = response;
     const { url } = data;
-    if (url && !window.Cypress) window.open(url);
+    if (url && window && !window.Cypress) window.open(url);
   });
 };
 

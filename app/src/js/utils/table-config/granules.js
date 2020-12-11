@@ -319,3 +319,10 @@ export const bulkActions = (granules, config, selectedGranules) => [
     confirm: containsPublishedGranules(selectedGranules) ? confirmRemoveFromCMR : confirmDelete,
     className: 'button--delete'
   }];
+
+const granules = {
+  setOnConfirm,
+  historyPushWithQueryParams
+};
+
+export default granules;

@@ -41,11 +41,7 @@ const collectionId = constructCollectionNameVersion(name, version);
 const granuleId = 'fakeId';
 
 test.beforeEach((t) => {
-  t.context.defaultConfig = {
-    json: true,
-    resolveWithFullResponse: true,
-    simple: false
-  };
+  t.context.defaultConfig = {};
   store.clearActions();
 });
 

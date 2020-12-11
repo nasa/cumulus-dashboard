@@ -66,6 +66,7 @@ export function getPersistentQueryParams(location = {}) {
  * @param {string} path the path to be passed to history.push
  */
 export function historyPushWithQueryParams(path) {
+  if (!history) return;
   const { location } = history;
   history.push({
     pathname: path,

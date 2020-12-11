@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
+import get from 'lodash/get';
 import { login, setTokenState } from '../../actions';
 import { window } from '../../utils/browser';
 import { updateDelay } from '../../config';
@@ -25,7 +26,7 @@ class LoginModal extends React.Component {
       const { dispatch } = prevProps;
       dispatch(setTokenState(this.state.token));
       const { pathname } = prevProps.location;
-      if (pathname !== '/login' && window.location && window.location.reload) {
+      if (pathname !== '/login' && get(window, 'location.reload')) {
         setTimeout(() => window.location.reload(), updateDelay);
       } else if (pathname === '/login') {
         setTimeout(() => historyPushWithQueryParams('/'), updateDelay);

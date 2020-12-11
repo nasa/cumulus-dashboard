@@ -17,7 +17,7 @@ import SubForm from '../SubForm/sub-form';
 import t from '../../utils/strings';
 import { window } from '../../utils/browser';
 
-const scrollTo = typeof window.scrollTo === 'function' ? window.scrollTo : () => true;
+const scrollTo = window && typeof window.scrollTo === 'function' ? window.scrollTo : () => true;
 
 export const formTypes = {
   text: 'TEXT',
@@ -168,7 +168,7 @@ export class Form extends React.Component {
   }
 
   onSubmit (e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (this.isInflight()) return;
 
     // validate input values in the store

@@ -43,24 +43,27 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- **CUMULUS-2251**
-  - Add the `Granule Actions` button
-
-- **CUMULUS-2262**
-  - Revised `Delete Granule` workflow to allow removing from CMR and then deleting in one step
-
-- **CUMULUS-2242**
-  - Changes underlying Docker files for building dashboard bundle and dashboard image via docker.  The user interface remains the same.
-
-- **CUMULUS-2271**
-  - Allow horizontal scrolling in table cells when content doesn't fit in view
-
 - **CUMULUS-2070**
   - Styling changes included a small css refactor.
 
 - **CUMULUS-2071**
   - Replace the static "Granule Updates" stats on the home page with clickable cards
   - Animate the Reconciliation Report > "Bucket Status" cards
+
+- **CUMULUS-2242**
+  - Changes underlying Docker files for building dashboard bundle and dashboard image via docker.  The user interface remains the same.
+
+- **CUMULUS-2251**
+  - Add the `Granule Actions` button
+
+- **CUMULUS-2262**
+  - Revised `Delete Granule` workflow to allow removing from CMR and then deleting in one step
+
+- **CUMULUS-2269**
+  - Replace `request`/`request-promise` packages with `axios`
+
+- **CUMULUS-2271**
+  - Allow horizontal scrolling in table cells when content doesn't fit in view
 
 - **CUMULUS-2280**
   - Continuous integration moved to earthdata bamboo.

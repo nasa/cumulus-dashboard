@@ -164,8 +164,8 @@ class ExecutionStatus extends React.Component {
         property: 'output',
         accessor: (d) => {
           if (d) {
-            const jsonData = new Blob([d], { type: 'text/json' });
-            const downloadUrl = window
+            const jsonData = typeof Blob !== 'undefined' ? new Blob([d], { type: 'text/json' }) : null;
+            const downloadUrl = typeof window.URL.createObjectURL === 'function'
               ? window.URL.createObjectURL(jsonData)
               : '';
             return (

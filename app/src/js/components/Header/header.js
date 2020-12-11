@@ -2,6 +2,7 @@ import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
+import get from 'lodash/get';
 import {
   logout,
   getApiVersion,
@@ -45,7 +46,7 @@ class Header extends React.Component {
   logout() {
     const { dispatch } = this.props;
     dispatch(logout()).then(() => {
-      if (window.location && window.location.reload) {
+      if (get(window, 'location.reload')) {
         window.location.reload();
       }
     });

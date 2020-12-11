@@ -68,7 +68,6 @@ TextAreaForm.propTypes = {
   error: PropTypes.any,
   mode: PropTypes.string,
   onChange: PropTypes.func,
-
   minLines: PropTypes.number,
   maxLines: PropTypes.number
 };

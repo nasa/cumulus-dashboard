@@ -27,8 +27,8 @@ export const addRequestAuthorization = (config, state) => {
   }
 };
 
-export const configureRequest = (params = {}) => {
-  let config = params;
+export const configureRequest = (requestConfig = {}) => {
+  const config = requestConfig;
 
   if (!config.url && !config.path) {
     throw new Error('Must include a URL or path with request');
@@ -44,15 +44,7 @@ export const configureRequest = (params = {}) => {
     config.url = new URL(config.path, _config.apiRoot).href;
   }
 
-  if (config.qs) config.qs = filterQueryParams(config.qs);
-
-  const defaultRequestConfig = {
-    json: true,
-    resolveWithFullResponse: true,
-    simple: false,
-    qsStringifyOptions: { arrayFormat: 'brackets' }
-  };
-  config = { ...defaultRequestConfig, ...config };
+  if (config.params) config.params = filterQueryParams(config.params);
 
   return config;
 };
