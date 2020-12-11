@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
 import 'brace';
 import 'brace/mode/json';
 import 'brace/theme/github';
+
 import Ace from 'react-ace';
 import config from '../../config';
 import { setWindowEditorRef } from '../../utils/browser';
@@ -13,13 +15,13 @@ const minLinesDefault = 8;
 const maxLinesDefault = 18;
 
 class TextAreaForm extends React.Component {
-  constructor (props) {
-    super(props);
+  constructor () {
+    super();
     this.onChange = this.onChange.bind(this);
   }
 
-  onChange (newValue, event) {
-    this.props.onChange(this.props.id, newValue);
+  onChange (value) {
+    this.props.onChange(this.props.id, value);
   }
 
   render () {
@@ -52,7 +54,6 @@ class TextAreaForm extends React.Component {
             maxLines={maxLines}
             wrapEnabled={true}
             ref={setWindowEditorRef}
-            setOptions={{ useWorker: false }}
           />
         </label>
       </div>
