@@ -1,7 +1,5 @@
 # Cumulus Dashboard
 
-[![CircleCI](https://circleci.com/gh/nasa/cumulus-dashboard.svg?style=svg)](https://circleci.com/gh/nasa/cumulus-dashboard)
-
 Code to generate and deploy the dashboard for the Cumulus API.
 
 ## Documentation
@@ -279,7 +277,7 @@ Bring up and down the entire stack (the localAPI and the dashboard) with:
   $ npm run start-dashboard
   $ npm run stop-dashboard
 ```
-This runs everything, the backing Localstack and Elasticsearch containers, the local Cumulus API and dashboard.  Edits to your code will be reflected in the running dashboard.  You can run cypress tests still with `npm run cypress`.  As a warning, this command takes a very long time to start up because the containers come up in a specific order and generally this should be reserved for use by CircleCI or some other continuous intergration service.  But if you are using it locally, be sure to wait until all containers are fully up before trying to visit the dashboard which is exposed at http://localhost:3000
+This runs everything, the backing Localstack and Elasticsearch containers, the local Cumulus API and dashboard.  Edits to your code will be reflected in the running dashboard.  You can run cypress tests still with `npm run cypress`.  As a warning, this command takes a very long time to start up because the containers come up in a specific order and generally this should be reserved for use by Earthdata Bamboo or some other continuous intergration service.  But, if you are using it locally, **be sure to wait until all containers are fully up** before trying to visit the dashboard which is exposed at http://localhost:3000
 The stack is ready when the `view-docker-logs` task shows:
 ```bash
 dashboard_1      | > NODE_ENV=production http-server dist -p 3000 --proxy http://localhost:3000?
@@ -310,11 +308,11 @@ ERROR: for shim  Cannot start service shim: driver failed programming external c
 
 #### Fully contained cypress testing.
 
-You can run all of the cypress tests locally that circleCI runs with a single command:
+You can run all of the cypress tests locally that Earthdata Bamboo runs with a single command:
 ```bash
   $ npm run e2e-tests
 ```
-This stands up the entire stack as well as begins the e2e service that will run all cypress commands and report an exit code for their success or failure.  This is primarily used for CircleCI, but can be useful to developers.
+This stands up the entire stack as well as begins the e2e service that will run all cypress commands and report an exit code for their success or failure.  This is primarily used for CI, but can be useful to developers.
 
 
 #### <a name=dockerdiagram></a> Docker Container Service Diagram.
@@ -361,11 +359,11 @@ Test the dashboard against a live API deployed with the latest Cumulus packages.
 
 ### 8. Create a pull request against the develop branch
 
-Create a PR for the `release-vX.X.X` branch against the `develop` branch. Verify that the Circle CI build for the PR succeeds and then merge to `develop`.
+Create a PR for the `release-vX.X.X` branch against the `develop` branch. Verify that the Earthdata Bamboo CI build for the PR succeeds and then merge to `develop`.
 
 ### 9. Create a pull request against the master branch
 
-Create a PR for the `develop` branch against the `master` branch. Verify that the Circle CI build for the PR succeeds and then merge to `master`.
+Create a PR for the `develop` branch against the `master` branch. Verify that the Earthdata Bamboo CI build for the PR succeeds and then merge to `master`.
 
 ### 10. Create a git tag for the release
 
