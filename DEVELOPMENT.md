@@ -198,7 +198,7 @@ The basic steps to follow are:
 
 2. Update the dashboard to use the alpha package for CI.
 
-    Update package.json to use the alpha version of the @cumulus/api by installing it `npm install @cumulus/api@1.18.1-alpha.0 --save-dev`  This will install the package from npm as well as allow circleCI to run all of the tests.
+    Update package.json to use the alpha version of the @cumulus/api by installing it `npm install @cumulus/api@4.0.1-alpha.0 --save-dev`  This will install the package from npm as well as allow Earthdata Bamboo's CI to run all of the tests.
 
 
 3. Clean up when core package is released.
