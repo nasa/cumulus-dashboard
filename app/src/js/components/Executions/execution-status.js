@@ -171,7 +171,7 @@ class ExecutionStatus extends React.Component {
             return (
               <>
                 <button
-                  onClick={() => this.openModal('output')}s
+                  onClick={() => this.openModal('output')}
                   className="button button--small button--no-icon"
                 >
                   Show Output
