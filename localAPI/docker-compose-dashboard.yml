@@ -10,7 +10,7 @@ services:
     working_dir:
       /cumulus-dashboard
     volumes:
-      - ../:/cumulus-dashboard:cached
+      - ../:/cumulus-dashboard
     environment:
       - APIROOT=http://localhost:5001
       - ESROOT=http://example.com
@@ -27,6 +27,6 @@ services:
     working_dir:
       /cumulus-dashboard
     volumes:
-      - ../:/cumulus-dashboard:cached
+      - ../:/cumulus-dashboard
     ports:
       - "3000:3000"

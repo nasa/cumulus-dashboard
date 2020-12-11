@@ -65,6 +65,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2271**
   - Allow horizontal scrolling in table cells when content doesn't fit in view
 
+- **CUMULUS-2280**
+  - Continuous integration moved to earthdata bamboo.
+
 ## [v3.0.0]
 
 ### Fixed

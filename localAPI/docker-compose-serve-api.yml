@@ -10,7 +10,7 @@ services:
     working_dir:
       /cumulus-dashboard
     volumes:
-      - ../:/cumulus-dashboard:cached
+      - ../:/cumulus-dashboard
     environment:
       - LOCALSTACK_HOST=localhost
       - LOCAL_ES_HOST=localhost
@@ -24,6 +24,6 @@ services:
     working_dir:
       /cumulus-dashboard
     volumes:
-      - ../:/cumulus-dashboard:cached
+      - ../:/cumulus-dashboard
     ports:
       - "5001:5001"
