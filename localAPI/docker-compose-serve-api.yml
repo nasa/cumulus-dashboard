@@ -6,7 +6,7 @@ services:
     depends_on:
       - localstack
       - elasticsearch
-    command: [ "./localAPI/wait-for-stack.sh", "./node_modules/@cumulus/api/bin/cli.js", "serve", "--no-reseed" ]
+    command: [ "./node_modules/@cumulus/api/bin/cli.js", "serve", "--no-reseed" ]
     working_dir:
       /cumulus-dashboard
     volumes:
