@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Update Pagination input to show possible page options in dropdown
 
 ### Added
+- **CUMULUS-1885**
+  - Expand columns to fit full content width when separator is double clicked
+
 - **CUMULUS-1895**
   - Update execution events to display more details in modal
 
