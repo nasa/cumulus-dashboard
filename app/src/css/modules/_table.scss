@@ -12,17 +12,29 @@
   overflow-x: scroll;
   border-radius: 8px 8px 0px 0px;
 
+  .content-fit {
+    width: fit-content!important;
+  }
+
   .Collapsible {
     max-width: 500px;
   }
 
   .thead {
     background-color: $ocean-blue;
+    &, .tbody {
+      width: fit-content;
+    }
     .th {
       color: $white;
       font-weight: $base-font-semibold;
       padding: 1em 2em;
       font-size: .86em;
+
+      &.no-resize {
+        border-right: 2px solid $lightest-grey;
+        padding: 1em 1.5em;
+      }
     }
   }
 
@@ -186,7 +198,7 @@
 .resizer {
   display: inline-block;
   background: $lightest-grey;
-  width: 1px;
+  width: 2px;
   height: 100%;
   position: absolute;
   right: 0;
