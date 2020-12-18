@@ -111,10 +111,9 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('.table .thead .tr .th').contains('.table__sort', 'Collection ID').dblclick();
       cy.get('.table .thead .tr .th').contains('.table__sort--desc', 'Collection ID');
-      cy.get('.table .thead .tr .th').eq(0).type('{shift}', { release: false });
-      cy.get('.table .thead .tr .th').contains('.table__sort', 'Status').click();
+      cy.get('.table .thead .tr .th').contains('.table__sort', 'Status').click({ shiftKey: true });
       cy.get('.table .thead .tr .th').contains('.table__sort--asc', 'Status');
-      cy.get('.table .thead .tr .th').contains('.table__sort', 'Name').click();
+      cy.get('.table .thead .tr .th').contains('.table__sort', 'Name').click({ shiftKey: true });
       cy.get('.table .thead .tr .th').contains('.table__sort--asc', 'Name');
 
       // wait until the selected fields of granules are in sorted order
