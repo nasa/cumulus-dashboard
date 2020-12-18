@@ -8,7 +8,7 @@ import React, {
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-import { useTable, useResizeColumns, useBlockLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
+import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
 import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
 
@@ -65,9 +65,8 @@ const SortableTable = ({
     () => ({
       Cell: ({ value = '' }) => value,
       // When using the useFlexLayout:
-      // minWidth: 30, // minWidth is only used as a limit for resizing
-      // width: 125, // width is used for both the flex-basis and flex-grow
-      // maxWidth: 350, // maxWidth is only used as a limit for resizing
+      minWidth: 30, // minWidth is only used as a limit for resizing
+      width: 125, // width is used for both the flex-basis and flex-grow
     }),
     []
   );
@@ -109,7 +108,7 @@ const SortableTable = ({
         hiddenColumns: initialHiddenColumns
       },
     },
-    useBlockLayout, // this allows table to have dynamic layouts outside of standard table markup
+    useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
     useResizeColumns, // this allows for resizing columns
     useSortBy, // this allows for sorting
     usePagination,

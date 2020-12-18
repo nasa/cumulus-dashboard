@@ -20,11 +20,13 @@
     max-width: 500px;
   }
 
+  .thead, .tbody {
+    width: fit-content;
+    min-width: 100%;
+  }
+
   .thead {
     background-color: $ocean-blue;
-    &, .tbody {
-      width: fit-content;
-    }
     .th {
       color: $white;
       font-weight: $base-font-semibold;
