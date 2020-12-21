@@ -228,6 +228,7 @@ const SortableTable = ({
                         {column.canResize && <div
                           {...restResizerProps}
                           role={role}
+                          title='Double click to expand'
                           onMouseDown={(e) => handleMouseDown(e, column.id, onMouseDown)}
                           onDoubleClick={() => handleDoubleClick(column.id, column.Header, column.originalWidth)}
                           className={`resizer ${column.isResizing ? 'isResizing' : ''}`}

@@ -199,7 +199,9 @@
 
 .resizer {
   display: inline-block;
-  background: $lightest-grey;
+  background-color: $lightest-grey;
+  background-clip: content-box;
+  padding: 0 10px;
   width: 2px;
   height: 100%;
   position: absolute;
@@ -210,7 +212,7 @@
   touch-action:none;
 
   &.isResizing {
-    background: red;
+    background-color: $grey;
   }
 }
 
