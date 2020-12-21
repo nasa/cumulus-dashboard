@@ -2,12 +2,26 @@ import React, {
   useMemo,
   useEffect,
   forwardRef,
-  useRef
+  useRef,
+  useState
 } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import omit from 'lodash/omit';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
 import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
+
+const getColumnWidth = (rows, accessor, headerText, originalWidth) => {
+  const maxWidth = 400;
+  const magicSpacing = 10;
+  const cellLength = Math.max(
+    ...rows.map((row) => (`${row.values[accessor]}` || '').length * magicSpacing),
+    headerText.length * magicSpacing,
+    originalWidth,
+  );
+  return Math.min(maxWidth, cellLength);
+};
 
 /**
  * IndeterminateCheckbox
@@ -53,10 +67,10 @@ const SortableTable = ({
       // When using the useFlexLayout:
       minWidth: 30, // minWidth is only used as a limit for resizing
       width: 125, // width is used for both the flex-basis and flex-grow
-      maxWidth: 350, // maxWidth is only used as a limit for resizing
     }),
     []
   );
+  const [fitColumn, setFitColumn] = useState({});
 
   const {
     getTableProps,
@@ -67,7 +81,7 @@ const SortableTable = ({
       selectedRowIds,
       sortBy,
       pageIndex,
-      hiddenColumns
+      hiddenColumns,
     },
     toggleAllRowsSelected,
     page,
@@ -92,7 +106,7 @@ const SortableTable = ({
       manualPagination: !shouldUsePagination,
       initialState: {
         hiddenColumns: initialHiddenColumns
-      }
+      },
     },
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
     useResizeColumns, // this allows for resizing columns
@@ -104,15 +118,14 @@ const SortableTable = ({
         hooks.visibleColumns.push((columns) => [
           {
             id: 'selection',
+            disableResizing: true,
+            width: 50,
             Header: ({ getToggleAllRowsSelectedProps }) => ( // eslint-disable-line react/prop-types
               <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
             ),
             Cell: ({ row }) => ( // eslint-disable-line react/prop-types
               <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} /> // eslint-disable-line react/prop-types
             ),
-            minWidth: 61,
-            width: 61,
-            maxWidth: 61
           },
           ...columns
         ]);
@@ -148,6 +161,21 @@ const SortableTable = ({
     }
   }, [changeSortProps, sortBy]);
 
+  function handleDoubleClick(id, header, originalWidth) {
+    setFitColumn({
+      ...fitColumn,
+      [id]: getColumnWidth(tableRows, id, header, originalWidth)
+    });
+  }
+
+  function handleMouseDown(e, id, onMouseDown) {
+    if (fitColumn[id]) {
+      const newFitColumn = omit(fitColumn, [id]);
+      setFitColumn(newFitColumn);
+    }
+    onMouseDown(e);
+  }
+
   return (
     <div className='table--wrapper'>
       {includeFilters &&
@@ -174,15 +202,37 @@ const SortableTable = ({
 
                       columnClassName = `table__sort${columnClassNameSuffix}`;
                     }
+
+                    const wrapperClassNames = classNames(
+                      'th',
+                      {
+                        'no-resize': !column.canResize,
+                      }
+                    );
+
+                    const { style, ...restHeaderProps } = column.getHeaderProps();
+                    const columnWidth = fitColumn[column.id];
+                    if (columnWidth) style.width = `${columnWidth}px`;
+
+                    const {
+                      onMouseDown,
+                      role,
+                      ...restResizerProps
+                    } = column.getResizerProps ? column.getResizerProps() : {};
+
                     return (
-                      <div {...column.getHeaderProps()} className='th'>
-                        <div {...column.getSortByToggleProps()} className={columnClassName}>
+                      <div {...restHeaderProps} className={wrapperClassNames} style={style}>
+                        <span {...column.getSortByToggleProps()} className={columnClassName}>
                           {column.render('Header')}
-                        </div>
-                        <div
-                          {...column.getResizerProps()}
+                        </span>
+                        {column.canResize && <div
+                          {...restResizerProps}
+                          role={role}
+                          title='Double click to expand'
+                          onMouseDown={(e) => handleMouseDown(e, column.id, onMouseDown)}
+                          onDoubleClick={() => handleDoubleClick(column.id, column.Header, column.originalWidth)}
                           className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
-                        />
+                        />}
                       </div>
                     );
                   })}
@@ -197,16 +247,26 @@ const SortableTable = ({
                 <div className='tr' data-value={row.id} {...row.getRowProps()} key={i}>
                   {row.cells.map((cell, cellIndex) => {
                     const primaryIdx = canSelect ? 1 : 0;
+                    const wrapperClassNames = classNames(
+                      'td',
+                      {
+                        'table__main-asset': cellIndex === primaryIdx,
+                      }
+                    );
+
+                    const { style, ...restCellProps } = cell.getCellProps();
+                    const columnWidth = fitColumn[cell.column.id];
+                    if (columnWidth) style.width = `${columnWidth}px`;
+
                     return (
-                      <React.Fragment key={cellIndex}>
-                        <div
-                          className={`td ${cellIndex === primaryIdx ? 'table__main-asset' : ''}`}
-                          {...cell.getCellProps()}
-                          key={cellIndex}
-                        >
-                          {cell.render('Cell')}
-                        </div>
-                      </React.Fragment>
+                      <div
+                        className={wrapperClassNames}
+                        {...restCellProps}
+                        style={style}
+                        key={cellIndex}
+                      >
+                        {cell.render('Cell')}
+                      </div>
                     );
                   })}
                 </div>

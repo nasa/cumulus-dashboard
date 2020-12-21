@@ -111,10 +111,9 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('.table .thead .tr .th').contains('.table__sort', 'Collection ID').dblclick();
       cy.get('.table .thead .tr .th').contains('.table__sort--desc', 'Collection ID');
-      cy.get('.table .thead .tr .th').eq(0).type('{shift}', { release: false });
-      cy.get('.table .thead .tr .th').contains('.table__sort', 'Status').click();
+      cy.get('.table .thead .tr .th').contains('.table__sort', 'Status').click({ shiftKey: true });
       cy.get('.table .thead .tr .th').contains('.table__sort--asc', 'Status');
-      cy.get('.table .thead .tr .th').contains('.table__sort', 'Name').click();
+      cy.get('.table .thead .tr .th').contains('.table__sort', 'Name').click({ shiftKey: true });
       cy.get('.table .thead .tr .th').contains('.table__sort--asc', 'Name');
 
       // wait until the selected fields of granules are in sorted order
@@ -143,6 +142,14 @@ describe('Dashboard Granules Page', () => {
           errorMsg: 'granule multi-column sorting not working within time limit'
         }
       );
+    });
+
+    it('Should resize column to fit content on double click', () => {
+      cy.visit('/granules');
+      cy.contains('.table .thead .tr .th', 'Name').as('nameColumn');
+      cy.get('@nameColumn').invoke('outerWidth').should('eq', 225);
+      cy.get('@nameColumn').find('.resizer').dblclick();
+      cy.get('@nameColumn').invoke('outerWidth').should('eq', 400);
     });
 
     it('Should update dropdown with label when visiting bookmarkable URL', () => {

@@ -12,8 +12,17 @@
   overflow-x: scroll;
   border-radius: 8px 8px 0px 0px;
 
+  .content-fit {
+    width: fit-content!important;
+  }
+
   .Collapsible {
     max-width: 500px;
+  }
+
+  .thead, .tbody {
+    width: fit-content;
+    min-width: 100%;
   }
 
   .thead {
@@ -23,6 +32,11 @@
       font-weight: $base-font-semibold;
       padding: 1em 2em;
       font-size: .86em;
+
+      &.no-resize {
+        border-right: 2px solid $lightest-grey;
+        padding: 1em 1.5em;
+      }
     }
   }
 
@@ -185,8 +199,10 @@
 
 .resizer {
   display: inline-block;
-  background: $lightest-grey;
-  width: 1px;
+  background-color: $lightest-grey;
+  background-clip: content-box;
+  padding: 0 10px;
+  width: 2px;
   height: 100%;
   position: absolute;
   right: 0;
@@ -196,7 +212,7 @@
   touch-action:none;
 
   &.isResizing {
-    background: red;
+    background-color: $grey;
   }
 }
 
