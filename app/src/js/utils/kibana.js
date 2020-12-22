@@ -98,6 +98,12 @@ export const kibanaAllLogsLink = (cumulusInstanceMeta) => {
   return `${_config.kibanaRoot}/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(from:now-48h,to:now))&_a=(columns:!(_source),index:${stackName},interval:auto,query:(language:lucene,query:''),sort:!('@timestamp',desc))`;
 };
 
+export const kibanaGranuleErrorsLink = (cumulusInstanceMeta) => {
+  if (!kibanaConfigured(cumulusInstanceMeta)) return '';
+  const { stackName } = cumulusInstanceMeta;
+  return `${_config.kibanaRoot}/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(from:now-48h,to:now))&_a=(columns:!(_source),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:${stackName},key:_index,negate:!f,params:(query:'${stackName}-granule*'),type:phrase),query:(match_phrase:(_index:'${stackName}-granule*')))),index:${stackName},interval:auto,query:(language:lucene,query:'status:%20failed'),sort:!('@timestamp',desc))`;
+};
+
 export const kibanaExecutionLink = (cumulusInstanceMeta, executionName) => {
   if (!kibanaConfigured(cumulusInstanceMeta)) return '';
   const { stackName } = cumulusInstanceMeta;
