@@ -181,112 +181,110 @@ const SortableTable = ({
       {includeFilters &&
         <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
       }
-      <form>
-        <div className='table' {...getTableProps()}>
-          <div className='thead'>
-            <div className='tr'>
-              {headerGroups.map((headerGroup) => (
-                <div {...headerGroup.getHeaderGroupProps()} className="tr">
-                  {headerGroup.headers.map((column) => {
-                    let columnClassName = '';
-                    if (column.canSort) {
-                      let columnClassNameSuffix;
+      <div className='table' {...getTableProps()}>
+        <div className='thead'>
+          <div className='tr'>
+            {headerGroups.map((headerGroup) => (
+              <div {...headerGroup.getHeaderGroupProps()} className="tr">
+                {headerGroup.headers.map((column) => {
+                  let columnClassName = '';
+                  if (column.canSort) {
+                    let columnClassNameSuffix;
 
-                      if (column.isSortedDesc === true) {
-                        columnClassNameSuffix = '--desc';
-                      } else if (column.isSortedDesc === false) {
-                        columnClassNameSuffix = '--asc';
-                      } else {
-                        columnClassNameSuffix = '';
-                      }
-
-                      columnClassName = `table__sort${columnClassNameSuffix}`;
+                    if (column.isSortedDesc === true) {
+                      columnClassNameSuffix = '--desc';
+                    } else if (column.isSortedDesc === false) {
+                      columnClassNameSuffix = '--asc';
+                    } else {
+                      columnClassNameSuffix = '';
                     }
 
-                    const wrapperClassNames = classNames(
-                      'th',
-                      {
-                        'no-resize': !column.canResize,
-                      }
-                    );
+                    columnClassName = `table__sort${columnClassNameSuffix}`;
+                  }
 
-                    const { style, ...restHeaderProps } = column.getHeaderProps();
-                    const columnWidth = fitColumn[column.id];
-                    if (columnWidth) style.width = `${columnWidth}px`;
+                  const wrapperClassNames = classNames(
+                    'th',
+                    {
+                      'no-resize': !column.canResize,
+                    }
+                  );
 
-                    const {
-                      onMouseDown,
-                      role,
-                      ...restResizerProps
-                    } = column.getResizerProps ? column.getResizerProps() : {};
+                  const { style, ...restHeaderProps } = column.getHeaderProps();
+                  const columnWidth = fitColumn[column.id];
+                  if (columnWidth) style.width = `${columnWidth}px`;
 
-                    return (
-                      <div {...restHeaderProps} className={wrapperClassNames} style={style}>
-                        <span {...column.getSortByToggleProps()} className={columnClassName}>
-                          {column.render('Header')}
-                        </span>
-                        {column.canResize && <div
-                          {...restResizerProps}
-                          role={role}
-                          title='Double click to expand'
-                          onMouseDown={(e) => handleMouseDown(e, column.id, onMouseDown)}
-                          onDoubleClick={() => handleDoubleClick(column.id, column.Header, column.originalWidth)}
-                          className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
-                        />}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className='tbody'>
-            {tableRows.map((row, i) => {
-              prepareRow(row);
-              return (
-                <div className='tr' data-value={row.id} {...row.getRowProps()} key={i}>
-                  {row.cells.map((cell, cellIndex) => {
-                    const primaryIdx = canSelect ? 1 : 0;
-                    const wrapperClassNames = classNames(
-                      'td',
-                      {
-                        'table__main-asset': cellIndex === primaryIdx,
-                      }
-                    );
+                  const {
+                    onMouseDown,
+                    role,
+                    ...restResizerProps
+                  } = column.getResizerProps ? column.getResizerProps() : {};
 
-                    const { style, ...restCellProps } = cell.getCellProps();
-                    const columnWidth = fitColumn[cell.column.id];
-                    if (columnWidth) style.width = `${columnWidth}px`;
-
-                    return (
-                      <div
-                        className={wrapperClassNames}
-                        {...restCellProps}
-                        style={style}
-                        key={cellIndex}
-                      >
-                        {cell.render('Cell')}
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })}
+                  return (
+                    <div {...restHeaderProps} className={wrapperClassNames} style={style}>
+                      <span {...column.getSortByToggleProps()} className={columnClassName}>
+                        {column.render('Header')}
+                      </span>
+                      {column.canResize && <div
+                        {...restResizerProps}
+                        role={role}
+                        title='Double click to expand'
+                        onMouseDown={(e) => handleMouseDown(e, column.id, onMouseDown)}
+                        onDoubleClick={() => handleDoubleClick(column.id, column.Header, column.originalWidth)}
+                        className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
+                      />}
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
           </div>
         </div>
-        {shouldUsePagination &&
-          <SimplePagination
-            canPreviousPage={canPreviousPage}
-            canNextPage={canNextPage}
-            pageCount={pageCount}
-            gotoPage={gotoPage}
-            nextPage={nextPage}
-            previousPage={previousPage}
-            pageOptions={pageOptions}
-            pageIndex={pageIndex}
-            dataCount={data.length}
-          />}
-      </form>
+        <div className='tbody'>
+          {tableRows.map((row, i) => {
+            prepareRow(row);
+            return (
+              <div className='tr' data-value={row.id} {...row.getRowProps()} key={i}>
+                {row.cells.map((cell, cellIndex) => {
+                  const primaryIdx = canSelect ? 1 : 0;
+                  const wrapperClassNames = classNames(
+                    'td',
+                    {
+                      'table__main-asset': cellIndex === primaryIdx,
+                    }
+                  );
+
+                  const { style, ...restCellProps } = cell.getCellProps();
+                  const columnWidth = fitColumn[cell.column.id];
+                  if (columnWidth) style.width = `${columnWidth}px`;
+
+                  return (
+                    <div
+                      className={wrapperClassNames}
+                      {...restCellProps}
+                      style={style}
+                      key={cellIndex}
+                    >
+                      {cell.render('Cell')}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      {shouldUsePagination &&
+        <SimplePagination
+          canPreviousPage={canPreviousPage}
+          canNextPage={canNextPage}
+          pageCount={pageCount}
+          gotoPage={gotoPage}
+          nextPage={nextPage}
+          previousPage={previousPage}
+          pageOptions={pageOptions}
+          pageIndex={pageIndex}
+          dataCount={data.length}
+        />}
     </div>
   );
 };

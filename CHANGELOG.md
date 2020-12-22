@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2263**
   - Update Pagination input to show possible page options in dropdown
 
+- **CUMULUS-2322**
+  - Fix pagination issue causing rerender
+  - Remove `node-notifier` to remediate security vulnerability
+
 ### Added
 - **CUMULUS-1885**
   - Expand columns to fit full content width when separator is double clicked

@@ -215,6 +215,11 @@ describe('Dashboard Reconciliation Reports Page', () => {
           cy.contains('.table__filters .button__filter', 'Show Column Filters');
           cy.get('.table__filters--collapse').should('not.be.visible');
         });
+
+      /** Pagination */
+      cy.contains('.simple-pagination .pagination__link--active', '1');
+      cy.contains('.simple-pagination button', 'Next').click();
+      cy.contains('.simple-pagination .pagination__link--active', '2');
     });
 
     it('Has a way to expand/collapse all tables', () => {
