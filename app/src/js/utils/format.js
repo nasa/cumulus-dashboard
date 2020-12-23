@@ -1,11 +1,15 @@
 /* eslint-disable import/no-cycle */
 
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import numeral from 'numeral';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { getPersistentQueryParams } from './url-helper';
 import Tooltip from '../components/Tooltip/tooltip';
+import Popover from '../components/Popover/popover';
 
 export const nullValue = '--';
 
@@ -92,6 +96,53 @@ export const fromNowWithTooltip = (timestamp) => (
     tip={fullDate(timestamp)}
   />
 );
+
+export const CopyCellPopover = ({ cellContents, id, popoverContent, value }) => {
+  const [copyStatus, setCopyStatus] = useState('');
+
+  async function copyToClipboard(e) {
+    e.preventDefault();
+    try {
+      await navigator.clipboard.writeText(value || popoverContent);
+      setCopyStatus('Copied!');
+    } catch (err) {
+      setCopyStatus('Failed to copy!');
+    }
+  }
+
+  function handleMouseLeave() {
+    if (copyStatus !== '') {
+      setCopyStatus('');
+    }
+  }
+
+  return (
+    <Popover
+      className="popover--blue"
+      id={id}
+      onMouseLeave={handleMouseLeave}
+      placement="bottom"
+      popover={true}
+      target={cellContents}
+      popoverContent={(
+        <>
+          <div className='popover-body--main'>{popoverContent}</div>
+          <div className='popover-body--footer'>
+            <span>{copyStatus}</span>
+            <button className='button button--small button--no-left-padding' onClick={copyToClipboard}><FontAwesomeIcon icon={faCopy}/> Copy</button>
+          </div>
+        </>
+      )}
+    />
+  );
+};
+
+CopyCellPopover.propTypes = {
+  cellContents: PropTypes.node,
+  id: PropTypes.string,
+  popoverContent: PropTypes.node,
+  value: PropTypes.string,
+};
 
 export const lastUpdated = (datestring, text) => {
   const meta = text || 'Last Updated';

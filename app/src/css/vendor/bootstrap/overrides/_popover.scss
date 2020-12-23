@@ -1,0 +1,62 @@
+.popover {
+
+  &-body {
+    min-width: 150px;
+  }
+  
+  &-body--main {
+    margin: 1em .5em;
+  }
+
+  &-body--footer {
+    display: flex;
+    justify-content: flex-end;
+
+    span {
+      margin: 0 1em;
+    }
+  }
+
+  &--blue {
+    background-color: $ocean-blue;
+    color: $white;
+
+    .popover-body {
+      color: white;
+    }
+
+    a {
+      color: $white;
+      border-bottom: 1px solid $white;
+    }
+
+    button {
+      background-color: lighten($color: $ocean-blue, $amount: 5%);
+    }
+
+    &.bs-popover-top {
+      .arrow::before,
+      .arrow::after {
+        border-top-color: $ocean-blue;
+      }
+    }
+    &.bs-popover-right {
+      .arrow::before,
+      .arrow::after {
+        border-right-color: $ocean-blue;
+      }
+    }
+    &.bs-popover-bottom {
+      .arrow::before,
+      .arrow::after {
+        border-bottom-color: $ocean-blue;
+      }
+    }
+    &.bs-popover-left {
+      .arrow::before,
+      .arrow::after {
+        border-left-color: $ocean-blue;
+      }
+    }
+  }
+}
