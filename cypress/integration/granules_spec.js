@@ -57,7 +57,7 @@ describe('Dashboard Granules Page', () => {
           cy.get('@columns').eq(2).invoke('text')
             .should('be.eq', granule.granuleId);
           // has link to the detailed granule page
-          cy.get('@columns').eq(2).children('a')
+          cy.get('@columns').eq(2).find('a')
             .should('have.attr', 'href')
             .and('be.eq', `/granules/granule/${granule.granuleId}`);
 
@@ -80,7 +80,7 @@ describe('Dashboard Granules Page', () => {
             .should('be.eq', granule.collectionId.replace('___', ' / '));
 
           // has link to the detailed collection page
-          cy.get('@columns').eq(4).children('a')
+          cy.get('@columns').eq(4).find('a')
             .should('have.attr', 'href')
             .and('be.eq', `/collections/collection/${granule.collectionId.replace('___', '/')}`);
 
