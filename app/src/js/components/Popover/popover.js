@@ -31,7 +31,7 @@ const Popover = ({
 
   return (
     <div
-      id="hover-wrap"
+      className="hover-wrap"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

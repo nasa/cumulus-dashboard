@@ -128,7 +128,7 @@ export const CopyCellPopover = ({ cellContents, id, popoverContent, value }) => 
         <>
           <div className='popover-body--main'>{popoverContent}</div>
           <div className='popover-body--footer'>
-            <span>{copyStatus}</span>
+            {copyStatus && <span>{copyStatus}</span>}
             <button className='button button--small button--no-left-padding' onClick={copyToClipboard}><FontAwesomeIcon icon={faCopy}/> Copy</button>
           </div>
         </>
