@@ -206,7 +206,7 @@ describe('Dashboard Home Page', () => {
       cy.get('.overview-num__wrapper-home > ul > :nth-child(5)').contains('0');
 
       // Test the Granule Error list is empty
-      cy.get('.table--wrapper > form > div > div.tbody').should('be.empty');
+      cy.get('.table--wrapper > div > div.tbody').should('be.empty');
     });
 
     it('modifies the Metrics section as datepicker changes', () => {
