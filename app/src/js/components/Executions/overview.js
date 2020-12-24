@@ -119,6 +119,7 @@ class ExecutionOverview extends React.Component {
                 label={'Workflow'}
                 inputProps={{
                   placeholder: 'All',
+                  className: 'dropdown--medium',
                 }}
               />
               <Dropdown
@@ -130,6 +131,7 @@ class ExecutionOverview extends React.Component {
                 label={strings.collection_id}
                 inputProps={{
                   placeholder: 'All',
+                  className: 'dropdown--large',
                 }}
               />
             </ListFilters>

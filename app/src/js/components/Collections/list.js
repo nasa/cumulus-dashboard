@@ -119,7 +119,7 @@ class CollectionList extends React.Component {
                 action={searchCollections}
                 clear={clearCollectionsSearch}
                 inputProps={{
-                  className: 'search search--medium',
+                  className: 'search search--large',
                 }}
                 label="Search"
                 labelKey="name"
@@ -134,7 +134,8 @@ class CollectionList extends React.Component {
                 paramKey="provider"
                 label="Provider"
                 inputProps={{
-                  placeholder: 'All'
+                  placeholder: 'All',
+                  className: 'dropdown--medium',
                 }}
               />
             </ListFilters>

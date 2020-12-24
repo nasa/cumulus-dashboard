@@ -185,6 +185,17 @@ const AllGranules = ({
           onSelect={updateSelection}
         >
           <ListFilters>
+            <Search
+              action={searchGranules}
+              clear={clearGranulesSearch}
+              inputProps={{
+                className: 'search search--xlarge',
+              }}
+              label="Search"
+              labelKey="granuleId"
+              placeholder="Granule ID"
+              searchKey="granules"
+            />
             <Dropdown
               getOptions={getOptionsCollectionName}
               options={get(dropdowns, ['collectionName', 'options']) || []}
@@ -194,6 +205,7 @@ const AllGranules = ({
               label="Collection"
               inputProps={{
                 placeholder: 'All',
+                className: 'dropdown--large',
               }}
             />
             {statusOpts && (
@@ -208,17 +220,6 @@ const AllGranules = ({
                 }}
               />
             )}
-            <Search
-              action={searchGranules}
-              clear={clearGranulesSearch}
-              inputProps={{
-                className: 'search search--large',
-              }}
-              label="Search"
-              labelKey="granuleId"
-              placeholder="Granule ID"
-              searchKey="granules"
-            />
             <Dropdown
               getOptions={getOptionsProviderName}
               options={get(providerDropdowns, ['provider', 'options'])}
@@ -227,7 +228,8 @@ const AllGranules = ({
               paramKey="provider"
               label="Provider"
               inputProps={{
-                placeholder: 'All'
+                placeholder: 'All',
+                className: 'dropdown--medium',
               }}
             />
             {view === 'failed' && (

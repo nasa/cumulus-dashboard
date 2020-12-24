@@ -163,7 +163,7 @@ const CollectionGranules = ({
               action={searchGranules}
               clear={clearGranulesSearch}
               inputProps={{
-                className: 'search search--large',
+                className: 'search search--xlarge',
               }}
               label="Search"
               labelKey="granuleId"
@@ -190,7 +190,8 @@ const CollectionGranules = ({
               paramKey="provider"
               label="Provider"
               inputProps={{
-                placeholder: 'All'
+                placeholder: 'All',
+                className: 'dropdown--medium',
               }}
             />
           </ListFilters>

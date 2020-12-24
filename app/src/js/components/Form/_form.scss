@@ -78,6 +78,18 @@ select option{
   display: inline-block;
   vertical-align: bottom;
   position: relative;
+
+  .dropdown {
+    &--small {
+      width: 15em;
+    }
+    &--medium {
+      width: 25em;
+    }
+    &--large {
+      width: 35em;
+    }
+  }
 }
 
 .filter__icon{
@@ -169,6 +181,9 @@ select option{
     }
     &--large {
       width: 35em;
+    }
+    &--xlarge {
+      width: 60em;
     }
   }
   

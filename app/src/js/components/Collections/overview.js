@@ -293,7 +293,7 @@ class CollectionOverview extends React.Component {
                 action={searchGranules}
                 clear={clearGranulesSearch}
                 inputProps={{
-                  className: 'search search--large',
+                  className: 'search search--xlarge',
                 }}
                 label="Search"
                 labelKey="granuleId"
@@ -318,7 +318,8 @@ class CollectionOverview extends React.Component {
                 paramKey="provider"
                 label="Provider"
                 inputProps={{
-                  placeholder: 'All'
+                  placeholder: 'All',
+                  className: 'dropdown--medium',
                 }}
               />
             </ListFilters>
