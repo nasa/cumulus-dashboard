@@ -51,7 +51,7 @@ export const tableColumns = [
     Header: 'Name',
     accessor: 'granuleId',
     // eslint-disable-next-line react/prop-types
-    Cell: ({ cell: { value } }) => <CopyCellPopover cellContents={granuleLink(value)} id={`granuleId-${value}-popover`} popoverContent={granuleLink(value)} value={value} />,
+    Cell: ({ cell: { value } }) => <CopyCellPopover cellContent={granuleLink(value)} id={`granuleId-${value}-popover`} popoverContent={granuleLink(value)} value={value} />,
     width: 225
   },
   {
@@ -65,7 +65,7 @@ export const tableColumns = [
     Header: strings.collection_id,
     accessor: 'collectionId',
     // eslint-disable-next-line react/prop-types
-    Cell: ({ cell: { value } }) => <CopyCellPopover cellContents={collectionLink(value)} id={`collectionId-${value}-popover`} popoverContent={collectionLink(value)} value={value} />,
+    Cell: ({ cell: { value } }) => <CopyCellPopover cellContent={collectionLink(value)} id={`collectionId-${value}-popover`} popoverContent={collectionLink(value)} value={value} />,
   },
   {
     Header: 'Provider',

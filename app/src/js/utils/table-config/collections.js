@@ -19,7 +19,7 @@ export const tableColumns = [
       const content = <Link to={(location) => ({ pathname: `/collections/collection/${value}/${values.version}`, search: getPersistentQueryParams(location) })}>{value}</Link>;
       return (
         <CopyCellPopover
-          cellContents={content}
+          cellContent={content}
           id={`collectionId-${value}-popover`}
           popoverContent={content}
           value={value}

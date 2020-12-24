@@ -97,7 +97,7 @@ export const fromNowWithTooltip = (timestamp) => (
   />
 );
 
-export const CopyCellPopover = ({ cellContents, id, popoverContent, value }) => {
+export const CopyCellPopover = ({ cellContent, id, popoverContent, value }) => {
   const [copyStatus, setCopyStatus] = useState('');
 
   async function copyToClipboard(e) {
@@ -123,7 +123,7 @@ export const CopyCellPopover = ({ cellContents, id, popoverContent, value }) => 
       onMouseLeave={handleMouseLeave}
       placement="bottom"
       popover={true}
-      target={cellContents}
+      target={cellContent}
       popoverContent={(
         <>
           <div className='popover-body--main'>{popoverContent}</div>
@@ -138,7 +138,7 @@ export const CopyCellPopover = ({ cellContents, id, popoverContent, value }) => 
 };
 
 CopyCellPopover.propTypes = {
-  cellContents: PropTypes.node,
+  cellContent: PropTypes.node,
   id: PropTypes.string,
   popoverContent: PropTypes.node,
   value: PropTypes.string,
