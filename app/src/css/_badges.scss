@@ -29,6 +29,14 @@
   text-transform: uppercase;
   font-weight: $base-font-regular;
   display: inline-block;
+
+  &--small {
+    @extend .status__badge;
+    margin: 0;
+    text-transform: none;
+    font-size: .86em;
+  }
+
   &--enabled {
     background-color: #30AD66;
   }
@@ -45,7 +53,8 @@
     background-color: $yellow;
   }
 
-  &--completed {
+  &--completed,
+  &--succeeded {
     background-color: $light-green;
   }
 
