@@ -194,6 +194,7 @@ const List = ({
               onSelect={updateSelection}
               changeSortProps={queryNewSort}
               clearSelected={clearSelected}
+              initialSortId={initialSortId}
               // if there's an initialSortId, it means the first fetch request for the list should be sorted
               // according to that id, and therefore we are using sever-side/manual sorting
               shouldManualSort={!!initialSortId}

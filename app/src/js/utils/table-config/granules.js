@@ -12,7 +12,8 @@ import {
   collectionLink,
   granuleLink,
   providerLink,
-  fromNowWithTooltip
+  fromNowWithTooltip,
+  CopyCellPopover
 } from '../format';
 import {
   applyWorkflowToGranuleClearError,
@@ -49,7 +50,8 @@ export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'granuleId',
-    Cell: ({ cell: { value } }) => granuleLink(value),
+    // eslint-disable-next-line react/prop-types
+    Cell: ({ cell: { value } }) => <CopyCellPopover cellContent={granuleLink(value)} id={`granuleId-${value}-popover`} popoverContent={granuleLink(value)} value={value} />,
     width: 225
   },
   {
@@ -62,7 +64,8 @@ export const tableColumns = [
   {
     Header: strings.collection_id,
     accessor: 'collectionId',
-    Cell: ({ cell: { value } }) => collectionLink(value)
+    // eslint-disable-next-line react/prop-types
+    Cell: ({ cell: { value } }) => <CopyCellPopover cellContent={collectionLink(value)} id={`collectionId-${value}-popover`} popoverContent={collectionLink(value)} value={value} />,
   },
   {
     Header: 'Provider',

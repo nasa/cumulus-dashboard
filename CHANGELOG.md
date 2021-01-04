@@ -48,6 +48,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2270**
   - Add provider drop down filter to Collections Overview page
 
+- **CUMULUS-2272**
+  - Add popover to granuleId and collection name table columns to view and copy full cell text
+
 ### Changed
 
 - **CUMULUS-2070**
