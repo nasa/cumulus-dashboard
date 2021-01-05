@@ -54,7 +54,7 @@ describe('Dashboard authentication', () => {
 
   it('should logout user on failed token refresh', () => {
     cy.server();
-    cy.route({
+    cy.intercept({
       method: 'POST',
       url: `${Cypress.env('APIROOT')}/refresh`,
       status: 500,

@@ -133,7 +133,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
       cy.get(`form .form__item .location input[value="${location}"]`).check();
 
-      cy.route2({
+      cy.intercept({
         url: '/reconciliationReports',
         method: 'POST'
       }, (req) => {

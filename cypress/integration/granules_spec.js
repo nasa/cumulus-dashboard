@@ -391,8 +391,8 @@ describe('Dashboard Granules Page', () => {
     it('Should have a Granule Lists page', () => {
       const listName = 'GranuleList100220';
       const url = `**/reconciliationReports/${listName}`;
-      cy.route2({ url: '**/reconciliationReports?limit=*', method: 'GET' }).as('getLists');
-      cy.route2({ url, method: 'GET' }).as('getList');
+      cy.intercept({ url: '**/reconciliationReports?limit=*', method: 'GET' }).as('getLists');
+      cy.intercept({ url, method: 'GET' }).as('getList');
       cy.visit('/granules');
       cy.contains('.sidebar li a', 'Lists').click();
       cy.wait('@getLists');
@@ -416,7 +416,7 @@ describe('Dashboard Granules Page', () => {
         'MOD09GQ.A1657416.CbyoRi.006.9697917818587'
       ];
 
-      cy.route2({
+      cy.intercept({
         url: '/reconciliationReports',
         method: 'POST'
       }, (req) => {
@@ -634,7 +634,7 @@ describe('Dashboard Granules Page', () => {
       cy.contains('button', 'Delete').click();
       cy.contains('.button--submit', 'Confirm').click();
 
-      cy.route2({
+      cy.intercept({
         url: '/granules',
         method: 'PUT'
       }, (req) => {
