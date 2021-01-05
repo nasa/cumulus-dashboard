@@ -749,21 +749,6 @@ a:active {
       background-color: $error-red;
     }
   }
-
-  .execution-status {
-    &-succeeded {
-      color: $light-green;
-    }
-
-    &-running {
-      color: $yellow;
-    }
-
-    &-failed {
-      color: $error-red;
-    }
-  }
-
 }
 
 .app__target--container {
