@@ -138,7 +138,7 @@ class ExecutionStatus extends React.Component {
               <>
                 <button
                   onClick={() => this.openModal('input')}
-                  className="button button--small button--no-icon"
+                  className="button button--small button--no-left-padding"
                 >
                   Show Input
                 </button>
@@ -172,7 +172,7 @@ class ExecutionStatus extends React.Component {
               <>
                 <button
                   onClick={() => this.openModal('output')}
-                  className="button button--small button--no-icon"
+                  className="button button--small button--no-left-padding"
                 >
                   Show Output
                 </button>

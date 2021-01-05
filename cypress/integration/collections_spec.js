@@ -90,7 +90,7 @@ describe('Dashboard Collections Page', () => {
         .contains(infix);
     });
 
-    it.only('should display collections with active granules when a provider is selected from dropdown', () => {
+    it('should display collections with active granules when a provider is selected from dropdown', () => {
       cy.visit('/collections');
       cy.wait('@getCollections');
 
@@ -389,7 +389,7 @@ describe('Dashboard Collections Page', () => {
           // with existing information, and the next update has to happen
           // before these all show up or don't show up correctly.
           cy.get(
-            `[data-value="${collection.name}___${collection.version}"] > .table__main-asset > a`,
+            `[data-value="${collection.name}___${collection.version}"] > .table__main-asset a`,
             { timeout: 25000 }
           ).should(existOrNotExist);
         });
