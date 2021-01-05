@@ -74,7 +74,7 @@ class ExecutionStatus extends React.Component {
         label: 'Execution Status',
         property: 'status',
         accessor: (d) => (
-          <span className={`execution-status-${d.toLowerCase()}`}>
+          <span className={`status__badge--small status__badge--${d.toLowerCase()}`}>
             {displayCase(d)}
           </span>
         ),
