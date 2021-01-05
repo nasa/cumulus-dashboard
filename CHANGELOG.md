@@ -51,6 +51,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2270**
   - Add provider drop down filter to Collections Overview page
 
+- **CUMULUS-2272**
+  - Add popover to granuleId and collection name table columns to view and copy full cell text
+
 ### Changed
 
 - **CUMULUS-2070**
@@ -59,6 +62,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2071**
   - Replace the static "Granule Updates" stats on the home page with clickable cards
   - Animate the Reconciliation Report > "Bucket Status" cards
+
+
+- **CUMULUS-2074**
+  - Update status on execution details page to be displayed as a badge
+  - Other styling tweaks on execution details page
 
 - **CUMULUS-2242**
   - Changes underlying Docker files for building dashboard bundle and dashboard image via docker.  The user interface remains the same.

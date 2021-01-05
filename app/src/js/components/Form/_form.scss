@@ -306,6 +306,7 @@ select option{
     svg {
       color: $ocean-blue;
       margin-left: .5em;
+      padding: .5em;
     }
   }
 
@@ -620,9 +621,7 @@ select option{
 }
 
 .execution__content {
-  cursor: pointer;
-
-  .execution__content--visual {
+  &--visual {
     width: 25%;
     margin: 0 auto;
   }
@@ -652,6 +651,7 @@ select option{
   }
 
   .execution__content {
+    cursor: pointer;
     margin-top: 0;
     border-radius: 0 0 10px 10px;
   }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { get } from 'object-path';
 import { Link } from 'react-router-dom';
-import { seconds, tally, collectionNameVersion, fromNowWithTooltip } from '../format';
+import { seconds, tally, collectionNameVersion, fromNowWithTooltip, CopyCellPopover } from '../format';
 import { deleteCollection } from '../../actions';
 import { strings } from '../../components/locale';
 import BatchDeleteConfirmContent from '../../components/DeleteCollection/BatchDeleteConfirmContent';
@@ -15,7 +15,16 @@ export const tableColumns = [
     accessor: 'name',
     Cell: ({ cell: { value, row } }) => { // eslint-disable-line react/prop-types
       const { values } = row; // eslint-disable-line react/prop-types
-      return <Link to={(location) => ({ pathname: `/collections/collection/${value}/${values.version}`, search: getPersistentQueryParams(location) })}>{value}</Link>; // eslint-disable-line react/prop-types
+      // eslint-disable-next-line react/prop-types
+      const content = <Link to={(location) => ({ pathname: `/collections/collection/${value}/${values.version}`, search: getPersistentQueryParams(location) })}>{value}</Link>;
+      return (
+        <CopyCellPopover
+          cellContent={content}
+          id={`collectionId-${value}-popover`}
+          popoverContent={content}
+          value={value}
+        />
+      );
     },
     width: 175
   },
