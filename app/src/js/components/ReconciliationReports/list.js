@@ -128,9 +128,6 @@ const ReconciliationReportList = ({
             <Search
               action={searchReconciliationReports}
               clear={clearReconciliationReportSearch}
-              inputProps={{
-                className: 'search search--medium',
-              }}
               label="Search"
               labelKey="name"
               placeholder={`${isGranules ? 'List' : 'Report'} Name`}

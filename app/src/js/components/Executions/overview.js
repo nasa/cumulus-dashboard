@@ -92,9 +92,6 @@ class ExecutionOverview extends React.Component {
               <Search
                 action={searchExecutions}
                 clear={clearExecutionsSearch}
-                inputProps={{
-                  className: 'search search--medium',
-                }}
                 paramKey="asyncOperationId"
                 label="Async Operation ID"
                 labelKey="asyncOperationId"

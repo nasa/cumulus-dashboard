@@ -118,9 +118,6 @@ class CollectionList extends React.Component {
               <Search
                 action={searchCollections}
                 clear={clearCollectionsSearch}
-                inputProps={{
-                  className: 'search search--large',
-                }}
                 label="Search"
                 labelKey="name"
                 placeholder="Collection Name"

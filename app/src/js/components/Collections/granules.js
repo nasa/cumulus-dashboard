@@ -162,9 +162,6 @@ const CollectionGranules = ({
             <Search
               action={searchGranules}
               clear={clearGranulesSearch}
-              inputProps={{
-                className: 'search search--xlarge',
-              }}
               label="Search"
               labelKey="granuleId"
               placeholder="Granule ID"

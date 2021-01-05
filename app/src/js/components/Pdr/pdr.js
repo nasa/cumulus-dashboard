@@ -245,9 +245,6 @@ class PDR extends React.Component {
               <Search
                 action={searchGranules}
                 clear={clearGranulesSearch}
-                inputProps={{
-                  className: 'search search--xlarge',
-                }}
                 labelKey="granuleId"
                 searchKey="granules"
               />

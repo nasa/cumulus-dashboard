@@ -101,9 +101,6 @@ class OperationOverview extends React.Component {
               <Search
                 action={searchOperations}
                 clear={clearOperationsSearch}
-                inputProps={{
-                  className: 'search search--medium',
-                }}
                 labelKey="id"
                 searchKey="operations"
               />

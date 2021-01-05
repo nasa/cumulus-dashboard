@@ -101,9 +101,6 @@ const ExecutionEvents = ({
             <Search
               action={searchExecutionEvents}
               clear={clearExecutionEventsSearch}
-              inputProps={{
-                className: 'search search--medium',
-              }}
               label="Search"
               labelKey="type"
               placeholder="Search Type"
