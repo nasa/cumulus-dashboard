@@ -319,14 +319,11 @@ describe('Dashboard Granules Page', () => {
 
     it('Should reingest a granule and redirect to the granules detail page.', () => {
       const granuleId = 'MOD09GQ.A0142558.ee5lpE.006.5112577830916';
-      cy.server();
-      cy.route({
-        method: 'PUT',
-        url: '/granules/*',
-        status: 200,
-        response: { message: 'ingested' }
-      });
-      cy.route('GET', `/granules/${granuleId}`).as('getGranule');
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { body: { message: 'ingested' }, statusCode: 200 },
+      );
+      cy.intercept('GET', `/granules/${granuleId}`).as('getGranule');
       cy.visit('/granules');
       cy.get(`[data-value="${granuleId}"] > .td >input[type="checkbox"]`).click();
       cy.contains('button', 'Granule Actions').click();
@@ -344,13 +341,10 @@ describe('Dashboard Granules Page', () => {
         'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
-      cy.server();
-      cy.route({
-        method: 'PUT',
-        url: '/granules/*',
-        status: 200,
-        response: { message: 'ingested' }
-      });
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { body: { message: 'ingested' }, statusCode: 200 },
+      );
       cy.visit('/granules');
       cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
@@ -368,13 +362,10 @@ describe('Dashboard Granules Page', () => {
         'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
-      cy.server();
-      cy.route({
-        method: 'PUT',
-        url: '/granules/*',
-        status: 500,
-        response: { message: 'Oopsie' }
-      });
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') },
+        {body: { message: 'Oopsie' }, statusCode: 500 }
+      );
       cy.visit('/granules');
       cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
@@ -390,8 +381,8 @@ describe('Dashboard Granules Page', () => {
 
     it('Should have a Granule Lists page', () => {
       const listName = 'GranuleList100220';
-      const url = `**/reconciliationReports/${listName}`;
-      cy.intercept({ url: '**/reconciliationReports?limit=*', method: 'GET' }).as('getLists');
+      const url = new RegExp(`.*/reconciliationReports/${listName}`);
+      cy.intercept({ url: new RegExp('.*/reconciliationReports\\?limit=.*'), method: 'GET' }).as('getLists');
       cy.intercept({ url, method: 'GET' }).as('getList');
       cy.visit('/granules');
       cy.contains('.sidebar li a', 'Lists').click();
@@ -403,7 +394,7 @@ describe('Dashboard Granules Page', () => {
         .should('be.visible')
         .click({ force: true });
 
-      cy.wait('@getList').its('response.body').should('include', 'url');
+      cy.wait('@getList').its('response.body.url').should('exist');
     });
 
     it('Should open modal to create granule inventory report', () => {
@@ -420,12 +411,12 @@ describe('Dashboard Granules Page', () => {
         url: '/reconciliationReports',
         method: 'POST'
       }, (req) => {
-        const requestBody = JSON.parse(req.body);
-        expect(requestBody).to.have.property('reportType', 'Granule Inventory');
-        expect(requestBody).to.have.property('reportName', listName);
-        expect(requestBody).to.have.property('status', status);
-        expect(requestBody).to.have.property('collectionId', collectionId);
-        expect(requestBody.granuleId.sort()).to.deep.equal(granuleIds);
+        const { body } = req;
+        expect(body).to.have.property('reportType', 'Granule Inventory');
+        expect(body).to.have.property('reportName', listName);
+        expect(body).to.have.property('status', status);
+        expect(body).to.have.property('collectionId', collectionId);
+        expect(body.granuleId.sort()).to.deep.equal(granuleIds);
       }).as('createList');
 
       cy.visit('/granules');
@@ -609,20 +600,15 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('Should handle a successful API response from the Remove and Delete granule requests', () => {
-      cy.server();
-      cy.route({
-        method: 'PUT',
-        url: '/granules/*',
-        status: 200,
-        response: { message: 'success' }
-      });
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*')},
+        { body: { message: 'success' }, statusCode: 200 },
+      );
 
-      cy.route({
-        method: 'DELETE',
-        url: '/granules/*',
-        status: 200,
-        response: { message: 'success' }
-      });
+      cy.intercept(
+        { method: 'DELETE', url: new RegExp('/granules/.*') },
+        { body: { message: 'success' }, statusCode: 200 }
+      );
 
       // this granules query will have a combination of published and unpublished granules
       cy.visit('/granules?limit=50&page=1&status=completed');
@@ -647,20 +633,15 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('Should handle a failed API response from the Remove granule requests', () => {
-      cy.server();
-      cy.route({
-        method: 'PUT',
-        url: '/granules/*',
-        status: 400,
-        response: { message: 'error' }
-      });
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { body: { message: 'error' }, statusCode: 400 }
+      );
 
-      cy.route({
-        method: 'DELETE',
-        url: '/granules/*',
-        status: 200,
-        response: { message: 'success' }
-      });
+      cy.intercept(
+        { method: 'DELETE', url: new RegExp('/granules/.*') },
+        { body: { message: 'success' }, status: 200 }
+      );
 
       // this granules query will have a combination of published and unpublished granules
       cy.visit('/granules?limit=50&page=1&status=completed');
@@ -677,20 +658,15 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('Should handle a failed API response from the Delete granule requests', () => {
-      cy.server();
-      cy.route({
-        method: 'PUT',
-        url: '/granules/*',
-        status: 200,
-        response: { message: 'success' }
-      });
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { body: { message: 'success' }, statusCode: 200 }
+      );
 
-      cy.route({
-        method: 'DELETE',
-        url: '/granules/*',
-        status: 400,
-        response: { message: 'error' }
-      });
+      cy.intercept(
+        { method: 'DELETE', url: new RegExp('/granules/.*') },
+        { body: { message: 'error' }, statusCode: 400 }
+      );
 
       // this granules query will have a combination of published and unpublished granules
       cy.visit('/granules?limit=50&page=1&status=completed');
