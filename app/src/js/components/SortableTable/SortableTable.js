@@ -55,6 +55,7 @@ const SortableTable = ({
   clearSelected,
   data = [],
   initialHiddenColumns = [],
+  initialSortId,
   onSelect,
   rowId,
   shouldManualSort = false,
@@ -105,7 +106,8 @@ const SortableTable = ({
       // if we want to use the pagination hook, then pagination should not be manual
       manualPagination: !shouldUsePagination,
       initialState: {
-        hiddenColumns: initialHiddenColumns
+        hiddenColumns: initialHiddenColumns,
+        sortBy: initialSortId ? [{ id: initialSortId, desc: true }] : [],
       },
     },
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
@@ -295,6 +297,7 @@ SortableTable.propTypes = {
   clearSelected: PropTypes.bool,
   data: PropTypes.array,
   initialHiddenColumns: PropTypes.array,
+  initialSortId: PropTypes.string,
   onSelect: PropTypes.func,
   rowId: PropTypes.any,
   shouldManualSort: PropTypes.bool,

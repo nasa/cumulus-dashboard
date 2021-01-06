@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { OverlayTrigger, Tooltip as TOOLTIP } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip as BootstrapTooltip } from 'react-bootstrap';
 
 const Tooltip = ({
   className = 'tooltip',
@@ -12,9 +12,9 @@ const Tooltip = ({
   <OverlayTrigger
     placement={placement}
     overlay={
-      <TOOLTIP className={className} id={id}>
+      <BootstrapTooltip className={className} id={id}>
         {tip}
-      </TOOLTIP>
+      </BootstrapTooltip>
     }
   >
     {target}

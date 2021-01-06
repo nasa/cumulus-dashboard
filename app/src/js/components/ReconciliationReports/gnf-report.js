@@ -105,13 +105,10 @@ const GnfReport = ({
             Granules Not Found <span className="num-title">{totalMissingGranules}</span>
           </h2>
         </div>
-        <div className="filters">
+        <div className="list-action-wrapper filters">
           <Search
             action={searchReconciliationReport}
             clear={clearReconciliationSearch}
-            inputProps={{
-              className: 'search search--large',
-            }}
             label="Search"
             labelKey="granuleId"
             options={combinedGranules}

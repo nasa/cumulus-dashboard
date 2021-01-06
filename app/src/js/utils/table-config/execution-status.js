@@ -33,7 +33,7 @@ export const tableColumns = [
           <>
             <button
               onClick={toggleModal}
-              className="button button--small button--no-icon"
+              className="button button--small button--no-left-padding"
             >
               More Details
             </button>

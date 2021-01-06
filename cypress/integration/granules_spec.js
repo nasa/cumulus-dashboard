@@ -19,7 +19,7 @@ describe('Dashboard Granules Page', () => {
       cy.visit('/');
     });
 
-    it('should display a link to view granules', () => {
+    it('should display all granules in table with correct columns', () => {
       cy.visit('/granules');
       cy.url().should('include', 'granules');
       cy.contains('.heading--xlarge', 'Granules');
@@ -57,9 +57,17 @@ describe('Dashboard Granules Page', () => {
           cy.get('@columns').eq(2).invoke('text')
             .should('be.eq', granule.granuleId);
           // has link to the detailed granule page
-          cy.get('@columns').eq(2).children('a')
+          cy.get('@columns').eq(2).find('a')
             .should('have.attr', 'href')
             .and('be.eq', `/granules/granule/${granule.granuleId}`);
+          // has popover with copy feature
+          cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseover');
+          cy.get(`#granuleId-${granule.granuleId.replaceAll('.', '\\.')}-popover`).as('popover');
+          cy.get('@popover').should('be.visible');
+          cy.get('@popover').contains('.popover-body--main', granule.granuleId);
+          cy.get('@popover').contains('button', 'Copy').click();
+          cy.get('@popover').find('span').should('be.visible');
+          cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseleave');
 
           // Published column, only public granules have CMR link
           if (granule.published) {
@@ -76,11 +84,20 @@ describe('Dashboard Granules Page', () => {
           }
 
           // Collection ID column
+          const formattedCollectionId = granule.collectionId.replace('___', ' / ');
           cy.get('@columns').eq(4).invoke('text')
-            .should('be.eq', granule.collectionId.replace('___', ' / '));
+            .should('be.eq', formattedCollectionId);
+          // has popover with copy feature
+          cy.get('@columns').eq(4).find('.hover-wrap').trigger('mouseover');
+          cy.get(`#collectionId-${granule.collectionId}-popover`).as('popover');
+          cy.get('@popover').should('be.visible');
+          cy.get('@popover').contains('.popover-body--main', formattedCollectionId);
+          cy.get('@popover').contains('button', 'Copy').click();
+          cy.get('@popover').find('span').should('be.visible');
+          cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseleave');
 
           // has link to the detailed collection page
-          cy.get('@columns').eq(4).children('a')
+          cy.get('@columns').eq(4).find('a')
             .should('have.attr', 'href')
             .and('be.eq', `/collections/collection/${granule.collectionId.replace('___', '/')}`);
 
@@ -100,6 +117,9 @@ describe('Dashboard Granules Page', () => {
           // Updated column
           cy.get('@columns').eq(8).invoke('text')
             .should('match', /.+ago$/);
+          cy.get('@columns').eq(8).find('span').trigger('mouseover');
+          cy.get('#table-timestamp-tooltip').should('be.visible');
+          cy.get('@columns').eq(8).find('span').trigger('mouseleave');
         });
 
       cy.get('.table .tbody .tr').as('list');
@@ -228,7 +248,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.search').as('search');
       cy.get('@search').should('be.visible').click().type('L2');
       cy.get('.filter-status .rbt-input-main').as('status-input');
-      cy.get('@status-input').should('be.visible').click().type('comp{enter}');
+      cy.get('@status-input').should('be.visible').click({ force: true }).type('comp{enter}');
       cy.url().should('include', 'search=L2').and('include', 'status=completed');
     });
 
@@ -238,7 +258,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.search').as('search');
       cy.get('@search').should('be.visible').click().type('L2');
       cy.get('.filter-status .rbt-input-main').as('status-input');
-      cy.get('@status-input').should('be.visible').click().type('comp{enter}');
+      cy.get('@status-input').should('be.visible').click({ force: true }).type('comp{enter}');
       cy.contains('.sidebar__row ul li a', 'Running').should('have.attr', 'href').and('match', /startDateTime/).and('not.match', /search|status/);
     });
 
