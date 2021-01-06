@@ -38,88 +38,93 @@ describe('Dashboard Granules Page', () => {
       // shows a list of granules
       cy.getFakeApiFixture('granules').as('granulesListFixture');
 
+      const numGranulesToTest = 4;
+      let granuleNum = 0;
       cy.get('@granulesListFixture').its('results')
         .each((granule) => {
-          // Wait for this granule to appear before proceeding.
-          cy.contains(granule.granuleId);
-          cy.get(`[data-value="${granule.granuleId}"]`).children().as('columns');
-          cy.get('@columns').should('have.length', 9);
+          granuleNum += 1;
+          if (granuleNum <= numGranulesToTest) {
+            // Wait for this granule to appear before proceeding.
+            cy.contains(granule.granuleId);
+            cy.get(`[data-value="${granule.granuleId}"]`).children().as('columns');
+            cy.get('@columns').should('have.length', 9);
 
-          // Granule Status Column is correct
-          cy.get('@columns').eq(1).invoke('text')
-            .should('be.eq', granule.status.replace(/^\w/, (c) => c.toUpperCase()));
-          // has link to the granule list with the same status
-          cy.get('@columns').eq(1).children('a')
-            .should('have.attr', 'href')
-            .and('be.eq', `/granules/${granule.status}`);
-
-          // granule Name (id) column
-          cy.get('@columns').eq(2).invoke('text')
-            .should('be.eq', granule.granuleId);
-          // has link to the detailed granule page
-          cy.get('@columns').eq(2).find('a')
-            .should('have.attr', 'href')
-            .and('be.eq', `/granules/granule/${granule.granuleId}`);
-          // has popover with copy feature
-          cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseover');
-          cy.get(`#granuleId-${granule.granuleId.replaceAll('.', '\\.')}-popover`).as('popover');
-          cy.get('@popover').should('be.visible');
-          cy.get('@popover').contains('.popover-body--main', granule.granuleId);
-          cy.get('@popover').contains('button', 'Copy').click();
-          cy.get('@popover').find('span').should('be.visible');
-          cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseleave');
-
-          // Published column, only public granules have CMR link
-          if (granule.published) {
-            cy.get('@columns').eq(3).invoke('text')
-              .should('be.eq', 'Yes');
-            cy.get('@columns').eq(3).children('a')
+            // Granule Status Column is correct
+            cy.get('@columns').eq(1).invoke('text')
+              .should('be.eq', granule.status.replace(/^\w/, (c) => c.toUpperCase()));
+            // has link to the granule list with the same status
+            cy.get('@columns').eq(1).children('a')
               .should('have.attr', 'href')
-              .and('be.eq', granule.cmrLink);
-          } else {
-            cy.get('@columns').eq(3).invoke('text')
-              .should('be.eq', 'No');
-            cy.get('@columns').eq(3).children('a')
-              .should('not.exist');
+              .and('be.eq', `/granules/${granule.status}`);
+
+            // granule Name (id) column
+            cy.get('@columns').eq(2).invoke('text')
+              .should('be.eq', granule.granuleId);
+            // has link to the detailed granule page
+            cy.get('@columns').eq(2).find('a')
+              .should('have.attr', 'href')
+              .and('be.eq', `/granules/granule/${granule.granuleId}`);
+            // has popover with copy feature
+            cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseover');
+            cy.get(`#granuleId-${granule.granuleId.replaceAll('.', '\\.')}-popover`).as('popover');
+            cy.get('@popover').should('be.visible');
+            cy.get('@popover').contains('.popover-body--main', granule.granuleId);
+            cy.get('@popover').contains('button', 'Copy').click();
+            cy.get('@popover').find('span').should('be.visible');
+            cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseleave');
+
+            // Published column, only public granules have CMR link
+            if (granule.published) {
+              cy.get('@columns').eq(3).invoke('text')
+                .should('be.eq', 'Yes');
+              cy.get('@columns').eq(3).children('a')
+                .should('have.attr', 'href')
+                .and('be.eq', granule.cmrLink);
+            } else {
+              cy.get('@columns').eq(3).invoke('text')
+                .should('be.eq', 'No');
+              cy.get('@columns').eq(3).children('a')
+                .should('not.exist');
+            }
+
+            // Collection ID column
+            const formattedCollectionId = granule.collectionId.replace('___', ' / ');
+            cy.get('@columns').eq(4).invoke('text')
+              .should('be.eq', formattedCollectionId);
+            // has popover with copy feature
+            cy.get('@columns').eq(4).find('.hover-wrap').trigger('mouseover');
+            cy.get(`#collectionId-${granule.collectionId}-popover`).as('popover');
+            cy.get('@popover').should('be.visible');
+            cy.get('@popover').contains('.popover-body--main', formattedCollectionId);
+            cy.get('@popover').contains('button', 'Copy').click();
+            cy.get('@popover').find('span').should('be.visible');
+            cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseleave');
+
+            // has link to the detailed collection page
+            cy.get('@columns').eq(4).find('a')
+              .should('have.attr', 'href')
+              .and('be.eq', `/collections/collection/${granule.collectionId.replace('___', '/')}`);
+
+            // has link to provider
+            cy.get('@columns').eq(5).children('a')
+              .should('have.attr', 'href')
+              .and('be.eq', `/providers/provider/${granule.provider}`);
+
+            // Execution column has link to the detailed execution page
+            cy.get('@columns').eq(6).children('a')
+              .should('have.attr', 'href')
+              .and('be.eq', `/executions/execution/${granule.execution.split('/').pop()}`);
+
+            // Duration column
+            cy.get('@columns').eq(7).invoke('text')
+              .should('be.eq', `${Number(granule.duration).toFixed(2)}s`);
+            // Updated column
+            cy.get('@columns').eq(8).invoke('text')
+              .should('match', /.+ago$/);
+            cy.get('@columns').eq(8).find('span').trigger('mouseover');
+            cy.get('#table-timestamp-tooltip').should('be.visible');
+            cy.get('@columns').eq(8).find('span').trigger('mouseleave');
           }
-
-          // Collection ID column
-          const formattedCollectionId = granule.collectionId.replace('___', ' / ');
-          cy.get('@columns').eq(4).invoke('text')
-            .should('be.eq', formattedCollectionId);
-          // has popover with copy feature
-          cy.get('@columns').eq(4).find('.hover-wrap').trigger('mouseover');
-          cy.get(`#collectionId-${granule.collectionId}-popover`).as('popover');
-          cy.get('@popover').should('be.visible');
-          cy.get('@popover').contains('.popover-body--main', formattedCollectionId);
-          cy.get('@popover').contains('button', 'Copy').click();
-          cy.get('@popover').find('span').should('be.visible');
-          cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseleave');
-
-          // has link to the detailed collection page
-          cy.get('@columns').eq(4).find('a')
-            .should('have.attr', 'href')
-            .and('be.eq', `/collections/collection/${granule.collectionId.replace('___', '/')}`);
-
-          // has link to provider
-          cy.get('@columns').eq(5).children('a')
-            .should('have.attr', 'href')
-            .and('be.eq', `/providers/provider/${granule.provider}`);
-
-          // Execution column has link to the detailed execution page
-          cy.get('@columns').eq(6).children('a')
-            .should('have.attr', 'href')
-            .and('be.eq', `/executions/execution/${granule.execution.split('/').pop()}`);
-
-          // Duration column
-          cy.get('@columns').eq(7).invoke('text')
-            .should('be.eq', `${Number(granule.duration).toFixed(2)}s`);
-          // Updated column
-          cy.get('@columns').eq(8).invoke('text')
-            .should('match', /.+ago$/);
-          cy.get('@columns').eq(8).find('span').trigger('mouseover');
-          cy.get('#table-timestamp-tooltip').should('be.visible');
-          cy.get('@columns').eq(8).find('span').trigger('mouseleave');
         });
 
       cy.get('.table .tbody .tr').as('list');
