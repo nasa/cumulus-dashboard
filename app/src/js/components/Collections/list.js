@@ -114,18 +114,15 @@ class CollectionList extends React.Component {
             filterAction={filterCollections}
             filterClear={clearCollectionsFilter}
           >
+            <Search
+              action={searchCollections}
+              clear={clearCollectionsSearch}
+              label="Search"
+              labelKey="name"
+              placeholder="Collection Name"
+              searchKey="collections"
+            />
             <ListFilters>
-              <Search
-                action={searchCollections}
-                clear={clearCollectionsSearch}
-                inputProps={{
-                  className: 'search search--medium',
-                }}
-                label="Search"
-                labelKey="name"
-                placeholder="Collection Name"
-                searchKey="collections"
-              />
               <Dropdown
                 getOptions={getOptionsProviderName}
                 options={get(dropdowns, ['provider', 'options'])}
@@ -134,7 +131,8 @@ class CollectionList extends React.Component {
                 paramKey="provider"
                 label="Provider"
                 inputProps={{
-                  placeholder: 'All'
+                  placeholder: 'All',
+                  className: 'dropdown--medium',
                 }}
               />
             </ListFilters>

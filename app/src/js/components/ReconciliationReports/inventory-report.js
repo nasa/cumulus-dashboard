@@ -17,6 +17,7 @@ import { handleDownloadJsonClick, handleDownloadCsvClick } from '../../utils/dow
 import Search from '../Search/search';
 import Dropdown from '../DropDown/dropdown';
 import ReportHeading from './report-heading';
+import ListFilters from '../ListActions/ListFilters';
 
 /**
  * returns PASSED or CONFLICT based on reconcilation report data.
@@ -158,28 +159,27 @@ const InventoryReport = ({
             </span>
           </div>
 
-          <div className="filters">
+          <div className="list-action-wrapper">
             <Search
               action={searchReconciliationReport}
               clear={clearReconciliationSearch}
-              inputProps={{
-                className: 'search search--large',
-              }}
               label="Search"
               labelKey="granuleId"
               options={[]}
               placeholder="Search"
             />
-            <Dropdown
-              options={bucketsForFilter(allBuckets)}
-              action={filterReconciliationReport}
-              clear={clearReconciliationReportFilter}
-              paramKey="bucket"
-              label="Bucket"
-              inputProps={{
-                placeholder: 'All',
-              }}
-            />
+            <ListFilters>
+              <Dropdown
+                options={bucketsForFilter(allBuckets)}
+                action={filterReconciliationReport}
+                clear={clearReconciliationReportFilter}
+                paramKey="bucket"
+                label="Bucket"
+                inputProps={{
+                  placeholder: 'All',
+                }}
+              />
+            </ListFilters>
           </div>
 
           {reportComparisons

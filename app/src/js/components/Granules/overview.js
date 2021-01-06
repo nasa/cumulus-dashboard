@@ -183,18 +183,15 @@ class GranulesOverview extends React.Component {
             filterClear={clearGranulesFilter}
             onSelect={this.updateSelection}
           >
+            <Search
+              action={searchGranules}
+              clear={clearGranulesSearch}
+              label='Search'
+              labelKey="granuleId"
+              placeholder='Granule ID'
+              searchKey="granules"
+            />
             <ListFilters>
-              <Search
-                action={searchGranules}
-                clear={clearGranulesSearch}
-                inputProps={{
-                  className: 'search search--large',
-                }}
-                label='Search'
-                labelKey="granuleId"
-                placeholder='Granule ID'
-                searchKey="granules"
-              />
               <Dropdown
                 options={statusOptions}
                 action={filterGranules}
@@ -213,7 +210,8 @@ class GranulesOverview extends React.Component {
                 paramKey='collectionId'
                 label={strings.collection}
                 inputProps={{
-                  placeholder: 'All'
+                  placeholder: 'All',
+                  className: 'dropdown--large',
                 }}
               />
               <Dropdown
@@ -224,7 +222,8 @@ class GranulesOverview extends React.Component {
                 paramKey="provider"
                 label="Provider"
                 inputProps={{
-                  placeholder: 'All'
+                  placeholder: 'All',
+                  className: 'dropdown--medium',
                 }}
               />
             </ListFilters>

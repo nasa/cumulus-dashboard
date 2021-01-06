@@ -67,7 +67,7 @@ select option{
 
 
 .filters {
-  margin: 1.5em 0 2em;
+  margin: 1em 0 2em;
   @extend .clearfix;
   label {
     font-size: .86em;
@@ -78,6 +78,18 @@ select option{
   display: inline-block;
   vertical-align: bottom;
   position: relative;
+
+  .dropdown {
+    &--small {
+      width: 15em;
+    }
+    &--medium {
+      width: 25em;
+    }
+    &--large {
+      width: 35em;
+    }
+  }
 }
 
 .filter__icon{
@@ -143,8 +155,11 @@ select option{
   }
 
   .dropdown__element {
-    font-size: .8em;
-    width: 180px;
+    width: 35em;
+  }
+
+  .collection-chooser {
+    font-size: 0.86em;
   }
 }
 
@@ -157,19 +172,8 @@ select option{
   .form__error {
     display: none;
   }
-  .dropdown__wrapper select {
-    min-width: 6em;
-  }
   .search {
-    &--small {
-      width: 15em;
-    }
-    &--medium {
-      width: 25em;
-    }
-    &--large {
-      width: 35em;
-    }
+    width: 80em;
   }
   
   button[aria-label="Clear"] {
