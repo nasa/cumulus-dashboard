@@ -158,15 +158,15 @@ const CollectionGranules = ({
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
         >
+          <Search
+            action={searchGranules}
+            clear={clearGranulesSearch}
+            label="Search"
+            labelKey="granuleId"
+            placeholder="Granule ID"
+            searchKey="granules"
+          />
           <ListFilters>
-            <Search
-              action={searchGranules}
-              clear={clearGranulesSearch}
-              label="Search"
-              labelKey="granuleId"
-              placeholder="Granule ID"
-              searchKey="granules"
-            />
             {view === 'all' && (
               <Dropdown
                 options={statusOptions}

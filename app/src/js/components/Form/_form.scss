@@ -67,7 +67,7 @@ select option{
 
 
 .filters {
-  margin: 1.5em 0 2em;
+  margin: 1em 0 2em;
   @extend .clearfix;
   label {
     font-size: .86em;
@@ -78,7 +78,6 @@ select option{
   display: inline-block;
   vertical-align: bottom;
   position: relative;
-  padding-top: 1em;
 
   .dropdown {
     &--small {

@@ -97,13 +97,13 @@ class OperationOverview extends React.Component {
             filterAction={filterOperations}
             filterClear={clearOperationsFilter}
           >
+            <Search
+              action={searchOperations}
+              clear={clearOperationsSearch}
+              labelKey="id"
+              searchKey="operations"
+            />
             <ListFilters>
-              <Search
-                action={searchOperations}
-                clear={clearOperationsSearch}
-                labelKey="id"
-                searchKey="operations"
-              />
               <Dropdown
                 options={operationStatus}
                 action={filterOperations}
