@@ -137,7 +137,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
         url: '/reconciliationReports',
         method: 'POST'
       }, (req) => {
-        const requestBody = JSON.parse(req.body);
+        const requestBody = req.body;
         expect(requestBody).to.have.property('reportType', reportType);
         expect(requestBody).to.have.property('reportName', reportName);
         expect(requestBody).to.have.property('startTimestamp', startTimestamp);
@@ -209,7 +209,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
           cy.contains('.table .th', filterLabel).should('be.visible');
           cy.contains('.table__filters--filter label', filterLabel).prev().click();
-          cy.contains('.table .th', filterLabel).should('not.be.visible');
+          cy.contains('.table .th', filterLabel).should('not.exist');
 
           cy.get('.table__filters .button__filter').click();
           cy.contains('.table__filters .button__filter', 'Show Column Filters');
