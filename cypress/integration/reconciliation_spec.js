@@ -137,13 +137,13 @@ describe('Dashboard Reconciliation Reports Page', () => {
         url: '/reconciliationReports',
         method: 'POST'
       }, (req) => {
-        const requestBody = req.body;
-        expect(requestBody).to.have.property('reportType', reportType);
-        expect(requestBody).to.have.property('reportName', reportName);
-        expect(requestBody).to.have.property('startTimestamp', startTimestamp);
-        expect(requestBody).to.have.property('endTimestamp', endTimestamp);
-        expect(requestBody).to.have.deep.property('collectionId', collectionId);
-        expect(requestBody).to.have.property('location', location);
+        const { body } = req;
+        expect(body).to.have.property('reportType', reportType);
+        expect(body).to.have.property('reportName', reportName);
+        expect(body).to.have.property('startTimestamp', startTimestamp);
+        expect(body).to.have.property('endTimestamp', endTimestamp);
+        expect(body).to.have.deep.property('collectionId', collectionId);
+        expect(body).to.have.property('location', location);
       }).as('createReport');
 
       cy.get('.button--submit').click();

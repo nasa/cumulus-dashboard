@@ -605,9 +605,12 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('Should handle a successful API response from the Remove and Delete granule requests', () => {
+
       cy.intercept(
-        { method: 'PUT', url: new RegExp('/granules/.*')},
-        { body: { message: 'success' }, statusCode: 200 },
+        { method: 'PUT', url: new RegExp('/granules/.*') }, (req) => {
+          expect(req.body).to.have.property('action', 'removeFromCmr');
+          req.reply({ body: { message: 'success' }, statusCode: 200 });
+        }
       );
 
       cy.intercept(
@@ -624,14 +627,6 @@ describe('Dashboard Granules Page', () => {
       cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Delete').click();
       cy.contains('.button--submit', 'Confirm').click();
-
-      cy.intercept({
-        url: '/granules',
-        method: 'PUT'
-      }, (req) => {
-        const requestBody = JSON.parse(req.body);
-        expect(requestBody).to.have.property('action', 'removeFromCmr');
-      });
 
       cy.get('.default-modal.batch-async-modal ').as('modal');
       cy.get('@modal').contains('div', 'Success!');
