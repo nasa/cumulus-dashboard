@@ -133,17 +133,17 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
       cy.get(`form .form__item .location input[value="${location}"]`).check();
 
-      cy.route2({
+      cy.intercept({
         url: '/reconciliationReports',
         method: 'POST'
       }, (req) => {
-        const requestBody = JSON.parse(req.body);
-        expect(requestBody).to.have.property('reportType', reportType);
-        expect(requestBody).to.have.property('reportName', reportName);
-        expect(requestBody).to.have.property('startTimestamp', startTimestamp);
-        expect(requestBody).to.have.property('endTimestamp', endTimestamp);
-        expect(requestBody).to.have.deep.property('collectionId', collectionId);
-        expect(requestBody).to.have.property('location', location);
+        const { body } = req;
+        expect(body).to.have.property('reportType', reportType);
+        expect(body).to.have.property('reportName', reportName);
+        expect(body).to.have.property('startTimestamp', startTimestamp);
+        expect(body).to.have.property('endTimestamp', endTimestamp);
+        expect(body).to.have.deep.property('collectionId', collectionId);
+        expect(body).to.have.property('location', location);
       }).as('createReport');
 
       cy.get('.button--submit').click();
@@ -209,7 +209,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
           cy.contains('.table .th', filterLabel).should('be.visible');
           cy.contains('.table__filters--filter label', filterLabel).prev().click();
-          cy.contains('.table .th', filterLabel).should('not.be.visible');
+          cy.contains('.table .th', filterLabel).should('not.exist');
 
           cy.get('.table__filters .button__filter').click();
           cy.contains('.table__filters .button__filter', 'Show Column Filters');
