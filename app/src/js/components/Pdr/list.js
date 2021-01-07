@@ -92,9 +92,6 @@ const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
             <Search
               action={searchPdrs}
               clear={clearPdrsSearch}
-              inputProps={{
-                className: 'search search--large',
-              }}
               labelKey="pdrName"
               searchKey="pdrs"
             />

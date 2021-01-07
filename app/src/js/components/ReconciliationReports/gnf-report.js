@@ -111,9 +111,6 @@ const GnfReport = ({
           <Search
             action={searchReconciliationReport}
             clear={clearReconciliationSearch}
-            inputProps={{
-              className: 'search search--large',
-            }}
             label="Search"
             labelKey="granuleId"
             options={combinedGranules}

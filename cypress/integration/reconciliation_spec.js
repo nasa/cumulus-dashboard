@@ -60,9 +60,9 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('@search').should('be.visible').click().type('inventoryReport-2020');
 
       cy.get('.filter-type .rbt-input-main').as('type-input');
-      cy.get('@type-input').should('be.visible').click().type('invent{enter}');
+      cy.get('@type-input').should('be.visible').click({ force: true }).type('invent{enter}');
       cy.get('.filter-status .rbt-input-main').as('status-input');
-      cy.get('@status-input').should('be.visible').click().type('gener{enter}');
+      cy.get('@status-input').should('be.visible').click({ force: true }).type('gener{enter}');
       cy.url().should('include', 'search=inventoryReport-2020')
         .and('include', 'type=Inventory')
         .and('include', 'status=Generated');

@@ -248,7 +248,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.search').as('search');
       cy.get('@search').should('be.visible').click().type('L2');
       cy.get('.filter-status .rbt-input-main').as('status-input');
-      cy.get('@status-input').should('be.visible').click().type('comp{enter}');
+      cy.get('@status-input').should('be.visible').click({ force: true }).type('comp{enter}');
       cy.url().should('include', 'search=L2').and('include', 'status=completed');
     });
 
@@ -258,7 +258,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.search').as('search');
       cy.get('@search').should('be.visible').click().type('L2');
       cy.get('.filter-status .rbt-input-main').as('status-input');
-      cy.get('@status-input').should('be.visible').click().type('comp{enter}');
+      cy.get('@status-input').should('be.visible').click({ force: true }).type('comp{enter}');
       cy.contains('.sidebar__row ul li a', 'Running').should('have.attr', 'href').and('match', /startDateTime/).and('not.match', /search|status/);
     });
 
