@@ -369,7 +369,7 @@ describe('Dashboard Granules Page', () => {
       ];
       cy.intercept(
         { method: 'PUT', url: new RegExp('/granules/.*') },
-        {body: { message: 'Oopsie' }, statusCode: 500 }
+        { body: { message: 'Oopsie' }, statusCode: 500 }
       );
       cy.visit('/granules');
       cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
@@ -605,7 +605,6 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('Should handle a successful API response from the Remove and Delete granule requests', () => {
-
       cy.intercept(
         { method: 'PUT', url: new RegExp('/granules/.*') }, (req) => {
           expect(req.body).to.have.property('action', 'removeFromCmr');
