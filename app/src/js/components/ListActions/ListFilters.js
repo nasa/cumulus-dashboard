@@ -5,7 +5,7 @@ const ListFilters = ({
   children,
   className = ''
 }) => (
-  <div className={`filters ${className}`} >
+  <div className={`list__filters ${className}`} >
     {children}
   </div>
 );

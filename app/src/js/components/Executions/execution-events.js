@@ -20,6 +20,7 @@ import Search from '../Search/search';
 
 import { getEventDetails } from './execution-graph-utils';
 import SortableTable from '../SortableTable/SortableTable';
+import ListFilters from '../ListActions/ListFilters';
 
 const ExecutionEvents = ({
   dispatch,
@@ -97,7 +98,7 @@ const ExecutionEvents = ({
               target='_blank'
             ><FontAwesomeIcon icon={faExternalLinkSquareAlt} /> View Workflows</a>
           </div>
-          <div className='filters'>
+          <ListFilters>
             <Search
               action={searchExecutionEvents}
               clear={clearExecutionEventsSearch}
@@ -109,7 +110,7 @@ const ExecutionEvents = ({
               placeholder="Search Type"
               searchKey="executions"
             />
-          </div>
+          </ListFilters>
 
           <SortableTable
             data={mutableEvents.sort((a, b) => (a.id > b.id ? 1 : -1))}

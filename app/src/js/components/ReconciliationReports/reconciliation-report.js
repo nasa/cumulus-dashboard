@@ -6,6 +6,7 @@ import { getReconciliationReport } from '../../actions';
 import Loading from '../LoadingIndicator/loading-indicator';
 import InventoryReport from './inventory-report';
 import GnfReport from './gnf-report';
+import Legend from './legend';
 
 const ReconciliationReport = ({
   dispatch,
@@ -39,6 +40,7 @@ const ReconciliationReport = ({
           />,
           'Granule Not Found': <GnfReport
             filterString={filterString}
+            legend={<Legend />}
             recordData={recordData}
             reportName={reconciliationReportName}
           />

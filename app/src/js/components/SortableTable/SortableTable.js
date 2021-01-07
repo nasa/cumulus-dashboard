@@ -11,6 +11,7 @@ import omit from 'lodash/omit';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
 import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
+import ListFilters from '../ListActions/ListFilters';
 
 const getColumnWidth = (rows, accessor, headerText, originalWidth) => {
   const maxWidth = 400;
@@ -52,10 +53,12 @@ IndeterminateCheckbox.propTypes = {
 const SortableTable = ({
   canSelect,
   changeSortProps,
+  children,
   clearSelected,
   data = [],
   initialHiddenColumns = [],
   initialSortId,
+  legend,
   onSelect,
   rowId,
   shouldManualSort = false,
@@ -178,11 +181,26 @@ const SortableTable = ({
     onMouseDown(e);
   }
 
+  function renderFilters() {
+    const tableFilters =
+    <>{includeFilters &&
+      <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
+    }</>;
+    if (children || legend) {
+      return (
+        <ListFilters className="list__filters--flex">
+          {children}
+          {tableFilters}
+          {legend}
+        </ListFilters>
+      );
+    }
+    return tableFilters;
+  }
+
   return (
     <div className='table--wrapper'>
-      {includeFilters &&
-        <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
-      }
+      {renderFilters()}
       <div className='table' {...getTableProps()}>
         <div className='thead'>
           <div className='tr'>
@@ -294,10 +312,12 @@ const SortableTable = ({
 SortableTable.propTypes = {
   canSelect: PropTypes.bool,
   changeSortProps: PropTypes.func,
+  children: PropTypes.node,
   clearSelected: PropTypes.bool,
   data: PropTypes.array,
   initialHiddenColumns: PropTypes.array,
   initialSortId: PropTypes.string,
+  legend: PropTypes.node,
   onSelect: PropTypes.func,
   rowId: PropTypes.any,
   shouldManualSort: PropTypes.bool,
