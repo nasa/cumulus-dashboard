@@ -97,7 +97,7 @@ const ExecutionEvents = ({
               target='_blank'
             ><FontAwesomeIcon icon={faExternalLinkSquareAlt} /> View Workflows</a>
           </div>
-          <div className='filters'>
+          <div className='list-action-wrapper filters'>
             <Search
               action={searchExecutionEvents}
               clear={clearExecutionEventsSearch}
