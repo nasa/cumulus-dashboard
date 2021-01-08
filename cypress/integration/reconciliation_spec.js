@@ -221,12 +221,13 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.contains('.simple-pagination button', 'Next').click();
       cy.contains('.simple-pagination .pagination__link--active', '2');
 
-      /** Legend */
-      cy.get('.legend').should('have.length', 1);
-      cy.get('.legend-items--item').should('have.length', 3);
-      cy.get('.legend-items--item').eq(0).should('contain', 'Granule not found');
-      cy.get('.legend-items--item').eq(1).should('contain', 'Missing image file');
-      cy.get('.legend-items--item').eq(2).should('contain', 'No issues/conflicts');
+      /** Legend - there should be one for each table */
+      cy.get('.legend').should('have.length', 3);
+      cy.get('.legend').eq(0).as('legend1');
+      cy.get('@legend1').find('.legend-items--item').should('have.length', 3);
+      cy.get('@legend1').find('.legend-items--item').eq(0).should('contain', 'Granule not found');
+      cy.get('@legend1').find('.legend-items--item').eq(1).should('contain', 'Missing image file');
+      cy.get('@legend1').find('.legend-items--item').eq(2).should('contain', 'No issues/conflicts');
     });
 
     it('Has a way to expand/collapse all tables', () => {
