@@ -97,6 +97,53 @@ export const fromNowWithTooltip = (timestamp) => (
   />
 );
 
+const getIndicator = (prop) => {
+  const indicator = {};
+  switch (prop) {
+    case 'missing':
+      indicator.color = 'orange';
+      indicator.text = 'Granule missing';
+      break;
+    case 'notFound':
+      indicator.color = 'failed';
+      indicator.text = 'Granule not found';
+      break;
+    case false:
+      indicator.color = 'failed';
+      indicator.text = 'Granule not found';
+      break;
+    default:
+      indicator.color = 'success';
+      indicator.text = 'Granule found';
+      break;
+  }
+  return indicator;
+};
+
+export const IndicatorWithTooltip = ({
+  granuleId,
+  repo,
+  value,
+}) => {
+  const indicator = getIndicator(value);
+  const { color, text } = indicator;
+  return (
+    <Tooltip
+      className="tooltip--blue"
+      id={`${granuleId}-${repo}-indicator-tooltip`}
+      placement="right"
+      target={<span className={`status-indicator status-indicator--${color}`}></span>}
+      tip={text}
+    />
+  );
+};
+
+IndicatorWithTooltip.propTypes = {
+  granuleId: PropTypes.string,
+  repo: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+};
+
 export const CopyCellPopover = ({ cellContent, id, popoverContent, value }) => {
   const [copyStatus, setCopyStatus] = useState('');
 
