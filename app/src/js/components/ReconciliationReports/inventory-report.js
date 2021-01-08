@@ -39,6 +39,7 @@ const bucketsForFilter = (allBuckets) => {
 const InventoryReport = ({
   filterBucket,
   filterString,
+  legend,
   recordData,
   reportName,
 }) => {
@@ -217,6 +218,7 @@ const InventoryReport = ({
                     <div id={item.id}>
                       <SortableTable
                         data={item.data}
+                        legend={legend}
                         tableColumns={item.columns}
                         shouldUsePagination={true}
                         initialHiddenColumns={['']}
@@ -235,6 +237,7 @@ const InventoryReport = ({
 InventoryReport.propTypes = {
   filterBucket: PropTypes.string,
   filterString: PropTypes.string,
+  legend: PropTypes.node,
   recordData: PropTypes.object,
   reportName: PropTypes.string,
 };

@@ -35,6 +35,7 @@ const ReconciliationReport = ({
           Inventory: <InventoryReport
             filterBucket={filterBucket}
             filterString={filterString}
+            legend={<Legend />}
             recordData={recordData}
             reportName={reconciliationReportName}
           />,
