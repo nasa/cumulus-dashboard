@@ -38,88 +38,93 @@ describe('Dashboard Granules Page', () => {
       // shows a list of granules
       cy.getFakeApiFixture('granules').as('granulesListFixture');
 
+      const numGranulesToTest = 4;
+      let granuleNum = 0;
       cy.get('@granulesListFixture').its('results')
         .each((granule) => {
-          // Wait for this granule to appear before proceeding.
-          cy.contains(granule.granuleId);
-          cy.get(`[data-value="${granule.granuleId}"]`).children().as('columns');
-          cy.get('@columns').should('have.length', 9);
+          granuleNum += 1;
+          if (granuleNum <= numGranulesToTest) {
+            // Wait for this granule to appear before proceeding.
+            cy.contains(granule.granuleId);
+            cy.get(`[data-value="${granule.granuleId}"]`).children().as('columns');
+            cy.get('@columns').should('have.length', 9);
 
-          // Granule Status Column is correct
-          cy.get('@columns').eq(1).invoke('text')
-            .should('be.eq', granule.status.replace(/^\w/, (c) => c.toUpperCase()));
-          // has link to the granule list with the same status
-          cy.get('@columns').eq(1).children('a')
-            .should('have.attr', 'href')
-            .and('be.eq', `/granules/${granule.status}`);
-
-          // granule Name (id) column
-          cy.get('@columns').eq(2).invoke('text')
-            .should('be.eq', granule.granuleId);
-          // has link to the detailed granule page
-          cy.get('@columns').eq(2).find('a')
-            .should('have.attr', 'href')
-            .and('be.eq', `/granules/granule/${granule.granuleId}`);
-          // has popover with copy feature
-          cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseover');
-          cy.get(`#granuleId-${granule.granuleId.replaceAll('.', '\\.')}-popover`).as('popover');
-          cy.get('@popover').should('be.visible');
-          cy.get('@popover').contains('.popover-body--main', granule.granuleId);
-          cy.get('@popover').contains('button', 'Copy').click();
-          cy.get('@popover').find('span').should('be.visible');
-          cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseleave');
-
-          // Published column, only public granules have CMR link
-          if (granule.published) {
-            cy.get('@columns').eq(3).invoke('text')
-              .should('be.eq', 'Yes');
-            cy.get('@columns').eq(3).children('a')
+            // Granule Status Column is correct
+            cy.get('@columns').eq(1).invoke('text')
+              .should('be.eq', granule.status.replace(/^\w/, (c) => c.toUpperCase()));
+            // has link to the granule list with the same status
+            cy.get('@columns').eq(1).children('a')
               .should('have.attr', 'href')
-              .and('be.eq', granule.cmrLink);
-          } else {
-            cy.get('@columns').eq(3).invoke('text')
-              .should('be.eq', 'No');
-            cy.get('@columns').eq(3).children('a')
-              .should('not.exist');
+              .and('be.eq', `/granules/${granule.status}`);
+
+            // granule Name (id) column
+            cy.get('@columns').eq(2).invoke('text')
+              .should('be.eq', granule.granuleId);
+            // has link to the detailed granule page
+            cy.get('@columns').eq(2).find('a')
+              .should('have.attr', 'href')
+              .and('be.eq', `/granules/granule/${granule.granuleId}`);
+            // has popover with copy feature
+            cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseover');
+            cy.get(`#granuleId-${granule.granuleId.replaceAll('.', '\\.')}-popover`).as('popover');
+            cy.get('@popover').should('be.visible');
+            cy.get('@popover').contains('.popover-body--main', granule.granuleId);
+            cy.get('@popover').contains('button', 'Copy').click();
+            cy.get('@popover').find('span').should('be.visible');
+            cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseleave');
+
+            // Published column, only public granules have CMR link
+            if (granule.published) {
+              cy.get('@columns').eq(3).invoke('text')
+                .should('be.eq', 'Yes');
+              cy.get('@columns').eq(3).children('a')
+                .should('have.attr', 'href')
+                .and('be.eq', granule.cmrLink);
+            } else {
+              cy.get('@columns').eq(3).invoke('text')
+                .should('be.eq', 'No');
+              cy.get('@columns').eq(3).children('a')
+                .should('not.exist');
+            }
+
+            // Collection ID column
+            const formattedCollectionId = granule.collectionId.replace('___', ' / ');
+            cy.get('@columns').eq(4).invoke('text')
+              .should('be.eq', formattedCollectionId);
+            // has popover with copy feature
+            cy.get('@columns').eq(4).find('.hover-wrap').trigger('mouseover');
+            cy.get(`#collectionId-${granule.collectionId}-popover`).as('popover');
+            cy.get('@popover').should('be.visible');
+            cy.get('@popover').contains('.popover-body--main', formattedCollectionId);
+            cy.get('@popover').contains('button', 'Copy').click();
+            cy.get('@popover').find('span').should('be.visible');
+            cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseleave');
+
+            // has link to the detailed collection page
+            cy.get('@columns').eq(4).find('a')
+              .should('have.attr', 'href')
+              .and('be.eq', `/collections/collection/${granule.collectionId.replace('___', '/')}`);
+
+            // has link to provider
+            cy.get('@columns').eq(5).children('a')
+              .should('have.attr', 'href')
+              .and('be.eq', `/providers/provider/${granule.provider}`);
+
+            // Execution column has link to the detailed execution page
+            cy.get('@columns').eq(6).children('a')
+              .should('have.attr', 'href')
+              .and('be.eq', `/executions/execution/${granule.execution.split('/').pop()}`);
+
+            // Duration column
+            cy.get('@columns').eq(7).invoke('text')
+              .should('be.eq', `${Number(granule.duration).toFixed(2)}s`);
+            // Updated column
+            cy.get('@columns').eq(8).invoke('text')
+              .should('match', /.+ago$/);
+            cy.get('@columns').eq(8).find('span').trigger('mouseover');
+            cy.get('#table-timestamp-tooltip').should('be.visible');
+            cy.get('@columns').eq(8).find('span').trigger('mouseleave');
           }
-
-          // Collection ID column
-          const formattedCollectionId = granule.collectionId.replace('___', ' / ');
-          cy.get('@columns').eq(4).invoke('text')
-            .should('be.eq', formattedCollectionId);
-          // has popover with copy feature
-          cy.get('@columns').eq(4).find('.hover-wrap').trigger('mouseover');
-          cy.get(`#collectionId-${granule.collectionId}-popover`).as('popover');
-          cy.get('@popover').should('be.visible');
-          cy.get('@popover').contains('.popover-body--main', formattedCollectionId);
-          cy.get('@popover').contains('button', 'Copy').click();
-          cy.get('@popover').find('span').should('be.visible');
-          cy.get('@columns').eq(2).find('.hover-wrap').trigger('mouseleave');
-
-          // has link to the detailed collection page
-          cy.get('@columns').eq(4).find('a')
-            .should('have.attr', 'href')
-            .and('be.eq', `/collections/collection/${granule.collectionId.replace('___', '/')}`);
-
-          // has link to provider
-          cy.get('@columns').eq(5).children('a')
-            .should('have.attr', 'href')
-            .and('be.eq', `/providers/provider/${granule.provider}`);
-
-          // Execution column has link to the detailed execution page
-          cy.get('@columns').eq(6).children('a')
-            .should('have.attr', 'href')
-            .and('be.eq', `/executions/execution/${granule.execution.split('/').pop()}`);
-
-          // Duration column
-          cy.get('@columns').eq(7).invoke('text')
-            .should('be.eq', `${Number(granule.duration).toFixed(2)}s`);
-          // Updated column
-          cy.get('@columns').eq(8).invoke('text')
-            .should('match', /.+ago$/);
-          cy.get('@columns').eq(8).find('span').trigger('mouseover');
-          cy.get('#table-timestamp-tooltip').should('be.visible');
-          cy.get('@columns').eq(8).find('span').trigger('mouseleave');
         });
 
       cy.get('.table .tbody .tr').as('list');
@@ -319,14 +324,11 @@ describe('Dashboard Granules Page', () => {
 
     it('Should reingest a granule and redirect to the granules detail page.', () => {
       const granuleId = 'MOD09GQ.A0142558.ee5lpE.006.5112577830916';
-      cy.server();
-      cy.route({
-        method: 'PUT',
-        url: '/granules/*',
-        status: 200,
-        response: { message: 'ingested' }
-      });
-      cy.route('GET', `/granules/${granuleId}`).as('getGranule');
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { body: { message: 'ingested' }, statusCode: 200 },
+      );
+      cy.intercept('GET', `/granules/${granuleId}`).as('getGranule');
       cy.visit('/granules');
       cy.get(`[data-value="${granuleId}"] > .td >input[type="checkbox"]`).click();
       cy.contains('button', 'Granule Actions').click();
@@ -344,13 +346,10 @@ describe('Dashboard Granules Page', () => {
         'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
-      cy.server();
-      cy.route({
-        method: 'PUT',
-        url: '/granules/*',
-        status: 200,
-        response: { message: 'ingested' }
-      });
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { body: { message: 'ingested' }, statusCode: 200 },
+      );
       cy.visit('/granules');
       cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
@@ -368,13 +367,10 @@ describe('Dashboard Granules Page', () => {
         'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
-      cy.server();
-      cy.route({
-        method: 'PUT',
-        url: '/granules/*',
-        status: 500,
-        response: { message: 'Oopsie' }
-      });
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { body: { message: 'Oopsie' }, statusCode: 500 }
+      );
       cy.visit('/granules');
       cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
@@ -390,9 +386,9 @@ describe('Dashboard Granules Page', () => {
 
     it('Should have a Granule Lists page', () => {
       const listName = 'GranuleList100220';
-      const url = `**/reconciliationReports/${listName}`;
-      cy.route2({ url: '**/reconciliationReports?limit=*', method: 'GET' }).as('getLists');
-      cy.route2({ url, method: 'GET' }).as('getList');
+      const url = new RegExp(`.*/reconciliationReports/${listName}`);
+      cy.intercept({ url: new RegExp('.*/reconciliationReports\\?limit=.*'), method: 'GET' }).as('getLists');
+      cy.intercept({ url, method: 'GET' }).as('getList');
       cy.visit('/granules');
       cy.contains('.sidebar li a', 'Lists').click();
       cy.wait('@getLists');
@@ -403,7 +399,7 @@ describe('Dashboard Granules Page', () => {
         .should('be.visible')
         .click({ force: true });
 
-      cy.wait('@getList').its('response.body').should('include', 'url');
+      cy.wait('@getList').its('response.body.url').should('exist');
     });
 
     it('Should open modal to create granule inventory report', () => {
@@ -416,16 +412,16 @@ describe('Dashboard Granules Page', () => {
         'MOD09GQ.A1657416.CbyoRi.006.9697917818587'
       ];
 
-      cy.route2({
+      cy.intercept({
         url: '/reconciliationReports',
         method: 'POST'
       }, (req) => {
-        const requestBody = JSON.parse(req.body);
-        expect(requestBody).to.have.property('reportType', 'Granule Inventory');
-        expect(requestBody).to.have.property('reportName', listName);
-        expect(requestBody).to.have.property('status', status);
-        expect(requestBody).to.have.property('collectionId', collectionId);
-        expect(requestBody.granuleId.sort()).to.deep.equal(granuleIds);
+        const { body } = req;
+        expect(body).to.have.property('reportType', 'Granule Inventory');
+        expect(body).to.have.property('reportName', listName);
+        expect(body).to.have.property('status', status);
+        expect(body).to.have.property('collectionId', collectionId);
+        expect(body.granuleId.sort()).to.deep.equal(granuleIds);
       }).as('createList');
 
       cy.visit('/granules');
@@ -609,20 +605,17 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('Should handle a successful API response from the Remove and Delete granule requests', () => {
-      cy.server();
-      cy.route({
-        method: 'PUT',
-        url: '/granules/*',
-        status: 200,
-        response: { message: 'success' }
-      });
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') }, (req) => {
+          expect(req.body).to.have.property('action', 'removeFromCmr');
+          req.reply({ body: { message: 'success' }, statusCode: 200 });
+        }
+      );
 
-      cy.route({
-        method: 'DELETE',
-        url: '/granules/*',
-        status: 200,
-        response: { message: 'success' }
-      });
+      cy.intercept(
+        { method: 'DELETE', url: new RegExp('/granules/.*') },
+        { body: { message: 'success' }, statusCode: 200 }
+      );
 
       // this granules query will have a combination of published and unpublished granules
       cy.visit('/granules?limit=50&page=1&status=completed');
@@ -634,33 +627,20 @@ describe('Dashboard Granules Page', () => {
       cy.contains('button', 'Delete').click();
       cy.contains('.button--submit', 'Confirm').click();
 
-      cy.route2({
-        url: '/granules',
-        method: 'PUT'
-      }, (req) => {
-        const requestBody = JSON.parse(req.body);
-        expect(requestBody).to.have.property('action', 'removeFromCmr');
-      });
-
       cy.get('.default-modal.batch-async-modal ').as('modal');
       cy.get('@modal').contains('div', 'Success!');
     });
 
     it('Should handle a failed API response from the Remove granule requests', () => {
-      cy.server();
-      cy.route({
-        method: 'PUT',
-        url: '/granules/*',
-        status: 400,
-        response: { message: 'error' }
-      });
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { body: { message: 'error' }, statusCode: 400 }
+      );
 
-      cy.route({
-        method: 'DELETE',
-        url: '/granules/*',
-        status: 200,
-        response: { message: 'success' }
-      });
+      cy.intercept(
+        { method: 'DELETE', url: new RegExp('/granules/.*') },
+        { body: { message: 'success' }, status: 200 }
+      );
 
       // this granules query will have a combination of published and unpublished granules
       cy.visit('/granules?limit=50&page=1&status=completed');
@@ -677,20 +657,15 @@ describe('Dashboard Granules Page', () => {
     });
 
     it('Should handle a failed API response from the Delete granule requests', () => {
-      cy.server();
-      cy.route({
-        method: 'PUT',
-        url: '/granules/*',
-        status: 200,
-        response: { message: 'success' }
-      });
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { body: { message: 'success' }, statusCode: 200 }
+      );
 
-      cy.route({
-        method: 'DELETE',
-        url: '/granules/*',
-        status: 400,
-        response: { message: 'error' }
-      });
+      cy.intercept(
+        { method: 'DELETE', url: new RegExp('/granules/.*') },
+        { body: { message: 'error' }, statusCode: 400 }
+      );
 
       // this granules query will have a combination of published and unpublished granules
       cy.visit('/granules?limit=50&page=1&status=completed');

@@ -25,10 +25,7 @@ describe('Dashboard Bulk Granules', () => {
     it('handles a successful bulk granule operation request', () => {
       const asyncOperationId = Math.random().toString(36).substring(2, 15);
 
-      cy.server();
-      cy.route('POST', '/granules/bulk', {
-        id: asyncOperationId
-      }).as('postBulkGranules');
+      cy.intercept('POST', '/granules/bulk', { id: asyncOperationId }).as('postBulkGranules');
 
       cy.visit('/granules');
       cy.contains('button', 'Granule Actions').click();
@@ -53,8 +50,7 @@ describe('Dashboard Bulk Granules', () => {
     it('appends correct query params after bulk granule operation request', () => {
       const asyncOperationId = Math.random().toString(36).substring(2, 15);
 
-      cy.server();
-      cy.route('POST', '/granules/bulk', {
+      cy.intercept('POST', '/granules/bulk', {
         id: asyncOperationId
       }).as('postBulkGranules');
 
@@ -84,8 +80,7 @@ describe('Dashboard Bulk Granules', () => {
     it('handles successful bulk granule deletion request', () => {
       const asyncOperationId = Math.random().toString(36).substring(2, 15);
 
-      cy.server();
-      cy.route('POST', '/granules/bulkDelete', {
+      cy.intercept('POST', '/granules/bulkDelete', {
         id: asyncOperationId
       }).as('postBulkDelete');
 
@@ -113,8 +108,7 @@ describe('Dashboard Bulk Granules', () => {
     it('handles successful bulk granule reingest request', () => {
       const asyncOperationId = Math.random().toString(36).substring(2, 15);
 
-      cy.server();
-      cy.route('POST', '/granules/bulkReingest', {
+      cy.intercept('POST', '/granules/bulkReingest', {
         id: asyncOperationId
       }).as('postBulkReingest');
 
@@ -143,15 +137,10 @@ describe('Dashboard Bulk Granules', () => {
       const errorMessage = 'bulk operations failure';
 
       beforeEach(() => {
-        cy.server();
-        cy.route({
-          method: 'POST',
-          status: 400,
-          url: '/granules/bulk',
-          response: {
-            message: errorMessage
-          }
-        }).as('postBulkGranules');
+        cy.intercept(
+          { method: 'POST', url: '/granules/bulk' },
+          { statusCode: 400, body: { message: errorMessage } }
+        ).as('postBulkGranules');
 
         cy.visit('/granules');
         cy.contains('button', 'Granule Actions').click();
@@ -193,15 +182,10 @@ describe('Dashboard Bulk Granules', () => {
       const errorMessage = 'bulk delete failure';
 
       beforeEach(() => {
-        cy.server();
-        cy.route({
-          method: 'POST',
-          status: 400,
-          url: '/granules/bulkDelete',
-          response: {
-            message: errorMessage
-          }
-        }).as('postBulkDelete');
+        cy.intercept(
+          { method: 'POST', url: '/granules/bulkDelete' },
+          { statusCode: 400, body: { message: errorMessage } }
+        ).as('postBulkDelete');
 
         cy.visit('/granules');
         cy.contains('button', 'Granule Actions').click();
@@ -243,15 +227,10 @@ describe('Dashboard Bulk Granules', () => {
       const errorMessage = 'bulk reingest failure';
 
       beforeEach(() => {
-        cy.server();
-        cy.route({
-          method: 'POST',
-          status: 400,
-          url: '/granules/bulkReingest',
-          response: {
-            message: errorMessage
-          }
-        }).as('postBulkReingest');
+        cy.intercept(
+          { method: 'POST', url: '/granules/bulkReingest' },
+          { statusCode: 400, body: { message: errorMessage } }
+        ).as('postBulkReingest');
 
         cy.visit('/granules');
         cy.contains('button', 'Granule Actions').click();

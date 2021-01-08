@@ -59,8 +59,7 @@ describe('Dashboard Workflows Page', () => {
     });
 
     it('filters workflows when a user types in the search box', () => {
-      cy.server();
-      cy.route('GET', '/workflows*').as('get-workflows');
+      cy.intercept('GET', '/workflows*').as('get-workflows');
       cy.visit('/workflows');
       cy.get('.table .tbody .tr').should('have.length', 2);
       cy.get('.table .tbody .tr').first().contains('HelloWorldWorkflow');
