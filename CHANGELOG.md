@@ -9,8 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - **CUMULUS-1765**
-  - Update 'Errors' tile kibana link to reflect 'failed' granules and datapicker
-  - Update 'Logs' kibana link to reflect datepicker
+  - Update 'Errors' tile Kibana link to reflect 'failed' granules and datepicker
+  - Update 'Logs' Kibana link to reflect datepicker
 
 - **CUMULUS-2069**
   - Standardize UI button groups
