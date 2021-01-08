@@ -91,6 +91,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Continuous integration moved to earthdata bamboo.
   - CircleCI configuration removed from project.
 
+- **CUMULUS-2325**
+  - Updates Cypress test software to 6.2.1.
+
 ## [v3.0.0]
 
 ### Fixed

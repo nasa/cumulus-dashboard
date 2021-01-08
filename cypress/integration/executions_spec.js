@@ -77,14 +77,11 @@ describe('Dashboard Executions Page', () => {
       const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
       const stateMachine = 'arn:aws:states:us-east-1:012345678901:stateMachine:test-stack-HelloWorldWorkflow';
 
-      cy.server();
       cy.visit('/executions');
-      cy.route({
-        method: 'GET',
-        url: `http://localhost:5001/executions/status/${executionArn}`,
-        response: 'fixture:valid-execution.json',
-        status: 200
-      });
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
+        { fixture: 'valid-execution.json', statusCode: 200 }
+      );
 
       cy.contains('nav li a', 'Executions').as('executions');
       cy.get('@executions').should('have.attr', 'href', '/executions');
@@ -113,19 +110,14 @@ describe('Dashboard Executions Page', () => {
       const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
       const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
 
-      cy.server();
-      cy.route({
-        method: 'GET',
-        url: `http://localhost:5001/executions/status/${executionArn}`,
-        response: 'fixture:valid-execution.json',
-        status: 200
-      });
-      cy.route({
-        method: 'GET',
-        url: `http://localhost:5001/logs/${executionName}`,
-        response: 'fixture:execution-logs.json',
-        status: 200
-      });
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
+        { fixture: 'valid-execution.json', statusCode: 200 }
+      );
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/logs/${executionName}` },
+        { fixture: 'execution-logs.json', statusCode: 200 }
+      );
 
       cy.visit(`/executions/execution/${executionArn}`);
       cy.contains('.heading--large', 'Execution');
@@ -162,13 +154,10 @@ describe('Dashboard Executions Page', () => {
       const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
       const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
 
-      cy.server();
-      cy.route({
-        method: 'GET',
-        url: `http://localhost:5001/executions/status/${executionArn}`,
-        response: 'fixture:valid-execution.json',
-        status: 200
-      });
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
+        { fixture: 'valid-execution.json', statusCode: 200 }
+      );
 
       cy.visit(`/executions/execution/${executionArn}`);
       cy.contains('.heading--large', 'Execution');
@@ -217,13 +206,10 @@ describe('Dashboard Executions Page', () => {
       const executionArn = 'arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
       const stateMachine = 'arn:aws:states:us-east-1:123456789012:stateMachine:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo';
 
-      cy.server();
-      cy.route({
-        method: 'GET',
-        url: `http://localhost:5001/logs/${executionName}`,
-        response: 'fixture:limited-execution.json',
-        status: 200
-      });
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/logs/${executionName}` },
+        { fixture: 'limited-execution.json', statusCode: 200 }
+      );
 
       cy.visit(`/executions/execution/${executionArn}`);
 
@@ -267,13 +253,10 @@ describe('Dashboard Executions Page', () => {
     it('should show an execution graph for a single execution', () => {
       const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
 
-      cy.server();
-      cy.route({
-        method: 'GET',
-        url: `http://localhost:5001/executions/status/${executionArn}`,
-        response: 'fixture:valid-execution.json',
-        status: 200
-      });
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
+        { fixture: 'valid-execution.json', statusCode: 200 }
+      );
 
       cy.visit(`/executions/execution/${executionArn}`);
 
