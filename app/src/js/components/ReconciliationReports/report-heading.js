@@ -64,7 +64,7 @@ const ReportHeading = ({
             {formattedStartTime} to {formattedEndTime}
           </div>
         </div>
-        <div div className="heading--shared-content">
+        <div className="heading--shared-content">
           {conflictComparisons && (
             <h2 className="heading--medium heading--shared-content">
               Total Conflict Comparisons
