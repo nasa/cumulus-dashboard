@@ -181,26 +181,16 @@ const SortableTable = ({
     onMouseDown(e);
   }
 
-  function renderFilters() {
-    const tableFilters =
-    <>{includeFilters &&
-      <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
-    }</>;
-    if (children || legend) {
-      return (
-        <ListFilters className="list__filters--flex">
-          {children}
-          {tableFilters}
-          {legend}
-        </ListFilters>
-      );
-    }
-    return tableFilters;
-  }
-
   return (
     <div className='table--wrapper'>
-      {renderFilters()}
+      {(includeFilters || legend) &&
+        <ListFilters className="list__filters--flex">
+          {includeFilters &&
+            <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
+          }
+          {legend}
+        </ListFilters>
+      }
       <div className='table' {...getTableProps()}>
         <div className='thead'>
           <div className='tr'>

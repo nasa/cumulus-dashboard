@@ -101,13 +101,7 @@ const GnfReport = ({
         type='Granule Not Found'
       />
       <section className="page__section">
-        <SortableTable
-          data={combinedGranules}
-          tableColumns={tableColumnsGnf}
-          shouldUsePagination={true}
-          initialHiddenColumns={['']}
-          legend={legend}
-        >
+        <div className="list-action-wrapper">
           <Search
             action={searchReconciliationReport}
             clear={clearReconciliationSearch}
@@ -116,7 +110,14 @@ const GnfReport = ({
             options={combinedGranules}
             placeholder="Search"
           />
-        </SortableTable>
+        </div>
+        <SortableTable
+          data={combinedGranules}
+          tableColumns={tableColumnsGnf}
+          shouldUsePagination={true}
+          initialHiddenColumns={['']}
+          legend={legend}
+        />
       </section>
     </div>
   );
