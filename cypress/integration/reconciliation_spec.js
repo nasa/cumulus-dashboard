@@ -220,6 +220,13 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.contains('.simple-pagination .pagination__link--active', '1');
       cy.contains('.simple-pagination button', 'Next').click();
       cy.contains('.simple-pagination .pagination__link--active', '2');
+
+      /** Legend */
+      cy.get('.legend').should('have.length', 1);
+      cy.get('.legend-items--item').should('have.length', 3);
+      cy.get('.legend-items--item').eq(0).should('contain', 'Granule not found');
+      cy.get('.legend-items--item').eq(1).should('contain', 'Missing image file');
+      cy.get('.legend-items--item').eq(2).should('contain', 'No issues/conflicts');
     });
 
     it('Has a way to expand/collapse all tables', () => {
@@ -260,8 +267,8 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.visit(path);
       cy.contains('.heading--large', `Granule Not Found Report: ${reportName}`);
 
-      cy.contains('.heading--medium', 'Granules Not Found');
-      cy.contains('.num-title', '7');
+      cy.contains('.heading--medium', 'Total Conflict Comparisons');
+      cy.contains('.num-title', '11');
 
       cy.get('.table .th').eq(0).should('contain', 'Collection ID');
       cy.get('.table .th').eq(1).should('contain', 'Granule ID');
@@ -274,22 +281,19 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.table .tr[data-value="4"] .td').eq(2).find('span').should('have.class', 'status-indicator--failed');
       cy.get('.table .tr[data-value="4"] .td').eq(3).find('span').should('have.class', 'status-indicator--failed');
       cy.get('.table .tr[data-value="4"] .td').eq(4).find('span').should('have.class', 'status-indicator--success');
+
+      /** Legend */
+      cy.get('.legend').should('have.length', 1);
+      cy.get('.legend-items--item').should('have.length', 3);
+      cy.get('.legend-items--item').eq(0).should('contain', 'Granule not found');
+      cy.get('.legend-items--item').eq(1).should('contain', 'Missing image file');
+      cy.get('.legend-items--item').eq(2).should('contain', 'No issues/conflicts');
     });
 
     it('should download the Internal report with the report link', () => {
       const reportName = 'InternalReport092020';
       cy.visit('/reconciliation-reports');
       cy.get(`[data-value="${reportName}"]`).find('.button__row--download').should('have.length', 1);
-    });
-
-    it('should include legend on list page', () => {
-      cy.visit('/reconciliation-reports');
-
-      cy.get('.legend').should('have.length', 1);
-      cy.get('.legend-items--item').should('have.length', 3);
-      cy.get('.legend-items--item').eq(0).should('contain', 'Granule not found');
-      cy.get('.legend-items--item').eq(1).should('contain', 'Missing image file');
-      cy.get('.legend-items--item').eq(2).should('contain', 'No issues/conflicts');
     });
 
     it('should have the option to search the report', () => {
