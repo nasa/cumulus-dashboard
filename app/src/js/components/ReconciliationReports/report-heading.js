@@ -17,7 +17,6 @@ const ReportHeading = ({
   error,
   name,
   onDownloadClick,
-  reportState,
   startTime,
   type,
 }) => {
@@ -56,24 +55,33 @@ const ReportHeading = ({
       </section>
       <section className="page__section page__section__header-wrapper">
         <div className="page__section__header page__section__header--shared-content heading__wrapper--border">
-          <h1 className="heading--large with-description">
-            {type && `${type} Report: `}{name}
+          <h1 className="heading--large">
+            {type && `${type} Report: `}
+            {name}
           </h1>
-          <div className="heading--date-range">
-            <span className="font-weight-bold">Date Range:</span> {formattedStartTime} to {formattedEndTime}
-            {/* <dt>State:</dt>
-              <dd
-                className={`status__badge status__badge--${
-                  reportState === 'PASSED' ? 'passed' : 'conflict'
-                }`}
-              >
-                {reportState}
-              </dd> */}
+          <div className="heading--description">
+            <span className="font-weight-bold">Date Range:</span>{' '}
+            {formattedStartTime} to {formattedEndTime}
           </div>
         </div>
-        {conflictComparisons && <h2 className="heading--medium heading--shared-content with-description">
-          Total Conflict Comparisons <span className="num-title">{conflictComparisons}</span>
-        </h2>}
+        <div div className="heading--shared-content">
+          {conflictComparisons && (
+            <h2 className="heading--medium heading--shared-content">
+              Total Conflict Comparisons
+              <span className="num-title">{conflictComparisons}</span>
+            </h2>
+          )}
+          <div className="heading--description">
+            {
+              {
+                Inventory:
+                  'The reports below compare datasets and display the conflicts in each data location.',
+                'Granule Not Found':
+                  'The report below shows a comparison across each data bucket/repository for granule issues.',
+              }[type]
+            }
+          </div>
+        </div>
         {downloadOptions && (
           <DropdownBootstrap className="form-group__element--right">
             <DropdownBootstrap.Toggle
@@ -127,7 +135,6 @@ ReportHeading.propTypes = {
    * Create button for single download
    */
   onDownloadClick: PropTypes.func,
-  reportState: PropTypes.string,
   startTime: PropTypes.string,
   type: PropTypes.string,
 };

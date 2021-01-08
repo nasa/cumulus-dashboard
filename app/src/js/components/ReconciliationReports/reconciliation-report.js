@@ -47,7 +47,6 @@ const ReconciliationReport = ({
           />
         }[reportType]
       }
-
     </>
   );
 };

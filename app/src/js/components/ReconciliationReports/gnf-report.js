@@ -82,8 +82,6 @@ const GnfReport = ({
 
   const totalMissingGranules = combinedGranules.reduce(calculateMissingGranules, 0);
 
-  const reportState = combinedGranules.length > 0 ? 'CONFLICT' : 'PASSED';
-
   function handleDownloadClick(e) {
     handleDownloadJsonClick(e, { data: recordData, reportName });
   }
@@ -96,7 +94,6 @@ const GnfReport = ({
         error={error}
         name={reportName}
         onDownloadClick={handleDownloadClick}
-        reportState={reportState}
         startTime={createStartTime}
         type='Granule Not Found'
       />
