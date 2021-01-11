@@ -12,11 +12,11 @@ import ErrorReport from '../Errors/report';
 
 const ReportHeading = ({
   downloadOptions,
+  conflictComparisons,
   endTime,
   error,
   name,
   onDownloadClick,
-  reportState,
   startTime,
   type,
 }) => {
@@ -36,11 +36,11 @@ const ReportHeading = ({
   ];
 
   const formattedStartTime = startTime
-    ? moment(startTime).utc().format('YYYY-MM-DD H:mm:ss UTC')
+    ? moment(startTime).utc().format('YYYY-MM-DD H:mm:ss')
     : 'missing';
 
   const formattedEndTime = endTime
-    ? moment(endTime).utc().format('YYYY-MM-DD H:mm:ss UTC')
+    ? moment(endTime).utc().format('YYYY-MM-DD H:mm:ss')
     : 'missing';
   return (
     <>
@@ -54,63 +54,71 @@ const ReportHeading = ({
         </div>
       </section>
       <section className="page__section page__section__header-wrapper">
-        <div className="page__section__header">
-          <div>
-            <h1 className="heading--large heading--shared-content with-description ">
-              {type && `${type} Report: `}{name}
-            </h1>
+        <div className="page__section__header page__section__header--shared-content heading__wrapper--border">
+          <h1 className="heading--large">
+            {type && `${type} Report: `}
+            {name}
+          </h1>
+          <div className="heading--description">
+            <span className="font-weight-bold">Date Range:</span>{' '}
+            {formattedStartTime} to {formattedEndTime}
           </div>
-          <div className="status--process">
-            <dl className="status--process--report">
-              <dt>Date Range:</dt>
-              <dd>{`${formattedStartTime} to ${formattedEndTime}`}</dd>
-              <dt>State:</dt>
-              <dd
-                className={`status__badge status__badge--${
-                  reportState === 'PASSED' ? 'passed' : 'conflict'
-                }`}
-              >
-                {reportState}
-              </dd>
-            </dl>
-            {downloadOptions && (
-              <DropdownBootstrap className="form-group__element--right">
-                <DropdownBootstrap.Toggle
-                  className="button button--small button--download"
-                  id="download-report-dropdown"
-                >
-                  Download Report
-                </DropdownBootstrap.Toggle>
-                <DropdownBootstrap.Menu>
-                  {downloadOptions.map(({ label, onClick }, index) => (
-                    <DropdownBootstrap.Item
-                      key={index}
-                      as="button"
-                      onClick={onClick}
-                    >
-                      {label}
-                    </DropdownBootstrap.Item>
-                  ))}
-                </DropdownBootstrap.Menu>
-              </DropdownBootstrap>
-            )}
-            {onDownloadClick && (
-              <button
-                className="form-group__element--right button button--small button--download"
-                onClick={onDownloadClick}
-              >
-                Download Report
-              </button>
-            )}
-          </div>
-          {error && <ErrorReport report={error} />}
         </div>
+        <div className="heading--shared-content">
+          {conflictComparisons && (
+            <h2 className="heading--medium heading--shared-content">
+              Total Conflict Comparisons
+              <span className="num-title">{conflictComparisons}</span>
+            </h2>
+          )}
+          <div className="heading--description">
+            {
+              {
+                Inventory:
+                  'The reports below compare datasets and display the conflicts in each data location.',
+                'Granule Not Found':
+                  'The report below shows a comparison across each data bucket/repository for granule issues.',
+              }[type]
+            }
+          </div>
+        </div>
+        {downloadOptions && (
+          <DropdownBootstrap className="form-group__element--right">
+            <DropdownBootstrap.Toggle
+              className="button button--small button--download"
+              id="download-report-dropdown"
+            >
+              Download Report
+            </DropdownBootstrap.Toggle>
+            <DropdownBootstrap.Menu>
+              {downloadOptions.map(({ label, onClick }, index) => (
+                <DropdownBootstrap.Item
+                  key={index}
+                  as="button"
+                  onClick={onClick}
+                >
+                  {label}
+                </DropdownBootstrap.Item>
+              ))}
+            </DropdownBootstrap.Menu>
+          </DropdownBootstrap>
+        )}
+        {onDownloadClick && (
+          <button
+            className="form-group__element--right button button--small button--download"
+            onClick={onDownloadClick}
+          >
+            Download Report
+          </button>
+        )}
+        {error && <ErrorReport report={error} />}
       </section>
     </>
   );
 };
 
 ReportHeading.propTypes = {
+  conflictComparisons: PropTypes.number,
   /**
    * Create dropdown for downloading multiple tables using these options
    */
@@ -127,7 +135,6 @@ ReportHeading.propTypes = {
    * Create button for single download
    */
   onDownloadClick: PropTypes.func,
-  reportState: PropTypes.string,
   startTime: PropTypes.string,
   type: PropTypes.string,
 };

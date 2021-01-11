@@ -183,7 +183,6 @@ test('correctly renders the heading', function (t) {
     endTime: '2018-06-11T18:52:39.893Z',
     error: null,
     name: 'exampleInventoryReport',
-    reportState: 'CONFLICT',
     startTime: '2018-06-11T18:52:37.710Z',
     type: 'Inventory'
   };
