@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2073**
   - Update forms with the required indicator and description
 
+- **CUMULUS-2148**
+  - Fix bug on Report deletion where the report wouldn't be removed from the table
+
 - **CUMULUS-2263**
   - Update Pagination input to show possible page options in dropdown
 
