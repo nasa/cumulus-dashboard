@@ -89,7 +89,7 @@
     align-items: center;
   }
 
-  .filter__item {
+  .list__filters--item {
     margin: 0 .3em;
   }
 
@@ -109,14 +109,28 @@
   text-align: right;
 }
 
-.table__filters {
-
-  .button__filter {
-    margin-bottom: 1em;
+.list__filters {
+  margin: 1.5em 0 2em;
+  @extend .clearfix;
+  label {
+    font-size: .86em;
   }
 
+  &--flex {
+    display: flex;
+  }
+
+  &--item {
+    display: inline-block;
+    vertical-align: bottom;
+    position: relative;
+  }
+}
+
+.table__filters {
   &--wrapper {
     display: flex;
+    flex-direction: column;
     background: $white;
     padding: 2em;
     margin: 1em 0;
@@ -127,7 +141,6 @@
   &--filter {
     display: flex;
     align-items: center;
-    width: 20%;
 
     label {
       margin: 0 .5em;

@@ -441,6 +441,12 @@ a:active {
   margin-bottom: 1em;
 }
 
+.page__section__header--shared-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .page_section.metrics--overview .heading__wrapper--border {
   margin-top: 0em;
 }

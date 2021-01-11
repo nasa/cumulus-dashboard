@@ -1,9 +1,10 @@
 .legend {
   background-color: $white;
   padding: 2em;
-  width: 50%;
   border-radius: 4px;
   box-shadow: $shadow__default;
+  margin-top: 1em;
+  font-size: .9em;
 
   &--title {
     font-size: 1.3em;
