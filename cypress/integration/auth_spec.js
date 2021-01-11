@@ -53,13 +53,10 @@ describe('Dashboard authentication', () => {
   });
 
   it('should logout user on failed token refresh', () => {
-    cy.server();
-    cy.route({
-      method: 'POST',
-      url: `${Cypress.env('APIROOT')}/refresh`,
-      status: 500,
-      response: {}
-    });
+    cy.intercept(
+      { method: 'POST', url: `${Cypress.env('APIROOT')}/refresh` },
+      { body: {}, statusCode: 500 }
+    );
 
     cy.window().its('appStore').then((store) => {
       const expirationTime = (new Date(Date.now() - 24 * 3600 * 1000)).valueOf() / 1000.0;
