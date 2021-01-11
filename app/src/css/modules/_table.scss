@@ -130,6 +130,7 @@
 .table__filters {
   &--wrapper {
     display: flex;
+    flex-direction: column;
     background: $white;
     padding: 2em;
     margin: 1em 0;
