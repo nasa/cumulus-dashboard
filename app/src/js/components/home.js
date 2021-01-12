@@ -35,7 +35,7 @@ import {
   kibanaGatewayAccessSuccessesLink,
   kibanaGatewayExecutionErrorsLink,
   kibanaGatewayExecutionSuccessesLink,
-  kibanaAllLogsLink,
+  kibanaGranuleErrorsLink,
 } from '../utils/kibana';
 import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
@@ -138,7 +138,7 @@ class Home extends React.Component {
     const { dist, location } = this.props;
     const searchString = getPersistentQueryParams(location);
     const overview = [
-      [tally(get(stats.data, 'errors.value')), 'Errors', kibanaAllLogsLink(this.props.cumulusInstance)],
+      [tally(get(stats.data, 'errors.value')), 'Errors', kibanaGranuleErrorsLink(this.props.cumulusInstance, this.props.datepicker)],
       [tally(get(stats.data, 'collections.value')), strings.collections, '/collections'],
       [tally(get(stats.data, 'granules.value')), strings.granules, '/granules'],
       [tally(get(this.props.executions, 'list.meta.count')), 'Executions', '/executions'],

@@ -11,7 +11,6 @@ import CreateReconciliationReport from './create';
 import ReconciliationReportList from './list';
 import ReconciliationReport from './reconciliation-report';
 import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
-import Legend from './legend';
 import { filterQueryParams } from '../../utils/url-helper';
 
 const ReconciliationReports = ({
@@ -53,13 +52,6 @@ const ReconciliationReports = ({
               <Route path="/reconciliation-reports/create" component={CreateReconciliationReport} />
               <Route path='/reconciliation-reports/report/:reconciliationReportName' component={ReconciliationReport} />
             </Switch>
-            {showSidebar
-              ? (
-                <section className='page__section'>
-                  <Legend />
-                </section>
-              )
-              : null}
           </div>
         </div>
       </div>

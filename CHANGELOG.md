@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Fixed
+- **CUMULUS-1765**
+  - Update 'Errors' tile Kibana link to reflect 'failed' granules and datepicker
+  - Update 'Logs' Kibana link to reflect datepicker
+
 - **CUMULUS-2069**
   - Standardize UI button groups
 
@@ -70,6 +74,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2074**
   - Update status on execution details page to be displayed as a badge
   - Other styling tweaks on execution details page
+
+- **CUMULUS-2176**
+  - Update styles for Granule Not Found Reports
+  - Add tooltips to indicators on GNF reports
 
 - **CUMULUS-2242**
   - Changes underlying Docker files for building dashboard bundle and dashboard image via docker.  The user interface remains the same.

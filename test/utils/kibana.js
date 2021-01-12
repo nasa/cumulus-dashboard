@@ -136,9 +136,9 @@ test('kibanaGatewayAccessSuccessesLink() will return a Kibana link to query for 
 });
 
 test('kibanaAllLogsLink() will return a link to all logs in Kibana', function (t) {
-  const expectedLink = "http://example.com/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(from:now-48h,to:now))&_a=(columns:!(_source),index:cumulus-stack,interval:auto,query:(language:lucene,query:''),sort:!('@timestamp',desc))";
+  const expectedLink = "http://example.com/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(from:'1970-01-01T00:00:00.000Z',to:now))&_a=(columns:!(_source),index:cumulus-stack,interval:auto,query:(language:lucene,query:''),sort:!('@timestamp',desc))";
 
-  const kibanaLink = kibanaAllLogsLink(cumulusInstanceMeta);
+  const kibanaLink = kibanaAllLogsLink(cumulusInstanceMeta, {});
   t.is(kibanaLink, expectedLink);
 });
 

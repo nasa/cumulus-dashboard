@@ -2,6 +2,7 @@ import React from 'react';
 import c from 'classnames';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import get from 'lodash/get';
 import {
   logout,
@@ -64,7 +65,7 @@ class Header extends React.Component {
 
   linkTo(path, search) {
     if (path[0] === 'Logs') {
-      const kibanaLink = kibanaAllLogsLink(this.props.cumulusInstance);
+      const kibanaLink = kibanaAllLogsLink(this.props.cumulusInstance, this.props.datepicker);
       return (
         <a href={kibanaLink} target="_blank">
           {path[0]}
@@ -126,6 +127,7 @@ Header.propTypes = {
   location: PropTypes.object,
   minimal: PropTypes.bool,
   cumulusInstance: PropTypes.object,
+  datepicker: PropTypes.object,
 };
 
-export default withRouter(Header);
+export default withRouter(connect((state) => state)(Header));

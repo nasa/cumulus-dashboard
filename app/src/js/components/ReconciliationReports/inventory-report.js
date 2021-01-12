@@ -19,15 +19,6 @@ import Dropdown from '../DropDown/dropdown';
 import ReportHeading from './report-heading';
 import ListFilters from '../ListActions/ListFilters';
 
-/**
- * returns PASSED or CONFLICT based on reconcilation report data.
- * @param {Object} dataList - list of reconcilation report objects.
- */
-const reportState = (dataList) => {
-  const anyBad = dataList.some((item) => item.tables.some((table) => table.data.length));
-  return anyBad ? 'CONFLICT' : 'PASSED';
-};
-
 const bucketsForFilter = (allBuckets) => {
   const uniqueBuckets = [...new Set(allBuckets)];
   return uniqueBuckets.map((bucket) => ({
@@ -39,6 +30,7 @@ const bucketsForFilter = (allBuckets) => {
 const InventoryReport = ({
   filterBucket,
   filterString,
+  legend,
   recordData,
   reportName,
 }) => {
@@ -51,7 +43,6 @@ const InventoryReport = ({
     allBuckets,
   } = reshapeReport(recordData, filterString, filterBucket);
   const reportComparisons = [...internalComparison, ...cumulusVsCmrComparison];
-  const theReportState = reportState(reportComparisons);
   const activeCardTables = reportComparisons.find(
     (displayObj) => displayObj.id === activeId
   ).tables;
@@ -122,7 +113,6 @@ const InventoryReport = ({
         endTime={reportEndTime}
         error={error}
         name={reportName}
-        reportState={theReportState}
         startTime={reportStartTime}
         type='Inventory'
       />
@@ -217,6 +207,7 @@ const InventoryReport = ({
                     <div id={item.id}>
                       <SortableTable
                         data={item.data}
+                        legend={legend}
                         tableColumns={item.columns}
                         shouldUsePagination={true}
                         initialHiddenColumns={['']}
@@ -235,6 +226,7 @@ const InventoryReport = ({
 InventoryReport.propTypes = {
   filterBucket: PropTypes.string,
   filterString: PropTypes.string,
+  legend: PropTypes.node,
   recordData: PropTypes.object,
   reportName: PropTypes.string,
 };
