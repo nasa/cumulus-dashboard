@@ -647,7 +647,6 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
 
     &__filter {
       background-color: $light-green;
-      position: relative;
 
       &:before {
         color: $white;
@@ -662,6 +661,10 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       &:hover {
         background-color: $light-green;
       }
+    }
+
+    &__legend {
+      background-color: $orange;
     }
 
     &__row {

@@ -72,6 +72,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Update status on execution details page to be displayed as a badge
   - Other styling tweaks on execution details page
 
+- **CUMULUS-2176**
+  - Update styles for Granule Not Found Reports
+  - Add tooltips to indicators on GNF reports
+
 - **CUMULUS-2242**
   - Changes underlying Docker files for building dashboard bundle and dashboard image via docker.  The user interface remains the same.
 
