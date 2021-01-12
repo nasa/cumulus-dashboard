@@ -128,4 +128,6 @@ Header.propTypes = {
   cumulusInstance: PropTypes.object,
 };
 
+export { Header };
+
 export default withRouter(Header);
