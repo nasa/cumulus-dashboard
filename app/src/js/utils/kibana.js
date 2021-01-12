@@ -92,10 +92,18 @@ export const kibanaGatewayAccessSuccessesLink = (cumulusInstanceMeta, datepicker
   return `${_config.kibanaRoot}/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(${timeInterval}))&_a=(columns:!(message),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:${stackName},key:_index,negate:!f,params:(query:'${stackName}-cloudwatch*',type:phrase),type:phrase,value:'${stackName}-cloudwatch*'),query:(match:(_index:(query:'${stackName}-cloudwatch*',type:phrase)))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:${stackName},key:logGroup,negate:!f,params:(query:'%22API%5C-Gateway%5C-Execution*%22',type:phrase),type:phrase,value:'%22API%5C-Gateway%5C-Execution*%22'),query:(match:(logGroup:(query:'%22API%5C-Gateway%5C-Execution*%22',type:phrase))))),index:${stackName},interval:auto,query:(language:lucene,query:'statusCode:%5B200%20TO%20399%5D'),sort:!('@timestamp',desc))`;
 };
 
-export const kibanaAllLogsLink = (cumulusInstanceMeta) => {
+export const kibanaAllLogsLink = (cumulusInstanceMeta, datepicker) => {
   if (!kibanaConfigured(cumulusInstanceMeta)) return '';
   const { stackName } = cumulusInstanceMeta;
-  return `${_config.kibanaRoot}/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(from:now-48h,to:now))&_a=(columns:!(_source),index:${stackName},interval:auto,query:(language:lucene,query:''),sort:!('@timestamp',desc))`;
+  const timeInterval = formatKibanaDate(datepicker);
+  return `${_config.kibanaRoot}/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(${timeInterval}))&_a=(columns:!(_source),index:${stackName},interval:auto,query:(language:lucene,query:''),sort:!('@timestamp',desc))`;
+};
+
+export const kibanaGranuleErrorsLink = (cumulusInstanceMeta, datepicker) => {
+  if (!kibanaConfigured(cumulusInstanceMeta)) return '';
+  const { stackName } = cumulusInstanceMeta;
+  const timeInterval = formatKibanaDate(datepicker);
+  return `${_config.kibanaRoot}/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(${timeInterval}))&_a=(columns:!(_source),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:${stackName},key:_index,negate:!f,params:(query:'${stackName}-granule*'),type:phrase),query:(match_phrase:(_index:'${stackName}-granule*')))),index:${stackName},interval:auto,query:(language:lucene,query:'status:%20failed'),sort:!('@timestamp',desc))`;
 };
 
 export const kibanaExecutionLink = (cumulusInstanceMeta, executionName) => {
