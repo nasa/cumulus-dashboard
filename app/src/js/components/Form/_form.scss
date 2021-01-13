@@ -65,20 +65,6 @@ select option{
   }
 }
 
-.list__filters--item {
-  .dropdown {
-    &--small {
-      width: 15em;
-    }
-    &--medium {
-      width: 25em;
-    }
-    &--large {
-      width: 35em;
-    }
-  }
-}
-
 .form--controls {
   margin-bottom: 2em;
   display: flex;
