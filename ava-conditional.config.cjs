@@ -9,6 +9,8 @@ module.exports = {
     AUTH_METHOD: 'launchpad',
     ESROOT: 'https://example.com',
     SHOW_DISTRIBUTION_API_METRICS: 'true',
-    BUCKET: 'https://example.com/bucket'
+    BUCKET: 'https://example.com/bucket',
+    STAGE: 'production',
+    DAAC_NAME: 'Cumulus_Daac'
   }
 };
