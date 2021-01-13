@@ -31,3 +31,24 @@ test('Header contains correct number of nav items and excludes PDRs and Logs', f
   t.is(navigation.contains('PDRs'), false);
   t.is(navigation.contains('Logs'), false);
 });
+
+test('Logo path is "/cumulus-logo.png" when BUCKET is not specified', function (t) {
+  const dispatch = () => {};
+  const api = {
+    authenticated: true
+  }
+  const location = {
+    pathname: '/'
+  }
+
+  const header = shallow(
+    <Header
+      dispatch={dispatch}
+      api={api}
+      location={location}
+    />
+  );
+
+  const logo = header.find('img[alt="Logo"]');
+  t.is(logo.props().src, "/cumulus-logo.png");
+});
