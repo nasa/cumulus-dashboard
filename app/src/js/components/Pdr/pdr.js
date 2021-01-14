@@ -240,6 +240,10 @@ class PDR extends React.Component {
                 clear={clearGranulesFilter}
                 paramKey={'collectionId'}
                 label={strings.collection}
+                inputProps={{
+                  placeholder: 'All',
+                  className: 'dropdown--large',
+                }}
               />
               <Dropdown
                 options={status}

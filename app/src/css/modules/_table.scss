@@ -124,6 +124,18 @@
     display: inline-block;
     vertical-align: bottom;
     position: relative;
+
+    .dropdown {
+      &--small {
+        width: 15em;
+      }
+      &--medium {
+        width: 25em;
+      }
+      &--large {
+        width: 35em;
+      }
+    }
   }
 }
 
