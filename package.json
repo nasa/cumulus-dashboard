@@ -73,7 +73,7 @@
     "@cypress/webpack-preprocessor": "^4.1.5",
     "audit-ci": "^3.1.1",
     "autoprefixer": "^9.8.6",
-    "ava": "^3.13.0",
+    "ava": "^3.15.0",
     "babel-core": "^7.0.0-bridge",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.1",
