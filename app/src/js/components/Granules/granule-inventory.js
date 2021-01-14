@@ -32,13 +32,14 @@ const GranuleInventory = ({
 
   function submitListRequest(e) {
     const queryParams = queryString.parse(history.location.search);
-    const { collectionId, status, search: granuleIdFilter } = queryParams;
+    const { collectionId, provider, status, search: granuleIdFilter } = queryParams;
 
     const requestBody = {
       reportName: listName,
       reportType: 'Granule Inventory',
-      status,
       collectionId,
+      provider,
+      status,
       // granuleId accepts a string or an array of granuleIds.
       // In this case, the granuleIdFilter is a search infix and selected is an array of granuleIds.
       granuleId: granuleIdFilter || ((selected.length > 0) ? selected : undefined),
