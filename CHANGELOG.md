@@ -62,6 +62,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2272**
   - Add popover to granuleId and collection name table columns to view and copy full cell text
 
+- **CUMULUS-2291**
+  - Add provider filter to Granule Inventory Report
+
 ### Changed
 
 - **CUMULUS-2070**
