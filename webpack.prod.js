@@ -32,9 +32,6 @@ const MainConfig = merge.smartStrategy({
     minimize: true,
     minimizer: [
       new TerserJsPlugin({
-        terserOptions: {
-          mangle: true
-        },
         cache: true,
         parallel: true,
         sourceMap: true,
