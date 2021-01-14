@@ -120,7 +120,7 @@ The compiled dashboard files (dashboard bundle) will be placed in the `./dist` d
 
 #### Build dashboard to be served by CloudFront
 
-If you wish to serve the dashboard from behind [CloudFront](https://aws.amazon.com/cloudfront/).  Build a `dist` with your configuration including `APIROOT` and ensure the `SERVED_BY_CUMULUS_API` variable is unset. Follow the cumulus operator docs on [serving the dashboard from CloudFront](https://nasa.github.io/cumulus/docs/next/operator-docs/serve-dashboard-from-cloudfront).
+If you wish to serve the dashboard from behind [CloudFront](https://aws.amazon.com/cloudfront/).  Build a `dist` with your configuration including `APIROOT` and ensure the `SERVED_BY_CUMULUS_API` variable is unset. For NGAP uers, follow the documentation to *Request Public or Protected Access to the APIs and Dashboard*, Step 5 of [Cumulus Deployments in NGAP](https://wiki.earthdata.nasa.gov/display/CUMULUS/Cumulus+Deployments+in+NGAP).
 
 #### Build dashboard to be served by the Cumulus API.
 
