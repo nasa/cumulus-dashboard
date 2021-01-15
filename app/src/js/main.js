@@ -11,11 +11,6 @@ import TopButton from './components/TopButton/TopButton';
 const { target, environment } = _config;
 
 class Main extends Component {
-  constructor () {
-    super();
-    this.displayName = 'Main';
-  }
-
   render () {
     return (
       <div className='app'>
@@ -50,5 +45,7 @@ Main.propTypes = {
   apiVersion: PropTypes.object,
   cumulusInstance: PropTypes.object
 };
+
+export { Main };
 
 export default withRouter(connect((state) => state)(Main));

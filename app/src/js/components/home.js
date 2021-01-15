@@ -82,12 +82,10 @@ class Home extends React.Component {
     if (type === 'Failed' && count > 0) {
       if (count > 99) {
         return 'red';
-      } if (count > 0) {
-        return 'yellow';
       }
-    } else {
-      return 'blue';
+      return 'yellow';
     }
+    return 'blue';
   }
 
   renderButtonListSection (items, header, listId) {

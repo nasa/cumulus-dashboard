@@ -10,14 +10,7 @@ import { tally } from '../../../app/src/js/utils/format';
 
 configure({ adapter: new Adapter() });
 
-/** 
- * Link values are generated with functions from app/src/js/utils/kibana.js
- * They return '' if `kibanaConfigured = false` which is determined from:
- * `const kibanaConfigured = (cumulusInstanceMeta) => 
- *   !!cumulusInstanceMeta && !!cumulusInstanceMeta.stackName && !!_config.kibanaRoot;`
- */
-
-test('Home page does not link to distribution metrics when KIBANAROOT is not passed', async (t) => {
+test('Home page links to KIBANAROOT when it is passed', async (t) => {
   const dist = {
     apiGateway: {
       execution: { errors: 10, successes: 123 },
@@ -36,11 +29,6 @@ test('Home page does not link to distribution metrics when KIBANAROOT is not pas
       data: {}
     }
   };
-
-  const emptyLinkToProp = {
-    pathname: '',
-    search: '',
-  }
 
   const expectedErrorMetrics = [
     {
@@ -92,59 +80,18 @@ test('Home page does not link to distribution metrics when KIBANAROOT is not pas
       location={{search: ''}}
     />
   );
-
   const errorMetrics = home.find('#distributionErrors li');
   t.is(errorMetrics.length, 3);
   errorMetrics.forEach((errorNode, index) => {
     t.is(errorNode.key(), expectedErrorMetrics[index].key);
-    t.is(errorNode.find('Link').text(), expectedErrorMetrics[index].text);
-    t.deepEqual(errorNode.find('Link').props().to, emptyLinkToProp);
+    t.is(errorNode.find('a').text(), expectedErrorMetrics[index].text);
+    t.regex(errorNode.find('a').props().href, /https:\/\/fake.com\/linktokibana/);
   });
   const successMetrics = home.find('#distributionSuccesses li');
   t.is(successMetrics.length, 5);
   successMetrics.forEach((successNode, index) => {
     t.is(successNode.key(), expectedSuccessMetrics[index].key);
-    t.is(successNode.find('Link').text(), expectedSuccessMetrics[index].text);
-    t.deepEqual(successNode.find('Link').props().to, emptyLinkToProp);
+    t.is(successNode.find('a').text(), expectedSuccessMetrics[index].text);
+    t.regex(successNode.find('a').props().href, /https:\/\/fake.com\/linktokibana/);
   });
-});
-
-
-test('Home page does not display distribution metrics when values are null', async (t) => {
-  const dist = {
-    apiGateway: {
-      execution: { errors: null, successes: null },
-      access: { errors: null, successes: null }
-    },
-    apiLambda: { errors: null, successes: null },
-    teaLambda: { errors: null, successes: null },
-    s3Access: { errors: null, successes: null }
-  };
-  const granules = { list: [] };
-  const stats = {
-    stats: {
-      data: {}
-    },
-    count: {
-      data: {}
-    }
-  };
-
-  const cumulusInstance = {stackName: 'stackName'};
-  const dispatch = () => Promise.resolve();
-  const home = shallow(
-    <Home
-      dispatch={dispatch}
-      dist={dist}
-      granules={granules}
-      stats={stats}
-      cumulusInstance={cumulusInstance}
-      location={{search: ''}}
-    />
-  );
-
-  const errorMetrics = home.find('#distributionErrors li');
-  t.is(errorMetrics.length, 0);
-  const successMetrics = home.find('#distributionSuccesses li');
-  t.is(successMetrics.length, 0);
 });

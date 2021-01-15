@@ -130,4 +130,6 @@ Header.propTypes = {
   datepicker: PropTypes.object,
 };
 
+export { Header };
+
 export default withRouter(connect((state) => state)(Header));
