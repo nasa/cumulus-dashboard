@@ -34,6 +34,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Remove `node-notifier` to remediate security vulnerability
 
 ### Added
+- **CUMULUS-1763**
+  - Add tests for different dashboard configurations
+
 - **CUMULUS-1885**
   - Expand columns to fit full content width when separator is double clicked
 

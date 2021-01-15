@@ -95,4 +95,6 @@ OAuth.propTypes = {
   queryParams: PropTypes.object
 };
 
+export { OAuth };
+
 export default withRouter(withQueryParams()(connect((state) => state)(OAuth)));
