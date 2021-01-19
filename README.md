@@ -349,6 +349,8 @@ Update the CHANGELOG.md. Put a header under the 'Unreleased' section with the ne
 
 Add a link reference for the GitHub "compare" view at the bottom of the CHANGELOG.md, following the existing pattern. This link reference should create a link in the CHANGELOG's release header to changes in the corresponding release.
 
+Check to make sure there are `Breaking Changes` and `All Changes` section for the release if there are breaking changes. e.g. a new version of Cumulus API is required.
+
 ### 6. Update the version of the Cumulus API
 
 If this release corresponds to a Cumulus Core package release, update the version of `@cumulus/api` to the latest package version so that the integration tests will run against that version.
@@ -380,5 +382,9 @@ Create and push a new git tag:
 ### 11. Add the release to GitHub
 
 Follow the [Github documentation to create a new release](https://help.github.com/articles/creating-releases/) for the dashboard using the tag that you just pushed. Make sure to use the content from the CHANGELOG for this release as the description of the release on GitHub.
+
+### 12. Create PR of master back into develop
+
+Create a PR for the `master` branch back into `develop` to bring the merge commit back into develop.
 
 <a name="bundlefootnote">1</a>: A dashboard bundle is just a ready-to-deploy compiled version of the dashboard and environment.
