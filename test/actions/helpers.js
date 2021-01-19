@@ -17,16 +17,8 @@ const getStateStub = () => ({
   }
 });
 
-const qsStringifyOptions = {
-  arrayFormat: 'brackets'
-};
-
 test.beforeEach((t) => {
-  t.context.defaultConfig = {
-    json: true,
-    resolveWithFullResponse: true,
-    simple: false
-  };
+  t.context.defaultConfig = {};
 
   t.context.defaultHeaders = {
     'Content-Type': 'application/json'
@@ -108,7 +100,6 @@ test('configureRequest() should add default parameters', (t) => {
     ...t.context.defaultConfig,
     url: 'http://localhost/test',
     headers: t.context.defaultHeaders,
-    qsStringifyOptions
   };
   const requestConfig = configureRequest(requestParams);
   t.deepEqual(requestConfig, expectedConfig);
@@ -123,7 +114,6 @@ test('configureRequest() should convert path to URL', (t) => {
     path: 'test',
     url: 'http://localhost/test',
     headers: t.context.defaultHeaders,
-    qsStringifyOptions
   };
   const requestConfig = configureRequest(requestParams);
   t.deepEqual(requestConfig, expectedConfig);
@@ -142,7 +132,6 @@ test('configureRequest() should maintain the request body', (t) => {
     url: 'http://localhost/test',
     body: requestBody,
     headers: t.context.defaultHeaders,
-    qsStringifyOptions
   };
   const requestConfig = configureRequest(requestParams);
   t.deepEqual(requestConfig, expectedConfig);
@@ -154,14 +143,13 @@ test('configureRequest() should maintain query state parameters', (t) => {
   };
   const requestParams = {
     url: 'http://localhost/test',
-    qs: queryParameters
+    params: queryParameters
   };
   const expectedConfig = {
     ...t.context.defaultConfig,
     url: 'http://localhost/test',
-    qs: queryParameters,
+    params: queryParameters,
     headers: t.context.defaultHeaders,
-    qsStringifyOptions
   };
   const requestConfig = configureRequest(requestParams);
   t.deepEqual(requestConfig, expectedConfig);
@@ -183,7 +171,6 @@ test('configureRequest() should not overwrite auth headers', (t) => {
       ...t.context.defaultHeaders,
       Authorization: 'Bearer fake-token'
     },
-    qsStringifyOptions
   };
 
   const requestConfig = configureRequest(requestParams);

@@ -67,7 +67,7 @@ export default createReducer(initialState, {
       field === 'status' ? shimEmptyCount(count) : count;
     state.count.inflight = false;
     state.count.error = null;
-    state.count.data[action.config.qs.type] = {
+    state.count.data[action.config.params.type] = {
       ...action.data,
       count: statsCount,
     };
@@ -79,7 +79,7 @@ export default createReducer(initialState, {
       field === 'status' ? shimEmptyCount(count) : count;
     state.count.inflight = false;
     state.count.error = null;
-    state.count.sidebar[action.config.qs.type] = {
+    state.count.sidebar[action.config.params.type] = {
       ...action.data,
       count: statsCount,
     };

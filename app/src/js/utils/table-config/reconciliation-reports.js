@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { nullValue, dateOnly, collectionNameVersion } from '../format';
+import { nullValue, dateOnly, collectionNameVersion, IndicatorWithTooltip } from '../format';
 import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions';
 import { getPersistentQueryParams } from '../url-helper';
 import { downloadFile } from '../download-file';
@@ -39,7 +39,9 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
     id: 'download',
     accessor: 'name',
     Cell: ({ cell: { value } }) => (// eslint-disable-line react/prop-types
-      <button className='button button__row button__row--download'
+      <button
+        aria-label="Download Report"
+        className='button button__row button__row--download'
         onClick={(e) => (isGranules
           ? handleCsvDownloadClick(e, value, dispatch)
           : handleDownloadClick(e, value, dispatch))}
@@ -52,7 +54,9 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
     id: 'delete',
     accessor: 'name',
     Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
-      <button className='button button__row button__row--delete'
+      <button
+        aria-label="Delete Report"
+        className='button button__row button__row--delete'
         onClick={(e) => handleDeleteClick(e, value, dispatch, query)}
       />
     ),
@@ -74,7 +78,7 @@ const handleCsvDownloadClick = (e, reportName, dispatch) => {
   dispatch(getReconciliationReport(reportName)).then((response) => {
     const { data } = response;
     const { url } = data;
-    if (url && !window.Cypress) window.open(url);
+    if (url && window && !window.Cypress) window.open(url);
   });
 };
 
@@ -179,25 +183,6 @@ export const tableColumnsGranules = [
   }
 ];
 
-const getIndicatorColor = (prop) => {
-  let indicatorColor = '';
-  switch (prop) {
-    case 'missing':
-      indicatorColor = 'orange';
-      break;
-    case 'notFound':
-      indicatorColor = 'failed';
-      break;
-    case false:
-      indicatorColor = 'failed';
-      break;
-    default:
-      indicatorColor = 'success';
-      break;
-  }
-  return indicatorColor;
-};
-
 export const tableColumnsGnf = [
   {
     Header: 'Collection ID',
@@ -220,8 +205,8 @@ export const tableColumnsGnf = [
   {
     Header: 'S3',
     id: 's3',
-    Cell: ({ row: { original: { s3 } } }) => ( // eslint-disable-line react/prop-types
-      <span className={`status-indicator status-indicator--${getIndicatorColor(s3)}`}></span>
+    Cell: ({ row: { original: { s3 }, values: { granuleId } } }) => ( // eslint-disable-line react/prop-types
+      <IndicatorWithTooltip granuleId={granuleId} repo='s3' value={s3} />
     ),
     width: 50,
   },
@@ -232,17 +217,17 @@ export const tableColumnsGnf = [
   // },
   {
     Header: 'Cumulus',
-    id: 'Cumulus',
-    Cell: ({ row: { original: { cumulus } } }) => ( // eslint-disable-line react/prop-types
-      <span className={`status-indicator status-indicator--${getIndicatorColor(cumulus)}`}></span>
+    id: 'cumulus',
+    Cell: ({ row: { original: { cumulus }, values: { granuleId } } }) => ( // eslint-disable-line react/prop-types
+      <IndicatorWithTooltip granuleId={granuleId} repo='cumulus' value={cumulus} />
     ),
     width: 50,
   },
   {
     Header: 'CMR',
     id: 'cmr',
-    Cell: ({ row: { original: { cmr } } }) => ( // eslint-disable-line react/prop-types
-      <span className={`status-indicator status-indicator--${getIndicatorColor(cmr)}`}></span>
+    Cell: ({ row: { original: { cmr }, values: { granuleId } } }) => ( // eslint-disable-line react/prop-types
+      <IndicatorWithTooltip granuleId={granuleId} repo='cmr' value={cmr} />
     ),
     width: 50,
   },

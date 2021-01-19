@@ -17,7 +17,7 @@ import SubForm from '../SubForm/sub-form';
 import t from '../../utils/strings';
 import { window } from '../../utils/browser';
 
-const scrollTo = typeof window.scrollTo === 'function' ? window.scrollTo : () => true;
+const scrollTo = window && typeof window.scrollTo === 'function' ? window.scrollTo : () => true;
 
 export const formTypes = {
   text: 'TEXT',
@@ -168,7 +168,7 @@ export class Form extends React.Component {
   }
 
   onSubmit (e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (this.isInflight()) return;
 
     // validate input values in the store
@@ -259,6 +259,8 @@ export class Form extends React.Component {
       submitButtonText = 'Submit';
     }
 
+    const hasRequiredFields = this.props.inputMeta.filter((input) => input.required).length >= 0;
+
     const form = (
       <div ref={(element) => { this.DOMElement = element; }}>
         {errors.length > 0 && <ErrorReport report={errorMessage(errors)} disableScroll={true} />}
@@ -299,7 +301,8 @@ export class Form extends React.Component {
             // textarea forms pass a mode value to ace
             const mode = (type === formTypes.textArea && input.mode) || null;
             // subforms have fieldsets that define child form structure
-            const fieldSet = (type === formTypes.subform && input.fieldSet) || null;
+            const fieldset = (type === formTypes.subform && input.fieldSet) || null;
+            const autoComplete = (type === formTypes.text && input.isPassword) ? 'on' : null;
             // text forms can be type=password or number
             let textType = (type === formTypes.text && input.isPassword) ? 'password' : null;
 
@@ -314,8 +317,9 @@ export class Form extends React.Component {
               error,
               mode,
               options,
-              fieldSet,
+              fieldset,
               type: textType,
+              autoComplete,
               onChange: this.onChange
             });
 
@@ -323,9 +327,18 @@ export class Form extends React.Component {
           })}
         </ul>
 
+        {hasRequiredFields && (
+          <div className='form__item form__item--require__description'>
+            <p>
+              <span className="label__required">* </span>
+              <span className="label__name">Required field</span>
+            </p>
+          </div>
+        )}
+
         {this.props.submit && (
           <button
-            className={`button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white button--submit${this.isInflight() ? ' button--disabled' : ''}`}
+            className={`button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right button--submit${this.isInflight() ? ' button--disabled' : ''}`}
             onClick={this.onSubmit}
           >
             { submitButtonText }
@@ -334,7 +347,7 @@ export class Form extends React.Component {
 
         {this.props.cancel && (
           <button
-            className={`button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left button--cancel${this.isInflight() ? ' button--disabled' : ''}`}
+            className={`button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right button--cancel${this.isInflight() ? ' button--disabled' : ''}`}
             onClick={this.onCancel}
           >
             Cancel

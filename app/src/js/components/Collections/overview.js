@@ -15,6 +15,7 @@ import {
   listGranules,
   searchGranules,
   listCollections,
+  getOptionsProviderName,
 } from '../../actions';
 import {
   collectionName as collectionLabelForId,
@@ -56,16 +57,15 @@ const breadcrumbConfig = [
 class CollectionOverview extends React.Component {
   constructor(props) {
     super(props);
-    [
-      this.changeCollection,
-      this.deleteMe,
-      this.errors,
-      this.generateQuery,
-      this.generateBulkActions,
-      this.gotoGranules,
-      this.load,
-      this.navigateBack,
-    ].forEach((fn) => (this[fn.name] = fn.bind(this)));
+
+    this.changeCollection = this.changeCollection.bind(this);
+    this.deleteMe = this.deleteMe.bind(this);
+    this.errors = this.errors.bind(this);
+    this.generateQuery = this.generateQuery.bind(this);
+    this.generateBulkActions = this.generateBulkActions.bind(this);
+    this.gotoGranules = this.gotoGranules.bind(this);
+    this.load = this.load.bind(this);
+    this.navigateBack = this.navigateBack.bind(this);
   }
 
   componentDidMount() {
@@ -171,6 +171,7 @@ class CollectionOverview extends React.Component {
       match: { params },
       collections,
       granules: { list },
+      providers: { dropdowns },
     } = this.props;
     const collectionName = params.name;
     const collectionVersion = params.version;
@@ -282,22 +283,19 @@ class CollectionOverview extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId="granuleId"
-            sortId="timestamp"
+            initialSortId="timestamp"
             filterAction={filterGranules}
             filterClear={clearGranulesFilter}
           >
+            <Search
+              action={searchGranules}
+              clear={clearGranulesSearch}
+              label="Search"
+              labelKey="granuleId"
+              placeholder="Granule ID"
+              searchKey="granules"
+            />
             <ListFilters>
-              <Search
-                action={searchGranules}
-                clear={clearGranulesSearch}
-                inputProps={{
-                  className: 'search search--large',
-                }}
-                label="Search"
-                labelKey="granuleId"
-                placeholder="Granule ID"
-                searchKey="granules"
-              />
               <Dropdown
                 options={statusOptions}
                 action={filterGranules}
@@ -306,6 +304,18 @@ class CollectionOverview extends React.Component {
                 label="Status"
                 inputProps={{
                   placeholder: 'All',
+                }}
+              />
+              <Dropdown
+                getOptions={getOptionsProviderName}
+                options={get(dropdowns, ['provider', 'options'])}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey="provider"
+                label="Provider"
+                inputProps={{
+                  placeholder: 'All',
+                  className: 'dropdown--medium',
                 }}
               />
             </ListFilters>
@@ -325,6 +335,7 @@ CollectionOverview.propTypes = {
   granules: PropTypes.object,
   match: PropTypes.object,
   queryParams: PropTypes.object,
+  providers: PropTypes.object
 };
 
 export default withRouter(
@@ -332,5 +343,6 @@ export default withRouter(
     collections: state.collections,
     datepicker: state.datepicker,
     granules: state.granules,
+    providers: state.providers
   }))(CollectionOverview)
 );

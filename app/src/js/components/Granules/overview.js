@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
 import { get } from 'object-path';
-import moment from 'moment';
 import isEqual from 'lodash/isEqual';
 import {
   searchGranules,
@@ -17,17 +16,17 @@ import {
   applyWorkflowToGranule,
   applyRecoveryWorkflowToGranule,
   getOptionsCollectionName,
-  createReconciliationReport
+  getOptionsProviderName,
 } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import {
-  tableColumns,
+  bulkActions,
   defaultWorkflowMeta,
   executeDialog,
-  bulkActions,
-  recoverAction
+  groupAction,
+  recoverAction,
+  tableColumns,
 } from '../../utils/table-config/granules';
-import { historyPushWithQueryParams } from '../../utils/url-helper';
 import statusOptions from '../../utils/status';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
@@ -37,8 +36,6 @@ import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import DefaultModal from '../Modal/modal';
-import TextForm from '../TextAreaForm/text';
 
 const breadcrumbConfig = [
   {
@@ -62,17 +59,8 @@ class GranulesOverview extends React.Component {
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
     this.setWorkflowMeta = this.setWorkflowMeta.bind(this);
     this.applyRecoveryWorkflow = this.applyRecoveryWorkflow.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.submitListRequest = this.submitListRequest.bind(this);
-    this.goToListPage = this.goToListPage.bind(this);
-    this.handleReportTypeInputChange = this.handleReportTypeInputChange.bind(this);
     this.updateSelection = this.updateSelection.bind(this);
-    this.defaultListName = () => `granuleList-${moment().format('YYYYMMDDTHHmmssSSS')}`;
     this.state = {
-      isModalOpen: false,
-      isListRequestSubmitted: false,
-      listName: this.defaultListName(),
       workflow: this.props.workflowOptions[0],
       workflowMeta: defaultWorkflowMeta,
       selected: []
@@ -111,7 +99,9 @@ class GranulesOverview extends React.Component {
       }
     };
     const { granules, config } = this.props;
-    let actions = bulkActions(granules, actionConfig);
+    const { selected } = this.state;
+    const selectedGranules = selected.map((id) => granules.list.data.find((g) => id === g.granuleId));
+    let actions = bulkActions(granules, actionConfig, selectedGranules);
     if (config.enableRecovery) {
       actions = actions.concat(recoverAction(granules, actionConfig));
     }
@@ -120,50 +110,6 @@ class GranulesOverview extends React.Component {
 
   selectWorkflow (selector, workflow) {
     this.setState({ workflow });
-  }
-
-  toggleModal() {
-    this.setState((prevState) => ({
-      ...prevState,
-      isModalOpen: !prevState.isModalOpen
-    }));
-  }
-
-  submitListRequest(e) {
-    const { listName, selected } = this.state;
-    const queryParams = this.generateQuery();
-    const { collectionId, status, search: granuleIdFilter } = queryParams;
-
-    const requestBody = {
-      reportName: listName,
-      reportType: 'Granule Inventory',
-      status,
-      collectionId,
-      // granuleId accepts a string or an array of granuleIds.
-      // In this case, the granuleIdFilter is a search infix and selected is an array of granuleIds.
-      granuleId: granuleIdFilter || ((selected.length > 0) ? selected : undefined),
-    };
-
-    this.setState({ isListRequestSubmitted: true });
-    this.props.dispatch(createReconciliationReport(
-      requestBody
-    ));
-  }
-
-  goToListPage() {
-    historyPushWithQueryParams('/granules/lists');
-  }
-
-  closeModal() {
-    this.toggleModal();
-    this.setState({
-      isListRequestSubmitted: false,
-      listName: this.defaultListName()
-    });
-  }
-
-  handleReportTypeInputChange(id, value) {
-    this.setState({ listName: value });
   }
 
   setWorkflowMeta (workflowMeta) {
@@ -199,10 +145,10 @@ class GranulesOverview extends React.Component {
   }
 
   render () {
-    const { isModalOpen, isListRequestSubmitted, listName } = this.state;
-    const { collections, granules } = this.props;
+    const { collections, granules, providers } = this.props;
     const { list } = granules;
     const { dropdowns } = collections;
+    const { dropdowns: providerDropdowns } = providers;
     const { count, queriedAt } = list.meta;
 
     return (
@@ -223,39 +169,6 @@ class GranulesOverview extends React.Component {
         <section className='page__section'>
           <div className='heading__wrapper--border'>
             <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num-title'>{count ? ` ${tally(count)}` : 0}</span></h2>
-            <a className='csv__download button button--small button--file button--green form-group__element--right'
-              id='download_link'
-              onClick={this.toggleModal}
-            >Create Granule Inventory List</a>
-            <DefaultModal
-              className="granule-inventory"
-              onCloseModal={this.closeModal}
-              onConfirm={isListRequestSubmitted ? this.goToListPage : this.submitListRequest}
-              showModal={isModalOpen}
-              title='Create Granule List'
-            >
-              {!isListRequestSubmitted && (
-                <div>
-                  <div>You have generated a selection to process for the following list:</div>
-                  <div className="list-name">
-                    <TextForm
-                      id="reportName"
-                      label="List Name"
-                      onChange={this.handleReportTypeInputChange}
-                      value={listName}
-                    />
-                  </div>
-                  <div>Would you like to continue with generating the list?</div>
-                </div>
-              )}
-              {isListRequestSubmitted && (
-                <div>
-                  <div>The following request is being processed and will be available shortly</div>
-                  <div className="list-name">{listName}</div>
-                  <div>On the Lists page, view the status and download your list when available</div>
-                </div>
-              )}
-            </DefaultModal>
           </div>
           <List
             list={list}
@@ -263,24 +176,22 @@ class GranulesOverview extends React.Component {
             tableColumns={tableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
+            groupAction={groupAction}
             rowId='granuleId'
-            sortId='timestamp'
+            initialSortId='timestamp'
             filterAction={filterGranules}
             filterClear={clearGranulesFilter}
             onSelect={this.updateSelection}
           >
+            <Search
+              action={searchGranules}
+              clear={clearGranulesSearch}
+              label='Search'
+              labelKey="granuleId"
+              placeholder='Granule ID'
+              searchKey="granules"
+            />
             <ListFilters>
-              <Search
-                action={searchGranules}
-                clear={clearGranulesSearch}
-                inputProps={{
-                  className: 'search search--large',
-                }}
-                label='Search'
-                labelKey="granuleId"
-                placeholder='Granule ID'
-                searchKey="granules"
-              />
               <Dropdown
                 options={statusOptions}
                 action={filterGranules}
@@ -299,7 +210,20 @@ class GranulesOverview extends React.Component {
                 paramKey='collectionId'
                 label={strings.collection}
                 inputProps={{
-                  placeholder: 'All'
+                  placeholder: 'All',
+                  className: 'dropdown--large',
+                }}
+              />
+              <Dropdown
+                getOptions={getOptionsProviderName}
+                options={get(providerDropdowns, ['provider', 'options'])}
+                action={filterGranules}
+                clear={clearGranulesFilter}
+                paramKey="provider"
+                label="Provider"
+                inputProps={{
+                  placeholder: 'All',
+                  className: 'dropdown--medium',
                 }}
               />
             </ListFilters>
@@ -317,6 +241,7 @@ GranulesOverview.propTypes = {
   granules: PropTypes.object,
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
+  providers: PropTypes.object,
 };
 
 export { GranulesOverview };
@@ -327,4 +252,5 @@ export default withRouter(withQueryParams()(connect((state) => ({
   granules: state.granules,
   selected: state.selected,
   workflowOptions: workflowOptionNames(state),
+  providers: state.providers
 }))(GranulesOverview)));

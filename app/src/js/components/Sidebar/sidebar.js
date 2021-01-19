@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -48,17 +48,19 @@ const Sidebar = ({
             ].join(' ');
 
             return (
-              <li key={base + i}>
-                <Link
-                  className={classes}
-                  to={(routeLocation) => ({
-                    pathname: path,
-                    search: getPersistentQueryParams(routeLocation),
-                  })}
-                >
-                  {d[0]}
-                </Link>
-              </li>
+              <Fragment key={base + i}>
+                {d[0] && <li>
+                  <Link
+                    className={classes}
+                    to={(routeLocation) => ({
+                      pathname: path,
+                      search: getPersistentQueryParams(routeLocation),
+                    })}
+                  >
+                    {d[0]}
+                  </Link>
+                </li>}
+              </Fragment>
             );
           })}
         </ul>
@@ -69,6 +71,7 @@ const Sidebar = ({
   return (
     <div className={`sidebar-toggle--wrapper${sidebarOpen ? ' active' : ''}`}>
       <button
+        aria-label={sidebarOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
         className={`sidebar-toggle button--round button--${
           sidebarOpen ? 'close' : 'open'
         }-sidebar`}

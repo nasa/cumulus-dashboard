@@ -5,7 +5,8 @@
     "plugin:eslint-comments/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
-    "plugin:lodash/recommended"
+    "plugin:lodash/recommended",
+    "plugin:jsx-a11y/recommended"
   ],
   "env": {
     "es6": true,
@@ -17,13 +18,16 @@
     "react-hooks",
     "eslint-comments",
     "import",
-    "lodash"
+    "lodash",
+    "jsx-a11y"
   ],
+  "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 2018,
     "ecmaFeatures": {
       "jsx": true
-    }
+    },
+    "allowImportExportEverywhere": true
   },
   "rules": {
     "comma-dangle": ["error", "only-multiline"],
@@ -72,7 +76,8 @@
         "ignoreTemplateLiterals": true
       }
     ],
-    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }]
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "jsx-a11y/click-events-have-key-events": "off"
   },
   "globals": {
     "cy": true,

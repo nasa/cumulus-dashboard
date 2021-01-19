@@ -77,14 +77,11 @@ describe('Dashboard Executions Page', () => {
       const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
       const stateMachine = 'arn:aws:states:us-east-1:012345678901:stateMachine:test-stack-HelloWorldWorkflow';
 
-      cy.server();
       cy.visit('/executions');
-      cy.route({
-        method: 'GET',
-        url: `http://localhost:5001/executions/status/${executionArn}`,
-        response: 'fixture:valid-execution.json',
-        status: 200
-      });
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
+        { fixture: 'valid-execution.json', statusCode: 200 }
+      );
 
       cy.contains('nav li a', 'Executions').as('executions');
       cy.get('@executions').should('have.attr', 'href', '/executions');
@@ -113,19 +110,14 @@ describe('Dashboard Executions Page', () => {
       const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
       const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
 
-      cy.server();
-      cy.route({
-        method: 'GET',
-        url: `http://localhost:5001/executions/status/${executionArn}`,
-        response: 'fixture:valid-execution.json',
-        status: 200
-      });
-      cy.route({
-        method: 'GET',
-        url: `http://localhost:5001/logs/${executionName}`,
-        response: 'fixture:execution-logs.json',
-        status: 200
-      });
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
+        { fixture: 'valid-execution.json', statusCode: 200 }
+      );
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/logs/${executionName}` },
+        { fixture: 'execution-logs.json', statusCode: 200 }
+      );
 
       cy.visit(`/executions/execution/${executionArn}`);
       cy.contains('.heading--large', 'Execution');
@@ -162,13 +154,10 @@ describe('Dashboard Executions Page', () => {
       const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
       const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
 
-      cy.server();
-      cy.route({
-        method: 'GET',
-        url: `http://localhost:5001/executions/status/${executionArn}`,
-        response: 'fixture:valid-execution.json',
-        status: 200
-      });
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
+        { fixture: 'valid-execution.json', statusCode: 200 }
+      );
 
       cy.visit(`/executions/execution/${executionArn}`);
       cy.contains('.heading--large', 'Execution');
@@ -188,17 +177,21 @@ describe('Dashboard Executions Page', () => {
           const timestamp = fullDate(events[index].timestamp);
           cy.wrap($el).children('.td').as('columns');
           cy.get('@columns').should('have.length', 4);
-          const idMatch = `"id": ${index + 1},`;
+          const id = index + 1;
+          const idMatch = `"id": ${id},`;
           const previousIdMatch = `"previousEventId": ${index}`;
 
           cy.get('@columns').eq(0).should('have.text', (index + 1).toString());
           cy.get('@columns').eq(2).should('have.text', timestamp);
+          cy.get('.execution__modal').should('not.exist');
           cy.get('@columns').eq(3).contains('More Details').click();
-          cy.get('@columns').eq(3).contains(idMatch);
+          cy.get('.execution__modal').should('exist');
+          cy.get('.execution__modal .modal-title').contains(`ID ${id}: Event Details`);
+          cy.get('.execution__modal .modal-body').contains(idMatch);
           if (index !== 0) {
-            cy.get('@columns').eq(3).contains(previousIdMatch);
+            cy.get('.execution__modal .modal-body').contains(previousIdMatch);
           }
-          cy.get('@columns').eq(3).contains('Less Details').click();
+          cy.contains('.execution__modal .button', 'Close').click();
         });
       });
 
@@ -213,13 +206,10 @@ describe('Dashboard Executions Page', () => {
       const executionArn = 'arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
       const stateMachine = 'arn:aws:states:us-east-1:123456789012:stateMachine:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo';
 
-      cy.server();
-      cy.route({
-        method: 'GET',
-        url: `http://localhost:5001/logs/${executionName}`,
-        response: 'fixture:limited-execution.json',
-        status: 200
-      });
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/logs/${executionName}` },
+        { fixture: 'limited-execution.json', statusCode: 200 }
+      );
 
       cy.visit(`/executions/execution/${executionArn}`);
 
@@ -263,13 +253,10 @@ describe('Dashboard Executions Page', () => {
     it('should show an execution graph for a single execution', () => {
       const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
 
-      cy.server();
-      cy.route({
-        method: 'GET',
-        url: `http://localhost:5001/executions/status/${executionArn}`,
-        response: 'fixture:valid-execution.json',
-        status: 200
-      });
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
+        { fixture: 'valid-execution.json', statusCode: 200 }
+      );
 
       cy.visit(`/executions/execution/${executionArn}`);
 

@@ -1,10 +1,52 @@
-FROM nginx:alpine
+FROM node:12.18.0 as build
+WORKDIR /cumulus-dashboard
+COPY package.json package-lock.json ./
+RUN npm install --no-optional
 
+ARG APIROOT
+ARG AUTH_METHOD
+ARG AWS_REGION
+ARG DAAC_NAME
+ARG ENABLE_RECOVERY
+ARG ESROOT
+ARG ES_PASSWORD
+ARG ES_USER
+ARG HIDE_PDR
+ARG KIBANAROOT
+ARG LABELS
+ARG SERVED_BY_CUMULUS_API
+ARG SHOW_DISTRIBUTION_API_METRICS
+ARG SHOW_TEA_METRICS
+ARG STAGE
+
+COPY . ./
+
+RUN bash -c "echo -e API ROOT IS : $APIROOT"
+
+RUN \
+ APIROOT=$APIROOT \
+ AUTH_METHOD=$AUTH_METHOD \
+ AWS_REGION=$AWS_REGION \
+ DAAC_NAME=$DAAC_NAME \
+ ENABLE_RECOVERY=$ENABLE_RECOVERY \
+ ESROOT=$ESROOT \
+ ES_PASSWORD=$ES_PASSWORD \
+ ES_USER=$ES_USER \
+ HIDE_PDR=$HIDE_PDR \
+ KIBANAROOT=$KIBANAROOT \
+ LABELS=$LABELS \
+ SERVED_BY_CUMULUS_API=$SERVED_BY_CUMULUS_API \
+ SHOW_DISTRIBUTION_API_METRICS=$SHOW_DISTRIBUTION_API_METRICS \
+ SHOW_TEA_METRICS=$SHOW_TEA_METRICS \
+ STAGE=$STAGE \
+ npm run build
+
+FROM nginx:alpine as app
 STOPSIGNAL SIGQUIT
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY run-nginx.sh /usr/local/sbin/run-nginx.sh
+COPY docker/nginx.conf /etc/nginx/nginx.conf
+COPY docker/run-nginx.sh /usr/local/sbin/run-nginx.sh
 
 CMD ["/usr/local/sbin/run-nginx.sh"]
 
-COPY html/ /usr/share/nginx/html/
+COPY --from=build /cumulus-dashboard/dist/ /usr/share/nginx/html/

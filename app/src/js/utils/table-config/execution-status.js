@@ -1,7 +1,6 @@
-import React from 'react';
-import Collapse from 'react-collapsible';
-
+import React, { useState } from 'react';
 import { fullDate } from '../format';
+import DefaultModal from '../../components/Modal/modal';
 
 export const tableColumns = [
   {
@@ -20,11 +19,41 @@ export const tableColumns = [
   {
     Header: 'Input Details',
     accessor: 'eventDetails',
-    Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
-      <Collapse trigger={'More Details'} triggerWhenOpen={'Less Details'}>
-        <pre className={'pre-style'}>{JSON.stringify(value, null, 2)}</pre>
-      </Collapse>
-    ),
+    Cell: ({ cell: { value } }) => {
+      const [showModal, setShowModal] = useState(false);
+      const { id } = value || {};
+      function toggleModal(e) {
+        if (e) {
+          e.preventDefault();
+        }
+        setShowModal(!showModal);
+      }
+      if (value) {
+        return (
+          <>
+            <button
+              onClick={toggleModal}
+              className="button button--small button--no-left-padding"
+            >
+              More Details
+            </button>
+            <DefaultModal
+              showModal={showModal}
+              title={`ID ${id}: Event Details`}
+              onCloseModal={toggleModal}
+              hasConfirmButton={false}
+              cancelButtonClass="button--close"
+              cancelButtonText="Close"
+              className="execution__modal"
+            >
+              <pre>{JSON.stringify(value, null, 2)}</pre>
+            </DefaultModal>
+          </>
+        );
+      }
+      return 'N/A';
+    },
+    disableSortBy: true,
   }
 ];
 

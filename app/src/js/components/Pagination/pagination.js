@@ -41,20 +41,38 @@ const Pagination = ({
     }
   }
 
+  function renderOptions(totalPages) {
+    const pages = [];
+
+    for (let p = 1; p <= totalPages; p++) {
+      pages.push(
+        {
+          id: p,
+          label: p.toString(),
+        }
+      );
+    }
+
+    return pages;
+  }
+
   if (Number.isNaN(count) && Number.isNaN(limit) && Number.isNaN(page)) return null;
 
   const currentPage = +page;
   const paginator = new Paginator(limit, 7);
   const meta = paginator.build(count, currentPage);
   const pages = [];
+  const hasTotalPages = !!meta.total_pages;
+  const renderInput = displayAsInput && hasTotalPages;
+
   for (let i = meta.first_page; i <= meta.last_page; ++i) {
     pages.push(i);
   }
   const jumpToFirst = meta.first_page > 1 && (
     <li>
-      <a href="#" data-value={1} onClick={onPageClick}>
+      <button data-value={1} onClick={onPageClick}>
         1
-      </a>{' '}
+      </button>{' '}
       ...{' '}
     </li>
   );
@@ -62,9 +80,9 @@ const Pagination = ({
     <li>
       {' '}
       ...{' '}
-      <a href="#" data-value={meta.total_pages} onClick={onPageClick}>
+      <button data-value={meta.total_pages} onClick={onPageClick}>
         {meta.total_pages}
-      </a>{' '}
+      </button>{' '}
     </li>
   );
 
@@ -72,27 +90,25 @@ const Pagination = ({
     <div className={`pagination ${displayAsInput ? 'pagination-dropdown' : 'pagination-list'}`}>
       <ol>
         <li>
-          <a
+          <button
             className={`previous${meta.has_previous_page ? '' : disabled}`}
             data-value={meta.previous_page}
             onClick={meta.has_previous_page ? onPageClick : noop}
           >
             Previous
-          </a>
+          </button>
         </li>
-        {displayAsInput && (
+        {renderInput && (
           <Dropdown
             action={action}
             clear={clear}
             clearButton={false}
+            inputProps={{ 'aria-label': 'Page' }}
+            label={<span className="sr-only">Page</span>}
             onChange={handleDropdownChange}
-            options={[
-              {
-                id: meta.total_pages,
-                label: meta.total_pages.toString(),
-              },
-            ]}
+            options={renderOptions(meta.total_pages)}
             paramKey="page"
+            clearOnClick={true}
             selectedValues={[
               {
                 id: currentPage,
@@ -108,22 +124,22 @@ const Pagination = ({
                 key={d}
                 className={d === currentPage ? 'pagination__link--active' : ''}
               >
-                <a href="#" data-value={d} onClick={onPageClick}>
+                <button data-value={d} onClick={onPageClick}>
                   {d}
-                </a>
+                </button>
               </li>
             ))}
             {jumpToLast}
           </>
         )}
         <li>
-          <a
+          <button
             className={`next${meta.has_next_page ? '' : disabled}`}
             data-value={meta.next_page}
             onClick={meta.has_next_page ? onPageClick : noop}
           >
             Next
-          </a>
+          </button>
         </li>
       </ol>
     </div>

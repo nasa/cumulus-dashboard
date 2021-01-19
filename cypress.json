@@ -9,6 +9,5 @@
   },
   "nodeVersion": "system",
   "viewportWidth": 1300,
-  "viewportHeight": 1000,
-  "experimentalNetworkStubbing": true
+  "viewportHeight": 1000
 }

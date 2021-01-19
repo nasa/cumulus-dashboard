@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
-import React from 'react';
-import Datepicker from '../Datepicker/DatepickerRange';
+import React, { lazy, Suspense } from 'react';
+import Loading from '../LoadingIndicator/loading-indicator';
+
+const Datepicker = lazy(() => import('../Datepicker/DatepickerRange'));
 
 const DatePickerHeader = ({ heading, onChange, showDatePicker = true }) => (
   <>
@@ -13,9 +15,11 @@ const DatePickerHeader = ({ heading, onChange, showDatePicker = true }) => (
             </div>
           </li>
           <li>
-            <div className='datetimeheader__datetime_range_wrapper'>
-              <Datepicker hideWrapper={true} onChange={onChange} />
-            </div>
+            <Suspense fallback={<Loading />}>
+              <div className='datetimeheader__datetime_range_wrapper'>
+                <Datepicker hideWrapper={true} onChange={onChange} />
+              </div>
+            </Suspense>
           </li>
         </ul>
       </div>

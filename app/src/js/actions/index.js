@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import compareVersions from 'compare-versions';
 import { get as getProperty } from 'object-path';
-import requestPromise from 'request-promise';
+import axios from 'axios';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import cloneDeep from 'lodash/cloneDeep';
@@ -37,11 +37,9 @@ export const refreshAccessToken = (token) => (dispatch) => {
   const requestConfig = configureRequest({
     method: 'POST',
     url: new URL('refresh', root).href,
-    body: { token },
-    // make sure request failures are sent to .catch()
-    simple: true
+    data: { token },
   });
-  return requestPromise(requestConfig)
+  return axios(requestConfig)
     .then(({ body }) => {
       const duration = new Date() - start;
       log('REFRESH_TOKEN', `${duration}ms`);
@@ -77,7 +75,7 @@ export const getCollection = (name, version) => (dispatch, getState) => {
       method: 'GET',
       id: getCollectionId({ name, version }),
       path: `collections?name=${name}&version=${version}&includeStats=true`,
-      qs: timeFilters,
+      params: timeFilters,
     },
   });
 };
@@ -86,13 +84,11 @@ export const getApiVersion = () => (dispatch) => {
   const config = configureRequest({
     method: 'GET',
     url: new URL('version', root).href,
-    // make sure request failures are sent to .catch()
-    simple: true
   });
-  return requestPromise(config)
-    .then(({ body }) => dispatch({
+  return axios(config)
+    .then(({ data }) => dispatch({
       type: types.API_VERSION,
-      payload: { versionNumber: body.api_version }
+      payload: { versionNumber: data.api_version }
     }))
     .then(() => dispatch(checkApiVersion()))
     .catch(({ error }) => dispatch({
@@ -121,14 +117,15 @@ export const listCollections = (options = {}) => {
   const { listAll = false, getMMT = true, includeStats = true, ...queryOptions } = options;
   return (dispatch, getState) => {
     const timeFilters = listAll ? {} : fetchCurrentTimeFilters(getState().datepicker);
-    const urlPath = `collections${isEmpty(timeFilters) || listAll ? '' : '/active'}`;
+    const providerFilter = get(queryOptions, 'provider');
+    const urlPath = `collections${(isEmpty(timeFilters) && providerFilter === undefined) || listAll ? '' : '/active'}`;
     return dispatch({
       [CALL_API]: {
         type: types.COLLECTIONS,
         method: 'GET',
         id: null,
         url: new URL(urlPath, root).href,
-        qs: { limit: defaultPageLimit, ...queryOptions, ...timeFilters, getMMT, includeStats }
+        params: { limit: defaultPageLimit, ...queryOptions, ...timeFilters, getMMT, includeStats }
       }
     });
   };
@@ -140,7 +137,7 @@ export const createCollection = (payload) => ({
     method: 'POST',
     id: getCollectionId(payload),
     path: 'collections',
-    body: payload
+    data: payload
   }
 });
 
@@ -151,7 +148,7 @@ export const updateCollection = (payload, name, version) => ({
     method: 'PUT',
     id: (name && version) ? getCollectionId({ name, version }) : getCollectionId(payload),
     path: `collections/${name || payload.name}/${version || payload.version}`,
-    body: payload
+    data: payload
   }
 });
 
@@ -196,7 +193,7 @@ export const listGranules = (options) => (dispatch, getState) => {
       method: 'GET',
       id: null,
       url: new URL('granules', root).href,
-      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+      params: { limit: defaultPageLimit, ...options, ...timeFilters }
     }
   });
 };
@@ -207,7 +204,7 @@ export const reprocessGranule = (granuleId) => ({
     method: 'PUT',
     id: granuleId,
     path: `granules/${granuleId}`,
-    body: {
+    data: {
       action: 'reprocess'
     }
   }
@@ -219,7 +216,7 @@ export const applyWorkflowToCollection = (name, version, workflow) => ({
     method: 'PUT',
     id: getCollectionId({ name, version }),
     path: `collections/${name}/${version}`,
-    body: {
+    data: {
       action: 'applyWorkflow',
       workflow
     }
@@ -253,7 +250,7 @@ export const applyWorkflowToGranule = (granuleId, workflow, meta) => ({
     method: 'PUT',
     id: granuleId,
     path: `granules/${granuleId}`,
-    body: {
+    data: {
       action: 'applyWorkflow',
       workflow,
       meta
@@ -296,7 +293,7 @@ export const reingestGranule = (granuleId) => ({
     method: 'PUT',
     id: granuleId,
     path: `granules/${granuleId}`,
-    body: {
+    data: {
       action: 'reingest'
     }
   }
@@ -313,7 +310,7 @@ export const removeGranule = (granuleId) => ({
     method: 'PUT',
     id: granuleId,
     path: `granules/${granuleId}`,
-    body: {
+    data: {
       action: 'removeFromCmr'
     }
   }
@@ -330,7 +327,7 @@ export const bulkGranule = (payload) => ({
     method: 'POST',
     path: 'granules/bulk',
     requestId: payload.requestId,
-    body: payload.json
+    data: payload.json
   }
 });
 
@@ -345,7 +342,7 @@ export const bulkGranuleDelete = (payload) => ({
     method: 'POST',
     path: 'granules/bulkDelete',
     requestId: payload.requestId,
-    body: payload.json
+    data: payload.json
   }
 });
 
@@ -360,7 +357,7 @@ export const bulkGranuleReingest = (payload) => ({
     method: 'POST',
     path: 'granules/bulkReingest',
     requestId: payload.requestId,
-    body: payload.json
+    data: payload.json
   }
 });
 
@@ -383,6 +380,41 @@ export const deleteGranuleClearError = (granuleId) => ({
   id: granuleId
 });
 
+export const removeAndDeleteGranule = (granuleId) => (dispatch, getState) => {
+  const granules = getState().granules.list.data;
+  const granuleToDelete = granules.find((g) => g.granuleId === granuleId);
+  const errorPresent = (response, errorType) => response && response.type && response.type === errorType;
+
+  // If the granule is published to CMR, remove it from CMR and then delete.
+  if (granuleToDelete.published) {
+    return dispatch(removeGranule(granuleId))
+      .then(
+        (removeResponse) => {
+          if (errorPresent(removeResponse, types.GRANULE_REMOVE_ERROR)) {
+            // If the remove request is unsuccessful, we still dispatch a DELETE error because
+            // that is what the action is expecting.
+            return dispatch({
+              type: types.GRANULE_DELETE_ERROR,
+              id: granuleId,
+              error: removeResponse.error
+            });
+          }
+        }
+      )
+      .then(
+        (removeResponse) => {
+          // If the previous remove request was successful, delete the granule
+          if (!errorPresent(removeResponse, types.GRANULE_DELETE_ERROR)) {
+            return dispatch(deleteGranule(granuleId));
+          }
+        }
+      );
+  }
+
+  // If this granule is NOT published, just delete it
+  return dispatch(deleteGranule(granuleId));
+};
+
 export const searchGranules = (infix) => ({ type: types.SEARCH_GRANULES, infix });
 export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH });
 export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param });
@@ -393,7 +425,7 @@ export const getOptionsCollectionName = (options) => ({
     type: types.OPTIONS_COLLECTIONNAME,
     method: 'GET',
     url: new URL('collections', root).href,
-    qs: { limit: 100, fields: 'name,version' }
+    params: { limit: 100, fields: 'name,version' }
   }
 });
 
@@ -404,7 +436,7 @@ export const getStats = (options) => (dispatch, getState) => {
       type: types.STATS,
       method: 'GET',
       url: new URL('stats', root).href,
-      qs: { ...options, ...timeFilters }
+      params: { ...options, ...timeFilters }
     }
   });
 };
@@ -423,7 +455,7 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
         method: 'POST',
         url: `${esRoot}/_search/`,
         headers: authHeader(),
-        body: JSON.parse(apiGatewaySearchTemplate(stackName, startTime, endTime))
+        data: JSON.parse(apiGatewaySearchTemplate(stackName, startTime, endTime))
       }
     });
   };
@@ -444,7 +476,7 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
         method: 'POST',
         url: `${esRoot}/_search/`,
         headers: authHeader(),
-        body: JSON.parse(apiLambdaSearchTemplate(stackName, startTime, endTime))
+        data: JSON.parse(apiLambdaSearchTemplate(stackName, startTime, endTime))
       }
     });
   };
@@ -465,7 +497,7 @@ export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
         method: 'POST',
         url: `${esRoot}/_search/`,
         headers: authHeader(),
-        body: JSON.parse(teaLambdaSearchTemplate(stackName, startTime, endTime))
+        data: JSON.parse(teaLambdaSearchTemplate(stackName, startTime, endTime))
       }
     });
   };
@@ -485,7 +517,7 @@ export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
         method: 'POST',
         url: `${esRoot}/_search/`,
         headers: authHeader(),
-        body: JSON.parse(s3AccessSearchTemplate(stackName, startTime, endTime))
+        data: JSON.parse(s3AccessSearchTemplate(stackName, startTime, endTime))
       }
     });
   };
@@ -508,7 +540,7 @@ export const getCount = (options = {}) => {
         method: 'GET',
         id: null,
         url: new URL('stats/aggregate', root).href,
-        qs: { type: 'must-include-type', field: 'status', ...params, ...timeFilters }
+        params: { type: 'must-include-type', field: 'status', ...params, ...timeFilters }
       }
     });
   };
@@ -521,7 +553,7 @@ export const listPdrs = (options) => (dispatch, getState) => {
       type: types.PDRS,
       method: 'GET',
       url: new URL('pdrs', root).href,
-      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+      params: { limit: defaultPageLimit, ...options, ...timeFilters }
     }
   });
 };
@@ -545,16 +577,16 @@ export const listProviders = (options) => ({
     type: types.PROVIDERS,
     method: 'GET',
     url: new URL('providers', root).href,
-    qs: { limit: defaultPageLimit, ...options }
+    params: { limit: defaultPageLimit, ...options }
   }
 });
 
-export const getOptionsProviderGroup = () => ({
+export const getOptionsProviderName = () => ({
   [CALL_API]: {
-    type: types.OPTIONS_PROVIDERGROUP,
+    type: types.OPTIONS_PROVIDERNAME,
     method: 'GET',
     url: new URL('providers', root).href,
-    qs: { limit: 100, fields: 'providerName' }
+    params: { limit: 100, fields: 'id' }
   }
 });
 
@@ -573,7 +605,7 @@ export const createProvider = (providerId, payload) => ({
     id: providerId,
     method: 'POST',
     path: 'providers',
-    body: payload
+    data: payload
   }
 });
 
@@ -583,7 +615,7 @@ export const updateProvider = (providerId, payload) => ({
     id: providerId,
     method: 'PUT',
     path: `providers/${providerId}`,
-    body: payload
+    data: payload
   }
 });
 
@@ -619,7 +651,7 @@ export const getLogs = (options) => (dispatch, getState) => {
       type: types.LOGS,
       method: 'GET',
       url: new URL('logs', root).href,
-      qs: { limit: 100, ...options, ...timeFilters }
+      params: { limit: 100, ...options, ...timeFilters }
     }
   });
 };
@@ -635,7 +667,7 @@ export const login = (token) => ({
     id: 'auth',
     method: 'GET',
     url: new URL('granules', root).href,
-    qs: { limit: 1, fields: 'granuleId' },
+    params: { limit: 1, fields: 'granuleId' },
     skipAuth: true,
     headers: {
       Authorization: `Bearer ${token}`
@@ -651,8 +683,9 @@ export const deleteToken = () => (dispatch, getState) => {
     method: 'DELETE',
     url: new URL(`tokenDelete/${token}`, root).href
   });
-  return requestPromise(requestConfig)
-    .finally(() => dispatch({ type: types.DELETE_TOKEN }));
+  return axios(requestConfig)
+    .then(() => dispatch({ type: types.DELETE_TOKEN }))
+    .catch(() => dispatch({ type: types.DELETE_TOKEN }));
 };
 
 export const loginError = (error) => (dispatch) => dispatch(deleteToken())
@@ -672,7 +705,7 @@ export const listWorkflows = (options) => ({
     type: types.WORKFLOWS,
     method: 'GET',
     url: new URL('workflows', root).href,
-    qs: { limit: defaultPageLimit, ...options }
+    params: { limit: defaultPageLimit, ...options }
   }
 });
 export const searchWorkflows = (searchString) => ({ type: types.SEARCH_WORKFLOWS, searchString });
@@ -704,7 +737,7 @@ export const listExecutions = (options) => (dispatch, getState) => {
       type: types.EXECUTIONS,
       method: 'GET',
       url: new URL('executions', root).href,
-      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+      params: { limit: defaultPageLimit, ...options, ...timeFilters }
     }
   });
 };
@@ -721,7 +754,7 @@ export const listOperations = (options) => (dispatch, getState) => {
       type: types.OPERATIONS,
       method: 'GET',
       url: new URL('asyncOperations', root).href,
-      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+      params: { limit: defaultPageLimit, ...options, ...timeFilters }
     }
   });
 };
@@ -747,7 +780,7 @@ export const listRules = (options) => (dispatch, getState) => {
       type: types.RULES,
       method: 'GET',
       url: new URL('rules', root).href,
-      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+      params: { limit: defaultPageLimit, ...options, ...timeFilters }
     }
   });
 };
@@ -767,7 +800,7 @@ export const updateRule = (payload) => ({
     type: types.UPDATE_RULE,
     method: 'PUT',
     path: `rules/${payload.name}`,
-    body: payload
+    data: payload
   }
 });
 
@@ -779,7 +812,7 @@ export const createRule = (name, payload) => ({
     type: types.NEW_RULE,
     method: 'POST',
     path: 'rules',
-    body: payload
+    data: payload
   }
 });
 
@@ -801,7 +834,7 @@ export const enableRule = (payload) => {
       type: types.RULE_ENABLE,
       method: 'PUT',
       path: `rules/${rule.name}`,
-      body: {
+      data: {
         ...rule,
         state: 'ENABLED'
       }
@@ -818,7 +851,7 @@ export const disableRule = (payload) => {
       type: types.RULE_DISABLE,
       method: 'PUT',
       path: `rules/${rule.name}`,
-      body: {
+      data: {
         ...rule,
         state: 'DISABLED'
       }
@@ -832,7 +865,7 @@ export const rerunRule = (payload) => ({
     type: types.RULE_RERUN,
     method: 'PUT',
     path: `rules/${payload.name}`,
-    body: {
+    data: {
       ...payload,
       action: 'rerun'
     }
@@ -851,7 +884,7 @@ export const listReconciliationReports = (options) => (dispatch, getState) => {
       type: types.RECONCILIATIONS,
       method: 'GET',
       url: new URL('reconciliationReports', root).href,
-      qs: { limit: defaultPageLimit, ...options, ...timeFilters }
+      params: { limit: defaultPageLimit, ...options, ...timeFilters }
     }
   });
 };
@@ -871,7 +904,7 @@ export const createReconciliationReport = (payload) => ({
     type: types.NEW_RECONCILIATION,
     method: 'POST',
     path: 'reconciliationReports',
-    body: payload
+    data: payload
   }
 });
 

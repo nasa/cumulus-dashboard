@@ -46,9 +46,6 @@ const WorkflowOverview = ({
             <Search
               action={searchWorkflows}
               clear={clearWorkflowsSearch}
-              inputProps={{
-                className: 'search search--small',
-              }}
               label="Search"
               labelKey="name"
               placeholder="Workflow Name"

@@ -1,7 +1,7 @@
 version: "3"
 services:
   serve_api:
-    image: node:12.18.0
+    image: ${DOCKER_REPOSITORY}node:12.18.0
     network_mode: "service:shim"
     depends_on:
       - localstack
@@ -10,7 +10,7 @@ services:
     working_dir:
       /cumulus-dashboard
     volumes:
-      - ../:/cumulus-dashboard:cached
+      - ../:/cumulus-dashboard
     environment:
       - LOCALSTACK_HOST=localhost
       - LOCAL_ES_HOST=localhost
@@ -18,12 +18,12 @@ services:
       - cmr_provider=CUMULUS
       - FAKE_AUTH=true
   shim:   # empty container to open ports
-    image: node:12.18.0
+    image: ${DOCKER_REPOSITORY}node:12.18.0
     command:
       bash -c "tail -f /dev/null"
     working_dir:
       /cumulus-dashboard
     volumes:
-      - ../:/cumulus-dashboard:cached
+      - ../:/cumulus-dashboard
     ports:
       - "5001:5001"

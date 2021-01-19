@@ -204,8 +204,6 @@ describe('Dashboard PDRs Page', () => {
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 2);
 
-      cy.server();
-
       cy.getFakeApiFixture('granules').its('results')
         .then((granules) => granules.filter((item) => item.pdrName === pdrName))
         .each((granule) => {
@@ -223,12 +221,12 @@ describe('Dashboard PDRs Page', () => {
             .should('have.text', `${Number(granule.duration.toFixed(2))}s`);
           cy.get('@columns').eq(5).invoke('text')
             .should('match', /.+ago$/);
-
-          cy.route('DELETE', `/granules/${granule.granuleId}`).as('deleteGranule');
+          cy.intercept('DELETE', `/granules/${granule.granuleId}`).as(`deleteGranule${granule.granuleId}`);
           cy.get(`[data-value="${granule.granuleId}"] > .td >input[type="checkbox"]`).check();
           cy.get('.list-actions').contains('Delete').click();
           cy.get('.button--submit').click();
-          cy.wait('@deleteGranule');
+          cy.wait(`@deleteGranule${granule.granuleId}`);
+          cy.get('.button--cancel').click();
         });
 
       cy.url().should('include', `/pdrs/pdr/${pdrName}`);

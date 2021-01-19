@@ -120,22 +120,19 @@ const ReconciliationReportList = ({
           query={query}
           bulkActions={generateBulkActions()}
           rowId="name"
-          sortId="createdAt"
+          initialSortId="createdAt"
           filterAction={filterReconciliationReports}
           filterClear={clearReconciliationReportsFilter}
         >
+          <Search
+            action={searchReconciliationReports}
+            clear={clearReconciliationReportSearch}
+            label="Search"
+            labelKey="name"
+            placeholder={`${isGranules ? 'List' : 'Report'} Name`}
+            searchKey="reconciliationReports"
+          />
           <ListFilters>
-            <Search
-              action={searchReconciliationReports}
-              clear={clearReconciliationReportSearch}
-              inputProps={{
-                className: 'search search--medium',
-              }}
-              label="Search"
-              labelKey="name"
-              placeholder={`${isGranules ? 'List' : 'Report'} Name`}
-              searchKey="reconciliationReports"
-            />
             {!isGranules && (
               <Dropdown
                 options={reportTypeOptions}

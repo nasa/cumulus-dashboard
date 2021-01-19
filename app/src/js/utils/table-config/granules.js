@@ -12,7 +12,8 @@ import {
   collectionLink,
   granuleLink,
   providerLink,
-  fromNowWithTooltip
+  fromNowWithTooltip,
+  CopyCellPopover
 } from '../format';
 import {
   applyWorkflowToGranuleClearError,
@@ -22,6 +23,7 @@ import {
   reingestGranuleClearError,
   removeGranule,
   removeGranuleClearError,
+  removeAndDeleteGranule
 } from '../../actions';
 import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
@@ -31,6 +33,12 @@ import BatchReingestConfirmContent from '../../components/ReingestGranules/Batch
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
 import TextArea from '../../components/TextAreaForm/text-area';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
+import GranuleInventory from '../../components/Granules/granule-inventory';
+
+export const groupAction = {
+  title: 'Granule Actions',
+  description: 'Select the action you would like to perform on the selected granules from the table below',
+};
 
 export const tableColumns = [
   {
@@ -42,7 +50,8 @@ export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'granuleId',
-    Cell: ({ cell: { value } }) => granuleLink(value),
+    // eslint-disable-next-line react/prop-types
+    Cell: ({ cell: { value } }) => <CopyCellPopover cellContent={granuleLink(value)} id={`granuleId-${value}-popover`} popoverContent={granuleLink(value)} value={value} />,
     width: 225
   },
   {
@@ -55,7 +64,8 @@ export const tableColumns = [
   {
     Header: strings.collection_id,
     accessor: 'collectionId',
-    Cell: ({ cell: { value } }) => collectionLink(value)
+    // eslint-disable-next-line react/prop-types
+    Cell: ({ cell: { value } }) => <CopyCellPopover cellContent={collectionLink(value)} id={`collectionId-${value}-popover`} popoverContent={collectionLink(value)} value={value} />,
   },
   {
     Header: 'Provider',
@@ -167,9 +177,10 @@ export const recoverAction = (granules, config) => ({
 });
 
 const confirmReingest = (d) => `Reingest ${d} Granule${d > 1 ? 's' : ''}?`;
-const confirmApply = (d) => `Run workflow on ${d} granules?`;
-const confirmRemove = (d) => `Remove ${d} granule(s) from ${strings.cmr}?`;
-const confirmDelete = (d) => `Delete ${d} granule(s)?`;
+const confirmApply = (d) => `Run workflow on ${d} granule${d > 1 ? 's' : ''}?`;
+const confirmRemove = (d) => `Remove ${d} granule${d > 1 ? 's' : ''} from ${strings.cmr}?`;
+const confirmDelete = (d) => `Delete ${d} granule${d > 1 ? 's' : ''}?`;
+const confirmRemoveFromCMR = (d) => 'Selection contains granules that are published to CMR which must be removed before deleting. Remove published granules from CMR and delete?';
 
 /**
  * Determine the base context of a collection view
@@ -222,15 +233,17 @@ const granuleModalJourney = ({
   closeModal
 }) => {
   const initialEntry = !isOnModalConfirm && !isOnModalComplete;
-  const modalOptions = {};
+  const modalOptions = {
+    size: 'lg'
+  };
   if (initialEntry) {
     modalOptions.children = <BatchReingestConfirmContent selected={selected}/>;
   }
   if (isOnModalComplete) {
     modalOptions.children = <BatchReingestCompleteContent results={results} errorMessage={errorMessage}
       errors={errors} />;
+    modalOptions.size = 'lg';
     modalOptions.hasConfirmButton = !errorMessage;
-    modalOptions.title = 'Reingest Granule(s)';
     modalOptions.cancelButtonText = 'Close';
     if (!errorMessage) {
       modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';
@@ -240,6 +253,20 @@ const granuleModalJourney = ({
     }
   }
   return modalOptions;
+};
+
+const containsPublishedGranules = (selectedGranules) => {
+  let publishedGranules = [];
+
+  if (Array.isArray(selectedGranules) && selectedGranules.length > 0) {
+    publishedGranules = selectedGranules.filter((g) => g.published === true);
+  }
+
+  if (publishedGranules.length < 1) {
+    return false;
+  }
+
+  return true;
 };
 
 export const reingestAction = (granules) => ({
@@ -252,7 +279,7 @@ export const reingestAction = (granules) => ({
   getModalOptions: granuleModalJourney
 });
 
-export const bulkActions = (granules, config) => [
+export const bulkActions = (granules, config, selectedGranules) => [
   reingestAction(granules),
   {
     text: 'Execute',
@@ -262,6 +289,14 @@ export const bulkActions = (granules, config) => [
     confirm: confirmApply,
     confirmOptions: config.execute.options,
     className: 'button--execute'
+  },
+  {
+    Component:
+      <GranuleInventory
+        element='button'
+        className='csv__download button button--small button--file button--green form-group__element'
+        confirmAction={true}
+      />
   },
   {
     text: strings.remove_from_cmr,
@@ -281,9 +316,16 @@ export const bulkActions = (granules, config) => [
   },
   {
     text: 'Delete',
-    action: deleteGranule,
+    action: containsPublishedGranules(selectedGranules) ? removeAndDeleteGranule : deleteGranule,
     state: granules.deleted,
     clearError: deleteGranuleClearError,
-    confirm: confirmDelete,
+    confirm: containsPublishedGranules(selectedGranules) ? confirmRemoveFromCMR : confirmDelete,
     className: 'button--delete'
   }];
+
+const granules = {
+  setOnConfirm,
+  historyPushWithQueryParams
+};
+
+export default granules;

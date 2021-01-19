@@ -1,7 +1,7 @@
 import React from 'react';
 import { get } from 'object-path';
 import { Link } from 'react-router-dom';
-import { seconds, tally, collectionNameVersion, fromNowWithTooltip } from '../format';
+import { seconds, tally, collectionNameVersion, fromNowWithTooltip, CopyCellPopover } from '../format';
 import { deleteCollection } from '../../actions';
 import { strings } from '../../components/locale';
 import BatchDeleteConfirmContent from '../../components/DeleteCollection/BatchDeleteConfirmContent';
@@ -15,7 +15,16 @@ export const tableColumns = [
     accessor: 'name',
     Cell: ({ cell: { value, row } }) => { // eslint-disable-line react/prop-types
       const { values } = row; // eslint-disable-line react/prop-types
-      return <Link to={(location) => ({ pathname: `/collections/collection/${value}/${values.version}`, search: getPersistentQueryParams(location) })}>{value}</Link>; // eslint-disable-line react/prop-types
+      // eslint-disable-next-line react/prop-types
+      const content = <Link to={(location) => ({ pathname: `/collections/collection/${value}/${values.version}`, search: getPersistentQueryParams(location) })}>{value}</Link>;
+      return (
+        <CopyCellPopover
+          cellContent={content}
+          id={`collectionId-${value}-popover`}
+          popoverContent={content}
+          value={value}
+        />
+      );
     },
     width: 175
   },
@@ -71,7 +80,7 @@ export const tableColumns = [
   }
 ];
 
-const confirmRecover = (d) => `Recover ${d} ${strings.collection}(s)?`;
+const confirmRecover = (d) => `Recover ${d} ${strings.collection}${d > 1 ? 's' : ''}?`;
 export const recoverAction = (collections, config) => [{
   text: 'Recover',
   action: config.recover.action,
@@ -79,7 +88,7 @@ export const recoverAction = (collections, config) => [{
   confirm: confirmRecover
 }];
 
-const confirmDelete = (d) => `Delete ${d} ${strings.collection}(s)?`;
+const confirmDelete = (d) => `Delete ${d} ${strings.collection}${d > 1 ? 's' : ''}?`;
 
 export const bulkActions = (collections) => {
   const getModalOptions = ({
@@ -105,7 +114,6 @@ export const bulkActions = (collections) => {
         modalOptions.confirmButtonText = 'Go To Granules';
         modalOptions.confirmButtonClass = 'button__goto';
         modalOptions.cancelButtonText = 'Cancel Request';
-        modalOptions.title = 'Warning';
         modalOptions.onConfirm = () => {
           historyPushWithQueryParams('/granules');
         };
@@ -117,7 +125,6 @@ export const bulkActions = (collections) => {
       modalOptions.hasConfirmButton = false;
       modalOptions.cancelButtonClass = 'button--green';
       modalOptions.cancelButtonText = 'Close';
-      modalOptions.title = 'Complete';
     }
 
     return modalOptions;

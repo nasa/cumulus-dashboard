@@ -36,10 +36,10 @@ test('listGranules injects timestamps from datepicker state when calling the Cum
   store.dispatch(listGranules());
   const dispatchedAction = store.getActions()[0];
   t.is(dispatchedAction.type, 'GRANULES_INFLIGHT');
-  t.true('timestamp__from' in dispatchedAction.config.qs);
-  t.true('timestamp__to' in dispatchedAction.config.qs);
-  t.is(endDateTime.valueOf(), dispatchedAction.config.qs.timestamp__to);
-  t.is(startDateTime.valueOf(), dispatchedAction.config.qs.timestamp__from);
+  t.true('timestamp__from' in dispatchedAction.config.params);
+  t.true('timestamp__to' in dispatchedAction.config.params);
+  t.is(endDateTime.valueOf(), dispatchedAction.config.params.timestamp__to);
+  t.is(startDateTime.valueOf(), dispatchedAction.config.params.timestamp__from);
 });
 
 test('listGranules does not inject information if datepicker state has no start or end values.', (t) => {
@@ -54,8 +54,8 @@ test('listGranules does not inject information if datepicker state has no start 
   store.dispatch(listGranules());
   const dispatchedAction = store.getActions()[0];
   t.is(dispatchedAction.type, 'GRANULES_INFLIGHT');
-  t.false('timestamp__from' in dispatchedAction.config.qs);
-  t.false('timestamp__to' in dispatchedAction.config.qs);
+  t.false('timestamp__from' in dispatchedAction.config.params);
+  t.false('timestamp__to' in dispatchedAction.config.params);
 });
 
 test('Each of these list action creators will pull data from datepicker state when calling the Cumulus API.', (t) => {
@@ -85,8 +85,8 @@ test('Each of these list action creators will pull data from datepicker state wh
     store.dispatch(e.dispatcher());
     const dispatchedAction = store.getActions()[0];
     t.is(dispatchedAction.type, e.action);
-    t.true('timestamp__from' in dispatchedAction.config.qs);
-    t.true('timestamp__to' in dispatchedAction.config.qs);
+    t.true('timestamp__from' in dispatchedAction.config.params);
+    t.true('timestamp__to' in dispatchedAction.config.params);
     store.clearActions();
   });
 });
@@ -111,9 +111,9 @@ test('Each of these list action creators will not use data from datepicker state
     store.dispatch(e.dispatcher());
     const dispatchedAction = store.getActions()[0];
     t.is(dispatchedAction.type, e.action);
-    if ('qs' in dispatchedAction.config) {
-      t.false('timestamp__from' in dispatchedAction.config.qs);
-      t.false('timestamp__to' in dispatchedAction.config.qs);
+    if ('params' in dispatchedAction.config) {
+      t.false('timestamp__from' in dispatchedAction.config.params);
+      t.false('timestamp__to' in dispatchedAction.config.params);
     }
     store.clearActions();
   });

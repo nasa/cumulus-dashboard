@@ -17,15 +17,7 @@ import { handleDownloadJsonClick, handleDownloadCsvClick } from '../../utils/dow
 import Search from '../Search/search';
 import Dropdown from '../DropDown/dropdown';
 import ReportHeading from './report-heading';
-
-/**
- * returns PASSED or CONFLICT based on reconcilation report data.
- * @param {Object} dataList - list of reconcilation report objects.
- */
-const reportState = (dataList) => {
-  const anyBad = dataList.some((item) => item.tables.some((table) => table.data.length));
-  return anyBad ? 'CONFLICT' : 'PASSED';
-};
+import ListFilters from '../ListActions/ListFilters';
 
 const bucketsForFilter = (allBuckets) => {
   const uniqueBuckets = [...new Set(allBuckets)];
@@ -38,6 +30,7 @@ const bucketsForFilter = (allBuckets) => {
 const InventoryReport = ({
   filterBucket,
   filterString,
+  legend,
   recordData,
   reportName,
 }) => {
@@ -50,7 +43,6 @@ const InventoryReport = ({
     allBuckets,
   } = reshapeReport(recordData, filterString, filterBucket);
   const reportComparisons = [...internalComparison, ...cumulusVsCmrComparison];
-  const theReportState = reportState(reportComparisons);
   const activeCardTables = reportComparisons.find(
     (displayObj) => displayObj.id === activeId
   ).tables;
@@ -121,7 +113,6 @@ const InventoryReport = ({
         endTime={reportEndTime}
         error={error}
         name={reportName}
-        reportState={theReportState}
         startTime={reportStartTime}
         type='Inventory'
       />
@@ -153,33 +144,32 @@ const InventoryReport = ({
       <section className="page__section">
         <div className="multicard">
           <div className="collapse-link">
-            <span className="link" onClick={handleExpandClick}>
+            <span className="link" onClick={handleExpandClick} role="button" tabIndex="0">
               {!allCollapsed() ? 'Expand All' : 'Collapse All'}
             </span>
           </div>
 
-          <div className="filters">
+          <div className="list-action-wrapper">
             <Search
               action={searchReconciliationReport}
               clear={clearReconciliationSearch}
-              inputProps={{
-                className: 'search search--large',
-              }}
               label="Search"
               labelKey="granuleId"
               options={[]}
               placeholder="Search"
             />
-            <Dropdown
-              options={bucketsForFilter(allBuckets)}
-              action={filterReconciliationReport}
-              clear={clearReconciliationReportFilter}
-              paramKey="bucket"
-              label="Bucket"
-              inputProps={{
-                placeholder: 'All',
-              }}
-            />
+            <ListFilters>
+              <Dropdown
+                options={bucketsForFilter(allBuckets)}
+                action={filterReconciliationReport}
+                clear={clearReconciliationReportFilter}
+                paramKey="bucket"
+                label="Bucket"
+                inputProps={{
+                  placeholder: 'All',
+                }}
+              />
+            </ListFilters>
           </div>
 
           {reportComparisons
@@ -217,6 +207,7 @@ const InventoryReport = ({
                     <div id={item.id}>
                       <SortableTable
                         data={item.data}
+                        legend={legend}
                         tableColumns={item.columns}
                         shouldUsePagination={true}
                         initialHiddenColumns={['']}
@@ -235,6 +226,7 @@ const InventoryReport = ({
 InventoryReport.propTypes = {
   filterBucket: PropTypes.string,
   filterString: PropTypes.string,
+  legend: PropTypes.node,
   recordData: PropTypes.object,
   reportName: PropTypes.string,
 };

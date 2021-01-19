@@ -17,7 +17,6 @@ const maxLinesDefault = 18;
 class TextAreaForm extends React.Component {
   constructor () {
     super();
-    this.displayName = 'TextAreaForm';
     this.onChange = this.onChange.bind(this);
   }
 
@@ -39,23 +38,24 @@ class TextAreaForm extends React.Component {
 
     return (
       <div className='form__textarea'>
-        <label>{label}</label>
-        <ErrorReport report={error} />
-        <Ace
-          editorProps={{ $blockScrolling: Infinity }}
-          mode={mode}
-          theme={config.editorTheme}
-          onChange={this.onChange}
-          name={id}
-          value={value}
-          width='auto'
-          tabSize={config.tabSize}
-          showPrintMargin={false}
-          minLines={minLines}
-          maxLines={maxLines}
-          wrapEnabled={true}
-          ref={setWindowEditorRef}
-        />
+        <label>{label}
+          <ErrorReport report={error} />
+          <Ace
+            editorProps={{ $blockScrolling: Infinity }}
+            mode={mode}
+            theme={config.editorTheme}
+            onChange={this.onChange}
+            name={id}
+            value={value}
+            width='auto'
+            tabSize={config.tabSize}
+            showPrintMargin={false}
+            minLines={minLines}
+            maxLines={maxLines}
+            wrapEnabled={true}
+            ref={setWindowEditorRef}
+          />
+        </label>
       </div>
     );
   }
@@ -68,7 +68,6 @@ TextAreaForm.propTypes = {
   error: PropTypes.any,
   mode: PropTypes.string,
   onChange: PropTypes.func,
-
   minLines: PropTypes.number,
   maxLines: PropTypes.number
 };

@@ -75,7 +75,7 @@ test('COUNT updates count for a requested type: granules replaces granules exist
   var type = COUNT;
   var requestAction = {
     url: 'http://localhost:5001/stats/aggregate',
-    qs: {
+    params: {
       type: 'granules',
       field: 'status'
     }
@@ -140,7 +140,7 @@ test('COUNT adds a requested type: collections added to counts  ', (t) => {
   var type = COUNT;
   var requestAction = {
     url: 'http://localhost:5001/stats/aggregate',
-    qs: {
+    params: {
       type: 'collections',
       field: 'status'
     }

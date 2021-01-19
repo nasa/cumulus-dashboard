@@ -9,7 +9,13 @@ import { requestMiddleware } from '../middleware/request';
 import { window } from '../utils/browser';
 import config from '../config';
 
-export const history = config.servedByCumulusAPI ? createHashHistory({}) : createBrowserHistory({});
+let historyCreator;
+
+if (typeof document !== 'undefined') {
+  historyCreator = config.servedByCumulusAPI ? createHashHistory({}) : createBrowserHistory({});
+}
+
+export const history = historyCreator;
 
 // redirect to login when not auth'd
 export const requireAuth = (store) => (nextState, replace) => {
@@ -50,7 +56,7 @@ export default function ourConfigureStore (preloadedState) {
     preloadedState
   });
 
-  if (window.Cypress && window.Cypress.env('TESTING') === true) {
+  if (window && window.Cypress && window.Cypress.env('TESTING') === true) {
     window.appStore = store;
   }
 

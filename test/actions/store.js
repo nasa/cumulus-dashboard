@@ -7,8 +7,6 @@ import thunk from 'redux-thunk';
 import { CALL_API } from '../../app/src/js/actions/types';
 import { requestMiddleware } from '../../app/src/js/middleware/request';
 
-const port = process.env.FAKEAPIPORT || 5001;
-
 const middlewares = [
   requestMiddleware,
   thunk
@@ -21,16 +19,9 @@ const store = mockStore({
     }
   }
 });
-const qsStringifyOptions = {
-  arrayFormat: 'brackets'
-};
 
 test.beforeEach((t) => {
-  t.context.defaultConfig = {
-    json: true,
-    resolveWithFullResponse: true,
-    simple: false
-  };
+  t.context.defaultConfig = {};
 
   t.context.expectedHeaders = {
     Authorization: 'Bearer fake-token',
@@ -42,14 +33,15 @@ test.beforeEach((t) => {
 
 test.serial('dispatches TYPE_INFLIGHT and TYPE actions for API request action', async (t) => {
   const stubbedResponse = { test: 'test' };
-  nock(`http://localhost:${port}`)
+
+  nock(`https://example.com`)
     .get('/test-path')
     .reply(200, stubbedResponse);
 
   const requestAction = {
     type: 'TEST',
     method: 'GET',
-    url: `http://localhost:${port}/test-path`
+    url: `https://example.com/test-path`
   };
   const actionObj = {
     [CALL_API]: requestAction
@@ -63,7 +55,6 @@ test.serial('dispatches TYPE_INFLIGHT and TYPE actions for API request action', 
         ...t.context.defaultConfig,
         ...requestAction,
         headers: t.context.expectedHeaders,
-        qsStringifyOptions
       }
     }, {
       id: undefined,
@@ -72,7 +63,6 @@ test.serial('dispatches TYPE_INFLIGHT and TYPE actions for API request action', 
         ...t.context.defaultConfig,
         ...requestAction,
         headers: t.context.expectedHeaders,
-        qsStringifyOptions
       },
       data: stubbedResponse
     }];

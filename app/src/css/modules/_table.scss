@@ -12,8 +12,17 @@
   overflow-x: scroll;
   border-radius: 8px 8px 0px 0px;
 
+  .content-fit {
+    width: fit-content!important;
+  }
+
   .Collapsible {
     max-width: 500px;
+  }
+
+  .thead, .tbody {
+    width: fit-content;
+    min-width: 100%;
   }
 
   .thead {
@@ -23,6 +32,11 @@
       font-weight: $base-font-semibold;
       padding: 1em 2em;
       font-size: .86em;
+
+      &.no-resize {
+        border-right: 2px solid $lightest-grey;
+        padding: 1em 1.5em;
+      }
     }
   }
 
@@ -34,10 +48,25 @@
         padding: 1em 2em;
         vertical-align: middle;
         overflow: hidden;
-        text-overflow: ellipsis;
-        /*&:first-of-type {
-          padding: 1em 0 1em 2em;
-        }*/
+        &:hover {
+          overflow: auto;
+        }
+
+        /*
+         * From https://stackoverflow.com/questions/7492062/css-overflow-scroll-always-show-vertical-scroll-bar/10100209#10100209
+         * The horizontal scrollbar does not always show, depending on the user's OS settings.
+         * This forces a bar to render.
+        */
+        &::-webkit-scrollbar {
+          -webkit-appearance: none;
+          height: 8px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          border-radius: 4px;
+          background-color: rgba(0, 0, 0, .5);
+          box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+        }
       }
       .table__main-asset {
         font-weight: $base-font-semibold;
@@ -60,7 +89,7 @@
     align-items: center;
   }
 
-  .filter__item {
+  .list__filters--item {
     margin: 0 .3em;
   }
 
@@ -80,14 +109,40 @@
   text-align: right;
 }
 
-.table__filters {
-
-  .button__filter {
-    margin-bottom: 1em;
+.list__filters {
+  margin: 1.5em 0 2em;
+  @extend .clearfix;
+  label {
+    font-size: .86em;
   }
 
+  &--flex {
+    display: flex;
+  }
+
+  &--item {
+    display: inline-block;
+    vertical-align: bottom;
+    position: relative;
+
+    .dropdown {
+      &--small {
+        width: 15em;
+      }
+      &--medium {
+        width: 25em;
+      }
+      &--large {
+        width: 35em;
+      }
+    }
+  }
+}
+
+.table__filters {
   &--wrapper {
     display: flex;
+    flex-direction: column;
     background: $white;
     padding: 2em;
     margin: 1em 0;
@@ -98,7 +153,6 @@
   &--filter {
     display: flex;
     align-items: center;
-    width: 20%;
 
     label {
       margin: 0 .5em;
@@ -106,7 +160,25 @@
   }
 }
 
+.group-action--wrapper {
+  background-color: $white;
+  padding: 1em 1em .4em 1em;
+  border: 1px solid $border-grey;
+  box-shadow: $shadow__default;
+  width: 100%;
+
+  h {
+    font-size: .86em;
+  }
+
+  p {
+    font-size: .86em;
+    padding-bottom: 1.25em;
+  }
+}
+
 .list-action-wrapper {
+  padding-top: 1.5em;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
@@ -153,8 +225,10 @@
 
 .resizer {
   display: inline-block;
-  background: $lightest-grey;
-  width: 1px;
+  background-color: $lightest-grey;
+  background-clip: content-box;
+  padding: 0 10px;
+  width: 2px;
   height: 100%;
   position: absolute;
   right: 0;
@@ -164,7 +238,7 @@
   touch-action:none;
 
   &.isResizing {
-    background: red;
+    background-color: $grey;
   }
 }
 
@@ -330,8 +404,19 @@
   &--color{
     position: relative;
     top: 30px;
-    /*left: 55px;*/
     text-align: center;
+  }
+
+  &--yellow{
+    color: $orange;
+  }
+
+  &--red{
+    color: $error-red;
+  }
+
+  &--blue{
+    color: $midnight-blue;
   }
 }
 
@@ -475,7 +560,7 @@
 // Table - Granule Status //
 
 .table__main-asset {
-  .granule__status--running, .granule__status--running:visited, 
+  .granule__status--running, .granule__status--running:visited,
   .granule__status--completed, .granule__status--completed:visited,
   .granule__status--failed, .granule__status--failed:visited {
     color: $ocean-blue;
@@ -492,7 +577,7 @@
   display: flex;
   flex-direction: row;
   border-radius: 10px 10px 0 0;
-  
+
 }
 
 .form__options li{

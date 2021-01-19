@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
@@ -8,133 +8,145 @@ import omitBy from 'lodash/omitBy';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/pagination';
-import SortableTable from '../SortableTable/SortableTable';
 // Lodash
 import ListActions from '../ListActions/ListActions';
 import TableHeader from '../TableHeader/table-header';
+
+const SortableTable = lazy(() => import('../SortableTable/SortableTable'));
 
 function buildSortKey(sortProps) {
   return sortProps.filter((item) => item.id).map((item) => (item.desc === true ? `-${item.id}` : `+${item.id}`));
 }
 
-class List extends React.Component {
-  constructor(props) {
-    super(props);
-    this.queryNewPage = this.queryNewPage.bind(this);
-    this.queryNewSort = this.queryNewSort.bind(this);
-    this.updateSelection = this.updateSelection.bind(this);
-    this.onBulkActionSuccess = this.onBulkActionSuccess.bind(this);
-    this.onBulkActionError = this.onBulkActionError.bind(this);
-    this.getQueryConfig = this.getQueryConfig.bind(this);
+const List = ({
+  action,
+  bulkActions,
+  children,
+  data,
+  dispatch,
+  filterAction,
+  filterClear,
+  groupAction,
+  initialSortId,
+  list,
+  onSelect,
+  query,
+  queryParams,
+  rowId,
+  tableColumns,
+}) => {
+  const { data: listData, error: listError, inflight: listInflight, meta } = list;
+  const { count, limit } = meta;
+  const tableData = data || listData;
 
-    const initialPage = 1;
-    const initialSortId = props.sortId;
-    const initialOrder = 'desc';
-    const sortProps = initialSortId ? [{ id: initialSortId, desc: true }] : [];
+  const [selected, setSelected] = useState([]);
+  const [clearSelected, setClearSelected] = useState(false);
+  const [page, setPage] = useState(1);
 
-    this.state = {
-      page: initialPage,
-      sortId: initialSortId,
-      order: initialOrder,
-      sortProps,
-      selected: [],
-      clearSelected: false,
-      infix: null,
-      queryConfig: {
-        page: initialPage,
-        sort_key: buildSortKey(sortProps),
-        ...(props.query || {}),
-      },
-      params: {},
-      completedBulkActions: 0,
-      bulkActionError: null,
-    };
-  }
+  const [queryConfig, setQueryConfig] = useState({
+    page: 1,
+    sort_key: buildSortKey(initialSortId ? [{ id: initialSortId, desc: true }] : []),
+    ...(query || {}),
+  });
+  const [params, setParams] = useState({});
+  const [bulkActionMeta, setBulkActionMeta] = useState({
+    completedBulkActions: 0,
+    bulkActionError: null,
+  });
 
-  componentDidUpdate(prevProps) {
-    const { list, query, queryParams } = this.props;
+  const { bulkActionError, completedBulkActions } = bulkActionMeta;
+  const { limit: limitQueryParam, page: pageQueryParam, ...queryFilters } = queryParams;
 
-    if (!isEqual(query, prevProps.query)) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ queryConfig: this.getQueryConfig({}, query) });
-    }
+  const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
+  useEffect(() => {
+    setQueryConfig((prevQueryConfig) => ({
+      ...prevQueryConfig,
+      ...getQueryConfig({})
+    }));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(query)]);
+
+  useEffect(() => {
     // Remove parameters with null or undefined values
-    const params = omitBy(list.params, isNil);
+    const newParams = omitBy(list.params, isNil);
 
-    if (!isEqual(params, this.state.params)) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ params }, () => this.setState({
-        queryConfig: this.getQueryConfig(),
+    if (!isEqual(newParams, params)) {
+      setParams(newParams);
+      setQueryConfig((prevQueryConfig) => ({
+        ...prevQueryConfig,
+        ...getQueryConfig({})
       }));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(list.params), JSON.stringify(params)]);
 
-    const { limit, page, ...filters } = queryParams;
-    const { limit: prevLimit, page: prevPage, ...prevFilters } = prevProps.queryParams;
-    if (!isEqual(filters, prevFilters)) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ clearSelected: true });
+  useEffect(() => {
+    setClearSelected(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(queryFilters)]);
+
+  function queryNewPage(newPage) {
+    setPage(newPage);
+  }
+
+  function queryNewSort(sortProps) {
+    const newQueryConfig = getQueryConfig({
+      sort_key: buildSortKey(sortProps)
+    });
+    if (!isEqual(queryConfig, newQueryConfig)) {
+      setQueryConfig(newQueryConfig);
     }
   }
 
-  queryNewPage(page) {
-    this.setState({
-      page,
-      queryConfig: this.getQueryConfig({ page }),
-    });
-  }
-
-  queryNewSort(sortProps) {
-    this.setState({
-      sortProps,
-      queryConfig: this.getQueryConfig({
-        sort_key: buildSortKey(sortProps),
-      }),
-    });
-  }
-
-  updateSelection(selected) {
-    this.setState({
-      selected,
-      clearSelected: false,
-    });
-
-    // Current selection is passed to the parent component
-    if (typeof this.props.onSelect === 'function') {
-      this.props.onSelect(selected);
+  function updateSelection(newSelections) {
+    if (!isEqual(selected, newSelections)) {
+      setSelected(newSelections);
+      setClearSelected(false);
+      // Current selection is passed to the parent component
+      if (typeof onSelect === 'function') {
+        onSelect(newSelections);
+      }
     }
   }
 
-  onBulkActionSuccess(results, error) {
+  function onBulkActionSuccess(results, error) {
     // not-elegant way to trigger a re-fresh in the timer
-    this.setState({
-      completedBulkActions: this.state.completedBulkActions + 1,
-      clearSelected: true,
-      bulkActionError: error ? this.state.bulkActionError : null,
+    setBulkActionMeta((prevBulkActionMeta) => {
+      const {
+        completedBulkActions: prevCompletedBulkActions,
+        bulkActionError: prevBulkActionError
+      } = prevBulkActionMeta;
+      return {
+        completedBulkActions: prevCompletedBulkActions + 1,
+        bulkActionError: error ? prevBulkActionError : null,
+      };
     });
+    setClearSelected(true);
   }
 
-  onBulkActionError(error) {
-    const bulkActionError =
+  function onBulkActionError(error) {
+    const newBulkActionError =
       error.id && error.error
         ? `Could not process ${error.id}, ${error.error}`
         : error;
 
-    this.setState({
-      bulkActionError,
-      clearSelected: true,
-    });
+    setBulkActionMeta((prevBulkActionMeta) => ({
+      ...prevBulkActionMeta,
+      bulkActionError: newBulkActionError,
+    }));
+    setClearSelected(true);
   }
 
-  getQueryConfig(config = {}, query = this.props.query || {}) {
+  function getQueryConfig(config = {}) {
     // Remove empty keys so as not to mess up the query
-    const { search, ...restQuery } = query;
+    const { search, ...restQuery } = query || {};
     return omitBy(
       {
-        page: this.state.page,
-        sort_key: buildSortKey(this.state.sortProps),
+        page,
+        sort_key: queryConfig.sort_key,
         infix: search,
-        ...this.state.params,
+        ...params,
         ...config,
         ...restQuery,
       },
@@ -142,90 +154,64 @@ class List extends React.Component {
     );
   }
 
-  render() {
-    const {
-      dispatch,
-      action,
-      children,
-      bulkActions,
-      rowId,
-      sortId: initialSortId,
-      list,
-      tableColumns,
-      data,
-      filterAction,
-      filterClear,
-    } = this.props;
-    const { meta, data: listData } = list;
-    const { count, limit } = meta;
-    const tableData = data || listData;
-    const {
-      page,
-      sortId,
-      order,
-      selected,
-      clearSelected,
-      completedBulkActions,
-      bulkActionError,
-      queryConfig,
-    } = this.state;
-    const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
-
-    return (
-      <>
-        <ListActions
-          dispatch={dispatch}
-          action={action}
-          bulkActions={bulkActions}
-          queryConfig={queryConfig}
-          completedBulkActions={completedBulkActions}
-          onBulkActionSuccess={this.onBulkActionSuccess}
-          onBulkActionError={this.onBulkActionError}
-          selected={selected}
-        >
-          {children}
-        </ListActions>
-        <div className="list-view">
-          {list.inflight && <Loading />}
-          {list.error && <ErrorReport report={list.error} truncate={true} />}
-          {bulkActionError && <ErrorReport report={bulkActionError} />}
-          <div className="list__wrapper">
-            {filterAction && (
-              <TableHeader
-                action={filterAction}
-                clear={filterClear}
-                count={count}
-                limit={limit}
-                onNewPage={this.queryNewPage}
-                page={page}
-                selected={selected}
-              />
-            )}
+  return (
+    <>
+      <ListActions
+        dispatch={dispatch}
+        action={action}
+        bulkActions={bulkActions}
+        groupAction={groupAction}
+        queryConfig={queryConfig}
+        completedBulkActions={completedBulkActions}
+        onBulkActionSuccess={onBulkActionSuccess}
+        onBulkActionError={onBulkActionError}
+        selected={selected}
+      >
+        {children}
+      </ListActions>
+      <div className="list-view">
+        {listInflight && <Loading />}
+        {listError && <ErrorReport report={listError} truncate={true} />}
+        {bulkActionError && <ErrorReport report={bulkActionError} />}
+        <div className="list__wrapper">
+          {filterAction && (
+            <TableHeader
+              action={filterAction}
+              clear={filterClear}
+              count={count}
+              limit={limit}
+              onNewPage={queryNewPage}
+              page={page}
+              selected={selected}
+            />
+          )}
+          <Suspense fallback={<Loading/>}>
             <SortableTable
               tableColumns={tableColumns}
               data={tableData}
               canSelect={hasActions}
               rowId={rowId}
-              onSelect={this.updateSelection}
-              initialSortId={initialSortId}
-              sortId={sortId}
-              changeSortProps={this.queryNewSort}
-              order={order}
+              onSelect={updateSelection}
+              changeSortProps={queryNewSort}
               clearSelected={clearSelected}
+              initialSortId={initialSortId}
+              // if there's an initialSortId, it means the first fetch request for the list should be sorted
+              // according to that id, and therefore we are using sever-side/manual sorting
+              shouldManualSort={!!initialSortId}
             />
-            <Pagination
-              count={count}
-              limit={limit}
-              page={page}
-              onNewPage={this.queryNewPage}
-              showPages={true}
-            />
-          </div>
+          </Suspense>
+          <Pagination
+            count={count}
+            limit={limit}
+            page={page}
+            onNewPage={queryNewPage}
+            showPages={true}
+          />
         </div>
-      </>
-    );
-  }
-}
+      </div>
+    </>
+  );
+};
 
 List.propTypes = {
   action: PropTypes.func,
@@ -235,10 +221,14 @@ List.propTypes = {
   dispatch: PropTypes.func,
   filterAction: PropTypes.func,
   filterClear: PropTypes.func,
+  groupAction: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+  }),
+  initialSortId: PropTypes.string,
   list: PropTypes.object,
   query: PropTypes.object,
   rowId: PropTypes.any,
-  sortId: PropTypes.string,
   tableColumns: PropTypes.array,
   onSelect: PropTypes.func,
   queryParams: PropTypes.object,

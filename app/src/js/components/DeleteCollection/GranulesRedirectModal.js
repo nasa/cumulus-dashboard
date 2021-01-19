@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
+import { Alert } from 'react-bootstrap';
 // import Button from '../Button/Button';
 
 class GranulesRedirectModal extends React.Component {
@@ -39,6 +40,7 @@ class GranulesRedirectModal extends React.Component {
           Delete Collection
         </Modal.Title>
         <Modal.Body>
+          <Alert variant="warning"><strong>Warning</strong></Alert>
           <p>
             In order to delete collection {`"${this.props.collectionLabel}"`},
             you must first delete the granules associated with it.  Would you

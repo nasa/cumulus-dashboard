@@ -1,7 +1,7 @@
 version: "3"
 services:
   dashboard:
-    image: node:12.18.0
+    image: ${DOCKER_REPOSITORY}node:12.18.0
     depends_on:
       - serve_api
     network_mode: "service:shim"
@@ -10,7 +10,7 @@ services:
     working_dir:
       /cumulus-dashboard
     volumes:
-      - ../:/cumulus-dashboard:cached
+      - ../:/cumulus-dashboard
     environment:
       - APIROOT=http://localhost:5001
       - ESROOT=http://example.com
@@ -21,12 +21,12 @@ services:
       - SHOW_TEA_METRICS=false
       - AUTH_METHOD=earthdata
   shim:   # empty container to open ports
-    image: node:12.18.0
+    image: ${DOCKER_REPOSITORY}node:12.18.0
     command:
       bash -c "tail -f /dev/null"
     working_dir:
       /cumulus-dashboard
     volumes:
-      - ../:/cumulus-dashboard:cached
+      - ../:/cumulus-dashboard
     ports:
       - "3000:3000"

@@ -93,20 +93,17 @@ class OperationOverview extends React.Component {
             tableColumns={tableColumns}
             query={this.generateQuery()}
             rowId='id'
-            sortId='createdAt'
+            initialSortId='createdAt'
             filterAction={filterOperations}
             filterClear={clearOperationsFilter}
           >
+            <Search
+              action={searchOperations}
+              clear={clearOperationsSearch}
+              labelKey="id"
+              searchKey="operations"
+            />
             <ListFilters>
-              <Search
-                action={searchOperations}
-                clear={clearOperationsSearch}
-                inputProps={{
-                  className: 'search search--medium',
-                }}
-                labelKey="id"
-                searchKey="operations"
-              />
               <Dropdown
                 options={operationStatus}
                 action={filterOperations}

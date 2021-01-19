@@ -13,6 +13,7 @@ import {
   listWorkflows,
   applyWorkflowToGranule,
   getCount,
+  getOptionsProviderName,
 } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
@@ -21,6 +22,7 @@ import {
   bulkActions,
   defaultWorkflowMeta,
   executeDialog,
+  groupAction,
 } from '../../utils/table-config/granules';
 import List from '../Table/Table';
 import LogViewer from '../Logs/viewer';
@@ -41,9 +43,11 @@ const AllGranules = ({
   queryParams,
   workflowOptions,
   stats,
+  providers,
 }) => {
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
+  const [selected, setSelected] = useState([]);
   const { dropdowns } = collections;
   const { list } = granules;
   const { count, queriedAt } = list.meta;
@@ -68,6 +72,7 @@ const AllGranules = ({
       active: true,
     },
   ];
+  const { dropdowns: providerDropdowns } = providers;
 
   useEffect(() => {
     dispatch(listWorkflows());
@@ -110,7 +115,9 @@ const AllGranules = ({
         action: applyWorkflow,
       },
     };
-    return bulkActions(granules, config);
+    const selectedGranules = selected.map((id) => granules.list.data.find((g) => id === g.granuleId));
+
+    return bulkActions(granules, config, selectedGranules);
   }
 
   function selectWorkflow(selector, selectedWorkflow) {
@@ -143,6 +150,10 @@ const AllGranules = ({
     }));
   }
 
+  function updateSelection(selection) {
+    setSelected(selection);
+  }
+
   return (
     <div className="page__component">
       <section className="page__section">
@@ -166,11 +177,21 @@ const AllGranules = ({
           tableColumns={view === 'failed' ? errorTableColumns : tableColumns}
           query={query}
           bulkActions={generateBulkActions()}
+          groupAction={groupAction}
           rowId="granuleId"
-          sortId={tablesortId}
+          initialSortId={tablesortId}
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
+          onSelect={updateSelection}
         >
+          <Search
+            action={searchGranules}
+            clear={clearGranulesSearch}
+            label="Search"
+            labelKey="granuleId"
+            placeholder="Granule ID"
+            searchKey="granules"
+          />
           <ListFilters>
             <Dropdown
               getOptions={getOptionsCollectionName}
@@ -181,6 +202,7 @@ const AllGranules = ({
               label="Collection"
               inputProps={{
                 placeholder: 'All',
+                className: 'dropdown--large',
               }}
             />
             {statusOpts && (
@@ -195,16 +217,17 @@ const AllGranules = ({
                 }}
               />
             )}
-            <Search
-              action={searchGranules}
-              clear={clearGranulesSearch}
+            <Dropdown
+              getOptions={getOptionsProviderName}
+              options={get(providerDropdowns, ['provider', 'options'])}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey="provider"
+              label="Provider"
               inputProps={{
-                className: 'search search--large',
+                placeholder: 'All',
+                className: 'dropdown--medium',
               }}
-              label="Search"
-              labelKey="granuleId"
-              placeholder="Granule ID"
-              searchKey="granules"
             />
             {view === 'failed' && (
               <Dropdown
@@ -240,6 +263,7 @@ AllGranules.propTypes = {
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
   stats: PropTypes.object,
+  providers: PropTypes.object,
 };
 
 AllGranules.displayName = strings.all_granules;
@@ -253,5 +277,6 @@ export default withRouter(
     logs: state.logs,
     stats: state.stats,
     workflowOptions: workflowOptionNames(state),
+    providers: state.providers
   }))(AllGranules)
 );

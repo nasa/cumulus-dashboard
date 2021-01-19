@@ -23,12 +23,11 @@ describe('Dashboard Collections Page', () => {
     beforeEach(() => {
       cy.login();
       cy.visit('/');
-      cy.server();
-      cy.route('POST', '/collections').as('postCollection');
-      cy.route('GET', '/collections?limit=*').as('getCollections');
-      cy.route('GET', '/collections/active?limit=*').as('getActiveCollections');
-      cy.route('GET', '/collections?name=*').as('getCollection');
-      cy.route('GET', '/granules?limit=*').as('getGranules');
+      cy.intercept('POST', '/collections').as('postCollection');
+      cy.intercept('GET', '/collections?limit=*').as('getCollections');
+      cy.intercept('GET', '/collections/active?limit=*').as('getActiveCollections');
+      cy.intercept('GET', '/collections?name=*').as('getCollection');
+      cy.intercept('GET', '/granules?limit=*').as('getGranules');
     });
 
     it('should display a link to view collections', () => {
@@ -90,12 +89,26 @@ describe('Dashboard Collections Page', () => {
         .contains(infix);
     });
 
+    it('should display collections with active granules when a provider is selected from dropdown', () => {
+      cy.visit('/collections');
+      cy.wait('@getCollections');
+
+      cy.get('.filter-provider .rbt-input-main').as('provider-input');
+      cy.get('@provider-input').click().type('s3').type('{enter}');
+      cy.url().should('include', 'provider=s3_provider');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+
+      cy.get('@provider-input').click().clear().type('POD')
+        .type('{enter}');
+      cy.url().should('include', 'provider=PODAAC_SWOT');
+      cy.get('.table .tbody .tr').should('not.exist');
+    });
+
     it('should display expected MMT Links for a collections list', () => {
-      cy.route({
-        method: 'GET',
-        url: '/collections?limit=*',
-        response: 'fixture:collections-with-mmtLinks.json',
-      }).as('getCollections');
+      cy.intercept(
+        { method: 'GET', url: new RegExp('/collections\\?limit=.*') },
+        { fixture: 'collections-with-mmtLinks.json' }
+      ).as('getCollections');
       cy.visit('/collections');
       cy.clearStartDateTime();
       cy.wait('@getCollections');
@@ -121,7 +134,7 @@ describe('Dashboard Collections Page', () => {
 
       // On the Collections page, click the Add Collection button
       cy.visit('/collections');
-      cy.contains('.heading--large', 'Collection Overview');
+      cy.contains('.heading--large', 'Collections Overview');
       cy.clearStartDateTime();
       cy.wait('@getCollections');
       cy.contains('a', 'Add Collection').click();
@@ -139,10 +152,10 @@ describe('Dashboard Collections Page', () => {
 
       // After POSTing the new collection, make sure we GET it back
       cy.wait('@postCollection')
-        .then((xhr) => cy.request({
+        .then((interception) => cy.request({
           method: 'GET',
-          url: `${new URL(xhr.url).origin}/collections/${name}/${version}`,
-          headers: xhr.request.headers
+          url: `${new URL(interception.request.url).origin}/collections/${name}/${version}`,
+          headers: { Authorization: interception.request.headers.authorization },
         }))
         .then((response) => {
           cy.expectDeepEqualButNewer(response.body, collection);
@@ -322,7 +335,7 @@ describe('Dashboard Collections Page', () => {
       cy.visit('/');
       const name = 'https_testcollection';
       const version = '001';
-      cy.route('DELETE', '/collections/https_testcollection/001').as('deleteCollection');
+      cy.intercept('DELETE', '/collections/https_testcollection/001').as('deleteCollection');
 
       cy.visit(`/collections/collection/${name}/${version}`);
       cy.clearStartDateTime();
@@ -335,7 +348,7 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.button', 'Cancel Request')
         .should('be.visible').click();
 
-      cy.contains('.modal-content').should('not.be.visible');
+      cy.contains('.modal-content').should('not.exist');
 
       // click delete again to show modal again
       cy.get('.DeleteCollection > .button').click();
@@ -348,7 +361,7 @@ describe('Dashboard Collections Page', () => {
       // click close on confirmation modal
       cy.contains('.modal-footer > .button', 'Close')
         .should('be.visible').click();
-      cy.contains('.modal-content').should('not.be.visible');
+      cy.contains('.modal-content').should('not.exist');
 
       // successful delete should cause navigation back to collections list
       cy.url().should('include', 'collections/all');
@@ -374,7 +387,7 @@ describe('Dashboard Collections Page', () => {
           // with existing information, and the next update has to happen
           // before these all show up or don't show up correctly.
           cy.get(
-            `[data-value="${collection.name}___${collection.version}"] > .table__main-asset > a`,
+            `[data-value="${collection.name}___${collection.version}"] > .table__main-asset a`,
             { timeout: 25000 }
           ).should(existOrNotExist);
         });
@@ -386,7 +399,7 @@ describe('Dashboard Collections Page', () => {
       cy.visit('/');
       const name = 'MOD09GK';
       const version = '006';
-      cy.route('DELETE', '/collections/MOD09GK/006').as('deleteCollection');
+      cy.intercept('DELETE', '/collections/MOD09GK/006').as('deleteCollection');
 
       cy.visit(`/collections/collection/${name}/${version}`);
       cy.clearStartDateTime();
@@ -403,7 +416,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('.modal-content .error__report').should('be.visible');
       cy.contains('.modal-footer > .button', 'Close')
         .should('be.visible').wait(200).click();
-      cy.contains('.modal-content').should('not.be.visible');
+      cy.contains('.modal-content').should('not.exist');
 
       // collection should still exist in list
       cy.contains('a', 'Back to Collections').click();
@@ -430,7 +443,7 @@ describe('Dashboard Collections Page', () => {
       // modal should ask if user wants to go to granules page
       cy.contains('.button--cancel', 'Cancel Request')
         .should('be.visible').wait(200).click();
-      cy.contains('.modal-content').should('not.be.visible');
+      cy.contains('.modal-content').should('not.exist');
 
       // collection should still exist in list
       cy.contains('a', 'Back to Collections').click();
@@ -455,7 +468,7 @@ describe('Dashboard Collections Page', () => {
       // modal should take user to granules page upon clicking 'Go To Granules'
       cy.contains('.button__goto', 'Go To Granules')
         .should('be.visible').wait(200).click();
-      cy.contains('.modal-content').should('not.be.visible');
+      cy.contains('.modal-content').should('not.exist');
       cy.url().should('include', 'granules');
 
       // collection should still exist in list
@@ -470,17 +483,15 @@ describe('Dashboard Collections Page', () => {
         'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
-      cy.server();
-      cy.route({
-        method: 'PUT',
-        url: '/granules/*',
-        status: 500,
-        response: { message: 'Oopsie' }
-      });
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { statusCode: 500, body: { message: 'Oopsie' } }
+      );
       cy.visit('/granules');
       cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
-      cy.get('.list-actions').contains('Reingest').click();
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Reingest').click();
       cy.get('.button--submit').click();
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Error');
       cy.get('.Collapsible__contentInner').should('contain.text', 'Oopsie');
@@ -496,17 +507,16 @@ describe('Dashboard Collections Page', () => {
         'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
-      cy.server();
-      cy.route({
-        method: 'PUT',
-        url: '/granules/*',
-        status: 200,
-        response: { message: 'ingested' }
-      });
+
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { statusCode: 200, body: { message: 'ingested' } }
+      );
 
       cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
-      cy.get('.list-actions').contains('Reingest').click();
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Reingest').click();
       cy.get('.button--submit').click();
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
       cy.get('.modal-content').within(() => {
@@ -516,7 +526,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('.heading--medium').should('have.text', 'Running Granules 2');
 
       // Ensure we have closed the modal.
-      cy.get('.modal-content').should('not.be.visible');
+      cy.get('.modal-content').should('not.exist');
     });
 
     it('Should display Granule Metrics that match the datepicker selection', () => {
@@ -542,7 +552,7 @@ describe('Dashboard Collections Page', () => {
           .and('contain', 'Running');
       });
 
-      cy.get('[data-cy=endDateTime] > .react-datetime-picker > .react-datetime-picker__wrapper > .react-datetime-picker__clear-button > .react-datetime-picker__clear-button__icon').click();
+      cy.get('[data-cy="endDateTime"] .react-datetime-picker__clear-button__icon').click();
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
@@ -579,6 +589,23 @@ describe('Dashboard Collections Page', () => {
           .first().should('contain', 0).and('contain', 'Completed')
           .next()
           .should('contain', 2)
+          .and('contain', 'Failed')
+          .next()
+          .should('contain', 0)
+          .and('contain', 'Running');
+      });
+    });
+
+    it('Should display Granules based on provider dropdown selection', () => {
+      cy.visit('/collections/collection/MOD09GQ/006');
+      cy.get('.filter-provider .rbt-input-main').as('provider-input');
+
+      cy.get('@provider-input').click().type('POD').type('{enter}');
+      cy.get('[data-cy=overview-num]').within(() => {
+        cy.get('li')
+          .first().should('contain', 0).and('contain', 'Completed')
+          .next()
+          .should('contain', 0)
           .and('contain', 'Failed')
           .next()
           .should('contain', 0)

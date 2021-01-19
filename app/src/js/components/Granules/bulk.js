@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'react-bootstrap/Modal';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
@@ -15,6 +14,7 @@ import {
 } from '../../actions';
 import BulkGranuleModal from './bulk-granule-modal';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
+import DefaultModal from '../Modal/modal';
 
 const generateAsyncRequestId = () => Math.random().toString(36).substring(2, 15) +
   Math.random().toString(36).substring(2, 15);
@@ -63,6 +63,8 @@ const BulkGranule = ({
   const [bulkOpRequestId, setBulkOpRequestId] = useState(generateAsyncRequestId());
   const [bulkDeleteRequestId, setBulkDeleteRequestId] = useState(generateAsyncRequestId());
   const [bulkReingestRequestId, setBulkReingestRequestId] = useState(generateAsyncRequestId());
+
+  const activeModal = showModal || showBulkOpsModal || showBulkDeleteModal || showBulkReingestModal;
 
   const bulkOpRequestInfo = get(granules.bulk, [bulkOpRequestId]);
   const bulkOpRequestStatus = getRequestStatus(bulkOpRequestInfo);
@@ -168,20 +170,23 @@ const BulkGranule = ({
       >
         <span>Run Bulk Granules</span>
       </ButtonComponent>
-      <Modal
-        dialogClassName={`default-modal ${modalClassName}`}
-        show={showModal}
-        onHide={handleCancel}
-        centered
-        size="sm"
-        aria-labelledby={`modal__${modalClassName}`}
+      {activeModal && <div className="modal__cover"></div>}
+      <div
+        className={
+          activeModal
+            ? 'modal__container modal__container--onscreen'
+            : 'modal__container'
+        }
       >
-        <Modal.Header className={`${modalClassName}__header`} closeButton></Modal.Header>
-        <Modal.Title id={`modal__${modalClassName}`} className={`${modalClassName}__title`}>
-          <h4>Run Bulk Granules</h4>
+        <DefaultModal
+          showModal={showModal}
+          onCloseModal={handleCancel}
+          className={modalClassName}
+          hasCancelButton={false}
+          hasConfirmButton={false}
+          title="Run Bulk Granules"
+        >
           <p>What action would you like to perform for your bulk granules selection?</p>
-        </Modal.Title>
-        <Modal.Body>
           <button
             className={'button button__animation--md button__arrow button__animation button__bulkgranules button__bulkgranules--delete form-group__element--left'}
             onClick={handleShowBulkDeleteModal}>
@@ -197,88 +202,88 @@ const BulkGranule = ({
             onClick={handleShowBulkOperationsModal}>
             Run Bulk Operations
           </button>
-        </Modal.Body>
-      </Modal>
-      <BulkGranuleModal
-        asyncOpId={getRequestAsyncOpId(bulkOpRequestInfo)}
-        bulkRequestAction={bulkGranule}
-        cancelButtonText={'Cancel Bulk Operations'}
-        className={`${modalClassName} bulk_granules--operations`}
-        confirmButtonClass={'button__bulkgranules button__bulkgranules--operations'}
-        confirmButtonText={'Run Bulk Operations'}
-        defaultQuery={bulkOperationsDefaultQuery}
-        dispatch={dispatch}
-        error={bulkOpRequestError}
-        handleSuccessConfirm={handleSuccessConfirm}
-        inflight={isStatusInflight(bulkOpRequestStatus)}
-        onCancel={hideBulkOperationsModal}
-        requestId={bulkOpRequestId}
-        selected={selected}
-        showModal={showBulkOpsModal}
-        success={isStatusSuccess(bulkOpRequestStatus)}
-        successMessage={'Your request to process a bulk granules operation has been submitted.'}
-        title={'Bulk Granule Operations'}
-      >
-        <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
-        <p>
+        </DefaultModal>
+        <BulkGranuleModal
+          asyncOpId={getRequestAsyncOpId(bulkOpRequestInfo)}
+          bulkRequestAction={bulkGranule}
+          cancelButtonText={'Cancel Bulk Operations'}
+          className={`${modalClassName} bulk_granules--operations`}
+          confirmButtonClass={'button__bulkgranules button__bulkgranules--operations'}
+          confirmButtonText={'Run Bulk Operations'}
+          defaultQuery={bulkOperationsDefaultQuery}
+          dispatch={dispatch}
+          error={bulkOpRequestError}
+          handleSuccessConfirm={handleSuccessConfirm}
+          inflight={isStatusInflight(bulkOpRequestStatus)}
+          onCancel={hideBulkOperationsModal}
+          requestId={bulkOpRequestId}
+          selected={selected}
+          showModal={showBulkOpsModal}
+          success={isStatusSuccess(bulkOpRequestStatus)}
+          successMessage={'Your request to process a bulk granules operation has been submitted.'}
+          title={'Bulk Granule Operations'}
+        >
+          <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
+          <p>
           1. In the box below, enter the <strong>workflowName</strong>. <br/>
           2. Then add either an array of granule Ids or an elasticsearch query and index. <br/>
-        </p>
-      </BulkGranuleModal>
-      <BulkGranuleModal
-        asyncOpId={getRequestAsyncOpId(bulkDeleteRequestInfo)}
-        bulkRequestAction={bulkGranuleDelete}
-        cancelButtonText={'Cancel Bulk Delete'}
-        className={`${modalClassName} bulk_granules--delete`}
-        confirmButtonClass={'button__bulkgranules button__bulkgranules--delete'}
-        confirmButtonText={'Run Bulk Delete'}
-        defaultQuery={bulkDeleteDefaultQuery}
-        dispatch={dispatch}
-        error={bulkDeleteRequestError}
-        handleSuccessConfirm={handleSuccessConfirm}
-        inflight={isStatusInflight(bulkDeleteRequestStatus)}
-        onCancel={hideBulkDeleteModal}
-        requestId={bulkDeleteRequestId}
-        selected={selected}
-        showModal={showBulkDeleteModal}
-        success={isStatusSuccess(bulkDeleteRequestStatus)}
-        successMessage={'Your request to process a bulk granule delete operation has been submitted.'}
-        title={'Bulk Granule Delete'}
-      >
-        <h4 className="modal_subtitle">To run and complete your bulk delete task:</h4>
-        <p>
+          </p>
+        </BulkGranuleModal>
+        <BulkGranuleModal
+          asyncOpId={getRequestAsyncOpId(bulkDeleteRequestInfo)}
+          bulkRequestAction={bulkGranuleDelete}
+          cancelButtonText={'Cancel Bulk Delete'}
+          className={`${modalClassName} bulk_granules--delete`}
+          confirmButtonClass={'button__bulkgranules button__bulkgranules--delete'}
+          confirmButtonText={'Run Bulk Delete'}
+          defaultQuery={bulkDeleteDefaultQuery}
+          dispatch={dispatch}
+          error={bulkDeleteRequestError}
+          handleSuccessConfirm={handleSuccessConfirm}
+          inflight={isStatusInflight(bulkDeleteRequestStatus)}
+          onCancel={hideBulkDeleteModal}
+          requestId={bulkDeleteRequestId}
+          selected={selected}
+          showModal={showBulkDeleteModal}
+          success={isStatusSuccess(bulkDeleteRequestStatus)}
+          successMessage={'Your request to process a bulk granule delete operation has been submitted.'}
+          title={'Bulk Granule Delete'}
+        >
+          <h4 className="modal_subtitle">To run and complete your bulk delete task:</h4>
+          <p>
           1. In the box below, add either an array of granule Ids or an elasticsearch query and index. <br/>
           2. Set <strong>forceRemoveFromCmr</strong> to <strong>true</strong> to automatically have granules
           removed from CMR as part of deletion.<br/>
           If <strong>forceRemoveFromCmr</strong> is <strong>false</strong>, then the bulk granule deletion will
-          <strong>fail for any granules that are published to CMR.</strong>
-        </p>
-      </BulkGranuleModal>
-      <BulkGranuleModal
-        asyncOpId={getRequestAsyncOpId(bulkReingestRequestInfo)}
-        bulkRequestAction={bulkGranuleReingest}
-        cancelButtonText={'Cancel Bulk Reingest'}
-        className={`${modalClassName} bulk_granules--reingest`}
-        confirmButtonClass={'button__bulkgranules button__bulkgranules--reingest'}
-        confirmButtonText={'Run Bulk Reingest'}
-        defaultQuery={bulkReingestDefaultQuery}
-        dispatch={dispatch}
-        error={bulkReingestRequestError}
-        handleSuccessConfirm={handleSuccessConfirm}
-        inflight={isStatusInflight(bulkReingestRequestStatus)}
-        onCancel={hideBulkReingestModal}
-        requestId={bulkReingestRequestId}
-        selected={selected}
-        showModal={showBulkReingestModal}
-        success={isStatusSuccess(bulkReingestRequestStatus)}
-        successMessage={'Your request to process a bulk granule reingest operation has been submitted.'}
-        title={'Bulk Granule Reingest'}
-      >
-        <h4 className="modal_subtitle">To run and complete your bulk reingest task:</h4>
-        <p>
+            <strong>fail for any granules that are published to CMR.</strong>
+          </p>
+        </BulkGranuleModal>
+        <BulkGranuleModal
+          asyncOpId={getRequestAsyncOpId(bulkReingestRequestInfo)}
+          bulkRequestAction={bulkGranuleReingest}
+          cancelButtonText={'Cancel Bulk Reingest'}
+          className={`${modalClassName} bulk_granules--reingest`}
+          confirmButtonClass={'button__bulkgranules button__bulkgranules--reingest'}
+          confirmButtonText={'Run Bulk Reingest'}
+          defaultQuery={bulkReingestDefaultQuery}
+          dispatch={dispatch}
+          error={bulkReingestRequestError}
+          handleSuccessConfirm={handleSuccessConfirm}
+          inflight={isStatusInflight(bulkReingestRequestStatus)}
+          onCancel={hideBulkReingestModal}
+          requestId={bulkReingestRequestId}
+          selected={selected}
+          showModal={showBulkReingestModal}
+          success={isStatusSuccess(bulkReingestRequestStatus)}
+          successMessage={'Your request to process a bulk granule reingest operation has been submitted.'}
+          title={'Bulk Granule Reingest'}
+        >
+          <h4 className="modal_subtitle">To run and complete your bulk reingest task:</h4>
+          <p>
           In the box below, add either an array of granule Ids or an elasticsearch query and index. <br/>
-        </p>
-      </BulkGranuleModal>
+          </p>
+        </BulkGranuleModal>
+      </div>
     </>
   );
 };

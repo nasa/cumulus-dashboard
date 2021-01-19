@@ -1,24 +1,24 @@
 version: "3"
 services:
   elasticsearch:
-    image: elasticsearch:5.6
+    image: ${DOCKER_REPOSITORY}elasticsearch:5.6
     network_mode: "service:shim"
     environment:
       ES_JAVA_OPTS: "-Xms750m -Xmx750m"
   localstack:
-    image: localstack/localstack:0.10.7
+    image: ${DOCKER_REPOSITORY}localstack/localstack:0.10.7
     network_mode: "service:shim"
     environment:
       SERVICES: "cloudwatch,cloudwatchlogs,dynamodb,kinesis,kms,lambda,s3,secretsmanager,sns,sqs,stepfunctions"
       DATA_DIR: "/tmp/localstack/data"
   shim:   # empty container to open ports
-    image: node:12.18.0
+    image: ${DOCKER_REPOSITORY}node:12.18.0
     command:
       bash -c "tail -f /dev/null"
     working_dir:
       /cumulus-dashboard
     volumes:
-      - ../:/cumulus-dashboard:cached
+      - ../:/cumulus-dashboard
     ports:
       - "9200:9200"
       - "4550-4586:4550-4586"

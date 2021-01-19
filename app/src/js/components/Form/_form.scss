@@ -26,7 +26,7 @@ input[type="checkbox"], input[type="radio"] {
   color: $lighter-grey;
 }
 
-label {
+label, .label {
   display: block;
   font-weight: $base-font-semibold;
   margin-bottom: .3em;
@@ -62,62 +62,6 @@ select option{
     background-color: $ocean-blue;
     box-shadow: inset 2px 2px $ocean-blue;
     color: $white;
-}
-}
-
-
-.filters {
-  margin: 1.5em 0 2em;
-  @extend .clearfix;
-  label {
-    font-size: .86em;
-  }
-}
-
-.filter__item {
-  display: inline-block;
-  vertical-align: bottom;
-  position: relative;
-}
-
-.filter__icon{
-  &:after {
-    color: $ocean-blue;
-    position: absolute;
-    font-family: 'FontAwesome';
-    content: '\f0d7';
-    font-weight: 900;
-    width: 14px;
-    height: 14px;
-    background-size: 14px 14px;
-    display: block;
-    right: .8em;
-    top: .5em;
-  }
-}
-
-.filters.filters__wlabels ul{
-  display: flex;
-  align-items: baseline;
-}
-
-.filters.filters__wlabels .run_bulk{
-  margin-left: auto;
-}
-
-.filter-action-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-}
-
-.filter-actions {
-  display: flex;
-  justify-content: space-around;
-  flex-grow: 1;
-
-  .form--controls {
-    flex-grow: 1;
   }
 }
 
@@ -143,8 +87,11 @@ select option{
   }
 
   .dropdown__element {
-    font-size: .8em;
-    width: 180px;
+    width: 35em;
+  }
+
+  .collection-chooser {
+    font-size: 0.86em;
   }
 }
 
@@ -157,19 +104,8 @@ select option{
   .form__error {
     display: none;
   }
-  .dropdown__wrapper select {
-    min-width: 6em;
-  }
   .search {
-    &--small {
-      width: 15em;
-    }
-    &--medium {
-      width: 25em;
-    }
-    &--large {
-      width: 35em;
-    }
+    width: 80em;
   }
   
   button[aria-label="Clear"] {
@@ -243,22 +179,15 @@ select option{
 }
 
 .form__element__updateToggle {
-  float: right;
-  margin-top: -6px;
-  position: relative;
-  .form-group__updating, .metadata__updated {
-    display: block;
-  }
+  padding-right: .1em;
   .metadata__updated {
-    margin-top: 18px;
-    padding-right: 4px;
+    display: block;
     &:hover {
       text-decoration: underline;
     }
   }
   .form-group__updating {
-    position: absolute;
-    left: 14px;
+    margin-left: .2em;
     font-weight: $base-font-semibold;
     font-size: .86em;
     min-width: 120px;
@@ -266,10 +195,6 @@ select option{
 }
 
 .form__element__refresh {
-  position: absolute;
-  left: -.3em;
-  top: -.2em;
-  display: inline-block;
   &:before {
     font-family: 'FontAwesome';
     content: '\f021';
@@ -289,7 +214,7 @@ select option{
 
 .form-group__element--right {
   float: right;
-  margin-left: 1em;
+  margin-left: 2em;
   margin-right: 0;
 }
 
@@ -313,8 +238,8 @@ select option{
     svg {
       color: $ocean-blue;
       margin-left: .5em;
+      padding: .5em;
     }
-
   }
 
   .radio {
@@ -328,7 +253,6 @@ select option{
       }
     }
   }
-
 }
 
 .subform__item,
@@ -376,6 +300,8 @@ select option{
 
 .subform__button {
   margin-left: 1em;
+  background: none;
+  border: none;
 }
 
 .subform__fields {
@@ -454,6 +380,10 @@ select option{
         float: left;
       }
     }
+    &--require__description {
+      font-size: .86em;
+      text-align: right;
+    }
   }
 }
 
@@ -470,16 +400,15 @@ select option{
   }
 }
 
-.form__dropdown {
-  width: 92%;
-}
-
 .label__description {
   display: block;
   font-size: 1em;
   margin: .2em 0 .6em;
 }
 
+.label__required {
+  color: $error-text-red;
+}
 
 /*log in*/
 .form__login {
@@ -522,6 +451,7 @@ select option{
   border: 1px solid $error-red;
   p {
     margin-bottom: 0;
+    overflow-x: scroll;
     color: $error-text-red;
   }
 }
@@ -623,9 +553,7 @@ select option{
 }
 
 .execution__content {
-  cursor: pointer;
-
-  .execution__content--visual {
+  &--visual {
     width: 25%;
     margin: 0 auto;
   }
@@ -655,6 +583,7 @@ select option{
   }
 
   .execution__content {
+    cursor: pointer;
     margin-top: 0;
     border-radius: 0 0 10px 10px;
   }

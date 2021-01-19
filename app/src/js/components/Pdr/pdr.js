@@ -226,6 +226,12 @@ class PDR extends React.Component {
             bulkActions={this.generateBulkActions()}
             rowId="granuleId"
           >
+            <Search
+              action={searchGranules}
+              clear={clearGranulesSearch}
+              labelKey="granuleId"
+              searchKey="granules"
+            />
             <ListFilters>
               <Dropdown
                 getOptions={getOptionsCollectionName}
@@ -234,6 +240,10 @@ class PDR extends React.Component {
                 clear={clearGranulesFilter}
                 paramKey={'collectionId'}
                 label={strings.collection}
+                inputProps={{
+                  placeholder: 'All',
+                  className: 'dropdown--large',
+                }}
               />
               <Dropdown
                 options={status}
@@ -241,15 +251,6 @@ class PDR extends React.Component {
                 clear={clearGranulesFilter}
                 paramKey={'status'}
                 label={'Status'}
-              />
-              <Search
-                action={searchGranules}
-                clear={clearGranulesSearch}
-                inputProps={{
-                  className: 'search search--large',
-                }}
-                labelKey="granuleId"
-                searchKey="granules"
               />
             </ListFilters>
           </List>

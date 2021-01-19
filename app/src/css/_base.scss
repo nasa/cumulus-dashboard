@@ -126,6 +126,11 @@ a:active {
   float: right;
 }
 
+.progress-text {
+  color: $ocean-blue;
+  padding: .5em;
+}
+
 .description {
   color: $lighter-grey;
   margin-bottom: 2em;
@@ -197,8 +202,12 @@ a:active {
     font-weight: $base-font-light;
     border-bottom: 1px solid $ocean-blue;
     transition: all 0.3s ease 0s;
-    a {
+    a, button {
       color: lighten($lightest-grey, 2%);
+    }
+    button {
+      background: none;
+      border: none;
     }
     &.active,
     &:hover {
@@ -240,18 +249,13 @@ a:active {
   -webkit-font-smoothing: antialiased;
 }
 
-.rightalign.nav__order-8{
-  position: relative;
-}
 .rightalign.nav__order-8 .log-icon{
+  margin-right: .2em;
   &:before {
-    position: absolute;
     color: $white;
     font-family: 'FontAwesome';
     content: '\f2f5';
     font-weight: 900;
-    right: 3.9em;
-    top: 1.54em;
   }
 }
 
@@ -397,27 +401,29 @@ a:active {
   margin-bottom: 1em;
 }
 
-.page__content__nosidebar {
-  margin-top: 2em;
-  flex-direction: column;
-}
-
 .page__content {
   width: 100%;
   @extend .clearfix;
-}
 
-.page__content--shortened {
-  flex: 10;
-  padding: 2em 4em 2em 4em;
-  /*float: left;*/
-  width: 80%;
-}
+  &--nosidebar {
+    margin-top: 2em;
+    flex-direction: column;
+    padding-bottom: 2em;
+  }
 
-.page__content--shortened--centered {
-  width: 70%;
-  margin: 0 auto;
-  padding-top: 4em;
+  &--shortened {
+    flex: 10;
+    padding: 2em 4em 2em 4em;
+    /*float: left;*/
+    width: 80%;
+
+    &--centered {
+      width: 70%;
+      margin: 0 auto;
+      padding-top: 2em;
+      padding-bottom: 2em;
+    }
+  }
 }
 
 .page__section {
@@ -433,6 +439,12 @@ a:active {
 
 .page__section__header-wrapper {
   margin-bottom: 1em;
+}
+
+.page__section__header--shared-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .page_section.metrics--overview .heading__wrapper--border {
@@ -714,7 +726,7 @@ a:active {
     font-size: .9em;
   }
   dd {
-    font-weight: $base-font-semibold;
+    font-weight: $base-font-regular;
     margin-right: 2em;
   }
   dt {
@@ -743,21 +755,6 @@ a:active {
       background-color: $error-red;
     }
   }
-
-  .execution-status {
-    &-succeeded {
-      color: $light-green;
-    }
-
-    &-running {
-      color: $yellow;
-    }
-
-    &-failed {
-      color: $error-red;
-    }
-  }
-
 }
 
 .app__target--container {

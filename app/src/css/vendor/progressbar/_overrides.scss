@@ -1,0 +1,50 @@
+[data-test-id="CircularProgressbarWithChildren"] {
+  width: 25%;
+  margin: 0 auto;
+
+  .CircularProgressbar {
+    width: initial;
+    margin: initial;
+  }
+}
+
+svg.CircularProgressbar {
+  width: 25%;
+  margin: 0 auto;
+
+
+  .CircularProgressbar-background {
+    fill: lighten($color: $ocean-blue, $amount: 50%);
+  }
+
+  .CircularProgressbar-trail {
+    stroke: lighten($color: $ocean-blue, $amount: 25%);
+  }
+
+  .CircularProgressbar-path {
+    stroke: $ocean-blue;
+  }
+
+  .CircularProgressbar-text {
+    fill: $ocean-blue;
+  }
+
+  &.success {
+    & + div {
+      .fa-check {
+        color: darken($color: $light-green, $amount: 15%);
+        width: 60%;
+        height: 60%;
+      }
+    }
+
+    .CircularProgressbar-background {
+      fill: lighten($color: $light-green, $amount: 50%);
+    }
+
+    .CircularProgressbar-path {
+      stroke: $light-green;
+    }
+  }
+
+}

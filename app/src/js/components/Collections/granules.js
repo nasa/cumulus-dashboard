@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { get } from 'object-path';
 import { getCollectionId, displayCase } from '../../utils/format';
 import {
   listGranules,
@@ -12,11 +13,13 @@ import {
   searchGranules,
   clearGranulesSearch,
   listWorkflows,
+  getOptionsProviderName
 } from '../../actions';
 import {
+  bulkActions,
   defaultWorkflowMeta,
   executeDialog,
-  bulkActions,
+  groupAction,
   tableColumns,
 } from '../../utils/table-config/granules';
 import List from '../Table/Table';
@@ -35,6 +38,7 @@ const CollectionGranules = ({
   match,
   queryParams,
   workflowOptions,
+  providers
 }) => {
   const { params } = match;
   const { name: collectionName, version: collectionVersion } = params;
@@ -47,6 +51,7 @@ const CollectionGranules = ({
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const query = generateQuery();
+  const { dropdowns } = providers;
 
   const breadcrumbConfig = [
     {
@@ -146,24 +151,22 @@ const CollectionGranules = ({
           action={listGranules}
           query={query}
           bulkActions={generateBulkActions()}
+          groupAction={groupAction}
           rowId="granuleId"
-          sortId="timestamp"
+          initialSortId="timestamp"
           tableColumns={tableColumns}
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
         >
+          <Search
+            action={searchGranules}
+            clear={clearGranulesSearch}
+            label="Search"
+            labelKey="granuleId"
+            placeholder="Granule ID"
+            searchKey="granules"
+          />
           <ListFilters>
-            <Search
-              action={searchGranules}
-              clear={clearGranulesSearch}
-              inputProps={{
-                className: 'search search--large',
-              }}
-              label="Search"
-              labelKey="granuleId"
-              placeholder="Granule ID"
-              searchKey="granules"
-            />
             {view === 'all' && (
               <Dropdown
                 options={statusOptions}
@@ -176,6 +179,18 @@ const CollectionGranules = ({
                 }}
               />
             )}
+            <Dropdown
+              getOptions={getOptionsProviderName}
+              options={get(dropdowns, ['provider', 'options'])}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey="provider"
+              label="Provider"
+              inputProps={{
+                placeholder: 'All',
+                className: 'dropdown--medium',
+              }}
+            />
           </ListFilters>
         </List>
       </section>
@@ -190,11 +205,13 @@ CollectionGranules.propTypes = {
   match: PropTypes.object,
   queryParams: PropTypes.object,
   workflowOptions: PropTypes.array,
+  providers: PropTypes.object,
 };
 
 export default withRouter(
   connect((state) => ({
     granules: state.granules,
     workflowOptions: workflowOptionNames(state),
+    providers: state.providers
   }))(CollectionGranules)
 );

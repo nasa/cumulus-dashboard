@@ -1,14 +1,13 @@
 import React from 'react';
-import Collapsible from 'react-collapsible';
 import PropTypes from 'prop-types';
 import { truncate } from '../../utils/format';
+import ShowMoreOrLess from './show-more-or-less';
 
 class ErrorReport extends React.Component {
   constructor () {
     super();
     this.scrollToTop = this.scrollToTop.bind(this);
     this.truncate = this.truncate.bind(this);
-    this.renderSingleError = this.renderSingleError.bind(this);
     this.renderReport = this.renderReport.bind(this);
     this.stringifyErrorObject = this.stringifyErrorObject.bind(this);
   }
@@ -22,7 +21,7 @@ class ErrorReport extends React.Component {
   scrollToTop () {
     if (this.DOMElement && typeof this.DOMElement.scrollIntoView === 'function') {
       this.DOMElement.scrollIntoView(true);
-    } else {
+    } else if (window) {
       window.scrollTo(0, 0);
     }
   }
@@ -32,27 +31,12 @@ class ErrorReport extends React.Component {
     return truncate(string);
   }
 
-  renderSingleError (report, trigger = this.truncate(report)) {
-    // No need to make error collapsible if the truncated
-    // output is the same length as the original output
-    if (typeof report === 'string' &&
-        report === trigger &&
-        report.length === trigger.length) {
-      return <p>{report}</p>;
-    }
-    return (
-      <Collapsible trigger={trigger} triggerWhenOpen={'Show less'}>
-        {report}
-      </Collapsible>
-    );
-  }
-
   renderReport (report) {
     if (typeof report === 'string') {
       return (
         <div key={report}>
           <strong>Error:</strong>
-          { this.renderSingleError(report) }
+          <ShowMoreOrLess text={report} truncate={this.props.truncate}></ShowMoreOrLess>
         </div>
       );
     }
@@ -72,7 +56,7 @@ class ErrorReport extends React.Component {
       return (
         <div key={message}>
           <strong>{name}: </strong>
-          { this.renderSingleError(stack, this.truncate(report.stack)) }
+          <ShowMoreOrLess text={stack} truncate={this.props.truncate}></ShowMoreOrLess>
         </div>
       );
     }
@@ -99,7 +83,7 @@ class ErrorReport extends React.Component {
       return (
         <div key={cause}>
           <strong>{error}: </strong>
-          { this.renderSingleError(cause) }
+          <ShowMoreOrLess text={cause} truncate={this.props.truncate}></ShowMoreOrLess>
         </div>
       );
     }

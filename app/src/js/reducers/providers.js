@@ -32,9 +32,9 @@ import {
   PROVIDER_DELETE,
   PROVIDER_DELETE_INFLIGHT,
   PROVIDER_DELETE_ERROR,
-  OPTIONS_PROVIDERGROUP,
-  OPTIONS_PROVIDERGROUP_INFLIGHT,
-  OPTIONS_PROVIDERGROUP_ERROR,
+  OPTIONS_PROVIDERNAME,
+  OPTIONS_PROVIDERNAME_INFLIGHT,
+  OPTIONS_PROVIDERNAME_ERROR,
 } from '../actions/types';
 
 export const initialState = {
@@ -123,24 +123,21 @@ export default createReducer(initialState, {
   [PROVIDER_DELETE]: createSuccessReducer('deleted'),
   [PROVIDER_DELETE_INFLIGHT]: createInflightReducer('deleted'),
   [PROVIDER_DELETE_ERROR]: createErrorReducer('deleted'),
-  [OPTIONS_PROVIDERGROUP]: (state, action) => {
+  [OPTIONS_PROVIDERNAME]: (state, action) => {
     // Map the list response to an object with key-value pairs like:
     // displayValue: optionElementValue
-    const options = action.data.results.reduce(
-      (obj, provider) => {
-        // Several `results` items can share a `providerName`, but
-        // these are de-duplciated by the key-value structure
-        obj[provider.providerName] = provider.providerName;
-        return obj;
-      },
-      { '': '' }
+    const options = action.data.results.map(
+      (provider) => ({
+        id: provider.id,
+        label: provider.id
+      }),
     );
 
-    set(state.dropdowns, 'group.options', options);
+    set(state.dropdowns, 'provider.options', options);
   },
-  [OPTIONS_PROVIDERGROUP_INFLIGHT]: noop,
-  [OPTIONS_PROVIDERGROUP_ERROR]: (state, action) => {
-    set(state.dropdowns, 'group.options', []);
+  [OPTIONS_PROVIDERNAME_INFLIGHT]: noop,
+  [OPTIONS_PROVIDERNAME_ERROR]: (state, action) => {
+    set(state.dropdowns, 'provider.options', []);
     state.list.error = action.error;
   },
 });

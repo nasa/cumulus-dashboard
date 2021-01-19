@@ -22,10 +22,9 @@ describe('Dashboard Providers Page', () => {
       cy.login();
       cy.task('resetState');
       cy.visit('/');
-      cy.server();
-      cy.route('POST', '/providers').as('postProvider');
-      cy.route('GET', '/providers?limit=*').as('getProviders');
-      cy.route('GET', '/providers/*').as('getProvider');
+      cy.intercept('POST', '/providers').as('postProvider');
+      cy.intercept('GET', '/providers?limit=*').as('getProviders');
+      cy.intercept('GET', '/providers/*').as('getProvider');
     });
 
     it('should display a link to view providers', () => {

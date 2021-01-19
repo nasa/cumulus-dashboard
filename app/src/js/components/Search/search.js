@@ -87,15 +87,15 @@ const Search = ({
   }
 
   return (
-    <div className="filter__item">
-      {label && <label htmlFor={formID}>{label}</label>}
+    <div>
+      {label && <label htmlFor="search" form={formID}>{label}</label>}
       <form className="search__wrapper form-group__element">
         <AsyncTypeahead
           clearButton={true}
           defaultInputValue={initialValue}
           highlightOnlyResult={true}
-          id="Search"
-          inputProps={inputProps}
+          id="search"
+          inputProps={{ id: 'search', ...inputProps }}
           isLoading={inflight}
           labelKey={labelKey}
           onChange={handleChange}

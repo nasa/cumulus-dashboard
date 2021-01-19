@@ -60,9 +60,9 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('@search').should('be.visible').click().type('inventoryReport-2020');
 
       cy.get('.filter-type .rbt-input-main').as('type-input');
-      cy.get('@type-input').should('be.visible').click().type('invent{enter}');
+      cy.get('@type-input').should('be.visible').click({ force: true }).type('invent{enter}');
       cy.get('.filter-status .rbt-input-main').as('status-input');
-      cy.get('@status-input').should('be.visible').click().type('gener{enter}');
+      cy.get('@status-input').should('be.visible').click({ force: true }).type('gener{enter}');
       cy.url().should('include', 'search=inventoryReport-2020')
         .and('include', 'type=Inventory')
         .and('include', 'status=Generated');
@@ -133,17 +133,17 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
       cy.get(`form .form__item .location input[value="${location}"]`).check();
 
-      cy.route2({
+      cy.intercept({
         url: '/reconciliationReports',
         method: 'POST'
       }, (req) => {
-        const requestBody = JSON.parse(req.body);
-        expect(requestBody).to.have.property('reportType', reportType);
-        expect(requestBody).to.have.property('reportName', reportName);
-        expect(requestBody).to.have.property('startTimestamp', startTimestamp);
-        expect(requestBody).to.have.property('endTimestamp', endTimestamp);
-        expect(requestBody).to.have.deep.property('collectionId', collectionId);
-        expect(requestBody).to.have.property('location', location);
+        const { body } = req;
+        expect(body).to.have.property('reportType', reportType);
+        expect(body).to.have.property('reportName', reportName);
+        expect(body).to.have.property('startTimestamp', startTimestamp);
+        expect(body).to.have.property('endTimestamp', endTimestamp);
+        expect(body).to.have.deep.property('collectionId', collectionId);
+        expect(body).to.have.property('location', location);
       }).as('createReport');
 
       cy.get('.button--submit').click();
@@ -209,12 +209,25 @@ describe('Dashboard Reconciliation Reports Page', () => {
 
           cy.contains('.table .th', filterLabel).should('be.visible');
           cy.contains('.table__filters--filter label', filterLabel).prev().click();
-          cy.contains('.table .th', filterLabel).should('not.be.visible');
+          cy.contains('.table .th', filterLabel).should('not.exist');
 
           cy.get('.table__filters .button__filter').click();
           cy.contains('.table__filters .button__filter', 'Show Column Filters');
           cy.get('.table__filters--collapse').should('not.be.visible');
         });
+
+      /** Pagination */
+      cy.contains('.simple-pagination .pagination__link--active', '1');
+      cy.contains('.simple-pagination button', 'Next').click();
+      cy.contains('.simple-pagination .pagination__link--active', '2');
+
+      /** Legend - there should be one for each table */
+      cy.get('.legend').should('have.length', 3);
+      cy.get('.legend').eq(0).as('legend1');
+      cy.get('@legend1').find('.legend-items--item').should('have.length', 3);
+      cy.get('@legend1').find('.legend-items--item').eq(0).should('contain', 'Granule not found');
+      cy.get('@legend1').find('.legend-items--item').eq(1).should('contain', 'Missing image file');
+      cy.get('@legend1').find('.legend-items--item').eq(2).should('contain', 'No issues/conflicts');
     });
 
     it('Has a way to expand/collapse all tables', () => {
@@ -255,8 +268,8 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.visit(path);
       cy.contains('.heading--large', `Granule Not Found Report: ${reportName}`);
 
-      cy.contains('.heading--medium', 'Granules Not Found');
-      cy.contains('.num-title', '7');
+      cy.contains('.heading--medium', 'Total Conflict Comparisons');
+      cy.contains('.num-title', '11');
 
       cy.get('.table .th').eq(0).should('contain', 'Collection ID');
       cy.get('.table .th').eq(1).should('contain', 'Granule ID');
@@ -269,22 +282,19 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.table .tr[data-value="4"] .td').eq(2).find('span').should('have.class', 'status-indicator--failed');
       cy.get('.table .tr[data-value="4"] .td').eq(3).find('span').should('have.class', 'status-indicator--failed');
       cy.get('.table .tr[data-value="4"] .td').eq(4).find('span').should('have.class', 'status-indicator--success');
+
+      /** Legend */
+      cy.get('.legend').should('have.length', 1);
+      cy.get('.legend-items--item').should('have.length', 3);
+      cy.get('.legend-items--item').eq(0).should('contain', 'Granule not found');
+      cy.get('.legend-items--item').eq(1).should('contain', 'Missing image file');
+      cy.get('.legend-items--item').eq(2).should('contain', 'No issues/conflicts');
     });
 
     it('should download the Internal report with the report link', () => {
       const reportName = 'InternalReport092020';
       cy.visit('/reconciliation-reports');
       cy.get(`[data-value="${reportName}"]`).find('.button__row--download').should('have.length', 1);
-    });
-
-    it('should include legend on list page', () => {
-      cy.visit('/reconciliation-reports');
-
-      cy.get('.legend').should('have.length', 1);
-      cy.get('.legend-items--item').should('have.length', 3);
-      cy.get('.legend-items--item').eq(0).should('contain', 'Granule not found');
-      cy.get('.legend-items--item').eq(1).should('contain', 'Missing image file');
-      cy.get('.legend-items--item').eq(2).should('contain', 'No issues/conflicts');
     });
 
     it('should have the option to search the report', () => {

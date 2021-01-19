@@ -78,7 +78,7 @@ class RulesOverview extends React.Component {
             action={listRules}
             tableColumns={tableColumns}
             query={{ ...queryParams }}
-            sortId="timestamp"
+            initialSortId="timestamp"
             bulkActions={this.generateBulkActions()}
             rowId="name"
             filterAction={filterRules}
@@ -88,9 +88,6 @@ class RulesOverview extends React.Component {
               <Search
                 action={searchRules}
                 clear={clearRulesSearch}
-                inputProps={{
-                  className: 'search search--small',
-                }}
                 label="Search"
                 labelKey="name"
                 placeholder="Search Rules"

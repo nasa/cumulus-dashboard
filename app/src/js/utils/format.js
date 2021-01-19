@@ -1,11 +1,15 @@
 /* eslint-disable import/no-cycle */
 
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import numeral from 'numeral';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { getPersistentQueryParams } from './url-helper';
 import Tooltip from '../components/Tooltip/tooltip';
+import Popover from '../components/Popover/popover';
 
 export const nullValue = '--';
 
@@ -87,11 +91,105 @@ export const fromNowWithTooltip = (timestamp) => (
   <Tooltip
     className="tooltip--blue"
     id="table-timestamp-tooltip"
-    placement="top"
+    placement="bottom"
     target={<span>{fromNow(timestamp)}</span>}
     tip={fullDate(timestamp)}
   />
 );
+
+const getIndicator = (prop) => {
+  const indicator = {};
+  switch (prop) {
+    case 'missing':
+      indicator.color = 'orange';
+      indicator.text = 'Granule missing';
+      break;
+    case 'notFound':
+      indicator.color = 'failed';
+      indicator.text = 'Granule not found';
+      break;
+    case false:
+      indicator.color = 'failed';
+      indicator.text = 'Granule not found';
+      break;
+    default:
+      indicator.color = 'success';
+      indicator.text = 'Granule found';
+      break;
+  }
+  return indicator;
+};
+
+export const IndicatorWithTooltip = ({
+  granuleId,
+  repo,
+  value,
+}) => {
+  const indicator = getIndicator(value);
+  const { color, text } = indicator;
+  return (
+    <Tooltip
+      className="tooltip--blue"
+      id={`${granuleId}-${repo}-indicator-tooltip`}
+      placement="right"
+      target={<span className={`status-indicator status-indicator--${color}`}></span>}
+      tip={text}
+    />
+  );
+};
+
+IndicatorWithTooltip.propTypes = {
+  granuleId: PropTypes.string,
+  repo: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+};
+
+export const CopyCellPopover = ({ cellContent, id, popoverContent, value }) => {
+  const [copyStatus, setCopyStatus] = useState('');
+
+  async function copyToClipboard(e) {
+    e.preventDefault();
+    try {
+      await navigator.clipboard.writeText(value || popoverContent);
+      setCopyStatus('Copied!');
+    } catch (err) {
+      setCopyStatus('Failed to copy!');
+    }
+  }
+
+  function handleMouseLeave() {
+    if (copyStatus !== '') {
+      setCopyStatus('');
+    }
+  }
+
+  return (
+    <Popover
+      className="popover--blue"
+      id={id}
+      onMouseLeave={handleMouseLeave}
+      placement="bottom"
+      popover={true}
+      target={cellContent}
+      popoverContent={(
+        <>
+          <div className='popover-body--main'>{popoverContent}</div>
+          <div className='popover-body--footer'>
+            {copyStatus && <span>{copyStatus}</span>}
+            <button className='button button--small button--no-left-padding' onClick={copyToClipboard}><FontAwesomeIcon icon={faCopy}/> Copy</button>
+          </div>
+        </>
+      )}
+    />
+  );
+};
+
+CopyCellPopover.propTypes = {
+  cellContent: PropTypes.node,
+  id: PropTypes.string,
+  popoverContent: PropTypes.node,
+  value: PropTypes.string,
+};
 
 export const lastUpdated = (datestring, text) => {
   const meta = text || 'Last Updated';
@@ -183,7 +281,7 @@ export const link = (url) => (
 export const truncate = (string, to = 100) => {
   if (!string) return nullValue;
   if (string.length <= to) return string;
-  return `${string.slice(0, to)}... Show More`;
+  return `${string.slice(0, to)}...`;
 };
 
 export const getFormattedCollectionId = (collection) => {

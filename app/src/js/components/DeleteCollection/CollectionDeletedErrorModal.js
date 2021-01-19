@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 // import Button from '../Button/Button';
+import { Alert } from 'react-bootstrap';
 import ErrorReport from '../Errors/report';
 
 class CollectionDeletedErrorModal extends React.Component {
@@ -34,10 +35,8 @@ class CollectionDeletedErrorModal extends React.Component {
           Delete Collection
         </Modal.Title>
         <Modal.Body>
-          <p>
-            An error occurred attempting to delete collection
-            {` "${this.props.collectionLabel}"`}
-          </p>
+          <Alert variant="danger"><strong>Error:</strong> An error occurred attempting to delete collection
+            {` "${this.props.collectionLabel}"`}</Alert>
           {this.props.errors.length > 0 &&
             <ErrorReport report={this.props.errors} truncate={true} />
           }

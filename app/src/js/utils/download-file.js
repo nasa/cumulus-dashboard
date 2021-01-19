@@ -43,6 +43,6 @@ export function handleDownloadCsvClick(e, { reportName, table }) {
   const { name: tableName, data: tableData, columns: tableColumns } = table;
   const data = convertToCSV(tableData, tableColumns);
   const csvData = new Blob([data], { type: 'text/csv' });
-  const url = window.URL.createObjectURL(csvData);
+  const url = window ? window.URL.createObjectURL(csvData) : '';
   downloadFile(url, `${reportName}-${tableName}.csv`);
 }
