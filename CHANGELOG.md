@@ -55,6 +55,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Implement lazy loading for SortableTable, Datepicker, and Sidebar
   - Improve performance
 
+- **CUMULUS-2259**
+  - Production build now minimizes code.
+  - CI now uses Docker images from maven.earthdata.nasa.gov/ via optional environmental variable DOCKER_REPOSITORY that is placed in front of the desired images.
+
 - **CUMULUS-2270**
   - Add provider drop down filter to Collections Overview page
 

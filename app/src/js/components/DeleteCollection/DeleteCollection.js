@@ -14,14 +14,12 @@ class DeleteCollection extends React.Component {
       modal: null
     };
 
-    [
-      this.handleClick,
-      this.handleClose,
-      this.handleConfirm,
-      this.handleError,
-      this.handleGotoGranules,
-      this.handleSuccess
-    ].forEach((fn) => (this[fn.name] = fn.bind(this)));
+    this.handleClick = this.handleClick.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleConfirm = this.handleConfirm.bind(this);
+    this.handleError = this.handleError.bind(this);
+    this.handleGotoGranules = this.handleGotoGranules.bind(this);
+    this.handleSuccess = this.handleSuccess.bind(this);
   }
 
   componentDidUpdate (prevProps) {
