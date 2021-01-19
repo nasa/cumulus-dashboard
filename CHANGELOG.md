@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [v4.0.0] - 2021-01-13
 
+## Breaking Changes
+
+This version of the dashboard requires Cumulus API v5.0.0
+
+## All Changes
+
 ### Fixed
 - **CUMULUS-1765**
   - Update 'Errors' tile Kibana link to reflect 'failed' granules and datepicker
