@@ -29,7 +29,7 @@ const MainConfig = merge.smartStrategy({
   optimization: {
     nodeEnv: 'production',
     concatenateModules: true,
-    minimize: false,
+    minimize: true,
     minimizer: [
       new TerserJsPlugin({
         cache: true,

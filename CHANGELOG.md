@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v4.0.0] - 2021-01-13
+
+## Breaking Changes
+
+This version of the dashboard requires Cumulus API v5.0.0
+
+## All Changes
+
 ### Fixed
 - **CUMULUS-1765**
   - Update 'Errors' tile Kibana link to reflect 'failed' granules and datepicker
@@ -54,6 +62,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2206**
   - Implement lazy loading for SortableTable, Datepicker, and Sidebar
   - Improve performance
+
+- **CUMULUS-2259**
+  - Production build now minimizes code.
+  - CI now uses Docker images from maven.earthdata.nasa.gov/ via optional environmental variable DOCKER_REPOSITORY that is placed in front of the desired images.
 
 - **CUMULUS-2270**
   - Add provider drop down filter to Collections Overview page
@@ -784,7 +796,8 @@ Fix for serving the dashboard through the Cumulus API.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v4.0.0...HEAD
+[v4.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v3.0.0...v4.0.0
 [v3.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v2.0.0...v3.0.0
 [v2.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.10.0...v2.0.0
 [v1.10.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.9.0...v1.10.0

@@ -3,6 +3,7 @@ set -ex
 
 # Bamboo envs are prefixed with bamboo_SECRET to avoid being printed
 declare -a param_list=(
+    "bamboo_DOCKER_REPOSITORY"
     "bamboo_GIT_PR"
     "bamboo_REPORT_BUILD_STATUS"
     "bamboo_SECRET_GITHUB_TOKEN"
