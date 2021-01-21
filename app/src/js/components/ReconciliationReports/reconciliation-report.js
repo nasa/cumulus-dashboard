@@ -13,7 +13,8 @@ const ReconciliationReport = ({
   match,
   reconciliationReports = [],
 }) => {
-  const { reconciliationReportName } = match.params;
+  const { reconciliationReportName: encodedReportName } = match.params;
+  const reconciliationReportName = decodeURIComponent(encodedReportName);
   const { list, map, searchString: filterString } = reconciliationReports;
   const record = map[reconciliationReportName];
   const { data: recordData } = record || {};

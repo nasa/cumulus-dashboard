@@ -894,7 +894,7 @@ export const getReconciliationReport = (reconciliationName) => ({
     id: reconciliationName,
     type: types.RECONCILIATION,
     method: 'GET',
-    path: `reconciliationReports/${reconciliationName}`
+    path: `reconciliationReports/${encodeURIComponent(reconciliationName)}`
   }
 });
 
@@ -913,7 +913,7 @@ export const deleteReconciliationReport = (reconciliationName) => ({
     id: reconciliationName,
     type: types.RECONCILIATION_DELETE,
     method: 'DELETE',
-    path: `reconciliationReports/${reconciliationName}`
+    path: `reconciliationReports/${encodeURIComponent(reconciliationName)}`
   }
 });
 
