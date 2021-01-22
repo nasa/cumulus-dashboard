@@ -1,3 +1,5 @@
+const filenamify = (fileName) => fileName.replace(/["%*/:<>?\\|]/g, '_');
+
 /**
  * downloadFile
  * @description This causes the browser to download a given file in the browser with a given filename
@@ -7,7 +9,7 @@
 
 export const downloadFile = (file, fileName) => {
   const link = document.createElement('a');
-  link.setAttribute('download', fileName);
+  link.setAttribute('download', filenamify(fileName));
   link.href = file;
   document.body.appendChild(link);
   link.click();
