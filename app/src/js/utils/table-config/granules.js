@@ -44,7 +44,7 @@ export const tableColumns = [
   {
     Header: 'Status',
     accessor: 'status',
-    width: 100,
+    width: 110,
     Cell: ({ cell: { value } }) => <Link to={(location) => ({ pathname: `/granules/${value}`, search: getPersistentQueryParams(location) })} className={`granule__status granule__status--${value}`}>{displayCase(value)}</Link> // eslint-disable-line react/prop-types
   },
   {
