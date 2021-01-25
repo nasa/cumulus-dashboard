@@ -85,23 +85,12 @@ const handleCsvDownloadClick = (e, reportName, dispatch) => {
 const handleDeleteClick = (e, value, dispatch, query) => {
   e.preventDefault();
   dispatch(deleteReconciliationReport(value)).then((response) => {
-    refreshReports(dispatch, value, query);
+    setTimeout(
+      () => dispatch(listReconciliationReports(query)),
+      1000
+    );
   });
 };
-
-// It can take an extra second or two to delete a report from
-// Elasticsearch. This function keeps checking the reports to make sure it was
-// deleted before displaying the delete result.
-const refreshReports = (dispatch, value, query) => {
-  dispatch(listReconciliationReports(query)).then((reports) => {
-    const reportDeleted = checkReportDeleted(value, reports.data.results);
-    if (!reportDeleted) {
-      refreshReports(dispatch, value, query);
-    }
-  });
-};
-
-const checkReportDeleted = (reportName, reports) => reports.every((report) => report.name !== reportName);
 
 export const bulkActions = (reports) => [];
 
