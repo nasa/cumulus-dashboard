@@ -57,16 +57,15 @@ const breadcrumbConfig = [
 class CollectionOverview extends React.Component {
   constructor(props) {
     super(props);
-    [
-      this.changeCollection,
-      this.deleteMe,
-      this.errors,
-      this.generateQuery,
-      this.generateBulkActions,
-      this.gotoGranules,
-      this.load,
-      this.navigateBack,
-    ].forEach((fn) => (this[fn.name] = fn.bind(this)));
+
+    this.changeCollection = this.changeCollection.bind(this);
+    this.deleteMe = this.deleteMe.bind(this);
+    this.errors = this.errors.bind(this);
+    this.generateQuery = this.generateQuery.bind(this);
+    this.generateBulkActions = this.generateBulkActions.bind(this);
+    this.gotoGranules = this.gotoGranules.bind(this);
+    this.load = this.load.bind(this);
+    this.navigateBack = this.navigateBack.bind(this);
   }
 
   componentDidMount() {

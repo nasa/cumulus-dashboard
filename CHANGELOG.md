@@ -8,6 +8,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Fixed
+- **CUMULUS-2310**
+  - Allow slash in reconciliation report name
+
+- **CUMULUS-2349**
+  - Stop scrolling of checkboxes in tables
+  - Other tweaks to prevent unexpected horizontal scrolling in tables
+
+## [v4.0.0] - 2021-01-13
+
+## Breaking Changes
+
+This version of the dashboard requires Cumulus API v5.0.0
+
+## All Changes
+
+### Fixed
+- **CUMULUS-1765**
+  - Update 'Errors' tile Kibana link to reflect 'failed' granules and datepicker
+  - Update 'Logs' Kibana link to reflect datepicker
+
 - **CUMULUS-2069**
   - Standardize UI button groups
 
@@ -31,6 +51,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Remove `node-notifier` to remediate security vulnerability
 
 ### Added
+- **CUMULUS-1763**
+  - Add tests for different dashboard configurations
+
 - **CUMULUS-1885**
   - Expand columns to fit full content width when separator is double clicked
 
@@ -51,11 +74,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Implement lazy loading for SortableTable, Datepicker, and Sidebar
   - Improve performance
 
+- **CUMULUS-2259**
+  - Production build now minimizes code.
+  - CI now uses Docker images from maven.earthdata.nasa.gov/ via optional environmental variable DOCKER_REPOSITORY that is placed in front of the desired images.
+
 - **CUMULUS-2270**
   - Add provider drop down filter to Collections Overview page
 
 - **CUMULUS-2272**
   - Add popover to granuleId and collection name table columns to view and copy full cell text
+
+- **CUMULUS-2291**
+  - Add provider filter to Granule Inventory Report
 
 ### Changed
 
@@ -777,7 +807,8 @@ Fix for serving the dashboard through the Cumulus API.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v4.0.0...HEAD
+[v4.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v3.0.0...v4.0.0
 [v3.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v2.0.0...v3.0.0
 [v2.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.10.0...v2.0.0
 [v1.10.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.9.0...v1.10.0

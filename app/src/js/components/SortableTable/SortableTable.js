@@ -69,7 +69,7 @@ const SortableTable = ({
     () => ({
       Cell: ({ value = '' }) => value,
       // When using the useFlexLayout:
-      minWidth: 30, // minWidth is only used as a limit for resizing
+      minWidth: 50, // minWidth is only used as a limit for resizing
       width: 125, // width is used for both the flex-basis and flex-grow
     }),
     []
@@ -260,6 +260,7 @@ const SortableTable = ({
                     'td',
                     {
                       'table__main-asset': cellIndex === primaryIdx,
+                      table__checkbox: canSelect && cellIndex === 0,
                     }
                   );
 
