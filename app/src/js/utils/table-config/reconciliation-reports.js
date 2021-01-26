@@ -11,7 +11,7 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
     Header: 'Name',
     accessor: 'name',
     Cell: ({ cell: { value }, row: { original: { type } } }) => { // eslint-disable-line react/prop-types
-      const link = (location) => ({ pathname: `/reconciliation-reports/report/${value}`, search: getPersistentQueryParams(location) });
+      const link = (location) => ({ pathname: `/reconciliation-reports/report/${encodeURIComponent(value)}`, search: getPersistentQueryParams(location) });
       switch (type) {
         case 'Internal':
           return <Link to={link} onClick={(e) => handleDownloadClick(e, value, dispatch)}>{value}</Link>;
