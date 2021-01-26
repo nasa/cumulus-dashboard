@@ -64,6 +64,8 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
   }
 ]);
 
+const MAX_REPORT_RETRIES = 5;
+
 const handleDownloadClick = (e, reportName, dispatch) => {
   e.preventDefault();
   dispatch(getReconciliationReport(reportName)).then((response) => {
@@ -85,9 +87,30 @@ const handleCsvDownloadClick = (e, reportName, dispatch) => {
 const handleDeleteClick = (e, value, dispatch, query) => {
   e.preventDefault();
   dispatch(deleteReconciliationReport(value)).then((response) => {
-    dispatch(listReconciliationReports(query));
+    if (!response.error) {
+      refreshReports(dispatch, value, query, MAX_REPORT_RETRIES);
+    }
   });
 };
+
+// It can take an extra second or two to delete a report from
+// Elasticsearch. This function keeps checking the reports to make sure it was
+// deleted before displaying the delete result.
+const refreshReports = (dispatch, value, query, retries) => {
+  if (retries > 0) {
+    dispatch(listReconciliationReports(query)).then((reports) => {
+      const reportDeleted = checkReportDeleted(value, reports.data.results);
+      if (!reportDeleted) {
+        setTimeout(
+          () => refreshReports(dispatch, value, query, retries - 1),
+          1000
+        );
+      }
+    });
+  }
+};
+
+const checkReportDeleted = (reportName, reports) => reports.every((report) => report.name !== reportName);
 
 export const bulkActions = (reports) => [];
 
