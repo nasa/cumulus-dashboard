@@ -8,12 +8,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Fixed
+
 - **CUMULUS-2310**
   - Allow slash in reconciliation report name
 
 - **CUMULUS-2349**
   - Stop scrolling of checkboxes in tables
   - Other tweaks to prevent unexpected horizontal scrolling in tables
+
+### Changed
+
+- **CUMULUS-bugfix**
+  - replaced deprecated node-sass with sass
 
 ## [v4.0.0] - 2021-01-13
 
