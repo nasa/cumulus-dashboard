@@ -21,6 +21,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-bugfix**
   - replaced deprecated node-sass with sass
 
+### Added
+
+- **CUMULUS-2297**
+  - Add abilitiy to toggle column filters on all tables
+
 ## [v4.0.0] - 2021-01-13
 
 ## Breaking Changes
