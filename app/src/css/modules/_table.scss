@@ -115,14 +115,11 @@
 }
 
 .list__filters {
-  margin: 1.5em 0 2em;
+  margin: 1.5em 0 .5em;
+  display: flex;
   @extend .clearfix;
   label {
     font-size: .86em;
-  }
-
-  &--flex {
-    display: flex;
   }
 
   &--item {
@@ -183,14 +180,11 @@
 }
 
 .list-action-wrapper {
-  padding-top: 1.5em;
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: flex-start;
 
   &.no-actions {
-    align-items: center;
-
     .filters {
       margin: 1em 0;
     }
@@ -201,6 +195,7 @@
   display: flex;
   justify-content: space-around;
   flex-grow: 1;
+  margin-top: 3em;
 
   .form--controls {
     flex-grow: 1;

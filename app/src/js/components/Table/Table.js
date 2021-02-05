@@ -1,16 +1,19 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
 import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
 import omitBy from 'lodash/omitBy';
+import noop from 'lodash/noop';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/pagination';
 // Lodash
 import ListActions from '../ListActions/ListActions';
 import TableHeader from '../TableHeader/table-header';
+import ListFilters from '../ListActions/ListFilters';
+import TableFilters from './TableFilters';
 
 const SortableTable = lazy(() => import('../SortableTable/SortableTable'));
 
@@ -52,6 +55,10 @@ const List = ({
   const [bulkActionMeta, setBulkActionMeta] = useState({
     completedBulkActions: 0,
     bulkActionError: null,
+  });
+  const [toggleColumnOptions, setToggleColumnOptions] = useState({
+    onChange: noop,
+    hiddenColumns: [],
   });
 
   const { bulkActionError, completedBulkActions } = bulkActionMeta;
@@ -154,6 +161,10 @@ const List = ({
     );
   }
 
+  const getToggleColumnOptions = useCallback((newOptions) => {
+    setToggleColumnOptions(newOptions);
+  }, []);
+
   return (
     <>
       <ListActions
@@ -168,6 +179,9 @@ const List = ({
         selected={selected}
       >
         {children}
+        <ListFilters>
+          <TableFilters columns={tableColumns} {...toggleColumnOptions} />
+        </ListFilters>
       </ListActions>
       <div className="list-view">
         {listInflight && <Loading />}
@@ -198,6 +212,7 @@ const List = ({
               // if there's an initialSortId, it means the first fetch request for the list should be sorted
               // according to that id, and therefore we are using sever-side/manual sorting
               shouldManualSort={!!initialSortId}
+              getToggleColumnOptions={getToggleColumnOptions}
             />
           </Suspense>
           <Pagination
