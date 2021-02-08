@@ -26,7 +26,7 @@ This version of the dashboard requires Cumulus API v5.0.2-alpha.0
   - replaced deprecated node-sass with sass
 
 - **CUMULUS-2321**
-  - Updated reconcilation report to work with the API endpoint changes
+  - Updated reconciliation report to work with the API endpoint changes
   - Requires @cumulus/api@5.0.2-alpha.0
 
 ## [v4.0.0] - 2021-01-13
