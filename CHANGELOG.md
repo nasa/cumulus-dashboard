@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - **CUMULUS-2297**
-  - Add abilitiy to toggle column filters on all tables
+  - Add ability to show/hide columns on all tables
 
 ## [v4.0.0] - 2021-01-13
 
