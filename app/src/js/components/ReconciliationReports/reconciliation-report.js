@@ -2,13 +2,11 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import get from 'lodash/get';
 import { getReconciliationReport } from '../../actions';
 import Loading from '../LoadingIndicator/loading-indicator';
 import InventoryReport from './inventory-report';
 import GnfReport from './gnf-report';
 import Legend from './legend';
-import ErrorReport from '../Errors/report';
 
 const ReconciliationReport = ({
   dispatch,
@@ -20,7 +18,16 @@ const ReconciliationReport = ({
   const { list, map, searchString: filterString } = reconciliationReports;
   const record = map[reconciliationReportName];
 
-  const recordData = get(record, 'data.data', {});
+  let { error, data: reportData } = record.data || {};
+
+  // report data is an error message
+  if (typeof reportData === 'string' && reportData.startsWith('Error')) {
+    const reportError = `${reportData}, please download the report instead`;
+    error = error || reportError;
+    reportData = {};
+  }
+
+  const recordData = { ...reportData, error };
   const { reportType = 'Inventory' } = recordData || {};
   const filterBucket = list.params.bucket;
 
@@ -30,11 +37,6 @@ const ReconciliationReport = ({
 
   if (!record || (record.inflight && !record.data)) {
     return <Loading />;
-  }
-
-  if (typeof recordData === 'string' && recordData.startsWith('Error')) {
-    const error = `${recordData}, please download the report instead`;
-    return <ErrorReport report={error} />;
   }
 
   return (

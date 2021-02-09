@@ -399,7 +399,7 @@ describe('Dashboard Granules Page', () => {
         .should('be.visible')
         .click({ force: true });
 
-      cy.wait('@getList').its('response.body.url').should('exist');
+      cy.wait('@getList').its('response.body.presignedS3Url').should('exist');
     });
 
     it('Should open modal to create granule inventory report', () => {
