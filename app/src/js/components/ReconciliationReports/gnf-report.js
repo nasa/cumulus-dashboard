@@ -83,7 +83,7 @@ const GnfReport = ({
   const totalMissingGranules = combinedGranules.reduce(calculateMissingGranules, 0);
 
   function handleDownloadClick(e) {
-    handleDownloadJsonClick(e, { data: recordData, reportName });
+    handleDownloadUrlClick(e, { url: reportUrl });
   }
 
   return (

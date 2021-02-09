@@ -40,6 +40,11 @@ export function handleDownloadJsonClick(e, { data, reportName }) {
   downloadFile(jsonHref, `${reportName}.json`);
 }
 
+export function handleDownloadUrlClick(e, { url }) {
+  e.preventDefault();
+  if (url && window && !window.Cypress) window.open(url);
+}
+
 export function handleDownloadCsvClick(e, { reportName, table }) {
   e.preventDefault();
   const { name: tableName, data: tableData, columns: tableColumns } = table;

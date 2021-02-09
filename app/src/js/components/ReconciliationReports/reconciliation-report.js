@@ -21,6 +21,7 @@ const ReconciliationReport = ({
 
   let error = get(record, 'data.error');
   let reportData = get(record, 'data.data', {});
+  const reportUrl = get(record, 'data.presignedS3Url');
 
   // report data is an error message
   if (typeof reportData === 'string' && reportData.startsWith('Error')) {
@@ -51,12 +52,14 @@ const ReconciliationReport = ({
             legend={<Legend />}
             recordData={recordData}
             reportName={reconciliationReportName}
+            reportUrl={reportUrl}
           />,
           'Granule Not Found': <GnfReport
             filterString={filterString}
             legend={<Legend />}
             recordData={recordData}
             reportName={reconciliationReportName}
+            reportUrl={reportUrl}
           />
         }[reportType]
       }
