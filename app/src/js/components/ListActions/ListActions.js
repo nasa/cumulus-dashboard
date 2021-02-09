@@ -62,33 +62,35 @@ const ListActions = ({
   function renderGroupActions() {
     return (
       <>
-        <div className={'list-actions'}>
-          <div className='form--controls'>
-            <button
-              aria-expanded={actionsExpanded}
-              className={`button button--small form-group__element button--group-action${actionsExpanded ? '--collapsed' : ''}`}
-              onClick={() => setFiltersExpanded(!actionsExpanded)}
-            >
-              {groupAction.title}
-            </button>
-          </div>
-          <Timer
-            noheader={!hasActions}
-            dispatch={dispatch}
-            action={action}
-            config={queryConfig}
-            reload={completedBulkActions}
-          />
-        </div>
-        <Collapse in={actionsExpanded}>
-          <div className='group-action--wrapper'>
-            <h4>{groupAction.title}</h4>
-            <p>{groupAction.description}</p>
+        <div>
+          <div className={'list-actions'}>
             <div className='form--controls'>
-              {listBulkActions()}
+              <button
+                aria-expanded={actionsExpanded}
+                className={`button button--small form-group__element button--group-action${actionsExpanded ? '--collapsed' : ''}`}
+                onClick={() => setFiltersExpanded(!actionsExpanded)}
+              >
+                {groupAction.title}
+              </button>
             </div>
           </div>
-        </Collapse>
+          <Collapse in={actionsExpanded}>
+            <div className='group-action--wrapper'>
+              <h4>{groupAction.title}</h4>
+              <p>{groupAction.description}</p>
+              <div className='form--controls'>
+                {listBulkActions()}
+              </div>
+            </div>
+          </Collapse>
+        </div>
+        <Timer
+          noheader={!hasActions}
+          dispatch={dispatch}
+          action={action}
+          config={queryConfig}
+          reload={completedBulkActions}
+        />
       </>
     );
   }

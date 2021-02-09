@@ -180,6 +180,9 @@ select option{
 
 .form__element__updateToggle {
   padding-right: .1em;
+  margin-left: auto;
+  align-self: flex-end;
+  margin-top: 1em;
   .metadata__updated {
     display: block;
     &:hover {
