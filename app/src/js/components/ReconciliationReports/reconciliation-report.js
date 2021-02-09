@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import get from 'lodash/get';
 import { getReconciliationReport } from '../../actions';
 import Loading from '../LoadingIndicator/loading-indicator';
 import InventoryReport from './inventory-report';
@@ -18,7 +19,8 @@ const ReconciliationReport = ({
   const { list, map, searchString: filterString } = reconciliationReports;
   const record = map[reconciliationReportName];
 
-  let { error, data: reportData } = record.data || {};
+  let error = get(record, 'data.error');
+  let reportData = get(record, 'data.data', {});
 
   // report data is an error message
   if (typeof reportData === 'string' && reportData.startsWith('Error')) {

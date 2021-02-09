@@ -238,7 +238,7 @@ test('report with error triggers error message', function (t) {
   t.is(ErrorReport.dive().find('ShowMoreOrLess').props().text, reconciliationReports.map.exampleReportWithError.data.error);
 });
 
-test.only('report which exceeds maximum allowed payload size triggers error message', function (t) {
+test('report which exceeds maximum allowed payload size triggers error message', function (t) {
   const match = { params: { reconciliationReportName: 'exampleReportExceedsPayloadLimit' } };
 
   const dispatch = () => {};
