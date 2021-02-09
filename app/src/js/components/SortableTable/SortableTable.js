@@ -139,6 +139,7 @@ const SortableTable = ({
   );
 
   const tableRows = page || rows;
+  const includeFilters = typeof getToggleColumnOptions !== 'function';
 
   useEffect(() => {
     if (clearSelected) {
@@ -191,9 +192,11 @@ const SortableTable = ({
 
   return (
     <div className='table--wrapper'>
-      {(typeof getToggleColumnOptions !== 'function') &&
+      {(includeFilters || legend) &&
       <ListFilters>
-        <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
+        {includeFilters &&
+            <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
+        }
         {legend}
       </ListFilters>}
       <div className='table' {...getTableProps()}>
