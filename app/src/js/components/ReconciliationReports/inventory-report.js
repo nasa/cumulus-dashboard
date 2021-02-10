@@ -13,7 +13,7 @@ import {
 } from '../../actions';
 import SortableTable from '../SortableTable/SortableTable';
 import { reshapeReport } from './reshape-report';
-import { handleDownloadJsonClick, handleDownloadCsvClick } from '../../utils/download-file';
+import { handleDownloadUrlClick, handleDownloadCsvClick } from '../../utils/download-file';
 import Search from '../Search/search';
 import Dropdown from '../DropDown/dropdown';
 import ReportHeading from './report-heading';
@@ -33,6 +33,7 @@ const InventoryReport = ({
   legend,
   recordData,
   reportName,
+  reportUrl,
 }) => {
   const [activeId, setActiveId] = useState('dynamo');
   const { reportStartTime = null, reportEndTime = null, error = null } =
@@ -50,7 +51,7 @@ const InventoryReport = ({
   const downloadOptions = [
     {
       label: 'JSON - Full Report',
-      onClick: (e) => handleDownloadJsonClick(e, { data: recordData, reportName })
+      onClick: (e) => handleDownloadUrlClick(e, { url: reportUrl })
     },
     ...activeCardTables.map((table) => ({
       label: `CSV - ${table.name}`,
@@ -229,6 +230,7 @@ InventoryReport.propTypes = {
   legend: PropTypes.node,
   recordData: PropTypes.object,
   reportName: PropTypes.string,
+  reportUrl: PropTypes.string,
 };
 
 export default InventoryReport;

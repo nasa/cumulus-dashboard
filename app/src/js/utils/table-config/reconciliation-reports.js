@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import get from 'lodash/get';
 
 import { nullValue, dateOnly, collectionNameVersion, IndicatorWithTooltip } from '../format';
 import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions';
 import { getPersistentQueryParams } from '../url-helper';
-import { downloadFile } from '../download-file';
 
 export const tableColumns = ({ dispatch, isGranules, query }) => ([
   {
@@ -14,9 +14,8 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
       const link = (location) => ({ pathname: `/reconciliation-reports/report/${encodeURIComponent(value)}`, search: getPersistentQueryParams(location) });
       switch (type) {
         case 'Internal':
-          return <Link to={link} onClick={(e) => handleDownloadClick(e, value, dispatch)}>{value}</Link>;
         case 'Granule Inventory':
-          return <Link to={link} onClick={(e) => handleCsvDownloadClick(e, value, dispatch)}>{value}</Link>;
+          return <Link to={link} onClick={(e) => handleDownloadClick(e, value, dispatch)}>{value}</Link>;
         default:
           return <Link to={link} >{value}</Link>;
       }
@@ -42,9 +41,7 @@ export const tableColumns = ({ dispatch, isGranules, query }) => ([
       <button
         aria-label="Download Report"
         className='button button__row button__row--download'
-        onClick={(e) => (isGranules
-          ? handleCsvDownloadClick(e, value, dispatch)
-          : handleDownloadClick(e, value, dispatch))}
+        onClick={(e) => handleDownloadClick(e, value, dispatch)}
       />
     ),
     disableSortBy: true
@@ -69,17 +66,7 @@ const MAX_REPORT_RETRIES = 5;
 const handleDownloadClick = (e, reportName, dispatch) => {
   e.preventDefault();
   dispatch(getReconciliationReport(reportName)).then((response) => {
-    const { data } = response;
-    const url = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data))}`;
-    downloadFile(url, `${reportName}.json`);
-  });
-};
-
-const handleCsvDownloadClick = (e, reportName, dispatch) => {
-  e.preventDefault();
-  dispatch(getReconciliationReport(reportName)).then((response) => {
-    const { data } = response;
-    const { url } = data;
+    const url = get(response, 'data.presignedS3Url');
     if (url && window && !window.Cypress) window.open(url);
   });
 };

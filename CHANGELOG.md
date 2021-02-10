@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## Breaking Changes
+
+This version of the dashboard requires Cumulus API v5.0.2-alpha.0
+
 ### Fixed
 
 - **CUMULUS-2310**
@@ -20,6 +24,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-bugfix**
   - replaced deprecated node-sass with sass
+
+- **CUMULUS-2321**
+  - Updated reconciliation report to work with the API endpoint changes
+  - Requires @cumulus/api@5.0.2-alpha.0
 
 ### Added
 

@@ -32,12 +32,9 @@ const convertToCSV = (data, columns) => {
   return `${csvHeader}\r\n${csvData}`;
 };
 
-export function handleDownloadJsonClick(e, { data, reportName }) {
+export function handleDownloadUrlClick(e, { url }) {
   e.preventDefault();
-  const jsonHref = `data:text/json;charset=utf-8,${encodeURIComponent(
-    JSON.stringify(data)
-  )}`;
-  downloadFile(jsonHref, `${reportName}.json`);
+  if (url && window && !window.Cypress) window.open(url);
 }
 
 export function handleDownloadCsvClick(e, { reportName, table }) {
