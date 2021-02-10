@@ -115,14 +115,11 @@
 }
 
 .list__filters {
-  margin: 1.5em 0 2em;
+  margin: 1.5em 0 .5em;
+  display: flex;
   @extend .clearfix;
   label {
     font-size: .86em;
-  }
-
-  &--flex {
-    display: flex;
   }
 
   &--item {
@@ -151,8 +148,7 @@
     background: $white;
     padding: 2em;
     margin: 1em 0;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.08);
-    border-radius: 8px;
+    box-shadow: $shadow__default;
   }
 
   &--filter {
@@ -170,9 +166,8 @@
   padding: 1em 1em .4em 1em;
   border: 1px solid $border-grey;
   box-shadow: $shadow__default;
-  width: 100%;
 
-  h {
+  h4 {
     font-size: .86em;
   }
 
@@ -183,14 +178,14 @@
 }
 
 .list-action-wrapper {
-  padding-top: 1.5em;
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+
+  &:not(.no-actions) {
+    align-items: flex-start;
+  }
 
   &.no-actions {
-    align-items: center;
-
     .filters {
       margin: 1em 0;
     }
@@ -199,11 +194,14 @@
 
 .list-actions {
   display: flex;
+  align-items: flex-start;
   justify-content: space-around;
   flex-grow: 1;
+  margin-top: 3em;
 
   .form--controls {
     flex-grow: 1;
+    margin-bottom: 1em;
   }
 }
 

@@ -53,9 +53,9 @@ IndeterminateCheckbox.propTypes = {
 const SortableTable = ({
   canSelect,
   changeSortProps,
-  children,
   clearSelected,
   data = [],
+  getToggleColumnOptions,
   initialHiddenColumns = [],
   initialSortId,
   legend,
@@ -139,7 +139,7 @@ const SortableTable = ({
   );
 
   const tableRows = page || rows;
-  const includeFilters = initialHiddenColumns.length > 0;
+  const includeFilters = typeof getToggleColumnOptions !== 'function';
 
   useEffect(() => {
     if (clearSelected) {
@@ -166,6 +166,15 @@ const SortableTable = ({
     }
   }, [changeSortProps, sortBy]);
 
+  useEffect(() => {
+    if (typeof getToggleColumnOptions === 'function') {
+      getToggleColumnOptions({
+        onChange: toggleHideColumn,
+        hiddenColumns
+      });
+    }
+  }, [getToggleColumnOptions, hiddenColumns, toggleHideColumn]);
+
   function handleDoubleClick(id, header, originalWidth) {
     setFitColumn({
       ...fitColumn,
@@ -184,13 +193,12 @@ const SortableTable = ({
   return (
     <div className='table--wrapper'>
       {(includeFilters || legend) &&
-        <ListFilters className="list__filters--flex">
-          {includeFilters &&
+      <ListFilters>
+        {includeFilters &&
             <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
-          }
-          {legend}
-        </ListFilters>
-      }
+        }
+        {legend}
+      </ListFilters>}
       <div className='table' {...getTableProps()}>
         <div className='thead'>
           <div className='tr'>
@@ -303,9 +311,9 @@ const SortableTable = ({
 SortableTable.propTypes = {
   canSelect: PropTypes.bool,
   changeSortProps: PropTypes.func,
-  children: PropTypes.node,
   clearSelected: PropTypes.bool,
   data: PropTypes.array,
+  getToggleColumnOptions: PropTypes.func,
   initialHiddenColumns: PropTypes.array,
   initialSortId: PropTypes.string,
   legend: PropTypes.node,

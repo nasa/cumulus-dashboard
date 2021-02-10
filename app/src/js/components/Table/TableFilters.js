@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from 'react-bootstrap';
 
-const TableFilters = ({ columns, onChange, hiddenColumns = [] }) => {
+const TableFilters = ({ columns = [], onChange, hiddenColumns = [] }) => {
   const [filtersExpanded, setFiltersExpanded] = useState(false);
 
   function handleChange(id) {

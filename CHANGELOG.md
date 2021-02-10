@@ -29,6 +29,11 @@ This version of the dashboard requires Cumulus API v5.0.2-alpha.0
   - Updated reconciliation report to work with the API endpoint changes
   - Requires @cumulus/api@5.0.2-alpha.0
 
+### Added
+
+- **CUMULUS-2297**
+  - Add ability to show/hide columns on all tables
+
 ## [v4.0.0] - 2021-01-13
 
 ## Breaking Changes
