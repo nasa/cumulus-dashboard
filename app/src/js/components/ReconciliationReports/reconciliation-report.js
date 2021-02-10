@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import get from 'lodash/get';
 import { getReconciliationReport } from '../../actions';
 import Loading from '../LoadingIndicator/loading-indicator';
 import InventoryReport from './inventory-report';
@@ -17,7 +18,19 @@ const ReconciliationReport = ({
   const reconciliationReportName = decodeURIComponent(encodedReportName);
   const { list, map, searchString: filterString } = reconciliationReports;
   const record = map[reconciliationReportName];
-  const { data: recordData } = record || {};
+
+  let error = get(record, 'data.error');
+  let reportData = get(record, 'data.data', {});
+  const reportUrl = get(record, 'data.presignedS3Url');
+
+  // report data is an error message
+  if (typeof reportData === 'string' && reportData.startsWith('Error')) {
+    const reportError = `${reportData}, please download the report instead`;
+    error = error || reportError;
+    reportData = {};
+  }
+
+  const recordData = { ...reportData, error };
   const { reportType = 'Inventory' } = recordData || {};
   const filterBucket = list.params.bucket;
 
@@ -39,12 +52,14 @@ const ReconciliationReport = ({
             legend={<Legend />}
             recordData={recordData}
             reportName={reconciliationReportName}
+            reportUrl={reportUrl}
           />,
           'Granule Not Found': <GnfReport
             filterString={filterString}
             legend={<Legend />}
             recordData={recordData}
             reportName={reconciliationReportName}
+            reportUrl={reportUrl}
           />
         }[reportType]
       }

@@ -8,7 +8,7 @@ import {
 import SortableTable from '../SortableTable/SortableTable';
 import Search from '../Search/search';
 import ReportHeading from './report-heading';
-import { handleDownloadJsonClick } from '../../utils/download-file';
+import { handleDownloadUrlClick } from '../../utils/download-file';
 import { tableColumnsGnf } from '../../utils/table-config/reconciliation-reports';
 import { getFilesSummary, getGranuleFilesSummary } from './reshape-report';
 import { getCollectionId } from '../../utils/format';
@@ -18,6 +18,7 @@ const GnfReport = ({
   legend,
   recordData,
   reportName,
+  reportUrl,
 }) => {
   const {
     filesInCumulus,
@@ -83,7 +84,7 @@ const GnfReport = ({
   const totalMissingGranules = combinedGranules.reduce(calculateMissingGranules, 0);
 
   function handleDownloadClick(e) {
-    handleDownloadJsonClick(e, { data: recordData, reportName });
+    handleDownloadUrlClick(e, { url: reportUrl });
   }
 
   return (
@@ -125,6 +126,7 @@ GnfReport.propTypes = {
   legend: PropTypes.node,
   recordData: PropTypes.object,
   reportName: PropTypes.string,
+  reportUrl: PropTypes.string,
 };
 
 export default GnfReport;
