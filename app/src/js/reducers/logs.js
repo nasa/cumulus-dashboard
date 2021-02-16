@@ -3,6 +3,7 @@ import uniqBy from 'lodash/fp';
 import { get } from 'object-path';
 import { createReducer } from '@reduxjs/toolkit';
 import { LOGS, LOGS_ERROR, LOGS_INFLIGHT, CLEAR_LOGS } from '../actions/types';
+import { metricsNotConfiguredMessage } from '../utils/log';
 
 // https://momentjs.com/docs/#/displaying/
 const format = 'MM/DD/YY hh:mma ss:SSS[s]';
@@ -50,6 +51,9 @@ export default createReducer(initialState, {
   [LOGS_ERROR]: (state, action) => {
     state.inflight = false;
     state.error = action.error;
+    if (action.error === metricsNotConfiguredMessage) {
+      state.metricsNotConfigured = true;
+    }
   },
   [CLEAR_LOGS]: (state, action) => {
     state.inflight = false;

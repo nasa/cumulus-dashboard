@@ -14,11 +14,13 @@ const Sidebar = ({
   currentPath,
   dispatch,
   location,
+  logs,
   match,
   params,
   sidebar,
 }) => {
   const { open: sidebarOpen } = sidebar;
+  const { metricsNotConfigured } = logs;
 
   function handleToggleClick() {
     dispatch(toggleSidebar());
@@ -41,6 +43,7 @@ const Sidebar = ({
         <ul>
           {routes(navPath, navParams, count).map((d, i) => {
             const path = resolvePath(base, d[1]);
+            if (d[1] && d[1].includes('logs') && metricsNotConfigured) return null;
             const classes = [
               // d[2] might be a function; use it only when it's a string
               typeof d[2] === 'string' ? d[2] : '',
@@ -90,6 +93,7 @@ Sidebar.propTypes = {
   currentPath: PropTypes.string,
   dispatch: PropTypes.func,
   location: PropTypes.object,
+  logs: PropTypes.object,
   match: PropTypes.object,
   params: PropTypes.object,
   sidebar: PropTypes.shape({
@@ -98,5 +102,6 @@ Sidebar.propTypes = {
 };
 
 export default connect((state) => ({
+  logs: state.logs,
   sidebar: state.sidebar,
 }))(Sidebar);
