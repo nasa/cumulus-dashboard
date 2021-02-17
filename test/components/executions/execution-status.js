@@ -15,7 +15,6 @@ test('Cumulus-690 Execution Status shows workflow task and version information',
     execution: executionHistory.execution,
     executionHistory: executionHistory.executionHistory,
     stateMachine: executionHistory.execution,
-    logs: {},
     inflight: true,
     error: false,
     meta: {}
@@ -29,6 +28,7 @@ test('Cumulus-690 Execution Status shows workflow task and version information',
     <ExecutionStatus
       dispatch={dispatch}
       match={match}
+      logs={{}}
       executionStatus={executionStatus}
       skipReloadOnMount={true}
     />
