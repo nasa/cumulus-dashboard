@@ -142,11 +142,13 @@ class LogViewer extends React.Component {
 
   render() {
     const { logs, notFound } = this.props;
+    const { error, inflight, items: logsItems, metricsNotConfigured } = logs || {};
+    if (metricsNotConfigured) return null;
     const { level } = this.state;
-    const count = tally(logs.items.length);
+    const count = tally(logsItems.length);
     const items =
-      logs.items.length || logs.inflight
-        ? logs.items
+      logsItems.length || inflight
+        ? logsItems
         : [{ ...noLogs, ...(notFound ? { displayText: notFound } : {}) }];
 
     return (
@@ -155,7 +157,7 @@ class LogViewer extends React.Component {
           <h2 className="heading--medium heading--shared-content with-description">
             Logs{' '}
             <span className="num-title">
-              {logs.inflight ? <LoadingEllipsis /> : count}
+              {inflight ? <LoadingEllipsis /> : count}
             </span>
           </h2>
 
@@ -187,7 +189,7 @@ class LogViewer extends React.Component {
 
         </div>
 
-        {logs.error && <ErrorReport report={logs.error} truncate={true} />}
+        {error && <ErrorReport report={error} truncate={true} />}
 
         <div className="logs">
           {items.map((item) => {

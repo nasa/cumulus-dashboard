@@ -28,6 +28,7 @@ test('Cumulus-690 Execution Status shows workflow task and version information',
     <ExecutionStatus
       dispatch={dispatch}
       match={match}
+      logs={{}}
       executionStatus={executionStatus}
       skipReloadOnMount={true}
     />

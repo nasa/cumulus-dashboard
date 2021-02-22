@@ -29,6 +29,9 @@ This version of the dashboard requires Cumulus API v5.0.2-alpha.0
   - Updated reconciliation report to work with the API endpoint changes
   - Requires @cumulus/api@5.0.2-alpha.0
 
+- **CUMULUS-2366**
+  - Removes logs from dashboard display when metrics is not setup
+
 ### Added
 
 - **CUMULUS-2297**
