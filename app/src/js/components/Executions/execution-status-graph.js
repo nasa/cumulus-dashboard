@@ -16,7 +16,7 @@ import { window } from '../../utils/browser';
 // dagre-d3 expects d3 to be attached to the window
 if (process.env.NODE_ENV !== 'test') window.d3 = d3;
 
-const ExecutionStatusGraph = ({ executionStatus, ...rest }) => {
+const ExecutionStatusGraph = ({ executionStatus }) => {
   const { executionHistory, stateMachine } = executionStatus;
   const g = useRef(null);
   const [showModal, setShowModal] = useState(false);
