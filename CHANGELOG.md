@@ -20,6 +20,9 @@ This version of the dashboard requires Cumulus API v5.0.2-alpha.0
   - Stop scrolling of checkboxes in tables
   - Other tweaks to prevent unexpected horizontal scrolling in tables
 
+- **CUMULUS-2415**
+  - Fixes issue with executions not always displaying the graph corresponding to the current execution
+
 ### Changed
 
 - **CUMULUS-bugfix**
