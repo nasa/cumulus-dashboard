@@ -13,6 +13,9 @@ This version of the dashboard requires Cumulus API v5.0.2-alpha.0
 
 ### Fixed
 
+- **CUMULUS-bugfix**
+  - Fixes typos in version compatibility tests
+
 - **CUMULUS-2310**
   - Allow slash in reconciliation report name
 
