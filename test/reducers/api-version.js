@@ -45,8 +45,8 @@ test('version error', (t) => {
   t.deepEqual(expected, actual);
 });
 
-test('version compatable', (t) => {
-  const testInitialState = { isCompatable: false, warning: 'hmmm' };
+test('version compatible', (t) => {
+  const testInitialState = { isCompatible: false, warning: 'hmmm' };
   const action = {
     type: API_VERSION_COMPATIBLE
   };
@@ -56,7 +56,7 @@ test('version compatable', (t) => {
   t.deepEqual(expected, actual);
 });
 
-test('version incompatable', (t) => {
+test('version incompatible', (t) => {
   const testInitialState = { isCompatible: true, warning: '' };
   const warningMessage = 'warning message';
   const action = {
