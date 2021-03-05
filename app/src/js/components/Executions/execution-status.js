@@ -10,6 +10,7 @@ import ErrorReport from '../Errors/report';
 
 import ExecutionStatusGraph from './execution-status-graph';
 import Metadata from '../Table/Metadata';
+import Loading from '../LoadingIndicator/loading-indicator';
 
 const ExecutionStatus = ({
   cumulusInstance,
@@ -21,14 +22,20 @@ const ExecutionStatus = ({
   const [showInputModal, setShowInputModal] = useState(false);
   const [showOutputModal, setShowOutputModal] = useState(false);
   const { error, execution, executionHistory, stateMachine } = executionStatus;
+  const { executionArn } = execution || {};
+  const { executionArn: executionArnParam } = match.params;
 
   useEffect(() => {
-    const { executionArn } = match.params;
-    dispatch(getExecutionStatus(executionArn));
+    dispatch(getExecutionStatus(executionArnParam));
     dispatch(getCumulusInstanceMetadata());
-  }, [dispatch, match.params]);
+  }, [dispatch, executionArnParam]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   if (!execution) return null;
+  if (executionArn !== executionArnParam) return <Loading />;
 
   const { name } = execution;
   const { metricsNotConfigured } = logs;
