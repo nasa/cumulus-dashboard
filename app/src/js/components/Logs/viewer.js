@@ -1,14 +1,15 @@
-import truncate from 'lodash/truncate';
 import noop from 'lodash/noop';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import moment from 'moment';
 import { interval, getLogs, clearLogs } from '../../actions';
 import _config from '../../config';
-// import moment from 'moment';
 import LoadingEllipsis from '../LoadingEllipsis/loading-ellipsis';
 import ErrorReport from '../Errors/report';
 import SimpleDropdown from '../DropDown/simple-dropdown';
 import { tally } from '../../utils/format';
+import { fetchCurrentTimeFilters } from '../../utils/datepicker';
 
 const { logsUpdateInterval } = _config;
 
@@ -19,6 +20,9 @@ const noLogs = {
 };
 // const twoDays = 2 * 1000 * 60 * 60 * 24;
 
+// Use a Map to preserve order of entries.  Otherwise, when using a plain
+// object, during iteration over the keys (or entries), "numeric" keys are
+// yielded in numeric order, not in insertion order
 const logLevels = [
   {
     value: '[10 TO 60]',
@@ -68,6 +72,7 @@ class LogViewer extends React.Component {
     super(props);
 
     this.query = this.query.bind(this);
+    this.buildQuery = this.buildQuery.bind(this);
     this.cancelInterval = noop;
 
     this.state = {
@@ -100,11 +105,17 @@ class LogViewer extends React.Component {
     this.setState({ level }, this.query);
   }
 
-  query() {
-    const { dispatch } = this.props;
+  buildQuery() {
     const { search, level } = this.state;
-    const { value: levelValue } = level;
+    const { label: levelString } = level;
     const query = { ...this.props.query };
+
+    // get the last 48 hours if timestamp filter is not specified
+    const timeFilters = fetchCurrentTimeFilters(this.props.datepicker);
+    const endTime = moment.utc(new Date(timeFilters.timestamp__to || Date.now())).format();
+    const startTime = timeFilters.timestamp__from
+      ? moment.utc(new Date(timeFilters.timestamp__from)).format()
+      : moment.utc().subtract(2, 'days').format();
 
     if (search || query.q) {
       // Since the API ignores most other parameters when the `q` parameter is
@@ -115,29 +126,26 @@ class LogViewer extends React.Component {
       query.q = [
         query.q && `"${query.q}"`,
         search && `(${search})`,
-        `level:${levelValue}`,
+        levelString !== logLevels[0].label && `level:${levelString}`,
+        timeFilters && `@timestamp:[${startTime} TO ${endTime}]`,
       ]
         .filter(Boolean)
         .join(' AND ');
     } else {
-      query.level = levelValue;
+      query.level = levelString;
     }
 
+    console.log('query', query);
+    return query;
+  }
+
+  query() {
+    const { dispatch } = this.props;
     this.cancelInterval();
     dispatch(clearLogs());
 
-    // let isFirstPull = true;
-    function querySinceLast() {
-      // on first pull, get the last 48 hours
-
-      // deactivating until timestamp filter works again on the API side
-      // const duration = isFirstPull ? twoDays : logsUpdateInterval;
-      // const from = moment().subtract(duration, 'milliseconds').format();
-      // isFirstPull = false;
-      dispatch(getLogs(query));
-    }
-
-    this.cancelInterval = interval(querySinceLast, logsUpdateInterval, true);
+    const queryFunction = () => dispatch(getLogs(this.buildQuery()));
+    this.cancelInterval = interval(queryFunction, logsUpdateInterval, true);
   }
 
   render() {
@@ -193,7 +201,6 @@ class LogViewer extends React.Component {
 
         <div className="logs">
           {items.map((item) => {
-            const text = truncate(item.displayText, { length: 200 });
             const logLevel = logLevelName(item.level);
 
             return (
@@ -204,7 +211,7 @@ class LogViewer extends React.Component {
                 >
                   {` ${logLevel.toUpperCase()} `}
                 </span>
-                {text}
+                {item.displayText}
               </p>
             );
           })}
@@ -215,10 +222,14 @@ class LogViewer extends React.Component {
 }
 
 LogViewer.propTypes = {
+  datepicker: PropTypes.object,
   dispatch: PropTypes.func,
   query: PropTypes.object,
   logs: PropTypes.object,
   notFound: PropTypes.string,
 };
 
-export default LogViewer;
+export default connect((state) => ({
+  datepicker: state.datepicker,
+  logs: state.logs,
+}))(LogViewer);

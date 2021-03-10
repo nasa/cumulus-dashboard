@@ -1,5 +1,5 @@
 import moment from 'moment';
-import uniqBy from 'lodash/fp';
+import uniqBy from 'lodash/fp/uniqBy';
 import { get } from 'object-path';
 import { createReducer } from '@reduxjs/toolkit';
 import { LOGS, LOGS_ERROR, LOGS_INFLIGHT, CLEAR_LOGS } from '../actions/types';
@@ -11,13 +11,15 @@ const format = 'MM/DD/YY hh:mma ss:SSS[s]';
 const processLog = (logEntry) => ({
   ...logEntry,
   displayTime: moment(logEntry.timestamp).format(format),
-  displayText: logEntry.message || logEntry.msg,
+  displayText: logEntry.inner_message || logEntry.message || logEntry.msg,
   key: `${logEntry.timestamp}-${logEntry.displayText}`,
   searchKey: Object.values(logEntry).join(' '),
 });
 
 export const initialState = {
   items: [],
+  inflight: false,
+  error: false,
 };
 
 export default createReducer(initialState, {
@@ -25,13 +27,11 @@ export default createReducer(initialState, {
     const { data } = action;
 
     if (Array.isArray(data.results) && data.results.length) {
-      state.items = uniqBy(
-        'key',
-        data.results
-          .filter((result) => result.timestamp && result.displayText)
-          .map(processLog)
-          .concat(state.items)
-      );
+      console.log(data.results);
+      state.items = uniqBy((item) => item.key)(data.results
+        .map(processLog)
+        .filter((result) => result.timestamp && result.displayText)
+        .concat(state.items));
     }
 
     state.inflight = false;
