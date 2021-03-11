@@ -80,7 +80,6 @@ describe('Dashboard Logs', () => {
       cy.contains('.meta__row dt', 'Logs').should('exist');
       cy.contains('.meta__row dd a', 'View Execution Logs').should('exist').click();
       cy.url().should('include', '/logs');
-      cy.contains('.status--process h2', 'Execution Logs').should('exist');
     });
 
     it('should not display logs on an Execution page when metrics are not configured', () => {
