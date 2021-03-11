@@ -1,5 +1,6 @@
+import isEqual from 'lodash/isEqual';
 import noop from 'lodash/noop';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -14,11 +15,10 @@ import { fetchCurrentTimeFilters } from '../../utils/datepicker';
 const { logsUpdateInterval } = _config;
 
 const noLogs = {
-  displayText: 'There are no Cumulus logs from the past 48 hours.',
+  displayText: 'There are no logs from the past 48 hours.',
   level: 'meta',
   key: 'no-logs-message',
 };
-// const twoDays = 2 * 1000 * 60 * 60 * 24;
 
 // Use a Map to preserve order of entries.  Otherwise, when using a plain
 // object, during iteration over the keys (or entries), "numeric" keys are
@@ -67,97 +67,90 @@ const logLevelName = (level) => {
   return logOption ? logOption.label : '';
 };
 
-class LogViewer extends React.Component {
-  constructor(props) {
-    super(props);
+const LogViewer = ({
+  datepicker,
+  dispatch,
+  logs,
+  notFound,
+  query,
+}) => {
+  const [level, setLevel] = useState(logLevels[0]);
+  const [searchText, setSearchText] = useState('');
+  const cancelIntervalRef = useRef(noop);
 
-    this.query = this.query.bind(this);
-    this.buildQuery = this.buildQuery.bind(this);
-    this.cancelInterval = noop;
-
-    this.state = {
-      level: logLevels[0],
-      search: '',
-    };
-  }
-
-  componentDidMount() {
-    this.query();
-  }
-
-  componentDidUpdate() {
-    if (this.props.logs.error) {
-      this.cancelInterval();
-      this.cancelInterval = noop;
-    }
-  }
-
-  componentWillUnmount() {
-    this.cancelInterval();
-    this.props.dispatch(clearLogs());
-  }
-
-  setSearch(search) {
-    this.setState({ search }, this.query);
-  }
-
-  setSearchLevel(level) {
-    this.setState({ level }, this.query);
-  }
-
-  buildQuery() {
-    const { search, level } = this.state;
-    const { label: levelString } = level;
-    const query = { ...this.props.query };
+  function buildQuery() {
+    const levelString = isEqual(level, logLevels[0]) ? null : level.label;
+    const returnQuery = { ...query };
 
     // get the last 48 hours if timestamp filter is not specified
-    const timeFilters = fetchCurrentTimeFilters(this.props.datepicker);
+    const timeFilters = fetchCurrentTimeFilters(datepicker);
     const endTime = moment.utc(new Date(timeFilters.timestamp__to || Date.now())).format();
     const startTime = timeFilters.timestamp__from
       ? moment.utc(new Date(timeFilters.timestamp__from)).format()
       : moment.utc().subtract(2, 'days').format();
 
-    if (search || query.q) {
+    if (searchText || query.q) {
       // Since the API ignores most other parameters when the `q` parameter is
       // specified, we must add the search query and log level directly to the
       // `q` parameter to ensure they are included in the query.  In addition,
       // enclosing `q` value in double-quotes to avoid potential undesired
       // interaction with the remainder of the constructed search query.
-      query.q = [
+      returnQuery.q = [
         query.q && `"${query.q}"`,
-        search && `(${search})`,
-        levelString !== logLevels[0].label && `level:${levelString}`,
+        searchText && `(${searchText})`,
+        levelString && `level:${levelString}`,
         timeFilters && `@timestamp:[${startTime} TO ${endTime}]`,
       ]
         .filter(Boolean)
         .join(' AND ');
-    } else {
-      query.level = levelString;
+    } else if (levelString) {
+      returnQuery.level = levelString;
     }
 
-    console.log('query', query);
-    return query;
+    return returnQuery;
   }
 
-  query() {
-    const { dispatch } = this.props;
-    this.cancelInterval();
+  function searchLogs() {
+    cancelIntervalRef.current();
     dispatch(clearLogs());
 
-    const queryFunction = () => dispatch(getLogs(this.buildQuery()));
-    this.cancelInterval = interval(queryFunction, logsUpdateInterval, true);
+    const queryFunction = () => dispatch(getLogs(buildQuery()));
+    cancelIntervalRef.current = interval(queryFunction, logsUpdateInterval, true);
   }
 
-  render() {
-    const { logs, notFound } = this.props;
+  function getNoLogsMessage() {
+    const timeFilters = fetchCurrentTimeFilters(datepicker);
+    return (timeFilters.timestamp__from)
+      ? { ...noLogs, ...{ displayText: notFound || 'No recent logs' } }
+      : noLogs;
+  }
+
+  useEffect(() => {
+    searchLogs();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, JSON.stringify(fetchCurrentTimeFilters(datepicker)), level, searchText]);
+
+  useEffect(() => {
+    if (logs.error) {
+      cancelIntervalRef.current();
+      cancelIntervalRef.current = noop;
+    }
+  }, [logs]);
+
+  useEffect(() => () => {
+    cancelIntervalRef.current();
+    cancelIntervalRef.current = noop;
+    dispatch(clearLogs());
+  }, [dispatch]);
+
+  function render() {
     const { error, inflight, items: logsItems, metricsNotConfigured } = logs || {};
     if (metricsNotConfigured) return null;
-    const { level } = this.state;
     const count = tally(logsItems.length);
     const items =
       logsItems.length || inflight
         ? logsItems
-        : [{ ...noLogs, ...(notFound ? { displayText: notFound } : {}) }];
+        : [getNoLogsMessage()];
 
     return (
       <section className="page__section page__section--logs">
@@ -176,7 +169,7 @@ class LogViewer extends React.Component {
                 value={level}
                 options={logLevels}
                 id={'logs-viewer-dropdown'}
-                onChange={(_, searchLevel, option) => this.setSearchLevel(option)}
+                onChange={(_, searchLevel, option) => setLevel(option)}
               />
             </form>
             <form className="form-group__element form-group__element--small">
@@ -187,8 +180,8 @@ class LogViewer extends React.Component {
                   id="search-logs"
                   type="search"
                   placeholder="Search all logs"
-                  value={this.state.search}
-                  onChange={(e) => this.setSearch(e.target.value)}
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
                 />
                 <span className="search__icon" />
               </div>
@@ -219,14 +212,16 @@ class LogViewer extends React.Component {
       </section>
     );
   }
-}
+
+  return render();
+};
 
 LogViewer.propTypes = {
   datepicker: PropTypes.object,
   dispatch: PropTypes.func,
-  query: PropTypes.object,
   logs: PropTypes.object,
   notFound: PropTypes.string,
+  query: PropTypes.object,
 };
 
 export default connect((state) => ({

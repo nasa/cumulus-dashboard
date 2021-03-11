@@ -27,11 +27,9 @@ export default createReducer(initialState, {
     const { data } = action;
 
     if (Array.isArray(data.results) && data.results.length) {
-      console.log(data.results);
       state.items = uniqBy((item) => item.key)(data.results
         .map(processLog)
-        .filter((result) => result.timestamp && result.displayText)
-        .concat(state.items));
+        .filter((result) => result.timestamp && result.displayText));
     }
 
     state.inflight = false;

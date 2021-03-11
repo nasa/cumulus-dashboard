@@ -105,7 +105,6 @@ class ProviderOverview extends React.Component {
       return <ErrorReport report={record.error} truncate={true} />;
     }
     const provider = record.data;
-    const logsQuery = { 'meta.provider': providerId };
     const errors = this.errors();
 
     const deleteStatus = get(this.props.providers.deleted, [providerId, 'status']);
@@ -140,9 +139,8 @@ class ProviderOverview extends React.Component {
 
         <section className='page__section'>
           <LogViewer
-            query={logsQuery}
+            query={{ q: `${providerId}` }}
             dispatch={this.props.dispatch}
-            logs={this.props.logs}
             notFound={`No recent logs for ${providerId}`}
           />
         </section>

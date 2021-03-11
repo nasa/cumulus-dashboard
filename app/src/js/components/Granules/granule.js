@@ -337,7 +337,6 @@ class GranuleOverview extends React.Component {
           <LogViewer
             query={{ q: granuleId }}
             dispatch={this.props.dispatch}
-            logs={this.props.logs}
             notFound={`No recent logs for ${granuleId}`}
           />
         </section>
