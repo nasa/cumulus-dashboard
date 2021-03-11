@@ -139,7 +139,7 @@ class ProviderOverview extends React.Component {
 
         <section className='page__section'>
           <LogViewer
-            query={{ q: `${providerId}` }}
+            query={{ q: providerId }}
             dispatch={this.props.dispatch}
             notFound={`No recent logs for ${providerId}`}
           />

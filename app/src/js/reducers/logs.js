@@ -11,7 +11,7 @@ const format = 'MM/DD/YY hh:mma ss:SSS[s]';
 const processLog = (logEntry) => ({
   ...logEntry,
   displayTime: moment(logEntry.timestamp).format(format),
-  displayText: logEntry.inner_message || logEntry.message || logEntry.msg,
+  displayText: logEntry.inner_message || logEntry.message || logEntry.Message,
   key: `${logEntry.timestamp}-${logEntry.displayText}`,
   searchKey: Object.values(logEntry).join(' '),
 });
