@@ -28,6 +28,7 @@ This version of the dashboard requires Cumulus API 7.0.0
 
 - **CUMULUS-2419**
   - Fixes log viewer query for cloud metrics log
+  - Requires @cumulus/api@7.0.0
 
 ### Changed
 
