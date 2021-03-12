@@ -25,7 +25,7 @@ export default createReducer(initialState, {
       state.results = data.results.map(processLog);
     }
 
-    state.details = action.data.meta;
+    state.details = data.meta;
     state.inflight = false;
     state.error = false;
   },
