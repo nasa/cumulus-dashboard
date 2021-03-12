@@ -111,9 +111,6 @@ const LogViewer = ({
   }
 
   function searchLogs() {
-    cancelIntervalRef.current();
-    dispatch(clearLogs());
-
     const queryFunction = () => dispatch(getLogs(buildQuery()));
     cancelIntervalRef.current = interval(queryFunction, logsUpdateInterval, true);
   }
@@ -127,6 +124,11 @@ const LogViewer = ({
 
   useEffect(() => {
     searchLogs();
+    return function cleanup() {
+      cancelIntervalRef.current();
+      cancelIntervalRef.current = noop;
+      dispatch(clearLogs());
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, JSON.stringify(fetchCurrentTimeFilters(datepicker)), level, searchText]);
 
@@ -136,12 +138,6 @@ const LogViewer = ({
       cancelIntervalRef.current = noop;
     }
   }, [logs]);
-
-  useEffect(() => () => {
-    cancelIntervalRef.current();
-    cancelIntervalRef.current = noop;
-    dispatch(clearLogs());
-  }, [dispatch]);
 
   function render() {
     const { error, inflight, items: logsItems, metricsNotConfigured } = logs || {};
