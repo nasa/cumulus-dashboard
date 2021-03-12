@@ -266,7 +266,7 @@ describe('Dashboard Collections Page', () => {
       cy.editJsonTextarea({ data: { duplicateHandling, meta }, update: true });
       cy.contains('form button', 'Submit').click();
       cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
-      cy.contains('.default-modal .modal-body', `Collection ${name}___${version} has been updated`);
+      cy.contains('.default-modal .modal-body', `Collection ${name}___${version} has been updated`, { timeout: 10000 });
       cy.contains('.modal-footer button', 'Close').click();
 
       // displays the updated collection and its granules
