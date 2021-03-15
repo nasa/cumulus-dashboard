@@ -233,7 +233,7 @@ export const addEventsToGraph = (events, graph) => {
     } else if (event.type.endsWith('StateExited')) {
       if (events[i-1].type.endsWith('Failed')) {
         node = graph[event.name];
-        node.status = 'Failed';
+        node.status = 'Stopped';
       } else {
         node = graph[event.name];
         node.status = 'Succeeded';
