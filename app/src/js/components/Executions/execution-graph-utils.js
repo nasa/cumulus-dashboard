@@ -231,8 +231,13 @@ export const addEventsToGraph = (events, graph) => {
       node.status = 'InProgress';
       node.input = event.input;
     } else if (event.type.endsWith('StateExited')) {
-      node = graph[event.name];
-      node.status = 'Succeeded';
+      if (events[i-1].type.endsWith('Failed')) {
+        node = graph[event.name];
+        node.status = 'Failed';
+      } else {
+        node = graph[event.name];
+        node.status = 'Succeeded';
+      }
       node.output = event.output;
     } else if (event.type === 'ExecutionFailed') {
       const name = findFailure(events, event);
