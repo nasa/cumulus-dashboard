@@ -72,18 +72,18 @@ Set the environment and build the dashboard with these commands:
   $ source production.env && ./bin/build_dashboard_via_docker.sh
 ```
 
-This creates the compiled dashboard in the `./dist` directory. You can now deploy this directory to AWS behind [CloudFront](https://aws.amazon.com/cloudfront/).  If you are in NGAP, follow the instructions for "Request Public or Protected Access to the APIs and Dashboard" on the earthdata wiki page [Using Cumulus with Private APIs](https://wiki.earthdata.nasa.gov/display/CUMULUS/Cumulus+Deployments+in+NGAP).
+This script uses Docker Compose to build and copy the a compiled dashboard into the `./dist` directory. You can now deploy this directory to AWS behind [CloudFront](https://aws.amazon.com/cloudfront/).  If you are in NGAP, follow the instructions for "Request Public or Protected Access to the APIs and Dashboard" on the earthdata wiki page [Using Cumulus with Private APIs](https://wiki.earthdata.nasa.gov/display/CUMULUS/Cumulus+Deployments+in+NGAP).
 
 
 ### Run the dashboard locally via Docker Image
 
-Once you have a built a dashboard and the contents are in the `./dist` directory, you can create a Docker container that will serve the dashboard behind a simple nginx configuration. Having a runnable Docker image is useful for testing a build before deployment or for NGAP Sandbox environments, where if you configure your computer to [access Cumulus APIs via SSM](https://wiki.earthdata.nasa.gov/display/CUMULUS/Accessing+Cumulus+APIs+via+SSM), you can run the dashboard container locally against the live Sandbox Cumulus API.
+You can also create a Docker container that will serve the dashboard behind a simple nginx configuration. Having a runnable Docker image is useful for testing a build before deployment or for NGAP Sandbox environments, where if you configure your computer to [access Cumulus APIs via SSM](https://wiki.earthdata.nasa.gov/display/CUMULUS/Accessing+Cumulus+APIs+via+SSM), you can run the dashboard container locally against the live Sandbox Cumulus API.
 
-The script `./bin/build_dashboard_image.sh` takes a pre-built dashboard in the `./dist` directly and packages it in a Docker container behind a basic nginx configuration. The script takes one optional parameter, the tag to name the generated image which defaults to cumulus-dashboard:latest.
+The script `./bin/build_dashboard_image.sh` will build a docker image containing the dashboard bundle served behind a basic [nginx](https://www.nginx.com/) configuration. The script takes one optional parameter, the tag to name the generated image which defaults to cumulus-dashboard:latest.  The same customizations as described in the [previous section](#build-the-dashboard-using-docker-and-docker-compose) are available to configure your dashboard.
 
 Example of building and running the project in Docker:
 ```bash
-  $ ./bin/build_dashboard_image.sh cumulus-dashboard:production-1
+  $ source production.env && ./bin/build_dashboard_image.sh cumulus-dashboard:production-1
 ```
 
 That command builds a Docker image with the name `cumulus-dashboard` and tag `production-1`. This image can be run in Docker to serve the Dashboard.
