@@ -26,6 +26,9 @@ This version of the dashboard requires Cumulus API v5.0.2-alpha.0
 - **CUMULUS-2415**
   - Fixes issue with executions not always displaying the graph corresponding to the current execution
 
+_ **CUMULUS-2425**
+  - Fixes graph display for failed execution steps
+
 ### Changed
 
 - **CUMULUS-bugfix**
