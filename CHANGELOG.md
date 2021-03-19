@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Breaking Changes
 
-This version of the dashboard requires Cumulus API v5.0.2-alpha.0
+This version of the dashboard requires Cumulus API 7.0.0
 
 ### Fixed
 
@@ -25,6 +25,10 @@ This version of the dashboard requires Cumulus API v5.0.2-alpha.0
 
 - **CUMULUS-2415**
   - Fixes issue with executions not always displaying the graph corresponding to the current execution
+
+- **CUMULUS-2419**
+  - Fixes log viewer query for cloud metrics log
+  - Requires @cumulus/api@7.0.0
 
 ### Changed
 

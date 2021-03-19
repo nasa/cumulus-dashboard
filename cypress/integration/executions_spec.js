@@ -114,9 +114,15 @@ describe('Dashboard Executions Page', () => {
         { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
         { fixture: 'valid-execution.json', statusCode: 200 }
       );
+
       cy.intercept(
         { method: 'GET', url: `http://localhost:5001/logs/${executionName}` },
         { fixture: 'execution-logs.json', statusCode: 200 }
+      );
+
+      cy.intercept(
+        { method: 'GET', url: 'http://localhost:5001/logs' },
+        { fixture: 'logs-success.json', statusCode: 200 }
       );
 
       cy.visit(`/executions/execution/${executionArn}`);
@@ -145,7 +151,7 @@ describe('Dashboard Executions Page', () => {
       });
       cy.getFixture('execution-logs').its('results').then((logs) => {
         cy.get('@sections').eq(1).within(() => {
-          cy.get('pre').contains(JSON.stringify(logs[0].message));
+          cy.get('pre').contains(JSON.stringify(logs[0].app_message));
         });
       });
     });
@@ -209,6 +215,11 @@ describe('Dashboard Executions Page', () => {
       cy.intercept(
         { method: 'GET', url: `http://localhost:5001/logs/${executionName}` },
         { fixture: 'limited-execution.json', statusCode: 200 }
+      );
+
+      cy.intercept(
+        { method: 'GET', url: 'http://localhost:5001/logs' },
+        { fixture: 'logs-success.json', statusCode: 200 }
       );
 
       cy.visit(`/executions/execution/${executionArn}`);
