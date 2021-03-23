@@ -22,8 +22,8 @@
       "status": "Generated"
     },
     {
-      "name": "inventoryReport-20200114T202529026",
-      "location": "s3://localbucket/localrun/reconciliation-reports/inventoryReport-20200114T202529026.json",
+      "name": "inventoryReport-2020/01/14T202529026",
+      "location": "s3://localbucket/localrun/reconciliation-reports/inventoryReport-2020_01_14T202529026.json",
       "type": "Inventory",
       "status": "Generated"
     },

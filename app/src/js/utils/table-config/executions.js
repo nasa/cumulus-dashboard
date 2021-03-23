@@ -13,6 +13,7 @@ export const tableColumns = [
   {
     Header: 'Name',
     accessor: 'name',
+    width: 150,
     Cell: ({ row: { original: { arn, name } } }) => ( // eslint-disable-line react/prop-types
       <Link to={(location) => ({ pathname: `/executions/execution/${arn}`, search: getPersistentQueryParams(location) })} title={name}>{name}</Link>)
   },
@@ -23,7 +24,8 @@ export const tableColumns = [
   },
   {
     Header: 'Workflow',
-    accessor: 'type'
+    accessor: 'type',
+    width: 150
   },
   {
     Header: 'Created',
@@ -34,11 +36,13 @@ export const tableColumns = [
   {
     Header: 'Duration',
     accessor: (row) => seconds(row.duration),
-    id: 'duration'
+    id: 'duration',
+    width: 75
   },
   {
     Header: strings.collection_id,
     accessor: 'collectionId',
+    width: 200,
     Cell: ({ cell: { value } }) => formatCollectionId(value)
   }
 ];

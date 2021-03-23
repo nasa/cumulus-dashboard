@@ -6,7 +6,7 @@ services:
       - serve_api
     network_mode: "service:shim"
     command:
-      bash -c "npm rebuild node-sass && npm run build && npm run serve:prod"
+      bash -c "npm run build && npm run serve:prod"
     working_dir:
       /cumulus-dashboard
     volumes:

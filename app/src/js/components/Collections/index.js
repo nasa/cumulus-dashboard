@@ -17,10 +17,11 @@ import DatePickerHeader from '../DatePickerHeader/DatePickerHeader';
 import { listCollections } from '../../actions';
 import { filterQueryParams } from '../../utils/url-helper';
 
-const Collections = ({ dispatch, location, queryParams }) => {
+const Collections = ({ dispatch, location, logs, queryParams }) => {
   const { pathname } = location;
   const existingCollection = pathname !== '/collections/add';
   const filteredQueryParams = filterQueryParams(queryParams);
+  const { metricsNotConfigured } = logs;
 
   function query() {
     dispatch(listCollections(filteredQueryParams));
@@ -129,11 +130,11 @@ const Collections = ({ dispatch, location, queryParams }) => {
                 path="/collections/collection/:name/:version/definition"
                 component={CollectionIngest}
               />
-              <Route
+              {!metricsNotConfigured && <Route
                 exact
                 path="/collections/collection/:name/:version/logs"
                 component={CollectionLogs}
-              />
+              />}
             </Switch>
           </div>
         </div>
@@ -147,7 +148,8 @@ Collections.displayName = strings.collection;
 Collections.propTypes = {
   dispatch: PropTypes.func,
   location: PropTypes.object,
+  logs: PropTypes.object,
   queryParams: PropTypes.object,
 };
 
-export default withRouter(withQueryParams()(connect()(Collections)));
+export default withRouter(withQueryParams()(connect((state) => ({ logs: state.logs }))(Collections)));

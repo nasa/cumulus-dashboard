@@ -1,3 +1,5 @@
+const filenamify = (fileName) => fileName.replace(/["%*/:<>?\\|]/g, '_');
+
 /**
  * downloadFile
  * @description This causes the browser to download a given file in the browser with a given filename
@@ -7,7 +9,7 @@
 
 export const downloadFile = (file, fileName) => {
   const link = document.createElement('a');
-  link.setAttribute('download', fileName);
+  link.setAttribute('download', filenamify(fileName));
   link.href = file;
   document.body.appendChild(link);
   link.click();
@@ -30,12 +32,9 @@ const convertToCSV = (data, columns) => {
   return `${csvHeader}\r\n${csvData}`;
 };
 
-export function handleDownloadJsonClick(e, { data, reportName }) {
+export function handleDownloadUrlClick(e, { url }) {
   e.preventDefault();
-  const jsonHref = `data:text/json;charset=utf-8,${encodeURIComponent(
-    JSON.stringify(data)
-  )}`;
-  downloadFile(jsonHref, `${reportName}.json`);
+  if (url && window && !window.Cypress) window.open(url);
 }
 
 export function handleDownloadCsvClick(e, { reportName, table }) {

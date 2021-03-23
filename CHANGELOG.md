@@ -7,7 +7,55 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v5.0.0] - 2021-03-23
+
+## Breaking Changes
+
+This version of the dashboard requires Cumulus API 7.0.0
+
+### Fixed
+
+- **CUMULUS-bugfix**
+  - Fixes typos in version compatibility tests
+
+- **CUMULUS-2310**
+  - Allow slash in reconciliation report name
+
+- **CUMULUS-2349**
+  - Stop scrolling of checkboxes in tables
+  - Other tweaks to prevent unexpected horizontal scrolling in tables
+
+- **CUMULUS-2415**
+  - Fixes issue with executions not always displaying the graph corresponding to the current execution
+
+- **CUMULUS-2419**
+  - Fixes log viewer query for cloud metrics log
+  - Requires @cumulus/api@7.0.0
+
+### Changed
+
+- **CUMULUS-bugfix**
+  - replaced deprecated node-sass with sass
+
+- **CUMULUS-2321**
+  - Updated reconciliation report to work with the API endpoint changes
+  - Requires @cumulus/api@5.0.2-alpha.0
+
+- **CUMULUS-2366**
+  - Removes logs from dashboard display when metrics is not setup
+
+### Added
+
+- **CUMULUS-2297**
+  - Add ability to show/hide columns on all tables
+
 ## [v4.0.0] - 2021-01-13
+
+## Breaking Changes
+
+This version of the dashboard requires Cumulus API v5.0.0
+
+## All Changes
 
 ### Fixed
 - **CUMULUS-1765**
@@ -22,6 +70,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-2073**
   - Update forms with the required indicator and description
+
+- **CUMULUS-2148**
+  - Fix bug on Report deletion where the report wouldn't be removed from the table
 
 - **CUMULUS-2263**
   - Update Pagination input to show possible page options in dropdown
@@ -790,7 +841,8 @@ Fix for serving the dashboard through the Cumulus API.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v4.0.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v5.0.0...HEAD
+[v5.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v4.0.0...v5.0.0
 [v4.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v3.0.0...v4.0.0
 [v3.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v2.0.0...v3.0.0
 [v2.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v1.10.0...v2.0.0

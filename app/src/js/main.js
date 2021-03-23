@@ -1,41 +1,57 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import isEqual from 'lodash/isEqual';
 import _config from './config';
 import { displayCase } from './utils/format';
 import Header from './components/Header/header';
 import Footer from './components/Footer/footer';
 import TopButton from './components/TopButton/TopButton';
+import { getLogs } from './actions';
+import { initialState as logsInitialState } from './reducers/logs';
 
 const { target, environment } = _config;
 
-class Main extends Component {
-  render () {
-    return (
-      <div className='app'>
-        {target !== 'cumulus' ? (
-          <div className='app__target--container'>
-            <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
-          </div>
-        ) : null}
-        <Header
-          dispatch={this.props.dispatch}
-          api={this.props.api}
-          location={this.props.location}
-          cumulusInstance={this.props.cumulusInstance}
-        />
-        <main className='main' role='main'>
-          {this.props.children}
-        </main>
-        <section className='page__section--top'>
-          <TopButton />
-        </section>
-        <Footer api={this.props.api} apiVersion={this.props.apiVersion} />
-      </div>
-    );
-  }
-}
+const Main = ({
+  api,
+  apiVersion,
+  children,
+  cumulusInstance,
+  dispatch,
+  location,
+  logs,
+}) => {
+  useEffect(() => {
+    // kick off an initial logs request to check if metrics is configured
+    if (isEqual(logs, logsInitialState)) {
+      dispatch(getLogs());
+    }
+  }, [dispatch, logs]);
+
+  return (
+    <div className='app'>
+      {target !== 'cumulus' && (
+        <div className='app__target--container'>
+          <h4 className='app__target'>{displayCase(target)} ({displayCase(environment)})</h4>
+        </div>
+      )}
+      <Header
+        dispatch={dispatch}
+        api={api}
+        location={location}
+        cumulusInstance={cumulusInstance}
+      />
+      <main className='main' role='main'>
+        {children}
+      </main>
+      <section className='page__section--top'>
+        <TopButton />
+      </section>
+      <Footer api={api} apiVersion={apiVersion} />
+    </div>
+  );
+};
 
 Main.propTypes = {
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.node]),
@@ -43,7 +59,8 @@ Main.propTypes = {
   location: PropTypes.object,
   api: PropTypes.object,
   apiVersion: PropTypes.object,
-  cumulusInstance: PropTypes.object
+  cumulusInstance: PropTypes.object,
+  logs: PropTypes.object,
 };
 
 export { Main };
