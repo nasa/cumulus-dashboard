@@ -419,6 +419,11 @@ export const searchGranules = (infix) => ({ type: types.SEARCH_GRANULES, infix }
 export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH });
 export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param });
 export const clearGranulesFilter = (paramKey) => ({ type: types.CLEAR_GRANULES_FILTER, paramKey });
+export const toggleGranulesTableColumns = (hiddenColumns, allColumns) => ({
+  type: types.TOGGLE_GRANULES_TABLE_COLUMNS,
+  hiddenColumns,
+  allColumns
+});
 
 export const getOptionsCollectionName = (options) => ({
   [CALL_API]: {

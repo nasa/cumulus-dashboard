@@ -73,6 +73,12 @@ export const tableColumns = [
     Cell: ({ cell: { value } }) => providerLink(value)
   },
   {
+    Header: 'ORCA',
+    accessor: 'orca',
+    disableSortBy: true,
+    width: 110,
+  },
+  {
     Header: 'Execution',
     accessor: 'execution',
     Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
@@ -93,6 +99,8 @@ export const tableColumns = [
     id: 'timestamp'
   }
 ];
+
+export const defaultHiddenColumns = ['orca'];
 
 export const errorTableColumns = [
   {

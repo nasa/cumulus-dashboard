@@ -51,6 +51,7 @@ import {
   CLEAR_GRANULES_SEARCH,
   FILTER_GRANULES,
   CLEAR_GRANULES_FILTER,
+  TOGGLE_GRANULES_TABLE_COLUMNS,
 } from '../actions/types';
 
 export const initialState = {
@@ -159,5 +160,14 @@ export default createReducer(initialState, {
   },
   [CLEAR_GRANULES_FILTER]: (state, action) => {
     state.list.params[action.paramKey] = null;
+  },
+  [TOGGLE_GRANULES_TABLE_COLUMNS]: (state, action) => {
+    const orca = 'orca';
+    const { hiddenColumns, allColumns } = action;
+    if (hiddenColumns.includes(orca) && state.list.params.getOrca) {
+      delete state.list.params.getOrca;
+    } else if (!hiddenColumns.includes(orca) && allColumns.includes(orca) && state.list.params.getOrca !== true) {
+      state.list.params.getOrca = true;
+    }
   }
 });
