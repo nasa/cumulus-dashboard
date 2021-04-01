@@ -279,13 +279,20 @@
   .overview-num, .overview-num:visited {
     width: 122px;
     height: 85px;
+    background-color: #fff;
+    padding: 1.5em 1em .5em;
+    display: inline-block;
+    border-radius: .5em;
+    border: 1px solid lighten($lightest-grey, 4%);
+    box-shadow: $shadow__default;
+    text-align: center;
+    font-size: .86em;
+    color: $lighter-grey;
     margin: .8em 1.2em .5em 0;
     border-bottom: 0;
+    overflow: hidden;
+    clear: right;
     position: relative;
-    &:hover {
-      margin: .1em 1.2em 1.2em 0;
-      border-bottom: 0;
-    }
   }
 
   ul li {
@@ -314,33 +321,7 @@
       }
     }
   }
-
-}
-
-.overview-num, .overview-num:visited {
-  background-color: #fff;
-  padding: 1.5em 1em .5em;
-  display: inline-block;
-  border-radius: .5em;
-  border: 1px solid lighten($lightest-grey, 4%);
-  box-shadow: $shadow__default;
-  text-align: center;
-  font-size: .86em;
-  width: 133px;
-  height: 94px;
-  margin: .8em 1.5em .8em 0;
-  /*float: left;*/
-  color: $lighter-grey;
-  -webkit-transition: all 0.3s;
-  -moz-transition: all 0.3s;
-  transition: all 0.3s ease 0s;
-  overflow: hidden;
-  clear: right;
-  &:hover {
-    border: 1px solid lighten($lightest-grey, 4%);
-    margin: .1em 1.5em 1.5em 0;
-    box-shadow: $shadow__hover;
-  }
+  
 }
 
 .timeline--processing--overall {
