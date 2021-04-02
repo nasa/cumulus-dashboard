@@ -73,8 +73,9 @@ export const tableColumns = [
     Cell: ({ cell: { value } }) => providerLink(value)
   },
   {
-    Header: 'ORCA',
-    accessor: 'orca',
+    Header: 'Recovery',
+    accessor: (row) => (row.recoveryStatus ? displayCase(row.recoveryStatus) : row.recoveryStatus),
+    id: 'recoveryStatus',
     disableSortBy: true,
     width: 110,
   },
@@ -100,7 +101,7 @@ export const tableColumns = [
   }
 ];
 
-export const defaultHiddenColumns = ['orca'];
+export const defaultHiddenColumns = ['recoveryStatus'];
 
 export const errorTableColumns = [
   {

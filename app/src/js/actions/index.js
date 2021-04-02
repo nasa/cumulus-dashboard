@@ -176,12 +176,13 @@ export const getCumulusInstanceMetadata = () => ({
   }
 });
 
-export const getGranule = (granuleId) => ({
+export const getGranule = (granuleId, params) => ({
   [CALL_API]: {
     type: types.GRANULE,
     method: 'GET',
     id: granuleId,
-    path: `granules/${granuleId}`
+    path: `granules/${granuleId}`,
+    params
   }
 });
 

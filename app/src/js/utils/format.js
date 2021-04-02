@@ -100,6 +100,18 @@ export const fromNowWithTooltip = (timestamp) => (
 const getIndicator = (prop) => {
   const indicator = {};
   switch (prop) {
+    case 'Completed':
+      indicator.color = 'success';
+      indicator.text = prop;
+      break;
+    case 'Failed':
+      indicator.color = 'failed';
+      indicator.text = prop;
+      break;
+    case 'Running':
+      indicator.color = 'orange';
+      indicator.text = prop;
+      break;
     case 'missing':
       indicator.color = 'orange';
       indicator.text = 'Granule missing';

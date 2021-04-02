@@ -17,6 +17,7 @@ import {
 } from '../../actions';
 import {
   displayCase,
+  IndicatorWithTooltip,
   lastUpdated,
   seconds,
   nullValue,
@@ -158,7 +159,7 @@ class GranuleOverview extends React.Component {
   loadGranule() {
     const { dispatch, match } = this.props;
     const { granuleId } = match.params;
-    dispatch(getGranule(granuleId));
+    dispatch(getGranule(granuleId, { getRecoveryStatus: true }));
   }
 
   navigateBack() {
@@ -305,12 +306,16 @@ class GranuleOverview extends React.Component {
           {lastUpdated(granule.createdAt, 'Created')}
 
           <dl className="status--process">
-            <dt>Status:</dt>
-            <dd
-              className={`status__badge status__badge--${granule.status.toLowerCase()}`}
-            >
-              {displayCase(granule.status)}
-            </dd>
+            <div className="meta__row">
+              <dt>Status:</dt>
+              <dd>
+                <span>Ingest</span><IndicatorWithTooltip granuleId={granuleId} repo='ingest' value={displayCase(granule.status)} />
+              </dd>
+              {granule.recoveryStatus
+                ? <dd><span>Recovery</span><IndicatorWithTooltip granuleId={granuleId} repo='ingest' value={displayCase(granule.recoveryStatus)} /></dd>
+                : null
+              }
+            </div>
           </dl>
         </section>
 

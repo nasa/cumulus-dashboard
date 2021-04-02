@@ -162,12 +162,14 @@ export default createReducer(initialState, {
     state.list.params[action.paramKey] = null;
   },
   [TOGGLE_GRANULES_TABLE_COLUMNS]: (state, action) => {
-    const orca = 'orca';
+    const recoveryStatus = 'recoveryStatus';
     const { hiddenColumns, allColumns } = action;
-    if (hiddenColumns.includes(orca) && state.list.params.getOrca) {
-      delete state.list.params.getOrca;
-    } else if (!hiddenColumns.includes(orca) && allColumns.includes(orca) && state.list.params.getOrca !== true) {
-      state.list.params.getOrca = true;
+    if (hiddenColumns.includes(recoveryStatus) && state.list.params.getRecoveryStatus) {
+      delete state.list.params.getRecoveryStatus;
+    } else if (!hiddenColumns.includes(recoveryStatus) &&
+      allColumns.includes(recoveryStatus) &&
+      state.list.params.getRecoveryStatus !== true) {
+      state.list.params.getRecoveryStatus = true;
     }
   }
 });
