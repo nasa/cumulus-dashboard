@@ -33,8 +33,11 @@ const Overview = ({
         {statsCount.map((d) => (
           <li key={d.key}>
             <span className="overview-num overview-num--small" to="/">
-              <span className="num--large num--large--color">{d.count}</span>
-              <span className={`num-status num-status--${d.key}`}>
+              <span 
+                className="num--large num--large--color">
+                  {d.count}
+              </span>
+              <span className={`num-status num-status--${d.key}`}> {/* This will need to change from status to type (Ingest, Backup, and Recovery) */}
                 {displayCase(d.key)}
               </span>
             </span>
