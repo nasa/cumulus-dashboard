@@ -309,10 +309,14 @@ class GranuleOverview extends React.Component {
             <div className="meta__row">
               <dt>Status:</dt>
               <dd>
-                <span>Ingest</span><IndicatorWithTooltip granuleId={granuleId} repo='ingest' value={displayCase(granule.status)} />
+                <span>Ingest</span>
+                <IndicatorWithTooltip granuleId={granuleId} repo='ingest' value={displayCase(granule.status)} className='status-indicator--granule'/>
               </dd>
               {granule.recoveryStatus
-                ? <dd><span>Recovery</span><IndicatorWithTooltip granuleId={granuleId} repo='ingest' value={displayCase(granule.recoveryStatus)} /></dd>
+                ? <dd>
+                    <span>Recovery</span>
+                    <IndicatorWithTooltip granuleId={granuleId} repo='recovery' value={displayCase(granule.recoveryStatus)} className='status-indicator--granule' />
+                  </dd>
                 : null
               }
             </div>

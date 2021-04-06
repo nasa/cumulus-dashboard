@@ -136,6 +136,7 @@ export const IndicatorWithTooltip = ({
   granuleId,
   repo,
   value,
+  className,
 }) => {
   const indicator = getIndicator(value);
   const { color, text } = indicator;
@@ -144,7 +145,7 @@ export const IndicatorWithTooltip = ({
       className="tooltip--blue"
       id={`${granuleId}-${repo}-indicator-tooltip`}
       placement="right"
-      target={<span className={`status-indicator status-indicator--${color}`}></span>}
+      target={<span className={`status-indicator status-indicator--${color} ${className}`}></span>}
       tip={text}
     />
   );
