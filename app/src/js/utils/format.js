@@ -71,6 +71,23 @@ export const tally = (numberstring) => {
   return bigTally(number);
 };
 
+export const numLargeTooltip = (numberstring) => {
+  const number = +numberstring;
+  return(
+    <Tooltip
+    className="tooltip--light"
+    id="card-total-tooltip"
+    placement="right"
+    target={<span className="num--large num--large--color">{d.count}</span>}
+    tip={tally(count)}
+  />
+  );
+};
+
+numLargeTooltip.propTypes = {
+  number: PropTypes.string,
+};
+
 export const seconds = (numberstring) => {
   const number = +numberstring;
   if (numberstring === null || Number.isNaN(number)) {
