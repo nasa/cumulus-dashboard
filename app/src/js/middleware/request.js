@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
 import qs from 'qs';
+import _config from '../config';
 import { CALL_API } from '../actions/types';
 import {
   configureRequest,
@@ -11,6 +12,8 @@ import { isValidApiRequestAction } from './validate';
 // Use require to allow for mocking
 const axios = require('axios');
 const { loginError } = require('../actions');
+
+const apiRootHost = new URL(_config.apiRoot).host;
 
 const handleError = ({
   id,
@@ -28,7 +31,8 @@ const handleError = ({
 
   // If the error response indicates lack or failure of request
   // authorization, then the log user out
-  if ([401, 403].includes(+statusCode)) {
+  if ([401, 403].includes(+statusCode) &&
+      new URL(requestAction.url).host === apiRootHost) {
     return next(loginError(error.message));
   }
 
