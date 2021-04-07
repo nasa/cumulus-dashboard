@@ -73,13 +73,24 @@ export const tally = (numberstring) => {
 
 export const numLargeTooltip = (numberstring) => {
   const number = +numberstring;
+  if (
+    (!numberstring && numberstring !== 0) ||
+    numberstring === nullValue ||
+    Number.isNaN(number)
+  ) {
+    return nullValue;
+  }
+
+  if (number > 0) {
+    return number;
+  }
   return(
     <Tooltip
     className="tooltip--light"
     id="card-total-tooltip"
     placement="right"
     target={<span className="num--large num--large--color">{d.count}</span>}
-    tip={tally(count)}
+    tip={number}
   />
   );
 };
