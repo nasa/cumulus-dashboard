@@ -157,9 +157,10 @@ class GranuleOverview extends React.Component {
   }
 
   loadGranule() {
-    const { dispatch, match } = this.props;
+    const { config, dispatch, match } = this.props;
     const { granuleId } = match.params;
-    dispatch(getGranule(granuleId, { getRecoveryStatus: true }));
+    const getRecoveryStatus = config.enableRecovery ? true : undefined;
+    dispatch(getGranule(granuleId, { getRecoveryStatus }));
   }
 
   navigateBack() {
@@ -373,6 +374,7 @@ export { GranuleOverview };
 
 export default withRouter(
   connect((state) => ({
+    config: state.config,
     granules: state.granules,
     workflowOptions: workflowOptionNames(state),
     logs: state.logs,
