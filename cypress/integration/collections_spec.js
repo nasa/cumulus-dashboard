@@ -111,7 +111,6 @@ describe('Dashboard Collections Page', () => {
       ).as('getCollections');
       cy.visit('/collections');
       cy.clearStartDateTime();
-      cy.wait('@getCollections');
 
       cy.get('.table .tbody .tr').should('have.length', 3);
 
