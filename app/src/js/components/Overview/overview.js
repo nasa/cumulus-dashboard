@@ -4,7 +4,7 @@ import withQueryParams from 'react-router-query-params';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import Loading from '../LoadingIndicator/loading-indicator';
-import { displayCase } from '../../utils/format';
+import { displayCase, NumLargeTooltip} from '../../utils/format';
 import { getCount } from '../../actions';
 
 const Overview = ({
@@ -33,10 +33,7 @@ const Overview = ({
         {statsCount.map((d) => (
           <li key={d.key}>
             <span className="overview-num overview-num--small" to="/">
-              <span 
-                className="num--large num--large--color">
-                  {d.count}
-              </span>
+              <span className="num--large num--large--color">{d.count && <NumLargeTooltip/>}</span>
               <span className={`num-status num-status--${d.key}`}> {/* This will need to change from status to type (Ingest, Backup, and Recovery) */}
                 {displayCase(d.key)}
               </span>

@@ -71,7 +71,7 @@ export const tally = (numberstring) => {
   return bigTally(number);
 };
 
-export const numLargeTooltip = (numberstring) => {
+export const fullStatTotal = (numberstring) => {
   const number = +numberstring;
   if (
     (!numberstring && numberstring !== 0) ||
@@ -81,21 +81,26 @@ export const numLargeTooltip = (numberstring) => {
     return nullValue;
   }
 
-  if (number > 0) {
-    return number;
+  if (number >= 0) {
+    return `${numeral(number).format('0,0')}`;
   }
+  
+  return bigTally(number);
+};
+
+export const NumLargeTooltip = (numberstring) => {
   return(
     <Tooltip
-    className="tooltip--light"
-    id="card-total-tooltip"
-    placement="right"
-    target={<span className="num--large num--large--color">{d.count}</span>}
-    tip={number}
-  />
+      className="tooltip--light"
+      id="card-total-tooltip"
+      placement="right"
+      target={<span className="num--large num--large--color">{d.count}</span>}
+      tip={fullStatTotal(numberstring)}
+    />
   );
 };
 
-numLargeTooltip.propTypes = {
+NumLargeTooltip.propTypes = {
   number: PropTypes.string,
 };
 
