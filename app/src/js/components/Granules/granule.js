@@ -315,9 +315,9 @@ class GranuleOverview extends React.Component {
               </dd>
               {granule.recoveryStatus
                 ? <dd>
-                    <span>Recovery</span>
-                    <IndicatorWithTooltip granuleId={granuleId} repo='recovery' value={displayCase(granule.recoveryStatus)} className='status-indicator--granule' />
-                  </dd>
+                  <span>Recovery</span>
+                  <IndicatorWithTooltip granuleId={granuleId} repo='recovery' value={displayCase(granule.recoveryStatus)} className='status-indicator--granule' />
+                </dd>
                 : null
               }
             </div>
@@ -356,6 +356,7 @@ class GranuleOverview extends React.Component {
 }
 
 GranuleOverview.propTypes = {
+  config: PropTypes.object,
   match: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,

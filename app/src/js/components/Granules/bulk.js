@@ -291,7 +291,7 @@ const BulkGranule = ({
             <li>Set <strong>forceRemoveFromCmr</strong> to <strong>true</strong> to automatically have granules
             removed from CMR as part of deletion.
             If <strong>forceRemoveFromCmr</strong> is <strong>false</strong>, then the bulk granule deletion will
-              <strong> fail for any granules that are published to CMR.</strong>
+            <strong> fail for any granules that are published to CMR.</strong>
             </li>
           </ol>
         </BulkGranuleModal>
@@ -347,7 +347,7 @@ const BulkGranule = ({
             <li>Then add either an array of Granule IDs or an Elasticsearch query and index (<i>see below</i>).</li>
           </ol>
         </BulkGranuleModal>
-      }
+        }
       </div>
     </>
   );
@@ -356,6 +356,7 @@ const BulkGranule = ({
 BulkGranule.propTypes = {
   history: PropTypes.object,
   dispatch: PropTypes.func,
+  config: PropTypes.object,
   confirmAction: PropTypes.bool,
   className: PropTypes.string,
   element: PropTypes.string,
