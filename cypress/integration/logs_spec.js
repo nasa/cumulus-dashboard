@@ -5,12 +5,12 @@ const executionArn = 'arn:aws:states:us-east-1:123456789012:execution:TestSource
 const pdr = 'MOD09GQ_1granule_v3.PDR_test-test-src-integration-IngestGranuleDuplicateHandling-1582837549352';
 const provider = 's3_provider';
 
-const logSuccess = () => cy.intercept('GET', '/logs', {
+const logSuccess = () => cy.intercept('GET', '/logs?*', {
   fixture: 'logs-success.json',
   statusCode: 200
 });
 
-const logError = () => cy.intercept('GET', '/logs', {
+const logError = () => cy.intercept('GET', '/logs?*', {
   fixture: 'logs-error.json',
   statusCode: 400
 });
@@ -24,7 +24,7 @@ describe('Dashboard Logs', () => {
 
     beforeEach(() => {
       cy.login();
-      cy.intercept('GET', '/logs').as('getLogs');
+      cy.intercept('GET', '/logs?*').as('getLogs');
     });
 
     it('should display logs on a Collection page when metrics are configured', () => {
