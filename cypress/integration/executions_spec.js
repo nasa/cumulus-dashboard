@@ -121,7 +121,7 @@ describe('Dashboard Executions Page', () => {
       );
 
       cy.intercept(
-        { method: 'GET', url: 'http://localhost:5001/logs' },
+        { method: 'GET', url: 'http://localhost:5001/logs?*' },
         { fixture: 'logs-success.json', statusCode: 200 }
       );
 
@@ -218,7 +218,7 @@ describe('Dashboard Executions Page', () => {
       );
 
       cy.intercept(
-        { method: 'GET', url: 'http://localhost:5001/logs' },
+        { method: 'GET', url: 'http://localhost:5001/logs?*' },
         { fixture: 'logs-success.json', statusCode: 200 }
       );
 
