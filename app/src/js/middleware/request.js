@@ -40,13 +40,22 @@ const handleError = ({
 
   const errorType = `${type}_ERROR`;
   log((id ? `${errorType}: ${id}` : errorType));
-  log(error);
+
+  // pull message from data if there is a data field, or just use message off of the error.message
+  let nextError;
+  try {
+    nextError = error.response.data.message ? error.response.data.message : error.message;
+  } catch (e) {
+    if (e instanceof TypeError) {
+      nextError = error.message;
+    }
+  }
 
   return next({
     id,
     config: requestAction,
     type: errorType,
-    error: error.message
+    error: nextError
   });
 };
 

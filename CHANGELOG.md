@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - **CUMULUS-2282**
+  - Adds component that displays errors returned from a configured metrics
+    endpoint.  Specifically, letting a user know that they are unauthorized
+    when trying to retrieve data from ESROOT rather than just not showing the
+    data.
+  - Changes requestMiddleware and handleError.  Existing behavior is retained,
+    but when an error has no message in it's response, we look to the error
+    message which has useful information to show the user.
   - Upgrades Cypress testing software to 7.0.0
 
 ## [v5.0.0] - 2021-03-23
