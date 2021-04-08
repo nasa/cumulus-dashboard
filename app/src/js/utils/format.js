@@ -297,6 +297,12 @@ export const getCollectionId = (collection) => {
   }
 };
 
+export const getEncodedCollectionId = (collection) => {
+  if (collection && collection.name && collection.version) {
+    return `${collection.name}___${encodeURIComponent(collection.version)}`;
+  }
+};
+
 // "MYD13A1___006" => "MYD13A1 / 006"
 export const collectionName = (collectionId) => {
   if (!collectionId) return nullValue;
@@ -344,7 +350,7 @@ export const collectionLink = (collectionId) => {
 export const collectionHref = (collectionId) => {
   if (!collectionId) return nullValue;
   const { name, version } = collectionNameVersion(collectionId);
-  return `/collections/collection/${name}/${version}`;
+  return `/collections/collection/${name}/${encodeURIComponent(version)}`;
 };
 
 export const enableText = (name) => `You are enabling rule ${name}`;

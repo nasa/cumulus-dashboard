@@ -16,7 +16,8 @@ export const tableColumns = [
     Cell: ({ cell: { value, row } }) => { // eslint-disable-line react/prop-types
       const { values } = row; // eslint-disable-line react/prop-types
       // eslint-disable-next-line react/prop-types
-      const content = <Link to={(location) => ({ pathname: `/collections/collection/${value}/${values.version}`, search: getPersistentQueryParams(location) })}>{value}</Link>;
+      const encodedVersion = encodeURIComponent(values.version);
+      const content = <Link to={(location) => ({ pathname: `/collections/collection/${value}/${encodedVersion}`, search: getPersistentQueryParams(location) })}>{value}</Link>;
       return (
         <CopyCellPopover
           cellContent={content}
