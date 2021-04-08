@@ -25,7 +25,9 @@ const handleError = ({
   console.groupCollapsed('handleError');
   console.log(`id: ${id}`);
   console.log(`type: ${type}`);
+  console.log('error:');
   console.dir(error);
+  console.log('requestAction:');
   console.dir(requestAction);
   console.groupEnd();
 
@@ -88,22 +90,21 @@ export const requestMiddleware = ({ dispatch, getState }) => (next) => (action) 
       })
       .catch((error) => {
         if (error.response) {
-          const { data, status } = error.response;
+          const { status } = error.response;
           return handleError(
             {
               id,
               type,
-              error: data,
+              error,
               requestAction,
               statusCode: status
             },
             next
           );
         }
-        handleError({ id, type, error, requestAction }, next);
+        return handleError({ id, type, error, requestAction }, next);
       });
   }
-
   return next(action);
 };
 
