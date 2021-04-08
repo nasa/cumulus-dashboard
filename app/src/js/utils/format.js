@@ -152,6 +152,7 @@ export const IndicatorWithTooltip = ({
 };
 
 IndicatorWithTooltip.propTypes = {
+  className: PropTypes.string,
   granuleId: PropTypes.string,
   repo: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
