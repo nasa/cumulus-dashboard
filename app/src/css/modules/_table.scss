@@ -274,7 +274,7 @@
   @extend .clearfix;
   margin-top: 1.5em;
   .num--large {
-    font-size: 1.85em;
+    font-size: 1.5em;
   }
   .overview-num, .overview-num:visited {
     width: 122px;
@@ -388,9 +388,9 @@
   font-weight: $base-font-semibold;
   color: $midnight-blue;
 
-  &--color{
+  &--tooltip{
     position: relative;
-    top: 30px;
+    top: 17px;
     text-align: center;
   }
 
