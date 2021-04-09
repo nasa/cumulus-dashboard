@@ -18,10 +18,11 @@ import {
 } from '../../actions';
 import {
   collectionName as collectionLabelForId,
-  collectionNameVersion,
   getCollectionId,
   getEncodedCollectionId,
   lastUpdated,
+  collectionHrefFromNameVersion,
+  collectionHrefFromId,
 } from '../../utils/format';
 import statusOptions from '../../utils/status';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
@@ -89,8 +90,7 @@ const CollectionOverview = ({
   }, [collectionName, datepicker, decodedVersion, dispatch]);
 
   function changeCollection(_, newCollectionId) {
-    const { name: newName, version: newVersion } = collectionNameVersion(newCollectionId);
-    historyPushWithQueryParams(`/collections/collection/${newName}/${newVersion}`);
+    historyPushWithQueryParams(collectionHrefFromId(newCollectionId));
   }
 
   function generateBulkActions() {
@@ -231,7 +231,7 @@ const CollectionOverview = ({
           <Link
             className="button button--small button__goto button--green form-group__element--right"
             to={(location) => ({
-              pathname: `/collections/collection/${collectionName}/${collectionVersion}/granules`,
+              pathname: `${collectionHrefFromNameVersion({ name: collectionName, version: collectionVersion })}/granules`,
               search: getPersistentQueryParams(location),
             })}
           >

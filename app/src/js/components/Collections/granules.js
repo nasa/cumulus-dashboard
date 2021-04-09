@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { getCollectionId, displayCase } from '../../utils/format';
+import { getCollectionId, displayCase, collectionHrefFromNameVersion } from '../../utils/format';
 import {
   listGranules,
   filterGranules,
@@ -56,7 +56,7 @@ const CollectionGranules = ({
   const breadcrumbConfig = [
     {
       label: 'Collection Granules',
-      href: `/collections/collection/${collectionName}/${collectionVersion}/granules`,
+      href: `${collectionHrefFromNameVersion({ name: collectionName, version: collectionVersion })}/granules`,
       active: view === 'all',
     },
   ];

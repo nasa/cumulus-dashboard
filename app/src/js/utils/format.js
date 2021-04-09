@@ -347,11 +347,13 @@ export const collectionLink = (collectionId) => {
   );
 };
 
-export const collectionHref = (collectionId) => {
+export const collectionHrefFromId = (collectionId) => {
   if (!collectionId) return nullValue;
   const { name, version } = collectionNameVersion(collectionId);
   return `/collections/collection/${name}/${encodeURIComponent(version)}`;
 };
+
+export const collectionHrefFromNameVersion = ({ name, version }) => `/collections/collection/${name}/${encodeURIComponent(version)}`;
 
 export const enableText = (name) => `You are enabling rule ${name}`;
 

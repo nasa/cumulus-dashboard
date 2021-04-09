@@ -5,6 +5,7 @@ import {
   collectionName as collectionLabelForId,
   getCollectionId,
   lastUpdated,
+  collectionHrefFromNameVersion,
 } from '../../utils/format';
 import { getPersistentQueryParams } from '../../utils/url-helper';
 import { strings } from '../locale';
@@ -28,7 +29,7 @@ const CollectionHeader = ({
     },
     {
       label: 'Collection Overview',
-      href: `/collections/collection/${name}/${version}`,
+      href: collectionHrefFromNameVersion({ name, version }),
     },
   ];
 

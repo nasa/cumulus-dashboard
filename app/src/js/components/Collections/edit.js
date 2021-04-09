@@ -8,7 +8,7 @@ import {
   updateCollection,
   clearUpdateCollection,
 } from '../../actions';
-import { getCollectionId } from '../../utils/format';
+import { getCollectionId, collectionHrefFromNameVersion } from '../../utils/format';
 import EditRaw from '../EditRaw/edit-raw';
 
 const SCHEMA_KEY = 'collection';
@@ -31,7 +31,7 @@ const EditCollection = ({ match, collections }) => {
         state={collections}
         getRecord={() => getCollection(name, version)}
         updateRecord={(payload) => updateCollection(payload, name, version)}
-        backRoute={`/collections/collection/${name}/${version}`}
+        backRoute={collectionHrefFromNameVersion({ name, version })}
         clearRecordUpdate={clearUpdateCollection}
         hasModal={true}
       />
