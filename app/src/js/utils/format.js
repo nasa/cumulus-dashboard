@@ -94,7 +94,7 @@ export const NumLargeTooltip = (numberstring) => {
       className="tooltip--light"
       id="card-total-tooltip"
       placement="right"
-      target={<span className="num--large num--large--color">{d.count}</span>}
+      target={<span className="num--large num--large--color">{numberstring}</span>}
       tip={fullStatTotal(numberstring)}
     />
   );
