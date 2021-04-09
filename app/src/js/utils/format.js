@@ -88,7 +88,7 @@ export const fullStatTotal = (numberstring) => {
   return number;
 };
 
-export const NumLargeTooltip = (numberstring) => {
+export const numLargeTooltip = (numberstring) => {
   return(
     <Tooltip
       className="tooltip--light"
@@ -98,10 +98,6 @@ export const NumLargeTooltip = (numberstring) => {
       tip={fullStatTotal(numberstring)}
     />
   );
-};
-
-NumLargeTooltip.propTypes = {
-  numberstring: PropTypes.string,
 };
 
 export const seconds = (numberstring) => {
