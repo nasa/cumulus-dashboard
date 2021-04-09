@@ -85,7 +85,7 @@ export const fullStatTotal = (numberstring) => {
     return `${numeral(number).format('0,0')}`;
   }
   
-  return bigTally(number);
+  return number;
 };
 
 export const NumLargeTooltip = (numberstring) => {
@@ -101,7 +101,7 @@ export const NumLargeTooltip = (numberstring) => {
 };
 
 NumLargeTooltip.propTypes = {
-  number: PropTypes.string,
+  numberstring: PropTypes.string,
 };
 
 export const seconds = (numberstring) => {
