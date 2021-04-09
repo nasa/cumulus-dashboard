@@ -54,30 +54,6 @@ const breadcrumbConfig = [
   },
 ];
 
-//   componentDidMount() {
-//     this.load();
-//   }
-
-//   componentDidUpdate(prevProps) {
-//     const { name, version } = this.props.match.params;
-//     const { name: prevName, version: prevVersion } = prevProps.match.params;
-
-//     if (
-//       name !== prevName ||
-//       version !== prevVersion ||
-//       !isEqual(this.props.datepicker, prevProps.datepicker)
-//     ) {
-//       this.load();
-//     }
-//   }
-
-//   load() {
-//     const { name, version } = this.props.match.params;
-//     this.props.dispatch(listCollections());
-//     this.props.dispatch(getCumulusInstanceMetadata());
-//     this.props.dispatch(getCollection(name, version));
-//   }
-
 const CollectionOverview = ({
   collections,
   datepicker,
