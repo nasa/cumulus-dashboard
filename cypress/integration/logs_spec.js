@@ -44,13 +44,13 @@ describe('Dashboard Logs', () => {
     it('should display logs on a Granule page when metrics are configured', () => {
       logSuccess();
       cy.visit(`/granules/granule/${granuleId}`);
-      cy.get('.page__section--logs').should('exist');
+      cy.get('.page__section--logs', { timeout: 10000 }).should('exist');
     });
 
     it('should not display logs on a Granule page when metrics are not configured', () => {
       logError();
       cy.visit(`/granules/granule/${granuleId}`);
-      cy.get('.page__section--logs').should('not.exist');
+      cy.get('.page__section--logs', { timeout: 10000 }).should('not.exist');
     });
 
     it('should display logs on a Granule status pages when metrics are configured', () => {

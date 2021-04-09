@@ -74,7 +74,8 @@ const BulkGranule = ({
   const [bulkReingestRequestId, setBulkReingestRequestId] = useState(generateAsyncRequestId());
   const [bulkRecoveryRequestId, setBulkRecoveryRequestId] = useState(generateAsyncRequestId());
 
-  const activeModal = showModal || showBulkOpsModal || showBulkDeleteModal || showBulkReingestModal || showBulkRecoveryModal;
+  const activeModal = showModal || showBulkOpsModal || showBulkDeleteModal ||
+    showBulkReingestModal || showBulkRecoveryModal;
 
   const bulkOpRequestInfo = get(granules.bulk, [bulkOpRequestId]);
   const bulkOpRequestStatus = getRequestStatus(bulkOpRequestInfo);

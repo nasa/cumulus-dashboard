@@ -19,7 +19,7 @@ describe('Dashboard Granules Page', () => {
       cy.visit('/');
     });
 
-    it.only('should be able to toggle a column', () => {
+    it('should be able to toggle a column', () => {
       cy.visit('/granules');
       cy.contains('.table__filters .button__filter', 'Show Column Filters').click();
       cy.get('.table__filters--collapse').should('be.visible');
