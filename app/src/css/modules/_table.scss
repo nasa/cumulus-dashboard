@@ -273,9 +273,6 @@
 .overview-num__wrapper {
   @extend .clearfix;
   margin-top: 1.5em;
-  .num--large {
-    font-size: 1.5em;
-  }
   .overview-num, .overview-num:visited {
     width: 122px;
     height: 85px;
@@ -392,6 +389,7 @@
     position: relative;
     top: 17px;
     text-align: center;
+    font-size: 1.5em;
   }
 
   &--yellow{
