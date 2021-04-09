@@ -364,6 +364,8 @@ BulkGranule.propTypes = {
   selected: PropTypes.array
 };
 
+export { BulkGranule };
+
 export default withRouter(connect((state) => ({
   config: state.config,
   granules: state.granules
