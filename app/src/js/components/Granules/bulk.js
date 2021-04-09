@@ -72,8 +72,9 @@ const BulkGranule = ({
   const [bulkOpRequestId, setBulkOpRequestId] = useState(generateAsyncRequestId());
   const [bulkDeleteRequestId, setBulkDeleteRequestId] = useState(generateAsyncRequestId());
   const [bulkReingestRequestId, setBulkReingestRequestId] = useState(generateAsyncRequestId());
+  const [bulkRecoveryRequestId, setBulkRecoveryRequestId] = useState(generateAsyncRequestId());
 
-  const activeModal = showModal || showBulkOpsModal || showBulkDeleteModal || showBulkReingestModal;
+  const activeModal = showModal || showBulkOpsModal || showBulkDeleteModal || showBulkReingestModal || showBulkRecoveryModal;
 
   const bulkOpRequestInfo = get(granules.bulk, [bulkOpRequestId]);
   const bulkOpRequestStatus = getRequestStatus(bulkOpRequestInfo);
@@ -86,6 +87,10 @@ const BulkGranule = ({
   const bulkReingestRequestInfo = get(granules.bulkReingest, [bulkReingestRequestId]);
   const bulkReingestRequestStatus = getRequestStatus(bulkReingestRequestInfo);
   const bulkReingestRequestError = getRequestError(bulkReingestRequestInfo);
+
+  const bulkRecoveryRequestInfo = get(granules.bulk, [bulkRecoveryRequestId]);
+  const bulkRecoveryRequestStatus = getRequestStatus(bulkRecoveryRequestInfo);
+  const bulkRecoveryRequestError = getRequestError(bulkRecoveryRequestInfo);
 
   const ButtonComponent = element;
   const modalClassName = 'bulk_granules';
@@ -180,12 +185,12 @@ const BulkGranule = ({
   function hideBulkRecoveryModal () {
     // If last operation succeeded, generate a new request ID so
     // modal doesn't still show success of last operation
-    if (isStatusSuccess(bulkOpRequestStatus)) {
-      setBulkReingestRequestId(generateAsyncRequestId());
+    if (isStatusSuccess(bulkRecoveryRequestStatus)) {
+      setBulkRecoveryRequestId(generateAsyncRequestId());
     }
     // clear error from any previous request failure
-    if (bulkOpRequestError) {
-      dispatch(bulkGranuleReingestClearError(bulkOpRequestId));
+    if (bulkRecoveryRequestError) {
+      dispatch(bulkGranuleClearError(bulkRecoveryRequestId));
     }
     // clear error from any previous request failure
     setShowBulkRecoveryModal(false);
@@ -322,7 +327,7 @@ const BulkGranule = ({
         </BulkGranuleModal>
         {config.enableRecovery &&
         <BulkGranuleModal
-          asyncOpId={getRequestAsyncOpId(bulkOpRequestInfo)}
+          asyncOpId={getRequestAsyncOpId(bulkRecoveryRequestInfo)}
           bulkRequestAction={bulkGranule}
           cancelButtonText={'Cancel Bulk Recovery'}
           className={`${modalClassName} bulk_granules--recovery`}
@@ -330,14 +335,14 @@ const BulkGranule = ({
           confirmButtonText={'Run Bulk Recovery'}
           defaultQuery={bulkRecoveryDefaultQuery}
           dispatch={dispatch}
-          error={bulkOpRequestError}
+          error={bulkRecoveryRequestError}
           handleSuccessConfirm={handleSuccessConfirm}
-          inflight={isStatusInflight(bulkOpRequestStatus)}
+          inflight={isStatusInflight(bulkRecoveryRequestStatus)}
           onCancel={hideBulkRecoveryModal}
-          requestId={bulkOpRequestId}
+          requestId={bulkRecoveryRequestId}
           selected={selected}
           showModal={showBulkRecoveryModal}
-          success={isStatusSuccess(bulkOpRequestStatus)}
+          success={isStatusSuccess(bulkRecoveryRequestStatus)}
           successMessage={'Your request to process a bulk granule recovery operation has been submitted.'}
           title={'Bulk Granules - Recovery'}
         >

@@ -19,6 +19,8 @@ describe('Dashboard Bulk Granules', () => {
         .within(() => {
           cy.contains('button', 'Run Bulk Delete');
           cy.contains('button', 'Run Bulk Operations');
+          cy.contains('button', 'Run Bulk Reingest');
+          cy.contains('button', 'Run Bulk Recovery');
         });
     });
 
@@ -130,6 +132,31 @@ describe('Dashboard Bulk Granules', () => {
       cy.wait('@postBulkReingest');
       cy.contains('p', asyncOperationId);
       cy.contains('button', 'Close');
+      cy.contains('button', 'Go To Operations');
+    });
+
+    it('handles a successful bulk granule recovery request', () => {
+      const asyncOperationId = Math.random().toString(36).substring(2, 15);
+
+      cy.intercept('POST', '/granules/bulk', { id: asyncOperationId }).as('postBulkRecovery');
+
+      cy.visit('/granules');
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Run Bulk Granules').click();
+
+      cy.get('.bulk_granules')
+        .within(() => {
+          cy.contains('button', 'Run Bulk Recovery').click();
+        });
+
+      cy.get('.bulk_granules--recovery')
+        .within(() => {
+          cy.contains('button', 'Cancel Bulk Recovery');
+          cy.contains('button', 'Run Bulk Recovery').click();
+        });
+
+      cy.wait('@postBulkRecovery');
+      cy.contains('p', asyncOperationId);
       cy.contains('button', 'Go To Operations');
     });
 
@@ -262,6 +289,51 @@ describe('Dashboard Bulk Granules', () => {
         cy.get('.bulk_granules')
           .within(() => {
             cy.contains('button', 'Run Bulk Reingest').click();
+          });
+
+        cy.get('.error__report').should('not.exist');
+      });
+    });
+
+    describe('handles error from failed bulk granule recovery request', () => {
+      const errorMessage = 'bulk recovery failure';
+
+      beforeEach(() => {
+        cy.intercept(
+          { method: 'POST', url: '/granules/bulk' },
+          { statusCode: 400, body: { message: errorMessage } }
+        ).as('postBulkRecovery');
+
+        cy.visit('/granules');
+        cy.contains('button', 'Granule Actions').click();
+        cy.contains('button', 'Run Bulk Granules').click();
+
+        cy.get('.bulk_granules')
+          .within(() => {
+            cy.contains('button', 'Run Bulk Recovery').click();
+          });
+
+        cy.get('.bulk_granules--recovery')
+          .within(() => {
+            cy.contains('button', 'Run Bulk Recovery').click();
+          });
+
+        cy.wait('@postBulkRecovery');
+      });
+
+      it('show error message', () => {
+        cy.contains('.error__report', errorMessage);
+      });
+
+      it('hides error message when modal is closed and re-opened', () => {
+        cy.contains('.error__report', errorMessage);
+        cy.contains('button', 'Cancel Bulk Recovery').click();
+
+        cy.contains('button', 'Run Bulk Granules').click();
+
+        cy.get('.bulk_granules')
+          .within(() => {
+            cy.contains('button', 'Run Bulk Recovery').click();
           });
 
         cy.get('.error__report').should('not.exist');
