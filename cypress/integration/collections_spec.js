@@ -49,7 +49,7 @@ describe('Dashboard Collections Page', () => {
       cy.clearStartDateTime();
       cy.wait('@getCollections');
 
-      cy.get('.table .tbody .tr').should('have.length', 5);
+      cy.get('.table .tbody .tr').should('have.length', 6);
     });
 
     it('should only display collections with active granules when time filter is applied', () => {
@@ -123,6 +123,19 @@ describe('Dashboard Collections Page', () => {
         .contains('.td a', 'MMT')
         .should('have.attr', 'href')
         .and('eq', 'https://mmt.uat.earthdata.nasa.gov/collections/CL2_HR_PIXC-CUMULUS');
+    });
+
+    it('should properly encode collections path', () => {
+      const name = 'Test-L2-Coastal';
+      const version = 'Operational/Near-Real-Time';
+      const encodedVersion = encodeURIComponent(version);
+      cy.visit('/collections');
+
+      cy.get('.table .tbody .tr').should('have.length', 6);
+
+      cy.contains('.table .tbody .tr', name).as('testCollection');
+      cy.contains('.table .tbody .tr', version);
+      cy.get('@testCollection').find('a').should('have.attr', 'href').and('match', new RegExp(`collections/collection/${name}/${encodedVersion}`));
     });
 
     it('should add a new collection', () => {
