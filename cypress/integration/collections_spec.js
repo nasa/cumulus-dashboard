@@ -129,13 +129,19 @@ describe('Dashboard Collections Page', () => {
       const name = 'Test-L2-Coastal';
       const version = 'Operational/Near-Real-Time';
       const encodedVersion = encodeURIComponent(version);
+      const urlRegex = new RegExp(`collections/collection/${name}/${encodedVersion}`);
       cy.visit('/collections');
 
       cy.get('.table .tbody .tr').should('have.length', 6);
 
       cy.contains('.table .tbody .tr', name).as('testCollection');
       cy.contains('.table .tbody .tr', version);
-      cy.get('@testCollection').find('a').should('have.attr', 'href').and('match', new RegExp(`collections/collection/${name}/${encodedVersion}`));
+      cy.get('@testCollection').find('a').should('have.attr', 'href').and('match', urlRegex);
+      cy.get('@testCollection').click();
+      cy.url().should('match', urlRegex);
+      cy.contains('.heading--large', `${name} / ${version}`);
+      cy.get('.heading--large').should('not.contain', encodedVersion);
+      cy.contains('.dropdown__collection', `${name}___${version}`);
     });
 
     it('should add a new collection', () => {
