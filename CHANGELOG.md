@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Changes requestMiddleware and handleError.  Existing behavior is retained,
     but when an error has no message in its response, we look to the error
     message which has useful information to show the user.
-  - Upgrades Cypress testing software to 7.0.0
+  - Upgrades Cypress testing software to 7.0.1
 
 ## [v5.0.0] - 2021-03-23
 
