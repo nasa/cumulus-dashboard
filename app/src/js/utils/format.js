@@ -334,11 +334,10 @@ export const deconstructCollectionId = (collectionId) => {
 
 export const collectionLink = (collectionId) => {
   if (!collectionId || collectionId === nullValue) return nullValue;
-  const { name, version } = collectionNameVersion(collectionId);
   return (
     <Link
       to={(location) => ({
-        pathname: `/collections/collection/${name}/${version}`,
+        pathname: collectionHrefFromId(collectionId),
         search: getPersistentQueryParams(location),
       })}
     >
