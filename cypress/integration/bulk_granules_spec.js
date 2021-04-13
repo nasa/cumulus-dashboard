@@ -321,7 +321,7 @@ describe('Dashboard Bulk Granules', () => {
         cy.wait('@postBulkRecovery');
       });
 
-      it('show error message', () => {
+      it('shows error message', () => {
         cy.contains('.error__report', errorMessage);
       });
 
