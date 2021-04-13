@@ -301,6 +301,7 @@ export const getEncodedCollectionId = (collection) => {
   if (collection && collection.name && collection.version) {
     return `${collection.name}___${encodeURIComponent(collection.version)}`;
   }
+  return nullValue;
 };
 
 // "MYD13A1___006" => "MYD13A1 / 006"
@@ -352,7 +353,7 @@ export const collectionHrefFromId = (collectionId) => {
   return `/collections/collection/${name}/${encodeURIComponent(version)}`;
 };
 
-export const collectionHrefFromNameVersion = ({ name, version }) => {
+export const collectionHrefFromNameVersion = ({ name, version } = {}) => {
   if (!name || !version) return nullValue;
   return `/collections/collection/${name}/${encodeURIComponent(version)}`;
 };

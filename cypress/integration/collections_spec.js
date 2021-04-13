@@ -137,7 +137,7 @@ describe('Dashboard Collections Page', () => {
       cy.contains('.table .tbody .tr', name).as('testCollection');
       cy.contains('.table .tbody .tr', version);
       cy.get('@testCollection').find('a').should('have.attr', 'href').and('match', urlRegex);
-      cy.get('@testCollection').click();
+      cy.get('@testCollection').find('a').click();
       cy.url().should('match', urlRegex);
       cy.contains('.heading--large', `${name} / ${version}`);
       cy.get('.heading--large').should('not.contain', encodedVersion);
