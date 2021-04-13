@@ -201,7 +201,7 @@ describe('Dashboard Collections Page', () => {
       // details page.
       cy.visit('/collections');
       cy.wait('@getCollections');
-      cy.get('.table .tbody .tr').should('have.length', 5);
+      cy.get('.table .tbody .tr').should('have.length', 6);
 
       cy.contains('.table .tbody .tr a', name)
         .then(($res) => {
@@ -403,7 +403,7 @@ describe('Dashboard Collections Page', () => {
             { timeout: 25000 }
           ).should(existOrNotExist);
         });
-      cy.get('.table .tbody .tr').should('have.length', 4);
+      cy.get('.table .tbody .tr').should('have.length', 5);
       cy.task('resetState');
     });
 
