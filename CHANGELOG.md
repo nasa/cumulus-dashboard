@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- **CUMULUS-2449**
+  - Fixes issue where collections with forward slash in version name were not displayed
+
 ### Changed
 
 - **CUMULUS-2282**
