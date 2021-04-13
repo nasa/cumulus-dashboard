@@ -353,7 +353,10 @@ export const collectionHrefFromId = (collectionId) => {
   return `/collections/collection/${name}/${encodeURIComponent(version)}`;
 };
 
-export const collectionHrefFromNameVersion = ({ name, version }) => `/collections/collection/${name}/${encodeURIComponent(version)}`;
+export const collectionHrefFromNameVersion = ({ name, version }) => {
+  if (!name || !version) return nullValue;
+  return `/collections/collection/${name}/${encodeURIComponent(version)}`;
+};
 
 export const enableText = (name) => `You are enabling rule ${name}`;
 
