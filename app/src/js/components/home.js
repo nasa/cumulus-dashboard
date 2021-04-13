@@ -22,6 +22,7 @@ import {
   tally,
   seconds
 } from '../utils/format';
+import ErrorReport from './Errors/report';
 import List from './Table/Table';
 import { errorTableColumns } from '../utils/table-config/granules';
 import {
@@ -122,6 +123,22 @@ class Home extends React.Component {
     );
   }
 
+  /**
+   *
+   * @param {Object} dist - distribution state object.
+   * @returns - Error Report when any distribution metric contains an error.
+   */
+  renderDistrubutionErrors (dist) {
+    const errors = Object.keys(dist).filter((key) => dist[key].error).map((key) => dist[key].error);
+    if (errors.length === 0) return undefined;
+    const uniqueErrors = [...new Set(errors)];
+    return (
+      <div className='row'>
+        <ErrorReport report={`Distribution Metrics: ${uniqueErrors.join('\n')}`}/>
+      </div>
+    );
+  }
+
   getCountByKey (counts, key) {
     const granuleCount = counts.find((c) => c.key === key);
 
@@ -204,6 +221,7 @@ class Home extends React.Component {
           </section>
 
           {this.renderButtonListSection(overview, 'Updates')}
+          {this.renderDistrubutionErrors(dist)}
           {this.renderButtonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
           {this.renderButtonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
 
