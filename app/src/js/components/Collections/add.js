@@ -31,10 +31,7 @@ const AddCollection = ({ location = {}, collections, dispatch, schema }) => {
     }
   }, [collectionSchema, collectionId, collectionsMap, isCopy]);
 
-  const getBaseRoute = (pk) => {
-    console.log(pk);
-    return (pk && pk !== 'unknown' ? collectionHrefFromId(pk) : '/collections');
-  };
+  const getBaseRoute = (pk) => (pk && pk !== 'unknown' ? collectionHrefFromId(pk) : '/collections');
   return (
     <div className = "add_collections">
       <Helmet>
