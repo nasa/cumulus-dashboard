@@ -66,10 +66,16 @@ This version of the dashboard requires Cumulus API 7.0.0
 - **CUMULUS-2366**
   - Removes logs from dashboard display when metrics is not setup
 
+- **CUMULUS-2430**
+  - Overview KPI status cards: Change styling to new design
+
 ### Added
 
 - **CUMULUS-2297**
   - Add ability to show/hide columns on all tables
+
+- **CUMULUS-2430**
+  - Overview KPI status cards: Add tooltip to display full totals
 
 ## [v4.0.0] - 2021-01-13
 
