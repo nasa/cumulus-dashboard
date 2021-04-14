@@ -51,6 +51,35 @@
       "status": "completed",
       "timestamp": 1537831783729,
       "updatedAt": 1537831783389
+    },    {
+      "granuleId": "test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-Rcei43QwgSP6:e931b74d-324c-4ee1-8d3e-e7fd7330bfb4",
+      "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
+      "published": true,
+      "error": {
+        "Cause": "\"None\"",
+        "Error": "Unknown Error"
+      },
+      "productVolume": 17956339,
+      "endingDateTime": "2017-11-08T23:59:59.000Z",
+      "timeToPreprocess": 0.1,
+      "duration": 26.966,
+      "cmrLink": "https://cmr.uat.earthdata.nasa.gov/search/granules.json?concept_id=G1224020882-CUMULUS",
+      "createdAt": 1537831756154,
+      "provider": "s3_provider",
+      "beginningDateTime": "2017-10-24T00:00:00.000Z",
+      "timeToArchive": 0.01,
+      "files": [
+        {
+          "bucket": "cumulus-test-sandbox-protected",
+          "key": "test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2.hdf",
+          "fileName": "test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2.hdf"
+        }
+      ],
+      "collectionId": "Test-L2-Coastal___Operational/Near-Real-Time",
+      "status": "completed",
+      "timestamp": 1537831783729,
+      "updatedAt": 1537831783389
     },
     {
       "granuleId": "MOD09GQ.A1657416.CbyoRi.006.9697917818587",
