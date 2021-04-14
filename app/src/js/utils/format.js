@@ -71,6 +71,33 @@ export const tally = (numberstring) => {
   return bigTally(number);
 };
 
+export const fullStatTotal = (numberstring) => {
+  const number = +numberstring;
+  if (
+    (!numberstring && numberstring !== 0) ||
+    numberstring === nullValue ||
+    Number.isNaN(number)
+  ) {
+    return nullValue;
+  }
+
+  if (number >= 0) {
+    return numeral(number).format('0,0');
+  }
+
+  return number;
+};
+
+export const numLargeTooltip = (numberstring) => (
+  <Tooltip
+    className="tooltip--light"
+    id="card-total-tooltip"
+    placement="right"
+    target={<span className="num--large num--large--tooltip">{tally(numberstring)}</span>}
+    tip={fullStatTotal(numberstring)}
+  />
+);
+
 export const seconds = (numberstring) => {
   const number = +numberstring;
   if (numberstring === null || Number.isNaN(number)) {
