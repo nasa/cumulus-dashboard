@@ -82,7 +82,7 @@ export const fullStatTotal = (numberstring) => {
   }
 
   if (number >= 0) {
-    return `${numeral(number).format('0,0')}`;
+    return numeral(number).format('0,0');
   }
   
   return number;
