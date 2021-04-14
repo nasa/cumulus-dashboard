@@ -188,7 +188,7 @@ const CollectionOverview = ({
               <Link
                 className="button button--edit button--small button--green"
                 to={(location) => ({
-                  pathname: `/collections/edit/${collectionName}/${collectionVersion}`,
+                  pathname: `/collections/edit/${collectionName}/${encodeURIComponent(collectionVersion)}`,
                   search: getPersistentQueryParams(location),
                 })}
               >
