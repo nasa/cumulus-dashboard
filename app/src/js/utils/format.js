@@ -105,11 +105,8 @@ const getIndicator = (prop) => {
       indicator.text = prop;
       break;
     case 'Failed':
-      indicator.color = 'failed';
-      indicator.text = prop;
-      break;
     case 'Running':
-      indicator.color = 'orange';
+      indicator.color = prop.toLowerCase()
       indicator.text = prop;
       break;
     case 'missing':
@@ -117,9 +114,6 @@ const getIndicator = (prop) => {
       indicator.text = 'Granule missing';
       break;
     case 'notFound':
-      indicator.color = 'failed';
-      indicator.text = 'Granule not found';
-      break;
     case false:
       indicator.color = 'failed';
       indicator.text = 'Granule not found';
