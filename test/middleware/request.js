@@ -140,10 +140,10 @@ test.serial('should be able to use provided authorization headers', async (t) =>
   }
 });
 
-test.serial('should dispatch error action for failed request', async (t) => {
+test.serial('should dispatch error action for failed request when error contains message information', async (t) => {
   nock('https://example.com')
     .get('/test-path')
-    .reply(500, { message: 'Internal server error' });
+    .reply(500, { message: 'payload: Internal server error' });
 
   const { next, invokeMiddleware } = createTestMiddleware();
 
@@ -158,7 +158,7 @@ test.serial('should dispatch error action for failed request', async (t) => {
 
   const expectedAction = {
     id: undefined,
-    error: 'Internal server error',
+    error: 'payload: Internal server error',
     config: {
       ...t.context.defaultConfig,
       ...requestAction,
@@ -171,7 +171,39 @@ test.serial('should dispatch error action for failed request', async (t) => {
   t.deepEqual(next.firstCall.args[0], expectedAction);
 });
 
-test.serial('should dispatch login error action for 401 response', async (t) => {
+test.serial('should dispatch error action for failed request message information is missing.', async (t) => {
+  nock('https://example.com')
+    .get('/test-path')
+    .reply(500, { });
+  const standard500Message = 'Request failed with status code 500';
+
+  const { next, invokeMiddleware } = createTestMiddleware();
+
+  const requestAction = {
+    type: 'TEST',
+    method: 'GET',
+    url: 'https://example.com/test-path'
+  };
+  const actionObj = {
+    [CALL_API]: requestAction
+  };
+
+  const expectedAction = {
+    id: undefined,
+    error: standard500Message,
+    config: {
+      ...t.context.defaultConfig,
+      ...requestAction,
+      headers: t.context.expectedHeaders,
+    },
+    type: 'TEST_ERROR'
+  };
+
+  await invokeMiddleware(actionObj);
+  t.deepEqual(next.firstCall.args[0], expectedAction);
+});
+
+test.serial('should dispatch login error action for 401 response when made to the APIROOT: example.com', async (t) => {
   nock('https://example.com')
     .get('/test-path')
     .reply(401, { message: 'Unauthorized' });
@@ -189,6 +221,26 @@ test.serial('should dispatch login error action for 401 response', async (t) => 
 
   await invokeMiddleware(actionObj);
   t.true(loginErrorStub.called);
+});
+
+test.serial('should NOT dispatch login error action for 401 response when made to a non-APIROOT path', async (t) => {
+  nock('https://example-notapiroot.com')
+    .get('/test-path')
+    .reply(401, { message: 'Unauthorized' });
+
+  const { invokeMiddleware } = createTestMiddleware();
+
+  const requestAction = {
+    type: 'TEST',
+    method: 'GET',
+    url: 'https://example-notapiroot.com/test-path'
+  };
+  const actionObj = {
+    [CALL_API]: requestAction
+  };
+
+  await invokeMiddleware(actionObj);
+  t.false(loginErrorStub.called);
 });
 
 test.serial('should dispatch login error action for 403 response', async (t) => {

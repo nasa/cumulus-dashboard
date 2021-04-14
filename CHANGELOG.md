@@ -20,7 +20,14 @@ This version of the dashboard requires Cumulus API 7.2.1-alpha.0
 ### Changed
 
 - **CUMULUS-2282**
-  - Upgrades Cypress testing software to 7.0.0
+  - Adds component that displays errors returned from a configured metrics
+    endpoint.  Specifically, letting a user know that they are unauthorized
+    when trying to retrieve data from ESROOT rather than just not showing the
+    data.
+  - Changes requestMiddleware and handleError.  Existing behavior is retained,
+    but when an error has no message in its response, we look to the error
+    message which has useful information to show the user.
+  - Upgrades Cypress testing software to 7.0.1
 
 ## [v5.0.0] - 2021-03-23
 
