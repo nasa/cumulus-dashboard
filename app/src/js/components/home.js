@@ -147,6 +147,34 @@ class Home extends React.Component {
     }
   }
 
+  pageSection (identifier, title, children) {
+    return (
+      <section className={`page__section ${identifier}`}>
+        <div className='row'>
+          <div className='heading__wrapper'>
+            <h2 className='heading--medium heading--shared-content--right'>
+              {title}
+            </h2>
+          </div>
+          {children}
+        </div>
+      </section>
+    );
+  }
+
+  sectionHeader (identifier, title, link) {
+    return (
+      <section className={`page__section ${identifier}`}>
+        <div className='row'>
+          <div className='heading__wrapper--border'>
+            <h2 className='heading--large heading--shared-content--right'>{title}</h2>
+            {link}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   render () {
     const { list } = this.props.granules;
     const { stats, count } = this.props.stats;
@@ -199,63 +227,43 @@ class Home extends React.Component {
         </div>
 
         <div className='page__content page__content--nosidebar'>
-          <section className='page__section datetime'>
-            <div className='row'>
-              <div className='heading__wrapper'>
-                <h2 className='datetime__info heading--medium heading--shared-content--right'>
-                  Select date and time to refine your results. <em>Time is UTC.</em>
-                </h2>
-              </div>
-              <div className='datetime__range_wrapper'>
-                <DatepickerRange onChange={this.query}/>
-              </div>
-            </div>
-          </section>
 
-          <section className='page__section metrics--overview'>
-            <div className='row'>
-              <div className='heading__wrapper--border'>
-                <h2 className='heading--large heading--shared-content--right'>Metrics Overview</h2>
-              </div>
+          {this.pageSection(
+            'datetime', <>Select date and time to refine your results. <em>Time is UTC.</em></>,
+            <div className='datetime__range_wrapper'>
+              <DatepickerRange onChange={this.query}/>
             </div>
-          </section>
+          )}
+
+          {this.sectionHeader('metrics--overview', 'Metrics Overview')}
 
           {this.renderButtonListSection(overview, 'Updates')}
           {this.renderDistrubutionErrors(dist)}
+
           {this.renderButtonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
+
           {this.renderButtonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
 
-          <section className='page__section update--granules'>
-            <div className='row'>
-              <div className='heading__wrapper--border'>
-                <h2 className='heading--large heading--shared-content--right'>Granules Updates</h2>
-                <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
-              </div>
-            </div>
+          {this.sectionHeader(
+            'update--granules', 'Granules Updates',
+            <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
+          )}
 
-            {this.renderButtonListSection(
-              updated,
-              <>{strings.granules_updated}<span className='num-title'>{numGranules}</span></>
-            )}
+          {this.renderButtonListSection(
+            updated,
+            <>{strings.granules_updated}<span className='num-title'>{numGranules}</span></>
+          )}
 
-          </section>
-          <section className='page__section list--granules'>
-            <div className='row'>
-              <div className='heading__wrapper'>
-                <h2 className='heading--medium heading--shared-content--right'>{strings.granules_errors}</h2>
-                {/* commenting out because this is not visible */}
-                {/* <Link className='link--secondary link--learn-more'
-                to={{ pathname: '/logs', search: searchString }}>{strings.view_logs}</Link> */}
-              </div>
-              <List
-                list={list}
-                action={listGranules}
-                tableColumns={errorTableColumns}
-                initialSortId='timestamp'
-                query={this.generateQuery()}
-              />
-            </div>
-          </section>
+          {this.pageSection(
+            'list--granules', strings.granules_errors,
+            <List
+              list={list}
+              action={listGranules}
+              tableColumns={errorTableColumns}
+              initialSortId='timestamp'
+              query={this.generateQuery()}
+            />
+          )}
         </div>
       </div>
     );
