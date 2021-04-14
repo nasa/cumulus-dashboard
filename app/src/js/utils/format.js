@@ -105,8 +105,11 @@ const getIndicator = (prop) => {
       indicator.text = prop;
       break;
     case 'Failed':
+      indicator.color = 'failed';
+      indicator.text = prop;
+      break;
     case 'Running':
-      indicator.color = prop.toLowerCase()
+      indicator.color = 'running';
       indicator.text = prop;
       break;
     case 'missing':
