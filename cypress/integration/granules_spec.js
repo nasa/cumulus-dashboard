@@ -1,4 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
+import { collectionHrefFromId } from '../../app/src/js/utils/format';
 
 describe('Dashboard Granules Page', () => {
   describe('When not logged in', () => {
@@ -93,7 +94,7 @@ describe('Dashboard Granules Page', () => {
               .should('be.eq', formattedCollectionId);
             // has popover with copy feature
             cy.get('@columns').eq(4).find('.hover-wrap').trigger('mouseover');
-            cy.get(`#collectionId-${granule.collectionId}-popover`).as('popover');
+            cy.get(`[id="collectionId-${granule.collectionId}-popover"]`).as('popover');
             cy.get('@popover').should('be.visible');
             cy.get('@popover').contains('.popover-body--main', formattedCollectionId);
             cy.get('@popover').contains('button', 'Copy').click();
@@ -103,7 +104,7 @@ describe('Dashboard Granules Page', () => {
             // has link to the detailed collection page
             cy.get('@columns').eq(4).find('a')
               .should('have.attr', 'href')
-              .and('be.eq', `/collections/collection/${granule.collectionId.replace('___', '/')}`);
+              .and('be.eq', collectionHrefFromId(granule.collectionId));
 
             // has link to provider
             cy.get('@columns').eq(5).children('a')
