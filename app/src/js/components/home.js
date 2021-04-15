@@ -142,19 +142,19 @@ class Home extends React.Component {
     }
   }
 
-  pageSection (identifier, title, children) {
-    return this.section({ identifier, title, children });
+  pageSection (className, title, children) {
+    return this.section({ className, title, children });
   }
 
-  sectionHeader (identifier, title, link) {
-    return this.section({ identifier, title, link, size: 'large', border: true });
+  sectionHeader (className, title, link) {
+    return this.section({ className, title, link, size: 'large', border: true });
   }
 
-  section ({ identifier, title, link, border = false, size = 'medium', children }) {
+  section ({ className, title, link, border = false, size = 'medium', children }) {
     const borderMod = border ? '--border' : '';
     const sizeMod = `--${size}`;
     return (
-      <section className={`page__section ${identifier}`}>
+      <section className={`page__section ${className}`}>
         <div className='row'>
           <div className={`heading__wrapper${borderMod}`}>
             <h2 className={`heading${sizeMod} heading--shared-content--right`}>
