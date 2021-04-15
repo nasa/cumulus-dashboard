@@ -122,15 +122,16 @@ class Home extends React.Component {
    * @param {Object} dist - distribution state object.
    * @returns - Error Report when any distribution metric contains an error.
    */
-  renderDistrubutionErrors (dist) {
+  distrubutionConnectionErrors (dist) {
     const errors = Object.keys(dist).filter((key) => dist[key].error).map((key) => dist[key].error);
     if (errors.length === 0) return undefined;
     const uniqueErrors = [...new Set(errors)];
-    return (
+    return this.section({
+      children:
       <div className='row'>
         <ErrorReport report={`Distribution Metrics: ${uniqueErrors.join('\n')}`}/>
       </div>
-    );
+    });
   }
 
   getCountByKey (counts, key) {
@@ -231,18 +232,14 @@ class Home extends React.Component {
           {this.buttonListSection(overview, 'Updates')}
 
           {this.sectionHeader('distribution--overview', 'Distribution Overview')}
-          {/* {this.distributionErrorSection()} */}
-          {/* {this.distributionSuccessSection()} */}
-          {this.renderDistrubutionErrors(dist)}
+          {this.distrubutionConnectionErrors(dist)}
           {this.buttonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
-
           {this.buttonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
 
           {this.sectionHeader(
             'update--granules', 'Granules Updates',
             <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
           )}
-
           {this.buttonListSection(
             updated,
             <>{strings.granules_updated}<span className='num-title'>{numGranules}</span></>
