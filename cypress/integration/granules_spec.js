@@ -27,7 +27,7 @@ describe('Dashboard Granules Page', () => {
 
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 7)
+        .first().contains('li', 'Completed').contains('li', 8)
         .next()
         .contains('li', 'Failed')
         .contains('li', 2)
@@ -128,7 +128,7 @@ describe('Dashboard Granules Page', () => {
         });
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 11);
+      cy.get('@list').should('have.length', 12);
     });
 
     it('should be able to sort table by multiple fields', () => {
@@ -157,7 +157,7 @@ describe('Dashboard Granules Page', () => {
               granules.push(granule);
             })
             .then(() => (
-              granules.length === 11 &&
+              granules.length === 12 &&
               Cypress._.isEqual(granules, Cypress._.orderBy(granules, ['collectionId', 'status', 'name'], ['desc', 'asc', 'asc']))
             ));
         },
@@ -209,7 +209,7 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', 7).and('contain', 'Completed')
+          .first().should('contain', 8).and('contain', 'Completed')
           .next()
           .should('contain', 0)
           .and('contain', 'Failed')
@@ -275,7 +275,7 @@ describe('Dashboard Granules Page', () => {
 
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 7)
+        .first().contains('li', 'Completed').contains('li', 8)
         .next()
         .contains('li', 'Failed')
         .contains('li', 2)
@@ -284,7 +284,7 @@ describe('Dashboard Granules Page', () => {
         .contains('li', 2);
       cy.setDatepickerDropdown('Recent');
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 7)
+        .first().contains('li', 'Completed').contains('li', 8)
         .next()
         .contains('li', 'Failed')
         .contains('li', 2)
@@ -319,7 +319,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table__header .filter-page').as('page-input');
       cy.get('@page-input').should('be.visible').click().type('{backspace}2{enter}');
       cy.url().should('include', 'page=2');
-      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('.table .tbody .tr').should('have.length', 2);
     });
 
     it('Should reingest a granule and redirect to the granules detail page.', () => {
@@ -472,10 +472,10 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .thead input[type="checkbox"]').as('select-all');
       cy.get('.table .tbody .tr').as('list');
 
-      cy.get('@list').should('have.length', 11);
+      cy.get('@list').should('have.length', 12);
       cy.get('@select-all').check();
       cy.get('@select-all').should('be.checked');
-      cy.contains('.table__header', '(11 selected)');
+      cy.contains('.table__header', '(12 selected)');
     });
 
     it('should clear the selection when a filter is applied', () => {
@@ -489,7 +489,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .tbody .tr').as('list');
       cy.get('.filter-status .rbt-input-main').as('status-input');
 
-      cy.get('@list').should('have.length', 11);
+      cy.get('@list').should('have.length', 12);
       cy.get('@table-body').contains('.td', granuleIds[0]).as('granule1');
       cy.get('@granule1').siblings().contains('.td', 'Completed');
       cy.get('@granule1').siblings().find('input[type="checkbox"]').check();
@@ -508,7 +508,7 @@ describe('Dashboard Granules Page', () => {
 
       // verify items still not selected when filter is cleared
       cy.get('@status-input').clear();
-      cy.get('@list').should('have.length', 11);
+      cy.get('@list').should('have.length', 12);
       cy.get('.table__header').should('not.contain.text', 'selected');
     });
 
@@ -534,7 +534,7 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', 7).and('contain', 'Completed')
+          .first().should('contain', 8).and('contain', 'Completed')
           .next()
           .should('contain', 2)
           .and('contain', 'Failed')

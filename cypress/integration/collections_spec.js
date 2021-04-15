@@ -40,7 +40,7 @@ describe('Dashboard Collections Page', () => {
       cy.url().should('include', 'collections');
       cy.contains('.heading--xlarge', 'Collections');
 
-      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('.table .tbody .tr').should('have.length', 2);
       cy.get('.tbody > .tr > :nth-child(4)').should('contain', '11');
       cy.get('.tbody > .tr > :nth-child(5)').should('contain', '7');
       cy.get('.tbody > .tr > :nth-child(6)').should('contain', '2');
@@ -74,7 +74,7 @@ describe('Dashboard Collections Page', () => {
 
       // verify there is a granule with a timestamp containing second or minute
       // this would indicate it was updated within the default timeframe of 1 hour
-      cy.get('@listItems').should('have.length', 11).contains('.td', /second|minute/);
+      cy.get('@listItems').should('have.length', 12).contains('.td', /second|minute/);
     });
 
     it('should search collections by name', () => {
@@ -96,7 +96,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('.filter-provider .rbt-input-main').as('provider-input');
       cy.get('@provider-input').click().type('s3').type('{enter}');
       cy.url().should('include', 'provider=s3_provider');
-      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('.table .tbody .tr').should('have.length', 2);
 
       cy.get('@provider-input').click().clear().type('POD')
         .type('{enter}');
