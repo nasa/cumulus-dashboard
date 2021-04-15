@@ -630,5 +630,72 @@ describe('Dashboard Collections Page', () => {
           .and('contain', 'Running');
       });
     });
+
+    describe('Encoded version', () => {
+      const name = 'Test-L2-Coastal';
+      const version = 'Operational/Near-Real-Time';
+      const encodedVersion = encodeURIComponent(version);
+      const urlRegex = new RegExp(`collections/collection/${name}/${encodedVersion}`);
+      it('should properly encode collections path', () => {
+        cy.visit('/collections');
+        cy.get('.table .tbody .tr').should('have.length', 6);
+        cy.contains('.table .tbody .tr', name).as('testCollection');
+        cy.contains('.table .tbody .tr', version);
+        cy.get('@testCollection').find('a').should('have.attr', 'href').and('match', urlRegex);
+        cy.get('@testCollection').find('a').click();
+        cy.url().should('match', urlRegex);
+        cy.contains('.heading--large', `${name} / ${version}`);
+        cy.get('.heading--large').should('not.contain', encodedVersion);
+        cy.contains('.dropdown__collection', `${name}___${version}`);
+      });
+
+      it('should properly query sidebar pages', () => {
+        cy.visit(`/collections/collection/${name}/${encodedVersion}`);
+        cy.contains('.sidebar a', 'Granules').click();
+        cy.get('.table .tbody .tr').should('have.length', 1);
+        cy.contains('.sidebar a', 'Completed').click();
+        cy.get('.table .tbody .tr').should('have.length', 1);
+        cy.contains('.sidebar a', 'Running').click();
+        cy.get('.table .tbody .tr').should('have.length', 0);
+        cy.contains('.sidebar a', 'Failed').click();
+        cy.get('.table .tbody .tr').should('have.length', 0);
+      });
+
+      it('should edit a collection', () => {
+        cy.visit(`/collections/collection/${name}/${encodedVersion}`);
+        cy.wait('@getGranules');
+        cy.contains('a', 'Edit').as('editCollection');
+        cy.get('@editCollection')
+          .should('have.attr', 'href')
+          .and('include', `/collections/edit/${name}/${encodedVersion}`);
+        cy.get('@editCollection').click();
+        cy.contains('.heading--large', `${name}___${version}`);
+
+        // update collection and submit
+        const duplicateHandling = 'version';
+        const meta = { metaObj: 'metadata' };
+        cy.contains('.ace_variable', 'name', { timeout: 10000 });
+        cy.editJsonTextarea({ data: { duplicateHandling, meta }, update: true });
+        cy.contains('form button', 'Submit').click();
+        cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
+        cy.contains('.default-modal .modal-body', `Collection ${name}___${version} has been updated`, { timeout: 10000 });
+        cy.contains('.modal-footer button', 'Close').click();
+
+        // displays the updated collection and its granules
+        cy.wait('@getCollection');
+        cy.contains('.heading--xlarge', 'Collections');
+        cy.contains('.heading--large', `${name} / ${version}`);
+
+        // verify the collection is updated by looking at the Edit page
+        cy.contains('a', 'Edit').click();
+
+        cy.contains('.ace_variable', 'name');
+        cy.getJsonTextareaValue().then((collectionJson) => {
+          expect(collectionJson.duplicateHandling).to.equal(duplicateHandling);
+          expect(collectionJson.meta).to.deep.equal(meta);
+        });
+        cy.contains('.heading--large', `${name}___${version}`);
+      });
+    });
   });
 });
