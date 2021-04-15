@@ -89,37 +89,31 @@ class Home extends React.Component {
     return 'blue';
   }
 
-  renderButtonListSection (items, header, listId) {
+  buttonListSection (items, title, listId) {
     const data = items.filter((d) => d[0] !== nullValue);
     if (!data.length) return null;
-    return (
-      <section className='page__section'>
-        <div className='row'>
-          <div className='heading__wrapper'>
-            <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
-          </div>
-          <div className="overview-num__wrapper overview-num__wrapper-home">
-            <ul id={listId}>
-              {data.map((d) => {
-                const value = d[0];
-                return (
-                  <li key={d[1]}>
-                    {this.isExternalLink(d[2]) ? (
-                      <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
-                        <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
-                      </a>
-                    ) : (
-                      <Link id={d[1]} className='overview-num' to={{ pathname: d[2], search: getPersistentQueryParams(this.props.location) }}>
-                        <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
-                      </Link>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </div>
-      </section>
+    return this.pageSection(
+      title, title,
+      <div className="overview-num__wrapper overview-num__wrapper-home">
+        <ul id={listId}>
+          {data.map((d) => {
+            const value = d[0];
+            return (
+              <li key={d[1]}>
+                {this.isExternalLink(d[2]) ? (
+                  <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
+                    <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
+                  </a>
+                ) : (
+                  <Link id={d[1]} className='overview-num' to={{ pathname: d[2], search: getPersistentQueryParams(this.props.location) }}>
+                    <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     );
   }
 
@@ -148,28 +142,26 @@ class Home extends React.Component {
   }
 
   pageSection (identifier, title, children) {
-    return (
-      <section className={`page__section ${identifier}`}>
-        <div className='row'>
-          <div className='heading__wrapper'>
-            <h2 className='heading--medium heading--shared-content--right'>
-              {title}
-            </h2>
-          </div>
-          {children}
-        </div>
-      </section>
-    );
+    return this.section({ identifier, title, children });
   }
 
   sectionHeader (identifier, title, link) {
+    return this.section({ identifier, title, link, size: 'large', border: true });
+  }
+
+  section ({ identifier, title, link, border = false, size = 'medium', children }) {
+    const borderMod = border ? '--border' : '';
+    const sizeMod = `--${size}`;
     return (
       <section className={`page__section ${identifier}`}>
         <div className='row'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--large heading--shared-content--right'>{title}</h2>
+          <div className={`heading__wrapper${borderMod}`}>
+            <h2 className={`heading${sizeMod} heading--shared-content--right`}>
+              {title}
+            </h2>
             {link}
           </div>
+          {children}
         </div>
       </section>
     );
@@ -236,20 +228,22 @@ class Home extends React.Component {
           )}
 
           {this.sectionHeader('metrics--overview', 'Metrics Overview')}
+          {this.buttonListSection(overview, 'Updates')}
 
-          {this.renderButtonListSection(overview, 'Updates')}
+          {this.sectionHeader('distribution--overview', 'Distribution Overview')}
+          {/* {this.distributionErrorSection()} */}
+          {/* {this.distributionSuccessSection()} */}
           {this.renderDistrubutionErrors(dist)}
+          {this.buttonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
 
-          {this.renderButtonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
-
-          {this.renderButtonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
+          {this.buttonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
 
           {this.sectionHeader(
             'update--granules', 'Granules Updates',
             <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
           )}
 
-          {this.renderButtonListSection(
+          {this.buttonListSection(
             updated,
             <>{strings.granules_updated}<span className='num-title'>{numGranules}</span></>
           )}
