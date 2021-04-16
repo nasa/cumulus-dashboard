@@ -13,6 +13,7 @@ services:
       - ../:/cumulus-dashboard
     environment:
       - APIROOT=http://localhost:5001
+      - ENABLE_RECOVERY=true
       - ESROOT=http://example.com
       - HIDE_PDR=false
       - DAAC_NAME=local

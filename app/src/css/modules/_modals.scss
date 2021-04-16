@@ -156,10 +156,35 @@
     .modal-body {
       height: 100px;
       overflow-y: auto;
+      margin-left: 10px;
+      text-align: left;
     }
 
     .button__arrow--md:hover:after {
       left: 85%;
+    }
+
+    ol {
+      counter-reset: my-counter;
+    }
+
+    ol li {
+      counter-increment: my-counter;
+      position: relative;
+    }
+
+    ol li::before {
+      content: counter(my-counter);
+      background: $ocean-blue;
+      border-radius: 50%;
+      color: white;
+      display: inline-block;
+      font-size: 1rem;
+      height: 2rem;
+      line-height: 2;
+      margin: 0.5rem;
+      text-align: center;
+      width: 2rem;
     }
   }
 
@@ -173,7 +198,7 @@
       }
   }
 
-  &.bulk_granules--operations, &.bulk_granules--delete, &.bulk_granules--reingest {
+  &.bulk_granules--operations, &.bulk_granules--delete, &.bulk_granules--reingest, &.bulk_granules--recovery {
     .modal-body {
       height: 425px;
     }

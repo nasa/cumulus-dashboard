@@ -20,6 +20,25 @@ describe('Dashboard Granules Page', () => {
       cy.visit('/');
     });
 
+    it('should be able to toggle a column', () => {
+      cy.visit('/granules');
+      cy.contains('.table__filters .button__filter', 'Show Column Filters').click();
+      cy.get('.table__filters--collapse').should('be.visible');
+
+      cy.get('.table__filters--wrapper #recoveryStatus').click();
+      cy.get('.table .thead .tr .th').should('contain.text', 'Recovery');
+
+      cy.get('.table .tbody .tr').as('list');
+      cy.get('@list').should('have.length', 11);
+
+      cy.get('.table__filters--wrapper #recoveryStatus').click();
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Recovery');
+
+      cy.contains('.table__filters .button__filter', 'Hide Column Filters').click();
+      cy.get('.table__filters--collapse').should('not.be.visible');
+      cy.contains('.table__filters .button__filter', 'Show Column Filters');
+    });
+
     it('should display all granules in table with correct columns', () => {
       cy.visit('/granules');
       cy.url().should('include', 'granules');
@@ -329,7 +348,7 @@ describe('Dashboard Granules Page', () => {
         { method: 'PUT', url: new RegExp('/granules/.*') },
         { body: { message: 'ingested' }, statusCode: 200 },
       );
-      cy.intercept('GET', `/granules/${granuleId}`).as('getGranule');
+      cy.intercept('GET', `/granules/${granuleId}*`).as('getGranule');
       cy.visit('/granules');
       cy.get(`[data-value="${granuleId}"] > .td >input[type="checkbox"]`).click();
       cy.contains('button', 'Granule Actions').click();

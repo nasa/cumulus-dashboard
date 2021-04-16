@@ -685,11 +685,18 @@ a:active {
   background-color: $grey;
   margin-right: 0.5em;
 
+  &--granule {
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-left: 0.8em;
+    margin-right: 2em;
+  }
+
   &--success {
     background-color: $light-green;
   }
 
-  &--orange {
+  &--running, &--orange {
     background-color: $orange;
   }
 
@@ -730,7 +737,7 @@ a:active {
     margin-right: 2em;
   }
   dt {
-    margin-right: 0.5em;
+    margin-right: 1.5em;
     color: $dark-grey;
   }
   .running,

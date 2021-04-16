@@ -47,10 +47,18 @@ const bulkReingestDefaultQuery = {
   ids: []
 };
 
+const bulkRecoveryDefaultQuery = {
+  workflowName: '',
+  index: '',
+  query: '',
+  ids: []
+};
+
 const BulkGranule = ({
   history,
   dispatch,
   className,
+  config,
   confirmAction,
   granules,
   element = 'button',
@@ -60,11 +68,14 @@ const BulkGranule = ({
   const [showBulkOpsModal, setShowBulkOpsModal] = useState(false);
   const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
   const [showBulkReingestModal, setShowBulkReingestModal] = useState(false);
+  const [showBulkRecoveryModal, setShowBulkRecoveryModal] = useState(false);
   const [bulkOpRequestId, setBulkOpRequestId] = useState(generateAsyncRequestId());
   const [bulkDeleteRequestId, setBulkDeleteRequestId] = useState(generateAsyncRequestId());
   const [bulkReingestRequestId, setBulkReingestRequestId] = useState(generateAsyncRequestId());
+  const [bulkRecoveryRequestId, setBulkRecoveryRequestId] = useState(generateAsyncRequestId());
 
-  const activeModal = showModal || showBulkOpsModal || showBulkDeleteModal || showBulkReingestModal;
+  const activeModal = showModal || showBulkOpsModal || showBulkDeleteModal ||
+    showBulkReingestModal || showBulkRecoveryModal;
 
   const bulkOpRequestInfo = get(granules.bulk, [bulkOpRequestId]);
   const bulkOpRequestStatus = getRequestStatus(bulkOpRequestInfo);
@@ -77,6 +88,10 @@ const BulkGranule = ({
   const bulkReingestRequestInfo = get(granules.bulkReingest, [bulkReingestRequestId]);
   const bulkReingestRequestStatus = getRequestStatus(bulkReingestRequestInfo);
   const bulkReingestRequestError = getRequestError(bulkReingestRequestInfo);
+
+  const bulkRecoveryRequestInfo = get(granules.bulk, [bulkRecoveryRequestId]);
+  const bulkRecoveryRequestStatus = getRequestStatus(bulkRecoveryRequestInfo);
+  const bulkRecoveryRequestError = getRequestError(bulkRecoveryRequestInfo);
 
   const ButtonComponent = element;
   const modalClassName = 'bulk_granules';
@@ -162,6 +177,26 @@ const BulkGranule = ({
     setShowBulkReingestModal(false);
   }
 
+  function handleShowBulkRecoveryModal (e) {
+    e.preventDefault();
+    setShowModal(false);
+    setShowBulkRecoveryModal(true);
+  }
+
+  function hideBulkRecoveryModal () {
+    // If last operation succeeded, generate a new request ID so
+    // modal doesn't still show success of last operation
+    if (isStatusSuccess(bulkRecoveryRequestStatus)) {
+      setBulkRecoveryRequestId(generateAsyncRequestId());
+    }
+    // clear error from any previous request failure
+    if (bulkRecoveryRequestError) {
+      dispatch(bulkGranuleClearError(bulkRecoveryRequestId));
+    }
+    // clear error from any previous request failure
+    setShowBulkRecoveryModal(false);
+  }
+
   return (
     <>
       <ButtonComponent
@@ -188,17 +223,24 @@ const BulkGranule = ({
         >
           <p>What action would you like to perform for your bulk granules selection?</p>
           <button
-            className={'button button__animation--md button__arrow button__animation button__bulkgranules button__bulkgranules--delete form-group__element--left'}
+            className={'button button--small button__animation--md button__arrow button__animation button__bulkgranules button__bulkgranules--delete form-group__element--left'}
             onClick={handleShowBulkDeleteModal}>
             Run Bulk Delete
           </button>
           <button
-            className={'button button__animation--md button__arrow button__animation button__bulkgranules button__bulkgranules--reingest form-group__element--left'}
+            className={'button button--small button__animation--md button__arrow button__animation button__bulkgranules button__bulkgranules--reingest form-group__element--left'}
             onClick={handleShowBulkReingestModal}>
             Run Bulk Reingest
           </button>
+          {config.enableRecovery &&
           <button
-            className={'button button__animation--md button__arrow button__animation button__bulkgranules button__bulkgranules--operations form-group__element--left'}
+            className={'button button--small button__animation--md button__arrow button__animation button__bulkgranules button__bulkgranules--recovery form-group__element--left'}
+            onClick={handleShowBulkRecoveryModal}>
+            Run Bulk Recovery
+          </button>
+          }
+          <button
+            className={'button button--small button__animation--md button__arrow button__animation button__bulkgranules button__bulkgranules--operations form-group__element--left'}
             onClick={handleShowBulkOperationsModal}>
             Run Bulk Operations
           </button>
@@ -224,10 +266,10 @@ const BulkGranule = ({
           title={'Bulk Granule Operations'}
         >
           <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
-          <p>
-          1. In the box below, enter the <strong>workflowName</strong>. <br/>
-          2. Then add either an array of granule Ids or an elasticsearch query and index. <br/>
-          </p>
+          <ol>
+            <li>In the box below, enter the <strong>workflowName</strong>.</li>
+            <li>Then add either an array of granule Ids or an elasticsearch query and index.</li>
+          </ol>
         </BulkGranuleModal>
         <BulkGranuleModal
           asyncOpId={getRequestAsyncOpId(bulkDeleteRequestInfo)}
@@ -250,13 +292,14 @@ const BulkGranule = ({
           title={'Bulk Granule Delete'}
         >
           <h4 className="modal_subtitle">To run and complete your bulk delete task:</h4>
-          <p>
-          1. In the box below, add either an array of granule Ids or an elasticsearch query and index. <br/>
-          2. Set <strong>forceRemoveFromCmr</strong> to <strong>true</strong> to automatically have granules
-          removed from CMR as part of deletion.<br/>
-          If <strong>forceRemoveFromCmr</strong> is <strong>false</strong>, then the bulk granule deletion will
-            <strong>fail for any granules that are published to CMR.</strong>
-          </p>
+          <ol>
+            <li>In the box below, add either an array of granule Ids or an elasticsearch query and index.</li>
+            <li>Set <strong>forceRemoveFromCmr</strong> to <strong>true</strong> to automatically have granules
+            removed from CMR as part of deletion.
+            If <strong>forceRemoveFromCmr</strong> is <strong>false</strong>, then the bulk granule deletion will
+            <strong> fail for any granules that are published to CMR.</strong>
+            </li>
+          </ol>
         </BulkGranuleModal>
         <BulkGranuleModal
           asyncOpId={getRequestAsyncOpId(bulkReingestRequestInfo)}
@@ -283,6 +326,34 @@ const BulkGranule = ({
           In the box below, add either an array of granule Ids or an elasticsearch query and index. <br/>
           </p>
         </BulkGranuleModal>
+        {config.enableRecovery &&
+        <BulkGranuleModal
+          asyncOpId={getRequestAsyncOpId(bulkRecoveryRequestInfo)}
+          bulkRequestAction={bulkGranule}
+          cancelButtonText={'Cancel Bulk Recovery'}
+          className={`${modalClassName} bulk_granules--recovery`}
+          confirmButtonClass={'button__bulkgranules button__bulkgranules--recovery'}
+          confirmButtonText={'Run Bulk Recovery'}
+          defaultQuery={bulkRecoveryDefaultQuery}
+          dispatch={dispatch}
+          error={bulkRecoveryRequestError}
+          handleSuccessConfirm={handleSuccessConfirm}
+          inflight={isStatusInflight(bulkRecoveryRequestStatus)}
+          onCancel={hideBulkRecoveryModal}
+          requestId={bulkRecoveryRequestId}
+          selected={selected}
+          showModal={showBulkRecoveryModal}
+          success={isStatusSuccess(bulkRecoveryRequestStatus)}
+          successMessage={'Your request to process a bulk granule recovery operation has been submitted.'}
+          title={'Bulk Granules - Recovery'}
+        >
+          <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
+          <ol>
+            <li>In the box below, enter the workflowName.</li>
+            <li>Then add either an array of Granule IDs or an Elasticsearch query and index (<i>see below</i>).</li>
+          </ol>
+        </BulkGranuleModal>
+        }
       </div>
     </>
   );
@@ -291,6 +362,7 @@ const BulkGranule = ({
 BulkGranule.propTypes = {
   history: PropTypes.object,
   dispatch: PropTypes.func,
+  config: PropTypes.object,
   confirmAction: PropTypes.bool,
   className: PropTypes.string,
   element: PropTypes.string,
@@ -298,6 +370,9 @@ BulkGranule.propTypes = {
   selected: PropTypes.array
 };
 
+export { BulkGranule };
+
 export default withRouter(connect((state) => ({
+  config: state.config,
   granules: state.granules
 }))(BulkGranule));
