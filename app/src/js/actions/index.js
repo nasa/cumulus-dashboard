@@ -73,7 +73,7 @@ export const getCollection = (name, version) => (dispatch, getState) => {
     [CALL_API]: {
       type: types.COLLECTION,
       method: 'GET',
-      id: getCollectionId({ name, version }),
+      id: getCollectionId({ name, version: decodeURIComponent(version) }),
       path: `collections?name=${name}&version=${version}&includeStats=true`,
       params: timeFilters,
     },
@@ -147,7 +147,7 @@ export const updateCollection = (payload, name, version) => ({
     type: types.UPDATE_COLLECTION,
     method: 'PUT',
     id: (name && version) ? getCollectionId({ name, version }) : getCollectionId(payload),
-    path: `collections/${name || payload.name}/${version || payload.version}`,
+    path: `collections/${name || payload.name}/${encodeURIComponent(version) || encodeURIComponent(payload.version)}`,
     data: payload
   }
 });
@@ -159,7 +159,7 @@ export const deleteCollection = (name, version) => ({
     type: types.COLLECTION_DELETE,
     method: 'DELETE',
     id: getCollectionId({ name, version }),
-    path: `collections/${name}/${version}`
+    path: `collections/${name}/${encodeURIComponent(version)}`
   }
 });
 

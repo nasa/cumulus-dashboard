@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 This version of the dashboard requires Cumulus API 7.2.1-alpha.0
 
+### Fixed
+
+- **CUMULUS-2449**
+  - Fixes issue where collections with forward slash in version name were not displayed
+
 ### Added
 
 - **CUMULUS-2348**
