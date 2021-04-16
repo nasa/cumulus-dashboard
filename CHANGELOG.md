@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Breaking Changes
 
-This version of the dashboard requires Cumulus API 7.2.1-alpha.0
+This version of the dashboard requires Cumulus API `change-me-next-api-release-after-8.0.0`
 
 ### Added
 
