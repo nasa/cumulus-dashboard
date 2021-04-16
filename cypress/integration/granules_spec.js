@@ -29,7 +29,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .thead .tr .th').should('contain.text', 'Recovery');
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 11);
+      cy.get('@list').should('have.length', 12);
 
       cy.get('.table__filters--wrapper #recoveryStatus').click();
       cy.get('.table .thead .tr .th').should('not.contain.text', 'Recovery');

@@ -727,7 +727,9 @@ describe('Dashboard Collections Page', () => {
             cy.wait('@getCollections');
             cy.url().should('contain', '/collections/all');
             cy.contains('.table .tbody .tr a', newName)
-              .should('have.attr', 'href', `/collections/collection/${newName}/${newEncodedVersion}`).click();
+              .should('have.attr', 'href', `/collections/collection/${newName}/${newEncodedVersion}`);
+
+            cy.contains('.table .tbody .tr a', newName).click();
 
             cy.url().should('contain', `/collections/collection/${newName}/${newEncodedVersion}`);
 
