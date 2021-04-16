@@ -127,14 +127,23 @@ export const fromNowWithTooltip = (timestamp) => (
 const getIndicator = (prop) => {
   const indicator = {};
   switch (prop) {
+    case 'Completed':
+      indicator.color = 'success';
+      indicator.text = prop;
+      break;
+    case 'Failed':
+      indicator.color = 'failed';
+      indicator.text = prop;
+      break;
+    case 'Running':
+      indicator.color = 'running';
+      indicator.text = prop;
+      break;
     case 'missing':
       indicator.color = 'orange';
       indicator.text = 'Granule missing';
       break;
     case 'notFound':
-      indicator.color = 'failed';
-      indicator.text = 'Granule not found';
-      break;
     case false:
       indicator.color = 'failed';
       indicator.text = 'Granule not found';
@@ -151,6 +160,7 @@ export const IndicatorWithTooltip = ({
   granuleId,
   repo,
   value,
+  className,
 }) => {
   const indicator = getIndicator(value);
   const { color, text } = indicator;
@@ -159,13 +169,14 @@ export const IndicatorWithTooltip = ({
       className="tooltip--blue"
       id={`${granuleId}-${repo}-indicator-tooltip`}
       placement="right"
-      target={<span className={`status-indicator status-indicator--${color}`}></span>}
+      target={<span className={`status-indicator status-indicator--${color} ${className}`}></span>}
       tip={text}
     />
   );
 };
 
 IndicatorWithTooltip.propTypes = {
+  className: PropTypes.string,
   granuleId: PropTypes.string,
   repo: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),

@@ -17,6 +17,7 @@ declare -a param_list=(
     "bamboo_SIT_DASHBOARD_AWS_REGION"
     "bamboo_SIT_DASHBOARD_BUCKET"
     "bamboo_SIT_DASHBOARD_DAAC_NAME"
+    "bamboo_SIT_DASHBOARD_ENABLE_RECOVERY"
     "bamboo_SIT_DASHBOARD_ESROOT"
     "bamboo_SIT_DASHBOARD_KIBANAROOT"
 )

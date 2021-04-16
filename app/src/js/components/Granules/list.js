@@ -14,9 +14,11 @@ import {
   applyWorkflowToGranule,
   getCount,
   getOptionsProviderName,
+  toggleGranulesTableColumns,
 } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
+  defaultHiddenColumns,
   tableColumns,
   errorTableColumns,
   bulkActions,
@@ -179,10 +181,12 @@ const AllGranules = ({
           bulkActions={generateBulkActions()}
           groupAction={groupAction}
           rowId="granuleId"
+          initialHiddenColumns={defaultHiddenColumns}
           initialSortId={tablesortId}
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
           onSelect={updateSelection}
+          toggleColumnOptionsAction={toggleGranulesTableColumns}
         >
           <Search
             action={searchGranules}
