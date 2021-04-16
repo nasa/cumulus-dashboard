@@ -147,7 +147,7 @@ export const updateCollection = (payload, name, version) => ({
     type: types.UPDATE_COLLECTION,
     method: 'PUT',
     id: (name && version) ? getCollectionId({ name, version }) : getCollectionId(payload),
-    path: `collections/${name || payload.name}/${encodeURIComponent(version || payload.version)}`,
+    path: `collections/${name || payload.name}/${encodeURIComponent(version) || encodeURIComponent(payload.version)}`,
     data: payload
   }
 });
