@@ -1,12 +1,12 @@
 // Functions to split pages into sections.
 import React from 'react';
 
-export const pageSection = (title, className, children) => section({ title, className, children });
+export const pageSection = (title, sectionId, children) => section({ title, sectionId, children });
 
-export const sectionHeader = (title, className, link) => section({ className, title, link, size: 'large', border: true });
+export const sectionHeader = (title, sectionId, link) => section({ sectionId, title, link, size: 'large', border: true });
 
 export const section = ({
-  className,
+  sectionId,
   title,
   link,
   border = false,
@@ -15,10 +15,10 @@ export const section = ({
 }) => {
   const borderMod = border ? '--border' : '';
   const sizeMod = `--${size}`;
-  const additionalClassName = className || '';
+  const id = sectionId || '';
   const headerClass = (link !== undefined) ? 'heading--shared-content--right' : '';
   return (
-    <section className={`page__section ${additionalClassName}`}>
+    <section className='page__section' id={`${id}`}>
       <div className="row">
         <div className={`heading__wrapper${borderMod}`}>
           <h2 className={`heading${sizeMod} ${headerClass}`}>

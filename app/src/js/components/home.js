@@ -91,11 +91,11 @@ class Home extends React.Component {
     return 'blue';
   }
 
-  buttonListSection (items, title, listId) {
+  buttonListSection (items, title, listId, sectionId) {
     const data = items.filter((d) => d[0] !== nullValue);
     if (!data.length) return null;
     return pageSection(
-      title, undefined,
+      title, sectionId,
       <div className="overview-num__wrapper overview-num__wrapper-home">
         <ul id={listId}>
           {data.map((d) => {
@@ -204,12 +204,12 @@ class Home extends React.Component {
             </div>
           )}
 
-          {sectionHeader('Metrics Overview', 'metrics--overview')}
+          {sectionHeader('Metrics Overview', 'metricsOverview')}
           {this.buttonListSection(overview, 'Updates')}
 
           {metricsConfigured() &&
            <>
-             {sectionHeader('Distribution Overview', 'distribution--overview')}
+             {sectionHeader('Distribution Overview', 'distributionOverview')}
              {this.distrubutionConnectionErrors(dist)}
              {this.buttonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
              {this.buttonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
