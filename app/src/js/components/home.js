@@ -15,7 +15,8 @@ import {
   getStats,
   listExecutions,
   listGranules,
-  listRules
+  listRules,
+  metricsConfigured,
 } from '../actions';
 import {
   nullValue,
@@ -203,16 +204,20 @@ class Home extends React.Component {
             </div>
           )}
 
-          {sectionHeader('metrics--overview', 'Metrics Overview')}
+          {sectionHeader('Metrics Overview', 'metrics--overview')}
           {this.buttonListSection(overview, 'Updates')}
 
-          {sectionHeader('distribution--overview', 'Distribution Overview')}
-          {this.distrubutionConnectionErrors(dist)}
-          {this.buttonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
-          {this.buttonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
+          {metricsConfigured() &&
+           <>
+             {sectionHeader('Distribution Overview', 'distribution--overview')}
+             {this.distrubutionConnectionErrors(dist)}
+             {this.buttonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
+             {this.buttonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
+           </>
+          }
 
           {sectionHeader(
-            'update--granules', 'Granules Updates',
+            'Granules Updates', 'update--granules',
             <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
           )}
           {this.buttonListSection(

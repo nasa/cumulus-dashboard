@@ -3,7 +3,7 @@ import React from 'react';
 
 export const pageSection = (title, className, children) => section({ title, className, children });
 
-export const sectionHeader = (className, title, link) => section({ className, title, link, size: 'large', border: true });
+export const sectionHeader = (title, className, link) => section({ className, title, link, size: 'large', border: true });
 
 export const section = ({
   className,

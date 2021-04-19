@@ -447,8 +447,13 @@ export const getStats = (options) => (dispatch, getState) => {
   });
 };
 
+export const metricsConfigured = () => {
+  if (esRoot !== '') return true;
+  return false;
+};
+
 export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
-  if (!esRoot) return { type: types.NOOP };
+  if (!metricsConfigured()) return { type: types.NOOP };
   return (dispatch, getState) => {
     const { stackName } = cumulusInstanceMeta;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
@@ -468,7 +473,7 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
 };
 
 export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
-  if (!esRoot) return { type: types.NOOP };
+  if (!metricsConfigured()) return { type: types.NOOP };
   if (!showDistributionAPIMetrics) return { type: types.NOOP };
   return (dispatch, getState) => {
     const { stackName } = cumulusInstanceMeta;
@@ -489,7 +494,7 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
 };
 
 export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
-  if (!esRoot) return { type: types.NOOP };
+  if (!metricsConfigured()) return { type: types.NOOP };
   if (!showTeaMetrics) return { type: types.NOOP };
   return (dispatch, getState) => {
     const { stackName } = cumulusInstanceMeta;
@@ -510,7 +515,7 @@ export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
 };
 
 export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
-  if (!esRoot) return { type: types.NOOP };
+  if (!metricsConfigured()) return { type: types.NOOP };
   return (dispatch, getState) => {
     const { stackName } = cumulusInstanceMeta;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
