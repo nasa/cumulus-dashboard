@@ -16,11 +16,12 @@ export const section = ({
   const borderMod = border ? '--border' : '';
   const sizeMod = `--${size}`;
   const additionalClassName = className || '';
+  const headerClass = (link !== undefined) ? 'heading--shared-content--right' : '';
   return (
     <section className={`page__section ${additionalClassName}`}>
       <div className="row">
         <div className={`heading__wrapper${borderMod}`}>
-          <h2 className={`heading${sizeMod}`}>
+          <h2 className={`heading${sizeMod} ${headerClass}`}>
             {title}
           </h2>
           {link}
