@@ -15,10 +15,10 @@ export const section = ({
 }) => {
   const borderMod = border ? '--border' : '';
   const sizeMod = `--${size}`;
-  const id = sectionId || '';
+  const id = sectionId || false;
   const headerClass = (link !== undefined) ? 'heading--shared-content--right' : '';
   return (
-    <section className='page__section' id={`${id}`}>
+    <section className='page__section' id={id}>
       <div className="row">
         <div className={`heading__wrapper${borderMod}`}>
           <h2 className={`heading${sizeMod} ${headerClass}`}>
