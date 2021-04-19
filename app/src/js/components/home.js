@@ -22,6 +22,7 @@ import {
   tally,
   seconds
 } from '../utils/format';
+import { pageSection, section, sectionHeader } from './Section/section';
 import ErrorReport from './Errors/report';
 import List from './Table/Table';
 import { errorTableColumns } from '../utils/table-config/granules';
@@ -92,7 +93,7 @@ class Home extends React.Component {
   buttonListSection (items, title, listId) {
     const data = items.filter((d) => d[0] !== nullValue);
     if (!data.length) return null;
-    return this.pageSection(
+    return pageSection(
       title, undefined,
       <div className="overview-num__wrapper overview-num__wrapper-home">
         <ul id={listId}>
@@ -126,7 +127,7 @@ class Home extends React.Component {
     const errors = Object.keys(dist).filter((key) => dist[key].error).map((key) => dist[key].error);
     if (errors.length === 0) return undefined;
     const uniqueErrors = [...new Set(errors)];
-    return this.section({
+    return section({
       children:
       <div className='row'>
         <ErrorReport report={`Distribution Metrics: ${uniqueErrors.join('\n')}`}/>
@@ -140,33 +141,6 @@ class Home extends React.Component {
     if (granuleCount) {
       return granuleCount.count;
     }
-  }
-
-  pageSection (title, className, children) {
-    return this.section({ title, className, children });
-  }
-
-  sectionHeader (className, title, link) {
-    return this.section({ className, title, link, size: 'large', border: true });
-  }
-
-  section ({ className, title, link, border = false, size = 'medium', children }) {
-    const borderMod = border ? '--border' : '';
-    const sizeMod = `--${size}`;
-    const additionalClassName = className || '';
-    return (
-      <section className={`page__section ${additionalClassName}`}>
-        <div className='row'>
-          <div className={`heading__wrapper${borderMod}`}>
-            <h2 className={`heading${sizeMod} heading--shared-content--right`}>
-              {title}
-            </h2>
-            {link}
-          </div>
-          {children}
-        </div>
-      </section>
-    );
   }
 
   render () {
@@ -221,8 +195,7 @@ class Home extends React.Component {
         </div>
 
         <div className='page__content page__content--nosidebar'>
-
-          {this.pageSection(
+          {pageSection(
             <>Select date and time to refine your results. <em>Time is UTC.</em></>,
             'datetime',
             <div className='datetime__range_wrapper'>
@@ -230,15 +203,15 @@ class Home extends React.Component {
             </div>
           )}
 
-          {this.sectionHeader('metrics--overview', 'Metrics Overview')}
+          {sectionHeader('metrics--overview', 'Metrics Overview')}
           {this.buttonListSection(overview, 'Updates')}
 
-          {this.sectionHeader('distribution--overview', 'Distribution Overview')}
+          {sectionHeader('distribution--overview', 'Distribution Overview')}
           {this.distrubutionConnectionErrors(dist)}
           {this.buttonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
           {this.buttonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
 
-          {this.sectionHeader(
+          {sectionHeader(
             'update--granules', 'Granules Updates',
             <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
           )}
@@ -247,7 +220,7 @@ class Home extends React.Component {
             <>{strings.granules_updated}<span className='num-title'>{numGranules}</span></>
           )}
 
-          {this.pageSection(
+          {pageSection(
             strings.granules_errors,
             'list--granules',
             <List
