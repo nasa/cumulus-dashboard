@@ -217,7 +217,7 @@ class Home extends React.Component {
           }
 
           {sectionHeader(
-            'Granules Updates', 'update--granules',
+            'Granules Updates', 'updateGranules',
             <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
           )}
           {this.buttonListSection(
@@ -227,7 +227,7 @@ class Home extends React.Component {
 
           {pageSection(
             strings.granules_errors,
-            'list--granules',
+            'listGranules',
             <List
               list={list}
               action={listGranules}

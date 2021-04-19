@@ -451,8 +451,13 @@ a:active {
   margin-top: 0em;
 }
 
-.page__section#datetime{
+// MHS: These two are pretty specific and should be fixed in the future.
+.page__section#datetime {
   margin-bottom: 7.5em;
+}
+
+.page__section#listGranules {
+    margin-top: 2.5em;
 }
 
 .page__section--logs {
