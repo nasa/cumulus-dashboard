@@ -11,10 +11,15 @@ export const tableColumns = [
   {
     Header: 'Id',
     accessor: 'id',
+    width: 10
   },
   {
     Header: 'Type',
     accessor: 'type'
+  },
+  {
+    Header: 'Step',
+    accessor: 'name',
   },
   {
     Header: 'Timestamp',
@@ -22,7 +27,7 @@ export const tableColumns = [
     Cell: ({ cell: { value } }) => fullDate(value)
   },
   {
-    Header: 'Input Details',
+    Header: 'Event Details',
     accessor: 'eventDetails',
     Cell: ({ cell: { value } }) => {
       const [showModal, setShowModal] = useState(false);
