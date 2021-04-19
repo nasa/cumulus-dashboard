@@ -1,3 +1,4 @@
+// Functions to split pages into sections.
 import React from 'react';
 
 export const pageSection = (title, className, children) => section({ title, className, children });

@@ -250,14 +250,16 @@ class CollectionOverview extends React.Component {
             </span>
           </div>
         </section>
+
         <section className="page__section page__section__overview">
           <div className="heading__wrapper--border">
-            <h2 className="heading--large heading--shared-content--right">
+            <h2 className="heading--large">
               Granule Metrics
             </h2>
           </div>
           {record && <Overview type='granules' params={{ collectionId }} inflight={record.inflight} />}
         </section>
+
         <section className="page__section">
           <div className="heading__wrapper--border">
             <h2 className="heading--medium heading--shared-content with-description">
