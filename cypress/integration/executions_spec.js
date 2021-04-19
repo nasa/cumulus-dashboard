@@ -182,7 +182,7 @@ describe('Dashboard Executions Page', () => {
         cy.get('@events').each(($el, index, $list) => {
           const timestamp = fullDate(events[index].timestamp);
           cy.wrap($el).children('.td').as('columns');
-          cy.get('@columns').should('have.length', 4);
+          cy.get('@columns').should('have.length', 5);
           const id = index + 1;
           const idMatch = `"id": ${id},`;
           const previousIdMatch = `"previousEventId": ${index}`;

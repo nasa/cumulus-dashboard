@@ -60,7 +60,7 @@ test('Execution Events shows event history', function (t) {
 
   tableRows.forEach(row => {
     const columns = row.find('Cell');
-    t.is(columns.length, 4);
+    t.is(columns.length, 5);
     const moreDetails = columns.last().shallow().find('pre');
     moreDetails.map(node => {
       const parsedDetailsOutput = JSON.parse(node.text()).output;
