@@ -541,10 +541,18 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       }
     }
 
+    &__bulkgranules--recovery {
+      background-color: $light-green;
+
+      &:before {
+        content: '\f247';
+      }
+    }
+
     &__kibana_open{
       background-color: $light-green;
       position: relative;
-      margin-top: 1em;
+      margin-top: .5em;
       display: inline-block;
 
       &:before{

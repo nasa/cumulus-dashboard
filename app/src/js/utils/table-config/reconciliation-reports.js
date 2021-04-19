@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import get from 'lodash/get';
 
-import { nullValue, dateOnly, collectionNameVersion, IndicatorWithTooltip } from '../format';
+import { nullValue, dateOnly, IndicatorWithTooltip, collectionHrefFromId } from '../format';
 import { getReconciliationReport, deleteReconciliationReport, listReconciliationReports } from '../../actions';
 import { getPersistentQueryParams } from '../url-helper';
 
@@ -197,10 +197,10 @@ export const tableColumnsGnf = [
   {
     Header: 'Collection ID',
     accessor: 'collectionId',
-    Cell: ({ cell: { value } }) => { // eslint-disable-line react/prop-types
-      const { name, version } = collectionNameVersion(value);
-      return <Link to={(location) => ({ pathname: `/collections/collection/${name}/${version}`, search: getPersistentQueryParams(location) })}>{value}</Link>;
-    },
+    // eslint-disable-next-line react/prop-types
+    Cell: ({ cell: { value } }) => <Link to={(location) => ({
+      pathname: collectionHrefFromId(value), search: getPersistentQueryParams(location)
+    })}>{value}</Link>,
     width: 125,
   },
   {

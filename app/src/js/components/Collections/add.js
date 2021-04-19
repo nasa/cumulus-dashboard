@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { createCollection, getSchema } from '../../actions';
-import { getCollectionId, collectionHref } from '../../utils/format';
+import { getCollectionId, collectionHrefFromId } from '../../utils/format';
 import { removeReadOnly } from '../FormSchema/schema';
 import AddRaw from '../AddRaw/add-raw';
 
@@ -31,7 +31,7 @@ const AddCollection = ({ location = {}, collections, dispatch, schema }) => {
     }
   }, [collectionSchema, collectionId, collectionsMap, isCopy]);
 
-  const getBaseRoute = (pk = collectionId) => (pk && pk !== 'unknown' ? collectionHref(pk) : '/collections');
+  const getBaseRoute = (pk) => (pk && pk !== 'unknown' ? collectionHrefFromId(pk) : '/collections');
   return (
     <div className = "add_collections">
       <Helmet>
