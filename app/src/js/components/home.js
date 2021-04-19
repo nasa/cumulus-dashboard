@@ -93,7 +93,7 @@ class Home extends React.Component {
     const data = items.filter((d) => d[0] !== nullValue);
     if (!data.length) return null;
     return this.pageSection(
-      title, title,
+      title, undefined,
       <div className="overview-num__wrapper overview-num__wrapper-home">
         <ul id={listId}>
           {data.map((d) => {
@@ -142,8 +142,8 @@ class Home extends React.Component {
     }
   }
 
-  pageSection (className, title, children) {
-    return this.section({ className, title, children });
+  pageSection (title, className, children) {
+    return this.section({ title, className, children });
   }
 
   sectionHeader (className, title, link) {
@@ -153,8 +153,9 @@ class Home extends React.Component {
   section ({ className, title, link, border = false, size = 'medium', children }) {
     const borderMod = border ? '--border' : '';
     const sizeMod = `--${size}`;
+    const additionalClassName = className || '';
     return (
-      <section className={`page__section ${className}`}>
+      <section className={`page__section ${additionalClassName}`}>
         <div className='row'>
           <div className={`heading__wrapper${borderMod}`}>
             <h2 className={`heading${sizeMod} heading--shared-content--right`}>
@@ -222,7 +223,8 @@ class Home extends React.Component {
         <div className='page__content page__content--nosidebar'>
 
           {this.pageSection(
-            'datetime', <>Select date and time to refine your results. <em>Time is UTC.</em></>,
+            <>Select date and time to refine your results. <em>Time is UTC.</em></>,
+            'datetime',
             <div className='datetime__range_wrapper'>
               <DatepickerRange onChange={this.query}/>
             </div>
@@ -246,7 +248,8 @@ class Home extends React.Component {
           )}
 
           {this.pageSection(
-            'list--granules', strings.granules_errors,
+            strings.granules_errors,
+            'list--granules',
             <List
               list={list}
               action={listGranules}
