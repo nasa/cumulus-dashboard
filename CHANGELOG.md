@@ -33,6 +33,7 @@ This version of the dashboard requires Cumulus API 7.2.1-alpha.0
     but when an error has no message in its response, we look to the error
     message which has useful information to show the user.
   - Upgrades Cypress testing software to 7.0.1
+  - Refactors home page and adds a new section header
 
 ## [v5.0.0] - 2021-03-23
 
