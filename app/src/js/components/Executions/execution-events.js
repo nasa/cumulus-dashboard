@@ -35,8 +35,11 @@ const ExecutionEvents = ({
   const { events } = executionHistory || {};
   const mutableEvents = cloneDeep(events);
   if (mutableEvents) {
-    mutableEvents.forEach((event) => {
+    mutableEvents.forEach((event, index, eventsArray) => {
       event.eventDetails = getEventDetails(event);
+      if (index === 0 || event.name || !event.type.match('LambdaFunction')) return;
+      const prevStep = eventsArray[index - 1];
+      event.name = prevStep.name;
     });
   }
 
