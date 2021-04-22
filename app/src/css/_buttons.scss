@@ -88,6 +88,24 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
     }
   }
 
+  &--failed {
+    background-color: $error-red;
+    position: relative;
+
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        font-weight: 900;
+        left: 10px;
+      }
+      &:hover {
+        background-color: $delete-btn-hover-bg-color;
+        color: #fff;
+        border: 0;
+      }
+  }
+
   &--primary, &--primary:visited {
     &:hover {
       background-color: darken($ocean-blue, 10%);

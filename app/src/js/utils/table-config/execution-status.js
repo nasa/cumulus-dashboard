@@ -14,35 +14,43 @@ export const tableColumns = [
   },
   {
     Header: 'Type',
-    accessor: 'eventDetails',
-    Cell: ({ cell: { value } }) => {
+    accessor: 'type',
+    Cell: ({ cell: { value }, row: { original: { eventDetails } } }) => {
       const [showModal, setShowModal] = useState(false);
-      const { id } = value || {};
+      const { id } = eventDetails || {};
       function toggleModal(e) {
         if (e) {
           e.preventDefault();
         }
         setShowModal(!showModal);
       }
-      if (value) {
+      if (eventDetails) {
+        let buttonClass;
+        if (eventDetails.type === 'LambdaFunctionFailed') {
+          console.log('does this get hit');
+          console.log(eventDetails.type);
+          buttonClass = "button button--small button--no-left-padding button--failed"
+        } else {
+          buttonClass = "button button--small button--no-left-padding"
+        }
         return (
           <>
             <button
               onClick={toggleModal}
-              className="button button--small button--no-left-padding"
+              className={buttonClass}
             >
-              {value.type}
+              {eventDetails.type}
             </button>
             <DefaultModal
               showModal={showModal}
-              title={`ID ${id}: Event Details`}
+              title={`ID ${id}: ${value}`}
               onCloseModal={toggleModal}
               hasConfirmButton={false}
               cancelButtonClass="button--close"
               cancelButtonText="Close"
               className="execution__modal"
             >
-              <pre>{JSON.stringify(value, null, 2)}</pre>
+              <pre>{JSON.stringify(eventDetails, null, 2)}</pre>
             </DefaultModal>
           </>
         );

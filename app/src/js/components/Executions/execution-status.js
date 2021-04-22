@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
 import { metaAccessors } from '../../utils/table-config/execution-status';
 
@@ -92,6 +92,14 @@ const ExecutionStatus = ({
             })}
           />
         </div>
+        <Link
+          className="button button--small button--green"
+          to={() => ({
+            pathname: `/executions/execution/${executionArn}/events`
+          })}
+        >
+        Events
+        </Link>
       </section>
     </div>
   );
