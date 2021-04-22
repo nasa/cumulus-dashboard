@@ -28,8 +28,6 @@ export const tableColumns = [
       if (eventDetails) {
         let buttonClass;
         if (eventDetails.type === 'LambdaFunctionFailed') {
-          console.log('does this get hit');
-          console.log(eventDetails.type);
           buttonClass = "button button--small button--no-left-padding button--failed"
         } else {
           buttonClass = "button button--small button--no-left-padding"
