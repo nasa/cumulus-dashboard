@@ -22,6 +22,9 @@ This version of the dashboard requires Cumulus API 7.2.1-alpha.0
   - Implement Granule Recovery status
   - Requires @cumulus/api@7.2.1-alpha.0
 
+- **CUMULUS-2435**
+  - Add step name to execution events
+
 ### Changed
 
 - **CUMULUS-2282**
