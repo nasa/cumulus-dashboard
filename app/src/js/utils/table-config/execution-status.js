@@ -28,9 +28,9 @@ export const tableColumns = [
       if (eventDetails) {
         let buttonClass;
         if (eventDetails.type === 'LambdaFunctionFailed') {
-          buttonClass = "button button--small button--no-left-padding button--failed"
+          buttonClass = 'button button--small button--no-left-padding button--failed';
         } else {
-          buttonClass = "button button--small button--no-left-padding"
+          buttonClass = 'button button--small button--no-left-padding';
         }
         return (
           <>
