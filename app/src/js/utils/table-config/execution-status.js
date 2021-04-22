@@ -18,7 +18,7 @@ export const tableColumns = [
     accessor: 'type'
   },
   {
-    Header: 'Step',
+    Header: 'Step Name',
     accessor: 'name',
   },
   {
