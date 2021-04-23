@@ -79,14 +79,14 @@ const ExecutionStatus = ({
       <section className="page__section">
         <div className="heading__wrapper--border">
           <h2 className="heading--medium with-description">Details
-          <Link
-            className="button button--small button--events"
-            to={() => ({
-              pathname: `/executions/execution/${executionArn}/events`
-            })}
-          >
-          Events
-          </Link>
+            <Link
+              className="button button--small button--events"
+              to={() => ({
+                pathname: `/executions/execution/${executionArn}/events`
+              })}
+            >
+            Events
+            </Link>
           </h2>
         </div>
         <div className="execution__content status--process">
