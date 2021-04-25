@@ -26,7 +26,7 @@ test('Cumulus API Version is not shown on the dashboard when not logged in', fun
     />
   );
 
-  t.false(footerWrapper.exists('.api__version'));
+  t.false(footerWrapper.exists('.version__info'));
 });
 
 test('Cumulus API Version is shown on the dashboard', function (t) {
@@ -45,7 +45,7 @@ test('Cumulus API Version is shown on the dashboard', function (t) {
   );
 
   const apiVersionNumber = footerWrapper.find('[className="api__version"]');
-  t.is(`Cumulus API Version: ${apiVersion.versionNumber}`, apiVersionNumber.text());
+  t.is(`API v${apiVersion.versionNumber}`, apiVersionNumber.text());
   const hasApiWarning = footerWrapper.hasClass('api__warning');
   t.false(hasApiWarning);
 });
@@ -86,5 +86,5 @@ test('Dashboard Version is shown in the footer', function (t) {
   );
 
   const dashboardVersionNumber = footerWrapper.find('[className="dashboard__version"]');
-  t.is(`Cumulus Dashboard Version: ${dashboardVersion}`, dashboardVersionNumber.text());
+  t.is(`Dashboard v${dashboardVersion}`, dashboardVersionNumber.text());
 });
