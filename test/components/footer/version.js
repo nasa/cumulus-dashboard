@@ -105,7 +105,8 @@ test('FOIA, Privacy, and Feedback links shown in the footer', function (t) {
 
   const footerLeftSideLinks = footerWrapper.find('[className="footer__links"] div');
   t.true(footerWrapper.exists('.footer__links')); // footer links on left exist
-  t.is(footerLeftSideLinks.find('div').length, 4); // four divs 
+  t.is(footerLeftSideLinks.find('div').length, 4); // four divs
+  t.is(footerLeftSideLinks.find('div').at(0).text(), 'NASA'); // NASA text 
   t.is(footerLeftSideLinks.find('a').length, 3); // three links
   t.is(footerLeftSideLinks.find('a').at(0).text(), 'FOIA'); // first link text
   t.is(footerLeftSideLinks.find('a').at(0).props().href, 'https://www.nasa.gov/FOIA/index.html'); // first link href
