@@ -172,8 +172,8 @@ describe('Dashboard Home Page', () => {
       cy.intercept('GET', '/stats?*timestamp__from=1233360000000*').as('stats');
 
       cy.get('#Errors').contains('2');
-      cy.get('#Collections').contains('1');
-      cy.get('#Granules').contains('11');
+      cy.get('#Collections').contains('2');
+      cy.get('#Granules').contains('12');
       cy.get('#Executions').contains('6');
       cy.get('[id="Ingest Rules"]').contains('1');
 

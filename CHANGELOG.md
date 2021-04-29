@@ -11,11 +11,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 This version of the dashboard requires Cumulus API `v8.1.0`
 
+### Fixed
+
+- **CUMULUS-2449**
+  - Fixes issue where collections with forward slash in version name were not displayed
+
 ### Added
 
 - **CUMULUS-2348**
   - Implement Granule Recovery status
   - Requires @cumulus/api@7.2.1-alpha.0
+
+- **CUMULUS-2435**
+  - Add step name to execution events
 
 ### Changed
 
@@ -28,6 +36,7 @@ This version of the dashboard requires Cumulus API `v8.1.0`
     but when an error has no message in its response, we look to the error
     message which has useful information to show the user.
   - Upgrades Cypress testing software to 7.0.1
+  - Refactors home page and adds a new section header
 
 ## [v5.0.0] - 2021-03-23
 
@@ -68,6 +77,11 @@ This version of the dashboard requires Cumulus API 7.0.0
 
 - **CUMULUS-2430**
   - Overview KPI status cards: Change styling to new design
+
+- **CUMULUS-2056**
+  - Added Events link to Details section of Executions page
+  - On Events tab of Execution page, highlighted in the red the failed tasks
+  - On Events tab of Execution page, made tasks expandable to show event details
 
 ### Added
 
