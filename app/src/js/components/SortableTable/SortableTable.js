@@ -3,7 +3,8 @@ import React, {
   useEffect,
   forwardRef,
   useRef,
-  useState
+  useState,
+  createRef
 } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -141,6 +142,8 @@ const SortableTable = ({
   const tableRows = page || rows;
   const includeFilters = typeof getToggleColumnOptions !== 'function';
 
+  const tableRef = createRef();
+
   useEffect(() => {
     if (clearSelected) {
       toggleAllRowsSelected(false);
@@ -190,6 +193,19 @@ const SortableTable = ({
     onMouseDown(e);
   }
 
+  function scrollHorizontal(scrollOffset) {
+    tableRef.current.scrollLeft += scrollOffset;
+  };
+
+  function tableColumnMouseEnter() {
+    console.log('mouse enter');
+    
+  }
+
+  function tableColumnMouseLeave() {
+    console.log('mouse leave');
+  }
+
   return (
     <div className='table--wrapper'>
       {(includeFilters || legend) &&
@@ -199,7 +215,7 @@ const SortableTable = ({
         }
         {legend}
       </ListFilters>}
-      <div className='table' {...getTableProps()}>
+      <div className='table' {...getTableProps()} ref={tableRef}>
         <div className='thead'>
           <div className='tr'>
             {headerGroups.map((headerGroup) => (
@@ -282,6 +298,8 @@ const SortableTable = ({
                       {...restCellProps}
                       style={style}
                       key={cellIndex}
+                      onMouseEnter={() => tableColumnMouseEnter()}
+                      onMouseLeave={() => tableColumnMouseLeave()}
                     >
                       {cell.render('Cell')}
                     </div>
@@ -292,6 +310,7 @@ const SortableTable = ({
           })}
         </div>
       </div>
+      <div className="scrollButton" onClick={() => scrollHorizontal(250)}>SCROLL</div>
       {shouldUsePagination &&
         <SimplePagination
           canPreviousPage={canPreviousPage}

@@ -11,6 +11,11 @@
   line-height: 1.6em;
   overflow-x: scroll;
   border-radius: 8px 8px 0px 0px;
+  scroll-behavior: smooth;
+
+  &:hover + .scrollButton {
+    display: flex;
+  }
 
   .content-fit {
     width: fit-content!important;
@@ -108,6 +113,28 @@
   & + .table--wrapper .table {
     border-radius: 0;
   }
+}
+
+.table--wrapper {
+  position: relative;
+}
+
+.scrollButton {
+  background-color: $ocean-blue;
+  color: white;
+  cursor: pointer;
+  height: 75px;
+  width: 75px;
+  border-radius: 50%;
+  align-items: center; 
+  justify-content: center;
+  display: flex;
+  position: absolute;
+  bottom: -90px;
+  right: 0;
+  // &::after {
+  //   content: 'SCROLL'
+  // }
 }
 
 .dropdown-wrapper {
