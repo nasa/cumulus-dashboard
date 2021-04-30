@@ -15,13 +15,16 @@ import {
   getStats,
   listExecutions,
   listGranules,
-  listRules
+  listRules,
+  metricsConfigured,
 } from '../actions';
 import {
   nullValue,
   tally,
   seconds
 } from '../utils/format';
+import { pageSection, section, sectionHeader } from './Section/section';
+import ErrorReport from './Errors/report';
 import List from './Table/Table';
 import { errorTableColumns } from '../utils/table-config/granules';
 import {
@@ -88,38 +91,49 @@ class Home extends React.Component {
     return 'blue';
   }
 
-  renderButtonListSection (items, header, listId) {
+  buttonListSection (items, title, listId, sectionId) {
     const data = items.filter((d) => d[0] !== nullValue);
     if (!data.length) return null;
-    return (
-      <section className='page__section'>
-        <div className='row'>
-          <div className='heading__wrapper'>
-            <h2 className='heading--medium heading--shared-content--right'>{header}</h2>
-          </div>
-          <div className="overview-num__wrapper overview-num__wrapper-home">
-            <ul id={listId}>
-              {data.map((d) => {
-                const value = d[0];
-                return (
-                  <li key={d[1]}>
-                    {this.isExternalLink(d[2]) ? (
-                      <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
-                        <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
-                      </a>
-                    ) : (
-                      <Link id={d[1]} className='overview-num' to={{ pathname: d[2], search: getPersistentQueryParams(this.props.location) }}>
-                        <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
-                      </Link>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </div>
-      </section>
+    return pageSection(
+      title, sectionId,
+      <div className="overview-num__wrapper overview-num__wrapper-home">
+        <ul id={listId}>
+          {data.map((d) => {
+            const value = d[0];
+            return (
+              <li key={d[1]}>
+                {this.isExternalLink(d[2]) ? (
+                  <a id={d[1]} href={d[2]} className='overview-num' target='_blank'>
+                    <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
+                  </a>
+                ) : (
+                  <Link id={d[1]} className='overview-num' to={{ pathname: d[2], search: getPersistentQueryParams(this.props.location) }}>
+                    <span className={`num--large num--large--${this.getCountColor(d[1], value)}`}>{value}</span> {d[1]}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     );
+  }
+
+  /**
+   *
+   * @param {Object} dist - distribution state object.
+   * @returns - Error Report when any distribution metric contains an error.
+   */
+  distrubutionConnectionErrors (dist) {
+    const errors = Object.keys(dist).filter((key) => dist[key].error).map((key) => dist[key].error);
+    if (errors.length === 0) return undefined;
+    const uniqueErrors = [...new Set(errors)];
+    return section({
+      children:
+      <div className='row'>
+        <ErrorReport report={`Distribution Metrics: ${uniqueErrors.join('\n')}`}/>
+      </div>
+    });
   }
 
   getCountByKey (counts, key) {
@@ -182,62 +196,46 @@ class Home extends React.Component {
         </div>
 
         <div className='page__content page__content--nosidebar'>
-          <section className='page__section datetime'>
-            <div className='row'>
-              <div className='heading__wrapper'>
-                <h2 className='datetime__info heading--medium heading--shared-content--right'>
-                  Select date and time to refine your results. <em>Time is UTC.</em>
-                </h2>
-              </div>
-              <div className='datetime__range_wrapper'>
-                <DatepickerRange onChange={this.query}/>
-              </div>
+          {pageSection(
+            <>Select date and time to refine your results. <em>Time is UTC.</em></>,
+            'datetime',
+            <div className='datetime__range_wrapper'>
+              <DatepickerRange onChange={this.query}/>
             </div>
-          </section>
+          )}
 
-          <section className='page__section metrics--overview'>
-            <div className='row'>
-              <div className='heading__wrapper--border'>
-                <h2 className='heading--large heading--shared-content--right'>Metrics Overview</h2>
-              </div>
-            </div>
-          </section>
+          {sectionHeader('Metrics Overview', 'metricsOverview')}
+          {this.buttonListSection(overview, 'Updates')}
 
-          {this.renderButtonListSection(overview, 'Updates')}
-          {this.renderButtonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
-          {this.renderButtonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
+          {metricsConfigured() &&
+           <>
+             {sectionHeader('Distribution Overview', 'distributionOverview')}
+             {this.distrubutionConnectionErrors(dist)}
+             {this.buttonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
+             {this.buttonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
+           </>
+          }
 
-          <section className='page__section update--granules'>
-            <div className='row'>
-              <div className='heading__wrapper--border'>
-                <h2 className='heading--large heading--shared-content--right'>Granules Updates</h2>
-                <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
-              </div>
-            </div>
+          {sectionHeader(
+            'Granules Updates', 'updateGranules',
+            <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
+          )}
+          {this.buttonListSection(
+            updated,
+            <>{strings.granules_updated}<span className='num-title'>{numGranules}</span></>
+          )}
 
-            {this.renderButtonListSection(
-              updated,
-              <>{strings.granules_updated}<span className='num-title'>{numGranules}</span></>
-            )}
-
-          </section>
-          <section className='page__section list--granules'>
-            <div className='row'>
-              <div className='heading__wrapper'>
-                <h2 className='heading--medium heading--shared-content--right'>{strings.granules_errors}</h2>
-                {/* commenting out because this is not visible */}
-                {/* <Link className='link--secondary link--learn-more'
-                to={{ pathname: '/logs', search: searchString }}>{strings.view_logs}</Link> */}
-              </div>
-              <List
-                list={list}
-                action={listGranules}
-                tableColumns={errorTableColumns}
-                initialSortId='timestamp'
-                query={this.generateQuery()}
-              />
-            </div>
-          </section>
+          {pageSection(
+            strings.granules_errors,
+            'listGranules',
+            <List
+              list={list}
+              action={listGranules}
+              tableColumns={errorTableColumns}
+              initialSortId='timestamp'
+              query={this.generateQuery()}
+            />
+          )}
         </div>
       </div>
     );

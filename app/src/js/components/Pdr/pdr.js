@@ -163,7 +163,6 @@ class PDR extends React.Component {
     const { dropdowns } = collections;
     const { list } = granules;
     const { count, queriedAt } = list.meta;
-    const logsQuery = { 'meta.pdrName': pdrName };
     const deleteStatus = get(pdrs.deleted, [pdrName, 'status']);
     const { error } = record;
 
@@ -256,7 +255,7 @@ class PDR extends React.Component {
           </List>
         </section>
         <LogViewer
-          query={logsQuery}
+          query={{ q: pdrName }}
           dispatch={this.props.dispatch}
           logs={this.props.logs}
           notFound={`No recent logs for ${pdrName}`}

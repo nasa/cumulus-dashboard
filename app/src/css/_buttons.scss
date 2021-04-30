@@ -50,6 +50,18 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
     }
   }
 
+  &--events{
+    background-color: $light-green;
+    padding: .4em 1.5em .4em 1.5em;
+    float: right;
+
+    &:hover {
+      background-color: darken($light-green, 10%);
+      color: #fff;
+      border: 0;
+    }
+  }
+
   &--large{
     padding: .7em 2em;
     font-weight: $base-font-bold;
@@ -86,6 +98,24 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       color: #fff;
       border: 0;
     }
+  }
+
+  &--failed {
+    background-color: $error-red;
+    position: relative;
+
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        font-weight: 900;
+        left: 10px;
+      }
+      &:hover {
+        background-color: $delete-btn-hover-bg-color;
+        color: #fff;
+        border: 0;
+      }
   }
 
   &--primary, &--primary:visited {
@@ -541,10 +571,18 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       }
     }
 
+    &__bulkgranules--recovery {
+      background-color: $light-green;
+
+      &:before {
+        content: '\f247';
+      }
+    }
+
     &__kibana_open{
       background-color: $light-green;
       position: relative;
-      margin-top: 1em;
+      margin-top: .5em;
       display: inline-block;
 
       &:before{

@@ -451,8 +451,13 @@ a:active {
   margin-top: 0em;
 }
 
-.page__section.datetime{
+// MHS: These two are pretty specific and should be fixed in the future.
+.page__section#datetime {
   margin-bottom: 7.5em;
+}
+
+.page__section#listGranules {
+    margin-top: 2.5em;
 }
 
 .page__section--logs {
@@ -685,11 +690,18 @@ a:active {
   background-color: $grey;
   margin-right: 0.5em;
 
+  &--granule {
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-left: 0.8em;
+    margin-right: 2em;
+  }
+
   &--success {
     background-color: $light-green;
   }
 
-  &--orange {
+  &--running, &--orange {
     background-color: $orange;
   }
 
@@ -730,7 +742,7 @@ a:active {
     margin-right: 2em;
   }
   dt {
-    margin-right: 0.5em;
+    margin-right: 1.5em;
     color: $dark-grey;
   }
   .running,

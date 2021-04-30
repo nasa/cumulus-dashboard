@@ -1,10 +1,9 @@
 import { get } from 'object-path';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-import isEqual from 'lodash/isEqual';
 import {
   clearGranulesFilter,
   clearGranulesSearch,
@@ -19,9 +18,11 @@ import {
 } from '../../actions';
 import {
   collectionName as collectionLabelForId,
-  collectionNameVersion,
   getCollectionId,
+  getEncodedCollectionId,
   lastUpdated,
+  collectionHrefFromNameVersion,
+  collectionHrefFromId,
 } from '../../utils/format';
 import statusOptions from '../../utils/status';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
@@ -54,51 +55,45 @@ const breadcrumbConfig = [
   },
 ];
 
-class CollectionOverview extends React.Component {
-  constructor(props) {
-    super(props);
+const CollectionOverview = ({
+  collections,
+  datepicker,
+  dispatch,
+  granules,
+  match,
+  providers,
+  queryParams,
+}) => {
+  const { params } = match;
+  const { deleted: deletedCollections, list: collectionsList, map: collectionsMap } = collections;
+  const { list: granulesList } = granules;
+  const { dropdowns } = providers;
+  const { name: collectionName, version: collectionVersion } = params || {};
+  const decodedVersion = decodeURIComponent(collectionVersion);
+  const collectionId = getCollectionId({ name: collectionName, version: decodedVersion });
+  const sortedCollectionIds = collectionsList.data.map((collection) => ({
+    label: getCollectionId(collection),
+    value: getEncodedCollectionId(collection)
+  })).sort(
+    // Compare collection IDs ignoring case
+    (id1, id2) => id1.label.localeCompare(id2.label, 'en', { sensitivity: 'base' })
+  );
+  const record = collectionsMap[collectionId];
+  const deleteStatus = get(deletedCollections, [collectionId, 'status']);
+  const hasGranules =
+    get(collectionsMap[collectionId], 'data.stats.total', 0) > 0;
 
-    this.changeCollection = this.changeCollection.bind(this);
-    this.deleteMe = this.deleteMe.bind(this);
-    this.errors = this.errors.bind(this);
-    this.generateQuery = this.generateQuery.bind(this);
-    this.generateBulkActions = this.generateBulkActions.bind(this);
-    this.gotoGranules = this.gotoGranules.bind(this);
-    this.load = this.load.bind(this);
-    this.navigateBack = this.navigateBack.bind(this);
+  useEffect(() => {
+    dispatch(listCollections());
+    dispatch(getCumulusInstanceMetadata());
+    dispatch(getCollection(collectionName, decodedVersion));
+  }, [collectionName, datepicker, decodedVersion, dispatch]);
+
+  function changeCollection(_, newCollectionId) {
+    historyPushWithQueryParams(collectionHrefFromId(newCollectionId));
   }
 
-  componentDidMount() {
-    this.load();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { name, version } = this.props.match.params;
-    const { name: prevName, version: prevVersion } = prevProps.match.params;
-
-    if (
-      name !== prevName ||
-      version !== prevVersion ||
-      !isEqual(this.props.datepicker, prevProps.datepicker)
-    ) {
-      this.load();
-    }
-  }
-
-  load() {
-    const { name, version } = this.props.match.params;
-    this.props.dispatch(listCollections());
-    this.props.dispatch(getCumulusInstanceMetadata());
-    this.props.dispatch(getCollection(name, version));
-  }
-
-  changeCollection(_, collectionId) {
-    const { name, version } = collectionNameVersion(collectionId);
-    historyPushWithQueryParams(`/collections/collection/${name}/${version}`);
-  }
-
-  generateBulkActions() {
-    const { granules } = this.props;
+  function generateBulkActions() {
     return [
       reingestAction(granules),
       {
@@ -113,220 +108,184 @@ class CollectionOverview extends React.Component {
     ];
   }
 
-  generateQuery() {
-    const { match, queryParams } = this.props;
+  function generateQuery() {
     return {
       ...queryParams,
-      collectionId: getCollectionId(match.params),
+      collectionId,
     };
   }
 
-  deleteMe() {
-    const { name, version } = this.props.match.params;
-    this.props.dispatch(deleteCollection(name, version));
+  function deleteMe() {
+    dispatch(deleteCollection(collectionName, decodedVersion));
   }
 
-  navigateBack() {
+  function navigateBack() {
     historyPushWithQueryParams('/collections/all');
   }
 
-  gotoGranules() {
+  function gotoGranules() {
     historyPushWithQueryParams('/granules');
   }
 
-  errors() {
-    const { name, version } = this.props.match.params;
-    const collectionId = getCollectionId({ name, version });
+  function errors() {
     return [
-      get(this.props.collections.map, [collectionId, 'error']),
-      get(this.props.collections.deleted, [collectionId, 'error']),
+      get(collections.map, [collectionId, 'error']),
+      get(collections.deleted, [collectionId, 'error']),
     ].filter(Boolean);
   }
 
-  renderDeleteButton() {
-    const {
-      match: { params },
-      collections,
-    } = this.props;
-    const collectionId = getCollectionId(params);
-    const deleteStatus = get(collections.deleted, [collectionId, 'status']);
-    const hasGranules =
-      get(collections.map[collectionId], 'data.stats.total', 0) > 0;
-
-    return (
-      <DeleteCollection
-        collectionId={collectionId}
-        errors={this.errors()}
-        hasGranules={hasGranules}
-        onDelete={this.deleteMe}
-        onGotoGranules={this.gotoGranules}
-        onSuccess={this.navigateBack}
-        status={deleteStatus}
-      />
-    );
-  }
-
-  render() {
-    const {
-      match: { params },
-      collections,
-      granules: { list },
-      providers: { dropdowns },
-    } = this.props;
-    const collectionName = params.name;
-    const collectionVersion = params.version;
-    const collectionId = getCollectionId(params);
-    const sortedCollectionIds = collections.list.data.map(getCollectionId).sort(
-      // Compare collection IDs ignoring case
-      (id1, id2) => id1.localeCompare(id2, 'en', { sensitivity: 'base' })
-    );
-    const record = collections.map[collectionId];
-
-    return (
-      <div className="page__component">
-        <Helmet>
-          <title> Collection Overview </title>
-        </Helmet>
-        <section className="page__section page__section__controls">
-          <div className="collection__options--top">
-            <ul>
-              <li>
-                <Breadcrumbs config={breadcrumbConfig} />
-              </li>
-              <li>
-                <div className="dropdown__collection form-group__element--right">
-                  <SimpleDropdown
-                    className='collection-chooser'
-                    label={'Collection'}
-                    title={'Collections Dropdown'}
-                    value={getCollectionId(params)}
-                    options={sortedCollectionIds}
-                    id={'collection-chooser'}
-                    onChange={this.changeCollection}
-                  />
-                </div>
-              </li>
-            </ul>
-          </div>
-        </section>
-        <section className="page__section page__section__header-wrapper">
-          <div className="heading-group">
-            <ul className="heading-form-group--left">
-              <li>
-                <h1 className="heading--large heading--shared-content with-description">
-                  {strings.collection}: {collectionLabelForId(collectionId)}
-                </h1>
-              </li>
-              <li>
-                <Link
-                  className="button button--copy button--small button--green"
-                  to={(location) => ({
-                    pathname: '/collections/add',
-                    search: getPersistentQueryParams(location),
-                    state: {
-                      name: collectionName,
-                      version: collectionVersion,
-                    },
-                  })}
-                >
-                  Copy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="button button--edit button--small button--green"
-                  to={(location) => ({
-                    pathname: `/collections/edit/${collectionName}/${collectionVersion}`,
-                    search: getPersistentQueryParams(location),
-                  })}
-                >
-                  Edit
-                </Link>
-              </li>
-              <li>{this.renderDeleteButton()}</li>
-            </ul>
-            <span className="last-update">
-              {lastUpdated(get(record, 'data.timestamp'))}
+  return (
+    <div className="page__component">
+      <Helmet>
+        <title> Collection Overview </title>
+      </Helmet>
+      <section className="page__section page__section__controls">
+        <div className="collection__options--top">
+          <ul>
+            <li>
+              <Breadcrumbs config={breadcrumbConfig} />
+            </li>
+            <li>
+              <div className="dropdown__collection form-group__element--right">
+                <SimpleDropdown
+                  className='collection-chooser'
+                  label={'Collection'}
+                  title={'Collections Dropdown'}
+                  value={collectionId}
+                  options={sortedCollectionIds}
+                  id={'collection-chooser'}
+                  onChange={changeCollection}
+                />
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section className="page__section page__section__header-wrapper">
+        <div className="heading-group">
+          <ul className="heading-form-group--left">
+            <li>
+              <h1 className="heading--large heading--shared-content with-description">
+                {strings.collection}: {collectionLabelForId(collectionId)}
+              </h1>
+            </li>
+            <li>
+              <Link
+                className="button button--copy button--small button--green"
+                to={(location) => ({
+                  pathname: '/collections/add',
+                  search: getPersistentQueryParams(location),
+                  state: {
+                    name: collectionName,
+                    version: decodedVersion,
+                  },
+                })}
+              >
+                Copy
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="button button--edit button--small button--green"
+                to={(location) => ({
+                  pathname: `/collections/edit/${collectionName}/${collectionVersion}`,
+                  search: getPersistentQueryParams(location),
+                })}
+              >
+                Edit
+              </Link>
+            </li>
+            <li>
+              <DeleteCollection
+                collectionId={collectionId}
+                errors={errors()}
+                hasGranules={hasGranules}
+                onDelete={deleteMe}
+                onGotoGranules={gotoGranules}
+                onSuccess={navigateBack}
+                status={deleteStatus}
+              />
+            </li>
+          </ul>
+          <span className="last-update">
+            {lastUpdated(get(record, 'data.timestamp'))}
+          </span>
+        </div>
+      </section>
+      <section className="page__section page__section__overview">
+        <div className="heading__wrapper--border">
+          <h2 className="heading--large ">
+            Granule Metrics
+          </h2>
+        </div>
+        {record && <Overview type='granules' params={{ collectionId }} inflight={record.inflight} />}
+      </section>
+      <section className="page__section">
+        <div className="heading__wrapper--border">
+          <h2 className="heading--medium heading--shared-content with-description">
+            {strings.total_granules}
+            <span className="num-title">
+              {granulesList.meta.count ? ` ${granulesList.meta.count}` : 0}
             </span>
-          </div>
-        </section>
-        <section className="page__section page__section__overview">
-          <div className="heading__wrapper--border">
-            <h2 className="heading--large heading--shared-content--right">
-              Granule Metrics
-            </h2>
-          </div>
-          {record && <Overview type='granules' params={{ collectionId }} inflight={record.inflight} />}
-        </section>
-        <section className="page__section">
-          <div className="heading__wrapper--border">
-            <h2 className="heading--medium heading--shared-content with-description">
-              {strings.total_granules}
-              <span className="num-title">
-                {list.meta.count ? ` ${list.meta.count}` : 0}
-              </span>
-            </h2>
-            <Link
-              className="button button--small button__goto button--green form-group__element--right"
-              to={(location) => ({
-                pathname: `/collections/collection/${collectionName}/${collectionVersion}/granules`,
-                search: getPersistentQueryParams(location),
-              })}
-            >
-              {strings.view_all_granules}
-            </Link>
-          </div>
-          <List
-            list={list}
-            action={listGranules}
-            tableColumns={tableColumns}
-            query={this.generateQuery()}
-            bulkActions={this.generateBulkActions()}
-            rowId="granuleId"
-            initialSortId="timestamp"
-            filterAction={filterGranules}
-            filterClear={clearGranulesFilter}
+          </h2>
+          <Link
+            className="button button--small button__goto button--green form-group__element--right"
+            to={(location) => ({
+              pathname: `${collectionHrefFromNameVersion({ name: collectionName, version: collectionVersion })}/granules`,
+              search: getPersistentQueryParams(location),
+            })}
           >
-            <Search
-              action={searchGranules}
-              clear={clearGranulesSearch}
-              label="Search"
-              labelKey="granuleId"
-              placeholder="Granule ID"
-              searchKey="granules"
+            {strings.view_all_granules}
+          </Link>
+        </div>
+        <List
+          list={granulesList}
+          action={listGranules}
+          tableColumns={tableColumns}
+          query={generateQuery()}
+          bulkActions={generateBulkActions()}
+          rowId="granuleId"
+          initialSortId="timestamp"
+          filterAction={filterGranules}
+          filterClear={clearGranulesFilter}
+        >
+          <Search
+            action={searchGranules}
+            clear={clearGranulesSearch}
+            label="Search"
+            labelKey="granuleId"
+            placeholder="Granule ID"
+            searchKey="granules"
+          />
+          <ListFilters>
+            <Dropdown
+              options={statusOptions}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey="status"
+              label="Status"
+              inputProps={{
+                placeholder: 'All',
+              }}
             />
-            <ListFilters>
-              <Dropdown
-                options={statusOptions}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey="status"
-                label="Status"
-                inputProps={{
-                  placeholder: 'All',
-                }}
-              />
-              <Dropdown
-                getOptions={getOptionsProviderName}
-                options={get(dropdowns, ['provider', 'options'])}
-                action={filterGranules}
-                clear={clearGranulesFilter}
-                paramKey="provider"
-                label="Provider"
-                inputProps={{
-                  placeholder: 'All',
-                  className: 'dropdown--medium',
-                }}
-              />
-            </ListFilters>
-          </List>
-        </section>
-      </div>
-    );
-  }
-}
-
-CollectionOverview.displayName = 'CollectionOverview';
+            <Dropdown
+              getOptions={getOptionsProviderName}
+              options={get(dropdowns, ['provider', 'options'])}
+              action={filterGranules}
+              clear={clearGranulesFilter}
+              paramKey="provider"
+              label="Provider"
+              inputProps={{
+                placeholder: 'All',
+                className: 'dropdown--medium',
+              }}
+            />
+          </ListFilters>
+        </List>
+      </section>
+    </div>
+  );
+};
 
 CollectionOverview.propTypes = {
   collections: PropTypes.object,

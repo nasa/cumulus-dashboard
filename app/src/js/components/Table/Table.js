@@ -30,6 +30,7 @@ const List = ({
   filterAction,
   filterClear,
   groupAction,
+  initialHiddenColumns = [],
   initialSortId,
   list,
   onSelect,
@@ -37,6 +38,7 @@ const List = ({
   queryParams,
   rowId,
   tableColumns,
+  toggleColumnOptionsAction,
 }) => {
   const { data: listData, error: listError, inflight: listInflight, meta } = list;
   const { count, limit } = meta;
@@ -58,7 +60,7 @@ const List = ({
   });
   const [toggleColumnOptions, setToggleColumnOptions] = useState({
     onChange: noop,
-    hiddenColumns: [],
+    hiddenColumns: initialHiddenColumns,
   });
 
   const { bulkActionError, completedBulkActions } = bulkActionMeta;
@@ -92,6 +94,13 @@ const List = ({
     setClearSelected(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(queryFilters)]);
+
+  useEffect(() => {
+    if (typeof toggleColumnOptionsAction === 'function') {
+      const allColumns = tableColumns.map((column) => column.id || column.accessor);
+      dispatch(toggleColumnOptionsAction(toggleColumnOptions.hiddenColumns, allColumns));
+    }
+  }, [dispatch, tableColumns, toggleColumnOptions.hiddenColumns, toggleColumnOptionsAction]);
 
   function queryNewPage(newPage) {
     setPage(newPage);
@@ -208,6 +217,7 @@ const List = ({
               onSelect={updateSelection}
               changeSortProps={queryNewSort}
               clearSelected={clearSelected}
+              initialHiddenColumns={initialHiddenColumns}
               initialSortId={initialSortId}
               // if there's an initialSortId, it means the first fetch request for the list should be sorted
               // according to that id, and therefore we are using sever-side/manual sorting
@@ -240,10 +250,12 @@ List.propTypes = {
     title: PropTypes.string,
     description: PropTypes.string,
   }),
+  initialHiddenColumns: PropTypes.array,
   initialSortId: PropTypes.string,
   list: PropTypes.object,
   query: PropTypes.object,
   rowId: PropTypes.any,
+  toggleColumnOptionsAction: PropTypes.func,
   tableColumns: PropTypes.array,
   onSelect: PropTypes.func,
   queryParams: PropTypes.object,

@@ -31,7 +31,7 @@ class CollectionIngest extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { name, version } = prevProps.match.params;
-    const collectionId = getCollectionId({ name, version });
+    const collectionId = getCollectionId({ name, version: decodeURIComponent(version) });
     const record = prevProps.collections.map[collectionId];
     if (!record) {
       this.get(name, version);
@@ -67,7 +67,8 @@ class CollectionIngest extends React.Component {
 
   render() {
     const { name, version } = this.props.match.params;
-    const collectionId = getCollectionId(this.props.match.params);
+    const decodedVersion = decodeURIComponent(version);
+    const collectionId = getCollectionId({ name, version: decodedVersion });
     const record = this.props.collections.map[collectionId];
     if (!record || (record.inflight && !record.data)) {
       return <Loading />;
@@ -79,7 +80,7 @@ class CollectionIngest extends React.Component {
           breadcrumbConfig={breadcrumbConfig}
           name={name}
           queriedAt={data.queriedAt}
-          version={version}
+          version={decodedVersion}
         />
         <section className="page__section">
           <div className="tab--wrapper">

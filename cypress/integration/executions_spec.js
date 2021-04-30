@@ -114,9 +114,15 @@ describe('Dashboard Executions Page', () => {
         { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
         { fixture: 'valid-execution.json', statusCode: 200 }
       );
+
       cy.intercept(
         { method: 'GET', url: `http://localhost:5001/logs/${executionName}` },
         { fixture: 'execution-logs.json', statusCode: 200 }
+      );
+
+      cy.intercept(
+        { method: 'GET', url: 'http://localhost:5001/logs?*' },
+        { fixture: 'logs-success.json', statusCode: 200 }
       );
 
       cy.visit(`/executions/execution/${executionArn}`);
@@ -145,7 +151,7 @@ describe('Dashboard Executions Page', () => {
       });
       cy.getFixture('execution-logs').its('results').then((logs) => {
         cy.get('@sections').eq(1).within(() => {
-          cy.get('pre').contains(JSON.stringify(logs[0].message));
+          cy.get('pre').contains(JSON.stringify(logs[0].app_message));
         });
       });
     });
@@ -168,6 +174,13 @@ describe('Dashboard Executions Page', () => {
       cy.contains('.heading--large', executionName);
       cy.contains('.num-title', 7);
 
+      cy.get('.table .thead .tr .th').as('columnHeaders');
+      cy.get('@columnHeaders').eq(0).should('contain.text', 'Id');
+      cy.get('@columnHeaders').eq(1).should('contain.text', 'Type');
+      cy.get('@columnHeaders').eq(2).should('contain.text', 'Step');
+      cy.get('@columnHeaders').eq(3).should('contain.text', 'Timestamp');
+      cy.get('@columnHeaders').eq(4).should('contain.text', 'Event Details');
+
       cy.get('.table .tbody .tr').as('events');
       cy.get('@events').should('have.length', 7);
 
@@ -176,15 +189,15 @@ describe('Dashboard Executions Page', () => {
         cy.get('@events').each(($el, index, $list) => {
           const timestamp = fullDate(events[index].timestamp);
           cy.wrap($el).children('.td').as('columns');
-          cy.get('@columns').should('have.length', 4);
+          cy.get('@columns').should('have.length', 5);
           const id = index + 1;
           const idMatch = `"id": ${id},`;
           const previousIdMatch = `"previousEventId": ${index}`;
 
           cy.get('@columns').eq(0).should('have.text', (index + 1).toString());
-          cy.get('@columns').eq(2).should('have.text', timestamp);
+          cy.get('@columns').eq(3).should('have.text', timestamp);
           cy.get('.execution__modal').should('not.exist');
-          cy.get('@columns').eq(3).contains('More Details').click();
+          cy.get('@columns').eq(4).contains('More Details').click();
           cy.get('.execution__modal').should('exist');
           cy.get('.execution__modal .modal-title').contains(`ID ${id}: Event Details`);
           cy.get('.execution__modal .modal-body').contains(idMatch);
@@ -209,6 +222,11 @@ describe('Dashboard Executions Page', () => {
       cy.intercept(
         { method: 'GET', url: `http://localhost:5001/logs/${executionName}` },
         { fixture: 'limited-execution.json', statusCode: 200 }
+      );
+
+      cy.intercept(
+        { method: 'GET', url: 'http://localhost:5001/logs?*' },
+        { fixture: 'logs-success.json', statusCode: 200 }
       );
 
       cy.visit(`/executions/execution/${executionArn}`);
@@ -246,8 +264,6 @@ describe('Dashboard Executions Page', () => {
         .within(() => {
           cy.get('a').should('have.attr', 'href', `/executions/execution/${executionArn}/logs`);
         });
-
-      cy.contains('.heading--medium', 'Events').should('not.exist');
     });
 
     it('should show an execution graph for a single execution', () => {

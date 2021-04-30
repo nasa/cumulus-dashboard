@@ -94,20 +94,22 @@ const BulkGranuleModal = ({
       {!success &&
         <div className="form__bulkgranules">
           { children }
+          <br/>
+          <h4 className="modal_subtitle">If you need to construct a query in Kibana:</h4>
+          <ol>
+            <li>To construct a query, go to Kibana. &nbsp;
+              <a className="button button__kibana_open button--small" href={kibanaRoot} alt="Open Kibana" target="_blank">Open Kibana</a>
+            </li>
+            <li>In Kibana, run a search and copy the query. </li>
+            <li>Then paste the Elasticsearch query in the input below. </li>
+          </ol>
+          <br/>
           {selected &&
             <>
-              <br/>
-              <p>Currently selected granules are:</p>
+              <p>Selected granules:</p>
               <p>[{selected.map((selection) => `"${selection}"`).join(', ')}]</p>
             </>
           }
-          <br/>
-          <h4 className="modal_subtitle">If you need to construct a query</h4>
-          <p>
-            To construct a query, go to Kibana and run a search. Then place the elasticsearch query
-            in the operation input. <br/>
-            <a className="button button__kibana_open button--small" href={kibanaRoot} alt="Open Kibana" target="_blank">Open Kibana</a>
-          </p>
           <br/>
           <form>
             {window && <TextArea

@@ -73,7 +73,7 @@ export const getCollection = (name, version) => (dispatch, getState) => {
     [CALL_API]: {
       type: types.COLLECTION,
       method: 'GET',
-      id: getCollectionId({ name, version }),
+      id: getCollectionId({ name, version: decodeURIComponent(version) }),
       path: `collections?name=${name}&version=${version}&includeStats=true`,
       params: timeFilters,
     },
@@ -147,7 +147,7 @@ export const updateCollection = (payload, name, version) => ({
     type: types.UPDATE_COLLECTION,
     method: 'PUT',
     id: (name && version) ? getCollectionId({ name, version }) : getCollectionId(payload),
-    path: `collections/${name || payload.name}/${version || payload.version}`,
+    path: `collections/${name || payload.name}/${encodeURIComponent(version) || encodeURIComponent(payload.version)}`,
     data: payload
   }
 });
@@ -159,7 +159,7 @@ export const deleteCollection = (name, version) => ({
     type: types.COLLECTION_DELETE,
     method: 'DELETE',
     id: getCollectionId({ name, version }),
-    path: `collections/${name}/${version}`
+    path: `collections/${name}/${encodeURIComponent(version)}`
   }
 });
 
@@ -176,12 +176,13 @@ export const getCumulusInstanceMetadata = () => ({
   }
 });
 
-export const getGranule = (granuleId) => ({
+export const getGranule = (granuleId, params) => ({
   [CALL_API]: {
     type: types.GRANULE,
     method: 'GET',
     id: granuleId,
-    path: `granules/${granuleId}`
+    path: `granules/${granuleId}`,
+    params
   }
 });
 
@@ -419,6 +420,11 @@ export const searchGranules = (infix) => ({ type: types.SEARCH_GRANULES, infix }
 export const clearGranulesSearch = () => ({ type: types.CLEAR_GRANULES_SEARCH });
 export const filterGranules = (param) => ({ type: types.FILTER_GRANULES, param });
 export const clearGranulesFilter = (paramKey) => ({ type: types.CLEAR_GRANULES_FILTER, paramKey });
+export const toggleGranulesTableColumns = (hiddenColumns, allColumns) => ({
+  type: types.TOGGLE_GRANULES_TABLE_COLUMNS,
+  hiddenColumns,
+  allColumns
+});
 
 export const getOptionsCollectionName = (options) => ({
   [CALL_API]: {
@@ -441,8 +447,13 @@ export const getStats = (options) => (dispatch, getState) => {
   });
 };
 
+export const metricsConfigured = () => {
+  if (esRoot !== '') return true;
+  return false;
+};
+
 export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
-  if (!esRoot) return { type: types.NOOP };
+  if (!metricsConfigured()) return { type: types.NOOP };
   return (dispatch, getState) => {
     const { stackName } = cumulusInstanceMeta;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
@@ -462,7 +473,7 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
 };
 
 export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
-  if (!esRoot) return { type: types.NOOP };
+  if (!metricsConfigured()) return { type: types.NOOP };
   if (!showDistributionAPIMetrics) return { type: types.NOOP };
   return (dispatch, getState) => {
     const { stackName } = cumulusInstanceMeta;
@@ -483,7 +494,7 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
 };
 
 export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
-  if (!esRoot) return { type: types.NOOP };
+  if (!metricsConfigured()) return { type: types.NOOP };
   if (!showTeaMetrics) return { type: types.NOOP };
   return (dispatch, getState) => {
     const { stackName } = cumulusInstanceMeta;
@@ -504,7 +515,7 @@ export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
 };
 
 export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
-  if (!esRoot) return { type: types.NOOP };
+  if (!metricsConfigured()) return { type: types.NOOP };
   return (dispatch, getState) => {
     const { stackName } = cumulusInstanceMeta;
     const timeFilters = fetchCurrentTimeFilters(getState().datepicker);

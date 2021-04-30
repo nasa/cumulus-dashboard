@@ -17,6 +17,7 @@ import {
 } from '../../actions';
 import {
   displayCase,
+  IndicatorWithTooltip,
   lastUpdated,
   seconds,
   nullValue,
@@ -156,9 +157,10 @@ class GranuleOverview extends React.Component {
   }
 
   loadGranule() {
-    const { dispatch, match } = this.props;
+    const { config, dispatch, match } = this.props;
     const { granuleId } = match.params;
-    dispatch(getGranule(granuleId));
+    const getRecoveryStatus = config.enableRecovery ? true : undefined;
+    dispatch(getGranule(granuleId, { getRecoveryStatus }));
   }
 
   navigateBack() {
@@ -305,12 +307,20 @@ class GranuleOverview extends React.Component {
           {lastUpdated(granule.createdAt, 'Created')}
 
           <dl className="status--process">
-            <dt>Status:</dt>
-            <dd
-              className={`status__badge status__badge--${granule.status.toLowerCase()}`}
-            >
-              {displayCase(granule.status)}
-            </dd>
+            <div className="meta__row">
+              <dt>Status:</dt>
+              <dd>
+                <span>Ingest</span>
+                <IndicatorWithTooltip granuleId={granuleId} repo='ingest' value={displayCase(granule.status)} className='status-indicator--granule'/>
+              </dd>
+              {granule.recoveryStatus
+                ? <dd>
+                  <span>Recovery</span>
+                  <IndicatorWithTooltip granuleId={granuleId} repo='recovery' value={displayCase(granule.recoveryStatus)} className='status-indicator--granule' />
+                </dd>
+                : null
+              }
+            </div>
           </dl>
         </section>
 
@@ -337,7 +347,6 @@ class GranuleOverview extends React.Component {
           <LogViewer
             query={{ q: granuleId }}
             dispatch={this.props.dispatch}
-            logs={this.props.logs}
             notFound={`No recent logs for ${granuleId}`}
           />
         </section>
@@ -347,6 +356,7 @@ class GranuleOverview extends React.Component {
 }
 
 GranuleOverview.propTypes = {
+  config: PropTypes.object,
   match: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
@@ -365,6 +375,7 @@ export { GranuleOverview };
 
 export default withRouter(
   connect((state) => ({
+    config: state.config,
     granules: state.granules,
     workflowOptions: workflowOptionNames(state),
     logs: state.logs,

@@ -14,9 +14,11 @@ import {
   applyWorkflowToGranule,
   getCount,
   getOptionsProviderName,
+  toggleGranulesTableColumns,
 } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
+  defaultHiddenColumns,
   tableColumns,
   errorTableColumns,
   bulkActions,
@@ -51,7 +53,7 @@ const AllGranules = ({
   const { dropdowns } = collections;
   const { list } = granules;
   const { count, queriedAt } = list.meta;
-  const logsQuery = { granuleId__exists: 'true' };
+  const logsQuery = { granules__exists: 'true', executions__exists: 'true' };
   const query = generateQuery();
   const view = getView();
   const displayCaseView = displayCase(view);
@@ -179,10 +181,12 @@ const AllGranules = ({
           bulkActions={generateBulkActions()}
           groupAction={groupAction}
           rowId="granuleId"
+          initialHiddenColumns={defaultHiddenColumns}
           initialSortId={tablesortId}
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
           onSelect={updateSelection}
+          toggleColumnOptionsAction={toggleGranulesTableColumns}
         >
           <Search
             action={searchGranules}
@@ -247,7 +251,6 @@ const AllGranules = ({
       <LogViewer
         query={logsQuery}
         dispatch={dispatch}
-        logs={logs}
         notFound="No recent logs for granules"
       />
     </div>

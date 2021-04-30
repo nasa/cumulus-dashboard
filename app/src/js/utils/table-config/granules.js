@@ -73,6 +73,13 @@ export const tableColumns = [
     Cell: ({ cell: { value } }) => providerLink(value)
   },
   {
+    Header: 'Recovery',
+    accessor: (row) => (row.recoveryStatus ? displayCase(row.recoveryStatus) : row.recoveryStatus),
+    id: 'recoveryStatus',
+    disableSortBy: true,
+    width: 110,
+  },
+  {
     Header: 'Execution',
     accessor: 'execution',
     Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
@@ -93,6 +100,8 @@ export const tableColumns = [
     id: 'timestamp'
   }
 ];
+
+export const defaultHiddenColumns = ['recoveryStatus'];
 
 export const errorTableColumns = [
   {

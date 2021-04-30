@@ -71,6 +71,33 @@ export const tally = (numberstring) => {
   return bigTally(number);
 };
 
+export const fullStatTotal = (numberstring) => {
+  const number = +numberstring;
+  if (
+    (!numberstring && numberstring !== 0) ||
+    numberstring === nullValue ||
+    Number.isNaN(number)
+  ) {
+    return nullValue;
+  }
+
+  if (number >= 0) {
+    return numeral(number).format('0,0');
+  }
+
+  return number;
+};
+
+export const numLargeTooltip = (numberstring) => (
+  <Tooltip
+    className="tooltip--light"
+    id="card-total-tooltip"
+    placement="right"
+    target={<span className="num--large num--large--tooltip">{tally(numberstring)}</span>}
+    tip={fullStatTotal(numberstring)}
+  />
+);
+
 export const seconds = (numberstring) => {
   const number = +numberstring;
   if (numberstring === null || Number.isNaN(number)) {
@@ -100,14 +127,23 @@ export const fromNowWithTooltip = (timestamp) => (
 const getIndicator = (prop) => {
   const indicator = {};
   switch (prop) {
+    case 'Completed':
+      indicator.color = 'success';
+      indicator.text = prop;
+      break;
+    case 'Failed':
+      indicator.color = 'failed';
+      indicator.text = prop;
+      break;
+    case 'Running':
+      indicator.color = 'running';
+      indicator.text = prop;
+      break;
     case 'missing':
       indicator.color = 'orange';
       indicator.text = 'Granule missing';
       break;
     case 'notFound':
-      indicator.color = 'failed';
-      indicator.text = 'Granule not found';
-      break;
     case false:
       indicator.color = 'failed';
       indicator.text = 'Granule not found';
@@ -124,6 +160,7 @@ export const IndicatorWithTooltip = ({
   granuleId,
   repo,
   value,
+  className,
 }) => {
   const indicator = getIndicator(value);
   const { color, text } = indicator;
@@ -132,13 +169,14 @@ export const IndicatorWithTooltip = ({
       className="tooltip--blue"
       id={`${granuleId}-${repo}-indicator-tooltip`}
       placement="right"
-      target={<span className={`status-indicator status-indicator--${color}`}></span>}
+      target={<span className={`status-indicator status-indicator--${color} ${className}`}></span>}
       tip={text}
     />
   );
 };
 
 IndicatorWithTooltip.propTypes = {
+  className: PropTypes.string,
   granuleId: PropTypes.string,
   repo: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
@@ -297,6 +335,13 @@ export const getCollectionId = (collection) => {
   }
 };
 
+export const getEncodedCollectionId = (collection) => {
+  if (collection && collection.name && collection.version) {
+    return `${collection.name}___${encodeURIComponent(collection.version)}`;
+  }
+  return nullValue;
+};
+
 // "MYD13A1___006" => "MYD13A1 / 006"
 export const collectionName = (collectionId) => {
   if (!collectionId) return nullValue;
@@ -328,11 +373,10 @@ export const deconstructCollectionId = (collectionId) => {
 
 export const collectionLink = (collectionId) => {
   if (!collectionId || collectionId === nullValue) return nullValue;
-  const { name, version } = collectionNameVersion(collectionId);
   return (
     <Link
       to={(location) => ({
-        pathname: `/collections/collection/${name}/${version}`,
+        pathname: collectionHrefFromId(collectionId),
         search: getPersistentQueryParams(location),
       })}
     >
@@ -341,10 +385,15 @@ export const collectionLink = (collectionId) => {
   );
 };
 
-export const collectionHref = (collectionId) => {
+export const collectionHrefFromId = (collectionId) => {
   if (!collectionId) return nullValue;
   const { name, version } = collectionNameVersion(collectionId);
-  return `/collections/collection/${name}/${version}`;
+  return `/collections/collection/${name}/${encodeURIComponent(version)}`;
+};
+
+export const collectionHrefFromNameVersion = ({ name, version } = {}) => {
+  if (!name || !version) return nullValue;
+  return `/collections/collection/${name}/${encodeURIComponent(version)}`;
 };
 
 export const enableText = (name) => `You are enabling rule ${name}`;

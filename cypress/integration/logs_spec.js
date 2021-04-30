@@ -5,12 +5,12 @@ const executionArn = 'arn:aws:states:us-east-1:123456789012:execution:TestSource
 const pdr = 'MOD09GQ_1granule_v3.PDR_test-test-src-integration-IngestGranuleDuplicateHandling-1582837549352';
 const provider = 's3_provider';
 
-const logSuccess = () => cy.intercept('GET', '/logs', {
+const logSuccess = () => cy.intercept('GET', '/logs?*', {
   fixture: 'logs-success.json',
   statusCode: 200
 });
 
-const logError = () => cy.intercept('GET', '/logs', {
+const logError = () => cy.intercept('GET', '/logs?*', {
   fixture: 'logs-error.json',
   statusCode: 400
 });
@@ -24,7 +24,7 @@ describe('Dashboard Logs', () => {
 
     beforeEach(() => {
       cy.login();
-      cy.intercept('GET', '/logs').as('getLogs');
+      cy.intercept('GET', '/logs?*').as('getLogs');
     });
 
     it('should display logs on a Collection page when metrics are configured', () => {
@@ -44,13 +44,13 @@ describe('Dashboard Logs', () => {
     it('should display logs on a Granule page when metrics are configured', () => {
       logSuccess();
       cy.visit(`/granules/granule/${granuleId}`);
-      cy.get('.page__section--logs').should('exist');
+      cy.get('.page__section--logs', { timeout: 10000 }).should('exist');
     });
 
     it('should not display logs on a Granule page when metrics are not configured', () => {
       logError();
       cy.visit(`/granules/granule/${granuleId}`);
-      cy.get('.page__section--logs').should('not.exist');
+      cy.get('.page__section--logs', { timeout: 10000 }).should('not.exist');
     });
 
     it('should display logs on a Granule status pages when metrics are configured', () => {
@@ -80,7 +80,6 @@ describe('Dashboard Logs', () => {
       cy.contains('.meta__row dt', 'Logs').should('exist');
       cy.contains('.meta__row dd a', 'View Execution Logs').should('exist').click();
       cy.url().should('include', '/logs');
-      cy.contains('.status--process h2', 'Execution Logs').should('exist');
     });
 
     it('should not display logs on an Execution page when metrics are not configured', () => {

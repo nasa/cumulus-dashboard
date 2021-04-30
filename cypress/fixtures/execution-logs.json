@@ -9,256 +9,441 @@
     },
     "results": [
         {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "SyncGranule Complete. Returning output: {\"granules\":[{\"granuleId\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725\",\"dataType\":\"MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332\",\"version\":\"006\",\"files\":[{\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":17865615,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\"},{\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\"},{\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\"}]}],\"process\":\"modis\"}",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.684Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "SyncGranule Complete. Returning output: {\"granules\":[{\"granuleId\":\"MOD14A1.A1512064.hpixL1.006.4931121344997\",\"dataType\":\"MOD14A1\",\"version\":\"006\",\"files\":[{\"path\":\"test-source-integration-emsIngestReport-1610051806101-test-data/files\",\"size\":233840,\"type\":\"data\",\"name\":\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\",\"filename\":\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD14A1___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}\",\"bucket\":\"cumulus-sit-internal\"},{\"path\":\"test-source-integration-emsIngestReport-1610051806101-test-data/files\",\"type\":\"metadata\",\"size\":14297,\"name\":\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\",\"filename\":\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD14A1___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"cumulus-sit-internal\"},{\"path\":\"test-source-integration-emsIngestReport-1610051806101-test-data/files\",\"size\":5812,\"type\":\"browse\",\"name\":\"BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\",\"filename\":\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD14A1___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"cumulus-sit-internal\"}],\"sync_granule_duration\":1643}],\"process\":\"modis\"}",
+            "timestamp": "2021-01-07T20:38:05.462Z",
+            "message": "2021-01-07T20:38:05.462Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"SyncGranule Complete. Returning output: {\\\"granules\\\":[{\\\"granuleId\\\":\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\",\\\"dataType\\\":\\\"MOD14A1\\\",\\\"version\\\":\\\"006\\\",\\\"files\\\":[{\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"size\\\":233840,\\\"type\\\":\\\"data\\\",\\\"name\\\":\\\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\\\",\\\"filename\\\":\\\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\\\",\\\"fileStagingDir\\\":\\\"file-staging/test-source-integration/MOD14A1___006\\\",\\\"url_path\\\":\\\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}\\\",\\\"bucket\\\":\\\"cumulus-sit-internal\\\"},{\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"type\\\":\\\"metadata\\\",\\\"size\\\":14297,\\\"name\\\":\\\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\\\",\\\"filename\\\":\\\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\\\",\\\"fileStagingDir\\\":\\\"file-staging/test-source-integration/MOD14A1___006\\\",\\\"url_path\\\":\\\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\\\",\\\"bucket\\\":\\\"cumulus-sit-internal\\\"},{\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"size\\\":5812,\\\"type\\\":\\\"browse\\\",\\\"name\\\":\\\"BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\\\",\\\"filename\\\":\\\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\\\",\\\"fileStagingDir\\\":\\\"file-staging/test-source-integration/MOD14A1___006\\\",\\\"url_path\\\":\\\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\\\",\\\"bucket\\\":\\\"cumulus-sit-internal\\\"}],\\\"sync_granule_duration\\\":1643}],\\\"process\\\":\\\"modis\\\"}\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.462Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"SyncGranule Complete. Returning output: {\\\"granules\\\":[{\\\"granuleId\\\":\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\",\\\"dataType\\\":\\\"MOD14A1\\\",\\\"version\\\":\\\"006\\\",\\\"files\\\":[{\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"size\\\":233840,\\\"type\\\":\\\"data\\\",\\\"name\\\":\\\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\\\",\\\"filename\\\":\\\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\\\",\\\"fileStagingDir\\\":\\\"file-staging/test-source-integration/MOD14A1___006\\\",\\\"url_path\\\":\\\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}\\\",\\\"bucket\\\":\\\"cumulus-sit-internal\\\"},{\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"type\\\":\\\"metadata\\\",\\\"size\\\":14297,\\\"name\\\":\\\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\\\",\\\"filename\\\":\\\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\\\",\\\"fileStagingDir\\\":\\\"file-staging/test-source-integration/MOD14A1___006\\\",\\\"url_path\\\":\\\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\\\",\\\"bucket\\\":\\\"cumulus-sit-internal\\\"},{\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"size\\\":5812,\\\"type\\\":\\\"browse\\\",\\\"name\\\":\\\"BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\\\",\\\"filename\\\":\\\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\\\",\\\"fileStagingDir\\\":\\\"file-staging/test-source-integration/MOD14A1___006\\\",\\\"url_path\\\":\\\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\\\",\\\"bucket\\\":\\\"cumulus-sit-internal\\\"}],\\\"sync_granule_duration\\\":1643}],\\\"process\\\":\\\"modis\\\"}\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.462Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356854302580009708561802110969479525087823370584083",
+            "@timestamp": "2021-01-07T20:38:05.471Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "finshed, await lock.removeLock(test-source-integration-internal, s3_provider_test-test-source-integration-IngestGranuleSuccess-1541685563332, MOD09GQ.A5033248.FyuAeH.006.3234109639725)",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.649Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "finished ingest()",
+            "timestamp": "2021-01-07T20:38:05.426Z",
+            "message": "2021-01-07T20:38:05.426Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"finished ingest()\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.426Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"finished ingest()\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.426Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356853299046475774683760741862157255911555601465362",
+            "@timestamp": "2021-01-07T20:38:05.426Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "finished ingest()",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.649Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "returning {\"path\":\"test-source-integration-emsIngestReport-1610051806101-test-data/files\",\"size\":233840,\"type\":\"data\",\"name\":\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\",\"filename\":\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD14A1___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}\",\"bucket\":\"cumulus-sit-internal\"}",
+            "timestamp": "2021-01-07T20:38:05.425Z",
+            "message": "2021-01-07T20:38:05.425Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"returning {\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"size\\\":233840,\\\"type\\\":\\\"data\\\",\\\"name\\\":\\\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\\\",\\\"filename\\\":\\\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\\\",\\\"fileStagingDir\\\":\\\"file-staging/test-source-integration/MOD14A1___006\\\",\\\"url_path\\\":\\\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}\\\",\\\"bucket\\\":\\\"cumulus-sit-internal\\\"}\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.425Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"returning {\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"size\\\":233840,\\\"type\\\":\\\"data\\\",\\\"name\\\":\\\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\\\",\\\"filename\\\":\\\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\\\",\\\"fileStagingDir\\\":\\\"file-staging/test-source-integration/MOD14A1___006\\\",\\\"url_path\\\":\\\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}\\\",\\\"bucket\\\":\\\"cumulus-sit-internal\\\"}\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.425Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356853299046475774683760741862157255911555601465361",
+            "@timestamp": "2021-01-07T20:38:05.426Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "await validateChecksum {\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":17865615,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\"}, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.648Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "warn",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "Could not verify MOD14A1.A1512064.hpixL1.006.4931121344997.hdf expected checksum: undefined of type undefined.",
+            "timestamp": "2021-01-07T20:38:05.377Z",
+            "message": "2021-01-07T20:38:05.377Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"warn\",\"message\":\"Could not verify MOD14A1.A1512064.hpixL1.006.4931121344997.hdf expected checksum: undefined of type undefined.\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.377Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"warn\",\"app_message\":\"Could not verify MOD14A1.A1512064.hpixL1.006.4931121344997.hdf expected checksum: undefined of type undefined.\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.377Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356852206309961046683226806611961896141841808424976",
+            "@timestamp": "2021-01-07T20:38:05.377Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 30,
-            "message": "synced 1098034 bytes",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.648Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "await verifyFile {\"path\":\"test-source-integration-emsIngestReport-1610051806101-test-data/files\",\"size\":233840,\"type\":\"data\",\"name\":\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\"}, s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf",
+            "timestamp": "2021-01-07T20:38:05.377Z",
+            "message": "2021-01-07T20:38:05.377Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"await verifyFile {\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"size\\\":233840,\\\"type\\\":\\\"data\\\",\\\"name\\\":\\\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\\\"}, s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.377Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"await verifyFile {\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"size\\\":233840,\\\"type\\\":\\\"data\\\",\\\"name\\\":\\\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\\\"}, s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.377Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356852206309961046683226806611961896141841808424975",
+            "@timestamp": "2021-01-07T20:38:05.377Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 30,
-            "message": "s3 Upload completed in 0.221 secs s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.607Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "returning {\"path\":\"test-source-integration-emsIngestReport-1610051806101-test-data/files\",\"type\":\"metadata\",\"size\":14297,\"name\":\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\",\"filename\":\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD14A1___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"cumulus-sit-internal\"}",
+            "timestamp": "2021-01-07T20:38:05.335Z",
+            "message": "2021-01-07T20:38:05.335Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"returning {\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"type\\\":\\\"metadata\\\",\\\"size\\\":14297,\\\"name\\\":\\\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\\\",\\\"filename\\\":\\\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\\\",\\\"fileStagingDir\\\":\\\"file-staging/test-source-integration/MOD14A1___006\\\",\\\"url_path\\\":\\\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\\\",\\\"bucket\\\":\\\"cumulus-sit-internal\\\"}\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.335Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"returning {\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"type\\\":\\\"metadata\\\",\\\"size\\\":14297,\\\"name\\\":\\\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\\\",\\\"filename\\\":\\\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\\\",\\\"fileStagingDir\\\":\\\"file-staging/test-source-integration/MOD14A1___006\\\",\\\"url_path\\\":\\\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\\\",\\\"bucket\\\":\\\"cumulus-sit-internal\\\"}\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.335Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356851269678662708397054862111794444910658557247502",
+            "@timestamp": "2021-01-07T20:38:05.335Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 30,
-            "message": "synced 9728 bytes",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.554Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "returning {\"path\":\"test-source-integration-emsIngestReport-1610051806101-test-data/files\",\"size\":5812,\"type\":\"browse\",\"name\":\"BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\",\"filename\":\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD14A1___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"cumulus-sit-internal\"}",
+            "timestamp": "2021-01-07T20:38:05.319Z",
+            "message": "2021-01-07T20:38:05.319Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"returning {\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"size\\\":5812,\\\"type\\\":\\\"browse\\\",\\\"name\\\":\\\"BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\\\",\\\"filename\\\":\\\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\\\",\\\"fileStagingDir\\\":\\\"file-staging/test-source-integration/MOD14A1___006\\\",\\\"url_path\\\":\\\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\\\",\\\"bucket\\\":\\\"cumulus-sit-internal\\\"}\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.319Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"returning {\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"size\\\":5812,\\\"type\\\":\\\"browse\\\",\\\"name\\\":\\\"BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\\\",\\\"filename\\\":\\\"s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\\\",\\\"fileStagingDir\\\":\\\"file-staging/test-source-integration/MOD14A1___006\\\",\\\"url_path\\\":\\\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\\\",\\\"bucket\\\":\\\"cumulus-sit-internal\\\"}\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.319Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356850935167484730437707739076020355185235967541261",
+            "@timestamp": "2021-01-07T20:38:05.320Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "await validateChecksum {\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\"}, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.554Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "warn",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "Could not verify BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg expected checksum: undefined of type undefined.",
+            "timestamp": "2021-01-07T20:38:05.233Z",
+            "message": "2021-01-07T20:38:05.233Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"warn\",\"message\":\"Could not verify BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg expected checksum: undefined of type undefined.\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.233Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"warn\",\"app_message\":\"Could not verify BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg expected checksum: undefined of type undefined.\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.233Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356849017303397656804117567004248907426146453225484",
+            "@timestamp": "2021-01-07T20:38:05.234Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 30,
-            "message": "s3 Upload completed in 0.087 secs s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.484Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "await verifyFile {\"path\":\"test-source-integration-emsIngestReport-1610051806101-test-data/files\",\"size\":5812,\"type\":\"browse\",\"name\":\"BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\"}, s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg",
+            "timestamp": "2021-01-07T20:38:05.233Z",
+            "message": "2021-01-07T20:38:05.233Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"await verifyFile {\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"size\\\":5812,\\\"type\\\":\\\"browse\\\",\\\"name\\\":\\\"BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\\\"}, s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.233Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"await verifyFile {\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"size\\\":5812,\\\"type\\\":\\\"browse\\\",\\\"name\\\":\\\"BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\\\"}, s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.233Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356849017303397656804117567004248907426146453225483",
+            "@timestamp": "2021-01-07T20:38:05.234Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 30,
-            "message": "synced 21708 bytes",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.469Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "warn",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "Could not verify MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met expected checksum: undefined of type undefined.",
+            "timestamp": "2021-01-07T20:38:05.224Z",
+            "message": "2021-01-07T20:38:05.224Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"warn\",\"message\":\"Could not verify MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met expected checksum: undefined of type undefined.\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.224Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"warn\",\"app_message\":\"Could not verify MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met expected checksum: undefined of type undefined.\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.224Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356848794295945671497886151647066180942531393421322",
+            "@timestamp": "2021-01-07T20:38:05.224Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "await validateChecksum {\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met\",\"filename\":\"s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met\",\"fileStagingDir\":\"file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006\",\"url_path\":\"{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}\",\"bucket\":\"test-source-integration-internal\"}, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.469Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "await verifyFile {\"path\":\"test-source-integration-emsIngestReport-1610051806101-test-data/files\",\"type\":\"metadata\",\"size\":14297,\"name\":\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\"}, s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met",
+            "timestamp": "2021-01-07T20:38:05.224Z",
+            "message": "2021-01-07T20:38:05.224Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"await verifyFile {\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"type\\\":\\\"metadata\\\",\\\"size\\\":14297,\\\"name\\\":\\\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\\\"}, s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.224Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"await verifyFile {\\\"path\\\":\\\"test-source-integration-emsIngestReport-1610051806101-test-data/files\\\",\\\"type\\\":\\\"metadata\\\",\\\"size\\\":14297,\\\"name\\\":\\\"MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\\\"}, s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:05.224Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356848794295945671497886151647066180942531393421321",
+            "@timestamp": "2021-01-07T20:38:05.224Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 30,
-            "message": "s3 Upload completed in 0.075 secs s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.448Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "await sync file test-source-integration-emsIngestReport-1610051806101-test-data/files/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg to s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg",
+            "timestamp": "2021-01-07T20:38:04.890Z",
+            "message": "2021-01-07T20:38:04.890Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"await sync file test-source-integration-emsIngestReport-1610051806101-test-data/files/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg to s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:04.890Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"await sync file test-source-integration-emsIngestReport-1610051806101-test-data/files/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg to s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:04.890Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356841345847049362269756878717163116389788395962376",
+            "@timestamp": "2021-01-07T20:38:04.890Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 30,
-            "message": "sync params: { Bucket: 'test-source-integration-internal',\n  CopySource: '/test-source-integration-internal/test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg',\n  Key: 'file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg',\n  ACL: 'private' }",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.397Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "file file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg exists in cumulus-sit-internal: false",
+            "timestamp": "2021-01-07T20:38:04.890Z",
+            "message": "2021-01-07T20:38:04.890Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"file file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg exists in cumulus-sit-internal: false\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:04.890Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"file file-staging/test-source-integration/MOD14A1___006/BROWSE.MOD14A1.A1512064.hpixL1.006.4931121344997.1.jpg exists in cumulus-sit-internal: false\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:04.890Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356841345847049362269756878717163116389788395962375",
+            "@timestamp": "2021-01-07T20:38:04.890Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 30,
-            "message": "sync params: { Bucket: 'test-source-integration-internal',\n  CopySource: '/test-source-integration-internal/test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf',\n  Key: 'file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf',\n  ACL: 'private' }",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.386Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "await sync file test-source-integration-emsIngestReport-1610051806101-test-data/files/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met to s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met",
+            "timestamp": "2021-01-07T20:38:04.887Z",
+            "message": "2021-01-07T20:38:04.887Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"await sync file test-source-integration-emsIngestReport-1610051806101-test-data/files/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met to s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:04.887Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"await sync file test-source-integration-emsIngestReport-1610051806101-test-data/files/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met to s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:04.887Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356841278944813766677887454110008298444703878021126",
+            "@timestamp": "2021-01-07T20:38:04.887Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 30,
-            "message": "sync params: { Bucket: 'test-source-integration-internal',\n  CopySource: '/test-source-integration-internal/test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met',\n  Key: 'file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met',\n  ACL: 'private' }",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.373Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "file file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met exists in cumulus-sit-internal: false",
+            "timestamp": "2021-01-07T20:38:04.886Z",
+            "message": "2021-01-07T20:38:04.886Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"file file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met exists in cumulus-sit-internal: false\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:04.886Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"file file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf.met exists in cumulus-sit-internal: false\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:04.886Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356841278944813766677887454110008298444703878021125",
+            "@timestamp": "2021-01-07T20:38:04.887Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 30,
-            "message": "Sync s3://test-source-integration-internal/test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg to s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.371Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "file file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf exists in cumulus-sit-internal: false",
+            "timestamp": "2021-01-07T20:38:04.881Z",
+            "message": "2021-01-07T20:38:04.881Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"file file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf exists in cumulus-sit-internal: false\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:04.881Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"file file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf exists in cumulus-sit-internal: false\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:04.881Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356841145140342575494148604895698662554534842138627",
+            "@timestamp": "2021-01-07T20:38:04.881Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "await sync file to s3 test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.370Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "await sync file test-source-integration-emsIngestReport-1610051806101-test-data/files/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf to s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf",
+            "timestamp": "2021-01-07T20:38:04.881Z",
+            "message": "2021-01-07T20:38:04.881Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"await sync file test-source-integration-emsIngestReport-1610051806101-test-data/files/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf to s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:04.881Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"await sync file test-source-integration-emsIngestReport-1610051806101-test-data/files/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf to s3://cumulus-sit-internal/file-staging/test-source-integration/MOD14A1___006/MOD14A1.A1512064.hpixL1.006.4931121344997.hdf\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:04.881Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356841145140342575494148604895698662554534842138628",
+            "@timestamp": "2021-01-07T20:38:04.881Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "file file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg exists in test-source-integration-internal: false",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.370Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "awaiting all download.Files",
+            "timestamp": "2021-01-07T20:38:03.793Z",
+            "message": "2021-01-07T20:38:03.793Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"awaiting all download.Files\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:03.793Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"awaiting all download.Files\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:03.793Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356816881929566574176170614034218021137216335446018",
+            "@timestamp": "2021-01-07T20:38:03.793Z"
+          },
+          {
+            "logStream": "2021/01/07/[$LATEST]8cabe6b8df384f3a812255266a10d45a",
+            "subscriptionFilters": [
+              "test-source-integration-SyncGranuleTaskLogSubscriptionToSharedDestination"
+            ],
+            "stackName": "test-source-integration",
+            "version": "$LATEST",
             "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 30,
-            "message": "Sync s3://test-source-integration-internal/test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf to s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.354Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
-            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "await sync file to s3 test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.353Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
-            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "file file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf exists in test-source-integration-internal: false",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.353Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
-            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "await sync file to s3 test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met, test-source-integration-internal, file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.332Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
-            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "file file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met exists in test-source-integration-internal: false",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.332Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
-            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 30,
-            "message": "Sync s3://test-source-integration-internal/test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met to s3://test-source-integration-internal/file-staging/test-source-integration/MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332___006/MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.332Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
-            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "awaiting all download.Files",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.313Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
-            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "await ingest.ingest({\"granuleId\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725\",\"dataType\":\"MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1541685563332\",\"version\":\"006\",\"files\":[{\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":17865615,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf\"},{\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725.hdf.met\"},{\"path\":\"test-source-integration-IngestGranuleSuccess-1541685563332-test-data/files\",\"fileSize\":44118,\"name\":\"MOD09GQ.A5033248.FyuAeH.006.3234109639725_ndvi.jpg\"}]}, test-source-integration-internal)",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.309Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
-            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "awaiting lock.proceed in download() bucket: test-source-integration-internal, provider: {\"protocol\":\"s3\",\"globalConnectionLimit\":10,\"host\":\"test-source-integration-internal\",\"updatedAt\":1541685568865,\"id\":\"s3_provider_test-test-source-integration-IngestGranuleSuccess-1541685563332\",\"createdAt\":1541685568865}, granuleID: MOD09GQ.A5033248.FyuAeH.006.3234109639725",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.259Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        },
-        {
-            "executions": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
-            "level": 20,
-            "message": "Configured duplicateHandling value: replace",
-            "sender": "test-source-integration-SyncGranuleNoVpc",
-            "timestamp": "2018-11-08T14:01:47.259Z",
-            "version": "23",
-            "RequestId": "642422df-56b6-408c-9d54-820655c93723"
-        }
+            "level": "debug",
+            "owner": "0123456",
+            "@version": "1",
+            "app_message": "awaiting lock.proceed in download() bucket: cumulus-sit-internal, provider: {\"createdAt\":1610051814176,\"id\":\"s3_provider_test-test-source-integration-emsIngestReport-1610051806101\",\"host\":\"cumulus-sit-internal\",\"globalConnectionLimit\":10,\"updatedAt\":1610051814176,\"protocol\":\"s3\"}, granuleID: MOD14A1.A1512064.hpixL1.006.4931121344997",
+            "timestamp": "2021-01-07T20:38:03.626Z",
+            "message": "2021-01-07T20:38:03.626Z\teb31bb65-c95c-4f70-8c5f-1f840ff463e2\tINFO\t{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"message\":\"awaiting lock.proceed in download() bucket: cumulus-sit-internal, provider: {\\\"createdAt\\\":1610051814176,\\\"id\\\":\\\"s3_provider_test-test-source-integration-emsIngestReport-1610051806101\\\",\\\"host\\\":\\\"cumulus-sit-internal\\\",\\\"globalConnectionLimit\\\":10,\\\"updatedAt\\\":1610051814176,\\\"protocol\\\":\\\"s3\\\"}, granuleID: MOD14A1.A1512064.hpixL1.006.4931121344997\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:03.626Z\",\"version\":\"$LATEST\"}\n",
+            "logstash_instance_id": "i-077966e2d29b61d76",
+            "inner_message": "{\"executions\":\"8e21ca0f-79d3-4782-8247-cacd42a595ea\",\"granules\":\"[\\\"MOD14A1.A1512064.hpixL1.006.4931121344997\\\"]\",\"level\":\"debug\",\"app_message\":\"awaiting lock.proceed in download() bucket: cumulus-sit-internal, provider: {\\\"createdAt\\\":1610051814176,\\\"id\\\":\\\"s3_provider_test-test-source-integration-emsIngestReport-1610051806101\\\",\\\"host\\\":\\\"cumulus-sit-internal\\\",\\\"globalConnectionLimit\\\":10,\\\"updatedAt\\\":1610051814176,\\\"protocol\\\":\\\"s3\\\"}, granuleID: MOD14A1.A1512064.hpixL1.006.4931121344997\",\"sender\":\"test-source-integration-SyncGranule\",\"stackName\":\"test-source-integration\",\"timestamp\":\"2021-01-07T20:38:03.626Z\",\"version\":\"$LATEST\"}",
+            "sender": "test-source-integration-SyncGranule",
+            "granules": "[\"MOD14A1.A1512064.hpixL1.006.4931121344997\"]",
+            "messageType": "DATA_MESSAGE",
+            "logGroup": "/aws/lambda/test-source-integration-SyncGranule",
+            "id": "35905356813157705118419562105977569266488860844836716545",
+            "@timestamp": "2021-01-07T20:38:03.626Z"
+          }
     ]
 }

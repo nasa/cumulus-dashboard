@@ -11,10 +11,55 @@ export const tableColumns = [
   {
     Header: 'Id',
     accessor: 'id',
+    width: 10
   },
   {
     Header: 'Type',
-    accessor: 'type'
+    accessor: 'type',
+    Cell: ({ cell: { value }, row: { original: { eventDetails } } }) => {
+      const [showModal, setShowModal] = useState(false);
+      const { id } = eventDetails || {};
+      function toggleModal(e) {
+        if (e) {
+          e.preventDefault();
+        }
+        setShowModal(!showModal);
+      }
+      if (eventDetails) {
+        let buttonClass;
+        if (eventDetails.type === 'LambdaFunctionFailed') {
+          buttonClass = 'button button--small button--no-left-padding button--failed';
+        } else {
+          buttonClass = 'button button--small button--no-left-padding';
+        }
+        return (
+          <>
+            <button
+              onClick={toggleModal}
+              className={buttonClass}
+            >
+              {eventDetails.type}
+            </button>
+            <DefaultModal
+              showModal={showModal}
+              title={`ID ${id}: ${value}`}
+              onCloseModal={toggleModal}
+              hasConfirmButton={false}
+              cancelButtonClass="button--close"
+              cancelButtonText="Close"
+              className="execution__modal"
+            >
+              <pre>{JSON.stringify(eventDetails, null, 2)}</pre>
+            </DefaultModal>
+          </>
+        );
+      }
+      return 'N/A';
+    },
+  },
+  {
+    Header: 'Step Name',
+    accessor: 'name',
   },
   {
     Header: 'Timestamp',
@@ -22,7 +67,7 @@ export const tableColumns = [
     Cell: ({ cell: { value } }) => fullDate(value)
   },
   {
-    Header: 'Input Details',
+    Header: 'Event Details',
     accessor: 'eventDetails',
     Cell: ({ cell: { value } }) => {
       const [showModal, setShowModal] = useState(false);
