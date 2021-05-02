@@ -13,10 +13,6 @@
   border-radius: 8px 8px 0px 0px;
   scroll-behavior: smooth;
 
-  &:hover + .scrollButton {
-    display: flex;
-  }
-
   .content-fit {
     width: fit-content!important;
   }
@@ -127,14 +123,25 @@
   width: 75px;
   border-radius: 50%;
   align-items: center; 
-  justify-content: center;
+  align-content: center;
   display: flex;
+  flex-wrap: wrap;
   position: absolute;
-  bottom: -90px;
-  right: 0;
-  // &::after {
-  //   content: 'SCROLL'
-  // }
+
+  div {
+    flex: 0 0 100%;
+    text-align: center;
+  }
+}
+
+.scrollButtonLeft {
+  top: 50%;
+  left: -50px;
+}
+
+.scrollButtonRight {
+  top: 50%;
+  right: -50px;
 }
 
 .dropdown-wrapper {

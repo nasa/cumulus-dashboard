@@ -76,6 +76,8 @@ const SortableTable = ({
     []
   );
   const [fitColumn, setFitColumn] = useState({});
+  const [showScrollRightButton, setShowScrollRightButton] = useState(false);
+  const [showScrollLeftButton, setShowScrollLeftButton] = useState(false);
 
   const {
     getTableProps,
@@ -86,7 +88,7 @@ const SortableTable = ({
       selectedRowIds,
       sortBy,
       pageIndex,
-      hiddenColumns,
+      hiddenColumns
     },
     toggleAllRowsSelected,
     page,
@@ -193,28 +195,72 @@ const SortableTable = ({
     onMouseDown(e);
   }
 
-  function scrollHorizontal(scrollOffset) {
-    tableRef.current.scrollLeft += scrollOffset;
+  function scrollTableRight() {
+    tableRef.current.scrollLeft += tableRef.current.clientWidth;
+    setShowScrollRightButton(false);
   };
 
-  function tableColumnMouseEnter() {
-    console.log('mouse enter');
-    
+  function scrollTableLeft() {
+    tableRef.current.scrollLeft -= tableRef.current.clientWidth;
+    setShowScrollLeftButton(false);
+  };
+
+  function checkInView(container, element, partial) {
+    if(!container || !element){
+      return true;
+    }
+
+    //Get container properties
+    let cLeft = container.scrollLeft;
+    let cRight = cLeft + container.clientWidth;
+
+    //Get element properties
+    let eLeft = element.offsetLeft - container.offsetLeft;
+    let eRight = eLeft + element.clientWidth;
+
+    //Check if in view    
+    let isTotal = (eLeft >= cLeft && eRight <= cRight);
+    let isPartial = partial && (
+      (eLeft < cLeft && eRight > cLeft) ||
+      (eRight > cRight && eLeft < cRight)
+    );
+
+    // if(!isTotal && !isPartial) {
+    //   console.log(`element: ${JSON.stringify(element.attributes)}`)
+    //   console.log(`cLeft: ${cLeft}`);
+    //   console.log(`cRight: ${cRight}`);
+    //   console.log(`eLeft: ${eLeft}`);
+    //   console.log(`eRight: ${eRight}`);
+    //   console.log(`isTotal | isPartial: ${isTotal} | ${isPartial}`);
+    // }
+
+    //Return outcome
+    return (isTotal || isPartial);
+  }
+
+  function tableColumnMouseEnter(event) {
+    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.nextSibling, false)) {
+      setShowScrollRightButton(true);
+    }
+
+    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.previousSibling, false)) {
+      setShowScrollLeftButton(true);
+    }
   }
 
   function tableColumnMouseLeave() {
-    console.log('mouse leave');
+    // setShowColumnScroll(false);
   }
 
   return (
     <div className='table--wrapper'>
       {(includeFilters || legend) &&
-      <ListFilters>
-        {includeFilters &&
+        <ListFilters>
+          {includeFilters &&
             <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
-        }
-        {legend}
-      </ListFilters>}
+          }
+          {legend}
+        </ListFilters>}
       <div className='table' {...getTableProps()} ref={tableRef}>
         <div className='thead'>
           <div className='tr'>
@@ -254,7 +300,11 @@ const SortableTable = ({
                   } = column.getResizerProps ? column.getResizerProps() : {};
 
                   return (
-                    <div {...restHeaderProps} className={wrapperClassNames} style={style}>
+                    <div {...restHeaderProps} 
+                         className={wrapperClassNames} 
+                         style={style} 
+                         onMouseEnter={(e) => tableColumnMouseEnter(e)}
+                         onMouseLeave={(e) => tableColumnMouseLeave(e)}>
                       <span {...column.getSortByToggleProps()} className={columnClassName}>
                         {column.render('Header')}
                       </span>
@@ -298,8 +348,8 @@ const SortableTable = ({
                       {...restCellProps}
                       style={style}
                       key={cellIndex}
-                      onMouseEnter={() => tableColumnMouseEnter()}
-                      onMouseLeave={() => tableColumnMouseLeave()}
+                      onMouseEnter={(e) => tableColumnMouseEnter(e)}
+                      onMouseLeave={(e) => tableColumnMouseLeave(e)}
                     >
                       {cell.render('Cell')}
                     </div>
@@ -310,7 +360,16 @@ const SortableTable = ({
           })}
         </div>
       </div>
-      <div className="scrollButton" onClick={() => scrollHorizontal(250)}>SCROLL</div>
+      {showScrollLeftButton && 
+      <div className="scrollButton scrollButtonLeft" onClick={() => scrollTableLeft()}>
+        <div><i className="fa fa-arrow-circle-left fa-2x"></i></div>
+        <div>SCROLL</div>
+      </div>}
+      {showScrollRightButton && 
+      <div className="scrollButton scrollButtonRight" onClick={() => scrollTableRight()}>
+        <div><i className="fa fa-arrow-circle-right fa-2x"></i></div>
+        <div>SCROLL</div>
+      </div>}
       {shouldUsePagination &&
         <SimplePagination
           canPreviousPage={canPreviousPage}
