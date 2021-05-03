@@ -81,6 +81,11 @@ This version of the dashboard requires Cumulus API 7.0.0
 - **CUMULUS-2430**
   - Overview KPI status cards: Change styling to new design
 
+- **CUMULUS-2056**
+  - Added Events link to Details section of Executions page
+  - On Events tab of Execution page, highlighted in the red the failed tasks
+  - On Events tab of Execution page, made tasks expandable to show event details
+
 ### Added
 
 - **CUMULUS-2297**
