@@ -16,6 +16,7 @@ const breadcrumbConfig = [
 const CollectionLogs = ({ dispatch, logs, match }) => {
   const { params } = match;
   const { name: collectionName, version: collectionVersion } = params;
+  const decodedVersion = decodeURIComponent(collectionVersion);
   const { queriedAt } = logs;
 
   return (
@@ -24,7 +25,7 @@ const CollectionLogs = ({ dispatch, logs, match }) => {
         breadcrumbConfig={breadcrumbConfig}
         name={collectionName}
         queriedAt={queriedAt}
-        version={collectionVersion}
+        version={decodedVersion}
       />
       <LogViewer
         query={{ q: collectionName }}

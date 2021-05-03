@@ -5,6 +5,7 @@ import {
   collectionName as collectionLabelForId,
   getCollectionId,
   lastUpdated,
+  collectionHrefFromNameVersion,
 } from '../../utils/format';
 import { getPersistentQueryParams } from '../../utils/url-helper';
 import { strings } from '../locale';
@@ -28,7 +29,7 @@ const CollectionHeader = ({
     },
     {
       label: 'Collection Overview',
-      href: `/collections/collection/${name}/${version}`,
+      href: collectionHrefFromNameVersion({ name, version }),
     },
   ];
 
@@ -46,7 +47,7 @@ const CollectionHeader = ({
         <Link
           className="button button--edit button--small form-group__element--right button--green"
           to={(location) => ({
-            pathname: `/collections/edit/${name}/${version}`,
+            pathname: `/collections/edit/${name}/${encodeURIComponent(version)}`,
             search: getPersistentQueryParams(location),
           })}
         >

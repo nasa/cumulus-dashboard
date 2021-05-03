@@ -17,10 +17,12 @@ import {
   applyRecoveryWorkflowToGranule,
   getOptionsCollectionName,
   getOptionsProviderName,
+  toggleGranulesTableColumns,
 } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import {
   bulkActions,
+  defaultHiddenColumns,
   defaultWorkflowMeta,
   executeDialog,
   groupAction,
@@ -178,10 +180,12 @@ class GranulesOverview extends React.Component {
             bulkActions={this.generateBulkActions()}
             groupAction={groupAction}
             rowId='granuleId'
+            initialHiddenColumns={defaultHiddenColumns}
             initialSortId='timestamp'
             filterAction={filterGranules}
             filterClear={clearGranulesFilter}
             onSelect={this.updateSelection}
+            toggleColumnOptionsAction={toggleGranulesTableColumns}
           >
             <Search
               action={searchGranules}

@@ -10,6 +10,7 @@ Code to generate and deploy the dashboard for the Cumulus API.
 - [Run the dashboard](#run-the-dashboard)
 - [Deployment](#deployment)
 - [Testing](#testing)
+- [Create a Dashboard Release](#create-a-dashboard-release)
 
 
 Other pages:
@@ -200,7 +201,7 @@ Serve the cumulus API (separate terminal)
 
 Serve the dashboard web application (another terminal)
 ```bash
-  $ [HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve
+  $ [HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ENABLE_RECOVERY=true ESROOT=http://example.com APIROOT=http://localhost:5001] npm run serve
 ```
 
 If you're just testing dashboard code, you can generally run all of the above commands as a single docker-compose stack.
@@ -325,7 +326,7 @@ The `master` branch is the branch where the source code of HEAD always reflects 
 
 When the source code in the develop branch reaches a stable point and is ready to be released, all of the changes should be merged back into master and then tagged with a release number.
 
-## How to release
+## Create a Dashboard Release
 
 ### 1. Checkout `develop` branch
 
@@ -365,7 +366,7 @@ Create a PR for the `release-vX.X.X` branch against the `develop` branch. Verify
 
 ### 9. Create a pull request against the master branch
 
-Create a PR for the `develop` branch against the `master` branch. Verify that the Earthdata Bamboo CI build for the PR succeeds and then merge to `master`.
+Create a PR for the `develop` branch against the `master` branch. Verify that the Earthdata Bamboo CI build for the PR succeeds and then merge to `master`.  Do not create a squash merge, but use a merge commit.
 
 ### 10. Create a git tag for the release
 
@@ -386,5 +387,17 @@ Follow the [Github documentation to create a new release](https://help.github.co
 ### 12. Create PR of master back into develop
 
 Create a PR for the `master` branch back into `develop` to bring the merge commit back into develop.
+
+It is likely that no branch plan will exist for the `master` branch.
+#### Create a bamboo branch plan for the release
+ - In the Cumulus Dashboard in Bamboo (<https://ci.earthdata.nasa.gov/browse/CUM-CDG>), click `Actions -> Configure Plan` in the top right.
+ - Next to `Plan branch` click the rightmost button that displays `Create Plan Branch` upon hover.
+ - Click `Create plan branch manually`.
+ - Choose Branch Name `master` and then click `create`.
+ - Verify that the build has started for this plan.
+
+
+
+
 
 <a name="bundlefootnote">1</a>: A dashboard bundle is just a ready-to-deploy compiled version of the dashboard and environment.

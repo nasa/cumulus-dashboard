@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
 import qs from 'qs';
+import _config from '../config';
 import { CALL_API } from '../actions/types';
 import {
   configureRequest,
@@ -12,6 +13,8 @@ import { isValidApiRequestAction } from './validate';
 const axios = require('axios');
 const { loginError } = require('../actions');
 
+const apiRootHost = new URL(_config.apiRoot).host;
+
 const handleError = ({
   id,
   type,
@@ -22,25 +25,37 @@ const handleError = ({
   console.groupCollapsed('handleError');
   console.log(`id: ${id}`);
   console.log(`type: ${type}`);
+  console.log('error:');
   console.dir(error);
+  console.log('requestAction:');
   console.dir(requestAction);
   console.groupEnd();
 
   // If the error response indicates lack or failure of request
   // authorization, then the log user out
-  if ([401, 403].includes(+statusCode)) {
+  if ([401, 403].includes(+statusCode) &&
+      new URL(requestAction.url).host === apiRootHost) {
     return next(loginError(error.message));
   }
 
   const errorType = `${type}_ERROR`;
   log((id ? `${errorType}: ${id}` : errorType));
-  log(error);
+
+  // pull message from data if there is a data field, or just use message off of the error.message
+  let nextError;
+  try {
+    nextError = error.response.data.message ? error.response.data.message : error.message;
+  } catch (e) {
+    if (e instanceof TypeError) {
+      nextError = error.message;
+    }
+  }
 
   return next({
     id,
     config: requestAction,
     type: errorType,
-    error: error.message
+    error: nextError
   });
 };
 
@@ -84,22 +99,21 @@ export const requestMiddleware = ({ dispatch, getState }) => (next) => (action) 
       })
       .catch((error) => {
         if (error.response) {
-          const { data, status } = error.response;
+          const { status } = error.response;
           return handleError(
             {
               id,
               type,
-              error: data,
+              error,
               requestAction,
               statusCode: status
             },
             next
           );
         }
-        handleError({ id, type, error, requestAction }, next);
+        return handleError({ id, type, error, requestAction }, next);
       });
   }
-
   return next(action);
 };
 
