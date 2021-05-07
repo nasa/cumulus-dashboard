@@ -45,6 +45,9 @@ _ **CUMULUS-2425**
   - Upgrades Cypress testing software to 7.0.1
   - Refactors home page and adds a new section header
 
+- **CUMULUS-2467**
+  - Update to footer layout to include NASA privacy links to help move Cumulus into compliance with other EED products
+
 ## [v5.0.0] - 2021-03-23
 
 ## Breaking Changes
