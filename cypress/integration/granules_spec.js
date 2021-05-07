@@ -700,5 +700,14 @@ describe('Dashboard Granules Page', () => {
       cy.get('.default-modal.batch-async-modal ').as('modal');
       cy.get('@modal').contains('div', 'Error');
     });
+
+    it.only('should display a SCROLL button on the right side of the list when columns are not visible to the right', () => {
+      cy.visit('/granules?limit=20');
+
+      cy.get('.scrollButton .scrollButtonRight').click({ force: true });
+      // cy.get('.scrollButtonRight > div:nth-child(2)').trigger('keydown', { keycode: 192 });
+      // cy.wait(10000);
+      // cy.get('.scrollButtonRight > div:nth-child(2)').trigger('keyup', { keycode: 192 });
+    });  
   });
 });

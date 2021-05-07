@@ -76,8 +76,9 @@ const SortableTable = ({
     []
   );
   const [fitColumn, setFitColumn] = useState({});
-  const [showScrollRightButton, setShowScrollRightButton] = useState(false);
-  const [showScrollLeftButton, setShowScrollLeftButton] = useState(false);
+
+  let rightScrollInterval;
+  let leftScrollInterval;
 
   const {
     getTableProps,
@@ -145,6 +146,8 @@ const SortableTable = ({
   const includeFilters = typeof getToggleColumnOptions !== 'function';
 
   const tableRef = createRef();
+  const scrollLeftButton = createRef();
+  const scrollRightButton = createRef();
 
   useEffect(() => {
     if (clearSelected) {
@@ -195,14 +198,68 @@ const SortableTable = ({
     onMouseDown(e);
   }
 
+  function handleTableColumnMouseEnter(event) {
+    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.nextSibling, false)) {
+      showScrollRightButton(event);
+    }
+
+    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.previousSibling, false)) {
+      showScrollLeftButton(event);
+    }
+  }
+
+  function handleTableColumnMouseLeave(event) {
+    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.nextSibling, false)) {
+      hideScrollRightButton();
+    }
+
+    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.previousSibling, false)) {
+      hideScrollLeftButton();
+    }
+  }
+
   function scrollTableRight() {
-    tableRef.current.scrollLeft += tableRef.current.clientWidth;
-    setShowScrollRightButton(false);
+    tableRef.current.scrollLeft += 20;
+  }
+
+  function startScrollTableRight() {
+    rightScrollInterval = setInterval(scrollTableRight, 1);
+    showScrollRightButton();
+  }
+
+  function stopScrollTableRight() {
+    clearInterval(rightScrollInterval);
+    hideScrollRightButton();
   }
 
   function scrollTableLeft() {
-    tableRef.current.scrollLeft -= tableRef.current.clientWidth;
-    setShowScrollLeftButton(false);
+    tableRef.current.scrollLeft -= 20;
+  }
+
+  function startScrollTableLeft() {
+    leftScrollInterval = setInterval(scrollTableLeft, 1);
+    showScrollLeftButton();
+  }
+
+  function stopScrollTableLeft() {
+    clearInterval(leftScrollInterval);
+    hideScrollLeftButton();
+  }
+
+  function showScrollLeftButton(event) {
+    scrollLeftButton.current.className = 'scrollButton scrollButtonLeft unhide';
+  }
+
+  function hideScrollLeftButton() {
+    scrollLeftButton.current.className = 'scrollButton scrollButtonLeft';
+  }
+
+  function showScrollRightButton(event) {
+    scrollRightButton.current.className = 'scrollButton scrollButtonRight unhide';
+  }
+
+  function hideScrollRightButton() {
+    scrollRightButton.current.className = 'scrollButton scrollButtonRight';
   }
 
   function checkInView(container, element, partial) {
@@ -227,16 +284,6 @@ const SortableTable = ({
 
     // Return outcome
     return (isTotal || isPartial);
-  }
-
-  function tableColumnMouseEnter(event) {
-    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.nextSibling, false)) {
-      setShowScrollRightButton(true);
-    }
-
-    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.previousSibling, false)) {
-      setShowScrollLeftButton(true);
-    }
   }
 
   return (
@@ -290,7 +337,9 @@ const SortableTable = ({
                     <div {...restHeaderProps}
                       className={wrapperClassNames}
                       style={style}
-                      onMouseEnter={(e) => tableColumnMouseEnter(e)}>
+                      onMouseEnter={(e) => handleTableColumnMouseEnter(e)}
+                      onMouseLeave={(e) => handleTableColumnMouseLeave(e)}
+                    >
                       <span {...column.getSortByToggleProps()} className={columnClassName}>
                         {column.render('Header')}
                       </span>
@@ -334,7 +383,8 @@ const SortableTable = ({
                       {...restCellProps}
                       style={style}
                       key={cellIndex}
-                      onMouseEnter={(e) => tableColumnMouseEnter(e)}
+                      onMouseEnter={(e) => handleTableColumnMouseEnter(e)}
+                      onMouseLeave={(e) => handleTableColumnMouseLeave(e)}
                     >
                       {cell.render('Cell')}
                     </div>
@@ -345,16 +395,28 @@ const SortableTable = ({
           })}
         </div>
       </div>
-      {showScrollLeftButton &&
-        <div role="button" tabIndex={0} className="scrollButton scrollButtonLeft" onClick={() => scrollTableLeft()}>
-          <div><i className="fa fa-arrow-circle-left fa-2x"></i></div>
-          <div>SCROLL</div>
-        </div>}
-      {showScrollRightButton &&
-        <div role="button" tabIndex={0} className="scrollButton scrollButtonRight" onClick={() => scrollTableRight()}>
-          <div><i className="fa fa-arrow-circle-right fa-2x"></i></div>
-          <div>SCROLL</div>
-        </div>}
+      <div role="button"
+        ref={scrollLeftButton}
+        tabIndex={0}
+        className="scrollButton scrollButtonLeft"
+        onPointerDown={() => startScrollTableLeft()}
+        onPointerUp={() => stopScrollTableLeft()}
+        onMouseEnter={() => showScrollLeftButton()}
+        onMouseLeave={() => hideScrollLeftButton()}>
+        <div><i className="fa fa-arrow-circle-left fa-2x"></i></div>
+        <div>SCROLL</div>
+      </div>
+      <div role="button"
+        ref={scrollRightButton}
+        tabIndex={0}
+        className="scrollButton scrollButtonRight"
+        onPointerDown={() => startScrollTableRight()}
+        onPointerUp={() => stopScrollTableRight()}
+        onMouseEnter={() => showScrollRightButton()}
+        onMouseLeave={() => hideScrollRightButton()}>
+        <div><i className="fa fa-arrow-circle-right fa-2x"></i></div>
+        <div>SCROLL</div>
+      </div>
       {shouldUsePagination &&
         <SimplePagination
           canPreviousPage={canPreviousPage}

@@ -127,7 +127,15 @@
   align-content: center;
   display: flex;
   flex-wrap: wrap;
-  position: absolute;
+  opacity: 0;
+  -webkit-transition: all 2s ease-out;
+  -moz-transition: all 2s ease-out;
+  -o-transition: all 2s ease-out;
+  -ms-transition: all 2s ease-out;
+  transition: all 2s ease-out;
+  position: -webkit-sticky;
+  position: sticky;
+  bottom:50%;
 
   div {
     flex: 0 0 100%;
@@ -135,14 +143,21 @@
   }
 }
 
+.unhide {
+  -webkit-transition: all 1s ease-in;
+  -moz-transition: all 1s ease-in;
+  -o-transition: all 1s ease-in;
+  -ms-transition: all 1s ease-in;
+  transition: all 1s ease-in;
+  opacity: 100;
+}
+
 .scrollButtonLeft {
-  top: 50%;
-  left: -50px;
+  float:left;
 }
 
 .scrollButtonRight {
-  top: 50%;
-  right: -50px;
+  float: right;
 }
 
 .dropdown-wrapper {
