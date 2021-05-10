@@ -2,5 +2,5 @@
   "high": true,
   "pass-enoaudit": true,
   "retry-count": 20,
-  "allowlist": ["xml-crypto"]
+  "allowlist": ["xml-crypto", "underscore", "url-parse"]
 }

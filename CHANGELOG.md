@@ -7,14 +7,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v6.0.0] - 2021-05-03
+
 ## Breaking Changes
 
-This version of the dashboard requires Cumulus API 7.2.1-alpha.0
+This version of the dashboard requires Cumulus API `v8.1.0`
+
+## All Changes
 
 ### Fixed
 
 - **CUMULUS-2449**
   - Fixes issue where collections with forward slash in version name were not displayed
+  
+_ **CUMULUS-2425**
+  - Fixes graph display for failed execution steps
 
 ### Added
 
@@ -37,6 +44,9 @@ This version of the dashboard requires Cumulus API 7.2.1-alpha.0
     message which has useful information to show the user.
   - Upgrades Cypress testing software to 7.0.1
   - Refactors home page and adds a new section header
+
+- **CUMULUS-2467**
+  - Update to footer layout to include NASA privacy links to help move Cumulus into compliance with other EED products
 
 ## [v5.0.0] - 2021-03-23
 
@@ -77,6 +87,11 @@ This version of the dashboard requires Cumulus API 7.0.0
 
 - **CUMULUS-2430**
   - Overview KPI status cards: Change styling to new design
+
+- **CUMULUS-2056**
+  - Added Events link to Details section of Executions page
+  - On Events tab of Execution page, highlighted in the red the failed tasks
+  - On Events tab of Execution page, made tasks expandable to show event details
 
 ### Added
 
@@ -878,7 +893,8 @@ Fix for serving the dashboard through the Cumulus API.
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
 
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v5.0.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v6.0.0...HEAD
+[v6.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v5.0.0...v6.0.0
 [v5.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v4.0.0...v5.0.0
 [v4.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v3.0.0...v4.0.0
 [v3.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v2.0.0...v3.0.0

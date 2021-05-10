@@ -833,12 +833,6 @@ a:active {
   text-align: center;
 }
 
-.api__version,.dashboard__version{
-  font-weight: 400;
-  color: $white;
-  padding: 10px 0 2px 0;
-}
-
 .api__warning {
   /*color: $error-red;*/
   color: $white;
@@ -862,4 +856,51 @@ a:active {
     left: -1.5em;
     top: 0em;
   }
+}
+
+.footer__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  color: $white;
+}
+
+.footer__links, .footer__version, .footer__opensource {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+  div {
+    display: flex;
+    padding: 0.5em;
+    margin-right: 1em;
+    a {
+      color: $white;
+    }
+  }
+}
+
+.footer__links {
+  div {
+    a {
+      text-decoration: underline;
+    }
+  }
+}
+
+.footer__version {
+  justify-content: center;
+  div {
+    justify-content: space-evenly;
+  }
+}
+
+.footer__opensource {
+  justify-content: flex-end;
+}
+
+.dashboard__version, .api__version {
+  background-color: darken($ocean-blue, 10%);
+  border: 1px solid darken($ocean-blue, 13%);
+  border-radius: .5em;
 }
