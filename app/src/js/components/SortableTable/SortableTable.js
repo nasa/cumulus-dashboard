@@ -399,8 +399,8 @@ const SortableTable = ({
         ref={scrollLeftButton}
         tabIndex={0}
         className="scrollButton scrollButtonLeft"
-        onPointerDown={() => startScrollTableLeft()}
-        onPointerUp={() => stopScrollTableLeft()}
+        onMouseDown={() => startScrollTableLeft()}
+        onMouseUp={() => stopScrollTableLeft()}
         onMouseEnter={() => showScrollLeftButton()}
         onMouseLeave={() => hideScrollLeftButton()}>
         <div><i className="fa fa-arrow-circle-left fa-2x"></i></div>
@@ -410,8 +410,8 @@ const SortableTable = ({
         ref={scrollRightButton}
         tabIndex={0}
         className="scrollButton scrollButtonRight"
-        onPointerDown={() => startScrollTableRight()}
-        onPointerUp={() => stopScrollTableRight()}
+        onMouseDown={() => startScrollTableRight()}
+        onMouseUp={() => stopScrollTableRight()}
         onMouseEnter={() => showScrollRightButton()}
         onMouseLeave={() => hideScrollRightButton()}>
         <div><i className="fa fa-arrow-circle-right fa-2x"></i></div>

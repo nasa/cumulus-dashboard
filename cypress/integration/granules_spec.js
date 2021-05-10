@@ -701,13 +701,46 @@ describe('Dashboard Granules Page', () => {
       cy.get('@modal').contains('div', 'Error');
     });
 
-    it.only('should display a SCROLL button on the right side of the list when columns are not visible to the right', () => {
+    it('should scroll show/hide scroll buttons when last visible columns are hovered over', () => {
+      cy.viewport(1300, 1000);
       cy.visit('/granules?limit=20');
 
-      cy.get('.scrollButton .scrollButtonRight').click({ force: true });
-      // cy.get('.scrollButtonRight > div:nth-child(2)').trigger('keydown', { keycode: 192 });
-      // cy.wait(10000);
-      // cy.get('.scrollButtonRight > div:nth-child(2)').trigger('keyup', { keycode: 192 });
-    });  
+      // ensure window has focus
+      cy.get('body').click();
+
+      // Validate Scroll Right button is visible when hovering over the last completely visible column
+      cy.get('.tr:nth-child(1) > .td:nth-child(8)').trigger('mouseover');
+      cy.get('.scrollButtonRight').should('be.visible');
+
+      // Validate moving the mouse off the last visible column results in the scroll right button hiding
+      cy.get('.tr:nth-child(1) > .td:nth-child(8)').trigger('mouseout');
+      cy.get('.scrollButtonRight').should('not.be.visible');
+
+      // Validate clicking on the scroll right button results in the table scrolling to the right
+      cy.get('.scrollButtonRight').trigger('mouseover');
+      cy.get('.scrollButtonRight').trigger('mousedown', { button: 0 });
+      cy.wait(1000);
+      cy.get('.scrollButtonRight').trigger('mouseup', { button: 0 });
+      cy.get('.scrollButtonRight').trigger('mouseout');
+      cy.get('.scrollButtonRight').should('not.be.visible');
+
+      // cy.get('body').click();
+
+      // Validate Scroll Left button is visible when hovering over the last completely visible column on the left
+      cy.get('.tr:nth-child(1) > .td:nth-child(2)').trigger('mouseover');
+      cy.get('.scrollButtonLeft').should('be.visible');
+
+      // Validate moving the mouse off the last visible column on the right results in the scroll left button hiding
+      cy.get('.tr:nth-child(1) > .td:nth-child(2)').trigger('mouseout');
+      cy.get('.scrollButtonLeft').should('not.be.visible');
+
+      // Validate clicking on the scroll left button results in the table scrolling to the left
+      cy.get('.scrollButtonLeft').trigger('mouseover');
+      cy.get('.scrollButtonLeft').trigger('mousedown', { button: 0 });
+      cy.wait(1000);
+      cy.get('.scrollButtonLeft').trigger('mouseup', { button: 0 });
+      cy.get('.scrollButtonLeft').trigger('mouseout');
+      cy.get('.scrollButtonLeft').should('not.be.visible');
+    });
   });
 });
