@@ -11,6 +11,8 @@
   line-height: 1.6em;
   overflow-x: scroll;
   border-radius: 8px 8px 0px 0px;
+  scroll-behavior: smooth;
+  // transform: translate3d(0px, -200px, 0px);
 
   .content-fit {
     width: fit-content!important;
@@ -108,6 +110,43 @@
   & + .table--wrapper .table {
     border-radius: 0;
   }
+}
+
+.table--wrapper {
+  position: relative;
+}
+
+.scrollButton {
+  background-color: $ocean-blue;
+  color: white;
+  cursor: pointer;
+  height: 75px;
+  width: 75px;
+  border-radius: 50%;
+  align-items: center; 
+  align-content: center;
+  flex-wrap: wrap;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
+  position: -webkit-sticky;
+  position: sticky;
+  bottom:50%;
+
+  div {
+    flex: 0 0 100%;
+    text-align: center;
+  }
+}
+
+.scrollButtonLeft {
+  float:left;
+}
+
+.scrollButtonRight {
+  float: right;
 }
 
 .dropdown-wrapper {

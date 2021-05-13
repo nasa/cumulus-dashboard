@@ -700,5 +700,33 @@ describe('Dashboard Granules Page', () => {
       cy.get('.default-modal.batch-async-modal ').as('modal');
       cy.get('@modal').contains('div', 'Error');
     });
+
+    it('should scroll show/hide scroll buttons when last visible columns are hovered over', () => {
+      cy.viewport(1300, 1000);
+      cy.visit('/granules?limit=20');
+
+      // ensure window has focus
+      cy.get('body').click();
+
+      // Validate Scroll Right button is visible when hovering over the last completely visible column
+      // and can scroll and hide the scroll right button
+      cy.get('.tr:nth-child(1) > .td:nth-child(8)').trigger('mouseover');
+      cy.get('.scrollButtonRight').should('be.visible');
+      cy.get('.scrollButtonRight').trigger('mousedown', { button: 0 });
+      cy.wait(1000);
+      cy.get('.scrollButtonRight').trigger('mouseup', { button: 0 });
+      cy.get('.scrollButtonRight').trigger('mouseout');
+      cy.get('.scrollButtonRight').should('not.be.visible');
+
+      // Validate Scroll Left button is visible when hovering over the last completely visible column on the left
+      // and can scroll and hide the scroll right button
+      cy.get('.tr:nth-child(1) > .td:nth-child(2)').trigger('mouseover');
+      cy.get('.scrollButtonLeft').should('be.visible');
+      cy.get('.scrollButtonLeft').trigger('mousedown', { button: 0 });
+      cy.wait(1000);
+      cy.get('.scrollButtonLeft').trigger('mouseup', { button: 0 });
+      cy.get('.scrollButtonLeft').trigger('mouseout');
+      cy.get('.scrollButtonLeft').should('not.be.visible');
+    });
   });
 });

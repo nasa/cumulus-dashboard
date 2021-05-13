@@ -48,6 +48,9 @@ _ **CUMULUS-2425**
 - **CUMULUS-2467**
   - Update to footer layout to include NASA privacy links to help move Cumulus into compliance with other EED products
 
+- **CUMULUS-2506**
+  - Adds horizontal scroll buttons to tables improving accessibily
+
 ## [v5.0.0] - 2021-03-23
 
 ## Breaking Changes
