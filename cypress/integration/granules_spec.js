@@ -718,7 +718,6 @@ describe('Dashboard Granules Page', () => {
       cy.get('.scrollButtonRight').trigger('mouseout');
       cy.get('.scrollButtonRight').should('not.be.visible');
 
-
       // Validate Scroll Left button is visible when hovering over the last completely visible column on the left
       // and can scroll and hide the scroll right button
       cy.get('.tr:nth-child(1) > .td:nth-child(2)').trigger('mouseover');
@@ -728,7 +727,6 @@ describe('Dashboard Granules Page', () => {
       cy.get('.scrollButtonLeft').trigger('mouseup', { button: 0 });
       cy.get('.scrollButtonLeft').trigger('mouseout');
       cy.get('.scrollButtonLeft').should('not.be.visible');
-
     });
   });
 });

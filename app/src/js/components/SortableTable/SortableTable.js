@@ -221,35 +221,31 @@ const SortableTable = ({
   }
 
   function scrollTableRight() {
-    if(tableRef !== null && tableRef.current !== null) {
+    if (tableRef !== null && tableRef.current !== null) {
       tableRef.current.scrollLeft += 20;
     }
   }
 
   function startScrollTableRight() {
     rightScrollInterval = setInterval(scrollTableRight, 1);
-    showScrollRightButton();
   }
 
   function stopScrollTableRight() {
     clearInterval(rightScrollInterval);
-    hideScrollRightButton();
   }
 
   function scrollTableLeft() {
-    if(tableRef !== null && tableRef.current !== null) {
+    if (tableRef !== null && tableRef.current !== null) {
       tableRef.current.scrollLeft -= 20;
     }
   }
 
   function startScrollTableLeft() {
     leftScrollInterval = setInterval(scrollTableLeft, 1);
-    showScrollLeftButton();
   }
 
   function stopScrollTableLeft() {
     clearInterval(leftScrollInterval);
-    hideScrollLeftButton();
   }
 
   function handleLeftScrollButtonOnMouseLeave() {
@@ -263,38 +259,31 @@ const SortableTable = ({
   }
 
   function showScrollLeftButton(event) {
-    if (leftScrollButtonVisibility.display === 'none' && leftScrollButtonVisibility.opacity === 0) {
-      setLeftScrollButtonVisibility({ display: 'flex', opacity: 0 });
-      setTimeout(() => {
-        setLeftScrollButtonVisibility({ display: 'flex', opacity: 1 });
-      }, 10);
-    }
+    console.log('showLeft');
+    setLeftScrollButtonVisibility({ display: 'flex', opacity: leftScrollButtonVisibility.opacity });
+    setTimeout(() => {
+      setLeftScrollButtonVisibility({ display: 'flex', opacity: 1 });
+    }, 10);
   }
 
   function hideScrollLeftButton() {
-    if (leftScrollButtonVisibility.display === 'flex' && leftScrollButtonVisibility.opacity === 1) {
-      setLeftScrollButtonVisibility({ display: 'flex', opacity: 0 });
-      setTimeout(() => {
-        setLeftScrollButtonVisibility({ display: 'none', opacity: 0 });
-      }, 300);
+    if (leftScrollButtonVisibility.opacity === 1) {
+      setLeftScrollButtonVisibility({ display: leftScrollButtonVisibility.display, opacity: 0 });
+      setLeftScrollButtonVisibility({ display: 'none', opacity: 0 });
     }
   }
 
   function showScrollRightButton(event) {
-    if (rightScrollButtonVisibility.display === 'none' && rightScrollButtonVisibility.opacity === 0) {
-      setRightScrollButtonVisibility({ display: 'flex', opacity: 0 });
-      setTimeout(() => {
-        setRightScrollButtonVisibility({ display: 'flex', opacity: 1 });
-      }, 10);
-    }
+    setRightScrollButtonVisibility({ display: 'flex', opacity: rightScrollButtonVisibility.opacity });
+    setTimeout(() => {
+      setRightScrollButtonVisibility({ display: 'flex', opacity: 1 });
+    }, 10);
   }
 
   function hideScrollRightButton() {
-    if (rightScrollButtonVisibility.display === 'flex' && rightScrollButtonVisibility.opacity === 1) {
-      setRightScrollButtonVisibility({ display: 'flex', opacity: 0 });
-      setTimeout(() => {
-        setRightScrollButtonVisibility({ display: 'none', opacity: 0 });
-      }, 300);
+    if (rightScrollButtonVisibility.opacity === 1) {
+      setRightScrollButtonVisibility({ display: rightScrollButtonVisibility.display, opacity: 0 });
+      setRightScrollButtonVisibility({ display: 'none', opacity: 0 });
     }
   }
 
