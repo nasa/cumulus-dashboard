@@ -264,8 +264,6 @@ describe('Dashboard Executions Page', () => {
         .within(() => {
           cy.get('a').should('have.attr', 'href', `/executions/execution/${executionArn}/logs`);
         });
-
-      cy.contains('.heading--medium', 'Events').should('not.exist');
     });
 
     it('should show an execution graph for a single execution', () => {
