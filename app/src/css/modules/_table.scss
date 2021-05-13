@@ -125,14 +125,12 @@
   border-radius: 50%;
   align-items: center; 
   align-content: center;
-  display: flex;
   flex-wrap: wrap;
-  opacity: 0;
-  -webkit-transition: all 2s ease-out;
-  -moz-transition: all 2s ease-out;
-  -o-transition: all 2s ease-out;
-  -ms-transition: all 2s ease-out;
-  transition: all 2s ease-out;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
   position: -webkit-sticky;
   position: sticky;
   bottom:50%;
@@ -141,15 +139,6 @@
     flex: 0 0 100%;
     text-align: center;
   }
-}
-
-.unhide {
-  -webkit-transition: all 1s ease-in;
-  -moz-transition: all 1s ease-in;
-  -o-transition: all 1s ease-in;
-  -ms-transition: all 1s ease-in;
-  transition: all 1s ease-in;
-  opacity: 100;
 }
 
 .scrollButtonLeft {

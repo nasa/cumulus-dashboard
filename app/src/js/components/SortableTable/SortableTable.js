@@ -76,6 +76,8 @@ const SortableTable = ({
     []
   );
   const [fitColumn, setFitColumn] = useState({});
+  const [leftScrollButtonVisibility, setLeftScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
+  const [rightScrollButtonVisibility, setRightScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
 
   let rightScrollInterval;
   let leftScrollInterval;
@@ -219,7 +221,9 @@ const SortableTable = ({
   }
 
   function scrollTableRight() {
-    tableRef.current.scrollLeft += 20;
+    if(tableRef !== null && tableRef.current !== null) {
+      tableRef.current.scrollLeft += 20;
+    }
   }
 
   function startScrollTableRight() {
@@ -233,7 +237,9 @@ const SortableTable = ({
   }
 
   function scrollTableLeft() {
-    tableRef.current.scrollLeft -= 20;
+    if(tableRef !== null && tableRef.current !== null) {
+      tableRef.current.scrollLeft -= 20;
+    }
   }
 
   function startScrollTableLeft() {
@@ -246,20 +252,50 @@ const SortableTable = ({
     hideScrollLeftButton();
   }
 
+  function handleLeftScrollButtonOnMouseLeave() {
+    hideScrollLeftButton();
+    clearInterval(leftScrollInterval);
+  }
+
+  function handleRightScrollbuttonOnMouseLeave() {
+    hideScrollRightButton();
+    clearInterval(rightScrollInterval);
+  }
+
   function showScrollLeftButton(event) {
-    scrollLeftButton.current.className = 'scrollButton scrollButtonLeft unhide';
+    if (leftScrollButtonVisibility.display === 'none' && leftScrollButtonVisibility.opacity === 0) {
+      setLeftScrollButtonVisibility({ display: 'flex', opacity: 0 });
+      setTimeout(() => {
+        setLeftScrollButtonVisibility({ display: 'flex', opacity: 1 });
+      }, 10);
+    }
   }
 
   function hideScrollLeftButton() {
-    scrollLeftButton.current.className = 'scrollButton scrollButtonLeft';
+    if (leftScrollButtonVisibility.display === 'flex' && leftScrollButtonVisibility.opacity === 1) {
+      setLeftScrollButtonVisibility({ display: 'flex', opacity: 0 });
+      setTimeout(() => {
+        setLeftScrollButtonVisibility({ display: 'none', opacity: 0 });
+      }, 300);
+    }
   }
 
   function showScrollRightButton(event) {
-    scrollRightButton.current.className = 'scrollButton scrollButtonRight unhide';
+    if (rightScrollButtonVisibility.display === 'none' && rightScrollButtonVisibility.opacity === 0) {
+      setRightScrollButtonVisibility({ display: 'flex', opacity: 0 });
+      setTimeout(() => {
+        setRightScrollButtonVisibility({ display: 'flex', opacity: 1 });
+      }, 10);
+    }
   }
 
   function hideScrollRightButton() {
-    scrollRightButton.current.className = 'scrollButton scrollButtonRight';
+    if (rightScrollButtonVisibility.display === 'flex' && rightScrollButtonVisibility.opacity === 1) {
+      setRightScrollButtonVisibility({ display: 'flex', opacity: 0 });
+      setTimeout(() => {
+        setRightScrollButtonVisibility({ display: 'none', opacity: 0 });
+      }, 300);
+    }
   }
 
   function checkInView(container, element, partial) {
@@ -399,10 +435,14 @@ const SortableTable = ({
         ref={scrollLeftButton}
         tabIndex={0}
         className="scrollButton scrollButtonLeft"
+        style={{
+          opacity: leftScrollButtonVisibility.opacity,
+          display: leftScrollButtonVisibility.display
+        }}
         onMouseDown={() => startScrollTableLeft()}
         onMouseUp={() => stopScrollTableLeft()}
         onMouseEnter={() => showScrollLeftButton()}
-        onMouseLeave={() => hideScrollLeftButton()}>
+        onMouseLeave={() => handleLeftScrollButtonOnMouseLeave()}>
         <div><i className="fa fa-arrow-circle-left fa-2x"></i></div>
         <div>SCROLL</div>
       </div>
@@ -410,10 +450,14 @@ const SortableTable = ({
         ref={scrollRightButton}
         tabIndex={0}
         className="scrollButton scrollButtonRight"
+        style={{
+          opacity: rightScrollButtonVisibility.opacity,
+          display: rightScrollButtonVisibility.display
+        }}
         onMouseDown={() => startScrollTableRight()}
         onMouseUp={() => stopScrollTableRight()}
         onMouseEnter={() => showScrollRightButton()}
-        onMouseLeave={() => hideScrollRightButton()}>
+        onMouseLeave={() => handleRightScrollbuttonOnMouseLeave()}>
         <div><i className="fa fa-arrow-circle-right fa-2x"></i></div>
         <div>SCROLL</div>
       </div>
