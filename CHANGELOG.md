@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- **CUMULUS-2506**
+  - Adds horizontal scroll buttons to tables improving accessibily
+
+- **CUMULUS-2505**
+  - Update column show/hide component with new styling and "reset to default interaction for each table
+
 ## [v6.0.0] - 2021-05-03
 
 ## Breaking Changes
@@ -47,9 +55,6 @@ _ **CUMULUS-2425**
 
 - **CUMULUS-2467**
   - Update to footer layout to include NASA privacy links to help move Cumulus into compliance with other EED products
-
-- **CUMULUS-2506**
-  - Adds horizontal scroll buttons to tables improving accessibily
 
 ## [v5.0.0] - 2021-03-23
 
