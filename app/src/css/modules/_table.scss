@@ -182,36 +182,92 @@
 
 .table__filters {
   &--wrapper {
-    display: flex;
     flex-direction: column;
     background: $white;
-    padding: 2em;
+    padding: 0.5em 2em 2em 2em;
     margin: 1em 0;
     box-shadow: $shadow__default;
+  }
+
+  &--header {
+    display: flex;
+    flex-direction: column;
+    border-bottom-style: solid;
+    border-bottom-width: thin;
+    border-bottom-color: $black;
+    margin-bottom: 15px;
+  }
+
+  &--header-title {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &--header-title-text {
+    display: flex;
+    font-weight: 700;
+  }
+
+  &--header-title-close {
+    display: flex;
+    cursor: pointer;
+
+    &:after {
+      color: $black;
+      position: absolute;
+      font-family: 'FontAwesome';
+      content: '\f00d';
+      font-weight: 600;
+      // left: 10px;
+    }
+  }
+
+  &--header-subtitle {
+    padding-bottom: 15px;
+  }
+
+  &--checkboxes {
+    -ms-box-orient: horizontal;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding-bottom: 15px;
+  }
+
+  &--footer {
+    display: flex;
+    justify-content: space-between;
   }
 
   &--filter {
     display: flex;
     align-items: center;
+    width: 250px;
+    padding-top: 15px;
 
     label {
-      margin: 0 .5em;
+      margin: 0 0.5em;
     }
   }
 }
 
 .group-action--wrapper {
   background-color: $white;
-  padding: 1em 1em .4em 1em;
+  padding: 1em 1em 0.4em 1em;
   border: 1px solid $border-grey;
   box-shadow: $shadow__default;
 
   h4 {
-    font-size: .86em;
+    font-size: 0.86em;
   }
 
   p {
-    font-size: .86em;
+    font-size: 0.86em;
     padding-bottom: 1.25em;
   }
 }

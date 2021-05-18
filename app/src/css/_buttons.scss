@@ -690,14 +690,56 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
         color: $white;
         position: absolute;
         font-family: 'FontAwesome';
-        content: '\f0b0';
+        content: '\f06e';
         font-weight: 900;
         left: 10px;
-
       }
 
       &:hover {
         background-color: $light-green;
+      }
+
+      &__expanded {
+        background-color: darken($light-green, 13%);
+
+        &:hover {
+          background-color: darken($light-green, 13%);
+        }
+      }
+    }
+
+    &__reset-filter {
+      background-color: $grey;
+      margin-right: 15px;
+
+      &:before {
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        content: '\f057';
+        font-weight: 900;
+        left: 10px;
+      }
+
+      &:hover {
+        background-color: darken($grey, 13%);
+      }
+    }
+
+    &__apply-filter {
+      background-color: $light-green;
+
+      &:before {
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        content: '\f0c7';
+        font-weight: 900;
+        left: 10px;
+      }
+
+      &:hover {
+        background-color: darken($light-green, 13%);
       }
     }
 

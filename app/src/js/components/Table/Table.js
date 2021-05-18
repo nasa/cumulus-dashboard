@@ -61,6 +61,7 @@ const List = ({
   const [toggleColumnOptions, setToggleColumnOptions] = useState({
     onChange: noop,
     hiddenColumns: initialHiddenColumns,
+    setHiddenColumns: noop
   });
 
   const { bulkActionError, completedBulkActions } = bulkActionMeta;
@@ -189,7 +190,7 @@ const List = ({
       >
         {children}
         <ListFilters>
-          <TableFilters columns={tableColumns} {...toggleColumnOptions} />
+          <TableFilters columns={tableColumns} {...toggleColumnOptions} initialHiddenColumns={initialHiddenColumns} />
         </ListFilters>
       </ListActions>
       <div className="list-view">
