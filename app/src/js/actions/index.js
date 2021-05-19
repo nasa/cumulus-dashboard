@@ -16,6 +16,7 @@ import apiGatewaySearchTemplate from './actions-metrics/apiGatewaySearch';
 import apiLambdaSearchTemplate from './actions-metrics/apiLambdaSearch';
 import teaLambdaSearchTemplate from './actions-metrics/teaLambdaSearch';
 import s3AccessSearchTemplate from './actions-metrics/s3AccessSearch';
+import searchIndex from './actions-metrics/searchIndex';
 import * as types from './types';
 import { historyPushWithQueryParams } from '../utils/url-helper';
 
@@ -464,7 +465,7 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
         type: types.DIST_APIGATEWAY,
         skipAuth: true,
         method: 'POST',
-        url: `${esRoot}/_search/`,
+        url: `${esRoot}/${searchIndex('DistApiGateway', stackName)}`,
         headers: authHeader(),
         data: JSON.parse(apiGatewaySearchTemplate(stackName, startTime, endTime))
       }
@@ -485,7 +486,7 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
         type: types.DIST_API_LAMBDA,
         skipAuth: true,
         method: 'POST',
-        url: `${esRoot}/_search/`,
+        url: `${esRoot}/${searchIndex('DistApiLambda', stackName)}`,
         headers: authHeader(),
         data: JSON.parse(apiLambdaSearchTemplate(stackName, startTime, endTime))
       }
@@ -506,7 +507,7 @@ export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
         type: types.DIST_TEA_LAMBDA,
         skipAuth: true,
         method: 'POST',
-        url: `${esRoot}/_search/`,
+        url: `${esRoot}/${searchIndex('TEALambda', stackName)}`,
         headers: authHeader(),
         data: JSON.parse(teaLambdaSearchTemplate(stackName, startTime, endTime))
       }
@@ -526,7 +527,7 @@ export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
         type: types.DIST_S3ACCESS,
         skipAuth: true,
         method: 'POST',
-        url: `${esRoot}/_search/`,
+        url: `${esRoot}/${searchIndex('DistS3Access', stackName)}`,
         headers: authHeader(),
         data: JSON.parse(s3AccessSearchTemplate(stackName, startTime, endTime))
       }
