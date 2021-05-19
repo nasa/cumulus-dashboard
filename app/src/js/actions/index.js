@@ -12,10 +12,10 @@ import { getCollectionId, collectionNameVersion } from '../utils/format';
 import { fetchCurrentTimeFilters } from '../utils/datepicker';
 import log from '../utils/log';
 import { authHeader } from '../utils/basic-auth';
-import apiGatewaySearchTemplate from './action-config/apiGatewaySearch';
-import apiLambdaSearchTemplate from './action-config/apiLambdaSearch';
-import teaLambdaSearchTemplate from './action-config/teaLambdaSearch';
-import s3AccessSearchTemplate from './action-config/s3AccessSearch';
+import apiGatewaySearchTemplate from './actions-metrics/apiGatewaySearch';
+import apiLambdaSearchTemplate from './actions-metrics/apiLambdaSearch';
+import teaLambdaSearchTemplate from './actions-metrics/teaLambdaSearch';
+import s3AccessSearchTemplate from './actions-metrics/s3AccessSearch';
 import * as types from './types';
 import { historyPushWithQueryParams } from '../utils/url-helper';
 
