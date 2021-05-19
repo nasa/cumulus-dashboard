@@ -78,10 +78,12 @@ const TableFilters = ({ columns = [], setHiddenColumns, hiddenColumns = [], init
                 <div>* Sets back to default</div>
               </div>
               <div>
-                <button className="button button--small button__reset-filter"
-                  onClick={() => handleResetHiddenColumns()}>
-                  Reset *
-                </button>
+                {initialHiddenColumns &&
+                  <button className="button button--small button__reset-filter"
+                    onClick={() => handleResetHiddenColumns()}>
+                    Reset <span className="caption">*</span>
+                  </button>
+                }
                 <button
                   className="button button--small button__apply-filter"
                   onClick={() => handleApplyHiddenColumns()}>

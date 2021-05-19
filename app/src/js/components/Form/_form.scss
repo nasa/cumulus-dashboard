@@ -53,7 +53,7 @@ input[type="checkbox"], input[type="radio"] {
   left: 0;
   height: 20px;
   width: 20px;
-  background-color: #eee;
+  background-color: $light-grey;
 
   &:after {
     content: "";
@@ -63,7 +63,7 @@ input[type="checkbox"], input[type="radio"] {
 }
 
 .checkmark--wrapper:hover input ~ .checkmark {
-  background-color: #ccc;
+  background-color: $lightest-grey;
 }
 
 .checkmark--wrapper input:checked ~ .checkmark {

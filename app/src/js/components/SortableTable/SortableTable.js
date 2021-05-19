@@ -323,7 +323,8 @@ const SortableTable = ({
             <TableFilters columns={tableColumns}
               setHiddenColumns={setHiddenColumns}
               hiddenColumns={hiddenColumns}
-              resetHiddenColumns={resetHiddenColumns} />
+              resetHiddenColumns={resetHiddenColumns}
+              initialHiddenColumns={initialHiddenColumns} />
           }
           {legend}
         </ListFilters>}
