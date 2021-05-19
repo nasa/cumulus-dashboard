@@ -52,13 +52,6 @@ export const apiLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpoc
         },
         {
           "match_phrase": {
-            "_index": {
-              "query": "${prefix}-cloudwatch*"
-            }
-          }
-        },
-        {
-          "match_phrase": {
             "logGroup": {
               "query": "/aws/lambda/${prefix}-ApiDistribution"
             }

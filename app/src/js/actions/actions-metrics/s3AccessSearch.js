@@ -52,13 +52,6 @@ export const s3AccessSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpoch
         },
         {
           "match_phrase": {
-            "_index": {
-              "query": "${prefix}-s3*"
-            }
-          }
-        },
-        {
-          "match_phrase": {
             "operation": {
               "query": "REST.GET.OBJECT"
             }

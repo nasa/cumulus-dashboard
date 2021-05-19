@@ -66,13 +66,6 @@ export const apiGatewaySearchTemplate = (prefix, startTimeEpochMilli, endTimeEpo
         },
         {
           "match_phrase": {
-            "_index": {
-              "query": "${prefix}-cloudwatch*"
-            }
-          }
-        },
-        {
-          "match_phrase": {
             "logGroup": {
               "query": "\\"API\\\\-Gateway\\\\-Execution*\\""
             }
