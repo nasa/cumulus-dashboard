@@ -102,7 +102,7 @@ const SortableTable = ({
     gotoPage,
     nextPage,
     previousPage,
-    toggleHideColumn
+    setHiddenColumns
   } = useTable(
     {
       data,
@@ -179,11 +179,15 @@ const SortableTable = ({
   useEffect(() => {
     if (typeof getToggleColumnOptions === 'function') {
       getToggleColumnOptions({
-        onChange: toggleHideColumn,
+        setHiddenColumns,
         hiddenColumns
       });
     }
-  }, [getToggleColumnOptions, hiddenColumns, toggleHideColumn]);
+  }, [getToggleColumnOptions, hiddenColumns, setHiddenColumns]);
+
+  function resetHiddenColumns() {
+    setHiddenColumns(initialHiddenColumns);
+  }
 
   function handleDoubleClick(id, header, originalWidth) {
     setFitColumn({
@@ -316,7 +320,11 @@ const SortableTable = ({
       {(includeFilters || legend) &&
         <ListFilters>
           {includeFilters &&
-            <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
+            <TableFilters columns={tableColumns}
+              setHiddenColumns={setHiddenColumns}
+              hiddenColumns={hiddenColumns}
+              resetHiddenColumns={resetHiddenColumns}
+              initialHiddenColumns={initialHiddenColumns} />
           }
           {legend}
         </ListFilters>}
