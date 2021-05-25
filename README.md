@@ -22,24 +22,34 @@ Other pages:
 
 The dashboard is populated from data retrieved from the Cumulus API. The environment for the Cumulus API must be predetermined and set before the dashboard can be built and deployed. The information needed to configure the dashboard is found in `app/src/js/config/config.js`, but it is generally preferred to set environmental variables overriding the default values during the build process.
 
-The following environment variables override the default values.
+Setting the following environment variables can override the default values.
 
 | Env Name | Description | Default |
-| -------- | ----------- | -------- |
+|----------|-------------|---------|
 | APIROOT | The API URL. This must be set by the user. | *example.com* |
-| AUTH_METHOD | The type of authorization method protecting the Cumulus API. [launchpad or earthdata] | *earthdata*  |
-| AWS\_REGION | Region in which Cumulus API is running. | *us-west-2*  |
+| AUTH_METHOD | The type of authorization method protecting the Cumulus API. [launchpad or earthdata] | *earthdata*   |
+| AWS\_REGION | Region in which Cumulus API is running. | *us-west-2*   |
 | DAAC\_NAME | An identifier: e.g. LPDAAC, | *Local* |
 | ENABLE\_RECOVERY | If true, adds recovery options to the granule and collection pages. | *false* |
+| HIDE\_PDR | Whether to hide (or show) the PDR menu. | *true* |
+| LABELS | Choose `gitc` or `daac` localization. | *daac* |
+| STAGE | Identifier displayed at top of dashboard page: e.g. PROD, UAT | *development* |
+
+ Environment options for metrics configuration.
+
+| Env Name | Description | Default |
+| -----|----|---- |
 | ESROOT | \<optional\> Should point to an Elasticsearch endpoint. Must be set for distribution metrics to be displayed. | |
 | ES\_PASSWORD | \<optional\> Elasticsearch password,needed when protected by basic authorization | |
 | ES\_USER | \<optional\> Elasticsearch username, needed when protected by basic authorization | |
-| HIDE\_PDR | Whether to hide (or show) the PDR menu. | *true* |
+| ES\_CLOUDWATCH\_INDEX\_PATTERN | \<optional\> The Elasticsearch index pattern to find cloudwatch events. e.g. `<daac>-cloudwatch-cumulus-<env>-*` | |
+| ES\_DISTRIBUTION\_INDEX\_PATTERN | \<optional\> The Elasticsearch index pattern to find s3 access log distribution events. e.g. `<daac>-distribution-<env>-*` | |
 | KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set to examine distribution metrics details. | |
-| LABELS | Choose `gitc` or `daac` localization. | *daac* |
-| SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from Cumulus Distribution API.| *false* |
+| KIBANA\_CLOUDWATCH\_UUID | \<optional\> The Kibana ID for the index pattern that matches the ES\_CLOUDWATCH\_INDEX\_PATTERN. | |
+| KIBANA\_DISTRIBUTION\_UUID | \<optional\> The Kibana ID for the index pattern that matches the ES\_DISTRIBUTION\_INDEX\_PATTERN. | |
+| SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from Cumulus Distribution API. | *false* |
 | SHOW\_TEA\_METRICS | \<optional\> Display metrics from Thin Egress Application (TEA). | *true* |
-| STAGE | Identifier displayed at top of dashboard page: e.g. PROD, UAT | *development* |
+
 
 ## Quick start
 

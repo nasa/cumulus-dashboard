@@ -20,7 +20,7 @@ import {
 const cumulusInstanceMeta = { stackName: 'cumulus-stack' };
 
 const startDateString = '2020-02-20T17:43:26.281Z';
-const endDateString = '2020-02-21T17:43:26.281Z'
+const endDateString = '2020-02-21T17:43:26.281Z';
 
 test.beforeEach(() => {
   _config.kibanaRoot = 'http://example.com';
