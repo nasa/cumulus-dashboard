@@ -47,6 +47,8 @@ Setting the following environment variables can override the default values.
 | KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set to examine distribution metrics details. | |
 | KIBANA\_CLOUDWATCH\_UUID | \<optional\> The Kibana ID for the index pattern that matches the ES\_CLOUDWATCH\_INDEX\_PATTERN. | |
 | KIBANA\_DISTRIBUTION\_UUID | \<optional\> The Kibana ID for the index pattern that matches the ES\_DISTRIBUTION\_INDEX\_PATTERN. | |
+| KIBANA\_GRANULES\_UUID | \<optional\> The Kibana ID for the index pattern that matches `<daac>-granules-<env>-*`. | |
+| KIBANA\_SECURITY\_TENANT | \<optional\> The Kibana security tenant for your NGAP account. | |
 | SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from Cumulus Distribution API. | *false* |
 | SHOW\_TEA\_METRICS | \<optional\> Display metrics from Thin Egress Application (TEA). | *true* |
 

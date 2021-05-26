@@ -21,7 +21,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - To configure Metrics with Kibana integration, new environmental varaibles are needed.
     + KIBANA\_CLOUDWATCH\_UUID
     + KIBANA\_DISTRIBUTION\_UUID
-
+    + KIBANA\_GRANULES\_UUID
+    + KIBANA\_SECURITY\_TENANT
 
 ## [v6.0.0] - 2021-05-03
 

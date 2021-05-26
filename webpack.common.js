@@ -153,6 +153,8 @@ const CommonConfig = {
         KIBANAROOT: config.kibanaRoot,
         KIBANA_CLOUDWATCH_UUID: config.kibanaCloudwatchUUID,
         KIBANA_DISTRIBUTION_UUID: config.kibanaDistributionUUID,
+        KIBANA_GRANULES_UUID: config.kibanaGranulesUUID,
+        KIBANA_SECURITY_TENANT: config.kibanaSecurityTenant,
         ESROOT: config.esRoot,
         ES_CLOUDWATCH_INDEX_PATTERN: config.esCloudwatchIndexPattern,
         ES_DISTRIBUTION_INDEX_PATTERN: config.esDistributionIndexPattern,

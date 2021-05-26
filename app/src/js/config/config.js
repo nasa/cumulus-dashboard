@@ -14,6 +14,8 @@ const config = {
   kibanaRoot: process.env.KIBANAROOT || '',
   kibanaCloudwatchUUID: process.env.KIBANA_CLOUDWATCH_UUID || '',
   kibanaDistributionUUID: process.env.KIBANA_DISTRIBUTION_UUID || '',
+  kibanaGranulesUUID: process.env.KIBANA_GRANULES_UUID || '',
+  kibanaSecurityTenant: process.env.KIBANA_SECURITY_TENANT || '',
   esRoot: process.env.ESROOT || '',
   esCloudwatchIndexPattern: process.env.ES_CLOUDWATCH_INDEX_PATTERN || '',
   esDistributionIndexPattern: process.env.ES_DISTRIBUTION_INDEX_PATTERN || '',
