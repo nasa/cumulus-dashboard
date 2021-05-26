@@ -22,21 +22,55 @@ describe('Dashboard Granules Page', () => {
 
     it('should be able to toggle a column', () => {
       cy.visit('/granules');
-      cy.contains('.table__filters .button__filter', 'Show Column Filters').click();
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
       cy.get('.table__filters--collapse').should('be.visible');
 
-      cy.get('.table__filters--wrapper #recoveryStatus').click();
+      cy.contains('.table__filters--filter label', 'Recovery').find('span').click();
+      cy.get('.button__apply-filter').click();
       cy.get('.table .thead .tr .th').should('contain.text', 'Recovery');
 
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 12);
 
-      cy.get('.table__filters--wrapper #recoveryStatus').click();
+      cy.contains('.table__filters--filter label', 'Recovery').find('span').click();
+      cy.get('.button__apply-filter').click();
+      cy.get('.button__apply-filter').click();
       cy.get('.table .thead .tr .th').should('not.contain.text', 'Recovery');
 
-      cy.contains('.table__filters .button__filter', 'Hide Column Filters').click();
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
       cy.get('.table__filters--collapse').should('not.be.visible');
-      cy.contains('.table__filters .button__filter', 'Show Column Filters');
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns');
+    });
+
+    it('should reset columns initially displayed when the reset button is clicked', () => {
+      cy.visit('/granules');
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
+      cy.get('.table__filters--collapse').should('be.visible');
+
+      cy.contains('.table__filters--filter label', 'Recovery').find('span').click();
+      cy.contains('.table__filters--filter label', 'Status').find('span').click();
+      cy.contains('.table__filters--filter label', 'Execution').find('span').click();
+      cy.contains('.table__filters--filter label', 'Name').find('span').click();
+      cy.contains('.table__filters--filter label', 'Published').find('span').click();
+
+      cy.get('.button__apply-filter').click();
+
+      cy.get('.table .thead .tr .th').should('contain.text', 'Recovery');
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Status');
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Execution');
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Name');
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Published');
+
+      cy.get('.button__reset-filter').click();
+
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Recovery');
+      cy.get('.table .thead .tr .th').should('contain.text', 'Status');
+      cy.get('.table .thead .tr .th').should('contain.text', 'Execution');
+      cy.get('.table .thead .tr .th').should('contain.text', 'Name');
+      cy.get('.table .thead .tr .th').should('contain.text', 'Published');
+
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
+      cy.get('.table__filters--collapse').should('not.be.visible');
     });
 
     it('should display all granules in table with correct columns', () => {

@@ -55,8 +55,8 @@ test('Renders table filters with hidden columns unchecked', t => {
 
   t.is(filters.length, 4);
 
-  t.is(filters.find('input#name').props().checked, true);
-  t.is(filters.find('input#title').props().checked, false);
-  t.is(filters.find('input#company').props().checked, true);
-  t.is(filters.find('input#startDate').props().checked, false);
+  t.is(filters.find('input#chk_name').props().checked, true);
+  t.is(filters.find('input#chk_title').props().checked, false);
+  t.is(filters.find('input#chk_company').props().checked, true);
+  t.is(filters.find('input#chk_startDate').props().checked, false);
 });

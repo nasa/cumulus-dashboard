@@ -50,20 +50,22 @@ describe('Dashboard Reconciliation Reports Page', () => {
     it('has a column toggle on the report list page', () => {
       cy.visit('/reconciliation-reports');
 
-      cy.contains('.table__filters .button__filter', 'Show Column Filters').click();
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
       cy.get('.table__filters--collapse').should('be.visible');
 
       tableColumnHeaders.forEach((header) => {
         cy.contains('.table .th', header).should('be.visible');
-        cy.contains('.table__filters--filter label', header).prev().click();
+        cy.contains('.table__filters--filter label', header).find('span').click();
+        cy.get('.button__apply-filter').click();
         cy.contains('.table .th', header).should('not.exist');
-        cy.contains('.table__filters--filter label', header).prev().click();
+        cy.contains('.table__filters--filter label', header).find('span').click();
+        cy.get('.button__apply-filter').click();
         cy.contains('.table .th', header).should('be.visible');
       });
 
-      cy.contains('.table__filters .button__filter', 'Hide Column Filters').click();
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
       cy.get('.table__filters--collapse').should('not.be.visible');
-      cy.contains('.table__filters .button__filter', 'Show Column Filters');
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns');
     });
 
     it('should update dropdown with label when visiting bookmarkable URL', () => {
@@ -225,17 +227,18 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.get('.table__filters');
       cy.get('.multicard__table').eq(0)
         .within(() => {
-          cy.contains('.table__filters .button__filter', 'Show Column Filters').click();
+          cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
           cy.get('.table__filters--collapse').should('be.visible');
           const filterLabel = 'Collection name';
 
           cy.contains('.table .th', filterLabel).should('be.visible');
-          cy.contains('.table__filters--filter label', filterLabel).prev().click();
+          cy.contains('.table__filters--filter label', filterLabel).find('span').click();
+          cy.get('.button__apply-filter').click();
           cy.contains('.table .th', filterLabel).should('not.exist');
 
-          cy.contains('.table__filters .button__filter', 'Hide Column Filters').click();
+          cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
           cy.get('.table__filters--collapse').should('not.be.visible');
-          cy.contains('.table__filters .button__filter', 'Show Column Filters');
+          cy.contains('.table__filters .button__filter', 'Show/Hide Columns');
         });
 
       /** Pagination */
