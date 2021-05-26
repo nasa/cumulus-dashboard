@@ -169,6 +169,10 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
     padding: .25em .75em;
   }
 
+  &--close, &--show {
+    margin: 1em 0 .75em 0;
+  }
+
   /*******ButtonGroup & Group CTA******/
   &--group-action {
     background-color: $light-green;

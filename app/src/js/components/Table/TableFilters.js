@@ -75,7 +75,7 @@ const TableFilters = ({ columns = [], setHiddenColumns, hiddenColumns = [], init
             </div>
             <div className="table__filters--footer">
               <div>
-                <div>* Sets back to default</div>
+                <div className="caption">* Sets back to default</div>
               </div>
               <div>
                 {initialHiddenColumns &&

@@ -212,6 +212,7 @@
   &--header-title-close {
     display: flex;
     cursor: pointer;
+    padding-top: 1em;
 
     &:after {
       color: $black;
@@ -243,6 +244,7 @@
   &--footer {
     display: flex;
     justify-content: space-between;
+    padding-top: 1em;
   }
 
   &--filter {
