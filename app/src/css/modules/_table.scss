@@ -192,9 +192,7 @@
   &--header {
     display: flex;
     flex-direction: column;
-    border-bottom-style: solid;
-    border-bottom-width: thin;
-    border-bottom-color: $black;
+    border-bottom: 1px solid $lightest-grey;
     margin-bottom: 15px;
   }
 

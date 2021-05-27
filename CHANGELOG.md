@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - **CUMULUS-2506**
+  - CSS and UI tweaks to padding/margin, width, and color/contrast
+
+- **CUMULUS-2506**
   - Adds horizontal scroll buttons to tables improving accessibily
 
 - **CUMULUS-2505**
