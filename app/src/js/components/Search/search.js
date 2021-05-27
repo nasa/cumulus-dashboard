@@ -87,7 +87,7 @@ const Search = ({
   }
 
   return (
-    <div>
+    <div className="search__box">
       {label && <label htmlFor="search" form={formID}>{label}</label>}
       <form className="search__wrapper form-group__element">
         <AsyncTypeahead
