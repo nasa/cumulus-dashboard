@@ -28,10 +28,10 @@ test.beforeEach((t) => {
 
 test('Each of the metrics actions will send a request to the correct ESROOT search endpoint', (t) => {
   const endpoints = [
-    { action: 'DIST_APIGATEWAY_INFLIGHT', dispatcher: getDistApiGatewayMetrics, searchPath: 'cumulus-stack-cloudwatch*' },
-    { action: 'DIST_API_LAMBDA_INFLIGHT', dispatcher: getDistApiLambdaMetrics, searchPath: 'cumulus-stack-cloudwatch*' },
-    { action: 'DIST_S3ACCESS_INFLIGHT', dispatcher: getDistS3AccessMetrics, searchPath: 'cumulus-stack-s3*' },
-    { action: 'DIST_TEA_LAMBDA_INFLIGHT', dispatcher: getTEALambdaMetrics, searchPath: 'cumulus-stack-cloudwatch*' },
+    { action: 'DIST_APIGATEWAY_INFLIGHT', dispatcher: getDistApiGatewayMetrics, searchPath: 'fakeESCloudwatchPattern*' },
+    { action: 'DIST_API_LAMBDA_INFLIGHT', dispatcher: getDistApiLambdaMetrics, searchPath: 'fakeESCloudwatchPattern*' },
+    { action: 'DIST_S3ACCESS_INFLIGHT', dispatcher: getDistS3AccessMetrics, searchPath: 'fakeESDistributionPattern*' },
+    { action: 'DIST_TEA_LAMBDA_INFLIGHT', dispatcher: getTEALambdaMetrics, searchPath: 'fakeESCloudwatchPattern*' },
   ];
 
   endpoints.forEach((e) => {
