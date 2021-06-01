@@ -44,7 +44,7 @@ Setting the following environment variables can override the default values.
 | ES\_USER |  Elasticsearch username, needed when protected by basic authorization. | |
 | ES\_CLOUDWATCH\_INDEX\_PATTERN |  The Elasticsearch index pattern to find cloudwatch events. e.g. `<daac>-cloudwatch-cumulus-<env>-*` | |
 | ES\_DISTRIBUTION\_INDEX\_PATTERN | The Elasticsearch index pattern to find s3 access log distribution events. e.g. `<daac>-distribution-<env>-*` | |
-| KIBANAROOT | \<optional\> Should point to a Kibana endpoint. | |
+| KIBANAROOT | \<optional\>  Points to a Kibana endpoint. | |
 | SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from the Cumulus Distribution API. | *false* |
 | SHOW\_TEA\_METRICS | \<optional\> Display metrics from the Thin Egress Application (TEA). | *true* |
 

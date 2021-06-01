@@ -11,20 +11,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Breaking Changes
 
 - **CUMULUS-2502**
-  - Changes required to connect the dashboard with Earthdata Metrics
-  - Metrics integration has been updated to allow manual configuration rather
+  - Configuration changes are required to continue connecting the dashboard with Earthdata Metrics
+  - Metrics integration has been updated to require manual configuration rather
     than by an assumed naming convention.  As such, new environmental variables
-    describing the Elasticsearch index patterns have been added as new required
-    values:
+    describing the Elasticsearch index patterns have been added (check with
+    your metrics provider for the exact values):
      + ES\_CLOUDWATCH\_INDEX\_PATTERN (Generally: `<daac>-cumulus-cloudwatch-<env>-*`)
      + ES\_DISTRIBUTION\_INDEX\_PATTERN (Generally: `<daac>-distribution-<env>-*`)
-    Check with your metrics provider for the exact values.
+  - Kibana links are changed. We no longer try to URLs that describe the
+    metrics' Elasicsearch results and instead return a simple link to the
+    configured Kibana root.  It is up to the operator to set the default
+    security tenant as well as default kibana index patterns.
+  -
+
+
 
 ### Changed
 
+- **CUMULUS-2502**
+  - Metrics ES searches have been updated to run against only the index
+    patterns provided, improving performance and saving resources.
+  - Documentation for metrics has been moved into its own table.
+  - Upgrade cypress testing framework to 7.3.0
+
 - **CUMULUS-2506**
   - Adds horizontal scroll buttons to tables improving accessibily
-
 - **CUMULUS-2505**
   - Update column show/hide component with new styling and "reset to default interaction for each table
 
@@ -55,9 +66,6 @@ _ **CUMULUS-2425**
   - Add step name to execution events
 
 ### Changed
-
-- **CUMULUS-2502**
-  - Upgrades cypress testing framework to 7.3.0
 
 - **CUMULUS-2282**
   - Adds component that displays errors returned from a configured metrics
