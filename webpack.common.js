@@ -163,7 +163,8 @@ const CommonConfig = {
         ENABLE_RECOVERY: config.enableRecovery,
         ES_USER: config.esUser,
         ES_PASSWORD: config.esPassword,
-        SERVED_BY_CUMULUS_API: config.servedByCumulusAPI
+        SERVED_BY_CUMULUS_API: config.servedByCumulusAPI,
+        SHOW_TEA_METRICS: config.showTeaMetrics
       }
     )
   ]
