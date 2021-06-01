@@ -35,22 +35,18 @@ Setting the following environment variables can override the default values.
 | LABELS | Choose `gitc` or `daac` localization. | *daac* |
 | STAGE | Identifier displayed at top of dashboard page: e.g. PROD, UAT | *development* |
 
- Environment options for metrics configuration.
+ Environment options to configure metrics displays. **All** of the below are optional configurations to display metrics on the Cumulus Dashboard.
 
 | Env Name | Description | Default |
 | -----|----|---- |
-| ESROOT | \<optional\> Should point to an Elasticsearch endpoint. Must be set for distribution metrics to be displayed. | |
-| ES\_PASSWORD | \<optional\> Elasticsearch password,needed when protected by basic authorization | |
-| ES\_USER | \<optional\> Elasticsearch username, needed when protected by basic authorization | |
-| ES\_CLOUDWATCH\_INDEX\_PATTERN | \<optional\> The Elasticsearch index pattern to find cloudwatch events. e.g. `<daac>-cloudwatch-cumulus-<env>-*` | |
-| ES\_DISTRIBUTION\_INDEX\_PATTERN | \<optional\> The Elasticsearch index pattern to find s3 access log distribution events. e.g. `<daac>-distribution-<env>-*` | |
-| KIBANAROOT | \<optional\> Should point to a Kibana endpoint. Must be set to examine distribution metrics details. | |
-| KIBANA\_CLOUDWATCH\_UUID | \<optional\> The Kibana ID for the index pattern that matches the ES\_CLOUDWATCH\_INDEX\_PATTERN. | |
-| KIBANA\_DISTRIBUTION\_UUID | \<optional\> The Kibana ID for the index pattern that matches the ES\_DISTRIBUTION\_INDEX\_PATTERN. | |
-| KIBANA\_GRANULES\_UUID | \<optional\> The Kibana ID for the index pattern that matches `<daac>-granules-<env>-*`. | |
-| KIBANA\_SECURITY\_TENANT | \<optional\> The Kibana security tenant for your NGAP account. | |
-| SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from Cumulus Distribution API. | *false* |
-| SHOW\_TEA\_METRICS | \<optional\> Display metrics from Thin Egress Application (TEA). | *true* |
+| ESROOT | Should point to an Elasticsearch endpoint. Must be set for distribution metrics to be displayed. | |
+| ES\_PASSWORD | Elasticsearch password, needed when protected by basic authorization. | |
+| ES\_USER |  Elasticsearch username, needed when protected by basic authorization. | |
+| ES\_CLOUDWATCH\_INDEX\_PATTERN |  The Elasticsearch index pattern to find cloudwatch events. e.g. `<daac>-cloudwatch-cumulus-<env>-*` | |
+| ES\_DISTRIBUTION\_INDEX\_PATTERN | The Elasticsearch index pattern to find s3 access log distribution events. e.g. `<daac>-distribution-<env>-*` | |
+| KIBANAROOT | \<optional\> Should point to a Kibana endpoint. | |
+| SHOW\_DISTRIBUTION\_API\_METRICS | \<optional\> Display metrics from the Cumulus Distribution API. | *false* |
+| SHOW\_TEA\_METRICS | \<optional\> Display metrics from the Thin Egress Application (TEA). | *true* |
 
 
 ## Quick start

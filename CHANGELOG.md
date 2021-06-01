@@ -12,18 +12,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-2502**
   - Changes required to connect the dashboard with Earthdata Metrics
-  - Metrics integration has been updated to work with manual configuration
-    rather than by an assumed naming convention.  As such, new environmental
-    variables describing the Elasticsearch index patterns have been added and
-    will need to be discovered and set before rebuilding the dashboard.
-     + ES\_CLOUDWATCH\_INDEX\_PATTERN
-     + ES\_DISTRIBUTION\_INDEX\_PATTERN
-
-  - To configure Metrics with Kibana integration, new environmental varaibles are needed.
-    + KIBANA\_CLOUDWATCH\_UUID
-    + KIBANA\_DISTRIBUTION\_UUID
-    + KIBANA\_GRANULES\_UUID
-    + KIBANA\_SECURITY\_TENANT
+  - Metrics integration has been updated to allow manual configuration rather
+    than by an assumed naming convention.  As such, new environmental variables
+    describing the Elasticsearch index patterns have been added as new required
+    values:
+     + ES\_CLOUDWATCH\_INDEX\_PATTERN (Generally: `<daac>-cumulus-cloudwatch-<env>-*`)
+     + ES\_DISTRIBUTION\_INDEX\_PATTERN (Generally: `<daac>-distribution-<env>-*`)
+    Check with your metrics provider for the exact values.
 
 ### Changed
 

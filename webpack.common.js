@@ -151,20 +151,16 @@ const CommonConfig = {
         HIDE_PDR: config.nav.exclude.PDRs,
         AUTH_METHOD: config.oauthMethod,
         KIBANAROOT: config.kibanaRoot,
-        KIBANA_CLOUDWATCH_UUID: config.kibanaCloudwatchUUID,
-        KIBANA_DISTRIBUTION_UUID: config.kibanaDistributionUUID,
-        KIBANA_GRANULES_UUID: config.kibanaGranulesUUID,
-        KIBANA_SECURITY_TENANT: config.kibanaSecurityTenant,
         ESROOT: config.esRoot,
         ES_CLOUDWATCH_INDEX_PATTERN: config.esCloudwatchIndexPattern,
         ES_DISTRIBUTION_INDEX_PATTERN: config.esDistributionIndexPattern,
-        SHOW_DISTRIBUTION_API_METRICS: config.showDistributionAPIMetrics,
-        BUCKET: config.graphicsPath,
-        ENABLE_RECOVERY: config.enableRecovery,
         ES_USER: config.esUser,
         ES_PASSWORD: config.esPassword,
-        SERVED_BY_CUMULUS_API: config.servedByCumulusAPI,
-        SHOW_TEA_METRICS: config.showTeaMetrics
+        SHOW_DISTRIBUTION_API_METRICS: config.showDistributionAPIMetrics,
+        SHOW_TEA_METRICS: config.showTeaMetrics,
+        BUCKET: config.graphicsPath,
+        ENABLE_RECOVERY: config.enableRecovery,
+        SERVED_BY_CUMULUS_API: config.servedByCumulusAPI
       }
     )
   ]
