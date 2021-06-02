@@ -18,13 +18,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     your metrics provider for the exact values):
      + ES\_CLOUDWATCH\_INDEX\_PATTERN (Generally: `<daac>-cumulus-cloudwatch-<env>-*`)
      + ES\_DISTRIBUTION\_INDEX\_PATTERN (Generally: `<daac>-distribution-<env>-*`)
-  - Kibana links are changed. We no longer try to URLs that describe the
-    metrics' Elasicsearch results and instead return a simple link to the
-    configured Kibana root.  It is up to the operator to set the default
-    security tenant as well as default kibana index patterns.
-  -
-
-
+  - Kibana links are changed. We no longer try to build URLs that describe the
+    metrics' Elasicsearch results. Instead, we now only return a simple link to
+    configured Kibana root.  It is up to the kibana user to interact with the
+    dashbaord, setting default security tenant and default kibana index
+    patterns. You can create kibana index patterns (or they may exist already)
+    to gather the cloudwatch logs sent to metrics with a similar patter to the
+    ES\_CLOUDWATCH\_INDEX\_PATTERN, and if you have configured s3 server access
+    logs, likewise use a pattern like the ES\_DISTRIBUTION\_INDEX\_PATTERN.
 
 ### Changed
 
