@@ -15,8 +15,8 @@ services:
       - APIROOT=http://localhost:5001
       - ENABLE_RECOVERY=true
       - ESROOT=http://example.com
-      - ES_CLOUDWATCH_INDEX_PATTERN=daac-cumulus-cloudwatch-env-*
-      - ES_DISTRIBUTION_INDEX_PATTERN=daac-distribution-env-*
+      - ES_CLOUDWATCH_TARGET_PATTERN=daac-cumulus-cloudwatch-env-*
+      - ES_DISTRIBUTION_TARGET_PATTERN=daac-distribution-env-*
       - HIDE_PDR=false
       - DAAC_NAME=local
       - STAGE=LOCALHOST-Development

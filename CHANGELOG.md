@@ -14,18 +14,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Configuration changes are required to continue connecting the dashboard with Earthdata Metrics
   - Metrics integration has been updated to require manual configuration rather
     than by an assumed naming convention.  As such, new environmental variables
-    describing the Elasticsearch index patterns have been added (check with
+    describing the Elasticsearch target patterns have been added (check with
     your metrics provider for the exact values):
-     + ES\_CLOUDWATCH\_INDEX\_PATTERN (Generally: `<daac>-cumulus-cloudwatch-<env>-*`)
-     + ES\_DISTRIBUTION\_INDEX\_PATTERN (Generally: `<daac>-distribution-<env>-*`)
+     + ES\_CLOUDWATCH\_TARGET\_PATTERN (Generally: `<daac>-cumulus-cloudwatch-<env>-*`)
+     + ES\_DISTRIBUTION\_TARGET\_PATTERN (Generally: `<daac>-distribution-<env>-*`)
   - Kibana links are changed. We no longer try to build URLs that describe the
     metrics' Elasicsearch results. Instead, we now only return a simple link to
     configured Kibana root.  It is up to the kibana user to interact with the
     dashbaord, setting default security tenant and default kibana index
-    patterns. You can create kibana index patterns (or they may exist already)
+    patterns. You can create kibana Index Patterns (or they may exist already)
     to gather the cloudwatch logs sent to metrics with a similar patter to the
-    ES\_CLOUDWATCH\_INDEX\_PATTERN, and if you have configured s3 server access
-    logs, likewise use a pattern like the ES\_DISTRIBUTION\_INDEX\_PATTERN.
+    ES\_CLOUDWATCH\_TARGET\_PATTERN, and if you have configured s3 server access
+    logs, likewise use a pattern like the ES\_DISTRIBUTION\_TARGET\_PATTERN.
 
 ### Changed
 
