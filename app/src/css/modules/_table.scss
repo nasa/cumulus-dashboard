@@ -192,9 +192,7 @@
   &--header {
     display: flex;
     flex-direction: column;
-    border-bottom-style: solid;
-    border-bottom-width: thin;
-    border-bottom-color: $black;
+    border-bottom: 1px solid $lightest-grey;
     margin-bottom: 15px;
   }
 
@@ -212,6 +210,7 @@
   &--header-title-close {
     display: flex;
     cursor: pointer;
+    padding-top: 1em;
 
     &:after {
       color: $black;
@@ -243,6 +242,7 @@
   &--footer {
     display: flex;
     justify-content: space-between;
+    padding-top: 1em;
   }
 
   &--filter {

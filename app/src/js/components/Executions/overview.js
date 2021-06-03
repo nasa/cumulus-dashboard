@@ -92,9 +92,9 @@ class ExecutionOverview extends React.Component {
               action={searchExecutions}
               clear={clearExecutionsSearch}
               paramKey="asyncOperationId"
-              label="Async Operation ID"
+              label="Search"
               labelKey="asyncOperationId"
-              placeholder="Search"
+              placeholder="Async Operation ID"
               searchKey="executions"
             />
             <ListFilters>
