@@ -29,12 +29,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+
 - **CUMULUS-2502**
   - Metrics ES searches have been updated to run against only the index
     patterns provided, improving performance and saving resources.
   - Documentation for metrics has been moved into its own table.
   - Upgrade cypress testing framework to 7.3.0
-
+- **CUMULUS-2524**
+  - CSS and UI tweaks to padding/margin, width, and color/contrast
 - **CUMULUS-2506**
   - Adds horizontal scroll buttons to tables improving accessibily
 - **CUMULUS-2505**

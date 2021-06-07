@@ -428,6 +428,7 @@ a:active {
 
 .page__section {
   @extend .clearfix;
+  margin-top: 1em;
   /*&:last-of-type {
   margin-bottom: 3em;
   }*/
@@ -451,13 +452,10 @@ a:active {
   margin-top: 0em;
 }
 
-// MHS: These two are pretty specific and should be fixed in the future.
+/* This is here to control the z-index and position attributes for the react-datetime-picker and react-calendar*/
 .page__section#datetime {
+  margin-top: 0em;
   margin-bottom: 7.5em;
-}
-
-.page__section#listGranules {
-    margin-top: 2.5em;
 }
 
 .page__section--logs {
@@ -877,6 +875,12 @@ a:active {
     a {
       color: $white;
     }
+  }
+}
+
+.footer__opensource {
+  div {
+    margin-right: 0em;
   }
 }
 

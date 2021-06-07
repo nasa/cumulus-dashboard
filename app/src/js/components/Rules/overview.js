@@ -84,15 +84,16 @@ class RulesOverview extends React.Component {
             filterAction={filterRules}
             filterClear={clearRulesFilter}
           >
+            <Search
+              action={searchRules}
+              clear={clearRulesSearch}
+              label="Search"
+              labelKey="name"
+              placeholder="Rule"
+              searchKey="rules"
+            />
             <ListFilters>
-              <Search
-                action={searchRules}
-                clear={clearRulesSearch}
-                label="Search"
-                labelKey="name"
-                placeholder="Search Rules"
-                searchKey="rules"
-              />
+
             </ListFilters>
           </List>
         </section>

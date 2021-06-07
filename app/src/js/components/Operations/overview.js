@@ -100,8 +100,10 @@ class OperationOverview extends React.Component {
             <Search
               action={searchOperations}
               clear={clearOperationsSearch}
+              label="Search"
               labelKey="id"
               searchKey="operations"
+              placeholder="Async Operation ID"
             />
             <ListFilters>
               <Dropdown
@@ -110,6 +112,10 @@ class OperationOverview extends React.Component {
                 clear={clearOperationsFilter}
                 paramKey={'status'}
                 label={'Status'}
+                inputProps={{
+                  placeholder: 'All',
+                  className: 'dropdown--small',
+                }}
               />
               <Dropdown
                 options={operationTypes}
@@ -117,6 +123,10 @@ class OperationOverview extends React.Component {
                 clear={clearOperationsFilter}
                 paramKey={'operationType'}
                 label={'Type'}
+                inputProps={{
+                  placeholder: 'All',
+                  className: 'dropdown--small',
+                }}
               />
             </ListFilters>
           </List>
