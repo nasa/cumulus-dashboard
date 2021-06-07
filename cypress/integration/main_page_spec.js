@@ -214,7 +214,7 @@ describe('Dashboard Home Page', () => {
       // elasticsearch endpoint. The fixture here returns a combined response of all the
       // responses for one url, effectively stubbing our elasticsearch searches.
       let fixtureName = 'elasticsearch.json';
-      cy.intercept('POST', 'http://example.com/_search/', (req) => req.reply({ statusCode: 200, fixture: fixtureName }));
+      cy.intercept('POST', 'http://example.com/*/_search/', (req) => req.reply({ statusCode: 200, fixture: fixtureName }));
       cy.visit('/');
 
       cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(5)').contains('0');

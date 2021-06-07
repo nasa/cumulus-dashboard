@@ -65,7 +65,7 @@ class Header extends React.Component {
 
   linkTo(path, search) {
     if (path[0] === 'Logs') {
-      const kibanaLink = kibanaAllLogsLink(this.props.cumulusInstance, this.props.datepicker);
+      const kibanaLink = kibanaAllLogsLink();
       return (
         <a href={kibanaLink} target="_blank">
           {path[0]}

@@ -7,16 +7,41 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+
+## Breaking Changes
+
+- **CUMULUS-2502**
+  - Configuration changes are required to continue connecting the dashboard with Earthdata Metrics
+  - Metrics integration has been updated to require manual configuration rather
+    than by an assumed naming convention.  As such, new environmental variables
+    describing the Elasticsearch target patterns have been added (check with
+    your metrics provider for the exact values):
+     + ES\_CLOUDWATCH\_TARGET\_PATTERN (Generally: `<daac>-cumulus-cloudwatch-<env>-*`)
+     + ES\_DISTRIBUTION\_TARGET\_PATTERN (Generally: `<daac>-distribution-<env>-*`)
+  - Kibana links are changed. We no longer try to build URLs that describe the
+    metrics' Elasicsearch results. Instead, we now only return a simple link to
+    configured Kibana root.  It is up to the kibana user to interact with the
+    dashbaord, setting default security tenant and default kibana index
+    patterns. You can create kibana Index Patterns (or they may exist already)
+    to gather the cloudwatch logs sent to metrics with a similar patter to the
+    ES\_CLOUDWATCH\_TARGET\_PATTERN, and if you have configured s3 server access
+    logs, likewise use a pattern like the ES\_DISTRIBUTION\_TARGET\_PATTERN.
+
 ### Changed
 
+
+- **CUMULUS-2502**
+  - Metrics ES searches have been updated to run against only the index
+    patterns provided, improving performance and saving resources.
+  - Documentation for metrics has been moved into its own table.
+  - Upgrade cypress testing framework to 7.3.0
 - **CUMULUS-2524**
   - CSS and UI tweaks to padding/margin, width, and color/contrast
-
 - **CUMULUS-2506**
   - Adds horizontal scroll buttons to tables improving accessibily
-
 - **CUMULUS-2505**
   - Update column show/hide component with new styling and "reset to default interaction for each table
+
 
 ## [v6.0.0] - 2021-05-03
 
@@ -30,7 +55,7 @@ This version of the dashboard requires Cumulus API `v8.1.0`
 
 - **CUMULUS-2449**
   - Fixes issue where collections with forward slash in version name were not displayed
-  
+
 _ **CUMULUS-2425**
   - Fixes graph display for failed execution steps
 

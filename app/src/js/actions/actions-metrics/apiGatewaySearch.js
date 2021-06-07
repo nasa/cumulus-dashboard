@@ -1,18 +1,32 @@
-export const teaLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
+export const apiGatewaySearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
   "aggs": {
     "2": {
       "filters": {
         "filters": {
-          "TEALambdaErrors": {
+          "ApiExecutionErrors": {
             "query_string": {
-              "query": "response_status:failure",
+              "query": "+\\"Method completed with status:\\" +(4?? 5??)",
               "analyze_wildcard": true,
               "default_field": "*"
             }
           },
-          "TEALambdaSuccesses": {
+          "ApiExecutionSuccesses": {
             "query_string": {
-              "query": "response_status:success",
+              "query": "+\\"Method completed with status:\\" +(2?? 3??)",
+              "analyze_wildcard": true,
+              "default_field": "*"
+            }
+          },
+          "ApiAccessErrors": {
+            "query_string": {
+              "query": "statusCode:[400 TO 599]",
+              "analyze_wildcard": true,
+              "default_field": "*"
+            }
+          },
+          "ApiAccessSuccesses": {
+            "query_string": {
+              "query": "statusCode:[200 TO 399]",
               "analyze_wildcard": true,
               "default_field": "*"
             }
@@ -52,15 +66,8 @@ export const teaLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpoc
         },
         {
           "match_phrase": {
-            "_index": {
-              "query": "${prefix}-cloudwatch*"
-            }
-          }
-        },
-        {
-          "match_phrase": {
             "logGroup": {
-              "query": "/aws/lambda/${prefix}-thin-egress-app-EgressLambda"
+              "query": "\\"API\\\\-Gateway\\\\-Execution*\\""
             }
           }
         }
@@ -72,4 +79,4 @@ export const teaLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpoc
   }
 }`;
 
-export default teaLambdaSearchTemplate;
+export default apiGatewaySearchTemplate;

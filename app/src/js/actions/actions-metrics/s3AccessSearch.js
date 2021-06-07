@@ -1,18 +1,18 @@
-export const apiLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
+export const s3AccessSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
   "aggs": {
     "2": {
       "filters": {
         "filters": {
-          "LambdaAPIErrors": {
+          "s3AccessSuccesses": {
             "query_string": {
-              "query": "message:(+GET +HTTP +(4?? 5??) -(200 307))",
+              "query": "response:200",
               "analyze_wildcard": true,
               "default_field": "*"
             }
           },
-          "LambdaAPISuccesses": {
+          "s3AccessFailures": {
             "query_string": {
-              "query": "message:(+GET +HTTP +(2?? 3??))",
+              "query": "NOT response:200",
               "analyze_wildcard": true,
               "default_field": "*"
             }
@@ -52,15 +52,8 @@ export const apiLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpoc
         },
         {
           "match_phrase": {
-            "_index": {
-              "query": "${prefix}-cloudwatch*"
-            }
-          }
-        },
-        {
-          "match_phrase": {
-            "logGroup": {
-              "query": "/aws/lambda/${prefix}-ApiDistribution"
+            "operation": {
+              "query": "REST.GET.OBJECT"
             }
           }
         }
@@ -72,4 +65,4 @@ export const apiLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpoc
   }
 }`;
 
-export default apiLambdaSearchTemplate;
+export default s3AccessSearchTemplate;
