@@ -209,6 +209,11 @@ a:active {
       background: none;
       border: none;
     }
+    a:focus, a:focus-visible {
+      outline:2px solid $white; 
+      background: rgba(255, 255, 255, 0.7);
+      color: $dark-blue;
+    }
     &.active,
     &:hover {
       border-bottom: 1px solid $white;
@@ -874,6 +879,11 @@ a:active {
     margin-right: 1em;
     a {
       color: $white;
+    }
+    a:focus, button:focus, a:focus-visible, button:focus-visible {
+      outline:2px solid $white; 
+      background: rgba(255, 255, 255, 0.7);
+      color: $dark-blue;
     }
   }
 }
