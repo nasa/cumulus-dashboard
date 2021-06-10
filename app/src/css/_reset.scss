@@ -105,19 +105,15 @@ q:before, q:after {
   content:none;
   }
 
-/* :focus-visible and :-moz-focusring (Firefox) for keyboard on browsers that support this element, :focus is fallback for browsers that don't support :focus-visible */
-:focus, :-moz-focusring, :focus-visible { 
+:focus {
+  box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: .5);
+}
+
+/* :focus-visible for keyboard on browsers that support this element */
+:focus-visible { 
   outline:2px solid $ocean-blue; 
-  background: transparent;
+  box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: .5);
 }
-
-a:focus, button:focus, input:focus, select:focus {
-  outline: 4px solid $ocean-blue;
-}
-
-/*:focus:not(:focus-visible) {
-  outline: 0px;
-}*/
 
 /* remember to highlight inserts somehow! */
 ins { text-decoration:none; }
