@@ -105,14 +105,28 @@ q:before, q:after {
   content:none;
   }
 
-:focus {
-  box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: .5);
+/* :focus for non-supporting browsers of :focus-visible */
+:focus { 
+  outline:2px solid $ocean-blue; 
+  box-shadow: 1px 1px 5px rgba($color: #ffffff, $alpha: .5);
 }
 
-/* :focus-visible for keyboard on browsers that support this element */
-:focus-visible { 
+/* :focus:not(:focus-visible) for mouse and tap on Chrome 86+ and other supported browsers */
+:focus:not(:focus-visible) {
+  outline: 0px;
+}
+
+/* :focus-visible for keyboard on browsers that support this element and :-moz-focusring for Firefox under version 85 */
+:focus-visible, :-moz-focusring { 
   outline:2px solid $ocean-blue; 
   box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: .5);
+  transition: all 1s ease-in-out;
+}
+
+button:focus-visible { 
+  outline:2px solid $ocean-blue; 
+  box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: .75);
+  transition: all 1s ease-in-out;
 }
 
 /* remember to highlight inserts somehow! */

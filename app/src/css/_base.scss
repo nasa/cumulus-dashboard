@@ -187,6 +187,9 @@ a:active {
       height: 26px;
       width: 165px;
     }
+    a {
+      padding: 16px 2px 0px 4px;
+    }
   }
   nav{
     height: 4.688em;
@@ -209,7 +212,7 @@ a:active {
       background: none;
       border: none;
     }
-    a:focus-visible, button:focus-visible { 
+    a:focus, button:focus, a:-moz-focusring, button:-moz-focusring { 
       outline:2px solid $white; 
       box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: .5);
     }
@@ -879,7 +882,7 @@ a:active {
     a {
       color: $white;
     }
-    a:focus-visible, button:focus-visible { 
+    a:focus, button:focus, a:-moz-focusring, button:-moz-focusring { 
       outline:2px solid $white; 
       box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: .5);
     }
