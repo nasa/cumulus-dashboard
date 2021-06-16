@@ -39,35 +39,30 @@ export const tableColumns = [
     Header: strings.granules,
     accessor: (row) => tally(get(row, 'stats.total')),
     id: 'granules',
-    disableSortBy: true,
     width: 100
   },
   {
     Header: 'Completed',
     accessor: (row) => tally(get(row, 'stats.completed')),
     id: 'completed',
-    disableSortBy: true,
     width: 100
   },
   {
     Header: 'Running',
     accessor: (row) => tally(get(row, 'stats.running')),
     id: 'running',
-    disableSortBy: true,
     width: 100
   },
   {
     Header: 'Failed',
     accessor: (row) => tally(get(row, 'stats.failed')),
     id: 'failed',
-    disableSortBy: true,
     width: 100
   },
   {
     Header: 'MMT',
     accessor: 'MMTLink',
     Cell: ({ cell: { value } }) => (value ? <a href={value} target="_blank">MMT</a> : null), // eslint-disable-line react/prop-types
-    disableSortBy: true,
     width: 100
   },
   {
