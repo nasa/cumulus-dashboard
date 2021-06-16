@@ -121,7 +121,7 @@ export const fromNowWithTooltip = (timestamp) => (
     placement="bottom"
     target={<span>{fullDate(timestamp)}</span>}
     tip={fromNow(timestamp)}
-/>
+  />
 );
 
 const getIndicator = (prop) => {
