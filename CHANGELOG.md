@@ -29,7 +29,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-
+- **CUMULUS-2554**
+  - Add focus styles for various browser support and keyboard/mouse inputs
 - **CUMULUS-2502**
   - Metrics ES searches have been updated to run against only the index
     patterns provided, improving performance and saving resources.
