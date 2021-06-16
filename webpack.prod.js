@@ -81,7 +81,10 @@ const MainConfig = merge.smartStrategy({
           },
           {
             // Minifies CSS files
-            loader: MiniCssExtractPlugin.loader
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              esModule: false,
+            }
           }
         ]
       }
