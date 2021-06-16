@@ -16,14 +16,14 @@ import { kibanaAllLogsLink } from '../../utils/kibana';
 import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const paths = [
-  ['PDRs', '/pdrs'],
-  ['Providers', '/providers'],
   [strings.collections, '/collections'],
+  ['Providers', '/providers'],
   [strings.granules, '/granules'],
   ['Workflows', '/workflows'],
   ['Executions', '/executions'],
   ['Operations', '/operations'],
   ['Rules', '/rules'],
+  ['PDRs', '/pdrs'],
   ['Logs', 'logs'],
   ['Reconciliation Reports', '/reconciliation-reports'],
 ];
