@@ -119,8 +119,8 @@ export const fromNowWithTooltip = (timestamp) => (
     className="tooltip--blue"
     id="table-timestamp-tooltip"
     placement="bottom"
-    target={<span>{fromNow(timestamp)}</span>}
-    tip={fullDate(timestamp)}
+    target={<span>{fullDate(timestamp)}</span>}
+    tip={fromNow(timestamp)}
   />
 );
 
