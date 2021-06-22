@@ -55,5 +55,3 @@ Overview.propTypes = {
 };
 
 export default withQueryParams()(connect((state) => ({ stats: state.stats }))(Overview));
-
-

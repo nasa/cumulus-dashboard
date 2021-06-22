@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import _config from '../../config';
-import { Overview }  from '../Overview/overview';
+import { Overview } from '../Overview/overview';
 import {
   TIMER_START,
   TIMER_STOP,
@@ -100,8 +100,9 @@ class Timer extends React.Component {
 
   updateKPI() {
     this.refreshTimer(this.props.config);
-    Overview;
+    return Overview;
   }
+
   render() {
     const { seconds, running } = this.props.timer;
     return (
