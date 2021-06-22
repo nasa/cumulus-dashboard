@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import _config from '../../config';
-import overview from '../Overview/overview';
+import { Overview }  from '../Overview/overview';
 import {
   TIMER_START,
   TIMER_STOP,
@@ -12,7 +12,6 @@ import {
 } from '../../actions/types';
 
 const { updateInterval } = _config;
-const { updateCards } = overview;
 const oneSecondTick = 1000;
 const secondsToRefresh = updateInterval / 1000;
 
@@ -101,7 +100,7 @@ class Timer extends React.Component {
 
   updateKPI() {
     this.refreshTimer(this.props.config);
-    updateCards;
+    Overview;
   }
   render() {
     const { seconds, running } = this.props.timer;

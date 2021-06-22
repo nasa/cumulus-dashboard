@@ -7,7 +7,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import { displayCase, numLargeTooltip } from '../../utils/format';
 import { getCount } from '../../actions';
 
-const Overview = ({
+export const Overview = ({
   dispatch,
   inflight,
   params = {},
@@ -55,3 +55,5 @@ Overview.propTypes = {
 };
 
 export default withQueryParams()(connect((state) => ({ stats: state.stats }))(Overview));
+
+
