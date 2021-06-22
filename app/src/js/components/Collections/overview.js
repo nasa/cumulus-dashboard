@@ -34,7 +34,7 @@ import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Dropdown from '../DropDown/dropdown';
 import SimpleDropdown from '../DropDown/simple-dropdown';
-import Bulk from '../Granules/bulk';
+//import Bulk from '../Granules/bulk';
 import ListFilters from '../ListActions/ListFilters';
 import { strings } from '../locale';
 import Overview from '../Overview/overview';
@@ -93,7 +93,7 @@ const CollectionOverview = ({
     historyPushWithQueryParams(collectionHrefFromId(newCollectionId));
   }
 
-  function generateBulkActions() {
+  /*function generateBulkActions() {
     return [
       reingestAction(granules),
       {
@@ -106,7 +106,7 @@ const CollectionOverview = ({
         ),
       },
     ];
-  }
+  }*/
 
   function generateQuery() {
     return {
@@ -243,7 +243,7 @@ const CollectionOverview = ({
           action={listGranules}
           tableColumns={tableColumns}
           query={generateQuery()}
-          bulkActions={generateBulkActions()}
+         /* bulkActions={generateBulkActions()}*/
           rowId="granuleId"
           initialSortId="timestamp"
           filterAction={filterGranules}
