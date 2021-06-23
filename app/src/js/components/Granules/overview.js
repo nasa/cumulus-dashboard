@@ -165,7 +165,7 @@ class GranulesOverview extends React.Component {
           <div className='page__section__header'>
             <h1 className='heading--large heading--shared-content with-description '>{strings.granule_overview}</h1>
             {lastUpdated(queriedAt)}
-            <Overview type='granules' inflight={false} />
+            <Overview type='granules' inflight={granules.list.inflight} />
           </div>
         </section>
         <section className='page__section'>

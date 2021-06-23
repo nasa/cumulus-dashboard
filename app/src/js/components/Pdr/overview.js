@@ -81,7 +81,7 @@ class PdrOverview extends React.Component {
             PDR Overview
           </h1>
           {lastUpdated(queriedAt)}
-          <Overview type='pdrs' inflight={false} />
+          <Overview type='pdrs' inflight={pdrs.list.inflight} />
         </section>
         <section className="page__section">
           <div className="heading__wrapper--border">
