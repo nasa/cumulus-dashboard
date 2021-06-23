@@ -91,8 +91,8 @@ const CollectionOverview = ({
   const deleteStatus = get(deletedCollections, [collectionId, 'status']);
   const hasGranules =
     get(collectionsMap[collectionId], 'data.stats.total', 0) > 0;
-  const [workflow, setWorkflow]  = useState(props.workflowOptions[0]);
-  const [workflowMeta, setWorkflowMeta]= useState(defaultWorkflowMeta);
+  const [workflow, setWorkflow] = useState(props.workflowOptions[0]);
+  const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
 
   useEffect(() => {
     dispatch(listCollections());
@@ -155,6 +155,11 @@ const CollectionOverview = ({
         metaHandler: this.setWorkflowMeta,
       })
     ];
+  }
+
+  function queryMeta () {
+    const { dispatch } = this.props;
+    dispatch(listWorkflows());
   }
 
   function generateQuery() {
