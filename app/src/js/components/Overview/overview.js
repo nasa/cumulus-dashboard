@@ -7,7 +7,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import { displayCase, numLargeTooltip } from '../../utils/format';
 import { getCount } from '../../actions';
 
-export const Overview = ({
+const Overview = ({
   dispatch,
   inflight,
   params = {},
@@ -18,14 +18,16 @@ export const Overview = ({
   const statsCount = get(stats, `count.data.${type}.count`, []);
 
   useEffect(() => {
-    dispatch(getCount({
-      type,
-      field: 'status',
-      ...params,
-      ...queryParams
-    }));
+    if (!inflight) {
+        dispatch(getCount({
+        type,
+        field: 'status',
+        ...params,
+        ...queryParams
+      }));
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, JSON.stringify(params), JSON.stringify(queryParams), type]);
+  }, [dispatch, JSON.stringify(params), JSON.stringify(queryParams), type, inflight]);
   return (
     <div className="overview-num__wrapper" data-cy="overview-num">
       {inflight && <Loading />}

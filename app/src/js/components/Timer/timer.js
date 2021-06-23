@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import _config from '../../config';
-import { Overview } from '../Overview/overview';
 import {
   TIMER_START,
   TIMER_STOP,
@@ -98,11 +97,6 @@ class Timer extends React.Component {
       : className;
   }
 
-  updateKPI() {
-    this.refreshTimer(this.props.config);
-    return Overview;
-  }
-
   render() {
     const { seconds, running } = this.props.timer;
     return (
@@ -110,7 +104,7 @@ class Timer extends React.Component {
         <span
           data-cy="refreshTimer"
           className="form__element__refresh"
-          onClick={() => this.updateKPI()}
+          onClick={() => this.refreshTimer(this.props.config) }
           role="button"
           tabIndex="0"
           aria-label="Refresh Timer"
