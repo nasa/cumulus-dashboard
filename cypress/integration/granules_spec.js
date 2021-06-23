@@ -174,7 +174,7 @@ describe('Dashboard Granules Page', () => {
               .should('be.eq', `${Number(granule.duration).toFixed(2)}s`);
             // Updated column
             cy.get('@columns').eq(8).invoke('text')
-              .should('match', /.+ago$/);
+              .should('match', /.+[0-9]{2}\/[0-9]{2}\/[0-9]{2}$/);
             cy.get('@columns').eq(8).find('span').trigger('mouseover');
             cy.get('#table-timestamp-tooltip').should('be.visible');
             cy.get('@columns').eq(8).find('span').trigger('mouseleave');
