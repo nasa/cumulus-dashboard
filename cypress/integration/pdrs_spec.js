@@ -93,7 +93,7 @@ describe('Dashboard PDRs Page', () => {
 
     it('should display active PDRs', () => {
       cy.visit('/pdrs');
-      cy.contains('.sidebar__row ul li a', 'Active 4')
+      cy.contains('.sidebar__row ul li a', 'Running 4')
         .should('have.attr', 'href', '/pdrs/active')
         .click();
 

@@ -66,7 +66,7 @@ class ExecutionOverview extends React.Component {
               Execution Overview
             </h1>
             {lastUpdated(queriedAt)}
-            <Overview type='executions' inflight={false} />
+            <Overview type='executions' inflight={executions.list.inflight} />
           </div>
         </section>
         <section className="page__section">

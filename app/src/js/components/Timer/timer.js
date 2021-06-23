@@ -11,7 +11,6 @@ import {
 } from '../../actions/types';
 
 const { updateInterval } = _config;
-
 const oneSecondTick = 1000;
 const secondsToRefresh = updateInterval / 1000;
 

@@ -28,6 +28,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     logs, likewise use a pattern like the ES\_DISTRIBUTION\_TARGET\_PATTERN.
 
 ### Changed
+
+- **CUMULUS-2535**
+  - Ensured that the KPI cards would be updated on all tabs whenever the page was updated
 - **CUMULUS-2544**
   - Changed the timestamp so that the date and time is shown rather than time elapsed since last occurrence
 - **CUMULUS-2554**
