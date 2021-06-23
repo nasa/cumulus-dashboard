@@ -104,7 +104,7 @@ class Timer extends React.Component {
         <span
           data-cy="refreshTimer"
           className="form__element__refresh"
-          onClick={() => this.refreshTimer(this.props.config) }
+          onClick={() => this.refreshTimer(this.props.config)}
           role="button"
           tabIndex="0"
           aria-label="Refresh Timer"

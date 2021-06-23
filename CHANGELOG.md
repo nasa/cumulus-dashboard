@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - **CUMULUS-2535**
-  - Ensured that the KPI cards would be updated on the executions tab whenever the page was updated
+  - Ensured that the KPI cards would be updated on all tabs whenever the page was updated
 - **CUMULUS-2544**
   - Changed the timestamp so that the date and time is shown rather than time elapsed since last occurrence
 - **CUMULUS-2554**
