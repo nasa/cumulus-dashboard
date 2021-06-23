@@ -15,6 +15,9 @@ import {
   searchGranules,
   listCollections,
   getOptionsProviderName,
+  listWorkflows,
+  applyWorkflowToGranule,
+  applyRecoveryWorkflowToGranule,
 } from '../../actions';
 import {
   collectionName as collectionLabelForId,
@@ -27,19 +30,24 @@ import {
 import statusOptions from '../../utils/status';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
 import {
-  reingestAction,
+  bulkActions,
+  defaultHiddenColumns,
+  defaultWorkflowMeta,
+  executeDialog,
+  groupAction,
+  recoverAction,
   tableColumns,
 } from '../../utils/table-config/granules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Dropdown from '../DropDown/dropdown';
 import SimpleDropdown from '../DropDown/simple-dropdown';
-//import Bulk from '../Granules/bulk';
 import ListFilters from '../ListActions/ListFilters';
 import { strings } from '../locale';
 import Overview from '../Overview/overview';
 import Search from '../Search/search';
 import List from '../Table/Table';
+
 const breadcrumbConfig = [
   {
     label: 'Dashboard Home',
@@ -63,6 +71,7 @@ const CollectionOverview = ({
   match,
   providers,
   queryParams,
+  workflowOptions
 }) => {
   const { params } = match;
   const { deleted: deletedCollections, list: collectionsList, map: collectionsMap } = collections;
@@ -82,6 +91,8 @@ const CollectionOverview = ({
   const deleteStatus = get(deletedCollections, [collectionId, 'status']);
   const hasGranules =
     get(collectionsMap[collectionId], 'data.stats.total', 0) > 0;
+  const [workflow, setWorkflow]  = useState(props.workflowOptions[0]);
+  const [workflowMeta, setWorkflowMeta]= useState(defaultWorkflowMeta);
 
   useEffect(() => {
     dispatch(listCollections());
@@ -93,20 +104,58 @@ const CollectionOverview = ({
     historyPushWithQueryParams(collectionHrefFromId(newCollectionId));
   }
 
-  /*function generateBulkActions() {
-    return [
-      reingestAction(granules),
-      {
-        Component: (
-          <Bulk
-            element="a"
-            className="button button__bulkgranules button--green button--small form-group__element link--no-underline"
-            confirmAction={true}
-          />
-        ),
+  function generateBulkActions () {
+    const actionConfig = {
+      execute: {
+        options: this.getExecuteOptions(),
+        action: this.applyWorkflow
       },
+      recover: {
+        options: this.getExecuteOptions(),
+        action: this.applyRecoveryWorkflow
+      }
+    };
+    const { granules, config } = this.props;
+    const { selected } = this.state;
+    const selectedGranules = selected.map((id) => granules.list.data.find((g) => id === g.granuleId));
+    let actions = bulkActions(granules, actionConfig, selectedGranules);
+    if (config.enableRecovery) {
+      actions = actions.concat(recoverAction(granules, actionConfig));
+    }
+    return actions;
+  }
+
+ function selectWorkflow (selector, workflow) {
+    this.setState({ workflow });
+  }
+
+  function setWorkflowMeta (workflowMeta) {
+    this.setState({ workflowMeta });
+  }
+
+  function applyWorkflow (granuleId) {
+    const { workflow, workflowMeta } = this.state;
+    const { meta } = JSON.parse(workflowMeta);
+    this.setState({ workflowMeta: defaultWorkflowMeta });
+    return applyWorkflowToGranule(granuleId, workflow, meta);
+  }
+
+  function applyRecoveryWorkflow (granuleId) {
+    return applyRecoveryWorkflowToGranule(granuleId);
+  }
+
+  function getExecuteOptions () {
+    return [
+      executeDialog({
+        selectHandler: this.selectWorkflow,
+        label: 'workflow',
+        value: this.state.workflow,
+        options: this.props.workflowOptions,
+        initialMeta: this.state.workflowMeta,
+        metaHandler: this.setWorkflowMeta,
+      })
     ];
-  }*/
+  }
 
   function generateQuery() {
     return {
@@ -243,8 +292,10 @@ const CollectionOverview = ({
           action={listGranules}
           tableColumns={tableColumns}
           query={generateQuery()}
-         /* bulkActions={generateBulkActions()}*/
+          bulkActions={generateBulkActions()}
+          groupAction={groupAction}
           rowId="granuleId"
+          initialHiddenColumns={defaultHiddenColumns}
           initialSortId="timestamp"
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
@@ -294,7 +345,8 @@ CollectionOverview.propTypes = {
   granules: PropTypes.object,
   match: PropTypes.object,
   queryParams: PropTypes.object,
-  providers: PropTypes.object
+  providers: PropTypes.object,
+  workflowOptions: PropTypes.array
 };
 
 export default withRouter(
@@ -302,6 +354,7 @@ export default withRouter(
     collections: state.collections,
     datepicker: state.datepicker,
     granules: state.granules,
-    providers: state.providers
+    providers: state.providers,
+    workflowOptions: workflowOptionNames(state)
   }))(CollectionOverview)
 );
