@@ -19,7 +19,7 @@ const Overview = ({
 
   useEffect(() => {
     if (!inflight) {
-        dispatch(getCount({
+      dispatch(getCount({
         type,
         field: 'status',
         ...params,
