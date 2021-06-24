@@ -2,6 +2,7 @@ import { get } from 'object-path';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
+import AsyncSelect from 'react-select/async';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import {
@@ -15,6 +16,8 @@ import {
   searchGranules,
   listCollections,
   getOptionsProviderName,
+  searchCollections,
+  filterCollections,
 } from '../../actions';
 import {
   collectionName as collectionLabelForId,
@@ -33,6 +36,7 @@ import {
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Dropdown from '../DropDown/dropdown';
+import AsyncDropdown from '../DropDown/async-drop';
 import SimpleDropdown from '../DropDown/simple-dropdown';
 import Bulk from '../Granules/bulk';
 import ListFilters from '../ListActions/ListFilters';
@@ -40,6 +44,7 @@ import { strings } from '../locale';
 import Overview from '../Overview/overview';
 import Search from '../Search/search';
 import List from '../Table/Table';
+import search from '../Search/search';
 const breadcrumbConfig = [
   {
     label: 'Dashboard Home',
@@ -76,7 +81,7 @@ const CollectionOverview = ({
     value: getEncodedCollectionId(collection)
   })).sort(
     // Compare collection IDs ignoring case
-    (id1, id2) => id1.label.localeCompare(id2.label, 'en', { sensitivity: 'base' })
+     (id1, id2) => id1.label.localeCompare(id2.label, 'en', { sensitivity: 'base' })
   );
   const record = collectionsMap[collectionId];
   const deleteStatus = get(deletedCollections, [collectionId, 'status']);
@@ -127,6 +132,11 @@ const CollectionOverview = ({
     historyPushWithQueryParams('/granules');
   }
 
+  function onInputChange(inputValue) { 
+    dispatch(listCollections({ infix: inputValue }));
+    console.log(inputValue);
+  }
+
   function errors() {
     return [
       get(collections.map, [collectionId, 'error']),
@@ -146,20 +156,16 @@ const CollectionOverview = ({
               <Breadcrumbs config={breadcrumbConfig} />
             </li>
             <li>
-              <div className="dropdown__collection form-group__element--right">
-                <SimpleDropdown
-                  className='collection-chooser'
-                  label={'Collection'}
-                  title={'Collections Dropdown'}
-                  value={collectionId}
-                  options={sortedCollectionIds}
-                  id={'collection-chooser'}
-                  onChange={changeCollection}
-                />
-              </div>
-            </li>
-          </ul>
-        </div>
+              <div className="dropdown__collection form-group__element--right"> 
+              <AsyncDropdown
+                onInputChange={onInputChange}
+                defaultOptions = {true}
+                cacheOptions = {true}
+              />
+               </div>
+              </li>
+            </ul>
+          </div>
       </section>
       <section className="page__section page__section__header-wrapper">
         <div className="heading-group">
