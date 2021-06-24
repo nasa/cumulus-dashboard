@@ -1,7 +1,7 @@
 import { get } from 'object-path';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import {
@@ -47,6 +47,7 @@ import { strings } from '../locale';
 import Overview from '../Overview/overview';
 import Search from '../Search/search';
 import List from '../Table/Table';
+import { workflowOptionNames } from '../../selectors';
 
 const breadcrumbConfig = [
   {
@@ -91,8 +92,9 @@ const CollectionOverview = ({
   const deleteStatus = get(deletedCollections, [collectionId, 'status']);
   const hasGranules =
     get(collectionsMap[collectionId], 'data.stats.total', 0) > 0;
-  const [workflow, setWorkflow] = useState(props.workflowOptions[0]);
+  const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
+  const [selected, setSelected] = useState([]);
 
   useEffect(() => {
     dispatch(listCollections());
@@ -104,58 +106,17 @@ const CollectionOverview = ({
     historyPushWithQueryParams(collectionHrefFromId(newCollectionId));
   }
 
-  function generateBulkActions () {
-    const actionConfig = {
-      execute: {
-        options: this.getExecuteOptions(),
-        action: this.applyWorkflow
-      },
-      recover: {
-        options: this.getExecuteOptions(),
-        action: this.applyRecoveryWorkflow
-      }
-    };
-    const { granules, config } = this.props;
-    const { selected } = this.state;
-    const selectedGranules = selected.map((id) => granules.list.data.find((g) => id === g.granuleId));
-    let actions = bulkActions(granules, actionConfig, selectedGranules);
-    if (config.enableRecovery) {
-      actions = actions.concat(recoverAction(granules, actionConfig));
-    }
-    return actions;
-  }
+  useEffect(() => {
+    queryMeta();
+  },[])
 
- function selectWorkflow (selector, workflow) {
-    this.setState({ workflow });
-  }
+  useEffect(() => {
+    dispatch(listWorkflows());
+  }, [dispatch]);
 
-  function setWorkflowMeta (workflowMeta) {
-    this.setState({ workflowMeta });
-  }
-
-  function applyWorkflow (granuleId) {
-    const { workflow, workflowMeta } = this.state;
-    const { meta } = JSON.parse(workflowMeta);
-    this.setState({ workflowMeta: defaultWorkflowMeta });
-    return applyWorkflowToGranule(granuleId, workflow, meta);
-  }
-
-  function applyRecoveryWorkflow (granuleId) {
-    return applyRecoveryWorkflowToGranule(granuleId);
-  }
-
-  function getExecuteOptions () {
-    return [
-      executeDialog({
-        selectHandler: this.selectWorkflow,
-        label: 'workflow',
-        value: this.state.workflow,
-        options: this.props.workflowOptions,
-        initialMeta: this.state.workflowMeta,
-        metaHandler: this.setWorkflowMeta,
-      })
-    ];
-  }
+  useEffect(() => {
+    setWorkflow(workflowOptions[0]);
+  }, [workflowOptions]);
 
   function queryMeta () {
     const { dispatch } = this.props;
@@ -167,6 +128,52 @@ const CollectionOverview = ({
       ...queryParams,
       collectionId,
     };
+  }
+
+  function generateBulkActions() {
+    const config = {
+      execute: {
+        options: getExecuteOptions(),
+        action: applyWorkflow,
+      },
+      recover: {
+        options: getExecuteOptions(),
+        action: applyRecoveryWorkflow
+      }
+    };
+    const selectedGranules = selected.map((id) => granules.list.data.find((g) => id === g.granuleId));
+    let actions = bulkActions(granules, config, selectedGranules);
+    if (config.enableRecovery) {
+      actions = actions.concat(recoverAction(granules, config));
+    }
+    return actions;
+  }
+
+  function selectWorkflow(selector, selectedWorkflow) {
+    setWorkflow(selectedWorkflow);
+  }
+
+  function applyWorkflow(granuleId) {
+    const { meta } = JSON.parse(workflowMeta);
+    setWorkflowMeta(defaultWorkflowMeta);
+    return applyWorkflowToGranule(granuleId, workflow, meta);
+  }
+
+  function applyRecoveryWorkflow (granuleId) {
+    return applyRecoveryWorkflowToGranule(granuleId);
+  }
+
+  function getExecuteOptions() {
+    return [
+      executeDialog({
+        selectHandler: selectWorkflow,
+        label: 'workflow',
+        value: workflow,
+        options: workflowOptions,
+        initialMeta: workflowMeta,
+        metaHandler: setWorkflowMeta,
+      }),
+    ];
   }
 
   function deleteMe() {
@@ -186,6 +193,10 @@ const CollectionOverview = ({
       get(collections.map, [collectionId, 'error']),
       get(collections.deleted, [collectionId, 'error']),
     ].filter(Boolean);
+  } /* Look at incorporating granule action errors maybe? */
+
+  function updateSelection(selection) {
+    setSelected(selection);
   }
 
   return (
@@ -304,6 +315,7 @@ const CollectionOverview = ({
           initialSortId="timestamp"
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
+          onSelect={updateSelection}
         >
           <Search
             action={searchGranules}
