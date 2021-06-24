@@ -159,7 +159,7 @@ const CollectionOverview = ({
               <div className="dropdown__collection form-group__element--right"> 
               <AsyncDropdown
                 onInputChange={onInputChange}
-                defaultOptions = {true}
+                defaultOptions = {true }
                 cacheOptions = {true}
               />
                </div>
