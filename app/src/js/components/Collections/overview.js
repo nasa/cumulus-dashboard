@@ -132,9 +132,11 @@ const CollectionOverview = ({
     historyPushWithQueryParams('/granules');
   }
 
-  function onInputChange(inputValue) { 
-    dispatch(listCollections({ infix: inputValue }));
-    console.log(inputValue);
+  function onInputChange(inputValue) {
+    return dispatch(listCollections({ infix: inputValue })).then((result) => result.data.results.map((collection) => ({
+      label: getCollectionId(collection),
+      value: getEncodedCollectionId(collection)
+    })));
   }
 
   function errors() {
@@ -158,6 +160,7 @@ const CollectionOverview = ({
             <li>
               <div className="dropdown__collection form-group__element--right"> 
               <AsyncDropdown
+                onChange = {changeCollection}
                 onInputChange={onInputChange}
                 defaultOptions = {true}
                 cacheOptions = {true}
