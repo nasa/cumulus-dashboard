@@ -11,6 +11,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Alert } from 'react-bootstrap';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import DefaultModal from '../Modal/modal';
+import ErrorReport from '../Errors/report';
 
 const CONCURRENCY = 3;
 
@@ -254,8 +255,9 @@ export class BatchCommand extends React.Component {
             }
             {status === 'error' &&
             <>
-              <Alert variant="danger"><strong>Error</strong></Alert>
-              <pre className='error__report'>{errorMessage}</pre>
+              <div>
+                <ErrorReport report= {errorMessage}/>
+              </div>
             </>
             }
             {(!inflight && !status) && (!modalOptions || !modalOptions.children) && (

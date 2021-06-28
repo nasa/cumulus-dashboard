@@ -12,29 +12,22 @@ const CopyToClipboard = ({
       await navigator.clipboard.writeText(text);
       copiedTextState('Copied!');
     } catch (err) {
-      copiedTextState('Not Copied!');
+      copiedTextState('Error Copying');
     }
   }
 
-  function render() {
-    return (
-      <>
-        <button
-          className="button button--small button--primary button--show button--copy"
-          onClick={handleClick}
-        >
-          {copy}
-        </button>
-      </>
-    );
-  }
-
-  return render();
+  return (
+    <>
+      <button
+        className="button button--small button--primary button--show button--copy"
+        onClick={handleClick}>
+        {copy}
+      </button>
+    </>);
 };
 
 CopyToClipboard.propTypes = {
   text: PropTypes.string,
-  truncate: PropTypes.bool,
 };
 
 export default CopyToClipboard;

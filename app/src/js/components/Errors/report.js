@@ -37,8 +37,8 @@ class ErrorReport extends React.Component {
       return (
         <div key={report}>
           <strong>Error:</strong>
-          <ShowMoreOrLess text={report} truncate={this.props.truncate}></ShowMoreOrLess>
-          <CopyToClipboard text = {report}></CopyToClipboard>
+          <ShowMoreOrLess text={report} truncate={true}/>
+          <CopyToClipboard text = {report}/>
         </div>
       );
     }
