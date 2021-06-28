@@ -256,6 +256,7 @@ export class BatchCommand extends React.Component {
             {status === 'error' &&
             <>
               <div>
+                <Alert variant="danger"><strong>Error</strong></Alert>
                 <ErrorReport report= {errorMessage}/>
               </div>
             </>

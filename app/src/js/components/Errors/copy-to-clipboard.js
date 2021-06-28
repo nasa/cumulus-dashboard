@@ -19,7 +19,7 @@ const CopyToClipboard = ({
   return (
     <>
       <button
-        className="button button--small button--primary button--show button--copy"
+        className="button button--small button--primary button--show button--copy_error"
         onClick={handleClick}>
         {copy}
       </button>
