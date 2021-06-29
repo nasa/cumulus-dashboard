@@ -29,10 +29,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - **CUMULUS-2542**
-  - Created test collections (need to be deleted later) in order to test the functionality of the secondary
-  dropdown on the Collections page since it does not show all collections.
-- **CUMULUS-2534**
-  - Added a copy button to errors pages so the error can be copied and searched up on the internet.
+  - Created an ASYNC dropdown component to be used in the page when a Collection is selected since it was initially not showing all options
+  - Created a new style utils file which is imported into and used in Async-Dropdown and Simple-Dropdown
 - **CUMULUS-2535**
   - Ensured that the KPI cards would be updated on all tabs whenever the page was updated
 - **CUMULUS-2544**
