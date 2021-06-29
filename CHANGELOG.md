@@ -29,10 +29,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - **CUMULUS-2542**
+<<<<<<< HEAD
   - Created a new ASYNC dropdown in order to be used to search Collections since some Collections were not showing
   - Created a new file for styles to be imported in Simple-Dropdown and Async-Dropdown
 - **CUMULUS-2534**
   - Added a copy button to errors pages so the error can be copied and searched up on the internet.
+=======
+  - Created an ASYNC dropdown component to be used in the page when a Collection is selected since it was initially not showing all options
+  - Created a new style utils file which is imported into and used in Async-Dropdown and Simple-Dropdown
+>>>>>>> ece0893a1e66875ba2f755a7a3bc6ef474628ea2
 - **CUMULUS-2535**
   - Ensured that the KPI cards would be updated on all tabs whenever the page was updated
 - **CUMULUS-2544**
