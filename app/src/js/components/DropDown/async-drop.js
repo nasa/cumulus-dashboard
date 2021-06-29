@@ -6,10 +6,13 @@ import { customStyles, DropdownIndicator } from '../../utils/dropdown-utils';
 const AsyncDropdown = ({
   onInputChange,
   onChange,
+  className,
   id,
+  label,
   error,
   options = [],
   value,
+  ...rest
 }) => {
   const optionsObject = options.map((option) => {
     if (typeof option === 'object') return option;
@@ -36,25 +39,38 @@ const AsyncDropdown = ({
   }
 
   return (
-    <div style={{ width: '300px' }}>
-      <Async
-        blurInputOnSelect={true}
-        components={ { DropdownIndicator } }
-        style={customStyles}
-        defaultOptions={options}
-        onChange= {handleChange}
-        value={valueObject}
-        options={optionsObject}
-        loadOptions={promiseOptions}
-      />
+    <div className={`form__dropdown${error ? ' form__error--wrapper' : ''}`}>
+      <ul>
+        <li className="dropdown__label">
+          <label htmlFor={id}>{label}</label>
+        </li>
+        <li className="dropdown__element">
+          <Async
+            blurInputOnSelect={true}
+            {...rest}
+            className={className}
+            components={ { DropdownIndicator } }
+            style={customStyles}
+            aria-label={label}
+            defaultOptions={options}
+            onChange= {handleChange}
+            value={valueObject}
+            options={optionsObject}
+            loadOptions={promiseOptions}
+          />
+        </li>
+      </ul>
+      {error && <span className="form__error">{error}</span>}
     </div>
   );
 };
 
 AsyncDropdown.propTypes = {
+  className: PropTypes.string,
   onInputChange: PropTypes.func,
   error: PropTypes.string,
   id: PropTypes.string,
+  label: PropTypes.any,
   onChange: PropTypes.func,
   options: PropTypes.array,
   value: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),

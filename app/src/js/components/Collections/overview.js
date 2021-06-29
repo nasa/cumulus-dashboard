@@ -148,9 +148,13 @@ const CollectionOverview = ({
             <li>
               <div className="dropdown__collection form-group__element--right">
                 <AsyncDropdown
+                  className='collection-chooser'
+                  label={'Collection'}
+                  title={'Collections Dropdown'}
                   onChange = {changeCollection}
                   onInputChange={onInputChange}
                   defaultOptions = {true}
+                  id={'collection-chooser'}
                   cacheOptions = {true}
                 />
               </div>

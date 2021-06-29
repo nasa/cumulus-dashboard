@@ -29,8 +29,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - **CUMULUS-2542**
-  - Created test collections (need to be deleted later) in order to test the functionality of the secondary
-  dropdown on the Collections page since it does not show all collections.
+  - Created a new ASYNC dropdown in order to be used to search Collections since some Collections were not showing
+  - Created a new file for styles to be imported in Simple-Dropdown and Async-Dropdown
 - **CUMULUS-2534**
   - Added a copy button to errors pages so the error can be copied and searched up on the internet.
 - **CUMULUS-2535**
