@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { truncate } from '../../utils/format';
 import ShowMoreOrLess from './show-more-or-less';
+import CopyToClipboard from './copy-to-clipboard';
 
 class ErrorReport extends React.Component {
   constructor () {
@@ -36,7 +37,8 @@ class ErrorReport extends React.Component {
       return (
         <div key={report}>
           <strong>Error:</strong>
-          <ShowMoreOrLess text={report} truncate={this.props.truncate}></ShowMoreOrLess>
+          <ShowMoreOrLess text={report} truncate={this.props.truncate}/>
+          <CopyToClipboard text = {report} />
         </div>
       );
     }
