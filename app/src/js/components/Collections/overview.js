@@ -153,6 +153,7 @@ const CollectionOverview = ({
                   title={'Collections Dropdown'}
                   onChange = {changeCollection}
                   onInputChange={onInputChange}
+                  value = {collectionId}
                   defaultOptions = {true}
                   id={'collection-chooser'}
                   cacheOptions = {true}

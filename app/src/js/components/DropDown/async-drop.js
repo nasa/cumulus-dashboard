@@ -46,12 +46,12 @@ const AsyncDropdown = ({
         </li>
         <li className="dropdown__element">
           <Async
+            aria-label={label}
             blurInputOnSelect={true}
             {...rest}
             className={className}
             components={ { DropdownIndicator } }
             style={customStyles}
-            aria-label={label}
             defaultOptions={true}
             onChange= {handleChange}
             value={valueObject}
