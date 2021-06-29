@@ -28,14 +28,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     logs, likewise use a pattern like the ES\_DISTRIBUTION\_TARGET\_PATTERN.
 
 ### Changed
-<<<<<<< Updated upstream
 - **CUMULUS-2542**
   - Created test collections (need to be deleted later) in order to test the functionality of the secondary
   dropdown on the Collections page since it does not show all collections.
-=======
-- **CUMULUS-2534**
-  - Added a copy button to errors pages so the error can be copied and searched up on the internet. 
->>>>>>> Stashed changes
 - **CUMULUS-2535**
   - Ensured that the KPI cards would be updated on all tabs whenever the page was updated
 - **CUMULUS-2544**
