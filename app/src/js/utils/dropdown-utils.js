@@ -1,8 +1,7 @@
+import React from 'react';
+import { components } from 'react-select';
 import colorVariables from '../../css/utils/variables/_colors.scss';
 import shadowVariables from '../../css/utils/variables/_shadows.scss';
-import React from 'react';
-import PropTypes from 'prop-types';
-import Select, { components } from 'react-select';
 
 const { borderGrey, hoverBlue, oceanBlue, white } = colorVariables;
 const { shadowDefault } = shadowVariables;
@@ -63,4 +62,4 @@ const customStyles = {
   },
 };
 
-export default {customStyles, DropdownIndicator};
+export { customStyles, DropdownIndicator };

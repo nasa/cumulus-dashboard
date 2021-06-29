@@ -2,7 +2,6 @@ import { get } from 'object-path';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
-import AsyncSelect from 'react-select/async';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import {
@@ -16,8 +15,6 @@ import {
   searchGranules,
   listCollections,
   getOptionsProviderName,
-  searchCollections,
-  filterCollections,
 } from '../../actions';
 import {
   collectionName as collectionLabelForId,
@@ -37,14 +34,12 @@ import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Dropdown from '../DropDown/dropdown';
 import AsyncDropdown from '../DropDown/async-drop';
-import SimpleDropdown from '../DropDown/simple-dropdown';
 import Bulk from '../Granules/bulk';
 import ListFilters from '../ListActions/ListFilters';
 import { strings } from '../locale';
 import Overview from '../Overview/overview';
 import Search from '../Search/search';
 import List from '../Table/Table';
-import search from '../Search/search';
 const breadcrumbConfig = [
   {
     label: 'Dashboard Home',
@@ -70,23 +65,16 @@ const CollectionOverview = ({
   queryParams,
 }) => {
   const { params } = match;
-  const { deleted: deletedCollections, list: collectionsList, map: collectionsMap } = collections;
+  const { deleted: deletedCollections, map: collectionsMap } = collections;
   const { list: granulesList } = granules;
   const { dropdowns } = providers;
   const { name: collectionName, version: collectionVersion } = params || {};
   const decodedVersion = decodeURIComponent(collectionVersion);
   const collectionId = getCollectionId({ name: collectionName, version: decodedVersion });
-  const sortedCollectionIds = collectionsList.data.map((collection) => ({
-    label: getCollectionId(collection),
-    value: getEncodedCollectionId(collection)
-  })).sort(
-    // Compare collection IDs ignoring case
-     (id1, id2) => id1.label.localeCompare(id2.label, 'en', { sensitivity: 'base' })
-  );
   const record = collectionsMap[collectionId];
   const deleteStatus = get(deletedCollections, [collectionId, 'status']);
   const hasGranules =
-    get(collectionsMap[collectionId], 'data.stats.total', 0) > 0;
+      get(collectionsMap[collectionId], 'data.stats.total', 0) > 0;
 
   useEffect(() => {
     dispatch(listCollections());
@@ -158,17 +146,17 @@ const CollectionOverview = ({
               <Breadcrumbs config={breadcrumbConfig} />
             </li>
             <li>
-              <div className="dropdown__collection form-group__element--right"> 
-              <AsyncDropdown
-                onChange = {changeCollection}
-                onInputChange={onInputChange}
-                defaultOptions = {true}
-                cacheOptions = {true}
-              />
-               </div>
-              </li>
-            </ul>
-          </div>
+              <div className="dropdown__collection form-group__element--right">
+                <AsyncDropdown
+                  onChange = {changeCollection}
+                  onInputChange={onInputChange}
+                  defaultOptions = {true}
+                  cacheOptions = {true}
+                />
+              </div>
+            </li>
+          </ul>
+        </div>
       </section>
       <section className="page__section page__section__header-wrapper">
         <div className="heading-group">

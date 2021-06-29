@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Async from 'react-select/async';
-import {customStyles, DropdownIndicator} from '../../../js/utils/dropdown-utils'
+import { customStyles, DropdownIndicator } from '../../utils/dropdown-utils';
 
 const AsyncDropdown = ({
   onInputChange,
@@ -11,7 +11,6 @@ const AsyncDropdown = ({
   options = [],
   value,
 }) => {
-  
   const optionsObject = options.map((option) => {
     if (typeof option === 'object') return option;
     return {
@@ -25,8 +24,6 @@ const AsyncDropdown = ({
   if (!value) valueObject = null;
   else if (typeof value !== 'object') valueObject = { label: value, value };
 
-
-
   const promiseOptions = (inputValue) => new Promise((resolve) => {
     resolve(onInputChange(inputValue));
   });
@@ -39,17 +36,17 @@ const AsyncDropdown = ({
   }
 
   return (
-    <div style={{width: '300px'}}>
+    <div style={{ width: '300px' }}>
       <Async
-      blurInputOnSelect={true}
-      components={{ DropdownIndicator }}
-      style={customStyles}
-      defaultOptions={options}
-      onChange= {handleChange}
-      value={valueObject}
-      options={optionsObject}
-      loadOptions={promiseOptions}
-    />
+        blurInputOnSelect={true}
+        components={ { DropdownIndicator } }
+        style={customStyles}
+        defaultOptions={options}
+        onChange= {handleChange}
+        value={valueObject}
+        options={optionsObject}
+        loadOptions={promiseOptions}
+      />
     </div>
   );
 };
