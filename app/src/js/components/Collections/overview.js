@@ -33,7 +33,7 @@ import {
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Dropdown from '../DropDown/dropdown';
-import AsyncDropdown from '../DropDown/async-drop';
+import AsyncDropdown from '../DropDown/async-dropdown';
 import Bulk from '../Granules/bulk';
 import ListFilters from '../ListActions/ListFilters';
 import { strings } from '../locale';
