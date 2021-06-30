@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     logs, likewise use a pattern like the ES\_DISTRIBUTION\_TARGET\_PATTERN.
 
 ### Changed
+- **CUMULUS-2551**
+  - Added a sortable column to individual granules tab so you can sort each file within the granule by size.
 - **CUMULUS-2534**
   - Added a copy button to errors pages so the error can be copied and searched up on the internet. 
 - **CUMULUS-2535**
