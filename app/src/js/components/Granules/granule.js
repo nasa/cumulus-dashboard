@@ -60,7 +60,7 @@ const tableColumns = [
   },
   {
     Header: 'File Size (bytes)',
-    accessor: (row) => row.size,
+    accessor: (row) => row.size || '(No Size Found)',
     id: 'size'
 
   },
