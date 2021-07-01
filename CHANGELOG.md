@@ -28,13 +28,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     logs, likewise use a pattern like the ES\_DISTRIBUTION\_TARGET\_PATTERN.
 
 ### Changed
-- **CUMULUS-2542**
-  - Created a new ASYNC dropdown in order to be used to search Collections since some Collections were not showing
-  - Created a new file for styles to be imported in Simple-Dropdown and Async-Dropdown
 - **CUMULUS-2534**
   - Added a copy button to errors pages so the error can be copied and searched up on the internet.
 - **CUMULUS-2535**
   - Ensured that the KPI cards would be updated on all tabs whenever the page was updated
+- **CUMULUS-2542**
+  - Created a new ASYNC dropdown in order to be used to search Collections since some Collections were not showing
+  - Created a new file for styles to be imported in Simple-Dropdown and Async-Dropdown
 - **CUMULUS-2544**
   - Changed the timestamp so that the date and time is shown rather than time elapsed since last occurrence
 - **CUMULUS-2554**
