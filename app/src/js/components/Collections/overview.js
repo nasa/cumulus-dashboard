@@ -107,21 +107,12 @@ const CollectionOverview = ({
   }
 
   useEffect(() => {
-    queryMeta();
-  },[])
-
-  useEffect(() => {
     dispatch(listWorkflows());
   }, [dispatch]);
 
   useEffect(() => {
     setWorkflow(workflowOptions[0]);
   }, [workflowOptions]);
-
-  function queryMeta () {
-    const { dispatch } = this.props;
-    dispatch(listWorkflows());
-  }
 
   function generateQuery() {
     return {
