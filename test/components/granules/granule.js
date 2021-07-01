@@ -97,9 +97,7 @@ test('The Size of a file in a granule is able to be fetched', function (t) {
   const sortableTableWrapper = sortableTable.dive();
   t.is(sortableTableWrapper
     .find('.tbody .tr')
-    .find('Cell').at(1).dive()
-    .find('a[href="https://my-bucket.s3.amazonaws.com/my-key-path/my-name/my-size"]').length, size);
-
-
+    .find('Cell').at(2).dive()
+    .find('a[href="https://my-bucket.s3.amazonaws.com/my-key-path/my-name/my-size"]').length, 1);
 });
 
