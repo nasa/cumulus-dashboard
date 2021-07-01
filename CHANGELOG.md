@@ -28,27 +28,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     logs, likewise use a pattern like the ES\_DISTRIBUTION\_TARGET\_PATTERN.
 
 ### Changed
-- **CUMULUS-2551**
-  - Added a sortable column to individual granules tab so you can sort each file within the granule by size. 
+- **CUMULUS-2502**
+  - Metrics ES searches have been updated to run against only the index
+    patterns provided, improving performance and saving resources.
+  - Documentation for metrics has been moved into its own table.
+  - Upgrade cypress testing framework to 7.3.0
+- **CUMULUS-2505**
+  - Update column show/hide component with new styling and "reset to default interaction for each table
+- **CUMULUS-2506**
+  - Adds horizontal scroll buttons to tables improving accessibily
+- **CUMULUS-2524**
+  - CSS and UI tweaks to padding/margin, width, and color/contrast
 - **CUMULUS-2534**
   - Added a copy button to errors pages so the error can be copied and searched up on the internet. 
 - **CUMULUS-2535**
   - Ensured that the KPI cards would be updated on all tabs whenever the page was updated
 - **CUMULUS-2544**
   - Changed the timestamp so that the date and time is shown rather than time elapsed since last occurrence
+- **CUMULUS-2551**
+  - Added a sortable column to individual granules tab so you can sort each file within the granule by size. 
 - **CUMULUS-2554**
-  - Add focus styles for various browser support and keyboard/mouse inputs
-- **CUMULUS-2502**
-  - Metrics ES searches have been updated to run against only the index
-    patterns provided, improving performance and saving resources.
-  - Documentation for metrics has been moved into its own table.
-  - Upgrade cypress testing framework to 7.3.0
-- **CUMULUS-2524**
-  - CSS and UI tweaks to padding/margin, width, and color/contrast
-- **CUMULUS-2506**
-  - Adds horizontal scroll buttons to tables improving accessibily
-- **CUMULUS-2505**
-  - Update column show/hide component with new styling and "reset to default interaction for each table
+  - Add focus styles for various browser support and keyboard/mouse inputs 
+
 
 
 ## [v6.0.0] - 2021-05-03
