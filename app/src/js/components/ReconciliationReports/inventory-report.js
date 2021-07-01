@@ -1,7 +1,9 @@
 import classNames from 'classnames';
 import cloneDeep from 'lodash/cloneDeep';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Collapse } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import TableCards from './table-cards';
@@ -10,6 +12,10 @@ import {
   clearReconciliationSearch,
   filterReconciliationReport,
   clearReconciliationReportFilter,
+  listWorkflows,
+  listGranules,
+  applyWorkflowToGranule,
+  applyRecoveryWorkflowToGranule
 } from '../../actions';
 import SortableTable from '../SortableTable/SortableTable';
 import { reshapeReport } from './reshape-report';
@@ -18,6 +24,14 @@ import Search from '../Search/search';
 import Dropdown from '../DropDown/dropdown';
 import ReportHeading from './report-heading';
 import ListFilters from '../ListActions/ListFilters';
+import { 
+  bulkActions,
+  defaultWorkflowMeta,
+  executeDialog,
+  groupAction,
+  recoverAction
+} from '../../utils/table-config/granules';
+import { workflowOptionNames } from '../../selectors';
 
 const bucketsForFilter = (allBuckets) => {
   const uniqueBuckets = [...new Set(allBuckets)];
@@ -34,6 +48,9 @@ const InventoryReport = ({
   recordData,
   reportName,
   reportUrl,
+  granules,
+  dispatch,
+  workflowOptions
 }) => {
   const [activeId, setActiveId] = useState('dynamo');
   const { reportStartTime = null, reportEndTime = null, error = null } =
@@ -47,7 +64,10 @@ const InventoryReport = ({
   const activeCardTables = reportComparisons.find(
     (displayObj) => displayObj.id === activeId
   ).tables;
-
+  const { list } = granules;
+  const [workflow, setWorkflow] = useState(workflowOptions[0]);
+  const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
+  const [selected, setSelected] = useState([]);
   const downloadOptions = [
     {
       label: 'JSON - Full Report',
@@ -58,7 +78,6 @@ const InventoryReport = ({
       onClick: (e) => handleDownloadCsvClick(e, { reportName, table }),
     })),
   ];
-
   const [expandedState, setExpandedState] = useState(
     reportComparisons.reduce((object, item) => {
       object[item.id] = item.tables.reduce((tableObject, table, index) => {
@@ -69,6 +88,14 @@ const InventoryReport = ({
       return object;
     }, {})
   );
+
+  useEffect(() => {
+    dispatch(listWorkflows());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setWorkflow(workflowOptions[0]);
+  }, [workflowOptions]);
 
   function handleCardClick(e, id) {
     e.preventDefault();
@@ -107,6 +134,56 @@ const InventoryReport = ({
     );
   }
 
+  function generateBulkActions() {
+    const config = {
+      execute: {
+        options: getExecuteOptions(),
+        action: applyWorkflow,
+      },
+      recover: {
+        options: getExecuteOptions(),
+        action: applyRecoveryWorkflow
+      }
+    };
+    const selectedGranules = selected.map((id) => granules.list.data.find((g) => id === g.granuleId));
+    let actions = bulkActions(granules, config, selectedGranules);
+    if (config.enableRecovery) {
+      actions = actions.concat(recoverAction(granules, config));
+    }
+    return actions;
+  }
+
+  function selectWorkflow(selector, selectedWorkflow) {
+    setWorkflow(selectedWorkflow);
+  }
+
+  function applyWorkflow(granuleId) {
+    const { meta } = JSON.parse(workflowMeta);
+    setWorkflowMeta(defaultWorkflowMeta);
+    return applyWorkflowToGranule(granuleId, workflow, meta);
+  }
+
+  function applyRecoveryWorkflow (granuleId) {
+    return applyRecoveryWorkflowToGranule(granuleId);
+  }
+
+  function getExecuteOptions() {
+    return [
+      executeDialog({
+        selectHandler: selectWorkflow,
+        label: 'workflow',
+        value: workflow,
+        options: workflowOptions,
+        initialMeta: workflowMeta,
+        metaHandler: setWorkflowMeta,
+      }),
+    ];
+  }
+
+  function updateSelection(selection) {
+    setSelected(selection);
+  }
+  
   return (
     <div className="page__component">
       <ReportHeading
@@ -207,11 +284,17 @@ const InventoryReport = ({
                   <Collapse in={isExpanded}>
                     <div id={item.id}>
                       <SortableTable
+                        list={list}
+                        action={listGranules}
                         data={item.data}
                         legend={legend}
                         tableColumns={item.columns}
+                        bulkActions={generateBulkActions()}
+                        groupAction={groupAction}
+                        rowId="granuleId"
                         shouldUsePagination={true}
                         initialHiddenColumns={['']}
+                        onSelect={updateSelection}
                       />
                     </div>
                   </Collapse>
@@ -231,6 +314,14 @@ InventoryReport.propTypes = {
   recordData: PropTypes.object,
   reportName: PropTypes.string,
   reportUrl: PropTypes.string,
+  dispatch: PropTypes.func,
+  granules: PropTypes.object,
+  workflowOptions: PropTypes.array
 };
 
-export default InventoryReport;
+export default withRouter(
+  connect((state) => ({
+    granules: state.granules,
+    workflowOptions: workflowOptionNames(state)
+  }))(InventoryReport)
+);
