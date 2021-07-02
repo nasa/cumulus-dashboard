@@ -27,7 +27,7 @@ const granules = {
             fileName: 'my-name',
             key: 'my-key-path/my-name',
             bucket: 'my-bucket',
-            size:  'my-size'
+            size:  10239
           }
         ]
       }
@@ -74,6 +74,6 @@ test('Checking granule for size prop', function (t) {
   t.is(sortableTableWrapper
     .find('.tbody .tr .td')
     .find('Cell').at(2).dive()
-    .text(), 'my-size');
+    .text(), '10239');
 });
 
