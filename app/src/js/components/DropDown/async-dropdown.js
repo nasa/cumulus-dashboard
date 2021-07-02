@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
+import Async from 'react-select/async';
 import { customStyles, DropdownIndicator } from '../../utils/dropdown-utils';
 
-const SimpleDropdown = ({
+const AsyncDropdown = ({
+  onInputChange,
+  onChange,
   className,
-  error,
   id,
   label,
-  onChange,
+  error,
   options = [],
   value,
   ...rest
@@ -26,6 +27,10 @@ const SimpleDropdown = ({
   if (!value) valueObject = null;
   else if (typeof value !== 'object') valueObject = { label: value, value };
 
+  const promiseOptions = (inputValue) => new Promise((resolve) => {
+    resolve(onInputChange(inputValue));
+  });
+
   function handleChange(option) {
     if (typeof onChange === 'function') {
       if (!option || Array.isArray(option)) onChange(id, option);
@@ -40,16 +45,18 @@ const SimpleDropdown = ({
           <label htmlFor={id}>{label}</label>
         </li>
         <li className="dropdown__element">
-          <Select
+          <Async
             aria-label={label}
-            {...rest}
             blurInputOnSelect={true}
+            {...rest}
             className={className}
-            components={{ DropdownIndicator }}
-            options={optionsObject}
-            onChange={handleChange}
+            components={ { DropdownIndicator } }
             styles={customStyles}
+            defaultOptions={true}
+            onChange= {handleChange}
             value={valueObject}
+            options={optionsObject}
+            loadOptions={promiseOptions}
           />
         </li>
       </ul>
@@ -58,8 +65,9 @@ const SimpleDropdown = ({
   );
 };
 
-SimpleDropdown.propTypes = {
+AsyncDropdown.propTypes = {
   className: PropTypes.string,
+  onInputChange: PropTypes.func,
   error: PropTypes.string,
   id: PropTypes.string,
   label: PropTypes.any,
@@ -68,4 +76,4 @@ SimpleDropdown.propTypes = {
   value: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
 };
 
-export default SimpleDropdown;
+export default AsyncDropdown;
