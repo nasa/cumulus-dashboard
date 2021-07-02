@@ -55,7 +55,7 @@ test('CUMULUS-336 Granule file links use the correct URL', function (t) {
     .find('Cell').at(1).dive()
     .find('a[href="https://my-bucket.s3.amazonaws.com/my-key-path/my-name"]').length, 1);
 });
-test('The Size of a file in a granule is able to be fetched', function (t) {
+test('Checking granule for size prop', function (t) {
   const granules = {
     map: {
       'my-granule-id': {
@@ -69,13 +69,14 @@ test('The Size of a file in a granule is able to be fetched', function (t) {
               fileName: 'my-name',
               key: 'my-key-path/my-name',
               bucket: 'my-bucket',
-              size: 'my-size'
+              size:  'my-size'
             }
           ]
         }
       }
     }
   };
+
   const logs = { items: [] };
 
   const match = { params: { granuleId: 'my-granule-id' } };
@@ -92,12 +93,13 @@ test('The Size of a file in a granule is able to be fetched', function (t) {
       workflowOptions={[]}
     />
   );
+
   const sortableTable = granuleOverview.find('SortableTable');
   t.is(sortableTable.length, 1);
   const sortableTableWrapper = sortableTable.dive();
   t.is(sortableTableWrapper
-    .find('.tbody .tr')
+    .find('.tbody .tr .td')
     .find('Cell').at(2).dive()
-    .find('a[href="https://my-bucket.s3.amazonaws.com/my-key-path/my-name/my-size"]').length, 1);
+    .text(), 'my-size');
 });
 
