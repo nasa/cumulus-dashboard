@@ -17,7 +17,7 @@ import {
   applyWorkflowToGranule,
   applyRecoveryWorkflowToGranule
 } from '../../actions';
-import SortableTable from '../SortableTable/SortableTable';
+import List from '../Table/Table';
 import { reshapeReport } from './reshape-report';
 import { handleDownloadUrlClick, handleDownloadCsvClick } from '../../utils/download-file';
 import Search from '../Search/search';
@@ -283,7 +283,7 @@ const InventoryReport = ({
                   </Card.Header>
                   <Collapse in={isExpanded}>
                     <div id={item.id}>
-                      <SortableTable
+                      <List
                         list={list}
                         action={listGranules}
                         data={item.data}
