@@ -41,7 +41,8 @@ import {
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Dropdown from '../DropDown/dropdown';
-import SimpleDropdown from '../DropDown/simple-dropdown';
+import AsyncDropdown from '../DropDown/async-dropdown';
+import Bulk from '../Granules/bulk';
 import ListFilters from '../ListActions/ListFilters';
 import { strings } from '../locale';
 import Overview from '../Overview/overview';
@@ -75,23 +76,15 @@ const CollectionOverview = ({
   workflowOptions
 }) => {
   const { params } = match;
-  const { deleted: deletedCollections, list: collectionsList, map: collectionsMap } = collections;
+  const { deleted: deletedCollections, map: collectionsMap } = collections;
   const { list: granulesList } = granules;
   const { dropdowns } = providers;
   const { name: collectionName, version: collectionVersion } = params || {};
   const decodedVersion = decodeURIComponent(collectionVersion);
   const collectionId = getCollectionId({ name: collectionName, version: decodedVersion });
-  const sortedCollectionIds = collectionsList.data.map((collection) => ({
-    label: getCollectionId(collection),
-    value: getEncodedCollectionId(collection)
-  })).sort(
-    // Compare collection IDs ignoring case
-    (id1, id2) => id1.label.localeCompare(id2.label, 'en', { sensitivity: 'base' })
-  );
   const record = collectionsMap[collectionId];
   const deleteStatus = get(deletedCollections, [collectionId, 'status']);
-  const hasGranules =
-    get(collectionsMap[collectionId], 'data.stats.total', 0) > 0;
+  const hasGranules = get(collectionsMap[collectionId], 'data.stats.total', 0) > 0;
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
@@ -179,6 +172,13 @@ const CollectionOverview = ({
     historyPushWithQueryParams('/granules');
   }
 
+  function onInputChange(inputValue) {
+    return dispatch(listCollections({ infix: inputValue })).then((result) => result.data.results.map((collection) => ({
+      label: getCollectionId(collection),
+      value: getEncodedCollectionId(collection)
+    })));
+  }
+
   function errors() {
     return [
       get(collections.map, [collectionId, 'error']),
@@ -203,14 +203,16 @@ const CollectionOverview = ({
             </li>
             <li>
               <div className="dropdown__collection form-group__element--right">
-                <SimpleDropdown
+                <AsyncDropdown
                   className='collection-chooser'
                   label={'Collection'}
                   title={'Collections Dropdown'}
-                  value={collectionId}
-                  options={sortedCollectionIds}
+                  onChange = {changeCollection}
+                  onInputChange={onInputChange}
+                  value = {collectionId}
+                  defaultOptions = {true}
                   id={'collection-chooser'}
-                  onChange={changeCollection}
+                  cacheOptions = {true}
                 />
               </div>
             </li>
