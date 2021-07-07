@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
-import { getCollectionId, displayCase } from '../../utils/format';
+import { getCollectionId, displayCase, collectionHrefFromNameVersion } from '../../utils/format';
 import {
   listGranules,
   filterGranules,
@@ -46,7 +46,8 @@ const CollectionGranules = ({
   const { list } = granules;
   const { meta } = list;
   const displayName = strings.granules;
-  const collectionId = getCollectionId(params);
+  const decodedVersion = decodeURIComponent(collectionVersion);
+  const collectionId = getCollectionId({ name: collectionName, version: decodedVersion });
   const view = getView();
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
@@ -56,7 +57,7 @@ const CollectionGranules = ({
   const breadcrumbConfig = [
     {
       label: 'Collection Granules',
-      href: `/collections/collection/${collectionName}/${collectionVersion}/granules`,
+      href: `${collectionHrefFromNameVersion({ name: collectionName, version: collectionVersion })}/granules`,
       active: view === 'all',
     },
   ];
@@ -135,7 +136,7 @@ const CollectionGranules = ({
         breadcrumbConfig={breadcrumbConfig}
         name={collectionName}
         queriedAt={meta.queriedAt}
-        version={collectionVersion}
+        version={decodedVersion}
       />
       <section className="page__section">
         <div className="heading__wrapper--border">

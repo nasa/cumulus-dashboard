@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserJsPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CSSNano = require('cssnano');
+const cssNano = require('cssnano');
 const pkg = require('./package.json');
 
 const CommonConfig = require('./webpack.common');
@@ -38,7 +38,7 @@ const MainConfig = merge.smartStrategy({
         include: /\.js$/
       }),
       new OptimizeCSSAssetsPlugin({
-        cssProcessor: CSSNano,
+        cssProcessor: cssNano(),
         cssProcessorPluginOptions: {
           preset: [
             'default',
@@ -81,7 +81,10 @@ const MainConfig = merge.smartStrategy({
           },
           {
             // Minifies CSS files
-            loader: MiniCssExtractPlugin.loader
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              esModule: false,
+            }
           }
         ]
       }

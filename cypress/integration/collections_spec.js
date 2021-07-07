@@ -40,7 +40,7 @@ describe('Dashboard Collections Page', () => {
       cy.url().should('include', 'collections');
       cy.contains('.heading--xlarge', 'Collections');
 
-      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('.table .tbody .tr').should('have.length', 2);
       cy.get('.tbody > .tr > :nth-child(4)').should('contain', '11');
       cy.get('.tbody > .tr > :nth-child(5)').should('contain', '7');
       cy.get('.tbody > .tr > :nth-child(6)').should('contain', '2');
@@ -49,7 +49,7 @@ describe('Dashboard Collections Page', () => {
       cy.clearStartDateTime();
       cy.wait('@getCollections');
 
-      cy.get('.table .tbody .tr').should('have.length', 5);
+      cy.get('.table .tbody .tr').should('have.length', 6);
     });
 
     it('should only display collections with active granules when time filter is applied', () => {
@@ -74,7 +74,7 @@ describe('Dashboard Collections Page', () => {
 
       // verify there is a granule with a timestamp containing second or minute
       // this would indicate it was updated within the default timeframe of 1 hour
-      cy.get('@listItems').should('have.length', 11).contains('.td', /second|minute/);
+      cy.get('@listItems').contains('.td', /[0-9]{2}:[0-9]{2}:[0-9]{2}.+/);
     });
 
     it('should search collections by name', () => {
@@ -96,7 +96,7 @@ describe('Dashboard Collections Page', () => {
       cy.get('.filter-provider .rbt-input-main').as('provider-input');
       cy.get('@provider-input').click().type('s3').type('{enter}');
       cy.url().should('include', 'provider=s3_provider');
-      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('.table .tbody .tr').should('have.length', 2);
 
       cy.get('@provider-input').click().clear().type('POD')
         .type('{enter}');
@@ -188,7 +188,7 @@ describe('Dashboard Collections Page', () => {
       // details page.
       cy.visit('/collections');
       cy.wait('@getCollections');
-      cy.get('.table .tbody .tr').should('have.length', 5);
+      cy.get('.table .tbody .tr').should('have.length', 6);
 
       cy.contains('.table .tbody .tr a', name)
         .then(($res) => {
@@ -390,7 +390,7 @@ describe('Dashboard Collections Page', () => {
             { timeout: 25000 }
           ).should(existOrNotExist);
         });
-      cy.get('.table .tbody .tr').should('have.length', 4);
+      cy.get('.table .tbody .tr').should('have.length', 5);
       cy.task('resetState');
     });
 
@@ -609,6 +609,161 @@ describe('Dashboard Collections Page', () => {
           .next()
           .should('contain', 0)
           .and('contain', 'Running');
+      });
+    });
+
+    describe('Encoded version', () => {
+      const name = 'Test-L2-Coastal';
+      const version = 'Operational/Near-Real-Time';
+      const encodedVersion = encodeURIComponent(version);
+      const urlRegex = new RegExp(`collections/collection/${name}/${encodedVersion}`);
+      it('should properly encode collections path', () => {
+        cy.visit('/collections');
+        cy.get('.table .tbody .tr').should('have.length', 6);
+        cy.contains('.table .tbody .tr', name).as('testCollection');
+        cy.contains('.table .tbody .tr', version);
+        cy.get('@testCollection').find('a').should('have.attr', 'href').and('match', urlRegex);
+        cy.get('@testCollection').find('a').click();
+        cy.url().should('match', urlRegex);
+        cy.contains('.heading--large', `${name} / ${version}`);
+        cy.get('.heading--large').should('not.contain', encodedVersion);
+        cy.contains('.dropdown__collection', `${name}___${version}`);
+      });
+
+      it('should properly query sidebar pages', () => {
+        cy.visit(`/collections/collection/${name}/${encodedVersion}`);
+        cy.contains('.sidebar a', 'Granules').click();
+        cy.get('.table .tbody .tr').should('have.length', 1);
+        cy.contains('.sidebar a', 'Completed').click();
+        cy.get('.table .tbody .tr').should('have.length', 1);
+        cy.contains('.sidebar a', 'Running').click();
+        cy.get('.table .tbody .tr').should('have.length', 0);
+        cy.contains('.sidebar a', 'Failed').click();
+        cy.get('.table .tbody .tr').should('have.length', 0);
+      });
+
+      it('should edit a collection', () => {
+        cy.visit(`/collections/collection/${name}/${encodedVersion}`);
+        cy.wait('@getGranules');
+        cy.contains('a', 'Edit').as('editCollection');
+        cy.get('@editCollection')
+          .should('have.attr', 'href')
+          .and('include', `/collections/edit/${name}/${encodedVersion}`);
+        cy.get('@editCollection').click();
+        cy.contains('.heading--large', `${name}___${version}`);
+
+        // update collection and submit
+        const duplicateHandling = 'version';
+        const meta = { metaObj: 'metadata' };
+        cy.contains('.ace_variable', 'name', { timeout: 10000 });
+        cy.editJsonTextarea({ data: { duplicateHandling, meta }, update: true });
+        cy.contains('form button', 'Submit').click();
+        cy.contains('.default-modal .edit-collection__title', 'Edit Collection');
+        cy.contains('.default-modal .modal-body', `Collection ${name}___${version} has been updated`, { timeout: 10000 });
+        cy.contains('.modal-footer button', 'Close').click();
+
+        // displays the updated collection and its granules
+        cy.contains('.heading--xlarge', 'Collections');
+        cy.contains('.heading--large', `${name} / ${version}`);
+
+        // verify the collection is updated by looking at the Edit page
+        cy.contains('a', 'Edit').click();
+
+        cy.contains('.ace_variable', 'name');
+        cy.getJsonTextareaValue().then((collectionJson) => {
+          expect(collectionJson.duplicateHandling).to.equal(duplicateHandling);
+          expect(collectionJson.meta).to.deep.equal(meta);
+        });
+        cy.contains('.heading--large', `${name}___${version}`);
+      });
+
+      it('should add and delete a new collection', () => {
+        const newName = 'TESTCOLLECTION';
+        const newVersion = 'Test/006';
+        const newEncodedVersion = encodeURIComponent(newVersion);
+        cy.intercept('DELETE', `/collections/${newName}/${newEncodedVersion}`).as('deleteCollection');
+        // Test collection loaded by cy.fixture
+        let collection;
+
+        // On the Collections page, click the Add Collection button
+        cy.visit('/collections');
+        cy.contains('.heading--large', 'Collections Overview');
+        cy.clearStartDateTime();
+        cy.wait('@getCollections');
+        cy.contains('a', 'Add Collection').click();
+
+        // Fill the form with the test collection JSON and submit it
+        cy.url().should('include', '/collections/add');
+        cy.fixture('TESTCOLLECTION___Test%2F006.json')
+          .then((json) => {
+            cy.editJsonTextarea({ data: json });
+            // Capture the test collection so we can confirm below that it was
+            // properly persisted after form submission.
+            collection = json;
+          });
+        cy.contains('form button', 'Submit').click();
+
+        // After POSTing the new collection, make sure we GET it back
+        cy.wait('@postCollection')
+          .then((interception) => cy.request({
+            method: 'GET',
+            url: `${new URL(interception.request.url).origin}/collections/${newName}/${newEncodedVersion}`,
+            headers: { Authorization: interception.request.headers.authorization },
+          }))
+          .then((response) => {
+            cy.expectDeepEqualButNewer(response.body, collection);
+
+            // Display the new collection
+            cy.wait('@getGranules');
+            cy.url().should('include', `/collections/collection/${newName}/${newEncodedVersion}`);
+            cy.contains('.heading--xlarge', 'Collections');
+            cy.contains('.heading--large', `${newName} / ${newVersion}`);
+
+            // Verify the new collection appears in the collections list, after
+            // allowing ES indexing to finish (hopefully), so that the new
+            // collection is part of the query results.
+            cy.wait(1000);
+            cy.contains('Back to Collections').click();
+            cy.wait('@getCollections');
+            cy.url().should('contain', '/collections/all');
+            cy.contains('.table .tbody .tr a', newName)
+              .should('have.attr', 'href', `/collections/collection/${newName}/${newEncodedVersion}`);
+
+            cy.visit(`/collections/collection/${newName}/${newEncodedVersion}`);
+
+            // delete collection
+            cy.get('.DeleteCollection > .button').click();
+            cy.contains('.modal button', 'Delete Collection')
+              .should('be.visible').click();
+            cy.wait('@deleteCollection');
+
+            // click close on confirmation modal
+            cy.contains('.modal-footer > .button', 'Close')
+              .should('be.visible').click();
+            cy.contains('.modal-content').should('not.exist');
+
+            // successful delete should cause navigation back to collections list
+            cy.url().should('include', 'collections/all');
+            cy.contains('.heading--xlarge', 'Collections');
+
+            // Wait for the table to be visible.
+            cy.get('.previous');
+            cy.wait('@getCollections');
+
+            // This forces an update to the current state and this seems wrong, but
+            // the tests will pass.
+            cy.get('.form__element__refresh').click();
+            cy.wait('@getCollections');
+
+            // This timeout exists because the table is sometimes re-rendered
+            // with existing information, and the next update has to happen
+            // before these all show up or don't show up correctly.
+            cy.get(
+                `[data-value="${newName}___${newVersion}"]`,
+                { timeout: 25000 }
+            ).should('not.exist');
+            cy.task('resetState');
+          });
       });
     });
   });

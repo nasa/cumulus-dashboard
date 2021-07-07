@@ -1,32 +1,18 @@
-export const apiGatewaySearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
+export const apiLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
   "aggs": {
     "2": {
       "filters": {
         "filters": {
-          "ApiExecutionErrors": {
+          "LambdaAPIErrors": {
             "query_string": {
-              "query": "+\\"Method completed with status:\\" +(4?? 5??)",
+              "query": "message:(+GET +HTTP +(4?? 5??) -(200 307))",
               "analyze_wildcard": true,
               "default_field": "*"
             }
           },
-          "ApiExecutionSuccesses": {
+          "LambdaAPISuccesses": {
             "query_string": {
-              "query": "+\\"Method completed with status:\\" +(2?? 3??)",
-              "analyze_wildcard": true,
-              "default_field": "*"
-            }
-          },
-          "ApiAccessErrors": {
-            "query_string": {
-              "query": "statusCode:[400 TO 599]",
-              "analyze_wildcard": true,
-              "default_field": "*"
-            }
-          },
-          "ApiAccessSuccesses": {
-            "query_string": {
-              "query": "statusCode:[200 TO 399]",
+              "query": "message:(+GET +HTTP +(2?? 3??))",
               "analyze_wildcard": true,
               "default_field": "*"
             }
@@ -66,15 +52,8 @@ export const apiGatewaySearchTemplate = (prefix, startTimeEpochMilli, endTimeEpo
         },
         {
           "match_phrase": {
-            "_index": {
-              "query": "${prefix}-cloudwatch*"
-            }
-          }
-        },
-        {
-          "match_phrase": {
             "logGroup": {
-              "query": "\\"API\\\\-Gateway\\\\-Execution*\\""
+              "query": "/aws/lambda/${prefix}-ApiDistribution"
             }
           }
         }
@@ -86,4 +65,4 @@ export const apiGatewaySearchTemplate = (prefix, startTimeEpochMilli, endTimeEpo
   }
 }`;
 
-export default apiGatewaySearchTemplate;
+export default apiLambdaSearchTemplate;

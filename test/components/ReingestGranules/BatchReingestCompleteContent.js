@@ -27,9 +27,9 @@ test('Renders Error result', (t) => {
     <BatchReingestComplete results={[]} errors={errors} />
   );
 
-  const errorWrapper = wrapper.find('Collapsible').dive();
+  const errorWrapper = wrapper.find('s').dive();
 
-  t.true(errorWrapper.find('.Collapsible__contentInner').text().includes(errors[0].error));
+  t.true(errorWrapper.text().includes(errors[0].error));
 });
 
 test('Renders success results with multiple Granules', (t) => {

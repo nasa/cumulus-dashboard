@@ -1,4 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
+import { collectionHrefFromId } from '../../app/src/js/utils/format';
 
 describe('Dashboard Granules Page', () => {
   describe('When not logged in', () => {
@@ -21,21 +22,55 @@ describe('Dashboard Granules Page', () => {
 
     it('should be able to toggle a column', () => {
       cy.visit('/granules');
-      cy.contains('.table__filters .button__filter', 'Show Column Filters').click();
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
       cy.get('.table__filters--collapse').should('be.visible');
 
-      cy.get('.table__filters--wrapper #recoveryStatus').click();
+      cy.contains('.table__filters--filter label', 'Recovery').find('span').click();
+      cy.get('.button__apply-filter').click();
       cy.get('.table .thead .tr .th').should('contain.text', 'Recovery');
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 11);
+      cy.get('@list').should('have.length', 12);
 
-      cy.get('.table__filters--wrapper #recoveryStatus').click();
+      cy.contains('.table__filters--filter label', 'Recovery').find('span').click();
+      cy.get('.button__apply-filter').click();
+      cy.get('.button__apply-filter').click();
       cy.get('.table .thead .tr .th').should('not.contain.text', 'Recovery');
 
-      cy.contains('.table__filters .button__filter', 'Hide Column Filters').click();
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
       cy.get('.table__filters--collapse').should('not.be.visible');
-      cy.contains('.table__filters .button__filter', 'Show Column Filters');
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns');
+    });
+
+    it('should reset columns initially displayed when the reset button is clicked', () => {
+      cy.visit('/granules');
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
+      cy.get('.table__filters--collapse').should('be.visible');
+
+      cy.contains('.table__filters--filter label', 'Recovery').find('span').click();
+      cy.contains('.table__filters--filter label', 'Status').find('span').click();
+      cy.contains('.table__filters--filter label', 'Execution').find('span').click();
+      cy.contains('.table__filters--filter label', 'Name').find('span').click();
+      cy.contains('.table__filters--filter label', 'Published').find('span').click();
+
+      cy.get('.button__apply-filter').click();
+
+      cy.get('.table .thead .tr .th').should('contain.text', 'Recovery');
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Status');
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Execution');
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Name');
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Published');
+
+      cy.get('.button__reset-filter').click();
+
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Recovery');
+      cy.get('.table .thead .tr .th').should('contain.text', 'Status');
+      cy.get('.table .thead .tr .th').should('contain.text', 'Execution');
+      cy.get('.table .thead .tr .th').should('contain.text', 'Name');
+      cy.get('.table .thead .tr .th').should('contain.text', 'Published');
+
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
+      cy.get('.table__filters--collapse').should('not.be.visible');
     });
 
     it('should display all granules in table with correct columns', () => {
@@ -46,7 +81,7 @@ describe('Dashboard Granules Page', () => {
 
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 7)
+        .first().contains('li', 'Completed').contains('li', 8)
         .next()
         .contains('li', 'Failed')
         .contains('li', 2)
@@ -112,7 +147,7 @@ describe('Dashboard Granules Page', () => {
               .should('be.eq', formattedCollectionId);
             // has popover with copy feature
             cy.get('@columns').eq(4).find('.hover-wrap').trigger('mouseover');
-            cy.get(`#collectionId-${granule.collectionId}-popover`).as('popover');
+            cy.get(`[id="collectionId-${granule.collectionId}-popover"]`).as('popover');
             cy.get('@popover').should('be.visible');
             cy.get('@popover').contains('.popover-body--main', formattedCollectionId);
             cy.get('@popover').contains('button', 'Copy').click();
@@ -122,7 +157,7 @@ describe('Dashboard Granules Page', () => {
             // has link to the detailed collection page
             cy.get('@columns').eq(4).find('a')
               .should('have.attr', 'href')
-              .and('be.eq', `/collections/collection/${granule.collectionId.replace('___', '/')}`);
+              .and('be.eq', collectionHrefFromId(granule.collectionId));
 
             // has link to provider
             cy.get('@columns').eq(5).children('a')
@@ -139,7 +174,7 @@ describe('Dashboard Granules Page', () => {
               .should('be.eq', `${Number(granule.duration).toFixed(2)}s`);
             // Updated column
             cy.get('@columns').eq(8).invoke('text')
-              .should('match', /.+ago$/);
+              .should('match', /.+[0-9]{2}\/[0-9]{2}\/[0-9]{2}$/);
             cy.get('@columns').eq(8).find('span').trigger('mouseover');
             cy.get('#table-timestamp-tooltip').should('be.visible');
             cy.get('@columns').eq(8).find('span').trigger('mouseleave');
@@ -147,7 +182,7 @@ describe('Dashboard Granules Page', () => {
         });
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 11);
+      cy.get('@list').should('have.length', 12);
     });
 
     it('should be able to sort table by multiple fields', () => {
@@ -176,7 +211,7 @@ describe('Dashboard Granules Page', () => {
               granules.push(granule);
             })
             .then(() => (
-              granules.length === 11 &&
+              granules.length === 12 &&
               Cypress._.isEqual(granules, Cypress._.orderBy(granules, ['collectionId', 'status', 'name'], ['desc', 'asc', 'asc']))
             ));
         },
@@ -228,7 +263,7 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', 7).and('contain', 'Completed')
+          .first().should('contain', 8).and('contain', 'Completed')
           .next()
           .should('contain', 0)
           .and('contain', 'Failed')
@@ -294,7 +329,7 @@ describe('Dashboard Granules Page', () => {
 
       // shows a summary count of completed and failed granules
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 7)
+        .first().contains('li', 'Completed').contains('li', 8)
         .next()
         .contains('li', 'Failed')
         .contains('li', 2)
@@ -303,7 +338,7 @@ describe('Dashboard Granules Page', () => {
         .contains('li', 2);
       cy.setDatepickerDropdown('Recent');
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 7)
+        .first().contains('li', 'Completed').contains('li', 8)
         .next()
         .contains('li', 'Failed')
         .contains('li', 2)
@@ -338,7 +373,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table__header .filter-page').as('page-input');
       cy.get('@page-input').should('be.visible').click().type('{backspace}2{enter}');
       cy.url().should('include', 'page=2');
-      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('.table .tbody .tr').should('have.length', 2);
     });
 
     it('Should reingest a granule and redirect to the granules detail page.', () => {
@@ -491,10 +526,10 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .thead input[type="checkbox"]').as('select-all');
       cy.get('.table .tbody .tr').as('list');
 
-      cy.get('@list').should('have.length', 11);
+      cy.get('@list').should('have.length', 12);
       cy.get('@select-all').check();
       cy.get('@select-all').should('be.checked');
-      cy.contains('.table__header', '(11 selected)');
+      cy.contains('.table__header', '(12 selected)');
     });
 
     it('should clear the selection when a filter is applied', () => {
@@ -508,7 +543,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .tbody .tr').as('list');
       cy.get('.filter-status .rbt-input-main').as('status-input');
 
-      cy.get('@list').should('have.length', 11);
+      cy.get('@list').should('have.length', 12);
       cy.get('@table-body').contains('.td', granuleIds[0]).as('granule1');
       cy.get('@granule1').siblings().contains('.td', 'Completed');
       cy.get('@granule1').siblings().find('input[type="checkbox"]').check();
@@ -527,7 +562,7 @@ describe('Dashboard Granules Page', () => {
 
       // verify items still not selected when filter is cleared
       cy.get('@status-input').clear();
-      cy.get('@list').should('have.length', 11);
+      cy.get('@list').should('have.length', 12);
       cy.get('.table__header').should('not.contain.text', 'selected');
     });
 
@@ -553,7 +588,7 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('[data-cy=overview-num]').within(() => {
         cy.get('li')
-          .first().should('contain', 7).and('contain', 'Completed')
+          .first().should('contain', 8).and('contain', 'Completed')
           .next()
           .should('contain', 2)
           .and('contain', 'Failed')
@@ -698,6 +733,34 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('.default-modal.batch-async-modal ').as('modal');
       cy.get('@modal').contains('div', 'Error');
+    });
+
+    it('should scroll show/hide scroll buttons when last visible columns are hovered over', () => {
+      cy.viewport(1300, 1000);
+      cy.visit('/granules?limit=20');
+
+      // ensure window has focus
+      cy.get('body').click();
+
+      // Validate Scroll Right button is visible when hovering over the last completely visible column
+      // and can scroll and hide the scroll right button
+      cy.get('.tr:nth-child(1) > .td:nth-child(8)').trigger('mouseover');
+      cy.get('.scrollButtonRight').should('be.visible');
+      cy.get('.scrollButtonRight').trigger('mousedown', { button: 0 });
+      cy.wait(1000);
+      cy.get('.scrollButtonRight').trigger('mouseup', { button: 0 });
+      cy.get('.scrollButtonRight').trigger('mouseout');
+      cy.get('.scrollButtonRight').should('not.be.visible');
+
+      // Validate Scroll Left button is visible when hovering over the last completely visible column on the left
+      // and can scroll and hide the scroll right button
+      cy.get('.tr:nth-child(1) > .td:nth-child(2)').trigger('mouseover');
+      cy.get('.scrollButtonLeft').should('be.visible');
+      cy.get('.scrollButtonLeft').trigger('mousedown', { button: 0 });
+      cy.wait(1000);
+      cy.get('.scrollButtonLeft').trigger('mouseup', { button: 0 });
+      cy.get('.scrollButtonLeft').trigger('mouseout');
+      cy.get('.scrollButtonLeft').should('not.be.visible');
     });
   });
 });

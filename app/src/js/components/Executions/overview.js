@@ -66,7 +66,7 @@ class ExecutionOverview extends React.Component {
               Execution Overview
             </h1>
             {lastUpdated(queriedAt)}
-            <Overview type='executions' inflight={false} />
+            <Overview type='executions' inflight={executions.list.inflight} />
           </div>
         </section>
         <section className="page__section">
@@ -92,9 +92,9 @@ class ExecutionOverview extends React.Component {
               action={searchExecutions}
               clear={clearExecutionsSearch}
               paramKey="asyncOperationId"
-              label="Async Operation ID"
+              label="Search"
               labelKey="asyncOperationId"
-              placeholder="Search"
+              placeholder="Async Operation ID"
               searchKey="executions"
             />
             <ListFilters>

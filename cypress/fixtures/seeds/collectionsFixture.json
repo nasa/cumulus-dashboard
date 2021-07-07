@@ -143,6 +143,54 @@
       "duplicateHandling": "replace",
       "updatedAt": 1528996960585,
       "url_path": "{cmrMetadata.Granule.Collection.ShortName}/{substring(file.name, 0, 3)}"
+    },
+    {
+      "duplicateHandling": "replace",
+      "files": [
+          {
+              "bucket": "protected",
+              "regex": "^test_[0-9]{8}_[0-9]{6}_metopa_[0-9]{5}_eps_o_coa_[0-9]{4}_ovw\\.l2\\.nc$",
+              "sampleFileName": "test_20100818_002101_metopa_19866_eps_o_coa_1100_ovw.l2.nc",
+              "type": "data"
+          },
+          {
+              "bucket": "public",
+              "regex": "^test_[0-9]{8}_[0-9]{6}_metopa_[0-9]{5}_eps_o_coa_[0-9]{4}_ovw\\.l2\\.cmr\\.json$",
+              "sampleFileName": "test_20100818_002101_metopa_19866_eps_o_coa_1100_ovw.l2.cmr.json",
+              "type": "metadata"
+          },
+          {
+              "bucket": "protected",
+              "regex": "^test_[0-9]{8}_[0-9]{6}_metopa_[0-9]{5}_eps_o_coa_[0-9]{4}_ovw\\.l2\\.nc\\.dmrpp$",
+              "sampleFileName": "test_20100818_002101_metopa_19866_eps_o_coa_1100_ovw.l2.nc.dmrpp",
+              "type": "metadata"
+          }
+      ],
+      "granuleId": "^test_[0-9]{8}_[0-9]{6}_metopa_[0-9]{5}_eps_o_coa_[0-9]{4}_ovw\\.l2$",
+      "granuleIdExtraction": "^(test_[0-9]{8}_[0-9]{6}_metopa_[0-9]{5}_eps_o_coa_[0-9]{4}_ovw\\.l2)(\\.tar\\.gz)?((\\.nc)|(\\.cmr\\.json)|(\\.nc\\.dmrpp))?$",
+      "meta": {
+          "glacier-bucket": "test-cumulus-glacier",
+          "granuleRecoveryWorkflow": "DrRecoveryWorkflow",
+          "required-files": [
+              "^test_[0-9]{8}_[0-9]{6}_metopa_[0-9]{5}_eps_o_coa_[0-9]{4}_ovw\\.l2\\.nc$"
+          ],
+          "response-endpoint": [
+              "arn:aws:sns:us-west-2:12345:test-cumulus-provider-response-sns",
+              "arn:aws:sns:us-west-2:12345:ops-cumulus-response-topic"
+          ],
+          "workflowChoice": {
+              "compressed": true,
+              "convertNetCDF": true,
+              "dmrpp": true,
+              "glacier": true,
+              "readDataFileForMetadata": true
+          }
+      },
+      "name": "Test-L2-Coastal",
+      "sampleFileName": "test_20100818_002101_metopa_19866_eps_o_coa_1100_ovw.l2.nc",
+      "url_path": "{cmrMetadata.CollectionReference.ShortName}",
+      "version": "Operational/Near-Real-Time"
     }
+    
   ]
 }

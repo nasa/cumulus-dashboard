@@ -145,6 +145,10 @@ rect {
   fill: #de322f;
 }
 
+.Stopped rect {
+  fill: orange;
+}
+
 svg:not(:root):not(.svg-inline--fa) {
   display: block;
   margin: 0 auto;

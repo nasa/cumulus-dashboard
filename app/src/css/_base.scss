@@ -187,6 +187,9 @@ a:active {
       height: 26px;
       width: 165px;
     }
+    a {
+      padding: 16px 2px 0px 4px;
+    }
   }
   nav{
     height: 4.688em;
@@ -208,6 +211,10 @@ a:active {
     button {
       background: none;
       border: none;
+    }
+    a:focus, button:focus, a:-moz-focusring, button:-moz-focusring { 
+      outline:2px solid $white; 
+      box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: .5);
     }
     &.active,
     &:hover {
@@ -428,6 +435,7 @@ a:active {
 
 .page__section {
   @extend .clearfix;
+  margin-top: 1em;
   /*&:last-of-type {
   margin-bottom: 3em;
   }*/
@@ -451,7 +459,9 @@ a:active {
   margin-top: 0em;
 }
 
-.page__section.datetime{
+/* This is here to control the z-index and position attributes for the react-datetime-picker and react-calendar*/
+.page__section#datetime {
+  margin-top: 0em;
   margin-bottom: 7.5em;
 }
 
@@ -828,12 +838,6 @@ a:active {
   text-align: center;
 }
 
-.api__version,.dashboard__version{
-  font-weight: 400;
-  color: $white;
-  padding: 10px 0 2px 0;
-}
-
 .api__warning {
   /*color: $error-red;*/
   color: $white;
@@ -857,4 +861,61 @@ a:active {
     left: -1.5em;
     top: 0em;
   }
+}
+
+.footer__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  color: $white;
+}
+
+.footer__links, .footer__version, .footer__opensource {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+  div {
+    display: flex;
+    padding: 0.5em;
+    margin-right: 1em;
+    a {
+      color: $white;
+    }
+    a:focus, button:focus, a:-moz-focusring, button:-moz-focusring { 
+      outline:2px solid $white; 
+      box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: .5);
+    }
+  }
+}
+
+.footer__opensource {
+  div {
+    margin-right: 0em;
+  }
+}
+
+.footer__links {
+  div {
+    a {
+      text-decoration: underline;
+    }
+  }
+}
+
+.footer__version {
+  justify-content: center;
+  div {
+    justify-content: space-evenly;
+  }
+}
+
+.footer__opensource {
+  justify-content: flex-end;
+}
+
+.dashboard__version, .api__version {
+  background-color: darken($ocean-blue, 10%);
+  border: 1px solid darken($ocean-blue, 13%);
+  border-radius: .5em;
 }

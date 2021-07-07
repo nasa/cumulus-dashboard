@@ -5,15 +5,25 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 
-import { Home } from '../../../app/src/js/components/home';
+import {
+  Home,
+  __RewireAPI__ as homeRewireApi
+} from '../../../app/src/js/components/home';
 import { tally } from '../../../app/src/js/utils/format';
 
 configure({ adapter: new Adapter() });
 
-/** 
+const fakeMetricsIsConfigured = () => true;
+const revertMetrics = homeRewireApi.__Rewire__('metricsConfigured', fakeMetricsIsConfigured);
+
+test.after(() => {
+  revertMetrics();
+});
+
+/**
  * Link values are generated with functions from app/src/js/utils/kibana.js
  * They return '' if `kibanaConfigured = false` which is determined from:
- * `const kibanaConfigured = (cumulusInstanceMeta) => 
+ * `const kibanaConfigured = (cumulusInstanceMeta) =>
  *   !!cumulusInstanceMeta && !!cumulusInstanceMeta.stackName && !!_config.kibanaRoot;`
  */
 

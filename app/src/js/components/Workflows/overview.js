@@ -40,17 +40,17 @@ const WorkflowOverview = ({
           tableColumns={tableColumns}
           query={{ ...queryParams }}
           rowId="name">
+          <Search
+            action={searchWorkflows}
+            clear={clearWorkflowsSearch}
+            label="Search"
+            labelKey="name"
+            placeholder="Workflow Name"
+            searchKey="workflows"
+          />
           <ListFilters>
             {/* Someone needs to define the search parameters for workflows,
             e.g. steps, collections, granules, etc. } */}
-            <Search
-              action={searchWorkflows}
-              clear={clearWorkflowsSearch}
-              label="Search"
-              labelKey="name"
-              placeholder="Workflow Name"
-              searchKey="workflows"
-            />
           </ListFilters>
         </List>
       </section>

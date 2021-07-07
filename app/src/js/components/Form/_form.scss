@@ -26,6 +26,71 @@ input[type="checkbox"], input[type="radio"] {
   color: $lighter-grey;
 }
 
+.checkmark--wrapper {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.checkmark--wrapper input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: $light-grey;
+
+  &:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+}
+
+.checkmark--wrapper:hover input ~ .checkmark {
+  background-color: $lightest-grey;
+}
+
+.checkmark--wrapper input:checked ~ .checkmark {
+  background-color: $ocean-blue;
+}
+
+.checkmark--wrapper input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkmark--wrapper  .checkmark:after {
+  left: 6px;
+  top: 4px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.checkmark--wrapper input:focus-visible ~ .checkmark { 
+  outline:2px solid $ocean-blue; 
+  box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: .5);
+}
+
 label, .label {
   display: block;
   font-weight: $base-font-semibold;
@@ -48,6 +113,11 @@ select {
   &:hover{
     box-shadow: $shadow__hover;
   }
+}
+
+select:focus-visible, input:focus-visible { 
+  outline:2px solid $ocean-blue; 
+  box-shadow: 1px 1px 5px rgba($color: #000000, $alpha: .5);
 }
 
 //For IE
@@ -95,6 +165,11 @@ select option{
   }
 }
 
+.search__box {
+  width: 100%;
+  margin-right: 1em;
+}
+
 .search__wrapper {
   position: relative;
   .form__dropdown label {
@@ -105,7 +180,8 @@ select option{
     display: none;
   }
   .search {
-    width: 80em;
+    width: 100%;
+    padding-right: .4em;
   }
   
   button[aria-label="Clear"] {
@@ -114,13 +190,17 @@ select option{
   }
 }
 
+.search__wrapper.form-group__element {
+  margin-right: 0em;
+}
+
 .search__icon {
   &:after {
     position: absolute;
     font-family: 'FontAwesome';
     content: '\f002';
     font-weight: 900;
-    right: .8em;
+    right: 1em;
     top: .34em;
   }
 }

@@ -65,7 +65,7 @@ describe('Dashboard Home Page', () => {
           payload: { versionNumber: apiVersionNumber }
         });
 
-        cy.get('h5[class=api__version]').should((apiVersionWrapper) => {
+        cy.get('div[class=api__version]').should((apiVersionWrapper) => {
           expect(apiVersionWrapper.first()).to.contain(apiVersionNumber);
         });
       });
@@ -172,8 +172,8 @@ describe('Dashboard Home Page', () => {
       cy.intercept('GET', '/stats?*timestamp__from=1233360000000*').as('stats');
 
       cy.get('#Errors').contains('2');
-      cy.get('#Collections').contains('1');
-      cy.get('#Granules').contains('11');
+      cy.get('#Collections').contains('2');
+      cy.get('#Granules').contains('12');
       cy.get('#Executions').contains('6');
       cy.get('[id="Ingest Rules"]').contains('1');
 
@@ -214,7 +214,7 @@ describe('Dashboard Home Page', () => {
       // elasticsearch endpoint. The fixture here returns a combined response of all the
       // responses for one url, effectively stubbing our elasticsearch searches.
       let fixtureName = 'elasticsearch.json';
-      cy.intercept('POST', 'http://example.com/_search/', (req) => req.reply({ statusCode: 200, fixture: fixtureName }));
+      cy.intercept('POST', 'http://example.com/*/_search/', (req) => req.reply({ statusCode: 200, fixture: fixtureName }));
       cy.visit('/');
 
       cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(5)').contains('0');

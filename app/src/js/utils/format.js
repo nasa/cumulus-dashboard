@@ -119,8 +119,8 @@ export const fromNowWithTooltip = (timestamp) => (
     className="tooltip--blue"
     id="table-timestamp-tooltip"
     placement="bottom"
-    target={<span>{fromNow(timestamp)}</span>}
-    tip={fullDate(timestamp)}
+    target={<span>{fullDate(timestamp)}</span>}
+    tip={fromNow(timestamp)}
   />
 );
 
@@ -335,6 +335,13 @@ export const getCollectionId = (collection) => {
   }
 };
 
+export const getEncodedCollectionId = (collection) => {
+  if (collection && collection.name && collection.version) {
+    return `${collection.name}___${encodeURIComponent(collection.version)}`;
+  }
+  return nullValue;
+};
+
 // "MYD13A1___006" => "MYD13A1 / 006"
 export const collectionName = (collectionId) => {
   if (!collectionId) return nullValue;
@@ -366,11 +373,10 @@ export const deconstructCollectionId = (collectionId) => {
 
 export const collectionLink = (collectionId) => {
   if (!collectionId || collectionId === nullValue) return nullValue;
-  const { name, version } = collectionNameVersion(collectionId);
   return (
     <Link
       to={(location) => ({
-        pathname: `/collections/collection/${name}/${version}`,
+        pathname: collectionHrefFromId(collectionId),
         search: getPersistentQueryParams(location),
       })}
     >
@@ -379,10 +385,15 @@ export const collectionLink = (collectionId) => {
   );
 };
 
-export const collectionHref = (collectionId) => {
+export const collectionHrefFromId = (collectionId) => {
   if (!collectionId) return nullValue;
   const { name, version } = collectionNameVersion(collectionId);
-  return `/collections/collection/${name}/${version}`;
+  return `/collections/collection/${name}/${encodeURIComponent(version)}`;
+};
+
+export const collectionHrefFromNameVersion = ({ name, version } = {}) => {
+  if (!name || !version) return nullValue;
+  return `/collections/collection/${name}/${encodeURIComponent(version)}`;
 };
 
 export const enableText = (name) => `You are enabling rule ${name}`;

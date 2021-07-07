@@ -58,7 +58,7 @@ describe('Dashboard PDRs Page', () => {
 
           // Discovered Column
           cy.get('@columns').eq(6).invoke('text')
-            .should('match', /.+ago$/);
+            .should('match', /.+[0-9]{2}\/[0-9]{2}\/[0-9]{2}$/);
         });
 
       cy.get('.table .tbody .tr').as('list');
@@ -93,7 +93,7 @@ describe('Dashboard PDRs Page', () => {
 
     it('should display active PDRs', () => {
       cy.visit('/pdrs');
-      cy.contains('.sidebar__row ul li a', 'Active 4')
+      cy.contains('.sidebar__row ul li a', 'Running 4')
         .should('have.attr', 'href', '/pdrs/active')
         .click();
 
@@ -220,7 +220,7 @@ describe('Dashboard PDRs Page', () => {
           cy.get('@columns').eq(4)
             .should('have.text', `${Number(granule.duration.toFixed(2))}s`);
           cy.get('@columns').eq(5).invoke('text')
-            .should('match', /.+ago$/);
+            .should('match', /.+[0-9]{2}\/[0-9]{2}\/[0-9]{2}$/);
           cy.intercept('DELETE', `/granules/${granule.granuleId}`).as(`deleteGranule${granule.granuleId}`);
           cy.get(`[data-value="${granule.granuleId}"] > .td >input[type="checkbox"]`).check();
           cy.get('.list-actions').contains('Delete').click();
