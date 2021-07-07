@@ -29,6 +29,11 @@ This version of the dashboard requires Cumulus API 7.2.1-alpha.0
     message which has useful information to show the user.
   - Upgrades Cypress testing software to 7.0.1
 
+### Fixed
+
+- **CUMULUS-2525**
+  - Fixes granule execute modal rerender issue when workflow options are not changed 
+
 ## [v5.0.0] - 2021-03-23
 
 ## Breaking Changes
