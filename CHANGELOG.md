@@ -51,7 +51,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2554**
   - Add focus styles for various browser support and keyboard/mouse inputs 
 
+### Fixed
 
+- **CUMULUS-2525**
+  - Fixes granule execute modal rerender issue when workflow options are not changed 
 
 ## [v6.0.0] - 2021-05-03
 
@@ -93,11 +96,6 @@ _ **CUMULUS-2425**
 
 - **CUMULUS-2467**
   - Update to footer layout to include NASA privacy links to help move Cumulus into compliance with other EED products
-
-### Fixed
-
-- **CUMULUS-2525**
-  - Fixes granule execute modal rerender issue when workflow options are not changed 
 
 ## [v5.0.0] - 2021-03-23
 
