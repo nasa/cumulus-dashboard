@@ -9,6 +9,17 @@ import BatchDeleteCompleteContent from '../../components/DeleteCollection/BatchD
 import BatchDeleteWithGranulesContent from '../../components/DeleteCollection/BatchDeleteWithGranulesContent';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
 
+function getRowValuesByColumnID(row1, row2, columnId) {
+  return [row1.values[columnId], row2.values[columnId]];
+}
+
+const statsSort = (rowA, rowB, columnId) => {
+  const [a, b] = getRowValuesByColumnID(rowA, rowB, columnId);
+  if (a > b) return 1;
+  if (a < b) return -1;
+  return 0;
+};
+
 export const tableColumns = [
   {
     Header: 'Name',
@@ -38,29 +49,29 @@ export const tableColumns = [
   {
     Header: strings.granules,
     accessor: (row) => tally(get(row, 'stats.total')),
-    id: 'granules',
-    disableSortBy: true,
+    id: 'stats.total',
+    sortMethod: (rowA, rowB, columnId) => statsSort(rowA, rowB, columnId),
     width: 100
   },
   {
     Header: 'Completed',
     accessor: (row) => tally(get(row, 'stats.completed')),
-    id: 'completed',
-    disableSortBy: true,
+    id: 'stats.completed',
+    sortMethod: (rowA, rowB, columnId) => statsSort(rowA, rowB, columnId),
     width: 100
   },
   {
     Header: 'Running',
     accessor: (row) => tally(get(row, 'stats.running')),
-    id: 'running',
-    disableSortBy: true,
+    id: 'stats.running',
+    sortMethod: (rowA, rowB, columnId) => statsSort(rowA, rowB, columnId),
     width: 100
   },
   {
     Header: 'Failed',
     accessor: (row) => tally(get(row, 'stats.failed')),
-    id: 'failed',
-    disableSortBy: true,
+    id: 'stats.failed',
+    sortMethod: (rowA, rowB, columnId) => statsSort(rowA, rowB, columnId),
     width: 100
   },
   {

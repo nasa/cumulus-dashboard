@@ -9,7 +9,7 @@ import React, {
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
+import { defaultOrderByFn, useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
 import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
 import ListFilters from '../ListActions/ListFilters';
@@ -85,6 +85,10 @@ const SortableTable = ({
   const {
     getTableProps,
     rows,
+    flatRows,
+    allColumns,
+    orderByFn = defaultOrderByFn,
+    manualSortBy,
     prepareRow,
     headerGroups,
     state: {
@@ -102,7 +106,7 @@ const SortableTable = ({
     gotoPage,
     nextPage,
     previousPage,
-    setHiddenColumns
+    setHiddenColumns,
   } = useTable(
     {
       data,
@@ -145,6 +149,73 @@ const SortableTable = ({
   );
 
   const tableRows = page || rows;
+
+  const [sortedRows] = React.useMemo(() => {
+    if (!manualSortBy || !sortBy.length) {
+      return [tableRows, flatRows];
+    }
+
+    const sortedFlatRows = [];
+
+    // Filter out sortBys that correspond to non existing columns
+    const availableSortBy = sortBy.filter((sort) => allColumns
+      .find((col) => (typeof col.sortMethod === 'function') && (col.id === sort.id)));
+
+    console.log(availableSortBy);
+
+    if (!availableSortBy.length) {
+      return [tableRows, flatRows];
+    }
+
+    const sortData = (_rows) => {
+      // Use the orderByFn to compose multiple sortBy's together.
+      // This will also perform a stable sorting using the row index
+      // if needed.
+      const sortedData = orderByFn(
+        _rows,
+        availableSortBy.map((sort) => {
+          // Support custom sorting methods for each column
+          const column = allColumns.find((d) => d.id === sort.id);
+
+          if (!column) {
+            throw new Error(
+              `React-Table: Could not find a column with id: ${sort.id} while sorting`
+            );
+          }
+
+          const { sortMethod } = column;
+          // Return the correct sortFn.
+          // This function should always return in ascending order
+          return (a, b) => sortMethod(a, b, sort.id, sort.desc);
+        }),
+        // Map the directions
+        availableSortBy.map((sort) => {
+          // Detect and use the sortInverted option
+          const column = allColumns.find((d) => d.id === sort.id);
+
+          if (column && column.sortInverted) {
+            return sort.desc;
+          }
+
+          return !sort.desc;
+        })
+      );
+
+      // If there are sub-rows, sort them
+      sortedData.forEach((row) => {
+        sortedFlatRows.push(row);
+        if (!row.subRows || row.subRows.length === 0) {
+          return;
+        }
+        row.subRows = sortData(row.subRows);
+      });
+
+      return sortedData;
+    };
+
+    return [sortData(tableRows), sortedFlatRows];
+  }, [manualSortBy, sortBy, tableRows, flatRows, allColumns, orderByFn]);
+
   const includeFilters = typeof getToggleColumnOptions !== 'function';
 
   const tableRef = createRef();
@@ -263,7 +334,6 @@ const SortableTable = ({
   }
 
   function showScrollLeftButton(event) {
-    console.log('showLeft');
     setLeftScrollButtonVisibility({ display: 'flex', opacity: leftScrollButtonVisibility.opacity });
     setTimeout(() => {
       setLeftScrollButtonVisibility({ display: 'flex', opacity: 1 });
@@ -392,7 +462,7 @@ const SortableTable = ({
           </div>
         </div>
         <div className='tbody'>
-          {tableRows.map((row, i) => {
+          {sortedRows.map((row, i) => {
             prepareRow(row);
             return (
               <div className='tr' data-value={row.id} {...row.getRowProps()} key={i}>
