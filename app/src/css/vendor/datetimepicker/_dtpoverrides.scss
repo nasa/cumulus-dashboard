@@ -95,7 +95,7 @@ styling overrides
   padding: 5.5px 2px;
 }
 
-/*.react-datetime-picker__inputGroup__input option:first-child {
+.react-datetime-picker__inputGroup__input option:first-child {
     &:before {
       color: $ocean-blue;
       position: absolute;
@@ -113,14 +113,10 @@ styling overrides
 
   .react-datetime-picker__inputGroup__leadingZero {
   font-size: 1.2em;
+  visibility: hidden;
 }
 
-  .react-datetime-picker__inputGroup__input--hasLeadingZero {
-   margin-left: 0px;
-   padding-left: 1px;
-}*/
-
-/*.react-datetime-picker__inputGroup__input.react-datetime-picker__inputGroup__month,
+.react-datetime-picker__inputGroup__input.react-datetime-picker__inputGroup__month,
 .react-datetime-picker__inputGroup__input.react-datetime-picker__inputGroup__day {
-  width: 26px !important;
-}*/
+  width: 14px !important;
+}
