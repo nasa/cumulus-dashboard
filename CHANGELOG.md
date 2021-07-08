@@ -50,6 +50,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Added a sortable column to individual granules tab so you can sort each file within the granule by size. 
 - **CUMULUS-2554**
   - Add focus styles for various browser support and keyboard/mouse inputs 
+- **CUMUULUS-2553**
+  - Fixed DatePicker prop so the leading zeroes can be entered without having too many zeroes clouding the input. 
 
 
 
