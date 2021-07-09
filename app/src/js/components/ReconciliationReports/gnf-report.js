@@ -1,24 +1,41 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import groupBy from 'lodash/groupBy';
 import {
   searchReconciliationReport,
   clearReconciliationSearch,
+  listWorkflows,
+  listGranules,
+  applyWorkflowToGranule,
+  applyRecoveryWorkflowToGranule
 } from '../../actions';
-import SortableTable from '../SortableTable/SortableTable';
+import List from '../Table/Table';
 import Search from '../Search/search';
 import ReportHeading from './report-heading';
 import { handleDownloadUrlClick } from '../../utils/download-file';
 import { tableColumnsGnf } from '../../utils/table-config/reconciliation-reports';
 import { getFilesSummary, getGranuleFilesSummary } from './reshape-report';
 import { getCollectionId } from '../../utils/format';
+import { 
+  bulkActions,
+  defaultWorkflowMeta,
+  executeDialog,
+  groupAction,
+  recoverAction
+} from '../../utils/table-config/granules';
+import { workflowOptionNames } from '../../selectors';
 
 const GnfReport = ({
+  dispatch,
   filterString,
+  granules,
   legend,
   recordData,
   reportName,
   reportUrl,
+  workflowOptions
 }) => {
   const {
     filesInCumulus,
@@ -28,6 +45,8 @@ const GnfReport = ({
     createEndTime = null,
     error = null
   } = recordData || {};
+
+  const { list } = granules;
 
   const { filesInDynamoDb } = getFilesSummary(filesInCumulus);
   const { granuleFilesOnlyInCumulus, granuleFilesOnlyInCmr } = getGranuleFilesSummary(filesInCumulusCmr);
@@ -83,8 +102,70 @@ const GnfReport = ({
 
   const totalMissingGranules = combinedGranules.reduce(calculateMissingGranules, 0);
 
+  const [workflow, setWorkflow] = useState(workflowOptions[0]);
+  const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
+  const [selected, setSelected] = useState([]);
+
   function handleDownloadClick(e) {
     handleDownloadUrlClick(e, { url: reportUrl });
+  }
+
+  useEffect(() => {
+    dispatch(listWorkflows());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setWorkflow(workflowOptions[0]);
+  }, [workflowOptions]);
+
+  function generateBulkActions() {
+    const config = {
+      execute: {
+        options: getExecuteOptions(),
+        action: applyWorkflow,
+      },
+      recover: {
+        options: getExecuteOptions(),
+        action: applyRecoveryWorkflow
+      }
+    };
+    const selectedGranules = selected;
+    let actions = bulkActions(granules, config, selectedGranules);
+    if (config.enableRecovery) {
+      actions = actions.concat(recoverAction(granules, config));
+    }
+    return actions;
+  }
+
+  function selectWorkflow(selector, selectedWorkflow) {
+    setWorkflow(selectedWorkflow);
+  }
+
+  function applyWorkflow(granuleId) {
+    const { meta } = JSON.parse(workflowMeta);
+    setWorkflowMeta(defaultWorkflowMeta);
+    return applyWorkflowToGranule(granuleId, workflow, meta);
+  }
+
+  function applyRecoveryWorkflow (granuleId) {
+    return applyRecoveryWorkflowToGranule(granuleId);
+  }
+
+  function getExecuteOptions() {
+    return [
+      executeDialog({
+        selectHandler: selectWorkflow,
+        label: 'workflow',
+        value: workflow,
+        options: workflowOptions,
+        initialMeta: workflowMeta,
+        metaHandler: setWorkflowMeta,
+      }),
+    ];
+  }
+
+  function updateSelection(selection) {
+    setSelected(selection);
   }
 
   return (
@@ -109,24 +190,38 @@ const GnfReport = ({
             placeholder="Search"
           />
         </div>
-        <SortableTable
-          data={combinedGranules}
-          tableColumns={tableColumnsGnf}
-          shouldUsePagination={true}
-          initialHiddenColumns={['']}
-          legend={legend}
-        />
+          <List
+            list={list}
+            action={listGranules}
+            data={combinedGranules}
+            legend={legend}
+            tableColumns={tableColumnsGnf}
+            bulkActions={generateBulkActions()}
+            groupAction={groupAction}
+            rowId="granuleId"
+            shouldUsePagination={true}
+            initialHiddenColumns={['']}
+            onSelect={updateSelection}
+          />
       </section>
     </div>
   );
 };
 
 GnfReport.propTypes = {
+  dispatch: PropTypes.func,
+  granules: PropTypes.object,
   filterString: PropTypes.string,
   legend: PropTypes.node,
   recordData: PropTypes.object,
   reportName: PropTypes.string,
   reportUrl: PropTypes.string,
+  workflowOptions: PropTypes.array
 };
 
-export default GnfReport;
+export default withRouter(
+  connect((state) => ({
+    granules: state.granules,
+    workflowOptions: workflowOptionNames(state)
+  }))(GnfReport)
+);
