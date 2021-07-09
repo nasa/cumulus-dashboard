@@ -32,6 +32,7 @@ const List = ({
   groupAction,
   initialHiddenColumns = [],
   initialSortId,
+  legend,
   list,
   onSelect,
   query,
@@ -191,6 +192,7 @@ const List = ({
         {children}
         <ListFilters>
           <TableFilters columns={tableColumns} {...toggleColumnOptions} initialHiddenColumns={initialHiddenColumns} />
+          {legend}
         </ListFilters>
       </ListActions>
       <div className="list-view">
@@ -253,6 +255,7 @@ List.propTypes = {
   }),
   initialHiddenColumns: PropTypes.array,
   initialSortId: PropTypes.string,
+  legend: PropTypes.node,
   list: PropTypes.object,
   query: PropTypes.object,
   rowId: PropTypes.any,

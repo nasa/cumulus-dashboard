@@ -145,7 +145,7 @@ const InventoryReport = ({
         action: applyRecoveryWorkflow
       }
     };
-    const selectedGranules = selected.map((id) => granules.list.data.find((g) => id === g.granuleId));
+    const selectedGranules = selected;
     let actions = bulkActions(granules, config, selectedGranules);
     if (config.enableRecovery) {
       actions = actions.concat(recoverAction(granules, config));
