@@ -18,7 +18,7 @@ import { handleDownloadUrlClick } from '../../utils/download-file';
 import { tableColumnsGnf } from '../../utils/table-config/reconciliation-reports';
 import { getFilesSummary, getGranuleFilesSummary } from './reshape-report';
 import { getCollectionId } from '../../utils/format';
-import { 
+import {
   bulkActions,
   defaultWorkflowMeta,
   executeDialog,
@@ -147,7 +147,7 @@ const GnfReport = ({
     return applyWorkflowToGranule(granuleId, workflow, meta);
   }
 
-  function applyRecoveryWorkflow (granuleId) {
+  function applyRecoveryWorkflow(granuleId) {
     return applyRecoveryWorkflowToGranule(granuleId);
   }
 
@@ -190,19 +190,19 @@ const GnfReport = ({
             placeholder="Search"
           />
         </div>
-          <List
-            list={list}
-            action={listGranules}
-            data={combinedGranules}
-            legend={legend}
-            tableColumns={tableColumnsGnf}
-            bulkActions={generateBulkActions()}
-            groupAction={groupAction}
-            rowId="granuleId"
-            shouldUsePagination={true}
-            initialHiddenColumns={['']}
-            onSelect={updateSelection}
-          />
+        <List
+          list={list}
+          action={listGranules}
+          data={combinedGranules}
+          legend={legend}
+          tableColumns={tableColumnsGnf}
+          bulkActions={generateBulkActions()}
+          groupAction={groupAction}
+          rowId="granuleId"
+          shouldUsePagination={true}
+          initialHiddenColumns={['']}
+          onSelect={updateSelection}
+        />
       </section>
     </div>
   );

@@ -42,7 +42,6 @@ import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import DeleteCollection from '../DeleteCollection/DeleteCollection';
 import Dropdown from '../DropDown/dropdown';
 import AsyncDropdown from '../DropDown/async-dropdown';
-import Bulk from '../Granules/bulk';
 import ListFilters from '../ListActions/ListFilters';
 import { strings } from '../locale';
 import Overview from '../Overview/overview';
@@ -143,7 +142,7 @@ const CollectionOverview = ({
     return applyWorkflowToGranule(granuleId, workflow, meta);
   }
 
-  function applyRecoveryWorkflow (granuleId) {
+  function applyRecoveryWorkflow(granuleId) {
     return applyRecoveryWorkflowToGranule(granuleId);
   }
 
@@ -207,12 +206,12 @@ const CollectionOverview = ({
                   className='collection-chooser'
                   label={'Collection'}
                   title={'Collections Dropdown'}
-                  onChange = {changeCollection}
+                  onChange={changeCollection}
                   onInputChange={onInputChange}
-                  value = {collectionId}
-                  defaultOptions = {true}
+                  value={collectionId}
+                  defaultOptions={true}
                   id={'collection-chooser'}
-                  cacheOptions = {true}
+                  cacheOptions={true}
                 />
               </div>
             </li>

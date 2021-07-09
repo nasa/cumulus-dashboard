@@ -24,7 +24,7 @@ import Search from '../Search/search';
 import Dropdown from '../DropDown/dropdown';
 import ReportHeading from './report-heading';
 import ListFilters from '../ListActions/ListFilters';
-import { 
+import {
   bulkActions,
   defaultWorkflowMeta,
   executeDialog,
@@ -163,7 +163,7 @@ const InventoryReport = ({
     return applyWorkflowToGranule(granuleId, workflow, meta);
   }
 
-  function applyRecoveryWorkflow (granuleId) {
+  function applyRecoveryWorkflow(granuleId) {
     return applyRecoveryWorkflowToGranule(granuleId);
   }
 
@@ -183,7 +183,7 @@ const InventoryReport = ({
   function updateSelection(selection) {
     setSelected(selection);
   }
-  
+
   return (
     <div className="page__component">
       <ReportHeading

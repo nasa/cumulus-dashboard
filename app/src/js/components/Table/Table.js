@@ -75,7 +75,7 @@ const List = ({
       ...prevQueryConfig,
       ...getQueryConfig({})
     }));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(query)]);
 
   useEffect(() => {
@@ -89,12 +89,12 @@ const List = ({
         ...getQueryConfig({})
       }));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(list.params), JSON.stringify(params)]);
 
   useEffect(() => {
     setClearSelected(true);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(queryFilters)]);
 
   useEffect(() => {
@@ -211,7 +211,7 @@ const List = ({
               selected={selected}
             />
           )}
-          <Suspense fallback={<Loading/>}>
+          <Suspense fallback={<Loading />}>
             <SortableTable
               tableColumns={tableColumns}
               data={tableData}
