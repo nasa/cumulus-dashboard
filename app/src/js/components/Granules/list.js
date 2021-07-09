@@ -82,7 +82,7 @@ const AllGranules = ({
 
   useEffect(() => {
     setWorkflow(workflowOptions[0]);
-  }, [workflowOptions]);
+  }, [JSON.stringify(workflowOptions)]);
 
   useEffect(() => {
     dispatch(
