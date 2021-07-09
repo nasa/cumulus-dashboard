@@ -75,7 +75,7 @@ const CollectionGranules = ({
 
   useEffect(() => {
     setWorkflow(workflowOptions[0]);
-  }, [workflowOptions]);
+  }, [JSON.stringify(workflowOptions)]);
 
   function generateQuery() {
     const options = {
