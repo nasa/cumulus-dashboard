@@ -51,7 +51,7 @@ const AsyncDropdown = ({
             {...rest}
             className={className}
             components={ { DropdownIndicator } }
-            style={customStyles}
+            styles={customStyles}
             defaultOptions={true}
             onChange= {handleChange}
             value={valueObject}
