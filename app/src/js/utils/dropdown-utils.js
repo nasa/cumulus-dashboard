@@ -25,7 +25,6 @@ const customStyles = {
   }),
   menu: (base) => ({
     ...base,
-    width: 100,
     margin: 0,
     zIndex: 9999,
   }),
