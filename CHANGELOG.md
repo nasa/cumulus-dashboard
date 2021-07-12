@@ -28,34 +28,35 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     logs, likewise use a pattern like the ES\_DISTRIBUTION\_TARGET\_PATTERN.
 
 ### Changed
-- **CUMULUS-2542**
-<<<<<<< HEAD
-  - Created a new ASYNC dropdown in order to be used to search Collections since some Collections were not showing
-  - Created a new file for styles to be imported in Simple-Dropdown and Async-Dropdown
-- **CUMULUS-2534**
-  - Added a copy button to errors pages so the error can be copied and searched up on the internet.
-=======
-  - Created an ASYNC dropdown component to be used in the page when a Collection is selected since it was initially not showing all options
-  - Created a new style utils file which is imported into and used in Async-Dropdown and Simple-Dropdown
->>>>>>> ece0893a1e66875ba2f755a7a3bc6ef474628ea2
-- **CUMULUS-2535**
-  - Ensured that the KPI cards would be updated on all tabs whenever the page was updated
-- **CUMULUS-2544**
-  - Changed the timestamp so that the date and time is shown rather than time elapsed since last occurrence
-- **CUMULUS-2554**
-  - Add focus styles for various browser support and keyboard/mouse inputs
+
 - **CUMULUS-2502**
   - Metrics ES searches have been updated to run against only the index
     patterns provided, improving performance and saving resources.
   - Documentation for metrics has been moved into its own table.
   - Upgrade cypress testing framework to 7.3.0
-- **CUMULUS-2524**
-  - CSS and UI tweaks to padding/margin, width, and color/contrast
-- **CUMULUS-2506**
-  - Adds horizontal scroll buttons to tables improving accessibily
 - **CUMULUS-2505**
   - Update column show/hide component with new styling and "reset to default interaction for each table
+- **CUMULUS-2506**
+  - Adds horizontal scroll buttons to tables improving accessibily
+- **CUMULUS-2524**
+  - CSS and UI tweaks to padding/margin, width, and color/contrast
+- **CUMULUS-2534**
+  - Added a copy button to errors pages so the error can be copied and searched up on the internet. 
+- **CUMULUS-2535**
+  - Ensured that the KPI cards would be updated on all tabs whenever the page was updated
+- **CUMULUS-2544**
+  - Changed the timestamp so that the date and time is shown rather than time elapsed since last occurrence
+- **CUMULUS-2551**
+  - Added a sortable column to individual granules tab so you can sort each file within the granule by size. 
+- **CUMULUS-2554**
+  - Add focus styles for various browser support and keyboard/mouse inputs 
 
+### Fixed
+
+- **CUMULUS-2525**
+  - Fixes granule execute modal rerender issue when workflow options are not changed
+- **CUMULUS-2553**
+  - Fixed DatePicker prop so the leading zeroes can be entered without having too many zeroes clouding the input.
 
 ## [v6.0.0] - 2021-05-03
 
