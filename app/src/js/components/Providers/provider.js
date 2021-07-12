@@ -136,24 +136,24 @@ class ProviderOverview extends React.Component {
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>Provider: {providerId}</h1>
-            <div className = 'dropdown__options form-group__element--right'>
-              <ul>
-                {dropdownConfig.map((d) => <li key={d.text}>
-                  <AsyncCommand action={d.action}
-                    success={() => this.handleSuccess(d.success)}
-                    error={() => this.handleError(d.error)}
-                    status={d.status}
-                    className='button button--small button--red button--delete form-group__element--right'
-                    disabled={d.disabled}
-                    confirmAction={d.confirmAction}
-                    confirmText={d.confirmText}
-                    confirmOptions={d.confirmOptions}
-                    showSuccessModal={d.postActionModal}
-                    postActionText={d.postActionText}
-                    element='a'
-                    text={d.text}/></li>)}
-              </ul>
-            </div>
+          <div className = 'dropdown__options form-group__element--right'>
+            <ul>
+              {dropdownConfig.map((d) => <li key={d.text}>
+                <AsyncCommand action={d.action}
+                  success={() => this.handleSuccess(d.success)}
+                  error={() => this.handleError(d.error)}
+                  status={d.status}
+                  className='button button--small button--red button--delete form-group__element--right'
+                  disabled={d.disabled}
+                  confirmAction={d.confirmAction}
+                  confirmText={d.confirmText}
+                  confirmOptions={d.confirmOptions}
+                  showSuccessModal={d.postActionModal}
+                  postActionText={d.postActionText}
+                  element='a'
+                  text={d.text}/></li>)}
+            </ul>
+          </div>
           <Link
             className='button button--small button--green button--edit form-group__element--right'
             to={(location) => ({ pathname: `/providers/edit/${providerId}`, search: getPersistentQueryParams(location) })}>Edit</Link>
