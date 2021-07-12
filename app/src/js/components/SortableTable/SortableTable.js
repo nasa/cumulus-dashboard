@@ -120,6 +120,7 @@ const SortableTable = ({
 
   const tableRows = page || rows;
 
+  // useMemo code modified from https://github.com/tannerlinsley/react-table/blob/master/src/plugin-hooks/useSortBy.js#L272
   const [sortedRows] = React.useMemo(() => {
     // we only want to do this if we're already manually sorting but have columns we want to sort client side
     if (!manualSortBy || !sortBy.length) {
@@ -168,8 +169,9 @@ const SortableTable = ({
   }, [selectedRowIds, onSelect]);
 
   useEffect(() => {
+    const availableSortBy = sortBy.filter((sortColumn) => !sortColumn.id.includes('__no-sort'));
     if (typeof changeSortProps === 'function') {
-      changeSortProps(sortBy);
+      changeSortProps(availableSortBy);
     }
   }, [changeSortProps, sortBy]);
 

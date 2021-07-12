@@ -8,17 +8,7 @@ import BatchDeleteConfirmContent from '../../components/DeleteCollection/BatchDe
 import BatchDeleteCompleteContent from '../../components/DeleteCollection/BatchDeleteCompleteContent';
 import BatchDeleteWithGranulesContent from '../../components/DeleteCollection/BatchDeleteWithGranulesContent';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../url-helper';
-
-function getRowValuesByColumnID(row1, row2, columnId) {
-  return [row1.values[columnId], row2.values[columnId]];
-}
-
-const statsSort = (rowA, rowB, columnId) => {
-  const [a, b] = getRowValuesByColumnID(rowA, rowB, columnId);
-  if (a > b) return 1;
-  if (a < b) return -1;
-  return 0;
-};
+import { numberSort, stringSort } from '../sortable-table';
 
 export const tableColumns = [
   {
@@ -49,36 +39,37 @@ export const tableColumns = [
   {
     Header: strings.granules,
     accessor: (row) => tally(get(row, 'stats.total')),
-    id: 'stats.total',
-    sortMethod: (rowA, rowB, columnId) => statsSort(rowA, rowB, columnId),
+    id: 'granules__no-sort',
+    sortMethod: (rowA, rowB, columnId) => numberSort(rowA, rowB, columnId),
     width: 100
   },
   {
     Header: 'Completed',
     accessor: (row) => tally(get(row, 'stats.completed')),
-    id: 'stats.completed',
-    sortMethod: (rowA, rowB, columnId) => statsSort(rowA, rowB, columnId),
+    id: 'completed__no-sort',
+    sortMethod: (rowA, rowB, columnId) => numberSort(rowA, rowB, columnId),
     width: 100
   },
   {
     Header: 'Running',
     accessor: (row) => tally(get(row, 'stats.running')),
-    id: 'stats.running',
-    sortMethod: (rowA, rowB, columnId) => statsSort(rowA, rowB, columnId),
+    id: 'running__no-sort',
+    sortMethod: (rowA, rowB, columnId) => numberSort(rowA, rowB, columnId),
     width: 100
   },
   {
     Header: 'Failed',
     accessor: (row) => tally(get(row, 'stats.failed')),
-    id: 'stats.failed',
-    sortMethod: (rowA, rowB, columnId) => statsSort(rowA, rowB, columnId),
+    id: 'failed__no-sort',
+    sortMethod: (rowA, rowB, columnId) => numberSort(rowA, rowB, columnId),
     width: 100
   },
   {
     Header: 'MMT',
     accessor: 'MMTLink',
+    id: 'mmt__no-sort',
     Cell: ({ cell: { value } }) => (value ? <a href={value} target="_blank">MMT</a> : null), // eslint-disable-line react/prop-types
-    disableSortBy: true,
+    sortMethod: (rowA, rowB, columnId) => stringSort(rowA, rowB, columnId),
     width: 100
   },
   {
