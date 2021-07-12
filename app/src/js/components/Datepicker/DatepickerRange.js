@@ -139,7 +139,7 @@ class DatepickerRange extends React.PureComponent {
     const { hourFormat } = this.props;
     const value = this.props[name];
     const locale = hourFormat === '24HR' ? 'en-GB' : 'en-US';
-    const format = `MM/dd/yyyyy ${hourFormat === '24HR' ? 'HH:mm' : 'hh:mm a'}`;
+    const format = `MM/dd/yyyy ${hourFormat === '24HR' ? 'HH:mm' : 'hh:mm a'}`;
 
     const utcValue = isNil(value)
       ? null
@@ -153,6 +153,8 @@ class DatepickerRange extends React.PureComponent {
         label={label}
         onChange={(id, date) => this.handleDateTimeRangeChange(name, date)}
         value={utcValue}
+        minDate = {new Date(0, 0, 0)}
+        maxDate = {new Date(9999, 12, 31)}
       />
     );
   }

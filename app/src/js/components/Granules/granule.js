@@ -59,6 +59,12 @@ const tableColumns = [
     id: 'link',
   },
   {
+    Header: 'File Size (bytes)',
+    accessor: (row) => row.size || '(No Size Found)',
+    id: 'size'
+
+  },
+  {
     Header: 'Bucket',
     accessor: 'bucket',
   },
