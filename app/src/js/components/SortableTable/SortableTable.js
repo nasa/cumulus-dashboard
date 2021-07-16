@@ -151,39 +151,39 @@ const SortableTable = ({
   const scrollLeftButton = createRef();
   const scrollRightButton = createRef();
 
-  // useEffect(() => {
-  //   if (clearSelected) {
-  //     toggleAllRowsSelected(false);
-  //   }
-  // }, [clearSelected, toggleAllRowsSelected]);
+  useEffect(() => {
+    if (clearSelected) {
+      toggleAllRowsSelected(false);
+    }
+  }, [clearSelected, toggleAllRowsSelected]);
 
-  // useEffect(() => {
-  //   const selected = Object.keys(selectedRowIds).reduce((selectedRows, key) => {
-  //     if (selectedRowIds[key]) {
-  //       selectedRows.push(key);
-  //     }
-  //     return selectedRows;
-  //   }, []);
+  useEffect(() => {
+    const selected = Object.keys(selectedRowIds).reduce((selectedRows, key) => {
+      if (selectedRowIds[key]) {
+        selectedRows.push(key);
+      }
+      return selectedRows;
+    }, []);
 
-  //   if (typeof onSelect === 'function') {
-  //     onSelect(selected);
-  //   }
-  // }, [selectedRowIds, onSelect]);
+    if (typeof onSelect === 'function') {
+      onSelect(selected);
+    }
+  }, [selectedRowIds, onSelect]);
 
-  // useEffect(() => {
-  //   if (typeof changeSortProps === 'function') {
-  //     changeSortProps(sortBy);
-  //   }
-  // }, [changeSortProps, sortBy]);
+  useEffect(() => {
+    if (typeof changeSortProps === 'function') {
+      changeSortProps(sortBy);
+    }
+  }, [changeSortProps, sortBy]);
 
-  // useEffect(() => {
-  //   if (typeof getToggleColumnOptions === 'function') {
-  //     getToggleColumnOptions({
-  //       setHiddenColumns,
-  //       hiddenColumns
-  //     });
-  //   }
-  // }, [getToggleColumnOptions, hiddenColumns, setHiddenColumns]);
+  useEffect(() => {
+    if (typeof getToggleColumnOptions === 'function') {
+      getToggleColumnOptions({
+        setHiddenColumns,
+        hiddenColumns
+      });
+    }
+  }, [getToggleColumnOptions, hiddenColumns, setHiddenColumns]);
 
   function resetHiddenColumns() {
     setHiddenColumns(initialHiddenColumns);

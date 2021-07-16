@@ -104,7 +104,7 @@ const CollectionGranules = ({
     return bulkActions(granules, actionConfig);
   }
 
-  function selectWorkflow(selector, selectedWorkflow) {
+  function selectWorkflow(selectedWorkflow) {
     setWorkflow(selectedWorkflow);
   }
 

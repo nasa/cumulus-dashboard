@@ -4,10 +4,7 @@ import groupBy from 'lodash/groupBy';
 import {
   searchReconciliationReport,
   clearReconciliationSearch,
-  listWorkflows,
-  listGranules,
-  applyWorkflowToGranule,
-  applyRecoveryWorkflowToGranule
+  listGranules
 } from '../../actions';
 import List from '../Table/Table';
 import Search from '../Search/search';
@@ -16,23 +13,16 @@ import { handleDownloadUrlClick } from '../../utils/download-file';
 import { tableColumnsGnf } from '../../utils/table-config/reconciliation-reports';
 import { getFilesSummary, getGranuleFilesSummary } from './reshape-report';
 import { getCollectionId } from '../../utils/format';
-import {
-  bulkActions,
-  defaultWorkflowMeta,
-  executeDialog,
-  groupAction,
-  recoverAction
-} from '../../utils/table-config/granules';
 
 const GnfReport = ({
-  dispatch,
+  bulkActions,
   filterString,
-  granules,
+  groupAction,
   legend,
+  onSelect,
   recordData,
   reportName,
-  reportUrl,
-  workflowOptions
+  reportUrl
 }) => {
   const {
     filesInCumulus,
@@ -42,8 +32,6 @@ const GnfReport = ({
     createEndTime = null,
     error = null
   } = recordData || {};
-
-  const { list } = granules;
 
   const { filesInDynamoDb } = getFilesSummary(filesInCumulus);
   const { granuleFilesOnlyInCumulus, granuleFilesOnlyInCmr } = getGranuleFilesSummary(filesInCumulusCmr);
@@ -99,71 +87,9 @@ const GnfReport = ({
 
   const totalMissingGranules = combinedGranules.reduce(calculateMissingGranules, 0);
 
-  // const [workflow, setWorkflow] = useState(workflowOptions[0]);
-  // const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
-  // const [selected, setSelected] = useState([]);
-
   function handleDownloadClick(e) {
     handleDownloadUrlClick(e, { url: reportUrl });
   }
-
-  /*useEffect(() => {
-    dispatch(listWorkflows());
-  }, [dispatch]);
-
-  useEffect(() => {
-    setWorkflow(workflowOptions[0]);
-  }, [workflowOptions]);
-
-  function generateBulkActions() {
-    const config = {
-      execute: {
-        options: getExecuteOptions(),
-        action: applyWorkflow,
-      },
-      recover: {
-        options: getExecuteOptions(),
-        action: applyRecoveryWorkflow
-      }
-    };
-    const selectedGranules = selected;
-    let actions = bulkActions(granules, config, selectedGranules);
-    if (config.enableRecovery) {
-      actions = actions.concat(recoverAction(granules, config));
-    }
-    return actions;
-  }
-
-  function selectWorkflow(selector, selectedWorkflow) {
-    setWorkflow(selectedWorkflow);
-  }
-
-  function applyWorkflow(granuleId) {
-    const { meta } = JSON.parse(workflowMeta);
-    setWorkflowMeta(defaultWorkflowMeta);
-    return applyWorkflowToGranule(granuleId, workflow, meta);
-  }
-
-  function applyRecoveryWorkflow(granuleId) {
-    return applyRecoveryWorkflowToGranule(granuleId);
-  }
-
-  function getExecuteOptions() {
-    return [
-      executeDialog({
-        selectHandler: selectWorkflow,
-        label: 'workflow',
-        value: workflow,
-        options: workflowOptions,
-        initialMeta: workflowMeta,
-        metaHandler: setWorkflowMeta,
-      }),
-    ];
-  }
-
-  function updateSelection(selection) {
-    setSelected(selection);
-  }*/
 
   return (
     <div className="page__component">
@@ -188,17 +114,16 @@ const GnfReport = ({
           />
         </div>
         <List
-          list={list}
           action={listGranules}
+          bulkActions={bulkActions}
           data={combinedGranules}
-          legend={legend}
-          tableColumns={tableColumnsGnf}
-          bulkActions={generateBulkActions()}
           groupAction={groupAction}
+          initialHiddenColumns={['']}
+          legend={legend}
+          onSelect={onSelect}
           rowId="granuleId"
           shouldUsePagination={true}
-          initialHiddenColumns={['']}
-          onSelect={updateSelection}
+          tableColumns={tableColumnsGnf}
         />
       </section>
     </div>
@@ -206,8 +131,10 @@ const GnfReport = ({
 };
 
 GnfReport.propTypes = {
+  bulkActions: PropTypes.array,
   filterString: PropTypes.string,
   legend: PropTypes.node,
+  onSelect: PropTypes.func,
   recordData: PropTypes.object,
   reportName: PropTypes.string,
   reportUrl: PropTypes.string,

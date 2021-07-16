@@ -71,42 +71,41 @@ const List = ({
 
   const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
-  // useEffect(() => {
-  //   setQueryConfig((prevQueryConfig) => ({
-  //     ...prevQueryConfig,
-  //     ...getQueryConfig({})
-  //   }));
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [JSON.stringify(query)]);
+  useEffect(() => {
+    setQueryConfig((prevQueryConfig) => ({
+      ...prevQueryConfig,
+      ...getQueryConfig({})
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(query)]);
 
-  // useEffect(() => {
-  //   // Remove parameters with null or undefined values
-  //   const newParams = omitBy(list.params, isNil);
+  useEffect(() => {
+    // Remove parameters with null or undefined values
+    const newParams = omitBy(list.params, isNil);
 
-  //   console.log(list);
-  //   if (isEmpty(list)) return;
+    if (isEmpty(list)) return;
 
-  //   if (!isEqual(newParams, params)) {
-  //     setParams(newParams);
-  //     setQueryConfig((prevQueryConfig) => ({
-  //       ...prevQueryConfig,
-  //       ...getQueryConfig({})
-  //     }));
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [JSON.stringify(list.params), JSON.stringify(params)]);
+    if (!isEqual(newParams, params)) {
+      setParams(newParams);
+      setQueryConfig((prevQueryConfig) => ({
+        ...prevQueryConfig,
+        ...getQueryConfig({})
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(list.params), JSON.stringify(params)]);
 
-  // useEffect(() => {
-  //   setClearSelected(true);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [JSON.stringify(queryFilters)]);
+  useEffect(() => {
+    setClearSelected(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(queryFilters)]);
 
-  // useEffect(() => {
-  //   if (typeof toggleColumnOptionsAction === 'function') {
-  //     const allColumns = tableColumns.map((column) => column.id || column.accessor);
-  //     dispatch(toggleColumnOptionsAction(toggleColumnOptions.hiddenColumns, allColumns));
-  //   }
-  // }, [dispatch, tableColumns, toggleColumnOptions.hiddenColumns, toggleColumnOptionsAction]);
+  useEffect(() => {
+    if (typeof toggleColumnOptionsAction === 'function') {
+      const allColumns = tableColumns.map((column) => column.id || column.accessor);
+      dispatch(toggleColumnOptionsAction(toggleColumnOptions.hiddenColumns, allColumns));
+    }
+  }, [dispatch, tableColumns, toggleColumnOptions.hiddenColumns, toggleColumnOptionsAction]);
 
   function queryNewPage(newPage) {
     setPage(newPage);

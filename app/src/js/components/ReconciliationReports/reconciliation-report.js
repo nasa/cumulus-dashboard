@@ -6,7 +6,6 @@ import get from 'lodash/get';
 import { 
   getReconciliationReport,
   listWorkflows,
-  listGranules,
   applyWorkflowToGranule,
   applyRecoveryWorkflowToGranule
 } from '../../actions';
@@ -54,7 +53,6 @@ const ReconciliationReport = ({
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
 
-  console.log(reconciliationReportName);
   useEffect(() => {
     dispatch(getReconciliationReport(reconciliationReportName));
   }, [dispatch, reconciliationReportName]);
@@ -86,7 +84,7 @@ const ReconciliationReport = ({
     return actions;
   }
 
-  function selectWorkflow(selector, selectedWorkflow) {
+  function selectWorkflow(selectedWorkflow) {
     setWorkflow(selectedWorkflow);
   }
 
@@ -129,21 +127,22 @@ const ReconciliationReport = ({
             bulkActions={generateBulkActions()}
             filterBucket={filterBucket}
             filterString={filterString}
+            groupAction={groupAction}
             legend={<Legend />}
+            onSelect={updateSelection}
             recordData={recordData}
             reportName={reconciliationReportName}
             reportUrl={reportUrl}
-            onSelect={updateSelection}
           />,
           'Granule Not Found': <GnfReport
             bulkActions={generateBulkActions()}
             filterString={filterString}
+            groupAction={groupAction}
             legend={<Legend />}
+            onSelect={updateSelection}
             recordData={recordData}
             reportName={reconciliationReportName}
             reportUrl={reportUrl}
-            onSelect={updateSelection}
-
           />
         }[reportType]
       }
