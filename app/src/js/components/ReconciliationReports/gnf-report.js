@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 import groupBy from 'lodash/groupBy';
 import {
   searchReconciliationReport,
@@ -25,7 +23,6 @@ import {
   groupAction,
   recoverAction
 } from '../../utils/table-config/granules';
-import { workflowOptionNames } from '../../selectors';
 
 const GnfReport = ({
   dispatch,
@@ -102,15 +99,15 @@ const GnfReport = ({
 
   const totalMissingGranules = combinedGranules.reduce(calculateMissingGranules, 0);
 
-  const [workflow, setWorkflow] = useState(workflowOptions[0]);
-  const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
-  const [selected, setSelected] = useState([]);
+  // const [workflow, setWorkflow] = useState(workflowOptions[0]);
+  // const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
+  // const [selected, setSelected] = useState([]);
 
   function handleDownloadClick(e) {
     handleDownloadUrlClick(e, { url: reportUrl });
   }
 
-  useEffect(() => {
+  /*useEffect(() => {
     dispatch(listWorkflows());
   }, [dispatch]);
 
@@ -166,7 +163,7 @@ const GnfReport = ({
 
   function updateSelection(selection) {
     setSelected(selection);
-  }
+  }*/
 
   return (
     <div className="page__component">
@@ -209,19 +206,11 @@ const GnfReport = ({
 };
 
 GnfReport.propTypes = {
-  dispatch: PropTypes.func,
-  granules: PropTypes.object,
   filterString: PropTypes.string,
   legend: PropTypes.node,
   recordData: PropTypes.object,
   reportName: PropTypes.string,
   reportUrl: PropTypes.string,
-  workflowOptions: PropTypes.array
 };
 
-export default withRouter(
-  connect((state) => ({
-    granules: state.granules,
-    workflowOptions: workflowOptionNames(state)
-  }))(GnfReport)
-);
+export default GnfReport;

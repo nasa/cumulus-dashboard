@@ -14,6 +14,7 @@ import ListActions from '../ListActions/ListActions';
 import TableHeader from '../TableHeader/table-header';
 import ListFilters from '../ListActions/ListFilters';
 import TableFilters from './TableFilters';
+import { isEmpty } from 'lodash';
 
 const SortableTable = lazy(() => import('../SortableTable/SortableTable'));
 
@@ -33,7 +34,7 @@ const List = ({
   initialHiddenColumns = [],
   initialSortId,
   legend,
-  list,
+  list = {},
   onSelect,
   query,
   queryParams,
@@ -42,7 +43,7 @@ const List = ({
   toggleColumnOptionsAction,
 }) => {
   const { data: listData, error: listError, inflight: listInflight, meta } = list;
-  const { count, limit } = meta;
+  const { count, limit } = meta || {};
   const tableData = data || listData;
 
   const [selected, setSelected] = useState([]);
@@ -70,39 +71,42 @@ const List = ({
 
   const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
-  useEffect(() => {
-    setQueryConfig((prevQueryConfig) => ({
-      ...prevQueryConfig,
-      ...getQueryConfig({})
-    }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(query)]);
+  // useEffect(() => {
+  //   setQueryConfig((prevQueryConfig) => ({
+  //     ...prevQueryConfig,
+  //     ...getQueryConfig({})
+  //   }));
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [JSON.stringify(query)]);
 
-  useEffect(() => {
-    // Remove parameters with null or undefined values
-    const newParams = omitBy(list.params, isNil);
+  // useEffect(() => {
+  //   // Remove parameters with null or undefined values
+  //   const newParams = omitBy(list.params, isNil);
 
-    if (!isEqual(newParams, params)) {
-      setParams(newParams);
-      setQueryConfig((prevQueryConfig) => ({
-        ...prevQueryConfig,
-        ...getQueryConfig({})
-      }));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(list.params), JSON.stringify(params)]);
+  //   console.log(list);
+  //   if (isEmpty(list)) return;
 
-  useEffect(() => {
-    setClearSelected(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(queryFilters)]);
+  //   if (!isEqual(newParams, params)) {
+  //     setParams(newParams);
+  //     setQueryConfig((prevQueryConfig) => ({
+  //       ...prevQueryConfig,
+  //       ...getQueryConfig({})
+  //     }));
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [JSON.stringify(list.params), JSON.stringify(params)]);
 
-  useEffect(() => {
-    if (typeof toggleColumnOptionsAction === 'function') {
-      const allColumns = tableColumns.map((column) => column.id || column.accessor);
-      dispatch(toggleColumnOptionsAction(toggleColumnOptions.hiddenColumns, allColumns));
-    }
-  }, [dispatch, tableColumns, toggleColumnOptions.hiddenColumns, toggleColumnOptionsAction]);
+  // useEffect(() => {
+  //   setClearSelected(true);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [JSON.stringify(queryFilters)]);
+
+  // useEffect(() => {
+  //   if (typeof toggleColumnOptionsAction === 'function') {
+  //     const allColumns = tableColumns.map((column) => column.id || column.accessor);
+  //     dispatch(toggleColumnOptionsAction(toggleColumnOptions.hiddenColumns, allColumns));
+  //   }
+  // }, [dispatch, tableColumns, toggleColumnOptions.hiddenColumns, toggleColumnOptionsAction]);
 
   function queryNewPage(newPage) {
     setPage(newPage);

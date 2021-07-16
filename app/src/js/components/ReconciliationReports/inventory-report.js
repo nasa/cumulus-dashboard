@@ -2,8 +2,6 @@ import classNames from 'classnames';
 import cloneDeep from 'lodash/cloneDeep';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { Collapse } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import TableCards from './table-cards';
@@ -31,7 +29,6 @@ import {
   groupAction,
   recoverAction
 } from '../../utils/table-config/granules';
-import { workflowOptionNames } from '../../selectors';
 
 const bucketsForFilter = (allBuckets) => {
   const uniqueBuckets = [...new Set(allBuckets)];
@@ -48,9 +45,6 @@ const InventoryReport = ({
   recordData,
   reportName,
   reportUrl,
-  granules,
-  dispatch,
-  workflowOptions
 }) => {
   const [activeId, setActiveId] = useState('dynamo');
   const { reportStartTime = null, reportEndTime = null, error = null } =
@@ -64,10 +58,9 @@ const InventoryReport = ({
   const activeCardTables = reportComparisons.find(
     (displayObj) => displayObj.id === activeId
   ).tables;
-  const { list } = granules;
-  const [workflow, setWorkflow] = useState(workflowOptions[0]);
-  const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
-  const [selected, setSelected] = useState([]);
+  // const [workflow, setWorkflow] = useState(workflowOptions[0]);
+  // const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
+  // const [selected, setSelected] = useState([]);
   const downloadOptions = [
     {
       label: 'JSON - Full Report',
@@ -89,13 +82,13 @@ const InventoryReport = ({
     }, {})
   );
 
-  useEffect(() => {
+/*  useEffect(() => {
     dispatch(listWorkflows());
   }, [dispatch]);
 
   useEffect(() => {
     setWorkflow(workflowOptions[0]);
-  }, [workflowOptions]);
+  }, [workflowOptions]); */
 
   function handleCardClick(e, id) {
     e.preventDefault();
@@ -134,7 +127,7 @@ const InventoryReport = ({
     );
   }
 
-  function generateBulkActions() {
+/*  function generateBulkActions() {
     const config = {
       execute: {
         options: getExecuteOptions(),
@@ -182,7 +175,7 @@ const InventoryReport = ({
 
   function updateSelection(selection) {
     setSelected(selection);
-  }
+  } */
 
   return (
     <div className="page__component">
@@ -284,17 +277,13 @@ const InventoryReport = ({
                   <Collapse in={isExpanded}>
                     <div id={item.id}>
                       <List
-                        list={list}
                         action={listGranules}
                         data={item.data}
+                        initialHiddenColumns={['']}
                         legend={legend}
-                        tableColumns={item.columns}
-                        bulkActions={generateBulkActions()}
                         groupAction={groupAction}
                         rowId="granuleId"
                         shouldUsePagination={true}
-                        initialHiddenColumns={['']}
-                        onSelect={updateSelection}
                       />
                     </div>
                   </Collapse>
@@ -308,20 +297,13 @@ const InventoryReport = ({
 };
 
 InventoryReport.propTypes = {
+  bulkActions: PropTypes.array,
   filterBucket: PropTypes.string,
   filterString: PropTypes.string,
   legend: PropTypes.node,
   recordData: PropTypes.object,
   reportName: PropTypes.string,
   reportUrl: PropTypes.string,
-  dispatch: PropTypes.func,
-  granules: PropTypes.object,
-  workflowOptions: PropTypes.array
 };
 
-export default withRouter(
-  connect((state) => ({
-    granules: state.granules,
-    workflowOptions: workflowOptionNames(state)
-  }))(InventoryReport)
-);
+export default InventoryReport;
