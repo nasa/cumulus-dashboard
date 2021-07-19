@@ -219,7 +219,7 @@ const InventoryReport = ({
                         onSelect={onSelect}
                         rowId="granuleId"
                         shouldUsePagination={true}
-                        tableColumns={item.tableColumns}
+                        tableColumns={item.columns}
                       />
                     </div>
                   </Collapse>
