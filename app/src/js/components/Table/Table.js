@@ -6,6 +6,7 @@ import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
 import omitBy from 'lodash/omitBy';
 import noop from 'lodash/noop';
+import isEmpty from 'lodash/isEmpty';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/pagination';
@@ -14,7 +15,6 @@ import ListActions from '../ListActions/ListActions';
 import TableHeader from '../TableHeader/table-header';
 import ListFilters from '../ListActions/ListFilters';
 import TableFilters from './TableFilters';
-import { isEmpty } from 'lodash';
 
 const SortableTable = lazy(() => import('../SortableTable/SortableTable'));
 

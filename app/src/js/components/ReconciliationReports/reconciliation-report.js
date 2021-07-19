@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import get from 'lodash/get';
-import { 
+import {
   getReconciliationReport,
   listWorkflows,
   applyWorkflowToGranule,

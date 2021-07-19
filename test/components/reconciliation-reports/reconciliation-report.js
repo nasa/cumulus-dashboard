@@ -109,7 +109,7 @@ const reconciliationReports = {
 test('shows an individual inventory report', function (t) {
   const match = { params: { reconciliationReportName: 'exampleInventoryReport' } };
 
-  const dispatch = () => {};
+  const dispatch = () => { };
 
   const report = shallow(
     <ReconciliationReport
@@ -143,7 +143,7 @@ test('shows an individual inventory report', function (t) {
 test('shows an individual Granule Not Found report', function (t) {
   const match = { params: { reconciliationReportName: 'exampleGranuleNotFoundReport' } };
 
-  const dispatch = () => {};
+  const dispatch = () => { };
 
   const report = shallow(
     <ReconciliationReport
@@ -170,7 +170,7 @@ test('correctly renders the heading', function (t) {
 
   const match = { params: { reconciliationReportName: 'exampleInventoryReport' } };
 
-  const dispatch = () => {};
+  const dispatch = () => { };
 
   const report = shallow(
     <ReconciliationReport
@@ -212,7 +212,7 @@ test('correctly renders the heading', function (t) {
 test('report with error triggers error message', function (t) {
   const match = { params: { reconciliationReportName: 'exampleReportWithError' } };
 
-  const dispatch = () => {};
+  const dispatch = () => { };
 
   const report = shallow(
     <ReconciliationReport
@@ -241,7 +241,7 @@ test('report with error triggers error message', function (t) {
 test('report which exceeds maximum allowed payload size triggers error message', function (t) {
   const match = { params: { reconciliationReportName: 'exampleReportExceedsPayloadLimit' } };
 
-  const dispatch = () => {};
+  const dispatch = () => { };
 
   const report = shallow(
     <ReconciliationReport

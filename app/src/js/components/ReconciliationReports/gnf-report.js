@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import groupBy from 'lodash/groupBy';
 import {
   searchReconciliationReport,
@@ -133,11 +133,15 @@ const GnfReport = ({
 GnfReport.propTypes = {
   bulkActions: PropTypes.array,
   filterString: PropTypes.string,
+  groupAction: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+  }),
   legend: PropTypes.node,
   onSelect: PropTypes.func,
   recordData: PropTypes.object,
   reportName: PropTypes.string,
-  reportUrl: PropTypes.string,
+  reportUrl: PropTypes.string
 };
 
 export default GnfReport;
