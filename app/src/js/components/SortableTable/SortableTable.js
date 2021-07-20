@@ -175,7 +175,7 @@ const SortableTable = ({
   useEffect(() => {
     if (typeof changeSortProps === 'function') {
       changeSortProps(sortBy);
-      dispatch(sortPersist(true, true));
+      dispatch(sortPersist(true, action));
     }
   }, [changeSortProps, sortBy]);
 
