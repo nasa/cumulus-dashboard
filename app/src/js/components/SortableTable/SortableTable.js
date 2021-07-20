@@ -10,9 +10,11 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
+import { dispatch } from 'd3';
 import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
 import ListFilters from '../ListActions/ListFilters';
+import sortPersist from '../../reducers/sort-persist';
 
 const getColumnWidth = (rows, accessor, headerText, originalWidth) => {
   const maxWidth = 400;
@@ -173,6 +175,7 @@ const SortableTable = ({
   useEffect(() => {
     if (typeof changeSortProps === 'function') {
       changeSortProps(sortBy);
+      dispatch(sortPersist(true, true));
     }
   }, [changeSortProps, sortBy]);
 
