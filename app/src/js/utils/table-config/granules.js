@@ -70,8 +70,8 @@ export const tableColumns = [
   {
     Header: 'Executions List',
     accessor: 'granuleId',
-    Cell: ({ cell: { value } }) => (
-      <Link to={(location) => ({ pathname: `/executions/executions-list/${path.basename(value)}` })}>link</Link>
+    Cell: ({ row: { original: {collectionId, granuleId} } }) => (
+      <Link to={(location) => ({ pathname: `/executions/executions-list/${encodeURIComponent(collectionId)}/${encodeURIComponent(path.basename(granuleId))}` })}>link</Link>
     ),
     disableSortBy: true,
     width: 90,

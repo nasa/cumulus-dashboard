@@ -57,7 +57,7 @@ const Executions = ({
               <Route exact path='/executions/execution/:executionArn/logs' component={ExecutionLogs} />
               <Route exact path='/executions/execution/:executionArn/events' component={ExecutionEvents} />
               <Route exact path='/executions/execution/:executionArn' component={ExecutionStatus} />
-              <Route exact path='/executions/executions-list/:granule' component={ExecutionsList} />
+              <Route exact path='/executions/executions-list/:collectionId/:granuleId' component={ExecutionsList} />
             </Switch>
           </div>
         </div>
