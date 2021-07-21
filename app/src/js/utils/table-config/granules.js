@@ -232,6 +232,7 @@ const setOnConfirm = ({ history, error, selected, closeModal }) => {
 };
 
 const granuleModalJourney = ({
+  onChange,
   selected = [],
   history,
   isOnModalConfirm,
@@ -246,7 +247,7 @@ const granuleModalJourney = ({
     size: 'lg'
   };
   if (initialEntry) {
-    modalOptions.children = <BatchReingestConfirmContent selected={selected}/>;
+    modalOptions.children = <BatchReingestConfirmContent selected={selected} onChange={onChange}/>;
   }
   if (isOnModalComplete) {
     modalOptions.children = <BatchReingestCompleteContent results={results} errorMessage={errorMessage}

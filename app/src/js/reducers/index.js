@@ -8,6 +8,7 @@ import config from './utils/config';
 import dist from './dist';
 import datepicker from './datepicker';
 import granules from './granules';
+import granulesExecutions from './granules-executions';
 import stats from './stats';
 import pdrs from './pdrs';
 import providers from './providers';
@@ -36,6 +37,7 @@ export const reducers = {
   datepicker,
   cumulusInstance,
   granules,
+  granulesExecutions,
   stats,
   timer,
   sidebar,

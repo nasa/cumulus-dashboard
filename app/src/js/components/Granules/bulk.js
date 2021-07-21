@@ -314,17 +314,21 @@ const BulkGranule = ({
           handleSuccessConfirm={handleSuccessConfirm}
           inflight={isStatusInflight(bulkReingestRequestStatus)}
           onCancel={hideBulkReingestModal}
+          queryWorkflowOptions={true}
           requestId={bulkReingestRequestId}
           selected={selected}
+          selectWorkflow={true}
           showModal={showBulkReingestModal}
           success={isStatusSuccess(bulkReingestRequestStatus)}
           successMessage={'Your request to process a bulk granule reingest operation has been submitted.'}
           title={'Bulk Granule Reingest'}
         >
           <h4 className="modal_subtitle">To run and complete your bulk reingest task:</h4>
-          <p>
-          In the box below, add either an array of granule Ids or an elasticsearch query and index. <br/>
-          </p>
+          <ol>
+            <li>In the box below, add either an array of granule Ids or an elasticsearch query and index.</li>
+            <li>Then select workflow to rerun for all the selected granules. The workflows listed are the
+              workflow intersects of all the selected granules.</li>
+          </ol>
         </BulkGranuleModal>
         {config.enableRecovery &&
         <BulkGranuleModal

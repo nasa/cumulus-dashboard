@@ -291,14 +291,15 @@ export const applyRecoveryWorkflowToGranule = (granuleId) => (dispatch) => dispa
     error
   }));
 
-export const reingestGranule = (granuleId) => ({
+export const reingestGranule = (granuleId, meta) => ({
   [CALL_API]: {
     type: types.GRANULE_REINGEST,
     method: 'PUT',
     id: granuleId,
     path: `granules/${granuleId}`,
     data: {
-      action: 'reingest'
+      action: 'reingest',
+      workflowName: meta.workflowName
     }
   }
 });
@@ -762,6 +763,19 @@ export const filterExecutions = (param) => ({ type: types.FILTER_EXECUTIONS, par
 export const clearExecutionsFilter = (paramKey) => ({ type: types.CLEAR_EXECUTIONS_FILTER, paramKey });
 export const searchExecutions = (infix) => ({ type: types.SEARCH_EXECUTIONS, infix });
 export const clearExecutionsSearch = () => ({ type: types.CLEAR_EXECUTIONS_SEARCH });
+
+export const getGranulesWorkflows = (payload) => ({
+  [CALL_API]: {
+    type: types.GRANULES_WORKFLOWS,
+    method: 'GET',
+    // method: 'POST', // TODO update method path payload etc.
+    path: 'executions',
+    // path: 'executions/workflows-by-granules',
+    // data: payload // ids or query stringified
+  }
+});
+
+export const clearGranulesWorkflows = () => ({ type: types.CLEAR_GRANULES_WORKFLOWS });
 
 export const listOperations = (options) => (dispatch, getState) => {
   const timeFilters = fetchCurrentTimeFilters(getState().datepicker);

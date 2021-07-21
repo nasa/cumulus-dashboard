@@ -42,6 +42,7 @@ export class BatchCommand extends React.Component {
       status: null,
       modalOptions: null,
       errorMessage: null,
+      meta: {},
     };
     this.isRunning = false;
     this.confirm = this.confirm.bind(this);
@@ -54,6 +55,11 @@ export class BatchCommand extends React.Component {
     this.isInflight = this.isInflight.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.updateMeta = this.updateMeta.bind(this);
+  }
+
+  updateMeta(meta) {
+    this.setState({ meta: { ...this.state.meta, ...meta } });
   }
 
   closeModal() {
@@ -119,10 +125,10 @@ export class BatchCommand extends React.Component {
   // save a reference to the callback in state, then init the action
   initAction(id, callback) {
     const { dispatch, action } = this.props;
-    const { callbacks } = this.state;
+    const { callbacks, meta } = this.state;
     callbacks[id] = callback;
     this.setState({ callbacks });
-    return dispatch(action(id));
+    return dispatch(action(id, meta));
   }
 
   // immediately change the UI to show either success or error
@@ -186,6 +192,7 @@ export class BatchCommand extends React.Component {
     const { selected, history, getModalOptions } = this.props;
     if (typeof getModalOptions === 'function') {
       const modalOptions = getModalOptions({
+        onChange: this.updateMeta,
         selected,
         history,
         closeModal: this.closeModal,

@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Alert } from 'react-bootstrap';
+import { clearGranulesWorkflows, getGranulesWorkflows } from '../../actions';
+import SimpleDropdown from '../DropDown/simple-dropdown';
 
 export const maxDisplayed = 10;
 
-const BatchReingestConfirmContent = ({ selected = [] }) => {
+const BatchReingestConfirmContent = ({
+  onChange,
+  selected = [],
+  dispatch,
+  granulesExecutions,
+}) => {
+  // TODO if no workflow found
+  const [workflow, setWorkflow] = useState(null);
   const isMultiple = selected.length > 1;
-  const these = isMultiple ? 'These' : 'This';
   const s = isMultiple ? 's' : '';
-  const requestText = `You have submitted a request to reingest the following granule${s}.`;
-  const confirmText = `Are you sure that you want to reingest ${these.toLowerCase()} granule${s}?`;
+  const requestText = `Selected granule${s}:`;
 
   const displayedItems = () => {
     const items = [];
@@ -22,6 +30,20 @@ const BatchReingestConfirmContent = ({ selected = [] }) => {
     return items;
   };
 
+  useEffect(() => {
+    dispatch(getGranulesWorkflows(JSON.stringify({ ids: selected })));
+    return () => {
+      dispatch(clearGranulesWorkflows());
+    };
+  }, [dispatch, selected]);
+
+  function handleSelectWorkflow(selector, selectedWorkflow) {
+    setWorkflow(selectedWorkflow);
+    if (typeof onChange === 'function') {
+      onChange({ workflowName: selectedWorkflow });
+    }
+  }
+
   return (
     <>
       <Alert variant='primary'><strong>Attention:</strong> {`The selected granule${s} will be overwritten`}</Alert>
@@ -29,15 +51,34 @@ const BatchReingestConfirmContent = ({ selected = [] }) => {
       <ul>
         {displayedItems()}
       </ul>
-      {confirmText.split('\n').map((line, index) => (
-        <p key={index}>{line}</p>
-      ))}
+      To complete your granule reingest requests:
+      <br></br>
+      {`Below you can select a specific workflow to apply to the selected granule${s}. `}
+      <strong>Note: The default is the latest workflow.</strong>
+
+      <div>
+        <SimpleDropdown
+          isClearable={true}
+          key={'workflow-dropdown'}
+          label={'Select Workflow'}
+          value={workflow}
+          options={granulesExecutions.workflows.data}
+          id='workflow-dropdown'
+          onChange={handleSelectWorkflow}
+          placeholder="Workflow Name"
+        />
+      </div>
     </>
   );
 };
 
 BatchReingestConfirmContent.propTypes = {
-  selected: PropTypes.array
+  onChange: PropTypes.func,
+  granulesExecutions: PropTypes.object,
+  dispatch: PropTypes.func,
+  selected: PropTypes.array,
 };
 
-export default BatchReingestConfirmContent;
+export default connect((state) => ({
+  granulesExecutions: state.granulesExecutions,
+}))(BatchReingestConfirmContent);
