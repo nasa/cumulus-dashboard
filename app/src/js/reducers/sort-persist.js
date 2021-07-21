@@ -9,7 +9,6 @@ export const initialState = {
 };
 export default createReducer(initialState, {
   [SORTS]: (state, action) => {
-    state.sorted = true;
-    state.maintained = action.holdPreviousState;
+    state[action.table] = action.sortBy;
   },
 });
