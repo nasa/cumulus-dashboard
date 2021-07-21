@@ -144,6 +144,10 @@
     }
   }
 
+  .batch_granules--reingest {
+    text-align: left;
+  }
+
   &.bulk_granules {
     &.modal-dialog {
       overflow-y: initial !important;

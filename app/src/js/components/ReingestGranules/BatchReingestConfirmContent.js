@@ -51,11 +51,14 @@ const BatchReingestConfirmContent = ({
       <ul>
         {displayedItems()}
       </ul>
-      To complete your granule reingest requests:
-      <br></br>
-      {`Below you can select a specific workflow to apply to the selected granule${s}. `}
-      <strong>Note: The default is the latest workflow.</strong>
-
+      <div className="batch_granules--reingest">
+        <h4 className="modal_subtitle">To complete your granule reingest requests:</h4>
+        <p>
+          {`Below you can select a specific workflow to apply to the selected granule${s}. `}
+          <strong>Note: The default is the latest workflow.</strong>
+        </p>
+        <br />
+      </div>
       <div>
         <SimpleDropdown
           isClearable={true}
