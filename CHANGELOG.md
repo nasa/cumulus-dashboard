@@ -54,6 +54,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Add focus styles for various browser support and keyboard/mouse inputs 
 - **CUMULUS-2573**
   - Changed the dropdown menu in the individual providers page into a delete button.
+- **CUMULUS-2579**
+  - Fixed React Issue with the Footer pertaining to missing keys.
 
 ### Fixed
 
