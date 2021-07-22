@@ -30,8 +30,8 @@ const Footer = ({
           <ul className="footer__container">
             <li className="footer__links">
               <div>NASA</div>
-              {leftSideLinks.map((linkInfo) => (
-                <div><a href={linkInfo.url} target="_blank">{linkInfo.text}</a></div>
+              {leftSideLinks.map((linkInfo, id) => (
+                <div key = { id }><a href={linkInfo.url} target="_blank">{linkInfo.text}</a></div>
               ))}
             </li>
             <li className="footer__version">
@@ -40,8 +40,8 @@ const Footer = ({
               <div className="api__version">API v{versionNumber}</div>
             </li>
             <li className="footer__opensource">
-              {rightSideLinks.map((linkInfo) => (
-                <div><a href={linkInfo.url} target="_blank"><i className={linkInfo.iconClassName}></i> {linkInfo.text}</a></div>
+              {rightSideLinks.map((linkInfo, id) => (
+                <div key = { id } ><a href={linkInfo.url} target="_blank"><i className={linkInfo.iconClassName}></i> {linkInfo.text}</a></div>
               ))}
             </li>
           </ul>
