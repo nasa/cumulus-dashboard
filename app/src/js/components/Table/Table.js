@@ -64,8 +64,6 @@ const List = ({
     hiddenColumns: initialHiddenColumns,
     setHiddenColumns: noop
   });
-  const SortedList = <SortableTable tableID = {tableID}/>;
-
   const { bulkActionError, completedBulkActions } = bulkActionMeta;
   const { limit: limitQueryParam, page: pageQueryParam, ...queryFilters } = queryParams;
 
@@ -226,8 +224,6 @@ const List = ({
               // according to that id, and therefore we are using sever-side/manual sorting
               shouldManualSort={!!initialSortId}
               getToggleColumnOptions={getToggleColumnOptions}
-            />
-            <SortedList
               tableId={'idOfThisTable'}
             />
           </Suspense>
