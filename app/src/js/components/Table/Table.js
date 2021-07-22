@@ -39,6 +39,7 @@ const List = ({
   rowId,
   tableColumns,
   toggleColumnOptionsAction,
+  tableID,
 }) => {
   const { data: listData, error: listError, inflight: listInflight, meta } = list;
   const { count, limit } = meta;
@@ -63,6 +64,7 @@ const List = ({
     hiddenColumns: initialHiddenColumns,
     setHiddenColumns: noop
   });
+  const SortedList = <SortableTable tableID = {tableID}/>;
 
   const { bulkActionError, completedBulkActions } = bulkActionMeta;
   const { limit: limitQueryParam, page: pageQueryParam, ...queryFilters } = queryParams;
@@ -225,6 +227,9 @@ const List = ({
               shouldManualSort={!!initialSortId}
               getToggleColumnOptions={getToggleColumnOptions}
             />
+            <SortedList
+              tableId={'idOfThisTable'}
+            />
           </Suspense>
           <Pagination
             count={count}
@@ -260,6 +265,7 @@ List.propTypes = {
   tableColumns: PropTypes.array,
   onSelect: PropTypes.func,
   queryParams: PropTypes.object,
+  tableID: PropTypes.string,
 };
 
 export { List };

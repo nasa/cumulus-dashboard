@@ -66,6 +66,7 @@ const SortableTable = ({
   shouldManualSort = false,
   shouldUsePagination = false,
   tableColumns = [],
+  tableID
 }) => {
   const defaultColumn = useMemo(
     () => ({
@@ -174,9 +175,9 @@ const SortableTable = ({
   useEffect(() => {
     if (typeof changeSortProps === 'function') {
       changeSortProps(sortBy);
-      dispatch(sortPersist(sortBy));
+      dispatch(sortPersist(tableID, sortBy));
     }
-  }, [changeSortProps, dispatch, sortBy]);
+  }, [changeSortProps, dispatch, tableID, sortBy]);
 
   useEffect(() => {
     if (typeof getToggleColumnOptions === 'function') {
@@ -490,6 +491,7 @@ SortableTable.propTypes = {
   shouldManualSort: PropTypes.bool,
   shouldUsePagination: PropTypes.bool,
   tableColumns: PropTypes.array,
+  tableID: PropTypes.string,
 };
 
 export default SortableTable;
