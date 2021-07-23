@@ -224,6 +224,7 @@ class PDR extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId="granuleId"
+            tableID = {'idOfThisTable'}
           >
             <Search
               action={searchGranules}

@@ -102,6 +102,7 @@ class PdrOverview extends React.Component {
             rowId="pdrName"
             filterAction={filterPdrs}
             filterClear={clearPdrsFilter}
+            tableID = {'idOfThisTable'}
           >
             <ListFilters>
               <Dropdown

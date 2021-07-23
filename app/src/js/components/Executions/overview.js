@@ -87,6 +87,7 @@ class ExecutionOverview extends React.Component {
             initialSortId='createdAt'
             filterAction={filterExecutions}
             filterClear={clearExecutionsFilter}
+            tableID = {'idOfThisTable'}
           >
             <Search
               action={searchExecutions}

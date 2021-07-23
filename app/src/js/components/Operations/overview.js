@@ -96,6 +96,7 @@ class OperationOverview extends React.Component {
             initialSortId='createdAt'
             filterAction={filterOperations}
             filterClear={clearOperationsFilter}
+            tableID = {'idOfThisTable'}
           >
             <Search
               action={searchOperations}

@@ -83,6 +83,7 @@ class RulesOverview extends React.Component {
             rowId="name"
             filterAction={filterRules}
             filterClear={clearRulesFilter}
+            tableID = {'idOfThisTable'}
           >
             <Search
               action={searchRules}

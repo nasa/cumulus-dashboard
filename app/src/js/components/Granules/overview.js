@@ -186,6 +186,7 @@ class GranulesOverview extends React.Component {
             filterClear={clearGranulesFilter}
             onSelect={this.updateSelection}
             toggleColumnOptionsAction={toggleGranulesTableColumns}
+            tableID = {'idOfThisTable'}
           >
             <Search
               action={searchGranules}

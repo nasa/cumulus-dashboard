@@ -187,6 +187,7 @@ const AllGranules = ({
           filterClear={clearGranulesFilter}
           onSelect={updateSelection}
           toggleColumnOptionsAction={toggleGranulesTableColumns}
+          tableID = {'idOfThisTable'}
         >
           <Search
             action={searchGranules}
