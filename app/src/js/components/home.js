@@ -83,7 +83,7 @@ class Home extends React.Component {
     const data = items.filter((d) => d[0] !== nullValue);
     if (!data.length) return null;
     return pageSection(
-      title, sectionId,
+      title, String(sectionId),
       <div className="overview-num__wrapper overview-num__wrapper-home">
         <ul id={listId}>
           {data.map((d) => {
