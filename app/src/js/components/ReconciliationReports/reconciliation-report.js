@@ -85,7 +85,7 @@ const ReconciliationReport = ({
     return actions;
   }
 
-  function selectWorkflow(selectedWorkflow) {
+  function selectWorkflow(_selector, selectedWorkflow) {
     setWorkflow(selectedWorkflow);
   }
 
