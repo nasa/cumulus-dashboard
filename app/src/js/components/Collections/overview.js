@@ -104,7 +104,8 @@ const CollectionOverview = ({
 
   useEffect(() => {
     setWorkflow(workflowOptions[0]);
-  }, [workflowOptions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(workflowOptions)]);
 
   function generateQuery() {
     return {

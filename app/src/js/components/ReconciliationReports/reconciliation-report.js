@@ -23,11 +23,11 @@ import {
 } from '../../utils/table-config/granules';
 
 const ReconciliationReport = ({
-  dispatch,
-  granules,
+  dispatch = {},
+  granules = {},
   match,
   reconciliationReports = [],
-  workflowOptions
+  workflowOptions = []
 }) => {
   const { reconciliationReportName: encodedReportName } = match.params;
   const reconciliationReportName = decodeURIComponent(encodedReportName);
@@ -63,7 +63,8 @@ const ReconciliationReport = ({
 
   useEffect(() => {
     setWorkflow(workflowOptions[0]);
-  }, [workflowOptions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(workflowOptions)]);
 
   function generateBulkActions() {
     const config = {

@@ -109,19 +109,10 @@ const reconciliationReports = {
 test('shows an individual inventory report', function (t) {
   const match = { params: { reconciliationReportName: 'exampleInventoryReport' } };
 
-  const dispatch = () => { };
-
-  const granules = () => { };
-
-  const workflowOptions = () => {[]};
-
   const report = shallow(
     <ReconciliationReport
-      granules={granules}
       match={match}
       reconciliationReports={reconciliationReports}
-      dispatch={dispatch}
-      workflowOptions={workflowOptions}
     />
   );
 
@@ -149,19 +140,10 @@ test('shows an individual inventory report', function (t) {
 test('shows an individual Granule Not Found report', function (t) {
   const match = { params: { reconciliationReportName: 'exampleGranuleNotFoundReport' } };
 
-  const dispatch = () => { };
-
-  const granules = () => { };
-
-  const workflowOptions = () => {[]};
-
   const report = shallow(
     <ReconciliationReport
-      granules={granules}
       match={match}
       reconciliationReports={reconciliationReports}
-      dispatch={dispatch}
-      workflowOptions={workflowOptions}
     />
   );
 
@@ -182,19 +164,10 @@ test('correctly renders the heading', function (t) {
 
   const match = { params: { reconciliationReportName: 'exampleInventoryReport' } };
 
-  const dispatch = () => { };
-
-  const granules = () => { };
-
-  const workflowOptions = () => {[]};
-
   const report = shallow(
     <ReconciliationReport
-      granules={granules}
       match={match}
       reconciliationReports={reconciliationReports}
-      dispatch={dispatch}
-      workflowOptions={workflowOptions}
     />
   );
 
@@ -230,19 +203,10 @@ test('correctly renders the heading', function (t) {
 test('report with error triggers error message', function (t) {
   const match = { params: { reconciliationReportName: 'exampleReportWithError' } };
 
-  const dispatch = () => { };
-
-  const granules = () => { };
-
-  const workflowOptions = () => {[]};
-
   const report = shallow(
     <ReconciliationReport
-      granules={granules}
       match={match}
       reconciliationReports={reconciliationReports}
-      dispatch={dispatch}
-      workflowOptions={workflowOptions}
     />
   );
 
@@ -265,19 +229,10 @@ test('report with error triggers error message', function (t) {
 test('report which exceeds maximum allowed payload size triggers error message', function (t) {
   const match = { params: { reconciliationReportName: 'exampleReportExceedsPayloadLimit' } };
 
-  const dispatch = () => { };
-
-  const granules = () => { };
-
-  const workflowOptions = () => {[]};
-
   const report = shallow(
     <ReconciliationReport
-      granules={granules}
       match={match}
       reconciliationReports={reconciliationReports}
-      dispatch={dispatch}
-      workflowOptions={workflowOptions}
     />
   );
 

@@ -6,7 +6,6 @@ import isNil from 'lodash/isNil';
 import isEqual from 'lodash/isEqual';
 import omitBy from 'lodash/omitBy';
 import noop from 'lodash/noop';
-import isEmpty from 'lodash/isEmpty';
 import ErrorReport from '../Errors/report';
 import Loading from '../LoadingIndicator/loading-indicator';
 import Pagination from '../Pagination/pagination';
@@ -82,8 +81,6 @@ const List = ({
   useEffect(() => {
     // Remove parameters with null or undefined values
     const newParams = omitBy(list.params, isNil);
-
-    if (isEmpty(list)) return;
 
     if (!isEqual(newParams, params)) {
       setParams(newParams);
