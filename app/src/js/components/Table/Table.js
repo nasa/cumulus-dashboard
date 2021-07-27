@@ -40,6 +40,7 @@ const List = ({
   tableColumns,
   toggleColumnOptionsAction,
   tableID,
+  sorts,
 }) => {
   const { data: listData, error: listError, inflight: listInflight, meta } = list;
   const { count, limit } = meta;
@@ -48,6 +49,7 @@ const List = ({
   const [selected, setSelected] = useState([]);
   const [clearSelected, setClearSelected] = useState(false);
   const [page, setPage] = useState(1);
+  const sortBy = sorts[tableID];
 
   const [queryConfig, setQueryConfig] = useState({
     page: 1,
@@ -224,7 +226,8 @@ const List = ({
               // according to that id, and therefore we are using sever-side/manual sorting
               shouldManualSort={!!initialSortId}
               getToggleColumnOptions={getToggleColumnOptions}
-              tableId={'idOfThisTable'}
+              tableID={tableID}
+              initialSortBy= {sortBy}
             />
           </Suspense>
           <Pagination
@@ -262,8 +265,9 @@ List.propTypes = {
   onSelect: PropTypes.func,
   queryParams: PropTypes.object,
   tableID: PropTypes.string,
+  sorts: PropTypes.array,
 };
 
 export { List };
 
-export default withQueryParams()(connect()(List));
+export default withQueryParams()(connect((state) => ({ sorts: state.sorts }))(List));

@@ -222,7 +222,6 @@ class Home extends React.Component {
               tableColumns={errorTableColumns}
               initialSortId='timestamp'
               query={this.generateQuery()}
-              tableID = {'idOfThisTable'}
             />
           )}
         </div>

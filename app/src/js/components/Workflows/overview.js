@@ -39,8 +39,7 @@ const WorkflowOverview = ({
           action={listWorkflows}
           tableColumns={tableColumns}
           query={{ ...queryParams }}
-          rowId="name"
-          tableID = {'idOfThisTable'}>
+          rowId="name">
           <Search
             action={searchWorkflows}
             clear={clearWorkflowsSearch}

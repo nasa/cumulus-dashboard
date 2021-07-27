@@ -250,7 +250,7 @@ const CollectionOverview = ({
           initialSortId="timestamp"
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
-          tableID = {'idOfThisTable'}
+          tableID = {'CollectionsTable'}
         >
           <Search
             action={searchGranules}

@@ -41,7 +41,6 @@ test('table should properly initialize timer config prop', async (t) => {
         initialSortId="timestamp"
         query={query}
         queryParams={{}}
-        tableID = {'idOfThisTable'}
       />
     </Provider>,
     {

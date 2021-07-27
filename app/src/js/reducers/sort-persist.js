@@ -4,11 +4,11 @@ import {
 } from '../actions/types';
 
 export const initialState = {
-  sorted: false,
-  maintained: false,
+  granulesTable: [],
 };
 export default createReducer(initialState, {
   [SORTS]: (state, action) => {
-    state[action.table] = action.sortBy;
+    state[action.tableID] = action.sortBy;
+    console.log(action);
   },
 });

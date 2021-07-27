@@ -96,7 +96,7 @@ class ProvidersOverview extends React.Component {
             initialSortId="timestamp"
             filterAction={filterProviders}
             filterClear={clearProvidersFilter}
-            tableID = {'idOfThisTable'}
+            tableID = {'ProvidersTable'}
           >
           </List>
         </section>
