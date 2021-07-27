@@ -15,7 +15,6 @@ import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
 import ListFilters from '../ListActions/ListFilters';
 import { sortPersist } from '../../actions/index';
-import { initialState } from '../../reducers/sort-persist';
 const getColumnWidth = (rows, accessor, headerText, originalWidth) => {
   const maxWidth = 400;
   const magicSpacing = 10;
@@ -68,7 +67,7 @@ const SortableTable = ({
   shouldUsePagination = false,
   tableColumns = [],
   tableID,
-  initialSortBy,
+  initialSortBy = [],
 }) => {
   const defaultColumn = useMemo(
     () => ({
@@ -84,7 +83,14 @@ const SortableTable = ({
   const [rightScrollButtonVisibility, setRightScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
   let rightScrollInterval;
   let leftScrollInterval;
-
+  let sortByState;
+  if (initialSortBy.length > 0) {
+    sortByState = initialSortBy;
+  } else if (initialSortId) {
+    sortByState = [{ id: initialSortId, desc: true }];
+  } else {
+    sortByState = [];
+  }
   const {
     getTableProps,
     rows,
@@ -119,7 +125,7 @@ const SortableTable = ({
       manualPagination: !shouldUsePagination,
       initialState: {
         hiddenColumns: initialHiddenColumns,
-        sortBy: initialSortId ? [{ id: initialSortId, desc: true }] : initialSortBy,
+        sortBy: sortByState,
       },
     },
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
@@ -188,7 +194,6 @@ const SortableTable = ({
       });
     }
   }, [getToggleColumnOptions, hiddenColumns, setHiddenColumns]);
-
 
   function resetHiddenColumns() {
     setHiddenColumns(initialHiddenColumns);
