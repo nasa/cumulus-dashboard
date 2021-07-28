@@ -73,9 +73,13 @@ test('Checking granule for size prop', function (t) {
       workflowOptions={[]}
     /></Provider>);
 
-  const sortableTable = granuleOverview.find('GranuleOverview').dive();
-  t.is(sortableTable.length, 1);
-  const sortableTableWrapper = sortableTable.dive();
+  const sortableTable = granuleOverview.find('GranuleOverview');
+  const reducedTable = sortableTable.find('SortableTable');
+  if(reducedTable){
+    console.log(sortableTable);
+  }
+  t.is(reducedTable.length, 1);
+  const sortableTableWrapper = reducedTable.dive();
   t.is(sortableTableWrapper
     .find('.tbody .tr .td')
     .find('Cell').at(2).dive()
