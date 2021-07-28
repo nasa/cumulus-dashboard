@@ -7,12 +7,18 @@ import { shallow, configure } from 'enzyme';
 
 import { ExecutionEvents } from '../../../app/src/js/components/Executions/execution-events';
 import executionHistory from '../../../test/fixtures/execution-history-all';
+import { Provider } from 'react-redux';
 
 configure({ adapter: new Adapter() });
 
 const match = {
   params: { executionArn: executionHistory.execution.executionArn },
 };
+const store = {
+      getState: () => {},
+      dispatch,
+      subscribe: () => {}
+    };
 
 const dispatch = () => {};
 
@@ -72,15 +78,16 @@ test('Execution Events displays the correct step name', function (t) {
   };
 
   const executionEventsRendered = shallow(
+    <Provider store = {store}>
     <ExecutionEvents
       dispatch={dispatch}
       location={{}}
       match={match}
       executionStatus={executionStatus}
-    />
+    /></Provider>
   );
 
-  const sortableTable = executionEventsRendered.find('SortableTable');
+  const sortableTable = executionEventsRendered.find('ExecutionEvents');
   t.is(sortableTable.length, 1);
 
   const sortableTableWrapper = sortableTable.dive();
@@ -116,17 +123,18 @@ test('Execution Events shows event history', function (t) {
     error: false,
     meta: {},
   };
-
+  
   const executionEventsRendered = shallow(
+  <Provider store = {store}>
     <ExecutionEvents
       dispatch={dispatch}
       location={{}}
       match={match}
       executionStatus={executionStatus}
-    />
+    /></Provider>
   );
-
-  const sortableTable = executionEventsRendered.find('SortableTable');
+  const renderedTable = executionEventsRendered.find('ExecutionEvents');
+  const sortableTable = renderedTable.find('SortableTable').dive();
   t.is(sortableTable.length, 1);
 
   const sortableTableWrapper = sortableTable.dive();

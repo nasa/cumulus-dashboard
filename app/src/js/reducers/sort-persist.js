@@ -9,6 +9,5 @@ export const initialState = {
 export default createReducer(initialState, {
   [SORTS]: (state, action) => {
     state[action.tableID] = action.sortBy;
-    console.log(action);
   },
 });

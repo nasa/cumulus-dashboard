@@ -26,8 +26,7 @@ test('Renders Error result', (t) => {
   const wrapper = shallow(
     <BatchReingestComplete results={[]} errors={errors} />
   );
-
-  const errorWrapper = wrapper.find('s').dive();
+  const errorWrapper = wrapper.find('a').dive();
 
   t.true(errorWrapper.text().includes(errors[0].error));
 });
