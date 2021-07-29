@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
-import { useDispatch } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
 import ListFilters from '../ListActions/ListFilters';
@@ -66,8 +66,7 @@ const SortableTable = ({
   shouldManualSort = false,
   shouldUsePagination = false,
   tableColumns = [],
-  tableID,
-  initialSortBy = [],
+  tableID
 }) => {
   const defaultColumn = useMemo(
     () => ({
@@ -81,16 +80,10 @@ const SortableTable = ({
   const [fitColumn, setFitColumn] = useState({});
   const [leftScrollButtonVisibility, setLeftScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
   const [rightScrollButtonVisibility, setRightScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
+
   let rightScrollInterval;
   let leftScrollInterval;
-  let sortByState;
-  if (initialSortBy.length > 0) {
-    sortByState = initialSortBy;
-  } else if (initialSortId) {
-    sortByState = [{ id: initialSortId, desc: true }];
-  } else {
-    sortByState = [];
-  }
+
   const {
     getTableProps,
     rows,
@@ -125,7 +118,7 @@ const SortableTable = ({
       manualPagination: !shouldUsePagination,
       initialState: {
         hiddenColumns: initialHiddenColumns,
-        sortBy: sortByState,
+        sortBy: initialSortId ? [{ id: initialSortId, desc: true }] : [],
       },
     },
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
@@ -499,7 +492,6 @@ SortableTable.propTypes = {
   shouldUsePagination: PropTypes.bool,
   tableColumns: PropTypes.array,
   tableID: PropTypes.string,
-  initialSortBy: PropTypes.array,
 };
 
-export default SortableTable;
+export default connect()(SortableTable);

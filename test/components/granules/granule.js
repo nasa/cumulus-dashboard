@@ -4,7 +4,6 @@ import test from 'ava';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
-import { Provider } from 'react-redux';
 
 import { GranuleOverview } from '../../../app/src/js/components/Granules/granule.js';
 
@@ -13,11 +12,7 @@ configure({ adapter: new Adapter() });
 const logs = { items: [] };
 
 const match = { params: { granuleId: 'my-granule-id' } };
-const store = {
-    getState: () => {},
-    dispatch,
-    subscribe: () => {}
-};
+
 const dispatch = () => {};
 const granules = {
   map: {
@@ -41,9 +36,7 @@ const granules = {
 };
 
 test('CUMULUS-336 Granule file links use the correct URL', function (t) {
-
   const granuleOverview = shallow(
-    <Provider store = {store}>
     <GranuleOverview
       dispatch={dispatch}
       match={match}
@@ -51,9 +44,10 @@ test('CUMULUS-336 Granule file links use the correct URL', function (t) {
       logs={logs}
       skipReloadOnMount={true}
       workflowOptions={[]}
-    /></Provider>);
+    />
+  );
 
-  const sortableTable = granuleOverview.find('GranuleOverview');
+  const sortableTable = granuleOverview.find('SortableTable');
   t.is(sortableTable.length, 1);
   const sortableTableWrapper = sortableTable.dive();
   t.is(sortableTableWrapper
@@ -62,8 +56,8 @@ test('CUMULUS-336 Granule file links use the correct URL', function (t) {
     .find('a[href="https://my-bucket.s3.amazonaws.com/my-key-path/my-name"]').length, 1);
 });
 test('Checking granule for size prop', function (t) {
+
   const granuleOverview = shallow(
-    <Provider store = {store}>
     <GranuleOverview
       dispatch={dispatch}
       match={match}
@@ -71,18 +65,14 @@ test('Checking granule for size prop', function (t) {
       logs={logs}
       skipReloadOnMount={true}
       workflowOptions={[]}
-    /></Provider>);
+    />
+  );
 
-  const sortableTable = granuleOverview.find('GranuleOverview');
-  const reducedTable = sortableTable.find('SortableTable');
-  if(reducedTable){
-    console.log(sortableTable);
-  }
-  t.is(reducedTable.length, 1);
-  const sortableTableWrapper = reducedTable.dive();
+  const sortableTable = granuleOverview.find('SortableTable');
+  t.is(sortableTable.length, 1);
+  const sortableTableWrapper = sortableTable.dive();
   t.is(sortableTableWrapper
     .find('.tbody .tr .td')
     .find('Cell').at(2).dive()
     .text(), '10239');
 });
-
