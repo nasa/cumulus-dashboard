@@ -4,7 +4,8 @@ import test from 'ava';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
-import { Provider } from 'react-redux';
+import * as redux from 'react-redux';
+import sinon from 'sinon';
 
 import { GranuleOverview } from '../../../app/src/js/components/Granules/granule.js';
 
@@ -13,11 +14,6 @@ configure({ adapter: new Adapter() });
 const logs = { items: [] };
 
 const match = { params: { granuleId: 'my-granule-id' } };
-const store = {
-    getState: () => {},
-    dispatch,
-    subscribe: () => {}
-};
 const dispatch = () => {};
 const granules = {
   map: {
@@ -40,10 +36,20 @@ const granules = {
   }
 };
 
+test.before(() => {
+  // Mock useDispatch hook
+  const useDispatchStub = sinon.stub(redux, 'useDispatch');
+  // Mock dispatch function returned from useDispatch
+  useDispatchStub.returns(sinon.spy());
+});
+
+test.after(() => {
+  sinon.restore();
+});
+
 test('CUMULUS-336 Granule file links use the correct URL', function (t) {
 
   const granuleOverview = shallow(
-    <Provider store = {store}>
     <GranuleOverview
       dispatch={dispatch}
       match={match}
@@ -51,9 +57,9 @@ test('CUMULUS-336 Granule file links use the correct URL', function (t) {
       logs={logs}
       skipReloadOnMount={true}
       workflowOptions={[]}
-    /></Provider>);
+    />);
 
-  const sortableTable = granuleOverview.find('GranuleOverview');
+  const sortableTable = granuleOverview.find('SortableTable')
   t.is(sortableTable.length, 1);
   const sortableTableWrapper = sortableTable.dive();
   t.is(sortableTableWrapper
@@ -61,9 +67,9 @@ test('CUMULUS-336 Granule file links use the correct URL', function (t) {
     .find('Cell').at(1).dive()
     .find('a[href="https://my-bucket.s3.amazonaws.com/my-key-path/my-name"]').length, 1);
 });
+
 test('Checking granule for size prop', function (t) {
   const granuleOverview = shallow(
-    <Provider store = {store}>
     <GranuleOverview
       dispatch={dispatch}
       match={match}
@@ -71,15 +77,11 @@ test('Checking granule for size prop', function (t) {
       logs={logs}
       skipReloadOnMount={true}
       workflowOptions={[]}
-    /></Provider>);
+    />);
 
-  const sortableTable = granuleOverview.find('GranuleOverview');
-  const reducedTable = sortableTable.find('SortableTable');
-  if(reducedTable){
-    console.log(sortableTable);
-  }
-  t.is(reducedTable.length, 1);
-  const sortableTableWrapper = reducedTable.dive();
+  const sortableTable = granuleOverview.find('SortableTable');
+  t.is(sortableTable.length, 1);
+  const sortableTableWrapper = sortableTable.dive();
   t.is(sortableTableWrapper
     .find('.tbody .tr .td')
     .find('Cell').at(2).dive()
