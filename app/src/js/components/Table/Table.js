@@ -49,7 +49,10 @@ const List = ({
   const [selected, setSelected] = useState([]);
   const [clearSelected, setClearSelected] = useState(false);
   const [page, setPage] = useState(1);
-  const sortBy = sorts[tableID];
+  let sortBy;
+  if (tableID) {
+    sortBy = sorts[tableID];
+  }
 
   const [queryConfig, setQueryConfig] = useState({
     page: 1,
