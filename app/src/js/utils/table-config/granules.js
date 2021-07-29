@@ -181,7 +181,7 @@ const confirmRecover = (d) => `Recover ${d} granule(s)?`;
 export const recoverAction = (granules, config) => ({
   text: 'Recover Granule',
   action: config.recover.action,
-  state: granules.recover,
+  state: granules.executed,
   clearError: applyWorkflowToGranuleClearError,
   confirm: confirmRecover
 });
@@ -280,18 +280,19 @@ const containsPublishedGranules = (selectedGranules) => {
   return true;
 };
 
-export const reingestAction = (granules) => ({
+export const reingestAction = (granules, selectedGranules) => ({
   text: 'Reingest',
   action: reingestGranule,
   state: granules.reingested,
   clearError: reingestGranuleClearError,
   confirm: confirmReingest,
   className: 'button--reingest',
-  getModalOptions: granuleModalJourney
+  getModalOptions: granuleModalJourney,
+  selected: selectedGranules.map((g) => pick(g, ['granuleId', 'collectionId']))
 });
 
 export const bulkActions = (granules, config, selectedGranules) => [
-  reingestAction(granules),
+  reingestAction(granules, selectedGranules),
   {
     text: 'Execute',
     action: config.execute.action,

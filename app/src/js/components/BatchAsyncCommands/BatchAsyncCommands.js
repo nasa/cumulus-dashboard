@@ -64,6 +64,7 @@ export class BatchCommand extends React.Component {
 
   closeModal() {
     this.setState({ activeModal: false });
+    this.setState({ meta: {} });
   }
 
   componentDidUpdate() {
@@ -117,7 +118,9 @@ export class BatchCommand extends React.Component {
     if (!Array.isArray(selected) || !selected.length || this.isInflight()) { return false; }
     const q = queue(CONCURRENCY);
     for (let i = 0; i < selected.length; i += 1) {
-      q.add(this.initAction, selected[i]);
+      // 'selected' prop of reingest granule action is an array of object
+      const id = (typeof selected[i] !== 'string') ? selected[i].granuleId : selected[i];
+      q.add(this.initAction, id);
     }
     q.done(this.onComplete);
   }

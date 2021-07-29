@@ -28,7 +28,7 @@ const BatchReingestConfirmContent = ({
   const displayedItems = () => {
     const items = [];
     for (let i = 0; i < Math.min(selected.length, maxDisplayed); i++) {
-      items.push(<li key={i}>{selected[i]}</li>);
+      items.push(<li key={i}>{selected[i].granuleId}</li>);
     }
     if (selected.length > maxDisplayed) {
       items.push(<li key={maxDisplayed}>and {selected.length - maxDisplayed} more.</li>);
@@ -37,12 +37,13 @@ const BatchReingestConfirmContent = ({
   };
 
   useEffect(() => {
-    dispatch(getGranulesWorkflows(JSON.stringify({ ids: selected })));
-    return () => {
-      dispatch(clearGranulesWorkflows());
-      dispatch(getGranulesWorkflowsClearError());
-    };
+    dispatch(getGranulesWorkflows(JSON.stringify({ granules: selected })));
   }, [dispatch, selected]);
+
+  useEffect(() => () => {
+    dispatch(clearGranulesWorkflows());
+    dispatch(getGranulesWorkflowsClearError());
+  }, [dispatch]);
 
   function handleSelectWorkflow(selector, selectedWorkflow) {
     setWorkflow(selectedWorkflow);
@@ -87,7 +88,10 @@ BatchReingestConfirmContent.propTypes = {
   onChange: PropTypes.func,
   granulesExecutions: PropTypes.object,
   dispatch: PropTypes.func,
-  selected: PropTypes.array,
+  selected: PropTypes.arrayOf(PropTypes.shape({
+    granuleId: PropTypes.string,
+    collectionId: PropTypes.string,
+  })),
 };
 
 export default connect((state) => ({
