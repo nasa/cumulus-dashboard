@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Alert } from 'react-bootstrap';
-import { clearGranulesWorkflows, getGranulesWorkflows } from '../../actions';
+import { get } from 'object-path';
+
+import {
+  clearGranulesWorkflows,
+  getGranulesWorkflows,
+  getGranulesWorkflowsClearError
+} from '../../actions';
+import ErrorReport from '../Errors/report';
 import SimpleDropdown from '../DropDown/simple-dropdown';
 
 export const maxDisplayed = 10;
@@ -13,7 +20,6 @@ const BatchReingestConfirmContent = ({
   dispatch,
   granulesExecutions,
 }) => {
-  // TODO if no workflow found
   const [workflow, setWorkflow] = useState(null);
   const isMultiple = selected.length > 1;
   const s = isMultiple ? 's' : '';
@@ -34,6 +40,7 @@ const BatchReingestConfirmContent = ({
     dispatch(getGranulesWorkflows(JSON.stringify({ ids: selected })));
     return () => {
       dispatch(clearGranulesWorkflows());
+      dispatch(getGranulesWorkflowsClearError());
     };
   }, [dispatch, selected]);
 
@@ -57,7 +64,8 @@ const BatchReingestConfirmContent = ({
           {`Below you can select a specific workflow to apply to the selected granule${s}. `}
           <strong>Note: The default is the latest workflow.</strong>
         </p>
-        <br />
+        {get(granulesExecutions, 'workflows.error') &&
+          <ErrorReport report={`Failed to get workflows: ${get(granulesExecutions, 'workflows.error')}`}/>}
       </div>
       <div>
         <SimpleDropdown

@@ -1,4 +1,5 @@
 import path from 'path';
+import pick from 'lodash/pick';
 import React from 'react';
 import { get } from 'object-path';
 import Collapsible from 'react-collapsible';
@@ -180,7 +181,7 @@ const confirmRecover = (d) => `Recover ${d} granule(s)?`;
 export const recoverAction = (granules, config) => ({
   text: 'Recover Granule',
   action: config.recover.action,
-  state: granules.executed,
+  state: granules.recover,
   clearError: applyWorkflowToGranuleClearError,
   confirm: confirmRecover
 });
@@ -322,6 +323,7 @@ export const bulkActions = (granules, config, selectedGranules) => [
         element='button'
         className='button button__bulkgranules button--green button--small form-group__element'
         confirmAction={true}
+        selected={selectedGranules.map((g) => pick(g, ['granuleId', 'collectionId']))}
       />
   },
   {

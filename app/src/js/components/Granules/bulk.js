@@ -354,7 +354,8 @@ const BulkGranule = ({
           <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
           <ol>
             <li>In the box below, enter the workflowName.</li>
-            <li>Then add either an array of Granule IDs or an Elasticsearch query and index (<i>see below</i>).</li>
+            <li>Then add either an array of granule Ids or an Elasticsearch query and
+              index (<i>see below</i>).</li>
           </ol>
         </BulkGranuleModal>
         }
@@ -371,7 +372,10 @@ BulkGranule.propTypes = {
   className: PropTypes.string,
   element: PropTypes.string,
   granules: PropTypes.object,
-  selected: PropTypes.array
+  selected: PropTypes.arrayOf(PropTypes.shape({
+    granuleId: PropTypes.string,
+    collectionId: PropTypes.string,
+  }))
 };
 
 export { BulkGranule };

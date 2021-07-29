@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { get } from 'object-path';
 
 import _config from '../../config';
 import DefaultModal from '../Modal/modal';
-import TextArea from '../TextAreaForm/text-area';
-import { clearGranulesWorkflows, getGranulesWorkflows } from '../../actions';
+import ErrorReport from '../Errors/report';
 import SimpleDropdown from '../DropDown/simple-dropdown';
+import TextArea from '../TextAreaForm/text-area';
+import {
+  clearGranulesWorkflows,
+  getGranulesWorkflows,
+  getGranulesWorkflowsClearError
+} from '../../actions';
 
 const { kibanaRoot } = _config;
 
@@ -55,6 +61,8 @@ const BulkGranuleModal = ({
     if (!inflight) {
       try {
         json = JSON.parse(query);
+        const granuleIds = json.ids.map((granule) => granule.granuleId);
+        json.ids = granuleIds;
       } catch (jsonError) {
         return setErrorState('Syntax error in JSON');
       }
@@ -62,18 +70,27 @@ const BulkGranuleModal = ({
     }
   }
 
-  function onChange (id, value) {
-    if (errorState) {
-      try {
-        JSON.parse(value);
-        setErrorState();
-      } catch (_) {
-        // empty
-      }
+  function queryGranulesWorkflows(queryParams) {
+    const { ids, index, query: esQuery } = queryParams;
+    if ((index && esQuery) || ids.length > 0) {
+      const granuleWorkflowsQuery = { ...queryParams, granules: ids };
+      delete granuleWorkflowsQuery[ids];
+      dispatch(getGranulesWorkflows(JSON.stringify(granuleWorkflowsQuery)));
     }
+  }
+
+  function onChange (id, value) {
     setQuery(value);
-    if (queryWorkflowOptions) {
-      dispatch(getGranulesWorkflows(query));
+    try {
+      const queryParams = JSON.parse(value);
+      if (errorState) {
+        setErrorState();
+      }
+      if (queryWorkflowOptions) {
+        queryGranulesWorkflows(queryParams);
+      }
+    } catch (_) {
+      // empty
     }
   }
 
@@ -82,7 +99,22 @@ const BulkGranuleModal = ({
     setQuery(JSON.stringify({ workflowName: selectedWorkflow, ...JSON.parse(query) }, null, 2));
   }
 
-  useEffect(() => () => dispatch(clearGranulesWorkflows()), [dispatch]);
+  useEffect(() => {
+    const queryParams = { ...JSON.parse(query), ids: selected };
+    setQuery(JSON.stringify(queryParams, null, 2));
+
+    if (showModal && queryWorkflowOptions) {
+      queryGranulesWorkflows(queryParams);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, showModal, queryWorkflowOptions, JSON.stringify(selected)]);
+
+  useEffect(() => {
+    if (!showModal && queryWorkflowOptions) {
+      dispatch(clearGranulesWorkflows());
+      dispatch(getGranulesWorkflowsClearError());
+    }
+  }, [dispatch, showModal, queryWorkflowOptions]);
 
   return (
     <DefaultModal
@@ -124,7 +156,7 @@ const BulkGranuleModal = ({
           {selected &&
             <>
               <p>Selected granules:</p>
-              <p>[{selected.map((selection) => `"${selection}"`).join(', ')}]</p>
+              <p>[{selected.map((selection) => `"${selection.granuleId}"`).join(', ')}]</p>
             </>
           }
           <br/>
@@ -142,6 +174,8 @@ const BulkGranuleModal = ({
           {selectWorkflow &&
           <>
             <h4 className="modal_subtitle">Then select workflows to rerun for all the selected granules.</h4>
+            {get(granulesExecutions, 'workflows.error') &&
+              <ErrorReport report={`Failed to get workflows: ${get(granulesExecutions, 'workflows.error')}`}/>}
             <SimpleDropdown
               isClearable={true}
               key={'workflow-dropdown'}
@@ -152,7 +186,7 @@ const BulkGranuleModal = ({
               onChange={handleSelectWorkflow}
               placeholder="Workflow Name"
             />
-            <br/>
+            <br/><br/>
           </>
           }
         </div>
@@ -176,11 +210,14 @@ BulkGranuleModal.propTypes = {
   handleSuccessConfirm: PropTypes.func,
   inflight: PropTypes.bool,
   onCancel: PropTypes.func,
-  // query workflow options for the granule from selection or es query
+  // whether query workflow options for the selected granule
   queryWorkflowOptions: PropTypes.bool,
   requestId: PropTypes.string,
-  selected: PropTypes.array,
-  // whether select workflow
+  selected: PropTypes.arrayOf(PropTypes.shape({
+    granuleId: PropTypes.string,
+    collectionId: PropTypes.string,
+  })),
+  // whether select a workflow from dropdown
   selectWorkflow: PropTypes.bool,
   showModal: PropTypes.bool,
   success: PropTypes.bool,
