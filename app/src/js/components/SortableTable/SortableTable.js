@@ -66,7 +66,8 @@ const SortableTable = ({
   shouldManualSort = false,
   shouldUsePagination = false,
   tableColumns = [],
-  tableID
+  tableID,
+  initialSortBy = [],
 }) => {
   const defaultColumn = useMemo(
     () => ({
@@ -80,7 +81,14 @@ const SortableTable = ({
   const [fitColumn, setFitColumn] = useState({});
   const [leftScrollButtonVisibility, setLeftScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
   const [rightScrollButtonVisibility, setRightScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
-
+  let sortByState;
+  if (initialSortBy.length > 0) {
+    sortByState = initialSortBy;
+  } else if (initialSortId) {
+    sortByState = [{ id: initialSortId, desc: true }];
+  } else {
+    sortByState = [];
+  }
   let rightScrollInterval;
   let leftScrollInterval;
 
@@ -118,7 +126,7 @@ const SortableTable = ({
       manualPagination: !shouldUsePagination,
       initialState: {
         hiddenColumns: initialHiddenColumns,
-        sortBy: initialSortId ? [{ id: initialSortId, desc: true }] : [],
+        sortBy: sortByState,
       },
     },
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
@@ -492,6 +500,7 @@ SortableTable.propTypes = {
   shouldUsePagination: PropTypes.bool,
   tableColumns: PropTypes.array,
   tableID: PropTypes.string,
+  initialSortBy: PropTypes.array,
 };
 
 export default connect()(SortableTable);
