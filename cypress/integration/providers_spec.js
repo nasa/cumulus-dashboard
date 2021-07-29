@@ -158,8 +158,7 @@ describe('Dashboard Providers Page', () => {
       cy.contains('.heading--large', name);
 
       // delete provider
-      cy.get('.dropdown__options__btn').click();
-      cy.contains('span', 'Delete').click();
+      cy.get('.button--delete').click();
       cy.contains('button', 'Confirm').click();
 
       // verify the provider is now gone
@@ -174,8 +173,7 @@ describe('Dashboard Providers Page', () => {
       cy.contains('.heading--large', name);
 
       // delete provider
-      cy.get('.dropdown__options__btn').click();
-      cy.contains('span', 'Delete').click();
+      cy.get('.button--delete').click();
       cy.contains('button', 'Confirm').click();
 
       // error should be displayed indicating that deletion failed
