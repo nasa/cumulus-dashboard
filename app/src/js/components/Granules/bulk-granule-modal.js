@@ -225,6 +225,8 @@ BulkGranuleModal.propTypes = {
   title: PropTypes.string
 };
 
+export { BulkGranuleModal };
+
 export default connect((state) => ({
   granulesExecutions: state.granulesExecutions,
 }))(BulkGranuleModal);

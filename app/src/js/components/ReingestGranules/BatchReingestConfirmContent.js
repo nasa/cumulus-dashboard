@@ -94,6 +94,8 @@ BatchReingestConfirmContent.propTypes = {
   })),
 };
 
+export { BatchReingestConfirmContent };
+
 export default connect((state) => ({
   granulesExecutions: state.granulesExecutions,
 }))(BatchReingestConfirmContent);
