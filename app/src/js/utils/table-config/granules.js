@@ -260,7 +260,8 @@ const granuleModalJourney = ({
       modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';
       modalOptions.cancelButtonClass = 'button--green';
       modalOptions.confirmButtonClass = 'button__goto';
-      modalOptions.onConfirm = setOnConfirm({ history, selected, errorMessage, closeModal });
+      const ids = selected.map((g) => g.granuleId);
+      modalOptions.onConfirm = setOnConfirm({ history, selected: ids, errorMessage, closeModal });
     }
   }
   return modalOptions;

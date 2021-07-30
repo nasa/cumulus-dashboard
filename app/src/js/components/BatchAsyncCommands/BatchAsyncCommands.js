@@ -45,6 +45,7 @@ export class BatchCommand extends React.Component {
       meta: {},
     };
     this.isRunning = false;
+    this.buildId = this.buildId.bind(this);
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
     this.start = this.start.bind(this);
@@ -56,6 +57,11 @@ export class BatchCommand extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.updateMeta = this.updateMeta.bind(this);
+  }
+
+  // 'selected' item is string or object, item for reingest granule action is object
+  buildId(item) {
+    return (typeof item === 'string') ? item : item.granuleId;
   }
 
   updateMeta(meta) {
@@ -118,9 +124,7 @@ export class BatchCommand extends React.Component {
     if (!Array.isArray(selected) || !selected.length || this.isInflight()) { return false; }
     const q = queue(CONCURRENCY);
     for (let i = 0; i < selected.length; i += 1) {
-      // 'selected' prop of reingest granule action is an array of object
-      const id = (typeof selected[i] !== 'string') ? selected[i].granuleId : selected[i];
-      q.add(this.initAction, id);
+      q.add(this.initAction, this.buildId(selected[i]));
     }
     q.done(this.onComplete);
   }
@@ -181,7 +185,7 @@ export class BatchCommand extends React.Component {
     if (results && results.length && typeof onSuccess === 'function') { onSuccess(results, errorMessage); }
 
     if (typeof clearError === 'function') {
-      selected.forEach((id) => dispatch(clearError(id)));
+      selected.forEach((item) => dispatch(clearError(this.buildId(item))));
     }
 
     this.setState({ activeModal: false, completed: 0, errorMessage: null, results: null, status: null });
