@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Breaking Changes
 
+This version of the dashboard requires Cumulus API `v9.3.1` (TBD) or later
+
 - **CUMULUS-2502**
   - Configuration changes are required to continue connecting the dashboard with Earthdata Metrics
   - Metrics integration has been updated to require manual configuration rather
@@ -26,6 +28,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     to gather the cloudwatch logs sent to metrics with a similar patter to the
     ES\_CLOUDWATCH\_TARGET\_PATTERN, and if you have configured s3 server access
     logs, likewise use a pattern like the ES\_DISTRIBUTION\_TARGET\_PATTERN.
+
+### Added
+
+- **CUMULUS-2462**
+  - Reingest and Bulk Reingest Actions are updated to select one workflow from multiple executions
+  - Requires new Cumulus API version
 
 ### Changed
 
