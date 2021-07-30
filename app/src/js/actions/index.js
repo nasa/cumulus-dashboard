@@ -760,7 +760,7 @@ export const listExecutions = (options) => (dispatch, getState) => {
 
 export const listExecutionsByGranule = (payload) => ({
     [CALL_API]: {
-      type: types.EXECUTIONS,
+      type: types.EXECUTIONS_LIST,
       method: 'POST',
       path: 'executions/search-by-granules',
       data: payload

@@ -27,7 +27,7 @@ const ExecutionsList = ({
     match,
     executions
 }) => {
-    const { list } = executions || {};
+    const { list } = executions || { list: { meta: { count: 0 }, results: [] } };
     const { params } = match || {};
     const { collectionId, granuleId } = params;
 
