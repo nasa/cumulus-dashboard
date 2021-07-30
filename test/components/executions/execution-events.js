@@ -4,25 +4,30 @@ import test from 'ava';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
+import * as redux from 'react-redux';
+import sinon from 'sinon';
 
 import { ExecutionEvents } from '../../../app/src/js/components/Executions/execution-events';
 import executionHistory from '../../../test/fixtures/execution-history-all';
-import { Provider } from 'react-redux';
 
 configure({ adapter: new Adapter() });
 
 const match = {
   params: { executionArn: executionHistory.execution.executionArn },
 };
-const store = {
-      getState: () => {},
-      dispatch,
-      subscribe: () => {}
-    };
 
 const dispatch = () => {};
 
-test('Execution Events displays the correct step name', function (t) {
+test.beforeEach((t) => {
+  // Mock useDispatch hook
+  sinon.stub(redux, "useDispatch").returns(sinon.spy());
+});
+
+test.afterEach.always(() => {
+  sinon.restore();
+});
+
+test.serial('Execution Events displays the correct step name', function (t) {
   const plainEventsExecutionHistory = {
     events: [
       {
@@ -77,17 +82,16 @@ test('Execution Events displays the correct step name', function (t) {
     meta: {},
   };
 
-  const executionEventsRendered = shallow(
-    <Provider store = {store}>
+  const executionEvents = shallow(
     <ExecutionEvents
       dispatch={dispatch}
       location={{}}
       match={match}
       executionStatus={executionStatus}
-    /></Provider>
+    />
   );
 
-  const sortableTable = executionEventsRendered.find('ExecutionEvents');
+  const sortableTable = executionEvents.find('SortableTable');
   t.is(sortableTable.length, 1);
 
   const sortableTableWrapper = sortableTable.dive();
@@ -114,7 +118,7 @@ test('Execution Events displays the correct step name', function (t) {
   });
 });
 
-test('Execution Events shows event history', function (t) {
+test.serial('Execution Events shows event history', function (t) {
   const executionStatus = {
     execution: executionHistory.execution,
     executionHistory: executionHistory.executionHistory,
@@ -124,17 +128,15 @@ test('Execution Events shows event history', function (t) {
     meta: {},
   };
   
-  const executionEventsRendered = shallow(
-  <Provider store = {store}>
+  const executionEvents = shallow(
     <ExecutionEvents
       dispatch={dispatch}
       location={{}}
       match={match}
       executionStatus={executionStatus}
-    /></Provider>
+    />
   );
-  const renderedTable = executionEventsRendered.find('ExecutionEvents');
-  const sortableTable = renderedTable.find('SortableTable').dive();
+  const sortableTable = executionEvents.find('SortableTable');
   t.is(sortableTable.length, 1);
 
   const sortableTableWrapper = sortableTable.dive();
