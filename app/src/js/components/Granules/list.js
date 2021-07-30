@@ -118,7 +118,8 @@ const AllGranules = ({
         action: applyWorkflow,
       },
     };
-    const selectedGranules = selected.map((id) => granules.list.data.find((g) => id === g.granuleId));
+    const selectedGranules = selected
+      .map((id) => granules.list.data.find((g) => id === g.granuleId)).filter(Boolean);
 
     return bulkActions(granules, config, selectedGranules);
   }
