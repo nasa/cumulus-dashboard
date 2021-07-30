@@ -52,6 +52,8 @@ This version of the dashboard requires Cumulus API `v9.3.1` (TBD) or later
   - Added a copy button to errors pages so the error can be copied and searched up on the internet. 
 - **CUMULUS-2535**
   - Ensured that the KPI cards would be updated on all tabs whenever the page was updated
+- **CUMULUS-2540**
+  - Add Granule Actions group & Functionality to other pages/sections with granules to manage
 - **CUMULUS-2544**
   - Changed the timestamp so that the date and time is shown rather than time elapsed since last occurrence
 - **CUMULUS-2551**
