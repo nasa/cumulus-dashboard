@@ -44,6 +44,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Added a copy button to errors pages so the error can be copied and searched up on the internet. 
 - **CUMULUS-2535**
   - Ensured that the KPI cards would be updated on all tabs whenever the page was updated
+- **CUMULUS-2540**
+  - Add Granule Actions group & Functionality to other pages/sections with granules to manage
 - **CUMULUS-2544**
   - Changed the timestamp so that the date and time is shown rather than time elapsed since last occurrence
 - **CUMULUS-2549**
@@ -54,6 +56,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Add focus styles for various browser support and keyboard/mouse inputs 
 - **CUMULUS-2573**
   - Changed the dropdown menu in the individual providers page into a delete button.
+- **CUMULUS-2579**
+  - Fixed React Issue with the Footer pertaining to missing keys.
 
 ### Fixed
 
