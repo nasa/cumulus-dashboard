@@ -109,13 +109,10 @@ const reconciliationReports = {
 test('shows an individual inventory report', function (t) {
   const match = { params: { reconciliationReportName: 'exampleInventoryReport' } };
 
-  const dispatch = () => {};
-
   const report = shallow(
     <ReconciliationReport
       match={match}
       reconciliationReports={reconciliationReports}
-      dispatch={dispatch}
     />
   );
 
@@ -136,20 +133,17 @@ test('shows an individual inventory report', function (t) {
   // there should be one card for DynamoDB and one card for S3
   t.is(Cards.length, 2);
 
-  const Table = inventoryReportWrapper.find('SortableTable');
+  const Table = inventoryReportWrapper.find('withRouter(withQueryParams(Connect(List)))');
   t.is(Table.length, 1);
 });
 
 test('shows an individual Granule Not Found report', function (t) {
   const match = { params: { reconciliationReportName: 'exampleGranuleNotFoundReport' } };
 
-  const dispatch = () => {};
-
   const report = shallow(
     <ReconciliationReport
       match={match}
       reconciliationReports={reconciliationReports}
-      dispatch={dispatch}
     />
   );
 
@@ -162,7 +156,7 @@ test('shows an individual Granule Not Found report', function (t) {
   const ReportHeading = gnfReportWrapper.find('ReportHeading');
   t.is(ReportHeading.length, 1);
 
-  const Table = gnfReportWrapper.find('SortableTable');
+  const Table = gnfReportWrapper.find('withRouter(withQueryParams(Connect(List)))');
   t.is(Table.length, 1);
 });
 
@@ -170,13 +164,10 @@ test('correctly renders the heading', function (t) {
 
   const match = { params: { reconciliationReportName: 'exampleInventoryReport' } };
 
-  const dispatch = () => {};
-
   const report = shallow(
     <ReconciliationReport
       match={match}
       reconciliationReports={reconciliationReports}
-      dispatch={dispatch}
     />
   );
 
@@ -212,13 +203,10 @@ test('correctly renders the heading', function (t) {
 test('report with error triggers error message', function (t) {
   const match = { params: { reconciliationReportName: 'exampleReportWithError' } };
 
-  const dispatch = () => {};
-
   const report = shallow(
     <ReconciliationReport
       match={match}
       reconciliationReports={reconciliationReports}
-      dispatch={dispatch}
     />
   );
 
@@ -241,13 +229,10 @@ test('report with error triggers error message', function (t) {
 test('report which exceeds maximum allowed payload size triggers error message', function (t) {
   const match = { params: { reconciliationReportName: 'exampleReportExceedsPayloadLimit' } };
 
-  const dispatch = () => {};
-
   const report = shallow(
     <ReconciliationReport
       match={match}
       reconciliationReports={reconciliationReports}
-      dispatch={dispatch}
     />
   );
 

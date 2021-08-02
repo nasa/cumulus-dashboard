@@ -181,7 +181,7 @@ const SortableTable = ({
   }, [selectedRowIds, onSelect]);
 
   useEffect(() => {
-    if (typeof changeSortProps === 'function') {
+    if (typeof changeSortProps === 'function' && tableID) {
       changeSortProps(sortBy);
       dispatch(sortPersist(tableID, sortBy));
     }
