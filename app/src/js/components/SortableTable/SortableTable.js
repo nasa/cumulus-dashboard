@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
-import { useDispatch, connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
 import ListFilters from '../ListActions/ListFilters';
@@ -503,4 +503,4 @@ SortableTable.propTypes = {
   initialSortBy: PropTypes.array,
 };
 
-export default connect()(SortableTable);
+export default SortableTable;
