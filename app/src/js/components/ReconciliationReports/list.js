@@ -23,6 +23,7 @@ import Search from '../Search/search';
 import List from '../Table/Table';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+const sortState = List.initialSortBy === [] ? 'createdAt' : List.initialSortBy;
 
 const breadcrumbConfig = [
   {
@@ -120,7 +121,7 @@ const ReconciliationReportList = ({
           query={query}
           bulkActions={generateBulkActions()}
           rowId="name"
-          initialSortId="createdAt"
+          initialSortId={sortState}
           filterAction={filterReconciliationReports}
           filterClear={clearReconciliationReportsFilter}
           tableID = {'ReconciliationReportsTable'}

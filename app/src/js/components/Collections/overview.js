@@ -87,6 +87,7 @@ const CollectionOverview = ({
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
   const [selected, setSelected] = useState([]);
+  const sortState = List.initialSortBy === [] ? 'timestamp' : List.initialSortBy;
 
   useEffect(() => {
     dispatch(listCollections());
@@ -305,7 +306,7 @@ const CollectionOverview = ({
           groupAction={groupAction}
           rowId="granuleId"
           initialHiddenColumns={defaultHiddenColumns}
-          initialSortId="timestamp"
+          initialSortId={sortState}
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
           tableID = {'CollectionsTable'}

@@ -23,6 +23,7 @@ import { tableColumns } from '../../utils/table-config/operations';
 import ListFilters from '../ListActions/ListFilters';
 import { operationStatus } from '../../utils/status';
 import { operationTypes } from '../../utils/type';
+const sortState = List.initialSortBy === [] ? 'createdAt' : List.initialSortBy;
 
 class OperationOverview extends React.Component {
   constructor (props) {
@@ -93,7 +94,7 @@ class OperationOverview extends React.Component {
             tableColumns={tableColumns}
             query={this.generateQuery()}
             rowId='id'
-            initialSortId='createdAt'
+            initialSortId={sortState}
             filterAction={filterOperations}
             filterClear={clearOperationsFilter}
             tableID = {'OperationsTable'}

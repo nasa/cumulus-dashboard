@@ -27,7 +27,7 @@ import List from '../Table/Table';
 import { strings } from '../locale';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import ListFilters from '../ListActions/ListFilters';
-
+const sortState = List.initialSortBy === [] ? 'duration' : List.initialSortBy;
 const breadcrumbConfig = [
   {
     label: 'Dashboard Home',
@@ -110,7 +110,7 @@ class CollectionList extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId={getCollectionId}
-            initialSortId="duration"
+            initialSortId= {sortState}
             filterAction={filterCollections}
             filterClear={clearCollectionsFilter}
             tableID = {'CollectionsTable'}

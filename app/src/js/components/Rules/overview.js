@@ -16,7 +16,7 @@ import Search from '../Search/search';
 import ListFilters from '../ListActions/ListFilters';
 import { tableColumns, bulkActions } from '../../utils/table-config/rules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-
+const sortState = List.initialSortBy === [] ? 'timestamp' : List.initialSortBy;
 const breadcrumbConfig = [
   {
     label: 'Dashboard Home',
@@ -78,7 +78,7 @@ class RulesOverview extends React.Component {
             action={listRules}
             tableColumns={tableColumns}
             query={{ ...queryParams }}
-            initialSortId="timestamp"
+            initialSortId={sortState}
             bulkActions={this.generateBulkActions()}
             rowId="name"
             filterAction={filterRules}
