@@ -30,7 +30,6 @@ import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import ListFilters from '../ListActions/ListFilters';
 import CollectionHeader from './collection-header';
-const sortState = List.initialSortBy === [] ? 'timestamp' : List.initialSortBy;
 
 const CollectionGranules = ({
   dispatch,
@@ -156,7 +155,7 @@ const CollectionGranules = ({
           bulkActions={generateBulkActions()}
           groupAction={groupAction}
           rowId="granuleId"
-          initialSortId= {sortState}
+          initialSortId="timestamp"
           tableColumns={tableColumns}
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}

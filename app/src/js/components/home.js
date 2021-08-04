@@ -31,7 +31,6 @@ import { kibanaGranuleErrorsLink, kibanaAllLogsLink } from '../utils/kibana';
 import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
 import { getPersistentQueryParams } from '../utils/url-helper';
-const sortState = List.initialSortBy === [] ? 'timestamp' : List.initialSortBy;
 
 class Home extends React.Component {
   constructor (props) {
@@ -221,7 +220,7 @@ class Home extends React.Component {
               list={list}
               action={listGranules}
               tableColumns={errorTableColumns}
-              initialSortId={sortState}
+              initialSortId='timestamp'
               query={this.generateQuery()}
             />
           )}

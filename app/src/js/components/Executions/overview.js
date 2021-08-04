@@ -23,7 +23,6 @@ import Overview from '../Overview/overview';
 import { strings } from '../locale';
 import { tableColumns } from '../../utils/table-config/executions';
 import ListFilters from '../ListActions/ListFilters';
-const sortState = List.initialSortBy === [] ? 'createdAt' : List.initialSortBy;
 
 class ExecutionOverview extends React.Component {
   constructor(props) {
@@ -85,7 +84,7 @@ class ExecutionOverview extends React.Component {
             tableColumns={tableColumns}
             query={{ ...queryParams }}
             rowId='name'
-            initialSortId= {sortState}
+            initialSortId='createdAt'
             filterAction={filterExecutions}
             filterClear={clearExecutionsFilter}
             tableID = {'ExecutionsTable'}

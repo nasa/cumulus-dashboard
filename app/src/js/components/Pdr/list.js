@@ -20,7 +20,6 @@ import List from '../Table/Table';
 
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-const sortState = List.initialSortBy === [] ? 'timestamp' : List.initialSortBy;
 
 const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
   const { list } = pdrs;
@@ -85,7 +84,7 @@ const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
           query={query}
           bulkActions={generateBulkActions()}
           rowId="pdrName"
-          initialSortId={sortState}
+          initialSortId="timestamp"
           filterAction={filterPdrs}
           filterClear={clearPdrsFilter}
           tableID = {'PDRsTable'}

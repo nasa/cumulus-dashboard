@@ -38,7 +38,6 @@ import Search from '../Search/search';
 import Overview from '../Overview/overview';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-const sortState = List.initialSortBy === [] ? 'timestamp' : List.initialSortBy;
 
 const breadcrumbConfig = [
   {
@@ -182,7 +181,7 @@ class GranulesOverview extends React.Component {
             groupAction={groupAction}
             rowId='granuleId'
             initialHiddenColumns={defaultHiddenColumns}
-            initialSortId={sortState}
+            initialSortId='timestamp'
             filterAction={filterGranules}
             filterClear={clearGranulesFilter}
             onSelect={this.updateSelection}

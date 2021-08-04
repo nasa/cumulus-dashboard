@@ -19,7 +19,6 @@ import statusOptions from '../../utils/status';
 import ListFilters from '../ListActions/ListFilters';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { getPersistentQueryParams } from '../../utils/url-helper';
-const sortState = List.initialSortBy === [] ? 'timestamp' : List.initialSortBy;
 
 const breadcrumbConfig = [
   {
@@ -97,7 +96,7 @@ class PdrOverview extends React.Component {
             list={list}
             action={listPdrs}
             tableColumns={tableColumns}
-            initialSortId={sortState}
+            initialSortId="timestamp"
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             rowId="pdrName"

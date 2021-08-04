@@ -15,7 +15,7 @@ import { lastUpdated } from '../../utils/format';
 import { tableColumns } from '../../utils/table-config/providers';
 import List from '../Table/Table';
 import { getPersistentQueryParams } from '../../utils/url-helper';
-const sortState = List.initialSortBy === [] ? 'timestamp' : List.initialSortBy;
+
 class ProvidersOverview extends React.Component {
   constructor() {
     super();
@@ -93,7 +93,7 @@ class ProvidersOverview extends React.Component {
             query={this.generateQuery()}
             bulkActions={bulkActions}
             rowId="name"
-            initialSortId={sortState}
+            initialSortId="timestamp"
             filterAction={filterProviders}
             filterClear={clearProvidersFilter}
             tableID = {'ProvidersTable'}

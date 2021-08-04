@@ -84,7 +84,7 @@ const SortableTable = ({
   let sortByState;
   if (initialSortBy.length > 0) {
     sortByState = initialSortBy;
-  } else if (initialSortId && initialSortBy === []) {
+  } else if (initialSortId) {
     sortByState = [{ id: initialSortId, desc: true }];
   } else {
     sortByState = [];
