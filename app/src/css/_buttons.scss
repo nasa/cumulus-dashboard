@@ -69,11 +69,10 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
   }
 
   &--round {
-    stroke: 1px solid #ffffff;
     border-radius: 50%;
     height: 2em;
     width: 2em;
-    background-color:#1E6B9D;
+    background-color: $sub-blue;
     border: 1px solid #ffffff;
   }
 
