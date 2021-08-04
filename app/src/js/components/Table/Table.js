@@ -54,8 +54,12 @@ const List = ({
   if (tableID) {
     sortBy = sorts[tableID];
   }
-  const id = buildSortKey(sortBy ? [{ id: sortBy, desc: true }] : []);
-
+  let id;
+  if (sortBy) {
+    id = buildSortKey([{ id: sortBy[0].id, desc: true }]);
+  } else {
+    id = buildSortKey([{ id: initialSortId, desc: true }]);
+  }
   const [queryConfig, setQueryConfig] = useState({
     page: 1,
     sort_key: id,
