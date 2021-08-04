@@ -28,13 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     logs, likewise use a pattern like the ES\_DISTRIBUTION\_TARGET\_PATTERN.
 
 ### Changed
-<<<<<<< HEAD
-=======
 
-- **CUMULUS-2142**
-  - Changed CSS styling for sidebar button
-  - Added a tooltip to the sidebar button
->>>>>>> 4d6d347c59dcf9a78338eaf72e1bd1bc8be5c7d5
 - **CUMULUS-2502**
   - Metrics ES searches have been updated to run against only the index
     patterns provided, improving performance and saving resources.
