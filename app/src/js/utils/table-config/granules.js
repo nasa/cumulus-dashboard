@@ -70,7 +70,7 @@ export const tableColumns = [
   {
     Header: 'Executions List',
     accessor: 'granuleId',
-    Cell: ({ row: { original: {collectionId, granuleId} } }) => (
+    Cell: ({ row: { original: { collectionId, granuleId } } }) => (// eslint-disable-line react/prop-types
       <Link to={(location) => ({ pathname: `/executions/executions-list/${encodeURIComponent(collectionId)}/${encodeURIComponent(path.basename(granuleId))}` })}>link</Link>
     ),
     disableSortBy: true,

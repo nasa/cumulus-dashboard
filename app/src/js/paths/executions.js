@@ -30,7 +30,7 @@ const handler = {
         return copy;
       });
     }
-    if(currentRoute.includes('executions/executions-list/')) {
+    if (currentRoute.includes('executions/executions-list/')) {
       return executionListRoutes;
     }
     if (currentRoute.slice(0, 12) !== '/executions') {
