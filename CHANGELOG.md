@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     to gather the cloudwatch logs sent to metrics with a similar patter to the
     ES\_CLOUDWATCH\_TARGET\_PATTERN, and if you have configured s3 server access
     logs, likewise use a pattern like the ES\_DISTRIBUTION\_TARGET\_PATTERN.
+- **CUMULUS-2459**
+  - Use of ```executions/search-by-granules``` to retrieve executions for a granule/collection
+    combination requires minimum CUMULUS API v9.3.0
 
 ### Changed
 
@@ -44,7 +47,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2524**
   - CSS and UI tweaks to padding/margin, width, and color/contrast
 - **CUMULUS-2534**
-  - Added a copy button to errors pages so the error can be copied and searched up on the internet. 
+  - Added a copy button to errors pages so the error can be copied and searched up on the internet.
 - **CUMULUS-2535**
   - Ensured that the KPI cards would be updated on all tabs whenever the page was updated
 - **CUMULUS-2540**
@@ -52,9 +55,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2544**
   - Changed the timestamp so that the date and time is shown rather than time elapsed since last occurrence
 - **CUMULUS-2551**
-  - Added a sortable column to individual granules tab so you can sort each file within the granule by size. 
+  - Added a sortable column to individual granules tab so you can sort each file within the granule by size.
 - **CUMULUS-2554**
-  - Add focus styles for various browser support and keyboard/mouse inputs 
+  - Add focus styles for various browser support and keyboard/mouse inputs
 - **CUMULUS-2573**
   - Changed the dropdown menu in the individual providers page into a delete button.
 - **CUMULUS-2579**
@@ -66,6 +69,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Fixes granule execute modal rerender issue when workflow options are not changed
 - **CUMULUS-2553**
   - Fixed DatePicker prop so the leading zeroes can be entered without having too many zeroes clouding the input.
+
+### Added
+
+- **CUMULUS-2459**
+  - Added Executions List column to granules table linking to executions-list view that displays all executions
+    for a granule/collection combination
 
 ## [v6.0.0] - 2021-05-03
 
