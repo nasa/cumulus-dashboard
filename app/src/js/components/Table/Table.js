@@ -51,16 +51,14 @@ const List = ({
   const [clearSelected, setClearSelected] = useState(false);
   const [page, setPage] = useState(1);
   let sortBy;
-  let tableIdExists = false;
   if (tableID) {
     sortBy = sorts[tableID];
-    tableIdExists = true;
   }
   let idMatch;
-  if (sortBy && !tableIdExists) {
-    idMatch = sortBy[0].id;
-  } else {
+  if (!sortBy || sortBy.length === 0) {
     idMatch = initialSortId;
+  } else {
+    idMatch = sortBy[0].id;
   }
   const [queryConfig, setQueryConfig] = useState({
     page: 1,
