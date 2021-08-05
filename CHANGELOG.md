@@ -59,6 +59,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Changed the dropdown menu in the individual providers page into a delete button.
 - **CUMULUS-2579**
   - Fixed React Issue with the Footer pertaining to missing keys.
+- **CUMULUS-2604**
+  - Deleted Collections column in the Providers overview page.
 
 ### Fixed
 
