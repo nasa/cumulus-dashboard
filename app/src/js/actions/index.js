@@ -763,6 +763,7 @@ export const listExecutionsByGranule = (payload) => ({
     type: types.EXECUTIONS_LIST,
     method: 'POST',
     path: 'executions/search-by-granules',
+    params: { limit: defaultPageLimit },
     data: payload
   }
 });
