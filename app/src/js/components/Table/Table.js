@@ -58,7 +58,7 @@ const List = ({
   if (!sortBy || sortBy.length === 0) {
     idMatch = initialSortId;
   } else {
-    idMatch = sortBy[0].id;
+    idMatch = sortBy;
   }
   const [queryConfig, setQueryConfig] = useState({
     page: 1,
