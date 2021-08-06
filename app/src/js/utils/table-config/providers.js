@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { fromNowWithTooltip } from '../format';
-import { strings } from '../../components/locale';
 import { getPersistentQueryParams } from '../url-helper';
 
 export const tableColumns = [
@@ -13,10 +12,6 @@ export const tableColumns = [
   {
     Header: 'Host',
     accessor: 'host'
-  },
-  {
-    Header: strings.collections,
-    accessor: 'collections'
   },
   {
     Header: 'Global Connection Limit',
