@@ -50,12 +50,14 @@ const List = ({
   const [selected, setSelected] = useState([]);
   const [clearSelected, setClearSelected] = useState(false);
   const [page, setPage] = useState(1);
+  let assigned = false;
   let sortBy;
   if (tableID) {
     sortBy = sorts[tableID];
+    assigned = true;
   }
   let idMatch;
-  if (!sortBy || sortBy.length === 0) {
+  if (sortBy || assigned) {
     idMatch = initialSortId;
   } else {
     idMatch = sortBy;
