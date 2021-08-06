@@ -9,7 +9,7 @@ const {
   localStackName,
   localSystemBucket,
 } = require('@cumulus/api/bin/local-test-defaults');
-const { exec } = require("child_process");
+const { exec } = require('child_process');
 
 const collections = require('../fixtures/seeds/collectionsFixture.json');
 const executions = require('../fixtures/seeds/executionsFixture.json');
@@ -81,22 +81,19 @@ function uploadReconciliationReportFiles() {
 }
 
 function seedPostgres() {
-
-  exec("chmod +x ./localAPI/seed-postgres-db.sh", (error, stdout) => {
+  exec('chmod +x ./localAPI/seed-postgres-db.sh', (error, stdout) => {
     if (error) {
       console.log(`error: ${error.message}`);
       return;
     }
-
     console.log(`stdout: ${stdout}`);
   });
 
-  exec("./localAPI/seed-postgres-db.sh", (error, stdout) => {
+  exec('./localAPI/seed-postgres-db.sh', (error, stdout) => {
     if (error) {
       console.log(`error: ${error.message}`);
       return;
     }
-    
     console.log(`stdout: ${stdout}`);
   });
 }

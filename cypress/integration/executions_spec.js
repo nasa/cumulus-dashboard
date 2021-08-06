@@ -319,11 +319,11 @@ describe('Dashboard Executions Page', () => {
 
     it('should show executions for a granule/collection', () => {
       cy.intercept(
-        { method: 'POST', url: `http://localhost:5001/executions/search-by-granules*` },
+        { method: 'POST', url: 'http://localhost:5001/executions/search-by-granules*' },
         { fixture: 'executions-list.json', statusCode: 200 }
       );
 
-      cy.visit(`/executions/executions-list/MOD09GQ___006/MOD09GQ.A4622742.B7A8Ma.006.7857260550036`);
+      cy.visit('/executions/executions-list/MOD09GQ___006/MOD09GQ.A4622742.B7A8Ma.006.7857260550036');
       cy.url().should('include', 'executions-list');
 
       // Should show Granule ID at the top
@@ -333,7 +333,7 @@ describe('Dashboard Executions Page', () => {
       cy.get('.num-title').should('contain.text', '6');
 
       // Should have 6 columns with the correct headers
-      cy.get(`.thead .tr .tr`).children().as('columns');
+      cy.get('.thead .tr .tr').children().as('columns');
       cy.get('@columns').should('have.length', 6);
 
       cy.get('@columns').eq(0).should('have.text', 'Name');
@@ -342,12 +342,6 @@ describe('Dashboard Executions Page', () => {
       cy.get('@columns').eq(3).should('have.text', 'Created');
       cy.get('@columns').eq(4).should('have.text', 'Duration');
       cy.get('@columns').eq(5).should('have.text', 'Collection ID');
-
-
-
-
-
-
     });
   });
 });
