@@ -49,7 +49,7 @@ describe('Dashboard Granules Page', () => {
 
       cy.contains('.table__filters--filter label', 'Recovery').find('span').click();
       cy.contains('.table__filters--filter label', 'Status').find('span').click();
-      cy.contains('.table__filters--filter label', 'Execution').find('span').click();
+      cy.contains('.table__filters--filter label', 'Duration').find('span').click();
       cy.contains('.table__filters--filter label', 'Name').find('span').click();
       cy.contains('.table__filters--filter label', 'Published').find('span').click();
 
@@ -57,7 +57,7 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('.table .thead .tr .th').should('contain.text', 'Recovery');
       cy.get('.table .thead .tr .th').should('not.contain.text', 'Status');
-      cy.get('.table .thead .tr .th').should('not.contain.text', 'Execution');
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Duration');
       cy.get('.table .thead .tr .th').should('not.contain.text', 'Name');
       cy.get('.table .thead .tr .th').should('not.contain.text', 'Published');
 
@@ -101,7 +101,7 @@ describe('Dashboard Granules Page', () => {
             // Wait for this granule to appear before proceeding.
             cy.contains(granule.granuleId);
             cy.get(`[data-value="${granule.granuleId}"]`).children().as('columns');
-            cy.get('@columns').should('have.length', 9);
+            cy.get('@columns').should('have.length', 10);
 
             // Granule Status Column is correct
             cy.get('@columns').eq(1).invoke('text')
@@ -160,24 +160,24 @@ describe('Dashboard Granules Page', () => {
               .and('be.eq', collectionHrefFromId(granule.collectionId));
 
             // has link to provider
-            cy.get('@columns').eq(5).children('a')
+            cy.get('@columns').eq(6).children('a')
               .should('have.attr', 'href')
               .and('be.eq', `/providers/provider/${granule.provider}`);
 
             // Execution column has link to the detailed execution page
-            cy.get('@columns').eq(6).children('a')
+            cy.get('@columns').eq(7).children('a')
               .should('have.attr', 'href')
               .and('be.eq', `/executions/execution/${granule.execution.split('/').pop()}`);
 
             // Duration column
-            cy.get('@columns').eq(7).invoke('text')
+            cy.get('@columns').eq(8).invoke('text')
               .should('be.eq', `${Number(granule.duration).toFixed(2)}s`);
             // Updated column
-            cy.get('@columns').eq(8).invoke('text')
+            cy.get('@columns').eq(9).invoke('text')
               .should('match', /.+[0-9]{2}\/[0-9]{2}\/[0-9]{2}$/);
-            cy.get('@columns').eq(8).find('span').trigger('mouseover');
+            cy.get('@columns').eq(9).find('span').trigger('mouseover');
             cy.get('#table-timestamp-tooltip').should('be.visible');
-            cy.get('@columns').eq(8).find('span').trigger('mouseleave');
+            cy.get('@columns').eq(9).find('span').trigger('mouseleave');
           }
         });
 
@@ -761,6 +761,14 @@ describe('Dashboard Granules Page', () => {
       cy.get('.scrollButtonLeft').trigger('mouseup', { button: 0 });
       cy.get('.scrollButtonLeft').trigger('mouseout');
       cy.get('.scrollButtonLeft').should('not.be.visible');
+    });
+
+    it('should navigate to executions-list when clicking on the executions-list link for a granule', () => {
+      cy.visit('/granules');
+      cy.url().should('include', 'granules');
+
+      cy.get('.tr:nth-child(1) > .td:nth-child(6) > a').click();
+      cy.url().should('include', 'executions-list');
     });
   });
 });

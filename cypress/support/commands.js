@@ -70,6 +70,7 @@ Cypress.Commands.add('editJsonTextarea', ({ data, update = false }) => {
     }
     editedData = JSON.stringify(editedData);
     editor.setValue(editedData);
+    cy.wait(1000);
   });
 });
 
@@ -106,6 +107,8 @@ Cypress.Commands.add('expectDeepEqualButNewer', (inewObject, ifixtureObject) => 
   expect(newObject.updatedAt).to.be.greaterThan(fixtureObject.updatedAt);
   delete newObject.updatedAt;
   delete fixtureObject.updatedAt;
+  delete newObject.createdAt;
+  delete fixtureObject.createdAt;
   expect(newObject).to.deep.equal(fixtureObject);
 });
 
