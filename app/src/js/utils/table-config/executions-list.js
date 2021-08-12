@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 import {
   displayCase,
   seconds,
-  fromNowWithTooltip,
-  formatCollectionId
+  fromNowWithTooltip
 } from '../format';
-import { strings } from '../../components/locale';
 import { getPersistentQueryParams } from '../url-helper';
 
 export const tableColumns = [
