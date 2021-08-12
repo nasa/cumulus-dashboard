@@ -6,6 +6,7 @@ import { resolve } from 'path';
 import sections from '../../paths';
 import { getPersistentQueryParams } from '../../utils/url-helper';
 import { toggleSidebar } from '../../actions';
+import Tooltip from '../Tooltip/tooltip';
 
 const currentPathClass = 'sidebar__nav--selected';
 
@@ -73,13 +74,20 @@ const Sidebar = ({
 
   return (
     <div className={`sidebar-toggle--wrapper${sidebarOpen ? ' active' : ''}`}>
-      <button
-        aria-label={sidebarOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
-        className={`sidebar-toggle button--round button--${
+      <Tooltip
+        className="tooltip--light"
+        id = "card-sidebar-tooltip"
+        placement = "right"
+        target = {
+          <button
+            aria-label={sidebarOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
+            className={`sidebar-toggle button--round button--${
           sidebarOpen ? 'close' : 'open'
         }-sidebar`}
-        onClick={handleToggleClick}
-        title={sidebarOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
+            onClick={handleToggleClick}
+          />
+        }
+        tip={sidebarOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
       />
       <div className="sidebar">
         <div className="sidebar__row">{sections.map(renderNavSection)}</div>

@@ -72,8 +72,8 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
     border-radius: 50%;
     height: 2em;
     width: 2em;
-    background-color: $midnight-blue;
-    border: none;
+    background-color: $sub-blue;
+    border: 1px solid #ffffff;
   }
 
   &--no-left-padding {
@@ -428,7 +428,14 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       &:before {
         color: $white;
         font-family: 'FontAwesome';
-        content: '\f100';
+        content: '\f0d9';
+        font-size: 17.5px;
+        align-content: center;
+        align-items: center;
+        align-self: center;
+        justify-content: center;
+        text-align: center;
+
       }
     }
 
@@ -436,7 +443,13 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       &:before {
         color: $white;
         font-family: 'FontAwesome';
-        content: '\f101';
+        content: '\f0da';
+        font-size: 17.5px;
+        align-items: center;
+        align-content: center;
+        align-self: center;
+        justify-content: center;
+        text-align: center;
       }
     }
 
