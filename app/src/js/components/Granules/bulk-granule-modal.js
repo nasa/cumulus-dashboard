@@ -176,17 +176,18 @@ const BulkGranuleModal = ({
             <h4 className="modal_subtitle">Then select workflows to rerun for all the selected granules.</h4>
             {get(granulesExecutions, 'workflows.error') &&
               <ErrorReport report={`Failed to get workflows: ${get(granulesExecutions, 'workflows.error')}`}/>}
-            <SimpleDropdown
-              isClearable={true}
-              key={'workflow-dropdown'}
-              label={'Select Workflow'}
-              value={workflow}
-              options={granulesExecutions.workflows.data}
-              id='workflow-dropdown'
-              onChange={handleSelectWorkflow}
-              placeholder="Workflow Name"
-            />
-            <br/><br/>
+            <div className='modal__internal modal__formcenter'>
+              <SimpleDropdown
+                isClearable={true}
+                key={'workflow-dropdown'}
+                label={'Select Workflow'}
+                value={workflow}
+                options={granulesExecutions.workflows.data}
+                id='workflow-dropdown'
+                onChange={handleSelectWorkflow}
+                placeholder="Workflow Name"
+              />
+            </div>
           </>
           }
         </div>

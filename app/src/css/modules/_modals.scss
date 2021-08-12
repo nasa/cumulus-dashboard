@@ -159,8 +159,9 @@
 
     .modal-body {
       height: 100px;
-      overflow-y: auto;
       margin-left: 10px;
+      overflow-y: auto;
+      padding: 1rem 3rem;
       text-align: left;
     }
 
@@ -205,6 +206,12 @@
   &.bulk_granules--operations, &.bulk_granules--delete, &.bulk_granules--reingest, &.bulk_granules--recovery {
     .modal-body {
       height: 425px;
+    }
+  }
+
+  &.bulk_granules--reingest {
+    .modal-body {
+      height: 600px;
     }
   }
 
