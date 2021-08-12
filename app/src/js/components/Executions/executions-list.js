@@ -53,12 +53,12 @@ const ExecutionsList = ({
         <h1 className='heading--large heading--shared-content with-description with-bottom-border width--full'>
           Executions for <Link to={`/granules/granule/${granuleId}`}>{granuleId}</Link>
         </h1>
-        <section className='h6'>
+        <p className='with-description'>
           Here you will see the full list of executions for this granule.
           You can click on each execution for visual step flow, details, and events.
           The newly added failed events snapshot gives you a quick reference of where
           the error is for a failed execution.
-        </section>
+        </p>
         <section className="page__section">
           <div className="heading__wrapper--border">
             <h2 className="heading--medium heading--shared-content with-description">Total Executions
