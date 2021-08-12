@@ -6,7 +6,8 @@ import { withRouter } from 'react-router-dom';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { listExecutionsByGranule } from '../../actions';
 import List from '../Table/Table';
-import { tableColumns } from '../../utils/table-config/executions';
+import { tableColumns } from '../../utils/table-config/executions-list';
+import { Link } from 'react-router-dom';
 
 const breadcrumbConfig = [
   {
@@ -49,9 +50,15 @@ const ExecutionsList = ({
         <section className="page__section page__section__controls">
           <Breadcrumbs config={breadcrumbConfig} />
         </section>
-        <h1 className='heading--large heading--shared-content with-description with-bottom-border width--three-quarters'>
-          Executions for {granuleId}
+        <h1 className='heading--large heading--shared-content with-description with-bottom-border width--full'>
+          Executions for <Link to={`/granules/granule/${granuleId}`}>{granuleId}</Link>
         </h1>
+        <section className='h6'>
+          Here you will see the full list of executions for this granule.
+          You can click on each execution for visual step flow, details, and events.
+          The newly added failed events snapshot gives you a quick reference of where
+          the error is for a failed execution.
+        </section>
         <section className="page__section">
           <div className="heading__wrapper--border">
             <h2 className="heading--medium heading--shared-content with-description">Total Executions

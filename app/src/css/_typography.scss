@@ -50,14 +50,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .heading__wrapper {
     &--border {
-      border-bottom: 1px solid $lightest-grey;
-      padding-bottom: .3em;
       margin-bottom: 1em;
       margin-top: 1.3em;
+      padding: .8em 0em .3em 1em;
+      background-color: #f3f3f3;
       h2, h3, h4 {
-      margin-bottom: .5em;
+        margin-bottom: .5em;
+      }
     }
-  }
     &--topborder {
       border-top: 1px solid $lightest-grey;
       margin-top: 1em;
