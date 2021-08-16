@@ -90,14 +90,6 @@ export const tableColumns = [
     width: 110,
   },
   {
-    Header: 'Execution',
-    accessor: 'execution',
-    Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
-      <Link to={(location) => ({ pathname: `/executions/execution/${path.basename(value)}`, search: getPersistentQueryParams(location) })}>link</Link>),
-    disableSortBy: true,
-    width: 90
-  },
-  {
     Header: 'Duration',
     accessor: (row) => seconds(row.duration),
     id: 'duration',
