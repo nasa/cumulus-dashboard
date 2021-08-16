@@ -101,7 +101,7 @@ describe('Dashboard Granules Page', () => {
             // Wait for this granule to appear before proceeding.
             cy.contains(granule.granuleId);
             cy.get(`[data-value="${granule.granuleId}"]`).children().as('columns');
-            cy.get('@columns').should('have.length', 10);
+            cy.get('@columns').should('have.length', 9);
 
             // Granule Status Column is correct
             cy.get('@columns').eq(1).invoke('text')
@@ -159,25 +159,25 @@ describe('Dashboard Granules Page', () => {
               .should('have.attr', 'href')
               .and('be.eq', collectionHrefFromId(granule.collectionId));
 
+            // Executions-list column has link to the executions list page
+            cy.get('@columns').eq(5).children('a')
+              .should('have.attr', 'href')
+              .and('be.eq', `/executions/executions-list/${encodeURIComponent(granule.collectionId)}/${encodeURIComponent(granule.granuleId)}`);
+
             // has link to provider
             cy.get('@columns').eq(6).children('a')
               .should('have.attr', 'href')
               .and('be.eq', `/providers/provider/${granule.provider}`);
 
-            // Execution column has link to the detailed execution page
-            cy.get('@columns').eq(7).children('a')
-              .should('have.attr', 'href')
-              .and('be.eq', `/executions/execution/${granule.execution.split('/').pop()}`);
-
             // Duration column
-            cy.get('@columns').eq(8).invoke('text')
+            cy.get('@columns').eq(7).invoke('text')
               .should('be.eq', `${Number(granule.duration).toFixed(2)}s`);
             // Updated column
-            cy.get('@columns').eq(9).invoke('text')
+            cy.get('@columns').eq(8).invoke('text')
               .should('match', /.+[0-9]{2}\/[0-9]{2}\/[0-9]{2}$/);
-            cy.get('@columns').eq(9).find('span').trigger('mouseover');
+            cy.get('@columns').eq(8).find('span').trigger('mouseover');
             cy.get('#table-timestamp-tooltip').should('be.visible');
-            cy.get('@columns').eq(9).find('span').trigger('mouseleave');
+            cy.get('@columns').eq(8).find('span').trigger('mouseleave');
           }
         });
 
