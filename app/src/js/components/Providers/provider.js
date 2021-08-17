@@ -12,7 +12,6 @@ import {
 import {
   fromNow,
   lastUpdated,
-  deleteText,
   link,
   tally
 } from '../../utils/format';
@@ -129,7 +128,8 @@ class ProviderOverview extends React.Component {
       status: deleteStatus,
       success: this.navigateBack,
       confirmAction: true,
-      confirmText: deleteText(providerId)
+      confirmText: ['You have submitted a request to permanently delete the following Provider',
+        <br></br>, <br></br>, <b>{providerId}</b>, <br></br>, <br></br>, 'Are you sure you want to permanently delete this provider?']
     }];
 
     return (

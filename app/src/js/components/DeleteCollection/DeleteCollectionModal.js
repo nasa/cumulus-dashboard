@@ -4,9 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 // import Button from '../Button/Button';
 import {
   collectionName as collectionLabelForId,
-  deleteText
 } from '../../utils/format';
-
 class DeleteCollectionModal extends React.Component {
   constructor (props) {
     super(props);
@@ -41,9 +39,15 @@ class DeleteCollectionModal extends React.Component {
           Delete Collection
         </Modal.Title>
         <Modal.Body>
-          <p>
-            {deleteText(`collection "${collectionLabelForId(this.props.collectionLabel)}"`)}
-          </p>
+          <p style={ { 'text-align': 'center' } }>You have submitted a request to delete the following collection</p>
+        </Modal.Body>
+        <Modal.Body>
+          <h1 style={ { 'text-align': 'center' } }>
+            <b>{collectionLabelForId(this.props.collectionLabel)}</b>
+          </h1>
+        </Modal.Body>
+        <Modal.Body>
+          <p style={ { 'text-align': 'center' } }>Are you sure you want to permanently delete this collection?'</p>
         </Modal.Body>
         <Modal.Footer>
           <button

@@ -61,7 +61,9 @@ export const bulkActions = (rules) => [{
     return enableRule(filteredRule);
   },
   state: rules.enabled,
-  confirm: (d) => `Enable ${d} Rule${d > 1 ? 's' : ''}?`,
+  confirm: (d) => ['You have submitted the following request:',
+    <br></br>, <br></br>, <b>Enable {d} Rule{d > 1 ? 's' : ''}?</b>, <br></br>, <br></br>,
+    `Are you sure you want to enable ${d > 1 ? 'these rules?' : 'this rule?'}`],
   className: 'button button--green button--enable button--small form-group__element'
 }, {
   text: 'Disable Rule',
@@ -71,7 +73,9 @@ export const bulkActions = (rules) => [{
     return disableRule(filteredRule);
   },
   state: rules.disabled,
-  confirm: (d) => `Disable ${d} Rule${d > 1 ? 's' : ''}?`,
+  confirm: (d) => ['You have submitted the following request:',
+    <br></br>, <br></br>, <b>Disable {d} Rule{d > 1 ? 's' : ''}?</b>, <br></br>, <br></br>,
+    `Are you sure you want to disable ${d > 1 ? 'these rules?' : 'this rule?'}`],
   className: 'button button--green button--disable button--small form-group__element'
 },
 {
@@ -81,6 +85,8 @@ export const bulkActions = (rules) => [{
   text: 'Delete Rule',
   action: deleteRule,
   state: rules.deleted,
-  confirm: (d) => `Delete ${d} Rule${d > 1 ? 's' : ''}?`,
+  confirm: (d) => ['You have submitted the following request:',
+    <br></br>, <br></br>, <b>Delete {d} Rule{d > 1 ? 's' : ''}?</b>, <br></br>, <br></br>,
+    `Are you sure you want to permanently delete ${d > 1 ? 'these rules?' : 'this rule?'}`],
   className: 'button button--delete button--small form-group__element'
 }];

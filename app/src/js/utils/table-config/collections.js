@@ -83,7 +83,9 @@ export const tableColumns = [
   }
 ];
 
-const confirmRecover = (d) => `Recover ${d} ${strings.collection}${d > 1 ? 's' : ''}?`;
+const confirmRecover = (d) => ['You have submitted a Collection recovery request',
+  <br></br>, <br></br>, <b>Recover {d} {strings.collection}{d > 1 ? 's' : ''}?</b>, <br></br>, <br></br>,
+  'Click confirm to proceed with the Collection Recovery'];
 export const recoverAction = (collections, config) => [{
   text: 'Recover',
   action: config.recover.action,

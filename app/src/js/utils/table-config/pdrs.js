@@ -89,8 +89,9 @@ export const errorTableColumns = [
   }
 ];
 
-const confirmDelete = (d) => `Delete ${d} PDR${d > 1 ? 's' : ''}?`;
-
+const confirmDelete = (d) => ['You have submitted the following request:',
+  <br></br>, <br></br>, <b>Delete {d} PDR{d > 1 ? 's' : ''} </b>, <br></br>, <br></br>,
+  `Are you sure you want to permanently remove ${d > 1 ? 'these PDRS' : 'this PDR'}`];
 export const bulkActions = (pdrs) => [{
   text: 'Delete',
   action: deletePdr,

@@ -25,7 +25,6 @@ import {
   collectionLink,
   providerLink,
   pdrLink,
-  deleteText,
 } from '../../utils/format';
 import Table from '../SortableTable/SortableTable';
 import Loading from '../LoadingIndicator/loading-indicator';
@@ -256,7 +255,9 @@ class GranuleOverview extends React.Component {
         status: get(this.props.granules.reingested, [granuleId, 'status']),
         success: this.loadGranule,
         confirmAction: true,
-        confirmText: `Reingest ${granuleId}? Note: the granule files will be overwritten.`,
+        confirmText: ['You have submitted a request to reingest the following granule:',
+          <br></br>, <br></br>, <b>{granuleId}</b>, <br></br>, <br></br>,
+          'Note: the granule files will be overwritten, are you sure you want to reingest this Granule?'],
       },
       {
         text: 'Execute',
@@ -272,6 +273,10 @@ class GranuleOverview extends React.Component {
         action: this.remove,
         status: get(this.props.granules.removed, [granuleId, 'status']),
         success: this.loadGranule,
+        confirmAction: true,
+        confirmText: ['You have submitted a request to remove this Granule from CMR:',
+          <br></br>, <br></br>, <b>{granuleId}</b>, <br></br>, <br></br>,
+          'Are you sure you want to permanently remove this Granule from CMR?'],
       },
       {
         text: 'Delete',
@@ -280,7 +285,9 @@ class GranuleOverview extends React.Component {
         status: get(this.props.granules.deleted, [granuleId, 'status']),
         success: this.navigateBack,
         confirmAction: true,
-        confirmText: deleteText(granuleId),
+        confirmText: ['You have submitted a request to permanently delete this Granule:',
+          <br></br>, <br></br>, <b>{granuleId}</b>, <br></br>, <br></br>,
+          'Are you sure you want to permanently delete this Granule?'],
       },
     ];
     const errors = this.errors();

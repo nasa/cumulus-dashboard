@@ -8,12 +8,8 @@ import {
   providerLink,
   fullDate,
   lastUpdated,
-  enableText,
   enableConfirm,
-  disableText,
   disableConfirm,
-  rerunText,
-  deleteText
 } from '../../utils/format';
 import {
   getRule,
@@ -142,7 +138,9 @@ class Rule extends React.Component {
       disabled: data.type === 'onetime',
       status: enabledStatus,
       confirmAction: true,
-      confirmText: enableText(ruleName),
+      confirmText: ['You have submitted a request to enable the following rule:',
+        <br></br>, <br></br>, <b>{ruleName}</b>, <br></br>, <br></br>,
+        'Are you sure you want to enable this rule?'],
       postActionModal: true,
       postActionText: enableConfirm(ruleName),
       success: this.reload
@@ -153,7 +151,9 @@ class Rule extends React.Component {
       status: disabledStatus,
       confirmAction: true,
       postActionModal: true,
-      confirmText: disableText(ruleName),
+      confirmText: ['You have submitted a request to disable the following rule:',
+        <br></br>, <br></br>, <b>{ruleName}</b>, <br></br>, <br></br>,
+        'Are you sure you want to disable this rule?'],
       postActionText: disableConfirm(ruleName),
       success: this.reload
     }, {
@@ -162,14 +162,18 @@ class Rule extends React.Component {
       status: deleteStatus,
       success: this.navigateBack,
       confirmAction: true,
-      confirmText: deleteText(ruleName)
+      confirmText: ['You have submitted a request to delete the following rule:',
+        <br></br>, <br></br>, <b>{ruleName}</b>, <br></br>, <br></br>,
+        'Are you sure you want to permanently delete this rule?']
     }, {
       text: 'Rerun',
       action: this.rerun,
       status: rerunStatus,
       success: this.reload,
       confirmAction: true,
-      confirmText: rerunText(ruleName)
+      confirmText: ['You have submitted a request to rerun the following rule:',
+        <br></br>, <br></br>, <b>{ruleName}</b>, <br></br>, <br></br>,
+        'Are you sure you want to rerun this rule?']
     }];
 
     const errors = this.errors();
