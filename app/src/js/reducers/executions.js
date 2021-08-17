@@ -20,8 +20,7 @@ export const initialState = {
     params: {},
     inflight: false,
     error: false,
-  },
-  map: {},
+  }
 };
 
 export default createReducer(initialState, {

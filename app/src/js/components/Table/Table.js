@@ -37,6 +37,7 @@ const List = ({
   onSelect,
   query,
   queryParams,
+  renderRowSubComponent,
   rowId,
   tableColumns,
   toggleColumnOptionsAction,
@@ -226,6 +227,7 @@ const List = ({
               // according to that id, and therefore we are using sever-side/manual sorting
               shouldManualSort={!!initialSortId}
               getToggleColumnOptions={getToggleColumnOptions}
+              renderRowSubComponent={renderRowSubComponent}
             />
           </Suspense>
           <Pagination
@@ -263,6 +265,7 @@ List.propTypes = {
   tableColumns: PropTypes.array,
   onSelect: PropTypes.func,
   queryParams: PropTypes.object,
+  renderRowSubComponent: PropTypes.func,
 };
 
 export { List };

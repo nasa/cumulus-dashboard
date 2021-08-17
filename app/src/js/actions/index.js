@@ -734,6 +734,7 @@ export const getExecutionStatus = (arn) => ({
   [CALL_API]: {
     type: types.EXECUTION_STATUS,
     method: 'GET',
+    id: arn,
     url: new URL(`executions/status/${arn}`, root).href
   }
 });

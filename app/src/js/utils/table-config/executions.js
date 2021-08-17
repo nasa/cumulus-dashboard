@@ -1,13 +1,75 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle, faChevronCircleDown, faChevronCircleUp, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import cloneDeep from 'lodash/cloneDeep';
 import {
   displayCase,
   seconds,
   fromNowWithTooltip,
-  formatCollectionId
+  formatCollectionId,
+  fullDate
 } from '../format';
 import { strings } from '../../components/locale';
 import { getPersistentQueryParams } from '../url-helper';
+import { getEventDetails } from '../../components/Executions/execution-graph-utils';
+import Tooltip from '../../components/Tooltip/tooltip';
+
+export const formatEvents = (events) => {
+  const mutableEvents = cloneDeep(events);
+  if (mutableEvents) {
+    mutableEvents.forEach((event, index, eventsArray) => {
+      event.eventDetails = getEventDetails(event);
+      if (index === 0 || event.name || !event.type.match('LambdaFunction')) return;
+      const prevStep = eventsArray[index - 1];
+      event.name = prevStep.name;
+    });
+  }
+  return mutableEvents;
+};
+
+export const subColumns = [
+  {
+    Header: 'Event ID',
+    accessor: 'id',
+  },
+  {
+    Header: 'Step Name',
+    accessor: 'name'
+  },
+  {
+    Header: 'Event Type',
+    accessor: 'type',
+    // eslint-disable-next-line react/prop-types
+    Cell: ({ cell: { value }, row: { original: { eventDetails } } }) => {
+      // eslint-disable-next-line react/prop-types
+      const failed = eventDetails?.type === 'LambdaFunctionFailed';
+      const icon = failed ? faTimesCircle : faCheckCircle;
+      const iconColor = failed ? 'red' : 'green';
+      return (
+        <>
+          {value &&
+            <div>
+              {value}
+              {!failed && <FontAwesomeIcon icon={icon} color={iconColor} />}
+              {failed && <Tooltip
+                className='tooltip--light'
+                id={value}
+                placement='right'
+                target={<FontAwesomeIcon icon={icon} color={iconColor} />}
+                tip={<div>{JSON.stringify(eventDetails)}</div>}
+              />}
+            </div>}
+        </>
+      );
+    }
+  },
+  {
+    Header: 'Timestamp',
+    accessor: 'timestamp',
+    Cell: ({ cell: { value } }) => fullDate(value)
+  },
+];
 
 export const tableColumns = [
   {
@@ -44,6 +106,18 @@ export const tableColumns = [
     accessor: 'collectionId',
     width: 200,
     Cell: ({ cell: { value } }) => formatCollectionId(value)
+  },
+  {
+    Header: 'Failed Events Snapshot',
+    id: 'failed',
+    Cell: ({ row }) => { // eslint-disable-line react/prop-types
+      const { getToggleRowExpandedProps, isExpanded } = row; // eslint-disable-line react/prop-types
+      return (
+        <span {...getToggleRowExpandedProps()}>
+          {isExpanded ? 'Close' : 'Open'} <FontAwesomeIcon icon={isExpanded ? faChevronCircleUp : faChevronCircleDown} />
+        </span>
+      );
+    },
   }
 ];
 
