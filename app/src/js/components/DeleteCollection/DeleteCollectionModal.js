@@ -30,8 +30,8 @@ class DeleteCollectionModal extends React.Component {
         showModal = {this.props.show}
         onCloseModal={this.handleCancel}
         className={'delete-collection-modal'}
-        hasCancelButton={true}
-        hasConfirmButton={true}
+        hasCancelButton={false}
+        hasConfirmButton={false}
         title='Delete Collection'
         onHide={this.handleCancel}
         aria-labelledby="modal__delete-collection-modal"
@@ -45,6 +45,20 @@ class DeleteCollectionModal extends React.Component {
         </h1>
         <br></br>
         <p> Are you sure you want to permanently delete this collection? </p>
+        <button
+          className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left'
+          label="cancel"
+          onClick={this.handleCancel}
+        >
+            Cancel Request
+        </button>
+        <button
+          className='button button__deletecollections button__animation--md button__arrow button__arrow--md button__animation button__arrow--white'
+          label="confirm"
+          onClick={this.handleConfirm}
+        >
+            Delete Collection
+        </button>
       </DefaultModal>
 
     );
