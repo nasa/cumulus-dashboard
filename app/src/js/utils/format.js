@@ -423,15 +423,15 @@ export const reingestText = (name) => ['You have submitted a request to reingest
   'Note: the granule files will be overwritten, are you sure you want to reingest this Granule?'];
 
 export const recoverCollectionText = (d) => ['You have submitted a Collection recovery request',
-  <br></br>, <br></br>, <b>Recover {d} Collection{d > 1 ? 's' : ''}?</b>, <br></br>, <br></br>,
+  <br></br>, <br></br>, <b>Recover {d} Collection{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
   'Click confirm to proceed with the Collection Recovery'];
 
 export const recoverGranules = (d) => ['You have submitted the following request:',
-  <br></br>, <br></br>, <b>Recover {d} Granule{d > 1 ? 's' : ''}.</b>, <br></br>, <br></br>,
+  <br></br>, <br></br>, <b>Recover {d} Granule{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
   `Are you sure you want to recover ${d > 1 ? 'these granules' : 'this granule'}?`];
 
 export const recoverCollections = (d) => ['You have submitted a Collection recovery request',
-  <br></br>, <br></br>, <b>Recover {d} Collection{d > 1 ? 's' : ''}?</b>, <br></br>, <br></br>,
+  <br></br>, <br></br>, <b>Recover {d} Collection{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
   'Click confirm to proceed with the Collection Recovery'];
 
 export const removeFromCmr = (name) => ['You have submitted a request to remove this Granule from CMR:',
@@ -455,15 +455,15 @@ export const deletePdrs = (d) => ['You have submitted the following request:',
   `Are you sure you want to permanently remove ${d > 1 ? 'these PDRS' : 'this PDR'}`];
 
 export const enableRules = (d) => ['You have submitted the following request:',
-  <br></br>, <br></br>, <b>Enable {d} Rule{d > 1 ? 's' : ''}?</b>, <br></br>, <br></br>,
+  <br></br>, <br></br>, <b>Enable {d} Rule{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
   `Are you sure you want to enable ${d > 1 ? 'these rules?' : 'this rule?'}`];
 
 export const disableRules = (d) => ['You have submitted the following request:',
-  <br></br>, <br></br>, <b>Disable {d} Rule{d > 1 ? 's' : ''}?</b>, <br></br>, <br></br>,
+  <br></br>, <br></br>, <b>Disable {d} Rule{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
   `Are you sure you want to disable ${d > 1 ? 'these rules?' : 'this rule?'}`];
 
 export const deleteRules = (d) => ['You have submitted the following request:',
-  <br></br>, <br></br>, <b>Delete {d} Rule{d > 1 ? 's' : ''}?</b>, <br></br>, <br></br>,
+  <br></br>, <br></br>, <b>Delete {d} Rule{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
   `Are you sure you want to permanently delete ${d > 1 ? 'these rules?' : 'this rule?'}`];
 
 export const buildRedirectUrl = ({ origin, pathname, hash }) => {
