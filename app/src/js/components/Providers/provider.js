@@ -13,7 +13,8 @@ import {
   fromNow,
   lastUpdated,
   link,
-  tally
+  tally,
+  deleteText,
 } from '../../utils/format';
 import Loading from '../LoadingIndicator/loading-indicator';
 import LogViewer from '../Logs/viewer';
@@ -128,8 +129,7 @@ class ProviderOverview extends React.Component {
       status: deleteStatus,
       success: this.navigateBack,
       confirmAction: true,
-      confirmText: ['You have submitted a request to permanently delete the following Provider',
-        <br></br>, <br></br>, <b>{providerId}</b>, <br></br>, <br></br>, 'Are you sure you want to permanently delete this provider?']
+      confirmText: deleteText(providerId)
     }];
 
     return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { get } from 'object-path';
-import { seconds, bool, nullValue, collectionLink, displayCase, granuleLink, fromNowWithTooltip } from '../format';
+import { seconds, bool, nullValue, collectionLink, displayCase, granuleLink, fromNowWithTooltip, deletePdrs } from '../format';
 import { deleteGranule, deletePdr } from '../../actions';
 import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
@@ -89,9 +89,7 @@ export const errorTableColumns = [
   }
 ];
 
-const confirmDelete = (d) => ['You have submitted the following request:',
-  <br></br>, <br></br>, <b>Delete {d} PDR{d > 1 ? 's' : ''} </b>, <br></br>, <br></br>,
-  `Are you sure you want to permanently remove ${d > 1 ? 'these PDRS' : 'this PDR'}`];
+const confirmDelete = (d) => deletePdrs(d);
 export const bulkActions = (pdrs) => [{
   text: 'Delete',
   action: deletePdr,

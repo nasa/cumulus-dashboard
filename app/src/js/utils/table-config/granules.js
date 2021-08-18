@@ -13,7 +13,11 @@ import {
   granuleLink,
   providerLink,
   fromNowWithTooltip,
-  CopyCellPopover
+  CopyCellPopover,
+  recoverGranules,
+  deleteGranules,
+  removeGranulesFromCmr,
+  removeFromCmrDelete,
 } from '../format';
 import {
   applyWorkflowToGranuleClearError,
@@ -176,9 +180,7 @@ export const simpleDropdownOption = (config) => (
   />
 );
 
-const confirmRecover = (d) => ['You have submitted the following request:',
-  <br></br>, <br></br>, <b>Recover {d} Granule{d > 1 ? 's' : ''}.</b>, <br></br>, <br></br>,
-  `Are you sure you want to recover ${d > 1 ? 'these granules' : 'this granule'}?`];
+const confirmRecover = (d) => recoverGranules(d);
 export const recoverAction = (granules, config) => ({
   text: 'Recover Granule',
   action: config.recover.action,
@@ -190,15 +192,9 @@ export const recoverAction = (granules, config) => ({
 
 const confirmReingest = (d) => `Reingest ${d} Granule${d > 1 ? 's' : ''}?`;
 const confirmApply = (d) => `Run workflow on ${d} granule${d > 1 ? 's' : ''}?`;
-const confirmRemove = (d) => ['You have submitted the following request:',
-  <br></br>, <br></br>, <b>Remove {d} Granule{d > 1 ? 's' : ''} from CMR </b>, <br></br>, <br></br>,
-  `Are you sure you want to permanently remove ${d > 1 ? 'these granules' : 'this granule'} from CMR?`];
-const confirmDelete = (d) => ['You have submitted the following request:',
-  <br></br>, <br></br>, <b>Delete {d} Granule{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
-  `Are you sure you want to permanently delete ${d > 1 ? 'these granules?' : 'this granule?'}`];
-const confirmRemoveFromCMR = (d) => [`You have submitted a request to delete ${d} Granule${d > 1 ? 's' : ''}`,
-  <br></br>, <br></br>, <b>Selection contains granules that are published to CMR which must be
-  removed before deleting</b>, <br></br>, <br></br>, 'Remove published granules from CMR and delete?'];
+const confirmRemove = (d) => removeGranulesFromCmr(d);
+const confirmDelete = (d) => deleteGranules(d);
+const confirmRemoveFromCMR = (d) => removeFromCmrDelete(d);
 
 /**
  * Determine the base context of a collection view

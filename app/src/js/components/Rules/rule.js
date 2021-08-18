@@ -10,6 +10,10 @@ import {
   lastUpdated,
   enableConfirm,
   disableConfirm,
+  enableText,
+  disableText,
+  deleteText,
+  rerunText,
 } from '../../utils/format';
 import {
   getRule,
@@ -138,9 +142,7 @@ class Rule extends React.Component {
       disabled: data.type === 'onetime',
       status: enabledStatus,
       confirmAction: true,
-      confirmText: ['You have submitted a request to enable the following rule:',
-        <br></br>, <br></br>, <b>{ruleName}</b>, <br></br>, <br></br>,
-        'Are you sure you want to enable this rule?'],
+      confirmText: enableText(ruleName),
       postActionModal: true,
       postActionText: enableConfirm(ruleName),
       success: this.reload
@@ -151,9 +153,7 @@ class Rule extends React.Component {
       status: disabledStatus,
       confirmAction: true,
       postActionModal: true,
-      confirmText: ['You have submitted a request to disable the following rule:',
-        <br></br>, <br></br>, <b>{ruleName}</b>, <br></br>, <br></br>,
-        'Are you sure you want to disable this rule?'],
+      confirmText: disableText(ruleName),
       postActionText: disableConfirm(ruleName),
       success: this.reload
     }, {
@@ -162,18 +162,14 @@ class Rule extends React.Component {
       status: deleteStatus,
       success: this.navigateBack,
       confirmAction: true,
-      confirmText: ['You have submitted a request to delete the following rule:',
-        <br></br>, <br></br>, <b>{ruleName}</b>, <br></br>, <br></br>,
-        'Are you sure you want to permanently delete this rule?']
+      confirmText: deleteText(ruleName)
     }, {
       text: 'Rerun',
       action: this.rerun,
       status: rerunStatus,
       success: this.reload,
       confirmAction: true,
-      confirmText: ['You have submitted a request to rerun the following rule:',
-        <br></br>, <br></br>, <b>{ruleName}</b>, <br></br>, <br></br>,
-        'Are you sure you want to rerun this rule?']
+      confirmText: rerunText(ruleName)
     }];
 
     const errors = this.errors();

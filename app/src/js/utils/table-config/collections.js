@@ -1,7 +1,7 @@
 import React from 'react';
 import { get } from 'object-path';
 import { Link } from 'react-router-dom';
-import { seconds, tally, collectionNameVersion, fromNowWithTooltip, CopyCellPopover, collectionHrefFromNameVersion } from '../format';
+import { seconds, tally, collectionNameVersion, fromNowWithTooltip, CopyCellPopover, collectionHrefFromNameVersion, recoverCollectionText } from '../format';
 import { deleteCollection } from '../../actions';
 import { strings } from '../../components/locale';
 import BatchDeleteConfirmContent from '../../components/DeleteCollection/BatchDeleteConfirmContent';
@@ -83,9 +83,7 @@ export const tableColumns = [
   }
 ];
 
-const confirmRecover = (d) => ['You have submitted a Collection recovery request',
-  <br></br>, <br></br>, <b>Recover {d} {strings.collection}{d > 1 ? 's' : ''}?</b>, <br></br>, <br></br>,
-  'Click confirm to proceed with the Collection Recovery'];
+const confirmRecover = (d) => recoverCollectionText(d);
 export const recoverAction = (collections, config) => [{
   text: 'Recover',
   action: config.recover.action,
