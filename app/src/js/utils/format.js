@@ -402,11 +402,9 @@ export const enableText = (name) => ['You have submitted a request to enable the
 
 export const enableConfirm = (name) => `Rule ${name} was enabled`;
 
-export const disableQuestion = (name) => ['You have submitted a request to disable the following rule:',
+export const disableText = (name) => ['You have submitted a request to disable the following rule:',
   <br></br>, <br></br>, <b>{name}</b>, <br></br>, <br></br>,
   'Are you sure you want to disable this rule?'];
-
-export const disableText = (name) => `You are disabling rule ${name}`;
 
 export const disableConfirm = (name) => `Rule ${name} was disabled`;
 
