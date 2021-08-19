@@ -9,7 +9,10 @@ import {
   getFormattedCollectionId,
   collectionLink,
   providerLink,
-  fromNowWithTooltip
+  fromNowWithTooltip,
+  enableRules,
+  disableRules,
+  deleteRules,
 } from '../format';
 import { strings } from '../../components/locale';
 import { getPersistentQueryParams } from '../url-helper';
@@ -61,7 +64,7 @@ export const bulkActions = (rules) => [{
     return enableRule(filteredRule);
   },
   state: rules.enabled,
-  confirm: (d) => `Enable ${d} Rule${d > 1 ? 's' : ''}?`,
+  confirm: (d) => enableRules(d),
   className: 'button button--green button--enable button--small form-group__element'
 }, {
   text: 'Disable Rule',
@@ -71,7 +74,7 @@ export const bulkActions = (rules) => [{
     return disableRule(filteredRule);
   },
   state: rules.disabled,
-  confirm: (d) => `Disable ${d} Rule${d > 1 ? 's' : ''}?`,
+  confirm: (d) => disableRules(d),
   className: 'button button--green button--disable button--small form-group__element'
 },
 {
@@ -81,6 +84,6 @@ export const bulkActions = (rules) => [{
   text: 'Delete Rule',
   action: deleteRule,
   state: rules.deleted,
-  confirm: (d) => `Delete ${d} Rule${d > 1 ? 's' : ''}?`,
+  confirm: (d) => deleteRules(d),
   className: 'button button--delete button--small form-group__element'
 }];

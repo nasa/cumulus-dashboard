@@ -32,6 +32,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2142**
   - Changed styling for sidebar button
   - Added tooltip for sidebar button
+- **CUMULUS-2358**
+  - Refactored various modals in order to reflect the StandardModal design
+  - Changed styling of Modal components for aesthetics
 - **CUMULUS-2502**
   - Metrics ES searches have been updated to run against only the index
     patterns provided, improving performance and saving resources.

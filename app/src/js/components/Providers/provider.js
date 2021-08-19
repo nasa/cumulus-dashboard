@@ -12,9 +12,9 @@ import {
 import {
   fromNow,
   lastUpdated,
-  deleteText,
   link,
-  tally
+  tally,
+  deleteText,
 } from '../../utils/format';
 import Loading from '../LoadingIndicator/loading-indicator';
 import LogViewer from '../Logs/viewer';
