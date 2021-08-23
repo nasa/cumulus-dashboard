@@ -7,6 +7,7 @@ import numeral from 'numeral';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
+import { Alert } from 'react-bootstrap';
 import { getPersistentQueryParams } from './url-helper';
 import Tooltip from '../components/Tooltip/tooltip';
 import Popover from '../components/Popover/popover';
@@ -408,7 +409,8 @@ export const disableText = (name) => ['You have submitted a request to disable t
 
 export const disableConfirm = (name) => `Rule ${name} was disabled`;
 
-export const deleteText = (name) => ['You have submitted a request to permanently delete the following:',
+export const deleteText = (name) => [<Alert variant="warning"><strong>Warning</strong></Alert>,
+  'You have submitted a request to permanently delete the following:',
   <br></br>, <br></br>, <b>{name}</b>, <br></br>, <br></br>,
   'Are you sure you want to permanently delete? Click confirm to proceed.'];
 
@@ -432,25 +434,30 @@ export const recoverCollections = (d) => ['You have submitted a Collection recov
   <br></br>, <br></br>, <b>Recover {d} Collection{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
   'Click confirm to proceed with the Collection Recovery'];
 
-export const removeFromCmr = (name) => ['You have submitted a request to remove this Granule from CMR:',
+export const removeFromCmr = (name) => [<Alert variant="warning"><strong>Warning</strong></Alert>,
+  'You have submitted a request to remove this Granule from CMR:',
   <br></br>, <br></br>, <b>{name}</b>, <br></br>, <br></br>,
   'Are you sure you want to permanently remove this Granule from CMR?'];
 
-export const removeFromCmrDelete = (d) => [`You have submitted a request to delete ${d} Granule${d > 1 ? 's' : ''}`,
+export const removeFromCmrDelete = (d) => [<Alert variant="warning"><strong>Warning</strong></Alert>,
+  `You have submitted a request to delete ${d} Granule${d > 1 ? 's' : ''}`,
   <br></br>, <br></br>, <b>Selection contains granules that are published to CMR which must be
   removed before deleting</b>, <br></br>, <br></br>, 'Remove published granules from CMR and delete?'];
 
-export const removeGranulesFromCmr = (d) => ['You have submitted the following request:',
+export const removeGranulesFromCmr = (d) => [<Alert variant="warning"><strong>Warning</strong></Alert>,
+  'You have submitted the following request:',
   <br></br>, <br></br>, <b>Remove {d} Granule{d > 1 ? 's' : ''} from CMR </b>, <br></br>, <br></br>,
   `Are you sure you want to permanently remove ${d > 1 ? 'these granules' : 'this granule'} from CMR?`];
 
-export const deleteGranules = (d) => ['You have submitted the following request:',
+export const deleteGranules = (d) => [<Alert variant="warning"><strong>Warning</strong></Alert>,
+  'You have submitted the following request:',
   <br></br>, <br></br>, <b>Delete {d} Granule{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
   `Are you sure you want to permanently delete ${d > 1 ? 'these granules?' : 'this granule?'}`];
 
-export const deletePdrs = (d) => ['You have submitted the following request:',
+export const deletePdrs = (d) => [<Alert variant="warning"><strong>Warning</strong></Alert>,
+  'You have submitted the following request:',
   <br></br>, <br></br>, <b>Delete {d} PDR{d > 1 ? 's' : ''} </b>, <br></br>, <br></br>,
-  `Are you sure you want to permanently remove ${d > 1 ? 'these PDRS' : 'this PDR'}`];
+  `Are you sure you want to permanently remove ${d > 1 ? 'these PDRS?' : 'this PDR?'}`];
 
 export const enableRules = (d) => ['You have submitted the following request:',
   <br></br>, <br></br>, <b>Enable {d} Rule{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
@@ -460,7 +467,8 @@ export const disableRules = (d) => ['You have submitted the following request:',
   <br></br>, <br></br>, <b>Disable {d} Rule{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
   `Are you sure you want to disable ${d > 1 ? 'these rules?' : 'this rule?'}`];
 
-export const deleteRules = (d) => ['You have submitted the following request:',
+export const deleteRules = (d) => [<Alert variant="warning"><strong>Warning</strong></Alert>,
+  'You have submitted the following request:',
   <br></br>, <br></br>, <b>Delete {d} Rule{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
   `Are you sure you want to permanently delete ${d > 1 ? 'these rules?' : 'this rule?'}`];
 

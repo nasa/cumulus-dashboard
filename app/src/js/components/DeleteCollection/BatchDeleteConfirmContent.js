@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Alert } from 'react-bootstrap';
 import { collectionNameVersion } from '../../utils/format';
 
 const BatchDeleteConfirmContent = ({ selected = [] }) => (
   <>
+    <Alert variant="warning"><strong>Warning</strong></Alert>
     <p>You have submitted a request to delete the following collections</p>
     <ul>
       {selected.map((selection, index) => {

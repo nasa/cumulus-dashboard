@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Alert } from 'react-bootstrap';
 import DefaultModal from '../Modal/modal';
 // import Modal from '../Modal/modal';
 
@@ -38,6 +39,7 @@ class DeleteCollectionModal extends React.Component {
         onCancel={this.handleCancel}
         onConfirm={this.handleConfirm}
       >
+        <Alert variant="warning"><strong>Warning</strong></Alert>
         <p> You have submitted a request to delete the following collection: </p>
         <br></br>
         <h1>
