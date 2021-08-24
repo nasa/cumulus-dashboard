@@ -99,6 +99,7 @@ const AsyncCommand = ({
     <div>
       { button }
       <DefaultModal
+        title = {text}
         className='async__modal'
         onCancel={successModal ? success : cancel}
         onCloseModal={cancel}
@@ -112,7 +113,7 @@ const AsyncCommand = ({
             {option}
             <br />
           </div>)}
-          <h4>{confirmText}</h4>
+          <p>{confirmText}</p>
         </div>}
         {successModal &&
         <>

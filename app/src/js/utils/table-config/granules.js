@@ -13,7 +13,11 @@ import {
   granuleLink,
   providerLink,
   fromNowWithTooltip,
-  CopyCellPopover
+  CopyCellPopover,
+  recoverGranules,
+  deleteGranules,
+  removeGranulesFromCmr,
+  removeFromCmrDelete,
 } from '../format';
 import {
   applyWorkflowToGranuleClearError,
@@ -178,20 +182,21 @@ export const simpleDropdownOption = (config) => (
   />
 );
 
-const confirmRecover = (d) => `Recover ${d} granule(s)?`;
+const confirmRecover = (d) => recoverGranules(d);
 export const recoverAction = (granules, config) => ({
   text: 'Recover Granule',
   action: config.recover.action,
   state: granules.executed,
   clearError: applyWorkflowToGranuleClearError,
+  confirmAction: true,
   confirm: confirmRecover
 });
 
 const confirmReingest = (d) => `Reingest ${d} Granule${d > 1 ? 's' : ''}?`;
 const confirmApply = (d) => `Run workflow on ${d} granule${d > 1 ? 's' : ''}?`;
-const confirmRemove = (d) => `Remove ${d} granule${d > 1 ? 's' : ''} from ${strings.cmr}?`;
-const confirmDelete = (d) => `Delete ${d} granule${d > 1 ? 's' : ''}?`;
-const confirmRemoveFromCMR = (d) => 'Selection contains granules that are published to CMR which must be removed before deleting. Remove published granules from CMR and delete?';
+const confirmRemove = (d) => removeGranulesFromCmr(d);
+const confirmDelete = (d) => deleteGranules(d);
+const confirmRemoveFromCMR = (d) => removeFromCmrDelete(d);
 
 /**
  * Determine the base context of a collection view
@@ -315,7 +320,7 @@ export const bulkActions = (granules, config, selectedGranules) => [
     state: granules.removed,
     clearError: removeGranuleClearError,
     confirm: confirmRemove,
-    className: 'button--remove'
+    className: 'button--remove',
   },
   {
     Component:
@@ -331,7 +336,7 @@ export const bulkActions = (granules, config, selectedGranules) => [
     state: granules.deleted,
     clearError: deleteGranuleClearError,
     confirm: containsPublishedGranules(selectedGranules) ? confirmRemoveFromCMR : confirmDelete,
-    className: 'button--delete'
+    className: 'button--delete',
   }];
 
 const granules = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { get } from 'object-path';
-import { seconds, bool, nullValue, collectionLink, displayCase, granuleLink, fromNowWithTooltip } from '../format';
+import { seconds, bool, nullValue, collectionLink, displayCase, granuleLink, fromNowWithTooltip, deletePdrs, deleteGranules } from '../format';
 import { deleteGranule, deletePdr } from '../../actions';
 import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
@@ -89,8 +89,7 @@ export const errorTableColumns = [
   }
 ];
 
-const confirmDelete = (d) => `Delete ${d} PDR${d > 1 ? 's' : ''}?`;
-
+const confirmDelete = (d) => deletePdrs(d);
 export const bulkActions = (pdrs) => [{
   text: 'Delete',
   action: deletePdr,
@@ -128,7 +127,7 @@ export const granuleTableColumns = [
   }
 ];
 
-const confirmGranuleDelete = (d) => `Delete ${d} Granule${d > 1 ? 's' : ''}?`;
+const confirmGranuleDelete = (d) => deleteGranules(d);
 export const granuleBulkActions = (granules) => [{
   text: 'Delete',
   action: deleteGranule,
