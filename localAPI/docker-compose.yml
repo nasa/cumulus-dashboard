@@ -22,11 +22,8 @@ services:
     ports:
       - "9200:9200"
       - "4550-4586:4550-4586"
-      # - "5432:5432"
-      # - "5500:80"
   postgres:
     image: postgres:10.17-alpine
-    # network_mode: "service:shim"
     ports:
       - "5432:5432"
     environment:

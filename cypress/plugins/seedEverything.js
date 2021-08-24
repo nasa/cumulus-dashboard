@@ -24,6 +24,7 @@ function resetIt() {
   return Promise.all([
     eraseDataStack(),
     testUtils.setAuthorizedOAuthUsers([localUserName]),
+    serveUtils.resetPostgresDb(),
   ]);
 }
 
@@ -80,35 +81,16 @@ function uploadReconciliationReportFiles() {
   );
 }
 
-function seedPostgres() {
-  exec('chmod +x ./localAPI/seed-postgres-db.sh', (error, stdout) => {
-    if (error) {
-      console.log(`error: ${error.message}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
-  });
-
-  exec('./localAPI/seed-postgres-db.sh', (error, stdout) => {
-    if (error) {
-      console.log(`error: ${error.message}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
-  });
-}
-
 function seedEverything() {
   return Promise.all([
     resetIt()
-      .then(seedPdrs)
-      .then(seedRules)
-      .then(seedCollections)
-      .then(seedGranules)
-      .then(seedExecutions)
       .then(seedProviders)
-      .then(seedReconciliationReports)
-      .then(seedPostgres),
+      .then(seedCollections)
+      .then(seedExecutions)
+      .then(seedPdrs)
+      // .then(seedGranules)
+      // .then(seedRules)
+      .then(seedReconciliationReports),
     uploadReconciliationReportFiles(),
   ]);
 }
