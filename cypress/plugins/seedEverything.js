@@ -88,8 +88,8 @@ function seedEverything() {
       .then(seedCollections)
       .then(seedExecutions)
       .then(seedPdrs)
-      // .then(seedGranules)
-      // .then(seedRules)
+      .then(seedGranules)
+      .then(seedRules)
       .then(seedReconciliationReports),
     uploadReconciliationReportFiles(),
   ]);
