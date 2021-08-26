@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faChevronCircleDown, faChevronCircleUp, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import cloneDeep from 'lodash/cloneDeep';
 import {
   displayCase,
@@ -117,18 +117,6 @@ export const tableColumns = [
     accessor: 'collectionId',
     width: 200,
     Cell: ({ cell: { value } }) => formatCollectionId(value)
-  },
-  {
-    Header: 'Failed Events Snapshot',
-    id: 'failed',
-    Cell: ({ row }) => { // eslint-disable-line react/prop-types
-      const { getToggleRowExpandedProps, isExpanded } = row; // eslint-disable-line react/prop-types
-      return (
-        <span {...getToggleRowExpandedProps()}>
-          {isExpanded ? 'Close' : 'Open'} <FontAwesomeIcon icon={isExpanded ? faChevronCircleUp : faChevronCircleDown} />
-        </span>
-      );
-    },
   }
 ];
 

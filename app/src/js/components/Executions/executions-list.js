@@ -2,12 +2,12 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import { Link, withRouter } from 'react-router-dom';
 import { listExecutionsByGranule } from '../../actions';
-import List from '../Table/Table';
 import { tableColumns } from '../../utils/table-config/executions-list';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import List from '../Table/Table';
+import ExecutionSnapshot from './execution-snapshot';
 
 const breadcrumbConfig = [
   {
@@ -41,6 +41,12 @@ const ExecutionsList = ({
     ],
   };
 
+  function renderRowSubComponent(row) {
+    return (
+      <ExecutionSnapshot row={row} />
+    );
+  }
+
   return (
     <div className='page__component'>
       <Helmet>
@@ -69,6 +75,9 @@ const ExecutionsList = ({
             list={list}
             tableColumns={tableColumns}
             action={(() => listExecutionsByGranule(payload))}
+            rowId='name'
+            initialSortId='createdAt'
+            renderRowSubComponent={renderRowSubComponent}
           >
           </List>
         </section>

@@ -23,7 +23,6 @@ import Overview from '../Overview/overview';
 import { strings } from '../locale';
 import { tableColumns } from '../../utils/table-config/executions';
 import ListFilters from '../ListActions/ListFilters';
-import ExecutionSnapshot from './execution-snapshot';
 
 class ExecutionOverview extends React.Component {
   constructor(props) {
@@ -44,12 +43,6 @@ class ExecutionOverview extends React.Component {
 
   searchOperationId(list, infix) {
     return list.filter((item) => item.asyncOperationId && item.asyncOperationId.includes(infix));
-  }
-
-  renderRowSubComponent(row) {
-    return (
-      <ExecutionSnapshot row={row} />
-    );
   }
 
   render() {
@@ -94,7 +87,6 @@ class ExecutionOverview extends React.Component {
             initialSortId='createdAt'
             filterAction={filterExecutions}
             filterClear={clearExecutionsFilter}
-            renderRowSubComponent={this.renderRowSubComponent}
           >
             <Search
               action={searchExecutions}
