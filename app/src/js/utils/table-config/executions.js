@@ -50,7 +50,7 @@ export const subColumns = [
         <>
           {value &&
             <div>
-              {value}
+              {value} &nbsp;
               {!failed && <FontAwesomeIcon icon={icon} color={iconColor} />}
               {failed && <Tooltip
                 className='tooltip--light'

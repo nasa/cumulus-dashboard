@@ -28,6 +28,7 @@ export default createReducer(initialState, {
     state.execution = data.execution;
     state.executionHistory = data.executionHistory;
     state.stateMachine = data.stateMachine;
+    state.warning = data.warning;
 
     if (state.searchString) {
       state.executionHistory.events = data.executionHistory.events.filter(

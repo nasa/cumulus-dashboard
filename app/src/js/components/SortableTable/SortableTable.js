@@ -54,6 +54,7 @@ IndeterminateCheckbox.propTypes = {
 const SortableTable = ({
   canSelect,
   changeSortProps,
+  className = '',
   clearSelected,
   data = [],
   getToggleColumnOptions,
@@ -331,7 +332,7 @@ const SortableTable = ({
           }
           {legend}
         </ListFilters>}
-      <div className='table' {...getTableProps()} ref={tableRef}>
+      <div className={`table ${className}`} {...getTableProps()} ref={tableRef}>
         <div className='thead'>
           <div className='tr'>
             {headerGroups.map((headerGroup) => (
@@ -487,6 +488,7 @@ const SortableTable = ({
 SortableTable.propTypes = {
   canSelect: PropTypes.bool,
   changeSortProps: PropTypes.func,
+  className: PropTypes.string,
   clearSelected: PropTypes.bool,
   data: PropTypes.array,
   getToggleColumnOptions: PropTypes.func,

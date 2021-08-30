@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Alert } from 'react-bootstrap';
 import SortableTable from '../SortableTable/SortableTable';
 import { getExecutionStatus } from '../../actions';
 import { formatEvents, subColumns } from '../../utils/table-config/executions';
@@ -13,27 +14,34 @@ const ExecutionSnapshot = ({
   const { original: { arn }, isExpanded } = row || {};
   const { map } = executionStatus || {};
   const currentExecutionStatus = map ? map[arn] : {};
-  const { execution, executionHistory, inflight } = currentExecutionStatus || {};
+  const { execution, executionHistory, inflight, warning, error } = currentExecutionStatus || {};
   const { events } = executionHistory || {};
+  const hasEvents = events?.length > 1;
 
   useEffect(() => {
-    if (isExpanded) {
+    if (isExpanded && !currentExecutionStatus) {
       dispatch(getExecutionStatus(arn));
     }
-  }, [dispatch, arn, isExpanded]);
+  }, [dispatch, arn, isExpanded, currentExecutionStatus]);
 
   if (!inflight && !execution) return null;
 
   return (
     <>
-      {inflight && 'Fetching snapshot...'}
+      {inflight && <Alert variant='info'>Fetching snapshot...</Alert>}
       {(isExpanded && !inflight) &&
-       <SortableTable
-         tableColumns={subColumns}
-         data={formatEvents(events)}
-         rowId='id'
-         hideFilters={true}
-       />
+        <>
+          {hasEvents &&
+            <SortableTable
+              className='sub-table'
+              tableColumns={subColumns}
+              data={formatEvents(events)}
+              rowId='id'
+              hideFilters={true}
+            />}
+          {warning && <Alert variant='warning'>{warning}</Alert>}
+          {error && <Alert variant='error'>{error}</Alert>}
+        </>
       }
     </>
   );
