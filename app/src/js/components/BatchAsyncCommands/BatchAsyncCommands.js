@@ -227,6 +227,7 @@ export class BatchCommand extends React.Component {
         >
           <DefaultModal
             className="batch-async-modal"
+            /* Need to separate cancel and close button functions because cancel is secondary and close is primary */
             onCancel={status ? this.cleanup : this.cancel}
             cancelButtonText={status ? 'Close' : 'Cancel'}
             onCloseModal={status ? this.cleanup : this.cancel}

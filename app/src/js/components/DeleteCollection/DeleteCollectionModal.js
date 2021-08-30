@@ -2,9 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert } from 'react-bootstrap';
 import DefaultModal from '../Modal/modal';
-// import Modal from '../Modal/modal';
-
-// import Button from '../Button/Button';
 import {
   collectionName as collectionLabelForId,
 } from '../../utils/format';

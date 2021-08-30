@@ -96,8 +96,8 @@
 .default-modal {
   .modal-body {
     text-align: center;
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 14px;
+    line-height: 20px;
     .error {
       word-wrap: break-word;
       margin: 1em auto;
@@ -151,7 +151,7 @@
       max-height:85%;
       margin-top: 50px;
       margin-bottom:50px;
-      max-width: 750px;
+      /*max-width: 750px;*/
     }
 
     .modal-body {
