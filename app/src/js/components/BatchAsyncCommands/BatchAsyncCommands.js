@@ -263,7 +263,7 @@ export class BatchCommand extends React.Component {
             }
             {(!inflight && !status) && (!modalOptions || !modalOptions.children) && (
               <>
-                <div>{confirmTextArray.map((confirmText, index) => (
+                <div>{confirmTextArray?.map((confirmText, index) => (
                   <React.Fragment key={index}>
                     {confirmText}
                   </React.Fragment>
