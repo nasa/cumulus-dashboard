@@ -36,7 +36,7 @@ class DeleteCollectionModal extends React.Component {
         onCancel={this.handleCancel}
         onConfirm={this.handleConfirm}
       >
-        <Alert variant="warning"><strong>Warning</strong></Alert>
+        <Alert variant="warning"><strong>Warning:</strong> This action can not be reversed once you submit it.</Alert>
         <p> You have submitted a request to delete the following collection: </p>
         <br></br>
         <h1>

@@ -5,7 +5,7 @@ import { collectionNameVersion } from '../../utils/format';
 const BatchDeleteWithGranulesContent = ({ selectionsWithGranules }) => (
   <>
     <span>
-      The following collections contain associated granules:
+    In order to complete this request, the granules associated with the following collections must first be deleted.
     </span>
     <ul className='collections-with-granules'>
       {selectionsWithGranules.map((collection, index) => {
@@ -16,8 +16,7 @@ const BatchDeleteWithGranulesContent = ({ selectionsWithGranules }) => (
       })}
     </ul>
     <span>
-      In order to complete this request, the granules associated with the above collections must first be deleted.
-      Would you like to be redirected to the Granules pages?
+      Would you like go to the Granules page to remove these granules?
     </span>
   </>
 );
