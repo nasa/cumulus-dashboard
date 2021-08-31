@@ -80,12 +80,12 @@ describe('Rules page', () => {
       cy.contains('.dropdown__options__btn', 'Options').click();
       cy.contains('.async__element', 'Disable').click();
 
-      cy.get('h4').contains(`You are disabling rule ${testRuleName}`);
+      cy.get('p').contains('You have submitted a request to disable the following rule:' && `${testRuleName}` && 'Are you sure you want to disable this rule?');
       cy.contains('.modal-footer button', 'Cancel').click();
 
       cy.contains('.dropdown__options__btn', 'Options').click();
       cy.contains('.async__element', 'Disable').click();
-      cy.get('h4').contains(`You are disabling rule ${testRuleName}`);
+      cy.get('p').contains('You have submitted a request to disable the following rule:' && `${testRuleName}` && 'Are you sure you want to disable this rule?');
       cy.contains('.modal-footer button', 'Confirm').click();
 
       cy.contains('.modal-body', `Rule ${testRuleName} was disabled`);

@@ -8,12 +8,12 @@ import {
   providerLink,
   fullDate,
   lastUpdated,
-  enableText,
   enableConfirm,
-  disableText,
   disableConfirm,
+  enableText,
+  disableText,
+  deleteText,
   rerunText,
-  deleteText
 } from '../../utils/format';
 import {
   getRule,

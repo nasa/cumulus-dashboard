@@ -32,6 +32,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2142**
   - Changed styling for sidebar button
   - Added tooltip for sidebar button
+- **CUMULUS-2358**
+  - Refactored various modals in order to reflect the StandardModal design
+  - Changed styling of Modal components for aesthetics
+- **CUMULUS-2360**
+  - Implemented Warning alert into every delete and remove modals
 - **CUMULUS-2502**
   - Metrics ES searches have been updated to run against only the index
     patterns provided, improving performance and saving resources.
@@ -46,7 +51,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2524**
   - CSS and UI tweaks to padding/margin, width, and color/contrast
 - **CUMULUS-2534**
-  - Added a copy button to errors pages so the error can be copied and searched up on the internet. 
+  - Added a copy button to errors pages so the error can be copied and searched up on the internet.
 - **CUMULUS-2535**
   - Ensured that the KPI cards would be updated on all tabs whenever the page was updated
 - **CUMULUS-2540**
@@ -54,15 +59,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2544**
   - Changed the timestamp so that the date and time is shown rather than time elapsed since last occurrence
 - **CUMULUS-2551**
-  - Added a sortable column to individual granules tab so you can sort each file within the granule by size. 
+  - Added a sortable column to individual granules tab so you can sort each file within the granule by size.
 - **CUMULUS-2554**
-  - Add focus styles for various browser support and keyboard/mouse inputs 
+  - Add focus styles for various browser support and keyboard/mouse inputs
 - **CUMULUS-2573**
   - Changed the dropdown menu in the individual providers page into a delete button.
 - **CUMULUS-2579**
   - Fixed React Issue with the Footer pertaining to missing keys.
 - **CUMULUS-2604**
   - Deleted Collections column in the Providers overview page.
+- **CUMULUS-2616**
+  - added .gitattributes file that prevents windows from changing the line endings on checkout from github.
 
 ### Fixed
 
