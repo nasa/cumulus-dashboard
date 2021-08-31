@@ -68,6 +68,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Deleted Collections column in the Providers overview page.
 - **CUMULUS-2616**
   - added .gitattributes file that prevents windows from changing the line endings on checkout from github.
+- **CUMULUS-2650**
+  - Modal CSS styling tweaks
 
 ### Fixed
 
