@@ -118,10 +118,7 @@
 
       li {
         font-weight: 700;
-        text-align: left;
         line-height: 24px;
-        list-style-type: circle;
-        margin-left: 5em;
 
         .Collapsible__contentInner {
           font-weight: normal;
@@ -135,14 +132,15 @@
       margin-bottom: 2em;
     }
 
-    p, span {
+    p,
+    span {
       margin: 0 0 1em 0;
     }
 
     .disclaimer {
       margin: 0 0 2em 0;
       color: #968a23;
-      background-color: rgba($color: #fcf7d1, $alpha: .50);
+      background-color: rgba($color: #fcf7d1, $alpha: 0.5);
       font-weight: 400;
       border-bottom: 1px solid #968a23;
       border-top: 1px solid #968a23;
@@ -181,7 +179,7 @@
       max-height: 85%;
       margin-top: 50px;
       margin-bottom: 50px;
-      /*max-width: 750px;*/
+      min-width: 750px;
     }
 
     .modal-body {

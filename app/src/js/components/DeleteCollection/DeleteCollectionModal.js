@@ -40,7 +40,7 @@ class DeleteCollectionModal extends React.Component {
         <p> You have submitted a request to delete the following collection: </p>
         <br></br>
         <h1>
-          <b>{collectionLabelForId(this.props.collectionLabel)}</b>
+          <strong>{collectionLabelForId(this.props.collectionLabel)}</strong>
         </h1>
         <br></br>
         <p> Are you sure you want to permanently delete this collection? </p>

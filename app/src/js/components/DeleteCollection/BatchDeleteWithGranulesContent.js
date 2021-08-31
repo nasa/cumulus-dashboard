@@ -16,7 +16,7 @@ const BatchDeleteWithGranulesContent = ({ selectionsWithGranules }) => (
       })}
     </ul>
     <span>
-      Would you like go to the Granules page to remove these granules?
+      Would you like to go to the Granules page to remove these granules?
     </span>
   </>
 );
