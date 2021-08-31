@@ -8,6 +8,6 @@ export const initialState = {
 };
 export default createReducer(initialState, {
   [SORTS]: (state, action) => {
-    state[action.tableID] = action.sortBy;
+    state[action.tableId] = action.sortBy;
   },
 });

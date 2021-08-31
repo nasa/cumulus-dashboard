@@ -13,11 +13,7 @@ import ListFilters from '../ListActions/ListFilters';
 import Search from '../Search/search';
 import { tableColumns } from '../../utils/table-config/workflows';
 
-const WorkflowOverview = ({
-  dispatch,
-  queryParams,
-  workflows
-}) => {
+const WorkflowOverview = ({ dispatch, queryParams, workflows }) => {
   const count = workflows.list.data.length;
 
   return (
@@ -40,7 +36,8 @@ const WorkflowOverview = ({
           tableColumns={tableColumns}
           query={{ ...queryParams }}
           rowId="name"
-          tableID = "WorkflowsID">
+          tableId="workflows"
+        >
           <Search
             action={searchWorkflows}
             clear={clearWorkflowsSearch}

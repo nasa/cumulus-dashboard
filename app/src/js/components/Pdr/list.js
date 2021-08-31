@@ -87,7 +87,7 @@ const ActivePdrs = ({ dispatch, location, pdrs, queryParams }) => {
           initialSortId="timestamp"
           filterAction={filterPdrs}
           filterClear={clearPdrsFilter}
-          tableID = {'PDRsTable'}
+          tableId="pdrs"
         >
           <ListFilters>
             <Search

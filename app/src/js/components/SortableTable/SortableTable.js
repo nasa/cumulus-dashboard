@@ -66,7 +66,7 @@ const SortableTable = ({
   shouldManualSort = false,
   shouldUsePagination = false,
   tableColumns = [],
-  tableID,
+  tableId,
   initialSortBy = [],
 }) => {
   const defaultColumn = useMemo(
@@ -82,7 +82,7 @@ const SortableTable = ({
   const [leftScrollButtonVisibility, setLeftScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
   const [rightScrollButtonVisibility, setRightScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
   let sortByState;
-  if (initialSortBy.length > 0) {
+  if (initialSortBy?.length > 0) {
     sortByState = initialSortBy;
   } else if (initialSortId) {
     sortByState = [{ id: initialSortId, desc: true }];
@@ -181,11 +181,16 @@ const SortableTable = ({
   }, [selectedRowIds, onSelect]);
 
   useEffect(() => {
-    if (typeof changeSortProps === 'function' && tableID) {
-      changeSortProps(sortBy);
-      dispatch(sortPersist(tableID, sortBy));
+    if (tableId) {
+      dispatch(sortPersist(tableId, sortBy));
     }
-  }, [changeSortProps, dispatch, tableID, sortBy]);
+  }, [dispatch, tableId, sortBy]);
+
+  useEffect(() => {
+    if (typeof changeSortProps === 'function') {
+      changeSortProps(sortBy);
+    }
+  }, [changeSortProps, sortBy]);
 
   useEffect(() => {
     if (typeof getToggleColumnOptions === 'function') {
@@ -499,7 +504,7 @@ SortableTable.propTypes = {
   shouldManualSort: PropTypes.bool,
   shouldUsePagination: PropTypes.bool,
   tableColumns: PropTypes.array,
-  tableID: PropTypes.string,
+  tableId: PropTypes.string,
   initialSortBy: PropTypes.array,
 };
 

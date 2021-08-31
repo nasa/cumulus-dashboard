@@ -205,7 +205,7 @@ export class BatchCommand extends React.Component {
 
     // show button as disabled when loading, and in the delay before we clean up.
     const buttonClass = inflight ? 'button--disabled' : '';
-    const confirmText = confirm(todo);
+    const confirmTextArray = confirm(todo);
     const percentage = todo ? ((completed * 100) / todo).toFixed(2) : 0;
 
     return (
@@ -263,13 +263,16 @@ export class BatchCommand extends React.Component {
             }
             {(!inflight && !status) && (!modalOptions || !modalOptions.children) && (
               <>
-                <div>{confirmText}</div>
+                <div>{confirmTextArray.map((confirmText, index) => (
+                  <React.Fragment key={index}>
+                    {confirmText}
+                  </React.Fragment>
+                ))}</div>
                 <div className="modal__internal modal__formcenter">
                   {confirmOptions &&
                     confirmOptions.map((option) => (
                       <div key={`option-${confirmOptions.indexOf(option)}`}>
                         {option}
-                        <br />
                       </div>))
                   }
                 </div>

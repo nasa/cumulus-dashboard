@@ -42,16 +42,16 @@ import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 const breadcrumbConfig = [
   {
     label: 'Dashboard Home',
-    href: '/'
+    href: '/',
   },
   {
     label: 'Granules',
-    active: true
-  }
+    active: true,
+  },
 ];
 
 class GranulesOverview extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.generateQuery = this.generateQuery.bind(this);
     this.generateBulkActions = this.generateBulkActions.bind(this);
@@ -65,40 +65,40 @@ class GranulesOverview extends React.Component {
     this.state = {
       workflow: this.props.workflowOptions[0],
       workflowMeta: defaultWorkflowMeta,
-      selected: []
+      selected: [],
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.queryMeta();
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (!isEqual(prevProps.workflowOptions, this.props.workflowOptions)) {
       this.setState({ workflow: this.props.workflowOptions[0] }); // eslint-disable-line react/no-did-update-set-state
     }
   }
 
-  queryMeta () {
+  queryMeta() {
     const { dispatch } = this.props;
     dispatch(listWorkflows());
   }
 
-  generateQuery () {
+  generateQuery() {
     const { queryParams } = this.props;
     return { ...queryParams };
   }
 
-  generateBulkActions () {
+  generateBulkActions() {
     const actionConfig = {
       execute: {
         options: this.getExecuteOptions(),
-        action: this.applyWorkflow
+        action: this.applyWorkflow,
       },
       recover: {
         options: this.getExecuteOptions(),
-        action: this.applyRecoveryWorkflow
-      }
+        action: this.applyRecoveryWorkflow,
+      },
     };
     const { granules, config } = this.props;
     const { selected } = this.state;
@@ -110,26 +110,26 @@ class GranulesOverview extends React.Component {
     return actions;
   }
 
-  selectWorkflow (selector, workflow) {
+  selectWorkflow(_selector, workflow) {
     this.setState({ workflow });
   }
 
-  setWorkflowMeta (workflowMeta) {
+  setWorkflowMeta(workflowMeta) {
     this.setState({ workflowMeta });
   }
 
-  applyWorkflow (granuleId) {
+  applyWorkflow(granuleId) {
     const { workflow, workflowMeta } = this.state;
     const { meta } = JSON.parse(workflowMeta);
     this.setState({ workflowMeta: defaultWorkflowMeta });
     return applyWorkflowToGranule(granuleId, workflow, meta);
   }
 
-  applyRecoveryWorkflow (granuleId) {
+  applyRecoveryWorkflow(granuleId) {
     return applyRecoveryWorkflowToGranule(granuleId);
   }
 
-  getExecuteOptions () {
+  getExecuteOptions() {
     return [
       executeDialog({
         selectHandler: this.selectWorkflow,
@@ -138,7 +138,7 @@ class GranulesOverview extends React.Component {
         options: this.props.workflowOptions,
         initialMeta: this.state.workflowMeta,
         metaHandler: this.setWorkflowMeta,
-      })
+      }),
     ];
   }
 
@@ -146,7 +146,7 @@ class GranulesOverview extends React.Component {
     this.setState({ selected });
   }
 
-  render () {
+  render() {
     const { collections, granules, providers } = this.props;
     const { list } = granules;
     const { dropdowns } = collections;
@@ -154,23 +154,30 @@ class GranulesOverview extends React.Component {
     const { count, queriedAt } = list.meta;
 
     return (
-      <div className='page__component'>
+      <div className="page__component">
         <Helmet>
           <title> Granules Overview </title>
         </Helmet>
-        <section className='page__section page__section__controls'>
+        <section className="page__section page__section__controls">
           <Breadcrumbs config={breadcrumbConfig} />
         </section>
-        <section className='page__section page__section__header-wrapper'>
-          <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description '>{strings.granule_overview}</h1>
+        <section className="page__section page__section__header-wrapper">
+          <div className="page__section__header">
+            <h1 className="heading--large heading--shared-content with-description ">
+              {strings.granule_overview}
+            </h1>
             {lastUpdated(queriedAt)}
-            <Overview type='granules' inflight={granules.list.inflight} />
+            <Overview type="granules" inflight={granules.list.inflight} />
           </div>
         </section>
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>{strings.granules} <span className='num-title'>{count ? ` ${tally(count)}` : 0}</span></h2>
+        <section className="page__section">
+          <div className="heading__wrapper--border">
+            <h2 className="heading--medium heading--shared-content with-description">
+              {strings.granules}{' '}
+              <span className="num-title">
+                {count ? ` ${tally(count)}` : 0}
+              </span>
+            </h2>
           </div>
           <List
             list={list}
@@ -179,21 +186,21 @@ class GranulesOverview extends React.Component {
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             groupAction={groupAction}
-            rowId='granuleId'
+            rowId="granuleId"
             initialHiddenColumns={defaultHiddenColumns}
-            initialSortId='timestamp'
+            initialSortId="timestamp"
             filterAction={filterGranules}
             filterClear={clearGranulesFilter}
             onSelect={this.updateSelection}
             toggleColumnOptionsAction={toggleGranulesTableColumns}
-            tableID = {'granulesTable'}
+            tableId="granules-overview"
           >
             <Search
               action={searchGranules}
               clear={clearGranulesSearch}
-              label='Search'
+              label="Search"
               labelKey="granuleId"
-              placeholder='Granule ID'
+              placeholder="Granule ID"
               searchKey="granules"
             />
             <ListFilters>
@@ -201,10 +208,10 @@ class GranulesOverview extends React.Component {
                 options={statusOptions}
                 action={filterGranules}
                 clear={clearGranulesFilter}
-                paramKey='status'
-                label='Status'
+                paramKey="status"
+                label="Status"
                 inputProps={{
-                  placeholder: 'All'
+                  placeholder: 'All',
                 }}
               />
               <Dropdown
@@ -212,7 +219,7 @@ class GranulesOverview extends React.Component {
                 options={get(dropdowns, ['collectionName', 'options'])}
                 action={filterGranules}
                 clear={clearGranulesFilter}
-                paramKey='collectionId'
+                paramKey="collectionId"
                 label={strings.collection}
                 inputProps={{
                   placeholder: 'All',
@@ -251,11 +258,15 @@ GranulesOverview.propTypes = {
 
 export { GranulesOverview };
 
-export default withRouter(withQueryParams()(connect((state) => ({
-  collections: state.collections,
-  config: state.config,
-  granules: state.granules,
-  selected: state.selected,
-  workflowOptions: workflowOptionNames(state),
-  providers: state.providers
-}))(GranulesOverview)));
+export default withRouter(
+  withQueryParams()(
+    connect((state) => ({
+      collections: state.collections,
+      config: state.config,
+      granules: state.granules,
+      selected: state.selected,
+      workflowOptions: workflowOptionNames(state),
+      providers: state.providers,
+    }))(GranulesOverview)
+  )
+);

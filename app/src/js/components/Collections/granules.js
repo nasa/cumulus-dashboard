@@ -159,7 +159,7 @@ const CollectionGranules = ({
           tableColumns={tableColumns}
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
-          tableID = {'granulesTable'}
+          tableId="granules"
         >
           <Search
             action={searchGranules}
