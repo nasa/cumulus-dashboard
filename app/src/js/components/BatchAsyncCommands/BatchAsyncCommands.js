@@ -273,6 +273,7 @@ export class BatchCommand extends React.Component {
                     confirmOptions.map((option) => (
                       <div key={`option-${confirmOptions.indexOf(option)}`}>
                         {option}
+                        <br />
                       </div>))
                   }
                 </div>
