@@ -38,11 +38,11 @@ class DeleteCollectionModal extends React.Component {
       >
         <Alert variant="warning"><strong>Warning:</strong> This action can not be reversed once you submit it.</Alert>
         <p> You have submitted a request to delete the following collection: </p>
-        <br></br>
+        <br />
         <h1>
           <strong>{collectionLabelForId(this.props.collectionLabel)}</strong>
         </h1>
-        <br></br>
+        <br />
         <p> Are you sure you want to permanently delete this collection? </p>
         <button
           className='button button--cancel button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--left'

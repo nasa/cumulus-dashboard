@@ -9,6 +9,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Alert } from 'react-bootstrap';
+import isArray from 'lodash/isArray';
 import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import DefaultModal from '../Modal/modal';
 import ErrorReport from '../Errors/report';
@@ -205,7 +206,8 @@ export class BatchCommand extends React.Component {
 
     // show button as disabled when loading, and in the delay before we clean up.
     const buttonClass = inflight ? 'button--disabled' : '';
-    const confirmText = confirm(todo);
+    const confirmResult = confirm(todo);
+    const confirmTextArray = isArray(confirmResult) ? confirmResult : [confirmResult];
     const percentage = todo ? ((completed * 100) / todo).toFixed(2) : 0;
 
     return (
@@ -264,7 +266,11 @@ export class BatchCommand extends React.Component {
             }
             {(!inflight && !status) && (!modalOptions || !modalOptions.children) && (
               <>
-                <div>{confirmText}</div>
+                <div>{confirmTextArray.map((confirmText, index) => (
+                  <React.Fragment key={index}>
+                    {confirmText}
+                  </React.Fragment>
+                ))}</div>
                 <div className="modal__internal modal__formcenter">
                   {confirmOptions &&
                     confirmOptions.map((option) => (

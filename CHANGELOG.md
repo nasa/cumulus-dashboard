@@ -46,6 +46,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Update column show/hide component with new styling and "reset to default interaction for each table
 - **CUMULUS-2506**
   - Adds horizontal scroll buttons to tables improving accessibily
+- **CUMULUS-2511** 
+  - Ensured that sort state will persist through page changes.
 - **CUMULUS-2524**
   - CSS and UI tweaks to padding/margin, width, and color/contrast
 - **CUMULUS-2534**

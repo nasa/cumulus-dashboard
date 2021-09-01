@@ -94,7 +94,11 @@ export const numLargeTooltip = (numberstring) => (
     className="tooltip--light"
     id="card-total-tooltip"
     placement="right"
-    target={<span className="num--large num--large--tooltip">{tally(numberstring)}</span>}
+    target={
+      <span className="num--large num--large--tooltip">
+        {tally(numberstring)}
+      </span>
+    }
     tip={fullStatTotal(numberstring)}
   />
 );
@@ -157,12 +161,7 @@ const getIndicator = (prop) => {
   return indicator;
 };
 
-export const IndicatorWithTooltip = ({
-  granuleId,
-  repo,
-  value,
-  className,
-}) => {
+export const IndicatorWithTooltip = ({ granuleId, repo, value, className }) => {
   const indicator = getIndicator(value);
   const { color, text } = indicator;
   return (
@@ -170,7 +169,11 @@ export const IndicatorWithTooltip = ({
       className="tooltip--blue"
       id={`${granuleId}-${repo}-indicator-tooltip`}
       placement="right"
-      target={<span className={`status-indicator status-indicator--${color} ${className}`}></span>}
+      target={
+        <span
+          className={`status-indicator status-indicator--${color} ${className}`}
+        ></span>
+      }
       tip={text}
     />
   );
@@ -210,20 +213,21 @@ export const CopyCellPopover = ({ cellContent, id, popoverContent, value }) => {
       placement="bottom"
       popover={true}
       target={cellContent}
-      popoverContent={(
+      popoverContent={
         <>
-          <div className='popover-body--main'>{popoverContent}</div>
-          <div className='popover-body--footer'>
+          <div className="popover-body--main">{popoverContent}</div>
+          <div className="popover-body--footer">
             {copyStatus && <span>{copyStatus}</span>}
-            <button 
-              className='button button--small button--no-left-padding' 
+
+            <button
+              className="button button--small button--no-left-padding"
               onClick={copyToClipboard}
             >
               <FontAwesomeIcon icon={faCopy} /> Copy
             </button>
           </div>
         </>
-      )}
+      }
     />
   );
 };
@@ -401,6 +405,7 @@ export const collectionHrefFromNameVersion = ({ name, version } = {}) => {
   if (!name || !version) return nullValue;
   return `/collections/collection/${name}/${encodeURIComponent(version)}`;
 };
+
 
 /* Modal Text */
 export const enableText = (name) => [
