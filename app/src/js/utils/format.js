@@ -406,7 +406,6 @@ export const collectionHrefFromNameVersion = ({ name, version } = {}) => {
   return `/collections/collection/${name}/${encodeURIComponent(version)}`;
 };
 
-
 /* Modal Text */
 export const enableText = (name) => [
   <p>You have submitted a request to enable the following rule:</p>,
