@@ -94,7 +94,11 @@ export const numLargeTooltip = (numberstring) => (
     className="tooltip--light"
     id="card-total-tooltip"
     placement="right"
-    target={<span className="num--large num--large--tooltip">{tally(numberstring)}</span>}
+    target={
+      <span className="num--large num--large--tooltip">
+        {tally(numberstring)}
+      </span>
+    }
     tip={fullStatTotal(numberstring)}
   />
 );
@@ -157,12 +161,7 @@ const getIndicator = (prop) => {
   return indicator;
 };
 
-export const IndicatorWithTooltip = ({
-  granuleId,
-  repo,
-  value,
-  className,
-}) => {
+export const IndicatorWithTooltip = ({ granuleId, repo, value, className }) => {
   const indicator = getIndicator(value);
   const { color, text } = indicator;
   return (
@@ -170,7 +169,11 @@ export const IndicatorWithTooltip = ({
       className="tooltip--blue"
       id={`${granuleId}-${repo}-indicator-tooltip`}
       placement="right"
-      target={<span className={`status-indicator status-indicator--${color} ${className}`}></span>}
+      target={
+        <span
+          className={`status-indicator status-indicator--${color} ${className}`}
+        ></span>
+      }
       tip={text}
     />
   );
@@ -210,15 +213,20 @@ export const CopyCellPopover = ({ cellContent, id, popoverContent, value }) => {
       placement="bottom"
       popover={true}
       target={cellContent}
-      popoverContent={(
+      popoverContent={
         <>
-          <div className='popover-body--main'>{popoverContent}</div>
-          <div className='popover-body--footer'>
+          <div className="popover-body--main">{popoverContent}</div>
+          <div className="popover-body--footer">
             {copyStatus && <span>{copyStatus}</span>}
-            <button className='button button--small button--no-left-padding' onClick={copyToClipboard}><FontAwesomeIcon icon={faCopy}/> Copy</button>
+            <button
+              className="button button--small button--no-left-padding"
+              onClick={copyToClipboard}
+            >
+              <FontAwesomeIcon icon={faCopy} /> Copy
+            </button>
           </div>
         </>
-      )}
+      }
     />
   );
 };
@@ -397,80 +405,221 @@ export const collectionHrefFromNameVersion = ({ name, version } = {}) => {
   return `/collections/collection/${name}/${encodeURIComponent(version)}`;
 };
 
-export const enableText = (name) => ['You have submitted a request to enable the following rule:',
-  <br></br>, <br></br>, <b>{name}</b>, <br></br>, <br></br>,
-  'Are you sure you want to enable this rule?'];
+export const enableText = (name) => [
+  'You have submitted a request to enable the following rule:',
+  <br />,
+  <br />,
+  <b>{name}</b>,
+  <br />,
+  <br />,
+  'Are you sure you want to enable this rule?',
+];
 
 export const enableConfirm = (name) => `Rule ${name} was enabled`;
 
-export const disableText = (name) => ['You have submitted a request to disable the following rule:',
-  <br></br>, <br></br>, <b>{name}</b>, <br></br>, <br></br>,
-  'Are you sure you want to disable this rule?'];
+export const disableText = (name) => [
+  'You have submitted a request to disable the following rule:',
+  <br />,
+  <br />,
+  <b>{name}</b>,
+  <br />,
+  <br />,
+  'Are you sure you want to disable this rule?',
+];
 
 export const disableConfirm = (name) => `Rule ${name} was disabled`;
 
-export const deleteText = (name) => [<Alert variant="warning"><strong>Warning</strong></Alert>,
+export const deleteText = (name) => [
+  <Alert variant="warning">
+    <strong>Warning</strong>
+  </Alert>,
   'You have submitted a request to permanently delete the following:',
-  <br></br>, <br></br>, <b>{name}</b>, <br></br>, <br></br>,
-  'Are you sure you want to permanently delete? Click confirm to proceed.'];
+  <br />,
+  <br />,
+  <b>{name}</b>,
+  <br />,
+  <br />,
+  'Are you sure you want to permanently delete? Click confirm to proceed.',
+];
 
-export const rerunText = (name) => ['You have submitted a request to rerun the following:',
-  <br></br>, <br></br>, <b>{name}</b>, <br></br>, <br></br>,
-  'Are you sure you want to rerun?'];
+export const rerunText = (name) => [
+  'You have submitted a request to rerun the following:',
+  <br />,
+  <br />,
+  <b>{name}</b>,
+  <br />,
+  <br />,
+  'Are you sure you want to rerun?',
+];
 
-export const reingestText = (name) => ['You have submitted a request to reingest the following granule:',
-  <br></br>, <br></br>, <b>{name}</b>, <br></br>, <br></br>,
-  'Note: the granule files will be overwritten, are you sure you want to reingest this Granule?'];
+export const reingestText = (name) => [
+  'You have submitted a request to reingest the following granule:',
+  <br />,
+  <br />,
+  <b>{name}</b>,
+  <br />,
+  <br />,
+  'Note: the granule files will be overwritten, are you sure you want to reingest this Granule?',
+];
 
-export const recoverCollectionText = (d) => ['You have submitted a Collection recovery request',
-  <br></br>, <br></br>, <b>Recover {d} Collection{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
-  'Click confirm to proceed with the Collection Recovery'];
+export const recoverCollectionText = (d) => [
+  'You have submitted a Collection recovery request',
+  <br />,
+  <br />,
+  <b>
+    Recover {d} Collection{d > 1 ? 's' : ''}
+  </b>,
+  <br />,
+  <br />,
+  'Click confirm to proceed with the Collection Recovery',
+];
 
-export const recoverGranules = (d) => ['You have submitted the following request:',
-  <br></br>, <br></br>, <b>Recover {d} Granule{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
-  `Are you sure you want to recover ${d > 1 ? 'these granules' : 'this granule'}?`];
+export const recoverGranules = (d) => [
+  'You have submitted the following request:',
+  <br />,
+  <br />,
+  <b>
+    Recover {d} Granule{d > 1 ? 's' : ''}
+  </b>,
+  <br />,
+  <br />,
+  `Are you sure you want to recover ${
+    d > 1 ? 'these granules' : 'this granule'
+  }?`,
+];
 
-export const recoverCollections = (d) => ['You have submitted a Collection recovery request',
-  <br></br>, <br></br>, <b>Recover {d} Collection{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
-  'Click confirm to proceed with the Collection Recovery'];
+export const recoverCollections = (d) => [
+  'You have submitted a Collection recovery request',
+  <br />,
+  <br />,
+  <b>
+    Recover {d} Collection{d > 1 ? 's' : ''}
+  </b>,
+  <br />,
+  <br />,
+  'Click confirm to proceed with the Collection Recovery',
+];
 
-export const removeFromCmr = (name) => [<Alert variant="warning"><strong>Warning</strong></Alert>,
+export const removeFromCmr = (name) => [
+  <Alert variant="warning">
+    <strong>Warning</strong>
+  </Alert>,
   'You have submitted a request to remove this Granule from CMR:',
-  <br></br>, <br></br>, <b>{name}</b>, <br></br>, <br></br>,
-  'Are you sure you want to permanently remove this Granule from CMR?'];
+  <br />,
+  <br />,
+  <b>{name}</b>,
+  <br />,
+  <br />,
+  'Are you sure you want to permanently remove this Granule from CMR?',
+];
 
-export const removeFromCmrDelete = (d) => [<Alert variant="warning"><strong>Warning</strong></Alert>,
+export const removeFromCmrDelete = (d) => [
+  <Alert variant="warning">
+    <strong>Warning</strong>
+  </Alert>,
   `You have submitted a request to delete ${d} Granule${d > 1 ? 's' : ''}`,
-  <br></br>, <br></br>, <b>Selection contains granules that are published to CMR which must be
-  removed before deleting</b>, <br></br>, <br></br>, 'Remove published granules from CMR and delete?'];
+  <br />,
+  <br />,
+  <b>
+    Selection contains granules that are published to CMR which must be removed
+    before deleting
+  </b>,
+  <br />,
+  <br />,
+  'Remove published granules from CMR and delete?',
+];
 
-export const removeGranulesFromCmr = (d) => [<Alert variant="warning"><strong>Warning</strong></Alert>,
+export const removeGranulesFromCmr = (d) => [
+  <Alert variant="warning">
+    <strong>Warning</strong>
+  </Alert>,
   'You have submitted the following request:',
-  <br></br>, <br></br>, <b>Remove {d} Granule{d > 1 ? 's' : ''} from CMR </b>, <br></br>, <br></br>,
-  `Are you sure you want to permanently remove ${d > 1 ? 'these granules' : 'this granule'} from CMR?`];
+  <br />,
+  <br />,
+  <b>
+    Remove {d} Granule{d > 1 ? 's' : ''} from CMR{' '}
+  </b>,
+  <br />,
+  <br />,
+  `Are you sure you want to permanently remove ${
+    d > 1 ? 'these granules' : 'this granule'
+  } from CMR?`,
+];
 
-export const deleteGranules = (d) => [<Alert variant="warning"><strong>Warning</strong></Alert>,
+export const deleteGranules = (d) => [
+  <Alert variant="warning">
+    <strong>Warning</strong>
+  </Alert>,
   'You have submitted the following request:',
-  <br></br>, <br></br>, <b>Delete {d} Granule{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
-  `Are you sure you want to permanently delete ${d > 1 ? 'these granules?' : 'this granule?'}`];
+  <br />,
+  <br />,
+  <b>
+    Delete {d} Granule{d > 1 ? 's' : ''}
+  </b>,
+  <br />,
+  <br />,
+  `Are you sure you want to permanently delete ${
+    d > 1 ? 'these granules?' : 'this granule?'
+  }`,
+];
 
-export const deletePdrs = (d) => [<Alert variant="warning"><strong>Warning</strong></Alert>,
+export const deletePdrs = (d) => [
+  <Alert variant="warning">
+    <strong>Warning</strong>
+  </Alert>,
   'You have submitted the following request:',
-  <br></br>, <br></br>, <b>Delete {d} PDR{d > 1 ? 's' : ''} </b>, <br></br>, <br></br>,
-  `Are you sure you want to permanently remove ${d > 1 ? 'these PDRS?' : 'this PDR?'}`];
+  <br />,
+  <br />,
+  <b>
+    Delete {d} PDR{d > 1 ? 's' : ''}{' '}
+  </b>,
+  <br />,
+  <br />,
+  `Are you sure you want to permanently remove ${
+    d > 1 ? 'these PDRS?' : 'this PDR?'
+  }`,
+];
 
-export const enableRules = (d) => ['You have submitted the following request:',
-  <br></br>, <br></br>, <b>Enable {d} Rule{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
-  `Are you sure you want to enable ${d > 1 ? 'these rules?' : 'this rule?'}`];
-
-export const disableRules = (d) => ['You have submitted the following request:',
-  <br></br>, <br></br>, <b>Disable {d} Rule{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
-  `Are you sure you want to disable ${d > 1 ? 'these rules?' : 'this rule?'}`];
-
-export const deleteRules = (d) => [<Alert variant="warning"><strong>Warning</strong></Alert>,
+export const enableRules = (d) => [
   'You have submitted the following request:',
-  <br></br>, <br></br>, <b>Delete {d} Rule{d > 1 ? 's' : ''}</b>, <br></br>, <br></br>,
-  `Are you sure you want to permanently delete ${d > 1 ? 'these rules?' : 'this rule?'}`];
+  <br />,
+  <br />,
+  <b>
+    Enable {d} Rule{d > 1 ? 's' : ''}
+  </b>,
+  <br />,
+  <br />,
+  `Are you sure you want to enable ${d > 1 ? 'these rules?' : 'this rule?'}`,
+];
+
+export const disableRules = (d) => [
+  'You have submitted the following request:',
+  <br />,
+  <br />,
+  <b>
+    Disable {d} Rule{d > 1 ? 's' : ''}
+  </b>,
+  <br />,
+  <br />,
+  `Are you sure you want to disable ${d > 1 ? 'these rules?' : 'this rule?'}`,
+];
+
+export const deleteRules = (d) => [
+  <Alert variant="warning">
+    <strong>Warning</strong>
+  </Alert>,
+  'You have submitted the following request:',
+  <br />,
+  <br />,
+  <b>
+    Delete {d} Rule{d > 1 ? 's' : ''}
+  </b>,
+  <br />,
+  <br />,
+  `Are you sure you want to permanently delete ${
+    d > 1 ? 'these rules?' : 'this rule?'
+  }`,
+];
 
 export const buildRedirectUrl = ({ origin, pathname, hash }) => {
   const hasQuery = hash.indexOf('?');

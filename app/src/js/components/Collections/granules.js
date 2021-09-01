@@ -159,6 +159,7 @@ const CollectionGranules = ({
           tableColumns={tableColumns}
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
+          tableId="granules"
         >
           <Search
             action={searchGranules}

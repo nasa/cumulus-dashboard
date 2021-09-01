@@ -123,6 +123,7 @@ const ReconciliationReportList = ({
           initialSortId="createdAt"
           filterAction={filterReconciliationReports}
           filterClear={clearReconciliationReportsFilter}
+          tableId="reconciliationReports"
         >
           <Search
             action={searchReconciliationReports}
