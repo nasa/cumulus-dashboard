@@ -533,6 +533,7 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
 
     &__arrow:after, &__arrow--sm:after, &__arrow--lg:after{
       left: 130%;
+      right: 1%;
       top: .75em;
     }
 
@@ -541,7 +542,7 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
     }
 
     &__arrow--sm:hover:after {
-      left: 73%;
+      left: 70%;
     }
 
     &__arrow--lg:hover:after {
