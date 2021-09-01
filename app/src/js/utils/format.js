@@ -215,7 +215,12 @@ export const CopyCellPopover = ({ cellContent, id, popoverContent, value }) => {
           <div className='popover-body--main'>{popoverContent}</div>
           <div className='popover-body--footer'>
             {copyStatus && <span>{copyStatus}</span>}
-            <button className='button button--small button--no-left-padding' onClick={copyToClipboard}><FontAwesomeIcon icon={faCopy} /> Copy</button>
+            <button 
+              className='button button--small button--no-left-padding' 
+              onClick={copyToClipboard}
+            >
+              <FontAwesomeIcon icon={faCopy} /> Copy
+            </button>
           </div>
         </>
       )}
@@ -397,6 +402,7 @@ export const collectionHrefFromNameVersion = ({ name, version } = {}) => {
   return `/collections/collection/${name}/${encodeURIComponent(version)}`;
 };
 
+/* Modal Text */
 export const enableText = (name) => [
   <p>You have submitted a request to enable the following rule:</p>,
   <strong>{name}</strong>,
@@ -503,6 +509,7 @@ export const deleteRules = (d) => [
   <p><strong>Delete {d} Rule{d > 1 ? 's' : ''}</strong></p>,
   `Are you sure you want to permanently delete ${d > 1 ? 'these rules?' : 'this rule?'}`
 ];
+/* End of Modal Text */
 
 export const buildRedirectUrl = ({ origin, pathname, hash }) => {
   const hasQuery = hash.indexOf('?');
