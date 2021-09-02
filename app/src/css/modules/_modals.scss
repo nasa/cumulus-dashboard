@@ -65,25 +65,33 @@
   background-color: $royal-purple;
 }
 
-.modal .modal__internal .error__report{
+.modal .modal__internal .error__report {
   margin: 0em 0em 5em 0em;
 }
 
-.modal__loading--progress--success { background-color: $light-green; }
-.modal__loading--progress--error { background-color: $error-red; }
+.modal__loading--progress--success {
+  background-color: $light-green;
+}
+.modal__loading--progress--error {
+  background-color: $error-red;
+}
 
-.modal__title--success { color: $light-green; }
-.modal__title--error { color: $error-red; }
+.modal__title--success {
+  color: $light-green;
+}
+.modal__title--error {
+  color: $error-red;
+}
 
 // Login Modal
-.oauth-modal__title.modal-title.h4{
+.oauth-modal__title.modal-title.h4 {
   text-align: center;
   font-size: 1.125em;
   font-weight: $base-font-semibold;
   color: $ocean-blue;
 }
 
-.oauth-modal .modal-footer{
+.oauth-modal .modal-footer {
   display: flex;
   justify-content: center;
   margin-bottom: 2em;
@@ -96,8 +104,9 @@
 .default-modal {
   .modal-body {
     text-align: center;
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 14px;
+    line-height: 20px;
+
     .error {
       word-wrap: break-word;
       margin: 1em auto;
@@ -108,7 +117,8 @@
       margin: 1em;
 
       li {
-        font-weight: bold;
+        font-weight: 700;
+        line-height: 24px;
 
         .Collapsible__contentInner {
           font-weight: normal;
@@ -116,6 +126,25 @@
           color: $error-red;
         }
       }
+    }
+
+    .alert {
+      margin-bottom: 2em;
+    }
+
+    p,
+    span {
+      margin: 0 0 1em 0;
+    }
+
+    .disclaimer {
+      margin: 0 0 2em 0;
+      color: #968a23;
+      background-color: rgba($color: #fcf7d1, $alpha: 0.5);
+      font-weight: 400;
+      border-bottom: 1px solid #968a23;
+      border-top: 1px solid #968a23;
+      padding: 1em 0;
     }
 
     .dropdown__wrapper {
@@ -134,13 +163,12 @@
         justify-content: center;
 
         label {
-          margin-right: .5em;
+          margin-right: 0.5em;
         }
 
         input {
           min-width: 200px;
         }
-        
       }
     }
   }
@@ -148,10 +176,10 @@
   &.bulk_granules {
     &.modal-dialog {
       overflow-y: initial !important;
-      max-height:85%;
+      max-height: 85%;
       margin-top: 50px;
-      margin-bottom:50px;
-      max-width: 750px;
+      margin-bottom: 50px;
+      min-width: 750px;
     }
 
     .modal-body {
@@ -190,16 +218,19 @@
   }
 
   .bulk_granules__title.modal-title.h4 {
-      padding: 0 1.25rem;
-      font-size: 1.125rem;
+    padding: 0 1.25rem;
+    font-size: 1.125rem;
 
-      p {
-        text-align: center;
-        padding-top: 1.125rem;
-      }
+    p {
+      text-align: center;
+      padding-top: 1.125rem;
+    }
   }
 
-  &.bulk_granules--operations, &.bulk_granules--delete, &.bulk_granules--reingest, &.bulk_granules--recovery {
+  &.bulk_granules--operations,
+  &.bulk_granules--delete,
+  &.bulk_granules--reingest,
+  &.bulk_granules--recovery {
     .modal-body {
       height: 425px;
     }
@@ -226,8 +257,6 @@
       padding: 1rem 3rem;
       text-align: left;
 
-
-
       pre {
         border: 1px solid $lightest-grey;
       }
@@ -253,7 +282,7 @@
         .header {
           width: 100%;
           color: white;
-          padding: .5em 1em;
+          padding: 0.5em 1em;
           display: flex;
           justify-content: space-between;
           cursor: pointer;
