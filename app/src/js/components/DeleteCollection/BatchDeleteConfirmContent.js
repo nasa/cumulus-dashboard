@@ -5,7 +5,7 @@ import { collectionNameVersion } from '../../utils/format';
 
 const BatchDeleteConfirmContent = ({ selected = [] }) => (
   <>
-    <Alert variant="warning"><strong>Warning: This action cannot be reversed once you submit it.</strong></Alert>
+    <Alert variant="warning"><strong>Warning:</strong> This action can not be reversed once you submit it.</Alert>
     <p>You have submitted a request to delete the following collections: </p>
     <ul>
       {selected.map((selection, index) => {

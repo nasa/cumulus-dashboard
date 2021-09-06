@@ -23,6 +23,7 @@ import rules from './rules';
 import reconciliationReports from './reconciliation-reports';
 import cumulusInstance from './cumulus-instance';
 import sidebar from './sidebar';
+import sorts from './sort-persist';
 
 const def = (state, _action) => state || {};
 
@@ -50,6 +51,7 @@ export const reducers = {
   operations,
   rules,
   reconciliationReports,
+  sorts,
 };
 
 export const createRootReducer = (history) => combineReducers({
