@@ -57,10 +57,6 @@ function seedPdrs() {
   return serveUtils.addPdrs(pdrs.results);
 }
 
-function seedGranulesExecutions() {
-  return serveUtils.addGranulesExecutions(granulesExecutions);
-}
-
 function uploadReconciliationReportFiles() {
   const reconcileReportList = fs
     .readdirSync(reconciliationReportDir)
@@ -95,7 +91,6 @@ function seedEverything() {
       .then(seedPdrs)
       .then(seedGranules)
       .then(seedRules)
-      .then(seedGranulesExecutions)
       .then(seedReconciliationReports),
     uploadReconciliationReportFiles(),
   ]);
