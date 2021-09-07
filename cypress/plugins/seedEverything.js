@@ -9,7 +9,6 @@ const {
   localStackName,
   localSystemBucket,
 } = require('@cumulus/api/bin/local-test-defaults');
-const { exec } = require('child_process');
 
 const collections = require('../fixtures/seeds/collectionsFixture.json');
 const executions = require('../fixtures/seeds/executionsFixture.json');
@@ -17,7 +16,6 @@ const granules = require('../fixtures/seeds/granulesFixture.json');
 const providers = require('../fixtures/seeds/providersFixture.json');
 const rules = require('../fixtures/seeds/rulesFixture.json');
 const pdrs = require('../fixtures/seeds/pdrsFixture.json');
-const granulesExecutions = require('../fixtures/seeds/granulesExecutionsFixture.json');
 const reconciliationReports = require('../fixtures/seeds/reconciliationReportFixture.json');
 const reconciliationReportDir = `${__dirname}/../fixtures/seeds/reconciliation-reports`;
 
