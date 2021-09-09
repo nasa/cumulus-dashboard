@@ -100,20 +100,12 @@ const metaAccessors = [
     )),
   },
   {
-    label: 'Execution',
-    property: 'execution',
-    accessor: (d) => (d ? (
-      <Link
-        to={(location) => ({
-          pathname: `/executions/execution/${path.basename(d)}`,
-          search: getPersistentQueryParams(location),
-        })}
-      >
-          link
-      </Link>
+    label: 'Executions List',
+    accessor: (row) => (row.granuleId && row.collectionId ? (
+      <Link to={() => ({ pathname: `/executions/executions-list/${encodeURIComponent(row.collectionId)}/${encodeURIComponent(path.basename(row.granuleId))}` })}>link</Link>
     ) : (
       nullValue
-    )),
+       )),
   },
   {
     label: 'Published',
