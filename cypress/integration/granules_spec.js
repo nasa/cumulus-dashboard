@@ -627,7 +627,7 @@ describe('Dashboard Granules Page', () => {
       cy.contains('button', 'Delete').click();
       cy.get('.default-modal.batch-async-modal ').as('modal');
 
-      cy.get('@modal').contains('div', 'Selection contains granules that are published to CMR which must be removed before deleting' && 'Remove published granules from CMR and delete?');
+      cy.get('@modal').contains('div', 'In order to delete these granules from Cumulus, we will first remove them from CMR' && 'Would you like to continue with your request');
     });
 
     it('Should show the correct DELETE modal when published granules are selected on the "processing granules" page', () => {
@@ -641,7 +641,7 @@ describe('Dashboard Granules Page', () => {
       cy.contains('button', 'Delete').click();
       cy.get('.default-modal.batch-async-modal ').as('modal');
 
-      cy.get('@modal').contains('div', 'Selection contains granules that are published to CMR which must be removed before deleting' && 'Remove published granules from CMR and delete?');
+      cy.get('@modal').contains('div', 'In order to delete these granules from Cumulus, we will first remove them from CMR' && 'Would you like to continue with your request');
     });
 
     it('Should show the correct DELETE modal when published granules are NOT selected', () => {

@@ -41,20 +41,25 @@ class ProvidersOverview extends React.Component {
     return { ...queryParams };
   }
 
-  render () {
+  render() {
     const { providers, stats } = this.props;
     const { list } = providers;
     const { count, queriedAt } = list.meta;
 
     const bulkActions = [
       {
-        Component: <Link
-          className="button button--green button--add button--small form-group__element"
-          to={(location) => ({ pathname: '/providers/add', search: getPersistentQueryParams(location) })}
-        >
-          Add Provider
-        </Link>
-      }
+        Component: (
+          <Link
+            className="button button--green button--add button--small form-group__element"
+            to={(location) => ({
+              pathname: '/providers/add',
+              search: getPersistentQueryParams(location),
+            })}
+          >
+            Add Provider
+          </Link>
+        ),
+      },
     ];
 
     // Incorporate the collection counts into the `list`
@@ -96,8 +101,8 @@ class ProvidersOverview extends React.Component {
             initialSortId="timestamp"
             filterAction={filterProviders}
             filterClear={clearProvidersFilter}
-          >
-          </List>
+            tableId="providers"
+          ></List>
         </section>
       </div>
     );

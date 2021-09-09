@@ -72,12 +72,12 @@ const ExecutionEvents = ({
               To find all task name and versions, select “More Details” for the last Lambda- or Activity-type event.
               There you should find a key / value pair “workflow_tasks” which lists all tasks’ version, name and arn.
             </p>
-            <br></br>
+            <br />
             <p><b>NOTE:</b> Task / version tracking is enabled as of Cumulus version 1.9.1.</p>
-            <br></br>
+            <br />
             <p><b>NOTE:</b> If the task output is greater than 10KB, the full message will be stored in an S3 Bucket.
             In these scenarios, task and version numbers are not part of the Lambda or Activity event output.</p>
-            <br></br>
+            <br />
             <FontAwesomeIcon icon={faExternalLinkSquareAlt} />
             <i>Related workflow will open up into another window to view.</i>
           </div>

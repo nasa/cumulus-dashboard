@@ -18,7 +18,9 @@ import TableFilters from './TableFilters';
 const SortableTable = lazy(() => import('../SortableTable/SortableTable'));
 
 function buildSortKey(sortProps) {
-  return sortProps.filter((item) => item.id).map((item) => (item.desc === true ? `-${item.id}` : `+${item.id}`));
+  return sortProps
+    .filter((item) => item.id)
+    .map((item) => (item.desc === true ? `-${item.id}` : `+${item.id}`));
 }
 
 const List = ({
@@ -39,20 +41,28 @@ const List = ({
   queryParams,
   renderRowSubComponent,
   rowId,
+  sorts,
   tableColumns,
+  tableId,
   toggleColumnOptionsAction,
 }) => {
-  const { data: listData, error: listError, inflight: listInflight, meta } = list;
+  const {
+    data: listData,
+    error: listError,
+    inflight: listInflight,
+    meta,
+  } = list;
   const { count, limit } = meta || {};
   const tableData = data || listData;
 
   const [selected, setSelected] = useState([]);
   const [clearSelected, setClearSelected] = useState(false);
   const [page, setPage] = useState(1);
+  const sortBy = tableId ? sorts[tableId] : null;
 
   const [queryConfig, setQueryConfig] = useState({
     page: 1,
-    sort_key: buildSortKey(initialSortId ? [{ id: initialSortId, desc: true }] : []),
+    sort_key: buildSortKey(sortBy || [{ id: initialSortId, desc: true }]),
     ...(query || {}),
   });
   const [params, setParams] = useState({});
@@ -63,18 +73,21 @@ const List = ({
   const [toggleColumnOptions, setToggleColumnOptions] = useState({
     onChange: noop,
     hiddenColumns: initialHiddenColumns,
-    setHiddenColumns: noop
+    setHiddenColumns: noop,
   });
-
   const { bulkActionError, completedBulkActions } = bulkActionMeta;
-  const { limit: limitQueryParam, page: pageQueryParam, ...queryFilters } = queryParams;
+  const {
+    limit: limitQueryParam,
+    page: pageQueryParam,
+    ...queryFilters
+  } = queryParams;
 
   const hasActions = Array.isArray(bulkActions) && bulkActions.length > 0;
 
   useEffect(() => {
     setQueryConfig((prevQueryConfig) => ({
       ...prevQueryConfig,
-      ...getQueryConfig({})
+      ...getQueryConfig({}),
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(query)]);
@@ -87,7 +100,7 @@ const List = ({
       setParams(newParams);
       setQueryConfig((prevQueryConfig) => ({
         ...prevQueryConfig,
-        ...getQueryConfig({})
+        ...getQueryConfig({}),
       }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -100,10 +113,19 @@ const List = ({
 
   useEffect(() => {
     if (typeof toggleColumnOptionsAction === 'function') {
-      const allColumns = tableColumns.map((column) => column.id || column.accessor);
-      dispatch(toggleColumnOptionsAction(toggleColumnOptions.hiddenColumns, allColumns));
+      const allColumns = tableColumns.map(
+        (column) => column.id || column.accessor
+      );
+      dispatch(
+        toggleColumnOptionsAction(toggleColumnOptions.hiddenColumns, allColumns)
+      );
     }
-  }, [dispatch, tableColumns, toggleColumnOptions.hiddenColumns, toggleColumnOptionsAction]);
+  }, [
+    dispatch,
+    tableColumns,
+    toggleColumnOptions.hiddenColumns,
+    toggleColumnOptionsAction,
+  ]);
 
   function queryNewPage(newPage) {
     setPage(newPage);
@@ -111,7 +133,7 @@ const List = ({
 
   function queryNewSort(sortProps) {
     const newQueryConfig = getQueryConfig({
-      sort_key: buildSortKey(sortProps)
+      sort_key: buildSortKey(sortProps),
     });
     if (!isEqual(queryConfig, newQueryConfig)) {
       setQueryConfig(newQueryConfig);
@@ -134,7 +156,7 @@ const List = ({
     setBulkActionMeta((prevBulkActionMeta) => {
       const {
         completedBulkActions: prevCompletedBulkActions,
-        bulkActionError: prevBulkActionError
+        bulkActionError: prevBulkActionError,
       } = prevBulkActionMeta;
       return {
         completedBulkActions: prevCompletedBulkActions + 1,
@@ -192,7 +214,11 @@ const List = ({
       >
         {children}
         <ListFilters>
-          <TableFilters columns={tableColumns} {...toggleColumnOptions} initialHiddenColumns={initialHiddenColumns} />
+          <TableFilters
+            columns={tableColumns}
+            {...toggleColumnOptions}
+            initialHiddenColumns={initialHiddenColumns}
+          />
           {legend}
         </ListFilters>
       </ListActions>
@@ -228,6 +254,8 @@ const List = ({
               shouldManualSort={!!initialSortId}
               getToggleColumnOptions={getToggleColumnOptions}
               renderRowSubComponent={renderRowSubComponent}
+              tableId={tableId}
+              initialSortBy={sortBy}
             />
           </Suspense>
           <Pagination
@@ -266,8 +294,12 @@ List.propTypes = {
   onSelect: PropTypes.func,
   queryParams: PropTypes.object,
   renderRowSubComponent: PropTypes.func,
+  tableId: PropTypes.string,
+  sorts: PropTypes.object,
 };
 
 export { List };
 
-export default withQueryParams()(connect()(List));
+export default withQueryParams()(
+  connect((state) => ({ sorts: state.sorts }))(List)
+);

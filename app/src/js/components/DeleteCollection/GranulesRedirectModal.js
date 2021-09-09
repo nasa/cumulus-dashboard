@@ -40,7 +40,7 @@ class GranulesRedirectModal extends React.Component {
           Delete Collection
         </Modal.Title>
         <Modal.Body>
-          <Alert variant="warning"><strong>Warning</strong></Alert>
+          <Alert variant="warning"><strong>Warning:</strong>There are associated granules.</Alert>
           <p>
             In order to delete collection {`"${this.props.collectionLabel}"`},
             you must first delete the granules associated with it.  Would you
