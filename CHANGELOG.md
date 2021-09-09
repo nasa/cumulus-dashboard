@@ -78,6 +78,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2459**
   - Updated localAPI docker-compose.yml to include SSM, Postgres container to be used with RDS compatible API
   - Updated integration tests due to changes in API behavior related to Postgres contstraints between tables
+- **CUMULUS-2584**
+  - Updated Granule detail component to reference `Executions List`.
+  - Removed `Execution` from Granule detail component
 
 ### Fixed
 
