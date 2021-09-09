@@ -22,10 +22,10 @@ services:
     ports:
       - "9200:9200"
       - "4550-4586:4550-4586"
+      - "5432:5432"
   postgres:
     image: postgres:10.17-alpine
-    ports:
-      - "5432:5432"
+    network_mode: "service:shim"
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "password"
