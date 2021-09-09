@@ -262,7 +262,7 @@ export class Form extends React.Component {
     const hasRequiredFields = this.props.inputMeta.filter((input) => input.required).length >= 0;
 
     const form = (
-      <div ref={(element) => { this.DOMElement = element; }}>
+      <div className="container" ref={(element) => { this.DOMElement = element; }}>
         {errors.length > 0 && <ErrorReport report={errorMessage(errors)} disableScroll={true} />}
         <ul>
           {this.props.inputMeta.map((input) => {
