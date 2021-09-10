@@ -82,6 +82,7 @@ const BulkGranuleModal = ({
       onCancel={onCancel}
       onCloseModal={onCancel}
       onConfirm={success ? handleSuccessConfirm : handleSubmit}
+      size = "xl"
     >
       {success &&
         <div className="message__success">
