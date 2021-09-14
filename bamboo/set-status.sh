@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -ex
-source .bamboo_env_vars || true
 . ./bamboo/set-bamboo-env-variables.sh
 
 if [[ $REPORT_BUILD_STATUS == true ]]; then
