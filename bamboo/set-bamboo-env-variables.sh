@@ -2,44 +2,59 @@
 set -ex
 
 # Bamboo envs are prefixed with bamboo_SECRET to avoid being printed
+# prefix variables with "bamboo_" or "bamboo_SECRET_" for all environments.
+# prefix variables with "bamboo_SIT_" or "bamboo_SECRET_SIT_" to override in SIT environment.
 declare -a param_list=(
     "bamboo_DOCKER_REPOSITORY"
-    "bamboo_GIT_PR"
     "bamboo_REPORT_BUILD_STATUS"
     "bamboo_SECRET_GITHUB_TOKEN"
-    "bamboo_SECRET_GITHUB_USER"
     "bamboo_SECRET_SIT_AWS_ACCESS_KEY_ID"
     "bamboo_SECRET_SIT_AWS_SECRET_ACCESS_KEY"
-    "bamboo_SECRET_SIT_DASHBOARD_ES_PASSWORD"
-    "bamboo_SECRET_SIT_DASHBOARD_ES_USER"
-    "bamboo_SIT_DASHBOARD_APIROOT"
-    "bamboo_SIT_DASHBOARD_AUTH_METHOD"
-    "bamboo_SIT_DASHBOARD_AWS_REGION"
-    "bamboo_SIT_DASHBOARD_BUCKET"
-    "bamboo_SIT_DASHBOARD_DAAC_NAME"
-    "bamboo_SIT_DASHBOARD_ENABLE_RECOVERY"
-    "bamboo_SIT_DASHBOARD_ESROOT"
+    "bamboo_SECRET_SIT_ES_PASSWORD"
+    "bamboo_SECRET_SIT_ES_USER"
+    "bamboo_SIT_APIROOT"
+    "bamboo_SIT_AUTH_METHOD"
+    "bamboo_SIT_AWS_REGION"
+    "bamboo_SIT_BUCKET"
+    "bamboo_SIT_DAAC_NAME"
+    "bamboo_SIT_ENABLE_RECOVERY"
+    "bamboo_SIT_ESROOT"
     "bamboo_SIT_ES_CLOUDWATCH_TARGET_PATTERN"
     "bamboo_SIT_ES_DISTRIBUTION_TARGET_PATTERN"
-    "bamboo_SIT_DASHBOARD_KIBANAROOT"
+    "bamboo_SIT_KIBANAROOT"
+    "bamboo_SIT_SHOW_DISTRIBUTION_API_METRICS"
+    "bamboo_SIT_SHOW_TEA_METRICS"
+    "bamboo_SIT_HIDE_PDR"
+    "bamboo_SIT_STAGE"
+    "bamboo_SIT_DASHBOARD_BUCKET"
+    "bamboo_SIT_ES_CLOUDWATCH_INDEX_PATTERN"
+    "bamboo_SIT_ES_DISTRIBUTION_INDEX_PATTERN"
 )
-regex='bamboo(_SECRET)?_(.*)'
 
 ## Strip 'bamboo_SECRET_' from secret keys
 ## Translate bamboo_ keys to expected stack keys
-for key in ${param_list[@]}; do
-  [[ $key =~ bamboo(_SECRET)?_(.*) ]]
-  update_key=${BASH_REMATCH[2]}
-  export $update_key=${!key}
+for key in "${param_list[@]}"; do
+    [[ $key =~ bamboo(_SECRET)?_(.*) ]]
+    update_key=${BASH_REMATCH[2]}
+    export $update_key=${!key}
 done
 
+if [[ $NGAP_ENV == 'SIT' ]]; then
+    echo "***NGAP_ENV IS SIT****"
+    for key in "${param_list[@]}"; do
+	[[ $key =~ bamboo(_SECRET_SIT|_SIT)?_(.*) ]]
+	update_key=${BASH_REMATCH[2]}
+	export $update_key=${!key}
+    done
+fi
+
 ## Get the current git SHA
-export GIT_SHA=$(git rev-parse HEAD)
+GIT_SHA=$(git rev-parse HEAD)
+export GIT_SHA
 
 ## Always set GIT_PR true if master or develop branch
 if [[ $BRANCH == master || $BRANCH == develop ]]; then
   export GIT_PR=true
-  echo export GIT_PR=true >> .bamboo_env_vars
 fi
 
 ## This should take a blank value from the global options, and
@@ -47,10 +62,7 @@ fi
 if [[ ! -z $bamboo_GIT_PR ]]; then
   export GIT_PR=$bamboo_GIT_PR
   export REPORT_BUILD_STATUS=true
-  echo export GIT_PR=$GIT_PR >> .bamboo_env_vars
 fi
-
-source .bamboo_env_vars || true
 
 ## Branch should be set in the .bamboo_env_vars *or* the
 ## configured bamboo Environment variables.
@@ -58,7 +70,6 @@ if [[ -z $BRANCH ]]; then
   echo "Branch is not set, this is required for Bamboo CI.  Exiting"
   exit 1
 fi
-echo export BRANCH=$BRANCH >> .bamboo_env_vars
 
 # Target develop by default.
 # Update with appropriate conditional
@@ -76,10 +87,8 @@ if [[ -z $GIT_PR ]]; then
   set -e
   if [[ PR_CODE -eq 100 ]]; then
     export GIT_PR=true
-    echo export GIT_PR=true >> .bamboo_env_vars
   elif [[ PR_CODE -eq 0 ]]; then
     export GIT_PR=false
-    echo export GIT_PR=false >> .bamboo_env_vars
   else
     echo "Error detecting PR status"
     exit 1
