@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -ex
-. ./bamboo/set-bamboo-env-variables.sh
+source .bamboo_git_env
 
 if [[ $REPORT_BUILD_STATUS == true ]]; then
   ### Post status to github.

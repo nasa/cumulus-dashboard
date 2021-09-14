@@ -96,3 +96,9 @@ if [[ -z $GIT_PR ]]; then
 fi
 
 echo GIT_PR is $GIT_PR
+echo writing git environment file
+echo export GIT_PR=$GIT_PR >> .bamboo_git_env
+echo export BRANCH=$BRANCH >> .bamboo_git_env
+echo export PR_BRANCH=$PR_BRANCH >> .bamboo_git_env
+echo export REPORT_BUILD_STATUS=$REPORT_BUILD_STATUS >> .bamboo_git_env
+echo export GIT_SHA=$GIT_SHA >> .bamboo_git_env
