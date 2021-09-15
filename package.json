@@ -24,6 +24,7 @@
     "serve": "NODE_ENV=development webpack-dev-server --open --config webpack.dev.js",
     "serve-hot": "NODE_ENV=development webpack-dev-server --open --hot --config webpack.dev.js",
     "serve-cypress": "SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com npm run serve",
+    "preinstall": "npm-force-resolutions",
     "build": "NODE_ENV=production webpack --config webpack.prod.js",
     "watch": "webpack --watch",
     "lint": "eslint . --ext .js",
@@ -56,6 +57,9 @@
       "last 2 firefox versions",
       "last 2 safari versions"
     ]
+  },
+  "resolutions": {
+    "ansi-regex": "6.0.1"
   },
   "devDependencies": {
     "@ava/babel": "^1.0.1",
@@ -117,6 +121,7 @@
     "ignore-styles": "^5.0.1",
     "mini-css-extract-plugin": "^1.6.0",
     "nock": "^10.0.4",
+    "npm-force-resolutions": "0.0.10",
     "optimize-css-assets-webpack-plugin": "^6.0.0",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^4.0.3",
