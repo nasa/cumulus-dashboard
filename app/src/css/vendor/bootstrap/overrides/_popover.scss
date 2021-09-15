@@ -8,6 +8,15 @@
     margin: 1em .5em;
   }
 
+  &-body--api-info {
+    text-align: center;
+  }
+
+  &-body--description {
+    margin: 1em .5em;
+    border-bottom: 1px solid $light-grey;
+  }
+
   &-body--header {
     font-weight: bold;
   }

@@ -51,14 +51,17 @@ const Footer = ({
                 popoverContent={
                   <>
                   <div className="popover-body--header">Cumulus API Configurations</div>
-                    <div className="popover-body--main">
-                      Below are details about your API Configurations that are associated to your DAAC and individual operator settings.
+                    <div className="popover-body--description">
+                      Below are details about your API Configurations that are associated to your DAAC and individual operator settings.<br/>
+                      <br/>
                     </div>
                     <div className="popover-body--main">{
-                      `CMR Environment: ${cmrEnv}
-                      CMR Provider: ${cmrProvider}
-                      CMR Authentication: idk
-                      Distribution Version: idk`}
+                      <ul className="popover-body--api-info">
+                        <li>CMR Environment: {cmrEnv}</li>
+                        <li>CMR Provider: {cmrProvider}</li>
+                        <li>CMR Authentication: idk</li>
+                        <li>Distribution Version: idk</li>
+                      </ul>}
                     </div>
                   </>
                 }
