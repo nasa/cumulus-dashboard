@@ -12,7 +12,7 @@ const Footer = ({
   const DASH_VERSION = pckg.version;
   const { authenticated } = api;
   const { warning, versionNumber } = apiVersion;
-  const { cmrProvider, cmrEnv } = cmrInfo;
+  const { cmrProvider, cmrEnv, cmrOauthProvider } = cmrInfo;
 
   const leftSideLinks = [
     { text: 'FOIA', url: 'https://www.nasa.gov/FOIA/index.html' },
@@ -59,7 +59,7 @@ const Footer = ({
                       <ul className="popover-body--api-info">
                         <li>CMR Environment: {cmrEnv}</li>
                         <li>CMR Provider: {cmrProvider}</li>
-                        <li>CMR Authentication: idk</li>
+                        <li>CMR Authentication: {cmrOauthProvider}</li>
                         <li>Distribution Version: idk</li>
                       </ul>}
                     </div>
