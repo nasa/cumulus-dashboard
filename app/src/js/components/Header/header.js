@@ -7,6 +7,7 @@ import get from 'lodash/get';
 import {
   logout,
   getApiVersion,
+  getCMRInfo,
   getCumulusInstanceMetadata,
 } from '../../actions';
 import { graphicsPath, nav } from '../../config';
@@ -40,6 +41,7 @@ class Header extends React.Component {
     const { dispatch, api } = this.props;
     if (api.authenticated) {
       dispatch(getApiVersion());
+      dispatch(getCMRInfo());
       dispatch(getCumulusInstanceMetadata());
     }
   }

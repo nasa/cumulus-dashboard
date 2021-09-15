@@ -1,14 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Popover from '../Popover/popover';
+import cmrInfo from '../../reducers/cmr-info';
 const pckg = require('../../../../../package.json');
 
 const Footer = ({
   api,
   apiVersion,
+  cmrInfo,
 }) => {
   const DASH_VERSION = pckg.version;
   const { authenticated } = api;
   const { warning, versionNumber } = apiVersion;
+  const { cmrProvider, cmrEnv } = cmrInfo;
 
   const leftSideLinks = [
     { text: 'FOIA', url: 'https://www.nasa.gov/FOIA/index.html' },
@@ -37,7 +41,29 @@ const Footer = ({
             <li className="footer__version">
               <div className="version__label">Version</div>
               <div className="dashboard__version">Dashboard v{DASH_VERSION}</div>
-              <div className="api__version">API v{versionNumber}</div>
+              <div className="api__version">
+              <Popover
+                className="popover--blue"
+                id={'api check id'}
+                placement="top"
+                popover={true}
+                target={`API v${versionNumber}`}
+                popoverContent={
+                  <>
+                  <div className="popover-body--header">Cumulus API Configurations</div>
+                    <div className="popover-body--main">
+                      Below are details about your API Configurations that are associated to your DAAC and individual operator settings.
+                    </div>
+                    <div className="popover-body--main">{
+                      `CMR Environment: ${cmrEnv}
+                      CMR Provider: ${cmrProvider}
+                      CMR Authentication: idk
+                      Distribution Version: idk`}
+                    </div>
+                  </>
+                }
+              />
+                </div>
             </li>
             <li className="footer__opensource">
               {rightSideLinks.map((linkInfo, id) => (
@@ -54,7 +80,8 @@ const Footer = ({
 
 Footer.propTypes = {
   api: PropTypes.object,
-  apiVersion: PropTypes.object
+  apiVersion: PropTypes.object,
+  cmrInfo: PropTypes.object
 };
 
 export default Footer;

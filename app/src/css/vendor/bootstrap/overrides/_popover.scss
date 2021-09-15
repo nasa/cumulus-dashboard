@@ -8,6 +8,10 @@
     margin: 1em .5em;
   }
 
+  &-body--header {
+    font-weight: bold;
+  }
+
   &-body--footer {
     display: flex;
     justify-content: flex-end;
