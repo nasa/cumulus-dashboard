@@ -2,5 +2,5 @@
   "high": true,
   "pass-enoaudit": true,
   "retry-count": 20,
-  "allowlist": ["underscore", "css-what", "cypress", "ansi-regex"]
+  "allowlist": ["underscore", "css-what", "cumulus-dashboard", "cypress", "@cypress/listr-verbose-renderer", "chalk", "has-ansi", "ansi-regex"]
 }
