@@ -28,7 +28,7 @@
     "watch": "webpack --watch",
     "lint": "eslint . --ext .js",
     "lint-fix": "eslint --fix . --ext .js",
-    "preinstall": "npm-force-resolutions",
+    "preinstall": "npx npm-force-resolutions",
     "cypress": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress open",
     "cypress-ci": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress run --spec 'cypress/integration/*' --config video=false",
     "test": "npm run lint && ava && ava --config ava-conditional.config.cjs",
