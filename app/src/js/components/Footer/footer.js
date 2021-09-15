@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Popover from '../Popover/popover';
-import cmrInfo from '../../reducers/cmr-info';
 const pckg = require('../../../../../package.json');
 
 const Footer = ({
@@ -42,31 +41,32 @@ const Footer = ({
               <div className="version__label">Version</div>
               <div className="dashboard__version">Dashboard v{DASH_VERSION}</div>
               <div className="api__version">
-              <Popover
-                className="popover--blue"
-                id={'api check id'}
-                placement="top"
-                popover={true}
-                target={`API v${versionNumber}`}
-                popoverContent={
-                  <>
-                  <div className="popover-body--header">Cumulus API Configurations</div>
-                    <div className="popover-body--description">
-                      Below are details about your API Configurations that are associated to your DAAC and individual operator settings.<br/>
-                      <br/>
-                    </div>
-                    <div className="popover-body--main">{
-                      <ul className="popover-body--api-info">
-                        <li>CMR Environment: {cmrEnv}</li>
-                        <li>CMR Provider: {cmrProvider}</li>
-                        <li>CMR Authentication: {cmrOauthProvider}</li>
-                        <li>Distribution Version: idk</li>
-                      </ul>}
-                    </div>
-                  </>
-                }
-              />
-                </div>
+                <Popover
+                  className="popover--blue"
+                  id={'api check id'}
+                  placement="top"
+                  popover={true}
+                  target={`API v${versionNumber}`}
+                  popoverContent={
+                    <>
+                      <div className="popover-body--header">Cumulus API Configurations</div>
+                      <div className="popover-body--description">
+                        Below are details about your API Configurations that are associated to your
+                         DAAC and individual operator settings.<br/>
+                        <br/>
+                      </div>
+                      <div className="popover-body--main">{
+                        <ul className="popover-body--api-info">
+                          <li>CMR Environment: {cmrEnv}</li>
+                          <li>CMR Provider: {cmrProvider}</li>
+                          <li>CMR Authentication: {cmrOauthProvider}</li>
+                          <li>Distribution Version: idk</li>
+                        </ul>}
+                      </div>
+                    </>
+                  }
+                />
+              </div>
             </li>
             <li className="footer__opensource">
               {rightSideLinks.map((linkInfo, id) => (

@@ -254,7 +254,7 @@ export const API_VERSION_COMPATIBLE = 'API_VERSION_COMPATIBLE';
 export const API_VERSION_INCOMPATIBLE = 'API_VERSION_INCOMPATIBLE';
 export const NOOP = 'NOOP';
 export const CALL_API = 'CALL_API';
-//CMR
+// CMR
 export const CMR_INFO = 'CMR_INFO';
 // Modals
 export const ASYNC_COMMAND = 'ASYNC_COMMAND';
