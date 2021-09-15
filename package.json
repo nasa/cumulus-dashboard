@@ -28,7 +28,6 @@
     "watch": "webpack --watch",
     "lint": "eslint . --ext .js",
     "lint-fix": "eslint --fix . --ext .js",
-    "preinstall": "npx npm-force-resolutions",
     "cypress": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress open",
     "cypress-ci": "LOCALSTACK_HOST=localhost LOCAL_ES_HOST=localhost CYPRESS_TESTING=true NODE_ENV=test cypress run --spec 'cypress/integration/*' --config video=false",
     "test": "npm run lint && ava && ava --config ava-conditional.config.cjs",
@@ -57,9 +56,6 @@
       "last 2 firefox versions",
       "last 2 safari versions"
     ]
-  },
-  "resolutions": {
-    "ansi-regex": "6.0.1"
   },
   "devDependencies": {
     "@ava/babel": "^1.0.1",
