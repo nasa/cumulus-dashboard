@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- **CUMULUS-2594**
+  - Added information on CMR Provider, Environment and Authentication to the Footer
 - **CUMULUS-2142**
   - Changed styling for sidebar button
   - Added tooltip for sidebar button
