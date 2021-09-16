@@ -43,7 +43,7 @@ const Footer = ({
               <div className="api__version">
                 <Popover
                   className="popover--blue"
-                  id={'api check id'}
+                  id={'apiInformation'}
                   placement="top"
                   popover={true}
                   target={`API v${versionNumber}`}
@@ -60,7 +60,6 @@ const Footer = ({
                           <li>CMR Environment: {cmrEnv}</li>
                           <li>CMR Provider: {cmrProvider}</li>
                           <li>CMR Authentication: {cmrOauthProvider}</li>
-                          <li>Distribution Version: idk</li>
                         </ul>}
                       </div>
                     </>
