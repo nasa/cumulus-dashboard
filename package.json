@@ -171,7 +171,7 @@
     "normalize-opentype.css": "^0.2.4",
     "normalize.css": "^8.0.1",
     "numeral": "^2.0.4",
-    "object-path": "^0.11.5",
+    "object-path": "^0.11.8",
     "paginator": "^1.0.0",
     "popper.js": "^1.14.7",
     "postcss": "^8.3.4",
