@@ -117,7 +117,6 @@
     "ignore-styles": "^5.0.1",
     "mini-css-extract-plugin": "^1.6.0",
     "nock": "^10.0.4",
-    "npm-force-resolutions": "0.0.10",
     "optimize-css-assets-webpack-plugin": "^6.0.0",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^4.0.3",
