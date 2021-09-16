@@ -59,7 +59,7 @@ const Footer = ({
                         <ul className="popover-body--api-info">
                           <li>CMR Environment: {cmrEnv}</li>
                           <li>CMR Provider: {cmrProvider}</li>
-                          <li>CMR Authentication: {cmrOauthProvider}</li>
+                          <li>CMR Authentication: {cmrOauthProvider || 'None'}</li>
                         </ul>}
                       </div>
                     </>
