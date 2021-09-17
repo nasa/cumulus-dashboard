@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import api from './api';
 import apiVersion from './api-version';
+import cmrInfo from './cmr-info';
 import collections from './collections';
 import config from './utils/config';
 import dist from './dist';
@@ -31,6 +32,7 @@ export const reducers = {
   def,
   api,
   apiVersion,
+  cmrInfo,
   collections,
   config,
   dist,

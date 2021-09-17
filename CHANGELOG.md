@@ -28,10 +28,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     logs, likewise use a pattern like the ES\_DISTRIBUTION\_TARGET\_PATTERN.
 - **CUMULUS-2459**
   - Use of ```executions/search-by-granules``` to retrieve executions for a granule/collection
-    combination requires minimum CUMULUS API v9.3.0
+    combination requires minimum CUMULUS API v9.5.0
 
 ### Changed
 
+- **CUMULUS-2594**
+  - Added information on CMR Provider, Environment and Authentication to the Footer
 - **CUMULUS-2142**
   - Changed styling for sidebar button
   - Added tooltip for sidebar button
@@ -49,7 +51,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Update column show/hide component with new styling and "reset to default interaction for each table
 - **CUMULUS-2506**
   - Adds horizontal scroll buttons to tables improving accessibily
-- **CUMULUS-2511** 
+- **CUMULUS-2511**
   - Ensured that sort state will persist through page changes.
 - **CUMULUS-2524**
   - CSS and UI tweaks to padding/margin, width, and color/contrast
@@ -75,6 +77,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - added .gitattributes file that prevents windows from changing the line endings on checkout from github.
 - **CUMULUS-2650**
   - Modal CSS styling tweaks
+- **CUMULUS-2459**
+  - Updated localAPI docker-compose.yml to include SSM, Postgres container to be used with RDS compatible API
+  - Updated integration tests due to changes in API behavior related to Postgres contstraints between tables
 
 ### Fixed
 
@@ -82,6 +87,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Fixes granule execute modal rerender issue when workflow options are not changed
 - **CUMULUS-2553**
   - Fixed DatePicker prop so the leading zeroes can be entered without having too many zeroes clouding the input.
+- **CUMULUS-NONE**
+  - Update Bamboo and scripts to deploy the Dashboard to our SIT for Cumulus team testing.
+
+### Added
+
+- **CUMULUS-2459**
+  - Added Executions List column to granules table linking to executions-list view that displays all executions
+    for a granule/collection combination
 
 ### Added
 

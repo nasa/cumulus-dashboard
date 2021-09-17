@@ -450,6 +450,14 @@ export const getStats = (options) => (dispatch, getState) => {
   });
 };
 
+export const getCMRInfo = () => ({
+  [CALL_API]: {
+    type: types.CMR_INFO,
+    method: 'GET',
+    url: new URL('instanceMeta', root).href
+  }
+});
+
 export const metricsConfigured = () => {
   if (esRoot !== '' &&
       esCloudwatchTargetPattern !== '' &&
