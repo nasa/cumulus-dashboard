@@ -72,6 +72,16 @@ export const tableColumns = [
     Cell: ({ cell: { value } }) => <CopyCellPopover cellContent={collectionLink(value)} id={`collectionId-${value}-popover`} popoverContent={collectionLink(value)} value={value} />,
   },
   {
+    Header: 'Executions List',
+    accessor: 'granuleId',
+    Cell: ({ row: { original: { collectionId, granuleId } } }) => (// eslint-disable-line react/prop-types
+      <Link to={(location) => ({ pathname: `/executions/executions-list/${encodeURIComponent(collectionId)}/${encodeURIComponent(path.basename(granuleId))}` })}>link</Link>
+    ),
+    disableSortBy: true,
+    width: 90,
+    id: 'execution-list'
+  },
+  {
     Header: 'Provider',
     accessor: 'provider',
     Cell: ({ cell: { value } }) => providerLink(value)
@@ -82,14 +92,6 @@ export const tableColumns = [
     id: 'recoveryStatus',
     disableSortBy: true,
     width: 110,
-  },
-  {
-    Header: 'Execution',
-    accessor: 'execution',
-    Cell: ({ cell: { value } }) => ( // eslint-disable-line react/prop-types
-      <Link to={(location) => ({ pathname: `/executions/execution/${path.basename(value)}`, search: getPersistentQueryParams(location) })}>link</Link>),
-    disableSortBy: true,
-    width: 90
   },
   {
     Header: 'Duration',
