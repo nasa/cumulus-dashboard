@@ -95,12 +95,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2459**
   - Added Executions List column to granules table linking to executions-list view that displays all executions
     for a granule/collection combination
-
-### Added
-
-- **CUMULUS-2459**
-  - Added Executions List column to granules table linking to executions-list view that displays all executions
-    for a granule/collection combination
+- **CUMULUS-2585**
+  - Added failed execution step snapshot to execution list
 
 ## [v6.0.0] - 2021-05-03
 
