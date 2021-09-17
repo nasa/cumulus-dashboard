@@ -70,7 +70,6 @@ Cypress.Commands.add('editJsonTextarea', ({ data, update = false }) => {
     }
     editedData = JSON.stringify(editedData);
     editor.setValue(editedData);
-    cy.wait(1000);
   });
 });
 
