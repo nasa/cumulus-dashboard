@@ -89,7 +89,7 @@ export const tableColumns = [
         className='tooltip--light'
         id={value}
         placement='right'
-        target={<> <FontAwesomeIcon icon={faTimesCircle} color='red' /></>}
+        target={<FontAwesomeIcon icon={faTimesCircle} color='red' />}
         // eslint-disable-next-line react/prop-types
         tip={<div>{error.Error}</div>}
       />}</>
