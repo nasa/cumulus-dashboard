@@ -57,7 +57,7 @@ describe('Dashboard Executions Page', () => {
             .should('have.attr', 'title')
             .and('be.eq', execution.name);
           cy.get('@columns').eq(1).invoke('text')
-            .should('contain.text', displayCase(execution.status));
+            .should('contain', displayCase(execution.status));
           cy.get('@columns').eq(2).invoke('text')
             .should('be.eq', execution.type);
           cy.get('@columns').eq(3).invoke('text')
