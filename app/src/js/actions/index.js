@@ -450,6 +450,14 @@ export const getStats = (options) => (dispatch, getState) => {
   });
 };
 
+export const getCMRInfo = () => ({
+  [CALL_API]: {
+    type: types.CMR_INFO,
+    method: 'GET',
+    url: new URL('instanceMeta', root).href
+  }
+});
+
 export const metricsConfigured = () => {
   if (esRoot !== '' &&
       esCloudwatchTargetPattern !== '' &&
@@ -757,6 +765,16 @@ export const listExecutions = (options) => (dispatch, getState) => {
     }
   });
 };
+
+export const listExecutionsByGranule = (payload) => ({
+  [CALL_API]: {
+    type: types.EXECUTIONS_LIST,
+    method: 'POST',
+    path: 'executions/search-by-granules',
+    params: { limit: defaultPageLimit },
+    data: payload
+  }
+});
 
 export const filterExecutions = (param) => ({ type: types.FILTER_EXECUTIONS, param });
 export const clearExecutionsFilter = (paramKey) => ({ type: types.CLEAR_EXECUTIONS_FILTER, paramKey });

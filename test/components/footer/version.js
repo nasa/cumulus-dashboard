@@ -18,11 +18,17 @@ test('Cumulus API Version is not shown on the dashboard when not logged in', fun
     warning: '',
     isCompatible: true
   };
+  const cmrInfo = {
+    cmrEnv: 'UAT',
+    cmrProvider: 'CUMULUS',
+    cmrOauthProvider: 'Launchpad'
+  }
 
   const footerWrapper = shallow(
     <Footer
       api={api}
       apiVersion={apiVersion}
+      cmrInfo={cmrInfo}
     />
   );
 
@@ -36,16 +42,24 @@ test('Cumulus API Version is shown on the dashboard', function (t) {
     warning: '',
     isCompatible: true
   };
+  const cmrInfo = {
+    cmrEnv: 'UAT',
+    cmrProvider: 'CUMULUS',
+    cmrOauthProvider: 'Launchpad'
+  }
 
   const footerWrapper = shallow(
     <Footer
       api={api}
       apiVersion={apiVersion}
+      cmrInfo={cmrInfo}
     />
   );
 
-  const apiVersionNumber = footerWrapper.find('[className="api__version"]');
-  t.is(`API v${apiVersion.versionNumber}`, apiVersionNumber.text());
+  const apiFooterSection = footerWrapper.find('[className="api__version"]');
+  const apiVersionNumber = apiFooterSection.props().children.props.target;
+
+  t.is(`API v${apiVersion.versionNumber}`, apiVersionNumber);
   const hasApiWarning = footerWrapper.hasClass('api__warning');
   t.false(hasApiWarning);
 });
@@ -57,11 +71,17 @@ test('Warning is shown when Cumulus API Version is not compatible with dashboard
     warning: 'This is a warning',
     isCompatible: false
   };
+  const cmrInfo = {
+    cmrEnv: 'UAT',
+    cmrProvider: 'CUMULUS',
+    cmrOauthProvider: 'Launchpad'
+  }
 
   const footerWrapper = shallow(
     <Footer
       api={api}
       apiVersion={apiVersion}
+      cmrInfo={cmrInfo}
     />
   );
 
@@ -76,12 +96,18 @@ test('Dashboard Version is shown in the footer', function (t) {
   const apiVersion = {
     versionNumber: '1.11.0',
   };
+  const cmrInfo = {
+    cmrEnv: 'UAT',
+    cmrProvider: 'CUMULUS',
+    cmrOauthProvider: 'Launchpad'
+  }
   const dashboardVersion = pckg.version;
 
   const footerWrapper = shallow(
     <Footer
       api={api}
       apiVersion={apiVersion}
+      cmrInfo={cmrInfo}
     />
   );
 
@@ -94,12 +120,18 @@ test('FOIA, Privacy, and Feedback links shown in the footer', function (t) {
   const apiVersion = {
     versionNumber: '1.11.0',
   };
+  const cmrInfo = {
+    cmrEnv: 'UAT',
+    cmrProvider: 'CUMULUS',
+    cmrOauthProvider: 'Launchpad'
+  }
   const dashboardVersion = pckg.version;
 
   const footerWrapper = shallow(
     <Footer
       api={api}
       apiVersion={apiVersion}
+      cmrInfo={cmrInfo}
     />
   );
 
@@ -121,12 +153,18 @@ test('Open Cumulus GitHub Docs link shown in the footer', function (t) {
   const apiVersion = {
     versionNumber: '1.11.0',
   };
+  const cmrInfo = {
+    cmrEnv: 'UAT',
+    cmrProvider: 'CUMULUS',
+    cmrOauthProvider: 'Launchpad'
+  }
   const dashboardVersion = pckg.version;
 
   const footerWrapper = shallow(
     <Footer
       api={api}
       apiVersion={apiVersion}
+      cmrInfo={cmrInfo}
     />
   );
 

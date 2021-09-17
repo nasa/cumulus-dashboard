@@ -10,7 +10,7 @@
   "results": [
     {
       "pdrName": "MOD09GQ.A6423561.F7TLUN.006.8525200467566.hdf.PDR",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestGranule:c039a2bb-8eac-4563-a33b-3eb646779768",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationParsePdrStateMachine-JVlCKfoXElDQ:9888b858-d70c-42ec-a887-c9367dcfd7cf",
       "PANmessage": "N/A",
       "duration": 1.778,
       "createdAt": 1582837648763,
@@ -30,7 +30,7 @@
     },
     {
       "pdrName": "MOD09GQ.A6461550.PnYuhI.006.2894803998382.hdf.PDR",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestAndPublishGranule:1d4a2c8e-e612-4503-aeb6-a70c84c35d3b",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
       "PANmessage": "N/A",
       "duration": 1.242,
       "createdAt": 1582837649015,
@@ -50,7 +50,7 @@
     },
     {
       "pdrName": "MOD09GQ_1granule_v3.PDR_test-test-src-integration-IngestGranuleDuplicateHandling-1582837549352",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestGranuleCatchDuplicateErrorTest:c0d2d497-89ba-40c5-8a1f-f8f1441795fa",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:8e21ca0f-79d3-4782-8247-cacd42a595ea",
       "PANmessage": "N/A",
       "duration": 1.344,
       "createdAt": 1582837637618,
@@ -63,14 +63,14 @@
       },
       "progress": 0,
       "PANSent": false,
-      "collectionId": "MOD09GQ_test-test-src-integration-IngestGranuleDuplicateHandling-1582837549352___006",
+      "collectionId": "MOD09GQ___006",
       "status": "completed",
       "timestamp": 1582837639812,
       "updatedAt": 1582837639078
     },
     {
       "pdrName": "MOD09GQ_1granule_v3.PDR_test-test-src-integration-sqsRule-1582837549345",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestGranule:c9b6d0e9-810b-4eaa-a382-89452a1a0e6b",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationParsePdrStateMachine-JVlCKfoXElDQ:9888b858-d70c-42ec-a887-c9367dcfd7cf",
       "PANmessage": "N/A",
       "duration": 0.728,
       "createdAt": 1582837600659,
@@ -83,14 +83,14 @@
       },
       "progress": 0,
       "PANSent": false,
-      "collectionId": "MOD09GQ_test-test-src-integration-sqsRule-1582837549345___006",
+      "collectionId": "MOD09GQ___006",
       "status": "completed",
       "timestamp": 1582837602207,
       "updatedAt": 1582837601509
     },
     {
       "pdrName": "MOD09GQ_1granule_v3.PDR_test-test-src-integration-IngestGranuleFailure-1582837549318",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestGranule:2220ccf3-b4d3-4e89-bc43-372c10860d85",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
       "PANmessage": "N/A",
       "duration": 28.759,
       "createdAt": 1582837570203,
@@ -103,14 +103,14 @@
       },
       "progress": 0,
       "PANSent": false,
-      "collectionId": "MOD09GQ_test-test-src-integration-IngestGranuleFailure-1582837549318___006",
+      "collectionId": "MOD09GQ___006",
       "status": "failed",
       "timestamp": 1582837599703,
       "updatedAt": 1582837599094
     },
     {
       "pdrName": "MOD09GQ_1granule_v3.PDR_test-test-src-integration-SyncGranuleSuccess-1582837549272",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-SyncGranule:912598f3-e798-4e7b-b06f-e2dc2a3a6c6a",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:c33e4091-e90d-449c-93f5-c4462b6e4e87",
       "PANmessage": "N/A",
       "duration": 4.513,
       "createdAt": 1582837590846,
@@ -123,14 +123,14 @@
       },
       "progress": 0,
       "PANSent": false,
-      "collectionId": "MOD09GQ_test-test-src-integration-SyncGranuleSuccess-1582837549272___006",
+      "collectionId": "MOD09GQ___006",
       "status": "failed",
       "timestamp": 1582837595947,
       "updatedAt": 1582837595466
     },
     {
       "pdrName": "MOD09GQ.A2185204.QJXYmH.006.3637470927183.hdf.PDR",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestAndPublishGranule:b154f982-70bd-434f-a5ca-b7b21f9ee368",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8",
       "PANmessage": "N/A",
       "duration": 1.307,
       "createdAt": 1582837574128,
@@ -150,7 +150,7 @@
     },
     {
       "pdrName": "MOD09GQ.A0386170.g1r6ua.006.5469189628473.hdf.PDR",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestAndPublishGranule:39a312dd-195b-41a7-88cd-cdf2e4a1d172",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1",
       "PANmessage": "N/A",
       "duration": 1.569,
       "createdAt": 1582837574205,
@@ -170,11 +170,11 @@
     },
     {
       "pdrName": "MOD09GQ.A6196635.exz_C5.006.6638820642953.hdf.PDR",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-IngestGranule:a9ac9b6b-e161-497d-98af-75809c275453",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:8e21ca0f-79d3-4782-8247-cacd42a595ea",
       "PANmessage": "N/A",
       "duration": 1.52,
       "createdAt": 1582837574013,
-      "provider": "s3_provider_test-test-src-integration-CreateReconciliationReport-1582837554438",
+      "provider": "s3_provider",
       "stats": {
         "total": 0,
         "processing": 0,
@@ -190,7 +190,7 @@
     },
     {
       "pdrName": "MOD09GQ_1granule_v3.PDR",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-src-integration-ParsePdr:d1725972-b8a4-4629-b9dd-c3bd222a8757",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8",
       "PANmessage": "N/A",
       "duration": 23.538,
       "createdAt": 1596203522716,
