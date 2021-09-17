@@ -60,35 +60,35 @@ const ReportHeading = ({
             {name}
           </h1>
           {downloadOptions && (
-          <DropdownBootstrap className="form-group__element--right">
-            <DropdownBootstrap.Toggle
-              className="button button--small button--download"
-              id="download-report-dropdown"
+            <DropdownBootstrap className="form-group__element--right">
+              <DropdownBootstrap.Toggle
+                className="button button--small button--download"
+                id="download-report-dropdown"
+              >
+                Download Report
+              </DropdownBootstrap.Toggle>
+              <DropdownBootstrap.Menu>
+                {downloadOptions.map(({ label, onClick }, index) => (
+                  <DropdownBootstrap.Item
+                    key={index}
+                    as="button"
+                    onClick={onClick}
+                  >
+                    {label}
+                  </DropdownBootstrap.Item>
+                ))}
+              </DropdownBootstrap.Menu>
+            </DropdownBootstrap>
+          )}
+          {onDownloadClick && (
+            <button
+              className="form-group__element--right button button--small button--download"
+              onClick={onDownloadClick}
             >
               Download Report
-            </DropdownBootstrap.Toggle>
-            <DropdownBootstrap.Menu>
-              {downloadOptions.map(({ label, onClick }, index) => (
-                <DropdownBootstrap.Item
-                  key={index}
-                  as="button"
-                  onClick={onClick}
-                >
-                  {label}
-                </DropdownBootstrap.Item>
-              ))}
-            </DropdownBootstrap.Menu>
-          </DropdownBootstrap>
-        )}
-        {onDownloadClick && (
-          <button
-            className="form-group__element--right button button--small button--download"
-            onClick={onDownloadClick}
-          >
-            Download Report
-          </button>
-        )}
-        {error && <ErrorReport report={error} />}
+            </button>
+          )}
+          {error && <ErrorReport report={error} />}
           <div className="heading--description">
             <span className="font-weight-bold">Date Range:</span>{' '}
             {formattedStartTime} to {formattedEndTime}
