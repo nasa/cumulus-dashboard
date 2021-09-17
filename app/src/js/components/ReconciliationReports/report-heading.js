@@ -54,35 +54,12 @@ const ReportHeading = ({
         </div>
       </section>
       <section className="page__section page__section__header-wrapper">
-        <div className="page__section__header page__section__header--shared-content heading__wrapper--border">
-          <h1 className="heading--large">
+        <div className="page__section__header">
+          <h1 className="heading--large heading--shared-content with-description">
             {type && `${type} Report: `}
             {name}
           </h1>
-          <div className="heading--description">
-            <span className="font-weight-bold">Date Range:</span>{' '}
-            {formattedStartTime} to {formattedEndTime}
-          </div>
-        </div>
-        <div className="heading--shared-content">
-          {conflictComparisons && (
-            <h2 className="heading--medium heading--shared-content">
-              Total Conflict Comparisons
-              <span className="num-title">{conflictComparisons}</span>
-            </h2>
-          )}
-          <div className="heading--description">
-            {
-              {
-                Inventory:
-                  'The reports below compare datasets and display the conflicts in each data location.',
-                'Granule Not Found':
-                  'The report below shows a comparison across each data bucket/repository for granule issues.',
-              }[type]
-            }
-          </div>
-        </div>
-        {downloadOptions && (
+          {downloadOptions && (
           <DropdownBootstrap className="form-group__element--right">
             <DropdownBootstrap.Toggle
               className="button button--small button--download"
@@ -112,6 +89,29 @@ const ReportHeading = ({
           </button>
         )}
         {error && <ErrorReport report={error} />}
+          <div className="heading--description">
+            <span className="font-weight-bold">Date Range:</span>{' '}
+            {formattedStartTime} to {formattedEndTime}
+          </div>
+        </div>
+        <div className="heading--shared-content">
+          {conflictComparisons && (
+            <h2 className="heading--medium heading--shared-content">
+              Total Conflict Comparisons
+              <span className="num-title">{conflictComparisons}</span>
+            </h2>
+          )}
+          <div className="heading--description">
+            {
+              {
+                Inventory:
+                  'The reports below compare datasets and display the conflicts in each data location.',
+                'Granule Not Found':
+                  'The report below shows a comparison across each data bucket/repository for granule issues.',
+              }[type]
+            }
+          </div>
+        </div>
       </section>
     </>
   );
