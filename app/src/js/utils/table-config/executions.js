@@ -85,11 +85,11 @@ export const tableColumns = [
     id: 'status',
     // eslint-disable-next-line react/prop-types
     Cell: ({ cell: { value }, row: { original: { error } } }) => (
-      <>{value} {value === 'Failed' && <Tooltip
+      <>{value}{value === 'Failed' && <Tooltip
         className='tooltip--light'
         id={value}
         placement='right'
-        target={<FontAwesomeIcon icon={faTimesCircle} color='red' />}
+        target={<> <FontAwesomeIcon icon={faTimesCircle} color='red' /></>}
         // eslint-disable-next-line react/prop-types
         tip={<div>{error.Error}</div>}
       />}</>

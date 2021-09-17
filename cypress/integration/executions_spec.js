@@ -334,13 +334,14 @@ describe('Dashboard Executions Page', () => {
 
       // Should have 6 columns with the correct headers
       cy.get('.thead .tr .tr').children().as('columns');
-      cy.get('@columns').should('have.length', 5);
+      cy.get('@columns').should('have.length', 6);
 
       cy.get('@columns').eq(0).should('have.text', 'Name');
       cy.get('@columns').eq(1).should('have.text', 'Status');
       cy.get('@columns').eq(2).should('have.text', 'Workflow');
       cy.get('@columns').eq(3).should('have.text', 'Updated');
       cy.get('@columns').eq(4).should('have.text', 'Duration');
+      cy.get('@columns').eq(4).should('have.text', 'Failed Events Snapshot');
     });
   });
 });
