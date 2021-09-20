@@ -7,6 +7,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { __RewireAPI__ as GranulesRewireAPI } from '../../../app/src/js/utils/table-config/granules';
 
 const setOnConfirm = GranulesRewireAPI.__get__('setOnConfirm');
+const containsPublishedGranules = GranulesRewireAPI.__get__('containsPublishedGranules');
 
 GranulesRewireAPI.__Rewire__('historyPushWithQueryParams', sinon.fake());
 const historyPushWithQueryParams = GranulesRewireAPI.__get__('historyPushWithQueryParams');
@@ -101,4 +102,47 @@ test('setOnConfirm navigates to the correct processing page irrespective of the 
     confirmCallback();
     t.true(historyPushWithQueryParams.calledWith(o.expected));
   });
+});
+
+test('containsPublishedGranules returns true if any granule is published', (t)=> {
+  const testGranules = [
+    {
+      "execution": "https://example.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789:execution:stack-IngestGranule:53f19d45-ead3-444d-9b74-83995df71657",
+      "published": false,
+    },
+    {
+      "execution": "https://example.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789:execution:stack-IngestGranule:53f19d45-ead3-444d-9b74-83995df71657",
+      "published": true,
+    }
+  ];
+
+  t.true (containsPublishedGranules(testGranules));
+});
+
+test('containsPublishedGranules returns false if no granules are published', (t)=>{
+    const testGranules = [
+    {
+      "execution": "https://example.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789:execution:stack-IngestGranule:53f19d45-ead3-444d-9b74-83995df71657",
+      "published": false,
+    },
+    {
+      "execution": "https://example.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789:execution:stack-IngestGranule:53f19d45-ead3-444d-9b74-83995df71657",
+      "published": false,
+    }
+  ];
+
+  t.false(containsPublishedGranules(testGranules));
+});
+
+test('containsPublishedGranules returns false if a granule is missing a published key', (t)=>{
+  const testGranules = [
+    {
+      "execution": "https://example.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789:execution:stack-IngestGranule:53f19d45-ead3-444d-9b74-83995df71657",
+    },
+    {
+      "execution": "https://example.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789:execution:stack-IngestGranule:53f19d45-ead3-444d-9b74-83995df71657",
+    }
+  ];
+
+  t.false(containsPublishedGranules(testGranules));
 });
