@@ -16,6 +16,7 @@ const { target, environment } = _config;
 const Main = ({
   api,
   apiVersion,
+  cmrInfo,
   children,
   cumulusInstance,
   dispatch,
@@ -48,7 +49,7 @@ const Main = ({
       <section className='page__section--top'>
         <TopButton />
       </section>
-      <Footer api={api} apiVersion={apiVersion} />
+      <Footer api={api} apiVersion={apiVersion} cmrInfo={cmrInfo} />
     </div>
   );
 };
@@ -59,6 +60,7 @@ Main.propTypes = {
   location: PropTypes.object,
   api: PropTypes.object,
   apiVersion: PropTypes.object,
+  cmrInfo: PropTypes.object,
   cumulusInstance: PropTypes.object,
   logs: PropTypes.object,
 };

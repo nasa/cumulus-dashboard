@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- **CUMULUS-2594**
+  - Added information on CMR Provider, Environment and Authentication to the Footer
 - **CUMULUS-2142**
   - Changed styling for sidebar button
   - Added tooltip for sidebar button
@@ -88,6 +90,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Fixes granule execute modal rerender issue when workflow options are not changed
 - **CUMULUS-2553**
   - Fixed DatePicker prop so the leading zeroes can be entered without having too many zeroes clouding the input.
+- **CUMULUS-NONE**
+  - Update Bamboo and scripts to deploy the Dashboard to our SIT for Cumulus team testing.
+
+### Added
+
+- **CUMULUS-2459**
+  - Added Executions List column to granules table linking to executions-list view that displays all executions
+    for a granule/collection combination
 
 ### Added
 
