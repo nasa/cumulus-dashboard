@@ -10,10 +10,11 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
+import { useDispatch } from 'react-redux';
 import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
 import ListFilters from '../ListActions/ListFilters';
-
+import { sortPersist } from '../../actions/index';
 const getColumnWidth = (rows, accessor, headerText, originalWidth) => {
   const maxWidth = 400;
   const magicSpacing = 10;
@@ -65,6 +66,8 @@ const SortableTable = ({
   shouldManualSort = false,
   shouldUsePagination = false,
   tableColumns = [],
+  tableId,
+  initialSortBy = [],
 }) => {
   const defaultColumn = useMemo(
     () => ({
@@ -78,7 +81,14 @@ const SortableTable = ({
   const [fitColumn, setFitColumn] = useState({});
   const [leftScrollButtonVisibility, setLeftScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
   const [rightScrollButtonVisibility, setRightScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
-
+  let sortByState;
+  if (initialSortBy?.length > 0) {
+    sortByState = initialSortBy;
+  } else if (initialSortId) {
+    sortByState = [{ id: initialSortId, desc: true }];
+  } else {
+    sortByState = [];
+  }
   let rightScrollInterval;
   let leftScrollInterval;
 
@@ -116,7 +126,7 @@ const SortableTable = ({
       manualPagination: !shouldUsePagination,
       initialState: {
         hiddenColumns: initialHiddenColumns,
-        sortBy: initialSortId ? [{ id: initialSortId, desc: true }] : [],
+        sortBy: sortByState,
       },
     },
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
@@ -143,7 +153,7 @@ const SortableTable = ({
       }
     }
   );
-
+  const dispatch = useDispatch();
   const tableRows = page || rows;
   const includeFilters = typeof getToggleColumnOptions !== 'function';
 
@@ -169,6 +179,12 @@ const SortableTable = ({
       onSelect(selected);
     }
   }, [selectedRowIds, onSelect]);
+
+  useEffect(() => {
+    if (tableId) {
+      dispatch(sortPersist(tableId, sortBy));
+    }
+  }, [dispatch, tableId, sortBy]);
 
   useEffect(() => {
     if (typeof changeSortProps === 'function') {
@@ -488,6 +504,8 @@ SortableTable.propTypes = {
   shouldManualSort: PropTypes.bool,
   shouldUsePagination: PropTypes.bool,
   tableColumns: PropTypes.array,
+  tableId: PropTypes.string,
+  initialSortBy: PropTypes.array,
 };
 
 export default SortableTable;

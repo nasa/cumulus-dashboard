@@ -113,6 +113,7 @@ class CollectionList extends React.Component {
             initialSortId="duration"
             filterAction={filterCollections}
             filterClear={clearCollectionsFilter}
+            tableId="collections"
           >
             <Search
               action={searchCollections}

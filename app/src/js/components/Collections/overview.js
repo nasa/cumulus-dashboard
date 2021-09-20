@@ -309,6 +309,7 @@ const CollectionOverview = ({
           initialSortId="timestamp"
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
+          tableId={`collection-${collectionName}-${collectionVersion}`}
           onSelect={updateSelection}
         >
           <Search

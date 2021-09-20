@@ -8,6 +8,9 @@ import {
   CLEAR_EXECUTIONS_FILTER,
   SEARCH_EXECUTIONS,
   CLEAR_EXECUTIONS_SEARCH,
+  EXECUTIONS_LIST,
+  EXECUTIONS_LIST_INFLIGHT,
+  EXECUTIONS_LIST_ERROR,
 } from '../actions/types';
 
 export const initialState = {
@@ -46,5 +49,18 @@ export default createReducer(initialState, {
   },
   [CLEAR_EXECUTIONS_SEARCH]: (state) => {
     state.list.infix = null;
+  },
+  [EXECUTIONS_LIST]: (state, action) => {
+    state.list.data = action.data.results;
+    state.list.meta = assignDate(action.data.meta);
+    state.list.inflight = false;
+    state.list.error = false;
+  },
+  [EXECUTIONS_LIST_INFLIGHT]: (state) => {
+    state.list.inflight = true;
+  },
+  [EXECUTIONS_LIST_ERROR]: (state, action) => {
+    state.list.inflight = false;
+    state.list.error = action.error;
   },
 });

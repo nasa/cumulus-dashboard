@@ -23,6 +23,7 @@ function resetIt() {
   return Promise.all([
     eraseDataStack(),
     testUtils.setAuthorizedOAuthUsers([localUserName]),
+    serveUtils.resetPostgresDb(),
   ]);
 }
 
@@ -82,12 +83,12 @@ function uploadReconciliationReportFiles() {
 function seedEverything() {
   return Promise.all([
     resetIt()
-      .then(seedPdrs)
-      .then(seedRules)
-      .then(seedCollections)
-      .then(seedGranules)
-      .then(seedExecutions)
       .then(seedProviders)
+      .then(seedCollections)
+      .then(seedExecutions)
+      .then(seedPdrs)
+      .then(seedGranules)
+      .then(seedRules)
       .then(seedReconciliationReports),
     uploadReconciliationReportFiles(),
   ]);

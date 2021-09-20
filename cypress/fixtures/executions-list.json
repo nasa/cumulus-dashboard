@@ -1,0 +1,292 @@
+{
+  "meta": {
+    "count": 6
+  },
+  "results": [
+    {
+      "name": "7a71f849-57a0-40e7-8fca-5cf796602a07",
+      "status": "running",
+      "arn": "arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
+      "duration": 26.635,
+      "error": {
+        "Cause": "{\"errorMessage\":\"Source file not found s3://cumulus-test-sandbox-internal/non-existent-path/non-existent-file\",\"errorType\":\"FileNotFound\",\"stackTrace\":[\"S3Granule.sync (/var/task/index.js:142314:13)\",\"<anonymous>\",\"process._tickDomainCallback (internal/process/next_tick.js:228:7)\"]}",
+        "Error": "FileNotFound"
+      },
+      "tasks": {
+        "Report": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
+          "name": "test-source-integration-SfSnsReport",
+          "version": "18"
+        }
+      },
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
+      "collectionId": "https_testcollection___001",
+      "createdAt": 1542129071756,
+      "updatedAt": 1542129098391,
+      "timestamp": 1542129099323
+    },
+    {
+      "name": "c33e4091-e90d-449c-93f5-c4462b6e4e87",
+      "status": "failed",
+      "arn": "arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:c33e4091-e90d-449c-93f5-c4462b6e4e87",
+      "duration": 28.694,
+      "error": {
+        "Cause": "{\"errorMessage\":\"Source file not found s3://cumulus-test-sandbox-internal/non-existent-path/non-existent-file\",\"errorType\":\"FileNotFound\",\"stackTrace\":[\"S3Granule.sync (/var/task/index.js:142314:13)\",\"<anonymous>\",\"process._tickDomainCallback (internal/process/next_tick.js:228:7)\"]}",
+        "Error": "FileNotFound"
+      },
+      "tasks": {
+        "StopStatus": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
+          "name": "test-source-integration-SfSnsReport",
+          "version": "18"
+        }
+      },
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:c33e4091-e90d-449c-93f5-c4462b6e4e87",
+      "collectionId": "https_testcollection___001",
+      "createdAt": 1542123794842,
+      "updatedAt": 1542123823536,
+      "timestamp": 1542123824136
+    },
+    {
+      "name": "9888b858-d70c-42ec-a887-c9367dcfd7cf",
+      "status": "completed",
+      "arn": "arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationParsePdrStateMachine-JVlCKfoXElDQ:9888b858-d70c-42ec-a887-c9367dcfd7cf",
+      "duration": 77.104,
+      "error": {
+        "Cause": "\"None\"",
+        "Error": "Unknown Error"
+      },
+      "tasks": {
+        "ParsePdr": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-ParsePdr:ParsePdr-2979f1f71736621607b0d6ccc9875dce4fdcccab",
+          "name": "test-source-integration-ParsePdr",
+          "version": "19"
+        },
+        "StopStatus": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
+          "name": "test-source-integration-SfSnsReport",
+          "version": "18"
+        },
+        "CheckStatus": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-PdrStatusCheck:PdrStatusCheck-870b3ba8ae46bd75407798ef59cc1e459d363312",
+          "name": "test-source-integration-PdrStatusCheck",
+          "version": "19"
+        },
+        "StatusReport": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
+          "name": "test-source-integration-SfSnsReport",
+          "version": "18"
+        },
+        "QueueGranules": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-QueueGranules:QueueGranules-5f5de321741f77e2d7f89f41f16498f02ce111cd",
+          "name": "test-source-integration-QueueGranules",
+          "version": "19"
+        }
+      },
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationParsePdrStateMachine-JVlCKfoXElDQ:9888b858-d70c-42ec-a887-c9367dcfd7cf",
+      "collectionId": "MOD09GQ___006",
+      "createdAt": 1542053062238,
+      "updatedAt": 1542053139343,
+      "timestamp": 1542053139921
+    },
+    {
+      "name": "8e21ca0f-79d3-4782-8247-cacd42a595ea",
+      "status": "completed",
+      "arn": "arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea",
+      "duration": 20.365,
+      "error": {
+        "Cause": "\"None\"",
+        "Error": "Unknown Error"
+      },
+      "tasks": {
+        "StopStatus": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
+          "name": "test-source-integration-SfSnsReport",
+          "version": "18"
+        },
+        "ProcessingStep": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-FakeProcessing:FakeProcessing-ca2504cf11020f7a7a2b01304752adf11fa43a56",
+          "name": "test-source-integration-FakeProcessing",
+          "version": "35"
+        },
+        "MoveGranuleStep": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-MoveGranules:MoveGranules-065967facfd624617685271a921be71a8c436f27",
+          "name": "test-source-integration-MoveGranules",
+          "version": "32"
+        },
+        "SyncGranuleNoVpc": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SyncGranuleNoVpc:SyncGranuleNoVpc-71bf2cfeda020e9409a3f67293d1f7b8f42e0546",
+          "name": "test-source-integration-SyncGranuleNoVpc",
+          "version": "35"
+        }
+      },
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:8e21ca0f-79d3-4782-8247-cacd42a595ea",
+      "collectionId": "MOD09GQ___006",
+      "createdAt": 1542053110348,
+      "updatedAt": 1542053130713,
+      "timestamp": 1542053131165
+    },
+    {
+      "name": "c3ce6b76-a5f5-47d2-80a5-8b5c56300da8",
+      "status": "completed",
+      "arn": "arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8",
+      "duration": 13.127,
+      "error": {
+        "Cause": "\"None\"",
+        "Error": "Unknown Error"
+      },
+      "tasks": {
+        "QueuePdrs": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-QueuePdrs:QueuePdrs-8e81d722bac219528d2be0ba8d8104a8cbb1bb04",
+          "name": "test-source-integration-QueuePdrs",
+          "version": "18"
+        },
+        "StopStatus": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
+          "name": "test-source-integration-SfSnsReport",
+          "version": "18"
+        },
+        "StartStatus": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-852e08f1fd5e168685bed68ab05230471247aa2b",
+          "name": "test-source-integration-SfSnsReport",
+          "version": "18"
+        },
+        "DiscoverPdrs": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-DiscoverPdrs:DiscoverPdrs-c155ebecc4d03a9a0a3737b844122643e93d3887",
+          "name": "test-source-integration-DiscoverPdrs",
+          "version": "19"
+        }
+      },
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8",
+      "collectionId": "http_testcollection___001",
+      "createdAt": 1542053050795,
+      "updatedAt": 1542053063922,
+      "timestamp": 1542053064551
+    },
+    {
+      "name": "b313e777-d28a-435b-a0dd-f1fad08116t1",
+      "status": "completed",
+      "arn": "arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1",
+      "duration": 29.971,
+      "error": {
+        "Cause": "\"None\"",
+        "Error": "Unknown Error"
+      },
+      "tasks": {
+        "CmrStep": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-PostToCmr:PostToCmr-e7dd30c53fd4c8b13241e5c9ebfe6f92c148b6c0",
+          "name": "test-source-integration-PostToCmr",
+          "version": "30"
+        },
+        "StopStatus": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SfSnsReport:SfSnsReport-d4c3a5a1e006ace8ad2368605afb331abdaf1431",
+          "name": "test-source-integration-SfSnsReport",
+          "version": "23"
+        },
+        "ProcessingStep": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-FakeProcessing:FakeProcessing-769a215f9b18c5a0f376e25d2b4326c810baaaa8",
+          "name": "test-source-integration-FakeProcessing",
+          "version": "41"
+        },
+        "MoveGranuleStep": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-MoveGranules:MoveGranules-0df332b0b971a1e01cac875e2c1497b0cab840fc",
+          "name": "test-source-integration-MoveGranules",
+          "version": "38"
+        },
+        "SyncGranuleNoVpc": {
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-SyncGranuleNoVpc:SyncGranuleNoVpc-1baa8c522bf76a37ed6d577ebc3e5fdb678512e3",
+          "name": "test-source-integration-SyncGranuleNoVpc",
+          "version": "41"
+        }
+      },
+      "originalPayload": {
+        "pdr": {
+          "name": "MOD09GQ_1granule_v3.PDR",
+          "path": "test-source-integration-IngestGranuleSuccess-1544123771801-test-data/files",
+          "size": 596,
+          "time": 1520873050000
+        },
+        "granules": [
+          {
+            "files": [
+              {
+                "name": "MOD09GQ.A4826606.CX9u3i.006.1751203470685.hdf",
+                "path": "test-source-integration-IngestGranuleSuccess-1544123771801-test-data/files",
+                "fileSize": 17865615
+              },
+              {
+                "name": "MOD09GQ.A4826606.CX9u3i.006.1751203470685.hdf.met",
+                "path": "test-source-integration-IngestGranuleSuccess-1544123771801-test-data/files",
+                "fileSize": 44118
+              },
+              {
+                "name": "MOD09GQ.A4826606.CX9u3i.006.1751203470685_ndvi.jpg",
+                "path": "test-source-integration-IngestGranuleSuccess-1544123771801-test-data/files",
+                "fileSize": 44118
+              }
+            ],
+            "version": "006",
+            "dataType": "MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1544123771801",
+            "granuleId": "MOD09GQ.A4826606.CX9u3i.006.1751203470685"
+          }
+        ]
+      },
+      "finalPayload": {
+        "process": "modis",
+        "granules": [
+          {
+            "files": [
+              {
+                "name": "MOD09GQ.A4826606.CX9u3i.006.1751203470685.hdf",
+                "path": "test-source-integration-IngestGranuleSuccess-1544123771801-test-data/files",
+                "bucket": "test-source-integration-protected",
+                "fileSize": 17865615,
+                "filename": "s3://test-source-integration-protected/MOD09GQ___006/2017/MOD/MOD09GQ.A4826606.CX9u3i.006.1751203470685.hdf",
+                "filepath": "MOD09GQ___006/2017/MOD/MOD09GQ.A4826606.CX9u3i.006.1751203470685.hdf",
+                "url_path": "{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{extractYear(cmrMetadata.Granule.Temporal.RangeDateTime.BeginningDateTime)}/{substring(file.name, 0, 3)}",
+                "duplicate_found": true
+              },
+              {
+                "name": "MOD09GQ.A4826606.CX9u3i.006.1751203470685.hdf.met",
+                "path": "test-source-integration-IngestGranuleSuccess-1544123771801-test-data/files",
+                "bucket": "test-source-integration-private",
+                "fileSize": 44118,
+                "filename": "s3://test-source-integration-private/MOD09GQ___006/MOD/MOD09GQ.A4826606.CX9u3i.006.1751203470685.hdf.met",
+                "filepath": "MOD09GQ___006/MOD/MOD09GQ.A4826606.CX9u3i.006.1751203470685.hdf.met",
+                "url_path": "{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}",
+                "duplicate_found": true
+              },
+              {
+                "name": "MOD09GQ.A4826606.CX9u3i.006.1751203470685_ndvi.jpg",
+                "path": "test-source-integration-IngestGranuleSuccess-1544123771801-test-data/files",
+                "bucket": "test-source-integration-public",
+                "fileSize": 44118,
+                "filename": "s3://test-source-integration-public/MOD09GQ___006/MOD/MOD09GQ.A4826606.CX9u3i.006.1751203470685_ndvi.jpg",
+                "filepath": "MOD09GQ___006/MOD/MOD09GQ.A4826606.CX9u3i.006.1751203470685_ndvi.jpg",
+                "url_path": "{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}",
+                "duplicate_found": true
+              },
+              {
+                "name": "MOD09GQ.A4826606.CX9u3i.006.1751203470685.cmr.xml",
+                "bucket": "test-source-integration-protected-2",
+                "filename": "s3://test-source-integration-protected-2/MOD09GQ___006/MOD/MOD09GQ.A4826606.CX9u3i.006.1751203470685.cmr.xml",
+                "filepath": "MOD09GQ___006/MOD/MOD09GQ.A4826606.CX9u3i.006.1751203470685.cmr.xml",
+                "url_path": "{cmrMetadata.Granule.Collection.ShortName}___{cmrMetadata.Granule.Collection.VersionId}/{substring(file.name, 0, 3)}"
+              }
+            ],
+            "cmrLink": "https://cmr.uat.earthdata.nasa.gov/search/granules.json?concept_id=G1224871669-CUMULUS",
+            "version": "006",
+            "dataType": "MOD09GQ_test-test-source-integration-IngestGranuleSuccess-1544123771801",
+            "granuleId": "MOD09GQ.A4826606.CX9u3i.006.1751203470685",
+            "published": true
+          }
+        ]
+      },
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1",
+      "collectionId": "L2_HR_PIXC___000",
+      "createdAt": 1544123891174,
+      "updatedAt": 1545019248081,
+      "timestamp": 1544123921145
+    }
+  ]
+}

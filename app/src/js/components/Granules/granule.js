@@ -25,6 +25,8 @@ import {
   collectionLink,
   providerLink,
   pdrLink,
+  reingestText,
+  removeFromCmr,
   deleteText,
 } from '../../utils/format';
 import Table from '../SortableTable/SortableTable';
@@ -256,7 +258,7 @@ class GranuleOverview extends React.Component {
         status: get(this.props.granules.reingested, [granuleId, 'status']),
         success: this.loadGranule,
         confirmAction: true,
-        confirmText: `Reingest ${granuleId}? Note: the granule files will be overwritten.`,
+        confirmText: reingestText(granuleId),
       },
       {
         text: 'Execute',
@@ -272,6 +274,8 @@ class GranuleOverview extends React.Component {
         action: this.remove,
         status: get(this.props.granules.removed, [granuleId, 'status']),
         success: this.loadGranule,
+        confirmAction: true,
+        confirmText: removeFromCmr(granuleId),
       },
       {
         text: 'Delete',

@@ -178,7 +178,8 @@ Button.propTypes = {
   tooltipPlacement: PropTypes.string,
   tooltipId: PropTypes.string,
   type: PropTypes.string,
-  variant: PropTypes.string
+  variant: PropTypes.string,
+  spinner: PropTypes.bool
 };
 
 export default Button;

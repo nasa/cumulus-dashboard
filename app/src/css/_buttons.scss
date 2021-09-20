@@ -163,6 +163,11 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
 
   &--close{
     padding: .65em 1.2em .65em 1.2em;
+    background-color: $light-green;
+    
+    &:hover {
+      background-color: darken($light-green, 10%);
+    }
   }
 
   &--show {
@@ -473,7 +478,6 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       cursor: pointer;
       &:after {
         position: absolute;
-        /*color: $white;*/
         font-family: 'FontAwesome';
         content: '\f061';
         font-weight: 900;
@@ -527,8 +531,9 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       }
     }
 
-    &__arrow:after {
+    &__arrow:after, &__arrow--sm:after, &__arrow--lg:after{
       left: 130%;
+      right: 1%;
       top: .75em;
     }
 
@@ -536,12 +541,16 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       left: 85%;
     }
 
-    &__animation--md:hover {
-      padding: .65em 3em .65em 1em;
+    &__arrow--sm:hover:after {
+      left: 70%;
     }
 
-    &__arrow--md:hover:after {
-      left: 75%;
+    &__arrow--lg:hover:after {
+      left: 92%;
+    }
+
+    &__animation--md:hover {
+      padding: .65em 3em .65em 1em;
     }
 
     &__arrow--white {

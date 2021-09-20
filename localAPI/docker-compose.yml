@@ -9,7 +9,7 @@ services:
     image: ${DOCKER_REPOSITORY}localstack/localstack:0.10.7
     network_mode: "service:shim"
     environment:
-      SERVICES: "cloudwatch,cloudwatchlogs,dynamodb,kinesis,kms,lambda,s3,secretsmanager,sns,sqs,stepfunctions"
+      SERVICES: "cloudwatch,cloudwatchlogs,dynamodb,kinesis,kms,lambda,s3,secretsmanager,sns,sqs,stepfunctions,ssm"
       DATA_DIR: "/tmp/localstack/data"
   shim:   # empty container to open ports
     image: ${DOCKER_REPOSITORY}node:12.18.0
@@ -22,3 +22,11 @@ services:
     ports:
       - "9200:9200"
       - "4550-4586:4550-4586"
+      - "5432:5432"
+  postgres:
+    image: postgres:10.17-alpine
+    network_mode: "service:shim"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "postgres"

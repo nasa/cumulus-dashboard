@@ -13,7 +13,7 @@ import {
   getCumulusInstanceMetadata,
   listCollections,
   listOperations,
-  listWorkflows
+  listWorkflows,
 } from '../../actions';
 import { tally } from '../../utils/format';
 import List from '../Table/Table';
@@ -25,41 +25,45 @@ import { operationStatus } from '../../utils/status';
 import { operationTypes } from '../../utils/type';
 
 class OperationOverview extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.queryMeta = this.queryMeta.bind(this);
     this.generateQuery = this.generateQuery.bind(this);
     this.searchOperations = this.searchOperations.bind(this);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.queryMeta();
     this.props.dispatch(getCumulusInstanceMetadata());
   }
 
-  generateQuery () {
+  generateQuery() {
     return { ...this.props.queryParams };
   }
 
-  queryMeta () {
+  queryMeta() {
     const { dispatch, queryParams } = this.props;
-    dispatch(listCollections({
-      limit: 100,
-      fields: 'name,version'
-    }));
+    dispatch(
+      listCollections({
+        limit: 100,
+        fields: 'name,version',
+      })
+    );
     dispatch(listWorkflows());
-    dispatch(getCount({
-      type: 'executions',
-      field: 'status',
-      ...queryParams
-    }));
+    dispatch(
+      getCount({
+        type: 'executions',
+        field: 'status',
+        ...queryParams,
+      })
+    );
   }
 
-  searchOperations (list, infix) {
+  searchOperations(list, infix) {
     return list.filter((item) => item.id.includes(infix));
   }
 
-  render () {
+  render() {
     const { operations } = this.props;
     const { list } = operations;
     const { count } = list.meta;
@@ -67,35 +71,46 @@ class OperationOverview extends React.Component {
     //  This data munging should probably be handled in the reducer, but this is a workaround.
     if (mutableList.internal.infix) {
       if (mutableList.internal.infix.queryValue) {
-        mutableList.data = this.searchOperations(mutableList.data, mutableList.internal.infix.queryValue);
+        mutableList.data = this.searchOperations(
+          mutableList.data,
+          mutableList.internal.infix.queryValue
+        );
       } else if (typeof mutableList.internal.infix === 'string') {
-        mutableList.data = this.searchOperations(mutableList.data, mutableList.internal.infix);
+        mutableList.data = this.searchOperations(
+          mutableList.data,
+          mutableList.internal.infix
+        );
       }
     }
 
     return (
-      <div className='page__component'>
+      <div className="page__component">
         <Helmet>
           <title> Operations Overview </title>
         </Helmet>
-        <section className='page__section page__section__header-wrapper'>
-          <div className='page__section__header'>
-            <h1 className='heading--large heading--shared-content with-description'>Operations Overview</h1>
+        <section className="page__section page__section__header-wrapper">
+          <div className="page__section__header">
+            <h1 className="heading--large heading--shared-content with-description">
+              Operations Overview
+            </h1>
           </div>
         </section>
-        <section className='page__section'>
-          <div className='heading__wrapper--border'>
-            <h2 className='heading--medium heading--shared-content with-description'>All Operations <span className='num-title'>{tally(count)}</span></h2>
+        <section className="page__section">
+          <div className="heading__wrapper--border">
+            <h2 className="heading--medium heading--shared-content with-description">
+              All Operations <span className="num-title">{tally(count)}</span>
+            </h2>
           </div>
           <List
             list={mutableList}
             action={listOperations}
             tableColumns={tableColumns}
             query={this.generateQuery()}
-            rowId='id'
-            initialSortId='createdAt'
+            rowId="id"
+            initialSortId="createdAt"
             filterAction={filterOperations}
             filterClear={clearOperationsFilter}
+            tableId="operations"
           >
             <Search
               action={searchOperations}
@@ -130,7 +145,6 @@ class OperationOverview extends React.Component {
               />
             </ListFilters>
           </List>
-
         </section>
       </div>
     );
@@ -143,6 +157,8 @@ OperationOverview.propTypes = {
   queryParams: PropTypes.object,
 };
 
-export default withRouter(connect((state) => ({
-  operations: state.operations,
-}))(OperationOverview));
+export default withRouter(
+  connect((state) => ({
+    operations: state.operations,
+  }))(OperationOverview)
+);
