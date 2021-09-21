@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Breaking Changes
 
-This version of the dashboard requires Cumulus API `9.3.1-alpha.0` or later
+This version of the dashboard requires Cumulus API `9.5.0` or later
 
 - **CUMULUS-2502**
   - Configuration changes are required to continue connecting the dashboard with Earthdata Metrics
@@ -36,7 +36,6 @@ This version of the dashboard requires Cumulus API `9.3.1-alpha.0` or later
 
 - **CUMULUS-2462**
   - Reingest and Bulk Reingest Actions are updated to select one workflow from multiple executions
-  - Requires the Cumulus API `9.3.1-alpha.0` or later
 
 ### Changed
 
