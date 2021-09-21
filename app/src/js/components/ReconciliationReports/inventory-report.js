@@ -147,12 +147,6 @@ const InventoryReport = ({
 
       <section className="page__section">
         <div className="multicard">
-          <div className="collapse-link">
-            <span className="link" onClick={handleExpandClick} role="button" tabIndex="0">
-              {!allCollapsed() ? 'Expand All' : 'Collapse All'}
-            </span>
-          </div>
-
           <div className="list-action-wrapper">
             <Search
               action={searchReconciliationReport}
@@ -175,7 +169,11 @@ const InventoryReport = ({
               />
             </ListFilters>
           </div>
-
+          <div className="collapse-link">
+            <span className="link" onClick={handleExpandClick} role="button" tabIndex="0">
+              {!allCollapsed() ? 'Expand All' : 'Collapse All'}
+            </span>
+          </div>
           {reportComparisons
             .find((displayObj) => displayObj.id === activeId)
             .tables.map((item, index) => {

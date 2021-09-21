@@ -55,53 +55,53 @@ const ReportHeading = ({
       </section>
       <section className="page__section page__section__header-wrapper">
         <div className="page__section__header">
-          <h1 className="heading--large heading--shared-content with-description">
-            {type && `${type} Report: `}
-            {name}
-          </h1>
-          {downloadOptions && (
-            <DropdownBootstrap className="form-group__element--right">
-              <DropdownBootstrap.Toggle
-                className="button button--small button--download"
-                id="download-report-dropdown"
-              >
-                Download Report
-              </DropdownBootstrap.Toggle>
-              <DropdownBootstrap.Menu>
-                {downloadOptions.map(({ label, onClick }, index) => (
-                  <DropdownBootstrap.Item
-                    key={index}
-                    as="button"
-                    onClick={onClick}
+          <div className="heading--shared-content with-description with-bottom-border width--full">
+            <ul>
+              <li>
+                <h1 className="heading--large heading--shared-content with-description">
+                  {type && `${type} Report: `}
+                  {name}
+                </h1>
+              </li>
+              <li>
+                {downloadOptions && (
+                  <DropdownBootstrap className="form-group__element--right">
+                    <DropdownBootstrap.Toggle
+                      className="button button--small button--download"
+                      id="download-report-dropdown"
+                    >
+                      Download Report
+                    </DropdownBootstrap.Toggle>
+                    <DropdownBootstrap.Menu>
+                      {downloadOptions.map(({ label, onClick }, index) => (
+                        <DropdownBootstrap.Item
+                          key={index}
+                          as="button"
+                          onClick={onClick}
+                        >
+                          {label}
+                        </DropdownBootstrap.Item>
+                      ))}
+                    </DropdownBootstrap.Menu>
+                  </DropdownBootstrap>
+                )}
+                {onDownloadClick && (
+                  <button
+                    className="form-group__element--right button button--small button--download"
+                    onClick={onDownloadClick}
                   >
-                    {label}
-                  </DropdownBootstrap.Item>
-                ))}
-              </DropdownBootstrap.Menu>
-            </DropdownBootstrap>
-          )}
-          {onDownloadClick && (
-            <button
-              className="form-group__element--right button button--small button--download"
-              onClick={onDownloadClick}
-            >
-              Download Report
-            </button>
-          )}
-          {error && <ErrorReport report={error} />}
-          <div className="heading--description">
-            <span className="font-weight-bold">Date Range:</span>{' '}
-            {formattedStartTime} to {formattedEndTime}
+                    Download Report
+                  </button>
+                )}
+                {error && <ErrorReport report={error} />}
+              </li>
+              <li>
+                <span className="font-weight-bold heading--description">Date Range:</span>{' '}
+                {formattedStartTime} to {formattedEndTime}
+              </li>
+            </ul>
           </div>
-        </div>
-        <div className="heading--shared-content">
-          {conflictComparisons && (
-            <h2 className="heading--medium heading--shared-content">
-              Total Conflict Comparisons
-              <span className="num-title">{conflictComparisons}</span>
-            </h2>
-          )}
-          <div className="heading--description">
+          <div className="with-description">
             {
               {
                 Inventory:
@@ -111,6 +111,16 @@ const ReportHeading = ({
               }[type]
             }
           </div>
+        </div>
+      </section>
+      <section>
+        <div>
+          {conflictComparisons && (
+            <h2 className="heading--medium heading--shared-content heading__wrapper--border width--full">
+              Total Conflict Comparisons
+              <span className="num-title">{conflictComparisons}</span>
+            </h2>
+          )}
         </div>
       </section>
     </>
