@@ -300,6 +300,47 @@
           }
         ]
       }
+    },
+    {
+      "arn": "arn:aws:states:us-east-1:123456789012:execution:test-source-integration-IngestAndPublishGranule:fd0bc7b5-56c3-4e37-b445-8a25f27c06b8",
+      "status": "failed",
+      "timestamp": 1629488546679,
+      "tasks": {},
+      "createdAt": 1629488527340,
+      "cumulusVersion": "9.4.0",
+      "name": "fd0bc7b5-56c3-4e37-b445-8a25f27c06b8",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-source-integration-IngestAndPublishGranule:fd0bc7b5-56c3-4e37-b445-8a25f27c06b8",
+      "updatedAt": 1632110409176,
+      "collectionId": "MOD09GQ___006",
+      "duration": 18.498,
+      "error": {
+        "Error": "CumulusMessageAdapterExecutionError",
+        "failedExecutionStepName": "SyncGranule",
+        "Cause": "{\"errorType\":\"CumulusMessageAdapterExecutionError\",\"errorMessage\":\"warning setting command to loadAndUpdateRemoteEvent\\nwarning setting command to loadNestedEvent\\nUnexpected Error <class 'jsonschema.exceptions.ValidationError'>. input schema: 'granules' is a required property\\n\\nFailed validating 'required' in schema:\\n\"}"
+      },
+      "type": "IngestAndPublishGranule"
+    },
+    {
+      "arn": "arn:aws:states:us-east-1:123456789012:execution:test-source-integration-HelloWorldWorkflow:79ba430a-0616-4458-ad5e-1bf2e979cfe4",
+      "status": "completed",
+      "timestamp": 1580327992306,
+      "tasks": {
+        "HelloWorld": {
+          "name": "test-source-integration-HelloWorld",
+          "arn": "arn:aws:lambda:us-east-1:123456789012:function:test-source-integration-HelloWorld",
+          "version": "$LATEST"
+        }
+      },
+      "createdAt": 1580327980133,
+      "name": "79ba430a-0616-4458-ad5e-1bf2e979cfe4",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:test-source-integration-HelloWorldWorkflow:79ba430a-0616-4458-ad5e-1bf2e979cfe4",
+      "updatedAt": 1581220884436,
+      "duration": 11.821,
+      "error": {
+        "Error": "Unknown Error",
+        "Cause": "None"
+      },
+      "type": "HelloWorldWorkflow"
     }
   ]
 }
