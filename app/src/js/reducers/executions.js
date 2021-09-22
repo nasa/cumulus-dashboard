@@ -20,7 +20,8 @@ export const initialState = {
     params: {},
     inflight: false,
     error: false,
-  }
+  },
+  map: {},
 };
 
 export default createReducer(initialState, {
@@ -50,16 +51,20 @@ export default createReducer(initialState, {
     state.list.infix = null;
   },
   [EXECUTIONS_LIST]: (state, action) => {
-    state.list.data = action.data.results;
-    state.list.meta = assignDate(action.data.meta);
-    state.list.inflight = false;
-    state.list.error = false;
+    state.map[action.id] = {
+      data: action.data.results,
+      meta: assignDate(action.data.meta),
+      inflight: false,
+      error: false,
+    };
   },
-  [EXECUTIONS_LIST_INFLIGHT]: (state) => {
-    state.list.inflight = true;
+  [EXECUTIONS_LIST_INFLIGHT]: (state, action) => {
+    state.map[action.id] = { inflight: true };
   },
   [EXECUTIONS_LIST_ERROR]: (state, action) => {
-    state.list.inflight = false;
-    state.list.error = action.error;
+    state.map[action.id] = {
+      inflight: false,
+      error: action.error,
+    };
   },
 });

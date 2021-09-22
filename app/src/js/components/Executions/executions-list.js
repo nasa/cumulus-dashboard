@@ -8,6 +8,7 @@ import { tableColumns } from '../../utils/table-config/executions-list';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import List from '../Table/Table';
 import ExecutionSnapshot from './execution-snapshot';
+import { initialState } from '../../reducers/executions';
 
 const breadcrumbConfig = [
   {
@@ -28,9 +29,11 @@ const ExecutionsList = ({
   match,
   executions
 }) => {
-  const { list } = executions || { list: { meta: { count: 0 }, results: [] } };
   const { params } = match || {};
   const { collectionId, granuleId } = params;
+  const { map } = executions || {};
+  const list = map[granuleId] || initialState.list;
+  const { meta } = list || {};
 
   const payload = {
     granules: [
@@ -68,13 +71,13 @@ const ExecutionsList = ({
         <section className="page__section">
           <div className="heading__wrapper--border">
             <h2 className="heading--medium heading--shared-content with-description">Total Executions
-              <span className='num-title'>{list.meta.count || 0}</span>
+              <span className='num-title'>{meta?.count || 0}</span>
             </h2>
           </div>
           <List
             list={list}
             tableColumns={tableColumns}
-            action={(() => listExecutionsByGranule(payload))}
+            action={(() => listExecutionsByGranule(granuleId, payload))}
             rowId='name'
             initialSortId='createdAt'
             renderRowSubComponent={renderRowSubComponent}
