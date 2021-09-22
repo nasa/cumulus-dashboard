@@ -85,7 +85,7 @@ export const tableColumns = [
     id: 'status',
     // eslint-disable-next-line react/prop-types
     Cell: ({ cell: { value }, row: { original: { error } } }) => (
-      <>{value}{value === 'Failed' && <Tooltip
+      <>{value} {value === 'Failed' && <Tooltip
         className='tooltip--light'
         id={value}
         placement='right'
