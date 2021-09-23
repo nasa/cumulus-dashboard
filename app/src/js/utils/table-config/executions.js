@@ -41,9 +41,8 @@ export const subColumns = [
     Header: 'Event Type',
     accessor: 'type',
     // eslint-disable-next-line react/prop-types
-    Cell: ({ cell: { value }, row: { original: { eventDetails } } }) => {
-      // eslint-disable-next-line react/prop-types
-      const failed = eventDetails?.type === 'LambdaFunctionFailed';
+    Cell: ({ cell: { value }, row: { original: { error } } }) => {
+      const failed = !!error;
       const icon = failed ? faTimesCircle : faCheckCircle;
       const iconColor = failed ? 'red' : 'green';
       return (
@@ -57,7 +56,7 @@ export const subColumns = [
                 id={value}
                 placement='right'
                 target={<FontAwesomeIcon icon={icon} color={iconColor} />}
-                tip={<div>{JSON.stringify(eventDetails)}</div>}
+                tip={<div>{error}</div>}
               />}
             </div>}
         </>
