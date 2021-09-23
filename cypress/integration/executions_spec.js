@@ -31,10 +31,10 @@ describe('Dashboard Executions Page', () => {
 
       // shows a summary count of completed and failed executions
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 4)
+        .first().contains('li', 'Completed').contains('li', 6)
         .next()
         .contains('li', 'Failed')
-        .contains('li', 1)
+        .contains('li', 2)
         .next()
         .contains('li', 'Running')
         .contains('li', 1);
@@ -65,11 +65,11 @@ describe('Dashboard Executions Page', () => {
           cy.get('@columns').eq(4).invoke('text')
             .should('be.eq', `${Number(execution.duration).toFixed(2)}s`);
           cy.get('@columns').eq(5).invoke('text')
-            .should('be.eq', execution.collectionId);
+            .should('be.eq', execution.collectionId || '--');
         });
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 6);
+      cy.get('@list').should('have.length', 9);
     });
 
     it('should show a single execution', () => {
