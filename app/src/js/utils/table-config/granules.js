@@ -278,7 +278,7 @@ const containsPublishedGranules = (selectedGranules) => {
   let publishedGranules = [];
 
   if (Array.isArray(selectedGranules) && selectedGranules.length > 0) {
-    publishedGranules = selectedGranules.filter((g) => g.published === true);
+    publishedGranules = selectedGranules.filter((g) => g && g.published === true);
   }
 
   if (publishedGranules.length < 1) {

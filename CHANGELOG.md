@@ -96,6 +96,7 @@ This version of the dashboard requires Cumulus API `9.5.0` or later
   - Fixed DatePicker prop so the leading zeroes can be entered without having too many zeroes clouding the input.
 - **CUMULUS-NONE**
   - Update Bamboo and scripts to deploy the Dashboard to our SIT for Cumulus team testing.
+  - Fixed containsPublishedGranules to ignore granules without a published key.
 
 ### Added
 
