@@ -299,7 +299,7 @@ export const reingestGranule = (granuleId, meta) => ({
     path: `granules/${granuleId}`,
     data: {
       action: 'reingest',
-      workflowName: meta.workflowName
+      ...meta,
     }
   }
 });
