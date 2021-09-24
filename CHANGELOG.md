@@ -35,7 +35,8 @@ This version of the dashboard requires Cumulus API `9.5.0` or later
 ### Added
 
 - **CUMULUS-2462**
-  - Reingest and Bulk Reingest Actions are updated to select one workflow from multiple executions
+  - Reingest a granule from granule details page is updated to select a workflow execution arn for reingest.
+  - Batch Reingest and Bulk Reingest Actions are updated to select the workflowName for reingest.
 
 ### Changed
 

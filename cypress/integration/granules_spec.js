@@ -376,6 +376,25 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .tbody .tr').should('have.length', 2);
     });
 
+    it('Should reingest a granule from granules detail page.', () => {
+      const granuleId = 'MOD09GQ.A9344328.K9yI3O.006.4625818663028';
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { body: { message: 'ingested' }, statusCode: 200 },
+      );
+
+      cy.visit(`/granules/granule/${granuleId}`);
+      cy.contains('button', 'Options').click();
+      cy.get('.dropdown__menu').contains('Reingest').click();
+      cy.get('.modal-body .form__dropdown .dropdown__element input').as('workflow-input');
+      cy.get('@workflow-input').click({ force: true }).type('IngestAndPublish').type('{enter}');
+      cy.get('.button--submit').click();
+      cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
+      cy.get('.button--cancel').click();
+      cy.url().should('include', `granules/granule/${granuleId}`);
+      cy.get('.heading--large').should('have.text', `Granule: ${granuleId}`);
+    });
+
     it('Should reingest a granule and redirect to the granules detail page.', () => {
       const granuleId = 'MOD09GQ.A0142558.ee5lpE.006.5112577830916';
       cy.intercept(
