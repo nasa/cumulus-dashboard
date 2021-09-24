@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import path from 'path';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import get from 'lodash/get';
@@ -174,6 +175,24 @@ export const metaAccessors = ({
         );
       }
       return 'N/A';
+    },
+  },
+  {
+    label: 'Granule ID',
+    property: 'granules',
+    accessor: (d) => {
+      return (
+        <Link to={() => ({ pathname: `/granules/granule/${encodeURIComponent(path.basename(d[0].granuleId))}` })}>{d[0].granuleId}</Link>
+      )
+    },
+  },
+  {
+    label: 'Associated Executions List',
+    property: 'granules',
+    accessor: (d) => {
+      return (
+        <Link to={() => ({ pathname: `/executions/executions-list/${encodeURIComponent(d[0].collectionId)}/${encodeURIComponent(path.basename(d[0].granuleId))}` })}>Link</Link>
+      )
     },
   },
   {
