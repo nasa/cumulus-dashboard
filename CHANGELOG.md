@@ -85,6 +85,8 @@ This version of the dashboard requires Cumulus API `9.5.0` or later
   - added .gitattributes file that prevents windows from changing the line endings on checkout from github.
 - **CUMULUS-2650**
   - Modal CSS styling tweaks
+- **CUMULUS-2651**
+  - Layout CSS styling tweaks
 - **CUMULUS-2459**
   - Updated localAPI docker-compose.yml to include SSM, Postgres container to be used with RDS compatible API
   - Updated integration tests due to changes in API behavior related to Postgres contstraints between tables

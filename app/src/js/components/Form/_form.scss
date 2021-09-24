@@ -349,9 +349,9 @@ select option{
 }
 
 .form__addone--button {
-  padding: 0.3em 1.8em;
+  padding: 0.3em 1em;
   font-size: 1.4em;
-  min-width: 4.2em;
+  float: right;
 }
 
 .subform__item {
@@ -413,10 +413,10 @@ select option{
     .form__item {
       input {
         &:not([type=number]) {
-          padding: 10px;
+          padding: 10px 0;
         }
         &[type=text] {
-          width: 90%;
+          width: 100%;
         }
       }
       .subform__item--expanded {
@@ -424,7 +424,20 @@ select option{
       }
       .form__addone--item {
         input {
-          width: 75%;
+          width: 93%;
+
+          @media screen and (max-width: 1240px) {
+            width: 90%
+          }
+
+          @media screen and (min-width: 1600px) {
+            width: 95%
+          }
+        }
+        &:after {
+          content: "";
+          display: table;
+          clear: both;
         }
       }
     }
@@ -459,7 +472,6 @@ select option{
       margin-bottom: 1em;
       input {
         width: 59%;
-        margin-right: 1.5em;
         float: left;
       }
     }
