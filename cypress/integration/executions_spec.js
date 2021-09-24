@@ -318,24 +318,14 @@ describe('Dashboard Executions Page', () => {
     });
 
     it('should show executions for a granule/collection', () => {
-      cy.intercept(
-        { method: 'POST', url: 'http://localhost:5001/executions/search-by-granules*' },
-        { fixture: 'executions-list.json', statusCode: 200 }
-      );
+      const granuleId = 'MOD09GQ.A9344328.K9yI3O.006.4625818663028';
+      cy.visit(`/executions/executions-list/MOD09GQ___006/${granuleId}`);
 
-      cy.visit('/executions/executions-list/MOD09GQ___006/MOD09GQ.A4622742.B7A8Ma.006.7857260550036');
-      cy.url().should('include', 'executions-list');
+      cy.get('.heading--large').should('contain.text', granuleId);
+      cy.get('.num-title').should('contain.text', '3');
 
-      // Should show Granule ID at the top
-      cy.get('.heading--large').should('contain.text', 'MOD09GQ.A4622742.B7A8Ma.006.7857260550036');
-
-      // Should have the correct number of results displayed
-      cy.get('.num-title').should('contain.text', '6');
-
-      // Should have 6 columns with the correct headers
       cy.get('.thead .tr .tr').children().as('columns');
       cy.get('@columns').should('have.length', 5);
-
       cy.get('@columns').eq(0).should('have.text', 'Name');
       cy.get('@columns').eq(1).should('have.text', 'Status');
       cy.get('@columns').eq(2).should('have.text', 'Workflow');
