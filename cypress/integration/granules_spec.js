@@ -382,9 +382,11 @@ describe('Dashboard Granules Page', () => {
         { method: 'PUT', url: new RegExp('/granules/.*') },
         { body: { message: 'ingested' }, statusCode: 200 },
       );
+      cy.intercept('GET', `/granules/${granuleId}*`).as('getGranule');
 
       cy.visit(`/granules/granule/${granuleId}`);
-      cy.get('.heading--large').should('contain.text', granuleId);
+      cy.wait('@getGranule');
+      cy.get('.heading--large').should('have.text', `Granule: ${granuleId}`);
       cy.contains('button', 'Options').click();
       cy.get('.dropdown__menu').contains('Reingest').click();
       cy.get('.modal-body .form__dropdown .dropdown__element input').as('workflow-input');
@@ -393,7 +395,6 @@ describe('Dashboard Granules Page', () => {
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
       cy.get('.button--cancel').click();
       cy.url().should('include', `granules/granule/${granuleId}`);
-      cy.get('.heading--large').should('have.text', `Granule: ${granuleId}`);
     });
 
     it('Should reingest a granule and redirect to the granules detail page.', () => {
