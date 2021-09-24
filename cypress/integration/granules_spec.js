@@ -387,6 +387,8 @@ describe('Dashboard Granules Page', () => {
       cy.get(`[data-value="${granuleId}"] > .td >input[type="checkbox"]`).click();
       cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Reingest').click();
+      cy.get('.modal-body .form__dropdown .dropdown__element input').as('workflow-input');
+      cy.get('@workflow-input').click({ force: true }).type('Discover').type('{enter}');
       cy.get('.button--submit').click();
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
       cy.get('.button__goto').click();

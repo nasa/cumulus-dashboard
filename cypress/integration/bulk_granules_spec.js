@@ -109,12 +109,16 @@ describe('Dashboard Bulk Granules', () => {
 
     it('handles successful bulk granule reingest request', () => {
       const asyncOperationId = Math.random().toString(36).substring(2, 15);
+      const granuleIds = ['MOD09GQ.A9344328.K9yI3O.006.4625818663028', 'MOD09GQ.A2417309.YZ9tCV.006.4640974889044'];
 
       cy.intercept('POST', '/granules/bulkReingest', {
         id: asyncOperationId
       }).as('postBulkReingest');
 
       cy.visit('/granules');
+      cy.get(`[data-value="${granuleIds[0]}"] > .td >input[type="checkbox"]`).click();
+      cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
+
       cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Run Bulk Granules').click();
 
@@ -125,6 +129,8 @@ describe('Dashboard Bulk Granules', () => {
 
       cy.get('.bulk_granules--reingest')
         .within(() => {
+          cy.get('.form__dropdown .dropdown__element input').as('workflow-input');
+          cy.get('@workflow-input').click({ force: true }).type('IngestAndPublish', { force: true }).type('{enter}');
           cy.contains('button', 'Cancel Bulk Reingest');
           cy.contains('button', 'Run Bulk Reingest').click();
         });
