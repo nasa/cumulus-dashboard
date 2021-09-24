@@ -376,7 +376,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .tbody .tr').should('have.length', 2);
     });
 
-    it('Should reingest a granule from granules detail page.', () => {
+    it('Should reingest a granule from granule details page.', () => {
       const granuleId = 'MOD09GQ.A9344328.K9yI3O.006.4625818663028';
       cy.intercept(
         { method: 'PUT', url: new RegExp('/granules/.*') },
@@ -384,6 +384,7 @@ describe('Dashboard Granules Page', () => {
       );
 
       cy.visit(`/granules/granule/${granuleId}`);
+      cy.get('.heading--large').should('contain.text', granuleId);
       cy.contains('button', 'Options').click();
       cy.get('.dropdown__menu').contains('Reingest').click();
       cy.get('.modal-body .form__dropdown .dropdown__element input').as('workflow-input');
