@@ -22,7 +22,7 @@
   }
 
   &:hover {
-    margin: .5em 1em 1.5em 0;
+    margin: 0.5em 1em 1.5em 0;
     box-shadow: $shadow__hover;
   }
 
@@ -33,19 +33,21 @@
   }
 }
 
-.tablecard--wrapper{
+.tablecard--wrapper {
   display: flex;
+  margin-top: 1.5em;
+  justify-content: center;
 
   .table-card {
     margin-right: 1em;
 
     &--title-caption {
       font-weight: $base-font-semibold;
-      margin-bottom: 1em;
+      margin-bottom: 0.5em;
     }
 
     &:first-child {
-      border-right: 1px solid $light-grey;
+      border-right: 1px solid $lightest-grey;
     }
   }
 }

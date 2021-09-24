@@ -77,9 +77,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - added .gitattributes file that prevents windows from changing the line endings on checkout from github.
 - **CUMULUS-2650**
   - Modal CSS styling tweaks
+- **CUMULUS-2651**
+  - Layout CSS styling tweaks
 - **CUMULUS-2459**
   - Updated localAPI docker-compose.yml to include SSM, Postgres container to be used with RDS compatible API
   - Updated integration tests due to changes in API behavior related to Postgres contstraints between tables
+- **CUMULUS-NONE**
+  - Downgrades elasticsearch version in testing container to 5.3 to match AWS version.
 
 ### Fixed
 
