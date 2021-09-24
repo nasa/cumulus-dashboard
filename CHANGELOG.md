@@ -77,6 +77,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - added .gitattributes file that prevents windows from changing the line endings on checkout from github.
 - **CUMULUS-2650**
   - Modal CSS styling tweaks
+- **CUMULUS-2651**
+  - Layout CSS styling tweaks
 - **CUMULUS-2459**
   - Updated localAPI docker-compose.yml to include SSM, Postgres container to be used with RDS compatible API
   - Updated integration tests due to changes in API behavior related to Postgres contstraints between tables
@@ -92,6 +94,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Fixed DatePicker prop so the leading zeroes can be entered without having too many zeroes clouding the input.
 - **CUMULUS-NONE**
   - Update Bamboo and scripts to deploy the Dashboard to our SIT for Cumulus team testing.
+  - Fixed containsPublishedGranules to ignore granules without a published key.
 
 ### Added
 
