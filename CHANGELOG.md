@@ -90,6 +90,8 @@ This version of the dashboard requires Cumulus API `9.5.0` or later
 - **CUMULUS-2459**
   - Updated localAPI docker-compose.yml to include SSM, Postgres container to be used with RDS compatible API
   - Updated integration tests due to changes in API behavior related to Postgres contstraints between tables
+- **CUMULUS-NONE**
+  - Downgrades elasticsearch version in testing container to 5.3 to match AWS version.
 
 ### Fixed
 
