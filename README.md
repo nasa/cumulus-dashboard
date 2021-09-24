@@ -114,8 +114,10 @@ The dashboard uses node v12.18.0. To build/run the dashboard on your local machi
 We use npm for local package management, to install the requirements:
 ```bash
   $ nvm use
-  $ npm install
+  $ npm ci
 ```
+
+Use `$ npm install` when package.json is updated.
 
 To build a dashboard bundle<sup>[1](#bundlefootnote)</sup>:
 
