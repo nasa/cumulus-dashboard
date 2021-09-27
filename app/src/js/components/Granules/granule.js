@@ -39,7 +39,7 @@ import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import { defaultWorkflowMeta, executeDialog } from '../../utils/table-config/granules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 const link = 'Link';
 
@@ -93,7 +93,7 @@ const metaAccessors = [
     property: 'cmrLink',
     accessor: (d) => (d ? (
       <a href={d} target="_blank">
-          link
+        link
       </a>
     ) : (
       nullValue
@@ -105,7 +105,7 @@ const metaAccessors = [
       <Link to={() => ({ pathname: `/executions/executions-list/${encodeURIComponent(row.collectionId)}/${encodeURIComponent(path.basename(row.granuleId))}` })}>link</Link>
     ) : (
       nullValue
-       )),
+    )),
   },
   {
     label: 'Published',
@@ -313,7 +313,7 @@ class GranuleOverview extends React.Component {
               <dt>Status:</dt>
               <dd>
                 <span>Ingest</span>
-                <IndicatorWithTooltip granuleId={granuleId} repo='ingest' value={displayCase(granule.status)} className='status-indicator--granule'/>
+                <IndicatorWithTooltip granuleId={granuleId} repo='ingest' value={displayCase(granule.status)} className='status-indicator--granule' />
               </dd>
               {granule.recoveryStatus
                 ? <dd>
