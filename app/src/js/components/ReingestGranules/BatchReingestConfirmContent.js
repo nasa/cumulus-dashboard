@@ -38,7 +38,9 @@ const BatchReingestConfirmContent = ({
 
   useEffect(() => {
     dispatch(getGranulesWorkflows(JSON.stringify({ granules: selected })));
-  }, [dispatch, selected]);
+    setWorkflow(null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, JSON.stringify(selected)]);
 
   useEffect(() => () => {
     dispatch(clearGranulesWorkflows());
