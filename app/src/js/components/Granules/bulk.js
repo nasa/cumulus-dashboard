@@ -327,7 +327,7 @@ const BulkGranule = ({
           <ol>
             <li>In the box below, add either an array of granule Ids or an elasticsearch query and index.</li>
             <li>Then select workflow to rerun for all the selected granules. The workflows listed are the
-              workflow intersects of all the selected granules.</li>
+              intersection of the selected granules' workflows.</li>
           </ol>
         </BulkGranuleModal>
         {config.enableRecovery &&

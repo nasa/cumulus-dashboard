@@ -175,7 +175,7 @@ const BulkGranuleModal = ({
           </form>
           {selectWorkflow &&
           <>
-            <h4 className="modal_subtitle">Then select workflows to rerun for all the selected granules.</h4>
+            <h4 className="modal_subtitle">Then select workflow to rerun for all the selected granules.</h4>
             {get(granulesExecutions, 'workflows.error') &&
               <ErrorReport report={`Failed to get workflows: ${get(granulesExecutions, 'workflows.error')}`}/>}
             <div className='modal__internal modal__formcenter'>
