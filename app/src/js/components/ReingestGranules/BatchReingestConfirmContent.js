@@ -62,7 +62,7 @@ const BatchReingestConfirmContent = ({
         {displayedItems()}
       </ul>
       <div className="batch_granules--reingest">
-        <h4 className="modal_subtitle">To complete your granule reingest requests:</h4>
+        <h4 className="modal_subtitle">{`To complete your granule reingest request${s}:`}</h4>
         <p>
           {`Below you can select a specific workflow to apply to the selected granule${s}. `}
           <strong>Note: The default is the latest workflow.</strong>
