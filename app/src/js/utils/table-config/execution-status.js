@@ -11,40 +11,45 @@ import DefaultModal from '../../components/Modal/modal';
 
 export const tableColumns = [
   {
-    Header: 'Id',
+    Header: 'Event ID',
     accessor: 'id',
-    width: 10
+    width: 10,
+    Cell: ({ cell: { value }}) => {
+      if (value) {
+        return (
+          <>
+            <span className="num-title--round">
+              {value}
+            </span>
+          </>
+        );
+      }
+      return 'N/A';
+    }
   },
   {
-    Header: 'Type',
-    accessor: 'type',
-    Cell: ({ cell: { value }, row: { original: { eventDetails } } }) => {
+    Header: 'Step Name',
+    accessor: 'name',
+    Cell: ({ cell: { value }, row: { original: { id, eventDetails } }}) => {
       const [showModal, setShowModal] = useState(false);
-      const { id } = eventDetails || {};
       function toggleModal(e) {
         if (e) {
           e.preventDefault();
         }
         setShowModal(!showModal);
       }
-      if (eventDetails) {
-        let buttonClass;
-        if (eventDetails.type === 'LambdaFunctionFailed') {
-          buttonClass = 'button button--small button--no-left-padding button--failed';
-        } else {
-          buttonClass = 'button button--small button--no-left-padding';
-        }
+      if (value) {
         return (
           <>
-            <button
-              onClick={toggleModal}
-              className={buttonClass}
-            >
-              {eventDetails.type}
-            </button>
+            <span className="link link--pad-right" onClick={toggleModal} role="button" tabIndex="0">
+              {value}
+            </span>
+            {eventDetails.type.toLowerCase().includes('failed') ?
+            <i class="fas fa-times-circle status-icon--failed"></i> :
+            <i class="far fa-check-circle status-icon--success"></i>}
             <DefaultModal
               showModal={showModal}
-              title={`ID ${id}: ${value}`}
+              title={`ID ${id}: ${value} - ${eventDetails.type}`}
               onCloseModal={toggleModal}
               hasConfirmButton={false}
               cancelButtonClass="button--close"
@@ -60,53 +65,10 @@ export const tableColumns = [
     },
   },
   {
-    Header: 'Step Name',
-    accessor: 'name',
-  },
-  {
     Header: 'Timestamp',
     accessor: 'timestamp',
     Cell: ({ cell: { value } }) => fullDate(value)
   },
-  {
-    Header: 'Event Details',
-    accessor: 'eventDetails',
-    Cell: ({ cell: { value } }) => {
-      const [showModal, setShowModal] = useState(false);
-      const { id } = value || {};
-      function toggleModal(e) {
-        if (e) {
-          e.preventDefault();
-        }
-        setShowModal(!showModal);
-      }
-      if (value) {
-        return (
-          <>
-            <button
-              onClick={toggleModal}
-              className="button button--small button--no-left-padding"
-            >
-              More Details
-            </button>
-            <DefaultModal
-              showModal={showModal}
-              title={`ID ${id}: Event Details`}
-              onCloseModal={toggleModal}
-              hasConfirmButton={false}
-              cancelButtonClass="button--close"
-              cancelButtonText="Close"
-              className="execution__modal"
-            >
-              <pre>{JSON.stringify(value, null, 2)}</pre>
-            </DefaultModal>
-          </>
-        );
-      }
-      return 'N/A';
-    },
-    disableSortBy: true,
-  }
 ];
 
 export const metaAccessors = ({

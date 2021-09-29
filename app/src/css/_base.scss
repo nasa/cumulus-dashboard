@@ -95,6 +95,10 @@ a:active {
   }
 }
 
+.link--pad-right {
+  margin-right: 0.5em
+}
+
 .link--no-underline {
   border-bottom: 0;
 }
@@ -752,6 +756,16 @@ a:active {
 
   &--failed {
     background-color: $error-red;
+  }
+}
+
+.status-icon {
+  &--success {
+    color: $light-green;
+  }
+
+  &--failed {
+    color: $error-red;
   }
 }
 
