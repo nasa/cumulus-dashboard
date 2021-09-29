@@ -8,7 +8,6 @@ import { tableColumns } from '../../utils/table-config/executions-list';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import List from '../Table/Table';
 import ExecutionSnapshot from './execution-snapshot';
-import { initialState } from '../../reducers/executions';
 
 const breadcrumbConfig = [
   {
@@ -32,8 +31,8 @@ const ExecutionsList = ({
   const { params } = match || {};
   const { collectionId, granuleId } = params;
   const { map } = executions || {};
-  const list = map[granuleId] || initialState.list;
-  const { meta } = list || {};
+  const granuleExecutionslist = map[granuleId];
+  const { meta } = granuleExecutionslist || {};
 
   const payload = {
     granules: [
@@ -75,9 +74,9 @@ const ExecutionsList = ({
             </h2>
           </div>
           <List
-            list={list}
+            list={granuleExecutionslist}
             tableColumns={tableColumns}
-            action={(() => listExecutionsByGranule(granuleId, payload))}
+            action={() => listExecutionsByGranule(granuleId, payload)}
             rowId='name'
             initialSortId='createdAt'
             renderRowSubComponent={renderRowSubComponent}

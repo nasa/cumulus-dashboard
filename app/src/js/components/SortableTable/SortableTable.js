@@ -166,10 +166,10 @@ const SortableTable = ({
   const scrollRightButton = createRef();
 
   useEffect(() => {
-    if (clearSelected) {
+    if (canSelect && clearSelected) {
       toggleAllRowsSelected(false);
     }
-  }, [clearSelected, toggleAllRowsSelected]);
+  }, [canSelect, clearSelected, toggleAllRowsSelected]);
 
   useEffect(() => {
     const selected = Object.keys(selectedRowIds).reduce((selectedRows, key) => {
@@ -197,13 +197,13 @@ const SortableTable = ({
   }, [changeSortProps, sortBy]);
 
   useEffect(() => {
-    if (typeof getToggleColumnOptions === 'function') {
+    if (tableRows.length > 0 && typeof getToggleColumnOptions === 'function') {
       getToggleColumnOptions({
         setHiddenColumns,
         hiddenColumns
       });
     }
-  }, [getToggleColumnOptions, hiddenColumns, setHiddenColumns]);
+  }, [getToggleColumnOptions, hiddenColumns, setHiddenColumns, tableRows.length]);
 
   function resetHiddenColumns() {
     setHiddenColumns(initialHiddenColumns);
