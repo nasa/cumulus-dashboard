@@ -33,7 +33,7 @@ import {
 import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
 import SimpleDropdown from '../../components/DropDown/simple-dropdown';
-import Bulk from '../../components/Granules/bulk';
+import BulkGranule from '../../components/Granules/bulk';
 import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent';
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
 import TextArea from '../../components/TextAreaForm/text-area';
@@ -328,7 +328,7 @@ export const bulkActions = (granules, config, selectedGranules) => [
   },
   {
     Component:
-      <Bulk
+      <BulkGranule
         element='button'
         className='button button__bulkgranules button--green button--small form-group__element'
         confirmAction={true}
