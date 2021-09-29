@@ -75,7 +75,7 @@ const BulkGranuleModal = ({
     if ((index && esQuery) || ids.length > 0) {
       const granuleWorkflowsQuery = { ...queryParams, granules: ids };
       delete granuleWorkflowsQuery[ids];
-      dispatch(getGranulesWorkflows(JSON.stringify(granuleWorkflowsQuery)));
+      dispatch(getGranulesWorkflows(granuleWorkflowsQuery));
     }
   }
 
