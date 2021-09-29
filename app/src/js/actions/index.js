@@ -784,7 +784,7 @@ export const clearExecutionsSearch = () => ({ type: types.CLEAR_EXECUTIONS_SEARC
 
 export const getGranulesWorkflows = (payload) => ({
   [CALL_API]: {
-    type: types.GRANULES_WORKFLOWS,
+    type: types.WORKFLOWS_FROM_GRANULES,
     method: 'POST',
     path: 'executions/workflows-by-granules',
     params: { limit: 50 },
@@ -792,9 +792,9 @@ export const getGranulesWorkflows = (payload) => ({
   }
 });
 
-export const clearGranulesWorkflows = () => ({ type: types.CLEAR_GRANULES_WORKFLOWS });
+export const clearGranulesWorkflows = () => ({ type: types.CLEAR_WORKFLOWS_FROM_GRANULES });
 
-export const getGranulesWorkflowsClearError = () => ({ type: types.GRANULES_WORKFLOWS_CLEAR_ERROR });
+export const getGranulesWorkflowsClearError = () => ({ type: types.WORKFLOWS_FROM_GRANULES_CLEAR_ERROR });
 
 export const listOperations = (options) => (dispatch, getState) => {
   const timeFilters = fetchCurrentTimeFilters(getState().datepicker);
