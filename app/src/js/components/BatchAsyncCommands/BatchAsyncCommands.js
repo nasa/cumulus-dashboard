@@ -60,7 +60,6 @@ export class BatchCommand extends React.Component {
     this.updateMeta = this.updateMeta.bind(this);
   }
 
-  // 'selected' item is string or object, item for reingest granule action is object
   buildId(item) {
     return (typeof item === 'string') ? item : item.granuleId;
   }
