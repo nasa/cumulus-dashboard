@@ -113,6 +113,7 @@ const BulkGranuleModal = ({
     if (!showModal && queryWorkflowOptions) {
       dispatch(clearGranulesWorkflows());
       dispatch(getGranulesWorkflowsClearError());
+      setWorkflow(null);
     }
   }, [dispatch, showModal, queryWorkflowOptions]);
 
