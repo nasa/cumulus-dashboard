@@ -131,6 +131,7 @@ describe('Dashboard Bulk Granules', () => {
         .within(() => {
           cy.get('.form__dropdown .dropdown__element input').as('workflow-input');
           cy.get('@workflow-input').click({ force: true }).type('IngestAndPublish', { force: true }).type('{enter}');
+          cy.get('.form__dropdown .dropdown__element').should('have.text', 'IngestAndPublishGranule');
           cy.contains('button', 'Cancel Bulk Reingest');
           cy.contains('button', 'Run Bulk Reingest').click();
         });

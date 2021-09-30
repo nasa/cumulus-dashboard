@@ -391,6 +391,7 @@ describe('Dashboard Granules Page', () => {
       cy.get('.dropdown__menu').contains('Reingest').click();
       cy.get('.modal-body .form__dropdown .dropdown__element input').as('workflow-input');
       cy.get('@workflow-input').click({ force: true }).type('IngestAndPublish').type('{enter}');
+      cy.get('.modal-body .form__dropdown .dropdown__element').should('have.text', 'IngestAndPublishGranule');
       cy.get('.button--submit').click();
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
       cy.get('.button--cancel').click();
@@ -410,6 +411,7 @@ describe('Dashboard Granules Page', () => {
       cy.contains('button', 'Reingest').click();
       cy.get('.modal-body .form__dropdown .dropdown__element input').as('workflow-input');
       cy.get('@workflow-input').click({ force: true }).type('Discover').type('{enter}');
+      cy.get('.modal-body .form__dropdown .dropdown__element').should('have.text', 'DiscoverAndQueuePdrs');
       cy.get('.button--submit').click();
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
       cy.get('.button__goto').click();
