@@ -159,7 +159,7 @@ const SortableTable = ({
   );
   const dispatch = useDispatch();
   const tableRows = page || rows;
-  const includeFilters = typeof getToggleColumnOptions !== 'function' && !hideFilters;
+  const includeFilters = typeof getToggleColumnOptions === 'function' && !hideFilters;
 
   const tableRef = createRef();
   const scrollLeftButton = createRef();
@@ -197,13 +197,13 @@ const SortableTable = ({
   }, [changeSortProps, sortBy]);
 
   useEffect(() => {
-    if (data.length > 0 && typeof getToggleColumnOptions === 'function') {
+    if (includeFilters) {
       getToggleColumnOptions({
         setHiddenColumns,
         hiddenColumns
       });
     }
-  }, [getToggleColumnOptions, hiddenColumns, setHiddenColumns, data.length]);
+  }, [getToggleColumnOptions, hiddenColumns, includeFilters, setHiddenColumns]);
 
   function resetHiddenColumns() {
     setHiddenColumns(initialHiddenColumns);

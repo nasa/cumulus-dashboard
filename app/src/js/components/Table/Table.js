@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense, useCallback } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
@@ -111,22 +111,6 @@ const List = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(queryFilters)]);
 
-  useEffect(() => {
-    if (typeof toggleColumnOptionsAction === 'function') {
-      const allColumns = tableColumns.map(
-        (column) => column.id || column.accessor
-      );
-      dispatch(
-        toggleColumnOptionsAction(toggleColumnOptions.hiddenColumns, allColumns)
-      );
-    }
-  }, [
-    dispatch,
-    tableColumns,
-    toggleColumnOptions.hiddenColumns,
-    toggleColumnOptionsAction,
-  ]);
-
   function queryNewPage(newPage) {
     setPage(newPage);
   }
@@ -195,7 +179,7 @@ const List = ({
     );
   }
 
-  const getToggleColumnOptions = useCallback((newOptions) => {
+  const getToggleColumnOptions = useMemo((newOptions) => {
     setToggleColumnOptions(newOptions);
   }, []);
 

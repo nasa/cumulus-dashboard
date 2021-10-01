@@ -14,7 +14,6 @@ import {
   applyWorkflowToGranule,
   getCount,
   getOptionsProviderName,
-  toggleGranulesTableColumns,
 } from '../../actions';
 import { lastUpdated, tally, displayCase } from '../../utils/format';
 import {
@@ -187,7 +186,6 @@ const AllGranules = ({
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
           onSelect={updateSelection}
-          toggleColumnOptionsAction={toggleGranulesTableColumns}
           tableId="granules"
         >
           <Search

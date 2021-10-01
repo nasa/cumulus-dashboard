@@ -44,7 +44,7 @@ export const groupAction = {
   description: 'Select the action you would like to perform on the selected granules from the table below',
 };
 
-export const tableColumns = [
+export const tableColumns = (config) => [
   {
     Header: 'Status',
     accessor: 'status',
@@ -75,7 +75,7 @@ export const tableColumns = [
     Header: 'Executions List',
     accessor: 'granuleId',
     Cell: ({ row: { original: { collectionId, granuleId } } }) => (// eslint-disable-line react/prop-types
-      <Link to={(location) => ({ pathname: `/executions/executions-list/${encodeURIComponent(collectionId)}/${encodeURIComponent(path.basename(granuleId))}` })}>link</Link>
+      <Link to={() => ({ pathname: `/executions/executions-list/${encodeURIComponent(collectionId)}/${encodeURIComponent(path.basename(granuleId))}` })}>link</Link>
     ),
     disableSortBy: true,
     width: 90,
@@ -86,13 +86,13 @@ export const tableColumns = [
     accessor: 'provider',
     Cell: ({ cell: { value } }) => providerLink(value)
   },
-  {
+  ...config.enableRecovery ? [{
     Header: 'Recovery',
     accessor: (row) => (row.recoveryStatus ? displayCase(row.recoveryStatus) : row.recoveryStatus),
     id: 'recoveryStatus',
     disableSortBy: true,
     width: 110,
-  },
+  }] : [],
   {
     Header: 'Duration',
     accessor: (row) => seconds(row.duration),
