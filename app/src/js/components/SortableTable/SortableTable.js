@@ -197,13 +197,13 @@ const SortableTable = ({
   }, [changeSortProps, sortBy]);
 
   useEffect(() => {
-    if (tableRows.length > 0 && typeof getToggleColumnOptions === 'function') {
+    if (data.length > 0 && typeof getToggleColumnOptions === 'function') {
       getToggleColumnOptions({
         setHiddenColumns,
         hiddenColumns
       });
     }
-  }, [getToggleColumnOptions, hiddenColumns, setHiddenColumns, tableRows.length]);
+  }, [getToggleColumnOptions, hiddenColumns, setHiddenColumns, data.length]);
 
   function resetHiddenColumns() {
     setHiddenColumns(initialHiddenColumns);
