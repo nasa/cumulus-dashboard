@@ -118,7 +118,6 @@ const GnfReport = ({
           bulkActions={bulkActions}
           data={combinedGranules}
           groupAction={groupAction}
-          initialHiddenColumns={['']}
           legend={legend}
           onSelect={onSelect}
           rowId="granuleId"

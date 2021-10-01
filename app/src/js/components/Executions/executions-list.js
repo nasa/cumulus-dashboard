@@ -31,8 +31,8 @@ const ExecutionsList = ({
   const { params } = match || {};
   const { collectionId, granuleId } = params;
   const { map } = executions || {};
-  const granuleExecutionslist = map[granuleId];
-  const { meta } = granuleExecutionslist || {};
+  const granuleExecutionslist = map[granuleId] || {};
+  const { meta } = granuleExecutionslist;
 
   const payload = {
     granules: [
@@ -78,7 +78,7 @@ const ExecutionsList = ({
             tableColumns={tableColumns}
             action={() => listExecutionsByGranule(granuleId, payload)}
             rowId='name'
-            initialSortId='createdAt'
+            initialSortId='updatedAt'
             renderRowSubComponent={renderRowSubComponent}
           >
           </List>

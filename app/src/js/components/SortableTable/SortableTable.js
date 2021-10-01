@@ -159,7 +159,9 @@ const SortableTable = ({
   );
   const dispatch = useDispatch();
   const tableRows = page || rows;
-  const includeFilters = typeof getToggleColumnOptions === 'function' && !hideFilters;
+  // We only include filters if not wrapped in list component and hideFilter is false
+  const wrappedInList = typeof getToggleColumnOptions === 'function';
+  const includeFilters = !wrappedInList && !hideFilters;
 
   const tableRef = createRef();
   const scrollLeftButton = createRef();
@@ -197,13 +199,13 @@ const SortableTable = ({
   }, [changeSortProps, sortBy]);
 
   useEffect(() => {
-    if (includeFilters) {
+    if (wrappedInList) {
       getToggleColumnOptions({
         setHiddenColumns,
         hiddenColumns
       });
     }
-  }, [getToggleColumnOptions, hiddenColumns, includeFilters, setHiddenColumns]);
+  }, [getToggleColumnOptions, hiddenColumns, setHiddenColumns, wrappedInList]);
 
   function resetHiddenColumns() {
     setHiddenColumns(initialHiddenColumns);
@@ -340,7 +342,8 @@ const SortableTable = ({
       {(includeFilters || legend) &&
         <ListFilters>
           {includeFilters &&
-            <TableFilters columns={tableColumns}
+            <TableFilters
+              columns={tableColumns}
               setHiddenColumns={setHiddenColumns}
               hiddenColumns={hiddenColumns}
               resetHiddenColumns={resetHiddenColumns}

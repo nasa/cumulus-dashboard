@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense, useMemo } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
@@ -44,7 +44,6 @@ const List = ({
   sorts,
   tableColumns,
   tableId,
-  toggleColumnOptionsAction,
 }) => {
   const {
     data: listData,
@@ -53,7 +52,7 @@ const List = ({
     meta,
   } = list;
   const { count, limit } = meta || {};
-  const tableData = data || listData;
+  const tableData = data || listData || [];
 
   const [selected, setSelected] = useState([]);
   const [clearSelected, setClearSelected] = useState(false);
@@ -71,7 +70,6 @@ const List = ({
     bulkActionError: null,
   });
   const [toggleColumnOptions, setToggleColumnOptions] = useState({
-    onChange: noop,
     hiddenColumns: initialHiddenColumns,
     setHiddenColumns: noop,
   });
@@ -179,7 +177,7 @@ const List = ({
     );
   }
 
-  const getToggleColumnOptions = useMemo((newOptions) => {
+  const getToggleColumnOptions = useCallback((newOptions) => {
     setToggleColumnOptions(newOptions);
   }, []);
 

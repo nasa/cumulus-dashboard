@@ -210,7 +210,6 @@ const InventoryReport = ({
                       <List
                         action={listGranules}
                         data={item.data}
-                        initialHiddenColumns={['']}
                         legend={legend}
                         bulkActions={bulkActions}
                         groupAction={groupAction}
