@@ -242,6 +242,14 @@ select option{
   }
 }
 
+.form__bulkgranules {
+  min-height: 1700px;
+}
+
+.form__dropdown {
+  overflow: visible;
+}
+
 .form-group__element {
   margin-right: 1em;
 }
