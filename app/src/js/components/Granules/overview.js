@@ -17,6 +17,7 @@ import {
   applyRecoveryWorkflowToGranule,
   getOptionsCollectionName,
   getOptionsProviderName,
+  toggleGranulesTableColumns,
 } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import {
@@ -181,7 +182,7 @@ class GranulesOverview extends React.Component {
           <List
             list={list}
             action={listGranules}
-            tableColumns={tableColumns(this.props.config)}
+            tableColumns={tableColumns}
             query={this.generateQuery()}
             bulkActions={this.generateBulkActions()}
             groupAction={groupAction}
@@ -191,6 +192,7 @@ class GranulesOverview extends React.Component {
             filterAction={filterGranules}
             filterClear={clearGranulesFilter}
             onSelect={this.updateSelection}
+            toggleColumnOptionsAction={toggleGranulesTableColumns}
             tableId="granules-overview"
           >
             <Search

@@ -44,6 +44,7 @@ const List = ({
   sorts,
   tableColumns,
   tableId,
+  toggleColumnOptionsAction,
 }) => {
   const {
     data: listData,
@@ -108,6 +109,22 @@ const List = ({
     setClearSelected(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(queryFilters)]);
+
+  useEffect(() => {
+    if (typeof toggleColumnOptionsAction === 'function') {
+      const allColumns = tableColumns.map(
+        (column) => column.id || column.accessor
+      );
+      dispatch(
+        toggleColumnOptionsAction(toggleColumnOptions.hiddenColumns, allColumns)
+      );
+    }
+  }, [
+    dispatch,
+    tableColumns,
+    toggleColumnOptions.hiddenColumns,
+    toggleColumnOptionsAction,
+  ]);
 
   function queryNewPage(newPage) {
     setPage(newPage);
