@@ -27,19 +27,7 @@ import { pageSection, section, sectionHeader } from './Section/section';
 import ErrorReport from './Errors/report';
 import List from './Table/Table';
 import { errorTableColumns } from '../utils/table-config/granules';
-import {
-  kibanaS3AccessErrorsLink,
-  kibanaS3AccessSuccessesLink,
-  kibanaApiLambdaErrorsLink,
-  kibanaApiLambdaSuccessesLink,
-  kibanaTEALambdaErrorsLink,
-  kibanaTEALambdaSuccessesLink,
-  kibanaGatewayAccessErrorsLink,
-  kibanaGatewayAccessSuccessesLink,
-  kibanaGatewayExecutionErrorsLink,
-  kibanaGatewayExecutionSuccessesLink,
-  kibanaGranuleErrorsLink,
-} from '../utils/kibana';
+import { kibanaGranuleErrorsLink, kibanaAllLogsLink } from '../utils/kibana';
 import DatepickerRange from './Datepicker/DatepickerRange';
 import { strings } from './locale';
 import { getPersistentQueryParams } from '../utils/url-helper';
@@ -95,7 +83,7 @@ class Home extends React.Component {
     const data = items.filter((d) => d[0] !== nullValue);
     if (!data.length) return null;
     return pageSection(
-      title, sectionId,
+      title, String(sectionId),
       <div className="overview-num__wrapper overview-num__wrapper-home">
         <ul id={listId}>
           {data.map((d) => {
@@ -150,7 +138,7 @@ class Home extends React.Component {
     const { dist, location } = this.props;
     const searchString = getPersistentQueryParams(location);
     const overview = [
-      [tally(get(stats.data, 'errors.value')), 'Errors', kibanaGranuleErrorsLink(this.props.cumulusInstance, this.props.datepicker)],
+      [tally(get(stats.data, 'errors.value')), 'Errors', kibanaGranuleErrorsLink()],
       [tally(get(stats.data, 'collections.value')), strings.collections, '/collections'],
       [tally(get(stats.data, 'granules.value')), strings.granules, '/granules'],
       [tally(get(this.props.executions, 'list.meta.count')), 'Executions', '/executions'],
@@ -159,19 +147,19 @@ class Home extends React.Component {
     ];
 
     const distSuccessStats = [
-      [tally(get(dist, 's3Access.successes')), 'S3 Access Successes', kibanaS3AccessSuccessesLink(this.props.cumulusInstance, this.props.datepicker)],
-      [tally(get(dist, 'teaLambda.successes')), 'TEA Lambda Successes', kibanaTEALambdaSuccessesLink(this.props.cumulusInstance, this.props.datepicker)],
-      [tally(get(dist, 'apiLambda.successes')), 'Distribution API Lambda Successes', kibanaApiLambdaSuccessesLink(this.props.cumulusInstance, this.props.datepicker)],
-      [tally(get(dist, 'apiGateway.execution.successes')), 'Gateway Execution Successes', kibanaGatewayExecutionSuccessesLink(this.props.cumulusInstance, this.props.datepicker)],
-      [tally(get(dist, 'apiGateway.access.successes')), 'Gateway Access Successes', kibanaGatewayAccessSuccessesLink(this.props.cumulusInstance, this.props.datepicker)]
+      [tally(get(dist, 's3Access.successes')), 'S3 Access Successes', kibanaAllLogsLink()],
+      [tally(get(dist, 'teaLambda.successes')), 'TEA Lambda Successes', kibanaAllLogsLink()],
+      [tally(get(dist, 'apiLambda.successes')), 'Distribution API Lambda Successes', kibanaAllLogsLink()],
+      [tally(get(dist, 'apiGateway.execution.successes')), 'Gateway Execution Successes', kibanaAllLogsLink()],
+      [tally(get(dist, 'apiGateway.access.successes')), 'Gateway Access Successes', kibanaAllLogsLink()]
     ];
 
     const distErrorStats = [
-      [tally(get(dist, 's3Access.errors')), 'S3 Access Errors', kibanaS3AccessErrorsLink(this.props.cumulusInstance, this.props.datepicker)],
-      [tally(get(dist, 'teaLambda.errors')), 'TEA Lambda Errors', kibanaTEALambdaErrorsLink(this.props.cumulusInstance, this.props.datepicker)],
-      [tally(get(dist, 'apiLambda.errors')), 'Distribution API Lambda Errors', kibanaApiLambdaErrorsLink(this.props.cumulusInstance, this.props.datepicker)],
-      [tally(get(dist, 'apiGateway.execution.errors')), 'Gateway Execution Errors', kibanaGatewayExecutionErrorsLink(this.props.cumulusInstance, this.props.datepicker)],
-      [tally(get(dist, 'apiGateway.access.errors')), 'Gateway Access Errors', kibanaGatewayAccessErrorsLink(this.props.cumulusInstance, this.props.datepicker)]
+      [tally(get(dist, 's3Access.errors')), 'S3 Access Errors', kibanaAllLogsLink()],
+      [tally(get(dist, 'teaLambda.errors')), 'TEA Lambda Errors', kibanaAllLogsLink()],
+      [tally(get(dist, 'apiLambda.errors')), 'Distribution API Lambda Errors', kibanaAllLogsLink()],
+      [tally(get(dist, 'apiGateway.execution.errors')), 'Gateway Execution Errors', kibanaAllLogsLink()],
+      [tally(get(dist, 'apiGateway.access.errors')), 'Gateway Access Errors', kibanaAllLogsLink()]
     ];
 
     const granuleCount = get(count.data, 'granules.meta.count');

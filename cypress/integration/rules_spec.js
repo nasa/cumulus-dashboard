@@ -80,12 +80,12 @@ describe('Rules page', () => {
       cy.contains('.dropdown__options__btn', 'Options').click();
       cy.contains('.async__element', 'Disable').click();
 
-      cy.get('h4').contains(`You are disabling rule ${testRuleName}`);
+      cy.get('p').contains('You have submitted a request to disable the following rule:' && `${testRuleName}` && 'Are you sure you want to disable this rule?');
       cy.contains('.modal-footer button', 'Cancel').click();
 
       cy.contains('.dropdown__options__btn', 'Options').click();
       cy.contains('.async__element', 'Disable').click();
-      cy.get('h4').contains(`You are disabling rule ${testRuleName}`);
+      cy.get('p').contains('You have submitted a request to disable the following rule:' && `${testRuleName}` && 'Are you sure you want to disable this rule?');
       cy.contains('.modal-footer button', 'Confirm').click();
 
       cy.contains('.modal-body', `Rule ${testRuleName} was disabled`);
@@ -234,7 +234,7 @@ describe('Rules page', () => {
       cy.contains('.heading--large', `${testRuleName}`);
 
       // update rule and submit
-      const provider = 'newProvider';
+      const provider = 's3_provider';
       cy.contains('.ace_variable', 'name');
       cy.editJsonTextarea({ data: { provider }, update: true });
       cy.contains('form button', 'Submit').click();
@@ -260,7 +260,7 @@ describe('Rules page', () => {
 
       // Test error flow
       const errorRuleType = 'test';
-      const errorMessage = 'The record has validation errors: [{"keyword":"enum","dataPath":".rule.type","schemaPath":"#/properties/rule/properties/type/enum","params":{"allowedValues":["onetime","scheduled","sns","kinesis","sqs"]},"message":"should be equal to one of the allowed values"}]';
+      const errorMessage = 'insert into "rules" ("arn", "collection_cumulus_id", "created_at", "enabled", "execution_name_prefix", "log_event_arn", "meta", "name", "payload", "provider_cumulus_id", "queue_url", "tags", "type", "updated_at", "value", "workflow")';
       cy.contains('.ace_variable', 'name');
       cy.editJsonTextarea({ data: { rule: { type: errorRuleType } }, update: true });
 

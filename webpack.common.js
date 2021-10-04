@@ -152,12 +152,14 @@ const CommonConfig = {
         AUTH_METHOD: config.oauthMethod,
         KIBANAROOT: config.kibanaRoot,
         ESROOT: config.esRoot,
-        SHOW_TEA_METRICS: config.showTeaMetrics,
-        SHOW_DISTRIBUTION_API_METRICS: config.showDistributionAPIMetrics,
-        BUCKET: config.graphicsPath,
-        ENABLE_RECOVERY: config.enableRecovery,
+        ES_CLOUDWATCH_TARGET_PATTERN: config.esCloudwatchTargetPattern,
+        ES_DISTRIBUTION_TARGET_PATTERN: config.esDistributionTargetPattern,
         ES_USER: config.esUser,
         ES_PASSWORD: config.esPassword,
+        SHOW_DISTRIBUTION_API_METRICS: config.showDistributionAPIMetrics,
+        SHOW_TEA_METRICS: config.showTeaMetrics,
+        BUCKET: config.graphicsPath,
+        ENABLE_RECOVERY: config.enableRecovery,
         SERVED_BY_CUMULUS_API: config.servedByCumulusAPI
       }
     )

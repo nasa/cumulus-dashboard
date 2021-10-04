@@ -7,6 +7,7 @@ import get from 'lodash/get';
 import {
   logout,
   getApiVersion,
+  getCMRInfo,
   getCumulusInstanceMetadata,
 } from '../../actions';
 import { graphicsPath, nav } from '../../config';
@@ -16,14 +17,14 @@ import { kibanaAllLogsLink } from '../../utils/kibana';
 import { getPersistentQueryParams } from '../../utils/url-helper';
 
 const paths = [
-  ['PDRs', '/pdrs'],
-  ['Providers', '/providers'],
   [strings.collections, '/collections'],
+  ['Providers', '/providers'],
   [strings.granules, '/granules'],
   ['Workflows', '/workflows'],
   ['Executions', '/executions'],
   ['Operations', '/operations'],
   ['Rules', '/rules'],
+  ['PDRs', '/pdrs'],
   ['Logs', 'logs'],
   ['Reconciliation Reports', '/reconciliation-reports'],
 ];
@@ -40,6 +41,7 @@ class Header extends React.Component {
     const { dispatch, api } = this.props;
     if (api.authenticated) {
       dispatch(getApiVersion());
+      dispatch(getCMRInfo());
       dispatch(getCumulusInstanceMetadata());
     }
   }
@@ -65,7 +67,7 @@ class Header extends React.Component {
 
   linkTo(path, search) {
     if (path[0] === 'Logs') {
-      const kibanaLink = kibanaAllLogsLink(this.props.cumulusInstance, this.props.datepicker);
+      const kibanaLink = kibanaAllLogsLink();
       return (
         <a href={kibanaLink} target="_blank">
           {path[0]}

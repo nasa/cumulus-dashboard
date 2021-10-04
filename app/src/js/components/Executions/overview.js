@@ -42,16 +42,14 @@ class ExecutionOverview extends React.Component {
   }
 
   searchOperationId(list, infix) {
-    return list.filter((item) => item.asyncOperationId && item.asyncOperationId.includes(infix));
+    return list.filter(
+      (item) => item.asyncOperationId && item.asyncOperationId.includes(infix)
+    );
   }
 
   render() {
-    const {
-      collections,
-      executions,
-      queryParams,
-      workflowOptions,
-    } = this.props;
+    const { collections, executions, queryParams, workflowOptions } =
+      this.props;
     const { dropdowns } = collections;
     const { list } = executions;
     const { count, queriedAt } = list.meta;
@@ -66,7 +64,7 @@ class ExecutionOverview extends React.Component {
               Execution Overview
             </h1>
             {lastUpdated(queriedAt)}
-            <Overview type='executions' inflight={false} />
+            <Overview type="executions" inflight={executions.list.inflight} />
           </div>
         </section>
         <section className="page__section">
@@ -83,18 +81,19 @@ class ExecutionOverview extends React.Component {
             action={listExecutions}
             tableColumns={tableColumns}
             query={{ ...queryParams }}
-            rowId='name'
-            initialSortId='createdAt'
+            rowId="name"
+            initialSortId="createdAt"
             filterAction={filterExecutions}
             filterClear={clearExecutionsFilter}
+            tableId="executions"
           >
             <Search
               action={searchExecutions}
               clear={clearExecutionsSearch}
               paramKey="asyncOperationId"
-              label="Async Operation ID"
+              label="Search"
               labelKey="asyncOperationId"
-              placeholder="Search"
+              placeholder="Async Operation ID"
               searchKey="executions"
             />
             <ListFilters>
@@ -147,8 +146,10 @@ ExecutionOverview.propTypes = {
   workflowOptions: PropTypes.array,
 };
 
-export default withRouter(connect((state) => ({
-  collections: state.collections,
-  executions: state.executions,
-  workflowOptions: workflowSelectOptions(state),
-}))(ExecutionOverview));
+export default withRouter(
+  connect((state) => ({
+    collections: state.collections,
+    executions: state.executions,
+    workflowOptions: workflowSelectOptions(state),
+  }))(ExecutionOverview)
+);

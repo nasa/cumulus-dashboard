@@ -10,8 +10,9 @@ import {
   clearReconciliationSearch,
   filterReconciliationReport,
   clearReconciliationReportFilter,
+  listGranules
 } from '../../actions';
-import SortableTable from '../SortableTable/SortableTable';
+import List from '../Table/Table';
 import { reshapeReport } from './reshape-report';
 import { handleDownloadUrlClick, handleDownloadCsvClick } from '../../utils/download-file';
 import Search from '../Search/search';
@@ -28,12 +29,15 @@ const bucketsForFilter = (allBuckets) => {
 };
 
 const InventoryReport = ({
+  bulkActions,
   filterBucket,
   filterString,
+  groupAction,
+  onSelect,
   legend,
   recordData,
   reportName,
-  reportUrl,
+  reportUrl
 }) => {
   const [activeId, setActiveId] = useState('dynamo');
   const { reportStartTime = null, reportEndTime = null, error = null } =
@@ -58,7 +62,6 @@ const InventoryReport = ({
       onClick: (e) => handleDownloadCsvClick(e, { reportName, table }),
     })),
   ];
-
   const [expandedState, setExpandedState] = useState(
     reportComparisons.reduce((object, item) => {
       object[item.id] = item.tables.reduce((tableObject, table, index) => {
@@ -144,12 +147,6 @@ const InventoryReport = ({
 
       <section className="page__section">
         <div className="multicard">
-          <div className="collapse-link">
-            <span className="link" onClick={handleExpandClick} role="button" tabIndex="0">
-              {!allCollapsed() ? 'Expand All' : 'Collapse All'}
-            </span>
-          </div>
-
           <div className="list-action-wrapper">
             <Search
               action={searchReconciliationReport}
@@ -172,7 +169,11 @@ const InventoryReport = ({
               />
             </ListFilters>
           </div>
-
+          <div className="collapse-link">
+            <span className="link" onClick={handleExpandClick} role="button" tabIndex="0">
+              {!allCollapsed() ? 'Expand All' : 'Collapse All'}
+            </span>
+          </div>
           {reportComparisons
             .find((displayObj) => displayObj.id === activeId)
             .tables.map((item, index) => {
@@ -206,12 +207,17 @@ const InventoryReport = ({
                   </Card.Header>
                   <Collapse in={isExpanded}>
                     <div id={item.id}>
-                      <SortableTable
+                      <List
+                        action={listGranules}
                         data={item.data}
-                        legend={legend}
-                        tableColumns={item.columns}
-                        shouldUsePagination={true}
                         initialHiddenColumns={['']}
+                        legend={legend}
+                        bulkActions={bulkActions}
+                        groupAction={groupAction}
+                        onSelect={onSelect}
+                        rowId="granuleId"
+                        shouldUsePagination={true}
+                        tableColumns={item.columns}
                       />
                     </div>
                   </Collapse>
@@ -225,12 +231,18 @@ const InventoryReport = ({
 };
 
 InventoryReport.propTypes = {
+  bulkActions: PropTypes.array,
   filterBucket: PropTypes.string,
   filterString: PropTypes.string,
+  groupAction: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+  }),
   legend: PropTypes.node,
+  onSelect: PropTypes.func,
   recordData: PropTypes.object,
   reportName: PropTypes.string,
-  reportUrl: PropTypes.string,
+  reportUrl: PropTypes.string
 };
 
 export default InventoryReport;

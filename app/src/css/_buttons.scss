@@ -72,8 +72,8 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
     border-radius: 50%;
     height: 2em;
     width: 2em;
-    background-color: $midnight-blue;
-    border: none;
+    background-color: $sub-blue;
+    border: 1px solid #ffffff;
   }
 
   &--no-left-padding {
@@ -163,10 +163,19 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
 
   &--close{
     padding: .65em 1.2em .65em 1.2em;
+    background-color: $light-green;
+    
+    &:hover {
+      background-color: darken($light-green, 10%);
+    }
   }
 
   &--show {
     padding: .25em .75em;
+  }
+
+  &--close, &--show {
+    margin: 1em 0 .75em 0;
   }
 
   /*******ButtonGroup & Group CTA******/
@@ -424,7 +433,14 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       &:before {
         color: $white;
         font-family: 'FontAwesome';
-        content: '\f100';
+        content: '\f0d9';
+        font-size: 17.5px;
+        align-content: center;
+        align-items: center;
+        align-self: center;
+        justify-content: center;
+        text-align: center;
+
       }
     }
 
@@ -432,7 +448,13 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       &:before {
         color: $white;
         font-family: 'FontAwesome';
-        content: '\f101';
+        content: '\f0da';
+        font-size: 17.5px;
+        align-items: center;
+        align-content: center;
+        align-self: center;
+        justify-content: center;
+        text-align: center;
       }
     }
 
@@ -456,7 +478,6 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       cursor: pointer;
       &:after {
         position: absolute;
-        /*color: $white;*/
         font-family: 'FontAwesome';
         content: '\f061';
         font-weight: 900;
@@ -479,6 +500,26 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
         }
       }
     }
+    &.button--copy_error {
+      &:hover{
+        background-color: $midnight-blue;
+      } 
+      &:before{
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        content: '\f0c5';
+        font-weight: 900;
+        left: 10px;
+
+      }
+      background-color: $ocean-blue;
+      padding: .25em 1.2em .25em 2.5em;
+      font-weight: $base-font-regular;
+      position: relative;
+      left: 25%;
+    }
+
 
     &__icon--animation {
       cursor: pointer;
@@ -490,8 +531,9 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       }
     }
 
-    &__arrow:after {
+    &__arrow:after, &__arrow--sm:after, &__arrow--lg:after{
       left: 130%;
+      right: 1%;
       top: .75em;
     }
 
@@ -499,12 +541,16 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
       left: 85%;
     }
 
-    &__animation--md:hover {
-      padding: .65em 3em .65em 1em;
+    &__arrow--sm:hover:after {
+      left: 70%;
     }
 
-    &__arrow--md:hover:after {
-      left: 75%;
+    &__arrow--lg:hover:after {
+      left: 92%;
+    }
+
+    &__animation--md:hover {
+      padding: .65em 3em .65em 1em;
     }
 
     &__arrow--white {
@@ -690,14 +736,56 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
         color: $white;
         position: absolute;
         font-family: 'FontAwesome';
-        content: '\f0b0';
+        content: '\f06e';
         font-weight: 900;
         left: 10px;
-
       }
 
       &:hover {
         background-color: $light-green;
+      }
+
+      &__expanded {
+        background-color: darken($light-green, 13%);
+
+        &:hover {
+          background-color: darken($light-green, 13%);
+        }
+      }
+    }
+
+    &__reset-filter {
+      background-color: $grey;
+      margin-right: 15px;
+
+      &:before {
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        content: '\f057';
+        font-weight: 900;
+        left: 10px;
+      }
+
+      &:hover {
+        background-color: darken($grey, 13%);
+      }
+    }
+
+    &__apply-filter {
+      background-color: $light-green;
+
+      &:before {
+        color: $white;
+        position: absolute;
+        font-family: 'FontAwesome';
+        content: '\f0c7';
+        font-weight: 900;
+        left: 10px;
+      }
+
+      &:hover {
+        background-color: darken($light-green, 13%);
       }
     }
 

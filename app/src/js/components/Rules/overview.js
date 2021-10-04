@@ -13,7 +13,6 @@ import {
 import { lastUpdated, tally } from '../../utils/format';
 import List from '../Table/Table';
 import Search from '../Search/search';
-import ListFilters from '../ListActions/ListFilters';
 import { tableColumns, bulkActions } from '../../utils/table-config/rules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
@@ -83,17 +82,16 @@ class RulesOverview extends React.Component {
             rowId="name"
             filterAction={filterRules}
             filterClear={clearRulesFilter}
+            tableId="rules"
           >
-            <ListFilters>
-              <Search
-                action={searchRules}
-                clear={clearRulesSearch}
-                label="Search"
-                labelKey="name"
-                placeholder="Search Rules"
-                searchKey="rules"
-              />
-            </ListFilters>
+            <Search
+              action={searchRules}
+              clear={clearRulesSearch}
+              label="Search"
+              labelKey="name"
+              placeholder="Rule"
+              searchKey="rules"
+            />
           </List>
         </section>
       </div>

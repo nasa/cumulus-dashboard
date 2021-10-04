@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { get } from 'object-path';
+import AsyncCommand from '../AsyncCommands/AsyncCommands';
 import {
   getProvider,
   deleteProvider,
@@ -11,13 +12,12 @@ import {
 import {
   fromNow,
   lastUpdated,
-  deleteText,
   link,
-  tally
+  tally,
+  deleteText,
 } from '../../utils/format';
 import Loading from '../LoadingIndicator/loading-indicator';
 import LogViewer from '../Logs/viewer';
-import DropdownAsync from '../DropDown/dropdown-async-command';
 import ErrorReport from '../Errors/report';
 import Metadata from '../Table/Metadata';
 import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
@@ -93,6 +93,20 @@ class ProviderOverview extends React.Component {
     ].filter(Boolean);
   }
 
+  close () {
+    this.setState({ showActions: false });
+  }
+
+  handleSuccess (onSuccess) {
+    this.close();
+    if (typeof onSuccess === 'function') onSuccess();
+  }
+
+  handleError (onError) {
+    this.close();
+    if (typeof onError === 'function') onError();
+  }
+
   render () {
     const { providerId } = this.props.match.params;
     const record = this.props.providers.map[providerId];
@@ -122,7 +136,24 @@ class ProviderOverview extends React.Component {
       <div className='page__component'>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>Provider: {providerId}</h1>
-          <DropdownAsync config={dropdownConfig} />
+          <div className = 'dropdown__options form-group__element--right'>
+            <ul>
+              {dropdownConfig.map((d) => <li key={d.text}>
+                <AsyncCommand action={d.action}
+                  success={() => this.handleSuccess(d.success)}
+                  error={() => this.handleError(d.error)}
+                  status={d.status}
+                  className='button button--small button--red button--delete form-group__element--right'
+                  disabled={d.disabled}
+                  confirmAction={d.confirmAction}
+                  confirmText={d.confirmText}
+                  confirmOptions={d.confirmOptions}
+                  showSuccessModal={d.postActionModal}
+                  postActionText={d.postActionText}
+                  element='a'
+                  text={d.text}/></li>)}
+            </ul>
+          </div>
           <Link
             className='button button--small button--green button--edit form-group__element--right'
             to={(location) => ({ pathname: `/providers/edit/${providerId}`, search: getPersistentQueryParams(location) })}>Edit</Link>

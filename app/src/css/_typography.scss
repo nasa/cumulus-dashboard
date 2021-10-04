@@ -1,11 +1,16 @@
 /***** Fonts Imports ********/
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Inconsolata:400,700&display=swap");
 
 /******* Typography *******/
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: $black;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
 .heading--xxlarge {
@@ -21,7 +26,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .heading--large {
-  font-size: 1.250em;
+  font-size: 1.25em;
   font-weight: $base-font-regular;
 }
 
@@ -36,7 +41,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .heading--description {
-  font-size: .86em;
+  font-size: 0.86em;
 }
 
 .heading--shared-content {
@@ -45,32 +50,50 @@ h1, h2, h3, h4, h5, h6 {
 
 .heading--shared-content--right {
   display: inline-block;
-  margin-right: .6em;
+  margin-right: 0.6em;
 }
 
 .heading__wrapper {
-    &--border {
-      border-bottom: 1px solid $lightest-grey;
-      padding-bottom: .3em;
-      margin-bottom: 1em;
-      margin-top: 1.3em;
-      h2, h3, h4 {
-      margin-bottom: .5em;
+  &--border {
+    margin-bottom: 1em;
+    margin-top: 1.3em;
+    padding: 0.8em 1em 0.3em 1em;
+    background-color: #f3f3f3;
+    h2,
+    h3,
+    h4 {
+      margin-bottom: 0.5em;
     }
   }
-    &--topborder {
-      border-top: 1px solid $lightest-grey;
-      margin-top: 1em;
-      padding-top: 1.5em;
-
-    }
+  &--topborder {
+    border-top: 1px solid $lightest-grey;
+    margin-top: 1em;
+    padding-top: 1.5em;
+  }
 }
 
-
-.with-description {
-  margin-bottom: .1em;
+.with-description,
+.description {
+  margin: 0.5em 0;
 }
 
-.breadcrumb, .caption {
+.with-bottom-border {
+  padding-bottom: 15px;
+  border-bottom: 1px solid $lightest-grey;
+}
+
+.breadcrumb,
+.caption {
   font-size: 0.875em;
+}
+
+.caption {
+  color: $lighter-grey;
+  margin-bottom: 2em;
+  line-height: 1.6em;
+}
+
+.description {
+  font-style: italic;
+  font-weight: 400;
 }

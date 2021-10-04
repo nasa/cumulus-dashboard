@@ -9,7 +9,7 @@
   "results": [
     {
       "granuleId": "MOD09GQ.A1530852.CljGDp.006.2163412421938",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-Rcei43QwgSP6:e931b74d-324c-4ee1-8d3e-e7fd7330bfb4",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
       "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
       "published": true,
       "error": {
@@ -29,21 +29,25 @@
         {
           "bucket": "cumulus-test-sandbox-protected",
           "key": "MOD09GQ___006/2017/MOD/MOD09GQ.A1530852.CljGDp.006.2163412421938.hdf",
+          "size": 16734,
           "fileName": "MOD09GQ.A1530852.CljGDp.006.2163412421938.hdf"
         },
         {
           "bucket": "cumulus-test-sandbox-private",
           "key": "MOD09GQ___006/MOD/MOD09GQ.A1530852.CljGDp.006.2163412421938.hdf.met",
+          "size": 12314,
           "fileName": "MOD09GQ.A1530852.CljGDp.006.2163412421938.hdf.met"
         },
         {
           "bucket": "cumulus-test-sandbox-public",
           "key": "MOD09GQ___006/MOD/MOD09GQ.A1530852.CljGDp.006.2163412421938_ndvi.jpg",
+          "size": 1675634,
           "fileName": "MOD09GQ.A1530852.CljGDp.006.2163412421938_ndvi.jpg"
         },
         {
           "bucket": "cumulus-test-sandbox-protected-2",
           "key": "MOD09GQ___006/MOD/MOD09GQ.A1530852.CljGDp.006.2163412421938.cmr.xml",
+          "size": 67867,
           "fileName": "MOD09GQ.A1530852.CljGDp.006.2163412421938.cmr.xml"
         }
       ],
@@ -53,7 +57,7 @@
       "updatedAt": 1537831783389
     },    {
       "granuleId": "test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-Rcei43QwgSP6:e931b74d-324c-4ee1-8d3e-e7fd7330bfb4",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
       "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
       "published": true,
       "error": {
@@ -73,7 +77,8 @@
         {
           "bucket": "cumulus-test-sandbox-protected",
           "key": "test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2.hdf",
-          "fileName": "test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2.hdf"
+          "fileName": "test_12345678_123456_metopa_12345_eps_o_coa_1234_ovwcl2.hdf",
+          "size" : 782
         }
       ],
       "collectionId": "Test-L2-Coastal___Operational/Near-Real-Time",
@@ -83,7 +88,7 @@
     },
     {
       "granuleId": "MOD09GQ.A1657416.CbyoRi.006.9697917818587",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationPublishGranuleStateMachine-SCBn8QOiQeE0:b8f44f55-7b49-49ba-a9b6-a64ebf77e655",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationParsePdrStateMachine-JVlCKfoXElDQ:9888b858-d70c-42ec-a887-c9367dcfd7cf",
       "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
       "processingEndDateTime": "2018-09-24T23:28:45.731Z",
       "published": true,
@@ -104,21 +109,25 @@
         {
           "bucket": "cumulus-test-sandbox-protected",
           "key": "MOD09GQ___006/2017/MOD/MOD09GQ.A1657416.CbyoRi.006.9697917818587.hdf",
+          "size" : 10239,
           "fileName": "MOD09GQ.A1657416.CbyoRi.006.9697917818587.hdf"
         },
         {
           "bucket": "cumulus-test-sandbox-private",
           "key": "MOD09GQ___006/MOD/MOD09GQ.A1657416.CbyoRi.006.9697917818587.hdf.met",
+          "size" : 657,
           "fileName": "MOD09GQ.A1657416.CbyoRi.006.9697917818587.hdf.met"
         },
         {
           "bucket": "cumulus-test-sandbox-public",
           "key": "MOD09GQ___006/MOD/MOD09GQ.A1657416.CbyoRi.006.9697917818587_ndvi.jpg",
+          "size" : 2341,
           "fileName": "MOD09GQ.A1657416.CbyoRi.006.9697917818587_ndvi.jpg"
         },
         {
           "bucket": "cumulus-test-sandbox-protected-2",
           "key": "MOD09GQ___006/MOD/MOD09GQ.A1657416.CbyoRi.006.9697917818587.cmr.xml",
+          "size" : 124521,
           "fileName": "MOD09GQ.A1657416.CbyoRi.006.9697917818587.cmr.xml"
         }
       ],
@@ -130,7 +139,7 @@
     {
       "granuleId": "MOD09GQ.A2016358.h13v04.006.2016360104606.hdf",
       "pdrName": "MOD09GQ_1granule_v3.PDR",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationSyncGranuleStateMachine-YBWU89xSgeQb:2890dde4-3ef8-45c2-a190-d21e26d503a3",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:c33e4091-e90d-449c-93f5-c4462b6e4e87",
       "published": false,
       "error": {
         "Cause": "\"None\"",
@@ -146,10 +155,12 @@
       "files": [
         {
           "bucket": "cumulus-test-sandbox-internal",
+          "size" : 456,
           "fileName": "s3://cumulus-test-sandbox-internal/custom-staging-dir/test-src-integration/MOD09GQ___006/MOD09GQ.A2016358.h13v04.006.2016360104606.hdf"
         },
         {
           "bucket": "cumulus-test-sandbox-internal",
+          "size" : 1234,
           "fileName": "s3://cumulus-test-sandbox-internal/custom-staging-dir/test-src-integration/MOD09GQ___006/MOD09GQ.A2016358.h13v04.006.2016360104606.hdf.met"
         }
       ],
@@ -161,7 +172,7 @@
     {
       "granuleId": "MOD09GQ.A2016358.h13v04.006.2016360104606",
       "pdrName": "MOD09GQ_1granule_v3.PDR",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:50eaad71-bba8-4376-83d7-bb9cc1309b92",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationParsePdrStateMachine-JVlCKfoXElDQ:9888b858-d70c-42ec-a887-c9367dcfd7cf",
       "published": false,
       "error": {
         "Cause": "\"None\"",
@@ -176,14 +187,17 @@
       "files": [
         {
           "bucket": "cumulus-test-sandbox-protected",
+          "size" : 34,
           "fileName": "s3://cumulus-test-sandbox-protected/MOD09GQ___006/2017/MOD/MOD09GQ.A2016358.h13v04.006.2016360104606.hdf"
         },
         {
           "bucket": "cumulus-test-sandbox-private",
+          "size" : 123,
           "fileName": "s3://cumulus-test-sandbox-private/MOD09GQ___006/MOD/MOD09GQ.A2016358.h13v04.006.2016360104606.hdf.met"
         },
         {
           "bucket": "cumulus-test-sandbox-protected-2",
+          "size" : 5667,
           "fileName": "s3://cumulus-test-sandbox-protected-2/MOD09GQ___006/MOD/MOD09GQ.A2016358.h13v04.006.2016360104606.cmr.xml"
         }
       ],
@@ -194,7 +208,7 @@
     },
     {
       "granuleId": "MOD09GQ.A5456658.rso6Y4.006.4979096122140",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-Rcei43QwgSP6:0eb48d9c-95aa-4f76-8f55-2d5f3393b50d",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:8e21ca0f-79d3-4782-8247-cacd42a595ea",
       "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
       "published": true,
       "error": {
@@ -213,18 +227,22 @@
       "files": [
         {
           "bucket": "cumulus-test-sandbox-protected",
+          "size" : 10239,
           "fileName": "s3://cumulus-test-sandbox-protected/MOD09GQ___006/2017/MOD/MOD09GQ.A5456658.rso6Y4.006.4979096122140.hdf"
         },
         {
           "bucket": "cumulus-test-sandbox-private",
+          "size" : 523,
           "fileName": "s3://cumulus-test-sandbox-private/MOD09GQ___006/MOD/MOD09GQ.A5456658.rso6Y4.006.4979096122140.hdf.met"
         },
         {
           "bucket": "cumulus-test-sandbox-public",
+          "size" : 45743,
           "fileName": "s3://cumulus-test-sandbox-public/MOD09GQ___006/MOD/MOD09GQ.A5456658.rso6Y4.006.4979096122140_ndvi.jpg"
         },
         {
           "bucket": "cumulus-test-sandbox-protected-2",
+          "size" : 10223439,
           "fileName": "s3://cumulus-test-sandbox-protected-2/MOD09GQ___006/MOD/MOD09GQ.A5456658.rso6Y4.006.4979096122140.cmr.xml"
         }
       ],
@@ -235,7 +253,7 @@
     },
     {
       "granuleId": "MOD09GQ.A2417309.YZ9tCV.006.4640974889044",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-Rcei43QwgSP6:ffdb0984-c64e-4b1d-8af0-81938ec8acf9",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:c33e4091-e90d-449c-93f5-c4462b6e4e87",
       "published": false,
       "error": {
         "Cause": "{\"errorMessage\":\"verifyFile s3://cumulus-test-sandbox-internal/non-existent-path/non-existent-file failed: Actual file size 2MB did not match expected file size 3MB\",\"errorType\":\"UnexpectedFileSize\",\"stackTrace\":[\"S3Granule.sync (/var/task/index.js:147549:13)\",\"<anonymous>\",\"process._tickDomainCallback (internal/process/next_tick.js:228:7)\"]}",
@@ -258,7 +276,7 @@
     },
     {
       "granuleId": "MOD09GQ.A0142558.ee5lpE.006.5112577830916",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-Rcei43QwgSP6:bab9c234-e492-40e6-a34c-a0f76a4c7968",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationDiscoverAndQueuePdrsStateMachine-T4MDdDs9ADnK:c3ce6b76-a5f5-47d2-80a5-8b5c56300da8",
       "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
       "published": true,
       "error": {
@@ -277,18 +295,22 @@
       "files": [
         {
           "bucket": "cumulus-test-sandbox-protected",
+          "size" : 10239,
           "fileName": "s3://cumulus-test-sandbox-protected/MOD09GQ___006/2017/MOD/MOD09GQ.A0142558.ee5lpE.006.5112577830916.hdf"
         },
         {
           "bucket": "cumulus-test-sandbox-private",
+          "size" : 544,
           "fileName": "s3://cumulus-test-sandbox-private/MOD09GQ___006/MOD/MOD09GQ.A0142558.ee5lpE.006.5112577830916.hdf.met"
         },
         {
           "bucket": "cumulus-test-sandbox-public",
+          "size" : 345,
           "fileName": "s3://cumulus-test-sandbox-public/MOD09GQ___006/MOD/MOD09GQ.A0142558.ee5lpE.006.5112577830916_ndvi.jpg"
         },
         {
           "bucket": "cumulus-test-sandbox-protected-2",
+          "size" : 86754,
           "fileName": "s3://cumulus-test-sandbox-protected-2/MOD09GQ___006/MOD/MOD09GQ.A0142558.ee5lpE.006.5112577830916.cmr.xml"
         }
       ],
@@ -299,7 +321,7 @@
     },
     {
       "granuleId": "MOD09GQ.A0501579.PZB_CG.006.8580266395214",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationPublishGranuleStateMachine-SCBn8QOiQeE0:77dafa83-0a0b-4fa4-8b4e-e9b037043282",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
       "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
       "processingEndDateTime": "2018-09-24T17:52:34.578Z",
       "published": true,
@@ -319,18 +341,22 @@
       "files": [
         {
           "bucket": "cumulus-test-sandbox-protected",
+          "size" : 10239,
           "fileName": "s3://cumulus-test-sandbox-protected/MOD09GQ___006/2017/MOD/MOD09GQ.A0501579.PZB_CG.006.8580266395214.hdf"
         },
         {
           "bucket": "cumulus-test-sandbox-private",
+          "size" : 457,
           "fileName": "s3://cumulus-test-sandbox-private/MOD09GQ___006/MOD/MOD09GQ.A0501579.PZB_CG.006.8580266395214.hdf.met"
         },
         {
           "bucket": "cumulus-test-sandbox-public",
+          "size" : 2342,
           "fileName": "s3://cumulus-test-sandbox-public/MOD09GQ___006/MOD/MOD09GQ.A0501579.PZB_CG.006.8580266395214_ndvi.jpg"
         },
         {
           "bucket": "cumulus-test-sandbox-protected-2",
+          "size" : 23545,
           "fileName": "s3://cumulus-test-sandbox-protected-2/MOD09GQ___006/MOD/MOD09GQ.A0501579.PZB_CG.006.8580266395214.cmr.xml"
         }
       ],
@@ -341,7 +367,7 @@
     },
     {
       "granuleId": "MOD09GQ.A8022119.sk3Sph.006.0494433853533",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-Rcei43QwgSP6:077bbb36-0469-4fc2-961c-b24529e30fed",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:7a71f849-57a0-40e7-8fca-5cf796602a07",
       "lastUpdateDateTime": "2018-04-25T21:45:45.524Z",
       "published": true,
       "error": {
@@ -360,18 +386,22 @@
       "files": [
         {
           "bucket": "cumulus-test-sandbox-protected",
+          "size": 123124,
           "fileName": "s3://cumulus-test-sandbox-protected/MOD09GQ___006/2017/MOD/MOD09GQ.A8022119.sk3Sph.006.0494433853533.hdf"
         },
         {
           "bucket": "cumulus-test-sandbox-private",
+          "size": 124235,
           "fileName": "s3://cumulus-test-sandbox-private/MOD09GQ___006/MOD/MOD09GQ.A8022119.sk3Sph.006.0494433853533.hdf.met"
         },
         {
           "bucket": "cumulus-test-sandbox-public",
+          "size": 568756,
           "fileName": "s3://cumulus-test-sandbox-public/MOD09GQ___006/MOD/MOD09GQ.A8022119.sk3Sph.006.0494433853533_ndvi.jpg"
         },
         {
           "bucket": "cumulus-test-sandbox-protected-2",
+          "size": 123124,
           "fileName": "s3://cumulus-test-sandbox-protected-2/MOD09GQ___006/MOD/MOD09GQ.A8022119.sk3Sph.006.0494433853533.cmr.xml"
         }
       ],
@@ -382,7 +412,7 @@
     },
     {
       "granuleId": "MOD09GQ.A9344328.K9yI3O.006.4625818663028",
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-Rcei43QwgSP6:954bda4c-712c-49b1-b3ff-ff37145e0dd5",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1",
       "published": false,
       "error": {
         "Cause": "{\"errorMessage\":\"Source file not found s3://cumulus-test-sandbox-internal/non-existent-path/non-existent-file\",\"errorType\":\"FileNotFound\",\"stackTrace\":[\"S3Granule.sync (/var/task/index.js:147549:13)\",\"<anonymous>\",\"process._tickDomainCallback (internal/process/next_tick.js:228:7)\"]}",
@@ -413,7 +443,7 @@
         "Cause": "None",
         "Error": "Unknown Error"
       },
-      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:bt-tf-IngestGranule:17765a38-8d3a-445a-8f95-6f2e53179254",
+      "execution": "https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:c33e4091-e90d-449c-93f5-c4462b6e4e87",
       "files": [
         {
           "bucket": "cumulus-test-sandbox-protected-2",

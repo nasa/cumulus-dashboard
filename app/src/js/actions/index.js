@@ -12,16 +12,19 @@ import { getCollectionId, collectionNameVersion } from '../utils/format';
 import { fetchCurrentTimeFilters } from '../utils/datepicker';
 import log from '../utils/log';
 import { authHeader } from '../utils/basic-auth';
-import apiGatewaySearchTemplate from './action-config/apiGatewaySearch';
-import apiLambdaSearchTemplate from './action-config/apiLambdaSearch';
-import teaLambdaSearchTemplate from './action-config/teaLambdaSearch';
-import s3AccessSearchTemplate from './action-config/s3AccessSearch';
+import apiGatewaySearchTemplate from './actions-metrics/apiGatewaySearch';
+import apiLambdaSearchTemplate from './actions-metrics/apiLambdaSearch';
+import teaLambdaSearchTemplate from './actions-metrics/teaLambdaSearch';
+import s3AccessSearchTemplate from './actions-metrics/s3AccessSearch';
+import searchTarget from './actions-metrics/searchTarget';
 import * as types from './types';
 import { historyPushWithQueryParams } from '../utils/url-helper';
 
 const { CALL_API } = types;
 const {
   esRoot,
+  esCloudwatchTargetPattern,
+  esDistributionTargetPattern,
   showDistributionAPIMetrics,
   showTeaMetrics,
   apiRoot: root,
@@ -447,8 +450,18 @@ export const getStats = (options) => (dispatch, getState) => {
   });
 };
 
+export const getCMRInfo = () => ({
+  [CALL_API]: {
+    type: types.CMR_INFO,
+    method: 'GET',
+    url: new URL('instanceMeta', root).href
+  }
+});
+
 export const metricsConfigured = () => {
-  if (esRoot !== '') return true;
+  if (esRoot !== '' &&
+      esCloudwatchTargetPattern !== '' &&
+      esDistributionTargetPattern !== '') return true;
   return false;
 };
 
@@ -464,7 +477,7 @@ export const getDistApiGatewayMetrics = (cumulusInstanceMeta) => {
         type: types.DIST_APIGATEWAY,
         skipAuth: true,
         method: 'POST',
-        url: `${esRoot}/_search/`,
+        url: `${esRoot}/${searchTarget(esCloudwatchTargetPattern)}`,
         headers: authHeader(),
         data: JSON.parse(apiGatewaySearchTemplate(stackName, startTime, endTime))
       }
@@ -485,7 +498,7 @@ export const getDistApiLambdaMetrics = (cumulusInstanceMeta) => {
         type: types.DIST_API_LAMBDA,
         skipAuth: true,
         method: 'POST',
-        url: `${esRoot}/_search/`,
+        url: `${esRoot}/${searchTarget(esCloudwatchTargetPattern)}`,
         headers: authHeader(),
         data: JSON.parse(apiLambdaSearchTemplate(stackName, startTime, endTime))
       }
@@ -506,7 +519,7 @@ export const getTEALambdaMetrics = (cumulusInstanceMeta) => {
         type: types.DIST_TEA_LAMBDA,
         skipAuth: true,
         method: 'POST',
-        url: `${esRoot}/_search/`,
+        url: `${esRoot}/${searchTarget(esCloudwatchTargetPattern)}`,
         headers: authHeader(),
         data: JSON.parse(teaLambdaSearchTemplate(stackName, startTime, endTime))
       }
@@ -526,7 +539,7 @@ export const getDistS3AccessMetrics = (cumulusInstanceMeta) => {
         type: types.DIST_S3ACCESS,
         skipAuth: true,
         method: 'POST',
-        url: `${esRoot}/_search/`,
+        url: `${esRoot}/${searchTarget(esDistributionTargetPattern)}`,
         headers: authHeader(),
         data: JSON.parse(s3AccessSearchTemplate(stackName, startTime, endTime))
       }
@@ -753,6 +766,16 @@ export const listExecutions = (options) => (dispatch, getState) => {
   });
 };
 
+export const listExecutionsByGranule = (payload) => ({
+  [CALL_API]: {
+    type: types.EXECUTIONS_LIST,
+    method: 'POST',
+    path: 'executions/search-by-granules',
+    params: { limit: defaultPageLimit },
+    data: payload
+  }
+});
+
 export const filterExecutions = (param) => ({ type: types.FILTER_EXECUTIONS, param });
 export const clearExecutionsFilter = (paramKey) => ({ type: types.CLEAR_EXECUTIONS_FILTER, paramKey });
 export const searchExecutions = (infix) => ({ type: types.SEARCH_EXECUTIONS, infix });
@@ -939,3 +962,4 @@ export const filterReconciliationReport = (param) => ({ type: types.FILTER_RECON
 export const clearReconciliationReportFilter = (paramKey) => ({ type: types.CLEAR_RECONCILIATION_FILTER, paramKey });
 
 export const toggleSidebar = () => ({ type: types.TOGGLE_SIDEBAR });
+export const sortPersist = (tableId, sortBy) => ({ type: types.SORTS, tableId, sortBy });

@@ -3,16 +3,18 @@ import React, {
   useEffect,
   forwardRef,
   useRef,
-  useState
+  useState,
+  createRef
 } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
+import { useDispatch } from 'react-redux';
 import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
 import ListFilters from '../ListActions/ListFilters';
-
+import { sortPersist } from '../../actions/index';
 const getColumnWidth = (rows, accessor, headerText, originalWidth) => {
   const maxWidth = 400;
   const magicSpacing = 10;
@@ -64,6 +66,8 @@ const SortableTable = ({
   shouldManualSort = false,
   shouldUsePagination = false,
   tableColumns = [],
+  tableId,
+  initialSortBy = [],
 }) => {
   const defaultColumn = useMemo(
     () => ({
@@ -75,6 +79,18 @@ const SortableTable = ({
     []
   );
   const [fitColumn, setFitColumn] = useState({});
+  const [leftScrollButtonVisibility, setLeftScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
+  const [rightScrollButtonVisibility, setRightScrollButtonVisibility] = useState({ display: 'none', opacity: 0 });
+  let sortByState;
+  if (initialSortBy?.length > 0) {
+    sortByState = initialSortBy;
+  } else if (initialSortId) {
+    sortByState = [{ id: initialSortId, desc: true }];
+  } else {
+    sortByState = [];
+  }
+  let rightScrollInterval;
+  let leftScrollInterval;
 
   const {
     getTableProps,
@@ -85,7 +101,7 @@ const SortableTable = ({
       selectedRowIds,
       sortBy,
       pageIndex,
-      hiddenColumns,
+      hiddenColumns
     },
     toggleAllRowsSelected,
     page,
@@ -96,7 +112,7 @@ const SortableTable = ({
     gotoPage,
     nextPage,
     previousPage,
-    toggleHideColumn
+    setHiddenColumns
   } = useTable(
     {
       data,
@@ -110,7 +126,7 @@ const SortableTable = ({
       manualPagination: !shouldUsePagination,
       initialState: {
         hiddenColumns: initialHiddenColumns,
-        sortBy: initialSortId ? [{ id: initialSortId, desc: true }] : [],
+        sortBy: sortByState,
       },
     },
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
@@ -137,9 +153,13 @@ const SortableTable = ({
       }
     }
   );
-
+  const dispatch = useDispatch();
   const tableRows = page || rows;
   const includeFilters = typeof getToggleColumnOptions !== 'function';
+
+  const tableRef = createRef();
+  const scrollLeftButton = createRef();
+  const scrollRightButton = createRef();
 
   useEffect(() => {
     if (clearSelected) {
@@ -161,6 +181,12 @@ const SortableTable = ({
   }, [selectedRowIds, onSelect]);
 
   useEffect(() => {
+    if (tableId) {
+      dispatch(sortPersist(tableId, sortBy));
+    }
+  }, [dispatch, tableId, sortBy]);
+
+  useEffect(() => {
     if (typeof changeSortProps === 'function') {
       changeSortProps(sortBy);
     }
@@ -169,11 +195,15 @@ const SortableTable = ({
   useEffect(() => {
     if (typeof getToggleColumnOptions === 'function') {
       getToggleColumnOptions({
-        onChange: toggleHideColumn,
+        setHiddenColumns,
         hiddenColumns
       });
     }
-  }, [getToggleColumnOptions, hiddenColumns, toggleHideColumn]);
+  }, [getToggleColumnOptions, hiddenColumns, setHiddenColumns]);
+
+  function resetHiddenColumns() {
+    setHiddenColumns(initialHiddenColumns);
+  }
 
   function handleDoubleClick(id, header, originalWidth) {
     setFitColumn({
@@ -190,16 +220,131 @@ const SortableTable = ({
     onMouseDown(e);
   }
 
+  function handleTableColumnMouseEnter(event) {
+    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.nextSibling, false)) {
+      showScrollRightButton(event);
+    }
+
+    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.previousSibling, false)) {
+      showScrollLeftButton(event);
+    }
+  }
+
+  function handleTableColumnMouseLeave(event) {
+    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.nextSibling, false)) {
+      hideScrollRightButton();
+    }
+
+    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.previousSibling, false)) {
+      hideScrollLeftButton();
+    }
+  }
+
+  function scrollTableRight() {
+    if (tableRef !== null && tableRef.current !== null) {
+      tableRef.current.scrollLeft += 20;
+    }
+  }
+
+  function startScrollTableRight() {
+    rightScrollInterval = setInterval(scrollTableRight, 1);
+  }
+
+  function stopScrollTableRight() {
+    clearInterval(rightScrollInterval);
+  }
+
+  function scrollTableLeft() {
+    if (tableRef !== null && tableRef.current !== null) {
+      tableRef.current.scrollLeft -= 20;
+    }
+  }
+
+  function startScrollTableLeft() {
+    leftScrollInterval = setInterval(scrollTableLeft, 1);
+  }
+
+  function stopScrollTableLeft() {
+    clearInterval(leftScrollInterval);
+  }
+
+  function handleLeftScrollButtonOnMouseLeave() {
+    hideScrollLeftButton();
+    clearInterval(leftScrollInterval);
+  }
+
+  function handleRightScrollbuttonOnMouseLeave() {
+    hideScrollRightButton();
+    clearInterval(rightScrollInterval);
+  }
+
+  function showScrollLeftButton(event) {
+    console.log('showLeft');
+    setLeftScrollButtonVisibility({ display: 'flex', opacity: leftScrollButtonVisibility.opacity });
+    setTimeout(() => {
+      setLeftScrollButtonVisibility({ display: 'flex', opacity: 1 });
+    }, 10);
+  }
+
+  function hideScrollLeftButton() {
+    if (leftScrollButtonVisibility.opacity === 1) {
+      setLeftScrollButtonVisibility({ display: leftScrollButtonVisibility.display, opacity: 0 });
+      setLeftScrollButtonVisibility({ display: 'none', opacity: 0 });
+    }
+  }
+
+  function showScrollRightButton(event) {
+    setRightScrollButtonVisibility({ display: 'flex', opacity: rightScrollButtonVisibility.opacity });
+    setTimeout(() => {
+      setRightScrollButtonVisibility({ display: 'flex', opacity: 1 });
+    }, 10);
+  }
+
+  function hideScrollRightButton() {
+    if (rightScrollButtonVisibility.opacity === 1) {
+      setRightScrollButtonVisibility({ display: rightScrollButtonVisibility.display, opacity: 0 });
+      setRightScrollButtonVisibility({ display: 'none', opacity: 0 });
+    }
+  }
+
+  function checkInView(container, element, partial) {
+    if (!container || !element) {
+      return true;
+    }
+
+    // Get container properties
+    const cLeft = container.scrollLeft;
+    const cRight = cLeft + container.clientWidth;
+
+    // Get element properties
+    const eLeft = element.offsetLeft - container.offsetLeft;
+    const eRight = eLeft + element.clientWidth;
+
+    // Check if in view
+    const isTotal = (eLeft >= cLeft && eRight <= cRight);
+    const isPartial = partial && (
+      (eLeft < cLeft && eRight > cLeft) ||
+      (eRight > cRight && eLeft < cRight)
+    );
+
+    // Return outcome
+    return (isTotal || isPartial);
+  }
+
   return (
     <div className='table--wrapper'>
       {(includeFilters || legend) &&
-      <ListFilters>
-        {includeFilters &&
-            <TableFilters columns={tableColumns} onChange={toggleHideColumn} hiddenColumns={hiddenColumns} />
-        }
-        {legend}
-      </ListFilters>}
-      <div className='table' {...getTableProps()}>
+        <ListFilters>
+          {includeFilters &&
+            <TableFilters columns={tableColumns}
+              setHiddenColumns={setHiddenColumns}
+              hiddenColumns={hiddenColumns}
+              resetHiddenColumns={resetHiddenColumns}
+              initialHiddenColumns={initialHiddenColumns} />
+          }
+          {legend}
+        </ListFilters>}
+      <div className='table' {...getTableProps()} ref={tableRef}>
         <div className='thead'>
           <div className='tr'>
             {headerGroups.map((headerGroup) => (
@@ -238,7 +383,12 @@ const SortableTable = ({
                   } = column.getResizerProps ? column.getResizerProps() : {};
 
                   return (
-                    <div {...restHeaderProps} className={wrapperClassNames} style={style}>
+                    <div {...restHeaderProps}
+                      className={wrapperClassNames}
+                      style={style}
+                      onMouseEnter={(e) => handleTableColumnMouseEnter(e)}
+                      onMouseLeave={(e) => handleTableColumnMouseLeave(e)}
+                    >
                       <span {...column.getSortByToggleProps()} className={columnClassName}>
                         {column.render('Header')}
                       </span>
@@ -282,6 +432,8 @@ const SortableTable = ({
                       {...restCellProps}
                       style={style}
                       key={cellIndex}
+                      onMouseEnter={(e) => handleTableColumnMouseEnter(e)}
+                      onMouseLeave={(e) => handleTableColumnMouseLeave(e)}
                     >
                       {cell.render('Cell')}
                     </div>
@@ -291,6 +443,36 @@ const SortableTable = ({
             );
           })}
         </div>
+      </div>
+      <div role="button"
+        ref={scrollLeftButton}
+        tabIndex={0}
+        className="scrollButton scrollButtonLeft"
+        style={{
+          opacity: leftScrollButtonVisibility.opacity,
+          display: leftScrollButtonVisibility.display
+        }}
+        onMouseDown={() => startScrollTableLeft()}
+        onMouseUp={() => stopScrollTableLeft()}
+        onMouseEnter={() => showScrollLeftButton()}
+        onMouseLeave={() => handleLeftScrollButtonOnMouseLeave()}>
+        <div><i className="fa fa-arrow-circle-left fa-2x"></i></div>
+        <div>SCROLL</div>
+      </div>
+      <div role="button"
+        ref={scrollRightButton}
+        tabIndex={0}
+        className="scrollButton scrollButtonRight"
+        style={{
+          opacity: rightScrollButtonVisibility.opacity,
+          display: rightScrollButtonVisibility.display
+        }}
+        onMouseDown={() => startScrollTableRight()}
+        onMouseUp={() => stopScrollTableRight()}
+        onMouseEnter={() => showScrollRightButton()}
+        onMouseLeave={() => handleRightScrollbuttonOnMouseLeave()}>
+        <div><i className="fa fa-arrow-circle-right fa-2x"></i></div>
+        <div>SCROLL</div>
       </div>
       {shouldUsePagination &&
         <SimplePagination
@@ -322,6 +504,8 @@ SortableTable.propTypes = {
   shouldManualSort: PropTypes.bool,
   shouldUsePagination: PropTypes.bool,
   tableColumns: PropTypes.array,
+  tableId: PropTypes.string,
+  initialSortBy: PropTypes.array,
 };
 
 export default SortableTable;

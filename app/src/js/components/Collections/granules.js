@@ -75,7 +75,8 @@ const CollectionGranules = ({
 
   useEffect(() => {
     setWorkflow(workflowOptions[0]);
-  }, [workflowOptions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(workflowOptions)]);
 
   function generateQuery() {
     const options = {
@@ -104,7 +105,7 @@ const CollectionGranules = ({
     return bulkActions(granules, actionConfig);
   }
 
-  function selectWorkflow(selector, selectedWorkflow) {
+  function selectWorkflow(_selector, selectedWorkflow) {
     setWorkflow(selectedWorkflow);
   }
 
@@ -158,6 +159,7 @@ const CollectionGranules = ({
           tableColumns={tableColumns}
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
+          tableId="granules"
         >
           <Search
             action={searchGranules}

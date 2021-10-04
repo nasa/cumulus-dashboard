@@ -22,21 +22,55 @@ describe('Dashboard Granules Page', () => {
 
     it('should be able to toggle a column', () => {
       cy.visit('/granules');
-      cy.contains('.table__filters .button__filter', 'Show Column Filters').click();
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
       cy.get('.table__filters--collapse').should('be.visible');
 
-      cy.get('.table__filters--wrapper #recoveryStatus').click();
+      cy.contains('.table__filters--filter label', 'Recovery').find('span').click();
+      cy.get('.button__apply-filter').click();
       cy.get('.table .thead .tr .th').should('contain.text', 'Recovery');
 
       cy.get('.table .tbody .tr').as('list');
       cy.get('@list').should('have.length', 12);
 
-      cy.get('.table__filters--wrapper #recoveryStatus').click();
+      cy.contains('.table__filters--filter label', 'Recovery').find('span').click();
+      cy.get('.button__apply-filter').click();
+      cy.get('.button__apply-filter').click();
       cy.get('.table .thead .tr .th').should('not.contain.text', 'Recovery');
 
-      cy.contains('.table__filters .button__filter', 'Hide Column Filters').click();
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
       cy.get('.table__filters--collapse').should('not.be.visible');
-      cy.contains('.table__filters .button__filter', 'Show Column Filters');
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns');
+    });
+
+    it('should reset columns initially displayed when the reset button is clicked', () => {
+      cy.visit('/granules');
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
+      cy.get('.table__filters--collapse').should('be.visible');
+
+      cy.contains('.table__filters--filter label', 'Recovery').find('span').click();
+      cy.contains('.table__filters--filter label', 'Status').find('span').click();
+      cy.contains('.table__filters--filter label', 'Duration').find('span').click();
+      cy.contains('.table__filters--filter label', 'Name').find('span').click();
+      cy.contains('.table__filters--filter label', 'Published').find('span').click();
+
+      cy.get('.button__apply-filter').click();
+
+      cy.get('.table .thead .tr .th').should('contain.text', 'Recovery');
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Status');
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Duration');
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Name');
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Published');
+
+      cy.get('.button__reset-filter').click();
+
+      cy.get('.table .thead .tr .th').should('not.contain.text', 'Recovery');
+      cy.get('.table .thead .tr .th').should('contain.text', 'Status');
+      cy.get('.table .thead .tr .th').should('contain.text', 'Execution');
+      cy.get('.table .thead .tr .th').should('contain.text', 'Name');
+      cy.get('.table .thead .tr .th').should('contain.text', 'Published');
+
+      cy.contains('.table__filters .button__filter', 'Show/Hide Columns').click();
+      cy.get('.table__filters--collapse').should('not.be.visible');
     });
 
     it('should display all granules in table with correct columns', () => {
@@ -125,22 +159,22 @@ describe('Dashboard Granules Page', () => {
               .should('have.attr', 'href')
               .and('be.eq', collectionHrefFromId(granule.collectionId));
 
-            // has link to provider
+            // Executions-list column has link to the executions list page
             cy.get('@columns').eq(5).children('a')
               .should('have.attr', 'href')
-              .and('be.eq', `/providers/provider/${granule.provider}`);
+              .and('be.eq', `/executions/executions-list/${encodeURIComponent(granule.collectionId)}/${encodeURIComponent(granule.granuleId)}`);
 
-            // Execution column has link to the detailed execution page
+            // has link to provider
             cy.get('@columns').eq(6).children('a')
               .should('have.attr', 'href')
-              .and('be.eq', `/executions/execution/${granule.execution.split('/').pop()}`);
+              .and('be.eq', `/providers/provider/${granule.provider}`);
 
             // Duration column
             cy.get('@columns').eq(7).invoke('text')
               .should('be.eq', `${Number(granule.duration).toFixed(2)}s`);
             // Updated column
             cy.get('@columns').eq(8).invoke('text')
-              .should('match', /.+ago$/);
+              .should('match', /.+[0-9]{2}\/[0-9]{2}\/[0-9]{2}$/);
             cy.get('@columns').eq(8).find('span').trigger('mouseover');
             cy.get('#table-timestamp-tooltip').should('be.visible');
             cy.get('@columns').eq(8).find('span').trigger('mouseleave');
@@ -593,7 +627,7 @@ describe('Dashboard Granules Page', () => {
       cy.contains('button', 'Delete').click();
       cy.get('.default-modal.batch-async-modal ').as('modal');
 
-      cy.get('@modal').contains('div', 'Selection contains granules that are published to CMR which must be removed before deleting. Remove published granules from CMR and delete?');
+      cy.get('@modal').contains('div', 'In order to delete these granules from Cumulus, we will first remove them from CMR' && 'Would you like to continue with your request');
     });
 
     it('Should show the correct DELETE modal when published granules are selected on the "processing granules" page', () => {
@@ -607,7 +641,7 @@ describe('Dashboard Granules Page', () => {
       cy.contains('button', 'Delete').click();
       cy.get('.default-modal.batch-async-modal ').as('modal');
 
-      cy.get('@modal').contains('div', 'Selection contains granules that are published to CMR which must be removed before deleting. Remove published granules from CMR and delete?');
+      cy.get('@modal').contains('div', 'In order to delete these granules from Cumulus, we will first remove them from CMR' && 'Would you like to continue with your request');
     });
 
     it('Should show the correct DELETE modal when published granules are NOT selected', () => {
@@ -621,7 +655,7 @@ describe('Dashboard Granules Page', () => {
       cy.contains('button', 'Delete').click();
       cy.get('.default-modal.batch-async-modal ').as('modal');
 
-      cy.get('@modal').contains('div', 'Delete 5 granules?');
+      cy.get('@modal').contains('div', 'You have submitted the following request', 'Delete 5 Granules');
     });
 
     it('Should handle a successful API response from the Remove and Delete granule requests', () => {
@@ -699,6 +733,42 @@ describe('Dashboard Granules Page', () => {
 
       cy.get('.default-modal.batch-async-modal ').as('modal');
       cy.get('@modal').contains('div', 'Error');
+    });
+
+    it('should scroll show/hide scroll buttons when last visible columns are hovered over', () => {
+      cy.viewport(1300, 1000);
+      cy.visit('/granules?limit=20');
+
+      // ensure window has focus
+      cy.get('body').click();
+
+      // Validate Scroll Right button is visible when hovering over the last completely visible column
+      // and can scroll and hide the scroll right button
+      cy.get('.tr:nth-child(1) > .td:nth-child(8)').trigger('mouseover');
+      cy.get('.scrollButtonRight').should('be.visible');
+      cy.get('.scrollButtonRight').trigger('mousedown', { button: 0 });
+      cy.wait(1000);
+      cy.get('.scrollButtonRight').trigger('mouseup', { button: 0 });
+      cy.get('.scrollButtonRight').trigger('mouseout');
+      cy.get('.scrollButtonRight').should('not.be.visible');
+
+      // Validate Scroll Left button is visible when hovering over the last completely visible column on the left
+      // and can scroll and hide the scroll right button
+      cy.get('.tr:nth-child(1) > .td:nth-child(2)').trigger('mouseover');
+      cy.get('.scrollButtonLeft').should('be.visible');
+      cy.get('.scrollButtonLeft').trigger('mousedown', { button: 0 });
+      cy.wait(1000);
+      cy.get('.scrollButtonLeft').trigger('mouseup', { button: 0 });
+      cy.get('.scrollButtonLeft').trigger('mouseout');
+      cy.get('.scrollButtonLeft').should('not.be.visible');
+    });
+
+    it('should navigate to executions-list when clicking on the executions-list link for a granule', () => {
+      cy.visit('/granules');
+      cy.url().should('include', 'granules');
+
+      cy.get('.tr:nth-child(1) > .td:nth-child(6) > a').click();
+      cy.url().should('include', 'executions-list');
     });
   });
 });

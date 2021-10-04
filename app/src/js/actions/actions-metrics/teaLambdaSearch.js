@@ -1,18 +1,18 @@
-export const s3AccessSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
+export const teaLambdaSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpochMilli) => `{
   "aggs": {
     "2": {
       "filters": {
         "filters": {
-          "s3AccessSuccesses": {
+          "TEALambdaErrors": {
             "query_string": {
-              "query": "response:200",
+              "query": "response_status:failure",
               "analyze_wildcard": true,
               "default_field": "*"
             }
           },
-          "s3AccessFailures": {
+          "TEALambdaSuccesses": {
             "query_string": {
-              "query": "NOT response:200",
+              "query": "response_status:success",
               "analyze_wildcard": true,
               "default_field": "*"
             }
@@ -52,15 +52,8 @@ export const s3AccessSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpoch
         },
         {
           "match_phrase": {
-            "_index": {
-              "query": "${prefix}-s3*"
-            }
-          }
-        },
-        {
-          "match_phrase": {
-            "operation": {
-              "query": "REST.GET.OBJECT"
+            "logGroup": {
+              "query": "/aws/lambda/${prefix}-thin-egress-app-EgressLambda"
             }
           }
         }
@@ -72,4 +65,4 @@ export const s3AccessSearchTemplate = (prefix, startTimeEpochMilli, endTimeEpoch
   }
 }`;
 
-export default s3AccessSearchTemplate;
+export default teaLambdaSearchTemplate;

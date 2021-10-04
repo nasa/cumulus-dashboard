@@ -7,6 +7,105 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v7.0.0]
+
+## Breaking Changes
+
+This version of the dashboard requires Cumulus API `v9.5.0`
+
+- **CUMULUS-2502**
+  - Configuration changes are required to continue connecting the dashboard with Earthdata Metrics
+  - Metrics integration has been updated to require manual configuration rather
+    than by an assumed naming convention.  As such, new environmental variables
+    describing the Elasticsearch target patterns have been added (check with
+    your metrics provider for the exact values):
+     + ES\_CLOUDWATCH\_TARGET\_PATTERN (Generally: `<daac>-cumulus-cloudwatch-<env>-*`)
+     + ES\_DISTRIBUTION\_TARGET\_PATTERN (Generally: `<daac>-distribution-<env>-*`)
+  - Kibana links are changed. We no longer try to build URLs that describe the
+    metrics' Elasicsearch results. Instead, we now only return a simple link to
+    configured Kibana root.  It is up to the kibana user to interact with the
+    dashbaord, setting default security tenant and default kibana index
+    patterns. You can create kibana Index Patterns (or they may exist already)
+    to gather the cloudwatch logs sent to metrics with a similar patter to the
+    ES\_CLOUDWATCH\_TARGET\_PATTERN, and if you have configured s3 server access
+    logs, likewise use a pattern like the ES\_DISTRIBUTION\_TARGET\_PATTERN.
+- **CUMULUS-2459**
+  - Use of ```executions/search-by-granules``` to retrieve executions for a granule/collection
+    combination requires minimum CUMULUS API v9.5.0
+
+## All Changes
+
+### Changed
+
+- **CUMULUS-2594**
+  - Added information on CMR Provider, Environment and Authentication to the Footer
+- **CUMULUS-2142**
+  - Changed styling for sidebar button
+  - Added tooltip for sidebar button
+- **CUMULUS-2358**
+  - Refactored various modals in order to reflect the StandardModal design
+  - Changed styling of Modal components for aesthetics
+- **CUMULUS-2360**
+  - Implemented Warning alert into every delete and remove modals
+- **CUMULUS-2502**
+  - Metrics ES searches have been updated to run against only the index
+    patterns provided, improving performance and saving resources.
+  - Documentation for metrics has been moved into its own table.
+  - Upgrade cypress testing framework to 7.3.0
+- **CUMULUS-2505**
+  - Update column show/hide component with new styling and "reset to default interaction for each table
+- **CUMULUS-2506**
+  - Adds horizontal scroll buttons to tables improving accessibily
+- **CUMULUS-2511**
+  - Ensured that sort state will persist through page changes.
+- **CUMULUS-2524**
+  - CSS and UI tweaks to padding/margin, width, and color/contrast
+- **CUMULUS-2534**
+  - Added a copy button to errors pages so the error can be copied and searched up on the internet.
+- **CUMULUS-2535**
+  - Ensured that the KPI cards would be updated on all tabs whenever the page was updated
+- **CUMULUS-2540**
+  - Add Granule Actions group & Functionality to other pages/sections with granules to manage
+- **CUMULUS-2544**
+  - Changed the timestamp so that the date and time is shown rather than time elapsed since last occurrence
+- **CUMULUS-2551**
+  - Added a sortable column to individual granules tab so you can sort each file within the granule by size.
+- **CUMULUS-2554**
+  - Add focus styles for various browser support and keyboard/mouse inputs
+- **CUMULUS-2573**
+  - Changed the dropdown menu in the individual providers page into a delete button.
+- **CUMULUS-2579**
+  - Fixed React Issue with the Footer pertaining to missing keys.
+- **CUMULUS-2604**
+  - Deleted Collections column in the Providers overview page.
+- **CUMULUS-2616**
+  - added .gitattributes file that prevents windows from changing the line endings on checkout from github.
+- **CUMULUS-2650**
+  - Modal CSS styling tweaks
+- **CUMULUS-2651**
+  - Layout CSS styling tweaks
+- **CUMULUS-2459**
+  - Updated localAPI docker-compose.yml to include SSM, Postgres container to be used with RDS compatible API
+  - Updated integration tests due to changes in API behavior related to Postgres contstraints between tables
+- **CUMULUS-NONE**
+  - Downgrades elasticsearch version in testing container to 5.3 to match AWS version.
+
+### Fixed
+
+- **CUMULUS-2525**
+  - Fixes granule execute modal rerender issue when workflow options are not changed
+- **CUMULUS-2553**
+  - Fixed DatePicker prop so the leading zeroes can be entered without having too many zeroes clouding the input.
+- **CUMULUS-NONE**
+  - Update Bamboo and scripts to deploy the Dashboard to our SIT for Cumulus team testing.
+  - Fixed containsPublishedGranules to ignore granules without a published key.
+
+### Added
+
+- **CUMULUS-2459**
+  - Added Executions List column to granules table linking to executions-list view that displays all executions
+    for a granule/collection combination
+
 ## [v6.0.0] - 2021-05-03
 
 ## Breaking Changes
@@ -19,6 +118,9 @@ This version of the dashboard requires Cumulus API `v8.1.0`
 
 - **CUMULUS-2449**
   - Fixes issue where collections with forward slash in version name were not displayed
+
+_ **CUMULUS-2425**
+  - Fixes graph display for failed execution steps
 
 ### Added
 
@@ -41,6 +143,9 @@ This version of the dashboard requires Cumulus API `v8.1.0`
     message which has useful information to show the user.
   - Upgrades Cypress testing software to 7.0.1
   - Refactors home page and adds a new section header
+
+- **CUMULUS-2467**
+  - Update to footer layout to include NASA privacy links to help move Cumulus into compliance with other EED products
 
 ## [v5.0.0] - 2021-03-23
 
@@ -886,8 +991,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v6.0.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v7.0.0...HEAD
+[v7.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v6.0.0...v7.0.0
 [v6.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v5.0.0...v6.0.0
 [v5.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v4.0.0...v5.0.0
 [v4.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v3.0.0...v4.0.0

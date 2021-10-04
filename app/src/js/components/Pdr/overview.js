@@ -3,12 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import {
-  listPdrs,
-  getCount,
-  clearPdrsFilter,
-  filterPdrs
-} from '../../actions';
+import { listPdrs, getCount, clearPdrsFilter, filterPdrs } from '../../actions';
 import { lastUpdated, tally } from '../../utils/format';
 import { bulkActions } from '../../utils/table-config/pdrs';
 import { tableColumns } from '../../utils/table-config/pdr-progress';
@@ -63,7 +58,7 @@ class PdrOverview extends React.Component {
     return bulkActions(this.props.pdrs);
   }
 
-  render () {
+  render() {
     const { pdrs } = this.props;
     const { list } = pdrs;
     const { count, queriedAt } = list.meta;
@@ -81,7 +76,7 @@ class PdrOverview extends React.Component {
             PDR Overview
           </h1>
           {lastUpdated(queriedAt)}
-          <Overview type='pdrs' inflight={false} />
+          <Overview type="pdrs" inflight={pdrs.list.inflight} />
         </section>
         <section className="page__section">
           <div className="heading__wrapper--border">
@@ -102,18 +97,25 @@ class PdrOverview extends React.Component {
             rowId="pdrName"
             filterAction={filterPdrs}
             filterClear={clearPdrsFilter}
+            tableId="pdrs-overview"
           >
             <ListFilters>
               <Dropdown
                 options={statusOptions}
                 action={filterPdrs}
                 clear={clearPdrsFilter}
-                paramKey={'status'}
-                label={'Status'}
+                paramKey="status"
+                label="Status"
               />
             </ListFilters>
           </List>
-          <Link className="link--secondary link--learn-more" to={(location) => ({ pathname: '/pdrs/active', search: getPersistentQueryParams(location) })}>
+          <Link
+            className="link--secondary link--learn-more"
+            to={(location) => ({
+              pathname: '/pdrs/active',
+              search: getPersistentQueryParams(location),
+            })}
+          >
             View Currently Active PDRs
           </Link>
         </section>

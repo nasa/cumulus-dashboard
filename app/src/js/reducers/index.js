@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import api from './api';
 import apiVersion from './api-version';
+import cmrInfo from './cmr-info';
 import collections from './collections';
 import config from './utils/config';
 import dist from './dist';
@@ -23,6 +24,7 @@ import rules from './rules';
 import reconciliationReports from './reconciliation-reports';
 import cumulusInstance from './cumulus-instance';
 import sidebar from './sidebar';
+import sorts from './sort-persist';
 
 const def = (state, _action) => state || {};
 
@@ -30,6 +32,7 @@ export const reducers = {
   def,
   api,
   apiVersion,
+  cmrInfo,
   collections,
   config,
   dist,
@@ -50,6 +53,7 @@ export const reducers = {
   operations,
   rules,
   reconciliationReports,
+  sorts,
 };
 
 export const createRootReducer = (history) => combineReducers({
