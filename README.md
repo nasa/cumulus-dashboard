@@ -386,6 +386,7 @@ Create and push a new git tag:
 
 ```bash
   $ git checkout master
+  $ git pull origin master
   $ git tag -a v1.x.x -m "Release 1.x.x"
   $ git push origin v1.x.x
 ```
