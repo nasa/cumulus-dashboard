@@ -314,17 +314,21 @@ const BulkGranule = ({
           handleSuccessConfirm={handleSuccessConfirm}
           inflight={isStatusInflight(bulkReingestRequestStatus)}
           onCancel={hideBulkReingestModal}
+          queryWorkflowOptions={true}
           requestId={bulkReingestRequestId}
           selected={selected}
+          selectWorkflow={true}
           showModal={showBulkReingestModal}
           success={isStatusSuccess(bulkReingestRequestStatus)}
           successMessage={'Your request to process a bulk granule reingest operation has been submitted.'}
           title={'Bulk Granule Reingest'}
         >
           <h4 className="modal_subtitle">To run and complete your bulk reingest task:</h4>
-          <p>
-          In the box below, add either an array of granule Ids or an elasticsearch query and index. <br/>
-          </p>
+          <ol>
+            <li>In the box below, add either an array of granule Ids or an elasticsearch query and index.</li>
+            <li>Then select workflow to rerun for all the selected granules. The workflows listed are the
+              intersection of the selected granules' workflows.</li>
+          </ol>
         </BulkGranuleModal>
         {config.enableRecovery &&
         <BulkGranuleModal
@@ -350,7 +354,8 @@ const BulkGranule = ({
           <h4 className="modal_subtitle">To run and complete your bulk granule task:</h4>
           <ol>
             <li>In the box below, enter the workflowName.</li>
-            <li>Then add either an array of Granule IDs or an Elasticsearch query and index (<i>see below</i>).</li>
+            <li>Then add either an array of granule Ids or an Elasticsearch query and
+              index (<i>see below</i>).</li>
           </ol>
         </BulkGranuleModal>
         }
@@ -367,7 +372,10 @@ BulkGranule.propTypes = {
   className: PropTypes.string,
   element: PropTypes.string,
   granules: PropTypes.object,
-  selected: PropTypes.array
+  selected: PropTypes.arrayOf(PropTypes.shape({
+    granuleId: PropTypes.string,
+    collectionId: PropTypes.string,
+  }))
 };
 
 export { BulkGranule };

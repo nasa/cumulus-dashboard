@@ -436,12 +436,6 @@ export const rerunText = (name) => [
   <p>Are you sure you want to rerun?</p>
 ];
 
-export const reingestText = (name) => [
-  <p>You have submitted a request to reingest the following granule:</p>,
-  <strong>{name}</strong>,
-  <p className="disclaimer"><strong>Note: </strong>The granule files will be overwritten when you reingest. Are you sure that you want to reingest this granule?</p>
-];
-
 export const recoverCollectionText = (d) => [
   <p>You have submitted a Collection recovery request</p>,
   <strong>Recover {d} Collection{d > 1 ? 's' : ''}</strong>,

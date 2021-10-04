@@ -37,7 +37,10 @@ const ListActions = ({
       const { Component, text } = item;
       return (
         <React.Fragment key={text || index}>
-          {Component && React.cloneElement(Component, { selected })}
+          {/* Add 'selected' prop to Component if the element doesn't have this property already.
+          Component like BulkGranule has `selected` prop which is an array of objects, `selected` here
+          is an array of string */}
+          {Component && React.cloneElement(Component, Component.props.selected === undefined && { selected })}
           {!Component &&
             <BatchAsyncCommand
               dispatch={dispatch}
@@ -50,7 +53,7 @@ const ListActions = ({
               getModalOptions={item.getModalOptions}
               onSuccess={handleBulkActionSuccess}
               onError={handleBulkActionError}
-              selected={selected}
+              selected={item.selected || selected}
               className={item.className || ''}
             />
           }
