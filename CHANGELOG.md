@@ -13,7 +13,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Reingest a granule from granule details page is updated to select a workflow execution arn for reingest.
   - Batch Reingest and Bulk Reingest Actions are updated to select the workflowName for reingest.
 
-## [v7.0.0]
+### Changed
+
+- **CUMULUS-NONE**
+  - update development version of @cumulus/api to v9.7.0 to pick up test fixes.
+
+## [v7.0.0] - 2021-10-04
 
 ## Breaking Changes
 
