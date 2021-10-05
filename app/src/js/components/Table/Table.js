@@ -39,6 +39,7 @@ const List = ({
   onSelect,
   query,
   queryParams,
+  renderRowSubComponent,
   rowId,
   sorts,
   tableColumns,
@@ -52,7 +53,7 @@ const List = ({
     meta,
   } = list;
   const { count, limit } = meta || {};
-  const tableData = data || listData;
+  const tableData = data || listData || [];
 
   const [selected, setSelected] = useState([]);
   const [clearSelected, setClearSelected] = useState(false);
@@ -70,7 +71,6 @@ const List = ({
     bulkActionError: null,
   });
   const [toggleColumnOptions, setToggleColumnOptions] = useState({
-    onChange: noop,
     hiddenColumns: initialHiddenColumns,
     setHiddenColumns: noop,
   });
@@ -252,6 +252,7 @@ const List = ({
               // according to that id, and therefore we are using sever-side/manual sorting
               shouldManualSort={!!initialSortId}
               getToggleColumnOptions={getToggleColumnOptions}
+              renderRowSubComponent={renderRowSubComponent}
               tableId={tableId}
               initialSortBy={sortBy}
             />
@@ -291,6 +292,7 @@ List.propTypes = {
   tableColumns: PropTypes.array,
   onSelect: PropTypes.func,
   queryParams: PropTypes.object,
+  renderRowSubComponent: PropTypes.func,
   tableId: PropTypes.string,
   sorts: PropTypes.object,
 };

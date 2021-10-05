@@ -1,5 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
-import { fullDate } from '../../app/src/js/utils/format';
+import { displayCase, fullDate } from '../../app/src/js/utils/format';
 
 describe('Dashboard Executions Page', () => {
   describe('When not logged in', () => {
@@ -57,7 +57,7 @@ describe('Dashboard Executions Page', () => {
             .should('have.attr', 'title')
             .and('be.eq', execution.name);
           cy.get('@columns').eq(1).invoke('text')
-            .should('be.eq', execution.status.replace(/^\w/, (c) => c.toUpperCase()));
+            .should('contain', displayCase(execution.status));
           cy.get('@columns').eq(2).invoke('text')
             .should('be.eq', execution.type);
           cy.get('@columns').eq(3).invoke('text')
@@ -325,12 +325,14 @@ describe('Dashboard Executions Page', () => {
       cy.get('.num-title').should('contain.text', '3');
 
       cy.get('.thead .tr .tr').children().as('columns');
-      cy.get('@columns').should('have.length', 5);
+      cy.get('@columns').should('have.length', 6);
+
       cy.get('@columns').eq(0).should('have.text', 'Name');
       cy.get('@columns').eq(1).should('have.text', 'Status');
       cy.get('@columns').eq(2).should('have.text', 'Workflow');
       cy.get('@columns').eq(3).should('have.text', 'Updated');
       cy.get('@columns').eq(4).should('have.text', 'Duration');
+      cy.get('@columns').eq(5).should('have.text', 'Failed Events Snapshot');
     });
   });
 });
