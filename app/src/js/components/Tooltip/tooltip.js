@@ -12,7 +12,7 @@ const Tooltip = ({
   <OverlayTrigger
     placement={placement}
     overlay={
-      <BootstrapTooltip className={className} id={id} show={true}>
+      <BootstrapTooltip className={className} id={id}>
         {tip}
       </BootstrapTooltip>
     }
