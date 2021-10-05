@@ -248,11 +248,13 @@ class GranuleOverview extends React.Component {
   }
 
   getReingestOptions() {
-    const { granuleId } = this.props.match.params;
-    const granExecutions = get(this.props.executions, 'list.data', []);
-    const reingestExecutionOptions = granExecutions
+    const { match, executions } = this.props;
+    const { granuleId } = match.params;
+    const granuleExecutions = executions.map[granuleId] || {};
+    const { data: granuleExecutionsList = [], error } = granuleExecutions || {};
+    const reingestExecutionOptions = granuleExecutionsList
       .map((execution) => ({
-        label: `${execution.type}${(execution.arn === granExecutions[0].arn) ? ' (default)' : ''}`,
+        label: `${execution.type}${(execution.arn === granuleExecutionsList[0].arn) ? ' (default)' : ''}`,
         value: execution.arn
       }));
 
@@ -265,8 +267,8 @@ class GranuleOverview extends React.Component {
             Below you can select a specific workflow to apply to this selected granule.
             <strong>Note: The default is the latest workflow.</strong>
           </p>
-          {get(this.props.executions, 'list.error') &&
-            <ErrorReport report={`Failed to get granule executions: ${get(this.props.executions, 'list.error')}`} />}
+          {error &&
+            <ErrorReport report={`Failed to get granule executions: ${error}`} />}
         </div>
         <div>
           <SimpleDropdown
