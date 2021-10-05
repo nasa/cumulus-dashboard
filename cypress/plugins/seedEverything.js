@@ -1,6 +1,7 @@
 const { testUtils } = require('@cumulus/api');
 const { promiseS3Upload } = require('@cumulus/aws-client/S3');
 const fs = require('fs');
+const path = require('path');
 const CSV = require('csv-string');
 const serveUtils = require('@cumulus/api/bin/serveUtils');
 const { eraseDataStack } = require('@cumulus/api/bin/serve');
@@ -18,7 +19,7 @@ const providers = require('../fixtures/seeds/providersFixture.json');
 const rules = require('../fixtures/seeds/rulesFixture.json');
 const pdrs = require('../fixtures/seeds/pdrsFixture.json');
 const reconciliationReports = require('../fixtures/seeds/reconciliationReportFixture.json');
-const reconciliationReportDir = `${__dirname}/../fixtures/seeds/reconciliation-reports`;
+const reconciliationReportDir = path.join(__dirname, '../fixtures/seeds/reconciliation-reports');
 
 function resetIt() {
   return Promise.all([

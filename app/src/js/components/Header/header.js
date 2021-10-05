@@ -96,7 +96,8 @@ class Header extends React.Component {
             </Link>
           </h1>
           <nav>
-            {!minimal ? (
+            {!minimal
+              ? (
               <ul>
                 {activePaths.map((path) => (
                   <li key={path[0]} className={this.className(path[1])}>
@@ -104,18 +105,21 @@ class Header extends React.Component {
                   </li>
                 ))}
                 <li className="rightalign nav__order-8">
-                  {authenticated ? (
+                  {authenticated
+                    ? (
                     <button onClick={this.logout}>
                       <span className="log-icon"></span>Log out
                     </button>
-                  ) : (
+                      )
+                    : (
                     <Link to={'/login'}>Log in</Link>
-                  )}
+                      )}
                 </li>
               </ul>
-            ) : (
+                )
+              : (
               <li>&nbsp;</li>
-            )}
+                )}
           </nav>
         </div>
       </div>

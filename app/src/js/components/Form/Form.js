@@ -365,7 +365,7 @@ export class Form extends React.Component {
         >
           {form}
         </form>
-      );
+        );
   }
 }
 

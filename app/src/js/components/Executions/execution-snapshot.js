@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Alert } from 'react-bootstrap';
@@ -13,7 +13,7 @@ const ExecutionSnapshot = ({
 }) => {
   const { original: { arn }, isExpanded } = row || {};
   const { map } = executionStatus || {};
-  const currentExecutionStatus = map ? map[arn] : {};
+  const currentExecutionStatus = useMemo(() => (map[arn] || {}), [arn, map]);
   const { execution, executionHistory, inflight, warning, error } = currentExecutionStatus || {};
   const { events } = executionHistory || {};
   const hasEvents = events?.length > 1;

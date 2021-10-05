@@ -94,11 +94,13 @@ const ReconciliationReportList = ({
                 search: getPersistentQueryParams(routerLocation),
               })}
             >
-              {reconciliationReports.createReportInflight ? (
-                <LoadingEllipsis />
-              ) : (
-                'Create New Report'
-              )}
+              {reconciliationReports.createReportInflight
+                ? (
+                  <LoadingEllipsis />
+                  )
+                : (
+                    'Create New Report'
+                  )}
             </Link>
           )}
           {lastUpdated(queriedAt)}

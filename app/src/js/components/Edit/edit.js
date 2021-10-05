@@ -99,7 +99,8 @@ class EditRecord extends React.Component {
       <div className='page__component'>
         <section className='page__section'>
           <h1 className='heading--large'>Edit {schemaKey}: {pk}</h1>
-          {schema && record.data ? (
+          {schema && record.data
+            ? (
             <Schema
               schema={schema}
               data={record.data}
@@ -110,7 +111,8 @@ class EditRecord extends React.Component {
               include={includedForms}
               error={meta.status === 'inflight' ? null : error}
             />
-          ) : <Loading />}
+              )
+            : <Loading />}
         </section>
       </div>
     );

@@ -55,11 +55,13 @@ const tableColumns = [
   },
   {
     Header: 'Link',
-    accessor: (row) => (row.bucket && row.key ? (
-      <a href={makeLink(row.bucket, row.key)}>
-        {row.fileName ? link : nullValue}
-      </a>
-    ) : null),
+    accessor: (row) => (row.bucket && row.key
+      ? (
+        <a href={makeLink(row.bucket, row.key)}>
+          {row.fileName ? link : nullValue}
+        </a>
+        )
+      : null),
     id: 'link',
   },
   {
@@ -93,29 +95,33 @@ const metaAccessors = [
   {
     label: `${strings.cmr} Link`,
     property: 'cmrLink',
-    accessor: (d) => (d ? (
-      <a href={d} target="_blank">
+    accessor: (d) => (d
+      ? (
+        <a href={d} target="_blank">
         link
-      </a>
-    ) : (
-      nullValue
-    )),
+        </a>
+        )
+      : (
+          nullValue
+        )),
   },
   {
     label: 'Execution',
     property: 'execution',
-    accessor: (d) => (d ? (
-      <Link
-        to={(location) => ({
-          pathname: `/executions/execution/${path.basename(d)}`,
-          search: getPersistentQueryParams(location),
-        })}
-      >
+    accessor: (d) => (d
+      ? (
+        <Link
+          to={(location) => ({
+            pathname: `/executions/execution/${path.basename(d)}`,
+            search: getPersistentQueryParams(location),
+          })}
+        >
         link
-      </Link>
-    ) : (
-      nullValue
-    )),
+        </Link>
+        )
+      : (
+          nullValue
+        )),
   },
   {
     label: 'Published',

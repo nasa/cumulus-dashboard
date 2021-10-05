@@ -65,7 +65,7 @@ export function renderTypeaheadMenu(results, menuProps) {
         </MenuItem>
       )}
       {results.map((result, index) => {
-        if (result.customOption) return;
+        if (result.customOption) return <></>;
         const position = customOption ? index + 1 : index;
         return (
           <MenuItem

@@ -64,18 +64,20 @@ const metaAccessors = [
   {
     label: 'Execution',
     property: 'execution',
-    accessor: (d) => (d ? (
-      <Link
-        to={(location) => ({
-          pathname: `/executions/execution/${path.basename(d)}`,
-          search: getPersistentQueryParams(location),
-        })}
-      >
+    accessor: (d) => (d
+      ? (
+        <Link
+          to={(location) => ({
+            pathname: `/executions/execution/${path.basename(d)}`,
+            search: getPersistentQueryParams(location),
+          })}
+        >
         link
-      </Link>
-    ) : (
-      nullValue
-    )),
+        </Link>
+        )
+      : (
+          nullValue
+        )),
   },
   {
     label: 'Status',

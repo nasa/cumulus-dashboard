@@ -51,7 +51,8 @@ class LoginModal extends React.Component {
       <div>
         { show ? <div className='modal__content'></div> : null }
         <div className={ show ? 'modal__container modal__container--onscreen' : 'modal__container' }>
-          { show ? (
+          { show
+            ? (
             <Modal
               dialogClassName="login-modal"
               show= {true}
@@ -89,7 +90,8 @@ class LoginModal extends React.Component {
                 { error ? <ErrorReport report={error} /> : null }
               </Modal.Body>
             </Modal>
-          ) : null }
+              )
+            : null }
         </div>
       </div>
     );

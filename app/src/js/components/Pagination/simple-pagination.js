@@ -54,7 +54,7 @@ const SimplePagination = ({
             if (shouldHaveEllipses) {
               return <li key={page}>...</li>;
             }
-            return;
+            return <></>;
           }
 
           return (

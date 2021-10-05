@@ -160,7 +160,8 @@ const EditRaw = ({
         <div className="heading__wrapper--border">
           <h1 className='heading--large'>Edit {recordDisplayName}: {pk}</h1>
         </div>
-        { data || data === '' ? (
+        { data || data === ''
+          ? (
           <form>
             <TextArea
               value={data}
@@ -181,7 +182,8 @@ const EditRaw = ({
               onClick={handleCancel}
             >Cancel</button>
           </form>
-        ) : <Loading /> }
+            )
+          : <Loading /> }
       </section>
       {hasModal &&
       <DefaultModal

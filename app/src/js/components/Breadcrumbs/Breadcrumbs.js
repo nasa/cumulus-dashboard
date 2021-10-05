@@ -13,7 +13,8 @@ const Breadcrumbs = ({ config }) => (
           key={index}
           className={`breadcrumb-item ${active ? 'active' : ''}`}
         >
-          {active ? <span>{label}</span>
+          {active
+            ? <span>{label}</span>
             : <Link to={(location) => ({ pathname: href, search: getPersistentQueryParams(location) })}>{label}</Link>}
         </li>
       );
