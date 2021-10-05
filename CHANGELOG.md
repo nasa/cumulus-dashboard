@@ -15,7 +15,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2585**
   - Added failed execution step snapshot to execution list
 
-## [v7.0.0]
+### Changed
+
+- **CUMULUS-NONE**
+  - update development version of @cumulus/api to v9.7.0 to pick up test fixes.
+
+## [v7.0.0] - 2021-10-04
 
 ## Breaking Changes
 
