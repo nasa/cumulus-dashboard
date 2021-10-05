@@ -250,7 +250,7 @@ class GranuleOverview extends React.Component {
   getReingestOptions() {
     const { match, executions } = this.props;
     const { granuleId } = match.params;
-    const granuleExecutions = executions.map[granuleId] || {};
+    const granuleExecutions = executions.map?.[granuleId] || {};
     const { data: granuleExecutionsList = [], error } = granuleExecutions || {};
     const reingestExecutionOptions = granuleExecutionsList
       .map((execution) => ({
