@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2462**
   - Reingest a granule from granule details page is updated to select a workflow execution arn for reingest.
   - Batch Reingest and Bulk Reingest Actions are updated to select the workflowName for reingest.
+- **CUMULUS-2585**
+  - Added failed execution step snapshot to execution list
 
 ## [v7.0.0]
 
@@ -111,8 +113,6 @@ This version of the dashboard requires Cumulus API `v9.5.0`
 - **CUMULUS-2459**
   - Added Executions List column to granules table linking to executions-list view that displays all executions
     for a granule/collection combination
-- **CUMULUS-2585**
-  - Added failed execution step snapshot to execution list
 
 ## [v6.0.0] - 2021-05-03
 
