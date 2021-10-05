@@ -1,0 +1,27 @@
+[
+  {
+    "granuleId": "MOD09GQ.A9344328.K9yI3O.006.4625818663028",
+    "collectionId": "MOD09GQ___006",
+    "executionArn": "arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1"
+  },
+  {
+    "granuleId": "MOD09GQ.A9344328.K9yI3O.006.4625818663028",
+    "collectionId": "MOD09GQ___006",
+    "executionArn": "arn:aws:states:us-east-1:123456789012:execution:test-source-integration-HelloWorldWorkflow:79ba430a-0616-4458-ad5e-1bf2e979cfe4"
+  },
+  {
+    "granuleId": "MOD09GQ.A9344328.K9yI3O.006.4625818663028",
+    "collectionId": "MOD09GQ___006",
+    "executionArn": "arn:aws:states:us-east-1:596205514787:execution:test-source-integration-HelloWorldWorkflow:1a5aaf01-835b-431a-924f-96a7feb3a3fb"
+  },
+  {
+    "granuleId": "MOD09GQ.A2417309.YZ9tCV.006.4640974889044",
+    "collectionId": "MOD09GQ___006",
+    "executionArn": "arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestGranuleStateMachine-MOyI0myKEXzf:c33e4091-e90d-449c-93f5-c4462b6e4e87"
+  },
+  {
+    "granuleId": "MOD09GQ.A2417309.YZ9tCV.006.4640974889044",
+    "collectionId": "MOD09GQ___006",
+    "executionArn": "arn:aws:states:us-east-1:123456789012:execution:test-source-integration-IngestAndPublishGranule:fd0bc7b5-56c3-4e37-b445-8a25f27c06b8"
+  }
+]

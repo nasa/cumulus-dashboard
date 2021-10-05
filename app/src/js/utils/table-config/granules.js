@@ -1,4 +1,5 @@
 import path from 'path';
+import pick from 'lodash/pick';
 import React from 'react';
 import { get } from 'object-path';
 import Collapsible from 'react-collapsible';
@@ -32,7 +33,7 @@ import {
 import ErrorReport from '../../components/Errors/report';
 import { strings } from '../../components/locale';
 import SimpleDropdown from '../../components/DropDown/simple-dropdown';
-import Bulk from '../../components/Granules/bulk';
+import BulkGranule from '../../components/Granules/bulk';
 import BatchReingestConfirmContent from '../../components/ReingestGranules/BatchReingestConfirmContent';
 import BatchReingestCompleteContent from '../../components/ReingestGranules/BatchReingestCompleteContent';
 import TextArea from '../../components/TextAreaForm/text-area';
@@ -239,6 +240,7 @@ const setOnConfirm = ({ history, error, selected, closeModal }) => {
 };
 
 const granuleModalJourney = ({
+  onChange,
   selected = [],
   history,
   isOnModalConfirm,
@@ -253,7 +255,7 @@ const granuleModalJourney = ({
     size: 'lg'
   };
   if (initialEntry) {
-    modalOptions.children = <BatchReingestConfirmContent selected={selected}/>;
+    modalOptions.children = <BatchReingestConfirmContent selected={selected} onChange={onChange}/>;
   }
   if (isOnModalComplete) {
     modalOptions.children = <BatchReingestCompleteContent results={results} errorMessage={errorMessage}
@@ -265,7 +267,8 @@ const granuleModalJourney = ({
       modalOptions.confirmButtonText = (selected.length > 1) ? 'View Running' : 'View Granule';
       modalOptions.cancelButtonClass = 'button--green';
       modalOptions.confirmButtonClass = 'button__goto';
-      modalOptions.onConfirm = setOnConfirm({ history, selected, errorMessage, closeModal });
+      const ids = selected.map((g) => g.granuleId);
+      modalOptions.onConfirm = setOnConfirm({ history, selected: ids, errorMessage, closeModal });
     }
   }
   return modalOptions;
@@ -285,18 +288,19 @@ const containsPublishedGranules = (selectedGranules) => {
   return true;
 };
 
-export const reingestAction = (granules) => ({
+export const reingestAction = (granules, selectedGranules) => ({
   text: 'Reingest',
   action: reingestGranule,
   state: granules.reingested,
   clearError: reingestGranuleClearError,
   confirm: confirmReingest,
   className: 'button--reingest',
-  getModalOptions: granuleModalJourney
+  getModalOptions: granuleModalJourney,
+  selected: selectedGranules.map((g) => pick(g, ['granuleId', 'collectionId']))
 });
 
 export const bulkActions = (granules, config, selectedGranules) => [
-  reingestAction(granules),
+  reingestAction(granules, selectedGranules),
   {
     text: 'Execute',
     action: config.execute.action,
@@ -324,10 +328,11 @@ export const bulkActions = (granules, config, selectedGranules) => [
   },
   {
     Component:
-      <Bulk
+      <BulkGranule
         element='button'
         className='button button__bulkgranules button--green button--small form-group__element'
         confirmAction={true}
+        selected={selectedGranules.map((g) => pick(g, ['granuleId', 'collectionId']))}
       />
   },
   {
