@@ -51,6 +51,7 @@ test.serial('CUMULUS-336 Granule file links use the correct URL', function (t) {
     <GranuleOverview
       dispatch={dispatch}
       match={match}
+      executions={{}}
       granules={granules}
       logs={logs}
       skipReloadOnMount={true}
@@ -71,6 +72,7 @@ test.serial('Checking granule for size prop', function (t) {
     <GranuleOverview
       dispatch={dispatch}
       match={match}
+      executions={{}}
       granules={granules}
       logs={logs}
       skipReloadOnMount={true}
