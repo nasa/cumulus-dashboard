@@ -138,7 +138,7 @@ AsyncCommand.propTypes = {
   disabled: PropTypes.bool,
   element: PropTypes.string,
   confirmAction: PropTypes.bool,
-  confirmText: PropTypes.string,
+  confirmText: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   confirmOptions: PropTypes.array,
   postActionText: PropTypes.string
 };

@@ -15,7 +15,7 @@ export const section = ({
 }) => {
   const borderMod = border ? '--border' : '';
   const sizeMod = `--${size}`;
-  const id = sectionId || false;
+  const id = sectionId || '';
   const headerClass = (link !== undefined) ? 'heading--shared-content--right' : '';
   return (
     <section className='page__section' id={id}>

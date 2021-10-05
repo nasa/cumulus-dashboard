@@ -43,8 +43,10 @@ export class BatchCommand extends React.Component {
       status: null,
       modalOptions: null,
       errorMessage: null,
+      meta: {},
     };
     this.isRunning = false;
+    this.buildId = this.buildId.bind(this);
     this.confirm = this.confirm.bind(this);
     this.cancel = this.cancel.bind(this);
     this.start = this.start.bind(this);
@@ -55,10 +57,20 @@ export class BatchCommand extends React.Component {
     this.isInflight = this.isInflight.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.updateMeta = this.updateMeta.bind(this);
+  }
+
+  buildId(item) {
+    return (typeof item === 'string') ? item : item.granuleId;
+  }
+
+  updateMeta(meta) {
+    this.setState({ meta: { ...this.state.meta, ...meta } });
   }
 
   closeModal() {
     this.setState({ activeModal: false });
+    this.setState({ meta: {} });
   }
 
   componentDidUpdate() {
@@ -112,7 +124,7 @@ export class BatchCommand extends React.Component {
     if (!Array.isArray(selected) || !selected.length || this.isInflight()) { return false; }
     const q = queue(CONCURRENCY);
     for (let i = 0; i < selected.length; i += 1) {
-      q.add(this.initAction, selected[i]);
+      q.add(this.initAction, this.buildId(selected[i]));
     }
     q.done(this.onComplete);
   }
@@ -120,10 +132,10 @@ export class BatchCommand extends React.Component {
   // save a reference to the callback in state, then init the action
   initAction(id, callback) {
     const { dispatch, action } = this.props;
-    const { callbacks } = this.state;
+    const { callbacks, meta } = this.state;
     callbacks[id] = callback;
     this.setState({ callbacks });
-    return dispatch(action(id));
+    return dispatch(action(id, meta));
   }
 
   // immediately change the UI to show either success or error
@@ -173,7 +185,7 @@ export class BatchCommand extends React.Component {
     if (results && results.length && typeof onSuccess === 'function') { onSuccess(results, errorMessage); }
 
     if (typeof clearError === 'function') {
-      selected.forEach((id) => dispatch(clearError(id)));
+      selected.forEach((item) => dispatch(clearError(this.buildId(item))));
     }
 
     this.setState({ activeModal: false, completed: 0, errorMessage: null, results: null, status: null });
@@ -187,6 +199,7 @@ export class BatchCommand extends React.Component {
     const { selected, history, getModalOptions } = this.props;
     if (typeof getModalOptions === 'function') {
       const modalOptions = getModalOptions({
+        onChange: this.updateMeta,
         selected,
         history,
         closeModal: this.closeModal,

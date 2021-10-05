@@ -28,7 +28,7 @@ const customStyles = {
     margin: 0,
     zIndex: 9999,
   }),
-  indicatorsContainer: (base) => ({
+  dropdownIndicator: (base) => ({
     ...base,
     backgroundColor: oceanBlue,
     borderRadius: `0 ${borderRadius} ${borderRadius} 0`,

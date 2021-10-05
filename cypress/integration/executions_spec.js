@@ -31,10 +31,10 @@ describe('Dashboard Executions Page', () => {
 
       // shows a summary count of completed and failed executions
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 4)
+        .first().contains('li', 'Completed').contains('li', 6)
         .next()
         .contains('li', 'Failed')
-        .contains('li', 1)
+        .contains('li', 2)
         .next()
         .contains('li', 'Running')
         .contains('li', 1);
@@ -65,11 +65,11 @@ describe('Dashboard Executions Page', () => {
           cy.get('@columns').eq(4).invoke('text')
             .should('be.eq', `${Number(execution.duration).toFixed(2)}s`);
           cy.get('@columns').eq(5).invoke('text')
-            .should('be.eq', execution.collectionId);
+            .should('be.eq', execution.collectionId || '--');
         });
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 6);
+      cy.get('@list').should('have.length', 9);
     });
 
     it('should show a single execution', () => {
@@ -318,21 +318,12 @@ describe('Dashboard Executions Page', () => {
     });
 
     it('should show executions for a granule/collection', () => {
-      cy.intercept(
-        { method: 'POST', url: 'http://localhost:5001/executions/search-by-granules*' },
-        { fixture: 'executions-list.json', statusCode: 200 }
-      );
+      const granuleId = 'MOD09GQ.A9344328.K9yI3O.006.4625818663028';
+      cy.visit(`/executions/executions-list/MOD09GQ___006/${granuleId}`);
 
-      cy.visit('/executions/executions-list/MOD09GQ___006/MOD09GQ.A4622742.B7A8Ma.006.7857260550036');
-      cy.url().should('include', 'executions-list');
+      cy.get('.heading--large').should('contain.text', granuleId);
+      cy.get('.num-title').should('contain.text', '3');
 
-      // Should show Granule ID at the top
-      cy.get('.heading--large').should('contain.text', 'MOD09GQ.A4622742.B7A8Ma.006.7857260550036');
-
-      // Should have the correct number of results displayed
-      cy.get('.num-title').should('contain.text', '6');
-
-      // Should have 6 columns with the correct headers
       cy.get('.thead .tr .tr').children().as('columns');
       cy.get('@columns').should('have.length', 6);
 
