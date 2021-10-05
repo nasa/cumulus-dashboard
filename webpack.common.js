@@ -3,12 +3,11 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const nodeExternals = require('webpack-node-externals');
 
 const config = require('./app/src/js/config');
 
 const CommonConfig = {
-  target: 'web',
+  target: ['web', 'es5'],
   entry: [
     'core-js/stable',
     'regenerator-runtime/runtime',
@@ -17,14 +16,11 @@ const CommonConfig = {
   output: {
     filename: 'bundle.js',
     chunkFilename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: '/'
+    publicPath: '/',
+    assetModuleFilename: '[path][name].[contenthash].[ext]',
   },
-  node: {
-    console: true,
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty'
+  optimization: {
+    moduleIds: 'deterministic',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.scss'],
@@ -32,6 +28,15 @@ const CommonConfig = {
       Fonts: path.join(__dirname, 'app/src/assets/fonts'),
       Images: path.join(__dirname, 'app/src/assets/images')
     },
+    fallback: {
+      fs: false,
+      net: false,
+      tls: false,
+      console: require.resolve('console-browserify'),
+      crypto: require.resolve('crypto-browserify'),
+      path: require.resolve('path-browserify'),
+      stream: require.resolve('stream-browserify')
+    }
   },
   module: {
     rules: [
@@ -64,6 +69,7 @@ const CommonConfig = {
       {
         test: /\.(css|scss)$/,
         use: [
+          // 'style-loader',
           {
             loader: 'css-loader', // Translates CSS into CommonJS
             options: {
@@ -93,50 +99,29 @@ const CommonConfig = {
       },
       {
         test: /\.(woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/, // fonts
-        use: {
-          loader: 'file-loader',
-          options: {
-            name: '[path][name].[hash].[ext]',
-            outputPath: 'fonts/',
-            publicPath: '../'
-          }
-        }
+        type: 'asset/resource',
       },
       {
         test: /\.(jpe?g|png|gif|ico|svg)(\?[a-z0-9=.]+)?$/, // images/graphics
-        use: {
-          loader: 'file-loader',
-          options: {
-            name: '[path][name].[hash].[ext]',
-            outputPath: 'images/',
-            publicPath: '../'
-          }
-        }
+        type: 'asset/resource',
       },
       {
         test: /font-awesome\.config\.js/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'font-awesome-loader'
-          }
-        ]
+        use: ['style-loader', 'css-loader', 'sass-loader', 'font-awesome-loader']
       },
     ]
   },
   plugins: [
-    new HtmlWebPackPlugin({
-      template: path.join(__dirname, 'app/src/template.html'),
-      filename: 'index.html',
-      title: 'Cumulus Dashboard'
-    }),
-    new webpack.HashedModuleIdsPlugin(),
     new CopyWebpackPlugin({
       patterns: [
         { from: './app/src/public', to: './' }
       ]
+    }),
+    new HtmlWebPackPlugin({
+      template: path.join(__dirname, 'app/src/template.html'),
+      filename: 'index.html',
+      title: 'Cumulus Dashboard',
+      favicon: 'dist/favicon.ico'
     }),
     new webpack.ProvidePlugin({
       jQuery: 'jquery', // can use jquery anywhere in the app without having to require it
