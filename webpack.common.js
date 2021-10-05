@@ -121,7 +121,7 @@ const CommonConfig = {
       template: path.join(__dirname, 'app/src/template.html'),
       filename: 'index.html',
       title: 'Cumulus Dashboard',
-      favicon: 'dist/favicon.ico'
+      favicon: path.resolve(__dirname, 'app/src/public/favicon.ico'),
     }),
     new webpack.ProvidePlugin({
       jQuery: 'jquery', // can use jquery anywhere in the app without having to require it
