@@ -64,12 +64,21 @@ const Search = ({
     }
   }
 
+  function handleInputChange(text) {
+    if (text) {
+      setQueryParams({ [paramKey]: text });
+    } else {
+      setQueryParams({ [paramKey]: undefined });
+    }
+  }
+
   function handleFocus(event) {
     event.target.select();
   }
 
   function handleKeyDown(event) {
     if (event.keyCode === 13) {
+      event.preventDefault();
       searchRef.current.hideMenu();
     }
   }
@@ -92,6 +101,7 @@ const Search = ({
           labelKey={labelKey}
           onChange={handleChange}
           onFocus={handleFocus}
+          onInputChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onSearch={handleSearch}
           options={searchOptions || options}
