@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React, { createRef, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withQueryParams from 'react-router-query-params';
@@ -48,10 +48,12 @@ const Search = ({
   const searchList = get(rest[searchKey], 'list');
   const { data: searchOptions, inflight = false } = searchList || {};
 
-  function handleSearch(query) {
+  useEffect(() => () => dispatch(clear(paramKey)), [clear, dispatch, paramKey]);
+
+  const handleSearch = useCallback((query) => {
     if (query) dispatch(action(query));
     else dispatch(clear);
-  }
+  }, [action, clear, dispatch]);
 
   function handleChange(selections) {
     if (selections && selections.length > 0) {

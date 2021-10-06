@@ -98,8 +98,8 @@ const ExecutionEvents = ({
               clear={clearExecutionEventsSearch}
               label="Search"
               labelKey="type"
+              options={formattedEvents}
               placeholder="Search Type"
-              searchKey="executions"
             />
           </ListFilters>
 
