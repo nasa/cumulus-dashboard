@@ -102,9 +102,7 @@ class GranulesOverview extends React.Component {
     };
     const { granules, config } = this.props;
     const { selected } = this.state;
-    const selectedGranules = selected
-      .map((id) => granules.list.data.find((g) => id === g.granuleId)).filter(Boolean);
-    let actions = bulkActions(granules, actionConfig, selectedGranules);
+    let actions = bulkActions(granules, actionConfig, selected);
     if (config.enableRecovery) {
       actions = actions.concat(recoverAction(granules, actionConfig));
     }
@@ -143,8 +141,11 @@ class GranulesOverview extends React.Component {
     ];
   }
 
-  updateSelection(selected) {
-    this.setState({ selected });
+  updateSelection(selectedIds, currentSelectedRows) {
+    const allSelectedRows = this.state.selected.concat(currentSelectedRows);
+    const selected = selectedIds
+      .map((id) => allSelectedRows.find((g) => id === g.granuleId)).filter(Boolean);
+    this.setSelected({ selected });
   }
 
   render() {

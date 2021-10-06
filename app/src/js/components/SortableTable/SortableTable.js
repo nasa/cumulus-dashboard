@@ -106,6 +106,7 @@ const SortableTable = ({
       pageIndex,
       hiddenColumns
     },
+    selectedFlatRows,
     toggleAllRowsSelected,
     page,
     canPreviousPage,
@@ -174,17 +175,20 @@ const SortableTable = ({
   }, [canSelect, clearSelected, toggleAllRowsSelected]);
 
   useEffect(() => {
-    const selected = Object.keys(selectedRowIds).reduce((selectedRows, key) => {
+    const selectedIds = Object.keys(selectedRowIds).reduce((ids, key) => {
       if (selectedRowIds[key]) {
-        selectedRows.push(key);
+        ids.push(key);
       }
-      return selectedRows;
+      return ids;
     }, []);
 
+    const currentSelectedRows = selectedFlatRows.map((row) => row.original);
+
     if (typeof onSelect === 'function') {
-      onSelect(selected);
+      onSelect(selectedIds, currentSelectedRows);
     }
-  }, [selectedRowIds, onSelect]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(selectedRowIds), onSelect, JSON.stringify(selectedFlatRows.map((row) => row.id))]);
 
   useEffect(() => {
     if (tableId) {

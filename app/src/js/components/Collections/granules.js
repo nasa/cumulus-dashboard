@@ -103,9 +103,7 @@ const CollectionGranules = ({
       },
     };
 
-    const selectedGranules = selected
-      .map((id) => granules.list.data.find((g) => id === g.granuleId)).filter(Boolean);
-    return bulkActions(granules, actionConfig, selectedGranules);
+    return bulkActions(granules, actionConfig, selected);
   }
 
   function selectWorkflow(_selector, selectedWorkflow) {
@@ -131,8 +129,11 @@ const CollectionGranules = ({
     ];
   }
 
-  function updateSelection(selection) {
-    setSelected(selection);
+  function updateSelection(selectedIds, currentSelectedRows) {
+    const allSelectedRows = selected.concat(currentSelectedRows);
+    const selectedRows = selectedIds
+      .map((id) => allSelectedRows.find((g) => id === g.granuleId)).filter(Boolean);
+    setSelected(selectedRows);
   }
 
   return (
