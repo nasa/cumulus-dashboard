@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useEffect } from 'react';
+import React, { createRef, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withQueryParams from 'react-router-query-params';
@@ -48,8 +48,6 @@ const Search = ({
   const searchList = get(rest[searchKey], 'list');
   const { data: searchOptions, inflight = false } = searchList || {};
 
-  useEffect(() => () => dispatch(clear(paramKey)), [clear, dispatch, paramKey]);
-
   const handleSearch = useCallback((query) => {
     if (query) dispatch(action(query));
     else dispatch(clear);
@@ -70,6 +68,7 @@ const Search = ({
     if (text) {
       setQueryParams({ [paramKey]: text });
     } else {
+      dispatch(clear());
       setQueryParams({ [paramKey]: undefined });
     }
   }
@@ -94,7 +93,6 @@ const Search = ({
       )}
       <form className="search__wrapper form-group__element">
         <AsyncTypeahead
-          clearButton={true}
           defaultInputValue={initialValue}
           highlightOnlyResult={true}
           id="search"

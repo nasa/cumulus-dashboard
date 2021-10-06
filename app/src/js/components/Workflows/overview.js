@@ -13,8 +13,9 @@ import ListFilters from '../ListActions/ListFilters';
 import Search from '../Search/search';
 import { tableColumns } from '../../utils/table-config/workflows';
 
-const WorkflowOverview = ({ dispatch, queryParams, workflows }) => {
-  const count = workflows.list.data.length;
+const WorkflowOverview = ({ queryParams, workflows }) => {
+  const { list } = workflows;
+  const count = list.data.length;
 
   return (
     <div className="page__component">
@@ -31,10 +32,11 @@ const WorkflowOverview = ({ dispatch, queryParams, workflows }) => {
           </h2>
         </div>
         <List
-          list={workflows.list}
+          list={list}
           action={listWorkflows}
           tableColumns={tableColumns}
           query={{ ...queryParams }}
+          initialSortId="name"
           rowId="name"
           tableId="workflows"
         >
@@ -57,7 +59,6 @@ const WorkflowOverview = ({ dispatch, queryParams, workflows }) => {
 };
 
 WorkflowOverview.propTypes = {
-  dispatch: PropTypes.func,
   queryParams: PropTypes.object,
   workflows: PropTypes.object,
 };
