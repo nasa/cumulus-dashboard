@@ -1,4 +1,4 @@
-import React, { createRef, useEffect } from 'react';
+import React, { createRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withQueryParams from 'react-router-query-params';
@@ -48,8 +48,6 @@ const Search = ({
   const searchList = get(rest[searchKey], 'list');
   const { data: searchOptions, inflight = false } = searchList || {};
 
-  useEffect(() => () => dispatch(clear(paramKey)), [clear, dispatch, paramKey]);
-
   function handleSearch(query) {
     if (query) dispatch(action(query));
     else dispatch(clear);
@@ -60,16 +58,6 @@ const Search = ({
       const query = selections[0][labelKey];
       dispatch(action(query));
       setQueryParams({ [paramKey]: query });
-    } else {
-      dispatch(clear());
-      setQueryParams({ [paramKey]: undefined });
-    }
-  }
-
-  function handleInputChange(text, event) {
-    if (text) {
-      dispatch(action(text));
-      setQueryParams({ [paramKey]: text });
     } else {
       dispatch(clear());
       setQueryParams({ [paramKey]: undefined });
@@ -88,7 +76,11 @@ const Search = ({
 
   return (
     <div className="search__box">
-      {label && <label htmlFor="search" form={formID}>{label}</label>}
+      {label && (
+        <label htmlFor="search" form={formID}>
+          {label}
+        </label>
+      )}
       <form className="search__wrapper form-group__element">
         <AsyncTypeahead
           clearButton={true}
@@ -100,7 +92,6 @@ const Search = ({
           labelKey={labelKey}
           onChange={handleChange}
           onFocus={handleFocus}
-          onInputChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onSearch={handleSearch}
           options={searchOptions || options}
