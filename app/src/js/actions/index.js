@@ -743,6 +743,7 @@ export const getExecutionStatus = (arn) => ({
   [CALL_API]: {
     type: types.EXECUTION_STATUS,
     method: 'GET',
+    id: arn,
     url: new URL(`executions/status/${arn}`, root).href
   }
 });
@@ -767,10 +768,11 @@ export const listExecutions = (options) => (dispatch, getState) => {
   });
 };
 
-export const listExecutionsByGranule = (payload) => ({
+export const listExecutionsByGranule = (granuleId, payload) => ({
   [CALL_API]: {
     type: types.EXECUTIONS_LIST,
     method: 'POST',
+    id: granuleId,
     path: 'executions/search-by-granules',
     params: { limit: defaultPageLimit },
     data: payload

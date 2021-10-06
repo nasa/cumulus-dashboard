@@ -12,10 +12,6 @@ const TableFilters = ({ columns = [], setHiddenColumns, hiddenColumns = [], init
     } else {
       setLocalHiddenColumns(localHiddenColumns.concat(id));
     }
-
-    // if (typeof onChange === 'function') {
-    //   onChange(id);
-    // }
   }
 
   function handleResetHiddenColumns() {
