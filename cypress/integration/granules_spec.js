@@ -422,7 +422,7 @@ describe('Dashboard Granules Page', () => {
 
     it('Should reingest multiple granules and redirect to the running page.', () => {
       const granuleIds = [
-        'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
+        'MOD09GQ.A2417309.YZ9tCV.006.4640974889044',
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
       cy.intercept(
@@ -434,6 +434,9 @@ describe('Dashboard Granules Page', () => {
       cy.get(`[data-value="${granuleIds[1]}"] > .td >input[type="checkbox"]`).click();
       cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Reingest').click();
+      cy.get('.modal-body .form__dropdown .dropdown__element input').as('workflow-input');
+      cy.get('@workflow-input').click({ force: true }).type('IngestAndP').type('{enter}');
+      cy.get('.modal-body .form__dropdown .dropdown__element').should('have.text', 'IngestAndPublishGranule');
       cy.get('.button--submit').click();
       cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
       cy.get('.button__goto').click();
@@ -450,15 +453,17 @@ describe('Dashboard Granules Page', () => {
       cy.get('.table .tbody .tr').should('have.length', 2);
       cy.get('.table .tbody .tr .td input[type=checkbox]').as('granule-checkbox');
       cy.get('@granule-checkbox').click({ multiple: true });
-      cy.get('.pagination ol li')
-        .last().should('have.text', 'Next')
-        .click();
 
+      cy.get('.pagination ol li').last().should('have.text', 'Next').click();
       cy.wait(1000);
       cy.url().should('include', 'page=2');
       cy.get('.table .tbody .tr').should('have.length', 2);
       cy.get('.table .tbody .tr .td input[type=checkbox]').as('granule-checkbox2');
       cy.get('@granule-checkbox2').click({ multiple: true });
+
+      cy.get('.pagination ol li').last().should('have.text', 'Next').click();
+      cy.wait(1000);
+      cy.url().should('include', 'page=3');
 
       cy.contains('button', 'Granule Actions').click();
       cy.contains('button', 'Reingest').click();
@@ -733,7 +738,7 @@ describe('Dashboard Granules Page', () => {
       cy.contains('button', 'Delete').click();
       cy.contains('.button--submit', 'Confirm').click();
 
-      cy.get('.default-modal.batch-async-modal ').as('modal');
+      cy.get('.default-modal.batch-async-modal ', { timeout: 10000 }).as('modal');
       cy.get('@modal').contains('div', 'Success!');
     });
 
