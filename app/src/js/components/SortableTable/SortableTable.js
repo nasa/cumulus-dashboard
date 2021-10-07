@@ -182,7 +182,7 @@ const SortableTable = ({
       return ids;
     }, []);
 
-    const currentSelectedRows = selectedFlatRows.map((row) => row.original);
+    const currentSelectedRows = selectedFlatRows.map((row) => omit(row.original, ['files']));
 
     if (typeof onSelect === 'function') {
       onSelect(selectedIds, currentSelectedRows);
