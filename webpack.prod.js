@@ -2,9 +2,8 @@ const path = require('path');
 const { mergeWithCustomize, customizeObject } = require('webpack-merge');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserJsPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const cssNano = require('cssnano');
 const pkg = require('./package.json');
 
 const CommonConfig = require('./webpack.common');
@@ -37,9 +36,8 @@ const MainConfig = mergeWithCustomize({
         parallel: true,
         include: /\.js$/
       }),
-      new OptimizeCSSAssetsPlugin({
-        cssProcessor: cssNano(),
-        cssProcessorPluginOptions: {
+      new CssMinimizerPlugin({
+        minimizerOptions: {
           preset: [
             'default',
             {
