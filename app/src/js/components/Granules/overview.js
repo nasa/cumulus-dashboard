@@ -145,7 +145,7 @@ class GranulesOverview extends React.Component {
     const allSelectedRows = this.state.selected.concat(currentSelectedRows);
     const selected = selectedIds
       .map((id) => allSelectedRows.find((g) => id === g.granuleId)).filter(Boolean);
-    this.setSelected({ selected });
+    this.setState({ selected });
   }
 
   render() {
@@ -266,7 +266,6 @@ export default withRouter(
       collections: state.collections,
       config: state.config,
       granules: state.granules,
-      selected: state.selected,
       workflowOptions: workflowOptionNames(state),
       providers: state.providers,
     }))(GranulesOverview)
