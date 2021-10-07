@@ -441,6 +441,33 @@ describe('Dashboard Granules Page', () => {
       cy.get('.heading--large').should('have.text', 'Running Granules 2');
     });
 
+    it('Should reingest multiple granules selected from multiple pages.', () => {
+      cy.intercept(
+        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { body: { message: 'ingested' }, statusCode: 200 },
+      );
+      cy.visit('/granules?limit=2');
+      cy.get('.table .tbody .tr').should('have.length', 2);
+      cy.get('.table .tbody .tr .td input[type=checkbox]').as('granule-checkbox');
+      cy.get('@granule-checkbox').click({ multiple: true });
+      cy.get('.pagination ol li')
+        .last().should('have.text', 'Next')
+        .click();
+
+      cy.wait(1000);
+      cy.url().should('include', 'page=2');
+      cy.get('.table .tbody .tr').should('have.length', 2);
+      cy.get('.table .tbody .tr .td input[type=checkbox]').as('granule-checkbox2');
+      cy.get('@granule-checkbox2').click({ multiple: true });
+
+      cy.contains('button', 'Granule Actions').click();
+      cy.contains('button', 'Reingest').click();
+      cy.get('.modal-content .modal-body').should('contain.text', 'Selected granules:');
+      cy.get('.modal-content .modal-body > ul > li').should('have.length', 4);
+      cy.get('.button--submit').click();
+      cy.get('.modal-content .modal-body .alert', { timeout: 10000 }).should('contain.text', 'Success');
+    });
+
     it('Should fail to reingest multiple granules and remain on the page.', () => {
       const granuleIds = [
         'MOD09GQ.A0142558.ee5lpE.006.5112577830916',
