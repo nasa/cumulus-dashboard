@@ -1,9 +1,9 @@
-import React, { createRef, useCallback } from 'react';
+import React, { createRef, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withQueryParams from 'react-router-query-params';
 import { withRouter } from 'react-router-dom';
-import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import { AsyncTypeahead, Typeahead } from 'react-bootstrap-typeahead';
 import { get } from 'object-path';
 import { getInitialValueFromLocation } from '../../utils/url-helper';
 import {
@@ -27,6 +27,7 @@ const Search = ({
   inputProps = {
     className: 'search',
   },
+  isAsync = true,
   label,
   labelKey,
   location,
@@ -38,6 +39,7 @@ const Search = ({
   setQueryParams,
   ...rest
 }) => {
+  const Component = isAsync ? AsyncTypeahead : Typeahead;
   const searchRef = createRef();
   const formID = `form-${label}-${paramKey}`;
   const initialValue = getInitialValueFromLocation({
@@ -47,6 +49,16 @@ const Search = ({
   });
   const searchList = get(rest[searchKey], 'list');
   const { data: searchOptions, inflight = false } = searchList || {};
+
+  useEffect(() => {
+    dispatch(clear(paramKey));
+  }, [clear, dispatch, paramKey]);
+
+  useEffect(() => {
+    if (initialValue && !isAsync) {
+      dispatch(action(initialValue));
+    }
+  }, [action, dispatch, initialValue, isAsync]);
 
   const handleSearch = useCallback((query) => {
     if (query) dispatch(action(query));
@@ -66,6 +78,9 @@ const Search = ({
 
   function handleInputChange(text) {
     if (text) {
+      if (!isAsync) {
+        dispatch(action(text));
+      }
       setQueryParams({ [paramKey]: text });
     } else {
       dispatch(clear());
@@ -92,7 +107,7 @@ const Search = ({
         </label>
       )}
       <form className="search__wrapper form-group__element">
-        <AsyncTypeahead
+        <Component
           defaultInputValue={initialValue}
           highlightOnlyResult={true}
           id="search"
@@ -120,6 +135,7 @@ Search.propTypes = {
   action: PropTypes.func,
   clear: PropTypes.func,
   inputProps: PropTypes.object,
+  isAsync: PropTypes.bool,
   paramKey: PropTypes.string,
   label: PropTypes.any,
   labelKey: PropTypes.string,
