@@ -61,9 +61,9 @@ const Search = ({
   }, [action, dispatch, initialValueRef]);
 
   const handleSearch = useCallback((query) => {
-    dispatch(action(query));
-    // else dispatch(clear);
-  }, [action, dispatch]);
+    if (query) dispatch(action(query));
+    else dispatch(clear);
+  }, [action, clear, dispatch]);
 
   function handleChange(selections) {
     if (selections && selections.length > 0) {
