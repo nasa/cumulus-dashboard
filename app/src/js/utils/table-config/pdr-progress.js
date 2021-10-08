@@ -90,3 +90,5 @@ export const tableColumns = [
     id: 'timestamp'
   }
 ];
+
+export default {};

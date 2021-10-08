@@ -73,3 +73,5 @@ export function historyPushWithQueryParams(path) {
     search: getPersistentQueryParams(location)
   });
 }
+
+export default {};

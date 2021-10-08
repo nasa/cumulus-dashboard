@@ -10,3 +10,5 @@ const genericKibanaLink = () => {
 export const kibanaAllLogsLink = genericKibanaLink;
 export const kibanaGranuleErrorsLink = genericKibanaLink;
 export const kibanaExecutionLink = (cumulusInstanceMeta, executionNameOrArn) => genericKibanaLink();
+
+export default {};

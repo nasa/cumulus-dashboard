@@ -31,3 +31,5 @@ export const section = ({
     </section>
   );
 };
+
+export default {};

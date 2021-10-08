@@ -48,3 +48,5 @@ export const configureRequest = (requestConfig = {}) => {
 
   return config;
 };
+
+export default {};

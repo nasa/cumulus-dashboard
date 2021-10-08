@@ -1,5 +1,5 @@
 const path = require('path');
-const { mergeWithCustomize, customizeObject } = require('webpack-merge');
+const { mergeWithRules } = require('webpack-merge');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserJsPlugin = require('terser-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
@@ -12,11 +12,13 @@ const servedByCumulusAPI = process.env.SERVED_BY_CUMULUS_API;
 
 const publicPath = servedByCumulusAPI ? './' : '/';
 
-const MainConfig = mergeWithCustomize({
-  custumizeObject: customizeObject({
-    devtool: 'replace',
-    'module.rules.use': 'prepend'
-  })
+const MainConfig = mergeWithRules({
+  devtool: 'replace',
+  module: {
+    rules: {
+      use: 'prepend'
+    },
+  },
 })(CommonConfig, {
   mode: 'production',
   devtool: 'source-map',

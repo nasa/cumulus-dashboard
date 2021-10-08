@@ -160,3 +160,5 @@ export const bulkActions = (collections) => {
     }
   ];
 };
+
+export default {};

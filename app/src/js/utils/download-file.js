@@ -8,12 +8,14 @@ const filenamify = (fileName) => fileName.replace(/["%*/:<>?\\|]/g, '_');
  */
 
 export const downloadFile = (file, fileName) => {
-  const link = document.createElement('a');
-  link.setAttribute('download', filenamify(fileName));
-  link.href = file;
-  document.body.appendChild(link);
-  link.click();
-  link.parentNode.removeChild(link);
+  if (typeof document !== 'undefined') {
+    const link = document.createElement('a');
+    link.setAttribute('download', filenamify(fileName));
+    link.href = file;
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode.removeChild(link);
+  }
 };
 
 const convertToCSV = (data, columns) => {
@@ -45,3 +47,5 @@ export function handleDownloadCsvClick(e, { reportName, table }) {
   const url = window ? window.URL.createObjectURL(csvData) : '';
   downloadFile(url, `${reportName}-${tableName}.csv`);
 }
+
+export default {};

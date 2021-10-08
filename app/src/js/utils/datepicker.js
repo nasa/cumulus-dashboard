@@ -67,3 +67,5 @@ export const fetchCurrentTimeFilters = (datepicker) => {
   });
   return filters;
 };
+
+export default {};

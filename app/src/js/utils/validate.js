@@ -13,3 +13,5 @@ export const granuleModel = (obj) => isText(obj.granuleId);
 export const collectionModel = (obj) => isText(obj.collectionName) && granuleModel(obj.granuleDefinition);
 
 export const isUndefined = (test) => typeof test === 'undefined';
+
+export default {};

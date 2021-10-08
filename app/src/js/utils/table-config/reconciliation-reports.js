@@ -244,3 +244,5 @@ export const tableColumnsGnf = [
     width: 50,
   },
 ];
+
+export default {};

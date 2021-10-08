@@ -4,7 +4,6 @@ module.exports = {
       plugins: [
         '@babel/plugin-syntax-jsx',
         [
-          'babel-plugin-webpack-alias-7',
           {
             config: './config/webpack.config.test.js',
           },

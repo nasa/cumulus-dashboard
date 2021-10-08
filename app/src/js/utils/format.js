@@ -523,3 +523,5 @@ export const buildRedirectUrl = ({ origin, pathname, hash }) => {
   }
   return encodeURIComponent(new URL(pathname + hash, origin).href);
 };
+
+export default {};

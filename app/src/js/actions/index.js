@@ -980,3 +980,5 @@ export const clearReconciliationReportFilter = (paramKey) => ({ type: types.CLEA
 
 export const toggleSidebar = () => ({ type: types.TOGGLE_SIDEBAR });
 export const sortPersist = (tableId, sortBy) => ({ type: types.SORTS, tableId, sortBy });
+
+export default {};

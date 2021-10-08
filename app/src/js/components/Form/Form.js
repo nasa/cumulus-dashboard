@@ -377,3 +377,5 @@ Form.propTypes = {
   status: PropTypes.string,
   nowrap: PropTypes.bool
 };
+
+export default Form;

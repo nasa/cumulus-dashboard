@@ -12,3 +12,5 @@ export const get = () => {
   }
   return auth;
 };
+
+export default {};

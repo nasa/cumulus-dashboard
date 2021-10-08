@@ -87,3 +87,5 @@ export const bulkActions = (rules) => [{
   confirm: (d) => deleteRules(d),
   className: 'button button--delete button--small form-group__element'
 }];
+
+export default {};

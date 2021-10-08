@@ -134,3 +134,5 @@ export const granuleBulkActions = (granules) => [{
   state: granules.deleted,
   confirm: confirmGranuleDelete
 }];
+
+export default {};

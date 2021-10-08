@@ -37,3 +37,5 @@ export const tableColumns = [
     id: 'steps'
   }
 ];
+
+export default {};

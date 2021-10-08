@@ -24,7 +24,6 @@ module.exports = {
     test: {
       plugins: [
         [
-          'babel-plugin-webpack-alias-7',
           { config: './config/webpack.config.test.js', findConfig: true },
         ],
       ],

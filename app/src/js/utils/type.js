@@ -34,3 +34,5 @@ export const operationTypes = [
     label: 'Kinesis Replay',
   },
 ];
+
+export default {};

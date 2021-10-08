@@ -13,3 +13,5 @@ export const buildAuthHeader = (user, password) => {
 };
 
 export const authHeader = () => buildAuthHeader(esUser, esPassword);
+
+export default {};

@@ -5,7 +5,8 @@ module.exports = {
         targets: {
           node: '12.18.0',
           esmodules: true
-        }
+        },
+        modules: 'commonjs'
       }
     ],
     '@babel/preset-react'

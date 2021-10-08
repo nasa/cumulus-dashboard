@@ -18,3 +18,5 @@ export const setWindowEditorRef = (editorRef) => {
 };
 
 export { window, document };
+
+export default {};

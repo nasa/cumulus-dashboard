@@ -98,3 +98,5 @@ export function renderSearchMenu(results, menuProps, labelKey) {
     </Menu>
   );
 }
+
+export default {};

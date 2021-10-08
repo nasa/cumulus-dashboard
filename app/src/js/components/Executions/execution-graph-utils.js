@@ -252,3 +252,5 @@ export const addEventsToGraph = (events, graph) => {
   }
   return result;
 };
+
+export default {};

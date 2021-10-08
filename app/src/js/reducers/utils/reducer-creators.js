@@ -184,3 +184,5 @@ export const createErrorReducer = (stateProp, idSelector = idProp) => (state, ac
  */
 // eslint-disable-next-line max-len
 export const createSerialReducer = (...reducers) => (state, action) => reducers.forEach((reducer) => reducer(state, action));
+
+export default {};

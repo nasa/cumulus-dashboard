@@ -14,3 +14,5 @@ export const workflowOptions = ({ workflows }) => {
 };
 
 export const workflowOptionNames = ({ workflows }) => get(workflows, 'list.data', []).map((workflow) => workflow.name);
+
+export default {};

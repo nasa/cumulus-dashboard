@@ -62,3 +62,5 @@ const customStyles = {
 };
 
 export { customStyles, DropdownIndicator };
+
+export default {};
