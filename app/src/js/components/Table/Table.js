@@ -78,6 +78,7 @@ const List = ({
   const {
     limit: limitQueryParam,
     page: pageQueryParam,
+    search: searchQueryParam,
     ...queryFilters
   } = queryParams;
 
@@ -180,15 +181,13 @@ const List = ({
 
   function getQueryConfig(config = {}) {
     // Remove empty keys so as not to mess up the query
-    const { search, ...restQuery } = query || {};
     return omitBy(
       {
         page,
         sort_key: queryConfig.sort_key,
-        infix: search,
         ...params,
         ...config,
-        ...restQuery,
+        ...query || {},
       },
       isNil
     );

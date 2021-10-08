@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useEffect } from 'react';
+import React, { createRef, useCallback, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withQueryParams from 'react-router-query-params';
@@ -42,11 +42,11 @@ const Search = ({
   const Component = isAsync ? AsyncTypeahead : Typeahead;
   const searchRef = createRef();
   const formID = `form-${label}-${paramKey}`;
-  const initialValue = getInitialValueFromLocation({
+  const initialValueRef = useRef(getInitialValueFromLocation({
     location,
     paramKey,
     queryParams,
-  });
+  }));
   const searchList = get(rest[searchKey], 'list');
   const { data: searchOptions, inflight = false } = searchList || {};
 
@@ -55,15 +55,15 @@ const Search = ({
   }, [clear, dispatch, paramKey]);
 
   useEffect(() => {
-    if (initialValue && !isAsync) {
-      dispatch(action(initialValue));
+    if (initialValueRef.current) {
+      dispatch(action(initialValueRef.current));
     }
-  }, [action, dispatch, initialValue, isAsync]);
+  }, [action, dispatch, initialValueRef]);
 
   const handleSearch = useCallback((query) => {
-    if (query) dispatch(action(query));
-    else dispatch(clear);
-  }, [action, clear, dispatch]);
+    dispatch(action(query));
+    // else dispatch(clear);
+  }, [action, dispatch]);
 
   function handleChange(selections) {
     if (selections && selections.length > 0) {
@@ -108,7 +108,7 @@ const Search = ({
       )}
       <form className="search__wrapper form-group__element">
         <Component
-          defaultInputValue={initialValue}
+          defaultInputValue={initialValueRef.current}
           highlightOnlyResult={true}
           id="search"
           inputProps={{ id: 'search', ...inputProps }}
