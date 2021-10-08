@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -13,9 +13,14 @@ import ListFilters from '../ListActions/ListFilters';
 import Search from '../Search/search';
 import { tableColumns } from '../../utils/table-config/workflows';
 
-const WorkflowOverview = ({ queryParams, workflows }) => {
-  const { list } = workflows;
+const WorkflowOverview = ({ dispatch, queryParams, workflows }) => {
+  const { list, searchString } = workflows;
   const count = list.data.length;
+
+  useEffect(() => {
+    dispatch(listWorkflows());
+    // when searchString changes, we want a fresh workflow fetch
+  }, [dispatch, searchString]);
 
   return (
     <div className="page__component">
@@ -46,6 +51,7 @@ const WorkflowOverview = ({ queryParams, workflows }) => {
             isAsync={false}
             label="Search"
             labelKey="name"
+            listAction={listWorkflows}
             placeholder="Workflow Name"
             searchKey="workflows"
           />
@@ -60,6 +66,7 @@ const WorkflowOverview = ({ queryParams, workflows }) => {
 };
 
 WorkflowOverview.propTypes = {
+  dispatch: PropTypes.func,
   queryParams: PropTypes.object,
   workflows: PropTypes.object,
 };
