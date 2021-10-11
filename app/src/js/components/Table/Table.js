@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense, useCallback } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
@@ -59,10 +59,12 @@ const List = ({
   const [clearSelected, setClearSelected] = useState(false);
   const [page, setPage] = useState(1);
   const sortBy = tableId ? sorts[tableId] : null;
+  const initialInfix = useRef(queryParams.search);
 
   const [queryConfig, setQueryConfig] = useState({
     page: 1,
     sort_key: buildSortKey(sortBy || [{ id: initialSortId, desc: true }]),
+    infix: initialInfix.current,
     ...(query || {}),
   });
   const [params, setParams] = useState({});
