@@ -147,6 +147,7 @@
     "airbnb-prop-types": "^2.16.0",
     "assert": "^2.0.0",
     "axios": "^0.22.0",
+    "babel-eslint": "^10.1.0",
     "bootstrap": "^4.6.0",
     "brace": "^0.11.1",
     "classnames": "^2.2.6",
