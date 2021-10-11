@@ -77,6 +77,7 @@
     "ava": "^3.15.0",
     "babel-loader": "^8.2.2",
     "babel-plugin-rewire": "^1.2.0",
+    "babel-plugin-webpack-alias-7": "^0.1.1",
     "browser-env": "^3.3.0",
     "cached-path-relative": "1.0.2",
     "clean-webpack-plugin": "^4.0.0",
