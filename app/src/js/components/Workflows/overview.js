@@ -48,7 +48,6 @@ const WorkflowOverview = ({ dispatch, queryParams, workflows }) => {
           <Search
             action={searchWorkflows}
             clear={clearWorkflowsSearch}
-            isAsync={false}
             label="Search"
             labelKey="name"
             placeholder="Workflow Name"
