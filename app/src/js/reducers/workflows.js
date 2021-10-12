@@ -29,12 +29,10 @@ const mapByName = (data) => data.reduce((map, datum) => ({ ...map, [datum.name]:
  * @param {string} filterString - string to check if name includes
  * @returns {Array} array of data's objects with names that include filterString
  */
-export const filterData = (data, filterString) => (!filterString
-  ? data
-  : data.filter(
-    (item) => item.name &&
-        item.name.toLowerCase().includes(filterString.toLowerCase())
-  ));
+export const filterData = (data, filterString = '') => data.filter(
+  (item) => item.name &&
+    item.name.toLowerCase().includes(filterString.toLowerCase())
+);
 
 export default createReducer(initialState, {
   [WORKFLOWS]: (state, action) => {
@@ -57,6 +55,6 @@ export default createReducer(initialState, {
     state.searchString = action.searchString;
   },
   [CLEAR_WORKFLOWS_SEARCH]: (state) => {
-    state.searchString = null;
+    state.searchString = '';
   },
 });
