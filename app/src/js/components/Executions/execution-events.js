@@ -95,7 +95,6 @@ const ExecutionEvents = ({
             <Search
               action={searchExecutionEvents}
               clear={clearExecutionEventsSearch}
-              isAsync={false}
               label="Search"
               labelKey="type"
               options={formattedEvents}
