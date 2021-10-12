@@ -58,7 +58,7 @@ describe('Dashboard Workflows Page', () => {
       /* eslint-enable no-template-curly-in-string */
     });
 
-    it.only('filters workflows when a user types in the search box', () => {
+    it('filters workflows when a user types in the search box', () => {
       cy.intercept('GET', '/workflows*').as('get-workflows');
       cy.visit('/workflows');
       cy.get('.table .tbody .tr').should('have.length', 2);
