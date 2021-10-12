@@ -37,7 +37,7 @@ const List = ({
   legend,
   list = {},
   onSelect,
-  query,
+  query = {},
   queryParams,
   renderRowSubComponent,
   rowId,
@@ -65,7 +65,7 @@ const List = ({
     page: 1,
     sort_key: buildSortKey(sortBy || [{ id: initialSortId, desc: true }]),
     infix: initialInfix.current,
-    ...(query || {}),
+    ...query,
   });
   const [params, setParams] = useState({});
   const [bulkActionMeta, setBulkActionMeta] = useState({
@@ -189,7 +189,7 @@ const List = ({
         sort_key: queryConfig.sort_key,
         ...params,
         ...config,
-        ...query || {},
+        ...query,
       },
       isNil
     );
