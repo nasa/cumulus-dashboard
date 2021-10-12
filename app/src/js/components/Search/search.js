@@ -56,7 +56,7 @@ const Search = ({
     if (initialValueRef.current) {
       dispatch(action(initialValueRef.current));
     }
-  }, [action, dispatch, initialValueRef]);
+  }, [action, dispatch]);
 
   const handleSearch = useCallback((query) => {
     if (query) dispatch(action(query));
