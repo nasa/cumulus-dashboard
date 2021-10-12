@@ -15,7 +15,7 @@ export const initialState = {
     error: false,
   },
   map: {},
-  searchString: null,
+  searchString: '',
 };
 
 const mapByName = (data) => data.reduce((map, datum) => ({ ...map, [datum.name]: datum }), {});
