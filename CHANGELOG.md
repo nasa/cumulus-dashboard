@@ -20,6 +20,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-NONE**
   - update development version of @cumulus/api to v9.7.0 to pick up test fixes.
 
+### Fixed
+
+- **CUMULUS-2643**
+  - Fixed issue with search component that was causing search to be triggered excessively
+
 ## [v7.0.0] - 2021-10-04
 
 ## Breaking Changes

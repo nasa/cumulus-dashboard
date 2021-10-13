@@ -1,4 +1,4 @@
-import React, { createRef, useEffect } from 'react';
+import React, { createRef, useCallback, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withQueryParams from 'react-router-query-params';
@@ -40,20 +40,28 @@ const Search = ({
 }) => {
   const searchRef = createRef();
   const formID = `form-${label}-${paramKey}`;
-  const initialValue = getInitialValueFromLocation({
+  const initialValueRef = useRef(getInitialValueFromLocation({
     location,
     paramKey,
     queryParams,
-  });
+  }));
   const searchList = get(rest[searchKey], 'list');
   const { data: searchOptions, inflight = false } = searchList || {};
 
-  useEffect(() => () => dispatch(clear(paramKey)), [clear, dispatch, paramKey]);
+  useEffect(() => {
+    dispatch(clear(paramKey));
+  }, [clear, dispatch, paramKey]);
 
-  function handleSearch(query) {
+  useEffect(() => {
+    if (initialValueRef.current) {
+      dispatch(action(initialValueRef.current));
+    }
+  }, [action, dispatch]);
+
+  const handleSearch = useCallback((query) => {
     if (query) dispatch(action(query));
     else dispatch(clear);
-  }
+  }, [action, clear, dispatch]);
 
   function handleChange(selections) {
     if (selections && selections.length > 0) {
@@ -66,9 +74,8 @@ const Search = ({
     }
   }
 
-  function handleInputChange(text, event) {
+  function handleInputChange(text) {
     if (text) {
-      dispatch(action(text));
       setQueryParams({ [paramKey]: text });
     } else {
       dispatch(clear());
@@ -82,17 +89,21 @@ const Search = ({
 
   function handleKeyDown(event) {
     if (event.keyCode === 13) {
+      event.preventDefault();
       searchRef.current.hideMenu();
     }
   }
 
   return (
     <div className="search__box">
-      {label && <label htmlFor="search" form={formID}>{label}</label>}
+      {label && (
+        <label htmlFor="search" form={formID}>
+          {label}
+        </label>
+      )}
       <form className="search__wrapper form-group__element">
         <AsyncTypeahead
-          clearButton={true}
-          defaultInputValue={initialValue}
+          defaultInputValue={initialValueRef.current}
           highlightOnlyResult={true}
           id="search"
           inputProps={{ id: 'search', ...inputProps }}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense, useCallback } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
@@ -37,7 +37,7 @@ const List = ({
   legend,
   list = {},
   onSelect,
-  query,
+  query = {},
   queryParams,
   renderRowSubComponent,
   rowId,
@@ -59,11 +59,13 @@ const List = ({
   const [clearSelected, setClearSelected] = useState(false);
   const [page, setPage] = useState(1);
   const sortBy = tableId ? sorts[tableId] : null;
+  const initialInfix = useRef(queryParams.search);
 
   const [queryConfig, setQueryConfig] = useState({
     page: 1,
     sort_key: buildSortKey(sortBy || [{ id: initialSortId, desc: true }]),
-    ...(query || {}),
+    ...initialInfix.current ? { infix: initialInfix.current } : {},
+    ...query,
   });
   const [params, setParams] = useState({});
   const [bulkActionMeta, setBulkActionMeta] = useState({
@@ -78,6 +80,7 @@ const List = ({
   const {
     limit: limitQueryParam,
     page: pageQueryParam,
+    search: searchQueryParam,
     ...queryFilters
   } = queryParams;
 
@@ -180,15 +183,13 @@ const List = ({
 
   function getQueryConfig(config = {}) {
     // Remove empty keys so as not to mess up the query
-    const { search, ...restQuery } = query || {};
     return omitBy(
       {
         page,
         sort_key: queryConfig.sort_key,
-        infix: search,
         ...params,
         ...config,
-        ...restQuery,
+        ...query,
       },
       isNil
     );

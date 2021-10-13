@@ -29,8 +29,7 @@ const ExecutionEvents = ({
 }) => {
   const { params } = match || {};
   const { executionArn } = params;
-  const { search } = location;
-  const { error, execution, executionHistory, stateMachine } = executionStatus || {};
+  const { error, execution, executionHistory, stateMachine, searchString } = executionStatus || {};
   const { events } = executionHistory || {};
   const formattedEvents = formatEvents(events);
 
@@ -41,7 +40,7 @@ const ExecutionEvents = ({
   useEffect(() => {
     dispatch(getExecutionStatus(executionArn));
     // when we have a new search, we also want to dispatch
-  }, [dispatch, executionArn, search]);
+  }, [dispatch, executionArn, searchString]);
 
   if (!execution) return null;
 
@@ -98,8 +97,8 @@ const ExecutionEvents = ({
               clear={clearExecutionEventsSearch}
               label="Search"
               labelKey="type"
+              options={formattedEvents}
               placeholder="Search Type"
-              searchKey="executions"
             />
           </ListFilters>
 

@@ -207,10 +207,35 @@ describe('Dashboard Executions Page', () => {
           cy.contains('.execution__modal .button', 'Close').click();
         });
       });
+    });
+
+    it('should correctly handle searching execution events', () => {
+      const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
+      const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
+
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
+        { fixture: 'valid-execution.json', statusCode: 200 }
+      );
+      cy.visit(`/executions/execution/${executionArn}/events`);
+
+      cy.contains('.heading--large', executionName);
+      cy.contains('.num-title', 7);
+
+      cy.get('.table .tbody .tr').as('events');
+      cy.get('@events').should('have.length', 7);
 
       cy.get('.search').as('search');
       cy.get('@search').click().type('task');
       cy.url().should('include', 'search=task');
+      cy.get('@events').should('have.length', 2);
+      cy.get('@search').clear();
+      cy.url().should('not.include', 'search');
+      cy.get('@events').should('have.length', 7);
+
+      //  test that initial search value works
+      cy.visit('/');
+      cy.visit(`/executions/execution/${executionArn}/events?search=task`);
       cy.get('@events').should('have.length', 2);
     });
 
