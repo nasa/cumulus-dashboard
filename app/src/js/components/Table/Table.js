@@ -142,13 +142,13 @@ const List = ({
     }
   }
 
-  function updateSelection(newSelections) {
-    if (!isEqual(selected, newSelections)) {
-      setSelected(newSelections);
+  function updateSelection(selectedIds, currentSelectedRows) {
+    if (!isEqual(selected, selectedIds)) {
+      setSelected(selectedIds);
       setClearSelected(false);
       // Current selection is passed to the parent component
       if (typeof onSelect === 'function') {
-        onSelect(newSelections);
+        onSelect(selectedIds, currentSelectedRows);
       }
     }
   }
