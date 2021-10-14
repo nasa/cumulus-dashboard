@@ -242,7 +242,7 @@ These are started and stopped with the commands:
   $ npm run stop-localstack
 ```
 
-After these containers are running, you can start a cumulus API locally in a terminal window `npm run serve-api`, the dashboard in another window. `[HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ESROOT=http://example.com ES_CLOUDWATCH_TARGET_PATTERN=cwpattern ES_DISTRIBUTION_TARGET_PATTERN=distpattern APIROOT=http://localhost:5001] npm run serve` and finally cypress in a third window. `npm run cypress`.
+After these containers are running, you can start a cumulus API locally in a terminal window `npm run serve-api`, the dashboard in another window. `[HIDE_PDR=false SHOW_DISTRIBUTION_API_METRICS=true ENABLE_RECOVERY=true ESROOT=http://example.com ES_CLOUDWATCH_TARGET_PATTERN=cwpattern ES_DISTRIBUTION_TARGET_PATTERN=distpattern APIROOT=http://localhost:5001] npm run serve` and finally cypress in a third window. `npm run cypress`.
 
 Once the Docker app is running, If you would like to see sample data you can seed the database. This will load the same sample data into the application that is used during cypress testing.
 ```bash
