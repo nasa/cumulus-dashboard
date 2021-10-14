@@ -204,6 +204,6 @@
     "url": "^0.11.0"
   },
   "optionalDependencies": {
-    "cypress": "7.3.0"
+    "cypress": "8.6.0"
   }
 }

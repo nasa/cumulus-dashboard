@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **CUMULUS-NONE**
   - update development version of @cumulus/api to v9.7.0 to pick up test fixes.
+  - update Cypress to latest version 8.6.0
 
 ### Fixed
 
