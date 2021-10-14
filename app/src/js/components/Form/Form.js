@@ -305,9 +305,11 @@ export class Form extends React.Component {
             const autoComplete = (type === formTypes.text && input.isPassword) ? 'on' : null;
             // text forms can be type=password or number
             let textType = (type === formTypes.text && input.isPassword) ? 'password' : null;
+            const additionalConfig = {};
 
             if (type === formTypes.number) {
               textType = 'number';
+              additionalConfig.min = 0;
             }
 
             const elem = React.createElement(element, {
@@ -320,7 +322,8 @@ export class Form extends React.Component {
               fieldset,
               type: textType,
               autoComplete,
-              onChange: this.onChange
+              onChange: this.onChange,
+              ...additionalConfig
             });
 
             return <li className='form__item' key={inputId}>{elem}</li>;
