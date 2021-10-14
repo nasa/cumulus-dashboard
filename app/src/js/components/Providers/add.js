@@ -8,37 +8,28 @@ import AddRecord from '../Add/add';
 
 const SCHEMA_KEY = 'provider';
 
-class AddProvider extends React.Component {
-  constructor () {
-    super();
-    this.state = { name: null };
-  }
-
-  render () {
-    return (
-      <div className = "add_providers">
-        <Helmet>
-          <title> Add Provider </title>
-        </Helmet>
-        <AddRecord
-          schemaKey={SCHEMA_KEY}
-          primaryProperty={'id'}
-          title={'Create a provider'}
-          state={this.props.providers}
-          baseRoute={'/providers/provider'}
-          createRecord={createProvider}
-        />
-      </div>
-    );
-  }
-}
+const AddProvider = ({ providers }) => (
+  <div className="add_providers">
+    <Helmet>
+      <title> Add Provider </title>
+    </Helmet>
+    <AddRecord
+      baseRoute="/providers/provider"
+      createRecord={createProvider}
+      primaryProperty="id"
+      schemaKey={SCHEMA_KEY}
+      state={providers}
+      title="Create a provider"
+    />
+  </div>
+);
 
 AddProvider.propTypes = {
-  providers: PropTypes.object
+  providers: PropTypes.object,
 };
 
 export default withRouter(
   connect((state) => ({
-    providers: state.providers
+    providers: state.providers,
   }))(AddProvider)
 );
