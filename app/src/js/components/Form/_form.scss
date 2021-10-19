@@ -353,7 +353,7 @@ select option{
 
 .form__addone--input {
   width: 50%;
-  margin-right: 1em;
+  margin-right: 0.5em;
 }
 
 .form__addone--button {
@@ -420,10 +420,8 @@ select option{
   .page__section--fullpage-form {
     .form__item {
       input {
-        &:not([type=number]) {
-          padding: 10px 0;
-        }
-        &[type=text] {
+        padding: 10px;
+        &[type=text], &[type=password] {
           width: 100%;
         }
       }
@@ -455,8 +453,11 @@ select option{
 .page__section--fullpage-form--internal {
   .form__item {
     margin-bottom: 3em;
-    input[type=text] {
-      width: 70%;
+    input{
+      padding: 10px;
+      &[type=text] {
+        width: 70%;
+      }
     }
     .subform__item--expanded {
       width: 70%;
@@ -479,8 +480,7 @@ select option{
     .form__addone--item {
       margin-bottom: 1em;
       input {
-        width: 59%;
-        float: left;
+        width: 93%;
       }
     }
     &--require__description {
