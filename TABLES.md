@@ -18,7 +18,7 @@ A basic table component that supports row selection and dumb sorting (see below)
     - disableSortBy: *set to true if the column should not be sortable*
     - width: *default is 125. set value if column needs to be wider/smaller*
 
-  * Additional options can be found [here](https://github.com/tannerlinsley/react-table/blob/master/docs/api/useTable.md#column-options) or in the documation for a specific plugin hook
+  * Additional options can be found [here](https://github.com/tannerlinsley/react-table/blob/master/docs/api/useTable.md#column-options) or in the documentation for a specific plugin hook
 
 - **data**: Array of data items. Items can be any format.
 - **sortId**: The id of the column to sort on.
