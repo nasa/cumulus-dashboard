@@ -51,6 +51,7 @@ const CollectionGranules = ({
   const view = getView();
   const [workflow, setWorkflow] = useState(workflowOptions[0]);
   const [workflowMeta, setWorkflowMeta] = useState(defaultWorkflowMeta);
+  const [selected, setSelected] = useState([]);
   const query = generateQuery();
   const { dropdowns } = providers;
 
@@ -102,7 +103,7 @@ const CollectionGranules = ({
       },
     };
 
-    return bulkActions(granules, actionConfig);
+    return bulkActions(granules, actionConfig, selected);
   }
 
   function selectWorkflow(_selector, selectedWorkflow) {
@@ -126,6 +127,13 @@ const CollectionGranules = ({
         metaHandler: setWorkflowMeta,
       }),
     ];
+  }
+
+  function updateSelection(selectedIds, currentSelectedRows) {
+    const allSelectedRows = selected.concat(currentSelectedRows);
+    const selectedRows = selectedIds
+      .map((id) => allSelectedRows.find((g) => id === g.granuleId)).filter(Boolean);
+    setSelected(selectedRows);
   }
 
   return (
@@ -159,6 +167,7 @@ const CollectionGranules = ({
           tableColumns={tableColumns}
           filterAction={filterGranules}
           filterClear={clearGranulesFilter}
+          onSelect={updateSelection}
           tableId="granules"
         >
           <Search

@@ -7,7 +7,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [v7.0.0]
+## [v7.0.1] - 2021-10-19
+
+### Added
+
+- **CUMULUS-2462**
+  - Reingest a granule from granule details page is updated to select a workflow execution arn for reingest.
+  - Batch Reingest and Bulk Reingest Actions are updated to select the workflowName for reingest.
+- **CUMULUS-2585**
+  - Added failed execution step snapshot to execution list
+
+### Changed
+
+- **CUMULUS-NONE**
+  - update development version of @cumulus/api to v9.7.0 to pick up test fixes.
+  - update Cypress to latest version 8.6.0
+
+### Fixed
+
+- **CUMULUS-2643**
+  - Fixed issue with search component that was causing search to be triggered excessively
+
+## [v7.0.0] - 2021-10-04
 
 ## Breaking Changes
 
@@ -991,7 +1012,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v7.0.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v7.1.0...HEAD
+[v7.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v7.0.0...v7.1.0
 [v7.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v6.0.0...v7.0.0
 [v6.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v5.0.0...v6.0.0
 [v5.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v4.0.0...v5.0.0

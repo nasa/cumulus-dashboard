@@ -13,6 +13,7 @@ const {
 const collections = require('../fixtures/seeds/collectionsFixture.json');
 const executions = require('../fixtures/seeds/executionsFixture.json');
 const granules = require('../fixtures/seeds/granulesFixture.json');
+const granulesExecutions = require('../fixtures/seeds/granulesExecutionsFixture.json');
 const providers = require('../fixtures/seeds/providersFixture.json');
 const rules = require('../fixtures/seeds/rulesFixture.json');
 const pdrs = require('../fixtures/seeds/pdrsFixture.json');
@@ -80,6 +81,15 @@ function uploadReconciliationReportFiles() {
   );
 }
 
+function seedGranulesExecutions() {
+  const updatedGranules = granulesExecutions.map((granuleExecution) => {
+    const granule = granules.results.find((g) => g.granuleId === granuleExecution.granuleId);
+    const execution = executions.results.find((e) => e.arn === granuleExecution.executionArn);
+    return { ...granule, execution: execution.execution };
+  });
+  return serveUtils.addGranules(updatedGranules);
+}
+
 function seedEverything() {
   return Promise.all([
     resetIt()
@@ -88,6 +98,7 @@ function seedEverything() {
       .then(seedExecutions)
       .then(seedPdrs)
       .then(seedGranules)
+      .then(seedGranulesExecutions)
       .then(seedRules)
       .then(seedReconciliationReports),
     uploadReconciliationReportFiles(),

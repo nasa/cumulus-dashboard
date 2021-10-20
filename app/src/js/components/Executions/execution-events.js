@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import cloneDeep from 'lodash/cloneDeep';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkSquareAlt } from '@fortawesome/free-solid-svg-icons';
 import { withRouter } from 'react-router-dom';
@@ -18,9 +17,9 @@ import { tableColumns } from '../../utils/table-config/execution-status';
 import ErrorReport from '../Errors/report';
 import Search from '../Search/search';
 
-import { getEventDetails } from './execution-graph-utils';
 import SortableTable from '../SortableTable/SortableTable';
 import ListFilters from '../ListActions/ListFilters';
+import { formatEvents } from '../../utils/table-config/executions';
 
 const ExecutionEvents = ({
   dispatch,
@@ -30,18 +29,9 @@ const ExecutionEvents = ({
 }) => {
   const { params } = match || {};
   const { executionArn } = params;
-  const { search } = location;
-  const { error, execution, executionHistory, stateMachine } = executionStatus || {};
+  const { error, execution, executionHistory, stateMachine, searchString } = executionStatus || {};
   const { events } = executionHistory || {};
-  const mutableEvents = cloneDeep(events);
-  if (mutableEvents) {
-    mutableEvents.forEach((event, index, eventsArray) => {
-      event.eventDetails = getEventDetails(event);
-      if (index === 0 || event.name || !event.type.match('LambdaFunction')) return;
-      const prevStep = eventsArray[index - 1];
-      event.name = prevStep.name;
-    });
-  }
+  const formattedEvents = formatEvents(events);
 
   useEffect(() => {
     dispatch(getCumulusInstanceMetadata());
@@ -50,7 +40,7 @@ const ExecutionEvents = ({
   useEffect(() => {
     dispatch(getExecutionStatus(executionArn));
     // when we have a new search, we also want to dispatch
-  }, [dispatch, executionArn, search]);
+  }, [dispatch, executionArn, searchString]);
 
   if (!execution) return null;
 
@@ -107,13 +97,13 @@ const ExecutionEvents = ({
               clear={clearExecutionEventsSearch}
               label="Search"
               labelKey="type"
+              options={formattedEvents}
               placeholder="Search Type"
-              searchKey="executions"
             />
           </ListFilters>
 
           <SortableTable
-            data={mutableEvents.sort((a, b) => (a.id > b.id ? 1 : -1))}
+            data={formattedEvents.sort((a, b) => (a.id > b.id ? 1 : -1))}
             tableColumns={tableColumns}
             rowId='id'
           />

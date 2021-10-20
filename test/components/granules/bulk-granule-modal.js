@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import { shallow, configure } from 'enzyme';
 
-import BulkGranuleModal from '../../../app/src/js/components/Granules/bulk-granule-modal.js';
+import { BulkGranuleModal } from '../../../app/src/js/components/Granules/bulk-granule-modal.js';
 
 configure({ adapter: new Adapter() });
 

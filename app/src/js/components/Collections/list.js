@@ -1,6 +1,6 @@
 // This is the main Collections Overview page
 import { get } from 'object-path';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -39,30 +39,35 @@ const breadcrumbConfig = [
   },
 ];
 
-class CollectionList extends React.Component {
-  constructor() {
-    super();
-    this.generateQuery = this.generateQuery.bind(this);
-    this.generateBulkActions = this.generateBulkActions.bind(this);
-  }
+const CollectionList = ({
+  collections,
+  config,
+  datepicker,
+  dispatch,
+  providers,
+  queryParams,
+}) => {
+  const { dropdowns } = providers;
+  const { list } = collections;
+  const { startDateTime, endDateTime } = datepicker || {};
+  const hasTimeFilter = startDateTime || endDateTime;
 
-  componentDidMount() {
-    const { dispatch } = this.props;
+  const { count, queriedAt } = list.meta;
+
+  useEffect(() => {
     dispatch(getCumulusInstanceMetadata());
-  }
+  }, [dispatch]);
 
-  generateQuery() {
-    const { queryParams } = this.props;
+  function generateQuery() {
     return { ...queryParams };
   }
 
-  generateBulkActions() {
+  function generateBulkActions() {
     const actionConfig = {
       recover: {
         action: applyRecoveryWorkflowToCollection,
       },
     };
-    const { collections, config } = this.props;
     let actions = bulkActions(collections);
     if (config.enableRecovery) {
       actions = actions.concat(recoverAction(collections, actionConfig));
@@ -70,79 +75,71 @@ class CollectionList extends React.Component {
     return actions;
   }
 
-  render() {
-    const { collections, datepicker, providers: { dropdowns } } = this.props;
-    const { list } = collections;
-    const { startDateTime, endDateTime } = datepicker || {};
-    const hasTimeFilter = startDateTime || endDateTime;
-
-    const { count, queriedAt } = list.meta;
-    return (
-      <div className="page__component">
-        <Helmet>
-          <title> Collections </title>
-        </Helmet>
-        <section className="page__section">
-          <section className="page__section page__section__controls">
-            <Breadcrumbs config={breadcrumbConfig} />
-          </section>
-          <div className="page__section__header page__section__header-wrapper">
-            <h1 className="heading--large heading--shared-content with-description">
-              {strings.collection_overview}
-            </h1>
-            {lastUpdated(queriedAt)}
-          </div>
+  return (
+    <div className="page__component">
+      <Helmet>
+        <title> Collections </title>
+      </Helmet>
+      <section className="page__section">
+        <section className="page__section page__section__controls">
+          <Breadcrumbs config={breadcrumbConfig} />
         </section>
-        <section className="page__section">
-          <div className="heading__wrapper--border">
-            <h2 className="heading--medium heading--shared-content with-description">
-              {hasTimeFilter
-                ? strings.active_collections
-                : strings.all_collections}
-              <span className="num-title">{count ? tally(count) : 0}</span>
-            </h2>
-          </div>
+        <div className="page__section__header page__section__header-wrapper">
+          <h1 className="heading--large heading--shared-content with-description">
+            {strings.collection_overview}
+          </h1>
+          {lastUpdated(queriedAt)}
+        </div>
+      </section>
+      <section className="page__section">
+        <div className="heading__wrapper--border">
+          <h2 className="heading--medium heading--shared-content with-description">
+            {hasTimeFilter
+              ? strings.active_collections
+              : strings.all_collections}
+            <span className="num-title">{count ? tally(count) : 0}</span>
+          </h2>
+        </div>
 
-          <List
-            list={list}
-            tableColumns={tableColumns}
-            action={listCollections}
-            query={this.generateQuery()}
-            bulkActions={this.generateBulkActions()}
-            rowId={getCollectionId}
-            initialSortId="duration"
-            filterAction={filterCollections}
-            filterClear={clearCollectionsFilter}
-            tableId="collections"
-          >
-            <Search
-              action={searchCollections}
-              clear={clearCollectionsSearch}
-              label="Search"
-              labelKey="name"
-              placeholder="Collection Name"
-              searchKey="collections"
+        <List
+          list={list}
+          tableColumns={tableColumns}
+          action={listCollections}
+          query={generateQuery()}
+          bulkActions={generateBulkActions()}
+          rowId={getCollectionId}
+          initialSortId="duration"
+          filterAction={filterCollections}
+          filterClear={clearCollectionsFilter}
+          tableId="collections"
+        >
+          <Search
+            action={searchCollections}
+            clear={clearCollectionsSearch}
+            label="Search"
+            labelKey="name"
+            placeholder="Collection Name"
+            searchKey="collections"
+          />
+          <ListFilters>
+            <Dropdown
+              getOptions={getOptionsProviderName}
+              options={get(dropdowns, ['provider', 'options'])}
+              action={filterCollections}
+              clear={clearCollectionsFilter}
+              paramKey="provider"
+              label="Provider"
+              inputProps={{
+                placeholder: 'All',
+                className: 'dropdown--medium',
+              }}
             />
-            <ListFilters>
-              <Dropdown
-                getOptions={getOptionsProviderName}
-                options={get(dropdowns, ['provider', 'options'])}
-                action={filterCollections}
-                clear={clearCollectionsFilter}
-                paramKey="provider"
-                label="Provider"
-                inputProps={{
-                  placeholder: 'All',
-                  className: 'dropdown--medium',
-                }}
-              />
-            </ListFilters>
-          </List>
-        </section>
-      </div>
-    );
-  }
-}
+          </ListFilters>
+        </List>
+      </section>
+    </div>
+  );
+};
 
 CollectionList.propTypes = {
   collections: PropTypes.object,
@@ -152,8 +149,6 @@ CollectionList.propTypes = {
   providers: PropTypes.object,
   queryParams: PropTypes.object,
 };
-
-CollectionList.displayName = 'CollectionList';
 
 export { CollectionList };
 export default withRouter(
