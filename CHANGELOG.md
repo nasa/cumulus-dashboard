@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- **CUMULUS-2725**
+  - Fixed bugs related to adding and editing providers
+
 ## [v7.0.1] - 2021-10-19
 
 ### Added
