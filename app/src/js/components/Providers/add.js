@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { createProvider } from '../../actions';
 import AddRecord from '../Add/add';
+import { isValidProvider } from '../../utils/validate';
 
 const SCHEMA_KEY = 'provider';
 
@@ -20,6 +21,7 @@ const AddProvider = ({ providers }) => (
       schemaKey={SCHEMA_KEY}
       state={providers}
       title="Create a provider"
+      validate={isValidProvider}
     />
   </div>
 );

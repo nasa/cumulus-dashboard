@@ -26,6 +26,7 @@ const EditRecord = ({
   schemaState,
   state,
   updateRecord,
+  validate,
 }) => {
   const record = get(state.map, pk, {});
   const meta = get(state.updated, pk, {});
@@ -73,9 +74,14 @@ const EditRecord = ({
       json.updatedAt = new Date().getTime();
       json.changedBy = strings.dashboard;
     }
-    setError(null);
-    console.log('About to update', json);
-    dispatch(updateRecord(pk, json));
+    if (!validate || validate(payload)) {
+      setError(null);
+      console.log('About to update', json);
+      dispatch(updateRecord(pk, json));
+    } else {
+      console.log('Payload failed validation');
+      setError('Payload failed validation');
+    }
   }
 
   return (
@@ -113,7 +119,8 @@ EditRecord.propTypes = {
 
   getRecord: PropTypes.func,
   updateRecord: PropTypes.func,
-  clearRecordUpdate: PropTypes.func
+  clearRecordUpdate: PropTypes.func,
+  validate: PropTypes.func,
 };
 
 export { EditRecord };

@@ -31,7 +31,7 @@ const AddRecord = ({
   validate,
 }) => {
   const [pk, setPk] = useState(null);
-  console.log(pk);
+  const [error, setError] = useState(null);
   const record = pk ? get(state.created, pk, {}) : {};
   const schema = schemaState[schemaKey];
 
@@ -68,6 +68,7 @@ const AddRecord = ({
       setPk(newPk);
     } else {
       console.log('Payload failed validation');
+      setError('Payload failed validation');
     }
   }
 
@@ -85,7 +86,7 @@ const AddRecord = ({
             onSubmit={post}
             onCancel={navigateBack}
             status={record.status}
-            error={record.status === 'inflight' ? null : record.error}
+            error={error || (record.status === 'inflight' ? null : record.error)}
             include={include}
             exclude={exclude}
             enums={enums}
