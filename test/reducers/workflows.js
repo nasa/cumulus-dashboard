@@ -43,7 +43,7 @@ test('verify WORKFLOWS loadState', (t) => {
       HelloWorldWorkflow: testData[0],
       AnotherWorkflow: testData[1],
     },
-    searchString: null,
+    searchString: '',
   });
 
   const actual = reducer(initialState, { type: 'WORKFLOWS', data: testData });

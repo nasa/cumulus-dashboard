@@ -173,6 +173,11 @@
     }
   }
 
+  .batch_granules--reingest,
+  .granule--reingest {
+    text-align: left;
+  }
+
   &.bulk_granules {
     &.modal-dialog {
       overflow-y: initial !important;
@@ -184,8 +189,8 @@
 
     .modal-body {
       height: 100px;
-      overflow-y: auto;
       margin-left: 10px;
+      overflow-y: auto;
       text-align: left;
     }
 

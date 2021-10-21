@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -14,7 +14,13 @@ import Search from '../Search/search';
 import { tableColumns } from '../../utils/table-config/workflows';
 
 const WorkflowOverview = ({ dispatch, queryParams, workflows }) => {
-  const count = workflows.list.data.length;
+  const { list, searchString } = workflows;
+  const count = list.data.length;
+
+  useEffect(() => {
+    dispatch(listWorkflows());
+    // when searchString changes, we want a fresh workflow fetch
+  }, [dispatch, searchString]);
 
   return (
     <div className="page__component">
@@ -31,10 +37,11 @@ const WorkflowOverview = ({ dispatch, queryParams, workflows }) => {
           </h2>
         </div>
         <List
-          list={workflows.list}
+          list={list}
           action={listWorkflows}
           tableColumns={tableColumns}
           query={{ ...queryParams }}
+          initialSortId="name"
           rowId="name"
           tableId="workflows"
         >

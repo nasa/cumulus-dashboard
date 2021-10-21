@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense, useCallback } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import withQueryParams from 'react-router-query-params';
@@ -37,8 +37,9 @@ const List = ({
   legend,
   list = {},
   onSelect,
-  query,
+  query = {},
   queryParams,
+  renderRowSubComponent,
   rowId,
   sorts,
   tableColumns,
@@ -52,17 +53,19 @@ const List = ({
     meta,
   } = list;
   const { count, limit } = meta || {};
-  const tableData = data || listData;
+  const tableData = data || listData || [];
 
   const [selected, setSelected] = useState([]);
   const [clearSelected, setClearSelected] = useState(false);
   const [page, setPage] = useState(1);
   const sortBy = tableId ? sorts[tableId] : null;
+  const initialInfix = useRef(queryParams.search);
 
   const [queryConfig, setQueryConfig] = useState({
     page: 1,
     sort_key: buildSortKey(sortBy || [{ id: initialSortId, desc: true }]),
-    ...(query || {}),
+    ...initialInfix.current ? { infix: initialInfix.current } : {},
+    ...query,
   });
   const [params, setParams] = useState({});
   const [bulkActionMeta, setBulkActionMeta] = useState({
@@ -70,7 +73,6 @@ const List = ({
     bulkActionError: null,
   });
   const [toggleColumnOptions, setToggleColumnOptions] = useState({
-    onChange: noop,
     hiddenColumns: initialHiddenColumns,
     setHiddenColumns: noop,
   });
@@ -78,6 +80,7 @@ const List = ({
   const {
     limit: limitQueryParam,
     page: pageQueryParam,
+    search: searchQueryParam,
     ...queryFilters
   } = queryParams;
 
@@ -139,13 +142,13 @@ const List = ({
     }
   }
 
-  function updateSelection(newSelections) {
-    if (!isEqual(selected, newSelections)) {
-      setSelected(newSelections);
+  function updateSelection(selectedIds, currentSelectedRows) {
+    if (!isEqual(selected, selectedIds)) {
+      setSelected(selectedIds);
       setClearSelected(false);
       // Current selection is passed to the parent component
       if (typeof onSelect === 'function') {
-        onSelect(newSelections);
+        onSelect(selectedIds, currentSelectedRows);
       }
     }
   }
@@ -180,15 +183,13 @@ const List = ({
 
   function getQueryConfig(config = {}) {
     // Remove empty keys so as not to mess up the query
-    const { search, ...restQuery } = query || {};
     return omitBy(
       {
         page,
         sort_key: queryConfig.sort_key,
-        infix: search,
         ...params,
         ...config,
-        ...restQuery,
+        ...query,
       },
       isNil
     );
@@ -252,6 +253,7 @@ const List = ({
               // according to that id, and therefore we are using sever-side/manual sorting
               shouldManualSort={!!initialSortId}
               getToggleColumnOptions={getToggleColumnOptions}
+              renderRowSubComponent={renderRowSubComponent}
               tableId={tableId}
               initialSortBy={sortBy}
             />
@@ -291,6 +293,7 @@ List.propTypes = {
   tableColumns: PropTypes.array,
   onSelect: PropTypes.func,
   queryParams: PropTypes.object,
+  renderRowSubComponent: PropTypes.func,
   tableId: PropTypes.string,
   sorts: PropTypes.object,
 };

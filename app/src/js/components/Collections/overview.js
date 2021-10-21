@@ -125,8 +125,8 @@ const CollectionOverview = ({
         action: applyRecoveryWorkflow
       }
     };
-    const selectedGranules = selected.map((id) => granules.list.data.find((g) => id === g.granuleId));
-    let actions = bulkActions(granules, config, selectedGranules);
+
+    let actions = bulkActions(granules, config, selected);
     if (config.enableRecovery) {
       actions = actions.concat(recoverAction(granules, config));
     }
@@ -186,8 +186,11 @@ const CollectionOverview = ({
     ].filter(Boolean);
   } /* Look at incorporating granule action errors maybe? */
 
-  function updateSelection(selection) {
-    setSelected(selection);
+  function updateSelection(selectedIds, currentSelectedRows) {
+    const allSelectedRows = selected.concat(currentSelectedRows);
+    const selectedRows = selectedIds
+      .map((id) => allSelectedRows.find((g) => id === g.granuleId)).filter(Boolean);
+    setSelected(selectedRows);
   }
 
   return (

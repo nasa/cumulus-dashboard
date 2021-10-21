@@ -9,7 +9,7 @@ import React, {
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination } from 'react-table';
+import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination, useExpanded } from 'react-table';
 import { useDispatch } from 'react-redux';
 import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
@@ -55,9 +55,11 @@ IndeterminateCheckbox.propTypes = {
 const SortableTable = ({
   canSelect,
   changeSortProps,
+  className = '',
   clearSelected,
   data = [],
   getToggleColumnOptions,
+  hideFilters = false,
   initialHiddenColumns = [],
   initialSortId,
   legend,
@@ -66,6 +68,7 @@ const SortableTable = ({
   shouldManualSort = false,
   shouldUsePagination = false,
   tableColumns = [],
+  renderRowSubComponent,
   tableId,
   initialSortBy = [],
 }) => {
@@ -103,6 +106,7 @@ const SortableTable = ({
       pageIndex,
       hiddenColumns
     },
+    selectedFlatRows,
     toggleAllRowsSelected,
     page,
     canPreviousPage,
@@ -132,6 +136,7 @@ const SortableTable = ({
     useFlexLayout, // this allows table to have dynamic layouts outside of standard table markup
     useResizeColumns, // this allows for resizing columns
     useSortBy, // this allows for sorting
+    useExpanded, // this allows for expandable rows
     usePagination,
     useRowSelect, // this allows for checkbox in table
     (hooks) => {
@@ -155,30 +160,35 @@ const SortableTable = ({
   );
   const dispatch = useDispatch();
   const tableRows = page || rows;
-  const includeFilters = typeof getToggleColumnOptions !== 'function';
+  // We only include filters if not wrapped in list component and hideFilter is false
+  const wrappedInList = typeof getToggleColumnOptions === 'function';
+  const includeFilters = !wrappedInList && !hideFilters;
 
   const tableRef = createRef();
   const scrollLeftButton = createRef();
   const scrollRightButton = createRef();
 
   useEffect(() => {
-    if (clearSelected) {
+    if (canSelect && clearSelected) {
       toggleAllRowsSelected(false);
     }
-  }, [clearSelected, toggleAllRowsSelected]);
+  }, [canSelect, clearSelected, toggleAllRowsSelected]);
 
   useEffect(() => {
-    const selected = Object.keys(selectedRowIds).reduce((selectedRows, key) => {
+    const selectedIds = Object.keys(selectedRowIds).reduce((ids, key) => {
       if (selectedRowIds[key]) {
-        selectedRows.push(key);
+        ids.push(key);
       }
-      return selectedRows;
+      return ids;
     }, []);
 
+    const currentSelectedRows = selectedFlatRows.map((row) => omit(row.original, ['files']));
+
     if (typeof onSelect === 'function') {
-      onSelect(selected);
+      onSelect(selectedIds, currentSelectedRows);
     }
-  }, [selectedRowIds, onSelect]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(selectedRowIds), onSelect, JSON.stringify(selectedFlatRows.map((row) => row.id))]);
 
   useEffect(() => {
     if (tableId) {
@@ -193,13 +203,13 @@ const SortableTable = ({
   }, [changeSortProps, sortBy]);
 
   useEffect(() => {
-    if (typeof getToggleColumnOptions === 'function') {
+    if (wrappedInList) {
       getToggleColumnOptions({
         setHiddenColumns,
         hiddenColumns
       });
     }
-  }, [getToggleColumnOptions, hiddenColumns, setHiddenColumns]);
+  }, [getToggleColumnOptions, hiddenColumns, setHiddenColumns, wrappedInList]);
 
   function resetHiddenColumns() {
     setHiddenColumns(initialHiddenColumns);
@@ -221,21 +231,21 @@ const SortableTable = ({
   }
 
   function handleTableColumnMouseEnter(event) {
-    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.nextSibling, false)) {
+    if ((event.target?.className.includes('th') || event.target?.className.includes('td')) && !checkInView(tableRef.current, event.target.nextSibling, false)) {
       showScrollRightButton(event);
     }
 
-    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.previousSibling, false)) {
+    if ((event.target?.className.includes('th') || event.target?.className.includes('td')) && !checkInView(tableRef.current, event.target.previousSibling, false)) {
       showScrollLeftButton(event);
     }
   }
 
   function handleTableColumnMouseLeave(event) {
-    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.nextSibling, false)) {
+    if ((event.target?.className.includes('th') || event.target?.className.includes('td')) && !checkInView(tableRef.current, event.target.nextSibling, false)) {
       hideScrollRightButton();
     }
 
-    if ((event.target.className.includes('th') || event.target.className.includes('td')) && !checkInView(tableRef.current, event.target.previousSibling, false)) {
+    if ((event.target?.className.includes('th') || event.target?.className.includes('td')) && !checkInView(tableRef.current, event.target.previousSibling, false)) {
       hideScrollLeftButton();
     }
   }
@@ -336,7 +346,8 @@ const SortableTable = ({
       {(includeFilters || legend) &&
         <ListFilters>
           {includeFilters &&
-            <TableFilters columns={tableColumns}
+            <TableFilters
+              columns={tableColumns}
               setHiddenColumns={setHiddenColumns}
               hiddenColumns={hiddenColumns}
               resetHiddenColumns={resetHiddenColumns}
@@ -344,7 +355,7 @@ const SortableTable = ({
           }
           {legend}
         </ListFilters>}
-      <div className='table' {...getTableProps()} ref={tableRef}>
+      <div className={`table ${className}`} {...getTableProps()} ref={tableRef}>
         <div className='thead'>
           <div className='tr'>
             {headerGroups.map((headerGroup) => (
@@ -411,35 +422,42 @@ const SortableTable = ({
           {tableRows.map((row, i) => {
             prepareRow(row);
             return (
-              <div className='tr' data-value={row.id} {...row.getRowProps()} key={i}>
-                {row.cells.map((cell, cellIndex) => {
-                  const primaryIdx = canSelect ? 1 : 0;
-                  const wrapperClassNames = classNames(
-                    'td',
-                    {
-                      'table__main-asset': cellIndex === primaryIdx,
-                      table__checkbox: canSelect && cellIndex === 0,
-                    }
-                  );
+              <React.Fragment key={i}>
+                <div className='tr' data-value={row.id} {...row.getRowProps()}>
+                  {row.cells.map((cell, cellIndex) => {
+                    const primaryIdx = canSelect ? 1 : 0;
+                    const wrapperClassNames = classNames(
+                      'td',
+                      {
+                        'table__main-asset': cellIndex === primaryIdx,
+                        table__checkbox: canSelect && cellIndex === 0,
+                      }
+                    );
 
-                  const { style, ...restCellProps } = cell.getCellProps();
-                  const columnWidth = fitColumn[cell.column.id];
-                  if (columnWidth) style.width = `${columnWidth}px`;
+                    const { style, ...restCellProps } = cell.getCellProps();
+                    const columnWidth = fitColumn[cell.column.id];
+                    if (columnWidth) style.width = `${columnWidth}px`;
 
-                  return (
-                    <div
-                      className={wrapperClassNames}
-                      {...restCellProps}
-                      style={style}
-                      key={cellIndex}
-                      onMouseEnter={(e) => handleTableColumnMouseEnter(e)}
-                      onMouseLeave={(e) => handleTableColumnMouseLeave(e)}
-                    >
-                      {cell.render('Cell')}
-                    </div>
-                  );
-                })}
-              </div>
+                    return (
+                      <div
+                        className={wrapperClassNames}
+                        {...restCellProps}
+                        style={style}
+                        key={cellIndex}
+                        onMouseEnter={(e) => handleTableColumnMouseEnter(e)}
+                        onMouseLeave={(e) => handleTableColumnMouseLeave(e)}
+                      >
+                        {cell.render('Cell')}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {renderRowSubComponent &&
+                  <>{renderRowSubComponent(row)}</>
+                }
+
+              </React.Fragment>
             );
           })}
         </div>
@@ -493,9 +511,11 @@ const SortableTable = ({
 SortableTable.propTypes = {
   canSelect: PropTypes.bool,
   changeSortProps: PropTypes.func,
+  className: PropTypes.string,
   clearSelected: PropTypes.bool,
   data: PropTypes.array,
   getToggleColumnOptions: PropTypes.func,
+  hideFilters: PropTypes.bool,
   initialHiddenColumns: PropTypes.array,
   initialSortId: PropTypes.string,
   legend: PropTypes.node,
@@ -504,6 +524,7 @@ SortableTable.propTypes = {
   shouldManualSort: PropTypes.bool,
   shouldUsePagination: PropTypes.bool,
   tableColumns: PropTypes.array,
+  renderRowSubComponent: PropTypes.func,
   tableId: PropTypes.string,
   initialSortBy: PropTypes.array,
 };

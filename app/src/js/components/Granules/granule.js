@@ -7,8 +7,10 @@ import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { get } from 'object-path';
 import isEqual from 'lodash/isEqual';
+import pick from 'lodash/pick';
 import {
   getGranule,
+  listExecutionsByGranule,
   reingestGranule,
   removeGranule,
   deleteGranule,
@@ -25,7 +27,6 @@ import {
   collectionLink,
   providerLink,
   pdrLink,
-  reingestText,
   removeFromCmr,
   deleteText,
 } from '../../utils/format';
@@ -35,6 +36,7 @@ import LogViewer from '../Logs/viewer';
 import ErrorReport from '../Errors/report';
 import Metadata from '../Table/Metadata';
 import DropdownAsync from '../DropDown/dropdown-async-command';
+import SimpleDropdown from '../DropDown/simple-dropdown';
 import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import { defaultWorkflowMeta, executeDialog } from '../../utils/table-config/granules';
@@ -135,10 +137,12 @@ class GranuleOverview extends React.Component {
     this.remove = this.remove.bind(this);
     this.delete = this.delete.bind(this);
     this.errors = this.errors.bind(this);
+    this.selectReingestWorkflow = this.selectReingestWorkflow.bind(this);
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.getExecuteOptions = this.getExecuteOptions.bind(this);
     this.setWorkflowMeta = this.setWorkflowMeta.bind(this);
     this.state = {
+      reingestWorkflow: {},
       workflow: this.props.workflowOptions[0],
       workflowMeta: defaultWorkflowMeta,
     };
@@ -160,7 +164,11 @@ class GranuleOverview extends React.Component {
     const { config, dispatch, match } = this.props;
     const { granuleId } = match.params;
     const getRecoveryStatus = config.enableRecovery ? true : undefined;
-    dispatch(getGranule(granuleId, { getRecoveryStatus }));
+    dispatch(getGranule(granuleId, { getRecoveryStatus }))
+      .then((granuleResponse) => {
+        const payload = { granules: [pick(granuleResponse.data, ['granuleId', 'collectionId'])] };
+        dispatch(listExecutionsByGranule(granuleId, payload));
+      });
   }
 
   navigateBack() {
@@ -173,7 +181,7 @@ class GranuleOverview extends React.Component {
 
   reingest() {
     const { granuleId } = this.props.match.params;
-    this.props.dispatch(reingestGranule(granuleId));
+    this.props.dispatch(reingestGranule(granuleId, { executionArn: this.state.reingestWorkflow.value }));
   }
 
   applyWorkflow() {
@@ -206,6 +214,10 @@ class GranuleOverview extends React.Component {
     ].filter(Boolean);
   }
 
+  selectReingestWorkflow(selector, value, option) {
+    this.setState({ reingestWorkflow: option || {} });
+  }
+
   selectWorkflow(selector, workflow) {
     this.setState({ workflow });
   }
@@ -227,6 +239,45 @@ class GranuleOverview extends React.Component {
     ];
   }
 
+  getReingestOptions() {
+    const { match, executions } = this.props;
+    const { granuleId } = match.params;
+    const granuleExecutions = executions.map?.[granuleId] || {};
+    const { data: granuleExecutionsList = [], error } = granuleExecutions || {};
+    const reingestExecutionOptions = granuleExecutionsList
+      .map((execution) => ({
+        label: `${execution.type}${(execution.arn === granuleExecutionsList[0].arn) ? ' (default)' : ''}`,
+        value: execution.arn
+      }));
+
+    return [(
+      <>
+        <div className="granule--reingest">
+          <p>Selected Granule: <strong>{granuleId}</strong></p>
+          <p><strong>To complete your granule reingest requests:</strong></p>
+          <p>
+            Below you can select a specific workflow to apply to this selected granule.
+            <strong>Note: The default is the latest workflow.</strong>
+          </p>
+          {error &&
+            <ErrorReport report={`Failed to get granule executions: ${error}`} />}
+        </div>
+        <div>
+          <SimpleDropdown
+            isClearable={true}
+            key={'workflow-dropdown'}
+            label={'Select Workflow'}
+            value={this.state.reingestWorkflow.label}
+            options={reingestExecutionOptions}
+            id='workflow-dropdown'
+            onChange={this.selectReingestWorkflow}
+            placeholder="Workflow Name"
+          />
+        </div>
+      </>
+    )];
+  }
+
   render() {
     const { granuleId } = this.props.match.params;
     const record = this.props.granules.map[granuleId];
@@ -243,6 +294,7 @@ class GranuleOverview extends React.Component {
         files.push(granule.files[key]);
       }
     }
+
     const dropdownConfig = [
       {
         text: 'Reingest',
@@ -250,7 +302,7 @@ class GranuleOverview extends React.Component {
         status: get(this.props.granules.reingested, [granuleId, 'status']),
         success: this.loadGranule,
         confirmAction: true,
-        confirmText: reingestText(granuleId),
+        confirmOptions: this.getReingestOptions(),
       },
       {
         text: 'Execute',
@@ -362,6 +414,7 @@ GranuleOverview.propTypes = {
   match: PropTypes.object,
   dispatch: PropTypes.func,
   granules: PropTypes.object,
+  executions: PropTypes.object,
   logs: PropTypes.object,
   skipReloadOnMount: PropTypes.bool,
   workflowOptions: PropTypes.array,
@@ -379,6 +432,7 @@ export default withRouter(
   connect((state) => ({
     config: state.config,
     granules: state.granules,
+    executions: state.executions,
     workflowOptions: workflowOptionNames(state),
     logs: state.logs,
   }))(GranuleOverview)

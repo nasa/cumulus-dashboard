@@ -1,5 +1,5 @@
 import { shouldBeRedirectedToLogin } from '../support/assertions';
-import { fullDate } from '../../app/src/js/utils/format';
+import { displayCase, fullDate } from '../../app/src/js/utils/format';
 
 describe('Dashboard Executions Page', () => {
   describe('When not logged in', () => {
@@ -31,10 +31,10 @@ describe('Dashboard Executions Page', () => {
 
       // shows a summary count of completed and failed executions
       cy.get('.overview-num__wrapper ul li')
-        .first().contains('li', 'Completed').contains('li', 4)
+        .first().contains('li', 'Completed').contains('li', 6)
         .next()
         .contains('li', 'Failed')
-        .contains('li', 1)
+        .contains('li', 2)
         .next()
         .contains('li', 'Running')
         .contains('li', 1);
@@ -57,7 +57,7 @@ describe('Dashboard Executions Page', () => {
             .should('have.attr', 'title')
             .and('be.eq', execution.name);
           cy.get('@columns').eq(1).invoke('text')
-            .should('be.eq', execution.status.replace(/^\w/, (c) => c.toUpperCase()));
+            .should('contain', displayCase(execution.status));
           cy.get('@columns').eq(2).invoke('text')
             .should('be.eq', execution.type);
           cy.get('@columns').eq(3).invoke('text')
@@ -65,11 +65,11 @@ describe('Dashboard Executions Page', () => {
           cy.get('@columns').eq(4).invoke('text')
             .should('be.eq', `${Number(execution.duration).toFixed(2)}s`);
           cy.get('@columns').eq(5).invoke('text')
-            .should('be.eq', execution.collectionId);
+            .should('be.eq', execution.collectionId || '--');
         });
 
       cy.get('.table .tbody .tr').as('list');
-      cy.get('@list').should('have.length', 6);
+      cy.get('@list').should('have.length', 9);
     });
 
     it('should show a single execution', () => {
@@ -207,10 +207,35 @@ describe('Dashboard Executions Page', () => {
           cy.contains('.execution__modal .button', 'Close').click();
         });
       });
+    });
+
+    it('should correctly handle searching execution events', () => {
+      const executionName = '8e21ca0f-79d3-4782-8247-cacd42a595ea';
+      const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
+
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
+        { fixture: 'valid-execution.json', statusCode: 200 }
+      );
+      cy.visit(`/executions/execution/${executionArn}/events`);
+
+      cy.contains('.heading--large', executionName);
+      cy.contains('.num-title', 7);
+
+      cy.get('.table .tbody .tr').as('events');
+      cy.get('@events').should('have.length', 7);
 
       cy.get('.search').as('search');
       cy.get('@search').click().type('task');
       cy.url().should('include', 'search=task');
+      cy.get('@events').should('have.length', 2);
+      cy.get('@search').clear();
+      cy.url().should('not.include', 'search');
+      cy.get('@events').should('have.length', 7);
+
+      //  test that initial search value works
+      cy.visit('/');
+      cy.visit(`/executions/execution/${executionArn}/events?search=task`);
       cy.get('@events').should('have.length', 2);
     });
 
@@ -318,29 +343,21 @@ describe('Dashboard Executions Page', () => {
     });
 
     it('should show executions for a granule/collection', () => {
-      cy.intercept(
-        { method: 'POST', url: 'http://localhost:5001/executions/search-by-granules*' },
-        { fixture: 'executions-list.json', statusCode: 200 }
-      );
+      const granuleId = 'MOD09GQ.A9344328.K9yI3O.006.4625818663028';
+      cy.visit(`/executions/executions-list/MOD09GQ___006/${granuleId}`);
 
-      cy.visit('/executions/executions-list/MOD09GQ___006/MOD09GQ.A4622742.B7A8Ma.006.7857260550036');
-      cy.url().should('include', 'executions-list');
+      cy.get('.heading--large').should('contain.text', granuleId);
+      cy.get('.num-title').should('contain.text', '3');
 
-      // Should show Granule ID at the top
-      cy.get('.heading--large').should('contain.text', 'MOD09GQ.A4622742.B7A8Ma.006.7857260550036');
-
-      // Should have the correct number of results displayed
-      cy.get('.num-title').should('contain.text', '6');
-
-      // Should have 6 columns with the correct headers
       cy.get('.thead .tr .tr').children().as('columns');
-      cy.get('@columns').should('have.length', 5);
+      cy.get('@columns').should('have.length', 6);
 
       cy.get('@columns').eq(0).should('have.text', 'Name');
       cy.get('@columns').eq(1).should('have.text', 'Status');
       cy.get('@columns').eq(2).should('have.text', 'Workflow');
       cy.get('@columns').eq(3).should('have.text', 'Updated');
       cy.get('@columns').eq(4).should('have.text', 'Duration');
+      cy.get('@columns').eq(5).should('have.text', 'Failed Events Snapshot');
     });
   });
 });

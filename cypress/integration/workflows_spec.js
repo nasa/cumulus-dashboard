@@ -64,8 +64,15 @@ describe('Dashboard Workflows Page', () => {
       cy.get('.table .tbody .tr').should('have.length', 2);
       cy.get('.table .tbody .tr').first().contains('HelloWorldWorkflow');
       cy.get('.search').click().type('condtes');
-      cy.get('.table .tbody .tr').first().contains('SecondTestWorkflow');
       cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('.table .tbody .tr').first().contains('SecondTestWorkflow');
+    });
+
+    it('filters workflows when a user comes to the page with a search query', () => {
+      cy.intercept('GET', '/workflows*').as('get-workflows');
+      cy.visit('/workflows?search=condtes');
+      cy.get('.table .tbody .tr').should('have.length', 1);
+      cy.get('.table .tbody .tr').first().contains('SecondTestWorkflow');
     });
   });
 });
