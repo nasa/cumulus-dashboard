@@ -241,10 +241,10 @@ describe('Dashboard Reconciliation Reports Page', () => {
           cy.contains('.table__filters .button__filter', 'Show/Hide Columns');
         });
 
-      /** Pagination */ /* Please fix this test when working on ticket CUMULUS-2633
-      // cy.contains('.pagination__link--active', '1');
-      // cy.contains('.pagination button', 'Next').click();
-      // cy.contains('.pagination__link--active', '2');
+      /** Pagination */
+      cy.contains('.pagination__link--active', '1');
+      cy.contains('.pagination button', 'Next').click();
+      cy.contains('.pagination__link--active', '2');
 
       /** Legend - there should be one for each table */
       cy.get('.legend').should('have.length', 3);

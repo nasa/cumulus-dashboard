@@ -10,7 +10,6 @@ import {
   clearReconciliationSearch,
   filterReconciliationReport,
   clearReconciliationReportFilter,
-  listGranules
 } from '../../actions';
 import List from '../Table/Table';
 import { reshapeReport } from './reshape-report';
@@ -176,8 +175,19 @@ const InventoryReport = ({
           </div>
           {reportComparisons
             .find((displayObj) => displayObj.id === activeId)
-            .tables.map((item, index) => {
-              const isExpanded = expandedState[activeId][item.id];
+            .tables.map((table, index) => {
+              const { columns, data, id, name, type } = table;
+              const isExpanded = expandedState[activeId][id];
+              const listProps = {};
+
+              if (type === 'granule' || type === 'file') {
+                listProps.bulkActions = bulkActions;
+                listProps.groupAction = groupAction;
+                listProps.rowId = 'granuleId';
+              } else if (type === 'collection') {
+                listProps.rowId = 'name';
+              }
+
               return (
                 <div className="multicard__table" key={index}>
                   <Card.Header
@@ -186,17 +196,17 @@ const InventoryReport = ({
                       'multicard__header--expanded': isExpanded,
                     })}
                     key={index}
-                    onClick={(e) => handleToggleClick(e, item.id)}
-                    aria-controls={item.id}
+                    onClick={(e) => handleToggleClick(e, id)}
+                    aria-controls={id}
                   >
-                    {item.name}
+                    {name}
                     <span
                       className={classNames({
                         'num-title--inverted': !isExpanded,
                         'num-title': isExpanded,
                       })}
                     >
-                      {item.data.length}
+                      {data.length}
                     </span>
                     <span
                       className={classNames({
@@ -206,17 +216,15 @@ const InventoryReport = ({
                     ></span>
                   </Card.Header>
                   <Collapse in={isExpanded}>
-                    <div id={item.id}>
+                    <div id={id}>
                       <List
-                        action={listGranules}
-                        data={item.data}
+                        data={data}
                         legend={legend}
-                        bulkActions={bulkActions}
-                        groupAction={groupAction}
                         onSelect={onSelect}
                         rowId="granuleId"
-                        shouldUsePagination={true}
-                        tableColumns={item.columns}
+                        tableColumns={columns}
+                        useSimplePagination={true}
+                        {...listProps}
                       />
                     </div>
                   </Collapse>
