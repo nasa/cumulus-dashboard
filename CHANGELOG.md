@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- **CUMULUS-2584**
+  - Added Associated Executions to execution-status.js
+
+### Changed
+
+- **CUMULUS-2584**
+  - Updated Granule detail component to reference `Executions List`.
+  - Removed `Execution` from Granule detail component
+  - Updated execution-events.js to only show step name with status icon. moving execution name, step name and event type into the More Details modal
+
 ## [v7.0.1] - 2021-10-19
 
 ### Added
@@ -110,9 +122,6 @@ This version of the dashboard requires Cumulus API `v9.5.0`
   - Updated integration tests due to changes in API behavior related to Postgres contstraints between tables
 - **CUMULUS-NONE**
   - Downgrades elasticsearch version in testing container to 5.3 to match AWS version.
-- **CUMULUS-2584**
-  - Updated Granule detail component to reference `Executions List`.
-  - Removed `Execution` from Granule detail component
 
 ### Fixed
 
