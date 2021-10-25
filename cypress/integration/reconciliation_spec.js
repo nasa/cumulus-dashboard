@@ -177,7 +177,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.url().should('include', '/reconciliation-reports');
     });
 
-    it('displays an individual Inventory report', () => {
+    it.only('displays an individual Inventory report', () => {
       const reportName = 'inventoryReport-20200114T205238781';
       const path = `/reconciliation-reports/report/${reportName}`;
 
@@ -200,15 +200,16 @@ describe('Dashboard Reconciliation Reports Page', () => {
           count: 216,
           secondColumn: 'Filename'
         },
+        // collections do not have select column, so need to check first column
         {
           title: 'Cumulus',
           count: 21,
-          secondColumn: 'Collection name'
+          firstColumn: 'Collection name'
         },
         {
           title: 'CMR',
           count: 391,
-          secondColumn: 'Collection name'
+          firstColumn: 'Collection name'
         }
       ];
 
@@ -220,7 +221,13 @@ describe('Dashboard Reconciliation Reports Page', () => {
         card.get('.card-title').contains(cards[index].count);
 
         // verify correct table is displayed on click
-        cy.get('.table .th').eq(1).contains(cards[index].secondColumn);
+        if (cards[index].firstColumn) {
+          cy.get('.table .th').eq(0).contains(cards[index].firstColumn);
+        }
+
+        if (cards[index].secondColumn) {
+          cy.get('.table .th').eq(1).contains(cards[index].secondColumn);
+        }
       });
 
       /** Table Filters **/
