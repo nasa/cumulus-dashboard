@@ -325,6 +325,13 @@
   border: 1px solid $border-grey;
   box-shadow: $shadow__default;
   border-radius: 10px;
+
+  .simple-pagination {
+    margin: initial;
+    border: initial;
+    box-shadow: initial;
+  }
+
 }
 
 .list--errors {
