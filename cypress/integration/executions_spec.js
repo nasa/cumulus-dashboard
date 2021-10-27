@@ -226,7 +226,6 @@ describe('Dashboard Executions Page', () => {
 
       cy.contains('div ul li a', 'Events').click();
 
-
       cy.get('.table .thead .tr .th').as('columnHeaders');
 
       cy.get('.table .tbody .tr').as('events');
@@ -237,12 +236,12 @@ describe('Dashboard Executions Page', () => {
         cy.get('@events').each(($el, index, $list) => {
           if (events[index].type.toLowerCase().includes('failed')) {
             cy.get('@columns').eq(1).children('i')
-            .should('have.class', 'fa-times-circle')
-            .should('have.class', 'status-icon--failed');
+              .should('have.class', 'fa-times-circle')
+              .should('have.class', 'status-icon--failed');
           } else {
             cy.get('@columns').eq(1).children('i')
-            .should('have.class', 'fa-check-circle')
-            .should('have.class', 'status-icon--success');
+              .should('have.class', 'fa-check-circle')
+              .should('have.class', 'status-icon--success');
           }
         });
       });
@@ -283,7 +282,7 @@ describe('Dashboard Executions Page', () => {
       const executionArn = 'arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
       const stateMachine = 'arn:aws:states:us-east-1:123456789012:stateMachine:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo';
       const granuleId = 'MOD09GQ.A9344328.K9yI3O.006.4625818663028';
-      
+
       cy.intercept(
         { method: 'GET', url: `http://localhost:5001/logs/${executionName}` },
         { fixture: 'limited-execution.json', statusCode: 200 }

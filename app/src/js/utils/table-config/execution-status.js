@@ -14,7 +14,7 @@ export const tableColumns = [
     Header: 'Event ID',
     accessor: 'id',
     width: 10,
-    Cell: ({ cell: { value }}) => {
+    Cell: ({ cell: { value } }) => {
       if (value) {
         return (
           <>
@@ -30,7 +30,7 @@ export const tableColumns = [
   {
     Header: 'Step Name',
     accessor: 'name',
-    Cell: ({ cell: { value }, row: { original: { id, eventDetails } }}) => {
+    Cell: ({ cell: { value }, row: { original: { id, eventDetails } } }) => {
       const [showModal, setShowModal] = useState(false);
       function toggleModal(e) {
         if (e) {
@@ -38,27 +38,27 @@ export const tableColumns = [
         }
         setShowModal(!showModal);
       }
-        return (
-          <>
-            <span className="link link--pad-right" onClick={toggleModal} role="button" tabIndex="0">
-              {eventDetails.name ? eventDetails.name : 'N/A'}
-            </span>
-            {eventDetails.type.toLowerCase().includes('failed') ?
-            <i class="fas fa-times-circle status-icon--failed"></i> :
-            <i class="far fa-check-circle status-icon--success"></i>}
-            <DefaultModal
-              showModal={showModal}
-              title={`ID ${id}: ${eventDetails.name ? eventDetails.name : 'N/A'} - ${eventDetails.type}`}
-              onCloseModal={toggleModal}
-              hasConfirmButton={false}
-              cancelButtonClass="button--close"
-              cancelButtonText="Close"
-              className="execution__modal"
-            >
-              <pre>{JSON.stringify(eventDetails, null, 2)}</pre>
-            </DefaultModal>
-          </>
-        );
+      return (
+        <>
+          <span className="link link--pad-right" onClick={toggleModal} role="button" tabIndex="0">
+            {eventDetails.name ? eventDetails.name : 'N/A'}
+          </span>
+          {eventDetails.type.toLowerCase().includes('failed') ?
+          <i class="fas fa-times-circle status-icon--failed"></i> :
+          <i class="far fa-check-circle status-icon--success"></i>}
+          <DefaultModal
+            showModal={showModal}
+            title={`ID ${id}: ${eventDetails.name ? eventDetails.name : 'N/A'} - ${eventDetails.type}`}
+            onCloseModal={toggleModal}
+            hasConfirmButton={false}
+            cancelButtonClass="button--close"
+            cancelButtonText="Close"
+            className="execution__modal"
+          >
+            <pre>{JSON.stringify(eventDetails, null, 2)}</pre>
+          </DefaultModal>
+        </>
+      );
     },
   },
   {
@@ -141,7 +141,7 @@ export const metaAccessors = ({
     property: 'granules',
     accessor: (d) => {
       if (!d) return 'N/A';
-      return(
+      return (
         <Link to={() => ({ pathname: `/granules/granule/${encodeURIComponent(path.basename(d[0].granuleId))}` })}>{d[0].granuleId}</Link>
       );
     },
@@ -150,8 +150,8 @@ export const metaAccessors = ({
     label: 'Associated Executions List',
     property: 'granules',
     accessor: (d) => {
-      if(!d) return 'N/A';
-      return(
+      if (!d) return 'N/A';
+      return (
         <Link to={() => ({ pathname: `/executions/executions-list/${encodeURIComponent(d[0].collectionId)}/${encodeURIComponent(path.basename(d[0].granuleId))}` })}>Link</Link>
       );
     },
