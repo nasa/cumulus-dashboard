@@ -234,6 +234,7 @@ describe('Dashboard Executions Page', () => {
       cy.getFixture('valid-execution-with-failure').as('executionStatus');
       cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
         cy.get('@events').each(($el, index, $list) => {
+          cy.wrap($el).children('.td').as('columns');
           if (events[index].type.toLowerCase().includes('failed')) {
             cy.get('@columns').eq(1).children('i')
               .should('have.class', 'fa-times-circle')
