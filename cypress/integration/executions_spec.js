@@ -204,7 +204,7 @@ describe('Dashboard Executions Page', () => {
           cy.get('.execution__modal').should('exist');
           const stepName = events[index].name;
           const stepType = events[index].type;
-          cy.get('.execution__modal .modal-title').contains(`ID ${id}: ${stepName ? stepName : 'N/A'} - ${stepType}`);
+          cy.get('.execution__modal .modal-title').contains(`ID ${id}: ${!stepName ? 'N/A' : stepName} - ${stepType}`);
           cy.get('.execution__modal .modal-body').contains(idMatch);
           if (index !== 0) {
             cy.get('.execution__modal .modal-body').contains(previousIdMatch);
