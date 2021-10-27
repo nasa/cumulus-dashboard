@@ -177,7 +177,7 @@ describe('Dashboard Reconciliation Reports Page', () => {
       cy.url().should('include', '/reconciliation-reports');
     });
 
-    it.only('displays an individual Inventory report', () => {
+    it('displays an individual Inventory report', () => {
       const reportName = 'inventoryReport-20200114T205238781';
       const path = `/reconciliation-reports/report/${reportName}`;
 
