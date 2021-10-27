@@ -41,7 +41,7 @@ export const tableColumns = [
       return (
         <>
           <span className="link link--pad-right" onClick={toggleModal} role="button" tabIndex="0">
-            ${!value || 'N/A'}
+            {value || 'N/A'}
           </span>
           {eventDetails.type.toLowerCase().includes('failed')
             ? <i className="fas fa-times-circle status-icon--failed"></i>
