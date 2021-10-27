@@ -41,14 +41,14 @@ export const tableColumns = [
       return (
         <>
           <span className="link link--pad-right" onClick={toggleModal} role="button" tabIndex="0">
-            {value ? value : 'N/A'}
+            ${value ? value : 'N/A'}
           </span>
           {eventDetails.type.toLowerCase().includes('failed')
             ? <i className="fas fa-times-circle status-icon--failed"></i>
             : <i className="far fa-check-circle status-icon--success"></i>}
           <DefaultModal
             showModal={showModal}
-            title={`ID ${id}: ${value ? value: 'N/A'} - ${eventDetails.type}`}
+            title={`ID ${id}: ${value ? value : 'N/A'} - ${eventDetails.type}`}
             onCloseModal={toggleModal}
             hasConfirmButton={false}
             cancelButtonClass="button--close"
