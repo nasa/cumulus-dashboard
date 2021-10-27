@@ -38,18 +38,17 @@ export const tableColumns = [
         }
         setShowModal(!showModal);
       }
-      if (value) {
         return (
           <>
             <span className="link link--pad-right" onClick={toggleModal} role="button" tabIndex="0">
-              {value}
+              {eventDetails.name ? eventDetails.name : 'N/A'}
             </span>
             {eventDetails.type.toLowerCase().includes('failed') ?
             <i class="fas fa-times-circle status-icon--failed"></i> :
             <i class="far fa-check-circle status-icon--success"></i>}
             <DefaultModal
               showModal={showModal}
-              title={`ID ${id}: ${value} - ${eventDetails.type}`}
+              title={`ID ${id}: ${eventDetails.name ? eventDetails.name : 'N/A'} - ${eventDetails.type}`}
               onCloseModal={toggleModal}
               hasConfirmButton={false}
               cancelButtonClass="button--close"
@@ -60,8 +59,6 @@ export const tableColumns = [
             </DefaultModal>
           </>
         );
-      }
-      return 'N/A';
     },
   },
   {
@@ -142,12 +139,22 @@ export const metaAccessors = ({
   {
     label: 'Granule ID',
     property: 'granules',
-    accessor: (d) => <Link to={() => ({ pathname: `/granules/granule/${encodeURIComponent(path.basename(d[0].granuleId))}` })}>{d[0].granuleId}</Link>,
+    accessor: (d) => {
+      if (!d) return 'N/A';
+      return(
+        <Link to={() => ({ pathname: `/granules/granule/${encodeURIComponent(path.basename(d[0].granuleId))}` })}>{d[0].granuleId}</Link>
+      );
+    },
   },
   {
     label: 'Associated Executions List',
     property: 'granules',
-    accessor: (d) => <Link to={() => ({ pathname: `/executions/executions-list/${encodeURIComponent(d[0].collectionId)}/${encodeURIComponent(path.basename(d[0].granuleId))}` })}>Link</Link>,
+    accessor: (d) => {
+      if(!d) return 'N/A';
+      return(
+        <Link to={() => ({ pathname: `/executions/executions-list/${encodeURIComponent(d[0].collectionId)}/${encodeURIComponent(path.basename(d[0].granuleId))}` })}>Link</Link>
+      );
+    },
   },
   {
     label: 'Input',

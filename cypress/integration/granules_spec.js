@@ -827,5 +827,16 @@ describe('Dashboard Granules Page', () => {
       cy.get('.tr:nth-child(1) > .td:nth-child(6) > a').click();
       cy.url().should('include', 'executions-list');
     });
+
+    it('should navigate to to executions-list when executions-list link is clicked on granule detail page', () => {
+      cy.visit('/granules');
+
+      cy.get('.tr:nth-child(1) > .td:nth-child(3) > div > span > a').click();
+      cy.url().should('include', 'granules/granule');
+
+      // overrode default timeout of 4 seconds because granules detail page takes longer than 4 seconds even locally
+      cy.get('.meta__row > dt', { timeout: 10000 }).contains('Executions List').siblings('dd').children('a')
+        .click();
+    });
   });
 });
