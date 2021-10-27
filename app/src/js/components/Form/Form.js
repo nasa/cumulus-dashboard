@@ -296,6 +296,11 @@ export class Form extends React.Component {
               value = String(value);
             }
 
+            // filter out empty values from the list
+            if (type === formTypes.list) {
+              value = value.filter((item) => item !== '');
+            }
+
             // dropdowns have options
             const options = (type === formTypes.dropdown && input.options) || null;
             // textarea forms pass a mode value to ace

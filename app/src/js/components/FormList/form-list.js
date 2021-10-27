@@ -9,14 +9,13 @@ const FormList = ({ error, id, label, onChange, value }) => {
     const newValues = [...values];
     newValues[index] = newValue;
     setValues(newValues);
-    onChange(id, values);
+    onChange(id, newValues);
   }
 
   function addItem(e) {
     e.preventDefault();
     if (!value[value.length - 1]) return;
     setValues((prevValues) => [...prevValues, '']);
-    onChange(id, values);
   }
 
   function removeItem(index) {
@@ -24,7 +23,7 @@ const FormList = ({ error, id, label, onChange, value }) => {
     const newValues = [...values];
     newValues.splice(index, 1);
     setValues(newValues);
-    onChange(id, values);
+    onChange(id, newValues);
   }
 
   function renderItem(item, index, items) {
