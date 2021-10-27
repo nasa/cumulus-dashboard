@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2584**
   - Updated Granule detail component to reference `Executions List`.
   - Removed `Execution` from Granule detail component
-  - Updated execution-events.js to only show step name with status icon. moving execution name, step name and event type into the More Details modal
+  - Updated execution-events.js to only show step name with status icon. moved execution name, step name and event type into the More Details modal
 
 ## [v7.0.1] - 2021-10-19
 
