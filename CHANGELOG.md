@@ -7,10 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## Breaking Changes
+
+This version of the dashboard requires Cumulus API 9.8.1-alpha.2
+
 ### Fixed
 
 - **CUMULUS-2725**
   - Fixed bugs related to adding and editing providers
+  - Requires @cumulus/api@9.8.1-alpha.2
 
 ## [v7.0.1] - 2021-10-19
 
