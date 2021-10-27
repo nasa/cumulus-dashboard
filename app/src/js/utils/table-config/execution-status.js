@@ -43,9 +43,9 @@ export const tableColumns = [
           <span className="link link--pad-right" onClick={toggleModal} role="button" tabIndex="0">
             {eventDetails.name ? eventDetails.name : 'N/A'}
           </span>
-          {eventDetails.type.toLowerCase().includes('failed') ?
-          <i class="fas fa-times-circle status-icon--failed"></i> :
-          <i class="far fa-check-circle status-icon--success"></i>}
+          {eventDetails.type.toLowerCase().includes('failed')
+            ? <i className="fas fa-times-circle status-icon--failed"></i>
+            : <i className="far fa-check-circle status-icon--success"></i>}
           <DefaultModal
             showModal={showModal}
             title={`ID ${id}: ${eventDetails.name ? eventDetails.name : 'N/A'} - ${eventDetails.type}`}
