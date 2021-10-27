@@ -29,7 +29,7 @@ const EditRaw = ({
   updateRecord,
   clearRecordUpdate,
   pk,
-  schema,
+  schemaState,
   schemaKey,
   hasModal
 }) => {
@@ -60,10 +60,10 @@ const EditRaw = ({
     if (!stateMap[pk]) {
       dispatch(getRecord(pk));
     }
-    if (!schema[schemaKey]) {
+    if (!schemaState[schemaKey]) {
       dispatch(getSchema(schemaKey));
     }
-  }, [dispatch, pk, stateMap, getRecord, schema, schemaKey]);
+  }, [dispatch, pk, stateMap, getRecord, schemaState, schemaKey]);
 
   // Handle effects of an update success or error
   useEffect(() => {
@@ -81,8 +81,8 @@ const EditRaw = ({
 
   // ported from componentDidUpdate
   useEffect(() => {
-    if (recordPk === pk || !schema[schemaKey]) { return; }
-    const recordSchema = schema[schemaKey];
+    if (recordPk === pk || !schemaState[schemaKey]) { return; }
+    const recordSchema = schemaState[schemaKey];
 
     const newRecord = stateMap[pk] || {};
     if (newRecord.error) {
@@ -107,7 +107,7 @@ const EditRaw = ({
     } else if (!newRecord.inflight && !stateMap[pk]) {
       dispatch(getRecord(pk));
     }
-  }, [recordPk, pk, schema, schemaKey, stateMap, dispatch, record, getRecord]);
+  }, [recordPk, pk, schemaState, schemaKey, stateMap, dispatch, record, getRecord]);
 
   function onSubmit (e) {
     e.preventDefault();
@@ -219,7 +219,7 @@ const EditRaw = ({
 EditRaw.propTypes = {
   dispatch: PropTypes.func,
   pk: PropTypes.string,
-  schema: PropTypes.object,
+  schemaState: PropTypes.object,
   schemaKey: PropTypes.string,
   state: PropTypes.object,
   backRoute: PropTypes.string,
@@ -231,5 +231,5 @@ EditRaw.propTypes = {
 };
 
 export default withRouter(connect((state) => ({
-  schema: state.schema
+  schemaState: state.schema
 }))(EditRaw));
