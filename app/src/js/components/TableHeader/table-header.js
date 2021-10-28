@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import isEmpty from 'lodash/isEmpty';
+import SimplePagination from '../Pagination/simple-pagination';
 import Pagination from '../Pagination/pagination';
 import Dropdown from '../DropDown/dropdown';
 import pageSizeOptions from '../../utils/page-size';
@@ -20,11 +22,15 @@ const TableHeader = ({
   onNewPage,
   page,
   selected = [],
+  simplePaginationOptions = {},
 }) => {
-  const [selectedValues, setSelectedValues] = useState([{
-    id: limit,
-    label: limit.toString(),
-  }]);
+  const useSimplePagination = !isEmpty(simplePaginationOptions);
+  const [selectedValues, setSelectedValues] = useState([
+    {
+      id: limit,
+      label: limit.toString(),
+    },
+  ]);
 
   const numberChecked = selected.length;
 
@@ -33,10 +39,12 @@ const TableHeader = ({
       setSelectedValues([]);
     } else {
       const { label: value } = selections[0];
-      setSelectedValues([{
-        id: value,
-        label: value,
-      }]);
+      setSelectedValues([
+        {
+          id: value,
+          label: value,
+        },
+      ]);
     }
     updateSelection();
   }
@@ -45,34 +53,44 @@ const TableHeader = ({
     <div className="table__header">
       <div className="records-wrapper">
         <span>
-          <b>{count}</b> total records {numberChecked > 0 && <>(<b>{numberChecked}</b> selected)</>}
+          <b>{count}</b> total records{' '}
+          {numberChecked > 0 && (
+            <>
+              (<b>{numberChecked}</b> selected)
+            </>
+          )}
         </span>
       </div>
-      <Pagination
-        action={action}
-        clear={clear}
-        count={count}
-        displayAsInput={true}
-        limit={limit}
-        page={page}
-        onNewPage={onNewPage}
-        showPages={true}
-      />
-      <div className="dropdown-wrapper">
-        <span>Show </span>
-        <Dropdown
-          action={action}
-          clear={clear}
-          clearButton={false}
-          inputProps={{ 'aria-label': 'Limit' }}
-          label={<span className="sr-only">Limit</span>}
-          onChange={handleLimitChange}
-          options={pageSizeOptions}
-          paramKey="limit"
-          selectedValues={selectedValues}
-        />
-        <span>per page</span>
-      </div>
+      {useSimplePagination && <SimplePagination {...simplePaginationOptions} />}
+      {!useSimplePagination && (
+        <>
+          <Pagination
+            action={action}
+            clear={clear}
+            count={count}
+            displayAsInput={true}
+            limit={limit}
+            page={page}
+            onNewPage={onNewPage}
+            showPages={true}
+          />
+          <div className="dropdown-wrapper">
+            <span>Show </span>
+            <Dropdown
+              action={action}
+              clear={clear}
+              clearButton={false}
+              inputProps={{ 'aria-label': 'Limit' }}
+              label={<span className="sr-only">Limit</span>}
+              onChange={handleLimitChange}
+              options={pageSizeOptions}
+              paramKey="limit"
+              selectedValues={selectedValues}
+            />
+            <span>per page</span>
+          </div>
+        </>
+      )}
     </div>
   );
 };
@@ -85,6 +103,7 @@ TableHeader.propTypes = {
   onNewPage: PropTypes.func,
   page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   selected: PropTypes.array,
+  simplePaginationOptions: PropTypes.object,
 };
 
 export default TableHeader;

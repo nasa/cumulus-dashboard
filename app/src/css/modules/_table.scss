@@ -96,7 +96,7 @@
 .table__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 0 1em;
 
   div {
@@ -106,6 +106,10 @@
 
   .list__filters--item {
     margin: 0 .3em;
+  }
+
+  .simple-pagination {
+    padding: 20px;
   }
 
   input {
