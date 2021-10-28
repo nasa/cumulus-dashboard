@@ -33,6 +33,7 @@ const EditProvider = ({
         clearRecordUpdate={clearUpdateProvider}
         backRoute={`/providers/provider/${providerId}`}
         validate={isValidProvider}
+        validationError={'Concurrent Connection Limit cannot be a negative value'}
       />
     </div>
   );

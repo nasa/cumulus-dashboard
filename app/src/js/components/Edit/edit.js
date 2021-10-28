@@ -27,6 +27,7 @@ const EditRecord = ({
   state,
   updateRecord,
   validate,
+  validationError,
 }) => {
   const record = get(state.map, pk, {});
   const meta = get(state.updated, pk, {});
@@ -79,8 +80,9 @@ const EditRecord = ({
       console.log('About to update', json);
       dispatch(updateRecord(pk, json));
     } else {
-      console.log('Payload failed validation');
-      setError('Payload failed validation');
+      const errorMessage = validationError || 'Payload failed validation';
+      console.log(errorMessage);
+      setError(errorMessage);
     }
   }
 
@@ -121,6 +123,7 @@ EditRecord.propTypes = {
   updateRecord: PropTypes.func,
   clearRecordUpdate: PropTypes.func,
   validate: PropTypes.func,
+  validationError: PropTypes.string,
 };
 
 export { EditRecord };

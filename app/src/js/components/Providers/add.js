@@ -22,6 +22,7 @@ const AddProvider = ({ providers }) => (
       state={providers}
       title="Create a provider"
       validate={isValidProvider}
+      validationError={'Concurrent Connection Limit cannot be a negative value'}
     />
   </div>
 );

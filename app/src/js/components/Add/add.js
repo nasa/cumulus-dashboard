@@ -29,6 +29,7 @@ const AddRecord = ({
   state,
   title,
   validate,
+  validationError,
 }) => {
   const [pk, setPk] = useState(null);
   const [error, setError] = useState(null);
@@ -67,8 +68,9 @@ const AddRecord = ({
       dispatch(createRecord(newPk, payload));
       setPk(newPk);
     } else {
-      console.log('Payload failed validation');
-      setError('Payload failed validation');
+      const errorMessage = validationError || 'Payload failed validation';
+      console.log(errorMessage);
+      setError(errorMessage);
     }
   }
 
@@ -115,6 +117,7 @@ AddRecord.propTypes = {
 
   createRecord: PropTypes.func,
   validate: PropTypes.func,
+  validationError: PropTypes.string,
 
   // Specifies schema properties to include on the form.  Each element in this
   // array may be either a string that specifies the full path of the property
