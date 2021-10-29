@@ -139,12 +139,6 @@ This version of the dashboard requires Cumulus API `v9.5.0`
   - Added Executions List column to granules table linking to executions-list view that displays all executions
     for a granule/collection combination
 
-### Added
-
-- **CUMULUS-2459**
-  - Added Executions List column to granules table linking to executions-list view that displays all executions
-    for a granule/collection combination
-
 ## [v6.0.0] - 2021-05-03
 
 ## Breaking Changes
