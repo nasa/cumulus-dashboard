@@ -4,7 +4,6 @@ import groupBy from 'lodash/groupBy';
 import {
   searchReconciliationReport,
   clearReconciliationSearch,
-  listGranules
 } from '../../actions';
 import List from '../Table/Table';
 import Search from '../Search/search';
@@ -114,15 +113,14 @@ const GnfReport = ({
           />
         </div>
         <List
-          action={listGranules}
           bulkActions={bulkActions}
           data={combinedGranules}
           groupAction={groupAction}
           legend={legend}
           onSelect={onSelect}
           rowId="granuleId"
-          shouldUsePagination={true}
           tableColumns={tableColumnsGnf}
+          useSimplePagination={true}
         />
       </section>
     </div>

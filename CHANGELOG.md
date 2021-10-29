@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Removed `Execution` from Granule detail component
   - Updated execution-events.js to only show step name with status icon. moved execution name, step name and event type into the More Details modal
 
+### Fixed
+
+- **CUMULUS-2633**
+  - Fix pagination on reconciliation report sub-tables.
+  - Remove granule actions from tables without granuleIds.
+  
+
 ## [v7.0.1] - 2021-10-19
 
 ### Added

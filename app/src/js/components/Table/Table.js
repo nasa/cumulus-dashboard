@@ -45,6 +45,7 @@ const List = ({
   tableColumns,
   tableId,
   toggleColumnOptionsAction,
+  useSimplePagination = false,
 }) => {
   const {
     data: listData,
@@ -256,15 +257,16 @@ const List = ({
               renderRowSubComponent={renderRowSubComponent}
               tableId={tableId}
               initialSortBy={sortBy}
+              shouldUsePagination={useSimplePagination}
             />
           </Suspense>
-          <Pagination
+          {!useSimplePagination && <Pagination
             count={count}
             limit={limit}
             page={page}
             onNewPage={queryNewPage}
             showPages={true}
-          />
+          />}
         </div>
       </div>
     </>
@@ -296,6 +298,7 @@ List.propTypes = {
   renderRowSubComponent: PropTypes.func,
   tableId: PropTypes.string,
   sorts: PropTypes.object,
+  useSimplePagination: PropTypes.bool,
 };
 
 export { List };

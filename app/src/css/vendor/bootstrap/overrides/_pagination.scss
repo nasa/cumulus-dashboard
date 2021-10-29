@@ -1,14 +1,14 @@
+.simple-pagination {
+  border: 1px solid $border-grey;
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  border-radius: 0 0 10px 10px;
+  margin: 0 0 10px;
+  padding: 2em 0;
+}
+
 .pagination {
   padding: 20px 0px;
-
-  &.simple-pagination {
-    border: 1px solid $border-grey;
-    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.08);
-    box-shadow: 0 1px 3px rgba(0,0,0,.08);
-    border-radius: 0 0 10px 10px;
-    margin: 0 0 10px;
-    padding: 2em 0;
-  }
 
   ol {
     text-align: center;
