@@ -112,8 +112,11 @@ const ReconciliationReport = ({
     ];
   }
 
-  function updateSelection(selection) {
-    setSelected(selection);
+  function updateSelection(selectedIds, currentSelectedRows) {
+    const allSelectedRows = selected.concat(currentSelectedRows);
+    const selectedRows = selectedIds
+      .map((id) => allSelectedRows.find((g) => id === g.granuleId)).filter(Boolean);
+    setSelected(selectedRows);
   }
 
   if (!record || (record.inflight && !record.data)) {

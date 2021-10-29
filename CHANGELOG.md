@@ -13,6 +13,9 @@ This version of the dashboard requires Cumulus API 9.8.1-alpha.2
 
 ### Fixed
 
+- **CUMULUS-2633**
+  - Fix pagination on reconciliation report sub-tables.
+  - Remove granule actions from tables without granuleIds.
 - **CUMULUS-2725**
   - Fixed bugs related to adding and editing providers
   - Requires @cumulus/api@9.8.1-alpha.2
