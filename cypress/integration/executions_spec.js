@@ -278,7 +278,7 @@ describe('Dashboard Executions Page', () => {
       cy.get('@events').should('have.length', 2);
     });
 
-    it.only('should show an execution with limited information', () => {
+    it('should show an execution with limited information', () => {
       const executionName = 'b313e777-d28a-435b-a0dd-f1fad08116t1';
       const executionArn = 'arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
       const stateMachine = 'arn:aws:states:us-east-1:123456789012:stateMachine:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo';
