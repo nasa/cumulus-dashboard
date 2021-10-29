@@ -96,7 +96,7 @@
 .table__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 0 1em;
 
   div {
@@ -106,6 +106,10 @@
 
   .list__filters--item {
     margin: 0 .3em;
+  }
+
+  .simple-pagination {
+    padding: 20px;
   }
 
   input {
@@ -325,6 +329,13 @@
   border: 1px solid $border-grey;
   box-shadow: $shadow__default;
   border-radius: 10px;
+
+  .simple-pagination {
+    margin: initial;
+    border: initial;
+    box-shadow: initial;
+  }
+
 }
 
 .list--errors {
