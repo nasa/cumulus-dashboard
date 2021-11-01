@@ -196,8 +196,6 @@ describe('Dashboard Executions Page', () => {
             ? 'N/A'
             : (events[index - 1].name || prevStepName));
           const stepColumnText = events[index].name || prevStepName;
-          cy.log('prevStepName: ' + prevStepName);
-          cy.log('stepColumnText: ' + stepColumnText);
           cy.get('@columns').eq(0).should('have.text', (index + 1).toString());
           cy.get('@columns').eq(1).should('have.text', stepColumnText);
           cy.get('@columns').eq(1).children('i')
@@ -374,7 +372,6 @@ describe('Dashboard Executions Page', () => {
 
     it('should show an execution graph for a single execution', () => {
       const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
-
       cy.intercept(
         { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
         { fixture: 'valid-execution.json', statusCode: 200 }
