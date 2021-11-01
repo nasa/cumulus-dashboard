@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- **CUMULUS-2633**
+  - Fix pagination on reconciliation report sub-tables.
+  - Remove granule actions from tables without granuleIds.
+
 ## [v7.0.1] - 2021-10-19
 
 ### Added

@@ -177,6 +177,7 @@ export const reshapeReport = (recordData, filterString, filterBucket) => {
         {
           id: 'dynamoNotS3',
           name: 'Files in DynamoDb not found in S3',
+          type: 'file',
           data: filesInDynamoDb,
           columns: tableColumnsFiles,
         },
@@ -189,6 +190,7 @@ export const reshapeReport = (recordData, filterString, filterBucket) => {
         {
           id: 's3NotDynamo',
           name: 'Files in S3 not found in DynamoDb',
+          type: 'file',
           data: filesInS3,
           columns: tableColumnsS3Files,
         },
@@ -204,18 +206,21 @@ export const reshapeReport = (recordData, filterString, filterBucket) => {
         {
           id: 'cumulusCollections',
           name: 'Collections only in Cumulus',
+          type: 'collection',
           data: collectionsInCumulus,
           columns: tableColumnsCollections,
         },
         {
           id: 'cumulusGranules',
           name: 'Granules only in Cumulus',
+          type: 'granule',
           data: granulesInCumulus,
           columns: tableColumnsGranules,
         },
         {
           id: 'cumulusFiles',
           name: 'Files only in Cumulus',
+          type: 'file',
           data: granuleFilesOnlyInCumulus,
           columns: tableColumnsFiles,
         },
@@ -228,18 +233,21 @@ export const reshapeReport = (recordData, filterString, filterBucket) => {
         {
           id: 'cmrCollections',
           name: 'Collections only in CMR',
+          type: 'collection',
           data: collectionsInCmr,
           columns: tableColumnsCollections,
         },
         {
           id: 'cmrGranules',
           name: 'Granules only in CMR',
+          type: 'granule',
           data: granulesInCmr,
           columns: tableColumnsGranules,
         },
         {
           id: 'cmrFiles',
           name: 'Files only in CMR',
+          type: 'file',
           data: granuleFilesOnlyInCmr,
           columns: tableColumnsFiles,
         },

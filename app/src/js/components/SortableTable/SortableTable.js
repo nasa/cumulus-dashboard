@@ -11,10 +11,12 @@ import classNames from 'classnames';
 import omit from 'lodash/omit';
 import { useTable, useResizeColumns, useFlexLayout, useSortBy, useRowSelect, usePagination, useExpanded } from 'react-table';
 import { useDispatch } from 'react-redux';
+import TableHeader from '../TableHeader/table-header';
 import SimplePagination from '../Pagination/simple-pagination';
 import TableFilters from '../Table/TableFilters';
 import ListFilters from '../ListActions/ListFilters';
 import { sortPersist } from '../../actions/index';
+
 const getColumnWidth = (rows, accessor, headerText, originalWidth) => {
   const maxWidth = 400;
   const magicSpacing = 10;
@@ -355,6 +357,22 @@ const SortableTable = ({
           }
           {legend}
         </ListFilters>}
+      {shouldUsePagination &&
+        <TableHeader
+          count={data.length}
+          simplePaginationOptions={{
+            canPreviousPage,
+            canNextPage,
+            pageCount,
+            gotoPage,
+            nextPage,
+            previousPage,
+            pageOptions,
+            pageIndex,
+            dataCount: data.length
+          }}
+        />
+      }
       <div className={`table ${className}`} {...getTableProps()} ref={tableRef}>
         <div className='thead'>
           <div className='tr'>
