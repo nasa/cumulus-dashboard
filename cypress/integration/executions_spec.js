@@ -367,7 +367,6 @@ describe('Dashboard Executions Page', () => {
       cy.get('@granule').then((granule) => {
         cy.get('.heading--large').should('contain.text', granule.granuleId);
       });
-
     });
 
     it('should show an execution graph for a single execution', () => {
