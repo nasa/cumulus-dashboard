@@ -19,6 +19,11 @@
     background: $white;
     color: $ocean-blue;
   }
+
+  &--round {
+    @extend .num-title;
+    border-radius: 50%;
+  }
 }
 
 .status__badge {

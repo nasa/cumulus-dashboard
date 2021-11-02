@@ -7,11 +7,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- **CUMULUS-2584**
+  - Added Associated Executions to execution-status.js
+
+### Changed
+
+- **CUMULUS-2584**
+  - Updated Granule detail component to reference `Executions List`.
+  - Removed `Execution` from Granule detail component
+  - Updated execution-events.js to only show step name with status icon. moved execution name, step name and event type into the More Details modal
+
 ### Fixed
 
 - **CUMULUS-2633**
   - Fix pagination on reconciliation report sub-tables.
   - Remove granule actions from tables without granuleIds.
+  
 
 ## [v7.0.1] - 2021-10-19
 
