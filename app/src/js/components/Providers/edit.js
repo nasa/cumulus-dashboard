@@ -9,6 +9,7 @@ import {
   clearUpdateProvider
 } from '../../actions';
 import EditRecord from '../Edit/edit';
+import { isValidProvider } from '../../utils/validate';
 
 const SCHEMA_KEY = 'provider';
 
@@ -31,6 +32,8 @@ const EditProvider = ({
         updateRecord={updateProvider}
         clearRecordUpdate={clearUpdateProvider}
         backRoute={`/providers/provider/${providerId}`}
+        validate={isValidProvider}
+        validationError={'Concurrent Connection Limit cannot be a negative value'}
       />
     </div>
   );

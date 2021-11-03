@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable import/no-cycle */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { get, set } from 'object-path';
 import startCase from 'lodash/startCase';
@@ -198,7 +198,7 @@ function textField (config, property, validate) {
   config.type = formTypes.text;
   config.validate = validate;
   config.error = validate && get(errors, property, errors.required);
-  if (property === 'password') config.isPassword = true;
+  if (property === 'password' || property === 'username') config.isPassword = true;
 
   return config;
 }
@@ -225,45 +225,36 @@ function listField (config, property, validate) {
   return config;
 }
 
-export class Schema extends React.Component {
-  constructor (props) {
-    super(props);
+const Schema = ({
+  data,
+  enums,
+  error,
+  exclude,
+  include,
+  onCancel,
+  onSubmit,
+  pk,
+  schema,
+  status,
+}) => {
+  const [fields, setFields] = useState(createFormConfig(data, schema, include, exclude, enums));
 
-    const { schema, data, include, exclude, enums } = props;
+  useEffect(() => {
+    setFields(createFormConfig(data, schema, include, exclude, enums));
+  }, [enums, data, schema, include, exclude, pk]);
 
-    this.state = {
-      fields: createFormConfig(data, schema, include, exclude, enums)
-    };
-  }
-
-  componentDidUpdate (prevProps) {
-    const { schema, data, include, exclude, pk, enums } = this.props;
-
-    if (prevProps.pk !== pk || prevProps.enums !== enums || prevProps.data !== data) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        fields: createFormConfig(data, schema, include, exclude, enums)
-      });
-    }
-  }
-
-  render () {
-    const { fields } = this.state;
-    const { error } = this.props;
-
-    return (
-      <div ref={(element) => { error && element && element.scrollIntoView(true); }}>
-        {error && <ErrorReport report={error} />}
-        <Form
-          inputMeta={fields}
-          submit={this.props.onSubmit}
-          cancel={this.props.onCancel}
-          status={this.props.status}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div ref={(element) => { error && element && element.scrollIntoView(true); }}>
+      {error && <ErrorReport report={error} />}
+      <Form
+        inputMeta={fields}
+        submit={onSubmit}
+        cancel={onCancel}
+        status={status}
+      />
+    </div>
+  );
+};
 
 Schema.propTypes = {
   schema: PropTypes.object,

@@ -12,7 +12,7 @@ import ErrorReport from '../Errors/report';
 import TextForm from '../TextAreaForm/text';
 import TextAreaForm from '../TextAreaForm/text-area';
 import SimpleDropdown from '../DropDown/simple-dropdown';
-import List from '../ArbitraryList/arbitrary-list';
+import FormList from '../FormList/form-list';
 import SubForm from '../SubForm/sub-form';
 import t from '../../utils/strings';
 import { window } from '../../utils/browser';
@@ -277,7 +277,7 @@ export class Form extends React.Component {
                 element = SimpleDropdown;
                 break;
               case formTypes.list:
-                element = List;
+                element = FormList;
                 break;
               case formTypes.subform:
                 element = SubForm;
@@ -296,6 +296,11 @@ export class Form extends React.Component {
               value = String(value);
             }
 
+            // filter out empty values from the list
+            if (type === formTypes.list) {
+              value = value.filter((item) => item !== '');
+            }
+
             // dropdowns have options
             const options = (type === formTypes.dropdown && input.options) || null;
             // textarea forms pass a mode value to ace
@@ -305,9 +310,11 @@ export class Form extends React.Component {
             const autoComplete = (type === formTypes.text && input.isPassword) ? 'on' : null;
             // text forms can be type=password or number
             let textType = (type === formTypes.text && input.isPassword) ? 'password' : null;
+            const additionalConfig = {};
 
             if (type === formTypes.number) {
               textType = 'number';
+              additionalConfig.min = 0;
             }
 
             const elem = React.createElement(element, {
@@ -320,7 +327,8 @@ export class Form extends React.Component {
               fieldset,
               type: textType,
               autoComplete,
-              onChange: this.onChange
+              onChange: this.onChange,
+              ...additionalConfig
             });
 
             return <li className='form__item' key={inputId}>{elem}</li>;
