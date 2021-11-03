@@ -175,36 +175,77 @@ describe('Dashboard Executions Page', () => {
       cy.contains('.num-title', 7);
 
       cy.get('.table .thead .tr .th').as('columnHeaders');
-      cy.get('@columnHeaders').eq(0).should('contain.text', 'Id');
-      cy.get('@columnHeaders').eq(1).should('contain.text', 'Type');
-      cy.get('@columnHeaders').eq(2).should('contain.text', 'Step');
-      cy.get('@columnHeaders').eq(3).should('contain.text', 'Timestamp');
-      cy.get('@columnHeaders').eq(4).should('contain.text', 'Event Details');
+      cy.get('@columnHeaders').eq(0).should('contain.text', 'Event ID');
+      cy.get('@columnHeaders').eq(1).should('contain.text', 'Step Name');
+      cy.get('@columnHeaders').eq(2).should('contain.text', 'Timestamp');
 
       cy.get('.table .tbody .tr').as('events');
       cy.get('@events').should('have.length', 7);
 
       cy.getFixture('valid-execution').as('executionStatus');
       cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
+        let prevStepName;
         cy.get('@events').each(($el, index, $list) => {
           const timestamp = fullDate(events[index].timestamp);
           cy.wrap($el).children('.td').as('columns');
-          cy.get('@columns').should('have.length', 5);
+          cy.get('@columns').should('have.length', 3);
           const id = index + 1;
           const idMatch = `"id": ${id},`;
           const previousIdMatch = `"previousEventId": ${index}`;
-
+          prevStepName = ((index === 0 || !events[index].type.match('LambdaFunction'))
+            ? 'N/A'
+            : (events[index - 1].name || prevStepName));
+          const stepColumnText = events[index].name || prevStepName;
           cy.get('@columns').eq(0).should('have.text', (index + 1).toString());
-          cy.get('@columns').eq(3).should('have.text', timestamp);
+          cy.get('@columns').eq(1).should('have.text', stepColumnText);
+          cy.get('@columns').eq(1).children('i')
+            .should('have.class', 'fa-check-circle')
+            .should('have.class', 'status-icon--success');
+          cy.get('@columns').eq(2).should('have.text', timestamp);
           cy.get('.execution__modal').should('not.exist');
-          cy.get('@columns').eq(4).contains('More Details').click();
+          cy.get('@columns').eq(1).children('span').click();
           cy.get('.execution__modal').should('exist');
-          cy.get('.execution__modal .modal-title').contains(`ID ${id}: Event Details`);
+          const stepType = events[index].type;
+          cy.get('.execution__modal .modal-title').contains(`ID ${id}: ${stepColumnText} - ${stepType}`);
           cy.get('.execution__modal .modal-body').contains(idMatch);
           if (index !== 0) {
             cy.get('.execution__modal .modal-body').contains(previousIdMatch);
           }
           cy.contains('.execution__modal .button', 'Close').click();
+        });
+      });
+    });
+
+    it('should show the correct status icon for each step', () => {
+      const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
+
+      cy.intercept(
+        { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
+        { fixture: 'valid-execution-with-failure.json', statusCode: 200 }
+      );
+
+      cy.visit(`/executions/execution/${executionArn}`);
+
+      cy.contains('div ul li a', 'Events').click();
+
+      cy.get('.table .thead .tr .th').as('columnHeaders');
+
+      cy.get('.table .tbody .tr').as('events');
+      cy.get('@events').should('have.length', 7);
+
+      cy.getFixture('valid-execution-with-failure').as('executionStatus');
+      cy.get('@executionStatus').its('executionHistory').its('events').then((events) => {
+        cy.get('@events').each(($el, index, $list) => {
+          cy.wrap($el).children('.td').as('columns');
+          if (events[index].type.toLowerCase().includes('failed')) {
+            cy.get('@columns').eq(1).children('i')
+              .should('have.class', 'fa-times-circle')
+              .should('have.class', 'status-icon--failed');
+          } else {
+            cy.get('@columns').eq(1).children('i')
+              .should('have.class', 'fa-check-circle')
+              .should('have.class', 'status-icon--success');
+          }
         });
       });
     });
@@ -243,6 +284,7 @@ describe('Dashboard Executions Page', () => {
       const executionName = 'b313e777-d28a-435b-a0dd-f1fad08116t1';
       const executionArn = 'arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
       const stateMachine = 'arn:aws:states:us-east-1:123456789012:stateMachine:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo';
+      const granuleId = 'MOD09GQ.A9344328.K9yI3O.006.4625818663028';
 
       cy.intercept(
         { method: 'GET', url: `http://localhost:5001/logs/${executionName}` },
@@ -269,6 +311,8 @@ describe('Dashboard Executions Page', () => {
           cy.contains('State Machine Arn').next().should('have.text', stateMachine);
           cy.contains('Started').next().should('have.text', startMatch);
           cy.contains('Ended').next().should('have.text', endMatch);
+          cy.contains('Granule ID').next().should('have.text', granuleId);
+          cy.contains('Associated Executions List').next().should('have.text', 'Link');
         });
 
       cy.getFakeApiFixture('executions').as('executionsFixture');
@@ -291,9 +335,42 @@ describe('Dashboard Executions Page', () => {
         });
     });
 
+    it('should navigate to to executions-list when Associated Executions List link is clicked on execution detail page', () => {
+      const executionArn = 'arn:aws:states:us-east-1:123456789012:execution:TestSourceIntegrationIngestAndPublishGranuleStateMachine-yCAhWOss5Xgo:b313e777-d28a-435b-a0dd-f1fad08116t1';
+
+      cy.intercept('http://localhost:5001/executions/status/*', (req) => {
+        // Remove the header that will allow caching of the request
+        delete req.headers['if-none-match'];
+      }).as('execution-status');
+
+      cy.visit(`/executions/execution/${executionArn}`);
+
+      cy.wait('@execution-status').as('response');
+
+      // validate Associated Executions List link contains correct parameters
+      cy.get('@response').then((resp) => {
+        cy.wrap(resp.response.body.execution.granules[0]).as('granule');
+        cy.get('@granule').then((granule) => {
+          cy.get('.status--process').within(() => {
+            cy.contains('Associated Executions List')
+              .next()
+              .should('have.text', 'Link')
+              .children('a')
+              .should('have.attr', 'href')
+              .should('include', `${granule.collectionId}/${granule.granuleId}`);
+            cy.contains('Associated Executions List').next().children('a').click();
+          });
+        });
+      });
+
+      // Validate link navigates to the correct page
+      cy.get('@granule').then((granule) => {
+        cy.get('.heading--large').should('contain.text', granule.granuleId);
+      });
+    });
+
     it('should show an execution graph for a single execution', () => {
       const executionArn = 'arn:aws:states:us-east-1:012345678901:execution:test-stack-HelloWorldWorkflow:8e21ca0f-79d3-4782-8247-cacd42a595ea';
-
       cy.intercept(
         { method: 'GET', url: `http://localhost:5001/executions/status/${executionArn}` },
         { fixture: 'valid-execution.json', statusCode: 200 }

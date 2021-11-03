@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Breaking Changes
 
 This version of the dashboard requires Cumulus API 9.8.1-alpha.2
+### Added
+
+- **CUMULUS-2584**
+  - Added Associated Executions to execution-status.js
+
+### Changed
+
+- **CUMULUS-2584**
+  - Updated Granule detail component to reference `Executions List`.
+  - Removed `Execution` from Granule detail component
+  - Updated execution-events.js to only show step name with status icon. moved execution name, step name and event type into the More Details modal
 
 ### Fixed
 
@@ -19,6 +30,7 @@ This version of the dashboard requires Cumulus API 9.8.1-alpha.2
 - **CUMULUS-2725**
   - Fixed bugs related to adding and editing providers
   - Requires @cumulus/api@9.8.1-alpha.2
+  
 
 ## [v7.0.1] - 2021-10-19
 

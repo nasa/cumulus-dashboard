@@ -99,7 +99,7 @@ test.serial('Execution Events displays the correct step name', function (t) {
   t.is(tableRows.length, 9);
 
   const expectedStepNames = [
-    '',
+    'N/A',
     'SyncGranule',
     'SyncGranule',
     'SyncGranule',
@@ -107,14 +107,14 @@ test.serial('Execution Events displays the correct step name', function (t) {
     'SyncGranule',
     'ChooseProcess',
     'ChooseProcess',
-    '',
+    'N/A',
   ];
 
   tableRows.forEach((row, index) => {
     const columns = row.find('Cell');
-    t.is(columns.length, 5);
-    const stepName = columns.at(2).shallow().text();
-    t.is(stepName, expectedStepNames[index])
+    t.is(columns.length, 3);
+    const stepName = columns.at(1).shallow().text();
+    t.assert(stepName.includes(expectedStepNames[index]));
   });
 });
 
@@ -127,7 +127,7 @@ test.serial('Execution Events shows event history', function (t) {
     error: false,
     meta: {},
   };
-  
+
   const executionEvents = shallow(
     <ExecutionEvents
       dispatch={dispatch}
@@ -163,7 +163,7 @@ test.serial('Execution Events shows event history', function (t) {
 
   tableRows.forEach((row) => {
     const columns = row.find('Cell');
-    t.is(columns.length, 5);
+    t.is(columns.length, 3);
     const moreDetails = columns.last().shallow().find('pre');
     moreDetails.map((node) => {
       const parsedDetailsOutput = JSON.parse(node.text()).output;
