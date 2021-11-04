@@ -31,7 +31,7 @@ test('EditRecord sends full object when merge property is true', (t) => {
   const providerWrapper = shallow(
     <Provider store={store}>
       <EditRecord
-        schema={schema}
+        schemaState={schema}
         dispatch={store.dispatch}
         merge={true}
         pk={`${provider.id}`}
