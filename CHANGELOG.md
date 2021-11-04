@@ -68,7 +68,7 @@ This version of the dashboard requires Cumulus API `v9.5.0`
      + ES\_CLOUDWATCH\_TARGET\_PATTERN (Generally: `<daac>-cumulus-cloudwatch-<env>-*`)
      + ES\_DISTRIBUTION\_TARGET\_PATTERN (Generally: `<daac>-distribution-<env>-*`)
   - Kibana links are changed. We no longer try to build URLs that describe the
-    metrics' Elasicsearch results. Instead, we now only return a simple link to
+    metrics' Elasticsearch results. Instead, we now only return a simple link to
     configured Kibana root.  It is up to the kibana user to interact with the
     dashboard, setting default security tenant and default kibana index
     patterns. You can create kibana Index Patterns (or they may exist already)
@@ -101,7 +101,7 @@ This version of the dashboard requires Cumulus API `v9.5.0`
 - **CUMULUS-2505**
   - Update column show/hide component with new styling and "reset to default interaction for each table
 - **CUMULUS-2506**
-  - Adds horizontal scroll buttons to tables improving accessibily
+  - Adds horizontal scroll buttons to tables improving accessibility
 - **CUMULUS-2511**
   - Ensured that sort state will persist through page changes.
 - **CUMULUS-2524**
@@ -132,7 +132,7 @@ This version of the dashboard requires Cumulus API `v9.5.0`
   - Layout CSS styling tweaks
 - **CUMULUS-2459**
   - Updated localAPI docker-compose.yml to include SSM, Postgres container to be used with RDS compatible API
-  - Updated integration tests due to changes in API behavior related to Postgres contstraints between tables
+  - Updated integration tests due to changes in API behavior related to Postgres constraints between tables
 - **CUMULUS-NONE**
   - Downgrades elasticsearch version in testing container to 5.3 to match AWS version.
 
@@ -366,7 +366,7 @@ This version of the dashboard requires Cumulus API v5.0.0
 
 - **CUMULUS-2242** and **CUMULUS-2177**
   - building with `npm run build` will now build a distribution that can be served from behind cloudfront.
-  - Fixed bug in nginx config that allows the application to run in the continer built by `bin/build_dashboard_image.sh`.
+  - Fixed bug in nginx config that allows the application to run in the container built by `bin/build_dashboard_image.sh`.
   - Overhauled the README.md and added a "Quick start" section
 
 - **CUMULUS-1873**
@@ -647,13 +647,13 @@ This version of the dashboard requires Cumulus API v5.0.0
     This has been changed so that the data is only fetched when the user clicks the "Download CSV" button.
 
 - **CUMULUS-1913**
-  - Add datepicker to reconcilation-reports page
+  - Add datepicker to reconciliation-reports page
 
 - **CUMULUS-1915**
-  - Add filters for `Report Type` and `Status` to reconcilation-reports page
+  - Add filters for `Report Type` and `Status` to reconciliation-reports page
 
 - **CUMULUS-1916**
-  - reconcilation-reports page now requires Cumulus API version >= v1.23.0
+  - reconciliation-reports page now requires Cumulus API version >= v1.23.0
 
 ## [v1.8.1]
 
@@ -661,7 +661,7 @@ This version of the dashboard requires Cumulus API v5.0.0
 
 - **CUMULUS-1816**
   - Change Datepicker behavior on login. The default to "Recent" start/end dates
-    now only occurs on first login on the hompage.
+    now only occurs on first login on the homepage.
   - URL is updated on login to reflect Datepicker params
 
 - **CUMULUS-1903**
@@ -683,7 +683,7 @@ This version of the dashboard requires Cumulus API v5.0.0
 
 - **CUMULUS-1984**
   - Fix bug where Distribution metrics were showing on the homepage even when
-    Elasaticsearch/Kibana not set up
+    Elasticsearch/Kibana not set up
 
 - **CUMULUS-1988**
   - Fix bugs in reducer-creators
@@ -725,7 +725,7 @@ This version of the dashboard requires Cumulus API v5.0.0
   - Change the metrics section on the home page to update based on datepicker time period.
 
 - **CUMULUS-1509**
-  - Update styles on grnaules page
+  - Update styles on granules page
 
 - **CUMULUS-1525**
   - Style changes for rules overview page
@@ -746,7 +746,7 @@ This version of the dashboard requires Cumulus API v5.0.0
   - Update executions details page styles
 
 - **CUMULUS-1787**
-  - Changes `listCollections` action to hit `/collections/active` endpoint when timefilters are present (requires Cumulus API v1.22.1)
+  - Changes `listCollections` action to hit `/collections/active` endpoint when time filters are present (requires Cumulus API v1.22.1)
 
 - **CUMULUS-1790**
   - Changes default values and visuals for home page's datepicker. When the page loads, it defaults to display "Recent" data, which is the previous 24 hours with no end time.
@@ -928,7 +928,7 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - **CUMULUS-1337**
-  - Must use Cumulus API version v1.14.0 or above in order to use the newi
+  - Must use Cumulus API version v1.14.0 or above in order to use the new
     distribution metrics functionality.
   - Distribution metrics are no longer served from the Cumulus API, but are
     computed from the logs in an ELK stack.

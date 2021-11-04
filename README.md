@@ -61,9 +61,9 @@ The cloned directory `./cumulus-dashboard` will be referred as the root director
 
 ### Build the dashboard using Docker and Docker Compose
 
-It is easy to build a producution-ready, deployable version of the Cumulus dashboard without having to learn the complicated build process details.  A single script, `./bin/build_dashboard_via_docker.sh`, when combined with your dashboard's environment customizations, allows you to run the entire build process within a Docker container.
+It is easy to build a production-ready, deployable version of the Cumulus dashboard without having to learn the complicated build process details.  A single script, `./bin/build_dashboard_via_docker.sh`, when combined with your dashboard's environment customizations, allows you to run the entire build process within a Docker container.
 
-All of the environment variables in the [configuration](#configuration) section are available to override with custom values for your dashboard.  A recommended method is to store your variables in a sourceable environment file for each dashboard you are going to build and deploy.
+All of the environment variables in the [configuration](#configuration) section are available to override with custom values for your dashboard.  A recommended method is to store your variables in a source-able environment file for each dashboard you are going to build and deploy.
 
 If you are using bash, export the values for each configuration option. An example `production.env` could look like:
 ```sh
@@ -131,7 +131,7 @@ The compiled dashboard files (dashboard bundle) will be placed in the `./dist` d
 
 #### Build dashboard to be served by CloudFront
 
-If you wish to serve the dashboard from behind [CloudFront](https://aws.amazon.com/cloudfront/).  Build a `dist` with your configuration including `APIROOT` and ensure the `SERVED_BY_CUMULUS_API` variable is unset. For NGAP uers, follow the documentation to *Request Public or Protected Access to the APIs and Dashboard*, Step 5 of [Cumulus Deployments in NGAP](https://wiki.earthdata.nasa.gov/display/CUMULUS/Cumulus+Deployments+in+NGAP).
+If you wish to serve the dashboard from behind [CloudFront](https://aws.amazon.com/cloudfront/).  Build a `dist` with your configuration including `APIROOT` and ensure the `SERVED_BY_CUMULUS_API` variable is unset. For NGAP users, follow the documentation to *Request Public or Protected Access to the APIs and Dashboard*, Step 5 of [Cumulus Deployments in NGAP](https://wiki.earthdata.nasa.gov/display/CUMULUS/Cumulus+Deployments+in+NGAP).
 
 #### Build dashboard to be served by the Cumulus API.
 
@@ -176,7 +176,7 @@ This runs a node http-server in front of whatever exists in the `./dist` directo
 
 ### Using S3
 
-First, [build the dasbboard](#build-the-dashboard). Then deploy the `./dist` folder, the dashboard bundle, to an AWS bucket.
+First, [build the dashboard](#build-the-dashboard). Then deploy the `./dist` folder, the dashboard bundle, to an AWS bucket.
 
 ```bash
   $ aws s3 sync dist s3://my-bucket-to-be-used
