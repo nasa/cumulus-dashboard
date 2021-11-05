@@ -13,3 +13,9 @@ export const granuleModel = (obj) => isText(obj.granuleId);
 export const collectionModel = (obj) => isText(obj.collectionName) && granuleModel(obj.granuleDefinition);
 
 export const isUndefined = (test) => typeof test === 'undefined';
+
+export const isValidProvider = (provider) => {
+  if (!provider.globalConnectionLimit) return true;
+  if (provider.globalConnectionLimit > 0) return true;
+  return false;
+};

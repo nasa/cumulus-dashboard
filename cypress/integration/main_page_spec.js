@@ -53,7 +53,6 @@ describe('Dashboard Home Page', () => {
 
     beforeEach(() => {
       cy.login();
-      cy.server();
       cy.visit('/');
     });
 

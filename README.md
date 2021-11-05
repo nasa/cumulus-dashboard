@@ -57,13 +57,13 @@ The dashboard source is available on github and can be cloned with git.
 ```bash
   $ git clone https://github.com/nasa/cumulus-dashboard
 ```
-The cloned directory `./cumulus-dashboard` will be refered as the root directory of the project and commands that are referenced in this document, should start from that directory.
+The cloned directory `./cumulus-dashboard` will be referred as the root directory of the project and commands that are referenced in this document, should start from that directory.
 
 ### Build the dashboard using Docker and Docker Compose
 
-It is easy to build a producution-ready, deployable version of the Cumulus dashboard without having to learn the complicated build process details.  A single script, `./bin/build_dashboard_via_docker.sh`, when combined with your dashboard's environment customizations, allows you to run the entire build process within a Docker container.
+It is easy to build a production-ready, deployable version of the Cumulus dashboard without having to learn the complicated build process details.  A single script, `./bin/build_dashboard_via_docker.sh`, when combined with your dashboard's environment customizations, allows you to run the entire build process within a Docker container.
 
-All of the environment variables in the [configuration](#configuration) section are available to override with custom values for your dashboard.  A recommended method is to store your variables in a sourceable environment file for each dashboard you are going to build and deploy.
+All of the environment variables in the [configuration](#configuration) section are available to override with custom values for your dashboard.  A recommended method is to store your variables in a source-able environment file for each dashboard you are going to build and deploy.
 
 If you are using bash, export the values for each configuration option. An example `production.env` could look like:
 ```sh
@@ -125,13 +125,13 @@ To build a dashboard bundle<sup>[1](#bundlefootnote)</sup>:
   $ nvm use
   $ [SERVED_BY_CUMULUS_API=true] [DAAC_NAME=LPDAAC] [STAGE=production] [HIDE_PDR=false] [LABELS=daac] APIROOT=https://myapi.com npm run build
 ```
-**NOTE**: Only the `APIROOT` environment variable is required and any of the environment varaibles currently set are passed to the build.
+**NOTE**: Only the `APIROOT` environment variable is required and any of the environment variables currently set are passed to the build.
 
 The compiled dashboard files (dashboard bundle) will be placed in the `./dist` directory.
 
 #### Build dashboard to be served by CloudFront
 
-If you wish to serve the dashboard from behind [CloudFront](https://aws.amazon.com/cloudfront/).  Build a `dist` with your configuration including `APIROOT` and ensure the `SERVED_BY_CUMULUS_API` variable is unset. For NGAP uers, follow the documentation to *Request Public or Protected Access to the APIs and Dashboard*, Step 5 of [Cumulus Deployments in NGAP](https://wiki.earthdata.nasa.gov/display/CUMULUS/Cumulus+Deployments+in+NGAP).
+If you wish to serve the dashboard from behind [CloudFront](https://aws.amazon.com/cloudfront/).  Build a `dist` with your configuration including `APIROOT` and ensure the `SERVED_BY_CUMULUS_API` variable is unset. For NGAP users, follow the documentation to *Request Public or Protected Access to the APIs and Dashboard*, Step 5 of [Cumulus Deployments in NGAP](https://wiki.earthdata.nasa.gov/display/CUMULUS/Cumulus+Deployments+in+NGAP).
 
 #### Build dashboard to be served by the Cumulus API.
 
@@ -176,7 +176,7 @@ This runs a node http-server in front of whatever exists in the `./dist` directo
 
 ### Using S3
 
-First, [build the dasbboard](#build-the-dashboard). Then deploy the `./dist` folder, the dashboard bundle, to an AWS bucket.
+First, [build the dashboard](#build-the-dashboard). Then deploy the `./dist` folder, the dashboard bundle, to an AWS bucket.
 
 ```bash
   $ aws s3 sync dist s3://my-bucket-to-be-used
@@ -288,7 +288,7 @@ Bring up and down the entire stack (the localAPI and the dashboard) with:
   $ npm run start-dashboard
   $ npm run stop-dashboard
 ```
-This runs everything, the backing Localstack and Elasticsearch containers, the local Cumulus API and dashboard.  Edits to your code will be reflected in the running dashboard.  You can run cypress tests still with `npm run cypress`.  As a warning, this command takes a very long time to start up because the containers come up in a specific order and generally this should be reserved for use by Earthdata Bamboo or some other continuous intergration service.  But, if you are using it locally, **be sure to wait until all containers are fully up** before trying to visit the dashboard which is exposed at http://localhost:3000
+This runs everything, the backing Localstack and Elasticsearch containers, the local Cumulus API and dashboard.  Edits to your code will be reflected in the running dashboard.  You can run cypress tests still with `npm run cypress`.  As a warning, this command takes a very long time to start up because the containers come up in a specific order and generally this should be reserved for use by Earthdata Bamboo or some other continuous integration service.  But, if you are using it locally, **be sure to wait until all containers are fully up** before trying to visit the dashboard which is exposed at http://localhost:3000
 The stack is ready when the `view-docker-logs` task shows:
 ```bash
 dashboard_1      | > NODE_ENV=production http-server dist -p 3000 --proxy http://localhost:3000?

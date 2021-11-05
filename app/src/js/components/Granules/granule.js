@@ -41,7 +41,7 @@ import { strings } from '../locale';
 import { workflowOptionNames } from '../../selectors';
 import { defaultWorkflowMeta, executeDialog } from '../../utils/table-config/granules';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import { getPersistentQueryParams, historyPushWithQueryParams } from '../../utils/url-helper';
+import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 const link = 'Link';
 
@@ -102,17 +102,9 @@ const metaAccessors = [
     )),
   },
   {
-    label: 'Execution',
-    property: 'execution',
-    accessor: (d) => (d ? (
-      <Link
-        to={(location) => ({
-          pathname: `/executions/execution/${path.basename(d)}`,
-          search: getPersistentQueryParams(location),
-        })}
-      >
-        link
-      </Link>
+    label: 'Executions List',
+    accessor: (row) => (row.granuleId && row.collectionId ? (
+      <Link to={() => ({ pathname: `/executions/executions-list/${encodeURIComponent(row.collectionId)}/${encodeURIComponent(path.basename(row.granuleId))}` })}>link</Link>
     ) : (
       nullValue
     )),

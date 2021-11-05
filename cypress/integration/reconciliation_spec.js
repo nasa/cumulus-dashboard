@@ -200,15 +200,16 @@ describe('Dashboard Reconciliation Reports Page', () => {
           count: 216,
           secondColumn: 'Filename'
         },
+        // collections do not have select column, so need to check first column
         {
           title: 'Cumulus',
           count: 21,
-          secondColumn: 'Collection name'
+          firstColumn: 'Collection name'
         },
         {
           title: 'CMR',
           count: 391,
-          secondColumn: 'Collection name'
+          firstColumn: 'Collection name'
         }
       ];
 
@@ -220,7 +221,13 @@ describe('Dashboard Reconciliation Reports Page', () => {
         card.get('.card-title').contains(cards[index].count);
 
         // verify correct table is displayed on click
-        cy.get('.table .th').eq(1).contains(cards[index].secondColumn);
+        if (cards[index].firstColumn) {
+          cy.get('.table .th').eq(0).contains(cards[index].firstColumn);
+        }
+
+        if (cards[index].secondColumn) {
+          cy.get('.table .th').eq(1).contains(cards[index].secondColumn);
+        }
       });
 
       /** Table Filters **/
@@ -241,10 +248,10 @@ describe('Dashboard Reconciliation Reports Page', () => {
           cy.contains('.table__filters .button__filter', 'Show/Hide Columns');
         });
 
-      /** Pagination */ /* Please fix this test when working on ticket CUMULUS-2633
-      // cy.contains('.pagination__link--active', '1');
-      // cy.contains('.pagination button', 'Next').click();
-      // cy.contains('.pagination__link--active', '2');
+      /** Pagination */
+      cy.contains('.pagination__link--active', '1');
+      cy.contains('.pagination button', 'Next').click();
+      cy.contains('.pagination__link--active', '2');
 
       /** Legend - there should be one for each table */
       cy.get('.legend').should('have.length', 3);

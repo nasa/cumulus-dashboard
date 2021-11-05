@@ -7,7 +7,34 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [v7.0.1] - 2021-10-19
+## [v8.0.0] - 2021-11-04
+
+## Breaking Changes
+
+This version of the dashboard requires Cumulus API 9.9.0
+### Added
+
+- **CUMULUS-2584**
+  - Added Associated Executions to execution-status.js
+
+### Changed
+
+- **CUMULUS-2584**
+  - Updated Granule detail component to reference `Executions List`.
+  - Removed `Execution` from Granule detail component
+  - Updated execution-events.js to only show step name with status icon. moved execution name, step name and event type into the More Details modal
+
+### Fixed
+
+- **CUMULUS-2633**
+  - Fix pagination on reconciliation report sub-tables.
+  - Remove granule actions from tables without granuleIds.
+- **CUMULUS-2725**
+  - Fixed bugs related to adding and editing providers
+  - Requires @cumulus/api@9.9.0
+
+
+## [v7.1.0] - 2021-10-19
 
 ### Added
 
@@ -43,9 +70,9 @@ This version of the dashboard requires Cumulus API `v9.5.0`
      + ES\_CLOUDWATCH\_TARGET\_PATTERN (Generally: `<daac>-cumulus-cloudwatch-<env>-*`)
      + ES\_DISTRIBUTION\_TARGET\_PATTERN (Generally: `<daac>-distribution-<env>-*`)
   - Kibana links are changed. We no longer try to build URLs that describe the
-    metrics' Elasicsearch results. Instead, we now only return a simple link to
+    metrics' Elasticsearch results. Instead, we now only return a simple link to
     configured Kibana root.  It is up to the kibana user to interact with the
-    dashbaord, setting default security tenant and default kibana index
+    dashboard, setting default security tenant and default kibana index
     patterns. You can create kibana Index Patterns (or they may exist already)
     to gather the cloudwatch logs sent to metrics with a similar patter to the
     ES\_CLOUDWATCH\_TARGET\_PATTERN, and if you have configured s3 server access
@@ -76,7 +103,7 @@ This version of the dashboard requires Cumulus API `v9.5.0`
 - **CUMULUS-2505**
   - Update column show/hide component with new styling and "reset to default interaction for each table
 - **CUMULUS-2506**
-  - Adds horizontal scroll buttons to tables improving accessibily
+  - Adds horizontal scroll buttons to tables improving accessibility
 - **CUMULUS-2511**
   - Ensured that sort state will persist through page changes.
 - **CUMULUS-2524**
@@ -107,7 +134,7 @@ This version of the dashboard requires Cumulus API `v9.5.0`
   - Layout CSS styling tweaks
 - **CUMULUS-2459**
   - Updated localAPI docker-compose.yml to include SSM, Postgres container to be used with RDS compatible API
-  - Updated integration tests due to changes in API behavior related to Postgres contstraints between tables
+  - Updated integration tests due to changes in API behavior related to Postgres constraints between tables
 - **CUMULUS-NONE**
   - Downgrades elasticsearch version in testing container to 5.3 to match AWS version.
 
@@ -341,7 +368,7 @@ This version of the dashboard requires Cumulus API v5.0.0
 
 - **CUMULUS-2242** and **CUMULUS-2177**
   - building with `npm run build` will now build a distribution that can be served from behind cloudfront.
-  - Fixed bug in nginx config that allows the application to run in the continer built by `bin/build_dashboard_image.sh`.
+  - Fixed bug in nginx config that allows the application to run in the container built by `bin/build_dashboard_image.sh`.
   - Overhauled the README.md and added a "Quick start" section
 
 - **CUMULUS-1873**
@@ -381,7 +408,7 @@ This version of the dashboard requires Cumulus API v5.0.0
   - Updates the dashboard to use alpha version `@cumulus/api@3.0.1-alpha.2` for testing.
   - Code changes to allow for private CMR collections to have links to the MMT.
 - **CUMULUS-2215**
-  - Omits unnecesary statistics request when building the option list of collection names on the granules page.
+  - Omits unnecessary statistics request when building the option list of collection names on the granules page.
 - **CUMULUS-2171**
   - Allows filtering of the Granule Inventory List CSV download based on Granule IDs, Status, and Collection.
 - **CUMULUS-2242**
@@ -422,7 +449,7 @@ This version of the dashboard requires Cumulus API v5.0.0
   - Add dashboard version to footer
 
 - **CUMULUS-2076**
-  - Add context references in headings on indivdual pages for screen reader accessibility
+  - Add context references in headings on individual pages for screen reader accessibility
 
 - **CUMULUS-2087**
   - Add Reconciliation Report creation page with report type selection
@@ -498,7 +525,7 @@ This version of the dashboard requires Cumulus API v5.0.0
 
 - **CUMULUS-1906**
   - Adds a download button dropdown to reconciliation report inventory view.
-    Option to download full report as json or indivdual tables as csv files.
+    Option to download full report as json or individual tables as csv files.
 
 - **CUMULUS-1908**
   - Adds Conflict Type and Conflict Details columns to reconciliation report inventory view tables.
@@ -581,22 +608,22 @@ This version of the dashboard requires Cumulus API v5.0.0
   - Fix dashboard table sort issue
 
 - **CUMULUS-1870**
-  - Fix/remove unecessary timers on Pdrs page
+  - Fix/remove unnecessary timers on Pdrs page
 
 - **CUMULUS-1871**
-  - Fix/remove unecessary timers on Providers page
+  - Fix/remove unnecessary timers on Providers page
 
 - **CUMULUS-1872**
-  - Fix/remove unecessary timers on granules page
+  - Fix/remove unnecessary timers on granules page
 
 - **CUMULUS-1873**
-  - Fix/remove unecessary timers on executions page
+  - Fix/remove unnecessary timers on executions page
 
 - **CUMULUS-1875**
-  - Fix/remove unecessary timers on Operations Page
+  - Fix/remove unnecessary timers on Operations Page
 
 - **CUMULUS-1877**
-  - Fix/remove unecessary timers on Reconcilation Reports page
+  - Fix/remove unnecessary timers on Reconciliation Reports page
 
 - **CUMULUS-1882**
   - Fix ES query for TEA Lambda metrics
@@ -617,18 +644,18 @@ This version of the dashboard requires Cumulus API v5.0.0
 ### Changed
 
 - **CUMULUS-1888**
-  - On the Granules page, CSV data was being refreshed in the background alog with the rest
+  - On the Granules page, CSV data was being refreshed in the background along with the rest
     of the data based on the timer. This could take a long time, depending on the number of granules.
     This has been changed so that the data is only fetched when the user clicks the "Download CSV" button.
 
 - **CUMULUS-1913**
-  - Add datepicker to reconcilation-reports page
+  - Add datepicker to reconciliation-reports page
 
 - **CUMULUS-1915**
-  - Add filters for `Report Type` and `Status` to reconcilation-reports page
+  - Add filters for `Report Type` and `Status` to reconciliation-reports page
 
 - **CUMULUS-1916**
-  - reconcilation-reports page now requires Cumulus API version >= v1.23.0
+  - reconciliation-reports page now requires Cumulus API version >= v1.23.0
 
 ## [v1.8.1]
 
@@ -636,7 +663,7 @@ This version of the dashboard requires Cumulus API v5.0.0
 
 - **CUMULUS-1816**
   - Change Datepicker behavior on login. The default to "Recent" start/end dates
-    now only occurs on first login on the hompage.
+    now only occurs on first login on the homepage.
   - URL is updated on login to reflect Datepicker params
 
 - **CUMULUS-1903**
@@ -658,7 +685,7 @@ This version of the dashboard requires Cumulus API v5.0.0
 
 - **CUMULUS-1984**
   - Fix bug where Distribution metrics were showing on the homepage even when
-    Elasaticsearch/Kibana not set up
+    Elasticsearch/Kibana not set up
 
 - **CUMULUS-1988**
   - Fix bugs in reducer-creators
@@ -700,7 +727,7 @@ This version of the dashboard requires Cumulus API v5.0.0
   - Change the metrics section on the home page to update based on datepicker time period.
 
 - **CUMULUS-1509**
-  - Update styles on grnaules page
+  - Update styles on granules page
 
 - **CUMULUS-1525**
   - Style changes for rules overview page
@@ -721,10 +748,10 @@ This version of the dashboard requires Cumulus API v5.0.0
   - Update executions details page styles
 
 - **CUMULUS-1787**
-  - Changes `listCollections` action to hit `/collections/active` endpoint when timefilters are present (requires Cumulus API v1.22.1)
+  - Changes `listCollections` action to hit `/collections/active` endpoint when time filters are present (requires Cumulus API v1.22.1)
 
 - **CUMULUS-1790**
-  - Changes default values and visuals for home page's datepicker. When the page loads, it defauls to display "Recent" data, which is the previous 24 hours with no end time.
+  - Changes default values and visuals for home page's datepicker. When the page loads, it defaults to display "Recent" data, which is the previous 24 hours with no end time.
 
 - **CUMULUS-1798**
   - Change the 12HR/24HR Format selector from radio to dropdown
@@ -903,7 +930,7 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - **CUMULUS-1337**
-  - Must use Cumulus API version v1.14.0 or above in order to use the newi
+  - Must use Cumulus API version v1.14.0 or above in order to use the new
     distribution metrics functionality.
   - Distribution metrics are no longer served from the Cumulus API, but are
     computed from the logs in an ELK stack.
@@ -1012,7 +1039,8 @@ Fix for serving the dashboard through the Cumulus API.
 ### Added
 
 - Versioning and changelog [CUMULUS-197] by @kkelly51
-[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v7.1.0...HEAD
+[Unreleased]: https://github.com/nasa/cumulus-dashboard/compare/v8.0.0...HEAD
+[v8.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v7.1.0...v8.0.0
 [v7.1.0]: https://github.com/nasa/cumulus-dashboard/compare/v7.0.0...v7.1.0
 [v7.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v6.0.0...v7.0.0
 [v6.0.0]: https://github.com/nasa/cumulus-dashboard/compare/v5.0.0...v6.0.0
