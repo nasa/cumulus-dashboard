@@ -30,7 +30,7 @@ const getColumnWidth = (rows, accessor, headerText, originalWidth) => {
 
 /**
  * IndeterminateCheckbox
- * @description Component for rendering the header and column checkboxs when canSelect is true
+ * @description Component for rendering the header and column checkboxes when canSelect is true
  * Taken from react-table examples
  */
 const IndeterminateCheckbox = forwardRef(
@@ -151,9 +151,11 @@ const SortableTable = ({
             Header: ({ getToggleAllRowsSelectedProps }) => ( // eslint-disable-line react/prop-types
               <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
             ),
-            Cell: ({ row }) => ( // eslint-disable-line react/prop-types
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} /> // eslint-disable-line react/prop-types
-            ),
+            Cell: ({ row }) => { // eslint-disable-line react/prop-types
+              // eslint-disable-next-line react/prop-types
+              const { original: { disableSelect }, getToggleRowSelectedProps } = row;
+              return <>{!disableSelect && <IndeterminateCheckbox {...getToggleRowSelectedProps()} />}</>;
+            },
           },
           ...columns
         ]);
@@ -184,7 +186,7 @@ const SortableTable = ({
       return ids;
     }, []);
 
-    const currentSelectedRows = selectedFlatRows.map((row) => omit(row.original, ['files']));
+    const currentSelectedRows = selectedFlatRows.map((row) => omit(row.original, ['files'])).filter((row) => !row.original?.disableSelect);
 
     if (typeof onSelect === 'function') {
       onSelect(selectedIds, currentSelectedRows);
@@ -285,13 +287,12 @@ const SortableTable = ({
     clearInterval(leftScrollInterval);
   }
 
-  function handleRightScrollbuttonOnMouseLeave() {
+  function handleRightScrollButtonOnMouseLeave() {
     hideScrollRightButton();
     clearInterval(rightScrollInterval);
   }
 
   function showScrollLeftButton(event) {
-    console.log('showLeft');
     setLeftScrollButtonVisibility({ display: 'flex', opacity: leftScrollButtonVisibility.opacity });
     setTimeout(() => {
       setLeftScrollButtonVisibility({ display: 'flex', opacity: 1 });
@@ -506,7 +507,7 @@ const SortableTable = ({
         onMouseDown={() => startScrollTableRight()}
         onMouseUp={() => stopScrollTableRight()}
         onMouseEnter={() => showScrollRightButton()}
-        onMouseLeave={() => handleRightScrollbuttonOnMouseLeave()}>
+        onMouseLeave={() => handleRightScrollButtonOnMouseLeave()}>
         <div><i className="fa fa-arrow-circle-right fa-2x"></i></div>
         <div>SCROLL</div>
       </div>

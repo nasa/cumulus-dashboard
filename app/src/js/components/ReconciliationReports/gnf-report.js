@@ -39,13 +39,15 @@ const GnfReport = ({
 
   const cmrGranules = onlyInCmr.map((granule) => {
     const { GranuleUR, ShortName, Version } = granule;
+    const collectionId = getCollectionId({ name: ShortName, version: Version });
     return {
       ...granule,
       granuleId: GranuleUR,
-      collectionId: getCollectionId({ name: ShortName, version: Version }),
+      collectionId,
       cmr: true,
       cumulus: false,
       s3: false,
+      disableSelect: !collectionId
     };
   });
 
@@ -53,6 +55,7 @@ const GnfReport = ({
     ...granule,
     cmr: false,
     cumulus: true,
+    disableSelect: !granule.collectionId
   }));
 
   const allGranules = [

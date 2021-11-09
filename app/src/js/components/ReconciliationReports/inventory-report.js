@@ -179,11 +179,11 @@ const InventoryReport = ({
               const { columns, data, id, name, type } = table;
               const isExpanded = expandedState[activeId][id];
               const listProps = {};
+              listProps.rowId = 'granuleId';
 
-              if (type === 'granule' || type === 'file') {
+              if (type === 'granule') {
                 listProps.bulkActions = bulkActions;
                 listProps.groupAction = groupAction;
-                listProps.rowId = 'granuleId';
               } else if (type === 'collection') {
                 listProps.rowId = 'name';
               }

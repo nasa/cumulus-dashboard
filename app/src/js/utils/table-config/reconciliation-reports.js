@@ -112,12 +112,12 @@ export const tableColumnsS3Files = [
     Cell: <span className='status-indicator status-indicator--failed'></span>,
     disableSortBy: true
   },
-  {
-    Header: 'Conflict Details',
-    id: 'conflictDetails',
-    Cell: 'View Details',
-    disableSortBy: true
-  },
+  // {
+  //   Header: 'Conflict Details',
+  //   id: 'conflictDetails',
+  //   Cell: 'View Details',
+  //   disableSortBy: true
+  // },
   {
     Header: 'Bucket',
     accessor: 'bucket'
@@ -144,12 +144,12 @@ export const tableColumnsFiles = [
     Cell: <span className='status-indicator status-indicator--orange'></span>,
     disableSortBy: true
   },
-  {
-    Header: 'Conflict Details',
-    id: 'conflictDetails',
-    Cell: 'View Details',
-    disableSortBy: true
-  },
+  // {
+  //   Header: 'Conflict Details',
+  //   id: 'conflictDetails',
+  //   Cell: 'View Details',
+  //   disableSortBy: true
+  // },
   {
     Header: 'Bucket',
     accessor: 'bucket'
@@ -166,12 +166,12 @@ export const tableColumnsCollections = [
     Header: 'Collection name',
     accessor: 'name',
   },
-  {
-    Header: 'Conflict Details',
-    id: 'conflictDetails',
-    Cell: 'View Details',
-    disableSortBy: true
-  }
+  // {
+  //   Header: 'Conflict Details',
+  //   id: 'conflictDetails',
+  //   Cell: 'View Details',
+  //   disableSortBy: true
+  // }
 ];
 
 export const tableColumnsGranules = [
@@ -180,17 +180,21 @@ export const tableColumnsGranules = [
     accessor: 'granuleId'
   },
   {
+    Header: 'Collection ID',
+    accessor: 'collectionId'
+  },
+  {
     Header: 'Conflict Type',
     id: 'conflictType',
     Cell: <span className='status-indicator status-indicator--failed'></span>,
     disableSortBy: true
   },
-  {
-    Header: 'Conflict Details',
-    id: 'conflictDetails',
-    Cell: 'View Details',
-    disableSortBy: true
-  }
+  // {
+  //   Header: 'Conflict Details',
+  //   id: 'conflictDetails',
+  //   Cell: 'View Details',
+  //   disableSortBy: true
+  // }
 ];
 
 export const tableColumnsGnf = [

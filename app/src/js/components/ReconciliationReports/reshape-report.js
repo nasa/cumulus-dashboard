@@ -1,6 +1,7 @@
 /* eslint node/no-deprecated-api: 0 */
 import path from 'path';
 import url from 'url';
+import { getCollectionId } from '../../utils/format';
 import {
   tableColumnsCollections,
   tableColumnsFiles,
@@ -15,6 +16,7 @@ export const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [], okCountByG
       filename: path.basename(parsed.pathname),
       bucket: parsed.hostname,
       path: parsed.href,
+      disableSelect: true
     };
   });
 
@@ -28,6 +30,7 @@ export const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [], okCountByG
     return {
       s3,
       cumulus: true,
+      disableSelect: true,
       ...parsedFile
     };
   });
@@ -46,6 +49,7 @@ const getGranulesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) => {
   const granulesInCumulus = onlyInCumulus;
   const granulesInCmr = onlyInCmr.map((granule) => ({
     granuleId: granule.GranuleUR,
+    collectionId: getCollectionId({ name: granule.ShortName, version: granule.Version })
   }));
   return { granulesInCumulus, granulesInCmr };
 };
@@ -55,6 +59,7 @@ export const getGranuleFilesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) =
     const parsedFile = parseFileObject(file);
     return {
       cmr: 'missing',
+      disableSelect: true,
       ...parsedFile
     };
   });
@@ -63,6 +68,7 @@ export const getGranuleFilesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) =
     const parsed = url.parse(d.URL);
     const bucket = parsed.hostname.split('.')[0];
     return {
+      disableSelect: true,
       granuleId: d.GranuleUR,
       filename: path.basename(parsed.pathname),
       bucket,
@@ -160,14 +166,14 @@ export const reshapeReport = (recordData, filterString, filterBucket) => {
   }
 
   /**
-   * The reconciation report display mechanism is set up to display cards as
+   * The reconciliation report display mechanism is set up to display cards as
    * headers for cumulus internal consistency as well as comparison between
    * Cumulus and CMR.  We set up a configuration from the input record to ease
    * the display of that information.
    *
    * The comparison configuration should consist of an Array of Objects, where
    * the objects have keys `id` used for selection and 'tables' which should be
-   * an array of Objects that are passed to Sortabletable.
+   * an array of Objects that are passed to SortableTable.
    */
   const internalComparison = [
     {
