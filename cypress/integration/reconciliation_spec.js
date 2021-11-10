@@ -193,12 +193,12 @@ describe('Dashboard Reconciliation Reports Page', () => {
         {
           title: 'DynamoDB',
           count: 35,
-          secondColumn: 'GranuleId'
+          firstColumn: 'GranuleId'
         },
         {
           title: 'S3',
           count: 216,
-          secondColumn: 'Filename'
+          firstColumn: 'Filename'
         },
         // collections do not have select column, so need to check first column
         {
