@@ -151,11 +151,9 @@ const SortableTable = ({
             Header: ({ getToggleAllRowsSelectedProps }) => ( // eslint-disable-line react/prop-types
               <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
             ),
-            Cell: ({ row }) => { // eslint-disable-line react/prop-types
-              // eslint-disable-next-line react/prop-types
-              const { original: { disableSelect }, getToggleRowSelectedProps } = row;
-              return <>{!disableSelect && <IndeterminateCheckbox {...getToggleRowSelectedProps()} />}</>;
-            },
+            Cell: ({ row }) => ( // eslint-disable-line react/prop-types
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} /> // eslint-disable-line react/prop-types
+            ),
           },
           ...columns
         ]);
@@ -186,7 +184,7 @@ const SortableTable = ({
       return ids;
     }, []);
 
-    const currentSelectedRows = selectedFlatRows.map((row) => omit(row.original, ['files'])).filter((row) => !row.original?.disableSelect);
+    const currentSelectedRows = selectedFlatRows.map((row) => omit(row.original, ['files']));
 
     if (typeof onSelect === 'function') {
       onSelect(selectedIds, currentSelectedRows);

@@ -16,7 +16,6 @@ export const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [], okCountByG
       filename: path.basename(parsed.pathname),
       bucket: parsed.hostname,
       path: parsed.href,
-      disableSelect: true
     };
   });
 
@@ -30,7 +29,6 @@ export const getFilesSummary = ({ onlyInDynamoDb = [], onlyInS3 = [], okCountByG
     return {
       s3,
       cumulus: true,
-      disableSelect: true,
       ...parsedFile
     };
   });
@@ -59,7 +57,6 @@ export const getGranuleFilesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) =
     const parsedFile = parseFileObject(file);
     return {
       cmr: 'missing',
-      disableSelect: true,
       ...parsedFile
     };
   });
@@ -68,7 +65,6 @@ export const getGranuleFilesSummary = ({ onlyInCumulus = [], onlyInCmr = [] }) =
     const parsed = url.parse(d.URL);
     const bucket = parsed.hostname.split('.')[0];
     return {
-      disableSelect: true,
       granuleId: d.GranuleUR,
       filename: path.basename(parsed.pathname),
       bucket,
