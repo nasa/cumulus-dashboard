@@ -101,6 +101,10 @@ const checkReportDeleted = (reportName, reports) => reports.every((report) => re
 
 export const bulkActions = (reports) => [];
 
+/**
+ * Commenting out Conflict Details for all the following tables
+ * since it does not currently function
+ */
 export const tableColumnsS3Files = [
   {
     Header: 'Filename',
