@@ -15,7 +15,6 @@ import { getCollectionId } from '../../utils/format';
 
 const GnfReport = ({
   filterString,
-  groupAction,
   legend,
   onSelect,
   recordData,
@@ -114,7 +113,6 @@ const GnfReport = ({
         </div>
         <List
           data={combinedGranules}
-          groupAction={groupAction}
           legend={legend}
           onSelect={onSelect}
           rowId="granuleId"
@@ -128,10 +126,6 @@ const GnfReport = ({
 
 GnfReport.propTypes = {
   filterString: PropTypes.string,
-  groupAction: PropTypes.shape({
-    title: PropTypes.string,
-    description: PropTypes.string,
-  }),
   legend: PropTypes.node,
   onSelect: PropTypes.func,
   recordData: PropTypes.object,
