@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
-import { metaAccessors } from '../../utils/table-config/execution-status';
+import { metaAccessors, associatedGranulesTableColumns } from '../../utils/table-config/execution-status';
 
+import List from '../Table/Table';
 import ErrorReport from '../Errors/report';
 
 import ExecutionStatusGraph from './execution-status-graph';
@@ -101,6 +102,15 @@ const ExecutionStatus = ({
             })}
           />
         </div>
+        <div className="heading__wrapper--border">
+          <h2 className="heading--medium with-description">Associated Granules</h2>
+        </div>
+        <List
+          data={execution.granules}
+          rowId="granuleId"
+          useSimplePagination={true}
+          tableColumns={associatedGranulesTableColumns}
+        />
       </section>
     </div>
   );
