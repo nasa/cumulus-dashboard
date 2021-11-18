@@ -28,10 +28,8 @@ const bucketsForFilter = (allBuckets) => {
 };
 
 const InventoryReport = ({
-  bulkActions,
   filterBucket,
   filterString,
-  groupAction,
   onSelect,
   legend,
   recordData,
@@ -179,13 +177,10 @@ const InventoryReport = ({
               const { columns, data, id, name, type } = table;
               const isExpanded = expandedState[activeId][id];
               const listProps = {};
-
-              if (type === 'granule' || type === 'file') {
-                listProps.bulkActions = bulkActions;
-                listProps.groupAction = groupAction;
-                listProps.rowId = 'granuleId';
-              } else if (type === 'collection') {
+              if (type === 'collection') {
                 listProps.rowId = 'name';
+              } else {
+                listProps.rowId = 'granuleId';
               }
 
               return (
@@ -238,13 +233,8 @@ const InventoryReport = ({
 };
 
 InventoryReport.propTypes = {
-  bulkActions: PropTypes.array,
   filterBucket: PropTypes.string,
   filterString: PropTypes.string,
-  groupAction: PropTypes.shape({
-    title: PropTypes.string,
-    description: PropTypes.string,
-  }),
   legend: PropTypes.node,
   onSelect: PropTypes.func,
   recordData: PropTypes.object,

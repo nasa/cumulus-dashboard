@@ -14,9 +14,7 @@ import { getFilesSummary, getGranuleFilesSummary } from './reshape-report';
 import { getCollectionId } from '../../utils/format';
 
 const GnfReport = ({
-  bulkActions,
   filterString,
-  groupAction,
   legend,
   onSelect,
   recordData,
@@ -39,10 +37,11 @@ const GnfReport = ({
 
   const cmrGranules = onlyInCmr.map((granule) => {
     const { GranuleUR, ShortName, Version } = granule;
+    const collectionId = getCollectionId({ name: ShortName, version: Version });
     return {
       ...granule,
       granuleId: GranuleUR,
-      collectionId: getCollectionId({ name: ShortName, version: Version }),
+      collectionId,
       cmr: true,
       cumulus: false,
       s3: false,
@@ -113,9 +112,7 @@ const GnfReport = ({
           />
         </div>
         <List
-          bulkActions={bulkActions}
           data={combinedGranules}
-          groupAction={groupAction}
           legend={legend}
           onSelect={onSelect}
           rowId="granuleId"
@@ -128,12 +125,7 @@ const GnfReport = ({
 };
 
 GnfReport.propTypes = {
-  bulkActions: PropTypes.array,
   filterString: PropTypes.string,
-  groupAction: PropTypes.shape({
-    title: PropTypes.string,
-    description: PropTypes.string,
-  }),
   legend: PropTypes.node,
   onSelect: PropTypes.func,
   recordData: PropTypes.object,
