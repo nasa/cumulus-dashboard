@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { getExecutionStatus, getCumulusInstanceMetadata } from '../../actions';
-import { metaAccessors, associatedGranulesTableColumns } from '../../utils/table-config/execution-status';
+import {
+  metaAccessors,
+  associatedGranulesTableColumns,
+} from '../../utils/table-config/execution-status';
 
 import List from '../Table/Table';
 import ErrorReport from '../Errors/report';
@@ -71,7 +74,7 @@ const ExecutionStatus = ({
       {stateMachine && executionHistory && (
         <section className="page__section">
           <div className="heading__wrapper--border">
-            <h2 className="heading--medium with-description">Visual</h2>
+            <h2 className="heading--medium">Visual</h2>
           </div>
           <ExecutionStatusGraph executionStatus={executionStatus} />
         </section>
@@ -79,15 +82,18 @@ const ExecutionStatus = ({
 
       <section className="page__section">
         <div className="heading__wrapper--border">
-          <h2 className="heading--medium with-description">Details
-            <Link
-              className="button button--small button--events"
-              to={() => ({
-                pathname: `/executions/execution/${executionArn}/events`
-              })}
-            >
-            Events
-            </Link>
+          <h2 className="heading--medium">
+            <span>Details</span>
+            <span className="float-right">
+              <Link
+                className="button button--small button--events"
+                to={() => ({
+                  pathname: `/executions/execution/${executionArn}/events`,
+                })}
+              >
+                Events
+              </Link>
+            </span>
           </h2>
         </div>
         <div className="execution__content status--process">
@@ -103,7 +109,7 @@ const ExecutionStatus = ({
           />
         </div>
         <div className="heading__wrapper--border">
-          <h2 className="heading--medium with-description">Associated Granules</h2>
+          <h2 className="heading--medium">Associated Granules</h2>
         </div>
         <List
           data={execution.granules}
