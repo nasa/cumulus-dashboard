@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2721**
   - Remove table selectors and granule actions from all reconciliation report tables since they will not work on these tables due to the nature of the backend
 
+### Fixed
+
+- **CUMULUS-2721**
+  - Fixed issue where boolean environment variables were being read as strings
+
 ## [v8.0.0] - 2021-11-04
 
 ## Breaking Changes
