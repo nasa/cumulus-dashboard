@@ -133,7 +133,6 @@ class Home extends React.Component {
   }
 
   render () {
-    console.log(metricsConfigured());
     const { list } = this.props.granules;
     const { stats, count } = this.props.stats;
     const { dist, location } = this.props;
