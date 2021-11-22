@@ -112,7 +112,7 @@ class Home extends React.Component {
    * @param {Object} dist - distribution state object.
    * @returns - Error Report when any distribution metric contains an error.
    */
-  distrubutionConnectionErrors (dist) {
+  distributionConnectionErrors (dist) {
     const errors = Object.keys(dist).filter((key) => dist[key].error).map((key) => dist[key].error);
     if (errors.length === 0) return undefined;
     const uniqueErrors = [...new Set(errors)];
@@ -133,6 +133,7 @@ class Home extends React.Component {
   }
 
   render () {
+    console.log(metricsConfigured());
     const { list } = this.props.granules;
     const { stats, count } = this.props.stats;
     const { dist, location } = this.props;
@@ -198,7 +199,7 @@ class Home extends React.Component {
           {metricsConfigured() &&
            <>
              {sectionHeader('Distribution Overview', 'distributionOverview')}
-             {this.distrubutionConnectionErrors(dist)}
+             {this.distributionConnectionErrors(dist)}
              {this.buttonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
              {this.buttonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
            </>

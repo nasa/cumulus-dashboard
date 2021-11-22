@@ -216,16 +216,14 @@ describe('Dashboard Home Page', () => {
       cy.intercept('POST', 'http://example.com/*/_search/', (req) => req.reply({ statusCode: 200, fixture: fixtureName }));
       cy.visit('/');
 
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(5)').contains('0');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(4)').contains('2');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(3)').contains('4');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(2)').contains('8');
+      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(4)').contains('0');
+      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(3)').contains('2');
+      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(2)').contains('4');
       cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(1)').contains('6');
 
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(5)').contains('1');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(4)').contains('3');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(3)').contains('5');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(2)').contains('9');
+      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(4)').contains('1');
+      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(3)').contains('3');
+      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(2)').contains('5');
       cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(1)').contains('7');
 
       fixtureName = 'updated_elasticsearch.json';
