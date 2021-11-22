@@ -245,16 +245,14 @@ describe('Dashboard Home Page', () => {
         cy.get('select[name=amPm]').select('AM');
       });
 
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(5)').contains('10');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(4)').contains('12');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(3)').contains('14');
-      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(2)').contains('18');
+      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(4)').contains('10');
+      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(3)').contains('12');
+      cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(2)').contains('14');
       cy.get('.overview-num__wrapper-home > ul#distributionErrors > :nth-child(1)').contains('16');
 
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(5)').contains('11');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(4)').contains('13');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(3)').contains('15');
-      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(2)').contains('19');
+      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(4)').contains('11');
+      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(3)').contains('13');
+      cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(2)').contains('15');
       cy.get('.overview-num__wrapper-home > ul#distributionSuccesses > :nth-child(1)').contains('17');
     });
 
