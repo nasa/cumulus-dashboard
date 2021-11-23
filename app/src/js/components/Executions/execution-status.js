@@ -113,9 +113,10 @@ const ExecutionStatus = ({
         </div>
         <List
           data={execution.granules}
+          hideActions={true}
           rowId="granuleId"
-          useSimplePagination={true}
           tableColumns={associatedGranulesTableColumns}
+          useSimplePagination={true}
         />
       </section>
     </div>

@@ -32,6 +32,7 @@ const List = ({
   filterAction,
   filterClear,
   groupAction,
+  hideActions = false,
   initialHiddenColumns = [],
   initialSortId,
   legend,
@@ -202,7 +203,7 @@ const List = ({
 
   return (
     <>
-      <ListActions
+      {!hideActions && <ListActions
         dispatch={dispatch}
         action={action}
         bulkActions={bulkActions}
@@ -222,7 +223,7 @@ const List = ({
           />
           {legend}
         </ListFilters>
-      </ListActions>
+      </ListActions>}
       <div className="list-view">
         {listInflight && <Loading />}
         {listError && <ErrorReport report={listError} truncate={true} />}
@@ -285,6 +286,7 @@ List.propTypes = {
     title: PropTypes.string,
     description: PropTypes.string,
   }),
+  hideActions: PropTypes.bool,
   initialHiddenColumns: PropTypes.array,
   initialSortId: PropTypes.string,
   legend: PropTypes.node,
