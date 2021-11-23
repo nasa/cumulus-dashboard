@@ -498,7 +498,7 @@ describe('Dashboard Granules Page', () => {
     it('Should have a Granule Lists page', () => {
       const listName = 'GranuleList100220';
       const url = new RegExp(`.*/reconciliationReports/${listName}`);
-      cy.intercept({ url: /.*\/reconciliationReports\\?limit=.*/, method: 'GET' }).as('getLists');
+      cy.intercept({ url: /\/reconciliationReports\?limit=.*/, method: 'GET' }).as('getLists');
       cy.intercept({ url, method: 'GET' }).as('getList');
       cy.visit('/granules');
       cy.contains('.sidebar li a', 'Lists').click();

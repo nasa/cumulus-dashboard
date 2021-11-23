@@ -106,7 +106,7 @@ describe('Dashboard Collections Page', () => {
 
     it('should display expected MMT Links for a collections list', () => {
       cy.intercept(
-        { method: 'GET', url: /\/collections\\?limit=.*/ },
+        { method: 'GET', url: /\/collections\?limit=.*/ },
         { fixture: 'collections-with-mmtLinks.json' }
       ).as('getCollections');
       cy.visit('/collections');
