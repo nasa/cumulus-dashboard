@@ -554,7 +554,7 @@ This version of the dashboard requires Cumulus API v5.0.0
   - Add ability to filter by S3 bucket on Reconciliation Report page
 
 - **CUMULUS-**
-  - upgrades node to 12.22.0
+  - upgrades node to 12.18.0
   - Upgrade Cypress to latest version (4.8.0)
 
 ### Changed
