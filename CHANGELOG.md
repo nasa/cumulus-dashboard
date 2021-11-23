@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- **CUMULUS-**
+  - Upgrade Webpack to version 5
+  - Various package updates related to Webpack upgrade
 - **CUMULUS-2721**
   - Remove table selectors and granule actions from all reconciliation report tables since they will not work on these tables due to the nature of the backend
 - **CUMULUS-2744**
