@@ -425,6 +425,11 @@ select option{
           width: 100%;
         }
       }
+      .react-datetime-picker__inputGroup {
+        input {
+          padding: 0;
+        }
+      }
       .subform__item--expanded {
         width: 87%;
       }

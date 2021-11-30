@@ -11,6 +11,7 @@ import Loading from '../LoadingIndicator/loading-indicator';
 import InventoryReport from './inventory-report';
 import GnfReport from './gnf-report';
 import Legend from './legend';
+import BackupRecoveryReport from './backup-recovery-report';
 
 const ReconciliationReport = ({
   dispatch = {},
@@ -62,6 +63,13 @@ const ReconciliationReport = ({
             reportUrl={reportUrl}
           />,
           'Granule Not Found': <GnfReport
+            filterString={filterString}
+            legend={<Legend />}
+            recordData={recordData}
+            reportName={reconciliationReportName}
+            reportUrl={reportUrl}
+          />,
+          'Backup and Recovery': <BackupRecoveryReport
             filterString={filterString}
             legend={<Legend />}
             recordData={recordData}

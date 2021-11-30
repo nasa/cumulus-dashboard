@@ -14,6 +14,11 @@ export const reconciliationReportTypes = [
     label: 'Inventory',
     description: 'This report allows you to select what bucket (s3, Cumulus, CMR) you would like to generate validation for all collections, granules and files for a duration.',
   },
+  {
+    id: 'Backup & Recovery',
+    label: 'Backup & Recovery',
+    description: 'This report compares the files that are in storage. This includes the Database versus what is in S3 Glacier/ORCA backup and recovery.'
+  }
 ];
 
 export const operationTypes = [
