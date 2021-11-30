@@ -10,17 +10,15 @@ const Metadata = ({
   <dl className='metadata__details'>
     {accessors.map((item, index) => {
       const { label, property, accessor } = item;
-      let value = get(data, property);
+      let value = get(data, property) || nullValue;
       if (value !== nullValue && typeof accessor === 'function') {
         value = accessor(value, data);
       }
       return (
-        <React.Fragment key={index}>
-          {value && <div className="meta__row">
-            <dt key={`meta-${property}--dt`}>{label}</dt>
-            <dd key={`meta-${property}--dd`}>{value}</dd>
-          </div>}
-        </React.Fragment>
+        <div className="meta__row" key={index}>
+          <dt key={`meta-${property}--dt`}>{label}</dt>
+          <dd key={`meta-${property}--dd`}>{value}</dd>
+        </div>
       );
     })}
   </dl>
