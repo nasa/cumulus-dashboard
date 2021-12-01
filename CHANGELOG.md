@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **CUMULUS-2744**
   - Display granules associated with an execution in a table
 
+### Fixed
+
+- **CUMULUS-2721**
+  - Fixed issue where boolean environment variables were being read as strings
+
 ## [v8.0.0] - 2021-11-04
 
 ## Breaking Changes
