@@ -106,7 +106,7 @@ describe('Dashboard Collections Page', () => {
 
     it('should display expected MMT Links for a collections list', () => {
       cy.intercept(
-        { method: 'GET', url: new RegExp('/collections\\?limit=.*') },
+        { method: 'GET', url: /\/collections\?limit=.*/ },
         { fixture: 'collections-with-mmtLinks.json' }
       ).as('getCollections');
       cy.visit('/collections');
@@ -483,7 +483,7 @@ describe('Dashboard Collections Page', () => {
         'MOD09GQ.A9344328.K9yI3O.006.4625818663028'
       ];
       cy.intercept(
-        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { method: 'PUT', url: /\/granules\/.*/ },
         { statusCode: 500, body: { message: 'Oopsie' } }
       );
       cy.visit('/granules');
@@ -508,7 +508,7 @@ describe('Dashboard Collections Page', () => {
       ];
 
       cy.intercept(
-        { method: 'PUT', url: new RegExp('/granules/.*') },
+        { method: 'PUT', url: /\/granules\/.*/ },
         { statusCode: 200, body: { message: 'ingested' } }
       );
 

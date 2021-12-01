@@ -30,12 +30,12 @@ class SubForm extends React.Component {
 
     const fields = Object.keys(value).map((key) => ({
       name: key,
-      fields: createFormConfig(value[key], fieldSet)
+      fields: createFormConfig({ data: value[key], schema: fieldSet })
     }));
 
     fields.push({
       name: 'Add',
-      fields: createFormConfig({}, fieldSet),
+      fields: createFormConfig({ data: {}, schema: fieldSet }),
       isEmpty: true
     });
 
