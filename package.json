@@ -184,7 +184,7 @@
     "react-bootstrap-typeahead": "^5.1.2",
     "react-circular-progressbar": "^2.0.3",
     "react-collapsible": "^2.8.1",
-    "react-datetime-picker": "2.8.0",
+    "react-datetime-picker": "^3.4.3",
     "react-dom": "^16.14.0",
     "react-final-form": "^6.5.2",
     "react-helmet": "^6.1.0",
