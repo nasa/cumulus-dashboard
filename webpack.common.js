@@ -3,7 +3,6 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const nodeExternals = require('webpack-node-externals');
 
 const config = require('./app/src/js/config');
 
@@ -20,11 +19,8 @@ const CommonConfig = {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/'
   },
-  node: {
-    console: true,
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty'
+  optimization: {
+    moduleIds: 'deterministic'
   },
   resolve: {
     extensions: ['.js', '.jsx', '.scss'],
@@ -32,6 +28,15 @@ const CommonConfig = {
       Fonts: path.join(__dirname, 'app/src/assets/fonts'),
       Images: path.join(__dirname, 'app/src/assets/images')
     },
+    fallback: {
+      fs: false,
+      net: false,
+      tls: false,
+      console: require.resolve('console-browserify'),
+      path: require.resolve('path-browserify'),
+      stream: require.resolve('stream-browserify'),
+      crypto: require.resolve('crypto-browserify')
+    }
   },
   module: {
     rules: [
@@ -132,7 +137,6 @@ const CommonConfig = {
       filename: 'index.html',
       title: 'Cumulus Dashboard'
     }),
-    new webpack.HashedModuleIdsPlugin(),
     new CopyWebpackPlugin({
       patterns: [
         { from: './app/src/public', to: './' }
@@ -140,7 +144,8 @@ const CommonConfig = {
     }),
     new webpack.ProvidePlugin({
       jQuery: 'jquery', // can use jquery anywhere in the app without having to require it
-      $: 'jquery'
+      $: 'jquery',
+      process: 'process/browser'
     }),
     new webpack.EnvironmentPlugin(
       {

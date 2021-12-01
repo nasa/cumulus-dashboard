@@ -83,7 +83,8 @@ class Home extends React.Component {
     const data = items.filter((d) => d[0] !== nullValue);
     if (!data.length) return null;
     return pageSection(
-      title, String(sectionId),
+      title,
+      String(sectionId),
       <div className="overview-num__wrapper overview-num__wrapper-home">
         <ul id={listId}>
           {data.map((d) => {
@@ -205,7 +206,8 @@ class Home extends React.Component {
           }
 
           {sectionHeader(
-            'Granules Updates', 'updateGranules',
+            'Granules Updates',
+            'updateGranules',
             <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
           )}
           {this.buttonListSection(
