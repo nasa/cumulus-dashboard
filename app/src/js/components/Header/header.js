@@ -82,7 +82,7 @@ class Header extends React.Component {
     const { api, location, minimal } = this.props;
     const { authenticated } = api;
     const locationSearch = getPersistentQueryParams(location);
-    const activePaths = paths.filter((path) => nav.exclude[path[0]] !== true);
+    const activePaths = paths.filter((path) => !nav.exclude[path[0]]);
     const logoPath =
       graphicsPath.substr(-1) === '/'
         ? `${graphicsPath}${strings.logo}`

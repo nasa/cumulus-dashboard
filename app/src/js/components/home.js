@@ -83,7 +83,8 @@ class Home extends React.Component {
     const data = items.filter((d) => d[0] !== nullValue);
     if (!data.length) return null;
     return pageSection(
-      title, String(sectionId),
+      title,
+      String(sectionId),
       <div className="overview-num__wrapper overview-num__wrapper-home">
         <ul id={listId}>
           {data.map((d) => {
@@ -112,7 +113,7 @@ class Home extends React.Component {
    * @param {Object} dist - distribution state object.
    * @returns - Error Report when any distribution metric contains an error.
    */
-  distrubutionConnectionErrors (dist) {
+  distributionConnectionErrors (dist) {
     const errors = Object.keys(dist).filter((key) => dist[key].error).map((key) => dist[key].error);
     if (errors.length === 0) return undefined;
     const uniqueErrors = [...new Set(errors)];
@@ -198,14 +199,15 @@ class Home extends React.Component {
           {metricsConfigured() &&
            <>
              {sectionHeader('Distribution Overview', 'distributionOverview')}
-             {this.distrubutionConnectionErrors(dist)}
+             {this.distributionConnectionErrors(dist)}
              {this.buttonListSection(distErrorStats, 'Distribution Errors', 'distributionErrors')}
              {this.buttonListSection(distSuccessStats, 'Distribution Successes', 'distributionSuccesses')}
            </>
           }
 
           {sectionHeader(
-            'Granules Updates', 'updateGranules',
+            'Granules Updates',
+            'updateGranules',
             <Link className='link--secondary link--learn-more' to={{ pathname: '/granules', search: searchString }}>{strings.view_granules_overview}</Link>
           )}
           {this.buttonListSection(

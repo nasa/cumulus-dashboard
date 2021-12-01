@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const path = require('path');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const CommonConfig = require('./webpack.common');
 
@@ -39,6 +40,7 @@ const DevConfig = merge.smartStrategy(
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new ESLintPlugin()
   ]
 });
 
