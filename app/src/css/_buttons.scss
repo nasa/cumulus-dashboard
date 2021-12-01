@@ -53,7 +53,6 @@ $delete-btn-hover-bg-color: darken($error-red, 10%);
   &--events{
     background-color: $light-green;
     padding: .4em 1.5em .4em 1.5em;
-    float: right;
 
     &:hover {
       background-color: darken($light-green, 10%);
