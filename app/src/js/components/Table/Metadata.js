@@ -10,7 +10,7 @@ const Metadata = ({
   <dl className='metadata__details'>
     {accessors.map((item, index) => {
       const { label, property, accessor } = item;
-      let value = get(data, property) || nullValue;
+      let value = get(data, property);
       if (value !== nullValue && typeof accessor === 'function') {
         value = accessor(value, data);
       }

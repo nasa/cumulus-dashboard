@@ -42,9 +42,9 @@ test('Cumulus-690 Execution Status shows workflow task and version information',
   t.is(metadataDetails.length, 1);
 
   const metadataLabels = metadataDetails.find('dt');
-  t.is(metadataLabels.length, 10);
+  t.is(metadataLabels.length, 9);
   const metadataValues = metadataDetails.find('dd');
-  t.is(metadataValues.length, 10);
+  t.is(metadataValues.length, 9);
 
   const granulesTable = executionStatusRendered.find('withRouter(withQueryParams(Connect(List)))');
   t.is(granulesTable.length, 1);

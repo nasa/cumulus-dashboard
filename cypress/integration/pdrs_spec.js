@@ -144,7 +144,7 @@ describe('Dashboard PDRs Page', () => {
       cy.get('@list').should('have.length', 1);
     });
 
-    it('should display PDR details in the individual PDR page', () => {
+    it.only('should display PDR details in the individual PDR page', () => {
       const pdrName = 'MOD09GQ_1granule_v3.PDR';
       cy.visit(`/pdrs/pdr/${pdrName}`);
       cy.contains('.heading--large', pdrName);
