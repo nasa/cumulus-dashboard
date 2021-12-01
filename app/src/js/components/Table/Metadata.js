@@ -15,10 +15,12 @@ const Metadata = ({
         value = accessor(value, data);
       }
       return (
-        <div className="meta__row" key={index}>
-          <dt key={`meta-${property}--dt`}>{label}</dt>
-          <dd key={`meta-${property}--dd`}>{value}</dd>
-        </div>
+        <React.Fragment key={index}>
+          {value && <div className="meta__row">
+            <dt key={`meta-${property}--dt`}>{label}</dt>
+            <dd key={`meta-${property}--dd`}>{value}</dd>
+          </div>}
+        </React.Fragment>
       );
     })}
   </dl>
