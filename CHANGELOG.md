@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- **CUMULUS-**
+- **CUMULUS-NONE**
   - Upgrade Webpack to version 5
   - Various package updates related to Webpack upgrade
   - Upgrade cypress to 8.7.0
@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- **CUMULUS-375**
+  - Fixed display issues on individual provider page
 - **CUMULUS-2721**
   - Fixed issue where boolean environment variables were being read as strings
 
