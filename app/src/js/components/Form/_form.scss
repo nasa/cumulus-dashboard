@@ -652,6 +652,11 @@ select option{
       dt{
         width: 25%;
       }
+      dd {
+        width: 74%;
+        line-break: anywhere;
+        margin: 0;
+      }
     }
   }
 }
