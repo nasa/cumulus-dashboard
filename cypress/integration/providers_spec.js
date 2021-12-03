@@ -43,6 +43,7 @@ describe('Dashboard Providers Page', () => {
       const connectionLimit = 5;
       const protocol = 's3';
       const host = 'test-host';
+      const port = 443;
 
       cy.visit('/providers');
 
@@ -75,6 +76,10 @@ describe('Dashboard Providers Page', () => {
         .contains('Host')
         .siblings('input')
         .type(host);
+      cy.get('@providerinput')
+        .contains('Port')
+        .siblings('input')
+        .type(port);
 
       cy.get('form div button').contains('Submit').click();
       cy.wait('@postProvider');
@@ -87,14 +92,16 @@ describe('Dashboard Providers Page', () => {
         .within(() => {
           cy.contains('Global Connection Limit')
             .next()
-            .should('have.text', `${connectionLimit}`);
+            .should('have.text', connectionLimit);
           cy.contains('Protocol')
             .next()
             .should('have.text', protocol);
           cy.contains('Host')
             .next()
-            .contains('a', 'Link')
-            .should('have.attr', 'href', host);
+            .should('have.text', host);
+          cy.contains('Port')
+            .next()
+            .should('have.text', port);
         });
 
       // Verify the new provider is added to the providers list, after allowing
@@ -111,6 +118,7 @@ describe('Dashboard Providers Page', () => {
       const name = 's3_provider';
       const connectionLimit = 12;
       const host = 'test-host-new';
+      const port = 3000;
 
       cy.visit(`/providers/provider/${name}`);
       cy.contains('.heading--large', name);
@@ -133,6 +141,11 @@ describe('Dashboard Providers Page', () => {
         .siblings('input')
         .clear()
         .type(host);
+      cy.get('@providerinput')
+        .contains('Port')
+        .siblings('input')
+        .clear()
+        .type(port);
 
       cy.get('form div button').contains('Submit').click();
 
@@ -144,11 +157,13 @@ describe('Dashboard Providers Page', () => {
         .within(() => {
           cy.contains('Global Connection Limit')
             .next()
-            .should('have.text', `${connectionLimit}`);
+            .should('have.text', connectionLimit);
           cy.contains('Host')
             .next()
-            .contains('a', 'Link')
-            .should('have.attr', 'href', host);
+            .should('have.text', host);
+          cy.contains('Port')
+            .next()
+            .should('have.text', port);
         });
     });
 

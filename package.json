@@ -113,7 +113,7 @@
     "fs-extra": "^5.0.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^5.5.0",
-    "http-server": "^0.12.3",
+    "http-server": "^14.0.0",
     "ignore-styles": "^5.0.1",
     "mini-css-extract-plugin": "^1.6.0",
     "nock": "^10.0.4",
