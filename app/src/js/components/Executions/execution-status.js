@@ -15,6 +15,22 @@ import ErrorReport from '../Errors/report';
 import ExecutionStatusGraph from './execution-status-graph';
 import Metadata from '../Table/Metadata';
 import Loading from '../LoadingIndicator/loading-indicator';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/',
+  },
+  {
+    label: 'Executions',
+    href: '/executions'
+  },
+  {
+    label: 'Execution Details',
+    active: true
+  }
+];
 
 const ExecutionStatus = ({
   cumulusInstance,
@@ -62,6 +78,9 @@ const ExecutionStatus = ({
       <Helmet>
         <title> Execution Status </title>
       </Helmet>
+      <section className="page__section page__section__controls">
+        <Breadcrumbs config={breadcrumbConfig} />
+      </section>
       <section className="page__section page__section__header-wrapper">
         <h1 className="heading--large heading--shared-content with-description width--three-quarters">
           Execution: {name}
