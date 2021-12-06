@@ -74,7 +74,7 @@ const generateInputState = (inputMeta, id) => {
  * @param {Array} forms list of config objects, representing form items.
  * @param {String} form.type must match TEXT, TEXT_AREA, or other type listed above.
  * @param {String} form.label arbitrary label for the field.
- * @param {Function} form.validate function returning true or fase based on the form input.
+ * @param {Function} form.validate function returning true or false based on the form input.
  * @param {String} form.error text to display when a form doesn't pass validation.
  * @return {JSX}
  */
@@ -103,7 +103,8 @@ export class Form extends React.Component {
     return this.props.status && this.props.status === 'inflight';
   }
 
-  onChange (inputId, value) {
+  onChange (inputId, value, handleChange) {
+    if (typeof handleChange === 'function') handleChange(value);
     // Update the internal key/value store, in addition to marking as dirty
     this.setState(createNextState((state) => {
       state.inputs[inputId].value = value;
@@ -123,7 +124,7 @@ export class Form extends React.Component {
     state
   }) {
     const { dirty, inputs } = state;
-    let { value } = inputs[inputId];
+    let { value } = inputs[inputId] || {};
 
     // don't set a value for values that haven't changed and aren't required
     if (!dirty[inputId] && !field.required) return;
@@ -266,7 +267,7 @@ export class Form extends React.Component {
         {errors.length > 0 && <ErrorReport report={errorMessage(errors)} disableScroll={true} />}
         <ul>
           {this.props.inputMeta.map((input) => {
-            const { type, label } = input;
+            const { type, label, handleChange } = input;
             let element;
 
             switch (type) {
@@ -289,9 +290,9 @@ export class Form extends React.Component {
             }
 
             const inputId = generateComponentId(input.schemaProperty, this.id);
-            let { value, error } = inputState[inputId];
+            let { value, error } = inputState[inputId] || {};
 
-            // coerce non-null values to string to simplify proptype warnings on numbers
+            // coerce non-null values to string to simplify PropType warnings on numbers
             if (type !== formTypes.list && type !== formTypes.subform && !value && value !== 0) {
               value = String(value);
             }
@@ -327,7 +328,7 @@ export class Form extends React.Component {
               fieldset,
               type: textType,
               autoComplete,
-              onChange: this.onChange,
+              onChange: (id, val) => this.onChange(id, val, handleChange),
               ...additionalConfig
             });
 

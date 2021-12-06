@@ -23,6 +23,7 @@ const AddRecord = ({
   enums,
   exclude,
   include,
+  handleInputChange,
   primaryProperty,
   schemaKey,
   schemaState,
@@ -37,8 +38,10 @@ const AddRecord = ({
   const schema = schemaState[schemaKey];
 
   useEffect(() => {
-    dispatch(getSchema(schemaKey));
-  }, [dispatch, schemaKey]);
+    if (!schema) {
+      dispatch(getSchema(schemaKey));
+    }
+  }, [dispatch, schema, schemaKey]);
 
   useEffect(() => {
     const status = get(state, ['created', pk, 'status']);
@@ -84,7 +87,7 @@ const AddRecord = ({
           <Schema
             data={data}
             schema={schema}
-            pk={'new-collection'}
+            handleInputChange={handleInputChange}
             onSubmit={post}
             onCancel={navigateBack}
             status={record.status}
@@ -133,7 +136,8 @@ AddRecord.propTypes = {
   // appearing on the form.
   exclude: PropTypes.arrayOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)])
-  )
+  ),
+  handleInputChange: PropTypes.objectOf(PropTypes.func)
 };
 
 Schema.defaultProps = {
