@@ -10,17 +10,19 @@ import { isValidProvider } from '../../utils/validate';
 
 const SCHEMA_KEY = 'provider';
 
-const nonHttpsExcludes = ['allowedRedirects'];
-const s3Excludes = [...nonHttpsExcludes, 'username', 'password', 'port'];
+const nonSftpExcludes = ['privateKey', 'cmKeyId'];
+const nonHttpsExcludes = ['allowedRedirects', 'certificateUri'];
+const s3Excludes = [...nonSftpExcludes, ...nonHttpsExcludes, 'username', 'password', 'port'];
 
 const AddProvider = ({ providers }) => {
-  const [exclude, setExclude] = useState([]);
+  const [exclude, setExclude] = useState(nonSftpExcludes);
   const [selectedProtocol, setSelectedProtocol] = useState('http');
 
   const handleInputChange = {
     protocol: (value) => {
       if (value === 's3') setExclude(s3Excludes);
-      else if (!value.includes('http')) setExclude(nonHttpsExcludes);
+      else if (!value.includes('http') && !value.includes('sftp')) setExclude([...nonHttpsExcludes, ...nonSftpExcludes]);
+      else if (value === 'sftp') setExclude(nonHttpsExcludes);
       else setExclude([]);
       setSelectedProtocol(value);
     },
