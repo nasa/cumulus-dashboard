@@ -299,7 +299,8 @@ export class Form extends React.Component {
 
             // filter out empty values from the list
             if (type === formTypes.list) {
-              value = value.filter((item) => item !== '');
+              console.log(input);
+              value = value?.filter((item) => item !== '');
             }
 
             // dropdowns have options

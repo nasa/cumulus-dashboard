@@ -21,9 +21,9 @@ const AddProvider = ({ providers }) => {
   const handleInputChange = {
     protocol: (value) => {
       if (value === 's3') setExclude(s3Excludes);
-      else if (!value.includes('http') && !value.includes('sftp')) setExclude([...nonHttpsExcludes, ...nonSftpExcludes]);
+      else if (value.includes('http')) setExclude(nonSftpExcludes);
       else if (value === 'sftp') setExclude(nonHttpsExcludes);
-      else setExclude([]);
+      else setExclude([...nonHttpsExcludes, ...nonSftpExcludes]);
       setSelectedProtocol(value);
     },
   };
