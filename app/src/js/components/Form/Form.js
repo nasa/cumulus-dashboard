@@ -299,7 +299,6 @@ export class Form extends React.Component {
 
             // filter out empty values from the list
             if (type === formTypes.list) {
-              console.log(input);
               value = value?.filter((item) => item !== '');
             }
 

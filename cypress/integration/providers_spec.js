@@ -183,8 +183,15 @@ describe('Dashboard Providers Page', () => {
         const protocol = 's3';
         const host = 'test-host';
 
+        cy.visit('/providers/add');
         // fill the form and submit
         cy.get('form div ul').as('providerInput');
+        cy.get('@providerInput')
+          .contains('.dropdown__label', 'Protocol')
+          .siblings()
+          .find('div[class*="container"]')
+          .click();
+        cy.contains('div[id*="react-select"]', protocol).click();
         cy.get('@providerInput')
           .contains('Provider Name')
           .siblings('input')
@@ -194,12 +201,6 @@ describe('Dashboard Providers Page', () => {
           .siblings('input')
           .clear()
           .type(connectionLimit);
-        cy.get('@providerInput')
-          .contains('.dropdown__label', 'Protocol')
-          .siblings()
-          .find('div[class*="container"]')
-          .click();
-        cy.contains('div[id*="react-select"]', protocol).click();
         cy.get('@providerInput').contains('Host').siblings('input').type(host);
 
         cy.get('form div button').contains('Submit').click();
