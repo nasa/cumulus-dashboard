@@ -20,6 +20,22 @@ import Search from '../Search/search';
 import SortableTable from '../SortableTable/SortableTable';
 import ListFilters from '../ListActions/ListFilters';
 import { formatEvents } from '../../utils/table-config/executions';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+
+const breadcrumbConfig = [
+  {
+    label: 'Dashboard Home',
+    href: '/',
+  },
+  {
+    label: 'Executions',
+    href: '/executions'
+  },
+  {
+    label: 'Execution Events',
+    active: true
+  }
+];
 
 const ExecutionEvents = ({
   dispatch,
@@ -49,6 +65,9 @@ const ExecutionEvents = ({
       <Helmet>
         <title> Execution Events </title>
       </Helmet>
+      <section className="page__section page__section__controls">
+        <Breadcrumbs config={breadcrumbConfig} />
+      </section>
       <section className='page__section page__section__header-wrapper'>
         <h1 className='heading--large heading--shared-content with-description width--three-quarters'>
           Events for Execution {execution.name}
@@ -75,7 +94,7 @@ const ExecutionEvents = ({
             <p><b>NOTE:</b> Task / version tracking is enabled as of Cumulus version 1.9.1.</p>
             <br />
             <p><b>NOTE:</b> If the task output is greater than 10KB, the full message will be stored in an S3 Bucket.
-            In these scenarios, task and version numbers are not part of the Lambda or Activity event output.</p>
+              In these scenarios, task and version numbers are not part of the Lambda or Activity event output.</p>
             <br />
             <FontAwesomeIcon icon={faExternalLinkSquareAlt} />
             <i>Related workflow will open up into another window to view.</i>
