@@ -27,7 +27,7 @@ describe('Dashboard Executions Page', () => {
 
       cy.url().should('include', 'executions');
       cy.contains('.heading--xlarge', 'Executions');
-      cy.contains('.heading--large', 'Execution Overview');
+      cy.contains('.heading--large', 'Executions Overview');
 
       // shows a summary count of completed and failed executions
       cy.get('.overview-num__wrapper ul li')
