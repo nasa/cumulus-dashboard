@@ -54,14 +54,11 @@ const AddProvider = ({ providers }) => {
 };
 
 AddProvider.propTypes = {
-  dispatch: PropTypes.func,
-  providers: PropTypes.object,
-  schema: PropTypes.object
+  providers: PropTypes.object
 };
 
 export default withRouter(
   connect((state) => ({
-    providers: state.providers,
-    schema: state.schema,
+    providers: state.providers
   }))(AddProvider)
 );
