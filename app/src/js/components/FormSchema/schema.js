@@ -224,7 +224,6 @@ function dropdownField(config, property, validate) {
   config.type = formTypes.dropdown;
   config.validate = validate;
   config.error = validate && get(errors, property, errors.required);
-  console.log(config);
   return config;
 }
 
