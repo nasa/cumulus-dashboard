@@ -4,37 +4,53 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getExecutionLogs } from '../../actions';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 import ErrorReport from '../Errors/report';
 import { historyPushWithQueryParams } from '../../utils/url-helper';
 
 class ExecutionLogs extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.navigateBack = this.navigateBack.bind(this);
     this.errors = this.errors.bind(this);
     this.executionName = this.getExecutionName();
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { dispatch } = this.props;
     dispatch(getExecutionLogs(this.executionName));
   }
 
-  getExecutionName () {
+  getExecutionName() {
     const { executionArn } = this.props.match.params;
     return executionArn.split(':').pop();
   }
 
-  navigateBack () {
+  navigateBack() {
     historyPushWithQueryParams('/executions');
   }
 
-  errors () {
+  errors() {
     return [].filter(Boolean);
   }
 
-  render () {
+  render() {
+    const breadcrumbConfig = [
+      {
+        label: 'Dashboard Home',
+        href: '/',
+      },
+      {
+        label: 'Executions',
+        href: '/executions'
+      },
+      {
+        label: 'Execution Logs',
+        active: true
+      }
+    ];
+
     const { executionLogs } = this.props;
     if (!executionLogs.results) return null;
     const errors = this.errors();
@@ -44,9 +60,12 @@ class ExecutionLogs extends React.Component {
         <Helmet>
           <title> Execution Logs </title>
         </Helmet>
+        <section className="page__section page__section__controls">
+          <Breadcrumbs config={breadcrumbConfig} />
+        </section>
         <section className='page__section page__section__header-wrapper'>
           <h1 className='heading--large heading--shared-content with-description'>
-          Logs for Execution {this.executionName}
+            Logs for Execution {this.executionName}
           </h1>
 
           {errors.length ? <ErrorReport report={errors} /> : null}

@@ -23,6 +23,7 @@ import Overview from '../Overview/overview';
 import { strings } from '../locale';
 import { tableColumns } from '../../utils/table-config/executions';
 import ListFilters from '../ListActions/ListFilters';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 class ExecutionOverview extends React.Component {
   constructor(props) {
@@ -48,6 +49,17 @@ class ExecutionOverview extends React.Component {
   }
 
   render() {
+    const breadcrumbConfig = [
+      {
+        label: 'Dashboard Home',
+        href: '/',
+      },
+      {
+        label: 'Executions Overview',
+        href: '/executions',
+        active: true,
+      }
+    ];
     const { collections, executions, queryParams, workflowOptions } =
       this.props;
     const { dropdowns } = collections;
@@ -58,10 +70,13 @@ class ExecutionOverview extends React.Component {
     }
     return (
       <div className="page__component">
+        <section className="page__section page__section__controls">
+          <Breadcrumbs config={breadcrumbConfig} />
+        </section>
         <section className="page__section page__section__header-wrapper">
           <div className="page__section__header">
             <h1 className="heading--large heading--shared-content with-description">
-              Execution Overview
+              Executions Overview
             </h1>
             {lastUpdated(queriedAt)}
             <Overview type="executions" inflight={executions.list.inflight} />
