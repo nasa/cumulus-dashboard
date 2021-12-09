@@ -187,7 +187,7 @@ This version of the dashboard requires Cumulus API `v8.1.0`
 - **CUMULUS-2449**
   - Fixes issue where collections with forward slash in version name were not displayed
 
-\_ **CUMULUS-2425**
+- **CUMULUS-2425**
 
 - Fixes graph display for failed execution steps
 
