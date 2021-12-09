@@ -14,7 +14,7 @@ import {
 /**
  * Search
  * @description Search component
- * @param {string} labelKey The propery of the search results that will be displayed in the dropdown menu
+ * @param {string} labelKey The property of the search results that will be displayed in the dropdown menu
  * (ex: for a granule, this would be set to 'granuleId')
  * @param {string} paramKey The parameter that should be appended to the url when searching
  * @param {string} searchKey This defines what is being searched (ex: collections, granules, rules, etc)

@@ -31,6 +31,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Fixed display issues on individual provider page
 - **CUMULUS-2721**
   - Fixed issue where boolean environment variables were being read as strings
+- **CUMULUS-2772**
+  - Fixed search on executions overview page
 
 ## [v8.0.0] - 2021-11-04
 
