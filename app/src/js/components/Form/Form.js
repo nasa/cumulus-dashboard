@@ -254,9 +254,6 @@ export class Form extends React.Component {
   componentDidUpdate(prevProps) {
     const { inputMeta } = this.props;
 
-    console.log(this.state.dirty);
-    console.log(this.state.inputs);
-
     if (prevProps.inputMeta !== inputMeta) {
       const inputs = generateInputState(inputMeta, this.id, this.state.inputs);
       const dirty = generateDirty(inputs);
