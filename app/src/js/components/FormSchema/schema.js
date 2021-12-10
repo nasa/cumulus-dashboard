@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable import/no-cycle */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { get, set } from 'object-path';
 import startCase from 'lodash/startCase';
@@ -246,13 +246,7 @@ const Schema = ({
   schema,
   status,
 }) => {
-  const [fields, setFields] = useState(
-    createFormConfig({ data, schema, include, exclude, enums, handleInputChange })
-  );
-
-  useEffect(() => {
-    setFields(createFormConfig({ data, schema, include, exclude, enums, handleInputChange }));
-  }, [enums, data, schema, include, exclude, handleInputChange]);
+  const fields = createFormConfig({ data, schema, include, exclude, enums, handleInputChange });
 
   return (
     <div

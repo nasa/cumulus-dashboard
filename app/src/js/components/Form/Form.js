@@ -230,17 +230,7 @@ export class Form extends React.Component {
     }
   }
 
-  componentDidUpdate (prevProps) {
-    const { inputMeta } = this.props;
-
-    if (prevProps.inputMeta !== inputMeta) {
-      const inputs = generateInputState(inputMeta, this.id);
-      const dirty = generateDirty(inputs);
-
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ inputs, dirty });
-    }
-
+  componentDidUpdate () {
     if (this.state.submitted) {
       this.submitPayload();
     }
