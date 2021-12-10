@@ -16,7 +16,10 @@ import SubForm from '../SubForm/sub-form';
 import t from '../../utils/strings';
 import { window } from '../../utils/browser';
 
-const scrollTo = window && typeof window.scrollTo === 'function' ? window.scrollTo : () => true;
+const scrollTo =
+  window && typeof window.scrollTo === 'function'
+    ? window.scrollTo
+    : () => true;
 
 export const formTypes = {
   text: 'TEXT',
@@ -24,17 +27,22 @@ export const formTypes = {
   dropdown: 'DROPDOWN',
   list: 'LIST',
   number: 'NUMBER',
-  subform: 'SUB_FORM'
+  subform: 'SUB_FORM',
 };
 
 export const defaults = {
-  json: '{\n  \n}'
+  json: '{\n  \n}',
 };
 
-const errorMessage = (errors) => `Please review the following fields and submit again: ${errors.map((error) => `'${error}'`).join(', ')}`;
+const errorMessage = (errors) => `Please review the following fields and submit again: ${errors
+    .map((error) => `'${error}'`)
+    .join(', ')}`;
 
 const generateDirty = (inputs) => Object.entries(inputs).reduce(
-  (dirty, [id, { value }]) => ({ ...dirty, [id]: isFinite(value) || !isEmpty(value) }),
+  (dirty, [id, { value }]) => ({
+    ...dirty,
+    [id]: isFinite(value) || !isEmpty(value),
+  }),
   {}
 );
 
@@ -53,9 +61,14 @@ const generateInputState = (inputMeta, id, oldInputState = {}) => {
 
     if (!inputValue && inputValue !== 0) {
       switch (type) {
-        case formTypes.list: inputValue = []; break;
-        case formTypes.subform: inputValue = {}; break;
-        default: inputValue = '';
+        case formTypes.list:
+          inputValue = [];
+          break;
+        case formTypes.subform:
+          inputValue = {};
+          break;
+        default:
+          inputValue = '';
       }
     }
 
@@ -65,7 +78,7 @@ const generateInputState = (inputMeta, id, oldInputState = {}) => {
       value: inputValue,
       schemaProperty,
       validationError: error, // this is the stored error message for the field
-      error: null // this is the displayed error for the field
+      error: null, // this is the displayed error for the field
     };
   });
 
@@ -83,7 +96,7 @@ const generateInputState = (inputMeta, id, oldInputState = {}) => {
  * @return {JSX}
  */
 export class Form extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     // Generate ID for this form
@@ -99,34 +112,32 @@ export class Form extends React.Component {
       inputs,
       dirty,
       errors: [],
-      submitted: false
+      submitted: false,
     };
   }
 
-  isInflight () {
+  isInflight() {
     return this.props.status && this.props.status === 'inflight';
   }
 
-  onChange (inputId, value, handleChange) {
+  onChange(inputId, value, handleChange) {
     if (typeof handleChange === 'function') handleChange(value);
     // Update the internal key/value store, in addition to marking as dirty
-    this.setState(createNextState((state) => {
-      state.inputs[inputId].value = value;
-      state.dirty[inputId] = true;
-      // validate the field for live changes
-      this.validateField({
-        field: this.state.inputs[inputId],
-        inputId,
-        state
-      });
-    }));
+    this.setState(
+      createNextState((state) => {
+        state.inputs[inputId].value = value;
+        state.dirty[inputId] = true;
+        // validate the field for live changes
+        this.validateField({
+          field: this.state.inputs[inputId],
+          inputId,
+          state,
+        });
+      })
+    );
   }
 
-  validateField ({
-    field,
-    inputId,
-    state
-  }) {
+  validateField({ field, inputId, state }) {
     const { dirty, inputs } = state;
     let { value } = inputs[inputId] || {};
 
@@ -164,7 +175,7 @@ export class Form extends React.Component {
     }
   }
 
-  onCancel (e) {
+  onCancel(e) {
     e.preventDefault();
 
     if (!this.isInflight()) {
@@ -172,28 +183,30 @@ export class Form extends React.Component {
     }
   }
 
-  onSubmit (e) {
+  onSubmit(e) {
     if (e) e.preventDefault();
     if (this.isInflight()) return;
 
     // validate input values in the store
 
-    this.setState(createNextState((state) => {
-      this.props.inputMeta.forEach((field) => {
-        const inputId = generateComponentId(field.schemaProperty, this.id);
+    this.setState(
+      createNextState((state) => {
+        this.props.inputMeta.forEach((field) => {
+          const inputId = generateComponentId(field.schemaProperty, this.id);
 
-        this.validateField({
-          field,
-          inputId,
-          state
+          this.validateField({
+            field,
+            inputId,
+            state,
+          });
         });
-      });
 
-      state.submitted = true;
-    }));
+        state.submitted = true;
+      })
+    );
   }
 
-  submitPayload () {
+  submitPayload() {
     const { inputs, errors } = this.state;
     const payload = {};
 
@@ -202,11 +215,12 @@ export class Form extends React.Component {
         const entryValue = entry[1];
         const { value, required, schemaProperty, type, mode } = entryValue;
 
-        if (required ||
+        if (
+          required ||
           // only add an optional array when it is not empty
           (Array.isArray(value) && value.length > 0) ||
           // only add an optional value when it is not an empty string or will create an empty object
-          (!Array.isArray(value) && (value !== '' && value !== '{}'))
+          (!Array.isArray(value) && value !== '' && value !== '{}')
         ) {
           let payloadValue = value;
           // these should be safe since we've already validated at this point
@@ -226,15 +240,18 @@ export class Form extends React.Component {
     this.setState({ submitted: false });
   }
 
-  scrollToTop () {
-    if (this.DOMElement && typeof this.DOMElement.scrollIntoView === 'function') {
+  scrollToTop() {
+    if (
+      this.DOMElement &&
+      typeof this.DOMElement.scrollIntoView === 'function'
+    ) {
       this.DOMElement.scrollIntoView(true);
     } else {
       scrollTo(0, 0);
     }
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     const { inputMeta } = this.props;
 
     console.log(this.state.dirty);
@@ -252,7 +269,7 @@ export class Form extends React.Component {
     }
   }
 
-  render () {
+  render() {
     const inputState = this.state.inputs;
     const { errors } = this.state;
     const { status } = this.props;
@@ -266,11 +283,19 @@ export class Form extends React.Component {
       submitButtonText = 'Submit';
     }
 
-    const hasRequiredFields = this.props.inputMeta.filter((input) => input.required).length >= 0;
+    const hasRequiredFields =
+      this.props.inputMeta.filter((input) => input.required).length >= 0;
 
     const form = (
-      <div className="container" ref={(element) => { this.DOMElement = element; }}>
-        {errors.length > 0 && <ErrorReport report={errorMessage(errors)} disableScroll={true} />}
+      <div
+        className="container"
+        ref={(element) => {
+          this.DOMElement = element;
+        }}
+      >
+        {errors.length > 0 && (
+          <ErrorReport report={errorMessage(errors)} disableScroll={true} />
+        )}
         <ul>
           {this.props.inputMeta.map((input) => {
             const { type, label, handleChange } = input;
@@ -299,7 +324,12 @@ export class Form extends React.Component {
             let { value, error } = inputState[inputId] || {};
 
             // coerce non-null values to string to simplify PropType warnings on numbers
-            if (type !== formTypes.list && type !== formTypes.subform && !value && value !== 0) {
+            if (
+              type !== formTypes.list &&
+              type !== formTypes.subform &&
+              !value &&
+              value !== 0
+            ) {
               value = String(value);
             }
 
@@ -309,14 +339,18 @@ export class Form extends React.Component {
             }
 
             // dropdowns have options
-            const options = (type === formTypes.dropdown && input.options) || null;
+            const options =
+              (type === formTypes.dropdown && input.options) || null;
             // textarea forms pass a mode value to ace
             const mode = (type === formTypes.textArea && input.mode) || null;
             // subforms have fieldsets that define child form structure
-            const fieldset = (type === formTypes.subform && input.fieldSet) || null;
-            const autoComplete = (type === formTypes.text && input.isPassword) ? 'on' : null;
+            const fieldset =
+              (type === formTypes.subform && input.fieldSet) || null;
+            const autoComplete =
+              type === formTypes.text && input.isPassword ? 'on' : null;
             // text forms can be type=password or number
-            let textType = (type === formTypes.text && input.isPassword) ? 'password' : null;
+            let textType =
+              type === formTypes.text && input.isPassword ? 'password' : null;
             const additionalConfig = {};
 
             if (type === formTypes.number) {
@@ -335,15 +369,19 @@ export class Form extends React.Component {
               type: textType,
               autoComplete,
               onChange: (id, val) => this.onChange(id, val, handleChange),
-              ...additionalConfig
+              ...additionalConfig,
             });
 
-            return <li className='form__item' key={inputId}>{elem}</li>;
+            return (
+              <li className="form__item" key={inputId}>
+                {elem}
+              </li>
+            );
           })}
         </ul>
 
         {hasRequiredFields && (
-          <div className='form__item form__item--require__description'>
+          <div className="form__item form__item--require__description">
             <p>
               <span className="label__required">* </span>
               <span className="label__name">Required field</span>
@@ -353,16 +391,20 @@ export class Form extends React.Component {
 
         {this.props.submit && (
           <button
-            className={`button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right button--submit${this.isInflight() ? ' button--disabled' : ''}`}
+            className={`button button__animation--md button__arrow button__arrow--md button__animation button__arrow--white form-group__element--right button--submit${
+              this.isInflight() ? ' button--disabled' : ''
+            }`}
             onClick={this.onSubmit}
           >
-            { submitButtonText }
+            {submitButtonText}
           </button>
         )}
 
         {this.props.cancel && (
           <button
-            className={`button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right button--cancel${this.isInflight() ? ' button--disabled' : ''}`}
+            className={`button button__animation--md button__arrow button__arrow--md button__animation button--secondary form-group__element--right button--cancel${
+              this.isInflight() ? ' button--disabled' : ''
+            }`}
             onClick={this.onCancel}
           >
             Cancel
@@ -371,16 +413,16 @@ export class Form extends React.Component {
       </div>
     );
 
-    return this.props.nowrap
-      ? form
-      : (
-        <form
-          className='page__section--fullpage-form page__section--fullpage-form--internal'
-          id={`form-${this.id}`}
-        >
-          {form}
-        </form>
-      );
+    return this.props.nowrap ? (
+      form
+    ) : (
+      <form
+        className="page__section--fullpage-form page__section--fullpage-form--internal"
+        id={`form-${this.id}`}
+      >
+        {form}
+      </form>
+    );
   }
 }
 
@@ -390,5 +432,5 @@ Form.propTypes = {
   submit: PropTypes.func,
   cancel: PropTypes.func,
   status: PropTypes.string,
-  nowrap: PropTypes.bool
+  nowrap: PropTypes.bool,
 };
