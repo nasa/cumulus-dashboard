@@ -207,7 +207,7 @@ function textField(config, property, validate) {
   config.type = formTypes.text;
   config.validate = validate;
   config.error = validate && get(errors, property, errors.required);
-  if (property === 'password' || property === 'username') config.isPassword = true;
+  if (property === 'password' || property === 'username') { config.isPassword = true; }
 
   return config;
 }
@@ -246,7 +246,14 @@ const Schema = ({
   schema,
   status,
 }) => {
-  const fields = createFormConfig({ data, schema, include, exclude, enums, handleInputChange });
+  const fields = createFormConfig({
+    data,
+    schema,
+    include,
+    exclude,
+    enums,
+    handleInputChange,
+  });
 
   return (
     <div
@@ -301,7 +308,7 @@ Schema.propTypes = {
   exclude: PropTypes.arrayOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)])
   ),
-  handleInputChange: PropTypes.objectOf(PropTypes.func)
+  handleInputChange: PropTypes.objectOf(PropTypes.func),
 };
 
 Schema.defaultProps = {

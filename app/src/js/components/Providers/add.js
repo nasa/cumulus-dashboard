@@ -11,7 +11,13 @@ const SCHEMA_KEY = 'provider';
 
 const nonSftpExcludes = ['privateKey', 'cmKeyId'];
 const nonHttpsExcludes = ['allowedRedirects', 'certificateUri'];
-const s3Excludes = [...nonSftpExcludes, ...nonHttpsExcludes, 'username', 'password', 'port'];
+const s3Excludes = [
+  ...nonSftpExcludes,
+  ...nonHttpsExcludes,
+  'username',
+  'password',
+  'port',
+];
 
 const AddProvider = ({ providers }) => {
   const [exclude, setExclude] = useState(nonSftpExcludes);
@@ -28,7 +34,7 @@ const AddProvider = ({ providers }) => {
   };
 
   const data = {
-    protocol: selectedProtocol
+    protocol: selectedProtocol,
   };
 
   return (
@@ -54,11 +60,11 @@ const AddProvider = ({ providers }) => {
 };
 
 AddProvider.propTypes = {
-  providers: PropTypes.object
+  providers: PropTypes.object,
 };
 
 export default withRouter(
   connect((state) => ({
-    providers: state.providers
+    providers: state.providers,
   }))(AddProvider)
 );
