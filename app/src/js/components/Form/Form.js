@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 /* eslint-disable import/no-cycle */
 import React from 'react';
 import { createNextState } from '@reduxjs/toolkit';
@@ -41,24 +40,29 @@ const generateDirty = (inputs) => Object.entries(inputs).reduce(
 
 const generateComponentId = (label, id) => `${slugify(label)}-${id}`;
 
-const generateInputState = (inputMeta, id) => {
+const generateInputState = (inputMeta, id, oldInputState = {}) => {
   const inputState = {};
 
   inputMeta.forEach(({ schemaProperty, type, value, error, ...rest }) => {
     const inputId = generateComponentId(schemaProperty, id);
+    let inputValue = value;
 
-    if (!value && value !== 0) {
+    if (oldInputState[inputId] && oldInputState[inputId].value) {
+      inputValue = oldInputState[inputId].value;
+    }
+
+    if (!inputValue && inputValue !== 0) {
       switch (type) {
-        case formTypes.list: value = []; break;
-        case formTypes.subform: value = {}; break;
-        default: value = '';
+        case formTypes.list: inputValue = []; break;
+        case formTypes.subform: inputValue = {}; break;
+        default: inputValue = '';
       }
     }
 
     inputState[inputId] = {
       ...rest,
       type,
-      value,
+      value: inputValue,
       schemaProperty,
       validationError: error, // this is the stored error message for the field
       error: null // this is the displayed error for the field
@@ -230,7 +234,19 @@ export class Form extends React.Component {
     }
   }
 
-  componentDidUpdate () {
+  componentDidUpdate (prevProps) {
+    const { inputMeta } = this.props;
+
+    console.log(this.state.dirty);
+    console.log(this.state.inputs);
+
+    if (prevProps.inputMeta !== inputMeta) {
+      const inputs = generateInputState(inputMeta, this.id, this.state.inputs);
+      const dirty = generateDirty(inputs);
+
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ inputs, dirty });
+    }
     if (this.state.submitted) {
       this.submitPayload();
     }
