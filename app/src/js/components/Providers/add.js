@@ -28,7 +28,7 @@ const AddProvider = ({ providers }) => {
       if (value === 's3') setExclude(s3Excludes);
       else if (value.includes('http')) setExclude(nonSftpExcludes);
       else if (value === 'sftp') setExclude(nonHttpsExcludes);
-      else setExclude([...nonHttpsExcludes, ...nonSftpExcludes]);
+      else if (value === 'ftp') setExclude([...nonHttpsExcludes, ...nonSftpExcludes]);
       setSelectedProtocol(value);
     },
   };
