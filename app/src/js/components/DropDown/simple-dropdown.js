@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 
 const SimpleDropdown = ({
-  className,
+  className = '',
   error,
   id,
   label,

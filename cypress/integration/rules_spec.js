@@ -117,19 +117,19 @@ describe('Rules page', () => {
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'workflow', { matchCase: false })
         .siblings()
-        .find('div[class*="container"]')
+        .find('.react-select__value-container')
         .click();
       cy.contains('div[id*="react-select"]', workflow).click();
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'provider', { matchCase: false })
         .siblings()
-        .find('div[class*="container"]')
+        .find('.react-select__value-container')
         .click();
       cy.contains('div[id*="react-select"]', provider).click();
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'collection', { matchCase: false })
         .siblings()
-        .find('div[class*="container"]')
+        .find('.react-select__value-container')
         .click();
       cy.contains('div[id*="react-select"]', collection).click();
 
@@ -144,13 +144,13 @@ describe('Rules page', () => {
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'type', { matchCase: false })
         .siblings()
-        .find('div[class*="container"]')
+        .find('.react-select__value-container')
         .click();
       cy.contains('div[id*="react-select"]', 'onetime').click();
       cy.get('@ruleInput')
         .contains('.dropdown__label', 'state', { matchCase: false })
         .siblings()
-        .find('div[class*="container"]')
+        .find('.react-select__value-container')
         .click();
       cy.contains('div[id*="react-select"]', 'ENABLED').click();
 

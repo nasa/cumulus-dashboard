@@ -5,7 +5,7 @@ import Async from 'react-select/async';
 const AsyncDropdown = ({
   onInputChange,
   onChange,
-  className,
+  className = '',
   id,
   label,
   error,
