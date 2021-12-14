@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Remove table selectors and granule actions from all reconciliation report tables since they will not work on these tables due to the nature of the backend
 - **CUMULUS-2744**
   - Display granules associated with an execution in a table
+- **CUMULUS-2747**
+  - When creating a provider, only fields relevant for the selected protocol will be displayed
 - **CUMULUS-2764**
   - Remove error copy button from auth modal
 
